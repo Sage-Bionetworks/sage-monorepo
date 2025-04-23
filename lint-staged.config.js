@@ -29,6 +29,11 @@ module.exports = {
     `nx affected --target=type-check --files=${filenames.join(',')}`,
   ],
 
+  '**/*.kt': (filenames) => [
+    // Format files with ktlint
+    `ktlint --format ${filenames.join(' ')}`,
+  ],
+
   '**/Dockerfile.*': (filenames) => [
     // Lint Dockerfiles with Hadolint
     `hadolint ${filenames.join(' ')}`,
