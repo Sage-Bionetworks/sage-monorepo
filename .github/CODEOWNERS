@@ -27,7 +27,7 @@
 
 /libs/shared/ @tschaffter
 
-/apps/model-ad/ @sagely1
-/docker/model-ad/ @sagely1
-/libs/model-ad/ @sagely1
-/libs/results-visualization-framework/ @sagely1
+/apps/model-ad/ @Sage-Bionetworks/sage-monorepo-agora
+/docker/model-ad/ @Sage-Bionetworks/sage-monorepo-agora
+/libs/model-ad/ @Sage-Bionetworks/sage-monorepo-agora
+/libs/results-visualization-framework/ @Sage-Bionetworks/sage-monorepo-agora
