@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../../dist/out-tsc",
+    "types": ["node"]
+  },
+  "files": [],
+  "include": ["e2e/**/*.spec.ts", "e2e/**/*.ts"],
+  "exclude": []
+}
