@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { FooterComponent } from '@sagebionetworks/model-ad/ui';
+import { HeaderComponent, FooterComponent } from '@sagebionetworks/model-ad/ui';
 
 @Component({
-  imports: [RouterModule, FooterComponent],
+  imports: [RouterModule, HeaderComponent, FooterComponent],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
