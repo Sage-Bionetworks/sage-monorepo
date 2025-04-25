@@ -6,10 +6,6 @@ on:
         required: true
         type: string
         description: The name of the Explorer to run e2e tests for
-    secrets:
-      SYNAPSE_AUTH_TOKEN:
-        required: true
-        description: The Synapse auth token for Explorer data
 
 jobs:
   check-explorer-affected:
