@@ -58,7 +58,7 @@ jobs:
     # to require an authorized user's approval to run the workflow, so should be used when running
     # against untrused code, e.g. PRs from forked repos.
     environment: ${{ github.event_name == 'pull_request_target' &&
-      github.event.pull_request.head.repo.full_name != github.repository && '${{ inputs.explorer }}-pr' || '${{ inputs.explorer }}' }}
+      github.event.pull_request.head.repo.full_name != github.repository && format('{0}-pr', inputs.explorer) || inputs.explorer }}
     timeout-minutes: 60
     runs-on: ubuntu-22.04
     steps:
