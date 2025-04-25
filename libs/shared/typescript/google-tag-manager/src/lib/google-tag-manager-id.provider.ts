@@ -11,12 +11,12 @@ export interface ConfigService<T extends ConfigWithGtm = ConfigWithGtm> {
 }
 
 /**
- * Checks if a Google Tag Manager ID is valid, i.e. not empty or whitespace-only string, null, or undefined.
+ * Checks if a Google Tag Manager ID is set, i.e. not empty or whitespace-only string, null, or undefined.
  *
- * @param id The Google Tag Manager ID to validate
- * @returns true if the ID is valid (contains at least one non-whitespace character), false otherwise
+ * @param id The Google Tag Manager ID to check
+ * @returns true if the ID is set (contains at least one non-whitespace character), false otherwise
  */
-export function isValidGoogleTagManagerId(id: string | undefined | null): boolean {
+export function isGoogleTagManagerIdSet(id: string | undefined | null): boolean {
   return !!id?.trim();
 }
 

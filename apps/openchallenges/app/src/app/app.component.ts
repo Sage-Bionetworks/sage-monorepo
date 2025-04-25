@@ -15,7 +15,7 @@ import {
   CONFIG_SERVICE_TOKEN,
   createGoogleTagManagerIdProvider,
   GoogleTagManagerComponent,
-  isValidGoogleTagManagerId,
+  isGoogleTagManagerIdSet,
 } from '@sagebionetworks/shared/google-tag-manager';
 import { Subscription } from 'rxjs';
 import { APP_SECTIONS } from './app-sections';
@@ -48,7 +48,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private homeDataService: HomeDataService,
     private configService: ConfigService,
   ) {
-    this.useGoogleTagManager = isValidGoogleTagManagerId(
+    this.useGoogleTagManager = isGoogleTagManagerIdSet(
       this.configService.config.googleTagManagerId,
     );
   }

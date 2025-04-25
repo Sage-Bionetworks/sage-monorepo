@@ -7,7 +7,7 @@ import {
   CONFIG_SERVICE_TOKEN,
   GoogleTagManagerComponent,
   createGoogleTagManagerIdProvider,
-  isValidGoogleTagManagerId,
+  isGoogleTagManagerIdSet,
 } from '@sagebionetworks/shared/google-tag-manager';
 import { ToastModule } from 'primeng/toast';
 
@@ -32,7 +32,7 @@ export class AppComponent {
 
   constructor() {
     this.metaTagService.updateMetaTags();
-    this.useGoogleTagManager = isValidGoogleTagManagerId(
+    this.useGoogleTagManager = isGoogleTagManagerIdSet(
       this.configService.config.googleTagManagerId,
     );
   }

@@ -18,7 +18,7 @@ import {
   GoogleTagManagerComponent,
   createGoogleTagManagerIdProvider,
   CONFIG_SERVICE_TOKEN,
-  isValidGoogleTagManagerId,
+  isGoogleTagManagerIdSet,
 } from '@sagebionetworks/shared/typescript/google-tag-manager';
 import { ConfigService } from '@your-project/config';
 
@@ -41,7 +41,7 @@ export class AppComponent {
   readonly useGoogleTagManager: boolean;
 
   constructor() {
-    this.useGoogleTagManager = isValidGoogleTagManagerId(
+    this.useGoogleTagManager = isGoogleTagManagerIdSet(
       this.configService.config.googleTagManagerId.length,
     );
   }
