@@ -10,6 +10,10 @@ export interface ConfigService<T extends ConfigWithGtm = ConfigWithGtm> {
   isPlatformServer?: boolean;
 }
 
+export function isValidGoogleTagManagerId(id: string | undefined | null): boolean {
+  return !!id?.trim();
+}
+
 export const CONFIG_SERVICE_TOKEN = new InjectionToken<ConfigService>('ConfigService');
 export const createGoogleTagManagerIdProvider = <T extends ConfigWithGtm>(): Provider => ({
   provide: 'googleTagManagerId',

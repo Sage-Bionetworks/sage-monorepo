@@ -6,6 +6,7 @@ import {
   CONFIG_SERVICE_TOKEN,
   GoogleTagManagerComponent,
   createGoogleTagManagerIdProvider,
+  isValidGoogleTagManagerId,
 } from '@sagebionetworks/shared/google-tag-manager';
 
 @Component({
@@ -28,6 +29,8 @@ export class AppComponent {
   readonly useGoogleTagManager: boolean;
 
   constructor() {
-    this.useGoogleTagManager = this.configService.config.googleTagManagerId.length > 0;
+    this.useGoogleTagManager = isValidGoogleTagManagerId(
+      this.configService.config.googleTagManagerId,
+    );
   }
 }
