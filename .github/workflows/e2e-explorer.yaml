@@ -96,7 +96,7 @@ jobs:
       - name: Setup Explorer
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-              && bash ./tools/setup-projects.sh "${{ inputs.explorer }}"
+              && bash ./tools/setup-projects.sh ${{ inputs.explorer }}"
 
       - name: Build Explorer
         env:
