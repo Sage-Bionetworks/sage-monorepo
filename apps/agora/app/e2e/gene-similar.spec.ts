@@ -32,7 +32,7 @@ test.describe('specific viewport block', () => {
     // sort forward on nominated target
     await page.getByRole('cell', { name: 'Nominated Target' }).click();
 
-    const cell = await page.getByRole('row').nth(1).getByRole('cell').nth(1).innerText();
-    expect(cell).not.toBe('');
+    const cell = page.getByRole('row').nth(1).getByRole('cell').nth(1);
+    await expect(cell).not.toHaveText('');
   });
 });
