@@ -45,6 +45,7 @@
         "libs/model-ad/api-client-angular/src/index.ts"
       ],
       "@sagebionetworks/model-ad/config": ["libs/model-ad/config/src/index.ts"],
+      "@sagebionetworks/model-ad/home": ["libs/model-ad/home/src/index.ts"],
       "@sagebionetworks/model-ad/not-found": ["libs/model-ad/not-found/src/index.ts"],
       "@sagebionetworks/model-ad/ui": ["libs/model-ad/ui/src/index.ts"],
       "@sagebionetworks/model-ad/util": ["libs/model-ad/util/src/index.ts"],

@@ -1,5 +1,0 @@
-@use './lib/footer/footer-theme' as footer;
-
-@mixin theme($theme) {
-  @include footer.theme($theme);
-}
