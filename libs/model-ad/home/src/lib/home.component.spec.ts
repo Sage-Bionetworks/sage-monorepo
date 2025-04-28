@@ -1,21 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { render, screen } from '@testing-library/angular';
 import { HomeComponent } from './home.component';
 
+async function setup() {
+  await render(HomeComponent);
+}
+
 describe('HomeComponent', () => {
-  let component: HomeComponent;
-  let fixture: ComponentFixture<HomeComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [],
-      providers: [],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(HomeComponent);
-    component = fixture.componentInstance;
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should display home button', async () => {
+    await setup();
+    const button = screen.getByRole('button', { name: /model-ad/i });
+    expect(button).toBeInTheDocument();
   });
 });
