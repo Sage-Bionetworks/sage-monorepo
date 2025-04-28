@@ -1,9 +1,0 @@
-{
-  "name": "KaggleCompetitionAvroModel",
-  "namespace": "org.sagebionetworks.openchallenges.kafka.model",
-  "type": "record",
-  "fields": [
-    { "name": "id", "type": "long" },
-    { "name": "title", "type": "string" }
-  ]
-}
