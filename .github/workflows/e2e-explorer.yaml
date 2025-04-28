@@ -8,7 +8,18 @@ on:
         description: The name of the Explorer to run e2e tests for
 
 jobs:
+  validate-explorer-input:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check if explorer input is valid
+        id: validate-explorer-input
+        run: |
+          if [[ "${{ inputs.explorer }}" != "agora" && "${{ inputs.explorer }}" != "model-ad" ]]; then
+            echo "Invalid Explorer input: ${{ inputs.explorer }}"
+            exit 1
+          fi
   check-explorer-affected:
+    needs: validate-explorer-input
     runs-on: ubuntu-22.04
     outputs:
       explorer_affected: ${{ steps.explorer_affected.outputs.affected }}
