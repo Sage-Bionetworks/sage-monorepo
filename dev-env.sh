@@ -56,8 +56,6 @@ function workspace-install-affected {
 }
 
 function workspace-install-java-lib-projects {
-  # Install Java libraries only so that the Java Language Server can find them when auto importing
-  # the projects that depend on them.
   nx run-many --target=install --exclude='!tag:language:java'
 }
 
