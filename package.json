@@ -32,7 +32,7 @@
     "@primeng/themes": "19.0.9",
     "@storybook/addon-interactions": "8.4.7",
     "@swc/helpers": "~0.5.11",
-    "angular-google-tag-manager": "1.8.0",
+    "angular-google-tag-manager": "1.11.0",
     "cdktf": "0.16.1",
     "commander": "9.4.1",
     "compression": "1.8.0",
