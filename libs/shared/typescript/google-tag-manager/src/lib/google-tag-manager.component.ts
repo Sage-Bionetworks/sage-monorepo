@@ -1,17 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { GoogleTagManagerService } from 'angular-google-tag-manager';
-import { ConfigService } from '@sagebionetworks/openchallenges/config';
-import { googleTagManagerIdProvider } from './google-tag-manager-id.provider';
+import { CONFIG_SERVICE_TOKEN, ConfigService } from './google-tag-manager-id.provider';
 
 @Component({
-  selector: 'app-google-tag-manager',
+  selector: 'sage-google-tag-manager',
   template: '',
   standalone: true,
   providers: [
-    googleTagManagerIdProvider,
-    // GoogleTagManagerService has been evaluated before we defined the GTM ID. That is why we
-    // redefine it below so that its initialization get access to the GTM ID.
     {
       provide: GoogleTagManagerService,
       useClass: GoogleTagManagerService,
@@ -20,9 +16,9 @@ import { googleTagManagerIdProvider } from './google-tag-manager-id.provider';
 })
 export class GoogleTagManagerComponent implements OnInit {
   constructor(
-    private router: Router,
-    private gtmService: GoogleTagManagerService,
-    private configService: ConfigService,
+    private readonly router: Router,
+    private readonly gtmService: GoogleTagManagerService,
+    @Inject(CONFIG_SERVICE_TOKEN) private readonly configService: ConfigService,
   ) {}
 
   ngOnInit(): void {

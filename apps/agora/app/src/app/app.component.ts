@@ -1,25 +1,39 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ConfigService } from '@sagebionetworks/agora/config';
 import { MetaTagService } from '@sagebionetworks/agora/services';
 import { FooterComponent, HeaderComponent } from '@sagebionetworks/agora/ui';
+import {
+  CONFIG_SERVICE_TOKEN,
+  GoogleTagManagerComponent,
+  createGoogleTagManagerIdProvider,
+  isGoogleTagManagerIdSet,
+} from '@sagebionetworks/shared/google-tag-manager';
 import { ToastModule } from 'primeng/toast';
-import { GoogleTagManagerComponent } from './google-tag-manager/google-tag-manager.component';
 
 @Component({
   imports: [RouterModule, HeaderComponent, FooterComponent, ToastModule, GoogleTagManagerComponent],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
+  providers: [
+    {
+      provide: CONFIG_SERVICE_TOKEN,
+      useFactory: () => inject(ConfigService),
+    },
+    createGoogleTagManagerIdProvider(),
+  ],
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   metaTagService = inject(MetaTagService);
   configService = inject(ConfigService);
 
-  useGoogleTagManager = false;
+  readonly useGoogleTagManager: boolean;
 
-  ngOnInit() {
+  constructor() {
     this.metaTagService.updateMetaTags();
-    this.useGoogleTagManager = this.configService.config.googleTagManagerId.length > 0;
+    this.useGoogleTagManager = isGoogleTagManagerIdSet(
+      this.configService.config.googleTagManagerId,
+    );
   }
 }

@@ -1,26 +1,37 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { PageTitleService } from '@sagebionetworks/openchallenges/util';
+import { RouterOutlet } from '@angular/router';
+import { ConfigService } from '@sagebionetworks/openchallenges/config';
+import { HomeDataService } from '@sagebionetworks/openchallenges/home';
 import {
   Avatar,
   MenuItem,
   MOCK_AVATAR_32,
-  USER_MENU_ITEMS,
-  NavbarSection,
   NavbarComponent,
+  NavbarSection,
+  USER_MENU_ITEMS,
 } from '@sagebionetworks/openchallenges/ui';
+import { PageTitleService } from '@sagebionetworks/openchallenges/util';
+import {
+  CONFIG_SERVICE_TOKEN,
+  createGoogleTagManagerIdProvider,
+  GoogleTagManagerComponent,
+  isGoogleTagManagerIdSet,
+} from '@sagebionetworks/shared/google-tag-manager';
+import { Subscription } from 'rxjs';
 import { APP_SECTIONS } from './app-sections';
-import { RouterOutlet } from '@angular/router';
-import { HomeDataService } from '@sagebionetworks/openchallenges/home';
-import { GoogleTagManagerComponent } from './google-tag-manager/google-tag-manager.component';
-import { ConfigService } from '@sagebionetworks/openchallenges/config';
-import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  imports: [NavbarComponent, RouterOutlet, NgIf, GoogleTagManagerComponent],
+  imports: [NavbarComponent, RouterOutlet, GoogleTagManagerComponent],
+  providers: [
+    {
+      provide: CONFIG_SERVICE_TOKEN,
+      useFactory: () => CONFIG_SERVICE_TOKEN,
+    },
+    createGoogleTagManagerIdProvider(),
+  ],
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'OpenChallenges';
@@ -37,7 +48,9 @@ export class AppComponent implements OnInit, OnDestroy {
     private homeDataService: HomeDataService,
     private configService: ConfigService,
   ) {
-    this.useGoogleTagManager = this.configService.config.googleTagManagerId.length > 0;
+    this.useGoogleTagManager = isGoogleTagManagerIdSet(
+      this.configService.config.googleTagManagerId,
+    );
   }
 
   ngOnInit() {

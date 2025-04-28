@@ -1,4 +1,6 @@
-<app-google-tag-manager *ngIf="useGoogleTagManager" />
+@if (useGoogleTagManager) {
+  <sage-google-tag-manager />
+}
 <!-- XXX -->
 <openchallenges-navbar
   class="mat-elevation-z6"
