@@ -30,6 +30,8 @@ function workspace-install-python-dependencies {
 function workspace-install {
   workspace-install-nodejs-dependencies
   workspace-install-python-dependencies
+  workspace-install-java-lib-projects
+
   nx run-many --target=create-config
   # Projects that can be prepared in parallel
   nx run-many --target=prepare --projects=!tag:language:java
@@ -40,11 +42,20 @@ function workspace-install {
 function workspace-install-affected {
   workspace-install-nodejs-dependencies
   workspace-install-python-dependencies
+  workspace-install-java-lib-projects
+
   nx affected --target=create-config
   # Projects that can be prepared in parallel
   nx affected --target=prepare --exclude='tag:language:java'
   # Java projects must be installed one at a time
   nx affected --target=prepare --exclude='!tag:language:java' --parallel=1
+}
+
+# TODO: This is needed when developing inside VS Code. The CI workflows don't need it.
+function workspace-install-java-lib-projects {
+  # Install Java libraries only so that the Java Language Server can find them when auto importing
+  # the projects that depend on them.
+  nx run-many --target=install --exclude='!tag:language:java'
 }
 
 # Setup Python virtualenvs
