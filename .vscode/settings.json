@@ -6,7 +6,7 @@
   "java.compile.nullAnalysis.mode": "disabled",
   "java.configuration.updateBuildConfiguration": "automatic",
   "java.autobuild.enabled": false,
-  "java.import.gradle.enabled": false,
+  "java.import.gradle.enabled": true,
   "java.import.maven.enabled": false,
   "css.validate": false,
   "less.validate": false,
