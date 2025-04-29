@@ -1,4 +1,4 @@
-package org.sagebionetworks.openchallenges.mcp_server;
+package org.sagebionetworks.openchallenges.mcp.server;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -6,8 +6,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class McpServerApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
-
+  @Test
+  void contextLoads() {}
 }
