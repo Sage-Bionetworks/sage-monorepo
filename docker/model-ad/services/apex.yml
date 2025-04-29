@@ -11,6 +11,11 @@ services:
       - model-ad
     ports:
       - '8000:80'
+    healthcheck:
+      test: ['CMD', 'curl', '--fail', 'http://localhost:80/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
     depends_on:
       model-ad-api-docs:
         condition: service_healthy

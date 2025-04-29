@@ -1,19 +1,28 @@
-name: Run e2e tests for Agora
-
+# Reusable workflow to run e2e tests for an Explorer (e.g. Agora, Model-AD, etc.)
 on:
-  push:
-  # Warning: using the pull_request_target event without the cautionary measures may allow
-  # unauthorized GitHub users to open a “pwn request” and exfiltrate secrets.
-  pull_request_target:
-    types: [opened, synchronize, reopened, labeled]
+  workflow_call:
+    inputs:
+      explorer:
+        required: true
+        type: string
+        description: The name of the Explorer to run e2e tests for
 
 jobs:
-  check-agora-affected:
-    # Run in Sage repo on main branch and on all branches in user-owned forks
-    if: ${{ github.ref_name == 'main' || github.actor == github.repository_owner }}
+  validate-explorer-input:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check if explorer input is valid
+        id: validate-explorer-input
+        run: |
+          if [[ "${{ inputs.explorer }}" != "agora" && "${{ inputs.explorer }}" != "model-ad" ]]; then
+            echo "Invalid Explorer input: ${{ inputs.explorer }}"
+            exit 1
+          fi
+  check-explorer-affected:
+    needs: validate-explorer-input
     runs-on: ubuntu-22.04
     outputs:
-      agora_affected: ${{ steps.agora_affected.outputs.affected }}
+      explorer_affected: ${{ steps.explorer_affected.outputs.affected }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -36,12 +45,12 @@ jobs:
         id: setup-dev-container
         uses: ./.github/actions/setup-dev-container
 
-      - name: Check if Agora was affected
-        id: agora_affected
+      - name: Check if Explorer was affected
+        id: explorer_affected
         run: |
           IFS=',' read -ra PROJECTS <<< "${{ steps.setup-dev-container.outputs.affected_projects }}"
           for project in "${PROJECTS[@]}"; do
-            if [[ "$project" == agora-* ]]; then
+            if [[ "$project" == "${{ inputs.explorer }}"-* ]]; then
               echo "affected=true" >> "${GITHUB_OUTPUT}"
               exit 0
             fi
@@ -51,15 +60,16 @@ jobs:
       - name: Remove the dev container
         run: docker rm -f sage_devcontainer
 
-  run-agora-e2e-tests:
-    needs: check-agora-affected
-    if: needs.check-agora-affected.outputs.agora_affected == 'true'
-    # The agora and agora-pr environments contain the same secrets. However, the agora environment
-    # will run workflows automatically and should only be used when the workflow is running against
-    # trusted code. The agora-pr environment requires an authorized user's approval to run the
-    # workflow, so should be used when running against untrused code, e.g. PRs from forked repos.
+  run-explorer-e2e-tests:
+    needs: check-explorer-affected
+    if: needs.check-explorer-affected.outputs.explorer_affected == 'true'
+    # The explorer and explorer-pr environments should contain the same secrets. However, the explorer
+    # environment should be configured to run workflows automatically and should only be used when
+    # the workflow is running against trusted code. The explorer-pr environment should be configured
+    # to require an authorized user's approval to run the workflow, so should be used when running
+    # against untrused code, e.g. PRs from forked repos.
     environment: ${{ github.event_name == 'pull_request_target' &&
-      github.event.pull_request.head.repo.full_name != github.repository && 'agora-pr' || 'agora' }}
+      github.event.pull_request.head.repo.full_name != github.repository && format('{0}-pr', inputs.explorer) || inputs.explorer }}
     timeout-minutes: 60
     runs-on: ubuntu-22.04
     steps:
@@ -94,31 +104,42 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
               && npx playwright install --with-deps"
 
-      - name: Setup Agora
+      - name: Setup Explorer
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-              && bash ./tools/setup-projects.sh agora"
+              && bash ./tools/setup-projects.sh ${{ inputs.explorer }}"
 
-      - name: Build Agora
+      - name: Build Explorer
+        env:
+          cmd: '${{ inputs.explorer }}-build-images'
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-              && agora-build-images"
+              && ${cmd}"
 
-      - name: Write Synapse PAT for Agora
+      - name: Write Synapse PAT for Explorer
         run: |
-          sed -i "s/^SYNAPSE_AUTH_TOKEN=.*/SYNAPSE_AUTH_TOKEN=\"${{ secrets.AGORA_DATA_SYNAPSE_AUTH_TOKEN }}\"/" apps/agora/data/.env
+          env_filename="apps/${{ inputs.explorer }}/data/.env"
+          if [ -f "$env_filename" ]; then
+            sed -i "s/^SYNAPSE_AUTH_TOKEN=.*/SYNAPSE_AUTH_TOKEN=\"${{ secrets.SYNAPSE_AUTH_TOKEN }}\"/" "${env_filename}"
+          else
+            echo "${env_filename} not found for ${{ inputs.explorer }}. Skipping SYNAPSE_AUTH_TOKEN injection."
+          fi
 
-      - name: Start Agora
+      - name: Start Explorer
+        env:
+          cmd: 'nx run ${{ inputs.explorer }}-apex:serve-detach'
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-              && nx run agora-apex:serve-detach"
+              && ${cmd}"
 
-      - name: Run Agora e2e tests
+      - name: Run Explorer e2e tests
+        env:
+          cmd: 'nx run ${{ inputs.explorer }}-app:e2e'
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-              && nx run agora-app:e2e"
+              && ${cmd}"
 
-      - name: Stop Agora
+      - name: Stop Explorer
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
               && workspace-docker-stop"
@@ -126,7 +147,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
-          name: playwright-report
+          name: 'playwright-report-${{ inputs.explorer }}'
           path: playwright-report/
           retention-days: 5
 
