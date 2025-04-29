@@ -30,21 +30,33 @@ function workspace-install-python-dependencies {
 function workspace-install {
   workspace-install-nodejs-dependencies
   workspace-install-python-dependencies
+
   nx run-many --target=create-config
   # Projects that can be prepared in parallel
   nx run-many --target=prepare --projects=!tag:language:java
   # Java projects must be installed one at a time
   nx run-many --target=prepare --projects=tag:language:java --parallel=1
+
+  # See https://sagebionetworks.jira.com/browse/SMR-78
+  workspace-install-java-lib-projects
 }
 
 function workspace-install-affected {
   workspace-install-nodejs-dependencies
   workspace-install-python-dependencies
+
   nx affected --target=create-config
   # Projects that can be prepared in parallel
   nx affected --target=prepare --exclude='tag:language:java'
   # Java projects must be installed one at a time
   nx affected --target=prepare --exclude='!tag:language:java' --parallel=1
+
+  # See https://sagebionetworks.jira.com/browse/SMR-78
+  workspace-install-java-lib-projects
+}
+
+function workspace-install-java-lib-projects {
+  nx run-many --target=install --exclude='!tag:language:java'
 }
 
 # Setup Python virtualenvs
