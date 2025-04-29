@@ -56,7 +56,8 @@ function workspace-install-affected {
 }
 
 function workspace-install-java-lib-projects {
-  nx run-many --target=install --exclude='!tag:language:java'
+  # Only library projects provide the install task.
+  nx run-many --target=install --projects=tag:language:java
 }
 
 # Setup Python virtualenvs
