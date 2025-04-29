@@ -1,0 +1,42 @@
+{
+  "name": "openchallenges-mcp-server",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/openchallenges/mcp-server/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["./gradlew --version 1> /dev/null"],
+        "cwd": "{projectRoot}"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/build"],
+      "options": {
+        "command": "./gradlew build",
+        "cwd": "{projectRoot}"
+      },
+      "dependsOn": ["^install"]
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/build"],
+      "options": {
+        "command": "./gradlew test",
+        "cwd": "{projectRoot}"
+      },
+      "dependsOn": ["^install"]
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./gradlew clean",
+        "cwd": "{projectRoot}"
+      }
+    }
+  },
+  "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],
+  "implicitDependencies": []
+}
