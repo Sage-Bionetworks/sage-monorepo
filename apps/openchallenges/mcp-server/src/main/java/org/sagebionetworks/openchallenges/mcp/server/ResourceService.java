@@ -27,13 +27,13 @@ public class ResourceService {
     log.info("Initialized {} resources", resources.size());
   }
 
-  @Tool(name = "oc_get_resources", description = "Get a list of OpenChallenges resources")
+  @Tool(name = "list_oc_resources", description = "Get a list of OpenChallenges resources")
   public List<Resource> getResources() {
     log.info("Fetching all resources");
     return resources;
   }
 
-  @Tool(name = "oc_get_resource", description = "Get a single OpenChallenges resource by name")
+  @Tool(name = "get_oc_resource", description = "Get a single OpenChallenges resource by name")
   public Resource getResource(String name) {
     log.info("Fetching resource by name: {}", name);
     return resources
