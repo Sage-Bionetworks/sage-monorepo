@@ -1,3 +1,5 @@
 // @forward 'shared/typescript/styles/src/index';
-@forward './variables';
-@forward './general';
+@forward './libs/general';
+@forward './libs/mixins';
+@forward './libs/variables';
+@forward './libs/components/fonts';
