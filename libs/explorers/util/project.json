@@ -1,15 +1,15 @@
 {
-  "name": "explorers-shared",
+  "name": "explorers-util",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "sourceRoot": "libs/explorers/shared/src",
+  "sourceRoot": "libs/explorers/util/src",
   "prefix": "explorers",
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/libs/explorers/shared"],
+      "outputs": ["{workspaceRoot}/coverage/libs/explorers/util"],
       "options": {
-        "jestConfig": "libs/explorers/shared/jest.config.ts"
+        "jestConfig": "libs/explorers/util/jest.config.ts"
       }
     },
     "lint": {
