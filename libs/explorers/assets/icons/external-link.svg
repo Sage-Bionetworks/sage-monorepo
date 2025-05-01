@@ -1,0 +1,13 @@
+<svg
+  version="1.1"
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  viewBox="0 0 20 20"
+  xml:space="preserve"
+>
+  <path
+    fill="currentColor"
+    d="M17.8,17.8H2.2V2.2H10V0H2.2C1,0,0,1,0,2.2v15.6C0,19,1,20,2.2,20h15.6c1.2,0,2.2-1,2.2-2.2V10h-2.2V17.8z M12.2,0v2.2h4
+	L5.3,13.1l1.6,1.6L17.8,3.8v4H20V0H12.2z"
+  />
+</svg>
