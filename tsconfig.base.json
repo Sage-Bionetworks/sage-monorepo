@@ -41,6 +41,10 @@
       "@sagebionetworks/amp-als/api-client-angular": [
         "libs/amp-als/api-client-angular/src/index.ts"
       ],
+      "@sagebionetworks/explorers/models": ["libs/explorers/models/index.ts"],
+      "@sagebionetworks/explorers/services": ["libs/explorers/services/src/index.ts"],
+      "@sagebionetworks/explorers/shared": ["libs/explorers/shared/src/index.ts"],
+      "@sagebionetworks/explorers/ui": ["libs/explorers/ui/src/index.ts"],
       "@sagebionetworks/model-ad/api-client-angular": [
         "libs/model-ad/api-client-angular/src/index.ts"
       ],

@@ -33,10 +33,25 @@
             "input": "libs/shared/typescript/assets/src/assets",
             "glob": "**/*",
             "output": "assets"
+          },
+          {
+            "input": "libs/model-ad/assets",
+            "glob": "**/*",
+            "output": "model-ad-assets"
+          },
+          {
+            "input": "libs/explorers/assets",
+            "glob": "**/*",
+            "output": "explorers-assets"
+          },
+          {
+            "input": "libs/model-ad/assets/favicon",
+            "glob": "**/*",
+            "output": "/"
           }
         ],
         "stylePreprocessorOptions": {
-          "includePaths": ["libs"]
+          "includePaths": ["libs/model-ad"]
         },
         "styles": ["apps/model-ad/app/src/styles.scss", "node_modules/primeicons/primeicons.css"],
         "scripts": []
@@ -117,7 +132,7 @@
         "tsConfig": "apps/model-ad/app/tsconfig.server.json",
         "inlineStyleLanguage": "scss",
         "stylePreprocessorOptions": {
-          "includePaths": ["libs"]
+          "includePaths": ["libs/model-ad"]
         }
       },
       "configurations": {

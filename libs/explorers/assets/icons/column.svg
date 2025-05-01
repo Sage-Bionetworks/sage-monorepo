@@ -1,0 +1,13 @@
+<svg
+  version="1.1"
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  viewBox="0 0 20 16"
+  xml:space="preserve"
+>
+  <path
+    class="svg-icon-bg"
+    d="M19 0H1C0.45 0 0 0.45 0 1V15C0 15.55 0.45 16 1 16H19C19.55 16 20 15.55 20 15V1C20 0.45 19.55 0 19 0ZM6 14H2V2H6V14ZM12 14H8V2H12V14ZM18 14H14V2H18V14Z"
+    fill="currentColor"
+  />
+</svg>
