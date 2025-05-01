@@ -27,6 +27,7 @@
     "@angular/router": "19.2.1",
     "@angular/ssr": "19.2.1",
     "@cdktf/provider-aws": "14.0.2",
+    "@fontsource-variable/dm-sans": "^5.2.5",
     "@fortawesome/angular-fontawesome": "1.0.0",
     "@fortawesome/free-solid-svg-icons": "6.7.1",
     "@primeng/themes": "19.0.9",
