@@ -5,6 +5,7 @@
   "prefix": "app",
   "sourceRoot": "apps/model-ad/app/src",
   "tags": [],
+  "implicitDependencies": ["model-ad-styles", "model-ad-themes", "shared-typescript-assets"],
   "targets": {
     "create-config": {
       "executor": "nx:run-commands",
@@ -180,7 +181,13 @@
         "command": "trivy image ghcr.io/sage-bionetworks/model-ad-app:local --quiet",
         "color": true
       }
+    },
+    "e2e": {
+      "executor": "@nx/playwright:playwright",
+      "outputs": ["{workspaceRoot}/dist/.playwright/{projectRoot}"],
+      "options": {
+        "config": "{projectRoot}/playwright.config.ts"
+      }
     }
-  },
-  "implicitDependencies": ["model-ad-styles", "model-ad-themes", "shared-typescript-assets"]
+  }
 }

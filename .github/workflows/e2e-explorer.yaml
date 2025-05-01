@@ -1,0 +1,155 @@
+# Reusable workflow to run e2e tests for an Explorer (e.g. Agora, Model-AD, etc.)
+on:
+  workflow_call:
+    inputs:
+      explorer:
+        required: true
+        type: string
+        description: The name of the Explorer to run e2e tests for
+
+jobs:
+  validate-explorer-input:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check if explorer input is valid
+        id: validate-explorer-input
+        run: |
+          if [[ "${{ inputs.explorer }}" != "agora" && "${{ inputs.explorer }}" != "model-ad" ]]; then
+            echo "Invalid Explorer input: ${{ inputs.explorer }}"
+            exit 1
+          fi
+  check-explorer-affected:
+    needs: validate-explorer-input
+    runs-on: ubuntu-22.04
+    outputs:
+      explorer_affected: ${{ steps.explorer_affected.outputs.affected }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # We need to fetch all branches and commits so that Nx affected has a base to compare
+          # against.
+          fetch-depth: 0
+          persist-credentials: false
+          # By default, actions/checkout@v4 will checkout the main branch instead of the merge
+          # commit when when using pull_request_target. It is currently difficult to checkout the
+          # merge commit in this context. The current solution is to checkout the PR HEAD instead
+          # and enable the branch protection rule "Require branches to be up to date before
+          # merging".
+          ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository && github.event.pull_request.head.sha || github.ref }}
+
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        # Pin to v4.2.1 until https://github.com/nrwl/nx-set-shas/issues/186 is fixed
+        uses: nrwl/nx-set-shas@v4.2.1
+
+      - name: Set up the dev container
+        id: setup-dev-container
+        uses: ./.github/actions/setup-dev-container
+
+      - name: Check if Explorer was affected
+        id: explorer_affected
+        run: |
+          IFS=',' read -ra PROJECTS <<< "${{ steps.setup-dev-container.outputs.affected_projects }}"
+          for project in "${PROJECTS[@]}"; do
+            if [[ "$project" == "${{ inputs.explorer }}"-* ]]; then
+              echo "affected=true" >> "${GITHUB_OUTPUT}"
+              exit 0
+            fi
+          done
+          echo "affected=false" >> "${GITHUB_OUTPUT}"
+
+      - name: Remove the dev container
+        run: docker rm -f sage_devcontainer
+
+  run-explorer-e2e-tests:
+    needs: check-explorer-affected
+    if: needs.check-explorer-affected.outputs.explorer_affected == 'true'
+    # The explorer and explorer-pr environments should contain the same secrets. However, the explorer
+    # environment should be configured to run workflows automatically and should only be used when
+    # the workflow is running against trusted code. The explorer-pr environment should be configured
+    # to require an authorized user's approval to run the workflow, so should be used when running
+    # against untrused code, e.g. PRs from forked repos.
+    environment: ${{ github.event_name == 'pull_request_target' &&
+      github.event.pull_request.head.repo.full_name != github.repository && format('{0}-pr', inputs.explorer) || inputs.explorer }}
+    timeout-minutes: 60
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # We need to fetch all branches and commits so that Nx affected has a base to compare
+          # against.
+          fetch-depth: 0
+          persist-credentials: false
+          # By default, actions/checkout@v4 will checkout the main branch instead of the merge
+          # commit when when using pull_request_target. It is currently difficult to checkout the
+          # merge commit in this context. The current solution is to checkout the PR HEAD instead
+          # and enable the branch protection rule "Require branches to be up to date before
+          # merging".
+          ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository && github.event.pull_request.head.sha || github.ref }}
+
+      - name:
+          Switch from the detached HEAD of the merge commit to a new branch
+          # Buildx does not work on a detached HEAD
+        run: git switch -c new-branch
+
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        # Pin to v4.2.1 until https://github.com/nrwl/nx-set-shas/issues/186 is fixed
+        uses: nrwl/nx-set-shas@v4.2.1
+
+      - name: Set up the dev container
+        id: setup-dev-container
+        uses: ./.github/actions/setup-dev-container
+
+      - name: Install Playwright Browsers
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+              && npx playwright install --with-deps"
+
+      - name: Setup Explorer
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+              && bash ./tools/setup-projects.sh ${{ inputs.explorer }}"
+
+      - name: Build Explorer
+        env:
+          cmd: '${{ inputs.explorer }}-build-images'
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+              && ${cmd}"
+
+      - name: Write Synapse PAT for Explorer
+        run: |
+          env_filename="apps/${{ inputs.explorer }}/data/.env"
+          if [ -f "$env_filename" ]; then
+            sed -i "s/^SYNAPSE_AUTH_TOKEN=.*/SYNAPSE_AUTH_TOKEN=\"${{ secrets.SYNAPSE_AUTH_TOKEN }}\"/" "${env_filename}"
+          else
+            echo "${env_filename} not found for ${{ inputs.explorer }}. Skipping SYNAPSE_AUTH_TOKEN injection."
+          fi
+
+      - name: Start Explorer
+        env:
+          cmd: 'nx run ${{ inputs.explorer }}-apex:serve-detach'
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+              && ${cmd}"
+
+      - name: Run Explorer e2e tests
+        env:
+          cmd: 'nx run ${{ inputs.explorer }}-app:e2e'
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+              && ${cmd}"
+
+      - name: Stop Explorer
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+              && workspace-docker-stop"
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: 'playwright-report-${{ inputs.explorer }}'
+          path: playwright-report/
+          retention-days: 5
+
+      - name: Remove the dev container
+        run: docker rm -f sage_devcontainer

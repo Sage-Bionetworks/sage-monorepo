@@ -1,25 +1,13 @@
-import { HttpClientModule } from '@angular/common/http';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { render, screen } from '@testing-library/angular';
 import { FooterComponent } from './footer.component';
 
+async function setup() {
+  await render(FooterComponent);
+}
+
 describe('FooterComponent', () => {
-  let component: FooterComponent;
-  let fixture: ComponentFixture<FooterComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [HttpClientModule, RouterTestingModule],
-    }).compileComponents();
-  });
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(FooterComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should include logo', async () => {
+    await setup();
+    expect(screen.getByAltText(/Model-AD logo/i)).toBeInTheDocument();
   });
 });
