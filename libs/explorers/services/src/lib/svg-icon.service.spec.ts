@@ -15,6 +15,7 @@ describe('SvgIconService', () => {
   it('should load SVG if imagePath is valid', async () => {
     // Test valid path
     expect(service.isValidImagePath('/agora-assets/icons/cog.svg')).toBe(true);
+    expect(service.isValidImagePath('/model-ad-assets/icons/cog.svg')).toBe(true);
   });
 
   it('should not load SVG if imagePath is invalid', async () => {
