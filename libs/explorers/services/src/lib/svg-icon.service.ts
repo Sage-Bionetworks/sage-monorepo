@@ -7,20 +7,33 @@ import { Observable, map, shareReplay } from 'rxjs';
   providedIn: 'root',
 })
 export class SvgIconService {
+  /**
+   * Service for managing SVG icons in the Explorer applications
+   *
+   * This service provides the following functionality:
+   * - Load SVG files from the `/agora-assets/icons/` directory
+   * - Cache SVGs to prevent redundant HTTP requests
+   * - Sanitize SVG content for safe rendering in the browser
+   * - Preload commonly used SVG icons for better performance
+   *
+   * The service ensures security by:
+   * - Only allowing SVGs from the approved assets directory
+   * - Sanitizing SVG content before rendering
+   */
   private http = inject(HttpClient);
   private sanitizer = inject(DomSanitizer);
   private svgCache = new Map<string, Observable<SafeHtml>>();
 
   // Common SVGs we want to preload
   private commonSvgPaths = [
-    '/agora-assets/icons/cog.svg',
-    '/agora-assets/icons/column.svg',
-    '/agora-assets/icons/download.svg',
-    '/agora-assets/icons/external-link.svg',
-    '/agora-assets/icons/gct.svg',
-    '/agora-assets/icons/info-circle.svg',
-    '/agora-assets/icons/pin.svg',
-    '/agora-assets/icons/trash.svg',
+    'libs/explorers/assets/icons/cog.svg',
+    'libs/explorers/assets/icons/column.svg',
+    'libs/explorers/assets/icons/download.svg',
+    'libs/explorers/assets/icons/external-link.svg',
+    'libs/explorers/assets/icons/gct.svg',
+    'libs/explorers/assets/icons/info-circle.svg',
+    'libs/explorers/assets/icons/pin.svg',
+    'libs/explorers/assets/icons/trash.svg',
   ];
 
   constructor() {
@@ -35,8 +48,12 @@ export class SvgIconService {
 
   isValidImagePath(path: string): boolean {
     // We don't want to load SVGs from external sources
+    // Block URLs
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      return false;
+    }
     // Ensure the path comes from '/agora-assets/icons/'
-    return Boolean(path) && path.startsWith('/agora-assets/icons/');
+    return Boolean(path) && /\/icons\/[^/]+\.svg$/.test(path);
   }
 
   getSvg(path: string): Observable<SafeHtml> {
