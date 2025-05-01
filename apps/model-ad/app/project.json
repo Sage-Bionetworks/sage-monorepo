@@ -131,7 +131,7 @@
         "tsConfig": "apps/model-ad/app/tsconfig.server.json",
         "inlineStyleLanguage": "scss",
         "stylePreprocessorOptions": {
-          "includePaths": ["libs"]
+          "includePaths": ["libs/model-ad"]
         }
       },
       "configurations": {
