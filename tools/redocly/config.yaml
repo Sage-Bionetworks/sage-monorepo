@@ -9,17 +9,18 @@ rules:
   no-server-example.com: off
   paths-kebab-case: warn
 
+# The path to the API description files is relative to the location of this file.
 apis:
   amp-als-api-description:
-    root: libs/amp-als/api-description/openapi/openapi.yaml
+    root: ../../libs/amp-als/api-description/openapi/openapi.yaml
   agora-api-description:
-    root: libs/agora/api-description/build/openapi.yaml
+    root: ../../libs/agora/api-description/build/openapi.yaml
   model-ad-api-description:
-    root: libs/model-ad/api-description/build/openapi.yaml
+    root: ../../libs/model-ad/api-description/build/openapi.yaml
   openchallenges-api-description:
-    root: libs/openchallenges/api-description/build/openapi.yaml
+    root: ../../libs/openchallenges/api-description/build/openapi.yaml
   synapse-api-description:
-    root: libs/synapse/api-description/build/openapi.json
+    root: ../../libs/synapse/api-description/build/openapi.json
     rules:
       operation-4xx-response: off
       operation-operationId-url-safe: off
