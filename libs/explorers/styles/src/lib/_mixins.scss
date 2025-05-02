@@ -20,42 +20,6 @@
   }
 }
 
-@mixin reset-ul() {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-@mixin container($width: 'md') {
-  max-width: var(--container-max-width-#{$width});
-  padding-left: 0;
-  padding-right: 0;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/**
-* Responsive breakpoint manager
-* S. https://sass-guidelin.es/#architecture
-*/
-@mixin respond-to($breakpoint) {
-  $raw-query: map.get($breakpoints, $breakpoint);
-
-  @if $raw-query {
-    $query: if(
-      meta.type-of($raw-query) == 'string',
-      string.unquote($raw-query),
-      meta.inspect($raw-query)
-    );
-
-    @media #{$query} {
-      @content;
-    }
-  } @else {
-    @error 'No value found for `#{$breakpoint}`. Please make sure it is defined in `$breakpoints` map.';
-  }
-}
-
 @mixin link-hover {
   color: var(--color-link);
   text-decoration: underline;
@@ -68,34 +32,5 @@
 
   &:hover {
     @include link-hover;
-  }
-}
-
-@mixin two-tone-icon-hover {
-  .svg-icon-bg {
-    fill: rgb(var(--color-action-primary-rgb) / 30%);
-  }
-
-  circle,
-  rect,
-  path {
-    &:not(.svg-icon-bg) {
-      fill: var(--color-action-primary);
-    }
-  }
-}
-
-@mixin two-tone-icon {
-  color: var(--color-gray-600);
-  transition: $transition-duration;
-
-  circle,
-  rect,
-  path {
-    transition: $transition-duration;
-  }
-
-  &:hover {
-    @include two-tone-icon-hover;
   }
 }
