@@ -1,16 +1,17 @@
 import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ConfigService } from '@sagebionetworks/model-ad/config';
-import { FooterComponent, HeaderComponent } from '@sagebionetworks/model-ad/ui';
+import { HeaderComponent } from '@sagebionetworks/explorers/ui';
 import {
   CONFIG_SERVICE_TOKEN,
   GoogleTagManagerComponent,
   createGoogleTagManagerIdProvider,
   isGoogleTagManagerIdSet,
 } from '@sagebionetworks/shared/google-tag-manager';
+import { NavigationLink } from '@sagebionetworks/explorers/models';
 
 @Component({
-  imports: [RouterModule, HeaderComponent, FooterComponent, GoogleTagManagerComponent],
+  imports: [RouterModule, HeaderComponent, GoogleTagManagerComponent],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -25,8 +26,47 @@ import {
 export class AppComponent {
   configService = inject(ConfigService);
 
-  title = 'model-ad-app';
   readonly useGoogleTagManager: boolean;
+
+  defaultNavItems: Array<NavigationLink> = [
+    {
+      label: 'Home',
+      routerLink: [''],
+      activeOptions: { exact: true },
+    },
+    {
+      label: 'Model Overview',
+      routerLink: ['model-overview'],
+    },
+    {
+      label: 'Gene Expression',
+      routerLink: ['gene-expression'],
+    },
+    {
+      label: 'Disease Correlation',
+      routerLink: ['disease-correlation'],
+    },
+  ];
+  mobileNavItems: Array<NavigationLink> = [
+    {
+      label: 'About',
+      routerLink: ['about'],
+    },
+    {
+      label: 'Help',
+      url: 'https://help.adknowledgeportal.org/apd/Agora-Help.2663088129.html',
+      target: '_blank',
+    },
+    {
+      label: 'News',
+      routerLink: ['news'],
+    },
+    {
+      label: 'Terms of Service',
+      url: 'https://s3.amazonaws.com/static.synapse.org/governance/SageBionetworksSynapseTermsandConditionsofUse.pdf?v=5',
+      target: '_blank',
+    },
+  ];
 
   constructor() {
     this.useGoogleTagManager = isGoogleTagManagerIdSet(
