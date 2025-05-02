@@ -6,6 +6,7 @@ settings:
 
 overrides:
   axios: 1.8.2
+  cross-spawn: 7.0.6
   redoc: 2.5.0
   tar-fs: 2.1.2
 
@@ -7060,12 +7061,8 @@ packages:
     resolution: {integrity: sha512-p0SaNjrHOnQeR8/VnfGbmg9te2kfyYSQ7Sc/j/6DtPL3JQvKxmjO9TSjNFpujqV3vEYYBvNNvXSxzyksBWAx1Q==}
     engines: {node: '>=12.0.0'}
 
-  cross-spawn@6.0.5:
-    resolution: {integrity: sha512-eTVLrBSt7fjbDygz805pMnstIs2VTBNkRm0qxZd+M7A5XDdxVRWO5MxGBXZhjY4cqLYLdtrGqRf8mBPmzwSpWQ==}
-    engines: {node: '>=4.8'}
-
-  cross-spawn@7.0.3:
-    resolution: {integrity: sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==}
+  cross-spawn@7.0.6:
+    resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
 
   crossfilter2@1.5.4:
@@ -10899,9 +10896,6 @@ packages:
       '@angular/common': '>=11.0.0'
       '@angular/core': '>=11.0.0'
 
-  nice-try@1.0.5:
-    resolution: {integrity: sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==}
-
   no-case@3.0.4:
     resolution: {integrity: sha512-fgAN3jGAh+RoxUGZHTSOLJIqUc2wmoBwGR4tbpNAKmmovFoWq0OdRkb0VkldReO2a2iBT/OEulG9XSUc10r3zg==}
 
@@ -11403,10 +11397,6 @@ packages:
   path-is-absolute@1.0.1:
     resolution: {integrity: sha512-AVbw3UJ2e9bq64vSaS9Am0fje1Pa8pbGqTTsmXfaIiMpnr5DlDhfJOuLj9Sf95ZPVDAUerDfEk88MPmPe7UCQg==}
     engines: {node: '>=0.10.0'}
-
-  path-key@2.0.1:
-    resolution: {integrity: sha512-fEHGKCSmUSDPv4uoj8AlD+joPlq3peND+HRYyxFz4KPw4z926S/b8rIuFs2FYJg3BwsxJf6A9/3eIdLaYC+9Dw==}
-    engines: {node: '>=4'}
 
   path-key@3.1.1:
     resolution: {integrity: sha512-ojmeN0qd+y0jszEtoY48r0Peq5dwMEkIlCOu6Q5f41lfkswXuKtYrhgoTpLnyIcHm24Uhqx+5Tqm2InSwLhE6Q==}
@@ -12996,17 +12986,9 @@ packages:
   shallowequal@1.1.0:
     resolution: {integrity: sha512-y0m1JoUZSlPAjXVtPPW70aZWfIL/dSP7AFkRnniLCrK/8MDKog3TySTBmckD+RObVxH0v4Tox67+F14PdED2oQ==}
 
-  shebang-command@1.2.0:
-    resolution: {integrity: sha512-EV3L1+UQWGor21OmnvojK36mhg+TyIKDh3iFBKBohr5xeXIhNBcx8oWdgkTEEQ+BEFFYdLRuqMfd5L84N1V5Vg==}
-    engines: {node: '>=0.10.0'}
-
   shebang-command@2.0.0:
     resolution: {integrity: sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA==}
     engines: {node: '>=8'}
-
-  shebang-regex@1.0.0:
-    resolution: {integrity: sha512-wpoSFAxys6b2a2wHZ1XpDSgD7N9iVjg29Ph9uV/uaP9Ex/KXlkTZTeddxDPSYQpgvzKLGJke2UU0AzoGCjNIvQ==}
-    engines: {node: '>=0.10.0'}
 
   shebang-regex@3.0.0:
     resolution: {integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==}
@@ -17135,7 +17117,7 @@ snapshots:
       cdktf: 0.16.1(constructs@10.3.0)
       codemaker: 1.101.0
       constructs: 10.3.0
-      cross-spawn: 7.0.3
+      cross-spawn: 7.0.6
       https-proxy-agent: 5.0.1(supports-color@8.1.1)
       ink-select-input: 4.2.2(ink@3.2.0(@types/react@18.3.7)(react@18.3.1))(react@18.3.1)
       jsii: 5.4.26
@@ -17171,7 +17153,7 @@ snapshots:
       cdktf: 0.16.1(constructs@10.2.13)
       codemaker: 1.101.0
       constructs: 10.2.13
-      cross-spawn: 7.0.3
+      cross-spawn: 7.0.6
       follow-redirects: 1.15.6(debug@4.3.7)
       fs-extra: 8.1.0
       is-valid-domain: 0.1.6
@@ -17199,7 +17181,7 @@ snapshots:
       cdktf: 0.16.1(constructs@10.2.13)
       codemaker: 1.101.0
       constructs: 10.2.13
-      cross-spawn: 7.0.3
+      cross-spawn: 7.0.6
       follow-redirects: 1.15.6(debug@4.3.7)
       fs-extra: 8.1.0
       is-valid-domain: 0.1.6
@@ -19669,7 +19651,7 @@ snapshots:
       '@nx/devkit': 20.8.1(nx@20.8.1(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.7.3))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))
       chalk: 4.1.2
       command-exists: 1.2.9
-      cross-spawn: 7.0.3
+      cross-spawn: 7.0.6
       file-uri-to-path: 2.0.0
       fs-extra: 11.2.0
       lodash: 4.17.21
@@ -22901,7 +22883,7 @@ snapshots:
       cdktf: 0.16.1(constructs@10.3.0)
       codemaker: 1.101.0
       constructs: 10.3.0
-      cross-spawn: 7.0.3
+      cross-spawn: 7.0.6
       https-proxy-agent: 5.0.1(supports-color@8.1.1)
       ink-select-input: 4.2.2(ink@3.2.0(@types/react@18.3.7)(react@18.3.1))(react@18.3.1)
       ink-table: 3.1.0(ink@3.2.0(@types/react@18.3.7)(react@18.3.1))(react@18.3.1)
@@ -23000,7 +22982,7 @@ snapshots:
 
   child-process-ext@2.1.1:
     dependencies:
-      cross-spawn: 6.0.5
+      cross-spawn: 7.0.6
       es5-ext: 0.10.64
       log: 6.3.1
       split2: 3.2.2
@@ -23008,7 +22990,7 @@ snapshots:
 
   child-process-ext@3.0.2:
     dependencies:
-      cross-spawn: 7.0.3
+      cross-spawn: 7.0.6
       es5-ext: 0.10.64
       log: 6.3.1
       split2: 3.2.2
@@ -23479,15 +23461,7 @@ snapshots:
     dependencies:
       luxon: 3.5.0
 
-  cross-spawn@6.0.5:
-    dependencies:
-      nice-try: 1.0.5
-      path-key: 2.0.1
-      semver: 5.7.2
-      shebang-command: 1.2.0
-      which: 1.3.1
-
-  cross-spawn@7.0.3:
+  cross-spawn@7.0.6:
     dependencies:
       path-key: 3.1.1
       shebang-command: 2.0.0
@@ -25046,7 +25020,7 @@ snapshots:
       '@ungap/structured-clone': 1.2.0
       ajv: 6.12.6
       chalk: 4.1.2
-      cross-spawn: 7.0.3
+      cross-spawn: 7.0.6
       debug: 4.3.7(supports-color@8.1.1)
       doctrine: 3.0.0
       escape-string-regexp: 4.0.0
@@ -25144,7 +25118,7 @@ snapshots:
 
   execa@4.1.0:
     dependencies:
-      cross-spawn: 7.0.3
+      cross-spawn: 7.0.6
       get-stream: 5.2.0
       human-signals: 1.1.1
       is-stream: 2.0.1
@@ -25156,7 +25130,7 @@ snapshots:
 
   execa@5.1.1:
     dependencies:
-      cross-spawn: 7.0.3
+      cross-spawn: 7.0.6
       get-stream: 6.0.1
       human-signals: 2.1.0
       is-stream: 2.0.1
@@ -25168,7 +25142,7 @@ snapshots:
 
   execa@8.0.1:
     dependencies:
-      cross-spawn: 7.0.3
+      cross-spawn: 7.0.6
       get-stream: 8.0.1
       human-signals: 5.0.0
       is-stream: 3.0.0
@@ -25522,7 +25496,7 @@ snapshots:
 
   foreground-child@3.2.1:
     dependencies:
-      cross-spawn: 7.0.3
+      cross-spawn: 7.0.6
       signal-exit: 4.1.0
 
   forever-agent@0.6.1: {}
@@ -28291,8 +28265,6 @@ snapshots:
       tslib: 2.6.3
       typed.js: 2.1.0
 
-  nice-try@1.0.5: {}
-
   no-case@3.0.4:
     dependencies:
       lower-case: 2.0.2
@@ -29018,8 +28990,6 @@ snapshots:
   path-exists@5.0.0: {}
 
   path-is-absolute@1.0.1: {}
-
-  path-key@2.0.1: {}
 
   path-key@3.1.1: {}
 
@@ -30721,15 +30691,9 @@ snapshots:
 
   shallowequal@1.1.0: {}
 
-  shebang-command@1.2.0:
-    dependencies:
-      shebang-regex: 1.0.0
-
   shebang-command@2.0.0:
     dependencies:
       shebang-regex: 3.0.0
-
-  shebang-regex@1.0.0: {}
 
   shebang-regex@3.0.0: {}
 
