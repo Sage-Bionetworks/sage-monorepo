@@ -208,6 +208,9 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "canvas"
-    ]
+    ],
+    "overrides": {
+      "tar-fs": "2.1.2"
+    }
   }
 }
