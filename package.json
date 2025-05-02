@@ -202,7 +202,7 @@
     "ts-node": "10.9.1",
     "typescript": "5.7.3",
     "vite": "6.2.1",
-    "vitest": "1.6.0"
+    "vitest": "3.1.2"
   },
   "packageManager": "pnpm@10.6.2",
   "pnpm": {
