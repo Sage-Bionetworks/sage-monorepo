@@ -28,6 +28,7 @@ jobs:
             amp-als
             bridge2ai
             common
+            explorers
             iatlas
             model-ad
             openchallenges

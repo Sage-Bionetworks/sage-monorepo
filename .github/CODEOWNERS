@@ -31,3 +31,5 @@
 /docker/model-ad/ @Sage-Bionetworks/sage-monorepo-agora
 /libs/model-ad/ @Sage-Bionetworks/sage-monorepo-agora
 /libs/results-visualization-framework/ @Sage-Bionetworks/sage-monorepo-agora
+
+/libs/explorers/ @Sage-Bionetworks/sage-monorepo-agora
