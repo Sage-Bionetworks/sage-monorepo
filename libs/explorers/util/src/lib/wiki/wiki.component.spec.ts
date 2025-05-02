@@ -1,18 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { WikiComponent } from './wiki.component';
 import { provideHttpClient } from '@angular/common/http';
-import { server } from '@sagebionetworks/agora/testing';
-import { synapseWikiMock } from '@sagebionetworks/agora/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { SynapseApiService } from '@sagebionetworks/explorers/services';
+import { server, synapseWikiMock } from '@sagebionetworks/explorers/testing';
 import { http, HttpResponse } from 'msw';
+import { WikiComponent } from './wiki.component';
 
 describe('WikiComponent', () => {
+  beforeAll(() => server.listen());
+  afterEach(() => server.restoreHandlers());
+  afterAll(() => server.close());
+
   let component: WikiComponent;
   let fixture: ComponentFixture<WikiComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [provideHttpClient()],
+      providers: [provideHttpClient(), SynapseApiService],
     }).compileComponents();
 
     fixture = TestBed.createComponent(WikiComponent);

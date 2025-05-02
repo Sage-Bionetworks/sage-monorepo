@@ -1,5 +1,5 @@
-import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Observable, map, shareReplay } from 'rxjs';
 
@@ -11,7 +11,7 @@ export class SvgIconService {
    * Service for managing SVG icons in the Explorer applications
    *
    * This service provides the following functionality:
-   * - Load SVG files from the `/agora-assets/icons/` directory
+   * - Load SVG files from the `/explorers-assets/icons/` directory
    * - Cache SVGs to prevent redundant HTTP requests
    * - Sanitize SVG content for safe rendering in the browser
    * - Preload commonly used SVG icons for better performance
@@ -52,7 +52,7 @@ export class SvgIconService {
     if (path.startsWith('http://') || path.startsWith('https://')) {
       return false;
     }
-    // Ensure the path comes from '/agora-assets/icons/'
+    // Ensure the path comes from '.*/icons/*.svg'
     return Boolean(path) && /\/icons\/[^/]+\.svg$/.test(path);
   }
 

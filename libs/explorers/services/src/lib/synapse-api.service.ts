@@ -1,15 +1,15 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
-import sanitizeHtml from 'sanitize-html';
+import { Injectable } from '@angular/core';
 import {
   OrgSagebionetworksRepoModelWikiWikiPage,
   WikiPageServicesService,
 } from '@sagebionetworks/synapse/api-client-angular';
+import { Observable, of } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import sanitizeHtml from 'sanitize-html';
 
 // -------------------------------------------------------------------------- //
 // Internal
@@ -31,7 +31,7 @@ export class SynapseApiService {
   ) {}
 
   // I created this method or to facilitate the comparison with `getWiki()`. In practice, there is
-  // no need for a wrapper method like done here: the Agora components and services should directly
+  // no need for a wrapper method like done here: the Explorer components and services should directly
   // make call to the Synapse API using the Angular client.
   getWikiAlternative(
     ownerId: string,
