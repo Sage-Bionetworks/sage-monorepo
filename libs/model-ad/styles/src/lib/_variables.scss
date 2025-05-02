@@ -1,7 +1,6 @@
 /* stylelint-disable no-duplicate-selectors */
 @use 'sass:map';
 
-$font-family-primary: 'DM Sans Variable', sans-serif;
 $main-colors: (
   primary: #3c4a63,
   secondary: #8b8ad1,
@@ -25,9 +24,12 @@ $main-colors: (
   gray-100: #fbfbfc,
 );
 
-// $main-colors-hover: (
-//   action-primary: #4f33a3,
-// );
+:root {
+  @each $key, $color in $main-colors {
+    --color-#{$key}: #{$color};
+  }
+}
+
 $extra-colors: (
   heading: map.get($main-colors, 'primary'),
   text: map.get($main-colors, 'gray-900'),
@@ -40,14 +42,6 @@ $extra-colors: (
 );
 
 :root {
-  @each $key, $color in $main-colors {
-    --color-#{$key}: #{$color};
-  }
-
-  // @each $key, $color in $main-colors-hover {
-  //   --color-#{$key}-hover: #{$color};
-  // }
-
   @each $key, $color in $extra-colors {
     --color-#{$key}: #{$color};
   }
