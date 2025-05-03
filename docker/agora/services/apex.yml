@@ -21,6 +21,8 @@ services:
         condition: service_healthy
       agora-api:
         condition: service_healthy
+      agora-cgt-v2beta-service:
+        condition: service_started
       agora-app:
         condition: service_healthy
     deploy:
