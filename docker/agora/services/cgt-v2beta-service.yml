@@ -1,0 +1,17 @@
+services:
+  agora-cgt-v2beta-service:
+    image: ghcr.io/sage-bionetworks/agora-cgt-v2beta-service:${AGORA_VERSION:-local}
+    container_name: agora-cgt-v2beta-service
+    restart: always
+    env_file:
+      - ../../../apps/agora/cgt-v2beta-service/.env
+    networks:
+      - agora
+    ports:
+      - '3334:3334'
+    deploy:
+      resources:
+        limits:
+          memory: 1GB
+    depends_on:
+      - agora-mongo
