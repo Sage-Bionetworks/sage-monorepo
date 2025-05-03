@@ -9,7 +9,7 @@ import { TestBed } from '@angular/core/testing';
 // Internal
 // -------------------------------------------------------------------------- //
 import { provideHttpClient } from '@angular/common/http';
-import { synapseWikiMock } from '@sagebionetworks/agora/testing';
+import { synapseWikiMock } from '@sagebionetworks/explorers/testing';
 import { SynapseApiService } from './synapse-api.service';
 
 // -------------------------------------------------------------------------- //

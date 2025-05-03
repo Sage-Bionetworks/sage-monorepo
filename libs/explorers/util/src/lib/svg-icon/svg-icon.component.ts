@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { SvgIconService } from '@sagebionetworks/agora/services';
+import { SvgIconService } from '@sagebionetworks/explorers/services';
 
 @Component({
   selector: 'explorers-svg-icon',
@@ -24,7 +24,6 @@ export class SvgIconComponent implements OnInit {
   svgService = inject(SvgIconService);
 
   svgContent: SafeHtml | null = null;
-  private static svgCache = new Map<string, SafeHtml>();
 
   className = 'svg-icon';
 

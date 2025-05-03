@@ -1,7 +1,7 @@
-import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { SvgImageComponent } from './svg-image.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { SvgImageComponent } from './svg-image.component';
 
 describe('SvgImageComponent', () => {
   let fixture: ComponentFixture<SvgImageComponent>;
@@ -25,7 +25,7 @@ describe('SvgImageComponent', () => {
 
   it('should populate innerHTML in the div when imagePath changes', () => {
     // Mock input change to trigger ngOnChanges
-    component.imagePath = '/agora-assets/images/background1.svg';
+    component.imagePath = '/explorers-assets/images/background1.svg';
 
     // Trigger change detection
     fixture.detectChanges();
