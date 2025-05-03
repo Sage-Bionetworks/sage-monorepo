@@ -5,6 +5,7 @@
 # list of hostnames (defined in alphabetical order)
 declare -a hostnames=(
   "127.0.0.1 agora-api"
+  "127.0.0.1 agora-cgt-v2beta-service"
   "127.0.0.1 agora-mongo"
   "127.0.0.1 amp-als-apex"
   "127.0.0.1 amp-als-dataset-service"
