@@ -1,0 +1,13 @@
+src/main/java/org/sagebionetworks/agora/cgt/v2beta/service/OpenApiGeneratorApplication.java
+src/main/java/org/sagebionetworks/agora/cgt/v2beta/service/RFC3339DateFormat.java
+src/main/java/org/sagebionetworks/agora/cgt/v2beta/service/api/ApiUtil.java
+src/main/java/org/sagebionetworks/agora/cgt/v2beta/service/api/HealthCheckApi.java
+src/main/java/org/sagebionetworks/agora/cgt/v2beta/service/api/HealthCheckApiController.java
+src/main/java/org/sagebionetworks/agora/cgt/v2beta/service/api/HealthCheckApiDelegate.java
+src/main/java/org/sagebionetworks/agora/cgt/v2beta/service/configuration/HomeController.java
+src/main/java/org/sagebionetworks/agora/cgt/v2beta/service/configuration/SpringDocConfiguration.java
+src/main/java/org/sagebionetworks/agora/cgt/v2beta/service/model/dto/BasicErrorDto.java
+src/main/java/org/sagebionetworks/agora/cgt/v2beta/service/model/dto/HealthCheckDto.java
+src/main/resources/application.properties
+src/main/resources/openapi.yaml
+src/test/java/org/sagebionetworks/agora/cgt/v2beta/service/OpenApiGeneratorApplicationTests.java
