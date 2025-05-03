@@ -19,8 +19,9 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "openapi-merge-cli --config openapi-merge.yaml",
-        "cwd": "{projectRoot}"
+        "commands": ["openapi-merge-cli --config openapi-merge.yaml", "rm build/base.openapi.yaml"],
+        "cwd": "{projectRoot}",
+        "parallel": false
       },
       "dependsOn": ["build-individuals"]
     },
