@@ -20,9 +20,9 @@ repositories {
 
 dependencies {
   // Spring Boot
-  implementation(libs.spring.boot.starter.data.jpa)
-  implementation(libs.spring.boot.starter.jdbc)
-  implementation(libs.spring.boot.starter.security)
+  // implementation(libs.spring.boot.starter.data.jpa)
+  // implementation(libs.spring.boot.starter.jdbc)
+  // implementation(libs.spring.boot.starter.security)
   implementation(libs.spring.boot.starter.validation)
   implementation(libs.spring.boot.starter.web)
   runtimeOnly(libs.spring.boot.devtools)
