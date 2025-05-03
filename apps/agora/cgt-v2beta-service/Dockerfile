@@ -1,0 +1,1 @@
+FROM ghcr.io/sage-bionetworks/agora-cgt-v2beta-service-base:local
