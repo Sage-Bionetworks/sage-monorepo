@@ -1,0 +1,7 @@
+inputs:
+  # info is defined in base OA definition. This file must be listed first.
+  - inputFile: build/base.openapi.yaml
+  # list files in alphanumeric order
+  - inputFile: build/main.openapi.yaml
+  # - inputFile: build/cgt-v2beta.openapi.yaml
+output: build/openapi.yaml

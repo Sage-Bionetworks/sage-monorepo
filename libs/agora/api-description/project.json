@@ -4,12 +4,25 @@
   "sourceRoot": "libs/agora/api-description/src",
   "projectType": "library",
   "targets": {
+    "build-individuals": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "redocly bundle --output build/base.openapi.yaml src/base.openapi.yaml",
+          "redocly bundle --output build/main.openapi.yaml src/main.openapi.yaml",
+          "redocly bundle --output build/cgt-v2beta.openapi.yaml src/cgt-v2beta.openapi.yaml"
+        ],
+        "parallel": true,
+        "cwd": "{projectRoot}"
+      }
+    },
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "redocly bundle --output build/openapi.yaml src/openapi.yaml",
+        "command": "openapi-merge-cli --config openapi-merge.yaml",
         "cwd": "{projectRoot}"
-      }
+      },
+      "dependsOn": ["build-individuals"]
     },
     "lint": {
       "executor": "nx:run-commands",
@@ -19,6 +32,5 @@
       "dependsOn": ["build"]
     }
   },
-  "tags": ["language:openapi"],
-  "implicitDependencies": []
+  "tags": ["language:openapi"]
 }
