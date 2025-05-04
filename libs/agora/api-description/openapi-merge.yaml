@@ -2,6 +2,6 @@ inputs:
   # info is defined in base OA definition. This file must be listed first.
   - inputFile: openapi/base.openapi.yaml
   # list files in alphanumeric order
-  - inputFile: openapi/main.openapi.yaml
-  # - inputFile: openapi/cgt-v2beta.openapi.yaml
+  - inputFile: openapi/api.openapi.yaml
+  # - inputFile: openapi/gene-api.openapi.yaml
 output: openapi/openapi.yaml

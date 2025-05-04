@@ -9,8 +9,8 @@
       "options": {
         "commands": [
           "redocly bundle --output openapi/base.openapi.yaml src/base.openapi.yaml",
-          "redocly bundle --output openapi/main.openapi.yaml src/main.openapi.yaml",
-          "redocly bundle --output openapi/cgt-v2beta.openapi.yaml src/cgt-v2beta.openapi.yaml"
+          "redocly bundle --output openapi/api.openapi.yaml src/api.openapi.yaml",
+          "redocly bundle --output openapi/gene-api.openapi.yaml src/gene-api.openapi.yaml"
         ],
         "parallel": true,
         "cwd": "{projectRoot}"
