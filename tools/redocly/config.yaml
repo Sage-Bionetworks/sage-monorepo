@@ -14,7 +14,7 @@ apis:
   amp-als-api-description:
     root: ../../libs/amp-als/api-description/openapi/openapi.yaml
   agora-api-description:
-    root: ../../libs/agora/api-description/build/openapi.yaml
+    root: ../../libs/agora/api-description/openapi/openapi.yaml
   model-ad-api-description:
     root: ../../libs/model-ad/api-description/build/openapi.yaml
   openchallenges-api-description:

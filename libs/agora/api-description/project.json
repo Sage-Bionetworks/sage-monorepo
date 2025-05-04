@@ -8,9 +8,9 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "redocly bundle --output build/base.openapi.yaml src/base.openapi.yaml",
-          "redocly bundle --output build/main.openapi.yaml src/main.openapi.yaml",
-          "redocly bundle --output build/cgt-v2beta.openapi.yaml src/cgt-v2beta.openapi.yaml"
+          "redocly bundle --output openapi/base.openapi.yaml src/base.openapi.yaml",
+          "redocly bundle --output openapi/main.openapi.yaml src/main.openapi.yaml",
+          "redocly bundle --output openapi/cgt-v2beta.openapi.yaml src/cgt-v2beta.openapi.yaml"
         ],
         "parallel": true,
         "cwd": "{projectRoot}"
@@ -19,7 +19,10 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["openapi-merge-cli --config openapi-merge.yaml", "rm build/base.openapi.yaml"],
+        "commands": [
+          "openapi-merge-cli --config openapi-merge.yaml",
+          "rm openapi/base.openapi.yaml"
+        ],
         "cwd": "{projectRoot}",
         "parallel": false
       },
