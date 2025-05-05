@@ -18,7 +18,7 @@ apis:
   model-ad-api-description:
     root: ../../libs/model-ad/api-description/build/openapi.yaml
   openchallenges-api-description:
-    root: ../../libs/openchallenges/api-description/build/openapi.yaml
+    root: ../../libs/openchallenges/api-description/openapi/openapi.yaml
   synapse-api-description:
     root: ../../libs/synapse/api-description/build/openapi.json
     rules:
