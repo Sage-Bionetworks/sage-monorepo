@@ -1,4 +1,4 @@
-import { HttpParameterCodec } from '@angular/common/http';
+import { HttpHeaders, HttpParams, HttpParameterCodec } from '@angular/common/http';
 import { Param } from './param';
 
 export interface ConfigurationParameters {
@@ -149,6 +149,25 @@ export class Configuration {
     return typeof value === 'function' ? value() : value;
   }
 
+  public addCredentialToHeaders(
+    credentialKey: string,
+    headerName: string,
+    headers: HttpHeaders,
+    prefix?: string,
+  ): HttpHeaders {
+    const value = this.lookupCredential(credentialKey);
+    return value ? headers.set(headerName, (prefix ?? '') + value) : headers;
+  }
+
+  public addCredentialToQuery(
+    credentialKey: string,
+    paramName: string,
+    query: HttpParams,
+  ): HttpParams {
+    const value = this.lookupCredential(credentialKey);
+    return value ? query.set(paramName, value) : query;
+  }
+
   private defaultEncodeParam(param: Param): string {
     // This implementation exists as fallback for missing configuration
     // and for backwards compatibility to older typescript-angular generator versions.
@@ -159,7 +178,9 @@ export class Configuration {
     // But: if that's all you need (i.e.: the most common use-case): no need for customization!
 
     const value =
-      param.dataFormat === 'date-time' ? (param.value as Date).toISOString() : param.value;
+      param.dataFormat === 'date-time' && param.value instanceof Date
+        ? (param.value as Date).toISOString()
+        : param.value;
 
     return encodeURIComponent(String(value));
   }
