@@ -62,17 +62,7 @@ export class ChallengeService extends BaseService {
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
-      httpHeaderAccept?: 'application/ld+json' | 'application/problem+json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<ChallengeJsonLd>;
-  public getChallenge(
-    challengeId: number,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      httpHeaderAccept?: 'application/json' | 'application/ld+json' | 'application/problem+json';
       context?: HttpContext;
       transferCache?: boolean;
     },
