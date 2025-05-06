@@ -1,9 +1,7 @@
-/* eslint-disable */
 export default {
   displayName: 'openchallenges-api-client-angular',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  globals: {},
   coverageDirectory: '../../../coverage/libs/openchallenges/api-client-angular',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [

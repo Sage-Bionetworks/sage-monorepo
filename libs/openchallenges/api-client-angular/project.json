@@ -12,9 +12,6 @@
         "jestConfig": "{projectRoot}/jest.config.ts"
       }
     },
-    "lint": {
-      "executor": "@nx/eslint:lint"
-    },
     "generate": {
       "executor": "nx:run-commands",
       "options": {
