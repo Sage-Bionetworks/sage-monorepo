@@ -28,12 +28,6 @@
         "jestConfig": "libs/openchallenges/api-client-angular/jest.config.ts"
       }
     },
-    "lint-fix": {
-      "executor": "@nx/eslint:lint",
-      "options": {
-        "fix": true
-      }
-    },
     "generate": {
       "executor": "nx:run-commands",
       "options": {

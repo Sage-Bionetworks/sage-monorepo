@@ -2,8 +2,8 @@
   "name": "@sagebionetworks/openchallenges-api-client-angular",
   "version": "0.0.1",
   "peerDependencies": {
-    "@angular/common": "^13.2.0",
-    "@angular/core": "^13.2.0"
+    "@angular/common": "^19.0.0",
+    "@angular/core": "^19.0.0"
   },
   "dependencies": {
     "tslib": "2.4.1"
