@@ -125,7 +125,16 @@ export class ChallengeService {
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
-      httpHeaderAccept?: 'application/json' | 'application/ld+json' | 'application/problem+json';
+      httpHeaderAccept?: 'application/ld+json' | 'application/problem+json';
+      context?: HttpContext;
+    },
+  ): Observable<ChallengeJsonLd>;
+  public getChallenge(
+    challengeId: number,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
       context?: HttpContext;
     },
   ): Observable<Challenge>;
