@@ -7,11 +7,10 @@
         </a>
       </div>
       @if (links.length > 0) {
-        <nav class="header-nav" [ngClass]="{ show: isShown }">
+        <nav class="header-nav" [ngClass]="{ show: isShown }" aria-label="Header navigation">
           <button
             class="hamburger-menu-button"
             (click)="toggleNav()"
-            data-testid="hamburger-menu-button"
             aria-label="Toggle navigation"
           >
             <span></span>
@@ -19,7 +18,7 @@
             <span></span>
           </button>
           <div class="header-nav-inner">
-            <ul data-testid="nav-links">
+            <ul>
               @for (link of links; track link.label) {
                 <li>
                   @if (link.routerLink) {
@@ -28,20 +27,12 @@
                       routerLinkActive="active"
                       [routerLinkActiveOptions]="link.activeOptions || { exact: false }"
                       (click)="toggleNav()"
-                      [attr.data-testid]="'nav-link-' + formatTestId(link.label)"
                     >
                       <span>{{ link.label }}</span>
                     </a>
                   } @else if (link.url) {
-                    <a
-                      [attr.href]="link.url"
-                      [attr.target]="link.target"
-                      (click)="toggleNav()"
-                      [attr.data-testid]="'nav-link-' + formatTestId(link.label)"
-                    >
-                      <span [attr.data-testid]="'nav-text-' + formatTestId(link.label)">{{
-                        link.label
-                      }}</span>
+                    <a [attr.href]="link.url" [attr.target]="link.target" (click)="toggleNav()">
+                      <span>{{ link.label }}</span>
                     </a>
                   } @else {
                     <span>{{ link.label }}</span>

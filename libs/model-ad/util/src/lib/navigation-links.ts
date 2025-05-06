@@ -1,4 +1,5 @@
 import { NavigationLink } from '@sagebionetworks/explorers/models';
+import { HELP_URL } from '@sagebionetworks/model-ad/util';
 
 export const headerLinks: NavigationLink[] = [
   {
@@ -27,7 +28,7 @@ export const footerLinks: NavigationLink[] = [
   },
   {
     label: 'Help',
-    url: 'https://help.adknowledgeportal.org/apd/Model-AD+Explorer+Resources.4077682781.html',
+    url: HELP_URL,
     target: '_blank',
   },
   {

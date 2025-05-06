@@ -59,7 +59,7 @@ describe('HeaderComponent', () => {
     verifyFooterLinks();
 
     // Verify the links are visible
-    expect(screen.getByTestId('nav-links')).toBeVisible();
+    expect(screen.getByRole('navigation', { name: 'Header navigation' })).toBeVisible();
   });
 
   it('should only show header links in desktop view', async () => {

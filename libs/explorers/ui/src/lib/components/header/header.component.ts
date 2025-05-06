@@ -3,7 +3,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { NavigationLink } from '@sagebionetworks/explorers/models';
 import { RouterModule } from '@angular/router';
 import { SvgImageComponent } from '../svg-image/svg-image.component';
-import { toKebabCase } from '@sagebionetworks/explorers/util';
+import { MIN_DESKTOP_WIDTH } from '@sagebionetworks/model-ad/util';
+
 @Component({
   selector: 'explorers-header',
   imports: [CommonModule, SvgImageComponent, RouterModule],
@@ -31,15 +32,11 @@ export class HeaderComponent implements OnInit {
   }
 
   onResize() {
-    if (typeof window !== 'undefined') this.isMobile = window.innerWidth < 1320;
+    if (typeof window !== 'undefined') this.isMobile = window.innerWidth < MIN_DESKTOP_WIDTH;
     this.refreshNavItems();
   }
 
   toggleNav() {
     this.isShown = !this.isShown;
-  }
-
-  formatTestId(s: string) {
-    return toKebabCase(s);
   }
 }
