@@ -1,3 +1,7 @@
+@use 'sass:map';
+@use 'sass:meta';
+@import 'variables';
+
 @mixin reset-button() {
   border: none;
   margin: 0;
@@ -13,5 +17,20 @@
   &::-moz-focus-inner {
     border: 0;
     padding: 0;
+  }
+}
+
+@mixin link-hover {
+  color: var(--color-link);
+  text-decoration: underline;
+}
+
+@mixin link {
+  color: var(--color-link);
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    @include link-hover;
   }
 }

@@ -1,13 +1,14 @@
 import { CommonModule } from '@angular/common';
 import {
   Component,
+  inject,
   Input,
   OnChanges,
   OnInit,
   SimpleChanges,
   ViewEncapsulation,
 } from '@angular/core';
-import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { SynapseWiki } from '@sagebionetworks/explorers/models';
 import { SynapseApiService } from '@sagebionetworks/explorers/services';
 import { LoadingIconComponent } from '../loading-icon/loading-icon.component';
@@ -20,6 +21,9 @@ import { LoadingIconComponent } from '../loading-icon/loading-icon.component';
   encapsulation: ViewEncapsulation.None,
 })
 export class WikiComponent implements OnChanges, OnInit {
+  synapseApiService = inject(SynapseApiService);
+  domSanitizer = inject(DomSanitizer);
+
   @Input() ownerId: string | undefined;
   @Input() wikiId: string | undefined;
   @Input() className = '';
@@ -28,11 +32,6 @@ export class WikiComponent implements OnChanges, OnInit {
 
   data: SynapseWiki = {} as SynapseWiki;
   safeHtml: SafeHtml | null = '<div class="wiki-no-data">No data found...</div>';
-
-  constructor(
-    private synapseApiService: SynapseApiService,
-    private domSanitizer: DomSanitizer,
-  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['wikiId'] && !changes['wikiId'].firstChange) {

@@ -1,13 +1,13 @@
 <div class="modal-link-container">
   <button class="modal-link-inner" (click)="toggle()">
     <explorers-svg-icon
-      imagePath="/agora-assets/icons/info-circle.svg"
+      imagePath="/explorers-assets/icons/info-circle.svg"
       [enableHoverEffects]="enableHoverEffects"
       [width]="iconWidth"
       [height]="iconHeight"
       [color]="'#aeb5bc'"
       altText="info"
-    ></explorers-svg-icon>
+    />
     @if (text) {
       <span class="modal-link-text" [ngStyle]="getTextColor()">
         {{ text }}
@@ -26,7 +26,7 @@
   >
     <div class="modal-link-content">
       @if (wikiId && hasActivated) {
-        <explorers-wiki [ownerId]="ownerId" [wikiId]="wikiId"></explorers-wiki>
+        <explorers-wiki [ownerId]="ownerId" [wikiId]="wikiId" />
       }
     </div>
   </p-dialog>
