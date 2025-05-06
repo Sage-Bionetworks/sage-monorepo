@@ -11,12 +11,17 @@
 /**
  * The submission type of the challenge.
  */
-export const ChallengeSubmissionType = {
-  ContainerImage: 'container_image',
-  PredictionFile: 'prediction_file',
-  Notebook: 'notebook',
-  Mlcube: 'mlcube',
-  Other: 'other',
-} as const;
 export type ChallengeSubmissionType =
-  (typeof ChallengeSubmissionType)[keyof typeof ChallengeSubmissionType];
+  | 'container_image'
+  | 'prediction_file'
+  | 'notebook'
+  | 'mlcube'
+  | 'other';
+
+export const ChallengeSubmissionType = {
+  ContainerImage: 'container_image' as ChallengeSubmissionType,
+  PredictionFile: 'prediction_file' as ChallengeSubmissionType,
+  Notebook: 'notebook' as ChallengeSubmissionType,
+  Mlcube: 'mlcube' as ChallengeSubmissionType,
+  Other: 'other' as ChallengeSubmissionType,
+};

@@ -11,9 +11,9 @@
 /**
  * What to sort results by.
  */
+export type ChallengePlatformSort = 'name' | 'relevance';
+
 export const ChallengePlatformSort = {
-  Name: 'name',
-  Relevance: 'relevance',
-} as const;
-export type ChallengePlatformSort =
-  (typeof ChallengePlatformSort)[keyof typeof ChallengePlatformSort];
+  Name: 'name' as ChallengePlatformSort,
+  Relevance: 'relevance' as ChallengePlatformSort,
+};

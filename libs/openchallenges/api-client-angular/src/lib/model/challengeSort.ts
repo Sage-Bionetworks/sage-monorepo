@@ -11,12 +11,19 @@
 /**
  * What to sort results by.
  */
+export type ChallengeSort =
+  | 'created'
+  | 'random'
+  | 'relevance'
+  | 'starred'
+  | 'start_date'
+  | 'end_date';
+
 export const ChallengeSort = {
-  Created: 'created',
-  Random: 'random',
-  Relevance: 'relevance',
-  Starred: 'starred',
-  StartDate: 'start_date',
-  EndDate: 'end_date',
-} as const;
-export type ChallengeSort = (typeof ChallengeSort)[keyof typeof ChallengeSort];
+  Created: 'created' as ChallengeSort,
+  Random: 'random' as ChallengeSort,
+  Relevance: 'relevance' as ChallengeSort,
+  Starred: 'starred' as ChallengeSort,
+  StartDate: 'start_date' as ChallengeSort,
+  EndDate: 'end_date' as ChallengeSort,
+};

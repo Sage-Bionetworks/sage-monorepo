@@ -11,7 +11,8 @@
 /**
  * The category of the organization.
  */
+export type OrganizationCategory = 'featured';
+
 export const OrganizationCategory = {
-  Featured: 'featured',
-} as const;
-export type OrganizationCategory = (typeof OrganizationCategory)[keyof typeof OrganizationCategory];
+  Featured: 'featured' as OrganizationCategory,
+};

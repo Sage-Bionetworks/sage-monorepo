@@ -11,9 +11,10 @@
 /**
  * The status of the challenge.
  */
+export type ChallengeStatus = 'upcoming' | 'active' | 'completed';
+
 export const ChallengeStatus = {
-  Upcoming: 'upcoming',
-  Active: 'active',
-  Completed: 'completed',
-} as const;
-export type ChallengeStatus = (typeof ChallengeStatus)[keyof typeof ChallengeStatus];
+  Upcoming: 'upcoming' as ChallengeStatus,
+  Active: 'active' as ChallengeStatus,
+  Completed: 'completed' as ChallengeStatus,
+};

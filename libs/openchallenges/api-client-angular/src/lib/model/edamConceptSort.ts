@@ -11,8 +11,9 @@
 /**
  * What to sort results by.
  */
+export type EdamConceptSort = 'preferred_label' | 'relevance';
+
 export const EdamConceptSort = {
-  PreferredLabel: 'preferred_label',
-  Relevance: 'relevance',
-} as const;
-export type EdamConceptSort = (typeof EdamConceptSort)[keyof typeof EdamConceptSort];
+  PreferredLabel: 'preferred_label' as EdamConceptSort,
+  Relevance: 'relevance' as EdamConceptSort,
+};

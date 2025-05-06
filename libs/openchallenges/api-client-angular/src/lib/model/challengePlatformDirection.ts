@@ -11,9 +11,9 @@
 /**
  * The direction to sort the results by.
  */
+export type ChallengePlatformDirection = 'asc' | 'desc';
+
 export const ChallengePlatformDirection = {
-  Asc: 'asc',
-  Desc: 'desc',
-} as const;
-export type ChallengePlatformDirection =
-  (typeof ChallengePlatformDirection)[keyof typeof ChallengePlatformDirection];
+  Asc: 'asc' as ChallengePlatformDirection,
+  Desc: 'desc' as ChallengePlatformDirection,
+};

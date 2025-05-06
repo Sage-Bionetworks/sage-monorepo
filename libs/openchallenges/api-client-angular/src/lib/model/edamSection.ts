@@ -11,11 +11,12 @@
 /**
  * The EDAM section (sub-ontology).
  */
+export type EdamSection = 'data' | 'format' | 'identifier' | 'operation' | 'topic';
+
 export const EdamSection = {
-  Data: 'data',
-  Format: 'format',
-  Identifier: 'identifier',
-  Operation: 'operation',
-  Topic: 'topic',
-} as const;
-export type EdamSection = (typeof EdamSection)[keyof typeof EdamSection];
+  Data: 'data' as EdamSection,
+  Format: 'format' as EdamSection,
+  Identifier: 'identifier' as EdamSection,
+  Operation: 'operation' as EdamSection,
+  Topic: 'topic' as EdamSection,
+};

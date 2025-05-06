@@ -11,10 +11,11 @@
 /**
  * The account status of a user
  */
+export type UserStatus = 'pending' | 'approved' | 'disabled' | 'blacklist';
+
 export const UserStatus = {
-  Pending: 'pending',
-  Approved: 'approved',
-  Disabled: 'disabled',
-  Blacklist: 'blacklist',
-} as const;
-export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus];
+  Pending: 'pending' as UserStatus,
+  Approved: 'approved' as UserStatus,
+  Disabled: 'disabled' as UserStatus,
+  Blacklist: 'blacklist' as UserStatus,
+};
