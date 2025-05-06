@@ -62,7 +62,7 @@ describe('HeaderComponent', () => {
     expect(screen.getByTestId('nav-links')).toBeVisible();
   });
 
-  it('should show header and footer links in desktop view', async () => {
+  it('should only show header links in desktop view', async () => {
     // Mock window width for desktop view
     changeWindowSize(DESKTOP_WIDTH);
     await setup();
@@ -71,10 +71,10 @@ describe('HeaderComponent', () => {
     verifyHeaderLinks();
 
     // Verify footer links are not present in the header
-    expect(screen.queryByTestId('nav-link-about')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('nav-link-help')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('nav-link-news')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('nav-link-terms-of-service')).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'About' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Help' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'News' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Terms of Service' })).not.toBeInTheDocument();
   });
 
   it('should toggle navigation visibility', async () => {
@@ -82,7 +82,7 @@ describe('HeaderComponent', () => {
     changeWindowSize(MOBILE_WIDTH);
     const { component, user } = await setup();
 
-    const toggleButton = screen.getByTestId('hamburger-menu-button');
+    const toggleButton = screen.getByRole('button', { name: 'Toggle navigation' });
 
     expect(component.isShown).toBe(false);
 
@@ -92,16 +92,16 @@ describe('HeaderComponent', () => {
   });
 
   function verifyHeaderLinks() {
-    expect(screen.getByTestId('nav-link-home')).toBeInTheDocument();
-    expect(screen.getByTestId('nav-link-model-overview')).toBeInTheDocument();
-    expect(screen.getByTestId('nav-link-gene-expression')).toBeInTheDocument();
-    expect(screen.getByTestId('nav-link-disease-correlation')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Home' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Model Overview' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Gene Expression' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Disease Correlation' })).toBeInTheDocument();
   }
 
   function verifyFooterLinks() {
-    expect(screen.getByTestId('nav-link-about')).toBeInTheDocument();
-    expect(screen.getByTestId('nav-link-help')).toBeInTheDocument();
-    expect(screen.getByTestId('nav-link-news')).toBeInTheDocument();
-    expect(screen.getByTestId('nav-link-terms-of-service')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'About' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Help' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'News' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Terms of Service' })).toBeInTheDocument();
   }
 });

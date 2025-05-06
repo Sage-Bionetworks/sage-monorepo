@@ -27,7 +27,7 @@ export const footerLinks: NavigationLink[] = [
   },
   {
     label: 'Help',
-    url: 'https://help.adknowledgeportal.org/apd/Agora-Help.2663088129.html',
+    url: 'https://help.adknowledgeportal.org/apd/Model-AD+Explorer+Resources.4077682781.html',
     target: '_blank',
   },
   {
