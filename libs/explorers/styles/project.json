@@ -1,0 +1,9 @@
+{
+  "name": "explorers-styles",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/explorers/styles/src",
+  "projectType": "library",
+  "generators": {},
+  "targets": {},
+  "tags": ["type:styles", "scope:explorers", "language:typescript"]
+}

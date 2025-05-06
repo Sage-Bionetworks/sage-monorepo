@@ -3,38 +3,48 @@
     <div class="header-inner">
       <div class="header-logo">
         <a routerLink="/">
-          <explorers-svg-image
-            [imagePath]="headerLogoPath"
-            altText="header logo"
-          ></explorers-svg-image>
+          <explorers-svg-image [imagePath]="headerLogoPath" altText="header logo" />
         </a>
       </div>
-      @if (navItems.length > 0) {
-        <div class="header-nav" [ngClass]="{ show: isShown }">
-          <button class="header-nav-toggle" (click)="toggleNav()">
+      @if (links.length > 0) {
+        <nav class="header-nav" [ngClass]="{ show: isShown }">
+          <button
+            class="hamburger-menu-button"
+            (click)="toggleNav()"
+            data-testid="hamburger-menu-button"
+            aria-label="Toggle navigation"
+          >
             <span></span>
             <span></span>
             <span></span>
           </button>
           <div class="header-nav-inner">
-            <ul>
-              @for (item of navItems; track item.label) {
+            <ul data-testid="nav-links">
+              @for (link of links; track link.label) {
                 <li>
-                  @if (item.routerLink) {
+                  @if (link.routerLink) {
                     <a
-                      [routerLink]="item.routerLink"
+                      [routerLink]="link.routerLink"
                       routerLinkActive="active"
-                      [routerLinkActiveOptions]="item.activeOptions || { exact: false }"
+                      [routerLinkActiveOptions]="link.activeOptions || { exact: false }"
                       (click)="toggleNav()"
+                      [attr.data-testid]="'nav-link-' + formatTestId(link.label)"
                     >
-                      <span>{{ item.label }}</span>
+                      <span>{{ link.label }}</span>
                     </a>
-                  } @else if (item.url) {
-                    <a [attr.href]="item.url" [attr.target]="item.target" (click)="toggleNav()">
-                      <span>{{ item.label }}</span>
+                  } @else if (link.url) {
+                    <a
+                      [attr.href]="link.url"
+                      [attr.target]="link.target"
+                      (click)="toggleNav()"
+                      [attr.data-testid]="'nav-link-' + formatTestId(link.label)"
+                    >
+                      <span [attr.data-testid]="'nav-text-' + formatTestId(link.label)">{{
+                        link.label
+                      }}</span>
                     </a>
                   } @else {
-                    <span>{{ item.label }}</span>
+                    <span>{{ link.label }}</span>
                   }
                 </li>
               }
@@ -47,7 +57,7 @@
               (searchNavigated)="toggleNav()"
             ></model-ad-gene-search> -->
           </div>
-        </div>
+        </nav>
       }
     </div>
   </div>

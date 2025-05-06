@@ -8,8 +8,7 @@ import {
   createGoogleTagManagerIdProvider,
   isGoogleTagManagerIdSet,
 } from '@sagebionetworks/shared/google-tag-manager';
-import { NavigationLink } from '@sagebionetworks/explorers/models';
-
+import { footerLinks, headerLinks } from '@sagebionetworks/model-ad/util';
 @Component({
   imports: [RouterModule, HeaderComponent, GoogleTagManagerComponent],
   selector: 'app-root',
@@ -28,45 +27,8 @@ export class AppComponent {
 
   readonly useGoogleTagManager: boolean;
 
-  defaultNavItems: Array<NavigationLink> = [
-    {
-      label: 'Home',
-      routerLink: [''],
-      activeOptions: { exact: true },
-    },
-    {
-      label: 'Model Overview',
-      routerLink: ['model-overview'],
-    },
-    {
-      label: 'Gene Expression',
-      routerLink: ['gene-expression'],
-    },
-    {
-      label: 'Disease Correlation',
-      routerLink: ['disease-correlation'],
-    },
-  ];
-  mobileNavItems: Array<NavigationLink> = [
-    {
-      label: 'About',
-      routerLink: ['about'],
-    },
-    {
-      label: 'Help',
-      url: 'https://help.adknowledgeportal.org/apd/Agora-Help.2663088129.html',
-      target: '_blank',
-    },
-    {
-      label: 'News',
-      routerLink: ['news'],
-    },
-    {
-      label: 'Terms of Service',
-      url: 'https://s3.amazonaws.com/static.synapse.org/governance/SageBionetworksSynapseTermsandConditionsofUse.pdf?v=5',
-      target: '_blank',
-    },
-  ];
+  headerLinks = headerLinks;
+  footerLinks = footerLinks;
 
   constructor() {
     this.useGoogleTagManager = isGoogleTagManagerIdSet(

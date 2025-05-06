@@ -1,9 +1,12 @@
-import { render } from '@testing-library/angular';
-import { RouterModule } from '@angular/router';
+import { render, screen } from '@testing-library/angular';
+import userEvent from '@testing-library/user-event';
 import { HeaderComponent } from './header.component';
 import { CommonModule } from '@angular/common';
 import { SvgImageComponent } from '@sagebionetworks/explorers/ui';
-import { NavigationLink } from '@sagebionetworks/explorers/models';
+import {
+  footerLinks as modelADFooterLinks,
+  headerLinks as modelADHeaderLinks,
+} from '@sagebionetworks/model-ad/util';
 
 function changeWindowSize(width: number) {
   Object.defineProperty(window, 'innerWidth', {
@@ -13,137 +16,92 @@ function changeWindowSize(width: number) {
   });
 }
 
-const mockDefaultNavItems: NavigationLink[] = [
-  {
-    label: 'Home',
-    routerLink: [''],
-    activeOptions: { exact: true },
-  },
-  {
-    label: 'Model Overview',
-    routerLink: ['model-overview'],
-  },
-  {
-    label: 'Gene Expression',
-    routerLink: ['gene-expression'],
-  },
-  {
-    label: 'Disease Correlation',
-    routerLink: ['disease-correlation'],
-  },
-];
-const mockMobileNavItems: NavigationLink[] = [
-  {
-    label: 'About',
-    routerLink: ['about'],
-  },
-  {
-    label: 'Help',
-    url: 'https://help.adknowledgeportal.org/apd/Agora-Help.2663088129.html',
-    target: '_blank',
-  },
-  {
-    label: 'News',
-    routerLink: ['news'],
-  },
-  {
-    label: 'Terms of Service',
-    url: 'https://s3.amazonaws.com/static.synapse.org/governance/SageBionetworksSynapseTermsandConditionsofUse.pdf?v=5',
-    target: '_blank',
-  },
-];
+const MOBILE_WIDTH = 1000;
+const DESKTOP_WIDTH = 1400;
+
+async function setup() {
+  const user = userEvent.setup();
+  const { fixture } = await render(HeaderComponent, {
+    componentInputs: {
+      headerLogoPath: 'path/to/logo.svg',
+      headerLinks: modelADHeaderLinks,
+      footerLinks: modelADFooterLinks,
+    },
+    imports: [CommonModule, SvgImageComponent],
+  });
+
+  const component = fixture.componentInstance;
+  return { user, component };
+}
 
 describe('HeaderComponent', () => {
-  const setup = async () => {
-    return render(HeaderComponent, {
-      imports: [CommonModule, RouterModule, SvgImageComponent],
-    });
-  };
+  afterEach(() => {
+    changeWindowSize(DESKTOP_WIDTH); // Reset window size after each test
+  });
 
   it('should create', async () => {
-    const { container } = await setup();
-    expect(container).toBeTruthy();
+    await setup();
+    expect(screen.getByAltText('header logo')).toBeTruthy();
   });
 
-  it('should combine default and mobile nav items when in mobile view', async () => {
-    const { fixture } = await setup();
-    const component = fixture.componentInstance;
-    component.defaultNavItems = mockDefaultNavItems;
-    component.mobileNavItems = mockMobileNavItems;
-
+  it('should combine header and footer links in the popup menu when in mobile view', async () => {
     // Mock window width for mobile view
-    changeWindowSize(1000);
+    changeWindowSize(MOBILE_WIDTH);
+    const { user } = await setup();
+    const toggleButton = screen.getByRole('button', { name: 'Toggle navigation' });
 
-    component.onResize();
+    await user.click(toggleButton);
 
-    const totalItems = component.defaultNavItems.length + component.mobileNavItems.length;
-    expect(component.navItems.length).toBe(totalItems);
-    expect(component.navItems).toEqual([...component.defaultNavItems, ...component.mobileNavItems]);
+    // Verify header links are present in the popup menu
+    verifyHeaderLinks();
 
-    // Verify mobile-specific items are present
-    expect(component.navItems.find((item) => item.label === 'About')).toBeTruthy();
-    expect(component.navItems.find((item) => item.label === 'Help')).toBeTruthy();
-    expect(component.navItems.find((item) => item.label === 'News')).toBeTruthy();
-    expect(component.navItems.find((item) => item.label === 'Terms of Service')).toBeTruthy();
+    // Verify footer links are present in the popup menu
+    verifyFooterLinks();
+
+    // Verify the links are visible
+    expect(screen.getByTestId('nav-links')).toBeVisible();
   });
 
-  it('should show only default nav items in desktop view', async () => {
-    const { fixture } = await setup();
-    const component = fixture.componentInstance;
-    component.defaultNavItems = mockDefaultNavItems;
-    component.mobileNavItems = mockMobileNavItems;
-
+  it('should show header and footer links in desktop view', async () => {
     // Mock window width for desktop view
-    changeWindowSize(1400);
+    changeWindowSize(DESKTOP_WIDTH);
+    await setup();
 
-    component.onResize();
+    // Verify header links are present
+    verifyHeaderLinks();
 
-    expect(component.navItems.length).toBe(component.defaultNavItems.length);
-    expect(component.navItems).toEqual(component.defaultNavItems);
-    expect(component.navItems.length).toBeGreaterThan(0);
-
-    // Verify mobile items are not present
-    expect(component.navItems.find((item) => item.label === 'About')).toBeFalsy();
-    expect(component.navItems.find((item) => item.label === 'Help')).toBeFalsy();
-    expect(component.navItems.find((item) => item.label === 'News')).toBeFalsy();
-    expect(component.navItems.find((item) => item.label === 'Terms of Service')).toBeFalsy();
+    // Verify footer links are not present in the header
+    expect(screen.queryByTestId('nav-link-about')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('nav-link-help')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('nav-link-news')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('nav-link-terms-of-service')).not.toBeInTheDocument();
   });
 
   it('should toggle navigation visibility', async () => {
-    const { fixture } = await setup();
-    const component = fixture.componentInstance;
-    component.defaultNavItems = mockDefaultNavItems;
-    component.mobileNavItems = mockMobileNavItems;
+    // Mock window width for mobile view
+    changeWindowSize(MOBILE_WIDTH);
+    const { component, user } = await setup();
+
+    const toggleButton = screen.getByTestId('hamburger-menu-button');
 
     expect(component.isShown).toBe(false);
 
-    component.toggleNav();
+    await user.click(toggleButton);
+
     expect(component.isShown).toBe(true);
-
-    component.toggleNav();
-    expect(component.isShown).toBe(false);
   });
 
-  it('should handle resize events and update navigation accordingly', async () => {
-    const { fixture } = await setup();
-    const component = fixture.componentInstance;
-    component.defaultNavItems = mockDefaultNavItems;
-    component.mobileNavItems = mockMobileNavItems;
+  function verifyHeaderLinks() {
+    expect(screen.getByTestId('nav-link-home')).toBeInTheDocument();
+    expect(screen.getByTestId('nav-link-model-overview')).toBeInTheDocument();
+    expect(screen.getByTestId('nav-link-gene-expression')).toBeInTheDocument();
+    expect(screen.getByTestId('nav-link-disease-correlation')).toBeInTheDocument();
+  }
 
-    // Start with desktop view
-    changeWindowSize(1400);
-
-    component.onResize();
-    expect(component.isMobile).toBe(false);
-    expect(component.navItems.length).toBe(component.defaultNavItems.length);
-
-    // Switch to mobile view
-    changeWindowSize(1000);
-
-    component.onResize();
-    expect(component.isMobile).toBe(true);
-    expect(component.navItems.length).toBe(
-      component.defaultNavItems.length + component.mobileNavItems.length,
-    );
-  });
+  function verifyFooterLinks() {
+    expect(screen.getByTestId('nav-link-about')).toBeInTheDocument();
+    expect(screen.getByTestId('nav-link-help')).toBeInTheDocument();
+    expect(screen.getByTestId('nav-link-news')).toBeInTheDocument();
+    expect(screen.getByTestId('nav-link-terms-of-service')).toBeInTheDocument();
+  }
 });

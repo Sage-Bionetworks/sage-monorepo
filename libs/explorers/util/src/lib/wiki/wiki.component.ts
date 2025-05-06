@@ -10,7 +10,7 @@ import {
 import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 import { SynapseWiki } from '@sagebionetworks/explorers/models';
 import { SynapseApiService } from '@sagebionetworks/explorers/services';
-import { LoadingIconComponent } from '@sagebionetworks/explorers/shared';
+import { LoadingIconComponent } from '../loading-icon/loading-icon.component';
 
 @Component({
   selector: 'explorers-wiki',

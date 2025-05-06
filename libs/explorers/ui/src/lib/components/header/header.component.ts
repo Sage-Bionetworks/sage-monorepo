@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { NavigationLink } from '@sagebionetworks/explorers/models';
 import { RouterModule } from '@angular/router';
 import { SvgImageComponent } from '../svg-image/svg-image.component';
+import { toKebabCase } from '@sagebionetworks/explorers/util';
 @Component({
   selector: 'explorers-header',
   imports: [CommonModule, SvgImageComponent, RouterModule],
@@ -11,22 +12,22 @@ import { SvgImageComponent } from '../svg-image/svg-image.component';
 })
 export class HeaderComponent implements OnInit {
   @Input() headerLogoPath = '';
-  @Input() defaultNavItems: NavigationLink[] = [];
-  @Input() mobileNavItems: NavigationLink[] = [];
+  @Input() headerLinks: NavigationLink[] = [];
+  @Input() footerLinks: NavigationLink[] = [];
 
   isMobile = false;
   isShown = false;
 
-  navItems: NavigationLink[] = [];
+  links: NavigationLink[] = [];
 
   ngOnInit() {
     this.onResize();
   }
 
   refreshNavItems() {
-    this.navItems = this.isMobile
-      ? [...this.defaultNavItems, ...this.mobileNavItems]
-      : [...this.defaultNavItems];
+    // mobile will combine header and footer links
+    // desktop will only show header links
+    this.links = this.isMobile ? [...this.headerLinks, ...this.footerLinks] : [...this.headerLinks];
   }
 
   onResize() {
@@ -36,5 +37,9 @@ export class HeaderComponent implements OnInit {
 
   toggleNav() {
     this.isShown = !this.isShown;
+  }
+
+  formatTestId(s: string) {
+    return toKebabCase(s);
   }
 }
