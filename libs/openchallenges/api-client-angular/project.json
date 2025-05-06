@@ -37,7 +37,13 @@
     "generate": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["rm -fr src/lib/*", "openapi-generator-cli generate"],
+        "commands": [
+          "rm -fr src/lib/*",
+          "openapi-generator-cli generate",
+          "prettier --write \"src/**/*{.ts,.md}\"",
+          "echo 'TODO: fix JSON-LD properties in **/*JsonLd.ts'",
+          "echo 'TODO: fix services that return JSON-LD objects in **/*.service.ts'"
+        ],
         "cwd": "{projectRoot}",
         "parallel": false
       },
