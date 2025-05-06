@@ -111,18 +111,15 @@ export class ChallengeAnalyticsService extends BaseService {
     }
 
     let localVarPath = `/challengeAnalytics/challengesPerYear`;
-    return this.httpClient.request<ChallengesPerYear>(
-      'get',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: observe,
-        transferCache: localVarTransferCache,
-        reportProgress: reportProgress,
-      },
-    );
+    const { basePath, withCredentials } = this.configuration;
+    return this.httpClient.request<ChallengesPerYear>('get', `${basePath}${localVarPath}`, {
+      context: localVarHttpContext,
+      responseType: <any>responseType_,
+      ...(withCredentials ? { withCredentials } : {}),
+      headers: localVarHeaders,
+      observe: observe,
+      transferCache: localVarTransferCache,
+      reportProgress: reportProgress,
+    });
   }
 }

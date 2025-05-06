@@ -11,14 +11,10 @@
 /**
  * What to sort results by.
  */
-export type OrganizationSort = 'challenge_count' | 'created' | 'name' | 'relevance';
-
 export const OrganizationSort = {
-  ChallengeCount: 'challenge_count' as OrganizationSort,
-
-  Created: 'created' as OrganizationSort,
-
-  Name: 'name' as OrganizationSort,
-
-  Relevance: 'relevance' as OrganizationSort,
-};
+  ChallengeCount: 'challenge_count',
+  Created: 'created',
+  Name: 'name',
+  Relevance: 'relevance',
+} as const;
+export type OrganizationSort = (typeof OrganizationSort)[keyof typeof OrganizationSort];

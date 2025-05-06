@@ -11,10 +11,9 @@
 /**
  * The direction to sort the results by.
  */
-export type OrganizationDirection = 'asc' | 'desc';
-
 export const OrganizationDirection = {
-  Asc: 'asc' as OrganizationDirection,
-
-  Desc: 'desc' as OrganizationDirection,
-};
+  Asc: 'asc',
+  Desc: 'desc',
+} as const;
+export type OrganizationDirection =
+  (typeof OrganizationDirection)[keyof typeof OrganizationDirection];

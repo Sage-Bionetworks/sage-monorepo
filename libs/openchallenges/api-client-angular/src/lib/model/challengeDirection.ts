@@ -11,10 +11,8 @@
 /**
  * The direction to sort the results by.
  */
-export type ChallengeDirection = 'asc' | 'desc';
-
 export const ChallengeDirection = {
-  Asc: 'asc' as ChallengeDirection,
-
-  Desc: 'desc' as ChallengeDirection,
-};
+  Asc: 'asc',
+  Desc: 'desc',
+} as const;
+export type ChallengeDirection = (typeof ChallengeDirection)[keyof typeof ChallengeDirection];

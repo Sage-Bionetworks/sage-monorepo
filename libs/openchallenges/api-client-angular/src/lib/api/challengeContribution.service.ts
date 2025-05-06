@@ -122,13 +122,14 @@ export class ChallengeContributionService extends BaseService {
     }
 
     let localVarPath = `/challenges/${this.configuration.encodeParam({ name: 'challengeId', value: challengeId, in: 'path', style: 'simple', explode: false, dataType: 'number', dataFormat: 'int64' })}/contributions`;
+    const { basePath, withCredentials } = this.configuration;
     return this.httpClient.request<ChallengeContributionsPage>(
       'get',
-      `${this.configuration.basePath}${localVarPath}`,
+      `${basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
         responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
+        ...(withCredentials ? { withCredentials } : {}),
         headers: localVarHeaders,
         observe: observe,
         transferCache: localVarTransferCache,

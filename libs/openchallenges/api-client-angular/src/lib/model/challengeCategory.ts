@@ -11,27 +11,13 @@
 /**
  * The category of the challenge.
  */
-export type ChallengeCategory =
-  | 'featured'
-  | 'benchmark'
-  | 'hackathon'
-  | 'starting_soon'
-  | 'ending_soon'
-  | 'recently_started'
-  | 'recently_ended';
-
 export const ChallengeCategory = {
-  Featured: 'featured' as ChallengeCategory,
-
-  Benchmark: 'benchmark' as ChallengeCategory,
-
-  Hackathon: 'hackathon' as ChallengeCategory,
-
-  StartingSoon: 'starting_soon' as ChallengeCategory,
-
-  EndingSoon: 'ending_soon' as ChallengeCategory,
-
-  RecentlyStarted: 'recently_started' as ChallengeCategory,
-
-  RecentlyEnded: 'recently_ended' as ChallengeCategory,
-};
+  Featured: 'featured',
+  Benchmark: 'benchmark',
+  Hackathon: 'hackathon',
+  StartingSoon: 'starting_soon',
+  EndingSoon: 'ending_soon',
+  RecentlyStarted: 'recently_started',
+  RecentlyEnded: 'recently_ended',
+} as const;
+export type ChallengeCategory = (typeof ChallengeCategory)[keyof typeof ChallengeCategory];

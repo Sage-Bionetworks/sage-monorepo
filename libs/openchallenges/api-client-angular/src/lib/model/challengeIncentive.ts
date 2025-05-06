@@ -11,14 +11,10 @@
 /**
  * The incentive type of the challenge.
  */
-export type ChallengeIncentive = 'monetary' | 'publication' | 'speaking_engagement' | 'other';
-
 export const ChallengeIncentive = {
-  Monetary: 'monetary' as ChallengeIncentive,
-
-  Publication: 'publication' as ChallengeIncentive,
-
-  SpeakingEngagement: 'speaking_engagement' as ChallengeIncentive,
-
-  Other: 'other' as ChallengeIncentive,
-};
+  Monetary: 'monetary',
+  Publication: 'publication',
+  SpeakingEngagement: 'speaking_engagement',
+  Other: 'other',
+} as const;
+export type ChallengeIncentive = (typeof ChallengeIncentive)[keyof typeof ChallengeIncentive];

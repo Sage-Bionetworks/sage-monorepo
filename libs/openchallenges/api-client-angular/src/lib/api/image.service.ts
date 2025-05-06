@@ -125,11 +125,12 @@ export class ImageService extends BaseService {
     }
 
     let localVarPath = `/images`;
-    return this.httpClient.request<Image>('get', `${this.configuration.basePath}${localVarPath}`, {
+    const { basePath, withCredentials } = this.configuration;
+    return this.httpClient.request<Image>('get', `${basePath}${localVarPath}`, {
       context: localVarHttpContext,
       params: localVarQueryParameters,
       responseType: <any>responseType_,
-      withCredentials: this.configuration.withCredentials,
+      ...(withCredentials ? { withCredentials } : {}),
       headers: localVarHeaders,
       observe: observe,
       transferCache: localVarTransferCache,

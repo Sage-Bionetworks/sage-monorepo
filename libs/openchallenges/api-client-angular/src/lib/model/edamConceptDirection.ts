@@ -11,10 +11,8 @@
 /**
  * The direction to sort the results by.
  */
-export type EdamConceptDirection = 'asc' | 'desc';
-
 export const EdamConceptDirection = {
-  Asc: 'asc' as EdamConceptDirection,
-
-  Desc: 'desc' as EdamConceptDirection,
-};
+  Asc: 'asc',
+  Desc: 'desc',
+} as const;
+export type EdamConceptDirection = (typeof EdamConceptDirection)[keyof typeof EdamConceptDirection];

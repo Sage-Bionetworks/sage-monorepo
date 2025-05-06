@@ -11,12 +11,10 @@
 /**
  * The nature of a challenge contribution.
  */
-export type ChallengeContributionRole = 'challenge_organizer' | 'data_contributor' | 'sponsor';
-
 export const ChallengeContributionRole = {
-  ChallengeOrganizer: 'challenge_organizer' as ChallengeContributionRole,
-
-  DataContributor: 'data_contributor' as ChallengeContributionRole,
-
-  Sponsor: 'sponsor' as ChallengeContributionRole,
-};
+  ChallengeOrganizer: 'challenge_organizer',
+  DataContributor: 'data_contributor',
+  Sponsor: 'sponsor',
+} as const;
+export type ChallengeContributionRole =
+  (typeof ChallengeContributionRole)[keyof typeof ChallengeContributionRole];
