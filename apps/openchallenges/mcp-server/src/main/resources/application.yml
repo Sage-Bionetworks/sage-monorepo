@@ -10,6 +10,3 @@ spring:
       server:
         name: openchallenges-mcp-server
         version: 1.0.0
-logging:
-  pattern:
-    console: ''
