@@ -43,6 +43,15 @@
         "command": "./gradlew clean",
         "cwd": "{projectRoot}"
       }
+    },
+    "generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["rm -fr src/", "openapi-generator-cli generate"],
+        "cwd": "{projectRoot}",
+        "parallel": false
+      },
+      "dependsOn": ["^build"]
     }
   },
   "tags": ["type:library", "scope:openchallenges", "language:java", "package-manager:gradle"]

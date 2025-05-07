@@ -81,10 +81,10 @@ Then manually install the following JARs:
 Please follow the [installation](#installation) instruction and execute the following Java code:
 
 ```java
-import org.openapitools.client.model.*;
-import org.sagebionetworks.openchallenges.*;
-import org.sagebionetworks.openchallenges.api.ChallengeApi;
-import org.sagebionetworks.openchallenges.auth.*;
+import org.sagebionetworks.openchallenges.api.client.*;
+import org.sagebionetworks.openchallenges.api.client.api.ChallengeApi;
+import org.sagebionetworks.openchallenges.api.client.auth.*;
+import org.sagebionetworks.openchallenges.api.client.model.*;
 
 public class ChallengeApiExample {
 

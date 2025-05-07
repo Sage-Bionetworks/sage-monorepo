@@ -9,9 +9,10 @@
         "inputSpec": "#{cwd}/../api-description/openapi/openapi.yaml",
         "output": "#{cwd}/",
         "additionalProperties": {
-          "apiPackage": "org.sagebionetworks.openchallenges.api",
+          "apiPackage": "org.sagebionetworks.openchallenges.api.client.api",
           "hideGenerationTimestamp": true,
-          "library": "restclient"
+          "library": "restclient",
+          "modelPackage": "org.sagebionetworks.openchallenges.api.client.model"
         }
       }
     }

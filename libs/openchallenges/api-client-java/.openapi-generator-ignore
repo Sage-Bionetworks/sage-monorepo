@@ -34,3 +34,4 @@ gradlew
 gradlew.bat
 pom.xml
 settings.gradle
+src/main/AndroidManifest.xml
