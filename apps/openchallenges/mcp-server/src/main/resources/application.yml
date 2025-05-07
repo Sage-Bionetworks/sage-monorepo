@@ -1,0 +1,12 @@
+server:
+  port: 8887
+spring:
+  application:
+    name: openchallenges-mcp-server
+  main:
+    banner-mode: off
+  ai:
+    mcp:
+      server:
+        name: openchallenges-mcp-server
+        version: 1.0.0
