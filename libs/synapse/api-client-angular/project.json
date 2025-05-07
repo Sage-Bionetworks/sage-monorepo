@@ -5,43 +5,26 @@
   "projectType": "library",
   "prefix": "synapse",
   "targets": {
-    "build": {
-      "executor": "@nx/angular:ng-packagr-lite",
-      "outputs": ["{workspaceRoot}/dist/libs/synapse/api-client-angular"],
-      "options": {
-        "project": "libs/synapse/api-client-angular/ng-package.json"
-      },
-      "configurations": {
-        "production": {
-          "tsConfig": "libs/synapse/api-client-angular/tsconfig.lib.prod.json"
-        },
-        "development": {
-          "tsConfig": "libs/synapse/api-client-angular/tsconfig.lib.json"
-        }
-      },
-      "defaultConfiguration": "production"
-    },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/libs/synapse/api-client-angular"],
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/synapse/api-client-angular/jest.config.ts"
-      }
-    },
-    "lint-fix": {
-      "executor": "@nx/eslint:lint",
-      "options": {
-        "fix": true
+        "jestConfig": "{projectRoot}/jest.config.ts"
       }
     },
     "generate": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["rm -fr src/lib/*", "openapi-generator-cli generate"],
+        "commands": [
+          "rm -fr src/lib/*",
+          "openapi-generator-cli generate",
+          "prettier --write \"src/**/*{.ts,.md}\"",
+          "echo 'TODO: fix services that return JSON-LD objects in **/*.service.ts'"
+        ],
         "cwd": "{projectRoot}",
         "parallel": false
       },
-      "dependsOn": ["^get"]
+      "dependsOn": ["^build"]
     }
   },
   "tags": ["language:typescript"],
