@@ -2,7 +2,7 @@ server:
   port: 8887
 spring:
   application:
-    name: mcp-server
+    name: openchallenges-mcp-server
   main:
     banner-mode: off
   ai:
