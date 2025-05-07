@@ -1,0 +1,20 @@
+{
+  "name": "openchallenges-api-client-java",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/openchallenges/api-client-java/src",
+  "projectType": "library",
+  "prefix": "openchallenges",
+  "targets": {
+    "generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["openapi-generator-cli generate"],
+        "cwd": "{projectRoot}",
+        "parallel": false
+      },
+      "dependsOn": ["^build"]
+    }
+  },
+  "tags": ["language:java"],
+  "implicitDependencies": ["openchallenges-api-description"]
+}
