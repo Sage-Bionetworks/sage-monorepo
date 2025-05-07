@@ -84,13 +84,6 @@ export class Configuration {
     } else {
       this.credentials = {};
     }
-
-    // init default bearerAuth credential
-    if (!this.credentials['bearerAuth']) {
-      this.credentials['bearerAuth'] = () => {
-        return typeof this.accessToken === 'function' ? this.accessToken() : this.accessToken;
-      };
-    }
   }
 
   /**
@@ -166,7 +159,9 @@ export class Configuration {
     // But: if that's all you need (i.e.: the most common use-case): no need for customization!
 
     const value =
-      param.dataFormat === 'date-time' ? (param.value as Date).toISOString() : param.value;
+      param.dataFormat === 'date-time' && param.value instanceof Date
+        ? (param.value as Date).toISOString()
+        : param.value;
 
     return encodeURIComponent(String(value));
   }
