@@ -20,7 +20,7 @@ apis:
   openchallenges-api-description:
     root: ../../libs/openchallenges/api-description/openapi/openapi.yaml
   synapse-api-description:
-    root: ../../libs/synapse/api-description/build/openapi.json
+    root: ../../libs/synapse/api-description/openapi/openapi.json
     rules:
       operation-4xx-response: off
       operation-operationId-url-safe: off
