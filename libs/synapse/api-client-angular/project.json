@@ -7,25 +7,25 @@
   "targets": {
     "build": {
       "executor": "@nx/angular:ng-packagr-lite",
-      "outputs": ["{workspaceRoot}/dist/libs/openchallenges/api-client-angular"],
+      "outputs": ["{workspaceRoot}/dist/libs/synapse/api-client-angular"],
       "options": {
-        "project": "libs/openchallenges/api-client-angular/ng-package.json"
+        "project": "libs/synapse/api-client-angular/ng-package.json"
       },
       "configurations": {
         "production": {
-          "tsConfig": "libs/openchallenges/api-client-angular/tsconfig.lib.prod.json"
+          "tsConfig": "libs/synapse/api-client-angular/tsconfig.lib.prod.json"
         },
         "development": {
-          "tsConfig": "libs/openchallenges/api-client-angular/tsconfig.lib.json"
+          "tsConfig": "libs/synapse/api-client-angular/tsconfig.lib.json"
         }
       },
       "defaultConfiguration": "production"
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/libs/openchallenges/api-client-angular"],
+      "outputs": ["{workspaceRoot}/coverage/libs/synapse/api-client-angular"],
       "options": {
-        "jestConfig": "libs/openchallenges/api-client-angular/jest.config.ts"
+        "jestConfig": "libs/synapse/api-client-angular/jest.config.ts"
       }
     },
     "lint-fix": {
