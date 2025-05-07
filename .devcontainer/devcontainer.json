@@ -92,10 +92,6 @@
       "label": "openchallenges-config-server",
       "onAutoForward": "silent"
     },
-    "8887": {
-      "label": "openchallenges-mcp-server",
-      "onAutoForward": "silent"
-    },
     "8400": {
       "label": "amp-als-apex",
       "onAutoForward": "silent"
@@ -118,6 +114,10 @@
     },
     "8405": {
       "label": "amp-als-keycloak",
+      "onAutoForward": "silent"
+    },
+    "8887": {
+      "label": "openchallenges-mcp-server",
       "onAutoForward": "silent"
     },
     "8888": {
