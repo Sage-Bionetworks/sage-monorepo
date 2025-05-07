@@ -1,0 +1,2085 @@
+openapi: 3.0.3
+info:
+  contact:
+    name: Support
+    url: https://github.com/Sage-Bionetworks/sage-monorepo
+  license:
+    name: Apache 2.0
+    url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
+  title: OpenChallenges REST API
+  version: 1.0.0
+  x-logo:
+    url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
+servers:
+  - url: http://localhost/v1
+tags:
+  - description: Operations about challenges.
+    name: Challenge
+  - description: Operations about challenge analytics.
+    name: ChallengeAnalytics
+  - description: Operations about challenge platforms.
+    name: ChallengePlatform
+  - description: Operations about EDAM concepts.
+    name: EdamConcept
+  - description: Operations about images
+    name: Image
+  - description: Operations about organizations
+    name: Organization
+  - description: Operations about users
+    name: User
+paths:
+  /challenges:
+    get:
+      description: List challenges
+      operationId: listChallenges
+      parameters:
+        - description: The search query used to find challenges.
+          explode: true
+          in: query
+          name: challengeSearchQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/ChallengeSearchQuery'
+          style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengesPage'
+          description: Success
+        '400':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: List challenges
+      tags:
+        - Challenge
+      x-accepts:
+        - application/json
+        - application/problem+json
+  /challenges/{challengeId}:
+    get:
+      description: Returns the challenge specified
+      operationId: getChallenge
+      parameters:
+        - description: The unique identifier of the challenge.
+          explode: false
+          in: path
+          name: challengeId
+          required: true
+          schema:
+            $ref: '#/components/schemas/ChallengeId'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Challenge'
+            application/ld+json:
+              schema:
+                $ref: '#/components/schemas/ChallengeJsonLd'
+          description: A challenge
+        '404':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get a challenge
+      tags:
+        - Challenge
+      x-accepts:
+        - application/json
+        - application/ld+json
+        - application/problem+json
+  /challenges/{challengeId}/contributions:
+    get:
+      description: List challenge contributions
+      operationId: listChallengeContributions
+      parameters:
+        - description: The unique identifier of the challenge.
+          explode: false
+          in: path
+          name: challengeId
+          required: true
+          schema:
+            $ref: '#/components/schemas/ChallengeId'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeContributionsPage'
+          description: Success
+        '400':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: List challenge contributions
+      tags:
+        - ChallengeContribution
+      x-accepts:
+        - application/json
+        - application/problem+json
+  /challengeAnalytics/challengesPerYear:
+    get:
+      description: Returns the number of challenges tracked per year
+      operationId: getChallengesPerYear
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengesPerYear'
+          description: An object
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get the number of challenges tracked per year
+      tags:
+        - ChallengeAnalytics
+      x-accepts:
+        - application/json
+        - application/problem+json
+  /challengePlatforms:
+    get:
+      description: List challenge platforms
+      operationId: listChallengePlatforms
+      parameters:
+        - description: The search query used to find challenge platforms.
+          explode: true
+          in: query
+          name: challengePlatformSearchQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/ChallengePlatformSearchQuery'
+          style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengePlatformsPage'
+          description: Success
+        '400':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: List challenge platforms
+      tags:
+        - ChallengePlatform
+      x-accepts:
+        - application/json
+        - application/problem+json
+  /challengePlatforms/{challengePlatformName}:
+    get:
+      description: Returns the challenge platform specified
+      operationId: getChallengePlatform
+      parameters:
+        - description: The unique identifier of the challenge platform.
+          explode: false
+          in: path
+          name: challengePlatformName
+          required: true
+          schema:
+            $ref: '#/components/schemas/ChallengePlatformName'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengePlatform'
+          description: Success
+        '404':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get a challenge platform
+      tags:
+        - ChallengePlatform
+      x-accepts:
+        - application/json
+        - application/problem+json
+  /edamConcepts:
+    get:
+      description: List EDAM concepts
+      operationId: listEdamConcepts
+      parameters:
+        - description: The search query used to find EDAM concepts.
+          explode: true
+          in: query
+          name: edamConceptSearchQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/EdamConceptSearchQuery'
+          style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdamConceptsPage'
+          description: Success
+        '400':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: List EDAM concepts
+      tags:
+        - EdamConcept
+      x-accepts:
+        - application/json
+        - application/problem+json
+  /images:
+    get:
+      description: Returns the image specified.
+      operationId: getImage
+      parameters:
+        - description: The query used to get an image.
+          explode: true
+          in: query
+          name: imageQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/ImageQuery'
+          style: deepObject
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image'
+          description: An image
+        '404':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get an image
+      tags:
+        - Image
+      x-accepts:
+        - application/json
+        - application/problem+json
+  /organizations:
+    get:
+      description: List organizations
+      operationId: listOrganizations
+      parameters:
+        - description: The search query used to find organizations.
+          explode: true
+          in: query
+          name: organizationSearchQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/OrganizationSearchQuery'
+          style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationsPage'
+          description: Success
+        '400':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: List organizations
+      tags:
+        - Organization
+      x-accepts:
+        - application/json
+        - application/problem+json
+  /organizations/{org}:
+    get:
+      description: Returns the organization specified
+      operationId: getOrganization
+      parameters:
+        - description: The id or login of the organization.
+          examples:
+            byString:
+              value: dream
+            byId:
+              value: '1'
+          explode: false
+          in: path
+          name: org
+          required: true
+          schema:
+            maxLength: 64
+            minLength: 1
+            type: string
+          style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+          description: An organization
+        '404':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get an organization
+      tags:
+        - Organization
+      x-accepts:
+        - application/json
+        - application/problem+json
+  /users/register:
+    post:
+      description: Create a user with the specified account name
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreateResponse'
+          description: Account created
+        '400':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        '409':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request conflicts with current state of the target resource
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Create a user
+      tags:
+        - User
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+  /users:
+    get:
+      description: Returns the users
+      operationId: listUsers
+      parameters:
+        - description: The page number.
+          explode: true
+          in: query
+          name: pageNumber
+          required: false
+          schema:
+            default: 0
+            format: int32
+            minimum: 0
+            type: integer
+          style: form
+        - description: The number of items in a single page.
+          explode: true
+          in: query
+          name: pageSize
+          required: false
+          schema:
+            default: 100
+            format: int32
+            minimum: 1
+            type: integer
+          style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersPage'
+          description: Success
+        '400':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get all users
+      tags:
+        - User
+      x-accepts:
+        - application/json
+        - application/problem+json
+  /users/{userId}:
+    delete:
+      description: Deletes the user specified
+      operationId: deleteUser
+      parameters:
+        - description: "The unique identifier of the user, either the user account ID\
+            \ or login"
+          explode: false
+          in: path
+          name: userId
+          required: true
+          schema:
+            $ref: '#/components/schemas/AccountId'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmptyObject'
+          description: Deleted
+        '400':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Delete a user
+      tags:
+        - User
+      x-accepts:
+        - application/json
+        - application/problem+json
+    get:
+      description: Returns the user specified
+      operationId: getUser
+      parameters:
+        - description: "The unique identifier of the user, either the user account ID\
+            \ or login"
+          explode: false
+          in: path
+          name: userId
+          required: true
+          schema:
+            $ref: '#/components/schemas/AccountId'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: A user
+        '404':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get a user
+      tags:
+        - User
+      x-accepts:
+        - application/json
+        - application/problem+json
+components:
+  parameters:
+    challengeSearchQuery:
+      description: The search query used to find challenges.
+      explode: true
+      in: query
+      name: challengeSearchQuery
+      required: false
+      schema:
+        $ref: '#/components/schemas/ChallengeSearchQuery'
+      style: form
+    challengeId:
+      description: The unique identifier of the challenge.
+      explode: false
+      in: path
+      name: challengeId
+      required: true
+      schema:
+        $ref: '#/components/schemas/ChallengeId'
+      style: simple
+    challengePlatformSearchQuery:
+      description: The search query used to find challenge platforms.
+      explode: true
+      in: query
+      name: challengePlatformSearchQuery
+      required: false
+      schema:
+        $ref: '#/components/schemas/ChallengePlatformSearchQuery'
+      style: form
+    challengePlatformName:
+      description: The unique identifier of the challenge platform.
+      explode: false
+      in: path
+      name: challengePlatformName
+      required: true
+      schema:
+        $ref: '#/components/schemas/ChallengePlatformName'
+      style: simple
+    edamConceptSearchQuery:
+      description: The search query used to find EDAM concepts.
+      explode: true
+      in: query
+      name: edamConceptSearchQuery
+      required: false
+      schema:
+        $ref: '#/components/schemas/EdamConceptSearchQuery'
+      style: form
+    imageQuery:
+      description: The query used to get an image.
+      explode: true
+      in: query
+      name: imageQuery
+      required: false
+      schema:
+        $ref: '#/components/schemas/ImageQuery'
+      style: deepObject
+    organizationSearchQuery:
+      description: The search query used to find organizations.
+      explode: true
+      in: query
+      name: organizationSearchQuery
+      required: false
+      schema:
+        $ref: '#/components/schemas/OrganizationSearchQuery'
+      style: form
+    org:
+      description: The id or login of the organization.
+      examples:
+        byString:
+          value: dream
+        byId:
+          value: '1'
+      explode: false
+      in: path
+      name: org
+      required: true
+      schema:
+        maxLength: 64
+        minLength: 1
+        type: string
+      style: simple
+    pageNumber:
+      description: The page number.
+      explode: true
+      in: query
+      name: pageNumber
+      required: false
+      schema:
+        default: 0
+        format: int32
+        minimum: 0
+        type: integer
+      style: form
+    pageSize:
+      description: The number of items in a single page.
+      explode: true
+      in: query
+      name: pageSize
+      required: false
+      schema:
+        default: 100
+        format: int32
+        minimum: 1
+        type: integer
+      style: form
+    userId:
+      description: "The unique identifier of the user, either the user account ID\
+        \ or login"
+      explode: false
+      in: path
+      name: userId
+      required: true
+      schema:
+        $ref: '#/components/schemas/AccountId'
+      style: simple
+  responses:
+    BadRequest:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: Invalid request
+    InternalServerError:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The request cannot be fulfilled due to an unexpected server error
+    NotFound:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The specified resource was not found
+    Conflict:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The request conflicts with current state of the target resource
+  schemas:
+    ChallengeSort:
+      default: relevance
+      description: What to sort results by.
+      enum:
+        - created
+        - random
+        - relevance
+        - starred
+        - start_date
+        - end_date
+      type: string
+    ChallengeDirection:
+      description: The direction to sort the results by.
+      enum:
+        - asc
+        - desc
+      nullable: true
+      type: string
+    ChallengeIncentive:
+      description: The incentive type of the challenge.
+      enum:
+        - monetary
+        - publication
+        - speaking_engagement
+        - other
+      example: publication
+      type: string
+    ChallengePlatformSlug:
+      description: The slug of the challenge platform.
+      example: example-challenge-platform
+      maxLength: 30
+      minLength: 3
+      pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+      type: string
+    OrganizationId:
+      description: The unique identifier of an organization
+      example: 1
+      format: int64
+      type: integer
+    ChallengeStatus:
+      description: The status of the challenge.
+      enum:
+        - upcoming
+        - active
+        - completed
+      example: active
+      type: string
+    ChallengeSubmissionType:
+      description: The submission type of the challenge.
+      enum:
+        - container_image
+        - prediction_file
+        - notebook
+        - mlcube
+        - other
+      example: container_image
+      type: string
+    EdamConceptId:
+      description: The unique identifier of the EDAM concept.
+      example: 1
+      format: int64
+      type: integer
+    ChallengeCategory:
+      description: The category of the challenge.
+      enum:
+        - featured
+        - benchmark
+        - hackathon
+        - starting_soon
+        - ending_soon
+        - recently_started
+        - recently_ended
+      example: featured
+      type: string
+    ChallengeSearchQuery:
+      description: A challenge search query.
+      properties:
+        pageNumber:
+          default: 0
+          description: The page number.
+          format: int32
+          minimum: 0
+          type: integer
+        pageSize:
+          default: 100
+          description: The number of items in a single page.
+          format: int32
+          minimum: 1
+          type: integer
+        sort:
+          $ref: '#/components/schemas/ChallengeSort'
+        sortSeed:
+          description: The seed that initializes the random sorter.
+          format: int32
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+          type: integer
+        direction:
+          $ref: '#/components/schemas/ChallengeDirection'
+        incentives:
+          description: An array of challenge incentive types used to filter the results.
+          items:
+            $ref: '#/components/schemas/ChallengeIncentive'
+          type: array
+        minStartDate:
+          description: Keep the challenges that start at this date or later.
+          example: 2017-07-21
+          format: date
+          nullable: true
+          type: string
+        maxStartDate:
+          description: Keep the challenges that start at this date or sooner.
+          example: 2017-07-21
+          format: date
+          nullable: true
+          type: string
+        platforms:
+          description: An array of challenge platform ids used to filter the results.
+          items:
+            $ref: '#/components/schemas/ChallengePlatformSlug'
+          type: array
+        organizations:
+          description: An array of organization ids used to filter the results.
+          items:
+            $ref: '#/components/schemas/OrganizationId'
+          type: array
+        status:
+          description: An array of challenge status used to filter the results.
+          items:
+            $ref: '#/components/schemas/ChallengeStatus'
+          type: array
+        submissionTypes:
+          description: An array of challenge submission types used to filter the results.
+          items:
+            $ref: '#/components/schemas/ChallengeSubmissionType'
+          type: array
+        inputDataTypes:
+          description: An array of EDAM concept ID used to filter the results.
+          items:
+            $ref: '#/components/schemas/EdamConceptId'
+          type: array
+        operations:
+          description: An array of EDAM concept ID used to filter the results.
+          items:
+            $ref: '#/components/schemas/EdamConceptId'
+          type: array
+        categories:
+          description: The array of challenge categories used to filter the results.
+          items:
+            $ref: '#/components/schemas/ChallengeCategory'
+          type: array
+        searchTerms:
+          description: A string of search terms used to filter the results.
+          example: dream challenge
+          type: string
+      type: object
+    PageMetadata:
+      description: The metadata of a page.
+      properties:
+        number:
+          description: The page number.
+          example: 99
+          format: int32
+          type: integer
+        size:
+          description: The number of items in a single page.
+          example: 99
+          format: int32
+          type: integer
+        totalElements:
+          description: Total number of elements in the result set.
+          example: 99
+          format: int64
+          type: integer
+        totalPages:
+          description: Total number of pages in the result set.
+          example: 99
+          format: int32
+          type: integer
+        hasNext:
+          description: Returns if there is a next page.
+          example: true
+          type: boolean
+        hasPrevious:
+          description: Returns if there is a previous page.
+          example: true
+          type: boolean
+      required:
+        - hasNext
+        - hasPrevious
+        - number
+        - size
+        - totalElements
+        - totalPages
+      type: object
+    ChallengeId:
+      description: The unique identifier of the challenge.
+      example: 1
+      format: int64
+      type: integer
+    ChallengeSlug:
+      description: The unique slug of the challenge.
+      example: awesome-challenge
+      maxLength: 255
+      minLength: 3
+      pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+      type: string
+    ChallengeName:
+      description: The name of the challenge.
+      maxLength: 255
+      minLength: 3
+      type: string
+    ChallengeHeadline:
+      description: The headline of the challenge.
+      example: Example challenge headline
+      maxLength: 80
+      minLength: 0
+      nullable: true
+      type: string
+    ChallengeDescription:
+      description: The description of the challenge.
+      example: This is an example description of the challenge.
+      maxLength: 1000
+      minLength: 0
+      type: string
+    ChallengeDoi:
+      description: The DOI of the challenge.
+      example: https://doi.org/123/abc
+      format: url
+      maxLength: 120
+      nullable: true
+      type: string
+    ChallengePlatformId:
+      description: The unique identifier of a challenge platform.
+      example: 1
+      format: int64
+      type: integer
+    ChallengePlatformName:
+      description: The name of the challenge platform.
+      maxLength: 30
+      minLength: 3
+      type: string
+    SimpleChallengePlatform:
+      description: A simple challenge platform.
+      example:
+        name: name
+        id: 1
+        slug: example-challenge-platform
+      nullable: true
+      properties:
+        id:
+          description: The unique identifier of a challenge platform.
+          example: 1
+          format: int64
+          type: integer
+        slug:
+          description: The slug of the challenge platform.
+          example: example-challenge-platform
+          maxLength: 30
+          minLength: 3
+          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          type: string
+        name:
+          description: The name of the challenge platform.
+          maxLength: 30
+          minLength: 3
+          type: string
+      required:
+        - id
+        - name
+        - slug
+      type: object
+    Url:
+      description: A URL to the website or image.
+      example: https://openchallenges.io
+      format: url
+      maxLength: 500
+      nullable: true
+      type: string
+    EdamConcept:
+      description: The EDAM concept.
+      example:
+        classId: http://edamontology.org/data_0850
+        preferredLabel: Sequence set
+        id: 1
+      nullable: true
+      properties:
+        id:
+          description: The unique identifier of the EDAM concept.
+          example: 1
+          format: int64
+          type: integer
+        classId:
+          example: http://edamontology.org/data_0850
+          maxLength: 60
+          type: string
+        preferredLabel:
+          example: Sequence set
+          maxLength: 80
+          type: string
+      required:
+        - classId
+        - id
+        - preferredLabel
+      type: object
+    ChallengeStartDate:
+      description: The start date of the challenge.
+      example: 2017-07-21
+      format: date
+      nullable: true
+      type: string
+    ChallengeEndDate:
+      description: The end date of the challenge.
+      example: 2017-07-21
+      format: date
+      nullable: true
+      type: string
+    CreatedDateTime:
+      description: Datetime when the object was added to the database.
+      example: 2022-07-04T22:19:11Z
+      format: date-time
+      type: string
+    UpdatedDateTime:
+      description: Datetime when the object was last modified in the database.
+      example: 2022-07-04T22:19:11Z
+      format: date-time
+      type: string
+    Challenge:
+      description: A challenge
+      example:
+        avatarUrl: https://openchallenges.io
+        endDate: 2017-07-21
+        description: This is an example description of the challenge.
+        platform:
+          name: name
+          id: 1
+          slug: example-challenge-platform
+        starredCount: 100
+        createdAt: 2022-07-04T22:19:11Z
+        incentives:
+          - publication
+          - publication
+        submissionTypes:
+          - container_image
+          - container_image
+        websiteUrl: https://openchallenges.io
+        name: name
+        id: 1
+        categories:
+          - featured
+          - featured
+        headline: Example challenge headline
+        operation:
+          classId: http://edamontology.org/data_0850
+          preferredLabel: Sequence set
+          id: 1
+        slug: awesome-challenge
+        startDate: 2017-07-21
+        doi: https://doi.org/123/abc
+        status: active
+        inputDataTypes:
+          - classId: http://edamontology.org/data_0850
+            preferredLabel: Sequence set
+            id: 1
+          - classId: http://edamontology.org/data_0850
+            preferredLabel: Sequence set
+            id: 1
+        updatedAt: 2022-07-04T22:19:11Z
+      properties:
+        id:
+          description: The unique identifier of the challenge.
+          example: 1
+          format: int64
+          type: integer
+        slug:
+          description: The unique slug of the challenge.
+          example: awesome-challenge
+          maxLength: 255
+          minLength: 3
+          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          type: string
+        name:
+          description: The name of the challenge.
+          maxLength: 255
+          minLength: 3
+          type: string
+        headline:
+          description: The headline of the challenge.
+          example: Example challenge headline
+          maxLength: 80
+          minLength: 0
+          nullable: true
+          type: string
+        description:
+          description: The description of the challenge.
+          example: This is an example description of the challenge.
+          maxLength: 1000
+          minLength: 0
+          type: string
+        doi:
+          description: The DOI of the challenge.
+          example: https://doi.org/123/abc
+          format: url
+          maxLength: 120
+          nullable: true
+          type: string
+        status:
+          $ref: '#/components/schemas/ChallengeStatus'
+        platform:
+          $ref: '#/components/schemas/SimpleChallengePlatform'
+        websiteUrl:
+          description: A URL to the website or image.
+          example: https://openchallenges.io
+          format: url
+          maxLength: 500
+          nullable: true
+          type: string
+        avatarUrl:
+          description: A URL to the website or image.
+          example: https://openchallenges.io
+          format: url
+          maxLength: 500
+          nullable: true
+          type: string
+        incentives:
+          items:
+            $ref: '#/components/schemas/ChallengeIncentive'
+          type: array
+        submissionTypes:
+          items:
+            $ref: '#/components/schemas/ChallengeSubmissionType'
+          type: array
+        inputDataTypes:
+          items:
+            $ref: '#/components/schemas/EdamConcept'
+          type: array
+        categories:
+          items:
+            $ref: '#/components/schemas/ChallengeCategory'
+          type: array
+        startDate:
+          description: The start date of the challenge.
+          example: 2017-07-21
+          format: date
+          nullable: true
+          type: string
+        endDate:
+          description: The end date of the challenge.
+          example: 2017-07-21
+          format: date
+          nullable: true
+          type: string
+        starredCount:
+          default: 0
+          description: The number of times the challenge has been starred by users.
+          example: 100
+          minimum: 0
+          type: integer
+        operation:
+          $ref: '#/components/schemas/EdamConcept'
+        createdAt:
+          description: Datetime when the object was added to the database.
+          example: 2022-07-04T22:19:11Z
+          format: date-time
+          type: string
+        updatedAt:
+          description: Datetime when the object was last modified in the database.
+          example: 2022-07-04T22:19:11Z
+          format: date-time
+          type: string
+      required:
+        - categories
+        - createdAt
+        - description
+        - id
+        - incentives
+        - name
+        - slug
+        - starredCount
+        - status
+        - submissionTypes
+        - updatedAt
+      type: object
+    ChallengesPage:
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - properties:
+            challenges:
+              description: A list of challenges.
+              items:
+                $ref: '#/components/schemas/Challenge'
+              type: array
+          required:
+            - challenges
+          type: object
+      description: A page of challenges.
+      example:
+        number: 99
+        size: 99
+        challenges:
+          - avatarUrl: https://openchallenges.io
+            endDate: 2017-07-21
+            description: This is an example description of the challenge.
+            platform:
+              name: name
+              id: 1
+              slug: example-challenge-platform
+            starredCount: 100
+            createdAt: 2022-07-04T22:19:11Z
+            incentives:
+              - publication
+              - publication
+            submissionTypes:
+              - container_image
+              - container_image
+            websiteUrl: https://openchallenges.io
+            name: name
+            id: 1
+            categories:
+              - featured
+              - featured
+            headline: Example challenge headline
+            operation:
+              classId: http://edamontology.org/data_0850
+              preferredLabel: Sequence set
+              id: 1
+            slug: awesome-challenge
+            startDate: 2017-07-21
+            doi: https://doi.org/123/abc
+            status: active
+            inputDataTypes:
+              - classId: http://edamontology.org/data_0850
+                preferredLabel: Sequence set
+                id: 1
+              - classId: http://edamontology.org/data_0850
+                preferredLabel: Sequence set
+                id: 1
+            updatedAt: 2022-07-04T22:19:11Z
+          - avatarUrl: https://openchallenges.io
+            endDate: 2017-07-21
+            description: This is an example description of the challenge.
+            platform:
+              name: name
+              id: 1
+              slug: example-challenge-platform
+            starredCount: 100
+            createdAt: 2022-07-04T22:19:11Z
+            incentives:
+              - publication
+              - publication
+            submissionTypes:
+              - container_image
+              - container_image
+            websiteUrl: https://openchallenges.io
+            name: name
+            id: 1
+            categories:
+              - featured
+              - featured
+            headline: Example challenge headline
+            operation:
+              classId: http://edamontology.org/data_0850
+              preferredLabel: Sequence set
+              id: 1
+            slug: awesome-challenge
+            startDate: 2017-07-21
+            doi: https://doi.org/123/abc
+            status: active
+            inputDataTypes:
+              - classId: http://edamontology.org/data_0850
+                preferredLabel: Sequence set
+                id: 1
+              - classId: http://edamontology.org/data_0850
+                preferredLabel: Sequence set
+                id: 1
+            updatedAt: 2022-07-04T22:19:11Z
+        totalPages: 99
+        hasPrevious: true
+        hasNext: true
+        totalElements: 99
+      type: object
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    BasicError:
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          description: A human readable documentation for the problem type
+          type: string
+        status:
+          description: The HTTP status code
+          type: integer
+        detail:
+          description: A human readable explanation specific to this occurrence of
+            the problem
+          type: string
+        type:
+          description: An absolute URI that identifies the problem type
+          type: string
+      required:
+        - status
+        - title
+      type: object
+      x-java-class-annotations:
+        - '@lombok.AllArgsConstructor'
+        - '@lombok.Builder'
+    ChallengeJsonLd:
+      allOf:
+        - $ref: '#/components/schemas/Challenge'
+        - properties:
+            '@context':
+              example: https://schema.org
+              type: string
+            '@id':
+              example: https://openchallenges.io/api/v1/challenges/1
+              type: string
+            '@type':
+              example: Challenge
+              type: string
+          required:
+            - '@context'
+            - '@id'
+            - '@type'
+          type: object
+      description: A challenge
+      type: object
+    ChallengeContributionRole:
+      description: The nature of a challenge contribution.
+      enum:
+        - challenge_organizer
+        - data_contributor
+        - sponsor
+      example: challenge_organizer
+      type: string
+    ChallengeContribution:
+      description: A challenge contribution.
+      example:
+        organizationId: 1
+        challengeId: 1
+        role: challenge_organizer
+      properties:
+        challengeId:
+          description: The unique identifier of the challenge.
+          example: 1
+          format: int64
+          type: integer
+        organizationId:
+          description: The unique identifier of an organization
+          example: 1
+          format: int64
+          type: integer
+        role:
+          $ref: '#/components/schemas/ChallengeContributionRole'
+      required:
+        - challengeId
+        - organizationId
+        - role
+      type: object
+    ChallengeContributionsPage:
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - properties:
+            challengeContributions:
+              description: A list of challenge contributions.
+              items:
+                $ref: '#/components/schemas/ChallengeContribution'
+              type: array
+          required:
+            - challengeContributions
+          type: object
+      description: A page of challenge challenge contributions.
+      example:
+        number: 99
+        size: 99
+        challengeContributions:
+          - organizationId: 1
+            challengeId: 1
+            role: challenge_organizer
+          - organizationId: 1
+            challengeId: 1
+            role: challenge_organizer
+        totalPages: 99
+        hasPrevious: true
+        hasNext: true
+        totalElements: 99
+      type: object
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    ChallengesPerYear:
+      description: An object
+      example:
+        undatedChallengeCount: 0
+        challengeCounts:
+          - 0
+          - 0
+        years:
+          - years
+          - years
+      properties:
+        years:
+          items:
+            type: string
+          type: array
+        challengeCounts:
+          items:
+            type: integer
+          type: array
+        undatedChallengeCount:
+          default: 0
+          example: 0
+          minimum: 0
+          type: integer
+      required:
+        - challengeCounts
+        - undatedChallengeCount
+        - years
+      type: object
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    ChallengePlatformSort:
+      default: relevance
+      description: What to sort results by.
+      enum:
+        - name
+        - relevance
+      type: string
+    ChallengePlatformDirection:
+      description: The direction to sort the results by.
+      enum:
+        - asc
+        - desc
+      nullable: true
+      type: string
+    ChallengePlatformSearchQuery:
+      description: A challenge platform search query.
+      properties:
+        pageNumber:
+          default: 0
+          description: The page number.
+          format: int32
+          minimum: 0
+          type: integer
+        pageSize:
+          default: 100
+          description: The number of items in a single page.
+          format: int32
+          minimum: 1
+          type: integer
+        sort:
+          $ref: '#/components/schemas/ChallengePlatformSort'
+        direction:
+          $ref: '#/components/schemas/ChallengePlatformDirection'
+        slugs:
+          description: An array of challenge platform slugs used to filter the results.
+          items:
+            $ref: '#/components/schemas/ChallengePlatformSlug'
+          type: array
+        searchTerms:
+          description: A string of search terms used to filter the results.
+          example: synapse
+          type: string
+      type: object
+    ChallengePlatform:
+      description: A challenge platform
+      example:
+        createdAt: 2022-07-04T22:19:11Z
+        avatarUrl: https://via.placeholder.com/300.png
+        websiteUrl: https://example.com
+        name: name
+        id: 1
+        slug: example-challenge-platform
+        updatedAt: 2022-07-04T22:19:11Z
+      properties:
+        id:
+          description: The unique identifier of a challenge platform.
+          example: 1
+          format: int64
+          type: integer
+        slug:
+          description: The slug of the challenge platform.
+          example: example-challenge-platform
+          maxLength: 30
+          minLength: 3
+          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          type: string
+        name:
+          description: The name of the challenge platform.
+          maxLength: 30
+          minLength: 3
+          type: string
+        avatarUrl:
+          example: https://via.placeholder.com/300.png
+          format: url
+          type: string
+        websiteUrl:
+          example: https://example.com
+          format: url
+          type: string
+        createdAt:
+          example: 2022-07-04T22:19:11Z
+          format: date-time
+          type: string
+        updatedAt:
+          example: 2022-07-04T22:19:11Z
+          format: date-time
+          type: string
+      required:
+        - avatarUrl
+        - createdAt
+        - id
+        - name
+        - slug
+        - updatedAt
+        - websiteUrl
+      type: object
+    ChallengePlatformsPage:
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - properties:
+            challengePlatforms:
+              description: A list of challenge platforms.
+              items:
+                $ref: '#/components/schemas/ChallengePlatform'
+              type: array
+          required:
+            - challengePlatforms
+          type: object
+      description: A page of challenge platforms.
+      example:
+        number: 99
+        size: 99
+        challengePlatforms:
+          - createdAt: 2022-07-04T22:19:11Z
+            avatarUrl: https://via.placeholder.com/300.png
+            websiteUrl: https://example.com
+            name: name
+            id: 1
+            slug: example-challenge-platform
+            updatedAt: 2022-07-04T22:19:11Z
+          - createdAt: 2022-07-04T22:19:11Z
+            avatarUrl: https://via.placeholder.com/300.png
+            websiteUrl: https://example.com
+            name: name
+            id: 1
+            slug: example-challenge-platform
+            updatedAt: 2022-07-04T22:19:11Z
+        totalPages: 99
+        hasPrevious: true
+        hasNext: true
+        totalElements: 99
+      type: object
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    EdamConceptSort:
+      default: relevance
+      description: What to sort results by.
+      enum:
+        - preferred_label
+        - relevance
+      type: string
+    EdamConceptDirection:
+      description: The direction to sort the results by.
+      enum:
+        - asc
+        - desc
+      nullable: true
+      type: string
+    EdamSection:
+      description: The EDAM section (sub-ontology).
+      enum:
+        - data
+        - format
+        - identifier
+        - operation
+        - topic
+      example: data
+      type: string
+    EdamConceptSearchQuery:
+      description: An EDAM concept search query.
+      properties:
+        pageNumber:
+          default: 0
+          description: The page number.
+          format: int32
+          minimum: 0
+          type: integer
+        pageSize:
+          default: 100
+          description: The number of items in a single page.
+          format: int32
+          minimum: 1
+          type: integer
+        sort:
+          $ref: '#/components/schemas/EdamConceptSort'
+        direction:
+          $ref: '#/components/schemas/EdamConceptDirection'
+        ids:
+          description: An array of EDAM concept ids used to filter the results.
+          items:
+            $ref: '#/components/schemas/EdamConceptId'
+          type: array
+        searchTerms:
+          description: A string of search terms used to filter the results.
+          example: sequence image
+          type: string
+        sections:
+          description: An array of EDAM sections (sub-ontologies) used to filter the
+            results.
+          items:
+            $ref: '#/components/schemas/EdamSection'
+          type: array
+      type: object
+    EdamConceptsPage:
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - properties:
+            edamConcepts:
+              description: A list of EDAM concepts.
+              items:
+                $ref: '#/components/schemas/EdamConcept'
+              type: array
+          required:
+            - edamConcepts
+          type: object
+      description: A page of EDAM concepts.
+      example:
+        number: 99
+        size: 99
+        totalPages: 99
+        hasPrevious: true
+        hasNext: true
+        edamConcepts:
+          - classId: http://edamontology.org/data_0850
+            preferredLabel: Sequence set
+            id: 1
+          - classId: http://edamontology.org/data_0850
+            preferredLabel: Sequence set
+            id: 1
+        totalElements: 99
+      type: object
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    ImageKey:
+      description: The unique identifier of the image.
+      example: logo/dream.png
+      pattern: "^[a-zA-Z0-9\\/_-]+.[a-zA-Z0-9\\/_-]+"
+      type: string
+    ImageHeight:
+      default: original
+      description: The height of the image.
+      enum:
+        - original
+        - 32px
+        - 100px
+        - 140px
+        - 250px
+        - 500px
+      type: string
+    ImageAspectRatio:
+      default: original
+      description: The aspect ratio of the image (the height of the image must be
+        specified).
+      enum:
+        - original
+        - 16_9
+        - 1_1
+        - 3_2
+        - 2_3
+      type: string
+    ImageQuery:
+      description: An image query.
+      properties:
+        objectKey:
+          description: The unique identifier of the image.
+          example: logo/dream.png
+          pattern: "^[a-zA-Z0-9\\/_-]+.[a-zA-Z0-9\\/_-]+"
+          type: string
+        height:
+          $ref: '#/components/schemas/ImageHeight'
+        aspectRatio:
+          $ref: '#/components/schemas/ImageAspectRatio'
+      required:
+        - objectKey
+      type: object
+    Image:
+      description: An image
+      example:
+        url: http://example.com/an-image.png
+      properties:
+        url:
+          example: http://example.com/an-image.png
+          type: string
+      required:
+        - url
+      type: object
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    OrganizationCategory:
+      description: The category of the organization.
+      enum:
+        - featured
+      example: featured
+      type: string
+    OrganizationSort:
+      default: relevance
+      description: What to sort results by.
+      enum:
+        - challenge_count
+        - created
+        - name
+        - relevance
+      type: string
+    OrganizationDirection:
+      description: The direction to sort the results by.
+      enum:
+        - asc
+        - desc
+      nullable: true
+      type: string
+    OrganizationSearchQuery:
+      description: An organization search query.
+      properties:
+        pageNumber:
+          default: 0
+          description: The page number.
+          format: int32
+          minimum: 0
+          type: integer
+        pageSize:
+          default: 100
+          description: The number of items in a single page.
+          format: int32
+          minimum: 1
+          type: integer
+        categories:
+          description: The array of organization categories used to filter the results.
+          items:
+            $ref: '#/components/schemas/OrganizationCategory'
+          type: array
+        challengeContributionRoles:
+          description: An array of challenge contribution roles used to filter the
+            results.
+          items:
+            $ref: '#/components/schemas/ChallengeContributionRole'
+          type: array
+        sort:
+          $ref: '#/components/schemas/OrganizationSort'
+        direction:
+          $ref: '#/components/schemas/OrganizationDirection'
+        ids:
+          description: An array of organization ids used to filter the results.
+          items:
+            $ref: '#/components/schemas/OrganizationId'
+          type: array
+        searchTerms:
+          description: A string of search terms used to filter the results.
+          example: data provider
+          type: string
+      type: object
+    OrganizationLogin:
+      description: The unique login of an organization.
+      example: example-org
+      maxLength: 64
+      minLength: 2
+      pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+      type: string
+    Organization:
+      description: An organization
+      example:
+        createdAt: 2022-07-04T22:19:11Z
+        avatarKey: logo/dream.png
+        websiteUrl: https://openchallenges.io
+        acronym: OC
+        name: Example organization
+        description: A description of the organization.
+        id: 1
+        challengeCount: 10
+        login: example-org
+        updatedAt: 2022-07-04T22:19:11Z
+      properties:
+        id:
+          description: The unique identifier of an organization
+          example: 1
+          format: int64
+          type: integer
+        name:
+          description: The name of the organization.
+          example: Example organization
+          type: string
+        login:
+          description: The unique login of an organization.
+          example: example-org
+          maxLength: 64
+          minLength: 2
+          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          type: string
+        description:
+          description: A description of the organization.
+          example: A description of the organization.
+          nullable: true
+          type: string
+        avatarKey:
+          example: logo/dream.png
+          type: string
+        websiteUrl:
+          description: A URL to the website or image.
+          example: https://openchallenges.io
+          format: url
+          maxLength: 500
+          nullable: true
+          type: string
+        challengeCount:
+          default: 0
+          description: The number of challenges involving this organization.
+          example: 10
+          minimum: 0
+          type: integer
+        createdAt:
+          description: Datetime when the object was added to the database.
+          example: 2022-07-04T22:19:11Z
+          format: date-time
+          type: string
+        updatedAt:
+          description: Datetime when the object was last modified in the database.
+          example: 2022-07-04T22:19:11Z
+          format: date-time
+          type: string
+        acronym:
+          description: An acronym of the organization.
+          example: OC
+          maxLength: 10
+          type: string
+      required:
+        - createdAt
+        - id
+        - login
+        - name
+        - updatedAt
+      type: object
+    OrganizationsPage:
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - properties:
+            organizations:
+              description: A list of organizations
+              items:
+                $ref: '#/components/schemas/Organization'
+              type: array
+          required:
+            - organizations
+          type: object
+      description: A page of organizations
+      example:
+        number: 99
+        size: 99
+        totalPages: 99
+        organizations:
+          - createdAt: 2022-07-04T22:19:11Z
+            avatarKey: logo/dream.png
+            websiteUrl: https://openchallenges.io
+            acronym: OC
+            name: Example organization
+            description: A description of the organization.
+            id: 1
+            challengeCount: 10
+            login: example-org
+            updatedAt: 2022-07-04T22:19:11Z
+          - createdAt: 2022-07-04T22:19:11Z
+            avatarKey: logo/dream.png
+            websiteUrl: https://openchallenges.io
+            acronym: OC
+            name: Example organization
+            description: A description of the organization.
+            id: 1
+            challengeCount: 10
+            login: example-org
+            updatedAt: 2022-07-04T22:19:11Z
+        hasPrevious: true
+        hasNext: true
+        totalElements: 99
+      type: object
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    Email:
+      description: An email address.
+      example: john.smith@example.com
+      format: email
+      type: string
+    UserCreateRequest:
+      description: The information required to create a user account
+      example:
+        login: awesome-user
+        email: awesome-user@example.org
+        password: yourpassword
+        name: Awesome User
+        avatarUrl: https://example.com/awesome-avatar.png
+        bio: A great bio
+      properties:
+        login:
+          type: string
+        email:
+          description: An email address.
+          example: john.smith@example.com
+          format: email
+          type: string
+        password:
+          format: password
+          type: string
+        name:
+          nullable: true
+          type: string
+        avatarUrl:
+          example: https://example.com/awesome-avatar.png
+          format: url
+          nullable: true
+          type: string
+        bio:
+          nullable: true
+          type: string
+      required:
+        - email
+        - login
+        - password
+      type: object
+    AccountId:
+      description: The unique identifier of an account
+      example: 1
+      format: int64
+      type: integer
+    UserCreateResponse:
+      description: The response returned after the creation of the user
+      example:
+        id: 507f1f77bcf86cd799439011
+      properties:
+        id:
+          description: The unique identifier of an account
+          example: 1
+          format: int64
+          type: integer
+      required:
+        - id
+      type: object
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    UserStatus:
+      description: The account status of a user
+      enum:
+        - pending
+        - approved
+        - disabled
+        - blacklist
+      example: pending
+      type: string
+    User:
+      description: A simple user
+      example:
+        login: awesome-user
+        email: awesome-user@example.org
+        name: Awesome User
+        status: approved
+        avatarUrl: https://example.com/awesome-avatar.png
+        bio: A great bio
+        createdAt: 2017-07-08T16:18:44-04:00
+        updatedAt: 2017-07-08T16:18:44-04:00
+        type: User
+      properties:
+        id:
+          description: The unique identifier of an account
+          example: 1
+          format: int64
+          type: integer
+        login:
+          type: string
+        email:
+          description: An email address.
+          example: john.smith@example.com
+          format: email
+          type: string
+        name:
+          nullable: true
+          type: string
+        status:
+          $ref: '#/components/schemas/UserStatus'
+        avatarUrl:
+          example: https://example.com/awesome-avatar.png
+          format: url
+          nullable: true
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+        type:
+          example: User
+          type: string
+        bio:
+          nullable: true
+          type: string
+      required:
+        - createdAt
+        - email
+        - login
+        - type
+        - updatedAt
+      type: object
+    UsersPage:
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - properties:
+            users:
+              description: A list of users
+              items:
+                $ref: '#/components/schemas/User'
+              type: array
+          required:
+            - users
+          type: object
+      description: A page of users
+      example:
+        number: 99
+        size: 99
+        totalPages: 99
+        hasPrevious: true
+        hasNext: true
+        users:
+          - login: awesome-user
+            email: awesome-user@example.org
+            name: Awesome User
+            status: approved
+            avatarUrl: https://example.com/awesome-avatar.png
+            bio: A great bio
+            createdAt: 2017-07-08T16:18:44-04:00
+            updatedAt: 2017-07-08T16:18:44-04:00
+            type: User
+          - login: awesome-user
+            email: awesome-user@example.org
+            name: Awesome User
+            status: approved
+            avatarUrl: https://example.com/awesome-avatar.png
+            bio: A great bio
+            createdAt: 2017-07-08T16:18:44-04:00
+            updatedAt: 2017-07-08T16:18:44-04:00
+            type: User
+        totalElements: 99
+      type: object
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    EmptyObject:
+      description: Empty JSON object
+      type: object

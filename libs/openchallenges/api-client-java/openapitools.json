@@ -5,10 +5,12 @@
     "version": "7.13.0",
     "generators": {
       "api-client-angular": {
-        "generatorName": "typescript-java",
+        "generatorName": "java",
         "inputSpec": "#{cwd}/../api-description/openapi/openapi.yaml",
-        "output": "#{cwd}/src/",
+        "output": "#{cwd}/",
         "additionalProperties": {
+          "apiPackage": "org.sagebionetworks.openchallenges.api",
+          "hideGenerationTimestamp": true,
           "library": "restclient"
         }
       }
