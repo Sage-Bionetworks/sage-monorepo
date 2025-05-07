@@ -2,9 +2,13 @@
   <sage-google-tag-manager />
 }
 <div id="container">
-  <model-ad-header></model-ad-header>
+  <explorers-header
+    headerLogoPath="/model-ad-assets/images/header-logo.svg"
+    [headerLinks]="headerLinks"
+    [footerLinks]="footerLinks"
+  ></explorers-header>
   <div class="container">
     <router-outlet></router-outlet>
   </div>
-  <!-- <model-ad-footer></model-ad-footer> -->
+  <!-- <explorers-footer></explorers-footer> -->
 </div>

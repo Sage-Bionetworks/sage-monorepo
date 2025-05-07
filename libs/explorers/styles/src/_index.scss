@@ -1,4 +1,4 @@
-@use 'sass:map';
-@import 'normalize.css';
-@import './lib/mixins';
-@import './lib/variables';
+@forward './lib/general';
+@forward './lib/mixins';
+@forward './lib/variables';
+@forward './lib/components/fonts';

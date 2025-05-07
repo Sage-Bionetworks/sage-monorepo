@@ -1,0 +1,55 @@
+<header>
+  <div id="header" [ngClass]="{ 'is-mobile': isMobile }" (window:resize)="onResize()">
+    <div class="header-inner">
+      <div class="header-logo">
+        <a routerLink="/">
+          <explorers-svg-image [imagePath]="headerLogoPath" altText="header logo" />
+        </a>
+      </div>
+      @if (links.length > 0) {
+        <nav class="header-nav" [ngClass]="{ show: isShown }" aria-label="Header navigation">
+          <button
+            class="hamburger-menu-button"
+            (click)="toggleNav()"
+            aria-label="Toggle navigation"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <div class="header-nav-inner">
+            <ul>
+              @for (link of links; track link.label) {
+                <li>
+                  @if (link.routerLink) {
+                    <a
+                      [routerLink]="link.routerLink"
+                      routerLinkActive="active"
+                      [routerLinkActiveOptions]="link.activeOptions || { exact: false }"
+                      (click)="toggleNav()"
+                    >
+                      <span>{{ link.label }}</span>
+                    </a>
+                  } @else if (link.url) {
+                    <a [attr.href]="link.url" [attr.target]="link.target" (click)="toggleNav()">
+                      <span>{{ link.label }}</span>
+                    </a>
+                  } @else {
+                    <span>{{ link.label }}</span>
+                  }
+                </li>
+              }
+            </ul>
+
+            <div class="separator"></div>
+
+            <!-- <model-ad-gene-search
+              class="header-search"
+              (searchNavigated)="toggleNav()"
+            ></model-ad-gene-search> -->
+          </div>
+        </nav>
+      }
+    </div>
+  </div>
+</header>

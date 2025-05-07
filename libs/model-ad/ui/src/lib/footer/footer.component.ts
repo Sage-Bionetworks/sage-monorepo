@@ -12,6 +12,6 @@ export class FooterComponent {
   @Input({ required: true }) appVersion = '';
   @Input({ required: true }) dataUpdatedOn = '';
   @Input({ required: true }) privacyPolicyUrl = '';
-  @Input({ required: true }) termsOfUseUrl = '';
+  @Input({ required: true }) termsOfUseUrl = ''; // TODO call synapse api
   @Input({ required: true }) apiDocsUrl = '';
 }

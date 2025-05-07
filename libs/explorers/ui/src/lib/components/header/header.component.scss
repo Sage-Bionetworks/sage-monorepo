@@ -1,4 +1,4 @@
-@use 'styles/src/lib/mixins';
+@use 'libs/explorers/styles/src/lib/mixins';
 
 #header {
   padding: 10px 80px;
@@ -27,7 +27,7 @@
   display: flex;
   justify-content: flex-end;
 
-  .header-nav-toggle {
+  .hamburger-menu-button {
     @include mixins.reset-button;
 
     position: relative;
@@ -87,7 +87,7 @@
 }
 
 #header:not(.is-mobile) {
-  .header-nav-toggle {
+  .hamburger-menu-button {
     display: none;
   }
 
@@ -191,7 +191,8 @@
     }
 
     &.show {
-      .header-nav-toggle {
+      // for hamburger menu styling
+      .hamburger-menu-button {
         span {
           &:nth-child(1) {
             right: -5px;

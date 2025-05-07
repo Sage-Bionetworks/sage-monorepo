@@ -46,6 +46,7 @@
       "@sagebionetworks/explorers/shared": ["libs/explorers/shared/src/index.ts"],
       "@sagebionetworks/explorers/testing": ["libs/explorers/testing/src/index.ts"],
       "@sagebionetworks/explorers/ui": ["libs/explorers/ui/src/index.ts"],
+      "@sagebionetworks/explorers/util": ["libs/explorers/util/src/index.ts"],
       "@sagebionetworks/model-ad/api-client-angular": [
         "libs/model-ad/api-client-angular/src/index.ts"
       ],

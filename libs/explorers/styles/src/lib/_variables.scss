@@ -1,14 +1,12 @@
+/* stylelint-disable no-duplicate-selectors */
 @use 'sass:map';
 
-// -------------------------------------------------------------------------- //
-// Colors
-// -------------------------------------------------------------------------- //
 $main-colors: (
   primary: #3c4a63,
   secondary: #8b8ad1,
   tertiary: #42c7bb,
 
-  action-primary: #5081a7,
+  action-primary: #4f33a3,
   action-primary-rgb: 80 129 167,
 
   success: #6db56d,
@@ -25,9 +23,13 @@ $main-colors: (
   gray-200: #f1f3f5,
   gray-100: #fbfbfc,
 );
-$main-colors-hover: (
-  action-primary: #406786,
-);
+
+:root {
+  @each $key, $color in $main-colors {
+    --color-#{$key}: #{$color};
+  }
+}
+
 $extra-colors: (
   heading: map.get($main-colors, 'primary'),
   text: map.get($main-colors, 'gray-900'),
@@ -40,15 +42,13 @@ $extra-colors: (
 );
 
 :root {
-  @each $key, $color in $main-colors {
-    --color-#{$key}: #{$color};
-  }
-
-  @each $key, $color in $main-colors-hover {
-    --color-#{$key}-hover: #{$color};
-  }
-
   @each $key, $color in $extra-colors {
     --color-#{$key}: #{$color};
   }
+}
+
+$transition-duration: 0.08s;
+
+:root {
+  --transition-duration: #{$transition-duration};
 }
