@@ -35,6 +35,14 @@
         "command": "./gradlew clean",
         "cwd": "{projectRoot}"
       }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
+        "cwd": "{projectRoot}"
+      },
+      "dependsOn": ["^install"]
     }
   },
   "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],
