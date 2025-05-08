@@ -19,7 +19,7 @@ services:
       openchallenges-app:
         condition: service_started
       openchallenges-mcp-server:
-        condition: service_healthy
+        condition: service_started
       openchallenges-zipkin:
         condition: service_healthy
     deploy:
