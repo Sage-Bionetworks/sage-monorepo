@@ -22,6 +22,15 @@
       "executor": "nx:run-commands",
       "outputs": ["{projectRoot}/build"],
       "options": {
+        "command": "./gradlew build",
+        "cwd": "{projectRoot}"
+      },
+      "dependsOn": ["^install"]
+    },
+    "build-native": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/build"],
+      "options": {
         "command": "./gradlew nativeCompile",
         "cwd": "{projectRoot}"
       },
