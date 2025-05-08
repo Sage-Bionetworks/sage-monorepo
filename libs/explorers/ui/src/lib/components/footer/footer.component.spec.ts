@@ -8,6 +8,6 @@ async function setup() {
 describe('FooterComponent', () => {
   it('should include logo', async () => {
     await setup();
-    expect(screen.getByAltText(/Model-AD logo/i)).toBeInTheDocument();
+    expect(screen.getByAltText(/footer logo/i)).toBeInTheDocument();
   });
 });
