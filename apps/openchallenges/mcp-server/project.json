@@ -76,7 +76,7 @@
     "inspect": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "npx -y @modelcontextprotocol/inspector node build/index.js",
+        "command": "mcp-inspector node build/index.js",
         "cwd": "{projectRoot}"
       }
     }
