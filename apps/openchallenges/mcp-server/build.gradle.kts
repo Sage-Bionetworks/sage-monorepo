@@ -25,8 +25,8 @@ graalvmNative {
       })
 
       imageName.set(project.name)
-      buildArgs.add("--static")
-      buildArgs.add("--libc=musl")
+      // buildArgs.add("--static")
+      // buildArgs.add("--libc=musl")
       // Optional: disables fallback to a dynamically linked image
       buildArgs.add("--no-fallback")
     }
