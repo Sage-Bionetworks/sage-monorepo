@@ -13,6 +13,13 @@ java {
   targetCompatibility = JavaVersion.VERSION_21
 }
 
+// java {
+//   toolchain {
+//     languageVersion.set(JavaLanguageVersion.of(21))
+//     vendor.set(JvmVendorSpec.GRAAL_VM)
+//   }
+// }
+
 repositories {
 	mavenCentral()
 }
@@ -23,14 +30,14 @@ dependencies {
 	testRuntimeOnly(libs.junit.platform.launcher)
 }
 
-graalvmNative {
-  binaries {
-    named("main") {
-      imageName.set(project.name)
-      buildArgs.add("--no-fallback")
-    }
-  }
-}
+// graalvmNative {
+//   binaries {
+//     named("main") {
+//       imageName.set(project.name)
+//       buildArgs.add("--no-fallback")
+//     }
+//   }
+// }
 
 tasks.withType<Test> {
 	useJUnitPlatform()
