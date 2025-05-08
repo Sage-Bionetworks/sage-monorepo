@@ -10,7 +10,9 @@ public class ChallengeAnalyticsService {
   private final RestClient restClient;
 
   public ChallengeAnalyticsService() {
-    this.restClient = RestClient.builder().baseUrl("http://localhost:8082/api/v1").build();
+    this.restClient = RestClient.builder()
+      .baseUrl("http://openchallenges-api-gateway:8082/api/v1")
+      .build();
   }
 
   @Tool(

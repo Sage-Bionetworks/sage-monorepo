@@ -8,7 +8,7 @@ import org.springframework.web.client.RestClient;
 public class ChallengePlatformService {
 
   private final RestClient restClient = RestClient.builder()
-    .baseUrl("http://localhost:8082/api/v1")
+    .baseUrl("http://openchallenges-api-gateway:8082/api/v1")
     .build();
 
   @Tool(name = "list_challenge_platforms", description = "List available challenge platforms")
