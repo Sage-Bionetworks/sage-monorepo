@@ -76,8 +76,7 @@
     "inspect": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "mcp-inspector node build/index.js",
-        "cwd": "{projectRoot}"
+        "command": "CLIENT_PORT=6274 SERVER_PORT=6277 mcp-inspector node build/index.js"
       }
     }
   },
