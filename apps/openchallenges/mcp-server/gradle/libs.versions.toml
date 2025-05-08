@@ -1,4 +1,5 @@
 [versions]
+graalvm = "0.10.6"
 junit-platform = "1.10.2"
 spring-ai = "1.0.0-M7"
 spring-boot = "3.4.5"
@@ -10,5 +11,6 @@ spring-ai-starter-mcp-server-webmvc = { module = "org.springframework.ai:spring-
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
 
 [plugins]
+graalvm-native = { id = "org.graalvm.buildtools.native", version.ref = "graalvm" }
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }

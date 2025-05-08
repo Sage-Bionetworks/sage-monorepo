@@ -1,7 +1,8 @@
 plugins {
 	java
-	alias(libs.plugins.spring.boot)
+  alias(libs.plugins.graalvm.native)
 	alias(libs.plugins.spring.dependency.management)
+	alias(libs.plugins.spring.boot)
 }
 
 group = "org.sagebionetworks.openchallenges"
@@ -20,6 +21,15 @@ dependencies {
 	implementation(libs.spring.ai.starter.mcp.server.webmvc)
 	testImplementation(libs.spring.boot.starter.test)
 	testRuntimeOnly(libs.junit.platform.launcher)
+}
+
+graalvmNative {
+  binaries {
+    named("main") {
+      imageName.set(project.name)
+      buildArgs.add("--no-fallback")
+    }
+  }
 }
 
 tasks.withType<Test> {
