@@ -7,7 +7,7 @@
     "create-config": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["cp -n .env.example .env", "cp -n .env.build.example .env.build"],
+        "commands": ["cp -n .env.example .env"],
         "cwd": "{projectRoot}"
       }
     },

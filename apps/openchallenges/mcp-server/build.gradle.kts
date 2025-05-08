@@ -15,6 +15,22 @@ java {
   }
 }
 
+graalvmNative {
+  binaries {
+    named("main") {
+      // Enable GraalVM Toolchain detection
+      javaLauncher.set(javaToolchains.launcherFor {
+        languageVersion.set(JavaLanguageVersion.of(21))
+        vendor.set(JvmVendorSpec.matching("Oracle"))
+      })
+    }
+  }
+}
+
+// tasks.withType<org.graalvm.buildtools.gradle.tasks.BuildNativeImageTask>().configureEach {
+//     disableToolchainDetection.set(false)
+// }
+
 // graalvmNative {
 // 	toolchainDetection = true
 // }
@@ -23,17 +39,17 @@ java {
 //     // metadataRepository {
 //     //     enabled.set(true)
 //     // }
-    
+
 //     binaries {
 //         named("main") {
 //             imageName.set(project.name)
 //             buildArgs.add("--no-fallback")
-            
+
 //             // Standard configuration for native image
 //             // jvmArgs.add("-Xmx8g")
 //         }
 //     }
-    
+
 //     // Enable tool chain detection
 //     // toolchainDetection.set(true)
 // }
@@ -42,12 +58,12 @@ java {
 // 	metadataRepository {
 // 		enabled.set(true)
 // 	}
-	
+
 // 	binaries {
 // 		named("main") {
 // 			imageName.set(project.name)
 // 			buildArgs.add("--no-fallback")
-			
+
 // 			// Use Docker for building the native image
 // 			usesContainer.set(true)
 // 			containerBuild {
