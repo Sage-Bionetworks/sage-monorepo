@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/analytics")
+@RequestMapping("/challengeAnalytics")
 public class ChallengeAnalyticsController {
 
   private final ChallengeAnalyticsService service;
@@ -14,8 +14,8 @@ public class ChallengeAnalyticsController {
     this.service = service;
   }
 
-  @GetMapping("/challenges-per-year")
+  @GetMapping("/challengesPerYear")
   public ChallengesPerYear getChallengesPerYear() {
-    return service.fetch();
+    return service.getChallengesPerYear();
   }
 }

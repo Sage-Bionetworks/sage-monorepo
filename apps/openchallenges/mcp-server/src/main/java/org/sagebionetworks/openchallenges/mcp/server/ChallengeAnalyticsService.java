@@ -1,5 +1,6 @@
 package org.sagebionetworks.openchallenges.mcp.server;
 
+import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -12,7 +13,8 @@ public class ChallengeAnalyticsService {
     this.restClient = RestClient.builder().baseUrl("http://localhost:8082/api/v1").build();
   }
 
-  public ChallengesPerYear fetch() {
+  @Tool(name = "getChallengesPerYear", description = "Fetch number of challenges tracked per year")
+  public ChallengesPerYear getChallengesPerYear() {
     return restClient
       .get()
       .uri("/challengeAnalytics/challengesPerYear")
