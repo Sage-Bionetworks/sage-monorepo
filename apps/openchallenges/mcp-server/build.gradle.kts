@@ -9,16 +9,11 @@ group = "org.sagebionetworks.openchallenges"
 version = "0.0.1-SNAPSHOT"
 
 java {
-  sourceCompatibility = JavaVersion.VERSION_21
-  targetCompatibility = JavaVersion.VERSION_21
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(21)
+    nativeImageCapable = true
+  }
 }
-
-// java {
-//   toolchain {
-//     languageVersion.set(JavaLanguageVersion.of(21))
-//     vendor.set(JvmVendorSpec.GRAAL_VM)
-//   }
-// }
 
 repositories {
 	mavenCentral()
