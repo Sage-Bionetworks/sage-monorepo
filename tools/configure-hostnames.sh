@@ -23,6 +23,7 @@ declare -a hostnames=(
   "127.0.0.1 openchallenges-elasticsearch"
   "127.0.0.1 openchallenges-image-service"
   "127.0.0.1 openchallenges-mariadb"
+  "127.0.0.1 openchallenges-mcp-server"
   "127.0.0.1 openchallenges-opensearch"
   "127.0.0.1 openchallenges-organization-service"
   "127.0.0.1 openchallenges-schema-registry"

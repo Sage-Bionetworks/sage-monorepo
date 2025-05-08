@@ -7,14 +7,14 @@
     "get": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "curl -fsSL https://rest-docs.synapse.org/rest/openapi/openapispecification.json -o build/openapi.json",
+        "command": "curl -fsSL https://rest-docs.synapse.org/rest/openapi/openapispecification.json -o openapi/openapi.json",
         "cwd": "{projectRoot}"
       }
     },
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "redocly bundle --output build/openapi.yaml src/openapi.yaml",
+        "command": "redocly bundle --output openapi/openapi.yaml src/openapi.yaml",
         "cwd": "{projectRoot}"
       }
     },

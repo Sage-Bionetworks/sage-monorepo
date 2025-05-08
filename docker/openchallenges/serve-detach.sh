@@ -14,6 +14,7 @@ args=(
   --file docker/openchallenges/services/image-service.yml
   --file docker/openchallenges/services/kafka.yml
   --file docker/openchallenges/services/mariadb.yml
+  --file docker/openchallenges/services/mcp-server.yml
   --file docker/openchallenges/services/organization-service.yml
   --file docker/openchallenges/services/service-registry.yml
   --file docker/openchallenges/services/thumbor.yml
