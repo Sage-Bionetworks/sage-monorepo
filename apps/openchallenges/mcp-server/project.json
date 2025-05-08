@@ -4,6 +4,13 @@
   "sourceRoot": "apps/openchallenges/mcp-server/src",
   "projectType": "application",
   "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
@@ -43,6 +50,28 @@
         "cwd": "{projectRoot}"
       },
       "dependsOn": ["^install"]
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/openchallenges/serve-detach.sh {projectName}"
+      },
+      "dependsOn": []
+    },
+    "build-image-base": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./gradlew bootBuildImage",
+        "cwd": "{projectRoot}"
+      },
+      "dependsOn": ["^install"]
+    },
+    "scan-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "trivy image ghcr.io/sage-bionetworks/{projectName}:local --quiet",
+        "color": true
+      }
     }
   },
   "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],
