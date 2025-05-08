@@ -54,7 +54,7 @@
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker/amp-als/serve-detach.sh {projectName}"
+        "command": "docker/openchallenges/serve-detach.sh {projectName}"
       },
       "dependsOn": []
     },
