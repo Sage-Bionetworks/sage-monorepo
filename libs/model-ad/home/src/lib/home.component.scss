@@ -1,1 +1,104 @@
 @use 'styles/src/lib/variables';
+@use 'styles/src/lib/mixins';
+
+explorers-card {
+  --card-heading-color: var(--color-secondary);
+
+  display: flex;
+  height: 100%;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  position: relative;
+  color: var(--color-primary);
+  padding: 20px 5px;
+
+  @include mixins.respond-to('large') {
+    padding: 100px 160px;
+  }
+}
+
+.content {
+  max-width: 1350px;
+  margin: 0 auto;
+}
+
+.text-marquee {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: var(--spacing-md);
+  max-width: 650px;
+}
+
+.description {
+  font-size: var(--font-size-xl);
+  color: var(--color-gray-900);
+}
+
+.home-heading {
+  color: var(--color-primary);
+  font-size: 60px;
+  line-height: 68px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.card-container {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-auto-rows: 1fr;
+  gap: var(--spacing-lg);
+  margin: 20px auto;
+
+  @include mixins.respond-to('large') {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.stats-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  justify-content: center;
+  padding: 10px 0;
+  flex-wrap: wrap;
+
+  .stat {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .stat-label {
+      margin: 0;
+    }
+
+    .stat-value {
+      font-size: 72px;
+      margin: 0;
+    }
+  }
+}
+
+.methodology-container {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 200px 0;
+
+  .methodology-text,
+  .methodology-image {
+    flex: 1;
+  }
+
+  .home-heading {
+    padding-bottom: 20px;
+  }
+}
