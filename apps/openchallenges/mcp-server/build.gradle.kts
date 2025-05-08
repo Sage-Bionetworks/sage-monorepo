@@ -1,15 +1,33 @@
 plugins {
 	java
-	alias(libs.plugins.spring.boot)
+  alias(libs.plugins.graalvm.native)
 	alias(libs.plugins.spring.dependency.management)
+	alias(libs.plugins.spring.boot)
 }
 
 group = "org.sagebionetworks.openchallenges"
 version = "0.0.1-SNAPSHOT"
 
 java {
-  sourceCompatibility = JavaVersion.VERSION_21
-  targetCompatibility = JavaVersion.VERSION_21
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(21)
+    nativeImageCapable = true
+  }
+}
+
+graalvmNative {
+  binaries {
+    named("main") {
+      // Enable GraalVM Toolchain detection
+      javaLauncher.set(javaToolchains.launcherFor {
+        languageVersion.set(JavaLanguageVersion.of(21))
+        vendor.set(JvmVendorSpec.matching("Oracle"))
+      })
+
+      imageName.set(project.name)
+      buildArgs.add("--no-fallback")
+    }
+  }
 }
 
 repositories {
