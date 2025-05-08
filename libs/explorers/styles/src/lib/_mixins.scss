@@ -1,6 +1,6 @@
 @use 'sass:map';
 @use 'sass:meta';
-@import 'variables';
+@use 'variables' as vars;
 
 @mixin reset-button() {
   border: none;
@@ -17,6 +17,28 @@
   &::-moz-focus-inner {
     border: 0;
     padding: 0;
+  }
+}
+
+/**
+* Responsive breakpoint manager
+* S. https://sass-guidelin.es/#architecture
+*/
+@mixin respond-to($breakpoint) {
+  $raw-query: map.get(vars.$breakpoints, $breakpoint);
+
+  @if $raw-query {
+    $query: if(
+      meta.type-of($raw-query) == 'string',
+      string.unquote($raw-query),
+      meta.inspect($raw-query)
+    );
+
+    @media #{$query} {
+      @content;
+    }
+  } @else {
+    @error 'No value found for `#{$breakpoint}`. Please make sure it is defined in `$breakpoints` map.';
   }
 }
 
