@@ -1,0 +1,24 @@
+services:
+  openchallenges-mcp-server:
+    image: ghcr.io/sage-bionetworks/openchallenges-mcp-server:${OPENCHALLENGES_VERSION:-local}
+    container_name: openchallenges-mcp-server
+    restart: always
+    env_file:
+      - ../../../apps/openchallenges/mcp-server/.env
+    networks:
+      - openchallenges
+    ports:
+      - '8887:8887'
+    depends_on:
+      openchallenges-api-gateway:
+        condition: service_healthy
+      openchallenges-challenge-service:
+        condition: service_started
+      # openchallenges-image-service:
+      #   condition: service_healthy
+      # openchallenges-organization-service:
+      #   condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 1G

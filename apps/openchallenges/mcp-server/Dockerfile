@@ -1,0 +1,1 @@
+FROM ghcr.io/sage-bionetworks/openchallenges-mcp-server-base:local
