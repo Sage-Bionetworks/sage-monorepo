@@ -1,3 +1,0 @@
-# Synapse API Description
-
-TODO
