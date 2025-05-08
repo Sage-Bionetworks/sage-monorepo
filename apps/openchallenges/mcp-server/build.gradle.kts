@@ -25,9 +25,6 @@ graalvmNative {
       })
 
       imageName.set(project.name)
-      // buildArgs.add("--static")
-      // buildArgs.add("--libc=musl")
-      // Optional: disables fallback to a dynamically linked image
       buildArgs.add("--no-fallback")
     }
   }
@@ -42,15 +39,6 @@ dependencies {
 	testImplementation(libs.spring.boot.starter.test)
 	testRuntimeOnly(libs.junit.platform.launcher)
 }
-
-// graalvmNative {
-//   binaries {
-//     named("main") {
-//       imageName.set(project.name)
-//       buildArgs.add("--no-fallback")
-//     }
-//   }
-// }
 
 tasks.withType<Test> {
 	useJUnitPlatform()
