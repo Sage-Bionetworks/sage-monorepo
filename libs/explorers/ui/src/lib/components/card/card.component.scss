@@ -1,0 +1,47 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: white;
+  box-sizing: border-box;
+  border-radius: 20px;
+  border: 1px solid var(--color-border);
+  padding: 40px;
+
+  h2 {
+    font-weight: bold;
+    font-size: var(--font-size-xxl);
+    color: var(--card-heading-color, inherit);
+    margin: 0;
+  }
+
+  p {
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-xxl);
+  }
+
+  .icon-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+}
+
+.card-link {
+  border: none;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  outline: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: normal;
+  appearance: none;
+  text-align: unset;
+  cursor: pointer;
+
+  .card {
+    height: 100%;
+  }
+}
