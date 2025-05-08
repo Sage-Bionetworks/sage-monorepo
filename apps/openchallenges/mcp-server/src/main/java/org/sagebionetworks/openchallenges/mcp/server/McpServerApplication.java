@@ -15,20 +15,6 @@ public class McpServerApplication {
     SpringApplication.run(McpServerApplication.class, args);
   }
 
-  // @Bean
-  // public List<ToolCallback> tools(
-  //   ChallengeAnalyticsService challengeAnalyticsService,
-  //   ChallengePlatformService challengePlatformService
-  // ) {
-  //   return List.of(
-  //     ToolCallbacks.from(challengeAnalyticsService),
-  //     ToolCallbacks.from(challengePlatformService)
-  //   )
-  //     .stream()
-  //     .flatMap(toolArray -> List.of(toolArray).stream())
-  //     .toList();
-  // }
-
   @Bean
   public List<ToolCallback> tools(
     ChallengeAnalyticsService challengeAnalyticsService,
