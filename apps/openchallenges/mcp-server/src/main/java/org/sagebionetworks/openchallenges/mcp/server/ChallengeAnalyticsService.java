@@ -13,7 +13,10 @@ public class ChallengeAnalyticsService {
     this.restClient = RestClient.builder().baseUrl("http://localhost:8082/api/v1").build();
   }
 
-  @Tool(name = "getChallengesPerYear", description = "Fetch number of challenges tracked per year")
+  @Tool(
+    name = "get_challenges_per_year",
+    description = "Get the number of challenges tracked per year"
+  )
   public ChallengesPerYear getChallengesPerYear() {
     return restClient
       .get()
