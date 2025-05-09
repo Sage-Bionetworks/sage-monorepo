@@ -22,11 +22,11 @@
 		reverse_proxy {env.ZIPKIN_HOST}:{env.ZIPKIN_PORT}
 	}
 
-	handle_path /mcp-server* {
-		rewrite * /mcp-server{uri}
-		reverse_proxy {env.MCP_SERVER_HOST}:{env.MCP_SERVER_PORT}
+	handle_path /mcp-server {
+    rewrite * /sse
+    reverse_proxy {env.MCP_SERVER_HOST}:{env.MCP_SERVER_PORT}
 	}
-	
+
 	handle {
 		reverse_proxy {env.APP_HOST}:{env.APP_PORT}
 	}
