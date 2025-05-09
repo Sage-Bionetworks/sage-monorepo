@@ -24,6 +24,7 @@ explorers-card {
 .content {
   max-width: 1350px;
   margin: 0 auto;
+  width: 100%;
 }
 
 .text-marquee {
@@ -37,6 +38,7 @@ explorers-card {
 .description {
   font-size: var(--font-size-xl);
   color: var(--color-gray-900);
+  margin: 0;
 }
 
 .home-heading {
@@ -64,8 +66,20 @@ explorers-card {
   align-items: center;
   gap: 20px;
   justify-content: center;
-  padding: 10px 0;
-  flex-wrap: wrap;
+  padding: 50px 0;
+  position: relative;
+
+  .stats-background-wrapper {
+    position: absolute;
+    height: 100%;
+    z-index: -1;
+  }
+
+  .stats-background {
+    position: absolute;
+    width: 100vw;
+    transform: translateX(-50%);
+  }
 
   .stat {
     width: 200px;
@@ -74,14 +88,18 @@ explorers-card {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    position: relative;
+    z-index: 1;
 
     .stat-label {
       margin: 0;
+      color: white;
     }
 
     .stat-value {
       font-size: 72px;
       margin: 0;
+      color: var(--color-gray-400);
     }
   }
 }
@@ -91,7 +109,7 @@ explorers-card {
   gap: 28px;
   align-items: center;
   flex-wrap: wrap;
-  padding: 200px 0;
+  padding: 150px 0 200px;
 
   .methodology-text,
   .methodology-image {
@@ -99,6 +117,6 @@ explorers-card {
   }
 
   .home-heading {
-    padding-bottom: 20px;
+    padding-bottom: 40px;
   }
 }
