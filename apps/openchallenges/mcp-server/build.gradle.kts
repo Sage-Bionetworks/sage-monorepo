@@ -27,6 +27,9 @@ graalvmNative {
       imageName.set(project.name)
       buildArgs.add("--static")
       buildArgs.add("--libc=musl")
+      // Quick build mode: Speeds up builds during development by avoiding time-consuming
+      // optimizations. This can also reduce file size sometimes.
+      buildArgs.add("-Ob")
       buildArgs.add("--no-fallback")
     }
   }
@@ -44,8 +47,4 @@ dependencies {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
-}
-
-tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
-  imageName.set("ghcr.io/sage-bionetworks/${project.name}-base:local")
 }
