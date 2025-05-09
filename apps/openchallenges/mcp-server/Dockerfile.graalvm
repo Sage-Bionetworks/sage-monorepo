@@ -2,15 +2,8 @@
 FROM container-registry.oracle.com/graalvm/native-image:21-muslib AS nativebuild
 WORKDIR /build
 
-# Install UPX
-ARG UPX_VERSION=4.2.2
-ARG UPX_ARCHIVE=upx-${UPX_VERSION}-amd64_linux.tar.xz
-RUN microdnf -y install wget xz unzip findutils && \
-    wget -q https://github.com/upx/upx/releases/download/v${UPX_VERSION}/${UPX_ARCHIVE} && \
-    tar -xJf ${UPX_ARCHIVE} && \
-    rm -rf ${UPX_ARCHIVE} && \
-    mv upx-${UPX_VERSION}-amd64_linux/upx . && \
-    rm -rf upx-${UPX_VERSION}-amd64_linux
+# hadolint ignore=DL3040,DL3041
+RUN microdnf -y install wget xz unzip findutils
 
 # Install Gradle
 ARG GRADLE_VERSION=8.14
@@ -21,26 +14,16 @@ RUN wget -q https://services.gradle.org/distributions/${GRADLE_ARCHIVE} && \
 
 ENV PATH="/build/gradle-${GRADLE_VERSION}/bin:$PATH"
 
-# Prepare application
+# Build the native image
 COPY gradle gradle
 COPY build.gradle* gradle* settings.gradle* ./
 COPY src src
-# RUN gradle clean build --no-daemon
 RUN gradle clean nativeCompile --no-daemon
-
-# Build a native executable with native-image
-# RUN native-image -Os --static --libc=musl -jar build/libs/*-all.jar -o notes
-# RUN ls -lh notes
-
-# Compress the executable with UPX
-RUN ./upx --lzma --best -o openchallenges-mcp-server.upx build/native/nativeCompile/openchallenges-mcp-server
-RUN ls -lh openchallenges-mcp-server.upx
 
 FROM busybox:1.36.1 AS busybox
 
-# Copy the compressed executable into a scratch container
+# Prepare the final image
 FROM scratch
 COPY --from=busybox /tmp /tmp
-COPY --from=nativebuild /build/openchallenges-mcp-server.upx /openchallenges-mcp-server.upx
-# COPY static /static
-ENTRYPOINT ["/openchallenges-mcp-server.upx"]
+COPY --from=nativebuild /build/openchallenges-mcp-server /openchallenges-mcp-server
+ENTRYPOINT ["/openchallenges-mcp-server"]
