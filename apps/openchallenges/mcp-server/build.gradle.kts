@@ -25,6 +25,8 @@ graalvmNative {
       })
 
       imageName.set(project.name)
+      buildArgs.add("--static")
+      buildArgs.add("--libc=musl")
       buildArgs.add("--no-fallback")
     }
   }
