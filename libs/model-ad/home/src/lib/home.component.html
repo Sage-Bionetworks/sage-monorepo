@@ -5,7 +5,7 @@
         <div>
           <h1 class="home-heading">Find the right model for your research</h1>
         </div>
-        <p class="description mb-lg">
+        <p class="description">
           Explore gene expression and pathology data from next-generation mouse models of
           Alzheimer's Disease (AD) developed by the MODEL-AD consortium.
         </p>
@@ -52,6 +52,13 @@
         />
       </div>
       <div class="stats-container">
+        <div class="stats-background-wrapper">
+          <explorers-svg-image
+            imagePath="/model-ad-assets/images/home-background-bottom.svg"
+            altText="background image"
+            class="stats-background"
+          />
+        </div>
         @for (stat of stats; track stat) {
           <div class="stat">
             <h3 class="stat-label">{{ stat.label }}</h3>
