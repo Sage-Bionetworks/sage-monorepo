@@ -23,7 +23,6 @@
 	}
 
 	handle_path /mcp-server* {
-    rewrite * /mcp-server{uri}
     reverse_proxy {env.MCP_SERVER_HOST}:{env.MCP_SERVER_PORT}
 	}
 
