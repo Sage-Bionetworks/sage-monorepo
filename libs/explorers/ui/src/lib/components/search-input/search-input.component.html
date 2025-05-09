@@ -1,0 +1,70 @@
+<div #root [class]="`search ${hasThickBorder() && 'search-thick-border'} `">
+  <div class="search-bar">
+    <div class="search-bar-icon">
+      @if (isLoading) {
+        <fa-icon [icon]="faSpinner" animation="spin" data-testid="spinner" />
+      } @else {
+        @if (!!searchIconPath()) {
+          <explorers-svg-icon
+            [imagePath]="searchIconPath()!"
+            [altText]="searchIconAltText()"
+            [width]="45"
+            [height]="45"
+          />
+        } @else {
+          <fa-icon [icon]="faMagnifyingGlass" />
+        }
+      }
+    </div>
+    <input
+      #input
+      [placeholder]="searchPlaceholder()"
+      autocomplete="off"
+      type="text"
+      (focus)="onFocus()"
+      [(ngModel)]="query"
+    />
+    @if (query) {
+      <div class="search-bar-close">
+        <button (click)="clearInput()">
+          <fa-icon [icon]="faXmark" />
+        </button>
+      </div>
+    }
+  </div>
+
+  @if (showResults && (error || results.length > 0)) {
+    <div class="search-results">
+      <div class="search-results-inner">
+        @if (error) {
+          <ul class="search-errors">
+            <li>
+              <explorers-svg-icon
+                imagePath="/explorers-assets/icons/warning-circle.svg"
+                [width]="22"
+                [height]="22"
+                [enableHoverEffects]="false"
+              />
+              {{ error }}
+            </li>
+          </ul>
+        }
+
+        @if (!error && results.length) {
+          <ul class="search-results-list">
+            <li *ngFor="let result of results" (click)="goToResult(result.id)">
+              <span class="result-name">
+                {{ result.id || result.name }}
+              </span>
+              @if (hasAlias(result)) {
+                <span class="result-aliases">
+                  &nbsp;(Also known as&nbsp;{{ query.toUpperCase() }})
+                </span>
+              }
+            </li>
+          </ul>
+        }
+      </div>
+    </div>
+  }
+</div>
