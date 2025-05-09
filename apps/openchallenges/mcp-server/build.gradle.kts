@@ -25,6 +25,8 @@ graalvmNative {
       })
 
       imageName.set(project.name)
+      buildArgs.add("--static")
+      buildArgs.add("--libc=musl")
       buildArgs.add("--no-fallback")
     }
   }
@@ -42,8 +44,4 @@ dependencies {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
-}
-
-tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
-  imageName.set("ghcr.io/sage-bionetworks/${project.name}-base:local")
 }
