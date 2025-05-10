@@ -34,10 +34,12 @@ graalvmNative {
 
 repositories {
 	mavenCentral()
+  mavenLocal()
 }
 
 dependencies {
 	implementation(libs.spring.ai.starter.mcp.server.webmvc)
+  implementation(libs.openchallenges.api.client.java)
 	testImplementation(libs.spring.boot.starter.test)
 	testRuntimeOnly(libs.junit.platform.launcher)
 }

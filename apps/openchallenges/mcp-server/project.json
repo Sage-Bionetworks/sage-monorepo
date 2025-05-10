@@ -73,5 +73,5 @@
     }
   },
   "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],
-  "implicitDependencies": []
+  "implicitDependencies": ["openchallenges-api-client-java"]
 }
