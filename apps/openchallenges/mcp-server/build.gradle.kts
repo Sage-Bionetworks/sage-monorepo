@@ -23,11 +23,20 @@ graalvmNative {
         languageVersion.set(JavaLanguageVersion.of(21))
         vendor.set(JvmVendorSpec.matching("Oracle"))
       })
-
+      
       imageName.set(project.name)
       buildArgs.add("--static")
       buildArgs.add("--libc=musl")
       buildArgs.add("--no-fallback")
+    }
+    named("test") {
+      // Enable GraalVM Toolchain detection
+      javaLauncher.set(javaToolchains.launcherFor {
+        languageVersion.set(JavaLanguageVersion.of(21))
+        vendor.set(JvmVendorSpec.matching("Oracle"))
+      })
+
+      buildArgs.add("-O0")
     }
   }
 }
