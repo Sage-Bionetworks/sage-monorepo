@@ -26,6 +26,8 @@ ARG sonarScannerVersion="7.1.0.4889"
 ARG hadolintVersion="2.12.0"
 # https://pinterest.github.io/ktlint/latest/install/cli/#download-and-verification
 ARG ktlintVersion="1.5.0"
+# https://zlib.net/fossils
+ARG zlibVersion="1.3.1"
 # The version of this dev container image.
 ARG devcontainerVersion=""
 # The username of the non-root user.
@@ -52,6 +54,8 @@ RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
     shellcheck \
     # Required by canvas (npm package)
     build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev \
+    # Required to build statically linked binaries.
+    musl musl-dev musl-tools \
   # Add Node.js repository.
   && curl -fsSL https://deb.nodesource.com/setup_${nodeVersionMajor}.x -o nodesource_setup.sh \
   && bash nodesource_setup.sh \
@@ -150,6 +154,15 @@ RUN echo "$user:$user" | chpasswd \
   # While this introduces a slight security risk, it is acceptable in a
   # controlled development environment
   && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+# Build zlib with musl from source
+RUN curl -O "https://zlib.net/fossils/zlib-${zlibVersion}.tar.gz" && \
+  tar -xzf "zlib-${zlibVersion}.tar.gz" && \
+  pushd "zlib-${zlibVersion}" && \
+  CC=musl-gcc ./configure --static && \
+  make && cp libz.a /usr/lib/x86_64-linux-musl/. && \
+  popd && \
+  rm -rf "zlib-${zlibVersion}" "zlib-${zlibVersion}.tar.gz"
 
 # Switch to the non-root user.
 USER $user
