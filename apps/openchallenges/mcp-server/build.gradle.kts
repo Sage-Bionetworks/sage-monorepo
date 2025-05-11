@@ -23,7 +23,7 @@ graalvmNative {
         languageVersion.set(JavaLanguageVersion.of(21))
         vendor.set(JvmVendorSpec.matching("Oracle"))
       })
-      
+
       imageName.set(project.name)
       buildArgs.add("--static")
       buildArgs.add("--libc=musl")
@@ -53,6 +53,12 @@ dependencies {
 	testRuntimeOnly(libs.junit.platform.launcher)
 }
 
-tasks.withType<Test> {
-	useJUnitPlatform()
+tasks.withType<Test>().configureEach {
+  maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
+  
+  useJUnitPlatform()
+
+  testLogging {
+    events("passed", "skipped", "failed")
+  }
 }
