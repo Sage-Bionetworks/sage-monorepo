@@ -1,18 +1,17 @@
 package org.sagebionetworks.openchallenges.mcp.server;
 
+import org.sagebionetworks.openchallenges.api.client.api.ChallengeAnalyticsApi;
+import org.sagebionetworks.openchallenges.api.client.model.ChallengesPerYear;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClient;
 
 @Service
 public class ChallengeAnalyticsService {
 
-  private final RestClient restClient;
+  private final ChallengeAnalyticsApi challengeAnalyticsApi;
 
-  public ChallengeAnalyticsService() {
-    this.restClient = RestClient.builder()
-      .baseUrl("http://openchallenges-api-gateway:8082/api/v1")
-      .build();
+  public ChallengeAnalyticsService(ChallengeAnalyticsApi challengeAnalyticsApi) {
+    this.challengeAnalyticsApi = challengeAnalyticsApi;
   }
 
   @Tool(
@@ -20,10 +19,6 @@ public class ChallengeAnalyticsService {
     description = "Get the number of challenges tracked per year"
   )
   public ChallengesPerYear getChallengesPerYear() {
-    return restClient
-      .get()
-      .uri("/challengeAnalytics/challengesPerYear")
-      .retrieve()
-      .body(ChallengesPerYear.class);
+    return challengeAnalyticsApi.getChallengesPerYear();
   }
 }

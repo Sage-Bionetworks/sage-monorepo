@@ -22,7 +22,7 @@
       "executor": "nx:run-commands",
       "outputs": ["{projectRoot}/build"],
       "options": {
-        "command": "./gradlew build",
+        "command": "./gradlew nativeCompile",
         "cwd": "{projectRoot}"
       },
       "dependsOn": ["^install"]
@@ -73,5 +73,5 @@
     }
   },
   "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],
-  "implicitDependencies": []
+  "implicitDependencies": ["openchallenges-api-client-java"]
 }
