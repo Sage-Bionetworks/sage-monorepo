@@ -1,6 +1,5 @@
 package org.sagebionetworks.openchallenges.mcp.server;
 
-import org.sagebionetworks.openchallenges.api.client.ApiClient;
 import org.sagebionetworks.openchallenges.api.client.api.ChallengeAnalyticsApi;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengesPerYear;
 import org.springframework.ai.tool.annotation.Tool;
@@ -11,10 +10,8 @@ public class ChallengeAnalyticsService {
 
   private final ChallengeAnalyticsApi challengeAnalyticsApi;
 
-  public ChallengeAnalyticsService() {
-    ApiClient defaultClient = new ApiClient();
-    defaultClient.setBasePath("http://openchallenges-api-gateway:8082/api/v1");
-    challengeAnalyticsApi = new ChallengeAnalyticsApi(defaultClient);
+  public ChallengeAnalyticsService(ChallengeAnalyticsApi challengeAnalyticsApi) {
+    this.challengeAnalyticsApi = challengeAnalyticsApi;
   }
 
   @Tool(
