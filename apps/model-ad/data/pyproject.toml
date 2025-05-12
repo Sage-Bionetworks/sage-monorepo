@@ -1,0 +1,25 @@
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[project]
+authors = [
+    {name = "Hallie Swan", email = "hallie.swan@sagebase.org"},
+]
+requires-python = "==3.11.9"
+dependencies = [
+    "synapseclient==4.3.0",
+    "pymongo==4.7.3",
+]
+name = "model-ad-data"
+version = "0.1.0"
+description = "Model-AD Data Release"
+readme = "README.md"
+
+[dependency-groups]
+dev = []
+prod = []
+test = []
+
+[tool.uv]
+default-groups = []

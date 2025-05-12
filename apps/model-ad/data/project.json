@@ -1,14 +1,27 @@
 {
-  "name": "model-ad-mongo",
+  "name": "model-ad-data",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/model-ad/mongo/src",
+  "sourceRoot": "apps/model-ad/data/src",
   "projectType": "application",
-  "tags": ["type:db", "scope:backend"],
   "targets": {
     "create-config": {
       "executor": "nx:run-commands",
       "options": {
         "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "uv sync",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "uv run src/main.py",
         "cwd": "{projectRoot}"
       }
     },
@@ -26,5 +39,6 @@
       }
     }
   },
+  "tags": ["type:app", "scope:backend", "language:python", "package-manager:uv"],
   "implicitDependencies": []
 }

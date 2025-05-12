@@ -9,6 +9,11 @@ services:
       - '4200:4200'
     env_file:
       - ../../../apps/model-ad/app/.env
+    depends_on:
+      model-ad-data:
+        condition: service_completed_successfully
+      model-ad-api:
+        condition: service_healthy
     deploy:
       resources:
         limits:
