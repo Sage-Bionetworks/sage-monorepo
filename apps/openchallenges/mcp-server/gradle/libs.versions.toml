@@ -2,7 +2,7 @@
 graalvm = "0.10.6"
 junit-platform = "1.10.2"
 openchallenges = "0.0.1-SNAPSHOT"
-spring-ai = "1.0.0-M7"
+spring-ai = "1.0.0-M8"
 spring-boot = "3.4.5"
 spring-dependency-management = "1.1.7"
 
