@@ -1,0 +1,21 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0-draft
+  title: Gene REST API
+  license:
+    name: Apache 2.0
+    url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
+  contact:
+    name: Support
+    url: https://github.com/Sage-Bionetworks/sage-monorepo
+  x-logo:
+    url: https://agora.adknowledgeportal.org/images/logo.png
+    altText: Agora
+servers:
+  - url: http://localhost/v1
+tags:
+  - name: HealthCheck
+    description: Operations about health checks
+paths:
+  /healthcheck:
+    $ref: paths/healthCheck.yaml
