@@ -1,0 +1,13 @@
+<explorers-hero
+  title="Terms of Service"
+  backgroundImagePath="https://raw.githubusercontent.com/Sage-Bionetworks/model-ad-images/refs/heads/main/hero-background.svg"
+/>
+
+<div class="container-sm terms-of-service">
+  @if (loading) {
+    <div class="loading-icon">
+      <explorers-loading-icon />
+    </div>
+  }
+  <markdown [data]="content" />
+</div>

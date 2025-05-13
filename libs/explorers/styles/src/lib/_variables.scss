@@ -47,8 +47,50 @@ $extra-colors: (
   }
 }
 
+// -------------------------------------------------------------------------- //
+// Container
+// -------------------------------------------------------------------------- //
+
+$container-max-width-sm: 925px;
+$container-max-width-md: 1440px;
+$container-max-width-lg: 1920px;
+$container-gutter-width: 30px;
+
+:root {
+  --container-max-width-sm: #{$container-max-width-sm};
+  --container-max-width-md: #{$container-max-width-md};
+  --container-max-width-lg: #{$container-max-width-lg};
+  --container-gutter-width: #{$container-gutter-width};
+}
+
+// -------------------------------------------------------------------------- //
+// Transition
+// -------------------------------------------------------------------------- //
+
 $transition-duration: 0.08s;
 
 :root {
   --transition-duration: #{$transition-duration};
 }
+
+$sm-breakpoint: 600px;
+$md-breakpoint: 768px;
+$lg-breakpoint: 992px;
+$xl-breakpoint: 1200px;
+$breakpoints: (
+  'ex-small': (
+    max-width: $sm-breakpoint,
+  ),
+  'small': (
+    min-width: $sm-breakpoint,
+  ),
+  'medium': (
+    min-width: $md-breakpoint,
+  ),
+  'large': (
+    min-width: $lg-breakpoint,
+  ),
+  'ex-large': (
+    min-width: $xl-breakpoint,
+  ),
+);

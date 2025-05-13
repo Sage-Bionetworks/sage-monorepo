@@ -1,0 +1,31 @@
+.section {
+  .section-inner {
+    padding: 50px;
+  }
+}
+
+.section-hero {
+  display: flex;
+  min-height: 200px;
+  background-size: cover !important;
+  color: #fff;
+  align-items: center;
+
+  h1 {
+    font-size: 1.5rem;
+    color: #fff;
+    margin: 0;
+  }
+
+  .section-inner {
+    width: 100%;
+  }
+}
+
+.container-sm {
+  max-width: 925px;
+  padding-left: 0;
+  padding-right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}

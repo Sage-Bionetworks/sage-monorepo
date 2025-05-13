@@ -51,7 +51,7 @@
           }
         ],
         "stylePreprocessorOptions": {
-          "includePaths": ["libs/model-ad"]
+          "includePaths": ["libs", "libs/model-ad"]
         },
         "styles": ["apps/model-ad/app/src/styles.scss", "node_modules/primeicons/primeicons.css"],
         "scripts": []
@@ -132,7 +132,7 @@
         "tsConfig": "apps/model-ad/app/tsconfig.server.json",
         "inlineStyleLanguage": "scss",
         "stylePreprocessorOptions": {
-          "includePaths": ["libs/model-ad"]
+          "includePaths": ["libs", "libs/model-ad"]
         }
       },
       "configurations": {
