@@ -16,7 +16,7 @@ public class McpServerApplication {
   }
 
   @Bean
-  public List<ToolCallback> tools(
+  public List<ToolCallback> toolCallbacks(
     ChallengeAnalyticsService challengeAnalyticsService,
     ChallengePlatformService challengePlatformService
   ) {
