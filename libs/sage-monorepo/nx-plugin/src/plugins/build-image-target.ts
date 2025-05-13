@@ -13,9 +13,9 @@ export async function buildImageTarget(
       target: 'build-image-base',
     });
     // This dependency is required for Java apps build with GraalVM.
-    dependsOn.push({
-      target: 'build',
-    });
+    // dependsOn.push({
+    //   target: 'build',
+    // });
   } else if (projectBuilder === 'webpack' && projectFramework === 'angular') {
     dependsOn.push({
       // TODO: the task `server` is more about Angular that the build itself. To revisit. Also,
