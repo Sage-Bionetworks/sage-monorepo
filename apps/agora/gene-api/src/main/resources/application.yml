@@ -1,0 +1,10 @@
+server:
+  port: 3334
+
+spring:
+  application:
+    name: agora-gene-api
+  jackson:
+    date-format: org.sagebionetworks.agora.gene.api.RFC3339DateFormat
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
