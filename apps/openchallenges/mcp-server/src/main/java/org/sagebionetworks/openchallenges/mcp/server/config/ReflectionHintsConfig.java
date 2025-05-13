@@ -1,6 +1,5 @@
 package org.sagebionetworks.openchallenges.mcp.server.config;
 
-import org.sagebionetworks.openchallenges.mcp.server.ChallengePlatformsPage;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.context.annotation.Configuration;
 
@@ -8,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 @RegisterReflectionForBinding(
   {
     org.sagebionetworks.openchallenges.api.client.model.ChallengesPerYear.class,
-    ChallengePlatformsPage.class,
+    org.sagebionetworks.openchallenges.api.client.model.ChallengePlatformsPage.class,
   }
 )
 public class ReflectionHintsConfig {}
