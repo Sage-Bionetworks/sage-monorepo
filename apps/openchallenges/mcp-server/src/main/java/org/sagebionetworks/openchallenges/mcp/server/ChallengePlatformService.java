@@ -1,7 +1,6 @@
 package org.sagebionetworks.openchallenges.mcp.server;
 
 import io.micrometer.common.lang.Nullable;
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import org.sagebionetworks.openchallenges.api.client.api.ChallengePlatformApi;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengePlatformDirection;
@@ -9,6 +8,7 @@ import org.sagebionetworks.openchallenges.api.client.model.ChallengePlatformSear
 import org.sagebionetworks.openchallenges.api.client.model.ChallengePlatformSort;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengePlatformsPage;
 import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,40 +20,29 @@ public class ChallengePlatformService {
     this.challengePlatformApi = challengePlatformApi;
   }
 
-  @Tool(
-    name = "list_challenge_platforms",
-    description = "List available challenge platforms with optional filters"
-  )
+  @Tool(name = "list_challenge_platforms", description = "List challenge platforms")
   public ChallengePlatformsPage listChallengePlatforms(
-    @Nullable @Schema(description = "Page number to retrieve (0-based)") Integer pageNumber,
-    @Nullable @Schema(description = "Page size to retrieve") Integer pageSize,
-    @Nullable @Schema(description = "Sort field (enum): NAME") ChallengePlatformSort sort,
-    @Nullable @Schema(
-      description = "Sort direction (enum): ASC or DESC"
-    ) ChallengePlatformDirection direction,
-    @Nullable @Schema(description = "Platform slugs to filter by") List<String> slugs,
-    @Nullable @Schema(description = "Search keywords") String searchTerms
+    @ToolParam(description = "The page number.") @Nullable Integer pageNumber,
+    @ToolParam(description = "The number of items in a single page.") @Nullable Integer pageSize,
+    @ToolParam(description = "What to sort results by.") @Nullable ChallengePlatformSort sort,
+    @ToolParam(
+      description = "The direction to sort the results by."
+    ) @Nullable ChallengePlatformDirection direction,
+    @ToolParam(
+      description = "An array of challenge platform slugs used to filter the results."
+    ) @Nullable List<String> slugs,
+    @ToolParam(
+      description = "A string of search terms used to filter the results."
+    ) @Nullable String searchTerms
   ) {
     ChallengePlatformSearchQuery query = new ChallengePlatformSearchQuery();
 
-    if (pageNumber != null) {
-      query.setPageNumber(pageNumber);
-    }
-    if (pageSize != null) {
-      query.setPageSize(pageSize);
-    }
-    if (sort != null) {
-      query.setSort(sort);
-    }
-    if (direction != null) {
-      query.setDirection(direction);
-    }
-    if (slugs != null && !slugs.isEmpty()) {
-      query.setSlugs(slugs);
-    }
-    if (searchTerms != null && !searchTerms.isEmpty()) {
-      query.setSearchTerms(searchTerms);
-    }
+    query.setPageNumber(pageNumber);
+    query.setPageSize(pageSize);
+    query.setSort(sort);
+    query.setDirection(direction);
+    query.setSlugs(slugs);
+    query.setSearchTerms(searchTerms);
 
     return challengePlatformApi.listChallengePlatforms(query);
   }
