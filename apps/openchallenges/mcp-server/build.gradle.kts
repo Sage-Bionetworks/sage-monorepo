@@ -29,6 +29,15 @@ graalvmNative {
       buildArgs.add("--libc=musl")
       buildArgs.add("--no-fallback")
     }
+    named("test") {
+      // Enable GraalVM Toolchain detection
+      javaLauncher.set(javaToolchains.launcherFor {
+        languageVersion.set(JavaLanguageVersion.of(21))
+        vendor.set(JvmVendorSpec.matching("Oracle"))
+      })
+
+      buildArgs.add("-O0")
+    }
   }
 }
 
@@ -44,6 +53,12 @@ dependencies {
 	testRuntimeOnly(libs.junit.platform.launcher)
 }
 
-tasks.withType<Test> {
-	useJUnitPlatform()
+tasks.withType<Test>().configureEach {
+  maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
+  
+  useJUnitPlatform()
+
+  testLogging {
+    events("passed", "skipped", "failed")
+  }
 }
