@@ -62,3 +62,7 @@ tasks.withType<Test>().configureEach {
     events("passed", "skipped", "failed")
   }
 }
+
+tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
+  imageName.set("ghcr.io/sage-bionetworks/${project.name}-base:local")
+}
