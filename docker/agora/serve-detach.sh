@@ -7,6 +7,7 @@ args=(
   --file docker/agora/services/api.yml
   --file docker/agora/services/app.yml
   --file docker/agora/services/data.yml
+  --file docker/agora/services/gene-api.yml
   --file docker/agora/services/mongo.yml
 
   --file docker/agora/networks.yml
