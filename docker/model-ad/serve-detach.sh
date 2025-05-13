@@ -6,6 +6,7 @@ args=(
   --file docker/model-ad/services/api-docs.yml
   --file docker/model-ad/services/api.yml
   --file docker/model-ad/services/app.yml
+  --file docker/model-ad/services/data.yml
   --file docker/model-ad/services/mongo.yml
 
   --file docker/model-ad/networks.yml

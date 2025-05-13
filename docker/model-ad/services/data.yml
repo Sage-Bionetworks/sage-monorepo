@@ -1,0 +1,17 @@
+services:
+  model-ad-data:
+    image: ghcr.io/sage-bionetworks/model-ad-data:${MODEL_AD_VERSION:-local}
+    container_name: model-ad-data
+    restart: no
+    env_file:
+      - ../../../apps/model-ad/data/.env
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - model-ad
+    deploy:
+      resources:
+        limits:
+          memory: 2GB
+    depends_on:
+      - model-ad-mongo
