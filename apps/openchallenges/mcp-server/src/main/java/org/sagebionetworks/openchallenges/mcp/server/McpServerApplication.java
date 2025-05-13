@@ -1,5 +1,6 @@
 package org.sagebionetworks.openchallenges.mcp.server;
 
+import java.util.Arrays;
 import java.util.List;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.ToolCallbacks;
@@ -15,7 +16,10 @@ public class McpServerApplication {
   }
 
   @Bean
-  public List<ToolCallback> ocTools(ResourceService resourceService) {
-    return List.of(ToolCallbacks.from(resourceService));
+  public List<ToolCallback> toolCallbacks(
+    ChallengeAnalyticsService challengeAnalyticsService,
+    ChallengePlatformService challengePlatformService
+  ) {
+    return Arrays.asList(ToolCallbacks.from(challengeAnalyticsService, challengePlatformService));
   }
 }
