@@ -19,10 +19,16 @@ public class McpServerApplication {
   public List<ToolCallback> toolCallbacks(
     ChallengeService challengeService,
     ChallengeAnalyticsService challengeAnalyticsService,
-    ChallengePlatformService challengePlatformService
+    ChallengePlatformService challengePlatformService,
+    EdamConceptService edamConceptService
   ) {
     return Arrays.asList(
-      ToolCallbacks.from(challengeService, challengeAnalyticsService, challengePlatformService)
+      ToolCallbacks.from(
+        challengeService,
+        challengeAnalyticsService,
+        challengePlatformService,
+        edamConceptService
+      )
     );
   }
 }
