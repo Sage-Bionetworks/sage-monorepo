@@ -1,0 +1,1 @@
+FROM ghcr.io/sage-bionetworks/agora-gene-api-base:local
