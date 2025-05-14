@@ -1,10 +1,10 @@
 /* eslint-disable */
 export default {
-  displayName: 'model-ad-ui',
+  displayName: 'explorers-shared',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {},
-  coverageDirectory: '../../../coverage/libs/model-ad/ui',
+  coverageDirectory: '../../../coverage/libs/explorers/shared',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
@@ -14,6 +14,7 @@ export default {
       },
     ],
   },
+  testEnvironment: 'jest-fixed-jsdom',
   transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
   snapshotSerializers: [
     'jest-preset-angular/build/serializers/no-ng-attributes',

@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ConfigService } from '@sagebionetworks/model-ad/config';
-import { HeaderComponent } from '@sagebionetworks/explorers/ui';
+import { FooterComponent, HeaderComponent } from '@sagebionetworks/explorers/ui';
 import {
   CONFIG_SERVICE_TOKEN,
   GoogleTagManagerComponent,
@@ -10,7 +10,7 @@ import {
 } from '@sagebionetworks/shared/google-tag-manager';
 import { footerLinks, headerLinks } from '@sagebionetworks/model-ad/util';
 @Component({
-  imports: [RouterModule, HeaderComponent, GoogleTagManagerComponent],
+  imports: [RouterModule, FooterComponent, HeaderComponent, GoogleTagManagerComponent],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

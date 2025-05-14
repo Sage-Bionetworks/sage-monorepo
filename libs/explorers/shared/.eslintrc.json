@@ -17,7 +17,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "model-ad",
+            "prefix": "explorers",
             "style": "camelCase"
           }
         ],
@@ -25,7 +25,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "model-ad",
+            "prefix": "explorers",
             "style": "kebab-case"
           }
         ],

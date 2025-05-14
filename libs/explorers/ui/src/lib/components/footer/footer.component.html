@@ -1,0 +1,32 @@
+<footer>
+  @if (footerLinks) {
+    <div class="footer-links">
+      <ul>
+        <li class="footer-logo">
+          <a routerLink="/">
+            <img [src]="footerLogoPath" alt="footer logo" />
+          </a>
+        </li>
+        @for (link of footerLinks; track link.label) {
+          <li>
+            @if (link.routerLink) {
+              <a [routerLink]="link.routerLink" routerLinkActive="active"
+                ><span>{{ link.label }}</span></a
+              >
+            } @else if (link.url && link.target) {
+              <a [attr.href]="link.url" [attr.target]="link.target"
+                ><span>{{ link.label }}</span></a
+              >
+            } @else {
+              <span>{{ link.label }}</span>
+            }
+          </li>
+        }
+      </ul>
+    </div>
+  }
+  <div class="footer-versions">
+    <div class="site-version">Site Version {{ siteVersion }}</div>
+    <div class="data-version">Data Version {{ dataVersion }}</div>
+  </div>
+</footer>

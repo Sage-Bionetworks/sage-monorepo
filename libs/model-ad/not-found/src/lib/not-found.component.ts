@@ -3,7 +3,6 @@ import { Component, OnInit, Renderer2 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
-import { FooterComponent } from '@sagebionetworks/model-ad/ui';
 import { ConfigService } from '@sagebionetworks/model-ad/config';
 import { SeoService } from '@sagebionetworks/shared/util';
 import { getSeoData } from './seo-data';
@@ -12,7 +11,7 @@ import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'model-ad-not-found',
-  imports: [CommonModule, RouterModule, MatCardModule, MatButtonModule, FooterComponent],
+  imports: [CommonModule, RouterModule, MatCardModule, MatButtonModule],
   templateUrl: './not-found.component.html',
   styleUrls: ['./not-found.component.scss'],
 })
