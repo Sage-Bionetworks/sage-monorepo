@@ -32,6 +32,14 @@
         "@typescript-eslint/no-extra-semi": "error",
         "no-extra-semi": "off"
       }
+    },
+    {
+      "files": ["*.html"],
+      "parser": "@angular-eslint/template-parser",
+      "plugins": ["@angular-eslint/template"],
+      "rules": {
+        "@angular-eslint/template/prefer-control-flow": "warn"
+      }
     }
   ]
 }
