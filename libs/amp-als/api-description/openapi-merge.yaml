@@ -3,4 +3,5 @@ inputs:
   - inputFile: openapi/base.openapi.yaml
   # list files in alphanumeric order
   - inputFile: openapi/dataset.openapi.yaml
+  - inputFile: openapi/user.openapi.yaml
 output: openapi/openapi.yaml

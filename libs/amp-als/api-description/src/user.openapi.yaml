@@ -1,20 +1,21 @@
 openapi: 3.0.3
 info:
   version: 1.0.0
-  title: AMP-ALS Dataset Service API
+  title: AMP-ALS User Service API
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
   contact:
     name: Support
     url: https://github.com/Sage-Bionetworks/sage-monorepo
+  x-logo:
+    url: https://agora.adknowledgeportal.org/images/logo.png
+    altText: Agora
 servers:
   - url: http://localhost/v1
 tags:
-  - name: Dataset
-    description: Operations about datasets.
+  - name: HealthCheck
+    description: Operations about health checks
 paths:
-  /datasets:
-    $ref: paths/datasets.yaml
-  /datasets/{datasetId}:
-    $ref: paths/datasets/@{datasetId}.yaml
+  /healthcheck:
+    $ref: paths/healthCheck.yaml
