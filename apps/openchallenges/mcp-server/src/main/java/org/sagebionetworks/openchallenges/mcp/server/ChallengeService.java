@@ -30,14 +30,14 @@ public class ChallengeService {
     description = """
     Lists challenges that can be filtered and sorted based on a variety of criteria.
 
-    When using the `list_challenges` tool:
-    - If a parameter is not specified, its default value should be used.
-    - If the user mentions 'Docker' or 'container', use `submissionTypes = ["container_image"]`
-    - If the user describes specific types of input data (e.g., "RNA-Seq"), you should:
-      1. Call the `list_edam_concepts` tool with `searchTerms` matching the user’s keywords.
-      2. Include `sections = ["data"]` to filter the EDAM concepts specifically to input data types.
-      3. From the results, extract the matching EDAM concept ID(s).
-      4. Then call `list_challenges` with those IDs as the `inputDataTypes` filter.
+    Guidelines for using this tool:
+    - If a parameter is not specified, the default value should be used.
+    - If the user mentions "Docker" or "Container", set: submissionTypes = ["container_image"]
+    - If the user describes specific types of input data / training data:
+        1. First call the `list_edam_concepts` tool with the user's keywords as `searchTerms`.
+        2. Set `sections = ["data"]` to filter results to input data types.
+        3. From the results, extract the matching EDAM concept ID(s).
+        4. Then call `list_challenges` using: inputDataTypes = [<EDAM ID(s)>]
     """
   )
   public ChallengesPage listChallenges(

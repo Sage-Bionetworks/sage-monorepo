@@ -24,16 +24,14 @@ public class EdamConceptService {
   @Tool(
     name = "list_edam_concepts",
     description = """
-      Lists EDAM concepts that can be filtered and sorted based on a variety of criteria.
-      If a parameter is not specified, its default value should be used.
-      This tool can be used to find input data types for challenges by:
-        - Simplify the user's keywords to its core concept (e.g., "RNA sequencing data" → "RNA sequence")
-        - Searching with specific keywords (e.g., "genomic", "clinical")
-          using the `searchTerms` parameter
-        - Filtering by EDAM section (e.g., data, format) using the `sections` parameter
-      Once you identify relevant EDAM concept IDs from the results, use them as `inputDataTypes`
-      in the `list_challenges` tool to search challenges by input type.
-    """
+    Searches for EDAM concepts (especially input data types) that can be used to filter challenges.
+
+    Usage guidelines:
+    - If the user mentions a specific input data type:
+        1. Simplify keywords where necessary (e.g., "RNA sequencing data" → "RNA sequence";).
+        2. Call `list_edam_concepts` with `searchTerms` derived from the user input.
+        3. Set `sections = ["data"]` to limit to data-related EDAM terms.
+        """
   )
   public EdamConceptsPage listEdamConcepts(
     @ToolParam(
