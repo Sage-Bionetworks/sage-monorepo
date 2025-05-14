@@ -7,14 +7,14 @@ import {
   OrgSagebionetworksRepoModelWikiWikiPage,
   WikiPageServicesService,
 } from '@sagebionetworks/synapse/api-client-angular';
-import { Observable, of } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import sanitizeHtml from 'sanitize-html';
 
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { SynapseWiki } from '@sagebionetworks/explorers/models';
+import { SynapseWiki, TermsOfUseInfo } from '@sagebionetworks/explorers/models';
 
 // -------------------------------------------------------------------------- //
 // Service
@@ -23,7 +23,10 @@ import { SynapseWiki } from '@sagebionetworks/explorers/models';
   providedIn: 'root',
 })
 export class SynapseApiService {
-  wikis: { [key: string]: any } = {};
+  private cache: { [key: string]: any } = {
+    wikis: {},
+    terms: null,
+  };
 
   constructor(
     private http: HttpClient,
@@ -42,17 +45,44 @@ export class SynapseApiService {
 
   getWiki(ownerId: string, wikiId: string): Observable<SynapseWiki> {
     const key = ownerId + wikiId;
-    if (this.wikis[key]) {
-      return of(this.wikis[key]);
+    if (this.cache['wikis'][key]) {
+      return of(this.cache['wikis'][key]);
     } else {
       return this.http
         .get('https://repo-prod.prod.sagebase.org/repo/v1/entity/' + ownerId + '/wiki/' + wikiId)
         .pipe(
           tap((wiki: any) => {
-            this.wikis[key] = wiki;
+            this.cache['wikis'][key] = wiki;
+          }),
+          catchError((error) => {
+            console.error('Error loading wiki:', error);
+            return throwError(() => new Error('Failed to fetch wiki'));
           }),
         );
     }
+  }
+
+  getTermsOfService() {
+    if (this.cache['terms']) {
+      return of(this.cache['terms']);
+    }
+
+    return this.http
+      .get<TermsOfUseInfo>('https://repo-prod.prod.sagebase.org/auth/v1/termsOfUse2/info')
+      .pipe(
+        switchMap((info) =>
+          this.http.get(info.termsOfServiceUrl, { responseType: 'text' }).pipe(
+            map((markdown) => {
+              this.cache['terms'] = markdown;
+              return markdown;
+            }),
+          ),
+        ),
+        catchError((error) => {
+          console.error('Failed to fetch Terms of Service:', error);
+          return throwError(() => new Error('Failed to fetch Terms of Service'));
+        }),
+      );
   }
 
   renderHtml(html: string) {

@@ -12,6 +12,7 @@ import { configFactory, ConfigService } from '@sagebionetworks/model-ad/config';
 
 import { routes } from './app.routes';
 import { MyPreset } from './myPrimeNGPreset';
+import { provideMarkdown } from 'ngx-markdown';
 
 // This index is used to remove the corresponding provider in app.config.server.ts.
 // TODO: This index could be out of sync if we are not careful. Find a more elegant way.
@@ -48,6 +49,7 @@ export const appConfig: ApplicationConfig = {
       },
     }),
     provideHttpClient(withInterceptorsFromDi()),
+    provideMarkdown(),
     provideRouter(
       routes,
       withEnabledBlockingInitialNavigation(),

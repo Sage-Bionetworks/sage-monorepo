@@ -16,17 +16,6 @@
         "command": "docker/model-ad/serve-detach.sh model-ad-apex"
       }
     },
-    "build-image": {
-      "executor": "@nx-tools/nx-container:build",
-      "options": {
-        "context": "apps/model-ad/apex",
-        "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/model-ad-apex"],
-          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
-        },
-        "push": false
-      }
-    },
     "scan-image": {
       "executor": "nx:run-commands",
       "options": {

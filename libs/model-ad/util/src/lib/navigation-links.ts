@@ -37,7 +37,6 @@ export const footerLinks: NavigationLink[] = [
   },
   {
     label: 'Terms of Service',
-    url: 'https://s3.amazonaws.com/static.synapse.org/governance/SageBionetworksSynapseTermsandConditionsofUse.pdf?v=5',
-    target: '_blank',
+    routerLink: ['terms-of-service'],
   },
 ];

@@ -8,15 +8,15 @@ import {
   workspaceRoot,
   writeJsonFile,
 } from '@nx/devkit';
+import { calculateHashForCreateNodes } from '@nx/devkit/src/utils/calculate-hash-for-create-nodes';
+import { getLockFileName } from '@nx/js';
+import { existsSync } from 'fs';
 import { hashObject } from 'nx/src/hasher/file-hasher';
 import { workspaceDataDirectory } from 'nx/src/utils/cache-directory';
-import { calculateHashForCreateNodes } from '@nx/devkit/src/utils/calculate-hash-for-create-nodes';
 import { dirname, join } from 'path';
-import { existsSync } from 'fs';
-import { getLockFileName } from '@nx/js';
-import { SageMonorepoProjectConfiguration } from './project-configuration';
-import { createPluginConfiguration, SageMonorepoPluginOptions } from './plugin-configuration';
 import { buildProjectConfiguration } from './build-project-configuration';
+import { createPluginConfiguration, SageMonorepoPluginOptions } from './plugin-configuration';
+import { SageMonorepoProjectConfiguration } from './project-configuration';
 import { ProjectConfigurationBuilderOptions } from './project-configuration-builder-options';
 import { inferProjectMetadata } from './project-metadata';
 
@@ -35,7 +35,7 @@ function writeProjectConfigurationsToCache(
 }
 
 const projectFilePattern =
-  '{apps,libs}/{openchallenges,agora,sage,sandbox,iatlas,amp-als}/**/project.json';
+  '{apps,libs}/{openchallenges,agora,sage,sandbox,iatlas,amp-als,model-ad,explorers}/**/project.json';
 
 export const createNodesV2: CreateNodesV2<SageMonorepoPluginOptions> = [
   projectFilePattern,

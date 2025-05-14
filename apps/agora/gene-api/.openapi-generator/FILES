@@ -1,0 +1,10 @@
+src/main/java/org/sagebionetworks/agora/gene/api/RFC3339DateFormat.java
+src/main/java/org/sagebionetworks/agora/gene/api/api/ApiUtil.java
+src/main/java/org/sagebionetworks/agora/gene/api/api/HealthCheckApi.java
+src/main/java/org/sagebionetworks/agora/gene/api/api/HealthCheckApiController.java
+src/main/java/org/sagebionetworks/agora/gene/api/api/HealthCheckApiDelegate.java
+src/main/java/org/sagebionetworks/agora/gene/api/configuration/HomeController.java
+src/main/java/org/sagebionetworks/agora/gene/api/configuration/SpringDocConfiguration.java
+src/main/java/org/sagebionetworks/agora/gene/api/model/dto/BasicErrorDto.java
+src/main/java/org/sagebionetworks/agora/gene/api/model/dto/HealthCheckDto.java
+src/main/resources/openapi.yaml
