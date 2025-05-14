@@ -9,7 +9,8 @@
       "options": {
         "commands": [
           "redocly bundle --output openapi/base.openapi.yaml src/base.openapi.yaml",
-          "redocly bundle --output openapi/dataset.openapi.yaml src/dataset.openapi.yaml"
+          "redocly bundle --output openapi/dataset.openapi.yaml src/dataset.openapi.yaml",
+          "redocly bundle --output openapi/user.openapi.yaml src/user.openapi.yaml"
         ],
         "parallel": true,
         "cwd": "{projectRoot}"
