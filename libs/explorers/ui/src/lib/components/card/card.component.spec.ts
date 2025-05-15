@@ -1,6 +1,6 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
-import { ResultsList } from '@sagebionetworks/explorers/models';
+import { SearchResultsList } from '@sagebionetworks/explorers/models';
 import { SvgIconService } from '@sagebionetworks/explorers/services';
 import {
   mockCheckQueryForErrors,
@@ -22,7 +22,7 @@ async function setup(
   routerLink?: string,
   searchPlaceholder?: string,
   navigateToResult?: (id: string) => void,
-  getSearchResultsList?: (query: string) => Observable<ResultsList>,
+  getSearchResultsList?: (query: string) => Observable<SearchResultsList>,
   checkQueryForErrors?: (query: string) => string,
 ) {
   const user = userEvent.setup();
