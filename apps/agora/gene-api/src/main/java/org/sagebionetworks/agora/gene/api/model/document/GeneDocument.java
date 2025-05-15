@@ -10,8 +10,4 @@ public class GeneDocument {
 
   @Id
   public String id;
-
-  public String model;
-  public String study;
-  public String tissue;
 }

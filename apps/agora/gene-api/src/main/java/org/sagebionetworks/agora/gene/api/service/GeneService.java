@@ -3,11 +3,18 @@ package org.sagebionetworks.agora.gene.api.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.sagebionetworks.agora.gene.api.GeneApiApplication;
+import org.sagebionetworks.agora.gene.api.model.document.GeneDocument;
 import org.sagebionetworks.agora.gene.api.model.document.RnaDifferentialExpressionDocument;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneDto;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGenesListDto;
+import org.sagebionetworks.agora.gene.api.model.dto.GeneDto;
+import org.sagebionetworks.agora.gene.api.model.mapper.GeneMapper;
 import org.sagebionetworks.agora.gene.api.model.mapper.RnaDifferentialExpressionMapper;
+import org.sagebionetworks.agora.gene.api.model.repository.GeneRepository;
 import org.sagebionetworks.agora.gene.api.model.repository.RnaDifferentialExpressionRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 // import org.sagebionetworks.agora.gene.api.model.dto.GeneDto;
 // import org.sagebionetworks.agora.gene.api.model.dto.GenesPageDto;
 // import org.sagebionetworks.agora.gene.api.model.mapper.GeneMapper;
@@ -15,14 +22,22 @@ import org.sagebionetworks.agora.gene.api.model.repository.RnaDifferentialExpres
 import org.springframework.stereotype.Service;
 
 @Service
-public class GenesService {
+public class GeneService {
 
+  private static final Logger logger = LoggerFactory.getLogger(GeneService.class);
+
+  private GeneMapper geneMapper = new GeneMapper();
   private RnaDifferentialExpressionMapper rnaDifferentialExpressionMapper =
     new RnaDifferentialExpressionMapper();
 
+  private final GeneRepository geneRepository;
   private final RnaDifferentialExpressionRepository rnaDifferentialExpressionRepository;
 
-  public GenesService(RnaDifferentialExpressionRepository rnaDifferentialExpressionRepository) {
+  public GeneService(
+    GeneRepository geneRepository,
+    RnaDifferentialExpressionRepository rnaDifferentialExpressionRepository
+  ) {
+    this.geneRepository = geneRepository;
     this.rnaDifferentialExpressionRepository = rnaDifferentialExpressionRepository;
   }
 
@@ -38,6 +53,7 @@ public class GenesService {
     GCTGenesListDto gctGenesListDto = null;
 
     if (category.equals("RNA - Differential Expression")) {
+      logger.info("getRnaComparisonGenes");
       gctGenesListDto = getRnaComparisonGenes(subCategory);
     } else if (category.equals("Protein - Differential Expression")) {
       gctGenesListDto = getProteinComparisonGenes(subCategory);
@@ -52,10 +68,12 @@ public class GenesService {
   private GCTGenesListDto getRnaComparisonGenes(String subCategory) {
     List<RnaDifferentialExpressionDocument> differentialExpression =
       rnaDifferentialExpressionRepository.findByModelSorted(subCategory);
-    // if (differentialExpression != null && !differentialExpression.isEmpty()) {
-    //   Map<String, GCTGeneDto> genes = new HashMap<>();
-    //   Map<String, Gene> allGenes = getGenesMap();
-    // }
+    logger.info("differentialExpression: {}", differentialExpression.size());
+    if (differentialExpression != null && !differentialExpression.isEmpty()) {
+      Map<String, GCTGeneDto> genes = new HashMap<>();
+      Map<String, GeneDto> allGenes = getGenesMap();
+      logger.info("allGenes: {}", allGenes.size());
+    }
 
     // List<GCTGeneDto> dtos = rnaDifferentialExpressionMapper.convertToDtoList(documents);
 
@@ -65,5 +83,23 @@ public class GenesService {
 
   private GCTGenesListDto getProteinComparisonGenes(String subCategory) {
     return GCTGenesListDto.builder().build();
+  }
+
+  /**
+   * Retrieves a map of all genes, keyed by ensembl_gene_id.
+   * This is a Java equivalent of the TypeScript getGenesMap().
+   * You should implement the logic to fetch all Gene objects from your data source.
+   */
+  private Map<String, GeneDto> getGenesMap() {
+    List<GeneDocument> documents = geneRepository.findAll();
+    logger.info("getGenesMap documents: {}", documents.size());
+    List<GeneDto> allGenes = geneMapper.convertToDtoList(documents);
+    Map<String, GeneDto> genesMap = new HashMap<>();
+    for (GeneDto gene : allGenes) {
+      if (gene.getEnsemblGeneId() != null) {
+        genesMap.put(gene.getEnsemblGeneId(), gene);
+      }
+    }
+    return genesMap;
   }
 }
