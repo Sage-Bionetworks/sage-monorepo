@@ -25,6 +25,7 @@ public class EdamConceptService {
     name = "list_edam_concepts",
     description = """
     Searches for EDAM (EMBRACE Data and Methods), an ontology for bioinformatics data types,
+    Searches for EDAM, an ontology for bioinformatics data types,
     formats, operations, and topics.
 
     Usage guidelines:
