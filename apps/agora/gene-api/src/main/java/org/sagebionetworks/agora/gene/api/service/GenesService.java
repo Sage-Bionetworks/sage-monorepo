@@ -1,6 +1,8 @@
 package org.sagebionetworks.agora.gene.api.service;
 
+import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneDto;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGenesListDto;
+import org.sagebionetworks.agora.gene.api.model.repository.RnaDifferentialExpressionRepository;
 // import org.sagebionetworks.agora.gene.api.model.dto.GeneDto;
 // import org.sagebionetworks.agora.gene.api.model.dto.GenesPageDto;
 // import org.sagebionetworks.agora.gene.api.model.mapper.GeneMapper;
@@ -12,9 +14,11 @@ public class GenesService {
 
   // private GeneMapper geneMapper = new GeneMapper();
 
-  // private final GeneRepository geneRepository;
+  private final RnaDifferentialExpressionRepository rnaDifferentialExpressionRepository;
 
-  public GenesService() {}
+  public GenesService(RnaDifferentialExpressionRepository rnaDifferentialExpressionRepository) {
+    this.rnaDifferentialExpressionRepository = rnaDifferentialExpressionRepository;
+  }
 
   public GCTGenesListDto getComparisonGenes(String category, String subCategory) {
     // Use the default values from the web app during development.
@@ -25,14 +29,26 @@ public class GenesService {
     // List<GeneDocument> geneDocuments = geneRepository.findAll();
     // List<GeneDto> genes = geneMapper.convertToDtoList(geneDocuments);
 
-    return GCTGenesListDto.builder()
-      // .genes(genes)
-      // .number(0)
-      // .size(genes.size())
-      // .totalElements(0L)
-      // .totalPages(1)
-      // .hasNext(false)
-      // .hasPrevious(false)
-      .build();
+    GCTGenesListDto gctGenesListDto = null;
+
+    if (category.equals("RNA - Differential Expression")) {
+      gctGenesListDto = getRnaComparisonGenes(subCategory);
+    } else if (category.equals("Protein - Differential Expression")) {
+      gctGenesListDto = getProteinComparisonGenes(subCategory);
+    } else {
+      // TODO: better handle unexpected value
+      gctGenesListDto = GCTGenesListDto.builder().build();
+    }
+
+    return gctGenesListDto;
+  }
+
+  private GCTGenesListDto getRnaComparisonGenes(String subCategory) {
+    rnaDifferentialExpressionRepository.findAll();
+    return GCTGenesListDto.builder().build();
+  }
+
+  private GCTGenesListDto getProteinComparisonGenes(String subCategory) {
+    return GCTGenesListDto.builder().build();
   }
 }
