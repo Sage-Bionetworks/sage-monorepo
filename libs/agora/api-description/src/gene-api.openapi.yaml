@@ -19,3 +19,7 @@ tags:
 paths:
   /genes/comparison:
     $ref: paths/genes/comparison.yaml
+components:
+  schemas:
+    Gene:
+      $ref: components/schemas/Gene.yaml
