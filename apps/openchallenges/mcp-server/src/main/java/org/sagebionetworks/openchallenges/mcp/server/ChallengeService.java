@@ -28,7 +28,7 @@ public class ChallengeService {
   @Tool(
     name = "list_challenges",
     description = """
-    Lists challenges that can be filtered and sorted based on a variety of criteria.
+    Lists challenges that can be filtered and sorted based on a variety of parameters.
 
     Guidelines for using this tool:
     - If a parameter is not specified, the default value should be used.
