@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { ResultsList } from '@sagebionetworks/explorers/models';
+import { SearchResultsList } from '@sagebionetworks/explorers/models';
 import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { Observable } from 'rxjs';
 import { SearchInputComponent } from '../search-input/search-input.component';
@@ -23,7 +23,7 @@ export class CardComponent {
 
   searchPlaceholder = input<string | undefined>();
   navigateToResult = input<(id: string) => void>();
-  getSearchResultsList = input<(query: string) => Observable<ResultsList>>();
+  getSearchResultsList = input<(query: string) => Observable<SearchResultsList>>();
   checkQueryForErrors = input<(query: string) => string>(); // empty string if no error
 
   secondaryColor = 'inherit';
