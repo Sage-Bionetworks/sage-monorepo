@@ -1,7 +1,12 @@
 package org.sagebionetworks.agora.gene.api.service;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.sagebionetworks.agora.gene.api.model.document.RnaDifferentialExpressionDocument;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneDto;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGenesListDto;
+import org.sagebionetworks.agora.gene.api.model.mapper.RnaDifferentialExpressionMapper;
 import org.sagebionetworks.agora.gene.api.model.repository.RnaDifferentialExpressionRepository;
 // import org.sagebionetworks.agora.gene.api.model.dto.GeneDto;
 // import org.sagebionetworks.agora.gene.api.model.dto.GenesPageDto;
@@ -12,7 +17,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class GenesService {
 
-  // private GeneMapper geneMapper = new GeneMapper();
+  private RnaDifferentialExpressionMapper rnaDifferentialExpressionMapper =
+    new RnaDifferentialExpressionMapper();
 
   private final RnaDifferentialExpressionRepository rnaDifferentialExpressionRepository;
 
@@ -44,7 +50,16 @@ public class GenesService {
   }
 
   private GCTGenesListDto getRnaComparisonGenes(String subCategory) {
-    rnaDifferentialExpressionRepository.findByModelSorted(subCategory);
+    List<RnaDifferentialExpressionDocument> differentialExpression =
+      rnaDifferentialExpressionRepository.findByModelSorted(subCategory);
+    // if (differentialExpression != null && !differentialExpression.isEmpty()) {
+    //   Map<String, GCTGeneDto> genes = new HashMap<>();
+    //   Map<String, Gene> allGenes = getGenesMap();
+    // }
+
+    // List<GCTGeneDto> dtos = rnaDifferentialExpressionMapper.convertToDtoList(documents);
+
+    // return GCTGenesListDto.builder().items(dtos).build();
     return GCTGenesListDto.builder().build();
   }
 
