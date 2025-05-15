@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 @Data
 @Document(collection = "genes")
-public class RnaDifferentialExpression {
+public class RnaDifferentialExpressionDocument {
 
   @Id
   private String id;

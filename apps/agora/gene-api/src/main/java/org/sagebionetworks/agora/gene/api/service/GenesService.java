@@ -44,7 +44,7 @@ public class GenesService {
   }
 
   private GCTGenesListDto getRnaComparisonGenes(String subCategory) {
-    rnaDifferentialExpressionRepository.findAll();
+    rnaDifferentialExpressionRepository.findByModelSorted(subCategory);
     return GCTGenesListDto.builder().build();
   }
 
