@@ -48,6 +48,11 @@
             "input": "libs/model-ad/assets/favicon",
             "glob": "**/*",
             "output": "/"
+          },
+          {
+            "input": "apps/model-ad/app/src/public/images/opengraph",
+            "glob": "**/*",
+            "output": "opengraph"
           }
         ],
         "stylePreprocessorOptions": {
