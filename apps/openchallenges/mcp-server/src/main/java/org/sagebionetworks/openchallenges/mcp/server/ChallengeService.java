@@ -37,7 +37,7 @@ public class ChallengeService {
     - If the user describes specific types of input data / training data:
         1. First call the `list_edam_concepts` tool with the user's keywords as `searchTerms`.
         2. Set `sections = ["data"]` to filter results to input data types.
-        3. From the results, extract the matching EDAM concept ID(s).
+        3. From the results, extract the matching EDAM concept IDs.
         4. Then call `list_challenges` using: inputDataTypes = [<EDAM ID(s)>]
     """
   )
