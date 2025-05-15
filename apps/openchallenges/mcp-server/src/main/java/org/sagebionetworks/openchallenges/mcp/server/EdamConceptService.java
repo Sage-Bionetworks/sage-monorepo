@@ -28,7 +28,7 @@ public class EdamConceptService {
     formats, operations, and topics.
 
     Usage guidelines:
-    - Use this tool when the user refers to a specific type of input data or bioinformatics concept.
+    - Use this tool when the user refers to a specific type of input data or training dataset.
       1. Extract relevant keywords from the user’s prompt to match EDAM concepts
       (e.g., "MRI Imaging Data" → "MRI Image").
         - If no matches are found, the keywords may not align with standard EDAM ontology terms.
