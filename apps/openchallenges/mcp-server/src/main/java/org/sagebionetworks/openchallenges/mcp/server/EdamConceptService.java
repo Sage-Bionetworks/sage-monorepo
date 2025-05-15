@@ -28,7 +28,7 @@ public class EdamConceptService {
 
     Usage guidelines:
     - If the user mentions a specific input data type:
-        1. Simplify keywords where necessary (e.g., "RNA sequencing data" → "RNA sequence";).
+        1. Simplify keywords where necessary (e.g., "MRI Image data" → "MRI Image";).
         2. Call `list_edam_concepts` with `searchTerms` derived from the user input.
         3. Set `sections = ["data"]` to limit to data-related EDAM terms.
         """
