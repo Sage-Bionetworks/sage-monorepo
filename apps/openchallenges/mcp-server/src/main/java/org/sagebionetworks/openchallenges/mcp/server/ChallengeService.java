@@ -32,6 +32,7 @@ public class ChallengeService {
 
     Guidelines for using this tool:
     - If a parameter is not specified, the default value should be used.
+    - If the user does not specify a challenge status, do not apply any status filter - search across all challenges status by default.
     - If the user mentions "Docker" or "Container", set: submissionTypes = ["container_image"]
     - If the user describes specific types of input data / training data:
         1. First call the `list_edam_concepts` tool with the user's keywords as `searchTerms`.
@@ -91,8 +92,12 @@ public class ChallengeService {
     query.setSortSeed(sortSeed);
     query.setDirection(direction);
     query.setIncentives(incentives);
-    query.setMinStartDate(minStartDate != null ? LocalDate.parse(minStartDate) : null);
-    query.setMaxStartDate(maxStartDate != null ? LocalDate.parse(maxStartDate) : null);
+    query.setMinStartDate(
+      minStartDate != null && !minStartDate.isEmpty() ? LocalDate.parse(minStartDate) : null
+    );
+    query.setMaxStartDate(
+      maxStartDate != null && !maxStartDate.isEmpty() ? LocalDate.parse(maxStartDate) : null
+    );
     query.setPlatforms(platforms);
     query.setOrganizations(organizations);
     query.setStatus(status);
