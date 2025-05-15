@@ -14,20 +14,47 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - description: Operations about health checks
-    name: HealthCheck
+  - description: Operations about genes.
+    name: Gene
 paths:
-  /healthcheck:
+  /genes/comparison:
     get:
-      description: Get information about the health of the service
-      operationId: getHealthCheck
+      description: Get comparison genes based on category and subcategory
+      operationId: getComparisonGenes
+      parameters:
+        - description: The category of the comparison (either RNA or Protein Differential
+            Expression).
+          explode: true
+          in: query
+          name: category
+          required: true
+          schema:
+            enum:
+              - RNA - Differential Expression
+              - Protein - Differential Expression
+            type: string
+          style: form
+        - description: The subcategory for gene comparison (sub-category must be a string).
+          explode: true
+          in: query
+          name: subCategory
+          required: true
+          schema:
+            type: string
+          style: form
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HealthCheck'
-          description: Success
+                $ref: '#/components/schemas/GCTGenesList'
+          description: Successful response with comparison genes
+        '404':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
         '500':
           content:
             application/problem+json:
@@ -35,16 +62,22 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
-      summary: Get health check information
+      summary: Get comparison genes based on category and subcategory
       tags:
-        - HealthCheck
+        - Genes
       x-accepts:
         - application/json
         - application/problem+json
       x-tags:
-        - tag: HealthCheck
+        - tag: Genes
 components:
   responses:
+    NotFound:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The specified resource was not found
     InternalServerError:
       content:
         application/problem+json:
@@ -52,20 +85,431 @@ components:
             $ref: '#/components/schemas/BasicError'
       description: The request cannot be fulfilled due to an unexpected server error
   schemas:
-    HealthCheck:
-      description: Represents the health of a service
+    MedianExpression:
+      description: MedianExpression
       example:
-        status: pass
+        min: 5.637377
+        first_quartile: 2.302136
+        median: 7.0614014
+        max: 2.027123
+        mean: 9.301444
+        tissue: tissue
+        third_quartile: 3.6160767
       properties:
-        status:
-          description: Indicates whether the service status is acceptable or not
-          enum:
-            - pass
-            - fail
-            - warn
+        min:
+          format: float
+          type: number
+        first_quartile:
+          format: float
+          type: number
+        median:
+          format: float
+          type: number
+        mean:
+          format: float
+          type: number
+        third_quartile:
+          format: float
+          type: number
+        max:
+          format: float
+          type: number
+        tissue:
           type: string
       required:
-        - status
+        - tissue
+      type: object
+    GCTGeneTissue:
+      description: GCTGeneTissue
+      example:
+        adj_p_val: 6.0274563
+        logfc: 0.8008282
+        ci_r: 5.962134
+        name: name
+        ci_l: 1.4658129
+        medianexpression:
+          min: 5.637377
+          first_quartile: 2.302136
+          median: 7.0614014
+          max: 2.027123
+          mean: 9.301444
+          tissue: tissue
+          third_quartile: 3.6160767
+      properties:
+        name:
+          description: Name of the gene or tissue.
+          type: string
+        logfc:
+          description: Log fold change value.
+          format: float
+          type: number
+        adj_p_val:
+          description: Adjusted p-value.
+          format: float
+          type: number
+        ci_l:
+          description: Lower confidence interval.
+          format: float
+          type: number
+        ci_r:
+          description: Upper confidence interval.
+          format: float
+          type: number
+        medianexpression:
+          $ref: '#/components/schemas/MedianExpression'
+      required:
+        - adj_p_val
+        - ci_l
+        - ci_r
+        - logfc
+        - mediaexpression
+        - name
+      type: object
+    GCTGeneNominations:
+      description: GCTGeneNominations
+      example:
+        teams:
+          - teams
+          - teams
+        year: 7
+        inputs:
+          - inputs
+          - inputs
+        count: 4
+        studies:
+          - studies
+          - studies
+        programs:
+          - programs
+          - programs
+        validations:
+          - validations
+          - validations
+      properties:
+        count:
+          description: The total number of gene nominations.
+          type: integer
+        year:
+          description: The year of the nominations.
+          type: integer
+        teams:
+          description: The list of teams involved in the nominations.
+          items:
+            type: string
+          type: array
+        studies:
+          description: The list of studies related to the nominations.
+          items:
+            type: string
+          type: array
+        inputs:
+          description: The input data used for the nominations.
+          items:
+            type: string
+          type: array
+        programs:
+          description: The list of programs associated with the nominations.
+          items:
+            type: string
+          type: array
+        validations:
+          description: The list of validations for the nominations.
+          items:
+            type: string
+          type: array
+      required:
+        - count
+        - inputs
+        - programs
+        - studies
+        - teams
+        - validations
+        - year
+      type: object
+    GCTGene:
+      description: GCT Gene
+      example:
+        associations:
+          - 1.2315135367772556
+          - 1.2315135367772556
+        pinned: true
+        tissues:
+          - adj_p_val: 6.0274563
+            logfc: 0.8008282
+            ci_r: 5.962134
+            name: name
+            ci_l: 1.4658129
+            medianexpression:
+              min: 5.637377
+              first_quartile: 2.302136
+              median: 7.0614014
+              max: 2.027123
+              mean: 9.301444
+              tissue: tissue
+              third_quartile: 3.6160767
+          - adj_p_val: 6.0274563
+            logfc: 0.8008282
+            ci_r: 5.962134
+            name: name
+            ci_l: 1.4658129
+            medianexpression:
+              min: 5.637377
+              first_quartile: 2.302136
+              median: 7.0614014
+              max: 2.027123
+              mean: 9.301444
+              tissue: tissue
+              third_quartile: 3.6160767
+        search_string: search_string
+        nominations:
+          teams:
+            - teams
+            - teams
+          year: 7
+          inputs:
+            - inputs
+            - inputs
+          count: 4
+          studies:
+            - studies
+            - studies
+          programs:
+            - programs
+            - programs
+          validations:
+            - validations
+            - validations
+        multi_omics_score: 6.84685269835264
+        uid: uid
+        target_risk_score: 1.0246457001441578
+        ensembl_gene_id: ensembl_gene_id
+        search_array:
+          - search_array
+          - search_array
+        hgnc_symbol: hgnc_symbol
+        genetics_score: 1.4894159098541704
+        uniprotid: uniprotid
+        biodomains:
+          - biodomains
+          - biodomains
+        target_enabling_resources:
+          - target_enabling_resources
+          - target_enabling_resources
+      properties:
+        ensembl_gene_id:
+          description: Ensembl gene identifier
+          type: string
+        hgnc_symbol:
+          description: HGNC gene symbol
+          type: string
+        uniprotid:
+          description: UniProt identifier
+          nullable: true
+          type: string
+        uid:
+          description: Unique identifier
+          nullable: true
+          type: string
+        search_string:
+          description: Search string
+          nullable: true
+          type: string
+        search_array:
+          description: Array of search terms
+          items:
+            type: string
+          nullable: true
+          type: array
+        tissues:
+          description: Array of gene tissues
+          items:
+            $ref: '#/components/schemas/GCTGeneTissue'
+          type: array
+        nominations:
+          $ref: '#/components/schemas/GCTGeneNominations'
+        associations:
+          description: Array of association values
+          items:
+            type: number
+          nullable: true
+          type: array
+        target_risk_score:
+          description: Target risk score
+          nullable: true
+          type: number
+        genetics_score:
+          description: Genetics score
+          nullable: true
+          type: number
+        multi_omics_score:
+          description: Multi-omics score
+          nullable: true
+          type: number
+        biodomains:
+          description: Array of biological domains
+          items:
+            type: string
+          nullable: true
+          type: array
+        pinned:
+          description: Whether the gene is pinned
+          nullable: true
+          type: boolean
+        target_enabling_resources:
+          description: Target enabling resources
+          items:
+            type: string
+          nullable: true
+          type: array
+      required:
+        - ensembl_gene_id
+        - genetics_score
+        - hgnc_symbol
+        - multi_omics_score
+        - target_risk_score
+        - tissues
+      type: object
+    GCTGenesList:
+      description: List of GCTGene
+      example:
+        items:
+          - associations:
+              - 1.2315135367772556
+              - 1.2315135367772556
+            pinned: true
+            tissues:
+              - adj_p_val: 6.0274563
+                logfc: 0.8008282
+                ci_r: 5.962134
+                name: name
+                ci_l: 1.4658129
+                medianexpression:
+                  min: 5.637377
+                  first_quartile: 2.302136
+                  median: 7.0614014
+                  max: 2.027123
+                  mean: 9.301444
+                  tissue: tissue
+                  third_quartile: 3.6160767
+              - adj_p_val: 6.0274563
+                logfc: 0.8008282
+                ci_r: 5.962134
+                name: name
+                ci_l: 1.4658129
+                medianexpression:
+                  min: 5.637377
+                  first_quartile: 2.302136
+                  median: 7.0614014
+                  max: 2.027123
+                  mean: 9.301444
+                  tissue: tissue
+                  third_quartile: 3.6160767
+            search_string: search_string
+            nominations:
+              teams:
+                - teams
+                - teams
+              year: 7
+              inputs:
+                - inputs
+                - inputs
+              count: 4
+              studies:
+                - studies
+                - studies
+              programs:
+                - programs
+                - programs
+              validations:
+                - validations
+                - validations
+            multi_omics_score: 6.84685269835264
+            uid: uid
+            target_risk_score: 1.0246457001441578
+            ensembl_gene_id: ensembl_gene_id
+            search_array:
+              - search_array
+              - search_array
+            hgnc_symbol: hgnc_symbol
+            genetics_score: 1.4894159098541704
+            uniprotid: uniprotid
+            biodomains:
+              - biodomains
+              - biodomains
+            target_enabling_resources:
+              - target_enabling_resources
+              - target_enabling_resources
+          - associations:
+              - 1.2315135367772556
+              - 1.2315135367772556
+            pinned: true
+            tissues:
+              - adj_p_val: 6.0274563
+                logfc: 0.8008282
+                ci_r: 5.962134
+                name: name
+                ci_l: 1.4658129
+                medianexpression:
+                  min: 5.637377
+                  first_quartile: 2.302136
+                  median: 7.0614014
+                  max: 2.027123
+                  mean: 9.301444
+                  tissue: tissue
+                  third_quartile: 3.6160767
+              - adj_p_val: 6.0274563
+                logfc: 0.8008282
+                ci_r: 5.962134
+                name: name
+                ci_l: 1.4658129
+                medianexpression:
+                  min: 5.637377
+                  first_quartile: 2.302136
+                  median: 7.0614014
+                  max: 2.027123
+                  mean: 9.301444
+                  tissue: tissue
+                  third_quartile: 3.6160767
+            search_string: search_string
+            nominations:
+              teams:
+                - teams
+                - teams
+              year: 7
+              inputs:
+                - inputs
+                - inputs
+              count: 4
+              studies:
+                - studies
+                - studies
+              programs:
+                - programs
+                - programs
+              validations:
+                - validations
+                - validations
+            multi_omics_score: 6.84685269835264
+            uid: uid
+            target_risk_score: 1.0246457001441578
+            ensembl_gene_id: ensembl_gene_id
+            search_array:
+              - search_array
+              - search_array
+            hgnc_symbol: hgnc_symbol
+            genetics_score: 1.4894159098541704
+            uniprotid: uniprotid
+            biodomains:
+              - biodomains
+              - biodomains
+            target_enabling_resources:
+              - target_enabling_resources
+              - target_enabling_resources
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/GCTGene'
+          type: array
       type: object
     BasicError:
       description: Problem details (tools.ietf.org/html/rfc7807)
