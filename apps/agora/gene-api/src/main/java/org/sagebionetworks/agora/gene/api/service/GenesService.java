@@ -17,6 +17,11 @@ public class GenesService {
   public GenesService() {}
 
   public GCTGenesListDto getComparisonGenes(String category, String subCategory) {
+    // Use the default values from the web app during development.
+    // TODO: Update the API description to set the default values for category and subCategory.
+    category = "RNA - Differential Expression";
+    subCategory = "AD Diagnosis (males and females)";
+
     // List<GeneDocument> geneDocuments = geneRepository.findAll();
     // List<GeneDto> genes = geneMapper.convertToDtoList(geneDocuments);
 
