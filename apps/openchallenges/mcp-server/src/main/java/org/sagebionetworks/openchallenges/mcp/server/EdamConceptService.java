@@ -24,8 +24,7 @@ public class EdamConceptService {
   @Tool(
     name = "list_edam_concepts",
     description = """
-    Searches for EDAM, an ontology for bioinformatics data types,
-    formats, operations, and topics.
+    Searches for EDAM, an ontology for bioinformatics data types, formats, operations, and topics.
 
     Usage guidelines:
     - Use this tool when the user refers to a specific type of input data or training dataset.
