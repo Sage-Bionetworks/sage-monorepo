@@ -31,9 +31,8 @@ public class ChallengeService {
     Lists challenges that can be filtered and sorted based on a variety of parameters.
 
     Guidelines for using this tool:
-    - If a parameter is not specified, the default value should be used.
-    - If the user does not specify a challenge status, do not apply any status filter - search across all challenges status by default.
-    - If the user mentions "Docker" or "Container", set: submissionTypes = ["container_image"]
+    - If a parameter is not specified, use its default value as defined in the challengeApi (usually `null` or empty).
+    - If the user mentions "Docker" or "Container", include "container_image" in the submissionTypes, while still allowing other types.
     - If the user describes specific types of input data / training data:
         1. First call the `list_edam_concepts` tool with the user's keywords as `searchTerms`.
         2. Set `sections = ["data"]` to filter results to input data types.
@@ -43,7 +42,7 @@ public class ChallengeService {
   )
   public ChallengesPage listChallenges(
     @ToolParam(
-      description = "The page number to retrieve. Default is 0."
+      description = "The page number to retrieve. The first page is 0."
     ) @Nullable Integer pageNumber,
     @ToolParam(description = "The number of items per page.") @Nullable Integer pageSize,
     @ToolParam(

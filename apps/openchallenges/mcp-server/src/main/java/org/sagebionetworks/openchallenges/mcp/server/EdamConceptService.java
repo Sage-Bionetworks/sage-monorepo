@@ -24,18 +24,21 @@ public class EdamConceptService {
   @Tool(
     name = "list_edam_concepts",
     description = """
-    Searches for EDAM concepts (especially input data types) that can be used to filter challenges.
+    Searches for EDAM (EMBRACE Data and Methods), an ontology for bioinformatics data types,
+    formats, operations, and topics.
 
     Usage guidelines:
-    - If the user mentions a specific input data type:
-        1. Simplify keywords where necessary (e.g., "MRI Image data" → "MRI Image";).
-        2. Call `list_edam_concepts` with `searchTerms` derived from the user input.
-        3. Set `sections = ["data"]` to limit to data-related EDAM terms.
-        """
+    - Use this tool when the user refers to a specific type of input data or bioinformatics concept.
+      1. Extract relevant keywords from the user’s prompt to match EDAM concepts
+      (e.g., "MRI Imaging Data" → "MRI Image").
+        - If no matches are found, the keywords may not align with standard EDAM ontology terms.
+      2. Call `list_edam_concepts` using those keywords in the `searchTerms` parameter.
+      3. Set `sections = ["data"]` to restrict the search to EDAM data-related concepts only.
+    """
   )
   public EdamConceptsPage listEdamConcepts(
     @ToolParam(
-      description = "The page number to retrieve. Default is 0."
+      description = "The page number to retrieve. The first page is 0."
     ) @Nullable Integer pageNumber,
     @ToolParam(
       description = "The number of items per page. Default is 100."
