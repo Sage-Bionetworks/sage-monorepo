@@ -18,6 +18,8 @@ repositories {
 }
 
 dependencies {
+  annotationProcessor(libs.lombok)
+  compileOnly(libs.lombok)
   implementation(libs.findbugs.jsr305)
   implementation(libs.jackson.databind)
   implementation(libs.jackson.dataformat.yaml)
