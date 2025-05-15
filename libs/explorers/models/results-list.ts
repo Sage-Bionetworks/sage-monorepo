@@ -1,9 +1,9 @@
-export interface Result {
+export interface SearchResult {
   name: string;
   alias: string[];
   id: string;
 }
 
-export interface ResultsList {
-  items?: Array<Result>;
+export interface SearchResultsList {
+  items?: Array<SearchResult>;
 }

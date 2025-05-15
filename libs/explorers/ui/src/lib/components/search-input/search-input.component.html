@@ -52,16 +52,18 @@
 
         @if (!error && results.length) {
           <ul class="search-results-list">
-            <li *ngFor="let result of results" (click)="goToResult(result.id)">
-              <span class="result-name">
-                {{ result.id || result.name }}
-              </span>
-              @if (hasAlias(result)) {
-                <span class="result-aliases">
-                  &nbsp;(Also known as&nbsp;{{ query.toUpperCase() }})
+            @for (result of results; track result) {
+              <li (click)="goToResult(result.id)">
+                <span class="result-name">
+                  {{ result.id || result.name }}
                 </span>
-              }
-            </li>
+                @if (hasAlias(result)) {
+                  <span class="result-aliases">
+                    &nbsp;(Also known as&nbsp;{{ query.toUpperCase() }})
+                  </span>
+                }
+              </li>
+            }
           </ul>
         }
       </div>

@@ -1,7 +1,7 @@
-import { ResultsList } from '@sagebionetworks/explorers/models';
+import { SearchResultsList } from '@sagebionetworks/explorers/models';
 import { delay, Observable, of } from 'rxjs';
 
-const dummySearchResulstList: ResultsList = {
+const dummySearchResultsList: SearchResultsList = {
   items: [
     {
       name: 'Dummy Name',
@@ -16,7 +16,7 @@ const dummySearchResulstList: ResultsList = {
   ],
 };
 
-const dummyEmptySearchResultsList: ResultsList = {
+const dummyEmptySearchResultsList: SearchResultsList = {
   items: [],
 };
 
@@ -24,11 +24,11 @@ export function mockNavigateToResult(id: string): void {
   alert(`Navigating to ${id}`);
 }
 
-export function mockGetSearchResultsList(query: string): Observable<ResultsList> {
+export function mockGetSearchResultsList(query: string): Observable<SearchResultsList> {
   if (query === 'notfound') {
     return of(dummyEmptySearchResultsList).pipe(delay(2000));
   }
-  return of(dummySearchResulstList).pipe(delay(1000));
+  return of(dummySearchResultsList).pipe(delay(1000));
 }
 
 function isEnsemblId(query: string): boolean {

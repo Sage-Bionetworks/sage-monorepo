@@ -32,7 +32,7 @@
         "browserTarget": "explorers-storybook:build-storybook",
         "compodoc": false,
         "styles": [
-          "libs/explorers/styles/src/_index.scss",
+          "libs/explorers/styles/src/index.scss",
           "node_modules/primeicons/primeicons.css"
         ],
         "stylePreprocessorOptions": {

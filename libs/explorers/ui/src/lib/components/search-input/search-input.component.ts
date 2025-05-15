@@ -16,7 +16,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faMagnifyingGlass, faSpinner, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { Result, ResultsList } from '@sagebionetworks/explorers/models';
+import { SearchResult, SearchResultsList } from '@sagebionetworks/explorers/models';
 import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 import {
   catchError,
@@ -48,7 +48,7 @@ export class SearchInputComponent implements AfterViewInit {
   hasThickBorder = input<boolean>(false);
 
   navigateToResult = input.required<(id: string) => void>();
-  getSearchResultsList = input.required<(query: string) => Observable<ResultsList>>();
+  getSearchResultsList = input.required<(query: string) => Observable<SearchResultsList>>();
   checkQueryForErrors = input.required<(query: string) => string>(); // empty string if no error
 
   faMagnifyingGlass = faMagnifyingGlass;
@@ -58,7 +58,7 @@ export class SearchInputComponent implements AfterViewInit {
   isLoading = false;
   query = '';
   error = '';
-  results: Result[] = [];
+  results: SearchResult[] = [];
 
   showResults = false;
   errorMessages: { [key: string]: string } = {
@@ -96,7 +96,7 @@ export class SearchInputComponent implements AfterViewInit {
       });
   }
 
-  search(query: string): Observable<ResultsList> {
+  search(query: string): Observable<SearchResultsList> {
     this.results = [];
     this.error = '';
     this.query = query = query.trim().replace(/[^a-z0-9-_]/gi, '');
@@ -115,7 +115,7 @@ export class SearchInputComponent implements AfterViewInit {
     return this.isLoading ? this.getSearchResultsList()(query) : EMPTY;
   }
 
-  setResults(results: Result[]) {
+  setResults(results: SearchResult[]) {
     if (results.length < 1) {
       this.error = this.errorMessages['notFound'];
     }
@@ -132,7 +132,7 @@ export class SearchInputComponent implements AfterViewInit {
     this.navigateToResult()(id);
   }
 
-  hasAlias(result: Result): boolean {
+  hasAlias(result: SearchResult): boolean {
     return (
       !result.name.toLowerCase().includes(this.query.toLowerCase()) &&
       result.alias?.map((s: string) => s.toLowerCase()).includes(this.query.toLowerCase())
