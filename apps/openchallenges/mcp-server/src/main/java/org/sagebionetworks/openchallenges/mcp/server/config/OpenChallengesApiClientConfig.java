@@ -5,6 +5,7 @@ import org.sagebionetworks.openchallenges.api.client.api.ChallengeAnalyticsApi;
 import org.sagebionetworks.openchallenges.api.client.api.ChallengeApi;
 import org.sagebionetworks.openchallenges.api.client.api.ChallengePlatformApi;
 import org.sagebionetworks.openchallenges.api.client.api.EdamConceptApi;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,9 +14,9 @@ public class OpenChallengesApiClientConfig {
 
   private final ApiClient apiClient;
 
-  public OpenChallengesApiClientConfig() {
+  public OpenChallengesApiClientConfig(@Value("${api.base.url}") String apiBaseUrl) {
     this.apiClient = new ApiClient();
-    this.apiClient.setBasePath("http://openchallenges-api-gateway:8082/api/v1");
+    this.apiClient.setBasePath(apiBaseUrl);
   }
 
   @Bean
