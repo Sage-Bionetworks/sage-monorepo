@@ -20,3 +20,11 @@ global.ResizeObserver = jest.fn().mockImplementation(() => ({
   unobserve: jest.fn(),
   disconnect: jest.fn(),
 }));
+
+Object.defineProperty(global.SVGElement.prototype, 'getBBox', {
+  writable: true,
+  value: jest.fn().mockReturnValue({
+    x: 0,
+    y: 0,
+  }),
+});
