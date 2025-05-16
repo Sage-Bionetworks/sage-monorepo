@@ -6,6 +6,7 @@ import java.util.Map;
 import org.sagebionetworks.agora.gene.api.GeneApiApplication;
 import org.sagebionetworks.agora.gene.api.model.document.GeneDocument;
 import org.sagebionetworks.agora.gene.api.model.document.RnaDifferentialExpressionDocument;
+import org.sagebionetworks.agora.gene.api.model.dto.BioDomainsDto;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneDto;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGenesListDto;
 import org.sagebionetworks.agora.gene.api.model.dto.GeneDto;
@@ -40,17 +41,20 @@ public class GeneService {
 
   private final TeamService teamService;
   private final OverallScoresService overallScoresService;
+  private final BioDomainsService bioDomainsService;
 
   public GeneService(
     GeneRepository geneRepository,
     RnaDifferentialExpressionRepository rnaDifferentialExpressionRepository,
     TeamService teamService,
-    OverallScoresService overallScoresService
+    OverallScoresService overallScoresService,
+    BioDomainsService bioDomainsService
   ) {
     this.geneRepository = geneRepository;
     this.rnaDifferentialExpressionRepository = rnaDifferentialExpressionRepository;
     this.teamService = teamService;
     this.overallScoresService = overallScoresService;
+    this.bioDomainsService = bioDomainsService;
   }
 
   public GCTGenesListDto getComparisonGenes(String category, String subCategory) {
@@ -86,11 +90,12 @@ public class GeneService {
       Map<String, GeneDto> allGenes = getGenesMap();
       List<TeamDto> teams = teamService.getTeams();
       List<OverallScoresDto> scores = overallScoresService.getOverallScoress();
-      // List<BioDomains> allBiodomains = getAllGeneBioDomains(); // Implement this to return a List<BioDomains>
+      List<BioDomainsDto> allBiodomains = bioDomainsService.getBioDomains();
 
       logger.info("allGenes: {}", allGenes.size());
       logger.info("teams: {}", teams.size());
       logger.info("scores: {}", scores.size());
+      logger.info("allBiodomains: {}", allBiodomains.size());
     }
 
     // List<GCTGeneDto> dtos = rnaDifferentialExpressionMapper.convertToDtoList(documents);
