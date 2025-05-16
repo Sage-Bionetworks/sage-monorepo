@@ -3,7 +3,7 @@
 
 #home-page {
   position: relative;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .top-background-wrapper {
@@ -31,6 +31,11 @@
     @include mixins.respond-to('large') {
       width: 130%;
       right: -100px;
+    }
+
+    @media (width >= 1800px) {
+      width: 100%;
+      right: 0;
     }
   }
 }
@@ -112,6 +117,7 @@ explorers-card {
     position: absolute;
     height: 100%;
     z-index: -1;
+    overflow: visible;
   }
 
   .stats-background {
