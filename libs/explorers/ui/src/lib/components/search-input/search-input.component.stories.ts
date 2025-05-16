@@ -38,8 +38,8 @@ export const HeaderSearchInput: Story = {
 export const HomeSearchInput: Story = {
   args: {
     searchPlaceholder: 'Find Gene by Name...',
-    searchIconPath: '/explorers-assets/icons/gene-search-icon.svg',
-    searchIconAltText: 'gene search icon',
+    searchImagePath: '/explorers-assets/images/gene-search-icon.svg',
+    searchImageAltText: 'gene search icon',
     hasThickBorder: true,
     navigateToResult: mockNavigateToResult,
     getSearchResultsList: mockGetSearchResultsList,

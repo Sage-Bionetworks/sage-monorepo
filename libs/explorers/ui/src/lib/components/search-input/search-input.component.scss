@@ -25,7 +25,8 @@
       }
 
       .search-bar-icon {
-        width: 45px;
+        width: 60px;
+        max-height: 64px;
 
         i {
           font-size: 26px;
@@ -127,8 +128,8 @@
         font-size: var(--font-size-sm);
         gap: var(--spacing-md);
 
-        svg {
-          flex-shrink: 0;
+        explorers-svg-image {
+          display: flex;
         }
       }
     }
