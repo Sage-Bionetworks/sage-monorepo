@@ -6,7 +6,7 @@ info:
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
-  title: Gene REST API
+  title: Agora Gene API
   version: 1.0.0-draft
   x-logo:
     url: https://agora.adknowledgeportal.org/images/logo.png

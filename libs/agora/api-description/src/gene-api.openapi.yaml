@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   version: 1.0.0-draft
-  title: Gene REST API
+  title: Agora Gene API
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt

@@ -28,7 +28,7 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 @Controller
-@RequestMapping("${openapi.geneREST.base-path:/v1}")
+@RequestMapping("${openapi.agoraGene.base-path:/v1}")
 public class GenesApiController implements GenesApi {
 
     private final GenesApiDelegate delegate;
