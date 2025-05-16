@@ -29,7 +29,7 @@ public class McpServerApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    logger.info(mcpServerConfigData.getApiBaseUrl());
+    logger.info(mcpServerConfigData.getWelcomeMessage());
   }
 
   @Bean
