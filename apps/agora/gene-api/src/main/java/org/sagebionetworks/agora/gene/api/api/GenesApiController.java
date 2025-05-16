@@ -1,7 +1,7 @@
 package org.sagebionetworks.agora.gene.api.api;
 
 import org.sagebionetworks.agora.gene.api.model.dto.BasicErrorDto;
-import org.sagebionetworks.agora.gene.api.model.dto.HealthCheckDto;
+import org.sagebionetworks.agora.gene.api.model.dto.GCTGenesListDto;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,17 +28,17 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 @Controller
-@RequestMapping("${openapi.geneREST.base-path:/v1}")
-public class HealthCheckApiController implements HealthCheckApi {
+@RequestMapping("${openapi.agoraGene.base-path:/v1}")
+public class GenesApiController implements GenesApi {
 
-    private final HealthCheckApiDelegate delegate;
+    private final GenesApiDelegate delegate;
 
-    public HealthCheckApiController(@Autowired(required = false) HealthCheckApiDelegate delegate) {
-        this.delegate = Optional.ofNullable(delegate).orElse(new HealthCheckApiDelegate() {});
+    public GenesApiController(@Autowired(required = false) GenesApiDelegate delegate) {
+        this.delegate = Optional.ofNullable(delegate).orElse(new GenesApiDelegate() {});
     }
 
     @Override
-    public HealthCheckApiDelegate getDelegate() {
+    public GenesApiDelegate getDelegate() {
         return delegate;
     }
 
