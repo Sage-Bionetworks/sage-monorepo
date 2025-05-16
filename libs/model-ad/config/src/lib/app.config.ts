@@ -19,6 +19,7 @@ export interface AppConfig {
   ssrApiUrl: string;
   termsOfUseUrl: string;
   apiDocsUrl: string;
+  supportEmail: string;
 }
 
 export const EMPTY_APP_CONFIG = {} as AppConfig;
