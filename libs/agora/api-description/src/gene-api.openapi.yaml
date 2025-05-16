@@ -23,3 +23,5 @@ components:
   schemas:
     Gene:
       $ref: components/schemas/Gene.yaml
+    Team:
+      $ref: components/schemas/Team.yaml

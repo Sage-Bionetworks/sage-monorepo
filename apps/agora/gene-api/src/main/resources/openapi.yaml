@@ -257,6 +257,28 @@ components:
         - target_nominations
         - total_nominations
       type: object
+    Team:
+      description: Team
+      properties:
+        team:
+          type: string
+        team_full:
+          type: string
+        program:
+          type: string
+        description:
+          type: string
+        members:
+          items:
+            $ref: '#/components/schemas/TeamMember'
+          type: array
+      required:
+        - description
+        - members
+        - program
+        - team
+        - team_full
+      type: object
     MedianExpression:
       description: MedianExpression
       example:
@@ -1162,4 +1184,17 @@ components:
         - ensembl_permalink
         - ensembl_possible_replacements
         - ensembl_release
+      type: object
+    TeamMember:
+      description: Team Member
+      properties:
+        name:
+          type: string
+        isprimaryinvestigator:
+          type: boolean
+        url:
+          type: string
+      required:
+        - isprimaryinvestigator
+        - name
       type: object

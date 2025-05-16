@@ -231,6 +231,28 @@ components:
         - druggability
         - total_nominations
         - ensembl_info
+    Team:
+      type: object
+      description: Team
+      properties:
+        team:
+          type: string
+        team_full:
+          type: string
+        program:
+          type: string
+        description:
+          type: string
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamMember'
+      required:
+        - team
+        - team_full
+        - program
+        - description
+        - members
     MedianExpression:
       type: object
       description: MedianExpression
@@ -898,6 +920,19 @@ components:
         - ensembl_release
         - ensembl_possible_replacements
         - ensembl_permalink
+    TeamMember:
+      type: object
+      description: Team Member
+      properties:
+        name:
+          type: string
+        isprimaryinvestigator:
+          type: boolean
+        url:
+          type: string
+      required:
+        - name
+        - isprimaryinvestigator
   responses:
     NotFound:
       description: The specified resource was not found

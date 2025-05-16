@@ -27,4 +27,6 @@ src/main/java/org/sagebionetworks/agora/gene/api/model/dto/SimilarGenesNetworkDt
 src/main/java/org/sagebionetworks/agora/gene/api/model/dto/SimilarGenesNetworkLinkDto.java
 src/main/java/org/sagebionetworks/agora/gene/api/model/dto/SimilarGenesNetworkNodeDto.java
 src/main/java/org/sagebionetworks/agora/gene/api/model/dto/TargetNominationDto.java
+src/main/java/org/sagebionetworks/agora/gene/api/model/dto/TeamDto.java
+src/main/java/org/sagebionetworks/agora/gene/api/model/dto/TeamMemberDto.java
 src/main/resources/openapi.yaml
