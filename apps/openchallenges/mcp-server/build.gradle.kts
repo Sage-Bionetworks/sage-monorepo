@@ -49,7 +49,11 @@ repositories {
 dependencies {
 	implementation(libs.spring.ai.starter.mcp.server.webmvc)
   implementation(libs.openchallenges.api.client.java)
+  compileOnly(libs.lombok)
+  annotationProcessor(libs.lombok)
 	testImplementation(libs.spring.boot.starter.test)
+  testCompileOnly(libs.lombok)
+  testAnnotationProcessor(libs.lombok)
 	testRuntimeOnly(libs.junit.platform.launcher)
 }
 
