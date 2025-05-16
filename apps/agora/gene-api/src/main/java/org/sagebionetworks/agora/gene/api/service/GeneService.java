@@ -96,6 +96,16 @@ public class GeneService {
       logger.info("teams: {}", teams.size());
       logger.info("scores: {}", scores.size());
       logger.info("allBiodomains: {}", allBiodomains.size());
+      // for (RnaDifferentialExpressionDocument exp : differentialExpression) {
+      //   String ensemblGeneId = exp.getEnsemblGeneId();
+      //   if (!genes.containsKey(ensemblGeneId)) {
+      //     GeneDto gene = allGenes.getOrDefault(
+      //       ensemblGeneId,
+      //       GeneDto.builder().ensemblGeneId("").hgncSymbol("").build()
+      //     );
+      //     genes.put(ensemblGeneId, getComparisonGene(gene, teams, scores, allBiodomains));
+      //   }
+      // }
     }
 
     // List<GCTGeneDto> dtos = rnaDifferentialExpressionMapper.convertToDtoList(documents);
