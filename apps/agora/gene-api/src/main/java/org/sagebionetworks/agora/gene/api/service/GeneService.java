@@ -72,6 +72,8 @@ public class GeneService {
     if (differentialExpression != null && !differentialExpression.isEmpty()) {
       Map<String, GCTGeneDto> genes = new HashMap<>();
       Map<String, GeneDto> allGenes = getGenesMap();
+      // List<TeamDto> teams = getTeams();
+
       logger.info("allGenes: {}", allGenes.size());
     }
 
