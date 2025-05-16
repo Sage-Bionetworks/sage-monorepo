@@ -4,12 +4,11 @@
       @if (isLoading) {
         <fa-icon [icon]="faSpinner" animation="spin" data-testid="spinner" />
       } @else {
-        @if (!!searchIconPath()) {
-          <explorers-svg-icon
-            [imagePath]="searchIconPath()!"
-            [altText]="searchIconAltText()"
-            [width]="45"
-            [height]="45"
+        @if (!!searchImagePath()) {
+          <explorers-svg-image
+            [imagePath]="searchImagePath()!"
+            [altText]="searchImageAltText()"
+            sizeMode="full-width"
           />
         } @else {
           <fa-icon [icon]="faMagnifyingGlass" />
@@ -39,12 +38,7 @@
         @if (error) {
           <ul class="search-errors">
             <li>
-              <explorers-svg-icon
-                imagePath="/explorers-assets/icons/warning-circle.svg"
-                [width]="22"
-                [height]="22"
-                [enableHoverEffects]="false"
-              />
+              <explorers-svg-image imagePath="/explorers-assets/images/warning-circle.svg" />
               {{ error }}
             </li>
           </ul>

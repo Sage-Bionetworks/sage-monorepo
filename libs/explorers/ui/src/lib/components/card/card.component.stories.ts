@@ -31,7 +31,7 @@ export const LinkCard: Story = {
     title: 'Gene Comparison',
     description:
       'Compare differential RNA and protein expression results for 20k+ human genes in AD. Build custom result sets by sorting, filtering, and searching for genes of interest.',
-    imagePath: '/explorers-assets/icons/gene-comparison-icon.svg',
+    imagePath: '/explorers-assets/images/gene-comparison-icon.svg',
     imageAltText: 'gene comparison icon',
     routerLink: '/genes/comparison',
   },
@@ -42,7 +42,7 @@ export const SearchCard: Story = {
     title: 'Gene Search',
     description:
       'Search for a gene by name or Ensembl gene ID to view related experimental evidence, find detailed information about nominations, and explore its association with AD.',
-    imagePath: '/explorers-assets/icons/gene-comparison-icon.svg',
+    imagePath: '/explorers-assets/images/gene-search-icon.svg',
     imageAltText: 'gene comparison icon',
     searchPlaceholder: 'Find Gene by Name...',
     navigateToResult: mockNavigateToResult,
