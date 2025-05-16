@@ -7,7 +7,11 @@ const config: StorybookConfig = {
     name: '@storybook/angular',
     options: {},
   },
-  staticDirs: [{ from: '../../../explorers/assets', to: '/explorers-assets' }],
+  staticDirs: [
+    { from: '../../../explorers/assets', to: '/explorers-assets' },
+    { from: '../../../agora/assets', to: '/agora-assets' },
+    { from: '../../../model-ad/assets', to: '/model-ad-assets' },
+  ],
 };
 
 export default config;

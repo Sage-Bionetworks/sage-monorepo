@@ -17,7 +17,6 @@ import { Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faMagnifyingGlass, faSpinner, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { SearchResult, SearchResultsList } from '@sagebionetworks/explorers/models';
-import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 import {
   catchError,
   debounceTime,
@@ -28,10 +27,11 @@ import {
   switchMap,
   throwError,
 } from 'rxjs';
+import { SvgImageComponent } from '../svg-image/svg-image.component';
 
 @Component({
   selector: 'explorers-search-input',
-  imports: [CommonModule, SvgIconComponent, FormsModule, FontAwesomeModule],
+  imports: [CommonModule, SvgImageComponent, FormsModule, FontAwesomeModule],
   templateUrl: './search-input.component.html',
   styleUrls: ['./search-input.component.scss'],
   standalone: true,
@@ -43,8 +43,8 @@ export class SearchInputComponent implements AfterViewInit {
   @Output() searchNavigated = new EventEmitter();
 
   searchPlaceholder = input.required<string>();
-  searchIconPath = input<string | undefined>();
-  searchIconAltText = input<string>('');
+  searchImagePath = input<string | undefined>();
+  searchImageAltText = input<string>('');
   hasThickBorder = input<boolean>(false);
 
   navigateToResult = input.required<(id: string) => void>();
