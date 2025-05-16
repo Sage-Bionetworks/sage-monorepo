@@ -33,12 +33,16 @@ public class GeneService {
   private final GeneRepository geneRepository;
   private final RnaDifferentialExpressionRepository rnaDifferentialExpressionRepository;
 
+  private final TeamService teamService;
+
   public GeneService(
     GeneRepository geneRepository,
-    RnaDifferentialExpressionRepository rnaDifferentialExpressionRepository
+    RnaDifferentialExpressionRepository rnaDifferentialExpressionRepository,
+    TeamService teamService
   ) {
     this.geneRepository = geneRepository;
     this.rnaDifferentialExpressionRepository = rnaDifferentialExpressionRepository;
+    this.teamService = teamService;
   }
 
   public GCTGenesListDto getComparisonGenes(String category, String subCategory) {
@@ -72,9 +76,10 @@ public class GeneService {
     if (differentialExpression != null && !differentialExpression.isEmpty()) {
       Map<String, GCTGeneDto> genes = new HashMap<>();
       Map<String, GeneDto> allGenes = getGenesMap();
-      // List<TeamDto> teams = getTeams();
+      List<TeamDto> teams = teamService.getTeams();
 
       logger.info("allGenes: {}", allGenes.size());
+      logger.info("teams: {}", teams.size());
     }
 
     // List<GCTGeneDto> dtos = rnaDifferentialExpressionMapper.convertToDtoList(documents);
