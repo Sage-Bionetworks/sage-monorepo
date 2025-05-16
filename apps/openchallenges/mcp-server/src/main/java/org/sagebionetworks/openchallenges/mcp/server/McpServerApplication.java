@@ -17,9 +17,18 @@ public class McpServerApplication {
 
   @Bean
   public List<ToolCallback> toolCallbacks(
+    ChallengeService challengeService,
     ChallengeAnalyticsService challengeAnalyticsService,
-    ChallengePlatformService challengePlatformService
+    ChallengePlatformService challengePlatformService,
+    EdamConceptService edamConceptService
   ) {
-    return Arrays.asList(ToolCallbacks.from(challengeAnalyticsService, challengePlatformService));
+    return Arrays.asList(
+      ToolCallbacks.from(
+        challengeService,
+        challengeAnalyticsService,
+        challengePlatformService,
+        edamConceptService
+      )
+    );
   }
 }

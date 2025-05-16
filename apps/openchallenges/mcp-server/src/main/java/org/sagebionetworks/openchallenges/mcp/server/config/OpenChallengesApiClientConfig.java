@@ -2,7 +2,9 @@ package org.sagebionetworks.openchallenges.mcp.server.config;
 
 import org.sagebionetworks.openchallenges.api.client.ApiClient;
 import org.sagebionetworks.openchallenges.api.client.api.ChallengeAnalyticsApi;
+import org.sagebionetworks.openchallenges.api.client.api.ChallengeApi;
 import org.sagebionetworks.openchallenges.api.client.api.ChallengePlatformApi;
+import org.sagebionetworks.openchallenges.api.client.api.EdamConceptApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,6 +19,11 @@ public class OpenChallengesApiClientConfig {
   }
 
   @Bean
+  public ChallengeApi challengeApi() {
+    return new ChallengeApi(apiClient);
+  }
+
+  @Bean
   public ChallengeAnalyticsApi challengeAnalyticsApi() {
     return new ChallengeAnalyticsApi(apiClient);
   }
@@ -24,5 +31,10 @@ public class OpenChallengesApiClientConfig {
   @Bean
   public ChallengePlatformApi challengePlatformApi() {
     return new ChallengePlatformApi(apiClient);
+  }
+
+  @Bean
+  public EdamConceptApi edamConceptApi() {
+    return new EdamConceptApi(apiClient);
   }
 }
