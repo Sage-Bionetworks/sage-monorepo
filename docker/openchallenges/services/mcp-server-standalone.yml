@@ -1,0 +1,13 @@
+services:
+  openchallenges-mcp-server:
+    image: ghcr.io/sage-bionetworks/openchallenges-mcp-server:latest
+    container_name: openchallenges-mcp-server-standalone
+    restart: always
+    ports:
+      - '8887:8887'
+    environment:
+      API_BASE_URL: https://openchallenges.io/api/v1
+    deploy:
+      resources:
+        limits:
+          memory: 1G
