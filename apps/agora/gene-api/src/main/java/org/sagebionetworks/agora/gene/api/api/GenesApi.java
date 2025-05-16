@@ -31,7 +31,7 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 @Validated
-@Tag(name = "Genes", description = "the Genes API")
+@Tag(name = "Genes", description = "Operations about genes.")
 public interface GenesApi {
 
     default GenesApiDelegate getDelegate() {

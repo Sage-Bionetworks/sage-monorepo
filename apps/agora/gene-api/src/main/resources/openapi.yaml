@@ -15,7 +15,7 @@ servers:
   - url: http://localhost/v1
 tags:
   - description: Operations about genes.
-    name: Gene
+    name: Genes
 paths:
   /genes/comparison:
     get:

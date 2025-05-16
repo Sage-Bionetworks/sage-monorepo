@@ -14,7 +14,7 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - name: Gene
+  - name: Genes # TODO: consider using "Gene" instead of "Genes" to be consistent with the other APIs
     description: Operations about genes.
 paths:
   /genes/comparison:
