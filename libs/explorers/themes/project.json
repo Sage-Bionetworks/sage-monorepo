@@ -1,0 +1,10 @@
+{
+  "name": "explorers-themes",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/explorers/themes/src",
+  "projectType": "library",
+  "generators": {},
+  "targets": {},
+  "tags": ["type:themes", "scope:explorers", "language:typescript"],
+  "implicitDependencies": []
+}
