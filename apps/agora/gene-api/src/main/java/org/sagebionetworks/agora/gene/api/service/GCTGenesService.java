@@ -1,8 +1,12 @@
 package org.sagebionetworks.agora.gene.api.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.sagebionetworks.agora.gene.api.model.document.RnaDifferentialExpressionDocument;
 import org.sagebionetworks.agora.gene.api.model.dto.BioDomainsDto;
+import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneDto;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGenesListDto;
 import org.sagebionetworks.agora.gene.api.model.dto.OverallScoresDto;
 import org.sagebionetworks.agora.gene.api.model.dto.TeamDto;
@@ -15,9 +19,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GeneService {
+public class GCTGenesService {
 
-  private static final Logger logger = LoggerFactory.getLogger(GeneService.class);
+  private static final Logger logger = LoggerFactory.getLogger(GCTGenesService.class);
 
   private GeneMapper geneMapper = new GeneMapper();
   private RnaDifferentialExpressionMapper rnaDifferentialExpressionMapper =
@@ -30,7 +34,7 @@ public class GeneService {
   private final OverallScoresService overallScoresService;
   private final BioDomainsService bioDomainsService;
 
-  public GeneService(
+  public GCTGenesService(
     GeneRepository geneRepository,
     RnaDifferentialExpressionRepository rnaDifferentialExpressionRepository,
     TeamService teamService,
@@ -66,23 +70,26 @@ public class GeneService {
     return gctGenesListDto;
   }
 
-  private GCTGenesListDto getRnaComparisonGenes(String subCategory) {
+  private GCTGenesListDto getRnaComparisonGenes(String model) {
     List<RnaDifferentialExpressionDocument> differentialExpression =
-      rnaDifferentialExpressionRepository.findByModelSorted(subCategory);
+      rnaDifferentialExpressionRepository.findByModelSorted(model);
     logger.info("differentialExpression: {}", differentialExpression.size());
+
+    Map<String, GCTGeneDto> genes = new HashMap<>();
     if (differentialExpression != null && !differentialExpression.isEmpty()) {
       // TODO: Using entity directly will be faster (next PR).
       // TODO: Use the verb list for list/array and get for single object.
-      List<TeamDto> teams = teamService.getTeams();
-      List<OverallScoresDto> scores = overallScoresService.getOverallScores();
-      List<BioDomainsDto> allBiodomains = bioDomainsService.getBioDomains();
+      // List<TeamDto> teams = teamService.getTeams();
+      // List<OverallScoresDto> scores = overallScoresService.getOverallScores();
+      // List<BioDomainsDto> allBiodomains = bioDomainsService.getBioDomains();
 
-      logger.info("teams: {}", teams.size());
-      logger.info("scores: {}", scores.size());
-      logger.info("allBiodomains: {}", allBiodomains.size());
+      // logger.info("teams: {}", teams.size());
+      // logger.info("scores: {}", scores.size());
+      // logger.info("allBiodomains: {}", allBiodomains.size());
     }
 
-    return GCTGenesListDto.builder().build();
+    List<GCTGeneDto> geneList = new ArrayList<>(genes.values());
+    return GCTGenesListDto.builder().items(geneList).build();
   }
 
   private GCTGenesListDto getProteinComparisonGenes(String subCategory) {
