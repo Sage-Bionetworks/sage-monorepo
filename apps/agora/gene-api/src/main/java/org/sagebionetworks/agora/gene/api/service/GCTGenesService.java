@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.sagebionetworks.agora.gene.api.model.document.GeneDocument;
 import org.sagebionetworks.agora.gene.api.model.document.RnaDifferentialExpressionDocument;
 import org.sagebionetworks.agora.gene.api.model.dto.BioDomainsDto;
@@ -130,12 +131,11 @@ public class GCTGenesService {
 
   // Helper to build a map of all genes by ensembl_gene_id
   private Map<String, GeneDocument> getGenesMap() {
-    List<GeneDocument> allGenes = geneRepository.findAll();
-    Map<String, GeneDocument> map = new HashMap<>();
-    for (GeneDocument gene : allGenes) {
-      map.put(gene.getEnsemblGeneId(), gene);
-    }
-    return map;
+    return geneRepository
+      .findAll()
+      .stream()
+      .filter(gene -> gene.getEnsemblGeneId() != null)
+      .collect(Collectors.toMap(GeneDocument::getEnsemblGeneId, gene -> gene));
   }
 
   private GCTGeneDto getComparisonGene(GeneDto gene) {
