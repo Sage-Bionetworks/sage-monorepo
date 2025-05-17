@@ -22,7 +22,7 @@ public class OverallScoresService {
     this.teamRepository = teamRepository;
   }
 
-  public List<OverallScoresDto> getOverallScoress() {
+  public List<OverallScoresDto> getOverallScores() {
     logger.info("getOverallScoress");
     List<OverallScoresDocument> documents = teamRepository.findAll();
     return teamMapper.convertToDtoList(documents);

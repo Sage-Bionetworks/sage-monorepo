@@ -72,8 +72,9 @@ public class GeneService {
     logger.info("differentialExpression: {}", differentialExpression.size());
     if (differentialExpression != null && !differentialExpression.isEmpty()) {
       // TODO: Using entity directly will be faster (next PR).
+      // TODO: Use the verb list for list/array and get for single object.
       List<TeamDto> teams = teamService.getTeams();
-      List<OverallScoresDto> scores = overallScoresService.getOverallScoress();
+      List<OverallScoresDto> scores = overallScoresService.getOverallScores();
       List<BioDomainsDto> allBiodomains = bioDomainsService.getBioDomains();
 
       logger.info("teams: {}", teams.size());
