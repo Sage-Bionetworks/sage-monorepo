@@ -170,8 +170,8 @@ public class GCTGenesService {
       .ensemblGeneId(gene.getEnsemblGeneId())
       .hgncSymbol(gene.getHgncSymbol())
       .targetRiskScore(geneScores != null ? geneScores.getTargetRiskScore() : null)
-      // .geneticsScore(geneScores != null ? geneScores.getGeneticsScore() : null)
-      // .multiOmicsScore(geneScores != null ? geneScores.getMultiOmicsScore() : null)
+      .geneticsScore(geneScores != null ? geneScores.getGeneticsScore() : null)
+      .multiOmicsScore(geneScores != null ? geneScores.getMultiOmicsScore() : null)
       .build();
 
     return gctGene;

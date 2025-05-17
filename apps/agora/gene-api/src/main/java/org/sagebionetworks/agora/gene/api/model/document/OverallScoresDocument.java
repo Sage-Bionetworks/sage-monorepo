@@ -1,9 +1,7 @@
 package org.sagebionetworks.agora.gene.api.model.document;
 
-import lombok.Data;
-
 import java.math.BigDecimal;
-
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -20,4 +18,10 @@ public class OverallScoresDocument {
 
   @Field("target_risk_score")
   private BigDecimal targetRiskScore;
+
+  @Field("genetics_score")
+  private BigDecimal geneticsScore;
+
+  @Field("multi_omics_score")
+  private BigDecimal multiOmicsScore;
 }
