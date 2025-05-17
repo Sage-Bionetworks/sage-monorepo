@@ -9,6 +9,7 @@ import org.sagebionetworks.agora.gene.api.model.document.GeneDocument;
 import org.sagebionetworks.agora.gene.api.model.document.RnaDifferentialExpressionDocument;
 import org.sagebionetworks.agora.gene.api.model.dto.BioDomainsDto;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneDto;
+import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneTissueDto;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGenesListDto;
 import org.sagebionetworks.agora.gene.api.model.dto.GeneDto;
 import org.sagebionetworks.agora.gene.api.model.dto.OverallScoresDto;
@@ -95,20 +96,17 @@ public class GCTGenesService {
             .hgncSymbol(exp.getHgncSymbol())
             .build();
           genes.put(ensemblGeneId, getComparisonGene(gene));
-          // genes.put(ensemblGeneId, getComparisonGene(gene, teams, scores, allBiodomains));
         }
-        // GCTGene gctGene = genes.get(ensemblGeneId);
-        // gctGene
-        //   .getTissues()
-        //   .add(
-        //     new Tissue(
-        //       exp.getTissue(),
-        //       exp.getLogfc(),
-        //       exp.getAdjPVal(),
-        //       exp.getCiL(),
-        //       exp.getCiR()
-        //     )
-        //   );
+
+        // Add tissue data to the gene
+        GCTGeneTissueDto tissue = GCTGeneTissueDto.builder()
+          .name(exp.getTissue())
+          .logfc((float) exp.getLogfc())
+          .adjPVal((float) exp.getAdjPVal())
+          .ciL((float) exp.getCiL())
+          .ciR((float) exp.getCiR())
+          .build();
+        genes.get(ensemblGeneId).addTissuesItem(tissue);
       }
       // TODO: Using entity directly will be faster (next PR).
       // TODO: Use the verb list for list/array and get for single object.
