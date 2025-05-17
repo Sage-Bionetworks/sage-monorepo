@@ -84,5 +84,5 @@
     }
   },
   "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],
-  "implicitDependencies": ["agora-api-description"]
+  "implicitDependencies": ["agora-api-description", "shared-java-util"]
 }
