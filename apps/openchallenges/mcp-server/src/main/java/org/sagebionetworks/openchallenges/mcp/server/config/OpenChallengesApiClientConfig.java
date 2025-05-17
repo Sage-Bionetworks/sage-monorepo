@@ -13,9 +13,9 @@ public class OpenChallengesApiClientConfig {
 
   private final ApiClient apiClient;
 
-  public OpenChallengesApiClientConfig() {
+  public OpenChallengesApiClientConfig(McpServerConfigData mcpServerConfigData) {
     this.apiClient = new ApiClient();
-    this.apiClient.setBasePath("http://openchallenges-api-gateway:8082/api/v1");
+    this.apiClient.setBasePath(mcpServerConfigData.getApiBaseUrl());
   }
 
   @Bean

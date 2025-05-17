@@ -1,6 +1,7 @@
 [versions]
 graalvm = "0.10.6"
 junit-platform = "1.10.2"
+lombok = "1.18.38"
 openchallenges = "0.0.1-SNAPSHOT"
 spring-ai = "1.0.0-M8"
 spring-boot = "3.4.5"
@@ -8,6 +9,7 @@ spring-dependency-management = "1.1.7"
 
 [libraries]
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit-platform" }
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 openchallenges-api-client-java = { module = "org.sagebionetworks.openchallenges:openchallenges-api-client-java", version.ref = "openchallenges" }
 spring-ai-starter-mcp-server-webmvc = { module = "org.springframework.ai:spring-ai-starter-mcp-server-webmvc", version.ref = "spring-ai" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
