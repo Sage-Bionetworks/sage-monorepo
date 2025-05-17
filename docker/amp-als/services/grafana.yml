@@ -1,0 +1,16 @@
+services:
+  amp-als-grafana:
+    image: ghcr.io/sage-bionetworks/amp-als-grafana:${AMP_ALS_VERSION:-local}
+    container_name: amp-als-grafana
+    restart: always
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks:
+      - amp-als
+    ports:
+      - '8408:3000'
+    deploy:
+      resources:
+        limits:
+          memory: 200M
