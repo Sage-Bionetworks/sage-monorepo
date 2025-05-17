@@ -12,6 +12,7 @@ declare -a hostnames=(
   "127.0.0.1 amp-als-elasticsearch"
   "127.0.0.1 amp-als-mariadb"
   "127.0.0.1 amp-als-opensearch"
+  "127.0.0.1 amp-als-prometheus"
   "127.0.0.1 amp-als-user-service"
   "127.0.0.1 iatlas-api"
   "127.0.0.1 iatlas-postgres"
