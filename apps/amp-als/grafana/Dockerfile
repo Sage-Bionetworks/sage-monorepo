@@ -1,0 +1,1 @@
+FROM grafana/grafana:12.0.0
