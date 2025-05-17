@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.sagebionetworks.agora.gene.api.model.document.BioDomainDocument;
+import org.sagebionetworks.agora.gene.api.model.document.BioDomainsDocument;
 import org.sagebionetworks.agora.gene.api.model.document.GeneDocument;
 import org.sagebionetworks.agora.gene.api.model.document.OverallScoresDocument;
 import org.sagebionetworks.agora.gene.api.model.document.RnaDifferentialExpressionDocument;
@@ -18,6 +20,7 @@ import org.sagebionetworks.agora.gene.api.model.dto.OverallScoresDto;
 import org.sagebionetworks.agora.gene.api.model.dto.TeamDto;
 import org.sagebionetworks.agora.gene.api.model.mapper.GeneMapper;
 import org.sagebionetworks.agora.gene.api.model.mapper.RnaDifferentialExpressionMapper;
+import org.sagebionetworks.agora.gene.api.model.repository.BioDomainsRepository;
 import org.sagebionetworks.agora.gene.api.model.repository.GeneRepository;
 import org.sagebionetworks.agora.gene.api.model.repository.OverallScoresRepository;
 import org.sagebionetworks.agora.gene.api.model.repository.RnaDifferentialExpressionRepository;
@@ -37,6 +40,7 @@ public class GCTGenesService {
   private final GeneRepository geneRepository;
   private final RnaDifferentialExpressionRepository rnaDifferentialExpressionRepository;
   private final OverallScoresRepository overallScoresRepository;
+  private final BioDomainsRepository bioDomainsRepository;
 
   private final TeamService teamService;
   private final OverallScoresService overallScoresService;
@@ -48,7 +52,8 @@ public class GCTGenesService {
     TeamService teamService,
     OverallScoresService overallScoresService,
     BioDomainsService bioDomainsService,
-    OverallScoresRepository overallScoresRepository
+    OverallScoresRepository overallScoresRepository,
+    BioDomainsRepository bioDomainsRepository
   ) {
     this.geneRepository = geneRepository;
     this.rnaDifferentialExpressionRepository = rnaDifferentialExpressionRepository;
@@ -56,6 +61,7 @@ public class GCTGenesService {
     this.overallScoresService = overallScoresService;
     this.bioDomainsService = bioDomainsService;
     this.overallScoresRepository = overallScoresRepository;
+    this.bioDomainsRepository = bioDomainsRepository;
   }
 
   public GCTGenesListDto getComparisonGenes(String category, String subCategory) {
@@ -96,7 +102,7 @@ public class GCTGenesService {
       Map<String, GeneDocument> allGenes = getGenesMap();
       List<TeamDto> teams = teamService.getTeams();
       List<OverallScoresDocument> scores = overallScoresRepository.findAll();
-      List<BioDomainsDto> allBiodomains = bioDomainsService.getBioDomains();
+      List<BioDomainsDocument> allBiodomains = bioDomainsRepository.findAll();
 
       for (RnaDifferentialExpressionDocument exp : differentialExpression) {
         String ensemblGeneId = exp.getEnsemblGeneId();
@@ -157,7 +163,7 @@ public class GCTGenesService {
     GeneDocument gene,
     List<TeamDto> teams,
     List<OverallScoresDocument> scores,
-    List<BioDomainsDto> allBiodomains
+    List<BioDomainsDocument> allBiodomains
   ) {
     // Find scores for this gene
     OverallScoresDocument geneScores = scores
@@ -166,12 +172,21 @@ public class GCTGenesService {
       .findFirst()
       .orElse(null);
 
+    // Find biodomains for this gene
+    List<String> geneBiodomains = allBiodomains
+      .stream()
+      .filter(b -> b.getEnsemblGeneId().equals(gene.getEnsemblGeneId()))
+      .findFirst()
+      .map(b -> b.getGeneBioDomains().stream().map(BioDomainDocument::getBioDomain).toList())
+      .orElse(null);
+
     GCTGeneDto gctGene = GCTGeneDto.builder()
       .ensemblGeneId(gene.getEnsemblGeneId())
       .hgncSymbol(gene.getHgncSymbol())
       .targetRiskScore(geneScores != null ? geneScores.getTargetRiskScore() : null)
       .geneticsScore(geneScores != null ? geneScores.getGeneticsScore() : null)
       .multiOmicsScore(geneScores != null ? geneScores.getMultiOmicsScore() : null)
+      .biodomains(geneBiodomains)
       .build();
 
     return gctGene;
