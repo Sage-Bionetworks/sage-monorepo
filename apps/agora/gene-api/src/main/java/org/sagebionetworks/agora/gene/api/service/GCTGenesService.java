@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.sagebionetworks.agora.gene.api.model.document.GeneDocument;
 import org.sagebionetworks.agora.gene.api.model.document.RnaDifferentialExpressionDocument;
 import org.sagebionetworks.agora.gene.api.model.dto.BioDomainsDto;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneDto;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGenesListDto;
+import org.sagebionetworks.agora.gene.api.model.dto.GeneDto;
 import org.sagebionetworks.agora.gene.api.model.dto.OverallScoresDto;
 import org.sagebionetworks.agora.gene.api.model.dto.TeamDto;
 import org.sagebionetworks.agora.gene.api.model.mapper.GeneMapper;
@@ -77,6 +79,33 @@ public class GCTGenesService {
 
     Map<String, GCTGeneDto> genes = new HashMap<>();
     if (differentialExpression != null && !differentialExpression.isEmpty()) {
+      for (RnaDifferentialExpressionDocument exp : differentialExpression) {
+        String ensemblGeneId = exp.getEnsemblGeneId();
+        if (!genes.containsKey(ensemblGeneId)) {
+          // GeneDto gene = allGenes.getOrDefault(
+          //   ensemblGeneId,
+          //   GeneDto.builder().ensemblGeneId(ensemblGeneId).hgncSymbol(exp.getHgncSymbol()).build()
+          // );
+          GeneDto gene = GeneDto.builder()
+            .ensemblGeneId(ensemblGeneId)
+            .hgncSymbol(exp.getHgncSymbol())
+            .build();
+          genes.put(ensemblGeneId, getComparisonGene(gene));
+          // genes.put(ensemblGeneId, getComparisonGene(gene, teams, scores, allBiodomains));
+        }
+        // GCTGene gctGene = genes.get(ensemblGeneId);
+        // gctGene
+        //   .getTissues()
+        //   .add(
+        //     new Tissue(
+        //       exp.getTissue(),
+        //       exp.getLogfc(),
+        //       exp.getAdjPVal(),
+        //       exp.getCiL(),
+        //       exp.getCiR()
+        //     )
+        //   );
+      }
       // TODO: Using entity directly will be faster (next PR).
       // TODO: Use the verb list for list/array and get for single object.
       // List<TeamDto> teams = teamService.getTeams();
@@ -94,5 +123,16 @@ public class GCTGenesService {
 
   private GCTGenesListDto getProteinComparisonGenes(String subCategory) {
     return GCTGenesListDto.builder().build();
+  }
+
+  private GCTGeneDto getComparisonGene(GeneDto gene) {
+    GCTGeneDto gctGene = GCTGeneDto.builder()
+      .ensemblGeneId(gene.getEnsemblGeneId())
+      .hgncSymbol(gene.getHgncSymbol())
+      .build();
+    // gctGene.setTeams(teams);
+    // gctGene.setOverallScores(scores);
+    // gctGene.setBioDomains(allBiodomains);
+    return gctGene;
   }
 }

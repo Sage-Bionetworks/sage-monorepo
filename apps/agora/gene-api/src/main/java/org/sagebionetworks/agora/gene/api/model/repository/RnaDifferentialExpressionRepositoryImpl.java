@@ -19,7 +19,7 @@ public class RnaDifferentialExpressionRepositoryImpl
     Query query = new Query();
     query.addCriteria(Criteria.where("model").is(model));
     query.with(Sort.by(Sort.Order.asc("hgnc_symbol"), Sort.Order.asc("tissue")));
-    query.limit(5);
+    // query.limit(5);
     return mongoTemplate.find(query, RnaDifferentialExpressionDocument.class);
   }
 }
