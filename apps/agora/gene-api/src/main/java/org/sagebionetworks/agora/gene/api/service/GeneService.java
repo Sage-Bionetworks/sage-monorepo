@@ -1,30 +1,17 @@
 package org.sagebionetworks.agora.gene.api.service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import org.sagebionetworks.agora.gene.api.GeneApiApplication;
-import org.sagebionetworks.agora.gene.api.model.document.GeneDocument;
 import org.sagebionetworks.agora.gene.api.model.document.RnaDifferentialExpressionDocument;
 import org.sagebionetworks.agora.gene.api.model.dto.BioDomainsDto;
-import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneDto;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGenesListDto;
-import org.sagebionetworks.agora.gene.api.model.dto.GeneDto;
-<<<<<<< HEAD
-=======
 import org.sagebionetworks.agora.gene.api.model.dto.OverallScoresDto;
 import org.sagebionetworks.agora.gene.api.model.dto.TeamDto;
->>>>>>> cb582a03e (chore: get scores)
 import org.sagebionetworks.agora.gene.api.model.mapper.GeneMapper;
 import org.sagebionetworks.agora.gene.api.model.mapper.RnaDifferentialExpressionMapper;
 import org.sagebionetworks.agora.gene.api.model.repository.GeneRepository;
 import org.sagebionetworks.agora.gene.api.model.repository.RnaDifferentialExpressionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-// import org.sagebionetworks.agora.gene.api.model.dto.GeneDto;
-// import org.sagebionetworks.agora.gene.api.model.dto.GenesPageDto;
-// import org.sagebionetworks.agora.gene.api.model.mapper.GeneMapper;
-// import org.sagebionetworks.agora.gene.api.model.repository.GeneRepository;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -63,18 +50,16 @@ public class GeneService {
     category = "RNA - Differential Expression";
     subCategory = "AD Diagnosis (males and females)";
 
-    // List<GeneDocument> geneDocuments = geneRepository.findAll();
-    // List<GeneDto> genes = geneMapper.convertToDtoList(geneDocuments);
-
     GCTGenesListDto gctGenesListDto = null;
 
+    // TODO: Consider different endpoints for RNA and Protein differential expression, which would allow more descriptive query parameters (model for RNA, method for Protein).
     if (category.equals("RNA - Differential Expression")) {
       logger.info("getRnaComparisonGenes");
       gctGenesListDto = getRnaComparisonGenes(subCategory);
     } else if (category.equals("Protein - Differential Expression")) {
       gctGenesListDto = getProteinComparisonGenes(subCategory);
     } else {
-      // TODO: better handle unexpected value
+      // TODO: Return 400 Bad Request
       gctGenesListDto = GCTGenesListDto.builder().build();
     }
 
@@ -86,53 +71,20 @@ public class GeneService {
       rnaDifferentialExpressionRepository.findByModelSorted(subCategory);
     logger.info("differentialExpression: {}", differentialExpression.size());
     if (differentialExpression != null && !differentialExpression.isEmpty()) {
-      Map<String, GCTGeneDto> genes = new HashMap<>();
-      Map<String, GeneDto> allGenes = getGenesMap();
+      // TODO: Using entity directly will be faster (next PR).
       List<TeamDto> teams = teamService.getTeams();
       List<OverallScoresDto> scores = overallScoresService.getOverallScoress();
       List<BioDomainsDto> allBiodomains = bioDomainsService.getBioDomains();
 
-      logger.info("allGenes: {}", allGenes.size());
       logger.info("teams: {}", teams.size());
       logger.info("scores: {}", scores.size());
       logger.info("allBiodomains: {}", allBiodomains.size());
-      // for (RnaDifferentialExpressionDocument exp : differentialExpression) {
-      //   String ensemblGeneId = exp.getEnsemblGeneId();
-      //   if (!genes.containsKey(ensemblGeneId)) {
-      //     GeneDto gene = allGenes.getOrDefault(
-      //       ensemblGeneId,
-      //       GeneDto.builder().ensemblGeneId("").hgncSymbol("").build()
-      //     );
-      //     genes.put(ensemblGeneId, getComparisonGene(gene, teams, scores, allBiodomains));
-      //   }
-      // }
     }
 
-    // List<GCTGeneDto> dtos = rnaDifferentialExpressionMapper.convertToDtoList(documents);
-
-    // return GCTGenesListDto.builder().items(dtos).build();
     return GCTGenesListDto.builder().build();
   }
 
   private GCTGenesListDto getProteinComparisonGenes(String subCategory) {
     return GCTGenesListDto.builder().build();
-  }
-
-  /**
-   * Retrieves a map of all genes, keyed by ensembl_gene_id.
-   * This is a Java equivalent of the TypeScript getGenesMap().
-   * You should implement the logic to fetch all Gene objects from your data source.
-   */
-  private Map<String, GeneDto> getGenesMap() {
-    List<GeneDocument> documents = geneRepository.findAll();
-    logger.info("getGenesMap documents: {}", documents.size());
-    List<GeneDto> allGenes = geneMapper.convertToDtoList(documents);
-    Map<String, GeneDto> genesMap = new HashMap<>();
-    for (GeneDto gene : allGenes) {
-      if (gene.getEnsemblGeneId() != null) {
-        genesMap.put(gene.getEnsemblGeneId(), gene);
-      }
-    }
-    return genesMap;
   }
 }
