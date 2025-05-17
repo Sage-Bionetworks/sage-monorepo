@@ -12,4 +12,6 @@ public class GeneDocument {
   public String id;
 
   public String ensemblGeneId;
+
+  public String hgncSymbol;
 }

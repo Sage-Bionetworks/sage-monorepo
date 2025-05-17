@@ -87,14 +87,14 @@ public class GCTGenesService {
       for (RnaDifferentialExpressionDocument exp : differentialExpression) {
         String ensemblGeneId = exp.getEnsemblGeneId();
         if (!genes.containsKey(ensemblGeneId)) {
-          // GeneDto gene = allGenes.getOrDefault(
-          //   ensemblGeneId,
-          //   GeneDto.builder().ensemblGeneId(ensemblGeneId).hgncSymbol(exp.getHgncSymbol()).build()
-          // );
-          GeneDto gene = GeneDto.builder()
-            .ensemblGeneId(ensemblGeneId)
-            .hgncSymbol(exp.getHgncSymbol())
-            .build();
+          // Get the GeneDocument by ensemblGeneId or create a new one
+          GeneDocument gene = allGenes.get(ensemblGeneId);
+          if (gene == null) {
+            gene = new GeneDocument();
+            gene.setEnsemblGeneId(ensemblGeneId);
+            gene.setHgncSymbol(exp.getHgncSymbol());
+          }
+          // Compute the GCTGeneDto and add it to the genes list
           genes.put(ensemblGeneId, getComparisonGene(gene));
         }
 
@@ -108,15 +108,6 @@ public class GCTGenesService {
           .build();
         genes.get(ensemblGeneId).addTissuesItem(tissue);
       }
-      // TODO: Using entity directly will be faster (next PR).
-      // TODO: Use the verb list for list/array and get for single object.
-      // List<TeamDto> teams = teamService.getTeams();
-      // List<OverallScoresDto> scores = overallScoresService.getOverallScores();
-      // List<BioDomainsDto> allBiodomains = bioDomainsService.getBioDomains();
-
-      // logger.info("teams: {}", teams.size());
-      // logger.info("scores: {}", scores.size());
-      // logger.info("allBiodomains: {}", allBiodomains.size());
     }
 
     List<GCTGeneDto> geneList = new ArrayList<>(genes.values());
@@ -136,7 +127,7 @@ public class GCTGenesService {
       .collect(Collectors.toMap(GeneDocument::getEnsemblGeneId, gene -> gene));
   }
 
-  private GCTGeneDto getComparisonGene(GeneDto gene) {
+  private GCTGeneDto getComparisonGene(GeneDocument gene) {
     GCTGeneDto gctGene = GCTGeneDto.builder()
       .ensemblGeneId(gene.getEnsemblGeneId())
       .hgncSymbol(gene.getHgncSymbol())
