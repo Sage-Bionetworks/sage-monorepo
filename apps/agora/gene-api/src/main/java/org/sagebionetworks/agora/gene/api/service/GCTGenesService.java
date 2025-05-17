@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.sagebionetworks.agora.gene.api.model.document.GeneDocument;
+import org.sagebionetworks.agora.gene.api.model.document.OverallScoresDocument;
 import org.sagebionetworks.agora.gene.api.model.document.RnaDifferentialExpressionDocument;
 import org.sagebionetworks.agora.gene.api.model.dto.BioDomainsDto;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneDto;
@@ -17,6 +18,7 @@ import org.sagebionetworks.agora.gene.api.model.dto.TeamDto;
 import org.sagebionetworks.agora.gene.api.model.mapper.GeneMapper;
 import org.sagebionetworks.agora.gene.api.model.mapper.RnaDifferentialExpressionMapper;
 import org.sagebionetworks.agora.gene.api.model.repository.GeneRepository;
+import org.sagebionetworks.agora.gene.api.model.repository.OverallScoresRepository;
 import org.sagebionetworks.agora.gene.api.model.repository.RnaDifferentialExpressionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +35,7 @@ public class GCTGenesService {
 
   private final GeneRepository geneRepository;
   private final RnaDifferentialExpressionRepository rnaDifferentialExpressionRepository;
+  private final OverallScoresRepository overallScoresRepository;
 
   private final TeamService teamService;
   private final OverallScoresService overallScoresService;
@@ -43,13 +46,15 @@ public class GCTGenesService {
     RnaDifferentialExpressionRepository rnaDifferentialExpressionRepository,
     TeamService teamService,
     OverallScoresService overallScoresService,
-    BioDomainsService bioDomainsService
+    BioDomainsService bioDomainsService,
+    OverallScoresRepository overallScoresRepository
   ) {
     this.geneRepository = geneRepository;
     this.rnaDifferentialExpressionRepository = rnaDifferentialExpressionRepository;
     this.teamService = teamService;
     this.overallScoresService = overallScoresService;
     this.bioDomainsService = bioDomainsService;
+    this.overallScoresRepository = overallScoresRepository;
   }
 
   public GCTGenesListDto getComparisonGenes(String category, String subCategory) {
@@ -84,7 +89,7 @@ public class GCTGenesService {
       // Fetch data
       Map<String, GeneDocument> allGenes = getGenesMap();
       List<TeamDto> teams = teamService.getTeams();
-      List<OverallScoresDto> scores = overallScoresService.getOverallScores();
+      List<OverallScoresDocument> scores = overallScoresRepository.findAll();
       List<BioDomainsDto> allBiodomains = bioDomainsService.getBioDomains();
 
       for (RnaDifferentialExpressionDocument exp : differentialExpression) {
@@ -97,6 +102,7 @@ public class GCTGenesService {
             gene.setEnsemblGeneId(ensemblGeneId);
             gene.setHgncSymbol(exp.getHgncSymbol());
           }
+
           // Compute the GCTGeneDto and add it to the genes list
           genes.put(ensemblGeneId, getComparisonGene(gene, teams, scores, allBiodomains));
         }
@@ -109,6 +115,7 @@ public class GCTGenesService {
           .ciL((float) exp.getCiL())
           .ciR((float) exp.getCiR())
           .build();
+
         genes.get(ensemblGeneId).addTissuesItem(tissue);
       }
     }
@@ -122,27 +129,42 @@ public class GCTGenesService {
   }
 
   // Helper to build a map of all genes by ensembl_gene_id
+  // XXX: What are the assumption behind selecting the last occurrence of a gene?
   private Map<String, GeneDocument> getGenesMap() {
     return geneRepository
       .findAll()
       .stream()
       .filter(gene -> gene.getEnsemblGeneId() != null)
-      .collect(Collectors.toMap(GeneDocument::getEnsemblGeneId, gene -> gene));
+      .collect(
+        Collectors.toMap(
+          GeneDocument::getEnsemblGeneId,
+          gene -> gene,
+          (existing, replacement) -> replacement // keep the last occurrence as in the original code
+        )
+      );
   }
 
   private GCTGeneDto getComparisonGene(
     GeneDocument gene,
     List<TeamDto> teams,
-    List<OverallScoresDto> scores,
+    List<OverallScoresDocument> scores,
     List<BioDomainsDto> allBiodomains
   ) {
+    // Find scores for this gene
+    OverallScoresDocument geneScores = scores
+      .stream()
+      .filter(s -> s.getEnsemblGeneId().equals(gene.getEnsemblGeneId()))
+      .findFirst()
+      .orElse(null);
+
     GCTGeneDto gctGene = GCTGeneDto.builder()
       .ensemblGeneId(gene.getEnsemblGeneId())
       .hgncSymbol(gene.getHgncSymbol())
+      .targetRiskScore(geneScores != null ? geneScores.getTargetRiskScore() : null)
+      // .geneticsScore(geneScores != null ? geneScores.getGeneticsScore() : null)
+      // .multiOmicsScore(geneScores != null ? geneScores.getMultiOmicsScore() : null)
       .build();
-    // gctGene.setTeams(teams);
-    // gctGene.setOverallScores(scores);
-    // gctGene.setBioDomains(allBiodomains);
+
     return gctGene;
   }
 }
