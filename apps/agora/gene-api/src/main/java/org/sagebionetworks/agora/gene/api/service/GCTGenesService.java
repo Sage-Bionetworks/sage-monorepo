@@ -83,6 +83,9 @@ public class GCTGenesService {
     if (differentialExpression != null && !differentialExpression.isEmpty()) {
       // Fetch data
       Map<String, GeneDocument> allGenes = getGenesMap();
+      List<TeamDto> teams = teamService.getTeams();
+      List<OverallScoresDto> scores = overallScoresService.getOverallScores();
+      List<BioDomainsDto> allBiodomains = bioDomainsService.getBioDomains();
 
       for (RnaDifferentialExpressionDocument exp : differentialExpression) {
         String ensemblGeneId = exp.getEnsemblGeneId();
@@ -95,7 +98,7 @@ public class GCTGenesService {
             gene.setHgncSymbol(exp.getHgncSymbol());
           }
           // Compute the GCTGeneDto and add it to the genes list
-          genes.put(ensemblGeneId, getComparisonGene(gene));
+          genes.put(ensemblGeneId, getComparisonGene(gene, teams, scores, allBiodomains));
         }
 
         // Add tissue data to the gene
@@ -127,7 +130,12 @@ public class GCTGenesService {
       .collect(Collectors.toMap(GeneDocument::getEnsemblGeneId, gene -> gene));
   }
 
-  private GCTGeneDto getComparisonGene(GeneDocument gene) {
+  private GCTGeneDto getComparisonGene(
+    GeneDocument gene,
+    List<TeamDto> teams,
+    List<OverallScoresDto> scores,
+    List<BioDomainsDto> allBiodomains
+  ) {
     GCTGeneDto gctGene = GCTGeneDto.builder()
       .ensemblGeneId(gene.getEnsemblGeneId())
       .hgncSymbol(gene.getHgncSymbol())
