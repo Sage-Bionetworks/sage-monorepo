@@ -79,6 +79,9 @@ public class GCTGenesService {
 
     Map<String, GCTGeneDto> genes = new HashMap<>();
     if (differentialExpression != null && !differentialExpression.isEmpty()) {
+      // Fetch data
+      Map<String, GeneDocument> allGenes = getGenesMap();
+
       for (RnaDifferentialExpressionDocument exp : differentialExpression) {
         String ensemblGeneId = exp.getEnsemblGeneId();
         if (!genes.containsKey(ensemblGeneId)) {
@@ -123,6 +126,16 @@ public class GCTGenesService {
 
   private GCTGenesListDto getProteinComparisonGenes(String subCategory) {
     return GCTGenesListDto.builder().build();
+  }
+
+  // Helper to build a map of all genes by ensembl_gene_id
+  private Map<String, GeneDocument> getGenesMap() {
+    List<GeneDocument> allGenes = geneRepository.findAll();
+    Map<String, GeneDocument> map = new HashMap<>();
+    for (GeneDocument gene : allGenes) {
+      map.put(gene.getEnsemblGeneId(), gene);
+    }
+    return map;
   }
 
   private GCTGeneDto getComparisonGene(GeneDto gene) {

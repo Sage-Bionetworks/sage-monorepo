@@ -10,4 +10,6 @@ public class GeneDocument {
 
   @Id
   public String id;
+
+  public String ensemblGeneId;
 }
