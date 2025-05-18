@@ -19,6 +19,7 @@ import jakarta.annotation.Generated;
 /**
  * NeuropathologicCorrelation
  */
+@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
 
 @Schema(name = "NeuropathologicCorrelation", description = "NeuropathologicCorrelation")
 @JsonTypeName("NeuropathologicCorrelation")

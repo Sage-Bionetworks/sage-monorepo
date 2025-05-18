@@ -19,6 +19,7 @@ import jakarta.annotation.Generated;
 /**
  * ProteinDifferentialExpression
  */
+@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
 
 @Schema(name = "ProteinDifferentialExpression", description = "ProteinDifferentialExpression")
 @JsonTypeName("ProteinDifferentialExpression")

@@ -1,34 +1,34 @@
 package org.sagebionetworks.agora.gene.api.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Generated;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
-import java.math.BigDecimal;
 import java.net.URI;
-import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneNominationsDto;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneTissueDto;
 import org.springframework.lang.Nullable;
+import java.time.OffsetDateTime;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import jakarta.annotation.Generated;
 
 /**
  * GCT Gene
  */
+@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
 
 @Schema(name = "GCTGene", description = "GCT Gene")
 @JsonTypeName("GCTGene")
-@Generated(
-  value = "org.openapitools.codegen.languages.SpringCodegen",
-  comments = "Generator version: 7.12.0"
-)
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 public class GCTGeneDto {
 
   private String ensemblGeneId;
@@ -73,14 +73,7 @@ public class GCTGeneDto {
   /**
    * Constructor with only required parameters
    */
-  public GCTGeneDto(
-    String ensemblGeneId,
-    String hgncSymbol,
-    List<@Valid GCTGeneTissueDto> tissues,
-    BigDecimal targetRiskScore,
-    BigDecimal geneticsScore,
-    BigDecimal multiOmicsScore
-  ) {
+  public GCTGeneDto(String ensemblGeneId, String hgncSymbol, List<@Valid GCTGeneTissueDto> tissues, BigDecimal targetRiskScore, BigDecimal geneticsScore, BigDecimal multiOmicsScore) {
     this.ensemblGeneId = ensemblGeneId;
     this.hgncSymbol = hgncSymbol;
     this.tissues = tissues;
@@ -98,12 +91,8 @@ public class GCTGeneDto {
    * Ensembl gene identifier
    * @return ensemblGeneId
    */
-  @NotNull
-  @Schema(
-    name = "ensembl_gene_id",
-    description = "Ensembl gene identifier",
-    requiredMode = Schema.RequiredMode.REQUIRED
-  )
+  @NotNull 
+  @Schema(name = "ensembl_gene_id", description = "Ensembl gene identifier", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("ensembl_gene_id")
   public String getEnsemblGeneId() {
     return ensemblGeneId;
@@ -122,12 +111,8 @@ public class GCTGeneDto {
    * HGNC gene symbol
    * @return hgncSymbol
    */
-  @NotNull
-  @Schema(
-    name = "hgnc_symbol",
-    description = "HGNC gene symbol",
-    requiredMode = Schema.RequiredMode.REQUIRED
-  )
+  @NotNull 
+  @Schema(name = "hgnc_symbol", description = "HGNC gene symbol", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("hgnc_symbol")
   public String getHgncSymbol() {
     return hgncSymbol;
@@ -146,12 +131,8 @@ public class GCTGeneDto {
    * UniProt identifier
    * @return uniprotid
    */
-
-  @Schema(
-    name = "uniprotid",
-    description = "UniProt identifier",
-    requiredMode = Schema.RequiredMode.NOT_REQUIRED
-  )
+  
+  @Schema(name = "uniprotid", description = "UniProt identifier", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("uniprotid")
   public String getUniprotid() {
     return uniprotid;
@@ -170,12 +151,8 @@ public class GCTGeneDto {
    * Unique identifier
    * @return uid
    */
-
-  @Schema(
-    name = "uid",
-    description = "Unique identifier",
-    requiredMode = Schema.RequiredMode.NOT_REQUIRED
-  )
+  
+  @Schema(name = "uid", description = "Unique identifier", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("uid")
   public String getUid() {
     return uid;
@@ -194,12 +171,8 @@ public class GCTGeneDto {
    * Search string
    * @return searchString
    */
-
-  @Schema(
-    name = "search_string",
-    description = "Search string",
-    requiredMode = Schema.RequiredMode.NOT_REQUIRED
-  )
+  
+  @Schema(name = "search_string", description = "Search string", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("search_string")
   public String getSearchString() {
     return searchString;
@@ -226,12 +199,8 @@ public class GCTGeneDto {
    * Array of search terms
    * @return searchArray
    */
-
-  @Schema(
-    name = "search_array",
-    description = "Array of search terms",
-    requiredMode = Schema.RequiredMode.NOT_REQUIRED
-  )
+  
+  @Schema(name = "search_array", description = "Array of search terms", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("search_array")
   public List<String> getSearchArray() {
     return searchArray;
@@ -258,13 +227,8 @@ public class GCTGeneDto {
    * Array of gene tissues
    * @return tissues
    */
-  @NotNull
-  @Valid
-  @Schema(
-    name = "tissues",
-    description = "Array of gene tissues",
-    requiredMode = Schema.RequiredMode.REQUIRED
-  )
+  @NotNull @Valid 
+  @Schema(name = "tissues", description = "Array of gene tissues", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("tissues")
   public List<@Valid GCTGeneTissueDto> getTissues() {
     return tissues;
@@ -283,7 +247,7 @@ public class GCTGeneDto {
    * Get nominations
    * @return nominations
    */
-  @Valid
+  @Valid 
   @Schema(name = "nominations", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("nominations")
   public GCTGeneNominationsDto getNominations() {
@@ -311,12 +275,8 @@ public class GCTGeneDto {
    * Array of association values
    * @return associations
    */
-  @Valid
-  @Schema(
-    name = "associations",
-    description = "Array of association values",
-    requiredMode = Schema.RequiredMode.NOT_REQUIRED
-  )
+  @Valid 
+  @Schema(name = "associations", description = "Array of association values", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("associations")
   public List<BigDecimal> getAssociations() {
     return associations;
@@ -335,13 +295,8 @@ public class GCTGeneDto {
    * Target risk score
    * @return targetRiskScore
    */
-  @NotNull
-  @Valid
-  @Schema(
-    name = "target_risk_score",
-    description = "Target risk score",
-    requiredMode = Schema.RequiredMode.REQUIRED
-  )
+  @NotNull @Valid 
+  @Schema(name = "target_risk_score", description = "Target risk score", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("target_risk_score")
   public BigDecimal getTargetRiskScore() {
     return targetRiskScore;
@@ -360,13 +315,8 @@ public class GCTGeneDto {
    * Genetics score
    * @return geneticsScore
    */
-  @NotNull
-  @Valid
-  @Schema(
-    name = "genetics_score",
-    description = "Genetics score",
-    requiredMode = Schema.RequiredMode.REQUIRED
-  )
+  @NotNull @Valid 
+  @Schema(name = "genetics_score", description = "Genetics score", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("genetics_score")
   public BigDecimal getGeneticsScore() {
     return geneticsScore;
@@ -385,13 +335,8 @@ public class GCTGeneDto {
    * Multi-omics score
    * @return multiOmicsScore
    */
-  @NotNull
-  @Valid
-  @Schema(
-    name = "multi_omics_score",
-    description = "Multi-omics score",
-    requiredMode = Schema.RequiredMode.REQUIRED
-  )
+  @NotNull @Valid 
+  @Schema(name = "multi_omics_score", description = "Multi-omics score", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("multi_omics_score")
   public BigDecimal getMultiOmicsScore() {
     return multiOmicsScore;
@@ -418,12 +363,8 @@ public class GCTGeneDto {
    * Array of biological domains
    * @return biodomains
    */
-
-  @Schema(
-    name = "biodomains",
-    description = "Array of biological domains",
-    requiredMode = Schema.RequiredMode.NOT_REQUIRED
-  )
+  
+  @Schema(name = "biodomains", description = "Array of biological domains", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("biodomains")
   public List<String> getBiodomains() {
     return biodomains;
@@ -442,12 +383,8 @@ public class GCTGeneDto {
    * Whether the gene is pinned
    * @return pinned
    */
-
-  @Schema(
-    name = "pinned",
-    description = "Whether the gene is pinned",
-    requiredMode = Schema.RequiredMode.NOT_REQUIRED
-  )
+  
+  @Schema(name = "pinned", description = "Whether the gene is pinned", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("pinned")
   public Boolean getPinned() {
     return pinned;
@@ -474,12 +411,8 @@ public class GCTGeneDto {
    * Target enabling resources
    * @return targetEnablingResources
    */
-
-  @Schema(
-    name = "target_enabling_resources",
-    description = "Target enabling resources",
-    requiredMode = Schema.RequiredMode.NOT_REQUIRED
-  )
+  
+  @Schema(name = "target_enabling_resources", description = "Target enabling resources", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("target_enabling_resources")
   public List<String> getTargetEnablingResources() {
     return targetEnablingResources;
@@ -498,44 +431,26 @@ public class GCTGeneDto {
       return false;
     }
     GCTGeneDto gcTGene = (GCTGeneDto) o;
-    return (
-      Objects.equals(this.ensemblGeneId, gcTGene.ensemblGeneId) &&
-      Objects.equals(this.hgncSymbol, gcTGene.hgncSymbol) &&
-      Objects.equals(this.uniprotid, gcTGene.uniprotid) &&
-      Objects.equals(this.uid, gcTGene.uid) &&
-      Objects.equals(this.searchString, gcTGene.searchString) &&
-      Objects.equals(this.searchArray, gcTGene.searchArray) &&
-      Objects.equals(this.tissues, gcTGene.tissues) &&
-      Objects.equals(this.nominations, gcTGene.nominations) &&
-      Objects.equals(this.associations, gcTGene.associations) &&
-      Objects.equals(this.targetRiskScore, gcTGene.targetRiskScore) &&
-      Objects.equals(this.geneticsScore, gcTGene.geneticsScore) &&
-      Objects.equals(this.multiOmicsScore, gcTGene.multiOmicsScore) &&
-      Objects.equals(this.biodomains, gcTGene.biodomains) &&
-      Objects.equals(this.pinned, gcTGene.pinned) &&
-      Objects.equals(this.targetEnablingResources, gcTGene.targetEnablingResources)
-    );
+    return Objects.equals(this.ensemblGeneId, gcTGene.ensemblGeneId) &&
+        Objects.equals(this.hgncSymbol, gcTGene.hgncSymbol) &&
+        Objects.equals(this.uniprotid, gcTGene.uniprotid) &&
+        Objects.equals(this.uid, gcTGene.uid) &&
+        Objects.equals(this.searchString, gcTGene.searchString) &&
+        Objects.equals(this.searchArray, gcTGene.searchArray) &&
+        Objects.equals(this.tissues, gcTGene.tissues) &&
+        Objects.equals(this.nominations, gcTGene.nominations) &&
+        Objects.equals(this.associations, gcTGene.associations) &&
+        Objects.equals(this.targetRiskScore, gcTGene.targetRiskScore) &&
+        Objects.equals(this.geneticsScore, gcTGene.geneticsScore) &&
+        Objects.equals(this.multiOmicsScore, gcTGene.multiOmicsScore) &&
+        Objects.equals(this.biodomains, gcTGene.biodomains) &&
+        Objects.equals(this.pinned, gcTGene.pinned) &&
+        Objects.equals(this.targetEnablingResources, gcTGene.targetEnablingResources);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(
-      ensemblGeneId,
-      hgncSymbol,
-      uniprotid,
-      uid,
-      searchString,
-      searchArray,
-      tissues,
-      nominations,
-      associations,
-      targetRiskScore,
-      geneticsScore,
-      multiOmicsScore,
-      biodomains,
-      pinned,
-      targetEnablingResources
-    );
+    return Objects.hash(ensemblGeneId, hgncSymbol, uniprotid, uid, searchString, searchArray, tissues, nominations, associations, targetRiskScore, geneticsScore, multiOmicsScore, biodomains, pinned, targetEnablingResources);
   }
 
   @Override
@@ -556,10 +471,7 @@ public class GCTGeneDto {
     sb.append("    multiOmicsScore: ").append(toIndentedString(multiOmicsScore)).append("\n");
     sb.append("    biodomains: ").append(toIndentedString(biodomains)).append("\n");
     sb.append("    pinned: ").append(toIndentedString(pinned)).append("\n");
-    sb
-      .append("    targetEnablingResources: ")
-      .append(toIndentedString(targetEnablingResources))
-      .append("\n");
+    sb.append("    targetEnablingResources: ").append(toIndentedString(targetEnablingResources)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -574,7 +486,7 @@ public class GCTGeneDto {
     }
     return o.toString().replace("\n", "\n    ");
   }
-
+  
   public static class Builder {
 
     private GCTGeneDto instance;
@@ -587,7 +499,7 @@ public class GCTGeneDto {
       this.instance = instance;
     }
 
-    protected Builder copyOf(GCTGeneDto value) {
+    protected Builder copyOf(GCTGeneDto value) { 
       this.instance.setEnsemblGeneId(value.ensemblGeneId);
       this.instance.setHgncSymbol(value.hgncSymbol);
       this.instance.setUniprotid(value.uniprotid);
@@ -610,82 +522,82 @@ public class GCTGeneDto {
       this.instance.ensemblGeneId(ensemblGeneId);
       return this;
     }
-
+    
     public GCTGeneDto.Builder hgncSymbol(String hgncSymbol) {
       this.instance.hgncSymbol(hgncSymbol);
       return this;
     }
-
+    
     public GCTGeneDto.Builder uniprotid(String uniprotid) {
       this.instance.uniprotid(uniprotid);
       return this;
     }
-
+    
     public GCTGeneDto.Builder uid(String uid) {
       this.instance.uid(uid);
       return this;
     }
-
+    
     public GCTGeneDto.Builder searchString(String searchString) {
       this.instance.searchString(searchString);
       return this;
     }
-
+    
     public GCTGeneDto.Builder searchArray(List<String> searchArray) {
       this.instance.searchArray(searchArray);
       return this;
     }
-
+    
     public GCTGeneDto.Builder tissues(List<GCTGeneTissueDto> tissues) {
       this.instance.tissues(tissues);
       return this;
     }
-
+    
     public GCTGeneDto.Builder nominations(GCTGeneNominationsDto nominations) {
       this.instance.nominations(nominations);
       return this;
     }
-
+    
     public GCTGeneDto.Builder associations(List<BigDecimal> associations) {
       this.instance.associations(associations);
       return this;
     }
-
+    
     public GCTGeneDto.Builder targetRiskScore(BigDecimal targetRiskScore) {
       this.instance.targetRiskScore(targetRiskScore);
       return this;
     }
-
+    
     public GCTGeneDto.Builder geneticsScore(BigDecimal geneticsScore) {
       this.instance.geneticsScore(geneticsScore);
       return this;
     }
-
+    
     public GCTGeneDto.Builder multiOmicsScore(BigDecimal multiOmicsScore) {
       this.instance.multiOmicsScore(multiOmicsScore);
       return this;
     }
-
+    
     public GCTGeneDto.Builder biodomains(List<String> biodomains) {
       this.instance.biodomains(biodomains);
       return this;
     }
-
+    
     public GCTGeneDto.Builder pinned(Boolean pinned) {
       this.instance.pinned(pinned);
       return this;
     }
-
+    
     public GCTGeneDto.Builder targetEnablingResources(List<String> targetEnablingResources) {
       this.instance.targetEnablingResources(targetEnablingResources);
       return this;
     }
-
+    
     /**
-     * returns a built GCTGeneDto instance.
-     *
-     * The builder is not reusable (NullPointerException)
-     */
+    * returns a built GCTGeneDto instance.
+    *
+    * The builder is not reusable (NullPointerException)
+    */
     public GCTGeneDto build() {
       try {
         return this.instance;
@@ -702,17 +614,19 @@ public class GCTGeneDto {
   }
 
   /**
-   * Create a builder with no initialized field (except for the default values).
-   */
+  * Create a builder with no initialized field (except for the default values).
+  */
   public static GCTGeneDto.Builder builder() {
     return new GCTGeneDto.Builder();
   }
 
   /**
-   * Create a builder with a shallow copy of this instance.
-   */
+  * Create a builder with a shallow copy of this instance.
+  */
   public GCTGeneDto.Builder toBuilder() {
     GCTGeneDto.Builder builder = new GCTGeneDto.Builder();
     return builder.copyOf(this);
   }
+
 }
+

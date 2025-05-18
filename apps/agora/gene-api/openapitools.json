@@ -20,7 +20,8 @@
           "useTags": true,
           "openApiNullable": false,
           "useSpringBoot3": true,
-          "generateBuilders": true
+          "generateBuilders": true,
+          "additionalModelTypeAnnotations": "@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)"
         }
       }
     }

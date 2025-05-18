@@ -21,6 +21,7 @@ import jakarta.annotation.Generated;
 /**
  * SimilarGenesNetworkNode
  */
+@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
 
 @Schema(name = "SimilarGenesNetworkNode", description = "SimilarGenesNetworkNode")
 @JsonTypeName("SimilarGenesNetworkNode")

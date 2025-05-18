@@ -21,6 +21,7 @@ import jakarta.annotation.Generated;
 /**
  * Druggability
  */
+@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
 
 @Schema(name = "Druggability", description = "Druggability")
 @JsonTypeName("Druggability")
