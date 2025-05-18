@@ -17,7 +17,7 @@
   "features": {},
   "forwardPorts": [
     2000, 2432, 3306, 3333, 3334, 4200, 4211, 5200, 5432, 5601, 8010, 8071, 8000, 8080, 8081, 8082,
-    8084, 8085, 8086, 8090, 8400, 8401, 8402, 8403, 8404, 8405, 8406, 8407, 8408, 8200, 8887, 8888,
+    8084, 8085, 8086, 8090, 8400, 8401, 8402, 8403, 8404, 8405, 8406, 8200, 8501, 8502, 8887, 8888,
     8889, 9200, 9411, 27017
   ],
   "portsAttributes": {
@@ -125,12 +125,12 @@
       "label": "amp-als-user-service",
       "onAutoForward": "silent"
     },
-    "8407": {
-      "label": "amp-als-prometheus",
+    "8501": {
+      "label": "observability-grafana",
       "onAutoForward": "silent"
     },
-    "8408": {
-      "label": "amp-als-grafana",
+    "8502": {
+      "label": "observability-prometheus",
       "onAutoForward": "silent"
     },
     "8887": {

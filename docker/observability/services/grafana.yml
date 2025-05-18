@@ -1,13 +1,13 @@
 services:
-  amp-als-grafana:
-    image: ghcr.io/sage-bionetworks/amp-als-grafana:${AMP_ALS_VERSION:-local}
-    container_name: amp-als-grafana
+  observability-grafana:
+    image: ghcr.io/sage-bionetworks/observability-grafana:${AMP_ALS_VERSION:-local}
+    container_name: observability-grafana
     restart: always
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
     networks:
-      - amp-als
+      - observability
     ports:
       - '8408:3000'
     deploy:
