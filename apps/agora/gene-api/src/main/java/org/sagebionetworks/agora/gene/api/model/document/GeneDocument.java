@@ -5,6 +5,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import com.mongodb.lang.Nullable;
+
 @Data
 @Document(collection = "geneinfo")
 // TODO: adopt name consistent with the DB collection name ()
@@ -38,9 +40,11 @@ public class GeneDocument {
   @Field("is_any_protein_changed_in_ad_brain")
   private boolean isAnyProteinChangedInAdBrain;
 
+  @Nullable
   @Field("is_adi")
   private Boolean isAdi;
 
+  @Nullable
   @Field("is_tep")
   private Boolean isTep;
 }

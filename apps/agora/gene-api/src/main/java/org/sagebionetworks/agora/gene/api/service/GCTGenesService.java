@@ -195,6 +195,7 @@ public class GCTGenesService {
       .geneticsScore(geneScores != null ? geneScores.getGeneticsScore() : null)
       .multiOmicsScore(geneScores != null ? geneScores.getMultiOmicsScore() : null)
       .biodomains(geneBiodomains)
+      .targetEnablingResources(getTargetEnablingResources(gene))
       .build();
 
     return gctGene;
