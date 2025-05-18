@@ -1,5 +1,6 @@
 package org.sagebionetworks.agora.gene.api.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -180,9 +181,16 @@ public class GCTGenesService {
       .map(b -> b.getGeneBioDomains().stream().map(BioDomainDocument::getBioDomain).toList())
       .orElse(null);
 
+    // TODO: Remove after fixing the type of associations in the API description
+    List<BigDecimal> associations = getComparisonGeneAssociations(gene)
+      .stream()
+      .map(BigDecimal::valueOf)
+      .collect(Collectors.toList());
+
     GCTGeneDto gctGene = GCTGeneDto.builder()
       .ensemblGeneId(gene.getEnsemblGeneId())
       .hgncSymbol(gene.getHgncSymbol())
+      .associations(associations)
       .targetRiskScore(geneScores != null ? geneScores.getTargetRiskScore() : null)
       .geneticsScore(geneScores != null ? geneScores.getGeneticsScore() : null)
       .multiOmicsScore(geneScores != null ? geneScores.getMultiOmicsScore() : null)
@@ -190,5 +198,52 @@ public class GCTGenesService {
       .build();
 
     return gctGene;
+  }
+
+  private List<Integer> getComparisonGeneAssociations(GeneDocument gene) {
+    List<Integer> associations = new ArrayList<>();
+
+    logger.info("gene: {}", gene);
+
+    // Genetically Associated with LOAD
+    if (Boolean.TRUE.equals(gene.isIgap())) {
+      associations.add(1);
+    }
+
+    // eQTL in Brain
+    if (Boolean.TRUE.equals(gene.isEqtl())) {
+      associations.add(2);
+    }
+
+    // RNA Expression Changed in AD Brain
+    if (
+      Boolean.TRUE.equals(gene.isRnaBrainChangeStudied()) &&
+      Boolean.TRUE.equals(gene.isAnyRnaChangedInAdBrain())
+    ) {
+      associations.add(3);
+    }
+
+    // Protein Expression Changed in AD Brain
+    if (
+      Boolean.TRUE.equals(gene.isProteinBrainChangeStudied()) &&
+      Boolean.TRUE.equals(gene.isAnyProteinChangedInAdBrain())
+    ) {
+      associations.add(4);
+    }
+
+    logger.info("associations: {}", associations);
+
+    return associations;
+  }
+
+  private List<String> getTargetEnablingResources(GeneDocument gene) {
+    List<String> resources = new ArrayList<>();
+    if (Boolean.TRUE.equals(gene.getIsAdi())) {
+      resources.add("AD Informer Set");
+    }
+    if (Boolean.TRUE.equals(gene.getIsTep())) {
+      resources.add("Target Enabling Package");
+    }
+    return resources;
   }
 }
