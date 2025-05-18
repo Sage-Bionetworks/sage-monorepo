@@ -273,37 +273,25 @@ public class GCTGenesService {
         ) {
           data.setYear(n.getInitialNomination());
         }
-        // // Team / Programs
-        // if (n.getTeam() != null) {
-        //   TeamDto team = teams
-        //     .stream()
-        //     .filter(t -> n.getTeam().equals(t.getTeam()))
-        //     .findFirst()
-        //     .orElse(null);
 
-        // if (
-        //   team != null &&
-        //   team.getProgram() != null &&
-        //   !builder.build().getPrograms().contains(team.getProgram())
-        // ) {
-        //   builder.programs(
-        //     new ArrayList<>(builder.build().getPrograms()) {
-        //       {
-        //         add(team.getProgram());
-        //       }
-        //     }
-        //   );
-        // }
+        // Team / Programs
+        if (n.getTeam() != null) {
+          TeamDto team = teams
+            .stream()
+            .filter(t -> n.getTeam().equals(t.getTeam()))
+            .findFirst()
+            .orElse(null);
 
-        // builder.teams(
-        //   new ArrayList<>(builder.build().getTeams()) {
-        //     {
-        //       add(n.getTeam());
-        //     }
-        //   }
-        // );
-        // }
+          if (
+            team != null &&
+            team.getProgram() != null &&
+            !data.getPrograms().contains(team.getProgram())
+          ) {
+            data.addProgramsItem(team.getProgram());
+          }
 
+          data.addTeamsItem(n.getTeam());
+        }
         // Studies
         // if (n.getStudy() != null) {
         //   for (String item : n.getStudy().split(",\\s*")) {

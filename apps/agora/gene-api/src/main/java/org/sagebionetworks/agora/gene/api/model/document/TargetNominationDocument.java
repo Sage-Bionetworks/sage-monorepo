@@ -8,4 +8,6 @@ public class TargetNominationDocument {
 
   @Field("initial_nomination")
   private int initialNomination;
+
+  private String team;
 }
