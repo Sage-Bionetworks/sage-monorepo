@@ -19,6 +19,7 @@ import jakarta.annotation.Generated;
 /**
  * RnaDifferentialExpression
  */
+@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
 
 @Schema(name = "RnaDifferentialExpression", description = "RnaDifferentialExpression")
 @JsonTypeName("RnaDifferentialExpression")

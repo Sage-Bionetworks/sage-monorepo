@@ -22,6 +22,7 @@ import jakarta.annotation.Generated;
 /**
  * Metabolomics
  */
+@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
 
 @Schema(name = "Metabolomics", description = "Metabolomics")
 @JsonTypeName("Metabolomics")

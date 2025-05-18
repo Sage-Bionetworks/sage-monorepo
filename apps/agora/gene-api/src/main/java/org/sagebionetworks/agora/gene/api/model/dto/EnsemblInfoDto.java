@@ -21,6 +21,7 @@ import jakarta.annotation.Generated;
 /**
  * EnsemblInfo
  */
+@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
 
 @Schema(name = "EnsemblInfo", description = "EnsemblInfo")
 @JsonTypeName("EnsemblInfo")

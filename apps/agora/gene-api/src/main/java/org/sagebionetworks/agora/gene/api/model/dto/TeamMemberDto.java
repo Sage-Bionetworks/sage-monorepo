@@ -18,6 +18,7 @@ import jakarta.annotation.Generated;
 /**
  * Team Member
  */
+@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
 
 @Schema(name = "TeamMember", description = "Team Member")
 @JsonTypeName("TeamMember")

@@ -18,6 +18,7 @@ import jakarta.annotation.Generated;
 /**
  * Experimental Validation
  */
+@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
 
 @Schema(name = "ExperimentalValidation", description = "Experimental Validation")
 @JsonTypeName("ExperimentalValidation")

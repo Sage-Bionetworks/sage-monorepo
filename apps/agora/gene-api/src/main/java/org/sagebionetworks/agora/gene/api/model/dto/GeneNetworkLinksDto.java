@@ -18,6 +18,7 @@ import jakarta.annotation.Generated;
 /**
  * Gene Network Links
  */
+@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
 
 @Schema(name = "GeneNetworkLinks", description = "Gene Network Links")
 @JsonTypeName("GeneNetworkLinks")

@@ -21,6 +21,7 @@ import jakarta.annotation.Generated;
 /**
  * BioDomain
  */
+@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
 
 @Schema(name = "BioDomain", description = "BioDomain")
 @JsonTypeName("BioDomain")

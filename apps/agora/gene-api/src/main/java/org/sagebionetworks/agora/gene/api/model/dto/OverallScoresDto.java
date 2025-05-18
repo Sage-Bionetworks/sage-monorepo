@@ -19,6 +19,7 @@ import jakarta.annotation.Generated;
 /**
  * OverallScores
  */
+@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
 
 @Schema(name = "OverallScores", description = "OverallScores")
 @JsonTypeName("OverallScores")

@@ -24,6 +24,7 @@ import jakarta.annotation.Generated;
 /**
  * GCT Gene
  */
+@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
 
 @Schema(name = "GCTGene", description = "GCT Gene")
 @JsonTypeName("GCTGene")
