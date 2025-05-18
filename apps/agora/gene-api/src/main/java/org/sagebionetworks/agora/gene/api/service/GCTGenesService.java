@@ -2,8 +2,7 @@ package org.sagebionetworks.agora.gene.api.service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -82,7 +81,7 @@ public class GCTGenesService {
     List<RnaDifferentialExpressionDocument> differentialExpression =
       rnaDifferentialExpressionRepository.findByModelSorted(model);
 
-    Map<String, GCTGeneDto> genes = new HashMap<>();
+    Map<String, GCTGeneDto> genes = new LinkedHashMap<>();
     if (differentialExpression != null && !differentialExpression.isEmpty()) {
       // Fetch data
       Map<String, GeneDocument> allGenes = getGenesMap();
@@ -118,9 +117,7 @@ public class GCTGenesService {
       }
     }
 
-    // Prepare the list of GCT genes and sort them by their ensembl_gene_id
     List<GCTGeneDto> geneList = new ArrayList<>(genes.values());
-    geneList.sort(Comparator.comparing(GCTGeneDto::getEnsemblGeneId));
 
     return GCTGenesListDto.builder().items(geneList).build();
   }
