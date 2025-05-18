@@ -181,7 +181,7 @@ public class GCTGenesService {
       .map(b -> b.getGeneBioDomains().stream().map(BioDomainDocument::getBioDomain).toList())
       .orElse(null);
 
-    // TODO: Remove after fixing the type of associations in the API description
+    // TODO: Remove after changing the type of associations in the API description
     List<BigDecimal> associations = getComparisonGeneAssociations(gene)
       .stream()
       .map(BigDecimal::valueOf)
@@ -202,9 +202,8 @@ public class GCTGenesService {
   }
 
   private List<Integer> getComparisonGeneAssociations(GeneDocument gene) {
+    // TODO: Use enum for the associations
     List<Integer> associations = new ArrayList<>();
-
-    logger.info("gene: {}", gene);
 
     // Genetically Associated with LOAD
     if (Boolean.TRUE.equals(gene.isIgap())) {
@@ -232,12 +231,11 @@ public class GCTGenesService {
       associations.add(4);
     }
 
-    logger.info("associations: {}", associations);
-
     return associations;
   }
 
   private List<String> getTargetEnablingResources(GeneDocument gene) {
+    // TODO: Use enum for the resources
     List<String> resources = new ArrayList<>();
     if (Boolean.TRUE.equals(gene.getIsAdi())) {
       resources.add("AD Informer Set");
