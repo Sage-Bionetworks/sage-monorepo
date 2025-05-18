@@ -13,16 +13,11 @@ import org.sagebionetworks.agora.gene.api.model.document.GeneDocument;
 import org.sagebionetworks.agora.gene.api.model.document.OverallScoresDocument;
 import org.sagebionetworks.agora.gene.api.model.document.RnaDifferentialExpressionDocument;
 import org.sagebionetworks.agora.gene.api.model.document.TargetNominationDocument;
-import org.sagebionetworks.agora.gene.api.model.dto.BioDomainsDto;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneDto;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneNominationsDto;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneTissueDto;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGenesListDto;
-import org.sagebionetworks.agora.gene.api.model.dto.GeneDto;
-import org.sagebionetworks.agora.gene.api.model.dto.OverallScoresDto;
 import org.sagebionetworks.agora.gene.api.model.dto.TeamDto;
-import org.sagebionetworks.agora.gene.api.model.mapper.GeneMapper;
-import org.sagebionetworks.agora.gene.api.model.mapper.RnaDifferentialExpressionMapper;
 import org.sagebionetworks.agora.gene.api.model.repository.BioDomainsRepository;
 import org.sagebionetworks.agora.gene.api.model.repository.GeneRepository;
 import org.sagebionetworks.agora.gene.api.model.repository.OverallScoresRepository;
@@ -36,18 +31,12 @@ public class GCTGenesService {
 
   private static final Logger logger = LoggerFactory.getLogger(GCTGenesService.class);
 
-  private GeneMapper geneMapper = new GeneMapper();
-  private RnaDifferentialExpressionMapper rnaDifferentialExpressionMapper =
-    new RnaDifferentialExpressionMapper();
-
   private final GeneRepository geneRepository;
   private final RnaDifferentialExpressionRepository rnaDifferentialExpressionRepository;
   private final OverallScoresRepository overallScoresRepository;
   private final BioDomainsRepository bioDomainsRepository;
 
   private final TeamService teamService;
-  private final OverallScoresService overallScoresService;
-  private final BioDomainsService bioDomainsService;
 
   public GCTGenesService(
     GeneRepository geneRepository,
@@ -61,8 +50,6 @@ public class GCTGenesService {
     this.geneRepository = geneRepository;
     this.rnaDifferentialExpressionRepository = rnaDifferentialExpressionRepository;
     this.teamService = teamService;
-    this.overallScoresService = overallScoresService;
-    this.bioDomainsService = bioDomainsService;
     this.overallScoresRepository = overallScoresRepository;
     this.bioDomainsRepository = bioDomainsRepository;
   }
@@ -92,12 +79,6 @@ public class GCTGenesService {
   private GCTGenesListDto getRnaComparisonGenes(String model) {
     List<RnaDifferentialExpressionDocument> differentialExpression =
       rnaDifferentialExpressionRepository.findByModelSorted(model);
-    logger.info("differentialExpression: {}", differentialExpression.size());
-
-    // Print each document with the logger
-    for (RnaDifferentialExpressionDocument doc : differentialExpression) {
-      logger.info("RnaDifferentialExpressionDocument: {}", doc);
-    }
 
     Map<String, GCTGeneDto> genes = new HashMap<>();
     if (differentialExpression != null && !differentialExpression.isEmpty()) {
@@ -292,49 +273,32 @@ public class GCTGenesService {
 
           data.addTeamsItem(n.getTeam());
         }
+
         // Studies
-        // if (n.getStudy() != null) {
-        //   for (String item : n.getStudy().split(",\\s*")) {
-        //     if (!builder.build().getStudies().contains(item)) {
-        //       builder.studies(
-        //         new ArrayList<>(builder.build().getStudies()) {
-        //           {
-        //             add(item);
-        //           }
-        //         }
-        //       );
-        //     }
-        //   }
-        // }
+        if (n.getStudy() != null) {
+          for (String item : n.getStudy().split(",\\s*")) {
+            if (!data.getStudies().contains(item)) {
+              data.addStudiesItem(item);
+            }
+          }
+        }
 
         // Inputs
-        // if (n.getInputData() != null) {
-        //   for (String item : n.getInputData().split(",\\s*")) {
-        //     if (!builder.build().getInputs().contains(item)) {
-        //       builder.inputs(
-        //         new ArrayList<>(builder.build().getInputs()) {
-        //           {
-        //             add(item);
-        //           }
-        //         }
-        //       );
-        //     }
-        //   }
-        // }
+        if (n.getInputData() != null) {
+          for (String item : n.getInputData().split(",\\s*")) {
+            if (!data.getInputs().contains(item)) {
+              data.addInputsItem(item);
+            }
+          }
+        }
 
         // Validations
-        // if (n.getValidationStudyDetails() != null) {
-        //   String validationStudyDetailClean = n.getValidationStudyDetails().trim().toLowerCase();
-        //   if (!builder.build().getValidations().contains(validationStudyDetailClean)) {
-        //     builder.validations(
-        //       new ArrayList<>(builder.build().getValidations()) {
-        //         {
-        //           add(validationStudyDetailClean);
-        //         }
-        //       }
-        //     );
-        //   }
-        // }
+        if (n.getValidationStudyDetails() != null) {
+          String validationStudyDetailClean = n.getValidationStudyDetails().trim().toLowerCase();
+          if (!data.getValidations().contains(validationStudyDetailClean)) {
+            data.addValidationsItem(validationStudyDetailClean);
+          }
+        }
       }
     }
 

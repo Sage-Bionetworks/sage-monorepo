@@ -1,5 +1,6 @@
 package org.sagebionetworks.agora.gene.api.model.document;
 
+import com.mongodb.lang.Nullable;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -10,4 +11,14 @@ public class TargetNominationDocument {
   private int initialNomination;
 
   private String team;
+
+  @Nullable
+  private String study;
+
+  @Field("input_data")
+  private String inputData;
+
+  @Nullable
+  @Field("validation_study_details")
+  private String validationStudyDetails;
 }
