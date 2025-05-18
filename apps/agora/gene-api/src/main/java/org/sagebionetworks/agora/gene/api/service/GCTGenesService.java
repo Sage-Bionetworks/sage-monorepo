@@ -36,26 +36,24 @@ public class GCTGenesService {
 
   private TeamMapper teamMapper = new TeamMapper();
 
-  private final GeneRepository geneRepository;
-  private final RnaDifferentialExpressionRepository rnaDifferentialExpressionRepository;
-  private final OverallScoresRepository overallScoresRepository;
   private final BioDomainsRepository bioDomainsRepository;
+  private final GeneRepository geneRepository;
+  private final OverallScoresRepository overallScoresRepository;
+  private final RnaDifferentialExpressionRepository rnaDifferentialExpressionRepository;
   private final TeamRepository teamRepository;
 
   public GCTGenesService(
+    BioDomainsRepository bioDomainsRepository,
     GeneRepository geneRepository,
-    RnaDifferentialExpressionRepository rnaDifferentialExpressionRepository,
-    TeamRepository teamRepository,
-    OverallScoresService overallScoresService,
-    BioDomainsService bioDomainsService,
     OverallScoresRepository overallScoresRepository,
-    BioDomainsRepository bioDomainsRepository
+    RnaDifferentialExpressionRepository rnaDifferentialExpressionRepository,
+    TeamRepository teamRepository
   ) {
+    this.bioDomainsRepository = bioDomainsRepository;
     this.geneRepository = geneRepository;
+    this.overallScoresRepository = overallScoresRepository;
     this.rnaDifferentialExpressionRepository = rnaDifferentialExpressionRepository;
     this.teamRepository = teamRepository;
-    this.overallScoresRepository = overallScoresRepository;
-    this.bioDomainsRepository = bioDomainsRepository;
   }
 
   public GCTGenesListDto getComparisonGenes(String category, String subCategory) {
