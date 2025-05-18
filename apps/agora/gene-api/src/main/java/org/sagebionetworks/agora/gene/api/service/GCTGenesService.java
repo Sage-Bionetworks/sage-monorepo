@@ -13,15 +13,18 @@ import org.sagebionetworks.agora.gene.api.model.document.GeneDocument;
 import org.sagebionetworks.agora.gene.api.model.document.OverallScoresDocument;
 import org.sagebionetworks.agora.gene.api.model.document.RnaDifferentialExpressionDocument;
 import org.sagebionetworks.agora.gene.api.model.document.TargetNominationDocument;
+import org.sagebionetworks.agora.gene.api.model.document.TeamDocument;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneDto;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneNominationsDto;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneTissueDto;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGenesListDto;
 import org.sagebionetworks.agora.gene.api.model.dto.TeamDto;
+import org.sagebionetworks.agora.gene.api.model.mapper.TeamMapper;
 import org.sagebionetworks.agora.gene.api.model.repository.BioDomainsRepository;
 import org.sagebionetworks.agora.gene.api.model.repository.GeneRepository;
 import org.sagebionetworks.agora.gene.api.model.repository.OverallScoresRepository;
 import org.sagebionetworks.agora.gene.api.model.repository.RnaDifferentialExpressionRepository;
+import org.sagebionetworks.agora.gene.api.model.repository.TeamRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -31,17 +34,18 @@ public class GCTGenesService {
 
   private static final Logger logger = LoggerFactory.getLogger(GCTGenesService.class);
 
+  private TeamMapper teamMapper = new TeamMapper();
+
   private final GeneRepository geneRepository;
   private final RnaDifferentialExpressionRepository rnaDifferentialExpressionRepository;
   private final OverallScoresRepository overallScoresRepository;
   private final BioDomainsRepository bioDomainsRepository;
-
-  private final TeamService teamService;
+  private final TeamRepository teamRepository;
 
   public GCTGenesService(
     GeneRepository geneRepository,
     RnaDifferentialExpressionRepository rnaDifferentialExpressionRepository,
-    TeamService teamService,
+    TeamRepository teamRepository,
     OverallScoresService overallScoresService,
     BioDomainsService bioDomainsService,
     OverallScoresRepository overallScoresRepository,
@@ -49,7 +53,7 @@ public class GCTGenesService {
   ) {
     this.geneRepository = geneRepository;
     this.rnaDifferentialExpressionRepository = rnaDifferentialExpressionRepository;
-    this.teamService = teamService;
+    this.teamRepository = teamRepository;
     this.overallScoresRepository = overallScoresRepository;
     this.bioDomainsRepository = bioDomainsRepository;
   }
@@ -84,7 +88,7 @@ public class GCTGenesService {
     if (differentialExpression != null && !differentialExpression.isEmpty()) {
       // Fetch data
       Map<String, GeneDocument> allGenes = getGenesMap();
-      List<TeamDto> teams = teamService.getTeams();
+      List<TeamDocument> teams = teamRepository.findAll();
       List<OverallScoresDocument> scores = overallScoresRepository.findAll();
       List<BioDomainsDocument> allBiodomains = bioDomainsRepository.findAll();
 
@@ -145,7 +149,7 @@ public class GCTGenesService {
 
   private GCTGeneDto getComparisonGene(
     GeneDocument gene,
-    List<TeamDto> teams,
+    List<TeamDocument> teams,
     List<OverallScoresDocument> scores,
     List<BioDomainsDocument> allBiodomains
   ) {
@@ -232,7 +236,7 @@ public class GCTGenesService {
 
   private GCTGeneNominationsDto getComparisonGeneNominations(
     GeneDocument gene,
-    List<TeamDto> teams
+    List<TeamDocument> teams
   ) {
     GCTGeneNominationsDto data = GCTGeneNominationsDto.builder()
       .count(gene.getTotalNominations() != null ? gene.getTotalNominations() : 0)
@@ -261,6 +265,7 @@ public class GCTGenesService {
             .stream()
             .filter(t -> n.getTeam().equals(t.getTeam()))
             .findFirst()
+            .map(teamMapper::convertToDto)
             .orElse(null);
 
           if (
