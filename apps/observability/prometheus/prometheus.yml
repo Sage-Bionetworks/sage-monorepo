@@ -2,7 +2,7 @@ global:
   scrape_interval: 15s
 
 scrape_configs:
-  - job_name: 'amp-als-dataset-service'
+  - job_name: 'agora-gene-api'
     metrics_path: '/actuator/prometheus'
     static_configs:
-      - targets: ['amp-als-dataset-service:8404']
+      - targets: ['agora-gene-api:3334']

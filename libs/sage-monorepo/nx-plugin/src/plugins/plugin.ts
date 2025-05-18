@@ -35,7 +35,7 @@ function writeProjectConfigurationsToCache(
 }
 
 const projectFilePattern =
-  '{apps,libs}/{openchallenges,agora,sage,sandbox,iatlas,amp-als,model-ad,explorers}/**/project.json';
+  '{apps,libs}/{openchallenges,agora,sage,sandbox,iatlas,amp-als,model-ad,explorers,observability}/**/project.json';
 
 export const createNodesV2: CreateNodesV2<SageMonorepoPluginOptions> = [
   projectFilePattern,

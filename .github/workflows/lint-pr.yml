@@ -31,6 +31,7 @@ jobs:
             explorers
             iatlas
             model-ad
+            observability
             openchallenges
             results-visualization-framework
             sage
