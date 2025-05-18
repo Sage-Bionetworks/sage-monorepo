@@ -67,7 +67,6 @@ function getComparisonGeneNominations(gene: Gene, teams: Team[]) {
   };
 
   gene.target_nominations?.forEach((n: TargetNomination) => {
-    // Year
     if (n.initial_nomination && (!data.year || n.initial_nomination < data.year)) {
       data.year = n.initial_nomination;
     }

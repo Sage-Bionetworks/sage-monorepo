@@ -1,11 +1,11 @@
 package org.sagebionetworks.agora.gene.api.model.document;
 
+import com.mongodb.lang.Nullable;
+import java.util.List;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-
-import com.mongodb.lang.Nullable;
 
 @Data
 @Document(collection = "geneinfo")
@@ -47,4 +47,12 @@ public class GeneDocument {
   @Nullable
   @Field("is_tep")
   private Boolean isTep;
+
+  @Nullable
+  @Field("total_nominations")
+  private Integer totalNominations;
+
+  @Nullable
+  @Field("target_nominations")
+  private List<TargetNominationDocument> targetNominations;
 }

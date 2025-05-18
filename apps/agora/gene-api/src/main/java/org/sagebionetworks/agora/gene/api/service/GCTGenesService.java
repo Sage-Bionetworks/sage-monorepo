@@ -12,8 +12,10 @@ import org.sagebionetworks.agora.gene.api.model.document.BioDomainsDocument;
 import org.sagebionetworks.agora.gene.api.model.document.GeneDocument;
 import org.sagebionetworks.agora.gene.api.model.document.OverallScoresDocument;
 import org.sagebionetworks.agora.gene.api.model.document.RnaDifferentialExpressionDocument;
+import org.sagebionetworks.agora.gene.api.model.document.TargetNominationDocument;
 import org.sagebionetworks.agora.gene.api.model.dto.BioDomainsDto;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneDto;
+import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneNominationsDto;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneTissueDto;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGenesListDto;
 import org.sagebionetworks.agora.gene.api.model.dto.GeneDto;
@@ -190,6 +192,7 @@ public class GCTGenesService {
     GCTGeneDto gctGene = GCTGeneDto.builder()
       .ensemblGeneId(gene.getEnsemblGeneId())
       .hgncSymbol(gene.getHgncSymbol())
+      .nominations(getComparisonGeneNominations(gene, teams))
       .associations(associations)
       .targetRiskScore(geneScores != null ? geneScores.getTargetRiskScore() : null)
       .geneticsScore(geneScores != null ? geneScores.getGeneticsScore() : null)
@@ -244,5 +247,109 @@ public class GCTGenesService {
       resources.add("Target Enabling Package");
     }
     return resources;
+  }
+
+  private GCTGeneNominationsDto getComparisonGeneNominations(
+    GeneDocument gene,
+    List<TeamDto> teams
+  ) {
+    GCTGeneNominationsDto data = GCTGeneNominationsDto.builder()
+      .count(gene.getTotalNominations() != null ? gene.getTotalNominations() : 0)
+      .year(0)
+      .teams(new ArrayList<>())
+      .studies(new ArrayList<>())
+      .inputs(new ArrayList<>())
+      .programs(new ArrayList<>())
+      .validations(new ArrayList<>())
+      .build();
+
+    if (gene.getTargetNominations() != null) {
+      for (TargetNominationDocument n : gene.getTargetNominations()) {
+        // Year
+        // XXX: Can n.getInitialNomination() be zero?
+        if (
+          n.getInitialNomination() > 0 &&
+          (data.getYear() == null || n.getInitialNomination() < data.getYear())
+        ) {
+          data.setYear(n.getInitialNomination());
+        }
+        // // Team / Programs
+        // if (n.getTeam() != null) {
+        //   TeamDto team = teams
+        //     .stream()
+        //     .filter(t -> n.getTeam().equals(t.getTeam()))
+        //     .findFirst()
+        //     .orElse(null);
+
+        // if (
+        //   team != null &&
+        //   team.getProgram() != null &&
+        //   !builder.build().getPrograms().contains(team.getProgram())
+        // ) {
+        //   builder.programs(
+        //     new ArrayList<>(builder.build().getPrograms()) {
+        //       {
+        //         add(team.getProgram());
+        //       }
+        //     }
+        //   );
+        // }
+
+        // builder.teams(
+        //   new ArrayList<>(builder.build().getTeams()) {
+        //     {
+        //       add(n.getTeam());
+        //     }
+        //   }
+        // );
+        // }
+
+        // Studies
+        // if (n.getStudy() != null) {
+        //   for (String item : n.getStudy().split(",\\s*")) {
+        //     if (!builder.build().getStudies().contains(item)) {
+        //       builder.studies(
+        //         new ArrayList<>(builder.build().getStudies()) {
+        //           {
+        //             add(item);
+        //           }
+        //         }
+        //       );
+        //     }
+        //   }
+        // }
+
+        // Inputs
+        // if (n.getInputData() != null) {
+        //   for (String item : n.getInputData().split(",\\s*")) {
+        //     if (!builder.build().getInputs().contains(item)) {
+        //       builder.inputs(
+        //         new ArrayList<>(builder.build().getInputs()) {
+        //           {
+        //             add(item);
+        //           }
+        //         }
+        //       );
+        //     }
+        //   }
+        // }
+
+        // Validations
+        // if (n.getValidationStudyDetails() != null) {
+        //   String validationStudyDetailClean = n.getValidationStudyDetails().trim().toLowerCase();
+        //   if (!builder.build().getValidations().contains(validationStudyDetailClean)) {
+        //     builder.validations(
+        //       new ArrayList<>(builder.build().getValidations()) {
+        //         {
+        //           add(validationStudyDetailClean);
+        //         }
+        //       }
+        //     );
+        //   }
+        // }
+      }
+    }
+
+    return data;
   }
 }
