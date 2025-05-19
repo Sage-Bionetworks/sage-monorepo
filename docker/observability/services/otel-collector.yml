@@ -1,16 +1,16 @@
 services:
   observability-otel-collector:
     image: ghcr.io/sage-bionetworks/observability-otel-collector:${OBSERVABILITY_VERSION:-local}
+    command: ['--config=/etc/otel-collector-config.yaml']
     container_name: observability-otel-collector
     restart: always
     volumes:
-      - ../../../apps/observability/otel-collector/otel-collector.yaml:/etc/otel-collector-config.yaml:ro
+      - ../../../apps/observability/otel-collector/otel-collector-config.yaml:/etc/otel-collector-config.yaml:ro
     networks:
       - observability
     ports:
-      - '8505:8505' # OTLP gRPC
-    command: ['--config=/etc/otel-collector-config.yaml']
-    deploy:
-      resources:
-        limits:
-          memory: 200M
+      - '8506:8506' # OTLP gRPC (default: 4317)
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: 200M

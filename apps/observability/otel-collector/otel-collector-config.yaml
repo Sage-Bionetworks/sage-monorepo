@@ -2,18 +2,20 @@ receivers:
   otlp:
     protocols:
       grpc:
-        endpoint: 0.0.0.0:8505
+        endpoint: 0.0.0.0:8506
 
 processors:
   batch:
 
 exporters:
-  logging:
+  debug:
+    verbosity: detailed
+
   prometheus:
-    endpoint: '0.0.0.0:8889'
+    endpoint: '0.0.0.0:8502'
 
   otlp/tempo:
-    endpoint: observability-tempo:4317
+    endpoint: observability-tempo:8505
     tls:
       insecure: true
 
@@ -22,7 +24,7 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp/tempo, logging]
+      exporters: [otlp/tempo, debug]
 
     metrics:
       receivers: [otlp]
