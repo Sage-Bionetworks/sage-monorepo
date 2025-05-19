@@ -12,7 +12,7 @@ args=(
   --file docker/model-ad/networks.yml
   --file docker/model-ad/volumes.yml
 
-  up $1 --detach --remove-orphans
+  up $1 --detach
 )
 
 docker compose "${args[@]}"

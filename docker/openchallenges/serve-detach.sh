@@ -23,7 +23,7 @@ args=(
   --file docker/openchallenges/networks.yml
   --file docker/openchallenges/volumes.yml
 
-  up $1 --detach --remove-orphans
+  up $1 --detach
 )
 
 docker compose "${args[@]}"

@@ -13,7 +13,7 @@ args=(
   --file docker/agora/networks.yml
   --file docker/agora/volumes.yml
 
-  up $1 --detach --remove-orphans
+  up $1 --detach
 )
 
 docker compose "${args[@]}"

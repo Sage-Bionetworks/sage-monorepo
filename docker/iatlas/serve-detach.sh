@@ -9,7 +9,7 @@ args=(
   --file docker/iatlas/networks.yml
   --file docker/iatlas/volumes.yml
 
-  up $1 --detach --remove-orphans
+  up $1 --detach
 )
 
 docker compose "${args[@]}"

@@ -7,7 +7,7 @@ args=(
   --file docker/sandbox/networks.yml
   --file docker/sandbox/volumes.yml
 
-  up $1 --remove-orphans
+  up $1
 )
 
 docker compose "${args[@]}"

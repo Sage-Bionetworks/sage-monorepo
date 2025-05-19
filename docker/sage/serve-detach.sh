@@ -6,7 +6,7 @@ args=(
 
   --file docker/sage/networks.yml
 
-  up $1 --detach --remove-orphans
+  up $1 --detach
 )
 
 docker compose "${args[@]}"
