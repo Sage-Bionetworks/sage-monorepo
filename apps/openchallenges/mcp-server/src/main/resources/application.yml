@@ -1,3 +1,7 @@
+openchallenges-mcp-server:
+  welcome-message: 'Welcome to the OpenChallenges MCP Server - dev mode'
+  api-base-url: :http://openchallenges-api-gateway:8082/api/v1
+
 server:
   port: 8887
 spring:
