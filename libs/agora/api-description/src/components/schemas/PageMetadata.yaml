@@ -1,0 +1,38 @@
+type: object
+description: The metadata of a page.
+properties:
+  number:
+    description: The page number.
+    type: integer
+    format: int32
+    example: 99
+  size:
+    description: The number of items in a single page.
+    type: integer
+    format: int32
+    example: 99
+  total_elements:
+    description: Total number of elements in the result set.
+    type: integer
+    format: int64
+    example: 99
+  total_pages:
+    description: Total number of pages in the result set.
+    type: integer
+    format: int32
+    example: 99
+  has_next:
+    description: Returns if there is a next page.
+    type: boolean
+    example: true
+  has_previous:
+    description: Returns if there is a previous page.
+    type: boolean
+    example: true
+required:
+  - number
+  - size
+  - total_elements
+  - total_pages
+  - has_next
+  - has_previous

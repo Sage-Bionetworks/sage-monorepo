@@ -1,0 +1,19 @@
+get:
+  tags:
+    - GeneExpressionProfile
+  summary: List gene expression profiles
+  description: List gene expression profiles
+  operationId: listGeneExpressionProfiles
+  parameters:
+    - $ref: ../components/parameters/query/geneExpressionProfileSearchQuery.yaml
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/GeneExpressionProfilesPage.yaml
+      description: Success
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml
