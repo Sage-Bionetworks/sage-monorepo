@@ -6,9 +6,27 @@ import org.springframework.context.annotation.Configuration;
 
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "openchallenges-mcp-server")
+@ConfigurationProperties
 public class McpServerConfigData {
 
-  private String welcomeMessage;
-  private String apiBaseUrl;
+  private Welcome welcome;
+  private Api api;
+
+  @Data
+  public static class Welcome {
+
+    private String message;
+  }
+
+  @Data
+  public static class Api {
+
+    private Base base;
+
+    @Data
+    public static class Base {
+
+      private String url;
+    }
+  }
 }
