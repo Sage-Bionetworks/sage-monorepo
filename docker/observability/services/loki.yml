@@ -4,7 +4,7 @@ services:
     container_name: observability-loki
     restart: always
     # volumes:
-    #   - ../../../apps/observability/loki/local-config.yaml:/etc/loki/local-config.yaml:ro
+    #   - ../../../apps/observability/loki/loki.yaml:/etc/loki/local-config.yaml:ro
     networks:
       - observability
     ports:

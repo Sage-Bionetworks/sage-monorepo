@@ -1,0 +1,16 @@
+services:
+  observability-tempo:
+    image: ghcr.io/sage-bionetworks/observability-tempo:${AMP_ALS_VERSION:-local}
+    container_name: observability-tempo
+    restart: always
+    volumes:
+      - ../../../apps/observability/tempo/tempo.yaml:/etc/tempo.yaml:ro
+    networks:
+      - observability
+    ports:
+      - '8504:3200' # tempo HTTP
+      - '4317:4317' # OTLP gRPC
+    deploy:
+      resources:
+        limits:
+          memory: 200M
