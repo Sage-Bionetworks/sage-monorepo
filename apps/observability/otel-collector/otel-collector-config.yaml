@@ -2,6 +2,7 @@ receivers:
   otlp:
     protocols:
       grpc:
+        endpoint: 0.0.0.0:8505
 
 processors:
   batch:
@@ -12,7 +13,7 @@ exporters:
     endpoint: '0.0.0.0:8889'
 
   otlp/tempo:
-    endpoint: tempo:4317
+    endpoint: observability-tempo:4317
     tls:
       insecure: true
 

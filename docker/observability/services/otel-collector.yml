@@ -4,12 +4,12 @@ services:
     container_name: observability-otel-collector
     restart: always
     volumes:
-      - ../../../apps/observability/otel-collector/otel-collector.yaml:/etc/otel-collector-config.yml:ro
+      - ../../../apps/observability/otel-collector/otel-collector.yaml:/etc/otel-collector-config.yaml:ro
     networks:
       - observability
     ports:
-      - '8505:4317' # OTLP gRPC
-    command: ['--config=/etc/otel-collector-config.yml']
+      - '8505:8505' # OTLP gRPC
+    command: ['--config=/etc/otel-collector-config.yaml']
     deploy:
       resources:
         limits:

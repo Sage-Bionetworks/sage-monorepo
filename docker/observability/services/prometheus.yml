@@ -4,7 +4,7 @@ services:
     container_name: observability-prometheus
     restart: always
     volumes:
-      - ../../../apps/observability/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml:ro:ro
+      - ../../../apps/observability/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml:ro
     networks:
       - observability
     ports:
