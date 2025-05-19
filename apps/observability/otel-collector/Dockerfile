@@ -1,0 +1,1 @@
+FROM otel/opentelemetry-collector-contrib:0.126.0

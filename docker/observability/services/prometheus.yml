@@ -1,10 +1,10 @@
 services:
   observability-prometheus:
-    image: ghcr.io/sage-bionetworks/observability-prometheus:${AMP_ALS_VERSION:-local}
+    image: ghcr.io/sage-bionetworks/observability-prometheus:${OBSERVABILITY_VERSION:-local}
     container_name: observability-prometheus
     restart: always
     volumes:
-      - ../../../apps/observability/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ../../../apps/observability/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml:ro:ro
     networks:
       - observability
     ports:

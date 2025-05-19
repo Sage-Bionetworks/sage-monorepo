@@ -1,6 +1,6 @@
 services:
   observability-loki:
-    image: ghcr.io/sage-bionetworks/observability-loki:${AMP_ALS_VERSION:-local}
+    image: ghcr.io/sage-bionetworks/observability-loki:${OBSERVABILITY_VERSION:-local}
     container_name: observability-loki
     restart: always
     # volumes:
@@ -9,6 +9,7 @@ services:
       - observability
     ports:
       - '8503:3100'
+    # command: -config.file=/etc/loki/local-config.yaml
     deploy:
       resources:
         limits:

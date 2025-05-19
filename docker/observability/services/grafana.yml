@@ -1,6 +1,6 @@
 services:
   observability-grafana:
-    image: ghcr.io/sage-bionetworks/observability-grafana:${AMP_ALS_VERSION:-local}
+    image: ghcr.io/sage-bionetworks/observability-grafana:${OBSERVABILITY_VERSION:-local}
     container_name: observability-grafana
     restart: always
     environment:
@@ -10,13 +10,13 @@ services:
       - observability
     ports:
       - '8501:3000'
-    depends_on:
-      observability-loki:
-        condition: service_started
-      observability-prometheus:
-        condition: service_started
-      observability-tempo:
-        condition: service_started
+    # depends_on:
+    #   observability-loki:
+    #     condition: service_started
+    #   observability-prometheus:
+    #     condition: service_started
+    #   observability-tempo:
+    #     condition: service_started
     deploy:
       resources:
         limits:
