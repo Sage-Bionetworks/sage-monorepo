@@ -13,6 +13,8 @@ args=(
   --file docker/agora/networks.yml
   --file docker/agora/volumes.yml
 
+  --project-name agora
+
   up $1 --detach
 )
 

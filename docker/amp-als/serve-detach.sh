@@ -11,6 +11,8 @@ args=(
 
   --file docker/amp-als/networks.yml
 
+  --project-name amp-als
+
   up $1 --detach
 )
 

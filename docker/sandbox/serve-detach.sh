@@ -7,6 +7,8 @@ args=(
   --file docker/sandbox/networks.yml
   --file docker/sandbox/volumes.yml
 
+  --project-name sandbox
+
   up $1 --detach
 )
 

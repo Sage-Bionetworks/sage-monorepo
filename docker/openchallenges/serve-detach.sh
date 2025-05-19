@@ -23,6 +23,8 @@ args=(
   --file docker/openchallenges/networks.yml
   --file docker/openchallenges/volumes.yml
 
+  --project-name openchallenges
+
   up $1 --detach
 )
 

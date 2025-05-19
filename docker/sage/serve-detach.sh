@@ -6,6 +6,8 @@ args=(
 
   --file docker/sage/networks.yml
 
+  --project-name sage
+
   up $1 --detach
 )
 

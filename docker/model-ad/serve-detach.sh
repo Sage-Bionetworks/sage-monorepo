@@ -12,6 +12,8 @@ args=(
   --file docker/model-ad/networks.yml
   --file docker/model-ad/volumes.yml
 
+  --project-name model-ad
+
   up $1 --detach
 )
 

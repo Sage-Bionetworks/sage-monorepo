@@ -6,6 +6,8 @@ args=(
 
   --file docker/synapse/networks.yml
 
+  --project-name sandbox
+
   up $1 --detach
 )
 

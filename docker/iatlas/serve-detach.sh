@@ -9,6 +9,8 @@ args=(
   --file docker/iatlas/networks.yml
   --file docker/iatlas/volumes.yml
 
+  --project-name iatlas
+
   up $1 --detach
 )
 
