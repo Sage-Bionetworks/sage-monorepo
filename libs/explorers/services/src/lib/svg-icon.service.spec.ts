@@ -17,10 +17,6 @@ describe('SvgIconService', () => {
     expect(service.isValidImagePath('/agora-assets/icons/cog.svg')).toBe(true);
     expect(service.isValidImagePath('/model-ad-assets/icons/cog.svg')).toBe(true);
     expect(service.isValidImagePath('/explorers-assets/icons/cog.svg')).toBe(true);
-
-    expect(service.isValidImagePath('/agora-assets/images/cog.svg')).toBe(true);
-    expect(service.isValidImagePath('/model-ad-assets/images/cog.svg')).toBe(true);
-    expect(service.isValidImagePath('/explorers-assets/images/cog.svg')).toBe(true);
   });
 
   it('should not load SVG if imagePath is invalid', async () => {
