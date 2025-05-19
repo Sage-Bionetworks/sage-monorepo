@@ -5,5 +5,5 @@ export interface SearchResult {
 }
 
 export interface SearchResultsList {
-  items?: Array<SearchResult>;
+  items?: SearchResult[];
 }
