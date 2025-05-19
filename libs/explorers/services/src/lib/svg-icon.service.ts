@@ -52,8 +52,8 @@ export class SvgIconService {
     if (path.startsWith('http://') || path.startsWith('https://')) {
       return false;
     }
-    // Ensure the path comes from '.*/icons/*.svg' OR '.*/images/*.svg'
-    return Boolean(path) && (/\/icons\/[^/]+\.svg$/.test(path) || /\/images\/.*\.svg$/.test(path));
+    // Ensure the path comes from '.*/icons/*.svg'
+    return Boolean(path) && /\/icons\/[^/]+\.svg$/.test(path);
   }
 
   getSvg(path: string): Observable<SafeHtml> {
