@@ -1,0 +1,13 @@
+type: object
+description: A page of gene expression profiles.
+allOf:
+  - $ref: PageMetadata.yaml
+  - type: object
+    properties:
+      geneExpressionProfiles:
+        description: A list of gene epxression profiles.
+        type: array
+        items:
+          $ref: GeneExpressionProfile.yaml
+    required:
+      - geneExpressionProfiles
