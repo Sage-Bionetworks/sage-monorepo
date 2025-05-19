@@ -1,5 +1,5 @@
-welcome.message: 'Welcome to the OpenChallenges MCP Server - dev mode'
-api.base.url: http://openchallenges-api-gateway:8082/api/v1
+welcome-message: ${WELCOME_MESSAGE:'Welcome to the OpenChallenges MCP Server - dev mode'}
+api-base-url: ${API_BASE_URL:http://openchallenges-api-gateway:8082/api/v1}
 
 server:
   port: 8887

@@ -9,24 +9,6 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties
 public class McpServerConfigData {
 
-  private Welcome welcome;
-  private Api api;
-
-  @Data
-  public static class Welcome {
-
-    private String message;
-  }
-
-  @Data
-  public static class Api {
-
-    private Base base;
-
-    @Data
-    public static class Base {
-
-      private String url;
-    }
-  }
+  private String welcomeMessage;
+  private String apiBaseUrl;
 }
