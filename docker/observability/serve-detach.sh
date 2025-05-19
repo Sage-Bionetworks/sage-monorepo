@@ -6,6 +6,7 @@ args=(
   # List of services in alphanumeric order
   --file docker/"$product_name"/services/grafana.yml
   --file docker/"$product_name"/services/prometheus.yml
+  --file docker/"$product_name"/services/loki.yml
 
   --file docker/"$product_name"/networks.yml
 
