@@ -25,6 +25,8 @@ dependencies {
   implementation(libs.jackson.databind)
   implementation(libs.jackson.dataformat.yaml)
   implementation(libs.jackson.datatype.jsr310)
+  implementation(libs.micrometer.registry.prometheus)
+  implementation(libs.opentelemetry.spring.boot.starter)
   implementation(libs.sage.bionetworks.util)
   implementation(libs.spring.boot.starter.data.mongodb)
   implementation(libs.spring.boot.starter.validation)
