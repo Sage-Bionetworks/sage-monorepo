@@ -18,6 +18,14 @@ repositories {
   mavenLocal()
 }
 
+dependencyManagement {
+  imports {
+    // Use the io.spring.dependency-management plugin and import the BOMs in dependencyManagement.
+    // Reference: https://opentelemetry.io/docs/zero-code/java/spring-boot-starter/getting-started/
+    mavenBom("io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom:2.16.0")
+  }
+}
+
 dependencies {
   annotationProcessor(libs.lombok)
   compileOnly(libs.lombok)
