@@ -1,6 +1,5 @@
 plugins {
 	alias(libs.plugins.spring.boot)
-	alias(libs.plugins.spring.dependency.management)
 	java
 }
 
@@ -16,14 +15,6 @@ java {
 repositories {
   mavenCentral()
   mavenLocal()
-}
-
-dependencyManagement {
-  imports {
-    // Use the io.spring.dependency-management plugin and import the BOMs in dependencyManagement.
-    // Reference: https://opentelemetry.io/docs/zero-code/java/spring-boot-starter/getting-started/
-    mavenBom("io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom:2.16.0")
-  }
 }
 
 dependencies {
@@ -42,6 +33,8 @@ dependencies {
   implementation(libs.spring.boot.starter.web)
   implementation(libs.spring.data.commons)
   implementation(libs.springdoc.openapi.ui)
+  implementation(platform(libs.opentelemetry.bom))
+  implementation(platform(libs.spring.boot.dependencies))
   runtimeOnly(libs.spring.boot.devtools)
   testImplementation(libs.spring.boot.starter.test)
 }

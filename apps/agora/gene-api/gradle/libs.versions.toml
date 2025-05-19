@@ -7,7 +7,6 @@ opentelemetry = "2.16.0"
 sage-bionetworks = "0.0.1-SNAPSHOT"
 spring-boot = "3.4.5"
 spring-data = "3.4.5"
-spring-dependency-management = "1.1.7"
 springdoc = "2.8.6"
 
 [libraries]
@@ -20,6 +19,7 @@ micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-p
 opentelemetry-bom = { module = "io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom", version.ref = "opentelemetry" }
 opentelemetry-spring-boot-starter = { module = "io.opentelemetry.instrumentation:opentelemetry-spring-boot-starter", version.ref = "opentelemetry" }
 sage-bionetworks-util = { group = "org.sagebionetworks", name = "util", version.ref = "sage-bionetworks" }
+spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
 spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools", version.ref = "spring-boot" }
 spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "spring-boot" }
 spring-boot-starter-data-mongodb = { module = "org.springframework.boot:spring-boot-starter-data-mongodb", version.ref = "spring-boot" }
@@ -31,4 +31,3 @@ springdoc-openapi-ui = { module = "org.springdoc:springdoc-openapi-starter-webmv
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
-spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
