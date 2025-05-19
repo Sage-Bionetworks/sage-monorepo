@@ -1,9 +1,7 @@
-/* eslint-disable */
 export default {
   displayName: 'model-ad-api-client-angular',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  globals: {},
   coverageDirectory: '../../../coverage/libs/model-ad/api-client-angular',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
