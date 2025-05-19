@@ -16,6 +16,8 @@ servers:
 tags:
   - name: Genes
     description: Operations about genes.
+  - name: GeneExpressionProfile
+    description: Operations about gene expression profiles.
 paths:
   /genes/comparison:
     get:
@@ -49,6 +51,26 @@ paths:
                 $ref: '#/components/schemas/GCTGenesList'
         '404':
           $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /geneExpressionProfiles:
+    get:
+      tags:
+        - GeneExpressionProfile
+      summary: List gene expression profiles
+      description: List gene expression profiles
+      operationId: listGeneExpressionProfiles
+      parameters:
+        - $ref: '#/components/parameters/geneExpressionProfileSearchQuery'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneExpressionProfilesPage'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
@@ -463,6 +485,121 @@ components:
       x-java-class-annotations:
         - '@lombok.AllArgsConstructor'
         - '@lombok.Builder'
+    GeneExpressionProfileSort:
+      description: What to sort results by.
+      type: string
+      default: relevance
+      enum:
+        - created
+        - relevance
+    GeneExpressionProfileDirection:
+      description: The direction to sort the results by.
+      type: string
+      nullable: true
+      enum:
+        - asc
+        - desc
+    GeneExpressionProfileSearchQuery:
+      type: object
+      description: A gene expression profile search query.
+      properties:
+        page_number:
+          description: The page number.
+          type: integer
+          format: int32
+          default: 0
+          minimum: 0
+        page_size:
+          description: The number of items in a single page.
+          type: integer
+          format: int32
+          default: 100
+          minimum: 1
+        sort:
+          $ref: '#/components/schemas/GeneExpressionProfileSort'
+        direction:
+          $ref: '#/components/schemas/GeneExpressionProfileDirection'
+        search_terms:
+          description: A string of search terms used to filter the results.
+          type: string
+          example: A1BG
+    PageMetadata:
+      type: object
+      description: The metadata of a page.
+      properties:
+        number:
+          description: The page number.
+          type: integer
+          format: int32
+          example: 99
+        size:
+          description: The number of items in a single page.
+          type: integer
+          format: int32
+          example: 99
+        total_elements:
+          description: Total number of elements in the result set.
+          type: integer
+          format: int64
+          example: 99
+        total_pages:
+          description: Total number of pages in the result set.
+          type: integer
+          format: int32
+          example: 99
+        has_next:
+          description: Returns if there is a next page.
+          type: boolean
+          example: true
+        has_previous:
+          description: Returns if there is a previous page.
+          type: boolean
+          example: true
+      required:
+        - number
+        - size
+        - total_elements
+        - total_pages
+        - has_next
+        - has_previous
+    EnsemblGeneId:
+      description: The Ensembl gene ID.
+      type: string
+      minLength: 15
+      maxLength: 15
+      pattern: ^ENSG\d{11}$
+      example: ENSG00000139618
+    HgncGeneSymbol:
+      description: The HGNC gene symbol.
+      type: string
+      minLength: 0
+      maxLength: 20
+      pattern: ^[A-Za-z0-9\-]+$
+      example: TP53
+    GeneExpressionProfile:
+      type: object
+      description: A gene expression profile.
+      properties:
+        ensembl_gene_id:
+          $ref: '#/components/schemas/EnsemblGeneId'
+        hgnc_symbol:
+          $ref: '#/components/schemas/HgncGeneSymbol'
+      required:
+        - ensembl_gene_id
+    GeneExpressionProfilesPage:
+      type: object
+      description: A page of gene expression profiles.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            geneExpressionProfiles:
+              description: A list of gene epxression profiles.
+              type: array
+              items:
+                $ref: '#/components/schemas/GeneExpressionProfile'
+          required:
+            - geneExpressionProfiles
     TargetNomination:
       type: object
       description: TargetNomination
@@ -946,3 +1083,16 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
+    BadRequest:
+      description: Invalid request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+  parameters:
+    geneExpressionProfileSearchQuery:
+      name: geneExpressionProfileSearchQuery
+      description: The search query used to find gene expression profiles.
+      in: query
+      schema:
+        $ref: '#/components/schemas/GeneExpressionProfileSearchQuery'

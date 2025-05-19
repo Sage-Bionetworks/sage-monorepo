@@ -4,6 +4,6 @@ properties:
   ensembl_gene_id:
     $ref: EnsemblGeneId.yaml
   hgnc_symbol:
-    $ref: HgncSymbol.yaml
+    $ref: HgncGeneSymbol.yaml
 required:
   - ensembl_gene_id
