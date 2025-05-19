@@ -16,7 +16,7 @@ apis:
   agora-api-description:
     root: libs/agora/api-description/openapi/openapi.yaml
   model-ad-api-description:
-    root: libs/model-ad/api-description/build/openapi.yaml
+    root: libs/model-ad/api-description/openapi/openapi.yaml
   openchallenges-api-description:
     root: libs/openchallenges/api-description/openapi/openapi.yaml
   synapse-api-description:

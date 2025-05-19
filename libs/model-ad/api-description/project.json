@@ -7,7 +7,7 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "redocly bundle --output build/openapi.yaml src/openapi.yaml",
+        "command": "redocly bundle --output openapi/openapi.yaml src/openapi.yaml",
         "cwd": "{projectRoot}"
       }
     },
@@ -19,6 +19,5 @@
       "dependsOn": ["build"]
     }
   },
-  "tags": ["language:openapi"],
-  "implicitDependencies": []
+  "tags": ["language:openapi"]
 }
