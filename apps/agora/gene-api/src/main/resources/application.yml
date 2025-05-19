@@ -16,3 +16,21 @@ spring:
     date-format: org.sagebionetworks.agora.gene.api.RFC3339DateFormat
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+otel:
+  exporter:
+    otlp:
+      endpoint: http://collector:4317
+  resource:
+    attributes:
+      service.name: agora-gene-api
