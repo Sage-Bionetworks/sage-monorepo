@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 
+product_name="sage"
+
 args=(
   # List of services in alphanumeric order
-  --file docker/sage/services/otel-collector.yml
+  --file docker/"$product_name"/services/otel-collector.yml
 
-  --file docker/sage/networks.yml
+  --file docker/"$product_name"/networks.yml
 
-  --project-name sage
+  --project-name "$product_name"
 
   up $1 --detach
 )

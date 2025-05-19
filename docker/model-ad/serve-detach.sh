@@ -1,18 +1,20 @@
 #!/usr/bin/env bash
 
+product_name="model-ad"
+
 args=(
   # List of services in alphanumeric order
-  --file docker/model-ad/services/apex.yml
-  --file docker/model-ad/services/api-docs.yml
-  --file docker/model-ad/services/api.yml
-  --file docker/model-ad/services/app.yml
-  --file docker/model-ad/services/data.yml
-  --file docker/model-ad/services/mongo.yml
+  --file docker/"$product_name"/services/apex.yml
+  --file docker/"$product_name"/services/api-docs.yml
+  --file docker/"$product_name"/services/api.yml
+  --file docker/"$product_name"/services/app.yml
+  --file docker/"$product_name"/services/data.yml
+  --file docker/"$product_name"/services/mongo.yml
 
-  --file docker/model-ad/networks.yml
-  --file docker/model-ad/volumes.yml
+  --file docker/"$product_name"/networks.yml
+  --file docker/"$product_name"/volumes.yml
 
-  --project-name model-ad
+  --project-name "$product_name"
 
   up $1 --detach
 )

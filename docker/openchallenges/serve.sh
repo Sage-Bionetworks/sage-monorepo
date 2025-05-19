@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 
+product_name="openchallenges"
+
 args=(
   # List of services in alphanumeric order
-  --file docker/openchallenges/services/data-lambda.yml
+  --file docker/"$product_name"/services/data-lambda.yml
 
-  --file docker/openchallenges/networks.yml
-  --file docker/openchallenges/volumes.yml
+  --file docker/"$product_name"/networks.yml
+  --file docker/"$product_name"/volumes.yml
 
-  --project-name openchallenges
+  --project-name "$product_name"
 
   up $1
 )

@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 
+product_name="observability"
+
 args=(
   # List of services in alphanumeric order
-  --file docker/observability/services/grafana.yml
-  --file docker/observability/services/prometheus.yml
+  --file docker/"$product_name"/services/grafana.yml
+  --file docker/"$product_name"/services/prometheus.yml
 
-  --file docker/observability/networks.yml
+  --file docker/"$product_name"/networks.yml
 
-  --project-name observability
+  --project-name "$product_name"
 
   up $1 --detach
 )

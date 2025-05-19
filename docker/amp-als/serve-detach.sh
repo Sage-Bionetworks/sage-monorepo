@@ -1,17 +1,19 @@
 #!/usr/bin/env bash
 
+product_name="amp-als"
+
 args=(
   # List of services in alphanumeric order
-  --file docker/amp-als/services/apex.yml
-  --file docker/amp-als/services/api-docs.yml
-  --file docker/amp-als/services/dataset-service.yml
-  --file docker/amp-als/services/keycloak.yml
-  --file docker/amp-als/services/mariadb.yml
-  --file docker/amp-als/services/opensearch.yml
+  --file docker/"$product_name"/services/apex.yml
+  --file docker/"$product_name"/services/api-docs.yml
+  --file docker/"$product_name"/services/dataset-service.yml
+  --file docker/"$product_name"/services/keycloak.yml
+  --file docker/"$product_name"/services/mariadb.yml
+  --file docker/"$product_name"/services/opensearch.yml
 
-  --file docker/amp-als/networks.yml
+  --file docker/"$product_name"/networks.yml
 
-  --project-name amp-als
+  --project-name "$product_name"
 
   up $1 --detach
 )
