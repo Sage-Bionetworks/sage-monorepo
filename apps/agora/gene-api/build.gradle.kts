@@ -28,6 +28,7 @@ dependencies {
   implementation(libs.micrometer.registry.prometheus)
   implementation(libs.opentelemetry.spring.boot.starter)
   implementation(libs.sage.bionetworks.util)
+  implementation(libs.spring.boot.starter.actuator)
   implementation(libs.spring.boot.starter.data.mongodb)
   implementation(libs.spring.boot.starter.validation)
   implementation(libs.spring.boot.starter.web)

@@ -20,6 +20,7 @@ micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-p
 opentelemetry-spring-boot-starter = { module = "io.opentelemetry.instrumentation:opentelemetry-spring-boot-starter", version.ref = "opentelemetry" }
 sage-bionetworks-util = { group = "org.sagebionetworks", name = "util", version.ref = "sage-bionetworks" }
 spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools", version.ref = "spring-boot" }
+spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "spring-boot" }
 spring-boot-starter-data-mongodb = { module = "org.springframework.boot:spring-boot-starter-data-mongodb", version.ref = "spring-boot" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
 spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation", version.ref = "spring-boot" }
