@@ -30,7 +30,7 @@ management:
 otel:
   exporter:
     otlp:
-      endpoint: http://collector:4317
+      endpoint: http://observability-otel-collector:8506
   resource:
     attributes:
       service.name: agora-gene-api
