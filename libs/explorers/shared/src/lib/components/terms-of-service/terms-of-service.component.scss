@@ -1,11 +1,31 @@
-.loading-icon {
-  min-width: 925px;
-  min-height: 500px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+@use 'libs/explorers/styles/src/lib/mixins';
 
-.terms-of-service {
-  padding: 10px 0;
+#terms-of-service-container {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - var(--header-height) - var(--footer-height) + 1px);
+
+  .terms-of-service {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    @media (width < 965px) {
+      // adds consistent margin when the screen is smaller
+      margin: 0 20px;
+    }
+
+    .loading-icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: min(925px, 100%);
+    }
+
+    .terms-of-service-content {
+      width: min(925px, 100%);
+    }
+  }
 }

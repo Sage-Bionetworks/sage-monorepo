@@ -10,20 +10,12 @@
   display: flex;
   align-items: start;
   flex-direction: column;
-  padding: 50px;
-
-  @include mixins.respond-to('small') {
-    padding: 150px;
-  }
+  padding: clamp(50px, 5vw, 150px);
 
   div {
     h1 {
-      font-size: 36px;
       margin: 0;
-
-      @include mixins.respond-to('small') {
-        font-size: 60px;
-      }
+      font-size: clamp(36px, 5vw, 60px);
     }
 
     p {

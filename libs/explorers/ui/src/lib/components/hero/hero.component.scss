@@ -1,17 +1,18 @@
-.section {
-  .section-inner {
-    padding: 50px;
-  }
-}
-
-.section-hero {
+.hero-container {
   display: flex;
-  min-height: 200px;
-  background-size: cover !important;
-  color: #fff;
+  justify-content: center;
   align-items: center;
+  height: clamp(100px, 15vw, 200px);
 
-  .section-inner {
-    width: 100%;
+  @media (width < 965px) {
+    padding: 0 20px;
+  }
+
+  .hero-container-inner {
+    width: min(925px, 100%);
+
+    h1 {
+      color: white;
+    }
   }
 }

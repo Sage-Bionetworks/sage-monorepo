@@ -16,7 +16,7 @@ function changeWindowSize(width: number) {
   });
 }
 
-const MOBILE_WIDTH = 1000;
+const MOBILE_WIDTH = 500;
 const DESKTOP_WIDTH = 1400;
 
 async function setup() {
