@@ -1,6 +1,15 @@
+x-common-extra-hosts: &common-extra-hosts
+  extra_hosts:
+    - 'agora-gene-api:host-gateway'
+
 services:
   observability-prometheus:
+    <<: *common-extra-hosts
     image: ghcr.io/sage-bionetworks/observability-prometheus:${OBSERVABILITY_VERSION:-local}
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--log.level=debug'
+      - '--web.listen-address=:8502'
     container_name: observability-prometheus
     restart: always
     volumes:
@@ -13,3 +22,5 @@ services:
     #   resources:
     #     limits:
     #       memory: 200M
+    # extra_hosts:
+    #   - 'agora-gene-api:host-gateway'

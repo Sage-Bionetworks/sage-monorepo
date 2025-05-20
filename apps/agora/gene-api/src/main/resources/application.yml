@@ -22,16 +22,16 @@ management:
     web:
       exposure:
         include: health,info,prometheus
-  metrics:
-    export:
-      prometheus:
+  prometheus:
+    metrics:
+      export:
         enabled: true
-
 otel:
   exporter:
     otlp:
-      endpoint: http://observability-otel-collector:8506
+      endpoint: http://observability-otel-collector:8508
       protocol: grpc
   resource:
     attributes:
-      service.name: agora-gene-api
+      service:
+        name: agora-gene-api
