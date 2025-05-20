@@ -31,6 +31,7 @@ otel:
   exporter:
     otlp:
       endpoint: http://observability-otel-collector:8506
+      protocol: grpc
   resource:
     attributes:
       service.name: agora-gene-api
