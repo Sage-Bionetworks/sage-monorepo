@@ -25,7 +25,7 @@ import { Observable } from 'rxjs';
 // @ts-ignore
 import { BasicError } from '../model/basicError';
 // @ts-ignore
-import { GenesPage } from '../model/genesPage';
+import { Dataversion } from '../model/dataversion';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -34,7 +34,7 @@ import { Configuration } from '../configuration';
 @Injectable({
   providedIn: 'root',
 })
-export class GeneService {
+export class DataversionService {
   protected basePath = 'http://localhost/v1';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
@@ -107,12 +107,12 @@ export class GeneService {
   }
 
   /**
-   * List genes
-   * List genes
+   * Get dataversion
+   * Get dataversion
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public listGenes(
+  public getDataversion(
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -120,8 +120,8 @@ export class GeneService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<GenesPage>;
-  public listGenes(
+  ): Observable<Dataversion>;
+  public getDataversion(
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -129,8 +129,8 @@ export class GeneService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<GenesPage>>;
-  public listGenes(
+  ): Observable<HttpResponse<Dataversion>>;
+  public getDataversion(
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -138,8 +138,8 @@ export class GeneService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<GenesPage>>;
-  public listGenes(
+  ): Observable<HttpEvent<Dataversion>>;
+  public getDataversion(
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -181,8 +181,8 @@ export class GeneService {
       }
     }
 
-    let localVarPath = `/genes`;
-    return this.httpClient.request<GenesPage>(
+    let localVarPath = `/dataversion`;
+    return this.httpClient.request<Dataversion>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {
