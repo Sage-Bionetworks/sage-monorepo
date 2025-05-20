@@ -11,7 +11,10 @@ services:
     ports:
       - '8508:8508' # gRPC (default: 4317)
       - '8509:8509' # HTTP (default: 4318)
+      - '8510:8510' # Prometheus exporter HTTP (default: 1234)
     depends_on:
+      observability-loki:
+        condition: service_started
       observability-tempo:
         condition: service_started
     # deploy:

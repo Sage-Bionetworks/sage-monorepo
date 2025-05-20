@@ -14,12 +14,21 @@ exporters:
     verbosity: detailed
 
   prometheus:
-    endpoint: '0.0.0.0:8502'
+    endpoint: 0.0.0.0:8510
 
   otlp/tempo:
     endpoint: observability-tempo:8507
     tls:
       insecure: true
+
+  loki:
+    endpoint: http://observability-loki:8503/loki/api/v1/push
+    tls:
+      insecure: true
+    # labels:
+    #   resource:
+    #     service.name: ''
+    #     service.namespace: ''
 
 service:
   pipelines:
@@ -36,4 +45,4 @@ service:
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [debug]
+      exporters: [loki, debug]
