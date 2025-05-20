@@ -9,7 +9,7 @@ services:
     networks:
       - observability
     ports:
-      - '8501:3000'
+      - '8501:8501' # HTTP (default: 3000)
     # depends_on:
     #   observability-loki:
     #     condition: service_started

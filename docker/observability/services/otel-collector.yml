@@ -9,7 +9,8 @@ services:
     networks:
       - observability
     ports:
-      - '8506:8506' # OTLP gRPC (default: 4317)
+      - '8508:8508' # gRPC (default: 4317)
+      - '8509:8509' # HTTP (default: 4318)
     depends_on:
       observability-tempo:
         condition: service_started
