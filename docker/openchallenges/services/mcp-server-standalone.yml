@@ -6,7 +6,8 @@ services:
     ports:
       - '8887:8887'
     environment:
-      API_BASE_URL: https://openchallenges.io/api/v1
+      OPENCHALLENGES_MCP_SERVER_WELCOME_MESSAGE: 'Welcome to the OpenChallenges MCP Server'
+      OPENCHALLENGES_MCP_SERVER_API_BASE_URL: https://openchallenges.io/api/v1
     deploy:
       resources:
         limits:
