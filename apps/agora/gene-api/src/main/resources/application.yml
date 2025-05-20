@@ -4,6 +4,14 @@ server:
 spring:
   application:
     name: agora-gene-api
+  data:
+    mongodb:
+      host: agora-mongo
+      port: 27017
+      database: agora
+      username: root
+      password: changeme
+      authentication-database: admin
   jackson:
     date-format: org.sagebionetworks.agora.gene.api.RFC3339DateFormat
     serialization:

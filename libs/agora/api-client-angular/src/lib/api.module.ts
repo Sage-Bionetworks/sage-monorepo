@@ -2,12 +2,6 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
-import { BioDomainsService } from './api/bioDomains.service';
-import { DataversionService } from './api/dataversion.service';
-import { DistributionService } from './api/distribution.service';
-import { GenesService } from './api/genes.service';
-import { TeamsService } from './api/teams.service';
-
 @NgModule({
   imports: [],
   declarations: [],

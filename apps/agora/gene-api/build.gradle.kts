@@ -1,7 +1,7 @@
 plugins {
-	java
-	alias(libs.plugins.spring.dependency.management)
 	alias(libs.plugins.spring.boot)
+	alias(libs.plugins.spring.dependency.management)
+	java
 }
 
 group = "org.sagebionetworks.agora"
@@ -15,15 +15,21 @@ java {
 
 repositories {
   mavenCentral()
+  mavenLocal()
 }
 
 dependencies {
+  annotationProcessor(libs.lombok)
+  compileOnly(libs.lombok)
   implementation(libs.findbugs.jsr305)
   implementation(libs.jackson.databind)
   implementation(libs.jackson.dataformat.yaml)
   implementation(libs.jackson.datatype.jsr310)
+  implementation(libs.sage.bionetworks.util)
+  implementation(libs.spring.boot.starter.data.mongodb)
   implementation(libs.spring.boot.starter.validation)
   implementation(libs.spring.boot.starter.web)
+  implementation(libs.spring.data.commons)
   implementation(libs.springdoc.openapi.ui)
   runtimeOnly(libs.spring.boot.devtools)
   testImplementation(libs.spring.boot.starter.test)
