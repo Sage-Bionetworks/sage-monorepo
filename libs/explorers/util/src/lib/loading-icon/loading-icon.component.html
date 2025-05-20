@@ -1,20 +1,20 @@
-<div class="loading-icon">
+<div class="loading-icon" [ngStyle]="customColors">
   <div class="loading-icon-inner">
     <div class="spinner">
       <div class="spinner-container">
-        <div class="hex0"></div>
-        <div class="hex120"></div>
-        <div class="hex240"></div>
+        <div class="hex0 hex0-outermost"></div>
+        <div class="hex120 hex120-outermost"></div>
+        <div class="hex240 hex240-outermost"></div>
         <div class="spinner">
           <div class="spinner-container">
-            <div class="hex0"></div>
-            <div class="hex120"></div>
-            <div class="hex240"></div>
+            <div class="hex0 hex0-central"></div>
+            <div class="hex120 hex120-central"></div>
+            <div class="hex240 hex240-central"></div>
             <div class="spinner">
               <div class="spinner-container">
-                <div class="hex0"></div>
-                <div class="hex120"></div>
-                <div class="hex240"></div>
+                <div class="hex0 hex0-innermost"></div>
+                <div class="hex120 hex120-innermost"></div>
+                <div class="hex240 hex240-innermost"></div>
               </div>
             </div>
           </div>
