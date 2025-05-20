@@ -90,6 +90,9 @@
     },
     "serve": {
       "executor": "@angular-devkit/build-angular:dev-server",
+      "options": {
+        "proxyConfig": "{projectRoot}/src/proxy.conf.json"
+      },
       "configurations": {
         "production": {
           "buildTarget": "model-ad-app:build:production"
@@ -167,18 +170,6 @@
         }
       },
       "defaultConfiguration": "development"
-    },
-    "build-image": {
-      "executor": "@nx-tools/nx-container:build",
-      "options": {
-        "context": ".",
-        "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/model-ad-app"],
-          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
-        },
-        "push": false
-      },
-      "dependsOn": ["server"]
     },
     "scan-image": {
       "executor": "nx:run-commands",
