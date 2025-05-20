@@ -10,6 +10,9 @@ services:
       - observability
     ports:
       - '8506:8506' # OTLP gRPC (default: 4317)
+    depends_on:
+      observability-tempo:
+        condition: service_started
     # deploy:
     #   resources:
     #     limits:
