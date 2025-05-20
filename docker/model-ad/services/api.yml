@@ -8,11 +8,10 @@ services:
     networks:
       - model-ad
     ports:
-      - '8080:8080'
-    depends_on:
-      model-ad-mongo:
-        condition: service_started
+      - '3333:3333'
     deploy:
       resources:
         limits:
-          memory: 1G
+          memory: 1GB
+    depends_on:
+      - model-ad-mongo
