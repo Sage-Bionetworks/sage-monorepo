@@ -9,7 +9,8 @@ info:
     name: Support
     url: https://github.com/Sage-Bionetworks/sage-monorepo
   x-logo:
-    url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
+    url: https://dev.modeladexplorer.org/opengraph/opengraph.png
+    altText: Model-AD Explorer
 servers:
   - url: http://localhost/v1
 tags:

@@ -1,5 +1,4 @@
 .gitignore
-.openapi-generator-ignore
 README.md
 api.module.ts
 api/api.ts
@@ -11,7 +10,6 @@ index.ts
 model/basicError.ts
 model/gene.ts
 model/genesPage.ts
-model/genesPageAllOf.ts
 model/models.ts
 model/pageMetadata.ts
 param.ts
