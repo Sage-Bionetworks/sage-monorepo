@@ -2,7 +2,7 @@
 
 .loading-icon {
   position: relative;
-  width: 200px;
+  width: 175px;
 
   .loading-icon-inner {
     width: 100%;
@@ -40,23 +40,17 @@
   top: 21.13%;
 }
 
-.hex0-outermost,
-.hex120-outermost,
-.hex240-outermost {
+.outermost {
   border-left: 1px solid var(--hex-outermost-color);
   border-right: 1px solid var(--hex-outermost-color);
 }
 
-.hex0-central,
-.hex120-central,
-.hex240-central {
+.central {
   border-left: 1px solid var(--hex-central-color);
   border-right: 1px solid var(--hex-central-color);
 }
 
-.hex0-innermost,
-.hex120-innermost,
-.hex240-innermost {
+.innermost {
   border-left: 1px solid var(--hex-innermost-color);
   border-right: 1px solid var(--hex-innermost-color);
 }
