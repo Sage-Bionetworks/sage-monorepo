@@ -13,6 +13,7 @@ exporters:
   debug:
     verbosity: detailed
 
+  # Export metrics to be scraped by Prometheus
   prometheus:
     endpoint: 0.0.0.0:8510
 
@@ -25,10 +26,6 @@ exporters:
     endpoint: http://observability-loki:8503/loki/api/v1/push
     tls:
       insecure: true
-    # labels:
-    #   resource:
-    #     service.name: ''
-    #     service.namespace: ''
 
 service:
   pipelines:
