@@ -14,22 +14,22 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - name: Gene
-    description: Operations about genes.
+  - name: Dataversion
+    description: Operations about dataversion.
 paths:
-  /genes:
+  /dataversion:
     get:
       tags:
-        - Gene
-      summary: List genes
-      description: List genes
-      operationId: listGenes
+        - Dataversion
+      summary: Get dataversion
+      description: Get dataversion
+      operationId: getDataversion
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GenesPage'
+                $ref: '#/components/schemas/Dataversion'
           description: Success
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -37,90 +37,17 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    PageMetadata:
+    Dataversion:
       type: object
-      description: The metadata of a page.
+      description: Synapse data version
       properties:
-        number:
-          description: The page number.
-          type: integer
-          format: int32
-          example: 99
-        size:
-          description: The number of items in a single page.
-          type: integer
-          format: int32
-          example: 99
-        totalElements:
-          description: Total number of elements in the result set.
-          type: integer
-          format: int64
-          example: 99
-        totalPages:
-          description: Total number of pages in the result set.
-          type: integer
-          format: int32
-          example: 99
-        hasNext:
-          description: Returns if there is a next page.
-          type: boolean
-          example: true
-        hasPrevious:
-          description: Returns if there is a previous page.
-          type: boolean
-          example: true
+        data_file:
+          type: string
+        data_version:
+          type: string
       required:
-        - number
-        - size
-        - totalElements
-        - totalPages
-        - hasNext
-        - hasPrevious
-    GeneId:
-      description: The unique identifier of the gene.
-      type: string
-      example: 66737b304e11611be5dab31d
-    GeneName:
-      description: The name of the gene.
-      type: string
-      minLength: 3
-      maxLength: 255
-    GeneDescription:
-      description: The description of the gene.
-      type: string
-      minLength: 0
-      maxLength: 1000
-      example: This is an example description of the gene.
-    Gene:
-      type: object
-      description: A gene
-      properties:
-        id:
-          $ref: '#/components/schemas/GeneId'
-        name:
-          $ref: '#/components/schemas/GeneName'
-        description:
-          $ref: '#/components/schemas/GeneDescription'
-      required:
-        - id
-        - name
-        - description
-    GenesPage:
-      type: object
-      description: A page of genes.
-      allOf:
-        - $ref: '#/components/schemas/PageMetadata'
-        - type: object
-          properties:
-            genes:
-              description: A list of genes.
-              type: array
-              items:
-                $ref: '#/components/schemas/Gene'
-          required:
-            - genes
-      x-java-class-annotations:
-        - '@lombok.Builder'
+        - data_file
+        - data_version
     BasicError:
       type: object
       description: Problem details (tools.ietf.org/html/rfc7807)

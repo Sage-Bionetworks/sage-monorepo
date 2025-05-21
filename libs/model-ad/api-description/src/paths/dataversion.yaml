@@ -1,0 +1,17 @@
+get:
+  tags:
+    - Dataversion
+  summary: Get dataversion
+  description: Get dataversion
+  operationId: getDataversion
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Dataversion.yaml
+      description: Success
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

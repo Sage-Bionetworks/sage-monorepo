@@ -14,8 +14,8 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - name: Gene
-    description: Operations about genes.
+  - name: Dataversion
+    description: Operations about dataversion.
 paths:
-  /genes:
-    $ref: paths/genes.yaml
+  /dataversion:
+    $ref: paths/dataversion.yaml

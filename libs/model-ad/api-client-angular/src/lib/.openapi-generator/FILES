@@ -2,15 +2,13 @@
 README.md
 api.module.ts
 api/api.ts
-api/gene.service.ts
+api/dataversion.service.ts
 configuration.ts
 encoder.ts
 git_push.sh
 index.ts
 model/basicError.ts
-model/gene.ts
-model/genesPage.ts
+model/dataversion.ts
 model/models.ts
-model/pageMetadata.ts
 param.ts
 variables.ts
