@@ -1,4 +1,4 @@
-.card {
+.home-card {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -27,7 +27,7 @@
   }
 }
 
-.card-link {
+.home-card-link {
   border: none;
   margin: 0;
   padding: 0;
@@ -41,7 +41,7 @@
   text-align: unset;
   cursor: pointer;
 
-  .card {
+  .home-card {
     height: 100%;
 
     explorers-svg-image {

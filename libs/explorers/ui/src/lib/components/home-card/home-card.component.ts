@@ -8,12 +8,12 @@ import { SearchInputComponent } from '../search-input/search-input.component';
 import { SvgImageComponent } from '../svg-image/svg-image.component';
 
 @Component({
-  selector: 'explorers-card',
+  selector: 'explorers-home-card',
   imports: [CommonModule, SvgImageComponent, RouterLink, SearchInputComponent, SvgIconComponent],
-  templateUrl: './card.component.html',
-  styleUrls: ['./card.component.scss'],
+  templateUrl: './home-card.component.html',
+  styleUrls: ['./home-card.component.scss'],
 })
-export class CardComponent {
+export class HomeCardComponent {
   title = input.required<string>();
   description = input.required<string>();
   imagePath = input.required<string>();
