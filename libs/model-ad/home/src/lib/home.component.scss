@@ -18,25 +18,10 @@
   .top-background {
     position: absolute;
     top: -200px;
-    right: -200px;
-    width: 150%;
     height: auto;
     max-width: none;
-
-    @include mixins.respond-to('medium') {
-      width: 140%;
-      right: -150px;
-    }
-
-    @include mixins.respond-to('large') {
-      width: 130%;
-      right: -100px;
-    }
-
-    @media (width >= 1800px) {
-      width: 100%;
-      right: 0;
-    }
+    width: clamp(100%, 150% - 5vw, 140%);
+    right: clamp(-150px, 5vw, 0px);
   }
 }
 
