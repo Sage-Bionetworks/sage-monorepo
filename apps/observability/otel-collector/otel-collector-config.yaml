@@ -18,7 +18,7 @@ exporters:
     endpoint: 0.0.0.0:8510
 
   otlp/tempo:
-    endpoint: observability-tempo:8507
+    endpoint: http://observability-tempo:8507
     tls:
       insecure: true
 
@@ -26,6 +26,10 @@ exporters:
     endpoint: http://observability-loki:8503/loki/api/v1/push
     tls:
       insecure: true
+
+  pyroscope:
+    endpoint: http://observability-pyroscope:8511
+    format: 'pprof'
 
 service:
   pipelines:
@@ -43,3 +47,7 @@ service:
       receivers: [otlp]
       processors: [batch]
       exporters: [loki, debug]
+
+    profiles:
+      receivers: [otlp]
+      exporters: [pyroscope, debug]
