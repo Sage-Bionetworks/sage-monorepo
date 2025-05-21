@@ -12,7 +12,3 @@ services:
       - '8505:8505' # HTTP (default: 80)
       - '8506:8506' # gRPC (default: 9095)
       - '8507:8507' # OTLP gRPC (default: 4317)
-    # deploy:
-    #   resources:
-    #     limits:
-    #       memory: 200M
