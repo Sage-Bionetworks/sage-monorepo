@@ -1,6 +1,6 @@
 services:
   openchallenges-mcp-server:
-    image: ghcr.io/sage-bionetworks/openchallenges-mcp-server:latest
+    image: ghcr.io/sage-bionetworks/openchallenges-mcp-server:sha-b5013cc
     container_name: openchallenges-mcp-server-standalone
     restart: always
     ports:
