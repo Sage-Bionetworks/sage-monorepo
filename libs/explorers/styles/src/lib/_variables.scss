@@ -1,24 +1,6 @@
 /* stylelint-disable no-duplicate-selectors */
 @use 'sass:map';
 
-// -------------------------------------------------------------------------- //
-// Spacing
-// -------------------------------------------------------------------------- //
-
-$spacings: (
-  'xs': 5px,
-  'sm': 10px,
-  'md': 15px,
-  'lg': 25px,
-  'xl': 50px,
-);
-
-:root {
-  @each $key, $value in $spacings {
-    --spacing-#{$key}: #{$value};
-  }
-}
-
 $main-colors: (
   primary: #3c4a63,
   secondary: #8b8ad1,

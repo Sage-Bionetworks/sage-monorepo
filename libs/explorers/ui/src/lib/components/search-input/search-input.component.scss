@@ -9,7 +9,7 @@
   input {
     background-color: transparent;
     font-size: var(--font-size-sm);
-    padding: 9px var(--spacing-md);
+    padding: 9px 15px;
   }
 
   &.search-thick-border {
@@ -18,10 +18,10 @@
     .search-bar {
       background-color: transparent;
       border: 3px solid var(--color-secondary);
-      padding-left: var(--spacing-md);
+      padding-left: 15px;
 
       @include mixins.respond-to('ex-large') {
-        padding-left: var(--spacing-lg);
+        padding-left: 25px;
       }
 
       .search-bar-icon {
@@ -43,10 +43,10 @@
 
     input {
       font-size: var(--font-size-md);
-      padding: 23px var(--spacing-sm);
+      padding: 23px 10px;
 
       @include mixins.respond-to('ex-large') {
-        padding-left: var(--spacing-md);
+        padding-left: 15px;
       }
     }
   }
@@ -59,8 +59,8 @@
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    padding-left: var(--spacing-md);
-    gap: var(--spacing-sm);
+    padding-left: 15px;
+    gap: 10px;
 
     .search-bar-icon {
       display: flex;
@@ -126,7 +126,7 @@
         display: flex;
         align-items: center;
         font-size: var(--font-size-sm);
-        gap: var(--spacing-md);
+        gap: 15px;
 
         explorers-svg-image {
           display: flex;
