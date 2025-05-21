@@ -1,4 +1,5 @@
 import { Route } from '@angular/router';
+import { SUPPORT_EMAIL } from '@sagebionetworks/model-ad/util';
 
 export const routes: Route[] = [
   {
@@ -14,6 +15,9 @@ export const routes: Route[] = [
     path: 'not-found',
     loadChildren: () =>
       import('@sagebionetworks/explorers/shared').then((routes) => routes.notFoundRoute),
+    data: {
+      supportEmail: SUPPORT_EMAIL,
+    },
   },
   {
     path: '**',

@@ -6,5 +6,4 @@
   "environment": "${ENVIRONMENT}",
   "googleTagManagerId": "${GOOGLE_TAG_MANAGER_ID}",
   "ssrApiUrl": "${SSR_API_URL}",
-  "supportEmail": "${SUPPORT_EMAIL}"
 }

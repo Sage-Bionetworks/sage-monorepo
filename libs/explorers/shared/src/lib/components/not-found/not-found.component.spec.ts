@@ -1,15 +1,18 @@
 import { render, screen } from '@testing-library/angular';
 import { NotFoundComponent } from './not-found.component';
-import { ConfigService } from '@sagebionetworks/model-ad/config';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
 
-// Mock ConfigService
-class MockConfigService {
-  config = { supportEmail: 'support@example.com' };
-}
-
-async function setup() {
+async function setup(supportEmail: string | null = 'support@example.com') {
   const { fixture } = await render(NotFoundComponent, {
-    providers: [{ provide: ConfigService, useClass: MockConfigService }],
+    providers: [
+      {
+        provide: ActivatedRoute,
+        useValue: {
+          data: of({ supportEmail }),
+        },
+      },
+    ],
   });
 
   const component = fixture.componentInstance;
@@ -26,7 +29,7 @@ describe('NotFoundComponent', () => {
     );
   });
 
-  it('should display the support email from config', async () => {
+  it('should display the support email', async () => {
     await setup();
 
     expect(screen.getByText('support@example.com')).toBeInTheDocument();
@@ -34,5 +37,11 @@ describe('NotFoundComponent', () => {
       'href',
       'mailto:support@example.com',
     );
+  });
+
+  it('should display the background image', async () => {
+    const component = await setup();
+    const expectedPath = 'explorers-assets/images/background.svg';
+    expect(component.backgroundImagePath).toBe(expectedPath);
   });
 });

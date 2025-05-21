@@ -5,6 +5,5 @@
   "dataUpdatedOn": "yyyy-mm-dd",
   "environment": "development",
   "googleTagManagerId": "",
-  "ssrApiUrl": "http://model-ad-api:8080/v1",
-  "supportEmail": "modeladexplorer@sagebionetworks.org"
+  "ssrApiUrl": "http://model-ad-api:8080/v1"
 }
