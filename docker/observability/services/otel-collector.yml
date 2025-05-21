@@ -15,7 +15,5 @@ services:
     depends_on:
       observability-loki:
         condition: service_started
-      observability-pyroscope:
-        condition: service_started
       observability-tempo:
         condition: service_started
