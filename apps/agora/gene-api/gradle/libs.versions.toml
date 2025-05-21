@@ -4,6 +4,7 @@ jackson = "2.18.3"
 lombok = "1.18.38"
 micrometer = "1.15.0"
 opentelemetry = "2.16.0"
+pyroscope = "2.1.2"
 sage-bionetworks = "0.0.1-SNAPSHOT"
 spring-boot = "3.4.5"
 spring-data = "3.4.5"
@@ -18,6 +19,7 @@ lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "micrometer" }
 opentelemetry-bom = { module = "io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom", version.ref = "opentelemetry" }
 opentelemetry-spring-boot-starter = { module = "io.opentelemetry.instrumentation:opentelemetry-spring-boot-starter", version.ref = "opentelemetry" }
+pyroscope-agent = { module = "io.pyroscope:agent", version.ref = "pyroscope" }
 sage-bionetworks-util = { group = "org.sagebionetworks", name = "util", version.ref = "sage-bionetworks" }
 spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot" }
 spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools", version.ref = "spring-boot" }

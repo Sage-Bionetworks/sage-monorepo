@@ -16,3 +16,5 @@ services:
         condition: service_started
       observability-prometheus:
         condition: service_started
+      observability-pyroscope:
+        condition: service_started

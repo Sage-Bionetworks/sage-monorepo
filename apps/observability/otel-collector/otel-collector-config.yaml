@@ -18,7 +18,7 @@ exporters:
     endpoint: 0.0.0.0:8510
 
   otlp/tempo:
-    endpoint: observability-tempo:8507
+    endpoint: http://observability-tempo:8507
     tls:
       insecure: true
 

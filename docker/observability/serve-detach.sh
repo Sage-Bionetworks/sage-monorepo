@@ -8,6 +8,7 @@ args=(
   --file docker/"$product_name"/services/loki.yml
   --file docker/"$product_name"/services/otel-collector.yml
   --file docker/"$product_name"/services/prometheus.yml
+  --file docker/"$product_name"/services/pyroscope.yml
   --file docker/"$product_name"/services/tempo.yml
 
   --file docker/"$product_name"/networks.yml
