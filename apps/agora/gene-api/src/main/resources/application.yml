@@ -1,3 +1,6 @@
+agora-gene-api:
+  pyroscope-server-address: http://observability-pyroscope:8511
+
 server:
   port: 3334
 

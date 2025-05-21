@@ -11,6 +11,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class PyroscopeConfiguration {
 
+  private final GeneApiConfiguration geneApiConfiguration;
+
+  public PyroscopeConfiguration(GeneApiConfiguration geneApiConfiguration) {
+    this.geneApiConfiguration = geneApiConfiguration;
+  }
+
   @Value("${spring.application.name}")
   private String applicationName;
 
@@ -21,7 +27,7 @@ public class PyroscopeConfiguration {
         .setApplicationName(applicationName)
         .setProfilingEvent(EventType.ITIMER)
         .setFormat(Format.JFR)
-        .setServerAddress("http://observability-pyroscope:8511")
+        .setServerAddress(geneApiConfiguration.getPyroscopeServerAddress())
         .build()
     );
   }
