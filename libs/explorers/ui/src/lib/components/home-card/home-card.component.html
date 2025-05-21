@@ -1,5 +1,5 @@
 <ng-template #card>
-  <div class="card">
+  <div class="home-card">
     <div>
       <h2>{{ title() }}</h2>
       <p>{{ description() }}</p>
@@ -37,7 +37,7 @@
 
 @if (!!routerLink()) {
   <ng-container>
-    <button [routerLink]="routerLink()" class="card-link">
+    <button [routerLink]="routerLink()" class="home-card-link">
       <ng-container [ngTemplateOutlet]="card" />
     </button>
   </ng-container>

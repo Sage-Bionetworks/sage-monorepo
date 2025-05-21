@@ -18,7 +18,7 @@
         </p>
       </div>
       <div class="card-container">
-        <explorers-card
+        <explorers-home-card
           [title]="'Model Overview'"
           [description]="
             'View summary information about all available AD models and learn what data is currently available in the Explorer. New data and analyses will be incorporated as they are available.'
@@ -27,7 +27,7 @@
           [imagePath]="'/model-ad-assets/images/mouse.svg'"
           [imageAltText]="'mouse icon'"
         />
-        <explorers-card
+        <explorers-home-card
           [title]="'Model Search'"
           [description]="
             'Find a model organism by name to get detailed information and additional experimental results, including pathology results and biomarker evidence.'
@@ -39,7 +39,7 @@
           [getSearchResultsList]="getSearchResultsList"
           [checkQueryForErrors]="checkQueryForErrors"
         />
-        <explorers-card
+        <explorers-home-card
           [title]="'Gene Expression'"
           [description]="
             'Explore differential RNA expression results for the available models by sex and age. Build custom result sets by sorting, filtering, and searching for genes of particular interest.'
@@ -48,7 +48,7 @@
           [imagePath]="'/model-ad-assets/images/gene-expression.svg'"
           [imageAltText]="'gene expression icon'"
         />
-        <explorers-card
+        <explorers-home-card
           [title]="'Disease Correlation'"
           [description]="
             'Compare how gene expression changes in mouse models correlate with gene expression changes in human disease.'
