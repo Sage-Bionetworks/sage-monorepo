@@ -1,0 +1,13 @@
+type: object
+description: A page of differential expression profiles (RNA).
+allOf:
+  - $ref: PageMetadata.yaml
+  - type: object
+    properties:
+      differentialExpressionProfilesRna:
+        description: A list of differential epxression profiles (RNA).
+        type: array
+        items:
+          $ref: DifferentialExpressionProfileRna.yaml
+    required:
+      - differentialExpressionProfilesRna

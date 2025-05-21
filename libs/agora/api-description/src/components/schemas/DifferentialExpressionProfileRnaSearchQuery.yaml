@@ -1,5 +1,5 @@
 type: object
-description: A differential expression profile search query (mRNA).
+description: A differential expression profile search query (RNA).
 properties:
   page_number:
     description: The page number.
@@ -14,9 +14,9 @@ properties:
     default: 100
     minimum: 1
   sort:
-    $ref: DifferentialExpressionProfileMRnaSort.yaml
+    $ref: DifferentialExpressionProfileRnaSort.yaml
   direction:
-    $ref: DifferentialExpressionProfileDirection.yaml
+    $ref: SortDirection.yaml
   search_terms:
     description: A string of search terms used to filter the results.
     type: string

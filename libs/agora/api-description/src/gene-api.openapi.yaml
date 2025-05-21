@@ -23,8 +23,8 @@ tags:
 paths:
   /genes/comparison:
     $ref: paths/genes/comparison.yaml
-  /differentialExpressionProfiles/mrna:
-    $ref: paths/differentialExpressionProfiles/mrna.yaml
+  /differentialExpressionProfiles/rna:
+    $ref: paths/differentialExpressionProfiles/rna.yaml
   /differentialExpressionProfiles/protein:
     $ref: paths/differentialExpressionProfiles/protein.yaml
 components:
