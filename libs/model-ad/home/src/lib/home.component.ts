@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CardComponent, SvgImageComponent } from '@sagebionetworks/explorers/ui';
+import { HomeCardComponent, SvgImageComponent } from '@sagebionetworks/explorers/ui';
 import {
   checkQueryForErrors,
   getSearchResultsList,
@@ -13,7 +13,7 @@ interface Stat {
 
 @Component({
   selector: 'model-ad-home',
-  imports: [CardComponent, SvgImageComponent],
+  imports: [HomeCardComponent, SvgImageComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })

@@ -10,7 +10,7 @@ import {
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { Observable } from 'rxjs';
-import { CardComponent } from './card.component';
+import { HomeCardComponent } from './home-card.component';
 
 const mockRouterLink = '/mock-router-link';
 const mockTitle = 'Mock Title';
@@ -26,7 +26,7 @@ async function setup(
   checkQueryForErrors?: (query: string) => string,
 ) {
   const user = userEvent.setup();
-  const component = await render(CardComponent, {
+  const component = await render(HomeCardComponent, {
     providers: [
       provideHttpClient(),
       provideRouter([]),
@@ -47,7 +47,7 @@ async function setup(
   return { user, component };
 }
 
-describe('CardComponent', () => {
+describe('HomeCardComponent', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });

@@ -7,11 +7,11 @@ import {
 } from '@sagebionetworks/explorers/testing';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
-import { CardComponent } from './card.component';
+import { HomeCardComponent } from './home-card.component';
 
-const meta: Meta<CardComponent> = {
-  component: CardComponent,
-  title: 'UI/CardComponent',
+const meta: Meta<HomeCardComponent> = {
+  component: HomeCardComponent,
+  title: 'UI/Cards/HomeCardComponent',
   decorators: [
     applicationConfig({
       providers: [provideRouter([]), provideHttpClient(withInterceptorsFromDi())],
@@ -24,9 +24,9 @@ const meta: Meta<CardComponent> = {
   },
 };
 export default meta;
-type Story = StoryObj<CardComponent>;
+type Story = StoryObj<HomeCardComponent>;
 
-export const LinkCard: Story = {
+export const LinkHomeCard: Story = {
   args: {
     title: 'Gene Comparison',
     description:
@@ -37,7 +37,7 @@ export const LinkCard: Story = {
   },
 };
 
-export const SearchCard: Story = {
+export const SearchHomeCard: Story = {
   args: {
     title: 'Gene Search',
     description:
