@@ -21,6 +21,7 @@ declare -a hostnames=(
   "127.0.0.1 observability-loki"
   "127.0.0.1 observability-otel-collector"
   "127.0.0.1 observability-prometheus"
+  "127.0.0.1 observability-pyroscope"
   "127.0.0.1 observability-tempo"
   "127.0.0.1 openchallenges-api-gateway"
   "127.0.0.1 openchallenges-app"
