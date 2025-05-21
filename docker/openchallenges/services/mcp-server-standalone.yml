@@ -4,11 +4,7 @@ services:
     container_name: openchallenges-mcp-server
     restart: always
     ports:
-      - '8887:8887'
+      - '${OPENCHALLENGES_MCP_SERVER_PORT}:8887'
     environment:
-      OPENCHALLENGES_MCP_SERVER_WELCOME_MESSAGE: 'Welcome to the OpenChallenges MCP Server'
       OPENCHALLENGES_MCP_SERVER_API_BASE_URL: https://openchallenges.io/api/v1
-    deploy:
-      resources:
-        limits:
-          memory: 1G
+      OPENCHALLENGES_MCP_SERVER_PORT: 8887
