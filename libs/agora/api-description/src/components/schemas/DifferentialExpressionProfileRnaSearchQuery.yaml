@@ -17,6 +17,8 @@ properties:
     $ref: DifferentialExpressionProfileRnaSort.yaml
   direction:
     $ref: SortDirection.yaml
+  model:
+    $ref: DifferentialExpressionProfileRnaModel.yaml
   search_terms:
     description: A string of search terms used to filter the results.
     type: string

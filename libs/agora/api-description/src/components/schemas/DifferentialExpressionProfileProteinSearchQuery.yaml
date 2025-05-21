@@ -17,6 +17,8 @@ properties:
     $ref: DifferentialExpressionProfileProteinSort.yaml
   direction:
     $ref: SortDirection.yaml
+  profiling_method:
+    $ref: DifferentialExpressionProfileProteinProfilingMethod.yaml
   search_terms:
     description: A string of search terms used to filter the results.
     type: string

@@ -1,0 +1,7 @@
+description: The RNA model to apply for the differential expression profile.
+type: string
+enum:
+  - ad_diagnosis_aod_males_and_females
+  - ad_diagnosis_males_and_females
+  - ad_diagnosis_sex_females_only
+  - ad_diagnosis_sex_males_only

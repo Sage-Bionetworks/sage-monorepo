@@ -1,0 +1,6 @@
+description: The protein profiling method to apply for the differential expression profile.
+type: string
+enum:
+  - lfq
+  - smr
+  - tmt
