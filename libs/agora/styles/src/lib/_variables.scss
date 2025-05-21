@@ -104,7 +104,6 @@ $extra-colors: (
 // Fonts
 // -------------------------------------------------------------------------- //
 
-$font-family-primary: 'DM Sans', sans-serif;
 $headings: (
   h1: (
     font-size: 1.75rem /* 28px */,
@@ -165,8 +164,6 @@ $font-sizes: (
 );
 
 :root {
-  --font-family-primary: #{$font-family-primary};
-
   @each $size, $properties in $headings {
     @each $property, $value in $properties {
       --#{$property}-#{$size}: #{$value};

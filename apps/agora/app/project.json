@@ -40,9 +40,14 @@
             "output": "agora-assets"
           },
           {
+            "input": "libs/explorers/assets",
+            "glob": "**/*",
+            "output": "explorers-assets"
+          },
+          {
             "input": "libs/agora/assets/favicon",
-            "glob": "favicon.ico",
-            "output": ""
+            "glob": "**/*",
+            "output": "/"
           }
         ],
         "styles": ["apps/agora/app/src/styles.scss", "node_modules/primeicons/primeicons.css"],
