@@ -10,7 +10,7 @@
   display: flex;
   align-items: start;
   flex-direction: column;
-  padding: clamp(50px, 5vw, 150px);
+  padding: clamp(50px, 15vw, 120px) clamp(50px, 15vw, 180px);
 
   div {
     h1 {
@@ -19,6 +19,7 @@
     }
 
     p {
+      font-size: 20px;
       margin: 30px 0;
 
       a {

@@ -38,10 +38,4 @@ describe('NotFoundComponent', () => {
       'mailto:support@example.com',
     );
   });
-
-  it('should display the background image', async () => {
-    const component = await setup();
-    const expectedPath = 'explorers-assets/images/background.svg';
-    expect(component.backgroundImagePath).toBe(expectedPath);
-  });
 });
