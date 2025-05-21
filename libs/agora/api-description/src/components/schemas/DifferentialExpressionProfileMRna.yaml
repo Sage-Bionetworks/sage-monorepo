@@ -1,0 +1,9 @@
+type: object
+description: A differential expression profile (mRNA).
+properties:
+  ensembl_gene_id:
+    $ref: EnsemblGeneId.yaml
+  hgnc_symbol:
+    $ref: HgncGeneSymbol.yaml
+required:
+  - ensembl_gene_id

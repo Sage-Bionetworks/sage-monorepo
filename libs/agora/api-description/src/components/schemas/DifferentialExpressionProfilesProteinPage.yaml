@@ -1,0 +1,13 @@
+type: object
+description: A page of differential expression profiles (protein).
+allOf:
+  - $ref: PageMetadata.yaml
+  - type: object
+    properties:
+      differentialExpressionProfilesProtein:
+        description: A list of differential epxression profiles (protein).
+        type: array
+        items:
+          $ref: DifferentialExpressionProfileProtein.yaml
+    required:
+      - differentialExpressionProfilesProtein

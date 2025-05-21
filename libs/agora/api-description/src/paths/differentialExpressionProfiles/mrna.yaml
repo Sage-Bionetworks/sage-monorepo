@@ -1,0 +1,19 @@
+get:
+  tags:
+    - DifferentialExpressionProfile
+  summary: List differential expression profiles (mRNA)
+  description: List differential expression profiles (mRNA)
+  operationId: listDifferentialExpressionProfilesMRna
+  parameters:
+    - $ref: ../../components/parameters/query/differentialExpressionProfileMRnaSearchQuery.yaml
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/DifferentialExpressionProfilesMRnaPage.yaml
+      description: Success
+    '400':
+      $ref: ../../components/responses/BadRequest.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml

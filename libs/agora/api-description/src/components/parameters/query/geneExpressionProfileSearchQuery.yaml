@@ -1,5 +1,0 @@
-name: geneExpressionProfileSearchQuery
-description: The search query used to find gene expression profiles.
-in: query
-schema:
-  $ref: ../../schemas/GeneExpressionProfileSearchQuery.yaml

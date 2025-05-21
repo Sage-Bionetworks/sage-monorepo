@@ -1,5 +1,5 @@
 type: object
-description: A gene expression profile search query.
+description: A differential expression profile search query (protein).
 properties:
   page_number:
     description: The page number.
@@ -14,9 +14,9 @@ properties:
     default: 100
     minimum: 1
   sort:
-    $ref: GeneExpressionProfileSort.yaml
+    $ref: DifferentialExpressionProfileProteinSort.yaml
   direction:
-    $ref: GeneExpressionProfileDirection.yaml
+    $ref: DifferentialExpressionProfileDirection.yaml
   search_terms:
     description: A string of search terms used to filter the results.
     type: string

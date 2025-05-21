@@ -1,0 +1,5 @@
+name: differentialExpressionProfileMRnaSearchQuery
+description: The search query used to find differential expression profiles (mRNA).
+in: query
+schema:
+  $ref: ../../schemas/DifferentialExpressionProfileMRnaSearchQuery.yaml
