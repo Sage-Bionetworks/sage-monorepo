@@ -1,0 +1,14 @@
+services:
+  observability-tempo:
+    image: ghcr.io/sage-bionetworks/observability-tempo:${OBSERVABILITY_VERSION:-local}
+    command: ['-config.file=/etc/tempo.yaml']
+    container_name: observability-tempo
+    restart: always
+    volumes:
+      - ../../../apps/observability/tempo/tempo.yaml:/etc/tempo.yaml:ro
+    networks:
+      - observability
+    ports:
+      - '8505:8505' # HTTP (default: 80)
+      - '8506:8506' # gRPC (default: 9095)
+      - '8507:8507' # OTLP gRPC (default: 4317)

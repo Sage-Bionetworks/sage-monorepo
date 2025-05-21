@@ -17,8 +17,8 @@
   "features": {},
   "forwardPorts": [
     2000, 2432, 3306, 3333, 3334, 4200, 4211, 5200, 5432, 5601, 8010, 8071, 8000, 8080, 8081, 8082,
-    8084, 8085, 8086, 8090, 8400, 8401, 8402, 8403, 8404, 8405, 8406, 8200, 8501, 8502, 8887, 8888,
-    8889, 9200, 9411, 27017
+    8084, 8085, 8086, 8090, 8400, 8401, 8402, 8403, 8404, 8405, 8406, 8200, 8501, 8502, 8503, 8504,
+    8505, 8506, 8507, 8508, 8509, 8510, 8887, 8888, 8889, 9200, 9411, 27017
   ],
   "portsAttributes": {
     "2000": {
@@ -131,6 +131,38 @@
     },
     "8502": {
       "label": "observability-prometheus",
+      "onAutoForward": "silent"
+    },
+    "8503": {
+      "label": "observability-loki (HTTP)",
+      "onAutoForward": "silent"
+    },
+    "8504": {
+      "label": "observability-loki (gRPC)",
+      "onAutoForward": "silent"
+    },
+    "8505": {
+      "label": "observability-tempo (HTTP)",
+      "onAutoForward": "silent"
+    },
+    "8506": {
+      "label": "observability-tempo (gRPC)",
+      "onAutoForward": "silent"
+    },
+    "8507": {
+      "label": "observability-tempo (OTLP gRPC)",
+      "onAutoForward": "silent"
+    },
+    "8508": {
+      "label": "observability-otel-collector (gRPC)",
+      "onAutoForward": "silent"
+    },
+    "8509": {
+      "label": "observability-otel-collector (HTTP)",
+      "onAutoForward": "silent"
+    },
+    "8510": {
+      "label": "observability-otel-collector (Prometheus HTTP)",
       "onAutoForward": "silent"
     },
     "8887": {

@@ -1,6 +1,5 @@
 plugins {
 	alias(libs.plugins.spring.boot)
-	alias(libs.plugins.spring.dependency.management)
 	java
 }
 
@@ -25,12 +24,17 @@ dependencies {
   implementation(libs.jackson.databind)
   implementation(libs.jackson.dataformat.yaml)
   implementation(libs.jackson.datatype.jsr310)
+  implementation(libs.micrometer.registry.prometheus)
+  implementation(libs.opentelemetry.spring.boot.starter)
   implementation(libs.sage.bionetworks.util)
+  implementation(libs.spring.boot.starter.actuator)
   implementation(libs.spring.boot.starter.data.mongodb)
   implementation(libs.spring.boot.starter.validation)
   implementation(libs.spring.boot.starter.web)
   implementation(libs.spring.data.commons)
   implementation(libs.springdoc.openapi.ui)
+  implementation(platform(libs.opentelemetry.bom))
+  implementation(platform(libs.spring.boot.dependencies))
   runtimeOnly(libs.spring.boot.devtools)
   testImplementation(libs.spring.boot.starter.test)
 }
