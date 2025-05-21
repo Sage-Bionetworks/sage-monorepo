@@ -1,0 +1,4 @@
+networks:
+  observability:
+    name: observability
+    driver: bridge

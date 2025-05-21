@@ -18,6 +18,7 @@ import jakarta.annotation.Generated;
 /**
  * Problem details (tools.ietf.org/html/rfc7807)
  */
+@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
 
 @Schema(name = "BasicError", description = "Problem details (tools.ietf.org/html/rfc7807)")
 @JsonTypeName("BasicError")

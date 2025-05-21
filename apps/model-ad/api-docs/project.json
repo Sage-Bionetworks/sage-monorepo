@@ -30,18 +30,6 @@
         "command": "docker/model-ad/serve-detach.sh model-ad-api-docs"
       }
     },
-    "build-image": {
-      "executor": "@nx-tools/nx-container:build",
-      "options": {
-        "context": "apps/model-ad/api-docs",
-        "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/model-ad-api-docs"],
-          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
-        },
-        "push": false
-      },
-      "dependsOn": ["build"]
-    },
     "scan-image": {
       "executor": "nx:run-commands",
       "options": {

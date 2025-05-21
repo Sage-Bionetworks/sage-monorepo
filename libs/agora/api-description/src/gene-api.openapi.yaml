@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   version: 1.0.0-draft
-  title: Gene REST API
+  title: Agora Gene API
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -14,8 +14,14 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - name: HealthCheck
-    description: Operations about health checks
+  - name: Genes # TODO: consider using "Gene" instead of "Genes" to be consistent with the other APIs
+    description: Operations about genes.
 paths:
-  /healthcheck:
-    $ref: paths/healthCheck.yaml
+  /genes/comparison:
+    $ref: paths/genes/comparison.yaml
+components:
+  schemas:
+    Gene:
+      $ref: components/schemas/Gene.yaml
+    Team:
+      $ref: components/schemas/Team.yaml

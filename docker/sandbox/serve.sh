@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
 
+product_name="sandbox"
+
 args=(
   # List of services in alphanumeric order
-  --file docker/sandbox/services/lambda-nodejs.yml
+  --file docker/"$product_name"/services/lambda-nodejs.yml
 
-  --file docker/sandbox/networks.yml
-  --file docker/sandbox/volumes.yml
+  --file docker/"$product_name"/networks.yml
+  --file docker/"$product_name"/volumes.yml
 
-  up $1 --remove-orphans
+  --project-name "$product_name"
+
+  up $1
 )
 
 docker compose "${args[@]}"

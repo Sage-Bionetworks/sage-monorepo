@@ -1,0 +1,21 @@
+# ------------------------------------------------------------------------------
+# OpenChallenges MCP Server - Docker Compose Configuration
+#
+# This file runs the OpenChallenges Model Context Protocol (MCP) server.
+# It is intended for running the MCP server standalone for local development or testing.
+#
+# To start the server:
+#   docker compose -f path/to/mcp-server-standalone.yml up
+#
+# By default, the server listens on port 8887.
+# ------------------------------------------------------------------------------
+
+services:
+  openchallenges-mcp-server:
+    image: ghcr.io/sage-bionetworks/openchallenges-mcp-server:sha-b5013cc
+    container_name: openchallenges-mcp-server
+    restart: always
+    ports:
+      - '8887:8887'
+    environment:
+      OPENCHALLENGES_MCP_SERVER_API_BASE_URL: https://openchallenges.io/api/v1

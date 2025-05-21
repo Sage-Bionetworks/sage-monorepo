@@ -1,0 +1,19 @@
+services:
+  observability-otel-collector:
+    image: ghcr.io/sage-bionetworks/observability-otel-collector:${OBSERVABILITY_VERSION:-local}
+    command: ['--config=/etc/otel-collector-config.yaml']
+    container_name: observability-otel-collector
+    restart: always
+    volumes:
+      - ../../../apps/observability/otel-collector/otel-collector-config.yaml:/etc/otel-collector-config.yaml:ro
+    networks:
+      - observability
+    ports:
+      - '8508:8508' # gRPC (default: 4317)
+      - '8509:8509' # HTTP (default: 4318)
+      - '8510:8510' # Prometheus exporter HTTP (default: 1234)
+    depends_on:
+      observability-loki:
+        condition: service_started
+      observability-tempo:
+        condition: service_started

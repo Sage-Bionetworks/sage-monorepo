@@ -1,29 +1,33 @@
 #!/usr/bin/env bash
 
+product_name="openchallenges"
+
 args=(
   # List of services in alphanumeric order
-  --file docker/openchallenges/services/apex.yml
-  --file docker/openchallenges/services/api-docs.yml
-  --file docker/openchallenges/services/api-gateway.yml
-  --file docker/openchallenges/services/app.yml
-  --file docker/openchallenges/services/challenge-service.yml
-  --file docker/openchallenges/services/config-server.yml
-  --file docker/openchallenges/services/data-lambda.yml
-  --file docker/openchallenges/services/edam-etl.yml
-  --file docker/openchallenges/services/elasticsearch.yml
-  --file docker/openchallenges/services/image-service.yml
-  --file docker/openchallenges/services/kafka.yml
-  --file docker/openchallenges/services/mariadb.yml
-  --file docker/openchallenges/services/mcp-server.yml
-  --file docker/openchallenges/services/organization-service.yml
-  --file docker/openchallenges/services/service-registry.yml
-  --file docker/openchallenges/services/thumbor.yml
-  --file docker/openchallenges/services/zipkin.yml
+  --file docker/"$product_name"/services/apex.yml
+  --file docker/"$product_name"/services/api-docs.yml
+  --file docker/"$product_name"/services/api-gateway.yml
+  --file docker/"$product_name"/services/app.yml
+  --file docker/"$product_name"/services/challenge-service.yml
+  --file docker/"$product_name"/services/config-server.yml
+  --file docker/"$product_name"/services/data-lambda.yml
+  --file docker/"$product_name"/services/edam-etl.yml
+  --file docker/"$product_name"/services/elasticsearch.yml
+  --file docker/"$product_name"/services/image-service.yml
+  --file docker/"$product_name"/services/kafka.yml
+  --file docker/"$product_name"/services/mariadb.yml
+  --file docker/"$product_name"/services/mcp-server.yml
+  --file docker/"$product_name"/services/organization-service.yml
+  --file docker/"$product_name"/services/service-registry.yml
+  --file docker/"$product_name"/services/thumbor.yml
+  --file docker/"$product_name"/services/zipkin.yml
 
-  --file docker/openchallenges/networks.yml
-  --file docker/openchallenges/volumes.yml
+  --file docker/"$product_name"/networks.yml
+  --file docker/"$product_name"/volumes.yml
 
-  up $1 --detach --remove-orphans
+  --project-name "$product_name"
+
+  up $1 --detach
 )
 
 docker compose "${args[@]}"

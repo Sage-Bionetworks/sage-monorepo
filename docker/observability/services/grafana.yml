@@ -1,0 +1,20 @@
+services:
+  observability-grafana:
+    image: ghcr.io/sage-bionetworks/observability-grafana:${OBSERVABILITY_VERSION:-local}
+    container_name: observability-grafana
+    restart: always
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SERVER_HTTP_PORT=8501
+    networks:
+      - observability
+    ports:
+      - '8501:8501' # HTTP (default: 3000)
+    depends_on:
+      observability-otel-collector:
+        condition: service_started
+      observability-prometheus:
+        condition: service_started
+      observability-pyroscope:
+        condition: service_started

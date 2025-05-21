@@ -4,7 +4,7 @@ import { APP_BASE_HREF } from '@angular/common';
 import { CommonEngine } from '@angular/ssr/node';
 import * as express from 'express';
 import { existsSync } from 'node:fs';
-import { join } from 'node:path';
+import path, { join } from 'node:path';
 import bootstrap from './src/main.server';
 
 const PORT = process.env['PORT'] || '4200';
@@ -35,6 +35,9 @@ export function app(): express.Express {
 
   // Health endpoint used by the container
   server.get('/health', (_req, res) => res.status(200).json({ status: 'UP' }));
+
+  // Serve static OpenGraph images at /opengraph
+  server.use('/opengraph', express.static(path.join(__dirname, 'public/images/opengraph')));
 
   // All regular routes use the Angular engine
   server.get('*', (req, res, next) => {

@@ -1,0 +1,22 @@
+x-common-extra-hosts: &common-extra-hosts
+  extra_hosts:
+    - 'agora-gene-api:host-gateway'
+
+services:
+  observability-prometheus:
+    <<: *common-extra-hosts
+    image: ghcr.io/sage-bionetworks/observability-prometheus:${OBSERVABILITY_VERSION:-local}
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.listen-address=:8502'
+      # - '--log.level=debug'
+    container_name: observability-prometheus
+    restart: always
+    volumes:
+      - ../../../apps/observability/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml:ro
+    networks:
+      - observability
+    ports:
+      - '8502:8502' # HTTP (default: 9090)
+    # extra_hosts:
+    #   - 'agora-gene-api:host-gateway'

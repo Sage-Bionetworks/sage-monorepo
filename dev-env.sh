@@ -116,6 +116,10 @@ function agora-test-affected {
   nx affected --target=test --projects=agora-* --parallel=10
 }
 
+function observability-build-images {
+  nx run-many --target=build-image --projects=observability-* --parallel=3
+}
+
 function model-ad-build-images {
   nx run-many --target=build-image --projects=model-ad-* --parallel=3
 }

@@ -37,7 +37,7 @@ properties:
   associations:
     type: array
     items:
-      type: number
+      type: number # TODO: Should be integer based on agora-api implementation (or enum?)
     nullable: true
     description: 'Array of association values'
   target_risk_score:
