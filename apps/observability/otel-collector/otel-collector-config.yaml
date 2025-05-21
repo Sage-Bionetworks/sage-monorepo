@@ -27,10 +27,6 @@ exporters:
     tls:
       insecure: true
 
-  pyroscope:
-    endpoint: http://observability-pyroscope:8511
-    format: 'pprof'
-
 service:
   pipelines:
     traces:
@@ -47,7 +43,3 @@ service:
       receivers: [otlp]
       processors: [batch]
       exporters: [loki, debug]
-
-    profiles:
-      receivers: [otlp]
-      exporters: [pyroscope, debug]
