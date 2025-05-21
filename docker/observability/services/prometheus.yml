@@ -8,8 +8,8 @@ services:
     image: ghcr.io/sage-bionetworks/observability-prometheus:${OBSERVABILITY_VERSION:-local}
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--log.level=debug'
       - '--web.listen-address=:8502'
+      # - '--log.level=debug'
     container_name: observability-prometheus
     restart: always
     volumes:
