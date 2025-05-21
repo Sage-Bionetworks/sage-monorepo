@@ -85,7 +85,7 @@
 
   .separator {
     border-left: 2px solid var(--color-separator);
-    height: var(--spacing-lg);
+    height: 25px;
     box-sizing: border-box;
   }
 
@@ -104,13 +104,13 @@
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      gap: var(--spacing-lg);
+      gap: 25px;
     }
 
     ul {
       display: flex;
       height: 100%;
-      gap: var(--spacing-md);
+      gap: 15px;
     }
 
     li {

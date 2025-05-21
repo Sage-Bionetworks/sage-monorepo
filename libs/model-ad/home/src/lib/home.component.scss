@@ -70,7 +70,7 @@ explorers-home-card {
   display: flex;
   flex-direction: column;
   gap: 28px;
-  padding: var(--spacing-md);
+  padding: 15px;
   width: 100%;
 
   @include mixins.respond-to('large') {
@@ -97,7 +97,7 @@ explorers-home-card {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   grid-auto-rows: 1fr;
-  gap: var(--spacing-lg);
+  gap: 25px;
   margin: 20px auto;
 
   @include mixins.respond-to('large') {
