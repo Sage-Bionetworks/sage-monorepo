@@ -3,6 +3,7 @@ findbugs = "3.0.2"
 jackson = "2.18.3"
 lombok = "1.18.38"
 micrometer = "1.15.0"
+mongock = "5.3.0"
 opentelemetry = "2.16.0"
 pyroscope = "2.1.2"
 sage-bionetworks = "0.0.1-SNAPSHOT"
@@ -17,6 +18,7 @@ jackson-dataformat-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-d
 jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "micrometer" }
+mongock-springboot = { module = "io.mongock:mongock-springboot-v3", version.ref = "mongock" }
 opentelemetry-bom = { module = "io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom", version.ref = "opentelemetry" }
 opentelemetry-spring-boot-starter = { module = "io.opentelemetry.instrumentation:opentelemetry-spring-boot-starter", version.ref = "opentelemetry" }
 pyroscope-agent = { module = "io.pyroscope:agent", version.ref = "pyroscope" }

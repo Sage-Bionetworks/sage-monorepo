@@ -25,6 +25,7 @@ dependencies {
   implementation(libs.jackson.dataformat.yaml)
   implementation(libs.jackson.datatype.jsr310)
   implementation(libs.micrometer.registry.prometheus)
+  implementation(libs.mongock.springboot)
   implementation(libs.opentelemetry.spring.boot.starter)
   implementation(libs.pyroscope.agent)
   implementation(libs.sage.bionetworks.util)
