@@ -89,6 +89,17 @@ public class GCTGenesService {
       List<OverallScoresDocument> scores = overallScoresRepository.findAll();
       List<BioDomainsDocument> allBiodomains = bioDomainsRepository.findAll();
 
+      Map<String, BioDomainsDocument> biodomainByGeneId = allBiodomains
+        .stream()
+        .filter(b -> b.getEnsemblGeneId() != null)
+        .collect(
+          Collectors.toMap(
+            BioDomainsDocument::getEnsemblGeneId,
+            b -> b,
+            (existing, replacement) -> replacement // in case of duplicates
+          )
+        );
+
       for (RnaDifferentialExpressionDocument exp : differentialExpression) {
         String ensemblGeneId = exp.getEnsemblGeneId();
         if (!genes.containsKey(ensemblGeneId)) {
@@ -101,7 +112,7 @@ public class GCTGenesService {
           }
 
           // Compute the GCTGeneDto and add it to the genes list
-          genes.put(ensemblGeneId, getComparisonGene(gene, teams, scores, allBiodomains));
+          genes.put(ensemblGeneId, getComparisonGene(gene, teams, scores, biodomainByGeneId));
         }
 
         // Add tissue data to the gene
@@ -142,26 +153,33 @@ public class GCTGenesService {
       );
   }
 
+  private boolean isSameEnsemblGeneIdForScores(OverallScoresDocument s, GeneDocument gene) {
+    return s.getEnsemblGeneId().equals(gene.getEnsemblGeneId());
+  }
+
+  // private boolean isSameEnsemblGeneIdForBiodomains(BioDomainsDocument b, GeneDocument gene) {
+  //   return b.getEnsemblGeneId().equals(gene.getEnsemblGeneId());
+  // }
+
+  // 2.23 mins spent in this function
   private GCTGeneDto getComparisonGene(
     GeneDocument gene,
     List<TeamDocument> teams,
     List<OverallScoresDocument> scores,
-    List<BioDomainsDocument> allBiodomains
+    Map<String, BioDomainsDocument> biodomainByGeneId
   ) {
     // Find scores for this gene
     OverallScoresDocument geneScores = scores
       .stream()
-      .filter(s -> s.getEnsemblGeneId().equals(gene.getEnsemblGeneId()))
+      .filter(s -> isSameEnsemblGeneIdForScores(s, gene))
       .findFirst()
       .orElse(null);
 
     // Find biodomains for this gene
-    List<String> geneBiodomains = allBiodomains
-      .stream()
-      .filter(b -> b.getEnsemblGeneId().equals(gene.getEnsemblGeneId()))
-      .findFirst()
-      .map(b -> b.getGeneBioDomains().stream().map(BioDomainDocument::getBioDomain).toList())
-      .orElse(null);
+    BioDomainsDocument bioDomainsDoc = biodomainByGeneId.get(gene.getEnsemblGeneId());
+    List<String> geneBiodomains = bioDomainsDoc != null
+      ? bioDomainsDoc.getGeneBioDomains().stream().map(BioDomainDocument::getBioDomain).toList()
+      : null;
 
     // TODO: Remove after changing the type of associations in the API description
     List<BigDecimal> associations = getComparisonGeneAssociations(gene)
