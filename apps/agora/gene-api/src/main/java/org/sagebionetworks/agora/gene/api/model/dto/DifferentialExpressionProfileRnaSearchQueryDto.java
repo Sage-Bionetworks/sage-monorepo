@@ -37,7 +37,7 @@ public class DifferentialExpressionProfileRnaSearchQueryDto {
 
   private @Nullable SortDirectionDto direction = null;
 
-  private @Nullable DifferentialExpressionProfileRnaModelDto model;
+  private DifferentialExpressionProfileRnaModelDto model = DifferentialExpressionProfileRnaModelDto.AD_DIAGNOSIS_AOD_MALES_AND_FEMALES;
 
   private @Nullable String searchTerms;
 

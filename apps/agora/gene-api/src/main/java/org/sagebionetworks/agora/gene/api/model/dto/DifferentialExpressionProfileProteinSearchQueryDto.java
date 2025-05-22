@@ -37,7 +37,7 @@ public class DifferentialExpressionProfileProteinSearchQueryDto {
 
   private @Nullable SortDirectionDto direction = null;
 
-  private @Nullable DifferentialExpressionProfileProteinProfilingMethodDto profilingMethod;
+  private DifferentialExpressionProfileProteinProfilingMethodDto profilingMethod = DifferentialExpressionProfileProteinProfilingMethodDto.LFQ;
 
   private @Nullable String searchTerms;
 

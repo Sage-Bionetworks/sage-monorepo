@@ -856,6 +856,7 @@ components:
       nullable: true
       type: string
     DifferentialExpressionProfileRnaModel:
+      default: ad_diagnosis_aod_males_and_females
       description: The RNA model to apply for the differential expression profile.
       enum:
         - ad_diagnosis_aod_males_and_females
@@ -999,6 +1000,7 @@ components:
         - relevance
       type: string
     DifferentialExpressionProfileProteinProfilingMethod:
+      default: lfq
       description: The protein profiling method to apply for the differential expression
         profile.
       enum:
