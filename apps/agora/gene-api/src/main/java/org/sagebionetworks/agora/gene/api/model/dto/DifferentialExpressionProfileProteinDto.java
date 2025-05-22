@@ -69,7 +69,7 @@ public class DifferentialExpressionProfileProteinDto {
    * The HGNC gene symbol.
    * @return hgncSymbol
    */
-  @Pattern(regexp = "^[A-Za-z0-9\\-]+$") @Size(min = 0, max = 20) 
+  @Size(min = 0) 
   @Schema(name = "hgnc_symbol", example = "TP53", description = "The HGNC gene symbol.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("hgnc_symbol")
   public String getHgncSymbol() {

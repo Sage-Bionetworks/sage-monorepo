@@ -605,8 +605,6 @@ components:
       description: The HGNC gene symbol.
       type: string
       minLength: 0
-      maxLength: 20
-      pattern: ^[A-Za-z0-9\-]+$
       example: TP53
     DifferentialExpressionProfileRna:
       type: object

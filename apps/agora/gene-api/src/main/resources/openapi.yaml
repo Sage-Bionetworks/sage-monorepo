@@ -940,9 +940,7 @@ components:
     HgncGeneSymbol:
       description: The HGNC gene symbol.
       example: TP53
-      maxLength: 20
       minLength: 0
-      pattern: "^[A-Za-z0-9\\-]+$"
       type: string
     DifferentialExpressionProfileRna:
       description: A differential expression profile (RNA).
@@ -960,9 +958,7 @@ components:
         hgnc_symbol:
           description: The HGNC gene symbol.
           example: TP53
-          maxLength: 20
           minLength: 0
-          pattern: "^[A-Za-z0-9\\-]+$"
           type: string
       required:
         - ensembl_gene_id
@@ -1051,9 +1047,7 @@ components:
         hgnc_symbol:
           description: The HGNC gene symbol.
           example: TP53
-          maxLength: 20
           minLength: 0
-          pattern: "^[A-Za-z0-9\\-]+$"
           type: string
       required:
         - ensembl_gene_id
