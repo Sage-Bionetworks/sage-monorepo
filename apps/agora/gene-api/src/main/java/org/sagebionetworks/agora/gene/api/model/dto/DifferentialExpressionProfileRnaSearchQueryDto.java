@@ -52,8 +52,8 @@ public class DifferentialExpressionProfileRnaSearchQueryDto {
    * @return pageNumber
    */
   @Min(0) 
-  @Schema(name = "page_number", description = "The page number.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("page_number")
+  @Schema(name = "pageNumber", description = "The page number.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("pageNumber")
   public Integer getPageNumber() {
     return pageNumber;
   }
@@ -74,8 +74,8 @@ public class DifferentialExpressionProfileRnaSearchQueryDto {
    * @return pageSize
    */
   @Min(1) @Max(100) 
-  @Schema(name = "page_size", description = "The number of items in a single page.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("page_size")
+  @Schema(name = "pageSize", description = "The number of items in a single page.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("pageSize")
   public Integer getPageSize() {
     return pageSize;
   }
@@ -154,8 +154,8 @@ public class DifferentialExpressionProfileRnaSearchQueryDto {
    * @return searchTerms
    */
   
-  @Schema(name = "search_terms", example = "A1BG", description = "A string of search terms used to filter the results.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("search_terms")
+  @Schema(name = "searchTerms", example = "A1BG", description = "A string of search terms used to filter the results.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("searchTerms")
   public String getSearchTerms() {
     return searchTerms;
   }

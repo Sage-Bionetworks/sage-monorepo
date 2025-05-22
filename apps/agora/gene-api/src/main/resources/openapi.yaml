@@ -867,13 +867,13 @@ components:
     DifferentialExpressionProfileRnaSearchQuery:
       description: A differential expression profile search query (RNA).
       properties:
-        page_number:
+        pageNumber:
           default: 0
           description: The page number.
           format: int32
           minimum: 0
           type: integer
-        page_size:
+        pageSize:
           default: 100
           description: The number of items in a single page.
           format: int32
@@ -886,7 +886,7 @@ components:
           $ref: '#/components/schemas/SortDirection'
         model:
           $ref: '#/components/schemas/DifferentialExpressionProfileRnaModel'
-        search_terms:
+        searchTerms:
           description: A string of search terms used to filter the results.
           example: A1BG
           type: string

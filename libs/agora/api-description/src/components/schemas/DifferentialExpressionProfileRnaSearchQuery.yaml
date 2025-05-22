@@ -1,13 +1,13 @@
 type: object
 description: A differential expression profile search query (RNA).
 properties:
-  page_number:
+  pageNumber:
     description: The page number.
     type: integer
     format: int32
     default: 0
     minimum: 0
-  page_size:
+  pageSize:
     description: The number of items in a single page.
     type: integer
     format: int32
@@ -20,7 +20,7 @@ properties:
     $ref: SortDirection.yaml
   model:
     $ref: DifferentialExpressionProfileRnaModel.yaml
-  search_terms:
+  searchTerms:
     description: A string of search terms used to filter the results.
     type: string
     example: 'A1BG'
