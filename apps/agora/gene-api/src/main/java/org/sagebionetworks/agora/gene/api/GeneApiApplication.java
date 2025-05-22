@@ -1,13 +1,12 @@
 package org.sagebionetworks.agora.gene.api;
 
+import io.mongock.runner.springboot.EnableMongock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.FullyQualifiedAnnotationBeanNameGenerator;
 
 @SpringBootApplication(nameGenerator = FullyQualifiedAnnotationBeanNameGenerator.class)
@@ -19,6 +18,7 @@ import org.springframework.context.annotation.FullyQualifiedAnnotationBeanNameGe
   },
   nameGenerator = FullyQualifiedAnnotationBeanNameGenerator.class
 )
+@EnableMongock
 public class GeneApiApplication implements CommandLineRunner {
 
   private static final Logger logger = LoggerFactory.getLogger(GeneApiApplication.class);
