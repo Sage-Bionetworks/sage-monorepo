@@ -89,6 +89,17 @@ public class GCTGenesService {
       List<OverallScoresDocument> scores = overallScoresRepository.findAll();
       List<BioDomainsDocument> allBiodomains = bioDomainsRepository.findAll();
 
+      Map<String, OverallScoresDocument> scoresByGeneId = scores
+        .stream()
+        .filter(s -> s.getEnsemblGeneId() != null)
+        .collect(
+          Collectors.toMap(
+            OverallScoresDocument::getEnsemblGeneId,
+            s -> s,
+            (existing, replacement) -> replacement // keep the last occurrence
+          )
+        );
+
       Map<String, BioDomainsDocument> biodomainByGeneId = allBiodomains
         .stream()
         .filter(b -> b.getEnsemblGeneId() != null)
@@ -112,7 +123,10 @@ public class GCTGenesService {
           }
 
           // Compute the GCTGeneDto and add it to the genes list
-          genes.put(ensemblGeneId, getComparisonGene(gene, teams, scores, biodomainByGeneId));
+          genes.put(
+            ensemblGeneId,
+            getComparisonGene(gene, teams, scoresByGeneId, biodomainByGeneId)
+          );
         }
 
         // Add tissue data to the gene
@@ -153,27 +167,15 @@ public class GCTGenesService {
       );
   }
 
-  private boolean isSameEnsemblGeneIdForScores(OverallScoresDocument s, GeneDocument gene) {
-    return s.getEnsemblGeneId().equals(gene.getEnsemblGeneId());
-  }
-
-  // private boolean isSameEnsemblGeneIdForBiodomains(BioDomainsDocument b, GeneDocument gene) {
-  //   return b.getEnsemblGeneId().equals(gene.getEnsemblGeneId());
-  // }
-
   // 2.23 mins spent in this function
   private GCTGeneDto getComparisonGene(
     GeneDocument gene,
     List<TeamDocument> teams,
-    List<OverallScoresDocument> scores,
+    Map<String, OverallScoresDocument> scoresByGeneId,
     Map<String, BioDomainsDocument> biodomainByGeneId
   ) {
     // Find scores for this gene
-    OverallScoresDocument geneScores = scores
-      .stream()
-      .filter(s -> isSameEnsemblGeneIdForScores(s, gene))
-      .findFirst()
-      .orElse(null);
+    OverallScoresDocument geneScores = scoresByGeneId.get(gene.getEnsemblGeneId());
 
     // Find biodomains for this gene
     BioDomainsDocument bioDomainsDoc = biodomainByGeneId.get(gene.getEnsemblGeneId());
