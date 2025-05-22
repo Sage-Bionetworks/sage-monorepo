@@ -167,7 +167,6 @@ public class GCTGenesService {
       );
   }
 
-  // 2.23 mins spent in this function
   private GCTGeneDto getComparisonGene(
     GeneDocument gene,
     List<TeamDocument> teams,
