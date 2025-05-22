@@ -10,7 +10,7 @@ import org.sagebionetworks.agora.gene.api.service.GCTGenesService;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 @ChangeUnit(
-  id = "preload-differential-expression-profiles-rna",
+  id = "preload-differential-expression-profiles-rna-2",
   order = "001",
   author = "tschaffter"
 )
@@ -33,6 +33,8 @@ public class PreloadDifferentialExpressionProfilesRnaMigration {
 
     final List<DifferentialExpressionProfileRnaDocument> precomputed = getComparisonGenes
       .stream()
+      // TODO: Open Jira ticket to suggest replacing blank value by null
+      .filter(gctGene -> gctGene.getHgncSymbol() != null && !gctGene.getHgncSymbol().isBlank())
       .map(gctGene ->
         DifferentialExpressionProfileRnaDocument.builder()
           .ensemblGeneId(gctGene.getEnsemblGeneId())
