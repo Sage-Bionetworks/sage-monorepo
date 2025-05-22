@@ -1,4 +1,5 @@
-@use 'libs/explorers/styles/src/lib/mixins';
+/* stylelint-disable media-feature-name-no-unknown */
+@use 'libs/explorers/styles/src/lib/variables' as vars;
 
 #terms-of-service-container {
   display: flex;
@@ -12,20 +13,20 @@
     align-items: center;
     justify-content: center;
 
-    @media (width < 965px) {
+    @media (width < vars.$main-content-total-width) {
       // adds consistent margin when the screen is smaller
-      margin: 0 20px;
+      margin: 0 vars.$main-content-margin;
     }
 
     .loading-icon {
       display: flex;
       justify-content: center;
       align-items: center;
-      width: min(925px, 100%);
+      width: min(vars.$main-content-desktop-width, 100%);
     }
 
     .terms-of-service-content {
-      width: min(925px, 100%);
+      width: min(vars.$main-content-desktop-width, 100%);
     }
   }
 }

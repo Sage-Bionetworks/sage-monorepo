@@ -1,15 +1,18 @@
+/* stylelint-disable media-feature-name-no-unknown */
+@use 'libs/explorers/styles/src/lib/variables' as vars;
+
 .hero-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: clamp(100px, 15vw, 200px);
 
-  @media (width < 965px) {
-    padding: 0 20px;
+  @media (width < vars.$main-content-total-width) {
+    padding: 0 vars.$main-content-margin;
   }
 
   .hero-container-inner {
-    width: min(925px, 100%);
+    width: min(vars.$main-content-desktop-width, 100%);
 
     h1 {
       color: white;
