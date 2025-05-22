@@ -77,7 +77,7 @@ public interface DifferentialExpressionProfileApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"number\" : 99, \"size\" : 99, \"total_elements\" : 99, \"has_previous\" : true, \"differentialExpressionProfilesRna\" : [ { \"ensembl_gene_id\" : \"ENSG00000139618\", \"hgnc_symbol\" : \"TP53\" }, { \"ensembl_gene_id\" : \"ENSG00000139618\", \"hgnc_symbol\" : \"TP53\" } ], \"has_next\" : true, \"total_pages\" : 99 }";
+                    String exampleString = "{ \"number\" : 99, \"size\" : 99, \"total_elements\" : 99, \"has_previous\" : true, \"differentialExpressionProfilesRna\" : [ { \"target_risk_score\" : 0.8008281904610115, \"ensembl_gene_id\" : \"ENSG00000139618\", \"hgnc_symbol\" : \"TP53\" }, { \"target_risk_score\" : 0.8008281904610115, \"ensembl_gene_id\" : \"ENSG00000139618\", \"hgnc_symbol\" : \"TP53\" } ], \"has_next\" : true, \"total_pages\" : 99 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

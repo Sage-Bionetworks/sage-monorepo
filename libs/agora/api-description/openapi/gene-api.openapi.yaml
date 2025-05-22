@@ -614,6 +614,10 @@ components:
           $ref: '#/components/schemas/EnsemblGeneId'
         hgnc_symbol:
           $ref: '#/components/schemas/HgncGeneSymbol'
+        target_risk_score:
+          type: number
+          nullable: true
+          description: Target risk score
       required:
         - ensembl_gene_id
     DifferentialExpressionProfilesRnaPage:

@@ -10,7 +10,7 @@ import org.sagebionetworks.agora.gene.api.service.GCTGenesService;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 @ChangeUnit(
-  id = "preload-differential-expression-profiles-rna-2",
+  id = "preload-differential-expression-profiles-rna-4",
   order = "001",
   author = "tschaffter"
 )
@@ -39,6 +39,7 @@ public class PreloadDifferentialExpressionProfilesRnaMigration {
         DifferentialExpressionProfileRnaDocument.builder()
           .ensemblGeneId(gctGene.getEnsemblGeneId())
           .hgncSymbol(gctGene.getHgncSymbol())
+          .targetRiskScore(gctGene.getTargetRiskScore())
           .build()
       )
       .toList();

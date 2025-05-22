@@ -5,5 +5,9 @@ properties:
     $ref: EnsemblGeneId.yaml
   hgnc_symbol:
     $ref: HgncGeneSymbol.yaml
+  target_risk_score:
+    type: number
+    nullable: true
+    description: 'Target risk score'
 required:
   - ensembl_gene_id

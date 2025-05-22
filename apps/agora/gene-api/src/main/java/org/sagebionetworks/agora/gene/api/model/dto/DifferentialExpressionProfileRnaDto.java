@@ -5,6 +5,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.math.BigDecimal;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -28,6 +29,8 @@ public class DifferentialExpressionProfileRnaDto {
   private String ensemblGeneId;
 
   private @Nullable String hgncSymbol;
+
+  private @Nullable BigDecimal targetRiskScore = null;
 
   public DifferentialExpressionProfileRnaDto() {
     super();
@@ -80,6 +83,26 @@ public class DifferentialExpressionProfileRnaDto {
     this.hgncSymbol = hgncSymbol;
   }
 
+  public DifferentialExpressionProfileRnaDto targetRiskScore(BigDecimal targetRiskScore) {
+    this.targetRiskScore = targetRiskScore;
+    return this;
+  }
+
+  /**
+   * Target risk score
+   * @return targetRiskScore
+   */
+  @Valid 
+  @Schema(name = "target_risk_score", description = "Target risk score", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("target_risk_score")
+  public BigDecimal getTargetRiskScore() {
+    return targetRiskScore;
+  }
+
+  public void setTargetRiskScore(BigDecimal targetRiskScore) {
+    this.targetRiskScore = targetRiskScore;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -90,12 +113,13 @@ public class DifferentialExpressionProfileRnaDto {
     }
     DifferentialExpressionProfileRnaDto differentialExpressionProfileRna = (DifferentialExpressionProfileRnaDto) o;
     return Objects.equals(this.ensemblGeneId, differentialExpressionProfileRna.ensemblGeneId) &&
-        Objects.equals(this.hgncSymbol, differentialExpressionProfileRna.hgncSymbol);
+        Objects.equals(this.hgncSymbol, differentialExpressionProfileRna.hgncSymbol) &&
+        Objects.equals(this.targetRiskScore, differentialExpressionProfileRna.targetRiskScore);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ensemblGeneId, hgncSymbol);
+    return Objects.hash(ensemblGeneId, hgncSymbol, targetRiskScore);
   }
 
   @Override
@@ -104,6 +128,7 @@ public class DifferentialExpressionProfileRnaDto {
     sb.append("class DifferentialExpressionProfileRnaDto {\n");
     sb.append("    ensemblGeneId: ").append(toIndentedString(ensemblGeneId)).append("\n");
     sb.append("    hgncSymbol: ").append(toIndentedString(hgncSymbol)).append("\n");
+    sb.append("    targetRiskScore: ").append(toIndentedString(targetRiskScore)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -134,6 +159,7 @@ public class DifferentialExpressionProfileRnaDto {
     protected Builder copyOf(DifferentialExpressionProfileRnaDto value) { 
       this.instance.setEnsemblGeneId(value.ensemblGeneId);
       this.instance.setHgncSymbol(value.hgncSymbol);
+      this.instance.setTargetRiskScore(value.targetRiskScore);
       return this;
     }
 
@@ -144,6 +170,11 @@ public class DifferentialExpressionProfileRnaDto {
     
     public DifferentialExpressionProfileRnaDto.Builder hgncSymbol(String hgncSymbol) {
       this.instance.hgncSymbol(hgncSymbol);
+      return this;
+    }
+    
+    public DifferentialExpressionProfileRnaDto.Builder targetRiskScore(BigDecimal targetRiskScore) {
+      this.instance.targetRiskScore(targetRiskScore);
       return this;
     }
     

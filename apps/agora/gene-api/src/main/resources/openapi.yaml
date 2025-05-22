@@ -945,6 +945,7 @@ components:
     DifferentialExpressionProfileRna:
       description: A differential expression profile (RNA).
       example:
+        target_risk_score: 0.8008281904610115
         ensembl_gene_id: ENSG00000139618
         hgnc_symbol: TP53
       properties:
@@ -960,6 +961,10 @@ components:
           example: TP53
           minLength: 0
           type: string
+        target_risk_score:
+          description: Target risk score
+          nullable: true
+          type: number
       required:
         - ensembl_gene_id
       type: object
@@ -982,9 +987,11 @@ components:
         total_elements: 99
         has_previous: true
         differentialExpressionProfilesRna:
-          - ensembl_gene_id: ENSG00000139618
+          - target_risk_score: 0.8008281904610115
+            ensembl_gene_id: ENSG00000139618
             hgnc_symbol: TP53
-          - ensembl_gene_id: ENSG00000139618
+          - target_risk_score: 0.8008281904610115
+            ensembl_gene_id: ENSG00000139618
             hgnc_symbol: TP53
         has_next: true
         total_pages: 99

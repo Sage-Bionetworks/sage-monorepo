@@ -1,5 +1,6 @@
 package org.sagebionetworks.agora.gene.api.model.document;
 
+import java.math.BigDecimal;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -22,4 +23,7 @@ public class DifferentialExpressionProfileRnaDocument {
 
   @Field("hgnc_symbol")
   private String hgncSymbol;
+
+  @Field("target_risk_score")
+  private BigDecimal targetRiskScore;
 }
