@@ -1,0 +1,26 @@
+get:
+  tags:
+    - Models
+  summary: Get details for a specific model
+  description: Retrieve detailed information for a specific model by its name
+  operationId: getModelDetailsByName
+  parameters:
+    - name: model
+      in: path
+      description: Name of the model to retrieve
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ModelDetails.yaml
+      description: Successfully retrieved model details
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '404':
+      $ref: ../components/responses/NotFound.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

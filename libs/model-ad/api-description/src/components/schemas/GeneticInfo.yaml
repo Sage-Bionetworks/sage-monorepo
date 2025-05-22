@@ -1,0 +1,24 @@
+type: object
+description: Genetic information about a model
+properties:
+  modified_gene:
+    type: string
+    description: Name of the modified gene
+  ensembl_gene_id:
+    type: string
+    description: Ensembl gene ID
+  allele:
+    type: string
+    description: Allele symbol
+  allele_type:
+    type: string
+    description: Type of allele
+  mgi_allele_id:
+    type: number
+    description: MGI allele ID
+required:
+  - modified_gene
+  - ensembl_gene_id
+  - allele
+  - allele_type
+  - mgi_allele_id

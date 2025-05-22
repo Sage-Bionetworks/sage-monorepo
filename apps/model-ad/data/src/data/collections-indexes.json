@@ -1,14 +1,6 @@
 [
   {
-    "name": "biomarkers",
-    "indexes": [{ "model": 1 }]
-  },
-  {
     "name": "modeldetails",
-    "indexes": [{ "model": 1 }]
-  },
-  {
-    "name": "pathology",
     "indexes": [{ "model": 1 }]
   }
 ]

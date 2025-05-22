@@ -1,0 +1,30 @@
+type: object
+description: Data associated with a model
+properties:
+  model:
+    type: string
+    description: Name of the model
+  evidence_type:
+    type: string
+    description: Type of evidence
+  tissue:
+    type: string
+    description: Tissue collected
+  age:
+    type: string
+    description: Age at collection
+  units:
+    type: string
+    description: Units of measurement
+  data:
+    type: array
+    description: Values for each individual
+    items:
+      $ref: IndividualData.yaml
+required:
+  - model
+  - evidence_type
+  - tissue
+  - age
+  - units
+  - data
