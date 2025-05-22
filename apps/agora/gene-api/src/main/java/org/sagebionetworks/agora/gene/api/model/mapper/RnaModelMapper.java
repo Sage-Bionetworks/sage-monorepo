@@ -1,0 +1,24 @@
+package org.sagebionetworks.agora.gene.api.model.mapper;
+
+import java.util.Map;
+import org.sagebionetworks.agora.gene.api.model.dto.DifferentialExpressionProfileRnaModelDto;
+
+public class RnaModelMapper {
+
+  private static final Map<DifferentialExpressionProfileRnaModelDto, String> modelToStoredValueMap =
+    Map.of(
+      DifferentialExpressionProfileRnaModelDto.AD_DIAGNOSIS_AOD_MALES_AND_FEMALES,
+      "AD Diagnosis (males and females)",
+      DifferentialExpressionProfileRnaModelDto.AD_DIAGNOSIS_MALES_AND_FEMALES,
+      "AD Diagnosis x AOD (males and females)",
+      DifferentialExpressionProfileRnaModelDto.AD_DIAGNOSIS_SEX_FEMALES_ONLY,
+      "AD Diagnosis x Sex (males only)",
+      DifferentialExpressionProfileRnaModelDto.AD_DIAGNOSIS_SEX_MALES_ONLY,
+      "AD Diagnosis (males only)"
+    );
+
+  public static String mapToStoredValue(DifferentialExpressionProfileRnaModelDto modelDto) {
+    if (modelDto == null) return null;
+    return modelToStoredValueMap.getOrDefault(modelDto, modelDto.getValue());
+  }
+}
