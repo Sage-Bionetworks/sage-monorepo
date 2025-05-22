@@ -16,6 +16,10 @@ servers:
 tags:
   - name: Dataversion
     description: Operations about dataversion.
+  - name: Models
+    description: Operations about models.
 paths:
   /dataversion:
     $ref: paths/dataversion.yaml
+  /models/{model}:
+    $ref: paths/modeldetails.yaml

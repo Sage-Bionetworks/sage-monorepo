@@ -1,0 +1,23 @@
+type: object
+description: Data for an individual
+properties:
+  genotype:
+    type: string
+    description: Genotype of the individual
+  sex:
+    type: string
+    enum:
+      - Male
+      - Female
+    description: Sex of the individual
+  individual_id:
+    type: string
+    description: Unique identifier for the individual
+  value:
+    type: number
+    description: Value for the individual
+required:
+  - genotype
+  - sex
+  - individual_id
+  - value
