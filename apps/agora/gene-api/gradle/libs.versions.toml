@@ -1,6 +1,6 @@
 [versions]
 findbugs = "3.0.2"
-jackson = "2.18.3"
+jackson = "2.19.0"
 lombok = "1.18.38"
 micrometer = "1.15.0"
 mongock = "5.5.1"

@@ -877,6 +877,7 @@ components:
           default: 100
           description: The number of items in a single page.
           format: int32
+          maximum: 100
           minimum: 1
           type: integer
         sort:

@@ -13,6 +13,7 @@ properties:
     format: int32
     default: 100
     minimum: 1
+    maximum: 100
   sort:
     $ref: DifferentialExpressionProfileRnaSort.yaml
   direction:

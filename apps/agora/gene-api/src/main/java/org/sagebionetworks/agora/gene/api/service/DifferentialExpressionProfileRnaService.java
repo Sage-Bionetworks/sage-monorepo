@@ -18,8 +18,6 @@ public class DifferentialExpressionProfileRnaService {
   ) {
     logger.info("listDifferentialExpressionProfilesRna query: {}", query);
 
-    throw new UnsupportedOperationException(
-      "Unimplemented method 'listDifferentialExpressionProfilesRna'"
-    );
+    return null;
   }
 }

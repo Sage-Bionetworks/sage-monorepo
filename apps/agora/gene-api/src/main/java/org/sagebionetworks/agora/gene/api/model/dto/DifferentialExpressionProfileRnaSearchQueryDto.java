@@ -70,9 +70,10 @@ public class DifferentialExpressionProfileRnaSearchQueryDto {
   /**
    * The number of items in a single page.
    * minimum: 1
+   * maximum: 100
    * @return pageSize
    */
-  @Min(1) 
+  @Min(1) @Max(100) 
   @Schema(name = "page_size", description = "The number of items in a single page.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("page_size")
   public Integer getPageSize() {
