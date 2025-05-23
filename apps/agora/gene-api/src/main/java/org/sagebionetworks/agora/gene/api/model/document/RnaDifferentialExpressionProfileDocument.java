@@ -40,4 +40,7 @@ public class RnaDifferentialExpressionProfileDocument {
   private List<BigDecimal> associations;
 
   private List<String> biodomains;
+
+  @Field("target_enabling_resources")
+  private List<String> targetEnablingResources;
 }

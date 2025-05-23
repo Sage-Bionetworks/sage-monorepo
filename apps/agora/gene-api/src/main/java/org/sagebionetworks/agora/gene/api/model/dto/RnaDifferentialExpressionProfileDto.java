@@ -52,6 +52,9 @@ public class RnaDifferentialExpressionProfileDto {
   @Valid
   private @Nullable List<String> biodomains;
 
+  @Valid
+  private @Nullable List<String> targetEnablingResources;
+
   public RnaDifferentialExpressionProfileDto() {
     super();
   }
@@ -272,6 +275,34 @@ public class RnaDifferentialExpressionProfileDto {
     this.biodomains = biodomains;
   }
 
+  public RnaDifferentialExpressionProfileDto targetEnablingResources(List<String> targetEnablingResources) {
+    this.targetEnablingResources = targetEnablingResources;
+    return this;
+  }
+
+  public RnaDifferentialExpressionProfileDto addTargetEnablingResourcesItem(String targetEnablingResourcesItem) {
+    if (this.targetEnablingResources == null) {
+      this.targetEnablingResources = new ArrayList<>();
+    }
+    this.targetEnablingResources.add(targetEnablingResourcesItem);
+    return this;
+  }
+
+  /**
+   * Target enabling resources
+   * @return targetEnablingResources
+   */
+  
+  @Schema(name = "target_enabling_resources", description = "Target enabling resources", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("target_enabling_resources")
+  public List<String> getTargetEnablingResources() {
+    return targetEnablingResources;
+  }
+
+  public void setTargetEnablingResources(List<String> targetEnablingResources) {
+    this.targetEnablingResources = targetEnablingResources;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -289,12 +320,13 @@ public class RnaDifferentialExpressionProfileDto {
         Objects.equals(this.tissues, rnaDifferentialExpressionProfile.tissues) &&
         Objects.equals(this.nominations, rnaDifferentialExpressionProfile.nominations) &&
         Objects.equals(this.associations, rnaDifferentialExpressionProfile.associations) &&
-        Objects.equals(this.biodomains, rnaDifferentialExpressionProfile.biodomains);
+        Objects.equals(this.biodomains, rnaDifferentialExpressionProfile.biodomains) &&
+        Objects.equals(this.targetEnablingResources, rnaDifferentialExpressionProfile.targetEnablingResources);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ensemblGeneId, hgncSymbol, targetRiskScore, geneticsScore, multiOmicsScore, tissues, nominations, associations, biodomains);
+    return Objects.hash(ensemblGeneId, hgncSymbol, targetRiskScore, geneticsScore, multiOmicsScore, tissues, nominations, associations, biodomains, targetEnablingResources);
   }
 
   @Override
@@ -310,6 +342,7 @@ public class RnaDifferentialExpressionProfileDto {
     sb.append("    nominations: ").append(toIndentedString(nominations)).append("\n");
     sb.append("    associations: ").append(toIndentedString(associations)).append("\n");
     sb.append("    biodomains: ").append(toIndentedString(biodomains)).append("\n");
+    sb.append("    targetEnablingResources: ").append(toIndentedString(targetEnablingResources)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -347,6 +380,7 @@ public class RnaDifferentialExpressionProfileDto {
       this.instance.setNominations(value.nominations);
       this.instance.setAssociations(value.associations);
       this.instance.setBiodomains(value.biodomains);
+      this.instance.setTargetEnablingResources(value.targetEnablingResources);
       return this;
     }
 
@@ -392,6 +426,11 @@ public class RnaDifferentialExpressionProfileDto {
     
     public RnaDifferentialExpressionProfileDto.Builder biodomains(List<String> biodomains) {
       this.instance.biodomains(biodomains);
+      return this;
+    }
+    
+    public RnaDifferentialExpressionProfileDto.Builder targetEnablingResources(List<String> targetEnablingResources) {
+      this.instance.targetEnablingResources(targetEnablingResources);
       return this;
     }
     

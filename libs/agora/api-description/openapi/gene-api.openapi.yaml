@@ -722,6 +722,12 @@ components:
             type: string
           nullable: true
           description: Array of biological domains
+        target_enabling_resources:
+          type: array
+          items:
+            type: string
+          nullable: true
+          description: Target enabling resources
       required:
         - ensembl_gene_id
         - hgnc_symbol
