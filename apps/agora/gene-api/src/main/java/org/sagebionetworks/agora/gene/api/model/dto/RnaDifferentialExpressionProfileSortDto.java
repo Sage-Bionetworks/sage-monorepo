@@ -22,7 +22,13 @@ import com.fasterxml.jackson.annotation.JsonValue;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 public enum RnaDifferentialExpressionProfileSortDto {
   
-  HGNC_SYMBOL("hgnc_symbol");
+  GENETICS_SCORE("genetics_score"),
+  
+  HGNC_SYMBOL("hgnc_symbol"),
+  
+  MULTI_OMICS_SCORE("multi_omics_score"),
+  
+  TARGET_RISK_SCORE("target_risk_score");
 
   private String value;
 

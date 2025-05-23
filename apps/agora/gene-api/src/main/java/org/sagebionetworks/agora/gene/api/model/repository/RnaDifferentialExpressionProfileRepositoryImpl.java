@@ -88,6 +88,9 @@ public class RnaDifferentialExpressionProfileRepositoryImpl
   private String mapSortField(RnaDifferentialExpressionProfileSortDto sortDto) {
     return switch (sortDto) {
       case HGNC_SYMBOL -> RnaDifferentialExpressionProfileSortDto.HGNC_SYMBOL.getValue();
+      case TARGET_RISK_SCORE -> RnaDifferentialExpressionProfileSortDto.TARGET_RISK_SCORE.getValue();
+      case GENETICS_SCORE -> RnaDifferentialExpressionProfileSortDto.GENETICS_SCORE.getValue();
+      case MULTI_OMICS_SCORE -> RnaDifferentialExpressionProfileSortDto.MULTI_OMICS_SCORE.getValue();
       default -> RnaDifferentialExpressionProfileSortDto.HGNC_SYMBOL.getValue();
     };
   }

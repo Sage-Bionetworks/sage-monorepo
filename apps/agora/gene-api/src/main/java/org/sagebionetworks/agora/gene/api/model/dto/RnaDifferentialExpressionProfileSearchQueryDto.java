@@ -33,7 +33,7 @@ public class RnaDifferentialExpressionProfileSearchQueryDto {
 
   private Integer pageSize = 100;
 
-  private RnaDifferentialExpressionProfileSortDto sort = RnaDifferentialExpressionProfileSortDto.HGNC_SYMBOL;
+  private RnaDifferentialExpressionProfileSortDto sort = RnaDifferentialExpressionProfileSortDto.TARGET_RISK_SCORE;
 
   private @Nullable SortDirectionDto direction = null;
 

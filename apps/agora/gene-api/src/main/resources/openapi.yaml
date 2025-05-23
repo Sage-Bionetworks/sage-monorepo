@@ -839,10 +839,13 @@ components:
         - '@lombok.AllArgsConstructor'
         - '@lombok.Builder'
     RnaDifferentialExpressionProfileSort:
-      default: hgnc_symbol
+      default: target_risk_score
       description: What to sort results by.
       enum:
+        - genetics_score
         - hgnc_symbol
+        - multi_omics_score
+        - target_risk_score
       type: string
     SortDirection:
       description: The direction to sort the results by.

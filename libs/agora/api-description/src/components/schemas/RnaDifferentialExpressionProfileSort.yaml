@@ -1,5 +1,8 @@
 description: What to sort results by.
 type: string
-default: hgnc_symbol
+default: target_risk_score
 enum:
+  - genetics_score
   - hgnc_symbol
+  - multi_omics_score
+  - target_risk_score
