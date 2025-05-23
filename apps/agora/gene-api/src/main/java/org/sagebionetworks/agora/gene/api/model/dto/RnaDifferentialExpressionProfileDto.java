@@ -44,7 +44,10 @@ public class RnaDifferentialExpressionProfileDto {
   @Valid
   private List<@Valid TissueDto> tissues = new ArrayList<>();
 
-  private NominationsDto nominations;
+  private @Nullable NominationsDto nominations;
+
+  @Valid
+  private @Nullable List<BigDecimal> associations;
 
   public RnaDifferentialExpressionProfileDto() {
     super();
@@ -53,14 +56,13 @@ public class RnaDifferentialExpressionProfileDto {
   /**
    * Constructor with only required parameters
    */
-  public RnaDifferentialExpressionProfileDto(String ensemblGeneId, String hgncSymbol, BigDecimal targetRiskScore, BigDecimal geneticsScore, BigDecimal multiOmicsScore, List<@Valid TissueDto> tissues, NominationsDto nominations) {
+  public RnaDifferentialExpressionProfileDto(String ensemblGeneId, String hgncSymbol, BigDecimal targetRiskScore, BigDecimal geneticsScore, BigDecimal multiOmicsScore, List<@Valid TissueDto> tissues) {
     this.ensemblGeneId = ensemblGeneId;
     this.hgncSymbol = hgncSymbol;
     this.targetRiskScore = targetRiskScore;
     this.geneticsScore = geneticsScore;
     this.multiOmicsScore = multiOmicsScore;
     this.tissues = tissues;
-    this.nominations = nominations;
   }
 
   public RnaDifferentialExpressionProfileDto ensemblGeneId(String ensemblGeneId) {
@@ -200,8 +202,8 @@ public class RnaDifferentialExpressionProfileDto {
    * Get nominations
    * @return nominations
    */
-  @NotNull @Valid 
-  @Schema(name = "nominations", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Valid 
+  @Schema(name = "nominations", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("nominations")
   public NominationsDto getNominations() {
     return nominations;
@@ -209,6 +211,34 @@ public class RnaDifferentialExpressionProfileDto {
 
   public void setNominations(NominationsDto nominations) {
     this.nominations = nominations;
+  }
+
+  public RnaDifferentialExpressionProfileDto associations(List<BigDecimal> associations) {
+    this.associations = associations;
+    return this;
+  }
+
+  public RnaDifferentialExpressionProfileDto addAssociationsItem(BigDecimal associationsItem) {
+    if (this.associations == null) {
+      this.associations = new ArrayList<>();
+    }
+    this.associations.add(associationsItem);
+    return this;
+  }
+
+  /**
+   * Array of association values
+   * @return associations
+   */
+  @Valid 
+  @Schema(name = "associations", description = "Array of association values", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("associations")
+  public List<BigDecimal> getAssociations() {
+    return associations;
+  }
+
+  public void setAssociations(List<BigDecimal> associations) {
+    this.associations = associations;
   }
 
   @Override
@@ -226,12 +256,13 @@ public class RnaDifferentialExpressionProfileDto {
         Objects.equals(this.geneticsScore, rnaDifferentialExpressionProfile.geneticsScore) &&
         Objects.equals(this.multiOmicsScore, rnaDifferentialExpressionProfile.multiOmicsScore) &&
         Objects.equals(this.tissues, rnaDifferentialExpressionProfile.tissues) &&
-        Objects.equals(this.nominations, rnaDifferentialExpressionProfile.nominations);
+        Objects.equals(this.nominations, rnaDifferentialExpressionProfile.nominations) &&
+        Objects.equals(this.associations, rnaDifferentialExpressionProfile.associations);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ensemblGeneId, hgncSymbol, targetRiskScore, geneticsScore, multiOmicsScore, tissues, nominations);
+    return Objects.hash(ensemblGeneId, hgncSymbol, targetRiskScore, geneticsScore, multiOmicsScore, tissues, nominations, associations);
   }
 
   @Override
@@ -245,6 +276,7 @@ public class RnaDifferentialExpressionProfileDto {
     sb.append("    multiOmicsScore: ").append(toIndentedString(multiOmicsScore)).append("\n");
     sb.append("    tissues: ").append(toIndentedString(tissues)).append("\n");
     sb.append("    nominations: ").append(toIndentedString(nominations)).append("\n");
+    sb.append("    associations: ").append(toIndentedString(associations)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -280,6 +312,7 @@ public class RnaDifferentialExpressionProfileDto {
       this.instance.setMultiOmicsScore(value.multiOmicsScore);
       this.instance.setTissues(value.tissues);
       this.instance.setNominations(value.nominations);
+      this.instance.setAssociations(value.associations);
       return this;
     }
 
@@ -315,6 +348,11 @@ public class RnaDifferentialExpressionProfileDto {
     
     public RnaDifferentialExpressionProfileDto.Builder nominations(NominationsDto nominations) {
       this.instance.nominations(nominations);
+      return this;
+    }
+    
+    public RnaDifferentialExpressionProfileDto.Builder associations(List<BigDecimal> associations) {
+      this.instance.associations(associations);
       return this;
     }
     

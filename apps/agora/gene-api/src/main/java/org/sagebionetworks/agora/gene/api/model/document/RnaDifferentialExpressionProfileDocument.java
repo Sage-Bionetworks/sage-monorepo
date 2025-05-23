@@ -36,4 +36,6 @@ public class RnaDifferentialExpressionProfileDocument {
   private List<TissueDocument> tissues;
 
   private NominationsDocument nominations;
+
+  private List<BigDecimal> associations;
 }

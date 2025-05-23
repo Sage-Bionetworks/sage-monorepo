@@ -710,6 +710,12 @@ components:
           $ref: '#/components/schemas/Nominations'
           nullable: true
           description: Gene nominations data
+        associations:
+          type: array
+          items:
+            type: number
+          nullable: true
+          description: Array of association values
       required:
         - ensembl_gene_id
         - hgnc_symbol
@@ -717,7 +723,6 @@ components:
         - genetics_score
         - multi_omics_score
         - tissues
-        - nominations
     RnaDifferentialExpressionProfilePage:
       type: object
       description: A page of RNA differential expression profiles.

@@ -27,6 +27,12 @@ properties:
     $ref: Nominations.yaml
     nullable: true
     description: 'Gene nominations data'
+  associations:
+    type: array
+    items:
+      type: number # TODO: Should be integer based on agora-api implementation (or enum?)
+    nullable: true
+    description: 'Array of association values'
 required:
   - ensembl_gene_id
   - hgnc_symbol
@@ -34,4 +40,3 @@ required:
   - genetics_score
   - multi_omics_score
   - tissues
-  - nominations
