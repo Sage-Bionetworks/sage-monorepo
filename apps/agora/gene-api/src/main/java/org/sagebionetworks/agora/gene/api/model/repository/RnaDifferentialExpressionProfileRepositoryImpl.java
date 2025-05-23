@@ -62,7 +62,8 @@ public class RnaDifferentialExpressionProfileRepositoryImpl
 
     // Sorting
     if (query.getSort() != null) {
-      String sortField = mapSortField(query.getSort());
+      String sortField = mapSortField(query.getSort()).getValue();
+      // TODO: Consider supporting different default direction for different sort fields.
       Sort.Direction direction = (query.getDirection() == SortDirectionDto.DESC)
         ? Sort.Direction.DESC
         : Sort.Direction.ASC;
@@ -85,13 +86,15 @@ public class RnaDifferentialExpressionProfileRepositoryImpl
     return new PageImpl<>(results, pageable, total);
   }
 
-  private String mapSortField(RnaDifferentialExpressionProfileSortDto sortDto) {
+  private RnaDifferentialExpressionProfileSortDto mapSortField(
+    RnaDifferentialExpressionProfileSortDto sortDto
+  ) {
     return switch (sortDto) {
-      case HGNC_SYMBOL -> RnaDifferentialExpressionProfileSortDto.HGNC_SYMBOL.getValue();
-      case TARGET_RISK_SCORE -> RnaDifferentialExpressionProfileSortDto.TARGET_RISK_SCORE.getValue();
-      case GENETICS_SCORE -> RnaDifferentialExpressionProfileSortDto.GENETICS_SCORE.getValue();
-      case MULTI_OMICS_SCORE -> RnaDifferentialExpressionProfileSortDto.MULTI_OMICS_SCORE.getValue();
-      default -> RnaDifferentialExpressionProfileSortDto.HGNC_SYMBOL.getValue();
+      case HGNC_SYMBOL -> RnaDifferentialExpressionProfileSortDto.HGNC_SYMBOL;
+      case TARGET_RISK_SCORE -> RnaDifferentialExpressionProfileSortDto.TARGET_RISK_SCORE;
+      case GENETICS_SCORE -> RnaDifferentialExpressionProfileSortDto.GENETICS_SCORE;
+      case MULTI_OMICS_SCORE -> RnaDifferentialExpressionProfileSortDto.MULTI_OMICS_SCORE;
+      default -> RnaDifferentialExpressionProfileSortDto.TARGET_RISK_SCORE;
     };
   }
 }
