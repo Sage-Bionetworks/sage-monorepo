@@ -13,7 +13,7 @@ import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneTissueDto;
 import org.sagebionetworks.agora.gene.api.service.GCTGenesService;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-@ChangeUnit(id = "preloadRnaDifferentialExpressionProfilesV7", order = "001", author = "tschaffter")
+@ChangeUnit(id = "preloadRnaDifferentialExpressionProfilesV8", order = "001", author = "tschaffter")
 public class PreloadRnaDifferentialExpressionProfilesMigration {
 
   private final GCTGenesService gctGenesService;
@@ -37,6 +37,8 @@ public class PreloadRnaDifferentialExpressionProfilesMigration {
       .filter(gctGene -> gctGene.getHgncSymbol() != null && !gctGene.getHgncSymbol().isBlank())
       .map(gctGene ->
         RnaDifferentialExpressionProfileDocument.builder()
+          // TODO: Store an enum value for the model for better performance and less risk of typos
+          .model(subCategory)
           .ensemblGeneId(gctGene.getEnsemblGeneId())
           .hgncSymbol(gctGene.getHgncSymbol())
           .targetRiskScore(gctGene.getTargetRiskScore())

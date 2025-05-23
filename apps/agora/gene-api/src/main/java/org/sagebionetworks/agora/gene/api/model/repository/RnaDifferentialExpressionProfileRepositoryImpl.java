@@ -43,6 +43,7 @@ public class RnaDifferentialExpressionProfileRepositoryImpl
       String storedModelValue = RnaDifferentialExpressionProfileModelMapper.mapToStoredValue(
         query.getModel()
       );
+      logger.info("model: {}", storedModelValue);
       if (storedModelValue != null) {
         criteriaList.add(Criteria.where("model").is(storedModelValue));
       }
