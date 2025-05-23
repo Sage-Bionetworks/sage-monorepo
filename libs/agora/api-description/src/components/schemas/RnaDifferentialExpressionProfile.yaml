@@ -22,6 +22,11 @@ properties:
     items:
       $ref: Tissue.yaml
     description: 'Array of gene tissues'
+  # TODO: the plural form should only be used for arrays.
+  nominations:
+    $ref: Nominations.yaml
+    nullable: true
+    description: 'Gene nominations data'
 required:
   - ensembl_gene_id
   - hgnc_symbol
@@ -29,3 +34,4 @@ required:
   - genetics_score
   - multi_omics_score
   - tissues
+  - nominations

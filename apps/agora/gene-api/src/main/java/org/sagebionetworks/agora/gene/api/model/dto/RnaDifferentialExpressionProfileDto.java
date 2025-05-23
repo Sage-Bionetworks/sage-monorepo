@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.sagebionetworks.agora.gene.api.model.dto.NominationsDto;
 import org.sagebionetworks.agora.gene.api.model.dto.TissueDto;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
@@ -43,6 +44,8 @@ public class RnaDifferentialExpressionProfileDto {
   @Valid
   private List<@Valid TissueDto> tissues = new ArrayList<>();
 
+  private NominationsDto nominations;
+
   public RnaDifferentialExpressionProfileDto() {
     super();
   }
@@ -50,13 +53,14 @@ public class RnaDifferentialExpressionProfileDto {
   /**
    * Constructor with only required parameters
    */
-  public RnaDifferentialExpressionProfileDto(String ensemblGeneId, String hgncSymbol, BigDecimal targetRiskScore, BigDecimal geneticsScore, BigDecimal multiOmicsScore, List<@Valid TissueDto> tissues) {
+  public RnaDifferentialExpressionProfileDto(String ensemblGeneId, String hgncSymbol, BigDecimal targetRiskScore, BigDecimal geneticsScore, BigDecimal multiOmicsScore, List<@Valid TissueDto> tissues, NominationsDto nominations) {
     this.ensemblGeneId = ensemblGeneId;
     this.hgncSymbol = hgncSymbol;
     this.targetRiskScore = targetRiskScore;
     this.geneticsScore = geneticsScore;
     this.multiOmicsScore = multiOmicsScore;
     this.tissues = tissues;
+    this.nominations = nominations;
   }
 
   public RnaDifferentialExpressionProfileDto ensemblGeneId(String ensemblGeneId) {
@@ -187,6 +191,26 @@ public class RnaDifferentialExpressionProfileDto {
     this.tissues = tissues;
   }
 
+  public RnaDifferentialExpressionProfileDto nominations(NominationsDto nominations) {
+    this.nominations = nominations;
+    return this;
+  }
+
+  /**
+   * Get nominations
+   * @return nominations
+   */
+  @NotNull @Valid 
+  @Schema(name = "nominations", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("nominations")
+  public NominationsDto getNominations() {
+    return nominations;
+  }
+
+  public void setNominations(NominationsDto nominations) {
+    this.nominations = nominations;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -201,12 +225,13 @@ public class RnaDifferentialExpressionProfileDto {
         Objects.equals(this.targetRiskScore, rnaDifferentialExpressionProfile.targetRiskScore) &&
         Objects.equals(this.geneticsScore, rnaDifferentialExpressionProfile.geneticsScore) &&
         Objects.equals(this.multiOmicsScore, rnaDifferentialExpressionProfile.multiOmicsScore) &&
-        Objects.equals(this.tissues, rnaDifferentialExpressionProfile.tissues);
+        Objects.equals(this.tissues, rnaDifferentialExpressionProfile.tissues) &&
+        Objects.equals(this.nominations, rnaDifferentialExpressionProfile.nominations);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ensemblGeneId, hgncSymbol, targetRiskScore, geneticsScore, multiOmicsScore, tissues);
+    return Objects.hash(ensemblGeneId, hgncSymbol, targetRiskScore, geneticsScore, multiOmicsScore, tissues, nominations);
   }
 
   @Override
@@ -219,6 +244,7 @@ public class RnaDifferentialExpressionProfileDto {
     sb.append("    geneticsScore: ").append(toIndentedString(geneticsScore)).append("\n");
     sb.append("    multiOmicsScore: ").append(toIndentedString(multiOmicsScore)).append("\n");
     sb.append("    tissues: ").append(toIndentedString(tissues)).append("\n");
+    sb.append("    nominations: ").append(toIndentedString(nominations)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -253,6 +279,7 @@ public class RnaDifferentialExpressionProfileDto {
       this.instance.setGeneticsScore(value.geneticsScore);
       this.instance.setMultiOmicsScore(value.multiOmicsScore);
       this.instance.setTissues(value.tissues);
+      this.instance.setNominations(value.nominations);
       return this;
     }
 
@@ -283,6 +310,11 @@ public class RnaDifferentialExpressionProfileDto {
     
     public RnaDifferentialExpressionProfileDto.Builder tissues(List<TissueDto> tissues) {
       this.instance.tissues(tissues);
+      return this;
+    }
+    
+    public RnaDifferentialExpressionProfileDto.Builder nominations(NominationsDto nominations) {
+      this.instance.nominations(nominations);
       return this;
     }
     

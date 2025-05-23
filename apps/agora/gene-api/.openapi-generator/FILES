@@ -24,6 +24,7 @@ src/main/java/org/sagebionetworks/agora/gene/api/model/dto/GeneNetworkLinksDto.j
 src/main/java/org/sagebionetworks/agora/gene/api/model/dto/MedianExpressionDto.java
 src/main/java/org/sagebionetworks/agora/gene/api/model/dto/MetabolomicsDto.java
 src/main/java/org/sagebionetworks/agora/gene/api/model/dto/NeuropathologicCorrelationDto.java
+src/main/java/org/sagebionetworks/agora/gene/api/model/dto/NominationsDto.java
 src/main/java/org/sagebionetworks/agora/gene/api/model/dto/OverallScoresDto.java
 src/main/java/org/sagebionetworks/agora/gene/api/model/dto/PageMetadataDto.java
 src/main/java/org/sagebionetworks/agora/gene/api/model/dto/ProteinDifferentialExpressionDto.java

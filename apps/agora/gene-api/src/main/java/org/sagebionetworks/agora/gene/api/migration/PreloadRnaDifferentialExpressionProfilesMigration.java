@@ -4,14 +4,16 @@ import io.mongock.api.annotations.ChangeUnit;
 import io.mongock.api.annotations.Execution;
 import io.mongock.api.annotations.RollbackExecution;
 import java.util.List;
+import org.sagebionetworks.agora.gene.api.model.document.NominationsDocument;
 import org.sagebionetworks.agora.gene.api.model.document.RnaDifferentialExpressionProfileDocument;
 import org.sagebionetworks.agora.gene.api.model.document.TissueDocument;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneDto;
+import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneNominationsDto;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneTissueDto;
 import org.sagebionetworks.agora.gene.api.service.GCTGenesService;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-@ChangeUnit(id = "preloadRnaDifferentialExpressionProfilesV2", order = "001", author = "tschaffter")
+@ChangeUnit(id = "preloadRnaDifferentialExpressionProfilesV4", order = "001", author = "tschaffter")
 public class PreloadRnaDifferentialExpressionProfilesMigration {
 
   private final GCTGenesService gctGenesService;
@@ -41,6 +43,7 @@ public class PreloadRnaDifferentialExpressionProfilesMigration {
           .geneticsScore(gctGene.getGeneticsScore())
           .multiOmicsScore(gctGene.getMultiOmicsScore())
           .tissues(mapTissues(gctGene.getTissues()))
+          .nominations(mapNominations(gctGene.getNominations()))
           .build()
       )
       .toList();
@@ -62,6 +65,19 @@ public class PreloadRnaDifferentialExpressionProfilesMigration {
           .build()
       )
       .toList();
+  }
+
+  private NominationsDocument mapNominations(GCTGeneNominationsDto nominationsDto) {
+    if (nominationsDto == null) return null;
+    return NominationsDocument.builder()
+      .count(nominationsDto.getCount())
+      .year(nominationsDto.getYear())
+      .teams(nominationsDto.getTeams())
+      .studies(nominationsDto.getStudies())
+      .inputs(nominationsDto.getInputs())
+      .programs(nominationsDto.getPrograms())
+      .validations(nominationsDto.getValidations())
+      .build();
   }
 
   @RollbackExecution

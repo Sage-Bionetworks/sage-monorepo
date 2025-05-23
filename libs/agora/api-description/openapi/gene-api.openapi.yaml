@@ -638,6 +638,49 @@ components:
         - ci_l
         - ci_r
         - mediaexpression
+    Nominations:
+      type: object
+      description: A gene nomination.
+      properties:
+        count:
+          type: integer
+          description: The total number of gene nominations.
+        year:
+          type: integer
+          description: The year of the nominations.
+        teams:
+          type: array
+          items:
+            type: string
+          description: The list of teams involved in the nominations.
+        studies:
+          type: array
+          items:
+            type: string
+          description: The list of studies related to the nominations.
+        inputs:
+          type: array
+          items:
+            type: string
+          description: The input data used for the nominations.
+        programs:
+          type: array
+          items:
+            type: string
+          description: The list of programs associated with the nominations.
+        validations:
+          type: array
+          items:
+            type: string
+          description: The list of validations for the nominations.
+      required:
+        - count
+        - year
+        - teams
+        - studies
+        - inputs
+        - programs
+        - validations
     RnaDifferentialExpressionProfile:
       type: object
       description: A RNA differential expression profile.
@@ -663,6 +706,10 @@ components:
           items:
             $ref: '#/components/schemas/Tissue'
           description: Array of gene tissues
+        nominations:
+          $ref: '#/components/schemas/Nominations'
+          nullable: true
+          description: Gene nominations data
       required:
         - ensembl_gene_id
         - hgnc_symbol
@@ -670,6 +717,7 @@ components:
         - genetics_score
         - multi_omics_score
         - tissues
+        - nominations
     RnaDifferentialExpressionProfilePage:
       type: object
       description: A page of RNA differential expression profiles.

@@ -12,29 +12,31 @@ public class RnaDifferentialExpressionProfileMapper
   > {
 
   private TissueMapper tissueMapper = new TissueMapper();
+  private NominationsMapper nominationsMapper = new NominationsMapper();
 
   @Override
   public RnaDifferentialExpressionProfileDocument convertToEntity(
     RnaDifferentialExpressionProfileDto dto,
     Object... args
   ) {
-    RnaDifferentialExpressionProfileDocument entity =
+    RnaDifferentialExpressionProfileDocument document =
       RnaDifferentialExpressionProfileDocument.builder().build();
     if (dto != null) {
-      BeanUtils.copyProperties(dto, entity);
+      BeanUtils.copyProperties(dto, document);
     }
-    return entity;
+    return document;
   }
 
   @Override
   public RnaDifferentialExpressionProfileDto convertToDto(
-    RnaDifferentialExpressionProfileDocument entity,
+    RnaDifferentialExpressionProfileDocument document,
     Object... args
   ) {
     RnaDifferentialExpressionProfileDto dto = new RnaDifferentialExpressionProfileDto();
-    if (entity != null) {
-      BeanUtils.copyProperties(entity, dto);
-      dto.setTissues(tissueMapper.convertToDtoList(entity.getTissues()));
+    if (document != null) {
+      BeanUtils.copyProperties(document, dto);
+      dto.setTissues(tissueMapper.convertToDtoList(document.getTissues()));
+      dto.setNominations(nominationsMapper.convertToDto(document.getNominations()));
     }
     return dto;
   }

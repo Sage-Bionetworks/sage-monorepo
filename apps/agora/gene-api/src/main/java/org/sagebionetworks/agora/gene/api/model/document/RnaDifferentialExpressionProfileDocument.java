@@ -34,4 +34,6 @@ public class RnaDifferentialExpressionProfileDocument {
   private BigDecimal multiOmicsScore;
 
   private List<TissueDocument> tissues;
+
+  private NominationsDocument nominations;
 }
