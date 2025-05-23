@@ -936,7 +936,7 @@ components:
       minLength: 15
       pattern: "^ENSG\\d{11}$"
       type: string
-    HgncGeneSymbol:
+    HgncSymbol:
       description: The HGNC gene symbol.
       example: TP53
       minLength: 0

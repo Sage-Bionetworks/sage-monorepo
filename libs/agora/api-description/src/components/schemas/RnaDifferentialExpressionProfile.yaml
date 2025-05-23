@@ -4,7 +4,7 @@ properties:
   ensembl_gene_id:
     $ref: EnsemblGeneId.yaml
   hgnc_symbol:
-    $ref: HgncGeneSymbol.yaml
+    $ref: HgncSymbol.yaml
   target_risk_score:
     type: number
     nullable: true

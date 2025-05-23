@@ -603,7 +603,7 @@ components:
       maxLength: 15
       pattern: ^ENSG\d{11}$
       example: ENSG00000139618
-    HgncGeneSymbol:
+    HgncSymbol:
       description: The HGNC gene symbol.
       type: string
       minLength: 0
@@ -691,7 +691,7 @@ components:
         ensembl_gene_id:
           $ref: '#/components/schemas/EnsemblGeneId'
         hgnc_symbol:
-          $ref: '#/components/schemas/HgncGeneSymbol'
+          $ref: '#/components/schemas/HgncSymbol'
         target_risk_score:
           type: number
           nullable: true
@@ -799,7 +799,7 @@ components:
         ensembl_gene_id:
           $ref: '#/components/schemas/EnsemblGeneId'
         hgnc_symbol:
-          $ref: '#/components/schemas/HgncGeneSymbol'
+          $ref: '#/components/schemas/HgncSymbol'
       required:
         - ensembl_gene_id
     ProteinDifferentialExpressionProfilePage:
