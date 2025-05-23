@@ -14,11 +14,19 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - name: Genes # TODO: consider using "Gene" instead of "Genes" to be consistent with the other APIs
+  # TODO: consider using "Gene" instead of "Genes" to be consistent with the other APIs in the
+  # monorepo.
+  - name: Genes
     description: Operations about genes.
+  - name: DifferentialExpression
+    description: Operations about differential expression.
 paths:
   /genes/comparison:
     $ref: paths/genes/comparison.yaml
+  /differentialExpression/rna:
+    $ref: paths/differentialExpression/rna.yaml
+  /differentialExpression/protein:
+    $ref: paths/differentialExpression/protein.yaml
 components:
   schemas:
     Gene:

@@ -1,0 +1,25 @@
+type: object
+description: A differential protein expression profile search query.
+properties:
+  page_number:
+    description: The page number.
+    type: integer
+    format: int32
+    default: 0
+    minimum: 0
+  page_size:
+    description: The number of items in a single page.
+    type: integer
+    format: int32
+    default: 100
+    minimum: 1
+  sort:
+    $ref: ProteinDifferentialExpressionProfileSort.yaml
+  direction:
+    $ref: SortDirection.yaml
+  profiling_method:
+    $ref: ProteinDifferentialExpressionProfileProfilingMethod.yaml
+  search_terms:
+    description: A string of search terms used to filter the results.
+    type: string
+    example: 'A1BG'

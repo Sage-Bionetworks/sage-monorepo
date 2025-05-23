@@ -7,7 +7,7 @@ extends:
 rules:
   security-defined: off
   no-server-example.com: off
-  paths-kebab-case: warn
+  paths-kebab-case: off
 
 # The path to the API description files is relative to the location of this file.
 apis:

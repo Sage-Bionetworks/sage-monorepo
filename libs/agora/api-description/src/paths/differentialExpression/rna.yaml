@@ -1,0 +1,19 @@
+get:
+  tags:
+    - DifferentialExpression
+  summary: List RNA differential expression profiles
+  description: List differential expression profiles
+  operationId: listRnaDifferentialExpressionProfiles
+  parameters:
+    - $ref: ../../components/parameters/query/rnaDifferentialExpressionProfileSearchQuery.yaml
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/RnaDifferentialExpressionProfilePage.yaml
+      description: Success
+    '400':
+      $ref: ../../components/responses/BadRequest.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml
