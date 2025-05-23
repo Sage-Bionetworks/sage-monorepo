@@ -17,7 +17,7 @@ describe('HeroComponent', () => {
   it('should apply background image when provided', async () => {
     const backgroundImagePath = '/path/to/image.jpg';
     const { container } = await setup({ backgroundImagePath });
-    const heroElement = container.querySelector('.section-hero');
+    const heroElement = container.querySelector('.hero-container');
     expect(heroElement).toHaveStyle(`background-image: url(${backgroundImagePath})`);
   });
 });

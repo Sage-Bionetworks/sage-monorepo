@@ -48,19 +48,17 @@ $extra-colors: (
 }
 
 // -------------------------------------------------------------------------- //
-// Container
+// Main Content
 // -------------------------------------------------------------------------- //
 
-$container-max-width-sm: 925px;
-$container-max-width-md: 1440px;
-$container-max-width-lg: 1920px;
-$container-gutter-width: 30px;
+$main-content-desktop-width: 925px;
+$main-content-margin: 20px;
+$main-content-total-width: $main-content-desktop-width + ($main-content-margin * 2);
 
 :root {
-  --container-max-width-sm: #{$container-max-width-sm};
-  --container-max-width-md: #{$container-max-width-md};
-  --container-max-width-lg: #{$container-max-width-lg};
-  --container-gutter-width: #{$container-gutter-width};
+  --main-content-desktop-width: #{$main-content-desktop-width};
+  --main-content-margin: #{$main-content-margin};
+  --main-content-total-width: #{$main-content-total-width};
 }
 
 // -------------------------------------------------------------------------- //
@@ -72,6 +70,30 @@ $transition-duration: 0.08s;
 :root {
   --transition-duration: #{$transition-duration};
 }
+
+// -------------------------------------------------------------------------- //
+// Header
+// -------------------------------------------------------------------------- //
+
+$header-height: 88px;
+
+:root {
+  --header-height: #{$header-height};
+}
+
+// -------------------------------------------------------------------------- //
+// Footer
+// -------------------------------------------------------------------------- //
+
+$footer-height: 88px;
+
+:root {
+  --footer-height: #{$footer-height};
+}
+
+// -------------------------------------------------------------------------- //
+// Breakpoints
+// -------------------------------------------------------------------------- //
 
 $sm-breakpoint: 600px;
 $md-breakpoint: 768px;

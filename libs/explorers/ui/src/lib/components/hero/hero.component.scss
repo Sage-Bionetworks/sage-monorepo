@@ -1,17 +1,21 @@
-.section {
-  .section-inner {
-    padding: 50px;
-  }
-}
+/* stylelint-disable media-feature-name-no-unknown */
+@use 'libs/explorers/styles/src/lib/variables' as vars;
 
-.section-hero {
+.hero-container {
   display: flex;
-  min-height: 200px;
-  background-size: cover !important;
-  color: #fff;
+  justify-content: center;
   align-items: center;
+  height: clamp(100px, 15vw, 200px);
 
-  .section-inner {
-    width: 100%;
+  @media (width < vars.$main-content-total-width) {
+    padding: 0 vars.$main-content-margin;
+  }
+
+  .hero-container-inner {
+    width: min(vars.$main-content-desktop-width, 100%);
+
+    h1 {
+      color: white;
+    }
   }
 }

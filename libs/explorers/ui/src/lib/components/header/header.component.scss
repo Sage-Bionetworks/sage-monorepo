@@ -2,6 +2,11 @@
 
 #header {
   padding: 10px 80px;
+
+  @media (width <= 965px) {
+    padding: 10px 30px 10px 10px;
+  }
+
   display: flex;
   justify-content: center;
   align-items: center;

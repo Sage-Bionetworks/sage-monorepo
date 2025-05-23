@@ -1,13 +1,17 @@
-<explorers-hero
-  title="Terms of Service"
-  backgroundImagePath="explorers-assets/images/hero-background.svg"
-/>
+<div id="terms-of-service-container">
+  <explorers-hero
+    title="Terms of Service"
+    backgroundImagePath="explorers-assets/images/hero-background.svg"
+  />
 
-<div class="container-sm terms-of-service">
-  @if (loading) {
-    <div class="loading-icon">
-      <explorers-loading-icon />
+  <div class="terms-of-service">
+    @if (loading) {
+      <div class="loading-icon">
+        <explorers-loading-icon />
+      </div>
+    }
+    <div class="terms-of-service-content">
+      <markdown [data]="content" />
     </div>
-  }
-  <markdown [data]="content" />
+  </div>
 </div>

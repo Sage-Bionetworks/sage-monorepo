@@ -1,11 +1,32 @@
-.loading-icon {
-  min-width: 925px;
-  min-height: 500px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+/* stylelint-disable media-feature-name-no-unknown */
+@use 'libs/explorers/styles/src/lib/variables' as vars;
 
-.terms-of-service {
-  padding: 10px 0;
+#terms-of-service-container {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - var(--header-height) - var(--footer-height) + 1px);
+
+  .terms-of-service {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    @media (width < vars.$main-content-total-width) {
+      // adds consistent margin when the screen is smaller
+      margin: 0 vars.$main-content-margin;
+    }
+
+    .loading-icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: min(vars.$main-content-desktop-width, 100%);
+    }
+
+    .terms-of-service-content {
+      width: min(vars.$main-content-desktop-width, 100%);
+    }
+  }
 }
