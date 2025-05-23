@@ -605,6 +605,39 @@ components:
       type: string
       minLength: 0
       example: TP53
+    Tissue:
+      type: object
+      description: A tissue.
+      properties:
+        name:
+          type: string
+          description: Name of the gene or tissue.
+        logfc:
+          type: number
+          format: float
+          description: Log fold change value.
+        adj_p_val:
+          type: number
+          format: float
+          description: Adjusted p-value.
+        ci_l:
+          type: number
+          format: float
+          description: Lower confidence interval.
+        ci_r:
+          type: number
+          format: float
+          description: Upper confidence interval.
+        medianexpression:
+          $ref: '#/components/schemas/MedianExpression'
+          nullable: true
+      required:
+        - name
+        - logfc
+        - adj_p_val
+        - ci_l
+        - ci_r
+        - mediaexpression
     RnaDifferentialExpressionProfile:
       type: object
       description: A RNA differential expression profile.
@@ -625,8 +658,18 @@ components:
           type: number
           nullable: true
           description: Multi-omics score
+        tissues:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tissue'
+          description: Array of gene tissues
       required:
         - ensembl_gene_id
+        - hgnc_symbol
+        - target_risk_score
+        - genetics_score
+        - multi_omics_score
+        - tissues
     RnaDifferentialExpressionProfilePage:
       type: object
       description: A page of RNA differential expression profiles.

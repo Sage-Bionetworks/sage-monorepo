@@ -45,4 +45,5 @@ src/main/java/org/sagebionetworks/agora/gene/api/model/dto/SortDirectionDto.java
 src/main/java/org/sagebionetworks/agora/gene/api/model/dto/TargetNominationDto.java
 src/main/java/org/sagebionetworks/agora/gene/api/model/dto/TeamDto.java
 src/main/java/org/sagebionetworks/agora/gene/api/model/dto/TeamMemberDto.java
+src/main/java/org/sagebionetworks/agora/gene/api/model/dto/TissueDto.java
 src/main/resources/openapi.yaml

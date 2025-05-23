@@ -17,5 +17,15 @@ properties:
     type: number
     nullable: true
     description: 'Multi-omics score'
+  tissues:
+    type: array
+    items:
+      $ref: Tissue.yaml
+    description: 'Array of gene tissues'
 required:
   - ensembl_gene_id
+  - hgnc_symbol
+  - target_risk_score
+  - genetics_score
+  - multi_omics_score
+  - tissues

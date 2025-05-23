@@ -1,6 +1,7 @@
 package org.sagebionetworks.agora.gene.api.model.document;
 
 import java.math.BigDecimal;
+import java.util.List;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -31,4 +32,6 @@ public class RnaDifferentialExpressionProfileDocument {
 
   @Field("multi_omics_score")
   private BigDecimal multiOmicsScore;
+
+  private List<TissueDocument> tissues;
 }

@@ -5,11 +5,13 @@ import io.mongock.api.annotations.Execution;
 import io.mongock.api.annotations.RollbackExecution;
 import java.util.List;
 import org.sagebionetworks.agora.gene.api.model.document.RnaDifferentialExpressionProfileDocument;
+import org.sagebionetworks.agora.gene.api.model.document.TissueDocument;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneDto;
+import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneTissueDto;
 import org.sagebionetworks.agora.gene.api.service.GCTGenesService;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-@ChangeUnit(id = "preloadRnaDifferentialExpressionProfilesV1", order = "001", author = "tschaffter")
+@ChangeUnit(id = "preloadRnaDifferentialExpressionProfilesV2", order = "001", author = "tschaffter")
 public class PreloadRnaDifferentialExpressionProfilesMigration {
 
   private final GCTGenesService gctGenesService;
@@ -38,12 +40,28 @@ public class PreloadRnaDifferentialExpressionProfilesMigration {
           .targetRiskScore(gctGene.getTargetRiskScore())
           .geneticsScore(gctGene.getGeneticsScore())
           .multiOmicsScore(gctGene.getMultiOmicsScore())
+          .tissues(mapTissues(gctGene.getTissues()))
           .build()
       )
       .toList();
 
     mongoTemplate.dropCollection(RnaDifferentialExpressionProfileDocument.class);
     mongoTemplate.insertAll(precomputed);
+  }
+
+  private List<TissueDocument> mapTissues(List<GCTGeneTissueDto> tissueDtos) {
+    return tissueDtos
+      .stream()
+      .map(tissueDto ->
+        TissueDocument.builder()
+          .name(tissueDto.getName())
+          .logfc(tissueDto.getLogfc())
+          .adjPVal(tissueDto.getAdjPVal())
+          .ciL(tissueDto.getCiL())
+          .ciR(tissueDto.getCiR())
+          .build()
+      )
+      .toList();
   }
 
   @RollbackExecution

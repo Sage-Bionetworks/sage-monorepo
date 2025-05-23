@@ -6,6 +6,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.sagebionetworks.agora.gene.api.model.dto.TissueDto;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -28,13 +32,16 @@ public class RnaDifferentialExpressionProfileDto {
 
   private String ensemblGeneId;
 
-  private @Nullable String hgncSymbol;
+  private String hgncSymbol;
 
-  private @Nullable BigDecimal targetRiskScore = null;
+  private BigDecimal targetRiskScore = null;
 
-  private @Nullable BigDecimal geneticsScore = null;
+  private BigDecimal geneticsScore = null;
 
-  private @Nullable BigDecimal multiOmicsScore = null;
+  private BigDecimal multiOmicsScore = null;
+
+  @Valid
+  private List<@Valid TissueDto> tissues = new ArrayList<>();
 
   public RnaDifferentialExpressionProfileDto() {
     super();
@@ -43,8 +50,13 @@ public class RnaDifferentialExpressionProfileDto {
   /**
    * Constructor with only required parameters
    */
-  public RnaDifferentialExpressionProfileDto(String ensemblGeneId) {
+  public RnaDifferentialExpressionProfileDto(String ensemblGeneId, String hgncSymbol, BigDecimal targetRiskScore, BigDecimal geneticsScore, BigDecimal multiOmicsScore, List<@Valid TissueDto> tissues) {
     this.ensemblGeneId = ensemblGeneId;
+    this.hgncSymbol = hgncSymbol;
+    this.targetRiskScore = targetRiskScore;
+    this.geneticsScore = geneticsScore;
+    this.multiOmicsScore = multiOmicsScore;
+    this.tissues = tissues;
   }
 
   public RnaDifferentialExpressionProfileDto ensemblGeneId(String ensemblGeneId) {
@@ -76,8 +88,8 @@ public class RnaDifferentialExpressionProfileDto {
    * The HGNC gene symbol.
    * @return hgncSymbol
    */
-  @Size(min = 0) 
-  @Schema(name = "hgnc_symbol", example = "TP53", description = "The HGNC gene symbol.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Size(min = 0) 
+  @Schema(name = "hgnc_symbol", example = "TP53", description = "The HGNC gene symbol.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("hgnc_symbol")
   public String getHgncSymbol() {
     return hgncSymbol;
@@ -96,8 +108,8 @@ public class RnaDifferentialExpressionProfileDto {
    * Target risk score
    * @return targetRiskScore
    */
-  @Valid 
-  @Schema(name = "target_risk_score", description = "Target risk score", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid 
+  @Schema(name = "target_risk_score", description = "Target risk score", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("target_risk_score")
   public BigDecimal getTargetRiskScore() {
     return targetRiskScore;
@@ -116,8 +128,8 @@ public class RnaDifferentialExpressionProfileDto {
    * Genetics score
    * @return geneticsScore
    */
-  @Valid 
-  @Schema(name = "genetics_score", description = "Genetics score", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid 
+  @Schema(name = "genetics_score", description = "Genetics score", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("genetics_score")
   public BigDecimal getGeneticsScore() {
     return geneticsScore;
@@ -136,8 +148,8 @@ public class RnaDifferentialExpressionProfileDto {
    * Multi-omics score
    * @return multiOmicsScore
    */
-  @Valid 
-  @Schema(name = "multi_omics_score", description = "Multi-omics score", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid 
+  @Schema(name = "multi_omics_score", description = "Multi-omics score", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("multi_omics_score")
   public BigDecimal getMultiOmicsScore() {
     return multiOmicsScore;
@@ -145,6 +157,34 @@ public class RnaDifferentialExpressionProfileDto {
 
   public void setMultiOmicsScore(BigDecimal multiOmicsScore) {
     this.multiOmicsScore = multiOmicsScore;
+  }
+
+  public RnaDifferentialExpressionProfileDto tissues(List<@Valid TissueDto> tissues) {
+    this.tissues = tissues;
+    return this;
+  }
+
+  public RnaDifferentialExpressionProfileDto addTissuesItem(TissueDto tissuesItem) {
+    if (this.tissues == null) {
+      this.tissues = new ArrayList<>();
+    }
+    this.tissues.add(tissuesItem);
+    return this;
+  }
+
+  /**
+   * Array of gene tissues
+   * @return tissues
+   */
+  @NotNull @Valid 
+  @Schema(name = "tissues", description = "Array of gene tissues", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("tissues")
+  public List<@Valid TissueDto> getTissues() {
+    return tissues;
+  }
+
+  public void setTissues(List<@Valid TissueDto> tissues) {
+    this.tissues = tissues;
   }
 
   @Override
@@ -160,12 +200,13 @@ public class RnaDifferentialExpressionProfileDto {
         Objects.equals(this.hgncSymbol, rnaDifferentialExpressionProfile.hgncSymbol) &&
         Objects.equals(this.targetRiskScore, rnaDifferentialExpressionProfile.targetRiskScore) &&
         Objects.equals(this.geneticsScore, rnaDifferentialExpressionProfile.geneticsScore) &&
-        Objects.equals(this.multiOmicsScore, rnaDifferentialExpressionProfile.multiOmicsScore);
+        Objects.equals(this.multiOmicsScore, rnaDifferentialExpressionProfile.multiOmicsScore) &&
+        Objects.equals(this.tissues, rnaDifferentialExpressionProfile.tissues);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ensemblGeneId, hgncSymbol, targetRiskScore, geneticsScore, multiOmicsScore);
+    return Objects.hash(ensemblGeneId, hgncSymbol, targetRiskScore, geneticsScore, multiOmicsScore, tissues);
   }
 
   @Override
@@ -177,6 +218,7 @@ public class RnaDifferentialExpressionProfileDto {
     sb.append("    targetRiskScore: ").append(toIndentedString(targetRiskScore)).append("\n");
     sb.append("    geneticsScore: ").append(toIndentedString(geneticsScore)).append("\n");
     sb.append("    multiOmicsScore: ").append(toIndentedString(multiOmicsScore)).append("\n");
+    sb.append("    tissues: ").append(toIndentedString(tissues)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -210,6 +252,7 @@ public class RnaDifferentialExpressionProfileDto {
       this.instance.setTargetRiskScore(value.targetRiskScore);
       this.instance.setGeneticsScore(value.geneticsScore);
       this.instance.setMultiOmicsScore(value.multiOmicsScore);
+      this.instance.setTissues(value.tissues);
       return this;
     }
 
@@ -235,6 +278,11 @@ public class RnaDifferentialExpressionProfileDto {
     
     public RnaDifferentialExpressionProfileDto.Builder multiOmicsScore(BigDecimal multiOmicsScore) {
       this.instance.multiOmicsScore(multiOmicsScore);
+      return this;
+    }
+    
+    public RnaDifferentialExpressionProfileDto.Builder tissues(List<TissueDto> tissues) {
+      this.instance.tissues(tissues);
       return this;
     }
     

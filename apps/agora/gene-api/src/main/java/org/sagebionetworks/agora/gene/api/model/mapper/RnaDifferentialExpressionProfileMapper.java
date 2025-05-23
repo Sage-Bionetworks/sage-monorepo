@@ -11,6 +11,8 @@ public class RnaDifferentialExpressionProfileMapper
     RnaDifferentialExpressionProfileDto
   > {
 
+  private TissueMapper tissueMapper = new TissueMapper();
+
   @Override
   public RnaDifferentialExpressionProfileDocument convertToEntity(
     RnaDifferentialExpressionProfileDto dto,
@@ -32,6 +34,7 @@ public class RnaDifferentialExpressionProfileMapper
     RnaDifferentialExpressionProfileDto dto = new RnaDifferentialExpressionProfileDto();
     if (entity != null) {
       BeanUtils.copyProperties(entity, dto);
+      dto.setTissues(tissueMapper.convertToDtoList(entity.getTissues()));
     }
     return dto;
   }
