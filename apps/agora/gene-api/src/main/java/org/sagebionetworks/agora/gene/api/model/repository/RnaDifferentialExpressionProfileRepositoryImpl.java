@@ -6,6 +6,7 @@ import org.sagebionetworks.agora.gene.api.model.document.RnaDifferentialExpressi
 import org.sagebionetworks.agora.gene.api.model.dto.RnaDifferentialExpressionProfileSearchQueryDto;
 import org.sagebionetworks.agora.gene.api.model.dto.RnaDifferentialExpressionProfileSortDto;
 import org.sagebionetworks.agora.gene.api.model.dto.SortDirectionDto;
+import org.sagebionetworks.agora.gene.api.model.mapper.RnaDifferentialExpressionProfileModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,23 +39,19 @@ public class RnaDifferentialExpressionProfileRepositoryImpl
     List<Criteria> criteriaList = new ArrayList<>();
 
     // Filter by model
-    // if (query.getModel() != null) {
-    //   String storedModelValue = RnaModelMapper.mapToStoredValue(query.getModel());
-    //   if (storedModelValue != null) {
-    //     criteriaList.add(Criteria.where("model").is(storedModelValue));
-    //   }
-    // }
+    if (query.getModel() != null) {
+      String storedModelValue = RnaDifferentialExpressionProfileModelMapper.mapToStoredValue(
+        query.getModel()
+      );
+      if (storedModelValue != null) {
+        criteriaList.add(Criteria.where("model").is(storedModelValue));
+      }
+    }
 
-    // Filter by search terms (e.g., gene name or description field)
-    // if (query.getSearchTerms() != null && !query.getSearchTerms().isBlank()) {
-    //   criteriaList.add(
-    //     new Criteria()
-    //       .orOperator(
-    //         Criteria.where("gene").regex("^" + query.getSearchTerms(), "i"),
-    //         Criteria.where("description").regex("^" + query.getSearchTerms(), "i")
-    //       )
-    //   );
-    // }
+    // Filter by search term
+    if (query.getSearchTerm() != null && !query.getSearchTerm().isBlank()) {
+      criteriaList.add(Criteria.where("hgnc_symbol").regex(query.getSearchTerm(), "i"));
+    }
 
     if (!criteriaList.isEmpty()) {
       criteria = new Criteria().andOperator(criteriaList.toArray(new Criteria[0]));

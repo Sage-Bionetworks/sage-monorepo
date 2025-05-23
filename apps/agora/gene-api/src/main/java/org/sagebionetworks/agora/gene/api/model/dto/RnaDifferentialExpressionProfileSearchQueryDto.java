@@ -39,7 +39,7 @@ public class RnaDifferentialExpressionProfileSearchQueryDto {
 
   private RnaDifferentialExpressionProfileModelDto model = RnaDifferentialExpressionProfileModelDto.AD_DIAGNOSIS_AOD_MALES_AND_FEMALES;
 
-  private @Nullable String searchTerms;
+  private @Nullable String searchTerm;
 
   public RnaDifferentialExpressionProfileSearchQueryDto pageNumber(Integer pageNumber) {
     this.pageNumber = pageNumber;
@@ -144,24 +144,24 @@ public class RnaDifferentialExpressionProfileSearchQueryDto {
     this.model = model;
   }
 
-  public RnaDifferentialExpressionProfileSearchQueryDto searchTerms(String searchTerms) {
-    this.searchTerms = searchTerms;
+  public RnaDifferentialExpressionProfileSearchQueryDto searchTerm(String searchTerm) {
+    this.searchTerm = searchTerm;
     return this;
   }
 
   /**
-   * A string of search terms used to filter the results.
-   * @return searchTerms
+   * A search term used to filter the results.
+   * @return searchTerm
    */
   
-  @Schema(name = "searchTerms", example = "A1BG", description = "A string of search terms used to filter the results.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("searchTerms")
-  public String getSearchTerms() {
-    return searchTerms;
+  @Schema(name = "searchTerm", example = "A1BG", description = "A search term used to filter the results.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("searchTerm")
+  public String getSearchTerm() {
+    return searchTerm;
   }
 
-  public void setSearchTerms(String searchTerms) {
-    this.searchTerms = searchTerms;
+  public void setSearchTerm(String searchTerm) {
+    this.searchTerm = searchTerm;
   }
 
   @Override
@@ -178,12 +178,12 @@ public class RnaDifferentialExpressionProfileSearchQueryDto {
         Objects.equals(this.sort, rnaDifferentialExpressionProfileSearchQuery.sort) &&
         Objects.equals(this.direction, rnaDifferentialExpressionProfileSearchQuery.direction) &&
         Objects.equals(this.model, rnaDifferentialExpressionProfileSearchQuery.model) &&
-        Objects.equals(this.searchTerms, rnaDifferentialExpressionProfileSearchQuery.searchTerms);
+        Objects.equals(this.searchTerm, rnaDifferentialExpressionProfileSearchQuery.searchTerm);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, sort, direction, model, searchTerms);
+    return Objects.hash(pageNumber, pageSize, sort, direction, model, searchTerm);
   }
 
   @Override
@@ -195,7 +195,7 @@ public class RnaDifferentialExpressionProfileSearchQueryDto {
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    direction: ").append(toIndentedString(direction)).append("\n");
     sb.append("    model: ").append(toIndentedString(model)).append("\n");
-    sb.append("    searchTerms: ").append(toIndentedString(searchTerms)).append("\n");
+    sb.append("    searchTerm: ").append(toIndentedString(searchTerm)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -229,7 +229,7 @@ public class RnaDifferentialExpressionProfileSearchQueryDto {
       this.instance.setSort(value.sort);
       this.instance.setDirection(value.direction);
       this.instance.setModel(value.model);
-      this.instance.setSearchTerms(value.searchTerms);
+      this.instance.setSearchTerm(value.searchTerm);
       return this;
     }
 
@@ -258,8 +258,8 @@ public class RnaDifferentialExpressionProfileSearchQueryDto {
       return this;
     }
     
-    public RnaDifferentialExpressionProfileSearchQueryDto.Builder searchTerms(String searchTerms) {
-      this.instance.searchTerms(searchTerms);
+    public RnaDifferentialExpressionProfileSearchQueryDto.Builder searchTerm(String searchTerm) {
+      this.instance.searchTerm(searchTerm);
       return this;
     }
     

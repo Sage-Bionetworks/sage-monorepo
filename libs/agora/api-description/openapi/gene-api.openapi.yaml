@@ -550,8 +550,8 @@ components:
           $ref: '#/components/schemas/SortDirection'
         model:
           $ref: '#/components/schemas/RnaDifferentialExpressionProfileModel'
-        searchTerms:
-          description: A string of search terms used to filter the results.
+        searchTerm:
+          description: A search term used to filter the results.
           type: string
           example: A1BG
     PageMetadata:

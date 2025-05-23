@@ -20,7 +20,7 @@ properties:
     $ref: SortDirection.yaml
   model:
     $ref: RnaDifferentialExpressionProfileModel.yaml
-  searchTerms:
-    description: A string of search terms used to filter the results.
+  searchTerm:
+    description: A search term used to filter the results.
     type: string
     example: 'A1BG'
