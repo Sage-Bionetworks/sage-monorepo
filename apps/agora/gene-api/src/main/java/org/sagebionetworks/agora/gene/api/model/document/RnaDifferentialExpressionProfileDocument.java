@@ -15,7 +15,6 @@ public class RnaDifferentialExpressionProfileDocument {
   @Id
   public String id;
 
-  @Field("model")
   private String model;
 
   @Field("ensembl_gene_id")
@@ -26,4 +25,10 @@ public class RnaDifferentialExpressionProfileDocument {
 
   @Field("target_risk_score")
   private BigDecimal targetRiskScore;
+
+  @Field("genetics_score")
+  private BigDecimal geneticsScore;
+
+  @Field("multi_omics_score")
+  private BigDecimal multiOmicsScore;
 }

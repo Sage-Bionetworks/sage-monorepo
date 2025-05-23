@@ -617,6 +617,14 @@ components:
           type: number
           nullable: true
           description: Target risk score
+        genetics_score:
+          type: number
+          nullable: true
+          description: Genetics score
+        multi_omics_score:
+          type: number
+          nullable: true
+          description: Multi-omics score
       required:
         - ensembl_gene_id
     RnaDifferentialExpressionProfilePage:

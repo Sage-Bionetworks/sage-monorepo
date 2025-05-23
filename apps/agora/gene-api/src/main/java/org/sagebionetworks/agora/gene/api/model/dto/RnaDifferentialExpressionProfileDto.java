@@ -32,6 +32,10 @@ public class RnaDifferentialExpressionProfileDto {
 
   private @Nullable BigDecimal targetRiskScore = null;
 
+  private @Nullable BigDecimal geneticsScore = null;
+
+  private @Nullable BigDecimal multiOmicsScore = null;
+
   public RnaDifferentialExpressionProfileDto() {
     super();
   }
@@ -103,6 +107,46 @@ public class RnaDifferentialExpressionProfileDto {
     this.targetRiskScore = targetRiskScore;
   }
 
+  public RnaDifferentialExpressionProfileDto geneticsScore(BigDecimal geneticsScore) {
+    this.geneticsScore = geneticsScore;
+    return this;
+  }
+
+  /**
+   * Genetics score
+   * @return geneticsScore
+   */
+  @Valid 
+  @Schema(name = "genetics_score", description = "Genetics score", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("genetics_score")
+  public BigDecimal getGeneticsScore() {
+    return geneticsScore;
+  }
+
+  public void setGeneticsScore(BigDecimal geneticsScore) {
+    this.geneticsScore = geneticsScore;
+  }
+
+  public RnaDifferentialExpressionProfileDto multiOmicsScore(BigDecimal multiOmicsScore) {
+    this.multiOmicsScore = multiOmicsScore;
+    return this;
+  }
+
+  /**
+   * Multi-omics score
+   * @return multiOmicsScore
+   */
+  @Valid 
+  @Schema(name = "multi_omics_score", description = "Multi-omics score", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("multi_omics_score")
+  public BigDecimal getMultiOmicsScore() {
+    return multiOmicsScore;
+  }
+
+  public void setMultiOmicsScore(BigDecimal multiOmicsScore) {
+    this.multiOmicsScore = multiOmicsScore;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -114,12 +158,14 @@ public class RnaDifferentialExpressionProfileDto {
     RnaDifferentialExpressionProfileDto rnaDifferentialExpressionProfile = (RnaDifferentialExpressionProfileDto) o;
     return Objects.equals(this.ensemblGeneId, rnaDifferentialExpressionProfile.ensemblGeneId) &&
         Objects.equals(this.hgncSymbol, rnaDifferentialExpressionProfile.hgncSymbol) &&
-        Objects.equals(this.targetRiskScore, rnaDifferentialExpressionProfile.targetRiskScore);
+        Objects.equals(this.targetRiskScore, rnaDifferentialExpressionProfile.targetRiskScore) &&
+        Objects.equals(this.geneticsScore, rnaDifferentialExpressionProfile.geneticsScore) &&
+        Objects.equals(this.multiOmicsScore, rnaDifferentialExpressionProfile.multiOmicsScore);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ensemblGeneId, hgncSymbol, targetRiskScore);
+    return Objects.hash(ensemblGeneId, hgncSymbol, targetRiskScore, geneticsScore, multiOmicsScore);
   }
 
   @Override
@@ -129,6 +175,8 @@ public class RnaDifferentialExpressionProfileDto {
     sb.append("    ensemblGeneId: ").append(toIndentedString(ensemblGeneId)).append("\n");
     sb.append("    hgncSymbol: ").append(toIndentedString(hgncSymbol)).append("\n");
     sb.append("    targetRiskScore: ").append(toIndentedString(targetRiskScore)).append("\n");
+    sb.append("    geneticsScore: ").append(toIndentedString(geneticsScore)).append("\n");
+    sb.append("    multiOmicsScore: ").append(toIndentedString(multiOmicsScore)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -160,6 +208,8 @@ public class RnaDifferentialExpressionProfileDto {
       this.instance.setEnsemblGeneId(value.ensemblGeneId);
       this.instance.setHgncSymbol(value.hgncSymbol);
       this.instance.setTargetRiskScore(value.targetRiskScore);
+      this.instance.setGeneticsScore(value.geneticsScore);
+      this.instance.setMultiOmicsScore(value.multiOmicsScore);
       return this;
     }
 
@@ -175,6 +225,16 @@ public class RnaDifferentialExpressionProfileDto {
     
     public RnaDifferentialExpressionProfileDto.Builder targetRiskScore(BigDecimal targetRiskScore) {
       this.instance.targetRiskScore(targetRiskScore);
+      return this;
+    }
+    
+    public RnaDifferentialExpressionProfileDto.Builder geneticsScore(BigDecimal geneticsScore) {
+      this.instance.geneticsScore(geneticsScore);
+      return this;
+    }
+    
+    public RnaDifferentialExpressionProfileDto.Builder multiOmicsScore(BigDecimal multiOmicsScore) {
+      this.instance.multiOmicsScore(multiOmicsScore);
       return this;
     }
     
