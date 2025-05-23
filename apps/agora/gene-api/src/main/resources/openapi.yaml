@@ -1101,6 +1101,9 @@ components:
           validations:
           - validations
           - validations
+        biodomains:
+        - biodomains
+        - biodomains
       properties:
         ensembl_gene_id:
           description: The Ensembl gene ID.
@@ -1137,6 +1140,12 @@ components:
           description: Array of association values
           items:
             type: number
+          nullable: true
+          type: array
+        biodomains:
+          description: Array of biological domains
+          items:
+            type: string
           nullable: true
           type: array
       required:
@@ -1219,6 +1228,9 @@ components:
             validations:
             - validations
             - validations
+          biodomains:
+          - biodomains
+          - biodomains
         - multi_omics_score: 1.4658129805029452
           associations:
           - 2.027123023002322
@@ -1272,6 +1284,9 @@ components:
             validations:
             - validations
             - validations
+          biodomains:
+          - biodomains
+          - biodomains
         has_next: true
         total_pages: 99
       type: object

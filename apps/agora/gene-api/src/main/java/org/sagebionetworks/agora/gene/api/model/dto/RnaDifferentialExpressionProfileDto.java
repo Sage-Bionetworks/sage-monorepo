@@ -49,6 +49,9 @@ public class RnaDifferentialExpressionProfileDto {
   @Valid
   private @Nullable List<BigDecimal> associations;
 
+  @Valid
+  private @Nullable List<String> biodomains;
+
   public RnaDifferentialExpressionProfileDto() {
     super();
   }
@@ -241,6 +244,34 @@ public class RnaDifferentialExpressionProfileDto {
     this.associations = associations;
   }
 
+  public RnaDifferentialExpressionProfileDto biodomains(List<String> biodomains) {
+    this.biodomains = biodomains;
+    return this;
+  }
+
+  public RnaDifferentialExpressionProfileDto addBiodomainsItem(String biodomainsItem) {
+    if (this.biodomains == null) {
+      this.biodomains = new ArrayList<>();
+    }
+    this.biodomains.add(biodomainsItem);
+    return this;
+  }
+
+  /**
+   * Array of biological domains
+   * @return biodomains
+   */
+  
+  @Schema(name = "biodomains", description = "Array of biological domains", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("biodomains")
+  public List<String> getBiodomains() {
+    return biodomains;
+  }
+
+  public void setBiodomains(List<String> biodomains) {
+    this.biodomains = biodomains;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -257,12 +288,13 @@ public class RnaDifferentialExpressionProfileDto {
         Objects.equals(this.multiOmicsScore, rnaDifferentialExpressionProfile.multiOmicsScore) &&
         Objects.equals(this.tissues, rnaDifferentialExpressionProfile.tissues) &&
         Objects.equals(this.nominations, rnaDifferentialExpressionProfile.nominations) &&
-        Objects.equals(this.associations, rnaDifferentialExpressionProfile.associations);
+        Objects.equals(this.associations, rnaDifferentialExpressionProfile.associations) &&
+        Objects.equals(this.biodomains, rnaDifferentialExpressionProfile.biodomains);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ensemblGeneId, hgncSymbol, targetRiskScore, geneticsScore, multiOmicsScore, tissues, nominations, associations);
+    return Objects.hash(ensemblGeneId, hgncSymbol, targetRiskScore, geneticsScore, multiOmicsScore, tissues, nominations, associations, biodomains);
   }
 
   @Override
@@ -277,6 +309,7 @@ public class RnaDifferentialExpressionProfileDto {
     sb.append("    tissues: ").append(toIndentedString(tissues)).append("\n");
     sb.append("    nominations: ").append(toIndentedString(nominations)).append("\n");
     sb.append("    associations: ").append(toIndentedString(associations)).append("\n");
+    sb.append("    biodomains: ").append(toIndentedString(biodomains)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -313,6 +346,7 @@ public class RnaDifferentialExpressionProfileDto {
       this.instance.setTissues(value.tissues);
       this.instance.setNominations(value.nominations);
       this.instance.setAssociations(value.associations);
+      this.instance.setBiodomains(value.biodomains);
       return this;
     }
 
@@ -353,6 +387,11 @@ public class RnaDifferentialExpressionProfileDto {
     
     public RnaDifferentialExpressionProfileDto.Builder associations(List<BigDecimal> associations) {
       this.instance.associations(associations);
+      return this;
+    }
+    
+    public RnaDifferentialExpressionProfileDto.Builder biodomains(List<String> biodomains) {
+      this.instance.biodomains(biodomains);
       return this;
     }
     

@@ -33,6 +33,12 @@ properties:
       type: number # TODO: Should be integer based on agora-api implementation (or enum?)
     nullable: true
     description: 'Array of association values'
+  biodomains:
+    type: array
+    items:
+      type: string
+    nullable: true
+    description: 'Array of biological domains'
 required:
   - ensembl_gene_id
   - hgnc_symbol

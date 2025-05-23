@@ -38,4 +38,6 @@ public class RnaDifferentialExpressionProfileDocument {
   private NominationsDocument nominations;
 
   private List<BigDecimal> associations;
+
+  private List<String> biodomains;
 }

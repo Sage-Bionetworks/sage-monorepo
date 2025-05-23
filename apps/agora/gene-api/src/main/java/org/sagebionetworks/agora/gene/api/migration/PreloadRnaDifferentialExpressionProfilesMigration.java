@@ -13,7 +13,7 @@ import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneTissueDto;
 import org.sagebionetworks.agora.gene.api.service.GCTGenesService;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-@ChangeUnit(id = "preloadRnaDifferentialExpressionProfilesV5", order = "001", author = "tschaffter")
+@ChangeUnit(id = "preloadRnaDifferentialExpressionProfilesV6", order = "001", author = "tschaffter")
 public class PreloadRnaDifferentialExpressionProfilesMigration {
 
   private final GCTGenesService gctGenesService;
@@ -45,6 +45,7 @@ public class PreloadRnaDifferentialExpressionProfilesMigration {
           .tissues(mapTissues(gctGene.getTissues()))
           .nominations(mapNominations(gctGene.getNominations()))
           .associations(gctGene.getAssociations())
+          .biodomains(gctGene.getBiodomains())
           .build()
       )
       .toList();
