@@ -39,7 +39,8 @@ def get_challenge_data(wks, sheet_name="challenges"):
     df = pd.DataFrame(wks.worksheet(sheet_name).get_all_records()).fillna("")
     df.loc[df._platform == "Other", "platform"] = "\\N"
 
-    challenges = df[
+    # Only keep challenges with a defined status.
+    challenges = df[df["status"] != ""][
         [
             "id",
             "slug",
@@ -57,7 +58,7 @@ def get_challenge_data(wks, sheet_name="challenges"):
             "created_at",
             "updated_at",
         ]
-    ].dropna(subset=["status"])  # Remove rows where status is missing.
+    ]
     challenges = (
         challenges.replace({r"\s+$": "", r"^\s+": ""}, regex=True)
         .replace(r"\n", " ", regex=True)
