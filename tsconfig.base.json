@@ -19,6 +19,9 @@
     "paths": {
       "@sagebionetworks/agora/about": ["libs/agora/about/src/index.ts"],
       "@sagebionetworks/agora/api-client-angular": ["libs/agora/api-client-angular/src/index.ts"],
+      "@sagebionetworks/agora/gene-api-client-angular": [
+        "libs/agora/gene-api-client-angular/src/index.ts"
+      ],
       "@sagebionetworks/agora/charts": ["libs/agora/charts/src/index.ts"],
       "@sagebionetworks/agora/config": ["libs/agora/config/src/index.ts"],
       "@sagebionetworks/agora/gene-comparison-tool": [

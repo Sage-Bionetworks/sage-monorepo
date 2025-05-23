@@ -8,6 +8,7 @@ import {
   withInMemoryScrolling,
 } from '@angular/router';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/agora/api-client-angular';
+import { BASE_PATH as GENE_API_CLIENT_BASE_PATH } from '@sagebionetworks/agora/gene-api-client-angular';
 import { configFactory, ConfigService } from '@sagebionetworks/agora/config';
 import { BASE_PATH as SYNAPSE_API_CLIENT_BASE_PATH } from '@sagebionetworks/synapse/api-client-angular';
 import { providePrimeNG } from 'primeng/config';
@@ -46,6 +47,14 @@ export const appConfig: ApplicationConfig = {
     }),
     {
       provide: API_CLIENT_BASE_PATH,
+      useFactory: (configService: ConfigService) =>
+        configService.config.isPlatformServer
+          ? configService.config.ssrApiUrl
+          : configService.config.csrApiUrl,
+      deps: [ConfigService],
+    },
+    {
+      provide: GENE_API_CLIENT_BASE_PATH,
       useFactory: (configService: ConfigService) =>
         configService.config.isPlatformServer
           ? configService.config.ssrApiUrl
