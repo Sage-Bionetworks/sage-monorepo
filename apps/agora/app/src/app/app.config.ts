@@ -55,11 +55,8 @@ export const appConfig: ApplicationConfig = {
     },
     {
       provide: GENE_API_CLIENT_BASE_PATH,
-      useFactory: (configService: ConfigService) =>
-        configService.config.isPlatformServer
-          ? configService.config.ssrApiUrl
-          : configService.config.csrApiUrl,
-      deps: [ConfigService],
+      useFactory: () => 'http://localhost:3334/v1',
+      deps: [],
     },
     provideAnimationsAsync(),
     providePrimeNG({

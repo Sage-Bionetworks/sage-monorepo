@@ -16,6 +16,7 @@ import {
   GenesService,
   OverallScoresDistribution,
 } from '@sagebionetworks/agora/api-client-angular';
+import { DifferentialExpressionService } from '@sagebionetworks/agora/gene-api-client-angular';
 import {
   GCTColumn,
   GCTDetailsPanelData,
@@ -90,6 +91,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   helperService = inject(HelperService);
   messageService = inject(MessageService);
   filterService = inject(FilterService);
+  differentialExpressionService = inject(DifferentialExpressionService);
 
   isLoading = true;
 
@@ -260,12 +262,14 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     this.genes = [];
     this.pinnedItems = [];
 
-    const genesApi$ = this.geneService.getComparisonGenes(this.category, this.subCategory);
+    // const genesApi$ = this.geneService.getComparisonGenes(this.category, this.subCategory);
+    const genesApi$ = this.differentialExpressionService.listRnaDifferentialExpressionProfiles();
+
     const distributionApi$ = this.distributionService.getDistribution();
 
     combineLatest([genesApi$, distributionApi$]).subscribe(([genesResult, distributionResult]) => {
-      if (genesResult.items) {
-        this.initData(genesResult.items);
+      if (genesResult.rnaDifferentialExpressionProfiles) {
+        this.initData(genesResult.rnaDifferentialExpressionProfiles);
         this.sortTable(this.headerTable);
         this.refresh();
 
