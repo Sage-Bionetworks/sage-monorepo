@@ -57,7 +57,7 @@ def get_challenge_data(wks, sheet_name="challenges"):
             "created_at",
             "updated_at",
         ]
-    ]
+    ].dropna(subset=["status"])  # Remove rows where status is missing.
     challenges = (
         challenges.replace({r"\s+$": "", r"^\s+": ""}, regex=True)
         .replace(r"\n", " ", regex=True)
