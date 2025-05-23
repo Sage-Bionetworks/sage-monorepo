@@ -6,8 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import org.sagebionetworks.agora.gene.api.model.dto.DifferentialExpressionProfileProteinProfilingMethodDto;
-import org.sagebionetworks.agora.gene.api.model.dto.DifferentialExpressionProfileProteinSortDto;
+import org.sagebionetworks.agora.gene.api.model.dto.ProteinDifferentialExpressionProfileProfilingMethodDto;
+import org.sagebionetworks.agora.gene.api.model.dto.ProteinDifferentialExpressionProfileSortDto;
 import org.sagebionetworks.agora.gene.api.model.dto.SortDirectionDto;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
@@ -20,28 +20,28 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * A differential expression profile search query (protein).
+ * A differential protein expression profile search query.
  */
 @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
 
-@Schema(name = "DifferentialExpressionProfileProteinSearchQuery", description = "A differential expression profile search query (protein).")
-@JsonTypeName("DifferentialExpressionProfileProteinSearchQuery")
+@Schema(name = "ProteinDifferentialExpressionProfileSearchQuery", description = "A differential protein expression profile search query.")
+@JsonTypeName("ProteinDifferentialExpressionProfileSearchQuery")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
-public class DifferentialExpressionProfileProteinSearchQueryDto {
+public class ProteinDifferentialExpressionProfileSearchQueryDto {
 
   private Integer pageNumber = 0;
 
   private Integer pageSize = 100;
 
-  private DifferentialExpressionProfileProteinSortDto sort = DifferentialExpressionProfileProteinSortDto.RELEVANCE;
+  private ProteinDifferentialExpressionProfileSortDto sort = ProteinDifferentialExpressionProfileSortDto.HGNC_SYMBOL;
 
   private @Nullable SortDirectionDto direction = null;
 
-  private DifferentialExpressionProfileProteinProfilingMethodDto profilingMethod = DifferentialExpressionProfileProteinProfilingMethodDto.LFQ;
+  private ProteinDifferentialExpressionProfileProfilingMethodDto profilingMethod = ProteinDifferentialExpressionProfileProfilingMethodDto.LFQ;
 
   private @Nullable String searchTerms;
 
-  public DifferentialExpressionProfileProteinSearchQueryDto pageNumber(Integer pageNumber) {
+  public ProteinDifferentialExpressionProfileSearchQueryDto pageNumber(Integer pageNumber) {
     this.pageNumber = pageNumber;
     return this;
   }
@@ -62,7 +62,7 @@ public class DifferentialExpressionProfileProteinSearchQueryDto {
     this.pageNumber = pageNumber;
   }
 
-  public DifferentialExpressionProfileProteinSearchQueryDto pageSize(Integer pageSize) {
+  public ProteinDifferentialExpressionProfileSearchQueryDto pageSize(Integer pageSize) {
     this.pageSize = pageSize;
     return this;
   }
@@ -83,7 +83,7 @@ public class DifferentialExpressionProfileProteinSearchQueryDto {
     this.pageSize = pageSize;
   }
 
-  public DifferentialExpressionProfileProteinSearchQueryDto sort(DifferentialExpressionProfileProteinSortDto sort) {
+  public ProteinDifferentialExpressionProfileSearchQueryDto sort(ProteinDifferentialExpressionProfileSortDto sort) {
     this.sort = sort;
     return this;
   }
@@ -95,15 +95,15 @@ public class DifferentialExpressionProfileProteinSearchQueryDto {
   @Valid 
   @Schema(name = "sort", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("sort")
-  public DifferentialExpressionProfileProteinSortDto getSort() {
+  public ProteinDifferentialExpressionProfileSortDto getSort() {
     return sort;
   }
 
-  public void setSort(DifferentialExpressionProfileProteinSortDto sort) {
+  public void setSort(ProteinDifferentialExpressionProfileSortDto sort) {
     this.sort = sort;
   }
 
-  public DifferentialExpressionProfileProteinSearchQueryDto direction(SortDirectionDto direction) {
+  public ProteinDifferentialExpressionProfileSearchQueryDto direction(SortDirectionDto direction) {
     this.direction = direction;
     return this;
   }
@@ -123,7 +123,7 @@ public class DifferentialExpressionProfileProteinSearchQueryDto {
     this.direction = direction;
   }
 
-  public DifferentialExpressionProfileProteinSearchQueryDto profilingMethod(DifferentialExpressionProfileProteinProfilingMethodDto profilingMethod) {
+  public ProteinDifferentialExpressionProfileSearchQueryDto profilingMethod(ProteinDifferentialExpressionProfileProfilingMethodDto profilingMethod) {
     this.profilingMethod = profilingMethod;
     return this;
   }
@@ -135,15 +135,15 @@ public class DifferentialExpressionProfileProteinSearchQueryDto {
   @Valid 
   @Schema(name = "profiling_method", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("profiling_method")
-  public DifferentialExpressionProfileProteinProfilingMethodDto getProfilingMethod() {
+  public ProteinDifferentialExpressionProfileProfilingMethodDto getProfilingMethod() {
     return profilingMethod;
   }
 
-  public void setProfilingMethod(DifferentialExpressionProfileProteinProfilingMethodDto profilingMethod) {
+  public void setProfilingMethod(ProteinDifferentialExpressionProfileProfilingMethodDto profilingMethod) {
     this.profilingMethod = profilingMethod;
   }
 
-  public DifferentialExpressionProfileProteinSearchQueryDto searchTerms(String searchTerms) {
+  public ProteinDifferentialExpressionProfileSearchQueryDto searchTerms(String searchTerms) {
     this.searchTerms = searchTerms;
     return this;
   }
@@ -171,13 +171,13 @@ public class DifferentialExpressionProfileProteinSearchQueryDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DifferentialExpressionProfileProteinSearchQueryDto differentialExpressionProfileProteinSearchQuery = (DifferentialExpressionProfileProteinSearchQueryDto) o;
-    return Objects.equals(this.pageNumber, differentialExpressionProfileProteinSearchQuery.pageNumber) &&
-        Objects.equals(this.pageSize, differentialExpressionProfileProteinSearchQuery.pageSize) &&
-        Objects.equals(this.sort, differentialExpressionProfileProteinSearchQuery.sort) &&
-        Objects.equals(this.direction, differentialExpressionProfileProteinSearchQuery.direction) &&
-        Objects.equals(this.profilingMethod, differentialExpressionProfileProteinSearchQuery.profilingMethod) &&
-        Objects.equals(this.searchTerms, differentialExpressionProfileProteinSearchQuery.searchTerms);
+    ProteinDifferentialExpressionProfileSearchQueryDto proteinDifferentialExpressionProfileSearchQuery = (ProteinDifferentialExpressionProfileSearchQueryDto) o;
+    return Objects.equals(this.pageNumber, proteinDifferentialExpressionProfileSearchQuery.pageNumber) &&
+        Objects.equals(this.pageSize, proteinDifferentialExpressionProfileSearchQuery.pageSize) &&
+        Objects.equals(this.sort, proteinDifferentialExpressionProfileSearchQuery.sort) &&
+        Objects.equals(this.direction, proteinDifferentialExpressionProfileSearchQuery.direction) &&
+        Objects.equals(this.profilingMethod, proteinDifferentialExpressionProfileSearchQuery.profilingMethod) &&
+        Objects.equals(this.searchTerms, proteinDifferentialExpressionProfileSearchQuery.searchTerms);
   }
 
   @Override
@@ -188,7 +188,7 @@ public class DifferentialExpressionProfileProteinSearchQueryDto {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DifferentialExpressionProfileProteinSearchQueryDto {\n");
+    sb.append("class ProteinDifferentialExpressionProfileSearchQueryDto {\n");
     sb.append("    pageNumber: ").append(toIndentedString(pageNumber)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
@@ -212,17 +212,17 @@ public class DifferentialExpressionProfileProteinSearchQueryDto {
   
   public static class Builder {
 
-    private DifferentialExpressionProfileProteinSearchQueryDto instance;
+    private ProteinDifferentialExpressionProfileSearchQueryDto instance;
 
     public Builder() {
-      this(new DifferentialExpressionProfileProteinSearchQueryDto());
+      this(new ProteinDifferentialExpressionProfileSearchQueryDto());
     }
 
-    protected Builder(DifferentialExpressionProfileProteinSearchQueryDto instance) {
+    protected Builder(ProteinDifferentialExpressionProfileSearchQueryDto instance) {
       this.instance = instance;
     }
 
-    protected Builder copyOf(DifferentialExpressionProfileProteinSearchQueryDto value) { 
+    protected Builder copyOf(ProteinDifferentialExpressionProfileSearchQueryDto value) { 
       this.instance.setPageNumber(value.pageNumber);
       this.instance.setPageSize(value.pageSize);
       this.instance.setSort(value.sort);
@@ -232,42 +232,42 @@ public class DifferentialExpressionProfileProteinSearchQueryDto {
       return this;
     }
 
-    public DifferentialExpressionProfileProteinSearchQueryDto.Builder pageNumber(Integer pageNumber) {
+    public ProteinDifferentialExpressionProfileSearchQueryDto.Builder pageNumber(Integer pageNumber) {
       this.instance.pageNumber(pageNumber);
       return this;
     }
     
-    public DifferentialExpressionProfileProteinSearchQueryDto.Builder pageSize(Integer pageSize) {
+    public ProteinDifferentialExpressionProfileSearchQueryDto.Builder pageSize(Integer pageSize) {
       this.instance.pageSize(pageSize);
       return this;
     }
     
-    public DifferentialExpressionProfileProteinSearchQueryDto.Builder sort(DifferentialExpressionProfileProteinSortDto sort) {
+    public ProteinDifferentialExpressionProfileSearchQueryDto.Builder sort(ProteinDifferentialExpressionProfileSortDto sort) {
       this.instance.sort(sort);
       return this;
     }
     
-    public DifferentialExpressionProfileProteinSearchQueryDto.Builder direction(SortDirectionDto direction) {
+    public ProteinDifferentialExpressionProfileSearchQueryDto.Builder direction(SortDirectionDto direction) {
       this.instance.direction(direction);
       return this;
     }
     
-    public DifferentialExpressionProfileProteinSearchQueryDto.Builder profilingMethod(DifferentialExpressionProfileProteinProfilingMethodDto profilingMethod) {
+    public ProteinDifferentialExpressionProfileSearchQueryDto.Builder profilingMethod(ProteinDifferentialExpressionProfileProfilingMethodDto profilingMethod) {
       this.instance.profilingMethod(profilingMethod);
       return this;
     }
     
-    public DifferentialExpressionProfileProteinSearchQueryDto.Builder searchTerms(String searchTerms) {
+    public ProteinDifferentialExpressionProfileSearchQueryDto.Builder searchTerms(String searchTerms) {
       this.instance.searchTerms(searchTerms);
       return this;
     }
     
     /**
-    * returns a built DifferentialExpressionProfileProteinSearchQueryDto instance.
+    * returns a built ProteinDifferentialExpressionProfileSearchQueryDto instance.
     *
     * The builder is not reusable (NullPointerException)
     */
-    public DifferentialExpressionProfileProteinSearchQueryDto build() {
+    public ProteinDifferentialExpressionProfileSearchQueryDto build() {
       try {
         return this.instance;
       } finally {
@@ -285,15 +285,15 @@ public class DifferentialExpressionProfileProteinSearchQueryDto {
   /**
   * Create a builder with no initialized field (except for the default values).
   */
-  public static DifferentialExpressionProfileProteinSearchQueryDto.Builder builder() {
-    return new DifferentialExpressionProfileProteinSearchQueryDto.Builder();
+  public static ProteinDifferentialExpressionProfileSearchQueryDto.Builder builder() {
+    return new ProteinDifferentialExpressionProfileSearchQueryDto.Builder();
   }
 
   /**
   * Create a builder with a shallow copy of this instance.
   */
-  public DifferentialExpressionProfileProteinSearchQueryDto.Builder toBuilder() {
-    DifferentialExpressionProfileProteinSearchQueryDto.Builder builder = new DifferentialExpressionProfileProteinSearchQueryDto.Builder();
+  public ProteinDifferentialExpressionProfileSearchQueryDto.Builder toBuilder() {
+    ProteinDifferentialExpressionProfileSearchQueryDto.Builder builder = new ProteinDifferentialExpressionProfileSearchQueryDto.Builder();
     return builder.copyOf(this);
   }
 

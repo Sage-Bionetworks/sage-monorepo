@@ -16,8 +16,8 @@ servers:
 tags:
   - description: Operations about genes.
     name: Genes
-  - description: Operations about differential expression profiles.
-    name: DifferentialExpressionProfile
+  - description: Operations about differential expression.
+    name: DifferentialExpression
 paths:
   /genes/comparison:
     get:
@@ -72,26 +72,25 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Genes
-  /differentialExpressionProfiles/rna:
+  /differentialExpression/rna:
     get:
-      description: List differential expression profiles (RNA)
-      operationId: listDifferentialExpressionProfilesRna
+      description: List differential expression profiles
+      operationId: listRnaDifferentialExpressionProfiles
       parameters:
-        - description: The search query used to find differential expression profiles
-            (RNA).
+        - description: The search query used to find RNA differential expression profiles.
           explode: true
           in: query
-          name: differentialExpressionProfileRnaSearchQuery
+          name: rnaDifferentialExpressionProfileSearchQuery
           required: false
           schema:
-            $ref: '#/components/schemas/DifferentialExpressionProfileRnaSearchQuery'
+            $ref: '#/components/schemas/RnaDifferentialExpressionProfileSearchQuery'
           style: form
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DifferentialExpressionProfilesRnaPage'
+                $ref: '#/components/schemas/RnaDifferentialExpressionProfilePage'
           description: Success
         '400':
           content:
@@ -106,34 +105,34 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
-      summary: List differential expression profiles (RNA)
+      summary: List RNA differential expression profiles
       tags:
-        - DifferentialExpressionProfile
+        - DifferentialExpression
       x-accepts:
         - application/json
         - application/problem+json
       x-tags:
-        - tag: DifferentialExpressionProfile
-  /differentialExpressionProfiles/protein:
+        - tag: DifferentialExpression
+  /differentialExpression/protein:
     get:
-      description: List differential expression profiles (protein)
-      operationId: listDifferentialExpressionProfilesProtein
+      description: List protein differential expression profiles
+      operationId: listProteinDifferentialExpressionProfiles
       parameters:
-        - description: The search query used to find differential expression profiles
-            (protein).
+        - description: The search query used to find protein differential expression
+            profiles.
           explode: true
           in: query
-          name: differentialExpressionProfileProteinSearchQuery
+          name: proteinDifferentialExpressionProfileSearchQuery
           required: false
           schema:
-            $ref: '#/components/schemas/DifferentialExpressionProfileProteinSearchQuery'
+            $ref: '#/components/schemas/ProteinDifferentialExpressionProfileSearchQuery'
           style: form
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DifferentialExpressionProfilesProteinPage'
+                $ref: '#/components/schemas/ProteinDifferentialExpressionProfilePage'
           description: Success
         '400':
           content:
@@ -148,35 +147,33 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
-      summary: List differential expression profiles (protein)
+      summary: List protein differential expression profiles
       tags:
-        - DifferentialExpressionProfile
+        - DifferentialExpression
       x-accepts:
         - application/json
         - application/problem+json
       x-tags:
-        - tag: DifferentialExpressionProfile
+        - tag: DifferentialExpression
 components:
   parameters:
-    differentialExpressionProfileRnaSearchQuery:
-      description: The search query used to find differential expression profiles
-        (RNA).
+    rnaDifferentialExpressionProfileSearchQuery:
+      description: The search query used to find RNA differential expression profiles.
       explode: true
       in: query
-      name: differentialExpressionProfileRnaSearchQuery
+      name: rnaDifferentialExpressionProfileSearchQuery
       required: false
       schema:
-        $ref: '#/components/schemas/DifferentialExpressionProfileRnaSearchQuery'
+        $ref: '#/components/schemas/RnaDifferentialExpressionProfileSearchQuery'
       style: form
-    differentialExpressionProfileProteinSearchQuery:
-      description: The search query used to find differential expression profiles
-        (protein).
+    proteinDifferentialExpressionProfileSearchQuery:
+      description: The search query used to find protein differential expression profiles.
       explode: true
       in: query
-      name: differentialExpressionProfileProteinSearchQuery
+      name: proteinDifferentialExpressionProfileSearchQuery
       required: false
       schema:
-        $ref: '#/components/schemas/DifferentialExpressionProfileProteinSearchQuery'
+        $ref: '#/components/schemas/ProteinDifferentialExpressionProfileSearchQuery'
       style: form
   responses:
     NotFound:
@@ -841,12 +838,11 @@ components:
       x-java-class-annotations:
         - '@lombok.AllArgsConstructor'
         - '@lombok.Builder'
-    DifferentialExpressionProfileRnaSort:
-      default: relevance
+    RnaDifferentialExpressionProfileSort:
+      default: hgnc_symbol
       description: What to sort results by.
       enum:
-        - created
-        - relevance
+        - hgnc_symbol
       type: string
     SortDirection:
       description: The direction to sort the results by.
@@ -855,7 +851,7 @@ components:
         - desc
       nullable: true
       type: string
-    DifferentialExpressionProfileRnaModel:
+    RnaDifferentialExpressionProfileModel:
       default: ad_diagnosis_aod_males_and_females
       description: The RNA model to apply for the differential expression profile.
       enum:
@@ -864,8 +860,8 @@ components:
         - ad_diagnosis_sex_females_only
         - ad_diagnosis_sex_males_only
       type: string
-    DifferentialExpressionProfileRnaSearchQuery:
-      description: A differential expression profile search query (RNA).
+    RnaDifferentialExpressionProfileSearchQuery:
+      description: A differential RNA expression profile search query.
       properties:
         pageNumber:
           default: 0
@@ -881,11 +877,11 @@ components:
           minimum: 1
           type: integer
         sort:
-          $ref: '#/components/schemas/DifferentialExpressionProfileRnaSort'
+          $ref: '#/components/schemas/RnaDifferentialExpressionProfileSort'
         direction:
           $ref: '#/components/schemas/SortDirection'
         model:
-          $ref: '#/components/schemas/DifferentialExpressionProfileRnaModel'
+          $ref: '#/components/schemas/RnaDifferentialExpressionProfileModel'
         searchTerms:
           description: A string of search terms used to filter the results.
           example: A1BG
@@ -942,8 +938,8 @@ components:
       example: TP53
       minLength: 0
       type: string
-    DifferentialExpressionProfileRna:
-      description: A differential expression profile (RNA).
+    RnaDifferentialExpressionProfile:
+      description: A RNA differential expression profile.
       example:
         target_risk_score: 0.8008281904610115
         ensembl_gene_id: ENSG00000139618
@@ -968,25 +964,25 @@ components:
       required:
         - ensembl_gene_id
       type: object
-    DifferentialExpressionProfilesRnaPage:
+    RnaDifferentialExpressionProfilePage:
       allOf:
         - $ref: '#/components/schemas/PageMetadata'
         - properties:
-            differentialExpressionProfilesRna:
-              description: A list of differential epxression profiles (RNA).
+            rnaDifferentialExpressionProfiles:
+              description: A list of RNA differential epxression profiles.
               items:
-                $ref: '#/components/schemas/DifferentialExpressionProfileRna'
+                $ref: '#/components/schemas/RnaDifferentialExpressionProfile'
               type: array
           required:
-            - differentialExpressionProfilesRna
+            - rnaDifferentialExpressionProfiles
           type: object
-      description: A page of differential expression profiles (RNA).
+      description: A page of RNA differential expression profiles.
       example:
         number: 99
         size: 99
         total_elements: 99
         has_previous: true
-        differentialExpressionProfilesRna:
+        rnaDifferentialExpressionProfiles:
           - target_risk_score: 0.8008281904610115
             ensembl_gene_id: ENSG00000139618
             hgnc_symbol: TP53
@@ -996,14 +992,13 @@ components:
         has_next: true
         total_pages: 99
       type: object
-    DifferentialExpressionProfileProteinSort:
-      default: relevance
+    ProteinDifferentialExpressionProfileSort:
+      default: hgnc_symbol
       description: What to sort results by.
       enum:
-        - created
-        - relevance
+        - hgnc_symbol
       type: string
-    DifferentialExpressionProfileProteinProfilingMethod:
+    ProteinDifferentialExpressionProfileProfilingMethod:
       default: lfq
       description: The protein profiling method to apply for the differential expression
         profile.
@@ -1012,8 +1007,8 @@ components:
         - smr
         - tmt
       type: string
-    DifferentialExpressionProfileProteinSearchQuery:
-      description: A differential expression profile search query (protein).
+    ProteinDifferentialExpressionProfileSearchQuery:
+      description: A differential protein expression profile search query.
       properties:
         page_number:
           default: 0
@@ -1028,18 +1023,18 @@ components:
           minimum: 1
           type: integer
         sort:
-          $ref: '#/components/schemas/DifferentialExpressionProfileProteinSort'
+          $ref: '#/components/schemas/ProteinDifferentialExpressionProfileSort'
         direction:
           $ref: '#/components/schemas/SortDirection'
         profiling_method:
-          $ref: '#/components/schemas/DifferentialExpressionProfileProteinProfilingMethod'
+          $ref: '#/components/schemas/ProteinDifferentialExpressionProfileProfilingMethod'
         search_terms:
           description: A string of search terms used to filter the results.
           example: A1BG
           type: string
       type: object
-    DifferentialExpressionProfileProtein:
-      description: A differential expression profile (protein).
+    ProteinDifferentialExpressionProfile:
+      description: A protein differential expression profile.
       example:
         ensembl_gene_id: ENSG00000139618
         hgnc_symbol: TP53
@@ -1059,31 +1054,31 @@ components:
       required:
         - ensembl_gene_id
       type: object
-    DifferentialExpressionProfilesProteinPage:
+    ProteinDifferentialExpressionProfilePage:
       allOf:
         - $ref: '#/components/schemas/PageMetadata'
         - properties:
-            differentialExpressionProfilesProtein:
-              description: A list of differential epxression profiles (protein).
+            proteinDifferentialExpressionProfiles:
+              description: A list of protein differential epxression profiles.
               items:
-                $ref: '#/components/schemas/DifferentialExpressionProfileProtein'
+                $ref: '#/components/schemas/ProteinDifferentialExpressionProfile'
               type: array
           required:
-            - differentialExpressionProfilesProtein
+            - proteinDifferentialExpressionProfiles
           type: object
-      description: A page of differential expression profiles (protein).
+      description: A page of protein differential expression profiles.
       example:
         number: 99
-        differentialExpressionProfilesProtein:
-          - ensembl_gene_id: ENSG00000139618
-            hgnc_symbol: TP53
-          - ensembl_gene_id: ENSG00000139618
-            hgnc_symbol: TP53
         size: 99
         total_elements: 99
         has_previous: true
         has_next: true
         total_pages: 99
+        proteinDifferentialExpressionProfiles:
+          - ensembl_gene_id: ENSG00000139618
+            hgnc_symbol: TP53
+          - ensembl_gene_id: ENSG00000139618
+            hgnc_symbol: TP53
       type: object
     TargetNomination:
       description: TargetNomination

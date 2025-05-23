@@ -1,12 +1,12 @@
 package org.sagebionetworks.agora.gene.api.service;
 
 import java.util.List;
-import org.sagebionetworks.agora.gene.api.model.document.DifferentialExpressionProfileRnaDocument;
-import org.sagebionetworks.agora.gene.api.model.dto.DifferentialExpressionProfileRnaDto;
-import org.sagebionetworks.agora.gene.api.model.dto.DifferentialExpressionProfileRnaSearchQueryDto;
-import org.sagebionetworks.agora.gene.api.model.dto.DifferentialExpressionProfilesRnaPageDto;
-import org.sagebionetworks.agora.gene.api.model.mapper.DifferentialExpressionProfileRnaMapper;
-import org.sagebionetworks.agora.gene.api.model.repository.DifferentialExpressionProfileRnaRepository;
+import org.sagebionetworks.agora.gene.api.model.document.RnaDifferentialExpressionProfileDocument;
+import org.sagebionetworks.agora.gene.api.model.dto.RnaDifferentialExpressionProfileDto;
+import org.sagebionetworks.agora.gene.api.model.dto.RnaDifferentialExpressionProfilePageDto;
+import org.sagebionetworks.agora.gene.api.model.dto.RnaDifferentialExpressionProfileSearchQueryDto;
+import org.sagebionetworks.agora.gene.api.model.mapper.RnaDifferentialExpressionProfileMapper;
+import org.sagebionetworks.agora.gene.api.model.repository.RnaDifferentialExpressionProfileRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -21,34 +21,33 @@ public class DifferentialExpressionProfileRnaService {
     DifferentialExpressionProfileRnaService.class
   );
 
-  private final DifferentialExpressionProfileRnaRepository differentialExpressionProfileRnaRepository;
+  private final RnaDifferentialExpressionProfileRepository rnaDifferentialExpressionProfileRepository;
 
-  private DifferentialExpressionProfileRnaMapper differentialExpressionProfileRnaMapper =
-    new DifferentialExpressionProfileRnaMapper();
+  private RnaDifferentialExpressionProfileMapper rnaDifferentialExpressionProfileMapper =
+    new RnaDifferentialExpressionProfileMapper();
 
   public DifferentialExpressionProfileRnaService(
-    DifferentialExpressionProfileRnaRepository differentialExpressionProfileRnaRepository
+    RnaDifferentialExpressionProfileRepository rnaDifferentialExpressionProfileRepository
   ) {
-    this.differentialExpressionProfileRnaRepository = differentialExpressionProfileRnaRepository;
+    this.rnaDifferentialExpressionProfileRepository = rnaDifferentialExpressionProfileRepository;
   }
 
-  public DifferentialExpressionProfilesRnaPageDto listDifferentialExpressionProfilesRna(
-    DifferentialExpressionProfileRnaSearchQueryDto query
+  public RnaDifferentialExpressionProfilePageDto listRnaDifferentialExpressionProfiles(
+    RnaDifferentialExpressionProfileSearchQueryDto query
   ) {
     logger.info("listDifferentialExpressionProfilesRna query: {}", query);
 
     Pageable pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
 
-    Page<DifferentialExpressionProfileRnaDocument> page =
-      differentialExpressionProfileRnaRepository.findAll(pageable, query);
+    Page<RnaDifferentialExpressionProfileDocument> page =
+      rnaDifferentialExpressionProfileRepository.findAll(pageable, query);
     logger.info("page: {}", page);
 
-    // TODO: Account for when the page is null
-    List<DifferentialExpressionProfileRnaDto> dtos =
-      differentialExpressionProfileRnaMapper.convertToDtoList(page.getContent());
+    List<RnaDifferentialExpressionProfileDto> dtos =
+      rnaDifferentialExpressionProfileMapper.convertToDtoList(page.getContent());
 
-    return DifferentialExpressionProfilesRnaPageDto.builder()
-      .differentialExpressionProfilesRna(dtos)
+    return RnaDifferentialExpressionProfilePageDto.builder()
+      .rnaDifferentialExpressionProfiles(dtos)
       .number(page.getNumber())
       .size(page.getSize())
       .totalElements(page.getTotalElements())

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.sagebionetworks.agora.gene.api.model.dto.DifferentialExpressionProfileRnaDto;
+import org.sagebionetworks.agora.gene.api.model.dto.ProteinDifferentialExpressionProfileDto;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -20,14 +20,14 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * A page of differential expression profiles (RNA).
+ * A page of protein differential expression profiles.
  */
 @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
 
-@Schema(name = "DifferentialExpressionProfilesRnaPage", description = "A page of differential expression profiles (RNA).")
-@JsonTypeName("DifferentialExpressionProfilesRnaPage")
+@Schema(name = "ProteinDifferentialExpressionProfilePage", description = "A page of protein differential expression profiles.")
+@JsonTypeName("ProteinDifferentialExpressionProfilePage")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
-public class DifferentialExpressionProfilesRnaPageDto {
+public class ProteinDifferentialExpressionProfilePageDto {
 
   private Integer number;
 
@@ -42,26 +42,26 @@ public class DifferentialExpressionProfilesRnaPageDto {
   private Boolean hasPrevious;
 
   @Valid
-  private List<@Valid DifferentialExpressionProfileRnaDto> differentialExpressionProfilesRna = new ArrayList<>();
+  private List<@Valid ProteinDifferentialExpressionProfileDto> proteinDifferentialExpressionProfiles = new ArrayList<>();
 
-  public DifferentialExpressionProfilesRnaPageDto() {
+  public ProteinDifferentialExpressionProfilePageDto() {
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-  public DifferentialExpressionProfilesRnaPageDto(Integer number, Integer size, Long totalElements, Integer totalPages, Boolean hasNext, Boolean hasPrevious, List<@Valid DifferentialExpressionProfileRnaDto> differentialExpressionProfilesRna) {
+  public ProteinDifferentialExpressionProfilePageDto(Integer number, Integer size, Long totalElements, Integer totalPages, Boolean hasNext, Boolean hasPrevious, List<@Valid ProteinDifferentialExpressionProfileDto> proteinDifferentialExpressionProfiles) {
     this.number = number;
     this.size = size;
     this.totalElements = totalElements;
     this.totalPages = totalPages;
     this.hasNext = hasNext;
     this.hasPrevious = hasPrevious;
-    this.differentialExpressionProfilesRna = differentialExpressionProfilesRna;
+    this.proteinDifferentialExpressionProfiles = proteinDifferentialExpressionProfiles;
   }
 
-  public DifferentialExpressionProfilesRnaPageDto number(Integer number) {
+  public ProteinDifferentialExpressionProfilePageDto number(Integer number) {
     this.number = number;
     return this;
   }
@@ -81,7 +81,7 @@ public class DifferentialExpressionProfilesRnaPageDto {
     this.number = number;
   }
 
-  public DifferentialExpressionProfilesRnaPageDto size(Integer size) {
+  public ProteinDifferentialExpressionProfilePageDto size(Integer size) {
     this.size = size;
     return this;
   }
@@ -101,7 +101,7 @@ public class DifferentialExpressionProfilesRnaPageDto {
     this.size = size;
   }
 
-  public DifferentialExpressionProfilesRnaPageDto totalElements(Long totalElements) {
+  public ProteinDifferentialExpressionProfilePageDto totalElements(Long totalElements) {
     this.totalElements = totalElements;
     return this;
   }
@@ -121,7 +121,7 @@ public class DifferentialExpressionProfilesRnaPageDto {
     this.totalElements = totalElements;
   }
 
-  public DifferentialExpressionProfilesRnaPageDto totalPages(Integer totalPages) {
+  public ProteinDifferentialExpressionProfilePageDto totalPages(Integer totalPages) {
     this.totalPages = totalPages;
     return this;
   }
@@ -141,7 +141,7 @@ public class DifferentialExpressionProfilesRnaPageDto {
     this.totalPages = totalPages;
   }
 
-  public DifferentialExpressionProfilesRnaPageDto hasNext(Boolean hasNext) {
+  public ProteinDifferentialExpressionProfilePageDto hasNext(Boolean hasNext) {
     this.hasNext = hasNext;
     return this;
   }
@@ -161,7 +161,7 @@ public class DifferentialExpressionProfilesRnaPageDto {
     this.hasNext = hasNext;
   }
 
-  public DifferentialExpressionProfilesRnaPageDto hasPrevious(Boolean hasPrevious) {
+  public ProteinDifferentialExpressionProfilePageDto hasPrevious(Boolean hasPrevious) {
     this.hasPrevious = hasPrevious;
     return this;
   }
@@ -181,32 +181,32 @@ public class DifferentialExpressionProfilesRnaPageDto {
     this.hasPrevious = hasPrevious;
   }
 
-  public DifferentialExpressionProfilesRnaPageDto differentialExpressionProfilesRna(List<@Valid DifferentialExpressionProfileRnaDto> differentialExpressionProfilesRna) {
-    this.differentialExpressionProfilesRna = differentialExpressionProfilesRna;
+  public ProteinDifferentialExpressionProfilePageDto proteinDifferentialExpressionProfiles(List<@Valid ProteinDifferentialExpressionProfileDto> proteinDifferentialExpressionProfiles) {
+    this.proteinDifferentialExpressionProfiles = proteinDifferentialExpressionProfiles;
     return this;
   }
 
-  public DifferentialExpressionProfilesRnaPageDto addDifferentialExpressionProfilesRnaItem(DifferentialExpressionProfileRnaDto differentialExpressionProfilesRnaItem) {
-    if (this.differentialExpressionProfilesRna == null) {
-      this.differentialExpressionProfilesRna = new ArrayList<>();
+  public ProteinDifferentialExpressionProfilePageDto addProteinDifferentialExpressionProfilesItem(ProteinDifferentialExpressionProfileDto proteinDifferentialExpressionProfilesItem) {
+    if (this.proteinDifferentialExpressionProfiles == null) {
+      this.proteinDifferentialExpressionProfiles = new ArrayList<>();
     }
-    this.differentialExpressionProfilesRna.add(differentialExpressionProfilesRnaItem);
+    this.proteinDifferentialExpressionProfiles.add(proteinDifferentialExpressionProfilesItem);
     return this;
   }
 
   /**
-   * A list of differential epxression profiles (RNA).
-   * @return differentialExpressionProfilesRna
+   * A list of protein differential epxression profiles.
+   * @return proteinDifferentialExpressionProfiles
    */
   @NotNull @Valid 
-  @Schema(name = "differentialExpressionProfilesRna", description = "A list of differential epxression profiles (RNA).", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("differentialExpressionProfilesRna")
-  public List<@Valid DifferentialExpressionProfileRnaDto> getDifferentialExpressionProfilesRna() {
-    return differentialExpressionProfilesRna;
+  @Schema(name = "proteinDifferentialExpressionProfiles", description = "A list of protein differential epxression profiles.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("proteinDifferentialExpressionProfiles")
+  public List<@Valid ProteinDifferentialExpressionProfileDto> getProteinDifferentialExpressionProfiles() {
+    return proteinDifferentialExpressionProfiles;
   }
 
-  public void setDifferentialExpressionProfilesRna(List<@Valid DifferentialExpressionProfileRnaDto> differentialExpressionProfilesRna) {
-    this.differentialExpressionProfilesRna = differentialExpressionProfilesRna;
+  public void setProteinDifferentialExpressionProfiles(List<@Valid ProteinDifferentialExpressionProfileDto> proteinDifferentialExpressionProfiles) {
+    this.proteinDifferentialExpressionProfiles = proteinDifferentialExpressionProfiles;
   }
 
   @Override
@@ -217,32 +217,32 @@ public class DifferentialExpressionProfilesRnaPageDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DifferentialExpressionProfilesRnaPageDto differentialExpressionProfilesRnaPage = (DifferentialExpressionProfilesRnaPageDto) o;
-    return Objects.equals(this.number, differentialExpressionProfilesRnaPage.number) &&
-        Objects.equals(this.size, differentialExpressionProfilesRnaPage.size) &&
-        Objects.equals(this.totalElements, differentialExpressionProfilesRnaPage.totalElements) &&
-        Objects.equals(this.totalPages, differentialExpressionProfilesRnaPage.totalPages) &&
-        Objects.equals(this.hasNext, differentialExpressionProfilesRnaPage.hasNext) &&
-        Objects.equals(this.hasPrevious, differentialExpressionProfilesRnaPage.hasPrevious) &&
-        Objects.equals(this.differentialExpressionProfilesRna, differentialExpressionProfilesRnaPage.differentialExpressionProfilesRna);
+    ProteinDifferentialExpressionProfilePageDto proteinDifferentialExpressionProfilePage = (ProteinDifferentialExpressionProfilePageDto) o;
+    return Objects.equals(this.number, proteinDifferentialExpressionProfilePage.number) &&
+        Objects.equals(this.size, proteinDifferentialExpressionProfilePage.size) &&
+        Objects.equals(this.totalElements, proteinDifferentialExpressionProfilePage.totalElements) &&
+        Objects.equals(this.totalPages, proteinDifferentialExpressionProfilePage.totalPages) &&
+        Objects.equals(this.hasNext, proteinDifferentialExpressionProfilePage.hasNext) &&
+        Objects.equals(this.hasPrevious, proteinDifferentialExpressionProfilePage.hasPrevious) &&
+        Objects.equals(this.proteinDifferentialExpressionProfiles, proteinDifferentialExpressionProfilePage.proteinDifferentialExpressionProfiles);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(number, size, totalElements, totalPages, hasNext, hasPrevious, differentialExpressionProfilesRna);
+    return Objects.hash(number, size, totalElements, totalPages, hasNext, hasPrevious, proteinDifferentialExpressionProfiles);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DifferentialExpressionProfilesRnaPageDto {\n");
+    sb.append("class ProteinDifferentialExpressionProfilePageDto {\n");
     sb.append("    number: ").append(toIndentedString(number)).append("\n");
     sb.append("    size: ").append(toIndentedString(size)).append("\n");
     sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
     sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    hasNext: ").append(toIndentedString(hasNext)).append("\n");
     sb.append("    hasPrevious: ").append(toIndentedString(hasPrevious)).append("\n");
-    sb.append("    differentialExpressionProfilesRna: ").append(toIndentedString(differentialExpressionProfilesRna)).append("\n");
+    sb.append("    proteinDifferentialExpressionProfiles: ").append(toIndentedString(proteinDifferentialExpressionProfiles)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -260,68 +260,68 @@ public class DifferentialExpressionProfilesRnaPageDto {
   
   public static class Builder {
 
-    private DifferentialExpressionProfilesRnaPageDto instance;
+    private ProteinDifferentialExpressionProfilePageDto instance;
 
     public Builder() {
-      this(new DifferentialExpressionProfilesRnaPageDto());
+      this(new ProteinDifferentialExpressionProfilePageDto());
     }
 
-    protected Builder(DifferentialExpressionProfilesRnaPageDto instance) {
+    protected Builder(ProteinDifferentialExpressionProfilePageDto instance) {
       this.instance = instance;
     }
 
-    protected Builder copyOf(DifferentialExpressionProfilesRnaPageDto value) { 
+    protected Builder copyOf(ProteinDifferentialExpressionProfilePageDto value) { 
       this.instance.setNumber(value.number);
       this.instance.setSize(value.size);
       this.instance.setTotalElements(value.totalElements);
       this.instance.setTotalPages(value.totalPages);
       this.instance.setHasNext(value.hasNext);
       this.instance.setHasPrevious(value.hasPrevious);
-      this.instance.setDifferentialExpressionProfilesRna(value.differentialExpressionProfilesRna);
+      this.instance.setProteinDifferentialExpressionProfiles(value.proteinDifferentialExpressionProfiles);
       return this;
     }
 
-    public DifferentialExpressionProfilesRnaPageDto.Builder number(Integer number) {
+    public ProteinDifferentialExpressionProfilePageDto.Builder number(Integer number) {
       this.instance.number(number);
       return this;
     }
     
-    public DifferentialExpressionProfilesRnaPageDto.Builder size(Integer size) {
+    public ProteinDifferentialExpressionProfilePageDto.Builder size(Integer size) {
       this.instance.size(size);
       return this;
     }
     
-    public DifferentialExpressionProfilesRnaPageDto.Builder totalElements(Long totalElements) {
+    public ProteinDifferentialExpressionProfilePageDto.Builder totalElements(Long totalElements) {
       this.instance.totalElements(totalElements);
       return this;
     }
     
-    public DifferentialExpressionProfilesRnaPageDto.Builder totalPages(Integer totalPages) {
+    public ProteinDifferentialExpressionProfilePageDto.Builder totalPages(Integer totalPages) {
       this.instance.totalPages(totalPages);
       return this;
     }
     
-    public DifferentialExpressionProfilesRnaPageDto.Builder hasNext(Boolean hasNext) {
+    public ProteinDifferentialExpressionProfilePageDto.Builder hasNext(Boolean hasNext) {
       this.instance.hasNext(hasNext);
       return this;
     }
     
-    public DifferentialExpressionProfilesRnaPageDto.Builder hasPrevious(Boolean hasPrevious) {
+    public ProteinDifferentialExpressionProfilePageDto.Builder hasPrevious(Boolean hasPrevious) {
       this.instance.hasPrevious(hasPrevious);
       return this;
     }
     
-    public DifferentialExpressionProfilesRnaPageDto.Builder differentialExpressionProfilesRna(List<DifferentialExpressionProfileRnaDto> differentialExpressionProfilesRna) {
-      this.instance.differentialExpressionProfilesRna(differentialExpressionProfilesRna);
+    public ProteinDifferentialExpressionProfilePageDto.Builder proteinDifferentialExpressionProfiles(List<ProteinDifferentialExpressionProfileDto> proteinDifferentialExpressionProfiles) {
+      this.instance.proteinDifferentialExpressionProfiles(proteinDifferentialExpressionProfiles);
       return this;
     }
     
     /**
-    * returns a built DifferentialExpressionProfilesRnaPageDto instance.
+    * returns a built ProteinDifferentialExpressionProfilePageDto instance.
     *
     * The builder is not reusable (NullPointerException)
     */
-    public DifferentialExpressionProfilesRnaPageDto build() {
+    public ProteinDifferentialExpressionProfilePageDto build() {
       try {
         return this.instance;
       } finally {
@@ -339,15 +339,15 @@ public class DifferentialExpressionProfilesRnaPageDto {
   /**
   * Create a builder with no initialized field (except for the default values).
   */
-  public static DifferentialExpressionProfilesRnaPageDto.Builder builder() {
-    return new DifferentialExpressionProfilesRnaPageDto.Builder();
+  public static ProteinDifferentialExpressionProfilePageDto.Builder builder() {
+    return new ProteinDifferentialExpressionProfilePageDto.Builder();
   }
 
   /**
   * Create a builder with a shallow copy of this instance.
   */
-  public DifferentialExpressionProfilesRnaPageDto.Builder toBuilder() {
-    DifferentialExpressionProfilesRnaPageDto.Builder builder = new DifferentialExpressionProfilesRnaPageDto.Builder();
+  public ProteinDifferentialExpressionProfilePageDto.Builder toBuilder() {
+    ProteinDifferentialExpressionProfilePageDto.Builder builder = new ProteinDifferentialExpressionProfilePageDto.Builder();
     return builder.copyOf(this);
   }
 

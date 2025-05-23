@@ -6,10 +6,10 @@
 package org.sagebionetworks.agora.gene.api.api;
 
 import org.sagebionetworks.agora.gene.api.model.dto.BasicErrorDto;
-import org.sagebionetworks.agora.gene.api.model.dto.DifferentialExpressionProfileProteinSearchQueryDto;
-import org.sagebionetworks.agora.gene.api.model.dto.DifferentialExpressionProfileRnaSearchQueryDto;
-import org.sagebionetworks.agora.gene.api.model.dto.DifferentialExpressionProfilesProteinPageDto;
-import org.sagebionetworks.agora.gene.api.model.dto.DifferentialExpressionProfilesRnaPageDto;
+import org.sagebionetworks.agora.gene.api.model.dto.ProteinDifferentialExpressionProfilePageDto;
+import org.sagebionetworks.agora.gene.api.model.dto.ProteinDifferentialExpressionProfileSearchQueryDto;
+import org.sagebionetworks.agora.gene.api.model.dto.RnaDifferentialExpressionProfilePageDto;
+import org.sagebionetworks.agora.gene.api.model.dto.RnaDifferentialExpressionProfileSearchQueryDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -34,31 +34,31 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 @Validated
-@Tag(name = "DifferentialExpressionProfile", description = "Operations about differential expression profiles.")
-public interface DifferentialExpressionProfileApi {
+@Tag(name = "DifferentialExpression", description = "Operations about differential expression.")
+public interface DifferentialExpressionApi {
 
-    default DifferentialExpressionProfileApiDelegate getDelegate() {
-        return new DifferentialExpressionProfileApiDelegate() {};
+    default DifferentialExpressionApiDelegate getDelegate() {
+        return new DifferentialExpressionApiDelegate() {};
     }
 
     /**
-     * GET /differentialExpressionProfiles/protein : List differential expression profiles (protein)
-     * List differential expression profiles (protein)
+     * GET /differentialExpression/protein : List protein differential expression profiles
+     * List protein differential expression profiles
      *
-     * @param differentialExpressionProfileProteinSearchQuery The search query used to find differential expression profiles (protein). (optional)
+     * @param proteinDifferentialExpressionProfileSearchQuery The search query used to find protein differential expression profiles. (optional)
      * @return Success (status code 200)
      *         or Invalid request (status code 400)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
-        operationId = "listDifferentialExpressionProfilesProtein",
-        summary = "List differential expression profiles (protein)",
-        description = "List differential expression profiles (protein)",
-        tags = { "DifferentialExpressionProfile" },
+        operationId = "listProteinDifferentialExpressionProfiles",
+        summary = "List protein differential expression profiles",
+        description = "List protein differential expression profiles",
+        tags = { "DifferentialExpression" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = DifferentialExpressionProfilesProteinPageDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = DifferentialExpressionProfilesProteinPageDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ProteinDifferentialExpressionProfilePageDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ProteinDifferentialExpressionProfilePageDto.class))
             }),
             @ApiResponse(responseCode = "400", description = "Invalid request", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
@@ -72,35 +72,35 @@ public interface DifferentialExpressionProfileApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/differentialExpressionProfiles/protein",
+        value = "/differentialExpression/protein",
         produces = { "application/json", "application/problem+json" }
     )
     
-    default ResponseEntity<DifferentialExpressionProfilesProteinPageDto> listDifferentialExpressionProfilesProtein(
-        @Parameter(name = "differentialExpressionProfileProteinSearchQuery", description = "The search query used to find differential expression profiles (protein).", in = ParameterIn.QUERY) @Valid DifferentialExpressionProfileProteinSearchQueryDto differentialExpressionProfileProteinSearchQuery
+    default ResponseEntity<ProteinDifferentialExpressionProfilePageDto> listProteinDifferentialExpressionProfiles(
+        @Parameter(name = "proteinDifferentialExpressionProfileSearchQuery", description = "The search query used to find protein differential expression profiles.", in = ParameterIn.QUERY) @Valid ProteinDifferentialExpressionProfileSearchQueryDto proteinDifferentialExpressionProfileSearchQuery
     ) {
-        return getDelegate().listDifferentialExpressionProfilesProtein(differentialExpressionProfileProteinSearchQuery);
+        return getDelegate().listProteinDifferentialExpressionProfiles(proteinDifferentialExpressionProfileSearchQuery);
     }
 
 
     /**
-     * GET /differentialExpressionProfiles/rna : List differential expression profiles (RNA)
-     * List differential expression profiles (RNA)
+     * GET /differentialExpression/rna : List RNA differential expression profiles
+     * List differential expression profiles
      *
-     * @param differentialExpressionProfileRnaSearchQuery The search query used to find differential expression profiles (RNA). (optional)
+     * @param rnaDifferentialExpressionProfileSearchQuery The search query used to find RNA differential expression profiles. (optional)
      * @return Success (status code 200)
      *         or Invalid request (status code 400)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
-        operationId = "listDifferentialExpressionProfilesRna",
-        summary = "List differential expression profiles (RNA)",
-        description = "List differential expression profiles (RNA)",
-        tags = { "DifferentialExpressionProfile" },
+        operationId = "listRnaDifferentialExpressionProfiles",
+        summary = "List RNA differential expression profiles",
+        description = "List differential expression profiles",
+        tags = { "DifferentialExpression" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = DifferentialExpressionProfilesRnaPageDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = DifferentialExpressionProfilesRnaPageDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = RnaDifferentialExpressionProfilePageDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = RnaDifferentialExpressionProfilePageDto.class))
             }),
             @ApiResponse(responseCode = "400", description = "Invalid request", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
@@ -114,14 +114,14 @@ public interface DifferentialExpressionProfileApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/differentialExpressionProfiles/rna",
+        value = "/differentialExpression/rna",
         produces = { "application/json", "application/problem+json" }
     )
     
-    default ResponseEntity<DifferentialExpressionProfilesRnaPageDto> listDifferentialExpressionProfilesRna(
-        @Parameter(name = "differentialExpressionProfileRnaSearchQuery", description = "The search query used to find differential expression profiles (RNA).", in = ParameterIn.QUERY) @Valid DifferentialExpressionProfileRnaSearchQueryDto differentialExpressionProfileRnaSearchQuery
+    default ResponseEntity<RnaDifferentialExpressionProfilePageDto> listRnaDifferentialExpressionProfiles(
+        @Parameter(name = "rnaDifferentialExpressionProfileSearchQuery", description = "The search query used to find RNA differential expression profiles.", in = ParameterIn.QUERY) @Valid RnaDifferentialExpressionProfileSearchQueryDto rnaDifferentialExpressionProfileSearchQuery
     ) {
-        return getDelegate().listDifferentialExpressionProfilesRna(differentialExpressionProfileRnaSearchQuery);
+        return getDelegate().listRnaDifferentialExpressionProfiles(rnaDifferentialExpressionProfileSearchQuery);
     }
 
 }

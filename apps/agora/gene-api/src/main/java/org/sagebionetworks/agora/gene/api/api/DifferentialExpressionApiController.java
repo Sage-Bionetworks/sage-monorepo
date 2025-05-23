@@ -1,10 +1,10 @@
 package org.sagebionetworks.agora.gene.api.api;
 
 import org.sagebionetworks.agora.gene.api.model.dto.BasicErrorDto;
-import org.sagebionetworks.agora.gene.api.model.dto.DifferentialExpressionProfileProteinSearchQueryDto;
-import org.sagebionetworks.agora.gene.api.model.dto.DifferentialExpressionProfileRnaSearchQueryDto;
-import org.sagebionetworks.agora.gene.api.model.dto.DifferentialExpressionProfilesProteinPageDto;
-import org.sagebionetworks.agora.gene.api.model.dto.DifferentialExpressionProfilesRnaPageDto;
+import org.sagebionetworks.agora.gene.api.model.dto.ProteinDifferentialExpressionProfilePageDto;
+import org.sagebionetworks.agora.gene.api.model.dto.ProteinDifferentialExpressionProfileSearchQueryDto;
+import org.sagebionetworks.agora.gene.api.model.dto.RnaDifferentialExpressionProfilePageDto;
+import org.sagebionetworks.agora.gene.api.model.dto.RnaDifferentialExpressionProfileSearchQueryDto;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,16 +32,16 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 @Controller
 @RequestMapping("${openapi.agoraGene.base-path:/v1}")
-public class DifferentialExpressionProfileApiController implements DifferentialExpressionProfileApi {
+public class DifferentialExpressionApiController implements DifferentialExpressionApi {
 
-    private final DifferentialExpressionProfileApiDelegate delegate;
+    private final DifferentialExpressionApiDelegate delegate;
 
-    public DifferentialExpressionProfileApiController(@Autowired(required = false) DifferentialExpressionProfileApiDelegate delegate) {
-        this.delegate = Optional.ofNullable(delegate).orElse(new DifferentialExpressionProfileApiDelegate() {});
+    public DifferentialExpressionApiController(@Autowired(required = false) DifferentialExpressionApiDelegate delegate) {
+        this.delegate = Optional.ofNullable(delegate).orElse(new DifferentialExpressionApiDelegate() {});
     }
 
     @Override
-    public DifferentialExpressionProfileApiDelegate getDelegate() {
+    public DifferentialExpressionApiDelegate getDelegate() {
         return delegate;
     }
 

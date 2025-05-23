@@ -6,8 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import org.sagebionetworks.agora.gene.api.model.dto.DifferentialExpressionProfileRnaModelDto;
-import org.sagebionetworks.agora.gene.api.model.dto.DifferentialExpressionProfileRnaSortDto;
+import org.sagebionetworks.agora.gene.api.model.dto.RnaDifferentialExpressionProfileModelDto;
+import org.sagebionetworks.agora.gene.api.model.dto.RnaDifferentialExpressionProfileSortDto;
 import org.sagebionetworks.agora.gene.api.model.dto.SortDirectionDto;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
@@ -20,28 +20,28 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * A differential expression profile search query (RNA).
+ * A differential RNA expression profile search query.
  */
 @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
 
-@Schema(name = "DifferentialExpressionProfileRnaSearchQuery", description = "A differential expression profile search query (RNA).")
-@JsonTypeName("DifferentialExpressionProfileRnaSearchQuery")
+@Schema(name = "RnaDifferentialExpressionProfileSearchQuery", description = "A differential RNA expression profile search query.")
+@JsonTypeName("RnaDifferentialExpressionProfileSearchQuery")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
-public class DifferentialExpressionProfileRnaSearchQueryDto {
+public class RnaDifferentialExpressionProfileSearchQueryDto {
 
   private Integer pageNumber = 0;
 
   private Integer pageSize = 100;
 
-  private DifferentialExpressionProfileRnaSortDto sort = DifferentialExpressionProfileRnaSortDto.RELEVANCE;
+  private RnaDifferentialExpressionProfileSortDto sort = RnaDifferentialExpressionProfileSortDto.HGNC_SYMBOL;
 
   private @Nullable SortDirectionDto direction = null;
 
-  private DifferentialExpressionProfileRnaModelDto model = DifferentialExpressionProfileRnaModelDto.AD_DIAGNOSIS_AOD_MALES_AND_FEMALES;
+  private RnaDifferentialExpressionProfileModelDto model = RnaDifferentialExpressionProfileModelDto.AD_DIAGNOSIS_AOD_MALES_AND_FEMALES;
 
   private @Nullable String searchTerms;
 
-  public DifferentialExpressionProfileRnaSearchQueryDto pageNumber(Integer pageNumber) {
+  public RnaDifferentialExpressionProfileSearchQueryDto pageNumber(Integer pageNumber) {
     this.pageNumber = pageNumber;
     return this;
   }
@@ -62,7 +62,7 @@ public class DifferentialExpressionProfileRnaSearchQueryDto {
     this.pageNumber = pageNumber;
   }
 
-  public DifferentialExpressionProfileRnaSearchQueryDto pageSize(Integer pageSize) {
+  public RnaDifferentialExpressionProfileSearchQueryDto pageSize(Integer pageSize) {
     this.pageSize = pageSize;
     return this;
   }
@@ -84,7 +84,7 @@ public class DifferentialExpressionProfileRnaSearchQueryDto {
     this.pageSize = pageSize;
   }
 
-  public DifferentialExpressionProfileRnaSearchQueryDto sort(DifferentialExpressionProfileRnaSortDto sort) {
+  public RnaDifferentialExpressionProfileSearchQueryDto sort(RnaDifferentialExpressionProfileSortDto sort) {
     this.sort = sort;
     return this;
   }
@@ -96,15 +96,15 @@ public class DifferentialExpressionProfileRnaSearchQueryDto {
   @Valid 
   @Schema(name = "sort", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("sort")
-  public DifferentialExpressionProfileRnaSortDto getSort() {
+  public RnaDifferentialExpressionProfileSortDto getSort() {
     return sort;
   }
 
-  public void setSort(DifferentialExpressionProfileRnaSortDto sort) {
+  public void setSort(RnaDifferentialExpressionProfileSortDto sort) {
     this.sort = sort;
   }
 
-  public DifferentialExpressionProfileRnaSearchQueryDto direction(SortDirectionDto direction) {
+  public RnaDifferentialExpressionProfileSearchQueryDto direction(SortDirectionDto direction) {
     this.direction = direction;
     return this;
   }
@@ -124,7 +124,7 @@ public class DifferentialExpressionProfileRnaSearchQueryDto {
     this.direction = direction;
   }
 
-  public DifferentialExpressionProfileRnaSearchQueryDto model(DifferentialExpressionProfileRnaModelDto model) {
+  public RnaDifferentialExpressionProfileSearchQueryDto model(RnaDifferentialExpressionProfileModelDto model) {
     this.model = model;
     return this;
   }
@@ -136,15 +136,15 @@ public class DifferentialExpressionProfileRnaSearchQueryDto {
   @Valid 
   @Schema(name = "model", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("model")
-  public DifferentialExpressionProfileRnaModelDto getModel() {
+  public RnaDifferentialExpressionProfileModelDto getModel() {
     return model;
   }
 
-  public void setModel(DifferentialExpressionProfileRnaModelDto model) {
+  public void setModel(RnaDifferentialExpressionProfileModelDto model) {
     this.model = model;
   }
 
-  public DifferentialExpressionProfileRnaSearchQueryDto searchTerms(String searchTerms) {
+  public RnaDifferentialExpressionProfileSearchQueryDto searchTerms(String searchTerms) {
     this.searchTerms = searchTerms;
     return this;
   }
@@ -172,13 +172,13 @@ public class DifferentialExpressionProfileRnaSearchQueryDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DifferentialExpressionProfileRnaSearchQueryDto differentialExpressionProfileRnaSearchQuery = (DifferentialExpressionProfileRnaSearchQueryDto) o;
-    return Objects.equals(this.pageNumber, differentialExpressionProfileRnaSearchQuery.pageNumber) &&
-        Objects.equals(this.pageSize, differentialExpressionProfileRnaSearchQuery.pageSize) &&
-        Objects.equals(this.sort, differentialExpressionProfileRnaSearchQuery.sort) &&
-        Objects.equals(this.direction, differentialExpressionProfileRnaSearchQuery.direction) &&
-        Objects.equals(this.model, differentialExpressionProfileRnaSearchQuery.model) &&
-        Objects.equals(this.searchTerms, differentialExpressionProfileRnaSearchQuery.searchTerms);
+    RnaDifferentialExpressionProfileSearchQueryDto rnaDifferentialExpressionProfileSearchQuery = (RnaDifferentialExpressionProfileSearchQueryDto) o;
+    return Objects.equals(this.pageNumber, rnaDifferentialExpressionProfileSearchQuery.pageNumber) &&
+        Objects.equals(this.pageSize, rnaDifferentialExpressionProfileSearchQuery.pageSize) &&
+        Objects.equals(this.sort, rnaDifferentialExpressionProfileSearchQuery.sort) &&
+        Objects.equals(this.direction, rnaDifferentialExpressionProfileSearchQuery.direction) &&
+        Objects.equals(this.model, rnaDifferentialExpressionProfileSearchQuery.model) &&
+        Objects.equals(this.searchTerms, rnaDifferentialExpressionProfileSearchQuery.searchTerms);
   }
 
   @Override
@@ -189,7 +189,7 @@ public class DifferentialExpressionProfileRnaSearchQueryDto {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DifferentialExpressionProfileRnaSearchQueryDto {\n");
+    sb.append("class RnaDifferentialExpressionProfileSearchQueryDto {\n");
     sb.append("    pageNumber: ").append(toIndentedString(pageNumber)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
@@ -213,17 +213,17 @@ public class DifferentialExpressionProfileRnaSearchQueryDto {
   
   public static class Builder {
 
-    private DifferentialExpressionProfileRnaSearchQueryDto instance;
+    private RnaDifferentialExpressionProfileSearchQueryDto instance;
 
     public Builder() {
-      this(new DifferentialExpressionProfileRnaSearchQueryDto());
+      this(new RnaDifferentialExpressionProfileSearchQueryDto());
     }
 
-    protected Builder(DifferentialExpressionProfileRnaSearchQueryDto instance) {
+    protected Builder(RnaDifferentialExpressionProfileSearchQueryDto instance) {
       this.instance = instance;
     }
 
-    protected Builder copyOf(DifferentialExpressionProfileRnaSearchQueryDto value) { 
+    protected Builder copyOf(RnaDifferentialExpressionProfileSearchQueryDto value) { 
       this.instance.setPageNumber(value.pageNumber);
       this.instance.setPageSize(value.pageSize);
       this.instance.setSort(value.sort);
@@ -233,42 +233,42 @@ public class DifferentialExpressionProfileRnaSearchQueryDto {
       return this;
     }
 
-    public DifferentialExpressionProfileRnaSearchQueryDto.Builder pageNumber(Integer pageNumber) {
+    public RnaDifferentialExpressionProfileSearchQueryDto.Builder pageNumber(Integer pageNumber) {
       this.instance.pageNumber(pageNumber);
       return this;
     }
     
-    public DifferentialExpressionProfileRnaSearchQueryDto.Builder pageSize(Integer pageSize) {
+    public RnaDifferentialExpressionProfileSearchQueryDto.Builder pageSize(Integer pageSize) {
       this.instance.pageSize(pageSize);
       return this;
     }
     
-    public DifferentialExpressionProfileRnaSearchQueryDto.Builder sort(DifferentialExpressionProfileRnaSortDto sort) {
+    public RnaDifferentialExpressionProfileSearchQueryDto.Builder sort(RnaDifferentialExpressionProfileSortDto sort) {
       this.instance.sort(sort);
       return this;
     }
     
-    public DifferentialExpressionProfileRnaSearchQueryDto.Builder direction(SortDirectionDto direction) {
+    public RnaDifferentialExpressionProfileSearchQueryDto.Builder direction(SortDirectionDto direction) {
       this.instance.direction(direction);
       return this;
     }
     
-    public DifferentialExpressionProfileRnaSearchQueryDto.Builder model(DifferentialExpressionProfileRnaModelDto model) {
+    public RnaDifferentialExpressionProfileSearchQueryDto.Builder model(RnaDifferentialExpressionProfileModelDto model) {
       this.instance.model(model);
       return this;
     }
     
-    public DifferentialExpressionProfileRnaSearchQueryDto.Builder searchTerms(String searchTerms) {
+    public RnaDifferentialExpressionProfileSearchQueryDto.Builder searchTerms(String searchTerms) {
       this.instance.searchTerms(searchTerms);
       return this;
     }
     
     /**
-    * returns a built DifferentialExpressionProfileRnaSearchQueryDto instance.
+    * returns a built RnaDifferentialExpressionProfileSearchQueryDto instance.
     *
     * The builder is not reusable (NullPointerException)
     */
-    public DifferentialExpressionProfileRnaSearchQueryDto build() {
+    public RnaDifferentialExpressionProfileSearchQueryDto build() {
       try {
         return this.instance;
       } finally {
@@ -286,15 +286,15 @@ public class DifferentialExpressionProfileRnaSearchQueryDto {
   /**
   * Create a builder with no initialized field (except for the default values).
   */
-  public static DifferentialExpressionProfileRnaSearchQueryDto.Builder builder() {
-    return new DifferentialExpressionProfileRnaSearchQueryDto.Builder();
+  public static RnaDifferentialExpressionProfileSearchQueryDto.Builder builder() {
+    return new RnaDifferentialExpressionProfileSearchQueryDto.Builder();
   }
 
   /**
   * Create a builder with a shallow copy of this instance.
   */
-  public DifferentialExpressionProfileRnaSearchQueryDto.Builder toBuilder() {
-    DifferentialExpressionProfileRnaSearchQueryDto.Builder builder = new DifferentialExpressionProfileRnaSearchQueryDto.Builder();
+  public RnaDifferentialExpressionProfileSearchQueryDto.Builder toBuilder() {
+    RnaDifferentialExpressionProfileSearchQueryDto.Builder builder = new RnaDifferentialExpressionProfileSearchQueryDto.Builder();
     return builder.copyOf(this);
   }
 

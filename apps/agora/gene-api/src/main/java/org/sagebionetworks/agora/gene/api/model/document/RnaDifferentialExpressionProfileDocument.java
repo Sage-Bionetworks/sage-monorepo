@@ -9,8 +9,8 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 @Builder
 @Data
-@Document(collection = "differential_expression_profile_rna")
-public class DifferentialExpressionProfileRnaDocument {
+@Document(collection = "rna_differential_expression_profile")
+public class RnaDifferentialExpressionProfileDocument {
 
   @Id
   public String id;

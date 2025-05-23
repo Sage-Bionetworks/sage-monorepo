@@ -2,11 +2,10 @@ package org.sagebionetworks.agora.gene.api.model.repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.sagebionetworks.agora.gene.api.model.document.DifferentialExpressionProfileRnaDocument;
-import org.sagebionetworks.agora.gene.api.model.dto.DifferentialExpressionProfileRnaSearchQueryDto;
-import org.sagebionetworks.agora.gene.api.model.dto.DifferentialExpressionProfileRnaSortDto;
+import org.sagebionetworks.agora.gene.api.model.document.RnaDifferentialExpressionProfileDocument;
+import org.sagebionetworks.agora.gene.api.model.dto.RnaDifferentialExpressionProfileSearchQueryDto;
+import org.sagebionetworks.agora.gene.api.model.dto.RnaDifferentialExpressionProfileSortDto;
 import org.sagebionetworks.agora.gene.api.model.dto.SortDirectionDto;
-import org.sagebionetworks.agora.gene.api.model.mapper.RnaModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,20 +19,20 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class DifferentialExpressionProfileRnaRepositoryImpl
-  implements DifferentialExpressionProfileRnaRepositoryCustom {
+public class RnaDifferentialExpressionProfileRepositoryImpl
+  implements RnaDifferentialExpressionProfileRepositoryCustom {
 
   private static final Logger logger = LoggerFactory.getLogger(
-    DifferentialExpressionProfileRnaRepositoryImpl.class
+    RnaDifferentialExpressionProfileRepositoryImpl.class
   );
 
   @Autowired
   private MongoTemplate mongoTemplate;
 
   @Override
-  public Page<DifferentialExpressionProfileRnaDocument> findAll(
+  public Page<RnaDifferentialExpressionProfileDocument> findAll(
     Pageable pageable,
-    DifferentialExpressionProfileRnaSearchQueryDto query
+    RnaDifferentialExpressionProfileSearchQueryDto query
   ) {
     Criteria criteria = new Criteria();
     List<Criteria> criteriaList = new ArrayList<>();
@@ -75,25 +74,23 @@ public class DifferentialExpressionProfileRnaRepositoryImpl
     // Pagination
     mongoQuery.with(pageable);
 
-    List<DifferentialExpressionProfileRnaDocument> results = mongoTemplate.find(
+    List<RnaDifferentialExpressionProfileDocument> results = mongoTemplate.find(
       mongoQuery,
-      DifferentialExpressionProfileRnaDocument.class
+      RnaDifferentialExpressionProfileDocument.class
     );
 
     long total = mongoTemplate.count(
       mongoQuery.skip(-1).limit(-1),
-      DifferentialExpressionProfileRnaDocument.class
+      RnaDifferentialExpressionProfileDocument.class
     );
 
     return new PageImpl<>(results, pageable, total);
   }
 
-  // TODO: Use meaningful options
-  private String mapSortField(DifferentialExpressionProfileRnaSortDto sortDto) {
+  private String mapSortField(RnaDifferentialExpressionProfileSortDto sortDto) {
     return switch (sortDto) {
-      case CREATED -> "hgnc_symbol";
-      case RELEVANCE -> "hgnc_symbol"; // assuming you rank by a "score" field
-      default -> "hgnc_symbol";
+      case HGNC_SYMBOL -> RnaDifferentialExpressionProfileSortDto.HGNC_SYMBOL.getValue();
+      default -> RnaDifferentialExpressionProfileSortDto.HGNC_SYMBOL.getValue();
     };
   }
 }

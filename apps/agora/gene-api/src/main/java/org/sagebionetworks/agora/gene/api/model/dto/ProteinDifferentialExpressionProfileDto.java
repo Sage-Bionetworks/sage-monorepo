@@ -5,7 +5,6 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.math.BigDecimal;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -17,33 +16,31 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * A differential expression profile (RNA).
+ * A protein differential expression profile.
  */
 @com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
 
-@Schema(name = "DifferentialExpressionProfileRna", description = "A differential expression profile (RNA).")
-@JsonTypeName("DifferentialExpressionProfileRna")
+@Schema(name = "ProteinDifferentialExpressionProfile", description = "A protein differential expression profile.")
+@JsonTypeName("ProteinDifferentialExpressionProfile")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
-public class DifferentialExpressionProfileRnaDto {
+public class ProteinDifferentialExpressionProfileDto {
 
   private String ensemblGeneId;
 
   private @Nullable String hgncSymbol;
 
-  private @Nullable BigDecimal targetRiskScore = null;
-
-  public DifferentialExpressionProfileRnaDto() {
+  public ProteinDifferentialExpressionProfileDto() {
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-  public DifferentialExpressionProfileRnaDto(String ensemblGeneId) {
+  public ProteinDifferentialExpressionProfileDto(String ensemblGeneId) {
     this.ensemblGeneId = ensemblGeneId;
   }
 
-  public DifferentialExpressionProfileRnaDto ensemblGeneId(String ensemblGeneId) {
+  public ProteinDifferentialExpressionProfileDto ensemblGeneId(String ensemblGeneId) {
     this.ensemblGeneId = ensemblGeneId;
     return this;
   }
@@ -63,7 +60,7 @@ public class DifferentialExpressionProfileRnaDto {
     this.ensemblGeneId = ensemblGeneId;
   }
 
-  public DifferentialExpressionProfileRnaDto hgncSymbol(String hgncSymbol) {
+  public ProteinDifferentialExpressionProfileDto hgncSymbol(String hgncSymbol) {
     this.hgncSymbol = hgncSymbol;
     return this;
   }
@@ -83,26 +80,6 @@ public class DifferentialExpressionProfileRnaDto {
     this.hgncSymbol = hgncSymbol;
   }
 
-  public DifferentialExpressionProfileRnaDto targetRiskScore(BigDecimal targetRiskScore) {
-    this.targetRiskScore = targetRiskScore;
-    return this;
-  }
-
-  /**
-   * Target risk score
-   * @return targetRiskScore
-   */
-  @Valid 
-  @Schema(name = "target_risk_score", description = "Target risk score", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("target_risk_score")
-  public BigDecimal getTargetRiskScore() {
-    return targetRiskScore;
-  }
-
-  public void setTargetRiskScore(BigDecimal targetRiskScore) {
-    this.targetRiskScore = targetRiskScore;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -111,24 +88,22 @@ public class DifferentialExpressionProfileRnaDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DifferentialExpressionProfileRnaDto differentialExpressionProfileRna = (DifferentialExpressionProfileRnaDto) o;
-    return Objects.equals(this.ensemblGeneId, differentialExpressionProfileRna.ensemblGeneId) &&
-        Objects.equals(this.hgncSymbol, differentialExpressionProfileRna.hgncSymbol) &&
-        Objects.equals(this.targetRiskScore, differentialExpressionProfileRna.targetRiskScore);
+    ProteinDifferentialExpressionProfileDto proteinDifferentialExpressionProfile = (ProteinDifferentialExpressionProfileDto) o;
+    return Objects.equals(this.ensemblGeneId, proteinDifferentialExpressionProfile.ensemblGeneId) &&
+        Objects.equals(this.hgncSymbol, proteinDifferentialExpressionProfile.hgncSymbol);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ensemblGeneId, hgncSymbol, targetRiskScore);
+    return Objects.hash(ensemblGeneId, hgncSymbol);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DifferentialExpressionProfileRnaDto {\n");
+    sb.append("class ProteinDifferentialExpressionProfileDto {\n");
     sb.append("    ensemblGeneId: ").append(toIndentedString(ensemblGeneId)).append("\n");
     sb.append("    hgncSymbol: ").append(toIndentedString(hgncSymbol)).append("\n");
-    sb.append("    targetRiskScore: ").append(toIndentedString(targetRiskScore)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -146,44 +121,38 @@ public class DifferentialExpressionProfileRnaDto {
   
   public static class Builder {
 
-    private DifferentialExpressionProfileRnaDto instance;
+    private ProteinDifferentialExpressionProfileDto instance;
 
     public Builder() {
-      this(new DifferentialExpressionProfileRnaDto());
+      this(new ProteinDifferentialExpressionProfileDto());
     }
 
-    protected Builder(DifferentialExpressionProfileRnaDto instance) {
+    protected Builder(ProteinDifferentialExpressionProfileDto instance) {
       this.instance = instance;
     }
 
-    protected Builder copyOf(DifferentialExpressionProfileRnaDto value) { 
+    protected Builder copyOf(ProteinDifferentialExpressionProfileDto value) { 
       this.instance.setEnsemblGeneId(value.ensemblGeneId);
       this.instance.setHgncSymbol(value.hgncSymbol);
-      this.instance.setTargetRiskScore(value.targetRiskScore);
       return this;
     }
 
-    public DifferentialExpressionProfileRnaDto.Builder ensemblGeneId(String ensemblGeneId) {
+    public ProteinDifferentialExpressionProfileDto.Builder ensemblGeneId(String ensemblGeneId) {
       this.instance.ensemblGeneId(ensemblGeneId);
       return this;
     }
     
-    public DifferentialExpressionProfileRnaDto.Builder hgncSymbol(String hgncSymbol) {
+    public ProteinDifferentialExpressionProfileDto.Builder hgncSymbol(String hgncSymbol) {
       this.instance.hgncSymbol(hgncSymbol);
       return this;
     }
     
-    public DifferentialExpressionProfileRnaDto.Builder targetRiskScore(BigDecimal targetRiskScore) {
-      this.instance.targetRiskScore(targetRiskScore);
-      return this;
-    }
-    
     /**
-    * returns a built DifferentialExpressionProfileRnaDto instance.
+    * returns a built ProteinDifferentialExpressionProfileDto instance.
     *
     * The builder is not reusable (NullPointerException)
     */
-    public DifferentialExpressionProfileRnaDto build() {
+    public ProteinDifferentialExpressionProfileDto build() {
       try {
         return this.instance;
       } finally {
@@ -201,15 +170,15 @@ public class DifferentialExpressionProfileRnaDto {
   /**
   * Create a builder with no initialized field (except for the default values).
   */
-  public static DifferentialExpressionProfileRnaDto.Builder builder() {
-    return new DifferentialExpressionProfileRnaDto.Builder();
+  public static ProteinDifferentialExpressionProfileDto.Builder builder() {
+    return new ProteinDifferentialExpressionProfileDto.Builder();
   }
 
   /**
   * Create a builder with a shallow copy of this instance.
   */
-  public DifferentialExpressionProfileRnaDto.Builder toBuilder() {
-    DifferentialExpressionProfileRnaDto.Builder builder = new DifferentialExpressionProfileRnaDto.Builder();
+  public ProteinDifferentialExpressionProfileDto.Builder toBuilder() {
+    ProteinDifferentialExpressionProfileDto.Builder builder = new ProteinDifferentialExpressionProfileDto.Builder();
     return builder.copyOf(this);
   }
 

@@ -20,15 +20,13 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
-public enum DifferentialExpressionProfileRnaSortDto {
+public enum ProteinDifferentialExpressionProfileSortDto {
   
-  CREATED("created"),
-  
-  RELEVANCE("relevance");
+  HGNC_SYMBOL("hgnc_symbol");
 
   private String value;
 
-  DifferentialExpressionProfileRnaSortDto(String value) {
+  ProteinDifferentialExpressionProfileSortDto(String value) {
     this.value = value;
   }
 
@@ -43,8 +41,8 @@ public enum DifferentialExpressionProfileRnaSortDto {
   }
 
   @JsonCreator
-  public static DifferentialExpressionProfileRnaSortDto fromValue(String value) {
-    for (DifferentialExpressionProfileRnaSortDto b : DifferentialExpressionProfileRnaSortDto.values()) {
+  public static ProteinDifferentialExpressionProfileSortDto fromValue(String value) {
+    for (ProteinDifferentialExpressionProfileSortDto b : ProteinDifferentialExpressionProfileSortDto.values()) {
       if (b.value.equals(value)) {
         return b;
       }

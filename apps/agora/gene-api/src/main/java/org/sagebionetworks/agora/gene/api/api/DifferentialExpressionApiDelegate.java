@@ -1,10 +1,10 @@
 package org.sagebionetworks.agora.gene.api.api;
 
 import org.sagebionetworks.agora.gene.api.model.dto.BasicErrorDto;
-import org.sagebionetworks.agora.gene.api.model.dto.DifferentialExpressionProfileProteinSearchQueryDto;
-import org.sagebionetworks.agora.gene.api.model.dto.DifferentialExpressionProfileRnaSearchQueryDto;
-import org.sagebionetworks.agora.gene.api.model.dto.DifferentialExpressionProfilesProteinPageDto;
-import org.sagebionetworks.agora.gene.api.model.dto.DifferentialExpressionProfilesRnaPageDto;
+import org.sagebionetworks.agora.gene.api.model.dto.ProteinDifferentialExpressionProfilePageDto;
+import org.sagebionetworks.agora.gene.api.model.dto.ProteinDifferentialExpressionProfileSearchQueryDto;
+import org.sagebionetworks.agora.gene.api.model.dto.RnaDifferentialExpressionProfilePageDto;
+import org.sagebionetworks.agora.gene.api.model.dto.RnaDifferentialExpressionProfileSearchQueryDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,31 +19,31 @@ import java.util.Optional;
 import jakarta.annotation.Generated;
 
 /**
- * A delegate to be called by the {@link DifferentialExpressionProfileApiController}}.
+ * A delegate to be called by the {@link DifferentialExpressionApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
-public interface DifferentialExpressionProfileApiDelegate {
+public interface DifferentialExpressionApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
         return Optional.empty();
     }
 
     /**
-     * GET /differentialExpressionProfiles/protein : List differential expression profiles (protein)
-     * List differential expression profiles (protein)
+     * GET /differentialExpression/protein : List protein differential expression profiles
+     * List protein differential expression profiles
      *
-     * @param differentialExpressionProfileProteinSearchQuery The search query used to find differential expression profiles (protein). (optional)
+     * @param proteinDifferentialExpressionProfileSearchQuery The search query used to find protein differential expression profiles. (optional)
      * @return Success (status code 200)
      *         or Invalid request (status code 400)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     * @see DifferentialExpressionProfileApi#listDifferentialExpressionProfilesProtein
+     * @see DifferentialExpressionApi#listProteinDifferentialExpressionProfiles
      */
-    default ResponseEntity<DifferentialExpressionProfilesProteinPageDto> listDifferentialExpressionProfilesProtein(DifferentialExpressionProfileProteinSearchQueryDto differentialExpressionProfileProteinSearchQuery) {
+    default ResponseEntity<ProteinDifferentialExpressionProfilePageDto> listProteinDifferentialExpressionProfiles(ProteinDifferentialExpressionProfileSearchQueryDto proteinDifferentialExpressionProfileSearchQuery) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"number\" : 99, \"differentialExpressionProfilesProtein\" : [ { \"ensembl_gene_id\" : \"ENSG00000139618\", \"hgnc_symbol\" : \"TP53\" }, { \"ensembl_gene_id\" : \"ENSG00000139618\", \"hgnc_symbol\" : \"TP53\" } ], \"size\" : 99, \"total_elements\" : 99, \"has_previous\" : true, \"has_next\" : true, \"total_pages\" : 99 }";
+                    String exampleString = "{ \"number\" : 99, \"size\" : 99, \"total_elements\" : 99, \"has_previous\" : true, \"has_next\" : true, \"total_pages\" : 99, \"proteinDifferentialExpressionProfiles\" : [ { \"ensembl_gene_id\" : \"ENSG00000139618\", \"hgnc_symbol\" : \"TP53\" }, { \"ensembl_gene_id\" : \"ENSG00000139618\", \"hgnc_symbol\" : \"TP53\" } ] }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -64,20 +64,20 @@ public interface DifferentialExpressionProfileApiDelegate {
     }
 
     /**
-     * GET /differentialExpressionProfiles/rna : List differential expression profiles (RNA)
-     * List differential expression profiles (RNA)
+     * GET /differentialExpression/rna : List RNA differential expression profiles
+     * List differential expression profiles
      *
-     * @param differentialExpressionProfileRnaSearchQuery The search query used to find differential expression profiles (RNA). (optional)
+     * @param rnaDifferentialExpressionProfileSearchQuery The search query used to find RNA differential expression profiles. (optional)
      * @return Success (status code 200)
      *         or Invalid request (status code 400)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     * @see DifferentialExpressionProfileApi#listDifferentialExpressionProfilesRna
+     * @see DifferentialExpressionApi#listRnaDifferentialExpressionProfiles
      */
-    default ResponseEntity<DifferentialExpressionProfilesRnaPageDto> listDifferentialExpressionProfilesRna(DifferentialExpressionProfileRnaSearchQueryDto differentialExpressionProfileRnaSearchQuery) {
+    default ResponseEntity<RnaDifferentialExpressionProfilePageDto> listRnaDifferentialExpressionProfiles(RnaDifferentialExpressionProfileSearchQueryDto rnaDifferentialExpressionProfileSearchQuery) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"number\" : 99, \"size\" : 99, \"total_elements\" : 99, \"has_previous\" : true, \"differentialExpressionProfilesRna\" : [ { \"target_risk_score\" : 0.8008281904610115, \"ensembl_gene_id\" : \"ENSG00000139618\", \"hgnc_symbol\" : \"TP53\" }, { \"target_risk_score\" : 0.8008281904610115, \"ensembl_gene_id\" : \"ENSG00000139618\", \"hgnc_symbol\" : \"TP53\" } ], \"has_next\" : true, \"total_pages\" : 99 }";
+                    String exampleString = "{ \"number\" : 99, \"size\" : 99, \"total_elements\" : 99, \"has_previous\" : true, \"rnaDifferentialExpressionProfiles\" : [ { \"target_risk_score\" : 0.8008281904610115, \"ensembl_gene_id\" : \"ENSG00000139618\", \"hgnc_symbol\" : \"TP53\" }, { \"target_risk_score\" : 0.8008281904610115, \"ensembl_gene_id\" : \"ENSG00000139618\", \"hgnc_symbol\" : \"TP53\" } ], \"has_next\" : true, \"total_pages\" : 99 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

@@ -4,21 +4,21 @@ import io.mongock.api.annotations.ChangeUnit;
 import io.mongock.api.annotations.Execution;
 import io.mongock.api.annotations.RollbackExecution;
 import java.util.List;
-import org.sagebionetworks.agora.gene.api.model.document.DifferentialExpressionProfileRnaDocument;
+import org.sagebionetworks.agora.gene.api.model.document.RnaDifferentialExpressionProfileDocument;
 import org.sagebionetworks.agora.gene.api.model.dto.GCTGeneDto;
 import org.sagebionetworks.agora.gene.api.service.GCTGenesService;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 @ChangeUnit(
-  id = "preload-differential-expression-profiles-rna-4",
+  id = "preload-rna-differential-expression-profiles",
   order = "001",
   author = "tschaffter"
 )
-public class PreloadDifferentialExpressionProfilesRnaMigration {
+public class PreloadRnaDifferentialExpressionProfilesMigration {
 
   private final GCTGenesService gctGenesService;
 
-  public PreloadDifferentialExpressionProfilesRnaMigration(GCTGenesService gctGenesService) {
+  public PreloadRnaDifferentialExpressionProfilesMigration(GCTGenesService gctGenesService) {
     this.gctGenesService = gctGenesService;
   }
 
@@ -31,12 +31,12 @@ public class PreloadDifferentialExpressionProfilesRnaMigration {
       .getComparisonGenes(category, subCategory)
       .getItems();
 
-    final List<DifferentialExpressionProfileRnaDocument> precomputed = getComparisonGenes
+    final List<RnaDifferentialExpressionProfileDocument> precomputed = getComparisonGenes
       .stream()
       // TODO: Open Jira ticket to suggest replacing blank value by null
       .filter(gctGene -> gctGene.getHgncSymbol() != null && !gctGene.getHgncSymbol().isBlank())
       .map(gctGene ->
-        DifferentialExpressionProfileRnaDocument.builder()
+        RnaDifferentialExpressionProfileDocument.builder()
           .ensemblGeneId(gctGene.getEnsemblGeneId())
           .hgncSymbol(gctGene.getHgncSymbol())
           .targetRiskScore(gctGene.getTargetRiskScore())
@@ -44,12 +44,12 @@ public class PreloadDifferentialExpressionProfilesRnaMigration {
       )
       .toList();
 
-    mongoTemplate.dropCollection(DifferentialExpressionProfileRnaDocument.class);
+    mongoTemplate.dropCollection(RnaDifferentialExpressionProfileDocument.class);
     mongoTemplate.insertAll(precomputed);
   }
 
   @RollbackExecution
   public void rollback(MongoTemplate mongoTemplate) {
-    mongoTemplate.dropCollection(DifferentialExpressionProfileRnaDocument.class);
+    mongoTemplate.dropCollection(RnaDifferentialExpressionProfileDocument.class);
   }
 }

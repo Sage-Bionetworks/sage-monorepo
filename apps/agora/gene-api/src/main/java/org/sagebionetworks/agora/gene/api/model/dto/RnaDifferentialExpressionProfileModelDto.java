@@ -16,21 +16,23 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * The protein profiling method to apply for the differential expression profile.
+ * The RNA model to apply for the differential expression profile.
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
-public enum DifferentialExpressionProfileProteinProfilingMethodDto {
+public enum RnaDifferentialExpressionProfileModelDto {
   
-  LFQ("lfq"),
+  AD_DIAGNOSIS_AOD_MALES_AND_FEMALES("ad_diagnosis_aod_males_and_females"),
   
-  SMR("smr"),
+  AD_DIAGNOSIS_MALES_AND_FEMALES("ad_diagnosis_males_and_females"),
   
-  TMT("tmt");
+  AD_DIAGNOSIS_SEX_FEMALES_ONLY("ad_diagnosis_sex_females_only"),
+  
+  AD_DIAGNOSIS_SEX_MALES_ONLY("ad_diagnosis_sex_males_only");
 
   private String value;
 
-  DifferentialExpressionProfileProteinProfilingMethodDto(String value) {
+  RnaDifferentialExpressionProfileModelDto(String value) {
     this.value = value;
   }
 
@@ -45,8 +47,8 @@ public enum DifferentialExpressionProfileProteinProfilingMethodDto {
   }
 
   @JsonCreator
-  public static DifferentialExpressionProfileProteinProfilingMethodDto fromValue(String value) {
-    for (DifferentialExpressionProfileProteinProfilingMethodDto b : DifferentialExpressionProfileProteinProfilingMethodDto.values()) {
+  public static RnaDifferentialExpressionProfileModelDto fromValue(String value) {
+    for (RnaDifferentialExpressionProfileModelDto b : RnaDifferentialExpressionProfileModelDto.values()) {
       if (b.value.equals(value)) {
         return b;
       }
