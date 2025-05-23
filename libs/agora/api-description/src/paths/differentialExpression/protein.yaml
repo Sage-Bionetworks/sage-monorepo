@@ -1,0 +1,19 @@
+get:
+  tags:
+    - DifferentialExpression
+  summary: List protein differential expression profiles
+  description: List protein differential expression profiles
+  operationId: listProteinDifferentialExpressionProfiles
+  parameters:
+    - $ref: ../../components/parameters/query/proteinDifferentialExpressionProfileSearchQuery.yaml
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/ProteinDifferentialExpressionProfilePage.yaml
+      description: Success
+    '400':
+      $ref: ../../components/responses/BadRequest.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml

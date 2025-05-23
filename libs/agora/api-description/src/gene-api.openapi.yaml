@@ -18,15 +18,15 @@ tags:
   # monorepo.
   - name: Genes
     description: Operations about genes.
-  - name: DifferentialExpressionProfile
-    description: Operations about differential expression profiles.
+  - name: DifferentialExpression
+    description: Operations about differential expression.
 paths:
   /genes/comparison:
     $ref: paths/genes/comparison.yaml
-  /differentialExpressionProfiles/rna:
-    $ref: paths/differentialExpressionProfiles/rna.yaml
-  /differentialExpressionProfiles/protein:
-    $ref: paths/differentialExpressionProfiles/protein.yaml
+  /differentialExpression/rna:
+    $ref: paths/differentialExpression/rna.yaml
+  /differentialExpression/protein:
+    $ref: paths/differentialExpression/protein.yaml
 components:
   schemas:
     Gene:
