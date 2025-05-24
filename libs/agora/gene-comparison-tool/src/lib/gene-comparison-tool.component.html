@@ -72,21 +72,23 @@
                 <input
                   type="text"
                   pInputText
-                  (input)="onSearchInput($event)"
-                  [value]="searchTerm"
+                  (input)="onSearchTermInput($event)"
+                  [value]="searchTerm()"
                   placeholder="Search"
                 />
-                <button *ngIf="searchTerm" (click)="clearSearch()">
-                  <svg
-                    width="10"
-                    height="10"
-                    viewBox="0 0 10 10"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M1 9L9 1M1 1L9 9" stroke="#C4C4C4" stroke-width="2" />
-                  </svg>
-                </button>
+                @if (searchTerm()) {
+                  <button (click)="searchTerm.set('')">
+                    <svg
+                      width="10"
+                      height="10"
+                      viewBox="0 0 10 10"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M1 9L9 1M1 1L9 9" stroke="#C4C4C4" stroke-width="2" />
+                    </svg>
+                  </button>
+                }
               </div>
             </div>
             <div class="gct-controls-right">

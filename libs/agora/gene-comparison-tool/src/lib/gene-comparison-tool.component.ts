@@ -2,9 +2,11 @@ import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
   Component,
+  computed,
   inject,
   OnDestroy,
   OnInit,
+  signal,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
@@ -34,7 +36,14 @@ import { FilterService, MessageService, SortEvent } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { Table, TableModule, TableLazyLoadEvent } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
-import { combineLatest, debounceTime, distinctUntilChanged, skip, Subscription } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  debounceTime,
+  distinctUntilChanged,
+  skip,
+  Subscription,
+} from 'rxjs';
 
 import * as helpers from './gene-comparison-tool.helpers';
 import * as variables from './gene-comparison-tool.variables';
@@ -144,7 +153,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
   /* Filters --------------------------------------------------------------- */
   filters: GCTFilter[] = cloneDeep(variables.filters);
-  searchTerm = '';
+  // searchTerm = '';
 
   // /* URL ------------------------------------------------------------------- */
   urlParams: { [key: string]: any } | undefined;
@@ -164,6 +173,11 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
   // /* Gene API ----------------------------------------------------------- */
   totalDifferentialExpressionProfilesCount = 0;
+  searchTerm = signal('');
+
+  queryParams = computed(() => ({
+    search: this.searchTerm(),
+  }));
 
   /* ----------------------------------------------------------------------- */
   private DEFAULT_SIGNIFICANCE_THRESHOLD = 0.05;
@@ -454,9 +468,9 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
     const preSelection = this.helperService.getGCTSelection();
     this.helperService.deleteGCTSelection();
-    if (preSelection?.length) {
-      this.searchTerm = preSelection.join(',');
-    }
+    // if (preSelection?.length) {
+    //   this.searchTerm = preSelection.join(',');
+    // }
 
     if (itemsToPin.length) {
       itemsToPin.sort((a, b) => (a.ensembl_gene_id > b.ensembl_gene_id ? 1 : -1));
@@ -518,7 +532,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
   setSignificanceThresholdActive(significanceThresholdActive: boolean) {
     this.significanceThresholdActive = significanceThresholdActive;
-    this.filter();
+    // this.filter();
     this.updateUrl();
   }
 
@@ -528,7 +542,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
   setFilters(filters: any) {
     this.filters = filters;
-    this.filter();
+    // this.filter();
     this.updateUrl();
   }
 
@@ -593,88 +607,88 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     return false;
   }
 
-  setSearchTerm(term: string) {
-    this.searchTerm = term;
-    this.filter();
-  }
+  // setSearchTerm(term: string) {
+  //   this.searchTerm = term;
+  //   this.filter();
+  // }
 
-  clearSearch() {
-    this.searchTerm = '';
-    this.filter();
-  }
+  // clearSearch() {
+  //   this.searchTerm = '';
+  //   this.filter();
+  // }
 
-  filter() {
-    let filters: { [key: string]: any };
+  // filter() {
+  //   let filters: { [key: string]: any };
 
-    if (this.category === 'RNA - Differential Expression') {
-      filters = {
-        ensembl_gene_id: {
-          value: this.getPinnedEnsemblGeneIds(),
-          matchMode: 'exclude_ensembl_gene_id',
-        },
-      };
-    } else {
-      filters = {
-        uniprotid: {
-          value: this.getPinnedUniProtIds(),
-          matchMode: 'exclude_uniprotid',
-        },
-      };
-    }
+  //   if (this.category === 'RNA - Differential Expression') {
+  //     filters = {
+  //       ensembl_gene_id: {
+  //         value: this.getPinnedEnsemblGeneIds(),
+  //         matchMode: 'exclude_ensembl_gene_id',
+  //       },
+  //     };
+  //   } else {
+  //     filters = {
+  //       uniprotid: {
+  //         value: this.getPinnedUniProtIds(),
+  //         matchMode: 'exclude_uniprotid',
+  //       },
+  //     };
+  //   }
 
-    if (this.searchTerm) {
-      if (this.searchTerm.indexOf(',') !== -1) {
-        const terms = this.searchTerm
-          .toLowerCase()
-          .split(',')
-          .map((t: string) => t.trim())
-          .filter((t: string) => t !== '');
-        filters['search_array'] = {
-          value: terms,
-          matchMode: 'intersect',
-        };
-      } else {
-        filters['search_string'] = {
-          value: this.searchTerm.toLowerCase(),
-          matchMode: 'contains',
-        };
-      }
-    }
+  //   if (this.searchTerm) {
+  //     if (this.searchTerm.indexOf(',') !== -1) {
+  //       const terms = this.searchTerm
+  //         .toLowerCase()
+  //         .split(',')
+  //         .map((t: string) => t.trim())
+  //         .filter((t: string) => t !== '');
+  //       filters['search_array'] = {
+  //         value: terms,
+  //         matchMode: 'intersect',
+  //       };
+  //     } else {
+  //       filters['search_string'] = {
+  //         value: this.searchTerm.toLowerCase(),
+  //         matchMode: 'contains',
+  //       };
+  //     }
+  //   }
 
-    this.filters.forEach((filter) => {
-      if (!filter.field) {
-        return;
-      }
+  //   this.filters.forEach((filter) => {
+  //     if (!filter.field) {
+  //       return;
+  //     }
 
-      const values = filter.options
-        .filter((option) => option.selected)
-        .map((selected) => selected.value);
+  //     const values = filter.options
+  //       .filter((option) => option.selected)
+  //       .map((selected) => selected.value);
 
-      if (values.length) {
-        filters[filter.field] = {
-          value: values,
-          matchMode: filter.matchMode || 'equals',
-        };
-      }
-    });
+  //     if (values.length) {
+  //       filters[filter.field] = {
+  //         value: values,
+  //         matchMode: filter.matchMode || 'equals',
+  //       };
+  //     }
+  //   });
 
-    const filterChanged =
-      JSON.stringify({ ...filters, ...{ ensembl_gene_id: '' } }) !==
-      JSON.stringify({
-        ...this.genesTable.filters,
-        ...{ ensembl_gene_id: '' },
-      });
+  //   const filterChanged =
+  //     JSON.stringify({ ...filters, ...{ ensembl_gene_id: '' } }) !==
+  //     JSON.stringify({
+  //       ...this.genesTable.filters,
+  //       ...{ ensembl_gene_id: '' },
+  //     });
 
-    const currentPage = this.genesTable._first;
+  //   const currentPage = this.genesTable._first;
 
-    this.genesTable.filters = filters;
-    this.genesTable._filter();
+  //   this.genesTable.filters = filters;
+  //   this.genesTable._filter();
 
-    // Restoring current pagination if filters didn't change
-    if (!filterChanged) {
-      this.genesTable._first = currentPage;
-    }
-  }
+  //   // Restoring current pagination if filters didn't change
+  //   if (!filterChanged) {
+  //     this.genesTable._first = currentPage;
+  //   }
+  // }
 
   /* ----------------------------------------------------------------------- */
   /* Sort
@@ -769,7 +783,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
   refreshPinnedGenes() {
     this.setPinnedItemsCache(this.pinnedItems);
-    this.filter();
+    // this.filter();
     this.updateUrl();
   }
 
@@ -1328,7 +1342,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
   refresh() {
     this.sort();
-    this.filter();
+    // this.filter();
     this.updateColumnWidth();
   }
 
@@ -1348,9 +1362,9 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     return this.helperService.getGCTColumnSortIconTooltipText(columnName);
   }
 
-  onSearchInput(event: Event) {
-    const el = event?.target as HTMLTextAreaElement;
-    this.setSearchTerm(el.value);
+  onSearchTermInput(event: Event): void {
+    const value = (event.target as HTMLInputElement)?.value ?? '';
+    this.searchTerm.set(value);
   }
 
   updateColumnWidth() {
