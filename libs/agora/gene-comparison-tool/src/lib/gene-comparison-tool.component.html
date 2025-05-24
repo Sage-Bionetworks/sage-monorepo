@@ -619,8 +619,12 @@
 
             <div class="gct-help-links" [hidden]="isLoading">
               <div class="gct-help-links-inner">
-                <div>Legend</div>
-                <div>Visualization Overview</div>
+                <div>
+                  <a class="gct-help-link" (click)="legendPanel.toggle()">Legend</a>
+                </div>
+                <div>
+                  <a class="gct-help-link" (click)="howToPanel.toggle()">Visualization Overview</a>
+                </div>
               </div>
             </div>
 
@@ -635,17 +639,17 @@
     </div>
   </div>
 
-  <!-- <agora-gene-comparison-tool-details-panel
+  <agora-gene-comparison-tool-details-panel
     #detailsPanel
     (onShowLegend)="legendPanel.toggle()"
     (onNavigateToConsistencyOfChange)="navigateToConsistencyOfChange($event)"
-  ></agora-gene-comparison-tool-details-panel> -->
+  ></agora-gene-comparison-tool-details-panel>
   <agora-gene-comparison-tool-score-panel #scorePanel></agora-gene-comparison-tool-score-panel>
-  <!-- <agora-gene-comparison-tool-how-to-panel #howToPanel></agora-gene-comparison-tool-how-to-panel> -->
-  <!-- <agora-gene-comparison-tool-legend-panel
+  <agora-gene-comparison-tool-how-to-panel #howToPanel></agora-gene-comparison-tool-how-to-panel>
+  <agora-gene-comparison-tool-legend-panel
     #legendPanel
     (howToClick)="legendPanel.toggle(); howToPanel.toggle()"
-  ></agora-gene-comparison-tool-legend-panel> -->
+  ></agora-gene-comparison-tool-legend-panel>
   <agora-gene-comparison-tool-pinned-genes-modal
     #pinnedGenesModal
     (changeEvent)="onPinnedGenesModalChange($event)"

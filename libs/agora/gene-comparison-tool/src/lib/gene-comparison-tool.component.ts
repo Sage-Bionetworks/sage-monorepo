@@ -44,7 +44,7 @@ import { GeneComparisonToolFilterPanelComponent as FilterPanelComponent } from '
 import { GeneComparisonToolPinnedGenesModalComponent as PinnedGenesModalComponent } from './components/gene-comparison-tool-pinned-genes-modal/gene-comparison-tool-pinned-genes-modal.component';
 import { GeneComparisonToolScorePanelComponent as ScorePanelComponent } from './components/gene-comparison-tool-score-panel/gene-comparison-tool-score-panel.component';
 
-// import { GeneComparisonToolDetailsPanelComponent } from './components/gene-comparison-tool-details-panel/gene-comparison-tool-details-panel.component';
+import { GeneComparisonToolDetailsPanelComponent } from './components/gene-comparison-tool-details-panel/gene-comparison-tool-details-panel.component';
 import { GeneComparisonToolFilterPanelComponent } from './components/gene-comparison-tool-filter-panel/gene-comparison-tool-filter-panel.component';
 import { GeneComparisonToolPinnedGenesModalComponent } from './components/gene-comparison-tool-pinned-genes-modal/gene-comparison-tool-pinned-genes-modal.component';
 import { GeneComparisonToolScorePanelComponent } from './components/gene-comparison-tool-score-panel/gene-comparison-tool-score-panel.component';
@@ -56,8 +56,8 @@ import { PopoverModule } from 'primeng/popover';
 import { SelectModule } from 'primeng/select';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { GeneComparisonToolFilterListComponent } from './components/gene-comparison-tool-filter-list/gene-comparison-tool-filter-list.component';
-// import { GeneComparisonToolHowToPanelComponent } from './components/gene-comparison-tool-how-to-panel/gene-comparison-tool-how-to-panel.component';
-// import { GeneComparisonToolLegendPanelComponent } from './components/gene-comparison-tool-legend-panel/gene-comparison-tool-legend-panel.component';
+import { GeneComparisonToolHowToPanelComponent } from './components/gene-comparison-tool-how-to-panel/gene-comparison-tool-how-to-panel.component';
+import { GeneComparisonToolLegendPanelComponent } from './components/gene-comparison-tool-legend-panel/gene-comparison-tool-legend-panel.component';
 
 @Component({
   selector: 'agora-gene-comparison-tool',
@@ -74,11 +74,11 @@ import { GeneComparisonToolFilterListComponent } from './components/gene-compari
     PopoverLinkComponent,
     PopoverModule,
     SvgIconComponent,
-    // GeneComparisonToolHowToPanelComponent,
-    // GeneComparisonToolLegendPanelComponent,
+    GeneComparisonToolHowToPanelComponent,
+    GeneComparisonToolLegendPanelComponent,
     GeneComparisonToolFilterListComponent,
     GeneComparisonToolScorePanelComponent,
-    // GeneComparisonToolDetailsPanelComponent,
+    GeneComparisonToolDetailsPanelComponent,
     GeneComparisonToolFilterPanelComponent,
     GeneComparisonToolPinnedGenesModalComponent,
     LoadingIconComponent,
