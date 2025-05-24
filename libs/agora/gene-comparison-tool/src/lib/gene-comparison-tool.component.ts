@@ -3,6 +3,7 @@ import {
   AfterViewInit,
   Component,
   computed,
+  effect,
   inject,
   OnDestroy,
   OnInit,
@@ -174,9 +175,13 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   // /* Gene API ----------------------------------------------------------- */
   totalDifferentialExpressionProfilesCount = 0;
   searchTerm = signal('');
+  pageNumber = signal(0);
+  pageSize = signal(10);
 
-  queryParams = computed(() => ({
-    search: this.searchTerm(),
+  query = computed(() => ({
+    searchTerm: this.searchTerm(),
+    pageNumber: this.pageNumber(),
+    pageSize: this.pageSize(),
   }));
 
   /* ----------------------------------------------------------------------- */
@@ -196,6 +201,30 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
   constructor() {
     this.category = 'RNA - Differential Expression';
+
+    effect(() => {
+      const { searchTerm, pageNumber, pageSize } = this.query();
+
+      this.differentialExpressionService
+        .listRnaDifferentialExpressionProfiles({
+          sort: RnaDifferentialExpressionProfileSort.TargetRiskScore,
+          direction: SortDirection.Desc,
+          pageSize,
+          pageNumber,
+          searchTerm,
+        })
+        .subscribe({
+          next: (response) => {
+            this.genes = response.rnaDifferentialExpressionProfiles;
+            this.totalDifferentialExpressionProfilesCount = response.total_elements;
+            this.isLoading = false;
+          },
+          error: (err) => {
+            console.error('Error loading data', err);
+            this.isLoading = false;
+          },
+        });
+    });
   }
 
   ngOnInit() {
@@ -264,43 +293,47 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   /* ----------------------------------------------------------------------- */
 
   loadDifferentialExpressionProfiles(event: TableLazyLoadEvent) {
-    this.isLoading = true;
-    console.log('event: ', event);
+    // this.isLoading = true;
+    // console.log('event: ', event);
 
     const pageSize = event.rows ?? 10;
     const pageNumber = (event.first ?? 0) / pageSize;
-    const filter = event.filters?.['search_string'];
-    let searchTerm = '';
 
-    if (filter) {
-      if (Array.isArray(filter)) {
-        // If multiple filters, use the first (or combine them if needed)
-        searchTerm = filter[0]?.value ?? '';
-      } else {
-        searchTerm = filter.value ?? '';
-      }
-    }
+    this.pageSize.set(pageSize);
+    this.pageNumber.set(pageNumber);
 
-    this.differentialExpressionService
-      .listRnaDifferentialExpressionProfiles({
-        sort: RnaDifferentialExpressionProfileSort.TargetRiskScore,
-        direction: SortDirection.Desc,
-        pageSize,
-        pageNumber,
-        searchTerm,
-      })
-      // .pipe(skip(1), debounceTime(400), distinctUntilChanged()) // TODO: free up subscription when needed
-      .subscribe({
-        next: (response) => {
-          this.genes = response.rnaDifferentialExpressionProfiles;
-          this.totalDifferentialExpressionProfilesCount = response.total_elements;
-          this.isLoading = false;
-        },
-        error: (err) => {
-          console.error('Error loading data', err);
-          this.isLoading = false;
-        },
-      });
+    // const filter = event.filters?.['search_string'];
+    // let searchTerm = '';
+
+    // if (filter) {
+    //   if (Array.isArray(filter)) {
+    //     // If multiple filters, use the first (or combine them if needed)
+    //     searchTerm = filter[0]?.value ?? '';
+    //   } else {
+    //     searchTerm = filter.value ?? '';
+    //   }
+    // }
+
+    // this.differentialExpressionService
+    //   .listRnaDifferentialExpressionProfiles({
+    //     sort: RnaDifferentialExpressionProfileSort.TargetRiskScore,
+    //     direction: SortDirection.Desc,
+    //     pageSize,
+    //     pageNumber,
+    //     searchTerm,
+    //   })
+    //   // .pipe(skip(1), debounceTime(400), distinctUntilChanged()) // TODO: free up subscription when needed
+    //   .subscribe({
+    //     next: (response) => {
+    //       this.genes = response.rnaDifferentialExpressionProfiles;
+    //       this.totalDifferentialExpressionProfilesCount = response.total_elements;
+    //       this.isLoading = false;
+    //     },
+    //     error: (err) => {
+    //       console.error('Error loading data', err);
+    //       this.isLoading = false;
+    //     },
+    //   });
   }
 
   /* ----------------------------------------------------------------------- */
