@@ -32,7 +32,7 @@ import { HelperService } from '@sagebionetworks/agora/services';
 import { cloneDeep } from 'lodash';
 import { FilterService, MessageService, SortEvent } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
-import { Table, TableModule } from 'primeng/table';
+import { Table, TableModule, TableLazyLoadEvent } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { combineLatest, Subscription } from 'rxjs';
 
@@ -243,6 +243,36 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
   public isNumber(value: string | number): boolean {
     return value != null && value !== '' && !isNaN(Number(value.toString()));
+  }
+
+  /* ----------------------------------------------------------------------- */
+  /* Functions for lazy loading data in the table
+  /* ----------------------------------------------------------------------- */
+
+  loadDifferentialExpressionProfiles(event: TableLazyLoadEvent) {
+    this.isLoading = true;
+
+    const pageSize = event.rows ?? 10;
+    const pageNumber = (event.first ?? 0) / pageSize;
+
+    this.differentialExpressionService
+      .listRnaDifferentialExpressionProfiles({
+        sort: RnaDifferentialExpressionProfileSort.TargetRiskScore,
+        direction: SortDirection.Desc,
+        pageSize,
+        pageNumber,
+      })
+      .subscribe({
+        next: (response) => {
+          this.genes = response.rnaDifferentialExpressionProfiles;
+          this.totalDifferentialExpressionProfilesCount = response.total_elements;
+          this.isLoading = false;
+        },
+        error: (err) => {
+          console.error('Error loading data', err);
+          this.isLoading = false;
+        },
+      });
   }
 
   /* ----------------------------------------------------------------------- */

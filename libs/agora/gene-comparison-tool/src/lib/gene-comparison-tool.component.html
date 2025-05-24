@@ -476,6 +476,9 @@
               [customSort]="true"
               [loading]="isLoading"
               loadingIcon=""
+              [lazy]="true"
+              (onLazyLoad)="loadDifferentialExpressionProfiles($event)"
+              [totalRecords]="totalDifferentialExpressionProfilesCount"
             >
               <ng-template pTemplate="emptymessage" let-gene>
                 <div class="no-results">No results found...</div>
