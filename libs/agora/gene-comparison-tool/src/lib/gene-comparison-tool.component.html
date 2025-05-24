@@ -52,8 +52,8 @@
           <div class="gct-controls-inner">
             <div class="gct-controls-left">
               <div class="gene-label">DISPLAYED GENES</div>
-              <div *ngIf="genesTable" class="gene-count" data-testid="gene-count">
-                {{ (genesTable?._totalRecords || 0) + uniquePinnedGenesCount }}
+              <div class="gene-count" data-testid="gene-count">
+                {{ totalDifferentialExpressionProfilesCount }}
               </div>
               <div class="gct-search">
                 <svg

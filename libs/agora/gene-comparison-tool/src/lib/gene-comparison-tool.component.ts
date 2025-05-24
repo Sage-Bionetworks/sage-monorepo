@@ -162,6 +162,9 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   pendingPinnedItems: GCTGene[] = [];
   maxPinnedGenes = 50;
 
+  // /* Gene API ----------------------------------------------------------- */
+  totalDifferentialExpressionProfilesCount = 0;
+
   /* ----------------------------------------------------------------------- */
   private DEFAULT_SIGNIFICANCE_THRESHOLD = 0.05;
   significanceThreshold = this.DEFAULT_SIGNIFICANCE_THRESHOLD;
@@ -277,6 +280,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
     combineLatest([genesApi$, distributionApi$]).subscribe(([genesResult, distributionResult]) => {
       if (genesResult.rnaDifferentialExpressionProfiles) {
+        this.totalDifferentialExpressionProfilesCount = genesResult.total_elements;
         this.initData(genesResult.rnaDifferentialExpressionProfiles);
         this.sortTable(this.headerTable);
         this.refresh();
