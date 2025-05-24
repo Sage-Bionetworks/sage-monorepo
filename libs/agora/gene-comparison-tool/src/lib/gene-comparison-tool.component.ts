@@ -34,7 +34,7 @@ import { FilterService, MessageService, SortEvent } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { Table, TableModule, TableLazyLoadEvent } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
-import { combineLatest, Subscription } from 'rxjs';
+import { combineLatest, debounceTime, distinctUntilChanged, skip, Subscription } from 'rxjs';
 
 import * as helpers from './gene-comparison-tool.helpers';
 import * as variables from './gene-comparison-tool.variables';
@@ -251,9 +251,21 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
   loadDifferentialExpressionProfiles(event: TableLazyLoadEvent) {
     this.isLoading = true;
+    console.log('event: ', event);
 
     const pageSize = event.rows ?? 10;
     const pageNumber = (event.first ?? 0) / pageSize;
+    const filter = event.filters?.['search_string'];
+    let searchTerm = '';
+
+    if (filter) {
+      if (Array.isArray(filter)) {
+        // If multiple filters, use the first (or combine them if needed)
+        searchTerm = filter[0]?.value ?? '';
+      } else {
+        searchTerm = filter.value ?? '';
+      }
+    }
 
     this.differentialExpressionService
       .listRnaDifferentialExpressionProfiles({
@@ -261,7 +273,9 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
         direction: SortDirection.Desc,
         pageSize,
         pageNumber,
+        searchTerm,
       })
+      // .pipe(skip(1), debounceTime(400), distinctUntilChanged()) // TODO: free up subscription when needed
       .subscribe({
         next: (response) => {
           this.genes = response.rnaDifferentialExpressionProfiles;
