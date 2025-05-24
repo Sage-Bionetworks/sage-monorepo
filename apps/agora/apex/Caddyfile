@@ -1,13 +1,21 @@
 :80 {
+	# Route /api-docs* to the API docs service
   handle_path /api-docs* {
     reverse_proxy {env.API_DOCS_HOST}:{env.API_DOCS_PORT}
   }
 
-  # Serve the API, stripping the /api prefix
+	# Route /api/v1/differentialExpression to the GENE api, stripping /api
+  handle /api/v1/differentialExpression/* {
+    uri strip_prefix /api
+    reverse_proxy {env.GENE_API_HOST}:{env.GENE_API_PORT}
+  }
+
+	# Route all other /api/* requests to the default API service, stripping /api
   handle_path /api/* {
     reverse_proxy {env.API_HOST}:{env.API_PORT}
   }
 
+	# Catch-all route for everything else (frontend app)
   handle {
     reverse_proxy {env.APP_HOST}:{env.APP_PORT}
   }
