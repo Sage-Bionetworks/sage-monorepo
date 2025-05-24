@@ -467,7 +467,9 @@
               paginatorStyleClass="gct-paginator"
               [rows]="10"
               [showCurrentPageReport]="true"
-              currentPageReportTemplate="{first}-{last} of {totalRecords}"
+              currentPageReportTemplate="{first}-{last} of {{
+                totalDifferentialExpressionProfilesCount
+              }}"
               [showPageLinks]="false"
               breakpoint="0"
               (sortFunction)="sortCallback($event)"
