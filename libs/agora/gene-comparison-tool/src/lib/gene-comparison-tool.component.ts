@@ -724,13 +724,25 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   /* ----------------------------------------------------------------------- */
 
   setSort(event: GCTSortEvent) {
-    this.sortField = event.field;
-    this.sortOrder = event.order;
-    this.sort();
-    this.updateUrl();
+    console.log('setSort: ', event);
+
+    // Set direction based on event.order (default to Desc if undefined)
+    this.direction.set(event.order === 1 ? SortDirection.Asc : SortDirection.Desc);
+
+    // Set sort field if provided
+    if (event.field) {
+      // Here you would map the field to the corresponding sort option
+      // this.sort.set(...); // Implement this based on your sorting options
+    }
+
+    // this.sortField = event.field;
+    // this.sortOrder = event.order;
+    // this.sort();
+    // this.updateUrl();
   }
 
   sortCallback(event: SortEvent) {
+    console.log('event: ', event);
     const order = event.order || 1;
     if (!event.field || !event.data) {
       return;
@@ -769,9 +781,10 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   }
 
   sortTable(table: Table) {
-    table.sortField = '';
-    table.defaultSortOrder = this.sortOrder;
-    table.sort({ field: this.sortField });
+    console.log('sortTable: ', table);
+    // table.sortField = '';
+    // table.defaultSortOrder = this.sortOrder;
+    // table.sort({ field: this.sortField });
   }
 
   // sort() {
