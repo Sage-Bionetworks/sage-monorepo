@@ -731,14 +731,23 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
     // Set sort field if provided
     if (event.field) {
-      // Here you would map the field to the corresponding sort option
-      // this.sort.set(...); // Implement this based on your sorting options
+      // Map column field values to the appropriate enum values
+      switch (event.field) {
+        case 'RISK SCORE':
+          this.sort.set(RnaDifferentialExpressionProfileSort.TargetRiskScore);
+          break;
+        case 'GENETIC':
+          this.sort.set(RnaDifferentialExpressionProfileSort.GeneticsScore);
+          break;
+        case 'MULTI-OMIC':
+          this.sort.set(RnaDifferentialExpressionProfileSort.MultiOmicsScore);
+          break;
+        default:
+          // Default to Target Risk Score if the field is not recognized
+          this.sort.set(RnaDifferentialExpressionProfileSort.TargetRiskScore);
+          break;
+      }
     }
-
-    // this.sortField = event.field;
-    // this.sortOrder = event.order;
-    // this.sort();
-    // this.updateUrl();
   }
 
   sortCallback(event: SortEvent) {
