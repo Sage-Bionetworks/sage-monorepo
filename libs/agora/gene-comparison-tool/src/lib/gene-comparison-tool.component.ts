@@ -177,11 +177,15 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   searchTerm = signal('');
   pageNumber = signal(0);
   pageSize = signal(10);
+  sort = signal(RnaDifferentialExpressionProfileSort.TargetRiskScore);
+  direction = signal(SortDirection.Desc);
 
   query = computed(() => ({
     searchTerm: this.searchTerm(),
     pageNumber: this.pageNumber(),
     pageSize: this.pageSize(),
+    sort: this.sort(),
+    direction: this.direction(),
   }));
 
   /* ----------------------------------------------------------------------- */
@@ -203,16 +207,8 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     this.category = 'RNA - Differential Expression';
 
     effect(() => {
-      const { searchTerm, pageNumber, pageSize } = this.query();
-
       this.differentialExpressionService
-        .listRnaDifferentialExpressionProfiles({
-          sort: RnaDifferentialExpressionProfileSort.TargetRiskScore,
-          direction: SortDirection.Desc,
-          pageSize,
-          pageNumber,
-          searchTerm,
-        })
+        .listRnaDifferentialExpressionProfiles(this.query())
         .subscribe({
           next: (response) => {
             this.genes = response.rnaDifferentialExpressionProfiles;
@@ -778,10 +774,10 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
     table.sort({ field: this.sortField });
   }
 
-  sort() {
-    this.sortTable(this.pinnedTable || null);
-    this.sortTable(this.genesTable || null);
-  }
+  // sort() {
+  //   this.sortTable(this.pinnedTable || null);
+  //   this.sortTable(this.genesTable || null);
+  // }
 
   /* ----------------------------------------------------------------------- */
   /* Pin/Unpin
