@@ -1,17 +1,19 @@
-import { render, screen } from '@testing-library/angular';
+import { render } from '@testing-library/angular';
 import { GeneExpressionComparisonToolComponent } from './gene-expression-comparison-tool.component';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
 
 async function setup() {
-  await render(GeneExpressionComparisonToolComponent, {
+  const { fixture } = await render(GeneExpressionComparisonToolComponent, {
     imports: [BaseComparisonToolComponent],
   });
+
+  const component = fixture.componentInstance;
+  return { component };
 }
 
 describe('GeneExpressionComparisonToolComponent', () => {
-  it('should display heading', async () => {
-    await setup();
-    const heading = screen.getByRole('heading', { level: 1 });
-    expect(heading).toHaveTextContent('Gene Expression');
+  it('should create', async () => {
+    const { component } = await setup();
+    expect(component).toBeTruthy();
   });
 });

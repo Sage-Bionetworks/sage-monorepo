@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
 import { ComparisonToolWrapperComponent } from '@sagebionetworks/model-ad/comparison-tool-wrapper';
 
@@ -8,20 +8,11 @@ import { ComparisonToolWrapperComponent } from '@sagebionetworks/model-ad/compar
   templateUrl: './model-overview-comparison-tool.component.html',
   styleUrls: ['./model-overview-comparison-tool.component.scss'],
 })
-export class ModelOverviewComparisonToolComponent
-  extends ComparisonToolWrapperComponent
-  implements OnInit
-{
+export class ModelOverviewComparisonToolComponent extends ComparisonToolWrapperComponent {
   override isLoading = true;
   override resultsCount = 50000;
 
   constructor() {
     super();
-  }
-
-  ngOnInit() {
-    setTimeout(() => {
-      this.isLoading = false;
-    }, 3000);
   }
 }

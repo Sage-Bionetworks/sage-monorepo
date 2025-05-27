@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
-import { LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/util';
+import { ComparisonToolWrapperComponent } from '@sagebionetworks/model-ad/comparison-tool-wrapper';
 
 @Component({
   selector: 'model-ad-disease-correlation-comparison-tool',
@@ -8,19 +8,11 @@ import { LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/util';
   templateUrl: './disease-correlation-comparison-tool.component.html',
   styleUrls: ['./disease-correlation-comparison-tool.component.scss'],
 })
-export class DiseaseCorrelationComparisonToolComponent
-  extends BaseComparisonToolComponent
-  implements OnInit
-{
+export class DiseaseCorrelationComparisonToolComponent extends ComparisonToolWrapperComponent {
   override isLoading = true;
-  override resultsCount = 30000;
-  LOADING_ICON_COLORS = LOADING_ICON_COLORS;
+  override resultsCount = 40000;
 
   constructor() {
     super();
-  }
-
-  ngOnInit(): void {
-    console.log('Method not implemented.');
   }
 }
