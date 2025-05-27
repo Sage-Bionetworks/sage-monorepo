@@ -41,6 +41,9 @@
       "@sagebionetworks/amp-als/api-client-angular": [
         "libs/amp-als/api-client-angular/src/index.ts"
       ],
+      "@sagebionetworks/explorers/comparison-tools": [
+        "libs/explorers/comparison-tools/src/index.ts"
+      ],
       "@sagebionetworks/explorers/models": ["libs/explorers/models/index.ts"],
       "@sagebionetworks/explorers/services": ["libs/explorers/services/src/index.ts"],
       "@sagebionetworks/explorers/shared": ["libs/explorers/shared/src/index.ts"],
@@ -50,8 +53,20 @@
       "@sagebionetworks/model-ad/api-client-angular": [
         "libs/model-ad/api-client-angular/src/index.ts"
       ],
+      "@sagebionetworks/model-ad/comparison-tool-wrapper": [
+        "libs/model-ad/comparison-tool-wrapper/src/index.ts"
+      ],
       "@sagebionetworks/model-ad/config": ["libs/model-ad/config/src/index.ts"],
+      "@sagebionetworks/model-ad/disease-correlation-comparison-tool": [
+        "libs/model-ad/disease-correlation-comparison-tool/src/index.ts"
+      ],
+      "@sagebionetworks/model-ad/gene-expression-comparison-tool": [
+        "libs/model-ad/gene-expression-comparison-tool/src/index.ts"
+      ],
       "@sagebionetworks/model-ad/home": ["libs/model-ad/home/src/index.ts"],
+      "@sagebionetworks/model-ad/model-overview-comparison-tool": [
+        "libs/model-ad/model-overview-comparison-tool/src/index.ts"
+      ],
       "@sagebionetworks/model-ad/not-found": ["libs/model-ad/not-found/src/index.ts"],
       "@sagebionetworks/model-ad/util": ["libs/model-ad/util/src/index.ts"],
       "@sagebionetworks/openchallenges/about": ["libs/openchallenges/about/src/index.ts"],

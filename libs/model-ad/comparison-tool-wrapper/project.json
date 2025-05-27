@@ -1,0 +1,27 @@
+{
+  "name": "model-ad-comparison-tool-wrapper",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/model-ad/comparison-tool-wrapper/src",
+  "prefix": "model-ad",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/model-ad/comparison-tool-wrapper"],
+      "options": {
+        "jestConfig": "libs/model-ad/comparison-tool-wrapper/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "lint-fix": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "fix": true
+      }
+    }
+  },
+  "tags": ["type:feature", "scope:model-ad", "language:typescript"],
+  "implicitDependencies": []
+}

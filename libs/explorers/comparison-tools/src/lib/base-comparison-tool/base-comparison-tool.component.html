@@ -1,0 +1,13 @@
+<main>
+  @if (isLoading) {
+    <div id="loading">
+      <explorers-loading-container
+        [colorOutermost]="loadingIconColors.outerColor"
+        [colorCentral]="loadingIconColors.centerColor"
+        [colorInnermost]="loadingIconColors.innerColor"
+        [count]="resultsCount"
+      ></explorers-loading-container>
+    </div>
+  }
+  <ng-content></ng-content>
+</main>
