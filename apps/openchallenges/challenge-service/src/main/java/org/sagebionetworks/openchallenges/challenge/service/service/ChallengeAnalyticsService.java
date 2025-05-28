@@ -35,24 +35,25 @@ public class ChallengeAnalyticsService {
 
     // The following line will be auto-updated by a script and should NOT be modified manually.
     List<Integer> challengeCounts = /* AUTO-UPDATE MARKER */Arrays.asList(
-      6,
-      9,
-      13,
+      11,
       17,
-      23,
-      29,
+      25,
       34,
-      41,
-      49,
-      59,
-      86,
-      97,
-      116,
-      135,
-      183,
-      242,
-      306,
-      344
+      45,
+      53,
+      61,
+      73,
+      85,
+      100,
+      138,
+      154,
+      177,
+      202,
+      253,
+      315,
+      385,
+      449,
+      474
     );
     Integer undatedChallengeCount = 171;
 
