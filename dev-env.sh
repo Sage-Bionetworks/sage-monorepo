@@ -148,6 +148,18 @@ function model-ad-build-images {
   nx run-many --target=build-image --projects=model-ad-* --parallel=3
 }
 
+function model-ad-docker-start {
+  nx serve-detach model-ad-apex
+}
+
+function model-ad-docker-stop {
+  docker stop $(docker ps -a --filter "name=^/model-ad-" --format "{{.ID}}")
+}
+
+function model-ad-docker-rm {
+  docker rm -f $(docker ps -a --filter "name=^/model-ad-" --format "{{.ID}}")
+}
+
 function openchallenges-build-images {
   nx run-many --target=build-image --projects=openchallenges-* --parallel=3
 }
