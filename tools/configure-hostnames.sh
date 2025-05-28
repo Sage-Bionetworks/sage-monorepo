@@ -17,6 +17,7 @@ declare -a hostnames=(
   "127.0.0.1 iatlas-postgres"
   "127.0.0.1 model-ad-api"
   "127.0.0.1 model-ad-mongo"
+  "127.0.0.1 observability-apex"
   "127.0.0.1 observability-grafana"
   "127.0.0.1 observability-loki"
   "127.0.0.1 observability-otel-collector"

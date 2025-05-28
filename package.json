@@ -35,6 +35,7 @@
     "@opentelemetry/exporter-metrics-otlp-http": "0.201.1",
     "@opentelemetry/exporter-trace-otlp-http": "0.201.1",
     "@opentelemetry/instrumentation": "0.201.1",
+    "@opentelemetry/instrumentation-document-load": "0.46.0",
     "@opentelemetry/propagator-b3": "2.0.1",
     "@opentelemetry/resources": "2.0.1",
     "@opentelemetry/sdk-metrics": "2.0.1",

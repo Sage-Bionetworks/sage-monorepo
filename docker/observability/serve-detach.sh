@@ -4,6 +4,7 @@ product_name="observability"
 
 args=(
   # List of services in alphanumeric order
+  --file docker/"$product_name"/services/apex.yml
   --file docker/"$product_name"/services/grafana.yml
   --file docker/"$product_name"/services/loki.yml
   --file docker/"$product_name"/services/otel-collector.yml

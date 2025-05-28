@@ -1,15 +1,18 @@
-localhost:80 {
-
-  # Handle CORS preflight requests
-  handle_options /otel-collector/v1/traces* {
-    header Access-Control-Allow-Origin "*"
-    header Access-Control-Allow-Methods "POST, OPTIONS"
-    header Access-Control-Allow-Headers "Content-Type"
-    respond "" 204
-  }
+:80 {
+  # Handle CORS preflight requests for the OTEL Collector
+	@preflight {
+		method OPTIONS
+		path /otel-collector/v1/traces*
+	}
+	handle @preflight {
+		header Access-Control-Allow-Origin "*"
+		header Access-Control-Allow-Methods "POST, OPTIONS"
+		header Access-Control-Allow-Headers "Content-Type"
+		respond "" 204
+	}
 
   # Handle actual POST requests
-  reverse_proxy /otel-collector/v1/traces http://{env.OTEL_COLLECTOR_HOST}:{env.OTEL_COLLECTOR_PORT_HTTP} {
+  reverse_proxy /otel-collector/v1/traces {env.OTEL_COLLECTOR_HOST}:{env.OTEL_COLLECTOR_PORT_HTTP} {
     header_down Access-Control-Allow-Origin "*"
     header_down Access-Control-Allow-Methods "POST, OPTIONS"
     header_down Access-Control-Allow-Headers "Content-Type"
