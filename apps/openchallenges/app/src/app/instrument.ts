@@ -13,15 +13,35 @@ import { B3Propagator } from '@opentelemetry/propagator-b3';
 import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION } from '@opentelemetry/semantic-conventions';
 import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-http';
 import { MeterProvider, PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
+import { DocumentLoadInstrumentation } from '@opentelemetry/instrumentation-document-load';
 
 const resource = resourceFromAttributes({
   [ATTR_SERVICE_NAME]: 'openchallenges-app',
   [ATTR_SERVICE_VERSION]: '1.0.0',
 });
 
-// const provider = new WebTracerProvider({ resource });
+const otelCollectorOptions = {
+  url: 'http://localhost:8509/v1/traces',
+  headers: {}, // an optional object containing custom headers to be sent with each request
+  concurrencyLimit: 10, // an optional limit on pending requests
+};
 
-// provider.addSpanProcessor(new SimpleSpanProcessor(new ConsoleSpanExporter()));
+const provider = new WebTracerProvider({
+  resource,
+  spanProcessors: [
+    // new SimpleSpanProcessor(new ConsoleSpanExporter()),
+    new BatchSpanProcessor(new OTLPTraceExporter(otelCollectorOptions), {
+      // The maximum queue size. After the size is reached spans are dropped.
+      maxQueueSize: 100,
+      // The maximum batch size of every export. It must be smaller or equal to maxQueueSize.
+      maxExportBatchSize: 10,
+      // The interval between two consecutive exports
+      scheduledDelayMillis: 500,
+      // How long the export can run before it is cancelled
+      exportTimeoutMillis: 30000,
+    }),
+  ],
+});
 
 // provider.addSpanProcessor(
 //   new BatchSpanProcessor(
@@ -34,9 +54,14 @@ const resource = resourceFromAttributes({
 //   ),
 // );
 
-// provider.register({
-//   propagator: new B3Propagator(),
-// });
+provider.register({
+  propagator: new B3Propagator(),
+});
+
+// Registering instrumentations / plugins
+registerInstrumentations({
+  instrumentations: [new DocumentLoadInstrumentation()],
+});
 
 // registerInstrumentations({
 //   instrumentations: [
