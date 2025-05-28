@@ -29,7 +29,8 @@ public class ChallengeAnalyticsService {
       "2021",
       "2022",
       "2023",
-      "2024"
+      "2024",
+      "2025"
     );
 
     // The following line will be auto-updated by a script and should NOT be modified manually.
