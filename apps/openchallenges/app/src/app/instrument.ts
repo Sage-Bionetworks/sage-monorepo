@@ -21,7 +21,7 @@ const resource = resourceFromAttributes({
 });
 
 const otelCollectorOptions = {
-  url: 'http://localhost:8509/v1/traces',
+  url: 'http://localhost:8500/otel-collector/v1/traces',
   headers: {}, // an optional object containing custom headers to be sent with each request
   concurrencyLimit: 10, // an optional limit on pending requests
 };
