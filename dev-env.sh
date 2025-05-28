@@ -108,6 +108,18 @@ function agora-build-images {
   nx run-many --target=build-image --projects=agora-* --parallel=3
 }
 
+function agora-docker-start {
+  nx serve-detach agora-apex
+}
+
+function agora-docker-stop {
+  docker stop $(docker ps -a --filter "name=^/agora-" --format "{{.ID}}")
+}
+
+function agora-docker-rm {
+  docker rm -f $(docker ps -a --filter "name=^/agora-" --format "{{.ID}}")
+}
+
 function agora-test {
   nx run-many --target=test --projects=agora-* --parallel=10
 }
@@ -120,12 +132,36 @@ function observability-build-images {
   nx run-many --target=build-image --projects=observability-* --parallel=3
 }
 
+function observability-docker-start {
+  nx serve-detach observability-grafana
+}
+
+function observability-docker-stop {
+  docker stop $(docker ps -a --filter "name=^/observability-" --format "{{.ID}}")
+}
+
+function observability-docker-rm {
+  docker rm -f $(docker ps -a --filter "name=^/observability-" --format "{{.ID}}")
+}
+
 function model-ad-build-images {
   nx run-many --target=build-image --projects=model-ad-* --parallel=3
 }
 
 function openchallenges-build-images {
   nx run-many --target=build-image --projects=openchallenges-* --parallel=3
+}
+
+function openchallenges-docker-start {
+  nx serve-detach openchallenges-apex
+}
+
+function openchallenges-docker-stop {
+  docker stop $(docker ps -a --filter "name=^/openchallenges-" --format "{{.ID}}")
+}
+
+function openchallenges-docker-rm {
+  docker rm -f $(docker ps -a --filter "name=^/openchallenges-" --format "{{.ID}}")
 }
 
 function iatlas-build-images {
