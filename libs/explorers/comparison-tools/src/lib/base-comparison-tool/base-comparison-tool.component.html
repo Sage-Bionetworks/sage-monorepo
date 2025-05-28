@@ -1,16 +1,14 @@
 <main>
-  <div id="base-comparison-tool">
-    @if (isLoading) {
-      <div id="loading">
-        <explorers-loading-container
-          [colorOutermost]="loadingIconColors.outerColor"
-          [colorCentral]="loadingIconColors.centerColor"
-          [colorInnermost]="loadingIconColors.innerColor"
-          [count]="resultsCount"
-        ></explorers-loading-container>
-      </div>
-    } @else {
-      <ng-content></ng-content>
-    }
-  </div>
+  @if (isLoading) {
+    <div id="loading">
+      <explorers-loading-container
+        [colorOutermost]="loadingIconColors.outerColor"
+        [colorCentral]="loadingIconColors.centerColor"
+        [colorInnermost]="loadingIconColors.innerColor"
+        [count]="resultsCount"
+      ></explorers-loading-container>
+    </div>
+  } @else {
+    <ng-content></ng-content>
+  }
 </main>
