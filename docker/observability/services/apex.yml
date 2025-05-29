@@ -12,6 +12,8 @@ services:
     ports:
       - '8500:80'
     depends_on:
+      observability-grafana:
+        condition: service_started
       observability-otel-collector:
         condition: service_started
     deploy:
