@@ -2,53 +2,11 @@
 @use 'sass:map';
 
 $main-colors: (
-  primary: #3c4a63,
-  secondary: #8b8ad1,
-  tertiary: #42c7bb,
-
-  action-primary: #4f33a3,
-  action-primary-rgb: 80 129 167,
-
-  success: #6db56d,
-  warning: #fccb6f,
-  danger: #e0585d,
-
-  gray-900: #353a3f,
-  gray-800: #4a5056,
-  gray-700: #878e95,
-  gray-600: #aeb5bc,
-  gray-500: #d0d4d9,
-  gray-400: #dfe2e6,
-  gray-300: #eaecee,
-  gray-200: #f1f3f5,
-  gray-100: #fbfbfc,
+  secondary: #4f33a3,
 );
 
 :root {
   @each $key, $color in $main-colors {
     --color-#{$key}: #{$color};
   }
-}
-
-$extra-colors: (
-  heading: map.get($main-colors, 'primary'),
-  text: map.get($main-colors, 'gray-900'),
-  text-secondary: map.get($main-colors, 'gray-800'),
-  link: map.get($main-colors, 'action-primary'),
-  border: map.get($main-colors, 'gray-300'),
-  separator: map.get($main-colors, 'gray-300'),
-  shadow: #c7c5c5,
-  tooltip: #63676c,
-);
-
-:root {
-  @each $key, $color in $extra-colors {
-    --color-#{$key}: #{$color};
-  }
-}
-
-$transition-duration: 0.08s;
-
-:root {
-  --transition-duration: #{$transition-duration};
 }

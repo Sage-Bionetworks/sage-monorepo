@@ -34,4 +34,20 @@ describe('SvgImageComponent', () => {
     const parentElement = element.querySelector('img');
     expect(parentElement).toBeTruthy(); // Check that innerHTML is populated
   });
+
+  it('should apply the correct class based on sizeMode', () => {
+    component.imagePath = '/explorers-assets/images/background1.svg';
+
+    component.sizeMode = 'full-height';
+    fixture.detectChanges();
+    expect(element).toHaveClass('svg-image-container--full-height');
+
+    component.sizeMode = 'full-width';
+    fixture.detectChanges();
+    expect(element).toHaveClass('svg-image-container--full-width');
+
+    component.sizeMode = 'original';
+    fixture.detectChanges();
+    expect(element).toHaveClass('svg-image-container--original');
+  });
 });
