@@ -14,6 +14,9 @@ import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION } from '@opentelemetry/semantic
 import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-http';
 import { MeterProvider, PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
 import { DocumentLoadInstrumentation } from '@opentelemetry/instrumentation-document-load';
+import { W3CTraceContextPropagator } from '@opentelemetry/core/build/src/trace/W3CTraceContextPropagator';
+import { CompositePropagator } from '@opentelemetry/core';
+import { UserInteractionInstrumentation } from '@opentelemetry/instrumentation-user-interaction';
 
 const resource = resourceFromAttributes({
   [ATTR_SERVICE_NAME]: 'openchallenges-app',
@@ -43,24 +46,15 @@ const provider = new WebTracerProvider({
   ],
 });
 
-// provider.addSpanProcessor(
-//   new BatchSpanProcessor(
-//     new OTLPTraceExporter({
-//       url: 'https://ingest.<REGION>.signoz.cloud:443/v1/traces',
-//       headers: {
-//         'signoz-ingestion-key': '<SIGNOZ_INGESTION_KEY>',
-//       },
-//     }),
-//   ),
-// );
-
 provider.register({
-  propagator: new B3Propagator(),
+  propagator: new CompositePropagator({
+    propagators: [new B3Propagator(), new W3CTraceContextPropagator()],
+  }),
 });
 
 // Registering instrumentations / plugins
 registerInstrumentations({
-  instrumentations: [new DocumentLoadInstrumentation()],
+  instrumentations: [new DocumentLoadInstrumentation(), new UserInteractionInstrumentation()],
 });
 
 // registerInstrumentations({
