@@ -19,22 +19,15 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { providePrimeNG } from 'primeng/config';
 import Lara from '@primeng/themes/lara';
-import { instrumentationFactory } from './instrumentation.factory';
+import { telemetryFactory } from './telemetry.factory';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     { provide: APP_ID, useValue: 'openchallenges-app' },
     provideAppInitializer(() => {
-      const initializerFn = configFactory(inject(ConfigService));
-      return initializerFn();
+      const configService = inject(ConfigService);
+      return configFactory(configService)().then(() => telemetryFactory(configService)());
     }),
-    {
-      provide: 'INSTRUMENTATION_INITIALIZER',
-      useFactory: (configService: ConfigService) => {
-        return instrumentationFactory(configService);
-      },
-      deps: [ConfigService],
-    },
     {
       provide: API_CLIENT_BASE_PATH,
       useFactory: (configService: ConfigService) =>

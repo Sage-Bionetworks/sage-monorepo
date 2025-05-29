@@ -8,5 +8,5 @@
   "ssrApiUrl": "${SSR_API_URL}",
   "enableOperationFilter": "${ENABLE_OPERATION_FILTER}",
   "showAnnouncement": "${SHOW_ANNOUNCEMENT}",
-  "instrumentationEnabled": "${INSTRUMENTATION_ENABLED}"
+  "telemetryEnabled": "${TELEMETRY_ENABLED}"
 }
