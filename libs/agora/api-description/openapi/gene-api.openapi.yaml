@@ -457,6 +457,9 @@ components:
         type:
           type: string
           description: An absolute URI that identifies the problem type
+        instance:
+          type: string
+          description: An absolute URI that identifies the specific occurrence of the problem
       required:
         - title
         - status

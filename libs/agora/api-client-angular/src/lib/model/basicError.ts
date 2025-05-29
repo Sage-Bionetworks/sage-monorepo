@@ -28,4 +28,8 @@ export interface BasicError {
    * An absolute URI that identifies the problem type
    */
   type?: string;
+  /**
+   * An absolute URI that identifies the specific occurrence of the problem
+   */
+  instance?: string;
 }

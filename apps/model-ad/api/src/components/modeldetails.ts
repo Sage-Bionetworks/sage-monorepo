@@ -28,6 +28,7 @@ export async function modelDetailsRoute(req: Request, res: Response, next: NextF
       title: 'Bad Request',
       status: 400,
       detail: 'Model parameter is required',
+      instance: req.path,
     });
     return;
   }
@@ -40,6 +41,7 @@ export async function modelDetailsRoute(req: Request, res: Response, next: NextF
         title: 'Not Found',
         status: 404,
         detail: 'Model not found',
+        instance: req.path,
       });
       return;
     }
