@@ -21,6 +21,7 @@ export interface AppConfig {
   termsOfUseUrl: string;
   apiDocsUrl: string;
   showAnnouncement: boolean;
+  instrumentationEnabled: boolean;
 }
 
 export const EMPTY_APP_CONFIG = {} as AppConfig;
