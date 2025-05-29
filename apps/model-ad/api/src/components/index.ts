@@ -1,2 +1,2 @@
 export * from './dataversion';
-export * from './modeldetails';
+export * from './models';

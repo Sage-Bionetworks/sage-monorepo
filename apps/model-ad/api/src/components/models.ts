@@ -22,7 +22,7 @@ export async function getModelDetails(model: string) {
   return result;
 }
 
-export async function modelDetailsRoute(req: Request, res: Response, next: NextFunction) {
+export async function modelRoute(req: Request, res: Response, next: NextFunction) {
   if (!req.params?.model) {
     res.status(400).contentType('application/problem+json').json({
       title: 'Bad Request',
