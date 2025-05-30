@@ -133,7 +133,7 @@ function observability-build-images {
 }
 
 function observability-docker-start {
-  nx serve-detach observability-grafana
+  nx serve-detach observability-apex
 }
 
 function observability-docker-stop {
