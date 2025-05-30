@@ -1,0 +1,7 @@
+description: The HGNC gene symbol.
+type: string
+# XXX: The production data include gene symbols that are empty strings. Is this a valid value?
+minLength: 0
+# maxLength: 20
+# pattern: '^[A-Za-z0-9\-]+$'
+example: TP53

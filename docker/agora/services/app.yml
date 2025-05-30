@@ -18,3 +18,5 @@ services:
         condition: service_completed_successfully
       agora-api:
         condition: service_healthy
+      agora-gene-api:
+        condition: service_started

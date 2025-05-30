@@ -54,11 +54,13 @@ export class GeneComparisonToolHowToPanelComponent implements OnInit {
   loading = false;
 
   ngOnInit() {
-    if (this.cookieService.get(this.willHideCookieName) !== '1') {
-      this.isActive = true;
-    } else {
-      this.willHide = true;
-    }
+    // Commented out to hide the "how to" section by default. Visibility should be managed by the
+    // calling component.
+    // if (this.cookieService.get(this.willHideCookieName) !== '1') {
+    //   this.isActive = true;
+    // } else {
+    //   this.willHide = true;
+    // }
 
     this.loadContent();
   }

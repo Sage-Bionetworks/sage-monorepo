@@ -1,0 +1,31 @@
+{
+  "name": "agora-gene-api-client-angular",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/agora/api-client-angular/src",
+  "projectType": "library",
+  "prefix": "agora",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "{projectRoot}/jest.config.ts"
+      }
+    },
+    "generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "rm -fr src/lib/*",
+          "openapi-generator-cli generate",
+          "prettier --write \"src/**/*{.ts,.md}\""
+        ],
+        "cwd": "{projectRoot}",
+        "parallel": false
+      },
+      "dependsOn": ["^build"]
+    }
+  },
+  "tags": ["language:typescript"],
+  "implicitDependencies": ["agora-api-description"]
+}

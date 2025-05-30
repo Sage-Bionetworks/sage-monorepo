@@ -1,0 +1,54 @@
+type: object
+description: A RNA differential expression profile.
+properties:
+  ensembl_gene_id:
+    $ref: EnsemblGeneId.yaml
+  hgnc_symbol:
+    $ref: HgncSymbol.yaml
+  target_risk_score:
+    type: number
+    nullable: true
+    description: 'Target risk score'
+  genetics_score:
+    type: number
+    nullable: true
+    description: 'Genetics score'
+  multi_omics_score:
+    type: number
+    nullable: true
+    description: 'Multi-omics score'
+  tissues:
+    type: array
+    items:
+      $ref: Tissue.yaml
+    description: 'Array of gene tissues'
+  # TODO: the plural form should only be used for arrays.
+  nominations:
+    $ref: Nominations.yaml
+    nullable: true
+    description: 'Gene nominations data'
+  associations:
+    type: array
+    items:
+      type: number # TODO: Should be integer based on agora-api implementation (or enum?)
+    nullable: true
+    description: 'Array of association values'
+  biodomains:
+    type: array
+    items:
+      type: string
+    nullable: true
+    description: 'Array of biological domains'
+  target_enabling_resources:
+    type: array
+    items:
+      type: string
+    nullable: true
+    description: 'Target enabling resources'
+required:
+  - ensembl_gene_id
+  - hgnc_symbol
+  - target_risk_score
+  - genetics_score
+  - multi_omics_score
+  - tissues
