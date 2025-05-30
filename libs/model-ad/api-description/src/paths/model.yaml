@@ -3,7 +3,7 @@ get:
     - Models
   summary: Get details for a specific model
   description: Retrieve detailed information for a specific model by its name
-  operationId: getModelDetailsByName
+  operationId: getModelByName
   parameters:
     - name: model
       in: path
@@ -16,7 +16,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: ../components/schemas/ModelDetails.yaml
+            $ref: ../components/schemas/Model.yaml
       description: Successfully retrieved model details
     '400':
       $ref: ../components/responses/BadRequest.yaml

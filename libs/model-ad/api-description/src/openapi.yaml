@@ -22,4 +22,4 @@ paths:
   /dataversion:
     $ref: paths/dataversion.yaml
   /models/{model}:
-    $ref: paths/modeldetails.yaml
+    $ref: paths/model.yaml

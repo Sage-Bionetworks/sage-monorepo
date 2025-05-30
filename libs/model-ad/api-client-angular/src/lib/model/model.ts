@@ -13,7 +13,7 @@ import { GeneticInfo } from './geneticInfo';
 /**
  * Model details
  */
-export interface ModelDetails {
+export interface Model {
   /**
    * Name of the model
    */

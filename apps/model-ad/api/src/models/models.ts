@@ -1,11 +1,11 @@
 import {
   GeneticInfo,
   IndividualData,
+  Model,
   ModelData,
-  ModelDetails,
 } from '@sagebionetworks/model-ad/api-client-angular';
 import { Schema, model } from 'mongoose';
-export { ModelDetails } from '@sagebionetworks/model-ad/api-client-angular';
+export { Model } from '@sagebionetworks/model-ad/api-client-angular';
 
 const IndividualDataSchema = new Schema<IndividualData>({
   genotype: { type: String, required: true },
@@ -31,7 +31,7 @@ const GeneticInfoSchema = new Schema<GeneticInfo>({
   mgi_allele_id: { type: Number, required: true },
 });
 
-const ModelDetailsSchema = new Schema<ModelDetails>(
+const ModelSchema = new Schema<Model>(
   {
     model: { type: String, required: true },
     matched_controls: { type: [String], required: true },
@@ -50,7 +50,4 @@ const ModelDetailsSchema = new Schema<ModelDetails>(
   { collection: 'modeldetails' },
 );
 
-export const ModelDetailsCollection = model<ModelDetails>(
-  'ModelDetailsCollection',
-  ModelDetailsSchema,
-);
+export const ModelsCollection = model<Model>('ModelsCollection', ModelSchema);

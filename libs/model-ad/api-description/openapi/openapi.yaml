@@ -43,7 +43,7 @@ paths:
         - Models
       summary: Get details for a specific model
       description: Retrieve detailed information for a specific model by its name
-      operationId: getModelDetailsByName
+      operationId: getModelByName
       parameters:
         - name: model
           in: path
@@ -56,7 +56,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ModelDetails'
+                $ref: '#/components/schemas/Model'
           description: Successfully retrieved model details
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -182,7 +182,7 @@ components:
         - age
         - units
         - data
-    ModelDetails:
+    Model:
       type: object
       description: Model details
       properties:

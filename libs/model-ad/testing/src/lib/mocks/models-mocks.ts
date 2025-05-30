@@ -1,6 +1,6 @@
-import { ModelDetails } from '@sagebionetworks/model-ad/api-client-angular';
+import { Model } from '@sagebionetworks/model-ad/api-client-angular';
 
-export const modelDetailsMock: ModelDetails = {
+export const modelMock: Model = {
   model: '3xTg-AD',
   matched_controls: ['B6129'],
   model_type: 'Familial AD',

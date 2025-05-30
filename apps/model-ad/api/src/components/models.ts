@@ -1,18 +1,18 @@
-import { ModelDetails } from '@sagebionetworks/model-ad/api-client-angular';
+import { Model } from '@sagebionetworks/model-ad/api-client-angular';
 import { NextFunction, Request, Response } from 'express';
 import { cache, setHeaders } from '../helpers';
-import { ModelDetailsCollection } from '../models';
+import { ModelsCollection } from '../models';
 
-export async function getModelDetails(model: string) {
-  const cacheKey = 'model-details-' + model;
-  const cachedResult: ModelDetails | null | undefined = cache.get(cacheKey);
+export async function getModel(model: string) {
+  const cacheKey = 'model-' + model;
+  const cachedResult: Model | null | undefined = cache.get(cacheKey);
 
   // If we have a cached result (including null), return it
   if (cachedResult !== undefined) {
     return cachedResult;
   }
 
-  const result = await ModelDetailsCollection.findOne({
+  const result = await ModelsCollection.findOne({
     model: model,
   })
     .lean()
@@ -34,7 +34,7 @@ export async function modelRoute(req: Request, res: Response, next: NextFunction
   }
 
   try {
-    const result = await getModelDetails(req.params.model);
+    const result = await getModel(req.params.model);
 
     if (!result) {
       res.status(404).contentType('application/problem+json').json({

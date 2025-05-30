@@ -25,7 +25,7 @@ import { Observable } from 'rxjs';
 // @ts-ignore
 import { BasicError } from '../model/basicError';
 // @ts-ignore
-import { ModelDetails } from '../model/modelDetails';
+import { Model } from '../model/model';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -113,7 +113,7 @@ export class ModelsService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getModelDetailsByName(
+  public getModelByName(
     model: string,
     observe?: 'body',
     reportProgress?: boolean,
@@ -122,8 +122,8 @@ export class ModelsService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<ModelDetails>;
-  public getModelDetailsByName(
+  ): Observable<Model>;
+  public getModelByName(
     model: string,
     observe?: 'response',
     reportProgress?: boolean,
@@ -132,8 +132,8 @@ export class ModelsService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<ModelDetails>>;
-  public getModelDetailsByName(
+  ): Observable<HttpResponse<Model>>;
+  public getModelByName(
     model: string,
     observe?: 'events',
     reportProgress?: boolean,
@@ -142,8 +142,8 @@ export class ModelsService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<ModelDetails>>;
-  public getModelDetailsByName(
+  ): Observable<HttpEvent<Model>>;
+  public getModelByName(
     model: string,
     observe: any = 'body',
     reportProgress: boolean = false,
@@ -155,7 +155,7 @@ export class ModelsService {
   ): Observable<any> {
     if (model === null || model === undefined) {
       throw new Error(
-        'Required parameter model was null or undefined when calling getModelDetailsByName.',
+        'Required parameter model was null or undefined when calling getModelByName.',
       );
     }
 
@@ -193,18 +193,14 @@ export class ModelsService {
     }
 
     let localVarPath = `/models/${this.configuration.encodeParam({ name: 'model', value: model, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
-    return this.httpClient.request<ModelDetails>(
-      'get',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: observe,
-        transferCache: localVarTransferCache,
-        reportProgress: reportProgress,
-      },
-    );
+    return this.httpClient.request<Model>('get', `${this.configuration.basePath}${localVarPath}`, {
+      context: localVarHttpContext,
+      responseType: <any>responseType_,
+      withCredentials: this.configuration.withCredentials,
+      headers: localVarHeaders,
+      observe: observe,
+      transferCache: localVarTransferCache,
+      reportProgress: reportProgress,
+    });
   }
 }
