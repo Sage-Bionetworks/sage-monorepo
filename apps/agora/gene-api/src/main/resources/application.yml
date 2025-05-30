@@ -38,3 +38,7 @@ otel:
     attributes:
       service:
         name: agora-gene-api
+
+mongock:
+  migration-scan-package:
+    - org.sagebionetworks.agora.gene.api.migration
