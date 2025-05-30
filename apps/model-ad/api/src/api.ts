@@ -1,6 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import { dataVersionRoute } from './components';
+import { dataVersionRoute, modelRoute } from './components';
 
 const mongodbUser = process.env.MONGODB_USER;
 const mongodbPass = process.env.MONGODB_PASS;
@@ -45,6 +45,7 @@ mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection 
 const router = express.Router();
 mongoose.connection.once('open', async () => {
   router.get('/dataversion', dataVersionRoute);
+  router.get('/models/:model', modelRoute);
 });
 
 export default router;
