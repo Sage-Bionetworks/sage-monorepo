@@ -126,11 +126,29 @@ jobs:
           fi
 
       - name: Start Explorer
+        id: start-explorer
+        timeout-minutes: 40
         env:
           cmd: 'nx run ${{ inputs.explorer }}-apex:serve-detach'
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
               && ${cmd}"
+
+      - name: Write out Explorer data logs
+        if: ${{ failure() }}
+        env:
+          cmd: 'docker logs ${{ inputs.explorer }}-data > data-logs.txt'
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+              && ${cmd}"
+
+      - name: Upload Explorer data logs
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'data-logs-${{ inputs.explorer }}'
+          path: data-logs.txt
+          retention-days: 5
 
       - name: Run Explorer e2e tests
         env:
@@ -145,7 +163,7 @@ jobs:
               && workspace-docker-stop"
 
       - uses: actions/upload-artifact@v4
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && steps.start-explorer.conclusion != 'failure' }}
         with:
           name: 'playwright-report-${{ inputs.explorer }}'
           path: playwright-report/

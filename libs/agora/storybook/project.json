@@ -4,7 +4,7 @@
   "sourceRoot": "libs/agora/storybook/src",
   "prefix": "agora",
   "projectType": "library",
-  "tags": [],
+  "tags": ["type:docs", "scope:agora", "language:typescript"],
   "targets": {
     "lint": {
       "executor": "@nx/eslint:lint"
