@@ -7,5 +7,6 @@
   "googleTagManagerId": "",
   "ssrApiUrl": "http://openchallenges-api-gateway:8082/api/v1",
   "enableOperationFilter": false,
-  "showAnnouncement": false
+  "showAnnouncement": false,
+  "telemetryEnabled": true
 }

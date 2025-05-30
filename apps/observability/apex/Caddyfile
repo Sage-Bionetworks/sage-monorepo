@@ -1,0 +1,20 @@
+:80 {
+  # Handle CORS preflight requests for the OTEL Collector
+	@preflight {
+		method OPTIONS
+		path /otel-collector/v1/traces
+	}
+	handle @preflight {
+		header Access-Control-Allow-Origin "*"
+		header Access-Control-Allow-Methods "POST, OPTIONS"
+		header Access-Control-Allow-Headers "Content-Type"
+		respond "" 204
+	}
+
+  # Proxy /otel-collector/* to the collector, stripping the /otel-collector prefix
+  handle_path /otel-collector/* {
+    reverse_proxy {env.OTEL_COLLECTOR_HOST}:{env.OTEL_COLLECTOR_PORT_HTTP} {
+      header_down Access-Control-Allow-Origin "*"
+    }
+  }
+}

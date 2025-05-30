@@ -7,5 +7,6 @@
   "googleTagManagerId": "${GOOGLE_TAG_MANAGER_ID}",
   "ssrApiUrl": "${SSR_API_URL}",
   "enableOperationFilter": "${ENABLE_OPERATION_FILTER}",
-  "showAnnouncement": "${SHOW_ANNOUNCEMENT}"
+  "showAnnouncement": "${SHOW_ANNOUNCEMENT}",
+  "telemetryEnabled": "${TELEMETRY_ENABLED}"
 }

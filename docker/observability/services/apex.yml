@@ -1,0 +1,22 @@
+services:
+  observability-apex:
+    image: ghcr.io/sage-bionetworks/observability-apex:${OBSERVABILITY_VERSION:-local}
+    container_name: observability-apex
+    restart: always
+    env_file:
+      - ../../../apps/observability/apex/.env
+    volumes:
+      - ../../../apps/observability/apex/Caddyfile:/etc/caddy/Caddyfile
+    networks:
+      - observability
+    ports:
+      - '8500:80'
+    depends_on:
+      observability-grafana:
+        condition: service_started
+      observability-otel-collector:
+        condition: service_started
+    deploy:
+      resources:
+        limits:
+          memory: 200M
