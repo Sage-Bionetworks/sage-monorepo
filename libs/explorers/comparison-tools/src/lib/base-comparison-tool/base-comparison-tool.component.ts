@@ -10,6 +10,6 @@ import { LoadingIconColors } from '@sagebionetworks/explorers/models';
 })
 export class BaseComparisonToolComponent {
   @Input() isLoading = true;
-  @Input() loadingIconColors!: LoadingIconColors;
-  @Input() resultsCount = 0;
+  @Input({ required: true }) loadingIconColors!: LoadingIconColors;
+  @Input({ required: true }) resultsCount!: number;
 }

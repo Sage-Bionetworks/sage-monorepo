@@ -4,4 +4,4 @@ This library was generated with [Nx](https://nx.dev).
 
 ## Running unit tests
 
-Run `nx test web-not-found` to execute the unit tests.
+Run `nx test model-ad-model-overview-comparison-tool` to execute the unit tests.

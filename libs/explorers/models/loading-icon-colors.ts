@@ -1,5 +1,5 @@
 export type LoadingIconColors = {
-  innerColor: string;
-  centerColor: string;
-  outerColor: string;
+  colorInnermost: string;
+  colorCentral: string;
+  colorOutermost: string;
 };

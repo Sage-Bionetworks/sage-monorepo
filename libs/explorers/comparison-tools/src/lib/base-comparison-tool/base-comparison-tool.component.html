@@ -2,9 +2,9 @@
   @if (isLoading) {
     <div id="loading">
       <explorers-loading-container
-        [colorOutermost]="loadingIconColors.outerColor"
-        [colorCentral]="loadingIconColors.centerColor"
-        [colorInnermost]="loadingIconColors.innerColor"
+        [colorOutermost]="loadingIconColors.colorOutermost"
+        [colorCentral]="loadingIconColors.colorCentral"
+        [colorInnermost]="loadingIconColors.colorInnermost"
         [count]="resultsCount"
       ></explorers-loading-container>
     </div>

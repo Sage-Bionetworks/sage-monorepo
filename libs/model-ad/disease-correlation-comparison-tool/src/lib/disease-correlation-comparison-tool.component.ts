@@ -20,6 +20,7 @@ export class DiseaseCorrelationComparisonToolComponent
   }
 
   ngOnInit() {
+    // TODO - Replace with actual data fetching logic
     setTimeout(() => {
       this.isLoading = false;
     }, 3000);

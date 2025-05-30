@@ -6,7 +6,7 @@ async function setup(componentProperties = {}) {
   const { fixture } = await render(BaseComparisonToolComponent, {
     componentProperties: {
       isLoading: true,
-      loadingIconColors: { innerColor: '#000', centerColor: '#fff', outerColor: '#ccc' },
+      loadingIconColors: { colorInnermost: '#000', colorCentral: '#fff', colorOutermost: '#ccc' },
       resultsCount: 0,
       ...componentProperties,
     },
