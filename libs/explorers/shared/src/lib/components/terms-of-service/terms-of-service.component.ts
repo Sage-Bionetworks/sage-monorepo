@@ -19,20 +19,20 @@ export class TermsOfServiceComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   content = '';
-  loading = true;
+  isLoading = true;
 
   ngOnInit() {
     this.loadTOS();
   }
 
   loadTOS() {
-    this.loading = true;
+    this.isLoading = true;
     this.synapseService
       .getTermsOfService()
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         finalize(() => {
-          this.loading = false;
+          this.isLoading = false;
         }),
       )
       .subscribe({

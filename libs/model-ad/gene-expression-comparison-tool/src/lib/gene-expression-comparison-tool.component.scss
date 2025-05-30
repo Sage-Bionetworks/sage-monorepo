@@ -1,0 +1,11 @@
+.gene-expression-comparison-tool {
+  width: 100%;
+  height: 100%;
+
+  // TODO move these styles to the base CT header
+  .gene-expression-comparison-tool-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
