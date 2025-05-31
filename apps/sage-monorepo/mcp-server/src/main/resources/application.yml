@@ -2,7 +2,7 @@ sage-monorepo-mcp-server:
   welcome-message: 'Welcome to the Sage Monorepo MCP Server!'
 
 server:
-  port: 8887
+  port: 8601
 spring:
   application:
     name: sage-monorepo-mcp-server
@@ -13,5 +13,5 @@ spring:
       server:
         name: sage-monorepo-mcp-server
         version: 1.0.0
-        sse-endpoint: /mcp-server/sse
-        sse-message-endpoint: /mcp-server/message
+        # sse-endpoint: /mcp-server/sse
+        # sse-message-endpoint: /mcp-server/message
