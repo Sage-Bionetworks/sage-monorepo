@@ -65,36 +65,4 @@ public class ObservabilityService {
       logger.error("Error during Docker stop", e);
     }
   }
-
-  @Tool(
-    name = "smr_observability_docker_start",
-    description = "Start the Observability stack with Docker."
-  )
-  public void dockerStart() {
-    logger.info("Starting the Observability stack with Docker");
-    try {
-      // Start the Observability stack using nx serve-detach
-      Process startProcess = new ProcessBuilder(
-        "bash",
-        "-c",
-        "cd /workspaces/sage-monorepo && nx serve-detach observability-apex"
-      ).start();
-
-      int startExitCode = startProcess.waitFor();
-
-      if (startExitCode == 0) {
-        logger.info("Successfully started the Observability stack");
-      } else {
-        logger.error("Failed to start the Observability stack, exit code: {}", startExitCode);
-        // Capture error output for better debugging
-        java.io.BufferedReader errorReader = new java.io.BufferedReader(
-          new java.io.InputStreamReader(startProcess.getErrorStream())
-        );
-        String errorOutput = errorReader.lines().collect(java.util.stream.Collectors.joining("\n"));
-        logger.error("Error output: {}", errorOutput);
-      }
-    } catch (Exception e) {
-      logger.error("Error during Observability stack startup", e);
-    }
-  }
 }

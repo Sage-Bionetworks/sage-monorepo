@@ -34,7 +34,7 @@ public class DockerService {
   }
 
   @Tool(name = "smr_product_build_images", description = "Build Docker images for a product.")
-  public void buildImages(
+  public void productBuildImages(
     @ToolParam(description = "The product name to build images for.") String productName
   ) {
     logger.info("Building Docker images for the {} product", productName);
@@ -77,6 +77,37 @@ public class DockerService {
       }
     } catch (Exception e) {
       logger.error("Error during {} product Docker image build", productName, e);
+    }
+  }
+
+  @Tool(name = "smr_product_docker_start", description = "Start the product stack with Docker.")
+  public void productDockerStart(
+    @ToolParam(description = "The product name to start with Docker.") String productName
+  ) {
+    logger.info("Starting the {} stack with Docker", productName);
+    try {
+      // Start the Observability stack using nx serve-detach
+      Process startProcess = new ProcessBuilder(
+        "bash",
+        "-c",
+        "cd /workspaces/sage-monorepo && nx serve-detach " + productName.toLowerCase() + "-apex"
+      ).start();
+
+      int startExitCode = startProcess.waitFor();
+
+      if (startExitCode == 0) {
+        logger.info("Successfully started the {} stack", productName);
+      } else {
+        logger.error("Failed to start the {} stack, exit code: {}", productName, startExitCode);
+        // Capture error output for better debugging
+        java.io.BufferedReader errorReader = new java.io.BufferedReader(
+          new java.io.InputStreamReader(startProcess.getErrorStream())
+        );
+        String errorOutput = errorReader.lines().collect(java.util.stream.Collectors.joining("\n"));
+        logger.error("Error output: {}", errorOutput);
+      }
+    } catch (Exception e) {
+      logger.error("Error during {} stack startup", productName, e);
     }
   }
 }
