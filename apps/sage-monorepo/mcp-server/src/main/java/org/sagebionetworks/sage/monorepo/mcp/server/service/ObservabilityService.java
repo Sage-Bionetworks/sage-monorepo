@@ -97,4 +97,49 @@ public class ObservabilityService {
       logger.error("Error during Observability stack startup", e);
     }
   }
+
+  @Tool(
+    name = "smr_observability_build_images",
+    description = "Build Docker images for the Observability stack."
+  )
+  public void buildImages() {
+    logger.info("Building Docker images for the Observability stack");
+    try {
+      // Build the Observability stack images
+      Process buildProcess = new ProcessBuilder(
+        "bash",
+        "-c",
+        "cd /workspaces/sage-monorepo && nx run-many --target=build-image --projects=observability-* --parallel=3"
+      ).start();
+
+      // Capture and log standard output in real-time for visibility
+      java.io.BufferedReader outputReader = new java.io.BufferedReader(
+        new java.io.InputStreamReader(buildProcess.getInputStream())
+      );
+
+      String line;
+      while ((line = outputReader.readLine()) != null) {
+        logger.info("Build output: {}", line);
+      }
+
+      int buildExitCode = buildProcess.waitFor();
+
+      if (buildExitCode == 0) {
+        logger.info("Successfully built Observability stack Docker images");
+      } else {
+        logger.error(
+          "Failed to build Observability stack Docker images, exit code: {}",
+          buildExitCode
+        );
+        // Capture error output for better debugging
+        java.io.BufferedReader errorReader = new java.io.BufferedReader(
+          new java.io.InputStreamReader(buildProcess.getErrorStream())
+        );
+        String errorOutput = errorReader.lines().collect(java.util.stream.Collectors.joining("\n"));
+        logger.error("Error output: {}", errorOutput);
+      }
+    } catch (Exception e) {
+      logger.error("Error during Observability stack Docker image build", e);
+    }
+  }
 }
