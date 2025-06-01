@@ -1,5 +1,6 @@
 package org.sagebionetworks.sage.monorepo.mcp.server;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.modelcontextprotocol.server.McpServerFeatures;
 import io.modelcontextprotocol.spec.McpSchema;
 import io.modelcontextprotocol.spec.McpSchema.GetPromptResult;
@@ -7,6 +8,7 @@ import io.modelcontextprotocol.spec.McpSchema.PromptMessage;
 import io.modelcontextprotocol.spec.McpSchema.Role;
 import io.modelcontextprotocol.spec.McpSchema.TextContent;
 import java.util.List;
+import java.util.Map;
 import org.sagebionetworks.sage.monorepo.mcp.server.config.McpServerConfigData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +35,36 @@ public class McpServerApplication implements CommandLineRunner {
   @Override
   public void run(String... args) throws Exception {
     logger.info(mcpServerConfigData.getWelcomeMessage());
+  }
+
+  @Bean
+  public List<McpServerFeatures.SyncResourceSpecification> myResources() {
+    logger.info("calling myResources()");
+    var systemInfoResource = new McpSchema.Resource(
+      "custom://resource",
+      "name",
+      "description",
+      "mime-type",
+      null
+    );
+    var resourceSpecification = new McpServerFeatures.SyncResourceSpecification(
+      systemInfoResource,
+      (exchange, request) -> {
+        try {
+          var systemInfo = Map.of();
+          String jsonContent = new ObjectMapper().writeValueAsString(systemInfo);
+          return new McpSchema.ReadResourceResult(
+            List.of(
+              new McpSchema.TextResourceContents(request.uri(), "application/json", jsonContent)
+            )
+          );
+        } catch (Exception e) {
+          throw new RuntimeException("Failed to generate system info", e);
+        }
+      }
+    );
+
+    return List.of(resourceSpecification);
   }
 
   @Bean
