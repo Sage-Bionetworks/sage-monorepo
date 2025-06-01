@@ -7,11 +7,16 @@ import io.modelcontextprotocol.spec.McpSchema.GetPromptResult;
 import io.modelcontextprotocol.spec.McpSchema.PromptMessage;
 import io.modelcontextprotocol.spec.McpSchema.Role;
 import io.modelcontextprotocol.spec.McpSchema.TextContent;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import org.sagebionetworks.sage.monorepo.mcp.server.config.McpServerConfigData;
+import org.sagebionetworks.sage.monorepo.mcp.server.configuration.McpServerConfig;
+import org.sagebionetworks.sage.monorepo.mcp.server.service.DockerService;
+import org.sagebionetworks.sage.monorepo.mcp.server.service.ObservabilityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.ai.support.ToolCallbacks;
+import org.springframework.ai.tool.ToolCallback;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,9 +27,9 @@ public class McpServerApplication implements CommandLineRunner {
 
   private static final Logger logger = LoggerFactory.getLogger(McpServerApplication.class);
 
-  private final McpServerConfigData mcpServerConfigData;
+  private final McpServerConfig mcpServerConfigData;
 
-  public McpServerApplication(McpServerConfigData mcpServerConfigData) {
+  public McpServerApplication(McpServerConfig mcpServerConfigData) {
     this.mcpServerConfigData = mcpServerConfigData;
   }
 
@@ -35,6 +40,14 @@ public class McpServerApplication implements CommandLineRunner {
   @Override
   public void run(String... args) throws Exception {
     logger.info(mcpServerConfigData.getWelcomeMessage());
+  }
+
+  @Bean
+  public List<ToolCallback> toolCallbacks(
+    DockerService dockerService,
+    ObservabilityService observabilityService
+  ) {
+    return Arrays.asList(ToolCallbacks.from(dockerService, observabilityService));
   }
 
   @Bean
