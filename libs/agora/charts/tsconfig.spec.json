@@ -7,11 +7,5 @@
     "types": ["jest", "node"]
   },
   "files": ["src/test-setup.ts"],
-  "include": [
-    "src/**/*.test.ts",
-    "src/**/*.spec.ts",
-    "src/**/*.d.ts",
-    "jest.config.ts",
-    "src/lib/median-barchart/median-barchart.component.spec.ts.off"
-  ]
+  "include": ["src/**/*.test.ts", "src/**/*.spec.ts", "src/**/*.d.ts", "jest.config.ts"]
 }

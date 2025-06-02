@@ -13,6 +13,7 @@ module.exports = {
       statements: 0,
     },
   },
+  workerIdleMemoryLimit: '512MB',
   /* TODO: Update to latest Jest snapshotFormat
    * By default Nx has kept the older style of Jest Snapshot formats
    * to prevent breaking of any existing tests with snapshots.
