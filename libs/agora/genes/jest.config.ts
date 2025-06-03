@@ -14,6 +14,7 @@ export default {
       },
     ],
   },
+  maxWorkers: '50%',
   testEnvironment: 'jest-fixed-jsdom',
   transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
   moduleNameMapper: {
