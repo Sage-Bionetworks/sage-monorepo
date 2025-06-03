@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { Component, HostBinding, Input, ViewEncapsulation } from '@angular/core';
+
+type SvgSizeMode = 'full-height' | 'full-width' | 'original';
 
 @Component({
   selector: 'explorers-svg-image',
@@ -11,4 +13,9 @@ import { Component, Input, ViewEncapsulation } from '@angular/core';
 export class SvgImageComponent {
   @Input() imagePath = '';
   @Input() altText = '';
+  @Input() sizeMode: SvgSizeMode = 'original';
+
+  @HostBinding('class') get hostClasses() {
+    return `svg-image-container svg-image-container--${this.sizeMode}`;
+  }
 }

@@ -1,0 +1,48 @@
+<ng-template #card>
+  <div class="home-card">
+    <div>
+      <h2>{{ title() }}</h2>
+      <p>{{ description() }}</p>
+    </div>
+    @if (!!routerLink()) {
+      <div class="icon-container">
+        <explorers-svg-image [imagePath]="imagePath()" [altText]="imageAltText()" />
+        <explorers-svg-icon
+          imagePath="/explorers-assets/icons/card-arrow.svg"
+          altText="arrow"
+          [color]="secondaryColor"
+          [height]="32"
+          [width]="35"
+          [enableHoverEffects]="false"
+        />
+      </div>
+    } @else if (
+      !!searchPlaceholder() &&
+      !!navigateToResult() &&
+      !!getSearchResultsList() &&
+      !!checkQueryForErrors()
+    ) {
+      <explorers-search-input
+        [searchPlaceholder]="searchPlaceholder()!"
+        [searchImagePath]="imagePath()"
+        [searchImageAltText]="imageAltText()"
+        [hasThickBorder]="true"
+        [navigateToResult]="navigateToResult()!"
+        [getSearchResultsList]="getSearchResultsList()!"
+        [checkQueryForErrors]="checkQueryForErrors()!"
+      />
+    }
+  </div>
+</ng-template>
+
+@if (!!routerLink()) {
+  <ng-container>
+    <button [routerLink]="routerLink()" class="home-card-link">
+      <ng-container [ngTemplateOutlet]="card" />
+    </button>
+  </ng-container>
+} @else {
+  <ng-container #noLink>
+    <ng-container [ngTemplateOutlet]="card" />
+  </ng-container>
+}
