@@ -45,6 +45,7 @@
         "libs/explorers/comparison-tools/src/index.ts"
       ],
       "@sagebionetworks/explorers/models": ["libs/explorers/models/index.ts"],
+      "@sagebionetworks/explorers/news": ["libs/explorers/news/index.ts"],
       "@sagebionetworks/explorers/services": ["libs/explorers/services/src/index.ts"],
       "@sagebionetworks/explorers/shared": ["libs/explorers/shared/src/index.ts"],
       "@sagebionetworks/explorers/testing": ["libs/explorers/testing/src/index.ts"],
@@ -67,6 +68,7 @@
       "@sagebionetworks/model-ad/model-overview-comparison-tool": [
         "libs/model-ad/model-overview-comparison-tool/src/index.ts"
       ],
+      "@sagebionetworks/model-ad/model-details": ["libs/model-ad/model-details/src/index.ts"],
       "@sagebionetworks/model-ad/not-found": ["libs/model-ad/not-found/src/index.ts"],
       "@sagebionetworks/model-ad/util": ["libs/model-ad/util/src/index.ts"],
       "@sagebionetworks/openchallenges/about": ["libs/openchallenges/about/src/index.ts"],

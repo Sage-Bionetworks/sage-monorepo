@@ -9,11 +9,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   styleUrls: ['./not-found.component.scss'],
 })
 export class NotFoundComponent implements OnInit {
-  readonly backgroundImagePath = 'explorers-assets/images/background.svg';
-  email = '';
-
   private activatedRoute = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
+
+  readonly backgroundImagePath = 'explorers-assets/images/background.svg';
+  email = '';
 
   ngOnInit() {
     this.setEmail();
