@@ -34,27 +34,7 @@ public class ChallengeAnalyticsService {
     );
 
     // The following line will be auto-updated by a script and should NOT be modified manually.
-    List<Integer> challengeCounts = /* AUTO-UPDATE MARKER */Arrays.asList(
-      11,
-      17,
-      25,
-      34,
-      45,
-      53,
-      61,
-      73,
-      85,
-      100,
-      138,
-      154,
-      177,
-      202,
-      253,
-      315,
-      385,
-      449,
-      474
-    );
+    List<Integer> challengeCounts = /* AUTO-UPDATE MARKER */Arrays.asList(11, 17, 25, 34, 45, 53, 61, 73, 85, 100, 138, 155, 178, 203, 254, 316, 387, 452, 484);
     Integer undatedChallengeCount = 171;
 
     // int currentYear = Year.now().getValue();
