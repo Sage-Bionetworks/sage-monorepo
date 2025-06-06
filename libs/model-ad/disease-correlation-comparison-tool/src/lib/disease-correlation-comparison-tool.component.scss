@@ -3,9 +3,25 @@
   height: 100%;
 
   // TODO move these styles to the base CT header
-  .disease-correlation-comparison-tool-header {
+  .header {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .help-links {
+    .help-links-inner {
+      .help-link {
+        color: var(--color-text);
+        font-weight: 700;
+        cursor: pointer;
+        pointer-events: all;
+
+        &:hover {
+          text-decoration: underline;
+          color: var(--color-action-primary);
+        }
+      }
+    }
   }
 }

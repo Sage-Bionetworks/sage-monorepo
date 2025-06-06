@@ -1,0 +1,25 @@
+h2 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+p {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+img {
+  margin: 10px 0;
+}
+
+#color-chart-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+#size-chart-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}

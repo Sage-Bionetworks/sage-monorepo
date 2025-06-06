@@ -1,0 +1,23 @@
+<p-dialog
+  header="Legend"
+  [visible]="comparisonToolService.isLegendVisible()"
+  (visibleChange)="comparisonToolService.setLegendVisibility($event)"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [dismissableMask]="true"
+  [style]="{ width: '100%', maxWidth: '580px' }"
+  styleClass="legend-panel"
+>
+  <explorers-legend
+    [colorChartLowerLabel]="colorChartLowerLabel"
+    [colorChartUpperLabel]="colorChartUpperLabel"
+    [colorChartText]="colorChartText"
+    [sizeChartLowerLabel]="sizeChartLowerLabel"
+    [sizeChartUpperLabel]="sizeChartUpperLabel"
+    [sizeChartText]="sizeChartText"
+  ></explorers-legend>
+  <ng-template #footer>
+    <a (click)="onHowToClick()">Visualization Overview</a>
+  </ng-template>
+</p-dialog>

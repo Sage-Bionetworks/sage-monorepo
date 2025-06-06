@@ -1,0 +1,29 @@
+.legend-panel {
+  color: var(--color-text);
+
+  .p-dialog-content {
+    padding: 20px 40px 0;
+  }
+
+  .p-dialog-footer {
+    padding: 30px 40px;
+    text-align: right;
+
+    a {
+      color: var(--color-action-primary);
+      font-size: var(--font-size-sm);
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  img,
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+}
