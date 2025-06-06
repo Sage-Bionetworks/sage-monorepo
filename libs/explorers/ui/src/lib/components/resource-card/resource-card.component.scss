@@ -1,0 +1,46 @@
+@use 'libs/explorers/styles/src/lib/variables';
+@use 'libs/explorers/styles/src/lib/mixins';
+
+.resource-card {
+  box-shadow: 0 4px 4px rgb(0 0 0 / 10%);
+  background: #fff;
+  padding: 40px;
+
+  button {
+    @include mixins.reset-button;
+
+    cursor: pointer;
+  }
+
+  .content {
+    display: flex;
+    align-items: flex-start;
+    gap: 30px;
+    text-align: left;
+
+    &.row {
+      flex-direction: row;
+    }
+
+    &.column {
+      flex-direction: column;
+    }
+  }
+
+  .text-content {
+    display: flex;
+    gap: 16px;
+    flex-direction: column;
+
+    .title {
+      color: var(--color-primary);
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .description {
+      color: var(--color-gray-900);
+      font-size: 16px;
+    }
+  }
+}
