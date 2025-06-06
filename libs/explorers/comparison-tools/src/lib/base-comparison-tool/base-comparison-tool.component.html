@@ -1,11 +1,11 @@
 <main>
-  @if (isLoading) {
+  @if (isLoading()) {
     <div id="loading">
       <explorers-loading-container
-        [colorOutermost]="loadingIconColors.colorOutermost"
-        [colorCentral]="loadingIconColors.colorCentral"
-        [colorInnermost]="loadingIconColors.colorInnermost"
-        [count]="resultsCount"
+        [colorOutermost]="loadingIconColors().colorOutermost"
+        [colorCentral]="loadingIconColors().colorCentral"
+        [colorInnermost]="loadingIconColors().colorInnermost"
+        [count]="resultsCount()"
       ></explorers-loading-container>
     </div>
   } @else {

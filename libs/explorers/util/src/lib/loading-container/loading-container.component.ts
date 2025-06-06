@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { Component, input, ViewEncapsulation } from '@angular/core';
 import { LoadingIconComponent } from '../loading-icon/loading-icon.component';
 
 @Component({
@@ -10,8 +10,8 @@ import { LoadingIconComponent } from '../loading-icon/loading-icon.component';
   encapsulation: ViewEncapsulation.None,
 })
 export class LoadingContainerComponent {
-  @Input() colorOutermost = '#8B8AD1';
-  @Input() colorCentral = '#8B8AD1';
-  @Input() colorInnermost = '#8B8AD1';
-  @Input() count = 0;
+  colorOutermost = input('#8B8AD1');
+  colorCentral = input('#8B8AD1');
+  colorInnermost = input('#8B8AD1');
+  count = input(0);
 }

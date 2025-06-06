@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NavigationLink } from '@sagebionetworks/explorers/models';
@@ -10,8 +10,8 @@ import { NavigationLink } from '@sagebionetworks/explorers/models';
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent {
-  @Input() footerLogoPath = '';
-  @Input() footerLinks: NavigationLink[] = [];
-  @Input() siteVersion = '';
-  @Input() dataVersion = '';
+  footerLogoPath = input('');
+  footerLinks = input<NavigationLink[]>([]);
+  siteVersion = input('');
+  dataVersion = input('');
 }

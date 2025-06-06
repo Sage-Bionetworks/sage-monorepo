@@ -1,28 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
-import { ComparisonToolWrapperComponent } from '@sagebionetworks/model-ad/comparison-tool-wrapper';
-
+import { ComparisonToolService } from '@sagebionetworks/model-ad/services';
+import { DiseaseCorrelationHelpLinksComponent } from './components/disease-correlation-help-links/disease-correlation-help-links.component';
+import { LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/util';
 @Component({
   selector: 'model-ad-disease-correlation-comparison-tool',
-  imports: [BaseComparisonToolComponent],
+  imports: [BaseComparisonToolComponent, DiseaseCorrelationHelpLinksComponent],
   templateUrl: './disease-correlation-comparison-tool.component.html',
   styleUrls: ['./disease-correlation-comparison-tool.component.scss'],
+  providers: [ComparisonToolService],
 })
-export class DiseaseCorrelationComparisonToolComponent
-  extends ComparisonToolWrapperComponent
-  implements OnInit
-{
-  override isLoading = true;
-  override resultsCount = 40000;
-
-  constructor() {
-    super();
-  }
+export class DiseaseCorrelationComparisonToolComponent implements OnInit {
+  isLoading = signal(true);
+  loadingIconColors = signal(LOADING_ICON_COLORS);
+  resultsCount = signal(40000);
 
   ngOnInit() {
     // TODO - Replace with actual data fetching logic
     setTimeout(() => {
-      this.isLoading = false;
-    }, 3000);
+      this.isLoading.set(false);
+    }, 300);
   }
 }
