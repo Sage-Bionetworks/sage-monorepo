@@ -1,7 +1,7 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Data } from '@angular/router';
-import { map } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { getRouteData } from '@sagebionetworks/explorers/util';
 
 @Component({
   selector: 'explorers-not-found',
@@ -20,22 +20,13 @@ export class NotFoundComponent implements OnInit {
   }
 
   private setEmail() {
-    this.activatedRoute.data
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        map((data: Data) => data['supportEmail']),
-      )
-      .subscribe({
-        next: (email) => {
-          if (!email) {
-            console.error('Support email not found in route data');
-          } else {
-            this.email = email;
-          }
-        },
-        error: (error) => {
-          console.error('Error retrieving support email:', error);
-        },
-      });
+    this.activatedRoute.data.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (data) => {
+        this.email = getRouteData('supportEmail', data);
+      },
+      error: (error) => {
+        console.error('Error retrieving support email:', error);
+      },
+    });
   }
 }

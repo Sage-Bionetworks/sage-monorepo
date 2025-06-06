@@ -23,16 +23,17 @@ class MockWikiComponent {
 
 const TITLE = 'Test Title';
 const WIKI_ID = '0';
-const CLASS_NAME = 'class-name';
 
-const mockRouteDataSubject = new BehaviorSubject<{ wikiId: string }>({ wikiId: 'test-wiki-id' });
+const mockRouteDataSubject = new BehaviorSubject<{ wikiId: string; heroTitle: string }>({
+  wikiId: 'test-wiki-id',
+  heroTitle: 'test-hero-title',
+});
 
-async function setup(options?: {
-  componentInputs?: Record<string, any>;
-  imports?: any[];
-  providers?: any[];
-}) {
-  mockRouteDataSubject.next({ wikiId: WIKI_ID || '' });
+async function setup() {
+  mockRouteDataSubject.next({
+    wikiId: WIKI_ID || '',
+    heroTitle: TITLE,
+  });
 
   const mockActivatedRoute = {
     data: mockRouteDataSubject.asObservable(),
@@ -40,13 +41,7 @@ async function setup(options?: {
 
   // const user = userEvent.setup();
   const { fixture } = await render(WikiDrivenComponent, {
-    componentInputs: {
-      title: TITLE,
-      wikiId: WIKI_ID,
-      className: CLASS_NAME,
-      ...options?.componentInputs,
-    },
-    imports: [CommonModule, MockHeroComponent, MockWikiComponent, ...(options?.imports || [])],
+    imports: [CommonModule, MockHeroComponent, MockWikiComponent],
     providers: [provideHttpClient(), { provide: ActivatedRoute, useValue: mockActivatedRoute }],
   });
 
@@ -61,7 +56,7 @@ describe('WikiDrivenComponent', () => {
   });
 
   it('should display the title', async () => {
-    await setup({ componentInputs: { title: TITLE } });
+    await setup();
     expect(screen.getByText(TITLE)).toBeInTheDocument();
   });
 

@@ -14,22 +14,26 @@ export const routes: Route[] = [
   {
     path: 'about',
     loadChildren: () =>
-      import('@sagebionetworks/explorers/shared').then((routes) => routes.aboutRoute),
+      import('@sagebionetworks/explorers/shared').then((routes) => routes.wikiDrivenRoute),
     data: {
       title: 'About the Model AD Explorer',
       description:
         'The Model AD Explorer is funded by the National Institute on Aging, and is developed and maintained by Sage Bionetworks.',
+      heroTitle: 'About',
+      // TODO: update to the actual wiki ID, see MG-241
       wikiId: '612058',
     },
   },
   {
     path: 'news',
     loadChildren: () =>
-      import('@sagebionetworks/explorers/shared').then((routes) => routes.newsRoute),
+      import('@sagebionetworks/explorers/shared').then((routes) => routes.wikiDrivenRoute),
     data: {
       title: 'News | Model AD Explorer Releases',
       description:
         "See what's new in the Model AD Explorer, from new features to our latest data updates.",
+      heroTitle: 'News',
+      // TODO: update to the actual wiki ID, see MG-241
       wikiId: '612058',
     },
   },
