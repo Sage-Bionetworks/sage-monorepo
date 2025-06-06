@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, Input, inject } from '@angular/core';
+import { Component, ViewEncapsulation, inject, input } from '@angular/core';
 import { DialogModule } from 'primeng/dialog';
 import { LegendComponent } from './legend/legend.component';
 import { ComparisonToolService } from '@sagebionetworks/model-ad/services';
@@ -13,12 +13,12 @@ import { ComparisonToolService } from '@sagebionetworks/model-ad/services';
 export class LegendPanelComponent {
   comparisonToolService = inject(ComparisonToolService);
 
-  @Input({ required: true }) colorChartLowerLabel = '';
-  @Input({ required: true }) colorChartUpperLabel = '';
-  @Input({ required: true }) colorChartText = '';
-  @Input({ required: true }) sizeChartLowerLabel = '';
-  @Input({ required: true }) sizeChartUpperLabel = '';
-  @Input({ required: true }) sizeChartText = '';
+  colorChartLowerLabel = input('');
+  colorChartUpperLabel = input('');
+  colorChartText = input('');
+  sizeChartLowerLabel = input('');
+  sizeChartUpperLabel = input('');
+  sizeChartText = input('');
 
   onHowToClick() {
     //TODO implement

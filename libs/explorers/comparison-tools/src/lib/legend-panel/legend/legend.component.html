@@ -1,19 +1,19 @@
 <h2>COLOR</h2>
 <p>
-  {{ colorChartText }}
+  {{ colorChartText() }}
 </p>
 <img [src]="'/explorers-assets/images/legend-color-chart.svg'" />
 <div id="color-chart-labels">
-  <div>{{ colorChartLowerLabel }}</div>
-  <div>{{ colorChartUpperLabel }}</div>
+  <div>{{ colorChartLowerLabel() }}</div>
+  <div>{{ colorChartUpperLabel() }}</div>
 </div>
 
 <h2>SIZE</h2>
 <p>
-  {{ sizeChartText }}
+  {{ sizeChartText() }}
 </p>
 <img [src]="'/explorers-assets/images/legend-size-chart.svg'" />
 <div id="size-chart-labels">
-  <div>{{ sizeChartLowerLabel }}</div>
-  <div>{{ sizeChartUpperLabel }}</div>
+  <div>{{ sizeChartLowerLabel() }}</div>
+  <div>{{ sizeChartUpperLabel() }}</div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { LoadingContainerComponent } from '@sagebionetworks/explorers/util';
 import { LoadingIconColors } from '@sagebionetworks/explorers/models';
 
@@ -9,7 +9,13 @@ import { LoadingIconColors } from '@sagebionetworks/explorers/models';
   styleUrls: ['./base-comparison-tool.component.scss'],
 })
 export class BaseComparisonToolComponent {
-  @Input() isLoading = true;
-  @Input({ required: true }) loadingIconColors!: LoadingIconColors;
-  @Input({ required: true }) resultsCount!: number;
+  defaultLoadingIconColors: LoadingIconColors = {
+    colorOutermost: '#8B8AD1',
+    colorCentral: '#8B8AD1',
+    colorInnermost: '#8B8AD1',
+  };
+
+  isLoading = input(true);
+  loadingIconColors = input(this.defaultLoadingIconColors);
+  resultsCount = input(0);
 }

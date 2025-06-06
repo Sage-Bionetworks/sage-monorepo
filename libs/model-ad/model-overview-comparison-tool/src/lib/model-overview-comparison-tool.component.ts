@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
-import { ComparisonToolWrapperComponent } from '@sagebionetworks/model-ad/comparison-tool-wrapper';
 import { ComparisonToolService } from '@sagebionetworks/model-ad/services';
 import { ModelOverviewHelpLinksComponent } from './components/model-overview-help-links/model-overview-help-links.component';
+import { LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/util';
 @Component({
   selector: 'model-ad-model-overview-comparison-tool',
   imports: [BaseComparisonToolComponent, ModelOverviewHelpLinksComponent],
@@ -10,21 +10,15 @@ import { ModelOverviewHelpLinksComponent } from './components/model-overview-hel
   styleUrls: ['./model-overview-comparison-tool.component.scss'],
   providers: [ComparisonToolService],
 })
-export class ModelOverviewComparisonToolComponent
-  extends ComparisonToolWrapperComponent
-  implements OnInit
-{
-  override isLoading = true;
-  override resultsCount = 50000;
-
-  constructor() {
-    super();
-  }
+export class ModelOverviewComparisonToolComponent implements OnInit {
+  isLoading = signal(true);
+  loadingIconColors = signal(LOADING_ICON_COLORS);
+  resultsCount = signal(50000);
 
   ngOnInit() {
     // TODO - Replace with actual data fetching logic
     setTimeout(() => {
-      this.isLoading = false;
+      this.isLoading.set(false);
     }, 300);
   }
 }

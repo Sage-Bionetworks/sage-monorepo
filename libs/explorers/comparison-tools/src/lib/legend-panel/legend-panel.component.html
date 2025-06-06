@@ -10,12 +10,12 @@
   styleClass="legend-panel"
 >
   <explorers-legend
-    [colorChartLowerLabel]="colorChartLowerLabel"
-    [colorChartUpperLabel]="colorChartUpperLabel"
-    [colorChartText]="colorChartText"
-    [sizeChartLowerLabel]="sizeChartLowerLabel"
-    [sizeChartUpperLabel]="sizeChartUpperLabel"
-    [sizeChartText]="sizeChartText"
+    [colorChartLowerLabel]="colorChartLowerLabel()"
+    [colorChartUpperLabel]="colorChartUpperLabel()"
+    [colorChartText]="colorChartText()"
+    [sizeChartLowerLabel]="sizeChartLowerLabel()"
+    [sizeChartUpperLabel]="sizeChartUpperLabel()"
+    [sizeChartText]="sizeChartText()"
   ></explorers-legend>
   <ng-template #footer>
     <a (click)="onHowToClick()">Visualization Overview</a>

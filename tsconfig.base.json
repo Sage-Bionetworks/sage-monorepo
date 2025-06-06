@@ -53,9 +53,6 @@
       "@sagebionetworks/model-ad/api-client-angular": [
         "libs/model-ad/api-client-angular/src/index.ts"
       ],
-      "@sagebionetworks/model-ad/comparison-tool-wrapper": [
-        "libs/model-ad/comparison-tool-wrapper/src/index.ts"
-      ],
       "@sagebionetworks/model-ad/config": ["libs/model-ad/config/src/index.ts"],
       "@sagebionetworks/model-ad/disease-correlation-comparison-tool": [
         "libs/model-ad/disease-correlation-comparison-tool/src/index.ts"
