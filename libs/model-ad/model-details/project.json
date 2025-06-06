@@ -1,0 +1,27 @@
+{
+  "name": "model-ad-model-details",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/model-ad/model-details/src",
+  "prefix": "model-ad",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/model-ad/model-details"],
+      "options": {
+        "jestConfig": "libs/model-ad/model-details/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "lint-fix": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "fix": true
+      }
+    }
+  },
+  "tags": ["type:feature", "scope:model-ad", "language:typescript"],
+  "implicitDependencies": []
+}

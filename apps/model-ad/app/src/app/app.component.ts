@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
+import { MetaTagService } from '@sagebionetworks/explorers/services';
 import { FooterComponent, HeaderComponent } from '@sagebionetworks/explorers/ui';
 import { Dataversion, DataversionService } from '@sagebionetworks/model-ad/api-client-angular';
 import { ConfigService } from '@sagebionetworks/model-ad/config';
@@ -27,6 +28,7 @@ import {
 export class AppComponent {
   configService = inject(ConfigService);
   dataVersionService = inject(DataversionService);
+  metaTagService = inject(MetaTagService);
 
   readonly useGoogleTagManager: boolean;
 
@@ -36,6 +38,8 @@ export class AppComponent {
   footerLinks = footerLinks;
 
   constructor() {
+    this.metaTagService.initialize('Model AD');
+
     this.useGoogleTagManager = isGoogleTagManagerIdSet(
       this.configService.config.googleTagManagerId,
     );

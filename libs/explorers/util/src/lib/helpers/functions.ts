@@ -1,3 +1,5 @@
+import { Data } from '@angular/router';
+
 export function getRandomInt(minInclusive: number, maxExclusive: number) {
   minInclusive = Math.ceil(minInclusive);
   maxExclusive = Math.floor(maxExclusive);
@@ -10,4 +12,12 @@ export function removeParenthesis(s: string) {
 
 export function toKebabCase(s: string) {
   return s.toLowerCase().replace(/\s+/g, '-');
+}
+
+export function getRouteData(routeParam: string, routeData: Data) {
+  const value = routeData[routeParam] || '';
+  if (!value) {
+    console.error(`Route data for '${routeParam}' not found`);
+  }
+  return value;
 }

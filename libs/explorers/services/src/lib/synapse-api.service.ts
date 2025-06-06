@@ -2,11 +2,7 @@
 // External
 // -------------------------------------------------------------------------- //
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import {
-  OrgSagebionetworksRepoModelWikiWikiPage,
-  WikiPageServicesService,
-} from '@sagebionetworks/synapse/api-client-angular';
+import { inject, Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import sanitizeHtml from 'sanitize-html';
@@ -23,25 +19,12 @@ import { SynapseWiki, TermsOfUseInfo } from '@sagebionetworks/explorers/models';
   providedIn: 'root',
 })
 export class SynapseApiService {
+  http = inject(HttpClient);
+
   private cache: { [key: string]: any } = {
     wikis: {},
     terms: null,
   };
-
-  constructor(
-    private http: HttpClient,
-    private wikiPageService: WikiPageServicesService,
-  ) {}
-
-  // I created this method or to facilitate the comparison with `getWiki()`. In practice, there is
-  // no need for a wrapper method like done here: the Explorer components and services should directly
-  // make call to the Synapse API using the Angular client.
-  getWikiAlternative(
-    ownerId: string,
-    wikiId: string,
-  ): Observable<OrgSagebionetworksRepoModelWikiWikiPage> {
-    return this.wikiPageService.getRepoV1EntityOwnerIdWikiWikiId(ownerId, wikiId);
-  }
 
   getWiki(ownerId: string, wikiId: string): Observable<SynapseWiki> {
     const key = ownerId + wikiId;
@@ -62,7 +45,7 @@ export class SynapseApiService {
     }
   }
 
-  getTermsOfService() {
+  getTermsOfService(): Observable<string> {
     if (this.cache['terms']) {
       return of(this.cache['terms']);
     }
