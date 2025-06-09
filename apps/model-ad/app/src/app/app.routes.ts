@@ -73,47 +73,11 @@ export const routes: Route[] = [
     },
   },
   {
-    path: 'model-overview',
-    loadChildren: () =>
-      import('@sagebionetworks/model-ad/model-overview-comparison-tool').then(
-        (routes) => routes.routes,
-      ),
-    data: {
-      title: "Model Overview | Overview of mouse models of Alzheimer's Disease",
-      description: "Explore next-generation mouse models of Alzheimer's Disease.",
-    },
-  },
-  {
-    path: 'gene-expression',
-    loadChildren: () =>
-      import('@sagebionetworks/model-ad/gene-expression-comparison-tool').then(
-        (routes) => routes.routes,
-      ),
-    data: {
-      title: 'Gene Expression | Visual comparison tool for differential expression results',
-      description:
-        "Explore high-dimensional omics data for next-generation mouse models of Alzheimer's Disease.",
-    },
-  },
-  {
-    path: 'disease-correlation',
-    loadChildren: () =>
-      import('@sagebionetworks/model-ad/disease-correlation-comparison-tool').then(
-        (routes) => routes.routes,
-      ),
-    data: {
-      title: 'Disease Correlation | Visual comparison tool for correlation results',
-      description:
-        "Explore whether changes in gene expression in next-generation Alzheimer's Disease mouse models correlate with changes in gene expression in humans with the disease.",
-    },
-  },
-  {
     path: 'models/:model',
     loadChildren: () =>
       import('@sagebionetworks/model-ad/model-details').then((routes) => routes.routes),
     data: {
-      title: (route: ActivatedRouteSnapshot) =>
-        `Model Details | ${route.params['model']} AD model.`,
+      title: (route: ActivatedRouteSnapshot) => `Model Details | ${route.params['model']} AD model`,
       description: (route: ActivatedRouteSnapshot) =>
         `Explore information and results for the ${route.params['model']} Alzheimer's Disease mouse model.`,
     },
