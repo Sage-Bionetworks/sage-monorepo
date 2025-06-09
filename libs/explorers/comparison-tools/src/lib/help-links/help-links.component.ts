@@ -1,4 +1,4 @@
-import { Component, output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 @Component({
   selector: 'explorers-help-links',
@@ -6,6 +6,7 @@ import { Component, output } from '@angular/core';
   styleUrls: ['./help-links.component.scss'],
 })
 export class HelpLinksComponent {
+  legendEnabled = input(true);
   legendToggle = output<void>();
   visualizationOverviewToggle = output<void>();
 
