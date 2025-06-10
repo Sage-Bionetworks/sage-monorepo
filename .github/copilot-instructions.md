@@ -2,14 +2,18 @@
 
 ## Project Overview
 
-This is a TypeScript-based monorepo for Sage Bionetworks projects. It contains multiple applications and libraries related to scientific research, data visualization, and biomedical informatics. The codebase uses Angular, React, and other modern web technologies.
+This is a multi-language `nx` monorepo for Sage Bionetworks projects and includes projects in TypeScript, Java, Python, and R.
+It contains multiple applications and libraries related to scientific research, data visualization, and biomedical informatics.
+The codebase uses Angular, React, and other modern web technologies.
 
 ## Monorepo Structure
 
-- **apps/**: Application projects (agora, model-ad, openchallenges, etc.)
-- **libs/**: Library projects (shared code, components, services)
-- **tools/**: Utility scripts and tools for the monorepo
-- **docs/**: Documentation
+The repository uses the standard Nx structure:
+
+- `apps/` contains standalone applications.
+- `libs/` contains shared libraries and components.
+- `tools/` contains utility scripts.
+- `docs/` contains documentation files.
 
 ## Import Conventions
 
@@ -33,7 +37,7 @@ Each project has a `project.json` file with:
 
 Always refer to `package.json` for the exact versions of dependencies when researching API documentation.
 
-## Build and Test Commands
+## Nx Commands
 
 - Run tests: `nx test [project-name]`
 - Run lint: `nx lint [project-name]`
@@ -47,5 +51,6 @@ When working with Angular code:
 - Use signals for reactive state management
 - Implement control flow with `@if`, `@for` instead of `*ngIf`, `*ngFor`
 - Write tests with `@testing-library/angular` and `@testing-library/jest-dom`
-- Prefer tests that focus on what the user can see and do. Avoid testing how the component is implemented internally
-- Your code should be self-documenting. Avoid unnecessary comments. Use meaningful variable and function names.
+- Focus tests on user behavior rather than implementation details
+- Write self-documenting code with meaningful names
+- Avoid unnecessary comments
