@@ -14,7 +14,7 @@ export const routes: Route[] = [
   {
     path: 'about',
     loadChildren: () =>
-      import('@sagebionetworks/explorers/shared').then((routes) => routes.wikiDrivenRoute),
+      import('@sagebionetworks/explorers/shared').then((routes) => routes.wikiHeroRoute),
     data: {
       title: 'About the Model AD Explorer',
       description:
@@ -27,7 +27,7 @@ export const routes: Route[] = [
   {
     path: 'news',
     loadChildren: () =>
-      import('@sagebionetworks/explorers/shared').then((routes) => routes.wikiDrivenRoute),
+      import('@sagebionetworks/explorers/shared').then((routes) => routes.wikiHeroRoute),
     data: {
       title: 'News | Model AD Explorer Releases',
       description:

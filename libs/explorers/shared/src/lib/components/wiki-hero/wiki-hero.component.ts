@@ -7,18 +7,18 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { getRouteData } from '@sagebionetworks/explorers/util';
 
 @Component({
-  selector: 'explorers-wiki-driven',
+  selector: 'explorers-wiki-hero',
   imports: [CommonModule, HeroComponent, WikiComponent],
-  templateUrl: './wiki-driven.component.html',
-  styleUrls: ['./wiki-driven.component.scss'],
+  templateUrl: './wiki-hero.component.html',
+  styleUrls: ['./wiki-hero.component.scss'],
 })
-export class WikiDrivenComponent implements OnInit {
+export class WikiHeroComponent implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
 
   heroTitle = '';
   wikiId = '';
-  className = 'wiki-driven-page-content';
+  className = 'wiki-hero-page-content';
 
   ngOnInit() {
     this.getRouteParams();

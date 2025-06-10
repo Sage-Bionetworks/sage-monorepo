@@ -1,4 +1,4 @@
-import { WikiDrivenComponent } from './wiki-driven.component';
+import { WikiHeroComponent } from './wiki-hero.component';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { render, screen } from '@testing-library/angular';
@@ -40,7 +40,7 @@ async function setup() {
   };
 
   // const user = userEvent.setup();
-  const { fixture } = await render(WikiDrivenComponent, {
+  const { fixture } = await render(WikiHeroComponent, {
     imports: [CommonModule, MockHeroComponent, MockWikiComponent],
     providers: [provideHttpClient(), { provide: ActivatedRoute, useValue: mockActivatedRoute }],
   });
@@ -49,7 +49,7 @@ async function setup() {
   return { fixture, component };
 }
 
-describe('WikiDrivenComponent', () => {
+describe('WikiHeroComponent', () => {
   it('should create the component', async () => {
     const { component } = await setup();
     expect(component).toBeTruthy();

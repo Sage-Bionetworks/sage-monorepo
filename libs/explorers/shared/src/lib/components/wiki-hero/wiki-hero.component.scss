@@ -1,12 +1,12 @@
 /* stylelint-disable media-feature-name-no-unknown */
 @use 'libs/explorers/styles/src/lib/variables' as vars;
 
-#wiki-driven-container {
+#wiki-hero-container {
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - var(--header-height) - var(--footer-height) + 1px);
 
-  .wiki-driven {
+  .wiki-hero {
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
@@ -18,7 +18,7 @@
       margin: 0 vars.$main-content-margin;
     }
 
-    .wiki-driven-content {
+    .wiki-hero-content {
       font-size: 16px;
       font-weight: 400;
       line-height: 1.5;
