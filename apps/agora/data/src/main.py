@@ -16,15 +16,14 @@ DB_HOST = getenv("DB_HOST")
 
 DATA_FILE = getenv("DATA_FILE")
 DATA_VERSION = getenv("DATA_VERSION")
-TEAM_IMAGES_ID = getenv("TEAM_IMAGES_ID")
 
 
-def download_synapse_data(team_images_dir: str, local_data_dir: str) -> None:
+def download_synapse_data(local_data_dir: str) -> None:
     print("===> login to synapse")
     syn = synapseclient.login()
 
     print("===> make directory for local data")
-    makedirs(team_images_dir, exist_ok=True)
+    makedirs(local_data_dir, exist_ok=True)
 
     print("===> download manifest file from Synapse")
     manifest_entity = syn.get(
@@ -50,11 +49,6 @@ def download_synapse_data(team_images_dir: str, local_data_dir: str) -> None:
                 ifcollision="overwrite.local",
             )
 
-    print("==> download team images")
-    synapseutils.syncFromSynapse(
-        syn, TEAM_IMAGES_ID, team_images_dir, followLink=False, manifest="all"
-    )
-
 
 def create_data_version_collection(db: database.Database) -> None:
     """Create collection that contains data version info"""
@@ -64,7 +58,7 @@ def create_data_version_collection(db: database.Database) -> None:
     dataversion = {
         "data_file": DATA_FILE,
         "data_version": DATA_VERSION,
-        "team_images_id": TEAM_IMAGES_ID,
+        "team_images_id": "NOT_SET",
     }
     data_version_collection.insert_one(dataversion)
 
@@ -108,24 +102,9 @@ def create_collections_indexes(
                 collection.create_index(list(index.items()))
 
 
-def import_images(db: database.Database, images_dir: str) -> None:
-    """Import images into MongoDB from local directory"""
-    print("    importing images")
-    fs = GridFS(db)
-    file_extensions = ["*.jpg", "*.jpeg", "*.png"]
-    files = []
-    for ext in file_extensions:
-        files.extend(glob(ext, root_dir=images_dir))
-    for filename in files:
-        with open(path.join(images_dir, filename), "rb") as file_data:
-            print(f"\tuploading {filename}...")
-            fs.put(file_data, filename=filename)
-
-
 def main() -> None:
     """Main function to execute preceding functions"""
     local_data_dir = path.join(getcwd(), "local", "data")
-    local_team_images_dir = path.join(local_data_dir, "team_images")
     collections_filepath = path.join(getcwd(), "src", "data", "collections.csv")
     collections_indexes_filepath = path.join(
         getcwd(), "src", "data", "collections-indexes.json"
@@ -133,10 +112,9 @@ def main() -> None:
 
     print(f"DATA_FILE: {DATA_FILE}")
     print(f"DATA_VERSION: {DATA_VERSION}")
-    print(f"TEAM_IMAGES_ID: {TEAM_IMAGES_ID}")
     print("\n")
 
-    download_synapse_data(local_team_images_dir, local_data_dir)
+    download_synapse_data(local_data_dir)
 
     print("==> update mongo db")
     db_uri = f"mongodb://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}"
@@ -146,7 +124,6 @@ def main() -> None:
         create_data_version_collection(db)
         import_collections_data(db, collections_filepath, local_data_dir)
         create_collections_indexes(db, collections_indexes_filepath)
-        import_images(db, local_team_images_dir)
         client.close()
     except Exception as e:
         raise Exception("Error", e)
