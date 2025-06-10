@@ -1,14 +1,25 @@
+import { provideHttpClient } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
+import { SvgIconService } from '@sagebionetworks/explorers/services';
+import { SvgIconServiceStub } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
 import { HomeComponent } from './home.component';
 
 async function setup() {
-  await render(HomeComponent);
+  await render(HomeComponent, {
+    providers: [
+      provideHttpClient(),
+      provideRouter([]),
+      { provide: SvgIconService, useClass: SvgIconServiceStub },
+    ],
+  });
 }
 
 describe('HomeComponent', () => {
-  it('should display home button', async () => {
+  it('should render heading', async () => {
     await setup();
-    const button = screen.getByRole('button', { name: /model-ad/i });
-    expect(button).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /find the right model for your research/i }),
+    ).toBeInTheDocument();
   });
 });

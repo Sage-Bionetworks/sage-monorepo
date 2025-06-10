@@ -11,7 +11,7 @@ import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/model-ad/api
 import { configFactory, ConfigService } from '@sagebionetworks/model-ad/config';
 
 import { routes } from './app.routes';
-import { MyPreset } from './myPrimeNGPreset';
+import { ModelAdPreset } from './primeNGPreset';
 import { provideMarkdown } from 'ngx-markdown';
 
 // This index is used to remove the corresponding provider in app.config.server.ts.
@@ -42,7 +42,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
-        preset: MyPreset,
+        preset: ModelAdPreset,
         options: {
           darkModeSelector: false,
         },

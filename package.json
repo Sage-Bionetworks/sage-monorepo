@@ -57,7 +57,6 @@
     "express": "4.21.2",
     "file-saver": "2.0.5",
     "glob": "11.0.0",
-    "jest-fixed-jsdom": "0.0.9",
     "json5": "2.2.3",
     "lodash": "4.17.21",
     "mariadb": "3.3.1",
@@ -79,7 +78,7 @@
     "rxjs": "7.8.1",
     "sanitize-html": "2.13.0",
     "screenfull": "5.2.0",
-    "storybook": "8.3.2",
+    "storybook": "8.6.12",
     "tslib": "2.4.1",
     "type-guards": "0.15.0",
     "validator": "13.7.0",
@@ -129,6 +128,8 @@
     "@storybook/addon-essentials": "8.6.12",
     "@storybook/angular": "8.6.12",
     "@storybook/core-server": "8.6.12",
+    "@storybook/manager-api": "8.6.12",
+    "@storybook/theming": "8.6.12",
     "@swc-node/register": "~1.9.1",
     "@swc/cli": "0.6.0",
     "@swc/core": "~1.5.7",
@@ -141,6 +142,7 @@
     "@types/dc": "4.2.5",
     "@types/debug": "4.1.12",
     "@types/dom-to-image": "2.6.7",
+    "@types/dom-to-image-more": "npm:@types/dom-to-image@2.6.7",
     "@types/express": "4.17.21",
     "@types/file-saver": "2.0.7",
     "@types/jest": "29.5.13",
@@ -181,11 +183,12 @@
     "husky": "9.1.5",
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
+    "jest-fixed-jsdom": "0.0.9",
     "jest-preset-angular": "14.4.2",
     "jiti": "2.4.2",
     "jsdom": "~22.1.0",
     "lint-staged": "15.2.10",
-    "msw": "2.6.0",
+    "msw": "2.7.6",
     "ng-packagr": "19.2.0",
     "ngx-echarts": "16.0.0",
     "nock": "13.2.9",
@@ -226,7 +229,7 @@
       "axios": "1.8.2",
       "cross-spawn": "7.0.6",
       "redoc": "2.5.0",
-      "tar-fs": "2.1.2"
+      "tar-fs": "2.1.3"
     }
   }
 }
