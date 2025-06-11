@@ -1,90 +1,129 @@
+import { DomSanitizer } from '@angular/platform-browser';
 import { provideHttpClient } from '@angular/common/http';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { render, waitFor, RenderResult } from '@testing-library/angular';
+import { of, timer } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+
 import { SynapseApiService } from '@sagebionetworks/explorers/services';
+import { SynapseWikiMarkdown, SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { synapseWikiMock } from '@sagebionetworks/explorers/testing';
-import { server } from '@sagebionetworks/explorers/testing/msw';
-import { http, HttpResponse } from 'msw';
 import { WikiComponent } from './wiki.component';
 
-describe('WikiComponent', () => {
-  beforeAll(() => server.listen());
-  afterEach(() => server.restoreHandlers());
-  afterAll(() => server.close());
+// Mock the SynapseApiService
+const mockSynapseApiService = {
+  getWikiMarkdown: jest.fn(),
+  renderHtml: jest.fn(),
+};
 
+// Mock DomSanitizer
+const mockDomSanitizer = {
+  bypassSecurityTrustHtml: jest.fn(),
+};
+
+const validWikiParams: SynapseWikiParams = {
+  ownerId: 'syn25913473',
+  wikiId: '612058',
+};
+
+const mockWikiData: SynapseWikiMarkdown = {
+  ...synapseWikiMock,
+  markdown: '<h1>Test Wiki Content</h1><p>This is test content.</p>',
+};
+
+const timerDelay = 100;
+
+describe('WikiComponent', () => {
   let component: WikiComponent;
-  let fixture: ComponentFixture<WikiComponent>;
+  let renderResult: RenderResult<WikiComponent>;
+
+  async function setup(wikiParams?: SynapseWikiParams) {
+    renderResult = await render(WikiComponent, {
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: SynapseApiService, useValue: mockSynapseApiService },
+        { provide: DomSanitizer, useValue: mockDomSanitizer },
+      ],
+      componentInputs: {
+        wikiParams,
+      },
+    });
+
+    component = renderResult.fixture.componentInstance;
+    return renderResult;
+  }
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [],
-      providers: [provideHttpClient(), SynapseApiService],
-    }).compileComponents();
+    jest.clearAllMocks();
 
-    fixture = TestBed.createComponent(WikiComponent);
-    component = fixture.componentInstance;
+    // Setup default mock implementations
+    mockSynapseApiService.getWikiMarkdown.mockReturnValue(of(mockWikiData));
+    mockSynapseApiService.renderHtml.mockReturnValue('<h1>Rendered HTML</h1>');
+    mockDomSanitizer.bypassSecurityTrustHtml.mockReturnValue('<h1>Safe HTML</h1>');
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  describe('getWikiData', () => {
-    it('should get wiki data', async () => {
-      const expected = synapseWikiMock;
-      expect(component.isLoading).toBe(true);
-
-      component.getWikiData();
-      await fixture.whenStable();
-
-      expect(component.data.markdown).toBe(expected.markdown);
-      expect(component.isLoading).toBe(false);
+  describe('Component Initialization', () => {
+    it('should create the component', async () => {
+      await setup(validWikiParams);
+      expect(component).toBeTruthy();
     });
 
-    it('should default to error content when api is unreachable', async () => {
-      const noDataContent = `<div class="wiki-no-data">No data found...</div>`;
-      expect(component.isLoading).toBe(true);
-
-      // simulate server error
-      const url = 'https://repo-prod.prod.sagebase.org/repo/v1/entity/syn25913473/wiki/';
-      server.use(
-        http.get(
-          url,
-          () => {
-            return HttpResponse.error();
-          },
-          {
-            once: true,
-          },
-        ),
+    it('should initialize with loading state', async () => {
+      // Make the service return a delayed observable to keep loading state
+      mockSynapseApiService.getWikiMarkdown.mockReturnValue(
+        timer(timerDelay).pipe(switchMap(() => of(mockWikiData))),
       );
 
-      component.getWikiData();
-      await fixture.whenStable();
+      await setup(validWikiParams);
+      expect(component.isLoading).toBe(true);
+    });
 
-      expect(component.safeHtml).toBe(noDataContent);
-      expect(component.isLoading).toBe(false);
+    it('should have default safeHtml content', async () => {
+      await setup();
+      expect(component.safeHtml).toBe('<div class="wiki-no-data">No data found...</div>');
     });
   });
 
-  describe('getClassName', () => {
-    it('should default to the @Input className', () => {
-      const expectedValue = 'test';
+  describe('Successful Data Loading', () => {
+    it('should call SynapseApiService with correct parameters', async () => {
+      await setup(validWikiParams);
 
-      component.className = expectedValue;
-      const result = component.getClassName();
-
-      expect(result.find((e) => e === expectedValue)).toBeTruthy();
+      await waitFor(() => {
+        expect(mockSynapseApiService.getWikiMarkdown).toHaveBeenCalledWith(
+          validWikiParams.ownerId,
+          validWikiParams.wikiId,
+        );
+      });
     });
 
-    it('should have a "loading" className when loading variable is true', () => {
-      const expectedValue = 'loading';
+    it('should process wiki data correctly', async () => {
+      await setup(validWikiParams);
 
-      // set loading variable to be true
-      component.isLoading = true;
+      await waitFor(() => {
+        expect(component.data).toEqual(mockWikiData);
+        expect(mockSynapseApiService.renderHtml).toHaveBeenCalledWith(mockWikiData.markdown);
+        expect(mockDomSanitizer.bypassSecurityTrustHtml).toHaveBeenCalledWith(
+          '<h1>Rendered HTML</h1>',
+        );
+      });
+    });
 
-      const result = component.getClassName();
+    it('should render the processed HTML content', async () => {
+      await setup(validWikiParams);
 
-      expect(result.find((e) => e === expectedValue)).toBeTruthy();
+      await waitFor(() => {
+        const wikiInner = renderResult.container.querySelector('.wiki-inner');
+        expect(wikiInner).toBeTruthy();
+      });
+    });
+
+    it('should stop loading after successful data fetch', async () => {
+      await setup(validWikiParams);
+
+      await waitFor(() => {
+        expect(component.isLoading).toBe(false);
+      });
     });
   });
 });

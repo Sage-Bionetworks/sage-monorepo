@@ -1,4 +1,5 @@
 import { ActivatedRouteSnapshot, Route } from '@angular/router';
+import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { SUPPORT_EMAIL } from '@sagebionetworks/model-ad/util';
 
 export const routes: Route[] = [
@@ -20,8 +21,10 @@ export const routes: Route[] = [
       description:
         'The Model AD Explorer is funded by the National Institute on Aging, and is developed and maintained by Sage Bionetworks.',
       heroTitle: 'About',
-      // TODO: update to the actual wiki ID, see MG-241
-      wikiId: '631750',
+      wikiParams: {
+        wikiId: '631750',
+        ownerId: 'syn66271427',
+      } as SynapseWikiParams,
     },
   },
   {
@@ -33,8 +36,10 @@ export const routes: Route[] = [
       description:
         "See what's new in the Model AD Explorer, from new features to our latest data updates.",
       heroTitle: 'News',
-      // TODO: update to the actual wiki ID, see MG-241
-      wikiId: '631751',
+      wikiParams: {
+        wikiId: '631751',
+        ownerId: 'syn66271427',
+      } as SynapseWikiParams,
     },
   },
   {

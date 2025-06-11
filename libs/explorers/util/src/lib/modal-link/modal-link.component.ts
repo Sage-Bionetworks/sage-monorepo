@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { Component, input, ViewEncapsulation } from '@angular/core';
 import { DialogModule } from 'primeng/dialog';
 import { SvgIconComponent } from '../svg-icon/svg-icon.component';
 import { WikiComponent } from '../wiki/wiki.component';
+import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 
 @Component({
   selector: 'explorers-modal-link',
@@ -12,18 +13,13 @@ import { WikiComponent } from '../wiki/wiki.component';
   encapsulation: ViewEncapsulation.None,
 })
 export class ModalLinkComponent {
-  @Input() text = '';
-  @Input() textColor = '';
-
-  @Input() title = '';
-
-  @Input() ownerId = '';
-  @Input() wikiId = '';
-
-  @Input() iconWidth = 14;
-  @Input() iconHeight = 14;
-  @Input() enableHoverEffects = true;
-
+  text = input('');
+  textColor = input('');
+  title = input('');
+  wikiParams = input<SynapseWikiParams>();
+  iconWidth = input(14);
+  iconHeight = input(14);
+  enableHoverEffects = input(true);
   isActive = false;
   hasActivated = false;
 

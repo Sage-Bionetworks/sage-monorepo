@@ -9,7 +9,7 @@ import { Observable, of } from 'rxjs';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { SynapseWiki } from '@sagebionetworks/explorers/models';
+import { SynapseWikiMarkdown } from '@sagebionetworks/explorers/models';
 import { synapseWikiMock } from '.';
 
 // -------------------------------------------------------------------------- //
@@ -19,7 +19,7 @@ import { synapseWikiMock } from '.';
 export class SynapseApiServiceStub {
   constructor() {}
 
-  getWiki(ownerId: string, wikiId: string): Observable<SynapseWiki> {
+  getWikiMarkdown(ownerId: string, wikiId: string): Observable<SynapseWikiMarkdown> {
     return of(synapseWikiMock);
   }
 
