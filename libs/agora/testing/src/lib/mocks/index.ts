@@ -11,6 +11,8 @@ export * from './synapse-mocks';
 export * from './team-mocks';
 export * from './team-service-mock';
 // Stubs
+export * from './activated-route-stub';
 export * from './api-service-stub';
-// export * from './gene-service-stub';
+export * from './genes-service-stub';
+export * from './svg-icon-service-stub';
 export * from './synapse-api-service-stub';

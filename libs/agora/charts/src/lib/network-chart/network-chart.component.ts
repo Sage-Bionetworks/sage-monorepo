@@ -2,18 +2,22 @@
 /* eslint-disable @angular-eslint/no-output-on-prefix */
 import {
   Component,
+  ElementRef,
+  EventEmitter,
+  inject,
   Input,
   Output,
-  EventEmitter,
   ViewChild,
-  ElementRef,
-  inject,
 } from '@angular/core';
 import * as d3 from 'd3';
 
-import { hexagonSymbol } from './symbol-hexagon';
-import { NetworkChartNode, NetworkChartLink, NetworkChartData } from '../../../../models';
+import {
+  NetworkChartData,
+  NetworkChartLink,
+  NetworkChartNode,
+} from '@sagebionetworks/agora/models';
 import { HelperService } from '@sagebionetworks/agora/services';
+import { hexagonSymbol } from './symbol-hexagon';
 
 @Component({
   selector: 'agora-network-chart',
