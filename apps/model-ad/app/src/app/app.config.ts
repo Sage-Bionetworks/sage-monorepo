@@ -1,6 +1,7 @@
 import { ApplicationConfig, APP_ID, inject, provideAppInitializer } from '@angular/core';
 import {
   provideRouter,
+  withComponentInputBinding,
   withEnabledBlockingInitialNavigation,
   withInMemoryScrolling,
 } from '@angular/router';
@@ -52,6 +53,7 @@ export const appConfig: ApplicationConfig = {
     provideMarkdown(),
     provideRouter(
       routes,
+      withComponentInputBinding(),
       withEnabledBlockingInitialNavigation(),
       withInMemoryScrolling({
         scrollPositionRestoration: 'enabled',
