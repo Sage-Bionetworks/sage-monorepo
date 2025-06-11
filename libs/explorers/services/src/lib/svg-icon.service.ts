@@ -26,14 +26,14 @@ export class SvgIconService {
 
   // Common SVGs we want to preload
   private commonSvgPaths = [
-    'libs/explorers/assets/icons/cog.svg',
-    'libs/explorers/assets/icons/column.svg',
-    'libs/explorers/assets/icons/download.svg',
-    'libs/explorers/assets/icons/external-link.svg',
-    'libs/explorers/assets/icons/gct.svg',
-    'libs/explorers/assets/icons/info-circle.svg',
-    'libs/explorers/assets/icons/pin.svg',
-    'libs/explorers/assets/icons/trash.svg',
+    '/explorers-assets/icons/cog.svg',
+    '/explorers-assets/icons/column.svg',
+    '/explorers-assets/icons/download.svg',
+    '/explorers-assets/icons/external-link.svg',
+    '/explorers-assets/icons/gct.svg',
+    '/explorers-assets/icons/info-circle.svg',
+    '/explorers-assets/icons/pin.svg',
+    '/explorers-assets/icons/trash.svg',
   ];
 
   constructor() {

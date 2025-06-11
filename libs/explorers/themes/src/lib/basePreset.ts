@@ -1,10 +1,7 @@
-import { ApplicationConfig } from '@angular/core';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { definePreset } from '@primeng/themes';
 import Lara from '@primeng/themes/lara';
-import { providePrimeNG } from 'primeng/config';
 
-export const MyPreset = definePreset(Lara, {
+export const BasePreset = definePreset(Lara, {
   primitive: {
     borderRadius: {
       none: '0',

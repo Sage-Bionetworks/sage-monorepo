@@ -11,7 +11,7 @@ import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/agora/api-cl
 import { configFactory, ConfigService } from '@sagebionetworks/agora/config';
 import { BASE_PATH as SYNAPSE_API_CLIENT_BASE_PATH } from '@sagebionetworks/synapse/api-client-angular';
 import { providePrimeNG } from 'primeng/config';
-import { MyPreset } from './myPrimeNGPreset';
+import { AgoraPreset } from './primeNGPreset';
 
 import {
   httpErrorInterceptor,
@@ -55,7 +55,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
-        preset: MyPreset,
+        preset: AgoraPreset,
         options: {
           darkModeSelector: false,
         },

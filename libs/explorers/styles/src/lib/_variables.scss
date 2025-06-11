@@ -48,6 +48,86 @@ $extra-colors: (
 }
 
 // -------------------------------------------------------------------------- //
+// Fonts
+// -------------------------------------------------------------------------- //
+
+$font-family-primary: 'DM Sans', sans-serif;
+$headings: (
+  h1: (
+    font-size: 28px /* 1.75rem */,
+    font-weight: 700,
+    line-height: 32px /* 2rem */,
+  ),
+  h2: (
+    font-size: 24px /* 1.5rem */,
+    font-weight: 700,
+    line-height: 28px /* 1.75rem */,
+  ),
+  h3: (
+    font-size: 20px /* 1.25rem */,
+    font-weight: 500,
+    line-height: 24px /* 1.5rem */,
+  ),
+  h4: (
+    font-size: 16px /* 1rem */,
+    font-weight: 500,
+    line-height: 20px /* 1.25rem */,
+  ),
+  h5: (
+    font-size: 14px /* 0.875rem */,
+    font-weight: 500,
+    line-height: 20px /* 1.25rem */,
+  ),
+  h6: (
+    font-size: 12px /* 0.75rem */,
+    font-weight: 500,
+    line-height: 18px /* 1.125rem */,
+  ),
+);
+$font-sizes: (
+  xs: (
+    font-size: 12px /* 0.75rem */,
+    line-height: 18px /* 1.125rem */,
+  ),
+  sm: (
+    font-size: 14px /* 0.875rem */,
+    line-height: 20px /* 1.25rem */,
+  ),
+  md: (
+    font-size: 16px /* 1rem */,
+    line-height: 24px /* 1.5rem */,
+  ),
+  lg: (
+    font-size: 18px /* 1.125rem */,
+    line-height: 24px /* 1.5rem */,
+  ),
+  xl: (
+    font-size: 20px /* 1.25rem */,
+    line-height: 26px /* 1.625rem */,
+  ),
+  xxl: (
+    font-size: 22px /* 1.375rem */,
+    line-height: 30px /* 1.875rem */,
+  ),
+);
+
+:root {
+  --font-family-primary: #{$font-family-primary};
+
+  @each $size, $properties in $headings {
+    @each $property, $value in $properties {
+      --#{$property}-#{$size}: #{$value};
+    }
+  }
+
+  @each $size, $properties in $font-sizes {
+    @each $property, $value in $properties {
+      --#{$property}-#{$size}: #{$value};
+    }
+  }
+}
+
+// -------------------------------------------------------------------------- //
 // Main Content
 // -------------------------------------------------------------------------- //
 

@@ -12,6 +12,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  box-shadow: 0 4px 4px rgb(0 0 0 / 15%);
 
   // for hamburger menu styling
   position: relative;
@@ -85,7 +86,7 @@
 
   .separator {
     border-left: 2px solid var(--color-separator);
-    height: var(--spacing-lg);
+    height: 25px;
     box-sizing: border-box;
   }
 
@@ -104,13 +105,13 @@
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      gap: var(--spacing-lg);
+      gap: 25px;
     }
 
     ul {
       display: flex;
       height: 100%;
-      gap: var(--spacing-md);
+      gap: 15px;
     }
 
     li {
