@@ -1,0 +1,28 @@
+apiVersion: 1
+
+datasources:
+  - name: Grafana Pyroscope
+    type: grafana-pyroscope-datasource
+    url: http://observability-pyroscope:8511
+    jsonData:
+      minStep: '15s'
+    editable: true
+
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://observability-loki:8503
+    editable: true
+
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://observability-prometheus:8502
+    isDefault: true
+    editable: true
+
+  - name: Tempo
+    type: tempo
+    access: proxy
+    url: http://observability-tempo:8505
+    editable: true
