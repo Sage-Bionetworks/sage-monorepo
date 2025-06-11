@@ -21,7 +21,7 @@ export const routes: Route[] = [
         'The Model AD Explorer is funded by the National Institute on Aging, and is developed and maintained by Sage Bionetworks.',
       heroTitle: 'About',
       // TODO: update to the actual wiki ID, see MG-241
-      wikiId: '612058',
+      wikiId: '631750',
     },
   },
   {
@@ -34,7 +34,7 @@ export const routes: Route[] = [
         "See what's new in the Model AD Explorer, from new features to our latest data updates.",
       heroTitle: 'News',
       // TODO: update to the actual wiki ID, see MG-241
-      wikiId: '612058',
+      wikiId: '631751',
     },
   },
   {
