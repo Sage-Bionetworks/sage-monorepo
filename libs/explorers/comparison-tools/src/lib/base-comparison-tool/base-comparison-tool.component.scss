@@ -2,7 +2,7 @@
 
 main {
   display: flex;
-  min-height: calc(100vh - var(--header-height) - var(--footer-height) + 1px);
+  min-height: calc(100vh - var(--header-height) - var(--footer-height));
 
   #loading {
     flex: 1 1 auto;

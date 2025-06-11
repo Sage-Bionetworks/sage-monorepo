@@ -1,11 +1,12 @@
 <explorers-base-comparison-tool
-  [loadingIconColors]="LOADING_ICON_COLORS"
-  [resultsCount]="resultsCount"
-  [isLoading]="isLoading"
+  [isLoading]="isLoading()"
+  [loadingIconColors]="loadingIconColors()"
+  [resultsCount]="resultsCount()"
 >
   <div class="disease-correlation-comparison-tool">
-    <div class="disease-correlation-comparison-tool-header">
+    <div class="header">
       <h1>Disease Correlation</h1>
     </div>
+    <model-ad-disease-correlation-help-links />
   </div>
 </explorers-base-comparison-tool>

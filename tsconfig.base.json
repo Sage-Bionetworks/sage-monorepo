@@ -56,9 +56,6 @@
       "@sagebionetworks/model-ad/api-client-angular": [
         "libs/model-ad/api-client-angular/src/index.ts"
       ],
-      "@sagebionetworks/model-ad/comparison-tool-wrapper": [
-        "libs/model-ad/comparison-tool-wrapper/src/index.ts"
-      ],
       "@sagebionetworks/model-ad/config": ["libs/model-ad/config/src/index.ts"],
       "@sagebionetworks/model-ad/disease-correlation-comparison-tool": [
         "libs/model-ad/disease-correlation-comparison-tool/src/index.ts"
@@ -71,6 +68,7 @@
         "libs/model-ad/model-overview-comparison-tool/src/index.ts"
       ],
       "@sagebionetworks/model-ad/not-found": ["libs/model-ad/not-found/src/index.ts"],
+      "@sagebionetworks/model-ad/services": ["libs/model-ad/services/src/index.ts"],
       "@sagebionetworks/model-ad/util": ["libs/model-ad/util/src/index.ts"],
       "@sagebionetworks/openchallenges/about": ["libs/openchallenges/about/src/index.ts"],
       "@sagebionetworks/openchallenges/api-client-angular": [

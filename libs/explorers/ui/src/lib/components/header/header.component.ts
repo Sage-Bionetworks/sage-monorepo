@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, input, OnInit } from '@angular/core';
 import { NavigationLink } from '@sagebionetworks/explorers/models';
 import { RouterModule } from '@angular/router';
 import { SvgImageComponent } from '../svg-image/svg-image.component';
@@ -12,9 +12,9 @@ import { MIN_DESKTOP_WIDTH } from '@sagebionetworks/model-ad/util';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  @Input() headerLogoPath = '';
-  @Input() headerLinks: NavigationLink[] = [];
-  @Input() footerLinks: NavigationLink[] = [];
+  headerLogoPath = input('');
+  headerLinks = input<NavigationLink[]>([]);
+  footerLinks = input<NavigationLink[]>([]);
 
   isMobile = false;
   isShown = false;
@@ -28,7 +28,9 @@ export class HeaderComponent implements OnInit {
   refreshNavItems() {
     // mobile will combine header and footer links
     // desktop will only show header links
-    this.links = this.isMobile ? [...this.headerLinks, ...this.footerLinks] : [...this.headerLinks];
+    this.links = this.isMobile
+      ? [...this.headerLinks(), ...this.footerLinks()]
+      : [...this.headerLinks()];
   }
 
   onResize() {

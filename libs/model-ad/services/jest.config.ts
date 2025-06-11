@@ -1,10 +1,10 @@
-/* eslint-disable */
-export default {
-  displayName: 'model-ad-comparison-tool-wrapper',
+module.exports = {
+  displayName: 'model-ad-services',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {},
-  coverageDirectory: '../../../coverage/libs/model-ad/comparison-tool-wrapper',
+  coverageDirectory: '../../../coverage/libs/model-ad/services',
+  testEnvironment: 'jest-fixed-jsdom',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

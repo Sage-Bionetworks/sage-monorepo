@@ -3,7 +3,7 @@
     <div class="header-inner">
       <div class="header-logo">
         <a routerLink="/">
-          <explorers-svg-image [imagePath]="headerLogoPath" altText="header logo" />
+          <explorers-svg-image [imagePath]="headerLogoPath()" altText="header logo" />
         </a>
       </div>
       @if (links.length > 0) {

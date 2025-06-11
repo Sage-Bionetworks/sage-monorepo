@@ -1,11 +1,12 @@
 <explorers-base-comparison-tool
-  [loadingIconColors]="LOADING_ICON_COLORS"
-  [resultsCount]="resultsCount"
-  [isLoading]="isLoading"
+  [isLoading]="isLoading()"
+  [loadingIconColors]="loadingIconColors()"
+  [resultsCount]="resultsCount()"
 >
   <div class="gene-expression-comparison-tool">
-    <div class="gene-expression-comparison-tool-header">
+    <div class="header">
       <h1>Gene Expression</h1>
     </div>
+    <model-ad-gene-expression-help-links />
   </div>
 </explorers-base-comparison-tool>
