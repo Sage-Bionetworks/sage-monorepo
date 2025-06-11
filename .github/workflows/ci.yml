@@ -55,7 +55,7 @@ jobs:
       - name: Test the affected projects (unit)
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=test --parallel=1"
+            && nx affected --target=test"
 
       - name: Test the affected projects (integration)
         run: |
@@ -126,7 +126,7 @@ jobs:
       - name: Test the affected projects (unit)
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=test --parallel=1"
+            && nx affected --target=test"
 
       - name: Test the affected projects (integration)
         run: |
