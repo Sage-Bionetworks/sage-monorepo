@@ -1,0 +1,61 @@
+<div class="panel-navigation" [ngClass]="{ 'has-active-child': activeParent() }">
+  <div class="panel-navigation-inner">
+    @if (navSlideIndex > 0) {
+      <button
+        class="panel-navigation-scroll panel-navigation-scroll-prev"
+        (click)="slideNavigation(-1)"
+      >
+        <fa-icon [icon]="faAngleLeft" />
+      </button>
+    }
+
+    <div class="panel-navigation-container">
+      <ul>
+        @for (item of panels(); track item.name) {
+          @if (!item.disabled) {
+            <li
+              class="panel-navigation-item"
+              [ngClass]="{
+                active: isPanelActive(item),
+              }"
+            >
+              <button (click)="onNavigationItemClick(item)">
+                {{ item.label }}
+                <span class="panel-navigation-icon"></span>
+              </button>
+
+              @if (item.children) {
+                <div class="panel-navigation-subnav">
+                  <ul>
+                    @for (subItem of item.children; track subItem.name) {
+                      @if (!subItem.disabled) {
+                        <li
+                          class="panel-navigation-subnav-item"
+                          [ngClass]="{ active: activePanel() === subItem.name }"
+                        >
+                          <button (click)="onNavigationItemClick(subItem)">
+                            {{ subItem.label }}
+                            <span class="panel-navigation-icon"></span>
+                          </button>
+                        </li>
+                      }
+                    }
+                  </ul>
+                </div>
+              }
+            </li>
+          }
+        }
+      </ul>
+    </div>
+
+    @if (navSlideIndex < getPanelCount() - 1) {
+      <button
+        class="panel-navigation-scroll panel-navigation-scroll-next"
+        (click)="slideNavigation(1)"
+      >
+        <fa-icon [icon]="faAngleRight" />
+      </button>
+    }
+  </div>
+</div>

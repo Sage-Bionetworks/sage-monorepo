@@ -83,6 +83,16 @@ export const routes: Route[] = [
     },
   },
   {
+    path: 'models/:model/:tab',
+    loadChildren: () =>
+      import('@sagebionetworks/model-ad/model-details').then((routes) => routes.routes),
+  },
+  {
+    path: 'models/:model/:tab/:subtab',
+    loadChildren: () =>
+      import('@sagebionetworks/model-ad/model-details').then((routes) => routes.routes),
+  },
+  {
     path: 'terms-of-service',
     loadChildren: () =>
       import('@sagebionetworks/explorers/shared').then((routes) => routes.termsOfServiceRoute),

@@ -1,1 +1,31 @@
-<h1>Model-AD Model Details</h1>
+<div class="model-details">
+  @if (isLoading) {
+    <div id="loading">
+      <explorers-loading-icon />
+    </div>
+  } @else {
+    <h1>{{ model?.model }}</h1>
+    <explorers-panel-navigation
+      [panels]="panels"
+      (panelChange)="onPanelChange($event)"
+      [activePanel]="activePanel"
+      [activeParent]="activeParent"
+    />
+    <div class="panel-content">
+      @switch (activePanel) {
+        @case ('omics') {
+          <h2>Available Data</h2>
+        }
+        @case ('biomarkers') {
+          <h2>Biomarkers</h2>
+        }
+        @case ('pathology') {
+          <h2>Pathology</h2>
+        }
+        @case ('resources') {
+          <h2>Model-Specific Resources</h2>
+        }
+      }
+    </div>
+  }
+</div>
