@@ -42,6 +42,10 @@ const pointsWithoutPointCategories: CategoryPoint[] = [
 
 describe('boxplot-utils', () => {
   beforeEach(() => jest.clearAllMocks());
+  afterAll(() => {
+    consoleWarnSpy.mockRestore();
+    jest.restoreAllMocks();
+  });
 
   describe('getPointStyleFromArray', () => {
     const pointCategories = ['a', 'b', 'c'];

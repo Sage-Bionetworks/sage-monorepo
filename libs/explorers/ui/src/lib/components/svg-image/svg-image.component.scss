@@ -1,0 +1,35 @@
+.svg-image-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  .svg-image {
+    display: block;
+  }
+
+  &--original {
+    .svg-image {
+      // Use SVG dimensions
+    }
+  }
+
+  &--full-width {
+    width: 100%;
+    height: 100%;
+
+    .svg-image {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  &--full-height {
+    width: 100%;
+    height: 100%;
+
+    .svg-image {
+      height: 100%;
+      width: auto;
+    }
+  }
+}

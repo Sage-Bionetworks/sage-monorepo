@@ -1,3 +1,5 @@
-export * from './lib/handlers';
+// Export only mocks from this entry point - no MSW imports to avoid parsing issues in browser environments.
 export * from './lib/mocks';
-export * from './lib/server';
+
+// If you need MSW functionality, import it explicitly from:
+// import { server } from '@sagebionetworks/explorers/testing/msw';
