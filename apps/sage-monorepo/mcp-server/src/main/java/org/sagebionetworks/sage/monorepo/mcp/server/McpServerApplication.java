@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import org.sagebionetworks.sage.monorepo.mcp.server.configuration.McpServerConfig;
 import org.sagebionetworks.sage.monorepo.mcp.server.service.DockerService;
-import org.sagebionetworks.sage.monorepo.mcp.server.service.ObservabilityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.support.ToolCallbacks;
@@ -43,11 +42,8 @@ public class McpServerApplication implements CommandLineRunner {
   }
 
   @Bean
-  public List<ToolCallback> toolCallbacks(
-    DockerService dockerService,
-    ObservabilityService observabilityService
-  ) {
-    return Arrays.asList(ToolCallbacks.from(dockerService, observabilityService));
+  public List<ToolCallback> toolCallbacks(DockerService dockerService) {
+    return Arrays.asList(ToolCallbacks.from(dockerService));
   }
 
   @Bean

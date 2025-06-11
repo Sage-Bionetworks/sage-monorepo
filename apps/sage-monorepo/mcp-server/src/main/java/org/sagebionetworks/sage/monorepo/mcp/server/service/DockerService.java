@@ -53,7 +53,8 @@ public class DockerService {
 
     // Validate product name
     if (!isValidProduct(productNameLower)) {
-      logger.warn("Unknown product: {}", productName);
+      logger.error("Unknown product: {}. Please specify a valid product name.", productName);
+      return;
     }
 
     logger.info("Building Docker images for the {} product", productName);
@@ -136,7 +137,8 @@ public class DockerService {
 
     // Validate product name
     if (!isValidProduct(productNameLower)) {
-      logger.warn("Unknown product: {}", productName);
+      logger.error("Unknown product: {}. Please specify a valid product name.", productName);
+      return;
     }
 
     String apexContainer = PRODUCT_TO_APEX_CONTAINER.getOrDefault(
@@ -169,6 +171,79 @@ public class DockerService {
       }
     } catch (Exception e) {
       logger.error("Error during {} stack startup", productName, e);
+    }
+  }
+
+  @Tool(name = "smr_product_docker_remove", description = "Remove the product stack with Docker.")
+  public void productDockerRemove(
+    @ToolParam(description = "The product stack to remove with Docker.") String productName
+  ) {
+    String productNameLower = productName.toLowerCase();
+
+    // Validate product name
+    if (!isValidProduct(productNameLower)) {
+      logger.error("Unknown product: {}. Please specify a valid product name.", productName);
+      return;
+    }
+
+    logger.info("Removing the {} stack with Docker", productName);
+    try {
+      // First, get the container IDs
+      Process findProcess = new ProcessBuilder(
+        "docker",
+        "ps",
+        "--all",
+        "--filter",
+        "name=^" + productNameLower + "-*",
+        "--format",
+        "{{.ID}}"
+      ).start();
+
+      // Wait for the find process to complete
+      int findExitCode = findProcess.waitFor();
+      if (findExitCode != 0) {
+        logger.error("Failed to find the containers, exit code: {}", findExitCode);
+        return;
+      }
+
+      // Read the output (container IDs) and collect them
+      java.io.BufferedReader reader = new java.io.BufferedReader(
+        new java.io.InputStreamReader(findProcess.getInputStream())
+      );
+      String containerIds = reader
+        .lines()
+        .map(String::trim)
+        .filter(id -> !id.isEmpty())
+        .collect(java.util.stream.Collectors.joining(" "));
+
+      if (!containerIds.isEmpty()) {
+        // Remove all containers in a single command
+        logger.info("Removing container IDs: {}", containerIds);
+
+        String command = "docker rm --force " + containerIds;
+        Process rmProcess = new ProcessBuilder("bash", "-c", command).start();
+        int rmExitCode = rmProcess.waitFor();
+
+        if (rmExitCode == 0) {
+          logger.info("Successfully removed all {} containers", productName);
+        } else {
+          logger.error("Failed to remove containers, exit code: {}", rmExitCode);
+          // Capture error output for better debugging
+          java.io.BufferedReader errorReader = new java.io.BufferedReader(
+            new java.io.InputStreamReader(rmProcess.getErrorStream())
+          );
+          String errorOutput = errorReader
+            .lines()
+            .collect(java.util.stream.Collectors.joining("\n"));
+          logger.error("Error output: {}", errorOutput);
+        }
+      } else {
+        logger.info("No {} containers found to remove", productName);
+      }
+
+      logger.info("Docker remove operation completed");
+    } catch (Exception e) {
+      logger.error("Error during Docker remove", e);
     }
   }
 }
