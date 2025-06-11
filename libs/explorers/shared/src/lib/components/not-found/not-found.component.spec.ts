@@ -1,20 +1,10 @@
 import { render, screen } from '@testing-library/angular';
 import { NotFoundComponent } from './not-found.component';
-import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
 
 async function setup(supportEmail: string | null = 'support@example.com') {
   const { fixture } = await render(NotFoundComponent, {
-    providers: [
-      {
-        provide: ActivatedRoute,
-        useValue: {
-          data: of({ supportEmail }),
-        },
-      },
-    ],
+    componentInputs: { supportEmail },
   });
-
   const component = fixture.componentInstance;
   return component;
 }

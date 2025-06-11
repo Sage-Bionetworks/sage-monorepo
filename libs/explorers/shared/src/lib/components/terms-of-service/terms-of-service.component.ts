@@ -26,7 +26,6 @@ export class TermsOfServiceComponent implements OnInit {
   }
 
   loadTOS() {
-    this.isLoading = true;
     this.synapseService
       .getTermsOfService()
       .pipe(

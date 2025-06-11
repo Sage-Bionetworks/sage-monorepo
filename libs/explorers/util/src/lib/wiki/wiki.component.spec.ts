@@ -31,18 +31,18 @@ describe('WikiComponent', () => {
   describe('getWikiData', () => {
     it('should get wiki data', async () => {
       const expected = synapseWikiMock;
-      expect(component.loading).toBe(true);
+      expect(component.isLoading).toBe(true);
 
       component.getWikiData();
       await fixture.whenStable();
 
       expect(component.data.markdown).toBe(expected.markdown);
-      expect(component.loading).toBe(false);
+      expect(component.isLoading).toBe(false);
     });
 
     it('should default to error content when api is unreachable', async () => {
       const noDataContent = `<div class="wiki-no-data">No data found...</div>`;
-      expect(component.loading).toBe(true);
+      expect(component.isLoading).toBe(true);
 
       // simulate server error
       const url = 'https://repo-prod.prod.sagebase.org/repo/v1/entity/syn25913473/wiki/';
@@ -62,7 +62,7 @@ describe('WikiComponent', () => {
       await fixture.whenStable();
 
       expect(component.safeHtml).toBe(noDataContent);
-      expect(component.loading).toBe(false);
+      expect(component.isLoading).toBe(false);
     });
   });
 
@@ -80,7 +80,7 @@ describe('WikiComponent', () => {
       const expectedValue = 'loading';
 
       // set loading variable to be true
-      component.loading = true;
+      component.isLoading = true;
 
       const result = component.getClassName();
 
