@@ -35,7 +35,7 @@ from opentelemetry.instrumentation.logging import LoggingInstrumentor
 # No profiling functionality
 
 # Constants
-SERVICE_NAME = "agora-data"
+SERVICE_NAME = "sandbox-observability-python"
 SERVICE_VERSION = "0.1.0"
 
 # Setup the OpenTelemetry resources
