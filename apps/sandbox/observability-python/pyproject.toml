@@ -1,0 +1,22 @@
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[project]
+authors = [
+    {name = "Thomas Schaffter", email = "thomas.schaffter@sagebionetworks.org"},
+]
+requires-python = "==3.11.9"
+dependencies = []
+name = "sandbox-observability-python"
+version = "0.1.0"
+description = "An example Python project for testing observability features."
+readme = "README.md"
+
+[dependency-groups]
+dev = []
+prod = []
+test = []
+
+[tool.uv]
+default-groups = []
