@@ -5,6 +5,8 @@ services:
     restart: no
     env_file:
       - ../../../apps/sandbox/observability-python/.env
+    volumes:
+      - ../../../apps/sandbox/observability-python/src:/app/src:ro # Defined in Dockerfile
     environment:
       - PYTHONUNBUFFERED=1
     networks:

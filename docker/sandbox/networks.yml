@@ -6,3 +6,4 @@ networks:
   observability:
     name: observability
     driver: bridge
+    external: true
