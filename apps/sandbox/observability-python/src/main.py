@@ -6,7 +6,7 @@ observability stack.
 This script demonstrates how to:
 1. Configure OpenTelemetry logging, metrics, and traces
 2. Configure Pyroscope profiles
-3. Instrument a script to send data to the observability stack
+3. Instrument this script to send data to the observability stack
 """
 
 import argparse
@@ -43,6 +43,8 @@ except ImportError:
 # Constants
 SERVICE_NAME = "sandbox-observability-python"
 SERVICE_VERSION = "0.1.0"
+OTLP_ENDPOINT = "http://observability-otel-collector:8508"  # gRPC endpoint
+PYROSCOPE_ENDPOINT = "http://observability-pyroscope:8511"
 
 # Setup the OpenTelemetry resources
 resource = Resource.create(
@@ -69,7 +71,7 @@ def setup_logging():
 
     # Set up the OTLP log exporter
     log_exporter = OTLPLogExporter(
-        endpoint="http://observability-otel-collector:8508",  # gRPC endpoint
+        endpoint=OTLP_ENDPOINT,
         insecure=True,
     )
 
@@ -96,7 +98,7 @@ def setup_tracing():
 
     # Create an OTLP exporter and add it to the tracer provider
     otlp_exporter = OTLPSpanExporter(
-        endpoint="http://observability-otel-collector:8508",  # gRPC endpoint
+        endpoint=OTLP_ENDPOINT,
         insecure=True,
     )
     span_processor = BatchSpanProcessor(otlp_exporter)
@@ -116,7 +118,7 @@ def setup_metrics():
     # Create a metric reader
     metric_reader = PeriodicExportingMetricReader(
         OTLPMetricExporter(
-            endpoint="http://observability-otel-collector:8508",  # gRPC endpoint
+            endpoint=OTLP_ENDPOINT,
             insecure=True,
         ),
         export_interval_millis=5000,  # 5 seconds - reduced for more frequent updates
@@ -180,7 +182,7 @@ def setup_profiling():
         # Initialize Pyroscope directly with more explicit settings
         pyroscope.configure(
             application_name=SERVICE_NAME,
-            server_address="http://observability-pyroscope:8511",
+            server_address=PYROSCOPE_ENDPOINT,
             sample_rate=10,
             tags={
                 "service.version": SERVICE_VERSION,
