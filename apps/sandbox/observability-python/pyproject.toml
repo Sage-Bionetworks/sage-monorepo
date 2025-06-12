@@ -6,7 +6,7 @@ build-backend = "pdm.backend"
 authors = [
     {name = "Thomas Schaffter", email = "thomas.schaffter@sagebionetworks.org"},
 ]
-requires-python = "==3.11.9"
+requires-python = "==3.13.3"
 dependencies = []
 name = "sandbox-observability-python"
 version = "0.1.0"
