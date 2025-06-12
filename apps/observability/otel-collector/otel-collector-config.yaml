@@ -37,7 +37,7 @@ service:
     metrics:
       receivers: [otlp]
       processors: [batch]
-      exporters: [prometheus, debug]
+      exporters: [prometheus]
 
     logs:
       receivers: [otlp]
