@@ -8,6 +8,7 @@ services:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SERVER_HTTP_PORT=8501
     volumes:
+      - ../../../apps/observability/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
       - ../../../apps/observability/grafana/datasources:/etc/grafana/provisioning/datasources:ro
     networks:
       - observability

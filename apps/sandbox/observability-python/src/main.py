@@ -116,32 +116,56 @@ def setup_metrics():
             endpoint="http://observability-otel-collector:8508",  # gRPC endpoint
             insecure=True,
         ),
-        export_interval_millis=10000,  # 10 seconds
+        export_interval_millis=5000,  # 5 seconds - reduced for more frequent updates
     )
 
-    # Create a meter provider
+    # Create a meter provider with the shared resource
     meter_provider = MeterProvider(resource=resource, metric_readers=[metric_reader])
 
-    # Set the meter provider
+    # Set the meter provider globally
     metrics.set_meter_provider(meter_provider)
 
     # Get a meter
-    meter = metrics.get_meter(SERVICE_NAME, SERVICE_VERSION)
-
-    # Create some metrics
+    meter = metrics.get_meter(
+        SERVICE_NAME, SERVICE_VERSION
+    )  # Create some metrics with more specific names
     request_counter = meter.create_counter(
-        name="requests",
+        name=f"{SERVICE_NAME}.requests",
         description="Number of requests processed",
         unit="1",
     )
 
     request_duration = meter.create_histogram(
-        name="request_duration",
+        name=f"{SERVICE_NAME}.request_duration",
         description="Duration of requests",
         unit="ms",
     )
 
-    return request_counter, request_duration
+    # Add a metric to track the time the script has been running
+    runtime_gauge = meter.create_up_down_counter(
+        name=f"{SERVICE_NAME}.runtime_seconds",
+        description="How long the script has been running in seconds",
+        unit="s",
+    )
+
+    # Add an up metric that will always be present and set to 1
+    # This helps confirm the metrics pipeline is working
+    up_gauge = meter.create_up_down_counter(
+        name=f"{SERVICE_NAME}.up",
+        description="Indicates the service is running and exporting metrics",
+        unit="1",
+    )
+
+    # Set the up metric to 1 (service is up) with service attributes
+    up_gauge.add(
+        1,
+        {
+            "service.name": SERVICE_NAME,
+            "service.version": SERVICE_VERSION,
+        },
+    )
+
+    return request_counter, request_duration, runtime_gauge
 
 
 # No profiling functionality
@@ -165,7 +189,13 @@ def main():
     # Setup telemetry
     logger = setup_logging()
     tracer = setup_tracing()
-    request_counter, request_duration = setup_metrics()
+    request_counter, request_duration, runtime_gauge = setup_metrics()
+
+    # Store meter provider reference for shutdown
+    meter_provider = metrics.get_meter_provider()
+
+    # Record start time
+    start_time = time.time()
 
     # Log initialization
     logger.info(f"Starting {SERVICE_NAME} v{SERVICE_VERSION}")
@@ -191,9 +221,14 @@ def main():
         sleep_time = random.uniform(0.1, 0.5)
         time.sleep(sleep_time)
 
-        # Record metrics
-        request_counter.add(1, {"item_id": str(item_id)})
-        request_duration.record(sleep_time * 1000, {"item_id": str(item_id)})
+        # Record metrics with additional attributes
+        attributes = {
+            "item_id": str(item_id),
+            "service.name": SERVICE_NAME,
+            "service.version": SERVICE_VERSION,
+        }
+        request_counter.add(1, attributes)
+        request_duration.record(sleep_time * 1000, attributes)
 
         # Sometimes generate an error
         if random.random() < 0.2:
@@ -211,6 +246,13 @@ def main():
             try:
                 processing_time = process_item(i)
                 total_time += processing_time
+
+                # Update the runtime gauge with the elapsed time
+                elapsed = time.time() - start_time
+                runtime_gauge.add(
+                    elapsed, {"service.name": SERVICE_NAME, "iteration": str(i)}
+                )
+
                 logger.info(f"Completed item {i} in {processing_time:.2f} seconds")
             except Exception as e:
                 logger.error(f"Unhandled exception: {e}", exc_info=True)
@@ -218,6 +260,19 @@ def main():
         logger.info(f"Processed {args.iterations} items in {total_time:.2f} seconds")
 
     logger.info(f"Shutting down {SERVICE_NAME}")
+
+    # Force flush metrics before shutdown
+    logger.info("Flushing metrics before shutdown...")
+
+    # Force a metrics collection/export cycle
+    if hasattr(meter_provider, "force_flush"):
+        meter_provider.force_flush()
+
+    # Give time for metrics to be exported
+    logger.info("Waiting for metrics to be exported...")
+    time.sleep(6)  # Wait 6 seconds to allow metrics to be exported
+
+    logger.info("Shutdown complete")
     return 0
 
 
