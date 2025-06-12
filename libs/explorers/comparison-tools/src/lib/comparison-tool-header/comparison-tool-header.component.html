@@ -1,8 +1,10 @@
-<div class="header">
-  <explorers-comparison-tool-filter-results-button
-    (filterToggle)="toggleFilterPanel()"
-    [tooltip]="filterResultsButtonTooltip()"
-  />
-  <h1>{{ headerTitle() }}</h1>
-  <explorers-comparison-tool-share-url-button [tooltip]="shareUrlButtonTooltip()" />
+<div class="comparison-tool-header">
+  <div class="comparison-tool-header-inner">
+    <explorers-comparison-tool-filter-results-button
+      (filterToggle)="toggleFilterPanel()"
+      [tooltip]="filterResultsButtonTooltip()"
+    />
+    <h1>{{ headerTitle() }}</h1>
+    <explorers-comparison-tool-share-url-button [tooltip]="shareUrlButtonTooltip()" />
+  </div>
 </div>
