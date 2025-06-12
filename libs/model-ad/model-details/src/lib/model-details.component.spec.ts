@@ -40,7 +40,7 @@ async function setup(model = modelMock, tab = 'omics', subtab = null, config = c
 describe('ModelDetailsComponent', () => {
   afterAll(() => jest.restoreAllMocks());
 
-  it('should display all model name', async () => {
+  it('should display the model name', async () => {
     await setup();
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(modelMock.model);
   });

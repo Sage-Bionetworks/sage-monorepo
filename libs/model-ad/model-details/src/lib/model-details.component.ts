@@ -70,9 +70,9 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
           .subscribe({
             next: (model: Model) => {
               this.panels.forEach((p: Panel) => {
-                if (p.name == 'biomarkers' && model.biomarkers.length == 0) {
+                if (p.name === 'biomarkers' && model.biomarkers.length === 0) {
                   p.disabled = true;
-                } else if (p.name == 'pathology' && model.pathology.length == 0) {
+                } else if (p.name === 'pathology' && model.pathology.length === 0) {
                   p.disabled = true;
                 } else {
                   p.disabled = false;

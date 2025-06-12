@@ -103,7 +103,7 @@ export class PanelNavigationComponent implements AfterViewInit, AfterViewChecked
     if (this.navSlideIndex < 0) {
       this.navSlideIndex = 0;
     } else if (this.navSlideIndex > this.getPanelCount() - 1) {
-      this.navSlideIndex = this.panels().length - 1;
+      this.navSlideIndex = this.getPanelCount() - 1;
     }
 
     const nav = document.querySelector<HTMLElement>('.panel-navigation');
