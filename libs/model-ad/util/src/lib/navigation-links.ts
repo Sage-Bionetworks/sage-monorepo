@@ -9,15 +9,15 @@ export const headerLinks: NavigationLink[] = [
   },
   {
     label: 'Model Overview',
-    routerLink: ['model-overview'],
+    routerLink: ['comparison/model'],
   },
   {
     label: 'Gene Expression',
-    routerLink: ['gene-expression'],
+    routerLink: ['comparison/expression'],
   },
   {
     label: 'Disease Correlation',
-    routerLink: ['disease-correlation'],
+    routerLink: ['comparison/correlation'],
   },
 ];
 

@@ -12,8 +12,10 @@ import {
   createGoogleTagManagerIdProvider,
   isGoogleTagManagerIdSet,
 } from '@sagebionetworks/shared/google-tag-manager';
+import { ToastModule } from 'primeng/toast';
+
 @Component({
-  imports: [RouterModule, FooterComponent, HeaderComponent, GoogleTagManagerComponent],
+  imports: [RouterModule, FooterComponent, HeaderComponent, ToastModule, GoogleTagManagerComponent],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
