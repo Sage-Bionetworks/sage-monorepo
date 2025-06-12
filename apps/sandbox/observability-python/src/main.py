@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
 """
-Example script instrumented with OpenTelemetry to send telemetry data to the Sage observability stack.
+Example script instrumented with OpenTelemetry to send telemetry data to the Sage monorepo
+observability stack.
 
 This script demonstrates how to:
 1. Configure OpenTelemetry logging, metrics, and traces
-2. Instrument a script to send data to the observability stack
-
-Requires:
-- opentelemetry-api
-- opentelemetry-sdk
-- opentelemetry-exporter-otlp
-- opentelemetry-instrumentation
+2. Configure Pyroscope profiles
+3. Instrument a script to send data to the observability stack
 """
 
 import argparse
@@ -175,20 +171,23 @@ def setup_metrics():
     return request_counter, request_duration, runtime_gauge
 
 
-# No profiling functionality
-
-
 # Configure Profiling with Pyroscope
 def setup_profiling():
     if not has_pyroscope:
         return None
 
     try:
-        # Initialize Pyroscope directly
+        # Initialize Pyroscope directly with more explicit settings
         pyroscope.configure(
             application_name=SERVICE_NAME,
             server_address="http://observability-pyroscope:8511",
-            tags={"service.version": SERVICE_VERSION, "environment": "development"},
+            sample_rate=10,
+            tags={
+                "service.version": SERVICE_VERSION,
+                "environment": "development",
+                "language": "python",
+            },
+            enable_logging=True,
         )
         return True
     except Exception as e:
