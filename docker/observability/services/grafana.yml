@@ -9,8 +9,8 @@ services:
       - GF_SERVER_HTTP_PORT=8501
     volumes:
       - ../../../apps/observability/grafana/dashboards:/etc/grafana/dashboards:ro
-      - ../../../apps/observability/grafana/datasources:/etc/grafana/provisioning/datasources:ro
       - ../../../apps/observability/grafana/provisioning/dashboards/dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml:ro
+      - ../../../apps/observability/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
     networks:
       - observability
     ports:
