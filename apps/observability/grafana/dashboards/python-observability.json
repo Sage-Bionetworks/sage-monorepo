@@ -200,7 +200,7 @@
             "uid": "Prometheus"
           },
           "editorMode": "code",
-          "expr": "sandbox_observability_python_requests_total",
+          "expr": "sandbox_observability_python_requests",
           "instant": false,
           "legendFormat": "Requests",
           "range": true,
@@ -388,7 +388,7 @@
             "uid": "Prometheus"
           },
           "editorMode": "code",
-          "expr": "sandbox_observability_python_request_duration_bucket",
+          "expr": "sandbox_observability_python_request_duration_sum / sandbox_observability_python_request_duration_count",
           "instant": false,
           "legendFormat": "Duration",
           "range": true,
