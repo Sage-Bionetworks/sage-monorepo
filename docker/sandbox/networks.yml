@@ -2,3 +2,7 @@ networks:
   sandbox:
     name: sandbox
     driver: bridge
+
+  observability:
+    name: observability
+    driver: bridge

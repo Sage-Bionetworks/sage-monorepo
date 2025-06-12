@@ -21,8 +21,13 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "uv run src/main.py",
-        "cwd": "{projectRoot}"
+        "command": "docker/sandbox/serve.sh {projectName}"
+      }
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/sandbox/serve-detach.sh {projectName}"
       }
     }
   },

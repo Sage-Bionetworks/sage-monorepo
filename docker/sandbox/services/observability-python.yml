@@ -1,0 +1,12 @@
+services:
+  sandbox-observability-python:
+    image: ghcr.io/sage-bionetworks/sandbox-observability-python:${SANDBOX_VERSION:-local}
+    container_name: sandbox-observability-python
+    restart: no
+    env_file:
+      - ../../../apps/sandbox/observability-python/.env
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - sandbox
+      - observability
