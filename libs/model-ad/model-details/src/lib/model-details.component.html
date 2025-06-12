@@ -1,4 +1,4 @@
-<div class="model-details">
+<div [class]="{ 'model-details': true, loading: isLoading }">
   @if (isLoading) {
     <div id="loading">
       <explorers-loading-icon />

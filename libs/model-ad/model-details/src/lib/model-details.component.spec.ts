@@ -1,12 +1,13 @@
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { ModelsService } from '@sagebionetworks/model-ad/api-client-angular';
-import { modelMock } from '@sagebionetworks/model-ad/testing';
+import { ConfigService } from '@sagebionetworks/model-ad/config';
+import { configMock, modelMock } from '@sagebionetworks/model-ad/testing';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
 import { ModelDetailsComponent } from './model-details.component';
 
-async function setup(model = modelMock, tab = 'omics', subtab = null) {
+async function setup(model = modelMock, tab = 'omics', subtab = null, config = configMock) {
   const user = userEvent.setup();
 
   const mockActivatedRoute = {
@@ -17,6 +18,10 @@ async function setup(model = modelMock, tab = 'omics', subtab = null) {
     getModelByName: jest.fn(() => of(model)),
   };
 
+  const configServiceMock = {
+    config: config,
+  };
+
   const component = await render(ModelDetailsComponent, {
     imports: [],
     providers: [
@@ -25,6 +30,7 @@ async function setup(model = modelMock, tab = 'omics', subtab = null) {
         provide: ActivatedRoute,
         useValue: mockActivatedRoute,
       },
+      { provide: ConfigService, useValue: configServiceMock },
     ],
   });
 
@@ -32,6 +38,8 @@ async function setup(model = modelMock, tab = 'omics', subtab = null) {
 }
 
 describe('ModelDetailsComponent', () => {
+  afterAll(() => jest.restoreAllMocks());
+
   it('should display all model name', async () => {
     await setup();
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(modelMock.model);
@@ -52,5 +60,12 @@ describe('ModelDetailsComponent', () => {
     expect(screen.queryByText('Biomarkers')).not.toBeInTheDocument();
     expect(screen.queryByText('Pathology')).not.toBeInTheDocument();
     expect(screen.getByText('Resources')).toBeInTheDocument();
+  });
+
+  it('should show loading icon on server', async () => {
+    const configServer = { ...configMock, isPlatformServer: true };
+    await setup(modelMock, 'omics', null, configServer);
+    expect(document.querySelector('.loading-icon')).toBeVisible();
+    expect(screen.queryByText(/This page isn't available/i)).not.toBeInTheDocument();
   });
 });

@@ -33,6 +33,12 @@ async function setup(panels: Panel[] = panelsMock, activePanel = 'panel1', activ
 }
 
 describe('PanelNavigationComponent', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+  afterAll(() => {
+    jest.restoreAllMocks();
+  });
   it('should create', async () => {
     const { component } = await setup();
     expect(component).toBeTruthy();

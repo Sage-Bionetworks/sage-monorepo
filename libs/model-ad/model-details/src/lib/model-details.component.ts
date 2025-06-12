@@ -7,6 +7,7 @@ import { HelperService } from '@sagebionetworks/explorers/services';
 import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { Model, ModelsService } from '@sagebionetworks/model-ad/api-client-angular';
+import { ConfigService } from '@sagebionetworks/model-ad/config';
 
 @Component({
   selector: 'model-ad-model-details',
@@ -21,6 +22,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
   helperService = inject(HelperService);
   modelsService = inject(ModelsService);
   destroyRef = inject(DestroyRef);
+  configService = inject(ConfigService);
 
   isLoading = true;
 
@@ -55,6 +57,9 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params: ParamMap) => {
       this.isLoading = true;
+      if (this.configService.config.isPlatformServer) {
+        return;
+      }
 
       const modelName = params.get('model');
 
