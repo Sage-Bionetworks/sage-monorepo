@@ -15,7 +15,7 @@ export class ComparisonToolShareURLButtonComponent {
 
   tooltip = input('');
 
-  toastDuration = 1000;
+  toastDuration = 5000;
 
   copyUrl() {
     navigator.clipboard.writeText(window.location.href);
@@ -23,7 +23,7 @@ export class ComparisonToolShareURLButtonComponent {
     this.messageService.add({
       key: 'share-url-button-toast',
       severity: 'info',
-      summary: '',
+      summary: 'URL Copied',
       detail:
         'URL copied to clipboard! Use this URL to share or bookmark the current table configuration.',
     });

@@ -14,6 +14,7 @@ export class ComparisonToolHeaderComponent {
   shareUrlButtonTooltip = input.required<string>();
 
   toggleFilterPanel() {
+    // TODO: Replace this alert with proper filter panel toggle behavior in a future update (MG-246)
     alert('Filter panel toggled');
   }
 }
