@@ -31,6 +31,9 @@ from opentelemetry.sdk.resources import Resource
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
 from opentelemetry.instrumentation.logging import LoggingInstrumentor
+from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
+from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
+from opentelemetry.exporter.otlp.proto.grpc._log_exporter import OTLPLogExporter
 
 # No profiling functionality
 
@@ -60,6 +63,22 @@ def setup_logging():
     )
     handler.setFormatter(formatter)
     logger.addHandler(handler)
+
+    # Set up the OTLP log exporter
+    log_exporter = OTLPLogExporter(
+        endpoint="http://observability-otel-collector:8508",  # gRPC endpoint
+        insecure=True,
+    )
+
+    # Create logger provider with our resource
+    logger_provider = LoggerProvider(resource=resource)
+
+    # Add exporter to logger provider
+    logger_provider.add_log_record_processor(BatchLogRecordProcessor(log_exporter))
+
+    # Create and add OTLP handler to logger
+    otlp_handler = LoggingHandler(logger_provider=logger_provider)
+    logger.addHandler(otlp_handler)
 
     # Instrument logging with OpenTelemetry
     LoggingInstrumentor().instrument(set_logging_format=True)
