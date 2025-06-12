@@ -35,7 +35,14 @@ from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
 from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
 from opentelemetry.exporter.otlp.proto.grpc._log_exporter import OTLPLogExporter
 
-# No profiling functionality
+# Pyroscope profiling
+try:
+    import pyroscope
+
+    has_pyroscope = True
+except ImportError:
+    print("Pyroscope not installed. Profiling will not be available.")
+    has_pyroscope = False
 
 # Constants
 SERVICE_NAME = "sandbox-observability-python"
@@ -171,6 +178,24 @@ def setup_metrics():
 # No profiling functionality
 
 
+# Configure Profiling with Pyroscope
+def setup_profiling():
+    if not has_pyroscope:
+        return None
+
+    try:
+        # Initialize Pyroscope directly
+        pyroscope.configure(
+            application_name=SERVICE_NAME,
+            server_address="http://observability-pyroscope:8511",
+            tags={"service.version": SERVICE_VERSION, "environment": "development"},
+        )
+        return True
+    except Exception as e:
+        print(f"Failed to configure Pyroscope: {e}")
+        return None
+
+
 # Tracing decorator for functions
 def trace_function(tracer):
     def decorator(func):
@@ -190,6 +215,7 @@ def main():
     logger = setup_logging()
     tracer = setup_tracing()
     request_counter, request_duration, runtime_gauge = setup_metrics()
+    profiling_enabled = setup_profiling()
 
     # Store meter provider reference for shutdown
     meter_provider = metrics.get_meter_provider()
@@ -203,6 +229,7 @@ def main():
     logger.info(
         f"Metrics enabled: {request_counter is not None and request_duration is not None}"
     )
+    logger.info(f"Profiling enabled: {profiling_enabled is True}")
 
     # Parse arguments
     parser = argparse.ArgumentParser(
@@ -217,6 +244,14 @@ def main():
     @trace_function(tracer)
     def process_item(item_id):
         logger.info(f"Processing item {item_id}")
+
+        # Add CPU-intensive work to demonstrate profiling
+        if item_id % 2 == 0:
+            # CPU-intensive operation - recursive Fibonacci calculation
+            n = 35  # Large enough to be visible in profiles
+            result = calculate_fibonacci(n)
+            logger.info(f"Calculated Fibonacci({n}) = {result}")
+
         # Simulate some work
         sleep_time = random.uniform(0.1, 0.5)
         time.sleep(sleep_time)
@@ -239,11 +274,25 @@ def main():
 
         return sleep_time
 
+    # CPU-intensive function that will show up in profiles
+    def calculate_fibonacci(n):
+        if n <= 1:
+            return n
+        return calculate_fibonacci(n - 1) + calculate_fibonacci(n - 2)
+
     # Main processing loop
     with tracer.start_as_current_span("main_processing"):
         total_time = 0
         for i in range(args.iterations):
             try:
+                # Add profiling label for each iteration if profiling is enabled
+                profiling_ctx = None
+                if has_pyroscope:
+                    profiling_ctx = pyroscope.tag_wrapper(
+                        {"iteration": str(i), "operation": "process_item"}
+                    )
+                    profiling_ctx.__enter__()
+
                 processing_time = process_item(i)
                 total_time += processing_time
 
@@ -254,7 +303,15 @@ def main():
                 )
 
                 logger.info(f"Completed item {i} in {processing_time:.2f} seconds")
+
+                # Exit the profiling context if it exists
+                if profiling_ctx:
+                    profiling_ctx.__exit__(None, None, None)
+
             except Exception as e:
+                # Exit profiling context in case of error
+                if "profiling_ctx" in locals() and profiling_ctx:
+                    profiling_ctx.__exit__(None, None, None)
                 logger.error(f"Unhandled exception: {e}", exc_info=True)
 
         logger.info(f"Processed {args.iterations} items in {total_time:.2f} seconds")
@@ -271,6 +328,11 @@ def main():
     # Give time for metrics to be exported
     logger.info("Waiting for metrics to be exported...")
     time.sleep(6)  # Wait 6 seconds to allow metrics to be exported
+
+    # Close Pyroscope profiler if it was enabled
+    if has_pyroscope and "pyroscope" in globals() and hasattr(pyroscope, "stop"):
+        logger.info("Stopping Pyroscope profiler...")
+        pyroscope.stop()
 
     logger.info("Shutdown complete")
     return 0

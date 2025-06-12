@@ -12,6 +12,7 @@ dependencies = [
     "opentelemetry-exporter-otlp==1.34.1",
     "opentelemetry-instrumentation-logging==0.55b1",
     "opentelemetry-sdk==1.34.1",
+    "pyroscope-io==0.8.11",
 ]
 name = "sandbox-observability-python"
 version = "0.1.0"
