@@ -1,7 +1,6 @@
 services:
   observability-pyroscope:
     image: ghcr.io/sage-bionetworks/observability-pyroscope:${OBSERVABILITY_VERSION:-local}
-    # command: ['-log.level=debug']
     container_name: observability-pyroscope
     restart: always
     volumes:
