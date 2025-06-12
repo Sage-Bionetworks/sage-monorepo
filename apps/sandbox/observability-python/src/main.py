@@ -266,7 +266,7 @@ def main():
 
     # Force a metrics collection/export cycle
     if hasattr(meter_provider, "force_flush"):
-        meter_provider.force_flush()
+        meter_provider.force_flush()  # type: ignore
 
     # Give time for metrics to be exported
     logger.info("Waiting for metrics to be exported...")
