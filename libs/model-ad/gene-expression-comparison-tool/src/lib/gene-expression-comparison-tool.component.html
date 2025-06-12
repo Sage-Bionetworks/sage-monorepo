@@ -4,9 +4,11 @@
   [resultsCount]="resultsCount()"
 >
   <div class="gene-expression-comparison-tool">
-    <div class="header">
-      <h1>Gene Expression</h1>
-    </div>
+    <explorers-comparison-tool-header
+      headerTitle="Gene Expression"
+      filterResultsButtonTooltip="Filter the results based on the selected criteria"
+      shareUrlButtonTooltip="Copy the URL to capture the table’s current filtering, sorting, and pinned results"
+    />
     <model-ad-gene-expression-help-links />
   </div>
 </explorers-base-comparison-tool>

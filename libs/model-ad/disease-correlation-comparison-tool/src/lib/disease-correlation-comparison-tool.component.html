@@ -4,9 +4,11 @@
   [resultsCount]="resultsCount()"
 >
   <div class="disease-correlation-comparison-tool">
-    <div class="header">
-      <h1>Disease Correlation</h1>
-    </div>
+    <explorers-comparison-tool-header
+      headerTitle="Disease Correlation"
+      filterResultsButtonTooltip="Filter the results based on the selected criteria"
+      shareUrlButtonTooltip="Copy the URL to capture the table’s current filtering, sorting, and pinned results"
+    />
     <model-ad-disease-correlation-help-links />
   </div>
 </explorers-base-comparison-tool>

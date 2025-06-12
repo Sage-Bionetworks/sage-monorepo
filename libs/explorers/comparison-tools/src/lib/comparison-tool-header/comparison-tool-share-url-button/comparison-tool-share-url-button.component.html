@@ -1,0 +1,10 @@
+<p-button
+  label="Share URL"
+  (click)="copyUrl()"
+  [rounded]="true"
+  variant="outlined"
+  size="small"
+  [pTooltip]="tooltip()"
+  tooltipPosition="left"
+></p-button>
+<p-toast key="share-url-button-toast" [life]="toastDuration"></p-toast>

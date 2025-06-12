@@ -1,11 +1,18 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
+import {
+  BaseComparisonToolComponent,
+  ComparisonToolHeaderComponent,
+} from '@sagebionetworks/explorers/comparison-tools';
 import { ComparisonToolService } from '@sagebionetworks/model-ad/services';
 import { DiseaseCorrelationHelpLinksComponent } from './components/disease-correlation-help-links/disease-correlation-help-links.component';
 import { LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/util';
 @Component({
   selector: 'model-ad-disease-correlation-comparison-tool',
-  imports: [BaseComparisonToolComponent, DiseaseCorrelationHelpLinksComponent],
+  imports: [
+    BaseComparisonToolComponent,
+    ComparisonToolHeaderComponent,
+    DiseaseCorrelationHelpLinksComponent,
+  ],
   templateUrl: './disease-correlation-comparison-tool.component.html',
   styleUrls: ['./disease-correlation-comparison-tool.component.scss'],
   providers: [ComparisonToolService],
