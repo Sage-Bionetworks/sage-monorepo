@@ -57,54 +57,63 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params: ParamMap) => {
       this.isLoading = true;
-      if (this.configService.config.isPlatformServer) {
-        return;
-      }
 
-      const modelName = params.get('model');
-
-      if (modelName) {
-        this.modelsService
-          .getModelByName(modelName)
-          .pipe(takeUntilDestroyed(this.destroyRef))
-          .subscribe({
-            next: (model: Model) => {
-              this.panels.forEach((p: Panel) => {
-                if (p.name === 'biomarkers' && model.biomarkers.length === 0) {
-                  p.disabled = true;
-                } else if (p.name === 'pathology' && model.pathology.length === 0) {
-                  p.disabled = true;
-                } else {
-                  p.disabled = false;
-                }
-              });
-
-              this.model = model;
-              this.isLoading = false;
-            },
-            error: (error) => {
-              console.error('Error retrieving model: ', error);
-              this.isLoading = false;
-              this.router.navigateByUrl('/not-found', { skipLocationChange: true });
-            },
-          });
-      }
-
-      if (params.get('subtab')) {
-        this.activePanel = params.get('subtab') as string;
-        this.activeParent = params.get('tab') as string;
-      } else if (params.get('tab')) {
-        const panel = this.panels.find((p: Panel) => p.name === params.get('tab'));
-        if (panel) {
-          const { activePanel, activeParent } = this.helperService.getActivePanelAndParent(
-            this.panels,
-            panel,
-          );
-          this.activePanel = activePanel;
-          this.activeParent = activeParent;
-        }
+      // only fetch data during client hydration
+      if (!this.configService.config.isPlatformServer) {
+        this.loadPanelData(params);
+        this.setActivePanelAndParentFromUrl(params);
       }
     });
+  }
+
+  private loadPanelData(params: ParamMap) {
+    const modelName = params.get('model');
+    if (modelName) {
+      this.modelsService
+        .getModelByName(modelName)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (model: Model) => {
+            this.model = model;
+            this.updatePanelDisabledState();
+            this.isLoading = false;
+          },
+          error: (error) => {
+            console.error('Error retrieving model: ', error);
+            this.isLoading = false;
+            this.router.navigateByUrl('/not-found', { skipLocationChange: true });
+          },
+        });
+    }
+  }
+
+  private updatePanelDisabledState() {
+    this.panels.forEach((p: Panel) => {
+      if (p.name === 'biomarkers' && this.model?.biomarkers.length === 0) {
+        p.disabled = true;
+      } else if (p.name === 'pathology' && this.model?.pathology.length === 0) {
+        p.disabled = true;
+      } else {
+        p.disabled = false;
+      }
+    });
+  }
+
+  private setActivePanelAndParentFromUrl(params: ParamMap) {
+    if (params.get('subtab')) {
+      this.activePanel = params.get('subtab') as string;
+      this.activeParent = params.get('tab') as string;
+    } else if (params.get('tab')) {
+      const panel = this.panels.find((p: Panel) => p.name === params.get('tab'));
+      if (panel) {
+        const { activePanel, activeParent } = this.helperService.getActivePanelAndParent(
+          this.panels,
+          panel,
+        );
+        this.activePanel = activePanel;
+        this.activeParent = activeParent;
+      }
+    }
   }
 
   ngAfterViewInit() {
