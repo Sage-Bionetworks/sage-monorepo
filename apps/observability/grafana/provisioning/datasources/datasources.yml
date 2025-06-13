@@ -13,6 +13,7 @@ datasources:
     url: http://observability-prometheus:8502
     isDefault: true
     editable: true
+    uid: Prometheus
 
   - name: Pyroscope
     type: grafana-pyroscope-datasource

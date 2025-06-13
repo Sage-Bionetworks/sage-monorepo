@@ -6,3 +6,8 @@ scrape_configs:
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: ['agora-gene-api:3334']
+
+  - job_name: 'observability-otel-collector'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['observability-otel-collector:8510']
