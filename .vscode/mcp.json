@@ -2,7 +2,11 @@
   "servers": {
     "openchallenges-mcp-server": {
       "type": "sse",
-      "url": "http://localhost:8000/mcp-server/sse"
+      "url": "http://localhost:8887/mcp-server/sse"
+    },
+    "sage-mcp-server": {
+      "type": "sse",
+      "url": "http://localhost:8887/mcp-server/sse"
     }
   }
 }

@@ -38,6 +38,10 @@ public class ChallengeService {
         2. Set `sections = ["data"]` to filter results to input data types.
         3. From the results, extract the matching EDAM concept IDs.
         4. Then call `list_challenges` using: inputDataTypes = [<EDAM ID(s)>]
+    - If the user refers to a specific organization (e.g., "DREAM", "Broad"):
+        1. Use `list_organizations` to search by name or acronym.
+        2. Extract the organization's `id` from the result.
+        3. Call this tool using: organizations = [<organizationId>]   
     - Search Term Strategy:
       - Use SHORT, DISTINCTIVE, and RELEVANT keywords.
       - Avoid generic filler words or overly long descriptions.
