@@ -35,7 +35,7 @@ export default defineConfig({
     url: `${baseURL}/health`,
     reuseExistingServer: !process.env['CI'],
     cwd: workspaceRoot,
-    timeout: 60000 * 3, // give time for agora-data to populate agora-mongo
+    timeout: 60000 * 3, // give time for model-ad-data to populate model-ad-mongo
   },
   projects: [
     {
