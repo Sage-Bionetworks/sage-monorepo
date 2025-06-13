@@ -29,6 +29,9 @@ public class OrganizationService {
 
     Guidelines for using this tool:
     - If a parameter is not specified, you can omit it and default values will be applied.
+    - To find challenges associated with an organization:
+      1. Call this tool to retrieve the organization and get its `id`.
+      2. Then call `list_challenges` with the `organizations` parameter set to that `id`.
     """
   )
   public OrganizationsPage listOrganizations(
