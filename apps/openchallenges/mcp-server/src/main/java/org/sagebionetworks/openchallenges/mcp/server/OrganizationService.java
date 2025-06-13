@@ -32,6 +32,9 @@ public class OrganizationService {
     - To find challenges associated with an organization:
       1. Call this tool to retrieve the organization and get its `id`.
       2. Then call `list_challenges` with the `organizations` parameter set to that `id`.
+    - Search Term Strategy:
+      - Use SHORT, DISTINCTIVE, and RELEVANT keywords.
+      - Avoid generic filler words or overly long descriptions.
     """
   )
   public OrganizationsPage listOrganizations(

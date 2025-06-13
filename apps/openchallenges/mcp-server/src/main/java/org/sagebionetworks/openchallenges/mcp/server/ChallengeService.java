@@ -38,6 +38,9 @@ public class ChallengeService {
         2. Set `sections = ["data"]` to filter results to input data types.
         3. From the results, extract the matching EDAM concept IDs.
         4. Then call `list_challenges` using: inputDataTypes = [<EDAM ID(s)>]
+    - Search Term Strategy:
+      - Use SHORT, DISTINCTIVE, and RELEVANT keywords.
+      - Avoid generic filler words or overly long descriptions.
     """
   )
   public ChallengesPage listChallenges(
