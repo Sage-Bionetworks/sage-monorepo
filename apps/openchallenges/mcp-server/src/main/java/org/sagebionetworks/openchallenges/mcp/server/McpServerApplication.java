@@ -35,6 +35,7 @@ public class McpServerApplication implements CommandLineRunner {
   @Bean
   public List<ToolCallback> toolCallbacks(
     ChallengeService challengeService,
+    ChallengeContributionService challengeContributionService,
     ChallengeAnalyticsService challengeAnalyticsService,
     ChallengePlatformService challengePlatformService,
     EdamConceptService edamConceptService,
@@ -43,6 +44,7 @@ public class McpServerApplication implements CommandLineRunner {
     return Arrays.asList(
       ToolCallbacks.from(
         challengeService,
+        challengeContributionService,
         challengeAnalyticsService,
         challengePlatformService,
         edamConceptService,

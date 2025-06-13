@@ -3,6 +3,7 @@ package org.sagebionetworks.openchallenges.mcp.server.config;
 import org.sagebionetworks.openchallenges.api.client.ApiClient;
 import org.sagebionetworks.openchallenges.api.client.api.ChallengeAnalyticsApi;
 import org.sagebionetworks.openchallenges.api.client.api.ChallengeApi;
+import org.sagebionetworks.openchallenges.api.client.api.ChallengeContributionApi;
 import org.sagebionetworks.openchallenges.api.client.api.ChallengePlatformApi;
 import org.sagebionetworks.openchallenges.api.client.api.EdamConceptApi;
 import org.sagebionetworks.openchallenges.api.client.api.OrganizationApi;
@@ -27,6 +28,11 @@ public class OpenChallengesApiClientConfig {
   @Bean
   public ChallengeAnalyticsApi challengeAnalyticsApi() {
     return new ChallengeAnalyticsApi(apiClient);
+  }
+
+  @Bean
+  public ChallengeContributionApi challengeContributionApi() {
+    return new ChallengeContributionApi(apiClient);
   }
 
   @Bean
