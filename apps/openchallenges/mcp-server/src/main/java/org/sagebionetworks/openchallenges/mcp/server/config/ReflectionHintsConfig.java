@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
     org.sagebionetworks.openchallenges.api.client.model.ChallengesPerYear.class,
     org.sagebionetworks.openchallenges.api.client.model.ChallengePlatformsPage.class,
     org.sagebionetworks.openchallenges.api.client.model.EdamConceptsPage.class,
+    org.sagebionetworks.openchallenges.api.client.model.OrganizationsPage.class,
   }
 )
 public class ReflectionHintsConfig {}

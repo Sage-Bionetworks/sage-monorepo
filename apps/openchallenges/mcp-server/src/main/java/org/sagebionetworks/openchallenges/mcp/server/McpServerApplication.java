@@ -37,14 +37,16 @@ public class McpServerApplication implements CommandLineRunner {
     ChallengeService challengeService,
     ChallengeAnalyticsService challengeAnalyticsService,
     ChallengePlatformService challengePlatformService,
-    EdamConceptService edamConceptService
+    EdamConceptService edamConceptService,
+    OrganizationService organizationService
   ) {
     return Arrays.asList(
       ToolCallbacks.from(
         challengeService,
         challengeAnalyticsService,
         challengePlatformService,
-        edamConceptService
+        edamConceptService,
+        organizationService
       )
     );
   }

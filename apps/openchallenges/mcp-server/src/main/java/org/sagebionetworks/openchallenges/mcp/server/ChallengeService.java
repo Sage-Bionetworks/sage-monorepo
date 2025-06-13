@@ -31,7 +31,7 @@ public class ChallengeService {
     Lists challenges that can be filtered and sorted based on a variety of parameters.
 
     Guidelines for using this tool:
-    - If a parameter is not specified, use its default value as defined in the challengeApi (usually `null` or empty).
+    - If a parameter is not specified, you can omit it and default values will be applied.
     - If the user mentions "Docker" or "Container", include "container_image" in the submissionTypes, while still allowing other types.
     - If the user describes specific types of input data / training data:
         1. First call the `list_edam_concepts` tool with the user's keywords as `searchTerms`.
