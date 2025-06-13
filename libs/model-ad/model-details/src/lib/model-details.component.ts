@@ -8,6 +8,7 @@ import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { Model, ModelsService } from '@sagebionetworks/model-ad/api-client-angular';
 import { ConfigService } from '@sagebionetworks/model-ad/config';
+import { LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/util';
 import { ModelDetailsOmicsComponent } from './components/model-details-omics/model-details-omics.component';
 
 @Component({
@@ -29,6 +30,8 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
   modelsService = inject(ModelsService);
   destroyRef = inject(DestroyRef);
   configService = inject(ConfigService);
+
+  loadingIconColors = LOADING_ICON_COLORS;
 
   isLoading = true;
 

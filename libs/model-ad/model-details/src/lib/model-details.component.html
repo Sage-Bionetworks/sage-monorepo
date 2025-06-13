@@ -1,7 +1,11 @@
 <div [class]="{ 'model-details': true, loading: isLoading }">
   @if (isLoading) {
     <div id="loading">
-      <explorers-loading-icon />
+      <explorers-loading-icon
+        [colorOutermost]="loadingIconColors.colorOutermost"
+        [colorCentral]="loadingIconColors.colorCentral"
+        [colorInnermost]="loadingIconColors.colorInnermost"
+      />
     </div>
   } @else if (model) {
     <h1>{{ model.model }}</h1>
