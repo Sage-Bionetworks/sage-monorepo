@@ -35,12 +35,6 @@
   }
 }
 
-@mixin reset-ul() {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
 @mixin container($width: 'md') {
   max-width: var(--container-max-width-#{$width});
   padding-left: 0;

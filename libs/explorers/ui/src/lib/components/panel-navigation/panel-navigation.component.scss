@@ -56,8 +56,6 @@
   }
 
   ul {
-    @include mixins.reset-ul;
-
     display: flex;
     width: 100%;
     height: var(--panel-nav-height);
