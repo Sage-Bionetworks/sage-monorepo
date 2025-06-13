@@ -242,8 +242,10 @@ def main():
     args = parser.parse_args()
 
     # Simulate work
-    # @trace_function(tracer)
-    @tracer.start_as_current_span("process_work_item")
+    @trace_function(tracer)
+    # By default, the span is named after the annotated function.
+    # To override this, use the annotation below to specify a custom span name.
+    # @tracer.start_as_current_span("process_work_item")
     def process_item(item_id):
         logger.info(f"Processing item {item_id}")
 
