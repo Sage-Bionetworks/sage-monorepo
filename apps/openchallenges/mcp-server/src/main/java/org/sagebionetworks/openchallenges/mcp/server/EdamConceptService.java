@@ -28,11 +28,32 @@ public class EdamConceptService {
 
     Usage guidelines:
     - Use this tool when the user refers to a specific type of input data or training dataset.
-      1. Extract relevant keywords from the user’s prompt to match EDAM concepts
-      (e.g., "MRI Imaging Data" → "MRI Image").
-        - If no matches are found, the keywords may not align with standard EDAM ontology terms.
-      2. Call `list_edam_concepts` using those keywords in the `searchTerms` parameter.
-      3. Set `sections = ["data"]` to restrict the search to EDAM data-related concepts only.
+    - EDAM uses standardized terminology. Start with SHORT, CORE terms and avoid extra descriptive words:
+
+    Search Strategy:
+    1. Extract the CORE scientific/technical term from user input:
+       - "MRI imaging data" → use "MRI" or "MRI image"
+       - "genomic sequence data" → use "sequence" or "genome"
+       - "protein structure information" → use "protein structure"
+       - "CT scan images" → use "CT" or "CT image"
+
+    2. If no results with core terms, try slight variations:
+       - "MRI" → try "magnetic resonance"
+       - "CT" → try "computed tomography"
+       - "DNA" → try "nucleotide sequence"
+
+    3. Avoid adding generic words like "data", "information", "dataset", "file" to search terms
+    4. Use singular forms when possible ("image" not "images")
+    5. Set `sections = ["data"]` to restrict search to EDAM data-related concepts only
+    6. If no matches found after trying variations**:
+    - Inform the user that their terminology may not exist in EDAM ontology (data section)
+    - Direct them to browse available terms at: https://bioportal.bioontology.org/ontologies/EDAM?p=classes
+    - Suggest they find the closest matching EDAM data concept and retry the search
+
+    Example searches:
+    - User: "MRI imaging data" → searchTerms: "MRI"
+    - User: "protein structural data" → searchTerms: "protein structure"
+    - User: "genomics datasets" → searchTerms: "genome"
     """
   )
   public EdamConceptsPage listEdamConcepts(
