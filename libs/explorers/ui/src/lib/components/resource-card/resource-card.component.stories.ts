@@ -22,13 +22,13 @@ export const InternalLinkHomeCard: Story = {
     description: 'View Gene Expression results for this model in the comparison tool.',
     imagePath: '/model-ad-assets/images/gene-expression.svg',
     altText: 'gene expression icon',
-    link: '/gene-expression',
+    link: '/comparison/expression?model=APOE4',
   },
 };
 
 export const ExternalLinkHomeCard: Story = {
   args: {
-    description: 'View Gene Expression results for this model on the Allen Institute’s site.',
+    description: "View Gene Expression results for this model on the Allen Institute's site.",
     imagePath: '/model-ad-assets/images/allen-institute-logo.svg',
     altText: 'allen institute logo',
     link: 'https://alleninstitute.org/division/brain-science',

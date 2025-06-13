@@ -8,10 +8,16 @@ import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { Model, ModelsService } from '@sagebionetworks/model-ad/api-client-angular';
 import { ConfigService } from '@sagebionetworks/model-ad/config';
+import { ModelDetailsOmicsComponent } from './components/model-details-omics/model-details-omics.component';
 
 @Component({
   selector: 'model-ad-model-details',
-  imports: [CommonModule, PanelNavigationComponent, LoadingIconComponent],
+  imports: [
+    CommonModule,
+    PanelNavigationComponent,
+    LoadingIconComponent,
+    ModelDetailsOmicsComponent,
+  ],
   templateUrl: './model-details.component.html',
   styleUrls: ['./model-details.component.scss'],
 })
