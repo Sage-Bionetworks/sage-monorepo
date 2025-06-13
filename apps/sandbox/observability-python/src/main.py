@@ -274,7 +274,7 @@ def main():
             try:
                 raise ValueError(f"Simulated error processing item {item_id}")
             except ValueError as e:
-                logger.error(f"Error: {e}", exc_info=True)
+                logger.exception(f"Error processing item {item_id}")
 
         return sleep_time
 
@@ -316,7 +316,7 @@ def main():
                 # Exit profiling context in case of error
                 if "profiling_ctx" in locals() and profiling_ctx:
                     profiling_ctx.__exit__(None, None, None)
-                logger.error(f"Unhandled exception: {e}", exc_info=True)
+                logger.exception(f"Unhandled exception in process_item")
 
         logger.info(f"Processed {args.iterations} items in {total_time:.2f} seconds")
 
