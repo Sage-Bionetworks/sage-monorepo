@@ -3,8 +3,8 @@
     <div id="loading">
       <explorers-loading-icon />
     </div>
-  } @else {
-    <h1>{{ model?.model }}</h1>
+  } @else if (model) {
+    <h1>{{ model.model }}</h1>
     <explorers-panel-navigation
       [panels]="panels"
       (panelChange)="onPanelChange($event)"
@@ -14,7 +14,7 @@
     <div class="panel-content">
       @switch (activePanel) {
         @case ('omics') {
-          <h2>Available Data</h2>
+          <model-ad-model-details-omics [modelName]="model.model" />
         }
         @case ('biomarkers') {
           <h2>Biomarkers</h2>

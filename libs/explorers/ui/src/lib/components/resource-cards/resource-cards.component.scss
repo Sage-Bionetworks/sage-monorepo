@@ -1,0 +1,17 @@
+@use 'libs/explorers/styles/src/lib/mixins';
+
+.resource-cards {
+  display: grid;
+  gap: 30px 50px;
+  grid-template-columns: 1fr;
+
+  @include mixins.respond-to('large') {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  explorers-resource-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 400px;
+  }
+}
