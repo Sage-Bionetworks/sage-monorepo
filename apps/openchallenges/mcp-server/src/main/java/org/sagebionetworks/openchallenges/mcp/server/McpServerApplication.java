@@ -36,7 +36,6 @@ public class McpServerApplication implements CommandLineRunner {
   public List<ToolCallback> toolCallbacks(
     ChallengeService challengeService,
     ChallengeAnalyticsService challengeAnalyticsService,
-    ChallengesByDataTypeService challengesByDataTypeService,
     ChallengePlatformService challengePlatformService,
     EdamConceptService edamConceptService
   ) {
@@ -44,7 +43,6 @@ public class McpServerApplication implements CommandLineRunner {
       ToolCallbacks.from(
         challengeService,
         challengeAnalyticsService,
-        challengesByDataTypeService,
         challengePlatformService,
         edamConceptService
       )
