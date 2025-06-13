@@ -31,13 +31,25 @@ public class ChallengeService {
     Lists challenges that can be filtered and sorted based on a variety of parameters.
 
     Guidelines for using this tool:
-    - If a parameter is not specified, use its default value as defined in the challengeApi (usually `null` or empty).
+    - If a parameter is not specified, you can omit it and default values will be applied.
+    - Do not use `minStartDate` or `maxStartDate` unless the user specifies a time window (e.g., “challenges starting after June”).
+    - Only apply filters that the user has explicitly requested or implied. 
     - If the user mentions "Docker" or "Container", include "container_image" in the submissionTypes, while still allowing other types.
     - If the user describes specific types of input data / training data:
         1. First call the `list_edam_concepts` tool with the user's keywords as `searchTerms`.
         2. Set `sections = ["data"]` to filter results to input data types.
         3. From the results, extract the matching EDAM concept IDs.
         4. Then call `list_challenges` using: inputDataTypes = [<EDAM ID(s)>]
+    - If the user refers to a specific organization (e.g., "DREAM", "Broad"):
+        1. Use `list_organizations` to search by name or acronym.
+        2. Extract the organization's `id` from the result.
+        3. Call this tool using: organizations = [<organizationId>]
+    - Search Term Strategy:
+      - Use SHORT, DISTINCTIVE, and RELEVANT keywords.
+      - Avoid generic filler words or overly long descriptions.
+    - Always prefer returning *some relevant* result over none. If initial query returns nothing:
+      - Relax some filters or retry with different filter combinations.
+      - Try at least 3 times
     """
   )
   public ChallengesPage listChallenges(
@@ -46,7 +58,7 @@ public class ChallengeService {
     ) @Nullable Integer pageNumber,
     @ToolParam(description = "The number of items per page.") @Nullable Integer pageSize,
     @ToolParam(
-      description = "Sort field: created, random, relevance, starred, start_date, end_date."
+      description = "Sort field: created, random, relevance, starred, start_date, end_date. Starred is sorted by the number of stars/bookmarks"
     ) @Nullable ChallengeSort sort,
     @ToolParam(
       description = "Seed for random sort to ensure reproducible results."
