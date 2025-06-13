@@ -46,7 +46,7 @@ public class ChallengeService {
     ) @Nullable Integer pageNumber,
     @ToolParam(description = "The number of items per page.") @Nullable Integer pageSize,
     @ToolParam(
-      description = "Sort field: created, random, relevance, starred, start_date, end_date."
+      description = "Sort field: created, random, relevance, starred, start_date, end_date. Starred is sorted by the number of stars/bookmarks"
     ) @Nullable ChallengeSort sort,
     @ToolParam(
       description = "Seed for random sort to ensure reproducible results."
