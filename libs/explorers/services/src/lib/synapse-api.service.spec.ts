@@ -37,7 +37,7 @@ describe('Service: Synapse API', () => {
   });
 
   it('should get data from Synapse API', () => {
-    synapseApiService.getWiki('syn25913473', synapseWikiMock.id).subscribe((response) => {
+    synapseApiService.getWikiMarkdown('syn25913473', synapseWikiMock.id).subscribe((response) => {
       expect(response).toEqual(synapseWikiMock);
     });
 
