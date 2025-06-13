@@ -1,10 +1,14 @@
 <div [class]="{ 'model-details': true, loading: isLoading }">
   @if (isLoading) {
     <div id="loading">
-      <explorers-loading-icon />
+      <explorers-loading-icon
+        [colorOutermost]="loadingIconColors.colorOutermost"
+        [colorCentral]="loadingIconColors.colorCentral"
+        [colorInnermost]="loadingIconColors.colorInnermost"
+      />
     </div>
-  } @else {
-    <h1>{{ model?.model }}</h1>
+  } @else if (model) {
+    <h1>{{ model.model }}</h1>
     <explorers-panel-navigation
       [panels]="panels"
       (panelChange)="onPanelChange($event)"
@@ -14,7 +18,7 @@
     <div class="panel-content">
       @switch (activePanel) {
         @case ('omics') {
-          <h2>Available Data</h2>
+          <model-ad-model-details-omics [modelName]="model.model" />
         }
         @case ('biomarkers') {
           <h2>Biomarkers</h2>

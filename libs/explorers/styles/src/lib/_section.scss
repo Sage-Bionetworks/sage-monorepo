@@ -1,5 +1,0 @@
-@use './mixins';
-
-.container-sm {
-  @include mixins.container('sm');
-}

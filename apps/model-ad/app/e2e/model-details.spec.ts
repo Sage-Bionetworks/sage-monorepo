@@ -50,3 +50,23 @@ test.describe('model details', () => {
     await expect(page.getByRole('heading', { level: 2, name: 'Available Data' })).toBeVisible();
   });
 });
+
+test.describe('model details - omics', () => {
+  test('gene expression card links to gene expression CT', async ({ page }) => {
+    await page.goto('/models/APOE4');
+    const card = page.getByRole('button', {
+      name: /view gene expression results.*comparison tool/i,
+    });
+    await card.click();
+    await page.waitForURL('/comparison/expression?model=APOE4');
+  });
+
+  test('disease correlation card links to disease correlation CT', async ({ page }) => {
+    await page.goto('/models/APOE4');
+    const card = page.getByRole('button', {
+      name: /view disease correlation results.*comparison tool/i,
+    });
+    await card.click();
+    await page.waitForURL('/comparison/correlation?model=APOE4');
+  });
+});

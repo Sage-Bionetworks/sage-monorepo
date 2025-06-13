@@ -4,5 +4,7 @@ export * from './lib/components/hero/hero.component';
 export * from './lib/components/home-card/home-card.component';
 export * from './lib/components/panel-navigation/panel-navigation.component';
 export * from './lib/components/resource-card/resource-card.component';
+export * from './lib/components/resource-cards/resource-cards.component';
 export * from './lib/components/search-input/search-input.component';
+export * from './lib/components/section/section.component';
 export * from './lib/components/svg-image/svg-image.component';

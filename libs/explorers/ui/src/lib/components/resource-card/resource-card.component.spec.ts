@@ -26,7 +26,7 @@ describe('ResourceCardComponent', () => {
       providers: [
         {
           provide: Router,
-          useValue: { navigate: navigateMock },
+          useValue: { navigateByUrl: navigateMock },
         },
       ],
     });
@@ -64,6 +64,6 @@ describe('ResourceCardComponent', () => {
     const button = screen.getByRole('button', { name: mockDescription });
     await user.click(button);
 
-    expect(navigateMock).toHaveBeenCalledWith([mockInternalLink]);
+    expect(navigateMock).toHaveBeenCalledWith(mockInternalLink);
   });
 });

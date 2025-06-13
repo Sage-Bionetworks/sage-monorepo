@@ -25,7 +25,7 @@ export class ResourceCardComponent {
     } else {
       // https://github.com/angular/angular/issues/45202
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      this.router.navigate([this.link]);
+      this.router.navigateByUrl(this.link);
     }
   }
 }
