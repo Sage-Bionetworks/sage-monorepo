@@ -242,7 +242,8 @@ def main():
     args = parser.parse_args()
 
     # Simulate work
-    @trace_function(tracer)
+    # @trace_function(tracer)
+    @tracer.start_as_current_span("process_work_item")
     def process_item(item_id):
         logger.info(f"Processing item {item_id}")
 
