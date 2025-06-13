@@ -20,11 +20,9 @@ dependencies {
   implementation "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
-  implementation "org.springframework.cloud:spring-cloud-sleuth-zipkin:${springCloudVersion}"
   implementation "org.springframework.cloud:spring-cloud-starter-config:${springCloudVersion}"
   implementation "org.springframework.cloud:spring-cloud-starter-gateway:${springCloudVersion}"
   implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:${springCloudVersion}"
-  implementation "org.springframework.cloud:spring-cloud-starter-sleuth:${springCloudVersion}"
   testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 }
 

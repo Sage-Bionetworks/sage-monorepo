@@ -20,7 +20,6 @@ args=(
   --file docker/"$product_name"/services/organization-service.yml
   --file docker/"$product_name"/services/service-registry.yml
   --file docker/"$product_name"/services/thumbor.yml
-  --file docker/"$product_name"/services/zipkin.yml
 
   --file docker/"$product_name"/networks.yml
   --file docker/"$product_name"/volumes.yml

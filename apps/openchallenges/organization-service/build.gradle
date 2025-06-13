@@ -48,10 +48,6 @@ dependencies {
   testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
   testRuntimeOnly 'com.h2database:h2:2.1.214'
 
-  // Enable distributed tracing
-  implementation "org.springframework.cloud:spring-cloud-starter-sleuth:${springCloudVersion}"
-  implementation "org.springframework.cloud:spring-cloud-sleuth-zipkin:${springCloudVersion}"
-
   implementation "org.springframework.cloud:spring-cloud-starter-config:${springCloudVersion}"
   implementation "org.sagebionetworks.openchallenges:openchallenges-app-config-data:${openchallengesVersion}"
 }

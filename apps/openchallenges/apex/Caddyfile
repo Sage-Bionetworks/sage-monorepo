@@ -17,11 +17,6 @@
 		reverse_proxy {env.THUMBOR_HOST}:{env.THUMBOR_PORT}
 	}
 
-	handle_path /zipkin* {
-		rewrite * /zipkin{uri}
-		reverse_proxy {env.ZIPKIN_HOST}:{env.ZIPKIN_PORT}
-	}
-
 	handle /mcp-server* {
     reverse_proxy {env.MCP_SERVER_HOST}:{env.MCP_SERVER_PORT}
 	}
