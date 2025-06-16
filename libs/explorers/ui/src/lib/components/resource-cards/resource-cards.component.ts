@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { ResourceCardComponent } from '../resource-card/resource-card.component';
 
 @Component({
@@ -9,5 +9,5 @@ import { ResourceCardComponent } from '../resource-card/resource-card.component'
   styleUrls: ['./resource-cards.component.scss'],
 })
 export class ResourceCardsComponent {
-  @Input({ required: true }) cards: Partial<ResourceCardComponent>[] = [];
+  cards = input.required<Partial<ResourceCardComponent>[]>();
 }

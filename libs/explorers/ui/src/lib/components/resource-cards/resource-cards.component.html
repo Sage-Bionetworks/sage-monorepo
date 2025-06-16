@@ -1,5 +1,5 @@
 <div class="resource-cards">
-  @for (card of cards; track $index) {
+  @for (card of cards(); track $index) {
     <explorers-resource-card
       [link]="card.link || ''"
       [description]="card.description || ''"
