@@ -70,3 +70,51 @@ test.describe('model details - omics', () => {
     await page.waitForURL('/comparison/correlation?model=APOE4');
   });
 });
+
+test.describe('model details - resources', () => {
+  const resourcesUrl = '/models/3xTg-AD/resources';
+
+  test('AD knowledge portal card links to ADKP study page for this model', async ({ page }) => {
+    await page.goto(resourcesUrl);
+    const card = page.getByRole('button', {
+      name: /ad knowledge portal/i,
+    });
+
+    const popupPromise = page.waitForEvent('popup');
+    await card.click();
+    const popup = await popupPromise;
+
+    await popup.waitForURL(
+      'https://adknowledgeportal.synapse.org/Explore/Studies/DetailsPage/StudyDetails?Study=**',
+    );
+    await expect.poll(() => page.getByText(/3xtg-ad/i).count()).toBeGreaterThan(0);
+  });
+
+  test('alzforum card links to alzforum page for this model', async ({ page }) => {
+    await page.goto(resourcesUrl);
+    const card = page.getByRole('button', {
+      name: /alzforum/i,
+    });
+
+    const popupPromise = page.waitForEvent('popup');
+    await card.click();
+    const popup = await popupPromise;
+
+    await popup.waitForURL('https://www.alzforum.org/research-models/**');
+    await expect.poll(() => page.getByText(/3xtg-ad/i).count()).toBeGreaterThan(0);
+  });
+
+  test('JAX card links to JAX page for this model', async ({ page }) => {
+    await page.goto(resourcesUrl);
+    const card = page.getByRole('button', {
+      name: /jax/i,
+    });
+
+    const popupPromise = page.waitForEvent('popup');
+    await card.click();
+    const popup = await popupPromise;
+
+    await popup.waitForURL('https://www.jax.org/strain/**');
+    await expect.poll(() => page.getByText(/3xtg-ad/i).count()).toBeGreaterThan(0);
+  });
+});
