@@ -145,11 +145,11 @@ $main-content-total-width: $main-content-desktop-width + ($main-content-margin *
 // Section
 // -------------------------------------------------------------------------- //
 
-$section-width: 1120px;
+$section-max-width: 1120px;
 $section-padding: 50px;
 
 :root {
-  --section-width: #{$section-width};
+  --section-max-width: #{$section-max-width};
   --section-padding: #{$section-padding};
 }
 

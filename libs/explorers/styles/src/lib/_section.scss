@@ -1,7 +1,7 @@
 @use 'variables' as vars;
 
 section {
-  max-width: var(--section-width);
+  max-width: var(--section-max-width);
   padding: var(--section-padding);
   margin-left: auto;
   margin-right: auto;
