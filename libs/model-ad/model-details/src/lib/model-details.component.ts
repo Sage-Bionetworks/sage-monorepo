@@ -10,6 +10,7 @@ import { Model, ModelsService } from '@sagebionetworks/model-ad/api-client-angul
 import { ConfigService } from '@sagebionetworks/model-ad/config';
 import { LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/util';
 import { ModelDetailsOmicsComponent } from './components/model-details-omics/model-details-omics.component';
+import { ModelDetailsResourcesComponent } from './components/model-details-resources/model-details-resources.component';
 
 @Component({
   selector: 'model-ad-model-details',
@@ -18,6 +19,7 @@ import { ModelDetailsOmicsComponent } from './components/model-details-omics/mod
     PanelNavigationComponent,
     LoadingIconComponent,
     ModelDetailsOmicsComponent,
+    ModelDetailsResourcesComponent,
   ],
   templateUrl: './model-details.component.html',
   styleUrls: ['./model-details.component.scss'],

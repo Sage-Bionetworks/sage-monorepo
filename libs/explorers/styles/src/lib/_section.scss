@@ -5,4 +5,8 @@ section {
   padding: var(--section-padding);
   margin-left: auto;
   margin-right: auto;
+
+  h2 {
+    margin-bottom: 30px;
+  }
 }
