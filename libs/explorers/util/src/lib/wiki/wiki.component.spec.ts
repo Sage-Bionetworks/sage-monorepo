@@ -1,90 +1,92 @@
+import { DomSanitizer } from '@angular/platform-browser';
 import { provideHttpClient } from '@angular/common/http';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { SynapseApiService } from '@sagebionetworks/explorers/services';
-import { synapseWikiMock } from '@sagebionetworks/explorers/testing';
+import { render, waitFor } from '@testing-library/angular';
 import { server } from '@sagebionetworks/explorers/testing/msw';
-import { http, HttpResponse } from 'msw';
+
+import { SynapseApiService } from '@sagebionetworks/explorers/services';
+import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { WikiComponent } from './wiki.component';
+import {
+  invalidWikiParam,
+  validWikiParams,
+} from 'libs/explorers/testing/src/lib/constants/wikiparams';
+import { validMarkdown } from 'libs/explorers/testing/src/lib/constants/markdown';
+
+// Mock DomSanitizer
+const mockDomSanitizer = {
+  bypassSecurityTrustHtml: jest.fn((html: string) => html),
+};
 
 describe('WikiComponent', () => {
-  beforeAll(() => server.listen());
-  afterEach(() => server.restoreHandlers());
-  afterAll(() => server.close());
-
-  let component: WikiComponent;
-  let fixture: ComponentFixture<WikiComponent>;
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [],
-      providers: [provideHttpClient(), SynapseApiService],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(WikiComponent);
-    component = fixture.componentInstance;
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  describe('getWikiData', () => {
-    it('should get wiki data', async () => {
-      const expected = synapseWikiMock;
-      expect(component.isLoading).toBe(true);
-
-      component.getWikiData();
-      await fixture.whenStable();
-
-      expect(component.data.markdown).toBe(expected.markdown);
-      expect(component.isLoading).toBe(false);
+  async function setup(wikiParams?: SynapseWikiParams) {
+    const result = await render(WikiComponent, {
+      providers: [
+        provideHttpClient(),
+        SynapseApiService,
+        { provide: DomSanitizer, useValue: mockDomSanitizer },
+      ],
+      componentInputs: {
+        wikiParams,
+      },
     });
 
-    it('should default to error content when api is unreachable', async () => {
-      const noDataContent = `<div class="wiki-no-data">No data found...</div>`;
-      expect(component.isLoading).toBe(true);
+    const component = result.fixture.componentInstance;
+    return { result, component };
+  }
 
-      // simulate server error
-      const url = 'https://repo-prod.prod.sagebase.org/repo/v1/entity/syn25913473/wiki/';
-      server.use(
-        http.get(
-          url,
-          () => {
-            return HttpResponse.error();
-          },
-          {
-            once: true,
-          },
-        ),
-      );
+  beforeAll(() => {
+    // Start MSW server before all tests
+    server.listen();
+  });
 
-      component.getWikiData();
-      await fixture.whenStable();
+  afterEach(() => {
+    // Reset handlers after each test
+    server.resetHandlers();
+    jest.clearAllMocks();
+  });
 
-      expect(component.safeHtml).toBe(noDataContent);
-      expect(component.isLoading).toBe(false);
+  afterAll(() => {
+    // Clean up after all tests
+    server.close();
+  });
+
+  describe('Component Initialization', () => {
+    it('should create the component', async () => {
+      const { component } = await setup(validWikiParams[0]);
+      expect(component).toBeTruthy();
     });
   });
 
-  describe('getClassName', () => {
-    it('should default to the @Input className', () => {
-      const expectedValue = 'test';
+  describe('Successful Data Loading', () => {
+    it('should load and process wiki data correctly', async () => {
+      const { component } = await setup(validWikiParams[0]);
 
-      component.className = expectedValue;
-      const result = component.getClassName();
-
-      expect(result.find((e) => e === expectedValue)).toBeTruthy();
+      await waitFor(() => {
+        expect(component.isLoading).toBe(false);
+        expect(mockDomSanitizer.bypassSecurityTrustHtml).toHaveBeenCalled();
+        expect(component.safeHtml).toContain(validMarkdown);
+      });
     });
 
-    it('should have a "loading" className when loading variable is true', () => {
-      const expectedValue = 'loading';
+    it('should render the processed HTML content', async () => {
+      const { component, result } = await setup(validWikiParams[0]);
 
-      // set loading variable to be true
-      component.isLoading = true;
+      await waitFor(() => {
+        const wikiInner = result.container.querySelector('.wiki-inner');
+        expect(wikiInner).toBeTruthy();
+        expect(component.safeHtml).toContain(validMarkdown);
+      });
+    });
+  });
 
-      const result = component.getClassName();
+  describe('Error Handling', () => {
+    it('should handle 404 errors gracefully', async () => {
+      const { component } = await setup(invalidWikiParam);
 
-      expect(result.find((e) => e === expectedValue)).toBeTruthy();
+      await waitFor(() => {
+        expect(component.isLoading).toBe(false);
+        expect(component.safeHtml).toBe('<div class="wiki-no-data">No data found...</div>');
+      });
     });
   });
 });

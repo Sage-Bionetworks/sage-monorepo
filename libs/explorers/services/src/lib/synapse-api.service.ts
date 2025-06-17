@@ -10,7 +10,7 @@ import sanitizeHtml from 'sanitize-html';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { SynapseWiki, TermsOfUseInfo } from '@sagebionetworks/explorers/models';
+import { SynapseWikiMarkdown, TermsOfUseInfo } from '@sagebionetworks/explorers/models';
 
 // -------------------------------------------------------------------------- //
 // Service
@@ -26,7 +26,7 @@ export class SynapseApiService {
     terms: null,
   };
 
-  getWiki(ownerId: string, wikiId: string): Observable<SynapseWiki> {
+  getWikiMarkdown(ownerId: string, wikiId: string): Observable<SynapseWikiMarkdown> {
     const key = ownerId + wikiId;
     if (this.cache['wikis'][key]) {
       return of(this.cache['wikis'][key]);

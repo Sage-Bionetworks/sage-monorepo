@@ -41,7 +41,7 @@
     }
   }
 
-  .wiki-overlay {
+  .wiki-loading {
     display: none;
     position: absolute;
     inset: 0;
@@ -55,7 +55,7 @@
       min-height: 120px;
     }
 
-    .wiki-overlay {
+    .wiki-loading {
       display: flex;
     }
   }

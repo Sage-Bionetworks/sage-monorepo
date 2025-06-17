@@ -2,20 +2,20 @@
   <button class="modal-link-inner" (click)="toggle()">
     <explorers-svg-icon
       imagePath="/explorers-assets/icons/info-circle.svg"
-      [enableHoverEffects]="enableHoverEffects"
-      [width]="iconWidth"
-      [height]="iconHeight"
+      [enableHoverEffects]="enableHoverEffects()"
+      [width]="iconWidth()"
+      [height]="iconHeight()"
       [color]="'#aeb5bc'"
       altText="info"
     />
-    @if (text) {
+    @if (text()) {
       <span class="modal-link-text" [ngStyle]="getTextColor()">
-        {{ text }}
+        {{ text() }}
       </span>
     }
   </button>
   <p-dialog
-    [header]="title"
+    [header]="title()"
     [(visible)]="isActive"
     [modal]="true"
     [draggable]="false"
@@ -25,8 +25,8 @@
     appendTo="body"
   >
     <div class="modal-link-content">
-      @if (wikiId && hasActivated) {
-        <explorers-wiki [ownerId]="ownerId" [wikiId]="wikiId" />
+      @if (hasActivated) {
+        <explorers-wiki [wikiParams]="wikiParams()" />
       }
     </div>
   </p-dialog>

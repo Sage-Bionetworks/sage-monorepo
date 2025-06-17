@@ -2,11 +2,8 @@ import { WikiHeroComponent } from './wiki-hero.component';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { render, screen } from '@testing-library/angular';
-import { ActivatedRoute } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
 
-// Mock components
 @Component({
   selector: 'explorers-hero',
   template: '<div>Mock Hero Component</div>',
@@ -24,25 +21,14 @@ class MockWikiComponent {
 const TITLE = 'Test Title';
 const WIKI_ID = '0';
 
-const mockRouteDataSubject = new BehaviorSubject<{ wikiId: string; heroTitle: string }>({
-  wikiId: 'test-wiki-id',
-  heroTitle: 'test-hero-title',
-});
-
 async function setup() {
-  mockRouteDataSubject.next({
-    wikiId: WIKI_ID || '',
-    heroTitle: TITLE,
-  });
-
-  const mockActivatedRoute = {
-    data: mockRouteDataSubject.asObservable(),
-  };
-
-  // const user = userEvent.setup();
   const { fixture } = await render(WikiHeroComponent, {
+    componentInputs: {
+      wikiParams: { ownerId: 'syn123456', wikiId: WIKI_ID },
+      heroTitle: TITLE,
+    },
     imports: [CommonModule, MockHeroComponent, MockWikiComponent],
-    providers: [provideHttpClient(), { provide: ActivatedRoute, useValue: mockActivatedRoute }],
+    providers: [provideHttpClient()],
   });
 
   const component = fixture.componentInstance;

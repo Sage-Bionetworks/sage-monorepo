@@ -1,16 +1,7 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  DestroyRef,
-  inject,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-  ViewEncapsulation,
-} from '@angular/core';
+import { Component, DestroyRef, inject, input, OnInit, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { SynapseWiki } from '@sagebionetworks/explorers/models';
+import { SynapseWikiMarkdown, SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { SynapseApiService } from '@sagebionetworks/explorers/services';
 import { LoadingIconComponent } from '../loading-icon/loading-icon.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -22,34 +13,33 @@ import { finalize } from 'rxjs/operators';
   styleUrls: ['./wiki.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class WikiComponent implements OnChanges, OnInit {
+export class WikiComponent implements OnInit {
   synapseApiService = inject(SynapseApiService);
   domSanitizer = inject(DomSanitizer);
   private destroyRef = inject(DestroyRef);
 
-  @Input() ownerId: string | undefined;
-  @Input() wikiId: string | undefined;
-  @Input() className = '';
+  wikiParams = input<SynapseWikiParams>();
 
+  className = '';
   isLoading = true;
-
-  data: SynapseWiki = {} as SynapseWiki;
   safeHtml: SafeHtml | null = '<div class="wiki-no-data">No data found...</div>';
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['wikiId'] && !changes['wikiId'].firstChange) {
-      this.getWikiData();
-    }
-  }
-
   ngOnInit() {
-    this.isLoading = true;
-    this.getWikiData();
+    this.getWikiMarkdown();
   }
 
-  getWikiData() {
+  getWikiMarkdown() {
+    const ownerId = this.wikiParams()?.ownerId;
+    const wikiId = this.wikiParams()?.wikiId;
+    if (!ownerId || !wikiId) {
+      console.error('Wiki parameter(s) missing');
+      return;
+    }
+
+    this.isLoading = true;
+
     this.synapseApiService
-      .getWiki(this.ownerId || 'syn25913473', this.wikiId || '')
+      .getWikiMarkdown(ownerId, wikiId)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         finalize(() => {
@@ -57,8 +47,7 @@ export class WikiComponent implements OnChanges, OnInit {
         }),
       )
       .subscribe({
-        next: (wiki: SynapseWiki) => {
-          this.data = wiki;
+        next: (wiki: SynapseWikiMarkdown) => {
           // Requires bypassSecurityTrustHtml to render iframes (e.g. videos)
           this.safeHtml = this.domSanitizer.bypassSecurityTrustHtml(
             this.synapseApiService.renderHtml(wiki.markdown),
