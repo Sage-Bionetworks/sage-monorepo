@@ -20,7 +20,7 @@ repositories {
 }
 
 dependencies {
-	implementation(libs.spring.ai.starter.mcp.server.webmvc)
+	implementation(libs.spring.ai.starter.mcp.server.webflux)
 	testImplementation(libs.spring.boot.starter.test)
 	testRuntimeOnly(libs.junit.platform.launcher)
   annotationProcessor(libs.lombok)
