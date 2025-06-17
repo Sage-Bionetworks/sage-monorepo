@@ -1,5 +1,8 @@
-@use './mixins';
+@use 'variables' as vars;
 
-.container-sm {
-  @include mixins.container('sm');
+section {
+  max-width: var(--section-max-width);
+  padding: var(--section-padding);
+  margin-left: auto;
+  margin-right: auto;
 }
