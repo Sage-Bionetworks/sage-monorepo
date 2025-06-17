@@ -22,7 +22,6 @@ export class WikiComponent implements OnInit {
 
   className = '';
   isLoading = true;
-  data: SynapseWikiMarkdown = {} as SynapseWikiMarkdown;
   safeHtml: SafeHtml | null = '<div class="wiki-no-data">No data found...</div>';
 
   ngOnInit() {
@@ -49,7 +48,6 @@ export class WikiComponent implements OnInit {
       )
       .subscribe({
         next: (wiki: SynapseWikiMarkdown) => {
-          this.data = wiki;
           // Requires bypassSecurityTrustHtml to render iframes (e.g. videos)
           this.safeHtml = this.domSanitizer.bypassSecurityTrustHtml(
             this.synapseApiService.renderHtml(wiki.markdown),

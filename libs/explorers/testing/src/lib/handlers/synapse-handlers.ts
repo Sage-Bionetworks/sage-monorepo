@@ -1,22 +1,24 @@
 import { http, HttpResponse } from 'msw';
 import { synapseWikiMock } from '../mocks/synapse-mocks';
+import { validWikiParams } from '../constants/wikiparams';
+import { validMarkdown } from '../constants/markdown';
 
 export const synapseHandlers = [
-  http.get('https://repo-prod.prod.sagebase.org/repo/v1/entity/syn25913473/wiki', () => {
-    return HttpResponse.json(synapseWikiMock);
-  }),
-
   // Get wiki markdown
   http.get(
     'https://repo-prod.prod.sagebase.org/repo/v1/entity/:ownerId/wiki/:wikiId',
     ({ params }) => {
-      const { ownerId, wikiId } = params;
+      const wikiId = params['wikiId'] as string;
+      const ownerId = params['ownerId'] as string;
 
       // Return mock data for valid IDs
-      if (ownerId === 'syn25913473' && wikiId === '612058') {
+      const isValid = validWikiParams.some(
+        (param) => param.wikiId === wikiId && param.ownerId === ownerId,
+      );
+      if (isValid) {
         return HttpResponse.json({
           ...synapseWikiMock,
-          markdown: '<h1>Test Wiki Content</h1><p>This is test content.</p>',
+          markdown: validMarkdown,
         });
       }
 
