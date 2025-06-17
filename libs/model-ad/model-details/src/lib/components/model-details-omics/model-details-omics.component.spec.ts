@@ -1,10 +1,10 @@
-import { ResourceCardsComponent, SectionComponent } from '@sagebionetworks/explorers/ui';
+import { ResourceCardsComponent } from '@sagebionetworks/explorers/ui';
 import { render, screen } from '@testing-library/angular';
 import { ModelDetailsOmicsComponent } from './model-details-omics.component';
 
 async function setup() {
   return render(ModelDetailsOmicsComponent, {
-    imports: [ResourceCardsComponent, SectionComponent],
+    imports: [ResourceCardsComponent],
     componentInputs: {
       modelName: 'TEST123',
     },
