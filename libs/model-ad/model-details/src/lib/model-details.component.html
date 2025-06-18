@@ -8,7 +8,7 @@
       />
     </div>
   } @else if (model) {
-    <h1>{{ model.model }}</h1>
+    <model-ad-model-details-hero [model]="model" />
     <explorers-panel-navigation
       [panels]="panels"
       (panelChange)="onPanelChange($event)"

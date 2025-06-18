@@ -14,8 +14,8 @@
 
   div {
     h1 {
-      margin: 0;
-      font-size: clamp(36px, 5vw, 60px);
+      font-size: 64px;
+      line-height: 64px;
     }
 
     p {
@@ -24,7 +24,6 @@
 
       a {
         color: white;
-        text-decoration: underline;
       }
     }
   }

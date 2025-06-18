@@ -7,11 +7,11 @@ import { faArrowRightArrowLeft, faDownload } from '@fortawesome/free-solid-svg-i
 import { Gene } from '@sagebionetworks/agora/api-client-angular';
 import { GeneTableColumn } from '@sagebionetworks/agora/models';
 import { HelperService } from '@sagebionetworks/agora/services';
+import { CapitalizeBooleanPipe } from '@sagebionetworks/explorers/util';
 import { Table, TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import screenfull from 'screenfull';
 import { GeneTableColumnSelectorComponent } from '../gene-table-column-selector/gene-table-column-selector.component';
-import { CapitalizeBooleanPipe } from '@sagebionetworks/agora/util';
 
 @Component({
   selector: 'agora-gene-table',
