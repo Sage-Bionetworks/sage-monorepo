@@ -1,0 +1,52 @@
+<div class="model-details-hero">
+  <section>
+    <h1>{{ model().model }}</h1>
+    <p>Mouse model of {{ model().model_type }}</p>
+    <p>Developed by the {{ model().contributing_group }} MODEL-AD Center</p>
+
+    <hr />
+
+    @for (gene of model().genetic_info; track gene.ensembl_gene_id) {
+      <h4>Modified Gene</h4>
+      <p>
+        {{ gene.modified_gene }} |
+        <a [href]="this.getGeneUrl(gene.ensembl_gene_id)" target="_blank">{{
+          gene.ensembl_gene_id
+        }}</a>
+      </p>
+      <p>
+        Allele:
+        <a
+          [href]="`https://www.informatics.jax.org/allele/MGI:${gene.mgi_allele_id}`"
+          target="_blank"
+        >
+          <span [innerHtml]="gene.allele | sanitizeHtml"></span>
+        </a>
+      </p>
+      <p>Type: {{ gene.allele_type }}</p>
+      <br />
+    }
+
+    <h4>Matched Controls</h4>
+    <p>{{ model().matched_controls.join(', ') }}</p>
+
+    <hr />
+
+    <h4>ALSO KNOWN AS</h4>
+    <br />
+
+    <p [innerHtml]="model().genotype | sanitizeHtml"></p>
+    @if (model().aliases.length > 0) {
+      <p [innerHtml]="model().aliases.join(', ') | sanitizeHtml"></p>
+    }
+    <br />
+
+    <p>
+      JAX Stock Number:
+      <a [href]="`https://www.jax.org/strain/${ model().jax_id }`" target="_blank">{{
+        model().jax_id
+      }}</a>
+    </p>
+    <p>RRID: {{ model().rrid }}</p>
+  </section>
+</div>

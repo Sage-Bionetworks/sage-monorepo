@@ -1,0 +1,10 @@
+@use '../variables' as vars;
+
+@each $size, $properties in vars.$headings {
+  #{$size},
+  .#{$size} {
+    @each $property, $value in $properties {
+      #{$property}: var(--#{$property}-#{$size});
+    }
+  }
+}
