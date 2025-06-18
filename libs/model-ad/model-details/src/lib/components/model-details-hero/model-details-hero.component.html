@@ -6,26 +6,30 @@
 
     <hr />
 
-    @for (gene of model().genetic_info; track gene.ensembl_gene_id) {
-      <h4>Modified Gene</h4>
-      <p>
-        {{ gene.modified_gene }} |
-        <a [href]="this.getGeneUrl(gene.ensembl_gene_id)" target="_blank">{{
-          gene.ensembl_gene_id
-        }}</a>
-      </p>
-      <p>
-        Allele:
-        <a
-          [href]="`https://www.informatics.jax.org/allele/MGI:${gene.mgi_allele_id}`"
-          target="_blank"
-        >
-          <span [innerHtml]="gene.allele | sanitizeHtml"></span>
-        </a>
-      </p>
-      <p>Type: {{ gene.allele_type }}</p>
-      <br />
-    }
+    <div class="modified-genes">
+      @for (gene of model().genetic_info; track gene.ensembl_gene_id) {
+        <div class="modified-gene">
+          <h4>Modified Gene</h4>
+          <p>
+            {{ gene.modified_gene }} |
+            <a [href]="this.getGeneUrl(gene.ensembl_gene_id)" target="_blank">{{
+              gene.ensembl_gene_id
+            }}</a>
+          </p>
+          <p>
+            Allele:
+            <a
+              [href]="`https://www.informatics.jax.org/allele/MGI:${gene.mgi_allele_id}`"
+              target="_blank"
+            >
+              <span [innerHtml]="gene.allele | sanitizeHtml"></span>
+            </a>
+          </p>
+          <p>Type: {{ gene.allele_type }}</p>
+          <br />
+        </div>
+      }
+    </div>
 
     <h4>Matched Controls</h4>
     <p>{{ model().matched_controls.join(', ') }}</p>
