@@ -1,8 +1,7 @@
 plugins {
-	java
   alias(libs.plugins.graalvm.native)
-	alias(libs.plugins.spring.dependency.management)
-	alias(libs.plugins.spring.boot)
+  alias(libs.plugins.spring.boot)
+  java
 }
 
 group = "org.sagebionetworks.openchallenges"
@@ -13,6 +12,23 @@ java {
     languageVersion = JavaLanguageVersion.of(21)
     nativeImageCapable = true
   }
+}
+
+repositories {
+	mavenCentral()
+  mavenLocal()
+}
+
+dependencies {
+	implementation(libs.spring.ai.starter.mcp.server.webflux)
+	testImplementation(libs.spring.boot.starter.test)
+	testRuntimeOnly(libs.junit.platform.launcher)
+  annotationProcessor(libs.lombok)
+  compileOnly(libs.lombok)
+  implementation(libs.openchallenges.api.client.java)
+  implementation(platform(libs.spring.boot.dependencies))
+  testAnnotationProcessor(libs.lombok)
+  testCompileOnly(libs.lombok)
 }
 
 graalvmNative {
@@ -39,22 +55,6 @@ graalvmNative {
       buildArgs.add("-O0")
     }
   }
-}
-
-repositories {
-	mavenCentral()
-  mavenLocal()
-}
-
-dependencies {
-	implementation(libs.spring.ai.starter.mcp.server.webmvc)
-  implementation(libs.openchallenges.api.client.java)
-  compileOnly(libs.lombok)
-  annotationProcessor(libs.lombok)
-	testImplementation(libs.spring.boot.starter.test)
-  testCompileOnly(libs.lombok)
-  testAnnotationProcessor(libs.lombok)
-	testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 tasks.withType<Test>().configureEach {
