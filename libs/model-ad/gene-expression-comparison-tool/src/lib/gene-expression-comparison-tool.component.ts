@@ -1,11 +1,11 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import {
   BaseComparisonToolComponent,
   ComparisonToolHeaderComponent,
 } from '@sagebionetworks/explorers/comparison-tools';
 import { ComparisonToolService } from '@sagebionetworks/model-ad/services';
 import { GeneExpressionHelpLinksComponent } from './components/gene-expression-help-links/gene-expression-help-links.component';
-import { LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/util';
+import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/models';
 @Component({
   selector: 'model-ad-gene-expression-comparison-tool',
   imports: [
@@ -18,8 +18,9 @@ import { LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/util';
   providers: [ComparisonToolService],
 })
 export class GeneExpressionComparisonToolComponent implements OnInit {
+  loadingIconColors = inject(LOADING_ICON_COLORS);
+
   isLoading = signal(true);
-  loadingIconColors = signal(LOADING_ICON_COLORS);
   resultsCount = signal(50000);
 
   ngOnInit() {

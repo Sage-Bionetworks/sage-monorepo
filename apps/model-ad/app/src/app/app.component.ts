@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
+import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/models';
 import { MetaTagService } from '@sagebionetworks/explorers/services';
 import { FooterComponent, HeaderComponent } from '@sagebionetworks/explorers/ui';
 import { Dataversion, DataversionService } from '@sagebionetworks/model-ad/api-client-angular';
@@ -13,6 +14,7 @@ import {
   isGoogleTagManagerIdSet,
 } from '@sagebionetworks/shared/google-tag-manager';
 import { ToastModule } from 'primeng/toast';
+import { MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
 
 @Component({
   imports: [RouterModule, FooterComponent, HeaderComponent, ToastModule, GoogleTagManagerComponent],
@@ -23,6 +25,10 @@ import { ToastModule } from 'primeng/toast';
     {
       provide: CONFIG_SERVICE_TOKEN,
       useFactory: () => inject(ConfigService),
+    },
+    {
+      provide: LOADING_ICON_COLORS,
+      useValue: MODEL_AD_LOADING_ICON_COLORS,
     },
     createGoogleTagManagerIdProvider(),
   ],
