@@ -1,16 +1,17 @@
-<div *ngIf="challenge">
-  <div class="challenge-card" [routerLink]="['/challenge', challenge.id]">
-    <!-- <img
+@if (challenge) {
+  <div>
+    <div class="challenge-card" [routerLink]="['/challenge', challenge.id]">
+      <!-- <img
       class="card-banner"
       [src]="(banner$ | async)?.url"
       alt="{{ challenge.name }}"
-    /> -->
-    <img
-      class="card-banner"
-      src="/assets/openchallenges/images/banner-default.svg"
-      alt="{{ challenge.name }}"
-    />
-    <!-- <div class="star-btn">
+      /> -->
+      <img
+        class="card-banner"
+        src="/assets/openchallenges/images/banner-default.svg"
+        alt="{{ challenge.name }}"
+        />
+      <!-- <div class="star-btn">
       <mat-icon aria-hidden="true" class="star-icon">star_outline</mat-icon>
       {{ challenge.starredCount }}
     </div> -->
@@ -28,17 +29,18 @@
     </div>
     <div class="card-footer">
       <mat-icon aria-hidden="true" class="card-icon">emoji_events</mat-icon>
-      <div
-        class="incentive-tag mat-small"
-        *ngIf="challenge.incentives.length > 0; else noIncentives"
-      >
-        <ng-container *ngFor="let incentive of challenge.incentives; let isLast = last">
-          {{ incentive | challengeIncentiveLabel }}{{ isLast ? '' : ', ' }}
-        </ng-container>
-      </div>
+      @if (challenge.incentives.length > 0) {
+        <div
+          class="incentive-tag mat-small"
+          >
+          @for (incentive of challenge.incentives; track incentive; let isLast = $last) {
+            {{ incentive | challengeIncentiveLabel }}{{ isLast ? '' : ', ' }}
+          }
+        </div>
+      } @else {
+        <div class="incentive-tag mat-small">No incentives listed</div>
+      }
     </div>
-    <ng-template #noIncentives>
-      <div class="incentive-tag mat-small">No incentives listed</div>
-    </ng-template>
   </div>
 </div>
+}

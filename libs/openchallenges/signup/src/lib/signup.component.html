@@ -5,26 +5,34 @@
         class="logo-icon"
         src="/assets/openchallenges/images/openchallenges-icon.svg"
         alt="OpenChallenges Icon"
-      />
+        />
       <h3>Join Us on OpenChallenges!</h3>
     </div>
     <form class="form-container" [formGroup]="newUserForm" novalidate>
       <mat-form-field class="new-email" appearance="outline">
         <mat-label>Email</mat-label>
         <input matInput placeholder="Email" type="email" formControlName="email" />
-        <mat-error *ngIf="email?.invalid">{{ getEmailErrorMessage() }} </mat-error>
+        @if (email?.invalid) {
+          <mat-error>{{ getEmailErrorMessage() }} </mat-error>
+        }
       </mat-form-field>
       <mat-form-field class="new-username" appearance="outline">
         <mat-label>Username</mat-label>
         <input matInput placeholder="Username" type="text" formControlName="username" />
-        <mat-error *ngIf="username?.invalid">{{ getUsernameErrorMessage() }} </mat-error>
+        @if (username?.invalid) {
+          <mat-error>{{ getUsernameErrorMessage() }} </mat-error>
+        }
       </mat-form-field>
       <mat-form-field class="new-password" appearance="outline">
         <mat-label>Password</mat-label>
         <input matInput placeholder="Password" type="password" formControlName="password" />
-        <mat-error *ngIf="password?.invalid">{{ getPasswordErrorMessage() }} </mat-error>
+        @if (password?.invalid) {
+          <mat-error>{{ getPasswordErrorMessage() }} </mat-error>
+        }
       </mat-form-field>
-      <mat-error *ngIf="errors.other">{{ errors.other }}</mat-error>
+      @if (errors.other) {
+        <mat-error>{{ errors.other }}</mat-error>
+      }
       <div class="mat-caption disclaimer">
         <p>
           By creating an account, you agree to the <a href="#">Terms of Use</a> of OpenChallenges.
@@ -37,7 +45,7 @@
           color="primary"
           [disabled]="newUserForm.invalid"
           (click)="createUserAccount()"
-        >
+          >
           Create Account
         </button>
         <div class="login-options">

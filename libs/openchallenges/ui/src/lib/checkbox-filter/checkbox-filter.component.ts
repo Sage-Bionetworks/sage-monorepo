@@ -1,12 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Filter } from './filter.model';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
   selector: 'openchallenges-checkbox-filter',
-  imports: [CommonModule, CheckboxModule, FormsModule],
+  imports: [CheckboxModule, FormsModule],
   templateUrl: './checkbox-filter.component.html',
   styleUrls: ['./checkbox-filter.component.scss'],
 })

@@ -1,11 +1,11 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Input } from '@angular/core';
 import { TeamMemberListComponent } from '../team-member-list/team-member-list.component';
 import { Team } from '@sagebionetworks/agora/api-client-angular';
 
 @Component({
   selector: 'agora-team-list',
-  imports: [CommonModule, TeamMemberListComponent],
+  imports: [TeamMemberListComponent],
   templateUrl: './team-list.component.html',
   styleUrls: ['./team-list.component.scss'],
   providers: [],

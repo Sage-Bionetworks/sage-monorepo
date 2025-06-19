@@ -13,9 +13,11 @@
         <div id="notch"></div>
         <h3>{{ getHeaderText() }}</h3>
         <ul>
-          <li *ngFor="let goTerm of goTerms">
-            {{ capitalizeGoTerm(goTerm) }}
-          </li>
+          @for (goTerm of goTerms; track goTerm) {
+            <li>
+              {{ capitalizeGoTerm(goTerm) }}
+            </li>
+          }
         </ul>
       </div>
     </div>

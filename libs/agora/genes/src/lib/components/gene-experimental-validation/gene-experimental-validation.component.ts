@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, inject, Input } from '@angular/core';
 
 import { Gene, TeamsService } from '@sagebionetworks/agora/api-client-angular';
@@ -6,7 +6,7 @@ import { ExperimentalValidationWithTeamData } from '../../models';
 
 @Component({
   selector: 'agora-gene-experimental-validation',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './gene-experimental-validation.component.html',
   styleUrls: ['./gene-experimental-validation.component.scss'],
 })

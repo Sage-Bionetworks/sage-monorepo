@@ -1,12 +1,13 @@
-<div *ngIf="organization$ | async as org" class="stats-group">
-  <div class="stat-item">
-    <h3>{{ shorthand(org.challengeCount) }}</h3>
-    <p [ngPlural]="org.challengeCount || 0" class="mat-caption">
-      <ng-template ngPluralCase="=1">challenge</ng-template>
-      <ng-template ngPluralCase="other">challenges</ng-template>
-    </p>
-  </div>
-  <!-- <div class="stat-item">
+@if (organization$ | async; as org) {
+  <div class="stats-group">
+    <div class="stat-item">
+      <h3>{{ shorthand(org.challengeCount) }}</h3>
+      <p [ngPlural]="org.challengeCount || 0" class="mat-caption">
+        <ng-template ngPluralCase="=1">challenge</ng-template>
+        <ng-template ngPluralCase="other">challenges</ng-template>
+      </p>
+    </div>
+    <!-- <div class="stat-item">
     <h3>{{ shorthand(mockMembers) }}</h3>
     <p [ngPlural]="mockMembers || 0" class="mat-caption">
       <ng-template ngPluralCase="=1">member</ng-template>
@@ -14,27 +15,37 @@
     </p>
   </div> -->
   <!-- <div class="stat-item action-btn" *ngIf="loggedIn">
-    <mat-icon aria-hidden="true" class="stats-card-icon">edit</mat-icon> Edit Profile
-  </div> -->
-  <a href="#" class="stat-item action-btn" *ngIf="!loggedIn">
+  <mat-icon aria-hidden="true" class="stats-card-icon">edit</mat-icon> Edit Profile
+</div> -->
+@if (!loggedIn) {
+  <a href="#" class="stat-item action-btn">
     <mat-icon aria-hidden="true" class="stats-card-icon">plus</mat-icon>
     Request to Join
   </a>
-  <div [ngSwitch]="!!org.websiteUrl" *ngIf="loggedIn">
-    <a
-      class="stat-item action-btn"
-      *ngSwitchCase="true"
-      href="{{ org.websiteUrl }}"
-      target="_blank"
-      title="Go to organization main website"
-      rel="noopener noreferrer"
-    >
-      <mat-icon aria-hidden="true" class="stats-card-icon">open_in_new</mat-icon>
-      Go to Website
-    </a>
-    <div class="stat-item disabled-btn" *ngSwitchCase="false">
-      <mat-icon aria-hidden="true" class="stats-card-icon">link_off</mat-icon>
-      Website Not Found
-    </div>
+}
+@if (loggedIn) {
+  <div>
+    @switch (!!org.websiteUrl) {
+      @case (true) {
+        <a
+          class="stat-item action-btn"
+          href="{{ org.websiteUrl }}"
+          target="_blank"
+          title="Go to organization main website"
+          rel="noopener noreferrer"
+          >
+          <mat-icon aria-hidden="true" class="stats-card-icon">open_in_new</mat-icon>
+          Go to Website
+        </a>
+      }
+      @case (false) {
+        <div class="stat-item disabled-btn">
+          <mat-icon aria-hidden="true" class="stats-card-icon">link_off</mat-icon>
+          Website Not Found
+        </div>
+      }
+    }
   </div>
+}
 </div>
+}

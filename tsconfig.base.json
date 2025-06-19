@@ -64,10 +64,10 @@
         "libs/model-ad/gene-expression-comparison-tool/src/index.ts"
       ],
       "@sagebionetworks/model-ad/home": ["libs/model-ad/home/src/index.ts"],
+      "@sagebionetworks/model-ad/model-details": ["libs/model-ad/model-details/src/index.ts"],
       "@sagebionetworks/model-ad/model-overview-comparison-tool": [
         "libs/model-ad/model-overview-comparison-tool/src/index.ts"
       ],
-      "@sagebionetworks/model-ad/model-details": ["libs/model-ad/model-details/src/index.ts"],
       "@sagebionetworks/model-ad/not-found": ["libs/model-ad/not-found/src/index.ts"],
       "@sagebionetworks/model-ad/services": ["libs/model-ad/services/src/index.ts"],
       "@sagebionetworks/model-ad/testing": ["libs/model-ad/testing/src/index.ts"],

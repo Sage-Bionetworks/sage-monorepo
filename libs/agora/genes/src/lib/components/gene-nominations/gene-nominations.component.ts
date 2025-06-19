@@ -1,12 +1,12 @@
 import { Component, inject, Input } from '@angular/core';
 
-import { CommonModule } from '@angular/common';
+
 import { Gene, Team, TeamsService } from '@sagebionetworks/agora/api-client-angular';
 import { TargetNominationWithTeamData } from '../../models/TargetNominationWithTeamData';
 
 @Component({
   selector: 'agora-gene-nominations',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './gene-nominations.component.html',
   styleUrls: ['./gene-nominations.component.scss'],
 })

@@ -13,54 +13,60 @@
 
         <hr class="separator separator-md" />
 
-        <div *ngFor="let d of experimentalValidationWithTeamData; let i = index">
-          @if (d.team_data) {
-            <div>
-              <h3 class="h2">{{ d.team_data.program }} : {{ d.team_data.team_full }}</h3>
-              <p class="mb-xl">{{ d.team_data.description }}</p>
-            </div>
-          }
-
-          <h3>Hypothesis Being Tested</h3>
-          <p class="mb-xl">{{ d.hypothesis_tested }}</p>
-
-          <h3>Species and Model System</h3>
-          <p class="mb-xl">
-            {{ d.species }}<span *ngIf="d.species && d.model_system">; </span>
-            <span *ngIf="d.model_system">{{ d.model_system }}</span>
+        @for (d of experimentalValidationWithTeamData; track d; let i = $index) {
+          <div>
+            @if (d.team_data) {
+              <div>
+                <h3 class="h2">{{ d.team_data.program }} : {{ d.team_data.team_full }}</h3>
+                <p class="mb-xl">{{ d.team_data.description }}</p>
+              </div>
+            }
+            <h3>Hypothesis Being Tested</h3>
+            <p class="mb-xl">{{ d.hypothesis_tested }}</p>
+            <h3>Species and Model System</h3>
+            <p class="mb-xl">
+              {{ d.species }}@if (d.species && d.model_system) {
+              <span>; </span>
+            }
+            @if (d.model_system) {
+              <span>{{ d.model_system }}</span>
+            }
           </p>
-
           <h3>Outcome Measure</h3>
           <p class="mb-xl">
             {{ d.outcome_measure
-            }}<span *ngIf="d.outcome_measure && d.outcome_measure_details">; </span>
-            <span *ngIf="d.outcome_measure_details">{{ d.outcome_measure_details }}</span>
-          </p>
-
-          <h3>Summary of Findings</h3>
-          <p class="mb-xl">{{ d.summary_findings }}</p>
-
-          <h3>Contributors</h3>
-          <p class="mb-xl">{{ d.contributors }}</p>
-
-          <h3>Published?</h3>
-          <p class="mb-xl">
-            {{ d.published }}<span *ngIf="d.published && d.reference_doi">; </span>
-            <span *ngIf="d.reference_doi"
-              ><a class="link-heading" [href]="d.reference_doi" target="_blank">{{
-                d.reference_doi
-              }}</a></span
-            >
-          </p>
-
-          <h3>Date of Report</h3>
-          <p class="mb-xl">{{ d.date_report }}</p>
-
-          @if (i + 1 < (_gene.experimental_validation?.length || 0)) {
-            <hr class="separator separator-md" />
+            }}@if (d.outcome_measure && d.outcome_measure_details) {
+            <span>; </span>
           }
-        </div>
-      </div>
+          @if (d.outcome_measure_details) {
+            <span>{{ d.outcome_measure_details }}</span>
+          }
+        </p>
+        <h3>Summary of Findings</h3>
+        <p class="mb-xl">{{ d.summary_findings }}</p>
+        <h3>Contributors</h3>
+        <p class="mb-xl">{{ d.contributors }}</p>
+        <h3>Published?</h3>
+        <p class="mb-xl">
+          {{ d.published }}@if (d.published && d.reference_doi) {
+          <span>; </span>
+        }
+        @if (d.reference_doi) {
+          <span
+            ><a class="link-heading" [href]="d.reference_doi" target="_blank">{{
+            d.reference_doi
+          }}</a></span
+          >
+        }
+      </p>
+      <h3>Date of Report</h3>
+      <p class="mb-xl">{{ d.date_report }}</p>
+      @if (i + 1 < (_gene.experimental_validation?.length || 0)) {
+        <hr class="separator separator-md" />
+      }
     </div>
-  </div>
+  }
+</div>
+</div>
+</div>
 }

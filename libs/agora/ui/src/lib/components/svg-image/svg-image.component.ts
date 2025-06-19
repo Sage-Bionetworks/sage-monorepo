@@ -1,9 +1,9 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Input, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'agora-svg-image',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './svg-image.component.html',
   styleUrls: ['./svg-image.component.scss'],
   encapsulation: ViewEncapsulation.None,

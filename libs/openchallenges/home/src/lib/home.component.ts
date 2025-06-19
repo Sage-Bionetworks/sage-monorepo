@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Renderer2 } from '@angular/core';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { FooterComponent } from '@sagebionetworks/openchallenges/ui';
@@ -17,19 +17,16 @@ import { RandomChallengeListComponent } from './random-challenge-list/random-cha
 @Component({
   selector: 'openchallenges-home',
   imports: [
-    CommonModule,
     ChallengeHostListComponent,
     ChallengeRegistrationComponent,
     ChallengeSearchComponent,
-    // FeaturedChallengeListComponent,
     RandomChallengeListComponent,
     SponsorListComponent,
     PlatformsComponent,
     StatisticsViewerComponent,
-    // TopicsViewerComponent,
     FooterComponent,
-    AppShellNoRenderDirective,
-  ],
+    AppShellNoRenderDirective
+],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })

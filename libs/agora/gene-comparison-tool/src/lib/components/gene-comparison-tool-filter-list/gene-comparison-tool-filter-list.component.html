@@ -20,8 +20,8 @@
           [isVisible]="significanceThresholdActive"
           (clearEvent)="removeSignificanceThresholdFilter()"
         ></agora-gene-comparison-tool-filter-list-item>
-        <ng-container *ngFor="let filter of filters; index as i">
-          <ng-container *ngFor="let option of filter.options; index as j">
+        @for (filter of filters; track filter; let i = $index) {
+          @for (option of filter.options; track option; let j = $index) {
             <agora-gene-comparison-tool-filter-list-item
               [item]="option"
               [title]="filter.short || ''"
@@ -29,8 +29,8 @@
               [isVisible]="option.selected || false"
               (clearEvent)="clearSelectedFilters(option)"
             ></agora-gene-comparison-tool-filter-list-item>
-          </ng-container>
-        </ng-container>
+          }
+        }
       </div>
     </div>
   }

@@ -2,11 +2,11 @@ import { Component, Input, OnInit } from '@angular/core';
 
 import { Gene } from '@sagebionetworks/agora/api-client-angular';
 import { ResourceCard } from '@sagebionetworks/agora/models';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'agora-gene-resources',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './gene-resources.component.html',
   styleUrls: ['./gene-resources.component.scss'],
 })

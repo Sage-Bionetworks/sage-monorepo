@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 import { Avatar } from '../avatar/avatar';
 import { EMPTY_AVATAR } from '../avatar/mock-avatars';
@@ -12,12 +12,10 @@ import { NavbarSection } from './navbar-section';
 @Component({
   selector: 'openchallenges-navbar',
   imports: [
-    CommonModule,
     RouterModule,
     MatButtonModule,
-    // UserButtonComponent,
-    DiscordButtonComponent,
-  ],
+    DiscordButtonComponent
+],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
 })

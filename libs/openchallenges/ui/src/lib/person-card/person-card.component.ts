@@ -1,12 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Avatar } from '../avatar/avatar';
-import { CommonModule } from '@angular/common';
+
 import { MatIconModule } from '@angular/material/icon';
 import { AvatarComponent } from '../avatar/avatar.component';
 
 @Component({
   selector: 'openchallenges-person-card',
-  imports: [CommonModule, AvatarComponent, MatIconModule],
+  imports: [AvatarComponent, MatIconModule],
   templateUrl: './person-card.component.html',
   styleUrls: ['./person-card.component.scss'],
 })

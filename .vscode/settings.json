@@ -95,5 +95,6 @@
   ],
   "terminal.integrated.showExitAlert": false,
   "rewrap.wrappingColumn": 100,
-  "jest.runMode": "on-demand"
+  "jest.runMode": "on-demand",
+  "nxConsole.generateAiAgentRules": true
 }

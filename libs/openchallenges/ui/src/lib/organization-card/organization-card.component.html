@@ -1,30 +1,39 @@
-<div *ngIf="organizationCard">
-  <div class="organization-card" [routerLink]="['/org', organizationCard.login]">
-    <openchallenges-avatar class="organization-card-banner" [avatar]="organizationAvatar" />
-    <!-- <div class="star-btn">
+@if (organizationCard) {
+  <div>
+    <div class="organization-card" [routerLink]="['/org', organizationCard.login]">
+      <openchallenges-avatar class="organization-card-banner" [avatar]="organizationAvatar" />
+      <!-- <div class="star-btn">
       <mat-icon aria-hidden="true" class="star-icon">star_outline</mat-icon>
       {{ mockStars }}
     </div> -->
     <div class="card-body">
       <p class="card-title">{{ organizationCard.name }}</p>
-      <div *ngIf="organizationMembers && showMember" class="members">
-        <div class="member-group">
-          <openchallenges-avatar
-            *ngFor="let member of organizationMembers | slice: 0 : 4"
-            [name]="member.name"
-            [src]="member.avatarUrl || ''"
-            [size]="32"
-          />
+      @if (organizationMembers && showMember) {
+        <div class="members">
+          <div class="member-group">
+            @for (member of organizationMembers | slice: 0 : 4; track member) {
+              <openchallenges-avatar
+                [name]="member.name"
+                [src]="member.avatarUrl || ''"
+                [size]="32"
+                />
+            }
+          </div>
+          @if (otherMembersCount > 0) {
+            <p class="mat-caption">
+              + {{ otherMembersCount }} other members
+            </p>
+          }
         </div>
-        <p class="mat-caption" *ngIf="otherMembersCount > 0">
-          + {{ otherMembersCount }} other members
-        </p>
-      </div>
+      }
     </div>
     <div class="card-footer">
-      <div *ngIf="challengesSupported" class="support-tag mat-small">
-        Contributed to {{ challengesSupported }} challenges
-      </div>
+      @if (challengesSupported) {
+        <div class="support-tag mat-small">
+          Contributed to {{ challengesSupported }} challenges
+        </div>
+      }
     </div>
   </div>
 </div>
+}

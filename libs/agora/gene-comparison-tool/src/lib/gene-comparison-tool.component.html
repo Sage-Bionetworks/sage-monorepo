@@ -52,9 +52,11 @@
           <div class="gct-controls-inner">
             <div class="gct-controls-left">
               <div class="gene-label">DISPLAYED GENES</div>
-              <div *ngIf="genesTable" class="gene-count" data-testid="gene-count">
-                {{ (genesTable?._totalRecords || 0) + uniquePinnedGenesCount }}
-              </div>
+              @if (genesTable) {
+                <div class="gene-count" data-testid="gene-count">
+                  {{ (genesTable?._totalRecords || 0) + uniquePinnedGenesCount }}
+                </div>
+              }
               <div class="gct-search">
                 <svg
                   class="gct-search-icon"
@@ -63,11 +65,11 @@
                   viewBox="0 0 13 13"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                >
+                  >
                   <path
                     d="M9.29102 8.1761H8.70383L8.49571 7.97541C9.22413 7.12807 9.66266 6.02802 9.66266 4.83133C9.66266 2.16295 7.49971 0 4.83133 0C2.16295 0 0 2.16295 0 4.83133C0 7.49971 2.16295 9.66266 4.83133 9.66266C6.02802 9.66266 7.12807 9.22413 7.97541 8.49571L8.1761 8.70383V9.29102L11.8925 13L13 11.8925L9.29102 8.1761ZM4.83133 8.1761C2.98056 8.1761 1.48656 6.6821 1.48656 4.83133C1.48656 2.98056 2.98056 1.48656 4.83133 1.48656C6.6821 1.48656 8.1761 2.98056 8.1761 4.83133C8.1761 6.6821 6.6821 8.1761 4.83133 8.1761Z"
                     fill="#C4C4C4"
-                  />
+                    />
                 </svg>
                 <input
                   type="text"
@@ -75,18 +77,20 @@
                   (input)="onSearchInput($event)"
                   [value]="searchTerm"
                   placeholder="Search"
-                />
-                <button *ngIf="searchTerm" (click)="clearSearch()">
-                  <svg
-                    width="10"
-                    height="10"
-                    viewBox="0 0 10 10"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M1 9L9 1M1 1L9 9" stroke="#C4C4C4" stroke-width="2" />
-                  </svg>
-                </button>
+                  />
+                @if (searchTerm) {
+                  <button (click)="clearSearch()">
+                    <svg
+                      width="10"
+                      height="10"
+                      viewBox="0 0 10 10"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      >
+                      <path d="M1 9L9 1M1 1L9 9" stroke="#C4C4C4" stroke-width="2" />
+                    </svg>
+                  </button>
+                }
               </div>
             </div>
             <div class="gct-controls-right">
@@ -139,7 +143,7 @@
                         (ngModelChange)="
                           setSignificanceThresholdActive(significanceThresholdActive)
                         "
-                      />
+                        />
                     </p-popover>
                     <button
                       (click)="significancePopover.toggle($event)"
@@ -147,7 +151,7 @@
                       pTooltip="Edit significance cutoff value"
                       tooltipPosition="top"
                       tooltipStyleClass="tooltip"
-                    >
+                      >
                       <agora-svg-icon
                         imagePath="/agora-assets/icons/cog.svg"
                         [width]="16"
@@ -159,33 +163,40 @@
                   <div>
                     <p-popover #columnPopover styleClass="gct-toggle-columns">
                       <ul id="scores-columns">
-                        <li *ngFor="let column of scoresColumns">
-                          <div class="column-toggle" (click)="toggleGCTColumn(column)">
-                            <div class="column-toggle-status">
-                              <span *ngIf="column.selected" class="pi pi-check"></span>
-                            </div>
-                            <div>
-                              <span>{{ column.header }}</span>
-                            </div>
-                          </div>
-                        </li>
-                      </ul>
-                      <ul>
-                        <li *ngFor="let column of brainRegionsColumns">
-                          <ng-container *ngIf="column.visible">
+                        @for (column of scoresColumns; track column) {
+                          <li>
                             <div class="column-toggle" (click)="toggleGCTColumn(column)">
                               <div class="column-toggle-status">
-                                <span
-                                  *ngIf="column.selected"
-                                  class="p-checkbox-icon pi pi-check"
-                                ></span>
+                                @if (column.selected) {
+                                  <span class="pi pi-check"></span>
+                                }
                               </div>
                               <div>
                                 <span>{{ column.header }}</span>
                               </div>
                             </div>
-                          </ng-container>
-                        </li>
+                          </li>
+                        }
+                      </ul>
+                      <ul>
+                        @for (column of brainRegionsColumns; track column) {
+                          <li>
+                            @if (column.visible) {
+                              <div class="column-toggle" (click)="toggleGCTColumn(column)">
+                                <div class="column-toggle-status">
+                                  @if (column.selected) {
+                                    <span
+                                      class="p-checkbox-icon pi pi-check"
+                                    ></span>
+                                  }
+                                </div>
+                                <div>
+                                  <span>{{ column.header }}</span>
+                                </div>
+                              </div>
+                            }
+                          </li>
+                        }
                       </ul>
                     </p-popover>
                     <button
@@ -193,7 +204,7 @@
                       pTooltip="Show/hide columns"
                       tooltipPosition="top"
                       tooltipStyleClass="tooltip-xs"
-                    >
+                      >
                       <agora-svg-icon
                         imagePath="/agora-assets/icons/column.svg"
                         [width]="20"
@@ -228,84 +239,91 @@
               breakpoint="0"
               (sortFunction)="setSort($event)"
               [customSort]="true"
-            >
+              >
               <ng-template pTemplate="header">
                 <tr>
                   <th></th>
-                  <th
-                    *ngFor="let column of columns"
-                    [pSortableColumn]="column"
-                    [style]="{ width: columnWidth }"
-                  >
-                    <div class="column-header">
-                      <div class="column-header-text">
-                        <span
-                          [pTooltip]="getGCTColumnTooltipText(column)"
-                          tooltipPosition="top"
-                          tooltipStyleClass="tooltip"
-                        >
-                          {{ column }}
-                        </span>
+                  @for (column of columns; track column) {
+                    <th
+                      [pSortableColumn]="column"
+                      [style]="{ width: columnWidth }"
+                      >
+                      <div class="column-header">
+                        <div class="column-header-text">
+                          <span
+                            [pTooltip]="getGCTColumnTooltipText(column)"
+                            tooltipPosition="top"
+                            tooltipStyleClass="tooltip"
+                            >
+                            {{ column }}
+                          </span>
+                        </div>
+                        <div class="column-header-sort">
+                          <p-sortIcon
+                            [field]="column"
+                            [pTooltip]="getGCTColumnSortIconTooltipText(column)"
+                            tooltipPosition="top"
+                            tooltipStyleClass="tooltip"
+                          ></p-sortIcon>
+                        </div>
                       </div>
-                      <div class="column-header-sort">
-                        <p-sortIcon
-                          [field]="column"
-                          [pTooltip]="getGCTColumnSortIconTooltipText(column)"
-                          tooltipPosition="top"
-                          tooltipStyleClass="tooltip"
-                        ></p-sortIcon>
-                      </div>
-                    </div>
-                  </th>
+                    </th>
+                  }
                 </tr>
               </ng-template>
             </p-table>
 
-            <div *ngIf="pinnedItems.length > 0" class="table-divider table-divider-1">
-              <div class="table-divider-inner">
-                <div id="pinned-genes-header">
-                  <span *ngIf="category === 'RNA - Differential Expression'">
-                    Pinned Genes ({{ pinnedItems.length }}/50)
-                  </span>
-                  <div *ngIf="category === 'Protein - Differential Expression'">
-                    <div>Pinned Genes ({{ uniquePinnedGenesCount }}/50)&nbsp;&nbsp;&nbsp;</div>
-                    <div id="pinned-proteins">
-                      {{ pinnedItems.length }} Protein<ng-container *ngIf="pinnedItems.length > 1"
-                        >s</ng-container
-                      >
+            @if (pinnedItems.length > 0) {
+              <div class="table-divider table-divider-1">
+                <div class="table-divider-inner">
+                  <div id="pinned-genes-header">
+                    @if (category === 'RNA - Differential Expression') {
+                      <span>
+                        Pinned Genes ({{ pinnedItems.length }}/50)
+                      </span>
+                    }
+                    @if (category === 'Protein - Differential Expression') {
+                      <div>
+                        <div>Pinned Genes ({{ uniquePinnedGenesCount }}/50)&nbsp;&nbsp;&nbsp;</div>
+                        <div id="pinned-proteins">
+                          {{ pinnedItems.length }} Protein@if (pinnedItems.length > 1) {
+                          s
+                        }
+                      </div>
                     </div>
-                  </div>
+                  }
                 </div>
                 <div class="csv-download-button">
                   <button (click)="downloadPinnedCsv()">
                     <agora-svg-icon
                       imagePath="/agora-assets/icons/download.svg"
                       altText="download"
-                    ></agora-svg-icon
-                    >Download as CSV
-                  </button>
-                </div>
-                <div class="clear-all-button">
-                  <button (click)="onClearAllClick()">Clear All</button>
+                      ></agora-svg-icon
+                      >Download as CSV
+                    </button>
+                  </div>
+                  <div class="clear-all-button">
+                    <button (click)="onClearAllClick()">Clear All</button>
+                  </div>
                 </div>
               </div>
-            </div>
+            }
             <p-table
               #pinnedTable
               [value]="pinnedItems"
               [customSort]="true"
               (sortFunction)="sortCallback($event)"
               breakpoint="0"
-            >
+              >
               <ng-template pTemplate="body" let-gene>
                 <tr class="pinned">
                   <td>
                     <div class="gene-controls">
                       <div>
                         {{ gene.hgnc_symbol || gene.ensembl_gene_id }}
-                        <ng-container *ngIf="gene.uniprotid && this.subCategory !== 'SRM'">
+                        @if (gene.uniprotid && this.subCategory !== 'SRM') {
                           ({{ gene.uniprotid }})
-                        </ng-container>
+                        }
                       </div>
 
                       <div>
@@ -314,7 +332,7 @@
                           pTooltip="Open gene details page"
                           tooltipPosition="top"
                           tooltipStyleClass="tooltip"
-                        >
+                          >
                           <agora-svg-icon
                             imagePath="/agora-assets/icons/external-link.svg"
                             [enableHoverEffects]="false"
@@ -328,7 +346,7 @@
                           pTooltip="Unpin this row"
                           tooltipPosition="top"
                           tooltipStyleClass="tooltip"
-                        >
+                          >
                           <agora-svg-icon
                             imagePath="/agora-assets/icons/pin.svg"
                             [enableHoverEffects]="false"
@@ -338,101 +356,111 @@
                       </div>
                     </div>
                   </td>
-                  <ng-container *ngFor="let column of columns">
-                    <td
-                      class="cell-numeric"
-                      *ngIf="column === 'RISK SCORE'"
-                      [style]="{ width: columnWidth }"
-                    >
-                      <button
+                  @for (column of columns; track column) {
+                    @if (column === 'RISK SCORE') {
+                      <td
+                        class="cell-numeric"
+                        [style]="{ width: columnWidth }"
+                        >
+                        <button
                         (click)="
                           scorePanel.toggle(
                             $event,
                             getScorePanelData(column, gene, scoresDistribution)
                           )
                         "
-                      >
-                        {{
+                          >
+                          {{
                           isNumber(gene.target_risk_score)
-                            ? (gene.target_risk_score | number: '1.0-2')
-                            : '&mdash;'
-                        }}
-                      </button>
-                    </td>
-                    <td
-                      class="cell-numeric"
-                      *ngIf="column === 'GENETIC'"
-                      [style]="{ width: columnWidth }"
-                    >
-                      <button
+                          ? (gene.target_risk_score | number: '1.0-2')
+                          : '&mdash;'
+                          }}
+                        </button>
+                      </td>
+                    }
+                    @if (column === 'GENETIC') {
+                      <td
+                        class="cell-numeric"
+                        [style]="{ width: columnWidth }"
+                        >
+                        <button
                         (click)="
                           scorePanel.toggle(
                             $event,
                             getScorePanelData(column, gene, scoresDistribution)
                           )
                         "
-                      >
-                        {{
+                          >
+                          {{
                           isNumber(gene.genetics_score)
-                            ? (gene.genetics_score | number: '1.0-2')
-                            : '&mdash;'
-                        }}
-                      </button>
-                    </td>
-                    <td
-                      class="cell-numeric"
-                      *ngIf="column === 'MULTI-OMIC'"
-                      [style]="{ width: columnWidth }"
-                    >
-                      <button
+                          ? (gene.genetics_score | number: '1.0-2')
+                          : '&mdash;'
+                          }}
+                        </button>
+                      </td>
+                    }
+                    @if (column === 'MULTI-OMIC') {
+                      <td
+                        class="cell-numeric"
+                        [style]="{ width: columnWidth }"
+                        >
+                        <button
                         (click)="
                           scorePanel.toggle(
                             $event,
                             getScorePanelData(column, gene, scoresDistribution)
                           )
                         "
-                      >
-                        {{
+                          >
+                          {{
                           isNumber(gene.multi_omics_score)
-                            ? (gene.multi_omics_score | number: '1.0-2')
-                            : '&mdash;'
-                        }}
-                      </button>
-                    </td>
-                    <td
-                      class="cell-default"
-                      *ngIf="!isScoresColumn(column)"
-                      [style]="{ width: columnWidth }"
-                    >
-                      <button
-                        [class]="getCircleClass(column, gene)"
-                        [style]="getCircleStyle(column, gene)"
-                        [pTooltip]="getCircleTooltip(column, gene)"
-                        [tooltipDisabled]="isCircleTooltipDisabled()"
-                        tooltipPosition="bottom"
-                        tooltipStyleClass="tooltip"
-                        (click)="detailsPanel.toggle($event, getDetailsPanelData(column, gene))"
-                      >
-                        <span></span>
-                      </button>
-                    </td>
-                  </ng-container>
+                          ? (gene.multi_omics_score | number: '1.0-2')
+                          : '&mdash;'
+                          }}
+                        </button>
+                      </td>
+                    }
+                    @if (!isScoresColumn(column)) {
+                      <td
+                        class="cell-default"
+                        [style]="{ width: columnWidth }"
+                        >
+                        <button
+                          [class]="getCircleClass(column, gene)"
+                          [style]="getCircleStyle(column, gene)"
+                          [pTooltip]="getCircleTooltip(column, gene)"
+                          [tooltipDisabled]="isCircleTooltipDisabled()"
+                          tooltipPosition="bottom"
+                          tooltipStyleClass="tooltip"
+                          (click)="detailsPanel.toggle($event, getDetailsPanelData(column, gene))"
+                          >
+                          <span></span>
+                        </button>
+                      </td>
+                    }
+                  }
                 </tr>
               </ng-template>
             </p-table>
 
-            <div *ngIf="searchTerm || hasSelectedFilters()" class="table-divider">
-              <div class="table-divider-inner">
-                <div *ngIf="searchTerm">Matching Genes</div>
-                <div *ngIf="!searchTerm">Filtered Genes</div>
-                <div *ngIf="genesTable.filteredValue?.length">
-                  <button
-                    class="pin-all-button"
-                    [disabled]="getPinDisabledStatus()"
+            @if (searchTerm || hasSelectedFilters()) {
+              <div class="table-divider">
+                <div class="table-divider-inner">
+                  @if (searchTerm) {
+                    <div>Matching Genes</div>
+                  }
+                  @if (!searchTerm) {
+                    <div>Filtered Genes</div>
+                  }
+                  @if (genesTable.filteredValue?.length) {
+                    <div>
+                      <button
+                        class="pin-all-button"
+                        [disabled]="getPinDisabledStatus()"
                     [ngClass]="{
                       disabled: getPinDisabledStatus(),
                     }"
-                    (click)="onPinAllClick()"
+                        (click)="onPinAllClick()"
                     [pTooltip]="
                       getPinDisabledStatus()
                         ? 'You have already pinned the maximum number of genes (' +
@@ -440,26 +468,29 @@
                           '). You must unpin some genes before you can pin more.'
                         : 'Pin all matching rows to the top.'
                     "
-                    tooltipPosition="left"
-                    tooltipStyleClass="tooltip"
-                  >
-                    <agora-svg-icon
-                      imagePath="/agora-assets/icons/pin.svg"
-                      altText="pin"
-                    ></agora-svg-icon>
-                    <span>Pin All</span>
-                  </button>
+                        tooltipPosition="left"
+                        tooltipStyleClass="tooltip"
+                        >
+                        <agora-svg-icon
+                          imagePath="/agora-assets/icons/pin.svg"
+                          altText="pin"
+                        ></agora-svg-icon>
+                        <span>Pin All</span>
+                      </button>
+                    </div>
+                  }
                 </div>
               </div>
-            </div>
-            <div
-              *ngIf="!searchTerm && !hasSelectedFilters() && pinnedItems.length > 0"
-              class="table-divider"
-            >
-              <div class="table-divider-inner">
-                <div>All Genes</div>
+            }
+            @if (!searchTerm && !hasSelectedFilters() && pinnedItems.length > 0) {
+              <div
+                class="table-divider"
+                >
+                <div class="table-divider-inner">
+                  <div>All Genes</div>
+                </div>
               </div>
-            </div>
+            }
             <p-table
               #genesTable
               [value]="genes"
@@ -474,7 +505,7 @@
               [customSort]="true"
               [loading]="isLoading"
               loadingIcon=""
-            >
+              >
               <ng-template pTemplate="emptymessage" let-gene>
                 <div class="no-results">No results found...</div>
               </ng-template>
@@ -485,9 +516,9 @@
                     <div class="gene-controls">
                       <div>
                         {{ gene.hgnc_symbol || gene.ensembl_gene_id }}
-                        <ng-container *ngIf="gene.uniprotid && this.subCategory !== 'SRM'">
+                        @if (gene.uniprotid && this.subCategory !== 'SRM') {
                           ({{ gene.uniprotid }})
-                        </ng-container>
+                        }
                       </div>
                       <div>
                         <button
@@ -495,7 +526,7 @@
                           pTooltip="Open gene details page"
                           tooltipPosition="top"
                           tooltipStyleClass="tooltip"
-                        >
+                          >
                           <agora-svg-icon
                             imagePath="/agora-assets/icons/external-link.svg"
                             [enableHoverEffects]="false"
@@ -519,7 +550,7 @@
                           "
                           tooltipPosition="top"
                           tooltipStyleClass="tooltip"
-                        >
+                          >
                           <agora-svg-icon
                             imagePath="/agora-assets/icons/pin.svg"
                             [enableHoverEffects]="false"
@@ -529,85 +560,89 @@
                       </div>
                     </div>
                   </td>
-                  <ng-container *ngFor="let column of columns">
-                    <td
-                      class="cell-numeric"
-                      *ngIf="column === 'RISK SCORE'"
-                      [style]="{ width: columnWidth }"
-                    >
-                      <button
+                  @for (column of columns; track column) {
+                    @if (column === 'RISK SCORE') {
+                      <td
+                        class="cell-numeric"
+                        [style]="{ width: columnWidth }"
+                        >
+                        <button
                         (click)="
                           scorePanel.toggle(
                             $event,
                             getScorePanelData(column, gene, scoresDistribution)
                           )
                         "
-                      >
-                        {{
+                          >
+                          {{
                           isNumber(gene.target_risk_score)
-                            ? (gene.target_risk_score | number: '1.0-2')
-                            : '&mdash;'
-                        }}
-                      </button>
-                    </td>
-                    <td
-                      class="cell-numeric"
-                      *ngIf="column === 'GENETIC'"
-                      [style]="{ width: columnWidth }"
-                    >
-                      <button
+                          ? (gene.target_risk_score | number: '1.0-2')
+                          : '&mdash;'
+                          }}
+                        </button>
+                      </td>
+                    }
+                    @if (column === 'GENETIC') {
+                      <td
+                        class="cell-numeric"
+                        [style]="{ width: columnWidth }"
+                        >
+                        <button
                         (click)="
                           scorePanel.toggle(
                             $event,
                             getScorePanelData(column, gene, scoresDistribution)
                           )
                         "
-                      >
-                        {{
+                          >
+                          {{
                           isNumber(gene.genetics_score)
-                            ? (gene.genetics_score | number: '1.0-2')
-                            : '&mdash;'
-                        }}
-                      </button>
-                    </td>
-                    <td
-                      class="cell-numeric"
-                      *ngIf="column === 'MULTI-OMIC'"
-                      [style]="{ width: columnWidth }"
-                    >
-                      <button
+                          ? (gene.genetics_score | number: '1.0-2')
+                          : '&mdash;'
+                          }}
+                        </button>
+                      </td>
+                    }
+                    @if (column === 'MULTI-OMIC') {
+                      <td
+                        class="cell-numeric"
+                        [style]="{ width: columnWidth }"
+                        >
+                        <button
                         (click)="
                           scorePanel.toggle(
                             $event,
                             getScorePanelData(column, gene, scoresDistribution)
                           )
                         "
-                      >
-                        {{
+                          >
+                          {{
                           isNumber(gene.multi_omics_score)
-                            ? (gene.multi_omics_score | number: '1.0-2')
-                            : '&mdash;'
-                        }}
-                      </button>
-                    </td>
-                    <td
-                      class="cell-default"
-                      *ngIf="!isScoresColumn(column)"
-                      [style]="{ width: columnWidth }"
-                    >
-                      <button
-                        [class]="getCircleClass(column, gene)"
-                        [style]="getCircleStyle(column, gene)"
-                        [pTooltip]="getCircleTooltip(column, gene)"
-                        [tooltipDisabled]="isCircleTooltipDisabled()"
-                        tooltipPosition="bottom"
-                        tooltipStyleClass="tooltip"
-                        (click)="detailsPanel.toggle($event, getDetailsPanelData(column, gene))"
-                      >
-                        <span></span>
-                      </button>
-                    </td>
-                  </ng-container>
+                          ? (gene.multi_omics_score | number: '1.0-2')
+                          : '&mdash;'
+                          }}
+                        </button>
+                      </td>
+                    }
+                    @if (!isScoresColumn(column)) {
+                      <td
+                        class="cell-default"
+                        [style]="{ width: columnWidth }"
+                        >
+                        <button
+                          [class]="getCircleClass(column, gene)"
+                          [style]="getCircleStyle(column, gene)"
+                          [pTooltip]="getCircleTooltip(column, gene)"
+                          [tooltipDisabled]="isCircleTooltipDisabled()"
+                          tooltipPosition="bottom"
+                          tooltipStyleClass="tooltip"
+                          (click)="detailsPanel.toggle($event, getDetailsPanelData(column, gene))"
+                          >
+                          <span></span>
+                        </button>
+                      </td>
+                    }
+                  }
                 </tr>
               </ng-template>
             </p-table>

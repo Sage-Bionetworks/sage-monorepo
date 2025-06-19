@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -12,14 +12,13 @@ import { ButtonModule } from 'primeng/button';
 @Component({
   selector: 'agora-nominated-targets',
   imports: [
-    CommonModule,
     RouterLink,
     SvgIconComponent,
     ModalLinkComponent,
     GeneTableComponent,
     ButtonModule,
-    FontAwesomeModule,
-  ],
+    FontAwesomeModule
+],
   templateUrl: './nominated-targets.component.html',
   styleUrls: ['./nominated-targets.component.scss'],
 })

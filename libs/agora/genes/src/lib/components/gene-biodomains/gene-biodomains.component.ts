@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { BioDomain, Gene } from '@sagebionetworks/agora/api-client-angular';
 import { BiodomainsChartComponent } from '@sagebionetworks/agora/charts';
@@ -6,7 +6,7 @@ import { HelperService } from '@sagebionetworks/agora/services';
 
 @Component({
   selector: 'agora-gene-biodomains',
-  imports: [CommonModule, BiodomainsChartComponent],
+  imports: [BiodomainsChartComponent],
   templateUrl: './gene-biodomains.component.html',
   styleUrls: ['./gene-biodomains.component.scss'],
 })
