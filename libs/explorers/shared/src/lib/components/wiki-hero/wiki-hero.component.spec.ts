@@ -16,9 +16,7 @@ class MockHeroComponent {}
   selector: 'explorers-wiki',
   template: '<div>Mock Wiki Component with ID: {{wikiId}}</div>',
 })
-class MockWikiComponent {
-  wikiId = '';
-}
+class MockWikiComponent {}
 
 const TITLE = 'Test Title';
 const WIKI_ID = '0';
