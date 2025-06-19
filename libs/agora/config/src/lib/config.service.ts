@@ -1,20 +1,20 @@
 import { isPlatformServer } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
+import { inject, InjectionToken, Injectable, PLATFORM_ID } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
 import { AppConfig, EMPTY_APP_CONFIG } from './app.config';
+
+// Define the token for APP_PORT
+export const APP_PORT = new InjectionToken<string>('APP_PORT');
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConfigService {
   config: AppConfig = EMPTY_APP_CONFIG;
-
-  constructor(
-    private http: HttpClient,
-    @Inject(PLATFORM_ID) private platformId: string,
-    @Inject('APP_PORT') @Optional() private readonly port: string,
-  ) {}
+  private http = inject(HttpClient);
+  readonly platformId = inject(PLATFORM_ID);
+  private readonly port = inject(APP_PORT, { optional: true });
 
   async loadConfig(): Promise<void> {
     // The location of the browser folder, which includes the config folder, depends on whether the
