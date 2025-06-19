@@ -3,8 +3,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { render, screen } from '@testing-library/angular';
 import { provideHttpClient } from '@angular/common/http';
-import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/models';
-import { MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
+import { getModelAdTestProviders } from '@sagebionetworks/model-ad/testing';
 
 @Component({
   selector: 'explorers-hero',
@@ -28,13 +27,7 @@ async function setup() {
       heroTitle: TITLE,
     },
     imports: [CommonModule, MockHeroComponent, MockWikiComponent],
-    providers: [
-      provideHttpClient(),
-      {
-        provide: LOADING_ICON_COLORS,
-        useValue: MODEL_AD_LOADING_ICON_COLORS,
-      },
-    ],
+    providers: [provideHttpClient(), ...getModelAdTestProviders()],
   });
 
   const component = fixture.componentInstance;

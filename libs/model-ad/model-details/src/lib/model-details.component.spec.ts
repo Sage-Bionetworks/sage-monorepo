@@ -7,8 +7,7 @@ import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
 import { ModelDetailsComponent } from './model-details.component';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
-import { MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
-import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/models';
+import { getModelAdTestProviders } from '@sagebionetworks/model-ad/testing';
 
 async function setup(model = modelMock, tab = 'omics', subtab = null, config = configMock) {
   const user = userEvent.setup();
@@ -34,10 +33,7 @@ async function setup(model = modelMock, tab = 'omics', subtab = null, config = c
         useValue: mockActivatedRoute,
       },
       { provide: ConfigService, useValue: configServiceMock },
-      {
-        provide: LOADING_ICON_COLORS,
-        useValue: MODEL_AD_LOADING_ICON_COLORS,
-      },
+      ...getModelAdTestProviders(),
     ],
   });
 
