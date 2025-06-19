@@ -1,11 +1,10 @@
-
-import { Inject, Injectable, Renderer2, DOCUMENT } from '@angular/core';
+import { Injectable, Renderer2, DOCUMENT, inject } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class JsonLdService {
-  constructor(@Inject(DOCUMENT) private document: Document) {}
+  readonly document = inject(DOCUMENT);
 
   /**
    * Add JSON-LD data to the head of the document.
