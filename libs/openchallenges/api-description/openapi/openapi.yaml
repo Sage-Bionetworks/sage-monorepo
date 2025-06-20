@@ -233,9 +233,15 @@ paths:
       summary: Delete an organization
       description: Deletes the organization specified
       operationId: deleteOrganization
+      security:
+        - bearerAuth: []
       responses:
         '204':
           description: Organization successfully deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
@@ -1318,6 +1324,18 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
     Conflict:
       description: The request conflicts with current state of the target resource
       content:
@@ -1410,3 +1428,9 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/AccountId'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token obtained from /auth/login endpoint
