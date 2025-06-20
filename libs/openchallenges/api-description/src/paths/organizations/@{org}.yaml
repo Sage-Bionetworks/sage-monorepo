@@ -23,9 +23,15 @@ delete:
   summary: Delete an organization
   description: Deletes the organization specified
   operationId: deleteOrganization
+  security:
+    - bearerAuth: []
   responses:
     '204':
       description: Organization successfully deleted
+    '401':
+      $ref: ../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../components/responses/Forbidden.yaml
     '404':
       $ref: ../../components/responses/NotFound.yaml
     '500':

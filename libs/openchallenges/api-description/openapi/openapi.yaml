@@ -233,9 +233,15 @@ paths:
       summary: Delete an organization
       description: Deletes the organization specified
       operationId: deleteOrganization
+      security:
+        - bearerAuth: []
       responses:
         '204':
           description: Organization successfully deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
@@ -1313,6 +1319,18 @@ components:
             $ref: '#/components/schemas/BasicError'
     NotFound:
       description: The specified resource was not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    Forbidden:
+      description: The user does not have the permission to perform this action
       content:
         application/problem+json:
           schema:
