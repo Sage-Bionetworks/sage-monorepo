@@ -1,5 +1,6 @@
 plugins {
   alias(libs.plugins.spring.boot)
+  jacoco
   java
 }
 
@@ -49,6 +50,10 @@ dependencies {
   testRuntimeOnly(libs.h2database.h2)
 }
 
+jacoco {
+  toolVersion = "0.8.13"
+}
+
 tasks.withType<Test>().configureEach {
   maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
 
@@ -57,6 +62,34 @@ tasks.withType<Test>().configureEach {
   testLogging {
     events("passed", "skipped", "failed")
   }
+}
+
+tasks.jacocoTestReport {
+  reports {
+    xml.required.set(true)
+    html.required.set(true)
+    csv.required.set(false)
+    html.outputLocation.set(layout.buildDirectory.dir("jacocoHtml"))
+  }
+
+  dependsOn(tasks.test)
+
+  classDirectories.setFrom(
+    files(classDirectories.files.map {
+      fileTree(it) {
+        exclude(
+          "**/api/*",
+          "**/configuration/EnumConverterConfiguration*.*",
+          "**/configuration/Flyway*.*",
+          "**/configuration/HibernateSearch*.*",
+          "**/configuration/HomeController*.*",
+          "**/configuration/SpringDocConfiguration*.*",
+          "**/model/dto/**",
+          "**/RFC3339DateFormat.*"
+        )
+      }
+    })
+  )
 }
 
 tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
