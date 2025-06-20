@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoadingContainerComponent } from './loading-container.component';
+import { getModelAdTestProviders } from '@sagebionetworks/model-ad/testing';
 
 describe('LoadingIcon', () => {
   let component: LoadingContainerComponent;
@@ -8,7 +9,7 @@ describe('LoadingIcon', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [],
-      providers: [],
+      providers: [...getModelAdTestProviders()],
     }).compileComponents();
   });
 

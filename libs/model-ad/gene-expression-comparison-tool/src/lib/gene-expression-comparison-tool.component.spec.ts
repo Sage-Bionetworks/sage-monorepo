@@ -2,11 +2,12 @@ import { render } from '@testing-library/angular';
 import { GeneExpressionComparisonToolComponent } from './gene-expression-comparison-tool.component';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
 import { MessageService } from 'primeng/api';
+import { getModelAdTestProviders } from '@sagebionetworks/model-ad/testing';
 
 async function setup() {
   const { fixture } = await render(GeneExpressionComparisonToolComponent, {
     imports: [BaseComparisonToolComponent],
-    providers: [MessageService],
+    providers: [MessageService, ...getModelAdTestProviders()],
   });
 
   const component = fixture.componentInstance;

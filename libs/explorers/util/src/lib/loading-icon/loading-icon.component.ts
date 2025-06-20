@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { Component, inject, ViewEncapsulation } from '@angular/core';
+import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/models';
 
 @Component({
   selector: 'explorers-loading-icon',
@@ -9,15 +10,13 @@ import { Component, Input, ViewEncapsulation } from '@angular/core';
   encapsulation: ViewEncapsulation.None,
 })
 export class LoadingIconComponent {
-  @Input() colorOutermost = '#8B8AD1';
-  @Input() colorCentral = '#8B8AD1';
-  @Input() colorInnermost = '#8B8AD1';
+  private readonly colors = inject(LOADING_ICON_COLORS);
 
   get customColors() {
     return {
-      '--hex-outermost-color': this.colorOutermost,
-      '--hex-central-color': this.colorCentral,
-      '--hex-innermost-color': this.colorInnermost,
+      '--hex-outermost-color': this.colors.colorOutermost,
+      '--hex-central-color': this.colors.colorCentral,
+      '--hex-innermost-color': this.colors.colorInnermost,
     };
   }
 }

@@ -10,8 +10,5 @@ import { LoadingIconComponent } from '../loading-icon/loading-icon.component';
   encapsulation: ViewEncapsulation.None,
 })
 export class LoadingContainerComponent {
-  colorOutermost = input('#8B8AD1');
-  colorCentral = input('#8B8AD1');
-  colorInnermost = input('#8B8AD1');
   count = input(0);
 }

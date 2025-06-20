@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { render, screen } from '@testing-library/angular';
 import { provideHttpClient } from '@angular/common/http';
+import { getModelAdTestProviders } from '@sagebionetworks/model-ad/testing';
 
 @Component({
   selector: 'explorers-hero',
@@ -14,9 +15,7 @@ class MockHeroComponent {}
   selector: 'explorers-wiki',
   template: '<div>Mock Wiki Component with ID: {{wikiId}}</div>',
 })
-class MockWikiComponent {
-  wikiId = '';
-}
+class MockWikiComponent {}
 
 const TITLE = 'Test Title';
 const WIKI_ID = '0';
@@ -28,7 +27,7 @@ async function setup() {
       heroTitle: TITLE,
     },
     imports: [CommonModule, MockHeroComponent, MockWikiComponent],
-    providers: [provideHttpClient()],
+    providers: [provideHttpClient(), ...getModelAdTestProviders()],
   });
 
   const component = fixture.componentInstance;
