@@ -17,6 +17,12 @@ public class OrganizationApiDelegateImpl implements OrganizationApiDelegate {
   }
 
   @Override
+  public ResponseEntity<Void> deleteOrganization(String identifier) {
+    organizationService.deleteOrganization(identifier);
+    return ResponseEntity.noContent().build();
+  }
+
+  @Override
   public ResponseEntity<OrganizationsPageDto> listOrganizations(OrganizationSearchQueryDto query) {
     return ResponseEntity.ok(organizationService.listOrganizations(query));
   }
