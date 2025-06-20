@@ -3,15 +3,16 @@
     <div class="col-8">
       <h1>
         I want to find challenges related to
-        <ngx-typed-js
-          *ngIf="!isPlatformServer"
-          [strings]="['breast cancer.', 'immunotherapy.', 'EHR.', 'imaging analysis.']"
-          [loop]="true"
-          [typeSpeed]="65"
-          [backSpeed]="15"
-        >
-          <span class="typing"></span>
-        </ngx-typed-js>
+        @if (!isPlatformServer) {
+          <ngx-typed-js
+            [strings]="['breast cancer.', 'immunotherapy.', 'EHR.', 'imaging analysis.']"
+            [loop]="true"
+            [typeSpeed]="65"
+            [backSpeed]="15"
+            >
+            <span class="typing"></span>
+          </ngx-typed-js>
+        }
       </h1>
       <p class="mat-body-strong">
         OpenChallenges (OC) is a centralized hub for biomedical challenges and more.
@@ -26,7 +27,7 @@
         height="420px"
         src="/assets/openchallenges/images/graphic-search-v2.svg"
         alt="Search OpenChallenges"
-      />
+        />
     </div>
   </div>
 </section>
@@ -36,15 +37,16 @@
       class="logo-icon"
       src="/assets/openchallenges/images/graphic-challenges.svg"
       alt="Number of challenges"
-    />
+      />
     <div class="metrics-text-box">
-      <h2
-        *ngIf="challengeCount$ | async as challengeCount"
-        [countUp]="challengeCount"
-        [reanimateOnClick]="reanimateOnClick"
-      >
-        0
-      </h2>
+      @if (challengeCount$ | async; as challengeCount) {
+        <h2
+          [countUp]="challengeCount"
+          [reanimateOnClick]="reanimateOnClick"
+          >
+          0
+        </h2>
+      }
       <p class="mat-body-strong">annotated challenges</p>
     </div>
   </div>
@@ -53,15 +55,16 @@
       class="logo-icon"
       src="/assets/openchallenges/images/graphic-hosts.svg"
       alt="Number of organizations & hosting societies"
-    />
+      />
     <div class="metrics-text-box">
-      <h2
-        *ngIf="orgCount$ | async as orgCount"
-        [countUp]="orgCount"
-        [reanimateOnClick]="reanimateOnClick"
-      >
-        0
-      </h2>
+      @if (orgCount$ | async; as orgCount) {
+        <h2
+          [countUp]="orgCount"
+          [reanimateOnClick]="reanimateOnClick"
+          >
+          0
+        </h2>
+      }
       <p class="mat-body-strong">organizations & hosting<br />societies</p>
     </div>
   </div>
@@ -70,15 +73,16 @@
       class="logo-icon"
       src="/assets/openchallenges/images/graphic-platforms.svg"
       alt="Number of platforms"
-    />
+      />
     <div class="metrics-text-box">
-      <h2
-        *ngIf="platformCount$ | async as platformCount"
-        [countUp]="platformCount"
-        [reanimateOnClick]="reanimateOnClick"
-      >
-        0
-      </h2>
+      @if (platformCount$ | async; as platformCount) {
+        <h2
+          [countUp]="platformCount"
+          [reanimateOnClick]="reanimateOnClick"
+          >
+          0
+        </h2>
+      }
       <p class="mat-body-strong">platforms</p>
     </div>
   </div>
@@ -95,7 +99,7 @@
         [(ngModel)]="searchTerms"
         (keydown.enter)="onSearch()"
         placeholder="I'm looking for..."
-      />
+        />
     </div>
   </div>
 </section>

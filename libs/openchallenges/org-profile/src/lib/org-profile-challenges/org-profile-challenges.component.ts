@@ -7,12 +7,12 @@ import {
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { BehaviorSubject, switchMap } from 'rxjs';
 import { assign } from 'lodash';
-import { CommonModule } from '@angular/common';
+
 import { ChallengeCardComponent, PaginatorComponent } from '@sagebionetworks/openchallenges/ui';
 
 @Component({
   selector: 'openchallenges-org-profile-challenges',
-  imports: [CommonModule, PaginatorComponent, ChallengeCardComponent],
+  imports: [PaginatorComponent, ChallengeCardComponent],
   templateUrl: './org-profile-challenges.component.html',
   styleUrls: ['./org-profile-challenges.component.scss'],
 })

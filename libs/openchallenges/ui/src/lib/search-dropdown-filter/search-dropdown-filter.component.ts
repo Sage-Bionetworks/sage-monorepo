@@ -1,7 +1,7 @@
 import { Avatar } from '../avatar/avatar';
 import { AvatarComponent } from '../avatar/avatar.component';
 import { CheckboxModule } from 'primeng/checkbox';
-import { CommonModule } from '@angular/common';
+
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Filter } from '../checkbox-filter/filter.model';
 import { FormsModule } from '@angular/forms';
@@ -16,13 +16,12 @@ import { SkeletonModule } from 'primeng/skeleton';
   imports: [
     AvatarComponent,
     CheckboxModule,
-    CommonModule,
     InputGroupModule,
     InputTextModule,
     FormsModule,
     MultiSelectModule,
-    SkeletonModule,
-  ],
+    SkeletonModule
+],
   templateUrl: './search-dropdown-filter.component.html',
   styleUrls: ['./search-dropdown-filter.component.scss'],
 })

@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Renderer2 } from '@angular/core';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { FooterComponent } from '@sagebionetworks/openchallenges/ui';
@@ -7,7 +7,7 @@ import { SeoService } from '@sagebionetworks/shared/util';
 
 @Component({
   selector: 'openchallenges-about',
-  imports: [CommonModule, FooterComponent],
+  imports: [FooterComponent],
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss'],
 })

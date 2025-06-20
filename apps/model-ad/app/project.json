@@ -101,7 +101,8 @@
           "buildTarget": "model-ad-app:build:development"
         }
       },
-      "defaultConfiguration": "development"
+      "defaultConfiguration": "development",
+      "continuous": true
     },
     "serve-detach": {
       "executor": "nx:run-commands",
@@ -169,7 +170,8 @@
           "serverTarget": "model-ad-app:server:production"
         }
       },
-      "defaultConfiguration": "development"
+      "defaultConfiguration": "development",
+      "continuous": true
     },
     "scan-image": {
       "executor": "nx:run-commands",

@@ -17,7 +17,7 @@
             [(ngModel)]="searchedTerms"
             (input)="onSearchChange()"
             placeholder="Search organizations"
-          />
+            />
         </p-inputGroup>
       </div>
       <div class="sort-field">
@@ -39,47 +39,50 @@
         header="{{ challengeContributionRolesFilter.label }}"
         [toggleable]="true"
         [collapsed]="challengeContributionRolesFilter.collapsed"
-      >
+        >
         <openchallenges-checkbox-filter
           [options]="challengeContributionRolesFilter.options"
           [selectedOptions]="selectedChallengeContributionRoles"
           (selectionChange)="onParamChange({ challengeContributionRoles: $event })"
           inputId="{{ challengeContributionRolesFilter.query }}"
-        />
+          />
       </p-panel>
       <p-divider></p-divider>
       <p-panel
         header="{{ categoriesFilter.label }}"
         [toggleable]="true"
         [collapsed]="categoriesFilter.collapsed"
-      >
+        >
         <openchallenges-checkbox-filter
           [options]="categoriesFilter.options"
           [selectedOptions]="selectedCategories"
           (selectionChange)="onParamChange({ categories: $event })"
           inputId="{{ categoriesFilter.query }}"
-        />
+          />
       </p-panel>
     </div>
     <div class="main col">
       <h3>
-        Results <span *ngIf="searchResultsCount !== undefined">({{ searchResultsCount }})</span>
-      </h3>
-      <div class="card-group">
+        Results @if (searchResultsCount !== undefined) {
+        <span>({{ searchResultsCount }})</span>
+      }
+    </h3>
+    <div class="card-group">
+      @for (organizationCard of organizationCards; track organizationCard) {
         <openchallenges-organization-card
-          *ngFor="let organizationCard of organizationCards"
           [organizationCard]="organizationCard"
-        />
-      </div>
-      <openchallenges-paginator
-        #paginator
-        [pageNumber]="selectedPageNumber || defaultPageNumber"
-        [pageSize]="selectedPageSize || defaultPageSize"
-        [totalElements]="searchResultsCount"
-        (pageChange)="onParamChange({ pageNumber: $event.page, pageSize: $event.rows })"
-      />
+          />
+      }
     </div>
-  </section>
+    <openchallenges-paginator
+      #paginator
+      [pageNumber]="selectedPageNumber || defaultPageNumber"
+      [pageSize]="selectedPageSize || defaultPageSize"
+      [totalElements]="searchResultsCount"
+      (pageChange)="onParamChange({ pageNumber: $event.page, pageSize: $event.rows })"
+      />
+  </div>
+</section>
 </main>
 
 <openchallenges-footer
@@ -88,4 +91,4 @@
   [privacyPolicyUrl]="privacyPolicyUrl"
   [termsOfUseUrl]="termsOfUseUrl"
   [apiDocsUrl]="apiDocsUrl"
-/>
+  />

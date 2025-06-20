@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
@@ -8,7 +8,7 @@ import { FooterComponent } from '@sagebionetworks/openchallenges/ui';
 
 @Component({
   selector: 'openchallenges-not-found',
-  imports: [CommonModule, RouterModule, MatCardModule, MatButtonModule, FooterComponent],
+  imports: [RouterModule, MatCardModule, MatButtonModule, FooterComponent],
   templateUrl: './not-found.component.html',
   styleUrls: ['./not-found.component.scss'],
 })

@@ -1,12 +1,12 @@
 import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { GCTFilter, GCTFilterOption } from '@sagebionetworks/agora/models';
-import { CommonModule } from '@angular/common';
+
 import { GeneComparisonToolFilterListItemComponent } from '../gene-comparison-tool-filter-list-item/gene-comparison-tool-filter-list-item.component';
 import { SvgIconComponent } from '@sagebionetworks/agora/shared';
 
 @Component({
   selector: 'agora-gene-comparison-tool-filter-list',
-  imports: [CommonModule, GeneComparisonToolFilterListItemComponent, SvgIconComponent],
+  imports: [GeneComparisonToolFilterListItemComponent, SvgIconComponent],
   templateUrl: './gene-comparison-tool-filter-list.component.html',
   styleUrls: ['./gene-comparison-tool-filter-list.component.scss'],
   encapsulation: ViewEncapsulation.None,

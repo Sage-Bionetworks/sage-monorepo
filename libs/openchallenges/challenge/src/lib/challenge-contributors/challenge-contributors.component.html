@@ -8,48 +8,48 @@
     </p>
     <div id="contributor-organizer">
       <p class="mat-body-strong"><strong>Challenge Organizers</strong></p>
-      <ng-container *ngIf="organizerCardBundles.length > 0; else no_org">
+      @if (organizerCardBundles.length > 0) {
         <div class="card-group">
-          <openchallenges-organization-card
-            *ngFor="let bundle of organizerCardBundles"
-            [organizationCard]="bundle.card"
-            [showMember]="false"
-          />
+          @for (bundle of organizerCardBundles; track bundle) {
+            <openchallenges-organization-card
+              [organizationCard]="bundle.card"
+              [showMember]="false"
+              />
+          }
         </div>
-      </ng-container>
-      <ng-template #no_org>
+      } @else {
         <p class="text-grey">Not available</p>
-      </ng-template>
+      }
     </div>
     <div id="contributor-data">
       <p class="mat-body-strong"><strong>Data Contributors</strong></p>
-      <ng-container *ngIf="dataContributorCardBundles.length > 0; else no_data">
+      @if (dataContributorCardBundles.length > 0) {
         <div class="card-group">
-          <openchallenges-organization-card
-            *ngFor="let bundle of dataContributorCardBundles"
-            [organizationCard]="bundle.card"
-            [showMember]="false"
-          />
+          @for (bundle of dataContributorCardBundles; track bundle) {
+            <openchallenges-organization-card
+              [organizationCard]="bundle.card"
+              [showMember]="false"
+              />
+          }
         </div>
-      </ng-container>
-      <ng-template #no_data>
+      } @else {
         <p class="text-grey">Not available</p>
-      </ng-template>
+      }
     </div>
     <div id="contributor-sponsor">
       <p class="mat-body-strong"><strong>Sponsors</strong></p>
-      <ng-container *ngIf="sponsorCardBundles.length > 0; else no_sponsor">
+      @if (sponsorCardBundles.length > 0) {
         <div class="card-group">
-          <openchallenges-organization-card
-            *ngFor="let bundle of sponsorCardBundles"
-            [organizationCard]="bundle.card"
-            [showMember]="false"
-          />
+          @for (bundle of sponsorCardBundles; track bundle) {
+            <openchallenges-organization-card
+              [organizationCard]="bundle.card"
+              [showMember]="false"
+              />
+          }
         </div>
-      </ng-container>
-      <ng-template #no_sponsor>
+      } @else {
         <p class="text-grey">Not available</p>
-      </ng-template>
+      }
     </div>
   </div>
 </main>

@@ -1,22 +1,24 @@
 @if (_gene) {
   <div class="gene-score-charts">
-    <div *ngFor="let chart of scoreDistributions">
-      <div class="gene-score-charts-header">
-        <div>
-          <h2 class="gene-score-charts-heading">
-            {{ chart.name }}
-          </h2>
+    @for (chart of scoreDistributions; track chart) {
+      <div>
+        <div class="gene-score-charts-header">
+          <div>
+            <h2 class="gene-score-charts-heading">
+              {{ chart.name }}
+            </h2>
+          </div>
+          <div>
+            <agora-popover-link [ownerId]="chart.syn_id" [wikiId]="chart.wiki_id">
+            </agora-popover-link>
+          </div>
         </div>
-        <div>
-          <agora-popover-link [ownerId]="chart.syn_id" [wikiId]="chart.wiki_id">
-          </agora-popover-link>
-        </div>
+        <agora-score-barchart
+          [score]="getGeneOverallScores(chart.name)"
+          [barColor]="getBarColor(chart.name)"
+          [data]="chart"
+        ></agora-score-barchart>
       </div>
-      <agora-score-barchart
-        [score]="getGeneOverallScores(chart.name)"
-        [barColor]="getBarColor(chart.name)"
-        [data]="chart"
-      ></agora-score-barchart>
-    </div>
+    }
   </div>
 }

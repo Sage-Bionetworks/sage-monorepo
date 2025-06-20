@@ -57,7 +57,7 @@ import {
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
 import { RouterModule } from '@angular/router';
-import { CommonModule, Location } from '@angular/common';
+import { Location } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DividerModule } from 'primeng/divider';
@@ -75,7 +75,6 @@ import { assign } from 'lodash';
 @Component({
   selector: 'openchallenges-org-search',
   imports: [
-    CommonModule,
     DividerModule,
     DropdownModule,
     InputGroupModule,
@@ -91,8 +90,8 @@ import { assign } from 'lodash';
     FooterComponent,
     PaginatorComponent,
     OrganizationCardComponent,
-    CheckboxFilterComponent,
-  ],
+    CheckboxFilterComponent
+],
   templateUrl: './org-search.component.html',
   styleUrls: ['./org-search.component.scss'],
 })

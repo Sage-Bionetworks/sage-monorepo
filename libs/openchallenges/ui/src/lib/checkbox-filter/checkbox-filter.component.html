@@ -1,10 +1,12 @@
-<div *ngFor="let option of options" class="p-field-checkbox">
-  <p-checkbox
-    name="{{ 'checkbox-' + option.label }}"
-    [value]="option.value"
-    [(ngModel)]="selectedOptions"
-    (onChange)="onChange(selectedOptions)"
-    inputId="{{ formatId(inputId + '-' + option.value) }}"
-  ></p-checkbox>
-  <label for="{{ formatId(inputId + '-' + option.value) }}">{{ option.label }}</label>
-</div>
+@for (option of options; track option) {
+  <div class="p-field-checkbox">
+    <p-checkbox
+      name="{{ 'checkbox-' + option.label }}"
+      [value]="option.value"
+      [(ngModel)]="selectedOptions"
+      (onChange)="onChange(selectedOptions)"
+      inputId="{{ formatId(inputId + '-' + option.value) }}"
+    ></p-checkbox>
+    <label for="{{ formatId(inputId + '-' + option.value) }}">{{ option.label }}</label>
+  </div>
+}

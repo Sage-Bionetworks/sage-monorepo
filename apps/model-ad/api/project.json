@@ -20,7 +20,7 @@
         "compiler": "tsc",
         "outputPath": "dist/apps/model-ad/api",
         "main": "{projectRoot}/src/main.ts",
-        "tsConfig": "{projectRoot}/tsconfig.app.json",
+        "tsConfig": "apps/model-ad/api/tsconfig.app.json",
         "assets": ["{projectRoot}/src/assets"],
         "webpackConfig": "{projectRoot}/webpack.config.js",
         "externalDependencies": []

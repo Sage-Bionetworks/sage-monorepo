@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Input } from '@angular/core';
 import { Challenge } from '@sagebionetworks/openchallenges/api-client-angular';
 import {
@@ -9,7 +9,7 @@ import {
 
 @Component({
   selector: 'openchallenges-challenge-organizers',
-  imports: [CommonModule, PersonCardComponent],
+  imports: [PersonCardComponent],
   templateUrl: './challenge-organizers.component.html',
   styleUrls: ['./challenge-organizers.component.scss'],
 })

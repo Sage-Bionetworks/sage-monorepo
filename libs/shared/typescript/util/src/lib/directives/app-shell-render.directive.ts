@@ -1,7 +1,7 @@
 import { isPlatformServer } from '@angular/common';
 import {
   Directive,
-  Inject,
+  inject,
   OnInit,
   PLATFORM_ID,
   TemplateRef,
@@ -17,11 +17,9 @@ import {
   standalone: true,
 })
 export class AppShellRenderDirective implements OnInit {
-  constructor(
-    private viewContainer: ViewContainerRef,
-    private templateRef: TemplateRef<any>,
-    @Inject(PLATFORM_ID) private platformId: string,
-  ) {}
+  private viewContainer = inject(ViewContainerRef);
+  private templateRef = inject(TemplateRef<any>);
+  readonly platformId = inject(PLATFORM_ID);
 
   ngOnInit() {
     if (isPlatformServer(this.platformId)) {

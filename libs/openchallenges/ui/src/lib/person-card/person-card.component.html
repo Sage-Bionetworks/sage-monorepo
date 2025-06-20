@@ -1,10 +1,16 @@
 <div class="person-card">
   <openchallenges-avatar class="person-card-pic" [avatar]="avatar" />
-  <p class="person-card-name" *ngIf="name">{{ name }}</p>
-  <p class="person-card-username" *ngIf="username">&#64;{{ username }}</p>
-  <p class="mat-caption person-card-affiliation" *ngIf="affiliation">{{ affiliation }}</p>
+  @if (name) {
+    <p class="person-card-name">{{ name }}</p>
+  }
+  @if (username) {
+    <p class="person-card-username">&#64;{{ username }}</p>
+  }
+  @if (affiliation) {
+    <p class="mat-caption person-card-affiliation">{{ affiliation }}</p>
+  }
   <!-- <div *ngIf="role" [ngClass]="{ 'person-card-chip': 'addChips' }">
-    <mat-icon aria-hidden="true"> emoji_people </mat-icon>
-    <span class="person-card-chip-text">{{ role }}</span>
-  </div> -->
+  <mat-icon aria-hidden="true"> emoji_people </mat-icon>
+  <span class="person-card-chip-text">{{ role }}</span>
+</div> -->
 </div>

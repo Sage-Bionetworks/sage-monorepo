@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatIconModule } from '@angular/material/icon';
 import { Challenge } from '@sagebionetworks/openchallenges/api-client-angular';
 
 @Component({
   selector: 'openchallenges-challenge-stats',
-  imports: [CommonModule, MatIconModule],
+  imports: [MatIconModule],
   templateUrl: './challenge-stats.component.html',
   styleUrls: ['./challenge-stats.component.scss'],
 })

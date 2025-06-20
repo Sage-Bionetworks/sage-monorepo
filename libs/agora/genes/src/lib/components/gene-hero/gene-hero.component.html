@@ -53,32 +53,38 @@
             @if (gene.ensembl_info.ensembl_possible_replacements.length > 0) {
               <p class="aliases">
                 <a [href]="getPossibleReplacementsURL()"
-                  >Possible replacement value<span
-                    *ngIf="gene.ensembl_info.ensembl_possible_replacements.length > 1"
+                  >Possible replacement value@if (gene.ensembl_info.ensembl_possible_replacements.length > 1) {
+                  <span
                     >s</span
-                  ></a
-                >:
-                {{ gene.ensembl_info.ensembl_possible_replacements.join(', ') }}
-              </p>
-            }
-            @if (gene.uniprotkb_accessions) {
-              <p class="aliases">
-                UNIPROTKB
-                <ng-container
-                  *ngFor="let accession of gene.uniprotkb_accessions; let isLast = last"
-                  class="aliases"
-                >
-                  <a [href]="getUniProtKBLink(accession)" target="_blank">{{ accession }}</a
-                  ><span *ngIf="!isLast">, </span>
-                </ng-container>
-              </p>
-              <p *ngIf="gene.alias.length > 0" class="aliases">
-                {{ getAliases() }}
-              </p>
+                    >
+                    }</a
+                    >:
+                    {{ gene.ensembl_info.ensembl_possible_replacements.join(', ') }}
+                  </p>
+                }
+                @if (gene.uniprotkb_accessions) {
+                  <p class="aliases">
+                    UNIPROTKB
+                    @for (accession of gene.uniprotkb_accessions; track accession; let isLast = $last) {
+                      <ng-container
+                        class="aliases"
+                        >
+                        <a [href]="getUniProtKBLink(accession)" target="_blank">{{ accession }}</a
+                          >@if (!isLast) {
+                          <span>, </span>
+                        }
+                      </ng-container>
+                    }
+                  </p>
+                  @if (gene.alias.length > 0) {
+                    <p class="aliases">
+                      {{ getAliases() }}
+                    </p>
+                  }
+                }
+              </div>
             }
           </div>
-        }
+        </div>
       </div>
-    </div>
-  </div>
-}
+    }

@@ -51,7 +51,7 @@ import {
   tap,
 } from 'rxjs/operators';
 import { DatePicker, DatePickerModule } from 'primeng/datepicker';
-import { CommonModule, DatePipe, Location } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { assign, isEqual, unionWith } from 'lodash';
 import { DateRange } from './date-range';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -76,7 +76,6 @@ import { ChallengeSearchDropdown, CHALLENGE_SEARCH_DROPDOWNS } from './challenge
   imports: [
     ChallengeCardComponent,
     CheckboxFilterComponent,
-    CommonModule,
     DatePickerModule,
     DividerModule,
     DropdownModule,
@@ -92,8 +91,8 @@ import { ChallengeSearchDropdown, CHALLENGE_SEARCH_DROPDOWNS } from './challenge
     RadioButtonModule,
     ReactiveFormsModule,
     RouterModule,
-    SearchDropdownFilterComponent,
-  ],
+    SearchDropdownFilterComponent
+],
   templateUrl: './challenge-search.component.html',
   styleUrls: ['./challenge-search.component.scss'],
 })

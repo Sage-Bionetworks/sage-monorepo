@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, inject, Input } from '@angular/core';
 
 import {
@@ -22,7 +22,7 @@ export interface SOEChartProps {
 
 @Component({
   selector: 'agora-gene-soe-charts',
-  imports: [CommonModule, PopoverLinkComponent, ScoreBarChartComponent],
+  imports: [PopoverLinkComponent, ScoreBarChartComponent],
   templateUrl: './gene-soe-charts.component.html',
   styleUrls: ['./gene-soe-charts.component.scss'],
 })

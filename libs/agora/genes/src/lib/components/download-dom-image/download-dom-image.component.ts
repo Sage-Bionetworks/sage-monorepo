@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 import domtoimage from 'dom-to-image-more';
 
-import { CommonModule } from '@angular/common';
+
 import { Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -19,13 +19,12 @@ interface Type {
 @Component({
   selector: 'agora-download-dom-image',
   imports: [
-    CommonModule,
     FormsModule,
     PopoverModule,
     RadioButtonModule,
     ButtonModule,
-    FontAwesomeModule,
-  ],
+    FontAwesomeModule
+],
   templateUrl: './download-dom-image.component.html',
   styleUrls: ['./download-dom-image.component.scss'],
   encapsulation: ViewEncapsulation.None,

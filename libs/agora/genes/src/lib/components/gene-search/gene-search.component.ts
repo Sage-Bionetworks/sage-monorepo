@@ -10,7 +10,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Gene, GenesList, GenesService } from '@sagebionetworks/agora/api-client-angular';
 import {
   catchError,
@@ -33,7 +33,7 @@ import { CloseIconComponent } from './assets/close-icon/close-icon.component';
 
 @Component({
   selector: 'agora-gene-search',
-  imports: [CommonModule, FormsModule, FontAwesomeModule, GeneIconComponent, CloseIconComponent],
+  imports: [FormsModule, FontAwesomeModule, GeneIconComponent, CloseIconComponent],
   templateUrl: './gene-search.component.html',
   styleUrls: ['./gene-search.component.scss'],
 })

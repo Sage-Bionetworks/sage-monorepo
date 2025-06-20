@@ -1,5 +1,6 @@
-<div *ngIf="challenge" class="stats-group">
-  <!-- <div class="stat-item">
+@if (challenge) {
+  <div class="stats-group">
+    <!-- <div class="stat-item">
     <h3>N</h3>
     <p [ngPlural]="mockViews || 0" class="mat-caption">
       <ng-template ngPluralCase="=1">view</ng-template>
@@ -7,31 +8,41 @@
     </p>
   </div> -->
   <!-- <div class="stat-item">
-    <h3>{{ shorthand(mockStargazers) }}</h3>
-    <p [ngPlural]="mockStargazers || 0" class="mat-caption">
-      <ng-template ngPluralCase="=1">stargazer</ng-template>
-      <ng-template ngPluralCase="other">stargazers</ng-template>
-    </p>
-  </div> -->
-  <a href="#" class="stat-item action-btn" *ngIf="loggedIn">
+  <h3>{{ shorthand(mockStargazers) }}</h3>
+  <p [ngPlural]="mockStargazers || 0" class="mat-caption">
+    <ng-template ngPluralCase="=1">stargazer</ng-template>
+    <ng-template ngPluralCase="other">stargazers</ng-template>
+  </p>
+</div> -->
+@if (loggedIn) {
+  <a href="#" class="stat-item action-btn">
     <mat-icon aria-hidden="true" class="stats-card-icon">edit</mat-icon>
     Edit
   </a>
-  <div [ngSwitch]="!!challenge.websiteUrl" *ngIf="!loggedIn">
-    <a
-      class="stat-item action-btn"
-      *ngSwitchCase="true"
-      [href]="challenge.websiteUrl"
-      target="_blank"
-      title="Go to Website"
-      rel="noopener noreferrer"
-    >
-      <mat-icon aria-hidden="true" class="stats-card-icon">open_in_new</mat-icon>
-      Go to Challenge Site
-    </a>
-    <div class="stat-item disabled-btn" *ngSwitchCase="false">
-      <mat-icon aria-hidden="true" class="stats-card-icon">link_off</mat-icon>
-      Challenge Site Not Found
-    </div>
+}
+@if (!loggedIn) {
+  <div>
+    @switch (!!challenge.websiteUrl) {
+      @case (true) {
+        <a
+          class="stat-item action-btn"
+          [href]="challenge.websiteUrl"
+          target="_blank"
+          title="Go to Website"
+          rel="noopener noreferrer"
+          >
+          <mat-icon aria-hidden="true" class="stats-card-icon">open_in_new</mat-icon>
+          Go to Challenge Site
+        </a>
+      }
+      @case (false) {
+        <div class="stat-item disabled-btn">
+          <mat-icon aria-hidden="true" class="stats-card-icon">link_off</mat-icon>
+          Challenge Site Not Found
+        </div>
+      }
+    }
   </div>
+}
 </div>
+}

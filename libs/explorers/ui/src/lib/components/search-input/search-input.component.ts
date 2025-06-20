@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import {
   AfterViewInit,
   Component,
@@ -31,7 +31,7 @@ import { SvgImageComponent } from '../svg-image/svg-image.component';
 
 @Component({
   selector: 'explorers-search-input',
-  imports: [CommonModule, SvgImageComponent, FormsModule, FontAwesomeModule],
+  imports: [SvgImageComponent, FormsModule, FontAwesomeModule],
   templateUrl: './search-input.component.html',
   styleUrls: ['./search-input.component.scss'],
   standalone: true,
