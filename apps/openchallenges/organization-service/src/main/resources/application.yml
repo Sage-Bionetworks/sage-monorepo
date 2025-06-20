@@ -13,6 +13,8 @@ spring:
       password: changeme
   # TODO: Move to the remote config file
   flyway:
+    enabled: true
+    clean-disabled: false
     placeholders:
       db_organizations_csv_path: ${DB_ORGANIZATIONS_CSV_PATH:src/main/resources/db/organizations.csv}
       db_contribution_roles_csv_path: ${DB_CONTRIBUTION_ROLES_CSV_PATH:src/main/resources/db/contribution_roles.csv}
