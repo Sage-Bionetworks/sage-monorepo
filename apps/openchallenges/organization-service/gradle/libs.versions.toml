@@ -1,6 +1,7 @@
 [versions]
 findbugs = "3.0.2"
 flyway = "11.7.2"
+h2database = "2.3.232"
 hibernate-search = "7.2.3.Final"
 jackson = "2.18.3"
 lombok = "1.18.38"
@@ -16,6 +17,7 @@ springdoc = "2.8.6"
 findbugs-jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "findbugs" }
 flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
 flyway-mysql = { module = "org.flywaydb:flyway-mysql", version.ref = "flyway" }
+h2database-h2 = { module = "com.h2database:h2", version.ref = "h2database" }
 hibernate-search-backend-elasticsearch = { module = "org.hibernate.search:hibernate-search-backend-elasticsearch", version.ref = "hibernate-search" }
 hibernate-search-mapper-orm = { module = "org.hibernate.search:hibernate-search-mapper-orm", version.ref = "hibernate-search" }
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }

@@ -46,6 +46,7 @@ dependencies {
   testAnnotationProcessor(libs.lombok)
   testCompileOnly(libs.lombok)
   testImplementation(libs.spring.boot.starter.test)
+  testRuntimeOnly(libs.h2database.h2)
 }
 
 tasks.withType<Test>().configureEach {
