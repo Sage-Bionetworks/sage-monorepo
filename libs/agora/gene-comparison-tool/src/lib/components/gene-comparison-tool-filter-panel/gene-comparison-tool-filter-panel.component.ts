@@ -47,6 +47,10 @@ export class GeneComparisonToolFilterPanelComponent {
     this.isOpen = false;
   }
   toggle() {
-    this.isOpen ? this.close() : this.open();
+    if (this.isOpen) {
+      this.close();
+    } else {
+      this.open();
+    }
   }
 }
