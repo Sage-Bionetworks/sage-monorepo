@@ -23,6 +23,8 @@ tags:
     description: Operations about EDAM concepts.
   - name: Image
     description: Operations about images
+  - name: Authentication
+    description: Operations about authentication
   - name: Organization
     description: Operations about organizations
   - name: User
@@ -185,6 +187,30 @@ paths:
                 $ref: '#/components/schemas/Image'
         '404':
           $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: User login
+      description: Authenticate user and return JWT token
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /organizations:
@@ -1046,6 +1072,36 @@ components:
         - url
       x-java-class-annotations:
         - '@lombok.Builder'
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          description: Username or email
+          example: admin@example.com
+        password:
+          type: string
+          format: password
+          description: User password
+          example: secretpassword
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: JWT access token
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        expiresIn:
+          type: integer
+          description: Token expiration time in seconds
+          example: 86400
+        tokenType:
+          type: string
+          description: Token type
+          example: Bearer
     OrganizationCategory:
       description: The category of the organization.
       type: string
