@@ -4,7 +4,7 @@
       <div class="col-lg-8">
         <div class="gene-network-chart">
           <p class="gene-network-filters-title">Filter by Number of Edges</p>
-          @if (filters?.length) {
+          @if (filters.length) {
             <div class="gene-network-filters">
               <div class="gene-network-filters-inner">
                 <span>&gt;0</span>
@@ -36,7 +36,7 @@
                   viewBox="0 0 18 20"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  >
+                >
                   <path d="M9 0L17.6603 5V15L9 20L0.339746 15V5L9 0Z" fill="#8B8AD1" />
                 </svg>
                 Current gene
@@ -73,10 +73,10 @@
                 <div>RNA Expression Change in AD Brain</div>
                 <div>
                   {{
-                  getText(
-                  selectedGene.is_any_rna_changed_in_ad_brain,
-                  selectedGene.rna_brain_change_studied
-                  )
+                    getText(
+                      selectedGene.is_any_rna_changed_in_ad_brain,
+                      selectedGene.rna_brain_change_studied
+                    )
                   }}
                 </div>
               </div>
@@ -84,10 +84,10 @@
                 <div>Protein Expression Change in AD Brain</div>
                 <div>
                   {{
-                  getText(
-                  selectedGene.is_any_protein_changed_in_ad_brain,
-                  selectedGene.protein_brain_change_studied
-                  )
+                    getText(
+                      selectedGene.is_any_protein_changed_in_ad_brain,
+                      selectedGene.protein_brain_change_studied
+                    )
                   }}
                 </div>
               </div>
@@ -101,7 +101,10 @@
             <hr class="separator separator-md" />
             <div class="gene-network-selected-similar">
               <div class="gene-network-selected-similar-list">
-                @for (node of selectedGene.similar_genes_network?.nodes | slice: 1 : 6; track node) {
+                @for (
+                  node of selectedGene.similar_genes_network?.nodes | slice: 1 : 6;
+                  track node
+                ) {
                   <div>
                     <a href="/genes/{{ node.ensembl_gene_id }}" class="genelink" target="_blank">
                       {{ node.hgnc_symbol || node.ensembl_gene_id }}
