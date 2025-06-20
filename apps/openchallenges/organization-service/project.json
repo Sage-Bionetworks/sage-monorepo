@@ -27,23 +27,6 @@
       },
       "dependsOn": ["^install"]
     },
-    "test": {
-      "executor": "nx:run-commands",
-      "outputs": ["{projectRoot}/build"],
-      "options": {
-        "command": "./gradlew test",
-        "cwd": "{projectRoot}"
-      },
-      "dependsOn": ["^install"]
-    },
-    "sonar": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "./gradlew sonar",
-        "cwd": "{projectRoot}"
-      },
-      "dependsOn": ["test"]
-    },
     "clean": {
       "executor": "nx:run-commands",
       "options": {

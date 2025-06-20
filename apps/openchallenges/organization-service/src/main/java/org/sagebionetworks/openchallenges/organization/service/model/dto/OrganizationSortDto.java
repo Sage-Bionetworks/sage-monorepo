@@ -1,20 +1,33 @@
 package org.sagebionetworks.openchallenges.organization.service.model.dto;
 
+import java.net.URI;
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.OffsetDateTime;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import jakarta.annotation.Generated;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.util.*;
-import javax.annotation.Generated;
-import javax.validation.constraints.*;
 
-/** What to sort results by. */
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
+/**
+ * What to sort results by.
+ */
+
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 public enum OrganizationSortDto {
+  
   CHALLENGE_COUNT("challenge_count"),
-
+  
   CREATED("created"),
-
+  
   NAME("name"),
-
+  
   RELEVANCE("relevance");
 
   private String value;
@@ -43,3 +56,4 @@ public enum OrganizationSortDto {
     throw new IllegalArgumentException("Unexpected value '" + value + "'");
   }
 }
+
