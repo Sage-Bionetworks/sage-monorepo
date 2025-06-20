@@ -76,9 +76,14 @@ describe('ModelDetailsHeroComponent', () => {
       );
     });
 
+    it('should display one gene correctly', async () => {
+      await setup({ ...modelMock, genetic_info: [modelMock.genetic_info[0]] });
+      expect(screen.getByText('Modified Gene')).toBeVisible();
+    });
+
     it('should display multiple genes correctly', async () => {
       await setup();
-      expect(screen.getAllByText('Modified Gene')).toHaveLength(modelMock.genetic_info.length);
+      expect(screen.getByText('Modified Genes')).toBeVisible();
       modelMock.genetic_info.forEach((gene) => {
         expect(screen.getByRole('link', { name: gene.ensembl_gene_id })).toBeInTheDocument();
       });
