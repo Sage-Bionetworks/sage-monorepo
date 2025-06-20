@@ -13,9 +13,13 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
+  - name: Authentication
+    description: Operations about authentication
   - name: Organization
     description: Operations about organizations
 paths:
+  /auth/login:
+    $ref: paths/auth/login.yaml
   /organizations:
     $ref: paths/organizations.yaml
   /organizations/{org}:
