@@ -46,6 +46,8 @@ public interface OrganizationApi {
      *
      * @param org The id or login of the organization. (required)
      * @return Organization successfully deleted (status code 204)
+     *         or Unauthorized (status code 401)
+     *         or Forbidden (status code 403)
      *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
@@ -56,6 +58,12 @@ public interface OrganizationApi {
         tags = { "Organization" },
         responses = {
             @ApiResponse(responseCode = "204", description = "Organization successfully deleted"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
             @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
