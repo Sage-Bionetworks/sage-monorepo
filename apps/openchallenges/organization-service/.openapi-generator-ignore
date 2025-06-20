@@ -24,6 +24,5 @@
 pom.xml
 README.md
 **/application.properties
-**/model/dto/*AllOf*.java
 **/OpenApiGeneratorApplication.java
 **/OpenApiGeneratorApplicationTests.java
