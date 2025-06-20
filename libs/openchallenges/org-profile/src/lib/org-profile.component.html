@@ -1,11 +1,12 @@
 <main class="base mat-typography">
-  <ng-container *ngIf="organization$ | async as org">
+  @if (organization$ | async; as org) {
     <section id="profile-top" class="row">
-      <openchallenges-avatar
-        *ngIf="organizationAvatar$ | async as organizationAvatar"
-        class="profile-pic"
-        [avatar]="organizationAvatar"
-      />
+      @if (organizationAvatar$ | async; as organizationAvatar) {
+        <openchallenges-avatar
+          class="profile-pic"
+          [avatar]="organizationAvatar"
+          />
+      }
       <div id="profile-details" class="col">
         <h2>
           {{ org.name }}
@@ -28,43 +29,46 @@
             class="profile-nav-item"
             (click)="updateTab('overview')"
             [ngClass]="{ 'active-tab': activeTab === tabs['overview'] }"
-          >
+            >
             Overview
           </a>
           <a
             class="profile-nav-item"
             (click)="updateTab('challenges')"
             [ngClass]="{ 'active-tab': activeTab === tabs['challenges'] }"
-          >
+            >
             Challenges
           </a>
           <a
             class="profile-nav-item"
             (click)="updateTab('members')"
             [ngClass]="{ 'active-tab': activeTab === tabs['members'] }"
-          >
+            >
             Members
           </a>
         </div>
       </div>
       <div class="main col">
-        <ng-container [ngSwitch]="activeTab">
-          <openchallenges-org-profile-overview
-            *ngSwitchCase="tabs['overview']"
-            [organization]="org"
-          />
-          <openchallenges-org-profile-challenges
-            *ngSwitchCase="tabs['challenges']"
-            [organization]="org"
-          />
-          <openchallenges-org-profile-members
-            *ngSwitchCase="tabs['members']"
-            [organization]="org"
-          />
-        </ng-container>
+        @switch (activeTab) {
+          @case (tabs['overview']) {
+            <openchallenges-org-profile-overview
+              [organization]="org"
+              />
+          }
+          @case (tabs['challenges']) {
+            <openchallenges-org-profile-challenges
+              [organization]="org"
+              />
+          }
+          @case (tabs['members']) {
+            <openchallenges-org-profile-members
+              [organization]="org"
+              />
+          }
+        }
       </div>
     </section>
-  </ng-container>
+  }
 </main>
 <openchallenges-footer
   [appVersion]="appVersion"
@@ -72,4 +76,4 @@
   [privacyPolicyUrl]="privacyPolicyUrl"
   [termsOfUseUrl]="termsOfUseUrl"
   [apiDocsUrl]="apiDocsUrl"
-/>
+  />

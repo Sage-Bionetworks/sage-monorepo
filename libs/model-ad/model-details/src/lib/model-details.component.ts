@@ -1,4 +1,4 @@
-import { CommonModule, Location } from '@angular/common';
+import { Location } from '@angular/common';
 import { AfterViewInit, Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
@@ -14,12 +14,11 @@ import { ModelDetailsResourcesComponent } from './components/model-details-resou
 @Component({
   selector: 'model-ad-model-details',
   imports: [
-    CommonModule,
     PanelNavigationComponent,
     LoadingIconComponent,
     ModelDetailsOmicsComponent,
-    ModelDetailsResourcesComponent,
-  ],
+    ModelDetailsResourcesComponent
+],
   templateUrl: './model-details.component.html',
   styleUrls: ['./model-details.component.scss'],
 })

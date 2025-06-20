@@ -2,18 +2,18 @@
   <div id="organizers">
     <h3>Organizers</h3>
     <p>The organizing team for the challenge (names and affiliations).</p>
-    <ng-container *ngIf="organizers.length > 0; else na_text">
+    @if (organizers.length > 0) {
       <div class="card-group">
-        <openchallenges-person-card
-          *ngFor="let organizer of organizers"
-          [name]="organizer.name"
-          [avatarSize]="120"
-          [affiliation]="organizationCard.name"
-        />
+        @for (organizer of organizers; track organizer) {
+          <openchallenges-person-card
+            [name]="organizer.name"
+            [avatarSize]="120"
+            [affiliation]="organizationCard.name"
+            />
+        }
       </div>
-    </ng-container>
-    <ng-template #na_text>
+    } @else {
       <p class="text-grey">There are no active OpenChallenges users at this time.</p>
-    </ng-template>
+    }
   </div>
 </main>

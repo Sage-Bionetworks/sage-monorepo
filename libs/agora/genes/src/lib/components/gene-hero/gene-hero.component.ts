@@ -1,11 +1,11 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Input } from '@angular/core';
 import { Gene } from '@sagebionetworks/agora/api-client-angular';
 import { ascending } from 'd3';
 
 @Component({
   selector: 'agora-gene-hero',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './gene-hero.component.html',
   styleUrls: ['./gene-hero.component.scss'],
 })

@@ -1,11 +1,11 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, HostBinding, Input, ViewEncapsulation } from '@angular/core';
 
 type SvgSizeMode = 'full-height' | 'full-width' | 'original';
 
 @Component({
   selector: 'explorers-svg-image',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './svg-image.component.html',
   styleUrls: ['./svg-image.component.scss'],
   encapsulation: ViewEncapsulation.None,

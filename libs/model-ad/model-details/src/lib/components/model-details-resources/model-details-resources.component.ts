@@ -1,11 +1,11 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, computed, input } from '@angular/core';
 import { ResourceCardsComponent } from '@sagebionetworks/explorers/ui';
 import { Model } from '@sagebionetworks/model-ad/api-client-angular';
 
 @Component({
   selector: 'model-ad-model-details-resources',
-  imports: [CommonModule, ResourceCardsComponent],
+  imports: [ResourceCardsComponent],
   templateUrl: './model-details-resources.component.html',
   styleUrls: ['./model-details-resources.component.scss'],
 })

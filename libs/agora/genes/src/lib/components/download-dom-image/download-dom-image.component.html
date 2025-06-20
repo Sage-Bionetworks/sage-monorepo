@@ -6,24 +6,30 @@
   styleClass="download-dom-image-panel"
   (rotate)="onRotate()"
   (window:resize)="onResize()"
->
+  >
   <div class="download-dom-image-header">
     {{ heading }}
   </div>
   <div class="download-dom-image-body">
-    <div class="download-dom-image-option" *ngFor="let type of types">
-      <p-radiobutton
-        value="{{ type.value }}"
-        inputId="download-radio-{{ type.label }}"
-        [(ngModel)]="selectedType"
-      ></p-radiobutton>
-      <label for="download-radio-{{ type.label }}">{{ type.label }}</label>
-    </div>
+    @for (type of types; track type) {
+      <div class="download-dom-image-option">
+        <p-radiobutton
+          value="{{ type.value }}"
+          inputId="download-radio-{{ type.label }}"
+          [(ngModel)]="selectedType"
+        ></p-radiobutton>
+        <label for="download-radio-{{ type.label }}">{{ type.label }}</label>
+      </div>
+    }
     <div>
       <p-button label="Download" rounded="true" size="small" (click)="download()">
-        <fa-icon *ngIf="isLoading" [icon]="spinnerIcon" animation="spin"></fa-icon>
+        @if (isLoading) {
+          <fa-icon [icon]="spinnerIcon" animation="spin"></fa-icon>
+        }
       </p-button>
-      <div *ngIf="error" class="download-dom-image-error">{{ error }}</div>
+      @if (error) {
+        <div class="download-dom-image-error">{{ error }}</div>
+      }
     </div>
   </div>
 </p-popover>

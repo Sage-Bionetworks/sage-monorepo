@@ -20,103 +20,107 @@
                 href="{{ gene.resource_url }}"
                 target="_blank"
                 >View Available Resources</a
-              >
-            </div>
-            <div class="card card-description">
-              View the openly available TREAT-AD resources for experimental validation of
-              {{ gene.hgnc_symbol || gene.ensembl_gene_id }} in the AD Knowledge Portal.
-            </div>
-          </div>
-          @if (gene.is_tep) {
-            <div class="row">
-              <div id="target-enabling-resources-card2" class="card card-title">
-                Target Portfolio
-              </div>
-              <div class="card card-link">
-                <a
-                  class="link no-bold"
-                  href="https://treatad.org/data-tools/target-dashboard"
-                  target="_blank"
-                  rel="noopener"
-                  >View Resource Status</a
                 >
               </div>
               <div class="card card-description">
-                View the status of TEP resource development on the TREAT-AD Target Portfolio and
-                Progress Dashboard.
+                View the openly available TREAT-AD resources for experimental validation of
+                {{ gene.hgnc_symbol || gene.ensembl_gene_id }} in the AD Knowledge Portal.
               </div>
             </div>
-          }
-          @if (gene.is_adi) {
-            <div class="row">
-              <div id="target-enabling-resources-card3" class="card card-title">
-                AD Informer Set
-              </div>
-              <div class="card card-link">
-                <a
-                  class="link no-bold"
-                  href="https://treatad.org/data-tools/ad-informer-set"
-                  target="_blank"
-                  rel="noopener"
-                  >View AD Informer Set</a
-                >
-              </div>
-              <div class="card card-description">
-                View information about the development and distribution of the AD Informer Set.
+            @if (gene.is_tep) {
+              <div class="row">
+                <div id="target-enabling-resources-card2" class="card card-title">
+                  Target Portfolio
+                </div>
+                <div class="card card-link">
+                  <a
+                    class="link no-bold"
+                    href="https://treatad.org/data-tools/target-dashboard"
+                    target="_blank"
+                    rel="noopener"
+                    >View Resource Status</a
+                    >
+                  </div>
+                  <div class="card card-description">
+                    View the status of TEP resource development on the TREAT-AD Target Portfolio and
+                    Progress Dashboard.
+                  </div>
+                </div>
+              }
+              @if (gene.is_adi) {
+                <div class="row">
+                  <div id="target-enabling-resources-card3" class="card card-title">
+                    AD Informer Set
+                  </div>
+                  <div class="card card-link">
+                    <a
+                      class="link no-bold"
+                      href="https://treatad.org/data-tools/ad-informer-set"
+                      target="_blank"
+                      rel="noopener"
+                      >View AD Informer Set</a
+                      >
+                    </div>
+                    <div class="card card-description">
+                      View information about the development and distribution of the AD Informer Set.
+                    </div>
+                  </div>
+                }
               </div>
             </div>
-          }
-        </div>
-      </div>
-    </div>
-  }
-}
+          </div>
+        }
+      }
 
-@if (gene) {
-  <div class="section">
-    <div class="section-inner">
-      <div class="container-sm">
-        <h2>Drug Development Resources</h2>
-        <p class="druggability-description">
-          These external sites provide information and resources related to drug development.
-        </p>
-        <div *ngFor="let r of drugDevelopmentResources; let i = index" class="row">
-          <div class="card card-title">{{ r.title }}</div>
-          <div class="card card-link">
-            <a class="additional-resource-links link no-bold" href="{{ r.link }}" target="_blank">{{
-              r.linkText
-            }}</a>
-          </div>
-          <div class="card card-description">
-            {{ r.description }}
+      @if (gene) {
+        <div class="section">
+          <div class="section-inner">
+            <div class="container-sm">
+              <h2>Drug Development Resources</h2>
+              <p class="druggability-description">
+                These external sites provide information and resources related to drug development.
+              </p>
+              @for (r of drugDevelopmentResources; track r; let i = $index) {
+                <div class="row">
+                  <div class="card card-title">{{ r.title }}</div>
+                  <div class="card card-link">
+                    <a class="additional-resource-links link no-bold" href="{{ r.link }}" target="_blank">{{
+                      r.linkText
+                    }}</a>
+                  </div>
+                  <div class="card card-description">
+                    {{ r.description }}
+                  </div>
+                </div>
+              }
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-}
+      }
 
-@if (additionalResources) {
-  <div class="section">
-    <div class="section-inner">
-      <div class="container-sm">
-        <h2>Additional Resources</h2>
-        <p>
-          These external sites provide additional information about therapeutic targets for AD and
-          related dementias.
-        </p>
-        <div *ngFor="let r of additionalResources; let i = index" class="row">
-          <div class="card card-title">{{ r.title }}</div>
-          <div class="card card-link">
-            <a class="additional-resource-links link no-bold" href="{{ r.link }}" target="_blank">
-              {{ r.linkText }}
-            </a>
-          </div>
-          <div class="card card-description">
-            {{ r.description }}
+      @if (additionalResources) {
+        <div class="section">
+          <div class="section-inner">
+            <div class="container-sm">
+              <h2>Additional Resources</h2>
+              <p>
+                These external sites provide additional information about therapeutic targets for AD and
+                related dementias.
+              </p>
+              @for (r of additionalResources; track r; let i = $index) {
+                <div class="row">
+                  <div class="card card-title">{{ r.title }}</div>
+                  <div class="card card-link">
+                    <a class="additional-resource-links link no-bold" href="{{ r.link }}" target="_blank">
+                      {{ r.linkText }}
+                    </a>
+                  </div>
+                  <div class="card card-description">
+                    {{ r.description }}
+                  </div>
+                </div>
+              }
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-}
+      }

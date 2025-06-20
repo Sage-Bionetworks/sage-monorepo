@@ -8,10 +8,11 @@
       </p>
     </div>
     <div class="card-group">
-      <openchallenges-organization-card
-        *ngFor="let organizationCard of organizationCards$ | async"
-        [organizationCard]="organizationCard"
-      />
+      @for (organizationCard of organizationCards$ | async; track organizationCard) {
+        <openchallenges-organization-card
+          [organizationCard]="organizationCard"
+          />
+      }
     </div>
     <div class="text-center">
       <a mat-raised-button class="see-more" routerLink="/org">See More</a>

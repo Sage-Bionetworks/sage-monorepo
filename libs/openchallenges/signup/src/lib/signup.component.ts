@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, OnInit } from '@angular/core';
 import {
   FormsModule,
@@ -26,15 +26,14 @@ import { isApiClientError } from '@sagebionetworks/openchallenges/util';
 @Component({
   selector: 'openchallenges-signup',
   imports: [
-    CommonModule,
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
     MatCardModule,
     MatFormFieldModule,
-    MatInputModule,
-  ],
+    MatInputModule
+],
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
 })

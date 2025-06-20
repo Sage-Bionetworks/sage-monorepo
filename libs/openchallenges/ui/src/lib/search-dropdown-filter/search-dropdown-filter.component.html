@@ -11,52 +11,61 @@
   [virtualScrollOptions]="scrollerOptions"
   [lazy]="lazy"
   (onLazyLoad)="onLazyLoad($event)"
->
+  >
   <!-- custom search bar to avoid conflicts against default filter func -->
-  <ng-template *ngIf="filterByApiClient" pTemplate="filter" class="custom-filter-container">
-    <p-checkbox
-      binary="true"
-      [(ngModel)]="isAllOptionsSelected"
-      (onChange)="toggleAllOptions()"
-    ></p-checkbox>
-    <p-inputgroup (click)="stopPropagation($event)">
-      <input
-        type="text"
-        pInputText
-        placeholder="search"
-        class="p-multiselect-filter-container"
-        [(ngModel)]="searchTerm"
-        (keyup)="onCustomSearch()"
-      />
-    </p-inputgroup>
-  </ng-template>
+  @if (filterByApiClient) {
+    <ng-template pTemplate="filter" class="custom-filter-container">
+      <p-checkbox
+        binary="true"
+        [(ngModel)]="isAllOptionsSelected"
+        (onChange)="toggleAllOptions()"
+      ></p-checkbox>
+      <p-inputgroup (click)="stopPropagation($event)">
+        <input
+          type="text"
+          pInputText
+          placeholder="search"
+          class="p-multiselect-filter-container"
+          [(ngModel)]="searchTerm"
+          (keyup)="onCustomSearch()"
+          />
+      </p-inputgroup>
+    </ng-template>
+  }
 
   <!-- custom loader with skeleton -->
   <ng-template pTemplate="loader">
-    <div *ngIf="showAvatar; else noAvatarLoader" class="loader-with-avatar-container">
-      <div *ngFor="let _ of [].constructor(5)" class="skeleton-with-avatar">
-        <p-skeleton class="circle" shape="circle" size="2rem"></p-skeleton>
-        <p-skeleton width="12rem" height="1rem"></p-skeleton>
+    @if (showAvatar) {
+      <div class="loader-with-avatar-container">
+        @for (_ of [].constructor(5); track _) {
+          <div class="skeleton-with-avatar">
+            <p-skeleton class="circle" shape="circle" size="2rem"></p-skeleton>
+            <p-skeleton width="12rem" height="1rem"></p-skeleton>
+          </div>
+        }
       </div>
-    </div>
-    <ng-template #noAvatarLoader>
-      <div *ngFor="let _ of [].constructor(5)" class="loader-container">
-        <p-skeleton class="skeleton" width="14rem" height="1.3rem" borderRadius="16px"></p-skeleton>
-      </div>
-    </ng-template>
+    } @else {
+      @for (_ of [].constructor(5); track _) {
+        <div class="loader-container">
+          <p-skeleton class="skeleton" width="14rem" height="1.3rem" borderRadius="16px"></p-skeleton>
+        </div>
+      }
+    }
   </ng-template>
 
   <!-- custom message for empty results -->
   <ng-template pTemplate="empty">
-    <ng-container *ngIf="!isLoading">
+    @if (!isLoading) {
       <span>No results found</span>
-    </ng-container>
+    }
   </ng-template>
 
   <!-- custom list items -->
   <ng-template let-option pTemplate="options">
     <div class="item-container">
-      <openchallenges-avatar *ngIf="showAvatar" [avatar]="getAvatar(option)" />
+      @if (showAvatar) {
+        <openchallenges-avatar [avatar]="getAvatar(option)" />
+      }
       <span class="item-label">{{ option.label }}</span>
     </div>
   </ng-template>

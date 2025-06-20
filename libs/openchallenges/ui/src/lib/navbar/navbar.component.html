@@ -5,12 +5,14 @@
       class="logo"
       src="/assets/openchallenges/images/openchallenges-color.svg"
       alt="OpenChallenges"
-    />
+      />
   </a>
 
-  <a mat-button class="navbar-item" *ngFor="let key of sectionsKeys" [routerLink]="key"
-    >{{ sections[key].name }}
-  </a>
+  @for (key of sectionsKeys; track key) {
+    <a mat-button class="navbar-item" [routerLink]="key"
+      >{{ sections[key].name }}
+    </a>
+  }
 
   <div class="flex-spacer"></div>
 
@@ -18,13 +20,13 @@
   <openchallenges-discord-button />
 
   <!-- <a mat-button class="navbar-item" *ngIf="!isLoggedIn" routerLink="/login" aria-label="Log In">
-    Log In
-  </a> -->
-  <!-- *ngIf="isLoggedIn" -->
-  <!-- <openchallenges-user-button
-    class="test"
-    [avatar]="userAvatar"
-    [menuItems]="userMenuItems"
-    (menuItemSelected)="selectUserMenuItem($event)"
-  /> -->
+  Log In
+</a> -->
+<!-- *ngIf="isLoggedIn" -->
+<!-- <openchallenges-user-button
+class="test"
+[avatar]="userAvatar"
+[menuItems]="userMenuItems"
+(menuItemSelected)="selectUserMenuItem($event)"
+/> -->
 </nav>

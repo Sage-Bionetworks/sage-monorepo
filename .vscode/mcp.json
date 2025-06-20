@@ -7,6 +7,10 @@
     "openchallenges-mcp-server-dev": {
       "type": "sse",
       "url": "http://localhost:8887/mcp-server/sse"
+    },
+    "nx-mcp": {
+      "type": "http",
+      "url": "http://localhost:9329/mcp"
     }
   }
 }

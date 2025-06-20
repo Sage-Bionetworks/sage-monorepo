@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HomeDataService } from '../home-data-service';
 import { NgxEchartsModule, NGX_ECHARTS_CONFIG } from 'ngx-echarts';
@@ -9,7 +9,7 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'openchallenges-statistics-viewer',
-  imports: [CommonModule, RouterModule, CountUpModule, NgxEchartsModule],
+  imports: [RouterModule, CountUpModule, NgxEchartsModule],
   providers: [
     {
       provide: NGX_ECHARTS_CONFIG,

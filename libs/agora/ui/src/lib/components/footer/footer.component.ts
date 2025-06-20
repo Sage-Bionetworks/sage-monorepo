@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, inject } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
@@ -11,7 +11,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'agora-footer',
-  imports: [CommonModule, RouterModule],
+  imports: [RouterModule],
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
 })

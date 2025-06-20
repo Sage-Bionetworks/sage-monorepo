@@ -1,11 +1,11 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, inject, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { SvgImageComponent } from '../svg-image/svg-image.component';
 
 @Component({
   selector: 'explorers-resource-card',
-  imports: [CommonModule, SvgImageComponent],
+  imports: [SvgImageComponent],
   templateUrl: './resource-card.component.html',
   styleUrls: ['./resource-card.component.scss'],
 })

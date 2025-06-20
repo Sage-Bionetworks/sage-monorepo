@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { HomeDataService } from '@sagebionetworks/openchallenges/home';
@@ -43,11 +43,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
-  constructor(
-    private pageTitleService: PageTitleService,
-    private homeDataService: HomeDataService,
-    private configService: ConfigService,
-  ) {
+  private pageTitleService = inject(PageTitleService);
+  private homeDataService = inject(HomeDataService);
+  private configService = inject(ConfigService);
+
+  constructor() {
     this.useGoogleTagManager = isGoogleTagManagerIdSet(
       this.configService.config.googleTagManagerId,
     );

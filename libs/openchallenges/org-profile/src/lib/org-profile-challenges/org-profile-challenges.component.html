@@ -2,7 +2,9 @@
   <div id="challenges">
     <h3>Challenges</h3>
     <div class="card-group">
-      <openchallenges-challenge-card *ngFor="let challenge of challenges" [challenge]="challenge" />
+      @for (challenge of challenges; track challenge) {
+        <openchallenges-challenge-card [challenge]="challenge" />
+      }
     </div>
     <openchallenges-paginator
       [pageNumber]="pageNumber"
@@ -10,6 +12,6 @@
       [totalElements]="totalChallengesCount"
       [itemsPerPage]="pageSizeOptions"
       (pageChange)="onPageChange($event)"
-    />
+      />
   </div>
 </main>

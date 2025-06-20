@@ -1,4 +1,4 @@
-import { Injectable, Renderer2 } from '@angular/core';
+import { inject, Injectable, Renderer2 } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { forIn } from 'lodash';
 import { SeoData } from './seo-data';
@@ -12,11 +12,9 @@ import { SeoMetas } from './seo-metas';
   providedIn: 'root',
 })
 export class SeoService {
-  constructor(
-    private titleService: Title,
-    private metaService: Meta,
-    private jsonLdService: JsonLdService,
-  ) {}
+  private titleService = inject(Title);
+  private metaService = inject(Meta);
+  private jsonLdService = inject(JsonLdService);
 
   setData(seoData: SeoData, renderer2: Renderer2): void {
     const title = seoData.title;

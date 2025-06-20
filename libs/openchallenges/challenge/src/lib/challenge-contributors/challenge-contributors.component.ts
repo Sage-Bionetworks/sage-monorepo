@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable, catchError, forkJoin, iif, map, of, shareReplay, switchMap, take } from 'rxjs';
 import {
@@ -25,7 +25,7 @@ type ContributionCardBundle = {
 
 @Component({
   selector: 'openchallenges-challenge-contributors',
-  imports: [CommonModule, OrganizationCardComponent],
+  imports: [OrganizationCardComponent],
   templateUrl: './challenge-contributors.component.html',
   styleUrls: ['./challenge-contributors.component.scss'],
 })

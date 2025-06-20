@@ -1,5 +1,5 @@
 <main class="base mat-typography">
-  <ng-container *ngIf="challenge$ | async as challenge">
+  @if (challenge$ | async; as challenge) {
     <section id="profile-top" class="row">
       <openchallenges-avatar class="profile-pic" [avatar]="challengeAvatar" />
       <div id="profile-details" class="col">
@@ -8,13 +8,14 @@
           <!-- <mat-icon aria-hidden="true" class="verified">verified_outline</mat-icon> -->
         </h2>
         <p class="mat-body-strong username">&#64;{{ challenge.slug }}</p>
-        <div
-          class="profile-type"
-          *ngIf="challenge.status"
-          [ngClass]="['status', challenge.status ? challenge.status : '']"
-        >
-          {{ challenge.status | titlecase }}
-        </div>
+        @if (challenge.status) {
+          <div
+            class="profile-type"
+            [ngClass]="['status', challenge.status ? challenge.status : '']"
+            >
+            {{ challenge.status | titlecase }}
+          </div>
+        }
       </div>
     </section>
     <section id="profile-stats" class="row">
@@ -30,55 +31,58 @@
             class="profile-nav-item"
             (click)="updateTab('overview')"
             [ngClass]="{ 'active-tab': activeTab === tabs['overview'] }"
-          >
+            >
             Overview
           </a>
           <a
             class="profile-nav-item"
             (click)="updateTab('contributors')"
             [ngClass]="{ 'active-tab': activeTab === tabs['contributors'] }"
-          >
+            >
             Contributors
           </a>
           <a
             class="profile-nav-item"
             (click)="updateTab('organizers')"
             [ngClass]="{ 'active-tab': activeTab === tabs['organizers'] }"
-          >
+            >
             Organizers
           </a>
           <!-- <a
-            class="profile-nav-item"
-            routerLink="."
-            [queryParams]="{ tab: 'stargazers' }"
-            [ngClass]="{ 'active-tab': activeTab === tabs['stargazers'] }"
+          class="profile-nav-item"
+          routerLink="."
+          [queryParams]="{ tab: 'stargazers' }"
+          [ngClass]="{ 'active-tab': activeTab === tabs['stargazers'] }"
           >
-            Stargazers
-          </a> -->
-        </div>
+          Stargazers
+        </a> -->
       </div>
-      <div class="main col">
-        <ng-container [ngSwitch]="activeTab">
+    </div>
+    <div class="main col">
+      @switch (activeTab) {
+        @case (tabs['overview']) {
           <openchallenges-challenge-overview
-            *ngSwitchCase="tabs['overview']"
             [challenge]="challenge"
-          />
+            />
+        }
+        @case (tabs['contributors']) {
           <openchallenges-challenge-contributors
-            *ngSwitchCase="tabs['contributors']"
             [challenge]="challenge"
-          />
+            />
+        }
+        @case (tabs['organizers']) {
           <openchallenges-challenge-organizers
-            *ngSwitchCase="tabs['organizers']"
             [challenge]="challenge"
-          />
-          <!-- <openchallenges-challenge-stargazers
-            *ngSwitchCase="tabs['stargazers']"
-            [challenge]="challenge"
-          /> -->
-        </ng-container>
-      </div>
-    </section>
-  </ng-container>
+            />
+        }
+        <!-- <openchallenges-challenge-stargazers
+        *ngSwitchCase="tabs['stargazers']"
+        [challenge]="challenge"
+        /> -->
+      }
+    </div>
+  </section>
+}
 </main>
 <openchallenges-footer
   [appVersion]="appVersion"
@@ -86,4 +90,4 @@
   [privacyPolicyUrl]="privacyPolicyUrl"
   [termsOfUseUrl]="termsOfUseUrl"
   [apiDocsUrl]="apiDocsUrl"
-/>
+  />

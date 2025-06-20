@@ -5,6 +5,11 @@
   "prefix": "app",
   "sourceRoot": "apps/openchallenges/app/src",
   "tags": ["type:app", "scope:client", "language:typescript"],
+  "implicitDependencies": [
+    "openchallenges-styles",
+    "openchallenges-themes",
+    "shared-typescript-assets"
+  ],
   "targets": {
     "build": {
       "executor": "@nx/angular:application",
@@ -83,7 +88,8 @@
           "buildTarget": "openchallenges-app:build:development"
         }
       },
-      "defaultConfiguration": "development"
+      "defaultConfiguration": "development",
+      "continuous": true
     },
     "extract-i18n": {
       "executor": "@nx/angular:extract-i18n",
@@ -123,10 +129,5 @@
         "config": "apps/openchallenges/app/playwright.config.ts"
       }
     }
-  },
-  "implicitDependencies": [
-    "openchallenges-styles",
-    "openchallenges-themes",
-    "shared-typescript-assets"
-  ]
+  }
 }

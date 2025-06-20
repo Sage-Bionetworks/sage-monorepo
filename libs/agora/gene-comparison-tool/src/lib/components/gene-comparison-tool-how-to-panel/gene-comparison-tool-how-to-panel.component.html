@@ -8,14 +8,15 @@
   [style]="{ width: '100%', maxWidth: '580px' }"
   styleClass="gct-how-to-panel"
   (onHide)="onHide()"
->
+  >
   <div class="gct-how-to-panel-panes">
-    <div
-      *ngFor="let pane of panes; index as i"
-      class="gct-how-to-panel-pane active"
-      [ngClass]="{ active: activePane === i }"
-      [innerHtml]="pane.content"
-    ></div>
+    @for (pane of panes; track pane; let i = $index) {
+      <div
+        class="gct-how-to-panel-pane active"
+        [ngClass]="{ active: activePane === i }"
+        [innerHtml]="pane.content"
+      ></div>
+    }
   </div>
 
   <ng-template #footer>

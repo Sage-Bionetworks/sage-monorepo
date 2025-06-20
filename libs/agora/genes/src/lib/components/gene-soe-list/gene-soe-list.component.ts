@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Gene } from '@sagebionetworks/agora/api-client-angular';
 
 interface SummaryProperty {
@@ -17,7 +17,7 @@ interface Summary {
 
 @Component({
   selector: 'agora-gene-soe-list',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './gene-soe-list.component.html',
   styleUrls: ['./gene-soe-list.component.scss'],
 })

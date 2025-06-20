@@ -1,5 +1,5 @@
+import { provideServerRendering } from '@angular/ssr';
 import { mergeApplicationConfig, ApplicationConfig } from '@angular/core';
-import { provideServerRendering } from '@angular/platform-server';
 import { APP_BASE_URL_PROVIDER_INDEX, appConfig } from './app.config';
 import { provideClientHydration } from '@angular/platform-browser';
 
