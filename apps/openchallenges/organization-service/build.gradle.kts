@@ -62,19 +62,21 @@ tasks.withType<Test>().configureEach {
   testLogging {
     events("passed", "skipped", "failed")
   }
+
+  finalizedBy(tasks.jacocoTestReport)
 }
 
 tasks.jacocoTestReport {
   reports {
-    xml.required.set(true)
-    html.required.set(true)
-    csv.required.set(false)
-    html.outputLocation.set(layout.buildDirectory.dir("jacocoHtml"))
+    xml.required = true
+    html.required = true
+    csv.required = false
+    html.outputLocation = layout.buildDirectory.dir("jacocoHtml")
   }
 
   dependsOn(tasks.test)
 
-  classDirectories.setFrom(
+  getClassDirectories().setFrom(
     files(classDirectories.files.map {
       fileTree(it) {
         exclude(
@@ -90,6 +92,28 @@ tasks.jacocoTestReport {
       }
     })
   )
+}
+
+tasks.jacocoTestCoverageVerification {
+  violationRules {
+    rule {
+      limit {
+        minimum = "0.8".toBigDecimal()
+      }
+    }
+
+    rule {
+      isEnabled = false
+      element = "CLASS"
+      includes = listOf("org.sagebionetworks.openchallenges.*")
+
+      limit {
+        counter = "LINE"
+        value = "COVEREDRATIO"
+        minimum = "0.8".toBigDecimal()
+      }
+    }
+  }
 }
 
 tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
