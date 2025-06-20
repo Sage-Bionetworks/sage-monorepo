@@ -6,10 +6,10 @@
 
     <hr />
 
+    <h4>{{ `Modified Gene${model().genetic_info.length > 1 ? 's' : '' }`}}</h4>
     <div class="modified-genes">
       @for (gene of model().genetic_info; track gene.ensembl_gene_id) {
         <div class="modified-gene">
-          <h4>Modified Gene</h4>
           <p>
             {{ gene.modified_gene }} |
             <a [href]="this.getGeneUrl(gene.ensembl_gene_id)" target="_blank">{{
