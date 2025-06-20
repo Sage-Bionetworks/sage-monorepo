@@ -1,54 +1,67 @@
 package org.sagebionetworks.openchallenges.organization.service.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.OffsetDateTime;
-import java.util.*;
+import java.net.URI;
 import java.util.Objects;
-import javax.annotation.Generated;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.time.OffsetDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
+import java.time.OffsetDateTime;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-/** An organization */
+
+import java.util.*;
+import jakarta.annotation.Generated;
+
+/**
+ * An organization
+ */
+
 @Schema(name = "Organization", description = "An organization")
 @JsonTypeName("Organization")
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-// TODO Add x-java-class-annotations
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 public class OrganizationDto {
 
-  @JsonProperty("id")
   private Long id;
 
-  @JsonProperty("name")
   private String name;
 
-  @JsonProperty("login")
   private String login;
 
-  @JsonProperty("description")
-  private String description = null;
+  private @Nullable String description = null;
 
-  @JsonProperty("avatarKey")
-  private String avatarKey;
+  private @Nullable String avatarKey;
 
-  @JsonProperty("websiteUrl")
-  private String websiteUrl = null;
+  private @Nullable String websiteUrl = null;
 
-  @JsonProperty("challengeCount")
   private Integer challengeCount = 0;
 
-  @JsonProperty("createdAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
 
-  @JsonProperty("updatedAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime updatedAt;
 
-  @JsonProperty("acronym")
-  private String acronym;
+  private @Nullable String acronym;
+
+  public OrganizationDto() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public OrganizationDto(Long id, String name, String login, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
+    this.id = id;
+    this.name = name;
+    this.login = login;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+  }
 
   public OrganizationDto id(Long id) {
     this.id = id;
@@ -57,16 +70,11 @@ public class OrganizationDto {
 
   /**
    * The unique identifier of an organization
-   *
    * @return id
    */
-  @NotNull
-  @Schema(
-    name = "id",
-    example = "1",
-    description = "The unique identifier of an organization",
-    required = true
-  )
+  @NotNull 
+  @Schema(name = "id", example = "1", description = "The unique identifier of an organization", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("id")
   public Long getId() {
     return id;
   }
@@ -82,16 +90,11 @@ public class OrganizationDto {
 
   /**
    * The name of the organization.
-   *
    * @return name
    */
-  @NotNull
-  @Schema(
-    name = "name",
-    example = "Example organization",
-    description = "The name of the organization.",
-    required = true
-  )
+  @NotNull 
+  @Schema(name = "name", example = "Example organization", description = "The name of the organization.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("name")
   public String getName() {
     return name;
   }
@@ -107,18 +110,11 @@ public class OrganizationDto {
 
   /**
    * The unique login of an organization.
-   *
    * @return login
    */
-  @NotNull
-  @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
-  @Size(min = 2, max = 64)
-  @Schema(
-    name = "login",
-    example = "example-org",
-    description = "The unique login of an organization.",
-    required = true
-  )
+  @NotNull @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$") @Size(min = 2, max = 64) 
+  @Schema(name = "login", example = "example-org", description = "The unique login of an organization.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("login")
   public String getLogin() {
     return login;
   }
@@ -134,15 +130,11 @@ public class OrganizationDto {
 
   /**
    * A description of the organization.
-   *
    * @return description
    */
-  @Schema(
-    name = "description",
-    example = "A description of the organization.",
-    description = "A description of the organization.",
-    required = false
-  )
+  
+  @Schema(name = "description", example = "A description of the organization.", description = "A description of the organization.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("description")
   public String getDescription() {
     return description;
   }
@@ -158,10 +150,11 @@ public class OrganizationDto {
 
   /**
    * Get avatarKey
-   *
    * @return avatarKey
    */
-  @Schema(name = "avatarKey", example = "logo/dream.png", required = false)
+  
+  @Schema(name = "avatarKey", example = "logo/dream.png", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("avatarKey")
   public String getAvatarKey() {
     return avatarKey;
   }
@@ -177,16 +170,11 @@ public class OrganizationDto {
 
   /**
    * A URL to the website or image.
-   *
    * @return websiteUrl
    */
-  @Size(max = 500)
-  @Schema(
-    name = "websiteUrl",
-    example = "https://openchallenges.io",
-    description = "A URL to the website or image.",
-    required = false
-  )
+  @Size(max = 500) 
+  @Schema(name = "websiteUrl", example = "https://openchallenges.io", description = "A URL to the website or image.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("websiteUrl")
   public String getWebsiteUrl() {
     return websiteUrl;
   }
@@ -201,17 +189,13 @@ public class OrganizationDto {
   }
 
   /**
-   * The number of challenges involving this organization. minimum: 0
-   *
+   * The number of challenges involving this organization.
+   * minimum: 0
    * @return challengeCount
    */
-  @Min(0)
-  @Schema(
-    name = "challengeCount",
-    example = "10",
-    description = "The number of challenges involving this organization.",
-    required = false
-  )
+  @Min(0) 
+  @Schema(name = "challengeCount", example = "10", description = "The number of challenges involving this organization.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("challengeCount")
   public Integer getChallengeCount() {
     return challengeCount;
   }
@@ -227,17 +211,11 @@ public class OrganizationDto {
 
   /**
    * Datetime when the object was added to the database.
-   *
    * @return createdAt
    */
-  @NotNull
-  @Valid
-  @Schema(
-    name = "createdAt",
-    example = "2022-07-04T22:19:11Z",
-    description = "Datetime when the object was added to the database.",
-    required = true
-  )
+  @NotNull @Valid 
+  @Schema(name = "createdAt", example = "2022-07-04T22:19:11Z", description = "Datetime when the object was added to the database.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("createdAt")
   public OffsetDateTime getCreatedAt() {
     return createdAt;
   }
@@ -253,17 +231,11 @@ public class OrganizationDto {
 
   /**
    * Datetime when the object was last modified in the database.
-   *
    * @return updatedAt
    */
-  @NotNull
-  @Valid
-  @Schema(
-    name = "updatedAt",
-    example = "2022-07-04T22:19:11Z",
-    description = "Datetime when the object was last modified in the database.",
-    required = true
-  )
+  @NotNull @Valid 
+  @Schema(name = "updatedAt", example = "2022-07-04T22:19:11Z", description = "Datetime when the object was last modified in the database.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("updatedAt")
   public OffsetDateTime getUpdatedAt() {
     return updatedAt;
   }
@@ -279,16 +251,11 @@ public class OrganizationDto {
 
   /**
    * An acronym of the organization.
-   *
    * @return acronym
    */
-  @Size(max = 10)
-  @Schema(
-    name = "acronym",
-    example = "OC",
-    description = "An acronym of the organization.",
-    required = false
-  )
+  @Size(max = 10) 
+  @Schema(name = "acronym", example = "OC", description = "An acronym of the organization.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("acronym")
   public String getAcronym() {
     return acronym;
   }
@@ -306,34 +273,21 @@ public class OrganizationDto {
       return false;
     }
     OrganizationDto organization = (OrganizationDto) o;
-    return (
-      Objects.equals(this.id, organization.id) &&
-      Objects.equals(this.name, organization.name) &&
-      Objects.equals(this.login, organization.login) &&
-      Objects.equals(this.description, organization.description) &&
-      Objects.equals(this.avatarKey, organization.avatarKey) &&
-      Objects.equals(this.websiteUrl, organization.websiteUrl) &&
-      Objects.equals(this.challengeCount, organization.challengeCount) &&
-      Objects.equals(this.createdAt, organization.createdAt) &&
-      Objects.equals(this.updatedAt, organization.updatedAt) &&
-      Objects.equals(this.acronym, organization.acronym)
-    );
+    return Objects.equals(this.id, organization.id) &&
+        Objects.equals(this.name, organization.name) &&
+        Objects.equals(this.login, organization.login) &&
+        Objects.equals(this.description, organization.description) &&
+        Objects.equals(this.avatarKey, organization.avatarKey) &&
+        Objects.equals(this.websiteUrl, organization.websiteUrl) &&
+        Objects.equals(this.challengeCount, organization.challengeCount) &&
+        Objects.equals(this.createdAt, organization.createdAt) &&
+        Objects.equals(this.updatedAt, organization.updatedAt) &&
+        Objects.equals(this.acronym, organization.acronym);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(
-      id,
-      name,
-      login,
-      description,
-      avatarKey,
-      websiteUrl,
-      challengeCount,
-      createdAt,
-      updatedAt,
-      acronym
-    );
+    return Objects.hash(id, name, login, description, avatarKey, websiteUrl, challengeCount, createdAt, updatedAt, acronym);
   }
 
   @Override
@@ -355,7 +309,8 @@ public class OrganizationDto {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
    */
   private String toIndentedString(Object o) {
     if (o == null) {
@@ -363,4 +318,117 @@ public class OrganizationDto {
     }
     return o.toString().replace("\n", "\n    ");
   }
+  
+  public static class Builder {
+
+    private OrganizationDto instance;
+
+    public Builder() {
+      this(new OrganizationDto());
+    }
+
+    protected Builder(OrganizationDto instance) {
+      this.instance = instance;
+    }
+
+    protected Builder copyOf(OrganizationDto value) { 
+      this.instance.setId(value.id);
+      this.instance.setName(value.name);
+      this.instance.setLogin(value.login);
+      this.instance.setDescription(value.description);
+      this.instance.setAvatarKey(value.avatarKey);
+      this.instance.setWebsiteUrl(value.websiteUrl);
+      this.instance.setChallengeCount(value.challengeCount);
+      this.instance.setCreatedAt(value.createdAt);
+      this.instance.setUpdatedAt(value.updatedAt);
+      this.instance.setAcronym(value.acronym);
+      return this;
+    }
+
+    public OrganizationDto.Builder id(Long id) {
+      this.instance.id(id);
+      return this;
+    }
+    
+    public OrganizationDto.Builder name(String name) {
+      this.instance.name(name);
+      return this;
+    }
+    
+    public OrganizationDto.Builder login(String login) {
+      this.instance.login(login);
+      return this;
+    }
+    
+    public OrganizationDto.Builder description(String description) {
+      this.instance.description(description);
+      return this;
+    }
+    
+    public OrganizationDto.Builder avatarKey(String avatarKey) {
+      this.instance.avatarKey(avatarKey);
+      return this;
+    }
+    
+    public OrganizationDto.Builder websiteUrl(String websiteUrl) {
+      this.instance.websiteUrl(websiteUrl);
+      return this;
+    }
+    
+    public OrganizationDto.Builder challengeCount(Integer challengeCount) {
+      this.instance.challengeCount(challengeCount);
+      return this;
+    }
+    
+    public OrganizationDto.Builder createdAt(OffsetDateTime createdAt) {
+      this.instance.createdAt(createdAt);
+      return this;
+    }
+    
+    public OrganizationDto.Builder updatedAt(OffsetDateTime updatedAt) {
+      this.instance.updatedAt(updatedAt);
+      return this;
+    }
+    
+    public OrganizationDto.Builder acronym(String acronym) {
+      this.instance.acronym(acronym);
+      return this;
+    }
+    
+    /**
+    * returns a built OrganizationDto instance.
+    *
+    * The builder is not reusable (NullPointerException)
+    */
+    public OrganizationDto build() {
+      try {
+        return this.instance;
+      } finally {
+        // ensure that this.instance is not reused
+        this.instance = null;
+      }
+    }
+
+    @Override
+    public String toString() {
+      return getClass() + "=(" + instance + ")";
+    }
+  }
+
+  /**
+  * Create a builder with no initialized field (except for the default values).
+  */
+  public static OrganizationDto.Builder builder() {
+    return new OrganizationDto.Builder();
+  }
+
+  /**
+  * Create a builder with a shallow copy of this instance.
+  */
+  public OrganizationDto.Builder toBuilder() {
+    OrganizationDto.Builder builder = new OrganizationDto.Builder();
+    return builder.copyOf(this);
+  }
+
 }
+
