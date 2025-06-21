@@ -91,6 +91,16 @@
       "name": "amp-als-mariadb",
       "username": "maria",
       "password": "changeme"
+    },
+    {
+      "previewLimit": 50,
+      "server": "openchallenges-postgres",
+      "port": 8091,
+      "driver": "PostgreSQL",
+      "name": "openchallenges-postgres",
+      "database": "organization_service",
+      "username": "postgres",
+      "password": "changeme"
     }
   ],
   "terminal.integrated.showExitAlert": false,
