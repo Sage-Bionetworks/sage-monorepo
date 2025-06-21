@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +25,12 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericFie
 public class ChallengeContributionEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "challenge_contribution_seq")
+  @SequenceGenerator(
+    name = "challenge_contribution_seq",
+    sequenceName = "challenge_contribution_id_seq",
+    allocationSize = 1
+  )
   @Column(nullable = false, updatable = false)
   private Long id;
 

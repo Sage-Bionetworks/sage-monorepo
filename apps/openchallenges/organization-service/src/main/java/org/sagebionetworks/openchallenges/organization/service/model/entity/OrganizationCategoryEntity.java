@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +25,12 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericFie
 public class OrganizationCategoryEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "organization_category_seq")
+  @SequenceGenerator(
+    name = "organization_category_seq",
+    sequenceName = "organization_category_id_seq",
+    allocationSize = 1
+  )
   @Column(nullable = false, updatable = false)
   private Long id;
 
@@ -35,6 +41,4 @@ public class OrganizationCategoryEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "organization_id", nullable = false)
   private OrganizationEntity organization;
-  // @Column(name = "created_at")
-  // private OffsetDateTime createdAt;
 }

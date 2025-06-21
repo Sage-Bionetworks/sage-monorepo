@@ -4,6 +4,8 @@ openchallenges-organization-service:
 spring:
   application:
     name: openchallenges-organization-service
+  # profiles:
+  #   active: dev,local
   flyway:
     enabled: true
     clean-disabled: false
