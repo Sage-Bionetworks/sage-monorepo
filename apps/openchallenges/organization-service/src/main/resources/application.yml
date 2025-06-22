@@ -38,6 +38,9 @@ spring:
     date-format: org.sagebionetworks.openchallenges.organization.service.RFC3339DateFormat
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
+  cloud:
+    config:
+      enabled: false
 
 server:
   port: 8084
