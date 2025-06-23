@@ -11,7 +11,7 @@ services:
     networks:
       - openchallenges
     ports:
-      - '8091:5432'
+      - '8091:8091'
     deploy:
       resources:
         limits:
