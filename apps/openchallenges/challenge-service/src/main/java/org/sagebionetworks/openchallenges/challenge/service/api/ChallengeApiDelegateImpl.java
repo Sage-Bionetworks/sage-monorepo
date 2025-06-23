@@ -7,6 +7,7 @@ import org.sagebionetworks.openchallenges.challenge.service.model.dto.Challenges
 import org.sagebionetworks.openchallenges.challenge.service.service.ChallengeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -44,8 +45,10 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
         return ResponseEntity.ok(challengeService.getChallenge(challengeId));
       }
     }
-    // TODO return an error object if this API does not support any of the accepted types
-    return ResponseEntity.ok(challengeService.getChallenge(challengeId));
+    // Return 406 Not Acceptable if no supported media type is found
+    return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(
+      "Unsupported media type. Supported types: application/json, application/ld+json"
+    );
   }
 
   @Override
