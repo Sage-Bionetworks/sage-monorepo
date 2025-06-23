@@ -25,13 +25,9 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericFie
 public class OrganizationCategoryEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "organization_category_seq")
-  @SequenceGenerator(
-    name = "organization_category_seq",
-    sequenceName = "organization_category_id_seq",
-    allocationSize = 1
-  )
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false, updatable = false)
+  @GenericField(name = "id")
   private Long id;
 
   @Column(nullable = false)

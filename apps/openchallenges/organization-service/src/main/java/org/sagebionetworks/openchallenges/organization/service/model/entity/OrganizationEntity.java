@@ -34,12 +34,7 @@ import org.sagebionetworks.openchallenges.organization.service.model.search.Orga
 public class OrganizationEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "organization_seq")
-  @SequenceGenerator(
-    name = "organization_seq",
-    sequenceName = "organization_id_seq",
-    allocationSize = 1
-  )
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false, updatable = false)
   @GenericField(name = "id")
   private Long id;

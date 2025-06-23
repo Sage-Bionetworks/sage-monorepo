@@ -25,13 +25,9 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericFie
 public class ChallengeContributionEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "challenge_contribution_seq")
-  @SequenceGenerator(
-    name = "challenge_contribution_seq",
-    sequenceName = "challenge_contribution_id_seq",
-    allocationSize = 1
-  )
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false, updatable = false)
+  @GenericField(name = "id")
   private Long id;
 
   @Column(nullable = false)
