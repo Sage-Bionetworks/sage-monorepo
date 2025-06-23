@@ -11,44 +11,44 @@ info:
   x-logo:
     url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
-  - url: http://localhost/v1
+- url: http://localhost/v1
 tags:
-  - description: Operations about challenges.
-    name: Challenge
-  - description: Operations about challenge analytics.
-    name: ChallengeAnalytics
-  - description: Operations about challenge platforms.
-    name: ChallengePlatform
-  - description: Operations about EDAM concepts.
-    name: EdamConcept
+- description: Operations about challenges.
+  name: Challenge
+- description: Operations about challenge analytics.
+  name: ChallengeAnalytics
+- description: Operations about challenge platforms.
+  name: ChallengePlatform
+- description: Operations about EDAM concepts.
+  name: EdamConcept
 paths:
   /challenges:
     get:
       description: List challenges
       operationId: listChallenges
       parameters:
-        - description: The search query used to find challenges.
-          explode: true
-          in: query
-          name: challengeSearchQuery
-          required: false
-          schema:
-            $ref: '#/components/schemas/ChallengeSearchQuery'
-          style: form
+      - description: The search query used to find challenges.
+        explode: true
+        in: query
+        name: challengeSearchQuery
+        required: false
+        schema:
+          $ref: '#/components/schemas/ChallengeSearchQuery'
+        style: form
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ChallengesPage'
           description: Success
-        '400':
+        "400":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -57,25 +57,27 @@ paths:
             error
       summary: List challenges
       tags:
-        - Challenge
-      x-accepts: application/json
+      - Challenge
+      x-accepts:
+      - application/json
+      - application/problem+json
       x-tags:
-        - tag: Challenge
+      - tag: Challenge
   /challenges/{challengeId}:
     get:
       description: Returns the challenge specified
       operationId: getChallenge
       parameters:
-        - description: The unique identifier of the challenge.
-          explode: false
-          in: path
-          name: challengeId
-          required: true
-          schema:
-            $ref: '#/components/schemas/ChallengeId'
-          style: simple
+      - description: The unique identifier of the challenge.
+        explode: false
+        in: path
+        name: challengeId
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeId'
+        style: simple
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
@@ -84,13 +86,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/ChallengeJsonLd'
           description: A challenge
-        '404':
+        "404":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -99,37 +101,40 @@ paths:
             error
       summary: Get a challenge
       tags:
-        - Challenge
-      x-accepts: application/json
+      - Challenge
+      x-accepts:
+      - application/json
+      - application/ld+json
+      - application/problem+json
       x-tags:
-        - tag: Challenge
+      - tag: Challenge
   /challenges/{challengeId}/contributions:
     get:
       description: List challenge contributions
       operationId: listChallengeContributions
       parameters:
-        - description: The unique identifier of the challenge.
-          explode: false
-          in: path
-          name: challengeId
-          required: true
-          schema:
-            $ref: '#/components/schemas/ChallengeId'
-          style: simple
+      - description: The unique identifier of the challenge.
+        explode: false
+        in: path
+        name: challengeId
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeId'
+        style: simple
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ChallengeContributionsPage'
           description: Success
-        '400':
+        "400":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -138,22 +143,24 @@ paths:
             error
       summary: List challenge contributions
       tags:
-        - ChallengeContribution
-      x-accepts: application/json
+      - ChallengeContribution
+      x-accepts:
+      - application/json
+      - application/problem+json
       x-tags:
-        - tag: ChallengeContribution
+      - tag: ChallengeContribution
   /challengeAnalytics/challengesPerYear:
     get:
       description: Returns the number of challenges tracked per year
       operationId: getChallengesPerYear
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ChallengesPerYear'
           description: An object
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -162,37 +169,39 @@ paths:
             error
       summary: Get the number of challenges tracked per year
       tags:
-        - ChallengeAnalytics
-      x-accepts: application/json
+      - ChallengeAnalytics
+      x-accepts:
+      - application/json
+      - application/problem+json
       x-tags:
-        - tag: ChallengeAnalytics
+      - tag: ChallengeAnalytics
   /challengePlatforms:
     get:
       description: List challenge platforms
       operationId: listChallengePlatforms
       parameters:
-        - description: The search query used to find challenge platforms.
-          explode: true
-          in: query
-          name: challengePlatformSearchQuery
-          required: false
-          schema:
-            $ref: '#/components/schemas/ChallengePlatformSearchQuery'
-          style: form
+      - description: The search query used to find challenge platforms.
+        explode: true
+        in: query
+        name: challengePlatformSearchQuery
+        required: false
+        schema:
+          $ref: '#/components/schemas/ChallengePlatformSearchQuery'
+        style: form
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ChallengePlatformsPage'
           description: Success
-        '400':
+        "400":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -201,37 +210,39 @@ paths:
             error
       summary: List challenge platforms
       tags:
-        - ChallengePlatform
-      x-accepts: application/json
+      - ChallengePlatform
+      x-accepts:
+      - application/json
+      - application/problem+json
       x-tags:
-        - tag: ChallengePlatform
+      - tag: ChallengePlatform
   /challengePlatforms/{challengePlatformName}:
     get:
       description: Returns the challenge platform specified
       operationId: getChallengePlatform
       parameters:
-        - description: The unique identifier of the challenge platform.
-          explode: false
-          in: path
-          name: challengePlatformName
-          required: true
-          schema:
-            $ref: '#/components/schemas/ChallengePlatformName'
-          style: simple
+      - description: The unique identifier of the challenge platform.
+        explode: false
+        in: path
+        name: challengePlatformName
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengePlatformName'
+        style: simple
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ChallengePlatform'
           description: Success
-        '404':
+        "404":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -240,37 +251,39 @@ paths:
             error
       summary: Get a challenge platform
       tags:
-        - ChallengePlatform
-      x-accepts: application/json
+      - ChallengePlatform
+      x-accepts:
+      - application/json
+      - application/problem+json
       x-tags:
-        - tag: ChallengePlatform
+      - tag: ChallengePlatform
   /edamConcepts:
     get:
       description: List EDAM concepts
       operationId: listEdamConcepts
       parameters:
-        - description: The search query used to find EDAM concepts.
-          explode: true
-          in: query
-          name: edamConceptSearchQuery
-          required: false
-          schema:
-            $ref: '#/components/schemas/EdamConceptSearchQuery'
-          style: form
+      - description: The search query used to find EDAM concepts.
+        explode: true
+        in: query
+        name: edamConceptSearchQuery
+        required: false
+        schema:
+          $ref: '#/components/schemas/EdamConceptSearchQuery'
+        style: form
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/EdamConceptsPage'
           description: Success
-        '400':
+        "400":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -279,10 +292,12 @@ paths:
             error
       summary: List EDAM concepts
       tags:
-        - EdamConcept
-      x-accepts: application/json
+      - EdamConcept
+      x-accepts:
+      - application/json
+      - application/problem+json
       x-tags:
-        - tag: EdamConcept
+      - tag: EdamConcept
 components:
   parameters:
     challengeSearchQuery:
@@ -354,27 +369,27 @@ components:
       default: relevance
       description: What to sort results by.
       enum:
-        - created
-        - random
-        - relevance
-        - starred
-        - start_date
-        - end_date
+      - created
+      - random
+      - relevance
+      - starred
+      - start_date
+      - end_date
       type: string
     ChallengeDirection:
       description: The direction to sort the results by.
       enum:
-        - asc
-        - desc
+      - asc
+      - desc
       nullable: true
       type: string
     ChallengeIncentive:
       description: The incentive type of the challenge.
       enum:
-        - monetary
-        - publication
-        - speaking_engagement
-        - other
+      - monetary
+      - publication
+      - speaking_engagement
+      - other
       example: publication
       type: string
     ChallengePlatformSlug:
@@ -382,7 +397,7 @@ components:
       example: example-challenge-platform
       maxLength: 30
       minLength: 3
-      pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+      pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
       type: string
     OrganizationId:
       description: The unique identifier of an organization
@@ -392,19 +407,19 @@ components:
     ChallengeStatus:
       description: The status of the challenge.
       enum:
-        - upcoming
-        - active
-        - completed
+      - upcoming
+      - active
+      - completed
       example: active
       type: string
     ChallengeSubmissionType:
       description: The submission type of the challenge.
       enum:
-        - container_image
-        - prediction_file
-        - notebook
-        - mlcube
-        - other
+      - container_image
+      - prediction_file
+      - notebook
+      - mlcube
+      - other
       example: container_image
       type: string
     EdamConceptId:
@@ -415,13 +430,13 @@ components:
     ChallengeCategory:
       description: The category of the challenge.
       enum:
-        - featured
-        - benchmark
-        - hackathon
-        - starting_soon
-        - ending_soon
-        - recently_started
-        - recently_ended
+      - featured
+      - benchmark
+      - hackathon
+      - starting_soon
+      - ending_soon
+      - recently_started
+      - recently_ended
       example: featured
       type: string
     ChallengeSearchQuery:
@@ -539,12 +554,12 @@ components:
           example: true
           type: boolean
       required:
-        - hasNext
-        - hasPrevious
-        - number
-        - size
-        - totalElements
-        - totalPages
+      - hasNext
+      - hasPrevious
+      - number
+      - size
+      - totalElements
+      - totalPages
       type: object
     ChallengeId:
       description: The unique identifier of the challenge.
@@ -556,7 +571,7 @@ components:
       example: awesome-challenge
       maxLength: 255
       minLength: 3
-      pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+      pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
       type: string
     ChallengeName:
       description: The name of the challenge.
@@ -611,7 +626,7 @@ components:
           example: example-challenge-platform
           maxLength: 30
           minLength: 3
-          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           type: string
         name:
           description: The name of the challenge platform.
@@ -619,9 +634,9 @@ components:
           minLength: 3
           type: string
       required:
-        - id
-        - name
-        - slug
+      - id
+      - name
+      - slug
       type: object
     Url:
       description: A URL to the website or image.
@@ -652,9 +667,9 @@ components:
           maxLength: 80
           type: string
       required:
-        - classId
-        - id
-        - preferredLabel
+      - classId
+      - id
+      - preferredLabel
       type: object
     ChallengeStartDate:
       description: The start date of the challenge.
@@ -682,7 +697,7 @@ components:
       description: A challenge
       example:
         avatarUrl: https://openchallenges.io
-        endDate: 2017-07-21T00:00:00.000+00:00
+        endDate: 2017-07-21
         description: This is an example description of the challenge.
         platform:
           name: name
@@ -691,33 +706,33 @@ components:
         starredCount: 100
         createdAt: 2022-07-04T22:19:11Z
         incentives:
-          - publication
-          - publication
+        - publication
+        - publication
         submissionTypes:
-          - container_image
-          - container_image
+        - container_image
+        - container_image
         websiteUrl: https://openchallenges.io
         name: name
         id: 1
         categories:
-          - featured
-          - featured
+        - featured
+        - featured
         headline: Example challenge headline
         operation:
           classId: http://edamontology.org/data_0850
           preferredLabel: Sequence set
           id: 1
         slug: awesome-challenge
-        startDate: 2017-07-21T00:00:00.000+00:00
+        startDate: 2017-07-21
         doi: https://doi.org/123/abc
         status: active
         inputDataTypes:
-          - classId: http://edamontology.org/data_0850
-            preferredLabel: Sequence set
-            id: 1
-          - classId: http://edamontology.org/data_0850
-            preferredLabel: Sequence set
-            id: 1
+        - classId: http://edamontology.org/data_0850
+          preferredLabel: Sequence set
+          id: 1
+        - classId: http://edamontology.org/data_0850
+          preferredLabel: Sequence set
+          id: 1
         updatedAt: 2022-07-04T22:19:11Z
       properties:
         id:
@@ -730,7 +745,7 @@ components:
           example: awesome-challenge
           maxLength: 255
           minLength: 3
-          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           type: string
         name:
           description: The name of the challenge.
@@ -822,26 +837,118 @@ components:
           format: date-time
           type: string
       required:
-        - categories
-        - createdAt
-        - description
-        - id
-        - incentives
-        - name
-        - slug
-        - starredCount
-        - status
-        - submissionTypes
-        - updatedAt
+      - categories
+      - createdAt
+      - description
+      - id
+      - incentives
+      - name
+      - slug
+      - starredCount
+      - status
+      - submissionTypes
+      - updatedAt
       type: object
     ChallengesPage:
       allOf:
-        - $ref: '#/components/schemas/PageMetadata'
-        - $ref: '#/components/schemas/ChallengesPage_allOf'
+      - $ref: '#/components/schemas/PageMetadata'
+      - properties:
+          challenges:
+            description: A list of challenges.
+            items:
+              $ref: '#/components/schemas/Challenge'
+            type: array
+        required:
+        - challenges
+        type: object
       description: A page of challenges.
+      example:
+        number: 99
+        size: 99
+        challenges:
+        - avatarUrl: https://openchallenges.io
+          endDate: 2017-07-21
+          description: This is an example description of the challenge.
+          platform:
+            name: name
+            id: 1
+            slug: example-challenge-platform
+          starredCount: 100
+          createdAt: 2022-07-04T22:19:11Z
+          incentives:
+          - publication
+          - publication
+          submissionTypes:
+          - container_image
+          - container_image
+          websiteUrl: https://openchallenges.io
+          name: name
+          id: 1
+          categories:
+          - featured
+          - featured
+          headline: Example challenge headline
+          operation:
+            classId: http://edamontology.org/data_0850
+            preferredLabel: Sequence set
+            id: 1
+          slug: awesome-challenge
+          startDate: 2017-07-21
+          doi: https://doi.org/123/abc
+          status: active
+          inputDataTypes:
+          - classId: http://edamontology.org/data_0850
+            preferredLabel: Sequence set
+            id: 1
+          - classId: http://edamontology.org/data_0850
+            preferredLabel: Sequence set
+            id: 1
+          updatedAt: 2022-07-04T22:19:11Z
+        - avatarUrl: https://openchallenges.io
+          endDate: 2017-07-21
+          description: This is an example description of the challenge.
+          platform:
+            name: name
+            id: 1
+            slug: example-challenge-platform
+          starredCount: 100
+          createdAt: 2022-07-04T22:19:11Z
+          incentives:
+          - publication
+          - publication
+          submissionTypes:
+          - container_image
+          - container_image
+          websiteUrl: https://openchallenges.io
+          name: name
+          id: 1
+          categories:
+          - featured
+          - featured
+          headline: Example challenge headline
+          operation:
+            classId: http://edamontology.org/data_0850
+            preferredLabel: Sequence set
+            id: 1
+          slug: awesome-challenge
+          startDate: 2017-07-21
+          doi: https://doi.org/123/abc
+          status: active
+          inputDataTypes:
+          - classId: http://edamontology.org/data_0850
+            preferredLabel: Sequence set
+            id: 1
+          - classId: http://edamontology.org/data_0850
+            preferredLabel: Sequence set
+            id: 1
+          updatedAt: 2022-07-04T22:19:11Z
+        totalPages: 99
+        hasPrevious: true
+        hasNext: true
+        totalElements: 99
       type: object
       x-java-class-annotations:
-        - '@lombok.Builder'
+      - '@lombok.Builder'
     BasicError:
       description: Problem details (tools.ietf.org/html/rfc7807)
       properties:
@@ -859,28 +966,46 @@ components:
           description: An absolute URI that identifies the problem type
           type: string
       required:
-        - status
-        - title
+      - status
+      - title
       type: object
       x-java-class-annotations:
-        - '@lombok.AllArgsConstructor'
-        - '@lombok.Builder'
+      - '@lombok.AllArgsConstructor'
+      - '@lombok.Builder'
     ChallengeJsonLd:
       allOf:
-        - $ref: '#/components/schemas/Challenge'
-        - $ref: '#/components/schemas/ChallengeJsonLd_allOf'
+      - $ref: '#/components/schemas/Challenge'
+      - properties:
+          '@context':
+            example: https://schema.org
+            type: string
+          '@id':
+            example: https://openchallenges.io/api/v1/challenges/1
+            type: string
+          '@type':
+            example: Challenge
+            type: string
+        required:
+        - '@context'
+        - '@id'
+        - '@type'
+        type: object
       description: A challenge
       type: object
     ChallengeContributionRole:
       description: The nature of a challenge contribution.
       enum:
-        - challenge_organizer
-        - data_contributor
-        - sponsor
+      - challenge_organizer
+      - data_contributor
+      - sponsor
       example: challenge_organizer
       type: string
     ChallengeContribution:
       description: A challenge contribution.
+      example:
+        organizationId: 1
+        challengeId: 1
+        role: challenge_organizer
       properties:
         challengeId:
           description: The unique identifier of the challenge.
@@ -895,28 +1020,50 @@ components:
         role:
           $ref: '#/components/schemas/ChallengeContributionRole'
       required:
-        - challengeId
-        - organizationId
-        - role
+      - challengeId
+      - organizationId
+      - role
       type: object
     ChallengeContributionsPage:
       allOf:
-        - $ref: '#/components/schemas/PageMetadata'
-        - $ref: '#/components/schemas/ChallengeContributionsPage_allOf'
+      - $ref: '#/components/schemas/PageMetadata'
+      - properties:
+          challengeContributions:
+            description: A list of challenge contributions.
+            items:
+              $ref: '#/components/schemas/ChallengeContribution'
+            type: array
+        required:
+        - challengeContributions
+        type: object
       description: A page of challenge challenge contributions.
+      example:
+        number: 99
+        size: 99
+        challengeContributions:
+        - organizationId: 1
+          challengeId: 1
+          role: challenge_organizer
+        - organizationId: 1
+          challengeId: 1
+          role: challenge_organizer
+        totalPages: 99
+        hasPrevious: true
+        hasNext: true
+        totalElements: 99
       type: object
       x-java-class-annotations:
-        - '@lombok.Builder'
+      - '@lombok.Builder'
     ChallengesPerYear:
       description: An object
       example:
         undatedChallengeCount: 0
         challengeCounts:
-          - 0
-          - 0
+        - 0
+        - 0
         years:
-          - years
-          - years
+        - years
+        - years
       properties:
         years:
           items:
@@ -932,24 +1079,24 @@ components:
           minimum: 0
           type: integer
       required:
-        - challengeCounts
-        - undatedChallengeCount
-        - years
+      - challengeCounts
+      - undatedChallengeCount
+      - years
       type: object
       x-java-class-annotations:
-        - '@lombok.Builder'
+      - '@lombok.Builder'
     ChallengePlatformSort:
       default: relevance
       description: What to sort results by.
       enum:
-        - name
-        - relevance
+      - name
+      - relevance
       type: string
     ChallengePlatformDirection:
       description: The direction to sort the results by.
       enum:
-        - asc
-        - desc
+      - asc
+      - desc
       nullable: true
       type: string
     ChallengePlatformSearchQuery:
@@ -1002,7 +1149,7 @@ components:
           example: example-challenge-platform
           maxLength: 30
           minLength: 3
-          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           type: string
         name:
           description: The name of the challenge platform.
@@ -1026,44 +1173,74 @@ components:
           format: date-time
           type: string
       required:
-        - avatarUrl
-        - createdAt
-        - id
-        - name
-        - slug
-        - updatedAt
-        - websiteUrl
+      - avatarUrl
+      - createdAt
+      - id
+      - name
+      - slug
+      - updatedAt
+      - websiteUrl
       type: object
     ChallengePlatformsPage:
       allOf:
-        - $ref: '#/components/schemas/PageMetadata'
-        - $ref: '#/components/schemas/ChallengePlatformsPage_allOf'
+      - $ref: '#/components/schemas/PageMetadata'
+      - properties:
+          challengePlatforms:
+            description: A list of challenge platforms.
+            items:
+              $ref: '#/components/schemas/ChallengePlatform'
+            type: array
+        required:
+        - challengePlatforms
+        type: object
       description: A page of challenge platforms.
+      example:
+        number: 99
+        size: 99
+        challengePlatforms:
+        - createdAt: 2022-07-04T22:19:11Z
+          avatarUrl: https://via.placeholder.com/300.png
+          websiteUrl: https://example.com
+          name: name
+          id: 1
+          slug: example-challenge-platform
+          updatedAt: 2022-07-04T22:19:11Z
+        - createdAt: 2022-07-04T22:19:11Z
+          avatarUrl: https://via.placeholder.com/300.png
+          websiteUrl: https://example.com
+          name: name
+          id: 1
+          slug: example-challenge-platform
+          updatedAt: 2022-07-04T22:19:11Z
+        totalPages: 99
+        hasPrevious: true
+        hasNext: true
+        totalElements: 99
       type: object
       x-java-class-annotations:
-        - '@lombok.Builder'
+      - '@lombok.Builder'
     EdamConceptSort:
       default: relevance
       description: What to sort results by.
       enum:
-        - preferred_label
-        - relevance
+      - preferred_label
+      - relevance
       type: string
     EdamConceptDirection:
       description: The direction to sort the results by.
       enum:
-        - asc
-        - desc
+      - asc
+      - desc
       nullable: true
       type: string
     EdamSection:
       description: The EDAM section (sub-ontology).
       enum:
-        - data
-        - format
-        - identifier
-        - operation
-        - topic
+      - data
+      - format
+      - identifier
+      - operation
+      - topic
       example: data
       type: string
     EdamConceptSearchQuery:
@@ -1103,70 +1280,31 @@ components:
       type: object
     EdamConceptsPage:
       allOf:
-        - $ref: '#/components/schemas/PageMetadata'
-        - $ref: '#/components/schemas/EdamConceptsPage_allOf'
+      - $ref: '#/components/schemas/PageMetadata'
+      - properties:
+          edamConcepts:
+            description: A list of EDAM concepts.
+            items:
+              $ref: '#/components/schemas/EdamConcept'
+            type: array
+        required:
+        - edamConcepts
+        type: object
       description: A page of EDAM concepts.
+      example:
+        number: 99
+        size: 99
+        totalPages: 99
+        hasPrevious: true
+        hasNext: true
+        edamConcepts:
+        - classId: http://edamontology.org/data_0850
+          preferredLabel: Sequence set
+          id: 1
+        - classId: http://edamontology.org/data_0850
+          preferredLabel: Sequence set
+          id: 1
+        totalElements: 99
       type: object
       x-java-class-annotations:
-        - '@lombok.Builder'
-    ChallengesPage_allOf:
-      properties:
-        challenges:
-          description: A list of challenges.
-          items:
-            $ref: '#/components/schemas/Challenge'
-          type: array
-      required:
-        - challenges
-      type: object
-      example: null
-    ChallengeJsonLd_allOf:
-      properties:
-        '@context':
-          example: https://schema.org
-          type: string
-        '@id':
-          example: https://openchallenges.io/api/v1/challenges/1
-          type: string
-        '@type':
-          example: Challenge
-          type: string
-      required:
-        - '@context'
-        - '@id'
-        - '@type'
-      type: object
-      example: null
-    ChallengeContributionsPage_allOf:
-      properties:
-        challengeContributions:
-          description: A list of challenge contributions.
-          items:
-            $ref: '#/components/schemas/ChallengeContribution'
-          type: array
-      required:
-        - challengeContributions
-      type: object
-      example: null
-    ChallengePlatformsPage_allOf:
-      properties:
-        challengePlatforms:
-          description: A list of challenge platforms.
-          items:
-            $ref: '#/components/schemas/ChallengePlatform'
-          type: array
-      required:
-        - challengePlatforms
-      type: object
-      example: null
-    EdamConceptsPage_allOf:
-      properties:
-        edamConcepts:
-          description: A list of EDAM concepts.
-          items:
-            $ref: '#/components/schemas/EdamConcept'
-          type: array
-      required:
-        - edamConcepts
-      type: object
-      example: null
+      - '@lombok.Builder'
