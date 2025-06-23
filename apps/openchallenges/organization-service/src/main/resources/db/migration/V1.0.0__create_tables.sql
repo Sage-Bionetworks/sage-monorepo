@@ -4,13 +4,13 @@ CREATE TABLE organization (
   id                    BIGSERIAL PRIMARY KEY,
   name                  VARCHAR(255) NOT NULL,
   login                 VARCHAR(100) NOT NULL UNIQUE,
-  avatar_key            VARCHAR(255) DEFAULT NULL,
-  website_url           VARCHAR(500) DEFAULT NULL,
-  description           VARCHAR(1000) DEFAULT NULL,
+  avatar_key            VARCHAR(255),
+  website_url           VARCHAR(500),
+  description           VARCHAR(1000),
   challenge_count       INTEGER DEFAULT 0,
-  created_at            TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  updated_at            TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  acronym               VARCHAR(20) DEFAULT NULL,
+  created_at            TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at            TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  acronym               VARCHAR(20),
   CONSTRAINT login_check CHECK (char_length(login) >= 2 AND login ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$')
 );
 
