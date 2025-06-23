@@ -1,4 +1,4 @@
--- organization definition
+-- create organization table
 
 CREATE TABLE organization (
   id                    BIGSERIAL PRIMARY KEY,
@@ -11,27 +11,37 @@ CREATE TABLE organization (
   created_at            TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at            TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   acronym               VARCHAR(20),
-  CONSTRAINT login_check CHECK (char_length(login) >= 2 AND login ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$')
+  CONSTRAINT login_check CHECK (
+    char_length(login) >= 2 AND login ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+  )
 );
 
 
--- organization_category definition
+-- create organization_category table
 
 CREATE TABLE organization_category (
     id                    BIGSERIAL PRIMARY KEY,
     organization_id       BIGINT NOT NULL,
-    category              VARCHAR(20) CHECK (category IN ('featured')),
-    FOREIGN KEY (organization_id) REFERENCES organization(id)
+    category              VARCHAR(20) NOT NULL CHECK (category IN ('featured')),
+    CONSTRAINT fk_organization
+      FOREIGN KEY (organization_id)
+      REFERENCES organization(id)
+      ON DELETE CASCADE
 );
 
 
--- challenge_contribution definition
+-- create challenge_contribution table
 
 CREATE TABLE challenge_contribution (
-    id                    BIGSERIAL PRIMARY KEY,
+    id BIGSERIAL          PRIMARY KEY,
     challenge_id          BIGINT NOT NULL,
     organization_id       BIGINT NOT NULL,
-    role                  VARCHAR(50) CHECK (role IN ('challenge_organizer', 'data_contributor', 'sponsor')),
-    FOREIGN KEY (organization_id) REFERENCES organization(id),
-    CONSTRAINT unique_item UNIQUE (challenge_id, organization_id, role)
+    role VARCHAR(50) NOT NULL CHECK (
+        role IN ('challenge_organizer', 'data_contributor', 'sponsor')
+    ),
+    CONSTRAINT fk_organization
+      FOREIGN KEY (organization_id)
+      REFERENCES organization(id)
+      ON DELETE CASCADE,
+    CONSTRAINT uq_contribution UNIQUE (challenge_id, organization_id, role)
 );
