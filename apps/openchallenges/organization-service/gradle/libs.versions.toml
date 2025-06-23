@@ -1,6 +1,6 @@
 [versions]
 findbugs = "3.0.2"
-flyway = "11.7.2"
+flyway = "11.9.1"
 h2database = "2.3.232"
 hibernate-search = "7.2.3.Final"
 jackson = "2.18.3"
@@ -43,4 +43,5 @@ spring-data-commons = { module = "org.springframework.data:spring-data-commons",
 springdoc-openapi-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }
 
 [plugins]
+flyway = { id = "org.flywaydb.flyway", version.ref = "flyway" }
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }

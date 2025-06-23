@@ -5,14 +5,14 @@ CREATE SEQUENCE organization_id_seq;
 CREATE TABLE organization (
   id                    BIGINT NOT NULL DEFAULT nextval('organization_id_seq'),
   name                  VARCHAR(255) NOT NULL,
-  login                 VARCHAR(64) NOT NULL UNIQUE,
+  login                 VARCHAR(100) NOT NULL UNIQUE,
   avatar_key            VARCHAR(255) DEFAULT NULL,
   website_url           VARCHAR(500) DEFAULT NULL,
   description           VARCHAR(1000) DEFAULT NULL,
   challenge_count       INTEGER DEFAULT 0,
   created_at            TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   updated_at            TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  acronym               VARCHAR(10) DEFAULT NULL,
+  acronym               VARCHAR(20) DEFAULT NULL,
   PRIMARY KEY (id),
   CONSTRAINT login_check CHECK (char_length(login) >= 2 AND login ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$')
 );
