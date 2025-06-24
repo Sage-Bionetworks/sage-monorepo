@@ -22,7 +22,7 @@ CREATE TABLE challenge (
   slug VARCHAR(255) NOT NULL UNIQUE,
   name VARCHAR(255) NOT NULL,
   headline VARCHAR(80),
-  description VARCHAR(1000) NOT NULL,
+  description VARCHAR(1000),
   avatar_url VARCHAR(500),
   website_url VARCHAR(500),
   status VARCHAR(20) CHECK (status IN ('upcoming', 'active', 'completed')),
