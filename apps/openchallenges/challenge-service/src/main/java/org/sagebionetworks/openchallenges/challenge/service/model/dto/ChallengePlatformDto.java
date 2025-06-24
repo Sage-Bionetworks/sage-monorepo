@@ -1,45 +1,63 @@
 package org.sagebionetworks.openchallenges.challenge.service.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.OffsetDateTime;
-import java.util.*;
+import java.net.URI;
 import java.util.Objects;
-import javax.annotation.Generated;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.time.OffsetDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
+import java.time.OffsetDateTime;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-/** A challenge platform */
+
+import java.util.*;
+import jakarta.annotation.Generated;
+
+/**
+ * A challenge platform
+ */
+
 @Schema(name = "ChallengePlatform", description = "A challenge platform")
 @JsonTypeName("ChallengePlatform")
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-// TODO Add x-java-class-annotations
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 public class ChallengePlatformDto {
 
-  @JsonProperty("id")
   private Long id;
 
-  @JsonProperty("slug")
   private String slug;
 
-  @JsonProperty("name")
   private String name;
 
-  @JsonProperty("avatarUrl")
   private String avatarUrl;
 
-  @JsonProperty("websiteUrl")
   private String websiteUrl;
 
-  @JsonProperty("createdAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
 
-  @JsonProperty("updatedAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime updatedAt;
+
+  public ChallengePlatformDto() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public ChallengePlatformDto(Long id, String slug, String name, String avatarUrl, String websiteUrl, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
+    this.id = id;
+    this.slug = slug;
+    this.name = name;
+    this.avatarUrl = avatarUrl;
+    this.websiteUrl = websiteUrl;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+  }
 
   public ChallengePlatformDto id(Long id) {
     this.id = id;
@@ -48,16 +66,11 @@ public class ChallengePlatformDto {
 
   /**
    * The unique identifier of a challenge platform.
-   *
    * @return id
    */
-  @NotNull
-  @Schema(
-    name = "id",
-    example = "1",
-    description = "The unique identifier of a challenge platform.",
-    required = true
-  )
+  @NotNull 
+  @Schema(name = "id", example = "1", description = "The unique identifier of a challenge platform.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("id")
   public Long getId() {
     return id;
   }
@@ -73,18 +86,11 @@ public class ChallengePlatformDto {
 
   /**
    * The slug of the challenge platform.
-   *
    * @return slug
    */
-  @NotNull
-  @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
-  @Size(min = 3, max = 30)
-  @Schema(
-    name = "slug",
-    example = "example-challenge-platform",
-    description = "The slug of the challenge platform.",
-    required = true
-  )
+  @NotNull @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$") @Size(min = 3, max = 30) 
+  @Schema(name = "slug", example = "example-challenge-platform", description = "The slug of the challenge platform.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("slug")
   public String getSlug() {
     return slug;
   }
@@ -100,12 +106,11 @@ public class ChallengePlatformDto {
 
   /**
    * The name of the challenge platform.
-   *
    * @return name
    */
-  @NotNull
-  @Size(min = 3, max = 30)
-  @Schema(name = "name", description = "The name of the challenge platform.", required = true)
+  @NotNull @Size(min = 3, max = 30) 
+  @Schema(name = "name", description = "The name of the challenge platform.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("name")
   public String getName() {
     return name;
   }
@@ -121,11 +126,11 @@ public class ChallengePlatformDto {
 
   /**
    * Get avatarUrl
-   *
    * @return avatarUrl
    */
-  @NotNull
-  @Schema(name = "avatarUrl", example = "https://via.placeholder.com/300.png", required = true)
+  @NotNull 
+  @Schema(name = "avatarUrl", example = "https://via.placeholder.com/300.png", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("avatarUrl")
   public String getAvatarUrl() {
     return avatarUrl;
   }
@@ -141,11 +146,11 @@ public class ChallengePlatformDto {
 
   /**
    * Get websiteUrl
-   *
    * @return websiteUrl
    */
-  @NotNull
-  @Schema(name = "websiteUrl", example = "https://example.com", required = true)
+  @NotNull 
+  @Schema(name = "websiteUrl", example = "https://example.com", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("websiteUrl")
   public String getWebsiteUrl() {
     return websiteUrl;
   }
@@ -161,12 +166,11 @@ public class ChallengePlatformDto {
 
   /**
    * Get createdAt
-   *
    * @return createdAt
    */
-  @NotNull
-  @Valid
-  @Schema(name = "createdAt", example = "2022-07-04T22:19:11Z", required = true)
+  @NotNull @Valid 
+  @Schema(name = "createdAt", example = "2022-07-04T22:19:11Z", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("createdAt")
   public OffsetDateTime getCreatedAt() {
     return createdAt;
   }
@@ -182,12 +186,11 @@ public class ChallengePlatformDto {
 
   /**
    * Get updatedAt
-   *
    * @return updatedAt
    */
-  @NotNull
-  @Valid
-  @Schema(name = "updatedAt", example = "2022-07-04T22:19:11Z", required = true)
+  @NotNull @Valid 
+  @Schema(name = "updatedAt", example = "2022-07-04T22:19:11Z", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("updatedAt")
   public OffsetDateTime getUpdatedAt() {
     return updatedAt;
   }
@@ -205,15 +208,13 @@ public class ChallengePlatformDto {
       return false;
     }
     ChallengePlatformDto challengePlatform = (ChallengePlatformDto) o;
-    return (
-      Objects.equals(this.id, challengePlatform.id) &&
-      Objects.equals(this.slug, challengePlatform.slug) &&
-      Objects.equals(this.name, challengePlatform.name) &&
-      Objects.equals(this.avatarUrl, challengePlatform.avatarUrl) &&
-      Objects.equals(this.websiteUrl, challengePlatform.websiteUrl) &&
-      Objects.equals(this.createdAt, challengePlatform.createdAt) &&
-      Objects.equals(this.updatedAt, challengePlatform.updatedAt)
-    );
+    return Objects.equals(this.id, challengePlatform.id) &&
+        Objects.equals(this.slug, challengePlatform.slug) &&
+        Objects.equals(this.name, challengePlatform.name) &&
+        Objects.equals(this.avatarUrl, challengePlatform.avatarUrl) &&
+        Objects.equals(this.websiteUrl, challengePlatform.websiteUrl) &&
+        Objects.equals(this.createdAt, challengePlatform.createdAt) &&
+        Objects.equals(this.updatedAt, challengePlatform.updatedAt);
   }
 
   @Override
@@ -237,7 +238,8 @@ public class ChallengePlatformDto {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
    */
   private String toIndentedString(Object o) {
     if (o == null) {
@@ -245,4 +247,99 @@ public class ChallengePlatformDto {
     }
     return o.toString().replace("\n", "\n    ");
   }
+  
+  public static class Builder {
+
+    private ChallengePlatformDto instance;
+
+    public Builder() {
+      this(new ChallengePlatformDto());
+    }
+
+    protected Builder(ChallengePlatformDto instance) {
+      this.instance = instance;
+    }
+
+    protected Builder copyOf(ChallengePlatformDto value) { 
+      this.instance.setId(value.id);
+      this.instance.setSlug(value.slug);
+      this.instance.setName(value.name);
+      this.instance.setAvatarUrl(value.avatarUrl);
+      this.instance.setWebsiteUrl(value.websiteUrl);
+      this.instance.setCreatedAt(value.createdAt);
+      this.instance.setUpdatedAt(value.updatedAt);
+      return this;
+    }
+
+    public ChallengePlatformDto.Builder id(Long id) {
+      this.instance.id(id);
+      return this;
+    }
+    
+    public ChallengePlatformDto.Builder slug(String slug) {
+      this.instance.slug(slug);
+      return this;
+    }
+    
+    public ChallengePlatformDto.Builder name(String name) {
+      this.instance.name(name);
+      return this;
+    }
+    
+    public ChallengePlatformDto.Builder avatarUrl(String avatarUrl) {
+      this.instance.avatarUrl(avatarUrl);
+      return this;
+    }
+    
+    public ChallengePlatformDto.Builder websiteUrl(String websiteUrl) {
+      this.instance.websiteUrl(websiteUrl);
+      return this;
+    }
+    
+    public ChallengePlatformDto.Builder createdAt(OffsetDateTime createdAt) {
+      this.instance.createdAt(createdAt);
+      return this;
+    }
+    
+    public ChallengePlatformDto.Builder updatedAt(OffsetDateTime updatedAt) {
+      this.instance.updatedAt(updatedAt);
+      return this;
+    }
+    
+    /**
+    * returns a built ChallengePlatformDto instance.
+    *
+    * The builder is not reusable (NullPointerException)
+    */
+    public ChallengePlatformDto build() {
+      try {
+        return this.instance;
+      } finally {
+        // ensure that this.instance is not reused
+        this.instance = null;
+      }
+    }
+
+    @Override
+    public String toString() {
+      return getClass() + "=(" + instance + ")";
+    }
+  }
+
+  /**
+  * Create a builder with no initialized field (except for the default values).
+  */
+  public static ChallengePlatformDto.Builder builder() {
+    return new ChallengePlatformDto.Builder();
+  }
+
+  /**
+  * Create a builder with a shallow copy of this instance.
+  */
+  public ChallengePlatformDto.Builder toBuilder() {
+    ChallengePlatformDto.Builder builder = new ChallengePlatformDto.Builder();
+    return builder.copyOf(this);
+  }
+
 }
+

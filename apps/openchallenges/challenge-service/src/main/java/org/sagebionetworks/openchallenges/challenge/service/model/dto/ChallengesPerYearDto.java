@@ -1,33 +1,52 @@
 package org.sagebionetworks.openchallenges.challenge.service.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.net.URI;
 import java.util.Objects;
-import javax.annotation.Generated;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.springframework.lang.Nullable;
+import java.time.OffsetDateTime;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-/** An object */
+
+import java.util.*;
+import jakarta.annotation.Generated;
+
+/**
+ * An object
+ */
+
 @Schema(name = "ChallengesPerYear", description = "An object")
 @JsonTypeName("ChallengesPerYear")
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-@lombok.Builder
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 public class ChallengesPerYearDto {
 
-  @JsonProperty("years")
   @Valid
   private List<String> years = new ArrayList<>();
 
-  @JsonProperty("challengeCounts")
   @Valid
   private List<Integer> challengeCounts = new ArrayList<>();
 
-  @JsonProperty("undatedChallengeCount")
   private Integer undatedChallengeCount = 0;
+
+  public ChallengesPerYearDto() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public ChallengesPerYearDto(List<String> years, List<Integer> challengeCounts, Integer undatedChallengeCount) {
+    this.years = years;
+    this.challengeCounts = challengeCounts;
+    this.undatedChallengeCount = undatedChallengeCount;
+  }
 
   public ChallengesPerYearDto years(List<String> years) {
     this.years = years;
@@ -44,11 +63,11 @@ public class ChallengesPerYearDto {
 
   /**
    * Get years
-   *
    * @return years
    */
-  @NotNull
-  @Schema(name = "years", required = true)
+  @NotNull 
+  @Schema(name = "years", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("years")
   public List<String> getYears() {
     return years;
   }
@@ -72,11 +91,11 @@ public class ChallengesPerYearDto {
 
   /**
    * Get challengeCounts
-   *
    * @return challengeCounts
    */
-  @NotNull
-  @Schema(name = "challengeCounts", required = true)
+  @NotNull 
+  @Schema(name = "challengeCounts", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("challengeCounts")
   public List<Integer> getChallengeCounts() {
     return challengeCounts;
   }
@@ -91,13 +110,13 @@ public class ChallengesPerYearDto {
   }
 
   /**
-   * Get undatedChallengeCount minimum: 0
-   *
+   * Get undatedChallengeCount
+   * minimum: 0
    * @return undatedChallengeCount
    */
-  @NotNull
-  @Min(0)
-  @Schema(name = "undatedChallengeCount", example = "0", required = true)
+  @NotNull @Min(0) 
+  @Schema(name = "undatedChallengeCount", example = "0", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("undatedChallengeCount")
   public Integer getUndatedChallengeCount() {
     return undatedChallengeCount;
   }
@@ -115,11 +134,9 @@ public class ChallengesPerYearDto {
       return false;
     }
     ChallengesPerYearDto challengesPerYear = (ChallengesPerYearDto) o;
-    return (
-      Objects.equals(this.years, challengesPerYear.years) &&
-      Objects.equals(this.challengeCounts, challengesPerYear.challengeCounts) &&
-      Objects.equals(this.undatedChallengeCount, challengesPerYear.undatedChallengeCount)
-    );
+    return Objects.equals(this.years, challengesPerYear.years) &&
+        Objects.equals(this.challengeCounts, challengesPerYear.challengeCounts) &&
+        Objects.equals(this.undatedChallengeCount, challengesPerYear.undatedChallengeCount);
   }
 
   @Override
@@ -133,16 +150,14 @@ public class ChallengesPerYearDto {
     sb.append("class ChallengesPerYearDto {\n");
     sb.append("    years: ").append(toIndentedString(years)).append("\n");
     sb.append("    challengeCounts: ").append(toIndentedString(challengeCounts)).append("\n");
-    sb
-      .append("    undatedChallengeCount: ")
-      .append(toIndentedString(undatedChallengeCount))
-      .append("\n");
+    sb.append("    undatedChallengeCount: ").append(toIndentedString(undatedChallengeCount)).append("\n");
     sb.append("}");
     return sb.toString();
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
    */
   private String toIndentedString(Object o) {
     if (o == null) {
@@ -150,4 +165,75 @@ public class ChallengesPerYearDto {
     }
     return o.toString().replace("\n", "\n    ");
   }
+  
+  public static class Builder {
+
+    private ChallengesPerYearDto instance;
+
+    public Builder() {
+      this(new ChallengesPerYearDto());
+    }
+
+    protected Builder(ChallengesPerYearDto instance) {
+      this.instance = instance;
+    }
+
+    protected Builder copyOf(ChallengesPerYearDto value) { 
+      this.instance.setYears(value.years);
+      this.instance.setChallengeCounts(value.challengeCounts);
+      this.instance.setUndatedChallengeCount(value.undatedChallengeCount);
+      return this;
+    }
+
+    public ChallengesPerYearDto.Builder years(List<String> years) {
+      this.instance.years(years);
+      return this;
+    }
+    
+    public ChallengesPerYearDto.Builder challengeCounts(List<Integer> challengeCounts) {
+      this.instance.challengeCounts(challengeCounts);
+      return this;
+    }
+    
+    public ChallengesPerYearDto.Builder undatedChallengeCount(Integer undatedChallengeCount) {
+      this.instance.undatedChallengeCount(undatedChallengeCount);
+      return this;
+    }
+    
+    /**
+    * returns a built ChallengesPerYearDto instance.
+    *
+    * The builder is not reusable (NullPointerException)
+    */
+    public ChallengesPerYearDto build() {
+      try {
+        return this.instance;
+      } finally {
+        // ensure that this.instance is not reused
+        this.instance = null;
+      }
+    }
+
+    @Override
+    public String toString() {
+      return getClass() + "=(" + instance + ")";
+    }
+  }
+
+  /**
+  * Create a builder with no initialized field (except for the default values).
+  */
+  public static ChallengesPerYearDto.Builder builder() {
+    return new ChallengesPerYearDto.Builder();
+  }
+
+  /**
+  * Create a builder with a shallow copy of this instance.
+  */
+  public ChallengesPerYearDto.Builder toBuilder() {
+    ChallengesPerYearDto.Builder builder = new ChallengesPerYearDto.Builder();
+    return builder.copyOf(this);
+  }
+
 }
+

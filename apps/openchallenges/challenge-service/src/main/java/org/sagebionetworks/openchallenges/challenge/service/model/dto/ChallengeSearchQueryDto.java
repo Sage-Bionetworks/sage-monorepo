@@ -1,82 +1,82 @@
 package org.sagebionetworks.openchallenges.challenge.service.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.LocalDate;
-import java.util.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.net.URI;
 import java.util.Objects;
-import javax.annotation.Generated;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeCategoryDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDirectionDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeIncentiveDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSortDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeStatusDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSubmissionTypeDto;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
+import java.time.OffsetDateTime;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-/** A challenge search query. */
+
+import java.util.*;
+import jakarta.annotation.Generated;
+
+/**
+ * A challenge search query.
+ */
+
 @Schema(name = "ChallengeSearchQuery", description = "A challenge search query.")
 @JsonTypeName("ChallengeSearchQuery")
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-// TODO Add x-java-class-annotations
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 public class ChallengeSearchQueryDto {
 
-  @JsonProperty("pageNumber")
   private Integer pageNumber = 0;
 
-  @JsonProperty("pageSize")
   private Integer pageSize = 100;
 
-  @JsonProperty("sort")
   private ChallengeSortDto sort = ChallengeSortDto.RELEVANCE;
 
-  @JsonProperty("sortSeed")
-  private Integer sortSeed = null;
+  private @Nullable Integer sortSeed = null;
 
-  @JsonProperty("direction")
-  private ChallengeDirectionDto direction = null;
+  private @Nullable ChallengeDirectionDto direction = null;
 
-  @JsonProperty("incentives")
   @Valid
-  private List<ChallengeIncentiveDto> incentives = null;
+  private List<ChallengeIncentiveDto> incentives = new ArrayList<>();
 
-  @JsonProperty("minStartDate")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-  private LocalDate minStartDate = null;
+  private @Nullable LocalDate minStartDate = null;
 
-  @JsonProperty("maxStartDate")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-  private LocalDate maxStartDate = null;
+  private @Nullable LocalDate maxStartDate = null;
 
-  @JsonProperty("platforms")
   @Valid
-  private List<String> platforms = null;
+  private List<@Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")@Size(min = 3, max = 30)String> platforms = new ArrayList<>();
 
-  @JsonProperty("organizations")
   @Valid
-  private List<Long> organizations = null;
+  private List<Long> organizations = new ArrayList<>();
 
-  @JsonProperty("status")
   @Valid
-  private List<ChallengeStatusDto> status = null;
+  private List<ChallengeStatusDto> status = new ArrayList<>();
 
-  @JsonProperty("submissionTypes")
   @Valid
-  private List<ChallengeSubmissionTypeDto> submissionTypes = null;
+  private List<ChallengeSubmissionTypeDto> submissionTypes = new ArrayList<>();
 
-  @JsonProperty("inputDataTypes")
   @Valid
-  private List<Long> inputDataTypes = null;
+  private List<Long> inputDataTypes = new ArrayList<>();
 
-  @JsonProperty("operations")
   @Valid
-  private List<Long> operations = null;
+  private List<Long> operations = new ArrayList<>();
 
-  @JsonProperty("categories")
   @Valid
-  private List<ChallengeCategoryDto> categories = null;
+  private List<ChallengeCategoryDto> categories = new ArrayList<>();
 
-  @JsonProperty("searchTerms")
-  private String searchTerms;
+  private @Nullable String searchTerms;
 
   public ChallengeSearchQueryDto pageNumber(Integer pageNumber) {
     this.pageNumber = pageNumber;
@@ -84,12 +84,13 @@ public class ChallengeSearchQueryDto {
   }
 
   /**
-   * The page number. minimum: 0
-   *
+   * The page number.
+   * minimum: 0
    * @return pageNumber
    */
-  @Min(0)
-  @Schema(name = "pageNumber", description = "The page number.", required = false)
+  @Min(0) 
+  @Schema(name = "pageNumber", description = "The page number.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("pageNumber")
   public Integer getPageNumber() {
     return pageNumber;
   }
@@ -104,16 +105,13 @@ public class ChallengeSearchQueryDto {
   }
 
   /**
-   * The number of items in a single page. minimum: 1
-   *
+   * The number of items in a single page.
+   * minimum: 1
    * @return pageSize
    */
-  @Min(1)
-  @Schema(
-    name = "pageSize",
-    description = "The number of items in a single page.",
-    required = false
-  )
+  @Min(1) 
+  @Schema(name = "pageSize", description = "The number of items in a single page.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("pageSize")
   public Integer getPageSize() {
     return pageSize;
   }
@@ -129,11 +127,11 @@ public class ChallengeSearchQueryDto {
 
   /**
    * Get sort
-   *
    * @return sort
    */
-  @Valid
-  @Schema(name = "sort", required = false)
+  @Valid 
+  @Schema(name = "sort", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("sort")
   public ChallengeSortDto getSort() {
     return sort;
   }
@@ -148,17 +146,14 @@ public class ChallengeSearchQueryDto {
   }
 
   /**
-   * The seed that initializes the random sorter. minimum: 0 maximum: 2147483647
-   *
+   * The seed that initializes the random sorter.
+   * minimum: 0
+   * maximum: 2147483647
    * @return sortSeed
    */
-  @Min(0)
-  @Max(2147483647)
-  @Schema(
-    name = "sortSeed",
-    description = "The seed that initializes the random sorter.",
-    required = false
-  )
+  @Min(0) @Max(2147483647) 
+  @Schema(name = "sortSeed", description = "The seed that initializes the random sorter.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("sortSeed")
   public Integer getSortSeed() {
     return sortSeed;
   }
@@ -174,11 +169,11 @@ public class ChallengeSearchQueryDto {
 
   /**
    * Get direction
-   *
    * @return direction
    */
-  @Valid
-  @Schema(name = "direction", required = false)
+  @Valid 
+  @Schema(name = "direction", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("direction")
   public ChallengeDirectionDto getDirection() {
     return direction;
   }
@@ -202,15 +197,11 @@ public class ChallengeSearchQueryDto {
 
   /**
    * An array of challenge incentive types used to filter the results.
-   *
    * @return incentives
    */
-  @Valid
-  @Schema(
-    name = "incentives",
-    description = "An array of challenge incentive types used to filter the results.",
-    required = false
-  )
+  @Valid 
+  @Schema(name = "incentives", description = "An array of challenge incentive types used to filter the results.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("incentives")
   public List<ChallengeIncentiveDto> getIncentives() {
     return incentives;
   }
@@ -226,16 +217,11 @@ public class ChallengeSearchQueryDto {
 
   /**
    * Keep the challenges that start at this date or later.
-   *
    * @return minStartDate
    */
-  @Valid
-  @Schema(
-    name = "minStartDate",
-    example = "Fri Jul 21 00:00:00 UTC 2017",
-    description = "Keep the challenges that start at this date or later.",
-    required = false
-  )
+  @Valid 
+  @Schema(name = "minStartDate", example = "2017-07-21", description = "Keep the challenges that start at this date or later.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("minStartDate")
   public LocalDate getMinStartDate() {
     return minStartDate;
   }
@@ -251,16 +237,11 @@ public class ChallengeSearchQueryDto {
 
   /**
    * Keep the challenges that start at this date or sooner.
-   *
    * @return maxStartDate
    */
-  @Valid
-  @Schema(
-    name = "maxStartDate",
-    example = "Fri Jul 21 00:00:00 UTC 2017",
-    description = "Keep the challenges that start at this date or sooner.",
-    required = false
-  )
+  @Valid 
+  @Schema(name = "maxStartDate", example = "2017-07-21", description = "Keep the challenges that start at this date or sooner.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("maxStartDate")
   public LocalDate getMaxStartDate() {
     return maxStartDate;
   }
@@ -269,7 +250,7 @@ public class ChallengeSearchQueryDto {
     this.maxStartDate = maxStartDate;
   }
 
-  public ChallengeSearchQueryDto platforms(List<String> platforms) {
+  public ChallengeSearchQueryDto platforms(List<@Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")@Size(min = 3, max = 30)String> platforms) {
     this.platforms = platforms;
     return this;
   }
@@ -284,19 +265,16 @@ public class ChallengeSearchQueryDto {
 
   /**
    * An array of challenge platform ids used to filter the results.
-   *
    * @return platforms
    */
-  @Schema(
-    name = "platforms",
-    description = "An array of challenge platform ids used to filter the results.",
-    required = false
-  )
-  public List<String> getPlatforms() {
+  
+  @Schema(name = "platforms", description = "An array of challenge platform ids used to filter the results.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("platforms")
+  public List<@Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")@Size(min = 3, max = 30)String> getPlatforms() {
     return platforms;
   }
 
-  public void setPlatforms(List<String> platforms) {
+  public void setPlatforms(List<@Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")@Size(min = 3, max = 30)String> platforms) {
     this.platforms = platforms;
   }
 
@@ -315,14 +293,11 @@ public class ChallengeSearchQueryDto {
 
   /**
    * An array of organization ids used to filter the results.
-   *
    * @return organizations
    */
-  @Schema(
-    name = "organizations",
-    description = "An array of organization ids used to filter the results.",
-    required = false
-  )
+  
+  @Schema(name = "organizations", description = "An array of organization ids used to filter the results.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("organizations")
   public List<Long> getOrganizations() {
     return organizations;
   }
@@ -346,15 +321,11 @@ public class ChallengeSearchQueryDto {
 
   /**
    * An array of challenge status used to filter the results.
-   *
    * @return status
    */
-  @Valid
-  @Schema(
-    name = "status",
-    description = "An array of challenge status used to filter the results.",
-    required = false
-  )
+  @Valid 
+  @Schema(name = "status", description = "An array of challenge status used to filter the results.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("status")
   public List<ChallengeStatusDto> getStatus() {
     return status;
   }
@@ -368,9 +339,7 @@ public class ChallengeSearchQueryDto {
     return this;
   }
 
-  public ChallengeSearchQueryDto addSubmissionTypesItem(
-    ChallengeSubmissionTypeDto submissionTypesItem
-  ) {
+  public ChallengeSearchQueryDto addSubmissionTypesItem(ChallengeSubmissionTypeDto submissionTypesItem) {
     if (this.submissionTypes == null) {
       this.submissionTypes = new ArrayList<>();
     }
@@ -380,15 +349,11 @@ public class ChallengeSearchQueryDto {
 
   /**
    * An array of challenge submission types used to filter the results.
-   *
    * @return submissionTypes
    */
-  @Valid
-  @Schema(
-    name = "submissionTypes",
-    description = "An array of challenge submission types used to filter the results.",
-    required = false
-  )
+  @Valid 
+  @Schema(name = "submissionTypes", description = "An array of challenge submission types used to filter the results.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("submissionTypes")
   public List<ChallengeSubmissionTypeDto> getSubmissionTypes() {
     return submissionTypes;
   }
@@ -412,14 +377,11 @@ public class ChallengeSearchQueryDto {
 
   /**
    * An array of EDAM concept ID used to filter the results.
-   *
    * @return inputDataTypes
    */
-  @Schema(
-    name = "inputDataTypes",
-    description = "An array of EDAM concept ID used to filter the results.",
-    required = false
-  )
+  
+  @Schema(name = "inputDataTypes", description = "An array of EDAM concept ID used to filter the results.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("inputDataTypes")
   public List<Long> getInputDataTypes() {
     return inputDataTypes;
   }
@@ -443,14 +405,11 @@ public class ChallengeSearchQueryDto {
 
   /**
    * An array of EDAM concept ID used to filter the results.
-   *
    * @return operations
    */
-  @Schema(
-    name = "operations",
-    description = "An array of EDAM concept ID used to filter the results.",
-    required = false
-  )
+  
+  @Schema(name = "operations", description = "An array of EDAM concept ID used to filter the results.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("operations")
   public List<Long> getOperations() {
     return operations;
   }
@@ -474,15 +433,11 @@ public class ChallengeSearchQueryDto {
 
   /**
    * The array of challenge categories used to filter the results.
-   *
    * @return categories
    */
-  @Valid
-  @Schema(
-    name = "categories",
-    description = "The array of challenge categories used to filter the results.",
-    required = false
-  )
+  @Valid 
+  @Schema(name = "categories", description = "The array of challenge categories used to filter the results.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("categories")
   public List<ChallengeCategoryDto> getCategories() {
     return categories;
   }
@@ -498,15 +453,11 @@ public class ChallengeSearchQueryDto {
 
   /**
    * A string of search terms used to filter the results.
-   *
    * @return searchTerms
    */
-  @Schema(
-    name = "searchTerms",
-    example = "dream challenge",
-    description = "A string of search terms used to filter the results.",
-    required = false
-  )
+  
+  @Schema(name = "searchTerms", example = "dream challenge", description = "A string of search terms used to filter the results.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("searchTerms")
   public String getSearchTerms() {
     return searchTerms;
   }
@@ -524,46 +475,27 @@ public class ChallengeSearchQueryDto {
       return false;
     }
     ChallengeSearchQueryDto challengeSearchQuery = (ChallengeSearchQueryDto) o;
-    return (
-      Objects.equals(this.pageNumber, challengeSearchQuery.pageNumber) &&
-      Objects.equals(this.pageSize, challengeSearchQuery.pageSize) &&
-      Objects.equals(this.sort, challengeSearchQuery.sort) &&
-      Objects.equals(this.sortSeed, challengeSearchQuery.sortSeed) &&
-      Objects.equals(this.direction, challengeSearchQuery.direction) &&
-      Objects.equals(this.incentives, challengeSearchQuery.incentives) &&
-      Objects.equals(this.minStartDate, challengeSearchQuery.minStartDate) &&
-      Objects.equals(this.maxStartDate, challengeSearchQuery.maxStartDate) &&
-      Objects.equals(this.platforms, challengeSearchQuery.platforms) &&
-      Objects.equals(this.organizations, challengeSearchQuery.organizations) &&
-      Objects.equals(this.status, challengeSearchQuery.status) &&
-      Objects.equals(this.submissionTypes, challengeSearchQuery.submissionTypes) &&
-      Objects.equals(this.inputDataTypes, challengeSearchQuery.inputDataTypes) &&
-      Objects.equals(this.operations, challengeSearchQuery.operations) &&
-      Objects.equals(this.categories, challengeSearchQuery.categories) &&
-      Objects.equals(this.searchTerms, challengeSearchQuery.searchTerms)
-    );
+    return Objects.equals(this.pageNumber, challengeSearchQuery.pageNumber) &&
+        Objects.equals(this.pageSize, challengeSearchQuery.pageSize) &&
+        Objects.equals(this.sort, challengeSearchQuery.sort) &&
+        Objects.equals(this.sortSeed, challengeSearchQuery.sortSeed) &&
+        Objects.equals(this.direction, challengeSearchQuery.direction) &&
+        Objects.equals(this.incentives, challengeSearchQuery.incentives) &&
+        Objects.equals(this.minStartDate, challengeSearchQuery.minStartDate) &&
+        Objects.equals(this.maxStartDate, challengeSearchQuery.maxStartDate) &&
+        Objects.equals(this.platforms, challengeSearchQuery.platforms) &&
+        Objects.equals(this.organizations, challengeSearchQuery.organizations) &&
+        Objects.equals(this.status, challengeSearchQuery.status) &&
+        Objects.equals(this.submissionTypes, challengeSearchQuery.submissionTypes) &&
+        Objects.equals(this.inputDataTypes, challengeSearchQuery.inputDataTypes) &&
+        Objects.equals(this.operations, challengeSearchQuery.operations) &&
+        Objects.equals(this.categories, challengeSearchQuery.categories) &&
+        Objects.equals(this.searchTerms, challengeSearchQuery.searchTerms);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(
-      pageNumber,
-      pageSize,
-      sort,
-      sortSeed,
-      direction,
-      incentives,
-      minStartDate,
-      maxStartDate,
-      platforms,
-      organizations,
-      status,
-      submissionTypes,
-      inputDataTypes,
-      operations,
-      categories,
-      searchTerms
-    );
+    return Objects.hash(pageNumber, pageSize, sort, sortSeed, direction, incentives, minStartDate, maxStartDate, platforms, organizations, status, submissionTypes, inputDataTypes, operations, categories, searchTerms);
   }
 
   @Override
@@ -591,7 +523,8 @@ public class ChallengeSearchQueryDto {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
    */
   private String toIndentedString(Object o) {
     if (o == null) {
@@ -599,4 +532,153 @@ public class ChallengeSearchQueryDto {
     }
     return o.toString().replace("\n", "\n    ");
   }
+  
+  public static class Builder {
+
+    private ChallengeSearchQueryDto instance;
+
+    public Builder() {
+      this(new ChallengeSearchQueryDto());
+    }
+
+    protected Builder(ChallengeSearchQueryDto instance) {
+      this.instance = instance;
+    }
+
+    protected Builder copyOf(ChallengeSearchQueryDto value) { 
+      this.instance.setPageNumber(value.pageNumber);
+      this.instance.setPageSize(value.pageSize);
+      this.instance.setSort(value.sort);
+      this.instance.setSortSeed(value.sortSeed);
+      this.instance.setDirection(value.direction);
+      this.instance.setIncentives(value.incentives);
+      this.instance.setMinStartDate(value.minStartDate);
+      this.instance.setMaxStartDate(value.maxStartDate);
+      this.instance.setPlatforms(value.platforms);
+      this.instance.setOrganizations(value.organizations);
+      this.instance.setStatus(value.status);
+      this.instance.setSubmissionTypes(value.submissionTypes);
+      this.instance.setInputDataTypes(value.inputDataTypes);
+      this.instance.setOperations(value.operations);
+      this.instance.setCategories(value.categories);
+      this.instance.setSearchTerms(value.searchTerms);
+      return this;
+    }
+
+    public ChallengeSearchQueryDto.Builder pageNumber(Integer pageNumber) {
+      this.instance.pageNumber(pageNumber);
+      return this;
+    }
+    
+    public ChallengeSearchQueryDto.Builder pageSize(Integer pageSize) {
+      this.instance.pageSize(pageSize);
+      return this;
+    }
+    
+    public ChallengeSearchQueryDto.Builder sort(ChallengeSortDto sort) {
+      this.instance.sort(sort);
+      return this;
+    }
+    
+    public ChallengeSearchQueryDto.Builder sortSeed(Integer sortSeed) {
+      this.instance.sortSeed(sortSeed);
+      return this;
+    }
+    
+    public ChallengeSearchQueryDto.Builder direction(ChallengeDirectionDto direction) {
+      this.instance.direction(direction);
+      return this;
+    }
+    
+    public ChallengeSearchQueryDto.Builder incentives(List<ChallengeIncentiveDto> incentives) {
+      this.instance.incentives(incentives);
+      return this;
+    }
+    
+    public ChallengeSearchQueryDto.Builder minStartDate(LocalDate minStartDate) {
+      this.instance.minStartDate(minStartDate);
+      return this;
+    }
+    
+    public ChallengeSearchQueryDto.Builder maxStartDate(LocalDate maxStartDate) {
+      this.instance.maxStartDate(maxStartDate);
+      return this;
+    }
+    
+    public ChallengeSearchQueryDto.Builder platforms(List<String> platforms) {
+      this.instance.platforms(platforms);
+      return this;
+    }
+    
+    public ChallengeSearchQueryDto.Builder organizations(List<Long> organizations) {
+      this.instance.organizations(organizations);
+      return this;
+    }
+    
+    public ChallengeSearchQueryDto.Builder status(List<ChallengeStatusDto> status) {
+      this.instance.status(status);
+      return this;
+    }
+    
+    public ChallengeSearchQueryDto.Builder submissionTypes(List<ChallengeSubmissionTypeDto> submissionTypes) {
+      this.instance.submissionTypes(submissionTypes);
+      return this;
+    }
+    
+    public ChallengeSearchQueryDto.Builder inputDataTypes(List<Long> inputDataTypes) {
+      this.instance.inputDataTypes(inputDataTypes);
+      return this;
+    }
+    
+    public ChallengeSearchQueryDto.Builder operations(List<Long> operations) {
+      this.instance.operations(operations);
+      return this;
+    }
+    
+    public ChallengeSearchQueryDto.Builder categories(List<ChallengeCategoryDto> categories) {
+      this.instance.categories(categories);
+      return this;
+    }
+    
+    public ChallengeSearchQueryDto.Builder searchTerms(String searchTerms) {
+      this.instance.searchTerms(searchTerms);
+      return this;
+    }
+    
+    /**
+    * returns a built ChallengeSearchQueryDto instance.
+    *
+    * The builder is not reusable (NullPointerException)
+    */
+    public ChallengeSearchQueryDto build() {
+      try {
+        return this.instance;
+      } finally {
+        // ensure that this.instance is not reused
+        this.instance = null;
+      }
+    }
+
+    @Override
+    public String toString() {
+      return getClass() + "=(" + instance + ")";
+    }
+  }
+
+  /**
+  * Create a builder with no initialized field (except for the default values).
+  */
+  public static ChallengeSearchQueryDto.Builder builder() {
+    return new ChallengeSearchQueryDto.Builder();
+  }
+
+  /**
+  * Create a builder with a shallow copy of this instance.
+  */
+  public ChallengeSearchQueryDto.Builder toBuilder() {
+    ChallengeSearchQueryDto.Builder builder = new ChallengeSearchQueryDto.Builder();
+    return builder.copyOf(this);
+  }
+
 }
+

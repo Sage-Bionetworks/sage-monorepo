@@ -12,6 +12,8 @@ spring:
       password: changeme
   # TODO: Move to the remote config file
   flyway:
+    enabled: true
+    clean-disabled: false
     placeholders:
       db_platforms_csv_path: ${DB_PLATFORMS_CSV_PATH:src/main/resources/db/platforms.csv}
       db_challenges_csv_path: ${DB_CHALLENGES_CSV_PATH:src/main/resources/db/challenges.csv}

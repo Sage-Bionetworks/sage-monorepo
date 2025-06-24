@@ -1,45 +1,51 @@
 package org.sagebionetworks.openchallenges.challenge.service.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.net.URI;
 import java.util.Objects;
-import javax.annotation.Generated;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.EdamConceptDirectionDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.EdamConceptSortDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.EdamSectionDto;
+import org.springframework.lang.Nullable;
+import java.time.OffsetDateTime;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-/** An EDAM concept search query. */
+
+import java.util.*;
+import jakarta.annotation.Generated;
+
+/**
+ * An EDAM concept search query.
+ */
+
 @Schema(name = "EdamConceptSearchQuery", description = "An EDAM concept search query.")
 @JsonTypeName("EdamConceptSearchQuery")
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-// TODO Add x-java-class-annotations
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 public class EdamConceptSearchQueryDto {
 
-  @JsonProperty("pageNumber")
   private Integer pageNumber = 0;
 
-  @JsonProperty("pageSize")
   private Integer pageSize = 100;
 
-  @JsonProperty("sort")
   private EdamConceptSortDto sort = EdamConceptSortDto.RELEVANCE;
 
-  @JsonProperty("direction")
-  private EdamConceptDirectionDto direction = null;
+  private @Nullable EdamConceptDirectionDto direction = null;
 
-  @JsonProperty("ids")
   @Valid
-  private List<Long> ids = null;
+  private List<Long> ids = new ArrayList<>();
 
-  @JsonProperty("searchTerms")
-  private String searchTerms;
+  private @Nullable String searchTerms;
 
-  @JsonProperty("sections")
   @Valid
-  private List<EdamSectionDto> sections = null;
+  private List<EdamSectionDto> sections = new ArrayList<>();
 
   public EdamConceptSearchQueryDto pageNumber(Integer pageNumber) {
     this.pageNumber = pageNumber;
@@ -47,12 +53,13 @@ public class EdamConceptSearchQueryDto {
   }
 
   /**
-   * The page number. minimum: 0
-   *
+   * The page number.
+   * minimum: 0
    * @return pageNumber
    */
-  @Min(0)
-  @Schema(name = "pageNumber", description = "The page number.", required = false)
+  @Min(0) 
+  @Schema(name = "pageNumber", description = "The page number.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("pageNumber")
   public Integer getPageNumber() {
     return pageNumber;
   }
@@ -67,16 +74,13 @@ public class EdamConceptSearchQueryDto {
   }
 
   /**
-   * The number of items in a single page. minimum: 1
-   *
+   * The number of items in a single page.
+   * minimum: 1
    * @return pageSize
    */
-  @Min(1)
-  @Schema(
-    name = "pageSize",
-    description = "The number of items in a single page.",
-    required = false
-  )
+  @Min(1) 
+  @Schema(name = "pageSize", description = "The number of items in a single page.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("pageSize")
   public Integer getPageSize() {
     return pageSize;
   }
@@ -92,11 +96,11 @@ public class EdamConceptSearchQueryDto {
 
   /**
    * Get sort
-   *
    * @return sort
    */
-  @Valid
-  @Schema(name = "sort", required = false)
+  @Valid 
+  @Schema(name = "sort", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("sort")
   public EdamConceptSortDto getSort() {
     return sort;
   }
@@ -112,11 +116,11 @@ public class EdamConceptSearchQueryDto {
 
   /**
    * Get direction
-   *
    * @return direction
    */
-  @Valid
-  @Schema(name = "direction", required = false)
+  @Valid 
+  @Schema(name = "direction", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("direction")
   public EdamConceptDirectionDto getDirection() {
     return direction;
   }
@@ -140,14 +144,11 @@ public class EdamConceptSearchQueryDto {
 
   /**
    * An array of EDAM concept ids used to filter the results.
-   *
    * @return ids
    */
-  @Schema(
-    name = "ids",
-    description = "An array of EDAM concept ids used to filter the results.",
-    required = false
-  )
+  
+  @Schema(name = "ids", description = "An array of EDAM concept ids used to filter the results.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("ids")
   public List<Long> getIds() {
     return ids;
   }
@@ -163,15 +164,11 @@ public class EdamConceptSearchQueryDto {
 
   /**
    * A string of search terms used to filter the results.
-   *
    * @return searchTerms
    */
-  @Schema(
-    name = "searchTerms",
-    example = "sequence image",
-    description = "A string of search terms used to filter the results.",
-    required = false
-  )
+  
+  @Schema(name = "searchTerms", example = "sequence image", description = "A string of search terms used to filter the results.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("searchTerms")
   public String getSearchTerms() {
     return searchTerms;
   }
@@ -195,15 +192,11 @@ public class EdamConceptSearchQueryDto {
 
   /**
    * An array of EDAM sections (sub-ontologies) used to filter the results.
-   *
    * @return sections
    */
-  @Valid
-  @Schema(
-    name = "sections",
-    description = "An array of EDAM sections (sub-ontologies) used to filter the results.",
-    required = false
-  )
+  @Valid 
+  @Schema(name = "sections", description = "An array of EDAM sections (sub-ontologies) used to filter the results.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("sections")
   public List<EdamSectionDto> getSections() {
     return sections;
   }
@@ -221,15 +214,13 @@ public class EdamConceptSearchQueryDto {
       return false;
     }
     EdamConceptSearchQueryDto edamConceptSearchQuery = (EdamConceptSearchQueryDto) o;
-    return (
-      Objects.equals(this.pageNumber, edamConceptSearchQuery.pageNumber) &&
-      Objects.equals(this.pageSize, edamConceptSearchQuery.pageSize) &&
-      Objects.equals(this.sort, edamConceptSearchQuery.sort) &&
-      Objects.equals(this.direction, edamConceptSearchQuery.direction) &&
-      Objects.equals(this.ids, edamConceptSearchQuery.ids) &&
-      Objects.equals(this.searchTerms, edamConceptSearchQuery.searchTerms) &&
-      Objects.equals(this.sections, edamConceptSearchQuery.sections)
-    );
+    return Objects.equals(this.pageNumber, edamConceptSearchQuery.pageNumber) &&
+        Objects.equals(this.pageSize, edamConceptSearchQuery.pageSize) &&
+        Objects.equals(this.sort, edamConceptSearchQuery.sort) &&
+        Objects.equals(this.direction, edamConceptSearchQuery.direction) &&
+        Objects.equals(this.ids, edamConceptSearchQuery.ids) &&
+        Objects.equals(this.searchTerms, edamConceptSearchQuery.searchTerms) &&
+        Objects.equals(this.sections, edamConceptSearchQuery.sections);
   }
 
   @Override
@@ -253,7 +244,8 @@ public class EdamConceptSearchQueryDto {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
    */
   private String toIndentedString(Object o) {
     if (o == null) {
@@ -261,4 +253,99 @@ public class EdamConceptSearchQueryDto {
     }
     return o.toString().replace("\n", "\n    ");
   }
+  
+  public static class Builder {
+
+    private EdamConceptSearchQueryDto instance;
+
+    public Builder() {
+      this(new EdamConceptSearchQueryDto());
+    }
+
+    protected Builder(EdamConceptSearchQueryDto instance) {
+      this.instance = instance;
+    }
+
+    protected Builder copyOf(EdamConceptSearchQueryDto value) { 
+      this.instance.setPageNumber(value.pageNumber);
+      this.instance.setPageSize(value.pageSize);
+      this.instance.setSort(value.sort);
+      this.instance.setDirection(value.direction);
+      this.instance.setIds(value.ids);
+      this.instance.setSearchTerms(value.searchTerms);
+      this.instance.setSections(value.sections);
+      return this;
+    }
+
+    public EdamConceptSearchQueryDto.Builder pageNumber(Integer pageNumber) {
+      this.instance.pageNumber(pageNumber);
+      return this;
+    }
+    
+    public EdamConceptSearchQueryDto.Builder pageSize(Integer pageSize) {
+      this.instance.pageSize(pageSize);
+      return this;
+    }
+    
+    public EdamConceptSearchQueryDto.Builder sort(EdamConceptSortDto sort) {
+      this.instance.sort(sort);
+      return this;
+    }
+    
+    public EdamConceptSearchQueryDto.Builder direction(EdamConceptDirectionDto direction) {
+      this.instance.direction(direction);
+      return this;
+    }
+    
+    public EdamConceptSearchQueryDto.Builder ids(List<Long> ids) {
+      this.instance.ids(ids);
+      return this;
+    }
+    
+    public EdamConceptSearchQueryDto.Builder searchTerms(String searchTerms) {
+      this.instance.searchTerms(searchTerms);
+      return this;
+    }
+    
+    public EdamConceptSearchQueryDto.Builder sections(List<EdamSectionDto> sections) {
+      this.instance.sections(sections);
+      return this;
+    }
+    
+    /**
+    * returns a built EdamConceptSearchQueryDto instance.
+    *
+    * The builder is not reusable (NullPointerException)
+    */
+    public EdamConceptSearchQueryDto build() {
+      try {
+        return this.instance;
+      } finally {
+        // ensure that this.instance is not reused
+        this.instance = null;
+      }
+    }
+
+    @Override
+    public String toString() {
+      return getClass() + "=(" + instance + ")";
+    }
+  }
+
+  /**
+  * Create a builder with no initialized field (except for the default values).
+  */
+  public static EdamConceptSearchQueryDto.Builder builder() {
+    return new EdamConceptSearchQueryDto.Builder();
+  }
+
+  /**
+  * Create a builder with a shallow copy of this instance.
+  */
+  public EdamConceptSearchQueryDto.Builder toBuilder() {
+    EdamConceptSearchQueryDto.Builder builder = new EdamConceptSearchQueryDto.Builder();
+    return builder.copyOf(this);
+  }
+
 }
+
