@@ -1,4 +1,4 @@
--- insert challenge platforms
+-- Insert challenge platforms
 INSERT INTO challenge_platform (id, slug, name, avatar_key, website_url, created_at, updated_at) VALUES
 (1, 'synapse', 'Synapse', 'logo/synapse.png', 'https://synapse.org/', '2023-08-09 23:01:32', '2023-11-21 01:07:14'),
 (3, 'cami', 'CAMI', 'logo/cami.png', 'https://data.cami-challenge.org/', '2023-08-09 23:01:32', '2023-10-19 21:50:25'),
@@ -15,3 +15,6 @@ INSERT INTO challenge_platform (id, slug, name, avatar_key, website_url, created
 (19, 'drivendata', 'DrivenData', 'logo/drivendata.jpg', 'https://www.drivendata.org/', '2023-11-16 21:57:43', '2023-12-12 18:18:39'),
 (20, 'devpost', 'Devpost', 'logo/devpost.jpg', 'https://devpost.com/', '2024-01-09 16:41:39', '2024-01-11 23:14:56'),
 (21, 'zindi', 'Zindi', 'logo/zindi.jpg', 'https://zindi.africa/', '2024-01-09 18:56:59', '2024-01-11 23:15:00');
+
+-- Update the sequence to continue from the highest ID to avoid conflicts
+SELECT setval('challenge_platform_id_seq', (SELECT MAX(id) FROM challenge_platform));
