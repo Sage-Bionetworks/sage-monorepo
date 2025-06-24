@@ -1,20 +1,75 @@
+openchallenges-organization-service:
+  welcome-message: 'Welcome to the organization service.'
+
 spring:
   application:
     name: openchallenges-organization-service
-  profiles:
-    active: dev,local
-  config:
-    import: 'configserver:'
-    # name: openchallenges-organization-service,openchallenges
-  cloud:
-    config:
-      uri: http://openchallenges-config-server:8090
-      username: openchallenges
-      password: changeme
-  # TODO: Move to the remote config file
+  # profiles:
+  #   active: dev,local
   flyway:
     enabled: true
     clean-disabled: false
-    placeholders:
-      db_organizations_csv_path: ${DB_ORGANIZATIONS_CSV_PATH:src/main/resources/db/organizations.csv}
-      db_contribution_roles_csv_path: ${DB_CONTRIBUTION_ROLES_CSV_PATH:src/main/resources/db/contribution_roles.csv}
+  datasource:
+    url: jdbc:postgresql://openchallenges-postgres:8091/organization_service
+    username: organization_service
+    password: changeme
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        search:
+          enabled: true
+          schema_management:
+            strategy: drop-and-create
+          backend:
+            # version_check: false
+            # version: 'opensearch:1.3.7'
+            # type: elasticsearch
+            hosts: openchallenges-elasticsearch:9200
+            username: admin
+            password: admin
+  jackson:
+    date-format: org.sagebionetworks.openchallenges.organization.service.RFC3339DateFormat
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+  cloud:
+    config:
+      enabled: false
+
+server:
+  port: 8084
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://openchallenges-service-registry:8081/eureka
+  instance:
+    preferIpAddress: true
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: health, prometheus
+      path-mapping:
+        prometheus: metrics
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+    prometheus:
+      cache.time-to-live: 1ms
+
+info:
+  application:
+    name: ${spring.application.name}

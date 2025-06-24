@@ -1,4 +1,11 @@
+buildscript {
+  dependencies {
+    classpath(libs.flyway.database.postgresql)
+  }
+}
+
 plugins {
+  alias(libs.plugins.flyway)
   alias(libs.plugins.spring.boot)
   jacoco
   java
@@ -19,11 +26,12 @@ repositories {
 }
 
 dependencies {
+  // runtimeOnly(libs.flyway.database.postgresql)
   annotationProcessor(libs.lombok)
   compileOnly(libs.lombok)
   implementation(libs.findbugs.jsr305)
   implementation(libs.flyway.core)
-  implementation(libs.flyway.mysql)
+  implementation(libs.flyway.database.postgresql)
   implementation(libs.hibernate.search.backend.elasticsearch)
   implementation(libs.hibernate.search.mapper.orm)
   implementation(libs.jackson.databind)
@@ -36,13 +44,12 @@ dependencies {
   implementation(libs.spring.boot.starter.security)
   implementation(libs.spring.boot.starter.validation)
   implementation(libs.spring.boot.starter.web)
-  implementation(libs.spring.cloud.starter.config)
   implementation(libs.spring.cloud.starter.netflix.eureka.client)
   implementation(libs.spring.cloud.starter.openfeign)
   implementation(libs.spring.data.commons)
   implementation(libs.springdoc.openapi.ui)
   implementation(platform(libs.spring.boot.dependencies))
-  runtimeOnly(libs.mysql.driver)
+  runtimeOnly(libs.postgresql)
   runtimeOnly(libs.spring.boot.devtools)
   testAnnotationProcessor(libs.lombok)
   testCompileOnly(libs.lombok)
@@ -118,4 +125,11 @@ tasks.jacocoTestCoverageVerification {
 
 tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
   imageName.set("ghcr.io/sage-bionetworks/${project.name}-base:local")
+}
+
+flyway {
+  url = "jdbc:postgresql://openchallenges-postgres:8091/organization_service"
+  user = System.getenv("FLYWAY_USER") ?: "organization_service"
+  password = System.getenv("FLYWAY_PASSWORD") ?: "changeme"
+  cleanDisabled = false
 }

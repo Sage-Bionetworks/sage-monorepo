@@ -26,6 +26,7 @@ public class ChallengeContributionEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false, updatable = false)
+  @GenericField(name = "id")
   private Long id;
 
   @Column(nullable = false)

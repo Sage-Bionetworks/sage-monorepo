@@ -26,6 +26,7 @@ public class OrganizationCategoryEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false, updatable = false)
+  @GenericField(name = "id")
   private Long id;
 
   @Column(nullable = false)
@@ -35,6 +36,4 @@ public class OrganizationCategoryEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "organization_id", nullable = false)
   private OrganizationEntity organization;
-  // @Column(name = "created_at")
-  // private OffsetDateTime createdAt;
 }

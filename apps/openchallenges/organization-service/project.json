@@ -46,10 +46,11 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
+        "commands": ["./gradlew build --continuous", "./gradlew bootRun -x test -x check"],
         "cwd": "{projectRoot}",
         "parallel": true
       },
+      "continuous": true,
       "dependsOn": ["^install"]
     },
     "serve-detach": {
@@ -82,6 +83,20 @@
         "parallel": false
       },
       "dependsOn": ["^build"]
+    },
+    "flyway-clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./gradlew flywayClean --no-configuration-cache",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "flyway-migrate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./gradlew flywayMigrate --no-configuration-cache",
+        "cwd": "{projectRoot}"
+      }
     }
   },
   "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],
