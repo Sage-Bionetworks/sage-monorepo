@@ -9,19 +9,19 @@ public class OrganizationMapper extends BaseMapper<OrganizationEntity, Organizat
 
   @Override
   public OrganizationEntity convertToEntity(OrganizationDto dto, Object... args) {
-    OrganizationEntity OrganizationEntity = new OrganizationEntity();
+    OrganizationEntity entity = new OrganizationEntity();
     if (dto != null) {
-      BeanUtils.copyProperties(dto, OrganizationEntity);
+      BeanUtils.copyProperties(dto, entity);
     }
-    return OrganizationEntity;
+    return entity;
   }
 
   @Override
   public OrganizationDto convertToDto(OrganizationEntity entity, Object... args) {
-    OrganizationDto user = new OrganizationDto();
+    OrganizationDto dto = new OrganizationDto();
     if (entity != null) {
-      BeanUtils.copyProperties(entity, user);
+      BeanUtils.copyProperties(entity, dto);
     }
-    return user;
+    return dto;
   }
 }

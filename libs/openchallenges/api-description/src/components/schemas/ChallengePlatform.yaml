@@ -7,10 +7,9 @@ properties:
     $ref: ChallengePlatformSlug.yaml
   name:
     $ref: ChallengePlatformName.yaml
-  avatarUrl:
+  avatarKey:
     type: string
-    format: url
-    example: https://via.placeholder.com/300.png
+    example: logo/dream.png
   websiteUrl:
     type: string
     format: url
@@ -27,7 +26,7 @@ required:
   - id
   - slug
   - name
-  - avatarUrl
+  - avatarKey
   - websiteUrl
   - createdAt
   - updatedAt

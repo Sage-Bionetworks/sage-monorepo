@@ -32,7 +32,7 @@ public class ChallengePlatformDto {
 
   private String name;
 
-  private String avatarUrl;
+  private String avatarKey;
 
   private String websiteUrl;
 
@@ -49,11 +49,11 @@ public class ChallengePlatformDto {
   /**
    * Constructor with only required parameters
    */
-  public ChallengePlatformDto(Long id, String slug, String name, String avatarUrl, String websiteUrl, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
+  public ChallengePlatformDto(Long id, String slug, String name, String avatarKey, String websiteUrl, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
     this.id = id;
     this.slug = slug;
     this.name = name;
-    this.avatarUrl = avatarUrl;
+    this.avatarKey = avatarKey;
     this.websiteUrl = websiteUrl;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
@@ -119,24 +119,24 @@ public class ChallengePlatformDto {
     this.name = name;
   }
 
-  public ChallengePlatformDto avatarUrl(String avatarUrl) {
-    this.avatarUrl = avatarUrl;
+  public ChallengePlatformDto avatarKey(String avatarKey) {
+    this.avatarKey = avatarKey;
     return this;
   }
 
   /**
-   * Get avatarUrl
-   * @return avatarUrl
+   * Get avatarKey
+   * @return avatarKey
    */
   @NotNull 
-  @Schema(name = "avatarUrl", example = "https://via.placeholder.com/300.png", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("avatarUrl")
-  public String getAvatarUrl() {
-    return avatarUrl;
+  @Schema(name = "avatarKey", example = "logo/dream.png", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("avatarKey")
+  public String getAvatarKey() {
+    return avatarKey;
   }
 
-  public void setAvatarUrl(String avatarUrl) {
-    this.avatarUrl = avatarUrl;
+  public void setAvatarKey(String avatarKey) {
+    this.avatarKey = avatarKey;
   }
 
   public ChallengePlatformDto websiteUrl(String websiteUrl) {
@@ -211,7 +211,7 @@ public class ChallengePlatformDto {
     return Objects.equals(this.id, challengePlatform.id) &&
         Objects.equals(this.slug, challengePlatform.slug) &&
         Objects.equals(this.name, challengePlatform.name) &&
-        Objects.equals(this.avatarUrl, challengePlatform.avatarUrl) &&
+        Objects.equals(this.avatarKey, challengePlatform.avatarKey) &&
         Objects.equals(this.websiteUrl, challengePlatform.websiteUrl) &&
         Objects.equals(this.createdAt, challengePlatform.createdAt) &&
         Objects.equals(this.updatedAt, challengePlatform.updatedAt);
@@ -219,7 +219,7 @@ public class ChallengePlatformDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, slug, name, avatarUrl, websiteUrl, createdAt, updatedAt);
+    return Objects.hash(id, slug, name, avatarKey, websiteUrl, createdAt, updatedAt);
   }
 
   @Override
@@ -229,7 +229,7 @@ public class ChallengePlatformDto {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    slug: ").append(toIndentedString(slug)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
+    sb.append("    avatarKey: ").append(toIndentedString(avatarKey)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
@@ -264,7 +264,7 @@ public class ChallengePlatformDto {
       this.instance.setId(value.id);
       this.instance.setSlug(value.slug);
       this.instance.setName(value.name);
-      this.instance.setAvatarUrl(value.avatarUrl);
+      this.instance.setAvatarKey(value.avatarKey);
       this.instance.setWebsiteUrl(value.websiteUrl);
       this.instance.setCreatedAt(value.createdAt);
       this.instance.setUpdatedAt(value.updatedAt);
@@ -286,8 +286,8 @@ public class ChallengePlatformDto {
       return this;
     }
     
-    public ChallengePlatformDto.Builder avatarUrl(String avatarUrl) {
-      this.instance.avatarUrl(avatarUrl);
+    public ChallengePlatformDto.Builder avatarKey(String avatarKey) {
+      this.instance.avatarKey(avatarKey);
       return this;
     }
     
