@@ -46,8 +46,8 @@ public class ChallengePlatformEntity {
   )
   private String name;
 
-  @Column(name = "avatar_url", nullable = false)
-  private String avatarUrl;
+  @Column(name = "avatar_key", nullable = false)
+  private String avatarKey;
 
   @Column(name = "website_url", nullable = false)
   private String websiteUrl;
