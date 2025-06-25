@@ -65,11 +65,11 @@
                   viewBox="0 0 13 13"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  >
+                >
                   <path
                     d="M9.29102 8.1761H8.70383L8.49571 7.97541C9.22413 7.12807 9.66266 6.02802 9.66266 4.83133C9.66266 2.16295 7.49971 0 4.83133 0C2.16295 0 0 2.16295 0 4.83133C0 7.49971 2.16295 9.66266 4.83133 9.66266C6.02802 9.66266 7.12807 9.22413 7.97541 8.49571L8.1761 8.70383V9.29102L11.8925 13L13 11.8925L9.29102 8.1761ZM4.83133 8.1761C2.98056 8.1761 1.48656 6.6821 1.48656 4.83133C1.48656 2.98056 2.98056 1.48656 4.83133 1.48656C6.6821 1.48656 8.1761 2.98056 8.1761 4.83133C8.1761 6.6821 6.6821 8.1761 4.83133 8.1761Z"
                     fill="#C4C4C4"
-                    />
+                  />
                 </svg>
                 <input
                   type="text"
@@ -77,7 +77,7 @@
                   (input)="onSearchInput($event)"
                   [value]="searchTerm"
                   placeholder="Search"
-                  />
+                />
                 @if (searchTerm) {
                   <button (click)="clearSearch()">
                     <svg
@@ -86,7 +86,7 @@
                       viewBox="0 0 10 10"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
-                      >
+                    >
                       <path d="M1 9L9 1M1 1L9 9" stroke="#C4C4C4" stroke-width="2" />
                     </svg>
                   </button>
@@ -143,7 +143,7 @@
                         (ngModelChange)="
                           setSignificanceThresholdActive(significanceThresholdActive)
                         "
-                        />
+                      />
                     </p-popover>
                     <button
                       (click)="significancePopover.toggle($event)"
@@ -151,7 +151,7 @@
                       pTooltip="Edit significance cutoff value"
                       tooltipPosition="top"
                       tooltipStyleClass="tooltip"
-                      >
+                    >
                       <agora-svg-icon
                         imagePath="/agora-assets/icons/cog.svg"
                         [width]="16"
@@ -185,9 +185,7 @@
                               <div class="column-toggle" (click)="toggleGCTColumn(column)">
                                 <div class="column-toggle-status">
                                   @if (column.selected) {
-                                    <span
-                                      class="p-checkbox-icon pi pi-check"
-                                    ></span>
+                                    <span class="p-checkbox-icon pi pi-check"></span>
                                   }
                                 </div>
                                 <div>
@@ -204,7 +202,7 @@
                       pTooltip="Show/hide columns"
                       tooltipPosition="top"
                       tooltipStyleClass="tooltip-xs"
-                      >
+                    >
                       <agora-svg-icon
                         imagePath="/agora-assets/icons/column.svg"
                         [width]="20"
@@ -239,22 +237,19 @@
               breakpoint="0"
               (sortFunction)="setSort($event)"
               [customSort]="true"
-              >
+            >
               <ng-template pTemplate="header">
                 <tr>
                   <th></th>
                   @for (column of columns; track column) {
-                    <th
-                      [pSortableColumn]="column"
-                      [style]="{ width: columnWidth }"
-                      >
+                    <th [pSortableColumn]="column" [style]="{ width: columnWidth }">
                       <div class="column-header">
                         <div class="column-header-text">
                           <span
                             [pTooltip]="getGCTColumnTooltipText(column)"
                             tooltipPosition="top"
                             tooltipStyleClass="tooltip"
-                            >
+                          >
                             {{ column }}
                           </span>
                         </div>
@@ -278,26 +273,22 @@
                 <div class="table-divider-inner">
                   <div id="pinned-genes-header">
                     @if (category === 'RNA - Differential Expression') {
-                      <span>
-                        Pinned Genes ({{ pinnedItems.length }}/50)
-                      </span>
+                      <span> Pinned Genes ({{ pinnedItems.length }}/50) </span>
                     }
                     @if (category === 'Protein - Differential Expression') {
                       <div>
                         <div>Pinned Genes ({{ uniquePinnedGenesCount }}/50)&nbsp;&nbsp;&nbsp;</div>
                         <div id="pinned-proteins">
-                          {{ pinnedItems.length }} Protein@if (pinnedItems.length > 1) {
-                          s
-                        }
+                          {{ pinnedItems.length }} Protein{{ pinnedItems.length > 1 ? 's' : '' }}
+                        </div>
                       </div>
-                    </div>
-                  }
-                </div>
-                <div class="csv-download-button">
-                  <button (click)="downloadPinnedCsv()">
-                    <agora-svg-icon
-                      imagePath="/agora-assets/icons/download.svg"
-                      altText="download"
+                    }
+                  </div>
+                  <div class="csv-download-button">
+                    <button (click)="downloadPinnedCsv()">
+                      <agora-svg-icon
+                        imagePath="/agora-assets/icons/download.svg"
+                        altText="download"
                       ></agora-svg-icon
                       >Download as CSV
                     </button>
@@ -314,7 +305,7 @@
               [customSort]="true"
               (sortFunction)="sortCallback($event)"
               breakpoint="0"
-              >
+            >
               <ng-template pTemplate="body" let-gene>
                 <tr class="pinned">
                   <td>
@@ -332,7 +323,7 @@
                           pTooltip="Open gene details page"
                           tooltipPosition="top"
                           tooltipStyleClass="tooltip"
-                          >
+                        >
                           <agora-svg-icon
                             imagePath="/agora-assets/icons/external-link.svg"
                             [enableHoverEffects]="false"
@@ -346,7 +337,7 @@
                           pTooltip="Unpin this row"
                           tooltipPosition="top"
                           tooltipStyleClass="tooltip"
-                          >
+                        >
                           <agora-svg-icon
                             imagePath="/agora-assets/icons/pin.svg"
                             [enableHoverEffects]="false"
@@ -358,73 +349,61 @@
                   </td>
                   @for (column of columns; track column) {
                     @if (column === 'RISK SCORE') {
-                      <td
-                        class="cell-numeric"
-                        [style]="{ width: columnWidth }"
-                        >
+                      <td class="cell-numeric" [style]="{ width: columnWidth }">
                         <button
-                        (click)="
-                          scorePanel.toggle(
-                            $event,
-                            getScorePanelData(column, gene, scoresDistribution)
-                          )
-                        "
-                          >
+                          (click)="
+                            scorePanel.toggle(
+                              $event,
+                              getScorePanelData(column, gene, scoresDistribution)
+                            )
+                          "
+                        >
                           {{
-                          isNumber(gene.target_risk_score)
-                          ? (gene.target_risk_score | number: '1.0-2')
-                          : '&mdash;'
+                            isNumber(gene.target_risk_score)
+                              ? (gene.target_risk_score | number: '1.0-2')
+                              : '&mdash;'
                           }}
                         </button>
                       </td>
                     }
                     @if (column === 'GENETIC') {
-                      <td
-                        class="cell-numeric"
-                        [style]="{ width: columnWidth }"
-                        >
+                      <td class="cell-numeric" [style]="{ width: columnWidth }">
                         <button
-                        (click)="
-                          scorePanel.toggle(
-                            $event,
-                            getScorePanelData(column, gene, scoresDistribution)
-                          )
-                        "
-                          >
+                          (click)="
+                            scorePanel.toggle(
+                              $event,
+                              getScorePanelData(column, gene, scoresDistribution)
+                            )
+                          "
+                        >
                           {{
-                          isNumber(gene.genetics_score)
-                          ? (gene.genetics_score | number: '1.0-2')
-                          : '&mdash;'
+                            isNumber(gene.genetics_score)
+                              ? (gene.genetics_score | number: '1.0-2')
+                              : '&mdash;'
                           }}
                         </button>
                       </td>
                     }
                     @if (column === 'MULTI-OMIC') {
-                      <td
-                        class="cell-numeric"
-                        [style]="{ width: columnWidth }"
-                        >
+                      <td class="cell-numeric" [style]="{ width: columnWidth }">
                         <button
-                        (click)="
-                          scorePanel.toggle(
-                            $event,
-                            getScorePanelData(column, gene, scoresDistribution)
-                          )
-                        "
-                          >
+                          (click)="
+                            scorePanel.toggle(
+                              $event,
+                              getScorePanelData(column, gene, scoresDistribution)
+                            )
+                          "
+                        >
                           {{
-                          isNumber(gene.multi_omics_score)
-                          ? (gene.multi_omics_score | number: '1.0-2')
-                          : '&mdash;'
+                            isNumber(gene.multi_omics_score)
+                              ? (gene.multi_omics_score | number: '1.0-2')
+                              : '&mdash;'
                           }}
                         </button>
                       </td>
                     }
                     @if (!isScoresColumn(column)) {
-                      <td
-                        class="cell-default"
-                        [style]="{ width: columnWidth }"
-                        >
+                      <td class="cell-default" [style]="{ width: columnWidth }">
                         <button
                           [class]="getCircleClass(column, gene)"
                           [style]="getCircleStyle(column, gene)"
@@ -433,7 +412,7 @@
                           tooltipPosition="bottom"
                           tooltipStyleClass="tooltip"
                           (click)="detailsPanel.toggle($event, getDetailsPanelData(column, gene))"
-                          >
+                        >
                           <span></span>
                         </button>
                       </td>
@@ -457,20 +436,20 @@
                       <button
                         class="pin-all-button"
                         [disabled]="getPinDisabledStatus()"
-                    [ngClass]="{
-                      disabled: getPinDisabledStatus(),
-                    }"
+                        [ngClass]="{
+                          disabled: getPinDisabledStatus(),
+                        }"
                         (click)="onPinAllClick()"
-                    [pTooltip]="
-                      getPinDisabledStatus()
-                        ? 'You have already pinned the maximum number of genes (' +
-                          maxPinnedGenes +
-                          '). You must unpin some genes before you can pin more.'
-                        : 'Pin all matching rows to the top.'
-                    "
+                        [pTooltip]="
+                          getPinDisabledStatus()
+                            ? 'You have already pinned the maximum number of genes (' +
+                              maxPinnedGenes +
+                              '). You must unpin some genes before you can pin more.'
+                            : 'Pin all matching rows to the top.'
+                        "
                         tooltipPosition="left"
                         tooltipStyleClass="tooltip"
-                        >
+                      >
                         <agora-svg-icon
                           imagePath="/agora-assets/icons/pin.svg"
                           altText="pin"
@@ -483,9 +462,7 @@
               </div>
             }
             @if (!searchTerm && !hasSelectedFilters() && pinnedItems.length > 0) {
-              <div
-                class="table-divider"
-                >
+              <div class="table-divider">
                 <div class="table-divider-inner">
                   <div>All Genes</div>
                 </div>
@@ -505,7 +482,7 @@
               [customSort]="true"
               [loading]="isLoading"
               loadingIcon=""
-              >
+            >
               <ng-template pTemplate="emptymessage" let-gene>
                 <div class="no-results">No results found...</div>
               </ng-template>
@@ -526,7 +503,7 @@
                           pTooltip="Open gene details page"
                           tooltipPosition="top"
                           tooltipStyleClass="tooltip"
-                          >
+                        >
                           <agora-svg-icon
                             imagePath="/agora-assets/icons/external-link.svg"
                             [enableHoverEffects]="false"
@@ -550,7 +527,7 @@
                           "
                           tooltipPosition="top"
                           tooltipStyleClass="tooltip"
-                          >
+                        >
                           <agora-svg-icon
                             imagePath="/agora-assets/icons/pin.svg"
                             [enableHoverEffects]="false"
@@ -562,73 +539,61 @@
                   </td>
                   @for (column of columns; track column) {
                     @if (column === 'RISK SCORE') {
-                      <td
-                        class="cell-numeric"
-                        [style]="{ width: columnWidth }"
-                        >
+                      <td class="cell-numeric" [style]="{ width: columnWidth }">
                         <button
-                        (click)="
-                          scorePanel.toggle(
-                            $event,
-                            getScorePanelData(column, gene, scoresDistribution)
-                          )
-                        "
-                          >
+                          (click)="
+                            scorePanel.toggle(
+                              $event,
+                              getScorePanelData(column, gene, scoresDistribution)
+                            )
+                          "
+                        >
                           {{
-                          isNumber(gene.target_risk_score)
-                          ? (gene.target_risk_score | number: '1.0-2')
-                          : '&mdash;'
+                            isNumber(gene.target_risk_score)
+                              ? (gene.target_risk_score | number: '1.0-2')
+                              : '&mdash;'
                           }}
                         </button>
                       </td>
                     }
                     @if (column === 'GENETIC') {
-                      <td
-                        class="cell-numeric"
-                        [style]="{ width: columnWidth }"
-                        >
+                      <td class="cell-numeric" [style]="{ width: columnWidth }">
                         <button
-                        (click)="
-                          scorePanel.toggle(
-                            $event,
-                            getScorePanelData(column, gene, scoresDistribution)
-                          )
-                        "
-                          >
+                          (click)="
+                            scorePanel.toggle(
+                              $event,
+                              getScorePanelData(column, gene, scoresDistribution)
+                            )
+                          "
+                        >
                           {{
-                          isNumber(gene.genetics_score)
-                          ? (gene.genetics_score | number: '1.0-2')
-                          : '&mdash;'
+                            isNumber(gene.genetics_score)
+                              ? (gene.genetics_score | number: '1.0-2')
+                              : '&mdash;'
                           }}
                         </button>
                       </td>
                     }
                     @if (column === 'MULTI-OMIC') {
-                      <td
-                        class="cell-numeric"
-                        [style]="{ width: columnWidth }"
-                        >
+                      <td class="cell-numeric" [style]="{ width: columnWidth }">
                         <button
-                        (click)="
-                          scorePanel.toggle(
-                            $event,
-                            getScorePanelData(column, gene, scoresDistribution)
-                          )
-                        "
-                          >
+                          (click)="
+                            scorePanel.toggle(
+                              $event,
+                              getScorePanelData(column, gene, scoresDistribution)
+                            )
+                          "
+                        >
                           {{
-                          isNumber(gene.multi_omics_score)
-                          ? (gene.multi_omics_score | number: '1.0-2')
-                          : '&mdash;'
+                            isNumber(gene.multi_omics_score)
+                              ? (gene.multi_omics_score | number: '1.0-2')
+                              : '&mdash;'
                           }}
                         </button>
                       </td>
                     }
                     @if (!isScoresColumn(column)) {
-                      <td
-                        class="cell-default"
-                        [style]="{ width: columnWidth }"
-                        >
+                      <td class="cell-default" [style]="{ width: columnWidth }">
                         <button
                           [class]="getCircleClass(column, gene)"
                           [style]="getCircleStyle(column, gene)"
@@ -637,7 +602,7 @@
                           tooltipPosition="bottom"
                           tooltipStyleClass="tooltip"
                           (click)="detailsPanel.toggle($event, getDetailsPanelData(column, gene))"
-                          >
+                        >
                           <span></span>
                         </button>
                       </td>
