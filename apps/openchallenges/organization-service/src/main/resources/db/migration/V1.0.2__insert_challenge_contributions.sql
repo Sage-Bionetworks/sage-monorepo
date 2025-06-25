@@ -1895,4 +1895,5 @@ INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VAL
 (1850, 686, 538, 'challenge_organizer'),
 (1851, 686, 537, 'challenge_organizer');
 
--- End of generated INSERT statements
+-- Update the sequence to continue from the highest ID
+SELECT setval('challenge_contribution_id_seq', (SELECT MAX(id) FROM challenge_contribution));
