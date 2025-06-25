@@ -8,7 +8,7 @@
     white-space: pre-wrap;
 
     a {
-      @include link;
+      @include mixins.link;
     }
 
     .email-link {

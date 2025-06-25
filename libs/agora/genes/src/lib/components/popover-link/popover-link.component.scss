@@ -2,7 +2,7 @@
 
 .popover-link-container {
   button {
-    @include reset-button;
+    @include mixins.reset-button;
   }
 
   .popover-link-inner {

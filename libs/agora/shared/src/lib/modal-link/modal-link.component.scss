@@ -2,7 +2,7 @@
 @use 'agora/styles/src/lib/mixins';
 
 button {
-  @include reset-button;
+  @include mixins.reset-button;
 }
 
 .modal-link-container {
@@ -18,7 +18,7 @@ button {
     &:hover {
       color: var(--color-action-primary);
 
-      @include link-hover;
+      @include mixins.link-hover;
     }
 
     &:hover agora-svg-icon {
@@ -28,7 +28,7 @@ button {
     }
 
     .modal-link-text {
-      @include link;
+      @include mixins.link;
     }
   }
 }
