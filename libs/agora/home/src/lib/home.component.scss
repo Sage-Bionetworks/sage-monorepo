@@ -20,7 +20,7 @@
     background-color: none;
   }
 
-  @include respond-to('ex-large') {
+  @include mixins.respond-to('ex-large') {
     padding: var(--spacing-xl) 100px;
   }
 }

@@ -49,7 +49,7 @@
   }
 
   ul {
-    @include reset-ul;
+    @include mixins.reset-ul;
 
     display: flex;
     width: 100%;
@@ -103,7 +103,7 @@
   }
 
   .gene-details-nav-scroll {
-    @include reset-button;
+    @include mixins.reset-button;
 
     display: none;
     position: absolute;

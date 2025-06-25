@@ -7,7 +7,7 @@
   }
 
   p-button {
-    @include respond-to('ex-small') {
+    @include mixins.respond-to('ex-small') {
       width: 70%;
     }
 
