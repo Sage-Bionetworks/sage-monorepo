@@ -709,10 +709,9 @@ components:
           $ref: '#/components/schemas/ChallengePlatformSlug'
         name:
           $ref: '#/components/schemas/ChallengePlatformName'
-        avatarUrl:
+        avatarKey:
           type: string
-          format: url
-          example: https://via.placeholder.com/300.png
+          example: logo/dream.png
         websiteUrl:
           type: string
           format: url
@@ -729,7 +728,7 @@ components:
         - id
         - slug
         - name
-        - avatarUrl
+        - avatarKey
         - websiteUrl
         - createdAt
         - updatedAt

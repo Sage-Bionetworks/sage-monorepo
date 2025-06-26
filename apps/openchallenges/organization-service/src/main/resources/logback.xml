@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration>
-  <property name="LOG_DIR" value="./log" />
-  <property name="APP_NAME" value="openchallenges-organization-service" />
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
 
-  <include resource="logback-common.xml" />
+  <logger name="org.sagebionetworks.openchallenges" level="info" additivity="false">
+    <appender-ref ref="CONSOLE" />
+  </logger>
+
+  <root level="info">
+    <appender-ref ref="CONSOLE" />
+  </root>
 </configuration>

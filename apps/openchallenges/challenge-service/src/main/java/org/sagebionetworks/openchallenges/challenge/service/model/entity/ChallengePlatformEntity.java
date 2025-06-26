@@ -1,12 +1,12 @@
 package org.sagebionetworks.openchallenges.challenge.service.model.entity;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -46,8 +46,8 @@ public class ChallengePlatformEntity {
   )
   private String name;
 
-  @Column(name = "avatar_url", nullable = false)
-  private String avatarUrl;
+  @Column(name = "avatar_key", nullable = false)
+  private String avatarKey;
 
   @Column(name = "website_url", nullable = false)
   private String websiteUrl;

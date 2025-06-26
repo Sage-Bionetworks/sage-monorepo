@@ -16,7 +16,7 @@ public class EurekaInstanceConfiguration {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(EurekaInstanceConfiguration.class);
 
-  @Value("${server.port}")
+  @Value("${server.port:8084}")
   private String port;
 
   /**

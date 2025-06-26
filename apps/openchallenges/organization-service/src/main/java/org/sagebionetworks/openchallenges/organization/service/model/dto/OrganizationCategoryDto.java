@@ -1,14 +1,27 @@
 package org.sagebionetworks.openchallenges.organization.service.model.dto;
 
+import java.net.URI;
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.OffsetDateTime;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import jakarta.annotation.Generated;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.util.*;
-import javax.annotation.Generated;
-import javax.validation.constraints.*;
 
-/** The category of the organization. */
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
+/**
+ * The category of the organization.
+ */
+
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 public enum OrganizationCategoryDto {
+  
   FEATURED("featured");
 
   private String value;
@@ -37,3 +50,4 @@ public enum OrganizationCategoryDto {
     throw new IllegalArgumentException("Unexpected value '" + value + "'");
   }
 }
+

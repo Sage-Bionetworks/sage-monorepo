@@ -2,14 +2,12 @@
   "$schema": "../../../node_modules/@openapitools/openapi-generator-cli/config.schema.json",
   "spaces": 2,
   "generator-cli": {
-    "version": "6.2.1",
+    "version": "7.12.0",
     "generators": {
       "openchallenges-organization-service": {
-        "config": "templates/config.yaml",
         "generatorName": "spring",
-        "inputSpec": "#{cwd}/../../../libs/openchallenges/api-description/build/organization.openapi.yaml",
+        "inputSpec": "#{cwd}/../../../libs/openchallenges/api-description/openapi/organization.openapi.yaml",
         "output": "#{cwd}",
-        "templateDir": "templates",
         "additionalProperties": {
           "apiPackage": "org.sagebionetworks.openchallenges.organization.service.api",
           "basePackage": "org.sagebionetworks.openchallenges.organization.service",
@@ -20,7 +18,9 @@
           "modelNameSuffix": "Dto",
           "modelPackage": "org.sagebionetworks.openchallenges.organization.service.model.dto",
           "useTags": true,
-          "openApiNullable": false
+          "openApiNullable": false,
+          "useSpringBoot3": true,
+          "generateBuilders": true
         }
       }
     }

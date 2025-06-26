@@ -58,7 +58,9 @@ paths:
       summary: List challenges
       tags:
         - Challenge
-      x-accepts: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
       x-tags:
         - tag: Challenge
   /challenges/{challengeId}:
@@ -100,7 +102,10 @@ paths:
       summary: Get a challenge
       tags:
         - Challenge
-      x-accepts: application/json
+      x-accepts:
+        - application/json
+        - application/ld+json
+        - application/problem+json
       x-tags:
         - tag: Challenge
   /challenges/{challengeId}/contributions:
@@ -139,7 +144,9 @@ paths:
       summary: List challenge contributions
       tags:
         - ChallengeContribution
-      x-accepts: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
       x-tags:
         - tag: ChallengeContribution
   /challengeAnalytics/challengesPerYear:
@@ -163,7 +170,9 @@ paths:
       summary: Get the number of challenges tracked per year
       tags:
         - ChallengeAnalytics
-      x-accepts: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
       x-tags:
         - tag: ChallengeAnalytics
   /challengePlatforms:
@@ -202,7 +211,9 @@ paths:
       summary: List challenge platforms
       tags:
         - ChallengePlatform
-      x-accepts: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
       x-tags:
         - tag: ChallengePlatform
   /challengePlatforms/{challengePlatformName}:
@@ -241,7 +252,9 @@ paths:
       summary: Get a challenge platform
       tags:
         - ChallengePlatform
-      x-accepts: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
       x-tags:
         - tag: ChallengePlatform
   /edamConcepts:
@@ -280,7 +293,9 @@ paths:
       summary: List EDAM concepts
       tags:
         - EdamConcept
-      x-accepts: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
       x-tags:
         - tag: EdamConcept
 components:
@@ -682,7 +697,7 @@ components:
       description: A challenge
       example:
         avatarUrl: https://openchallenges.io
-        endDate: 2017-07-21T00:00:00.000+00:00
+        endDate: 2017-07-21
         description: This is an example description of the challenge.
         platform:
           name: name
@@ -708,7 +723,7 @@ components:
           preferredLabel: Sequence set
           id: 1
         slug: awesome-challenge
-        startDate: 2017-07-21T00:00:00.000+00:00
+        startDate: 2017-07-21
         doi: https://doi.org/123/abc
         status: active
         inputDataTypes:
@@ -837,8 +852,100 @@ components:
     ChallengesPage:
       allOf:
         - $ref: '#/components/schemas/PageMetadata'
-        - $ref: '#/components/schemas/ChallengesPage_allOf'
+        - properties:
+            challenges:
+              description: A list of challenges.
+              items:
+                $ref: '#/components/schemas/Challenge'
+              type: array
+          required:
+            - challenges
+          type: object
       description: A page of challenges.
+      example:
+        number: 99
+        size: 99
+        challenges:
+          - avatarUrl: https://openchallenges.io
+            endDate: 2017-07-21
+            description: This is an example description of the challenge.
+            platform:
+              name: name
+              id: 1
+              slug: example-challenge-platform
+            starredCount: 100
+            createdAt: 2022-07-04T22:19:11Z
+            incentives:
+              - publication
+              - publication
+            submissionTypes:
+              - container_image
+              - container_image
+            websiteUrl: https://openchallenges.io
+            name: name
+            id: 1
+            categories:
+              - featured
+              - featured
+            headline: Example challenge headline
+            operation:
+              classId: http://edamontology.org/data_0850
+              preferredLabel: Sequence set
+              id: 1
+            slug: awesome-challenge
+            startDate: 2017-07-21
+            doi: https://doi.org/123/abc
+            status: active
+            inputDataTypes:
+              - classId: http://edamontology.org/data_0850
+                preferredLabel: Sequence set
+                id: 1
+              - classId: http://edamontology.org/data_0850
+                preferredLabel: Sequence set
+                id: 1
+            updatedAt: 2022-07-04T22:19:11Z
+          - avatarUrl: https://openchallenges.io
+            endDate: 2017-07-21
+            description: This is an example description of the challenge.
+            platform:
+              name: name
+              id: 1
+              slug: example-challenge-platform
+            starredCount: 100
+            createdAt: 2022-07-04T22:19:11Z
+            incentives:
+              - publication
+              - publication
+            submissionTypes:
+              - container_image
+              - container_image
+            websiteUrl: https://openchallenges.io
+            name: name
+            id: 1
+            categories:
+              - featured
+              - featured
+            headline: Example challenge headline
+            operation:
+              classId: http://edamontology.org/data_0850
+              preferredLabel: Sequence set
+              id: 1
+            slug: awesome-challenge
+            startDate: 2017-07-21
+            doi: https://doi.org/123/abc
+            status: active
+            inputDataTypes:
+              - classId: http://edamontology.org/data_0850
+                preferredLabel: Sequence set
+                id: 1
+              - classId: http://edamontology.org/data_0850
+                preferredLabel: Sequence set
+                id: 1
+            updatedAt: 2022-07-04T22:19:11Z
+        totalPages: 99
+        hasPrevious: true
+        hasNext: true
+        totalElements: 99
       type: object
       x-java-class-annotations:
         - '@lombok.Builder'
@@ -868,7 +975,21 @@ components:
     ChallengeJsonLd:
       allOf:
         - $ref: '#/components/schemas/Challenge'
-        - $ref: '#/components/schemas/ChallengeJsonLd_allOf'
+        - properties:
+            '@context':
+              example: https://schema.org
+              type: string
+            '@id':
+              example: https://openchallenges.io/api/v1/challenges/1
+              type: string
+            '@type':
+              example: Challenge
+              type: string
+          required:
+            - '@context'
+            - '@id'
+            - '@type'
+          type: object
       description: A challenge
       type: object
     ChallengeContributionRole:
@@ -881,6 +1002,10 @@ components:
       type: string
     ChallengeContribution:
       description: A challenge contribution.
+      example:
+        organizationId: 1
+        challengeId: 1
+        role: challenge_organizer
       properties:
         challengeId:
           description: The unique identifier of the challenge.
@@ -902,8 +1027,30 @@ components:
     ChallengeContributionsPage:
       allOf:
         - $ref: '#/components/schemas/PageMetadata'
-        - $ref: '#/components/schemas/ChallengeContributionsPage_allOf'
+        - properties:
+            challengeContributions:
+              description: A list of challenge contributions.
+              items:
+                $ref: '#/components/schemas/ChallengeContribution'
+              type: array
+          required:
+            - challengeContributions
+          type: object
       description: A page of challenge challenge contributions.
+      example:
+        number: 99
+        size: 99
+        challengeContributions:
+          - organizationId: 1
+            challengeId: 1
+            role: challenge_organizer
+          - organizationId: 1
+            challengeId: 1
+            role: challenge_organizer
+        totalPages: 99
+        hasPrevious: true
+        hasNext: true
+        totalElements: 99
       type: object
       x-java-class-annotations:
         - '@lombok.Builder'
@@ -985,7 +1132,7 @@ components:
       description: A challenge platform
       example:
         createdAt: 2022-07-04T22:19:11Z
-        avatarUrl: https://via.placeholder.com/300.png
+        avatarKey: logo/dream.png
         websiteUrl: https://example.com
         name: name
         id: 1
@@ -1009,9 +1156,8 @@ components:
           maxLength: 30
           minLength: 3
           type: string
-        avatarUrl:
-          example: https://via.placeholder.com/300.png
-          format: url
+        avatarKey:
+          example: logo/dream.png
           type: string
         websiteUrl:
           example: https://example.com
@@ -1026,7 +1172,7 @@ components:
           format: date-time
           type: string
       required:
-        - avatarUrl
+        - avatarKey
         - createdAt
         - id
         - name
@@ -1037,8 +1183,38 @@ components:
     ChallengePlatformsPage:
       allOf:
         - $ref: '#/components/schemas/PageMetadata'
-        - $ref: '#/components/schemas/ChallengePlatformsPage_allOf'
+        - properties:
+            challengePlatforms:
+              description: A list of challenge platforms.
+              items:
+                $ref: '#/components/schemas/ChallengePlatform'
+              type: array
+          required:
+            - challengePlatforms
+          type: object
       description: A page of challenge platforms.
+      example:
+        number: 99
+        size: 99
+        challengePlatforms:
+          - createdAt: 2022-07-04T22:19:11Z
+            avatarKey: logo/dream.png
+            websiteUrl: https://example.com
+            name: name
+            id: 1
+            slug: example-challenge-platform
+            updatedAt: 2022-07-04T22:19:11Z
+          - createdAt: 2022-07-04T22:19:11Z
+            avatarKey: logo/dream.png
+            websiteUrl: https://example.com
+            name: name
+            id: 1
+            slug: example-challenge-platform
+            updatedAt: 2022-07-04T22:19:11Z
+        totalPages: 99
+        hasPrevious: true
+        hasNext: true
+        totalElements: 99
       type: object
       x-java-class-annotations:
         - '@lombok.Builder'
@@ -1104,69 +1280,30 @@ components:
     EdamConceptsPage:
       allOf:
         - $ref: '#/components/schemas/PageMetadata'
-        - $ref: '#/components/schemas/EdamConceptsPage_allOf'
+        - properties:
+            edamConcepts:
+              description: A list of EDAM concepts.
+              items:
+                $ref: '#/components/schemas/EdamConcept'
+              type: array
+          required:
+            - edamConcepts
+          type: object
       description: A page of EDAM concepts.
+      example:
+        number: 99
+        size: 99
+        totalPages: 99
+        hasPrevious: true
+        hasNext: true
+        edamConcepts:
+          - classId: http://edamontology.org/data_0850
+            preferredLabel: Sequence set
+            id: 1
+          - classId: http://edamontology.org/data_0850
+            preferredLabel: Sequence set
+            id: 1
+        totalElements: 99
       type: object
       x-java-class-annotations:
         - '@lombok.Builder'
-    ChallengesPage_allOf:
-      properties:
-        challenges:
-          description: A list of challenges.
-          items:
-            $ref: '#/components/schemas/Challenge'
-          type: array
-      required:
-        - challenges
-      type: object
-      example: null
-    ChallengeJsonLd_allOf:
-      properties:
-        '@context':
-          example: https://schema.org
-          type: string
-        '@id':
-          example: https://openchallenges.io/api/v1/challenges/1
-          type: string
-        '@type':
-          example: Challenge
-          type: string
-      required:
-        - '@context'
-        - '@id'
-        - '@type'
-      type: object
-      example: null
-    ChallengeContributionsPage_allOf:
-      properties:
-        challengeContributions:
-          description: A list of challenge contributions.
-          items:
-            $ref: '#/components/schemas/ChallengeContribution'
-          type: array
-      required:
-        - challengeContributions
-      type: object
-      example: null
-    ChallengePlatformsPage_allOf:
-      properties:
-        challengePlatforms:
-          description: A list of challenge platforms.
-          items:
-            $ref: '#/components/schemas/ChallengePlatform'
-          type: array
-      required:
-        - challengePlatforms
-      type: object
-      example: null
-    EdamConceptsPage_allOf:
-      properties:
-        edamConcepts:
-          description: A list of EDAM concepts.
-          items:
-            $ref: '#/components/schemas/EdamConcept'
-          type: array
-      required:
-        - edamConcepts
-      type: object
-      example: null

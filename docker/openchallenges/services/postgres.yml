@@ -1,0 +1,20 @@
+services:
+  openchallenges-postgres:
+    image: ghcr.io/sage-bionetworks/openchallenges-postgres:${IATLAS_VERSION:-local}
+    container_name: openchallenges-postgres
+    restart: always
+    env_file:
+      - ../../../apps/openchallenges/postgres/.env
+    volumes:
+      # - openchallenges-postgres-data:/var/lib/postgresql/data
+      - ../../../apps/openchallenges/postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    networks:
+      - openchallenges
+    ports:
+      - '8091:8091'
+    deploy:
+      resources:
+        limits:
+          memory: 500M
+    # set shared memory limit when using docker compose
+    shm_size: 128mb

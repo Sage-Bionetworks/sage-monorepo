@@ -1,125 +1,107 @@
--- challenge_platform definition
-CREATE TABLE `challenge_platform` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `slug` varchar(255) NOT NULL UNIQUE,
-  `name` varchar(255) NOT NULL UNIQUE,
-  `avatar_key` varchar(255),
-  `website_url` varchar(500) NOT NULL,
-  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
+-- create challenge_platform table
+CREATE TABLE challenge_platform (
+  id BIGSERIAL PRIMARY KEY,
+  slug VARCHAR(255) NOT NULL UNIQUE,
+  name VARCHAR(255) NOT NULL UNIQUE,
+  avatar_key VARCHAR(255),
+  website_url VARCHAR(500) NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- edam_concept definition
-CREATE TABLE `edam_concept` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `class_id` varchar(60) NOT NULL UNIQUE,
-  `preferred_label` varchar(80) NOT NULL,
-  PRIMARY KEY (`id`)
+-- create edam_concept table
+CREATE TABLE edam_concept (
+  id SERIAL PRIMARY KEY,
+  class_id VARCHAR(60) NOT NULL UNIQUE,
+  preferred_label VARCHAR(80) NOT NULL
 );
 
--- challenge definition
-CREATE TABLE `challenge` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `slug` varchar(255) NOT NULL UNIQUE,
-  `name` varchar(255) NOT NULL,
-  `headline` varchar(80),
-  `description` varchar(1000) NOT NULL,
-  `avatar_url` varchar(500),
-  `website_url` varchar(500),
-  `status` ENUM ('upcoming', 'active', 'completed'),
-  `platform_id` int,
-  `doi` varchar(120),
-  `start_date` DATE,
-  `end_date` DATE,
-  `operation_id` int,
-  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`platform_id`) REFERENCES challenge_platform (`id`),
-  FOREIGN KEY (`operation_id`) REFERENCES edam_concept (`id`),
+-- create challenge table
+CREATE TABLE challenge (
+  id BIGSERIAL PRIMARY KEY,
+  slug VARCHAR(255) NOT NULL UNIQUE,
+  name VARCHAR(255) NOT NULL,
+  headline VARCHAR(80),
+  description VARCHAR(1000),
+  avatar_url VARCHAR(500),
+  website_url VARCHAR(500),
+  status VARCHAR(20) CHECK (status IN ('upcoming', 'active', 'completed')),
+  platform_id BIGINT,
+  doi VARCHAR(120),
+  start_date DATE,
+  end_date DATE,
+  operation_id INTEGER,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_platform FOREIGN KEY (platform_id) REFERENCES challenge_platform(id),
+  CONSTRAINT fk_operation FOREIGN KEY (operation_id) REFERENCES edam_concept(id),
   CONSTRAINT slug_check CHECK (
-    char_length(`slug`) >= 3
-    and `slug` REGEXP '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+    LENGTH(slug) >= 3
+    AND slug ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$'
   )
 );
 
--- challenge_organization_role definition
-CREATE TABLE `challenge_contribution` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `challenge_id` bigint(20) NOT NULL,
-  `organization_id` bigint(20) NOT NULL,
-  `role` ENUM (
-    'challenge_organizer',
-    'data_contributor',
-    'sponsor'
+-- create challenge_contribution table
+CREATE TABLE challenge_contribution (
+  id SERIAL PRIMARY KEY,
+  challenge_id BIGINT NOT NULL,
+  organization_id BIGINT NOT NULL,
+  role VARCHAR(50) CHECK (
+    role IN ('challenge_organizer', 'data_contributor', 'sponsor')
   ),
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`challenge_id`) REFERENCES challenge (`id`),
-  CONSTRAINT unique_item UNIQUE (`challenge_id`, `organization_id`, `role`)
+  CONSTRAINT fk_challenge FOREIGN KEY (challenge_id) REFERENCES challenge(id),
+  CONSTRAINT unique_contribution UNIQUE (challenge_id, organization_id, role)
 );
 
--- challenge_incentive definition
-CREATE TABLE `challenge_incentive` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` ENUM (
-    'monetary',
-    'publication',
-    'speaking_engagement',
-    'other'
+-- create challenge_incentive table
+CREATE TABLE challenge_incentive (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(50) CHECK (
+    name IN ('monetary', 'publication', 'speaking_engagement', 'other')
   ),
-  `challenge_id` bigint(20) NOT NULL,
-  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`challenge_id`) REFERENCES challenge (`id`),
-  CONSTRAINT unique_item UNIQUE (`name`, `challenge_id`)
+  challenge_id BIGINT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_challenge_inc FOREIGN KEY (challenge_id) REFERENCES challenge(id),
+  CONSTRAINT unique_incentive UNIQUE (name, challenge_id)
 );
 
--- challenge_submission_type definition
-CREATE TABLE `challenge_submission_type` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` ENUM (
-    'container_image',
-    'prediction_file',
-    'notebook',
-    'mlcube',
-    'other'
+-- create challenge_submission_type table
+CREATE TABLE challenge_submission_type (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(50) CHECK (
+    name IN ('container_image', 'prediction_file', 'notebook', 'mlcube', 'other')
   ),
-  `challenge_id` bigint(20) NOT NULL,
-  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`challenge_id`) REFERENCES challenge (`id`),
-  CONSTRAINT unique_item UNIQUE (`name`, `challenge_id`)
+  challenge_id BIGINT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_challenge_sub FOREIGN KEY (challenge_id) REFERENCES challenge(id),
+  CONSTRAINT unique_submission_type UNIQUE (name, challenge_id)
 );
 
--- challenge_input_data_type definition
-CREATE TABLE `challenge_input_data_type` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `challenge_id` bigint(20) NOT NULL,
-  `edam_concept_id` int NOT NULL,
-  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`challenge_id`) REFERENCES challenge (`id`),
-  FOREIGN KEY (`edam_concept_id`) REFERENCES edam_concept (`id`),
-  CONSTRAINT unique_item UNIQUE (`challenge_id`, `edam_concept_id`)
+-- create challenge_input_data_type table
+CREATE TABLE challenge_input_data_type (
+  id SERIAL PRIMARY KEY,
+  challenge_id BIGINT NOT NULL,
+  edam_concept_id INTEGER NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_challenge_input FOREIGN KEY (challenge_id) REFERENCES challenge(id),
+  CONSTRAINT fk_edam_concept FOREIGN KEY (edam_concept_id) REFERENCES edam_concept(id),
+  CONSTRAINT unique_input_data_type UNIQUE (challenge_id, edam_concept_id)
 );
 
--- challenge_star definition
-CREATE TABLE `challenge_star` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `challenge_id` bigint(20) NOT NULL,
-  `user_id` bigint(20) NOT NULL,
-  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`challenge_id`) REFERENCES challenge (`id`),
-  CONSTRAINT unique_item UNIQUE (`challenge_id`, `user_id`)
+-- create challenge_star table
+CREATE TABLE challenge_star (
+  id SERIAL PRIMARY KEY,
+  challenge_id BIGINT NOT NULL,
+  user_id BIGINT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_challenge_star FOREIGN KEY (challenge_id) REFERENCES challenge(id),
+  CONSTRAINT unique_star UNIQUE (challenge_id, user_id)
 );
 
--- challenge_category definition
-CREATE TABLE `challenge_category` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `challenge_id` bigint(20) NOT NULL,
-  `name` ENUM ('featured', 'benchmark', 'hackathon'),
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`challenge_id`) REFERENCES challenge (`id`)
+-- create challenge_category table
+CREATE TABLE challenge_category (
+  id SERIAL PRIMARY KEY,
+  challenge_id BIGINT NOT NULL,
+  name VARCHAR(20) CHECK (name IN ('featured', 'benchmark', 'hackathon')),
+  CONSTRAINT fk_challenge_cat FOREIGN KEY (challenge_id) REFERENCES challenge(id)
 );

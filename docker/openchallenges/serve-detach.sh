@@ -18,6 +18,7 @@ args=(
   --file docker/"$product_name"/services/mariadb.yml
   --file docker/"$product_name"/services/mcp-server.yml
   --file docker/"$product_name"/services/organization-service.yml
+  --file docker/"$product_name"/services/postgres.yml
   --file docker/"$product_name"/services/service-registry.yml
   --file docker/"$product_name"/services/thumbor.yml
 

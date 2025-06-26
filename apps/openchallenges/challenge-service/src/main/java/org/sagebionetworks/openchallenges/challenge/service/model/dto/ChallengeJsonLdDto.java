@@ -1,102 +1,119 @@
 package org.sagebionetworks.openchallenges.challenge.service.model.dto;
 
+import java.net.URI;
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import io.swagger.v3.oas.annotations.media.Schema;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import javax.annotation.Generated;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeCategoryDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeIncentiveDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeStatusDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSubmissionTypeDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.EdamConceptDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.SimpleChallengePlatformDto;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
+import java.time.OffsetDateTime;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-/** A challenge */
+
+import java.util.*;
+import jakarta.annotation.Generated;
+
+/**
+ * A challenge
+ */
+
 @Schema(name = "ChallengeJsonLd", description = "A challenge")
 @JsonTypeName("ChallengeJsonLd")
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-// TODO Add x-java-class-annotations
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 public class ChallengeJsonLdDto {
 
-  @JsonProperty("id")
   private Long id;
 
-  @JsonProperty("slug")
   private String slug;
 
-  @JsonProperty("name")
   private String name;
 
-  @JsonProperty("headline")
-  private String headline = null;
+  private @Nullable String headline = null;
 
-  @JsonProperty("description")
   private String description;
 
-  @JsonProperty("doi")
-  private String doi = null;
+  private @Nullable String doi = null;
 
-  @JsonProperty("status")
   private ChallengeStatusDto status;
 
-  @JsonProperty("platform")
-  private SimpleChallengePlatformDto platform = null;
+  private @Nullable SimpleChallengePlatformDto platform = null;
 
-  @JsonProperty("websiteUrl")
-  private String websiteUrl = null;
+  private @Nullable String websiteUrl = null;
 
-  @JsonProperty("avatarUrl")
-  private String avatarUrl = null;
+  private @Nullable String avatarUrl = null;
 
-  @JsonProperty("incentives")
   @Valid
   private List<ChallengeIncentiveDto> incentives = new ArrayList<>();
 
-  @JsonProperty("submissionTypes")
   @Valid
   private List<ChallengeSubmissionTypeDto> submissionTypes = new ArrayList<>();
 
-  @JsonProperty("inputDataTypes")
   @Valid
-  private List<EdamConceptDto> inputDataTypes = null;
+  private List<@Valid EdamConceptDto> inputDataTypes = new ArrayList<>();
 
-  @JsonProperty("categories")
   @Valid
   private List<ChallengeCategoryDto> categories = new ArrayList<>();
 
-  @JsonProperty("startDate")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-  private LocalDate startDate = null;
+  private @Nullable LocalDate startDate = null;
 
-  @JsonProperty("endDate")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-  private LocalDate endDate = null;
+  private @Nullable LocalDate endDate = null;
 
-  @JsonProperty("starredCount")
   private Integer starredCount = 0;
 
-  @JsonProperty("operation")
-  private EdamConceptDto operation = null;
+  private @Nullable EdamConceptDto operation = null;
 
-  @JsonProperty("createdAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
 
-  @JsonProperty("updatedAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime updatedAt;
 
-  @JsonProperty("@context")
   private String atContext;
 
-  @JsonProperty("@id")
   private String atId;
 
-  @JsonProperty("@type")
   private String atType;
+
+  public ChallengeJsonLdDto() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public ChallengeJsonLdDto(Long id, String slug, String name, String description, ChallengeStatusDto status, List<ChallengeIncentiveDto> incentives, List<ChallengeSubmissionTypeDto> submissionTypes, List<ChallengeCategoryDto> categories, Integer starredCount, OffsetDateTime createdAt, OffsetDateTime updatedAt, String atContext, String atId, String atType) {
+    this.id = id;
+    this.slug = slug;
+    this.name = name;
+    this.description = description;
+    this.status = status;
+    this.incentives = incentives;
+    this.submissionTypes = submissionTypes;
+    this.categories = categories;
+    this.starredCount = starredCount;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+    this.atContext = atContext;
+    this.atId = atId;
+    this.atType = atType;
+  }
 
   public ChallengeJsonLdDto id(Long id) {
     this.id = id;
@@ -105,16 +122,11 @@ public class ChallengeJsonLdDto {
 
   /**
    * The unique identifier of the challenge.
-   *
    * @return id
    */
-  @NotNull
-  @Schema(
-    name = "id",
-    example = "1",
-    description = "The unique identifier of the challenge.",
-    required = true
-  )
+  @NotNull 
+  @Schema(name = "id", example = "1", description = "The unique identifier of the challenge.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("id")
   public Long getId() {
     return id;
   }
@@ -130,18 +142,11 @@ public class ChallengeJsonLdDto {
 
   /**
    * The unique slug of the challenge.
-   *
    * @return slug
    */
-  @NotNull
-  @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
-  @Size(min = 3, max = 255)
-  @Schema(
-    name = "slug",
-    example = "awesome-challenge",
-    description = "The unique slug of the challenge.",
-    required = true
-  )
+  @NotNull @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$") @Size(min = 3, max = 255) 
+  @Schema(name = "slug", example = "awesome-challenge", description = "The unique slug of the challenge.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("slug")
   public String getSlug() {
     return slug;
   }
@@ -157,12 +162,11 @@ public class ChallengeJsonLdDto {
 
   /**
    * The name of the challenge.
-   *
    * @return name
    */
-  @NotNull
-  @Size(min = 3, max = 255)
-  @Schema(name = "name", description = "The name of the challenge.", required = true)
+  @NotNull @Size(min = 3, max = 255) 
+  @Schema(name = "name", description = "The name of the challenge.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("name")
   public String getName() {
     return name;
   }
@@ -178,16 +182,11 @@ public class ChallengeJsonLdDto {
 
   /**
    * The headline of the challenge.
-   *
    * @return headline
    */
-  @Size(min = 0, max = 80)
-  @Schema(
-    name = "headline",
-    example = "Example challenge headline",
-    description = "The headline of the challenge.",
-    required = false
-  )
+  @Size(min = 0, max = 80) 
+  @Schema(name = "headline", example = "Example challenge headline", description = "The headline of the challenge.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("headline")
   public String getHeadline() {
     return headline;
   }
@@ -203,17 +202,11 @@ public class ChallengeJsonLdDto {
 
   /**
    * The description of the challenge.
-   *
    * @return description
    */
-  @NotNull
-  @Size(min = 0, max = 1000)
-  @Schema(
-    name = "description",
-    example = "This is an example description of the challenge.",
-    description = "The description of the challenge.",
-    required = true
-  )
+  @NotNull @Size(min = 0, max = 1000) 
+  @Schema(name = "description", example = "This is an example description of the challenge.", description = "The description of the challenge.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("description")
   public String getDescription() {
     return description;
   }
@@ -229,16 +222,11 @@ public class ChallengeJsonLdDto {
 
   /**
    * The DOI of the challenge.
-   *
    * @return doi
    */
-  @Size(max = 120)
-  @Schema(
-    name = "doi",
-    example = "https://doi.org/123/abc",
-    description = "The DOI of the challenge.",
-    required = false
-  )
+  @Size(max = 120) 
+  @Schema(name = "doi", example = "https://doi.org/123/abc", description = "The DOI of the challenge.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("doi")
   public String getDoi() {
     return doi;
   }
@@ -254,12 +242,11 @@ public class ChallengeJsonLdDto {
 
   /**
    * Get status
-   *
    * @return status
    */
-  @NotNull
-  @Valid
-  @Schema(name = "status", required = true)
+  @NotNull @Valid 
+  @Schema(name = "status", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("status")
   public ChallengeStatusDto getStatus() {
     return status;
   }
@@ -275,11 +262,11 @@ public class ChallengeJsonLdDto {
 
   /**
    * Get platform
-   *
    * @return platform
    */
-  @Valid
-  @Schema(name = "platform", required = false)
+  @Valid 
+  @Schema(name = "platform", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("platform")
   public SimpleChallengePlatformDto getPlatform() {
     return platform;
   }
@@ -295,16 +282,11 @@ public class ChallengeJsonLdDto {
 
   /**
    * A URL to the website or image.
-   *
    * @return websiteUrl
    */
-  @Size(max = 500)
-  @Schema(
-    name = "websiteUrl",
-    example = "https://openchallenges.io",
-    description = "A URL to the website or image.",
-    required = false
-  )
+  @Size(max = 500) 
+  @Schema(name = "websiteUrl", example = "https://openchallenges.io", description = "A URL to the website or image.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("websiteUrl")
   public String getWebsiteUrl() {
     return websiteUrl;
   }
@@ -320,16 +302,11 @@ public class ChallengeJsonLdDto {
 
   /**
    * A URL to the website or image.
-   *
    * @return avatarUrl
    */
-  @Size(max = 500)
-  @Schema(
-    name = "avatarUrl",
-    example = "https://openchallenges.io",
-    description = "A URL to the website or image.",
-    required = false
-  )
+  @Size(max = 500) 
+  @Schema(name = "avatarUrl", example = "https://openchallenges.io", description = "A URL to the website or image.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("avatarUrl")
   public String getAvatarUrl() {
     return avatarUrl;
   }
@@ -353,12 +330,11 @@ public class ChallengeJsonLdDto {
 
   /**
    * Get incentives
-   *
    * @return incentives
    */
-  @NotNull
-  @Valid
-  @Schema(name = "incentives", required = true)
+  @NotNull @Valid 
+  @Schema(name = "incentives", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("incentives")
   public List<ChallengeIncentiveDto> getIncentives() {
     return incentives;
   }
@@ -382,12 +358,11 @@ public class ChallengeJsonLdDto {
 
   /**
    * Get submissionTypes
-   *
    * @return submissionTypes
    */
-  @NotNull
-  @Valid
-  @Schema(name = "submissionTypes", required = true)
+  @NotNull @Valid 
+  @Schema(name = "submissionTypes", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("submissionTypes")
   public List<ChallengeSubmissionTypeDto> getSubmissionTypes() {
     return submissionTypes;
   }
@@ -396,7 +371,7 @@ public class ChallengeJsonLdDto {
     this.submissionTypes = submissionTypes;
   }
 
-  public ChallengeJsonLdDto inputDataTypes(List<EdamConceptDto> inputDataTypes) {
+  public ChallengeJsonLdDto inputDataTypes(List<@Valid EdamConceptDto> inputDataTypes) {
     this.inputDataTypes = inputDataTypes;
     return this;
   }
@@ -411,16 +386,16 @@ public class ChallengeJsonLdDto {
 
   /**
    * Get inputDataTypes
-   *
    * @return inputDataTypes
    */
-  @Valid
-  @Schema(name = "inputDataTypes", required = false)
-  public List<EdamConceptDto> getInputDataTypes() {
+  @Valid 
+  @Schema(name = "inputDataTypes", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("inputDataTypes")
+  public List<@Valid EdamConceptDto> getInputDataTypes() {
     return inputDataTypes;
   }
 
-  public void setInputDataTypes(List<EdamConceptDto> inputDataTypes) {
+  public void setInputDataTypes(List<@Valid EdamConceptDto> inputDataTypes) {
     this.inputDataTypes = inputDataTypes;
   }
 
@@ -439,12 +414,11 @@ public class ChallengeJsonLdDto {
 
   /**
    * Get categories
-   *
    * @return categories
    */
-  @NotNull
-  @Valid
-  @Schema(name = "categories", required = true)
+  @NotNull @Valid 
+  @Schema(name = "categories", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("categories")
   public List<ChallengeCategoryDto> getCategories() {
     return categories;
   }
@@ -460,16 +434,11 @@ public class ChallengeJsonLdDto {
 
   /**
    * The start date of the challenge.
-   *
    * @return startDate
    */
-  @Valid
-  @Schema(
-    name = "startDate",
-    example = "Fri Jul 21 00:00:00 UTC 2017",
-    description = "The start date of the challenge.",
-    required = false
-  )
+  @Valid 
+  @Schema(name = "startDate", example = "2017-07-21", description = "The start date of the challenge.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("startDate")
   public LocalDate getStartDate() {
     return startDate;
   }
@@ -485,16 +454,11 @@ public class ChallengeJsonLdDto {
 
   /**
    * The end date of the challenge.
-   *
    * @return endDate
    */
-  @Valid
-  @Schema(
-    name = "endDate",
-    example = "Fri Jul 21 00:00:00 UTC 2017",
-    description = "The end date of the challenge.",
-    required = false
-  )
+  @Valid 
+  @Schema(name = "endDate", example = "2017-07-21", description = "The end date of the challenge.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("endDate")
   public LocalDate getEndDate() {
     return endDate;
   }
@@ -509,18 +473,13 @@ public class ChallengeJsonLdDto {
   }
 
   /**
-   * The number of times the challenge has been starred by users. minimum: 0
-   *
+   * The number of times the challenge has been starred by users.
+   * minimum: 0
    * @return starredCount
    */
-  @NotNull
-  @Min(0)
-  @Schema(
-    name = "starredCount",
-    example = "100",
-    description = "The number of times the challenge has been starred by users.",
-    required = true
-  )
+  @NotNull @Min(0) 
+  @Schema(name = "starredCount", example = "100", description = "The number of times the challenge has been starred by users.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("starredCount")
   public Integer getStarredCount() {
     return starredCount;
   }
@@ -536,11 +495,11 @@ public class ChallengeJsonLdDto {
 
   /**
    * Get operation
-   *
    * @return operation
    */
-  @Valid
-  @Schema(name = "operation", required = false)
+  @Valid 
+  @Schema(name = "operation", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("operation")
   public EdamConceptDto getOperation() {
     return operation;
   }
@@ -556,17 +515,11 @@ public class ChallengeJsonLdDto {
 
   /**
    * Datetime when the object was added to the database.
-   *
    * @return createdAt
    */
-  @NotNull
-  @Valid
-  @Schema(
-    name = "createdAt",
-    example = "2022-07-04T22:19:11Z",
-    description = "Datetime when the object was added to the database.",
-    required = true
-  )
+  @NotNull @Valid 
+  @Schema(name = "createdAt", example = "2022-07-04T22:19:11Z", description = "Datetime when the object was added to the database.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("createdAt")
   public OffsetDateTime getCreatedAt() {
     return createdAt;
   }
@@ -582,17 +535,11 @@ public class ChallengeJsonLdDto {
 
   /**
    * Datetime when the object was last modified in the database.
-   *
    * @return updatedAt
    */
-  @NotNull
-  @Valid
-  @Schema(
-    name = "updatedAt",
-    example = "2022-07-04T22:19:11Z",
-    description = "Datetime when the object was last modified in the database.",
-    required = true
-  )
+  @NotNull @Valid 
+  @Schema(name = "updatedAt", example = "2022-07-04T22:19:11Z", description = "Datetime when the object was last modified in the database.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("updatedAt")
   public OffsetDateTime getUpdatedAt() {
     return updatedAt;
   }
@@ -608,11 +555,11 @@ public class ChallengeJsonLdDto {
 
   /**
    * Get atContext
-   *
    * @return atContext
    */
-  @NotNull
-  @Schema(name = "@context", example = "https://schema.org", required = true)
+  @NotNull 
+  @Schema(name = "@context", example = "https://schema.org", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("@context")
   public String getAtContext() {
     return atContext;
   }
@@ -628,11 +575,11 @@ public class ChallengeJsonLdDto {
 
   /**
    * Get atId
-   *
    * @return atId
    */
-  @NotNull
-  @Schema(name = "@id", example = "https://openchallenges.io/api/v1/challenges/1", required = true)
+  @NotNull 
+  @Schema(name = "@id", example = "https://openchallenges.io/api/v1/challenges/1", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("@id")
   public String getAtId() {
     return atId;
   }
@@ -648,11 +595,11 @@ public class ChallengeJsonLdDto {
 
   /**
    * Get atType
-   *
    * @return atType
    */
-  @NotNull
-  @Schema(name = "@type", example = "Challenge", required = true)
+  @NotNull 
+  @Schema(name = "@type", example = "Challenge", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("@type")
   public String getAtType() {
     return atType;
   }
@@ -670,60 +617,34 @@ public class ChallengeJsonLdDto {
       return false;
     }
     ChallengeJsonLdDto challengeJsonLd = (ChallengeJsonLdDto) o;
-    return (
-      Objects.equals(this.id, challengeJsonLd.id) &&
-      Objects.equals(this.slug, challengeJsonLd.slug) &&
-      Objects.equals(this.name, challengeJsonLd.name) &&
-      Objects.equals(this.headline, challengeJsonLd.headline) &&
-      Objects.equals(this.description, challengeJsonLd.description) &&
-      Objects.equals(this.doi, challengeJsonLd.doi) &&
-      Objects.equals(this.status, challengeJsonLd.status) &&
-      Objects.equals(this.platform, challengeJsonLd.platform) &&
-      Objects.equals(this.websiteUrl, challengeJsonLd.websiteUrl) &&
-      Objects.equals(this.avatarUrl, challengeJsonLd.avatarUrl) &&
-      Objects.equals(this.incentives, challengeJsonLd.incentives) &&
-      Objects.equals(this.submissionTypes, challengeJsonLd.submissionTypes) &&
-      Objects.equals(this.inputDataTypes, challengeJsonLd.inputDataTypes) &&
-      Objects.equals(this.categories, challengeJsonLd.categories) &&
-      Objects.equals(this.startDate, challengeJsonLd.startDate) &&
-      Objects.equals(this.endDate, challengeJsonLd.endDate) &&
-      Objects.equals(this.starredCount, challengeJsonLd.starredCount) &&
-      Objects.equals(this.operation, challengeJsonLd.operation) &&
-      Objects.equals(this.createdAt, challengeJsonLd.createdAt) &&
-      Objects.equals(this.updatedAt, challengeJsonLd.updatedAt) &&
-      Objects.equals(this.atContext, challengeJsonLd.atContext) &&
-      Objects.equals(this.atId, challengeJsonLd.atId) &&
-      Objects.equals(this.atType, challengeJsonLd.atType)
-    );
+    return Objects.equals(this.id, challengeJsonLd.id) &&
+        Objects.equals(this.slug, challengeJsonLd.slug) &&
+        Objects.equals(this.name, challengeJsonLd.name) &&
+        Objects.equals(this.headline, challengeJsonLd.headline) &&
+        Objects.equals(this.description, challengeJsonLd.description) &&
+        Objects.equals(this.doi, challengeJsonLd.doi) &&
+        Objects.equals(this.status, challengeJsonLd.status) &&
+        Objects.equals(this.platform, challengeJsonLd.platform) &&
+        Objects.equals(this.websiteUrl, challengeJsonLd.websiteUrl) &&
+        Objects.equals(this.avatarUrl, challengeJsonLd.avatarUrl) &&
+        Objects.equals(this.incentives, challengeJsonLd.incentives) &&
+        Objects.equals(this.submissionTypes, challengeJsonLd.submissionTypes) &&
+        Objects.equals(this.inputDataTypes, challengeJsonLd.inputDataTypes) &&
+        Objects.equals(this.categories, challengeJsonLd.categories) &&
+        Objects.equals(this.startDate, challengeJsonLd.startDate) &&
+        Objects.equals(this.endDate, challengeJsonLd.endDate) &&
+        Objects.equals(this.starredCount, challengeJsonLd.starredCount) &&
+        Objects.equals(this.operation, challengeJsonLd.operation) &&
+        Objects.equals(this.createdAt, challengeJsonLd.createdAt) &&
+        Objects.equals(this.updatedAt, challengeJsonLd.updatedAt) &&
+        Objects.equals(this.atContext, challengeJsonLd.atContext) &&
+        Objects.equals(this.atId, challengeJsonLd.atId) &&
+        Objects.equals(this.atType, challengeJsonLd.atType);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(
-      id,
-      slug,
-      name,
-      headline,
-      description,
-      doi,
-      status,
-      platform,
-      websiteUrl,
-      avatarUrl,
-      incentives,
-      submissionTypes,
-      inputDataTypes,
-      categories,
-      startDate,
-      endDate,
-      starredCount,
-      operation,
-      createdAt,
-      updatedAt,
-      atContext,
-      atId,
-      atType
-    );
+    return Objects.hash(id, slug, name, headline, description, doi, status, platform, websiteUrl, avatarUrl, incentives, submissionTypes, inputDataTypes, categories, startDate, endDate, starredCount, operation, createdAt, updatedAt, atContext, atId, atType);
   }
 
   @Override
@@ -758,7 +679,8 @@ public class ChallengeJsonLdDto {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
    */
   private String toIndentedString(Object o) {
     if (o == null) {
@@ -766,4 +688,195 @@ public class ChallengeJsonLdDto {
     }
     return o.toString().replace("\n", "\n    ");
   }
+  
+  public static class Builder {
+
+    private ChallengeJsonLdDto instance;
+
+    public Builder() {
+      this(new ChallengeJsonLdDto());
+    }
+
+    protected Builder(ChallengeJsonLdDto instance) {
+      this.instance = instance;
+    }
+
+    protected Builder copyOf(ChallengeJsonLdDto value) { 
+      this.instance.setId(value.id);
+      this.instance.setSlug(value.slug);
+      this.instance.setName(value.name);
+      this.instance.setHeadline(value.headline);
+      this.instance.setDescription(value.description);
+      this.instance.setDoi(value.doi);
+      this.instance.setStatus(value.status);
+      this.instance.setPlatform(value.platform);
+      this.instance.setWebsiteUrl(value.websiteUrl);
+      this.instance.setAvatarUrl(value.avatarUrl);
+      this.instance.setIncentives(value.incentives);
+      this.instance.setSubmissionTypes(value.submissionTypes);
+      this.instance.setInputDataTypes(value.inputDataTypes);
+      this.instance.setCategories(value.categories);
+      this.instance.setStartDate(value.startDate);
+      this.instance.setEndDate(value.endDate);
+      this.instance.setStarredCount(value.starredCount);
+      this.instance.setOperation(value.operation);
+      this.instance.setCreatedAt(value.createdAt);
+      this.instance.setUpdatedAt(value.updatedAt);
+      this.instance.setAtContext(value.atContext);
+      this.instance.setAtId(value.atId);
+      this.instance.setAtType(value.atType);
+      return this;
+    }
+
+    public ChallengeJsonLdDto.Builder id(Long id) {
+      this.instance.id(id);
+      return this;
+    }
+    
+    public ChallengeJsonLdDto.Builder slug(String slug) {
+      this.instance.slug(slug);
+      return this;
+    }
+    
+    public ChallengeJsonLdDto.Builder name(String name) {
+      this.instance.name(name);
+      return this;
+    }
+    
+    public ChallengeJsonLdDto.Builder headline(String headline) {
+      this.instance.headline(headline);
+      return this;
+    }
+    
+    public ChallengeJsonLdDto.Builder description(String description) {
+      this.instance.description(description);
+      return this;
+    }
+    
+    public ChallengeJsonLdDto.Builder doi(String doi) {
+      this.instance.doi(doi);
+      return this;
+    }
+    
+    public ChallengeJsonLdDto.Builder status(ChallengeStatusDto status) {
+      this.instance.status(status);
+      return this;
+    }
+    
+    public ChallengeJsonLdDto.Builder platform(SimpleChallengePlatformDto platform) {
+      this.instance.platform(platform);
+      return this;
+    }
+    
+    public ChallengeJsonLdDto.Builder websiteUrl(String websiteUrl) {
+      this.instance.websiteUrl(websiteUrl);
+      return this;
+    }
+    
+    public ChallengeJsonLdDto.Builder avatarUrl(String avatarUrl) {
+      this.instance.avatarUrl(avatarUrl);
+      return this;
+    }
+    
+    public ChallengeJsonLdDto.Builder incentives(List<ChallengeIncentiveDto> incentives) {
+      this.instance.incentives(incentives);
+      return this;
+    }
+    
+    public ChallengeJsonLdDto.Builder submissionTypes(List<ChallengeSubmissionTypeDto> submissionTypes) {
+      this.instance.submissionTypes(submissionTypes);
+      return this;
+    }
+    
+    public ChallengeJsonLdDto.Builder inputDataTypes(List<EdamConceptDto> inputDataTypes) {
+      this.instance.inputDataTypes(inputDataTypes);
+      return this;
+    }
+    
+    public ChallengeJsonLdDto.Builder categories(List<ChallengeCategoryDto> categories) {
+      this.instance.categories(categories);
+      return this;
+    }
+    
+    public ChallengeJsonLdDto.Builder startDate(LocalDate startDate) {
+      this.instance.startDate(startDate);
+      return this;
+    }
+    
+    public ChallengeJsonLdDto.Builder endDate(LocalDate endDate) {
+      this.instance.endDate(endDate);
+      return this;
+    }
+    
+    public ChallengeJsonLdDto.Builder starredCount(Integer starredCount) {
+      this.instance.starredCount(starredCount);
+      return this;
+    }
+    
+    public ChallengeJsonLdDto.Builder operation(EdamConceptDto operation) {
+      this.instance.operation(operation);
+      return this;
+    }
+    
+    public ChallengeJsonLdDto.Builder createdAt(OffsetDateTime createdAt) {
+      this.instance.createdAt(createdAt);
+      return this;
+    }
+    
+    public ChallengeJsonLdDto.Builder updatedAt(OffsetDateTime updatedAt) {
+      this.instance.updatedAt(updatedAt);
+      return this;
+    }
+    
+    public ChallengeJsonLdDto.Builder atContext(String atContext) {
+      this.instance.atContext(atContext);
+      return this;
+    }
+    
+    public ChallengeJsonLdDto.Builder atId(String atId) {
+      this.instance.atId(atId);
+      return this;
+    }
+    
+    public ChallengeJsonLdDto.Builder atType(String atType) {
+      this.instance.atType(atType);
+      return this;
+    }
+    
+    /**
+    * returns a built ChallengeJsonLdDto instance.
+    *
+    * The builder is not reusable (NullPointerException)
+    */
+    public ChallengeJsonLdDto build() {
+      try {
+        return this.instance;
+      } finally {
+        // ensure that this.instance is not reused
+        this.instance = null;
+      }
+    }
+
+    @Override
+    public String toString() {
+      return getClass() + "=(" + instance + ")";
+    }
+  }
+
+  /**
+  * Create a builder with no initialized field (except for the default values).
+  */
+  public static ChallengeJsonLdDto.Builder builder() {
+    return new ChallengeJsonLdDto.Builder();
+  }
+
+  /**
+  * Create a builder with a shallow copy of this instance.
+  */
+  public ChallengeJsonLdDto.Builder toBuilder() {
+    ChallengeJsonLdDto.Builder builder = new ChallengeJsonLdDto.Builder();
+    return builder.copyOf(this);
+  }
+
 }
+

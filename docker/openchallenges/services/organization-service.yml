@@ -21,6 +21,8 @@ services:
         condition: service_healthy
       openchallenges-mariadb:
         condition: service_healthy
+      openchallenges-postgres:
+        condition: service_healthy
       openchallenges-service-registry:
         condition: service_healthy
     deploy:

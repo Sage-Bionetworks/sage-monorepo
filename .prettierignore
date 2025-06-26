@@ -25,3 +25,6 @@ great_expectations
 
 # Mist
 tmp
+
+# Ignoring until we figure out how to handle different SQL dialects
+apps/openchallenges/postgres/docker-entrypoint-initdb.d/init-db.sql
