@@ -11,6 +11,3 @@ services:
       resources:
         limits:
           memory: 500M
-    depends_on:
-      openchallenges-mariadb:
-        condition: service_healthy

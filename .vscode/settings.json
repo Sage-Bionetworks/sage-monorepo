@@ -59,18 +59,6 @@
   "sqltools.autoOpenSessionFiles": false,
   "sqltools.connections": [
     {
-      "mysqlOptions": {
-        "authProtocol": "default"
-      },
-      "previewLimit": 50,
-      "server": "openchallenges-mariadb",
-      "port": 3306,
-      "driver": "MariaDB",
-      "name": "openchallenges-mariadb",
-      "username": "maria",
-      "password": "changeme"
-    },
-    {
       "previewLimit": 50,
       "server": "iatlas-postgres",
       "port": 2432,
