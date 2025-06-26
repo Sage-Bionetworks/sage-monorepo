@@ -97,19 +97,6 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON FUNCTIONS TO organization
 -- Switch back to default database
 \c postgres;
 
--- Create user for openchallenges-edam-etl
-CREATE ROLE edam_etl LOGIN PASSWORD 'changeme';
-GRANT CONNECT ON DATABASE edam TO edam_etl;
-
-\c edam;
-GRANT ALL PRIVILEGES ON SCHEMA public TO edam_etl;
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO edam_etl;
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO edam_etl;
-GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO edam_etl;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO edam_etl;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO edam_etl;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON FUNCTIONS TO edam_etl;
-
 -- Create user for openchallenges-user-service (commented out in original)
 -- \c postgres;
 -- CREATE ROLE user_service LOGIN PASSWORD 'changeme';
