@@ -5,7 +5,7 @@ import {
 } from '@sagebionetworks/explorers/comparison-tools';
 import { ComparisonToolService } from '@sagebionetworks/model-ad/services';
 import { GeneExpressionHelpLinksComponent } from './components/gene-expression-help-links/gene-expression-help-links.component';
-import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/models';
+import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/util';
 @Component({
   selector: 'model-ad-gene-expression-comparison-tool',
   imports: [

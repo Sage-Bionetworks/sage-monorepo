@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { render, screen } from '@testing-library/angular';
 import { provideHttpClient } from '@angular/common/http';
-import { getModelAdTestProviders } from '@sagebionetworks/model-ad/testing';
+import { LOADING_ICON_COLORS_PROVIDER } from '@sagebionetworks/model-ad/testing';
 
 @Component({
   selector: 'explorers-hero',
@@ -27,7 +27,7 @@ async function setup() {
       heroTitle: TITLE,
     },
     imports: [CommonModule, MockHeroComponent, MockWikiComponent],
-    providers: [provideHttpClient(), ...getModelAdTestProviders()],
+    providers: [provideHttpClient(), LOADING_ICON_COLORS_PROVIDER],
   });
 
   const component = fixture.componentInstance;

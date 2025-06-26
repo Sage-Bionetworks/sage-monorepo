@@ -5,7 +5,7 @@ import {
 } from '@sagebionetworks/explorers/comparison-tools';
 import { ComparisonToolService } from '@sagebionetworks/model-ad/services';
 import { DiseaseCorrelationHelpLinksComponent } from './components/disease-correlation-help-links/disease-correlation-help-links.component';
-import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/models';
+import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/util';
 @Component({
   selector: 'model-ad-disease-correlation-comparison-tool',
   imports: [

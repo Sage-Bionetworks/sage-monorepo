@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, ViewEncapsulation } from '@angular/core';
-import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/models';
+import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/util';
 
 @Component({
   selector: 'explorers-loading-icon',

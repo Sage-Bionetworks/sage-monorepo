@@ -1,12 +1,12 @@
 import { render } from '@testing-library/angular';
 import { BaseComparisonToolComponent } from './base-comparison-tool.component';
 import { LoadingContainerComponent } from '@sagebionetworks/explorers/util';
-import { getModelAdTestProviders } from '@sagebionetworks/model-ad/testing';
+import { LOADING_ICON_COLORS_PROVIDER } from '@sagebionetworks/model-ad/testing';
 
 async function setup() {
   const { fixture } = await render(BaseComparisonToolComponent, {
     imports: [LoadingContainerComponent],
-    providers: [getModelAdTestProviders()],
+    providers: [LOADING_ICON_COLORS_PROVIDER],
   });
 
   const component = fixture.componentInstance;

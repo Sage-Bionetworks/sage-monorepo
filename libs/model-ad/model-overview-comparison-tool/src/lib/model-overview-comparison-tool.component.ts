@@ -5,7 +5,7 @@ import {
 } from '@sagebionetworks/explorers/comparison-tools';
 import { ComparisonToolService } from '@sagebionetworks/model-ad/services';
 import { ModelOverviewHelpLinksComponent } from './components/model-overview-help-links/model-overview-help-links.component';
-import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/models';
+import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/util';
 @Component({
   selector: 'model-ad-model-overview-comparison-tool',
   imports: [
