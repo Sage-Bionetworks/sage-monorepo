@@ -1,5 +1,11 @@
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { APP_ID, ApplicationConfig, inject, provideAppInitializer } from '@angular/core';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import {
+  APP_ID,
+  ApplicationConfig,
+  inject,
+  provideAppInitializer,
+  provideZoneChangeDetection,
+} from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
   provideRouter,
@@ -21,6 +27,7 @@ import {
 import { MessageService } from 'primeng/api';
 import { CustomUrlSerializer } from './app.custom-uri-serializer';
 import { routes } from './app.routes';
+import { provideClientHydration } from '@angular/platform-browser';
 
 // This index is used to remove the corresponding provider in app.config.server.ts.
 // TODO: This index could be out of sync if we are not careful. Find a more elegant way.
@@ -61,7 +68,9 @@ export const appConfig: ApplicationConfig = {
         },
       },
     }),
-    provideHttpClient(withInterceptors([httpErrorInterceptor])),
+    provideHttpClient(withFetch(), withInterceptors([httpErrorInterceptor])),
+    provideClientHydration(),
+    provideZoneChangeDetection({ eventCoalescing: true }),
     {
       provide: RollbarService,
       useFactory: rollbarFactory,
