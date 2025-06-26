@@ -1,4 +1,3 @@
-
 import { Component, computed, input } from '@angular/core';
 import { ResourceCardsComponent } from '@sagebionetworks/explorers/ui';
 import { Model } from '@sagebionetworks/model-ad/api-client-angular';
@@ -12,24 +11,33 @@ import { Model } from '@sagebionetworks/model-ad/api-client-angular';
 export class ModelDetailsResourcesComponent {
   model = input.required<Model>();
 
-  modelSpecificResourceCards = computed(() => [
-    {
-      imagePath: '/model-ad-assets/images/ad-knowledge-portal-logo.svg',
-      description:
-        "Explore all of the data and metadata that's available for this model in the AD Knowledge Portal.",
-      link: `https://adknowledgeportal.synapse.org/Explore/Studies/DetailsPage/StudyDetails?Study=${this.model().study_synid}`,
-    },
-    {
-      imagePath: '/model-ad-assets/images/alzforum-logo.svg',
-      description: 'Visit Alzforum to find more information about this model.',
-      link: `https://www.alzforum.org/research-models/${this.model().alzforum_id}`,
-    },
-    {
-      imagePath: '/model-ad-assets/images/jax-logo.svg',
-      description: 'View detailed information about this AD model on JAX.',
-      link: `https://www.jax.org/strain/${this.model().jax_id}`,
-    },
-  ]);
+  modelSpecificResourceCards = computed(() => {
+    const cards = [
+      {
+        imagePath: '/model-ad-assets/images/ad-knowledge-portal-logo.svg',
+        description:
+          "Explore all of the data and metadata that's available for this model in the AD Knowledge Portal.",
+        link: `https://adknowledgeportal.synapse.org/Explore/Studies/DetailsPage/StudyDetails?Study=${this.model().study_synid}`,
+      },
+      {
+        imagePath: '/model-ad-assets/images/alzforum-logo.svg',
+        description: 'Visit Alzforum to find more information about this model.',
+        link: `https://www.alzforum.org/research-models/${this.model().alzforum_id}`,
+      },
+      {
+        imagePath: '/model-ad-assets/images/jax-logo.svg',
+        description: 'View detailed information about this AD model on JAX.',
+        link: `https://www.jax.org/strain/${this.model().jax_id}`,
+      },
+    ];
+
+    return cards.filter((card) => {
+      if (card.imagePath.includes('alzforum-logo')) {
+        return this.model().alzforum_id !== '';
+      }
+      return true;
+    });
+  });
 
   additionalResourceCards = [
     {
