@@ -24,7 +24,7 @@ export interface ChallengePlatform {
    * The name of the challenge platform.
    */
   name: string;
-  avatarUrl: string;
+  avatarKey: string;
   websiteUrl: string;
   createdAt: string;
   updatedAt: string;

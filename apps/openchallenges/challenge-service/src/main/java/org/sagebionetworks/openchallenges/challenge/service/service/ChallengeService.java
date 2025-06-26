@@ -3,6 +3,7 @@ package org.sagebionetworks.openchallenges.challenge.service.service;
 import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.openchallenges.challenge.service.ChallengeServiceApplication;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeJsonLdDto;
@@ -12,15 +13,18 @@ import org.sagebionetworks.openchallenges.challenge.service.model.entity.Challen
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengeJsonLdMapper;
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengeMapper;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Slf4j
 @Service
 public class ChallengeService {
+
+  private static final Logger logger = LoggerFactory.getLogger(ChallengeService.class);
 
   private final ChallengeRepository challengeRepository;
 
@@ -45,7 +49,7 @@ public class ChallengeService {
 
   @Transactional(readOnly = true)
   public ChallengesPageDto listChallenges(ChallengeSearchQueryDto query) {
-    log.info("query {}", query);
+    logger.debug("query {}", query);
 
     Pageable pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
 
@@ -59,7 +63,7 @@ public class ChallengeService {
       query,
       fieldsToSearchBy.toArray(new String[0])
     );
-    log.info("challengeEntitiesPage {}", challengeEntitiesPage);
+    logger.debug("challengeEntitiesPage {}", challengeEntitiesPage);
 
     List<ChallengeDto> challenges = challengeMapper.convertToDtoList(
       challengeEntitiesPage.getContent()

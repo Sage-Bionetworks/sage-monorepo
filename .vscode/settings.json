@@ -97,9 +97,19 @@
       "server": "openchallenges-postgres",
       "port": 8091,
       "driver": "PostgreSQL",
-      "name": "openchallenges-postgres",
+      "name": "openchallenges-organization-service",
       "database": "organization_service",
-      "username": "postgres",
+      "username": "organization_service",
+      "password": "changeme"
+    },
+    {
+      "previewLimit": 50,
+      "server": "openchallenges-postgres",
+      "port": 8091,
+      "driver": "PostgreSQL",
+      "name": "openchallenges-challenge-service",
+      "database": "challenge_service",
+      "username": "challenge_service",
       "password": "changeme"
     }
   ],

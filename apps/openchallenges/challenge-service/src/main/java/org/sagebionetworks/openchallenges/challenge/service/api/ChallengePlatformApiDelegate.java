@@ -42,7 +42,7 @@ public interface ChallengePlatformApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"createdAt\" : \"2022-07-04T22:19:11Z\", \"avatarUrl\" : \"https://via.placeholder.com/300.png\", \"websiteUrl\" : \"https://example.com\", \"name\" : \"name\", \"id\" : 1, \"slug\" : \"example-challenge-platform\", \"updatedAt\" : \"2022-07-04T22:19:11Z\" }";
+                    String exampleString = "{ \"createdAt\" : \"2022-07-04T22:19:11Z\", \"avatarKey\" : \"logo/dream.png\", \"websiteUrl\" : \"https://example.com\", \"name\" : \"name\", \"id\" : 1, \"slug\" : \"example-challenge-platform\", \"updatedAt\" : \"2022-07-04T22:19:11Z\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -76,7 +76,7 @@ public interface ChallengePlatformApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"number\" : 99, \"size\" : 99, \"challengePlatforms\" : [ { \"createdAt\" : \"2022-07-04T22:19:11Z\", \"avatarUrl\" : \"https://via.placeholder.com/300.png\", \"websiteUrl\" : \"https://example.com\", \"name\" : \"name\", \"id\" : 1, \"slug\" : \"example-challenge-platform\", \"updatedAt\" : \"2022-07-04T22:19:11Z\" }, { \"createdAt\" : \"2022-07-04T22:19:11Z\", \"avatarUrl\" : \"https://via.placeholder.com/300.png\", \"websiteUrl\" : \"https://example.com\", \"name\" : \"name\", \"id\" : 1, \"slug\" : \"example-challenge-platform\", \"updatedAt\" : \"2022-07-04T22:19:11Z\" } ], \"totalPages\" : 99, \"hasPrevious\" : true, \"hasNext\" : true, \"totalElements\" : 99 }";
+                    String exampleString = "{ \"number\" : 99, \"size\" : 99, \"challengePlatforms\" : [ { \"createdAt\" : \"2022-07-04T22:19:11Z\", \"avatarKey\" : \"logo/dream.png\", \"websiteUrl\" : \"https://example.com\", \"name\" : \"name\", \"id\" : 1, \"slug\" : \"example-challenge-platform\", \"updatedAt\" : \"2022-07-04T22:19:11Z\" }, { \"createdAt\" : \"2022-07-04T22:19:11Z\", \"avatarKey\" : \"logo/dream.png\", \"websiteUrl\" : \"https://example.com\", \"name\" : \"name\", \"id\" : 1, \"slug\" : \"example-challenge-platform\", \"updatedAt\" : \"2022-07-04T22:19:11Z\" } ], \"totalPages\" : 99, \"hasPrevious\" : true, \"hasNext\" : true, \"totalElements\" : 99 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

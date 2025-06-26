@@ -25,7 +25,6 @@ jobs:
         image:
           - 'openchallenges-apex'
           - 'openchallenges-api-gateway'
-          - 'openchallenges-challenge-service'
 
     steps:
       - name: Login to GitHub Container Registry

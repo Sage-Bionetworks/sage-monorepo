@@ -16,15 +16,4 @@ public class FlywayConfiguration {
       flyway.migrate();
     };
   }
-  // @Autowired
-  // public FlywayConfiguration(DataSource dataSource) {
-  //   Flyway flyway =
-  //       Flyway.configure()
-  //           // .baselineOnMigrate(true)
-  //           .cleanDisabled(false)
-  //           .dataSource(dataSource)
-  //           .load();
-  //   // flyway.clean();
-  //   // flyway.migrate();
-  // }
 }
