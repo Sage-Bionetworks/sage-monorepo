@@ -1,7 +1,7 @@
 /* stylelint-disable no-descending-specificity */
 @use 'sass:map';
-@import 'libs/agora/styles/src/lib/variables';
-@import 'libs/agora/styles/src/lib/mixins';
+@use 'agora/styles/src/lib/variables';
+@use 'agora/styles/src/lib/mixins';
 
 .gene-search {
   position: relative;
@@ -20,7 +20,7 @@
       border: 3px solid var(--color-secondary);
       padding-left: var(--spacing-md);
 
-      @include respond-to('ex-large') {
+      @include mixins.respond-to('ex-large') {
         padding-left: var(--spacing-lg);
       }
     }
@@ -44,7 +44,7 @@
       font-size: var(--font-size-md);
       padding: 23px var(--spacing-sm);
 
-      @include respond-to('ex-large') {
+      @include mixins.respond-to('ex-large') {
         padding-left: var(--spacing-md);
       }
     }
@@ -71,7 +71,7 @@
 
     .gene-search-bar-close {
       button {
-        @include reset-button;
+        @include mixins.reset-button;
 
         position: absolute;
         top: 0;
@@ -81,7 +81,7 @@
         cursor: pointer;
 
         * svg path {
-          transition: $transition-duration;
+          transition: variables.$transition-duration;
         }
 
         &:hover {

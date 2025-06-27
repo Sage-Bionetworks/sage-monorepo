@@ -1,12 +1,12 @@
-@import 'libs/agora/styles/src/lib/variables';
-@import 'libs/agora/styles/src/lib/mixins';
+@use 'agora/styles/src/lib/variables';
+@use 'agora/styles/src/lib/mixins';
 
 .gene-seo-list {
-  @include reset-ul;
+  @include mixins.reset-ul;
 
   .item {
     .item-inner {
-      @include container;
+      @include mixins.container;
 
       display: flex;
       padding: 20px var(--spacing-lg) 28px var(--spacing-lg);

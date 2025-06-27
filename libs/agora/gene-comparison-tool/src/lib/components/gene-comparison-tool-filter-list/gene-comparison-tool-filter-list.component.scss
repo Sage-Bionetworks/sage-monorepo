@@ -1,12 +1,12 @@
 @use 'sass:map';
-@import 'libs/agora/styles/src/lib/variables';
-@import 'libs/agora/styles/src/lib/mixins';
+@use 'agora/styles/src/lib/variables';
+@use 'agora/styles/src/lib/mixins';
 
 .gct-filter-list {
   white-space: nowrap;
 
   button {
-    @include reset-button;
+    @include mixins.reset-button;
   }
 
   .gct-filter-list-inner {
@@ -25,12 +25,12 @@
     font-weight: 700;
     text-transform: uppercase;
     cursor: pointer;
-    transition: $transition-duration;
+    transition: variables.$transition-duration;
 
     &:hover {
       color: var(--color-action-primary);
 
-      @include link-hover;
+      @include mixins.link-hover;
     }
 
     &:hover agora-svg-icon {
