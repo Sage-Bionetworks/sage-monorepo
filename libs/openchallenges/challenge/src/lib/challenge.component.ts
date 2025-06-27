@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {
   ChallengeJsonLd,
@@ -51,6 +51,14 @@ import { HttpParams } from '@angular/common/http';
   styleUrls: ['./challenge.component.scss'],
 })
 export class ChallengeComponent implements OnInit, OnDestroy {
+  private activatedRoute = inject(ActivatedRoute);
+  private router = inject(Router);
+  private challengeService = inject(ChallengeService);
+  private configService = inject(ConfigService);
+  private seoService = inject(SeoService);
+  private renderer2 = inject(Renderer2);
+  private _location = inject(Location);
+
   public appVersion: string;
   public dataUpdatedOn: string;
   public privacyPolicyUrl: string;
@@ -64,15 +72,7 @@ export class ChallengeComponent implements OnInit, OnDestroy {
   activeTab!: Tab;
   private subscription = new Subscription();
 
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private challengeService: ChallengeService,
-    private readonly configService: ConfigService,
-    private seoService: SeoService,
-    private renderer2: Renderer2,
-    private _location: Location,
-  ) {
+  constructor() {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
     this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;

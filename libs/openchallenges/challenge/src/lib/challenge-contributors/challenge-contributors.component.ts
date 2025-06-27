@@ -1,5 +1,4 @@
-
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { Observable, catchError, forkJoin, iif, map, of, shareReplay, switchMap, take } from 'rxjs';
 import {
   Challenge,
@@ -30,17 +29,15 @@ type ContributionCardBundle = {
   styleUrls: ['./challenge-contributors.component.scss'],
 })
 export class ChallengeContributorsComponent implements OnInit {
+  private challengeContributionService = inject(ChallengeContributionService);
+  private organizationService = inject(OrganizationService);
+  private imageService = inject(ImageService);
+
   @Input({ required: true }) challenge!: Challenge;
 
   organizerCardBundles: ContributionCardBundle[] = [];
   dataContributorCardBundles: ContributionCardBundle[] = [];
   sponsorCardBundles: ContributionCardBundle[] = [];
-
-  constructor(
-    private challengeContributionService: ChallengeContributionService,
-    private organizationService: OrganizationService,
-    private imageService: ImageService,
-  ) {}
 
   ngOnInit() {
     // Get all the contributions
