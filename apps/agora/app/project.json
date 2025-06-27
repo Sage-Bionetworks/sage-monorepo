@@ -25,23 +25,24 @@
         "tsConfig": "apps/agora/app/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
+          "apps/agora/app/src/assets",
           "apps/agora/app/src/config",
           "apps/agora/app/src/humans.txt",
           "apps/agora/app/src/robots.txt",
           {
-            "input": "libs/shared/typescript/assets/src",
+            "input": "libs/shared/typescript/assets/src/assets",
             "glob": "**/*",
-            "output": "assets/shared"
+            "output": "assets"
           },
           {
             "input": "libs/agora/assets",
             "glob": "**/*",
-            "output": "assets/agora"
+            "output": "agora-assets"
           },
           {
             "input": "libs/explorers/assets",
             "glob": "**/*",
-            "output": "assets/explorers"
+            "output": "explorers-assets"
           },
           {
             "input": "libs/agora/assets/favicon",
