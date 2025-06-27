@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HomeDataService } from '../home-data-service';
-// import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
-import { NgxEchartsModule, NGX_ECHARTS_CONFIG } from 'ngx-echarts';
+import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
+// import { NgxEchartsModule, NGX_ECHARTS_CONFIG } from 'ngx-echarts';
 import * as echarts from 'echarts/core';
+// import * as echarts from 'echarts';
 // import { EChartsOption } from 'echarts';
 import { CountUpModule } from 'ngx-countup';
 import { Subscription } from 'rxjs';
@@ -10,29 +11,29 @@ import { RouterModule } from '@angular/router';
 import { BarChart } from 'echarts/charts';
 import { GridComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
-import { EChartsOption } from 'echarts/types/dist/shared';
+// import { EChartsOption } from 'echarts/types/dist/shared';
 
 echarts.use([BarChart, GridComponent, CanvasRenderer]);
 
 @Component({
   selector: 'openchallenges-statistics-viewer',
-  imports: [RouterModule, CountUpModule, NgxEchartsModule], // NgxEchartsDirective
+  imports: [RouterModule, CountUpModule, NgxEchartsDirective], // NgxEchartsDirective
   templateUrl: './statistics-viewer.component.html',
   styleUrls: ['./statistics-viewer.component.scss'],
-  // providers: [provideEchartsCore({ echarts })],
-  providers: [
-    {
-      provide: NGX_ECHARTS_CONFIG,
-      useFactory: () => ({ echarts: () => echarts }),
-    },
-  ],
+  providers: [provideEchartsCore({ echarts })],
+  // providers: [
+  //   {
+  //     provide: NGX_ECHARTS_CONFIG,
+  //     useFactory: () => ({ echarts: () => echarts }),
+  //   },
+  // ],
 })
 export class StatisticsViewerComponent implements OnInit, OnDestroy {
   constructor(private homeDataService: HomeDataService) {}
 
   private chartDataSubscription: Subscription | undefined;
 
-  chartOptions!: EChartsOption;
+  chartOptions!: echarts.EChartsCoreOption;
 
   ngOnInit() {
     // update plot's data
