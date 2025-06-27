@@ -20,3 +20,20 @@ get:
       $ref: ../../components/responses/NotFound.yaml
     '500':
       $ref: ../../components/responses/InternalServerError.yaml
+delete:
+  tags:
+    - Challenge
+  summary: Delete a challenge
+  description: |
+    Deletes a challenge using its unique ChallengeID. This action is
+    irreversible.
+  operationId: DeleteChallengeById
+  responses:
+    '204':
+      description: Deletion successful
+    '404':
+      $ref: ../../components/responses/NotFound.yaml
+    '403':
+      $ref: ../../components/responses/Unauthorized.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml
