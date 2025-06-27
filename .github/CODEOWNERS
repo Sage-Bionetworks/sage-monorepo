@@ -14,9 +14,6 @@
 /apps/openchallenges/challenge-service/src/main/resources/db/     @tschaffter @gaiaandreoletti
 /apps/openchallenges/organization-service/src/main/resources/db/  @tschaffter @gaiaandreoletti
 
-## EDAM ETL
-/apps/openchallenges/edam-etl/ @rrchai
-
 ## Sage
 /apps/sage/ @tschaffter
 /libs/sage/ @tschaffter

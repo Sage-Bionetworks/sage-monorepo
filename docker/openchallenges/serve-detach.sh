@@ -11,7 +11,6 @@ args=(
   --file docker/"$product_name"/services/challenge-service.yml
   --file docker/"$product_name"/services/config-server.yml
   --file docker/"$product_name"/services/data-lambda.yml
-  --file docker/"$product_name"/services/edam-etl.yml
   --file docker/"$product_name"/services/elasticsearch.yml
   --file docker/"$product_name"/services/image-service.yml
   --file docker/"$product_name"/services/kafka.yml
