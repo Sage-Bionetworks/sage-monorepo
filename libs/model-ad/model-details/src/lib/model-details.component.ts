@@ -8,6 +8,7 @@ import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { Model, ModelsService } from '@sagebionetworks/model-ad/api-client-angular';
 import { ConfigService } from '@sagebionetworks/model-ad/config';
+import { ModelDetailsHeroComponent } from './components/model-details-hero/model-details-hero.component';
 import { ModelDetailsOmicsComponent } from './components/model-details-omics/model-details-omics.component';
 import { ModelDetailsResourcesComponent } from './components/model-details-resources/model-details-resources.component';
 
@@ -17,8 +18,9 @@ import { ModelDetailsResourcesComponent } from './components/model-details-resou
     PanelNavigationComponent,
     LoadingIconComponent,
     ModelDetailsOmicsComponent,
-    ModelDetailsResourcesComponent
-],
+    ModelDetailsResourcesComponent,
+    ModelDetailsHeroComponent,
+  ],
   templateUrl: './model-details.component.html',
   styleUrls: ['./model-details.component.scss'],
 })
