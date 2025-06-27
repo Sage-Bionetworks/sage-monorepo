@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import {
   Challenge,
   ChallengeSearchQuery,
@@ -17,6 +17,8 @@ import { ChallengeCardComponent, PaginatorComponent } from '@sagebionetworks/ope
   styleUrls: ['./org-profile-challenges.component.scss'],
 })
 export class OrgProfileChallengesComponent implements OnInit {
+  private readonly challengeService = inject(ChallengeService);
+
   @Input({ required: true }) organization!: Organization;
   challenges: Challenge[] = [];
   // default pagination
@@ -28,8 +30,6 @@ export class OrgProfileChallengesComponent implements OnInit {
   private query: BehaviorSubject<ChallengeSearchQuery> = new BehaviorSubject<ChallengeSearchQuery>(
     {},
   );
-
-  constructor(private challengeService: ChallengeService) {}
 
   ngOnInit(): void {
     this.pageSizeOptions = this.getPageSizeOptions(this.pageSize);
