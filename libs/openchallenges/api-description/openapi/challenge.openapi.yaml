@@ -183,6 +183,11 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
   schemas:
     ChallengeSort:
       description: What to sort results by.
