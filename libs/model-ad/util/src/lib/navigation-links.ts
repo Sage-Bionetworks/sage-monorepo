@@ -1,5 +1,5 @@
 import { NavigationLink } from '@sagebionetworks/explorers/models';
-import { HELP_URL, ROUTE_PATHS } from '@sagebionetworks/model-ad/util';
+import { HELP_URL, ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 
 export const headerLinks: NavigationLink[] = [
   {

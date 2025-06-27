@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { HomeCardComponent, SvgImageComponent } from '@sagebionetworks/explorers/ui';
+import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import {
   checkQueryForErrors,
   getSearchResultsList,
   navigateToResult,
-  ROUTE_PATHS,
 } from '@sagebionetworks/model-ad/util';
 
 interface Stat {

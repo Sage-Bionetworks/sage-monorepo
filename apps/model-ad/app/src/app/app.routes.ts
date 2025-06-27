@@ -1,6 +1,6 @@
 import { ActivatedRouteSnapshot, Route } from '@angular/router';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
-import { ROUTE_PATHS, SUPPORT_EMAIL } from '@sagebionetworks/model-ad/util';
+import { ROUTE_PATHS, SUPPORT_EMAIL } from '@sagebionetworks/model-ad/config';
 
 export const routes: Route[] = [
   {
