@@ -3,11 +3,11 @@ import { modelMock } from '@sagebionetworks/model-ad/testing';
 import { render, screen } from '@testing-library/angular';
 import { ModelDetailsResourcesComponent } from './model-details-resources.component';
 
-async function setup() {
+async function setup(model = modelMock) {
   return render(ModelDetailsResourcesComponent, {
     imports: [ResourceCardsComponent],
     componentInputs: {
-      model: modelMock,
+      model: model,
     },
   });
 }
@@ -34,5 +34,10 @@ describe('ModelDetailsResourcesComponent', () => {
     expect(screen.getByText(/model-ad program/i)).toBeInTheDocument();
     expect(screen.getByText(/mouse genome informatics/i)).toBeInTheDocument();
     expect(screen.getByText(/model-ad preclinical testing core/i)).toBeInTheDocument();
+  });
+
+  it('should not display alzforum card when alzforum_id is missing', async () => {
+    await setup({ ...modelMock, alzforum_id: '' });
+    expect(screen.queryByText(/alzforum/i)).not.toBeInTheDocument();
   });
 });
