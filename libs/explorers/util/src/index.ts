@@ -1,3 +1,4 @@
+export * from './lib/constants';
 export * from './lib/helpers/functions';
 export * from './lib/loading-container/loading-container.component';
 export * from './lib/loading-icon/loading-icon.component';

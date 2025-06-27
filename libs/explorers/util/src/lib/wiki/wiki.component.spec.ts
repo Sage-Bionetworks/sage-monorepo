@@ -11,6 +11,7 @@ import {
   validWikiParams,
 } from 'libs/explorers/testing/src/lib/constants/wikiparams';
 import { validMarkdown } from 'libs/explorers/testing/src/lib/constants/markdown';
+import { LOADING_ICON_COLORS_PROVIDER } from '@sagebionetworks/model-ad/testing';
 
 // Mock DomSanitizer
 const mockDomSanitizer = {
@@ -24,6 +25,7 @@ describe('WikiComponent', () => {
         provideHttpClient(),
         SynapseApiService,
         { provide: DomSanitizer, useValue: mockDomSanitizer },
+        LOADING_ICON_COLORS_PROVIDER,
       ],
       componentInputs: {
         wikiParams,

@@ -2,11 +2,9 @@ import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'explorers-hero',
-  imports: [],
-  templateUrl: './hero.component.html',
-  styleUrls: ['./hero.component.scss'],
+  template: '<div>Mock Hero Component</div>',
 })
-export class HeroComponent {
+export class MockHeroComponent {
   title = input('');
   backgroundImagePath = input('');
 }

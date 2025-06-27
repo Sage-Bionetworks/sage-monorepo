@@ -1,11 +1,7 @@
 <div [class]="{ 'model-details': true, loading: isLoading }">
   @if (isLoading) {
     <div id="loading">
-      <explorers-loading-icon
-        [colorOutermost]="loadingIconColors.colorOutermost"
-        [colorCentral]="loadingIconColors.colorCentral"
-        [colorInnermost]="loadingIconColors.colorInnermost"
-      />
+      <explorers-loading-icon />
     </div>
   } @else if (model) {
     <model-ad-model-details-hero [model]="model" />

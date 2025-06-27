@@ -3,7 +3,7 @@ import { HeroComponent } from './hero.component';
 
 async function setup(props = {}) {
   return await render(HeroComponent, {
-    componentProperties: props,
+    componentInputs: props,
   });
 }
 

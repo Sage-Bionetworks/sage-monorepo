@@ -1,35 +1,28 @@
 import { CommonModule } from '@angular/common';
-import { provideHttpClient } from '@angular/common/http';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { SynapseApiService } from '@sagebionetworks/explorers/services';
+import { render, screen } from '@testing-library/angular';
 import { DialogModule } from 'primeng/dialog';
-import { LoadingIconComponent } from '../loading-icon/loading-icon.component';
-import { SvgIconComponent } from '../svg-icon/svg-icon.component';
-import { WikiComponent } from '../wiki/wiki.component';
 import { ModalLinkComponent } from './modal-link.component';
 
+// Mocks for child components
+import { MockSvgIconComponent, MockWikiComponent } from '@sagebionetworks/explorers/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
+
 describe('ModalLinkComponent', () => {
-  let fixture: ComponentFixture<ModalLinkComponent>;
-  let component: ModalLinkComponent;
+  async function setup({ text = 'Open Modal', title = 'Modal Title', textColor = '#000' }) {
+    const result = await render(ModalLinkComponent, {
+      componentInputs: { text: text, title: title, textColor: textColor },
+      imports: [CommonModule, DialogModule, MockSvgIconComponent, MockWikiComponent],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
+    });
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [
-        ModalLinkComponent,
-        CommonModule,
-        DialogModule,
-        SvgIconComponent,
-        WikiComponent,
-        LoadingIconComponent,
-      ],
-      providers: [SynapseApiService, provideHttpClient()],
-    }).compileComponents();
+    const component = result.fixture.componentInstance;
+    return { result, component };
+  }
 
-    fixture = TestBed.createComponent(ModalLinkComponent);
-    component = fixture.componentInstance;
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should render the link text', async () => {
+    const expectedText = 'Open Modal';
+    await setup({ text: expectedText });
+    expect(screen.getByText(expectedText)).toBeInTheDocument();
   });
 });
