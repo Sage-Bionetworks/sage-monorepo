@@ -1,23 +1,23 @@
-
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HomeDataService } from '../home-data-service';
-import { NgxEchartsModule, NGX_ECHARTS_CONFIG } from 'ngx-echarts';
+import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
+import * as echarts from 'echarts/core';
 import { EChartsOption } from 'echarts';
 import { CountUpModule } from 'ngx-countup';
 import { Subscription } from 'rxjs';
 import { RouterModule } from '@angular/router';
+import { BarChart } from 'echarts/charts';
+import { GridComponent } from 'echarts/components';
+import { CanvasRenderer } from 'echarts/renderers';
+
+echarts.use([BarChart, GridComponent, CanvasRenderer]);
 
 @Component({
   selector: 'openchallenges-statistics-viewer',
-  imports: [RouterModule, CountUpModule, NgxEchartsModule],
-  providers: [
-    {
-      provide: NGX_ECHARTS_CONFIG,
-      useFactory: () => ({ echarts: () => import('echarts') }),
-    },
-  ],
+  imports: [RouterModule, CountUpModule, NgxEchartsDirective],
   templateUrl: './statistics-viewer.component.html',
   styleUrls: ['./statistics-viewer.component.scss'],
+  providers: [provideEchartsCore({ echarts })],
 })
 export class StatisticsViewerComponent implements OnInit, OnDestroy {
   constructor(private homeDataService: HomeDataService) {}
