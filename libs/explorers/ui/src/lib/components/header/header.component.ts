@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, input, OnInit } from '@angular/core';
-import { NavigationLink } from '@sagebionetworks/explorers/models';
 import { RouterModule } from '@angular/router';
+import { NavigationLink } from '@sagebionetworks/explorers/models';
+import { MIN_DESKTOP_WIDTH } from '@sagebionetworks/model-ad/config';
 import { SvgImageComponent } from '../svg-image/svg-image.component';
-import { MIN_DESKTOP_WIDTH } from '@sagebionetworks/model-ad/util';
 
 @Component({
   selector: 'explorers-header',
