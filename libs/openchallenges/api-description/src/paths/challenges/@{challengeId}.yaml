@@ -28,6 +28,8 @@ delete:
     Deletes a challenge using its unique ChallengeID. This action is
     irreversible.
   operationId: deleteChallengeById
+  security:
+    - APIKeyAuth: []
   responses:
     '204':
       description: Deletion successful
