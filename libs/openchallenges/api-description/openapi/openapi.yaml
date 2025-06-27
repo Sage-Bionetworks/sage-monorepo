@@ -71,6 +71,23 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - Challenge
+      summary: Delete a challenge
+      description: |
+        Deletes a challenge using its unique ChallengeID. This action is
+        irreversible.
+      operationId: DeleteChallengeById
+      responses:
+        '204':
+          description: Deletion successful
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   '/challenges/{challengeId}/contributions':
     parameters:
       - $ref: '#/components/parameters/challengeId'
@@ -1300,6 +1317,12 @@ components:
             $ref: '#/components/schemas/BasicError'
     NotFound:
       description: The specified resource was not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    Unauthorized:
+      description: Unauthorized
       content:
         application/problem+json:
           schema:
