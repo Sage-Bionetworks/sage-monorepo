@@ -15,14 +15,6 @@ export class ConfigService {
   config: AppConfig = EMPTY_APP_CONFIG;
 
   async loadConfig(): Promise<void> {
-    // The location of the browser folder, which includes the config folder, depends on whether the
-    // present code is run in the browser and by the node server. We could use the request received
-    // by the node server (SSR) and get the host and port, but this does not work when the port is
-    // different from the Angular or node port. Note that `localhost` works inside the container
-    // (production) as well as outside (dev server). APP_BASE_URL could be used when running the dev
-    // server and accessing it directly (e.g. APP_BASE_URL = 'http://localhost:37677') but not when
-    // accessing the production server in the container from apex (APP_BASE_URL =
-    // 'http://localhost:8000', which is invalid inside the container).
     const browserRoot = isPlatformServer(this.platformId) ? `http://localhost:${this.port}` : '.';
 
     const appConfig$ = this.http.get<AppConfig>(`${browserRoot}/config/config.json`);
