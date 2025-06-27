@@ -1,0 +1,36 @@
+@use 'libs/explorers/styles/src/lib/variables';
+@use 'libs/explorers/styles/src/lib/mixins';
+
+.model-details-hero {
+  background-image: url('/explorers-assets/images/background.svg');
+  background-size: cover !important;
+
+  section {
+    color: #fff;
+
+    h1,
+    h4,
+    a {
+      color: #fff;
+    }
+
+    h4 {
+      font-weight: 700;
+    }
+
+    hr {
+      margin-top: var(--section-padding);
+      margin-bottom: var(--section-padding);
+    }
+
+    .modified-genes {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+
+      @include mixins.respond-to('medium') {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  }
+}
