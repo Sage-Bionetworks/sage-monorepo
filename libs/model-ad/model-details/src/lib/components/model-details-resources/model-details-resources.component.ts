@@ -32,7 +32,8 @@ export class ModelDetailsResourcesComponent {
     ];
 
     return cards.filter((card) => {
-      if (card.imagePath.includes('alzforum-logo')) {
+      // hide alzforum resource card when alzforum_id is empty
+      if (card.link.includes('www.alzforum.org')) {
         return this.model().alzforum_id !== '';
       }
       return true;
