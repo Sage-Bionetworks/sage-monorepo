@@ -187,7 +187,7 @@ export class GeneSearchComponent implements AfterViewInit, OnDestroy {
 
   checkClickIsInsideComponent(event: Event) {
     // if clicked element is not part of this component, hide gene results
-    if (!this.root.nativeElement.contains(event.target)) {
+    if (!this.root?.nativeElement?.contains(event.target)) {
       this.showGeneResults = false;
     }
   }
