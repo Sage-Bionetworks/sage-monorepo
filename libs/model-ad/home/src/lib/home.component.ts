@@ -4,6 +4,7 @@ import {
   checkQueryForErrors,
   getSearchResultsList,
   navigateToResult,
+  ROUTE_PATHS,
 } from '@sagebionetworks/model-ad/util';
 
 interface Stat {
@@ -21,6 +22,8 @@ export class HomeComponent {
   navigateToResult = navigateToResult;
   getSearchResultsList = getSearchResultsList;
   checkQueryForErrors = checkQueryForErrors;
+
+  ROUTE_PATHS = ROUTE_PATHS;
 
   stats: Stat[] = [
     {

@@ -23,7 +23,7 @@
           [description]="
             'View summary information about all available AD models and learn what data is currently available in the Explorer. New data and analyses will be incorporated as they are available.'
           "
-          [routerLink]="'/model-overview'"
+          [routerLink]="ROUTE_PATHS.MODEL_OVERVIEW"
           [imagePath]="'/model-ad-assets/images/mouse.svg'"
           [imageAltText]="'mouse icon'"
         />
@@ -44,7 +44,7 @@
           [description]="
             'Explore differential RNA expression results for the available models by sex and age. Build custom result sets by sorting, filtering, and searching for genes of particular interest.'
           "
-          [routerLink]="'/gene-expression'"
+          [routerLink]="ROUTE_PATHS.GENE_EXPRESSION"
           [imagePath]="'/model-ad-assets/images/gene-expression.svg'"
           [imageAltText]="'gene expression icon'"
         />
@@ -53,7 +53,7 @@
           [description]="
             'Compare how gene expression changes in mouse models correlate with gene expression changes in human disease.'
           "
-          [routerLink]="'/disease-correlation'"
+          [routerLink]="ROUTE_PATHS.DISEASE_CORRELATION"
           [imagePath]="'/model-ad-assets/images/disease-correlation.svg'"
           [imageAltText]="'disease correlation icon'"
         />
