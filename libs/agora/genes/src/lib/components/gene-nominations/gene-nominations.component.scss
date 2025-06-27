@@ -7,16 +7,16 @@
   }
 
   p-button {
-    @include mixins.respond-to('ex-small') {
-      width: 70%;
-    }
-
     width: 100%;
     height: 100%;
 
     button {
       width: 100%;
       height: 100%;
+    }
+
+    @include mixins.respond-to('ex-small') {
+      width: 70%;
     }
   }
 }
