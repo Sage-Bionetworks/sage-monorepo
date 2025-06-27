@@ -27,7 +27,7 @@ delete:
   description: |
     Deletes a challenge using its unique ChallengeID. This action is
     irreversible.
-  operationId: DeleteChallengeById
+  operationId: deleteChallengeById
   responses:
     '204':
       description: Deletion successful
