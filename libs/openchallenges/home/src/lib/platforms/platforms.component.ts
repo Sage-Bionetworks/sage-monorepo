@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Image, ImageService } from '@sagebionetworks/openchallenges/api-client-angular';
 import { Observable } from 'rxjs';
@@ -10,9 +10,9 @@ import { Observable } from 'rxjs';
   styleUrls: ['./platforms.component.scss'],
 })
 export class PlatformsComponent implements OnInit {
-  public platforms$: Observable<Image> | undefined;
+  private readonly imageService = inject(ImageService);
 
-  constructor(private imageService: ImageService) {}
+  public platforms$: Observable<Image> | undefined;
 
   ngOnInit() {
     this.platforms$ = this.imageService.getImage({

@@ -26,10 +26,10 @@ import { ChallengeSearchDropdown } from './challenge-search-dropdown';
   providedIn: 'root',
 })
 export class ChallengeSearchDataService {
-  private challengePlatformService = inject(ChallengePlatformService);
-  private edamConceptService = inject(EdamConceptService);
-  private imageService = inject(ImageService);
-  private organizationService = inject(OrganizationService);
+  private readonly challengePlatformService = inject(ChallengePlatformService);
+  private readonly edamConceptService = inject(EdamConceptService);
+  private readonly imageService = inject(ImageService);
+  private readonly organizationService = inject(OrganizationService);
 
   private edamConceptSearchQuery: BehaviorSubject<EdamConceptSearchQuery> =
     new BehaviorSubject<EdamConceptSearchQuery>({
