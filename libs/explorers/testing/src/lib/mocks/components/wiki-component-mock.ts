@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
+import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 
 @Component({
   selector: 'explorers-wiki',
@@ -6,5 +7,5 @@ import { Component, Input } from '@angular/core';
   template: '<div>wiki</div>',
 })
 export class MockWikiComponent {
-  @Input() params: any;
+  wikiParams = input<SynapseWikiParams>();
 }

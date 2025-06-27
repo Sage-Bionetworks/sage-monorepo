@@ -1,21 +1,9 @@
 import { WikiHeroComponent } from './wiki-hero.component';
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { render, screen } from '@testing-library/angular';
 import { provideHttpClient } from '@angular/common/http';
 import { LOADING_ICON_COLORS_PROVIDER } from '@sagebionetworks/model-ad/testing';
-
-@Component({
-  selector: 'explorers-hero',
-  template: '<div>Mock Hero Component</div>',
-})
-class MockHeroComponent {}
-
-@Component({
-  selector: 'explorers-wiki',
-  template: '<div>Mock Wiki Component with ID: {{wikiId}}</div>',
-})
-class MockWikiComponent {}
+import { MockHeroComponent, MockWikiComponent } from '@sagebionetworks/explorers/testing';
 
 const TITLE = 'Test Title';
 const WIKI_ID = '0';
