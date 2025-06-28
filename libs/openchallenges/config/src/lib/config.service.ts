@@ -14,12 +14,6 @@ export class ConfigService {
 
   config: AppConfig = EMPTY_APP_CONFIG;
 
-  // constructor(
-  //   private http: HttpClient,
-  //   @Inject(PLATFORM_ID) private platformId: string,
-  //   @Inject('APP_PORT') @Optional() private readonly port: string,
-  // ) {}
-
   async loadConfig(): Promise<void> {
     try {
       const browserRoot = this.port ? `http://localhost:${this.port}` : '';
