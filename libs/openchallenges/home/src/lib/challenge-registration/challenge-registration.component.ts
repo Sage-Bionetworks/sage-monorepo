@@ -1,5 +1,4 @@
-
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Image, ImageService } from '@sagebionetworks/openchallenges/api-client-angular';
 import { Observable } from 'rxjs';
@@ -11,9 +10,9 @@ import { Observable } from 'rxjs';
   styleUrls: ['./challenge-registration.component.scss'],
 })
 export class ChallengeRegistrationComponent implements OnInit {
-  public share$: Observable<Image> | undefined;
+  private readonly imageService = inject(ImageService);
 
-  constructor(private imageService: ImageService) {}
+  public share$: Observable<Image> | undefined;
 
   ngOnInit() {
     this.share$ = this.imageService.getImage({

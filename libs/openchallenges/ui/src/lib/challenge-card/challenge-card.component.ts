@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { Challenge, Image, ImageService } from '@sagebionetworks/openchallenges/api-client-angular';
@@ -13,14 +13,14 @@ import { Observable } from 'rxjs';
   styleUrls: ['./challenge-card.component.scss'],
 })
 export class ChallengeCardComponent implements OnInit {
+  private readonly imageService = inject(ImageService);
+
   @Input({ required: true }) challenge!: Challenge;
   banner$: Observable<Image> | undefined;
   status!: string | undefined;
   desc!: string;
   statusClass!: string;
   time_info!: string | number;
-
-  constructor(private imageService: ImageService) {}
 
   ngOnInit(): void {
     if (this.challenge) {

@@ -1,5 +1,4 @@
-
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   FormsModule,
   ReactiveFormsModule,
@@ -32,12 +31,17 @@ import { isApiClientError } from '@sagebionetworks/openchallenges/util';
     MatButtonModule,
     MatCardModule,
     MatFormFieldModule,
-    MatInputModule
-],
+    MatInputModule,
+  ],
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
 })
 export class SignupComponent implements OnInit {
+  private readonly router = inject(Router);
+  private readonly formBuilder = inject(UntypedFormBuilder);
+  private readonly userService = inject(UserService);
+  private readonly configService = inject(ConfigService);
+
   public appVersion: string;
   public dataUpdatedOn: string;
 
@@ -49,12 +53,7 @@ export class SignupComponent implements OnInit {
 
   submitted = false;
 
-  constructor(
-    private router: Router,
-    private formBuilder: UntypedFormBuilder,
-    private userService: UserService,
-    private readonly configService: ConfigService,
-  ) {
+  constructor() {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
   }

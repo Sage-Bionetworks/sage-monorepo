@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   Image,
   ImageHeight,
@@ -14,10 +14,10 @@ import { Observable } from 'rxjs';
   styleUrls: ['./sponsor-list.component.scss'],
 })
 export class SponsorListComponent implements OnInit {
+  private readonly imageService = inject(ImageService);
+
   itcrImage$: Observable<Image> | undefined;
   readonly height = ImageHeight._140px;
-
-  constructor(private imageService: ImageService) {}
 
   ngOnInit() {
     this.itcrImage$ = this.imageService.getImage({

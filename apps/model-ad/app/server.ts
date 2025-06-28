@@ -59,7 +59,7 @@ export function app(): express.Express {
             deps: [],
           },
           {
-            provide: 'APP_PORT',
+            provide: 'APP_PORT', // TODO: use the same injection token as in the config service
             useValue: PORT,
             deps: [],
           },

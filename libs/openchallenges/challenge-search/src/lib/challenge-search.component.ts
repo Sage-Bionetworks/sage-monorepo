@@ -1,6 +1,7 @@
 import {
   AfterContentInit,
   Component,
+  inject,
   Input,
   OnDestroy,
   OnInit,
@@ -91,12 +92,20 @@ import { ChallengeSearchDropdown, CHALLENGE_SEARCH_DROPDOWNS } from './challenge
     RadioButtonModule,
     ReactiveFormsModule,
     RouterModule,
-    SearchDropdownFilterComponent
-],
+    SearchDropdownFilterComponent,
+  ],
   templateUrl: './challenge-search.component.html',
   styleUrls: ['./challenge-search.component.scss'],
 })
 export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDestroy {
+  private readonly challengeService = inject(ChallengeService);
+  private readonly challengeSearchDataService = inject(ChallengeSearchDataService);
+  private readonly configService = inject(ConfigService);
+  private readonly _snackBar = inject(MatSnackBar);
+  private readonly seoService = inject(SeoService);
+  private readonly renderer2 = inject(Renderer2);
+  private readonly _location = inject(Location);
+
   public appVersion: string;
   public dataUpdatedOn: string;
   public privacyPolicyUrl: string;
@@ -178,15 +187,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
     submissionTypes: [] as ChallengeSubmissionType[],
   };
 
-  constructor(
-    private readonly challengeService: ChallengeService,
-    private readonly challengeSearchDataService: ChallengeSearchDataService,
-    private readonly configService: ConfigService,
-    private readonly _snackBar: MatSnackBar,
-    private readonly seoService: SeoService,
-    private readonly renderer2: Renderer2,
-    private readonly _location: Location,
-  ) {
+  constructor() {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
     this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   Organization,
@@ -16,15 +16,13 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./org-profile-stats.component.scss'],
 })
 export class OrgProfileStatsComponent implements OnInit {
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly organizationService = inject(OrganizationService);
+
   @Input({ required: true }) loggedIn = false;
   organization$!: Observable<Organization>;
   mockMembers!: number;
-
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private organizationService: OrganizationService,
-  ) {}
 
   ngOnInit(): void {
     this.mockMembers = 3;
