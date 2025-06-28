@@ -16,6 +16,8 @@ servers:
 tags:
   - description: Operations about genes.
     name: Genes
+  - description: Operations about differential expression.
+    name: DifferentialExpression
 paths:
   /genes/comparison:
     get:
@@ -70,7 +72,109 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Genes
+  /differentialExpression/rna:
+    get:
+      description: List differential expression profiles
+      operationId: listRnaDifferentialExpressionProfiles
+      parameters:
+        - description: The search query used to find RNA differential expression profiles.
+          explode: true
+          in: query
+          name: rnaDifferentialExpressionProfileSearchQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/RnaDifferentialExpressionProfileSearchQuery'
+          style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RnaDifferentialExpressionProfilePage'
+          description: Success
+        '400':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: List RNA differential expression profiles
+      tags:
+        - DifferentialExpression
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: DifferentialExpression
+  /differentialExpression/protein:
+    get:
+      description: List protein differential expression profiles
+      operationId: listProteinDifferentialExpressionProfiles
+      parameters:
+        - description: The search query used to find protein differential expression
+            profiles.
+          explode: true
+          in: query
+          name: proteinDifferentialExpressionProfileSearchQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/ProteinDifferentialExpressionProfileSearchQuery'
+          style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProteinDifferentialExpressionProfilePage'
+          description: Success
+        '400':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: List protein differential expression profiles
+      tags:
+        - DifferentialExpression
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: DifferentialExpression
 components:
+  parameters:
+    rnaDifferentialExpressionProfileSearchQuery:
+      description: The search query used to find RNA differential expression profiles.
+      explode: true
+      in: query
+      name: rnaDifferentialExpressionProfileSearchQuery
+      required: false
+      schema:
+        $ref: '#/components/schemas/RnaDifferentialExpressionProfileSearchQuery'
+      style: form
+    proteinDifferentialExpressionProfileSearchQuery:
+      description: The search query used to find protein differential expression profiles.
+      explode: true
+      in: query
+      name: proteinDifferentialExpressionProfileSearchQuery
+      required: false
+      schema:
+        $ref: '#/components/schemas/ProteinDifferentialExpressionProfileSearchQuery'
+      style: form
   responses:
     NotFound:
       content:
@@ -84,6 +188,12 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: The request cannot be fulfilled due to an unexpected server error
+    BadRequest:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: Invalid request
   schemas:
     Gene:
       description: Gene
@@ -728,6 +838,564 @@ components:
       x-java-class-annotations:
         - '@lombok.AllArgsConstructor'
         - '@lombok.Builder'
+    RnaDifferentialExpressionProfileSort:
+      default: target_risk_score
+      description: What to sort results by.
+      enum:
+        - genetics_score
+        - hgnc_symbol
+        - multi_omics_score
+        - target_risk_score
+      type: string
+    SortDirection:
+      description: The direction to sort the results by.
+      enum:
+        - asc
+        - desc
+      nullable: true
+      type: string
+    RnaDifferentialExpressionProfileModel:
+      default: ad_diagnosis_aod_males_and_females
+      description: The RNA model to apply for the differential expression profile.
+      enum:
+        - ad_diagnosis_aod_males_and_females
+        - ad_diagnosis_males_and_females
+        - ad_diagnosis_sex_females_only
+        - ad_diagnosis_sex_males_only
+      type: string
+    RnaDifferentialExpressionProfileSearchQuery:
+      description: A differential RNA expression profile search query.
+      properties:
+        pageNumber:
+          default: 0
+          description: The page number.
+          format: int32
+          minimum: 0
+          type: integer
+        pageSize:
+          default: 100
+          description: The number of items in a single page.
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        sort:
+          $ref: '#/components/schemas/RnaDifferentialExpressionProfileSort'
+        direction:
+          $ref: '#/components/schemas/SortDirection'
+        model:
+          $ref: '#/components/schemas/RnaDifferentialExpressionProfileModel'
+        searchTerm:
+          description: A search term used to filter the results.
+          example: A1BG
+          type: string
+      type: object
+    PageMetadata:
+      description: The metadata of a page.
+      properties:
+        number:
+          description: The page number.
+          example: 99
+          format: int32
+          type: integer
+        size:
+          description: The number of items in a single page.
+          example: 99
+          format: int32
+          type: integer
+        total_elements:
+          description: Total number of elements in the result set.
+          example: 99
+          format: int64
+          type: integer
+        total_pages:
+          description: Total number of pages in the result set.
+          example: 99
+          format: int32
+          type: integer
+        has_next:
+          description: Returns if there is a next page.
+          example: true
+          type: boolean
+        has_previous:
+          description: Returns if there is a previous page.
+          example: true
+          type: boolean
+      required:
+        - has_next
+        - has_previous
+        - number
+        - size
+        - total_elements
+        - total_pages
+      type: object
+    EnsemblGeneId:
+      description: The Ensembl gene ID.
+      example: ENSG00000139618
+      maxLength: 15
+      minLength: 15
+      pattern: "^ENSG\\d{11}$"
+      type: string
+    HgncSymbol:
+      description: The HGNC gene symbol.
+      example: TP53
+      minLength: 0
+      type: string
+    Tissue:
+      description: A tissue.
+      example:
+        adj_p_val: 5.637377
+        logfc: 5.962134
+        ci_r: 7.0614014
+        name: name
+        ci_l: 2.302136
+        medianexpression:
+          min: 5.637377
+          first_quartile: 2.302136
+          median: 7.0614014
+          max: 2.027123
+          mean: 9.301444
+          tissue: tissue
+          third_quartile: 3.6160767
+      properties:
+        name:
+          description: Name of the gene or tissue.
+          type: string
+        logfc:
+          description: Log fold change value.
+          format: float
+          type: number
+        adj_p_val:
+          description: Adjusted p-value.
+          format: float
+          type: number
+        ci_l:
+          description: Lower confidence interval.
+          format: float
+          type: number
+        ci_r:
+          description: Upper confidence interval.
+          format: float
+          type: number
+        medianexpression:
+          $ref: '#/components/schemas/MedianExpression'
+      required:
+        - adj_p_val
+        - ci_l
+        - ci_r
+        - logfc
+        - mediaexpression
+        - name
+      type: object
+    Nominations:
+      description: A gene nomination.
+      example:
+        teams:
+          - teams
+          - teams
+        year: 3
+        inputs:
+          - inputs
+          - inputs
+        count: 9
+        studies:
+          - studies
+          - studies
+        programs:
+          - programs
+          - programs
+        validations:
+          - validations
+          - validations
+      properties:
+        count:
+          description: The total number of gene nominations.
+          type: integer
+        year:
+          description: The year of the nominations.
+          type: integer
+        teams:
+          description: The list of teams involved in the nominations.
+          items:
+            type: string
+          type: array
+        studies:
+          description: The list of studies related to the nominations.
+          items:
+            type: string
+          type: array
+        inputs:
+          description: The input data used for the nominations.
+          items:
+            type: string
+          type: array
+        programs:
+          description: The list of programs associated with the nominations.
+          items:
+            type: string
+          type: array
+        validations:
+          description: The list of validations for the nominations.
+          items:
+            type: string
+          type: array
+      required:
+        - count
+        - inputs
+        - programs
+        - studies
+        - teams
+        - validations
+        - year
+      type: object
+    RnaDifferentialExpressionProfile:
+      description: A RNA differential expression profile.
+      example:
+        multi_omics_score: 1.4658129805029452
+        associations:
+          - 2.027123023002322
+          - 2.027123023002322
+        tissues:
+          - adj_p_val: 5.637377
+            logfc: 5.962134
+            ci_r: 7.0614014
+            name: name
+            ci_l: 2.302136
+            medianexpression:
+              min: 5.637377
+              first_quartile: 2.302136
+              median: 7.0614014
+              max: 2.027123
+              mean: 9.301444
+              tissue: tissue
+              third_quartile: 3.6160767
+          - adj_p_val: 5.637377
+            logfc: 5.962134
+            ci_r: 7.0614014
+            name: name
+            ci_l: 2.302136
+            medianexpression:
+              min: 5.637377
+              first_quartile: 2.302136
+              median: 7.0614014
+              max: 2.027123
+              mean: 9.301444
+              tissue: tissue
+              third_quartile: 3.6160767
+        target_risk_score: 0.8008281904610115
+        ensembl_gene_id: ENSG00000139618
+        hgnc_symbol: TP53
+        genetics_score: 6.027456183070403
+        nominations:
+          teams:
+            - teams
+            - teams
+          year: 3
+          inputs:
+            - inputs
+            - inputs
+          count: 9
+          studies:
+            - studies
+            - studies
+          programs:
+            - programs
+            - programs
+          validations:
+            - validations
+            - validations
+        biodomains:
+          - biodomains
+          - biodomains
+        target_enabling_resources:
+          - target_enabling_resources
+          - target_enabling_resources
+      properties:
+        ensembl_gene_id:
+          description: The Ensembl gene ID.
+          example: ENSG00000139618
+          maxLength: 15
+          minLength: 15
+          pattern: "^ENSG\\d{11}$"
+          type: string
+        hgnc_symbol:
+          description: The HGNC gene symbol.
+          example: TP53
+          minLength: 0
+          type: string
+        target_risk_score:
+          description: Target risk score
+          nullable: true
+          type: number
+        genetics_score:
+          description: Genetics score
+          nullable: true
+          type: number
+        multi_omics_score:
+          description: Multi-omics score
+          nullable: true
+          type: number
+        tissues:
+          description: Array of gene tissues
+          items:
+            $ref: '#/components/schemas/Tissue'
+          type: array
+        nominations:
+          $ref: '#/components/schemas/Nominations'
+        associations:
+          description: Array of association values
+          items:
+            type: number
+          nullable: true
+          type: array
+        biodomains:
+          description: Array of biological domains
+          items:
+            type: string
+          nullable: true
+          type: array
+        target_enabling_resources:
+          description: Target enabling resources
+          items:
+            type: string
+          nullable: true
+          type: array
+      required:
+        - ensembl_gene_id
+        - genetics_score
+        - hgnc_symbol
+        - multi_omics_score
+        - target_risk_score
+        - tissues
+      type: object
+    RnaDifferentialExpressionProfilePage:
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - properties:
+            rnaDifferentialExpressionProfiles:
+              description: A list of RNA differential epxression profiles.
+              items:
+                $ref: '#/components/schemas/RnaDifferentialExpressionProfile'
+              type: array
+          required:
+            - rnaDifferentialExpressionProfiles
+          type: object
+      description: A page of RNA differential expression profiles.
+      example:
+        number: 99
+        size: 99
+        total_elements: 99
+        has_previous: true
+        rnaDifferentialExpressionProfiles:
+          - multi_omics_score: 1.4658129805029452
+            associations:
+              - 2.027123023002322
+              - 2.027123023002322
+            tissues:
+              - adj_p_val: 5.637377
+                logfc: 5.962134
+                ci_r: 7.0614014
+                name: name
+                ci_l: 2.302136
+                medianexpression:
+                  min: 5.637377
+                  first_quartile: 2.302136
+                  median: 7.0614014
+                  max: 2.027123
+                  mean: 9.301444
+                  tissue: tissue
+                  third_quartile: 3.6160767
+              - adj_p_val: 5.637377
+                logfc: 5.962134
+                ci_r: 7.0614014
+                name: name
+                ci_l: 2.302136
+                medianexpression:
+                  min: 5.637377
+                  first_quartile: 2.302136
+                  median: 7.0614014
+                  max: 2.027123
+                  mean: 9.301444
+                  tissue: tissue
+                  third_quartile: 3.6160767
+            target_risk_score: 0.8008281904610115
+            ensembl_gene_id: ENSG00000139618
+            hgnc_symbol: TP53
+            genetics_score: 6.027456183070403
+            nominations:
+              teams:
+                - teams
+                - teams
+              year: 3
+              inputs:
+                - inputs
+                - inputs
+              count: 9
+              studies:
+                - studies
+                - studies
+              programs:
+                - programs
+                - programs
+              validations:
+                - validations
+                - validations
+            biodomains:
+              - biodomains
+              - biodomains
+            target_enabling_resources:
+              - target_enabling_resources
+              - target_enabling_resources
+          - multi_omics_score: 1.4658129805029452
+            associations:
+              - 2.027123023002322
+              - 2.027123023002322
+            tissues:
+              - adj_p_val: 5.637377
+                logfc: 5.962134
+                ci_r: 7.0614014
+                name: name
+                ci_l: 2.302136
+                medianexpression:
+                  min: 5.637377
+                  first_quartile: 2.302136
+                  median: 7.0614014
+                  max: 2.027123
+                  mean: 9.301444
+                  tissue: tissue
+                  third_quartile: 3.6160767
+              - adj_p_val: 5.637377
+                logfc: 5.962134
+                ci_r: 7.0614014
+                name: name
+                ci_l: 2.302136
+                medianexpression:
+                  min: 5.637377
+                  first_quartile: 2.302136
+                  median: 7.0614014
+                  max: 2.027123
+                  mean: 9.301444
+                  tissue: tissue
+                  third_quartile: 3.6160767
+            target_risk_score: 0.8008281904610115
+            ensembl_gene_id: ENSG00000139618
+            hgnc_symbol: TP53
+            genetics_score: 6.027456183070403
+            nominations:
+              teams:
+                - teams
+                - teams
+              year: 3
+              inputs:
+                - inputs
+                - inputs
+              count: 9
+              studies:
+                - studies
+                - studies
+              programs:
+                - programs
+                - programs
+              validations:
+                - validations
+                - validations
+            biodomains:
+              - biodomains
+              - biodomains
+            target_enabling_resources:
+              - target_enabling_resources
+              - target_enabling_resources
+        has_next: true
+        total_pages: 99
+      type: object
+    ProteinDifferentialExpressionProfileSort:
+      default: hgnc_symbol
+      description: What to sort results by.
+      enum:
+        - hgnc_symbol
+      type: string
+    ProteinDifferentialExpressionProfileProfilingMethod:
+      default: lfq
+      description: The protein profiling method to apply for the differential expression
+        profile.
+      enum:
+        - lfq
+        - smr
+        - tmt
+      type: string
+    ProteinDifferentialExpressionProfileSearchQuery:
+      description: A differential protein expression profile search query.
+      properties:
+        page_number:
+          default: 0
+          description: The page number.
+          format: int32
+          minimum: 0
+          type: integer
+        page_size:
+          default: 100
+          description: The number of items in a single page.
+          format: int32
+          minimum: 1
+          type: integer
+        sort:
+          $ref: '#/components/schemas/ProteinDifferentialExpressionProfileSort'
+        direction:
+          $ref: '#/components/schemas/SortDirection'
+        profiling_method:
+          $ref: '#/components/schemas/ProteinDifferentialExpressionProfileProfilingMethod'
+        search_terms:
+          description: A string of search terms used to filter the results.
+          example: A1BG
+          type: string
+      type: object
+    ProteinDifferentialExpressionProfile:
+      description: A protein differential expression profile.
+      example:
+        ensembl_gene_id: ENSG00000139618
+        hgnc_symbol: TP53
+      properties:
+        ensembl_gene_id:
+          description: The Ensembl gene ID.
+          example: ENSG00000139618
+          maxLength: 15
+          minLength: 15
+          pattern: "^ENSG\\d{11}$"
+          type: string
+        hgnc_symbol:
+          description: The HGNC gene symbol.
+          example: TP53
+          minLength: 0
+          type: string
+      required:
+        - ensembl_gene_id
+      type: object
+    ProteinDifferentialExpressionProfilePage:
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - properties:
+            proteinDifferentialExpressionProfiles:
+              description: A list of protein differential epxression profiles.
+              items:
+                $ref: '#/components/schemas/ProteinDifferentialExpressionProfile'
+              type: array
+          required:
+            - proteinDifferentialExpressionProfiles
+          type: object
+      description: A page of protein differential expression profiles.
+      example:
+        number: 99
+        size: 99
+        total_elements: 99
+        has_previous: true
+        has_next: true
+        total_pages: 99
+        proteinDifferentialExpressionProfiles:
+          - ensembl_gene_id: ENSG00000139618
+            hgnc_symbol: TP53
+          - ensembl_gene_id: ENSG00000139618
+            hgnc_symbol: TP53
+      type: object
     TargetNomination:
       description: TargetNomination
       properties:

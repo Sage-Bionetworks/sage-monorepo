@@ -1,0 +1,5 @@
+name: rnaDifferentialExpressionProfileSearchQuery
+description: The search query used to find RNA differential expression profiles.
+in: query
+schema:
+  $ref: ../../schemas/RnaDifferentialExpressionProfileSearchQuery.yaml

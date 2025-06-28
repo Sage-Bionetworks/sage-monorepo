@@ -1,0 +1,5 @@
+name: proteinDifferentialExpressionProfileSearchQuery
+description: The search query used to find protein differential expression profiles.
+in: query
+schema:
+  $ref: ../../schemas/ProteinDifferentialExpressionProfileSearchQuery.yaml
