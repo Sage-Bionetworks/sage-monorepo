@@ -152,9 +152,6 @@ importers:
       lodash:
         specifier: 4.17.21
         version: 4.17.21
-      mariadb:
-        specifier: 3.3.1
-        version: 3.3.1
       marked:
         specifier: 15.0.11
         version: 15.0.11
@@ -6557,9 +6554,6 @@ packages:
   '@types/node@16.18.23':
     resolution: {integrity: sha512-XAMpaw1s1+6zM+jn2tmw8MyaRDIJfXxqmIQIS0HfoGYPuf7dUWeiUKopwq13KFX9lEp1+THGtlaaYx39Nxr58g==}
 
-  '@types/node@20.16.5':
-    resolution: {integrity: sha512-VwYCweNo3ERajwy0IUlqqcyZ8/A7Zwa9ZP3MnENWcB11AejO+tLy3pu850goUW2FC/IJMdZUfKpX/yxL1gymCA==}
-
   '@types/node@22.5.1':
     resolution: {integrity: sha512-KkHsxej0j9IW1KKOOAA/XBA0z08UFSrRQHErzEfA3Vgq57eXIMYboIlHJuYIfd+lwCQjtKqUu3UnmKbtUc9yRw==}
 
@@ -8913,10 +8907,6 @@ packages:
 
   delegates@1.0.0:
     resolution: {integrity: sha512-bd2L678uiWATM6m5Z1VzNCErI3jiGzt6HGY8OVICs40JQq/HALfbyNJmp0UDakEY4pMMaN0Ly5om/B1VI/+xfQ==}
-
-  denque@2.1.0:
-    resolution: {integrity: sha512-HVQE3AAb/pxF8fQAoiqpvg9i3evqug3hoiwakOyZAwJm+6vZehbkYXZ0l4JxS+I3QxM97v5aaRNhj8v5oBhekw==}
-    engines: {node: '>=0.10'}
 
   depd@1.1.2:
     resolution: {integrity: sha512-7emPTl6Dpo6JRXOXjLRxck+FlLRX5847cLKEn00PLAgc3g2hTZZgr+e4c2v6QpSmLeFP3n5yUo7ft6avBK/5jQ==}
@@ -11784,10 +11774,6 @@ packages:
 
   map-or-similar@1.5.0:
     resolution: {integrity: sha512-0aF7ZmVon1igznGI4VS30yugpduQW3y3GkcgGJOp7d8x8QrizhigUxjI/m2UojsXXto+jLAH3KSz+xOJTiORjg==}
-
-  mariadb@3.3.1:
-    resolution: {integrity: sha512-L8bh4iuZU3J8H7Co7rQ6OY9FDLItAN1rGy8kPA7Dyxo8AiHADuuONoypKKp1pE09drs6e5LR7UW9luLZ/A4znA==}
-    engines: {node: '>= 14'}
 
   mark.js@8.11.1:
     resolution: {integrity: sha512-1I+1qpDt4idfgLQG+BNWmrqku+7/2bi5nLf4YwF8y8zXvmfiTBY3PV3ZibfrjBueCByROpuBjLLFCajqkgYoLQ==}
@@ -15687,6 +15673,11 @@ packages:
 
   typescript@5.9.0-dev.20250626:
     resolution: {integrity: sha512-ARBArFl0en7fW2nvwodltEgG06wBzp/sAsyBWl7NLpSQ5ruG7fNqL1mRi9pqa1cWSrWTyK00qkfJ0atLIlhWXA==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
+  typescript@5.9.0-dev.20250629:
+    resolution: {integrity: sha512-GJKLIHDZbZsJe5DxHrrnwNRGDOMYopm5emOF+RbqYfjKDW/IBcITQF5mypVAxROYJ04Oh4DbcM4kiCH5qMfJYA==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -25450,10 +25441,6 @@ snapshots:
 
   '@types/node@16.18.23': {}
 
-  '@types/node@20.16.5':
-    dependencies:
-      undici-types: 6.19.8
-
   '@types/node@22.5.1':
     dependencies:
       undici-types: 6.19.8
@@ -28498,8 +28485,6 @@ snapshots:
 
   delegates@1.0.0: {}
 
-  denque@2.1.0: {}
-
   depd@1.1.2: {}
 
   depd@2.0.0: {}
@@ -28648,7 +28633,7 @@ snapshots:
     dependencies:
       semver: 7.7.2
       shelljs: 0.8.5
-      typescript: 5.9.0-dev.20250626
+      typescript: 5.9.0-dev.20250629
 
   dunder-proto@1.0.1:
     dependencies:
@@ -32235,14 +32220,6 @@ snapshots:
       tmpl: 1.0.5
 
   map-or-similar@1.5.0: {}
-
-  mariadb@3.3.1:
-    dependencies:
-      '@types/geojson': 7946.0.14
-      '@types/node': 20.16.5
-      denque: 2.1.0
-      iconv-lite: 0.6.3
-      lru-cache: 10.4.3
 
   mark.js@8.11.1: {}
 
@@ -36883,6 +36860,8 @@ snapshots:
   typescript@5.8.3: {}
 
   typescript@5.9.0-dev.20250626: {}
+
+  typescript@5.9.0-dev.20250629: {}
 
   ua-parser-js@1.0.38: {}
 
