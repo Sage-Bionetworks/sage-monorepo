@@ -15,9 +15,9 @@ services:
     depends_on:
       openchallenges-config-server:
         condition: service_healthy
-      openchallenges-elasticsearch:
-        condition: service_healthy
       openchallenges-image-service:
+        condition: service_healthy
+      openchallenges-opensearch:
         condition: service_healthy
       openchallenges-postgres:
         condition: service_healthy
