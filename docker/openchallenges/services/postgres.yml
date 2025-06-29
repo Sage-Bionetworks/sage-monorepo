@@ -1,6 +1,6 @@
 services:
   openchallenges-postgres:
-    image: ghcr.io/sage-bionetworks/openchallenges-postgres:${IATLAS_VERSION:-local}
+    image: ghcr.io/sage-bionetworks/openchallenges-postgres:${OPENCHALLENGES_VERSION:-local}
     container_name: openchallenges-postgres
     restart: always
     env_file:
