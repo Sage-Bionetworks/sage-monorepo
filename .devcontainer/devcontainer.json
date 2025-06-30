@@ -182,7 +182,7 @@
       "onAutoForward": "silent"
     },
     "9200": {
-      "label": "openchallenges-elasticsearch",
+      "label": "openchallenges-opensearch",
       "onAutoForward": "silent"
     },
     "27017": {

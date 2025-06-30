@@ -11,10 +11,10 @@ args=(
   --file docker/"$product_name"/services/challenge-service.yml
   --file docker/"$product_name"/services/config-server.yml
   --file docker/"$product_name"/services/data-lambda.yml
-  --file docker/"$product_name"/services/elasticsearch.yml
   --file docker/"$product_name"/services/image-service.yml
   --file docker/"$product_name"/services/kafka.yml
   --file docker/"$product_name"/services/mcp-server.yml
+  --file docker/"$product_name"/services/opensearch.yml
   --file docker/"$product_name"/services/organization-service.yml
   --file docker/"$product_name"/services/postgres.yml
   --file docker/"$product_name"/services/service-registry.yml
