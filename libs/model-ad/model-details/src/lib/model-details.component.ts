@@ -7,7 +7,7 @@ import { HelperService } from '@sagebionetworks/explorers/services';
 import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { Model, ModelsService } from '@sagebionetworks/model-ad/api-client-angular';
-import { ConfigService } from '@sagebionetworks/model-ad/config';
+import { ConfigService, ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { ModelDetailsHeroComponent } from './components/model-details-hero/model-details-hero.component';
 import { ModelDetailsOmicsComponent } from './components/model-details-omics/model-details-omics.component';
 import { ModelDetailsResourcesComponent } from './components/model-details-resources/model-details-resources.component';
@@ -90,7 +90,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
           error: (error) => {
             console.error('Error retrieving model: ', error);
             this.isLoading = false;
-            this.router.navigateByUrl('/not-found', { skipLocationChange: true });
+            this.router.navigateByUrl(ROUTE_PATHS.NOT_FOUND, { skipLocationChange: true });
           },
         });
     }
@@ -145,7 +145,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
     this.activePanel = activePanel;
     this.activeParent = activeParent;
 
-    const basePath = `/models/${this.model?.model}`;
+    const basePath = `/${ROUTE_PATHS.MODELS}/${this.model?.model}`;
     const fullPath = this.helperService.getPanelUrl(basePath, this.activePanel, this.activeParent);
     this.location.replaceState(fullPath);
   }

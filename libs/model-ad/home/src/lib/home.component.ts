@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HomeCardComponent, SvgImageComponent } from '@sagebionetworks/explorers/ui';
+import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import {
   checkQueryForErrors,
   getSearchResultsList,
@@ -21,6 +22,8 @@ export class HomeComponent {
   navigateToResult = navigateToResult;
   getSearchResultsList = getSearchResultsList;
   checkQueryForErrors = checkQueryForErrors;
+
+  ROUTE_PATHS = ROUTE_PATHS;
 
   stats: Stat[] = [
     {
