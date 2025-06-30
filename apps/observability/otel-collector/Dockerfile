@@ -1,1 +1,1 @@
-FROM otel/opentelemetry-collector-contrib:0.126.0
+FROM mirror.gcr.io/otel/opentelemetry-collector-contrib:0.126.0
