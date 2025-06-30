@@ -69,15 +69,13 @@
       "password": "changeme"
     },
     {
-      "mysqlOptions": {
-        "authProtocol": "default"
-      },
       "previewLimit": 50,
-      "server": "amp-als-mariadb",
+      "server": "amp-als-postgres",
       "port": 8401,
-      "driver": "MariaDB",
-      "name": "amp-als-mariadb",
-      "username": "maria",
+      "driver": "PostgreSQL",
+      "name": "amp-als-dataset-service",
+      "database": "dataset_service",
+      "username": "dataset_service",
       "password": "changeme"
     },
     {

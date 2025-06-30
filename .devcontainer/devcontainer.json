@@ -98,7 +98,7 @@
       "onAutoForward": "silent"
     },
     "8401": {
-      "label": "amp-als-mariadb",
+      "label": "amp-als-postgres",
       "onAutoForward": "silent"
     },
     "8402": {

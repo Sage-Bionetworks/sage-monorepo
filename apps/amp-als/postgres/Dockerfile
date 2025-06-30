@@ -1,6 +1,5 @@
-FROM mariadb:11.7.2
+FROM postgres:16.9-bullseye
 
-COPY docker-entrypoint-initdb.d /docker-entrypoint-initdb.d
 COPY docker-healthcheck /usr/local/bin/
 
 HEALTHCHECK CMD ["docker-healthcheck"]
