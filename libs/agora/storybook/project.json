@@ -33,7 +33,7 @@
         "compodoc": false,
         "styles": ["apps/agora/app/src/styles.scss", "node_modules/primeicons/primeicons.css"],
         "stylePreprocessorOptions": {
-          "includePaths": ["libs/agora/styles/src/lib", "libs/agora/themes/src/lib"]
+          "includePaths": ["libs", "libs/agora/styles/src/lib", "libs/agora/themes/src/lib"]
         }
       },
       "configurations": {

@@ -36,7 +36,7 @@
           "node_modules/primeicons/primeicons.css"
         ],
         "stylePreprocessorOptions": {
-          "includePaths": ["libs/explorers/styles/src/lib", "libs/explorers/themes/src/lib"]
+          "includePaths": ["libs", "libs/explorers/styles/src/lib", "libs/explorers/themes/src/lib"]
         }
       },
       "configurations": {
