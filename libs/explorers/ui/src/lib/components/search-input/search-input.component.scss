@@ -1,7 +1,7 @@
 /* stylelint-disable no-descending-specificity */
 @use 'sass:map';
-@use 'libs/explorers/styles/src/lib/variables';
-@use 'libs/explorers/styles/src/lib/mixins';
+@use 'explorers/styles/src/lib/variables';
+@use 'explorers/styles/src/lib/mixins';
 
 .search {
   position: relative;
