@@ -1,4 +1,4 @@
-FROM postgres:15.3-alpine
+FROM mirror.gcr.io/postgres:15.3-alpine
 
 COPY docker-healthcheck /usr/local/bin/
 

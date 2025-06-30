@@ -1,4 +1,4 @@
-FROM opensearchproject/opensearch:2.19.1
+FROM mirror.gcr.io/opensearchproject/opensearch:2.19.1
 
 COPY docker-healthcheck /usr/local/bin/
 

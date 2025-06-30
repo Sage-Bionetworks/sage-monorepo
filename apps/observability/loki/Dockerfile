@@ -1,1 +1,1 @@
-FROM grafana/loki:3.5.0
+FROM mirror.gcr.io/grafana/loki:3.5.0

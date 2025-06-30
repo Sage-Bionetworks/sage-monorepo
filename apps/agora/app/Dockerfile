@@ -1,4 +1,4 @@
-FROM node:20.7.0-alpine
+FROM mirror.gcr.io/node:20.7.0-alpine
 
 ENV APP_DIR=/app
 

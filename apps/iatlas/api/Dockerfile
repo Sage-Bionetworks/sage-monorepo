@@ -1,7 +1,7 @@
 FROM ghcr.io/astral-sh/uv:0.5.14 AS uv
 
 # First, bundle the dependencies into the task root.
-FROM python:3.8.20-slim AS builder
+FROM mirror.gcr.io/python:3.8.20-slim AS builder
 
 # Enable bytecode compilation, to improve cold-start performance.
 ENV UV_COMPILE_BYTECODE=1
@@ -28,7 +28,7 @@ RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
 RUN uv export --frozen --no-emit-workspace --no-dev --group prod --no-editable -o requirements.txt \
   && uv pip install -r requirements.txt --target "/app"
 
-FROM python:3.8.20-slim
+FROM mirror.gcr.io/python:3.8.20-slim
 
 ENV APP_DIR=/app
 ENV PYTHONPATH="${APP_DIR}"
