@@ -1396,3 +1396,8 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/AccountId'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
