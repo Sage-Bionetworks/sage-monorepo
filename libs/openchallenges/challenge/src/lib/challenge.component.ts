@@ -51,13 +51,13 @@ import { HttpParams } from '@angular/common/http';
   styleUrls: ['./challenge.component.scss'],
 })
 export class ChallengeComponent implements OnInit, OnDestroy {
-  private activatedRoute = inject(ActivatedRoute);
-  private router = inject(Router);
-  private challengeService = inject(ChallengeService);
-  private configService = inject(ConfigService);
-  private seoService = inject(SeoService);
-  private renderer2 = inject(Renderer2);
-  private _location = inject(Location);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly challengeService = inject(ChallengeService);
+  private readonly configService = inject(ConfigService);
+  private readonly seoService = inject(SeoService);
+  private readonly renderer2 = inject(Renderer2);
+  private readonly _location = inject(Location);
 
   public appVersion: string;
   public dataUpdatedOn: string;

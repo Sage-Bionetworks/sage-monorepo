@@ -29,9 +29,9 @@ type ContributionCardBundle = {
   styleUrls: ['./challenge-contributors.component.scss'],
 })
 export class ChallengeContributorsComponent implements OnInit {
-  private challengeContributionService = inject(ChallengeContributionService);
-  private organizationService = inject(OrganizationService);
-  private imageService = inject(ImageService);
+  private readonly challengeContributionService = inject(ChallengeContributionService);
+  private readonly organizationService = inject(OrganizationService);
+  private readonly imageService = inject(ImageService);
 
   @Input({ required: true }) challenge!: Challenge;
 
