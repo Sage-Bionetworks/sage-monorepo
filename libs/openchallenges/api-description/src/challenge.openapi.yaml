@@ -36,3 +36,7 @@ paths:
     $ref: paths/challengePlatforms/@{challengePlatformName}.yaml
   /edamConcepts:
     $ref: paths/edamConcepts.yaml
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      $ref: components/securitySchemes/ApiKeyAuth.yaml

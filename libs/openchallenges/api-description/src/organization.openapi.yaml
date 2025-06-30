@@ -20,3 +20,7 @@ paths:
     $ref: paths/organizations.yaml
   /organizations/{org}:
     $ref: paths/organizations/@{org}.yaml
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      $ref: components/securitySchemes/ApiKeyAuth.yaml
