@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: amp-als-dataset-service-config
+  namespace: amp-als
+  labels:
+    app: amp-als-dataset-service
+    component: application
+data:
+  application.yml: |
+    amp-als-dataset-service:
+      welcome-message: 'Welcome to the AMP-ALS dataset service'
+
+    server:
+      port: 8404
+
+    spring:
+      application:
+        name: amp-als-dataset-service
+      datasource:
+        url: jdbc:mysql://amp-als-mariadb:8401/dataset_service
+        username: dataset_service
+        password: changeme
+        driver-class-name: com.mysql.cj.jdbc.Driver
+      flyway:
+        enabled: true
+        clean-disabled: false
+      jackson:
+        date-format: org.sagebionetworks.amp.als.dataset.service.RFC3339DateFormat
+        serialization:
+          WRITE_DATES_AS_TIMESTAMPS: false
+      jpa:
+        hibernate:
+          ddl-auto: update
+        properties:
+          hibernate:
+            dialect: org.hibernate.dialect.MariaDBDialect
+            search:
+              enable: true
+              backend:
+                hosts: amp-als-opensearch:8402
+      autoconfigure:
+        exclude: org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration

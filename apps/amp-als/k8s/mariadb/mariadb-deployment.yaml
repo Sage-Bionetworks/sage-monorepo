@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: amp-als-mariadb
+  namespace: amp-als
+  labels:
+    app: amp-als-mariadb
+    component: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: amp-als-mariadb
+  template:
+    metadata:
+      labels:
+        app: amp-als-mariadb
+        component: database
+    spec:
+      containers:
+        - name: mariadb
+          image: ghcr.io/sage-bionetworks/amp-als-mariadb:local
+          ports:
+            - containerPort: 8401
+              name: mysql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: amp-als-mariadb-secret
+                  key: mysql-root-password
+            - name: MYSQL_DATABASE
+              value: dataset_service
+            - name: MYSQL_USER
+              value: dataset_service
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: amp-als-mariadb-secret
+                  key: mysql-dataset-service-password
+            - name: MYSQL_TCP_PORT
+              value: '8401'
+          volumeMounts:
+            - name: mariadb-data
+              mountPath: /var/lib/mysql
+            - name: init-scripts
+              mountPath: /docker-entrypoint-initdb.d
+              readOnly: true
+          livenessProbe:
+            exec:
+              command:
+                - mariadb-admin
+                - ping
+                - -h
+                - localhost
+                - -P
+                - '8401'
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            exec:
+              command:
+                - mariadb-admin
+                - ping
+                - -h
+                - localhost
+                - -P
+                - '8401'
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 5
+          resources:
+            limits:
+              memory: 500Mi
+              cpu: 500m
+            requests:
+              memory: 256Mi
+              cpu: 250m
+      volumes:
+        - name: mariadb-data
+          persistentVolumeClaim:
+            claimName: amp-als-mariadb-pvc
+        - name: init-scripts
+          configMap:
+            name: amp-als-mariadb-init

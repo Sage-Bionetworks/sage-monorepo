@@ -1,0 +1,76 @@
+# Default values for amp-als.
+# This is a YAML-formatted file.
+
+global:
+  namespace: amp-als
+  imageRegistry: ghcr.io/sage-bionetworks
+  imageTag: local
+
+mariadb:
+  enabled: true
+  image:
+    repository: amp-als-mariadb
+    tag: local
+    pullPolicy: IfNotPresent
+
+  auth:
+    rootPassword: changeme
+    database: dataset_service
+    username: dataset_service
+    password: changeme
+
+  persistence:
+    enabled: true
+    size: 5Gi
+    # storageClass: ""
+
+  resources:
+    limits:
+      memory: 500Mi
+      cpu: 500m
+    requests:
+      memory: 256Mi
+      cpu: 250m
+
+  service:
+    type: ClusterIP
+    port: 8401
+
+datasetService:
+  enabled: true
+  image:
+    repository: amp-als-dataset-service
+    tag: local
+    pullPolicy: IfNotPresent
+
+  replicaCount: 1
+
+  resources:
+    limits:
+      memory: 1Gi
+      cpu: 1000m
+    requests:
+      memory: 512Mi
+      cpu: 500m
+
+  service:
+    type: ClusterIP
+    port: 8404
+    nodePort: 30404
+
+  # Enable NodePort service for external access
+  nodePortService:
+    enabled: true
+
+  config:
+    welcomeMessage: 'Welcome to the AMP-ALS dataset service'
+    spring:
+      profiles:
+        active: kubernetes
+
+# Additional services (can be enabled in the future)
+opensearch:
+  enabled: false
+
+keycloak:
+  enabled: false

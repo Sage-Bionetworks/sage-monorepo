@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: amp-als-mariadb-pvc
+  namespace: amp-als
+  labels:
+    app: amp-als-mariadb
+    component: database
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  # Uncomment if you have a specific storage class
+  # storageClassName: standard

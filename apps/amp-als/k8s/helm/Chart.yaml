@@ -1,0 +1,19 @@
+apiVersion: v2
+name: amp-als
+description: A Helm chart for AMP-ALS Stack (MariaDB + Dataset Service)
+type: application
+version: 0.1.0
+appVersion: 'local'
+home: https://github.com/Sage-Bionetworks/sage-monorepo
+sources:
+  - https://github.com/Sage-Bionetworks/sage-monorepo
+maintainers:
+  - name: Sage Bionetworks
+    email: platform@sagebionetworks.org
+keywords:
+  - amp-als
+  - mariadb
+  - dataset-service
+  - biomedical
+annotations:
+  category: Database

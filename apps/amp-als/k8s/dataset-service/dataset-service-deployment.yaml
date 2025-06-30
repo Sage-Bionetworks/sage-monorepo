@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: amp-als-dataset-service
+  namespace: amp-als
+  labels:
+    app: amp-als-dataset-service
+    component: application
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: amp-als-dataset-service
+  template:
+    metadata:
+      labels:
+        app: amp-als-dataset-service
+        component: application
+    spec:
+      containers:
+        - name: dataset-service
+          image: ghcr.io/sage-bionetworks/amp-als-dataset-service:local
+          ports:
+            - containerPort: 8404
+              name: http
+          env:
+            - name: DB_URL
+              value: 'jdbc:mysql://amp-als-mariadb:8401/dataset_service'
+            - name: DB_USERNAME
+              value: 'dataset_service'
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: amp-als-dataset-service-secret
+                  key: db-password
+            - name: SPRING_PROFILES_ACTIVE
+              value: 'kubernetes'
+          volumeMounts:
+            - name: config
+              mountPath: /app/config
+              readOnly: true
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8404
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8404
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          resources:
+            limits:
+              memory: 1Gi
+              cpu: 1000m
+            requests:
+              memory: 512Mi
+              cpu: 500m
+      volumes:
+        - name: config
+          configMap:
+            name: amp-als-dataset-service-config
+      initContainers:
+        - name: wait-for-mariadb
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              echo "Waiting for MariaDB to be ready..."
+              until nc -z amp-als-mariadb 8401; do
+                echo "MariaDB not ready yet, waiting..."
+                sleep 5
+              done
+              echo "MariaDB is ready!"
+        - name: wait-for-opensearch
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              echo "Waiting for OpenSearch to be ready..."
+              until nc -z amp-als-opensearch 8402; do
+                echo "OpenSearch not ready yet, waiting..."
+                sleep 5
+              done
+              echo "OpenSearch is ready!"
