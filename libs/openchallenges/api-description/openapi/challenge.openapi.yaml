@@ -94,7 +94,7 @@ paths:
         This action is irreversible.
       operationId: deleteAllChallengeContributions
       security:
-        - APIKeyAuth: []
+        - ApiKeyAuth: []
       responses:
         '204':
           description: Deletion successful
