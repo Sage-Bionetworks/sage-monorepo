@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { inject, Injectable, OnDestroy } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 
@@ -6,12 +6,14 @@ import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
   providedIn: 'root',
 })
 export class PageTitleService implements OnDestroy {
+  private readonly bodyTitle = inject(Title);
+
   private title: BehaviorSubject<string> = new BehaviorSubject<string>('');
   private numNotifications: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
   private subscription!: Subscription;
 
-  constructor(private bodyTitle: Title) {
+  constructor() {
     combineLatest([this.title, this.numNotifications]).subscribe(
       ([title, numNotifications]) => {
         title = title !== '' ? `${title}` : '';
