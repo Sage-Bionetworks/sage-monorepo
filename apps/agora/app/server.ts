@@ -7,9 +7,6 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import bootstrap from './src/main.server';
 
-const PORT = process.env['PORT'] || '4200';
-console.log(`server.ts: ${PORT}`);
-
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
@@ -55,11 +52,6 @@ export function app(): express.Express {
             useFactory: () => `${protocol}://${headers.host}`,
             deps: [],
           },
-          {
-            provide: 'APP_PORT',
-            useValue: PORT,
-            deps: [],
-          },
         ],
       })
       .then((html) => res.send(html))
@@ -70,22 +62,15 @@ export function app(): express.Express {
 }
 
 function run(): void {
+  const port = process.env['PORT'] || '4200';
+
   // Start up the Node server
   const server = app();
-  server.listen(PORT, () => {
-    console.log(`Node Express server listening on http://localhost:${PORT}`);
+  server.listen(port, () => {
+    console.log(`Node Express server listening on http://localhost:${port}`);
   });
 }
 
-// Webpack will replace 'require' with '__webpack_require__'
-// '__non_webpack_require__' is a proxy to Node 'require'
-// The below code is to ensure that the server is run only when not requiring the bundle.
-/* eslint-disable camelcase,no-undef */
-declare const __non_webpack_require__: NodeRequire;
-const mainModule = __non_webpack_require__.main;
-const moduleFilename = (mainModule && mainModule.filename) || '';
-if (moduleFilename === __filename || moduleFilename.includes('iisnode')) {
+if (require.main === module) {
   run();
 }
-
-export default bootstrap;

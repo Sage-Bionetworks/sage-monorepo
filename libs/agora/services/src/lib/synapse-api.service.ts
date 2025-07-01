@@ -2,7 +2,7 @@
 // External
 // -------------------------------------------------------------------------- //
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import sanitizeHtml from 'sanitize-html';
@@ -21,7 +21,7 @@ import { SynapseWiki } from '@sagebionetworks/agora/models';
 export class SynapseApiService {
   wikis: { [key: string]: any } = {};
 
-  constructor(private http: HttpClient) {}
+  private readonly http = inject(HttpClient);
 
   getWiki(ownerId: string, wikiId: string): Observable<SynapseWiki> {
     const key = ownerId + wikiId;
