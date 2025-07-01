@@ -48,7 +48,7 @@ tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("boot
 }
 
 flyway {
-  url = "jdbc:postgresql://openchallenges-postgres:9091/auth_service"
+  url = "jdbc:postgresql://openchallenges-postgres:8091/auth_service"
   user = System.getenv("FLYWAY_USER") ?: "auth_service"
   password = System.getenv("FLYWAY_PASSWORD") ?: "changeme"
   cleanDisabled = false

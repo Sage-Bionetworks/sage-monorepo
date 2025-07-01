@@ -1,10 +1,26 @@
 server:
-  port: 8406
+  port: 8087
 
 spring:
   application:
-    name: amp-als-user-service
+    name: openchallenges-auth-service
   jackson:
-    date-format: org.sagebionetworks.amp.als.user.service.RFC3339DateFormat
+    date-format: org.sagebionetworks.openchallenges.auth.service.RFC3339DateFormat
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
+  flyway:
+    enabled: true
+    clean-disabled: false
+  datasource:
+    url: jdbc:postgresql://openchallenges-postgres:8091/auth_service
+    username: auth_service
+    password: changeme
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true

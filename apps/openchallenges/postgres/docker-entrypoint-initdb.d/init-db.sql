@@ -2,6 +2,7 @@
 CREATE DATABASE challenge_service;
 CREATE DATABASE organization_service;
 CREATE DATABASE user_service;
+CREATE DATABASE auth_service;
 CREATE DATABASE edam;
 
 -- Create admin role with necessary privileges
@@ -31,6 +32,16 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON FUNCTIONS TO role_admin;
 
 \c user_service;
 GRANT ALL PRIVILEGES ON DATABASE user_service TO role_admin;
+GRANT ALL PRIVILEGES ON SCHEMA public TO role_admin;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO role_admin;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO role_admin;
+GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO role_admin;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO role_admin;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO role_admin;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON FUNCTIONS TO role_admin;
+
+\c auth_service;
+GRANT ALL PRIVILEGES ON DATABASE auth_service TO role_admin;
 GRANT ALL PRIVILEGES ON SCHEMA public TO role_admin;
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO role_admin;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO role_admin;
@@ -93,6 +104,22 @@ GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO organization_service;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO organization_service;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO organization_service;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON FUNCTIONS TO organization_service;
+
+-- Switch back to default database
+\c postgres;
+
+-- Create user for openchallenges-auth-service
+CREATE ROLE auth_service LOGIN PASSWORD 'changeme';
+GRANT CONNECT ON DATABASE auth_service TO auth_service;
+
+\c auth_service;
+GRANT ALL PRIVILEGES ON SCHEMA public TO auth_service;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO auth_service;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO auth_service;
+GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO auth_service;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO auth_service;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO auth_service;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON FUNCTIONS TO auth_service;
 
 -- Switch back to default database
 \c postgres;
