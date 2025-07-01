@@ -1,12 +1,16 @@
-package org.sagebionetworks.amp.als.user.service.api;
+package org.sagebionetworks.openchallenges.auth.service.api;
 
-import org.sagebionetworks.amp.als.user.service.model.dto.BasicErrorDto;
-import org.sagebionetworks.amp.als.user.service.model.dto.HealthCheckDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.ApiKeyDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.BasicErrorDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.CreateApiKeyRequestDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.CreateApiKeyResponseDto;
+import java.util.UUID;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.lang.Nullable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,19 +30,19 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Controller
-@RequestMapping("${openapi.aMPALSUserService.base-path:/v1}")
-public class HealthCheckApiController implements HealthCheckApi {
+@RequestMapping("${openapi.openChallengesAuth.base-path:/v1}")
+public class ApiKeysApiController implements ApiKeysApi {
 
-    private final HealthCheckApiDelegate delegate;
+    private final ApiKeysApiDelegate delegate;
 
-    public HealthCheckApiController(@Autowired(required = false) HealthCheckApiDelegate delegate) {
-        this.delegate = Optional.ofNullable(delegate).orElse(new HealthCheckApiDelegate() {});
+    public ApiKeysApiController(@Autowired(required = false) ApiKeysApiDelegate delegate) {
+        this.delegate = Optional.ofNullable(delegate).orElse(new ApiKeysApiDelegate() {});
     }
 
     @Override
-    public HealthCheckApiDelegate getDelegate() {
+    public ApiKeysApiDelegate getDelegate() {
         return delegate;
     }
 

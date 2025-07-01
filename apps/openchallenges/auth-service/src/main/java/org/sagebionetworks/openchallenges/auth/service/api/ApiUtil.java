@@ -1,4 +1,4 @@
-package org.sagebionetworks.amp.als.user.service.api;
+package org.sagebionetworks.openchallenges.auth.service.api;
 
 import org.springframework.web.context.request.NativeWebRequest;
 

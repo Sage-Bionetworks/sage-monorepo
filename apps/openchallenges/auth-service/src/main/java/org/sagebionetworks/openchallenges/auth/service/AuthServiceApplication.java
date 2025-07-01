@@ -1,0 +1,24 @@
+package org.sagebionetworks.openchallenges.auth.service;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.FullyQualifiedAnnotationBeanNameGenerator;
+
+@SpringBootApplication(nameGenerator = FullyQualifiedAnnotationBeanNameGenerator.class)
+@ComponentScan(
+  basePackages = {
+    "org.sagebionetworks.openchallenges.auth.service",
+    "org.sagebionetworks.openchallenges.auth.service.api",
+    "org.sagebionetworks.openchallenges.auth.service.configuration",
+  },
+  nameGenerator = FullyQualifiedAnnotationBeanNameGenerator.class
+)
+public class AuthServiceApplication {
+
+  public static void main(String[] args) {
+    SpringApplication.run(AuthServiceApplication.class, args);
+  }
+}

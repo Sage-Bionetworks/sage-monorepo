@@ -1,4 +1,4 @@
-package org.sagebionetworks.amp.als.user.service;
+package org.sagebionetworks.openchallenges.auth.service;
 
 import com.fasterxml.jackson.databind.util.StdDateFormat;
 

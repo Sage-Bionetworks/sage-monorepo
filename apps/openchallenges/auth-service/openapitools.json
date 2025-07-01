@@ -2,7 +2,7 @@
   "$schema": "../../../node_modules/@openapitools/openapi-generator-cli/config.schema.json",
   "spaces": 2,
   "generator-cli": {
-    "version": "7.12.0",
+    "version": "7.14.0",
     "generators": {
       "openchallenges-auth-service": {
         "generatorName": "spring",
@@ -20,8 +20,7 @@
           "useTags": true,
           "openApiNullable": false,
           "useSpringBoot3": true,
-          "generateBuilders": true,
-          "reactive": true
+          "generateBuilders": true
         }
       }
     }

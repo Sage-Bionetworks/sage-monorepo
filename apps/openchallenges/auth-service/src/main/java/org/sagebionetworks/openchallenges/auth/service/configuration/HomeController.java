@@ -1,4 +1,4 @@
-package org.sagebionetworks.amp.als.user.service.configuration;
+package org.sagebionetworks.openchallenges.auth.service.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
