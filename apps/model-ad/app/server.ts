@@ -7,9 +7,6 @@ import { existsSync } from 'node:fs';
 import path, { join } from 'node:path';
 import bootstrap from './src/main.server';
 
-const PORT = process.env['PORT'] || '4200';
-console.log(`server.ts: ${PORT}`);
-
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
@@ -58,11 +55,6 @@ export function app(): express.Express {
             useFactory: () => `${protocol}://${headers.host}`,
             deps: [],
           },
-          {
-            provide: 'APP_PORT', // TODO: use the same injection token as in the config service
-            useValue: PORT,
-            deps: [],
-          },
         ],
       })
       .then((html) => res.send(html))
@@ -73,10 +65,12 @@ export function app(): express.Express {
 }
 
 function run(): void {
+  const port = process.env['PORT'] || '4200';
+
   // Start up the Node server
   const server = app();
-  server.listen(PORT, () => {
-    console.log(`Node Express server listening on http://localhost:${PORT}`);
+  server.listen(port, () => {
+    console.log(`Node Express server listening on http://localhost:${port}`);
   });
 }
 

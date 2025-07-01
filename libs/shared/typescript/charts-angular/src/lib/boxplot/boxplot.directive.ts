@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { Directive, ElementRef, inject, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import {
   BoxplotChart,
   BoxplotProps,
@@ -11,6 +11,8 @@ import {
   standalone: true,
 })
 export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
+  private readonly el = inject(ElementRef);
+
   boxplot: BoxplotChart | undefined;
 
   @Input({ required: true }) points: CategoryPoint[] = [];
@@ -22,10 +24,6 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
   @Input() yAxisMax: number | undefined;
   @Input() xAxisCategoryToTooltipText: Record<string, string> | undefined;
   @Input() pointTooltipFormatter: undefined | ((pt: CategoryPoint) => string);
-
-  constructor(private el: ElementRef) {
-    // add comment so constructor is not empty
-  }
 
   ngOnInit() {
     this.boxplot = new BoxplotChart(this.el.nativeElement, this.getBoxplotProps());
