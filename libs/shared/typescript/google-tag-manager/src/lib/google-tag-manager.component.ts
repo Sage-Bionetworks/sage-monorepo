@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { GoogleTagManagerService } from 'angular-google-tag-manager';
 import { CONFIG_SERVICE_TOKEN, ConfigService } from './google-tag-manager-id.provider';
@@ -15,11 +15,9 @@ import { CONFIG_SERVICE_TOKEN, ConfigService } from './google-tag-manager-id.pro
   ],
 })
 export class GoogleTagManagerComponent implements OnInit {
-  constructor(
-    private readonly router: Router,
-    private readonly gtmService: GoogleTagManagerService,
-    @Inject(CONFIG_SERVICE_TOKEN) private readonly configService: ConfigService,
-  ) {}
+  private readonly router = inject(Router);
+  private readonly gtmService = inject(GoogleTagManagerService);
+  private readonly configService = inject<ConfigService>(CONFIG_SERVICE_TOKEN);
 
   ngOnInit(): void {
     if (!this.configService.config.isPlatformServer) {
