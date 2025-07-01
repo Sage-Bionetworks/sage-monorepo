@@ -66,7 +66,7 @@ export class DownloadDomImageComponent {
         height: this.target().offsetHeight,
       })
       .then((blob: any) => {
-        saveAs(blob, this.filename + this.selectedType);
+        saveAs(blob, this.filename() + this.selectedType);
         this.isLoading = false;
         this.hide();
       })

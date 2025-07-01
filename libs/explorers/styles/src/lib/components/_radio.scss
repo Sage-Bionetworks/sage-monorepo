@@ -1,0 +1,32 @@
+.p-radiobutton {
+  display: inline-flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  vertical-align: middle !important;
+  margin-right: 5px;
+
+  .p-radiobutton-box {
+    width: 14px !important;
+    height: 14px !important;
+    min-width: 14px !important;
+    min-height: 14px !important;
+    background-color: transparent !important;
+    border: 2px solid var(--surface-border, #dee2e6) !important;
+    border-radius: 50% !important;
+  }
+}
+
+// modify visual design of the radio button
+.p-radiobutton-checked {
+  // outer circle color
+  .p-radiobutton-box {
+    border-color: var(--primary-color, #007bff) !important;
+  }
+
+  .p-radiobutton-icon {
+    width: 6px !important;
+    height: 6px !important;
+    border-radius: 50% !important;
+    background-color: var(--primary-color, #007bff) !important;
+  }
+}
