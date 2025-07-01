@@ -102,7 +102,7 @@ public class ApiKeyService {
     System.out.println("=== DEBUG: ApiKeyService.validateApiKey ===");
     System.out.println("Input API key: " + apiKey);
     System.out.println("Expected prefix: " + API_KEY_PREFIX);
-    
+
     if (apiKey == null || !apiKey.startsWith(API_KEY_PREFIX)) {
       System.out.println("DEBUG: API key is null or doesn't have correct prefix");
       return Optional.empty();
@@ -116,10 +116,10 @@ public class ApiKeyService {
     for (ApiKey key : allKeys) {
       System.out.println("DEBUG: Checking key ID: " + key.getId());
       System.out.println("DEBUG: Stored hash: " + key.getKeyHash());
-      
+
       boolean matches = passwordEncoder.matches(apiKey, key.getKeyHash());
       System.out.println("DEBUG: Password matches: " + matches);
-      
+
       if (matches) {
         System.out.println("DEBUG: Found matching API key!");
         // Check if expired

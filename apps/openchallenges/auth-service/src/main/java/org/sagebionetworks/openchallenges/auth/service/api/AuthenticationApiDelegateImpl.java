@@ -36,33 +36,17 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
   @Override
   public ResponseEntity<LoginResponseDto> login(LoginRequestDto loginRequestDto) {
     try {
-      // TEMPORARY: Generate correct hashes for debugging
-      System.out.println("=== DEBUG: Generating BCrypt hashes ===");
-      System.out.println("admin123 hash: " + passwordEncoder.encode("admin123"));
-      System.out.println("researcher123 hash: " + passwordEncoder.encode("researcher123"));
-      System.out.println("=====================================");
-
       // Find user by username
       Optional<User> userOptional = userService.findByUsername(loginRequestDto.getUsername());
 
       if (userOptional.isEmpty()) {
-        System.out.println("DEBUG: User not found: " + loginRequestDto.getUsername());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       }
 
       User user = userOptional.get();
-      System.out.println("DEBUG: Found user: " + user.getUsername());
-      System.out.println("DEBUG: Stored hash: " + user.getPasswordHash());
-      System.out.println("DEBUG: Input password: " + loginRequestDto.getPassword());
 
       // Verify password
-      boolean passwordMatches = passwordEncoder.matches(
-        loginRequestDto.getPassword(),
-        user.getPasswordHash()
-      );
-      System.out.println("DEBUG: Password matches: " + passwordMatches);
-
-      if (!passwordMatches) {
+      if (!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPasswordHash())) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       }
 
@@ -79,8 +63,6 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
       return ResponseEntity.ok(response);
     } catch (Exception e) {
       // Log the error in a real application
-      System.out.println("DEBUG: Exception in login: " + e.getMessage());
-      e.printStackTrace();
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
   }
@@ -91,34 +73,24 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
   ) {
     try {
       String apiKeyValue = validateApiKeyRequestDto.getApiKey();
-      
-      System.out.println("=== DEBUG: API Key Validation ===");
-      System.out.println("Input API key: " + apiKeyValue);
 
       if (apiKeyValue == null || apiKeyValue.trim().isEmpty()) {
-        System.out.println("DEBUG: API key is null or empty");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       }
 
       // Find and validate API key
       Optional<ApiKey> apiKeyOptional = apiKeyService.findByKeyValue(apiKeyValue);
-      
-      System.out.println("DEBUG: API key found in service: " + apiKeyOptional.isPresent());
 
       if (apiKeyOptional.isEmpty()) {
         // API key not found
-        System.out.println("DEBUG: API key not found - returning valid=false");
         ValidateApiKeyResponseDto response = new ValidateApiKeyResponseDto().valid(false);
         return ResponseEntity.ok(response);
       }
 
       ApiKey apiKey = apiKeyOptional.get();
-      System.out.println("DEBUG: Found API key with ID: " + apiKey.getId());
-      System.out.println("DEBUG: API key expires at: " + apiKey.getExpiresAt());
 
       // Check if API key is expired
       if (apiKey.getExpiresAt() != null && apiKey.getExpiresAt().isBefore(OffsetDateTime.now())) {
-        System.out.println("DEBUG: API key is expired - returning valid=false");
         ValidateApiKeyResponseDto response = new ValidateApiKeyResponseDto().valid(false);
         return ResponseEntity.ok(response);
       }
@@ -127,7 +99,6 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
       apiKeyService.updateLastUsed(apiKey);
 
       User user = apiKey.getUser();
-      System.out.println("DEBUG: API key belongs to user: " + user.getUsername());
 
       // Define basic scopes based on user role
       String[] scopes = getDefaultScopes(user.getRole().name());
