@@ -1,20 +1,18 @@
 import { isPlatformServer } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
-import { AppConfig, EMPTY_APP_CONFIG } from './app.config';
+import { APP_PORT, AppConfig, EMPTY_APP_CONFIG } from './app.config';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConfigService {
-  config: AppConfig = EMPTY_APP_CONFIG;
+  private readonly http = inject(HttpClient);
+  private readonly platformId: Record<string, any> = inject(PLATFORM_ID);
+  private readonly port = inject(APP_PORT, { optional: true });
 
-  constructor(
-    private http: HttpClient,
-    @Inject(PLATFORM_ID) private platformId: string,
-    @Inject('APP_PORT') @Optional() private readonly port: string,
-  ) {}
+  config: AppConfig = EMPTY_APP_CONFIG;
 
   async loadConfig(): Promise<void> {
     try {
