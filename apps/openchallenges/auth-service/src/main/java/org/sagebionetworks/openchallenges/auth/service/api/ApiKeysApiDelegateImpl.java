@@ -50,7 +50,7 @@ public class ApiKeysApiDelegateImpl implements ApiKeysApiDelegate {
       // Build response
       CreateApiKeyResponseDto response = new CreateApiKeyResponseDto()
         .id(apiKey.getId())
-        .key(apiKey.getKeyHash()) // The service temporarily stores the plain key here
+        .key(apiKey.getPlainKey()) // Use the transient field with the plain key
         .name(apiKey.getName())
         .prefix(apiKey.getKeyPrefix())
         .createdAt(apiKey.getCreatedAt())

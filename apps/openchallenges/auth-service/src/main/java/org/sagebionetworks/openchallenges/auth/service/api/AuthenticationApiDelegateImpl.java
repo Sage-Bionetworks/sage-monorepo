@@ -74,7 +74,7 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
         .userId(user.getId())
         .username(user.getUsername())
         .role(convertToRoleEnum(user.getRole()))
-        .apiKey(apiKey.getKeyHash()); // The service temporarily stores the plain key here
+        .apiKey(apiKey.getPlainKey()); // Use the transient field with the plain key
 
       return ResponseEntity.ok(response);
     } catch (Exception e) {
@@ -91,24 +91,34 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
   ) {
     try {
       String apiKeyValue = validateApiKeyRequestDto.getApiKey();
+      
+      System.out.println("=== DEBUG: API Key Validation ===");
+      System.out.println("Input API key: " + apiKeyValue);
 
       if (apiKeyValue == null || apiKeyValue.trim().isEmpty()) {
+        System.out.println("DEBUG: API key is null or empty");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       }
 
       // Find and validate API key
       Optional<ApiKey> apiKeyOptional = apiKeyService.findByKeyValue(apiKeyValue);
+      
+      System.out.println("DEBUG: API key found in service: " + apiKeyOptional.isPresent());
 
       if (apiKeyOptional.isEmpty()) {
         // API key not found
+        System.out.println("DEBUG: API key not found - returning valid=false");
         ValidateApiKeyResponseDto response = new ValidateApiKeyResponseDto().valid(false);
         return ResponseEntity.ok(response);
       }
 
       ApiKey apiKey = apiKeyOptional.get();
+      System.out.println("DEBUG: Found API key with ID: " + apiKey.getId());
+      System.out.println("DEBUG: API key expires at: " + apiKey.getExpiresAt());
 
       // Check if API key is expired
       if (apiKey.getExpiresAt() != null && apiKey.getExpiresAt().isBefore(OffsetDateTime.now())) {
+        System.out.println("DEBUG: API key is expired - returning valid=false");
         ValidateApiKeyResponseDto response = new ValidateApiKeyResponseDto().valid(false);
         return ResponseEntity.ok(response);
       }
@@ -117,6 +127,7 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
       apiKeyService.updateLastUsed(apiKey);
 
       User user = apiKey.getUser();
+      System.out.println("DEBUG: API key belongs to user: " + user.getUsername());
 
       // Define basic scopes based on user role
       String[] scopes = getDefaultScopes(user.getRole().name());

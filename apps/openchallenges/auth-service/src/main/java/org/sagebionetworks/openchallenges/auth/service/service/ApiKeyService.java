@@ -37,8 +37,13 @@ public class ApiKeyService {
    */
   public ApiKey createApiKey(User user, String name, Integer expiresInDays) {
     // Generate random API key
-    String apiKey = generateApiKey();
-    String keyHash = passwordEncoder.encode(apiKey);
+    String plainApiKey = generateApiKey();
+    String keyHash = passwordEncoder.encode(plainApiKey);
+
+    System.out.println("=== DEBUG: Creating API key ===");
+    System.out.println("Plain API key: " + plainApiKey);
+    System.out.println("Hashed API key: " + keyHash);
+    System.out.println("================================");
 
     // Calculate expiration
     OffsetDateTime expiresAt = null;
@@ -46,13 +51,13 @@ public class ApiKeyService {
       expiresAt = OffsetDateTime.now().plusDays(expiresInDays);
     }
 
-    // Create entity
+    // Create entity with the HASHED key
     ApiKey apiKeyEntity = new ApiKey(user, keyHash, API_KEY_PREFIX, name, expiresAt);
     ApiKey saved = apiKeyRepository.save(apiKeyEntity);
 
-    // Store the plain API key temporarily for returning to client
-    // This is the only time the plain key will be available
-    saved.setKeyHash(apiKey); // Temporarily store plain key for response
+    // Create a temporary field to store the plain key for the response
+    // We'll use a transient field or create a wrapper class for this
+    saved.setPlainKey(plainApiKey); // This should be a transient field
 
     return saved;
   }
@@ -94,18 +99,32 @@ public class ApiKeyService {
    */
   @Transactional(readOnly = true)
   public Optional<ApiKey> validateApiKey(String apiKey) {
+    System.out.println("=== DEBUG: ApiKeyService.validateApiKey ===");
+    System.out.println("Input API key: " + apiKey);
+    System.out.println("Expected prefix: " + API_KEY_PREFIX);
+    
     if (apiKey == null || !apiKey.startsWith(API_KEY_PREFIX)) {
+      System.out.println("DEBUG: API key is null or doesn't have correct prefix");
       return Optional.empty();
     }
 
     // Find all API keys and check against each hash
     // In a high-performance system, you might want to use a different approach
     List<ApiKey> allKeys = apiKeyRepository.findAll();
+    System.out.println("DEBUG: Found " + allKeys.size() + " API keys in database");
 
     for (ApiKey key : allKeys) {
-      if (passwordEncoder.matches(apiKey, key.getKeyHash())) {
+      System.out.println("DEBUG: Checking key ID: " + key.getId());
+      System.out.println("DEBUG: Stored hash: " + key.getKeyHash());
+      
+      boolean matches = passwordEncoder.matches(apiKey, key.getKeyHash());
+      System.out.println("DEBUG: Password matches: " + matches);
+      
+      if (matches) {
+        System.out.println("DEBUG: Found matching API key!");
         // Check if expired
         if (key.isExpired()) {
+          System.out.println("DEBUG: But the key is expired");
           return Optional.empty();
         }
 
@@ -117,6 +136,7 @@ public class ApiKeyService {
       }
     }
 
+    System.out.println("DEBUG: No matching API key found");
     return Optional.empty();
   }
 

@@ -41,6 +41,11 @@ public class ApiKey {
   @Column(name = "updated_at", nullable = false)
   private OffsetDateTime updatedAt;
 
+  // Transient field to temporarily store the plain key for API responses
+  // This is NOT persisted to the database
+  @Transient
+  private String plainKey;
+
   // Default constructor
   public ApiKey() {}
 
@@ -140,5 +145,14 @@ public class ApiKey {
 
   public void setUpdatedAt(OffsetDateTime updatedAt) {
     this.updatedAt = updatedAt;
+  }
+
+  // Getter and setter for transient plainKey field
+  public String getPlainKey() {
+    return plainKey;
+  }
+
+  public void setPlainKey(String plainKey) {
+    this.plainKey = plainKey;
   }
 }
