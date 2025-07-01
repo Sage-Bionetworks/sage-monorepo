@@ -58,6 +58,30 @@ public class ApiKeyService {
   }
 
   /**
+   * Generate a new API key for a user (used for login sessions)
+   */
+  public ApiKey generateApiKey(User user, String name) {
+    return createApiKey(user, name, null); // No expiration for login session keys
+  }
+
+  /**
+   * Find API key by key value
+   */
+  @Transactional(readOnly = true)
+  public Optional<ApiKey> findByKeyValue(String apiKeyValue) {
+    return validateApiKey(apiKeyValue);
+  }
+
+  /**
+   * Update last used timestamp for an API key
+   */
+  @Transactional
+  public void updateLastUsed(ApiKey apiKey) {
+    apiKey.updateLastUsed();
+    apiKeyRepository.save(apiKey);
+  }
+
+  /**
    * Get all API keys for a user (without the actual key values)
    */
   @Transactional(readOnly = true)

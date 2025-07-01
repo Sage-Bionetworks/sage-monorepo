@@ -33,7 +33,7 @@ public class SecurityConfiguration {
       .authorizeHttpRequests(
         authz ->
           authz
-            .requestMatchers("/auth/login", "/auth/validate")
+            .requestMatchers("/v1/auth/login", "/v1/auth/validate")
             .permitAll() // Public endpoints
             .requestMatchers("/actuator/health", "/actuator/info")
             .permitAll() // Health checks
