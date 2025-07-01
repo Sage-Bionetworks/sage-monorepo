@@ -7,9 +7,6 @@ import { existsSync } from 'node:fs';
 import path, { join } from 'node:path';
 import bootstrap from './src/main.server';
 
-const PORT = process.env['PORT'] || '4200';
-console.log(`server.ts: ${PORT}`);
-
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
@@ -56,11 +53,6 @@ export function app(): express.Express {
             provide: 'APP_BASE_URL',
             // the format of ${host} is `host:port`
             useFactory: () => `${protocol}://${headers.host}`,
-            deps: [],
-          },
-          {
-            provide: 'APP_PORT', // TODO: use the same injection token as in the config service
-            useValue: PORT,
             deps: [],
           },
         ],
