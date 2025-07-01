@@ -53,3 +53,15 @@ flyway {
   password = System.getenv("FLYWAY_PASSWORD") ?: "changeme"
   cleanDisabled = false
 }
+
+// Task to generate password hashes
+tasks.register<JavaExec>("generatePasswordHashes") {
+  group = "application"
+  description = "Generate BCrypt password hashes"
+  classpath = sourceSets["main"].runtimeClasspath
+  mainClass.set("org.sagebionetworks.openchallenges.auth.service.util.PasswordHashGenerator")
+}
+
+tasks.named("generatePasswordHashes") {
+  dependsOn("compileJava")
+}
