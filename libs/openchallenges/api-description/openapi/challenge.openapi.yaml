@@ -121,14 +121,14 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /challengePlatforms/{challengePlatformName}:
+  /challengePlatforms/{challengePlatformId}:
     parameters:
-      - $ref: '#/components/parameters/challengePlatformName'
+      - $ref: '#/components/parameters/challengePlatformId'
     get:
       tags:
         - ChallengePlatform
       summary: Get a challenge platform
-      description: Returns the challenge platform specified
+      description: Returns the challenge platform specified by unique ID
       operationId: getChallengePlatform
       responses:
         '200':
@@ -137,6 +137,66 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ChallengePlatform'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - ChallengePlatform
+      summary: Delete a challenge platform
+      description: |
+        Deletes a challenge platform identified by its unique ID. This action is irreversible.
+      operationId: deleteChallengePlatform
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '204':
+          description: Deletion successful
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /challengePlatforms/name/{challengePlatformName}:
+    parameters:
+      - $ref: '#/components/parameters/challengePlatformName'
+    get:
+      tags:
+        - ChallengePlatform
+      summary: Get a challenge platform
+      description: Returns the challenge platform specified by its unique name
+      operationId: getChallengePlatformByName
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengePlatform'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - ChallengePlatform
+      summary: Delete a challenge platform
+      description: |
+        Deletes a challenge platform identified by its unique name. This action is irreversible.
+      operationId: deleteChallengePlatformByName
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '204':
+          description: Deletion successful
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
@@ -847,6 +907,13 @@ components:
       in: query
       schema:
         $ref: '#/components/schemas/ChallengePlatformSearchQuery'
+    challengePlatformId:
+      name: challengePlatformId
+      in: path
+      description: The unique identifier of the challenge platform.
+      required: true
+      schema:
+        $ref: '#/components/schemas/ChallengePlatformId'
     challengePlatformName:
       name: challengePlatformName
       in: path
@@ -875,6 +942,18 @@ components:
             $ref: '#/components/schemas/BasicError'
     NotFound:
       description: The specified resource was not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    Forbidden:
+      description: Forbidden - user does not have the permission to perform this action
       content:
         application/problem+json:
           schema:
