@@ -13,6 +13,8 @@ info:
 servers:
   - url: 'http://localhost/v1'
 tags:
+  - name: Authentication
+    description: Operations about authentication
   - name: Challenge
     description: Operations about challenges.
   - name: ChallengeAnalytics
@@ -23,13 +25,35 @@ tags:
     description: Operations about EDAM concepts.
   - name: Image
     description: Operations about images
-  - name: Authentication
-    description: Operations about authentication
   - name: Organization
     description: Operations about organizations
   - name: User
     description: Operations about users
 paths:
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: User login
+      description: Authenticate user and return JWT token
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /challenges:
     get:
       tags:
@@ -189,30 +213,6 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /auth/login:
-    post:
-      tags:
-        - Authentication
-      summary: User login
-      description: Authenticate user and return JWT token
-      operationId: login
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LoginRequest'
-      responses:
-        '200':
-          description: Login successful
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LoginResponse'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
   /organizations:
     get:
       tags:
@@ -358,6 +358,60 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          description: Username or email
+          example: admin@example.com
+        password:
+          type: string
+          format: password
+          description: User password
+          example: secretpassword
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: JWT access token
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        expiresIn:
+          type: integer
+          description: Token expiration time in seconds
+          example: 86400
+        tokenType:
+          type: string
+          description: Token type
+          example: Bearer
+    BasicError:
+      type: object
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          type: string
+          description: A human readable documentation for the problem type
+        status:
+          type: integer
+          description: The HTTP status code
+        detail:
+          type: string
+          description: >-
+            A human readable explanation specific to this occurrence of the
+            problem
+        type:
+          type: string
+          description: An absolute URI that identifies the problem type
+      required:
+        - title
+        - status
+      x-java-class-annotations:
+        - '@lombok.AllArgsConstructor'
+        - '@lombok.Builder'
     ChallengeSort:
       description: What to sort results by.
       type: string
@@ -748,30 +802,6 @@ components:
             - challenges
       x-java-class-annotations:
         - '@lombok.Builder'
-    BasicError:
-      type: object
-      description: Problem details (tools.ietf.org/html/rfc7807)
-      properties:
-        title:
-          type: string
-          description: A human readable documentation for the problem type
-        status:
-          type: integer
-          description: The HTTP status code
-        detail:
-          type: string
-          description: >-
-            A human readable explanation specific to this occurrence of the
-            problem
-        type:
-          type: string
-          description: An absolute URI that identifies the problem type
-      required:
-        - title
-        - status
-      x-java-class-annotations:
-        - '@lombok.AllArgsConstructor'
-        - '@lombok.Builder'
     ChallengeJsonLd:
       type: object
       description: A challenge
@@ -1072,36 +1102,6 @@ components:
         - url
       x-java-class-annotations:
         - '@lombok.Builder'
-    LoginRequest:
-      type: object
-      required:
-        - username
-        - password
-      properties:
-        username:
-          type: string
-          description: Username or email
-          example: admin@example.com
-        password:
-          type: string
-          format: password
-          description: User password
-          example: secretpassword
-    LoginResponse:
-      type: object
-      properties:
-        token:
-          type: string
-          description: JWT access token
-          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-        expiresIn:
-          type: integer
-          description: Token expiration time in seconds
-          example: 86400
-        tokenType:
-          type: string
-          description: Token type
-          example: Bearer
     OrganizationCategory:
       description: The category of the organization.
       type: string
@@ -1361,8 +1361,8 @@ components:
       type: object
       description: Empty JSON object
   responses:
-    BadRequest:
-      description: Invalid request
+    Unauthorized:
+      description: Unauthorized
       content:
         application/problem+json:
           schema:
@@ -1373,14 +1373,14 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-    NotFound:
-      description: The specified resource was not found
+    BadRequest:
+      description: Invalid request
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-    Unauthorized:
-      description: Unauthorized
+    NotFound:
+      description: The specified resource was not found
       content:
         application/problem+json:
           schema:
