@@ -1,14 +1,20 @@
 type: object
 properties:
-  token:
+  apiKey:
     type: string
-    description: JWT access token
-    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-  expiresIn:
-    type: integer
-    description: Token expiration time in seconds
-    example: 86400
-  tokenType:
+    description: API key for authentication
+    example: oc_live_abcd1234567890abcdef1234567890abcdef1234
+  userId:
     type: string
-    description: Token type
-    example: Bearer
+    format: uuid
+    description: User ID
+    example: 123e4567-e89b-12d3-a456-426614174000
+  username:
+    type: string
+    description: Username
+    example: admin
+  role:
+    type: string
+    description: User role
+    example: admin
+    enum: [admin, user, readonly]

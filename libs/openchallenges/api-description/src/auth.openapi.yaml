@@ -15,6 +15,18 @@ servers:
 tags:
   - name: Authentication
     description: Operations about authentication
+  - name: API Keys
+    description: Operations about API key management
 paths:
   /auth/login:
     $ref: paths/auth/login.yaml
+  /auth/api-keys:
+    $ref: paths/auth/api-keys.yaml
+  /auth/api-keys/{keyId}:
+    $ref: paths/auth/api-keys/@{keyId}.yaml
+  /auth/validate:
+    $ref: paths/auth/validate.yaml
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      $ref: components/securitySchemes/ApiKeyAuth.yaml
