@@ -76,11 +76,10 @@ paths:
         - Challenge
       summary: Delete a challenge
       description: |
-        Deletes a challenge using its unique ChallengeID. This action is
-        irreversible.
+        Deletes a challenge using its unique ID. This action is irreversible.
       operationId: deleteChallengeById
       security:
-        - APIKeyAuth: []
+        - ApiKeyAuth: []
       responses:
         '204':
           description: Deletion successful
