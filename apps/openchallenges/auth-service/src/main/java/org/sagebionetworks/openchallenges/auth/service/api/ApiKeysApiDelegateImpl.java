@@ -10,12 +10,16 @@ import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
 import org.sagebionetworks.openchallenges.auth.service.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ApiKeysApiDelegateImpl implements ApiKeysApiDelegate {
+
+  private static final Logger logger = LoggerFactory.getLogger(ApiKeysApiDelegateImpl.class);
 
   private final ApiKeyService apiKeyService;
   private final UserService userService;
@@ -29,6 +33,7 @@ public class ApiKeysApiDelegateImpl implements ApiKeysApiDelegate {
   public ResponseEntity<CreateApiKeyResponseDto> createApiKey(
     CreateApiKeyRequestDto createApiKeyRequestDto
   ) {
+    logger.info("Creating new API key with name: {}", createApiKeyRequestDto.getName());
     try {
       // TODO: Get authenticated user from security context
       // For now, we'll use a hardcoded user for testing
@@ -36,6 +41,7 @@ public class ApiKeysApiDelegateImpl implements ApiKeysApiDelegate {
       Optional<User> userOptional = userService.findByUsername("admin");
 
       if (userOptional.isEmpty()) {
+        logger.warn("API key creation failed: admin user not found");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       }
 
@@ -46,6 +52,8 @@ public class ApiKeysApiDelegateImpl implements ApiKeysApiDelegate {
       Integer expiresInDays = createApiKeyRequestDto.getExpiresIn();
 
       ApiKey apiKey = apiKeyService.createApiKey(user, keyName, expiresInDays);
+
+      logger.info("Successfully created API key '{}' for user: {}", keyName, user.getUsername());
 
       // Build response
       CreateApiKeyResponseDto response = new CreateApiKeyResponseDto()
@@ -58,7 +66,11 @@ public class ApiKeysApiDelegateImpl implements ApiKeysApiDelegate {
 
       return ResponseEntity.status(HttpStatus.CREATED).body(response);
     } catch (Exception e) {
-      // Log the error in a real application
+      logger.error(
+        "Unexpected error while creating API key: {}",
+        createApiKeyRequestDto.getName(),
+        e
+      );
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
   }

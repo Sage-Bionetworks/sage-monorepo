@@ -9,6 +9,8 @@ import java.util.UUID;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.repository.ApiKeyRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class ApiKeyService {
+
+  private static final Logger logger = LoggerFactory.getLogger(ApiKeyService.class);
 
   private final ApiKeyRepository apiKeyRepository;
   private final PasswordEncoder passwordEncoder;
@@ -40,10 +44,11 @@ public class ApiKeyService {
     String plainApiKey = generateApiKey();
     String keyHash = passwordEncoder.encode(plainApiKey);
 
-    System.out.println("=== DEBUG: Creating API key ===");
-    System.out.println("Plain API key: " + plainApiKey);
-    System.out.println("Hashed API key: " + keyHash);
-    System.out.println("================================");
+    logger.debug("Creating API key for user: {}", user.getUsername());
+    logger.debug(
+      "Generated API key with prefix: {}",
+      plainApiKey.substring(0, API_KEY_PREFIX.length())
+    );
 
     // Calculate expiration
     OffsetDateTime expiresAt = null;
@@ -56,8 +61,7 @@ public class ApiKeyService {
     ApiKey saved = apiKeyRepository.save(apiKeyEntity);
 
     // Create a temporary field to store the plain key for the response
-    // We'll use a transient field or create a wrapper class for this
-    saved.setPlainKey(plainApiKey); // This should be a transient field
+    saved.setPlainKey(plainApiKey); // This is a transient field
 
     return saved;
   }
@@ -99,32 +103,34 @@ public class ApiKeyService {
    */
   @Transactional(readOnly = true)
   public Optional<ApiKey> validateApiKey(String apiKey) {
-    System.out.println("=== DEBUG: ApiKeyService.validateApiKey ===");
-    System.out.println("Input API key: " + apiKey);
-    System.out.println("Expected prefix: " + API_KEY_PREFIX);
+    logger.debug(
+      "Validating API key with prefix: {}",
+      apiKey != null && apiKey.length() >= API_KEY_PREFIX.length()
+        ? apiKey.substring(0, API_KEY_PREFIX.length())
+        : "null"
+    );
 
     if (apiKey == null || !apiKey.startsWith(API_KEY_PREFIX)) {
-      System.out.println("DEBUG: API key is null or doesn't have correct prefix");
+      logger.debug("API key is null or doesn't have correct prefix: {}", API_KEY_PREFIX);
       return Optional.empty();
     }
 
     // Find all API keys and check against each hash
     // In a high-performance system, you might want to use a different approach
     List<ApiKey> allKeys = apiKeyRepository.findAll();
-    System.out.println("DEBUG: Found " + allKeys.size() + " API keys in database");
+    logger.debug("Found {} API keys in database", allKeys.size());
 
     for (ApiKey key : allKeys) {
-      System.out.println("DEBUG: Checking key ID: " + key.getId());
-      System.out.println("DEBUG: Stored hash: " + key.getKeyHash());
+      logger.debug("Checking key ID: {}", key.getId());
 
       boolean matches = passwordEncoder.matches(apiKey, key.getKeyHash());
-      System.out.println("DEBUG: Password matches: " + matches);
+      logger.debug("Password matches for key {}: {}", key.getId(), matches);
 
       if (matches) {
-        System.out.println("DEBUG: Found matching API key!");
+        logger.debug("Found matching API key for user: {}", key.getUser().getUsername());
         // Check if expired
         if (key.isExpired()) {
-          System.out.println("DEBUG: But the key is expired");
+          logger.debug("API key is expired");
           return Optional.empty();
         }
 
@@ -136,7 +142,7 @@ public class ApiKeyService {
       }
     }
 
-    System.out.println("DEBUG: No matching API key found");
+    logger.debug("No matching API key found");
     return Optional.empty();
   }
 

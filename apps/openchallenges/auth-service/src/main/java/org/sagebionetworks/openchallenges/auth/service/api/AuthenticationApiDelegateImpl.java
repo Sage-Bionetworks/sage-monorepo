@@ -11,6 +11,8 @@ import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
 import org.sagebionetworks.openchallenges.auth.service.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +20,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate {
+
+  private static final Logger logger = LoggerFactory.getLogger(AuthenticationApiDelegateImpl.class);
 
   private final UserService userService;
   private final ApiKeyService apiKeyService;
@@ -35,11 +39,13 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
 
   @Override
   public ResponseEntity<LoginResponseDto> login(LoginRequestDto loginRequestDto) {
+    logger.info("Login attempt for username: {}", loginRequestDto.getUsername());
     try {
       // Find user by username
       Optional<User> userOptional = userService.findByUsername(loginRequestDto.getUsername());
 
       if (userOptional.isEmpty()) {
+        logger.warn("Login failed: user not found for username: {}", loginRequestDto.getUsername());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       }
 
@@ -47,11 +53,17 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
 
       // Verify password
       if (!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPasswordHash())) {
+        logger.warn(
+          "Login failed: invalid password for username: {}",
+          loginRequestDto.getUsername()
+        );
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       }
 
       // Generate a new API key for this login session
       ApiKey apiKey = apiKeyService.generateApiKey(user, "Login Session");
+
+      logger.info("Login successful for username: {}", loginRequestDto.getUsername());
 
       // Build response
       LoginResponseDto response = new LoginResponseDto()
@@ -62,7 +74,11 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
 
       return ResponseEntity.ok(response);
     } catch (Exception e) {
-      // Log the error in a real application
+      logger.error(
+        "Unexpected error during login for username: {}",
+        loginRequestDto.getUsername(),
+        e
+      );
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
   }
@@ -71,10 +87,12 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
   public ResponseEntity<ValidateApiKeyResponseDto> validateApiKey(
     ValidateApiKeyRequestDto validateApiKeyRequestDto
   ) {
+    logger.debug("API key validation request received");
     try {
       String apiKeyValue = validateApiKeyRequestDto.getApiKey();
 
       if (apiKeyValue == null || apiKeyValue.trim().isEmpty()) {
+        logger.warn("API key validation failed: empty or null API key");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       }
 
@@ -82,6 +100,7 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
       Optional<ApiKey> apiKeyOptional = apiKeyService.findByKeyValue(apiKeyValue);
 
       if (apiKeyOptional.isEmpty()) {
+        logger.warn("API key validation failed: API key not found");
         // API key not found
         ValidateApiKeyResponseDto response = new ValidateApiKeyResponseDto().valid(false);
         return ResponseEntity.ok(response);
@@ -91,6 +110,10 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
 
       // Check if API key is expired
       if (apiKey.getExpiresAt() != null && apiKey.getExpiresAt().isBefore(OffsetDateTime.now())) {
+        logger.warn(
+          "API key validation failed: API key expired for user: {}",
+          apiKey.getUser().getUsername()
+        );
         ValidateApiKeyResponseDto response = new ValidateApiKeyResponseDto().valid(false);
         return ResponseEntity.ok(response);
       }
@@ -99,6 +122,7 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
       apiKeyService.updateLastUsed(apiKey);
 
       User user = apiKey.getUser();
+      logger.info("API key validation successful for user: {}", user.getUsername());
 
       // Define basic scopes based on user role
       String[] scopes = getDefaultScopes(user.getRole().name());
@@ -113,7 +137,7 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
 
       return ResponseEntity.ok(response);
     } catch (Exception e) {
-      // Log the error in a real application
+      logger.error("Unexpected error during API key validation", e);
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
   }
