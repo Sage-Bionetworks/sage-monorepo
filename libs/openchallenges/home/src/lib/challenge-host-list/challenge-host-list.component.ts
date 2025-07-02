@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
@@ -21,7 +21,7 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'openchallenges-challenge-host-list',
-  imports: [CommonModule, MatButtonModule, OrganizationCardComponent, RouterModule],
+  imports: [AsyncPipe, MatButtonModule, OrganizationCardComponent, RouterModule],
   templateUrl: './challenge-host-list.component.html',
   styleUrls: ['./challenge-host-list.component.scss'],
 })

@@ -27,7 +27,7 @@ import { ChallengeOrganizersComponent } from './challenge-organizers/challenge-o
 import { ChallengeOverviewComponent } from './challenge-overview/challenge-overview.component';
 // import { ChallengeStargazersComponent } from './challenge-stargazers/challenge-stargazers.component';
 import { ChallengeStatsComponent } from './challenge-stats/challenge-stats.component';
-import { CommonModule, Location } from '@angular/common';
+import { NgClass, AsyncPipe, Location, TitleCasePipe } from '@angular/common';
 import { SeoService } from '@sagebionetworks/shared/util';
 import { getSeoData } from './challenge-seo-data';
 import { HttpParams } from '@angular/common/http';
@@ -35,7 +35,8 @@ import { HttpParams } from '@angular/common/http';
 @Component({
   selector: 'openchallenges-challenge',
   imports: [
-    CommonModule,
+    NgClass,
+    AsyncPipe,
     RouterModule,
     MatTabsModule,
     MatIconModule,
@@ -46,6 +47,7 @@ import { HttpParams } from '@angular/common/http';
     ChallengeStatsComponent,
     AvatarComponent,
     FooterComponent,
+    TitleCasePipe,
   ],
   templateUrl: './challenge.component.html',
   styleUrls: ['./challenge.component.scss'],

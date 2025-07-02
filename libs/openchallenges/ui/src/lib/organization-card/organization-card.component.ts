@@ -2,14 +2,14 @@ import { Component, Input, OnInit } from '@angular/core';
 import { OrganizationCard } from './organization-card';
 import { Avatar } from '../avatar/avatar';
 import { MOCK_MEMBERS, OrganizationMember } from './mock-members';
-import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { AvatarComponent } from '../avatar/avatar.component';
+import { SlicePipe } from '@angular/common';
 
 @Component({
   selector: 'openchallenges-organization-card',
-  imports: [CommonModule, AvatarComponent, MatIconModule, RouterModule],
+  imports: [AvatarComponent, MatIconModule, RouterModule, SlicePipe],
   templateUrl: './organization-card.component.html',
   styleUrls: ['./organization-card.component.scss'],
 })

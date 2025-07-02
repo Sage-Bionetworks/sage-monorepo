@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import {
   Challenge,
@@ -12,7 +12,7 @@ import { Observable, catchError, map, of, switchMap, throwError } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-featured-challenge-list',
-  imports: [CommonModule, ChallengeCardComponent],
+  imports: [AsyncPipe, ChallengeCardComponent],
   templateUrl: './featured-challenge-list.component.html',
   styleUrls: ['./featured-challenge-list.component.scss'],
 })

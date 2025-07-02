@@ -9,7 +9,7 @@ import {
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { Observable, map } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';
-import { CommonModule, isPlatformServer } from '@angular/common';
+import { AsyncPipe, isPlatformServer } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgxTypedJsModule } from 'ngx-typed-js';
 import { InputTextModule } from 'primeng/inputtext';
@@ -17,14 +17,7 @@ import { CountUpModule } from 'ngx-countup';
 
 @Component({
   selector: 'openchallenges-challenge-search',
-  imports: [
-    CommonModule,
-    FormsModule,
-    NgxTypedJsModule,
-    InputTextModule,
-    CountUpModule,
-    RouterModule,
-  ],
+  imports: [AsyncPipe, FormsModule, NgxTypedJsModule, InputTextModule, CountUpModule, RouterModule],
   templateUrl: './challenge-search.component.html',
   styleUrls: ['./challenge-search.component.scss'],
 })

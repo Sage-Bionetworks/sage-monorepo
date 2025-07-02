@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Component, inject, OnInit, Renderer2 } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import {
@@ -15,7 +15,7 @@ import { getSeoData } from './team-seo-data';
 
 @Component({
   selector: 'openchallenges-team',
-  imports: [CommonModule, RouterModule, FooterComponent],
+  imports: [AsyncPipe, RouterModule, FooterComponent],
   templateUrl: './team.component.html',
   styleUrls: ['./team.component.scss'],
 })

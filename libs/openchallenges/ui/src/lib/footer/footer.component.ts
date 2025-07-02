@@ -1,12 +1,12 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Image, ImageService } from '@sagebionetworks/openchallenges/api-client-angular';
 import { Observable } from 'rxjs';
 import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'openchallenges-footer',
-  imports: [CommonModule, RouterModule],
+  imports: [AsyncPipe, RouterModule],
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
 })

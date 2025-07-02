@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Avatar } from '../avatar/avatar';
 import { EMPTY_AVATAR } from '../avatar/mock-avatars';
 import { MenuItem } from './menu-item';
-import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,7 +12,6 @@ import { AvatarComponent } from '../avatar/avatar.component';
 @Component({
   selector: 'openchallenges-user-button',
   imports: [
-    CommonModule,
     RouterModule,
     MatButtonModule,
     MatDividerModule,
