@@ -27,7 +27,7 @@ import {
   Image,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { HttpStatusRedirect, handleHttpError } from '@sagebionetworks/openchallenges/util';
-import { CommonModule, Location } from '@angular/common';
+import { AsyncPipe, Location, NgClass } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { OrgProfileChallengesComponent } from './org-profile-challenges/org-profile-challenges.component';
 import { OrgProfileMembersComponent } from './org-profile-members/org-profile-members.component';
@@ -40,7 +40,8 @@ import { HttpParams } from '@angular/common/http';
 @Component({
   selector: 'openchallenges-org-profile',
   imports: [
-    CommonModule,
+    AsyncPipe,
+    NgClass,
     RouterModule,
     MatIconModule,
     OrgProfileOverviewComponent,

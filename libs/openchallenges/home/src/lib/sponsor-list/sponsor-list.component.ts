@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import {
   Image,
@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-sponsor-list',
-  imports: [CommonModule],
+  imports: [AsyncPipe],
   templateUrl: './sponsor-list.component.html',
   styleUrls: ['./sponsor-list.component.scss'],
 })

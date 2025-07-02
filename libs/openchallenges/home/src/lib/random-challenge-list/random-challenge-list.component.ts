@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Observable, catchError, map, throwError } from 'rxjs';
@@ -13,7 +13,7 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'openchallenges-random-challenge-list',
-  imports: [CommonModule, MatButtonModule, ChallengeCardComponent, RouterModule],
+  imports: [AsyncPipe, MatButtonModule, ChallengeCardComponent, RouterModule],
   templateUrl: './random-challenge-list.component.html',
   styleUrls: ['./random-challenge-list.component.scss'],
 })

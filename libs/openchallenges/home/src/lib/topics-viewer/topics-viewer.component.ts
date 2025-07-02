@@ -1,9 +1,8 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'openchallenges-topics-viewer',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './topics-viewer.component.html',
   styleUrls: ['./topics-viewer.component.scss'],
 })

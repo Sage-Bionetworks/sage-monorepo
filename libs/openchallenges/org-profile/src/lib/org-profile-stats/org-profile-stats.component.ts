@@ -6,12 +6,12 @@ import {
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { HttpStatusRedirect, handleHttpError } from '@sagebionetworks/openchallenges/util';
-import { CommonModule } from '@angular/common';
+import { NgPlural, NgPluralCase, AsyncPipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'openchallenges-org-profile-stats',
-  imports: [CommonModule, MatIconModule],
+  imports: [NgPlural, NgPluralCase, AsyncPipe, MatIconModule],
   templateUrl: './org-profile-stats.component.html',
   styleUrls: ['./org-profile-stats.component.scss'],
 })

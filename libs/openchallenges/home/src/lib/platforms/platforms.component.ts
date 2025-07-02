@@ -1,11 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Image, ImageService } from '@sagebionetworks/openchallenges/api-client-angular';
 import { Observable } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-platforms',
-  imports: [CommonModule],
+  imports: [AsyncPipe],
   templateUrl: './platforms.component.html',
   styleUrls: ['./platforms.component.scss'],
 })
