@@ -5,10 +5,9 @@
       Not sure where to start? Try one of the following featured challenges!
     </div>
     <div class="card-group">
-      <openchallenges-challenge-card
-        *ngFor="let challenge of challenges$ | async"
-        [challenge]="challenge"
-      />
+      @for (challenge of challenges$ | async; track challenge) {
+        <openchallenges-challenge-card [challenge]="challenge" />
+      }
     </div>
   </div>
 </section>

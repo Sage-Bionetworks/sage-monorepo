@@ -9,8 +9,12 @@
   @if (affiliation) {
     <p class="mat-caption person-card-affiliation">{{ affiliation }}</p>
   }
-  <!-- <div *ngIf="role" [ngClass]="{ 'person-card-chip': 'addChips' }">
-  <mat-icon aria-hidden="true"> emoji_people </mat-icon>
-  <span class="person-card-chip-text">{{ role }}</span>
-</div> -->
+  <!-- Role chip functionality commented out for now
+  @if (role) {
+    <div [ngClass]="{ 'person-card-chip': 'addChips' }">
+      <mat-icon aria-hidden="true"> emoji_people </mat-icon>
+      <span class="person-card-chip-text">{{ role }}</span>
+    </div>
+  }
+  -->
 </div>

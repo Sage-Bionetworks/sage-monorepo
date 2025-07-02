@@ -2,14 +2,16 @@
   <div class="container">
     <h3 class="section-title">Explore trending topics</h3>
     <div class="cards-wrap">
-      <!-- TODO: replace hard-coded cards with ngFor, e.g.
+      <!-- TODO: replace hard-coded cards with @for, e.g.
 
-      <div class="card trending-card text-center" *ngFor="let trend in trendList | async">
-        <div class="card-inner">
-          <h4 class="card-title">{{ trend.title }}</h4>
-          <p class="text-sm">{{ trend.count }} active challenges</p>
+      @for (trend of trendList | async; track trend) {
+        <div class="card trending-card text-center">
+          <div class="card-inner">
+            <h4 class="card-title">{{ trend.title }}</h4>
+            <p class="text-sm">{{ trend.count }} active challenges</p>
+          </div>
         </div>
-      </div>
+      }
       -->
       <div class="card trending-card">
         <div class="card-inner">
