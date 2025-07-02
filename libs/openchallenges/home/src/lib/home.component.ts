@@ -1,7 +1,7 @@
 import { Component, inject, Renderer2 } from '@angular/core';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { FooterComponent } from '@sagebionetworks/openchallenges/ui';
-import { AppShellNoRenderDirective, SeoService } from '@sagebionetworks/shared/util';
+import { SeoService } from '@sagebionetworks/shared/util';
 import { ChallengeHostListComponent } from './challenge-host-list/challenge-host-list.component';
 import { ChallengeRegistrationComponent } from './challenge-registration/challenge-registration.component';
 import { ChallengeSearchComponent } from './challenge-search/challenge-search.component';
@@ -24,7 +24,6 @@ import { RandomChallengeListComponent } from './random-challenge-list/random-cha
     PlatformsComponent,
     StatisticsViewerComponent,
     FooterComponent,
-    AppShellNoRenderDirective,
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
