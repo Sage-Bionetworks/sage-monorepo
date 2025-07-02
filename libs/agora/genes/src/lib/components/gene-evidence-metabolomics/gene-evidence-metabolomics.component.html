@@ -80,11 +80,13 @@
   <div class="section-inner">
     <div class="container-lg">
       <div #mdeChart>
-        <agora-box-plot-chart
-          xAxisLabel="DIAGNOSIS"
-          [yAxisLabel]="_gene?.metabolomics?.metabolite_full_name + ' LEVELS'"
-          [data]="boxPlotData"
-        ></agora-box-plot-chart>
+        @defer {
+          <agora-box-plot-chart
+            xAxisLabel="DIAGNOSIS"
+            [yAxisLabel]="_gene?.metabolomics?.metabolite_full_name + ' LEVELS'"
+            [data]="boxPlotData"
+          ></agora-box-plot-chart>
+        }
       </div>
     </div>
   </div>
