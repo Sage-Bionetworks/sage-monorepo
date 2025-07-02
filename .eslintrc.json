@@ -36,7 +36,7 @@
       "parser": "@angular-eslint/template-parser",
       "plugins": ["@angular-eslint/template"],
       "rules": {
-        "@angular-eslint/template/prefer-control-flow": "warn"
+        "@angular-eslint/template/prefer-control-flow": "error"
       }
     }
   ]

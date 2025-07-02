@@ -5,13 +5,11 @@
       class="logo"
       src="/assets/openchallenges/images/openchallenges-color.svg"
       alt="OpenChallenges"
-      />
+    />
   </a>
 
   @for (key of sectionsKeys; track key) {
-    <a mat-button class="navbar-item" [routerLink]="key"
-      >{{ sections[key].name }}
-    </a>
+    <a mat-button class="navbar-item" [routerLink]="key">{{ sections[key].name }} </a>
   }
 
   <div class="flex-spacer"></div>
@@ -19,14 +17,19 @@
   <a mat-button class="navbar-item" routerLink="/team">Meet Our Team</a>
   <openchallenges-discord-button />
 
-  <!-- <a mat-button class="navbar-item" *ngIf="!isLoggedIn" routerLink="/login" aria-label="Log In">
-  Log In
-</a> -->
-<!-- *ngIf="isLoggedIn" -->
-<!-- <openchallenges-user-button
-class="test"
-[avatar]="userAvatar"
-[menuItems]="userMenuItems"
-(menuItemSelected)="selectUserMenuItem($event)"
-/> -->
+  <!-- Login/User button functionality commented out for now
+  @if (!isLoggedIn) {
+    <a mat-button class="navbar-item" routerLink="/login" aria-label="Log In">
+      Log In
+    </a>
+  }
+  @if (isLoggedIn) {
+    <openchallenges-user-button
+      class="test"
+      [avatar]="userAvatar"
+      [menuItems]="userMenuItems"
+      (menuItemSelected)="selectUserMenuItem($event)"
+    />
+  }
+  -->
 </nav>

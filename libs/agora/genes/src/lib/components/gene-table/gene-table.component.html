@@ -56,30 +56,31 @@
     </ng-template>
     <ng-template #header let-columns>
       <tr>
-        <th
-          *ngFor="let column of columns; let i = index"
-          [style]="{ width: column.width + 'px' }"
-          [ngClass]="{ hidden: !selectedColumns.includes(column) }"
-          [ngSwitch]="column.field"
-        >
-          <div class="tr">
-            <div [pSortableColumn]="column.field" class="th">
-              {{ column.header }}
-              <p-sortIcon [field]="column.field"></p-sortIcon>
+        @for (column of columns; track column; let i = $index) {
+          <th
+            [style]="{ width: column.width + 'px' }"
+            [ngClass]="{ hidden: !selectedColumns.includes(column) }"
+          >
+            <div class="tr">
+              <div [pSortableColumn]="column.field" class="th">
+                {{ column.header }}
+                <p-sortIcon [field]="column.field"></p-sortIcon>
+              </div>
             </div>
-          </div>
-        </th>
+          </th>
+        }
       </tr>
     </ng-template>
     <ng-template #body let-item let-columns="columns">
       <tr (click)="navigateToGene(item)">
-        <td
-          *ngFor="let column of columns"
-          [style]="{ width: column.width + 'px' }"
-          [ngClass]="{ hidden: !selectedColumns.includes(column) }"
-        >
-          {{ item[column.field] | capitalizeBoolean }}
-        </td>
+        @for (column of columns; track column) {
+          <td
+            [style]="{ width: column.width + 'px' }"
+            [ngClass]="{ hidden: !selectedColumns.includes(column) }"
+          >
+            {{ item[column.field] | capitalizeBoolean }}
+          </td>
+        }
       </tr>
     </ng-template>
   </p-table>
