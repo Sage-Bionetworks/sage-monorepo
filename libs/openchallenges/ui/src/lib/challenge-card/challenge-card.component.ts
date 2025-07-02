@@ -1,4 +1,4 @@
-import { AsyncPipe, NgClass } from '@angular/common';
+import { AsyncPipe, NgClass, TitleCasePipe } from '@angular/common';
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-challenge-card',
-  imports: [ChallengeIncentiveLabelPipe, NgClass, AsyncPipe, MatIconModule, RouterModule],
+  imports: [ChallengeIncentiveLabelPipe, NgClass, MatIconModule, RouterModule, TitleCasePipe],
   templateUrl: './challenge-card.component.html',
   styleUrls: ['./challenge-card.component.scss'],
 })
