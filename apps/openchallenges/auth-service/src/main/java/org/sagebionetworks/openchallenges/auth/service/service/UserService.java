@@ -68,7 +68,7 @@ public class UserService {
     }
 
     String hashedPassword = passwordEncoder.encode(password);
-    User user = new User(username, hashedPassword, role);
+    User user = User.builder().username(username).passwordHash(hashedPassword).role(role).build();
 
     User savedUser = userRepository.save(user);
     logger.info("Successfully created user: {}", username);

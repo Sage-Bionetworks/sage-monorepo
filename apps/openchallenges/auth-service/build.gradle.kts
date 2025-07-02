@@ -25,6 +25,8 @@ repositories {
 }
 
 dependencies {
+  compileOnly(libs.lombok)
+  annotationProcessor(libs.lombok)
   implementation(libs.findbugs.jsr305)
   implementation(libs.flyway.core)
   implementation(libs.flyway.database.postgresql)

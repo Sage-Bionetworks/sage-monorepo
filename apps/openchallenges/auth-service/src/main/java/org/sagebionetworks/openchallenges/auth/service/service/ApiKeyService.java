@@ -57,7 +57,13 @@ public class ApiKeyService {
     }
 
     // Create entity with the HASHED key
-    ApiKey apiKeyEntity = new ApiKey(user, keyHash, API_KEY_PREFIX, name, expiresAt);
+    ApiKey apiKeyEntity = ApiKey.builder()
+      .user(user)
+      .keyHash(keyHash)
+      .keyPrefix(API_KEY_PREFIX)
+      .name(name)
+      .expiresAt(expiresAt)
+      .build();
     ApiKey saved = apiKeyRepository.save(apiKeyEntity);
 
     // Create a temporary field to store the plain key for the response
