@@ -361,7 +361,7 @@ paths:
       description: Deletes the organization specified
       operationId: deleteOrganization
       security:
-        - bearerAuth: []
+        - apiKeyAuth: []
       responses:
         '204':
           description: Organization successfully deleted

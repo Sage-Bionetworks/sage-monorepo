@@ -65,7 +65,7 @@ paths:
       description: Deletes the organization specified
       operationId: deleteOrganization
       security:
-        - bearerAuth: []
+        - apiKeyAuth: []
       responses:
         '204':
           description: Organization successfully deleted
@@ -79,7 +79,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
-    ApiKeyAuth:
+    apiKeyAuth:
       type: apiKey
       in: header
       name: X-API-Key
