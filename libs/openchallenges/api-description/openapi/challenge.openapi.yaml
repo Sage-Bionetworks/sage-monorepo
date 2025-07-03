@@ -128,7 +128,7 @@ paths:
       tags:
         - ChallengePlatform
       summary: Get a challenge platform
-      description: Returns the challenge platform specified by unique ID
+      description: Returns the challenge platform identified by its unique ID
       operationId: getChallengePlatform
       responses:
         '200':
