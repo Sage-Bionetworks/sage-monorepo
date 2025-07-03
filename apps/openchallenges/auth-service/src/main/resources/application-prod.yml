@@ -4,6 +4,8 @@ spring:
     show-sql: false
   datasource:
     url: jdbc:postgresql://openchallenges-postgres-prod:8091/auth_service
+  flyway:
+    enabled: false
 
 openchallenges:
   auth:
