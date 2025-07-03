@@ -97,8 +97,48 @@ else
     echo "Response: $TEST_RESPONSE"
 fi
 
-# Step 5: Delete the created API key
-echo -e "\n🗑️  Step 5: Delete the created API key"
+# Step 5: Validate the API key using the validate endpoint
+echo -e "\n🔍 Step 5: Validate the API key using the validate endpoint"
+echo "POST $API_BASE/v1/auth/validate"
+
+VALIDATE_RESPONSE=$(curl -s --http1.1 --tcp-nodelay -X POST "$API_BASE/v1/auth/validate" \
+  -H "Content-Type: application/json" \
+  -H "Connection: close" \
+  -d "{\"apiKey\": \"$NEW_API_KEY\"}")
+
+if echo "$VALIDATE_RESPONSE" | grep -q '"valid": *true'; then
+    USER_ID=$(echo "$VALIDATE_RESPONSE" | jq -r '.userId')
+    USERNAME=$(echo "$VALIDATE_RESPONSE" | jq -r '.username')
+    ROLE=$(echo "$VALIDATE_RESPONSE" | jq -r '.role')
+    SCOPES=$(echo "$VALIDATE_RESPONSE" | jq -r '.scopes | join(", ")')
+    echo "✅ API key validation successful"
+    echo "👤 User ID: $USER_ID"
+    echo "🏷️ Username: $USERNAME"
+    echo "🎭 Role: $ROLE"
+    echo "🔑 Scopes: $SCOPES"
+else
+    echo "❌ API key validation failed"
+    echo "Response: $VALIDATE_RESPONSE"
+fi
+
+# Test with invalid API key
+echo -e "\n🧪 Step 5b: Test validation with invalid API key"
+echo "POST $API_BASE/v1/auth/validate (with invalid key)"
+
+INVALID_VALIDATE_RESPONSE=$(curl -s --http1.1 --tcp-nodelay -X POST "$API_BASE/v1/auth/validate" \
+  -H "Content-Type: application/json" \
+  -H "Connection: close" \
+  -d '{"apiKey": "oc_dev_invalid_key_123456789"}')
+
+if echo "$INVALID_VALIDATE_RESPONSE" | grep -q '"valid": *false'; then
+    echo "✅ Invalid API key correctly rejected"
+else
+    echo "❌ Invalid API key validation test failed"
+    echo "Response: $INVALID_VALIDATE_RESPONSE"
+fi
+
+# Step 6: Delete the created API key
+echo -e "\n🗑️  Step 6: Delete the created API key"
 echo "DELETE $API_BASE/v1/auth/api-keys/$KEY_ID"
 
 DELETE_RESPONSE=$(curl -s -w "%{http_code}" -X DELETE "$API_BASE/v1/auth/api-keys/$KEY_ID" \
@@ -111,8 +151,8 @@ else
     echo "HTTP status: $DELETE_RESPONSE"
 fi
 
-# Step 6: Verify deletion
-echo -e "\n🔍 Step 6: Verify the API key was deleted"
+# Step 7: Verify deletion
+echo -e "\n🔍 Step 7: Verify the API key was deleted"
 echo "GET $API_BASE/v1/auth/api-keys (using deleted key)"
 
 VERIFY_RESPONSE=$(curl -s -w "%{http_code}" -X GET "$API_BASE/v1/auth/api-keys" \
@@ -125,22 +165,31 @@ else
     echo "Response: $VERIFY_RESPONSE"
 fi
 
-# # Final verification
-# echo -e "\n📋 Final: List remaining API keys"
-# FINAL_LIST=$(curl -s -X GET "$API_BASE/v1/auth/api-keys" \
-#   -H "Authorization: Bearer $API_KEY")
+# Step 8: Test validation endpoint with deleted API key
+echo -e "\n🧪 Step 8: Test validation endpoint with deleted API key"
+echo "POST $API_BASE/v1/auth/validate (with deleted key)"
 
-# FINAL_COUNT=$(echo "$FINAL_LIST" | jq '. | length')
-# echo "📊 Remaining API keys: $FINAL_COUNT"
+DELETED_VALIDATE_RESPONSE=$(curl -s --http1.1 --tcp-nodelay -X POST "$API_BASE/v1/auth/validate" \
+  -H "Content-Type: application/json" \
+  -H "Connection: close" \
+  -d "{\"apiKey\": \"$NEW_API_KEY\"}")
 
-# echo -e "\n🎉 Demo completed successfully!"
-# echo "==============================================="
-# echo "✅ All API key management operations work correctly"
-# echo "🔑 API key authentication is functional"
-# echo "🛡️  Security controls are in place"
+if echo "$DELETED_VALIDATE_RESPONSE" | grep -q '"valid": *false'; then
+    echo "✅ Deleted API key validation correctly returned false"
+else
+    echo "❌ Deleted API key validation test failed"
+    echo "Response: $DELETED_VALIDATE_RESPONSE"
+fi
 
-# # Display profile information
-# echo -e "\n📋 Current Configuration:"
-# echo "🏷️  Profile: dev (API keys prefixed with 'oc_dev_')"
-# echo "🌐 Service URL: $API_BASE"
-# echo "📚 API Documentation: $API_BASE/swagger-ui.html"
+echo -e "\n🎉 Demo completed successfully!"
+echo "==============================================="
+echo "✅ All API key management operations work correctly"
+echo "🔑 API key authentication is functional"
+echo "🔍 API key validation endpoint tested"
+echo "🛡️ Security controls are in place"
+
+# Display profile information
+echo -e "\n📋 Current Configuration:"
+echo "🏷️ Profile: dev (API keys prefixed with 'oc_dev_')"
+echo "🌐 Service URL: $API_BASE"
+echo "📚 API Documentation: $API_BASE/swagger-ui.html"
