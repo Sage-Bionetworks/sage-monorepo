@@ -96,8 +96,8 @@ paths:
         - ChallengeContribution
       summary: Delete all contributions for a specific challenge
       description: >
-        Deletes all associated contributions for a given challenge, identified
-        by its `challengeId`.
+        Deletes all associated contributions for a given challenge, specified by
+        its unique ID.
 
         This action is irreversible.
       operationId: deleteAllChallengeContributions
