@@ -8,7 +8,7 @@ properties:
   key:
     type: string
     description: The actual API key (only returned on creation)
-    example: oc_live_abcd1234567890abcdef1234567890abcdef1234
+    example: oc_prod_abcd1234567890abcdef1234567890abcdef1234
   name:
     type: string
     description: Human-readable name for the API key
@@ -16,7 +16,7 @@ properties:
   prefix:
     type: string
     description: First 8 characters of the API key for identification
-    example: oc_live_
+    example: oc_prod_
   createdAt:
     type: string
     format: date-time

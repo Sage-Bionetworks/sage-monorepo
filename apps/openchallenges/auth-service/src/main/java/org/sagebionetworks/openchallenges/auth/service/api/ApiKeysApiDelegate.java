@@ -45,7 +45,7 @@ public interface ApiKeysApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"createdAt\" : \"2024-01-15T10:30:00Z\", \"prefix\" : \"oc_live_\", \"name\" : \"Production API Key\", \"id\" : \"123e4567-e89b-12d3-a456-426614174000\", \"key\" : \"oc_live_abcd1234567890abcdef1234567890abcdef1234\", \"expiresAt\" : \"2025-01-15T10:30:00Z\" }";
+                    String exampleString = "{ \"createdAt\" : \"2024-01-15T10:30:00Z\", \"prefix\" : \"oc_prod_\", \"name\" : \"Production API Key\", \"id\" : \"123e4567-e89b-12d3-a456-426614174000\", \"key\" : \"oc_prod_abcd1234567890abcdef1234567890abcdef1234\", \"expiresAt\" : \"2025-01-15T10:30:00Z\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -118,7 +118,7 @@ public interface ApiKeysApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "[ { \"createdAt\" : \"2024-01-15T10:30:00Z\", \"lastUsedAt\" : \"2024-06-15T14:20:00Z\", \"prefix\" : \"oc_live_\", \"name\" : \"Production API Key\", \"id\" : \"123e4567-e89b-12d3-a456-426614174000\", \"expiresAt\" : \"2025-01-15T10:30:00Z\" }, { \"createdAt\" : \"2024-01-15T10:30:00Z\", \"lastUsedAt\" : \"2024-06-15T14:20:00Z\", \"prefix\" : \"oc_live_\", \"name\" : \"Production API Key\", \"id\" : \"123e4567-e89b-12d3-a456-426614174000\", \"expiresAt\" : \"2025-01-15T10:30:00Z\" } ]";
+                    String exampleString = "[ { \"createdAt\" : \"2024-01-15T10:30:00Z\", \"lastUsedAt\" : \"2024-06-15T14:20:00Z\", \"prefix\" : \"oc_prod_\", \"name\" : \"Production API Key\", \"id\" : \"123e4567-e89b-12d3-a456-426614174000\", \"expiresAt\" : \"2025-01-15T10:30:00Z\" }, { \"createdAt\" : \"2024-01-15T10:30:00Z\", \"lastUsedAt\" : \"2024-06-15T14:20:00Z\", \"prefix\" : \"oc_prod_\", \"name\" : \"Production API Key\", \"id\" : \"123e4567-e89b-12d3-a456-426614174000\", \"expiresAt\" : \"2025-01-15T10:30:00Z\" } ]";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

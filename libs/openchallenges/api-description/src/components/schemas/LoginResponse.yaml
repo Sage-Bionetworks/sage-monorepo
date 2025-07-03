@@ -3,7 +3,7 @@ properties:
   apiKey:
     type: string
     description: API key for authentication
-    example: oc_live_abcd1234567890abcdef1234567890abcdef1234
+    example: oc_prod_abcd1234567890abcdef1234567890abcdef1234
   userId:
     type: string
     format: uuid

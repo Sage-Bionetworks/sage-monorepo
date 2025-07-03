@@ -80,7 +80,7 @@ public class LoginResponseDto {
    * @return apiKey
    */
   
-  @Schema(name = "apiKey", example = "oc_live_abcd1234567890abcdef1234567890abcdef1234", description = "API key for authentication", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "apiKey", example = "oc_prod_abcd1234567890abcdef1234567890abcdef1234", description = "API key for authentication", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("apiKey")
   public @Nullable String getApiKey() {
     return apiKey;

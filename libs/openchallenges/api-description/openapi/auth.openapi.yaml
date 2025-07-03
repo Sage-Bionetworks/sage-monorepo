@@ -169,7 +169,7 @@ components:
         apiKey:
           type: string
           description: API key for authentication
-          example: oc_live_abcd1234567890abcdef1234567890abcdef1234
+          example: oc_prod_abcd1234567890abcdef1234567890abcdef1234
         userId:
           type: string
           format: uuid
@@ -224,7 +224,7 @@ components:
         prefix:
           type: string
           description: First 8 characters of the API key for identification
-          example: oc_live_
+          example: oc_prod_
         createdAt:
           type: string
           format: date-time
@@ -270,7 +270,7 @@ components:
         key:
           type: string
           description: The actual API key (only returned on creation)
-          example: oc_live_abcd1234567890abcdef1234567890abcdef1234
+          example: oc_prod_abcd1234567890abcdef1234567890abcdef1234
         name:
           type: string
           description: Human-readable name for the API key
@@ -278,7 +278,7 @@ components:
         prefix:
           type: string
           description: First 8 characters of the API key for identification
-          example: oc_live_
+          example: oc_prod_
         createdAt:
           type: string
           format: date-time
@@ -298,7 +298,7 @@ components:
         apiKey:
           type: string
           description: The API key to validate
-          example: oc_live_abcd1234567890abcdef1234567890abcdef1234
+          example: oc_prod_abcd1234567890abcdef1234567890abcdef1234
     ValidateApiKeyResponse:
       type: object
       properties:

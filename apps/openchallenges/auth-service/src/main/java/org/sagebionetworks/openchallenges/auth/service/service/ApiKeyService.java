@@ -26,7 +26,7 @@ public class ApiKeyService {
   private final PasswordEncoder passwordEncoder;
   private final SecureRandom secureRandom;
 
-  private static final String API_KEY_PREFIX = "oc_live_";
+  private static final String API_KEY_PREFIX = "oc_prod_";
   private static final int API_KEY_LENGTH = 40; // characters after prefix
 
   @Autowired

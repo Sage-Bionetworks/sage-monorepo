@@ -70,7 +70,7 @@ public class CreateApiKeyResponseDto {
    * @return key
    */
   
-  @Schema(name = "key", example = "oc_live_abcd1234567890abcdef1234567890abcdef1234", description = "The actual API key (only returned on creation)", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "key", example = "oc_prod_abcd1234567890abcdef1234567890abcdef1234", description = "The actual API key (only returned on creation)", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("key")
   public @Nullable String getKey() {
     return key;
@@ -110,7 +110,7 @@ public class CreateApiKeyResponseDto {
    * @return prefix
    */
   
-  @Schema(name = "prefix", example = "oc_live_", description = "First 8 characters of the API key for identification", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "prefix", example = "oc_prod_", description = "First 8 characters of the API key for identification", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("prefix")
   public @Nullable String getPrefix() {
     return prefix;

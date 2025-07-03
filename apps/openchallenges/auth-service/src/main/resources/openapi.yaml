@@ -215,13 +215,13 @@ components:
     LoginResponse:
       example:
         role: admin
-        apiKey: oc_live_abcd1234567890abcdef1234567890abcdef1234
+        apiKey: oc_prod_abcd1234567890abcdef1234567890abcdef1234
         userId: 123e4567-e89b-12d3-a456-426614174000
         username: admin
       properties:
         apiKey:
           description: API key for authentication
-          example: oc_live_abcd1234567890abcdef1234567890abcdef1234
+          example: oc_prod_abcd1234567890abcdef1234567890abcdef1234
           type: string
         userId:
           description: User ID
@@ -268,7 +268,7 @@ components:
       example:
         createdAt: 2024-01-15T10:30:00Z
         lastUsedAt: 2024-06-15T14:20:00Z
-        prefix: oc_live_
+        prefix: oc_prod_
         name: Production API Key
         id: 123e4567-e89b-12d3-a456-426614174000
         expiresAt: 2025-01-15T10:30:00Z
@@ -284,7 +284,7 @@ components:
           type: string
         prefix:
           description: First 8 characters of the API key for identification
-          example: oc_live_
+          example: oc_prod_
           type: string
         createdAt:
           description: When the API key was created
@@ -325,10 +325,10 @@ components:
     CreateApiKeyResponse:
       example:
         createdAt: 2024-01-15T10:30:00Z
-        prefix: oc_live_
+        prefix: oc_prod_
         name: Production API Key
         id: 123e4567-e89b-12d3-a456-426614174000
-        key: oc_live_abcd1234567890abcdef1234567890abcdef1234
+        key: oc_prod_abcd1234567890abcdef1234567890abcdef1234
         expiresAt: 2025-01-15T10:30:00Z
       properties:
         id:
@@ -338,7 +338,7 @@ components:
           type: string
         key:
           description: The actual API key (only returned on creation)
-          example: oc_live_abcd1234567890abcdef1234567890abcdef1234
+          example: oc_prod_abcd1234567890abcdef1234567890abcdef1234
           type: string
         name:
           description: Human-readable name for the API key
@@ -346,7 +346,7 @@ components:
           type: string
         prefix:
           description: First 8 characters of the API key for identification
-          example: oc_live_
+          example: oc_prod_
           type: string
         createdAt:
           description: When the API key was created
@@ -364,7 +364,7 @@ components:
       properties:
         apiKey:
           description: The API key to validate
-          example: oc_live_abcd1234567890abcdef1234567890abcdef1234
+          example: oc_prod_abcd1234567890abcdef1234567890abcdef1234
           type: string
       required:
         - apiKey

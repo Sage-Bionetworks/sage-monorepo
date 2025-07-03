@@ -5,4 +5,4 @@ properties:
   apiKey:
     type: string
     description: The API key to validate
-    example: oc_live_abcd1234567890abcdef1234567890abcdef1234
+    example: oc_prod_abcd1234567890abcdef1234567890abcdef1234

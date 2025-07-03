@@ -44,7 +44,7 @@ public interface AuthenticationApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"role\" : \"admin\", \"apiKey\" : \"oc_live_abcd1234567890abcdef1234567890abcdef1234\", \"userId\" : \"123e4567-e89b-12d3-a456-426614174000\", \"username\" : \"admin\" }";
+                    String exampleString = "{ \"role\" : \"admin\", \"apiKey\" : \"oc_prod_abcd1234567890abcdef1234567890abcdef1234\", \"userId\" : \"123e4567-e89b-12d3-a456-426614174000\", \"username\" : \"admin\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

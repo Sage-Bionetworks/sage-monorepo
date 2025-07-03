@@ -46,7 +46,7 @@ public class ValidateApiKeyRequestDto {
    * @return apiKey
    */
   @NotNull 
-  @Schema(name = "apiKey", example = "oc_live_abcd1234567890abcdef1234567890abcdef1234", description = "The API key to validate", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "apiKey", example = "oc_prod_abcd1234567890abcdef1234567890abcdef1234", description = "The API key to validate", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("apiKey")
   public String getApiKey() {
     return apiKey;

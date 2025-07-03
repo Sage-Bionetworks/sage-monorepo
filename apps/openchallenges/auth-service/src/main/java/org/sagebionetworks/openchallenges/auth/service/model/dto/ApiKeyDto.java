@@ -91,7 +91,7 @@ public class ApiKeyDto {
    * @return prefix
    */
   
-  @Schema(name = "prefix", example = "oc_live_", description = "First 8 characters of the API key for identification", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "prefix", example = "oc_prod_", description = "First 8 characters of the API key for identification", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("prefix")
   public @Nullable String getPrefix() {
     return prefix;
