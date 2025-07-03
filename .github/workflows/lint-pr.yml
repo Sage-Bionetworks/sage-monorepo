@@ -26,6 +26,7 @@ jobs:
           scopes: |
             agora
             amp-als
+            bioarena
             bridge2ai
             common
             explorers

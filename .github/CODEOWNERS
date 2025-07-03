@@ -6,6 +6,11 @@
 /.vscode @tschaffter
 /.yarn @tschaffter
 
+# BioArena
+/apps/bioarena/ @rrchai @tschaffter
+/libs/bioarena/ @rrchai @tschaffter
+/docker/bioarena/ @rrchai @tschaffter
+
 # OpenChallenges
 /apps/openchallenges/ @rrchai @tschaffter
 /libs/openchallenges/ @rrchai @tschaffter
