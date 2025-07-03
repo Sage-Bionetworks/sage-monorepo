@@ -80,6 +80,11 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
         );
       } else {
         logger.warn("Invalid API key provided for request: {}", requestURI);
+        // Send 401 Unauthorized for invalid API key
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.getWriter().write("{\"error\":\"Invalid API key\"}");
+        return;
       }
     } catch (Exception e) {
       logger.error("Error during API key authentication for request: {}", requestURI, e);
