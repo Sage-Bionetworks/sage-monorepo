@@ -2,13 +2,13 @@
 -- Password is 'admin123' hashed with BCrypt (strength 12)
 -- You should change this password in production
 INSERT INTO app_user (username, password_hash, role) VALUES
-('admin', '$2a$12$8YU4YgK1XZp1YxXhK4K1JuO8TzUwN3CJ9z8QJtZ3K9YgT2L1N8J9.', 'admin');
+('admin', '$2a$12$0vDbrdL7o3enKVmjlIJGVeZC8obDRxUGcf76D3DowTo3gVt1wUluu', 'admin');
 
 -- Insert default researcher user
 -- Password is 'researcher123' hashed with BCrypt (strength 12)
 -- You should change this password in production
 INSERT INTO app_user (username, password_hash, role) VALUES
-('researcher', '$2a$12$9ZV5ZhL2YAq2ZyYiL5L2KvP9UaVxO4DK0a9RKuA4L0ZhU3M2O9K0.', 'user');
+('researcher', '$2a$12$2wGLgcl3NnRDJFNod89oqOrG1PwK1JT1QlD6b9SW8wcR30ZqQiG6K', 'user');
 
 -- Note: These are placeholder BCrypt hashes. In a real implementation,
 -- you would either:
