@@ -13,7 +13,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
-@Table(name = "user")
+@Table(name = "app_user")
 @Data
 @Builder
 @NoArgsConstructor
