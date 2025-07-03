@@ -1,5 +1,11 @@
 server:
   port: 8087
+  tomcat:
+    connection-timeout: 20000
+    keep-alive-timeout: 20000
+    max-keep-alive-requests: 100
+  compression:
+    enabled: false
 
 spring:
   application:

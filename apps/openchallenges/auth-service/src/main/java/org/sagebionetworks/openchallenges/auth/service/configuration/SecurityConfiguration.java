@@ -28,10 +28,13 @@ public class SecurityConfiguration {
    * Configure security filter chain with API key authentication
    */
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http, ApiKeyService apiKeyService) throws Exception {
+  public SecurityFilterChain filterChain(HttpSecurity http, ApiKeyService apiKeyService)
+    throws Exception {
     // Create the API key authentication filter here to avoid circular dependency
-    ApiKeyAuthenticationFilter apiKeyAuthenticationFilter = new ApiKeyAuthenticationFilter(apiKeyService);
-    
+    ApiKeyAuthenticationFilter apiKeyAuthenticationFilter = new ApiKeyAuthenticationFilter(
+      apiKeyService
+    );
+
     http
       .csrf(csrf -> csrf.disable()) // Disable CSRF for API
       .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless for API

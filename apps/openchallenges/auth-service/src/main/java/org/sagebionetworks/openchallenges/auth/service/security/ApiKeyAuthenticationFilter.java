@@ -4,6 +4,9 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
 import org.slf4j.Logger;
@@ -12,10 +15,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * Filter to authenticate requests using API keys in the Authorization header
@@ -38,7 +37,6 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
     HttpServletResponse response,
     FilterChain filterChain
   ) throws ServletException, IOException {
-    
     String requestURI = request.getRequestURI();
     logger.debug("Processing request: {} {}", request.getMethod(), requestURI);
 
@@ -58,29 +56,28 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
     }
 
     String apiKeyValue = authHeader.substring(API_KEY_PREFIX.length());
-    
+
     try {
       // Validate API key
       Optional<ApiKey> apiKeyOptional = apiKeyService.validateApiKey(apiKeyValue);
-      
+
       if (apiKeyOptional.isPresent()) {
         ApiKey apiKey = apiKeyOptional.get();
-        
+
         // Create authentication token
         List<SimpleGrantedAuthority> authorities = List.of(
           new SimpleGrantedAuthority("ROLE_" + apiKey.getUser().getRole().name().toUpperCase())
         );
-        
-        UsernamePasswordAuthenticationToken authentication = 
-          new UsernamePasswordAuthenticationToken(
-            apiKey.getUser(), 
-            null, 
-            authorities
-          );
-        
+
+        UsernamePasswordAuthenticationToken authentication =
+          new UsernamePasswordAuthenticationToken(apiKey.getUser(), null, authorities);
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        logger.debug("Successfully authenticated user: {} for request: {}", 
-          apiKey.getUser().getUsername(), requestURI);
+        logger.debug(
+          "Successfully authenticated user: {} for request: {}",
+          apiKey.getUser().getUsername(),
+          requestURI
+        );
       } else {
         logger.warn("Invalid API key provided for request: {}", requestURI);
       }
@@ -92,10 +89,12 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
   }
 
   private boolean isPublicEndpoint(String requestURI) {
-    return requestURI.equals("/v1/auth/login") ||
-           requestURI.equals("/v1/auth/validate") ||
-           requestURI.startsWith("/actuator/") ||
-           requestURI.startsWith("/v3/api-docs") ||
-           requestURI.startsWith("/swagger-ui");
+    return (
+      requestURI.equals("/v1/auth/login") ||
+      requestURI.equals("/v1/auth/validate") ||
+      requestURI.startsWith("/actuator/") ||
+      requestURI.startsWith("/v3/api-docs") ||
+      requestURI.startsWith("/swagger-ui")
+    );
   }
 }

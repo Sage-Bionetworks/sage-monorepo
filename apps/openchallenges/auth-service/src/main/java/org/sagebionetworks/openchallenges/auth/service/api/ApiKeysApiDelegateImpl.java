@@ -49,7 +49,11 @@ public class ApiKeysApiDelegateImpl implements ApiKeysApiDelegate {
 
       ApiKey apiKey = apiKeyService.createApiKey(authenticatedUser, keyName, expiresInDays);
 
-      logger.info("Successfully created API key '{}' for user: {}", keyName, authenticatedUser.getUsername());
+      logger.info(
+        "Successfully created API key '{}' for user: {}",
+        keyName,
+        authenticatedUser.getUsername()
+      );
 
       // Build response
       CreateApiKeyResponseDto response = new CreateApiKeyResponseDto()
@@ -60,7 +64,9 @@ public class ApiKeysApiDelegateImpl implements ApiKeysApiDelegate {
         .createdAt(apiKey.getCreatedAt())
         .expiresAt(apiKey.getExpiresAt());
 
-      return ResponseEntity.status(HttpStatus.CREATED).body(response);
+      return ResponseEntity.status(HttpStatus.CREATED)
+        .header("Content-Type", "application/json")
+        .body(response);
     } catch (Exception e) {
       logger.error(
         "Unexpected error while creating API key: {}",
@@ -86,10 +92,18 @@ public class ApiKeysApiDelegateImpl implements ApiKeysApiDelegate {
       boolean deleted = apiKeyService.deleteApiKey(keyId, authenticatedUser);
 
       if (deleted) {
-        logger.info("Successfully deleted API key {} for user: {}", keyId, authenticatedUser.getUsername());
+        logger.info(
+          "Successfully deleted API key {} for user: {}",
+          keyId,
+          authenticatedUser.getUsername()
+        );
         return ResponseEntity.noContent().build();
       } else {
-        logger.warn("API key {} not found or does not belong to user: {}", keyId, authenticatedUser.getUsername());
+        logger.warn(
+          "API key {} not found or does not belong to user: {}",
+          keyId,
+          authenticatedUser.getUsername()
+        );
         return ResponseEntity.notFound().build();
       }
     } catch (Exception e) {
@@ -118,7 +132,11 @@ public class ApiKeysApiDelegateImpl implements ApiKeysApiDelegate {
         .map(this::convertToDto)
         .collect(java.util.stream.Collectors.toList());
 
-      logger.info("Successfully listed {} API keys for user: {}", apiKeyDtos.size(), authenticatedUser.getUsername());
+      logger.info(
+        "Successfully listed {} API keys for user: {}",
+        apiKeyDtos.size(),
+        authenticatedUser.getUsername()
+      );
       return ResponseEntity.ok(apiKeyDtos);
     } catch (Exception e) {
       logger.error("Unexpected error while listing API keys", e);

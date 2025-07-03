@@ -24,8 +24,9 @@ echo "✅ Auth service is running"
 echo -e "\n🔐 Step 1: Login as admin user"
 echo "POST $API_BASE/v1/auth/login"
 
-LOGIN_RESPONSE=$(curl -s -X POST "$API_BASE/v1/auth/login" \
+LOGIN_RESPONSE=$(curl -s --http1.1 --tcp-nodelay -X POST "$API_BASE/v1/auth/login" \
   -H "Content-Type: application/json" \
+  -H "Connection: close" \
   -d '{"username": "admin", "password": "changeme"}')
 
 if echo "$LOGIN_RESPONSE" | grep -q "apiKey"; then
@@ -39,28 +40,29 @@ else
     exit 1
 fi
 
-# # Step 2: Create API Key
-# echo -e "\n📝 Step 2: Create a new API key"
-# echo "POST $API_BASE/v1/auth/api-keys"
+# Step 2: Create API Key
+echo -e "\n📝 Step 2: Create a new API key"
+echo "POST $API_BASE/v1/auth/api-keys"
 
-# CREATE_RESPONSE=$(curl -s -X POST "$API_BASE/v1/auth/api-keys" \
-#   -H "Authorization: Bearer $API_KEY" \
-#   -H "Content-Type: application/json" \
-#   -d '{"name": "Demo API Key", "expiresIn": 30}')
+CREATE_RESPONSE=$(curl -s --http1.1 --tcp-nodelay -X POST "$API_BASE/v1/auth/api-keys" \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -H "Connection: close" \
+  -d '{"name": "Demo API Key", "expiresIn": 30}')
 
-# if echo "$CREATE_RESPONSE" | grep -q '"key"'; then
-#     NEW_API_KEY=$(echo "$CREATE_RESPONSE" | jq -r '.key')
-#     KEY_ID=$(echo "$CREATE_RESPONSE" | jq -r '.id')
-#     KEY_NAME=$(echo "$CREATE_RESPONSE" | jq -r '.name')
-#     echo "✅ API key created successfully"
-#     echo "📋 Key ID: $KEY_ID"
-#     echo "📝 Key Name: $KEY_NAME"
-#     echo "🔑 New API key: ${NEW_API_KEY:0:20}..."
-# else
-#     echo "❌ API key creation failed"
-#     echo "Response: $CREATE_RESPONSE"
-#     exit 1
-# fi
+if echo "$CREATE_RESPONSE" | grep -q '"key"'; then
+    NEW_API_KEY=$(echo "$CREATE_RESPONSE" | jq -r '.key')
+    KEY_ID=$(echo "$CREATE_RESPONSE" | jq -r '.id')
+    KEY_NAME=$(echo "$CREATE_RESPONSE" | jq -r '.name')
+    echo "✅ API key created successfully"
+    echo "📋 Key ID: $KEY_ID"
+    echo "📝 Key Name: $KEY_NAME"
+    echo "🔑 New API key: ${NEW_API_KEY:0:20}..."
+else
+    echo "❌ API key creation failed"
+    echo "Response: $CREATE_RESPONSE"
+    exit 1
+fi
 
 # # Step 3: List API Keys
 # echo -e "\n📋 Step 3: List all API keys"
