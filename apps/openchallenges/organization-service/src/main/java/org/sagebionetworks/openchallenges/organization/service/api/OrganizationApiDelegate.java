@@ -35,7 +35,7 @@ public interface OrganizationApiDelegate {
      * @param org The id or login of the organization. (required)
      * @return Organization successfully deleted (status code 204)
      *         or Unauthorized (status code 401)
-     *         or Forbidden (status code 403)
+     *         or The user does not have the permission to perform this action (status code 403)
      *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see OrganizationApi#deleteOrganization
