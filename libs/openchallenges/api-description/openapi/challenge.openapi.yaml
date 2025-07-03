@@ -146,7 +146,7 @@ paths:
         - ChallengePlatform
       summary: Delete a challenge platform
       description: |
-        Deletes a challenge platform identified by its unique ID. This action is irreversible.
+        Deletes a challenge platform by its unique ID. This action is irreversible.
       operationId: deleteChallengePlatform
       security:
         - ApiKeyAuth: []
