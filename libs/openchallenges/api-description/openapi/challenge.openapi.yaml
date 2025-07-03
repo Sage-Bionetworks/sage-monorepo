@@ -85,6 +85,28 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - ChallengeContribution
+      summary: Create a new contribution for a challenge
+      description: |
+        Creates a new contribution record associated with a challenge ID.
+      operationId: addChallengeContribution
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '201':
+          $ref: '#/components/responses/ChallengeContribution'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
     delete:
       tags:
         - ChallengeContribution
@@ -899,6 +921,20 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
+    ChallengeContribution:
+      type: object
+      description: A challenge contribution.
+      properties:
+        challengeId:
+          $ref: '#/components/schemas/ChallengeId'
+        organizationId:
+          $ref: '#/components/schemas/OrganizationId'
+        role:
+          $ref: '#/components/schemas/ChallengeContributionRole'
+      required:
+        - challengeId
+        - organizationId
+        - role
     Unauthorized:
       description: Unauthorized
       content:
@@ -907,6 +943,12 @@ components:
             $ref: '#/components/schemas/BasicError'
     Forbidden:
       description: Forbidden - user does not have the permission to perform this action
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    Conflict:
+      description: The request conflicts with current state of the target resource
       content:
         application/problem+json:
           schema:
