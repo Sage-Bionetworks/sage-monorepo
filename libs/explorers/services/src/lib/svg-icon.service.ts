@@ -1,7 +1,8 @@
+import { isPlatformServer } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { Observable, map, shareReplay } from 'rxjs';
+import { Observable, map, of, shareReplay } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +24,7 @@ export class SvgIconService {
   private http = inject(HttpClient);
   private sanitizer = inject(DomSanitizer);
   private svgCache = new Map<string, Observable<SafeHtml>>();
+  private readonly platformId = inject(PLATFORM_ID);
 
   // Common SVGs we want to preload
   private commonSvgPaths = [
@@ -57,6 +59,9 @@ export class SvgIconService {
   }
 
   getSvg(path: string): Observable<SafeHtml> {
+    // Do not load SVGs on the server side
+    if (isPlatformServer(this.platformId)) return of('');
+
     if (!this.isValidImagePath(path)) {
       throw new Error('Invalid SVG path');
     }

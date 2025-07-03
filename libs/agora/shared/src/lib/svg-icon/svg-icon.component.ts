@@ -1,6 +1,6 @@
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, inject, Input, OnInit, PLATFORM_ID, ViewEncapsulation } from '@angular/core';
+import { Component, inject, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { SvgIconService } from '@sagebionetworks/agora/services';
 
@@ -23,7 +23,6 @@ export class SvgIconComponent implements OnInit {
   http = inject(HttpClient);
   sanitizer = inject(DomSanitizer);
   svgService = inject(SvgIconService);
-  platformId = inject(PLATFORM_ID);
 
   svgContent: SafeHtml | null = null;
 
@@ -34,12 +33,9 @@ export class SvgIconComponent implements OnInit {
 
     this.className = this.enableHoverEffects ? 'svg-icon' : 'svg-icon-no-hover';
 
-    // Only load SVG in browser environment to avoid SSR issues
-    if (isPlatformBrowser(this.platformId)) {
-      this.svgService.getSvg(this.imagePath).subscribe({
-        next: (svg) => (this.svgContent = svg),
-        error: (error) => console.error('Error loading svg:', error),
-      });
-    }
+    this.svgService.getSvg(this.imagePath).subscribe({
+      next: (svg) => (this.svgContent = svg),
+      error: (error) => console.error('Error loading svg:', error),
+    });
   }
 }
