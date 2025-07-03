@@ -17,6 +17,28 @@ get:
       $ref: ../../../components/responses/BadRequest.yaml
     '500':
       $ref: ../../../components/responses/InternalServerError.yaml
+post:
+  tags:
+    - ChallengeContribution
+  summary: Create a new contribution for a challenge
+  description: |
+    Creates a new contribution record associated with a challenge ID.
+  operationId: addChallengeContribution
+  security:
+    - ApiKeyAuth: []
+  responses:
+    '201':
+      $ref: ../../../components/schemas/ChallengeContribution.yaml
+    '401':
+      $ref: ../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../components/responses/NotFound.yaml
+    '409':
+      $ref: ../../../components/responses/Conflict.yaml
+    '500':
+      $ref: ../../../components/responses/InternalServerError.yaml
 delete:
   tags:
     - ChallengeContribution
