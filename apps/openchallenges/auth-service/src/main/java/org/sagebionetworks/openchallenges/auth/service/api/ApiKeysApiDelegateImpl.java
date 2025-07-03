@@ -1,7 +1,6 @@
 package org.sagebionetworks.openchallenges.auth.service.api;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.ApiKeyDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.CreateApiKeyRequestDto;
@@ -14,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -35,25 +36,20 @@ public class ApiKeysApiDelegateImpl implements ApiKeysApiDelegate {
   ) {
     logger.info("Creating new API key with name: {}", createApiKeyRequestDto.getName());
     try {
-      // TODO: Get authenticated user from security context
-      // For now, we'll use a hardcoded user for testing
-      // In a real implementation, you would get this from SecurityContextHolder
-      Optional<User> userOptional = userService.findByUsername("admin");
-
-      if (userOptional.isEmpty()) {
-        logger.warn("API key creation failed: admin user not found");
+      // Get authenticated user from security context
+      User authenticatedUser = getAuthenticatedUser();
+      if (authenticatedUser == null) {
+        logger.warn("API key creation failed: no authenticated user");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       }
-
-      User user = userOptional.get();
 
       // Create the API key
       String keyName = createApiKeyRequestDto.getName();
       Integer expiresInDays = createApiKeyRequestDto.getExpiresIn();
 
-      ApiKey apiKey = apiKeyService.createApiKey(user, keyName, expiresInDays);
+      ApiKey apiKey = apiKeyService.createApiKey(authenticatedUser, keyName, expiresInDays);
 
-      logger.info("Successfully created API key '{}' for user: {}", keyName, user.getUsername());
+      logger.info("Successfully created API key '{}' for user: {}", keyName, authenticatedUser.getUsername());
 
       // Build response
       CreateApiKeyResponseDto response = new CreateApiKeyResponseDto()
@@ -77,46 +73,44 @@ public class ApiKeysApiDelegateImpl implements ApiKeysApiDelegate {
 
   @Override
   public ResponseEntity<Void> deleteApiKey(UUID keyId) {
+    logger.info("Deleting API key with ID: {}", keyId);
     try {
-      // TODO: Get authenticated user from security context
-      // For now, we'll use a hardcoded user for testing
-      Optional<User> userOptional = userService.findByUsername("admin");
-
-      if (userOptional.isEmpty()) {
+      // Get authenticated user from security context
+      User authenticatedUser = getAuthenticatedUser();
+      if (authenticatedUser == null) {
+        logger.warn("API key deletion failed: no authenticated user");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       }
 
-      User user = userOptional.get();
-
-      // Delete the API key
-      boolean deleted = apiKeyService.deleteApiKey(keyId, user);
+      // Delete the API key (only if it belongs to the authenticated user)
+      boolean deleted = apiKeyService.deleteApiKey(keyId, authenticatedUser);
 
       if (deleted) {
+        logger.info("Successfully deleted API key {} for user: {}", keyId, authenticatedUser.getUsername());
         return ResponseEntity.noContent().build();
       } else {
+        logger.warn("API key {} not found or does not belong to user: {}", keyId, authenticatedUser.getUsername());
         return ResponseEntity.notFound().build();
       }
     } catch (Exception e) {
-      // Log the error in a real application
+      logger.error("Unexpected error while deleting API key: {}", keyId, e);
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
   }
 
   @Override
   public ResponseEntity<List<ApiKeyDto>> listApiKeys() {
+    logger.info("Listing API keys");
     try {
-      // TODO: Get authenticated user from security context
-      // For now, we'll use a hardcoded user for testing
-      Optional<User> userOptional = userService.findByUsername("admin");
-
-      if (userOptional.isEmpty()) {
+      // Get authenticated user from security context
+      User authenticatedUser = getAuthenticatedUser();
+      if (authenticatedUser == null) {
+        logger.warn("API keys listing failed: no authenticated user");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       }
 
-      User user = userOptional.get();
-
       // Get user's API keys
-      List<ApiKey> apiKeys = apiKeyService.getUserApiKeys(user);
+      List<ApiKey> apiKeys = apiKeyService.getUserApiKeys(authenticatedUser);
 
       // Convert to DTOs (without exposing actual key values)
       List<ApiKeyDto> apiKeyDtos = apiKeys
@@ -124,11 +118,23 @@ public class ApiKeysApiDelegateImpl implements ApiKeysApiDelegate {
         .map(this::convertToDto)
         .collect(java.util.stream.Collectors.toList());
 
+      logger.info("Successfully listed {} API keys for user: {}", apiKeyDtos.size(), authenticatedUser.getUsername());
       return ResponseEntity.ok(apiKeyDtos);
     } catch (Exception e) {
-      // Log the error in a real application
+      logger.error("Unexpected error while listing API keys", e);
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
+  }
+
+  /**
+   * Get the authenticated user from the security context
+   */
+  private User getAuthenticatedUser() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication != null && authentication.getPrincipal() instanceof User) {
+      return (User) authentication.getPrincipal();
+    }
+    return null;
   }
 
   private ApiKeyDto convertToDto(ApiKey apiKey) {

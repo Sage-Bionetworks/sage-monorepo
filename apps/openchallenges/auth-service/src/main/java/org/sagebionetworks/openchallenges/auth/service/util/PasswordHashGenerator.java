@@ -13,5 +13,6 @@ public class PasswordHashGenerator {
 
     logger.info("admin123: {}", encoder.encode("admin123"));
     logger.info("researcher123: {}", encoder.encode("researcher123"));
+    logger.info("changeme: {}", encoder.encode("changeme"));
   }
 }

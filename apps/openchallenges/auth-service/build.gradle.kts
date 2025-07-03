@@ -25,8 +25,8 @@ repositories {
 }
 
 dependencies {
-  compileOnly(libs.lombok)
   annotationProcessor(libs.lombok)
+  compileOnly(libs.lombok)
   implementation(libs.findbugs.jsr305)
   implementation(libs.flyway.core)
   implementation(libs.flyway.database.postgresql)
@@ -34,6 +34,7 @@ dependencies {
   implementation(libs.jackson.dataformat.yaml)
   implementation(libs.jackson.datatype.jsr310)
   implementation(libs.postgresql)
+  implementation(libs.spring.boot.starter.actuator)
   implementation(libs.spring.boot.starter.data.jpa)
   implementation(libs.spring.boot.starter.security)
   implementation(libs.spring.boot.starter.validation)
