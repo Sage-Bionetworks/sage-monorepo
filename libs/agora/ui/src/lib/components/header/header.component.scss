@@ -1,6 +1,6 @@
 /* stylelint-disable plugin/no-unsupported-browser-features */
 
-@import 'libs/agora/styles/src/lib/mixins';
+@use 'agora/styles/src/lib/mixins';
 
 #header {
   // Uncomment for sticky header
@@ -14,7 +14,7 @@
   z-index: 999;
 
   .header-inner {
-    @include container('lg');
+    @include mixins.container('lg');
 
     padding: 0 var(--spacing-xl);
     display: flex;
@@ -34,7 +34,7 @@
   align-items: center;
 
   .header-nav-toggle {
-    @include reset-button;
+    @include mixins.reset-button;
 
     position: relative;
     width: 20px;

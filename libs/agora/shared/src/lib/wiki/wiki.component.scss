@@ -1,5 +1,5 @@
-@import 'libs/agora/styles/src/lib/variables';
-@import 'libs/agora/styles/src/lib/mixins';
+@use 'agora/styles/src/lib/variables';
+@use 'agora/styles/src/lib/mixins';
 
 .wiki {
   position: relative;
@@ -8,7 +8,7 @@
     white-space: pre-wrap;
 
     a {
-      @include link;
+      @include mixins.link;
     }
 
     .email-link {

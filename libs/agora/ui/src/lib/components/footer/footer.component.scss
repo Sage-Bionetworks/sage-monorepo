@@ -1,7 +1,7 @@
 /* stylelint-disable plugin/no-unsupported-browser-features */
 /* stylelint-disable no-descending-specificity */
 
-@import 'libs/agora/styles/src/lib/mixins';
+@use 'agora/styles/src/lib/mixins';
 
 footer {
   box-sizing: border-box;
@@ -23,14 +23,14 @@ footer {
       padding: 0;
       margin: 0;
 
-      @include respond-to('small') {
+      @include mixins.respond-to('small') {
         justify-content: flex-start;
       }
 
       > :first-child {
         display: none;
 
-        @include respond-to('small') {
+        @include mixins.respond-to('small') {
           display: block;
         }
       }
@@ -64,11 +64,11 @@ footer {
     justify-content: center;
     align-items: stretch;
 
-    @include respond-to('ex-small') {
+    @include mixins.respond-to('ex-small') {
       margin: 10px 0;
     }
 
-    @include respond-to('small') {
+    @include mixins.respond-to('small') {
       margin: 10px 0;
     }
 

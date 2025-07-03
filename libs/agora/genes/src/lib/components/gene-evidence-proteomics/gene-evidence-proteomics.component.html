@@ -54,12 +54,14 @@
     <div class="section-inner">
       <div class="container-lg">
         <div #srmChart>
-          <agora-box-plot-chart
-            xAxisLabel="BRAIN TISSUE"
-            [yAxisMin]="SRMRange?.Min"
-            [yAxisMax]="SRMRange?.Max"
-            [data]="SRMData"
-          ></agora-box-plot-chart>
+          @defer {
+            <agora-box-plot-chart
+              xAxisLabel="BRAIN TISSUE"
+              [yAxisMin]="SRMRange?.Min"
+              [yAxisMax]="SRMRange?.Max"
+              [data]="SRMData"
+            ></agora-box-plot-chart>
+          }
         </div>
       </div>
     </div>
@@ -125,12 +127,14 @@
     <div class="section-inner">
       <div class="container-lg">
         <div #tmtChart>
-          <agora-box-plot-chart
-            xAxisLabel="BRAIN TISSUE"
-            [yAxisMin]="TMTRange?.Min"
-            [yAxisMax]="TMTRange?.Max"
-            [data]="TMTData"
-          ></agora-box-plot-chart>
+          @defer {
+            <agora-box-plot-chart
+              xAxisLabel="BRAIN TISSUE"
+              [yAxisMin]="TMTRange?.Min"
+              [yAxisMax]="TMTRange?.Max"
+              [data]="TMTData"
+            ></agora-box-plot-chart>
+          }
         </div>
       </div>
     </div>
@@ -165,12 +169,14 @@
     <div class="section-inner">
       <div class="container-lg">
         <div #lfqChart>
-          <agora-box-plot-chart
-            xAxisLabel="BRAIN TISSUE"
-            [yAxisMin]="LFQRange?.Min"
-            [yAxisMax]="LFQRange?.Max"
-            [data]="LFQData"
-          ></agora-box-plot-chart>
+          @defer {
+            <agora-box-plot-chart
+              xAxisLabel="BRAIN TISSUE"
+              [yAxisMin]="LFQRange?.Min"
+              [yAxisMax]="LFQRange?.Max"
+              [data]="LFQData"
+            ></agora-box-plot-chart>
+          }
         </div>
       </div>
     </div>

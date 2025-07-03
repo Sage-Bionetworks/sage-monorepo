@@ -1,5 +1,5 @@
-@use 'libs/explorers/styles/src/lib/variables';
-@use 'libs/explorers/styles/src/lib/mixins';
+@use 'explorers/styles/src/lib/variables';
+@use 'explorers/styles/src/lib/mixins';
 
 button {
   @include mixins.reset-button;

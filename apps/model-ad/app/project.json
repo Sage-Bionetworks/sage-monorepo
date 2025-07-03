@@ -15,12 +15,12 @@
       }
     },
     "build": {
-      "executor": "@angular-devkit/build-angular:browser",
+      "executor": "@nx/angular:application",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/model-ad/app/browser/browser",
+        "outputPath": "dist/apps/model-ad/app",
         "index": "apps/model-ad/app/src/index.html",
-        "main": "apps/model-ad/app/src/main.ts",
+        "browser": "apps/model-ad/app/src/main.ts",
         "polyfills": ["zone.js"],
         "tsConfig": "apps/model-ad/app/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
@@ -59,7 +59,12 @@
           "includePaths": ["libs", "libs/model-ad"]
         },
         "styles": ["apps/model-ad/app/src/styles.scss", "node_modules/primeicons/primeicons.css"],
-        "scripts": []
+        "scripts": [],
+        "server": "apps/model-ad/app/src/main.server.ts",
+        "prerender": false,
+        "ssr": {
+          "entry": "apps/model-ad/app/server.ts"
+        }
       },
       "configurations": {
         "production": {
@@ -78,18 +83,15 @@
           "outputHashing": "all"
         },
         "development": {
-          "buildOptimizer": false,
           "optimization": false,
-          "vendorChunk": true,
           "extractLicenses": false,
-          "sourceMap": true,
-          "namedChunks": true
+          "sourceMap": true
         }
       },
       "defaultConfiguration": "production"
     },
     "serve": {
-      "executor": "@angular-devkit/build-angular:dev-server",
+      "executor": "@nx/angular:dev-server",
       "options": {
         "proxyConfig": "{projectRoot}/src/proxy.conf.json"
       },
@@ -104,14 +106,15 @@
       "defaultConfiguration": "development",
       "continuous": true
     },
-    "serve-detach": {
-      "executor": "nx:run-commands",
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "command": "docker/model-ad/serve-detach.sh model-ad-app"
+        "jestConfig": "apps/model-ad/app/jest.config.ts"
       }
     },
     "extract-i18n": {
-      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "executor": "@nx/angular:extract-i18n",
       "options": {
         "buildTarget": "model-ad-app:build"
       }
@@ -125,53 +128,20 @@
         "fix": true
       }
     },
-    "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+    "serve-static": {
+      "executor": "@nx/web:file-server",
       "options": {
-        "jestConfig": "apps/model-ad/app/jest.config.ts"
+        "buildTarget": "model-ad-app:build",
+        "staticFilePath": "dist/apps/model-ad/app/browser",
+        "spa": true
       }
     },
-    "server": {
-      "dependsOn": ["build"],
-      "executor": "@angular-devkit/build-angular:server",
+    "serve-detach": {
+      "executor": "nx:run-commands",
       "options": {
-        "outputPath": "dist/apps/model-ad/app/browser/server",
-        "main": "apps/model-ad/app/server.ts",
-        "tsConfig": "apps/model-ad/app/tsconfig.server.json",
-        "inlineStyleLanguage": "scss",
-        "stylePreprocessorOptions": {
-          "includePaths": ["libs", "libs/model-ad"]
-        }
+        "command": "docker/model-ad/serve-detach.sh model-ad-app"
       },
-      "configurations": {
-        "production": {
-          "outputHashing": "media"
-        },
-        "development": {
-          "buildOptimizer": false,
-          "optimization": false,
-          "sourceMap": true,
-          "extractLicenses": false,
-          "vendorChunk": true
-        }
-      },
-      "defaultConfiguration": "production"
-    },
-    "serve-ssr": {
-      "executor": "@angular-devkit/build-angular:ssr-dev-server",
-      "configurations": {
-        "development": {
-          "browserTarget": "model-ad-app:build:development",
-          "serverTarget": "model-ad-app:server:development"
-        },
-        "production": {
-          "browserTarget": "model-ad-app:build:production",
-          "serverTarget": "model-ad-app:server:production"
-        }
-      },
-      "defaultConfiguration": "development",
-      "continuous": true
+      "dependsOn": []
     },
     "scan-image": {
       "executor": "nx:run-commands",
