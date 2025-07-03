@@ -6,6 +6,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.sagebionetworks.openchallenges.auth.service.configuration.ApiKeyProperties;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.repository.ApiKeyRepository;
@@ -25,14 +26,17 @@ public class ApiKeyService {
   private final ApiKeyRepository apiKeyRepository;
   private final PasswordEncoder passwordEncoder;
   private final SecureRandom secureRandom;
-
-  private static final String API_KEY_PREFIX = "oc_prod_";
-  private static final int API_KEY_LENGTH = 40; // characters after prefix
+  private final ApiKeyProperties apiKeyProperties;
 
   @Autowired
-  public ApiKeyService(ApiKeyRepository apiKeyRepository, PasswordEncoder passwordEncoder) {
+  public ApiKeyService(
+    ApiKeyRepository apiKeyRepository,
+    PasswordEncoder passwordEncoder,
+    ApiKeyProperties apiKeyProperties
+  ) {
     this.apiKeyRepository = apiKeyRepository;
     this.passwordEncoder = passwordEncoder;
+    this.apiKeyProperties = apiKeyProperties;
     this.secureRandom = new SecureRandom();
   }
 
@@ -47,20 +51,18 @@ public class ApiKeyService {
     logger.debug("Creating API key for user: {}", user.getUsername());
     logger.debug(
       "Generated API key with prefix: {}",
-      plainApiKey.substring(0, API_KEY_PREFIX.length())
+      plainApiKey.substring(0, apiKeyProperties.getPrefix().length())
     );
 
     // Calculate expiration
     OffsetDateTime expiresAt = null;
     if (expiresInDays != null && expiresInDays > 0) {
       expiresAt = OffsetDateTime.now().plusDays(expiresInDays);
-    }
-
-    // Create entity with the HASHED key
+    } // Create entity with the HASHED key
     ApiKey apiKeyEntity = ApiKey.builder()
       .user(user)
       .keyHash(keyHash)
-      .keyPrefix(API_KEY_PREFIX)
+      .keyPrefix(apiKeyProperties.getPrefix())
       .name(name)
       .expiresAt(expiresAt)
       .build();
@@ -111,13 +113,16 @@ public class ApiKeyService {
   public Optional<ApiKey> validateApiKey(String apiKey) {
     logger.debug(
       "Validating API key with prefix: {}",
-      apiKey != null && apiKey.length() >= API_KEY_PREFIX.length()
-        ? apiKey.substring(0, API_KEY_PREFIX.length())
+      apiKey != null && apiKey.length() >= apiKeyProperties.getPrefix().length()
+        ? apiKey.substring(0, apiKeyProperties.getPrefix().length())
         : "null"
     );
 
-    if (apiKey == null || !apiKey.startsWith(API_KEY_PREFIX)) {
-      logger.debug("API key is null or doesn't have correct prefix: {}", API_KEY_PREFIX);
+    if (apiKey == null || !apiKey.startsWith(apiKeyProperties.getPrefix())) {
+      logger.debug(
+        "API key is null or doesn't have correct prefix: {}",
+        apiKeyProperties.getPrefix()
+      );
       return Optional.empty();
     }
 
@@ -181,8 +186,8 @@ public class ApiKeyService {
     String randomPart = Base64.getUrlEncoder()
       .withoutPadding()
       .encodeToString(randomBytes)
-      .substring(0, API_KEY_LENGTH);
+      .substring(0, apiKeyProperties.getLength());
 
-    return API_KEY_PREFIX + randomPart;
+    return apiKeyProperties.getPrefix() + randomPart;
   }
 }

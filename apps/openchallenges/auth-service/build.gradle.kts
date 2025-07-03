@@ -43,6 +43,7 @@ dependencies {
   runtimeOnly(libs.spring.boot.devtools)
   testImplementation(libs.spring.boot.starter.test)
   testImplementation(libs.spring.security.test)
+  testRuntimeOnly(libs.h2database.h2)
 }
 
 tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {

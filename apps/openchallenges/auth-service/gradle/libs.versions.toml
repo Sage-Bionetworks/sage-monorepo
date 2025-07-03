@@ -1,6 +1,7 @@
 [versions]
 findbugs = "3.0.2"
 flyway = "11.9.1"
+h2database = "2.3.232"
 jackson = "2.18.3"
 lombok = "1.18.38"
 postgresql = "42.7.7"
@@ -12,6 +13,7 @@ springdoc = "2.8.6"
 findbugs-jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "findbugs" }
 flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
 flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }
+h2database-h2 = { module = "com.h2database:h2", version.ref = "h2database" }
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
 jackson-dataformat-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref = "jackson" }
 jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
