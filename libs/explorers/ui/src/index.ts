@@ -1,3 +1,4 @@
+export * from './lib/components/download-dom-image/download-dom-image.component';
 export * from './lib/components/footer/footer.component';
 export * from './lib/components/header/header.component';
 export * from './lib/components/hero/hero.component';
