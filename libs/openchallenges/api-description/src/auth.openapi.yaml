@@ -15,7 +15,7 @@ servers:
 tags:
   - name: Authentication
     description: Operations about authentication
-  - name: API Keys
+  - name: API Key
     description: Operations about API key management
 paths:
   /auth/login:

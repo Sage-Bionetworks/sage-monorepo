@@ -1,6 +1,6 @@
 delete:
   tags:
-    - API Keys
+    - API Key
   summary: Delete API key
   description: Revoke an API key
   operationId: deleteApiKey

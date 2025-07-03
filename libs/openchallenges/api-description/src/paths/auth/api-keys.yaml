@@ -1,6 +1,6 @@
 get:
   tags:
-    - API Keys
+    - API Key
   summary: List API keys
   description: Get all API keys for the authenticated user
   operationId: listApiKeys
@@ -22,7 +22,7 @@ get:
 
 post:
   tags:
-    - API Keys
+    - API Key
   summary: Create API key
   description: Generate a new API key for the authenticated user
   operationId: createApiKey

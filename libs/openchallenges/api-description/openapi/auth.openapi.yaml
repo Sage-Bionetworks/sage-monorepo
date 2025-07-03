@@ -15,7 +15,7 @@ servers:
 tags:
   - name: Authentication
     description: Operations about authentication
-  - name: API Keys
+  - name: API Key
     description: Operations about API key management
 paths:
   /auth/login:
@@ -45,7 +45,7 @@ paths:
   /auth/api-keys:
     get:
       tags:
-        - API Keys
+        - API Key
       summary: List API keys
       description: Get all API keys for the authenticated user
       operationId: listApiKeys
@@ -66,7 +66,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     post:
       tags:
-        - API Keys
+        - API Key
       summary: Create API key
       description: Generate a new API key for the authenticated user
       operationId: createApiKey
@@ -94,7 +94,7 @@ paths:
   /auth/api-keys/{keyId}:
     delete:
       tags:
-        - API Keys
+        - API Key
       summary: Delete API key
       description: Revoke an API key
       operationId: deleteApiKey
