@@ -1,7 +1,7 @@
 src/main/java/org/sagebionetworks/openchallenges/auth/service/RFC3339DateFormat.java
-src/main/java/org/sagebionetworks/openchallenges/auth/service/api/ApiKeysApi.java
-src/main/java/org/sagebionetworks/openchallenges/auth/service/api/ApiKeysApiController.java
-src/main/java/org/sagebionetworks/openchallenges/auth/service/api/ApiKeysApiDelegate.java
+src/main/java/org/sagebionetworks/openchallenges/auth/service/api/ApiKeyApi.java
+src/main/java/org/sagebionetworks/openchallenges/auth/service/api/ApiKeyApiController.java
+src/main/java/org/sagebionetworks/openchallenges/auth/service/api/ApiKeyApiDelegate.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/api/ApiUtil.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/api/AuthenticationApi.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/api/AuthenticationApiController.java

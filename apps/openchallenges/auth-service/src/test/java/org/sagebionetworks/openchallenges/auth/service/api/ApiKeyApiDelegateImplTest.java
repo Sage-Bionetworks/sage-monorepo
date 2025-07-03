@@ -27,7 +27,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(ApiKeysApiDelegateImpl.class)
+@WebMvcTest(ApiKeyApiDelegateImpl.class)
 @TestPropertySource(
   properties = {
     "spring.datasource.url=jdbc:h2:mem:testdb",
@@ -38,7 +38,7 @@ import org.springframework.test.web.servlet.MockMvc;
     "spring.flyway.enabled=false",
   }
 )
-class ApiKeysApiDelegateImplTest {
+class ApiKeyApiDelegateImplTest {
 
   @Autowired
   private MockMvc mockMvc;

@@ -16,7 +16,7 @@ tags:
   - description: Operations about authentication
     name: Authentication
   - description: Operations about API key management
-    name: API Keys
+    name: API Key
 paths:
   /auth/login:
     post:
@@ -66,15 +66,15 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - ApiKeyAuth: []
+        - apiKeyAuth: []
       summary: List API keys
       tags:
-        - API Keys
+        - API Key
       x-accepts:
         - application/json
         - application/problem+json
       x-tags:
-        - tag: API Keys
+        - tag: API Key
     post:
       description: Generate a new API key for the authenticated user
       operationId: createApiKey
@@ -98,16 +98,16 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - ApiKeyAuth: []
+        - apiKeyAuth: []
       summary: Create API key
       tags:
-        - API Keys
+        - API Key
       x-content-type: application/json
       x-accepts:
         - application/json
         - application/problem+json
       x-tags:
-        - tag: API Keys
+        - tag: API Key
   /auth/api-keys/{keyId}:
     delete:
       description: Revoke an API key
@@ -132,14 +132,14 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - ApiKeyAuth: []
+        - apiKeyAuth: []
       summary: Delete API key
       tags:
-        - API Keys
+        - API Key
       x-accepts:
         - application/problem+json
       x-tags:
-        - tag: API Keys
+        - tag: API Key
   /auth/validate:
     post:
       description: Internal endpoint to validate API keys (used by other services)
@@ -410,7 +410,7 @@ components:
           type: array
       type: object
   securitySchemes:
-    ApiKeyAuth:
+    apiKeyAuth:
       in: header
       name: X-API-Key
       type: apiKey

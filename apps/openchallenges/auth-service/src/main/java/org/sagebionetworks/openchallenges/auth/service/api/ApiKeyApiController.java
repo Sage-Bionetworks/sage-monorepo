@@ -33,16 +33,16 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Controller
 @RequestMapping("${openapi.openChallengesAuth.base-path:/v1}")
-public class ApiKeysApiController implements ApiKeysApi {
+public class ApiKeyApiController implements ApiKeyApi {
 
-    private final ApiKeysApiDelegate delegate;
+    private final ApiKeyApiDelegate delegate;
 
-    public ApiKeysApiController(@Autowired(required = false) ApiKeysApiDelegate delegate) {
-        this.delegate = Optional.ofNullable(delegate).orElse(new ApiKeysApiDelegate() {});
+    public ApiKeyApiController(@Autowired(required = false) ApiKeyApiDelegate delegate) {
+        this.delegate = Optional.ofNullable(delegate).orElse(new ApiKeyApiDelegate() {});
     }
 
     @Override
-    public ApiKeysApiDelegate getDelegate() {
+    public ApiKeyApiDelegate getDelegate() {
         return delegate;
     }
 

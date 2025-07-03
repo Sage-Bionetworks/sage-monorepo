@@ -18,14 +18,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ApiKeysApiDelegateImpl implements ApiKeysApiDelegate {
+public class ApiKeyApiDelegateImpl implements ApiKeyApiDelegate {
 
-  private static final Logger logger = LoggerFactory.getLogger(ApiKeysApiDelegateImpl.class);
+  private static final Logger logger = LoggerFactory.getLogger(ApiKeyApiDelegateImpl.class);
 
   private final ApiKeyService apiKeyService;
   private final UserService userService;
 
-  public ApiKeysApiDelegateImpl(ApiKeyService apiKeyService, UserService userService) {
+  public ApiKeyApiDelegateImpl(ApiKeyService apiKeyService, UserService userService) {
     this.apiKeyService = apiKeyService;
     this.userService = userService;
   }

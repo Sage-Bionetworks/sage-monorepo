@@ -36,11 +36,11 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Validated
-@Tag(name = "API Keys", description = "Operations about API key management")
-public interface ApiKeysApi {
+@Tag(name = "API Key", description = "Operations about API key management")
+public interface ApiKeyApi {
 
-    default ApiKeysApiDelegate getDelegate() {
-        return new ApiKeysApiDelegate() {};
+    default ApiKeyApiDelegate getDelegate() {
+        return new ApiKeyApiDelegate() {};
     }
 
     /**
@@ -57,7 +57,7 @@ public interface ApiKeysApi {
         operationId = "createApiKey",
         summary = "Create API key",
         description = "Generate a new API key for the authenticated user",
-        tags = { "API Keys" },
+        tags = { "API Key" },
         responses = {
             @ApiResponse(responseCode = "201", description = "API key created successfully", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = CreateApiKeyResponseDto.class)),
@@ -77,7 +77,7 @@ public interface ApiKeysApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "ApiKeyAuth")
+            @SecurityRequirement(name = "apiKeyAuth")
         }
     )
     @RequestMapping(
@@ -108,7 +108,7 @@ public interface ApiKeysApi {
         operationId = "deleteApiKey",
         summary = "Delete API key",
         description = "Revoke an API key",
-        tags = { "API Keys" },
+        tags = { "API Key" },
         responses = {
             @ApiResponse(responseCode = "204", description = "API key deleted successfully"),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
@@ -122,7 +122,7 @@ public interface ApiKeysApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "ApiKeyAuth")
+            @SecurityRequirement(name = "apiKeyAuth")
         }
     )
     @RequestMapping(
@@ -150,7 +150,7 @@ public interface ApiKeysApi {
         operationId = "listApiKeys",
         summary = "List API keys",
         description = "Get all API keys for the authenticated user",
-        tags = { "API Keys" },
+        tags = { "API Key" },
         responses = {
             @ApiResponse(responseCode = "200", description = "List of API keys", content = {
                 @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ApiKeyDto.class))),
@@ -166,7 +166,7 @@ public interface ApiKeysApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "ApiKeyAuth")
+            @SecurityRequirement(name = "apiKeyAuth")
         }
     )
     @RequestMapping(

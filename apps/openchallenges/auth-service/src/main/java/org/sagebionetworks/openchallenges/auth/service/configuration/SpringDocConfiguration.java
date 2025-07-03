@@ -34,7 +34,7 @@ public class SpringDocConfiguration {
                 )
                 .components(
                         new Components()
-                                .addSecuritySchemes("ApiKeyAuth", new SecurityScheme()
+                                .addSecuritySchemes("apiKeyAuth", new SecurityScheme()
                                         .type(SecurityScheme.Type.APIKEY)
                                         .in(SecurityScheme.In.HEADER)
                                         .name("X-API-Key")

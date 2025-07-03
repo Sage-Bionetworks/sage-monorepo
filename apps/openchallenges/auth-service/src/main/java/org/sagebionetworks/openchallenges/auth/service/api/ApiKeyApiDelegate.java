@@ -20,11 +20,11 @@ import java.util.Optional;
 import jakarta.annotation.Generated;
 
 /**
- * A delegate to be called by the {@link ApiKeysApiController}}.
+ * A delegate to be called by the {@link ApiKeyApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
-public interface ApiKeysApiDelegate {
+public interface ApiKeyApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
         return Optional.empty();
@@ -39,7 +39,7 @@ public interface ApiKeysApiDelegate {
      *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     * @see ApiKeysApi#createApiKey
+     * @see ApiKeyApi#createApiKey
      */
     default ResponseEntity<CreateApiKeyResponseDto> createApiKey(CreateApiKeyRequestDto createApiKeyRequestDto) {
         getRequest().ifPresent(request -> {
@@ -79,7 +79,7 @@ public interface ApiKeysApiDelegate {
      *         or Unauthorized (status code 401)
      *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     * @see ApiKeysApi#deleteApiKey
+     * @see ApiKeyApi#deleteApiKey
      */
     default ResponseEntity<Void> deleteApiKey(UUID keyId) {
         getRequest().ifPresent(request -> {
@@ -112,7 +112,7 @@ public interface ApiKeysApiDelegate {
      * @return List of API keys (status code 200)
      *         or Unauthorized (status code 401)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     * @see ApiKeysApi#listApiKeys
+     * @see ApiKeyApi#listApiKeys
      */
     default ResponseEntity<List<ApiKeyDto>> listApiKeys() {
         getRequest().ifPresent(request -> {
