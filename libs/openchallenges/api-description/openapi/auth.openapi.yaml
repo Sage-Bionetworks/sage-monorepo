@@ -50,7 +50,7 @@ paths:
       description: Get all API keys for the authenticated user
       operationId: listApiKeys
       security:
-        - apiKeyAuth: []
+        - apiKeyBearerAuth: []
       responses:
         '200':
           description: List of API keys
@@ -71,7 +71,7 @@ paths:
       description: Generate a new API key for the authenticated user
       operationId: createApiKey
       security:
-        - apiKeyAuth: []
+        - apiKeyBearerAuth: []
       requestBody:
         required: true
         content:
@@ -99,7 +99,7 @@ paths:
       description: Revoke an API key
       operationId: deleteApiKey
       security:
-        - apiKeyAuth: []
+        - apiKeyBearerAuth: []
       parameters:
         - name: keyId
           in: path
@@ -143,10 +143,11 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
-    apiKeyAuth:
-      type: apiKey
-      in: header
-      name: X-API-Key
+    apiKeyBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: api_key
+      description: API key obtained from /auth/login endpoint
   schemas:
     LoginRequest:
       type: object
