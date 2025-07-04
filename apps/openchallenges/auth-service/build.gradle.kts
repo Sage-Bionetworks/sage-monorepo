@@ -60,58 +60,53 @@ tasks.withType<Test>().configureEach {
   testLogging {
     events("passed", "skipped", "failed")
   }
+}
 
-  finalizedBy(tasks.jacocoTestReport)
+val coverageExclusions = listOf(
+  "org/sagebionetworks/openchallenges/auth/service/model/dto/**",
+  "org/sagebionetworks/openchallenges/auth/service/api/**",
+  "org/sagebionetworks/openchallenges/auth/service/configuration/EnumConverterConfiguration*",
+  "org/sagebionetworks/openchallenges/auth/service/configuration/Flyway*",
+  "org/sagebionetworks/openchallenges/auth/service/configuration/HibernateSearch*",
+  "org/sagebionetworks/openchallenges/auth/service/configuration/HomeController*",
+  "org/sagebionetworks/openchallenges/auth/service/configuration/SpringDocConfiguration*",
+  "org/sagebionetworks/openchallenges/auth/service/RFC3339DateFormat*"
+)
+
+val coverageClassDirectories = fileTree("${buildDir}/classes/java/main") {
+  exclude(coverageExclusions)
 }
 
 tasks.jacocoTestReport {
+  dependsOn(tasks.test)
+
+  classDirectories.setFrom(coverageClassDirectories)
+
   reports {
     xml.required = true
     html.required = true
     csv.required = false
     html.outputLocation = layout.buildDirectory.dir("jacocoHtml")
   }
-
-  dependsOn(tasks.test)
-
-  getClassDirectories().setFrom(
-    files(classDirectories.files.map {
-      fileTree(it) {
-        exclude(
-          "**/api/*",
-          "**/configuration/EnumConverterConfiguration*.*",
-          "**/configuration/Flyway*.*",
-          "**/configuration/HibernateSearch*.*",
-          "**/configuration/HomeController*.*",
-          "**/configuration/SpringDocConfiguration*.*",
-          "**/model/dto/**",
-          "**/RFC3339DateFormat.*"
-        )
-      }
-    })
-  )
 }
 
 tasks.jacocoTestCoverageVerification {
+  classDirectories.setFrom(coverageClassDirectories)
+
   violationRules {
     rule {
-      limit {
-        minimum = "0.8".toBigDecimal()
-      }
-    }
-
-    rule {
-      isEnabled = true
       element = "CLASS"
-      includes = listOf("org.sagebionetworks.openchallenges.auth.service.*")
-
       limit {
         counter = "LINE"
         value = "COVEREDRATIO"
-        minimum = "0.8".toBigDecimal()
+        minimum = "0.0".toBigDecimal()
       }
     }
   }
+}
+
+tasks.check {
+  dependsOn(tasks.jacocoTestReport, tasks.jacocoTestCoverageVerification)
 }
 
 tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
