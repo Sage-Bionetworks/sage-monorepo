@@ -35,26 +35,30 @@ public class SecurityConfiguration {
     http
       .csrf(csrf -> csrf.disable())
       .cors(cors -> cors.disable())
-      .authorizeHttpRequests(auth -> auth
-        // Public endpoints
-        .requestMatchers("/actuator/**").permitAll()
-        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-        .requestMatchers(HttpMethod.GET, "/v1/organizations/**").permitAll()
-        .requestMatchers(HttpMethod.POST, "/v1/organizations/search").permitAll()
-        
-        // Protected endpoints - require authentication and specific scopes
-        .requestMatchers(HttpMethod.DELETE, "/v1/organizations/**")
+      .authorizeHttpRequests(auth ->
+        auth
+          // Public endpoints
+          .requestMatchers("/actuator/**")
+          .permitAll()
+          .requestMatchers("/swagger-ui/**", "/v3/api-docs/**")
+          .permitAll()
+          .requestMatchers(HttpMethod.GET, "/v1/organizations/**")
+          .permitAll()
+          .requestMatchers(HttpMethod.POST, "/v1/organizations/search")
+          .permitAll()
+          // Protected endpoints - require authentication and specific scopes
+          .requestMatchers(HttpMethod.DELETE, "/v1/organizations/**")
           .hasAuthority("organizations:delete")
-        .requestMatchers(HttpMethod.POST, "/v1/organizations")
+          .requestMatchers(HttpMethod.POST, "/v1/organizations")
           .hasAuthority("organizations:write")
-        .requestMatchers(HttpMethod.PUT, "/v1/organizations/**")
+          .requestMatchers(HttpMethod.PUT, "/v1/organizations/**")
           .hasAuthority("organizations:write")
-        
-        .anyRequest().authenticated()
+          .anyRequest()
+          .authenticated()
       )
       .addFilterBefore(apiKeyAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
       .httpBasic(httpBasic -> {});
-    
+
     return http.build();
   }
 }

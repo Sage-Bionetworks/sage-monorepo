@@ -24,5 +24,5 @@ paths:
     $ref: paths/organizations/@{org}.yaml
 components:
   securitySchemes:
-    apiKeyBearerAuth:
-      $ref: components/securitySchemes/ApiKeyBearerAuth.yaml
+    apiBearerAuth:
+      $ref: components/securitySchemes/ApiBearerAuth.yaml

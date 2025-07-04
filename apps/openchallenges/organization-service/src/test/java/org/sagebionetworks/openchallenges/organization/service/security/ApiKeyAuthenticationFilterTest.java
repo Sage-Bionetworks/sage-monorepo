@@ -1,10 +1,18 @@
 package org.sagebionetworks.openchallenges.organization.service.security;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.FeignException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,15 +22,6 @@ import org.sagebionetworks.openchallenges.organization.service.client.AuthServic
 import org.sagebionetworks.openchallenges.organization.service.model.dto.auth.ValidateApiKeyRequestDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.auth.ValidateApiKeyResponseDto;
 import org.springframework.security.core.context.SecurityContextHolder;
-
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.List;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ApiKeyAuthenticationFilterTest {
@@ -54,14 +53,19 @@ class ApiKeyAuthenticationFilterTest {
     // Given
     String apiKey = "oc_dev_valid_key_123";
     UUID userId = UUID.randomUUID();
-    
+
     when(request.getHeader("Authorization")).thenReturn("Bearer " + apiKey);
-    
+
     ValidateApiKeyResponseDto validResponse = new ValidateApiKeyResponseDto(
-      true, userId, "testuser", "admin", List.of("organizations:read", "organizations:delete")
+      true,
+      userId,
+      "testuser",
+      "admin",
+      List.of("organizations:read", "organizations:delete")
     );
-    when(authServiceClient.validateApiKey(any(ValidateApiKeyRequestDto.class)))
-      .thenReturn(validResponse);
+    when(authServiceClient.validateApiKey(any(ValidateApiKeyRequestDto.class))).thenReturn(
+      validResponse
+    );
 
     // When
     filter.doFilterInternal(request, response, filterChain);
@@ -69,9 +73,10 @@ class ApiKeyAuthenticationFilterTest {
     // Then
     verify(filterChain).doFilter(request, response);
     assertNotNull(SecurityContextHolder.getContext().getAuthentication());
-    
-    AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder
-      .getContext().getAuthentication().getPrincipal();
+
+    AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
+      .getAuthentication()
+      .getPrincipal();
     assertEquals("testuser", user.getUsername());
     assertEquals("admin", user.getRole());
     assertTrue(user.hasScope("organizations:delete"));
@@ -83,15 +88,20 @@ class ApiKeyAuthenticationFilterTest {
     String apiKey = "invalid_key";
     StringWriter stringWriter = new StringWriter();
     PrintWriter writer = new PrintWriter(stringWriter);
-    
+
     when(request.getHeader("Authorization")).thenReturn("Bearer " + apiKey);
     when(response.getWriter()).thenReturn(writer);
-    
+
     ValidateApiKeyResponseDto invalidResponse = new ValidateApiKeyResponseDto(
-      false, null, null, null, null
+      false,
+      null,
+      null,
+      null,
+      null
     );
-    when(authServiceClient.validateApiKey(any(ValidateApiKeyRequestDto.class)))
-      .thenReturn(invalidResponse);
+    when(authServiceClient.validateApiKey(any(ValidateApiKeyRequestDto.class))).thenReturn(
+      invalidResponse
+    );
 
     // When
     filter.doFilterInternal(request, response, filterChain);
@@ -108,11 +118,12 @@ class ApiKeyAuthenticationFilterTest {
     String apiKey = "oc_dev_valid_key_123";
     StringWriter stringWriter = new StringWriter();
     PrintWriter writer = new PrintWriter(stringWriter);
-    
+
     when(request.getHeader("Authorization")).thenReturn("Bearer " + apiKey);
     when(response.getWriter()).thenReturn(writer);
-    when(authServiceClient.validateApiKey(any(ValidateApiKeyRequestDto.class)))
-      .thenThrow(FeignException.ServiceUnavailable.class);
+    when(authServiceClient.validateApiKey(any(ValidateApiKeyRequestDto.class))).thenThrow(
+      FeignException.ServiceUnavailable.class
+    );
 
     // When
     filter.doFilterInternal(request, response, filterChain);

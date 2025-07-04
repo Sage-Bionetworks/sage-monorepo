@@ -8,13 +8,9 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(
   webEnvironment = SpringBootTest.WebEnvironment.NONE,
-  properties = {
-    "spring.cloud.openfeign.enabled=false"
-  }
+  properties = { "spring.cloud.openfeign.enabled=false" }
 )
-@EnableAutoConfiguration(exclude = {
-  SecurityAutoConfiguration.class
-})
+@EnableAutoConfiguration(exclude = { SecurityAutoConfiguration.class })
 @ActiveProfiles("test")
 class OrganizationServiceApplicationTests {
 

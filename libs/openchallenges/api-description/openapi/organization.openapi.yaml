@@ -65,7 +65,7 @@ paths:
       description: Deletes the organization specified
       operationId: deleteOrganization
       security:
-        - apiKeyBearerAuth:
+        - apiBearerAuth:
             - organizations:delete
       responses:
         '204':
@@ -80,7 +80,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
-    apiKeyBearerAuth:
+    apiBearerAuth:
       type: http
       scheme: bearer
       bearerFormat: api_key

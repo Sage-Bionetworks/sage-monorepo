@@ -34,10 +34,10 @@ public class SpringDocConfiguration {
                 )
                 .components(
                         new Components()
-                                .addSecuritySchemes("apiKeyAuth", new SecurityScheme()
-                                        .type(SecurityScheme.Type.APIKEY)
-                                        .in(SecurityScheme.In.HEADER)
-                                        .name("X-API-Key")
+                                .addSecuritySchemes("apiBearerAuth", new SecurityScheme()
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .scheme("bearer")
+                                        .bearerFormat("api_key")
                                 )
                 )
         ;

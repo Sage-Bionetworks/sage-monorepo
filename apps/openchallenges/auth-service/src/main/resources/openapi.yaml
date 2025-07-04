@@ -66,7 +66,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - apiKeyAuth: []
+        - apiBearerAuth: []
       summary: List API keys
       tags:
         - API Key
@@ -98,7 +98,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - apiKeyAuth: []
+        - apiBearerAuth: []
       summary: Create API key
       tags:
         - API Key
@@ -132,7 +132,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - apiKeyAuth: []
+        - apiBearerAuth: []
       summary: Delete API key
       tags:
         - API Key
@@ -201,11 +201,11 @@ components:
       properties:
         username:
           description: Username or email
-          example: admin@example.com
+          example: admin
           type: string
         password:
           description: User password
-          example: secretpassword
+          example: changeme
           format: password
           type: string
       required:
@@ -410,7 +410,8 @@ components:
           type: array
       type: object
   securitySchemes:
-    apiKeyAuth:
-      in: header
-      name: X-API-Key
-      type: apiKey
+    apiBearerAuth:
+      bearerFormat: api_key
+      description: API key obtained from /auth/login endpoint
+      scheme: bearer
+      type: http

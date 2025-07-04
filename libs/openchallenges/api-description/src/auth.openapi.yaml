@@ -28,5 +28,5 @@ paths:
     $ref: paths/auth/validate.yaml
 components:
   securitySchemes:
-    apiKeyBearerAuth:
-      $ref: components/securitySchemes/ApiKeyBearerAuth.yaml
+    apiBearerAuth:
+      $ref: components/securitySchemes/ApiBearerAuth.yaml

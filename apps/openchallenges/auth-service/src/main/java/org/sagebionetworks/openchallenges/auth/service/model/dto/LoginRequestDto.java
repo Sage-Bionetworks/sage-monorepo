@@ -49,7 +49,7 @@ public class LoginRequestDto {
    * @return username
    */
   @NotNull 
-  @Schema(name = "username", example = "admin@example.com", description = "Username or email", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "username", example = "admin", description = "Username or email", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("username")
   public String getUsername() {
     return username;
@@ -69,7 +69,7 @@ public class LoginRequestDto {
    * @return password
    */
   @NotNull 
-  @Schema(name = "password", example = "secretpassword", description = "User password", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "password", example = "changeme", description = "User password", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("password")
   public String getPassword() {
     return password;

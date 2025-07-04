@@ -77,7 +77,7 @@ public interface ApiKeyApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "apiKeyAuth")
+            @SecurityRequirement(name = "apiBearerAuth")
         }
     )
     @RequestMapping(
@@ -122,7 +122,7 @@ public interface ApiKeyApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "apiKeyAuth")
+            @SecurityRequirement(name = "apiBearerAuth")
         }
     )
     @RequestMapping(
@@ -166,7 +166,7 @@ public interface ApiKeyApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "apiKeyAuth")
+            @SecurityRequirement(name = "apiBearerAuth")
         }
     )
     @RequestMapping(

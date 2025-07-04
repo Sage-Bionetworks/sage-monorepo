@@ -1,16 +1,15 @@
 package org.sagebionetworks.openchallenges.organization.service.security;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * Custom user principal containing authenticated user information from the auth service
@@ -30,9 +29,7 @@ public class AuthenticatedUser implements UserDetails {
     if (scopes == null) {
       return List.of();
     }
-    return scopes.stream()
-      .map(SimpleGrantedAuthority::new)
-      .collect(Collectors.toList());
+    return scopes.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
   }
 
   @Override

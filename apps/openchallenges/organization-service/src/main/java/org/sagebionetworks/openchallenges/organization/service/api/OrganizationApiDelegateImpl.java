@@ -25,11 +25,16 @@ public class OrganizationApiDelegateImpl implements OrganizationApiDelegate {
   @PreAuthorize("hasAuthority('organizations:delete')")
   public ResponseEntity<Void> deleteOrganization(String identifier) {
     // Log the authenticated user for audit purposes
-    AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder
-      .getContext().getAuthentication().getPrincipal();
-    log.info("User {} (role: {}) is deleting organization: {}", 
-      user.getUsername(), user.getRole(), identifier);
-    
+    AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
+      .getAuthentication()
+      .getPrincipal();
+    log.info(
+      "User {} (role: {}) is deleting organization: {}",
+      user.getUsername(),
+      user.getRole(),
+      identifier
+    );
+
     organizationService.deleteOrganization(identifier);
     return ResponseEntity.noContent().build();
   }

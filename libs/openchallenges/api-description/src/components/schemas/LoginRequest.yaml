@@ -6,9 +6,9 @@ properties:
   username:
     type: string
     description: Username or email
-    example: admin@example.com
+    example: admin
   password:
     type: string
     format: password
     description: User password
-    example: secretpassword
+    example: changeme

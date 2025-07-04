@@ -108,7 +108,8 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-        - apiKeyAuth: []
+        - apiBearerAuth:
+            - organizations:delete
       summary: Delete an organization
       tags:
         - Organization
@@ -501,7 +502,8 @@ components:
         - '@lombok.AllArgsConstructor'
         - '@lombok.Builder'
   securitySchemes:
-    apiKeyAuth:
-      in: header
-      name: X-API-Key
-      type: apiKey
+    apiBearerAuth:
+      bearerFormat: api_key
+      description: API key obtained from /auth/login endpoint
+      scheme: bearer
+      type: http

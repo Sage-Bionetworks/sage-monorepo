@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
   path = "/v1"
 )
 public interface AuthServiceClient {
-
   /**
    * Validates an API key with the auth service
    *
