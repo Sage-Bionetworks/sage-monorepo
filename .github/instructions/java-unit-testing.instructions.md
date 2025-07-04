@@ -94,14 +94,20 @@ cd /workspaces/sage-monorepo/apps/amp-als/user-service
 
 ### Running Specific Tests
 
-When running tests from a Java subproject, use the `--info` flag with Gradle to improve Copilot context:
+When running tests from a Java subproject, use the `--info` flag with Gradle to improve Copilot context. Use `--rerun-tasks` to bypass cache and force test execution:
 
 ```bash
 # Run all tests
 ./gradlew test --info
 
+# Run all tests bypassing cache
+./gradlew test --rerun-tasks --info
+
 # Run specific test class
 ./gradlew test --tests "*UserServiceTest*" --info
+
+# Run specific test class bypassing cache
+./gradlew test --tests "*UserServiceTest*" --rerun-tasks --info
 
 # Run specific test method
 ./gradlew test --tests "*UserServiceTest.shouldReturnUserWhenAuthenticationIsSuccessful*" --info
