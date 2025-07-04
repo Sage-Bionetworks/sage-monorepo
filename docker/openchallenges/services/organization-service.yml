@@ -10,7 +10,7 @@ services:
     ports:
       - '8084:8084'
     depends_on:
-      openchallenges-auth-server:
+      openchallenges-auth-service:
         condition: service_healthy
       openchallenges-config-server:
         condition: service_healthy
