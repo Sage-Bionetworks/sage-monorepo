@@ -26,12 +26,10 @@ repositories {
 }
 
 dependencies {
-  // runtimeOnly(libs.flyway.database.postgresql)
   annotationProcessor(libs.lombok)
   compileOnly(libs.lombok)
   implementation(libs.findbugs.jsr305)
   implementation(libs.flyway.core)
-  implementation(libs.flyway.database.postgresql)
   implementation(libs.hibernate.search.backend.elasticsearch)
   implementation(libs.hibernate.search.mapper.orm)
   implementation(libs.jackson.databind)
@@ -50,11 +48,12 @@ dependencies {
   implementation(libs.spring.data.commons)
   implementation(libs.springdoc.openapi.ui)
   implementation(platform(libs.spring.boot.dependencies))
+  runtimeOnly(libs.flyway.database.postgresql)
   runtimeOnly(libs.postgresql)
   runtimeOnly(libs.spring.boot.devtools)
   testAnnotationProcessor(libs.lombok)
   testCompileOnly(libs.lombok)
-  testImplementation("org.springframework.security:spring-security-test")
+  testImplementation(libs.spring.security.test)
   testImplementation(libs.spring.boot.starter.test)
   testRuntimeOnly(libs.h2database.h2)
 }
