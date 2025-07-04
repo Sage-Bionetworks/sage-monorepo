@@ -39,6 +39,7 @@ dependencies {
   implementation(libs.jackson.datatype.jsr310)
   implementation(libs.openchallenges.app.config.data)
   implementation(libs.sagebionetworks.util)
+  implementation(libs.spring.boot.starter.actuator)
   implementation(libs.spring.boot.starter.data.jpa)
   implementation(libs.spring.boot.starter.jdbc)
   implementation(libs.spring.boot.starter.security)
@@ -53,6 +54,7 @@ dependencies {
   runtimeOnly(libs.spring.boot.devtools)
   testAnnotationProcessor(libs.lombok)
   testCompileOnly(libs.lombok)
+  testImplementation("org.springframework.security:spring-security-test")
   testImplementation(libs.spring.boot.starter.test)
   testRuntimeOnly(libs.h2database.h2)
 }
