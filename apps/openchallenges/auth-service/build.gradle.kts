@@ -64,7 +64,10 @@ tasks.withType<Test>().configureEach {
 
 val coverageExclusions = listOf(
   "org/sagebionetworks/openchallenges/auth/service/model/dto/**",
-  "org/sagebionetworks/openchallenges/auth/service/api/**",
+  "org/sagebionetworks/openchallenges/auth/service/api/**"
+)
+
+val coverageIncludeExclusions = listOf(
   "org/sagebionetworks/openchallenges/auth/service/configuration/EnumConverterConfiguration*",
   "org/sagebionetworks/openchallenges/auth/service/configuration/Flyway*",
   "org/sagebionetworks/openchallenges/auth/service/configuration/HibernateSearch*",
@@ -73,14 +76,20 @@ val coverageExclusions = listOf(
   "org/sagebionetworks/openchallenges/auth/service/RFC3339DateFormat*"
 )
 
-val coverageClassDirectories = fileTree("${buildDir}/classes/java/main") {
-  exclude(coverageExclusions)
-}
+val coverageClassFiles = files(
+  fileTree(layout.buildDirectory.dir("classes/java/main")) {
+    exclude(coverageExclusions)
+    exclude(coverageIncludeExclusions)
+  },
+  fileTree(layout.buildDirectory.dir("classes/java/main")) {
+    include("org/sagebionetworks/openchallenges/auth/service/api/*Impl.class")
+  }
+)
 
 tasks.jacocoTestReport {
   dependsOn(tasks.test)
 
-  classDirectories.setFrom(coverageClassDirectories)
+  classDirectories.setFrom(coverageClassFiles)
 
   reports {
     xml.required = true
@@ -91,7 +100,7 @@ tasks.jacocoTestReport {
 }
 
 tasks.jacocoTestCoverageVerification {
-  classDirectories.setFrom(coverageClassDirectories)
+  classDirectories.setFrom(coverageClassFiles)
 
   violationRules {
     rule {
