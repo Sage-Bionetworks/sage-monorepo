@@ -149,9 +149,24 @@ public class ApiKeyApiDelegateImpl implements ApiKeyApiDelegate {
    */
   private User getAuthenticatedUser() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication != null && authentication.getPrincipal() instanceof User) {
-      return (User) authentication.getPrincipal();
+    if (authentication == null) {
+      return null;
     }
+
+    Object principal = authentication.getPrincipal();
+
+    // If principal is a User object (custom authentication)
+    if (principal instanceof User) {
+      return (User) principal;
+    }
+
+    // If principal is UserDetails (Spring Security default), get username and fetch user
+    if (principal instanceof org.springframework.security.core.userdetails.UserDetails) {
+      String username =
+        ((org.springframework.security.core.userdetails.UserDetails) principal).getUsername();
+      return userService.findByUsername(username).orElse(null);
+    }
+
     return null;
   }
 

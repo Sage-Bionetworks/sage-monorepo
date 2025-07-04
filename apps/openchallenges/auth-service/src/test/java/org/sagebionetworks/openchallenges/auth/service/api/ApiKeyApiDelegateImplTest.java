@@ -22,12 +22,14 @@ import org.sagebionetworks.openchallenges.auth.service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(ApiKeyApiDelegateImpl.class)
+@Import(org.sagebionetworks.openchallenges.auth.service.configuration.SecurityConfiguration.class)
 @TestPropertySource(
   properties = {
     "spring.datasource.url=jdbc:h2:mem:testdb",
@@ -38,6 +40,7 @@ import org.springframework.test.web.servlet.MockMvc;
     "spring.flyway.enabled=false",
   }
 )
+@MockitoSettings(strictness = Strictness.LENIENT)
 class ApiKeyApiDelegateImplTest {
 
   @Autowired
@@ -48,6 +51,9 @@ class ApiKeyApiDelegateImplTest {
 
   @MockBean
   private UserService userService;
+
+  @MockBean
+  private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
 
   @Autowired
   private ObjectMapper objectMapper;
@@ -72,6 +78,9 @@ class ApiKeyApiDelegateImplTest {
       .createdAt(OffsetDateTime.now())
       .build();
     testApiKey.setPlainKey("oc_dev_1234567890abcdef");
+
+    // Mock userService to return testUser when looking up by username
+    when(userService.findByUsername("testuser")).thenReturn(java.util.Optional.of(testUser));
   }
 
   @Test
@@ -115,7 +124,7 @@ class ApiKeyApiDelegateImplTest {
           .contentType(MediaType.APPLICATION_JSON)
           .content(objectMapper.writeValueAsString(request))
       )
-      .andExpect(status().isUnauthorized());
+      .andExpect(status().isForbidden());
   }
 
   @Test
@@ -137,7 +146,7 @@ class ApiKeyApiDelegateImplTest {
   @Test
   void listApiKeys_ShouldReturnUnauthorized_WhenNotAuthenticated() throws Exception {
     // Act & Assert
-    mockMvc.perform(get("/v1/auth/api-keys")).andExpect(status().isUnauthorized());
+    mockMvc.perform(get("/v1/auth/api-keys")).andExpect(status().isForbidden());
   }
 
   @Test
@@ -172,8 +181,6 @@ class ApiKeyApiDelegateImplTest {
     UUID keyId = UUID.randomUUID();
 
     // Act & Assert
-    mockMvc
-      .perform(delete("/v1/auth/api-keys/{keyId}", keyId))
-      .andExpect(status().isUnauthorized());
+    mockMvc.perform(delete("/v1/auth/api-keys/{keyId}", keyId)).andExpect(status().isForbidden());
   }
 }

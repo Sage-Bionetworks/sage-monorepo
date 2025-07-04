@@ -101,9 +101,9 @@ tasks.jacocoTestCoverageVerification {
     }
 
     rule {
-      isEnabled = false
+      isEnabled = true
       element = "CLASS"
-      includes = listOf("org.sagebionetworks.openchallenges.*")
+      includes = listOf("org.sagebionetworks.openchallenges.auth.service.*")
 
       limit {
         counter = "LINE"
