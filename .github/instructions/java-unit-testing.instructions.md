@@ -74,10 +74,37 @@ Examples:
 
 ## Project Execution (Gradle)
 
+### Monorepo Structure
+
+In this Sage monorepo, each Java project has its own `gradlew` wrapper. Navigate to the specific project directory before running tests.
+
+**For OpenChallenges projects:**
+
+```bash
+cd /workspaces/sage-monorepo/apps/openchallenges/auth-service
+./gradlew test --info
+```
+
+**For other projects, examples:**
+
+```bash
+cd /workspaces/sage-monorepo/apps/amp-als/user-service
+./gradlew test --info
+```
+
+### Running Specific Tests
+
 When running tests from a Java subproject, use the `--info` flag with Gradle to improve Copilot context:
 
 ```bash
+# Run all tests
 ./gradlew test --info
+
+# Run specific test class
+./gradlew test --tests "*UserServiceTest*" --info
+
+# Run specific test method
+./gradlew test --tests "*UserServiceTest.shouldReturnUserWhenAuthenticationIsSuccessful*" --info
 ```
 
 This gives Copilot more visibility into:
