@@ -4,9 +4,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-public class PasswordHashGenerator {
+public final class PasswordHashGenerator {
 
   private static final Logger logger = LoggerFactory.getLogger(PasswordHashGenerator.class);
+
+  /**
+   * Private constructor to prevent instantiation of this utility class.
+   */
+  private PasswordHashGenerator() {
+    // Private constructor to prevent instantiation
+  }
 
   public static void main(String[] args) {
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);

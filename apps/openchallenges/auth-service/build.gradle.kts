@@ -141,3 +141,5 @@ tasks.register<JavaExec>("generatePasswordHashes") {
 tasks.named("generatePasswordHashes") {
   dependsOn("compileJava")
 }
+
+

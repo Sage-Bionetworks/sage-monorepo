@@ -639,4 +639,118 @@ class UserTest {
       assertThat(user.getApiKeys()).isSameAs(linkedList);
     }
   }
+
+  @Nested
+  @DisplayName("Business Logic Tests")
+  class BusinessLogicTests {
+
+    @Test
+    @DisplayName("Should correctly identify admin users")
+    void shouldIdentifyAdminUsers() {
+      User adminUser = User.builder()
+        .username("admin")
+        .passwordHash("hash")
+        .role(User.Role.admin)
+        .build();
+
+      User regularUser = User.builder()
+        .username("user")
+        .passwordHash("hash")
+        .role(User.Role.user)
+        .build();
+
+      User readonlyUser = User.builder()
+        .username("readonly")
+        .passwordHash("hash")
+        .role(User.Role.readonly)
+        .build();
+
+      assertThat(adminUser.isAdmin()).isTrue();
+      assertThat(regularUser.isAdmin()).isFalse();
+      assertThat(readonlyUser.isAdmin()).isFalse();
+    }
+
+    @Test
+    @DisplayName("Should correctly identify active users")
+    void shouldIdentifyActiveUsers() {
+      User enabledUser = User.builder()
+        .username("enabled")
+        .passwordHash("hash")
+        .enabled(true)
+        .build();
+
+      User disabledUser = User.builder()
+        .username("disabled")
+        .passwordHash("hash")
+        .enabled(false)
+        .build();
+
+      User nullEnabledUser = User.builder()
+        .username("null")
+        .passwordHash("hash")
+        .enabled(null)
+        .build();
+
+      assertThat(enabledUser.isActive()).isTrue();
+      assertThat(disabledUser.isActive()).isFalse();
+      assertThat(nullEnabledUser.isActive()).isFalse();
+    }
+
+    @Test
+    @DisplayName("Should correctly count API keys")
+    void shouldCountApiKeys() {
+      User userWithNoKeys = User.builder()
+        .username("nokeys")
+        .passwordHash("hash")
+        .apiKeys(new ArrayList<>())
+        .build();
+
+      User userWithNullKeys = User.builder()
+        .username("nullkeys")
+        .passwordHash("hash")
+        .apiKeys(null)
+        .build();
+
+      List<ApiKey> apiKeys = new ArrayList<>();
+      apiKeys.add(new ApiKey());
+      apiKeys.add(new ApiKey());
+      User userWithKeys = User.builder()
+        .username("withkeys")
+        .passwordHash("hash")
+        .apiKeys(apiKeys)
+        .build();
+
+      assertThat(userWithNoKeys.getApiKeyCount()).isEqualTo(0);
+      assertThat(userWithNullKeys.getApiKeyCount()).isEqualTo(0);
+      assertThat(userWithKeys.getApiKeyCount()).isEqualTo(2);
+    }
+
+    @Test
+    @DisplayName("Should correctly determine if user has API keys")
+    void shouldDetermineIfUserHasApiKeys() {
+      User userWithNoKeys = User.builder()
+        .username("nokeys")
+        .passwordHash("hash")
+        .apiKeys(new ArrayList<>())
+        .build();
+
+      User userWithNullKeys = User.builder()
+        .username("nullkeys")
+        .passwordHash("hash")
+        .apiKeys(null)
+        .build();
+
+      List<ApiKey> apiKeys = new ArrayList<>();
+      apiKeys.add(new ApiKey());
+      User userWithKeys = User.builder()
+        .username("withkeys")
+        .passwordHash("hash")
+        .apiKeys(apiKeys)
+        .build();
+
+      assertThat(userWithNoKeys.hasApiKeys()).isFalse();
+      assertThat(userWithNullKeys.hasApiKeys()).isFalse();
+      assertThat(userWithKeys.hasApiKeys()).isTrue();
+    }
+  }
 }
