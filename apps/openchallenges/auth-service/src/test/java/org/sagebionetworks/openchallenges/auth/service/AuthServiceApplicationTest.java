@@ -37,10 +37,14 @@ class AuthServiceApplicationTest {
   void shouldConfigureSpringBootApplicationWithCorrectNameGenerator() {
     // given
     Class<AuthServiceApplication> applicationClass = AuthServiceApplication.class;
-    SpringBootApplication springBootAnnotation = applicationClass.getAnnotation(SpringBootApplication.class);
+    SpringBootApplication springBootAnnotation = applicationClass.getAnnotation(
+      SpringBootApplication.class
+    );
 
     // when & then
-    assertThat(springBootAnnotation.nameGenerator()).isEqualTo(FullyQualifiedAnnotationBeanNameGenerator.class);
+    assertThat(springBootAnnotation.nameGenerator()).isEqualTo(
+      FullyQualifiedAnnotationBeanNameGenerator.class
+    );
   }
 
   @Test
@@ -52,9 +56,9 @@ class AuthServiceApplicationTest {
 
     // when & then
     assertThat(componentScanAnnotation.basePackages()).containsExactlyInAnyOrder(
-        "org.sagebionetworks.openchallenges.auth.service",
-        "org.sagebionetworks.openchallenges.auth.service.api",
-        "org.sagebionetworks.openchallenges.auth.service.configuration"
+      "org.sagebionetworks.openchallenges.auth.service",
+      "org.sagebionetworks.openchallenges.auth.service.api",
+      "org.sagebionetworks.openchallenges.auth.service.configuration"
     );
   }
 
@@ -66,21 +70,25 @@ class AuthServiceApplicationTest {
     ComponentScan componentScanAnnotation = applicationClass.getAnnotation(ComponentScan.class);
 
     // when & then
-    assertThat(componentScanAnnotation.nameGenerator()).isEqualTo(FullyQualifiedAnnotationBeanNameGenerator.class);
+    assertThat(componentScanAnnotation.nameGenerator()).isEqualTo(
+      FullyQualifiedAnnotationBeanNameGenerator.class
+    );
   }
 
   @Test
   @DisplayName("should run Spring application when main method is called")
   void shouldRunSpringApplicationWhenMainMethodIsCalled() {
     // given
-    String[] args = {"--spring.profiles.active=test"};
+    String[] args = { "--spring.profiles.active=test" };
 
     // when & then
-    try (MockedStatic<SpringApplication> springApplicationMock = mockStatic(SpringApplication.class)) {
+    try (
+      MockedStatic<SpringApplication> springApplicationMock = mockStatic(SpringApplication.class)
+    ) {
       AuthServiceApplication.main(args);
-      
-      springApplicationMock.verify(() -> 
-          SpringApplication.run(eq(AuthServiceApplication.class), eq(args))
+
+      springApplicationMock.verify(() ->
+        SpringApplication.run(eq(AuthServiceApplication.class), eq(args))
       );
     }
   }
@@ -92,11 +100,13 @@ class AuthServiceApplicationTest {
     String[] emptyArgs = {};
 
     // when & then
-    try (MockedStatic<SpringApplication> springApplicationMock = mockStatic(SpringApplication.class)) {
+    try (
+      MockedStatic<SpringApplication> springApplicationMock = mockStatic(SpringApplication.class)
+    ) {
       AuthServiceApplication.main(emptyArgs);
-      
-      springApplicationMock.verify(() -> 
-          SpringApplication.run(eq(AuthServiceApplication.class), eq(emptyArgs))
+
+      springApplicationMock.verify(() ->
+        SpringApplication.run(eq(AuthServiceApplication.class), eq(emptyArgs))
       );
     }
   }
@@ -108,11 +118,13 @@ class AuthServiceApplicationTest {
     String[] nullArgs = null;
 
     // when & then
-    try (MockedStatic<SpringApplication> springApplicationMock = mockStatic(SpringApplication.class)) {
+    try (
+      MockedStatic<SpringApplication> springApplicationMock = mockStatic(SpringApplication.class)
+    ) {
       AuthServiceApplication.main(nullArgs);
-      
-      springApplicationMock.verify(() -> 
-          SpringApplication.run(eq(AuthServiceApplication.class), eq(nullArgs))
+
+      springApplicationMock.verify(() ->
+        SpringApplication.run(eq(AuthServiceApplication.class), eq(nullArgs))
       );
     }
   }

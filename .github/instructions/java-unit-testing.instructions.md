@@ -97,11 +97,17 @@ cd /workspaces/sage-monorepo/apps/amp-als/user-service
 When running tests from a Java subproject, use the `--info` flag with Gradle to improve Copilot context. Use `--rerun-tasks` to bypass cache and force test execution:
 
 ```bash
-# Run all tests
+# Run all tests (unit + integration)
 ./gradlew test --info
 
 # Run all tests bypassing cache
 ./gradlew test --rerun-tasks --info
+
+# Run only unit tests (fast, no Spring context)
+./gradlew testUnit --info
+
+# Run only integration tests (slow, full Spring context)
+./gradlew testIntegration --info
 
 # Run specific test class
 ./gradlew test --tests "*UserServiceTest*" --info
@@ -112,6 +118,11 @@ When running tests from a Java subproject, use the `--info` flag with Gradle to 
 # Run specific test method
 ./gradlew test --tests "*UserServiceTest.shouldReturnUserWhenAuthenticationIsSuccessful*" --info
 ```
+
+**Test Separation:**
+
+- **Unit tests** (`testUnit`): Fast execution, no Spring context, use `@ExtendWith(MockitoExtension.class)`
+- **Integration tests** (`testIntegration`): Slower execution, full Spring context, use `@SpringBootTest` and `@Tag("integration")`
 
 This gives Copilot more visibility into:
 
