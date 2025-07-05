@@ -49,6 +49,7 @@ class MyServiceTest {
   private MyService service;
 
   @Test
+  @DisplayName("should return data when repository returns value")
   void shouldReturnDataWhenRepositoryReturnsValue() {
     // given
     when(repository.getData()).thenReturn("value");
@@ -65,12 +66,37 @@ class MyServiceTest {
 
 ### Method Naming Convention
 
-Use the pattern: `should<ExpectedBehavior>When<Condition>()`
+**STRICT REQUIREMENT:** Use consistent CamelCase naming for both method names and @DisplayName annotations.
 
-Examples:
+**Method Names:** Use the pattern `should<ExpectedBehavior>When<Condition>()`
+**@DisplayName:** Use lowercase "should" with descriptive text
 
-- `shouldReturnUserWhenEmailIsValid()`
-- `shouldThrowExceptionWhenInputIsNull()`
+```java
+@Test
+@DisplayName("should return user when email is valid")
+void shouldReturnUserWhenEmailIsValid() {
+  // test implementation
+}
+
+@Test
+@DisplayName("should throw exception when input is null")
+void shouldThrowExceptionWhenInputIsNull() {
+  // test implementation
+}
+
+```
+
+**❌ AVOID these inconsistent patterns:**
+
+- Method names with underscores: `void login_ShouldReturn_WhenValid()`
+- Uppercase "Should" in @DisplayName: `@DisplayName("Should return user...")`
+- Mixed casing patterns within the same test class
+
+**✅ CORRECT examples:**
+
+- `shouldAuthenticateUserWhenCredentialsAreValid()`
+- `shouldReturnEmptyWhenUserNotFound()`
+- `shouldThrowExceptionWhenParameterIsNull()`
 
 ## Project Execution (Gradle)
 
@@ -149,9 +175,17 @@ Use inline comments or prompts like:
 
 ```
 
+**When generating tests, ensure:**
+
+- Method names use CamelCase: `shouldDoSomethingWhenConditionExists()`
+- @DisplayName uses lowercase "should": `@DisplayName("should do something when condition exists")`
+- Consistent naming patterns throughout the test class
+
 ## Clean Code Rules
 
 - Keep tests short and isolated
 - Avoid real HTTP calls or database operations
 - Use Arrange-Act-Assert (AAA) structure
 - Prefer one assertion per test (unless logically grouped)
+- **CONSISTENCY:** Always use the same naming convention within a test class
+- **NO MIXED PATTERNS:** Don't mix CamelCase and underscore naming in the same project
