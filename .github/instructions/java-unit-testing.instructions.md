@@ -12,6 +12,36 @@ This file provides focused guidance for GitHub Copilot to generate strong, idiom
 - Use mocking for all external dependencies (e.g., repositories, APIs).
 - Do not use `@SpringBootTest` unless writing an integration test (see `java-integration-testing.md`).
 
+## Test File Naming Conventions
+
+**STRICT REQUIREMENT:** Follow consistent naming patterns for different types of tests.
+
+- **Pure Unit Tests:** `ClassNameTest.java` - Use `@ExtendWith(MockitoExtension.class)`
+- **Web Layer Tests:** `ClassNameWebTest.java` - Use `@WebMvcTest` + `MockMvc`
+- **Integration Tests:** `ClassNameIntegrationTest.java` - Use `@SpringBootTest` + `@Tag("integration")`
+
+**Examples:**
+
+```
+ApiKeyServiceTest.java              → Pure unit test for service layer
+ApiKeyApiDelegateImplTest.java      → Pure unit test for API delegate logic
+ApiKeyApiDelegateImplWebTest.java   → Web layer test with @WebMvcTest
+UserServiceIntegrationTest.java     → Full integration test with @SpringBootTest
+```
+
+**Why This Convention:**
+
+- Pure unit tests are most common, so they get the simple `Test.java` suffix
+- Web layer tests get descriptive `WebTest.java` suffix to indicate HTTP testing
+- Integration tests use established `IntegrationTest.java` pattern
+- Clear distinction between testing approaches and scope
+
+**When to Use Each Type:**
+
+- **Pure Unit Tests (`ClassNameTest.java`)**: For service classes, utilities, entities, and API delegate business logic
+- **Web Layer Tests (`ClassNameWebTest.java`)**: For Spring Boot controllers and API delegates testing HTTP endpoints
+- **Integration Tests (`ClassNameIntegrationTest.java`)**: For full application testing with database and external services
+
 ## Use These Frameworks
 
 When generating unit tests, use:

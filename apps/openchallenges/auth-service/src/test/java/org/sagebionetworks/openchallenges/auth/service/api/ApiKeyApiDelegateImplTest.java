@@ -1,62 +1,61 @@
 package org.sagebionetworks.openchallenges.auth.service.api;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.Mockito.verify;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.Optional;
+import java.util.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.CreateApiKeyRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
 import org.sagebionetworks.openchallenges.auth.service.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
-@WebMvcTest(ApiKeyApiDelegateImpl.class)
-@Import(org.sagebionetworks.openchallenges.auth.service.configuration.SecurityConfiguration.class)
-@TestPropertySource(
-  properties = {
-    "spring.datasource.url=jdbc:h2:mem:testdb",
-    "spring.datasource.driver-class-name=org.h2.Driver",
-    "spring.datasource.username=sa",
-    "spring.datasource.password=",
-    "spring.jpa.hibernate.ddl-auto=create-drop",
-    "spring.flyway.enabled=false",
-  }
-)
-@MockitoSettings(strictness = Strictness.LENIENT)
+/**
+ * Pure unit tests for ApiKeyApiDelegateImpl focusing on business logic without Spring context.
+ * 
+ * This test class complements ApiKeyApiDelegateImplWebTest.java (web layer tests with @WebMvcTest)
+ * by providing focused unit testing of the delegate's internal logic, authentication handling,
+ * and edge cases that are harder to test through the web layer.
+ */
+@ExtendWith(MockitoExtension.class)
+@DisplayName("ApiKeyApiDelegateImpl Unit Tests")
 class ApiKeyApiDelegateImplTest {
 
-  @Autowired
-  private MockMvc mockMvc;
-
-  @MockBean
+  @Mock
   private ApiKeyService apiKeyService;
 
-  @MockBean
+  @Mock
   private UserService userService;
 
-  @MockBean
-  private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+  @Mock
+  private SecurityContext securityContext;
 
-  @Autowired
-  private ObjectMapper objectMapper;
+  @Mock
+  private Authentication authentication;
+
+  @InjectMocks
+  private ApiKeyApiDelegateImpl apiKeyApiDelegateImpl;
 
   private User testUser;
   private ApiKey testApiKey;
@@ -76,111 +75,276 @@ class ApiKeyApiDelegateImplTest {
       .keyPrefix("oc_dev_")
       .keyHash("hashedkey")
       .createdAt(OffsetDateTime.now())
+      .expiresAt(OffsetDateTime.now().plusDays(30))
+      .lastUsedAt(OffsetDateTime.now().minusHours(2))
       .build();
     testApiKey.setPlainKey("oc_dev_1234567890abcdef");
 
-    // Mock userService to return testUser when looking up by username
-    when(userService.findByUsername("testuser")).thenReturn(java.util.Optional.of(testUser));
+    SecurityContextHolder.setContext(securityContext);
   }
 
-  @Test
-  @WithMockUser("testuser")
-  void shouldCreateApiKeyWhenValidRequest() throws Exception {
-    // Arrange
-    CreateApiKeyRequestDto request = new CreateApiKeyRequestDto()
-      .name("Test API Key")
-      .expiresIn(30);
+  @Nested
+  @DisplayName("Authentication Principal Handling")
+  class AuthenticationPrincipalHandling {
 
-    when(apiKeyService.createApiKey(any(User.class), eq("Test API Key"), eq(30))).thenReturn(
-      testApiKey
-    );
+    @Test
+    @DisplayName("should handle User principal directly")
+    void shouldHandleUserPrincipalDirectly() {
+      // Arrange
+      CreateApiKeyRequestDto request = new CreateApiKeyRequestDto()
+        .name("Test API Key")
+        .expiresIn(30);
 
-    // Act & Assert
-    mockMvc
-      .perform(
-        post("/v1/auth/api-keys")
-          .with(user("testuser"))
-          .contentType(MediaType.APPLICATION_JSON)
-          .content(objectMapper.writeValueAsString(request))
-      )
-      .andExpect(status().isCreated())
-      .andExpect(jsonPath("$.id").value(testApiKey.getId().toString()))
-      .andExpect(jsonPath("$.name").value("Test API Key"))
-      .andExpect(jsonPath("$.prefix").value("oc_dev_"))
-      .andExpect(jsonPath("$.key").value("oc_dev_1234567890abcdef"));
+      when(securityContext.getAuthentication()).thenReturn(authentication);
+      when(authentication.getPrincipal()).thenReturn(testUser);
+      when(apiKeyService.createApiKey(testUser, "Test API Key", 30)).thenReturn(testApiKey);
+
+      // Act
+      ResponseEntity<?> response = apiKeyApiDelegateImpl.createApiKey(request);
+
+      // Assert
+      assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+      verify(apiKeyService).createApiKey(testUser, "Test API Key", 30);
+      // Should NOT call userService when principal is already a User
+      verify(userService, org.mockito.Mockito.never()).findByUsername(anyString());
+    }
+
+    @Test
+    @DisplayName("should resolve UserDetails principal to User entity")
+    void shouldResolveUserDetailsPrincipalToUserEntity() {
+      // Arrange
+      CreateApiKeyRequestDto request = new CreateApiKeyRequestDto().name("Test");
+      
+      UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
+        .username("testuser")
+        .password("password")
+        .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")))
+        .build();
+
+      when(securityContext.getAuthentication()).thenReturn(authentication);
+      when(authentication.getPrincipal()).thenReturn(userDetails);
+      when(userService.findByUsername("testuser")).thenReturn(Optional.of(testUser));
+      when(apiKeyService.createApiKey(testUser, "Test", null)).thenReturn(testApiKey);
+
+      // Act
+      ResponseEntity<?> response = apiKeyApiDelegateImpl.createApiKey(request);
+
+      // Assert
+      assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+      verify(userService).findByUsername("testuser");
+      verify(apiKeyService).createApiKey(testUser, "Test", null);
+    }
+
+    @Test
+    @DisplayName("should reject unknown principal types")
+    void shouldRejectUnknownPrincipalTypes() {
+      // Arrange
+      CreateApiKeyRequestDto request = new CreateApiKeyRequestDto().name("Test");
+
+      when(securityContext.getAuthentication()).thenReturn(authentication);
+      when(authentication.getPrincipal()).thenReturn("invalid_principal_type");
+
+      // Act
+      ResponseEntity<?> response = apiKeyApiDelegateImpl.createApiKey(request);
+
+      // Assert
+      assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+      verify(userService, org.mockito.Mockito.never()).findByUsername(anyString());
+      verify(apiKeyService, org.mockito.Mockito.never()).createApiKey(any(), anyString(), any());
+    }
+
+    @Test
+    @DisplayName("should handle missing authentication")
+    void shouldHandleMissingAuthentication() {
+      // Arrange
+      CreateApiKeyRequestDto request = new CreateApiKeyRequestDto().name("Test");
+      when(securityContext.getAuthentication()).thenReturn(null);
+
+      // Act
+      ResponseEntity<?> response = apiKeyApiDelegateImpl.createApiKey(request);
+
+      // Assert
+      assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+    }
+
+    @Test
+    @DisplayName("should handle UserDetails principal when user not found in database")
+    void shouldHandleUserDetailsPrincipalWhenUserNotFoundInDatabase() {
+      // Arrange
+      CreateApiKeyRequestDto request = new CreateApiKeyRequestDto().name("Test");
+      
+      UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
+        .username("nonexistent")
+        .password("password")
+        .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")))
+        .build();
+
+      when(securityContext.getAuthentication()).thenReturn(authentication);
+      when(authentication.getPrincipal()).thenReturn(userDetails);
+      when(userService.findByUsername("nonexistent")).thenReturn(Optional.empty());
+
+      // Act
+      ResponseEntity<?> response = apiKeyApiDelegateImpl.createApiKey(request);
+
+      // Assert
+      assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+      verify(userService).findByUsername("nonexistent");
+      verify(apiKeyService, org.mockito.Mockito.never()).createApiKey(any(), anyString(), any());
+    }
   }
 
-  @Test
-  void shouldReturnUnauthorizedWhenNotAuthenticated() throws Exception {
-    // Arrange
-    CreateApiKeyRequestDto request = new CreateApiKeyRequestDto()
-      .name("Test API Key")
-      .expiresIn(30);
+  @Nested
+  @DisplayName("Exception Handling")
+  class ExceptionHandling {
 
-    // Act & Assert
-    mockMvc
-      .perform(
-        post("/v1/auth/api-keys")
-          .contentType(MediaType.APPLICATION_JSON)
-          .content(objectMapper.writeValueAsString(request))
-      )
-      .andExpect(status().isForbidden());
+    @Test
+    @DisplayName("should handle service exceptions during API key creation")
+    void shouldHandleServiceExceptionsDuringApiKeyCreation() {
+      // Arrange
+      CreateApiKeyRequestDto request = new CreateApiKeyRequestDto().name("Test");
+
+      when(securityContext.getAuthentication()).thenReturn(authentication);
+      when(authentication.getPrincipal()).thenReturn(testUser);
+      when(apiKeyService.createApiKey(testUser, "Test", null))
+        .thenThrow(new RuntimeException("Database connection failed"));
+
+      // Act
+      ResponseEntity<?> response = apiKeyApiDelegateImpl.createApiKey(request);
+
+      // Assert
+      assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Test
+    @DisplayName("should handle user service exceptions during UserDetails resolution")
+    void shouldHandleUserServiceExceptionsDuringUserDetailsResolution() {
+      // Arrange
+      CreateApiKeyRequestDto request = new CreateApiKeyRequestDto().name("Test");
+      
+      UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
+        .username("testuser")
+        .password("password")
+        .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")))
+        .build();
+
+      when(securityContext.getAuthentication()).thenReturn(authentication);
+      when(authentication.getPrincipal()).thenReturn(userDetails);
+      when(userService.findByUsername("testuser"))
+        .thenThrow(new RuntimeException("Database connection failed"));
+
+      // Act
+      ResponseEntity<?> response = apiKeyApiDelegateImpl.createApiKey(request);
+
+      // Assert
+      assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Test
+    @DisplayName("should handle exceptions during API key listing")
+    void shouldHandleExceptionsDuringApiKeyListing() {
+      // Arrange
+      when(securityContext.getAuthentication()).thenReturn(authentication);
+      when(authentication.getPrincipal()).thenReturn(testUser);
+      when(apiKeyService.getUserApiKeys(testUser))
+        .thenThrow(new RuntimeException("Database connection failed"));
+
+      // Act
+      ResponseEntity<?> response = apiKeyApiDelegateImpl.listApiKeys();
+
+      // Assert
+      assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Test
+    @DisplayName("should handle exceptions during API key deletion")
+    void shouldHandleExceptionsDuringApiKeyDeletion() {
+      // Arrange
+      UUID keyId = UUID.randomUUID();
+      when(securityContext.getAuthentication()).thenReturn(authentication);
+      when(authentication.getPrincipal()).thenReturn(testUser);
+      when(apiKeyService.deleteApiKey(keyId, testUser))
+        .thenThrow(new RuntimeException("Database connection failed"));
+
+      // Act
+      ResponseEntity<Void> response = apiKeyApiDelegateImpl.deleteApiKey(keyId);
+
+      // Assert
+      assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
-  @Test
-  @WithMockUser("testuser")
-  void shouldListApiKeysWhenAuthenticated() throws Exception {
-    // Arrange
-    when(apiKeyService.getUserApiKeys(any(User.class))).thenReturn(List.of(testApiKey));
+  @Nested
+  @DisplayName("Business Logic Edge Cases")
+  class BusinessLogicEdgeCases {
 
-    // Act & Assert
-    mockMvc
-      .perform(get("/v1/auth/api-keys").with(user("testuser")))
-      .andExpect(status().isOk())
-      .andExpect(jsonPath("$").isArray())
-      .andExpect(jsonPath("$[0].id").value(testApiKey.getId().toString()))
-      .andExpect(jsonPath("$[0].name").value("Test API Key"))
-      .andExpect(jsonPath("$[0].prefix").value("oc_dev_"));
-  }
+    @Test
+    @DisplayName("should handle null expiration correctly")
+    void shouldHandleNullExpirationCorrectly() {
+      // Arrange
+      CreateApiKeyRequestDto request = new CreateApiKeyRequestDto()
+        .name("Permanent Key");
+      // expiresIn is null
 
-  @Test
-  void shouldReturnUnauthorizedWhenNotAuthenticatedForListApiKeys() throws Exception {
-    // Act & Assert
-    mockMvc.perform(get("/v1/auth/api-keys")).andExpect(status().isForbidden());
-  }
+      when(securityContext.getAuthentication()).thenReturn(authentication);
+      when(authentication.getPrincipal()).thenReturn(testUser);
+      when(apiKeyService.createApiKey(testUser, "Permanent Key", null)).thenReturn(testApiKey);
 
-  @Test
-  @WithMockUser("testuser")
-  void shouldDeleteApiKeyWhenValidRequest() throws Exception {
-    // Arrange
-    UUID keyId = UUID.randomUUID();
-    when(apiKeyService.deleteApiKey(eq(keyId), any(User.class))).thenReturn(true);
+      // Act
+      ResponseEntity<?> response = apiKeyApiDelegateImpl.createApiKey(request);
 
-    // Act & Assert
-    mockMvc
-      .perform(delete("/v1/auth/api-keys/{keyId}", keyId).with(user("testuser")))
-      .andExpect(status().isNoContent());
-  }
+      // Assert
+      assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+      verify(apiKeyService).createApiKey(testUser, "Permanent Key", null);
+    }
 
-  @Test
-  @WithMockUser("testuser")
-  void shouldReturnNotFoundWhenApiKeyNotFound() throws Exception {
-    // Arrange
-    UUID keyId = UUID.randomUUID();
-    when(apiKeyService.deleteApiKey(eq(keyId), any(User.class))).thenReturn(false);
+    @Test
+    @DisplayName("should handle empty API key list")
+    void shouldHandleEmptyApiKeyList() {
+      // Arrange
+      when(securityContext.getAuthentication()).thenReturn(authentication);
+      when(authentication.getPrincipal()).thenReturn(testUser);
+      when(apiKeyService.getUserApiKeys(testUser)).thenReturn(Collections.emptyList());
 
-    // Act & Assert
-    mockMvc
-      .perform(delete("/v1/auth/api-keys/{keyId}", keyId).with(user("testuser")))
-      .andExpect(status().isNotFound());
-  }
+      // Act
+      ResponseEntity<?> response = apiKeyApiDelegateImpl.listApiKeys();
 
-  @Test
-  void shouldReturnUnauthorizedWhenNotAuthenticatedForDeleteApiKey() throws Exception {
-    // Arrange
-    UUID keyId = UUID.randomUUID();
+      // Assert
+      assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+      verify(apiKeyService).getUserApiKeys(testUser);
+    }
 
-    // Act & Assert
-    mockMvc.perform(delete("/v1/auth/api-keys/{keyId}", keyId)).andExpect(status().isForbidden());
+    @Test
+    @DisplayName("should handle API key deletion when key not found")
+    void shouldHandleApiKeyDeletionWhenKeyNotFound() {
+      // Arrange
+      UUID keyId = UUID.randomUUID();
+      when(securityContext.getAuthentication()).thenReturn(authentication);
+      when(authentication.getPrincipal()).thenReturn(testUser);
+      when(apiKeyService.deleteApiKey(keyId, testUser)).thenReturn(false);
+
+      // Act
+      ResponseEntity<Void> response = apiKeyApiDelegateImpl.deleteApiKey(keyId);
+
+      // Assert
+      assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+      verify(apiKeyService).deleteApiKey(keyId, testUser);
+    }
+
+    @Test
+    @DisplayName("should handle successful API key deletion")
+    void shouldHandleSuccessfulApiKeyDeletion() {
+      // Arrange
+      UUID keyId = UUID.randomUUID();
+      when(securityContext.getAuthentication()).thenReturn(authentication);
+      when(authentication.getPrincipal()).thenReturn(testUser);
+      when(apiKeyService.deleteApiKey(keyId, testUser)).thenReturn(true);
+
+      // Act
+      ResponseEntity<Void> response = apiKeyApiDelegateImpl.deleteApiKey(keyId);
+
+      // Assert
+      assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+      verify(apiKeyService).deleteApiKey(keyId, testUser);
+    }
   }
 }
