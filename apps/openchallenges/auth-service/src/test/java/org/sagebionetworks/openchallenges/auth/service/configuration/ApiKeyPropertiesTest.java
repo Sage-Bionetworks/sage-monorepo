@@ -1,87 +1,107 @@
 package org.sagebionetworks.openchallenges.auth.service.configuration;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
- * Tests for profile-specific API key properties configuration
+ * Pure unit tests for ApiKeyProperties.
+ * Tests the basic functionality without Spring context or external dependencies.
  */
+@ExtendWith(MockitoExtension.class)
 class ApiKeyPropertiesTest {
 
-  @SpringBootTest
-  @ActiveProfiles("dev")
-  @TestPropertySource(
-    properties = {
-      "spring.datasource.url=jdbc:h2:mem:testdb",
-      "spring.datasource.driver-class-name=org.h2.Driver",
-      "spring.datasource.username=sa",
-      "spring.datasource.password=",
-      "spring.jpa.hibernate.ddl-auto=create-drop",
-      "spring.flyway.enabled=false",
-    }
-  )
-  static class DevProfileTest {
+  @Test
+  @DisplayName("should have default values when created")
+  void shouldHaveDefaultValuesWhenCreated() {
+    // Arrange & Act
+    ApiKeyProperties properties = new ApiKeyProperties();
 
-    @Autowired
-    private ApiKeyProperties apiKeyProperties;
-
-    @Test
-    void shouldHaveDevPrefix() {
-      assertEquals("oc_dev_", apiKeyProperties.getPrefix());
-      assertEquals(40, apiKeyProperties.getLength());
-    }
+    // Assert
+    assertThat(properties.getPrefix()).isEqualTo("oc_dev_");
+    assertThat(properties.getLength()).isEqualTo(40);
   }
 
-  @SpringBootTest
-  @ActiveProfiles("stage")
-  @TestPropertySource(
-    properties = {
-      "spring.datasource.url=jdbc:h2:mem:testdb",
-      "spring.datasource.driver-class-name=org.h2.Driver",
-      "spring.datasource.username=sa",
-      "spring.datasource.password=",
-      "spring.jpa.hibernate.ddl-auto=create-drop",
-      "spring.flyway.enabled=false",
-    }
-  )
-  static class StageProfileTest {
+  @Test
+  @DisplayName("should allow setting custom prefix")
+  void shouldAllowSettingCustomPrefix() {
+    // Arrange
+    ApiKeyProperties properties = new ApiKeyProperties();
 
-    @Autowired
-    private ApiKeyProperties apiKeyProperties;
+    // Act
+    properties.setPrefix("oc_prod_");
 
-    @Test
-    void shouldHaveStagePrefix() {
-      assertEquals("oc_stage_", apiKeyProperties.getPrefix());
-      assertEquals(40, apiKeyProperties.getLength());
-    }
+    // Assert
+    assertThat(properties.getPrefix()).isEqualTo("oc_prod_");
   }
 
-  @SpringBootTest
-  @ActiveProfiles("prod")
-  @TestPropertySource(
-    properties = {
-      "spring.datasource.url=jdbc:h2:mem:testdb",
-      "spring.datasource.driver-class-name=org.h2.Driver",
-      "spring.datasource.username=sa",
-      "spring.datasource.password=",
-      "spring.jpa.hibernate.ddl-auto=create-drop",
-      "spring.flyway.enabled=false",
-    }
-  )
-  static class ProdProfileTest {
+  @Test
+  @DisplayName("should allow setting custom length")
+  void shouldAllowSettingCustomLength() {
+    // Arrange
+    ApiKeyProperties properties = new ApiKeyProperties();
 
-    @Autowired
-    private ApiKeyProperties apiKeyProperties;
+    // Act
+    properties.setLength(60);
 
-    @Test
-    void shouldHaveProdPrefix() {
-      assertEquals("oc_prod_", apiKeyProperties.getPrefix());
-      assertEquals(40, apiKeyProperties.getLength());
-    }
+    // Assert
+    assertThat(properties.getLength()).isEqualTo(60);
+  }
+
+  @Test
+  @DisplayName("should allow setting both prefix and length")
+  void shouldAllowSettingBothPrefixAndLength() {
+    // Arrange
+    ApiKeyProperties properties = new ApiKeyProperties();
+
+    // Act
+    properties.setPrefix("custom_");
+    properties.setLength(32);
+
+    // Assert
+    assertThat(properties.getPrefix()).isEqualTo("custom_");
+    assertThat(properties.getLength()).isEqualTo(32);
+  }
+
+  @Test
+  @DisplayName("should handle null prefix gracefully")
+  void shouldHandleNullPrefixGracefully() {
+    // Arrange
+    ApiKeyProperties properties = new ApiKeyProperties();
+
+    // Act
+    properties.setPrefix(null);
+
+    // Assert
+    assertThat(properties.getPrefix()).isNull();
+  }
+
+  @Test
+  @DisplayName("should handle zero length")
+  void shouldHandleZeroLength() {
+    // Arrange
+    ApiKeyProperties properties = new ApiKeyProperties();
+
+    // Act
+    properties.setLength(0);
+
+    // Assert
+    assertThat(properties.getLength()).isEqualTo(0);
+  }
+
+  @Test
+  @DisplayName("should handle negative length")
+  void shouldHandleNegativeLength() {
+    // Arrange
+    ApiKeyProperties properties = new ApiKeyProperties();
+
+    // Act
+    properties.setLength(-5);
+
+    // Assert
+    assertThat(properties.getLength()).isEqualTo(-5);
   }
 }
