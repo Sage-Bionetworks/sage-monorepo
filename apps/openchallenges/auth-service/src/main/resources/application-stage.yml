@@ -1,0 +1,18 @@
+# Staging profile configuration
+spring:
+  jpa:
+    show-sql: false
+  datasource:
+    url: jdbc:postgresql://openchallenges-postgres-stage:8091/auth_service
+  flyway:
+    enabled: false
+
+openchallenges:
+  auth:
+    api-key:
+      prefix: oc_stage_
+      length: 40
+
+logging:
+  level:
+    org.sagebionetworks.openchallenges: INFO

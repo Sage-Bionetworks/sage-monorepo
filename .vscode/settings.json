@@ -97,6 +97,16 @@
       "database": "challenge_service",
       "username": "challenge_service",
       "password": "changeme"
+    },
+    {
+      "previewLimit": 50,
+      "server": "openchallenges-postgres",
+      "port": 8091,
+      "driver": "PostgreSQL",
+      "name": "openchallenges-auth-service",
+      "database": "auth_service",
+      "username": "auth_service",
+      "password": "changeme"
     }
   ],
   "terminal.integrated.showExitAlert": false,

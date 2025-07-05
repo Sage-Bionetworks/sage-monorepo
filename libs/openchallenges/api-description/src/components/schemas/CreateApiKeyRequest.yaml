@@ -1,0 +1,16 @@
+type: object
+required:
+  - name
+properties:
+  name:
+    type: string
+    description: Human-readable name for the API key
+    example: Production API Key
+    minLength: 1
+    maxLength: 100
+  expiresIn:
+    type: integer
+    description: Number of days until the API key expires (optional, default is no expiration)
+    example: 365
+    minimum: 1
+    maximum: 3650

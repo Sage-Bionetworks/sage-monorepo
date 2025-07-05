@@ -1,0 +1,25 @@
+delete:
+  tags:
+    - API Key
+  summary: Delete API key
+  description: Revoke an API key
+  operationId: deleteApiKey
+  security:
+    - apiBearerAuth: []
+  parameters:
+    - name: keyId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: The API key ID to delete
+  responses:
+    '204':
+      description: API key deleted successfully
+    '401':
+      $ref: ../../../components/responses/Unauthorized.yaml
+    '404':
+      $ref: ../../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../../components/responses/InternalServerError.yaml

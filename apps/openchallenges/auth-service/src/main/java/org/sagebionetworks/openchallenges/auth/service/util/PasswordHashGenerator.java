@@ -1,0 +1,25 @@
+package org.sagebionetworks.openchallenges.auth.service.util;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+public final class PasswordHashGenerator {
+
+  private static final Logger logger = LoggerFactory.getLogger(PasswordHashGenerator.class);
+
+  /**
+   * Private constructor to prevent instantiation of this utility class.
+   */
+  private PasswordHashGenerator() {
+    // Private constructor to prevent instantiation
+  }
+
+  public static void main(String[] args) {
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+
+    logger.info("admin123: {}", encoder.encode("admin123"));
+    logger.info("researcher123: {}", encoder.encode("researcher123"));
+    logger.info("changeme: {}", encoder.encode("changeme"));
+  }
+}

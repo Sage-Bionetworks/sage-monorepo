@@ -17,20 +17,23 @@ get:
       $ref: ../../components/responses/NotFound.yaml
     '500':
       $ref: ../../components/responses/InternalServerError.yaml
-# delete:
-#   tags:
-#     - User
-#   summary: Delete a user
-#   description: Deletes the user specified
-#   operationId: deleteUser
-#   responses:
-#     '200':
-#       description: Deleted
-#       content:
-#         application/json:
-#           schema:
-#             $ref: ../../components/schemas/EmptyObject.yaml
-#     '400':
-#       $ref: ../../components/responses/NotFound.yaml
-#     '500':
-#       $ref: ../../components/responses/InternalServerError.yaml
+delete:
+  tags:
+    - Organization
+  summary: Delete an organization
+  description: Deletes the organization specified
+  operationId: deleteOrganization
+  security:
+    - apiBearerAuth:
+        - organizations:delete
+  responses:
+    '204':
+      description: Organization successfully deleted
+    '401':
+      $ref: ../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml

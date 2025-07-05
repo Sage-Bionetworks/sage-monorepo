@@ -1,0 +1,28 @@
+{
+  "$schema": "../../../node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "7.14.0",
+    "generators": {
+      "openchallenges-auth-service": {
+        "generatorName": "spring",
+        "inputSpec": "#{cwd}/../../../libs/openchallenges/api-description/openapi/auth.openapi.yaml",
+        "output": "#{cwd}",
+        "additionalProperties": {
+          "apiPackage": "org.sagebionetworks.openchallenges.auth.service.api",
+          "basePackage": "org.sagebionetworks.openchallenges.auth.service",
+          "configPackage": "org.sagebionetworks.openchallenges.auth.service.configuration",
+          "delegatePattern": true,
+          "hideGenerationTimestamp": true,
+          "library": "spring-boot",
+          "modelNameSuffix": "Dto",
+          "modelPackage": "org.sagebionetworks.openchallenges.auth.service.model.dto",
+          "useTags": true,
+          "openApiNullable": false,
+          "useSpringBoot3": true,
+          "generateBuilders": true
+        }
+      }
+    }
+  }
+}

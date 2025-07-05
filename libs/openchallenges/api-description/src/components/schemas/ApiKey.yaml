@@ -1,0 +1,32 @@
+type: object
+properties:
+  id:
+    type: string
+    format: uuid
+    description: API key ID
+    example: 123e4567-e89b-12d3-a456-426614174000
+  name:
+    type: string
+    description: Human-readable name for the API key
+    example: Production API Key
+  prefix:
+    type: string
+    description: First 8 characters of the API key for identification
+    example: oc_prod_
+  createdAt:
+    type: string
+    format: date-time
+    description: When the API key was created
+    example: 2024-01-15T10:30:00Z
+  expiresAt:
+    type: string
+    format: date-time
+    description: When the API key expires (null if no expiration)
+    example: 2025-01-15T10:30:00Z
+    nullable: true
+  lastUsedAt:
+    type: string
+    format: date-time
+    description: When the API key was last used (null if never used)
+    example: 2024-06-15T14:20:00Z
+    nullable: true

@@ -41,6 +41,54 @@ public interface OrganizationApi {
     }
 
     /**
+     * DELETE /organizations/{org} : Delete an organization
+     * Deletes the organization specified
+     *
+     * @param org The id or login of the organization. (required)
+     * @return Organization successfully deleted (status code 204)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "deleteOrganization",
+        summary = "Delete an organization",
+        description = "Deletes the organization specified",
+        tags = { "Organization" },
+        responses = {
+            @ApiResponse(responseCode = "204", description = "Organization successfully deleted"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "apiBearerAuth", scopes={ "organizations:delete" })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.DELETE,
+        value = "/organizations/{org}",
+        produces = { "application/problem+json" }
+    )
+    
+    default ResponseEntity<Void> deleteOrganization(
+        @Size(min = 1, max = 64) @Parameter(name = "org", description = "The id or login of the organization.", required = true, in = ParameterIn.PATH) @PathVariable("org") String org
+    ) {
+        return getDelegate().deleteOrganization(org);
+    }
+
+
+    /**
      * GET /organizations/{org} : Get an organization
      * Returns the organization specified
      *
