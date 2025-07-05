@@ -39,19 +39,19 @@ class PasswordHashGeneratorTest {
   class MainMethodTests {
 
     @Test
-    @DisplayName("Should execute main method without throwing exceptions")
+    @DisplayName("should execute main method without throwing exceptions")
     void shouldExecuteMainMethodWithoutExceptions() {
       assertDoesNotThrow(() -> PasswordHashGenerator.main(new String[] {}));
     }
 
     @Test
-    @DisplayName("Should execute main method with arguments without throwing exceptions")
+    @DisplayName("should execute main method with arguments without throwing exceptions")
     void shouldExecuteMainMethodWithArgumentsWithoutExceptions() {
       assertDoesNotThrow(() -> PasswordHashGenerator.main(new String[] { "arg1", "arg2" }));
     }
 
     @Test
-    @DisplayName("Should generate and log password hashes for predefined passwords")
+    @DisplayName("should generate and log password hashes for predefined passwords")
     void shouldGenerateAndLogPasswordHashes() {
       // When
       PasswordHashGenerator.main(new String[] {});
@@ -71,7 +71,7 @@ class PasswordHashGeneratorTest {
     }
 
     @Test
-    @DisplayName("Should generate different hashes on each execution due to salt")
+    @DisplayName("should generate different hashes on each execution due to salt")
     void shouldGenerateDifferentHashesOnEachExecution() {
       // First execution
       PasswordHashGenerator.main(new String[] {});
@@ -98,7 +98,7 @@ class PasswordHashGeneratorTest {
   class BCryptIntegrationTests {
 
     @Test
-    @DisplayName("Should generate valid BCrypt hashes that can be verified")
+    @DisplayName("should generate valid BCrypt hashes that can be verified")
     void shouldGenerateValidBCryptHashes() {
       // Given
       BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
@@ -118,7 +118,7 @@ class PasswordHashGeneratorTest {
     }
 
     @Test
-    @DisplayName("Should use BCrypt strength of 12")
+    @DisplayName("should use BCrypt strength of 12")
     void shouldUseBCryptStrengthOf12() {
       // Execute the main method
       PasswordHashGenerator.main(new String[] {});
@@ -147,7 +147,7 @@ class PasswordHashGeneratorTest {
   class SecurityTests {
 
     @Test
-    @DisplayName("Should generate hashes with proper salt randomness")
+    @DisplayName("should generate hashes with proper salt randomness")
     void shouldGenerateHashesWithProperSaltRandomness() {
       BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
       String password = "testpassword";
@@ -169,7 +169,7 @@ class PasswordHashGeneratorTest {
     }
 
     @Test
-    @DisplayName("Should generate computationally expensive hashes")
+    @DisplayName("should generate computationally expensive hashes")
     void shouldGenerateComputationallyExpensiveHashes() {
       BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
       String password = "testpassword";
@@ -196,7 +196,7 @@ class PasswordHashGeneratorTest {
   class EdgeCaseTests {
 
     @Test
-    @DisplayName("Should handle empty password array gracefully")
+    @DisplayName("should handle empty password array gracefully")
     void shouldHandleEmptyPasswordArrayGracefully() {
       // This tests that the method completes normally even with no issues
       assertDoesNotThrow(() -> PasswordHashGenerator.main(null));
@@ -204,7 +204,7 @@ class PasswordHashGeneratorTest {
     }
 
     @Test
-    @DisplayName("Should handle special characters in passwords")
+    @DisplayName("should handle special characters in passwords")
     void shouldHandleSpecialCharactersInPasswords() {
       BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
       String[] specialPasswords = {
@@ -224,7 +224,7 @@ class PasswordHashGeneratorTest {
     }
 
     @Test
-    @DisplayName("Should handle very long passwords")
+    @DisplayName("should handle very long passwords")
     void shouldHandleVeryLongPasswords() {
       BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
@@ -243,7 +243,7 @@ class PasswordHashGeneratorTest {
     }
 
     @Test
-    @DisplayName("Should handle empty string password")
+    @DisplayName("should handle empty string password")
     void shouldHandleEmptyStringPassword() {
       BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
       String emptyPassword = "";
@@ -259,7 +259,7 @@ class PasswordHashGeneratorTest {
   class ConstructorTests {
 
     @Test
-    @DisplayName("Should have private constructor to prevent instantiation")
+    @DisplayName("should have private constructor to prevent instantiation")
     void shouldHavePrivateConstructorToPreventInstantiation() {
       // Use reflection to access the private constructor
       Constructor<?>[] constructors = PasswordHashGenerator.class.getDeclaredConstructors();
@@ -280,7 +280,7 @@ class PasswordHashGeneratorTest {
     }
 
     @Test
-    @DisplayName("Should prevent instantiation through new operator")
+    @DisplayName("should prevent instantiation through new operator")
     void shouldPreventInstantiationThroughNewOperator() {
       // This test documents that direct instantiation is not possible
       // (This would be a compile-time error, so we test via reflection)

@@ -77,7 +77,7 @@ class ApiKeyServiceTest {
   class ConstructorTests {
 
     @Test
-    @DisplayName("Should initialize all dependencies correctly")
+    @DisplayName("should initialize all dependencies correctly")
     void shouldInitializeAllDependenciesCorrectly() {
       // When
       ApiKeyService service = new ApiKeyService(
@@ -102,7 +102,7 @@ class ApiKeyServiceTest {
   class CreateApiKeyTests {
 
     @Test
-    @DisplayName("Should create API key with expiration")
+    @DisplayName("should create API key with expiration")
     void shouldCreateApiKeyWithExpiration() {
       // Arrange
       String name = "Test API Key";
@@ -136,7 +136,7 @@ class ApiKeyServiceTest {
     }
 
     @Test
-    @DisplayName("Should create API key without expiration")
+    @DisplayName("should create API key without expiration")
     void shouldCreateApiKeyWithoutExpiration() {
       // Arrange
       String name = "Permanent API Key";
@@ -165,7 +165,7 @@ class ApiKeyServiceTest {
     }
 
     @Test
-    @DisplayName("Should create API key with zero expiration days")
+    @DisplayName("should create API key with zero expiration days")
     void shouldCreateApiKeyWithZeroExpirationDays() {
       // Arrange
       String name = "No Expiration API Key";
@@ -190,7 +190,7 @@ class ApiKeyServiceTest {
     }
 
     @Test
-    @DisplayName("Should generate unique API keys on multiple calls")
+    @DisplayName("should generate unique API keys on multiple calls")
     void shouldGenerateUniqueApiKeysOnMultipleCalls() {
       // Arrange
       String name = "Test API Key";
@@ -222,7 +222,7 @@ class ApiKeyServiceTest {
   class GenerateApiKeyTests {
 
     @Test
-    @DisplayName("Should generate API key for login session without expiration")
+    @DisplayName("should generate API key for login session without expiration")
     void shouldGenerateApiKeyForLoginSessionWithoutExpiration() {
       // Arrange
       String name = "Login Session";
@@ -256,7 +256,7 @@ class ApiKeyServiceTest {
   class FindByKeyValueTests {
 
     @Test
-    @DisplayName("Should find API key by valid key value")
+    @DisplayName("should find API key by valid key value")
     void shouldFindApiKeyByValidKeyValue() {
       // Arrange
       String apiKeyValue = "oc_test_validkey123";
@@ -277,7 +277,7 @@ class ApiKeyServiceTest {
     }
 
     @Test
-    @DisplayName("Should return empty when API key not found")
+    @DisplayName("should return empty when API key not found")
     void shouldReturnEmptyWhenApiKeyNotFound() {
       // Arrange
       String apiKeyValue = "oc_test_invalidkey123";
@@ -301,7 +301,7 @@ class ApiKeyServiceTest {
   class UpdateLastUsedTests {
 
     @Test
-    @DisplayName("Should update last used timestamp")
+    @DisplayName("should update last used timestamp")
     void shouldUpdateLastUsedTimestamp() {
       // Arrange
       OffsetDateTime beforeUpdate = testApiKey.getLastUsedAt();
@@ -323,7 +323,7 @@ class ApiKeyServiceTest {
   class GetUserApiKeysTests {
 
     @Test
-    @DisplayName("Should return user's API keys ordered by creation date")
+    @DisplayName("should return user's API keys ordered by creation date")
     void shouldReturnUsersApiKeysOrderedByCreationDate() {
       // Arrange
       ApiKey apiKey1 = ApiKey.builder()
@@ -355,7 +355,7 @@ class ApiKeyServiceTest {
     }
 
     @Test
-    @DisplayName("Should return empty list when user has no API keys")
+    @DisplayName("should return empty list when user has no API keys")
     void shouldReturnEmptyListWhenUserHasNoApiKeys() {
       // Arrange
       when(apiKeyRepository.findByUserOrderByCreatedAtDesc(testUser)).thenReturn(List.of());
@@ -375,7 +375,7 @@ class ApiKeyServiceTest {
   class ValidateApiKeyTests {
 
     @Test
-    @DisplayName("Should validate API key successfully")
+    @DisplayName("should validate API key successfully")
     void shouldValidateApiKeySuccessfully() {
       // Arrange
       String apiKeyValue = "oc_test_validkey123";
@@ -404,7 +404,7 @@ class ApiKeyServiceTest {
     }
 
     @Test
-    @DisplayName("Should reject null API key")
+    @DisplayName("should reject null API key")
     void shouldRejectNullApiKey() {
       // Act
       Optional<ApiKey> result = apiKeyService.validateApiKey(null);
@@ -417,7 +417,7 @@ class ApiKeyServiceTest {
     }
 
     @Test
-    @DisplayName("Should reject API key without correct prefix")
+    @DisplayName("should reject API key without correct prefix")
     void shouldRejectApiKeyWithoutCorrectPrefix() {
       // Arrange
       String invalidApiKey = "invalid_prefix_key123";
@@ -433,7 +433,7 @@ class ApiKeyServiceTest {
     }
 
     @Test
-    @DisplayName("Should reject expired API key")
+    @DisplayName("should reject expired API key")
     void shouldRejectExpiredApiKey() {
       // Arrange
       String apiKeyValue = "oc_test_expiredkey123";
@@ -460,7 +460,7 @@ class ApiKeyServiceTest {
     }
 
     @Test
-    @DisplayName("Should handle API key without expiration")
+    @DisplayName("should handle API key without expiration")
     void shouldHandleApiKeyWithoutExpiration() {
       // Arrange
       String apiKeyValue = "oc_test_neverexpireskey123";
@@ -489,7 +489,7 @@ class ApiKeyServiceTest {
     }
 
     @Test
-    @DisplayName("Should handle multiple API keys and find correct match")
+    @DisplayName("should handle multiple API keys and find correct match")
     void shouldHandleMultipleApiKeysAndFindCorrectMatch() {
       // Arrange
       String apiKeyValue = "oc_test_correctkey123";
@@ -541,7 +541,7 @@ class ApiKeyServiceTest {
   class DeleteApiKeyTests {
 
     @Test
-    @DisplayName("Should delete API key when user owns it")
+    @DisplayName("should delete API key when user owns it")
     void shouldDeleteApiKeyWhenUserOwnsIt() {
       // Arrange
       UUID keyId = testApiKey.getId();
@@ -558,7 +558,7 @@ class ApiKeyServiceTest {
     }
 
     @Test
-    @DisplayName("Should not delete API key when user does not own it")
+    @DisplayName("should not delete API key when user does not own it")
     void shouldNotDeleteApiKeyWhenUserDoesNotOwnIt() {
       // Arrange
       UUID keyId = testApiKey.getId();
@@ -577,7 +577,7 @@ class ApiKeyServiceTest {
     }
 
     @Test
-    @DisplayName("Should not delete API key when it does not exist")
+    @DisplayName("should not delete API key when it does not exist")
     void shouldNotDeleteApiKeyWhenItDoesNotExist() {
       // Arrange
       UUID nonExistentKeyId = UUID.randomUUID();
@@ -599,7 +599,7 @@ class ApiKeyServiceTest {
   class CleanupExpiredApiKeysTests {
 
     @Test
-    @DisplayName("Should call repository to delete expired API keys")
+    @DisplayName("should call repository to delete expired API keys")
     void shouldCallRepositoryToDeleteExpiredApiKeys() {
       // Act
       apiKeyService.cleanupExpiredApiKeys();
@@ -619,7 +619,7 @@ class ApiKeyServiceTest {
   class ApiKeyGenerationTests {
 
     @Test
-    @DisplayName("Should generate API key with correct prefix")
+    @DisplayName("should generate API key with correct prefix")
     void shouldGenerateApiKeyWithCorrectPrefix() {
       // Arrange
       String hashedKey = "hashedkey";
@@ -643,7 +643,7 @@ class ApiKeyServiceTest {
     }
 
     @Test
-    @DisplayName("Should generate API key with correct length")
+    @DisplayName("should generate API key with correct length")
     void shouldGenerateApiKeyWithCorrectLength() {
       // Arrange
       when(apiKeyProperties.getLength()).thenReturn(32); // Different length for testing
@@ -664,7 +664,7 @@ class ApiKeyServiceTest {
     }
 
     @Test
-    @DisplayName("Should use custom prefix from properties")
+    @DisplayName("should use custom prefix from properties")
     void shouldUseCustomPrefixFromProperties() {
       // Arrange
       when(apiKeyProperties.getPrefix()).thenReturn("custom_prefix_");
@@ -690,7 +690,7 @@ class ApiKeyServiceTest {
   class EdgeCasesAndIntegrationTests {
 
     @Test
-    @DisplayName("Should handle empty API key database")
+    @DisplayName("should handle empty API key database")
     void shouldHandleEmptyApiKeyDatabase() {
       // Arrange
       String apiKeyValue = "oc_test_somekey123";
@@ -707,7 +707,7 @@ class ApiKeyServiceTest {
     }
 
     @Test
-    @DisplayName("Should handle API key validation with short key")
+    @DisplayName("should handle API key validation with short key")
     void shouldHandleApiKeyValidationWithShortKey() {
       // Arrange
       String shortKey = "oc_"; // Shorter than prefix
@@ -722,7 +722,7 @@ class ApiKeyServiceTest {
     }
 
     @Test
-    @DisplayName("Should properly update lastUsedAt during validation")
+    @DisplayName("should properly update lastUsedAt during validation")
     void shouldProperlyUpdateLastUsedAtDuringValidation() {
       // Arrange
       String apiKeyValue = "oc_test_validkey123";

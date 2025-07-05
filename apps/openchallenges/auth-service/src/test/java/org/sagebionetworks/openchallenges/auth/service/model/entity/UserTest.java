@@ -35,7 +35,7 @@ class UserTest {
   class BuilderTests {
 
     @Test
-    @DisplayName("Should create User with all fields using builder")
+    @DisplayName("should create User with all fields using builder")
     void shouldCreateUserWithAllFields() {
       UUID id = UUID.randomUUID();
       String username = "testuser";
@@ -68,7 +68,7 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("Should create User with minimum required fields and defaults")
+    @DisplayName("should create User with minimum required fields and defaults")
     void shouldCreateUserWithMinimumFieldsAndDefaults() {
       User result = User.builder().username("testuser").passwordHash("hashedpassword").build();
 
@@ -83,7 +83,7 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("Should create User with different roles")
+    @DisplayName("should create User with different roles")
     void shouldCreateUserWithDifferentRoles() {
       User adminUser = User.builder()
         .username("admin")
@@ -114,7 +114,7 @@ class UserTest {
   class NoArgsConstructorTests {
 
     @Test
-    @DisplayName("Should create empty User using no-args constructor")
+    @DisplayName("should create empty User using no-args constructor")
     void shouldCreateEmptyUser() {
       User result = new User();
 
@@ -134,7 +134,7 @@ class UserTest {
   class AllArgsConstructorTests {
 
     @Test
-    @DisplayName("Should create User using all-args constructor")
+    @DisplayName("should create User using all-args constructor")
     void shouldCreateUserWithAllArgsConstructor() {
       UUID id = UUID.randomUUID();
       String username = "testuser";
@@ -172,7 +172,7 @@ class UserTest {
   class GettersAndSettersTests {
 
     @Test
-    @DisplayName("Should get and set all properties correctly")
+    @DisplayName("should get and set all properties correctly")
     void shouldGetAndSetAllProperties() {
       User testUser = new User();
       UUID id = UUID.randomUUID();
@@ -209,7 +209,7 @@ class UserTest {
   class RoleEnumTests {
 
     @Test
-    @DisplayName("Should have all expected role values")
+    @DisplayName("should have all expected role values")
     void shouldHaveAllExpectedRoleValues() {
       User.Role[] roles = User.Role.values();
 
@@ -222,7 +222,7 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("Should convert role to string correctly")
+    @DisplayName("should convert role to string correctly")
     void shouldConvertRoleToStringCorrectly() {
       assertThat(User.Role.admin.toString()).isEqualTo("admin");
       assertThat(User.Role.user.toString()).isEqualTo("user");
@@ -230,7 +230,7 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("Should parse role from string correctly")
+    @DisplayName("should parse role from string correctly")
     void shouldParseRoleFromStringCorrectly() {
       assertThat(User.Role.valueOf("admin")).isEqualTo(User.Role.admin);
       assertThat(User.Role.valueOf("user")).isEqualTo(User.Role.user);
@@ -238,7 +238,7 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("Should set different roles on user")
+    @DisplayName("should set different roles on user")
     void shouldSetDifferentRolesOnUser() {
       user.setRole(User.Role.admin);
       assertThat(user.getRole()).isEqualTo(User.Role.admin);
@@ -256,7 +256,7 @@ class UserTest {
   class DefaultValuesTests {
 
     @Test
-    @DisplayName("Should have correct default role")
+    @DisplayName("should have correct default role")
     void shouldHaveCorrectDefaultRole() {
       User defaultUser = User.builder().username("test").passwordHash("pass").build();
 
@@ -264,7 +264,7 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("Should have correct default enabled value")
+    @DisplayName("should have correct default enabled value")
     void shouldHaveCorrectDefaultEnabledValue() {
       User defaultUser = User.builder().username("test").passwordHash("pass").build();
 
@@ -272,7 +272,7 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("Should have correct default apiKeys list")
+    @DisplayName("should have correct default apiKeys list")
     void shouldHaveCorrectDefaultApiKeysList() {
       User defaultUser = User.builder().username("test").passwordHash("pass").build();
 
@@ -282,7 +282,7 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("Should allow overriding default values")
+    @DisplayName("should allow overriding default values")
     void shouldAllowOverridingDefaultValues() {
       List<ApiKey> customApiKeys = new ArrayList<>();
 
@@ -305,7 +305,7 @@ class UserTest {
   class ApiKeysCollectionTests {
 
     @Test
-    @DisplayName("Should manage apiKeys collection correctly")
+    @DisplayName("should manage apiKeys collection correctly")
     void shouldManageApiKeysCollectionCorrectly() {
       ApiKey apiKey1 = ApiKey.builder()
         .id(UUID.randomUUID())
@@ -331,14 +331,14 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("Should handle empty apiKeys collection")
+    @DisplayName("should handle empty apiKeys collection")
     void shouldHandleEmptyApiKeysCollection() {
       assertThat(user.getApiKeys()).isEmpty();
       assertThat(user.getApiKeys()).isNotNull();
     }
 
     @Test
-    @DisplayName("Should allow setting new apiKeys collection")
+    @DisplayName("should allow setting new apiKeys collection")
     void shouldAllowSettingNewApiKeysCollection() {
       List<ApiKey> newApiKeys = new ArrayList<>();
       ApiKey apiKey = ApiKey.builder()
@@ -363,14 +363,14 @@ class UserTest {
   class EqualsAndHashCodeTests {
 
     @Test
-    @DisplayName("Should be equal to itself")
+    @DisplayName("should be equal to itself")
     void shouldBeEqualToItself() {
       assertThat(user).isEqualTo(user);
       assertThat(user.hashCode()).isEqualTo(user.hashCode());
     }
 
     @Test
-    @DisplayName("Should have consistent equals and hashCode behavior")
+    @DisplayName("should have consistent equals and hashCode behavior")
     void shouldHaveConsistentEqualsAndHashCodeBehavior() {
       // Create two users with the same core properties
       User user1 = User.builder()
@@ -404,19 +404,19 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("Should not be equal to null")
+    @DisplayName("should not be equal to null")
     void shouldNotBeEqualToNull() {
       assertThat(user).isNotEqualTo(null);
     }
 
     @Test
-    @DisplayName("Should not be equal to different type")
+    @DisplayName("should not be equal to different type")
     void shouldNotBeEqualToDifferentType() {
       assertThat(user).isNotEqualTo("string");
     }
 
     @Test
-    @DisplayName("Should not be equal to User with different id")
+    @DisplayName("should not be equal to User with different id")
     void shouldNotBeEqualToUserWithDifferentId() {
       User other = User.builder()
         .id(UUID.randomUUID()) // Different ID
@@ -430,7 +430,7 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("Should not be equal to User with different username")
+    @DisplayName("should not be equal to User with different username")
     void shouldNotBeEqualToUserWithDifferentUsername() {
       User other = User.builder()
         .id(user.getId())
@@ -449,7 +449,7 @@ class UserTest {
   class ToStringTests {
 
     @Test
-    @DisplayName("Should include class name in toString")
+    @DisplayName("should include class name in toString")
     void shouldIncludeClassNameInToString() {
       String toString = user.toString();
 
@@ -457,7 +457,7 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("Should include key properties in toString")
+    @DisplayName("should include key properties in toString")
     void shouldIncludeKeyPropertiesInToString() {
       String toString = user.toString();
 
@@ -468,7 +468,7 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("Should exclude apiKeys from toString")
+    @DisplayName("should exclude apiKeys from toString")
     void shouldExcludeApiKeysFromToString() {
       // Add some API keys to test exclusion
       ApiKey apiKey = ApiKey.builder()
@@ -487,7 +487,7 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("Should handle null values in toString")
+    @DisplayName("should handle null values in toString")
     void shouldHandleNullValuesInToString() {
       User nullUser = new User();
 
@@ -504,7 +504,7 @@ class UserTest {
   class SecurityAndValidationTests {
 
     @Test
-    @DisplayName("Should handle password hash securely")
+    @DisplayName("should handle password hash securely")
     void shouldHandlePasswordHashSecurely() {
       String passwordHash = "bcrypt$2a$10$hashedpassword";
       user.setPasswordHash(passwordHash);
@@ -516,7 +516,7 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("Should handle username constraints")
+    @DisplayName("should handle username constraints")
     void shouldHandleUsernameConstraints() {
       // Test various username formats
       user.setUsername("user123");
@@ -530,7 +530,7 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("Should handle enabled flag properly")
+    @DisplayName("should handle enabled flag properly")
     void shouldHandleEnabledFlagProperly() {
       user.setEnabled(true);
       assertThat(user.getEnabled()).isTrue();
@@ -548,7 +548,7 @@ class UserTest {
   class TimestampTests {
 
     @Test
-    @DisplayName("Should handle creation and update timestamps")
+    @DisplayName("should handle creation and update timestamps")
     void shouldHandleCreationAndUpdateTimestamps() {
       OffsetDateTime createdAt = OffsetDateTime.now().minusDays(5);
       OffsetDateTime updatedAt = OffsetDateTime.now().minusHours(1);
@@ -561,7 +561,7 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("Should handle null timestamps")
+    @DisplayName("should handle null timestamps")
     void shouldHandleNullTimestamps() {
       user.setCreatedAt(null);
       user.setUpdatedAt(null);
@@ -571,7 +571,7 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("Should handle very old and future timestamps")
+    @DisplayName("should handle very old and future timestamps")
     void shouldHandleVeryOldAndFutureTimestamps() {
       OffsetDateTime veryOld = OffsetDateTime.now().minusYears(50);
       OffsetDateTime farFuture = OffsetDateTime.now().plusYears(100);
@@ -589,7 +589,7 @@ class UserTest {
   class EdgeCasesTests {
 
     @Test
-    @DisplayName("Should handle empty string values")
+    @DisplayName("should handle empty string values")
     void shouldHandleEmptyStringValues() {
       user.setUsername("");
       user.setPasswordHash("");
@@ -599,7 +599,7 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("Should handle very long string values")
+    @DisplayName("should handle very long string values")
     void shouldHandleVeryLongStringValues() {
       String longUsername = "a".repeat(1000);
       String longPasswordHash = "b".repeat(1000);
@@ -612,7 +612,7 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("Should handle special characters in username")
+    @DisplayName("should handle special characters in username")
     void shouldHandleSpecialCharactersInUsername() {
       String specialUsername = "user@domain.com";
       user.setUsername(specialUsername);
@@ -621,7 +621,7 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("Should handle null collections gracefully")
+    @DisplayName("should handle null collections gracefully")
     void shouldHandleNullCollectionsGracefully() {
       user.setApiKeys(null);
 
@@ -629,7 +629,7 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("Should maintain apiKeys collection type")
+    @DisplayName("should maintain apiKeys collection type")
     void shouldMaintainApiKeysCollectionType() {
       assertThat(user.getApiKeys()).isInstanceOf(ArrayList.class);
 
@@ -645,7 +645,7 @@ class UserTest {
   class BusinessLogicTests {
 
     @Test
-    @DisplayName("Should correctly identify admin users")
+    @DisplayName("should correctly identify admin users")
     void shouldIdentifyAdminUsers() {
       User adminUser = User.builder()
         .username("admin")
@@ -671,7 +671,7 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("Should correctly identify active users")
+    @DisplayName("should correctly identify active users")
     void shouldIdentifyActiveUsers() {
       User enabledUser = User.builder()
         .username("enabled")
@@ -697,7 +697,7 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("Should correctly count API keys")
+    @DisplayName("should correctly count API keys")
     void shouldCountApiKeys() {
       User userWithNoKeys = User.builder()
         .username("nokeys")
@@ -726,7 +726,7 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("Should correctly determine if user has API keys")
+    @DisplayName("should correctly determine if user has API keys")
     void shouldDetermineIfUserHasApiKeys() {
       User userWithNoKeys = User.builder()
         .username("nokeys")

@@ -42,7 +42,7 @@ class ApiKeyTest {
   class BuilderTests {
 
     @Test
-    @DisplayName("Should create ApiKey with all fields using builder")
+    @DisplayName("should create ApiKey with all fields using builder")
     void shouldCreateApiKeyWithAllFields() {
       UUID id = UUID.randomUUID();
       String keyHash = "test_hash";
@@ -80,7 +80,7 @@ class ApiKeyTest {
     }
 
     @Test
-    @DisplayName("Should create ApiKey with minimum required fields")
+    @DisplayName("should create ApiKey with minimum required fields")
     void shouldCreateApiKeyWithMinimumFields() {
       ApiKey result = ApiKey.builder()
         .user(user)
@@ -104,7 +104,7 @@ class ApiKeyTest {
   class NoArgsConstructorTests {
 
     @Test
-    @DisplayName("Should create empty ApiKey using no-args constructor")
+    @DisplayName("should create empty ApiKey using no-args constructor")
     void shouldCreateEmptyApiKey() {
       ApiKey result = new ApiKey();
 
@@ -126,7 +126,7 @@ class ApiKeyTest {
   class AllArgsConstructorTests {
 
     @Test
-    @DisplayName("Should create ApiKey using all-args constructor")
+    @DisplayName("should create ApiKey using all-args constructor")
     void shouldCreateApiKeyWithAllArgsConstructor() {
       UUID id = UUID.randomUUID();
       String keyHash = "test_hash";
@@ -169,7 +169,7 @@ class ApiKeyTest {
   class GettersAndSettersTests {
 
     @Test
-    @DisplayName("Should get and set all properties correctly")
+    @DisplayName("should get and set all properties correctly")
     void shouldGetAndSetAllProperties() {
       ApiKey testKey = new ApiKey();
       UUID id = UUID.randomUUID();
@@ -215,7 +215,7 @@ class ApiKeyTest {
     class IsExpiredTests {
 
       @Test
-      @DisplayName("Should return false when expiresAt is null")
+      @DisplayName("should return false when expiresAt is null")
       void shouldReturnFalseWhenExpiresAtIsNull() {
         apiKey.setExpiresAt(null);
 
@@ -223,7 +223,7 @@ class ApiKeyTest {
       }
 
       @Test
-      @DisplayName("Should return false when expiresAt is in the future")
+      @DisplayName("should return false when expiresAt is in the future")
       void shouldReturnFalseWhenExpiresAtIsInFuture() {
         apiKey.setExpiresAt(OffsetDateTime.now().plusDays(1));
 
@@ -231,7 +231,7 @@ class ApiKeyTest {
       }
 
       @Test
-      @DisplayName("Should return true when expiresAt is in the past")
+      @DisplayName("should return true when expiresAt is in the past")
       void shouldReturnTrueWhenExpiresAtIsInPast() {
         apiKey.setExpiresAt(OffsetDateTime.now().minusDays(1));
 
@@ -239,7 +239,7 @@ class ApiKeyTest {
       }
 
       @Test
-      @DisplayName("Should return true when expiresAt is exactly now")
+      @DisplayName("should return true when expiresAt is exactly now")
       void shouldReturnTrueWhenExpiresAtIsNow() {
         // Set to a time slightly in the past to account for execution time
         apiKey.setExpiresAt(OffsetDateTime.now().minusNanos(1000));
@@ -253,7 +253,7 @@ class ApiKeyTest {
     class UpdateLastUsedTests {
 
       @Test
-      @DisplayName("Should update lastUsedAt to current time")
+      @DisplayName("should update lastUsedAt to current time")
       void shouldUpdateLastUsedAtToCurrentTime() {
         OffsetDateTime beforeUpdate = OffsetDateTime.now().minusSeconds(1);
         apiKey.setLastUsedAt(OffsetDateTime.now().minusHours(5));
@@ -266,7 +266,7 @@ class ApiKeyTest {
       }
 
       @Test
-      @DisplayName("Should update lastUsedAt when it was null")
+      @DisplayName("should update lastUsedAt when it was null")
       void shouldUpdateLastUsedAtWhenNull() {
         apiKey.setLastUsedAt(null);
         OffsetDateTime beforeUpdate = OffsetDateTime.now().minusSeconds(1);
@@ -280,7 +280,7 @@ class ApiKeyTest {
       }
 
       @Test
-      @DisplayName("Should update lastUsedAt to a newer time")
+      @DisplayName("should update lastUsedAt to a newer time")
       void shouldUpdateLastUsedAtToNewerTime() {
         OffsetDateTime originalTime = OffsetDateTime.now().minusHours(2);
         apiKey.setLastUsedAt(originalTime);
@@ -297,14 +297,14 @@ class ApiKeyTest {
   class EqualsAndHashCodeTests {
 
     @Test
-    @DisplayName("Should be equal to itself")
+    @DisplayName("should be equal to itself")
     void shouldBeEqualToItself() {
       assertThat(apiKey).isEqualTo(apiKey);
       assertThat(apiKey.hashCode()).isEqualTo(apiKey.hashCode());
     }
 
     @Test
-    @DisplayName("Should be equal to another ApiKey with same values")
+    @DisplayName("should be equal to another ApiKey with same values")
     void shouldBeEqualToAnotherApiKeyWithSameValues() {
       ApiKey other = ApiKey.builder()
         .id(apiKey.getId())
@@ -324,19 +324,19 @@ class ApiKeyTest {
     }
 
     @Test
-    @DisplayName("Should not be equal to null")
+    @DisplayName("should not be equal to null")
     void shouldNotBeEqualToNull() {
       assertThat(apiKey).isNotEqualTo(null);
     }
 
     @Test
-    @DisplayName("Should not be equal to different type")
+    @DisplayName("should not be equal to different type")
     void shouldNotBeEqualToDifferentType() {
       assertThat(apiKey).isNotEqualTo("string");
     }
 
     @Test
-    @DisplayName("Should not be equal to ApiKey with different id")
+    @DisplayName("should not be equal to ApiKey with different id")
     void shouldNotBeEqualToApiKeyWithDifferentId() {
       ApiKey other = ApiKey.builder()
         .id(UUID.randomUUID()) // Different ID
@@ -355,7 +355,7 @@ class ApiKeyTest {
   class ToStringTests {
 
     @Test
-    @DisplayName("Should include class name in toString")
+    @DisplayName("should include class name in toString")
     void shouldIncludeClassNameInToString() {
       String toString = apiKey.toString();
 
@@ -363,7 +363,7 @@ class ApiKeyTest {
     }
 
     @Test
-    @DisplayName("Should include key properties in toString")
+    @DisplayName("should include key properties in toString")
     void shouldIncludeKeyPropertiesInToString() {
       String toString = apiKey.toString();
 
@@ -374,7 +374,7 @@ class ApiKeyTest {
     }
 
     @Test
-    @DisplayName("Should handle null values in toString")
+    @DisplayName("should handle null values in toString")
     void shouldHandleNullValuesInToString() {
       ApiKey nullApiKey = new ApiKey();
 
@@ -390,7 +390,7 @@ class ApiKeyTest {
   class EntityRelationshipTests {
 
     @Test
-    @DisplayName("Should maintain user relationship")
+    @DisplayName("should maintain user relationship")
     void shouldMaintainUserRelationship() {
       assertThat(apiKey.getUser()).isNotNull();
       assertThat(apiKey.getUser()).isEqualTo(user);
@@ -399,7 +399,7 @@ class ApiKeyTest {
     }
 
     @Test
-    @DisplayName("Should allow setting different user")
+    @DisplayName("should allow setting different user")
     void shouldAllowSettingDifferentUser() {
       User newUser = User.builder()
         .id(UUID.randomUUID())
@@ -419,7 +419,7 @@ class ApiKeyTest {
   class TransientFieldTests {
 
     @Test
-    @DisplayName("Should handle plainKey as transient field")
+    @DisplayName("should handle plainKey as transient field")
     void shouldHandlePlainKeyAsTransientField() {
       String plainKeyValue = "test_plain_key_12345";
 
@@ -429,7 +429,7 @@ class ApiKeyTest {
     }
 
     @Test
-    @DisplayName("Should allow null plainKey")
+    @DisplayName("should allow null plainKey")
     void shouldAllowNullPlainKey() {
       apiKey.setPlainKey(null);
 
@@ -442,7 +442,7 @@ class ApiKeyTest {
   class EdgeCasesTests {
 
     @Test
-    @DisplayName("Should handle very long expiration dates")
+    @DisplayName("should handle very long expiration dates")
     void shouldHandleVeryLongExpirationDates() {
       OffsetDateTime farFuture = OffsetDateTime.now().plusYears(100);
       apiKey.setExpiresAt(farFuture);
@@ -452,7 +452,7 @@ class ApiKeyTest {
     }
 
     @Test
-    @DisplayName("Should handle very old creation dates")
+    @DisplayName("should handle very old creation dates")
     void shouldHandleVeryOldCreationDates() {
       OffsetDateTime veryOld = OffsetDateTime.now().minusYears(50);
       apiKey.setCreatedAt(veryOld);
@@ -461,7 +461,7 @@ class ApiKeyTest {
     }
 
     @Test
-    @DisplayName("Should handle empty string values")
+    @DisplayName("should handle empty string values")
     void shouldHandleEmptyStringValues() {
       apiKey.setKeyHash("");
       apiKey.setKeyPrefix("");

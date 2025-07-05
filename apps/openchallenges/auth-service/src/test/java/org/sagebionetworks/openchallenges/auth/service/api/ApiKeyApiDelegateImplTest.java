@@ -85,7 +85,7 @@ class ApiKeyApiDelegateImplTest {
 
   @Test
   @WithMockUser("testuser")
-  void createApiKey_ShouldCreateApiKey_WhenValidRequest() throws Exception {
+  void shouldCreateApiKeyWhenValidRequest() throws Exception {
     // Arrange
     CreateApiKeyRequestDto request = new CreateApiKeyRequestDto()
       .name("Test API Key")
@@ -111,7 +111,7 @@ class ApiKeyApiDelegateImplTest {
   }
 
   @Test
-  void createApiKey_ShouldReturnUnauthorized_WhenNotAuthenticated() throws Exception {
+  void shouldReturnUnauthorizedWhenNotAuthenticated() throws Exception {
     // Arrange
     CreateApiKeyRequestDto request = new CreateApiKeyRequestDto()
       .name("Test API Key")
@@ -129,7 +129,7 @@ class ApiKeyApiDelegateImplTest {
 
   @Test
   @WithMockUser("testuser")
-  void listApiKeys_ShouldReturnApiKeys_WhenAuthenticated() throws Exception {
+  void shouldListApiKeysWhenAuthenticated() throws Exception {
     // Arrange
     when(apiKeyService.getUserApiKeys(any(User.class))).thenReturn(List.of(testApiKey));
 
@@ -144,14 +144,14 @@ class ApiKeyApiDelegateImplTest {
   }
 
   @Test
-  void listApiKeys_ShouldReturnUnauthorized_WhenNotAuthenticated() throws Exception {
+  void shouldReturnUnauthorizedWhenNotAuthenticatedForListApiKeys() throws Exception {
     // Act & Assert
     mockMvc.perform(get("/v1/auth/api-keys")).andExpect(status().isForbidden());
   }
 
   @Test
   @WithMockUser("testuser")
-  void deleteApiKey_ShouldDeleteApiKey_WhenValidRequest() throws Exception {
+  void shouldDeleteApiKeyWhenValidRequest() throws Exception {
     // Arrange
     UUID keyId = UUID.randomUUID();
     when(apiKeyService.deleteApiKey(eq(keyId), any(User.class))).thenReturn(true);
@@ -164,7 +164,7 @@ class ApiKeyApiDelegateImplTest {
 
   @Test
   @WithMockUser("testuser")
-  void deleteApiKey_ShouldReturnNotFound_WhenApiKeyNotFound() throws Exception {
+  void shouldReturnNotFoundWhenApiKeyNotFound() throws Exception {
     // Arrange
     UUID keyId = UUID.randomUUID();
     when(apiKeyService.deleteApiKey(eq(keyId), any(User.class))).thenReturn(false);
@@ -176,7 +176,7 @@ class ApiKeyApiDelegateImplTest {
   }
 
   @Test
-  void deleteApiKey_ShouldReturnUnauthorized_WhenNotAuthenticated() throws Exception {
+  void shouldReturnUnauthorizedWhenNotAuthenticatedForDeleteApiKey() throws Exception {
     // Arrange
     UUID keyId = UUID.randomUUID();
 

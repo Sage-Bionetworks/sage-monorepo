@@ -85,7 +85,7 @@ class AuthenticationApiDelegateImplTest {
   // ========== Login Tests ==========
 
   @Test
-  void login_ShouldReturnSuccessResponse_WhenValidCredentials() {
+  void shouldReturnSuccessResponseWhenValidCredentials() {
     // Arrange
     when(userService.findByUsername("testuser")).thenReturn(Optional.of(testUser));
     when(passwordEncoder.matches("plainpassword", "hashedpassword")).thenReturn(true);
@@ -108,7 +108,7 @@ class AuthenticationApiDelegateImplTest {
   }
 
   @Test
-  void login_ShouldReturnUnauthorized_WhenUserNotFound() {
+  void shouldLoginReturnUnauthorizedWhenUserNotFound() {
     // Arrange
     when(userService.findByUsername("testuser")).thenReturn(Optional.empty());
 
@@ -125,7 +125,7 @@ class AuthenticationApiDelegateImplTest {
   }
 
   @Test
-  void login_ShouldReturnUnauthorized_WhenInvalidPassword() {
+  void shouldLoginReturnUnauthorizedWhenInvalidPassword() {
     // Arrange
     when(userService.findByUsername("testuser")).thenReturn(Optional.of(testUser));
     when(passwordEncoder.matches("plainpassword", "hashedpassword")).thenReturn(false);
@@ -143,7 +143,7 @@ class AuthenticationApiDelegateImplTest {
   }
 
   @Test
-  void login_ShouldReturnInternalServerError_WhenExceptionThrown() {
+  void shouldLoginReturnInternalServerErrorWhenExceptionThrown() {
     // Arrange
     when(userService.findByUsername("testuser")).thenThrow(new RuntimeException("Database error"));
 
@@ -158,7 +158,7 @@ class AuthenticationApiDelegateImplTest {
   }
 
   @Test
-  void login_ShouldHandleAdminRole_WhenUserIsAdmin() {
+  void shouldLoginHandleAdminRoleWhenUserIsAdmin() {
     // Arrange
     User adminUser = User.builder()
       .id(UUID.randomUUID())
@@ -185,7 +185,7 @@ class AuthenticationApiDelegateImplTest {
   }
 
   @Test
-  void login_ShouldHandleReadonlyRole_WhenUserIsReadonly() {
+  void shouldLoginHandleReadonlyRoleWhenUserIsReadonly() {
     // Arrange
     User readonlyUser = User.builder()
       .id(UUID.randomUUID())
@@ -214,7 +214,7 @@ class AuthenticationApiDelegateImplTest {
   // ========== Validate API Key Tests ==========
 
   @Test
-  void validateApiKey_ShouldReturnValidResponse_WhenValidApiKey() {
+  void shouldValidateApiKeyReturnValidResponseWhenValidApiKey() {
     // Arrange
     when(apiKeyService.findByKeyValue("oc_dev_1234567890abcdef")).thenReturn(Optional.of(testApiKey));
 
@@ -240,7 +240,7 @@ class AuthenticationApiDelegateImplTest {
   }
 
   @Test
-  void validateApiKey_ShouldReturnInvalidResponse_WhenApiKeyNotFound() {
+  void shouldValidateApiKeyReturnInvalidResponseWhenApiKeyNotFound() {
     // Arrange
     when(apiKeyService.findByKeyValue("oc_dev_1234567890abcdef")).thenReturn(Optional.empty());
 
@@ -259,7 +259,7 @@ class AuthenticationApiDelegateImplTest {
   }
 
   @Test
-  void validateApiKey_ShouldReturnInvalidResponse_WhenApiKeyExpired() {
+  void shouldValidateApiKeyReturnInvalidResponseWhenApiKeyExpired() {
     // Arrange
     ApiKey expiredApiKey = ApiKey.builder()
       .id(UUID.randomUUID())
@@ -288,7 +288,7 @@ class AuthenticationApiDelegateImplTest {
   }
 
   @Test
-  void validateApiKey_ShouldReturnUnauthorized_WhenApiKeyIsNull() {
+  void shouldValidateApiKeyReturnUnauthorizedWhenApiKeyIsNull() {
     // Arrange
     ValidateApiKeyRequestDto nullApiKeyRequest = new ValidateApiKeyRequestDto().apiKey(null);
 
@@ -305,7 +305,7 @@ class AuthenticationApiDelegateImplTest {
   }
 
   @Test
-  void validateApiKey_ShouldReturnUnauthorized_WhenApiKeyIsEmpty() {
+  void shouldValidateApiKeyReturnUnauthorizedWhenApiKeyIsEmpty() {
     // Arrange
     ValidateApiKeyRequestDto emptyApiKeyRequest = new ValidateApiKeyRequestDto().apiKey("");
 
@@ -322,7 +322,7 @@ class AuthenticationApiDelegateImplTest {
   }
 
   @Test
-  void validateApiKey_ShouldReturnUnauthorized_WhenApiKeyIsWhitespace() {
+  void shouldValidateApiKeyReturnUnauthorizedWhenApiKeyIsWhitespace() {
     // Arrange
     ValidateApiKeyRequestDto whitespaceApiKeyRequest = new ValidateApiKeyRequestDto().apiKey("   ");
 
@@ -339,7 +339,7 @@ class AuthenticationApiDelegateImplTest {
   }
 
   @Test
-  void validateApiKey_ShouldReturnInternalServerError_WhenExceptionThrown() {
+  void shouldValidateApiKeyReturnInternalServerErrorWhenExceptionThrown() {
     // Arrange
     when(apiKeyService.findByKeyValue("oc_dev_1234567890abcdef"))
       .thenThrow(new RuntimeException("Database error"));
@@ -357,7 +357,7 @@ class AuthenticationApiDelegateImplTest {
   }
 
   @Test
-  void validateApiKey_ShouldReturnValidResponseWithAdminScopes_WhenUserIsAdmin() {
+  void shouldValidateApiKeyReturnValidResponseWithAdminScopesWhenUserIsAdmin() {
     // Arrange
     User adminUser = User.builder()
       .id(UUID.randomUUID())
@@ -401,7 +401,7 @@ class AuthenticationApiDelegateImplTest {
   }
 
   @Test
-  void validateApiKey_ShouldReturnValidResponseWithReadonlyScopes_WhenUserIsReadonly() {
+  void shouldValidateApiKeyReturnValidResponseWithReadonlyScopesWhenUserIsReadonly() {
     // Arrange
     User readonlyUser = User.builder()
       .id(UUID.randomUUID())
@@ -436,7 +436,7 @@ class AuthenticationApiDelegateImplTest {
   }
 
   @Test
-  void validateApiKey_ShouldHandleApiKeyWithoutExpiration() {
+  void shouldValidateApiKeyHandleApiKeyWithoutExpiration() {
     // Arrange
     ApiKey neverExpiresApiKey = ApiKey.builder()
       .id(UUID.randomUUID())
@@ -466,7 +466,7 @@ class AuthenticationApiDelegateImplTest {
   // ========== Edge Cases and Integration Tests ==========
 
   @Test
-  void validateApiKey_ShouldHandleUnknownRole() {
+  void shouldValidateApiKeyHandleUnknownRole() {
     // This test covers the default case in the switch statement for scopes
     // We can't directly test this without adding an unknown role to the enum,
     // but we can test with a mock that returns a string representation
@@ -495,7 +495,7 @@ class AuthenticationApiDelegateImplTest {
   }
 
   @Test
-  void constructor_ShouldInitializeAllDependencies() {
+  void shouldConstructorInitializeAllDependencies() {
     // This test ensures the constructor properly assigns all dependencies
     // and helps with constructor coverage
     UserService mockUserService = mock(UserService.class);
