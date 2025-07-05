@@ -11,7 +11,7 @@ services:
       - '8084:8084'
     depends_on:
       openchallenges-auth-service:
-        condition: service_healthy
+        condition: service_started
       openchallenges-config-server:
         condition: service_healthy
       openchallenges-image-service:
