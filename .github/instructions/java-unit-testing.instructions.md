@@ -94,41 +94,41 @@ cd /workspaces/sage-monorepo/apps/amp-als/user-service
 
 ### Running Specific Tests
 
-When running tests from a Java subproject, use the `--info` flag with Gradle to improve Copilot context. Use `--rerun-tasks` to bypass cache and force test execution:
+When running tests from a Java subproject, use targeted commands to minimize execution time and get meaningful feedback:
 
 ```bash
-# Run all tests (unit + integration)
-./gradlew test --info
+# RECOMMENDED: Start with specific test class to identify issues quickly
+./gradlew test --tests "*YourTestClass*" --stacktrace --no-daemon --console=plain
 
-# Run all tests bypassing cache
-./gradlew test --rerun-tasks --info
+# If tests fail, use --rerun-tasks to bypass cache
+./gradlew test --tests "*YourTestClass*" --rerun-tasks --stacktrace --no-daemon --console=plain
 
-# Run only unit tests (fast, no Spring context)
-./gradlew testUnit --info
+# After fixes, verify all unit tests pass
+./gradlew testUnit --no-daemon --console=plain
 
-# Run only integration tests (slow, full Spring context)
-./gradlew testIntegration --info
-
-# Run specific test class
-./gradlew test --tests "*UserServiceTest*" --info
-
-# Run specific test class bypassing cache
-./gradlew test --tests "*UserServiceTest*" --rerun-tasks --info
-
-# Run specific test method
-./gradlew test --tests "*UserServiceTest.shouldReturnUserWhenAuthenticationIsSuccessful*" --info
+# Finally, verify integration tests still work
+./gradlew testIntegration --no-daemon --console=plain
 ```
+
+**Efficient Testing Strategy:**
+
+1. **Target specific test class first** - Don't run all tests initially
+2. **Use `--stacktrace` for failures** - Gets full error details immediately
+3. **Use `--no-daemon --console=plain`** - Avoids terminal environment issues
+4. **Only use `--rerun-tasks` when needed** - When you suspect cache issues
+5. **Avoid redundant compilation checks** - `test` task includes compilation
 
 **Test Separation:**
 
 - **Unit tests** (`testUnit`): Fast execution, no Spring context, use `@ExtendWith(MockitoExtension.class)`
 - **Integration tests** (`testIntegration`): Slower execution, full Spring context, use `@SpringBootTest` and `@Tag("integration")`
 
-This gives Copilot more visibility into:
+**Command Execution Tips:**
 
-- The test execution flow
-- Failures and stack traces
-- Which test classes and methods are running
+- **One targeted command is better than multiple broad ones**
+- **Full stacktrace on first failure reveals root cause immediately**
+- **Don't check compilation separately - test task will catch compile errors**
+- **Use plain console output to avoid terminal formatting issues**
 
 ## Copilot Prompt Examples
 
