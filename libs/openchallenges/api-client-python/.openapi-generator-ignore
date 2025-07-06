@@ -21,3 +21,13 @@
 #docs/*.md
 # Then explicitly reverse the ignore rule for a single file:
 #!docs/README.md
+.github/
+.gitignore
+.gitlab-ci.yml
+.travis.yml
+git_push.sh
+pyproject.toml
+README.md
+requirements.txt
+setup.cfg
+test-requirements.txt
