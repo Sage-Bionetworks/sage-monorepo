@@ -8,16 +8,27 @@ authors = [
 ]
 requires-python = "==3.13.3"
 dependencies = [
+    "urllib3>=2.1.0,<3.0.0",
+    "python-dateutil>=2.8.2",
+    "pydantic>=2",
+    "typing-extensions>=4.7.1",
 ]
 name = "openchallenges-client"
 version = "0.1.0"
-description = "An example Python project for testing observability features."
+description = "OpenAPI client for OpenChallenges API"
 readme = "README.md"
 
 [dependency-groups]
-dev = []
-prod = []
-test = []
+dev = [
+    "flake8>=4.0.0",
+    "mypy>=1.5",
+    "tox>=3.9.0",
+]
+test = [
+    "pytest>=7.2.1",
+    "pytest-cov>=2.8.1",
+    "types-python-dateutil>=2.8.19.14",
+]
 
 [tool.uv]
-default-groups = []
+default-groups = ["dev", "test"]
