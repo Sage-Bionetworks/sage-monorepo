@@ -17,7 +17,7 @@ requires = [ "pdm-backend" ]
 build-backend = "pdm.backend"
 
 [project]
-requires-python = "==3.10.14"
+requires-python = "==3.13.3"
 dependencies = [ "openchallenges_tools" ]
 name = "sage-monorepo"
 version = "1.0.0"
