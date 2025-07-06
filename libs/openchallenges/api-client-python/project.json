@@ -10,6 +10,15 @@
         "command": "uv sync",
         "cwd": "{projectRoot}"
       }
+    },
+    "generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["openapi-generator-cli generate", "echo 'TODO Format generated code'"],
+        "cwd": "{projectRoot}",
+        "parallel": false
+      },
+      "dependsOn": ["^build"]
     }
   },
   "tags": ["type:library", "language:python", "package-manager:uv"]
