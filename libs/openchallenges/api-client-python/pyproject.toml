@@ -13,9 +13,9 @@ dependencies = [
     "pydantic>=2",
     "typing-extensions>=4.7.1",
 ]
-name = "openchallenges-client"
+name = "openchallenges"
 version = "0.1.0"
-description = "OpenAPI client for OpenChallenges API"
+description = "Discover, explore, and contribute to open biomedical challenges"
 readme = "README.md"
 
 [dependency-groups]
