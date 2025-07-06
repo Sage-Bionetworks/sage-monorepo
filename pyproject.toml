@@ -9,8 +9,14 @@ sql_file_exts = ".sql"
 [tool.uv.sources.openchallenges_tools]
 workspace = true
 
+[tool.uv.sources.openchallenges-api-client-python]
+workspace = true
+
 [tool.uv.workspace]
-members = [ "apps/openchallenges/tools" ]
+members = [
+  "apps/openchallenges/tools",
+  "libs/openchallenges/api-client-python"
+]
 
 [build-system]
 requires = [ "pdm-backend" ]
@@ -18,7 +24,7 @@ build-backend = "pdm.backend"
 
 [project]
 requires-python = "==3.13.3"
-dependencies = [ "openchallenges_tools" ]
+dependencies = [ "openchallenges_tools", "openchallenges-api-client-python" ]
 name = "sage-monorepo"
 version = "1.0.0"
 description = ""
