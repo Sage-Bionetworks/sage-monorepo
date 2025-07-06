@@ -19,8 +19,8 @@ sitemap.xml
 # compiled output
 /**/bin
 /**/dist
-/tmp
 /out-tsc
+tmp/
 
 # dependencies
 **/node_modules

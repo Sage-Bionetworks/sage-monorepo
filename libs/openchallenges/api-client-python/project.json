@@ -14,7 +14,11 @@
     "generate": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["openapi-generator-cli generate", "echo 'TODO Format generated code'"],
+        "commands": [
+          "rm -fr openchallenges/*",
+          "openapi-generator-cli generate",
+          "echo 'TODO: Format generated code'"
+        ],
         "cwd": "{projectRoot}",
         "parallel": false
       },
