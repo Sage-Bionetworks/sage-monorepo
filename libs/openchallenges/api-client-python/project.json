@@ -15,7 +15,7 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "rm -fr openchallenges/*",
+          "xargs rm -fr <.openapi-generator/FILES",
           "openapi-generator-cli generate",
           "echo 'TODO: Format generated code'"
         ],
