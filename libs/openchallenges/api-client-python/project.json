@@ -1,0 +1,16 @@
+{
+  "name": "openchallenges-api-client-python",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/openchallenges/api-client-python/src",
+  "projectType": "library",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "uv sync",
+        "cwd": "{projectRoot}"
+      }
+    }
+  },
+  "tags": ["type:library", "language:python", "package-manager:uv"]
+}
