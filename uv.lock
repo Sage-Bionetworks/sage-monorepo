@@ -189,6 +189,12 @@ source = { editable = "libs/openchallenges/api-client-python" }
 name = "openchallenges-tools"
 version = "1.0.0"
 source = { editable = "apps/openchallenges/tools" }
+dependencies = [
+    { name = "openchallenges-api-client-python" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "openchallenges-api-client-python", editable = "libs/openchallenges/api-client-python" }]
 
 [[package]]
 name = "packaging"
