@@ -23,6 +23,11 @@
         "parallel": false
       },
       "dependsOn": ["^build"]
+    },
+    "release": {
+      "version": {
+        "generator": "@nxlv/python:release-version"
+      }
     }
   },
   "tags": ["type:library", "language:python", "package-manager:uv"]
