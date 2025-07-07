@@ -87,7 +87,7 @@
         "commands": [
           "xargs rm -fr <.openapi-generator/FILES",
           "openapi-generator-cli generate",
-          "echo 'TODO: Format generated code'"
+          "nx run format"
         ],
         "cwd": "{projectRoot}",
         "parallel": false

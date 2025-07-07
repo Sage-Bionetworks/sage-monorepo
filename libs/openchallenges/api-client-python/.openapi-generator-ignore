@@ -25,10 +25,11 @@
 .gitignore
 .gitlab-ci.yml
 .travis.yml
+# README.md
 git_push.sh
 pyproject.toml
-README.md
 requirements.txt
 setup.cfg
 setup.py
 test-requirements.txt
+tox.ini

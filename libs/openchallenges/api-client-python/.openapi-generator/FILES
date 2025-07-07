@@ -1,3 +1,4 @@
+README.md
 docs/BasicError.md
 docs/Challenge.md
 docs/ChallengeAnalyticsApi.md
@@ -110,4 +111,3 @@ openchallenges_api_client_python/models/users_page.py
 openchallenges_api_client_python/py.typed
 openchallenges_api_client_python/rest.py
 test/__init__.py
-tox.ini
