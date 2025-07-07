@@ -73,6 +73,13 @@
         "verbose": false,
         "debug": false
       }
+    },
+    "run-python-version": {
+      "executor": "@nxlv/python:run-commands",
+      "options": {
+        "command": "python --version",
+        "cwd": "{projectRoot}"
+      }
     }
   },
   "tags": ["language:python", "package-manager:uv"],
