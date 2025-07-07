@@ -53,18 +53,18 @@
       },
       "cache": true
     },
-    // "test": {
-    //   "executor": "@nxlv/python:run-commands",
-    //   "outputs": [
-    //     "{workspaceRoot}/reports/{projectRoot}/unittests",
-    //     "{workspaceRoot}/coverage/{projectRoot}"
-    //   ],
-    //   "options": {
-    //     "command": "uv run pytest tests/",
-    //     "cwd": "{projectRoot}"
-    //   },
-    //   "cache": true
-    // },
+    "test": {
+      "executor": "@nxlv/python:run-commands",
+      "outputs": [
+        "{workspaceRoot}/reports/{projectRoot}/unittests",
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "command": "uv run pytest test/",
+        "cwd": "{projectRoot}"
+      },
+      "cache": true
+    },
     "install": {
       "executor": "@nxlv/python:install",
       "options": {
@@ -80,6 +80,19 @@
         "command": "python --version",
         "cwd": "{projectRoot}"
       }
+    },
+    "generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "xargs rm -fr <.openapi-generator/FILES",
+          "openapi-generator-cli generate",
+          "echo 'TODO: Format generated code'"
+        ],
+        "cwd": "{projectRoot}",
+        "parallel": false
+      },
+      "dependsOn": ["^build"]
     }
   },
   "tags": ["language:python", "package-manager:uv"],

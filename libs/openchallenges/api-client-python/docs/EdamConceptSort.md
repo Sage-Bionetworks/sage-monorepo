@@ -1,0 +1,13 @@
+# EdamConceptSort
+
+What to sort results by.
+
+## Enum
+
+* `PREFERRED_LABEL` (value: `'preferred_label'`)
+
+* `RELEVANCE` (value: `'relevance'`)
+
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+
