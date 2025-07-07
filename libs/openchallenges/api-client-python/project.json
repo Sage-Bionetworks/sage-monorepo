@@ -85,7 +85,7 @@
   "tags": ["language:python", "package-manager:uv"],
   "release": {
     "version": {
-      "generator": "@nxlv/python:release-version"
+      "versionActions": "@nxlv/python/src/release/version-actions"
     }
   }
 }
