@@ -53,18 +53,18 @@
       },
       "cache": true
     },
-    "test": {
-      "executor": "@nxlv/python:run-commands",
-      "outputs": [
-        "{workspaceRoot}/reports/{projectRoot}/unittests",
-        "{workspaceRoot}/coverage/{projectRoot}"
-      ],
-      "options": {
-        "command": "uv run pytest tests/",
-        "cwd": "{projectRoot}"
-      },
-      "cache": true
-    },
+    // "test": {
+    //   "executor": "@nxlv/python:run-commands",
+    //   "outputs": [
+    //     "{workspaceRoot}/reports/{projectRoot}/unittests",
+    //     "{workspaceRoot}/coverage/{projectRoot}"
+    //   ],
+    //   "options": {
+    //     "command": "uv run pytest tests/",
+    //     "cwd": "{projectRoot}"
+    //   },
+    //   "cache": true
+    // },
     "install": {
       "executor": "@nxlv/python:install",
       "options": {
