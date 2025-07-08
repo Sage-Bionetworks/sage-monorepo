@@ -1,9 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
+import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/constants';
 import { MetaTagService } from '@sagebionetworks/explorers/services';
 import { FooterComponent, HeaderComponent } from '@sagebionetworks/explorers/ui';
-import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/util';
 import { Dataversion, DataversionService } from '@sagebionetworks/model-ad/api-client-angular';
 import { ConfigService, MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
 import { footerLinks, headerLinks } from '@sagebionetworks/model-ad/util';
