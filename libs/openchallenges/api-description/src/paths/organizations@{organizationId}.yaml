@@ -29,7 +29,7 @@ delete:
   description: Deletes the organization specified
   operationId: deleteOrganization
   security:
-    - ApiKeyAuth: []
+    - apiKeyAuth: []
   responses:
     '200':
       description: Success

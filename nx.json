@@ -79,6 +79,11 @@
     },
     "@schematics/angular:resolver": {
       "typeSeparator": "."
+    },
+    "@nxlv/python:uv-project": {
+      "codeCoverageHtmlReport": true,
+      "codeCoverageThreshold": 100,
+      "useNxReleaseLegacyVersioning": false
     }
   },
   "defaultProject": "openchallenges-app",
