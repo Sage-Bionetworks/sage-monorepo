@@ -18,7 +18,7 @@
         "cwd": "{projectRoot}"
       }
     },
-    "test-integration": {
+    "integration-test": {
       "executor": "nx:run-commands",
       "options": {
         "command": "uv run pytest tests/integration",
