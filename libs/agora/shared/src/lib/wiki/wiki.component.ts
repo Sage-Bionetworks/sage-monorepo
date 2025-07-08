@@ -11,7 +11,7 @@ import {
 import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 import { SynapseWiki } from '@sagebionetworks/agora/models';
 import { SynapseApiService } from '@sagebionetworks/agora/services';
-import { LoadingIconComponent } from '@sagebionetworks/agora/shared';
+import { LoadingIconComponent } from '../loading-icon/loading-icon.component';
 
 @Component({
   selector: 'agora-wiki',

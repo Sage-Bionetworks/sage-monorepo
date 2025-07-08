@@ -6,6 +6,7 @@ import { SvgIconService } from '@sagebionetworks/agora/services';
 
 @Component({
   selector: 'agora-svg-icon',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './svg-icon.component.html',
   styleUrls: ['./svg-icon.component.scss'],
@@ -24,7 +25,6 @@ export class SvgIconComponent implements OnInit {
   svgService = inject(SvgIconService);
 
   svgContent: SafeHtml | null = null;
-  private static svgCache = new Map<string, SafeHtml>();
 
   className = 'svg-icon';
 

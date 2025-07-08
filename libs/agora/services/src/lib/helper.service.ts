@@ -1,14 +1,6 @@
-// -------------------------------------------------------------------------- //
-// External
-// -------------------------------------------------------------------------- //
 import { HttpParams } from '@angular/common/http';
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { round } from 'lodash';
-
-// -------------------------------------------------------------------------- //
-// Internal
-// -------------------------------------------------------------------------- //
-// N/A
 
 declare global {
   interface Navigator {
@@ -16,9 +8,6 @@ declare global {
   }
 }
 
-// -------------------------------------------------------------------------- //
-// Service
-// -------------------------------------------------------------------------- //
 @Injectable({
   providedIn: 'root',
 })
@@ -183,6 +172,8 @@ export class HelperService {
   }
 
   getUrlParam(name: string) {
+    if (typeof window === 'undefined') return null;
+
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     return urlParams.get(name);

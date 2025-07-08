@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
   AfterViewChecked,
   AfterViewInit,
@@ -7,6 +7,7 @@ import {
   inject,
   input,
   output,
+  PLATFORM_ID,
 } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
@@ -22,6 +23,7 @@ import { HelperService } from '@sagebionetworks/explorers/services';
 })
 export class PanelNavigationComponent implements AfterViewInit, AfterViewChecked {
   helperService = inject(HelperService);
+  private readonly platformId: Record<string, any> = inject(PLATFORM_ID);
 
   panels = input.required<Panel[]>();
   activePanel = input.required<string>();
@@ -36,36 +38,40 @@ export class PanelNavigationComponent implements AfterViewInit, AfterViewChecked
 
   @HostListener('window:scroll', ['$event'])
   onWindowScroll() {
-    const nav = document.querySelector<HTMLElement>('.panel-navigation');
-    const rect = nav?.getBoundingClientRect();
+    if (isPlatformBrowser(this.platformId)) {
+      const nav = document.querySelector<HTMLElement>('.panel-navigation');
+      const rect = nav?.getBoundingClientRect();
 
-    if (rect && rect.y <= 0) {
-      nav?.classList.add('sticky');
-    } else {
-      nav?.classList.remove('sticky');
+      if (rect && rect.y <= 0) {
+        nav?.classList.add('sticky');
+      } else {
+        nav?.classList.remove('sticky');
+      }
     }
   }
 
   @HostListener('window:resize', ['$event'])
   onWindowResize() {
-    const nav = document.querySelector<HTMLElement>('.panel-navigation');
-    const navContainer = nav?.querySelector<HTMLElement>('.panel-navigation-container');
-    const navList = nav?.querySelector<HTMLElement>('.panel-navigation-container > ul');
-    const navItems = nav?.querySelectorAll<HTMLElement>('.panel-navigation-container > ul > li');
-    let navItemsWidth = 0;
-    if (navItems) {
-      for (const element of Array.from(navItems)) {
-        navItemsWidth += element.offsetWidth;
+    if (isPlatformBrowser(this.platformId)) {
+      const nav = document.querySelector<HTMLElement>('.panel-navigation');
+      const navContainer = nav?.querySelector<HTMLElement>('.panel-navigation-container');
+      const navList = nav?.querySelector<HTMLElement>('.panel-navigation-container > ul');
+      const navItems = nav?.querySelectorAll<HTMLElement>('.panel-navigation-container > ul > li');
+      let navItemsWidth = 0;
+      if (navItems) {
+        for (const element of Array.from(navItems)) {
+          navItemsWidth += element.offsetWidth;
+        }
       }
-    }
 
-    if (navContainer && navList && navItemsWidth) {
-      if (navItemsWidth > navContainer.offsetWidth) {
-        nav?.classList.add('scrollable');
-      } else {
-        nav?.classList.remove('scrollable');
-        this.navSlideIndex = 0;
-        navList.style.marginLeft = '0px';
+      if (navContainer && navList && navItemsWidth) {
+        if (navItemsWidth > navContainer.offsetWidth) {
+          nav?.classList.add('scrollable');
+        } else {
+          nav?.classList.remove('scrollable');
+          this.navSlideIndex = 0;
+          navList.style.marginLeft = '0px';
+        }
       }
     }
   }
@@ -81,12 +87,14 @@ export class PanelNavigationComponent implements AfterViewInit, AfterViewChecked
   }
 
   activatePanel(panel: Panel) {
-    const nav = document.querySelector('.panel-navigation');
-    if (nav) {
-      window.scrollTo(0, this.helperService.getOffset(nav).top);
-    }
+    if (isPlatformBrowser(this.platformId)) {
+      const nav = document.querySelector('.panel-navigation');
+      if (nav) {
+        window.scrollTo(0, this.helperService.getOffset(nav).top);
+      }
 
-    this.panelChange.emit(panel);
+      this.panelChange.emit(panel);
+    }
   }
 
   getPanelCount() {

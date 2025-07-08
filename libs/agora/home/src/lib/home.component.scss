@@ -1,6 +1,6 @@
 /* stylelint-disable no-descending-specificity */
-@import 'libs/agora/styles/src/lib/variables';
-@import 'libs/agora/styles/src/lib/mixins';
+@use 'agora/styles/src/lib/variables';
+@use 'agora/styles/src/lib/mixins';
 
 .section {
   display: flex;
@@ -20,7 +20,7 @@
     background-color: none;
   }
 
-  @include respond-to('ex-large') {
+  @include mixins.respond-to('ex-large') {
     padding: var(--spacing-xl) 100px;
   }
 }
