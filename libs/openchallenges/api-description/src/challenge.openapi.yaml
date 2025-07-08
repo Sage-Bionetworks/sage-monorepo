@@ -34,11 +34,9 @@ paths:
     $ref: paths/challengePlatforms.yaml
   /challengePlatforms/{challengePlatformId}:
     $ref: paths/challengePlatforms/@{challengePlatformId}.yaml
-  /challengePlatforms/name/{challengePlatformName}:
-    $ref: paths/challengePlatforms/@{challengePlatformName}.yaml
   /edamConcepts:
     $ref: paths/edamConcepts.yaml
 components:
   securitySchemes:
-    ApiKeyAuth:
-      $ref: components/securitySchemes/ApiKeyAuth.yaml
+    apiBearerAuth:
+      $ref: components/securitySchemes/ApiBearerAuth.yaml

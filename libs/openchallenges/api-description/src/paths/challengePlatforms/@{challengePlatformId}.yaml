@@ -25,7 +25,7 @@ delete:
     Deletes a challenge platform by its unique ID. This action is irreversible.
   operationId: deleteChallengePlatform
   security:
-    - ApiKeyAuth: []
+    - apiBearerAuth: []
   responses:
     '204':
       description: Deletion successful

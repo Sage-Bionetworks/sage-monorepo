@@ -149,47 +149,7 @@ paths:
         Deletes a challenge platform by its unique ID. This action is irreversible.
       operationId: deleteChallengePlatform
       security:
-        - ApiKeyAuth: []
-      responses:
-        '204':
-          description: Deletion successful
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /challengePlatforms/name/{challengePlatformName}:
-    parameters:
-      - $ref: '#/components/parameters/challengePlatformName'
-    get:
-      tags:
-        - ChallengePlatform
-      summary: Get a challenge platform
-      description: Returns the challenge platform specified by its unique name
-      operationId: getChallengePlatformByName
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ChallengePlatform'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-    delete:
-      tags:
-        - ChallengePlatform
-      summary: Delete a challenge platform
-      description: |
-        Deletes a challenge platform identified by its unique name. This action is irreversible.
-      operationId: deleteChallengePlatformByName
-      security:
-        - ApiKeyAuth: []
+        - apiBearerAuth: []
       responses:
         '204':
           description: Deletion successful
@@ -223,10 +183,11 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: X-API-Key
+    apiBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: api_key
+      description: API key obtained from /auth/login endpoint
   schemas:
     ChallengeSort:
       description: What to sort results by.
@@ -914,13 +875,6 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/ChallengePlatformId'
-    challengePlatformName:
-      name: challengePlatformName
-      in: path
-      description: The unique identifier of the challenge platform.
-      required: true
-      schema:
-        $ref: '#/components/schemas/ChallengePlatformName'
     edamConceptSearchQuery:
       name: edamConceptSearchQuery
       description: The search query used to find EDAM concepts.
@@ -953,7 +907,7 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
     Forbidden:
-      description: Forbidden - user does not have the permission to perform this action
+      description: The user does not have the permission to perform this action
       content:
         application/problem+json:
           schema:
