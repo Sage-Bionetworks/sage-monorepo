@@ -41,10 +41,58 @@ public interface ChallengePlatformApi {
     }
 
     /**
-     * GET /challengePlatforms/{challengePlatformName} : Get a challenge platform
-     * Returns the challenge platform specified
+     * DELETE /challengePlatforms/{challengePlatformId} : Delete a challenge platform
+     * Deletes a challenge platform by its unique ID. This action is irreversible. 
      *
-     * @param challengePlatformName The unique identifier of the challenge platform. (required)
+     * @param challengePlatformId The unique identifier of the challenge platform. (required)
+     * @return Deletion successful (status code 204)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "deleteChallengePlatform",
+        summary = "Delete a challenge platform",
+        description = "Deletes a challenge platform by its unique ID. This action is irreversible. ",
+        tags = { "ChallengePlatform" },
+        responses = {
+            @ApiResponse(responseCode = "204", description = "Deletion successful"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "apiBearerAuth")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.DELETE,
+        value = "/challengePlatforms/{challengePlatformId}",
+        produces = { "application/problem+json" }
+    )
+    
+    default ResponseEntity<Void> deleteChallengePlatform(
+        @Parameter(name = "challengePlatformId", description = "The unique identifier of the challenge platform.", required = true, in = ParameterIn.PATH) @PathVariable("challengePlatformId") Long challengePlatformId
+    ) {
+        return getDelegate().deleteChallengePlatform(challengePlatformId);
+    }
+
+
+    /**
+     * GET /challengePlatforms/{challengePlatformId} : Get a challenge platform
+     * Returns the challenge platform identified by its unique ID
+     *
+     * @param challengePlatformId The unique identifier of the challenge platform. (required)
      * @return Success (status code 200)
      *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
@@ -52,7 +100,7 @@ public interface ChallengePlatformApi {
     @Operation(
         operationId = "getChallengePlatform",
         summary = "Get a challenge platform",
-        description = "Returns the challenge platform specified",
+        description = "Returns the challenge platform identified by its unique ID",
         tags = { "ChallengePlatform" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
@@ -71,14 +119,14 @@ public interface ChallengePlatformApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/challengePlatforms/{challengePlatformName}",
+        value = "/challengePlatforms/{challengePlatformId}",
         produces = { "application/json", "application/problem+json" }
     )
     
     default ResponseEntity<ChallengePlatformDto> getChallengePlatform(
-        @Size(min = 3, max = 30) @Parameter(name = "challengePlatformName", description = "The unique identifier of the challenge platform.", required = true, in = ParameterIn.PATH) @PathVariable("challengePlatformName") String challengePlatformName
+        @Parameter(name = "challengePlatformId", description = "The unique identifier of the challenge platform.", required = true, in = ParameterIn.PATH) @PathVariable("challengePlatformId") Long challengePlatformId
     ) {
-        return getDelegate().getChallengePlatform(challengePlatformName);
+        return getDelegate().getChallengePlatform(challengePlatformId);
     }
 
 
