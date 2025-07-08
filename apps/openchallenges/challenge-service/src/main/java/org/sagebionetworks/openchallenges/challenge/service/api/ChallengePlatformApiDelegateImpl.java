@@ -27,7 +27,7 @@ public class ChallengePlatformApiDelegateImpl implements ChallengePlatformApiDel
   }
 
   @Override
-  @PreAuthorize("isAuthenticated()")
+  @PreAuthorize("authentication.principal.admin")
   public ResponseEntity<Void> deleteChallengePlatform(Long challengePlatformId) {
     // Log the authenticated user for audit purposes
     AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
