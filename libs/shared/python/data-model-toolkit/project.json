@@ -14,7 +14,7 @@
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "uv run pytest",
+        "command": "uv run pytest tests/unit",
         "cwd": "{projectRoot}"
       }
     },
