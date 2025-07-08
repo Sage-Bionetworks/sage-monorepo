@@ -1,5 +1,8 @@
 package org.sagebionetworks.openchallenges.challenge.service.configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.sagebionetworks.openchallenges.challenge.service.client.AuthServiceClient;
+import org.sagebionetworks.openchallenges.challenge.service.security.ApiKeyAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -7,11 +10,25 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(jsr250Enabled = true)
 public class SecurityConfiguration {
+
+  private final AuthServiceClient authServiceClient;
+  private final ObjectMapper objectMapper;
+
+  public SecurityConfiguration(AuthServiceClient authServiceClient, ObjectMapper objectMapper) {
+    this.authServiceClient = authServiceClient;
+    this.objectMapper = objectMapper;
+  }
+
+  @Bean
+  public ApiKeyAuthenticationFilter apiKeyAuthenticationFilter() {
+    return new ApiKeyAuthenticationFilter(authServiceClient, objectMapper);
+  }
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -40,7 +57,9 @@ public class SecurityConfiguration {
           .anyRequest()
           .permitAll()
       )
+      .addFilterBefore(apiKeyAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
       .httpBasic(httpBasic -> {});
+
     return http.build();
   }
 }

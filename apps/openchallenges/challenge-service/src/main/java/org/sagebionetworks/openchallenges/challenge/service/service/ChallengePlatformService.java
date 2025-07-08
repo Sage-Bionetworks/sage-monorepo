@@ -30,13 +30,16 @@ public class ChallengePlatformService {
     this.challengePlatformRepository = challengePlatformRepository;
   }
 
+  @Transactional(readOnly = false)
+  public void deleteChallengePlatform(Long id) {}
+
   @Transactional(readOnly = true)
-  public ChallengePlatformDto getChallengePlatform(Long challengePlatformId) {
+  public ChallengePlatformDto getChallengePlatform(Long id) {
     ChallengePlatformEntity entity = challengePlatformRepository
-      .findById(challengePlatformId)
+      .findById(id)
       .orElseThrow(() ->
         new ChallengePlatformNotFoundException(
-          String.format("The challenge platform with ID %d does not exist.", challengePlatformId)
+          String.format("The challenge platform with ID %d does not exist.", id)
         )
       );
 
