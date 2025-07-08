@@ -1,0 +1,18 @@
+services:
+  openchallenges-auth-service:
+    image: ghcr.io/sage-bionetworks/openchallenges-auth-service:${OPENCHALLENGES_VERSION:-local}
+    container_name: openchallenges-auth-service
+    restart: always
+    env_file:
+      - ../../../apps/openchallenges/auth-service/.env
+    networks:
+      - openchallenges
+    ports:
+      - '8087:8087'
+    depends_on:
+      openchallenges-postgres:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 1G

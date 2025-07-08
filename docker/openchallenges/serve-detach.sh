@@ -8,6 +8,7 @@ args=(
   --file docker/"$product_name"/services/api-docs.yml
   --file docker/"$product_name"/services/api-gateway.yml
   --file docker/"$product_name"/services/app.yml
+  --file docker/"$product_name"/services/auth-service.yml
   --file docker/"$product_name"/services/challenge-service.yml
   --file docker/"$product_name"/services/config-server.yml
   --file docker/"$product_name"/services/data-lambda.yml

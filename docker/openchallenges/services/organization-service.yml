@@ -5,14 +5,13 @@ services:
     restart: always
     env_file:
       - ../../../apps/openchallenges/organization-service/.env
-    environment:
-      - DB_ORGANIZATIONS_CSV_PATH=/workspace/BOOT-INF/classes/db/organizations.csv
-      - DB_CONTRIBUTION_ROLES_CSV_PATH=/workspace/BOOT-INF/classes/db/contribution_roles.csv
     networks:
       - openchallenges
     ports:
       - '8084:8084'
     depends_on:
+      openchallenges-auth-service:
+        condition: service_started
       openchallenges-config-server:
         condition: service_healthy
       openchallenges-image-service:
