@@ -1,8 +1,9 @@
 from csv import reader
-from datetime import datetime
 from glob import glob
 from gridfs import GridFS
 from json import load
+import logging
+import logging.config as logging_config
 from os import getenv, getcwd, makedirs, path
 from pymongo import MongoClient, database
 import synapseclient
@@ -17,32 +18,55 @@ DB_HOST = getenv("DB_HOST")
 DATA_FILE = getenv("DATA_FILE")
 DATA_VERSION = getenv("DATA_VERSION")
 
+# Configure logging
+logging_config.dictConfig(
+    {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "detailed": {
+                "format": "%(asctime)s [%(module)s:%(lineno)d - %(levelname)s]: %(message)s"
+            },
+        },
+        "handlers": {
+            "console": {
+                "level": "DEBUG",
+                "class": "logging.StreamHandler",
+                "formatter": "detailed",
+            },
+        },
+        "loggers": {
+            "model-ad.data": {
+                "handlers": ["console"],
+                "level": "DEBUG",
+                "propagate": False,
+            },
+        },
+    }
+)
 
-def print_with_timestamp(message: str) -> None:
-    """Print message with timestamp prefix"""
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    print(f"[{timestamp}] {message}")
+logger = logging.getLogger("model-ad.data")
 
 
 def download_synapse_data(local_data_dir: str) -> None:
-    print_with_timestamp("INFO - Logging in to Synapse")
+    logger.debug("Logging in to Synapse")
     syn = synapseclient.login()
-    print_with_timestamp("INFO - Logged in to Synapse successfully")
+    logger.debug("Logged in to Synapse successfully")
 
-    print_with_timestamp("INFO - Creating local data directory")
+    logger.debug("Creating local data directory")
     makedirs(local_data_dir, exist_ok=True)
-    print_with_timestamp("INFO - Local data directory created successfully")
+    logger.debug("Local data directory created successfully")
 
-    print_with_timestamp("INFO - Downloading manifest file from Synapse")
+    logger.debug("Downloading manifest file from Synapse")
     manifest_entity = syn.get(
         DATA_FILE,
         version=DATA_VERSION,
         downloadLocation=local_data_dir,
         ifcollision="overwrite.local",
     )
-    print_with_timestamp("INFO - Manifest file downloaded successfully")
+    logger.debug("Manifest file downloaded successfully")
 
-    print_with_timestamp("INFO - Processing manifest and downloading referenced files")
+    logger.debug("Processing manifest and downloading referenced files")
     manifest_filepath = path.join(local_data_dir, manifest_entity.name)
     with open(manifest_filepath, "r") as manifest_file:
         manifest_reader = reader(manifest_file)
@@ -50,31 +74,31 @@ def download_synapse_data(local_data_dir: str) -> None:
         for row in manifest_reader:
             syn_id = row[0]
             version = row[1]
-            print_with_timestamp(f"INFO - Downloading file {syn_id} version {version}")
+            logger.debug("Downloading %s version %s", syn_id, version)
             syn.get(
                 syn_id,
                 version=version,
                 downloadLocation=local_data_dir,
                 ifcollision="overwrite.local",
             )
-            print_with_timestamp(
-                f"INFO - Downloaded {syn_id} version {version} successfully"
-            )
-    print_with_timestamp("INFO - All manifest files downloaded successfully")
+            logger.debug("Downloaded %s version %s successfully", syn_id, version)
+    logger.debug("All manifest files downloaded successfully")
 
 
 def import_collections_data(
     db: database.Database, collections_filepath: str, local_data_dir: str
 ) -> None:
     """Import collections into MongoDB using local definition CSV and local data"""
-    print_with_timestamp("INFO - Starting collections import process")
+    logger.debug("Starting collections import process")
     with open(collections_filepath, "r") as collections_file:
         collections_reader = reader(collections_file)
         for row in collections_reader:
             collection_name = row[0]
             collection_filename = row[1]
-            print_with_timestamp(
-                f"INFO - Importing collection '{collection_name}' from file '{collection_filename}'"
+            logger.debug(
+                "Importing collection '%s' from '%s'",
+                collection_name,
+                collection_filename,
             )
 
             # read json
@@ -86,32 +110,34 @@ def import_collections_data(
             collection = db.get_collection(collection_name)
             collection.drop()
             collection.insert_many(documents)
-            print_with_timestamp(
-                f"INFO - Imported {len(documents)} documents to collection '{collection_name}' successfully"
+            logger.debug(
+                "Successfully imported %d documents to collection '%s'",
+                len(documents),
+                collection_name,
             )
-    print_with_timestamp("INFO - All collections imported successfully")
+    logger.debug("All collections imported successfully")
 
 
 def create_collections_indexes(
     db: database.Database, collections_indexes_filepath: str
 ) -> None:
     """Create indexes for MongoDB collections based on JSON file"""
-    print_with_timestamp("INFO - Starting index creation process")
+    logger.debug("Starting index creation process")
     with open(collections_indexes_filepath, "r") as collection_indexes_file:
         collections_indexes_data = load(collection_indexes_file)
         for collection_index_data in collections_indexes_data:
             collection_name = collection_index_data["name"]
-            print_with_timestamp(
-                f"INFO - Creating indexes for collection '{collection_name}'"
-            )
+            logger.debug("Creating indexes for collection '%s'", collection_name)
             indexes = collection_index_data["indexes"]
             collection = db.get_collection(collection_name)
             for index in indexes:
                 collection.create_index(list(index.items()))
-            print_with_timestamp(
-                f"INFO - Created {len(indexes)} indexes for collection '{collection_name}' successfully"
+            logger.debug(
+                "Created %d indexes for collection '%s' successfully",
+                len(indexes),
+                collection_name,
             )
-    print_with_timestamp("INFO - All indexes created successfully")
+    logger.debug("All indexes created successfully")
 
 
 def main() -> None:
@@ -122,14 +148,14 @@ def main() -> None:
         getcwd(), "src", "data", "collections-indexes.json"
     )
 
-    print_with_timestamp(f"CONFIG - DATA_FILE: {DATA_FILE}")
-    print_with_timestamp(f"CONFIG - DATA_VERSION: {DATA_VERSION}")
+    logger.debug("DATA_FILE: %s", DATA_FILE)
+    logger.debug("DATA_VERSION: %s", DATA_VERSION)
 
-    print_with_timestamp("INFO - Starting Synapse data download process")
+    logger.debug("Starting Synapse data download process")
     download_synapse_data(local_data_dir)
-    print_with_timestamp("INFO - Synapse data download completed successfully")
+    logger.debug("Synapse data download completed successfully")
 
-    print_with_timestamp("INFO - Starting MongoDB update process")
+    logger.debug("Starting MongoDB update process")
     db_uri = f"mongodb://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}"
     client = MongoClient(db_uri)
     try:
@@ -138,8 +164,9 @@ def main() -> None:
         create_collections_indexes(db, collections_indexes_filepath)
         client.close()
     except Exception as e:
+        logger.error("Error during MongoDB update: %s", e)
         raise Exception("Error", e)
-    print_with_timestamp("INFO - MongoDB update completed successfully")
+    logger.debug("MongoDB update completed successfully")
 
 
 if __name__ == "__main__":
