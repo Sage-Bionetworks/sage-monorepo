@@ -21,7 +21,35 @@
         "no-useless-constructor": "off",
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-non-null-assertion": "error",
-        "@stylistic/no-extra-semi": "error"
+        "@stylistic/no-extra-semi": "error",
+        "@nx/enforce-module-boundaries": [
+          "error",
+          {
+            "allow": [],
+            "depConstraints": [
+              {
+                "sourceTag": "scope:model-ad",
+                "onlyDependOnLibsWithTags": ["scope:model-ad", "scope:explorers", "scope:shared"]
+              },
+              {
+                "sourceTag": "scope:agora",
+                "onlyDependOnLibsWithTags": ["scope:agora", "scope:explorers", "scope:shared"]
+              },
+              {
+                "sourceTag": "scope:explorers",
+                "onlyDependOnLibsWithTags": ["scope:explorers", "scope:shared"]
+              },
+              {
+                "sourceTag": "scope:shared",
+                "onlyDependOnLibsWithTags": ["scope:shared"]
+              },
+              {
+                "sourceTag": "*",
+                "onlyDependOnLibsWithTags": ["*"]
+              }
+            ]
+          }
+        ]
       }
     },
     {
