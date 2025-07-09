@@ -19,5 +19,5 @@
       "dependsOn": ["build"]
     }
   },
-  "tags": ["language:openapi"]
+  "tags": ["language:openapi", "scope:model-ad"]
 }

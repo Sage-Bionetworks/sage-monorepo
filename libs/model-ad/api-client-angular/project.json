@@ -26,6 +26,6 @@
       "dependsOn": ["^build"]
     }
   },
-  "tags": ["language:typescript"],
+  "tags": ["language:typescript", "scope:model-ad"],
   "implicitDependencies": ["model-ad-api-description"]
 }
