@@ -18,10 +18,10 @@ data:
       application:
         name: amp-als-dataset-service
       datasource:
-        url: jdbc:mysql://amp-als-mariadb:8401/dataset_service
+        url: jdbc:postgresql://amp-als-postgres:8401/dataset_service
         username: dataset_service
         password: changeme
-        driver-class-name: com.mysql.cj.jdbc.Driver
+        driver-class-name: org.postgresql.Driver
       flyway:
         enabled: true
         clean-disabled: false
@@ -34,7 +34,7 @@ data:
           ddl-auto: update
         properties:
           hibernate:
-            dialect: org.hibernate.dialect.MariaDBDialect
+            dialect: org.hibernate.dialect.PostgreSQLDialect
             search:
               enable: true
               backend:

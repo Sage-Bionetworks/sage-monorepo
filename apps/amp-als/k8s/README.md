@@ -4,8 +4,9 @@ This directory contains Kubernetes manifests and Helm chart for deploying the AM
 
 ## Components
 
-- **MariaDB**: Database service with persistent storage
+- **PostgreSQL**: Database service with persistent storage
 - **Dataset Service**: Spring Boot application for dataset management
+- **OpenSearch**: Search and analytics engine
 
 ## Prerequisites
 
@@ -27,13 +28,13 @@ minikube start
 # Create namespace
 kubectl apply -f namespace.yaml
 
-# Deploy MariaDB
+# Deploy PostgreSQL
 kubectl apply -f secrets/
 kubectl apply -f configmaps/
-kubectl apply -f mariadb/
+kubectl apply -f postgres/
 
-# Wait for MariaDB to be ready
-kubectl wait --for=condition=ready pod -l app=amp-als-mariadb -n amp-als --timeout=300s
+# Wait for PostgreSQL to be ready
+kubectl wait --for=condition=ready pod -l app=amp-als-postgres -n amp-als --timeout=300s
 
 # Deploy Dataset Service
 kubectl apply -f dataset-service/
@@ -57,14 +58,14 @@ kubectl port-forward service/amp-als-dataset-service 8404:8404 -n amp-als
 # Access at: http://localhost:8404
 ```
 
-### MariaDB (for debugging)
+### PostgreSQL (for debugging)
 
 ```bash
 # Port forward to access locally
-kubectl port-forward service/amp-als-mariadb 8401:8401 -n amp-als
+kubectl port-forward service/amp-als-postgres 8401:8401 -n amp-als
 
-# Connect with mysql client
-mysql -h localhost -P 8401 -u dataset_service -p dataset_service
+# Connect with psql client
+psql -h localhost -p 8401 -U dataset_service -d dataset_service
 ```
 
 ## Scaling
@@ -87,7 +88,7 @@ helm uninstall amp-als -n amp-als
 ## Configuration
 
 - Environment variables are stored in ConfigMaps and Secrets
-- Persistent storage is used for MariaDB data
+- Persistent storage is used for PostgreSQL data
 - Services are exposed via ClusterIP by default
 
 ## Troubleshooting
@@ -98,7 +99,7 @@ kubectl get pods -n amp-als
 
 # Check logs
 kubectl logs -f deployment/amp-als-dataset-service -n amp-als
-kubectl logs -f deployment/amp-als-mariadb -n amp-als
+kubectl logs -f deployment/amp-als-postgres -n amp-als
 
 # Describe resources for more details
 kubectl describe pod <pod-name> -n amp-als

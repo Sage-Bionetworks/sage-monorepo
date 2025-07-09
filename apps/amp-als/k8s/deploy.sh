@@ -54,84 +54,84 @@ show_help() {
 
 check_prerequisites() {
     log_info "Checking prerequisites..."
-    
+
     # Check kubectl
     if ! command -v kubectl &> /dev/null; then
         log_error "kubectl is not installed or not in PATH"
         exit 1
     fi
-    
+
     # Check if kubectl can connect to cluster
     if ! kubectl cluster-info &> /dev/null; then
         log_error "Cannot connect to Kubernetes cluster. Make sure your cluster is running and kubectl is configured."
         exit 1
     fi
-    
+
     # Check Helm if using Helm mode
     if [[ "$DEPLOYMENT_MODE" == "helm" ]] && ! command -v helm &> /dev/null; then
         log_error "Helm is not installed or not in PATH"
         exit 1
     fi
-    
+
     log_success "Prerequisites check passed"
 }
 
 deploy_with_kubectl() {
     log_info "Deploying AMP-ALS with kubectl..."
-    
+
     # Create namespace
     log_info "Creating namespace: $NAMESPACE"
     kubectl apply -f namespace.yaml
-    
+
     # Deploy secrets
     log_info "Deploying secrets..."
     kubectl apply -f secrets/
-    
+
     # Deploy configmaps
     log_info "Deploying configmaps..."
     kubectl apply -f configmaps/
-    
-    # Deploy MariaDB
-    log_info "Deploying MariaDB..."
-    kubectl apply -f mariadb/
-    
-    # Wait for MariaDB to be ready
-    log_info "Waiting for MariaDB to be ready..."
-    kubectl wait --for=condition=ready pod -l app=amp-als-mariadb -n "$NAMESPACE" --timeout=300s
-    
+
+    # Deploy PostgreSQL
+    log_info "Deploying PostgreSQL..."
+    kubectl apply -f postgres/
+
+    # Wait for PostgreSQL to be ready
+    log_info "Waiting for PostgreSQL to be ready..."
+    kubectl wait --for=condition=ready pod -l app=amp-als-postgres -n "$NAMESPACE" --timeout=300s
+
     # Deploy Dataset Service
     log_info "Deploying Dataset Service..."
     kubectl apply -f dataset-service/
-    
+
     # Wait for Dataset Service to be ready
     log_info "Waiting for Dataset Service to be ready..."
     kubectl wait --for=condition=ready pod -l app=amp-als-dataset-service -n "$NAMESPACE" --timeout=300s
-    
+
     log_success "Deployment completed successfully!"
 }
 
 deploy_with_helm() {
     log_info "Deploying AMP-ALS with Helm..."
-    
+
     helm install amp-als ./helm \
         --namespace "$NAMESPACE" \
         --create-namespace \
         --set global.imageTag="$IMAGE_TAG"
-    
+
     log_success "Helm deployment completed successfully!"
 }
 
 cleanup_resources() {
     log_warning "Cleaning up AMP-ALS resources..."
-    
+
     if [[ "$DEPLOYMENT_MODE" == "helm" ]]; then
         log_info "Uninstalling Helm release..."
         helm uninstall amp-als -n "$NAMESPACE" || true
     fi
-    
+
     log_info "Deleting namespace: $NAMESPACE"
     kubectl delete namespace "$NAMESPACE" --ignore-not-found=true
-    
+
     log_success "Cleanup completed!"
 }
 
@@ -149,9 +149,9 @@ show_access_info() {
     echo "  # Or via NodePort (if using minikube):"
     echo "  minikube service amp-als-dataset-service-nodeport -n $NAMESPACE"
     echo ""
-    echo "MariaDB (for debugging):"
-    echo "  kubectl port-forward service/amp-als-mariadb 8401:8401 -n $NAMESPACE"
-    echo "  mysql -h localhost -P 8401 -u dataset_service -p dataset_service"
+    echo "PostgreSQL (for debugging):"
+    echo "  kubectl port-forward service/amp-als-postgres 8401:8401 -n $NAMESPACE"
+    echo "  psql -h localhost -p 8401 -U dataset_service -d dataset_service"
 }
 
 show_status() {

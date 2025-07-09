@@ -1,72 +1,70 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: amp-als-mariadb
+  name: amp-als-postgres
   namespace: amp-als
   labels:
-    app: amp-als-mariadb
+    app: amp-als-postgres
     component: database
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: amp-als-mariadb
+      app: amp-als-postgres
   template:
     metadata:
       labels:
-        app: amp-als-mariadb
+        app: amp-als-postgres
         component: database
     spec:
       containers:
-        - name: mariadb
-          image: ghcr.io/sage-bionetworks/amp-als-mariadb:local
+        - name: postgres
+          image: ghcr.io/sage-bionetworks/amp-als-postgres:local
           ports:
             - containerPort: 8401
-              name: mysql
+              name: postgres
           env:
-            - name: MYSQL_ROOT_PASSWORD
+            - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: amp-als-mariadb-secret
-                  key: mysql-root-password
-            - name: MYSQL_DATABASE
+                  name: amp-als-postgres-secret
+                  key: postgres-password
+            - name: POSTGRES_DB
               value: dataset_service
-            - name: MYSQL_USER
+            - name: POSTGRES_USER
               value: dataset_service
-            - name: MYSQL_PASSWORD
+            - name: POSTGRES_USER_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: amp-als-mariadb-secret
-                  key: mysql-dataset-service-password
-            - name: MYSQL_TCP_PORT
+                  name: amp-als-postgres-secret
+                  key: postgres-user-password
+            - name: PGPORT
               value: '8401'
           volumeMounts:
-            - name: mariadb-data
-              mountPath: /var/lib/mysql
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
             - name: init-scripts
               mountPath: /docker-entrypoint-initdb.d
               readOnly: true
           livenessProbe:
             exec:
               command:
-                - mariadb-admin
-                - ping
-                - -h
-                - localhost
-                - -P
-                - '8401'
+                - pg_isready
+                - -U
+                - dataset_service
+                - -d
+                - dataset_service
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5
           readinessProbe:
             exec:
               command:
-                - mariadb-admin
-                - ping
-                - -h
-                - localhost
-                - -P
-                - '8401'
+                - pg_isready
+                - -U
+                - dataset_service
+                - -d
+                - dataset_service
             initialDelaySeconds: 10
             periodSeconds: 5
             timeoutSeconds: 5
@@ -78,9 +76,9 @@ spec:
               memory: 256Mi
               cpu: 250m
       volumes:
-        - name: mariadb-data
+        - name: postgres-data
           persistentVolumeClaim:
-            claimName: amp-als-mariadb-pvc
+            claimName: amp-als-postgres-pvc
         - name: init-scripts
           configMap:
-            name: amp-als-mariadb-init
+            name: amp-als-postgres-init

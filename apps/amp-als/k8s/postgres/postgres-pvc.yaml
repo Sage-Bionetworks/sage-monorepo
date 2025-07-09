@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: amp-als-mariadb-pvc
+  name: amp-als-postgres-pvc
   namespace: amp-als
   labels:
-    app: amp-als-mariadb
+    app: amp-als-postgres
     component: database
 spec:
   accessModes:
