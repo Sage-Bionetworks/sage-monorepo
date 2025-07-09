@@ -1,8 +1,8 @@
 /* stylelint-disable plugin/no-unsupported-browser-features */
 /* stylelint-disable no-descending-specificity */
 
-@import 'libs/agora/styles/src/lib/variables';
-@import 'libs/agora/styles/src/lib/mixins';
+@use 'agora/styles/src/lib/variables';
+@use 'agora/styles/src/lib/mixins';
 
 .gene-details-nav {
   position: relative;
@@ -49,7 +49,7 @@
   }
 
   ul {
-    @include reset-ul;
+    @include mixins.reset-ul;
 
     display: flex;
     width: 100%;
@@ -103,7 +103,7 @@
   }
 
   .gene-details-nav-scroll {
-    @include reset-button;
+    @include mixins.reset-button;
 
     display: none;
     position: absolute;

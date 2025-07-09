@@ -1,0 +1,23 @@
+post:
+  tags:
+    - Authentication
+  summary: User login
+  description: Authenticate user and return JWT token
+  operationId: login
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/LoginRequest.yaml
+  responses:
+    '200':
+      description: Login successful
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/LoginResponse.yaml
+    '401':
+      $ref: ../../components/responses/Unauthorized.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml

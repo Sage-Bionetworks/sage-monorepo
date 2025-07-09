@@ -1,8 +1,8 @@
-@import 'libs/agora/styles/src/lib/mixins';
+@use 'agora/styles/src/lib/mixins';
 
 .popover-link-container {
   button {
-    @include reset-button;
+    @include mixins.reset-button;
   }
 
   .popover-link-inner {

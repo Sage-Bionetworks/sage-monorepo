@@ -1,8 +1,8 @@
 /* stylelint-disable no-descending-specificity */
 
 @use 'sass:map';
-@use 'libs/agora/styles/src/lib/variables';
-@use 'libs/agora/styles/src/lib/mixins';
+@use 'agora/styles/src/lib/variables';
+@use 'agora/styles/src/lib/mixins';
 
 .gene-network {
   min-height: 600px;

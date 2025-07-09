@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule, isPlatformBrowser, Location } from '@angular/common';
 import {
   AfterViewChecked,
   AfterViewInit,
@@ -7,9 +7,9 @@ import {
   HostListener,
   inject,
   OnInit,
+  PLATFORM_ID,
 } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { Gene, GenesService } from '@sagebionetworks/agora/api-client-angular';
@@ -53,6 +53,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
   location = inject(Location);
   helperService = inject(HelperService);
   geneService = inject(GenesService);
+  private readonly platformId: Record<string, any> = inject(PLATFORM_ID);
 
   faAngleRight = faAngleRight;
   faAngleLeft = faAngleLeft;
@@ -110,36 +111,40 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
 
   @HostListener('window:scroll', ['$event'])
   onWindowScroll() {
-    const nav = document.querySelector<HTMLElement>('.gene-details-nav');
-    const rect = nav?.getBoundingClientRect();
+    if (isPlatformBrowser(this.platformId)) {
+      const nav = document.querySelector<HTMLElement>('.gene-details-nav');
+      const rect = nav?.getBoundingClientRect();
 
-    if (rect && rect.y <= 0) {
-      nav?.classList.add('sticky');
-    } else {
-      nav?.classList.remove('sticky');
+      if (rect && rect.y <= 0) {
+        nav?.classList.add('sticky');
+      } else {
+        nav?.classList.remove('sticky');
+      }
     }
   }
 
   @HostListener('window:resize', ['$event'])
   onWindowResize() {
-    const nav = document.querySelector<HTMLElement>('.gene-details-nav');
-    const navContainer = nav?.querySelector<HTMLElement>('.gene-details-nav-container');
-    const navList = nav?.querySelector<HTMLElement>('.gene-details-nav-container > ul');
-    const navItems = nav?.querySelectorAll<HTMLElement>('.gene-details-nav-container > ul > li');
-    let navItemsWidth = 0;
-    if (navItems) {
-      for (let i = 0; i < navItems.length; ++i) {
-        navItemsWidth += navItems[i].offsetWidth;
+    if (isPlatformBrowser(this.platformId)) {
+      const nav = document.querySelector<HTMLElement>('.gene-details-nav');
+      const navContainer = nav?.querySelector<HTMLElement>('.gene-details-nav-container');
+      const navList = nav?.querySelector<HTMLElement>('.gene-details-nav-container > ul');
+      const navItems = nav?.querySelectorAll<HTMLElement>('.gene-details-nav-container > ul > li');
+      let navItemsWidth = 0;
+      if (navItems) {
+        for (let i = 0; i < navItems.length; ++i) {
+          navItemsWidth += navItems[i].offsetWidth;
+        }
       }
-    }
 
-    if (navContainer && navList && navItemsWidth) {
-      if (navItemsWidth > navContainer.offsetWidth) {
-        nav?.classList.add('scrollable');
-      } else {
-        nav?.classList.remove('scrollable');
-        this.navSlideIndex = 0;
-        navList.style.marginLeft = '0px';
+      if (navContainer && navList && navItemsWidth) {
+        if (navItemsWidth > navContainer.offsetWidth) {
+          nav?.classList.add('scrollable');
+        } else {
+          nav?.classList.remove('scrollable');
+          this.navSlideIndex = 0;
+          navList.style.marginLeft = '0px';
+        }
       }
     }
   }
@@ -258,9 +263,11 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
       url = this.helperService.addSingleUrlParam(url, 'model', modelUrlParam);
     }
 
-    const nav = document.querySelector('.gene-details-nav');
-    if (nav) {
-      window.scrollTo(0, this.helperService.getOffset(nav).top);
+    if (isPlatformBrowser(this.platformId)) {
+      const nav = document.querySelector('.gene-details-nav');
+      if (nav) {
+        window.scrollTo(0, this.helperService.getOffset(nav).top);
+      }
     }
 
     this.location.replaceState(url);
@@ -275,30 +282,32 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
   }
 
   slideNavigation(direction: number) {
-    this.navSlideIndex += direction;
+    if (isPlatformBrowser(this.platformId)) {
+      this.navSlideIndex += direction;
 
-    if (this.navSlideIndex < 0) {
-      this.navSlideIndex = 0;
-    } else if (this.navSlideIndex > this.getPanelCount() - 1) {
-      this.navSlideIndex = this.panels.length - 1;
-    }
-
-    const nav = document.querySelector<HTMLElement>('.gene-details-nav');
-    const navList = nav?.querySelector<HTMLElement>('.gene-details-nav-container > ul');
-    const navItems = nav?.querySelectorAll<HTMLElement>('.gene-details-nav-container > ul > li');
-
-    if (navList && navItems) {
-      let navItemsWidth = 0;
-
-      for (let i = 0; i < this.navSlideIndex; ++i) {
-        navItemsWidth += navItems[i].offsetWidth;
+      if (this.navSlideIndex < 0) {
+        this.navSlideIndex = 0;
+      } else if (this.navSlideIndex > this.getPanelCount() - 1) {
+        this.navSlideIndex = this.panels.length - 1;
       }
 
-      if (this.navSlideIndex > 0) {
-        navItemsWidth += 20;
-      }
+      const nav = document.querySelector<HTMLElement>('.gene-details-nav');
+      const navList = nav?.querySelector<HTMLElement>('.gene-details-nav-container > ul');
+      const navItems = nav?.querySelectorAll<HTMLElement>('.gene-details-nav-container > ul > li');
 
-      navList.style.marginLeft = navItemsWidth * -1 + 'px';
+      if (navList && navItems) {
+        let navItemsWidth = 0;
+
+        for (let i = 0; i < this.navSlideIndex; ++i) {
+          navItemsWidth += navItems[i].offsetWidth;
+        }
+
+        if (this.navSlideIndex > 0) {
+          navItemsWidth += 20;
+        }
+
+        navList.style.marginLeft = navItemsWidth * -1 + 'px';
+      }
     }
   }
 }

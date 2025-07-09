@@ -154,7 +154,7 @@ export class GeneTableComponent {
   }
 
   toggleFullscreen() {
-    if (!screenfull.isEnabled) {
+    if (!screenfull.isEnabled || typeof document === 'undefined') {
       return;
     }
 

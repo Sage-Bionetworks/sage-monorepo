@@ -22,11 +22,13 @@
               </div>
             </div>
           }
-          <agora-network-chart
-            [data]="data"
-            [selectedFilter]="selectedFilter"
-            (onNodeClick)="onNodeClick($event)"
-          ></agora-network-chart>
+          @defer {
+            <agora-network-chart
+              [data]="data"
+              [selectedFilter]="selectedFilter"
+              (onNodeClick)="onNodeClick($event)"
+            ></agora-network-chart>
+          }
           <div class="gene-network-legend">
             <div class="gene-network-legend-inner">
               <div>

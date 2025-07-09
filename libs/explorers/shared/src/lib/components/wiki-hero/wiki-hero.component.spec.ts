@@ -1,9 +1,12 @@
-import { WikiHeroComponent } from './wiki-hero.component';
 import { CommonModule } from '@angular/common';
-import { render, screen } from '@testing-library/angular';
 import { provideHttpClient } from '@angular/common/http';
-import { LOADING_ICON_COLORS_PROVIDER } from '@sagebionetworks/model-ad/testing';
-import { MockHeroComponent, MockWikiComponent } from '@sagebionetworks/explorers/testing';
+import {
+  MockHeroComponent,
+  MockWikiComponent,
+  provideLoadingIconColors,
+} from '@sagebionetworks/explorers/testing';
+import { render, screen } from '@testing-library/angular';
+import { WikiHeroComponent } from './wiki-hero.component';
 
 const TITLE = 'Test Title';
 const WIKI_ID = '0';
@@ -15,7 +18,7 @@ async function setup() {
       heroTitle: TITLE,
     },
     imports: [CommonModule, MockHeroComponent, MockWikiComponent],
-    providers: [provideHttpClient(), LOADING_ICON_COLORS_PROVIDER],
+    providers: [provideHttpClient(), provideLoadingIconColors()],
   });
 
   const component = fixture.componentInstance;

@@ -1,5 +1,11 @@
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { APP_ID, ApplicationConfig, inject, provideAppInitializer } from '@angular/core';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import {
+  APP_ID,
+  ApplicationConfig,
+  inject,
+  provideAppInitializer,
+  provideZoneChangeDetection,
+} from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
   provideRouter,
@@ -21,20 +27,11 @@ import {
 import { MessageService } from 'primeng/api';
 import { CustomUrlSerializer } from './app.custom-uri-serializer';
 import { routes } from './app.routes';
-
-// This index is used to remove the corresponding provider in app.config.server.ts.
-// TODO: This index could be out of sync if we are not careful. Find a more elegant way.
-export const APP_BASE_URL_PROVIDER_INDEX = 1;
+import { provideClientHydration } from '@angular/platform-browser';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     { provide: APP_ID, useValue: 'agora-app' },
-    {
-      // This provider must be specified at the index defined by APP_BASE_URL_PROVIDER_INDEX.
-      provide: 'APP_BASE_URL',
-      useFactory: () => '.',
-      deps: [],
-    },
     {
       provide: SYNAPSE_API_CLIENT_BASE_PATH,
       useFactory: () => 'https://repo-prod.prod.sagebase.org',
@@ -61,7 +58,9 @@ export const appConfig: ApplicationConfig = {
         },
       },
     }),
-    provideHttpClient(withInterceptors([httpErrorInterceptor])),
+    provideHttpClient(withFetch(), withInterceptors([httpErrorInterceptor])),
+    provideClientHydration(),
+    provideZoneChangeDetection({ eventCoalescing: true }),
     {
       provide: RollbarService,
       useFactory: rollbarFactory,

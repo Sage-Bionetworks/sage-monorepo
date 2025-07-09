@@ -1,0 +1,27 @@
+{
+  "name": "explorers-constants",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/explorers/constants/src",
+  "prefix": "explorers",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/explorers/constants"],
+      "options": {
+        "jestConfig": "libs/explorers/constants/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "lint-fix": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "fix": true
+      }
+    }
+  },
+  "tags": ["type:feature", "scope:explorers", "language:typescript"],
+  "implicitDependencies": []
+}

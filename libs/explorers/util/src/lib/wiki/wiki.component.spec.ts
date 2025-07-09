@@ -1,17 +1,17 @@
-import { DomSanitizer } from '@angular/platform-browser';
 import { provideHttpClient } from '@angular/common/http';
-import { render, waitFor } from '@testing-library/angular';
+import { DomSanitizer } from '@angular/platform-browser';
 import { server } from '@sagebionetworks/explorers/testing/msw';
+import { render, waitFor } from '@testing-library/angular';
 
-import { SynapseApiService } from '@sagebionetworks/explorers/services';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
-import { WikiComponent } from './wiki.component';
+import { SynapseApiService } from '@sagebionetworks/explorers/services';
+import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
+import { validMarkdown } from 'libs/explorers/testing/src/lib/constants/markdown';
 import {
   invalidWikiParam,
   validWikiParams,
 } from 'libs/explorers/testing/src/lib/constants/wikiparams';
-import { validMarkdown } from 'libs/explorers/testing/src/lib/constants/markdown';
-import { LOADING_ICON_COLORS_PROVIDER } from '@sagebionetworks/model-ad/testing';
+import { WikiComponent } from './wiki.component';
 
 // Mock DomSanitizer
 const mockDomSanitizer = {
@@ -25,7 +25,7 @@ describe('WikiComponent', () => {
         provideHttpClient(),
         SynapseApiService,
         { provide: DomSanitizer, useValue: mockDomSanitizer },
-        LOADING_ICON_COLORS_PROVIDER,
+        provideLoadingIconColors(),
       ],
       componentInputs: {
         wikiParams,
