@@ -61,7 +61,7 @@
     "json5": "2.2.3",
     "lodash": "4.17.21",
     "marked": "15.0.11",
-    "mongodb-schema": "^12.6.2",
+    "mongodb-schema": "12.6.2",
     "mongoose": "8.9.5",
     "ngx-avatars": "1.5.0",
     "ngx-cookie-service": "18.0.0",
