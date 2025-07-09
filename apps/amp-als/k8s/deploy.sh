@@ -77,7 +77,7 @@ check_prerequisites() {
 }
 
 deploy_with_kubectl() {
-    log_info "Deploying AMP-ALS with kubectl..."
+    log_info "Deploying amp-als with kubectl..."
 
     # Create namespace
     log_info "Creating namespace: $NAMESPACE"
@@ -91,27 +91,35 @@ deploy_with_kubectl() {
     log_info "Deploying configmaps..."
     kubectl apply -f configmaps/
 
-    # Deploy PostgreSQL
-    log_info "Deploying PostgreSQL..."
+    # Deploy amp-als-postgres
+    log_info "Deploying amp-als-postgres..."
     kubectl apply -f postgres/
 
-    # Wait for PostgreSQL to be ready
-    log_info "Waiting for PostgreSQL to be ready..."
+    # Wait for amp-als-postgres to be ready
+    log_info "Waiting for amp-als-postgres to be ready..."
     kubectl wait --for=condition=ready pod -l app=amp-als-postgres -n "$NAMESPACE" --timeout=300s
 
-    # Deploy Dataset Service
-    log_info "Deploying Dataset Service..."
+    # Deploy amp-als-opensearch
+    log_info "Deploying amp-als-opensearch..."
+    kubectl apply -f opensearch/
+
+    # Wait for amp-als-opensearch to be ready
+    log_info "Waiting for amp-als-opensearch to be ready..."
+    kubectl wait --for=condition=ready pod -l app=amp-als-opensearch -n "$NAMESPACE" --timeout=300s
+
+    # Deploy amp-als-dataset-service
+    log_info "Deploying amp-als-dataset-service..."
     kubectl apply -f dataset-service/
 
-    # Wait for Dataset Service to be ready
-    log_info "Waiting for Dataset Service to be ready..."
+    # Wait for amp-als-dataset-service to be ready
+    log_info "Waiting for amp-als-dataset-service to be ready..."
     kubectl wait --for=condition=ready pod -l app=amp-als-dataset-service -n "$NAMESPACE" --timeout=300s
 
     log_success "Deployment completed successfully!"
 }
 
 deploy_with_helm() {
-    log_info "Deploying AMP-ALS with Helm..."
+    log_info "Deploying amp-als with Helm..."
 
     helm install amp-als ./helm \
         --namespace "$NAMESPACE" \
@@ -122,7 +130,7 @@ deploy_with_helm() {
 }
 
 cleanup_resources() {
-    log_warning "Cleaning up AMP-ALS resources..."
+    log_warning "Cleaning up amp-als resources..."
 
     if [[ "$DEPLOYMENT_MODE" == "helm" ]]; then
         log_info "Uninstalling Helm release..."
@@ -138,7 +146,7 @@ cleanup_resources() {
 show_access_info() {
     log_info "Access Information:"
     echo ""
-    echo "Dataset Service:"
+    echo "amp-als-dataset-service:"
     echo "  Internal URL: http://amp-als-dataset-service.${NAMESPACE}.svc.cluster.local:8404"
     echo ""
     echo "To access externally:"
@@ -149,9 +157,13 @@ show_access_info() {
     echo "  # Or via NodePort (if using minikube):"
     echo "  minikube service amp-als-dataset-service-nodeport -n $NAMESPACE"
     echo ""
-    echo "PostgreSQL (for debugging):"
+    echo "amp-als-postgres (for debugging):"
     echo "  kubectl port-forward service/amp-als-postgres 8401:8401 -n $NAMESPACE"
     echo "  psql -h localhost -p 8401 -U dataset_service -d dataset_service"
+    echo ""
+    echo "amp-als-opensearch (for debugging):"
+    echo "  kubectl port-forward service/amp-als-opensearch 8402:8402 -n $NAMESPACE"
+    echo "  # Then access: http://localhost:8402"
 }
 
 show_status() {
@@ -200,7 +212,7 @@ if [[ "$DEPLOYMENT_MODE" != "kubectl" && "$DEPLOYMENT_MODE" != "helm" ]]; then
 fi
 
 # Main execution
-log_info "Starting AMP-ALS deployment..."
+log_info "Starting amp-als deployment..."
 log_info "Mode: $DEPLOYMENT_MODE"
 log_info "Namespace: $NAMESPACE"
 log_info "Image Tag: $IMAGE_TAG"

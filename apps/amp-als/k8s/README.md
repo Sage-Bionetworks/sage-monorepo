@@ -36,6 +36,12 @@ kubectl apply -f postgres/
 # Wait for PostgreSQL to be ready
 kubectl wait --for=condition=ready pod -l app=amp-als-postgres -n amp-als --timeout=300s
 
+# Deploy OpenSearch
+kubectl apply -f opensearch/
+
+# Wait for OpenSearch to be ready
+kubectl wait --for=condition=ready pod -l app=amp-als-opensearch -n amp-als --timeout=300s
+
 # Deploy Dataset Service
 kubectl apply -f dataset-service/
 ```
@@ -66,6 +72,15 @@ kubectl port-forward service/amp-als-postgres 8401:8401 -n amp-als
 
 # Connect with psql client
 psql -h localhost -p 8401 -U dataset_service -d dataset_service
+```
+
+### OpenSearch (for debugging)
+
+```bash
+# Port forward to access locally
+kubectl port-forward service/amp-als-opensearch 8402:8402 -n amp-als
+
+# Access at: http://localhost:8402
 ```
 
 ## Scaling
