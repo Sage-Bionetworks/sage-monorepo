@@ -1,14 +1,12 @@
-import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { ModalLinkComponent } from './modal-link.component';
-import { DialogModule } from 'primeng/dialog';
-import {
-  LoadingIconComponent,
-  SvgIconComponent,
-  WikiComponent,
-} from '@sagebionetworks/agora/shared';
-import { SynapseApiService } from '@sagebionetworks/agora/services';
-import { provideHttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { provideHttpClient } from '@angular/common/http';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { SynapseApiService } from '@sagebionetworks/agora/services';
+import { DialogModule } from 'primeng/dialog';
+import { LoadingIconComponent } from '../loading-icon/loading-icon.component';
+import { SvgIconComponent } from '../svg-icon/svg-icon.component';
+import { WikiComponent } from '../wiki/wiki.component';
+import { ModalLinkComponent } from './modal-link.component';
 
 describe('ModalLinkComponent', () => {
   let fixture: ComponentFixture<ModalLinkComponent>;

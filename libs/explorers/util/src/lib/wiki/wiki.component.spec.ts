@@ -1,16 +1,15 @@
 import { provideHttpClient } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
-import { server } from '@sagebionetworks/explorers/testing/msw';
-import { render, waitFor } from '@testing-library/angular';
-
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { SynapseApiService } from '@sagebionetworks/explorers/services';
-import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
-import { validMarkdown } from 'libs/explorers/testing/src/lib/constants/markdown';
 import {
   invalidWikiParam,
+  provideLoadingIconColors,
+  validMarkdown,
   validWikiParams,
-} from 'libs/explorers/testing/src/lib/constants/wikiparams';
+} from '@sagebionetworks/explorers/testing';
+import { server } from '@sagebionetworks/explorers/testing/msw';
+import { render, waitFor } from '@testing-library/angular';
 import { WikiComponent } from './wiki.component';
 
 // Mock DomSanitizer

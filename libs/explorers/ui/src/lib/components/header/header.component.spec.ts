@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { footerLinks, headerLinks } from '@sagebionetworks/explorers/testing';
-import { SvgImageComponent } from '@sagebionetworks/explorers/ui';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
+import { SvgImageComponent } from '../svg-image/svg-image.component';
 import { HeaderComponent } from './header.component';
 
 function changeWindowSize(width: number) {

@@ -25,7 +25,12 @@
         "@nx/enforce-module-boundaries": [
           "error",
           {
-            "allow": [],
+            // TODO: openchallenges-home is lazy loaded in openchallenges' app.routes.ts, but
+            // HomeDataService is statically imported in app.component.ts, which forces the entire
+            // library to be loaded immediately, breaking the lazy-loading optimization.
+            // Consider moving the service to a shared library or restructuring to avoid static imports
+            // from lazy-loaded modules, then remove this exception.
+            "allow": ["@sagebionetworks/openchallenges/home"],
             "depConstraints": [
               {
                 "sourceTag": "scope:model-ad",
