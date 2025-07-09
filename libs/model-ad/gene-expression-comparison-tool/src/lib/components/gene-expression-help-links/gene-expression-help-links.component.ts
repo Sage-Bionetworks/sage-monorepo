@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { GeneExpressionLegendComponent } from '../gene-expression-legend/gene-expression-legend.component';
-import { ComparisonToolService } from '@sagebionetworks/model-ad/services';
+import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { HelpLinksComponent } from '@sagebionetworks/explorers/comparison-tools';
 
 @Component({
