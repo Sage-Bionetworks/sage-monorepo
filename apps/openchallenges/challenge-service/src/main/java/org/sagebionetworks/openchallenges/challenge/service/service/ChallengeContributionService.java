@@ -7,6 +7,7 @@ import org.sagebionetworks.openchallenges.challenge.service.model.entity.Challen
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengeContributionMapper;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeContributionRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ChallengeContributionService {
@@ -38,5 +39,10 @@ public class ChallengeContributionService {
       .hasNext(false)
       .hasPrevious(false)
       .build();
+  }
+
+  @Transactional
+  public void deleteAllChallengeContributions(Long challengeId) {
+    challengeContributionRepository.deleteAllByChallengeId(challengeId);
   }
 }
