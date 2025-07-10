@@ -3,7 +3,7 @@ import {
   BaseComparisonToolComponent,
   ComparisonToolHeaderComponent,
 } from '@sagebionetworks/explorers/comparison-tools';
-import { ComparisonToolService } from '@sagebionetworks/model-ad/services';
+import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { GeneExpressionHelpLinksComponent } from './components/gene-expression-help-links/gene-expression-help-links.component';
 
 @Component({

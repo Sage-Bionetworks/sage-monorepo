@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, input, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NavigationLink } from '@sagebionetworks/explorers/models';
-import { MIN_DESKTOP_WIDTH } from '@sagebionetworks/model-ad/config';
 import { SvgImageComponent } from '../svg-image/svg-image.component';
 
 @Component({
@@ -15,6 +14,7 @@ export class HeaderComponent implements OnInit {
   headerLogoPath = input('');
   headerLinks = input<NavigationLink[]>([]);
   footerLinks = input<NavigationLink[]>([]);
+  minDesktopWidth = input(768);
 
   isMobile = false;
   isShown = false;
@@ -34,7 +34,7 @@ export class HeaderComponent implements OnInit {
   }
 
   onResize() {
-    if (typeof window !== 'undefined') this.isMobile = window.innerWidth < MIN_DESKTOP_WIDTH;
+    if (typeof window !== 'undefined') this.isMobile = window.innerWidth < this.minDesktopWidth();
     this.refreshNavItems();
   }
 
