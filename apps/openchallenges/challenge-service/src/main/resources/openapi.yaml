@@ -64,6 +64,56 @@ paths:
       x-tags:
         - tag: Challenge
   /challenges/{challengeId}:
+    delete:
+      description: |
+        Deletes a challenge by its unique ID. This action is irreversible.
+      operationId: deleteChallengeById
+      parameters:
+        - description: The unique identifier of the challenge.
+          explode: false
+          in: path
+          name: challengeId
+          required: true
+          schema:
+            $ref: '#/components/schemas/ChallengeId'
+          style: simple
+      responses:
+        '204':
+          description: Deletion successful
+        '401':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        '403':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The user does not have the permission to perform this action
+        '404':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+        - apiBearerAuth: []
+      summary: Delete a challenge
+      tags:
+        - Challenge
+      x-accepts:
+        - application/problem+json
+      x-tags:
+        - tag: Challenge
     get:
       description: Returns the challenge specified
       operationId: getChallenge
