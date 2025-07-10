@@ -74,10 +74,10 @@
         "debug": false
       }
     },
-    "run-hello": {
+    "run-get-challenge": {
       "executor": "@nxlv/python:run-commands",
       "options": {
-        "command": "uv run openchallenges_tools/hello.py",
+        "command": "uv run openchallenges_tools/get_challenge.py",
         "cwd": "{projectRoot}"
       }
     },

@@ -37,11 +37,11 @@
       },
       "cache": true
     },
-    "lint": {
+    "lint-excluded": {
       "executor": "@nxlv/python:ruff-check",
       "outputs": [],
       "options": {
-        "lintFilePatterns": ["openchallenges_api_client_python", "tests"]
+        "lintFilePatterns": ["openchallenges_api_client_python", "test"]
       },
       "cache": true
     },
@@ -49,7 +49,7 @@
       "executor": "@nxlv/python:ruff-format",
       "outputs": [],
       "options": {
-        "filePatterns": ["openchallenges_api_client_python", "tests"]
+        "filePatterns": ["openchallenges_api_client_python", "test"]
       },
       "cache": true
     },
@@ -60,7 +60,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "command": "uv run pytest tests/",
+        "command": "uv run pytest test/",
         "cwd": "{projectRoot}"
       },
       "cache": true
@@ -80,6 +80,19 @@
         "command": "python --version",
         "cwd": "{projectRoot}"
       }
+    },
+    "generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "xargs rm -fr <.openapi-generator/FILES",
+          "openapi-generator-cli generate",
+          "nx run format"
+        ],
+        "cwd": "{projectRoot}",
+        "parallel": false
+      },
+      "dependsOn": ["^build"]
     }
   },
   "tags": ["language:python", "package-manager:uv"],
