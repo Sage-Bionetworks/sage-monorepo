@@ -8,19 +8,17 @@ on:
   merge_group:
 
 env:
-  NX_BRANCH: ${{ github.event.number }}
-  NX_RUN_GROUP: ${{ github.run_id }}
-  NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
-  NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
-  NX_CLOUD_ENV_NAME: 'linux'
   # SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   HEAD_REF: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.ref_name }}
   HEAD_REPOSITORY: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}
+  NX_BRANCH: ${{ github.event.number }}
 
 jobs:
   push:
     runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
     if: ${{ github.event_name != 'pull_request' }}
+    env:
+      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN_READ_WRITE }}
     # env:
     #   NX_BRANCH: main
     steps:
@@ -89,6 +87,8 @@ jobs:
             github.event.pull_request.base.repo.full_name
           || !startsWith(github.head_ref, 'renovate/')
         )
+    env:
+      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN_READ_ONLY }}
     steps:
       - uses: actions/checkout@v4
         name: Checkout merge commit
