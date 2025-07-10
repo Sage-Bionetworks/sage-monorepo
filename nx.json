@@ -203,5 +203,6 @@
   },
   "useInferencePlugins": false,
   "defaultBase": "main",
-  "packageManager": "pnpm"
+  "packageManager": "pnpm",
+  "nxCloudId": "686fbf8b26cf276f670bc4b0"
 }
