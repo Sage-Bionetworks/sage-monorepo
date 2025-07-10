@@ -33,7 +33,6 @@ dependencies {
   implementation(libs.jackson.databind)
   implementation(libs.jackson.dataformat.yaml)
   implementation(libs.jackson.datatype.jsr310)
-  implementation(libs.postgresql)
   implementation(libs.spring.boot.starter.actuator)
   implementation(libs.spring.boot.starter.data.jpa)
   implementation(libs.spring.boot.starter.security)
@@ -42,12 +41,13 @@ dependencies {
   implementation(libs.springdoc.openapi.ui)
   implementation(platform(libs.spring.boot.dependencies))
   runtimeOnly(libs.flyway.database.postgresql)
+  runtimeOnly(libs.postgresql)
   runtimeOnly(libs.spring.boot.devtools)
   testImplementation(libs.spring.boot.starter.test)
   testImplementation(libs.spring.security.test)
-  testImplementation(platform(libs.testcontainers.bom))
   testImplementation(libs.testcontainers.junit.jupiter)
   testImplementation(libs.testcontainers.postgresql)
+  testImplementation(platform(libs.testcontainers.bom))
   testRuntimeOnly(libs.h2database.h2)
 }
 
