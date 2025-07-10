@@ -27,6 +27,47 @@ public interface ChallengeContributionApiDelegate {
     }
 
     /**
+     * DELETE /challenges/{challengeId}/contributions : Delete all contributions for a specific challenge
+     * Deletes all contributions associated with a challenge ID. This action is irreversible. 
+     *
+     * @param challengeId The unique identifier of the challenge. (required)
+     * @return Deletion successful (status code 204)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     * @see ChallengeContributionApi#deleteAllChallengeContributions
+     */
+    default ResponseEntity<Void> deleteAllChallengeContributions(Long challengeId) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
      * GET /challenges/{challengeId}/contributions : List challenge contributions
      * List challenge contributions
      *
