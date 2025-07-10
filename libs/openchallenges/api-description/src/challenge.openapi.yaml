@@ -32,11 +32,11 @@ paths:
     $ref: paths/challengeAnalytics/challengesPerYear.yaml
   /challengePlatforms:
     $ref: paths/challengePlatforms.yaml
-  /challengePlatforms/{challengePlatformName}:
-    $ref: paths/challengePlatforms/@{challengePlatformName}.yaml
+  /challengePlatforms/{challengePlatformId}:
+    $ref: paths/challengePlatforms/@{challengePlatformId}.yaml
   /edamConcepts:
     $ref: paths/edamConcepts.yaml
 components:
   securitySchemes:
-    ApiKeyAuth:
-      $ref: components/securitySchemes/ApiKeyAuth.yaml
+    apiBearerAuth:
+      $ref: components/securitySchemes/ApiBearerAuth.yaml

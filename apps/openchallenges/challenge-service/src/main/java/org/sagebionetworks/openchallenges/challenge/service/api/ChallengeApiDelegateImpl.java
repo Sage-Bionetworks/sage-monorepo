@@ -2,6 +2,7 @@ package org.sagebionetworks.openchallenges.challenge.service.api;
 
 import java.util.List;
 import java.util.Optional;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengesPageDto;
 import org.sagebionetworks.openchallenges.challenge.service.service.ChallengeService;
@@ -36,19 +37,8 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
   }
 
   @Override
-  public ResponseEntity<?> getChallenge(Long challengeId) {
-    for (MediaType mediaType : getAcceptedMediaTypes(getRequest())) {
-      if (mediaType.isCompatibleWith(APPLICATION_LD_JSON)) {
-        return ResponseEntity.ok(challengeService.getChallengeJsonLd(challengeId));
-      }
-      if (mediaType.isCompatibleWith(APPLICATION_JSON)) {
-        return ResponseEntity.ok(challengeService.getChallenge(challengeId));
-      }
-    }
-    // Return 406 Not Acceptable if no supported media type is found
-    return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(
-      "Unsupported media type. Supported types: application/json, application/ld+json"
-    );
+  public ResponseEntity<ChallengeDto> getChallenge(Long challengeId) {
+    return ResponseEntity.ok(challengeService.getChallenge(challengeId));
   }
 
   @Override

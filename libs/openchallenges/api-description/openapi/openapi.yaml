@@ -254,14 +254,14 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  '/challengePlatforms/{challengePlatformName}':
+  '/challengePlatforms/{challengePlatformId}':
     parameters:
-      - $ref: '#/components/parameters/challengePlatformName'
+      - $ref: '#/components/parameters/challengePlatformId'
     get:
       tags:
         - ChallengePlatform
       summary: Get a challenge platform
-      description: Returns the challenge platform specified
+      description: Returns the challenge platform identified by its unique ID
       operationId: getChallengePlatform
       responses:
         '200':
@@ -270,6 +270,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ChallengePlatform'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - ChallengePlatform
+      summary: Delete a challenge platform
+      description: >
+        Deletes a challenge platform by its unique ID. This action is
+        irreversible.
+      operationId: deleteChallengePlatform
+      security:
+        - apiBearerAuth: []
+      responses:
+        '204':
+          description: Deletion successful
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
@@ -1658,13 +1679,13 @@ components:
       in: query
       schema:
         $ref: '#/components/schemas/ChallengePlatformSearchQuery'
-    challengePlatformName:
-      name: challengePlatformName
+    challengePlatformId:
+      name: challengePlatformId
       in: path
       description: The unique identifier of the challenge platform.
       required: true
       schema:
-        $ref: '#/components/schemas/ChallengePlatformName'
+        $ref: '#/components/schemas/ChallengePlatformId'
     edamConceptSearchQuery:
       name: edamConceptSearchQuery
       description: The search query used to find EDAM concepts.

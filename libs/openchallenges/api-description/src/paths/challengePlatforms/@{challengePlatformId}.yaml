@@ -1,11 +1,11 @@
 parameters:
-  - $ref: ../../components/parameters/path/challengePlatformName.yaml
+  - $ref: ../../components/parameters/path/challengePlatformId.yaml
 get:
   tags:
     - ChallengePlatform
   summary: Get a challenge platform
-  description: Returns the challenge platform specified by its unique name
-  operationId: getChallengePlatformByName
+  description: Returns the challenge platform identified by its unique ID
+  operationId: getChallengePlatform
   responses:
     '200':
       description: Success
@@ -22,10 +22,10 @@ delete:
     - ChallengePlatform
   summary: Delete a challenge platform
   description: |
-    Deletes a challenge platform identified by its unique name. This action is irreversible.
-  operationId: deleteChallengePlatformByName
+    Deletes a challenge platform by its unique ID. This action is irreversible.
+  operationId: deleteChallengePlatform
   security:
-    - ApiKeyAuth: []
+    - apiBearerAuth: []
   responses:
     '204':
       description: Deletion successful

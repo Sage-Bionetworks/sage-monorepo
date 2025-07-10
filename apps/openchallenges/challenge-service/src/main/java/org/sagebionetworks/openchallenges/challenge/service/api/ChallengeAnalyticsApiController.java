@@ -28,7 +28,7 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 @Controller
-@RequestMapping("${openapi.openChallengesChallengeREST.base-path:/v1}")
+@RequestMapping("${openapi.openChallengesChallenge.base-path:/v1}")
 public class ChallengeAnalyticsApiController implements ChallengeAnalyticsApi {
 
     private final ChallengeAnalyticsApiDelegate delegate;
