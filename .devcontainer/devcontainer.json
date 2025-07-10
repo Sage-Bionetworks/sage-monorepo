@@ -6,7 +6,7 @@
     "DOCKER_USERNAME": "${localEnv:DOCKER_USERNAME}",
     "NX_BASE": "${localEnv:NX_BASE}",
     "NX_BRANCH": "${localEnv:NX_BRANCH}",
-    "NX_CI_EXECUTION_ENV": "ubuntu_24.04",
+    "NX_CI_EXECUTION_ENV": "ubuntu-24.04",
     "NX_CLOUD_ACCESS_TOKEN": "${localEnv:NX_CLOUD_ACCESS_TOKEN}",
     "NX_HEAD": "${localEnv:NX_HEAD}",
     "SONAR_PULL_REQUEST_NUMBER": "${localEnv:SONAR_PULL_REQUEST_NUMBER}",
