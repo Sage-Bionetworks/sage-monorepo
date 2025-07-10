@@ -43,6 +43,6 @@ public class ChallengeContributionService {
 
   @Transactional
   public void deleteAllChallengeContributions(Long challengeId) {
-    challengeContributionRepository.deleteAllByChallengeId(challengeId);
+    challengeContributionRepository.deleteByChallengeId(challengeId);
   }
 }
