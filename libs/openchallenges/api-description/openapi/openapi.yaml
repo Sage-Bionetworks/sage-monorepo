@@ -227,7 +227,7 @@ paths:
         irreversible.
       operationId: deleteAllChallengeContributions
       security:
-        - ApiKeyAuth: []
+        - apiBearerAuth: []
       responses:
         '204':
           description: Deletion successful
@@ -1658,12 +1658,6 @@ components:
             $ref: '#/components/schemas/BasicError'
     NotFound:
       description: The specified resource was not found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    Unauthorized:
-      description: Unauthorized
       content:
         application/problem+json:
           schema:

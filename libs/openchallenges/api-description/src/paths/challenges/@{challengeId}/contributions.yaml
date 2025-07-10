@@ -25,7 +25,7 @@ delete:
     Deletes all contributions associated with a challenge ID. This action is irreversible.
   operationId: deleteAllChallengeContributions
   security:
-    - ApiKeyAuth: []
+    - apiBearerAuth: []
   responses:
     '204':
       description: Deletion successful
