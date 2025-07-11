@@ -2,5 +2,17 @@
   {
     "name": "modeldetails",
     "indexes": [{ "model": 1 }]
+  },
+  {
+    "name": "uiconfig",
+    "indexes": [{ "page": 1 }]
+  },
+  {
+    "name": "modeloverview",
+    "indexes": [{ "model": 1 }]
+  },
+  {
+    "name": "diseasecorrelation",
+    "indexes": [{ "model": 1 }]
   }
 ]
