@@ -1,3 +1,1 @@
-# fastchat
-
-Project description here.
+# BioArena Apps
