@@ -12,8 +12,12 @@ workspace = true
 [tool.uv.sources.openchallenges-api-client-python]
 workspace = true
 
+[tool.uv.sources.bioarena-tools]
+workspace = true
+
 [tool.uv.workspace]
 members = [
+  "apps/bioarena/tools",
   "apps/openchallenges/tools",
   "libs/openchallenges/api-client-python"
 ]
@@ -24,7 +28,11 @@ build-backend = "pdm.backend"
 
 [project]
 requires-python = "==3.13.3"
-dependencies = [ "openchallenges_tools", "openchallenges-api-client-python" ]
+dependencies = [
+  "openchallenges_tools",
+  "openchallenges-api-client-python",
+  "bioarena-tools"
+]
 name = "sage-monorepo"
 version = "1.0.0"
 description = ""
