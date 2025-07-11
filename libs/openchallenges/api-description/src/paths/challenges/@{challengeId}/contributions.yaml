@@ -17,3 +17,23 @@ get:
       $ref: ../../../components/responses/BadRequest.yaml
     '500':
       $ref: ../../../components/responses/InternalServerError.yaml
+delete:
+  tags:
+    - ChallengeContribution
+  summary: Delete all contributions for a specific challenge
+  description: |
+    Deletes all contributions associated with a challenge ID. This action is irreversible.
+  operationId: deleteAllChallengeContributions
+  security:
+    - apiBearerAuth: []
+  responses:
+    '204':
+      description: Deletion successful
+    '401':
+      $ref: ../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../../components/responses/InternalServerError.yaml
