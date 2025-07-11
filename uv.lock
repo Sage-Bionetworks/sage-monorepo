@@ -4,6 +4,7 @@ requires-python = "==3.13.3"
 
 [manifest]
 members = [
+    "fastchat",
     "openchallenges-api-client-python",
     "openchallenges-tools",
     "sage-monorepo",
@@ -121,6 +122,11 @@ sdist = { url = "https://files.pythonhosted.org/packages/ed/11/a8fe05b5d974e889d
 wheels = [
     { url = "https://files.pythonhosted.org/packages/5e/51/e8cb085f0c0e5d272624129809ae971979173e2853a609d90beade7ea107/diff_cover-9.4.1-py3-none-any.whl", hash = "sha256:84d5bd402f566d04212126988a2c352b8ec801fa7e43b8856bd8dc146baec5a9", size = 54643, upload_time = "2025-06-23T23:14:50.859Z" },
 ]
+
+[[package]]
+name = "fastchat"
+version = "1.0.0"
+source = { editable = "apps/bioarena" }
 
 [[package]]
 name = "iniconfig"
@@ -394,6 +400,7 @@ name = "sage-monorepo"
 version = "1.0.0"
 source = { editable = "." }
 dependencies = [
+    { name = "fastchat" },
     { name = "openchallenges-api-client-python" },
     { name = "openchallenges-tools" },
 ]
@@ -412,6 +419,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "fastchat", editable = "apps/bioarena" },
     { name = "openchallenges-api-client-python", editable = "libs/openchallenges/api-client-python" },
     { name = "openchallenges-tools", editable = "apps/openchallenges/tools" },
 ]
