@@ -88,8 +88,6 @@ jobs:
             github.event.pull_request.base.repo.full_name
           || !startsWith(github.head_ref, 'renovate/')
         )
-    env:
-      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN_READ_ONLY }}
     steps:
       - uses: actions/checkout@v4
         name: Checkout merge commit
