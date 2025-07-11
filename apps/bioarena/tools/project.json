@@ -73,6 +73,13 @@
         "verbose": false,
         "debug": false
       }
+    },
+    "run-hello": {
+      "executor": "@nxlv/python:run-commands",
+      "options": {
+        "command": "uv run bioarena_tools/hello.py",
+        "cwd": "{projectRoot}"
+      }
     }
   },
   "tags": [],
