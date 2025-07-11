@@ -15,6 +15,7 @@ args=(
   --file docker/"$product_name"/services/image-service.yml
   --file docker/"$product_name"/services/kafka.yml
   --file docker/"$product_name"/services/mcp-server.yml
+  --file docker/"$product_name"/services/opensearch-dashboards.yml
   --file docker/"$product_name"/services/opensearch.yml
   --file docker/"$product_name"/services/organization-service.yml
   --file docker/"$product_name"/services/postgres.yml
