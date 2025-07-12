@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: amp-als-dataset-service
+  namespace: amp-als
+  labels:
+    app: amp-als-dataset-service
+    component: application
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8404
+      targetPort: 8404
+      protocol: TCP
+      name: http
+  selector:
+    app: amp-als-dataset-service

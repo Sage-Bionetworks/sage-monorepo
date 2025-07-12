@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: amp-als-postgres
+  namespace: amp-als
+  labels:
+    app: amp-als-postgres
+    component: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: amp-als-postgres
+  template:
+    metadata:
+      labels:
+        app: amp-als-postgres
+        component: database
+    spec:
+      containers:
+        - name: postgres
+          image: ghcr.io/sage-bionetworks/amp-als-postgres:local
+          ports:
+            - containerPort: 8401
+              name: postgres
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: amp-als-postgres-secret
+                  key: postgres-password
+            - name: POSTGRES_DB
+              value: dataset_service
+            - name: POSTGRES_USER
+              value: dataset_service
+            - name: POSTGRES_USER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: amp-als-postgres-secret
+                  key: postgres-user-password
+            - name: PGPORT
+              value: '8401'
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+            - name: init-scripts
+              mountPath: /docker-entrypoint-initdb.d
+              readOnly: true
+          livenessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - dataset_service
+                - -d
+                - dataset_service
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - dataset_service
+                - -d
+                - dataset_service
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 5
+          resources:
+            limits:
+              memory: 500Mi
+              cpu: 500m
+            requests:
+              memory: 256Mi
+              cpu: 250m
+      volumes:
+        - name: postgres-data
+          persistentVolumeClaim:
+            claimName: amp-als-postgres-pvc
+        - name: init-scripts
+          configMap:
+            name: amp-als-postgres-init
