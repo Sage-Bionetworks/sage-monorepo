@@ -1,0 +1,6 @@
+description: The Ensembl gene ID.
+type: string
+minLength: 15
+maxLength: 15
+pattern: '^ENSG\d{11}$'
+example: ENSG00000139618
