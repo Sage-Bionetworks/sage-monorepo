@@ -115,7 +115,7 @@
     "@nx/playwright": "21.2.1",
     "@nx/plugin": "21.2.1",
     "@nx/react": "21.2.1",
-    "@nx/storybook": "20.8.1",
+    "@nx/storybook": "21.2.3",
     "@nx/vite": "21.2.1",
     "@nx/web": "21.2.1",
     "@nx/webpack": "21.2.1",
