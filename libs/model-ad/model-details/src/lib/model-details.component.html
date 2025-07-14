@@ -18,6 +18,11 @@
         }
         @case ('biomarkers') {
           <h2>Biomarkers</h2>
+          <model-ad-model-details-boxplots-grid
+            [title]="model.biomarkers[0].evidence_type"
+            [modelDataList]="model.biomarkers.slice(0, 3)"
+            [sexes]="['Male', 'Female']"
+          />
         }
         @case ('pathology') {
           <h2>Pathology</h2>

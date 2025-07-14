@@ -47,6 +47,27 @@ export const getCategoryPointColor = (
   return getPointStyleFromArray(pt, pointCategories, colors, 'color', 'transparent');
 };
 
+export const getCategoryPointStyle = <T>(
+  point: CategoryPoint,
+  hasPointCategories: boolean,
+  customMapping: Record<string, T> | undefined,
+  defaultStyleFunction: (pt: CategoryPoint, categories: string[]) => T,
+  pointCategories: string[],
+  defaultValue: T,
+): T => {
+  if (!hasPointCategories) {
+    return defaultValue;
+  }
+
+  if (customMapping) {
+    const ptCategory = point.pointCategory;
+    const customStyle = ptCategory && customMapping[ptCategory];
+    return customStyle || defaultValue;
+  } else {
+    return defaultStyleFunction(point, pointCategories);
+  }
+};
+
 export function getUniqueValues(
   values: Record<string, unknown>[],
   key: string,

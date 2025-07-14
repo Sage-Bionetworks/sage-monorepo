@@ -1,0 +1,12 @@
+<div class="boxplots-grid-container">
+  <div class="boxplots-grid-title">
+    <h2>{{ title() | decodeGreekEntity }}</h2>
+    <!-- <explorers-download-dom-image /> -->
+  </div>
+
+  <div class="boxplots-grid">
+    @for (modelData of modelDataList(); track modelData) {
+      <model-ad-model-details-boxplot [modelData]="modelData" [sexes]="sexes()" />
+    }
+  </div>
+</div>

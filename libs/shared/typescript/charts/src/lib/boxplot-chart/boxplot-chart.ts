@@ -6,6 +6,7 @@ import {
   formatCategoryPointsForBoxplotTransform,
   getCategoryPointColor,
   getCategoryPointShape,
+  getCategoryPointStyle,
   getUniqueValues,
   initChart,
   setNoDataOption,
@@ -27,6 +28,9 @@ const yAxisPadding = 0.2;
 const defaultPointShape = 'circle';
 const defaultPointSize = 18;
 const defaultPointColor = '#8b8ad1';
+
+const Y_AXIS_TICK_LABELS_MAX_WIDTH = 80;
+const SPACE_FOR_Y_AXIS_NAME = 40;
 
 export class BoxplotChart {
   chart: ECharts | undefined;
@@ -62,6 +66,8 @@ export class BoxplotChart {
       yAxisMax,
       xAxisCategoryToTooltipText,
       pointTooltipFormatter,
+      pointCategoryColors,
+      pointCategoryShapes,
     } = boxplotProps;
 
     const noPoints = points.length === 0;
@@ -162,39 +168,52 @@ export class BoxplotChart {
       },
       symbolSize: defaultPointSize,
       symbol: (point: CategoryPoint) => {
-        return hasPointCategories
-          ? getCategoryPointShape(point, pointCategories)
-          : defaultPointShape;
+        return getCategoryPointStyle(
+          point,
+          hasPointCategories,
+          pointCategoryShapes,
+          getCategoryPointShape,
+          pointCategories,
+          defaultPointShape,
+        );
       },
       itemStyle: {
         color: (params) => {
-          return hasPointCategories
-            ? getCategoryPointColor(params.value as CategoryPoint, pointCategories)
-            : defaultPointColor;
+          return getCategoryPointStyle(
+            params.value as CategoryPoint,
+            hasPointCategories,
+            pointCategoryColors,
+            getCategoryPointColor,
+            pointCategories,
+            defaultPointColor,
+          );
         },
       },
       tooltip: {
-        formatter: (param) => {
+        formatter: (params) => {
           if (pointTooltipFormatter) {
-            return pointTooltipFormatter(param.data as CategoryPoint);
+            return pointTooltipFormatter(params.data as CategoryPoint, params);
           }
-          const pt = param.data as CategoryPoint;
+          const pt = params.data as CategoryPoint;
           return `${pt.value}`;
         },
       },
     });
 
-    const titles = [
-      // Add x-axis title as a title rather than xAxis.name, because
-      // setting via xAxis.name causes cursor to change to pointer when
-      // x-axis label tooltips are used
-      {
-        text: xAxisTitle,
-        textStyle: titleTextStyle,
-        left: 'center',
-        top: 'bottom',
-      },
-    ];
+    const titles = [];
+    if (xAxisTitle) {
+      titles.push(
+        // Add x-axis title as a title rather than xAxis.name, because
+        // setting via xAxis.name causes cursor to change to pointer when
+        // x-axis label tooltips are used
+        {
+          text: xAxisTitle,
+          textStyle: titleTextStyle,
+          left: 'center',
+          top: 'bottom',
+        },
+      );
+    }
     if (title) {
       titles.push({
         text: title,
@@ -207,9 +226,9 @@ export class BoxplotChart {
     const option: EChartsOption = {
       grid: {
         top: title ? 60 : 20,
-        left: 25,
+        left: Y_AXIS_TICK_LABELS_MAX_WIDTH + SPACE_FOR_Y_AXIS_NAME,
         right: 20,
-        containLabel: true,
+        containLabel: false,
       },
       title: titles,
       aria: {
@@ -266,12 +285,14 @@ export class BoxplotChart {
         type: 'value',
         name: yAxisTitle,
         nameLocation: 'middle',
-        nameGap: 50,
+        nameGap: Y_AXIS_TICK_LABELS_MAX_WIDTH,
         nameTextStyle: titleTextStyle,
         axisLine: {
           show: true,
         },
         axisLabel: {
+          width: Y_AXIS_TICK_LABELS_MAX_WIDTH,
+          hideOverlap: true,
           showMinLabel: yAxisMin == null,
           showMaxLabel: yAxisMax == null,
         },

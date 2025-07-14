@@ -10,6 +10,7 @@ import {
   formatCategoryPointsForBoxplotTransform,
   getCategoryPointColor,
   getCategoryPointShape,
+  getCategoryPointStyle,
   getOffsetAndJitteredXValue,
   getPointStyleFromArray,
   getRandomNumber,
@@ -177,6 +178,62 @@ describe('boxplot-utils', () => {
         ]),
       ).toEqual('transparent');
       expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('getCategoryPointStyle', () => {
+    const point = { xAxisCategory: 'b', pointCategory: 'X', value: 1 };
+    const pointCategories = ['X', 'Y', 'Z'];
+
+    it('should return default value when hasPointCategories is false', () => {
+      const result = getCategoryPointStyle(
+        point,
+        false,
+        { X: 'triangle' },
+        getCategoryPointShape,
+        pointCategories,
+        'circle',
+      );
+      expect(result).toEqual('circle');
+    });
+
+    it('should return custom style when point category in custom mapping', () => {
+      const customShapes = { X: 'triangle', Y: 'rect' };
+      const result = getCategoryPointStyle(
+        point,
+        true,
+        customShapes,
+        getCategoryPointShape,
+        pointCategories,
+        'circle',
+      );
+      expect(result).toEqual('triangle');
+    });
+
+    it('should return default when point category not in custom mapping', () => {
+      const pointWithUnknownCategory = { xAxisCategory: 'b', pointCategory: 'Z', value: 1 };
+      const customShapes = { X: 'triangle', Y: 'rect' };
+      const result = getCategoryPointStyle(
+        pointWithUnknownCategory,
+        true,
+        customShapes,
+        getCategoryPointShape,
+        pointCategories,
+        'circle',
+      );
+      expect(result).toEqual('circle');
+    });
+
+    it('should use default style fucntion when no custom mapping is provided', () => {
+      const result = getCategoryPointStyle(
+        point,
+        true,
+        undefined,
+        getCategoryPointShape,
+        pointCategories,
+        'triangle',
+      );
+      expect(result).toEqual('circle');
     });
   });
 

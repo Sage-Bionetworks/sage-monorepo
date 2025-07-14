@@ -22,6 +22,8 @@ const renderTestComponent = async (props: BoxplotProps) => {
       [yAxisMax]="yAxisMax"
       [xAxisCategoryToTooltipText]="xAxisCategoryToTooltipText"
       [pointTooltipFormatter]="pointTooltipFormatter"
+      [pointCategoryColors]="pointCategoryColors"
+      [pointCategoryShapes]="pointCategoryShapes"
     ></div>`,
   })
   class TestComponent {
@@ -34,6 +36,8 @@ const renderTestComponent = async (props: BoxplotProps) => {
     yAxisMax = props.yAxisMax;
     xAxisCategoryToTooltipText = props.xAxisCategoryToTooltipText;
     pointTooltipFormatter = props.pointTooltipFormatter;
+    pointCategoryColors = props.pointCategoryColors;
+    pointCategoryShapes = props.pointCategoryShapes;
   }
 
   return await render(TestComponent, {

@@ -1,0 +1,21 @@
+@use 'styles/src/lib/variables';
+@use 'styles/src/lib/mixins';
+
+.boxplots-grid-container {
+  overflow-x: hidden;
+
+  .boxplots-grid {
+    display: grid;
+    gap: 30px 50px;
+    grid-template-columns: minmax(0, 1fr);
+
+    @include mixins.respond-to('large') {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    shared-typescript-charts-angular {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
