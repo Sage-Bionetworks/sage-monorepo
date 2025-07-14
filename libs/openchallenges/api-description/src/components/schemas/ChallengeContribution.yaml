@@ -1,13 +1,5 @@
 type: object
-description: A challenge contribution.
-properties:
-  challengeId:
-    $ref: ChallengeId.yaml
-  organizationId:
-    $ref: OrganizationId.yaml
-  role:
-    $ref: ChallengeContributionRole.yaml
-required:
-  - challengeId
-  - organizationId
-  - role
+description: A challenge contribution
+allOf:
+  - $ref: ChallengeOrganizerCreateResponse.yaml
+  - $ref: ChallengeOrganizerCreateRequest.yaml

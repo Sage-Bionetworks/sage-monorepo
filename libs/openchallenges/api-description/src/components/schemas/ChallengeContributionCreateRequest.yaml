@@ -1,0 +1,13 @@
+type: object
+description: A challenge contribution to be created.
+properties:
+  challengeId:
+    $ref: ChallengeId.yaml
+  organizationId:
+    $ref: OrganizationId.yaml
+  role:
+    $ref: ChallengeContributionRole.yaml
+required:
+  - challengeId
+  - organizationId
+  - role
