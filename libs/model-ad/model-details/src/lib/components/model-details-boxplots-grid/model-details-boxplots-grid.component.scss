@@ -1,6 +1,10 @@
 @use 'styles/src/lib/variables';
 @use 'styles/src/lib/mixins';
 
+h2 {
+  padding-bottom: 30px;
+}
+
 .boxplots-grid-container {
   overflow-x: hidden;
 

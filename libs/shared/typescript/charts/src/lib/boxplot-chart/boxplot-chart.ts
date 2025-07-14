@@ -28,6 +28,7 @@ const yAxisPadding = 0.2;
 const defaultPointShape = 'circle';
 const defaultPointSize = 18;
 const defaultPointColor = '#8b8ad1';
+const defaultPointOpacity = 0.8;
 
 const Y_AXIS_TICK_LABELS_MAX_WIDTH = 80;
 const SPACE_FOR_Y_AXIS_NAME = 40;
@@ -68,6 +69,7 @@ export class BoxplotChart {
       pointTooltipFormatter,
       pointCategoryColors,
       pointCategoryShapes,
+      pointOpacity,
     } = boxplotProps;
 
     const showLegend = boxplotProps.showLegend || false;
@@ -213,6 +215,7 @@ export class BoxplotChart {
                   pointCategories,
                   defaultPointColor,
                 ),
+          opacity: pointOpacity || defaultPointOpacity,
         },
         tooltip: {
           formatter: (params) => {

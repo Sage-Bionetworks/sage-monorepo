@@ -63,4 +63,5 @@ export interface BoxplotProps {
   where key is the pointCategory and value is the shape. */
   pointCategoryShapes?: Record<string, string>;
   showLegend?: boolean;
+  pointOpacity?: number;
 }

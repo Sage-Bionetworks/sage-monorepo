@@ -17,7 +17,7 @@ const meta: Meta<BoxplotDirective> = {
   },
   render: (args: BoxplotProps) => ({
     props: args,
-    template: `<div sageBoxplot [points]="points" [summaries]="summaries" [title]="title" [xAxisTitle]="xAxisTitle" [yAxisTitle]="yAxisTitle" [yAxisMin]="yAxisMin" [yAxisMax]="yAxisMax" [xAxisCategoryToTooltipText]="xAxisCategoryToTooltipText" [pointTooltipFormatter]="pointTooltipFormatter" [pointCategoryColors]="pointCategoryColors" [pointCategoryShapes]="pointCategoryShapes" [showLegend]="showLegend"></div>`,
+    template: `<div sageBoxplot [points]="points" [summaries]="summaries" [title]="title" [xAxisTitle]="xAxisTitle" [yAxisTitle]="yAxisTitle" [yAxisMin]="yAxisMin" [yAxisMax]="yAxisMax" [xAxisCategoryToTooltipText]="xAxisCategoryToTooltipText" [pointTooltipFormatter]="pointTooltipFormatter" [pointCategoryColors]="pointCategoryColors" [pointCategoryShapes]="pointCategoryShapes" [showLegend]="showLegend" [pointOpacity]="pointOpacity"></div>`,
   }),
 };
 export default meta;
@@ -60,5 +60,6 @@ export const DynamicSummary: Story = {
     pointCategoryColors: { Male: 'yellow', Female: 'green' },
     pointCategoryShapes: { Male: 'circle', Female: 'triangle' },
     showLegend: true,
+    pointOpacity: 0.5,
   },
 };
