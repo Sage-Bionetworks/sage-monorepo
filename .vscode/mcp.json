@@ -1,11 +1,9 @@
 {
   "servers": {
-    // https://www.atlassian.com/platform/remote-mcp-server
     "atlassian": {
       "type": "http",
       "url": "https://mcp.atlassian.com/v1/sse"
     },
-    // https://github.com/github/github-mcp-server/
     "github": {
       "type": "http",
       "url": "https://api.githubcopilot.com/mcp/"
