@@ -100,6 +100,7 @@ export class BoxplotChart {
       xAxisCategories,
     );
 
+    const basePointsDatasetId = 'points';
     const datasetOpts: DatasetComponentOption[] = [
       {
         id: 'static-boxplot-summaries',
@@ -109,7 +110,7 @@ export class BoxplotChart {
         source: dataForStaticBoxplotSummaries,
       },
       {
-        id: 'points',
+        id: basePointsDatasetId,
         dimensions: noPoints ? undefined : Object.keys(dataForScatterPoints[0]),
         source: dataForScatterPoints,
       },
@@ -125,6 +126,24 @@ export class BoxplotChart {
         },
       },
     ];
+
+    // points dataset for each pointCategory
+    const pointDatasetIds = hasPointCategories ? pointCategories : [basePointsDatasetId];
+    if (hasPointCategories) {
+      pointCategories.forEach((pointCategory) => {
+        datasetOpts.push({
+          id: pointCategory,
+          fromDatasetId: basePointsDatasetId,
+          transform: {
+            type: 'filter',
+            config: {
+              dimension: 'pointCategory',
+              value: pointCategory,
+            },
+          },
+        });
+      });
+    }
 
     const seriesOpts: SeriesOption[] = [];
 
@@ -157,47 +176,51 @@ export class BoxplotChart {
       });
     }
 
-    // points
-    seriesOpts.push({
-      type: 'scatter',
-      datasetId: 'points',
-      xAxisId: 'value-x-axis',
-      encode: {
-        x: 'xAxisValue',
-        y: 'value',
-      },
-      symbolSize: defaultPointSize,
-      symbol: (point: CategoryPoint) => {
-        return getCategoryPointStyle(
-          point,
-          hasPointCategories,
-          pointCategoryShapes,
-          getCategoryPointShape,
-          pointCategories,
-          defaultPointShape,
-        );
-      },
-      itemStyle: {
-        color: (params) => {
-          return getCategoryPointStyle(
-            params.value as CategoryPoint,
-            hasPointCategories,
-            pointCategoryColors,
-            getCategoryPointColor,
-            pointCategories,
-            defaultPointColor,
-          );
+    // points series for each points dataset
+    pointDatasetIds.forEach((id) => {
+      seriesOpts.push({
+        type: 'scatter',
+        datasetId: id,
+        xAxisId: 'value-x-axis',
+        encode: {
+          x: 'xAxisValue',
+          y: 'value',
         },
-      },
-      tooltip: {
-        formatter: (params) => {
-          if (pointTooltipFormatter) {
-            return pointTooltipFormatter(params.data as CategoryPoint, params);
-          }
-          const pt = params.data as CategoryPoint;
-          return `${pt.value}`;
+        symbolSize: defaultPointSize,
+        symbol:
+          id === 'points'
+            ? defaultPointShape
+            : getCategoryPointStyle(
+                id,
+                hasPointCategories,
+                pointCategoryShapes,
+                getCategoryPointShape,
+                pointCategories,
+                defaultPointShape,
+              ),
+        itemStyle: {
+          color:
+            id === 'points'
+              ? defaultPointColor
+              : getCategoryPointStyle(
+                  id,
+                  hasPointCategories,
+                  pointCategoryColors,
+                  getCategoryPointColor,
+                  pointCategories,
+                  defaultPointColor,
+                ),
         },
-      },
+        tooltip: {
+          formatter: (params) => {
+            if (pointTooltipFormatter) {
+              return pointTooltipFormatter(params.data as CategoryPoint, params);
+            }
+            const pt = params.data as CategoryPoint;
+            return `${pt.value}`;
+          },
+        },
+      });
     });
 
     const titles = [];

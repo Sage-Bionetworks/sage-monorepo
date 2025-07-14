@@ -2,15 +2,15 @@ import { CategoryAsValuePoint, CategoryBoxplotSummary, CategoryPoint } from '../
 import { CategoryAsValueBoxplotSummary } from '../models/boxplot';
 
 export const getPointStyleFromArray = (
-  pt: CategoryPoint,
+  pointCategory: string | undefined,
   pointCategories: string[],
   styleValues: string[],
   styleType: string,
   notFoundValue: string,
 ) => {
-  const pointIndex = pointCategories.indexOf(pt.pointCategory || '');
+  const pointIndex = pointCategories.indexOf(pointCategory || '');
   if (pointIndex < 0) {
-    console.warn(`Point category ${pt.pointCategory} not found.`);
+    console.warn(`Point category ${pointCategory} not found.`);
     return notFoundValue;
   }
   if (pointIndex >= styleValues.length) {
@@ -23,15 +23,15 @@ export const getPointStyleFromArray = (
 };
 
 export const getCategoryPointShape = (
-  pt: CategoryPoint,
+  pointCategory: string | undefined,
   pointCategories: string[],
   shapes: string[] = ['circle', 'triangle', 'rect', 'roundRect', 'diamond', 'pin', 'arrow'],
 ) => {
-  return getPointStyleFromArray(pt, pointCategories, shapes, 'shape', 'none');
+  return getPointStyleFromArray(pointCategory, pointCategories, shapes, 'shape', 'none');
 };
 
 export const getCategoryPointColor = (
-  pt: CategoryPoint,
+  pointCategory: string | undefined,
   pointCategories: string[],
   colors: string[] = [
     '#000000',
@@ -44,14 +44,14 @@ export const getCategoryPointColor = (
     '#CC79A7',
   ],
 ) => {
-  return getPointStyleFromArray(pt, pointCategories, colors, 'color', 'transparent');
+  return getPointStyleFromArray(pointCategory, pointCategories, colors, 'color', 'transparent');
 };
 
 export const getCategoryPointStyle = <T>(
-  point: CategoryPoint,
+  pointCategory: string | undefined,
   hasPointCategories: boolean,
   customMapping: Record<string, T> | undefined,
-  defaultStyleFunction: (pt: CategoryPoint, categories: string[]) => T,
+  defaultStyleFunction: (pointCategory: string | undefined, categories: string[]) => T,
   pointCategories: string[],
   defaultValue: T,
 ): T => {
@@ -60,11 +60,10 @@ export const getCategoryPointStyle = <T>(
   }
 
   if (customMapping) {
-    const ptCategory = point.pointCategory;
-    const customStyle = ptCategory && customMapping[ptCategory];
+    const customStyle = pointCategory && customMapping[pointCategory];
     return customStyle || defaultValue;
   } else {
-    return defaultStyleFunction(point, pointCategories);
+    return defaultStyleFunction(pointCategory, pointCategories);
   }
 };
 
