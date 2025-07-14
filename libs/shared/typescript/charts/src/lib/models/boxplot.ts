@@ -62,4 +62,5 @@ export interface BoxplotProps {
   /* if defined, will be used to set shape for each point based on its pointCategory, 
   where key is the pointCategory and value is the shape. */
   pointCategoryShapes?: Record<string, string>;
+  showLegend?: boolean;
 }

@@ -70,6 +70,8 @@ export class BoxplotChart {
       pointCategoryShapes,
     } = boxplotProps;
 
+    const showLegend = boxplotProps.showLegend || false;
+
     const noPoints = points.length === 0;
     const noSummaries = summaries == null || summaries.length === 0;
 
@@ -181,6 +183,7 @@ export class BoxplotChart {
       seriesOpts.push({
         type: 'scatter',
         datasetId: id,
+        name: id,
         xAxisId: 'value-x-axis',
         encode: {
           x: 'xAxisValue',
@@ -247,6 +250,16 @@ export class BoxplotChart {
     }
 
     const option: EChartsOption = {
+      legend: {
+        show: showLegend,
+        data: pointDatasetIds,
+        orient: 'horizontal',
+        left: 'left',
+        top: 'bottom',
+        itemHeight: defaultPointSize,
+        itemWidth: defaultPointSize,
+        selectedMode: false,
+      },
       grid: {
         top: title ? 60 : 20,
         left: Y_AXIS_TICK_LABELS_MAX_WIDTH + SPACE_FOR_Y_AXIS_NAME,

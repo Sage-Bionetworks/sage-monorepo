@@ -29,6 +29,7 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
     | ((pt: CategoryPoint, params: CallbackDataParams) => string);
   @Input() pointCategoryColors: undefined | Record<string, string>;
   @Input() pointCategoryShapes: undefined | Record<string, string>;
+  @Input() showLegend: undefined | boolean;
 
   ngOnInit() {
     this.boxplot = new BoxplotChart(this.el.nativeElement, this.getBoxplotProps());
@@ -55,6 +56,7 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
       pointTooltipFormatter: this.pointTooltipFormatter,
       pointCategoryColors: this.pointCategoryColors,
       pointCategoryShapes: this.pointCategoryShapes,
+      showLegend: this.showLegend,
     };
   }
 }

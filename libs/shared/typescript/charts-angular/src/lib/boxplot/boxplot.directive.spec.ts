@@ -24,6 +24,7 @@ const renderTestComponent = async (props: BoxplotProps) => {
       [pointTooltipFormatter]="pointTooltipFormatter"
       [pointCategoryColors]="pointCategoryColors"
       [pointCategoryShapes]="pointCategoryShapes"
+      [showLegend]="showLegend"
     ></div>`,
   })
   class TestComponent {
@@ -38,6 +39,7 @@ const renderTestComponent = async (props: BoxplotProps) => {
     pointTooltipFormatter = props.pointTooltipFormatter;
     pointCategoryColors = props.pointCategoryColors;
     pointCategoryShapes = props.pointCategoryShapes;
+    showLegend = props.showLegend;
   }
 
   return await render(TestComponent, {
