@@ -26,9 +26,11 @@ post:
   operationId: addChallengeContribution
   security:
     - ApiKeyAuth: []
+  requestBody:
+    $ref: ../../../components/schemas/ChallengeContributionCreateRequest.yaml
   responses:
     '201':
-      $ref: ../../../components/schemas/ChallengeContribution.yaml
+      $ref: ../../../components/schemas/ChallengeContributionCreateResponse.yaml
     '401':
       $ref: ../../../components/responses/Unauthorized.yaml
     '403':

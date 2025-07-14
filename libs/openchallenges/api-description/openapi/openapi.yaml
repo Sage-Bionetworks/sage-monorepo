@@ -100,9 +100,11 @@ paths:
       operationId: addChallengeContribution
       security:
         - ApiKeyAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/ChallengeContributionCreateRequest'
       responses:
         '201':
-          $ref: '#/components/responses/ChallengeContribution'
+          $ref: '#/components/responses/ChallengeContributionCreateResponse'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -790,28 +792,61 @@ components:
             - '@context'
             - '@id'
             - '@type'
-    ChallengeContributionRole:
-      description: The nature of a challenge contribution.
+    ChallengeOrganizerId:
+      description: The unique identifier of a challenge organizer
+      type: string
+      example: 507f1f77bcf86cd799439011
+    ChallengeOrganizerCreateResponse:
+      type: object
+      description: The unique identifier of the challenge organizer created
+      properties:
+        id:
+          $ref: '#/components/schemas/ChallengeOrganizerId'
+      required:
+        - id
+      example:
+        id: 507f1f77bcf86cd799439011
+    AccountLogin:
+      description: The user or organization account name
+      type: string
+      minLength: 3
+      maxLength: 25
+      pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+      example: awesome-user
+    ChallengeOrganizerRole:
+      description: The role of the challenge organizer
       type: string
       enum:
-        - challenge_organizer
-        - data_contributor
-        - sponsor
-      example: challenge_organizer
+        - ChallengeLead
+        - InfrastructureLead
+      example: ChallengeLead
+    ChallengeOrganizerCreateRequest:
+      type: object
+      description: The information used to create a challenge organizer
+      properties:
+        name:
+          type: string
+        login:
+          $ref: '#/components/schemas/AccountLogin'
+          nullable: true
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeOrganizerRole'
+      required:
+        - name
+      example:
+        name: John Smith
+        login: jsmith
+        roles:
+          - ChallengeLead
+          - InfrastructureLead
     ChallengeContribution:
       type: object
-      description: A challenge contribution.
-      properties:
-        challengeId:
-          $ref: '#/components/schemas/ChallengeId'
-        organizationId:
-          $ref: '#/components/schemas/OrganizationId'
-        role:
-          $ref: '#/components/schemas/ChallengeContributionRole'
-      required:
-        - challengeId
-        - organizationId
-        - role
+      description: A challenge contribution
+      allOf:
+        - $ref: '#/components/schemas/ChallengeOrganizerCreateResponse'
+        - $ref: '#/components/schemas/ChallengeOrganizerCreateRequest'
     ChallengeContributionsPage:
       type: object
       description: A page of challenge challenge contributions.
@@ -1076,6 +1111,14 @@ components:
       enum:
         - featured
       example: featured
+    ChallengeContributionRole:
+      description: The nature of a challenge contribution.
+      type: string
+      enum:
+        - challenge_organizer
+        - data_contributor
+        - sponsor
+      example: challenge_organizer
     OrganizationSort:
       description: What to sort results by.
       type: string
@@ -1347,20 +1390,16 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-    ChallengeContribution:
+    ChallengeContributionCreateResponse:
       type: object
-      description: A challenge contribution.
+      description: The unique identifier of the challenge contribution
       properties:
-        challengeId:
-          $ref: '#/components/schemas/ChallengeId'
-        organizationId:
-          $ref: '#/components/schemas/OrganizationId'
-        role:
-          $ref: '#/components/schemas/ChallengeContributionRole'
+        id:
+          $ref: ContributionId.yaml
       required:
-        - challengeId
-        - organizationId
-        - role
+        - id
+      example:
+        id: 1
     Unauthorized:
       description: Unauthorized
       content:
@@ -1465,6 +1504,21 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/AccountId'
+  requestBodies:
+    ChallengeContributionCreateRequest:
+      type: object
+      description: A challenge contribution to be created.
+      properties:
+        challengeId:
+          $ref: ChallengeId.yaml
+        organizationId:
+          $ref: OrganizationId.yaml
+        role:
+          $ref: ChallengeContributionRole.yaml
+      required:
+        - challengeId
+        - organizationId
+        - role
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
