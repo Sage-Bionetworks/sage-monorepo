@@ -1,0 +1,15 @@
+services:
+  bioarena-controller:
+    image: ghcr.io/sage-bionetworks/bioarena-controller:${AGORA_VERSION:-local}
+    container_name: bioarena-controller
+    restart: always
+    networks:
+      - bioarena
+    ports:
+      - '21001:21001'
+    env_file:
+      - ../../../apps/bioarena/controller/.env
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: 200M

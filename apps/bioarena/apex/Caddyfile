@@ -1,0 +1,5 @@
+:8000 {
+	handle {
+		reverse_proxy {env.APP_HOST}:{env.APP_PORT}
+	}
+}

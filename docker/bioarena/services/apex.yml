@@ -1,0 +1,24 @@
+services:
+  bioarena-apex:
+    image: ghcr.io/sage-bionetworks/bioarena-apex:${BIOARENA_VERSION:-local}
+    container_name: bioarena-apex
+    restart: always
+    env_file:
+      - ../../../apps/bioarena/apex/.env
+    volumes:
+      - ../../../apps/bioarena/apex/Caddyfile:/etc/caddy/Caddyfile
+    networks:
+      - bioarena
+    ports:
+      - '8111:8111'
+    depends_on:
+      # bioarena-api-server:
+      #   condition: service_started
+      bioarena-app:
+        condition: service_started
+      bioarena-controller:
+        condition: service_started
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: 200M
