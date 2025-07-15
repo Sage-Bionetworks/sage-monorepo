@@ -115,7 +115,11 @@ paths:
       security:
         - apiBearerAuth: []
       requestBody:
-        $ref: '#/components/requestBodies/ChallengeContributionCreateRequest'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengeContributionCreateRequest'
       responses:
         '201':
           content:
@@ -760,6 +764,28 @@ components:
             - challengeContributions
       x-java-class-annotations:
         - '@lombok.Builder'
+    ChallengeContributionRole:
+      description: The nature of a challenge contribution.
+      type: string
+      enum:
+        - challenge_organizer
+        - data_contributor
+        - sponsor
+      example: challenge_organizer
+    ChallengeContributionCreateRequest:
+      type: object
+      description: A challenge contribution to be created.
+      properties:
+        challengeId:
+          $ref: '#/components/schemas/ChallengeId'
+        organizationId:
+          $ref: '#/components/schemas/OrganizationId'
+        role:
+          $ref: '#/components/schemas/ChallengeContributionRole'
+      required:
+        - challengeId
+        - organizationId
+        - role
     ContributionId:
       description: The unique identifier of a challenge contribution
       type: integer
@@ -1034,18 +1060,3 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-  requestBodies:
-    ChallengeContributionCreateRequest:
-      type: object
-      description: A challenge contribution to be created.
-      properties:
-        challengeId:
-          $ref: ChallengeId.yaml
-        organizationId:
-          $ref: OrganizationId.yaml
-        role:
-          $ref: ChallengeContributionRole.yaml
-      required:
-        - challengeId
-        - organizationId
-        - role

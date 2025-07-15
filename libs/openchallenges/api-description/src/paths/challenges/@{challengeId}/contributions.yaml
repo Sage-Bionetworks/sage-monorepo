@@ -27,7 +27,11 @@ post:
   security:
     - apiBearerAuth: []
   requestBody:
-    $ref: ../../../components/schemas/ChallengeContributionCreateRequest.yaml
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../../components/schemas/ChallengeContributionCreateRequest.yaml
   responses:
     '201':
       content:
