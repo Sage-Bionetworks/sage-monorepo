@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   version: 1.0.0
-  title: OpenChallenges Challenge REST API
+  title: OpenChallenges Challenge API
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -65,6 +65,26 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - Challenge
+      summary: Delete a challenge
+      description: |
+        Deletes a challenge by its unique ID. This action is irreversible.
+      operationId: deleteChallengeById
+      security:
+        - apiBearerAuth: []
+      responses:
+        '204':
+          description: Deletion successful
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /challenges/{challengeId}/contributions:
     parameters:
       - $ref: '#/components/parameters/challengeId'
@@ -114,10 +134,11 @@ paths:
         - ChallengeContribution
       summary: Delete all contributions for a specific challenge
       description: |
-        Deletes all contributions associated with a challenge ID. This action is irreversible.
+        Deletes all associated contributions for a given challenge, identified by its ID.
+        This action is irreversible.
       operationId: deleteAllChallengeContributions
       security:
-        - ApiKeyAuth: []
+        - apiBearerAuth: []
       responses:
         '204':
           description: Deletion successful
@@ -165,14 +186,14 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /challengePlatforms/{challengePlatformName}:
+  /challengePlatforms/{challengePlatformId}:
     parameters:
-      - $ref: '#/components/parameters/challengePlatformName'
+      - $ref: '#/components/parameters/challengePlatformId'
     get:
       tags:
         - ChallengePlatform
       summary: Get a challenge platform
-      description: Returns the challenge platform specified
+      description: Returns the challenge platform identified by its unique ID
       operationId: getChallengePlatform
       responses:
         '200':
@@ -181,6 +202,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ChallengePlatform'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - ChallengePlatform
+      summary: Delete a challenge platform
+      description: |
+        Deletes a challenge platform by its unique ID. This action is irreversible.
+      operationId: deleteChallengePlatform
+      security:
+        - apiBearerAuth: []
+      responses:
+        '204':
+          description: Deletion successful
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
@@ -207,10 +248,11 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: X-API-Key
+    apiBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: api_key
+      description: API key obtained from /auth/login endpoint
   schemas:
     ChallengeSort:
       description: What to sort results by.
@@ -924,13 +966,13 @@ components:
       in: query
       schema:
         $ref: '#/components/schemas/ChallengePlatformSearchQuery'
-    challengePlatformName:
-      name: challengePlatformName
+    challengePlatformId:
+      name: challengePlatformId
       in: path
       description: The unique identifier of the challenge platform.
       required: true
       schema:
-        $ref: '#/components/schemas/ChallengePlatformName'
+        $ref: '#/components/schemas/ChallengePlatformId'
     edamConceptSearchQuery:
       name: edamConceptSearchQuery
       description: The search query used to find EDAM concepts.
@@ -956,6 +998,18 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    Forbidden:
+      description: The user does not have the permission to perform this action
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
     ChallengeContributionCreateResponse:
       type: object
       description: The unique identifier of the challenge contribution
@@ -966,18 +1020,6 @@ components:
         - id
       example:
         id: 1
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    Forbidden:
-      description: Forbidden - user does not have the permission to perform this action
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
     Conflict:
       description: The request conflicts with current state of the target resource
       content:
