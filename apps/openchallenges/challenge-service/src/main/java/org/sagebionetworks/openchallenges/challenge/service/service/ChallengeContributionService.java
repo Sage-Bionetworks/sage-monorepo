@@ -65,11 +65,15 @@ public class ChallengeContributionService {
     // Verify the challenge exists
     ChallengeEntity challenge = challengeRepository
       .findById(challengeId)
-      .orElseThrow(() -> new ChallengeNotFoundException("Challenge not found with id: " + challengeId));
+      .orElseThrow(() ->
+        new ChallengeNotFoundException("Challenge not found with id: " + challengeId)
+      );
 
     // Validate organization ID (basic validation)
     if (request.getOrganizationId() == null || request.getOrganizationId() <= 0) {
-      throw new OrganizationNotFoundException("Organization not found with id: " + request.getOrganizationId());
+      throw new OrganizationNotFoundException(
+        "Organization not found with id: " + request.getOrganizationId()
+      );
     }
 
     // Create the contribution entity
