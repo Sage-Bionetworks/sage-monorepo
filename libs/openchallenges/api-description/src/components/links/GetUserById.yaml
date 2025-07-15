@@ -1,6 +1,0 @@
-operationId: getUser
-description: >
-  The `userName` value returned in the response can be used as the
-  `userName` parameter in `GET /users/{userName}`
-parameters:
-  userName: $response.body#/userName

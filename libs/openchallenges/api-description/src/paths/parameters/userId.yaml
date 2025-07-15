@@ -1,6 +1,0 @@
-name: userId
-description: A user identifier used to filter the results
-in: query
-required: false
-schema:
-  $ref: ../../components/schemas/UserId.yaml
