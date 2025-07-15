@@ -54,6 +54,10 @@ public class SecurityConfiguration {
           // Protected endpoints - require authentication but no specific scope
           .requestMatchers(HttpMethod.DELETE, "/v1/challengePlatforms/**")
           .authenticated()
+          .requestMatchers(HttpMethod.POST, "/v1/challenges/*/contributions")
+          .authenticated()
+          .requestMatchers(HttpMethod.DELETE, "/v1/challenges/*/contributions")
+          .authenticated()
           .anyRequest()
           .permitAll()
       )
