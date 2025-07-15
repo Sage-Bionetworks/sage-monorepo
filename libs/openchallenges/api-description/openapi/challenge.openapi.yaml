@@ -694,61 +694,28 @@ components:
             - '@context'
             - '@id'
             - '@type'
-    ChallengeOrganizerId:
-      description: The unique identifier of a challenge organizer
-      type: string
-      example: 507f1f77bcf86cd799439011
-    ChallengeOrganizerCreateResponse:
-      type: object
-      description: The unique identifier of the challenge organizer created
-      properties:
-        id:
-          $ref: '#/components/schemas/ChallengeOrganizerId'
-      required:
-        - id
-      example:
-        id: 507f1f77bcf86cd799439011
-    AccountLogin:
-      description: The user or organization account name
-      type: string
-      minLength: 3
-      maxLength: 25
-      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
-      example: awesome-user
-    ChallengeOrganizerRole:
-      description: The role of the challenge organizer
+    ChallengeContributionRole:
+      description: The nature of a challenge contribution.
       type: string
       enum:
-        - ChallengeLead
-        - InfrastructureLead
-      example: ChallengeLead
-    ChallengeOrganizerCreateRequest:
-      type: object
-      description: The information used to create a challenge organizer
-      properties:
-        name:
-          type: string
-        login:
-          $ref: '#/components/schemas/AccountLogin'
-          nullable: true
-        roles:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChallengeOrganizerRole'
-      required:
-        - name
-      example:
-        name: John Smith
-        login: jsmith
-        roles:
-          - ChallengeLead
-          - InfrastructureLead
+        - challenge_organizer
+        - data_contributor
+        - sponsor
+      example: challenge_organizer
     ChallengeContribution:
       type: object
-      description: A challenge contribution
-      allOf:
-        - $ref: '#/components/schemas/ChallengeOrganizerCreateResponse'
-        - $ref: '#/components/schemas/ChallengeOrganizerCreateRequest'
+      description: A challenge contribution.
+      properties:
+        challengeId:
+          $ref: '#/components/schemas/ChallengeId'
+        organizationId:
+          $ref: '#/components/schemas/OrganizationId'
+        role:
+          $ref: '#/components/schemas/ChallengeContributionRole'
+      required:
+        - challengeId
+        - organizationId
+        - role
     ChallengeContributionsPage:
       type: object
       description: A page of challenge challenge contributions.
@@ -765,14 +732,6 @@ components:
             - challengeContributions
       x-java-class-annotations:
         - '@lombok.Builder'
-    ChallengeContributionRole:
-      description: The nature of a challenge contribution.
-      type: string
-      enum:
-        - challenge_organizer
-        - data_contributor
-        - sponsor
-      example: challenge_organizer
     ChallengeContributionCreateRequest:
       type: object
       description: A challenge contribution to be created.
