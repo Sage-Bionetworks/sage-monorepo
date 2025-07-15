@@ -30,7 +30,10 @@ post:
     $ref: ../../../components/schemas/ChallengeContributionCreateRequest.yaml
   responses:
     '201':
-      $ref: ../../../components/schemas/ChallengeContributionCreateResponse.yaml
+      content:
+        application/json:
+          schema:
+            $ref: ../../../components/schemas/ChallengeContributionCreateResponse.yaml
     '401':
       $ref: ../../../components/responses/Unauthorized.yaml
     '403':

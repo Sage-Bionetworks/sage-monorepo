@@ -118,7 +118,10 @@ paths:
         $ref: '#/components/requestBodies/ChallengeContributionCreateRequest'
       responses:
         '201':
-          $ref: '#/components/responses/ChallengeContributionCreateResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeContributionCreateResponse'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -757,6 +760,21 @@ components:
             - challengeContributions
       x-java-class-annotations:
         - '@lombok.Builder'
+    ContributionId:
+      description: The unique identifier of a challenge contribution
+      type: integer
+      format: int64
+      example: 1
+    ChallengeContributionCreateResponse:
+      type: object
+      description: The unique identifier of the challenge contribution
+      properties:
+        id:
+          $ref: '#/components/schemas/ContributionId'
+      required:
+        - id
+      example:
+        id: 1
     ChallengesPerYear:
       type: object
       description: An object
@@ -1010,16 +1028,6 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-    ChallengeContributionCreateResponse:
-      type: object
-      description: The unique identifier of the challenge contribution
-      properties:
-        id:
-          $ref: ContributionId.yaml
-      required:
-        - id
-      example:
-        id: 1
     Conflict:
       description: The request conflicts with current state of the target resource
       content:
