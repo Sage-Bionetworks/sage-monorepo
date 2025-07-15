@@ -1294,11 +1294,6 @@ components:
     ChallengeContributionCreateRequest:
       description: A challenge contribution to be created.
       properties:
-        challengeId:
-          description: The unique identifier of the challenge.
-          example: 1
-          format: int64
-          type: integer
         organizationId:
           description: The unique identifier of an organization
           example: 1
@@ -1307,7 +1302,6 @@ components:
         role:
           $ref: '#/components/schemas/ChallengeContributionRole'
       required:
-        - challengeId
         - organizationId
         - role
       type: object

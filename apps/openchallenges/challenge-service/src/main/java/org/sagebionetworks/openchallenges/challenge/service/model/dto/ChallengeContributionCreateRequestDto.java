@@ -26,8 +26,6 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 public class ChallengeContributionCreateRequestDto {
 
-  private Long challengeId;
-
   private Long organizationId;
 
   private ChallengeContributionRoleDto role;
@@ -39,30 +37,9 @@ public class ChallengeContributionCreateRequestDto {
   /**
    * Constructor with only required parameters
    */
-  public ChallengeContributionCreateRequestDto(Long challengeId, Long organizationId, ChallengeContributionRoleDto role) {
-    this.challengeId = challengeId;
+  public ChallengeContributionCreateRequestDto(Long organizationId, ChallengeContributionRoleDto role) {
     this.organizationId = organizationId;
     this.role = role;
-  }
-
-  public ChallengeContributionCreateRequestDto challengeId(Long challengeId) {
-    this.challengeId = challengeId;
-    return this;
-  }
-
-  /**
-   * The unique identifier of the challenge.
-   * @return challengeId
-   */
-  @NotNull 
-  @Schema(name = "challengeId", example = "1", description = "The unique identifier of the challenge.", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("challengeId")
-  public Long getChallengeId() {
-    return challengeId;
-  }
-
-  public void setChallengeId(Long challengeId) {
-    this.challengeId = challengeId;
   }
 
   public ChallengeContributionCreateRequestDto organizationId(Long organizationId) {
@@ -114,21 +91,19 @@ public class ChallengeContributionCreateRequestDto {
       return false;
     }
     ChallengeContributionCreateRequestDto challengeContributionCreateRequest = (ChallengeContributionCreateRequestDto) o;
-    return Objects.equals(this.challengeId, challengeContributionCreateRequest.challengeId) &&
-        Objects.equals(this.organizationId, challengeContributionCreateRequest.organizationId) &&
+    return Objects.equals(this.organizationId, challengeContributionCreateRequest.organizationId) &&
         Objects.equals(this.role, challengeContributionCreateRequest.role);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(challengeId, organizationId, role);
+    return Objects.hash(organizationId, role);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ChallengeContributionCreateRequestDto {\n");
-    sb.append("    challengeId: ").append(toIndentedString(challengeId)).append("\n");
     sb.append("    organizationId: ").append(toIndentedString(organizationId)).append("\n");
     sb.append("    role: ").append(toIndentedString(role)).append("\n");
     sb.append("}");
@@ -159,17 +134,11 @@ public class ChallengeContributionCreateRequestDto {
     }
 
     protected Builder copyOf(ChallengeContributionCreateRequestDto value) { 
-      this.instance.setChallengeId(value.challengeId);
       this.instance.setOrganizationId(value.organizationId);
       this.instance.setRole(value.role);
       return this;
     }
 
-    public ChallengeContributionCreateRequestDto.Builder challengeId(Long challengeId) {
-      this.instance.challengeId(challengeId);
-      return this;
-    }
-    
     public ChallengeContributionCreateRequestDto.Builder organizationId(Long organizationId) {
       this.instance.organizationId(organizationId);
       return this;
