@@ -1,6 +1,8 @@
 package org.sagebionetworks.openchallenges.challenge.service.api;
 
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.BasicErrorDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateResponseDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionsPageDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,8 +29,62 @@ public interface ChallengeContributionApiDelegate {
     }
 
     /**
+     * POST /challenges/{challengeId}/contributions : Create a new contribution for a challenge
+     * Creates a new contribution record associated with a challenge ID. 
+     *
+     * @param challengeId The unique identifier of the challenge. (required)
+     * @param challengeContributionCreateRequestDto  (required)
+     * @return Contribution created successfully (status code 201)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request conflicts with current state of the target resource (status code 409)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     * @see ChallengeContributionApi#addChallengeContribution
+     */
+    default ResponseEntity<ChallengeContributionCreateResponseDto> addChallengeContribution(Long challengeId,
+        ChallengeContributionCreateRequestDto challengeContributionCreateRequestDto) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"id\" : 1 }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
      * DELETE /challenges/{challengeId}/contributions : Delete all contributions for a specific challenge
-     * Deletes all contributions associated with a challenge ID. This action is irreversible. 
+     * Deletes all associated contributions for a given challenge, identified by its ID. This action is irreversible. 
      *
      * @param challengeId The unique identifier of the challenge. (required)
      * @return Deletion successful (status code 204)
@@ -81,7 +137,7 @@ public interface ChallengeContributionApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"number\" : 99, \"size\" : 99, \"challengeContributions\" : [ { \"organizationId\" : 1, \"challengeId\" : 1, \"role\" : \"challenge_organizer\" }, { \"organizationId\" : 1, \"challengeId\" : 1, \"role\" : \"challenge_organizer\" } ], \"totalPages\" : 99, \"hasPrevious\" : true, \"hasNext\" : true, \"totalElements\" : 99 }";
+                    String exampleString = "{ \"number\" : 99, \"size\" : 99, \"challengeContributions\" : [ { \"roles\" : [ \"ChallengeLead\", \"ChallengeLead\" ], \"name\" : \"name\", \"id\" : \"507f1f77bcf86cd799439011\", \"login\" : \"awesome-user\" }, { \"roles\" : [ \"ChallengeLead\", \"ChallengeLead\" ], \"name\" : \"name\", \"id\" : \"507f1f77bcf86cd799439011\", \"login\" : \"awesome-user\" } ], \"totalPages\" : 99, \"hasPrevious\" : true, \"hasNext\" : true, \"totalElements\" : 99 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

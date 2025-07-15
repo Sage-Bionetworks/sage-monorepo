@@ -4,6 +4,7 @@ import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeC
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionRoleDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDirectionDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeIncentiveDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeOrganizerRoleDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformDirectionDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformSortDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSortDto;
@@ -53,6 +54,15 @@ public class EnumConverterConfiguration {
             @Override
             public ChallengeIncentiveDto convert(String source) {
                 return ChallengeIncentiveDto.fromValue(source);
+            }
+        };
+    }
+    @Bean(name = "org.sagebionetworks.openchallenges.challenge.service.configuration.EnumConverterConfiguration.challengeOrganizerRoleConverter")
+    Converter<String, ChallengeOrganizerRoleDto> challengeOrganizerRoleConverter() {
+        return new Converter<String, ChallengeOrganizerRoleDto>() {
+            @Override
+            public ChallengeOrganizerRoleDto convert(String source) {
+                return ChallengeOrganizerRoleDto.fromValue(source);
             }
         };
     }

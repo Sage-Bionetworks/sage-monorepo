@@ -20,15 +20,13 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * A challenge contribution
+ * The information used to create a challenge organizer
  */
 
-@Schema(name = "ChallengeContribution", description = "A challenge contribution")
-@JsonTypeName("ChallengeContribution")
+@Schema(name = "ChallengeOrganizerCreateRequest", description = "The information used to create a challenge organizer")
+@JsonTypeName("ChallengeOrganizerCreateRequest")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
-public class ChallengeContributionDto {
-
-  private String id;
+public class ChallengeOrganizerCreateRequestDto {
 
   private String name;
 
@@ -37,39 +35,18 @@ public class ChallengeContributionDto {
   @Valid
   private List<ChallengeOrganizerRoleDto> roles = new ArrayList<>();
 
-  public ChallengeContributionDto() {
+  public ChallengeOrganizerCreateRequestDto() {
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-  public ChallengeContributionDto(String id, String name) {
-    this.id = id;
+  public ChallengeOrganizerCreateRequestDto(String name) {
     this.name = name;
   }
 
-  public ChallengeContributionDto id(String id) {
-    this.id = id;
-    return this;
-  }
-
-  /**
-   * The unique identifier of a challenge organizer
-   * @return id
-   */
-  @NotNull 
-  @Schema(name = "id", example = "507f1f77bcf86cd799439011", description = "The unique identifier of a challenge organizer", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("id")
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
-
-  public ChallengeContributionDto name(String name) {
+  public ChallengeOrganizerCreateRequestDto name(String name) {
     this.name = name;
     return this;
   }
@@ -89,7 +66,7 @@ public class ChallengeContributionDto {
     this.name = name;
   }
 
-  public ChallengeContributionDto login(String login) {
+  public ChallengeOrganizerCreateRequestDto login(String login) {
     this.login = login;
     return this;
   }
@@ -109,12 +86,12 @@ public class ChallengeContributionDto {
     this.login = login;
   }
 
-  public ChallengeContributionDto roles(List<ChallengeOrganizerRoleDto> roles) {
+  public ChallengeOrganizerCreateRequestDto roles(List<ChallengeOrganizerRoleDto> roles) {
     this.roles = roles;
     return this;
   }
 
-  public ChallengeContributionDto addRolesItem(ChallengeOrganizerRoleDto rolesItem) {
+  public ChallengeOrganizerCreateRequestDto addRolesItem(ChallengeOrganizerRoleDto rolesItem) {
     if (this.roles == null) {
       this.roles = new ArrayList<>();
     }
@@ -145,23 +122,21 @@ public class ChallengeContributionDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ChallengeContributionDto challengeContribution = (ChallengeContributionDto) o;
-    return Objects.equals(this.id, challengeContribution.id) &&
-        Objects.equals(this.name, challengeContribution.name) &&
-        Objects.equals(this.login, challengeContribution.login) &&
-        Objects.equals(this.roles, challengeContribution.roles);
+    ChallengeOrganizerCreateRequestDto challengeOrganizerCreateRequest = (ChallengeOrganizerCreateRequestDto) o;
+    return Objects.equals(this.name, challengeOrganizerCreateRequest.name) &&
+        Objects.equals(this.login, challengeOrganizerCreateRequest.login) &&
+        Objects.equals(this.roles, challengeOrganizerCreateRequest.roles);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, login, roles);
+    return Objects.hash(name, login, roles);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ChallengeContributionDto {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("class ChallengeOrganizerCreateRequestDto {\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    login: ").append(toIndentedString(login)).append("\n");
     sb.append("    roles: ").append(toIndentedString(roles)).append("\n");
@@ -182,50 +157,44 @@ public class ChallengeContributionDto {
   
   public static class Builder {
 
-    private ChallengeContributionDto instance;
+    private ChallengeOrganizerCreateRequestDto instance;
 
     public Builder() {
-      this(new ChallengeContributionDto());
+      this(new ChallengeOrganizerCreateRequestDto());
     }
 
-    protected Builder(ChallengeContributionDto instance) {
+    protected Builder(ChallengeOrganizerCreateRequestDto instance) {
       this.instance = instance;
     }
 
-    protected Builder copyOf(ChallengeContributionDto value) { 
-      this.instance.setId(value.id);
+    protected Builder copyOf(ChallengeOrganizerCreateRequestDto value) { 
       this.instance.setName(value.name);
       this.instance.setLogin(value.login);
       this.instance.setRoles(value.roles);
       return this;
     }
 
-    public ChallengeContributionDto.Builder id(String id) {
-      this.instance.id(id);
-      return this;
-    }
-    
-    public ChallengeContributionDto.Builder name(String name) {
+    public ChallengeOrganizerCreateRequestDto.Builder name(String name) {
       this.instance.name(name);
       return this;
     }
     
-    public ChallengeContributionDto.Builder login(String login) {
+    public ChallengeOrganizerCreateRequestDto.Builder login(String login) {
       this.instance.login(login);
       return this;
     }
     
-    public ChallengeContributionDto.Builder roles(List<ChallengeOrganizerRoleDto> roles) {
+    public ChallengeOrganizerCreateRequestDto.Builder roles(List<ChallengeOrganizerRoleDto> roles) {
       this.instance.roles(roles);
       return this;
     }
     
     /**
-    * returns a built ChallengeContributionDto instance.
+    * returns a built ChallengeOrganizerCreateRequestDto instance.
     *
     * The builder is not reusable (NullPointerException)
     */
-    public ChallengeContributionDto build() {
+    public ChallengeOrganizerCreateRequestDto build() {
       try {
         return this.instance;
       } finally {
@@ -243,15 +212,15 @@ public class ChallengeContributionDto {
   /**
   * Create a builder with no initialized field (except for the default values).
   */
-  public static ChallengeContributionDto.Builder builder() {
-    return new ChallengeContributionDto.Builder();
+  public static ChallengeOrganizerCreateRequestDto.Builder builder() {
+    return new ChallengeOrganizerCreateRequestDto.Builder();
   }
 
   /**
   * Create a builder with a shallow copy of this instance.
   */
-  public ChallengeContributionDto.Builder toBuilder() {
-    ChallengeContributionDto.Builder builder = new ChallengeContributionDto.Builder();
+  public ChallengeOrganizerCreateRequestDto.Builder toBuilder() {
+    ChallengeOrganizerCreateRequestDto.Builder builder = new ChallengeOrganizerCreateRequestDto.Builder();
     return builder.copyOf(this);
   }
 

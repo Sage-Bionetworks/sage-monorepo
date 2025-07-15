@@ -6,6 +6,8 @@
 package org.sagebionetworks.openchallenges.challenge.service.api;
 
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.BasicErrorDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateResponseDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionsPageDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,8 +41,71 @@ public interface ChallengeContributionApi {
     }
 
     /**
+     * POST /challenges/{challengeId}/contributions : Create a new contribution for a challenge
+     * Creates a new contribution record associated with a challenge ID. 
+     *
+     * @param challengeId The unique identifier of the challenge. (required)
+     * @param challengeContributionCreateRequestDto  (required)
+     * @return Contribution created successfully (status code 201)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request conflicts with current state of the target resource (status code 409)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "addChallengeContribution",
+        summary = "Create a new contribution for a challenge",
+        description = "Creates a new contribution record associated with a challenge ID. ",
+        tags = { "ChallengeContribution" },
+        responses = {
+            @ApiResponse(responseCode = "201", description = "Contribution created successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ChallengeContributionCreateResponseDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ChallengeContributionCreateResponseDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "409", description = "The request conflicts with current state of the target resource", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "apiBearerAuth")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/challenges/{challengeId}/contributions",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<ChallengeContributionCreateResponseDto> addChallengeContribution(
+        @Parameter(name = "challengeId", description = "The unique identifier of the challenge.", required = true, in = ParameterIn.PATH) @PathVariable("challengeId") Long challengeId,
+        @Parameter(name = "ChallengeContributionCreateRequestDto", description = "", required = true) @Valid @RequestBody ChallengeContributionCreateRequestDto challengeContributionCreateRequestDto
+    ) {
+        return getDelegate().addChallengeContribution(challengeId, challengeContributionCreateRequestDto);
+    }
+
+
+    /**
      * DELETE /challenges/{challengeId}/contributions : Delete all contributions for a specific challenge
-     * Deletes all contributions associated with a challenge ID. This action is irreversible. 
+     * Deletes all associated contributions for a given challenge, identified by its ID. This action is irreversible. 
      *
      * @param challengeId The unique identifier of the challenge. (required)
      * @return Deletion successful (status code 204)
@@ -52,7 +117,7 @@ public interface ChallengeContributionApi {
     @Operation(
         operationId = "deleteAllChallengeContributions",
         summary = "Delete all contributions for a specific challenge",
-        description = "Deletes all contributions associated with a challenge ID. This action is irreversible. ",
+        description = "Deletes all associated contributions for a given challenge, identified by its ID. This action is irreversible. ",
         tags = { "ChallengeContribution" },
         responses = {
             @ApiResponse(responseCode = "204", description = "Deletion successful"),
