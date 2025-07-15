@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.sagebionetworks.openchallenges.challenge.service.exception.DuplicateContributionException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateResponseDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionRoleDto;
@@ -20,6 +21,7 @@ import org.sagebionetworks.openchallenges.challenge.service.model.entity.Challen
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeContributionRepository;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 
 @ExtendWith(MockitoExtension.class)
 class ChallengeContributionServiceTest {
@@ -97,5 +99,46 @@ class ChallengeContributionServiceTest {
       .hasMessage("Challenge not found with id: " + challengeId);
 
     verify(challengeRepository).findById(challengeId);
+  }
+
+  @Test
+  @DisplayName("should throw duplicate contribution exception when unique constraint is violated")
+  void shouldThrowDuplicateContributionExceptionWhenUniqueConstraintIsViolated() {
+    // given
+    Long challengeId = 1L;
+    Long organizationId = 123L;
+    ChallengeContributionRoleDto role = ChallengeContributionRoleDto.CHALLENGE_ORGANIZER;
+
+    ChallengeContributionCreateRequestDto request = new ChallengeContributionCreateRequestDto(
+      organizationId,
+      role
+    );
+
+    ChallengeEntity challenge = ChallengeEntity.builder()
+      .id(challengeId)
+      .slug("test-challenge")
+      .build();
+
+    DataIntegrityViolationException dataIntegrityException = new DataIntegrityViolationException(
+      "could not execute statement [ERROR: duplicate key value violates unique constraint \"unique_contribution\"]"
+    );
+
+    when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));
+    when(challengeContributionRepository.save(any(ChallengeContributionEntity.class))).thenThrow(
+      dataIntegrityException
+    );
+
+    // when & then
+    assertThatThrownBy(() ->
+      challengeContributionService.addChallengeContribution(challengeId, request)
+    )
+      .isInstanceOf(DuplicateContributionException.class)
+      .hasMessageContaining("A contribution with role 'challenge_organizer' already exists")
+      .hasMessageContaining("organization 123")
+      .hasMessageContaining("challenge 1")
+      .hasCause(dataIntegrityException);
+
+    verify(challengeRepository).findById(challengeId);
+    verify(challengeContributionRepository).save(any(ChallengeContributionEntity.class));
   }
 }

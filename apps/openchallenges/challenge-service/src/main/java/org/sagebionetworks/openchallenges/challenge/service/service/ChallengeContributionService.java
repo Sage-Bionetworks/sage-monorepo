@@ -1,6 +1,7 @@
 package org.sagebionetworks.openchallenges.challenge.service.service;
 
 import java.util.List;
+import org.sagebionetworks.openchallenges.challenge.service.exception.DuplicateContributionException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateResponseDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionDto;
@@ -10,6 +11,7 @@ import org.sagebionetworks.openchallenges.challenge.service.model.entity.Challen
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengeContributionMapper;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeContributionRepository;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,10 +72,27 @@ public class ChallengeContributionService {
       .role(request.getRole().getValue())
       .build();
 
-    // Save the entity
-    ChallengeContributionEntity savedEntity = challengeContributionRepository.save(entity);
+    try {
+      // Save the entity
+      ChallengeContributionEntity savedEntity = challengeContributionRepository.save(entity);
 
-    // Return the response with the generated ID
-    return new ChallengeContributionCreateResponseDto(savedEntity.getId());
+      // Return the response with the generated ID
+      return new ChallengeContributionCreateResponseDto(savedEntity.getId());
+    } catch (DataIntegrityViolationException e) {
+      // Check if this is the unique constraint violation
+      if (e.getMessage() != null && e.getMessage().contains("unique_contribution")) {
+        throw new DuplicateContributionException(
+          String.format(
+            "A contribution with role '%s' already exists for organization %d in challenge %d.",
+            request.getRole().getValue(),
+            request.getOrganizationId(),
+            challengeId
+          ),
+          e
+        );
+      }
+      // Re-throw the original exception if it's not the constraint we're looking for
+      throw e;
+    }
   }
 }
