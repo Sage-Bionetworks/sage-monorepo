@@ -29,8 +29,6 @@ tags:
     description: Operations about images
   - name: Organization
     description: Operations about organizations
-  - name: User
-    description: Operations about users
 paths:
   /auth/login:
     post:
@@ -433,90 +431,6 @@ paths:
         '403':
           $ref: '#/components/responses/Forbidden'
         '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /users/register:
-    post:
-      tags:
-        - User
-      summary: Create a user
-      description: Create a user with the specified account name
-      operationId: createUser
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserCreateRequest'
-        required: true
-      responses:
-        '201':
-          description: Account created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserCreateResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '409':
-          $ref: '#/components/responses/Conflict'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /users:
-    get:
-      tags:
-        - User
-      summary: Get all users
-      description: Returns the users
-      operationId: listUsers
-      parameters:
-        - $ref: '#/components/parameters/pageNumber'
-        - $ref: '#/components/parameters/pageSize'
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UsersPage'
-          description: Success
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  '/users/{userId}':
-    parameters:
-      - $ref: '#/components/parameters/userId'
-    get:
-      tags:
-        - User
-      summary: Get a user
-      description: Returns the user specified
-      operationId: getUser
-      responses:
-        '200':
-          description: A user
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-    delete:
-      tags:
-        - User
-      summary: Delete a user
-      description: Deletes the user specified
-      operationId: deleteUser
-      responses:
-        '200':
-          description: Deleted
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EmptyObject'
-        '400':
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
@@ -1526,137 +1440,6 @@ components:
             - organizations
       x-java-class-annotations:
         - '@lombok.Builder'
-    Email:
-      description: An email address.
-      type: string
-      format: email
-      example: john.smith@example.com
-    UserCreateRequest:
-      type: object
-      description: The information required to create a user account
-      properties:
-        login:
-          type: string
-        email:
-          $ref: '#/components/schemas/Email'
-        password:
-          type: string
-          format: password
-        name:
-          type: string
-          nullable: true
-        avatarUrl:
-          type: string
-          format: url
-          example: 'https://example.com/awesome-avatar.png'
-          nullable: true
-        bio:
-          type: string
-          nullable: true
-      required:
-        - login
-        - email
-        - password
-      example:
-        login: awesome-user
-        email: awesome-user@example.org
-        password: yourpassword
-        name: Awesome User
-        avatarUrl: 'https://example.com/awesome-avatar.png'
-        bio: A great bio
-    AccountId:
-      description: The unique identifier of an account
-      type: integer
-      format: int64
-      example: 1
-    UserCreateResponse:
-      type: object
-      description: The response returned after the creation of the user
-      properties:
-        id:
-          $ref: '#/components/schemas/AccountId'
-      required:
-        - id
-      example:
-        id: 507f1f77bcf86cd799439011
-      x-java-class-annotations:
-        - '@lombok.Builder'
-    UserStatus:
-      description: The account status of a user
-      type: string
-      enum:
-        - pending
-        - approved
-        - disabled
-        - blacklist
-      example: pending
-    User:
-      type: object
-      description: A simple user
-      properties:
-        id:
-          $ref: '#/components/schemas/AccountId'
-        login:
-          type: string
-        email:
-          $ref: '#/components/schemas/Email'
-        name:
-          type: string
-          nullable: true
-        status:
-          $ref: '#/components/schemas/UserStatus'
-        avatarUrl:
-          type: string
-          format: url
-          example: 'https://example.com/awesome-avatar.png'
-          nullable: true
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        type:
-          type: string
-          example: User
-        bio:
-          type: string
-          nullable: true
-      required:
-        - login
-        - email
-        - createdAt
-        - updatedAt
-        - type
-      example:
-        login: awesome-user
-        email: awesome-user@example.org
-        name: Awesome User
-        status: approved
-        avatarUrl: 'https://example.com/awesome-avatar.png'
-        bio: A great bio
-        createdAt: '2017-07-08T16:18:44-04:00'
-        updatedAt: '2017-07-08T16:18:44-04:00'
-        type: User
-    UsersPage:
-      type: object
-      description: A page of users
-      allOf:
-        - $ref: '#/components/schemas/PageMetadata'
-        - type: object
-          properties:
-            users:
-              description: A list of users
-              type: array
-              items:
-                $ref: '#/components/schemas/User'
-          required:
-            - users
-      x-java-class-annotations:
-        - '@lombok.Builder'
-    EmptyObject:
-      type: object
-      description: Empty JSON object
   responses:
     Unauthorized:
       description: Unauthorized
@@ -1684,12 +1467,6 @@ components:
             $ref: '#/components/schemas/BasicError'
     Forbidden:
       description: The user does not have the permission to perform this action
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    Conflict:
-      description: The request conflicts with current state of the target resource
       content:
         application/problem+json:
           schema:
@@ -1761,28 +1538,3 @@ components:
           value: dream
         byId:
           value: '1'
-    pageNumber:
-      name: pageNumber
-      description: The page number.
-      in: query
-      schema:
-        type: integer
-        format: int32
-        default: 0
-        minimum: 0
-    pageSize:
-      name: pageSize
-      description: The number of items in a single page.
-      in: query
-      schema:
-        type: integer
-        format: int32
-        default: 100
-        minimum: 1
-    userId:
-      name: userId
-      in: path
-      description: 'The unique identifier of the user, either the user account ID or login'
-      required: true
-      schema:
-        $ref: '#/components/schemas/AccountId'

@@ -1,6 +1,0 @@
-name: userId
-in: path
-description: The unique identifier of the user, either the user account ID or login
-required: true
-schema:
-  $ref: ../../schemas/AccountId.yaml

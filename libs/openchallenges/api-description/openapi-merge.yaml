@@ -6,5 +6,4 @@ inputs:
   - inputFile: openapi/challenge.openapi.yaml
   - inputFile: openapi/image.openapi.yaml
   - inputFile: openapi/organization.openapi.yaml
-  - inputFile: openapi/user.openapi.yaml
 output: openapi/openapi.yaml
