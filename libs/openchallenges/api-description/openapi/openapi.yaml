@@ -244,7 +244,7 @@ paths:
         Creates a new contribution record associated with a challenge ID.
       operationId: addChallengeContribution
       security:
-        - ApiKeyAuth: []
+        - apiBearerAuth: []
       requestBody:
         $ref: '#/components/requestBodies/ChallengeContributionCreateRequest'
       responses:

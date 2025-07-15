@@ -35,7 +35,7 @@ delete:
   description: Deletes the challenge specified
   operationId: deleteChallenge
   security:
-    - ApiKeyAuth: []
+    - apiBearerAuth: []
   responses:
     '200':
       description: Success

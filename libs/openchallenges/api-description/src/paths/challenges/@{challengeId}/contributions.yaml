@@ -25,7 +25,7 @@ post:
     Creates a new contribution record associated with a challenge ID.
   operationId: addChallengeContribution
   security:
-    - ApiKeyAuth: []
+    - apiBearerAuth: []
   requestBody:
     $ref: ../../../components/schemas/ChallengeContributionCreateRequest.yaml
   responses:
