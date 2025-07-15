@@ -122,6 +122,7 @@ paths:
               $ref: '#/components/schemas/ChallengeContributionCreateRequest'
       responses:
         '201':
+          description: Contribution created successfully
           content:
             application/json:
               schema:

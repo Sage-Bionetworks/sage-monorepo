@@ -34,6 +34,7 @@ post:
           $ref: ../../../components/schemas/ChallengeContributionCreateRequest.yaml
   responses:
     '201':
+      description: Contribution created successfully
       content:
         application/json:
           schema:
