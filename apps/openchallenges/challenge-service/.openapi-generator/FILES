@@ -29,9 +29,6 @@ src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/Cha
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/ChallengeDto.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/ChallengeIncentiveDto.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/ChallengeJsonLdDto.java
-src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/ChallengeOrganizerCreateRequestDto.java
-src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/ChallengeOrganizerCreateResponseDto.java
-src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/ChallengeOrganizerRoleDto.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/ChallengePlatformDirectionDto.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/ChallengePlatformDto.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/ChallengePlatformSearchQueryDto.java

@@ -5,10 +5,8 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeOrganizerRoleDto;
+import com.fasterxml.jackson.annotation.JsonValue;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionRoleDto;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -20,22 +18,19 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * A challenge contribution
+ * A challenge contribution.
  */
 
-@Schema(name = "ChallengeContribution", description = "A challenge contribution")
+@Schema(name = "ChallengeContribution", description = "A challenge contribution.")
 @JsonTypeName("ChallengeContribution")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 public class ChallengeContributionDto {
 
-  private String id;
+  private Long challengeId;
 
-  private String name;
+  private Long organizationId;
 
-  private @Nullable String login;
-
-  @Valid
-  private List<ChallengeOrganizerRoleDto> roles = new ArrayList<>();
+  private ChallengeContributionRoleDto role;
 
   public ChallengeContributionDto() {
     super();
@@ -44,97 +39,70 @@ public class ChallengeContributionDto {
   /**
    * Constructor with only required parameters
    */
-  public ChallengeContributionDto(String id, String name) {
-    this.id = id;
-    this.name = name;
+  public ChallengeContributionDto(Long challengeId, Long organizationId, ChallengeContributionRoleDto role) {
+    this.challengeId = challengeId;
+    this.organizationId = organizationId;
+    this.role = role;
   }
 
-  public ChallengeContributionDto id(String id) {
-    this.id = id;
+  public ChallengeContributionDto challengeId(Long challengeId) {
+    this.challengeId = challengeId;
     return this;
   }
 
   /**
-   * The unique identifier of a challenge organizer
-   * @return id
+   * The unique identifier of the challenge.
+   * @return challengeId
    */
   @NotNull 
-  @Schema(name = "id", example = "507f1f77bcf86cd799439011", description = "The unique identifier of a challenge organizer", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("id")
-  public String getId() {
-    return id;
+  @Schema(name = "challengeId", example = "1", description = "The unique identifier of the challenge.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("challengeId")
+  public Long getChallengeId() {
+    return challengeId;
   }
 
-  public void setId(String id) {
-    this.id = id;
+  public void setChallengeId(Long challengeId) {
+    this.challengeId = challengeId;
   }
 
-  public ChallengeContributionDto name(String name) {
-    this.name = name;
+  public ChallengeContributionDto organizationId(Long organizationId) {
+    this.organizationId = organizationId;
     return this;
   }
 
   /**
-   * Get name
-   * @return name
+   * The unique identifier of an organization
+   * @return organizationId
    */
   @NotNull 
-  @Schema(name = "name", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("name")
-  public String getName() {
-    return name;
+  @Schema(name = "organizationId", example = "1", description = "The unique identifier of an organization", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("organizationId")
+  public Long getOrganizationId() {
+    return organizationId;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setOrganizationId(Long organizationId) {
+    this.organizationId = organizationId;
   }
 
-  public ChallengeContributionDto login(String login) {
-    this.login = login;
+  public ChallengeContributionDto role(ChallengeContributionRoleDto role) {
+    this.role = role;
     return this;
   }
 
   /**
-   * The user or organization account name
-   * @return login
+   * Get role
+   * @return role
    */
-  @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$") @Size(min = 3, max = 25) 
-  @Schema(name = "login", example = "awesome-user", description = "The user or organization account name", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("login")
-  public String getLogin() {
-    return login;
+  @NotNull @Valid 
+  @Schema(name = "role", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("role")
+  public ChallengeContributionRoleDto getRole() {
+    return role;
   }
 
-  public void setLogin(String login) {
-    this.login = login;
-  }
-
-  public ChallengeContributionDto roles(List<ChallengeOrganizerRoleDto> roles) {
-    this.roles = roles;
-    return this;
-  }
-
-  public ChallengeContributionDto addRolesItem(ChallengeOrganizerRoleDto rolesItem) {
-    if (this.roles == null) {
-      this.roles = new ArrayList<>();
-    }
-    this.roles.add(rolesItem);
-    return this;
-  }
-
-  /**
-   * Get roles
-   * @return roles
-   */
-  @Valid 
-  @Schema(name = "roles", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("roles")
-  public List<ChallengeOrganizerRoleDto> getRoles() {
-    return roles;
-  }
-
-  public void setRoles(List<ChallengeOrganizerRoleDto> roles) {
-    this.roles = roles;
+  public void setRole(ChallengeContributionRoleDto role) {
+    this.role = role;
   }
 
   @Override
@@ -146,25 +114,23 @@ public class ChallengeContributionDto {
       return false;
     }
     ChallengeContributionDto challengeContribution = (ChallengeContributionDto) o;
-    return Objects.equals(this.id, challengeContribution.id) &&
-        Objects.equals(this.name, challengeContribution.name) &&
-        Objects.equals(this.login, challengeContribution.login) &&
-        Objects.equals(this.roles, challengeContribution.roles);
+    return Objects.equals(this.challengeId, challengeContribution.challengeId) &&
+        Objects.equals(this.organizationId, challengeContribution.organizationId) &&
+        Objects.equals(this.role, challengeContribution.role);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, login, roles);
+    return Objects.hash(challengeId, organizationId, role);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ChallengeContributionDto {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    login: ").append(toIndentedString(login)).append("\n");
-    sb.append("    roles: ").append(toIndentedString(roles)).append("\n");
+    sb.append("    challengeId: ").append(toIndentedString(challengeId)).append("\n");
+    sb.append("    organizationId: ").append(toIndentedString(organizationId)).append("\n");
+    sb.append("    role: ").append(toIndentedString(role)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -193,30 +159,24 @@ public class ChallengeContributionDto {
     }
 
     protected Builder copyOf(ChallengeContributionDto value) { 
-      this.instance.setId(value.id);
-      this.instance.setName(value.name);
-      this.instance.setLogin(value.login);
-      this.instance.setRoles(value.roles);
+      this.instance.setChallengeId(value.challengeId);
+      this.instance.setOrganizationId(value.organizationId);
+      this.instance.setRole(value.role);
       return this;
     }
 
-    public ChallengeContributionDto.Builder id(String id) {
-      this.instance.id(id);
+    public ChallengeContributionDto.Builder challengeId(Long challengeId) {
+      this.instance.challengeId(challengeId);
       return this;
     }
     
-    public ChallengeContributionDto.Builder name(String name) {
-      this.instance.name(name);
+    public ChallengeContributionDto.Builder organizationId(Long organizationId) {
+      this.instance.organizationId(organizationId);
       return this;
     }
     
-    public ChallengeContributionDto.Builder login(String login) {
-      this.instance.login(login);
-      return this;
-    }
-    
-    public ChallengeContributionDto.Builder roles(List<ChallengeOrganizerRoleDto> roles) {
-      this.instance.roles(roles);
+    public ChallengeContributionDto.Builder role(ChallengeContributionRoleDto role) {
+      this.instance.role(role);
       return this;
     }
     

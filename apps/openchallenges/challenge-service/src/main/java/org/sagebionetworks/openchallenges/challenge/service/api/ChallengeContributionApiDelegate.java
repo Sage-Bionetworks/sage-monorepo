@@ -137,7 +137,7 @@ public interface ChallengeContributionApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"number\" : 99, \"size\" : 99, \"challengeContributions\" : [ { \"roles\" : [ \"ChallengeLead\", \"ChallengeLead\" ], \"name\" : \"name\", \"id\" : \"507f1f77bcf86cd799439011\", \"login\" : \"awesome-user\" }, { \"roles\" : [ \"ChallengeLead\", \"ChallengeLead\" ], \"name\" : \"name\", \"id\" : \"507f1f77bcf86cd799439011\", \"login\" : \"awesome-user\" } ], \"totalPages\" : 99, \"hasPrevious\" : true, \"hasNext\" : true, \"totalElements\" : 99 }";
+                    String exampleString = "{ \"number\" : 99, \"size\" : 99, \"challengeContributions\" : [ { \"organizationId\" : 1, \"challengeId\" : 1, \"role\" : \"challenge_organizer\" }, { \"organizationId\" : 1, \"challengeId\" : 1, \"role\" : \"challenge_organizer\" } ], \"totalPages\" : 99, \"hasPrevious\" : true, \"hasNext\" : true, \"totalElements\" : 99 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
