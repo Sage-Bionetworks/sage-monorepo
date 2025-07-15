@@ -1109,14 +1109,11 @@ components:
       type: object
       description: A challenge contribution to be created.
       properties:
-        challengeId:
-          $ref: '#/components/schemas/ChallengeId'
         organizationId:
           $ref: '#/components/schemas/OrganizationId'
         role:
           $ref: '#/components/schemas/ChallengeContributionRole'
       required:
-        - challengeId
         - organizationId
         - role
     ChallengeContributionId:
