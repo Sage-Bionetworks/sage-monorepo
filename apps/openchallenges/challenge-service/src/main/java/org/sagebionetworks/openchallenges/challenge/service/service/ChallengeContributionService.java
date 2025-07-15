@@ -1,7 +1,9 @@
 package org.sagebionetworks.openchallenges.challenge.service.service;
 
 import java.util.List;
+import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.DuplicateContributionException;
+import org.sagebionetworks.openchallenges.challenge.service.exception.OrganizationNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateResponseDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionDto;
@@ -63,7 +65,12 @@ public class ChallengeContributionService {
     // Verify the challenge exists
     ChallengeEntity challenge = challengeRepository
       .findById(challengeId)
-      .orElseThrow(() -> new RuntimeException("Challenge not found with id: " + challengeId));
+      .orElseThrow(() -> new ChallengeNotFoundException("Challenge not found with id: " + challengeId));
+
+    // Validate organization ID (basic validation)
+    if (request.getOrganizationId() == null || request.getOrganizationId() <= 0) {
+      throw new OrganizationNotFoundException("Organization not found with id: " + request.getOrganizationId());
+    }
 
     // Create the contribution entity
     ChallengeContributionEntity entity = ChallengeContributionEntity.builder()

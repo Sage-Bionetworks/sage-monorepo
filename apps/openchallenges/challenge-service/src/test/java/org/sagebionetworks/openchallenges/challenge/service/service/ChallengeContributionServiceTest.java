@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.DuplicateContributionException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateResponseDto;
@@ -95,7 +96,7 @@ class ChallengeContributionServiceTest {
     assertThatThrownBy(() ->
       challengeContributionService.addChallengeContribution(challengeId, request)
     )
-      .isInstanceOf(RuntimeException.class)
+      .isInstanceOf(ChallengeNotFoundException.class)
       .hasMessage("Challenge not found with id: " + challengeId);
 
     verify(challengeRepository).findById(challengeId);
