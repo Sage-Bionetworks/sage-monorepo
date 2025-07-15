@@ -2,7 +2,7 @@ type: object
 description: The unique identifier of the challenge contribution
 properties:
   id:
-    $ref: ContributionId.yaml
+    $ref: ChallengeContributionId.yaml
 required:
   - id
 example:

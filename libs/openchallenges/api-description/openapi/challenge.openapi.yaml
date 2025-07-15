@@ -746,7 +746,7 @@ components:
         - challengeId
         - organizationId
         - role
-    ContributionId:
+    ChallengeContributionId:
       description: The unique identifier of a challenge contribution
       type: integer
       format: int64
@@ -756,7 +756,7 @@ components:
       description: The unique identifier of the challenge contribution
       properties:
         id:
-          $ref: '#/components/schemas/ContributionId'
+          $ref: '#/components/schemas/ChallengeContributionId'
       required:
         - id
       example:
