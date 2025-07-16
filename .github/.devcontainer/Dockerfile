@@ -56,6 +56,8 @@ RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
     build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev \
     # Required to build statically linked binaries.
     musl musl-dev musl-tools \
+    # Required by `nx login`
+    xdg-utils \
   # Add Node.js repository.
   && curl -fsSL https://deb.nodesource.com/setup_${nodeVersionMajor}.x -o nodesource_setup.sh \
   && bash nodesource_setup.sh \
