@@ -112,5 +112,26 @@
   "terminal.integrated.showExitAlert": false,
   "rewrap.wrappingColumn": 100,
   "jest.runMode": "on-demand",
-  "nxConsole.generateAiAgentRules": true
+  "nxConsole.generateAiAgentRules": true,
+  "github.copilot.chat.agent.terminal.allowList": {
+    "echo": true,
+    "cd": true,
+    "ls": true,
+    "cat": true,
+    "pwd": true,
+    "git status": true,
+    "git log": true,
+    "git diff": true,
+    "git show": true
+  },
+  "github.copilot.chat.agent.terminal.denyList": {
+    "rm": true,
+    "rmdir": true,
+    "kill": true,
+    "curl": true,
+    "wget": true,
+    "eval": true,
+    "chmod": true,
+    "chown": true
+  }
 }
