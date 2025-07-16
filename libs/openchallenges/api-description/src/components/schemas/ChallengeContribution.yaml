@@ -1,6 +1,8 @@
 type: object
 description: A challenge contribution.
 properties:
+  id:
+    $ref: ChallengeContributionId.yaml
   challengeId:
     $ref: ChallengeId.yaml
   organizationId:
@@ -8,6 +10,7 @@ properties:
   role:
     $ref: ChallengeContributionRole.yaml
 required:
+  - id
   - challengeId
   - organizationId
   - role

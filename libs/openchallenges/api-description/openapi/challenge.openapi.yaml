@@ -694,6 +694,11 @@ components:
             - '@context'
             - '@id'
             - '@type'
+    ChallengeContributionId:
+      description: The unique identifier of a challenge contribution
+      type: integer
+      format: int64
+      example: 1
     ChallengeContributionRole:
       description: The nature of a challenge contribution.
       type: string
@@ -706,6 +711,8 @@ components:
       type: object
       description: A challenge contribution.
       properties:
+        id:
+          $ref: '#/components/schemas/ChallengeContributionId'
         challengeId:
           $ref: '#/components/schemas/ChallengeId'
         organizationId:
@@ -713,6 +720,7 @@ components:
         role:
           $ref: '#/components/schemas/ChallengeContributionRole'
       required:
+        - id
         - challengeId
         - organizationId
         - role
@@ -743,11 +751,6 @@ components:
       required:
         - organizationId
         - role
-    ChallengeContributionId:
-      description: The unique identifier of a challenge contribution
-      type: integer
-      format: int64
-      example: 1
     ChallengeContributionCreateResponse:
       type: object
       description: The unique identifier of the challenge contribution
