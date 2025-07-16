@@ -321,6 +321,65 @@ paths:
       x-tags:
         - tag: ChallengeContribution
   /challenges/{challengeId}/contributions/{challengeContributionId}:
+    delete:
+      description: |
+        Deletes a specific contribution record for a challenge, identified by its ID.
+        This action is irreversible.
+      operationId: deleteChallengeContribution
+      parameters:
+        - description: The unique identifier of the challenge.
+          explode: false
+          in: path
+          name: challengeId
+          required: true
+          schema:
+            $ref: '#/components/schemas/ChallengeId'
+          style: simple
+        - description: The unique identifier of a challenge contribution
+          explode: false
+          in: path
+          name: challengeContributionId
+          required: true
+          schema:
+            $ref: '#/components/schemas/ChallengeContributionId'
+          style: simple
+      responses:
+        '204':
+          description: Contribution deleted successfully
+        '401':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        '403':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The user does not have the permission to perform this action
+        '404':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+        - apiBearerAuth: []
+      summary: Delete a specific challenge contribution
+      tags:
+        - ChallengeContribution
+      x-accepts:
+        - application/problem+json
+      x-tags:
+        - tag: ChallengeContribution
     put:
       description: |
         Updates an existing contribution record for a challenge.

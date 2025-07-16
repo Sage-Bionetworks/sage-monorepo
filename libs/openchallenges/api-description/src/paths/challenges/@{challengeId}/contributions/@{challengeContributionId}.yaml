@@ -36,3 +36,24 @@ put:
       $ref: ../../../../components/responses/Conflict.yaml
     '500':
       $ref: ../../../../components/responses/InternalServerError.yaml
+delete:
+  tags:
+    - ChallengeContribution
+  summary: Delete a specific challenge contribution
+  description: |
+    Deletes a specific contribution record for a challenge, identified by its ID.
+    This action is irreversible.
+  operationId: deleteChallengeContribution
+  security:
+    - apiBearerAuth: []
+  responses:
+    '204':
+      description: Contribution deleted successfully
+    '401':
+      $ref: ../../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../../../components/responses/InternalServerError.yaml

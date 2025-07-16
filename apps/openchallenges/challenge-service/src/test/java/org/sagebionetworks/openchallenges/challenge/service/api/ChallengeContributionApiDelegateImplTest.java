@@ -122,4 +122,20 @@ class ChallengeContributionApiDelegateImplTest {
     assertThat(response.getBody().getRole()).isEqualTo(newRole);
     verify(challengeContributionService).updateChallengeContribution(challengeId, contributionId, request);
   }
+
+  @Test
+  @DisplayName("should delete challenge contribution and return no content status")
+  void shouldDeleteChallengeContributionAndReturnNoContentStatus() {
+    // given
+    Long challengeId = 1L;
+    Long contributionId = 456L;
+
+    // when
+    ResponseEntity<Void> response = apiDelegate.deleteChallengeContribution(challengeId, contributionId);
+
+    // then
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+    assertThat(response.getBody()).isNull();
+    verify(challengeContributionService).deleteChallengeContribution(challengeId, contributionId);
+  }
 }

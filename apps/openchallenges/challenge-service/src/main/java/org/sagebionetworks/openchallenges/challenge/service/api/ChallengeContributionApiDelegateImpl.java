@@ -112,4 +112,26 @@ public class ChallengeContributionApiDelegateImpl implements ChallengeContributi
 
     return ResponseEntity.ok(updatedContribution);
   }
+
+  @Override
+  @PreAuthorize("authentication.principal.admin")
+  public ResponseEntity<Void> deleteChallengeContribution(
+    Long challengeId,
+    Long challengeContributionId
+  ) {
+    // Log the authenticated user for audit purposes
+    AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
+      .getAuthentication()
+      .getPrincipal();
+    logger.info(
+      "User {} (role: {}) is deleting contribution {} for challenge: {}",
+      user.getUsername(),
+      user.getRole(),
+      challengeContributionId,
+      challengeId
+    );
+
+    challengeContributionService.deleteChallengeContribution(challengeId, challengeContributionId);
+    return ResponseEntity.noContent().build();
+  }
 }

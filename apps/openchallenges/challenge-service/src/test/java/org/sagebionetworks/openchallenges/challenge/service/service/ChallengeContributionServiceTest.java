@@ -675,4 +675,119 @@ class ChallengeContributionServiceTest {
     verify(organizationServiceClient).getOrganization(newOrgId);
     verify(challengeContributionRepository).save(any(ChallengeContributionEntity.class));
   }
+
+  @Test
+  @DisplayName("should delete challenge contribution when valid IDs provided")
+  void shouldDeleteChallengeContributionWhenValidIdsProvided() {
+    // given
+    Long challengeId = 1L;
+    Long contributionId = 456L;
+
+    ChallengeEntity challenge = ChallengeEntity.builder()
+      .id(challengeId)
+      .slug("test-challenge")
+      .build();
+
+    ChallengeContributionEntity existingEntity = ChallengeContributionEntity.builder()
+      .id(contributionId)
+      .challenge(challenge)
+      .organizationId(123L)
+      .role("challenge_organizer")
+      .build();
+
+    when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));
+    when(challengeContributionRepository.findById(contributionId)).thenReturn(Optional.of(existingEntity));
+
+    // when
+    challengeContributionService.deleteChallengeContribution(challengeId, contributionId);
+
+    // then
+    verify(challengeRepository).findById(challengeId);
+    verify(challengeContributionRepository).findById(contributionId);
+    verify(challengeContributionRepository).delete(existingEntity);
+  }
+
+  @Test
+  @DisplayName("should throw exception when challenge not found during delete")
+  void shouldThrowExceptionWhenChallengeNotFoundDuringDelete() {
+    // given
+    Long challengeId = 999L;
+    Long contributionId = 456L;
+
+    when(challengeRepository.findById(challengeId)).thenReturn(Optional.empty());
+
+    // when & then
+    assertThatThrownBy(() ->
+      challengeContributionService.deleteChallengeContribution(challengeId, contributionId)
+    )
+      .isInstanceOf(ChallengeNotFoundException.class)
+      .hasMessage("Challenge not found with id: " + challengeId);
+
+    verify(challengeRepository).findById(challengeId);
+  }
+
+  @Test
+  @DisplayName("should throw exception when contribution not found during delete")
+  void shouldThrowExceptionWhenContributionNotFoundDuringDelete() {
+    // given
+    Long challengeId = 1L;
+    Long contributionId = 999L;
+
+    ChallengeEntity challenge = ChallengeEntity.builder()
+      .id(challengeId)
+      .slug("test-challenge")
+      .build();
+
+    when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));
+    when(challengeContributionRepository.findById(contributionId)).thenReturn(Optional.empty());
+
+    // when & then
+    assertThatThrownBy(() ->
+      challengeContributionService.deleteChallengeContribution(challengeId, contributionId)
+    )
+      .isInstanceOf(ChallengeContributionNotFoundException.class)
+      .hasMessage("Challenge contribution not found with id: " + contributionId);
+
+    verify(challengeRepository).findById(challengeId);
+    verify(challengeContributionRepository).findById(contributionId);
+  }
+
+  @Test
+  @DisplayName("should throw exception when deleting contribution that belongs to different challenge")
+  void shouldThrowExceptionWhenDeletingContributionBelongsToDifferentChallenge() {
+    // given
+    Long challengeId = 1L;
+    Long differentChallengeId = 2L;
+    Long contributionId = 456L;
+
+    ChallengeEntity challenge = ChallengeEntity.builder()
+      .id(challengeId)
+      .slug("test-challenge")
+      .build();
+
+    ChallengeEntity differentChallenge = ChallengeEntity.builder()
+      .id(differentChallengeId)
+      .slug("different-challenge")
+      .build();
+
+    ChallengeContributionEntity existingEntity = ChallengeContributionEntity.builder()
+      .id(contributionId)
+      .challenge(differentChallenge)
+      .organizationId(123L)
+      .role("challenge_organizer")
+      .build();
+
+    when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));
+    when(challengeContributionRepository.findById(contributionId)).thenReturn(Optional.of(existingEntity));
+
+    // when & then
+    assertThatThrownBy(() ->
+      challengeContributionService.deleteChallengeContribution(challengeId, contributionId)
+    )
+      .isInstanceOf(ChallengeContributionNotFoundException.class)
+      .hasMessage("Challenge contribution " + contributionId + " does not belong to challenge " + challengeId);
+
+    verify(challengeRepository).findById(challengeId);
+    verify(challengeContributionRepository).findById(contributionId);
+  }
 }

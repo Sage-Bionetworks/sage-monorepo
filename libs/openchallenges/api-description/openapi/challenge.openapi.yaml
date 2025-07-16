@@ -199,6 +199,27 @@ paths:
           $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - ChallengeContribution
+      summary: Delete a specific challenge contribution
+      description: |
+        Deletes a specific contribution record for a challenge, identified by its ID.
+        This action is irreversible.
+      operationId: deleteChallengeContribution
+      security:
+        - apiBearerAuth: []
+      responses:
+        '204':
+          description: Contribution deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /challengeAnalytics/challengesPerYear:
     get:
       tags:

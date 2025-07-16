@@ -153,6 +153,56 @@ public interface ChallengeContributionApi {
 
 
     /**
+     * DELETE /challenges/{challengeId}/contributions/{challengeContributionId} : Delete a specific challenge contribution
+     * Deletes a specific contribution record for a challenge, identified by its ID. This action is irreversible. 
+     *
+     * @param challengeId The unique identifier of the challenge. (required)
+     * @param challengeContributionId The unique identifier of a challenge contribution (required)
+     * @return Contribution deleted successfully (status code 204)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "deleteChallengeContribution",
+        summary = "Delete a specific challenge contribution",
+        description = "Deletes a specific contribution record for a challenge, identified by its ID. This action is irreversible. ",
+        tags = { "ChallengeContribution" },
+        responses = {
+            @ApiResponse(responseCode = "204", description = "Contribution deleted successfully"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "apiBearerAuth")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.DELETE,
+        value = "/challenges/{challengeId}/contributions/{challengeContributionId}",
+        produces = { "application/problem+json" }
+    )
+    
+    default ResponseEntity<Void> deleteChallengeContribution(
+        @Parameter(name = "challengeId", description = "The unique identifier of the challenge.", required = true, in = ParameterIn.PATH) @PathVariable("challengeId") Long challengeId,
+        @Parameter(name = "challengeContributionId", description = "The unique identifier of a challenge contribution", required = true, in = ParameterIn.PATH) @PathVariable("challengeContributionId") Long challengeContributionId
+    ) {
+        return getDelegate().deleteChallengeContribution(challengeId, challengeContributionId);
+    }
+
+
+    /**
      * GET /challenges/{challengeId}/contributions : List challenge contributions
      * List challenge contributions
      *

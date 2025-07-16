@@ -201,4 +201,33 @@ public class ChallengeContributionService {
       throw e;
     }
   }
+
+  @Transactional
+  public void deleteChallengeContribution(Long challengeId, Long challengeContributionId) {
+    // Verify the challenge exists
+    challengeRepository
+      .findById(challengeId)
+      .orElseThrow(() ->
+        new ChallengeNotFoundException("Challenge not found with id: " + challengeId)
+      );
+
+    // Find the existing contribution
+    ChallengeContributionEntity existingContribution = challengeContributionRepository
+      .findById(challengeContributionId)
+      .orElseThrow(() ->
+        new ChallengeContributionNotFoundException(
+          "Challenge contribution not found with id: " + challengeContributionId
+        )
+      );
+
+    // Verify the contribution belongs to the specified challenge
+    if (!existingContribution.getChallenge().getId().equals(challengeId)) {
+      throw new ChallengeContributionNotFoundException(
+        "Challenge contribution " + challengeContributionId + " does not belong to challenge " + challengeId
+      );
+    }
+
+    // Delete the contribution
+    challengeContributionRepository.delete(existingContribution);
+  }
 }
