@@ -119,11 +119,6 @@
     "ls": true,
     "cat": true,
     "pwd": true,
-    "Write-Host": true,
-    "Set-Location": true,
-    "Get-ChildItem": true,
-    "Get-Content": true,
-    "Get-Location": true,
     "git status": true,
     "git log": true,
     "git diff": true,
@@ -132,13 +127,11 @@
   "github.copilot.chat.agent.terminal.denyList": {
     "rm": true,
     "rmdir": true,
-    "del": true,
     "kill": true,
     "curl": true,
     "wget": true,
     "eval": true,
     "chmod": true,
-    "chown": true,
-    "Remove-Item": true
+    "chown": true
   }
 }
