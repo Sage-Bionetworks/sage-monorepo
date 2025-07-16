@@ -51,11 +51,39 @@ public class ChallengeContributionService {
       .challengeContributions(contributions)
       .number(0)
       .size(contributions.size())
-      .totalElements(Long.valueOf(contributions.size()))
+      .totalElements((long) contributions.size())
       .totalPages(1)
       .hasNext(false)
       .hasPrevious(false)
       .build();
+  }
+
+  public ChallengeContributionDto getChallengeContribution(Long challengeId, Long challengeContributionId) {
+    // Verify the challenge exists
+    challengeRepository
+      .findById(challengeId)
+      .orElseThrow(() ->
+        new ChallengeNotFoundException("Challenge not found with id: " + challengeId)
+      );
+
+    // Find the contribution
+    ChallengeContributionEntity contribution = challengeContributionRepository
+      .findById(challengeContributionId)
+      .orElseThrow(() ->
+        new ChallengeContributionNotFoundException(
+          "Challenge contribution not found with id: " + challengeContributionId
+        )
+      );
+
+    // Verify the contribution belongs to the specified challenge
+    if (!contribution.getChallenge().getId().equals(challengeId)) {
+      throw new ChallengeContributionNotFoundException(
+        "Challenge contribution " + challengeContributionId + " does not belong to challenge " + challengeId
+      );
+    }
+
+    // Return the contribution as DTO
+    return challengeContributionMapper.convertToDto(contribution);
   }
 
   @Transactional
