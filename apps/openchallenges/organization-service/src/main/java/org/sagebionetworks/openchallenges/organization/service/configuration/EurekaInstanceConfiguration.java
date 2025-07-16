@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class EurekaInstanceConfiguration {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(EurekaInstanceConfiguration.class);
+  private static final Logger logger = LoggerFactory.getLogger(EurekaInstanceConfiguration.class);
 
   @Value("${server.port:8084}")
   private String port;
@@ -34,13 +34,13 @@ public class EurekaInstanceConfiguration {
     matchIfMissing = false
   )
   public EurekaInstanceConfigBean eurekaInstanceConfig(InetUtils inetUtils) {
-    LOGGER.info("Configuring the Eureka instance for AWS.");
+    logger.info("Configuring the Eureka instance for AWS.");
     EurekaInstanceConfigBean bean = new EurekaInstanceConfigBean(inetUtils);
     String ip = null;
     try {
       ip = InetAddress.getLocalHost().getHostAddress();
     } catch (UnknownHostException e) {
-      LOGGER.error("Unable to get the host address.", e);
+      logger.error("Unable to get the host address.", e);
     }
     bean.setIpAddress(ip);
     bean.setPreferIpAddress(true);
