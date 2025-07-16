@@ -3,15 +3,15 @@ package org.sagebionetworks.openchallenges.challenge.service.service;
 import feign.FeignException;
 import java.util.List;
 import org.sagebionetworks.openchallenges.challenge.service.client.OrganizationServiceClient;
-import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeContributionNotFoundException;
+import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.DuplicateContributionException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.OrganizationNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateResponseDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionDto;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionsPageDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionUpdateRequestDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionsPageDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeContributionEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengeContributionMapper;
@@ -149,7 +149,10 @@ public class ChallengeContributionService {
     // Verify the contribution belongs to the specified challenge
     if (!existingContribution.getChallenge().getId().equals(challengeId)) {
       throw new ChallengeContributionNotFoundException(
-        "Challenge contribution " + challengeContributionId + " does not belong to challenge " + challengeId
+        "Challenge contribution " +
+        challengeContributionId +
+        " does not belong to challenge " +
+        challengeId
       );
     }
 
@@ -176,7 +179,9 @@ public class ChallengeContributionService {
 
     try {
       // Save the updated entity
-      ChallengeContributionEntity updatedEntity = challengeContributionRepository.save(existingContribution);
+      ChallengeContributionEntity updatedEntity = challengeContributionRepository.save(
+        existingContribution
+      );
 
       // Return the updated contribution as DTO
       return challengeContributionMapper.convertToDto(updatedEntity);
