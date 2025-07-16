@@ -1,7 +1,6 @@
 package org.sagebionetworks.openchallenges.challenge.service.api;
 
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateResponseDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionUpdateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionsPageDto;
@@ -57,7 +56,7 @@ public class ChallengeContributionApiDelegateImpl implements ChallengeContributi
 
   @Override
   @PreAuthorize("authentication.principal.admin")
-  public ResponseEntity<ChallengeContributionCreateResponseDto> addChallengeContribution(
+  public ResponseEntity<ChallengeContributionDto> addChallengeContribution(
     Long challengeId,
     ChallengeContributionCreateRequestDto challengeContributionCreateRequestDto
   ) {
@@ -74,7 +73,7 @@ public class ChallengeContributionApiDelegateImpl implements ChallengeContributi
       challengeContributionCreateRequestDto.getRole()
     );
 
-    ChallengeContributionCreateResponseDto response =
+    ChallengeContributionDto response =
       challengeContributionService.addChallengeContribution(
         challengeId,
         challengeContributionCreateRequestDto

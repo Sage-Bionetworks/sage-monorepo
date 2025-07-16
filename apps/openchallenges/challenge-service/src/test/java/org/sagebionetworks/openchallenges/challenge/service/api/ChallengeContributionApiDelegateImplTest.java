@@ -13,7 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateResponseDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionUpdateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionRoleDto;
@@ -62,21 +61,27 @@ class ChallengeContributionApiDelegateImplTest {
       role
     );
 
-    ChallengeContributionCreateResponseDto expectedResponse =
-      new ChallengeContributionCreateResponseDto(456L);
+    ChallengeContributionDto expectedResponse = new ChallengeContributionDto()
+      .id(456L)
+      .challengeId(challengeId)
+      .organizationId(organizationId)
+      .role(role);
 
     when(challengeContributionService.addChallengeContribution(challengeId, request)).thenReturn(
       expectedResponse
     );
 
     // when
-    ResponseEntity<ChallengeContributionCreateResponseDto> response =
+    ResponseEntity<ChallengeContributionDto> response =
       apiDelegate.addChallengeContribution(challengeId, request);
 
     // then
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     assertThat(response.getBody()).isNotNull();
     assertThat(response.getBody().getId()).isEqualTo(456L);
+    assertThat(response.getBody().getChallengeId()).isEqualTo(challengeId);
+    assertThat(response.getBody().getOrganizationId()).isEqualTo(organizationId);
+    assertThat(response.getBody().getRole()).isEqualTo(role);
     verify(challengeContributionService).addChallengeContribution(challengeId, request);
   }
 

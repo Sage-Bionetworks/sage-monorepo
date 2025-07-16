@@ -7,7 +7,6 @@ package org.sagebionetworks.openchallenges.challenge.service.api;
 
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.BasicErrorDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateResponseDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionUpdateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionsPageDto;
@@ -62,8 +61,8 @@ public interface ChallengeContributionApi {
         tags = { "ChallengeContribution" },
         responses = {
             @ApiResponse(responseCode = "201", description = "Contribution created successfully", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ChallengeContributionCreateResponseDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ChallengeContributionCreateResponseDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ChallengeContributionDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ChallengeContributionDto.class))
             }),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
@@ -97,7 +96,7 @@ public interface ChallengeContributionApi {
         consumes = { "application/json" }
     )
     
-    default ResponseEntity<ChallengeContributionCreateResponseDto> addChallengeContribution(
+    default ResponseEntity<ChallengeContributionDto> addChallengeContribution(
         @Parameter(name = "challengeId", description = "The unique identifier of the challenge.", required = true, in = ParameterIn.PATH) @PathVariable("challengeId") Long challengeId,
         @Parameter(name = "ChallengeContributionCreateRequestDto", description = "", required = true) @Valid @RequestBody ChallengeContributionCreateRequestDto challengeContributionCreateRequestDto
     ) {

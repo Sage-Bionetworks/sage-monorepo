@@ -21,38 +21,10 @@ import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeN
 import org.sagebionetworks.openchallenges.challenge.service.exception.DuplicateContributionException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.OrganizationNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateResponseDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionRoleDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionUpdateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionsPageDto;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.organization.OrganizationDto;
-import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeContributionEntity;
-import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeEntity;
-import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeContributionRepository;
-import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeRepository;
-import org.springframework.dao.DataIntegrityViolationException;
-import static org.mockito.Mockito.when;
-
-import feign.FeignException;
-import java.util.List;
-import java.util.Optional;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.sagebionetworks.openchallenges.challenge.service.client.OrganizationServiceClient;
-import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeContributionNotFoundException;
-import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeNotFoundException;
-import org.sagebionetworks.openchallenges.challenge.service.exception.DuplicateContributionException;
-import org.sagebionetworks.openchallenges.challenge.service.exception.OrganizationNotFoundException;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateResponseDto;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionDto;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionRoleDto;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionUpdateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.organization.OrganizationDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeContributionEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeEntity;
@@ -111,12 +83,15 @@ class ChallengeContributionServiceTest {
     );
 
     // when
-    ChallengeContributionCreateResponseDto response =
+    ChallengeContributionDto response =
       challengeContributionService.addChallengeContribution(challengeId, request);
 
     // then
     assertThat(response).isNotNull();
     assertThat(response.getId()).isEqualTo(456L);
+    assertThat(response.getChallengeId()).isEqualTo(challengeId);
+    assertThat(response.getOrganizationId()).isEqualTo(organizationId);
+    assertThat(response.getRole()).isEqualTo(role);
     verify(challengeRepository).findById(challengeId);
     verify(organizationServiceClient).getOrganization(organizationId);
     verify(challengeContributionRepository).save(any(ChallengeContributionEntity.class));

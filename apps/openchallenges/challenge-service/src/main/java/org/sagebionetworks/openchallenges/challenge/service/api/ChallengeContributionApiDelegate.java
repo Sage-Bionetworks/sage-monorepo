@@ -2,7 +2,6 @@ package org.sagebionetworks.openchallenges.challenge.service.api;
 
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.BasicErrorDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateResponseDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionUpdateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionsPageDto;
@@ -44,12 +43,12 @@ public interface ChallengeContributionApiDelegate {
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see ChallengeContributionApi#addChallengeContribution
      */
-    default ResponseEntity<ChallengeContributionCreateResponseDto> addChallengeContribution(Long challengeId,
+    default ResponseEntity<ChallengeContributionDto> addChallengeContribution(Long challengeId,
         ChallengeContributionCreateRequestDto challengeContributionCreateRequestDto) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"id\" : 1 }";
+                    String exampleString = "{ \"organizationId\" : 1, \"challengeId\" : 1, \"role\" : \"challenge_organizer\", \"id\" : 1 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

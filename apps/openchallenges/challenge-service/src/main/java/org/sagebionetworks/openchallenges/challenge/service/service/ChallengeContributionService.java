@@ -8,7 +8,6 @@ import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeN
 import org.sagebionetworks.openchallenges.challenge.service.exception.DuplicateContributionException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.OrganizationNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateResponseDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionUpdateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionsPageDto;
@@ -65,7 +64,7 @@ public class ChallengeContributionService {
   }
 
   @Transactional
-  public ChallengeContributionCreateResponseDto addChallengeContribution(
+  public ChallengeContributionDto addChallengeContribution(
     Long challengeId,
     ChallengeContributionCreateRequestDto request
   ) {
@@ -104,8 +103,8 @@ public class ChallengeContributionService {
       // Save the entity
       ChallengeContributionEntity savedEntity = challengeContributionRepository.save(entity);
 
-      // Return the response with the generated ID
-      return new ChallengeContributionCreateResponseDto(savedEntity.getId());
+      // Return the full contribution DTO
+      return challengeContributionMapper.convertToDto(savedEntity);
     } catch (DataIntegrityViolationException e) {
       // Check if this is the unique constraint violation
       if (e.getMessage() != null && e.getMessage().contains("unique_contribution")) {
