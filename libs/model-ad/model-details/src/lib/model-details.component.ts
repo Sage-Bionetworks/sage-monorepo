@@ -8,6 +8,7 @@ import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { Model, ModelsService } from '@sagebionetworks/model-ad/api-client-angular';
 import { ConfigService, ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import { ModelDetailsBoxplotsGridComponent } from './components/model-details-boxplots-grid/model-details-boxplots-grid.component';
 import { ModelDetailsHeroComponent } from './components/model-details-hero/model-details-hero.component';
 import { ModelDetailsOmicsComponent } from './components/model-details-omics/model-details-omics.component';
 import { ModelDetailsResourcesComponent } from './components/model-details-resources/model-details-resources.component';
@@ -20,6 +21,7 @@ import { ModelDetailsResourcesComponent } from './components/model-details-resou
     ModelDetailsOmicsComponent,
     ModelDetailsResourcesComponent,
     ModelDetailsHeroComponent,
+    ModelDetailsBoxplotsGridComponent,
   ],
   templateUrl: './model-details.component.html',
   styleUrls: ['./model-details.component.scss'],

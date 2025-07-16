@@ -5,6 +5,7 @@ import {
   CategoryBoxplotSummary,
   CategoryPoint,
 } from '@sagebionetworks/shared/charts';
+import { CallbackDataParams } from 'echarts/types/dist/shared';
 
 @Directive({
   selector: '[sageBoxplot]',
@@ -18,12 +19,18 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
   @Input({ required: true }) points: CategoryPoint[] = [];
   @Input() summaries: CategoryBoxplotSummary[] | undefined;
   @Input() title = '';
-  @Input() xAxisTitle = '';
+  @Input() xAxisTitle: string | undefined;
   @Input() yAxisTitle = '';
   @Input() yAxisMin: number | undefined;
   @Input() yAxisMax: number | undefined;
   @Input() xAxisCategoryToTooltipText: Record<string, string> | undefined;
-  @Input() pointTooltipFormatter: undefined | ((pt: CategoryPoint) => string);
+  @Input() pointTooltipFormatter:
+    | undefined
+    | ((pt: CategoryPoint, params: CallbackDataParams) => string);
+  @Input() pointCategoryColors: undefined | Record<string, string>;
+  @Input() pointCategoryShapes: undefined | Record<string, string>;
+  @Input() showLegend: undefined | boolean;
+  @Input() pointOpacity: undefined | number;
 
   ngOnInit() {
     this.boxplot = new BoxplotChart(this.el.nativeElement, this.getBoxplotProps());
@@ -48,6 +55,10 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
       yAxisMax: this.yAxisMax,
       xAxisCategoryToTooltipText: this.xAxisCategoryToTooltipText,
       pointTooltipFormatter: this.pointTooltipFormatter,
+      pointCategoryColors: this.pointCategoryColors,
+      pointCategoryShapes: this.pointCategoryShapes,
+      showLegend: this.showLegend,
+      pointOpacity: this.pointOpacity,
     };
   }
 }
