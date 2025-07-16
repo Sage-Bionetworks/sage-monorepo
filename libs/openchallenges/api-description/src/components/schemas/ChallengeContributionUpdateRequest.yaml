@@ -1,16 +1,10 @@
 type: object
-description: A challenge contribution.
+description: A challenge contribution update request.
 properties:
-  id:
-    $ref: ChallengeContributionId.yaml
-  challengeId:
-    $ref: ChallengeId.yaml
   organizationId:
     $ref: OrganizationId.yaml
   role:
     $ref: ChallengeContributionRole.yaml
 required:
-  - id
-  - challengeId
   - organizationId
   - role

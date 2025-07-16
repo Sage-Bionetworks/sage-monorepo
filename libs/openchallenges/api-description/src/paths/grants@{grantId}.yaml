@@ -29,7 +29,7 @@ delete:
   description: Deletes the grant specified
   operationId: deleteGrant
   security:
-    - ApiKeyAuth: []
+    - apiBearerAuth: []
   responses:
     '200':
       description: Success

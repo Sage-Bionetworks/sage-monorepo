@@ -3,6 +3,9 @@ openchallenges-challenge-service:
   auth-service:
     base-url: http://openchallenges-auth-service:8087
     timeout: 5000ms
+  organization-service:
+    base-url: http://openchallenges-organization-service:8084
+    timeout: 5000ms
 
 server:
   port: 8085

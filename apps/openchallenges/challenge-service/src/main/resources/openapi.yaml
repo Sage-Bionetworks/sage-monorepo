@@ -3,6 +3,7 @@ info:
   contact:
     name: Support
     url: https://github.com/Sage-Bionetworks/sage-monorepo
+  description: 'Discover, explore, and contribute to open biomedical challenges.'
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -15,6 +16,8 @@ servers:
 tags:
   - description: Operations about challenges.
     name: Challenge
+  - description: Operations about challenge contributions.
+    name: ChallengeContribution
   - description: Operations about challenge analytics.
     name: ChallengeAnalytics
   - description: Operations about challenge platforms.
@@ -161,7 +164,8 @@ paths:
   /challenges/{challengeId}/contributions:
     delete:
       description: |
-        Deletes all contributions associated with a challenge ID. This action is irreversible.
+        Deletes all associated contributions for a given challenge, identified by its ID.
+        This action is irreversible.
       operationId: deleteAllChallengeContributions
       parameters:
         - description: The unique identifier of the challenge.
@@ -244,6 +248,272 @@ paths:
       summary: List challenge contributions
       tags:
         - ChallengeContribution
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: ChallengeContribution
+    post:
+      description: |
+        Creates a new contribution record associated with a challenge ID.
+      operationId: addChallengeContribution
+      parameters:
+        - description: The unique identifier of the challenge.
+          explode: false
+          in: path
+          name: challengeId
+          required: true
+          schema:
+            $ref: '#/components/schemas/ChallengeId'
+          style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengeContributionCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeContribution'
+          description: Contribution created successfully
+        '401':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        '403':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The user does not have the permission to perform this action
+        '404':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        '409':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request conflicts with current state of the target resource
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+        - apiBearerAuth: []
+      summary: Create a new contribution for a challenge
+      tags:
+        - ChallengeContribution
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: ChallengeContribution
+  /challenges/{challengeId}/contributions/{challengeContributionId}:
+    delete:
+      description: |
+        Deletes a specific contribution record for a challenge, identified by its ID.
+        This action is irreversible.
+      operationId: deleteChallengeContribution
+      parameters:
+        - description: The unique identifier of the challenge.
+          explode: false
+          in: path
+          name: challengeId
+          required: true
+          schema:
+            $ref: '#/components/schemas/ChallengeId'
+          style: simple
+        - description: The unique identifier of a challenge contribution
+          explode: false
+          in: path
+          name: challengeContributionId
+          required: true
+          schema:
+            $ref: '#/components/schemas/ChallengeContributionId'
+          style: simple
+      responses:
+        '204':
+          description: Contribution deleted successfully
+        '401':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        '403':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The user does not have the permission to perform this action
+        '404':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+        - apiBearerAuth: []
+      summary: Delete a specific challenge contribution
+      tags:
+        - ChallengeContribution
+      x-accepts:
+        - application/problem+json
+      x-tags:
+        - tag: ChallengeContribution
+    get:
+      description: |
+        Retrieves a specific contribution record for a challenge, identified by its ID.
+      operationId: getChallengeContribution
+      parameters:
+        - description: The unique identifier of the challenge.
+          explode: false
+          in: path
+          name: challengeId
+          required: true
+          schema:
+            $ref: '#/components/schemas/ChallengeId'
+          style: simple
+        - description: The unique identifier of a challenge contribution
+          explode: false
+          in: path
+          name: challengeContributionId
+          required: true
+          schema:
+            $ref: '#/components/schemas/ChallengeContributionId'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeContribution'
+          description: Challenge contribution retrieved successfully
+        '400':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        '404':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get a specific challenge contribution
+      tags:
+        - ChallengeContribution
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: ChallengeContribution
+    put:
+      description: |
+        Updates an existing contribution record for a challenge.
+        Only the organization ID and role can be modified.
+      operationId: updateChallengeContribution
+      parameters:
+        - description: The unique identifier of the challenge.
+          explode: false
+          in: path
+          name: challengeId
+          required: true
+          schema:
+            $ref: '#/components/schemas/ChallengeId'
+          style: simple
+        - description: The unique identifier of a challenge contribution
+          explode: false
+          in: path
+          name: challengeContributionId
+          required: true
+          schema:
+            $ref: '#/components/schemas/ChallengeContributionId'
+          style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengeContributionUpdateRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeContribution'
+          description: Contribution updated successfully
+        '400':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        '401':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        '403':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The user does not have the permission to perform this action
+        '404':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        '409':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request conflicts with current state of the target resource
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+        - apiBearerAuth: []
+      summary: Update an existing challenge contribution
+      tags:
+        - ChallengeContribution
+      x-content-type: application/json
       x-accepts:
         - application/json
         - application/problem+json
@@ -468,6 +738,15 @@ components:
       schema:
         $ref: '#/components/schemas/ChallengeId'
       style: simple
+    challengeContributionId:
+      description: The unique identifier of a challenge contribution
+      explode: false
+      in: path
+      name: challengeContributionId
+      required: true
+      schema:
+        $ref: '#/components/schemas/ChallengeContributionId'
+      style: simple
     challengePlatformSearchQuery:
       description: The search query used to find challenge platforms.
       explode: true
@@ -526,6 +805,12 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: The user does not have the permission to perform this action
+    Conflict:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The request conflicts with current state of the target resource
   schemas:
     ChallengeSort:
       default: relevance
@@ -1154,6 +1439,11 @@ components:
           type: object
       description: A challenge
       type: object
+    ChallengeContributionId:
+      description: The unique identifier of a challenge contribution
+      example: 1
+      format: int64
+      type: integer
     ChallengeContributionRole:
       description: The nature of a challenge contribution.
       enum:
@@ -1168,7 +1458,13 @@ components:
         organizationId: 1
         challengeId: 1
         role: challenge_organizer
+        id: 1
       properties:
+        id:
+          description: The unique identifier of a challenge contribution
+          example: 1
+          format: int64
+          type: integer
         challengeId:
           description: The unique identifier of the challenge.
           example: 1
@@ -1183,6 +1479,7 @@ components:
           $ref: '#/components/schemas/ChallengeContributionRole'
       required:
         - challengeId
+        - id
         - organizationId
         - role
       type: object
@@ -1206,9 +1503,11 @@ components:
           - organizationId: 1
             challengeId: 1
             role: challenge_organizer
+            id: 1
           - organizationId: 1
             challengeId: 1
             role: challenge_organizer
+            id: 1
         totalPages: 99
         hasPrevious: true
         hasNext: true
@@ -1216,6 +1515,34 @@ components:
       type: object
       x-java-class-annotations:
         - '@lombok.Builder'
+    ChallengeContributionCreateRequest:
+      description: A challenge contribution to be created.
+      properties:
+        organizationId:
+          description: The unique identifier of an organization
+          example: 1
+          format: int64
+          type: integer
+        role:
+          $ref: '#/components/schemas/ChallengeContributionRole'
+      required:
+        - organizationId
+        - role
+      type: object
+    ChallengeContributionUpdateRequest:
+      description: A challenge contribution update request.
+      properties:
+        organizationId:
+          description: The unique identifier of an organization
+          example: 1
+          format: int64
+          type: integer
+        role:
+          $ref: '#/components/schemas/ChallengeContributionRole'
+      required:
+        - organizationId
+        - role
+      type: object
     ChallengesPerYear:
       description: An object
       example:

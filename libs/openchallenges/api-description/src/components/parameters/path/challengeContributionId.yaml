@@ -1,0 +1,6 @@
+name: challengeContributionId
+in: path
+description: The unique identifier of a challenge contribution
+required: true
+schema:
+  $ref: ../../../components/schemas/ChallengeContributionId.yaml

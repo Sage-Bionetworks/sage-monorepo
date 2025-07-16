@@ -43,6 +43,21 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     );
   }
 
+  @ExceptionHandler(DuplicateContributionException.class)
+  protected ResponseEntity<BasicErrorDto> handleDuplicateContributionException(
+    DuplicateContributionException e,
+    Locale locale
+  ) {
+    return new ResponseEntity<>(
+      BasicErrorDto.builder()
+        .title("Duplicate Contribution")
+        .status(HttpStatus.CONFLICT.value())
+        .detail(e.getMessage())
+        .build(),
+      HttpStatus.CONFLICT
+    );
+  }
+
   @ExceptionHandler({ Exception.class })
   protected ResponseEntity<BasicErrorDto> handleException(Exception e, Locale locale) {
     return ResponseEntity.internalServerError()

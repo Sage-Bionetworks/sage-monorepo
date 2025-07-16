@@ -19,6 +19,8 @@ tags:
     description: Operations about API key management
   - name: Challenge
     description: Operations about challenges.
+  - name: ChallengeContribution
+    description: Operations about challenge contributions.
   - name: ChallengeAnalytics
     description: Operations about challenge analytics.
   - name: ChallengePlatform
@@ -236,19 +238,136 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - ChallengeContribution
+      summary: Create a new contribution for a challenge
+      description: |
+        Creates a new contribution record associated with a challenge ID.
+      operationId: addChallengeContribution
+      security:
+        - apiBearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengeContributionCreateRequest'
+      responses:
+        '201':
+          description: Contribution created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeContribution'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
     delete:
       tags:
         - ChallengeContribution
       summary: Delete all contributions for a specific challenge
       description: >
-        Deletes all contributions associated with a challenge ID. This action is
-        irreversible.
+        Deletes all associated contributions for a given challenge, identified
+        by its ID.
+
+        This action is irreversible.
       operationId: deleteAllChallengeContributions
       security:
         - apiBearerAuth: []
       responses:
         '204':
           description: Deletion successful
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  '/challenges/{challengeId}/contributions/{challengeContributionId}':
+    parameters:
+      - $ref: '#/components/parameters/challengeId'
+      - $ref: '#/components/parameters/challengeContributionId'
+    get:
+      tags:
+        - ChallengeContribution
+      summary: Get a specific challenge contribution
+      description: >
+        Retrieves a specific contribution record for a challenge, identified by
+        its ID.
+      operationId: getChallengeContribution
+      responses:
+        '200':
+          description: Challenge contribution retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeContribution'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - ChallengeContribution
+      summary: Update an existing challenge contribution
+      description: |
+        Updates an existing contribution record for a challenge.
+        Only the organization ID and role can be modified.
+      operationId: updateChallengeContribution
+      security:
+        - apiBearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengeContributionUpdateRequest'
+      responses:
+        '200':
+          description: Contribution updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeContribution'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - ChallengeContribution
+      summary: Delete a specific challenge contribution
+      description: >
+        Deletes a specific contribution record for a challenge, identified by
+        its ID.
+
+        This action is irreversible.
+      operationId: deleteChallengeContribution
+      security:
+        - apiBearerAuth: []
+      responses:
+        '204':
+          description: Contribution deleted successfully
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -1033,6 +1152,11 @@ components:
             - '@context'
             - '@id'
             - '@type'
+    ChallengeContributionId:
+      description: The unique identifier of a challenge contribution
+      type: integer
+      format: int64
+      example: 1
     ChallengeContributionRole:
       description: The nature of a challenge contribution.
       type: string
@@ -1045,6 +1169,8 @@ components:
       type: object
       description: A challenge contribution.
       properties:
+        id:
+          $ref: '#/components/schemas/ChallengeContributionId'
         challengeId:
           $ref: '#/components/schemas/ChallengeId'
         organizationId:
@@ -1052,6 +1178,7 @@ components:
         role:
           $ref: '#/components/schemas/ChallengeContributionRole'
       required:
+        - id
         - challengeId
         - organizationId
         - role
@@ -1071,6 +1198,28 @@ components:
             - challengeContributions
       x-java-class-annotations:
         - '@lombok.Builder'
+    ChallengeContributionCreateRequest:
+      type: object
+      description: A challenge contribution to be created.
+      properties:
+        organizationId:
+          $ref: '#/components/schemas/OrganizationId'
+        role:
+          $ref: '#/components/schemas/ChallengeContributionRole'
+      required:
+        - organizationId
+        - role
+    ChallengeContributionUpdateRequest:
+      type: object
+      description: A challenge contribution update request.
+      properties:
+        organizationId:
+          $ref: '#/components/schemas/OrganizationId'
+        role:
+          $ref: '#/components/schemas/ChallengeContributionRole'
+      required:
+        - organizationId
+        - role
     ChallengesPerYear:
       type: object
       description: An object
@@ -1471,6 +1620,12 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
+    Conflict:
+      description: The request conflicts with current state of the target resource
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
   securitySchemes:
     apiBearerAuth:
       type: http
@@ -1491,6 +1646,13 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/ChallengeId'
+    challengeContributionId:
+      name: challengeContributionId
+      in: path
+      description: The unique identifier of a challenge contribution
+      required: true
+      schema:
+        $ref: '#/components/schemas/ChallengeContributionId'
     challengePlatformSearchQuery:
       name: challengePlatformSearchQuery
       description: The search query used to find challenge platforms.

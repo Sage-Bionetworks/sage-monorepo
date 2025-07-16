@@ -18,77 +18,31 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * A challenge contribution.
+ * A challenge contribution update request.
  */
 
-@Schema(name = "ChallengeContribution", description = "A challenge contribution.")
-@JsonTypeName("ChallengeContribution")
+@Schema(name = "ChallengeContributionUpdateRequest", description = "A challenge contribution update request.")
+@JsonTypeName("ChallengeContributionUpdateRequest")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
-public class ChallengeContributionDto {
-
-  private Long id;
-
-  private Long challengeId;
+public class ChallengeContributionUpdateRequestDto {
 
   private Long organizationId;
 
   private ChallengeContributionRoleDto role;
 
-  public ChallengeContributionDto() {
+  public ChallengeContributionUpdateRequestDto() {
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-  public ChallengeContributionDto(Long id, Long challengeId, Long organizationId, ChallengeContributionRoleDto role) {
-    this.id = id;
-    this.challengeId = challengeId;
+  public ChallengeContributionUpdateRequestDto(Long organizationId, ChallengeContributionRoleDto role) {
     this.organizationId = organizationId;
     this.role = role;
   }
 
-  public ChallengeContributionDto id(Long id) {
-    this.id = id;
-    return this;
-  }
-
-  /**
-   * The unique identifier of a challenge contribution
-   * @return id
-   */
-  @NotNull 
-  @Schema(name = "id", example = "1", description = "The unique identifier of a challenge contribution", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("id")
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public ChallengeContributionDto challengeId(Long challengeId) {
-    this.challengeId = challengeId;
-    return this;
-  }
-
-  /**
-   * The unique identifier of the challenge.
-   * @return challengeId
-   */
-  @NotNull 
-  @Schema(name = "challengeId", example = "1", description = "The unique identifier of the challenge.", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("challengeId")
-  public Long getChallengeId() {
-    return challengeId;
-  }
-
-  public void setChallengeId(Long challengeId) {
-    this.challengeId = challengeId;
-  }
-
-  public ChallengeContributionDto organizationId(Long organizationId) {
+  public ChallengeContributionUpdateRequestDto organizationId(Long organizationId) {
     this.organizationId = organizationId;
     return this;
   }
@@ -108,7 +62,7 @@ public class ChallengeContributionDto {
     this.organizationId = organizationId;
   }
 
-  public ChallengeContributionDto role(ChallengeContributionRoleDto role) {
+  public ChallengeContributionUpdateRequestDto role(ChallengeContributionRoleDto role) {
     this.role = role;
     return this;
   }
@@ -136,24 +90,20 @@ public class ChallengeContributionDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ChallengeContributionDto challengeContribution = (ChallengeContributionDto) o;
-    return Objects.equals(this.id, challengeContribution.id) &&
-        Objects.equals(this.challengeId, challengeContribution.challengeId) &&
-        Objects.equals(this.organizationId, challengeContribution.organizationId) &&
-        Objects.equals(this.role, challengeContribution.role);
+    ChallengeContributionUpdateRequestDto challengeContributionUpdateRequest = (ChallengeContributionUpdateRequestDto) o;
+    return Objects.equals(this.organizationId, challengeContributionUpdateRequest.organizationId) &&
+        Objects.equals(this.role, challengeContributionUpdateRequest.role);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, challengeId, organizationId, role);
+    return Objects.hash(organizationId, role);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ChallengeContributionDto {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    challengeId: ").append(toIndentedString(challengeId)).append("\n");
+    sb.append("class ChallengeContributionUpdateRequestDto {\n");
     sb.append("    organizationId: ").append(toIndentedString(organizationId)).append("\n");
     sb.append("    role: ").append(toIndentedString(role)).append("\n");
     sb.append("}");
@@ -173,50 +123,38 @@ public class ChallengeContributionDto {
   
   public static class Builder {
 
-    private ChallengeContributionDto instance;
+    private ChallengeContributionUpdateRequestDto instance;
 
     public Builder() {
-      this(new ChallengeContributionDto());
+      this(new ChallengeContributionUpdateRequestDto());
     }
 
-    protected Builder(ChallengeContributionDto instance) {
+    protected Builder(ChallengeContributionUpdateRequestDto instance) {
       this.instance = instance;
     }
 
-    protected Builder copyOf(ChallengeContributionDto value) { 
-      this.instance.setId(value.id);
-      this.instance.setChallengeId(value.challengeId);
+    protected Builder copyOf(ChallengeContributionUpdateRequestDto value) { 
       this.instance.setOrganizationId(value.organizationId);
       this.instance.setRole(value.role);
       return this;
     }
 
-    public ChallengeContributionDto.Builder id(Long id) {
-      this.instance.id(id);
-      return this;
-    }
-    
-    public ChallengeContributionDto.Builder challengeId(Long challengeId) {
-      this.instance.challengeId(challengeId);
-      return this;
-    }
-    
-    public ChallengeContributionDto.Builder organizationId(Long organizationId) {
+    public ChallengeContributionUpdateRequestDto.Builder organizationId(Long organizationId) {
       this.instance.organizationId(organizationId);
       return this;
     }
     
-    public ChallengeContributionDto.Builder role(ChallengeContributionRoleDto role) {
+    public ChallengeContributionUpdateRequestDto.Builder role(ChallengeContributionRoleDto role) {
       this.instance.role(role);
       return this;
     }
     
     /**
-    * returns a built ChallengeContributionDto instance.
+    * returns a built ChallengeContributionUpdateRequestDto instance.
     *
     * The builder is not reusable (NullPointerException)
     */
-    public ChallengeContributionDto build() {
+    public ChallengeContributionUpdateRequestDto build() {
       try {
         return this.instance;
       } finally {
@@ -234,15 +172,15 @@ public class ChallengeContributionDto {
   /**
   * Create a builder with no initialized field (except for the default values).
   */
-  public static ChallengeContributionDto.Builder builder() {
-    return new ChallengeContributionDto.Builder();
+  public static ChallengeContributionUpdateRequestDto.Builder builder() {
+    return new ChallengeContributionUpdateRequestDto.Builder();
   }
 
   /**
   * Create a builder with a shallow copy of this instance.
   */
-  public ChallengeContributionDto.Builder toBuilder() {
-    ChallengeContributionDto.Builder builder = new ChallengeContributionDto.Builder();
+  public ChallengeContributionUpdateRequestDto.Builder toBuilder() {
+    ChallengeContributionUpdateRequestDto.Builder builder = new ChallengeContributionUpdateRequestDto.Builder();
     return builder.copyOf(this);
   }
 

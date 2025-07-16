@@ -1,8 +1,8 @@
 package org.sagebionetworks.openchallenges.challenge.service.exception;
 
-public class ChallengeNotFoundException extends SimpleChallengeGlobalException {
+public class ChallengeContributionNotFoundException extends SimpleChallengeGlobalException {
 
-  public ChallengeNotFoundException(String detail) {
+  public ChallengeContributionNotFoundException(String detail) {
     super(detail); // This calls the constructor that sets the message
     // Also set the structured exception fields
     this.setType(ErrorConstants.ENTITY_NOT_FOUND.getType());

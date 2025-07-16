@@ -57,7 +57,7 @@ delete:
   description: Delete all grants
   operationId: deleteAllGrants
   security:
-    - ApiKeyAuth: []
+    - apiBearerAuth: []
   responses:
     '200':
       description: Success
