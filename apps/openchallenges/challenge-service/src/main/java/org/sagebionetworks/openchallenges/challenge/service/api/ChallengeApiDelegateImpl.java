@@ -20,7 +20,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 @Component
 public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(ChallengeApiDelegateImpl.class);
+  private static final Logger logger = LoggerFactory.getLogger(ChallengeApiDelegateImpl.class);
 
   private static final MediaType APPLICATION_LD_JSON = MediaType.valueOf("application/ld+json");
   private static final MediaType APPLICATION_JSON = MediaType.valueOf("application/json");
@@ -46,7 +46,7 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
     AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
       .getAuthentication()
       .getPrincipal();
-    LOGGER.info(
+    logger.info(
       "User {} (role: {}) is deleting challenge: {}",
       user.getUsername(),
       user.getRole(),
