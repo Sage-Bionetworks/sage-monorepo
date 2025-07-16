@@ -380,6 +380,61 @@ paths:
         - application/problem+json
       x-tags:
         - tag: ChallengeContribution
+    get:
+      description: |
+        Retrieves a specific contribution record for a challenge, identified by its ID.
+      operationId: getChallengeContribution
+      parameters:
+        - description: The unique identifier of the challenge.
+          explode: false
+          in: path
+          name: challengeId
+          required: true
+          schema:
+            $ref: '#/components/schemas/ChallengeId'
+          style: simple
+        - description: The unique identifier of a challenge contribution
+          explode: false
+          in: path
+          name: challengeContributionId
+          required: true
+          schema:
+            $ref: '#/components/schemas/ChallengeContributionId'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeContribution'
+          description: Challenge contribution retrieved successfully
+        '400':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        '404':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get a specific challenge contribution
+      tags:
+        - ChallengeContribution
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: ChallengeContribution
     put:
       description: |
         Updates an existing contribution record for a challenge.
