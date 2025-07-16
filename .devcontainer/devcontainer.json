@@ -1,12 +1,12 @@
 {
   "name": "Sage Monorepo Dev Container",
-  "image": "ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:sha-02b9942cd09cd887daa578e288616e745ce14370",
+  "image": "ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:sha-6269b9b3d863831c296f843edd84b2c7e1d4733d",
   "containerEnv": {
     "DOCKER_PASSWORD": "${localEnv:DOCKER_PASSWORD}",
     "DOCKER_USERNAME": "${localEnv:DOCKER_USERNAME}",
     "NX_BASE": "${localEnv:NX_BASE}",
     "NX_BRANCH": "${localEnv:NX_BRANCH}",
-    "NX_CI_EXECUTION_ENV": "ubuntu-24.04",
+    "NX_CI_EXECUTION_ENV": "${localEnv:NX_CI_EXECUTION_ENV}",
     "NX_CLOUD_ACCESS_TOKEN": "${localEnv:NX_CLOUD_ACCESS_TOKEN}",
     "NX_CLOUD_ENCRYPTION_KEY": "${localEnv:NX_CLOUD_ENCRYPTION_KEY}",
     "NX_HEAD": "${localEnv:NX_HEAD}",
