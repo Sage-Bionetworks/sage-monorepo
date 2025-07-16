@@ -1,6 +1,8 @@
 package org.sagebionetworks.openchallenges.challenge.service.service;
 
+import feign.FeignException;
 import java.util.List;
+import org.sagebionetworks.openchallenges.challenge.service.client.OrganizationServiceClient;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.DuplicateContributionException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.OrganizationNotFoundException;
@@ -22,16 +24,19 @@ public class ChallengeContributionService {
 
   private final ChallengeContributionRepository challengeContributionRepository;
   private final ChallengeRepository challengeRepository;
+  private final OrganizationServiceClient organizationServiceClient;
 
   private final ChallengeContributionMapper challengeContributionMapper =
     new ChallengeContributionMapper();
 
   public ChallengeContributionService(
     ChallengeContributionRepository challengeContributionRepository,
-    ChallengeRepository challengeRepository
+    ChallengeRepository challengeRepository,
+    OrganizationServiceClient organizationServiceClient
   ) {
     this.challengeContributionRepository = challengeContributionRepository;
     this.challengeRepository = challengeRepository;
+    this.organizationServiceClient = organizationServiceClient;
   }
 
   public ChallengeContributionsPageDto listChallengeContributions(Long challengeId) {
@@ -69,10 +74,20 @@ public class ChallengeContributionService {
         new ChallengeNotFoundException("Challenge not found with id: " + challengeId)
       );
 
-    // Validate organization ID (basic validation)
-    if (request.getOrganizationId() == null || request.getOrganizationId() <= 0) {
+    // Validate organization exists by querying the organization service
+    try {
+      organizationServiceClient.getOrganization(request.getOrganizationId());
+    } catch (FeignException.NotFound e) {
       throw new OrganizationNotFoundException(
         "Organization not found with id: " + request.getOrganizationId()
+      );
+    } catch (FeignException e) {
+      throw new RuntimeException(
+        "Failed to validate organization with id: " +
+        request.getOrganizationId() +
+        ". Reason: " +
+        e.getMessage(),
+        e
       );
     }
 

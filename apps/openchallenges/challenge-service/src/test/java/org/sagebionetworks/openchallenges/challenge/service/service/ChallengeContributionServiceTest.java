@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import feign.FeignException;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,11 +14,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.sagebionetworks.openchallenges.challenge.service.client.OrganizationServiceClient;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.DuplicateContributionException;
+import org.sagebionetworks.openchallenges.challenge.service.exception.OrganizationNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateResponseDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionRoleDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.organization.OrganizationDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeContributionEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeContributionRepository;
@@ -32,6 +36,9 @@ class ChallengeContributionServiceTest {
 
   @Mock
   private ChallengeRepository challengeRepository;
+
+  @Mock
+  private OrganizationServiceClient organizationServiceClient;
 
   @InjectMocks
   private ChallengeContributionService challengeContributionService;
@@ -54,6 +61,10 @@ class ChallengeContributionServiceTest {
       .slug("test-challenge")
       .build();
 
+    OrganizationDto organization = new OrganizationDto();
+    organization.setId(organizationId);
+    organization.setName("Test Organization");
+
     ChallengeContributionEntity savedEntity = ChallengeContributionEntity.builder()
       .id(456L)
       .challenge(challenge)
@@ -62,6 +73,7 @@ class ChallengeContributionServiceTest {
       .build();
 
     when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));
+    when(organizationServiceClient.getOrganization(organizationId)).thenReturn(organization);
     when(challengeContributionRepository.save(any(ChallengeContributionEntity.class))).thenReturn(
       savedEntity
     );
@@ -74,6 +86,7 @@ class ChallengeContributionServiceTest {
     assertThat(response).isNotNull();
     assertThat(response.getId()).isEqualTo(456L);
     verify(challengeRepository).findById(challengeId);
+    verify(organizationServiceClient).getOrganization(organizationId);
     verify(challengeContributionRepository).save(any(ChallengeContributionEntity.class));
   }
 
@@ -120,11 +133,16 @@ class ChallengeContributionServiceTest {
       .slug("test-challenge")
       .build();
 
+    OrganizationDto organization = new OrganizationDto();
+    organization.setId(organizationId);
+    organization.setName("Test Organization");
+
     DataIntegrityViolationException dataIntegrityException = new DataIntegrityViolationException(
       "could not execute statement [ERROR: duplicate key value violates unique constraint \"unique_contribution\"]"
     );
 
     when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));
+    when(organizationServiceClient.getOrganization(organizationId)).thenReturn(organization);
     when(challengeContributionRepository.save(any(ChallengeContributionEntity.class))).thenThrow(
       dataIntegrityException
     );
@@ -140,6 +158,228 @@ class ChallengeContributionServiceTest {
       .hasCause(dataIntegrityException);
 
     verify(challengeRepository).findById(challengeId);
+    verify(organizationServiceClient).getOrganization(organizationId);
     verify(challengeContributionRepository).save(any(ChallengeContributionEntity.class));
+  }
+
+  @Test
+  @DisplayName("should throw exception when organization id is null")
+  void shouldThrowExceptionWhenOrganizationIdIsNull() {
+    // given
+    Long challengeId = 1L;
+    ChallengeContributionRoleDto role = ChallengeContributionRoleDto.CHALLENGE_ORGANIZER;
+
+    ChallengeContributionCreateRequestDto request = new ChallengeContributionCreateRequestDto(
+      null,
+      role
+    );
+
+    ChallengeEntity challenge = ChallengeEntity.builder()
+      .id(challengeId)
+      .slug("test-challenge")
+      .build();
+
+    when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));
+
+    // when & then
+    assertThatThrownBy(() ->
+      challengeContributionService.addChallengeContribution(challengeId, request)
+    )
+      .isInstanceOf(OrganizationNotFoundException.class)
+      .hasMessage("Organization ID must be a positive number: null");
+
+    verify(challengeRepository).findById(challengeId);
+  }
+
+  @Test
+  @DisplayName("should throw exception when organization id is negative")
+  void shouldThrowExceptionWhenOrganizationIdIsNegative() {
+    // given
+    Long challengeId = 1L;
+    Long organizationId = -1L;
+    ChallengeContributionRoleDto role = ChallengeContributionRoleDto.CHALLENGE_ORGANIZER;
+
+    ChallengeContributionCreateRequestDto request = new ChallengeContributionCreateRequestDto(
+      organizationId,
+      role
+    );
+
+    ChallengeEntity challenge = ChallengeEntity.builder()
+      .id(challengeId)
+      .slug("test-challenge")
+      .build();
+
+    when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));
+
+    // when & then
+    assertThatThrownBy(() ->
+      challengeContributionService.addChallengeContribution(challengeId, request)
+    )
+      .isInstanceOf(OrganizationNotFoundException.class)
+      .hasMessage("Organization ID must be a positive number: -1");
+
+    verify(challengeRepository).findById(challengeId);
+  }
+
+  @Test
+  @DisplayName("should throw exception when organization not found in organization service")
+  void shouldThrowExceptionWhenOrganizationNotFoundInOrganizationService() {
+    // given
+    Long challengeId = 1L;
+    Long organizationId = 999L;
+    ChallengeContributionRoleDto role = ChallengeContributionRoleDto.CHALLENGE_ORGANIZER;
+
+    ChallengeContributionCreateRequestDto request = new ChallengeContributionCreateRequestDto(
+      organizationId,
+      role
+    );
+
+    ChallengeEntity challenge = ChallengeEntity.builder()
+      .id(challengeId)
+      .slug("test-challenge")
+      .build();
+
+    when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));
+    when(organizationServiceClient.getOrganization(organizationId)).thenThrow(
+      FeignException.NotFound.class
+    );
+
+    // when & then
+    assertThatThrownBy(() ->
+      challengeContributionService.addChallengeContribution(challengeId, request)
+    )
+      .isInstanceOf(OrganizationNotFoundException.class)
+      .hasMessage("Organization not found with id: " + organizationId);
+
+    verify(challengeRepository).findById(challengeId);
+    verify(organizationServiceClient).getOrganization(organizationId);
+  }
+
+  @Test
+  @DisplayName("should throw runtime exception when organization service fails")
+  void shouldThrowRuntimeExceptionWhenOrganizationServiceFails() {
+    // given
+    Long challengeId = 1L;
+    Long organizationId = 123L;
+    ChallengeContributionRoleDto role = ChallengeContributionRoleDto.CHALLENGE_ORGANIZER;
+
+    ChallengeContributionCreateRequestDto request = new ChallengeContributionCreateRequestDto(
+      organizationId,
+      role
+    );
+
+    ChallengeEntity challenge = ChallengeEntity.builder()
+      .id(challengeId)
+      .slug("test-challenge")
+      .build();
+
+    FeignException serviceError =
+      FeignException.InternalServerError.class.cast(
+          FeignException.errorStatus(
+            "getOrganization",
+            feign.Response.builder()
+              .status(500)
+              .reason("Internal Server Error")
+              .request(
+                feign.Request.create(
+                  feign.Request.HttpMethod.GET,
+                  "test",
+                  java.util.Map.of(),
+                  null,
+                  null,
+                  null
+                )
+              )
+              .build()
+          )
+        );
+
+    when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));
+    when(organizationServiceClient.getOrganization(organizationId)).thenThrow(serviceError);
+
+    // when & then
+    assertThatThrownBy(() ->
+      challengeContributionService.addChallengeContribution(challengeId, request)
+    )
+      .isInstanceOf(RuntimeException.class)
+      .hasMessageContaining("Failed to validate organization with id: 123")
+      .hasCause(serviceError);
+
+    verify(challengeRepository).findById(challengeId);
+    verify(organizationServiceClient).getOrganization(organizationId);
+  }
+
+  @Test
+  @DisplayName(
+    "should throw organization not found exception when organization service returns 404"
+  )
+  void shouldThrowOrganizationNotFoundExceptionWhenOrganizationServiceReturns404() {
+    // given
+    Long challengeId = 1L;
+    Long organizationId = 999L;
+    ChallengeContributionRoleDto role = ChallengeContributionRoleDto.CHALLENGE_ORGANIZER;
+
+    ChallengeContributionCreateRequestDto request = new ChallengeContributionCreateRequestDto(
+      organizationId,
+      role
+    );
+
+    ChallengeEntity challenge = ChallengeEntity.builder()
+      .id(challengeId)
+      .slug("test-challenge")
+      .build();
+
+    when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));
+    when(organizationServiceClient.getOrganization(organizationId)).thenThrow(
+      FeignException.NotFound.class
+    );
+
+    // when & then
+    assertThatThrownBy(() ->
+      challengeContributionService.addChallengeContribution(challengeId, request)
+    )
+      .isInstanceOf(OrganizationNotFoundException.class)
+      .hasMessage("Organization not found with id: " + organizationId);
+
+    verify(challengeRepository).findById(challengeId);
+    verify(organizationServiceClient).getOrganization(organizationId);
+  }
+
+  @Test
+  @DisplayName(
+    "should throw runtime exception when organization service fails with other feign exception"
+  )
+  void shouldThrowRuntimeExceptionWhenOrganizationServiceFailsWithOtherFeignException() {
+    // given
+    Long challengeId = 1L;
+    Long organizationId = 123L;
+    ChallengeContributionRoleDto role = ChallengeContributionRoleDto.CHALLENGE_ORGANIZER;
+
+    ChallengeContributionCreateRequestDto request = new ChallengeContributionCreateRequestDto(
+      organizationId,
+      role
+    );
+
+    ChallengeEntity challenge = ChallengeEntity.builder()
+      .id(challengeId)
+      .slug("test-challenge")
+      .build();
+
+    FeignException serviceException =
+      FeignException.InternalServerError.class.cast(new RuntimeException("Service unavailable"));
+
+    when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));
+    when(organizationServiceClient.getOrganization(organizationId)).thenThrow(serviceException);
+
+    // when & then
+    assertThatThrownBy(() ->
+      challengeContributionService.addChallengeContribution(challengeId, request)
+    )
+      .isInstanceOf(RuntimeException.class)
+      .hasMessageContaining("Failed to validate organization with id: " + organizationId)
+      .hasCause(serviceException);
+
+    verify(challengeRepository).findById(challengeId);
+    verify(organizationServiceClient).getOrganization(organizationId);
   }
 }
