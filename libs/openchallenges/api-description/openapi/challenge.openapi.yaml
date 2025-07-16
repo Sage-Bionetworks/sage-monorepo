@@ -128,7 +128,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ChallengeContributionCreateResponse'
+                $ref: '#/components/schemas/ChallengeContribution'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -792,16 +792,6 @@ components:
       required:
         - organizationId
         - role
-    ChallengeContributionCreateResponse:
-      type: object
-      description: The unique identifier of the challenge contribution
-      properties:
-        id:
-          $ref: '#/components/schemas/ChallengeContributionId'
-      required:
-        - id
-      example:
-        id: 1
     ChallengeContributionUpdateRequest:
       type: object
       description: A challenge contribution update request.

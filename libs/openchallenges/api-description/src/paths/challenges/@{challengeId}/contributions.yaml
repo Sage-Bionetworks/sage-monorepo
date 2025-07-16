@@ -38,7 +38,7 @@ post:
       content:
         application/json:
           schema:
-            $ref: ../../../components/schemas/ChallengeContributionCreateResponse.yaml
+            $ref: ../../../components/schemas/ChallengeContribution.yaml
     '401':
       $ref: ../../../components/responses/Unauthorized.yaml
     '403':
