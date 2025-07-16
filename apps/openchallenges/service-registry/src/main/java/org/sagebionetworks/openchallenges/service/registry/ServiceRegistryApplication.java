@@ -14,7 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = "org.sagebionetworks.openchallenges")
 public class ServiceRegistryApplication implements CommandLineRunner {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ServiceRegistryApplication.class);
+  private static final Logger logger = LoggerFactory.getLogger(ServiceRegistryApplication.class);
 
   private final ServiceRegistryConfigData serviceRegistryConfigData;
 
@@ -28,6 +28,6 @@ public class ServiceRegistryApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    LOG.info(serviceRegistryConfigData.getWelcomeMessage());
+    logger.info(serviceRegistryConfigData.getWelcomeMessage());
   }
 }

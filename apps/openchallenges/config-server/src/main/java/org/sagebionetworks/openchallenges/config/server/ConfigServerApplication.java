@@ -14,7 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = "org.sagebionetworks.openchallenges")
 public class ConfigServerApplication implements CommandLineRunner {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ConfigServerApplication.class);
+  private static final Logger logger = LoggerFactory.getLogger(ConfigServerApplication.class);
 
   private final ConfigServerConfigData configServerConfigData;
 
@@ -28,6 +28,6 @@ public class ConfigServerApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    LOG.info(configServerConfigData.getWelcomeMessage());
+    logger.info(configServerConfigData.getWelcomeMessage());
   }
 }

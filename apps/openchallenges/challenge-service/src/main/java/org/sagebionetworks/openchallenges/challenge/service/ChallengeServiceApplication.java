@@ -14,7 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 public class ChallengeServiceApplication implements CommandLineRunner {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ChallengeServiceApplication.class);
+  private static final Logger logger = LoggerFactory.getLogger(ChallengeServiceApplication.class);
 
   private final ChallengeServiceConfigData challengeServiceConfigData;
 
@@ -28,6 +28,6 @@ public class ChallengeServiceApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    LOG.info(challengeServiceConfigData.getWelcomeMessage());
+    logger.info(challengeServiceConfigData.getWelcomeMessage());
   }
 }
