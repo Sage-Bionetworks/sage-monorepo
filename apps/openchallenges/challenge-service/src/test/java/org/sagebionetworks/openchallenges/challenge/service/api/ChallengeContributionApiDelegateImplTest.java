@@ -14,6 +14,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateResponseDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionUpdateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionRoleDto;
 import org.sagebionetworks.openchallenges.challenge.service.security.AuthenticatedUser;
 import org.sagebionetworks.openchallenges.challenge.service.service.ChallengeContributionService;
@@ -76,5 +78,43 @@ class ChallengeContributionApiDelegateImplTest {
     assertThat(response.getBody()).isNotNull();
     assertThat(response.getBody().getId()).isEqualTo(456L);
     verify(challengeContributionService).addChallengeContribution(challengeId, request);
+  }
+
+  @Test
+  @DisplayName("should update challenge contribution and return ok status")
+  void shouldUpdateChallengeContributionAndReturnOkStatus() {
+    // given
+    Long challengeId = 1L;
+    Long contributionId = 456L;
+    Long newOrganizationId = 789L;
+    ChallengeContributionRoleDto newRole = ChallengeContributionRoleDto.DATA_CONTRIBUTOR;
+
+    ChallengeContributionUpdateRequestDto request = new ChallengeContributionUpdateRequestDto(
+      newOrganizationId,
+      newRole
+    );
+
+    ChallengeContributionDto expectedResponse = new ChallengeContributionDto()
+      .id(contributionId)
+      .challengeId(challengeId)
+      .organizationId(newOrganizationId)
+      .role(newRole);
+
+    when(challengeContributionService.updateChallengeContribution(challengeId, contributionId, request)).thenReturn(
+      expectedResponse
+    );
+
+    // when
+    ResponseEntity<ChallengeContributionDto> response =
+      apiDelegate.updateChallengeContribution(challengeId, contributionId, request);
+
+    // then
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(response.getBody()).isNotNull();
+    assertThat(response.getBody().getId()).isEqualTo(contributionId);
+    assertThat(response.getBody().getChallengeId()).isEqualTo(challengeId);
+    assertThat(response.getBody().getOrganizationId()).isEqualTo(newOrganizationId);
+    assertThat(response.getBody().getRole()).isEqualTo(newRole);
+    verify(challengeContributionService).updateChallengeContribution(challengeId, contributionId, request);
   }
 }

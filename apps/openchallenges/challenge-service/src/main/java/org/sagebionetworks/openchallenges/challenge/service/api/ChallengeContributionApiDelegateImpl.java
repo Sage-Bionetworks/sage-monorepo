@@ -3,6 +3,8 @@ package org.sagebionetworks.openchallenges.challenge.service.api;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateResponseDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionsPageDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionUpdateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.security.AuthenticatedUser;
 import org.sagebionetworks.openchallenges.challenge.service.service.ChallengeContributionService;
 import org.slf4j.Logger;
@@ -79,5 +81,36 @@ public class ChallengeContributionApiDelegateImpl implements ChallengeContributi
       );
 
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
+  }
+
+  @Override
+  @PreAuthorize("authentication.principal.admin")
+  public ResponseEntity<ChallengeContributionDto> updateChallengeContribution(
+    Long challengeId,
+    Long challengeContributionId,
+    ChallengeContributionUpdateRequestDto challengeContributionUpdateRequestDto
+  ) {
+    // Log the authenticated user for audit purposes
+    AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
+      .getAuthentication()
+      .getPrincipal();
+    logger.info(
+      "User {} (role: {}) is updating contribution {} for challenge: {} with organization: {} and role: {}",
+      user.getUsername(),
+      user.getRole(),
+      challengeContributionId,
+      challengeId,
+      challengeContributionUpdateRequestDto.getOrganizationId(),
+      challengeContributionUpdateRequestDto.getRole()
+    );
+
+    ChallengeContributionDto updatedContribution =
+      challengeContributionService.updateChallengeContribution(
+        challengeId,
+        challengeContributionId,
+        challengeContributionUpdateRequestDto
+      );
+
+    return ResponseEntity.ok(updatedContribution);
   }
 }
