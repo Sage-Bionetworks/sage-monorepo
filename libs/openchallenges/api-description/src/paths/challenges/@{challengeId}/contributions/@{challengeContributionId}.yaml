@@ -1,0 +1,38 @@
+parameters:
+  - $ref: ../../../../components/parameters/path/challengeId.yaml
+  - $ref: ../../../../components/parameters/path/challengeContributionId.yaml
+put:
+  tags:
+    - ChallengeContribution
+  summary: Update an existing challenge contribution
+  description: |
+    Updates an existing contribution record for a challenge.
+    Only the organization ID and role can be modified.
+  operationId: updateChallengeContribution
+  security:
+    - apiBearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../../../components/schemas/ChallengeContributionUpdateRequest.yaml
+  responses:
+    '200':
+      description: Contribution updated successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../../../components/schemas/ChallengeContribution.yaml
+    '400':
+      $ref: ../../../../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../../components/responses/NotFound.yaml
+    '409':
+      $ref: ../../../../components/responses/Conflict.yaml
+    '500':
+      $ref: ../../../../components/responses/InternalServerError.yaml

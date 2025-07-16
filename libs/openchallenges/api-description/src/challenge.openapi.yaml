@@ -15,6 +15,8 @@ servers:
 tags:
   - name: Challenge
     description: Operations about challenges.
+  - name: ChallengeContribution
+    description: Operations about challenge contributions.
   - name: ChallengeAnalytics
     description: Operations about challenge analytics.
   - name: ChallengePlatform
@@ -28,6 +30,8 @@ paths:
     $ref: paths/challenges/@{challengeId}.yaml
   /challenges/{challengeId}/contributions:
     $ref: paths/challenges/@{challengeId}/contributions.yaml
+  /challenges/{challengeId}/contributions/{challengeContributionId}:
+    $ref: paths/challenges/@{challengeId}/contributions/@{challengeContributionId}.yaml
   /challengeAnalytics/challengesPerYear:
     $ref: paths/challengeAnalytics/challengesPerYear.yaml
   /challengePlatforms:

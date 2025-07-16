@@ -19,6 +19,8 @@ tags:
     description: Operations about API key management
   - name: Challenge
     description: Operations about challenges.
+  - name: ChallengeContribution
+    description: Operations about challenge contributions.
   - name: ChallengeAnalytics
     description: Operations about challenge analytics.
   - name: ChallengePlatform
@@ -289,6 +291,45 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  '/challenges/{challengeId}/contributions/{challengeContributionId}':
+    parameters:
+      - $ref: '#/components/parameters/challengeId'
+      - $ref: '#/components/parameters/challengeContributionId'
+    put:
+      tags:
+        - ChallengeContribution
+      summary: Update an existing challenge contribution
+      description: |
+        Updates an existing contribution record for a challenge.
+        Only the organization ID and role can be modified.
+      operationId: updateChallengeContribution
+      security:
+        - apiBearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengeContributionUpdateRequest'
+      responses:
+        '200':
+          description: Contribution updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeContribution'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /challengeAnalytics/challengesPerYear:
@@ -1134,6 +1175,17 @@ components:
         - id
       example:
         id: 1
+    ChallengeContributionUpdateRequest:
+      type: object
+      description: A challenge contribution update request.
+      properties:
+        organizationId:
+          $ref: '#/components/schemas/OrganizationId'
+        role:
+          $ref: '#/components/schemas/ChallengeContributionRole'
+      required:
+        - organizationId
+        - role
     ChallengesPerYear:
       type: object
       description: An object
@@ -1560,6 +1612,13 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/ChallengeId'
+    challengeContributionId:
+      name: challengeContributionId
+      in: path
+      description: The unique identifier of a challenge contribution
+      required: true
+      schema:
+        $ref: '#/components/schemas/ChallengeContributionId'
     challengePlatformSearchQuery:
       name: challengePlatformSearchQuery
       description: The search query used to find challenge platforms.
