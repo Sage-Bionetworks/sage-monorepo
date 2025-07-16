@@ -53,6 +53,7 @@ runs:
     - name: Start the dev container
       env:
         DEVCONTAINER_USER: ${{ inputs.devcontainer-user }}
+        NX_CI_EXECUTION_ENV: 'ubuntu-22.04'
       shell: bash
       run: |
         mkdir -p \
