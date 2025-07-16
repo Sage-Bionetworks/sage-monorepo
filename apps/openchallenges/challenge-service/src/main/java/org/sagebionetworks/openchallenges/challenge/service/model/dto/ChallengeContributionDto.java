@@ -26,6 +26,8 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 public class ChallengeContributionDto {
 
+  private Long id;
+
   private Long challengeId;
 
   private Long organizationId;
@@ -39,10 +41,31 @@ public class ChallengeContributionDto {
   /**
    * Constructor with only required parameters
    */
-  public ChallengeContributionDto(Long challengeId, Long organizationId, ChallengeContributionRoleDto role) {
+  public ChallengeContributionDto(Long id, Long challengeId, Long organizationId, ChallengeContributionRoleDto role) {
+    this.id = id;
     this.challengeId = challengeId;
     this.organizationId = organizationId;
     this.role = role;
+  }
+
+  public ChallengeContributionDto id(Long id) {
+    this.id = id;
+    return this;
+  }
+
+  /**
+   * The unique identifier of a challenge contribution
+   * @return id
+   */
+  @NotNull 
+  @Schema(name = "id", example = "1", description = "The unique identifier of a challenge contribution", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("id")
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public ChallengeContributionDto challengeId(Long challengeId) {
@@ -114,20 +137,22 @@ public class ChallengeContributionDto {
       return false;
     }
     ChallengeContributionDto challengeContribution = (ChallengeContributionDto) o;
-    return Objects.equals(this.challengeId, challengeContribution.challengeId) &&
+    return Objects.equals(this.id, challengeContribution.id) &&
+        Objects.equals(this.challengeId, challengeContribution.challengeId) &&
         Objects.equals(this.organizationId, challengeContribution.organizationId) &&
         Objects.equals(this.role, challengeContribution.role);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(challengeId, organizationId, role);
+    return Objects.hash(id, challengeId, organizationId, role);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ChallengeContributionDto {\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    challengeId: ").append(toIndentedString(challengeId)).append("\n");
     sb.append("    organizationId: ").append(toIndentedString(organizationId)).append("\n");
     sb.append("    role: ").append(toIndentedString(role)).append("\n");
@@ -159,12 +184,18 @@ public class ChallengeContributionDto {
     }
 
     protected Builder copyOf(ChallengeContributionDto value) { 
+      this.instance.setId(value.id);
       this.instance.setChallengeId(value.challengeId);
       this.instance.setOrganizationId(value.organizationId);
       this.instance.setRole(value.role);
       return this;
     }
 
+    public ChallengeContributionDto.Builder id(Long id) {
+      this.instance.id(id);
+      return this;
+    }
+    
     public ChallengeContributionDto.Builder challengeId(Long challengeId) {
       this.instance.challengeId(challengeId);
       return this;

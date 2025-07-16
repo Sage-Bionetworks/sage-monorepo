@@ -1229,6 +1229,11 @@ components:
           type: object
       description: A challenge
       type: object
+    ChallengeContributionId:
+      description: The unique identifier of a challenge contribution
+      example: 1
+      format: int64
+      type: integer
     ChallengeContributionRole:
       description: The nature of a challenge contribution.
       enum:
@@ -1243,7 +1248,13 @@ components:
         organizationId: 1
         challengeId: 1
         role: challenge_organizer
+        id: 1
       properties:
+        id:
+          description: The unique identifier of a challenge contribution
+          example: 1
+          format: int64
+          type: integer
         challengeId:
           description: The unique identifier of the challenge.
           example: 1
@@ -1258,6 +1269,7 @@ components:
           $ref: '#/components/schemas/ChallengeContributionRole'
       required:
         - challengeId
+        - id
         - organizationId
         - role
       type: object
@@ -1281,9 +1293,11 @@ components:
           - organizationId: 1
             challengeId: 1
             role: challenge_organizer
+            id: 1
           - organizationId: 1
             challengeId: 1
             role: challenge_organizer
+            id: 1
         totalPages: 99
         hasPrevious: true
         hasNext: true
@@ -1305,11 +1319,6 @@ components:
         - organizationId
         - role
       type: object
-    ChallengeContributionId:
-      description: The unique identifier of a challenge contribution
-      example: 1
-      format: int64
-      type: integer
     ChallengeContributionCreateResponse:
       description: The unique identifier of the challenge contribution
       example:

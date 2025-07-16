@@ -137,7 +137,7 @@ public interface ChallengeContributionApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"number\" : 99, \"size\" : 99, \"challengeContributions\" : [ { \"organizationId\" : 1, \"challengeId\" : 1, \"role\" : \"challenge_organizer\" }, { \"organizationId\" : 1, \"challengeId\" : 1, \"role\" : \"challenge_organizer\" } ], \"totalPages\" : 99, \"hasPrevious\" : true, \"hasNext\" : true, \"totalElements\" : 99 }";
+                    String exampleString = "{ \"number\" : 99, \"size\" : 99, \"challengeContributions\" : [ { \"organizationId\" : 1, \"challengeId\" : 1, \"role\" : \"challenge_organizer\", \"id\" : 1 }, { \"organizationId\" : 1, \"challengeId\" : 1, \"role\" : \"challenge_organizer\", \"id\" : 1 } ], \"totalPages\" : 99, \"hasPrevious\" : true, \"hasNext\" : true, \"totalElements\" : 99 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

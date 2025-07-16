@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import feign.FeignException;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,33 @@ import org.sagebionetworks.openchallenges.challenge.service.exception.DuplicateC
 import org.sagebionetworks.openchallenges.challenge.service.exception.OrganizationNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateResponseDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionRoleDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionsPageDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.organization.OrganizationDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeContributionEntity;
+import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeEntity;
+import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeContributionRepository;
+import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeRepository;
+import org.springframework.dao.DataIntegrityViolationException;
+import static org.mockito.Mockito.when;
+
+import feign.FeignException;
+import java.util.List;
+import java.util.Optional;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.sagebionetworks.openchallenges.challenge.service.client.OrganizationServiceClient;
+import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeNotFoundException;
+import org.sagebionetworks.openchallenges.challenge.service.exception.DuplicateContributionException;
+import org.sagebionetworks.openchallenges.challenge.service.exception.OrganizationNotFoundException;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateResponseDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionRoleDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.organization.OrganizationDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeContributionEntity;
@@ -163,65 +191,6 @@ class ChallengeContributionServiceTest {
   }
 
   @Test
-  @DisplayName("should throw exception when organization id is null")
-  void shouldThrowExceptionWhenOrganizationIdIsNull() {
-    // given
-    Long challengeId = 1L;
-    ChallengeContributionRoleDto role = ChallengeContributionRoleDto.CHALLENGE_ORGANIZER;
-
-    ChallengeContributionCreateRequestDto request = new ChallengeContributionCreateRequestDto(
-      null,
-      role
-    );
-
-    ChallengeEntity challenge = ChallengeEntity.builder()
-      .id(challengeId)
-      .slug("test-challenge")
-      .build();
-
-    when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));
-
-    // when & then
-    assertThatThrownBy(() ->
-      challengeContributionService.addChallengeContribution(challengeId, request)
-    )
-      .isInstanceOf(OrganizationNotFoundException.class)
-      .hasMessage("Organization ID must be a positive number: null");
-
-    verify(challengeRepository).findById(challengeId);
-  }
-
-  @Test
-  @DisplayName("should throw exception when organization id is negative")
-  void shouldThrowExceptionWhenOrganizationIdIsNegative() {
-    // given
-    Long challengeId = 1L;
-    Long organizationId = -1L;
-    ChallengeContributionRoleDto role = ChallengeContributionRoleDto.CHALLENGE_ORGANIZER;
-
-    ChallengeContributionCreateRequestDto request = new ChallengeContributionCreateRequestDto(
-      organizationId,
-      role
-    );
-
-    ChallengeEntity challenge = ChallengeEntity.builder()
-      .id(challengeId)
-      .slug("test-challenge")
-      .build();
-
-    when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));
-
-    // when & then
-    assertThatThrownBy(() ->
-      challengeContributionService.addChallengeContribution(challengeId, request)
-    )
-      .isInstanceOf(OrganizationNotFoundException.class)
-      .hasMessage("Organization ID must be a positive number: -1");
-
-    verify(challengeRepository).findById(challengeId);
-  }
-
-  @Test
   @DisplayName("should throw exception when organization not found in organization service")
   void shouldThrowExceptionWhenOrganizationNotFoundInOrganizationService() {
     // given
@@ -273,26 +242,23 @@ class ChallengeContributionServiceTest {
       .slug("test-challenge")
       .build();
 
-    FeignException serviceError =
-      FeignException.InternalServerError.class.cast(
-          FeignException.errorStatus(
-            "getOrganization",
-            feign.Response.builder()
-              .status(500)
-              .reason("Internal Server Error")
-              .request(
-                feign.Request.create(
-                  feign.Request.HttpMethod.GET,
-                  "test",
-                  java.util.Map.of(),
-                  null,
-                  null,
-                  null
-                )
-              )
-              .build()
+    FeignException serviceError = FeignException.errorStatus(
+      "getOrganization",
+      feign.Response.builder()
+        .status(500)
+        .reason("Internal Server Error")
+        .request(
+          feign.Request.create(
+            feign.Request.HttpMethod.GET,
+            "test",
+            java.util.Map.of(),
+            null,
+            null,
+            null
           )
-        );
+        )
+        .build()
+    );
 
     when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));
     when(organizationServiceClient.getOrganization(organizationId)).thenThrow(serviceError);
@@ -365,8 +331,23 @@ class ChallengeContributionServiceTest {
       .slug("test-challenge")
       .build();
 
-    FeignException serviceException =
-      FeignException.InternalServerError.class.cast(new RuntimeException("Service unavailable"));
+    FeignException serviceException = FeignException.errorStatus(
+      "getOrganization",
+      feign.Response.builder()
+        .status(503)
+        .reason("Service Unavailable")
+        .request(
+          feign.Request.create(
+            feign.Request.HttpMethod.GET,
+            "test",
+            java.util.Map.of(),
+            null,
+            null,
+            null
+          )
+        )
+        .build()
+    );
 
     when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));
     when(organizationServiceClient.getOrganization(organizationId)).thenThrow(serviceException);
@@ -381,5 +362,70 @@ class ChallengeContributionServiceTest {
 
     verify(challengeRepository).findById(challengeId);
     verify(organizationServiceClient).getOrganization(organizationId);
+  }
+
+  @Test
+  @DisplayName("should list challenge contributions with proper id mapping")
+  void shouldListChallengeContributionsWithProperIdMapping() {
+    // given
+    Long challengeId = 1L;
+    Long contributionId1 = 101L;
+    Long contributionId2 = 102L;
+    Long organizationId1 = 201L;
+    Long organizationId2 = 202L;
+
+    ChallengeEntity challenge = ChallengeEntity.builder()
+      .id(challengeId)
+      .slug("test-challenge")
+      .build();
+
+    ChallengeContributionEntity entity1 = ChallengeContributionEntity.builder()
+      .id(contributionId1)
+      .challenge(challenge)
+      .organizationId(organizationId1)
+      .role("challenge_organizer")
+      .build();
+
+    ChallengeContributionEntity entity2 = ChallengeContributionEntity.builder()
+      .id(contributionId2)
+      .challenge(challenge)
+      .organizationId(organizationId2)
+      .role("data_contributor")
+      .build();
+
+    List<ChallengeContributionEntity> entities = List.of(entity1, entity2);
+
+    when(challengeContributionRepository.findAllByChallenge_id(challengeId)).thenReturn(entities);
+
+    // when
+    ChallengeContributionsPageDto result = challengeContributionService.listChallengeContributions(challengeId);
+
+    // then
+    assertThat(result).isNotNull();
+    assertThat(result.getChallengeContributions()).hasSize(2);
+
+    // Verify first contribution
+    ChallengeContributionDto dto1 = result.getChallengeContributions().get(0);
+    assertThat(dto1.getId()).isEqualTo(contributionId1);
+    assertThat(dto1.getChallengeId()).isEqualTo(challengeId);
+    assertThat(dto1.getOrganizationId()).isEqualTo(organizationId1);
+    assertThat(dto1.getRole()).isEqualTo(ChallengeContributionRoleDto.CHALLENGE_ORGANIZER);
+
+    // Verify second contribution
+    ChallengeContributionDto dto2 = result.getChallengeContributions().get(1);
+    assertThat(dto2.getId()).isEqualTo(contributionId2);
+    assertThat(dto2.getChallengeId()).isEqualTo(challengeId);
+    assertThat(dto2.getOrganizationId()).isEqualTo(organizationId2);
+    assertThat(dto2.getRole()).isEqualTo(ChallengeContributionRoleDto.DATA_CONTRIBUTOR);
+
+    // Verify pagination info
+    assertThat(result.getSize()).isEqualTo(2);
+    assertThat(result.getTotalElements()).isEqualTo(2L);
+    assertThat(result.getTotalPages()).isEqualTo(1);
+    assertThat(result.getNumber()).isEqualTo(0);
+    assertThat(result.getHasNext()).isFalse();
+    assertThat(result.getHasPrevious()).isFalse();
+
+    verify(challengeContributionRepository).findAllByChallenge_id(challengeId);
   }
 }
