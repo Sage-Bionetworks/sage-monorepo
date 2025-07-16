@@ -297,6 +297,27 @@ paths:
     parameters:
       - $ref: '#/components/parameters/challengeId'
       - $ref: '#/components/parameters/challengeContributionId'
+    get:
+      tags:
+        - ChallengeContribution
+      summary: Get a specific challenge contribution
+      description: >
+        Retrieves a specific contribution record for a challenge, identified by
+        its ID.
+      operationId: getChallengeContribution
+      responses:
+        '200':
+          description: Challenge contribution retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeContribution'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
     put:
       tags:
         - ChallengeContribution

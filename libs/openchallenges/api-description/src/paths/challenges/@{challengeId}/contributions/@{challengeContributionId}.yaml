@@ -1,6 +1,26 @@
 parameters:
   - $ref: ../../../../components/parameters/path/challengeId.yaml
   - $ref: ../../../../components/parameters/path/challengeContributionId.yaml
+get:
+  tags:
+    - ChallengeContribution
+  summary: Get a specific challenge contribution
+  description: |
+    Retrieves a specific contribution record for a challenge, identified by its ID.
+  operationId: getChallengeContribution
+  responses:
+    '200':
+      description: Challenge contribution retrieved successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../../../components/schemas/ChallengeContribution.yaml
+    '400':
+      $ref: ../../../../components/responses/BadRequest.yaml
+    '404':
+      $ref: ../../../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../../../components/responses/InternalServerError.yaml
 put:
   tags:
     - ChallengeContribution
