@@ -17,6 +17,8 @@ export class ModelDetailsBoxplotComponent {
   titleCasePipe = inject(TitleCasePipe);
   decodeGreekEntityPipe = inject(DecodeGreekEntityPipe);
 
+  private readonly Y_AXIS_TITLE_LINE_BREAK_THRESHOLD = 30;
+
   pointCategoryColors = {
     Male: '#1B00B3',
     Female: '#DB00FF',
@@ -57,6 +59,9 @@ export class ModelDetailsBoxplotComponent {
       this.titleCasePipe.transform(this.modelData().evidence_type),
     );
     const units = this.modelData().units;
-    return `${evidenceType} (${units})`;
+
+    const nChars = evidenceType.length + units.length;
+    const sep = nChars > this.Y_AXIS_TITLE_LINE_BREAK_THRESHOLD ? '\n' : ' ';
+    return `${evidenceType}${sep}(${units})`;
   };
 }
