@@ -20,6 +20,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.search.engine.backend.types.Searchable;
 import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
@@ -65,6 +66,7 @@ public class ChallengeEntity {
   private String avatarUrl;
 
   @Column(name = "website_url", nullable = true, length = 500)
+  @GenericField(name = "website_url", searchable = Searchable.NO)
   private String websiteUrl;
 
   @Column(nullable = true, length = 120)
