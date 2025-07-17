@@ -28,7 +28,7 @@ public class ChallengeCategoryEntity {
   @Column(nullable = false, updatable = false)
   private Long id;
 
-  @Column(nullable = false)
+  @Column(nullable = false, length = 20)
   @GenericField
   private String name;
 

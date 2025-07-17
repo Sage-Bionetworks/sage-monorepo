@@ -55,6 +55,9 @@ dependencies {
   testCompileOnly(libs.lombok)
   testImplementation(libs.spring.security.test)
   testImplementation(libs.spring.boot.starter.test)
+  testImplementation(libs.testcontainers.junit.jupiter)
+  testImplementation(libs.testcontainers.postgresql)
+  testImplementation(platform(libs.testcontainers.bom))
   testRuntimeOnly(libs.h2database.h2)
 }
 
