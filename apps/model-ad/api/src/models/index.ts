@@ -1,2 +1,4 @@
-export * from './dataversion';
+export * from './comparisonToolConfig';
+export * from './dataVersion';
 export * from './models';
+export * from './modelOverviewComparisonTool';

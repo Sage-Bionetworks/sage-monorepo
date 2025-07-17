@@ -2,9 +2,14 @@ import { Injectable, signal } from '@angular/core';
 
 @Injectable()
 export class ComparisonToolService {
-  private readonly isLegendVisible$ = signal(false);
+  columns = signal<string[]>([]);
+
+  totalResultsCount = signal<number>(0);
+  pinnedResultsCount = signal<number>(0);
 
   /* Legend */
+  private readonly isLegendVisible$ = signal(false);
+
   isLegendVisible() {
     return this.isLegendVisible$();
   }
