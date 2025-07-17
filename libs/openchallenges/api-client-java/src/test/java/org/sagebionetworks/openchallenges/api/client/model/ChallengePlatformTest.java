@@ -62,11 +62,11 @@ class ChallengePlatformTest {
   }
 
   /**
-   * Test the property 'avatarUrl'
+   * Test the property 'avatarKey'
    */
   @Test
-  void avatarUrlTest() {
-    // TODO: test avatarUrl
+  void avatarKeyTest() {
+    // TODO: test avatarKey
   }
 
   /**

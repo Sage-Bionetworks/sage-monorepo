@@ -17,48 +17,48 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.sagebionetworks.openchallenges.api.client.model.ChallengeContributionRole;
 
 /**
- * Model tests for ChallengeContribution
+ * Model tests for LoginResponse
  */
-class ChallengeContributionTest {
+class LoginResponseTest {
 
-  private final ChallengeContribution model = new ChallengeContribution();
+  private final LoginResponse model = new LoginResponse();
 
   /**
-   * Model tests for ChallengeContribution
+   * Model tests for LoginResponse
    */
   @Test
-  void testChallengeContribution() {
-    // TODO: test ChallengeContribution
+  void testLoginResponse() {
+    // TODO: test LoginResponse
   }
 
   /**
-   * Test the property 'id'
+   * Test the property 'apiKey'
    */
   @Test
-  void idTest() {
-    // TODO: test id
+  void apiKeyTest() {
+    // TODO: test apiKey
   }
 
   /**
-   * Test the property 'challengeId'
+   * Test the property 'userId'
    */
   @Test
-  void challengeIdTest() {
-    // TODO: test challengeId
+  void userIdTest() {
+    // TODO: test userId
   }
 
   /**
-   * Test the property 'organizationId'
+   * Test the property 'username'
    */
   @Test
-  void organizationIdTest() {
-    // TODO: test organizationId
+  void usernameTest() {
+    // TODO: test username
   }
 
   /**

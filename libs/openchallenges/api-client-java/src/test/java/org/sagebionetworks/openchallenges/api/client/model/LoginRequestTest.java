@@ -20,52 +20,35 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.sagebionetworks.openchallenges.api.client.model.ChallengeContributionRole;
 
 /**
- * Model tests for ChallengeContribution
+ * Model tests for LoginRequest
  */
-class ChallengeContributionTest {
+class LoginRequestTest {
 
-  private final ChallengeContribution model = new ChallengeContribution();
+  private final LoginRequest model = new LoginRequest();
 
   /**
-   * Model tests for ChallengeContribution
+   * Model tests for LoginRequest
    */
   @Test
-  void testChallengeContribution() {
-    // TODO: test ChallengeContribution
+  void testLoginRequest() {
+    // TODO: test LoginRequest
   }
 
   /**
-   * Test the property 'id'
+   * Test the property 'username'
    */
   @Test
-  void idTest() {
-    // TODO: test id
+  void usernameTest() {
+    // TODO: test username
   }
 
   /**
-   * Test the property 'challengeId'
+   * Test the property 'password'
    */
   @Test
-  void challengeIdTest() {
-    // TODO: test challengeId
-  }
-
-  /**
-   * Test the property 'organizationId'
-   */
-  @Test
-  void organizationIdTest() {
-    // TODO: test organizationId
-  }
-
-  /**
-   * Test the property 'role'
-   */
-  @Test
-  void roleTest() {
-    // TODO: test role
+  void passwordTest() {
+    // TODO: test password
   }
 }

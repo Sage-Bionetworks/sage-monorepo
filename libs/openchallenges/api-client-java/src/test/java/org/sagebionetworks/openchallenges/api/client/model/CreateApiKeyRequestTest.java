@@ -13,55 +13,27 @@
 package org.sagebionetworks.openchallenges.api.client.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.util.NoSuchElementException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.openapitools.jackson.nullable.JsonNullable;
-import org.openapitools.jackson.nullable.JsonNullable;
 
 /**
- * Model tests for UserCreateRequest
+ * Model tests for CreateApiKeyRequest
  */
-class UserCreateRequestTest {
+class CreateApiKeyRequestTest {
 
-  private final UserCreateRequest model = new UserCreateRequest();
-
-  /**
-   * Model tests for UserCreateRequest
-   */
-  @Test
-  void testUserCreateRequest() {
-    // TODO: test UserCreateRequest
-  }
+  private final CreateApiKeyRequest model = new CreateApiKeyRequest();
 
   /**
-   * Test the property 'login'
+   * Model tests for CreateApiKeyRequest
    */
   @Test
-  void loginTest() {
-    // TODO: test login
-  }
-
-  /**
-   * Test the property 'email'
-   */
-  @Test
-  void emailTest() {
-    // TODO: test email
-  }
-
-  /**
-   * Test the property 'password'
-   */
-  @Test
-  void passwordTest() {
-    // TODO: test password
+  void testCreateApiKeyRequest() {
+    // TODO: test CreateApiKeyRequest
   }
 
   /**
@@ -73,18 +45,10 @@ class UserCreateRequestTest {
   }
 
   /**
-   * Test the property 'avatarUrl'
+   * Test the property 'expiresIn'
    */
   @Test
-  void avatarUrlTest() {
-    // TODO: test avatarUrl
-  }
-
-  /**
-   * Test the property 'bio'
-   */
-  @Test
-  void bioTest() {
-    // TODO: test bio
+  void expiresInTest() {
+    // TODO: test expiresIn
   }
 }

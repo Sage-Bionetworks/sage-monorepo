@@ -13,28 +13,33 @@
 package org.sagebionetworks.openchallenges.api.client.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.OffsetDateTime;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.sagebionetworks.openchallenges.api.client.model.ChallengeContributionRole;
+import org.openapitools.jackson.nullable.JsonNullable;
+import org.openapitools.jackson.nullable.JsonNullable;
 
 /**
- * Model tests for ChallengeContribution
+ * Model tests for ApiKey
  */
-class ChallengeContributionTest {
+class ApiKeyTest {
 
-  private final ChallengeContribution model = new ChallengeContribution();
+  private final ApiKey model = new ApiKey();
 
   /**
-   * Model tests for ChallengeContribution
+   * Model tests for ApiKey
    */
   @Test
-  void testChallengeContribution() {
-    // TODO: test ChallengeContribution
+  void testApiKey() {
+    // TODO: test ApiKey
   }
 
   /**
@@ -46,26 +51,42 @@ class ChallengeContributionTest {
   }
 
   /**
-   * Test the property 'challengeId'
+   * Test the property 'name'
    */
   @Test
-  void challengeIdTest() {
-    // TODO: test challengeId
+  void nameTest() {
+    // TODO: test name
   }
 
   /**
-   * Test the property 'organizationId'
+   * Test the property 'prefix'
    */
   @Test
-  void organizationIdTest() {
-    // TODO: test organizationId
+  void prefixTest() {
+    // TODO: test prefix
   }
 
   /**
-   * Test the property 'role'
+   * Test the property 'createdAt'
    */
   @Test
-  void roleTest() {
-    // TODO: test role
+  void createdAtTest() {
+    // TODO: test createdAt
+  }
+
+  /**
+   * Test the property 'expiresAt'
+   */
+  @Test
+  void expiresAtTest() {
+    // TODO: test expiresAt
+  }
+
+  /**
+   * Test the property 'lastUsedAt'
+   */
+  @Test
+  void lastUsedAtTest() {
+    // TODO: test lastUsedAt
   }
 }

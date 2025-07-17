@@ -20,79 +20,63 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.sagebionetworks.openchallenges.api.client.model.User;
 
 /**
- * Model tests for UsersPage
+ * Model tests for ValidateApiKeyResponse
  */
-class UsersPageTest {
+class ValidateApiKeyResponseTest {
 
-  private final UsersPage model = new UsersPage();
+  private final ValidateApiKeyResponse model = new ValidateApiKeyResponse();
 
   /**
-   * Model tests for UsersPage
+   * Model tests for ValidateApiKeyResponse
    */
   @Test
-  void testUsersPage() {
-    // TODO: test UsersPage
+  void testValidateApiKeyResponse() {
+    // TODO: test ValidateApiKeyResponse
   }
 
   /**
-   * Test the property 'number'
+   * Test the property 'valid'
    */
   @Test
-  void numberTest() {
-    // TODO: test number
+  void validTest() {
+    // TODO: test valid
   }
 
   /**
-   * Test the property 'size'
+   * Test the property 'userId'
    */
   @Test
-  void sizeTest() {
-    // TODO: test size
+  void userIdTest() {
+    // TODO: test userId
   }
 
   /**
-   * Test the property 'totalElements'
+   * Test the property 'username'
    */
   @Test
-  void totalElementsTest() {
-    // TODO: test totalElements
+  void usernameTest() {
+    // TODO: test username
   }
 
   /**
-   * Test the property 'totalPages'
+   * Test the property 'role'
    */
   @Test
-  void totalPagesTest() {
-    // TODO: test totalPages
+  void roleTest() {
+    // TODO: test role
   }
 
   /**
-   * Test the property 'hasNext'
+   * Test the property 'scopes'
    */
   @Test
-  void hasNextTest() {
-    // TODO: test hasNext
-  }
-
-  /**
-   * Test the property 'hasPrevious'
-   */
-  @Test
-  void hasPreviousTest() {
-    // TODO: test hasPrevious
-  }
-
-  /**
-   * Test the property 'users'
-   */
-  @Test
-  void usersTest() {
-    // TODO: test users
+  void scopesTest() {
+    // TODO: test scopes
   }
 }

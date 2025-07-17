@@ -22,25 +22,25 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
- * Model tests for UserCreateResponse
+ * Model tests for ValidateApiKeyRequest
  */
-class UserCreateResponseTest {
+class ValidateApiKeyRequestTest {
 
-  private final UserCreateResponse model = new UserCreateResponse();
+  private final ValidateApiKeyRequest model = new ValidateApiKeyRequest();
 
   /**
-   * Model tests for UserCreateResponse
+   * Model tests for ValidateApiKeyRequest
    */
   @Test
-  void testUserCreateResponse() {
-    // TODO: test UserCreateResponse
+  void testValidateApiKeyRequest() {
+    // TODO: test ValidateApiKeyRequest
   }
 
   /**
-   * Test the property 'id'
+   * Test the property 'apiKey'
    */
   @Test
-  void idTest() {
-    // TODO: test id
+  void apiKeyTest() {
+    // TODO: test apiKey
   }
 }

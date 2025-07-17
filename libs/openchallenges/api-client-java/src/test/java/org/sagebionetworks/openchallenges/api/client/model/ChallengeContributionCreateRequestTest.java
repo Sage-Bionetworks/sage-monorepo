@@ -23,34 +23,18 @@ import org.junit.jupiter.api.Test;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengeContributionRole;
 
 /**
- * Model tests for ChallengeContribution
+ * Model tests for ChallengeContributionCreateRequest
  */
-class ChallengeContributionTest {
+class ChallengeContributionCreateRequestTest {
 
-  private final ChallengeContribution model = new ChallengeContribution();
-
-  /**
-   * Model tests for ChallengeContribution
-   */
-  @Test
-  void testChallengeContribution() {
-    // TODO: test ChallengeContribution
-  }
+  private final ChallengeContributionCreateRequest model = new ChallengeContributionCreateRequest();
 
   /**
-   * Test the property 'id'
+   * Model tests for ChallengeContributionCreateRequest
    */
   @Test
-  void idTest() {
-    // TODO: test id
-  }
-
-  /**
-   * Test the property 'challengeId'
-   */
-  @Test
-  void challengeIdTest() {
-    // TODO: test challengeId
+  void testChallengeContributionCreateRequest() {
+    // TODO: test ChallengeContributionCreateRequest
   }
 
   /**

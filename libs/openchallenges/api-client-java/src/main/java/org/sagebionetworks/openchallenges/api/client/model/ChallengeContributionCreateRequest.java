@@ -24,31 +24,19 @@ import java.util.Objects;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengeContributionRole;
 
 /**
- * A challenge contribution.
+ * A challenge contribution to be created.
  */
 @JsonPropertyOrder(
   {
-    ChallengeContribution.JSON_PROPERTY_ID,
-    ChallengeContribution.JSON_PROPERTY_CHALLENGE_ID,
-    ChallengeContribution.JSON_PROPERTY_ORGANIZATION_ID,
-    ChallengeContribution.JSON_PROPERTY_ROLE,
+    ChallengeContributionCreateRequest.JSON_PROPERTY_ORGANIZATION_ID,
+    ChallengeContributionCreateRequest.JSON_PROPERTY_ROLE,
   }
 )
 @jakarta.annotation.Generated(
   value = "org.openapitools.codegen.languages.JavaClientCodegen",
   comments = "Generator version: 7.13.0"
 )
-public class ChallengeContribution {
-
-  public static final String JSON_PROPERTY_ID = "id";
-
-  @jakarta.annotation.Nonnull
-  private Long id;
-
-  public static final String JSON_PROPERTY_CHALLENGE_ID = "challengeId";
-
-  @jakarta.annotation.Nonnull
-  private Long challengeId;
+public class ChallengeContributionCreateRequest {
 
   public static final String JSON_PROPERTY_ORGANIZATION_ID = "organizationId";
 
@@ -60,53 +48,11 @@ public class ChallengeContribution {
   @jakarta.annotation.Nonnull
   private ChallengeContributionRole role;
 
-  public ChallengeContribution() {}
+  public ChallengeContributionCreateRequest() {}
 
-  public ChallengeContribution id(@jakarta.annotation.Nonnull Long id) {
-    this.id = id;
-    return this;
-  }
-
-  /**
-   * The unique identifier of a challenge contribution
-   * @return id
-   */
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public Long getId() {
-    return id;
-  }
-
-  @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(@jakarta.annotation.Nonnull Long id) {
-    this.id = id;
-  }
-
-  public ChallengeContribution challengeId(@jakarta.annotation.Nonnull Long challengeId) {
-    this.challengeId = challengeId;
-    return this;
-  }
-
-  /**
-   * The unique identifier of the challenge.
-   * @return challengeId
-   */
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_CHALLENGE_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public Long getChallengeId() {
-    return challengeId;
-  }
-
-  @JsonProperty(JSON_PROPERTY_CHALLENGE_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setChallengeId(@jakarta.annotation.Nonnull Long challengeId) {
-    this.challengeId = challengeId;
-  }
-
-  public ChallengeContribution organizationId(@jakarta.annotation.Nonnull Long organizationId) {
+  public ChallengeContributionCreateRequest organizationId(
+    @jakarta.annotation.Nonnull Long organizationId
+  ) {
     this.organizationId = organizationId;
     return this;
   }
@@ -128,7 +74,9 @@ public class ChallengeContribution {
     this.organizationId = organizationId;
   }
 
-  public ChallengeContribution role(@jakarta.annotation.Nonnull ChallengeContributionRole role) {
+  public ChallengeContributionCreateRequest role(
+    @jakarta.annotation.Nonnull ChallengeContributionRole role
+  ) {
     this.role = role;
     return this;
   }
@@ -158,26 +106,23 @@ public class ChallengeContribution {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ChallengeContribution challengeContribution = (ChallengeContribution) o;
+    ChallengeContributionCreateRequest challengeContributionCreateRequest =
+      (ChallengeContributionCreateRequest) o;
     return (
-      Objects.equals(this.id, challengeContribution.id) &&
-      Objects.equals(this.challengeId, challengeContribution.challengeId) &&
-      Objects.equals(this.organizationId, challengeContribution.organizationId) &&
-      Objects.equals(this.role, challengeContribution.role)
+      Objects.equals(this.organizationId, challengeContributionCreateRequest.organizationId) &&
+      Objects.equals(this.role, challengeContributionCreateRequest.role)
     );
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, challengeId, organizationId, role);
+    return Objects.hash(organizationId, role);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ChallengeContribution {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    challengeId: ").append(toIndentedString(challengeId)).append("\n");
+    sb.append("class ChallengeContributionCreateRequest {\n");
     sb.append("    organizationId: ").append(toIndentedString(organizationId)).append("\n");
     sb.append("    role: ").append(toIndentedString(role)).append("\n");
     sb.append("}");

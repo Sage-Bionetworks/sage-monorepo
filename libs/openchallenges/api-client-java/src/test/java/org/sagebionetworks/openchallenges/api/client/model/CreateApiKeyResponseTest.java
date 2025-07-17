@@ -20,26 +20,26 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.time.OffsetDateTime;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openapitools.jackson.nullable.JsonNullable;
 import org.openapitools.jackson.nullable.JsonNullable;
-import org.sagebionetworks.openchallenges.api.client.model.UserStatus;
 
 /**
- * Model tests for User
+ * Model tests for CreateApiKeyResponse
  */
-class UserTest {
+class CreateApiKeyResponseTest {
 
-  private final User model = new User();
+  private final CreateApiKeyResponse model = new CreateApiKeyResponse();
 
   /**
-   * Model tests for User
+   * Model tests for CreateApiKeyResponse
    */
   @Test
-  void testUser() {
-    // TODO: test User
+  void testCreateApiKeyResponse() {
+    // TODO: test CreateApiKeyResponse
   }
 
   /**
@@ -51,19 +51,11 @@ class UserTest {
   }
 
   /**
-   * Test the property 'login'
+   * Test the property 'key'
    */
   @Test
-  void loginTest() {
-    // TODO: test login
-  }
-
-  /**
-   * Test the property 'email'
-   */
-  @Test
-  void emailTest() {
-    // TODO: test email
+  void keyTest() {
+    // TODO: test key
   }
 
   /**
@@ -75,19 +67,11 @@ class UserTest {
   }
 
   /**
-   * Test the property 'status'
+   * Test the property 'prefix'
    */
   @Test
-  void statusTest() {
-    // TODO: test status
-  }
-
-  /**
-   * Test the property 'avatarUrl'
-   */
-  @Test
-  void avatarUrlTest() {
-    // TODO: test avatarUrl
+  void prefixTest() {
+    // TODO: test prefix
   }
 
   /**
@@ -99,26 +83,10 @@ class UserTest {
   }
 
   /**
-   * Test the property 'updatedAt'
+   * Test the property 'expiresAt'
    */
   @Test
-  void updatedAtTest() {
-    // TODO: test updatedAt
-  }
-
-  /**
-   * Test the property 'type'
-   */
-  @Test
-  void typeTest() {
-    // TODO: test type
-  }
-
-  /**
-   * Test the property 'bio'
-   */
-  @Test
-  void bioTest() {
-    // TODO: test bio
+  void expiresAtTest() {
+    // TODO: test expiresAt
   }
 }

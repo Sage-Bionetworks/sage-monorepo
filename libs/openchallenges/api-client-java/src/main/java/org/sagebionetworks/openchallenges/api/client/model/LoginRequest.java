@@ -23,42 +23,69 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * The response returned after the creation of the user
+ * LoginRequest
  */
-@JsonPropertyOrder({ UserCreateResponse.JSON_PROPERTY_ID })
+@JsonPropertyOrder({ LoginRequest.JSON_PROPERTY_USERNAME, LoginRequest.JSON_PROPERTY_PASSWORD })
 @jakarta.annotation.Generated(
   value = "org.openapitools.codegen.languages.JavaClientCodegen",
   comments = "Generator version: 7.13.0"
 )
-public class UserCreateResponse {
+public class LoginRequest {
 
-  public static final String JSON_PROPERTY_ID = "id";
+  public static final String JSON_PROPERTY_USERNAME = "username";
 
   @jakarta.annotation.Nonnull
-  private Long id;
+  private String username;
 
-  public UserCreateResponse() {}
+  public static final String JSON_PROPERTY_PASSWORD = "password";
 
-  public UserCreateResponse id(@jakarta.annotation.Nonnull Long id) {
-    this.id = id;
+  @jakarta.annotation.Nonnull
+  private String password;
+
+  public LoginRequest() {}
+
+  public LoginRequest username(@jakarta.annotation.Nonnull String username) {
+    this.username = username;
     return this;
   }
 
   /**
-   * The unique identifier of an account
-   * @return id
+   * Username or email
+   * @return username
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(JSON_PROPERTY_USERNAME)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public Long getId() {
-    return id;
+  public String getUsername() {
+    return username;
   }
 
-  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonProperty(JSON_PROPERTY_USERNAME)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(@jakarta.annotation.Nonnull Long id) {
-    this.id = id;
+  public void setUsername(@jakarta.annotation.Nonnull String username) {
+    this.username = username;
+  }
+
+  public LoginRequest password(@jakarta.annotation.Nonnull String password) {
+    this.password = password;
+    return this;
+  }
+
+  /**
+   * User password
+   * @return password
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_PASSWORD)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public String getPassword() {
+    return password;
+  }
+
+  @JsonProperty(JSON_PROPERTY_PASSWORD)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setPassword(@jakarta.annotation.Nonnull String password) {
+    this.password = password;
   }
 
   @Override
@@ -69,20 +96,24 @@ public class UserCreateResponse {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    UserCreateResponse userCreateResponse = (UserCreateResponse) o;
-    return Objects.equals(this.id, userCreateResponse.id);
+    LoginRequest loginRequest = (LoginRequest) o;
+    return (
+      Objects.equals(this.username, loginRequest.username) &&
+      Objects.equals(this.password, loginRequest.password)
+    );
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id);
+    return Objects.hash(username, password);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class UserCreateResponse {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("class LoginRequest {\n");
+    sb.append("    username: ").append(toIndentedString(username)).append("\n");
+    sb.append("    password: ").append("*").append("\n");
     sb.append("}");
     return sb.toString();
   }
