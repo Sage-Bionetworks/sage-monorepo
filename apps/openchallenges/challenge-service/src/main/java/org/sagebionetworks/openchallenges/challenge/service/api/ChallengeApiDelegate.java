@@ -88,6 +88,35 @@ public interface ChallengeApiDelegate {
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
+     * GET /challenges/{challengeId}/json-ld : Get a challenge in JSON-LD format
+     * Returns the challenge specified in JSON-LD format
+     *
+     * @param challengeId The unique identifier of the challenge. (required)
+     * @return A challenge (status code 200)
+     *         or The specified resource was not found (status code 404)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     * @see ChallengeApi#getChallengeJsonLd
+     */
+    default ResponseEntity<ChallengeJsonLdDto> getChallengeJsonLd(Long challengeId) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/ld+json"))) {
                     String exampleString = "Custom MIME type example not yet supported: application/ld+json";
                     ApiUtil.setExampleResponse(request, "application/ld+json", exampleString);

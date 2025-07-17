@@ -106,17 +106,14 @@ public interface ChallengeApi {
         responses = {
             @ApiResponse(responseCode = "200", description = "A challenge", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ChallengeDto.class)),
-                @Content(mediaType = "application/ld+json", schema = @Schema(implementation = ChallengeDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ChallengeDto.class))
             }),
             @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/ld+json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
             @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/ld+json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             })
         }
@@ -124,13 +121,55 @@ public interface ChallengeApi {
     @RequestMapping(
         method = RequestMethod.GET,
         value = "/challenges/{challengeId}",
-        produces = { "application/json", "application/ld+json", "application/problem+json" }
+        produces = { "application/json", "application/problem+json" }
     )
     
     default ResponseEntity<ChallengeDto> getChallenge(
         @Parameter(name = "challengeId", description = "The unique identifier of the challenge.", required = true, in = ParameterIn.PATH) @PathVariable("challengeId") Long challengeId
     ) {
         return getDelegate().getChallenge(challengeId);
+    }
+
+
+    /**
+     * GET /challenges/{challengeId}/json-ld : Get a challenge in JSON-LD format
+     * Returns the challenge specified in JSON-LD format
+     *
+     * @param challengeId The unique identifier of the challenge. (required)
+     * @return A challenge (status code 200)
+     *         or The specified resource was not found (status code 404)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "getChallengeJsonLd",
+        summary = "Get a challenge in JSON-LD format",
+        description = "Returns the challenge specified in JSON-LD format",
+        tags = { "Challenge" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "A challenge", content = {
+                @Content(mediaType = "application/ld+json", schema = @Schema(implementation = ChallengeJsonLdDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ChallengeJsonLdDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/ld+json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/ld+json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/challenges/{challengeId}/json-ld",
+        produces = { "application/ld+json", "application/problem+json" }
+    )
+    
+    default ResponseEntity<ChallengeJsonLdDto> getChallengeJsonLd(
+        @Parameter(name = "challengeId", description = "The unique identifier of the challenge.", required = true, in = ParameterIn.PATH) @PathVariable("challengeId") Long challengeId
+    ) {
+        return getDelegate().getChallengeJsonLd(challengeId);
     }
 
 
