@@ -1,7 +1,7 @@
 ---
 mode: 'agent'
 tools: ['github', 'get_pull_request', 'get_pull_request_comments', 'get_pull_request_diff', 'get_pull_request_files', 'get_pull_request_status', 'list_branches', 'list_commits', 'list_pull_requests', 'search_pull_requests', 'update_pull_request']
-description: 'Fetch the files changed from the active PR and update the PR description'
+description: 'Fetch the files changed from the active PR and update its PR description'
 ---
 
 # Generate PR Description Prompt
