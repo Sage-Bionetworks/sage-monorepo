@@ -15,6 +15,7 @@ export class HelpLinksComponent {
   }
 
   toggleVisualizationOverview() {
+    console.log('emitting');
     this.visualizationOverviewToggle.emit();
   }
 }

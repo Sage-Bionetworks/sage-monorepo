@@ -2,6 +2,7 @@ import { provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/c
 import {
   APP_ID,
   ApplicationConfig,
+  ErrorHandler,
   inject,
   provideAppInitializer,
   provideZoneChangeDetection,
@@ -21,6 +22,7 @@ import { MessageService } from 'primeng/api';
 import { providePrimeNG } from 'primeng/config';
 import { routes } from './app.routes';
 import { ModelAdPreset } from './primeNGPreset';
+import { ErrorService } from '@sagebionetworks/model-ad/services';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -59,5 +61,6 @@ export const appConfig: ApplicationConfig = {
       }),
     ),
     MessageService,
+    { provide: ErrorHandler, useClass: ErrorService },
   ],
 };

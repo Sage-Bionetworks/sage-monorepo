@@ -71,8 +71,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
       columns = config.columns.map((column) => column.name);
       return columns;
     } else {
-      console.error('Missing comparison tool config data');
-      return [];
+      throw new Error('Missing comparison tool config data');
     }
   }
 
@@ -85,7 +84,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
           this.data = data;
         },
         error: (error) => {
-          console.error('Error fetching model overview data:', error);
+          throw new Error('Error fetching model overview data:', { cause: error });
         },
         complete: () => {
           this.isLoading.set(false);

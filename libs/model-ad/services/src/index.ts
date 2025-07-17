@@ -1,1 +1,1 @@
-export * from './lib/cached-comparison-tool-config.service';
+export * from './lib/error.service';
