@@ -33,6 +33,18 @@ public class OrganizationApiTest {
   private final OrganizationApi api = new OrganizationApi();
 
   /**
+   * Delete an organization
+   *
+   * Deletes the organization specified
+   */
+  @Test
+  public void deleteOrganizationTest() {
+    String org = null;
+    api.deleteOrganization(org);
+    // TODO: test validations
+  }
+
+  /**
    * Get an organization
    *
    * Returns the organization specified

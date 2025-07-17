@@ -31,7 +31,7 @@ import java.util.Objects;
     ChallengePlatform.JSON_PROPERTY_ID,
     ChallengePlatform.JSON_PROPERTY_SLUG,
     ChallengePlatform.JSON_PROPERTY_NAME,
-    ChallengePlatform.JSON_PROPERTY_AVATAR_URL,
+    ChallengePlatform.JSON_PROPERTY_AVATAR_KEY,
     ChallengePlatform.JSON_PROPERTY_WEBSITE_URL,
     ChallengePlatform.JSON_PROPERTY_CREATED_AT,
     ChallengePlatform.JSON_PROPERTY_UPDATED_AT,
@@ -58,10 +58,10 @@ public class ChallengePlatform {
   @jakarta.annotation.Nonnull
   private String name;
 
-  public static final String JSON_PROPERTY_AVATAR_URL = "avatarUrl";
+  public static final String JSON_PROPERTY_AVATAR_KEY = "avatarKey";
 
   @jakarta.annotation.Nonnull
-  private String avatarUrl;
+  private String avatarKey;
 
   public static final String JSON_PROPERTY_WEBSITE_URL = "websiteUrl";
 
@@ -146,26 +146,26 @@ public class ChallengePlatform {
     this.name = name;
   }
 
-  public ChallengePlatform avatarUrl(@jakarta.annotation.Nonnull String avatarUrl) {
-    this.avatarUrl = avatarUrl;
+  public ChallengePlatform avatarKey(@jakarta.annotation.Nonnull String avatarKey) {
+    this.avatarKey = avatarKey;
     return this;
   }
 
   /**
-   * Get avatarUrl
-   * @return avatarUrl
+   * Get avatarKey
+   * @return avatarKey
    */
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_AVATAR_URL)
+  @JsonProperty(JSON_PROPERTY_AVATAR_KEY)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public String getAvatarUrl() {
-    return avatarUrl;
+  public String getAvatarKey() {
+    return avatarKey;
   }
 
-  @JsonProperty(JSON_PROPERTY_AVATAR_URL)
+  @JsonProperty(JSON_PROPERTY_AVATAR_KEY)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAvatarUrl(@jakarta.annotation.Nonnull String avatarUrl) {
-    this.avatarUrl = avatarUrl;
+  public void setAvatarKey(@jakarta.annotation.Nonnull String avatarKey) {
+    this.avatarKey = avatarKey;
   }
 
   public ChallengePlatform websiteUrl(@jakarta.annotation.Nonnull String websiteUrl) {
@@ -247,7 +247,7 @@ public class ChallengePlatform {
       Objects.equals(this.id, challengePlatform.id) &&
       Objects.equals(this.slug, challengePlatform.slug) &&
       Objects.equals(this.name, challengePlatform.name) &&
-      Objects.equals(this.avatarUrl, challengePlatform.avatarUrl) &&
+      Objects.equals(this.avatarKey, challengePlatform.avatarKey) &&
       Objects.equals(this.websiteUrl, challengePlatform.websiteUrl) &&
       Objects.equals(this.createdAt, challengePlatform.createdAt) &&
       Objects.equals(this.updatedAt, challengePlatform.updatedAt)
@@ -256,7 +256,7 @@ public class ChallengePlatform {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, slug, name, avatarUrl, websiteUrl, createdAt, updatedAt);
+    return Objects.hash(id, slug, name, avatarKey, websiteUrl, createdAt, updatedAt);
   }
 
   @Override
@@ -266,7 +266,7 @@ public class ChallengePlatform {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    slug: ").append(toIndentedString(slug)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
+    sb.append("    avatarKey: ").append(toIndentedString(avatarKey)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");

@@ -135,9 +135,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Challenge'
-            application/ld+json:
-              schema:
-                $ref: '#/components/schemas/ChallengeJsonLd'
           description: A challenge
         '404':
           content:
@@ -157,6 +154,46 @@ paths:
         - Challenge
       x-accepts:
         - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Challenge
+  /challenges/{challengeId}/json-ld:
+    get:
+      description: Returns the challenge specified in JSON-LD format
+      operationId: getChallengeJsonLd
+      parameters:
+        - description: The unique identifier of the challenge.
+          explode: false
+          in: path
+          name: challengeId
+          required: true
+          schema:
+            $ref: '#/components/schemas/ChallengeId'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/ld+json:
+              schema:
+                $ref: '#/components/schemas/ChallengeJsonLd'
+          description: A challenge
+        '404':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get a challenge in JSON-LD format
+      tags:
+        - Challenge
+      x-accepts:
         - application/ld+json
         - application/problem+json
       x-tags:

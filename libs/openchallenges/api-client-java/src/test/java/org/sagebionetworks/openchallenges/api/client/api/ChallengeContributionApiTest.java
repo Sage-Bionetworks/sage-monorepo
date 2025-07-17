@@ -20,6 +20,9 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.sagebionetworks.openchallenges.api.client.model.BasicError;
+import org.sagebionetworks.openchallenges.api.client.model.ChallengeContribution;
+import org.sagebionetworks.openchallenges.api.client.model.ChallengeContributionCreateRequest;
+import org.sagebionetworks.openchallenges.api.client.model.ChallengeContributionUpdateRequest;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengeContributionsPage;
 
 /**
@@ -31,6 +34,63 @@ public class ChallengeContributionApiTest {
   private final ChallengeContributionApi api = new ChallengeContributionApi();
 
   /**
+   * Create a new contribution for a challenge
+   *
+   * Creates a new contribution record associated with a challenge ID.
+   */
+  @Test
+  public void addChallengeContributionTest() {
+    Long challengeId = null;
+    ChallengeContributionCreateRequest challengeContributionCreateRequest = null;
+    ChallengeContribution response = api.addChallengeContribution(
+      challengeId,
+      challengeContributionCreateRequest
+    );
+    // TODO: test validations
+  }
+
+  /**
+   * Delete all contributions for a specific challenge
+   *
+   * Deletes all associated contributions for a given challenge, identified by its ID. This action is irreversible.
+   */
+  @Test
+  public void deleteAllChallengeContributionsTest() {
+    Long challengeId = null;
+    api.deleteAllChallengeContributions(challengeId);
+    // TODO: test validations
+  }
+
+  /**
+   * Delete a specific challenge contribution
+   *
+   * Deletes a specific contribution record for a challenge, identified by its ID. This action is irreversible.
+   */
+  @Test
+  public void deleteChallengeContributionTest() {
+    Long challengeId = null;
+    Long challengeContributionId = null;
+    api.deleteChallengeContribution(challengeId, challengeContributionId);
+    // TODO: test validations
+  }
+
+  /**
+   * Get a specific challenge contribution
+   *
+   * Retrieves a specific contribution record for a challenge, identified by its ID.
+   */
+  @Test
+  public void getChallengeContributionTest() {
+    Long challengeId = null;
+    Long challengeContributionId = null;
+    ChallengeContribution response = api.getChallengeContribution(
+      challengeId,
+      challengeContributionId
+    );
+    // TODO: test validations
+  }
+
+  /**
    * List challenge contributions
    *
    * List challenge contributions
@@ -39,6 +99,24 @@ public class ChallengeContributionApiTest {
   public void listChallengeContributionsTest() {
     Long challengeId = null;
     ChallengeContributionsPage response = api.listChallengeContributions(challengeId);
+    // TODO: test validations
+  }
+
+  /**
+   * Update an existing challenge contribution
+   *
+   * Updates an existing contribution record for a challenge. Only the organization ID and role can be modified.
+   */
+  @Test
+  public void updateChallengeContributionTest() {
+    Long challengeId = null;
+    Long challengeContributionId = null;
+    ChallengeContributionUpdateRequest challengeContributionUpdateRequest = null;
+    ChallengeContribution response = api.updateChallengeContribution(
+      challengeId,
+      challengeContributionId,
+      challengeContributionUpdateRequest
+    );
     // TODO: test validations
   }
 }
