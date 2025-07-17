@@ -71,7 +71,7 @@ public class ChallengeEntity {
   @GenericField
   private String doi;
 
-  @Column(nullable = true, length = 20)
+  @Column(nullable = false, length = 20)
   @GenericField
   private String status;
 

@@ -25,7 +25,7 @@ CREATE TABLE challenge (
   description VARCHAR(1000),
   avatar_url VARCHAR(500),
   website_url VARCHAR(500),
-  status VARCHAR(20) CHECK (status IN ('upcoming', 'active', 'completed')),
+  status VARCHAR(20) NOT NULL CHECK (status IN ('upcoming', 'active', 'completed')),
   platform_id BIGINT,
   doi VARCHAR(120),
   start_date DATE,
