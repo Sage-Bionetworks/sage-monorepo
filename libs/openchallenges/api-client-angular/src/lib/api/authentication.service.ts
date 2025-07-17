@@ -25,11 +25,13 @@ import { Observable } from 'rxjs';
 // @ts-ignore
 import { BasicError } from '../model/basicError';
 // @ts-ignore
-import { Organization } from '../model/organization';
+import { LoginRequest } from '../model/loginRequest';
 // @ts-ignore
-import { OrganizationSearchQuery } from '../model/organizationSearchQuery';
+import { LoginResponse } from '../model/loginResponse';
 // @ts-ignore
-import { OrganizationsPage } from '../model/organizationsPage';
+import { ValidateApiKeyRequest } from '../model/validateApiKeyRequest';
+// @ts-ignore
+import { ValidateApiKeyResponse } from '../model/validateApiKeyResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -38,7 +40,7 @@ import { Configuration } from '../configuration';
 @Injectable({
   providedIn: 'root',
 })
-export class OrganizationService {
+export class AuthenticationService {
   protected basePath = 'http://localhost/v1';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
@@ -111,119 +113,14 @@ export class OrganizationService {
   }
 
   /**
-   * Delete an organization
-   * Deletes the organization specified
-   * @param org The id or login of the organization.
+   * User login
+   * Authenticate user and return JWT token
+   * @param loginRequest
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public deleteOrganization(
-    org: string,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/problem+json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<any>;
-  public deleteOrganization(
-    org: string,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/problem+json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpResponse<any>>;
-  public deleteOrganization(
-    org: string,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/problem+json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpEvent<any>>;
-  public deleteOrganization(
-    org: string,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: {
-      httpHeaderAccept?: 'application/problem+json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<any> {
-    if (org === null || org === undefined) {
-      throw new Error(
-        'Required parameter org was null or undefined when calling deleteOrganization.',
-      );
-    }
-
-    let localVarHeaders = this.defaultHeaders;
-
-    let localVarCredential: string | undefined;
-    // authentication (apiBearerAuth) required
-    localVarCredential = this.configuration.lookupCredential('apiBearerAuth');
-    if (localVarCredential) {
-      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
-    }
-
-    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['application/problem+json'];
-      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-    }
-
-    let localVarHttpContext: HttpContext | undefined = options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
-    }
-
-    let localVarTransferCache: boolean | undefined = options && options.transferCache;
-    if (localVarTransferCache === undefined) {
-      localVarTransferCache = true;
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/organizations/${this.configuration.encodeParam({ name: 'org', value: org, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
-    return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`, {
-      context: localVarHttpContext,
-      responseType: <any>responseType_,
-      withCredentials: this.configuration.withCredentials,
-      headers: localVarHeaders,
-      observe: observe,
-      transferCache: localVarTransferCache,
-      reportProgress: reportProgress,
-    });
-  }
-
-  /**
-   * Get an organization
-   * Returns the organization specified
-   * @param org The id or login of the organization.
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public getOrganization(
-    org: string,
+  public login(
+    loginRequest: LoginRequest,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -231,9 +128,9 @@ export class OrganizationService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<Organization>;
-  public getOrganization(
-    org: string,
+  ): Observable<LoginResponse>;
+  public login(
+    loginRequest: LoginRequest,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -241,9 +138,9 @@ export class OrganizationService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<Organization>>;
-  public getOrganization(
-    org: string,
+  ): Observable<HttpResponse<LoginResponse>>;
+  public login(
+    loginRequest: LoginRequest,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -251,9 +148,9 @@ export class OrganizationService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<Organization>>;
-  public getOrganization(
-    org: string,
+  ): Observable<HttpEvent<LoginResponse>>;
+  public login(
+    loginRequest: LoginRequest,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -262,8 +159,8 @@ export class OrganizationService {
       transferCache?: boolean;
     },
   ): Observable<any> {
-    if (org === null || org === undefined) {
-      throw new Error('Required parameter org was null or undefined when calling getOrganization.');
+    if (loginRequest === null || loginRequest === undefined) {
+      throw new Error('Required parameter loginRequest was null or undefined when calling login.');
     }
 
     let localVarHeaders = this.defaultHeaders;
@@ -288,6 +185,14 @@ export class OrganizationService {
       localVarTransferCache = true;
     }
 
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+    }
+
     let responseType_: 'text' | 'json' | 'blob' = 'json';
     if (localVarHttpHeaderAcceptSelected) {
       if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
@@ -299,12 +204,13 @@ export class OrganizationService {
       }
     }
 
-    let localVarPath = `/organizations/${this.configuration.encodeParam({ name: 'org', value: org, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
-    return this.httpClient.request<Organization>(
-      'get',
+    let localVarPath = `/auth/login`;
+    return this.httpClient.request<LoginResponse>(
+      'post',
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
+        body: loginRequest,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,
@@ -316,14 +222,14 @@ export class OrganizationService {
   }
 
   /**
-   * List organizations
-   * List organizations
-   * @param organizationSearchQuery The search query used to find organizations.
+   * Validate API key
+   * Internal endpoint to validate API keys (used by other services)
+   * @param validateApiKeyRequest
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public listOrganizations(
-    organizationSearchQuery?: OrganizationSearchQuery,
+  public validateApiKey(
+    validateApiKeyRequest: ValidateApiKeyRequest,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -331,9 +237,9 @@ export class OrganizationService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<OrganizationsPage>;
-  public listOrganizations(
-    organizationSearchQuery?: OrganizationSearchQuery,
+  ): Observable<ValidateApiKeyResponse>;
+  public validateApiKey(
+    validateApiKeyRequest: ValidateApiKeyRequest,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -341,9 +247,9 @@ export class OrganizationService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<OrganizationsPage>>;
-  public listOrganizations(
-    organizationSearchQuery?: OrganizationSearchQuery,
+  ): Observable<HttpResponse<ValidateApiKeyResponse>>;
+  public validateApiKey(
+    validateApiKeyRequest: ValidateApiKeyRequest,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -351,9 +257,9 @@ export class OrganizationService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<OrganizationsPage>>;
-  public listOrganizations(
-    organizationSearchQuery?: OrganizationSearchQuery,
+  ): Observable<HttpEvent<ValidateApiKeyResponse>>;
+  public validateApiKey(
+    validateApiKeyRequest: ValidateApiKeyRequest,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -362,12 +268,9 @@ export class OrganizationService {
       transferCache?: boolean;
     },
   ): Observable<any> {
-    let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
-    if (organizationSearchQuery !== undefined && organizationSearchQuery !== null) {
-      localVarQueryParameters = this.addToHttpParams(
-        localVarQueryParameters,
-        <any>organizationSearchQuery,
-        'organizationSearchQuery',
+    if (validateApiKeyRequest === null || validateApiKeyRequest === undefined) {
+      throw new Error(
+        'Required parameter validateApiKeyRequest was null or undefined when calling validateApiKey.',
       );
     }
 
@@ -393,6 +296,14 @@ export class OrganizationService {
       localVarTransferCache = true;
     }
 
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+    }
+
     let responseType_: 'text' | 'json' | 'blob' = 'json';
     if (localVarHttpHeaderAcceptSelected) {
       if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
@@ -404,13 +315,13 @@ export class OrganizationService {
       }
     }
 
-    let localVarPath = `/organizations`;
-    return this.httpClient.request<OrganizationsPage>(
-      'get',
+    let localVarPath = `/auth/validate`;
+    return this.httpClient.request<ValidateApiKeyResponse>(
+      'post',
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
-        params: localVarQueryParameters,
+        body: validateApiKeyRequest,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,

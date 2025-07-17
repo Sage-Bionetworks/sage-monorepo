@@ -8,17 +8,13 @@
  * Do not edit the class manually.
  */
 
-/**
- * The information required to create a user account
- */
-export interface UserCreateRequest {
-  login: string;
+export interface LoginRequest {
   /**
-   * An email address.
+   * Username or email
    */
-  email: string;
+  username: string;
+  /**
+   * User password
+   */
   password: string;
-  name?: string | null;
-  avatarUrl?: string | null;
-  bio?: string | null;
 }

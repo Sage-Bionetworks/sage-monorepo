@@ -10,21 +10,13 @@
 import { ChallengeContributionRole } from './challengeContributionRole';
 
 /**
- * A challenge contribution.
+ * A challenge contribution update request.
  */
-export interface ChallengeContribution {
-  /**
-   * The unique identifier of a challenge contribution
-   */
-  id: number;
-  /**
-   * The unique identifier of the challenge.
-   */
-  challengeId: number;
+export interface ChallengeContributionUpdateRequest {
   /**
    * The unique identifier of an organization
    */
   organizationId: number;
   role: ChallengeContributionRole;
 }
-export namespace ChallengeContribution {}
+export namespace ChallengeContributionUpdateRequest {}

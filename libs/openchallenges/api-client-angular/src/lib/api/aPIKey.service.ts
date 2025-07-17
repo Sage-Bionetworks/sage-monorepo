@@ -23,15 +23,13 @@ import { CustomHttpParameterCodec } from '../encoder';
 import { Observable } from 'rxjs';
 
 // @ts-ignore
+import { ApiKey } from '../model/apiKey';
+// @ts-ignore
 import { BasicError } from '../model/basicError';
 // @ts-ignore
-import { User } from '../model/user';
+import { CreateApiKeyRequest } from '../model/createApiKeyRequest';
 // @ts-ignore
-import { UserCreateRequest } from '../model/userCreateRequest';
-// @ts-ignore
-import { UserCreateResponse } from '../model/userCreateResponse';
-// @ts-ignore
-import { UsersPage } from '../model/usersPage';
+import { CreateApiKeyResponse } from '../model/createApiKeyResponse';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -40,7 +38,7 @@ import { Configuration } from '../configuration';
 @Injectable({
   providedIn: 'root',
 })
-export class UserService {
+export class APIKeyService {
   protected basePath = 'http://localhost/v1';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
@@ -113,14 +111,14 @@ export class UserService {
   }
 
   /**
-   * Create a user
-   * Create a user with the specified account name
-   * @param userCreateRequest
+   * Create API key
+   * Generate a new API key for the authenticated user
+   * @param createApiKeyRequest
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public createUser(
-    userCreateRequest: UserCreateRequest,
+  public createApiKey(
+    createApiKeyRequest: CreateApiKeyRequest,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -128,9 +126,9 @@ export class UserService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<UserCreateResponse>;
-  public createUser(
-    userCreateRequest: UserCreateRequest,
+  ): Observable<CreateApiKeyResponse>;
+  public createApiKey(
+    createApiKeyRequest: CreateApiKeyRequest,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -138,9 +136,9 @@ export class UserService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<UserCreateResponse>>;
-  public createUser(
-    userCreateRequest: UserCreateRequest,
+  ): Observable<HttpResponse<CreateApiKeyResponse>>;
+  public createApiKey(
+    createApiKeyRequest: CreateApiKeyRequest,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -148,9 +146,9 @@ export class UserService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<UserCreateResponse>>;
-  public createUser(
-    userCreateRequest: UserCreateRequest,
+  ): Observable<HttpEvent<CreateApiKeyResponse>>;
+  public createApiKey(
+    createApiKeyRequest: CreateApiKeyRequest,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -159,13 +157,20 @@ export class UserService {
       transferCache?: boolean;
     },
   ): Observable<any> {
-    if (userCreateRequest === null || userCreateRequest === undefined) {
+    if (createApiKeyRequest === null || createApiKeyRequest === undefined) {
       throw new Error(
-        'Required parameter userCreateRequest was null or undefined when calling createUser.',
+        'Required parameter createApiKeyRequest was null or undefined when calling createApiKey.',
       );
     }
 
     let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (apiBearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('apiBearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
 
     let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
     if (localVarHttpHeaderAcceptSelected === undefined) {
@@ -206,13 +211,13 @@ export class UserService {
       }
     }
 
-    let localVarPath = `/users/register`;
-    return this.httpClient.request<UserCreateResponse>(
+    let localVarPath = `/auth/api-keys`;
+    return this.httpClient.request<CreateApiKeyResponse>(
       'post',
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
-        body: userCreateRequest,
+        body: createApiKeyRequest,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,
@@ -224,62 +229,69 @@ export class UserService {
   }
 
   /**
-   * Delete a user
-   * Deletes the user specified
-   * @param userId The unique identifier of the user, either the user account ID or login
+   * Delete API key
+   * Revoke an API key
+   * @param keyId The API key ID to delete
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public deleteUser(
-    userId: number,
+  public deleteApiKey(
+    keyId: string,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
-      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      httpHeaderAccept?: 'application/problem+json';
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<object>;
-  public deleteUser(
-    userId: number,
+  ): Observable<any>;
+  public deleteApiKey(
+    keyId: string,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
-      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      httpHeaderAccept?: 'application/problem+json';
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<object>>;
-  public deleteUser(
-    userId: number,
+  ): Observable<HttpResponse<any>>;
+  public deleteApiKey(
+    keyId: string,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
-      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      httpHeaderAccept?: 'application/problem+json';
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<object>>;
-  public deleteUser(
-    userId: number,
+  ): Observable<HttpEvent<any>>;
+  public deleteApiKey(
+    keyId: string,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
-      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      httpHeaderAccept?: 'application/problem+json';
       context?: HttpContext;
       transferCache?: boolean;
     },
   ): Observable<any> {
-    if (userId === null || userId === undefined) {
-      throw new Error('Required parameter userId was null or undefined when calling deleteUser.');
+    if (keyId === null || keyId === undefined) {
+      throw new Error('Required parameter keyId was null or undefined when calling deleteApiKey.');
     }
 
     let localVarHeaders = this.defaultHeaders;
 
+    let localVarCredential: string | undefined;
+    // authentication (apiBearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('apiBearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
     let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
     if (localVarHttpHeaderAcceptSelected === undefined) {
       // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['application/json', 'application/problem+json'];
+      const httpHeaderAccepts: string[] = ['application/problem+json'];
       localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
     }
     if (localVarHttpHeaderAcceptSelected !== undefined) {
@@ -307,108 +319,8 @@ export class UserService {
       }
     }
 
-    let localVarPath = `/users/${this.configuration.encodeParam({ name: 'userId', value: userId, in: 'path', style: 'simple', explode: false, dataType: 'number', dataFormat: 'int64' })}`;
-    return this.httpClient.request<object>(
-      'delete',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: observe,
-        transferCache: localVarTransferCache,
-        reportProgress: reportProgress,
-      },
-    );
-  }
-
-  /**
-   * Get a user
-   * Returns the user specified
-   * @param userId The unique identifier of the user, either the user account ID or login
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public getUser(
-    userId: number,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json' | 'application/problem+json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<User>;
-  public getUser(
-    userId: number,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json' | 'application/problem+json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpResponse<User>>;
-  public getUser(
-    userId: number,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json' | 'application/problem+json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpEvent<User>>;
-  public getUser(
-    userId: number,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: {
-      httpHeaderAccept?: 'application/json' | 'application/problem+json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<any> {
-    if (userId === null || userId === undefined) {
-      throw new Error('Required parameter userId was null or undefined when calling getUser.');
-    }
-
-    let localVarHeaders = this.defaultHeaders;
-
-    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['application/json', 'application/problem+json'];
-      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-    }
-
-    let localVarHttpContext: HttpContext | undefined = options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
-    }
-
-    let localVarTransferCache: boolean | undefined = options && options.transferCache;
-    if (localVarTransferCache === undefined) {
-      localVarTransferCache = true;
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/users/${this.configuration.encodeParam({ name: 'userId', value: userId, in: 'path', style: 'simple', explode: false, dataType: 'number', dataFormat: 'int64' })}`;
-    return this.httpClient.request<User>('get', `${this.configuration.basePath}${localVarPath}`, {
+    let localVarPath = `/auth/api-keys/${this.configuration.encodeParam({ name: 'keyId', value: keyId, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: 'uuid' })}`;
+    return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`, {
       context: localVarHttpContext,
       responseType: <any>responseType_,
       withCredentials: this.configuration.withCredentials,
@@ -420,16 +332,12 @@ export class UserService {
   }
 
   /**
-   * Get all users
-   * Returns the users
-   * @param pageNumber The page number.
-   * @param pageSize The number of items in a single page.
+   * List API keys
+   * Get all API keys for the authenticated user
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public listUsers(
-    pageNumber?: number,
-    pageSize?: number,
+  public listApiKeys(
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -437,10 +345,8 @@ export class UserService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<UsersPage>;
-  public listUsers(
-    pageNumber?: number,
-    pageSize?: number,
+  ): Observable<Array<ApiKey>>;
+  public listApiKeys(
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -448,10 +354,8 @@ export class UserService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<UsersPage>>;
-  public listUsers(
-    pageNumber?: number,
-    pageSize?: number,
+  ): Observable<HttpResponse<Array<ApiKey>>>;
+  public listApiKeys(
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -459,10 +363,8 @@ export class UserService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<UsersPage>>;
-  public listUsers(
-    pageNumber?: number,
-    pageSize?: number,
+  ): Observable<HttpEvent<Array<ApiKey>>>;
+  public listApiKeys(
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -471,23 +373,14 @@ export class UserService {
       transferCache?: boolean;
     },
   ): Observable<any> {
-    let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
-    if (pageNumber !== undefined && pageNumber !== null) {
-      localVarQueryParameters = this.addToHttpParams(
-        localVarQueryParameters,
-        <any>pageNumber,
-        'pageNumber',
-      );
-    }
-    if (pageSize !== undefined && pageSize !== null) {
-      localVarQueryParameters = this.addToHttpParams(
-        localVarQueryParameters,
-        <any>pageSize,
-        'pageSize',
-      );
-    }
-
     let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (apiBearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('apiBearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
 
     let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
     if (localVarHttpHeaderAcceptSelected === undefined) {
@@ -520,13 +413,12 @@ export class UserService {
       }
     }
 
-    let localVarPath = `/users`;
-    return this.httpClient.request<UsersPage>(
+    let localVarPath = `/auth/api-keys`;
+    return this.httpClient.request<Array<ApiKey>>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
-        params: localVarQueryParameters,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,

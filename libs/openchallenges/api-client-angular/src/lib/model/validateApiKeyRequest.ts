@@ -8,12 +8,9 @@
  * Do not edit the class manually.
  */
 
-/**
- * The response returned after the creation of the user
- */
-export interface UserCreateResponse {
+export interface ValidateApiKeyRequest {
   /**
-   * The unique identifier of an account
+   * The API key to validate
    */
-  id: number;
+  apiKey: string;
 }
