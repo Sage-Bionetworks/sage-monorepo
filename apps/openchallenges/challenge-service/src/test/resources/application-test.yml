@@ -1,7 +1,7 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: create-drop # Let Hibernate create schema for tests
+      ddl-auto: validate
     database-platform: org.hibernate.dialect.H2Dialect
     show-sql: false
     properties:
