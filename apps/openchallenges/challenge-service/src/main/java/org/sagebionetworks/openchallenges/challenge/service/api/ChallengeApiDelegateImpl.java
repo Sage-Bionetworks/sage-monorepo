@@ -3,13 +3,13 @@ package org.sagebionetworks.openchallenges.challenge.service.api;
 import java.util.List;
 import java.util.Optional;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeJsonLdDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengesPageDto;
 import org.sagebionetworks.openchallenges.challenge.service.security.AuthenticatedUser;
 import org.sagebionetworks.openchallenges.challenge.service.service.ChallengeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,9 +21,6 @@ import org.springframework.web.context.request.NativeWebRequest;
 public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
 
   private static final Logger logger = LoggerFactory.getLogger(ChallengeApiDelegateImpl.class);
-
-  private static final MediaType APPLICATION_LD_JSON = MediaType.valueOf("application/ld+json");
-  private static final MediaType APPLICATION_JSON = MediaType.valueOf("application/json");
 
   private final ChallengeService challengeService;
 
@@ -60,6 +57,11 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
   @Override
   public ResponseEntity<ChallengeDto> getChallenge(Long challengeId) {
     return ResponseEntity.ok(challengeService.getChallenge(challengeId));
+  }
+
+  @Override
+  public ResponseEntity<ChallengeJsonLdDto> getChallengeJsonLd(Long challengeId) {
+    return ResponseEntity.ok(challengeService.getChallengeJsonLd(challengeId));
   }
 
   @Override
