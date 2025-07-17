@@ -114,15 +114,18 @@
   "jest.runMode": "on-demand",
   "nxConsole.generateAiAgentRules": true,
   "github.copilot.chat.agent.terminal.allowList": {
-    "echo": true,
-    "cd": true,
-    "ls": true,
+    "/^(?:\\.\\/)?gradlew(?:\\s+.+)?$/": true,
     "cat": true,
-    "pwd": true,
-    "git status": true,
-    "git log": true,
+    "cd": true,
+    "echo": true,
+    "find": true,
     "git diff": true,
-    "git show": true
+    "git log": true,
+    "git show": true,
+    "git status": true,
+    "grep": true,
+    "ls": true,
+    "pwd": true
   },
   "github.copilot.chat.agent.terminal.denyList": {
     "rm": true,

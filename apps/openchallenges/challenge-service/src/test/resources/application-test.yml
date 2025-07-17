@@ -1,0 +1,26 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: false
+    properties:
+      hibernate:
+        search:
+          enabled: false # Disable Hibernate Search for tests
+  flyway:
+    enabled: false # Disable Flyway for simple tests
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration
+  cloud:
+    discovery:
+      enabled: false
+eureka:
+  client:
+    enabled: false
+
+logging:
+  level:
+    org.sagebionetworks.openchallenges: DEBUG
+    org.hibernate.search: OFF
