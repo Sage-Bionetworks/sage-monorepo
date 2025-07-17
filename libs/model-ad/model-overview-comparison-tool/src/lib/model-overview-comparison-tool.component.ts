@@ -6,12 +6,15 @@ import {
   DisplayedResultsComponent,
 } from '@sagebionetworks/explorers/comparison-tools';
 import { ModelOverviewHelpLinksComponent } from './components/model-overview-help-links/model-overview-help-links.component';
-import { ComparisonToolConfig, ModelOverview } from '@sagebionetworks/model-ad/api-client-angular';
+import {
+  ComparisonToolConfig,
+  ModelOverview,
+  ModelOverviewService,
+} from '@sagebionetworks/model-ad/api-client-angular';
 import { ActivatedRoute } from '@angular/router';
 import { ComparisonToolService, PlatformService } from '@sagebionetworks/explorers/services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ModelOverviewMainTableComponent } from './components/model-overview-main-table/model-overview-main-table.component';
-import { CachedModelOverviewService } from './services/cached-model-overview.service';
 import { runInBrowser } from '@sagebionetworks/explorers/util';
 
 @Component({
@@ -24,7 +27,7 @@ import { runInBrowser } from '@sagebionetworks/explorers/util';
     DisplayedResultsComponent,
     ComparisonToolColumnsComponent,
   ],
-  providers: [CachedModelOverviewService, ComparisonToolService],
+  providers: [ComparisonToolService],
   templateUrl: './model-overview-comparison-tool.component.html',
   styleUrls: ['./model-overview-comparison-tool.component.scss'],
 })
@@ -33,7 +36,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   private readonly comparisonToolService = inject(ComparisonToolService);
-  private readonly modelOverviewService = inject(CachedModelOverviewService);
+  private readonly modelOverviewService = inject(ModelOverviewService);
 
   private readonly route = inject(ActivatedRoute);
 

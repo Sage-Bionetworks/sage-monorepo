@@ -10,6 +10,6 @@ import { LoadingContainerComponent } from '@sagebionetworks/explorers/util';
 export class BaseComparisonToolComponent {
   isLoading = input(true);
 
-  // TODO need to use comparison tool service version
+  // this is overridden
   resultsCount = input(0);
 }

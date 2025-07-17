@@ -19,8 +19,12 @@ export class ModelOverviewResolver implements Resolve<ComparisonToolConfig | nul
     return this.comparisonToolConfigService
       .getComparisonToolConfig(ComparisonToolPages.ModelOverview)
       .pipe(
+        // model overview only has one config (no dropdowns), so return the first one or null
         map((config) => config[0] ?? null),
-        catchError(() => of(null)),
+        catchError((error) => {
+          console.error('Failed to load ModelOverview config:', error);
+          return of(null);
+        }),
       );
   }
 }
