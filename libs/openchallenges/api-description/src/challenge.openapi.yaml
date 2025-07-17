@@ -29,6 +29,8 @@ paths:
     $ref: paths/challenges.yaml
   /challenges/{challengeId}:
     $ref: paths/challenges/@{challengeId}.yaml
+  /challenges/{challengeId}/json-ld:
+    $ref: paths/challenges/@{challengeId}/json-ld.yaml
   /challenges/{challengeId}/contributions:
     $ref: paths/challenges/@{challengeId}/contributions.yaml
   /challenges/{challengeId}/contributions/{challengeContributionId}:
