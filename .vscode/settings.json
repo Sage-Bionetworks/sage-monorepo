@@ -114,7 +114,7 @@
   "jest.runMode": "on-demand",
   "nxConsole.generateAiAgentRules": true,
   "github.copilot.chat.agent.terminal.allowList": {
-    "/^(\\.\\/)?gradlew(\\b|\\s).*$/": true,
+    "/^(?:\\.\\/)?gradlew(?:\\s+.+)?$/": true,
     "cat": true,
     "cd": true,
     "echo": true,
