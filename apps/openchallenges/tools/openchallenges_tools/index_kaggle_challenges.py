@@ -1,13 +1,16 @@
 import logging
+import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime
 from itertools import chain
 from typing import Any, Optional
 
 import kaggle
+from opensearchpy import OpenSearch
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    level=logging.DEBUG, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -51,6 +54,218 @@ def get_competition_id(competition: Any) -> Optional[str]:
         or getattr(competition, "id", None)
         or getattr(competition, "url", None)
     )
+
+
+def get_opensearch_client() -> OpenSearch:
+    """
+    Get OpenSearch client configured with environment variables.
+
+    Returns:
+        OpenSearch client instance
+
+    Raises:
+        ValueError: If required environment variables are not set
+    """
+    host = os.getenv("OC_OPENSEARCH_HOST")
+    if not host:
+        raise ValueError("OC_OPENSEARCH_HOST environment variable is required")
+
+    # Parse host and port
+    if ":" in host:
+        host_name, port = host.split(":", 1)
+        port = int(port)
+    else:
+        host_name = host
+        port = 9200
+
+    client = OpenSearch(
+        hosts=[{"host": host_name, "port": port}],
+        use_ssl=False,
+        verify_certs=False,
+        connection_class=None,
+    )
+
+    return client
+
+
+def get_index_name() -> str:
+    """
+    Get the OpenSearch index name using environment variables and current date.
+
+    Returns:
+        Index name in format: {prefix}YYYYMMDD
+
+    Raises:
+        ValueError: If OC_OPENSEARCH_INDEX_PREFIX is not set
+    """
+    prefix = os.getenv("OC_OPENSEARCH_INDEX_PREFIX")
+    if not prefix:
+        raise ValueError("OC_OPENSEARCH_INDEX_PREFIX environment variable is required")
+
+    current_date = datetime.now().strftime("%Y%m%d")
+    return f"{prefix}{current_date}"
+
+
+def prepare_competition_document(
+    competition: Any, competition_id: str
+) -> dict[str, Any]:
+    """
+    Prepare a Kaggle competition for indexing in OpenSearch.
+
+    Args:
+        competition: Kaggle competition object
+        competition_id: Competition identifier
+
+    Returns:
+        Dictionary ready for OpenSearch indexing
+    """
+
+    # Helper function to safely extract and serialize complex objects
+    def safe_extract(obj, attr: str, default=None):
+        value = getattr(obj, attr, default)
+        if value is None:
+            return default
+
+        # Special handling for tags - extract just the names
+        if attr == "tags" and isinstance(value, list):
+            tag_names = []
+            for item in value:
+                if hasattr(item, "name"):
+                    tag_names.append(str(getattr(item, "name", "")))
+                else:
+                    tag_names.append(str(item))
+            return tag_names
+
+        # Handle other lists of objects
+        if isinstance(value, list):
+            serialized_list = []
+            for item in value:
+                if hasattr(item, "__dict__"):  # Complex object
+                    # Convert complex objects to string
+                    serialized_list.append(str(item))
+                else:
+                    serialized_list.append(item)
+            return serialized_list
+
+        # Handle single complex objects - convert to string
+        if hasattr(value, "__dict__"):
+            return str(value)
+
+        return value
+
+    # Extract common fields from competition object
+    doc = {
+        "competition_id": competition_id,
+        "title": safe_extract(competition, "title", ""),
+        "description": safe_extract(competition, "description", ""),
+        "url": safe_extract(competition, "url", ""),
+        "ref": safe_extract(competition, "ref", ""),
+        "tags": safe_extract(competition, "tags", []),
+        "category": safe_extract(competition, "category", ""),
+        "organizationName": safe_extract(competition, "organizationName", ""),
+        "organizationRef": safe_extract(competition, "organizationRef", ""),
+        "enabledDate": safe_extract(competition, "enabledDate", ""),
+        "deadlineDate": safe_extract(competition, "deadlineDate", ""),
+        "rewardType": safe_extract(competition, "rewardType", ""),
+        "totalTeams": safe_extract(competition, "totalTeams", 0),
+        "userHasEntered": safe_extract(competition, "userHasEntered", False),
+        "userRank": safe_extract(competition, "userRank", None),
+        "mergerDeadline": safe_extract(competition, "mergerDeadline", ""),
+        "newEntrantDeadline": safe_extract(competition, "newEntrantDeadline", ""),
+        "submissionDeadline": safe_extract(competition, "submissionDeadline", ""),
+        "teamMergerDeadline": safe_extract(competition, "teamMergerDeadline", ""),
+        "indexed_at": datetime.now().isoformat(),
+    }
+
+    # Debug logging for tags
+    if doc["tags"]:
+        logger.debug(f"Tags for {competition_id}: {doc['tags']}")
+        logger.debug(f"Tags type: {type(doc['tags'])}")
+        if isinstance(doc["tags"], list) and len(doc["tags"]) > 0:
+            logger.debug(f"First tag type: {type(doc['tags'][0])}")
+
+    # Remove None values and empty strings for cleaner indexing
+    return {k: v for k, v in doc.items() if v is not None and v != ""}
+
+
+def index_competitions_to_opensearch(competitions: dict[str, Any]) -> None:
+    """
+    Index competitions to OpenSearch.
+
+    Args:
+        competitions: Dictionary of competitions with competition_id as key
+
+    Raises:
+        Exception: If indexing fails
+    """
+    if not competitions:
+        logger.warning("No competitions to index")
+        return
+
+    try:
+        client = get_opensearch_client()
+        index_name = get_index_name()
+
+        logger.info(f"Indexing {len(competitions)} competitions to OpenSearch")
+        logger.info(f"Index name: {index_name}")
+
+        # Create index if it doesn't exist
+        if not client.indices.exists(index=index_name):
+            logger.info(f"Creating index: {index_name}")
+            client.indices.create(
+                index=index_name,
+                body={
+                    "mappings": {
+                        "properties": {
+                            "competition_id": {"type": "keyword"},
+                            "title": {"type": "text"},
+                            "description": {"type": "text"},
+                            "url": {"type": "keyword"},
+                            "ref": {"type": "keyword"},
+                            "tags": {"type": "keyword"},
+                            "category": {"type": "keyword"},
+                            "organizationName": {"type": "text"},
+                            "organizationRef": {"type": "keyword"},
+                            "enabledDate": {"type": "date"},
+                            "deadlineDate": {"type": "date"},
+                            "rewardType": {"type": "keyword"},
+                            "totalTeams": {"type": "integer"},
+                            "userHasEntered": {"type": "boolean"},
+                            "userRank": {"type": "integer"},
+                            "mergerDeadline": {"type": "date"},
+                            "newEntrantDeadline": {"type": "date"},
+                            "submissionDeadline": {"type": "date"},
+                            "teamMergerDeadline": {"type": "date"},
+                            "indexed_at": {"type": "date"},
+                        }
+                    }
+                },
+            )
+
+        # Index competitions
+        indexed_count = 0
+        for competition_id, competition in competitions.items():
+            try:
+                doc = prepare_competition_document(competition, competition_id)
+
+                response = client.index(index=index_name, id=competition_id, body=doc)
+
+                if response.get("result") in ["created", "updated"]:
+                    indexed_count += 1
+                    logger.debug(f"Indexed competition: {competition_id}")
+                else:
+                    logger.warning(
+                        f"Unexpected response for {competition_id}: {response}"
+                    )
+
+            except Exception as e:
+                logger.error(f"Failed to index competition {competition_id}: {e}")
+
+        logger.info(f"Successfully indexed {indexed_count} competitions")
+
+    except Exception as e:
+        logger.error(f"Failed to index competitions to OpenSearch: {e}")
+        raise
 
 
 def collect_unique_competitions(search_terms: list[str]) -> dict[str, Any]:
@@ -121,7 +336,9 @@ def print_competitions(competitions: dict[str, Any]) -> None:
 
 
 def main() -> None:
-    """Search for Kaggle competitions with biomedical search terms."""
+    """
+    Search for Kaggle competitions with biomedical search terms and index to OpenSearch.
+    """
     # Define search terms for biomedical/life sciences competitions
     search_terms: list[str] = [
         "medicine",
@@ -139,8 +356,10 @@ def main() -> None:
         # First, collect all unique competitions
         unique_competitions = collect_unique_competitions(search_terms)
 
-        # Then, print all competitions
-        print_competitions(unique_competitions)
+        # Then, index competitions to OpenSearch
+        index_competitions_to_opensearch(unique_competitions)
+
+        logger.info("Successfully completed indexing process")
 
     except Exception as e:
         logger.error(f"Error occurred: {e}")
