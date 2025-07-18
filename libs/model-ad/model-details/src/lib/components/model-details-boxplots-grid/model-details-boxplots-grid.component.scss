@@ -1,5 +1,9 @@
-@use 'styles/src/lib/variables';
+@use 'styles/src/lib/variables' as vars;
 @use 'styles/src/lib/mixins';
+
+:host {
+  --lg-breakpoint: vars.$lg-breakpoint;
+}
 
 h2 {
   padding-bottom: 30px;
@@ -15,11 +19,6 @@ h2 {
 
     @include mixins.respond-to('large') {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    shared-typescript-charts-angular {
-      display: flex;
-      flex-direction: column;
     }
   }
 }

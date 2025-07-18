@@ -1,0 +1,61 @@
+<section>
+  <div class="title-container">
+    <h2>{{ title() }}</h2>
+    <p>
+      The results shown on this page are derived from the analysis of post-mortem brains from
+      {{ modelName() }} mice and matched control animals.
+    </p>
+    <explorers-modal-link
+      text="Data and Methods for this study"
+      title="About the Study"
+      [wikiParams]="wikiParams()"
+    />
+  </div>
+
+  <div class="filters-container full-width-container">
+    <p>Use the following dropdown menus to select the results that are displayed.</p>
+
+    <div class="filters">
+      <div class="filter">
+        <label for="tissue">Tissue</label>
+        <p-select
+          inputId="tissue"
+          [options]="tissueOptions()"
+          [(ngModel)]="selectedTissueOption"
+          placeholder="Select Tissue"
+        ></p-select>
+      </div>
+
+      <div class="filter">
+        <label for="sex">Sex</label>
+        <p-select
+          inputId="sex"
+          [options]="sexOptions"
+          optionLabel="label"
+          [(ngModel)]="selectedSexOption"
+          placeholder="Select Sex"
+        ></p-select>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-of-contents-container full-width-container">
+    <h2>Table of Contents</h2>
+  </div>
+
+  <div class="boxplots-container">
+    @for (evidenceType of evidenceTypes(); track evidenceType; let last = $last) {
+      <div class="boxplots-evidence-type">
+        <model-ad-model-details-boxplots-grid
+          [modelDataList]="getSelectedModelDataForEvidenceType(evidenceType)"
+          [genotypeOrder]="genotypeOrder()"
+          [sexes]="selectedSexOption().value"
+          [title]="evidenceType"
+        />
+        @if (!last) {
+          <hr class="boxplots-separator" />
+        }
+      </div>
+    }
+  </div>
+</section>

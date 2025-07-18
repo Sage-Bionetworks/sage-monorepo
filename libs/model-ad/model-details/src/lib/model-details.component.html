@@ -17,15 +17,22 @@
           <model-ad-model-details-omics [modelName]="model.model" />
         }
         @case ('biomarkers') {
-          <h2>Biomarkers</h2>
-          <model-ad-model-details-boxplots-grid
-            [title]="model.biomarkers[0].evidence_type"
-            [modelDataList]="model.biomarkers.slice(0, 3)"
-            [sexes]="['Male', 'Female']"
+          <model-ad-model-details-boxplots-selector
+            [title]="'Biomarkers'"
+            [modelName]="model.model"
+            [modelControls]="model.matched_controls"
+            [modelDataList]="model.biomarkers"
+            [wikiParams]="biomarkersWikiParams"
           />
         }
         @case ('pathology') {
-          <h2>Pathology</h2>
+          <model-ad-model-details-boxplots-selector
+            [title]="'Pathology'"
+            [modelName]="model.model"
+            [modelControls]="model.matched_controls"
+            [modelDataList]="model.pathology"
+            [wikiParams]="pathologyWikiParams"
+          />
         }
         @case ('resources') {
           <model-ad-model-details-resources [model]="model" />
