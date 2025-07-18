@@ -4,6 +4,13 @@
   "projectType": "application",
   "sourceRoot": "apps/openchallenges/tools/openchallenges_tools",
   "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.index-kaggle-challenges.example .env.index-kaggle-challenges",
+        "cwd": "{projectRoot}"
+      }
+    },
     "lock": {
       "executor": "@nxlv/python:lock",
       "options": {
