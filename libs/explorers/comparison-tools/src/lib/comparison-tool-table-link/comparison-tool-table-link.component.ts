@@ -8,6 +8,14 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./comparison-tool-table-link.component.scss'],
 })
 export class ComparisonToolTableLinkComponent {
-  linkText = input<string>();
-  linkUrl = input<string>();
+  // TODO in a future release data release, this will be required
+  linkText = input<string>('');
+  linkUrl = input<string>('');
+
+  isExternalLink(url: string | null | undefined) {
+    if (typeof url === 'string' && url.trim().startsWith('http')) {
+      return true;
+    }
+    return false;
+  }
 }
