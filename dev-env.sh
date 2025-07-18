@@ -132,6 +132,14 @@ function bioarena-build-images {
   nx run-many --target=build-image --projects=bioarena-* --parallel=3
 }
 
+function bioarena-docker-start {
+  nx serve-detach bioarena-apex
+}
+
+function bioarena-docker-rm {
+  docker rm -f $(docker ps -a --filter "name=^/bioarena-" --format "{{.ID}}")
+}
+
 function observability-build-images {
   nx run-many --target=build-image --projects=observability-* --parallel=3
 }

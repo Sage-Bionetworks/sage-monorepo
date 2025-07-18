@@ -15,4 +15,4 @@ services:
       bioarena-app:
         condition: service_started
       bioarena-controller:
-        condition: service_started
+        condition: service_healthy
