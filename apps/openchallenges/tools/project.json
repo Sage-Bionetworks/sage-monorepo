@@ -7,7 +7,10 @@
     "create-config": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "cp -n .env.index-kaggle-challenges.example .env.index-kaggle-challenges",
+        "commands": [
+          "cp -n .env.example .env",
+          "cp -n .env.index-kaggle-challenges.example .env.index-kaggle-challenges"
+        ],
         "cwd": "{projectRoot}"
       }
     },
