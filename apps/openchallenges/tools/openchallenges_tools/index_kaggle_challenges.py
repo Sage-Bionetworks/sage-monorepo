@@ -1,18 +1,22 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from itertools import chain
+from typing import Any, Optional
 
 import kaggle
 
 
-def fetch_competitions_for_term(search_term):
+def fetch_competitions_for_term(search_term: str) -> tuple[str, list[Any]]:
     """
     Fetch competitions for a single search term.
 
     Args:
-        search_term (str): The search term to query
+        search_term: The search term to query
 
     Returns:
-        tuple: (search_term, competitions_list)
+        Tuple containing the search term and list of competitions
+
+    Raises:
+        Exception: If the API call fails
     """
     api = kaggle.api
     try:
@@ -25,23 +29,43 @@ def fetch_competitions_for_term(search_term):
         return search_term, []
 
 
-def collect_unique_competitions(search_terms):
+def get_competition_id(competition: Any) -> Optional[str]:
+    """
+    Extract a unique identifier from a competition object.
+
+    Args:
+        competition: Kaggle competition object
+
+    Returns:
+        Competition ID if found, None otherwise
+    """
+    return (
+        getattr(competition, "ref", None)
+        or getattr(competition, "id", None)
+        or getattr(competition, "url", None)
+    )
+
+
+def collect_unique_competitions(search_terms: list[str]) -> dict[str, Any]:
     """
     Collect unique competitions from Kaggle API using the provided search terms.
     Uses concurrent processing for better performance.
 
     Args:
-        search_terms (list): List of search terms to query competitions
+        search_terms: List of search terms to query competitions
 
     Returns:
-        dict: Dictionary of unique competitions with competition_id as key
+        Dictionary of unique competitions with competition_id as key
+
+    Raises:
+        Exception: If there's an error during collection
     """
     print("Collecting competitions...")
     print(f"Search terms: {', '.join(search_terms)}")
     print("-" * 80)
 
     # Use ThreadPoolExecutor for concurrent API calls
-    all_competitions_lists = []
+    all_competitions_lists: list[list[Any]] = []
 
     with ThreadPoolExecutor(max_workers=3) as executor:
         # Submit all search tasks concurrently
@@ -59,39 +83,40 @@ def collect_unique_competitions(search_terms):
     all_competitions_flat = chain.from_iterable(all_competitions_lists)
 
     # Create dictionary of unique competitions using dictionary comprehension
-    unique_competitions = {
-        (getattr(comp, "ref", None) or getattr(comp, "id", None) or str(comp)): comp
-        for comp in all_competitions_flat
-        if getattr(comp, "ref", None) or getattr(comp, "id", None)
-    }
+    unique_competitions: dict[str, Any] = {}
+
+    for comp in all_competitions_flat:
+        comp_id = get_competition_id(comp)
+        if comp_id and comp_id not in unique_competitions:
+            unique_competitions[comp_id] = comp
 
     print(f"\nTotal unique competitions collected: {len(unique_competitions)}")
     return unique_competitions
 
 
-def print_competitions(competitions):
+def print_competitions(competitions: dict[str, Any]) -> None:
     """
     Print all competitions to stdout.
 
     Args:
-        competitions (dict): Dictionary of competitions with competition_id as key
+        competitions: Dictionary of competitions with competition_id as key
     """
     print("\n" + "=" * 80)
     print("PRINTING ALL UNIQUE COMPETITIONS")
     print("=" * 80)
 
     for competition_id, competition in competitions.items():
-        title = getattr(competition, "title", "") or ""
+        title = getattr(competition, "title", "") or "No title"
         print(f"Competition: {title}")
         print(f"Competition ID: {competition_id}")
         print(f"Competition object: {competition}")
         print("-" * 80)
 
 
-def main():
+def main() -> None:
     """Search for Kaggle competitions with biomedical search terms."""
     # Define search terms for biomedical/life sciences competitions
-    search_terms = [
+    search_terms: list[str] = [
         "medicine",
         "cancer",
         "cell",
@@ -112,6 +137,7 @@ def main():
 
     except Exception as e:
         print(f"Error occurred: {e}")
+        raise
 
 
 if __name__ == "__main__":
