@@ -4,6 +4,16 @@
   "projectType": "application",
   "sourceRoot": "apps/openchallenges/tools/openchallenges_tools",
   "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "cp -n .env.example .env",
+          "cp -n .env.index-kaggle-challenges.example .env.index-kaggle-challenges"
+        ],
+        "cwd": "{projectRoot}"
+      }
+    },
     "lock": {
       "executor": "@nxlv/python:lock",
       "options": {
@@ -81,10 +91,10 @@
         "cwd": "{projectRoot}"
       }
     },
-    "run-python-version": {
+    "index-kaggle-challenges": {
       "executor": "@nxlv/python:run-commands",
       "options": {
-        "command": "python --version",
+        "command": "uv run openchallenges_tools/index_kaggle_challenges.py",
         "cwd": "{projectRoot}"
       }
     }
