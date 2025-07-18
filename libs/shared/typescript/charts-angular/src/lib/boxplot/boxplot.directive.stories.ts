@@ -13,11 +13,12 @@ const meta: Meta<BoxplotDirective> = {
   component: BoxplotDirective,
   title: 'directives/sageBoxplot',
   argTypes: {
+    xAxisLabelFormatter: { control: false },
     pointTooltipFormatter: { control: false },
   },
   render: (args: BoxplotProps) => ({
     props: args,
-    template: `<div sageBoxplot [points]="points" [summaries]="summaries" [title]="title" [xAxisTitle]="xAxisTitle" [yAxisTitle]="yAxisTitle" [yAxisMin]="yAxisMin" [yAxisMax]="yAxisMax" [xAxisCategoryToTooltipText]="xAxisCategoryToTooltipText" [pointTooltipFormatter]="pointTooltipFormatter" [pointCategoryColors]="pointCategoryColors" [pointCategoryShapes]="pointCategoryShapes" [showLegend]="showLegend" [pointOpacity]="pointOpacity"></div>`,
+    template: `<div sageBoxplot [points]="points" [summaries]="summaries" [title]="title" [xAxisTitle]="xAxisTitle" [xAxisLabelFormatter]="xAxisLabelFormatter" [yAxisTitle]="yAxisTitle" [yAxisMin]="yAxisMin" [yAxisMax]="yAxisMax" [xAxisCategoryToTooltipText]="xAxisCategoryToTooltipText" [pointTooltipFormatter]="pointTooltipFormatter" [pointCategoryColors]="pointCategoryColors" [pointCategoryShapes]="pointCategoryShapes" [showLegend]="showLegend" [pointOpacity]="pointOpacity"></div>`,
   }),
 };
 export default meta;

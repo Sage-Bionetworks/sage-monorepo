@@ -54,6 +54,13 @@ export class ModelDetailsBoxplotComponent {
     return `${params.marker} ${pt.text ?? pt.value.toString()}`;
   };
 
+  xAxisLabelFormatter = (value: string) => {
+    if (value.length > 10) {
+      return value.replace(/[-*]/, (match) => match + '\n');
+    }
+    return value;
+  };
+
   formatYAxisTitle = () => {
     const evidenceType = this.decodeGreekEntityPipe.transform(
       this.titleCasePipe.transform(this.modelData().evidence_type),

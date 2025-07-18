@@ -47,6 +47,7 @@ export interface BoxplotProps {
   summaries?: CategoryBoxplotSummary[];
   title?: string;
   xAxisTitle?: string;
+  xAxisLabelFormatter?: (value: string) => string;
   yAxisTitle?: string;
   yAxisMin?: number;
   yAxisMax?: number;
