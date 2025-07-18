@@ -71,7 +71,9 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
       columns = config.columns.map((column) => column.name);
       return columns;
     } else {
-      throw new Error('Missing comparison tool config data');
+      throw new Error(
+        'Missing comparison tool config data: "columns" property is undefined or empty.',
+      );
     }
   }
 
