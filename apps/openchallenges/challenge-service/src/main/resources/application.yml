@@ -13,19 +13,14 @@ server:
 spring:
   application:
     name: openchallenges-challenge-service
-  # profiles:
-  #   active: dev,local
+  profiles:
+    active: dev
   flyway:
     enabled: true
     clean-disabled: false
-  datasource:
-    url: jdbc:postgresql://openchallenges-postgres:8091/challenge_service
-    username: challenge_service
-    password: changeme
-    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:

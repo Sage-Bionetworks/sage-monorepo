@@ -27,7 +27,7 @@ public class ChallengeStar {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false, updatable = false)
-  private Long id;
+  private Integer id;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "challenge_id", nullable = false)
@@ -35,7 +35,7 @@ public class ChallengeStar {
 
   @Column(name = "user_id", nullable = false)
   @GenericField
-  private int userId;
+  private Long userId;
 
   @Column(name = "created_at")
   private OffsetDateTime createdAt;

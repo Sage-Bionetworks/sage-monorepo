@@ -38,6 +38,14 @@ class ChallengeContributionTest {
   }
 
   /**
+   * Test the property 'id'
+   */
+  @Test
+  void idTest() {
+    // TODO: test id
+  }
+
+  /**
    * Test the property 'challengeId'
    */
   @Test

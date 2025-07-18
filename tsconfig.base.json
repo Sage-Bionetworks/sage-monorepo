@@ -10,7 +10,7 @@
     "importHelpers": true,
     "target": "es2024",
     "module": "esnext",
-    "lib": ["ES2024", "dom"],
+    "lib": ["es2024", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "forceConsistentCasingInFileNames": true,

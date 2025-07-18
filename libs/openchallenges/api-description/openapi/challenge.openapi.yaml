@@ -61,9 +61,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Challenge'
-            application/ld+json:
-              schema:
-                $ref: '#/components/schemas/ChallengeJsonLd'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
@@ -84,6 +81,26 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /challenges/{challengeId}/json-ld:
+    parameters:
+      - $ref: '#/components/parameters/challengeId'
+    get:
+      tags:
+        - Challenge
+      summary: Get a challenge in JSON-LD format
+      description: Returns the challenge specified in JSON-LD format
+      operationId: getChallengeJsonLd
+      responses:
+        '200':
+          description: A challenge
+          content:
+            application/ld+json:
+              schema:
+                $ref: '#/components/schemas/ChallengeJsonLd'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':

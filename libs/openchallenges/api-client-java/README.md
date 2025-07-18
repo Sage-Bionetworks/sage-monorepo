@@ -82,23 +82,29 @@ Please follow the [installation](#installation) instruction and execute the foll
 
 ```java
 import org.sagebionetworks.openchallenges.api.client.*;
-import org.sagebionetworks.openchallenges.api.client.api.ChallengeApi;
+import org.sagebionetworks.openchallenges.api.client.api.ApiKeyApi;
 import org.sagebionetworks.openchallenges.api.client.auth.*;
 import org.sagebionetworks.openchallenges.api.client.model.*;
 
-public class ChallengeApiExample {
+public class ApiKeyApiExample {
 
   public static void main(String[] args) {
     ApiClient defaultClient = new ApiClient();
     defaultClient.setBasePath("http://localhost/v1");
 
-    ChallengeApi apiInstance = new ChallengeApi(defaultClient);
-    Long challengeId = 56L; // Long | The unique identifier of the challenge.
+    // Configure HTTP bearer authorization: apiBearerAuth
+    HttpBearerAuth apiBearerAuth = (HttpBearerAuth) defaultClient.getAuthentication(
+      "apiBearerAuth"
+    );
+    apiBearerAuth.setBearerToken("BEARER TOKEN");
+
+    ApiKeyApi apiInstance = new ApiKeyApi(defaultClient);
+    CreateApiKeyRequest createApiKeyRequest = new CreateApiKeyRequest(); // CreateApiKeyRequest |
     try {
-      Challenge result = apiInstance.getChallenge(challengeId);
+      CreateApiKeyResponse result = apiInstance.createApiKey(createApiKeyRequest);
       System.out.println(result);
     } catch (HttpStatusCodeException e) {
-      System.err.println("Exception when calling ChallengeApi#getChallenge");
+      System.err.println("Exception when calling ApiKeyApi#createApiKey");
       System.err.println("Status code: " + e.getStatusCode().value());
       System.err.println("Reason: " + e.getResponseBodyAsString());
       System.err.println("Response headers: " + e.getResponseHeaders());
@@ -113,30 +119,43 @@ public class ChallengeApiExample {
 
 All URIs are relative to _http://localhost/v1_
 
-| Class                      | Method                                                                                        | HTTP request                                        | Description                                   |
-| -------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------- | --------------------------------------------- |
-| _ChallengeApi_             | [**getChallenge**](docs/ChallengeApi.md#getChallenge)                                         | **GET** /challenges/{challengeId}                   | Get a challenge                               |
-| _ChallengeApi_             | [**listChallenges**](docs/ChallengeApi.md#listChallenges)                                     | **GET** /challenges                                 | List challenges                               |
-| _ChallengeAnalyticsApi_    | [**getChallengesPerYear**](docs/ChallengeAnalyticsApi.md#getChallengesPerYear)                | **GET** /challengeAnalytics/challengesPerYear       | Get the number of challenges tracked per year |
-| _ChallengeContributionApi_ | [**listChallengeContributions**](docs/ChallengeContributionApi.md#listChallengeContributions) | **GET** /challenges/{challengeId}/contributions     | List challenge contributions                  |
-| _ChallengePlatformApi_     | [**getChallengePlatform**](docs/ChallengePlatformApi.md#getChallengePlatform)                 | **GET** /challengePlatforms/{challengePlatformName} | Get a challenge platform                      |
-| _ChallengePlatformApi_     | [**listChallengePlatforms**](docs/ChallengePlatformApi.md#listChallengePlatforms)             | **GET** /challengePlatforms                         | List challenge platforms                      |
-| _EdamConceptApi_           | [**listEdamConcepts**](docs/EdamConceptApi.md#listEdamConcepts)                               | **GET** /edamConcepts                               | List EDAM concepts                            |
-| _ImageApi_                 | [**getImage**](docs/ImageApi.md#getImage)                                                     | **GET** /images                                     | Get an image                                  |
-| _OrganizationApi_          | [**getOrganization**](docs/OrganizationApi.md#getOrganization)                                | **GET** /organizations/{org}                        | Get an organization                           |
-| _OrganizationApi_          | [**listOrganizations**](docs/OrganizationApi.md#listOrganizations)                            | **GET** /organizations                              | List organizations                            |
-| _UserApi_                  | [**createUser**](docs/UserApi.md#createUser)                                                  | **POST** /users/register                            | Create a user                                 |
-| _UserApi_                  | [**deleteUser**](docs/UserApi.md#deleteUser)                                                  | **DELETE** /users/{userId}                          | Delete a user                                 |
-| _UserApi_                  | [**getUser**](docs/UserApi.md#getUser)                                                        | **GET** /users/{userId}                             | Get a user                                    |
-| _UserApi_                  | [**listUsers**](docs/UserApi.md#listUsers)                                                    | **GET** /users                                      | Get all users                                 |
+| Class                      | Method                                                                                                  | HTTP request                                                                 | Description                                       |
+| -------------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------- |
+| _ApiKeyApi_                | [**createApiKey**](docs/ApiKeyApi.md#createApiKey)                                                      | **POST** /auth/api-keys                                                      | Create API key                                    |
+| _ApiKeyApi_                | [**deleteApiKey**](docs/ApiKeyApi.md#deleteApiKey)                                                      | **DELETE** /auth/api-keys/{keyId}                                            | Delete API key                                    |
+| _ApiKeyApi_                | [**listApiKeys**](docs/ApiKeyApi.md#listApiKeys)                                                        | **GET** /auth/api-keys                                                       | List API keys                                     |
+| _AuthenticationApi_        | [**login**](docs/AuthenticationApi.md#login)                                                            | **POST** /auth/login                                                         | User login                                        |
+| _AuthenticationApi_        | [**validateApiKey**](docs/AuthenticationApi.md#validateApiKey)                                          | **POST** /auth/validate                                                      | Validate API key                                  |
+| _ChallengeApi_             | [**deleteChallengeById**](docs/ChallengeApi.md#deleteChallengeById)                                     | **DELETE** /challenges/{challengeId}                                         | Delete a challenge                                |
+| _ChallengeApi_             | [**getChallenge**](docs/ChallengeApi.md#getChallenge)                                                   | **GET** /challenges/{challengeId}                                            | Get a challenge                                   |
+| _ChallengeApi_             | [**getChallengeJsonLd**](docs/ChallengeApi.md#getChallengeJsonLd)                                       | **GET** /challenges/{challengeId}/json-ld                                    | Get a challenge in JSON-LD format                 |
+| _ChallengeApi_             | [**listChallenges**](docs/ChallengeApi.md#listChallenges)                                               | **GET** /challenges                                                          | List challenges                                   |
+| _ChallengeAnalyticsApi_    | [**getChallengesPerYear**](docs/ChallengeAnalyticsApi.md#getChallengesPerYear)                          | **GET** /challengeAnalytics/challengesPerYear                                | Get the number of challenges tracked per year     |
+| _ChallengeContributionApi_ | [**addChallengeContribution**](docs/ChallengeContributionApi.md#addChallengeContribution)               | **POST** /challenges/{challengeId}/contributions                             | Create a new contribution for a challenge         |
+| _ChallengeContributionApi_ | [**deleteAllChallengeContributions**](docs/ChallengeContributionApi.md#deleteAllChallengeContributions) | **DELETE** /challenges/{challengeId}/contributions                           | Delete all contributions for a specific challenge |
+| _ChallengeContributionApi_ | [**deleteChallengeContribution**](docs/ChallengeContributionApi.md#deleteChallengeContribution)         | **DELETE** /challenges/{challengeId}/contributions/{challengeContributionId} | Delete a specific challenge contribution          |
+| _ChallengeContributionApi_ | [**getChallengeContribution**](docs/ChallengeContributionApi.md#getChallengeContribution)               | **GET** /challenges/{challengeId}/contributions/{challengeContributionId}    | Get a specific challenge contribution             |
+| _ChallengeContributionApi_ | [**listChallengeContributions**](docs/ChallengeContributionApi.md#listChallengeContributions)           | **GET** /challenges/{challengeId}/contributions                              | List challenge contributions                      |
+| _ChallengeContributionApi_ | [**updateChallengeContribution**](docs/ChallengeContributionApi.md#updateChallengeContribution)         | **PUT** /challenges/{challengeId}/contributions/{challengeContributionId}    | Update an existing challenge contribution         |
+| _ChallengePlatformApi_     | [**deleteChallengePlatform**](docs/ChallengePlatformApi.md#deleteChallengePlatform)                     | **DELETE** /challengePlatforms/{challengePlatformId}                         | Delete a challenge platform                       |
+| _ChallengePlatformApi_     | [**getChallengePlatform**](docs/ChallengePlatformApi.md#getChallengePlatform)                           | **GET** /challengePlatforms/{challengePlatformId}                            | Get a challenge platform                          |
+| _ChallengePlatformApi_     | [**listChallengePlatforms**](docs/ChallengePlatformApi.md#listChallengePlatforms)                       | **GET** /challengePlatforms                                                  | List challenge platforms                          |
+| _EdamConceptApi_           | [**listEdamConcepts**](docs/EdamConceptApi.md#listEdamConcepts)                                         | **GET** /edamConcepts                                                        | List EDAM concepts                                |
+| _ImageApi_                 | [**getImage**](docs/ImageApi.md#getImage)                                                               | **GET** /images                                                              | Get an image                                      |
+| _OrganizationApi_          | [**deleteOrganization**](docs/OrganizationApi.md#deleteOrganization)                                    | **DELETE** /organizations/{org}                                              | Delete an organization                            |
+| _OrganizationApi_          | [**getOrganization**](docs/OrganizationApi.md#getOrganization)                                          | **GET** /organizations/{org}                                                 | Get an organization                               |
+| _OrganizationApi_          | [**listOrganizations**](docs/OrganizationApi.md#listOrganizations)                                      | **GET** /organizations                                                       | List organizations                                |
 
 ## Documentation for Models
 
+- [ApiKey](docs/ApiKey.md)
 - [BasicError](docs/BasicError.md)
 - [Challenge](docs/Challenge.md)
 - [ChallengeCategory](docs/ChallengeCategory.md)
 - [ChallengeContribution](docs/ChallengeContribution.md)
+- [ChallengeContributionCreateRequest](docs/ChallengeContributionCreateRequest.md)
 - [ChallengeContributionRole](docs/ChallengeContributionRole.md)
+- [ChallengeContributionUpdateRequest](docs/ChallengeContributionUpdateRequest.md)
 - [ChallengeContributionsPage](docs/ChallengeContributionsPage.md)
 - [ChallengeDirection](docs/ChallengeDirection.md)
 - [ChallengeIncentive](docs/ChallengeIncentive.md)
@@ -152,6 +171,8 @@ All URIs are relative to _http://localhost/v1_
 - [ChallengeSubmissionType](docs/ChallengeSubmissionType.md)
 - [ChallengesPage](docs/ChallengesPage.md)
 - [ChallengesPerYear](docs/ChallengesPerYear.md)
+- [CreateApiKeyRequest](docs/CreateApiKeyRequest.md)
+- [CreateApiKeyResponse](docs/CreateApiKeyResponse.md)
 - [EdamConcept](docs/EdamConcept.md)
 - [EdamConceptDirection](docs/EdamConceptDirection.md)
 - [EdamConceptSearchQuery](docs/EdamConceptSearchQuery.md)
@@ -162,6 +183,8 @@ All URIs are relative to _http://localhost/v1_
 - [ImageAspectRatio](docs/ImageAspectRatio.md)
 - [ImageHeight](docs/ImageHeight.md)
 - [ImageQuery](docs/ImageQuery.md)
+- [LoginRequest](docs/LoginRequest.md)
+- [LoginResponse](docs/LoginResponse.md)
 - [Organization](docs/Organization.md)
 - [OrganizationCategory](docs/OrganizationCategory.md)
 - [OrganizationDirection](docs/OrganizationDirection.md)
@@ -170,17 +193,19 @@ All URIs are relative to _http://localhost/v1_
 - [OrganizationsPage](docs/OrganizationsPage.md)
 - [PageMetadata](docs/PageMetadata.md)
 - [SimpleChallengePlatform](docs/SimpleChallengePlatform.md)
-- [User](docs/User.md)
-- [UserCreateRequest](docs/UserCreateRequest.md)
-- [UserCreateResponse](docs/UserCreateResponse.md)
-- [UserStatus](docs/UserStatus.md)
-- [UsersPage](docs/UsersPage.md)
+- [ValidateApiKeyRequest](docs/ValidateApiKeyRequest.md)
+- [ValidateApiKeyResponse](docs/ValidateApiKeyResponse.md)
 
 <a id="documentation-for-authorization"></a>
 
 ## Documentation for Authorization
 
-Endpoints do not require authorization.
+Authentication schemes defined for the API:
+<a id="apiBearerAuth"></a>
+
+### apiBearerAuth
+
+- **Type**: HTTP Bearer Token authentication (api_key)
 
 ## Recommendation
 

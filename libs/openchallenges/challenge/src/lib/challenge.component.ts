@@ -84,11 +84,7 @@ export class ChallengeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.challenge$ = this.activatedRoute.params.pipe(
-      switchMap((params) =>
-        this.challengeService.getChallenge(params['challengeId'], undefined, undefined, {
-          httpHeaderAccept: 'application/ld+json',
-        }),
-      ),
+      switchMap((params) => this.challengeService.getChallengeJsonLd(params['challengeId'])),
       catchError((err) => {
         const error = handleHttpError(err, this.router, {
           404: '/not-found',

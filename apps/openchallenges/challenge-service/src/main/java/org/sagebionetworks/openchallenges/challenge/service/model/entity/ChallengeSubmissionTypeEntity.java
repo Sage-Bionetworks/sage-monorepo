@@ -29,7 +29,7 @@ public class ChallengeSubmissionTypeEntity {
   @Column(nullable = false, updatable = false)
   private Long id;
 
-  @Column(nullable = false)
+  @Column(nullable = false, length = 50)
   @GenericField
   private String name;
 

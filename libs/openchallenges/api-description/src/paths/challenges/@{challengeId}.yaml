@@ -13,9 +13,6 @@ get:
         application/json:
           schema:
             $ref: ../../components/schemas/Challenge.yaml
-        application/ld+json:
-          schema:
-            $ref: ../../components/schemas/ChallengeJsonLd.yaml
     '404':
       $ref: ../../components/responses/NotFound.yaml
     '500':
