@@ -1,0 +1,14 @@
+services:
+  bioarena-app:
+    image: ghcr.io/sage-bionetworks/bioarena-app:${BIOARENA_VERSION:-local}
+    container_name: bioarena-app
+    restart: always
+    networks:
+      - bioarena
+    ports:
+      - '8100:8100'
+    env_file:
+      - ../../../apps/bioarena/app/.env
+    depends_on:
+      bioarena-controller:
+        condition: service_started

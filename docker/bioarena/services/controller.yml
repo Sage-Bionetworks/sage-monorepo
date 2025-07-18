@@ -1,0 +1,11 @@
+services:
+  bioarena-controller:
+    image: ghcr.io/sage-bionetworks/bioarena-controller:${BIOARENA_VERSION:-local}
+    container_name: bioarena-controller
+    restart: always
+    networks:
+      - bioarena
+    ports:
+      - '21001:21001'
+    env_file:
+      - ../../../apps/bioarena/controller/.env
