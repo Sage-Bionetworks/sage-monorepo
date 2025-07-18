@@ -15,6 +15,7 @@ export class ModelDetailsBoxplotsGridComponent {
   private readonly breakpointObserver = inject(BreakpointObserver);
 
   modelDataList = input.required<ModelData[]>();
+  genotypeOrder = input<string[] | undefined>();
   sexes = input.required<IndividualData.SexEnum[]>();
   title = input.required<string>();
 

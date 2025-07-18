@@ -48,6 +48,7 @@
       <div class="boxplots-evidence-type">
         <model-ad-model-details-boxplots-grid
           [modelDataList]="getSelectedModelDataForEvidenceType(evidenceType)"
+          [genotypeOrder]="genotypeOrder()"
           [sexes]="selectedSexOption().value"
           [title]="evidenceType"
         />

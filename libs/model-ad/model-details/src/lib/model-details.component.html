@@ -20,6 +20,7 @@
           <model-ad-model-details-boxplots-selector
             [title]="'Biomarkers'"
             [modelName]="model.model"
+            [modelControls]="model.matched_controls"
             [modelDataList]="model.biomarkers"
             [wikiParams]="biomarkersWikiParams"
           />
@@ -28,6 +29,7 @@
           <model-ad-model-details-boxplots-selector
             [title]="'Pathology'"
             [modelName]="model.model"
+            [modelControls]="model.matched_controls"
             [modelDataList]="model.pathology"
             [wikiParams]="pathologyWikiParams"
           />

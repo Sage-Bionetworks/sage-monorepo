@@ -5,6 +5,7 @@ import {
   SvgIconServiceStub,
   validWikiParams,
 } from '@sagebionetworks/explorers/testing';
+import { IndividualData } from '@sagebionetworks/model-ad/api-client-angular';
 import { modelMock } from '@sagebionetworks/model-ad/testing';
 import { render, screen, waitFor } from '@testing-library/angular';
 import { ModelDetailsBoxplotsSelectorComponent } from './model-details-boxplots-selector.component';
@@ -12,16 +13,19 @@ import { ModelDetailsBoxplotsSelectorComponent } from './model-details-boxplots-
 const mockTitle = 'Pathology';
 
 async function setup(model = modelMock, title = mockTitle, wikiParams = validWikiParams) {
-  return render(ModelDetailsBoxplotsSelectorComponent, {
+  const { fixture } = await render(ModelDetailsBoxplotsSelectorComponent, {
     imports: [MockWikiComponent],
     componentInputs: {
       title: title,
       modelName: model.model,
+      modelControls: model.matched_controls,
       modelDataList: model.pathology,
       wikiParams: wikiParams,
     },
     providers: [provideHttpClient(), { provide: SvgIconService, useClass: SvgIconServiceStub }],
   });
+  const component = fixture.componentInstance;
+  return { component };
 }
 
 describe('ModelDetailsBoxplotsSelectorComponent', () => {
@@ -57,6 +61,59 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
 
     await waitFor(() => {
       expect(sexSelect).toHaveAccessibleName('Male & Female');
+    });
+  });
+
+  it('should return the expected genotype order', async () => {
+    const basePt = { sex: IndividualData.SexEnum.Male, individual_id: '1', value: 100 };
+    const mockModelDataList = [
+      {
+        model: 'ModelName',
+        evidence_type: 'Test',
+        tissue: 'Brain',
+        age: '4 months',
+        units: 'test',
+        data: [
+          { ...basePt, genotype: 'ModelName' },
+          { ...basePt, genotype: 'NewGenotype1' },
+          { ...basePt, genotype: 'Control2' },
+          { ...basePt, genotype: 'Control1' },
+          { ...basePt, genotype: 'NewGenotype2' },
+        ],
+      },
+      {
+        model: 'ModelName',
+        evidence_type: 'Test2',
+        tissue: 'Brain',
+        age: '4 months',
+        units: 'test',
+        data: [
+          { ...basePt, genotype: 'NewGenotype3' },
+          { ...basePt, genotype: 'ModelName' },
+        ],
+      },
+    ];
+
+    const { component } = await setup(
+      {
+        ...modelMock,
+        model: 'ModelName',
+        matched_controls: ['Control1', 'Control2'],
+        pathology: mockModelDataList,
+      },
+      mockTitle,
+      validWikiParams,
+    );
+
+    await waitFor(() => {
+      expect(component.genotypeOrder()).toEqual([
+        'Control1',
+        'Control2',
+        'ModelName',
+        'NewGenotype1',
+        'NewGenotype2',
+        'NewGenotype3',
+      ]);
     });
   });
 });

@@ -32,6 +32,7 @@ export class ModelDetailsBoxplotComponent {
   modelData = input.required<ModelData>();
   sexes = input.required<IndividualData.SexEnum[]>();
   showLegend = input<boolean>(false);
+  genotypeOrder = input<string[] | undefined>();
 
   points = computed<CategoryPoint[]>(() => {
     return this.modelData()
