@@ -337,10 +337,36 @@ def print_competitions(competitions: dict[str, Any]) -> None:
         logger.info("-" * 80)
 
 
+def check_kaggle_authentication() -> None:
+    """
+    Check if the user is authenticated with Kaggle. Raise an error if not.
+    """
+    api = kaggle.api
+    try:
+        user = api.get_config_value("username")
+        key = api.get_config_value("key")
+        if not user or not key:
+            logger.error(
+                "Kaggle authentication failed: Missing Kaggle username or key."
+            )
+            # Exit gracefully without stacktrace
+            print("ERROR: Kaggle authentication failed. Please check your credentials.")
+            exit(1)
+        # Optionally, test API access
+        api.authenticate()
+    except Exception:
+        logger.error("Kaggle authentication failed. Please check your credentials.")
+        print("ERROR: Kaggle authentication failed. Please check your credentials.")
+        exit(1)
+
+
 def main() -> None:
     """
     Search for Kaggle competitions with biomedical search terms and index to OpenSearch.
     """
+    # Check Kaggle authentication first
+    check_kaggle_authentication()
+
     # Define search terms for biomedical/life sciences competitions
     search_terms: list[str] = [
         "medicine",
