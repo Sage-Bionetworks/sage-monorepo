@@ -1,8 +1,15 @@
+import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from itertools import chain
 from typing import Any, Optional
 
 import kaggle
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
 
 
 def fetch_competitions_for_term(search_term: str) -> tuple[str, list[Any]]:
@@ -22,10 +29,10 @@ def fetch_competitions_for_term(search_term: str) -> tuple[str, list[Any]]:
     try:
         competitions = api.competitions_list(search=search_term)
         count = len(competitions) if competitions else 0
-        print(f"Found {count} competitions for '{search_term}'")
+        logger.info(f"Found {count} competitions for '{search_term}'")
         return search_term, competitions or []
     except Exception as e:
-        print(f"Error searching for '{search_term}': {e}")
+        logger.error(f"Error searching for '{search_term}': {e}")
         return search_term, []
 
 
@@ -60,9 +67,9 @@ def collect_unique_competitions(search_terms: list[str]) -> dict[str, Any]:
     Raises:
         Exception: If there's an error during collection
     """
-    print("Collecting competitions...")
-    print(f"Search terms: {', '.join(search_terms)}")
-    print("-" * 80)
+    logger.info("Collecting competitions...")
+    logger.info(f"Search terms: {', '.join(search_terms)}")
+    logger.info("-" * 80)
 
     # Use ThreadPoolExecutor for concurrent API calls
     all_competitions_lists: list[list[Any]] = []
@@ -90,7 +97,7 @@ def collect_unique_competitions(search_terms: list[str]) -> dict[str, Any]:
         if comp_id and comp_id not in unique_competitions:
             unique_competitions[comp_id] = comp
 
-    print(f"\nTotal unique competitions collected: {len(unique_competitions)}")
+    logger.info(f"Total unique competitions collected: {len(unique_competitions)}")
     return unique_competitions
 
 
@@ -101,16 +108,16 @@ def print_competitions(competitions: dict[str, Any]) -> None:
     Args:
         competitions: Dictionary of competitions with competition_id as key
     """
-    print("\n" + "=" * 80)
-    print("PRINTING ALL UNIQUE COMPETITIONS")
-    print("=" * 80)
+    logger.info("\n" + "=" * 80)
+    logger.info("PRINTING ALL UNIQUE COMPETITIONS")
+    logger.info("=" * 80)
 
     for competition_id, competition in competitions.items():
         title = getattr(competition, "title", "") or "No title"
-        print(f"Competition: {title}")
-        print(f"Competition ID: {competition_id}")
-        print(f"Competition object: {competition}")
-        print("-" * 80)
+        logger.info(f"Competition: {title}")
+        logger.debug(f"Competition ID: {competition_id}")
+        logger.debug(f"Competition object: {competition}")
+        logger.info("-" * 80)
 
 
 def main() -> None:
@@ -136,7 +143,7 @@ def main() -> None:
         print_competitions(unique_competitions)
 
     except Exception as e:
-        print(f"Error occurred: {e}")
+        logger.error(f"Error occurred: {e}")
         raise
 
 
