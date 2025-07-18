@@ -349,14 +349,11 @@ def check_kaggle_authentication() -> None:
             logger.error(
                 "Kaggle authentication failed: Missing Kaggle username or key."
             )
-            # Exit gracefully without stacktrace
-            print("ERROR: Kaggle authentication failed. Please check your credentials.")
             exit(1)
         # Optionally, test API access
         api.authenticate()
     except Exception:
         logger.error("Kaggle authentication failed. Please check your credentials.")
-        print("ERROR: Kaggle authentication failed. Please check your credentials.")
         exit(1)
 
 
