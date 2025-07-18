@@ -12,13 +12,7 @@ services:
     ports:
       - '8111:8111'
     depends_on:
-      # bioarena-api-server:
-      #   condition: service_started
       bioarena-app:
         condition: service_started
       bioarena-controller:
         condition: service_started
-    # deploy:
-    #   resources:
-    #     limits:
-    #       memory: 200M
