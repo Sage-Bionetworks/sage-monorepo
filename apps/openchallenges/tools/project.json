@@ -88,10 +88,10 @@
         "cwd": "{projectRoot}"
       }
     },
-    "run-python-version": {
+    "index-kaggle-challenges": {
       "executor": "@nxlv/python:run-commands",
       "options": {
-        "command": "python --version",
+        "command": "uv run openchallenges_tools/index_kaggle_challenges.py",
         "cwd": "{projectRoot}"
       }
     }
