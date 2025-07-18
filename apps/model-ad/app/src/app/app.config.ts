@@ -22,7 +22,7 @@ import { MessageService } from 'primeng/api';
 import { providePrimeNG } from 'primeng/config';
 import { routes } from './app.routes';
 import { ModelAdPreset } from './primeNGPreset';
-import { ErrorService } from '@sagebionetworks/model-ad/services';
+import { GlobalErrorHandler } from '@sagebionetworks/explorers/services';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -61,6 +61,6 @@ export const appConfig: ApplicationConfig = {
       }),
     ),
     MessageService,
-    { provide: ErrorHandler, useClass: ErrorService },
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
   ],
 };

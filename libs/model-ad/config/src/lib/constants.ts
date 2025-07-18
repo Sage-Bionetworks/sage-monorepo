@@ -22,5 +22,3 @@ export const ROUTE_PATHS = {
   TERMS_OF_SERVICE: 'terms-of-service',
   NOT_FOUND: 'not-found',
 } as const;
-
-export const TOAST_DURATION = 5000; // milliseconds
