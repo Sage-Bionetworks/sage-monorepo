@@ -18,7 +18,7 @@ const meta: Meta<BoxplotDirective> = {
   },
   render: (args: BoxplotProps) => ({
     props: args,
-    template: `<div sageBoxplot [points]="points" [summaries]="summaries" [title]="title" [xAxisTitle]="xAxisTitle" [xAxisLabelFormatter]="xAxisLabelFormatter" [yAxisTitle]="yAxisTitle" [yAxisMin]="yAxisMin" [yAxisMax]="yAxisMax" [xAxisCategoryToTooltipText]="xAxisCategoryToTooltipText" [pointTooltipFormatter]="pointTooltipFormatter" [pointCategoryColors]="pointCategoryColors" [pointCategoryShapes]="pointCategoryShapes" [showLegend]="showLegend" [pointOpacity]="pointOpacity"></div>`,
+    template: `<div sageBoxplot [points]="points" [summaries]="summaries" [title]="title" [xAxisTitle]="xAxisTitle" [xAxisLabelFormatter]="xAxisLabelFormatter" [xAxisCategories]="xAxisCategories" [yAxisTitle]="yAxisTitle" [yAxisMin]="yAxisMin" [yAxisMax]="yAxisMax" [xAxisCategoryToTooltipText]="xAxisCategoryToTooltipText" [pointTooltipFormatter]="pointTooltipFormatter" [pointCategoryColors]="pointCategoryColors" [pointCategoryShapes]="pointCategoryShapes" [showLegend]="showLegend" [pointOpacity]="pointOpacity"></div>`,
   }),
 };
 export default meta;
@@ -56,6 +56,7 @@ export const DynamicSummary: Story = {
     points: dynamicBoxplotPoints,
     xAxisTitle: 'MODEL',
     yAxisTitle: 'Insoluble A&beta;40 #objects/sqmm',
+    xAxisCategories: ['Experimental', 'Control2', 'Control1'],
     pointTooltipFormatter: (pt: CategoryPoint, params: CallbackDataParams) =>
       `${pt.pointCategory}: ${pt.value}`,
     pointCategoryColors: { Male: 'yellow', Female: 'green' },

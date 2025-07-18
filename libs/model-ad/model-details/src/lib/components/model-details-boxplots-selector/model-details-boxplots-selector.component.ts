@@ -15,6 +15,7 @@ import { ModelDetailsBoxplotsGridComponent } from '../model-details-boxplots-gri
 export class ModelDetailsBoxplotsSelectorComponent {
   title = input.required<string>();
   modelName = input.required<string>();
+  modelControls = input.required<string[]>();
   modelDataList = input.required<ModelData[]>();
   wikiParams = input.required<SynapseWikiParams>();
 
@@ -25,15 +26,9 @@ export class ModelDetailsBoxplotsSelectorComponent {
   ];
   selectedSexOption = signal(this.sexOptions[0]);
 
-  isLoading = computed(() => {
-    const modelData = this.modelDataList();
-    return !modelData || modelData.length === 0;
-  });
-
   tissueOptions = computed(() => {
     return Array.from(new Set(this.modelDataList().map((item) => item.tissue)));
   });
-
   selectedTissueOption = signal('');
 
   constructor() {
@@ -49,6 +44,18 @@ export class ModelDetailsBoxplotsSelectorComponent {
     return this.modelDataList().filter(
       (modelData) => modelData.tissue === this.selectedTissueOption(),
     );
+  });
+
+  genotypeOrder = computed(() => {
+    const baseGenotypes = new Set([...this.modelControls(), this.modelName()]);
+    const extraGenotypes = [
+      ...new Set(
+        this.selectedModelDataList().flatMap((modelData) =>
+          modelData.data.map((item) => item.genotype),
+        ),
+      ),
+    ].filter((genotype) => !baseGenotypes.has(genotype));
+    return [...baseGenotypes, ...extraGenotypes];
   });
 
   evidenceTypes = computed(() => {
