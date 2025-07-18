@@ -1,6 +1,11 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import { dataVersionRoute, modelRoute } from './components';
+import {
+  comparisonToolConfigRoute,
+  dataVersionRoute,
+  modelOverviewRoute,
+  modelRoute,
+} from './components';
 
 const mongodbUser = process.env.MONGODB_USER;
 const mongodbPass = process.env.MONGODB_PASS;
@@ -46,6 +51,8 @@ const router = express.Router();
 mongoose.connection.once('open', async () => {
   router.get('/dataversion', dataVersionRoute);
   router.get('/models/:model', modelRoute);
+  router.get('/comparison-tool-config', comparisonToolConfigRoute);
+  router.get('/comparison-tools/model-overview', modelOverviewRoute);
 });
 
 export default router;

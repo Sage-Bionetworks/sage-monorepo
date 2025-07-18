@@ -1,0 +1,28 @@
+type: object
+description: Model Overview object for comparison tools
+properties:
+  model:
+    type: string
+    description: Model name
+  model_type:
+    type: string
+    description: Model type (e.g., Late Onset AD, Familial AD)
+  matched_controls:
+    type: array
+    items:
+      type: string
+    description: List of matched control models
+  gene_expression:
+    $ref: './ModelOverviewLink.yaml'
+  disease_correlation:
+    $ref: './ModelOverviewLink.yaml'
+  biomarkers:
+    $ref: './ModelOverviewLink.yaml'
+  pathology:
+    $ref: './ModelOverviewLink.yaml'
+  study_data:
+    $ref: './ModelOverviewLink.yaml'
+  jax_strain:
+    $ref: './ModelOverviewLink.yaml'
+  center:
+    $ref: './ModelOverviewLink.yaml'
