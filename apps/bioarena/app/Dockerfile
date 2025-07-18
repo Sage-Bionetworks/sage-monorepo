@@ -10,4 +10,4 @@ RUN pip install --no-cache-dir \
 
 EXPOSE 8100
 
-ENTRYPOINT ["python", "-m", "fastchat.serve.gradio_web_server_multi", "--controller-url", "http://bioarena-controller:21001", "--port", "8100"]
+ENTRYPOINT ["/bin/sh", "-c", "python -m fastchat.serve.gradio_web_server_multi --controller-url http://${CONTROLLER_HOST}:${CONTROLLER_PORT} --port 8100"]
