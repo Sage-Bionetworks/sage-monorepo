@@ -7,7 +7,8 @@ RUN apt-get update -y && apt-get install -y \
     python3.9 python3.9-distutils curl && \
     curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
     python3.9 get-pip.py && \
-    python3.9 -m pip install fschat
+    python3.9 -m pip install fschat && \
+    python3.9 -m pip install fschat[model_worker,webui]
 
 EXPOSE 21001
 
