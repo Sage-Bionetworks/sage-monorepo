@@ -62,6 +62,7 @@ export class BoxplotChart {
       summaries,
       title,
       xAxisTitle,
+      xAxisLabelFormatter,
       yAxisTitle,
       yAxisMin,
       yAxisMax,
@@ -309,6 +310,13 @@ export class BoxplotChart {
             color: 'black',
             fontWeight: 'bold',
             fontSize: '14px',
+            interval: 0, // ensure all labels are shown
+            formatter: (value) => {
+              if (xAxisLabelFormatter) {
+                return xAxisLabelFormatter(value);
+              }
+              return value;
+            },
           },
           axisTick: {
             alignWithLabel: true,

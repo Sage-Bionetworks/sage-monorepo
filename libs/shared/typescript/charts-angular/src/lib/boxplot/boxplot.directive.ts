@@ -20,6 +20,7 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
   @Input() summaries: CategoryBoxplotSummary[] | undefined;
   @Input() title = '';
   @Input() xAxisTitle: string | undefined;
+  @Input() xAxisLabelFormatter: undefined | ((value: string) => string);
   @Input() yAxisTitle = '';
   @Input() yAxisMin: number | undefined;
   @Input() yAxisMax: number | undefined;
@@ -50,6 +51,7 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
       summaries: this.summaries,
       title: this.title,
       xAxisTitle: this.xAxisTitle,
+      xAxisLabelFormatter: this.xAxisLabelFormatter,
       yAxisTitle: this.yAxisTitle,
       yAxisMin: this.yAxisMin,
       yAxisMax: this.yAxisMax,

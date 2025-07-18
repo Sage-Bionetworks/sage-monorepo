@@ -87,4 +87,22 @@ describe('ModelDetailsBoxplotComponent', () => {
     const yAxisTitle = component.formatYAxisTitle();
     expect(yAxisTitle).toContain('\n');
   });
+
+  it('should format x-axis labels', async () => {
+    const { component } = await setup();
+
+    const labelToExpectedFormattedLabel = {
+      'short-dash': 'short-dash',
+      'short*star': 'short*star',
+      'long-onedash': 'long-\nonedash',
+      'long*onestar': 'long*\nonestar',
+      'long-multi-dash': 'long-\nmulti-dash',
+      'long*multi*star': 'long*\nmulti*star',
+    };
+
+    for (const [label, expectedFormattedLabel] of Object.entries(labelToExpectedFormattedLabel)) {
+      const formattedLabel = component.xAxisLabelFormatter(label);
+      expect(formattedLabel).toBe(expectedFormattedLabel);
+    }
+  });
 });

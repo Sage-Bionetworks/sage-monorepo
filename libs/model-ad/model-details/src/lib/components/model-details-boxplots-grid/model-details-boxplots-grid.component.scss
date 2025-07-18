@@ -20,10 +20,5 @@ h2 {
     @include mixins.respond-to('large') {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-
-    shared-typescript-charts-angular {
-      display: flex;
-      flex-direction: column;
-    }
   }
 }
