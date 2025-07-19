@@ -19,7 +19,8 @@ public enum ErrorConstants {
     "CHALLENGE-SERVICE-1004",
     "Sorting strategy not implemented",
     HttpStatus.NOT_IMPLEMENTED
-  );
+  ),
+  DELETE_NOT_ALLOWED("CHALLENGE-SERVICE-1005", "Delete not allowed", HttpStatus.CONFLICT);
 
   private String type;
   private String title;

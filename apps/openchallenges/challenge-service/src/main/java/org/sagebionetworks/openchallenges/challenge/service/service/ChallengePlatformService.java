@@ -1,8 +1,8 @@
 package org.sagebionetworks.openchallenges.challenge.service.service;
 
-import jakarta.persistence.EntityManager;
 import java.util.Arrays;
 import java.util.List;
+import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengePlatformDeleteNotAllowedException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengePlatformNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.DuplicateContributionException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformCreateRequestDto;
@@ -37,7 +37,28 @@ public class ChallengePlatformService {
   }
 
   @Transactional(readOnly = false)
-  public void deleteChallengePlatform(Long id) {}
+  public void deleteChallengePlatform(Long id) {
+    // Find the challenge platform
+    ChallengePlatformEntity existingPlatform = challengePlatformRepository
+      .findById(id)
+      .orElseThrow(() ->
+        new ChallengePlatformNotFoundException("Challenge platform not found with id: " + id)
+      );
+
+    try {
+      // Delete the challenge platform
+      challengePlatformRepository.delete(existingPlatform);
+      challengePlatformRepository.flush();
+    } catch (DataIntegrityViolationException e) {
+      String message = e.getMessage();
+      if (message != null && message.contains("fk_platform")) {
+        throw new ChallengePlatformDeleteNotAllowedException(
+          "Cannot delete challenge platform because it is referenced by one or more resources."
+        );
+      }
+      throw e;
+    }
+  }
 
   @Transactional(readOnly = true)
   public ChallengePlatformDto getChallengePlatform(Long id) {

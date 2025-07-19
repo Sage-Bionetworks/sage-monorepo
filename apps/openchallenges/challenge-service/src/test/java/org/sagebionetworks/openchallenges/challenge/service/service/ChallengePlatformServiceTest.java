@@ -132,13 +132,14 @@ class ChallengePlatformServiceTest {
   void shouldCallDeleteMethodWhenDeletingChallengePlatform() {
     // given
     Long platformId = 1L;
+    when(challengePlatformRepository.findById(platformId)).thenReturn(Optional.of(testEntity));
 
     // when
     challengePlatformService.deleteChallengePlatform(platformId);
 
     // then
-    // Note: The actual method is empty, so we're just verifying it doesn't throw
-    // This test ensures the method exists and can be called
-    assertThat(platformId).isNotNull();
+    verify(challengePlatformRepository).findById(platformId);
+    verify(challengePlatformRepository).delete(testEntity);
+    verify(challengePlatformRepository).flush();
   }
 }
