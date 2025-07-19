@@ -55,7 +55,7 @@ public interface ChallengeContributionApi {
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
-        operationId = "addChallengeContribution",
+        operationId = "createChallengeContribution",
         summary = "Create a new contribution for a challenge",
         description = "Creates a new contribution record associated with a challenge ID. ",
         tags = { "ChallengeContribution" },
@@ -96,11 +96,11 @@ public interface ChallengeContributionApi {
         consumes = { "application/json" }
     )
     
-    default ResponseEntity<ChallengeContributionDto> addChallengeContribution(
+    default ResponseEntity<ChallengeContributionDto> createChallengeContribution(
         @Parameter(name = "challengeId", description = "The unique identifier of the challenge.", required = true, in = ParameterIn.PATH) @PathVariable("challengeId") Long challengeId,
         @Parameter(name = "ChallengeContributionCreateRequestDto", description = "", required = true) @Valid @RequestBody ChallengeContributionCreateRequestDto challengeContributionCreateRequestDto
     ) {
-        return getDelegate().addChallengeContribution(challengeId, challengeContributionCreateRequestDto);
+        return getDelegate().createChallengeContribution(challengeId, challengeContributionCreateRequestDto);
     }
 
 
@@ -295,7 +295,7 @@ public interface ChallengeContributionApi {
 
     /**
      * PUT /challenges/{challengeId}/contributions/{challengeContributionId} : Update an existing challenge contribution
-     * Updates an existing contribution record for a challenge. Only the organization ID and role can be modified. 
+     * Updates an existing challenge contribution. 
      *
      * @param challengeId The unique identifier of the challenge. (required)
      * @param challengeContributionId The unique identifier of a challenge contribution (required)
@@ -311,7 +311,7 @@ public interface ChallengeContributionApi {
     @Operation(
         operationId = "updateChallengeContribution",
         summary = "Update an existing challenge contribution",
-        description = "Updates an existing contribution record for a challenge. Only the organization ID and role can be modified. ",
+        description = "Updates an existing challenge contribution. ",
         tags = { "ChallengeContribution" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Contribution updated successfully", content = {

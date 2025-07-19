@@ -261,7 +261,7 @@ paths:
       summary: Create a new contribution for a challenge
       description: |
         Creates a new contribution record associated with a challenge ID.
-      operationId: addChallengeContribution
+      operationId: createChallengeContribution
       security:
         - apiBearerAuth: []
       requestBody:
@@ -340,8 +340,7 @@ paths:
         - ChallengeContribution
       summary: Update an existing challenge contribution
       description: |
-        Updates an existing contribution record for a challenge.
-        Only the organization ID and role can be modified.
+        Updates an existing challenge contribution.
       operationId: updateChallengeContribution
       security:
         - apiBearerAuth: []
@@ -409,7 +408,7 @@ paths:
                 $ref: '#/components/schemas/ChallengesPerYear'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /challengePlatforms:
+  /challenge-platforms:
     get:
       tags:
         - ChallengePlatform
@@ -429,7 +428,38 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  '/challengePlatforms/{challengePlatformId}':
+    post:
+      tags:
+        - ChallengePlatform
+      summary: Create a challenge platform
+      description: Create a challenge platform with the specified ID
+      operationId: createChallengePlatform
+      security:
+        - apiBearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengePlatformCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengePlatform'
+          description: Success
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  '/challenge-platforms/{challengePlatformId}':
     parameters:
       - $ref: '#/components/parameters/challengePlatformId'
     get:
@@ -447,6 +477,40 @@ paths:
                 $ref: '#/components/schemas/ChallengePlatform'
         '404':
           $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - ChallengePlatform
+      summary: Update an existing challenge platform
+      description: |
+        Updates an existing challenge platform.
+      operationId: updateChallengePlatform
+      security:
+        - apiBearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengePlatformUpdateRequest'
+      responses:
+        '200':
+          description: Challange platform updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeContribution'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
@@ -1352,6 +1416,28 @@ components:
             - challengePlatforms
       x-java-class-annotations:
         - '@lombok.Builder'
+    ChallengePlatformDisplayName:
+      description: The display name of the challenge platform.
+      type: string
+      minLength: 3
+      maxLength: 50
+      example: Example Challenge Platform
+    ChallengePlatformCreateRequest:
+      type: object
+      description: The information used to create a challenge platform
+      properties:
+        displayName:
+          $ref: '#/components/schemas/ChallengePlatformDisplayName'
+      required:
+        - displayName
+    ChallengePlatformUpdateRequest:
+      type: object
+      description: A challenge platform update request.
+      properties:
+        displayName:
+          $ref: '#/components/schemas/ChallengePlatformDisplayName'
+      required:
+        - displayName
     EdamConceptSort:
       description: What to sort results by.
       type: string
