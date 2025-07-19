@@ -58,7 +58,10 @@ public class ChallengeContributionService {
       .build();
   }
 
-  public ChallengeContributionDto getChallengeContribution(Long challengeId, Long challengeContributionId) {
+  public ChallengeContributionDto getChallengeContribution(
+    Long challengeId,
+    Long challengeContributionId
+  ) {
     // Verify the challenge exists
     challengeRepository
       .findById(challengeId)
@@ -78,7 +81,10 @@ public class ChallengeContributionService {
     // Verify the contribution belongs to the specified challenge
     if (!contribution.getChallenge().getId().equals(challengeId)) {
       throw new ChallengeContributionNotFoundException(
-        "Challenge contribution " + challengeContributionId + " does not belong to challenge " + challengeId
+        "Challenge contribution " +
+        challengeContributionId +
+        " does not belong to challenge " +
+        challengeId
       );
     }
 
@@ -92,7 +98,7 @@ public class ChallengeContributionService {
   }
 
   @Transactional
-  public ChallengeContributionDto addChallengeContribution(
+  public ChallengeContributionDto createChallengeContribution(
     Long challengeId,
     ChallengeContributionCreateRequestDto request
   ) {
@@ -251,7 +257,10 @@ public class ChallengeContributionService {
     // Verify the contribution belongs to the specified challenge
     if (!existingContribution.getChallenge().getId().equals(challengeId)) {
       throw new ChallengeContributionNotFoundException(
-        "Challenge contribution " + challengeContributionId + " does not belong to challenge " + challengeId
+        "Challenge contribution " +
+        challengeContributionId +
+        " does not belong to challenge " +
+        challengeId
       );
     }
 
