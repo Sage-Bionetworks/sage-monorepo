@@ -5,8 +5,6 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.time.OffsetDateTime;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -36,12 +34,6 @@ public class ChallengePlatformDto {
 
   private String websiteUrl = null;
 
-  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-  private OffsetDateTime createdAt;
-
-  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-  private OffsetDateTime updatedAt;
-
   public ChallengePlatformDto() {
     super();
   }
@@ -49,14 +41,12 @@ public class ChallengePlatformDto {
   /**
    * Constructor with only required parameters
    */
-  public ChallengePlatformDto(Long id, String slug, String name, String avatarKey, String websiteUrl, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
+  public ChallengePlatformDto(Long id, String slug, String name, String avatarKey, String websiteUrl) {
     this.id = id;
     this.slug = slug;
     this.name = name;
     this.avatarKey = avatarKey;
     this.websiteUrl = websiteUrl;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
   }
 
   public ChallengePlatformDto id(Long id) {
@@ -159,46 +149,6 @@ public class ChallengePlatformDto {
     this.websiteUrl = websiteUrl;
   }
 
-  public ChallengePlatformDto createdAt(OffsetDateTime createdAt) {
-    this.createdAt = createdAt;
-    return this;
-  }
-
-  /**
-   * Get createdAt
-   * @return createdAt
-   */
-  @NotNull @Valid 
-  @Schema(name = "createdAt", example = "2022-07-04T22:19:11Z", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("createdAt")
-  public OffsetDateTime getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(OffsetDateTime createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public ChallengePlatformDto updatedAt(OffsetDateTime updatedAt) {
-    this.updatedAt = updatedAt;
-    return this;
-  }
-
-  /**
-   * Get updatedAt
-   * @return updatedAt
-   */
-  @NotNull @Valid 
-  @Schema(name = "updatedAt", example = "2022-07-04T22:19:11Z", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("updatedAt")
-  public OffsetDateTime getUpdatedAt() {
-    return updatedAt;
-  }
-
-  public void setUpdatedAt(OffsetDateTime updatedAt) {
-    this.updatedAt = updatedAt;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -212,14 +162,12 @@ public class ChallengePlatformDto {
         Objects.equals(this.slug, challengePlatform.slug) &&
         Objects.equals(this.name, challengePlatform.name) &&
         Objects.equals(this.avatarKey, challengePlatform.avatarKey) &&
-        Objects.equals(this.websiteUrl, challengePlatform.websiteUrl) &&
-        Objects.equals(this.createdAt, challengePlatform.createdAt) &&
-        Objects.equals(this.updatedAt, challengePlatform.updatedAt);
+        Objects.equals(this.websiteUrl, challengePlatform.websiteUrl);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, slug, name, avatarKey, websiteUrl, createdAt, updatedAt);
+    return Objects.hash(id, slug, name, avatarKey, websiteUrl);
   }
 
   @Override
@@ -231,8 +179,6 @@ public class ChallengePlatformDto {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    avatarKey: ").append(toIndentedString(avatarKey)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
-    sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
-    sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -266,8 +212,6 @@ public class ChallengePlatformDto {
       this.instance.setName(value.name);
       this.instance.setAvatarKey(value.avatarKey);
       this.instance.setWebsiteUrl(value.websiteUrl);
-      this.instance.setCreatedAt(value.createdAt);
-      this.instance.setUpdatedAt(value.updatedAt);
       return this;
     }
 
@@ -293,16 +237,6 @@ public class ChallengePlatformDto {
     
     public ChallengePlatformDto.Builder websiteUrl(String websiteUrl) {
       this.instance.websiteUrl(websiteUrl);
-      return this;
-    }
-    
-    public ChallengePlatformDto.Builder createdAt(OffsetDateTime createdAt) {
-      this.instance.createdAt(createdAt);
-      return this;
-    }
-    
-    public ChallengePlatformDto.Builder updatedAt(OffsetDateTime updatedAt) {
-      this.instance.updatedAt(updatedAt);
       return this;
     }
     

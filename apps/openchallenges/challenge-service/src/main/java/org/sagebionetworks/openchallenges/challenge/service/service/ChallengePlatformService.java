@@ -9,7 +9,6 @@ import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeP
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformsPageDto;
-import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeContributionEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengePlatformEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengePlatformMapper;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengePlatformRepository;
@@ -28,18 +27,13 @@ public class ChallengePlatformService {
   private static final Logger logger = LoggerFactory.getLogger(ChallengePlatformService.class);
 
   private final ChallengePlatformRepository challengePlatformRepository;
-  private final EntityManager entityManager;
 
   private ChallengePlatformMapper challengePlatformMapper = new ChallengePlatformMapper();
 
   private static final List<String> SEARCHABLE_FIELDS = Arrays.asList("name");
 
-  public ChallengePlatformService(
-    ChallengePlatformRepository challengePlatformRepository,
-    EntityManager entityManager
-  ) {
+  public ChallengePlatformService(ChallengePlatformRepository challengePlatformRepository) {
     this.challengePlatformRepository = challengePlatformRepository;
-    this.entityManager = entityManager;
   }
 
   @Transactional(readOnly = false)
@@ -100,17 +94,23 @@ public class ChallengePlatformService {
     try {
       // Save the entity
       ChallengePlatformEntity savedEntity = challengePlatformRepository.save(entity);
-      entityManager.refresh(savedEntity); // Refresh to populate DB-generated fields
 
       // Return the full challenge platform DTO
       return challengePlatformMapper.convertToDto(savedEntity);
     } catch (DataIntegrityViolationException e) {
-      // Check if this is the unique constraint violation
-      if (e.getMessage() != null && e.getMessage().contains("unique_challenge_platform_name")) {
-        throw new DuplicateContributionException(
-          String.format("A challenge platform with name '%s' already exists.", request.getName()),
-          e
-        );
+      String message = e.getMessage();
+      if (message != null) {
+        if (message.contains("challenge_platform_name_key")) {
+          throw new DuplicateContributionException(
+            String.format("A challenge platform with name '%s' already exists.", request.getName()),
+            e
+          );
+        } else if (message.contains("challenge_platform_slug_key")) {
+          throw new DuplicateContributionException(
+            String.format("A challenge platform with slug '%s' already exists.", request.getSlug()),
+            e
+          );
+        }
       }
       // Re-throw the original exception if it's not the constraint we're looking for
       throw e;

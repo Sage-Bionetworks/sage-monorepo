@@ -1788,13 +1788,11 @@ components:
     ChallengePlatform:
       description: A challenge platform
       example:
-        createdAt: 2022-07-04T22:19:11Z
         avatarKey: logo/dream.png
         websiteUrl: https://openchallenges.io
         name: Example Challenge Platform
         id: 1
         slug: example-challenge-platform
-        updatedAt: 2022-07-04T22:19:11Z
       properties:
         id:
           description: The unique identifier of a challenge platform.
@@ -1825,21 +1823,11 @@ components:
           maxLength: 500
           nullable: true
           type: string
-        createdAt:
-          example: 2022-07-04T22:19:11Z
-          format: date-time
-          type: string
-        updatedAt:
-          example: 2022-07-04T22:19:11Z
-          format: date-time
-          type: string
       required:
         - avatarKey
-        - createdAt
         - id
         - name
         - slug
-        - updatedAt
         - websiteUrl
       type: object
     ChallengePlatformsPage:
@@ -1859,20 +1847,16 @@ components:
         number: 99
         size: 99
         challengePlatforms:
-          - createdAt: 2022-07-04T22:19:11Z
-            avatarKey: logo/dream.png
+          - avatarKey: logo/dream.png
             websiteUrl: https://openchallenges.io
             name: Example Challenge Platform
             id: 1
             slug: example-challenge-platform
-            updatedAt: 2022-07-04T22:19:11Z
-          - createdAt: 2022-07-04T22:19:11Z
-            avatarKey: logo/dream.png
+          - avatarKey: logo/dream.png
             websiteUrl: https://openchallenges.io
             name: Example Challenge Platform
             id: 1
             slug: example-challenge-platform
-            updatedAt: 2022-07-04T22:19:11Z
         totalPages: 99
         hasPrevious: true
         hasNext: true
