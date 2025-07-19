@@ -26,8 +26,7 @@ put:
     - ChallengeContribution
   summary: Update an existing challenge contribution
   description: |
-    Updates an existing contribution record for a challenge.
-    Only the organization ID and role can be modified.
+    Updates an existing challenge contribution.
   operationId: updateChallengeContribution
   security:
     - apiBearerAuth: []

@@ -23,7 +23,7 @@ post:
   summary: Create a new contribution for a challenge
   description: |
     Creates a new contribution record associated with a challenge ID.
-  operationId: addChallengeContribution
+  operationId: createChallengeContribution
   security:
     - apiBearerAuth: []
   requestBody:
