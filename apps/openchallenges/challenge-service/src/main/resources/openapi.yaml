@@ -650,12 +650,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The user does not have the permission to perform this action
-        '404':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The specified resource was not found
         '409':
           content:
             application/problem+json:
@@ -1219,14 +1213,15 @@ components:
       format: int64
       type: integer
     ChallengePlatformName:
-      description: The name of the challenge platform.
-      maxLength: 30
+      description: The display name of the challenge platform.
+      example: Example Challenge Platform
+      maxLength: 50
       minLength: 3
       type: string
     SimpleChallengePlatform:
       description: A simple challenge platform.
       example:
-        name: name
+        name: Example Challenge Platform
         id: 1
         slug: example-challenge-platform
       nullable: true
@@ -1244,8 +1239,9 @@ components:
           pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
           type: string
         name:
-          description: The name of the challenge platform.
-          maxLength: 30
+          description: The display name of the challenge platform.
+          example: Example Challenge Platform
+          maxLength: 50
           minLength: 3
           type: string
       required:
@@ -1315,7 +1311,7 @@ components:
         endDate: 2017-07-21
         description: This is an example description of the challenge.
         platform:
-          name: name
+          name: Example Challenge Platform
           id: 1
           slug: example-challenge-platform
         starredCount: 100
@@ -1485,7 +1481,7 @@ components:
             endDate: 2017-07-21
             description: This is an example description of the challenge.
             platform:
-              name: name
+              name: Example Challenge Platform
               id: 1
               slug: example-challenge-platform
             starredCount: 100
@@ -1523,7 +1519,7 @@ components:
             endDate: 2017-07-21
             description: This is an example description of the challenge.
             platform:
-              name: name
+              name: Example Challenge Platform
               id: 1
               slug: example-challenge-platform
             starredCount: 100
@@ -1785,13 +1781,17 @@ components:
           example: synapse
           type: string
       type: object
+    AvatarKey:
+      description: The avatar key
+      example: logo/dream.png
+      type: string
     ChallengePlatform:
       description: A challenge platform
       example:
         createdAt: 2022-07-04T22:19:11Z
         avatarKey: logo/dream.png
-        websiteUrl: https://example.com
-        name: name
+        websiteUrl: https://openchallenges.io
+        name: Example Challenge Platform
         id: 1
         slug: example-challenge-platform
         updatedAt: 2022-07-04T22:19:11Z
@@ -1809,16 +1809,21 @@ components:
           pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
           type: string
         name:
-          description: The name of the challenge platform.
-          maxLength: 30
+          description: The display name of the challenge platform.
+          example: Example Challenge Platform
+          maxLength: 50
           minLength: 3
           type: string
         avatarKey:
+          description: The avatar key
           example: logo/dream.png
           type: string
         websiteUrl:
-          example: https://example.com
+          description: A URL to the website or image.
+          example: https://openchallenges.io
           format: url
+          maxLength: 500
+          nullable: true
           type: string
         createdAt:
           example: 2022-07-04T22:19:11Z
@@ -1856,15 +1861,15 @@ components:
         challengePlatforms:
           - createdAt: 2022-07-04T22:19:11Z
             avatarKey: logo/dream.png
-            websiteUrl: https://example.com
-            name: name
+            websiteUrl: https://openchallenges.io
+            name: Example Challenge Platform
             id: 1
             slug: example-challenge-platform
             updatedAt: 2022-07-04T22:19:11Z
           - createdAt: 2022-07-04T22:19:11Z
             avatarKey: logo/dream.png
-            websiteUrl: https://example.com
-            name: name
+            websiteUrl: https://openchallenges.io
+            name: Example Challenge Platform
             id: 1
             slug: example-challenge-platform
             updatedAt: 2022-07-04T22:19:11Z
@@ -1875,35 +1880,71 @@ components:
       type: object
       x-java-class-annotations:
         - '@lombok.Builder'
-    ChallengePlatformDisplayName:
-      description: The display name of the challenge platform.
-      example: Example Challenge Platform
-      maxLength: 50
-      minLength: 3
-      type: string
     ChallengePlatformCreateRequest:
       description: The information used to create a challenge platform
       properties:
-        displayName:
+        slug:
+          description: The slug of the challenge platform.
+          example: example-challenge-platform
+          maxLength: 30
+          minLength: 3
+          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          type: string
+        name:
           description: The display name of the challenge platform.
           example: Example Challenge Platform
           maxLength: 50
           minLength: 3
           type: string
+        avatarKey:
+          description: The avatar key
+          example: logo/dream.png
+          type: string
+        websiteUrl:
+          description: A URL to the website or image.
+          example: https://openchallenges.io
+          format: url
+          maxLength: 500
+          nullable: true
+          type: string
       required:
-        - displayName
+        - avatarKey
+        - name
+        - slug
+        - websiteUrl
       type: object
     ChallengePlatformUpdateRequest:
       description: A challenge platform update request.
       properties:
-        displayName:
+        slug:
+          description: The slug of the challenge platform.
+          example: example-challenge-platform
+          maxLength: 30
+          minLength: 3
+          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          type: string
+        name:
           description: The display name of the challenge platform.
           example: Example Challenge Platform
           maxLength: 50
           minLength: 3
           type: string
+        avatarKey:
+          description: The avatar key
+          example: logo/dream.png
+          type: string
+        websiteUrl:
+          description: A URL to the website or image.
+          example: https://openchallenges.io
+          format: url
+          maxLength: 500
+          nullable: true
+          type: string
       required:
-        - displayName
+        - avatarKey
+        - name
+        - slug
+        - websiteUrl
       type: object
     EdamConceptSort:
       default: relevance

@@ -85,12 +85,13 @@ public class ChallengeContributionApiDelegateImpl implements ChallengeContributi
       challengeContributionCreateRequestDto.getRole()
     );
 
-    ChallengeContributionDto response = challengeContributionService.createChallengeContribution(
-      challengeId,
-      challengeContributionCreateRequestDto
-    );
+    ChallengeContributionDto createdContribution =
+      challengeContributionService.createChallengeContribution(
+        challengeId,
+        challengeContributionCreateRequestDto
+      );
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    return ResponseEntity.status(HttpStatus.CREATED).body(createdContribution);
   }
 
   @Override

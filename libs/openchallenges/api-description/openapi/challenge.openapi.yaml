@@ -318,8 +318,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
         '409':
           $ref: '#/components/responses/Conflict'
         '500':
@@ -993,6 +991,10 @@ components:
           description: A string of search terms used to filter the results.
           type: string
           example: synapse
+    AvatarKey:
+      description: The avatar key
+      type: string
+      example: logo/dream.png
     ChallengePlatform:
       type: object
       description: A challenge platform
@@ -1004,12 +1006,9 @@ components:
         name:
           $ref: '#/components/schemas/ChallengePlatformName'
         avatarKey:
-          type: string
-          example: logo/dream.png
+          $ref: '#/components/schemas/AvatarKey'
         websiteUrl:
-          type: string
-          format: url
-          example: https://example.com
+          $ref: '#/components/schemas/Url'
         createdAt:
           type: string
           format: date-time
@@ -1042,10 +1041,6 @@ components:
             - challengePlatforms
       x-java-class-annotations:
         - '@lombok.Builder'
-    AvatarKey:
-      description: The avatar key
-      type: string
-      example: logo/dream.png
     ChallengePlatformCreateRequest:
       type: object
       description: The information used to create a challenge platform

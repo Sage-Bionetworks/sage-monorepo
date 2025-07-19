@@ -24,7 +24,13 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 public class ChallengePlatformUpdateRequestDto {
 
-  private String displayName;
+  private String slug;
+
+  private String name;
+
+  private String avatarKey;
+
+  private String websiteUrl = null;
 
   public ChallengePlatformUpdateRequestDto() {
     super();
@@ -33,28 +39,91 @@ public class ChallengePlatformUpdateRequestDto {
   /**
    * Constructor with only required parameters
    */
-  public ChallengePlatformUpdateRequestDto(String displayName) {
-    this.displayName = displayName;
+  public ChallengePlatformUpdateRequestDto(String slug, String name, String avatarKey, String websiteUrl) {
+    this.slug = slug;
+    this.name = name;
+    this.avatarKey = avatarKey;
+    this.websiteUrl = websiteUrl;
   }
 
-  public ChallengePlatformUpdateRequestDto displayName(String displayName) {
-    this.displayName = displayName;
+  public ChallengePlatformUpdateRequestDto slug(String slug) {
+    this.slug = slug;
+    return this;
+  }
+
+  /**
+   * The slug of the challenge platform.
+   * @return slug
+   */
+  @NotNull @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$") @Size(min = 3, max = 30) 
+  @Schema(name = "slug", example = "example-challenge-platform", description = "The slug of the challenge platform.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("slug")
+  public String getSlug() {
+    return slug;
+  }
+
+  public void setSlug(String slug) {
+    this.slug = slug;
+  }
+
+  public ChallengePlatformUpdateRequestDto name(String name) {
+    this.name = name;
     return this;
   }
 
   /**
    * The display name of the challenge platform.
-   * @return displayName
+   * @return name
    */
   @NotNull @Size(min = 3, max = 50) 
-  @Schema(name = "displayName", example = "Example Challenge Platform", description = "The display name of the challenge platform.", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("displayName")
-  public String getDisplayName() {
-    return displayName;
+  @Schema(name = "name", example = "Example Challenge Platform", description = "The display name of the challenge platform.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("name")
+  public String getName() {
+    return name;
   }
 
-  public void setDisplayName(String displayName) {
-    this.displayName = displayName;
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public ChallengePlatformUpdateRequestDto avatarKey(String avatarKey) {
+    this.avatarKey = avatarKey;
+    return this;
+  }
+
+  /**
+   * The avatar key
+   * @return avatarKey
+   */
+  @NotNull 
+  @Schema(name = "avatarKey", example = "logo/dream.png", description = "The avatar key", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("avatarKey")
+  public String getAvatarKey() {
+    return avatarKey;
+  }
+
+  public void setAvatarKey(String avatarKey) {
+    this.avatarKey = avatarKey;
+  }
+
+  public ChallengePlatformUpdateRequestDto websiteUrl(String websiteUrl) {
+    this.websiteUrl = websiteUrl;
+    return this;
+  }
+
+  /**
+   * A URL to the website or image.
+   * @return websiteUrl
+   */
+  @NotNull @Size(max = 500) 
+  @Schema(name = "websiteUrl", example = "https://openchallenges.io", description = "A URL to the website or image.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("websiteUrl")
+  public String getWebsiteUrl() {
+    return websiteUrl;
+  }
+
+  public void setWebsiteUrl(String websiteUrl) {
+    this.websiteUrl = websiteUrl;
   }
 
   @Override
@@ -66,19 +135,25 @@ public class ChallengePlatformUpdateRequestDto {
       return false;
     }
     ChallengePlatformUpdateRequestDto challengePlatformUpdateRequest = (ChallengePlatformUpdateRequestDto) o;
-    return Objects.equals(this.displayName, challengePlatformUpdateRequest.displayName);
+    return Objects.equals(this.slug, challengePlatformUpdateRequest.slug) &&
+        Objects.equals(this.name, challengePlatformUpdateRequest.name) &&
+        Objects.equals(this.avatarKey, challengePlatformUpdateRequest.avatarKey) &&
+        Objects.equals(this.websiteUrl, challengePlatformUpdateRequest.websiteUrl);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(displayName);
+    return Objects.hash(slug, name, avatarKey, websiteUrl);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ChallengePlatformUpdateRequestDto {\n");
-    sb.append("    displayName: ").append(toIndentedString(displayName)).append("\n");
+    sb.append("    slug: ").append(toIndentedString(slug)).append("\n");
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    avatarKey: ").append(toIndentedString(avatarKey)).append("\n");
+    sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -107,12 +182,30 @@ public class ChallengePlatformUpdateRequestDto {
     }
 
     protected Builder copyOf(ChallengePlatformUpdateRequestDto value) { 
-      this.instance.setDisplayName(value.displayName);
+      this.instance.setSlug(value.slug);
+      this.instance.setName(value.name);
+      this.instance.setAvatarKey(value.avatarKey);
+      this.instance.setWebsiteUrl(value.websiteUrl);
       return this;
     }
 
-    public ChallengePlatformUpdateRequestDto.Builder displayName(String displayName) {
-      this.instance.displayName(displayName);
+    public ChallengePlatformUpdateRequestDto.Builder slug(String slug) {
+      this.instance.slug(slug);
+      return this;
+    }
+    
+    public ChallengePlatformUpdateRequestDto.Builder name(String name) {
+      this.instance.name(name);
+      return this;
+    }
+    
+    public ChallengePlatformUpdateRequestDto.Builder avatarKey(String avatarKey) {
+      this.instance.avatarKey(avatarKey);
+      return this;
+    }
+    
+    public ChallengePlatformUpdateRequestDto.Builder websiteUrl(String websiteUrl) {
+      this.instance.websiteUrl(websiteUrl);
       return this;
     }
     

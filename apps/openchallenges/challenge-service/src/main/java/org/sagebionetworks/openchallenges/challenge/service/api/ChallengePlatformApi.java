@@ -51,7 +51,6 @@ public interface ChallengePlatformApi {
      * @return Success (status code 201)
      *         or Unauthorized (status code 401)
      *         or The user does not have the permission to perform this action (status code 403)
-     *         or The specified resource was not found (status code 404)
      *         or The request conflicts with current state of the target resource (status code 409)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
@@ -70,10 +69,6 @@ public interface ChallengePlatformApi {
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
             @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),

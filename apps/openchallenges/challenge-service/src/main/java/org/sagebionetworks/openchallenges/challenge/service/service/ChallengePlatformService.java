@@ -1,16 +1,21 @@
 package org.sagebionetworks.openchallenges.challenge.service.service;
 
+import jakarta.persistence.EntityManager;
 import java.util.Arrays;
 import java.util.List;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengePlatformNotFoundException;
+import org.sagebionetworks.openchallenges.challenge.service.exception.DuplicateContributionException;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformsPageDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeContributionEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengePlatformEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengePlatformMapper;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengePlatformRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,13 +28,18 @@ public class ChallengePlatformService {
   private static final Logger logger = LoggerFactory.getLogger(ChallengePlatformService.class);
 
   private final ChallengePlatformRepository challengePlatformRepository;
+  private final EntityManager entityManager;
 
   private ChallengePlatformMapper challengePlatformMapper = new ChallengePlatformMapper();
 
   private static final List<String> SEARCHABLE_FIELDS = Arrays.asList("name");
 
-  public ChallengePlatformService(ChallengePlatformRepository challengePlatformRepository) {
+  public ChallengePlatformService(
+    ChallengePlatformRepository challengePlatformRepository,
+    EntityManager entityManager
+  ) {
     this.challengePlatformRepository = challengePlatformRepository;
+    this.entityManager = entityManager;
   }
 
   @Transactional(readOnly = false)
@@ -75,5 +85,35 @@ public class ChallengePlatformService {
       .hasNext(entitiesPage.hasNext())
       .hasPrevious(entitiesPage.hasPrevious())
       .build();
+  }
+
+  @Transactional
+  public ChallengePlatformDto createChallengePlatform(ChallengePlatformCreateRequestDto request) {
+    // Create the challenge platform entity
+    ChallengePlatformEntity entity = ChallengePlatformEntity.builder()
+      .slug(request.getSlug())
+      .name(request.getName())
+      .avatarKey(request.getAvatarKey())
+      .websiteUrl(request.getWebsiteUrl())
+      .build();
+
+    try {
+      // Save the entity
+      ChallengePlatformEntity savedEntity = challengePlatformRepository.save(entity);
+      entityManager.refresh(savedEntity); // Refresh to populate DB-generated fields
+
+      // Return the full challenge platform DTO
+      return challengePlatformMapper.convertToDto(savedEntity);
+    } catch (DataIntegrityViolationException e) {
+      // Check if this is the unique constraint violation
+      if (e.getMessage() != null && e.getMessage().contains("unique_challenge_platform_name")) {
+        throw new DuplicateContributionException(
+          String.format("A challenge platform with name '%s' already exists.", request.getName()),
+          e
+        );
+      }
+      // Re-throw the original exception if it's not the constraint we're looking for
+      throw e;
+    }
   }
 }

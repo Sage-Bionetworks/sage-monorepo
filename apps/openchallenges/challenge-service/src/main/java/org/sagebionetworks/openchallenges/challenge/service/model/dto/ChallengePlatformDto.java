@@ -34,7 +34,7 @@ public class ChallengePlatformDto {
 
   private String avatarKey;
 
-  private String websiteUrl;
+  private String websiteUrl = null;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
@@ -105,11 +105,11 @@ public class ChallengePlatformDto {
   }
 
   /**
-   * The name of the challenge platform.
+   * The display name of the challenge platform.
    * @return name
    */
-  @NotNull @Size(min = 3, max = 30) 
-  @Schema(name = "name", description = "The name of the challenge platform.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotNull @Size(min = 3, max = 50) 
+  @Schema(name = "name", example = "Example Challenge Platform", description = "The display name of the challenge platform.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("name")
   public String getName() {
     return name;
@@ -125,11 +125,11 @@ public class ChallengePlatformDto {
   }
 
   /**
-   * Get avatarKey
+   * The avatar key
    * @return avatarKey
    */
   @NotNull 
-  @Schema(name = "avatarKey", example = "logo/dream.png", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "avatarKey", example = "logo/dream.png", description = "The avatar key", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("avatarKey")
   public String getAvatarKey() {
     return avatarKey;
@@ -145,11 +145,11 @@ public class ChallengePlatformDto {
   }
 
   /**
-   * Get websiteUrl
+   * A URL to the website or image.
    * @return websiteUrl
    */
-  @NotNull 
-  @Schema(name = "websiteUrl", example = "https://example.com", requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotNull @Size(max = 500) 
+  @Schema(name = "websiteUrl", example = "https://openchallenges.io", description = "A URL to the website or image.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("websiteUrl")
   public String getWebsiteUrl() {
     return websiteUrl;

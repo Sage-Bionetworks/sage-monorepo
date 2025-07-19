@@ -52,9 +52,9 @@ public class ChallengePlatformEntity {
   @Column(name = "website_url", nullable = false, length = 500)
   private String websiteUrl;
 
-  @Column(name = "created_at")
+  @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
   private OffsetDateTime createdAt;
 
-  @Column(name = "updated_at")
+  @Column(name = "updated_at", nullable = false, insertable = false, updatable = false)
   private OffsetDateTime updatedAt;
 }

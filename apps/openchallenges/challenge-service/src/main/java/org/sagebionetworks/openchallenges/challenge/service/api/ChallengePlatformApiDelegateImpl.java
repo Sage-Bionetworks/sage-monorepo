@@ -1,5 +1,6 @@
 package org.sagebionetworks.openchallenges.challenge.service.api;
 
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformsPageDto;
@@ -8,6 +9,7 @@ import org.sagebionetworks.openchallenges.challenge.service.security.Authenticat
 import org.sagebionetworks.openchallenges.challenge.service.service.ChallengePlatformService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -54,5 +56,26 @@ public class ChallengePlatformApiDelegateImpl implements ChallengePlatformApiDel
     ChallengePlatformSearchQueryDto query
   ) {
     return ResponseEntity.ok(challengePlatformService.listChallengePlatforms(query));
+  }
+
+  @Override
+  @PreAuthorize("authentication.principal.admin")
+  public ResponseEntity<ChallengePlatformDto> createChallengePlatform(
+    ChallengePlatformCreateRequestDto challengePlatformCreateRequestDto
+  ) {
+    // Log the authenticated user for audit purposes
+    AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
+      .getAuthentication()
+      .getPrincipal();
+    logger.info(
+      "User {} (role: {}) is creating a new challenge platform",
+      user.getUsername(),
+      user.getRole()
+    );
+
+    ChallengePlatformDto createdPlatform = challengePlatformService.createChallengePlatform(
+      challengePlatformCreateRequestDto
+    );
+    return ResponseEntity.status(HttpStatus.CREATED).body(createdPlatform);
   }
 }
