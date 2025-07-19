@@ -6,7 +6,6 @@
 package org.sagebionetworks.openchallenges.challenge.service.api;
 
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.BasicErrorDto;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformSearchQueryDto;
@@ -252,8 +251,8 @@ public interface ChallengePlatformApi {
         tags = { "ChallengePlatform" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Challange platform updated successfully", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ChallengeContributionDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ChallengeContributionDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ChallengePlatformDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ChallengePlatformDto.class))
             }),
             @ApiResponse(responseCode = "400", description = "Invalid request", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
@@ -291,7 +290,7 @@ public interface ChallengePlatformApi {
         consumes = { "application/json" }
     )
     
-    default ResponseEntity<ChallengeContributionDto> updateChallengePlatform(
+    default ResponseEntity<ChallengePlatformDto> updateChallengePlatform(
         @Parameter(name = "challengePlatformId", description = "The unique identifier of the challenge platform.", required = true, in = ParameterIn.PATH) @PathVariable("challengePlatformId") Long challengePlatformId,
         @Parameter(name = "ChallengePlatformUpdateRequestDto", description = "", required = true) @Valid @RequestBody ChallengePlatformUpdateRequestDto challengePlatformUpdateRequestDto
     ) {

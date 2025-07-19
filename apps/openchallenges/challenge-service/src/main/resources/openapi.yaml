@@ -789,7 +789,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ChallengeContribution'
+                $ref: '#/components/schemas/ChallengePlatform'
           description: Challange platform updated successfully
         '400':
           content:

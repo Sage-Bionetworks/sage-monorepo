@@ -38,7 +38,7 @@ put:
       content:
         application/json:
           schema:
-            $ref: ../../components/schemas/ChallengeContribution.yaml
+            $ref: ../../components/schemas/ChallengePlatform.yaml
     '400':
       $ref: ../../components/responses/BadRequest.yaml
     '401':

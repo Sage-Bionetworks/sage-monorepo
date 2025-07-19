@@ -3,8 +3,8 @@ package org.sagebionetworks.openchallenges.challenge.service.api;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformSearchQueryDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformUpdateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformsPageDto;
-import org.sagebionetworks.openchallenges.challenge.service.security.ApiKeyAuthenticationFilter;
 import org.sagebionetworks.openchallenges.challenge.service.security.AuthenticatedUser;
 import org.sagebionetworks.openchallenges.challenge.service.service.ChallengePlatformService;
 import org.slf4j.Logger;
@@ -77,5 +77,30 @@ public class ChallengePlatformApiDelegateImpl implements ChallengePlatformApiDel
       challengePlatformCreateRequestDto
     );
     return ResponseEntity.status(HttpStatus.CREATED).body(createdPlatform);
+  }
+
+  @Override
+  @PreAuthorize("authentication.principal.admin")
+  public ResponseEntity<ChallengePlatformDto> updateChallengePlatform(
+    Long challengePlatformId,
+    ChallengePlatformUpdateRequestDto challengePlatformUpdateRequestDto
+  ) {
+    // Log the authenticated user for audit purposes
+    AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
+      .getAuthentication()
+      .getPrincipal();
+    logger.info(
+      "User {} (role: {}) is updating challenge platform {}",
+      user.getUsername(),
+      user.getRole(),
+      challengePlatformId
+    );
+
+    ChallengePlatformDto updatedPlatform = challengePlatformService.updateChallengePlatform(
+      challengePlatformId,
+      challengePlatformUpdateRequestDto
+    );
+
+    return ResponseEntity.ok(updatedPlatform);
   }
 }

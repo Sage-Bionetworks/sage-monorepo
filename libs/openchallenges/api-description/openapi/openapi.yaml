@@ -498,7 +498,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ChallengeContribution'
+                $ref: '#/components/schemas/ChallengePlatform'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':

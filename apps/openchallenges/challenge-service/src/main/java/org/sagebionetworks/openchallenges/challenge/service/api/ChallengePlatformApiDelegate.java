@@ -1,7 +1,6 @@
 package org.sagebionetworks.openchallenges.challenge.service.api;
 
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.BasicErrorDto;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformSearchQueryDto;
@@ -201,12 +200,12 @@ public interface ChallengePlatformApiDelegate {
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see ChallengePlatformApi#updateChallengePlatform
      */
-    default ResponseEntity<ChallengeContributionDto> updateChallengePlatform(Long challengePlatformId,
+    default ResponseEntity<ChallengePlatformDto> updateChallengePlatform(Long challengePlatformId,
         ChallengePlatformUpdateRequestDto challengePlatformUpdateRequestDto) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"organizationId\" : 1, \"challengeId\" : 1, \"role\" : \"challenge_organizer\", \"id\" : 1 }";
+                    String exampleString = "{ \"avatarKey\" : \"logo/dream.png\", \"websiteUrl\" : \"https://openchallenges.io\", \"name\" : \"Example Challenge Platform\", \"id\" : 1, \"slug\" : \"example-challenge-platform\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
