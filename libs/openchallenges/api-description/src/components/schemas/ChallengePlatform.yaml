@@ -11,19 +11,9 @@ properties:
     $ref: AvatarKey.yaml
   websiteUrl:
     $ref: Url.yaml
-  createdAt:
-    type: string
-    format: date-time
-    example: '2022-07-04T22:19:11Z'
-  updatedAt:
-    type: string
-    format: date-time
-    example: '2022-07-04T22:19:11Z'
 required:
   - id
   - slug
   - name
   - avatarKey
   - websiteUrl
-  - createdAt
-  - updatedAt

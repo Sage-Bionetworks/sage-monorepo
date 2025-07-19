@@ -1009,22 +1009,12 @@ components:
           $ref: '#/components/schemas/AvatarKey'
         websiteUrl:
           $ref: '#/components/schemas/Url'
-        createdAt:
-          type: string
-          format: date-time
-          example: '2022-07-04T22:19:11Z'
-        updatedAt:
-          type: string
-          format: date-time
-          example: '2022-07-04T22:19:11Z'
       required:
         - id
         - slug
         - name
         - avatarKey
         - websiteUrl
-        - createdAt
-        - updatedAt
     ChallengePlatformsPage:
       type: object
       description: A page of challenge platforms.
