@@ -1,5 +1,0 @@
-description: The display name of the challenge platform.
-type: string
-minLength: 3
-maxLength: 50
-example: Example Challenge Platform

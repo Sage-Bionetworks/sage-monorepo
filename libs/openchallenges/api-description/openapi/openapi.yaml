@@ -1062,10 +1062,11 @@ components:
       format: int64
       example: 1
     ChallengePlatformName:
-      description: The name of the challenge platform.
+      description: The display name of the challenge platform.
       type: string
       minLength: 3
-      maxLength: 30
+      maxLength: 50
+      example: Example Challenge Platform
     SimpleChallengePlatform:
       type: object
       description: A simple challenge platform.
@@ -1416,28 +1417,44 @@ components:
             - challengePlatforms
       x-java-class-annotations:
         - '@lombok.Builder'
-    ChallengePlatformDisplayName:
-      description: The display name of the challenge platform.
+    AvatarKey:
+      description: The avatar key
       type: string
-      minLength: 3
-      maxLength: 50
-      example: Example Challenge Platform
+      example: logo/dream.png
     ChallengePlatformCreateRequest:
       type: object
       description: The information used to create a challenge platform
       properties:
-        displayName:
-          $ref: '#/components/schemas/ChallengePlatformDisplayName'
+        slug:
+          $ref: '#/components/schemas/ChallengePlatformSlug'
+        name:
+          $ref: '#/components/schemas/ChallengePlatformName'
+        avatarKey:
+          $ref: '#/components/schemas/AvatarKey'
+        websiteUrl:
+          $ref: '#/components/schemas/Url'
       required:
-        - displayName
+        - slug
+        - name
+        - avatarKey
+        - websiteUrl
     ChallengePlatformUpdateRequest:
       type: object
       description: A challenge platform update request.
       properties:
-        displayName:
-          $ref: '#/components/schemas/ChallengePlatformDisplayName'
+        slug:
+          $ref: '#/components/schemas/ChallengePlatformSlug'
+        name:
+          $ref: '#/components/schemas/ChallengePlatformName'
+        avatarKey:
+          $ref: '#/components/schemas/AvatarKey'
+        websiteUrl:
+          $ref: '#/components/schemas/Url'
       required:
-        - displayName
+        - slug
+        - name
+        - avatarKey
+        - websiteUrl
     EdamConceptSort:
       description: What to sort results by.
       type: string
