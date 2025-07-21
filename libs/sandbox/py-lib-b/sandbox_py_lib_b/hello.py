@@ -1,6 +1,11 @@
 """Sample Hello World application."""
 
+from faker import Faker
+
+fake = Faker()
+
 
 def hello():
     """Return a friendly greeting."""
-    return "Hello sandbox-py-lib-b"
+    name = fake.name()
+    return f"Hello sandbox-py-lib-b from {name}"
