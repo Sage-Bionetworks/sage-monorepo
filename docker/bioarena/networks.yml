@@ -1,4 +1,0 @@
-networks:
-  bioarena:
-    name: bioarena
-    driver: bridge

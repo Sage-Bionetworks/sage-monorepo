@@ -128,16 +128,16 @@ function agora-test-affected {
   nx affected --target=test --projects=agora-* --parallel=10
 }
 
-function bioarena-build-images {
-  nx run-many --target=build-image --projects=bioarena-* --parallel=3
+function bixarena-build-images {
+  nx run-many --target=build-image --projects=bixarena-* --parallel=3
 }
 
-function bioarena-docker-start {
-  nx serve-detach bioarena-apex
+function bixarena-docker-start {
+  nx serve-detach bixarena-apex
 }
 
-function bioarena-docker-rm {
-  docker rm -f $(docker ps -a --filter "name=^/bioarena-" --format "{{.ID}}")
+function bixarena-docker-rm {
+  docker rm -f $(docker ps -a --filter "name=^/bixarena-" --format "{{.ID}}")
 }
 
 function observability-build-images {

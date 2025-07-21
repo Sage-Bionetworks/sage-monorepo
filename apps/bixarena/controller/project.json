@@ -1,5 +1,5 @@
 {
-  "name": "bioarena-app",
+  "name": "bixarena-controller",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "targets": {
@@ -13,7 +13,7 @@
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker/bioarena/serve-detach.sh {projectName}"
+        "command": "docker/bixarena/serve-detach.sh {projectName}"
       }
     },
     "scan-image": {
