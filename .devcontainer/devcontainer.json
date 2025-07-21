@@ -97,11 +97,11 @@
       "onAutoForward": "silent"
     },
     "8100": {
-      "label": "bioarena-app",
+      "label": "bixarena-app",
       "onAutoForward": "silent"
     },
     "8111": {
-      "label": "bioarena-apex",
+      "label": "bixarena-apex",
       "onAutoForward": "silent"
     },
     "8400": {
@@ -197,7 +197,7 @@
       "onAutoForward": "silent"
     },
     "21001": {
-      "label": "bioarena-controller",
+      "label": "bixarena-controller",
       "onAutoForward": "silent"
     },
     "27017": {

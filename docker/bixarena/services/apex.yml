@@ -1,0 +1,18 @@
+services:
+  bixarena-apex:
+    image: ghcr.io/sage-bionetworks/bixarena-apex:${bixarena_VERSION:-local}
+    container_name: bixarena-apex
+    restart: always
+    env_file:
+      - ../../../apps/bixarena/apex/.env
+    volumes:
+      - ../../../apps/bixarena/apex/Caddyfile:/etc/caddy/Caddyfile
+    networks:
+      - bixarena
+    ports:
+      - '8111:8111'
+    depends_on:
+      bixarena-app:
+        condition: service_started
+      bixarena-controller:
+        condition: service_started
