@@ -567,11 +567,11 @@ paths:
       tags:
         - Organization
       summary: Get an organization
-      description: Returns the organization specified
+      description: Returns the organization identified by its login or ID.
       operationId: getOrganization
       responses:
         '200':
-          description: An organization
+          description: Organization retrieved successfully
           content:
             application/json:
               schema:
@@ -580,11 +580,44 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - Organization
+      summary: Update an existing organization
+      description: Updates an existing organization.
+      operationId: updateOrganization
+      security:
+        - apiBearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationUpdateRequest'
+      responses:
+        '200':
+          description: Organization updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
     delete:
       tags:
         - Organization
       summary: Delete an organization
-      description: Deletes the organization specified
+      description: Deletes the organization specified by its login or ID.
       operationId: deleteOrganization
       security:
         - apiBearerAuth:
@@ -1659,6 +1692,29 @@ components:
       required:
         - login
         - name
+        - websiteUrl
+    OrganizationUpdateRequest:
+      type: object
+      description: The information required to update an org account
+      properties:
+        name:
+          type: string
+          example: Example organization
+        description:
+          type: string
+          example: A short description of the organization.
+          nullable: true
+        avatarUrl:
+          type: string
+          format: url
+          example: 'https://via.placeholder.com/300.png'
+          nullable: true
+        websiteUrl:
+          $ref: '#/components/schemas/Url'
+      required:
+        - name
+        - description
+        - avatarUrl
         - websiteUrl
   responses:
     Unauthorized:
