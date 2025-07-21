@@ -15,11 +15,19 @@ workspace = true
 [tool.uv.sources.bixarena-tools]
 workspace = true
 
+[tool.uv.sources.sandbox-py-lib-a]
+workspace = true
+
+[tool.uv.sources.sandbox-py-lib-b]
+workspace = true
+
 [tool.uv.workspace]
 members = [
   "apps/bixarena/tools",
   "apps/openchallenges/tools",
-  "libs/openchallenges/api-client-python"
+  "libs/openchallenges/api-client-python",
+  "libs/sandbox/py-lib-a",
+  "libs/sandbox/py-lib-b"
 ]
 
 [build-system]
@@ -31,7 +39,9 @@ requires-python = "==3.13.3"
 dependencies = [
   "openchallenges_tools",
   "openchallenges-api-client-python",
-  "bixarena-tools"
+  "bixarena-tools",
+  "sandbox-py-lib-a",
+  "sandbox-py-lib-b"
 ]
 name = "sage-monorepo"
 version = "1.0.0"
