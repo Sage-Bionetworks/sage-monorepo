@@ -524,6 +524,12 @@ dev = [
 name = "sandbox-py-lib-a"
 version = "1.0.0"
 source = { editable = "libs/sandbox/py-lib-a" }
+dependencies = [
+    { name = "sandbox-py-lib-b" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "sandbox-py-lib-b", editable = "libs/sandbox/py-lib-b" }]
 
 [[package]]
 name = "sandbox-py-lib-b"
