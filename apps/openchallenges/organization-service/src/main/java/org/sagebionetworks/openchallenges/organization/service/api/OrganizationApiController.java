@@ -1,8 +1,10 @@
 package org.sagebionetworks.openchallenges.organization.service.api;
 
 import org.sagebionetworks.openchallenges.organization.service.model.dto.BasicErrorDto;
+import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationCreateRequestDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationSearchQueryDto;
+import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationUpdateRequestDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationsPageDto;
 
 

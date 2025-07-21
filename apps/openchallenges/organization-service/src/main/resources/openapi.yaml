@@ -3,6 +3,7 @@ info:
   contact:
     name: Support
     url: https://github.com/Sage-Bionetworks/sage-monorepo
+  description: 'Discover, explore, and contribute to open biomedical challenges.'
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -13,8 +14,6 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - description: Operations about authentication
-    name: Authentication
   - description: Operations about organizations
     name: Organization
 paths:
@@ -59,9 +58,61 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Organization
+    post:
+      description: Create an organization with the specified account name
+      operationId: createOrganization
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+          description: Organization created successfully
+        '401':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        '403':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The user does not have the permission to perform this action
+        '409':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request conflicts with current state of the target resource
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+        - apiBearerAuth: []
+      summary: Create an organization
+      tags:
+        - Organization
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Organization
   /organizations/{org}:
     delete:
-      description: Deletes the organization specified
+      description: Deletes the organization specified by its login or ID.
       operationId: deleteOrganization
       parameters:
         - description: The id or login of the organization.
@@ -118,7 +169,7 @@ paths:
       x-tags:
         - tag: Organization
     get:
-      description: Returns the organization specified
+      description: Returns the organization identified by its login or ID.
       operationId: getOrganization
       parameters:
         - description: The id or login of the organization.
@@ -142,7 +193,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Organization'
-          description: An organization
+          description: Organization retrieved successfully
         '404':
           content:
             application/problem+json:
@@ -159,6 +210,86 @@ paths:
       summary: Get an organization
       tags:
         - Organization
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Organization
+    put:
+      description: Updates an existing organization.
+      operationId: updateOrganization
+      parameters:
+        - description: The id or login of the organization.
+          examples:
+            byString:
+              value: dream
+            byId:
+              value: '1'
+          explode: false
+          in: path
+          name: org
+          required: true
+          schema:
+            maxLength: 64
+            minLength: 1
+            type: string
+          style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationUpdateRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+          description: Organization updated successfully
+        '400':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        '401':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        '403':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The user does not have the permission to perform this action
+        '404':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        '409':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request conflicts with current state of the target resource
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+        - apiBearerAuth: []
+      summary: Update an existing organization
+      tags:
+        - Organization
+      x-content-type: application/json
       x-accepts:
         - application/json
         - application/problem+json
@@ -204,12 +335,6 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: The request cannot be fulfilled due to an unexpected server error
-    NotFound:
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-      description: The specified resource was not found
     Unauthorized:
       content:
         application/problem+json:
@@ -222,6 +347,18 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: The user does not have the permission to perform this action
+    Conflict:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The request conflicts with current state of the target resource
+    NotFound:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The specified resource was not found
   schemas:
     OrganizationCategory:
       description: The category of the organization.
@@ -501,6 +638,68 @@ components:
       x-java-class-annotations:
         - '@lombok.AllArgsConstructor'
         - '@lombok.Builder'
+    OrganizationCreateRequest:
+      description: The information required to create an org account
+      properties:
+        login:
+          description: The unique login of an organization.
+          example: example-org
+          maxLength: 64
+          minLength: 2
+          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          type: string
+        name:
+          example: Example organization
+          type: string
+        description:
+          example: A short description of the organization.
+          nullable: true
+          type: string
+        avatarUrl:
+          example: https://via.placeholder.com/300.png
+          format: url
+          nullable: true
+          type: string
+        websiteUrl:
+          description: A URL to the website or image.
+          example: https://openchallenges.io
+          format: url
+          maxLength: 500
+          nullable: true
+          type: string
+      required:
+        - login
+        - name
+        - websiteUrl
+      type: object
+    OrganizationUpdateRequest:
+      description: The information required to update an org account
+      properties:
+        name:
+          example: Example organization
+          type: string
+        description:
+          example: A short description of the organization.
+          nullable: true
+          type: string
+        avatarUrl:
+          example: https://via.placeholder.com/300.png
+          format: url
+          nullable: true
+          type: string
+        websiteUrl:
+          description: A URL to the website or image.
+          example: https://openchallenges.io
+          format: url
+          maxLength: 500
+          nullable: true
+          type: string
+      required:
+        - avatarUrl
+        - description
+        - name
+        - websiteUrl
+      type: object
   securitySchemes:
     apiBearerAuth:
       bearerFormat: api_key
