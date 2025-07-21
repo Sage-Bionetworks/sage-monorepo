@@ -13,11 +13,13 @@ server:
 spring:
   application:
     name: openchallenges-challenge-service
-  profiles:
-    active: dev
   flyway:
     enabled: true
     clean-disabled: false
+  jackson:
+    date-format: org.sagebionetworks.openchallenges.challenge.service.RFC3339DateFormat
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
   jpa:
     hibernate:
       ddl-auto: validate
@@ -32,10 +34,8 @@ spring:
             hosts: openchallenges-opensearch:9200
             # username: admin
             # password: admin
-  jackson:
-    date-format: org.sagebionetworks.openchallenges.challenge.service.RFC3339DateFormat
-    serialization:
-      WRITE_DATES_AS_TIMESTAMPS: false
+  profiles:
+    active: dev
 
 eureka:
   client:
