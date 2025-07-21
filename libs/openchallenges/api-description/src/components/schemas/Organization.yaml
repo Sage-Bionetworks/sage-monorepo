@@ -17,6 +17,7 @@ properties:
   avatarKey:
     type: string
     example: logo/dream.png
+    nullable: true
   websiteUrl:
     $ref: Url.yaml
   challengeCount:

@@ -535,6 +535,7 @@ components:
           type: string
         avatarKey:
           example: logo/dream.png
+          nullable: true
           type: string
         websiteUrl:
           description: A URL to the website or image.
@@ -655,9 +656,8 @@ components:
           example: A short description of the organization.
           nullable: true
           type: string
-        avatarUrl:
-          example: https://via.placeholder.com/300.png
-          format: url
+        avatarKey:
+          example: logo/300.png
           nullable: true
           type: string
         websiteUrl:

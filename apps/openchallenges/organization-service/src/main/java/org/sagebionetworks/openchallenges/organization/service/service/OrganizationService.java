@@ -2,16 +2,21 @@ package org.sagebionetworks.openchallenges.organization.service.service;
 
 import java.util.Arrays;
 import java.util.List;
+import org.sagebionetworks.openchallenges.organization.service.exception.OrganizationAlreadyExistsException;
 import org.sagebionetworks.openchallenges.organization.service.exception.OrganizationNotFoundException;
+import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationCreateRequestDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationSearchQueryDto;
+import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationUpdateRequestDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationsPageDto;
+import org.sagebionetworks.openchallenges.organization.service.model.entity.ChallengeContributionEntity;
 import org.sagebionetworks.openchallenges.organization.service.model.entity.OrganizationEntity;
 import org.sagebionetworks.openchallenges.organization.service.model.mapper.OrganizationMapper;
 import org.sagebionetworks.openchallenges.organization.service.model.repository.ChallengeContributionRepository;
 import org.sagebionetworks.openchallenges.organization.service.model.repository.OrganizationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -110,9 +115,6 @@ public class OrganizationService {
       // Ignore
     }
 
-    logger.info("login: {}", orgLogin);
-    logger.info("id: {}", orgId);
-
     OrganizationEntity orgEntity = organizationRepository
       .findByIdOrLogin(orgId, orgLogin)
       .orElseThrow(() ->
@@ -122,5 +124,44 @@ public class OrganizationService {
       );
 
     return organizationMapper.convertToDto(orgEntity);
+  }
+
+  public OrganizationDto createOrganization(OrganizationCreateRequestDto request) {
+    // Create the organization entity
+    OrganizationEntity entity = OrganizationEntity.builder()
+      .login(request.getLogin())
+      .name(request.getName())
+      .description(request.getDescription())
+      .avatarKey(request.getAvatarKey())
+      .websiteUrl(request.getWebsiteUrl())
+      .build();
+
+    try {
+      // Save the entity
+      OrganizationEntity savedEntity = organizationRepository.save(entity);
+
+      // Return the full contribution DTO
+      return organizationMapper.convertToDto(savedEntity);
+    } catch (DataIntegrityViolationException e) {
+      // Check if this is the unique constraint violation
+      String message = e.getMessage();
+      if (message != null) {
+        if (message.contains("organization_login_key")) {
+          throw new OrganizationAlreadyExistsException(
+            String.format("A organization with login '%s' already exists.", request.getName())
+          );
+        }
+      }
+      // Re-throw the original exception if it's not the constraint we're looking for
+      throw e;
+    }
+  }
+
+  public OrganizationDto updateOrganization(
+    String org,
+    OrganizationUpdateRequestDto organizationUpdateRequestDto
+  ) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'updateOrganization'");
   }
 }

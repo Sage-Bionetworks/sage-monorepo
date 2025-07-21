@@ -30,7 +30,7 @@ public class OrganizationCreateRequestDto {
 
   private @Nullable String description = null;
 
-  private @Nullable String avatarUrl = null;
+  private @Nullable String avatarKey = null;
 
   private String websiteUrl = null;
 
@@ -107,24 +107,24 @@ public class OrganizationCreateRequestDto {
     this.description = description;
   }
 
-  public OrganizationCreateRequestDto avatarUrl(String avatarUrl) {
-    this.avatarUrl = avatarUrl;
+  public OrganizationCreateRequestDto avatarKey(String avatarKey) {
+    this.avatarKey = avatarKey;
     return this;
   }
 
   /**
-   * Get avatarUrl
-   * @return avatarUrl
+   * Get avatarKey
+   * @return avatarKey
    */
   
-  @Schema(name = "avatarUrl", example = "https://via.placeholder.com/300.png", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("avatarUrl")
-  public String getAvatarUrl() {
-    return avatarUrl;
+  @Schema(name = "avatarKey", example = "logo/300.png", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("avatarKey")
+  public String getAvatarKey() {
+    return avatarKey;
   }
 
-  public void setAvatarUrl(String avatarUrl) {
-    this.avatarUrl = avatarUrl;
+  public void setAvatarKey(String avatarKey) {
+    this.avatarKey = avatarKey;
   }
 
   public OrganizationCreateRequestDto websiteUrl(String websiteUrl) {
@@ -159,13 +159,13 @@ public class OrganizationCreateRequestDto {
     return Objects.equals(this.login, organizationCreateRequest.login) &&
         Objects.equals(this.name, organizationCreateRequest.name) &&
         Objects.equals(this.description, organizationCreateRequest.description) &&
-        Objects.equals(this.avatarUrl, organizationCreateRequest.avatarUrl) &&
+        Objects.equals(this.avatarKey, organizationCreateRequest.avatarKey) &&
         Objects.equals(this.websiteUrl, organizationCreateRequest.websiteUrl);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(login, name, description, avatarUrl, websiteUrl);
+    return Objects.hash(login, name, description, avatarKey, websiteUrl);
   }
 
   @Override
@@ -175,7 +175,7 @@ public class OrganizationCreateRequestDto {
     sb.append("    login: ").append(toIndentedString(login)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
+    sb.append("    avatarKey: ").append(toIndentedString(avatarKey)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -208,7 +208,7 @@ public class OrganizationCreateRequestDto {
       this.instance.setLogin(value.login);
       this.instance.setName(value.name);
       this.instance.setDescription(value.description);
-      this.instance.setAvatarUrl(value.avatarUrl);
+      this.instance.setAvatarKey(value.avatarKey);
       this.instance.setWebsiteUrl(value.websiteUrl);
       return this;
     }
@@ -228,8 +228,8 @@ public class OrganizationCreateRequestDto {
       return this;
     }
     
-    public OrganizationCreateRequestDto.Builder avatarUrl(String avatarUrl) {
-      this.instance.avatarUrl(avatarUrl);
+    public OrganizationCreateRequestDto.Builder avatarKey(String avatarKey) {
+      this.instance.avatarKey(avatarKey);
       return this;
     }
     

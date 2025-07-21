@@ -73,11 +73,11 @@ public class OrganizationEntity {
   @FullTextField
   private String description;
 
-  @Column(name = "created_at")
+  @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
   @GenericField(name = "created_at", sortable = Sortable.YES)
   private OffsetDateTime createdAt;
 
-  @Column(name = "updated_at")
+  @Column(name = "updated_at", nullable = false, insertable = false, updatable = false)
   private OffsetDateTime updatedAt;
 
   @Column(name = "acronym", nullable = true)

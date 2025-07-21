@@ -34,7 +34,7 @@ public class OrganizationDto {
 
   private @Nullable String description = null;
 
-  private @Nullable String avatarKey;
+  private @Nullable String avatarKey = null;
 
   private @Nullable String websiteUrl = null;
 
