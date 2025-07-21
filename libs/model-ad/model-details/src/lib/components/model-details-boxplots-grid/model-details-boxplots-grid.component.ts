@@ -2,6 +2,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, computed, inject, input } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { DecodeGreekEntityPipe } from '@sagebionetworks/explorers/util';
+import { BreakpointConfigService } from '@sagebionetworks/explorers/services';
 import { IndividualData, ModelData } from '@sagebionetworks/model-ad/api-client-angular';
 import { ModelDetailsBoxplotComponent } from '../model-details-boxplot/model-details-boxplot.component';
 
@@ -13,26 +14,15 @@ import { ModelDetailsBoxplotComponent } from '../model-details-boxplot/model-det
 })
 export class ModelDetailsBoxplotsGridComponent {
   private readonly breakpointObserver = inject(BreakpointObserver);
+  private readonly breakpointConfigService = inject(BreakpointConfigService);
 
   modelDataList = input.required<ModelData[]>();
   genotypeOrder = input<string[] | undefined>();
   sexes = input.required<IndividualData.SexEnum[]>();
   title = input.required<string>();
 
-  private readonly defaultLargeBreakpoint = '992px';
-
-  private readonly largeBreakpoint = (() => {
-    if (typeof document !== 'undefined') {
-      const breakpointValue = getComputedStyle(document.documentElement).getPropertyValue(
-        '--lg-breakpoint',
-      );
-      return breakpointValue?.trim() || this.defaultLargeBreakpoint;
-    }
-    return this.defaultLargeBreakpoint;
-  })();
-
   private readonly observeLargeScreen = toSignal(
-    this.breakpointObserver.observe(`(min-width: ${this.largeBreakpoint})`),
+    this.breakpointObserver.observe(`(min-width: ${this.breakpointConfigService.largeBreakpoint})`),
     { initialValue: { matches: false, breakpoints: {} } },
   );
 

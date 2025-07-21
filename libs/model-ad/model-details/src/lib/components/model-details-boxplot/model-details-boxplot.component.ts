@@ -57,6 +57,7 @@ export class ModelDetailsBoxplotComponent {
 
   xAxisLabelFormatter = (value: string) => {
     if (value.length > 10) {
+      // replace first occurrence of - or * with a newline character
       return value.replace(/[-*]/, (match) => match + '\n');
     }
     return value;
