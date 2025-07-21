@@ -6,17 +6,18 @@ properties:
   name:
     type: string
     example: Example organization
+  description:
+    type: string
+    example: A short description of the organization.
+    nullable: true
   avatarUrl:
     type: string
     format: url
     example: https://via.placeholder.com/300.png
     nullable: true
   websiteUrl:
-    type: string
-    format: url
-    example: https://example.com
-  description:
-    type: string
-    example: A short description of the organization.
+    $ref: Url.yaml
 required:
   - login
+  - name
+  - websiteUrl

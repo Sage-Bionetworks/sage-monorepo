@@ -531,6 +531,35 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - Organization
+      summary: Create an organization
+      description: Create an organization with the specified account name
+      operationId: createOrganization
+      security:
+        - apiBearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+          description: Organization created successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   '/organizations/{org}':
     parameters:
       - $ref: '#/components/parameters/org'
@@ -1607,6 +1636,30 @@ components:
             - organizations
       x-java-class-annotations:
         - '@lombok.Builder'
+    OrganizationCreateRequest:
+      type: object
+      description: The information required to create an org account
+      properties:
+        login:
+          $ref: '#/components/schemas/OrganizationLogin'
+        name:
+          type: string
+          example: Example organization
+        description:
+          type: string
+          example: A short description of the organization.
+          nullable: true
+        avatarUrl:
+          type: string
+          format: url
+          example: 'https://via.placeholder.com/300.png'
+          nullable: true
+        websiteUrl:
+          $ref: '#/components/schemas/Url'
+      required:
+        - login
+        - name
+        - websiteUrl
   responses:
     Unauthorized:
       description: Unauthorized
