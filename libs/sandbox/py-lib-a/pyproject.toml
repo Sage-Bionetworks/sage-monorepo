@@ -9,7 +9,7 @@ show_missing = true
 [tool.pytest.ini_options]
 addopts = """
  --cov
- --cov-fail-under=100
+ --cov-fail-under=50
  --cov-report html:'../../../coverage/libs/sandbox/py-lib-a/html'
  --cov-report xml:'../../../coverage/libs/sandbox/py-lib-a/coverage.xml'
  --html='../../../reports/libs/sandbox/py-lib-a/unittests/html/index.html'

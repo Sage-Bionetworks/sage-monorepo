@@ -73,6 +73,13 @@
         "verbose": false,
         "debug": false
       }
+    },
+    "run-hello": {
+      "executor": "@nxlv/python:run-commands",
+      "options": {
+        "command": "uv run sandbox_py_lib_a/hello.py",
+        "cwd": "{projectRoot}"
+      }
     }
   },
   "tags": [],
