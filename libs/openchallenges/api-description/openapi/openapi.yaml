@@ -1707,18 +1707,25 @@ components:
           type: string
           example: A short description of the organization.
           nullable: true
-        avatarUrl:
+        avatarKey:
           type: string
           format: url
           example: 'https://via.placeholder.com/300.png'
           nullable: true
         websiteUrl:
           $ref: '#/components/schemas/Url'
+        acronym:
+          description: An acronym of the organization.
+          type: string
+          maxLength: 10
+          example: OC
+          nullable: true
       required:
         - name
         - description
-        - avatarUrl
+        - avatarKey
         - websiteUrl
+        - acronym
   responses:
     Unauthorized:
       description: Unauthorized

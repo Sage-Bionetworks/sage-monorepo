@@ -586,7 +586,7 @@ components:
           example: A short description of the organization.
           nullable: true
           type: string
-        avatarUrl:
+        avatarKey:
           example: https://via.placeholder.com/300.png
           format: url
           nullable: true
@@ -598,8 +598,15 @@ components:
           maxLength: 500
           nullable: true
           type: string
+        acronym:
+          description: An acronym of the organization.
+          example: OC
+          maxLength: 10
+          nullable: true
+          type: string
       required:
-        - avatarUrl
+        - acronym
+        - avatarKey
         - description
         - name
         - websiteUrl

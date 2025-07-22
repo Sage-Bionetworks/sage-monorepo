@@ -107,6 +107,7 @@ public class OrganizationService {
 
   @Transactional(readOnly = true)
   public OrganizationDto getOrganization(String identifier) {
+    // Find the organization
     String orgLogin = String.valueOf(identifier);
     Long orgId = null;
     try {
@@ -114,7 +115,6 @@ public class OrganizationService {
     } catch (Exception ignore) {
       // Ignore
     }
-
     OrganizationEntity orgEntity = organizationRepository
       .findByIdOrLogin(orgId, orgLogin)
       .orElseThrow(() ->
@@ -160,10 +160,41 @@ public class OrganizationService {
   }
 
   public OrganizationDto updateOrganization(
-    String org,
-    OrganizationUpdateRequestDto organizationUpdateRequestDto
+    String identifier,
+    OrganizationUpdateRequestDto request
   ) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'updateOrganization'");
+    // Find the existing organization
+    String orgLogin = String.valueOf(identifier);
+    Long orgId = null;
+    try {
+      orgId = Long.valueOf(orgLogin);
+    } catch (Exception ignore) {
+      // Ignore
+    }
+    OrganizationEntity existingOrg = organizationRepository
+      .findByIdOrLogin(orgId, orgLogin)
+      .orElseThrow(() ->
+        new OrganizationNotFoundException(
+          String.format("The organization with the ID or login %s does not exist.", identifier)
+        )
+      );
+
+    // Update the organization
+    existingOrg.setName(request.getName());
+    existingOrg.setDescription(request.getDescription());
+    existingOrg.setAvatarKey(request.getAvatarKey());
+    existingOrg.setWebsiteUrl(request.getWebsiteUrl());
+    existingOrg.setAcronym(request.getAcronym());
+
+    try {
+      // Save the updated entity
+      OrganizationEntity updatedEntity = organizationRepository.save(existingOrg);
+
+      // Return the updated contribution as DTO
+      return organizationMapper.convertToDto(updatedEntity);
+    } catch (DataIntegrityViolationException e) {
+      // Re-throw the original exception if it's not the constraint we're looking for
+      throw e;
+    }
   }
 }

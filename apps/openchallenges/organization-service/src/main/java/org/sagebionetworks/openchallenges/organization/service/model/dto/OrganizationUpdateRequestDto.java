@@ -28,9 +28,11 @@ public class OrganizationUpdateRequestDto {
 
   private String description = null;
 
-  private String avatarUrl = null;
+  private String avatarKey = null;
 
   private String websiteUrl = null;
+
+  private String acronym = null;
 
   public OrganizationUpdateRequestDto() {
     super();
@@ -39,11 +41,12 @@ public class OrganizationUpdateRequestDto {
   /**
    * Constructor with only required parameters
    */
-  public OrganizationUpdateRequestDto(String name, String description, String avatarUrl, String websiteUrl) {
+  public OrganizationUpdateRequestDto(String name, String description, String avatarKey, String websiteUrl, String acronym) {
     this.name = name;
     this.description = description;
-    this.avatarUrl = avatarUrl;
+    this.avatarKey = avatarKey;
     this.websiteUrl = websiteUrl;
+    this.acronym = acronym;
   }
 
   public OrganizationUpdateRequestDto name(String name) {
@@ -86,24 +89,24 @@ public class OrganizationUpdateRequestDto {
     this.description = description;
   }
 
-  public OrganizationUpdateRequestDto avatarUrl(String avatarUrl) {
-    this.avatarUrl = avatarUrl;
+  public OrganizationUpdateRequestDto avatarKey(String avatarKey) {
+    this.avatarKey = avatarKey;
     return this;
   }
 
   /**
-   * Get avatarUrl
-   * @return avatarUrl
+   * Get avatarKey
+   * @return avatarKey
    */
   @NotNull 
-  @Schema(name = "avatarUrl", example = "https://via.placeholder.com/300.png", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("avatarUrl")
-  public String getAvatarUrl() {
-    return avatarUrl;
+  @Schema(name = "avatarKey", example = "https://via.placeholder.com/300.png", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("avatarKey")
+  public String getAvatarKey() {
+    return avatarKey;
   }
 
-  public void setAvatarUrl(String avatarUrl) {
-    this.avatarUrl = avatarUrl;
+  public void setAvatarKey(String avatarKey) {
+    this.avatarKey = avatarKey;
   }
 
   public OrganizationUpdateRequestDto websiteUrl(String websiteUrl) {
@@ -126,6 +129,26 @@ public class OrganizationUpdateRequestDto {
     this.websiteUrl = websiteUrl;
   }
 
+  public OrganizationUpdateRequestDto acronym(String acronym) {
+    this.acronym = acronym;
+    return this;
+  }
+
+  /**
+   * An acronym of the organization.
+   * @return acronym
+   */
+  @NotNull @Size(max = 10) 
+  @Schema(name = "acronym", example = "OC", description = "An acronym of the organization.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("acronym")
+  public String getAcronym() {
+    return acronym;
+  }
+
+  public void setAcronym(String acronym) {
+    this.acronym = acronym;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -137,13 +160,14 @@ public class OrganizationUpdateRequestDto {
     OrganizationUpdateRequestDto organizationUpdateRequest = (OrganizationUpdateRequestDto) o;
     return Objects.equals(this.name, organizationUpdateRequest.name) &&
         Objects.equals(this.description, organizationUpdateRequest.description) &&
-        Objects.equals(this.avatarUrl, organizationUpdateRequest.avatarUrl) &&
-        Objects.equals(this.websiteUrl, organizationUpdateRequest.websiteUrl);
+        Objects.equals(this.avatarKey, organizationUpdateRequest.avatarKey) &&
+        Objects.equals(this.websiteUrl, organizationUpdateRequest.websiteUrl) &&
+        Objects.equals(this.acronym, organizationUpdateRequest.acronym);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, description, avatarUrl, websiteUrl);
+    return Objects.hash(name, description, avatarKey, websiteUrl, acronym);
   }
 
   @Override
@@ -152,8 +176,9 @@ public class OrganizationUpdateRequestDto {
     sb.append("class OrganizationUpdateRequestDto {\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
+    sb.append("    avatarKey: ").append(toIndentedString(avatarKey)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
+    sb.append("    acronym: ").append(toIndentedString(acronym)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -184,8 +209,9 @@ public class OrganizationUpdateRequestDto {
     protected Builder copyOf(OrganizationUpdateRequestDto value) { 
       this.instance.setName(value.name);
       this.instance.setDescription(value.description);
-      this.instance.setAvatarUrl(value.avatarUrl);
+      this.instance.setAvatarKey(value.avatarKey);
       this.instance.setWebsiteUrl(value.websiteUrl);
+      this.instance.setAcronym(value.acronym);
       return this;
     }
 
@@ -199,13 +225,18 @@ public class OrganizationUpdateRequestDto {
       return this;
     }
     
-    public OrganizationUpdateRequestDto.Builder avatarUrl(String avatarUrl) {
-      this.instance.avatarUrl(avatarUrl);
+    public OrganizationUpdateRequestDto.Builder avatarKey(String avatarKey) {
+      this.instance.avatarKey(avatarKey);
       return this;
     }
     
     public OrganizationUpdateRequestDto.Builder websiteUrl(String websiteUrl) {
       this.instance.websiteUrl(websiteUrl);
+      return this;
+    }
+    
+    public OrganizationUpdateRequestDto.Builder acronym(String acronym) {
+      this.instance.acronym(acronym);
       return this;
     }
     
