@@ -9,15 +9,19 @@
  */
 
 /**
- * Model Overview Link
+ * Comparison Tool Config Filter
  */
-export interface ModelOverviewLink {
+export interface ComparisonToolConfigFilter {
   /**
-   * Link text
+   * Name of the filter group
    */
-  link_text?: string;
+  name: string;
   /**
-   * URL for the related resource
+   * Field to filter on
    */
-  link_url?: string;
+  field: string;
+  /**
+   * List of filter values
+   */
+  values: Array<string>;
 }

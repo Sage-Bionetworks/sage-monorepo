@@ -18,8 +18,10 @@ tags:
     description: Operations about dataversion.
   - name: Models
     description: Operations about models.
+  - name: ModelOverview
+    description: Operations about Model Overview.
   - name: ComparisonToolConfig
-    description: Operations about UI configuration.
+    description: Operations about Comparison Tool UI configuration.
 paths:
   /dataversion:
     get:
@@ -102,7 +104,7 @@ paths:
         - ModelOverview
       summary: Get model overview for comparison tools
       description: Returns a list of model overview objects for use in comparison tools.
-      operationId: getModelOverview
+      operationId: getModelOverviews
       responses:
         '200':
           description: A list of model overview objects
@@ -311,10 +313,10 @@ components:
           description: The display name of the column.
         type:
           type: string
-          description: The data type of the column.
-        column_type:
-          type: string
-          description: The UI-specific type of the column.
+          enum:
+            - text
+            - heat_map
+          description: The data type of the column. Must be 'text' or 'heat_map'.
         tooltip:
           type: string
           description: Tooltip text for the column.
@@ -324,9 +326,30 @@ components:
       required:
         - name
         - type
-        - column_type
         - tooltip
         - sort_tooltip
+    ComparisonToolConfigFilter:
+      type: object
+      description: Comparison Tool Config Filter
+      properties:
+        name:
+          type: string
+          description: Name of the filter group
+          example: Biological Domain
+        field:
+          type: string
+          description: Field to filter on
+          example: model_type
+        values:
+          type: array
+          description: List of filter values
+          items:
+            type: string
+            example: Apoptosis
+      required:
+        - name
+        - field
+        - values
     ComparisonToolConfig:
       type: object
       properties:
@@ -345,13 +368,15 @@ components:
           description: List of column definitions
           items:
             $ref: '#/components/schemas/ComparisonToolConfigColumn'
+        filters:
+          $ref: '#/components/schemas/ComparisonToolConfigFilter'
       required:
         - page
         - dropdowns
         - columns
     ModelOverviewLink:
       type: object
-      description: Model Overview Links
+      description: Model Overview Link
       properties:
         link_text:
           type: string
@@ -359,6 +384,17 @@ components:
         link_url:
           type: string
           description: URL for the related resource
+      oneOf:
+        - required:
+            - link_text
+          not:
+            required:
+              - link_url
+        - required:
+            - link_url
+          not:
+            required:
+              - link_text
     ModelOverview:
       type: object
       description: Model Overview object for comparison tools
@@ -370,24 +406,42 @@ components:
           type: string
           description: Model type (e.g., Late Onset AD, Familial AD)
         matched_controls:
+          type: string
+          description: A comma-delimited list of matched control models
+        gene_expression:
+          $ref: '#/components/schemas/ModelOverviewLink'
+          nullable: true
+        disease_correlation:
+          $ref: '#/components/schemas/ModelOverviewLink'
+          nullable: true
+        biomarkers:
+          $ref: '#/components/schemas/ModelOverviewLink'
+          nullable: true
+        pathology:
+          $ref: '#/components/schemas/ModelOverviewLink'
+          nullable: true
+        study_data:
+          $ref: '#/components/schemas/ModelOverviewLink'
+          nullable: true
+        jax_strain:
+          $ref: '#/components/schemas/ModelOverviewLink'
+          nullable: true
+        center:
+          $ref: '#/components/schemas/ModelOverviewLink'
+          nullable: true
+        modified_genes:
           type: array
           items:
             type: string
-          description: List of matched control models
-        gene_expression:
-          $ref: '#/components/schemas/ModelOverviewLink'
-        disease_correlation:
-          $ref: '#/components/schemas/ModelOverviewLink'
-        biomarkers:
-          $ref: '#/components/schemas/ModelOverviewLink'
-        pathology:
-          $ref: '#/components/schemas/ModelOverviewLink'
-        study_data:
-          $ref: '#/components/schemas/ModelOverviewLink'
-        jax_strain:
-          $ref: '#/components/schemas/ModelOverviewLink'
-        center:
-          $ref: '#/components/schemas/ModelOverviewLink'
+          description: List of modified genes in the model
+      required:
+        - model
+        - model_type
+        - matched_controls
+        - study_data
+        - jax_strain
+        - center
+        - modified_genes
   responses:
     BadRequest:
       description: Invalid request

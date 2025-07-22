@@ -47,7 +47,7 @@ const ModelSchema = new Schema<Model>(
     biomarkers: { type: [ModelDataSchema], required: true },
     pathology: { type: [ModelDataSchema], required: true },
   },
-  { collection: 'modeldetails' },
+  { collection: 'model_details' },
 );
 
 export const ModelsCollection = model<Model>('ModelsCollection', ModelSchema);

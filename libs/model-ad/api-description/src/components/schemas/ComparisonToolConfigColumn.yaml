@@ -5,10 +5,10 @@ properties:
     description: The display name of the column.
   type:
     type: string
-    description: The data type of the column.
-  column_type:
-    type: string
-    description: The UI-specific type of the column.
+    enum:
+      - text
+      - heat_map
+    description: The data type of the column. Must be 'text' or 'heat_map'.
   tooltip:
     type: string
     description: Tooltip text for the column.
@@ -18,6 +18,5 @@ properties:
 required:
   - name
   - type
-  - column_type
   - tooltip
   - sort_tooltip

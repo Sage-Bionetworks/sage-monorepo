@@ -13,6 +13,7 @@ index.ts
 model/basicError.ts
 model/comparisonToolConfig.ts
 model/comparisonToolConfigColumn.ts
+model/comparisonToolConfigFilter.ts
 model/dataversion.ts
 model/geneticInfo.ts
 model/individualData.ts

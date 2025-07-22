@@ -18,8 +18,10 @@ tags:
     description: Operations about dataversion.
   - name: Models
     description: Operations about models.
+  - name: ModelOverview
+    description: Operations about Model Overview.
   - name: ComparisonToolConfig
-    description: Operations about UI configuration.
+    description: Operations about Comparison Tool UI configuration.
 paths:
   /dataversion:
     $ref: paths/dataversion.yaml
