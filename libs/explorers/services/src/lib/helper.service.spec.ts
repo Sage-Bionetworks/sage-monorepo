@@ -34,4 +34,13 @@ describe('Service: Helper', () => {
     const result = helperService.getPanelUrl(url, 'summary', '');
     expect(result).toEqual(expected);
   });
+
+  it('should encode urls', () => {
+    expect(helperService.encodeParenthesesForwardSlashes('/models/5xFAD (UCI)')).toBe(
+      '/models/5xFAD %28UCI%29',
+    );
+    expect(helperService.encodeParenthesesForwardSlashes('/models/5xFAD (IU/Jax/Pitt)')).toBe(
+      '/models/5xFAD %28IU%2FJax%2FPitt%29',
+    );
+  });
 });

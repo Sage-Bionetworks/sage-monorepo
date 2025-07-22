@@ -73,4 +73,15 @@ export class HelperService {
       };
     }
   }
+
+  encodeParenthesesForwardSlashes(uri: string) {
+    return (
+      uri
+        // forward slash within parentheses
+        .replace(/\(([^)]*)\)/g, (match, content) => `(${content.replace(/\//g, '%2F')})`)
+        // parentheses
+        .replace(/\(/g, '%28')
+        .replace(/\)/g, '%29')
+    );
+  }
 }

@@ -10,6 +10,7 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
   provideRouter,
+  UrlSerializer,
   withComponentInputBinding,
   withEnabledBlockingInitialNavigation,
   withInMemoryScrolling,
@@ -19,6 +20,7 @@ import { configFactory, ConfigService } from '@sagebionetworks/model-ad/config';
 import { provideMarkdown } from 'ngx-markdown';
 import { MessageService } from 'primeng/api';
 import { providePrimeNG } from 'primeng/config';
+import { CustomUrlSerializer } from './app.custom-url-serializer';
 import { routes } from './app.routes';
 import { ModelAdPreset } from './primeNGPreset';
 
@@ -58,6 +60,7 @@ export const appConfig: ApplicationConfig = {
         scrollPositionRestoration: 'enabled',
       }),
     ),
+    { provide: UrlSerializer, useClass: CustomUrlSerializer },
     MessageService,
   ],
 };

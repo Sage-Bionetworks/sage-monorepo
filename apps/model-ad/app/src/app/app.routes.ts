@@ -97,6 +97,12 @@ export const routes: Route[] = [
     loadChildren: () =>
       import('@sagebionetworks/model-ad/model-details').then((routes) => routes.routes),
   },
+  // ensure that all models match a route, so the custom url serializer can encode special characters
+  {
+    path: `${ROUTE_PATHS.MODELS}/**`,
+    loadChildren: () =>
+      import('@sagebionetworks/model-ad/model-details').then((routes) => routes.routes),
+  },
   {
     path: ROUTE_PATHS.TERMS_OF_SERVICE,
     loadChildren: () =>

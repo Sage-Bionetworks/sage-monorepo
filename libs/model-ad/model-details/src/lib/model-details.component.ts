@@ -147,7 +147,10 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
     this.activePanel = activePanel;
     this.activeParent = activeParent;
 
-    const basePath = `/${ROUTE_PATHS.MODELS}/${this.model?.model}`;
+    const encodedModel = this.helperService.encodeParenthesesForwardSlashes(
+      encodeURIComponent(this.model?.model || ''),
+    );
+    const basePath = `/${ROUTE_PATHS.MODELS}/${encodedModel}`;
     const fullPath = this.helperService.getPanelUrl(basePath, this.activePanel, this.activeParent);
     this.location.replaceState(fullPath);
   }
