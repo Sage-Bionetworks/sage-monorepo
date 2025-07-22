@@ -16,6 +16,12 @@ properties:
     nullable: true
   websiteUrl:
     $ref: Url.yaml
+  acronym:
+    description: An acronym of the organization.
+    type: string
+    maxLength: 10
+    example: 'OC'
+    nullable: true
 required:
   - login
   - name

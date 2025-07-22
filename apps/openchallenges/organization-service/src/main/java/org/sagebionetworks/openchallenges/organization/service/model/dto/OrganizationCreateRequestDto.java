@@ -34,6 +34,8 @@ public class OrganizationCreateRequestDto {
 
   private String websiteUrl = null;
 
+  private @Nullable String acronym = null;
+
   public OrganizationCreateRequestDto() {
     super();
   }
@@ -147,6 +149,26 @@ public class OrganizationCreateRequestDto {
     this.websiteUrl = websiteUrl;
   }
 
+  public OrganizationCreateRequestDto acronym(String acronym) {
+    this.acronym = acronym;
+    return this;
+  }
+
+  /**
+   * An acronym of the organization.
+   * @return acronym
+   */
+  @Size(max = 10) 
+  @Schema(name = "acronym", example = "OC", description = "An acronym of the organization.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("acronym")
+  public String getAcronym() {
+    return acronym;
+  }
+
+  public void setAcronym(String acronym) {
+    this.acronym = acronym;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -160,12 +182,13 @@ public class OrganizationCreateRequestDto {
         Objects.equals(this.name, organizationCreateRequest.name) &&
         Objects.equals(this.description, organizationCreateRequest.description) &&
         Objects.equals(this.avatarKey, organizationCreateRequest.avatarKey) &&
-        Objects.equals(this.websiteUrl, organizationCreateRequest.websiteUrl);
+        Objects.equals(this.websiteUrl, organizationCreateRequest.websiteUrl) &&
+        Objects.equals(this.acronym, organizationCreateRequest.acronym);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(login, name, description, avatarKey, websiteUrl);
+    return Objects.hash(login, name, description, avatarKey, websiteUrl, acronym);
   }
 
   @Override
@@ -177,6 +200,7 @@ public class OrganizationCreateRequestDto {
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    avatarKey: ").append(toIndentedString(avatarKey)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
+    sb.append("    acronym: ").append(toIndentedString(acronym)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -210,6 +234,7 @@ public class OrganizationCreateRequestDto {
       this.instance.setDescription(value.description);
       this.instance.setAvatarKey(value.avatarKey);
       this.instance.setWebsiteUrl(value.websiteUrl);
+      this.instance.setAcronym(value.acronym);
       return this;
     }
 
@@ -235,6 +260,11 @@ public class OrganizationCreateRequestDto {
     
     public OrganizationCreateRequestDto.Builder websiteUrl(String websiteUrl) {
       this.instance.websiteUrl(websiteUrl);
+      return this;
+    }
+    
+    public OrganizationCreateRequestDto.Builder acronym(String acronym) {
+      this.instance.acronym(acronym);
       return this;
     }
     

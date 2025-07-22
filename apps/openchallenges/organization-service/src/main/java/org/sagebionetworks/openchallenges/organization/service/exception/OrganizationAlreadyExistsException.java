@@ -4,9 +4,9 @@ public class OrganizationAlreadyExistsException extends SimpleChallengeGlobalExc
 
   public OrganizationAlreadyExistsException(String detail) {
     super(
-      ErrorConstants.ENTITY_NOT_FOUND.getType(),
-      ErrorConstants.ENTITY_NOT_FOUND.getTitle(),
-      ErrorConstants.ENTITY_NOT_FOUND.getStatus(),
+      ErrorConstants.ORGANIZATION_ALREADY_EXISTS.getType(),
+      ErrorConstants.ORGANIZATION_ALREADY_EXISTS.getTitle(),
+      ErrorConstants.ORGANIZATION_ALREADY_EXISTS.getStatus(),
       detail
     );
   }

@@ -1639,21 +1639,18 @@ components:
           minimum: 0
           default: 0
           example: 10
-        createdAt:
-          $ref: '#/components/schemas/CreatedDateTime'
-        updatedAt:
-          $ref: '#/components/schemas/UpdatedDateTime'
         acronym:
           description: An acronym of the organization.
           type: string
           maxLength: 10
           example: OC
+          nullable: true
       required:
         - id
         - name
         - login
-        - createdAt
-        - updatedAt
+        - websiteUrl
+        - challengeCount
     OrganizationsPage:
       type: object
       description: A page of organizations
@@ -1689,6 +1686,12 @@ components:
           nullable: true
         websiteUrl:
           $ref: '#/components/schemas/Url'
+        acronym:
+          description: An acronym of the organization.
+          type: string
+          maxLength: 10
+          example: OC
+          nullable: true
       required:
         - login
         - name

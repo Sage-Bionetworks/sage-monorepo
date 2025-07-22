@@ -46,7 +46,7 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["./gradlew build --continuous", "./gradlew bootRun -x test -x check"],
+        "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
         "cwd": "{projectRoot}",
         "parallel": true
       },

@@ -5,8 +5,6 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.time.OffsetDateTime;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -36,17 +34,11 @@ public class OrganizationDto {
 
   private @Nullable String avatarKey = null;
 
-  private @Nullable String websiteUrl = null;
+  private String websiteUrl = null;
 
   private Integer challengeCount = 0;
 
-  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-  private OffsetDateTime createdAt;
-
-  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-  private OffsetDateTime updatedAt;
-
-  private @Nullable String acronym;
+  private @Nullable String acronym = null;
 
   public OrganizationDto() {
     super();
@@ -55,12 +47,12 @@ public class OrganizationDto {
   /**
    * Constructor with only required parameters
    */
-  public OrganizationDto(Long id, String name, String login, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
+  public OrganizationDto(Long id, String name, String login, String websiteUrl, Integer challengeCount) {
     this.id = id;
     this.name = name;
     this.login = login;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
+    this.websiteUrl = websiteUrl;
+    this.challengeCount = challengeCount;
   }
 
   public OrganizationDto id(Long id) {
@@ -172,8 +164,8 @@ public class OrganizationDto {
    * A URL to the website or image.
    * @return websiteUrl
    */
-  @Size(max = 500) 
-  @Schema(name = "websiteUrl", example = "https://openchallenges.io", description = "A URL to the website or image.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Size(max = 500) 
+  @Schema(name = "websiteUrl", example = "https://openchallenges.io", description = "A URL to the website or image.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("websiteUrl")
   public String getWebsiteUrl() {
     return websiteUrl;
@@ -193,8 +185,8 @@ public class OrganizationDto {
    * minimum: 0
    * @return challengeCount
    */
-  @Min(0) 
-  @Schema(name = "challengeCount", example = "10", description = "The number of challenges involving this organization.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Min(0) 
+  @Schema(name = "challengeCount", example = "10", description = "The number of challenges involving this organization.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("challengeCount")
   public Integer getChallengeCount() {
     return challengeCount;
@@ -202,46 +194,6 @@ public class OrganizationDto {
 
   public void setChallengeCount(Integer challengeCount) {
     this.challengeCount = challengeCount;
-  }
-
-  public OrganizationDto createdAt(OffsetDateTime createdAt) {
-    this.createdAt = createdAt;
-    return this;
-  }
-
-  /**
-   * Datetime when the object was added to the database.
-   * @return createdAt
-   */
-  @NotNull @Valid 
-  @Schema(name = "createdAt", example = "2022-07-04T22:19:11Z", description = "Datetime when the object was added to the database.", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("createdAt")
-  public OffsetDateTime getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(OffsetDateTime createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public OrganizationDto updatedAt(OffsetDateTime updatedAt) {
-    this.updatedAt = updatedAt;
-    return this;
-  }
-
-  /**
-   * Datetime when the object was last modified in the database.
-   * @return updatedAt
-   */
-  @NotNull @Valid 
-  @Schema(name = "updatedAt", example = "2022-07-04T22:19:11Z", description = "Datetime when the object was last modified in the database.", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("updatedAt")
-  public OffsetDateTime getUpdatedAt() {
-    return updatedAt;
-  }
-
-  public void setUpdatedAt(OffsetDateTime updatedAt) {
-    this.updatedAt = updatedAt;
   }
 
   public OrganizationDto acronym(String acronym) {
@@ -280,14 +232,12 @@ public class OrganizationDto {
         Objects.equals(this.avatarKey, organization.avatarKey) &&
         Objects.equals(this.websiteUrl, organization.websiteUrl) &&
         Objects.equals(this.challengeCount, organization.challengeCount) &&
-        Objects.equals(this.createdAt, organization.createdAt) &&
-        Objects.equals(this.updatedAt, organization.updatedAt) &&
         Objects.equals(this.acronym, organization.acronym);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, login, description, avatarKey, websiteUrl, challengeCount, createdAt, updatedAt, acronym);
+    return Objects.hash(id, name, login, description, avatarKey, websiteUrl, challengeCount, acronym);
   }
 
   @Override
@@ -301,8 +251,6 @@ public class OrganizationDto {
     sb.append("    avatarKey: ").append(toIndentedString(avatarKey)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("    challengeCount: ").append(toIndentedString(challengeCount)).append("\n");
-    sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
-    sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("    acronym: ").append(toIndentedString(acronym)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -339,8 +287,6 @@ public class OrganizationDto {
       this.instance.setAvatarKey(value.avatarKey);
       this.instance.setWebsiteUrl(value.websiteUrl);
       this.instance.setChallengeCount(value.challengeCount);
-      this.instance.setCreatedAt(value.createdAt);
-      this.instance.setUpdatedAt(value.updatedAt);
       this.instance.setAcronym(value.acronym);
       return this;
     }
@@ -377,16 +323,6 @@ public class OrganizationDto {
     
     public OrganizationDto.Builder challengeCount(Integer challengeCount) {
       this.instance.challengeCount(challengeCount);
-      return this;
-    }
-    
-    public OrganizationDto.Builder createdAt(OffsetDateTime createdAt) {
-      this.instance.createdAt(createdAt);
-      return this;
-    }
-    
-    public OrganizationDto.Builder updatedAt(OffsetDateTime updatedAt) {
-      this.instance.updatedAt(updatedAt);
       return this;
     }
     

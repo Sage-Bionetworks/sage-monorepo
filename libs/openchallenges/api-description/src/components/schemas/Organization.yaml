@@ -26,18 +26,15 @@ properties:
     minimum: 0
     default: 0
     example: 10
-  createdAt:
-    $ref: CreatedDateTime.yaml
-  updatedAt:
-    $ref: UpdatedDateTime.yaml
   acronym:
     description: An acronym of the organization.
     type: string
     maxLength: 10
     example: 'OC'
+    nullable: true
 required:
   - id
   - name
   - login
-  - createdAt
-  - updatedAt
+  - websiteUrl
+  - challengeCount
