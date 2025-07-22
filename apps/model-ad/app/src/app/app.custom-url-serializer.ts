@@ -8,12 +8,12 @@ export class CustomUrlSerializer implements UrlSerializer {
   private readonly defaultSerializer = new DefaultUrlSerializer();
   helperService = inject(HelperService);
 
-  parse(url: any): UrlTree {
+  parse(url: string): UrlTree {
     url = this.helperService.encodeParenthesesForwardSlashes(url);
     return this.defaultSerializer.parse(url);
   }
 
-  serialize(tree: UrlTree): any {
+  serialize(tree: UrlTree): string {
     return this.defaultSerializer.serialize(tree);
   }
 }
