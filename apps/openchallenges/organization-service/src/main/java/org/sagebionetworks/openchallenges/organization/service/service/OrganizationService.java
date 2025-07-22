@@ -150,7 +150,7 @@ public class OrganizationService {
       if (message != null) {
         if (message.contains("organization_login_key")) {
           throw new OrganizationAlreadyExistsException(
-            String.format("A organization with login '%s' already exists.", request.getName())
+            String.format("A organization with login '%s' already exists.", request.getLogin())
           );
         }
       }

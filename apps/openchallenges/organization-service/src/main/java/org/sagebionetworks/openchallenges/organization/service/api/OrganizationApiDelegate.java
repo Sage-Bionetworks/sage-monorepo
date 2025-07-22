@@ -9,6 +9,7 @@ import org.sagebionetworks.openchallenges.organization.service.model.dto.Organiz
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,7 +24,7 @@ import jakarta.annotation.Generated;
  * A delegate to be called by the {@link OrganizationApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public interface OrganizationApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {

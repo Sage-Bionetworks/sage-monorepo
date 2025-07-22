@@ -29,7 +29,7 @@ import jakarta.annotation.Generated;
 
 @Schema(name = "OrganizationSearchQuery", description = "An organization search query.")
 @JsonTypeName("OrganizationSearchQuery")
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class OrganizationSearchQueryDto {
 
   private Integer pageNumber = 0;
@@ -169,7 +169,7 @@ public class OrganizationSearchQueryDto {
     this.sort = sort;
   }
 
-  public OrganizationSearchQueryDto direction(OrganizationDirectionDto direction) {
+  public OrganizationSearchQueryDto direction(@Nullable OrganizationDirectionDto direction) {
     this.direction = direction;
     return this;
   }
@@ -181,11 +181,11 @@ public class OrganizationSearchQueryDto {
   @Valid 
   @Schema(name = "direction", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("direction")
-  public OrganizationDirectionDto getDirection() {
+  public @Nullable OrganizationDirectionDto getDirection() {
     return direction;
   }
 
-  public void setDirection(OrganizationDirectionDto direction) {
+  public void setDirection(@Nullable OrganizationDirectionDto direction) {
     this.direction = direction;
   }
 
@@ -217,7 +217,7 @@ public class OrganizationSearchQueryDto {
     this.ids = ids;
   }
 
-  public OrganizationSearchQueryDto searchTerms(String searchTerms) {
+  public OrganizationSearchQueryDto searchTerms(@Nullable String searchTerms) {
     this.searchTerms = searchTerms;
     return this;
   }
@@ -229,11 +229,11 @@ public class OrganizationSearchQueryDto {
   
   @Schema(name = "searchTerms", example = "data provider", description = "A string of search terms used to filter the results.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("searchTerms")
-  public String getSearchTerms() {
+  public @Nullable String getSearchTerms() {
     return searchTerms;
   }
 
-  public void setSearchTerms(String searchTerms) {
+  public void setSearchTerms(@Nullable String searchTerms) {
     this.searchTerms = searchTerms;
   }
 

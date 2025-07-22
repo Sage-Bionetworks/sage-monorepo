@@ -19,12 +19,12 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * The category of the organization.
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public enum OrganizationCategoryDto {
   
   FEATURED("featured");
 
-  private String value;
+  private final String value;
 
   OrganizationCategoryDto(String value) {
     this.value = value;

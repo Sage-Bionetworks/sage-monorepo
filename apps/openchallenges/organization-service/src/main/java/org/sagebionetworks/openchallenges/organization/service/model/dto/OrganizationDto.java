@@ -21,7 +21,7 @@ import jakarta.annotation.Generated;
 
 @Schema(name = "Organization", description = "An organization")
 @JsonTypeName("Organization")
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class OrganizationDto {
 
   private Long id;
@@ -115,7 +115,7 @@ public class OrganizationDto {
     this.login = login;
   }
 
-  public OrganizationDto description(String description) {
+  public OrganizationDto description(@Nullable String description) {
     this.description = description;
     return this;
   }
@@ -127,15 +127,15 @@ public class OrganizationDto {
   
   @Schema(name = "description", example = "A description of the organization.", description = "A description of the organization.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("description")
-  public String getDescription() {
+  public @Nullable String getDescription() {
     return description;
   }
 
-  public void setDescription(String description) {
+  public void setDescription(@Nullable String description) {
     this.description = description;
   }
 
-  public OrganizationDto avatarKey(String avatarKey) {
+  public OrganizationDto avatarKey(@Nullable String avatarKey) {
     this.avatarKey = avatarKey;
     return this;
   }
@@ -147,11 +147,11 @@ public class OrganizationDto {
   
   @Schema(name = "avatarKey", example = "logo/dream.png", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("avatarKey")
-  public String getAvatarKey() {
+  public @Nullable String getAvatarKey() {
     return avatarKey;
   }
 
-  public void setAvatarKey(String avatarKey) {
+  public void setAvatarKey(@Nullable String avatarKey) {
     this.avatarKey = avatarKey;
   }
 
@@ -196,7 +196,7 @@ public class OrganizationDto {
     this.challengeCount = challengeCount;
   }
 
-  public OrganizationDto acronym(String acronym) {
+  public OrganizationDto acronym(@Nullable String acronym) {
     this.acronym = acronym;
     return this;
   }
@@ -208,11 +208,11 @@ public class OrganizationDto {
   @Size(max = 10) 
   @Schema(name = "acronym", example = "OC", description = "An acronym of the organization.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("acronym")
-  public String getAcronym() {
+  public @Nullable String getAcronym() {
     return acronym;
   }
 
-  public void setAcronym(String acronym) {
+  public void setAcronym(@Nullable String acronym) {
     this.acronym = acronym;
   }
 

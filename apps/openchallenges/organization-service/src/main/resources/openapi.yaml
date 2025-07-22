@@ -38,18 +38,9 @@ paths:
                 $ref: '#/components/schemas/OrganizationsPage'
           description: Success
         '400':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Invalid request
+          $ref: '#/components/responses/BadRequest'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       summary: List organizations
       tags:
         - Organization
@@ -75,30 +66,13 @@ paths:
                 $ref: '#/components/schemas/Organization'
           description: Organization created successfully
         '401':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The user does not have the permission to perform this action
+          $ref: '#/components/responses/Forbidden'
         '409':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request conflicts with current state of the target resource
+          $ref: '#/components/responses/Conflict'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       security:
         - apiBearerAuth: []
       summary: Create an organization
@@ -134,30 +108,13 @@ paths:
         '204':
           description: Organization successfully deleted
         '401':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The user does not have the permission to perform this action
+          $ref: '#/components/responses/Forbidden'
         '404':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The specified resource was not found
+          $ref: '#/components/responses/NotFound'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       security:
         - apiBearerAuth:
             - organizations:delete
@@ -195,18 +152,9 @@ paths:
                 $ref: '#/components/schemas/Organization'
           description: Organization retrieved successfully
         '404':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The specified resource was not found
+          $ref: '#/components/responses/NotFound'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       summary: Get an organization
       tags:
         - Organization
@@ -248,42 +196,17 @@ paths:
                 $ref: '#/components/schemas/Organization'
           description: Organization updated successfully
         '400':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Invalid request
+          $ref: '#/components/responses/BadRequest'
         '401':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The user does not have the permission to perform this action
+          $ref: '#/components/responses/Forbidden'
         '404':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The specified resource was not found
+          $ref: '#/components/responses/NotFound'
         '409':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request conflicts with current state of the target resource
+          $ref: '#/components/responses/Conflict'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       security:
         - apiBearerAuth: []
       summary: Update an existing organization

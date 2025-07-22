@@ -21,7 +21,7 @@ import jakarta.annotation.Generated;
 
 @Schema(name = "OrganizationUpdateRequest", description = "The information required to update an org account")
 @JsonTypeName("OrganizationUpdateRequest")
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class OrganizationUpdateRequestDto {
 
   private String name;

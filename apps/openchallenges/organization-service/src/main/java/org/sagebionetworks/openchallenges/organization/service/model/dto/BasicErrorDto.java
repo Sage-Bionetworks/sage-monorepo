@@ -21,7 +21,7 @@ import jakarta.annotation.Generated;
 
 @Schema(name = "BasicError", description = "Problem details (tools.ietf.org/html/rfc7807)")
 @JsonTypeName("BasicError")
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class BasicErrorDto {
 
   private String title;
@@ -84,7 +84,7 @@ public class BasicErrorDto {
     this.status = status;
   }
 
-  public BasicErrorDto detail(String detail) {
+  public BasicErrorDto detail(@Nullable String detail) {
     this.detail = detail;
     return this;
   }
@@ -96,15 +96,15 @@ public class BasicErrorDto {
   
   @Schema(name = "detail", description = "A human readable explanation specific to this occurrence of the problem", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("detail")
-  public String getDetail() {
+  public @Nullable String getDetail() {
     return detail;
   }
 
-  public void setDetail(String detail) {
+  public void setDetail(@Nullable String detail) {
     this.detail = detail;
   }
 
-  public BasicErrorDto type(String type) {
+  public BasicErrorDto type(@Nullable String type) {
     this.type = type;
     return this;
   }
@@ -116,11 +116,11 @@ public class BasicErrorDto {
   
   @Schema(name = "type", description = "An absolute URI that identifies the problem type", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("type")
-  public String getType() {
+  public @Nullable String getType() {
     return type;
   }
 
-  public void setType(String type) {
+  public void setType(@Nullable String type) {
     this.type = type;
   }
 
