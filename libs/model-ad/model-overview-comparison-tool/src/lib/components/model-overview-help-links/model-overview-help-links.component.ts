@@ -12,6 +12,7 @@ export class ModelOverviewHelpLinksComponent {
   private legendService = inject(ComparisonToolService);
 
   toggleVisualizationOverview() {
-    // TODO implement
+    // TODO implement this method.  For now, throw a new Error
+    throw new Error('not implemented');
   }
 }

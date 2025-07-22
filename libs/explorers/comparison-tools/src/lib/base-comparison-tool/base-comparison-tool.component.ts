@@ -9,5 +9,7 @@ import { LoadingContainerComponent } from '@sagebionetworks/explorers/util';
 })
 export class BaseComparisonToolComponent {
   isLoading = input(true);
+
+  // this is overridden
   resultsCount = input(0);
 }
