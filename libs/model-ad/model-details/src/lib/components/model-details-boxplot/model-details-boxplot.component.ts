@@ -2,7 +2,7 @@ import { TitleCasePipe } from '@angular/common';
 import { Component, computed, inject, input } from '@angular/core';
 import { DecodeGreekEntityPipe } from '@sagebionetworks/explorers/util';
 import { IndividualData, ModelData } from '@sagebionetworks/model-ad/api-client-angular';
-import { CategoryPoint } from '@sagebionetworks/shared/charts';
+import { CategoryPoint, getTextWidth } from '@sagebionetworks/shared/charts';
 import { BoxplotDirective } from '@sagebionetworks/shared/charts-angular';
 import { CallbackDataParams } from 'echarts/types/dist/shared';
 
@@ -18,6 +18,8 @@ export class ModelDetailsBoxplotComponent {
   decodeGreekEntityPipe = inject(DecodeGreekEntityPipe);
 
   private readonly Y_AXIS_TITLE_LINE_BREAK_THRESHOLD = 30;
+  private readonly X_AXIS_LABEL_MAX_WIDTH = 100;
+  private readonly X_AXIS_LABEL_FONT = "bold 14px 'DM Sans Variable', sans-serif";
 
   pointCategoryColors = {
     Male: '#1B00B3',
@@ -56,7 +58,8 @@ export class ModelDetailsBoxplotComponent {
   };
 
   xAxisLabelFormatter = (value: string) => {
-    if (value.length > 10) {
+    const textWidth = getTextWidth(value, this.X_AXIS_LABEL_FONT);
+    if (textWidth > this.X_AXIS_LABEL_MAX_WIDTH) {
       // replace first occurrence of - or * with a newline character
       return value.replace(/[-*]/, (match) => match + '\n');
     }
