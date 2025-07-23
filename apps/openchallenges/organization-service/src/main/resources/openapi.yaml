@@ -16,6 +16,8 @@ servers:
 tags:
   - description: Operations about organizations
     name: Organization
+  - description: Operations about a challenge participation
+    name: Challenge Participation
 paths:
   /organizations:
     get:
@@ -218,6 +220,116 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Organization
+  /organizations/{org}/participations:
+    post:
+      description: Creates a new challenge participation.
+      operationId: createChallengeParticipation
+      parameters:
+        - description: The id or login of the organization.
+          examples:
+            byString:
+              value: dream
+            byId:
+              value: '1'
+          explode: false
+          in: path
+          name: org
+          required: true
+          schema:
+            maxLength: 64
+            minLength: 1
+            type: string
+          style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengeParticipationCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeParticipation'
+          description: Participation created successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - apiBearerAuth: []
+      summary: Create a new challenge participation
+      tags:
+        - Challenge Participation
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Challenge Participation
+  /organizations/{org}/participations/{challengeId}/roles/{role}:
+    delete:
+      description: Delete a specific challenge participation.
+      operationId: deleteChallengeParticipation
+      parameters:
+        - description: The id or login of the organization.
+          examples:
+            byString:
+              value: dream
+            byId:
+              value: '1'
+          explode: false
+          in: path
+          name: org
+          required: true
+          schema:
+            maxLength: 64
+            minLength: 1
+            type: string
+          style: simple
+        - description: The unique identifier of the challenge.
+          explode: false
+          in: path
+          name: challengeId
+          required: true
+          schema:
+            $ref: '#/components/schemas/ChallengeId'
+          style: simple
+        - description: A challenge participation role.
+          explode: false
+          in: path
+          name: role
+          required: true
+          schema:
+            $ref: '#/components/schemas/ChallengeParticipationRole'
+          style: simple
+      responses:
+        '204':
+          description: Participation deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - apiBearerAuth: []
+      summary: Delete a specific challenge participation
+      tags:
+        - Challenge Participation
+      x-accepts:
+        - application/problem+json
+      x-tags:
+        - tag: Challenge Participation
 components:
   parameters:
     organizationSearchQuery:
@@ -244,6 +356,24 @@ components:
         maxLength: 64
         minLength: 1
         type: string
+      style: simple
+    challengeId:
+      description: The unique identifier of the challenge.
+      explode: false
+      in: path
+      name: challengeId
+      required: true
+      schema:
+        $ref: '#/components/schemas/ChallengeId'
+      style: simple
+    challengeParticipationRole:
+      description: A challenge participation role.
+      explode: false
+      in: path
+      name: role
+      required: true
+      schema:
+        $ref: '#/components/schemas/ChallengeParticipationRole'
       style: simple
   responses:
     BadRequest:
@@ -610,6 +740,71 @@ components:
         - description
         - name
         - websiteUrl
+      type: object
+    ChallengeId:
+      description: The unique identifier of the challenge.
+      example: 1
+      format: int64
+      type: integer
+    ChallengeParticipationRole:
+      description: The nature of a challenge participation.
+      enum:
+        - challenge_organizer
+        - data_contributor
+        - sponsor
+      example: challenge_organizer
+      type: string
+    ChallengeParticipationCreateRequest:
+      description: |
+        A request to create a challenge participation for an organization, defined by a challenge ID and a
+        role.
+      properties:
+        challengeId:
+          description: The unique identifier of the challenge.
+          example: 1
+          format: int64
+          type: integer
+        role:
+          $ref: '#/components/schemas/ChallengeParticipationRole'
+      required:
+        - challengeId
+        - role
+      type: object
+    ChallengeParticipationId:
+      description: The unique identifier of a challenge participation
+      example: 1
+      format: int64
+      type: integer
+    ChallengeParticipation:
+      description: An challenge participation.
+      example:
+        organizationId: 1
+        challengeId: 1
+        role: challenge_organizer
+        id: 1
+      properties:
+        id:
+          description: The unique identifier of a challenge participation
+          example: 1
+          format: int64
+          type: integer
+        challengeId:
+          description: The unique identifier of the challenge.
+          example: 1
+          format: int64
+          type: integer
+        organizationId:
+          description: The unique identifier of an organization
+          example: 1
+          format: int64
+          type: integer
+        role:
+          $ref: '#/components/schemas/ChallengeContributionRole'
+      required:
+        - challengeId
+        - id
+        - organizationId
+        - role
       type: object
   securitySchemes:
     apiBearerAuth:

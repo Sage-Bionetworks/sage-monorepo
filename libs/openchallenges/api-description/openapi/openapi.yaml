@@ -1943,7 +1943,7 @@ components:
         byId:
           value: '1'
     challengeParticipationRole:
-      name: challengeId
+      name: role
       in: path
       description: A challenge participation role.
       required: true

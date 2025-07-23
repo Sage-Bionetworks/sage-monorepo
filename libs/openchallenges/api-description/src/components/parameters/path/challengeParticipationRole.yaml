@@ -1,4 +1,4 @@
-name: challengeId
+name: role
 in: path
 description: A challenge participation role.
 required: true

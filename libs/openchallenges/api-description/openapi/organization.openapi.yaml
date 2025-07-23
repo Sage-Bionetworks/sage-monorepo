@@ -549,7 +549,7 @@ components:
       schema:
         $ref: '#/components/schemas/ChallengeId'
     challengeParticipationRole:
-      name: challengeId
+      name: role
       in: path
       description: A challenge participation role.
       required: true
