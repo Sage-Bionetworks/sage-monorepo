@@ -16,11 +16,17 @@ servers:
 tags:
   - name: Organization
     description: Operations about organizations
+  - name: Challenge Participation
+    description: Operations about a challenge participation
 paths:
   /organizations:
     $ref: paths/organizations.yaml
   /organizations/{org}:
     $ref: paths/organizations/@{org}.yaml
+  /organizations/{org}/participations:
+    $ref: paths/organizations/@{org}/participations.yaml
+  /organizations/{org}/participations/{challengeId}/roles/{role}:
+    $ref: paths/organizations/@{org}/participations/@{challengeId}/roles/${role}.yaml
 components:
   securitySchemes:
     apiBearerAuth:

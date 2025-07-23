@@ -1,0 +1,4 @@
+description: The unique identifier of a challenge participation
+type: integer
+format: int64
+example: 1

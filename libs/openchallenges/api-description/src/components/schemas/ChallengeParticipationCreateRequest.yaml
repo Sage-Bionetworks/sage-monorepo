@@ -1,0 +1,12 @@
+type: object
+description: |
+  A request to create a challenge participation for an organization, defined by a challenge ID and a
+  role.
+properties:
+  challengeId:
+    $ref: ChallengeId.yaml
+  role:
+    $ref: ChallengeParticipationRole.yaml
+required:
+  - challengeId
+  - role

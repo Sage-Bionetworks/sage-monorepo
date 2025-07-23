@@ -1,0 +1,7 @@
+description: The nature of a challenge participation.
+type: string
+enum:
+  - challenge_organizer
+  - data_contributor
+  - sponsor
+example: challenge_organizer

@@ -16,6 +16,8 @@ servers:
 tags:
   - name: Organization
     description: Operations about organizations
+  - name: Challenge Participation
+    description: Operations about a challenge participation
 paths:
   /organizations:
     get:
@@ -131,6 +133,64 @@ paths:
       responses:
         '204':
           description: Organization successfully deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /organizations/{org}/participations:
+    parameters:
+      - $ref: '#/components/parameters/org'
+    post:
+      tags:
+        - Challenge Participation
+      summary: Create a new challenge participation
+      description: Creates a new challenge participation.
+      operationId: createChallengeParticipation
+      security:
+        - apiBearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengeParticipationCreateRequest'
+      responses:
+        '201':
+          description: Participation created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeParticipation'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /organizations/{org}/participations/{challengeId}/roles/{role}:
+    parameters:
+      - $ref: '#/components/parameters/org'
+      - $ref: '#/components/parameters/challengeId'
+      - $ref: '#/components/parameters/challengeParticipationRole'
+    delete:
+      tags:
+        - Challenge Participation
+      summary: Delete a specific challenge participation
+      description: Delete a specific challenge participation.
+      operationId: deleteChallengeParticipation
+      security:
+        - apiBearerAuth: []
+      responses:
+        '204':
+          description: Participation deleted successfully
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -412,6 +472,54 @@ components:
         - avatarKey
         - websiteUrl
         - acronym
+    ChallengeId:
+      description: The unique identifier of the challenge.
+      type: integer
+      format: int64
+      example: 1
+    ChallengeParticipationRole:
+      description: The nature of a challenge participation.
+      type: string
+      enum:
+        - challenge_organizer
+        - data_contributor
+        - sponsor
+      example: challenge_organizer
+    ChallengeParticipationCreateRequest:
+      type: object
+      description: |
+        A request to create a challenge participation for an organization, defined by a challenge ID and a
+        role.
+      properties:
+        challengeId:
+          $ref: '#/components/schemas/ChallengeId'
+        role:
+          $ref: '#/components/schemas/ChallengeParticipationRole'
+      required:
+        - challengeId
+        - role
+    ChallengeParticipationId:
+      description: The unique identifier of a challenge participation
+      type: integer
+      format: int64
+      example: 1
+    ChallengeParticipation:
+      type: object
+      description: An challenge participation.
+      properties:
+        id:
+          $ref: '#/components/schemas/ChallengeParticipationId'
+        challengeId:
+          $ref: '#/components/schemas/ChallengeId'
+        organizationId:
+          $ref: '#/components/schemas/OrganizationId'
+        role:
+          $ref: '#/components/schemas/ChallengeContributionRole'
+      required:
+        - id
+        - challengeId
+        - organizationId
+        - role
   parameters:
     organizationSearchQuery:
       name: organizationSearchQuery
@@ -433,6 +541,20 @@ components:
           value: dream
         byId:
           value: '1'
+    challengeId:
+      name: challengeId
+      in: path
+      description: The unique identifier of the challenge.
+      required: true
+      schema:
+        $ref: '#/components/schemas/ChallengeId'
+    challengeParticipationRole:
+      name: challengeId
+      in: path
+      description: A challenge participation role.
+      required: true
+      schema:
+        $ref: '#/components/schemas/ChallengeParticipationRole'
   responses:
     BadRequest:
       description: Invalid request

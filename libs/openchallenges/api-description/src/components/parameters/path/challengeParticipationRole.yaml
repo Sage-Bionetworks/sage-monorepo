@@ -1,0 +1,6 @@
+name: challengeId
+in: path
+description: A challenge participation role.
+required: true
+schema:
+  $ref: ../../schemas/ChallengeParticipationRole.yaml
