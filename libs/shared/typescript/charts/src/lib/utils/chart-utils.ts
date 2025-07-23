@@ -53,3 +53,22 @@ export function setNoDataOption(chart: ECharts) {
   // notMerge must be set to true to override any existing options set on the chart
   chart.setOption(noDataOptions, true);
 }
+
+/**
+ * Measures the rendered width of text using canvas context.
+ *
+ * @param text - The text to measure
+ * @param font - CSS font specification (e.g., "16px Arial", "bold 14px sans-serif")
+ * @returns The width in pixels, or a fallback estimate if canvas is not available
+ */
+export function getTextWidth(text: string, font: string): number {
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+
+  if (!context) {
+    return text.length * 8;
+  }
+
+  context.font = font;
+  return context.measureText(text).width;
+}
