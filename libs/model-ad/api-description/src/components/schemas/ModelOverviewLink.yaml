@@ -1,0 +1,9 @@
+type: object
+description: Model Overview Links
+properties:
+  link_text:
+    type: string
+    description: Link text
+  link_url:
+    type: string
+    description: URL for the related resource

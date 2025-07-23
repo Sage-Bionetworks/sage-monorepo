@@ -18,6 +18,8 @@ tags:
     description: Operations about dataversion.
   - name: Models
     description: Operations about models.
+  - name: ComparisonToolConfig
+    description: Operations about UI configuration.
 paths:
   /dataversion:
     get:
@@ -58,6 +60,58 @@ paths:
               schema:
                 $ref: '#/components/schemas/Model'
           description: Successfully retrieved model details
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /comparison-tool-config:
+    get:
+      tags:
+        - ComparisonToolConfig
+      summary: Get Comparison Tool configuration
+      description: Retrieve the Comparison Tool configuration schema for the Model-AD application
+      operationId: getComparisonToolConfig
+      parameters:
+        - name: page
+          in: query
+          description: Name of the page to retrieve the Comparison Tool configuration for
+          required: true
+          schema:
+            type: string
+            example: model-overview
+      responses:
+        '200':
+          description: Successfully retrieved Comparison Tool configuration
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ComparisonToolConfig'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /comparison-tools/model-overview:
+    get:
+      tags:
+        - ModelOverview
+      summary: Get model overview for comparison tools
+      description: Returns a list of model overview objects for use in comparison tools.
+      operationId: getModelOverview
+      responses:
+        '200':
+          description: A list of model overview objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ModelOverview'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -249,6 +303,91 @@ components:
         - genetic_info
         - biomarkers
         - pathology
+    ComparisonToolConfigColumn:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The display name of the column.
+        type:
+          type: string
+          description: The data type of the column.
+        column_type:
+          type: string
+          description: The UI-specific type of the column.
+        tooltip:
+          type: string
+          description: Tooltip text for the column.
+        sort_tooltip:
+          type: string
+          description: Tooltip text for the column's sort functionality.
+      required:
+        - name
+        - type
+        - column_type
+        - tooltip
+        - sort_tooltip
+    ComparisonToolConfig:
+      type: object
+      properties:
+        page:
+          type: string
+          description: Page name
+          example: Gene Expression
+        dropdowns:
+          type: array
+          description: List of dropdown options
+          items:
+            type: string
+            example: RNA - DIFFERENTIAL EXPRESSION, Tissue - Hippocampus, Sex - Females & Males
+        columns:
+          type: array
+          description: List of column definitions
+          items:
+            $ref: '#/components/schemas/ComparisonToolConfigColumn'
+      required:
+        - page
+        - dropdowns
+        - columns
+    ModelOverviewLink:
+      type: object
+      description: Model Overview Links
+      properties:
+        link_text:
+          type: string
+          description: Link text
+        link_url:
+          type: string
+          description: URL for the related resource
+    ModelOverview:
+      type: object
+      description: Model Overview object for comparison tools
+      properties:
+        model:
+          type: string
+          description: Model name
+        model_type:
+          type: string
+          description: Model type (e.g., Late Onset AD, Familial AD)
+        matched_controls:
+          type: array
+          items:
+            type: string
+          description: List of matched control models
+        gene_expression:
+          $ref: '#/components/schemas/ModelOverviewLink'
+        disease_correlation:
+          $ref: '#/components/schemas/ModelOverviewLink'
+        biomarkers:
+          $ref: '#/components/schemas/ModelOverviewLink'
+        pathology:
+          $ref: '#/components/schemas/ModelOverviewLink'
+        study_data:
+          $ref: '#/components/schemas/ModelOverviewLink'
+        jax_strain:
+          $ref: '#/components/schemas/ModelOverviewLink'
+        center:
+          $ref: '#/components/schemas/ModelOverviewLink'
   responses:
     BadRequest:
       description: Invalid request
