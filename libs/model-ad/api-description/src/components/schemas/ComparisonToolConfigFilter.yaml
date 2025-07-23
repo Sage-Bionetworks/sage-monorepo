@@ -1,0 +1,21 @@
+type: object
+description: Comparison Tool Config Filter
+properties:
+  name:
+    type: string
+    description: Name of the filter group
+    example: 'Biological Domain'
+  field:
+    type: string
+    description: Field to filter on
+    example: 'model_type'
+  values:
+    type: array
+    description: List of filter values
+    items:
+      type: string
+      example: 'Apoptosis'
+required:
+  - name
+  - field
+  - values

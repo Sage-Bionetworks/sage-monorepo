@@ -1,0 +1,22 @@
+type: object
+properties:
+  name:
+    type: string
+    description: The display name of the column.
+  type:
+    type: string
+    enum:
+      - text
+      - heat_map
+    description: The data type of the column. Must be 'text' or 'heat_map'.
+  tooltip:
+    type: string
+    description: Tooltip text for the column.
+  sort_tooltip:
+    type: string
+    description: Tooltip text for the column's sort functionality.
+required:
+  - name
+  - type
+  - tooltip
+  - sort_tooltip

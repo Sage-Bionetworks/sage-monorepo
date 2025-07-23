@@ -18,6 +18,10 @@ tags:
     description: Operations about dataversion.
   - name: Models
     description: Operations about models.
+  - name: ModelOverview
+    description: Operations about Model Overview.
+  - name: ComparisonToolConfig
+    description: Operations about Comparison Tool UI configuration.
 paths:
   /dataversion:
     get:
@@ -58,6 +62,58 @@ paths:
               schema:
                 $ref: '#/components/schemas/Model'
           description: Successfully retrieved model details
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /comparison-tool-config:
+    get:
+      tags:
+        - ComparisonToolConfig
+      summary: Get Comparison Tool configuration
+      description: Retrieve the Comparison Tool configuration schema for the Model-AD application
+      operationId: getComparisonToolConfig
+      parameters:
+        - name: page
+          in: query
+          description: Name of the page to retrieve the Comparison Tool configuration for
+          required: true
+          schema:
+            type: string
+            example: model-overview
+      responses:
+        '200':
+          description: Successfully retrieved Comparison Tool configuration
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ComparisonToolConfig'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /comparison-tools/model-overview:
+    get:
+      tags:
+        - ModelOverview
+      summary: Get model overview for comparison tools
+      description: Returns a list of model overview objects for use in comparison tools.
+      operationId: getModelOverviews
+      responses:
+        '200':
+          description: A list of model overview objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ModelOverview'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -249,6 +305,143 @@ components:
         - genetic_info
         - biomarkers
         - pathology
+    ComparisonToolConfigColumn:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The display name of the column.
+        type:
+          type: string
+          enum:
+            - text
+            - heat_map
+          description: The data type of the column. Must be 'text' or 'heat_map'.
+        tooltip:
+          type: string
+          description: Tooltip text for the column.
+        sort_tooltip:
+          type: string
+          description: Tooltip text for the column's sort functionality.
+      required:
+        - name
+        - type
+        - tooltip
+        - sort_tooltip
+    ComparisonToolConfigFilter:
+      type: object
+      description: Comparison Tool Config Filter
+      properties:
+        name:
+          type: string
+          description: Name of the filter group
+          example: Biological Domain
+        field:
+          type: string
+          description: Field to filter on
+          example: model_type
+        values:
+          type: array
+          description: List of filter values
+          items:
+            type: string
+            example: Apoptosis
+      required:
+        - name
+        - field
+        - values
+    ComparisonToolConfig:
+      type: object
+      properties:
+        page:
+          type: string
+          description: Page name
+          example: Gene Expression
+        dropdowns:
+          type: array
+          description: List of dropdown options
+          items:
+            type: string
+            example: RNA - DIFFERENTIAL EXPRESSION, Tissue - Hippocampus, Sex - Females & Males
+        columns:
+          type: array
+          description: List of column definitions
+          items:
+            $ref: '#/components/schemas/ComparisonToolConfigColumn'
+        filters:
+          $ref: '#/components/schemas/ComparisonToolConfigFilter'
+      required:
+        - page
+        - dropdowns
+        - columns
+    ModelOverviewLink:
+      type: object
+      description: Model Overview Link
+      properties:
+        link_text:
+          type: string
+          description: Link text
+        link_url:
+          type: string
+          description: URL for the related resource
+      oneOf:
+        - required:
+            - link_text
+          not:
+            required:
+              - link_url
+        - required:
+            - link_url
+          not:
+            required:
+              - link_text
+    ModelOverview:
+      type: object
+      description: Model Overview object for comparison tools
+      properties:
+        model:
+          type: string
+          description: Model name
+        model_type:
+          type: string
+          description: Model type (e.g., Late Onset AD, Familial AD)
+        matched_controls:
+          type: string
+          description: A comma-delimited list of matched control models
+        gene_expression:
+          $ref: '#/components/schemas/ModelOverviewLink'
+          nullable: true
+        disease_correlation:
+          $ref: '#/components/schemas/ModelOverviewLink'
+          nullable: true
+        biomarkers:
+          $ref: '#/components/schemas/ModelOverviewLink'
+          nullable: true
+        pathology:
+          $ref: '#/components/schemas/ModelOverviewLink'
+          nullable: true
+        study_data:
+          $ref: '#/components/schemas/ModelOverviewLink'
+          nullable: true
+        jax_strain:
+          $ref: '#/components/schemas/ModelOverviewLink'
+          nullable: true
+        center:
+          $ref: '#/components/schemas/ModelOverviewLink'
+          nullable: true
+        modified_genes:
+          type: array
+          items:
+            type: string
+          description: List of modified genes in the model
+      required:
+        - model
+        - model_type
+        - matched_controls
+        - study_data
+        - jax_strain
+        - center
+        - modified_genes
   responses:
     BadRequest:
       description: Invalid request

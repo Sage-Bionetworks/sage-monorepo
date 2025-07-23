@@ -1,0 +1,21 @@
+get:
+  tags:
+    - ModelOverview
+  summary: Get model overview for comparison tools
+  description: Returns a list of model overview objects for use in comparison tools.
+  operationId: getModelOverviews
+  responses:
+    '200':
+      description: A list of model overview objects
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../components/schemas/ModelOverview.yaml'
+    '400':
+      $ref: ../../components/responses/BadRequest.yaml
+    '404':
+      $ref: ../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml
