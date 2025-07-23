@@ -53,7 +53,7 @@ public class ChallengeParticipationApiDelegateImpl implements ChallengeParticipa
   }
 
   @Override
-  @PreAuthorize("hasAuthority('participations:delete')")
+  @PreAuthorize("authentication.principal.admin")
   public ResponseEntity<Void> deleteChallengeParticipation(
     String org,
     Long challengeId,

@@ -57,8 +57,7 @@ delete:
   description: Deletes the organization specified by its login or ID.
   operationId: deleteOrganization
   security:
-    - apiBearerAuth:
-        - organizations:delete
+    - apiBearerAuth: []
   responses:
     '204':
       description: Organization successfully deleted

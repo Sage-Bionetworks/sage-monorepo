@@ -48,7 +48,7 @@ public class OrganizationApiDelegateImpl implements OrganizationApiDelegate {
   }
 
   @Override
-  @PreAuthorize("hasAuthority('organizations:delete')")
+  @PreAuthorize("authentication.principal.admin")
   public ResponseEntity<Void> deleteOrganization(String identifier) {
     // Log the authenticated user for audit purposes
     AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()

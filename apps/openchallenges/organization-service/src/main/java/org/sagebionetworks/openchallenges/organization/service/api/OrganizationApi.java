@@ -132,7 +132,7 @@ public interface OrganizationApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "apiBearerAuth", scopes={ "organizations:delete" })
+            @SecurityRequirement(name = "apiBearerAuth")
         }
     )
     @RequestMapping(
