@@ -28,15 +28,19 @@ export interface Organization {
    * A description of the organization.
    */
   description?: string | null;
-  avatarKey?: string;
+  avatarKey?: string | null;
   /**
    * A URL to the website or image.
    */
-  websiteUrl?: string | null;
+  websiteUrl: string | null;
   /**
    * The number of challenges involving this organization.
    */
-  challengeCount?: number;
+  challengeCount: number;
+  /**
+   * An acronym of the organization.
+   */
+  acronym?: string | null;
   /**
    * Datetime when the object was added to the database.
    */
@@ -45,8 +49,4 @@ export interface Organization {
    * Datetime when the object was last modified in the database.
    */
   updatedAt: string;
-  /**
-   * An acronym of the organization.
-   */
-  acronym?: string;
 }

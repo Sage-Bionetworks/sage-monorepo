@@ -541,9 +541,20 @@ components:
       maxLength: 500
       nullable: true
       type: string
+    CreatedDateTime:
+      description: Datetime when the object was added to the database.
+      example: 2022-07-04T22:19:11Z
+      format: date-time
+      type: string
+    UpdatedDateTime:
+      description: Datetime when the object was last modified in the database.
+      example: 2022-07-04T22:19:11Z
+      format: date-time
+      type: string
     Organization:
       description: An organization
       example:
+        createdAt: 2022-07-04T22:19:11Z
         avatarKey: logo/dream.png
         websiteUrl: https://openchallenges.io
         acronym: OC
@@ -552,6 +563,7 @@ components:
         id: 1
         challengeCount: 10
         login: example-org
+        updatedAt: 2022-07-04T22:19:11Z
       properties:
         id:
           description: The unique identifier of an organization
@@ -597,11 +609,23 @@ components:
           maxLength: 10
           nullable: true
           type: string
+        createdAt:
+          description: Datetime when the object was added to the database.
+          example: 2022-07-04T22:19:11Z
+          format: date-time
+          type: string
+        updatedAt:
+          description: Datetime when the object was last modified in the database.
+          example: 2022-07-04T22:19:11Z
+          format: date-time
+          type: string
       required:
         - challengeCount
+        - createdAt
         - id
         - login
         - name
+        - updatedAt
         - websiteUrl
       type: object
     OrganizationsPage:
@@ -622,7 +646,8 @@ components:
         size: 99
         totalPages: 99
         organizations:
-          - avatarKey: logo/dream.png
+          - createdAt: 2022-07-04T22:19:11Z
+            avatarKey: logo/dream.png
             websiteUrl: https://openchallenges.io
             acronym: OC
             name: Example organization
@@ -630,7 +655,9 @@ components:
             id: 1
             challengeCount: 10
             login: example-org
-          - avatarKey: logo/dream.png
+            updatedAt: 2022-07-04T22:19:11Z
+          - createdAt: 2022-07-04T22:19:11Z
+            avatarKey: logo/dream.png
             websiteUrl: https://openchallenges.io
             acronym: OC
             name: Example organization
@@ -638,6 +665,7 @@ components:
             id: 1
             challengeCount: 10
             login: example-org
+            updatedAt: 2022-07-04T22:19:11Z
         hasPrevious: true
         hasNext: true
         totalElements: 99

@@ -334,6 +334,16 @@ components:
       maxLength: 500
       nullable: true
       example: https://openchallenges.io
+    CreatedDateTime:
+      description: Datetime when the object was added to the database.
+      type: string
+      format: date-time
+      example: '2022-07-04T22:19:11Z'
+    UpdatedDateTime:
+      description: Datetime when the object was last modified in the database.
+      type: string
+      format: date-time
+      example: '2022-07-04T22:19:11Z'
     Organization:
       type: object
       description: An organization
@@ -369,12 +379,18 @@ components:
           maxLength: 10
           example: OC
           nullable: true
+        createdAt:
+          $ref: '#/components/schemas/CreatedDateTime'
+        updatedAt:
+          $ref: '#/components/schemas/UpdatedDateTime'
       required:
         - id
         - name
         - login
         - websiteUrl
         - challengeCount
+        - createdAt
+        - updatedAt
     OrganizationsPage:
       type: object
       description: A page of organizations

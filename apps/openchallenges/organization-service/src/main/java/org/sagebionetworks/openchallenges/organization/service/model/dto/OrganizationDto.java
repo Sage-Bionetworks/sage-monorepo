@@ -5,6 +5,8 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.time.OffsetDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -40,6 +42,12 @@ public class OrganizationDto {
 
   private @Nullable String acronym = null;
 
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+  private OffsetDateTime createdAt;
+
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+  private OffsetDateTime updatedAt;
+
   public OrganizationDto() {
     super();
   }
@@ -47,12 +55,14 @@ public class OrganizationDto {
   /**
    * Constructor with only required parameters
    */
-  public OrganizationDto(Long id, String name, String login, String websiteUrl, Integer challengeCount) {
+  public OrganizationDto(Long id, String name, String login, String websiteUrl, Integer challengeCount, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
     this.id = id;
     this.name = name;
     this.login = login;
     this.websiteUrl = websiteUrl;
     this.challengeCount = challengeCount;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 
   public OrganizationDto id(Long id) {
@@ -216,6 +226,46 @@ public class OrganizationDto {
     this.acronym = acronym;
   }
 
+  public OrganizationDto createdAt(OffsetDateTime createdAt) {
+    this.createdAt = createdAt;
+    return this;
+  }
+
+  /**
+   * Datetime when the object was added to the database.
+   * @return createdAt
+   */
+  @NotNull @Valid 
+  @Schema(name = "createdAt", example = "2022-07-04T22:19:11Z", description = "Datetime when the object was added to the database.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("createdAt")
+  public OffsetDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(OffsetDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public OrganizationDto updatedAt(OffsetDateTime updatedAt) {
+    this.updatedAt = updatedAt;
+    return this;
+  }
+
+  /**
+   * Datetime when the object was last modified in the database.
+   * @return updatedAt
+   */
+  @NotNull @Valid 
+  @Schema(name = "updatedAt", example = "2022-07-04T22:19:11Z", description = "Datetime when the object was last modified in the database.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("updatedAt")
+  public OffsetDateTime getUpdatedAt() {
+    return updatedAt;
+  }
+
+  public void setUpdatedAt(OffsetDateTime updatedAt) {
+    this.updatedAt = updatedAt;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -232,12 +282,14 @@ public class OrganizationDto {
         Objects.equals(this.avatarKey, organization.avatarKey) &&
         Objects.equals(this.websiteUrl, organization.websiteUrl) &&
         Objects.equals(this.challengeCount, organization.challengeCount) &&
-        Objects.equals(this.acronym, organization.acronym);
+        Objects.equals(this.acronym, organization.acronym) &&
+        Objects.equals(this.createdAt, organization.createdAt) &&
+        Objects.equals(this.updatedAt, organization.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, login, description, avatarKey, websiteUrl, challengeCount, acronym);
+    return Objects.hash(id, name, login, description, avatarKey, websiteUrl, challengeCount, acronym, createdAt, updatedAt);
   }
 
   @Override
@@ -252,6 +304,8 @@ public class OrganizationDto {
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("    challengeCount: ").append(toIndentedString(challengeCount)).append("\n");
     sb.append("    acronym: ").append(toIndentedString(acronym)).append("\n");
+    sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
+    sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -288,6 +342,8 @@ public class OrganizationDto {
       this.instance.setWebsiteUrl(value.websiteUrl);
       this.instance.setChallengeCount(value.challengeCount);
       this.instance.setAcronym(value.acronym);
+      this.instance.setCreatedAt(value.createdAt);
+      this.instance.setUpdatedAt(value.updatedAt);
       return this;
     }
 
@@ -328,6 +384,16 @@ public class OrganizationDto {
     
     public OrganizationDto.Builder acronym(String acronym) {
       this.instance.acronym(acronym);
+      return this;
+    }
+    
+    public OrganizationDto.Builder createdAt(OffsetDateTime createdAt) {
+      this.instance.createdAt(createdAt);
+      return this;
+    }
+    
+    public OrganizationDto.Builder updatedAt(OffsetDateTime updatedAt) {
+      this.instance.updatedAt(updatedAt);
       return this;
     }
     

@@ -1,5 +1,7 @@
 package org.sagebionetworks.openchallenges.organization.service.service;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.util.Arrays;
 import java.util.List;
 import org.sagebionetworks.openchallenges.organization.service.exception.OrganizationAlreadyExistsException;
@@ -9,7 +11,6 @@ import org.sagebionetworks.openchallenges.organization.service.model.dto.Organiz
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationSearchQueryDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationUpdateRequestDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationsPageDto;
-import org.sagebionetworks.openchallenges.organization.service.model.entity.ChallengeContributionEntity;
 import org.sagebionetworks.openchallenges.organization.service.model.entity.OrganizationEntity;
 import org.sagebionetworks.openchallenges.organization.service.model.mapper.OrganizationMapper;
 import org.sagebionetworks.openchallenges.organization.service.model.repository.ChallengeContributionRepository;
@@ -30,6 +31,9 @@ public class OrganizationService {
 
   private final OrganizationRepository organizationRepository;
   private final ChallengeContributionRepository challengeContributionRepository;
+
+  @PersistenceContext
+  private EntityManager entityManager;
 
   public OrganizationService(
     OrganizationRepository organizationRepository,
@@ -126,6 +130,7 @@ public class OrganizationService {
     return organizationMapper.convertToDto(orgEntity);
   }
 
+  @Transactional
   public OrganizationDto createOrganization(OrganizationCreateRequestDto request) {
     // Create the organization entity
     OrganizationEntity entity = OrganizationEntity.builder()
@@ -141,8 +146,9 @@ public class OrganizationService {
     try {
       // Save the entity
       OrganizationEntity savedEntity = organizationRepository.save(entity);
+      entityManager.refresh(savedEntity);
 
-      // Return the full contribution DTO
+      // Return the full organization DTO
       return organizationMapper.convertToDto(savedEntity);
     } catch (DataIntegrityViolationException e) {
       // Check if this is the unique constraint violation
@@ -159,6 +165,7 @@ public class OrganizationService {
     }
   }
 
+  @Transactional
   public OrganizationDto updateOrganization(
     String identifier,
     OrganizationUpdateRequestDto request
@@ -190,7 +197,7 @@ public class OrganizationService {
       // Save the updated entity
       OrganizationEntity updatedEntity = organizationRepository.save(existingOrg);
 
-      // Return the updated contribution as DTO
+      // Return the updated organization as DTO
       return organizationMapper.convertToDto(updatedEntity);
     } catch (DataIntegrityViolationException e) {
       // Re-throw the original exception if it's not the constraint we're looking for

@@ -32,9 +32,15 @@ properties:
     maxLength: 10
     example: 'OC'
     nullable: true
+  createdAt:
+    $ref: CreatedDateTime.yaml
+  updatedAt:
+    $ref: UpdatedDateTime.yaml
 required:
   - id
   - name
   - login
   - websiteUrl
   - challengeCount
+  - createdAt
+  - updatedAt

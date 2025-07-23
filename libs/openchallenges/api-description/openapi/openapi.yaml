@@ -1705,12 +1705,18 @@ components:
           maxLength: 10
           example: OC
           nullable: true
+        createdAt:
+          $ref: '#/components/schemas/CreatedDateTime'
+        updatedAt:
+          $ref: '#/components/schemas/UpdatedDateTime'
       required:
         - id
         - name
         - login
         - websiteUrl
         - challengeCount
+        - createdAt
+        - updatedAt
     OrganizationsPage:
       type: object
       description: A page of organizations
