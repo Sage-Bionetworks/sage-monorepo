@@ -229,7 +229,7 @@
       "axios": "1.8.2",
       "cross-spawn": "7.0.6",
       "redoc": "2.5.0",
-      "stylus": "0.0.1-security",
+      "stylus": "github:stylus/stylus#0.54.4",
       "tar-fs": "2.1.3"
     }
   }
