@@ -12,8 +12,6 @@ services:
     ports:
       - '8000:8000'
     depends_on:
-      openchallenges-api-docs:
-        condition: service_healthy
       openchallenges-api-gateway:
         condition: service_healthy
       openchallenges-app:
