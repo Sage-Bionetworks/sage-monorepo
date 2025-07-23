@@ -8,7 +8,7 @@ properties:
   organizationId:
     $ref: OrganizationId.yaml
   role:
-    $ref: ChallengeContributionRole.yaml
+    $ref: ChallengeParticipationRole.yaml
 required:
   - id
   - challengeId

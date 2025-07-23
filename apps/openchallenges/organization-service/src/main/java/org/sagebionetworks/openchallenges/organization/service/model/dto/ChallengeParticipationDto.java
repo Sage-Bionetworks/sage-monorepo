@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import org.sagebionetworks.openchallenges.organization.service.model.dto.ChallengeContributionRoleDto;
+import org.sagebionetworks.openchallenges.organization.service.model.dto.ChallengeParticipationRoleDto;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -32,7 +32,7 @@ public class ChallengeParticipationDto {
 
   private Long organizationId;
 
-  private ChallengeContributionRoleDto role;
+  private ChallengeParticipationRoleDto role;
 
   public ChallengeParticipationDto() {
     super();
@@ -41,7 +41,7 @@ public class ChallengeParticipationDto {
   /**
    * Constructor with only required parameters
    */
-  public ChallengeParticipationDto(Long id, Long challengeId, Long organizationId, ChallengeContributionRoleDto role) {
+  public ChallengeParticipationDto(Long id, Long challengeId, Long organizationId, ChallengeParticipationRoleDto role) {
     this.id = id;
     this.challengeId = challengeId;
     this.organizationId = organizationId;
@@ -108,7 +108,7 @@ public class ChallengeParticipationDto {
     this.organizationId = organizationId;
   }
 
-  public ChallengeParticipationDto role(ChallengeContributionRoleDto role) {
+  public ChallengeParticipationDto role(ChallengeParticipationRoleDto role) {
     this.role = role;
     return this;
   }
@@ -120,11 +120,11 @@ public class ChallengeParticipationDto {
   @NotNull @Valid 
   @Schema(name = "role", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("role")
-  public ChallengeContributionRoleDto getRole() {
+  public ChallengeParticipationRoleDto getRole() {
     return role;
   }
 
-  public void setRole(ChallengeContributionRoleDto role) {
+  public void setRole(ChallengeParticipationRoleDto role) {
     this.role = role;
   }
 
@@ -206,7 +206,7 @@ public class ChallengeParticipationDto {
       return this;
     }
     
-    public ChallengeParticipationDto.Builder role(ChallengeContributionRoleDto role) {
+    public ChallengeParticipationDto.Builder role(ChallengeParticipationRoleDto role) {
       this.instance.role(role);
       return this;
     }

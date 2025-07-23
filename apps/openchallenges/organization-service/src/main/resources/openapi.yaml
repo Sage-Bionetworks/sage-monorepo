@@ -826,7 +826,7 @@ components:
           format: int64
           type: integer
         role:
-          $ref: '#/components/schemas/ChallengeContributionRole'
+          $ref: '#/components/schemas/ChallengeParticipationRole'
       required:
         - challengeId
         - id

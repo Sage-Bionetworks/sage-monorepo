@@ -55,6 +55,8 @@ public class SecurityConfiguration {
           .authenticated()
           .requestMatchers(HttpMethod.DELETE, "/v1/organizations/*/participations/*/role/*")
           .authenticated()
+          .requestMatchers(HttpMethod.POST, "/v1/organizations/*/participations")
+          .authenticated()
           .anyRequest()
           .authenticated()
       )

@@ -529,7 +529,7 @@ components:
         organizationId:
           $ref: '#/components/schemas/OrganizationId'
         role:
-          $ref: '#/components/schemas/ChallengeContributionRole'
+          $ref: '#/components/schemas/ChallengeParticipationRole'
       required:
         - id
         - challengeId
