@@ -6,25 +6,6 @@
   overflow: hidden;
 }
 
-.top-background-wrapper {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  overflow: visible;
-
-  .top-background {
-    position: absolute;
-    top: -200px;
-    height: auto;
-    max-width: none;
-    width: clamp(100%, 150% - 5vw, 140%);
-    right: clamp(-150px, 5vw, 0px);
-  }
-}
-
 explorers-home-card {
   --card-heading-color: var(--color-secondary);
 
@@ -97,19 +78,6 @@ explorers-home-card {
   justify-content: center;
   padding: 50px 0;
   position: relative;
-
-  .stats-background-wrapper {
-    position: absolute;
-    height: 100%;
-    z-index: -1;
-    overflow: visible;
-  }
-
-  .stats-background {
-    position: absolute;
-    width: 100vw;
-    transform: translateX(-50%);
-  }
 
   .stat {
     width: 200px;
