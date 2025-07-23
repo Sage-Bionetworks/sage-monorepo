@@ -4,7 +4,7 @@ requires-python = "==3.13.3"
 
 [manifest]
 members = [
-    "bioarena-tools",
+    "bixarena-tools",
     "openchallenges-api-client-python",
     "openchallenges-tools",
     "sage-monorepo",
@@ -41,9 +41,9 @@ wheels = [
 ]
 
 [[package]]
-name = "bioarena-tools"
+name = "bixarena-tools"
 version = "1.0.0"
-source = { editable = "apps/bioarena/tools" }
+source = { editable = "apps/bixarena/tools" }
 
 [[package]]
 name = "black"
@@ -478,7 +478,7 @@ name = "sage-monorepo"
 version = "1.0.0"
 source = { editable = "." }
 dependencies = [
-    { name = "bioarena-tools" },
+    { name = "bixarena-tools" },
     { name = "openchallenges-api-client-python" },
     { name = "openchallenges-tools" },
 ]
@@ -497,7 +497,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "bioarena-tools", editable = "apps/bioarena/tools" },
+    { name = "bixarena-tools", editable = "apps/bixarena/tools" },
     { name = "openchallenges-api-client-python", editable = "libs/openchallenges/api-client-python" },
     { name = "openchallenges-tools", editable = "apps/openchallenges/tools" },
 ]

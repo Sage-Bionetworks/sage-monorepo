@@ -10,16 +10,13 @@ server:
 spring:
   application:
     name: openchallenges-organization-service
-  # profiles:
-  #   active: dev,local
   flyway:
     enabled: true
     clean-disabled: false
-  datasource:
-    url: jdbc:postgresql://openchallenges-postgres:8091/organization_service
-    username: organization_service
-    password: changeme
-    driver-class-name: org.postgresql.Driver
+  jackson:
+    date-format: org.sagebionetworks.openchallenges.organization.service.RFC3339DateFormat
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
   jpa:
     hibernate:
       ddl-auto: none
@@ -34,10 +31,8 @@ spring:
             hosts: openchallenges-opensearch:9200
             # username: admin
             # password: admin
-  jackson:
-    date-format: org.sagebionetworks.openchallenges.organization.service.RFC3339DateFormat
-    serialization:
-      WRITE_DATES_AS_TIMESTAMPS: false
+  profiles:
+    active: dev
 
 eureka:
   client:

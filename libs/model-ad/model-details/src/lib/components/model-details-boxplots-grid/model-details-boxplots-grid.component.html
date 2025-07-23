@@ -5,11 +5,12 @@
   </div>
 
   <div class="boxplots-grid">
-    @for (modelData of modelDataList(); track modelData; let last = $last) {
+    @for (modelData of modelDataList(); track modelData; let i = $index) {
       <model-ad-model-details-boxplot
         [modelData]="modelData"
         [sexes]="sexes()"
-        [showLegend]="$last"
+        [showLegend]="i === legendIndex()"
+        [genotypeOrder]="genotypeOrder()"
       />
     }
   </div>

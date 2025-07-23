@@ -3,4 +3,4 @@
 
 def hello():
     """Return a friendly greeting."""
-    return "Hello bioarena-tools"
+    return "Hello bixarena-tools"
