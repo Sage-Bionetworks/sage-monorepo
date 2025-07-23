@@ -30,6 +30,7 @@ public class ChallengeParticipationService {
     this.challengeParticipationRepository = challengeParticipationRepository;
   }
 
+  @Transactional(readOnly = false)
   public ChallengeParticipationDto createChallengeParticipation(
     String org,
     ChallengeParticipationCreateRequestDto requestDto
@@ -77,7 +78,7 @@ public class ChallengeParticipationService {
         )
       );
     challengeParticipationRepository.delete(participation);
-    logger.info(
+    logger.debug(
       "Successfully deleted challenge participation for org: {}, challengeId: {}, role: {}",
       org,
       challengeId,

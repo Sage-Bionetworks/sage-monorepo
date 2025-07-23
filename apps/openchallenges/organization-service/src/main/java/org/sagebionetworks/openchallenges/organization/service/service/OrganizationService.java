@@ -130,7 +130,7 @@ public class OrganizationService {
     return organizationMapper.convertToDto(orgEntity);
   }
 
-  @Transactional
+  @Transactional(readOnly = false)
   public OrganizationDto createOrganization(OrganizationCreateRequestDto request) {
     // Create the organization entity
     OrganizationEntity entity = OrganizationEntity.builder()
@@ -165,7 +165,7 @@ public class OrganizationService {
     }
   }
 
-  @Transactional
+  @Transactional(readOnly = false)
   public OrganizationDto updateOrganization(
     String identifier,
     OrganizationUpdateRequestDto request
