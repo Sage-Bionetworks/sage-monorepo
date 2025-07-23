@@ -16,11 +16,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class ChallengeParticipationApiDelegateImpl implements ChallengeParticipationApiDelegate {
 
-  private static final Logger logger = LoggerFactory.getLogger(ChallengeParticipationApiDelegateImpl.class);
+  private static final Logger logger = LoggerFactory.getLogger(
+    ChallengeParticipationApiDelegateImpl.class
+  );
 
   private final ChallengeParticipationService challengeParticipationService;
 
-  public ChallengeParticipationApiDelegateImpl(ChallengeParticipationService challengeParticipationService) {
+  public ChallengeParticipationApiDelegateImpl(
+    ChallengeParticipationService challengeParticipationService
+  ) {
     this.challengeParticipationService = challengeParticipationService;
   }
 
@@ -40,10 +44,11 @@ public class ChallengeParticipationApiDelegateImpl implements ChallengeParticipa
       org
     );
 
-    ChallengeParticipationDto createdParticipation = challengeParticipationService.createChallengeParticipation(
-      org,
-      challengeParticipationCreateRequestDto
-    );
+    ChallengeParticipationDto createdParticipation =
+      challengeParticipationService.createChallengeParticipation(
+        org,
+        challengeParticipationCreateRequestDto
+      );
     return ResponseEntity.status(HttpStatus.CREATED).body(createdParticipation);
   }
 

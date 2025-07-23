@@ -8,12 +8,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class ChallengeParticipationService {
 
-    public ChallengeParticipationDto createChallengeParticipation(String org, ChallengeParticipationCreateRequestDto requestDto) {
-        // TODO: Implement actual creation logic
-        return new ChallengeParticipationDto();
-    }
+  public ChallengeParticipationDto createChallengeParticipation(
+    String org,
+    ChallengeParticipationCreateRequestDto requestDto
+  ) {
+    // TODO: Implement actual creation logic
+    return new ChallengeParticipationDto();
+  }
 
-    public void deleteChallengeParticipation(String org, Long challengeId, ChallengeParticipationRoleDto role) {
-        // TODO: Implement actual deletion logic
-    }
+  public void deleteChallengeParticipation(
+    String org,
+    Long challengeId,
+    ChallengeParticipationRoleDto role
+  ) {
+    // TODO: Implement actual deletion logic
+  }
 }
