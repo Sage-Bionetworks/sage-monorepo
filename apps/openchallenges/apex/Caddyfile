@@ -1,8 +1,4 @@
 :8000 {
-	handle_path /api-docs* {
-		reverse_proxy {env.API_DOCS_HOST}:{env.API_DOCS_PORT}
-	}
-
 	handle_path /api* {
 		rewrite * /api{uri}
 		reverse_proxy {env.API_GATEWAY_HOST}:{env.API_GATEWAY_PORT}
