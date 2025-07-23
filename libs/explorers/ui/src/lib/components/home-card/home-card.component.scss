@@ -10,14 +10,16 @@
 
   h2 {
     font-weight: bold;
-    font-size: var(--font-size-xxl);
+    font-size: 24px;
+    line-height: 28px;
     color: var(--card-heading-color, inherit);
+    padding-bottom: 14px;
     margin: 0;
   }
 
   p {
-    font-size: var(--font-size-xl);
-    line-height: var(--line-height-xxl);
+    font-size: 16px;
+    line-height: 20px;
   }
 
   .icon-container {
