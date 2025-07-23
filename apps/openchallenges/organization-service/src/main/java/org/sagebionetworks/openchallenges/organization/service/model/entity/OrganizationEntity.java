@@ -66,8 +66,8 @@ public class OrganizationEntity {
   private List<OrganizationCategoryEntity> categories;
 
   @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY)
-  @IndexedEmbedded(name = "challenge_contributions", includePaths = { "role" })
-  private List<ChallengeContributionEntity> challengeContributions;
+  @IndexedEmbedded(name = "challenge_participations", includePaths = { "role" })
+  private List<ChallengeParticipationEntity> challengeParticipations;
 
   @Column(nullable = true)
   @FullTextField

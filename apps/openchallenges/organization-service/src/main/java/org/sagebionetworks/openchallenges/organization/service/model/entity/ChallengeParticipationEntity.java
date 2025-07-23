@@ -16,26 +16,26 @@ import lombok.NoArgsConstructor;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 
 @Entity
-@Table(name = "challenge_contribution")
+@Table(name = "challenge_participation")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChallengeContributionEntity {
+public class ChallengeParticipationEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false, updatable = false)
-  @GenericField(name = "id")
   private Long id;
 
-  @Column(nullable = false)
+  @Column(nullable = false, length = 50)
   @GenericField
   private String role;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "organization_id", nullable = false)
   private OrganizationEntity organization;
-  // @Column(name = "created_at")
-  // private OffsetDateTime createdAt;
+
+  @Column(nullable = false)
+  private Long challengeId;
 }

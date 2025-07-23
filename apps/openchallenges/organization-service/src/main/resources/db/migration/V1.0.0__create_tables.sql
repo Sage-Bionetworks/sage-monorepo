@@ -30,9 +30,9 @@ CREATE TABLE organization_category (
 );
 
 
--- create challenge_contribution table
+-- create challenge_participation table
 
-CREATE TABLE challenge_contribution (
+CREATE TABLE challenge_participation (
     id BIGSERIAL          PRIMARY KEY,
     challenge_id          BIGINT NOT NULL,
     organization_id       BIGINT NOT NULL,
@@ -43,5 +43,5 @@ CREATE TABLE challenge_contribution (
       FOREIGN KEY (organization_id)
       REFERENCES organization(id)
       ON DELETE CASCADE,
-    CONSTRAINT uq_contribution UNIQUE (challenge_id, organization_id, role)
+    CONSTRAINT uq_participation UNIQUE (challenge_id, organization_id, role)
 );

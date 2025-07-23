@@ -13,7 +13,7 @@ import org.sagebionetworks.openchallenges.organization.service.model.dto.Organiz
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationsPageDto;
 import org.sagebionetworks.openchallenges.organization.service.model.entity.OrganizationEntity;
 import org.sagebionetworks.openchallenges.organization.service.model.mapper.OrganizationMapper;
-import org.sagebionetworks.openchallenges.organization.service.model.repository.ChallengeContributionRepository;
+import org.sagebionetworks.openchallenges.organization.service.model.repository.ChallengeParticipationRepository;
 import org.sagebionetworks.openchallenges.organization.service.model.repository.OrganizationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,17 +30,17 @@ public class OrganizationService {
   private static final Logger logger = LoggerFactory.getLogger(OrganizationService.class);
 
   private final OrganizationRepository organizationRepository;
-  private final ChallengeContributionRepository challengeContributionRepository;
+  private final ChallengeParticipationRepository challengeParticipationRepository;
 
   @PersistenceContext
   private EntityManager entityManager;
 
   public OrganizationService(
     OrganizationRepository organizationRepository,
-    ChallengeContributionRepository challengeContributionRepository
+    ChallengeParticipationRepository challengeParticipationRepository
   ) {
     this.organizationRepository = organizationRepository;
-    this.challengeContributionRepository = challengeContributionRepository;
+    this.challengeParticipationRepository = challengeParticipationRepository;
   }
 
   private OrganizationMapper organizationMapper = new OrganizationMapper();
@@ -67,9 +67,9 @@ public class OrganizationService {
         )
       );
 
-    // First delete all challenge contributions that reference this organization
-    logger.info("Deleting challenge contributions for organization: {}", orgEntity.getId());
-    challengeContributionRepository.deleteByOrganization(orgEntity);
+    // First delete all challenge participations that reference this organization
+    logger.info("Deleting challenge participations for organization: {}", orgEntity.getId());
+    challengeParticipationRepository.deleteByOrganization(orgEntity);
 
     // Now delete the organization
     organizationRepository.delete(orgEntity);

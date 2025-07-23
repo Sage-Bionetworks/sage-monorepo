@@ -35,7 +35,7 @@ public class OrganizationEntityTest {
     entityFromConstructor.setUpdatedAt(updatedAt);
     entityFromConstructor.setAcronym(acronym);
     entityFromConstructor.setCategories(Collections.emptyList());
-    entityFromConstructor.setChallengeContributions(Collections.emptyList());
+    entityFromConstructor.setChallengeParticipations(Collections.emptyList());
 
     entityFromConstructor2 = new OrganizationEntity();
 
@@ -49,7 +49,7 @@ public class OrganizationEntityTest {
     entityFromConstructor2.setUpdatedAt(updatedAt);
     entityFromConstructor2.setAcronym(acronym);
     entityFromConstructor2.setCategories(Collections.emptyList());
-    entityFromConstructor2.setChallengeContributions(Collections.emptyList());
+    entityFromConstructor2.setChallengeParticipations(Collections.emptyList());
 
     entityFromConstructor3 = new OrganizationEntity();
 
@@ -63,7 +63,7 @@ public class OrganizationEntityTest {
     entityFromConstructor3.setUpdatedAt(updatedAt);
     entityFromConstructor3.setAcronym("AO");
     entityFromConstructor3.setCategories(Collections.emptyList());
-    entityFromConstructor3.setChallengeContributions(Collections.emptyList());
+    entityFromConstructor3.setChallengeParticipations(Collections.emptyList());
   }
 
   @Test
@@ -75,7 +75,7 @@ public class OrganizationEntityTest {
       .websiteUrl(websiteUrl)
       .challengeCount(challengeCount)
       .categories(Collections.emptyList())
-      .challengeContributions(Collections.emptyList())
+      .challengeParticipations(Collections.emptyList())
       .description(description)
       .createdAt(createdAt)
       .updatedAt(updatedAt)
@@ -88,7 +88,7 @@ public class OrganizationEntityTest {
     Assertions.assertEquals(websiteUrl, entity.getWebsiteUrl());
     Assertions.assertEquals(challengeCount, entity.getChallengeCount());
     Assertions.assertEquals(Collections.emptyList(), entity.getCategories());
-    Assertions.assertEquals(Collections.emptyList(), entity.getChallengeContributions());
+    Assertions.assertEquals(Collections.emptyList(), entity.getChallengeParticipations());
     Assertions.assertEquals(description, entity.getDescription());
     Assertions.assertEquals(createdAt, entity.getCreatedAt());
     Assertions.assertEquals(updatedAt, entity.getUpdatedAt());
@@ -105,7 +105,7 @@ public class OrganizationEntityTest {
     Assertions.assertEquals(Collections.emptyList(), entityFromConstructor.getCategories());
     Assertions.assertEquals(
       Collections.emptyList(),
-      entityFromConstructor.getChallengeContributions()
+      entityFromConstructor.getChallengeParticipations()
     );
     Assertions.assertEquals(description, entityFromConstructor.getDescription());
     Assertions.assertEquals(createdAt, entityFromConstructor.getCreatedAt());

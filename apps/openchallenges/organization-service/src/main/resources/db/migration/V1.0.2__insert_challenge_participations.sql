@@ -1,5 +1,5 @@
 -- Batch 1: rows 1 to 100
-INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VALUES
+INSERT INTO challenge_participation (id, challenge_id, organization_id, role) VALUES
 (1, 1, 75, 'sponsor'),
 (2, 2, 28, 'data_contributor'),
 (3, 2, 45, 'data_contributor'),
@@ -102,7 +102,7 @@ INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VAL
 (100, 12, 169, 'data_contributor');
 
 -- Batch 2: rows 101 to 200
-INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VALUES
+INSERT INTO challenge_participation (id, challenge_id, organization_id, role) VALUES
 (101, 12, 18, 'data_contributor'),
 (102, 12, 94, 'data_contributor'),
 (103, 12, 19, 'sponsor'),
@@ -205,7 +205,7 @@ INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VAL
 (200, 19, 59, 'sponsor');
 
 -- Batch 3: rows 201 to 300
-INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VALUES
+INSERT INTO challenge_participation (id, challenge_id, organization_id, role) VALUES
 (201, 20, 171, 'challenge_organizer'),
 (202, 20, 205, 'challenge_organizer'),
 (203, 20, 128, 'challenge_organizer'),
@@ -308,7 +308,7 @@ INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VAL
 (300, 28, 89, 'challenge_organizer');
 
 -- Batch 4: rows 301 to 400
-INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VALUES
+INSERT INTO challenge_participation (id, challenge_id, organization_id, role) VALUES
 (301, 28, 73, 'challenge_organizer'),
 (302, 28, 170, 'challenge_organizer'),
 (303, 28, 149, 'challenge_organizer'),
@@ -411,7 +411,7 @@ INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VAL
 (400, 39, 150, 'challenge_organizer');
 
 -- Batch 5: rows 401 to 500
-INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VALUES
+INSERT INTO challenge_participation (id, challenge_id, organization_id, role) VALUES
 (401, 39, 128, 'challenge_organizer'),
 (402, 39, 15, 'challenge_organizer'),
 (403, 39, 131, 'challenge_organizer'),
@@ -514,7 +514,7 @@ INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VAL
 (500, 79, 219, 'challenge_organizer');
 
 -- Batch 6: rows 501 to 600
-INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VALUES
+INSERT INTO challenge_participation (id, challenge_id, organization_id, role) VALUES
 (501, 79, 137, 'sponsor'),
 (502, 79, 15, 'sponsor'),
 (503, 79, 60, 'sponsor'),
@@ -617,7 +617,7 @@ INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VAL
 (600, 150, 13, 'challenge_organizer');
 
 -- Batch 7: rows 601 to 700
-INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VALUES
+INSERT INTO challenge_participation (id, challenge_id, organization_id, role) VALUES
 (601, 150, 238, 'challenge_organizer'),
 (602, 151, 13, 'challenge_organizer'),
 (603, 151, 238, 'challenge_organizer'),
@@ -720,7 +720,7 @@ INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VAL
 (700, 158, 262, 'challenge_organizer');
 
 -- Batch 8: rows 701 to 800
-INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VALUES
+INSERT INTO challenge_participation (id, challenge_id, organization_id, role) VALUES
 (701, 158, 263, 'challenge_organizer'),
 (702, 158, 264, 'challenge_organizer'),
 (703, 158, 265, 'sponsor'),
@@ -823,7 +823,7 @@ INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VAL
 (800, 184, 261, 'data_contributor');
 
 -- Batch 9: rows 801 to 900
-INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VALUES
+INSERT INTO challenge_participation (id, challenge_id, organization_id, role) VALUES
 (801, 184, 311, 'data_contributor'),
 (802, 185, 261, 'challenge_organizer'),
 (803, 185, 261, 'data_contributor'),
@@ -926,7 +926,7 @@ INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VAL
 (900, 219, 13, 'challenge_organizer');
 
 -- Batch 10: rows 901 to 1000
-INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VALUES
+INSERT INTO challenge_participation (id, challenge_id, organization_id, role) VALUES
 (901, 220, 327, 'challenge_organizer'),
 (902, 220, 62, 'challenge_organizer'),
 (903, 99, 34, 'challenge_organizer'),
@@ -1029,7 +1029,7 @@ INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VAL
 (1000, 280, 179, 'data_contributor');
 
 -- Batch 11: rows 1001 to 1100
-INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VALUES
+INSERT INTO challenge_participation (id, challenge_id, organization_id, role) VALUES
 (1001, 281, 161, 'data_contributor'),
 (1002, 281, 350, 'data_contributor'),
 (1003, 281, 351, 'challenge_organizer'),
@@ -1132,7 +1132,7 @@ INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VAL
 (1100, 467, 418, 'challenge_organizer');
 
 -- Batch 12: rows 1101 to 1200
-INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VALUES
+INSERT INTO challenge_participation (id, challenge_id, organization_id, role) VALUES
 (1101, 467, 419, 'sponsor'),
 (1102, 468, 420, 'challenge_organizer'),
 (1103, 468, 418, 'challenge_organizer'),
@@ -1234,7 +1234,7 @@ INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VAL
 (1200, 516, 248, 'challenge_organizer');
 
 -- Batch 13: rows 1201 to 1300
-INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VALUES
+INSERT INTO challenge_participation (id, challenge_id, organization_id, role) VALUES
 (1201, 516, 13, 'challenge_organizer'),
 (1202, 516, 249, 'challenge_organizer'),
 (1203, 516, 34, 'challenge_organizer'),
@@ -1337,7 +1337,7 @@ INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VAL
 (1300, 549, 179, 'challenge_organizer');
 
 -- Batch 14: rows 1301 to 1400
-INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VALUES
+INSERT INTO challenge_participation (id, challenge_id, organization_id, role) VALUES
 (1301, 548, 38, 'challenge_organizer'),
 (1302, 551, 209, 'challenge_organizer'),
 (1303, 551, 183, 'challenge_organizer'),
@@ -1439,7 +1439,7 @@ INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VAL
 (1400, 623, 266, 'challenge_organizer');
 
 -- Batch 15: rows 1401 to 1500
-INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VALUES
+INSERT INTO challenge_participation (id, challenge_id, organization_id, role) VALUES
 (1401, 624, 266, 'challenge_organizer'),
 (1402, 625, 266, 'challenge_organizer'),
 (1403, 626, 266, 'challenge_organizer'),
@@ -1542,7 +1542,7 @@ INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VAL
 (1500, 607, 73, 'challenge_organizer');
 
 -- Batch 16: rows 1501 to 1600
-INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VALUES
+INSERT INTO challenge_participation (id, challenge_id, organization_id, role) VALUES
 (1501, 608, 73, 'challenge_organizer'),
 (1502, 609, 73, 'challenge_organizer'),
 (1503, 610, 73, 'challenge_organizer'),
@@ -1645,7 +1645,7 @@ INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VAL
 (1600, 565, 308, 'challenge_organizer');
 
 -- Batch 17: rows 1601 to 1700
-INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VALUES
+INSERT INTO challenge_participation (id, challenge_id, organization_id, role) VALUES
 (1601, 592, 320, 'challenge_organizer'),
 (1602, 593, 320, 'challenge_organizer'),
 (1603, 594, 320, 'challenge_organizer'),
@@ -1748,7 +1748,7 @@ INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VAL
 (1700, 652, 517, 'challenge_organizer');
 
 -- Batch 18: rows 1701 to 1800
-INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VALUES
+INSERT INTO challenge_participation (id, challenge_id, organization_id, role) VALUES
 (1701, 652, 519, 'challenge_organizer'),
 (1702, 653, 348, 'challenge_organizer'),
 (1703, 654, 348, 'challenge_organizer'),
@@ -1843,7 +1843,7 @@ INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VAL
 (1800, 661, 88, 'data_contributor');
 
 -- Batch 19: rows 1801 to 1851
-INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VALUES
+INSERT INTO challenge_participation (id, challenge_id, organization_id, role) VALUES
 (1801, 661, 119, 'data_contributor'),
 (1802, 661, 220, 'data_contributor'),
 (1803, 661, 527, 'data_contributor'),
@@ -1896,4 +1896,4 @@ INSERT INTO challenge_contribution (id, challenge_id, organization_id, role) VAL
 (1851, 686, 537, 'challenge_organizer');
 
 -- Update the sequence to continue from the highest ID
-SELECT setval('challenge_contribution_id_seq', (SELECT MAX(id) FROM challenge_contribution));
+SELECT setval('challenge_participation_id_seq', (SELECT MAX(id) FROM challenge_participation));
