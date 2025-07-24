@@ -62,7 +62,6 @@ public class OrganizationEntity {
   private String websiteUrl;
 
   @Column(name = "challenge_count", nullable = false)
-  @GenericField(name = "challenge_count", sortable = Sortable.YES)
   private Integer challengeCount;
 
   @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY)
@@ -72,7 +71,7 @@ public class OrganizationEntity {
   @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY)
   @IndexedEmbedded(name = "challenge_participations", includePaths = { "role" })
   @GenericField(
-    name = "challenge_count_2",
+    name = "challenge_count",
     valueBinder = @ValueBinderRef(type = UniqueChallengeCountValueBinder.class),
     extraction = @ContainerExtraction(extract = ContainerExtract.NO),
     sortable = Sortable.YES
