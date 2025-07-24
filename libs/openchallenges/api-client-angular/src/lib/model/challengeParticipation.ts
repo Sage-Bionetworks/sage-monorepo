@@ -7,7 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { ChallengeContributionRole } from './challengeContributionRole';
+import { ChallengeParticipationRole } from './challengeParticipationRole';
 
 /**
  * An challenge participation.
@@ -25,6 +25,6 @@ export interface ChallengeParticipation {
    * The unique identifier of an organization
    */
   organizationId: number;
-  role: ChallengeContributionRole;
+  role: ChallengeParticipationRole;
 }
 export namespace ChallengeParticipation {}
