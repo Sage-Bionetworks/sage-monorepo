@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { Component, inject, OnInit, Renderer2 } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import {
   Image,
@@ -15,11 +15,16 @@ import { getSeoData } from './team-seo-data';
 
 @Component({
   selector: 'openchallenges-team',
-  imports: [CommonModule, RouterModule, FooterComponent],
+  imports: [AsyncPipe, RouterModule, FooterComponent],
   templateUrl: './team.component.html',
   styleUrls: ['./team.component.scss'],
 })
 export class TeamComponent implements OnInit {
+  private readonly configService = inject(ConfigService);
+  private readonly imageService = inject(ImageService);
+  private readonly seoService = inject(SeoService);
+  private readonly renderer2 = inject(Renderer2);
+
   public appVersion: string;
   public dataUpdatedOn: string;
   public privacyPolicyUrl: string;
@@ -39,12 +44,7 @@ export class TeamComponent implements OnInit {
   public gaiaAvatar$: Observable<Image> | undefined;
   public jakeAvatar$: Observable<Image> | undefined;
 
-  constructor(
-    private readonly configService: ConfigService,
-    private imageService: ImageService,
-    private seoService: SeoService,
-    private renderer2: Renderer2,
-  ) {
+  constructor() {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
     this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;

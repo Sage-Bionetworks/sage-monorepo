@@ -14,7 +14,9 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 public class OrganizationServiceApplication implements CommandLineRunner {
 
-  private static final Logger LOG = LoggerFactory.getLogger(OrganizationServiceApplication.class);
+  private static final Logger logger = LoggerFactory.getLogger(
+    OrganizationServiceApplication.class
+  );
 
   private final OrganizationServiceConfigData organizationServiceConfigData;
 
@@ -30,6 +32,6 @@ public class OrganizationServiceApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    LOG.info(organizationServiceConfigData.getWelcomeMessage());
+    logger.info(organizationServiceConfigData.getWelcomeMessage());
   }
 }

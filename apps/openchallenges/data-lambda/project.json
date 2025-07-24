@@ -44,5 +44,5 @@
       }
     }
   },
-  "tags": ["language:python"]
+  "tags": ["language:python", "package-manager:uv"]
 }

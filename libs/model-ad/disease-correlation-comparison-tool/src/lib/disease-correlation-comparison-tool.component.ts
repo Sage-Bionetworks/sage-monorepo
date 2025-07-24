@@ -1,11 +1,11 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import {
   BaseComparisonToolComponent,
   ComparisonToolHeaderComponent,
 } from '@sagebionetworks/explorers/comparison-tools';
-import { ComparisonToolService } from '@sagebionetworks/model-ad/services';
+import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { DiseaseCorrelationHelpLinksComponent } from './components/disease-correlation-help-links/disease-correlation-help-links.component';
-import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/util';
+
 @Component({
   selector: 'model-ad-disease-correlation-comparison-tool',
   imports: [
@@ -18,8 +18,6 @@ import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/util';
   providers: [ComparisonToolService],
 })
 export class DiseaseCorrelationComparisonToolComponent implements OnInit {
-  loadingIconColors = inject(LOADING_ICON_COLORS);
-
   isLoading = signal(true);
   resultsCount = signal(40000);
 

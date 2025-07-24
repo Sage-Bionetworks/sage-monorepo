@@ -1,1 +1,1 @@
-FROM grafana/pyroscope:1.13.4
+FROM mirror.gcr.io/grafana/pyroscope:1.13.4

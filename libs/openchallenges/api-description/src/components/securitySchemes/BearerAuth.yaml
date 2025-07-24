@@ -1,3 +1,4 @@
 type: http
 scheme: bearer
 bearerFormat: JWT
+description: JWT token obtained from /auth/login endpoint

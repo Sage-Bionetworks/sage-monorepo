@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   version: 1.0.0
-  title: OpenChallenges Organization REST API
+  title: OpenChallenges Organization API
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -13,6 +13,8 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
+  - name: Authentication
+    description: Operations about authentication
   - name: Organization
     description: Operations about organizations
 paths:
@@ -56,7 +58,33 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - Organization
+      summary: Delete an organization
+      description: Deletes the organization specified
+      operationId: deleteOrganization
+      security:
+        - apiBearerAuth:
+            - organizations:delete
+      responses:
+        '204':
+          description: Organization successfully deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
+  securitySchemes:
+    apiBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: api_key
+      description: API key obtained from /auth/login endpoint
   schemas:
     OrganizationCategory:
       description: The category of the organization.
@@ -312,6 +340,18 @@ components:
             $ref: '#/components/schemas/BasicError'
     NotFound:
       description: The specified resource was not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    Forbidden:
+      description: The user does not have the permission to perform this action
       content:
         application/problem+json:
           schema:

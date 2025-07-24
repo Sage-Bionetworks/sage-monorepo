@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   Challenge,
   ChallengeService,
@@ -12,14 +12,14 @@ import { Observable, catchError, map, of, switchMap, throwError } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-featured-challenge-list',
-  imports: [CommonModule, ChallengeCardComponent],
+  imports: [AsyncPipe, ChallengeCardComponent],
   templateUrl: './featured-challenge-list.component.html',
   styleUrls: ['./featured-challenge-list.component.scss'],
 })
 export class FeaturedChallengeListComponent implements OnInit {
-  challenges$!: Observable<Challenge[]>;
+  private readonly challengeService = inject(ChallengeService);
 
-  constructor(private challengeService: ChallengeService) {}
+  challenges$!: Observable<Challenge[]>;
 
   ngOnInit() {
     const defaultQuery: ChallengeSearchQuery = {

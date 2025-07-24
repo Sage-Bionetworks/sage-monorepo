@@ -6,43 +6,45 @@ info:
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
-  title: OpenChallenges Organization REST API
+  title: OpenChallenges Organization API
   version: 1.0.0
   x-logo:
     url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
-- url: http://localhost/v1
+  - url: http://localhost/v1
 tags:
-- description: Operations about organizations
-  name: Organization
+  - description: Operations about authentication
+    name: Authentication
+  - description: Operations about organizations
+    name: Organization
 paths:
   /organizations:
     get:
       description: List organizations
       operationId: listOrganizations
       parameters:
-      - description: The search query used to find organizations.
-        explode: true
-        in: query
-        name: organizationSearchQuery
-        required: false
-        schema:
-          $ref: '#/components/schemas/OrganizationSearchQuery'
-        style: form
+        - description: The search query used to find organizations.
+          explode: true
+          in: query
+          name: organizationSearchQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/OrganizationSearchQuery'
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/OrganizationsPage'
           description: Success
-        "400":
+        '400':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -51,46 +53,103 @@ paths:
             error
       summary: List organizations
       tags:
-      - Organization
+        - Organization
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Organization
+        - tag: Organization
   /organizations/{org}:
-    get:
-      description: Returns the organization specified
-      operationId: getOrganization
+    delete:
+      description: Deletes the organization specified
+      operationId: deleteOrganization
       parameters:
-      - description: The id or login of the organization.
-        examples:
-          byString:
-            value: dream
-          byId:
-            value: "1"
-        explode: false
-        in: path
-        name: org
-        required: true
-        schema:
-          maxLength: 64
-          minLength: 1
-          type: string
-        style: simple
+        - description: The id or login of the organization.
+          examples:
+            byString:
+              value: dream
+            byId:
+              value: '1'
+          explode: false
+          in: path
+          name: org
+          required: true
+          schema:
+            maxLength: 64
+            minLength: 1
+            type: string
+          style: simple
       responses:
-        "200":
+        '204':
+          description: Organization successfully deleted
+        '401':
           content:
-            application/json:
+            application/problem+json:
               schema:
-                $ref: '#/components/schemas/Organization'
-          description: An organization
-        "404":
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        '403':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The user does not have the permission to perform this action
+        '404':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        "500":
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+        - apiBearerAuth:
+            - organizations:delete
+      summary: Delete an organization
+      tags:
+        - Organization
+      x-accepts:
+        - application/problem+json
+      x-tags:
+        - tag: Organization
+    get:
+      description: Returns the organization specified
+      operationId: getOrganization
+      parameters:
+        - description: The id or login of the organization.
+          examples:
+            byString:
+              value: dream
+            byId:
+              value: '1'
+          explode: false
+          in: path
+          name: org
+          required: true
+          schema:
+            maxLength: 64
+            minLength: 1
+            type: string
+          style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+          description: An organization
+        '404':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        '500':
           content:
             application/problem+json:
               schema:
@@ -99,12 +158,12 @@ paths:
             error
       summary: Get an organization
       tags:
-      - Organization
+        - Organization
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Organization
+        - tag: Organization
 components:
   parameters:
     organizationSearchQuery:
@@ -122,7 +181,7 @@ components:
         byString:
           value: dream
         byId:
-          value: "1"
+          value: '1'
       explode: false
       in: path
       name: org
@@ -151,35 +210,47 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: The specified resource was not found
+    Unauthorized:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: Unauthorized
+    Forbidden:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The user does not have the permission to perform this action
   schemas:
     OrganizationCategory:
       description: The category of the organization.
       enum:
-      - featured
+        - featured
       example: featured
       type: string
     ChallengeContributionRole:
       description: The nature of a challenge contribution.
       enum:
-      - challenge_organizer
-      - data_contributor
-      - sponsor
+        - challenge_organizer
+        - data_contributor
+        - sponsor
       example: challenge_organizer
       type: string
     OrganizationSort:
       default: relevance
       description: What to sort results by.
       enum:
-      - challenge_count
-      - created
-      - name
-      - relevance
+        - challenge_count
+        - created
+        - name
+        - relevance
       type: string
     OrganizationDirection:
       description: The direction to sort the results by.
       enum:
-      - asc
-      - desc
+        - asc
+        - desc
       nullable: true
       type: string
     OrganizationId:
@@ -259,19 +330,19 @@ components:
           example: true
           type: boolean
       required:
-      - hasNext
-      - hasPrevious
-      - number
-      - size
-      - totalElements
-      - totalPages
+        - hasNext
+        - hasPrevious
+        - number
+        - size
+        - totalElements
+        - totalPages
       type: object
     OrganizationLogin:
       description: The unique login of an organization.
       example: example-org
       maxLength: 64
       minLength: 2
-      pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
       type: string
     Url:
       description: A URL to the website or image.
@@ -318,7 +389,7 @@ components:
           example: example-org
           maxLength: 64
           minLength: 2
-          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
           type: string
         description:
           description: A description of the organization.
@@ -357,56 +428,56 @@ components:
           maxLength: 10
           type: string
       required:
-      - createdAt
-      - id
-      - login
-      - name
-      - updatedAt
+        - createdAt
+        - id
+        - login
+        - name
+        - updatedAt
       type: object
     OrganizationsPage:
       allOf:
-      - $ref: '#/components/schemas/PageMetadata'
-      - properties:
-          organizations:
-            description: A list of organizations
-            items:
-              $ref: '#/components/schemas/Organization'
-            type: array
-        required:
-        - organizations
-        type: object
+        - $ref: '#/components/schemas/PageMetadata'
+        - properties:
+            organizations:
+              description: A list of organizations
+              items:
+                $ref: '#/components/schemas/Organization'
+              type: array
+          required:
+            - organizations
+          type: object
       description: A page of organizations
       example:
         number: 99
         size: 99
         totalPages: 99
         organizations:
-        - createdAt: 2022-07-04T22:19:11Z
-          avatarKey: logo/dream.png
-          websiteUrl: https://openchallenges.io
-          acronym: OC
-          name: Example organization
-          description: A description of the organization.
-          id: 1
-          challengeCount: 10
-          login: example-org
-          updatedAt: 2022-07-04T22:19:11Z
-        - createdAt: 2022-07-04T22:19:11Z
-          avatarKey: logo/dream.png
-          websiteUrl: https://openchallenges.io
-          acronym: OC
-          name: Example organization
-          description: A description of the organization.
-          id: 1
-          challengeCount: 10
-          login: example-org
-          updatedAt: 2022-07-04T22:19:11Z
+          - createdAt: 2022-07-04T22:19:11Z
+            avatarKey: logo/dream.png
+            websiteUrl: https://openchallenges.io
+            acronym: OC
+            name: Example organization
+            description: A description of the organization.
+            id: 1
+            challengeCount: 10
+            login: example-org
+            updatedAt: 2022-07-04T22:19:11Z
+          - createdAt: 2022-07-04T22:19:11Z
+            avatarKey: logo/dream.png
+            websiteUrl: https://openchallenges.io
+            acronym: OC
+            name: Example organization
+            description: A description of the organization.
+            id: 1
+            challengeCount: 10
+            login: example-org
+            updatedAt: 2022-07-04T22:19:11Z
         hasPrevious: true
         hasNext: true
         totalElements: 99
       type: object
       x-java-class-annotations:
-      - '@lombok.Builder'
+        - '@lombok.Builder'
     BasicError:
       description: Problem details (tools.ietf.org/html/rfc7807)
       properties:
@@ -424,9 +495,15 @@ components:
           description: An absolute URI that identifies the problem type
           type: string
       required:
-      - status
-      - title
+        - status
+        - title
       type: object
       x-java-class-annotations:
-      - '@lombok.AllArgsConstructor'
-      - '@lombok.Builder'
+        - '@lombok.AllArgsConstructor'
+        - '@lombok.Builder'
+  securitySchemes:
+    apiBearerAuth:
+      bearerFormat: api_key
+      description: API key obtained from /auth/login endpoint
+      scheme: bearer
+      type: http

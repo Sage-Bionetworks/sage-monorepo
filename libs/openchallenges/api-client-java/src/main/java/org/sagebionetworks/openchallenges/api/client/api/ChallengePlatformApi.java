@@ -51,23 +51,24 @@ public class ChallengePlatformApi {
   }
 
   /**
-   * Get a challenge platform
-   * Returns the challenge platform specified
-   * <p><b>200</b> - Success
+   * Delete a challenge platform
+   * Deletes a challenge platform by its unique ID. This action is irreversible.
+   * <p><b>204</b> - Deletion successful
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
    * <p><b>404</b> - The specified resource was not found
    * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
-   * @param challengePlatformName The unique identifier of the challenge platform.
-   * @return ChallengePlatform
+   * @param challengePlatformId The unique identifier of the challenge platform.
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
    */
-  private ResponseSpec getChallengePlatformRequestCreation(
-    @jakarta.annotation.Nonnull String challengePlatformName
+  private ResponseSpec deleteChallengePlatformRequestCreation(
+    @jakarta.annotation.Nonnull Long challengePlatformId
   ) throws RestClientResponseException {
     Object postBody = null;
-    // verify the required parameter 'challengePlatformName' is set
-    if (challengePlatformName == null) {
+    // verify the required parameter 'challengePlatformId' is set
+    if (challengePlatformId == null) {
       throw new RestClientResponseException(
-        "Missing the required parameter 'challengePlatformName' when calling getChallengePlatform",
+        "Missing the required parameter 'challengePlatformId' when calling deleteChallengePlatform",
         HttpStatus.BAD_REQUEST.value(),
         HttpStatus.BAD_REQUEST.getReasonPhrase(),
         null,
@@ -78,7 +79,119 @@ public class ChallengePlatformApi {
     // create path and map variables
     final Map<String, Object> pathParams = new HashMap<>();
 
-    pathParams.put("challengePlatformName", challengePlatformName);
+    pathParams.put("challengePlatformId", challengePlatformId);
+
+    final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+    final HttpHeaders headerParams = new HttpHeaders();
+    final MultiValueMap<String, String> cookieParams = new LinkedMultiValueMap<>();
+    final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<>();
+
+    final String[] localVarAccepts = { "application/problem+json" };
+    final List<MediaType> localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+    final String[] localVarContentTypes = {};
+    final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+
+    String[] localVarAuthNames = new String[] { "apiBearerAuth" };
+
+    ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
+    return apiClient.invokeAPI(
+      "/challengePlatforms/{challengePlatformId}",
+      HttpMethod.DELETE,
+      pathParams,
+      queryParams,
+      postBody,
+      headerParams,
+      cookieParams,
+      formParams,
+      localVarAccept,
+      localVarContentType,
+      localVarAuthNames,
+      localVarReturnType
+    );
+  }
+
+  /**
+   * Delete a challenge platform
+   * Deletes a challenge platform by its unique ID. This action is irreversible.
+   * <p><b>204</b> - Deletion successful
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengePlatformId The unique identifier of the challenge platform.
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public void deleteChallengePlatform(@jakarta.annotation.Nonnull Long challengePlatformId)
+    throws RestClientResponseException {
+    ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
+    deleteChallengePlatformRequestCreation(challengePlatformId).body(localVarReturnType);
+  }
+
+  /**
+   * Delete a challenge platform
+   * Deletes a challenge platform by its unique ID. This action is irreversible.
+   * <p><b>204</b> - Deletion successful
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengePlatformId The unique identifier of the challenge platform.
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public ResponseEntity<Void> deleteChallengePlatformWithHttpInfo(
+    @jakarta.annotation.Nonnull Long challengePlatformId
+  ) throws RestClientResponseException {
+    ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
+    return deleteChallengePlatformRequestCreation(challengePlatformId).toEntity(localVarReturnType);
+  }
+
+  /**
+   * Delete a challenge platform
+   * Deletes a challenge platform by its unique ID. This action is irreversible.
+   * <p><b>204</b> - Deletion successful
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengePlatformId The unique identifier of the challenge platform.
+   * @return ResponseSpec
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public ResponseSpec deleteChallengePlatformWithResponseSpec(
+    @jakarta.annotation.Nonnull Long challengePlatformId
+  ) throws RestClientResponseException {
+    return deleteChallengePlatformRequestCreation(challengePlatformId);
+  }
+
+  /**
+   * Get a challenge platform
+   * Returns the challenge platform identified by its unique ID
+   * <p><b>200</b> - Success
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengePlatformId The unique identifier of the challenge platform.
+   * @return ChallengePlatform
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  private ResponseSpec getChallengePlatformRequestCreation(
+    @jakarta.annotation.Nonnull Long challengePlatformId
+  ) throws RestClientResponseException {
+    Object postBody = null;
+    // verify the required parameter 'challengePlatformId' is set
+    if (challengePlatformId == null) {
+      throw new RestClientResponseException(
+        "Missing the required parameter 'challengePlatformId' when calling getChallengePlatform",
+        HttpStatus.BAD_REQUEST.value(),
+        HttpStatus.BAD_REQUEST.getReasonPhrase(),
+        null,
+        null,
+        null
+      );
+    }
+    // create path and map variables
+    final Map<String, Object> pathParams = new HashMap<>();
+
+    pathParams.put("challengePlatformId", challengePlatformId);
 
     final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
     final HttpHeaders headerParams = new HttpHeaders();
@@ -95,7 +208,7 @@ public class ChallengePlatformApi {
     ParameterizedTypeReference<ChallengePlatform> localVarReturnType =
       new ParameterizedTypeReference<>() {};
     return apiClient.invokeAPI(
-      "/challengePlatforms/{challengePlatformName}",
+      "/challengePlatforms/{challengePlatformId}",
       HttpMethod.GET,
       pathParams,
       queryParams,
@@ -112,54 +225,54 @@ public class ChallengePlatformApi {
 
   /**
    * Get a challenge platform
-   * Returns the challenge platform specified
+   * Returns the challenge platform identified by its unique ID
    * <p><b>200</b> - Success
    * <p><b>404</b> - The specified resource was not found
    * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
-   * @param challengePlatformName The unique identifier of the challenge platform.
+   * @param challengePlatformId The unique identifier of the challenge platform.
    * @return ChallengePlatform
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
    */
   public ChallengePlatform getChallengePlatform(
-    @jakarta.annotation.Nonnull String challengePlatformName
+    @jakarta.annotation.Nonnull Long challengePlatformId
   ) throws RestClientResponseException {
     ParameterizedTypeReference<ChallengePlatform> localVarReturnType =
       new ParameterizedTypeReference<>() {};
-    return getChallengePlatformRequestCreation(challengePlatformName).body(localVarReturnType);
+    return getChallengePlatformRequestCreation(challengePlatformId).body(localVarReturnType);
   }
 
   /**
    * Get a challenge platform
-   * Returns the challenge platform specified
+   * Returns the challenge platform identified by its unique ID
    * <p><b>200</b> - Success
    * <p><b>404</b> - The specified resource was not found
    * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
-   * @param challengePlatformName The unique identifier of the challenge platform.
+   * @param challengePlatformId The unique identifier of the challenge platform.
    * @return ResponseEntity&lt;ChallengePlatform&gt;
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
    */
   public ResponseEntity<ChallengePlatform> getChallengePlatformWithHttpInfo(
-    @jakarta.annotation.Nonnull String challengePlatformName
+    @jakarta.annotation.Nonnull Long challengePlatformId
   ) throws RestClientResponseException {
     ParameterizedTypeReference<ChallengePlatform> localVarReturnType =
       new ParameterizedTypeReference<>() {};
-    return getChallengePlatformRequestCreation(challengePlatformName).toEntity(localVarReturnType);
+    return getChallengePlatformRequestCreation(challengePlatformId).toEntity(localVarReturnType);
   }
 
   /**
    * Get a challenge platform
-   * Returns the challenge platform specified
+   * Returns the challenge platform identified by its unique ID
    * <p><b>200</b> - Success
    * <p><b>404</b> - The specified resource was not found
    * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
-   * @param challengePlatformName The unique identifier of the challenge platform.
+   * @param challengePlatformId The unique identifier of the challenge platform.
    * @return ResponseSpec
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
    */
   public ResponseSpec getChallengePlatformWithResponseSpec(
-    @jakarta.annotation.Nonnull String challengePlatformName
+    @jakarta.annotation.Nonnull Long challengePlatformId
   ) throws RestClientResponseException {
-    return getChallengePlatformRequestCreation(challengePlatformName);
+    return getChallengePlatformRequestCreation(challengePlatformId);
   }
 
   /**

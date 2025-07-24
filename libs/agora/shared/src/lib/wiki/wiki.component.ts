@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import {
   Component,
+  inject,
   Input,
   OnChanges,
   OnInit,
@@ -10,7 +11,7 @@ import {
 import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 import { SynapseWiki } from '@sagebionetworks/agora/models';
 import { SynapseApiService } from '@sagebionetworks/agora/services';
-import { LoadingIconComponent } from '@sagebionetworks/agora/shared';
+import { LoadingIconComponent } from '../loading-icon/loading-icon.component';
 
 @Component({
   selector: 'agora-wiki',
@@ -29,10 +30,8 @@ export class WikiComponent implements OnChanges, OnInit {
   data: SynapseWiki = {} as SynapseWiki;
   safeHtml: SafeHtml | null = '<div class="wiki-no-data">No data found...</div>';
 
-  constructor(
-    private synapseApiService: SynapseApiService,
-    private domSanitizer: DomSanitizer,
-  ) {}
+  private readonly synapseApiService = inject(SynapseApiService);
+  private readonly domSanitizer = inject(DomSanitizer);
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['wikiId'] && !changes['wikiId'].firstChange) {

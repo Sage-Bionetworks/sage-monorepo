@@ -97,6 +97,13 @@
         "command": "./gradlew flywayMigrate --no-configuration-cache",
         "cwd": "{projectRoot}"
       }
+    },
+    "demo-auth": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["bash tools/demo-auth.sh"],
+        "cwd": "{projectRoot}"
+      }
     }
   },
   "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],

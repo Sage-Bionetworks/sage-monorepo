@@ -13,8 +13,14 @@ info:
 servers:
   - url: 'http://localhost/v1'
 tags:
+  - name: Authentication
+    description: Operations about authentication
+  - name: API Key
+    description: Operations about API key management
   - name: Challenge
     description: Operations about challenges.
+  - name: ChallengeContribution
+    description: Operations about challenge contributions.
   - name: ChallengeAnalytics
     description: Operations about challenge analytics.
   - name: ChallengePlatform
@@ -25,9 +31,130 @@ tags:
     description: Operations about images
   - name: Organization
     description: Operations about organizations
-  - name: User
-    description: Operations about users
 paths:
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: User login
+      description: Authenticate user and return JWT token
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /auth/api-keys:
+    get:
+      tags:
+        - API Key
+      summary: List API keys
+      description: Get all API keys for the authenticated user
+      operationId: listApiKeys
+      security:
+        - apiBearerAuth: []
+      responses:
+        '200':
+          description: List of API keys
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiKey'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - API Key
+      summary: Create API key
+      description: Generate a new API key for the authenticated user
+      operationId: createApiKey
+      security:
+        - apiBearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateApiKeyRequest'
+      responses:
+        '201':
+          description: API key created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateApiKeyResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  '/auth/api-keys/{keyId}':
+    delete:
+      tags:
+        - API Key
+      summary: Delete API key
+      description: Revoke an API key
+      operationId: deleteApiKey
+      security:
+        - apiBearerAuth: []
+      parameters:
+        - name: keyId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The API key ID to delete
+      responses:
+        '204':
+          description: API key deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /auth/validate:
+    post:
+      tags:
+        - Authentication
+      summary: Validate API key
+      description: Internal endpoint to validate API keys (used by other services)
+      operationId: validateApiKey
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateApiKeyRequest'
+      responses:
+        '200':
+          description: API key is valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateApiKeyResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /challenges:
     get:
       tags:
@@ -64,6 +191,43 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Challenge'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - Challenge
+      summary: Delete a challenge
+      description: |
+        Deletes a challenge by its unique ID. This action is irreversible.
+      operationId: deleteChallengeById
+      security:
+        - apiBearerAuth: []
+      responses:
+        '204':
+          description: Deletion successful
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  '/challenges/{challengeId}/json-ld':
+    parameters:
+      - $ref: '#/components/parameters/challengeId'
+    get:
+      tags:
+        - Challenge
+      summary: Get a challenge in JSON-LD format
+      description: Returns the challenge specified in JSON-LD format
+      operationId: getChallengeJsonLd
+      responses:
+        '200':
+          description: A challenge
+          content:
             application/ld+json:
               schema:
                 $ref: '#/components/schemas/ChallengeJsonLd'
@@ -89,6 +253,144 @@ paths:
           description: Success
         '400':
           $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - ChallengeContribution
+      summary: Create a new contribution for a challenge
+      description: |
+        Creates a new contribution record associated with a challenge ID.
+      operationId: addChallengeContribution
+      security:
+        - apiBearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengeContributionCreateRequest'
+      responses:
+        '201':
+          description: Contribution created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeContribution'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - ChallengeContribution
+      summary: Delete all contributions for a specific challenge
+      description: >
+        Deletes all associated contributions for a given challenge, identified
+        by its ID.
+
+        This action is irreversible.
+      operationId: deleteAllChallengeContributions
+      security:
+        - apiBearerAuth: []
+      responses:
+        '204':
+          description: Deletion successful
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  '/challenges/{challengeId}/contributions/{challengeContributionId}':
+    parameters:
+      - $ref: '#/components/parameters/challengeId'
+      - $ref: '#/components/parameters/challengeContributionId'
+    get:
+      tags:
+        - ChallengeContribution
+      summary: Get a specific challenge contribution
+      description: >
+        Retrieves a specific contribution record for a challenge, identified by
+        its ID.
+      operationId: getChallengeContribution
+      responses:
+        '200':
+          description: Challenge contribution retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeContribution'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - ChallengeContribution
+      summary: Update an existing challenge contribution
+      description: |
+        Updates an existing contribution record for a challenge.
+        Only the organization ID and role can be modified.
+      operationId: updateChallengeContribution
+      security:
+        - apiBearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengeContributionUpdateRequest'
+      responses:
+        '200':
+          description: Contribution updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeContribution'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - ChallengeContribution
+      summary: Delete a specific challenge contribution
+      description: >
+        Deletes a specific contribution record for a challenge, identified by
+        its ID.
+
+        This action is irreversible.
+      operationId: deleteChallengeContribution
+      security:
+        - apiBearerAuth: []
+      responses:
+        '204':
+          description: Contribution deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /challengeAnalytics/challengesPerYear:
@@ -127,14 +429,14 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  '/challengePlatforms/{challengePlatformName}':
+  '/challengePlatforms/{challengePlatformId}':
     parameters:
-      - $ref: '#/components/parameters/challengePlatformName'
+      - $ref: '#/components/parameters/challengePlatformId'
     get:
       tags:
         - ChallengePlatform
       summary: Get a challenge platform
-      description: Returns the challenge platform specified
+      description: Returns the challenge platform identified by its unique ID
       operationId: getChallengePlatform
       responses:
         '200':
@@ -143,6 +445,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ChallengePlatform'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - ChallengePlatform
+      summary: Delete a challenge platform
+      description: >
+        Deletes a challenge platform by its unique ID. This action is
+        irreversible.
+      operationId: deleteChallengePlatform
+      security:
+        - apiBearerAuth: []
+      responses:
+        '204':
+          description: Deletion successful
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
@@ -227,92 +550,215 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /users/register:
-    post:
-      tags:
-        - User
-      summary: Create a user
-      description: Create a user with the specified account name
-      operationId: createUser
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserCreateRequest'
-        required: true
-      responses:
-        '201':
-          description: Account created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserCreateResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '409':
-          $ref: '#/components/responses/Conflict'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /users:
-    get:
-      tags:
-        - User
-      summary: Get all users
-      description: Returns the users
-      operationId: listUsers
-      parameters:
-        - $ref: '#/components/parameters/pageNumber'
-        - $ref: '#/components/parameters/pageSize'
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UsersPage'
-          description: Success
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  '/users/{userId}':
-    parameters:
-      - $ref: '#/components/parameters/userId'
-    get:
-      tags:
-        - User
-      summary: Get a user
-      description: Returns the user specified
-      operationId: getUser
-      responses:
-        '200':
-          description: A user
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
     delete:
       tags:
-        - User
-      summary: Delete a user
-      description: Deletes the user specified
-      operationId: deleteUser
+        - Organization
+      summary: Delete an organization
+      description: Deletes the organization specified
+      operationId: deleteOrganization
+      security:
+        - apiBearerAuth:
+            - 'organizations:delete'
       responses:
-        '200':
-          description: Deleted
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EmptyObject'
-        '400':
+        '204':
+          description: Organization successfully deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          description: Username or email
+          example: admin
+        password:
+          type: string
+          format: password
+          description: User password
+          example: changeme
+    LoginResponse:
+      type: object
+      properties:
+        apiKey:
+          type: string
+          description: API key for authentication
+          example: oc_prod_abcd1234567890abcdef1234567890abcdef1234
+        userId:
+          type: string
+          format: uuid
+          description: User ID
+          example: 123e4567-e89b-12d3-a456-426614174000
+        username:
+          type: string
+          description: Username
+          example: admin
+        role:
+          type: string
+          description: User role
+          example: admin
+          enum:
+            - admin
+            - user
+            - readonly
+    BasicError:
+      type: object
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          type: string
+          description: A human readable documentation for the problem type
+        status:
+          type: integer
+          description: The HTTP status code
+        detail:
+          type: string
+          description: >-
+            A human readable explanation specific to this occurrence of the
+            problem
+        type:
+          type: string
+          description: An absolute URI that identifies the problem type
+      required:
+        - title
+        - status
+      x-java-class-annotations:
+        - '@lombok.AllArgsConstructor'
+        - '@lombok.Builder'
+    ApiKey:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: API key ID
+          example: 123e4567-e89b-12d3-a456-426614174000
+        name:
+          type: string
+          description: Human-readable name for the API key
+          example: Production API Key
+        prefix:
+          type: string
+          description: First 8 characters of the API key for identification
+          example: oc_prod_
+        createdAt:
+          type: string
+          format: date-time
+          description: When the API key was created
+          example: '2024-01-15T10:30:00Z'
+        expiresAt:
+          type: string
+          format: date-time
+          description: When the API key expires (null if no expiration)
+          example: '2025-01-15T10:30:00Z'
+          nullable: true
+        lastUsedAt:
+          type: string
+          format: date-time
+          description: When the API key was last used (null if never used)
+          example: '2024-06-15T14:20:00Z'
+          nullable: true
+    CreateApiKeyRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: Human-readable name for the API key
+          example: Production API Key
+          minLength: 1
+          maxLength: 100
+        expiresIn:
+          type: integer
+          description: >-
+            Number of days until the API key expires (optional, default is no
+            expiration)
+          example: 365
+          minimum: 1
+          maximum: 3650
+    CreateApiKeyResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: API key ID
+          example: 123e4567-e89b-12d3-a456-426614174000
+        key:
+          type: string
+          description: The actual API key (only returned on creation)
+          example: oc_prod_abcd1234567890abcdef1234567890abcdef1234
+        name:
+          type: string
+          description: Human-readable name for the API key
+          example: Production API Key
+        prefix:
+          type: string
+          description: First 8 characters of the API key for identification
+          example: oc_prod_
+        createdAt:
+          type: string
+          format: date-time
+          description: When the API key was created
+          example: '2024-01-15T10:30:00Z'
+        expiresAt:
+          type: string
+          format: date-time
+          description: When the API key expires (null if no expiration)
+          example: '2025-01-15T10:30:00Z'
+          nullable: true
+    ValidateApiKeyRequest:
+      type: object
+      required:
+        - apiKey
+      properties:
+        apiKey:
+          type: string
+          description: The API key to validate
+          example: oc_prod_abcd1234567890abcdef1234567890abcdef1234
+    ValidateApiKeyResponse:
+      type: object
+      properties:
+        valid:
+          type: boolean
+          description: Whether the API key is valid
+          example: true
+        userId:
+          type: string
+          format: uuid
+          description: ID of the user who owns this API key (only if valid)
+          example: 123e4567-e89b-12d3-a456-426614174000
+        username:
+          type: string
+          description: Username of the API key owner (only if valid)
+          example: admin
+        role:
+          type: string
+          description: Role of the API key owner (only if valid)
+          example: admin
+          enum:
+            - admin
+            - user
+            - readonly
+        scopes:
+          type: array
+          items:
+            type: string
+          description: Permissions granted to this API key (only if valid)
+          example:
+            - 'organizations:read'
+            - 'organizations:write'
     ChallengeSort:
       description: What to sort results by.
       type: string
@@ -703,30 +1149,6 @@ components:
             - challenges
       x-java-class-annotations:
         - '@lombok.Builder'
-    BasicError:
-      type: object
-      description: Problem details (tools.ietf.org/html/rfc7807)
-      properties:
-        title:
-          type: string
-          description: A human readable documentation for the problem type
-        status:
-          type: integer
-          description: The HTTP status code
-        detail:
-          type: string
-          description: >-
-            A human readable explanation specific to this occurrence of the
-            problem
-        type:
-          type: string
-          description: An absolute URI that identifies the problem type
-      required:
-        - title
-        - status
-      x-java-class-annotations:
-        - '@lombok.AllArgsConstructor'
-        - '@lombok.Builder'
     ChallengeJsonLd:
       type: object
       description: A challenge
@@ -747,6 +1169,11 @@ components:
             - '@context'
             - '@id'
             - '@type'
+    ChallengeContributionId:
+      description: The unique identifier of a challenge contribution
+      type: integer
+      format: int64
+      example: 1
     ChallengeContributionRole:
       description: The nature of a challenge contribution.
       type: string
@@ -759,6 +1186,8 @@ components:
       type: object
       description: A challenge contribution.
       properties:
+        id:
+          $ref: '#/components/schemas/ChallengeContributionId'
         challengeId:
           $ref: '#/components/schemas/ChallengeId'
         organizationId:
@@ -766,6 +1195,7 @@ components:
         role:
           $ref: '#/components/schemas/ChallengeContributionRole'
       required:
+        - id
         - challengeId
         - organizationId
         - role
@@ -785,6 +1215,28 @@ components:
             - challengeContributions
       x-java-class-annotations:
         - '@lombok.Builder'
+    ChallengeContributionCreateRequest:
+      type: object
+      description: A challenge contribution to be created.
+      properties:
+        organizationId:
+          $ref: '#/components/schemas/OrganizationId'
+        role:
+          $ref: '#/components/schemas/ChallengeContributionRole'
+      required:
+        - organizationId
+        - role
+    ChallengeContributionUpdateRequest:
+      type: object
+      description: A challenge contribution update request.
+      properties:
+        organizationId:
+          $ref: '#/components/schemas/OrganizationId'
+        role:
+          $ref: '#/components/schemas/ChallengeContributionRole'
+      required:
+        - organizationId
+        - role
     ChallengesPerYear:
       type: object
       description: An object
@@ -1154,140 +1606,9 @@ components:
             - organizations
       x-java-class-annotations:
         - '@lombok.Builder'
-    Email:
-      description: An email address.
-      type: string
-      format: email
-      example: john.smith@example.com
-    UserCreateRequest:
-      type: object
-      description: The information required to create a user account
-      properties:
-        login:
-          type: string
-        email:
-          $ref: '#/components/schemas/Email'
-        password:
-          type: string
-          format: password
-        name:
-          type: string
-          nullable: true
-        avatarUrl:
-          type: string
-          format: url
-          example: 'https://example.com/awesome-avatar.png'
-          nullable: true
-        bio:
-          type: string
-          nullable: true
-      required:
-        - login
-        - email
-        - password
-      example:
-        login: awesome-user
-        email: awesome-user@example.org
-        password: yourpassword
-        name: Awesome User
-        avatarUrl: 'https://example.com/awesome-avatar.png'
-        bio: A great bio
-    AccountId:
-      description: The unique identifier of an account
-      type: integer
-      format: int64
-      example: 1
-    UserCreateResponse:
-      type: object
-      description: The response returned after the creation of the user
-      properties:
-        id:
-          $ref: '#/components/schemas/AccountId'
-      required:
-        - id
-      example:
-        id: 507f1f77bcf86cd799439011
-      x-java-class-annotations:
-        - '@lombok.Builder'
-    UserStatus:
-      description: The account status of a user
-      type: string
-      enum:
-        - pending
-        - approved
-        - disabled
-        - blacklist
-      example: pending
-    User:
-      type: object
-      description: A simple user
-      properties:
-        id:
-          $ref: '#/components/schemas/AccountId'
-        login:
-          type: string
-        email:
-          $ref: '#/components/schemas/Email'
-        name:
-          type: string
-          nullable: true
-        status:
-          $ref: '#/components/schemas/UserStatus'
-        avatarUrl:
-          type: string
-          format: url
-          example: 'https://example.com/awesome-avatar.png'
-          nullable: true
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        type:
-          type: string
-          example: User
-        bio:
-          type: string
-          nullable: true
-      required:
-        - login
-        - email
-        - createdAt
-        - updatedAt
-        - type
-      example:
-        login: awesome-user
-        email: awesome-user@example.org
-        name: Awesome User
-        status: approved
-        avatarUrl: 'https://example.com/awesome-avatar.png'
-        bio: A great bio
-        createdAt: '2017-07-08T16:18:44-04:00'
-        updatedAt: '2017-07-08T16:18:44-04:00'
-        type: User
-    UsersPage:
-      type: object
-      description: A page of users
-      allOf:
-        - $ref: '#/components/schemas/PageMetadata'
-        - type: object
-          properties:
-            users:
-              description: A list of users
-              type: array
-              items:
-                $ref: '#/components/schemas/User'
-          required:
-            - users
-      x-java-class-annotations:
-        - '@lombok.Builder'
-    EmptyObject:
-      type: object
-      description: Empty JSON object
   responses:
-    BadRequest:
-      description: Invalid request
+    Unauthorized:
+      description: Unauthorized
       content:
         application/problem+json:
           schema:
@@ -1298,8 +1619,20 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
+    BadRequest:
+      description: Invalid request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
     NotFound:
       description: The specified resource was not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    Forbidden:
+      description: The user does not have the permission to perform this action
       content:
         application/problem+json:
           schema:
@@ -1310,6 +1643,12 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
+  securitySchemes:
+    apiBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: api_key
+      description: API key obtained from /auth/login endpoint
   parameters:
     challengeSearchQuery:
       name: challengeSearchQuery
@@ -1324,19 +1663,26 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/ChallengeId'
+    challengeContributionId:
+      name: challengeContributionId
+      in: path
+      description: The unique identifier of a challenge contribution
+      required: true
+      schema:
+        $ref: '#/components/schemas/ChallengeContributionId'
     challengePlatformSearchQuery:
       name: challengePlatformSearchQuery
       description: The search query used to find challenge platforms.
       in: query
       schema:
         $ref: '#/components/schemas/ChallengePlatformSearchQuery'
-    challengePlatformName:
-      name: challengePlatformName
+    challengePlatformId:
+      name: challengePlatformId
       in: path
       description: The unique identifier of the challenge platform.
       required: true
       schema:
-        $ref: '#/components/schemas/ChallengePlatformName'
+        $ref: '#/components/schemas/ChallengePlatformId'
     edamConceptSearchQuery:
       name: edamConceptSearchQuery
       description: The search query used to find EDAM concepts.
@@ -1371,28 +1717,3 @@ components:
           value: dream
         byId:
           value: '1'
-    pageNumber:
-      name: pageNumber
-      description: The page number.
-      in: query
-      schema:
-        type: integer
-        format: int32
-        default: 0
-        minimum: 0
-    pageSize:
-      name: pageSize
-      description: The number of items in a single page.
-      in: query
-      schema:
-        type: integer
-        format: int32
-        default: 100
-        minimum: 1
-    userId:
-      name: userId
-      in: path
-      description: 'The unique identifier of the user, either the user account ID or login'
-      required: true
-      schema:
-        $ref: '#/components/schemas/AccountId'

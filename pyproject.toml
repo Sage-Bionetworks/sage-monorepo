@@ -6,24 +6,51 @@ templater = "jinja"
 dialect = "mysql"
 sql_file_exts = ".sql"
 
+[tool.uv.sources.openchallenges_tools]
+workspace = true
+
+[tool.uv.sources.openchallenges-api-client-python]
+workspace = true
+
+[tool.uv.sources.bixarena-tools]
+workspace = true
+
+[tool.uv.workspace]
+members = [
+  "apps/bixarena/tools",
+  "apps/openchallenges/tools",
+  "libs/openchallenges/api-client-python"
+]
+
 [build-system]
-requires = ["pdm-backend"]
+requires = [ "pdm-backend" ]
 build-backend = "pdm.backend"
 
 [project]
-authors = [
-    {name = "Thomas Schaffter", email = "thomas.schaffter@gmail.com"},
+requires-python = "==3.13.3"
+dependencies = [
+  "openchallenges_tools",
+  "openchallenges-api-client-python",
+  "bixarena-tools"
 ]
-requires-python = "==3.10.14"
-dependencies = []
 name = "sage-monorepo"
 version = "1.0.0"
 description = ""
 readme = "README.md"
 package-mode = false
 
+  [[project.authors]]
+  name = "Thomas Schaffter"
+  email = "thomas.schaffter@gmail.com"
+
 [dependency-groups]
 dev = [
-    "black==24.8.0",
-    "sqlfluff==3.2.0",
+  "black==24.8.0",
+  "sqlfluff==3.2.0",
+  "ruff>=0.8.2",
+  "autopep8>=2.3.1",
+  "pytest>=8.3.4",
+  "pytest-sugar>=1.0.0",
+  "pytest-cov>=6.0.0",
+  "pytest-html>=4.1.1"
 ]

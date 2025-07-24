@@ -6,13 +6,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan(basePackages = { "org.sagebionetworks.openchallenges" })
+@EnableFeignClients
 @SpringBootApplication
 public class ChallengeServiceApplication implements CommandLineRunner {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ChallengeServiceApplication.class);
+  private static final Logger logger = LoggerFactory.getLogger(ChallengeServiceApplication.class);
 
   private final ChallengeServiceConfigData challengeServiceConfigData;
 
@@ -26,6 +28,6 @@ public class ChallengeServiceApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    LOG.info(challengeServiceConfigData.getWelcomeMessage());
+    logger.info(challengeServiceConfigData.getWelcomeMessage());
   }
 }

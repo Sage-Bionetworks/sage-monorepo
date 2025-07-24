@@ -1,0 +1,15 @@
+# Staging profile configuration
+spring:
+  datasource:
+    url: jdbc:postgresql://openchallenges-postgres-stage:8091/challenge_service
+    username: challenge_service
+    password: changeme
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: false
+  flyway:
+    enabled: false
+
+logging:
+  level:
+    org.sagebionetworks.openchallenges: INFO

@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { DiseaseCorrelationLegendComponent } from '../disease-correlation-legend/disease-correlation-legend.component';
-import { ComparisonToolService } from '@sagebionetworks/model-ad/services';
+import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { HelpLinksComponent } from '@sagebionetworks/explorers/comparison-tools';
 
 @Component({

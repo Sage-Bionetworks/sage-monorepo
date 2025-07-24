@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, forkJoin, iif, Observable, of } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 import {
@@ -26,6 +26,11 @@ import { ChallengeSearchDropdown } from './challenge-search-dropdown';
   providedIn: 'root',
 })
 export class ChallengeSearchDataService {
+  private readonly challengePlatformService = inject(ChallengePlatformService);
+  private readonly edamConceptService = inject(EdamConceptService);
+  private readonly imageService = inject(ImageService);
+  private readonly organizationService = inject(OrganizationService);
+
   private edamConceptSearchQuery: BehaviorSubject<EdamConceptSearchQuery> =
     new BehaviorSubject<EdamConceptSearchQuery>({
       sort: EdamConceptSort.PreferredLabel,
@@ -40,13 +45,6 @@ export class ChallengeSearchDataService {
     new BehaviorSubject<ChallengePlatformSearchQuery>({
       sort: ChallengePlatformSort.Name,
     });
-
-  constructor(
-    private challengePlatformService: ChallengePlatformService,
-    private edamConceptService: EdamConceptService,
-    private imageService: ImageService,
-    private organizationService: OrganizationService,
-  ) {}
 
   setEdamConceptSearchQuery(searchQuery: EdamConceptSearchQuery) {
     const currentState = this.edamConceptSearchQuery.getValue();

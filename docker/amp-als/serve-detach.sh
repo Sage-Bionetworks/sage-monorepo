@@ -8,8 +8,8 @@ args=(
   --file docker/"$product_name"/services/api-docs.yml
   --file docker/"$product_name"/services/dataset-service.yml
   --file docker/"$product_name"/services/keycloak.yml
-  --file docker/"$product_name"/services/mariadb.yml
   --file docker/"$product_name"/services/opensearch.yml
+  --file docker/"$product_name"/services/postgres.yml
 
   --file docker/"$product_name"/networks.yml
 

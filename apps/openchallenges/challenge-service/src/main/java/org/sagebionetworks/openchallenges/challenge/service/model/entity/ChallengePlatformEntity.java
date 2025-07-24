@@ -33,11 +33,11 @@ public class ChallengePlatformEntity {
   @Column(nullable = false, updatable = false)
   private Long id;
 
-  @Column(nullable = false)
+  @Column(nullable = false, length = 255)
   @KeywordField
   private String slug;
 
-  @Column(nullable = false)
+  @Column(nullable = false, length = 255)
   @FullTextField
   @GenericField(
     name = "name_sort",
@@ -46,10 +46,10 @@ public class ChallengePlatformEntity {
   )
   private String name;
 
-  @Column(name = "avatar_key", nullable = false)
+  @Column(name = "avatar_key", nullable = true, length = 255)
   private String avatarKey;
 
-  @Column(name = "website_url", nullable = false)
+  @Column(name = "website_url", nullable = false, length = 500)
   private String websiteUrl;
 
   @Column(name = "created_at")

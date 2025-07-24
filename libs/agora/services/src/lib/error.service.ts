@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { ErrorHandler, Injectable } from '@angular/core';
+import { ErrorHandler, inject, Injectable } from '@angular/core';
 import { MessageService } from 'primeng/api';
 
 // -------------------------------------------------------------------------- //
@@ -11,7 +11,7 @@ import { MessageService } from 'primeng/api';
   providedIn: 'root',
 })
 export class ErrorService implements ErrorHandler {
-  constructor(private messageService: MessageService) {}
+  private readonly messageService = inject(MessageService);
 
   handleError(error: any) {
     this.messageService.clear();

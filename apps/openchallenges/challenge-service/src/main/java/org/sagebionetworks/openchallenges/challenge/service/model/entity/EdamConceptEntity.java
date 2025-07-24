@@ -33,7 +33,7 @@ public class EdamConceptEntity {
   @GenericField(name = "id")
   private Long id;
 
-  @Column(name = "class_id", nullable = false)
+  @Column(name = "class_id", nullable = false, length = 60, unique = true)
   @FullTextField(name = "class_id")
   @KeywordField(
     name = "section",
@@ -41,7 +41,7 @@ public class EdamConceptEntity {
   )
   private String classId;
 
-  @Column(name = "preferred_label", nullable = false)
+  @Column(name = "preferred_label", nullable = false, length = 80)
   @FullTextField(name = "preferred_label")
   @GenericField(name = "preferred_label_sort", sortable = Sortable.YES)
   private String preferredLabel;

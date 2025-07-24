@@ -1,24 +1,23 @@
 {
   "name": "Sage Monorepo Dev Container",
-  "image": "ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:sha-02b9942cd09cd887daa578e288616e745ce14370",
+  "image": "ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:sha-6269b9b3d863831c296f843edd84b2c7e1d4733d",
   "containerEnv": {
+    "DOCKER_PASSWORD": "${localEnv:DOCKER_PASSWORD}",
+    "DOCKER_USERNAME": "${localEnv:DOCKER_USERNAME}",
     "NX_BASE": "${localEnv:NX_BASE}",
     "NX_BRANCH": "${localEnv:NX_BRANCH}",
-    "NX_CLOUD_AUTH_TOKEN": "${localEnv:NX_CLOUD_AUTH_TOKEN}",
+    "NX_CI_EXECUTION_ENV": "${localEnv:NX_CI_EXECUTION_ENV}",
+    "NX_CLOUD_ACCESS_TOKEN": "${localEnv:NX_CLOUD_ACCESS_TOKEN}",
     "NX_CLOUD_ENCRYPTION_KEY": "${localEnv:NX_CLOUD_ENCRYPTION_KEY}",
-    "NX_CLOUD_ENV_NAME": "${localEnv:NX_CLOUD_ENV_NAME}",
     "NX_HEAD": "${localEnv:NX_HEAD}",
-    "NX_RUN_GROUP": "${localEnv:NX_RUN_GROUP}",
-    "SONAR_TOKEN": "${localEnv:SONAR_TOKEN}",
     "SONAR_PULL_REQUEST_NUMBER": "${localEnv:SONAR_PULL_REQUEST_NUMBER}",
-    "DOCKER_USERNAME": "${localEnv:DOCKER_USERNAME}",
-    "DOCKER_PASSWORD": "${localEnv:DOCKER_PASSWORD}"
+    "SONAR_TOKEN": "${localEnv:SONAR_TOKEN}"
   },
   "features": {},
   "forwardPorts": [
     2000, 2432, 3333, 3334, 4200, 4211, 5200, 5601, 8010, 8071, 8000, 8080, 8081, 8082, 8084, 8085,
-    8086, 8090, 8091, 8400, 8401, 8402, 8403, 8404, 8405, 8406, 8200, 8500, 8501, 8502, 8503, 8504,
-    8505, 8506, 8507, 8508, 8509, 8510, 8511, 8887, 8888, 8889, 9200, 27017
+    8086, 8087, 8090, 8091, 8100, 8111, 8400, 8401, 8402, 8403, 8404, 8405, 8406, 8200, 8500, 8501,
+    8502, 8503, 8504, 8505, 8506, 8507, 8508, 8509, 8510, 8511, 8887, 8888, 8889, 9200, 21001, 27017
   ],
   "portsAttributes": {
     "2000": {
@@ -85,6 +84,10 @@
       "label": "openchallenges-image-service",
       "onAutoForward": "silent"
     },
+    "8087": {
+      "label": "openchallenges-auth-service",
+      "onAutoForward": "silent"
+    },
     "8090": {
       "label": "openchallenges-config-server",
       "onAutoForward": "silent"
@@ -93,12 +96,20 @@
       "label": "openchallenges-postgres",
       "onAutoForward": "silent"
     },
+    "8100": {
+      "label": "bixarena-app",
+      "onAutoForward": "silent"
+    },
+    "8111": {
+      "label": "bixarena-apex",
+      "onAutoForward": "silent"
+    },
     "8400": {
       "label": "amp-als-apex",
       "onAutoForward": "silent"
     },
     "8401": {
-      "label": "amp-als-mariadb",
+      "label": "amp-als-postgres",
       "onAutoForward": "silent"
     },
     "8402": {
@@ -182,7 +193,11 @@
       "onAutoForward": "silent"
     },
     "9200": {
-      "label": "openchallenges-elasticsearch",
+      "label": "openchallenges-opensearch",
+      "onAutoForward": "silent"
+    },
+    "21001": {
+      "label": "bixarena-controller",
       "onAutoForward": "silent"
     },
     "27017": {

@@ -10,8 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
+import org.hibernate.search.engine.backend.types.Aggregable;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 
 @Entity
 @Table(name = "challenge_platform")
@@ -27,11 +27,11 @@ public class SimpleChallengePlatformEntity {
   private Long id;
 
   @Column(nullable = false)
-  @GenericField
+  @KeywordField(aggregable = Aggregable.YES)
   private String slug;
 
   @Column(nullable = false)
-  @FullTextField
+  @KeywordField(aggregable = Aggregable.YES)
   private String name;
 
   @Column(name = "avatar_key", nullable = false)

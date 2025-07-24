@@ -1,3 +1,5 @@
+import { InjectionToken } from '@angular/core';
+
 export interface AppConfig {
   appVersion: string;
   csrApiUrl: string;
@@ -9,3 +11,5 @@ export interface AppConfig {
 }
 
 export const EMPTY_APP_CONFIG = {} as AppConfig;
+
+export const APP_PORT = new InjectionToken<string>('APP_PORT');

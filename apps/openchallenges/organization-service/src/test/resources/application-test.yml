@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: openchallenges-organization-service-test
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        search:
+          enabled: false
+  flyway:
+    enabled: false
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            connect-timeout: 5000
+            read-timeout: 5000
+
+openchallenges-organization-service:
+  auth-service:
+    base-url: http://localhost:8087
+    timeout: 5000ms
+
+logging:
+  level:
+    org.sagebionetworks.openchallenges: DEBUG

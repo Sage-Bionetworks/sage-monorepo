@@ -10,6 +10,7 @@ import {
   formatCategoryPointsForBoxplotTransform,
   getCategoryPointColor,
   getCategoryPointShape,
+  getCategoryPointStyle,
   getOffsetAndJitteredXValue,
   getPointStyleFromArray,
   getRandomNumber,
@@ -49,62 +50,37 @@ describe('boxplot-utils', () => {
 
   describe('getPointStyleFromArray', () => {
     const pointCategories = ['a', 'b', 'c'];
-    const pt = { xAxisCategory: 'first', value: 1, pointCategory: 'a' };
     const shapes = ['circle', 'triangle'];
     const styleType = 'shape';
     const notFoundValue = 'none';
 
     it('should handle valid point categories', () => {
-      expect(getPointStyleFromArray(pt, pointCategories, shapes, styleType, notFoundValue)).toEqual(
-        'circle',
-      );
       expect(
-        getPointStyleFromArray(
-          { ...pt, pointCategory: 'b' },
-          pointCategories,
-          shapes,
-          styleType,
-          notFoundValue,
-        ),
+        getPointStyleFromArray('a', pointCategories, shapes, styleType, notFoundValue),
+      ).toEqual('circle');
+      expect(
+        getPointStyleFromArray('b', pointCategories, shapes, styleType, notFoundValue),
       ).toEqual('triangle');
       expect(consoleWarnSpy).not.toHaveBeenCalled();
     });
 
     it('should reuse values if there are more categories than values', () => {
-      expect(
-        getPointStyleFromArray(
-          { ...pt, pointCategory: 'c' },
-          pointCategories,
-          shapes,
-          'shape',
-          'none',
-        ),
-      ).toEqual('circle');
+      expect(getPointStyleFromArray('c', pointCategories, shapes, 'shape', 'none')).toEqual(
+        'circle',
+      );
       expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
     });
 
     it('should return notFoundValue if category is not found', () => {
       expect(
-        getPointStyleFromArray(
-          { ...pt, pointCategory: 'd' },
-          pointCategories,
-          shapes,
-          styleType,
-          notFoundValue,
-        ),
+        getPointStyleFromArray('d', pointCategories, shapes, styleType, notFoundValue),
       ).toEqual(notFoundValue);
       expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
     });
 
     it('should return notFoundValue if category is undefined', () => {
       expect(
-        getPointStyleFromArray(
-          { ...pt, pointCategory: undefined },
-          pointCategories,
-          shapes,
-          styleType,
-          notFoundValue,
-        ),
+        getPointStyleFromArray(undefined, pointCategories, shapes, styleType, notFoundValue),
       ).toEqual(notFoundValue);
       expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
     });
@@ -112,71 +88,91 @@ describe('boxplot-utils', () => {
 
   describe('getCategoryPointShape', () => {
     it('should return first shape for the first point category', () => {
-      expect(
-        getCategoryPointShape({ xAxisCategory: 'b', pointCategory: 'X', value: 1 }, [
-          'X',
-          'Y',
-          'Z',
-        ]),
-      ).toEqual('circle');
+      expect(getCategoryPointShape('X', ['X', 'Y', 'Z'])).toEqual('circle');
       expect(consoleWarnSpy).not.toHaveBeenCalled();
     });
 
     it('should return second shape for the second point category', () => {
-      expect(
-        getCategoryPointShape({ xAxisCategory: 'b', pointCategory: 'Y', value: 1 }, [
-          'X',
-          'Y',
-          'Z',
-        ]),
-      ).toEqual('triangle');
+      expect(getCategoryPointShape('Y', ['X', 'Y', 'Z'])).toEqual('triangle');
       expect(consoleWarnSpy).not.toHaveBeenCalled();
     });
 
     it('should return default when point category is not found', () => {
-      expect(
-        getCategoryPointShape({ xAxisCategory: 'b', pointCategory: 'WW', value: 1 }, [
-          'X',
-          'Y',
-          'Z',
-        ]),
-      ).toEqual('none');
+      expect(getCategoryPointShape('WW', ['X', 'Y', 'Z'])).toEqual('none');
       expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('getCategoryPointColor', () => {
     it('should return first color for the first point category', () => {
-      expect(
-        getCategoryPointColor(
-          { xAxisCategory: 'b', pointCategory: 'X', value: 1 },
-          ['X', 'Y', 'Z'],
-          ['blue', 'red', 'yellow'],
-        ),
-      ).toEqual('blue');
+      expect(getCategoryPointColor('X', ['X', 'Y', 'Z'], ['blue', 'red', 'yellow'])).toEqual(
+        'blue',
+      );
       expect(consoleWarnSpy).not.toHaveBeenCalled();
     });
 
     it('should return second color for the second point category', () => {
-      expect(
-        getCategoryPointColor(
-          { xAxisCategory: 'b', pointCategory: 'Y', value: 1 },
-          ['X', 'Y', 'Z'],
-          ['blue', 'red', 'yellow'],
-        ),
-      ).toEqual('red');
+      expect(getCategoryPointColor('Y', ['X', 'Y', 'Z'], ['blue', 'red', 'yellow'])).toEqual('red');
       expect(consoleWarnSpy).not.toHaveBeenCalled();
     });
 
     it('should return default when point category is not found', () => {
-      expect(
-        getCategoryPointColor({ xAxisCategory: 'b', pointCategory: 'WW', value: 1 }, [
-          'X',
-          'Y',
-          'Z',
-        ]),
-      ).toEqual('transparent');
+      expect(getCategoryPointColor('WW', ['X', 'Y', 'Z'])).toEqual('transparent');
       expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('getCategoryPointStyle', () => {
+    const pointCategories = ['X', 'Y', 'Z'];
+
+    it('should return default value when hasPointCategories is false', () => {
+      const result = getCategoryPointStyle(
+        'X',
+        false,
+        { X: 'triangle' },
+        getCategoryPointShape,
+        pointCategories,
+        'circle',
+      );
+      expect(result).toEqual('circle');
+    });
+
+    it('should return custom style when point category in custom mapping', () => {
+      const customShapes = { X: 'triangle', Y: 'rect' };
+      const result = getCategoryPointStyle(
+        'X',
+        true,
+        customShapes,
+        getCategoryPointShape,
+        pointCategories,
+        'circle',
+      );
+      expect(result).toEqual('triangle');
+    });
+
+    it('should return default when point category not in custom mapping', () => {
+      const customShapes = { X: 'triangle', Y: 'rect' };
+      const result = getCategoryPointStyle(
+        'Z',
+        true,
+        customShapes,
+        getCategoryPointShape,
+        pointCategories,
+        'circle',
+      );
+      expect(result).toEqual('circle');
+    });
+
+    it('should use default style fucntion when no custom mapping is provided', () => {
+      const result = getCategoryPointStyle(
+        'X',
+        true,
+        undefined,
+        getCategoryPointShape,
+        pointCategories,
+        'triangle',
+      );
+      expect(result).toEqual('circle');
     });
   });
 

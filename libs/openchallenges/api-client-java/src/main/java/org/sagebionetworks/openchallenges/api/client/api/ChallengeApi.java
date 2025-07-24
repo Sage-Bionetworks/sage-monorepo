@@ -52,6 +52,119 @@ public class ChallengeApi {
   }
 
   /**
+   * Delete a challenge
+   * Deletes a challenge by its unique ID. This action is irreversible.
+   * <p><b>204</b> - Deletion successful
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengeId The unique identifier of the challenge.
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  private ResponseSpec deleteChallengeByIdRequestCreation(
+    @jakarta.annotation.Nonnull Long challengeId
+  ) throws RestClientResponseException {
+    Object postBody = null;
+    // verify the required parameter 'challengeId' is set
+    if (challengeId == null) {
+      throw new RestClientResponseException(
+        "Missing the required parameter 'challengeId' when calling deleteChallengeById",
+        HttpStatus.BAD_REQUEST.value(),
+        HttpStatus.BAD_REQUEST.getReasonPhrase(),
+        null,
+        null,
+        null
+      );
+    }
+    // create path and map variables
+    final Map<String, Object> pathParams = new HashMap<>();
+
+    pathParams.put("challengeId", challengeId);
+
+    final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+    final HttpHeaders headerParams = new HttpHeaders();
+    final MultiValueMap<String, String> cookieParams = new LinkedMultiValueMap<>();
+    final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<>();
+
+    final String[] localVarAccepts = { "application/problem+json" };
+    final List<MediaType> localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+    final String[] localVarContentTypes = {};
+    final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+
+    String[] localVarAuthNames = new String[] { "apiBearerAuth" };
+
+    ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
+    return apiClient.invokeAPI(
+      "/challenges/{challengeId}",
+      HttpMethod.DELETE,
+      pathParams,
+      queryParams,
+      postBody,
+      headerParams,
+      cookieParams,
+      formParams,
+      localVarAccept,
+      localVarContentType,
+      localVarAuthNames,
+      localVarReturnType
+    );
+  }
+
+  /**
+   * Delete a challenge
+   * Deletes a challenge by its unique ID. This action is irreversible.
+   * <p><b>204</b> - Deletion successful
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengeId The unique identifier of the challenge.
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public void deleteChallengeById(@jakarta.annotation.Nonnull Long challengeId)
+    throws RestClientResponseException {
+    ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
+    deleteChallengeByIdRequestCreation(challengeId).body(localVarReturnType);
+  }
+
+  /**
+   * Delete a challenge
+   * Deletes a challenge by its unique ID. This action is irreversible.
+   * <p><b>204</b> - Deletion successful
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengeId The unique identifier of the challenge.
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public ResponseEntity<Void> deleteChallengeByIdWithHttpInfo(
+    @jakarta.annotation.Nonnull Long challengeId
+  ) throws RestClientResponseException {
+    ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
+    return deleteChallengeByIdRequestCreation(challengeId).toEntity(localVarReturnType);
+  }
+
+  /**
+   * Delete a challenge
+   * Deletes a challenge by its unique ID. This action is irreversible.
+   * <p><b>204</b> - Deletion successful
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengeId The unique identifier of the challenge.
+   * @return ResponseSpec
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public ResponseSpec deleteChallengeByIdWithResponseSpec(
+    @jakarta.annotation.Nonnull Long challengeId
+  ) throws RestClientResponseException {
+    return deleteChallengeByIdRequestCreation(challengeId);
+  }
+
+  /**
    * Get a challenge
    * Returns the challenge specified
    * <p><b>200</b> - A challenge
@@ -85,11 +198,7 @@ public class ChallengeApi {
     final MultiValueMap<String, String> cookieParams = new LinkedMultiValueMap<>();
     final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<>();
 
-    final String[] localVarAccepts = {
-      "application/json",
-      "application/ld+json",
-      "application/problem+json",
-    };
+    final String[] localVarAccepts = { "application/json", "application/problem+json" };
     final List<MediaType> localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
     final String[] localVarContentTypes = {};
     final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
@@ -162,6 +271,117 @@ public class ChallengeApi {
   public ResponseSpec getChallengeWithResponseSpec(@jakarta.annotation.Nonnull Long challengeId)
     throws RestClientResponseException {
     return getChallengeRequestCreation(challengeId);
+  }
+
+  /**
+   * Get a challenge in JSON-LD format
+   * Returns the challenge specified in JSON-LD format
+   * <p><b>200</b> - A challenge
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengeId The unique identifier of the challenge.
+   * @return ChallengeJsonLd
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  private ResponseSpec getChallengeJsonLdRequestCreation(
+    @jakarta.annotation.Nonnull Long challengeId
+  ) throws RestClientResponseException {
+    Object postBody = null;
+    // verify the required parameter 'challengeId' is set
+    if (challengeId == null) {
+      throw new RestClientResponseException(
+        "Missing the required parameter 'challengeId' when calling getChallengeJsonLd",
+        HttpStatus.BAD_REQUEST.value(),
+        HttpStatus.BAD_REQUEST.getReasonPhrase(),
+        null,
+        null,
+        null
+      );
+    }
+    // create path and map variables
+    final Map<String, Object> pathParams = new HashMap<>();
+
+    pathParams.put("challengeId", challengeId);
+
+    final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+    final HttpHeaders headerParams = new HttpHeaders();
+    final MultiValueMap<String, String> cookieParams = new LinkedMultiValueMap<>();
+    final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<>();
+
+    final String[] localVarAccepts = { "application/ld+json", "application/problem+json" };
+    final List<MediaType> localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+    final String[] localVarContentTypes = {};
+    final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+
+    String[] localVarAuthNames = new String[] {};
+
+    ParameterizedTypeReference<ChallengeJsonLd> localVarReturnType =
+      new ParameterizedTypeReference<>() {};
+    return apiClient.invokeAPI(
+      "/challenges/{challengeId}/json-ld",
+      HttpMethod.GET,
+      pathParams,
+      queryParams,
+      postBody,
+      headerParams,
+      cookieParams,
+      formParams,
+      localVarAccept,
+      localVarContentType,
+      localVarAuthNames,
+      localVarReturnType
+    );
+  }
+
+  /**
+   * Get a challenge in JSON-LD format
+   * Returns the challenge specified in JSON-LD format
+   * <p><b>200</b> - A challenge
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengeId The unique identifier of the challenge.
+   * @return ChallengeJsonLd
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public ChallengeJsonLd getChallengeJsonLd(@jakarta.annotation.Nonnull Long challengeId)
+    throws RestClientResponseException {
+    ParameterizedTypeReference<ChallengeJsonLd> localVarReturnType =
+      new ParameterizedTypeReference<>() {};
+    return getChallengeJsonLdRequestCreation(challengeId).body(localVarReturnType);
+  }
+
+  /**
+   * Get a challenge in JSON-LD format
+   * Returns the challenge specified in JSON-LD format
+   * <p><b>200</b> - A challenge
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengeId The unique identifier of the challenge.
+   * @return ResponseEntity&lt;ChallengeJsonLd&gt;
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public ResponseEntity<ChallengeJsonLd> getChallengeJsonLdWithHttpInfo(
+    @jakarta.annotation.Nonnull Long challengeId
+  ) throws RestClientResponseException {
+    ParameterizedTypeReference<ChallengeJsonLd> localVarReturnType =
+      new ParameterizedTypeReference<>() {};
+    return getChallengeJsonLdRequestCreation(challengeId).toEntity(localVarReturnType);
+  }
+
+  /**
+   * Get a challenge in JSON-LD format
+   * Returns the challenge specified in JSON-LD format
+   * <p><b>200</b> - A challenge
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengeId The unique identifier of the challenge.
+   * @return ResponseSpec
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public ResponseSpec getChallengeJsonLdWithResponseSpec(
+    @jakarta.annotation.Nonnull Long challengeId
+  ) throws RestClientResponseException {
+    return getChallengeJsonLdRequestCreation(challengeId);
   }
 
   /**

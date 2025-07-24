@@ -8,10 +8,10 @@ spring:
   application:
     name: amp-als-dataset-service
   datasource:
-    url: ${db.url} # jdbc:mysql://amp-als-mariadb:8401/dataset_service
+    url: jdbc:postgresql://amp-als-postgres:8401/dataset_service
     username: dataset_service
     password: changeme
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: org.postgresql.Driver
   flyway:
     enabled: true
     clean-disabled: false
@@ -21,10 +21,10 @@ spring:
       WRITE_DATES_AS_TIMESTAMPS: false
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MariaDBDialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         search:
           enable: true
           backend:
@@ -34,3 +34,28 @@ spring:
     # which Hibernate Search might incorrectly use, leading to node sniffing errors
     # when a local cluster is not available.
     exclude: org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: health, prometheus
+      path-mapping:
+        prometheus: metrics
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+    prometheus:
+      cache.time-to-live: 1ms
+
+info:
+  application:
+    name: ${spring.application.name}

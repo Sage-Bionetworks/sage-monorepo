@@ -1,0 +1,32 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: OpenChallenges Auth API
+  license:
+    name: Apache 2.0
+    url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
+  contact:
+    name: Support
+    url: https://github.com/Sage-Bionetworks/sage-monorepo
+  x-logo:
+    url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
+servers:
+  - url: http://localhost/v1
+tags:
+  - name: Authentication
+    description: Operations about authentication
+  - name: API Key
+    description: Operations about API key management
+paths:
+  /auth/login:
+    $ref: paths/auth/login.yaml
+  /auth/api-keys:
+    $ref: paths/auth/api-keys.yaml
+  /auth/api-keys/{keyId}:
+    $ref: paths/auth/api-keys/@{keyId}.yaml
+  /auth/validate:
+    $ref: paths/auth/validate.yaml
+components:
+  securitySchemes:
+    apiBearerAuth:
+      $ref: components/securitySchemes/ApiBearerAuth.yaml

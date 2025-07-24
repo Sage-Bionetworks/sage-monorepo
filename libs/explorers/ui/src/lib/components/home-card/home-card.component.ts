@@ -29,8 +29,10 @@ export class HomeCardComponent {
   secondaryColor = 'inherit';
 
   constructor() {
-    this.secondaryColor = getComputedStyle(document.documentElement).getPropertyValue(
-      '--color-secondary',
-    );
+    if (typeof document !== 'undefined') {
+      this.secondaryColor = getComputedStyle(document.documentElement).getPropertyValue(
+        '--color-secondary',
+      );
+    }
   }
 }

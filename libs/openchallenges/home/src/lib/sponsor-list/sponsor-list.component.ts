@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   Image,
   ImageHeight,
@@ -9,15 +9,15 @@ import { Observable } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-sponsor-list',
-  imports: [CommonModule],
+  imports: [AsyncPipe],
   templateUrl: './sponsor-list.component.html',
   styleUrls: ['./sponsor-list.component.scss'],
 })
 export class SponsorListComponent implements OnInit {
+  private readonly imageService = inject(ImageService);
+
   itcrImage$: Observable<Image> | undefined;
   readonly height = ImageHeight._140px;
-
-  constructor(private imageService: ImageService) {}
 
   ngOnInit() {
     this.itcrImage$ = this.imageService.getImage({

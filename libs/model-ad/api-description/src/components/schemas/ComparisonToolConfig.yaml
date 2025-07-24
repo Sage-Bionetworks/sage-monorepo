@@ -1,0 +1,23 @@
+type: object
+properties:
+  page:
+    type: string
+    description: Page name
+    example: Gene Expression
+  dropdowns:
+    type: array
+    description: List of dropdown options
+    items:
+      type: string
+      example: RNA - DIFFERENTIAL EXPRESSION, Tissue - Hippocampus, Sex - Females & Males
+  columns:
+    type: array
+    description: List of column definitions
+    items:
+      $ref: './ComparisonToolConfigColumn.yaml'
+  filters:
+    $ref: './ComparisonToolConfigFilter.yaml'
+required:
+  - page
+  - dropdowns
+  - columns

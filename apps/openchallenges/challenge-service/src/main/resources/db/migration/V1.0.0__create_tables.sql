@@ -11,7 +11,7 @@ CREATE TABLE challenge_platform (
 
 -- create edam_concept table
 CREATE TABLE edam_concept (
-  id SERIAL PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   class_id VARCHAR(60) NOT NULL UNIQUE,
   preferred_label VARCHAR(80) NOT NULL
 );
@@ -25,12 +25,12 @@ CREATE TABLE challenge (
   description VARCHAR(1000),
   avatar_url VARCHAR(500),
   website_url VARCHAR(500),
-  status VARCHAR(20) CHECK (status IN ('upcoming', 'active', 'completed')),
+  status VARCHAR(20) NOT NULL CHECK (status IN ('upcoming', 'active', 'completed')),
   platform_id BIGINT,
   doi VARCHAR(120),
   start_date DATE,
   end_date DATE,
-  operation_id INTEGER,
+  operation_id BIGINT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_platform FOREIGN KEY (platform_id) REFERENCES challenge_platform(id),
@@ -43,10 +43,10 @@ CREATE TABLE challenge (
 
 -- create challenge_contribution table
 CREATE TABLE challenge_contribution (
-  id SERIAL PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   challenge_id BIGINT NOT NULL,
   organization_id BIGINT NOT NULL,
-  role VARCHAR(50) CHECK (
+  role VARCHAR(50) NOT NULL CHECK (
     role IN ('challenge_organizer', 'data_contributor', 'sponsor')
   ),
   CONSTRAINT fk_challenge FOREIGN KEY (challenge_id) REFERENCES challenge(id),
@@ -55,8 +55,8 @@ CREATE TABLE challenge_contribution (
 
 -- create challenge_incentive table
 CREATE TABLE challenge_incentive (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(50) CHECK (
+  id BIGSERIAL PRIMARY KEY,
+  name VARCHAR(50) NOT NULL CHECK (
     name IN ('monetary', 'publication', 'speaking_engagement', 'other')
   ),
   challenge_id BIGINT NOT NULL,
@@ -67,8 +67,8 @@ CREATE TABLE challenge_incentive (
 
 -- create challenge_submission_type table
 CREATE TABLE challenge_submission_type (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(50) CHECK (
+  id BIGSERIAL PRIMARY KEY,
+  name VARCHAR(50) NOT NULL CHECK (
     name IN ('container_image', 'prediction_file', 'notebook', 'mlcube', 'other')
   ),
   challenge_id BIGINT NOT NULL,
@@ -79,9 +79,9 @@ CREATE TABLE challenge_submission_type (
 
 -- create challenge_input_data_type table
 CREATE TABLE challenge_input_data_type (
-  id SERIAL PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   challenge_id BIGINT NOT NULL,
-  edam_concept_id INTEGER NOT NULL,
+  edam_concept_id BIGINT NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_challenge_input FOREIGN KEY (challenge_id) REFERENCES challenge(id),
   CONSTRAINT fk_edam_concept FOREIGN KEY (edam_concept_id) REFERENCES edam_concept(id),
@@ -90,7 +90,7 @@ CREATE TABLE challenge_input_data_type (
 
 -- create challenge_star table
 CREATE TABLE challenge_star (
-  id SERIAL PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   challenge_id BIGINT NOT NULL,
   user_id BIGINT NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -100,8 +100,8 @@ CREATE TABLE challenge_star (
 
 -- create challenge_category table
 CREATE TABLE challenge_category (
-  id SERIAL PRIMARY KEY,
+  id BIGSERIAL PRIMARY KEY,
   challenge_id BIGINT NOT NULL,
-  name VARCHAR(20) CHECK (name IN ('featured', 'benchmark', 'hackathon')),
+  name VARCHAR(20) NOT NULL CHECK (name IN ('featured', 'benchmark', 'hackathon')),
   CONSTRAINT fk_challenge_cat FOREIGN KEY (challenge_id) REFERENCES challenge(id)
 );

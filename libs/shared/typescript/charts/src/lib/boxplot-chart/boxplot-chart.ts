@@ -6,6 +6,7 @@ import {
   formatCategoryPointsForBoxplotTransform,
   getCategoryPointColor,
   getCategoryPointShape,
+  getCategoryPointStyle,
   getUniqueValues,
   initChart,
   setNoDataOption,
@@ -27,6 +28,10 @@ const yAxisPadding = 0.2;
 const defaultPointShape = 'circle';
 const defaultPointSize = 18;
 const defaultPointColor = '#8b8ad1';
+const defaultPointOpacity = 0.8;
+
+const Y_AXIS_TICK_LABELS_MAX_WIDTH = 80;
+const SPACE_FOR_Y_AXIS_NAME = 40;
 
 export class BoxplotChart {
   chart: ECharts | undefined;
@@ -57,12 +62,18 @@ export class BoxplotChart {
       summaries,
       title,
       xAxisTitle,
+      xAxisLabelFormatter,
       yAxisTitle,
       yAxisMin,
       yAxisMax,
       xAxisCategoryToTooltipText,
       pointTooltipFormatter,
+      pointCategoryColors,
+      pointCategoryShapes,
+      pointOpacity,
     } = boxplotProps;
+
+    const showLegend = boxplotProps.showLegend || false;
 
     const noPoints = points.length === 0;
     const noSummaries = summaries == null || summaries.length === 0;
@@ -73,9 +84,10 @@ export class BoxplotChart {
     }
 
     const xAxisCategories =
-      noPoints && summaries
+      boxplotProps.xAxisCategories ??
+      (noPoints && summaries
         ? (getUniqueValues(summaries, 'xAxisCategory') as string[])
-        : (getUniqueValues(points, 'xAxisCategory') as string[]);
+        : (getUniqueValues(points, 'xAxisCategory') as string[]));
     const pointCategories = getUniqueValues(points, 'pointCategory') as string[];
     const hasPointCategories = pointCategories.length > 0;
 
@@ -94,6 +106,7 @@ export class BoxplotChart {
       xAxisCategories,
     );
 
+    const basePointsDatasetId = 'points';
     const datasetOpts: DatasetComponentOption[] = [
       {
         id: 'static-boxplot-summaries',
@@ -103,7 +116,7 @@ export class BoxplotChart {
         source: dataForStaticBoxplotSummaries,
       },
       {
-        id: 'points',
+        id: basePointsDatasetId,
         dimensions: noPoints ? undefined : Object.keys(dataForScatterPoints[0]),
         source: dataForScatterPoints,
       },
@@ -119,6 +132,24 @@ export class BoxplotChart {
         },
       },
     ];
+
+    // points dataset for each pointCategory
+    const pointDatasetIds = hasPointCategories ? pointCategories : [basePointsDatasetId];
+    if (hasPointCategories) {
+      pointCategories.forEach((pointCategory) => {
+        datasetOpts.push({
+          id: pointCategory,
+          fromDatasetId: basePointsDatasetId,
+          transform: {
+            type: 'filter',
+            config: {
+              dimension: 'pointCategory',
+              value: pointCategory,
+            },
+          },
+        });
+      });
+    }
 
     const seriesOpts: SeriesOption[] = [];
 
@@ -151,50 +182,69 @@ export class BoxplotChart {
       });
     }
 
-    // points
-    seriesOpts.push({
-      type: 'scatter',
-      datasetId: 'points',
-      xAxisId: 'value-x-axis',
-      encode: {
-        x: 'xAxisValue',
-        y: 'value',
-      },
-      symbolSize: defaultPointSize,
-      symbol: (point: CategoryPoint) => {
-        return hasPointCategories
-          ? getCategoryPointShape(point, pointCategories)
-          : defaultPointShape;
-      },
-      itemStyle: {
-        color: (params) => {
-          return hasPointCategories
-            ? getCategoryPointColor(params.value as CategoryPoint, pointCategories)
-            : defaultPointColor;
+    // points series for each points dataset
+    pointDatasetIds.forEach((id) => {
+      seriesOpts.push({
+        type: 'scatter',
+        datasetId: id,
+        name: id,
+        xAxisId: 'value-x-axis',
+        encode: {
+          x: 'xAxisValue',
+          y: 'value',
         },
-      },
-      tooltip: {
-        formatter: (param) => {
-          if (pointTooltipFormatter) {
-            return pointTooltipFormatter(param.data as CategoryPoint);
-          }
-          const pt = param.data as CategoryPoint;
-          return `${pt.value}`;
+        symbolSize: defaultPointSize,
+        symbol:
+          id === 'points'
+            ? defaultPointShape
+            : getCategoryPointStyle(
+                id,
+                hasPointCategories,
+                pointCategoryShapes,
+                getCategoryPointShape,
+                pointCategories,
+                defaultPointShape,
+              ),
+        itemStyle: {
+          color:
+            id === 'points'
+              ? defaultPointColor
+              : getCategoryPointStyle(
+                  id,
+                  hasPointCategories,
+                  pointCategoryColors,
+                  getCategoryPointColor,
+                  pointCategories,
+                  defaultPointColor,
+                ),
+          opacity: pointOpacity || defaultPointOpacity,
         },
-      },
+        tooltip: {
+          formatter: (params) => {
+            if (pointTooltipFormatter) {
+              return pointTooltipFormatter(params.data as CategoryPoint, params);
+            }
+            const pt = params.data as CategoryPoint;
+            return `${pt.value}`;
+          },
+        },
+      });
     });
 
-    const titles = [
-      // Add x-axis title as a title rather than xAxis.name, because
-      // setting via xAxis.name causes cursor to change to pointer when
-      // x-axis label tooltips are used
-      {
-        text: xAxisTitle,
-        textStyle: titleTextStyle,
-        left: 'center',
-        top: 'bottom',
-      },
-    ];
+    const titles = [];
+    if (xAxisTitle) {
+      titles.push(
+        // Add x-axis title as a title rather than xAxis.name, because
+        // setting via xAxis.name causes cursor to change to pointer when
+        // x-axis label tooltips are used
+        {
+          text: xAxisTitle,
+          textStyle: titleTextStyle,
+          left: 'center',
+          top: 'bottom',
+        },
+      );
+    }
     if (title) {
       titles.push({
         text: title,
@@ -205,11 +255,21 @@ export class BoxplotChart {
     }
 
     const option: EChartsOption = {
+      legend: {
+        show: showLegend,
+        data: pointDatasetIds,
+        orient: 'horizontal',
+        left: 'left',
+        top: 'bottom',
+        itemHeight: defaultPointSize,
+        itemWidth: defaultPointSize,
+        selectedMode: false,
+      },
       grid: {
         top: title ? 60 : 20,
-        left: 25,
+        left: Y_AXIS_TICK_LABELS_MAX_WIDTH + SPACE_FOR_Y_AXIS_NAME,
         right: 20,
-        containLabel: true,
+        containLabel: false,
       },
       title: titles,
       aria: {
@@ -251,6 +311,13 @@ export class BoxplotChart {
             color: 'black',
             fontWeight: 'bold',
             fontSize: '14px',
+            interval: 0, // ensure all labels are shown
+            formatter: (value) => {
+              if (xAxisLabelFormatter) {
+                return xAxisLabelFormatter(value);
+              }
+              return value;
+            },
           },
           axisTick: {
             alignWithLabel: true,
@@ -266,12 +333,14 @@ export class BoxplotChart {
         type: 'value',
         name: yAxisTitle,
         nameLocation: 'middle',
-        nameGap: 50,
+        nameGap: Y_AXIS_TICK_LABELS_MAX_WIDTH,
         nameTextStyle: titleTextStyle,
         axisLine: {
           show: true,
         },
         axisLabel: {
+          width: Y_AXIS_TICK_LABELS_MAX_WIDTH,
+          hideOverlap: true,
           showMinLabel: yAxisMin == null,
           showMaxLabel: yAxisMax == null,
         },

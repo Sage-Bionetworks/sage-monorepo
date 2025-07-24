@@ -20,6 +20,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.search.engine.backend.types.Searchable;
 import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
@@ -46,32 +47,33 @@ public class ChallengeEntity {
   @Column(nullable = false, updatable = false)
   private Long id;
 
-  @Column(nullable = false)
+  @Column(nullable = false, length = 255)
   private String slug;
 
-  @Column(nullable = false)
+  @Column(nullable = false, length = 255)
   @FullTextField
   private String name;
 
-  @Column(nullable = false)
+  @Column(nullable = true, length = 80)
   @FullTextField
   private String headline;
 
-  @Column(nullable = false)
+  @Column(nullable = true, length = 1000)
   @FullTextField
   private String description;
 
-  @Column(name = "avatar_url", nullable = true)
+  @Column(name = "avatar_url", nullable = true, length = 500)
   private String avatarUrl;
 
-  @Column(name = "website_url", nullable = false)
+  @Column(name = "website_url", nullable = true, length = 500)
+  @GenericField(name = "website_url", searchable = Searchable.NO)
   private String websiteUrl;
 
-  @Column(nullable = true)
+  @Column(nullable = true, length = 120)
   @GenericField
   private String doi;
 
-  @Column(nullable = false)
+  @Column(nullable = false, length = 20)
   @GenericField
   private String status;
 

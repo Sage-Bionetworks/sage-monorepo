@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Organization } from '@sagebionetworks/openchallenges/api-client-angular';
 import { MOCK_ORGANIZATION_CARDS, OrganizationCard } from '@sagebionetworks/openchallenges/ui';
@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'openchallenges-org-profile-overview',
-  imports: [CommonModule, MatIconModule],
+  imports: [NgClass, MatIconModule],
   templateUrl: './org-profile-overview.component.html',
   styleUrls: ['./org-profile-overview.component.scss'],
 })

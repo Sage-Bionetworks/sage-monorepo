@@ -1,0 +1,39 @@
+parameters:
+  - $ref: ../../components/parameters/path/challengePlatformId.yaml
+get:
+  tags:
+    - ChallengePlatform
+  summary: Get a challenge platform
+  description: Returns the challenge platform identified by its unique ID
+  operationId: getChallengePlatform
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/ChallengePlatform.yaml
+    '404':
+      $ref: ../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml
+delete:
+  tags:
+    - ChallengePlatform
+  summary: Delete a challenge platform
+  description: |
+    Deletes a challenge platform by its unique ID. This action is irreversible.
+  operationId: deleteChallengePlatform
+  security:
+    - apiBearerAuth: []
+  responses:
+    '204':
+      description: Deletion successful
+    '401':
+      $ref: ../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml

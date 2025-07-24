@@ -34,6 +34,18 @@ public class ChallengeApiTest {
   private final ChallengeApi api = new ChallengeApi();
 
   /**
+   * Delete a challenge
+   *
+   * Deletes a challenge by its unique ID. This action is irreversible.
+   */
+  @Test
+  public void deleteChallengeByIdTest() {
+    Long challengeId = null;
+    api.deleteChallengeById(challengeId);
+    // TODO: test validations
+  }
+
+  /**
    * Get a challenge
    *
    * Returns the challenge specified
@@ -42,6 +54,18 @@ public class ChallengeApiTest {
   public void getChallengeTest() {
     Long challengeId = null;
     Challenge response = api.getChallenge(challengeId);
+    // TODO: test validations
+  }
+
+  /**
+   * Get a challenge in JSON-LD format
+   *
+   * Returns the challenge specified in JSON-LD format
+   */
+  @Test
+  public void getChallengeJsonLdTest() {
+    Long challengeId = null;
+    ChallengeJsonLd response = api.getChallengeJsonLd(challengeId);
     // TODO: test validations
   }
 

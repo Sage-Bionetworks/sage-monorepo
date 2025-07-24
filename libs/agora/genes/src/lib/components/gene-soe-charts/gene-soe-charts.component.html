@@ -13,11 +13,13 @@
             </agora-popover-link>
           </div>
         </div>
-        <agora-score-barchart
-          [score]="getGeneOverallScores(chart.name)"
-          [barColor]="getBarColor(chart.name)"
-          [data]="chart"
-        ></agora-score-barchart>
+        @defer {
+          <agora-score-barchart
+            [score]="getGeneOverallScores(chart.name)"
+            [barColor]="getBarColor(chart.name)"
+            [data]="chart"
+          ></agora-score-barchart>
+        }
       </div>
     }
   </div>

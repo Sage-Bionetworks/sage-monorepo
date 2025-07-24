@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ChallengePlatformRepository
   extends JpaRepository<ChallengePlatformEntity, Long>, CustomChallengePlatformRepository {
-  Optional<ChallengePlatformEntity> findByName(String name);
+  Optional<ChallengePlatformEntity> findById(Long id);
 }

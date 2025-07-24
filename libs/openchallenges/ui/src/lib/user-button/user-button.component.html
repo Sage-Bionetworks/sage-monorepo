@@ -6,13 +6,12 @@
   </div>
 </button>
 <mat-menu class="user-dropdown" #userMenu="matMenu" xPosition="before" [overlapTrigger]="false">
-  <button
-    mat-menu-item
-    *ngFor="let item of menuItems"
-    [attr.aria-label]="item.name"
-    (click)="selectMenuItem(item)"
-  >
-    <mat-icon *ngIf="!!item.icon" aria-hidden="true">{{ item.icon }}</mat-icon>
-    <span>{{ item.name }}</span>
-  </button>
+  @for (item of menuItems; track item) {
+    <button mat-menu-item [attr.aria-label]="item.name" (click)="selectMenuItem(item)">
+      @if (!!item.icon) {
+        <mat-icon aria-hidden="true">{{ item.icon }}</mat-icon>
+      }
+      <span>{{ item.name }}</span>
+    </button>
+  }
 </mat-menu>

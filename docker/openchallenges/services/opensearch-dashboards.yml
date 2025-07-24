@@ -1,0 +1,19 @@
+services:
+  openchallenges-opensearch-dashboards:
+    image: ghcr.io/sage-bionetworks/openchallenges-opensearch-dashboards:${OPENCHALLENGES_VERSION:-local}
+    container_name: openchallenges-opensearch-dashboards
+    restart: always
+    environment:
+      - OPENSEARCH_HOSTS=["http://openchallenges-opensearch:9200"]
+      - DISABLE_SECURITY_DASHBOARDS_PLUGIN=true
+    networks:
+      - openchallenges
+    ports:
+      - '5601:5601'
+    depends_on:
+      openchallenges-opensearch:
+        condition: service_started
+    deploy:
+      resources:
+        limits:
+          memory: 512M

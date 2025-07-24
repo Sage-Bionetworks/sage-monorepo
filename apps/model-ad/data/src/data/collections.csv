@@ -1,2 +1,5 @@
 dataversion,dataversion.json
-modeldetails,model_details.json
+disease_correlation,disease_correlation.json
+model_details,model_details.json
+model_overview,model_overview.json
+ui_config,ui_config.json

@@ -1,8 +1,0 @@
-description: The account status of a user
-type: string
-enum:
-  - pending
-  - approved
-  - disabled
-  - blacklist
-example: pending

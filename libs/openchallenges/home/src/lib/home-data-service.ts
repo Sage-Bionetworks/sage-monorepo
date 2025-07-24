@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {
   ChallengeAnalyticsService,
   ChallengesPerYear,
@@ -10,8 +10,9 @@ import { isNotNull } from 'type-guards';
   providedIn: 'root',
 })
 export class HomeDataService {
+  private readonly challengeAnalyticsService = inject(ChallengeAnalyticsService);
+
   challengesPerYear$: Observable<ChallengesPerYear | null> = of(null);
-  constructor(private challengeAnalyticsService: ChallengeAnalyticsService) {}
 
   setChallengesPerYear() {
     this.challengesPerYear$ = this.challengeAnalyticsService.getChallengesPerYear();

@@ -1,6 +1,9 @@
 package org.sagebionetworks.openchallenges.challenge.service.api;
 
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.BasicErrorDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionUpdateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionsPageDto;
 
 
@@ -28,7 +31,7 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 @Controller
-@RequestMapping("${openapi.openChallengesChallengeREST.base-path:/v1}")
+@RequestMapping("${openapi.openChallengesChallenge.base-path:/v1}")
 public class ChallengeContributionApiController implements ChallengeContributionApi {
 
     private final ChallengeContributionApiDelegate delegate;

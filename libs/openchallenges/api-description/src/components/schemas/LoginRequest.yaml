@@ -1,0 +1,14 @@
+type: object
+required:
+  - username
+  - password
+properties:
+  username:
+    type: string
+    description: Username or email
+    example: admin
+  password:
+    type: string
+    format: password
+    description: User password
+    example: changeme

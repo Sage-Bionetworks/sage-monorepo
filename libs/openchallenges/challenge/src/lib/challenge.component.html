@@ -12,7 +12,7 @@
           <div
             class="profile-type"
             [ngClass]="['status', challenge.status ? challenge.status : '']"
-            >
+          >
             {{ challenge.status | titlecase }}
           </div>
         }
@@ -31,21 +31,21 @@
             class="profile-nav-item"
             (click)="updateTab('overview')"
             [ngClass]="{ 'active-tab': activeTab === tabs['overview'] }"
-            >
+          >
             Overview
           </a>
           <a
             class="profile-nav-item"
             (click)="updateTab('contributors')"
             [ngClass]="{ 'active-tab': activeTab === tabs['contributors'] }"
-            >
+          >
             Contributors
           </a>
           <a
             class="profile-nav-item"
             (click)="updateTab('organizers')"
             [ngClass]="{ 'active-tab': activeTab === tabs['organizers'] }"
-            >
+          >
             Organizers
           </a>
           <!-- <a
@@ -56,33 +56,30 @@
           >
           Stargazers
         </a> -->
+        </div>
       </div>
-    </div>
-    <div class="main col">
-      @switch (activeTab) {
-        @case (tabs['overview']) {
-          <openchallenges-challenge-overview
+      <div class="main col">
+        @switch (activeTab) {
+          @case (tabs['overview']) {
+            <openchallenges-challenge-overview [challenge]="challenge" />
+          }
+          @case (tabs['contributors']) {
+            <openchallenges-challenge-contributors [challenge]="challenge" />
+          }
+          @case (tabs['organizers']) {
+            <openchallenges-challenge-organizers [challenge]="challenge" />
+          }
+          <!-- Stargazers tab commented out for now
+        @case (tabs['stargazers']) {
+          <openchallenges-challenge-stargazers
             [challenge]="challenge"
-            />
+          />
         }
-        @case (tabs['contributors']) {
-          <openchallenges-challenge-contributors
-            [challenge]="challenge"
-            />
+        -->
         }
-        @case (tabs['organizers']) {
-          <openchallenges-challenge-organizers
-            [challenge]="challenge"
-            />
-        }
-        <!-- <openchallenges-challenge-stargazers
-        *ngSwitchCase="tabs['stargazers']"
-        [challenge]="challenge"
-        /> -->
-      }
-    </div>
-  </section>
-}
+      </div>
+    </section>
+  }
 </main>
 <openchallenges-footer
   [appVersion]="appVersion"
@@ -90,4 +87,4 @@
   [privacyPolicyUrl]="privacyPolicyUrl"
   [termsOfUseUrl]="termsOfUseUrl"
   [apiDocsUrl]="apiDocsUrl"
-  />
+/>

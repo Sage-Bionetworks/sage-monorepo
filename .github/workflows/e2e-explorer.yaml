@@ -152,7 +152,7 @@ jobs:
 
       - name: Run Explorer e2e tests
         env:
-          cmd: 'nx run ${{ inputs.explorer }}-app:e2e'
+          cmd: 'CI=true nx run ${{ inputs.explorer }}-app:e2e'
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
               && ${cmd}"

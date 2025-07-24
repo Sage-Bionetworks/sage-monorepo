@@ -2,7 +2,7 @@
   "extends": "./tsconfig.app.json",
   "compilerOptions": {
     "outDir": "../../out-tsc/server",
-    "target": "ES2022",
+    "target": "es2024",
     "types": ["node"],
     "esModuleInterop": false,
     "moduleResolution": "bundler"

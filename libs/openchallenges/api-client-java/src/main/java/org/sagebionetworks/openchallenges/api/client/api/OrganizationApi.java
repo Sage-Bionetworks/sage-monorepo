@@ -51,6 +51,117 @@ public class OrganizationApi {
   }
 
   /**
+   * Delete an organization
+   * Deletes the organization specified
+   * <p><b>204</b> - Organization successfully deleted
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param org The id or login of the organization.
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  private ResponseSpec deleteOrganizationRequestCreation(@jakarta.annotation.Nonnull String org)
+    throws RestClientResponseException {
+    Object postBody = null;
+    // verify the required parameter 'org' is set
+    if (org == null) {
+      throw new RestClientResponseException(
+        "Missing the required parameter 'org' when calling deleteOrganization",
+        HttpStatus.BAD_REQUEST.value(),
+        HttpStatus.BAD_REQUEST.getReasonPhrase(),
+        null,
+        null,
+        null
+      );
+    }
+    // create path and map variables
+    final Map<String, Object> pathParams = new HashMap<>();
+
+    pathParams.put("org", org);
+
+    final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+    final HttpHeaders headerParams = new HttpHeaders();
+    final MultiValueMap<String, String> cookieParams = new LinkedMultiValueMap<>();
+    final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<>();
+
+    final String[] localVarAccepts = { "application/problem+json" };
+    final List<MediaType> localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+    final String[] localVarContentTypes = {};
+    final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+
+    String[] localVarAuthNames = new String[] { "apiBearerAuth" };
+
+    ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
+    return apiClient.invokeAPI(
+      "/organizations/{org}",
+      HttpMethod.DELETE,
+      pathParams,
+      queryParams,
+      postBody,
+      headerParams,
+      cookieParams,
+      formParams,
+      localVarAccept,
+      localVarContentType,
+      localVarAuthNames,
+      localVarReturnType
+    );
+  }
+
+  /**
+   * Delete an organization
+   * Deletes the organization specified
+   * <p><b>204</b> - Organization successfully deleted
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param org The id or login of the organization.
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public void deleteOrganization(@jakarta.annotation.Nonnull String org)
+    throws RestClientResponseException {
+    ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
+    deleteOrganizationRequestCreation(org).body(localVarReturnType);
+  }
+
+  /**
+   * Delete an organization
+   * Deletes the organization specified
+   * <p><b>204</b> - Organization successfully deleted
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param org The id or login of the organization.
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public ResponseEntity<Void> deleteOrganizationWithHttpInfo(
+    @jakarta.annotation.Nonnull String org
+  ) throws RestClientResponseException {
+    ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
+    return deleteOrganizationRequestCreation(org).toEntity(localVarReturnType);
+  }
+
+  /**
+   * Delete an organization
+   * Deletes the organization specified
+   * <p><b>204</b> - Organization successfully deleted
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param org The id or login of the organization.
+   * @return ResponseSpec
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public ResponseSpec deleteOrganizationWithResponseSpec(@jakarta.annotation.Nonnull String org)
+    throws RestClientResponseException {
+    return deleteOrganizationRequestCreation(org);
+  }
+
+  /**
    * Get an organization
    * Returns the organization specified
    * <p><b>200</b> - An organization

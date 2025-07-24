@@ -1,5 +1,4 @@
-
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { HomeDataService } from '../home-data-service';
 import { NgxEchartsModule, NGX_ECHARTS_CONFIG } from 'ngx-echarts';
 import { EChartsOption } from 'echarts';
@@ -20,7 +19,7 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./statistics-viewer.component.scss'],
 })
 export class StatisticsViewerComponent implements OnInit, OnDestroy {
-  constructor(private homeDataService: HomeDataService) {}
+  private readonly homeDataService = inject(HomeDataService);
 
   private chartDataSubscription: Subscription | undefined;
 

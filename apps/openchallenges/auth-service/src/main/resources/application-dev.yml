@@ -1,0 +1,16 @@
+# Development profile configuration
+spring:
+  jpa:
+    show-sql: true
+  datasource:
+    url: jdbc:postgresql://openchallenges-postgres:8091/auth_service
+
+openchallenges:
+  auth:
+    api-key:
+      prefix: oc_dev_
+      length: 40
+
+logging:
+  level:
+    org.sagebionetworks.openchallenges: DEBUG

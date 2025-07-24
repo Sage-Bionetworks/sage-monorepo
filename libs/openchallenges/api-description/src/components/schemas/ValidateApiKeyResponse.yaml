@@ -1,0 +1,26 @@
+type: object
+properties:
+  valid:
+    type: boolean
+    description: Whether the API key is valid
+    example: true
+  userId:
+    type: string
+    format: uuid
+    description: ID of the user who owns this API key (only if valid)
+    example: 123e4567-e89b-12d3-a456-426614174000
+  username:
+    type: string
+    description: Username of the API key owner (only if valid)
+    example: admin
+  role:
+    type: string
+    description: Role of the API key owner (only if valid)
+    example: admin
+    enum: [admin, user, readonly]
+  scopes:
+    type: array
+    items:
+      type: string
+    description: Permissions granted to this API key (only if valid)
+    example: [organizations:read, organizations:write]

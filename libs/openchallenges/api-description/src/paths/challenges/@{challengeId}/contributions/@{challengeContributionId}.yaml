@@ -1,0 +1,79 @@
+parameters:
+  - $ref: ../../../../components/parameters/path/challengeId.yaml
+  - $ref: ../../../../components/parameters/path/challengeContributionId.yaml
+get:
+  tags:
+    - ChallengeContribution
+  summary: Get a specific challenge contribution
+  description: |
+    Retrieves a specific contribution record for a challenge, identified by its ID.
+  operationId: getChallengeContribution
+  responses:
+    '200':
+      description: Challenge contribution retrieved successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../../../components/schemas/ChallengeContribution.yaml
+    '400':
+      $ref: ../../../../components/responses/BadRequest.yaml
+    '404':
+      $ref: ../../../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../../../components/responses/InternalServerError.yaml
+put:
+  tags:
+    - ChallengeContribution
+  summary: Update an existing challenge contribution
+  description: |
+    Updates an existing contribution record for a challenge.
+    Only the organization ID and role can be modified.
+  operationId: updateChallengeContribution
+  security:
+    - apiBearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../../../components/schemas/ChallengeContributionUpdateRequest.yaml
+  responses:
+    '200':
+      description: Contribution updated successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../../../components/schemas/ChallengeContribution.yaml
+    '400':
+      $ref: ../../../../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../../components/responses/NotFound.yaml
+    '409':
+      $ref: ../../../../components/responses/Conflict.yaml
+    '500':
+      $ref: ../../../../components/responses/InternalServerError.yaml
+delete:
+  tags:
+    - ChallengeContribution
+  summary: Delete a specific challenge contribution
+  description: |
+    Deletes a specific contribution record for a challenge, identified by its ID.
+    This action is irreversible.
+  operationId: deleteChallengeContribution
+  security:
+    - apiBearerAuth: []
+  responses:
+    '204':
+      description: Contribution deleted successfully
+    '401':
+      $ref: ../../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../../../components/responses/InternalServerError.yaml

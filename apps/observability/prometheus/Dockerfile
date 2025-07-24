@@ -1,1 +1,1 @@
-FROM prom/prometheus:v3.3.1
+FROM mirror.gcr.io/prom/prometheus:v3.3.1

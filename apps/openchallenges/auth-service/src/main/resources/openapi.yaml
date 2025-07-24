@@ -1,0 +1,417 @@
+openapi: 3.0.3
+info:
+  contact:
+    name: Support
+    url: https://github.com/Sage-Bionetworks/sage-monorepo
+  license:
+    name: Apache 2.0
+    url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
+  title: OpenChallenges Auth API
+  version: 1.0.0
+  x-logo:
+    url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
+servers:
+  - url: http://localhost/v1
+tags:
+  - description: Operations about authentication
+    name: Authentication
+  - description: Operations about API key management
+    name: API Key
+paths:
+  /auth/login:
+    post:
+      description: Authenticate user and return JWT token
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+          description: Login successful
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: User login
+      tags:
+        - Authentication
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Authentication
+  /auth/api-keys:
+    get:
+      description: Get all API keys for the authenticated user
+      operationId: listApiKeys
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiKey'
+                type: array
+          description: List of API keys
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - apiBearerAuth: []
+      summary: List API keys
+      tags:
+        - API Key
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: API Key
+    post:
+      description: Generate a new API key for the authenticated user
+      operationId: createApiKey
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateApiKeyRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateApiKeyResponse'
+          description: API key created successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - apiBearerAuth: []
+      summary: Create API key
+      tags:
+        - API Key
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: API Key
+  /auth/api-keys/{keyId}:
+    delete:
+      description: Revoke an API key
+      operationId: deleteApiKey
+      parameters:
+        - description: The API key ID to delete
+          explode: false
+          in: path
+          name: keyId
+          required: true
+          schema:
+            format: uuid
+            type: string
+          style: simple
+      responses:
+        '204':
+          description: API key deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - apiBearerAuth: []
+      summary: Delete API key
+      tags:
+        - API Key
+      x-accepts:
+        - application/problem+json
+      x-tags:
+        - tag: API Key
+  /auth/validate:
+    post:
+      description: Internal endpoint to validate API keys (used by other services)
+      operationId: validateApiKey
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateApiKeyRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateApiKeyResponse'
+          description: API key is valid
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Validate API key
+      tags:
+        - Authentication
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Authentication
+components:
+  responses:
+    Unauthorized:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: Unauthorized
+    InternalServerError:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The request cannot be fulfilled due to an unexpected server error
+    BadRequest:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: Invalid request
+    NotFound:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The specified resource was not found
+  schemas:
+    LoginRequest:
+      properties:
+        username:
+          description: Username or email
+          example: admin
+          type: string
+        password:
+          description: User password
+          example: changeme
+          format: password
+          type: string
+      required:
+        - password
+        - username
+      type: object
+    LoginResponse:
+      example:
+        role: admin
+        apiKey: oc_prod_abcd1234567890abcdef1234567890abcdef1234
+        userId: 123e4567-e89b-12d3-a456-426614174000
+        username: admin
+      properties:
+        apiKey:
+          description: API key for authentication
+          example: oc_prod_abcd1234567890abcdef1234567890abcdef1234
+          type: string
+        userId:
+          description: User ID
+          example: 123e4567-e89b-12d3-a456-426614174000
+          format: uuid
+          type: string
+        username:
+          description: Username
+          example: admin
+          type: string
+        role:
+          description: User role
+          enum:
+            - admin
+            - user
+            - readonly
+          example: admin
+          type: string
+      type: object
+    BasicError:
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          description: A human readable documentation for the problem type
+          type: string
+        status:
+          description: The HTTP status code
+          type: integer
+        detail:
+          description: A human readable explanation specific to this occurrence of
+            the problem
+          type: string
+        type:
+          description: An absolute URI that identifies the problem type
+          type: string
+      required:
+        - status
+        - title
+      type: object
+      x-java-class-annotations:
+        - '@lombok.AllArgsConstructor'
+        - '@lombok.Builder'
+    ApiKey:
+      example:
+        createdAt: 2024-01-15T10:30:00Z
+        lastUsedAt: 2024-06-15T14:20:00Z
+        prefix: oc_prod_
+        name: Production API Key
+        id: 123e4567-e89b-12d3-a456-426614174000
+        expiresAt: 2025-01-15T10:30:00Z
+      properties:
+        id:
+          description: API key ID
+          example: 123e4567-e89b-12d3-a456-426614174000
+          format: uuid
+          type: string
+        name:
+          description: Human-readable name for the API key
+          example: Production API Key
+          type: string
+        prefix:
+          description: First 8 characters of the API key for identification
+          example: oc_prod_
+          type: string
+        createdAt:
+          description: When the API key was created
+          example: 2024-01-15T10:30:00Z
+          format: date-time
+          type: string
+        expiresAt:
+          description: When the API key expires (null if no expiration)
+          example: 2025-01-15T10:30:00Z
+          format: date-time
+          nullable: true
+          type: string
+        lastUsedAt:
+          description: When the API key was last used (null if never used)
+          example: 2024-06-15T14:20:00Z
+          format: date-time
+          nullable: true
+          type: string
+      type: object
+    CreateApiKeyRequest:
+      properties:
+        name:
+          description: Human-readable name for the API key
+          example: Production API Key
+          maxLength: 100
+          minLength: 1
+          type: string
+        expiresIn:
+          description: "Number of days until the API key expires (optional, default\
+            \ is no expiration)"
+          example: 365
+          maximum: 3650
+          minimum: 1
+          type: integer
+      required:
+        - name
+      type: object
+    CreateApiKeyResponse:
+      example:
+        createdAt: 2024-01-15T10:30:00Z
+        prefix: oc_prod_
+        name: Production API Key
+        id: 123e4567-e89b-12d3-a456-426614174000
+        key: oc_prod_abcd1234567890abcdef1234567890abcdef1234
+        expiresAt: 2025-01-15T10:30:00Z
+      properties:
+        id:
+          description: API key ID
+          example: 123e4567-e89b-12d3-a456-426614174000
+          format: uuid
+          type: string
+        key:
+          description: The actual API key (only returned on creation)
+          example: oc_prod_abcd1234567890abcdef1234567890abcdef1234
+          type: string
+        name:
+          description: Human-readable name for the API key
+          example: Production API Key
+          type: string
+        prefix:
+          description: First 8 characters of the API key for identification
+          example: oc_prod_
+          type: string
+        createdAt:
+          description: When the API key was created
+          example: 2024-01-15T10:30:00Z
+          format: date-time
+          type: string
+        expiresAt:
+          description: When the API key expires (null if no expiration)
+          example: 2025-01-15T10:30:00Z
+          format: date-time
+          nullable: true
+          type: string
+      type: object
+    ValidateApiKeyRequest:
+      properties:
+        apiKey:
+          description: The API key to validate
+          example: oc_prod_abcd1234567890abcdef1234567890abcdef1234
+          type: string
+      required:
+        - apiKey
+      type: object
+    ValidateApiKeyResponse:
+      example:
+        valid: true
+        role: admin
+        scopes:
+          - organizations:read
+          - organizations:write
+        userId: 123e4567-e89b-12d3-a456-426614174000
+        username: admin
+      properties:
+        valid:
+          description: Whether the API key is valid
+          example: true
+          type: boolean
+        userId:
+          description: ID of the user who owns this API key (only if valid)
+          example: 123e4567-e89b-12d3-a456-426614174000
+          format: uuid
+          type: string
+        username:
+          description: Username of the API key owner (only if valid)
+          example: admin
+          type: string
+        role:
+          description: Role of the API key owner (only if valid)
+          enum:
+            - admin
+            - user
+            - readonly
+          example: admin
+          type: string
+        scopes:
+          description: Permissions granted to this API key (only if valid)
+          example:
+            - organizations:read
+            - organizations:write
+          items:
+            type: string
+          type: array
+      type: object
+  securitySchemes:
+    apiBearerAuth:
+      bearerFormat: api_key
+      description: API key obtained from /auth/login endpoint
+      scheme: bearer
+      type: http

@@ -21,7 +21,40 @@
         "no-useless-constructor": "off",
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-non-null-assertion": "error",
-        "@stylistic/no-extra-semi": "error"
+        "@stylistic/no-extra-semi": "error",
+        "@nx/enforce-module-boundaries": [
+          "error",
+          {
+            // TODO: openchallenges-home is lazy loaded in openchallenges' app.routes.ts, but
+            // HomeDataService is statically imported in app.component.ts, which forces the entire
+            // library to be loaded immediately, breaking the lazy-loading optimization.
+            // Consider moving the service to a shared library or restructuring to avoid static imports
+            // from lazy-loaded modules, then remove this exception.
+            "allow": ["@sagebionetworks/openchallenges/home"],
+            "depConstraints": [
+              {
+                "sourceTag": "scope:model-ad",
+                "onlyDependOnLibsWithTags": ["scope:model-ad", "scope:explorers", "scope:shared"]
+              },
+              {
+                "sourceTag": "scope:agora",
+                "onlyDependOnLibsWithTags": ["scope:agora", "scope:explorers", "scope:shared"]
+              },
+              {
+                "sourceTag": "scope:explorers",
+                "onlyDependOnLibsWithTags": ["scope:explorers", "scope:shared"]
+              },
+              {
+                "sourceTag": "scope:shared",
+                "onlyDependOnLibsWithTags": ["scope:shared"]
+              },
+              {
+                "sourceTag": "*",
+                "onlyDependOnLibsWithTags": ["*"]
+              }
+            ]
+          }
+        ]
       }
     },
     {
@@ -36,7 +69,7 @@
       "parser": "@angular-eslint/template-parser",
       "plugins": ["@angular-eslint/template"],
       "rules": {
-        "@angular-eslint/template/prefer-control-flow": "warn"
+        "@angular-eslint/template/prefer-control-flow": "error"
       }
     }
   ]

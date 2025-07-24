@@ -1,7 +1,8 @@
 openapi: 3.0.3
 info:
   version: 1.0.0
-  title: OpenChallenges Challenge REST API
+  title: OpenChallenges Challenge API
+  description: Discover, explore, and contribute to open biomedical challenges.
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -15,6 +16,8 @@ servers:
 tags:
   - name: Challenge
     description: Operations about challenges.
+  - name: ChallengeContribution
+    description: Operations about challenge contributions.
   - name: ChallengeAnalytics
     description: Operations about challenge analytics.
   - name: ChallengePlatform
@@ -26,13 +29,21 @@ paths:
     $ref: paths/challenges.yaml
   /challenges/{challengeId}:
     $ref: paths/challenges/@{challengeId}.yaml
+  /challenges/{challengeId}/json-ld:
+    $ref: paths/challenges/@{challengeId}/json-ld.yaml
   /challenges/{challengeId}/contributions:
     $ref: paths/challenges/@{challengeId}/contributions.yaml
+  /challenges/{challengeId}/contributions/{challengeContributionId}:
+    $ref: paths/challenges/@{challengeId}/contributions/@{challengeContributionId}.yaml
   /challengeAnalytics/challengesPerYear:
     $ref: paths/challengeAnalytics/challengesPerYear.yaml
   /challengePlatforms:
     $ref: paths/challengePlatforms.yaml
-  /challengePlatforms/{challengePlatformName}:
-    $ref: paths/challengePlatforms/@{challengePlatformName}.yaml
+  /challengePlatforms/{challengePlatformId}:
+    $ref: paths/challengePlatforms/@{challengePlatformId}.yaml
   /edamConcepts:
     $ref: paths/edamConcepts.yaml
+components:
+  securitySchemes:
+    apiBearerAuth:
+      $ref: components/securitySchemes/ApiBearerAuth.yaml

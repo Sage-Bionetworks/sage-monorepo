@@ -1,0 +1,28 @@
+{
+  "name": "bixarena-apex",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/bixarena/serve-detach.sh {projectName}"
+      }
+    },
+    "scan-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "trivy image ghcr.io/sage-bionetworks/{projectName}:local --quiet",
+        "color": true
+      }
+    }
+  },
+  "tags": ["type:service", "scope:backend"]
+}

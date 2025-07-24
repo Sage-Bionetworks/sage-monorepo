@@ -1,0 +1,11 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate # Use Flyway for schema management
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    clean-disabled: false
+# Testcontainers will dynamically configure the datasource properties

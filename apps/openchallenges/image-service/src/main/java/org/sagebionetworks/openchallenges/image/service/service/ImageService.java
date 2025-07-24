@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ImageService {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ImageService.class);
+  private static final Logger logger = LoggerFactory.getLogger(ImageService.class);
 
   private final ImageServiceConfigData imageServiceConfigData;
 
@@ -25,7 +25,7 @@ public class ImageService {
     this.imageServiceConfigData = imageServiceConfigData;
     this.thumbor = thumbor;
 
-    LOG.debug("Thumbor host: {}", this.imageServiceConfigData.getThumborHost());
+    logger.debug("Thumbor host: {}", this.imageServiceConfigData.getThumborHost());
   }
 
   public ImageDto getImage(ImageQueryDto query) {
@@ -40,7 +40,7 @@ public class ImageService {
       );
     }
 
-    LOG.info("Requesting an image url for the objectId: {}", query.getObjectKey());
+    logger.info("Requesting an image url for the objectId: {}", query.getObjectKey());
 
     ThumborUrlBuilder builder = thumbor.buildImage(query.getObjectKey());
     Integer height = getImageHeightInPx(query.getHeight());

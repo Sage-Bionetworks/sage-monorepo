@@ -2,8 +2,8 @@ inputs:
   # info is defined in base OA definition. This file must be listed first.
   - inputFile: openapi/base.openapi.yaml
   # list files in alphanumeric order
+  - inputFile: openapi/auth.openapi.yaml
   - inputFile: openapi/challenge.openapi.yaml
   - inputFile: openapi/image.openapi.yaml
   - inputFile: openapi/organization.openapi.yaml
-  - inputFile: openapi/user.openapi.yaml
 output: openapi/openapi.yaml

@@ -1,5 +1,6 @@
 import { provideServerRendering } from '@angular/ssr';
 import { mergeApplicationConfig, ApplicationConfig } from '@angular/core';
+import { APP_PORT } from '@sagebionetworks/openchallenges/config';
 import { appConfig } from './app.config';
 
 const serverConfig: ApplicationConfig = {
@@ -9,7 +10,7 @@ const serverConfig: ApplicationConfig = {
     // Originally added to server.ts (used for production with the Express server),
     // it was moved here to ensure availability in both production and development environments.
     {
-      provide: 'APP_PORT',
+      provide: APP_PORT,
       useValue: process.env['PORT'] || '4200',
     },
   ],

@@ -10,9 +10,9 @@ services:
     ports:
       - '8404:8404'
     depends_on:
-      amp-als-mariadb:
-        condition: service_healthy
       amp-als-opensearch:
+        condition: service_healthy
+      amp-als-postgres:
         condition: service_healthy
     deploy:
       resources:

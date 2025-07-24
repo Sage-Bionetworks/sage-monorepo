@@ -1,1 +1,1 @@
-FROM grafana/tempo:2.3.1
+FROM mirror.gcr.io/grafana/tempo:2.3.1

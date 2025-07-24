@@ -128,6 +128,18 @@ function agora-test-affected {
   nx affected --target=test --projects=agora-* --parallel=10
 }
 
+function bixarena-build-images {
+  nx run-many --target=build-image --projects=bixarena-* --parallel=3
+}
+
+function bixarena-docker-start {
+  nx serve-detach bixarena-apex
+}
+
+function bixarena-docker-rm {
+  docker rm -f $(docker ps -a --filter "name=^/bixarena-" --format "{{.ID}}")
+}
+
 function observability-build-images {
   nx run-many --target=build-image --projects=observability-* --parallel=3
 }
@@ -230,8 +242,25 @@ function workspace-docker-stop {
   fi
 }
 
+function workspace-unset-empty-nx-env-vars {
+  # Get all environment variables that start with "NX_" and have empty values
+  local empty_nx_vars=$(env | grep '^NX_' | grep '=$' | cut -d= -f1)
+  
+  if [ -n "$empty_nx_vars" ]; then
+    while IFS= read -r var_name; do
+      if [ -n "$var_name" ]; then
+        unset "$var_name"
+      fi
+    done <<< "$empty_nx_vars"
+  fi
+}
+
 function workspace-initialize-env {
   workspace-welcome
+
+  # Unset empty NX_ environment variables
+  # See https://github.com/nrwl/nx/issues/31921
+  workspace-unset-empty-nx-env-vars
 
   if [ -f "./tools/configure-hostnames.sh" ]; then
     sudo ./tools/configure-hostnames.sh

@@ -1,0 +1,25 @@
+services:
+  openchallenges-opensearch:
+    image: ghcr.io/sage-bionetworks/openchallenges-opensearch:${OPENCHALLENGES_VERSION:-local}
+    container_name: openchallenges-opensearch
+    restart: always
+    environment:
+      - node.name=openchallenges-opensearch
+      - cluster.name=openchallenges-opensearch
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true # Disable JVM heap memory swapping
+      - 'OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m'
+      - http.port=9200
+      - DISABLE_SECURITY_PLUGIN=true
+    networks:
+      - openchallenges
+    ports:
+      - '9200:9200'
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    deploy:
+      resources:
+        limits:
+          memory: 2G

@@ -17,12 +17,14 @@
     </div>
   }
   <openchallenges-challenge-search />
-  <openchallenges-statistics-viewer *sageAppShellNoRender />
-  <openchallenges-random-challenge-list *sageAppShellNoRender />
-  <openchallenges-challenge-registration *sageAppShellNoRender />
-  <openchallenges-challenge-host-list *sageAppShellNoRender />
-  <openchallenges-platforms *sageAppShellNoRender />
-  <openchallenges-sponsor-list *sageAppShellNoRender />
+  @defer {
+    <openchallenges-statistics-viewer />
+    <openchallenges-random-challenge-list />
+    <openchallenges-challenge-registration />
+    <openchallenges-challenge-host-list />
+    <openchallenges-platforms />
+    <openchallenges-sponsor-list />
+  }
 </div>
 
 <openchallenges-footer

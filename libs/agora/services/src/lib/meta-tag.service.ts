@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, map, mergeMap } from 'rxjs/operators';
@@ -7,12 +7,10 @@ import { filter, map, mergeMap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class MetaTagService {
-  constructor(
-    private titleService: Title,
-    private metaService: Meta,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-  ) {}
+  private readonly titleService = inject(Title);
+  private readonly metaService = inject(Meta);
+  private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
 
   updateMetaTags() {
     this.router.events

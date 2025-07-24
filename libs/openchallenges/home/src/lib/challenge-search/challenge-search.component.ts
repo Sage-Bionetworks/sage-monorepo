@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, inject, OnInit, PLATFORM_ID } from '@angular/core';
 import {
   ChallengePlatformService,
   ChallengeService,
@@ -9,8 +9,7 @@ import {
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { Observable, map } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';
-import { ConfigService } from '@sagebionetworks/openchallenges/config';
-import { CommonModule, isPlatformServer } from '@angular/common';
+import { AsyncPipe, isPlatformServer } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgxTypedJsModule } from 'ngx-typed-js';
 import { InputTextModule } from 'primeng/inputtext';
@@ -18,18 +17,18 @@ import { CountUpModule } from 'ngx-countup';
 
 @Component({
   selector: 'openchallenges-challenge-search',
-  imports: [
-    CommonModule,
-    FormsModule,
-    NgxTypedJsModule,
-    InputTextModule,
-    CountUpModule,
-    RouterModule,
-  ],
+  imports: [AsyncPipe, FormsModule, NgxTypedJsModule, InputTextModule, CountUpModule, RouterModule],
   templateUrl: './challenge-search.component.html',
   styleUrls: ['./challenge-search.component.scss'],
 })
 export class ChallengeSearchComponent implements OnInit {
+  private readonly router = inject(Router);
+  private readonly imageService = inject(ImageService);
+  private readonly challengeService = inject(ChallengeService);
+  private readonly challengePlatformService = inject(ChallengePlatformService);
+  private readonly organizationService = inject(OrganizationService);
+  private readonly platformId: Record<string, any> = inject(PLATFORM_ID);
+
   private imgHeight = ImageHeight._140px;
   public isPlatformServer = false;
   public searchOC$: Observable<Image> | undefined;
@@ -42,15 +41,7 @@ export class ChallengeSearchComponent implements OnInit {
   orgImg$: Observable<Image> | undefined;
   userImg$: Observable<Image> | undefined;
 
-  constructor(
-    private readonly configService: ConfigService,
-    private router: Router,
-    private imageService: ImageService,
-    private challengeService: ChallengeService,
-    private challengePlatformService: ChallengePlatformService,
-    private organizationService: OrganizationService,
-    @Inject(PLATFORM_ID) private platformId: string,
-  ) {
+  constructor() {
     this.isPlatformServer = isPlatformServer(this.platformId);
   }
 

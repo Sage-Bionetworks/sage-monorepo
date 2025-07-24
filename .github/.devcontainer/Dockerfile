@@ -1,4 +1,4 @@
-FROM ubuntu:noble-20250404
+FROM ubuntu:noble-20250714
 
 # Set safer bash scripts.
 SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
@@ -7,25 +7,25 @@ SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
 # https://github.com/sharkdp/hyperfine
 ARG hyperfineVersion="1.19.0"
 # https://www.npmjs.com/package/@devcontainers/cli
-ARG devcontainerCliVersion="0.75.0"
+ARG devcontainerCliVersion="0.80.0"
 # https://github.com/astral-sh/uv
-ARG uvVersion="0.6.16"
+ARG uvVersion="0.7.21"
 # https://docs.posit.co/resources/install-r/#specify-r-version
-ARG rVersion="4.5.0"
+ARG rVersion="4.5.1"
 # https://aquasecurity.github.io/trivy
-ARG trivyVersion="0.61.1"
+ARG trivyVersion="0.64.1"
 # https://github.com/rstudio/renv
 ARG renvVersion="1.1.4"
 # https://nodejs.org/en/about/previous-releases
 ARG nodeVersionMajor="22"
 # https://github.com/pnpm/pnpm/releases
-ARG pnpmVersion="10.9.0"
+ARG pnpmVersion="10.13.1"
 # https://github.com/SonarSource/sonar-scanner-cli/releases
 ARG sonarScannerVersion="7.1.0.4889"
 # https://github.com/hadolint/hadolint
 ARG hadolintVersion="2.12.0"
 # https://pinterest.github.io/ktlint/latest/install/cli/#download-and-verification
-ARG ktlintVersion="1.5.0"
+ARG ktlintVersion="1.7.0"
 # https://zlib.net/fossils
 ARG zlibVersion="1.3.1"
 # The version of this dev container image.
@@ -56,6 +56,8 @@ RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
     build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev \
     # Required to build statically linked binaries.
     musl musl-dev musl-tools \
+    # Required by `nx login`
+    xdg-utils \
   # Add Node.js repository.
   && curl -fsSL https://deb.nodesource.com/setup_${nodeVersionMajor}.x -o nodesource_setup.sh \
   && bash nodesource_setup.sh \

@@ -1,6 +1,18 @@
 [
   {
-    "name": "modeldetails",
+    "name": "model_details",
+    "indexes": [{ "model": 1 }]
+  },
+  {
+    "name": "ui_config",
+    "indexes": [{ "page": 1 }]
+  },
+  {
+    "name": "model_overview",
+    "indexes": [{ "model": 1 }]
+  },
+  {
+    "name": "disease_correlation",
     "indexes": [{ "model": 1 }]
   }
 ]

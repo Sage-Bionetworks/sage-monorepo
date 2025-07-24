@@ -13,7 +13,7 @@ import org.springframework.beans.BeanUtils;
 
 public class ChallengeJsonLdMapper extends BaseMapper<ChallengeEntity, ChallengeJsonLdDto> {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ChallengeJsonLdMapper.class);
+  private static final Logger logger = LoggerFactory.getLogger(ChallengeJsonLdMapper.class);
 
   private SimpleChallengePlatformMapper platformMapper = new SimpleChallengePlatformMapper();
   private EdamConceptMapper edamConceptMapper = new EdamConceptMapper();

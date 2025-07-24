@@ -15,7 +15,11 @@
         "port": 4400,
         "configDir": "libs/agora/storybook/.storybook",
         "browserTarget": "agora-storybook:build-storybook",
-        "compodoc": false
+        "compodoc": false,
+        "styles": ["apps/agora/app/src/styles.scss", "node_modules/primeicons/primeicons.css"],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs", "libs/agora/styles/src/lib", "libs/agora/themes/src/lib"]
+        }
       },
       "configurations": {
         "ci": {
@@ -33,7 +37,7 @@
         "compodoc": false,
         "styles": ["apps/agora/app/src/styles.scss", "node_modules/primeicons/primeicons.css"],
         "stylePreprocessorOptions": {
-          "includePaths": ["libs/agora/styles/src/lib", "libs/agora/themes/src/lib"]
+          "includePaths": ["libs", "libs/agora/styles/src/lib", "libs/agora/themes/src/lib"]
         }
       },
       "configurations": {

@@ -5,15 +5,6 @@ services:
     restart: always
     env_file:
       - ../../../apps/openchallenges/challenge-service/.env
-    environment:
-      - DB_PLATFORMS_CSV_PATH=/workspace/BOOT-INF/classes/db/platforms.csv
-      - DB_CHALLENGES_CSV_PATH=/workspace/BOOT-INF/classes/db/challenges.csv
-      - DB_CONTRIBUTION_ROLES_CSV_PATH=/workspace/BOOT-INF/classes/db/contribution_roles.csv
-      - DB_INCENTIVES_CSV_PATH=/workspace/BOOT-INF/classes/db/incentives.csv
-      - DB_INPUT_DATA_TYPE_CSV_PATH=/workspace/BOOT-INF/classes/db/input_data_type.csv
-      - DB_SUBMISSION_TYPES_CSV_PATH=/workspace/BOOT-INF/classes/db/submission_types.csv
-      - DB_CATEGORIES_CSV_PATH=/workspace/BOOT-INF/classes/db/categories.csv
-      - DB_EDAM_CONCEPT_CSV_PATH=/workspace/BOOT-INF/classes/db/edam_concept.csv
     networks:
       - openchallenges
     ports:
@@ -21,7 +12,9 @@ services:
     depends_on:
       openchallenges-config-server:
         condition: service_healthy
-      openchallenges-elasticsearch:
+      openchallenges-opensearch:
+        condition: service_healthy
+      openchallenges-postgres:
         condition: service_healthy
       openchallenges-service-registry:
         condition: service_healthy

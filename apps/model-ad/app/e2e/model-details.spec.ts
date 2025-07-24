@@ -118,3 +118,55 @@ test.describe('model details - resources', () => {
     await expect.poll(() => page.getByText(/3xtg-ad/i).count()).toBeGreaterThan(0);
   });
 });
+
+test.describe('model details - model with special characters', () => {
+  const specialModel = '5xFAD (IU/Jax/Pitt)';
+  const specialModelEncoded = '5xFAD%20%28IU%2FJax%2FPitt%29';
+
+  test('valid model with special characters displays model name', async ({ page }) => {
+    await page.goto(`/models/${specialModel}`);
+    await page.waitForURL(`/models/${specialModelEncoded}`);
+    await expect(page.getByRole('heading', { level: 1, name: specialModel })).toBeVisible();
+  });
+
+  test('url is encoded when changing tabs for model with special characters', async ({ page }) => {
+    await page.goto(`/models/${specialModel}`);
+    await expect(page.getByRole('heading', { level: 2, name: 'Available Data' })).toBeVisible();
+
+    const resourcesTab = page.getByRole('button', { name: 'Resources' });
+    await resourcesTab.click();
+    await page.waitForURL(`/models/${specialModelEncoded}/resources`);
+
+    await expect(page.getByRole('heading', { level: 1, name: specialModel })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { level: 2, name: 'Model-Specific Resources' }),
+    ).toBeVisible();
+  });
+
+  test('correct tab is loaded from url for model with special characters', async ({ page }) => {
+    await page.goto(`/models/${specialModel}/resources`);
+    await page.waitForURL(`/models/${specialModelEncoded}/resources`);
+
+    await expect(page.getByRole('heading', { level: 1, name: specialModel })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { level: 2, name: 'Model-Specific Resources' }),
+    ).toBeVisible();
+  });
+
+  test('can reload page for model with special characters', async ({ page }) => {
+    await page.goto(`/models/${specialModel}/resources`);
+    await page.waitForURL(`/models/${specialModelEncoded}/resources`);
+    await expect(page.getByRole('heading', { level: 1, name: specialModel })).toBeVisible();
+
+    await page.reload();
+    await page.waitForURL(`/models/${specialModelEncoded}/resources`);
+    await expect(page.getByRole('heading', { level: 1, name: specialModel })).toBeVisible();
+  });
+
+  test('invalid model with special characters results in a 404 redirect', async ({ page }) => {
+    await page.goto('/models/does (not/exist)');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
+      ` This page isn't available right now. `,
+    );
+  });
+});

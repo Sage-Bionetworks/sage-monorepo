@@ -1,7 +1,7 @@
 import { Component, ViewEncapsulation, inject, input } from '@angular/core';
+import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { DialogModule } from 'primeng/dialog';
 import { LegendComponent } from './legend/legend.component';
-import { ComparisonToolService } from '@sagebionetworks/model-ad/services';
 
 @Component({
   selector: 'explorers-legend-panel',

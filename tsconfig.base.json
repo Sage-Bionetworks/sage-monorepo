@@ -8,9 +8,9 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es2015",
+    "target": "es2024",
     "module": "esnext",
-    "lib": ["es2017", "dom"],
+    "lib": ["es2024", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "forceConsistentCasingInFileNames": true,
@@ -44,6 +44,7 @@
       "@sagebionetworks/explorers/comparison-tools": [
         "libs/explorers/comparison-tools/src/index.ts"
       ],
+      "@sagebionetworks/explorers/constants": ["libs/explorers/constants/src/index.ts"],
       "@sagebionetworks/explorers/models": ["libs/explorers/models/src/index.ts"],
       "@sagebionetworks/explorers/services": ["libs/explorers/services/src/index.ts"],
       "@sagebionetworks/explorers/shared": ["libs/explorers/shared/src/index.ts"],

@@ -1,4 +1,4 @@
-FROM caddy:2.8.4
+FROM mirror.gcr.io/caddy:2.8.4
 
 RUN apk add --no-cache curl jq
 

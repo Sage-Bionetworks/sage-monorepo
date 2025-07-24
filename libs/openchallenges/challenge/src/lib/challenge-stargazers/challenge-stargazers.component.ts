@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Challenge } from '@sagebionetworks/openchallenges/api-client-angular';
 import {
@@ -9,7 +8,7 @@ import {
 
 @Component({
   selector: 'openchallenges-challenge-stargazers',
-  imports: [CommonModule, PersonCardComponent],
+  imports: [PersonCardComponent],
   templateUrl: './challenge-stargazers.component.html',
   styleUrls: ['./challenge-stargazers.component.scss'],
 })

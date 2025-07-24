@@ -14,6 +14,10 @@ import { ChallengeContributionRole } from './challengeContributionRole';
  */
 export interface ChallengeContribution {
   /**
+   * The unique identifier of a challenge contribution
+   */
+  id: number;
+  /**
    * The unique identifier of the challenge.
    */
   challengeId: number;

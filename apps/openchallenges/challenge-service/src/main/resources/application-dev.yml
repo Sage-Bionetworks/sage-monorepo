@@ -1,0 +1,13 @@
+# Development profile configuration
+spring:
+  datasource:
+    url: jdbc:postgresql://openchallenges-postgres:8091/challenge_service
+    username: challenge_service
+    password: changeme
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: true
+
+logging:
+  level:
+    org.sagebionetworks.openchallenges: DEBUG

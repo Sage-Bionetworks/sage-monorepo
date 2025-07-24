@@ -69,15 +69,13 @@
       "password": "changeme"
     },
     {
-      "mysqlOptions": {
-        "authProtocol": "default"
-      },
       "previewLimit": 50,
-      "server": "amp-als-mariadb",
+      "server": "amp-als-postgres",
       "port": 8401,
-      "driver": "MariaDB",
-      "name": "amp-als-mariadb",
-      "username": "maria",
+      "driver": "PostgreSQL",
+      "name": "amp-als-dataset-service",
+      "database": "dataset_service",
+      "username": "dataset_service",
       "password": "changeme"
     },
     {
@@ -99,10 +97,44 @@
       "database": "challenge_service",
       "username": "challenge_service",
       "password": "changeme"
+    },
+    {
+      "previewLimit": 50,
+      "server": "openchallenges-postgres",
+      "port": 8091,
+      "driver": "PostgreSQL",
+      "name": "openchallenges-auth-service",
+      "database": "auth_service",
+      "username": "auth_service",
+      "password": "changeme"
     }
   ],
   "terminal.integrated.showExitAlert": false,
   "rewrap.wrappingColumn": 100,
   "jest.runMode": "on-demand",
-  "nxConsole.generateAiAgentRules": true
+  "nxConsole.generateAiAgentRules": true,
+  "github.copilot.chat.agent.terminal.allowList": {
+    "/^(?:\\.\\/)?gradlew(?:\\s+.+)?$/": true,
+    "cat": true,
+    "cd": true,
+    "echo": true,
+    "find": true,
+    "git diff": true,
+    "git log": true,
+    "git show": true,
+    "git status": true,
+    "grep": true,
+    "ls": true,
+    "pwd": true
+  },
+  "github.copilot.chat.agent.terminal.denyList": {
+    "rm": true,
+    "rmdir": true,
+    "kill": true,
+    "curl": true,
+    "wget": true,
+    "eval": true,
+    "chmod": true,
+    "chown": true
+  }
 }

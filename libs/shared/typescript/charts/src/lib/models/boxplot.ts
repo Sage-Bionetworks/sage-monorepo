@@ -1,3 +1,5 @@
+import type { CallbackDataParams } from 'echarts/types/dist/shared';
+
 export type CategoryPoint = {
   // x-axis category for this point
   xAxisCategory: string;
@@ -45,6 +47,9 @@ export interface BoxplotProps {
   summaries?: CategoryBoxplotSummary[];
   title?: string;
   xAxisTitle?: string;
+  xAxisLabelFormatter?: (value: string) => string;
+  /* if defined will determine the order in which categories appear on the x-axis */
+  xAxisCategories?: string[];
   yAxisTitle?: string;
   yAxisMin?: number;
   yAxisMax?: number;
@@ -53,5 +58,13 @@ export interface BoxplotProps {
   is the tooltipText. otherwise, tooltips will not be displayed. */
   xAxisCategoryToTooltipText?: Record<string, string>;
   /* if defined, will be used to format tooltip for each point. */
-  pointTooltipFormatter?: (pt: CategoryPoint) => string;
+  pointTooltipFormatter?: (pt: CategoryPoint, params: CallbackDataParams) => string;
+  /* if defined, will be used to set color for each point based on its pointCategory, 
+  where key is the pointCategory and value is the color. */
+  pointCategoryColors?: Record<string, string>;
+  /* if defined, will be used to set shape for each point based on its pointCategory, 
+  where key is the pointCategory and value is the shape. */
+  pointCategoryShapes?: Record<string, string>;
+  showLegend?: boolean;
+  pointOpacity?: number;
 }

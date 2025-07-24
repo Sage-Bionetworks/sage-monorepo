@@ -1,14 +1,9 @@
-@use 'libs/explorers/styles/src/lib/mixins';
-@use 'libs/explorers/styles/src/lib/variables' as vars;
+@use 'explorers/styles/src/lib/mixins';
+@use 'explorers/styles/src/lib/variables' as vars;
 
 #header {
   padding: 10px 80px;
   min-height: var(--header-height);
-
-  @media (width <= 965px) {
-    padding: 10px 30px 10px 10px;
-  }
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,6 +12,10 @@
   // for hamburger menu styling
   position: relative;
   z-index: 999;
+
+  @media (width <= 965px) {
+    padding: 10px 30px 10px 10px;
+  }
 
   .header-inner {
     display: flex;

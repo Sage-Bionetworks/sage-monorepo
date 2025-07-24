@@ -79,6 +79,11 @@
     },
     "@schematics/angular:resolver": {
       "typeSeparator": "."
+    },
+    "@nxlv/python:uv-project": {
+      "codeCoverageHtmlReport": true,
+      "codeCoverageThreshold": 100,
+      "useNxReleaseLegacyVersioning": false
     }
   },
   "defaultProject": "openchallenges-app",
@@ -198,5 +203,6 @@
   },
   "useInferencePlugins": false,
   "defaultBase": "main",
-  "packageManager": "pnpm"
+  "packageManager": "pnpm",
+  "nxCloudId": "686fbf8b26cf276f670bc4b0"
 }

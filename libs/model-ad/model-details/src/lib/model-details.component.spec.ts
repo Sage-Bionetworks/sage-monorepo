@@ -1,13 +1,13 @@
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
+import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { ModelsService } from '@sagebionetworks/model-ad/api-client-angular';
-import { ConfigService } from '@sagebionetworks/model-ad/config';
+import { ConfigService, MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
 import { configMock, modelMock } from '@sagebionetworks/model-ad/testing';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
 import { ModelDetailsComponent } from './model-details.component';
-import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
-import { LOADING_ICON_COLORS_PROVIDER } from '@sagebionetworks/model-ad/testing';
 
 async function setup(model = modelMock, tab = 'omics', subtab = null, config = configMock) {
   const user = userEvent.setup();
@@ -33,7 +33,7 @@ async function setup(model = modelMock, tab = 'omics', subtab = null, config = c
         useValue: mockActivatedRoute,
       },
       { provide: ConfigService, useValue: configServiceMock },
-      LOADING_ICON_COLORS_PROVIDER,
+      provideLoadingIconColors(MODEL_AD_LOADING_ICON_COLORS),
     ],
   });
 

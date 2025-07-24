@@ -1,5 +1,5 @@
 {
-  "extends": ["../../../../.eslintrc.json"],
+  "extends": ["../../../../.eslintrc.json", "plugin:storybook/recommended"],
   "ignorePatterns": ["!**/*", "storybook-static"],
   "overrides": [
     {
@@ -26,8 +26,7 @@
             "style": "kebab-case"
           }
         ],
-        "@angular-eslint/prefer-standalone": "off",
-        "@angular-eslint/prefer-inject": "warn"
+        "@angular-eslint/prefer-standalone": "off"
       }
     },
     {

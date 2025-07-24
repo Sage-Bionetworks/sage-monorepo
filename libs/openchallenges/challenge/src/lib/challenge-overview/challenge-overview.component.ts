@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Challenge } from '@sagebionetworks/openchallenges/api-client-angular';
 import { MOCK_ORGANIZATION_CARDS, OrganizationCard } from '@sagebionetworks/openchallenges/ui';
@@ -15,7 +15,7 @@ import {
     ChallengeIncentiveLabelPipe,
     ChallengeStatusLabelPipe,
     ChallengeSubmissionTypeLabelPipe,
-    CommonModule,
+    NgClass,
     MatIconModule,
   ],
   templateUrl: './challenge-overview.component.html',

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   Organization,
@@ -6,25 +6,23 @@ import {
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { HttpStatusRedirect, handleHttpError } from '@sagebionetworks/openchallenges/util';
-import { CommonModule } from '@angular/common';
+import { NgPlural, NgPluralCase, AsyncPipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'openchallenges-org-profile-stats',
-  imports: [CommonModule, MatIconModule],
+  imports: [NgPlural, NgPluralCase, AsyncPipe, MatIconModule],
   templateUrl: './org-profile-stats.component.html',
   styleUrls: ['./org-profile-stats.component.scss'],
 })
 export class OrgProfileStatsComponent implements OnInit {
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly organizationService = inject(OrganizationService);
+
   @Input({ required: true }) loggedIn = false;
   organization$!: Observable<Organization>;
   mockMembers!: number;
-
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private organizationService: OrganizationService,
-  ) {}
 
   ngOnInit(): void {
     this.mockMembers = 3;

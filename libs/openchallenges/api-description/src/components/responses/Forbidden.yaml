@@ -1,0 +1,5 @@
+description: The user does not have the permission to perform this action
+content:
+  application/problem+json:
+    schema:
+      $ref: ../schemas/BasicError.yaml

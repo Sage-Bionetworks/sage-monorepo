@@ -33,14 +33,26 @@ public class ChallengePlatformApiTest {
   private final ChallengePlatformApi api = new ChallengePlatformApi();
 
   /**
+   * Delete a challenge platform
+   *
+   * Deletes a challenge platform by its unique ID. This action is irreversible.
+   */
+  @Test
+  public void deleteChallengePlatformTest() {
+    Long challengePlatformId = null;
+    api.deleteChallengePlatform(challengePlatformId);
+    // TODO: test validations
+  }
+
+  /**
    * Get a challenge platform
    *
-   * Returns the challenge platform specified
+   * Returns the challenge platform identified by its unique ID
    */
   @Test
   public void getChallengePlatformTest() {
-    String challengePlatformName = null;
-    ChallengePlatform response = api.getChallengePlatform(challengePlatformName);
+    Long challengePlatformId = null;
+    ChallengePlatform response = api.getChallengePlatform(challengePlatformId);
     // TODO: test validations
   }
 

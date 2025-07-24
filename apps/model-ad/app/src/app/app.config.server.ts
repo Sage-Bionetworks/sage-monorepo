@@ -1,17 +1,19 @@
+import { ApplicationConfig, mergeApplicationConfig } from '@angular/core';
 import { provideServerRendering } from '@angular/ssr';
-import { mergeApplicationConfig, ApplicationConfig } from '@angular/core';
-import { APP_BASE_URL_PROVIDER_INDEX, appConfig } from './app.config';
-import { provideClientHydration } from '@angular/platform-browser';
+import { APP_PORT } from '@sagebionetworks/model-ad/config';
+import { appConfig } from './app.config';
 
 const serverConfig: ApplicationConfig = {
-  providers: [provideServerRendering(), provideClientHydration()],
+  providers: [
+    provideServerRendering(),
+    // This provider enables the config service to locate the config file during SSR.
+    // Originally added to server.ts (used for production with the Express server),
+    // it was moved here to ensure availability in both production and development environments.
+    {
+      provide: APP_PORT,
+      useValue: process.env['PORT'] || '4200',
+    },
+  ],
 };
-
-// The file server.ts defines a provider that specifies 'APP_BASE_URL' based on the request protocol
-// and host. If this provider could be defined in serverConfig above, there would be no need to
-// manually remove the provider that specifies 'APP_BASE_URL' from appConfig used for client-side
-// rendering. Also removing based on an index should be avoided: I would have preferred to remove it
-// based on a property value but couldn't.
-appConfig.providers.splice(APP_BASE_URL_PROVIDER_INDEX, 1);
 
 export const config = mergeApplicationConfig(appConfig, serverConfig);

@@ -24,8 +24,6 @@ import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeS
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSubmissionTypeDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeEntity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -33,8 +31,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class CustomChallengeRepositoryImpl implements CustomChallengeRepository {
-
-  private static final Logger LOG = LoggerFactory.getLogger(CustomChallengeRepositoryImpl.class);
 
   @PersistenceContext
   private EntityManager entityManager;

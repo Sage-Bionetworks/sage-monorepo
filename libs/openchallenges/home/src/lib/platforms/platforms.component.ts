@@ -1,18 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
 import { Image, ImageService } from '@sagebionetworks/openchallenges/api-client-angular';
 import { Observable } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-platforms',
-  imports: [CommonModule],
+  imports: [AsyncPipe],
   templateUrl: './platforms.component.html',
   styleUrls: ['./platforms.component.scss'],
 })
 export class PlatformsComponent implements OnInit {
-  public platforms$: Observable<Image> | undefined;
+  private readonly imageService = inject(ImageService);
 
-  constructor(private imageService: ImageService) {}
+  public platforms$: Observable<Image> | undefined;
 
   ngOnInit() {
     this.platforms$ = this.imageService.getImage({

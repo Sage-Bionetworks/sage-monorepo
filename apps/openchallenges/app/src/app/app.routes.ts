@@ -23,11 +23,6 @@ export const appRoutes: Routes = [
       import('@sagebionetworks/openchallenges/org-search').then((routes) => routes.routes),
   },
   {
-    path: 'signup',
-    loadChildren: () =>
-      import('@sagebionetworks/openchallenges/signup').then((routes) => routes.routes),
-  },
-  {
     path: 'team',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/team').then((routes) => routes.routes),

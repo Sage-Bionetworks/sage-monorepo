@@ -3,26 +3,22 @@ on:
   push:
     branches:
       - main
-      - 'renovate/**'
   pull_request:
   merge_group:
 
 env:
-  NX_BRANCH: ${{ github.event.number }}
-  NX_RUN_GROUP: ${{ github.run_id }}
-  NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
-  NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
-  NX_CLOUD_ENV_NAME: 'linux'
   # SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   HEAD_REF: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.ref_name }}
   HEAD_REPOSITORY: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}
+  NX_BRANCH: ${{ github.event_name == 'pull_request' && github.event.number || github.ref_name }}
+  NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
 
 jobs:
   push:
     runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
     if: ${{ github.event_name != 'pull_request' }}
-    # env:
-    #   NX_BRANCH: main
+    env:
+      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN_READ_WRITE }}
     steps:
       - uses: actions/checkout@v4
         name: Checkout ${{ env.HEAD_REPOSITORY }}:${{ env.HEAD_REF }}
@@ -78,17 +74,11 @@ jobs:
 
   pr:
     runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
-    # Runs this job if triggered by a PR and if at least one of these conditions are true:
-    # - the PR originate from a fork
-    # - the branch name does not start with `renovate/` since we know that the workflow would have
-    #   been already triggered by the `push` event.
+    # Runs this job if triggered by a PR and if the PR originates from a fork
     if: |
       github.event_name == 'pull_request'
-        && (
-          github.event.pull_request.head.repo.full_name !=
+        && github.event.pull_request.head.repo.full_name !=
             github.event.pull_request.base.repo.full_name
-          || !startsWith(github.head_ref, 'renovate/')
-        )
     steps:
       - uses: actions/checkout@v4
         name: Checkout merge commit

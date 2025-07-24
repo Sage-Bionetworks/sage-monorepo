@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {
   catchError,
@@ -27,7 +27,7 @@ import {
   Image,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { HttpStatusRedirect, handleHttpError } from '@sagebionetworks/openchallenges/util';
-import { CommonModule, Location } from '@angular/common';
+import { AsyncPipe, Location, NgClass } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { OrgProfileChallengesComponent } from './org-profile-challenges/org-profile-challenges.component';
 import { OrgProfileMembersComponent } from './org-profile-members/org-profile-members.component';
@@ -40,7 +40,8 @@ import { HttpParams } from '@angular/common/http';
 @Component({
   selector: 'openchallenges-org-profile',
   imports: [
-    CommonModule,
+    AsyncPipe,
+    NgClass,
     RouterModule,
     MatIconModule,
     OrgProfileOverviewComponent,
@@ -54,6 +55,15 @@ import { HttpParams } from '@angular/common/http';
   styleUrls: ['./org-profile.component.scss'],
 })
 export class OrgProfileComponent implements OnInit, OnDestroy {
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly configService = inject(ConfigService);
+  private readonly organizationService = inject(OrganizationService);
+  private readonly imageService = inject(ImageService);
+  private readonly seoService = inject(SeoService);
+  private readonly renderer2 = inject(Renderer2);
+  private readonly _location = inject(Location);
+
   public appVersion: string;
   public dataUpdatedOn: string;
   public privacyPolicyUrl: string;
@@ -67,16 +77,7 @@ export class OrgProfileComponent implements OnInit, OnDestroy {
   activeTab!: Tab;
   private subscription = new Subscription();
 
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private readonly configService: ConfigService,
-    private organizationService: OrganizationService,
-    private imageService: ImageService,
-    private seoService: SeoService,
-    private renderer2: Renderer2,
-    private _location: Location,
-  ) {
+  constructor() {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
     this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;

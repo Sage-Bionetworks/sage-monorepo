@@ -14,38 +14,42 @@
       <ng-template ngPluralCase="other">members</ng-template>
     </p>
   </div> -->
-  <!-- <div class="stat-item action-btn" *ngIf="loggedIn">
-  <mat-icon aria-hidden="true" class="stats-card-icon">edit</mat-icon> Edit Profile
-</div> -->
-@if (!loggedIn) {
-  <a href="#" class="stat-item action-btn">
-    <mat-icon aria-hidden="true" class="stats-card-icon">plus</mat-icon>
-    Request to Join
-  </a>
-}
-@if (loggedIn) {
-  <div>
-    @switch (!!org.websiteUrl) {
-      @case (true) {
-        <a
-          class="stat-item action-btn"
-          href="{{ org.websiteUrl }}"
-          target="_blank"
-          title="Go to organization main website"
-          rel="noopener noreferrer"
-          >
-          <mat-icon aria-hidden="true" class="stats-card-icon">open_in_new</mat-icon>
-          Go to Website
-        </a>
-      }
-      @case (false) {
-        <div class="stat-item disabled-btn">
-          <mat-icon aria-hidden="true" class="stats-card-icon">link_off</mat-icon>
-          Website Not Found
-        </div>
-      }
+    <!-- Edit profile button commented out for now
+  @if (loggedIn) {
+    <div class="stat-item action-btn">
+      <mat-icon aria-hidden="true" class="stats-card-icon">edit</mat-icon> Edit Profile
+    </div>
+  }
+  -->
+    @if (!loggedIn) {
+      <a href="#" class="stat-item action-btn">
+        <mat-icon aria-hidden="true" class="stats-card-icon">plus</mat-icon>
+        Request to Join
+      </a>
+    }
+    @if (loggedIn) {
+      <div>
+        @switch (!!org.websiteUrl) {
+          @case (true) {
+            <a
+              class="stat-item action-btn"
+              href="{{ org.websiteUrl }}"
+              target="_blank"
+              title="Go to organization main website"
+              rel="noopener noreferrer"
+            >
+              <mat-icon aria-hidden="true" class="stats-card-icon">open_in_new</mat-icon>
+              Go to Website
+            </a>
+          }
+          @case (false) {
+            <div class="stat-item disabled-btn">
+              <mat-icon aria-hidden="true" class="stats-card-icon">link_off</mat-icon>
+              Website Not Found
+            </div>
+          }
+        }
+      </div>
     }
   </div>
-}
-</div>
 }

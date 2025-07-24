@@ -27,6 +27,15 @@
       },
       "dependsOn": ["^install"]
     },
+    "test": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/build"],
+      "options": {
+        "command": "./gradlew test",
+        "cwd": "{projectRoot}"
+      },
+      "dependsOn": ["^install"]
+    },
     "clean": {
       "executor": "nx:run-commands",
       "options": {

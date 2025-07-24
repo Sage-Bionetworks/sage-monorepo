@@ -17,3 +17,56 @@ get:
       $ref: ../../../components/responses/BadRequest.yaml
     '500':
       $ref: ../../../components/responses/InternalServerError.yaml
+post:
+  tags:
+    - ChallengeContribution
+  summary: Create a new contribution for a challenge
+  description: |
+    Creates a new contribution record associated with a challenge ID.
+  operationId: addChallengeContribution
+  security:
+    - apiBearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../../components/schemas/ChallengeContributionCreateRequest.yaml
+  responses:
+    '201':
+      description: Contribution created successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../../components/schemas/ChallengeContribution.yaml
+    '401':
+      $ref: ../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../components/responses/NotFound.yaml
+    '409':
+      $ref: ../../../components/responses/Conflict.yaml
+    '500':
+      $ref: ../../../components/responses/InternalServerError.yaml
+delete:
+  tags:
+    - ChallengeContribution
+  summary: Delete all contributions for a specific challenge
+  description: |
+    Deletes all associated contributions for a given challenge, identified by its ID.
+    This action is irreversible.
+  operationId: deleteAllChallengeContributions
+  security:
+    - apiBearerAuth: []
+  responses:
+    '204':
+      description: Deletion successful
+    '401':
+      $ref: ../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../../components/responses/InternalServerError.yaml

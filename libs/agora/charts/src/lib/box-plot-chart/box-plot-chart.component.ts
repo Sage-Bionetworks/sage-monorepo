@@ -10,6 +10,7 @@ import { HelperService } from '@sagebionetworks/agora/services';
 import { BoxPlotChartItem } from '@sagebionetworks/agora/models';
 import { CategoryBoxplotSummary, CategoryPoint } from '@sagebionetworks/shared/charts';
 import { BoxplotDirective } from '@sagebionetworks/shared/charts-angular';
+import { CallbackDataParams } from 'echarts/types/dist/shared';
 
 // -------------------------------------------------------------------------- //
 // Component
@@ -28,7 +29,7 @@ export class BoxPlotComponent {
   summaries: CategoryBoxplotSummary[] = [];
   xAxisCategoryToTooltipText: Record<string, string> | undefined = {};
   isInitialized = false;
-  pointTooltipFormatter: ((pt: CategoryPoint) => string) | undefined;
+  pointTooltipFormatter: ((pt: CategoryPoint, params: CallbackDataParams) => string) | undefined;
 
   get data(): BoxPlotChartItem[] {
     return this._data;
@@ -94,7 +95,7 @@ export class BoxPlotComponent {
         }
       }
 
-      this.pointTooltipFormatter = (pt: CategoryPoint) => {
+      this.pointTooltipFormatter = (pt: CategoryPoint, params: CallbackDataParams) => {
         return pt.text ?? pt.value.toString();
       };
     });

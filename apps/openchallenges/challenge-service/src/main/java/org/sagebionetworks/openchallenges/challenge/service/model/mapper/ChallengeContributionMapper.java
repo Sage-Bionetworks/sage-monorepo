@@ -11,12 +11,12 @@ import org.springframework.beans.BeanUtils;
 public class ChallengeContributionMapper
   extends BaseMapper<ChallengeContributionEntity, ChallengeContributionDto> {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ChallengeContributionMapper.class);
+  private static final Logger logger = LoggerFactory.getLogger(ChallengeContributionMapper.class);
 
   @Override
   public ChallengeContributionEntity convertToEntity(ChallengeContributionDto dto, Object... args) {
     ChallengeContributionEntity entity = new ChallengeContributionEntity();
-    LOG.error("ChallengeContributionEntity.convertToEntity() not implemented.");
+    logger.error("ChallengeContributionEntity.convertToEntity() not implemented.");
     return entity;
   }
 

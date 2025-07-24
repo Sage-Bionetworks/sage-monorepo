@@ -1,10 +1,10 @@
 import { ActivatedRouteSnapshot, Route } from '@angular/router';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
-import { SUPPORT_EMAIL } from '@sagebionetworks/model-ad/util';
+import { ROUTE_PATHS, SUPPORT_EMAIL } from '@sagebionetworks/model-ad/config';
 
 export const routes: Route[] = [
   {
-    path: '',
+    path: ROUTE_PATHS.HOME,
     loadChildren: () => import('@sagebionetworks/model-ad/home').then((routes) => routes.routes),
     data: {
       title: 'Model AD Explorer',
@@ -13,7 +13,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: 'about',
+    path: ROUTE_PATHS.ABOUT,
     loadChildren: () =>
       import('@sagebionetworks/explorers/shared').then((routes) => routes.wikiHeroRoute),
     data: {
@@ -28,7 +28,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: 'news',
+    path: ROUTE_PATHS.NEWS,
     loadChildren: () =>
       import('@sagebionetworks/explorers/shared').then((routes) => routes.wikiHeroRoute),
     data: {
@@ -43,7 +43,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: 'comparison/model',
+    path: ROUTE_PATHS.MODEL_OVERVIEW,
     loadChildren: () =>
       import('@sagebionetworks/model-ad/model-overview-comparison-tool').then(
         (routes) => routes.routes,
@@ -54,7 +54,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: 'comparison/expression',
+    path: ROUTE_PATHS.GENE_EXPRESSION,
     loadChildren: () =>
       import('@sagebionetworks/model-ad/gene-expression-comparison-tool').then(
         (routes) => routes.routes,
@@ -66,7 +66,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: 'comparison/correlation',
+    path: ROUTE_PATHS.DISEASE_CORRELATION,
     loadChildren: () =>
       import('@sagebionetworks/model-ad/disease-correlation-comparison-tool').then(
         (routes) => routes.routes,
@@ -78,7 +78,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: 'models/:model',
+    path: `${ROUTE_PATHS.MODELS}/:model`,
     loadChildren: () =>
       import('@sagebionetworks/model-ad/model-details').then((routes) => routes.routes),
     data: {
@@ -88,17 +88,23 @@ export const routes: Route[] = [
     },
   },
   {
-    path: 'models/:model/:tab',
+    path: `${ROUTE_PATHS.MODELS}/:model/:tab`,
     loadChildren: () =>
       import('@sagebionetworks/model-ad/model-details').then((routes) => routes.routes),
   },
   {
-    path: 'models/:model/:tab/:subtab',
+    path: `${ROUTE_PATHS.MODELS}/:model/:tab/:subtab`,
+    loadChildren: () =>
+      import('@sagebionetworks/model-ad/model-details').then((routes) => routes.routes),
+  },
+  // ensure that all models match a route, so the custom url serializer can encode special characters
+  {
+    path: `${ROUTE_PATHS.MODELS}/**`,
     loadChildren: () =>
       import('@sagebionetworks/model-ad/model-details').then((routes) => routes.routes),
   },
   {
-    path: 'terms-of-service',
+    path: ROUTE_PATHS.TERMS_OF_SERVICE,
     loadChildren: () =>
       import('@sagebionetworks/explorers/shared').then((routes) => routes.termsOfServiceRoute),
     data: {
@@ -108,7 +114,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: 'not-found',
+    path: ROUTE_PATHS.NOT_FOUND,
     loadChildren: () =>
       import('@sagebionetworks/explorers/shared').then((routes) => routes.notFoundRoute),
     data: {
@@ -120,6 +126,6 @@ export const routes: Route[] = [
   },
   {
     path: '**',
-    redirectTo: '/not-found',
+    redirectTo: `/${ROUTE_PATHS.NOT_FOUND}`,
   },
 ];

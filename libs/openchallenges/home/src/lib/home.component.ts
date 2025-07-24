@@ -1,8 +1,7 @@
-
-import { Component, Renderer2 } from '@angular/core';
+import { Component, inject, Renderer2 } from '@angular/core';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { FooterComponent } from '@sagebionetworks/openchallenges/ui';
-import { AppShellNoRenderDirective, SeoService } from '@sagebionetworks/shared/util';
+import { SeoService } from '@sagebionetworks/shared/util';
 import { ChallengeHostListComponent } from './challenge-host-list/challenge-host-list.component';
 import { ChallengeRegistrationComponent } from './challenge-registration/challenge-registration.component';
 import { ChallengeSearchComponent } from './challenge-search/challenge-search.component';
@@ -25,12 +24,15 @@ import { RandomChallengeListComponent } from './random-challenge-list/random-cha
     PlatformsComponent,
     StatisticsViewerComponent,
     FooterComponent,
-    AppShellNoRenderDirective
-],
+  ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
+  private readonly configService = inject(ConfigService);
+  private readonly seoService = inject(SeoService);
+  private readonly renderer2 = inject(Renderer2);
+
   public appVersion: string;
   public dataUpdatedOn: string;
   public privacyPolicyUrl: string;
@@ -38,11 +40,7 @@ export class HomeComponent {
   public apiDocsUrl: string;
   public showAnnouncement: boolean;
 
-  constructor(
-    private readonly configService: ConfigService,
-    private seoService: SeoService,
-    private renderer2: Renderer2,
-  ) {
+  constructor() {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
     this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;

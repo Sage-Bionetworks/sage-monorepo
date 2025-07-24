@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import {
@@ -21,17 +21,15 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'openchallenges-challenge-host-list',
-  imports: [CommonModule, MatButtonModule, OrganizationCardComponent, RouterModule],
+  imports: [AsyncPipe, MatButtonModule, OrganizationCardComponent, RouterModule],
   templateUrl: './challenge-host-list.component.html',
   styleUrls: ['./challenge-host-list.component.scss'],
 })
 export class ChallengeHostListComponent implements OnInit {
-  organizationCards$!: Observable<OrganizationCard[]>;
+  private readonly imageService = inject(ImageService);
+  private readonly organizationService = inject(OrganizationService);
 
-  constructor(
-    private organizationService: OrganizationService,
-    private imageService: ImageService,
-  ) {}
+  organizationCards$!: Observable<OrganizationCard[]>;
 
   ngOnInit() {
     const query: OrganizationSearchQuery = {

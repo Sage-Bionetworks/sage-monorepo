@@ -28,6 +28,7 @@ import org.sagebionetworks.openchallenges.api.client.model.ChallengeContribution
  */
 @JsonPropertyOrder(
   {
+    ChallengeContribution.JSON_PROPERTY_ID,
     ChallengeContribution.JSON_PROPERTY_CHALLENGE_ID,
     ChallengeContribution.JSON_PROPERTY_ORGANIZATION_ID,
     ChallengeContribution.JSON_PROPERTY_ROLE,
@@ -38,6 +39,11 @@ import org.sagebionetworks.openchallenges.api.client.model.ChallengeContribution
   comments = "Generator version: 7.13.0"
 )
 public class ChallengeContribution {
+
+  public static final String JSON_PROPERTY_ID = "id";
+
+  @jakarta.annotation.Nonnull
+  private Long id;
 
   public static final String JSON_PROPERTY_CHALLENGE_ID = "challengeId";
 
@@ -55,6 +61,28 @@ public class ChallengeContribution {
   private ChallengeContributionRole role;
 
   public ChallengeContribution() {}
+
+  public ChallengeContribution id(@jakarta.annotation.Nonnull Long id) {
+    this.id = id;
+    return this;
+  }
+
+  /**
+   * The unique identifier of a challenge contribution
+   * @return id
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public Long getId() {
+    return id;
+  }
+
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setId(@jakarta.annotation.Nonnull Long id) {
+    this.id = id;
+  }
 
   public ChallengeContribution challengeId(@jakarta.annotation.Nonnull Long challengeId) {
     this.challengeId = challengeId;
@@ -132,6 +160,7 @@ public class ChallengeContribution {
     }
     ChallengeContribution challengeContribution = (ChallengeContribution) o;
     return (
+      Objects.equals(this.id, challengeContribution.id) &&
       Objects.equals(this.challengeId, challengeContribution.challengeId) &&
       Objects.equals(this.organizationId, challengeContribution.organizationId) &&
       Objects.equals(this.role, challengeContribution.role)
@@ -140,13 +169,14 @@ public class ChallengeContribution {
 
   @Override
   public int hashCode() {
-    return Objects.hash(challengeId, organizationId, role);
+    return Objects.hash(id, challengeId, organizationId, role);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ChallengeContribution {\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    challengeId: ").append(toIndentedString(challengeId)).append("\n");
     sb.append("    organizationId: ").append(toIndentedString(organizationId)).append("\n");
     sb.append("    role: ").append(toIndentedString(role)).append("\n");

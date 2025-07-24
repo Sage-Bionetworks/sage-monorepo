@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class EurekaInstanceConfiguration {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(EurekaInstanceConfiguration.class);
+  private static final Logger logger = LoggerFactory.getLogger(EurekaInstanceConfiguration.class);
 
   /**
    * If the application is planned to be deployed to an AWS cloud, the Eureka instance must be
@@ -29,7 +29,7 @@ public class EurekaInstanceConfiguration {
     matchIfMissing = false
   )
   public EurekaInstanceConfigBean eurekaInstanceConfig(InetUtils inetUtils) {
-    LOGGER.info("Configuring the Eureka instance to be AWS-aware.");
+    logger.info("Configuring the Eureka instance to be AWS-aware.");
     EurekaInstanceConfigBean bean = new EurekaInstanceConfigBean(inetUtils);
     AmazonInfo info = AmazonInfo.Builder.newBuilder().autoBuild("eureka");
     bean.setDataCenterInfo(info);

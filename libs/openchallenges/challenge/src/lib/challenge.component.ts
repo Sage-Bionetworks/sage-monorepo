@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {
   ChallengeJsonLd,
@@ -27,7 +27,7 @@ import { ChallengeOrganizersComponent } from './challenge-organizers/challenge-o
 import { ChallengeOverviewComponent } from './challenge-overview/challenge-overview.component';
 // import { ChallengeStargazersComponent } from './challenge-stargazers/challenge-stargazers.component';
 import { ChallengeStatsComponent } from './challenge-stats/challenge-stats.component';
-import { CommonModule, Location } from '@angular/common';
+import { NgClass, AsyncPipe, Location, TitleCasePipe } from '@angular/common';
 import { SeoService } from '@sagebionetworks/shared/util';
 import { getSeoData } from './challenge-seo-data';
 import { HttpParams } from '@angular/common/http';
@@ -35,7 +35,8 @@ import { HttpParams } from '@angular/common/http';
 @Component({
   selector: 'openchallenges-challenge',
   imports: [
-    CommonModule,
+    NgClass,
+    AsyncPipe,
     RouterModule,
     MatTabsModule,
     MatIconModule,
@@ -46,11 +47,20 @@ import { HttpParams } from '@angular/common/http';
     ChallengeStatsComponent,
     AvatarComponent,
     FooterComponent,
+    TitleCasePipe,
   ],
   templateUrl: './challenge.component.html',
   styleUrls: ['./challenge.component.scss'],
 })
 export class ChallengeComponent implements OnInit, OnDestroy {
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly challengeService = inject(ChallengeService);
+  private readonly configService = inject(ConfigService);
+  private readonly seoService = inject(SeoService);
+  private readonly renderer2 = inject(Renderer2);
+  private readonly _location = inject(Location);
+
   public appVersion: string;
   public dataUpdatedOn: string;
   public privacyPolicyUrl: string;
@@ -64,15 +74,7 @@ export class ChallengeComponent implements OnInit, OnDestroy {
   activeTab!: Tab;
   private subscription = new Subscription();
 
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private challengeService: ChallengeService,
-    private readonly configService: ConfigService,
-    private seoService: SeoService,
-    private renderer2: Renderer2,
-    private _location: Location,
-  ) {
+  constructor() {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
     this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
@@ -82,11 +84,7 @@ export class ChallengeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.challenge$ = this.activatedRoute.params.pipe(
-      switchMap((params) =>
-        this.challengeService.getChallenge(params['challengeId'], undefined, undefined, {
-          httpHeaderAccept: 'application/ld+json',
-        }),
-      ),
+      switchMap((params) => this.challengeService.getChallengeJsonLd(params['challengeId'])),
       catchError((err) => {
         const error = handleHttpError(err, this.router, {
           404: '/not-found',

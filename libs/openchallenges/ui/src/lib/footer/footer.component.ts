@@ -1,16 +1,18 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, Input, OnInit } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
 import { Image, ImageService } from '@sagebionetworks/openchallenges/api-client-angular';
 import { Observable } from 'rxjs';
 import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'openchallenges-footer',
-  imports: [CommonModule, RouterModule],
+  imports: [AsyncPipe, RouterModule],
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent implements OnInit {
+  private readonly imageService = inject(ImageService);
+
   public sageLogo$: Observable<Image> | undefined;
 
   @Input({ required: true }) appVersion = '';
@@ -18,8 +20,6 @@ export class FooterComponent implements OnInit {
   @Input({ required: true }) privacyPolicyUrl = '';
   @Input({ required: true }) termsOfUseUrl = '';
   @Input({ required: true }) apiDocsUrl = '';
-
-  constructor(private imageService: ImageService) {}
 
   ngOnInit() {
     this.sageLogo$ = this.imageService.getImage({

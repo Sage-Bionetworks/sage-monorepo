@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import { LoadingIconComponent } from './loading-icon.component';
-import { LOADING_ICON_COLORS_PROVIDER } from '@sagebionetworks/model-ad/testing';
 
 describe('LoadingIcon', () => {
   let component: LoadingIconComponent;
@@ -9,7 +9,7 @@ describe('LoadingIcon', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [],
-      providers: [LOADING_ICON_COLORS_PROVIDER],
+      providers: [provideLoadingIconColors()],
     }).compileComponents();
   });
 

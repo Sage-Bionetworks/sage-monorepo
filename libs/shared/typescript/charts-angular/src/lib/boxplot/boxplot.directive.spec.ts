@@ -17,11 +17,17 @@ const renderTestComponent = async (props: BoxplotProps) => {
       [summaries]="summaries"
       [title]="title"
       [xAxisTitle]="xAxisTitle"
+      [xAxisLabelFormatter]="xAxisLabelFormatter"
+      [xAxisCategories]="xAxisCategories"
       [yAxisTitle]="yAxisTitle"
       [yAxisMin]="yAxisMin"
       [yAxisMax]="yAxisMax"
       [xAxisCategoryToTooltipText]="xAxisCategoryToTooltipText"
       [pointTooltipFormatter]="pointTooltipFormatter"
+      [pointCategoryColors]="pointCategoryColors"
+      [pointCategoryShapes]="pointCategoryShapes"
+      [showLegend]="showLegend"
+      [pointOpacity]="pointOpacity"
     ></div>`,
   })
   class TestComponent {
@@ -29,11 +35,17 @@ const renderTestComponent = async (props: BoxplotProps) => {
     summaries = props.summaries;
     title = props.title;
     xAxisTitle = props.xAxisTitle;
+    xAxisLabelFormatter = props.xAxisLabelFormatter;
+    xAxisCategories = props.xAxisCategories;
     yAxisTitle = props.yAxisTitle;
     yAxisMin = props.yAxisMin;
     yAxisMax = props.yAxisMax;
     xAxisCategoryToTooltipText = props.xAxisCategoryToTooltipText;
     pointTooltipFormatter = props.pointTooltipFormatter;
+    pointCategoryColors = props.pointCategoryColors;
+    pointCategoryShapes = props.pointCategoryShapes;
+    showLegend = props.showLegend;
+    pointOpacity = props.pointOpacity;
   }
 
   return await render(TestComponent, {

@@ -1,12 +1,9 @@
+import { CommonModule } from '@angular/common';
+import { footerLinks, headerLinks } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
+import { SvgImageComponent } from '../svg-image/svg-image.component';
 import { HeaderComponent } from './header.component';
-import { CommonModule } from '@angular/common';
-import { SvgImageComponent } from '@sagebionetworks/explorers/ui';
-import {
-  footerLinks as modelADFooterLinks,
-  headerLinks as modelADHeaderLinks,
-} from '@sagebionetworks/model-ad/util';
 
 function changeWindowSize(width: number) {
   Object.defineProperty(window, 'innerWidth', {
@@ -24,8 +21,8 @@ async function setup() {
   const { fixture } = await render(HeaderComponent, {
     componentInputs: {
       headerLogoPath: 'path/to/logo.svg',
-      headerLinks: modelADHeaderLinks,
-      footerLinks: modelADFooterLinks,
+      headerLinks: headerLinks,
+      footerLinks: footerLinks,
     },
     imports: [CommonModule, SvgImageComponent],
   });
@@ -71,10 +68,9 @@ describe('HeaderComponent', () => {
     verifyHeaderLinks();
 
     // Verify footer links are not present in the header
-    expect(screen.queryByRole('link', { name: 'About' })).not.toBeInTheDocument();
-    expect(screen.queryByRole('link', { name: 'Help' })).not.toBeInTheDocument();
-    expect(screen.queryByRole('link', { name: 'News' })).not.toBeInTheDocument();
-    expect(screen.queryByRole('link', { name: 'Terms of Service' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'FooterLinkInternal1' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'FooterLinkExternal' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'FooterLinkInternal2' })).not.toBeInTheDocument();
   });
 
   it('should toggle navigation visibility', async () => {
@@ -92,16 +88,13 @@ describe('HeaderComponent', () => {
   });
 
   function verifyHeaderLinks() {
-    expect(screen.getByRole('link', { name: 'Home' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Model Overview' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Gene Expression' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Disease Correlation' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'HeaderLink1' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'HeaderLink2' })).toBeInTheDocument();
   }
 
   function verifyFooterLinks() {
-    expect(screen.getByRole('link', { name: 'About' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Help' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'News' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Terms of Service' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'FooterLinkInternal1' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'FooterLinkExternal' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'FooterLinkInternal2' })).toBeInTheDocument();
   }
 });

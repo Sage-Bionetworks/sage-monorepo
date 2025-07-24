@@ -1,6 +1,0 @@
-operationId: deleteUser
-description: >
-  The `userName` value returned in the response can be used as the
-  `userName` parameter in `DELETE /users/{userName}`
-parameters:
-  userName: $response.body#/userName

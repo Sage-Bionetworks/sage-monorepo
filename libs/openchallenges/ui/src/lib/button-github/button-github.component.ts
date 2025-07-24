@@ -1,11 +1,10 @@
-import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'openchallenges-button-github',
   standalone: true,
-  imports: [CommonModule, MatButtonModule],
+  imports: [MatButtonModule],
   templateUrl: './button-github.component.html',
   styleUrls: ['./button-github.component.scss'],
 })

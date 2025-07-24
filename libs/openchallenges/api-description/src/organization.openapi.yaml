@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   version: 1.0.0
-  title: OpenChallenges Organization REST API
+  title: OpenChallenges Organization API
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -13,6 +13,8 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
+  - name: Authentication
+    description: Operations about authentication
   - name: Organization
     description: Operations about organizations
 paths:
@@ -20,3 +22,7 @@ paths:
     $ref: paths/organizations.yaml
   /organizations/{org}:
     $ref: paths/organizations/@{org}.yaml
+components:
+  securitySchemes:
+    apiBearerAuth:
+      $ref: components/securitySchemes/ApiBearerAuth.yaml

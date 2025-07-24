@@ -1,13 +1,14 @@
-import { render } from '@testing-library/angular';
-import { ModelOverviewComparisonToolComponent } from './model-overview-comparison-tool.component';
 import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
+import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
+import { MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
+import { render } from '@testing-library/angular';
 import { MessageService } from 'primeng/api';
-import { LOADING_ICON_COLORS_PROVIDER } from '@sagebionetworks/model-ad/testing';
+import { ModelOverviewComparisonToolComponent } from './model-overview-comparison-tool.component';
 
 async function setup() {
   const { fixture } = await render(ModelOverviewComparisonToolComponent, {
     imports: [BaseComparisonToolComponent],
-    providers: [MessageService, LOADING_ICON_COLORS_PROVIDER],
+    providers: [MessageService, provideLoadingIconColors(MODEL_AD_LOADING_ICON_COLORS)],
   });
 
   const component = fixture.componentInstance;

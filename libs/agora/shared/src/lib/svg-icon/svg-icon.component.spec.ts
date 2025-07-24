@@ -1,10 +1,10 @@
-import { render, RenderResult, screen } from '@testing-library/angular';
-import { SvgIconComponent } from './svg-icon.component';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { SvgIconService } from '@sagebionetworks/agora/services';
 import { DomSanitizer } from '@angular/platform-browser';
+import { SvgIconService } from '@sagebionetworks/agora/services';
+import { render, RenderResult } from '@testing-library/angular';
 import { of } from 'rxjs';
+import { SvgIconComponent } from './svg-icon.component';
 
 // Mock SvgIconService
 class MockSvgIconService {

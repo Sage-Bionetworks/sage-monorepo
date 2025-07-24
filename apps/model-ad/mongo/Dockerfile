@@ -1,1 +1,1 @@
-FROM mongo:6.0.3
+FROM mirror.gcr.io/mongo:6.0.3

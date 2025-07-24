@@ -1,34 +1,32 @@
-import { ApplicationConfig, APP_ID, inject, provideAppInitializer } from '@angular/core';
+import { provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  APP_ID,
+  ApplicationConfig,
+  inject,
+  provideAppInitializer,
+  provideZoneChangeDetection,
+} from '@angular/core';
+import { provideClientHydration } from '@angular/platform-browser';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
   provideRouter,
+  UrlSerializer,
   withComponentInputBinding,
   withEnabledBlockingInitialNavigation,
   withInMemoryScrolling,
 } from '@angular/router';
-import { withInterceptorsFromDi, provideHttpClient } from '@angular/common/http';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { providePrimeNG } from 'primeng/config';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/model-ad/api-client-angular';
 import { configFactory, ConfigService } from '@sagebionetworks/model-ad/config';
-
-import { routes } from './app.routes';
-import { ModelAdPreset } from './primeNGPreset';
 import { provideMarkdown } from 'ngx-markdown';
 import { MessageService } from 'primeng/api';
-
-// This index is used to remove the corresponding provider in app.config.server.ts.
-// TODO: This index could be out of sync if we are not careful. Find a more elegant way.
-export const APP_BASE_URL_PROVIDER_INDEX = 1;
+import { providePrimeNG } from 'primeng/config';
+import { CustomUrlSerializer } from './app.custom-url-serializer';
+import { routes } from './app.routes';
+import { ModelAdPreset } from './primeNGPreset';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     { provide: APP_ID, useValue: 'model-ad-app' },
-    {
-      // This provider must be specified at the index defined by APP_BASE_URL_PROVIDER_INDEX.
-      provide: 'APP_BASE_URL',
-      useFactory: () => '.',
-      deps: [],
-    },
     provideAppInitializer(() => {
       const initializerFn = configFactory(inject(ConfigService));
       return initializerFn();
@@ -50,7 +48,9 @@ export const appConfig: ApplicationConfig = {
         },
       },
     }),
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withFetch(), withInterceptorsFromDi()),
+    provideClientHydration(),
+    provideZoneChangeDetection({ eventCoalescing: true }),
     provideMarkdown(),
     provideRouter(
       routes,
@@ -60,6 +60,7 @@ export const appConfig: ApplicationConfig = {
         scrollPositionRestoration: 'enabled',
       }),
     ),
+    { provide: UrlSerializer, useClass: CustomUrlSerializer },
     MessageService,
   ],
 };

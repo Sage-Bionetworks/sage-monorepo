@@ -20,6 +20,7 @@ pnpm-lock.yaml
 great_expectations
 
 # Nx
+/.github/instructions/nx.instructions.md
 /.nx/cache
 /.nx/workspace-data
 
@@ -28,3 +29,6 @@ tmp
 
 # Ignoring until we figure out how to handle different SQL dialects
 apps/openchallenges/postgres/docker-entrypoint-initdb.d/init-db.sql
+
+# Prompt files with YAML front matter
+.github/prompts/*.md

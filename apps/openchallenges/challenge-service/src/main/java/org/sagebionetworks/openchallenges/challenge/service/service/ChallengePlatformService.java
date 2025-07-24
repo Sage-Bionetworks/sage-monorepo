@@ -2,7 +2,6 @@ package org.sagebionetworks.openchallenges.challenge.service.service;
 
 import java.util.Arrays;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengePlatformNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformSearchQueryDto;
@@ -10,15 +9,18 @@ import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeP
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengePlatformEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengePlatformMapper;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengePlatformRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Slf4j
 @Service
 public class ChallengePlatformService {
+
+  private static final Logger logger = LoggerFactory.getLogger(ChallengePlatformService.class);
 
   private final ChallengePlatformRepository challengePlatformRepository;
 
@@ -30,16 +32,16 @@ public class ChallengePlatformService {
     this.challengePlatformRepository = challengePlatformRepository;
   }
 
+  @Transactional(readOnly = false)
+  public void deleteChallengePlatform(Long id) {}
+
   @Transactional(readOnly = true)
-  public ChallengePlatformDto getChallengePlatform(String challengePlatformName) {
+  public ChallengePlatformDto getChallengePlatform(Long id) {
     ChallengePlatformEntity entity = challengePlatformRepository
-      .findByName(challengePlatformName)
+      .findById(id)
       .orElseThrow(() ->
         new ChallengePlatformNotFoundException(
-          String.format(
-            "The challenge platform with name %s does not exist.",
-            challengePlatformName
-          )
+          String.format("The challenge platform with ID %d does not exist.", id)
         )
       );
 
@@ -48,7 +50,7 @@ public class ChallengePlatformService {
 
   @Transactional(readOnly = true)
   public ChallengePlatformsPageDto listChallengePlatforms(ChallengePlatformSearchQueryDto query) {
-    log.info("query {}", query);
+    logger.info("query {}", query);
 
     Pageable pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
 
@@ -58,7 +60,7 @@ public class ChallengePlatformService {
       query,
       fieldsToSearchBy.toArray(new String[0])
     );
-    log.info("entitiesPage {}", entitiesPage);
+    logger.info("entitiesPage {}", entitiesPage);
 
     List<ChallengePlatformDto> challengePlatforms = challengePlatformMapper.convertToDtoList(
       entitiesPage.getContent()

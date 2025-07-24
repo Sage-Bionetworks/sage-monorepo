@@ -1,5 +1,6 @@
-import { AfterViewChecked, Component, inject, Input, ViewChild } from '@angular/core';
+import { AfterViewChecked, Component, inject, Input, PLATFORM_ID, ViewChild } from '@angular/core';
 
+import { isPlatformBrowser } from '@angular/common';
 import {
   DistributionService,
   Gene,
@@ -22,6 +23,7 @@ import { GeneNetworkComponent } from '../gene-network/gene-network.component';
 
 @Component({
   selector: 'agora-gene-evidence-rna',
+  standalone: true,
   imports: [
     GeneNetworkComponent,
     GeneModelSelectorComponent,
@@ -36,6 +38,7 @@ import { GeneNetworkComponent } from '../gene-network/gene-network.component';
   styleUrls: ['./gene-evidence-rna.component.scss'],
 })
 export class GeneEvidenceRnaComponent implements AfterViewChecked {
+  private readonly platformId: Record<string, any> = inject(PLATFORM_ID);
   helperService = inject(HelperService);
   distributionService = inject(DistributionService);
 
@@ -105,14 +108,16 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
   }
 
   scrollToAnchorLink() {
-    // AG-1408 - wait for differential expression box plot to finish loading before scrolling
-    if (this.boxPlotComponent?.isInitialized && !this.hasScrolled) {
-      const hash = window.location.hash.slice(1);
-      if (hash) {
-        const target = document.getElementById(hash);
-        if (target) {
-          window.scrollTo(0, this.helperService.getOffset(target).top - 150);
-          this.hasScrolled = true;
+    if (isPlatformBrowser(this.platformId)) {
+      // AG-1408 - wait for differential expression box plot to finish loading before scrolling
+      if (this.boxPlotComponent?.isInitialized && !this.hasScrolled) {
+        const hash = window.location.hash.slice(1);
+        if (hash) {
+          const target = document.getElementById(hash);
+          if (target) {
+            window.scrollTo(0, this.helperService.getOffset(target).top - 150);
+            this.hasScrolled = true;
+          }
         }
       }
     }

@@ -1,0 +1,14 @@
+<h3>{{ modelData().age }}</h3>
+<div
+  sageBoxplot
+  [style.height]="450"
+  [points]="points()"
+  [xAxisLabelFormatter]="xAxisLabelFormatter"
+  [xAxisCategories]="genotypeOrder()"
+  [yAxisTitle]="formatYAxisTitle()"
+  [pointTooltipFormatter]="pointTooltipFormatter"
+  [pointCategoryColors]="pointCategoryColors"
+  [pointCategoryShapes]="pointCategoryShapes"
+  [showLegend]="showLegend()"
+  [pointOpacity]="0.5"
+></div>

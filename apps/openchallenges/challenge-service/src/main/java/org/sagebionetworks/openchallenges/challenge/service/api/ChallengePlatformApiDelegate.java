@@ -29,16 +29,57 @@ public interface ChallengePlatformApiDelegate {
     }
 
     /**
-     * GET /challengePlatforms/{challengePlatformName} : Get a challenge platform
-     * Returns the challenge platform specified
+     * DELETE /challengePlatforms/{challengePlatformId} : Delete a challenge platform
+     * Deletes a challenge platform by its unique ID. This action is irreversible. 
      *
-     * @param challengePlatformName The unique identifier of the challenge platform. (required)
+     * @param challengePlatformId The unique identifier of the challenge platform. (required)
+     * @return Deletion successful (status code 204)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     * @see ChallengePlatformApi#deleteChallengePlatform
+     */
+    default ResponseEntity<Void> deleteChallengePlatform(Long challengePlatformId) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
+     * GET /challengePlatforms/{challengePlatformId} : Get a challenge platform
+     * Returns the challenge platform identified by its unique ID
+     *
+     * @param challengePlatformId The unique identifier of the challenge platform. (required)
      * @return Success (status code 200)
      *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see ChallengePlatformApi#getChallengePlatform
      */
-    default ResponseEntity<ChallengePlatformDto> getChallengePlatform(String challengePlatformName) {
+    default ResponseEntity<ChallengePlatformDto> getChallengePlatform(Long challengePlatformId) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
