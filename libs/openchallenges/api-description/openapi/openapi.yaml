@@ -395,7 +395,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /challengeAnalytics/challengesPerYear:
+  /challenge-analytics/challenges-per-year:
     get:
       tags:
         - ChallengeAnalytics
@@ -535,7 +535,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /edamConcepts:
+  /edam-concepts:
     get:
       tags:
         - EdamConcept
