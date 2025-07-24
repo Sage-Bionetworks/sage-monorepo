@@ -5,7 +5,6 @@ product_name="openchallenges"
 args=(
   # List of services in alphanumeric order
   --file docker/"$product_name"/services/apex.yml
-  --file docker/"$product_name"/services/api-docs.yml
   --file docker/"$product_name"/services/api-gateway.yml
   --file docker/"$product_name"/services/app.yml
   --file docker/"$product_name"/services/auth-service.yml
