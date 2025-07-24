@@ -17,7 +17,6 @@ public class OrganizationMapperTest {
     dto.setLogin("login");
     dto.setAvatarKey("avatar Key");
     dto.setWebsiteUrl("url");
-    dto.setChallengeCount(7);
     dto.setAcronym(null);
 
     OrganizationMapper mapper = new OrganizationMapper();
@@ -30,7 +29,6 @@ public class OrganizationMapperTest {
     Assertions.assertEquals(entity.getLogin(), dto.getLogin());
     Assertions.assertEquals(entity.getAvatarKey(), dto.getAvatarKey());
     Assertions.assertEquals(entity.getWebsiteUrl(), dto.getWebsiteUrl());
-    Assertions.assertEquals(entity.getChallengeCount(), dto.getChallengeCount());
     Assertions.assertEquals(entity.getDescription(), dto.getDescription());
     Assertions.assertEquals(entity.getAcronym(), dto.getAcronym());
   }
@@ -45,7 +43,6 @@ public class OrganizationMapperTest {
     entity.setLogin("login");
     entity.setAvatarKey("avatar Key");
     entity.setWebsiteUrl("url");
-    entity.setChallengeCount(7);
     entity.setAcronym(null);
 
     OrganizationMapper mapper = new OrganizationMapper();
@@ -58,7 +55,6 @@ public class OrganizationMapperTest {
     Assertions.assertEquals(entity.getLogin(), dto.getLogin());
     Assertions.assertEquals(entity.getAvatarKey(), dto.getAvatarKey());
     Assertions.assertEquals(entity.getWebsiteUrl(), dto.getWebsiteUrl());
-    Assertions.assertEquals(entity.getChallengeCount(), dto.getChallengeCount());
     Assertions.assertEquals(entity.getDescription(), dto.getDescription());
     Assertions.assertEquals(entity.getAcronym(), dto.getAcronym());
   }

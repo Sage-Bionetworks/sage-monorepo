@@ -8,6 +8,8 @@ export * from './challengeAnalytics.service';
 import { ChallengeAnalyticsService } from './challengeAnalytics.service';
 export * from './challengeContribution.service';
 import { ChallengeContributionService } from './challengeContribution.service';
+export * from './challengeParticipation.service';
+import { ChallengeParticipationService } from './challengeParticipation.service';
 export * from './challengePlatform.service';
 import { ChallengePlatformService } from './challengePlatform.service';
 export * from './edamConcept.service';
@@ -22,6 +24,7 @@ export const APIS = [
   ChallengeService,
   ChallengeAnalyticsService,
   ChallengeContributionService,
+  ChallengeParticipationService,
   ChallengePlatformService,
   EdamConceptService,
   ImageService,

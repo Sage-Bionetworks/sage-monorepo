@@ -6,17 +6,23 @@ properties:
   name:
     type: string
     example: Example organization
-  avatarUrl:
-    type: string
-    format: url
-    example: https://via.placeholder.com/300.png
-    nullable: true
-  websiteUrl:
-    type: string
-    format: url
-    example: https://example.com
   description:
     type: string
     example: A short description of the organization.
+    nullable: true
+  avatarKey:
+    type: string
+    example: logo/300.png
+    nullable: true
+  websiteUrl:
+    $ref: Url.yaml
+  acronym:
+    description: An acronym of the organization.
+    type: string
+    maxLength: 10
+    example: 'OC'
+    nullable: true
 required:
   - login
+  - name
+  - websiteUrl

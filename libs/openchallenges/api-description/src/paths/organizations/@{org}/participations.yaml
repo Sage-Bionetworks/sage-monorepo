@@ -1,0 +1,33 @@
+parameters:
+  - $ref: ../../../components/parameters/path/org.yaml
+post:
+  tags:
+    - Challenge Participation
+  summary: Create a new challenge participation
+  description: Creates a new challenge participation.
+  operationId: createChallengeParticipation
+  security:
+    - apiBearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../../components/schemas/ChallengeParticipationCreateRequest.yaml
+  responses:
+    '201':
+      description: Participation created successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../../components/schemas/ChallengeParticipation.yaml
+    '401':
+      $ref: ../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../components/responses/NotFound.yaml
+    '409':
+      $ref: ../../../components/responses/Conflict.yaml
+    '500':
+      $ref: ../../../components/responses/InternalServerError.yaml

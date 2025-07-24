@@ -3,6 +3,7 @@ info:
   contact:
     name: Support
     url: https://github.com/Sage-Bionetworks/sage-monorepo
+  description: 'Discover, explore, and contribute to open biomedical challenges.'
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -13,10 +14,10 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - description: Operations about authentication
-    name: Authentication
   - description: Operations about organizations
     name: Organization
+  - description: Operations about a challenge participation
+    name: Challenge Participation
 paths:
   /organizations:
     get:
@@ -39,18 +40,9 @@ paths:
                 $ref: '#/components/schemas/OrganizationsPage'
           description: Success
         '400':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Invalid request
+          $ref: '#/components/responses/BadRequest'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       summary: List organizations
       tags:
         - Organization
@@ -59,9 +51,44 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Organization
+    post:
+      description: Create an organization with the specified account name
+      operationId: createOrganization
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+          description: Organization created successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - apiBearerAuth: []
+      summary: Create an organization
+      tags:
+        - Organization
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Organization
   /organizations/{org}:
     delete:
-      description: Deletes the organization specified
+      description: Deletes the organization specified by its login or ID.
       operationId: deleteOrganization
       parameters:
         - description: The id or login of the organization.
@@ -83,33 +110,15 @@ paths:
         '204':
           description: Organization successfully deleted
         '401':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The user does not have the permission to perform this action
+          $ref: '#/components/responses/Forbidden'
         '404':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The specified resource was not found
+          $ref: '#/components/responses/NotFound'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       security:
-        - apiBearerAuth:
-            - organizations:delete
+        - apiBearerAuth: []
       summary: Delete an organization
       tags:
         - Organization
@@ -118,7 +127,7 @@ paths:
       x-tags:
         - tag: Organization
     get:
-      description: Returns the organization specified
+      description: Returns the organization identified by its login or ID.
       operationId: getOrganization
       parameters:
         - description: The id or login of the organization.
@@ -142,20 +151,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Organization'
-          description: An organization
+          description: Organization retrieved successfully
         '404':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The specified resource was not found
+          $ref: '#/components/responses/NotFound'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       summary: Get an organization
       tags:
         - Organization
@@ -164,6 +164,171 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Organization
+    put:
+      description: Updates an existing organization.
+      operationId: updateOrganization
+      parameters:
+        - description: The id or login of the organization.
+          examples:
+            byString:
+              value: dream
+            byId:
+              value: '1'
+          explode: false
+          in: path
+          name: org
+          required: true
+          schema:
+            maxLength: 64
+            minLength: 1
+            type: string
+          style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationUpdateRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+          description: Organization updated successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - apiBearerAuth: []
+      summary: Update an existing organization
+      tags:
+        - Organization
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Organization
+  /organizations/{org}/participations:
+    post:
+      description: Creates a new challenge participation.
+      operationId: createChallengeParticipation
+      parameters:
+        - description: The id or login of the organization.
+          examples:
+            byString:
+              value: dream
+            byId:
+              value: '1'
+          explode: false
+          in: path
+          name: org
+          required: true
+          schema:
+            maxLength: 64
+            minLength: 1
+            type: string
+          style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengeParticipationCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeParticipation'
+          description: Participation created successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - apiBearerAuth: []
+      summary: Create a new challenge participation
+      tags:
+        - Challenge Participation
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Challenge Participation
+  /organizations/{org}/participations/{challengeId}/roles/{role}:
+    delete:
+      description: Delete a specific challenge participation.
+      operationId: deleteChallengeParticipation
+      parameters:
+        - description: The id or login of the organization.
+          examples:
+            byString:
+              value: dream
+            byId:
+              value: '1'
+          explode: false
+          in: path
+          name: org
+          required: true
+          schema:
+            maxLength: 64
+            minLength: 1
+            type: string
+          style: simple
+        - description: The unique identifier of the challenge.
+          explode: false
+          in: path
+          name: challengeId
+          required: true
+          schema:
+            $ref: '#/components/schemas/ChallengeId'
+          style: simple
+        - description: A challenge participation role.
+          explode: false
+          in: path
+          name: role
+          required: true
+          schema:
+            $ref: '#/components/schemas/ChallengeParticipationRole'
+          style: simple
+      responses:
+        '204':
+          description: Participation deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - apiBearerAuth: []
+      summary: Delete a specific challenge participation
+      tags:
+        - Challenge Participation
+      x-accepts:
+        - application/problem+json
+      x-tags:
+        - tag: Challenge Participation
 components:
   parameters:
     organizationSearchQuery:
@@ -191,6 +356,24 @@ components:
         minLength: 1
         type: string
       style: simple
+    challengeId:
+      description: The unique identifier of the challenge.
+      explode: false
+      in: path
+      name: challengeId
+      required: true
+      schema:
+        $ref: '#/components/schemas/ChallengeId'
+      style: simple
+    challengeParticipationRole:
+      description: A challenge participation role.
+      explode: false
+      in: path
+      name: role
+      required: true
+      schema:
+        $ref: '#/components/schemas/ChallengeParticipationRole'
+      style: simple
   responses:
     BadRequest:
       content:
@@ -204,12 +387,6 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: The request cannot be fulfilled due to an unexpected server error
-    NotFound:
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-      description: The specified resource was not found
     Unauthorized:
       content:
         application/problem+json:
@@ -222,6 +399,18 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: The user does not have the permission to perform this action
+    Conflict:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The request conflicts with current state of the target resource
+    NotFound:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The specified resource was not found
   schemas:
     OrganizationCategory:
       description: The category of the organization.
@@ -398,6 +587,7 @@ components:
           type: string
         avatarKey:
           example: logo/dream.png
+          nullable: true
           type: string
         websiteUrl:
           description: A URL to the website or image.
@@ -412,6 +602,12 @@ components:
           example: 10
           minimum: 0
           type: integer
+        acronym:
+          description: An acronym of the organization.
+          example: OC
+          maxLength: 10
+          nullable: true
+          type: string
         createdAt:
           description: Datetime when the object was added to the database.
           example: 2022-07-04T22:19:11Z
@@ -422,17 +618,14 @@ components:
           example: 2022-07-04T22:19:11Z
           format: date-time
           type: string
-        acronym:
-          description: An acronym of the organization.
-          example: OC
-          maxLength: 10
-          type: string
       required:
+        - challengeCount
         - createdAt
         - id
         - login
         - name
         - updatedAt
+        - websiteUrl
       type: object
     OrganizationsPage:
       allOf:
@@ -501,6 +694,145 @@ components:
       x-java-class-annotations:
         - '@lombok.AllArgsConstructor'
         - '@lombok.Builder'
+    OrganizationCreateRequest:
+      description: The information required to create an org account
+      properties:
+        login:
+          description: The unique login of an organization.
+          example: example-org
+          maxLength: 64
+          minLength: 2
+          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          type: string
+        name:
+          example: Example organization
+          type: string
+        description:
+          example: A short description of the organization.
+          nullable: true
+          type: string
+        avatarKey:
+          example: logo/300.png
+          nullable: true
+          type: string
+        websiteUrl:
+          description: A URL to the website or image.
+          example: https://openchallenges.io
+          format: url
+          maxLength: 500
+          nullable: true
+          type: string
+        acronym:
+          description: An acronym of the organization.
+          example: OC
+          maxLength: 10
+          nullable: true
+          type: string
+      required:
+        - login
+        - name
+        - websiteUrl
+      type: object
+    OrganizationUpdateRequest:
+      description: The information required to update an org account
+      properties:
+        name:
+          example: Example organization
+          type: string
+        description:
+          example: A short description of the organization.
+          nullable: true
+          type: string
+        avatarKey:
+          example: https://via.placeholder.com/300.png
+          format: url
+          nullable: true
+          type: string
+        websiteUrl:
+          description: A URL to the website or image.
+          example: https://openchallenges.io
+          format: url
+          maxLength: 500
+          nullable: true
+          type: string
+        acronym:
+          description: An acronym of the organization.
+          example: OC
+          maxLength: 10
+          nullable: true
+          type: string
+      required:
+        - acronym
+        - avatarKey
+        - description
+        - name
+        - websiteUrl
+      type: object
+    ChallengeId:
+      description: The unique identifier of the challenge.
+      example: 1
+      format: int64
+      type: integer
+    ChallengeParticipationRole:
+      description: The nature of a challenge participation.
+      enum:
+        - challenge_organizer
+        - data_contributor
+        - sponsor
+      example: challenge_organizer
+      type: string
+    ChallengeParticipationCreateRequest:
+      description: |
+        A request to create a challenge participation for an organization, defined by a challenge ID and a
+        role.
+      properties:
+        challengeId:
+          description: The unique identifier of the challenge.
+          example: 1
+          format: int64
+          type: integer
+        role:
+          $ref: '#/components/schemas/ChallengeParticipationRole'
+      required:
+        - challengeId
+        - role
+      type: object
+    ChallengeParticipationId:
+      description: The unique identifier of a challenge participation
+      example: 1
+      format: int64
+      type: integer
+    ChallengeParticipation:
+      description: An challenge participation.
+      example:
+        organizationId: 1
+        challengeId: 1
+        role: challenge_organizer
+        id: 1
+      properties:
+        id:
+          description: The unique identifier of a challenge participation
+          example: 1
+          format: int64
+          type: integer
+        challengeId:
+          description: The unique identifier of the challenge.
+          example: 1
+          format: int64
+          type: integer
+        organizationId:
+          description: The unique identifier of an organization
+          example: 1
+          format: int64
+          type: integer
+        role:
+          $ref: '#/components/schemas/ChallengeParticipationRole'
+      required:
+        - challengeId
+        - id
+        - organizationId
+        - role
+      type: object
   securitySchemes:
     apiBearerAuth:
       bearerFormat: api_key

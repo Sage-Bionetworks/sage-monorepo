@@ -1,17 +1,23 @@
 package org.sagebionetworks.openchallenges.organization.service.service;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.util.Arrays;
 import java.util.List;
+import org.sagebionetworks.openchallenges.organization.service.exception.OrganizationAlreadyExistsException;
 import org.sagebionetworks.openchallenges.organization.service.exception.OrganizationNotFoundException;
+import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationCreateRequestDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationSearchQueryDto;
+import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationUpdateRequestDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationsPageDto;
 import org.sagebionetworks.openchallenges.organization.service.model.entity.OrganizationEntity;
 import org.sagebionetworks.openchallenges.organization.service.model.mapper.OrganizationMapper;
-import org.sagebionetworks.openchallenges.organization.service.model.repository.ChallengeContributionRepository;
+import org.sagebionetworks.openchallenges.organization.service.model.repository.ChallengeParticipationRepository;
 import org.sagebionetworks.openchallenges.organization.service.model.repository.OrganizationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,14 +30,17 @@ public class OrganizationService {
   private static final Logger logger = LoggerFactory.getLogger(OrganizationService.class);
 
   private final OrganizationRepository organizationRepository;
-  private final ChallengeContributionRepository challengeContributionRepository;
+  private final ChallengeParticipationRepository challengeParticipationRepository;
+
+  @PersistenceContext
+  private EntityManager entityManager;
 
   public OrganizationService(
     OrganizationRepository organizationRepository,
-    ChallengeContributionRepository challengeContributionRepository
+    ChallengeParticipationRepository challengeParticipationRepository
   ) {
     this.organizationRepository = organizationRepository;
-    this.challengeContributionRepository = challengeContributionRepository;
+    this.challengeParticipationRepository = challengeParticipationRepository;
   }
 
   private OrganizationMapper organizationMapper = new OrganizationMapper();
@@ -48,8 +57,6 @@ public class OrganizationService {
       // Ignore - this means the identifier is not a numeric ID
     }
 
-    logger.info("Attempting to delete organization with login: {} or id: {}", orgLogin, orgId);
-
     OrganizationEntity orgEntity = organizationRepository
       .findByIdOrLogin(orgId, orgLogin)
       .orElseThrow(() ->
@@ -58,9 +65,9 @@ public class OrganizationService {
         )
       );
 
-    // First delete all challenge contributions that reference this organization
-    logger.info("Deleting challenge contributions for organization: {}", orgEntity.getId());
-    challengeContributionRepository.deleteByOrganization(orgEntity);
+    // First delete all challenge participations that reference this organization
+    logger.info("Deleting challenge participations for organization: {}", orgEntity.getId());
+    challengeParticipationRepository.deleteByOrganization(orgEntity);
 
     // Now delete the organization
     organizationRepository.delete(orgEntity);
@@ -102,25 +109,90 @@ public class OrganizationService {
 
   @Transactional(readOnly = true)
   public OrganizationDto getOrganization(String identifier) {
+    // Find the organization
+    OrganizationEntity orgEntity = getOrganizationByIdentifier(identifier);
+    return organizationMapper.convertToDto(orgEntity);
+  }
+
+  @Transactional(readOnly = false)
+  public OrganizationDto createOrganization(OrganizationCreateRequestDto request) {
+    // Create the organization entity
+    OrganizationEntity entity = OrganizationEntity.builder()
+      .login(request.getLogin())
+      .name(request.getName())
+      .description(request.getDescription())
+      .avatarKey(request.getAvatarKey())
+      .websiteUrl(request.getWebsiteUrl())
+      .acronym(request.getAcronym())
+      .build();
+
+    try {
+      // Save the entity
+      OrganizationEntity savedEntity = organizationRepository.save(entity);
+      entityManager.refresh(savedEntity);
+
+      // Return the full organization DTO
+      return organizationMapper.convertToDto(savedEntity);
+    } catch (DataIntegrityViolationException e) {
+      // Check if this is the unique constraint violation
+      String message = e.getMessage();
+      if (message != null) {
+        if (message.contains("organization_login_key")) {
+          throw new OrganizationAlreadyExistsException(
+            String.format("A organization with login '%s' already exists.", request.getLogin())
+          );
+        }
+      }
+      // Re-throw the original exception if it's not the constraint we're looking for
+      throw e;
+    }
+  }
+
+  @Transactional(readOnly = false)
+  public OrganizationDto updateOrganization(
+    String identifier,
+    OrganizationUpdateRequestDto request
+  ) {
+    // Find the existing organization
+    OrganizationEntity existingOrg = getOrganizationByIdentifier(identifier);
+
+    // Update the organization
+    existingOrg.setName(request.getName());
+    existingOrg.setDescription(request.getDescription());
+    existingOrg.setAvatarKey(request.getAvatarKey());
+    existingOrg.setWebsiteUrl(request.getWebsiteUrl());
+    existingOrg.setAcronym(request.getAcronym());
+
+    try {
+      // Save the updated entity
+      OrganizationEntity updatedEntity = organizationRepository.save(existingOrg);
+
+      // Return the updated organization as DTO
+      return organizationMapper.convertToDto(updatedEntity);
+    } catch (DataIntegrityViolationException e) {
+      // Re-throw the original exception if it's not the constraint we're looking for
+      throw e;
+    }
+  }
+
+  /**
+   * Utility function to get an organization by its identifier (login or id).
+   * Throws OrganizationNotFoundException if not found.
+   */
+  public OrganizationEntity getOrganizationByIdentifier(String identifier) {
     String orgLogin = String.valueOf(identifier);
     Long orgId = null;
     try {
       orgId = Long.valueOf(orgLogin);
-    } catch (Exception ignore) {
-      // Ignore
+    } catch (NumberFormatException ignore) {
+      // Ignore - identifier is not a numeric ID
     }
-
-    logger.info("login: {}", orgLogin);
-    logger.info("id: {}", orgId);
-
-    OrganizationEntity orgEntity = organizationRepository
+    return organizationRepository
       .findByIdOrLogin(orgId, orgLogin)
       .orElseThrow(() ->
         new OrganizationNotFoundException(
           String.format("The organization with the ID or login %s does not exist.", identifier)
         )
       );
-
-    return organizationMapper.convertToDto(orgEntity);
   }
 }

@@ -1,5 +1,8 @@
 src/main/java/org/sagebionetworks/openchallenges/organization/service/RFC3339DateFormat.java
 src/main/java/org/sagebionetworks/openchallenges/organization/service/api/ApiUtil.java
+src/main/java/org/sagebionetworks/openchallenges/organization/service/api/ChallengeParticipationApi.java
+src/main/java/org/sagebionetworks/openchallenges/organization/service/api/ChallengeParticipationApiController.java
+src/main/java/org/sagebionetworks/openchallenges/organization/service/api/ChallengeParticipationApiDelegate.java
 src/main/java/org/sagebionetworks/openchallenges/organization/service/api/OrganizationApi.java
 src/main/java/org/sagebionetworks/openchallenges/organization/service/api/OrganizationApiController.java
 src/main/java/org/sagebionetworks/openchallenges/organization/service/api/OrganizationApiDelegate.java
@@ -8,11 +11,16 @@ src/main/java/org/sagebionetworks/openchallenges/organization/service/configurat
 src/main/java/org/sagebionetworks/openchallenges/organization/service/configuration/SpringDocConfiguration.java
 src/main/java/org/sagebionetworks/openchallenges/organization/service/model/dto/BasicErrorDto.java
 src/main/java/org/sagebionetworks/openchallenges/organization/service/model/dto/ChallengeContributionRoleDto.java
+src/main/java/org/sagebionetworks/openchallenges/organization/service/model/dto/ChallengeParticipationCreateRequestDto.java
+src/main/java/org/sagebionetworks/openchallenges/organization/service/model/dto/ChallengeParticipationDto.java
+src/main/java/org/sagebionetworks/openchallenges/organization/service/model/dto/ChallengeParticipationRoleDto.java
 src/main/java/org/sagebionetworks/openchallenges/organization/service/model/dto/OrganizationCategoryDto.java
+src/main/java/org/sagebionetworks/openchallenges/organization/service/model/dto/OrganizationCreateRequestDto.java
 src/main/java/org/sagebionetworks/openchallenges/organization/service/model/dto/OrganizationDirectionDto.java
 src/main/java/org/sagebionetworks/openchallenges/organization/service/model/dto/OrganizationDto.java
 src/main/java/org/sagebionetworks/openchallenges/organization/service/model/dto/OrganizationSearchQueryDto.java
 src/main/java/org/sagebionetworks/openchallenges/organization/service/model/dto/OrganizationSortDto.java
+src/main/java/org/sagebionetworks/openchallenges/organization/service/model/dto/OrganizationUpdateRequestDto.java
 src/main/java/org/sagebionetworks/openchallenges/organization/service/model/dto/OrganizationsPageDto.java
 src/main/java/org/sagebionetworks/openchallenges/organization/service/model/dto/PageMetadataDto.java
 src/main/resources/openapi.yaml

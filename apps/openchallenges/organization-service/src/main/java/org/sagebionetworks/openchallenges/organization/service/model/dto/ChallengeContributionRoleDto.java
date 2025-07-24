@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * The nature of a challenge contribution.
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public enum ChallengeContributionRoleDto {
   
   CHALLENGE_ORGANIZER("challenge_organizer"),
@@ -28,7 +28,7 @@ public enum ChallengeContributionRoleDto {
   
   SPONSOR("sponsor");
 
-  private String value;
+  private final String value;
 
   ChallengeContributionRoleDto(String value) {
     this.value = value;

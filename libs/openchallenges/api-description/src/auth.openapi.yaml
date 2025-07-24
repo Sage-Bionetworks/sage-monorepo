@@ -2,6 +2,7 @@ openapi: 3.0.3
 info:
   version: 1.0.0
   title: OpenChallenges Auth API
+  description: Discover, explore, and contribute to open biomedical challenges.
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
