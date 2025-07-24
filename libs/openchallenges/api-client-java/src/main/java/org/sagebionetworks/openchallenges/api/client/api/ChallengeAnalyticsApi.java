@@ -76,7 +76,7 @@ public class ChallengeAnalyticsApi {
     ParameterizedTypeReference<ChallengesPerYear> localVarReturnType =
       new ParameterizedTypeReference<>() {};
     return apiClient.invokeAPI(
-      "/challengeAnalytics/challengesPerYear",
+      "/challenge-analytics/challenges-per-year",
       HttpMethod.GET,
       pathParams,
       queryParams,

@@ -10,7 +10,9 @@ import java.util.stream.Collectors;
 import org.sagebionetworks.openchallenges.api.client.ApiClient;
 import org.sagebionetworks.openchallenges.api.client.model.BasicError;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengePlatform;
+import org.sagebionetworks.openchallenges.api.client.model.ChallengePlatformCreateRequest;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengePlatformSearchQuery;
+import org.sagebionetworks.openchallenges.api.client.model.ChallengePlatformUpdateRequest;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengePlatformsPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -48,6 +50,128 @@ public class ChallengePlatformApi {
 
   public void setApiClient(ApiClient apiClient) {
     this.apiClient = apiClient;
+  }
+
+  /**
+   * Create a challenge platform
+   * Create a challenge platform with the specified ID
+   * <p><b>201</b> - Success
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>409</b> - The request conflicts with current state of the target resource
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengePlatformCreateRequest The challengePlatformCreateRequest parameter
+   * @return ChallengePlatform
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  private ResponseSpec createChallengePlatformRequestCreation(
+    @jakarta.annotation.Nonnull ChallengePlatformCreateRequest challengePlatformCreateRequest
+  ) throws RestClientResponseException {
+    Object postBody = challengePlatformCreateRequest;
+    // verify the required parameter 'challengePlatformCreateRequest' is set
+    if (challengePlatformCreateRequest == null) {
+      throw new RestClientResponseException(
+        "Missing the required parameter 'challengePlatformCreateRequest' when calling createChallengePlatform",
+        HttpStatus.BAD_REQUEST.value(),
+        HttpStatus.BAD_REQUEST.getReasonPhrase(),
+        null,
+        null,
+        null
+      );
+    }
+    // create path and map variables
+    final Map<String, Object> pathParams = new HashMap<>();
+
+    final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+    final HttpHeaders headerParams = new HttpHeaders();
+    final MultiValueMap<String, String> cookieParams = new LinkedMultiValueMap<>();
+    final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<>();
+
+    final String[] localVarAccepts = { "application/json", "application/problem+json" };
+    final List<MediaType> localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+    final String[] localVarContentTypes = { "application/json" };
+    final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+
+    String[] localVarAuthNames = new String[] { "apiBearerAuth" };
+
+    ParameterizedTypeReference<ChallengePlatform> localVarReturnType =
+      new ParameterizedTypeReference<>() {};
+    return apiClient.invokeAPI(
+      "/challenge-platforms",
+      HttpMethod.POST,
+      pathParams,
+      queryParams,
+      postBody,
+      headerParams,
+      cookieParams,
+      formParams,
+      localVarAccept,
+      localVarContentType,
+      localVarAuthNames,
+      localVarReturnType
+    );
+  }
+
+  /**
+   * Create a challenge platform
+   * Create a challenge platform with the specified ID
+   * <p><b>201</b> - Success
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>409</b> - The request conflicts with current state of the target resource
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengePlatformCreateRequest The challengePlatformCreateRequest parameter
+   * @return ChallengePlatform
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public ChallengePlatform createChallengePlatform(
+    @jakarta.annotation.Nonnull ChallengePlatformCreateRequest challengePlatformCreateRequest
+  ) throws RestClientResponseException {
+    ParameterizedTypeReference<ChallengePlatform> localVarReturnType =
+      new ParameterizedTypeReference<>() {};
+    return createChallengePlatformRequestCreation(challengePlatformCreateRequest).body(
+      localVarReturnType
+    );
+  }
+
+  /**
+   * Create a challenge platform
+   * Create a challenge platform with the specified ID
+   * <p><b>201</b> - Success
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>409</b> - The request conflicts with current state of the target resource
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengePlatformCreateRequest The challengePlatformCreateRequest parameter
+   * @return ResponseEntity&lt;ChallengePlatform&gt;
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public ResponseEntity<ChallengePlatform> createChallengePlatformWithHttpInfo(
+    @jakarta.annotation.Nonnull ChallengePlatformCreateRequest challengePlatformCreateRequest
+  ) throws RestClientResponseException {
+    ParameterizedTypeReference<ChallengePlatform> localVarReturnType =
+      new ParameterizedTypeReference<>() {};
+    return createChallengePlatformRequestCreation(challengePlatformCreateRequest).toEntity(
+      localVarReturnType
+    );
+  }
+
+  /**
+   * Create a challenge platform
+   * Create a challenge platform with the specified ID
+   * <p><b>201</b> - Success
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>409</b> - The request conflicts with current state of the target resource
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengePlatformCreateRequest The challengePlatformCreateRequest parameter
+   * @return ResponseSpec
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public ResponseSpec createChallengePlatformWithResponseSpec(
+    @jakarta.annotation.Nonnull ChallengePlatformCreateRequest challengePlatformCreateRequest
+  ) throws RestClientResponseException {
+    return createChallengePlatformRequestCreation(challengePlatformCreateRequest);
   }
 
   /**
@@ -95,7 +219,7 @@ public class ChallengePlatformApi {
 
     ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
     return apiClient.invokeAPI(
-      "/challengePlatforms/{challengePlatformId}",
+      "/challenge-platforms/{challengePlatformId}",
       HttpMethod.DELETE,
       pathParams,
       queryParams,
@@ -208,7 +332,7 @@ public class ChallengePlatformApi {
     ParameterizedTypeReference<ChallengePlatform> localVarReturnType =
       new ParameterizedTypeReference<>() {};
     return apiClient.invokeAPI(
-      "/challengePlatforms/{challengePlatformId}",
+      "/challenge-platforms/{challengePlatformId}",
       HttpMethod.GET,
       pathParams,
       queryParams,
@@ -342,7 +466,7 @@ public class ChallengePlatformApi {
     ParameterizedTypeReference<ChallengePlatformsPage> localVarReturnType =
       new ParameterizedTypeReference<>() {};
     return apiClient.invokeAPI(
-      "/challengePlatforms",
+      "/challenge-platforms",
       HttpMethod.GET,
       pathParams,
       queryParams,
@@ -411,5 +535,161 @@ public class ChallengePlatformApi {
     @jakarta.annotation.Nullable ChallengePlatformSearchQuery challengePlatformSearchQuery
   ) throws RestClientResponseException {
     return listChallengePlatformsRequestCreation(challengePlatformSearchQuery);
+  }
+
+  /**
+   * Update an existing challenge platform
+   * Updates an existing challenge platform.
+   * <p><b>200</b> - Challange platform updated successfully
+   * <p><b>400</b> - Invalid request
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>409</b> - The request conflicts with current state of the target resource
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengePlatformId The unique identifier of the challenge platform.
+   * @param challengePlatformUpdateRequest The challengePlatformUpdateRequest parameter
+   * @return ChallengePlatform
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  private ResponseSpec updateChallengePlatformRequestCreation(
+    @jakarta.annotation.Nonnull Long challengePlatformId,
+    @jakarta.annotation.Nonnull ChallengePlatformUpdateRequest challengePlatformUpdateRequest
+  ) throws RestClientResponseException {
+    Object postBody = challengePlatformUpdateRequest;
+    // verify the required parameter 'challengePlatformId' is set
+    if (challengePlatformId == null) {
+      throw new RestClientResponseException(
+        "Missing the required parameter 'challengePlatformId' when calling updateChallengePlatform",
+        HttpStatus.BAD_REQUEST.value(),
+        HttpStatus.BAD_REQUEST.getReasonPhrase(),
+        null,
+        null,
+        null
+      );
+    }
+    // verify the required parameter 'challengePlatformUpdateRequest' is set
+    if (challengePlatformUpdateRequest == null) {
+      throw new RestClientResponseException(
+        "Missing the required parameter 'challengePlatformUpdateRequest' when calling updateChallengePlatform",
+        HttpStatus.BAD_REQUEST.value(),
+        HttpStatus.BAD_REQUEST.getReasonPhrase(),
+        null,
+        null,
+        null
+      );
+    }
+    // create path and map variables
+    final Map<String, Object> pathParams = new HashMap<>();
+
+    pathParams.put("challengePlatformId", challengePlatformId);
+
+    final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+    final HttpHeaders headerParams = new HttpHeaders();
+    final MultiValueMap<String, String> cookieParams = new LinkedMultiValueMap<>();
+    final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<>();
+
+    final String[] localVarAccepts = { "application/json", "application/problem+json" };
+    final List<MediaType> localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+    final String[] localVarContentTypes = { "application/json" };
+    final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+
+    String[] localVarAuthNames = new String[] { "apiBearerAuth" };
+
+    ParameterizedTypeReference<ChallengePlatform> localVarReturnType =
+      new ParameterizedTypeReference<>() {};
+    return apiClient.invokeAPI(
+      "/challenge-platforms/{challengePlatformId}",
+      HttpMethod.PUT,
+      pathParams,
+      queryParams,
+      postBody,
+      headerParams,
+      cookieParams,
+      formParams,
+      localVarAccept,
+      localVarContentType,
+      localVarAuthNames,
+      localVarReturnType
+    );
+  }
+
+  /**
+   * Update an existing challenge platform
+   * Updates an existing challenge platform.
+   * <p><b>200</b> - Challange platform updated successfully
+   * <p><b>400</b> - Invalid request
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>409</b> - The request conflicts with current state of the target resource
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengePlatformId The unique identifier of the challenge platform.
+   * @param challengePlatformUpdateRequest The challengePlatformUpdateRequest parameter
+   * @return ChallengePlatform
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public ChallengePlatform updateChallengePlatform(
+    @jakarta.annotation.Nonnull Long challengePlatformId,
+    @jakarta.annotation.Nonnull ChallengePlatformUpdateRequest challengePlatformUpdateRequest
+  ) throws RestClientResponseException {
+    ParameterizedTypeReference<ChallengePlatform> localVarReturnType =
+      new ParameterizedTypeReference<>() {};
+    return updateChallengePlatformRequestCreation(
+      challengePlatformId,
+      challengePlatformUpdateRequest
+    ).body(localVarReturnType);
+  }
+
+  /**
+   * Update an existing challenge platform
+   * Updates an existing challenge platform.
+   * <p><b>200</b> - Challange platform updated successfully
+   * <p><b>400</b> - Invalid request
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>409</b> - The request conflicts with current state of the target resource
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengePlatformId The unique identifier of the challenge platform.
+   * @param challengePlatformUpdateRequest The challengePlatformUpdateRequest parameter
+   * @return ResponseEntity&lt;ChallengePlatform&gt;
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public ResponseEntity<ChallengePlatform> updateChallengePlatformWithHttpInfo(
+    @jakarta.annotation.Nonnull Long challengePlatformId,
+    @jakarta.annotation.Nonnull ChallengePlatformUpdateRequest challengePlatformUpdateRequest
+  ) throws RestClientResponseException {
+    ParameterizedTypeReference<ChallengePlatform> localVarReturnType =
+      new ParameterizedTypeReference<>() {};
+    return updateChallengePlatformRequestCreation(
+      challengePlatformId,
+      challengePlatformUpdateRequest
+    ).toEntity(localVarReturnType);
+  }
+
+  /**
+   * Update an existing challenge platform
+   * Updates an existing challenge platform.
+   * <p><b>200</b> - Challange platform updated successfully
+   * <p><b>400</b> - Invalid request
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>409</b> - The request conflicts with current state of the target resource
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengePlatformId The unique identifier of the challenge platform.
+   * @param challengePlatformUpdateRequest The challengePlatformUpdateRequest parameter
+   * @return ResponseSpec
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public ResponseSpec updateChallengePlatformWithResponseSpec(
+    @jakarta.annotation.Nonnull Long challengePlatformId,
+    @jakarta.annotation.Nonnull ChallengePlatformUpdateRequest challengePlatformUpdateRequest
+  ) throws RestClientResponseException {
+    return updateChallengePlatformRequestCreation(
+      challengePlatformId,
+      challengePlatformUpdateRequest
+    );
   }
 }

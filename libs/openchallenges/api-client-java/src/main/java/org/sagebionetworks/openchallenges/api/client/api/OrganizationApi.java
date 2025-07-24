@@ -10,7 +10,9 @@ import java.util.stream.Collectors;
 import org.sagebionetworks.openchallenges.api.client.ApiClient;
 import org.sagebionetworks.openchallenges.api.client.model.BasicError;
 import org.sagebionetworks.openchallenges.api.client.model.Organization;
+import org.sagebionetworks.openchallenges.api.client.model.OrganizationCreateRequest;
 import org.sagebionetworks.openchallenges.api.client.model.OrganizationSearchQuery;
+import org.sagebionetworks.openchallenges.api.client.model.OrganizationUpdateRequest;
 import org.sagebionetworks.openchallenges.api.client.model.OrganizationsPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -51,8 +53,128 @@ public class OrganizationApi {
   }
 
   /**
+   * Create an organization
+   * Create an organization with the specified account name
+   * <p><b>201</b> - Organization created successfully
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>409</b> - The request conflicts with current state of the target resource
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param organizationCreateRequest The organizationCreateRequest parameter
+   * @return Organization
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  private ResponseSpec createOrganizationRequestCreation(
+    @jakarta.annotation.Nonnull OrganizationCreateRequest organizationCreateRequest
+  ) throws RestClientResponseException {
+    Object postBody = organizationCreateRequest;
+    // verify the required parameter 'organizationCreateRequest' is set
+    if (organizationCreateRequest == null) {
+      throw new RestClientResponseException(
+        "Missing the required parameter 'organizationCreateRequest' when calling createOrganization",
+        HttpStatus.BAD_REQUEST.value(),
+        HttpStatus.BAD_REQUEST.getReasonPhrase(),
+        null,
+        null,
+        null
+      );
+    }
+    // create path and map variables
+    final Map<String, Object> pathParams = new HashMap<>();
+
+    final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+    final HttpHeaders headerParams = new HttpHeaders();
+    final MultiValueMap<String, String> cookieParams = new LinkedMultiValueMap<>();
+    final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<>();
+
+    final String[] localVarAccepts = { "application/json", "application/problem+json" };
+    final List<MediaType> localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+    final String[] localVarContentTypes = { "application/json" };
+    final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+
+    String[] localVarAuthNames = new String[] { "apiBearerAuth" };
+
+    ParameterizedTypeReference<Organization> localVarReturnType =
+      new ParameterizedTypeReference<>() {};
+    return apiClient.invokeAPI(
+      "/organizations",
+      HttpMethod.POST,
+      pathParams,
+      queryParams,
+      postBody,
+      headerParams,
+      cookieParams,
+      formParams,
+      localVarAccept,
+      localVarContentType,
+      localVarAuthNames,
+      localVarReturnType
+    );
+  }
+
+  /**
+   * Create an organization
+   * Create an organization with the specified account name
+   * <p><b>201</b> - Organization created successfully
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>409</b> - The request conflicts with current state of the target resource
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param organizationCreateRequest The organizationCreateRequest parameter
+   * @return Organization
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public Organization createOrganization(
+    @jakarta.annotation.Nonnull OrganizationCreateRequest organizationCreateRequest
+  ) throws RestClientResponseException {
+    ParameterizedTypeReference<Organization> localVarReturnType =
+      new ParameterizedTypeReference<>() {};
+    return createOrganizationRequestCreation(organizationCreateRequest).body(localVarReturnType);
+  }
+
+  /**
+   * Create an organization
+   * Create an organization with the specified account name
+   * <p><b>201</b> - Organization created successfully
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>409</b> - The request conflicts with current state of the target resource
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param organizationCreateRequest The organizationCreateRequest parameter
+   * @return ResponseEntity&lt;Organization&gt;
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public ResponseEntity<Organization> createOrganizationWithHttpInfo(
+    @jakarta.annotation.Nonnull OrganizationCreateRequest organizationCreateRequest
+  ) throws RestClientResponseException {
+    ParameterizedTypeReference<Organization> localVarReturnType =
+      new ParameterizedTypeReference<>() {};
+    return createOrganizationRequestCreation(organizationCreateRequest).toEntity(
+      localVarReturnType
+    );
+  }
+
+  /**
+   * Create an organization
+   * Create an organization with the specified account name
+   * <p><b>201</b> - Organization created successfully
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>409</b> - The request conflicts with current state of the target resource
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param organizationCreateRequest The organizationCreateRequest parameter
+   * @return ResponseSpec
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public ResponseSpec createOrganizationWithResponseSpec(
+    @jakarta.annotation.Nonnull OrganizationCreateRequest organizationCreateRequest
+  ) throws RestClientResponseException {
+    return createOrganizationRequestCreation(organizationCreateRequest);
+  }
+
+  /**
    * Delete an organization
-   * Deletes the organization specified
+   * Deletes the organization specified by its login or ID.
    * <p><b>204</b> - Organization successfully deleted
    * <p><b>401</b> - Unauthorized
    * <p><b>403</b> - The user does not have the permission to perform this action
@@ -111,7 +233,7 @@ public class OrganizationApi {
 
   /**
    * Delete an organization
-   * Deletes the organization specified
+   * Deletes the organization specified by its login or ID.
    * <p><b>204</b> - Organization successfully deleted
    * <p><b>401</b> - Unauthorized
    * <p><b>403</b> - The user does not have the permission to perform this action
@@ -128,7 +250,7 @@ public class OrganizationApi {
 
   /**
    * Delete an organization
-   * Deletes the organization specified
+   * Deletes the organization specified by its login or ID.
    * <p><b>204</b> - Organization successfully deleted
    * <p><b>401</b> - Unauthorized
    * <p><b>403</b> - The user does not have the permission to perform this action
@@ -146,7 +268,7 @@ public class OrganizationApi {
 
   /**
    * Delete an organization
-   * Deletes the organization specified
+   * Deletes the organization specified by its login or ID.
    * <p><b>204</b> - Organization successfully deleted
    * <p><b>401</b> - Unauthorized
    * <p><b>403</b> - The user does not have the permission to perform this action
@@ -163,8 +285,8 @@ public class OrganizationApi {
 
   /**
    * Get an organization
-   * Returns the organization specified
-   * <p><b>200</b> - An organization
+   * Returns the organization identified by its login or ID.
+   * <p><b>200</b> - Organization retrieved successfully
    * <p><b>404</b> - The specified resource was not found
    * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
    * @param org The id or login of the organization.
@@ -222,8 +344,8 @@ public class OrganizationApi {
 
   /**
    * Get an organization
-   * Returns the organization specified
-   * <p><b>200</b> - An organization
+   * Returns the organization identified by its login or ID.
+   * <p><b>200</b> - Organization retrieved successfully
    * <p><b>404</b> - The specified resource was not found
    * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
    * @param org The id or login of the organization.
@@ -239,8 +361,8 @@ public class OrganizationApi {
 
   /**
    * Get an organization
-   * Returns the organization specified
-   * <p><b>200</b> - An organization
+   * Returns the organization identified by its login or ID.
+   * <p><b>200</b> - Organization retrieved successfully
    * <p><b>404</b> - The specified resource was not found
    * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
    * @param org The id or login of the organization.
@@ -257,8 +379,8 @@ public class OrganizationApi {
 
   /**
    * Get an organization
-   * Returns the organization specified
-   * <p><b>200</b> - An organization
+   * Returns the organization identified by its login or ID.
+   * <p><b>200</b> - Organization retrieved successfully
    * <p><b>404</b> - The specified resource was not found
    * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
    * @param org The id or login of the organization.
@@ -408,5 +530,156 @@ public class OrganizationApi {
     @jakarta.annotation.Nullable OrganizationSearchQuery organizationSearchQuery
   ) throws RestClientResponseException {
     return listOrganizationsRequestCreation(organizationSearchQuery);
+  }
+
+  /**
+   * Update an existing organization
+   * Updates an existing organization.
+   * <p><b>200</b> - Organization updated successfully
+   * <p><b>400</b> - Invalid request
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>409</b> - The request conflicts with current state of the target resource
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param org The id or login of the organization.
+   * @param organizationUpdateRequest The organizationUpdateRequest parameter
+   * @return Organization
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  private ResponseSpec updateOrganizationRequestCreation(
+    @jakarta.annotation.Nonnull String org,
+    @jakarta.annotation.Nonnull OrganizationUpdateRequest organizationUpdateRequest
+  ) throws RestClientResponseException {
+    Object postBody = organizationUpdateRequest;
+    // verify the required parameter 'org' is set
+    if (org == null) {
+      throw new RestClientResponseException(
+        "Missing the required parameter 'org' when calling updateOrganization",
+        HttpStatus.BAD_REQUEST.value(),
+        HttpStatus.BAD_REQUEST.getReasonPhrase(),
+        null,
+        null,
+        null
+      );
+    }
+    // verify the required parameter 'organizationUpdateRequest' is set
+    if (organizationUpdateRequest == null) {
+      throw new RestClientResponseException(
+        "Missing the required parameter 'organizationUpdateRequest' when calling updateOrganization",
+        HttpStatus.BAD_REQUEST.value(),
+        HttpStatus.BAD_REQUEST.getReasonPhrase(),
+        null,
+        null,
+        null
+      );
+    }
+    // create path and map variables
+    final Map<String, Object> pathParams = new HashMap<>();
+
+    pathParams.put("org", org);
+
+    final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+    final HttpHeaders headerParams = new HttpHeaders();
+    final MultiValueMap<String, String> cookieParams = new LinkedMultiValueMap<>();
+    final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<>();
+
+    final String[] localVarAccepts = { "application/json", "application/problem+json" };
+    final List<MediaType> localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+    final String[] localVarContentTypes = { "application/json" };
+    final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+
+    String[] localVarAuthNames = new String[] { "apiBearerAuth" };
+
+    ParameterizedTypeReference<Organization> localVarReturnType =
+      new ParameterizedTypeReference<>() {};
+    return apiClient.invokeAPI(
+      "/organizations/{org}",
+      HttpMethod.PUT,
+      pathParams,
+      queryParams,
+      postBody,
+      headerParams,
+      cookieParams,
+      formParams,
+      localVarAccept,
+      localVarContentType,
+      localVarAuthNames,
+      localVarReturnType
+    );
+  }
+
+  /**
+   * Update an existing organization
+   * Updates an existing organization.
+   * <p><b>200</b> - Organization updated successfully
+   * <p><b>400</b> - Invalid request
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>409</b> - The request conflicts with current state of the target resource
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param org The id or login of the organization.
+   * @param organizationUpdateRequest The organizationUpdateRequest parameter
+   * @return Organization
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public Organization updateOrganization(
+    @jakarta.annotation.Nonnull String org,
+    @jakarta.annotation.Nonnull OrganizationUpdateRequest organizationUpdateRequest
+  ) throws RestClientResponseException {
+    ParameterizedTypeReference<Organization> localVarReturnType =
+      new ParameterizedTypeReference<>() {};
+    return updateOrganizationRequestCreation(org, organizationUpdateRequest).body(
+      localVarReturnType
+    );
+  }
+
+  /**
+   * Update an existing organization
+   * Updates an existing organization.
+   * <p><b>200</b> - Organization updated successfully
+   * <p><b>400</b> - Invalid request
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>409</b> - The request conflicts with current state of the target resource
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param org The id or login of the organization.
+   * @param organizationUpdateRequest The organizationUpdateRequest parameter
+   * @return ResponseEntity&lt;Organization&gt;
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public ResponseEntity<Organization> updateOrganizationWithHttpInfo(
+    @jakarta.annotation.Nonnull String org,
+    @jakarta.annotation.Nonnull OrganizationUpdateRequest organizationUpdateRequest
+  ) throws RestClientResponseException {
+    ParameterizedTypeReference<Organization> localVarReturnType =
+      new ParameterizedTypeReference<>() {};
+    return updateOrganizationRequestCreation(org, organizationUpdateRequest).toEntity(
+      localVarReturnType
+    );
+  }
+
+  /**
+   * Update an existing organization
+   * Updates an existing organization.
+   * <p><b>200</b> - Organization updated successfully
+   * <p><b>400</b> - Invalid request
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>409</b> - The request conflicts with current state of the target resource
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param org The id or login of the organization.
+   * @param organizationUpdateRequest The organizationUpdateRequest parameter
+   * @return ResponseSpec
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public ResponseSpec updateOrganizationWithResponseSpec(
+    @jakarta.annotation.Nonnull String org,
+    @jakarta.annotation.Nonnull OrganizationUpdateRequest organizationUpdateRequest
+  ) throws RestClientResponseException {
+    return updateOrganizationRequestCreation(org, organizationUpdateRequest);
   }
 }

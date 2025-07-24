@@ -65,7 +65,7 @@ public class ChallengeContributionApi {
    * @return ChallengeContribution
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
    */
-  private ResponseSpec addChallengeContributionRequestCreation(
+  private ResponseSpec createChallengeContributionRequestCreation(
     @jakarta.annotation.Nonnull Long challengeId,
     @jakarta.annotation.Nonnull ChallengeContributionCreateRequest challengeContributionCreateRequest
   ) throws RestClientResponseException {
@@ -73,7 +73,7 @@ public class ChallengeContributionApi {
     // verify the required parameter 'challengeId' is set
     if (challengeId == null) {
       throw new RestClientResponseException(
-        "Missing the required parameter 'challengeId' when calling addChallengeContribution",
+        "Missing the required parameter 'challengeId' when calling createChallengeContribution",
         HttpStatus.BAD_REQUEST.value(),
         HttpStatus.BAD_REQUEST.getReasonPhrase(),
         null,
@@ -84,7 +84,7 @@ public class ChallengeContributionApi {
     // verify the required parameter 'challengeContributionCreateRequest' is set
     if (challengeContributionCreateRequest == null) {
       throw new RestClientResponseException(
-        "Missing the required parameter 'challengeContributionCreateRequest' when calling addChallengeContribution",
+        "Missing the required parameter 'challengeContributionCreateRequest' when calling createChallengeContribution",
         HttpStatus.BAD_REQUEST.value(),
         HttpStatus.BAD_REQUEST.getReasonPhrase(),
         null,
@@ -141,13 +141,13 @@ public class ChallengeContributionApi {
    * @return ChallengeContribution
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
    */
-  public ChallengeContribution addChallengeContribution(
+  public ChallengeContribution createChallengeContribution(
     @jakarta.annotation.Nonnull Long challengeId,
     @jakarta.annotation.Nonnull ChallengeContributionCreateRequest challengeContributionCreateRequest
   ) throws RestClientResponseException {
     ParameterizedTypeReference<ChallengeContribution> localVarReturnType =
       new ParameterizedTypeReference<>() {};
-    return addChallengeContributionRequestCreation(
+    return createChallengeContributionRequestCreation(
       challengeId,
       challengeContributionCreateRequest
     ).body(localVarReturnType);
@@ -167,13 +167,13 @@ public class ChallengeContributionApi {
    * @return ResponseEntity&lt;ChallengeContribution&gt;
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
    */
-  public ResponseEntity<ChallengeContribution> addChallengeContributionWithHttpInfo(
+  public ResponseEntity<ChallengeContribution> createChallengeContributionWithHttpInfo(
     @jakarta.annotation.Nonnull Long challengeId,
     @jakarta.annotation.Nonnull ChallengeContributionCreateRequest challengeContributionCreateRequest
   ) throws RestClientResponseException {
     ParameterizedTypeReference<ChallengeContribution> localVarReturnType =
       new ParameterizedTypeReference<>() {};
-    return addChallengeContributionRequestCreation(
+    return createChallengeContributionRequestCreation(
       challengeId,
       challengeContributionCreateRequest
     ).toEntity(localVarReturnType);
@@ -193,11 +193,14 @@ public class ChallengeContributionApi {
    * @return ResponseSpec
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
    */
-  public ResponseSpec addChallengeContributionWithResponseSpec(
+  public ResponseSpec createChallengeContributionWithResponseSpec(
     @jakarta.annotation.Nonnull Long challengeId,
     @jakarta.annotation.Nonnull ChallengeContributionCreateRequest challengeContributionCreateRequest
   ) throws RestClientResponseException {
-    return addChallengeContributionRequestCreation(challengeId, challengeContributionCreateRequest);
+    return createChallengeContributionRequestCreation(
+      challengeId,
+      challengeContributionCreateRequest
+    );
   }
 
   /**
@@ -706,7 +709,7 @@ public class ChallengeContributionApi {
 
   /**
    * Update an existing challenge contribution
-   * Updates an existing contribution record for a challenge. Only the organization ID and role can be modified.
+   * Updates an existing challenge contribution.
    * <p><b>200</b> - Contribution updated successfully
    * <p><b>400</b> - Invalid request
    * <p><b>401</b> - Unauthorized
@@ -797,7 +800,7 @@ public class ChallengeContributionApi {
 
   /**
    * Update an existing challenge contribution
-   * Updates an existing contribution record for a challenge. Only the organization ID and role can be modified.
+   * Updates an existing challenge contribution.
    * <p><b>200</b> - Contribution updated successfully
    * <p><b>400</b> - Invalid request
    * <p><b>401</b> - Unauthorized
@@ -827,7 +830,7 @@ public class ChallengeContributionApi {
 
   /**
    * Update an existing challenge contribution
-   * Updates an existing contribution record for a challenge. Only the organization ID and role can be modified.
+   * Updates an existing challenge contribution.
    * <p><b>200</b> - Contribution updated successfully
    * <p><b>400</b> - Invalid request
    * <p><b>401</b> - Unauthorized
@@ -857,7 +860,7 @@ public class ChallengeContributionApi {
 
   /**
    * Update an existing challenge contribution
-   * Updates an existing contribution record for a challenge. Only the organization ID and role can be modified.
+   * Updates an existing challenge contribution.
    * <p><b>200</b> - Contribution updated successfully
    * <p><b>400</b> - Invalid request
    * <p><b>401</b> - Unauthorized
