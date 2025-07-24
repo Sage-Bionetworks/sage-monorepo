@@ -17,7 +17,6 @@ export class ModelDetailsBoxplotComponent {
   titleCasePipe = inject(TitleCasePipe);
   decodeGreekEntityPipe = inject(DecodeGreekEntityPipe);
 
-  private readonly Y_AXIS_TITLE_LINE_BREAK_THRESHOLD = 30;
   private readonly X_AXIS_LABEL_MAX_WIDTH = 100;
   private readonly X_AXIS_LABEL_FONT = "bold 14px 'DM Sans Variable', sans-serif";
 
@@ -49,6 +48,8 @@ export class ModelDetailsBoxplotComponent {
       .sort((a, b) => a.pointCategory.localeCompare(b.pointCategory));
   });
 
+  yAxisTitle = computed(() => this.modelData().units);
+
   createTooltipText(individual: IndividualData, units: string): string {
     return `${individual.sex}\n${individual.value} ${units}\nIndividual ID: ${individual.individual_id}`;
   }
@@ -64,16 +65,5 @@ export class ModelDetailsBoxplotComponent {
       return value.replace(/[-*]/, (match) => match + '\n');
     }
     return value;
-  };
-
-  formatYAxisTitle = () => {
-    const evidenceType = this.decodeGreekEntityPipe.transform(
-      this.titleCasePipe.transform(this.modelData().evidence_type),
-    );
-    const units = this.modelData().units;
-
-    const nChars = evidenceType.length + units.length;
-    const sep = nChars > this.Y_AXIS_TITLE_LINE_BREAK_THRESHOLD ? '\n' : ' ';
-    return `${evidenceType}${sep}(${units})`;
   };
 }
