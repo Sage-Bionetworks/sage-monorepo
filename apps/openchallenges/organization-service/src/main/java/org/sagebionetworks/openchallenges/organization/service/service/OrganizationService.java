@@ -57,8 +57,6 @@ public class OrganizationService {
       // Ignore - this means the identifier is not a numeric ID
     }
 
-    logger.info("Attempting to delete organization with login: {} or id: {}", orgLogin, orgId);
-
     OrganizationEntity orgEntity = organizationRepository
       .findByIdOrLogin(orgId, orgLogin)
       .orElseThrow(() ->
@@ -112,21 +110,7 @@ public class OrganizationService {
   @Transactional(readOnly = true)
   public OrganizationDto getOrganization(String identifier) {
     // Find the organization
-    String orgLogin = String.valueOf(identifier);
-    Long orgId = null;
-    try {
-      orgId = Long.valueOf(orgLogin);
-    } catch (Exception ignore) {
-      // Ignore
-    }
-    OrganizationEntity orgEntity = organizationRepository
-      .findByIdOrLogin(orgId, orgLogin)
-      .orElseThrow(() ->
-        new OrganizationNotFoundException(
-          String.format("The organization with the ID or login %s does not exist.", identifier)
-        )
-      );
-
+    OrganizationEntity orgEntity = getOrganizationByIdentifier(identifier);
     return organizationMapper.convertToDto(orgEntity);
   }
 
@@ -171,20 +155,7 @@ public class OrganizationService {
     OrganizationUpdateRequestDto request
   ) {
     // Find the existing organization
-    String orgLogin = String.valueOf(identifier);
-    Long orgId = null;
-    try {
-      orgId = Long.valueOf(orgLogin);
-    } catch (Exception ignore) {
-      // Ignore
-    }
-    OrganizationEntity existingOrg = organizationRepository
-      .findByIdOrLogin(orgId, orgLogin)
-      .orElseThrow(() ->
-        new OrganizationNotFoundException(
-          String.format("The organization with the ID or login %s does not exist.", identifier)
-        )
-      );
+    OrganizationEntity existingOrg = getOrganizationByIdentifier(identifier);
 
     // Update the organization
     existingOrg.setName(request.getName());
@@ -203,5 +174,26 @@ public class OrganizationService {
       // Re-throw the original exception if it's not the constraint we're looking for
       throw e;
     }
+  }
+
+  /**
+   * Utility function to get an organization by its identifier (login or id).
+   * Throws OrganizationNotFoundException if not found.
+   */
+  public OrganizationEntity getOrganizationByIdentifier(String identifier) {
+    String orgLogin = String.valueOf(identifier);
+    Long orgId = null;
+    try {
+      orgId = Long.valueOf(orgLogin);
+    } catch (NumberFormatException ignore) {
+      // Ignore - identifier is not a numeric ID
+    }
+    return organizationRepository
+      .findByIdOrLogin(orgId, orgLogin)
+      .orElseThrow(() ->
+        new OrganizationNotFoundException(
+          String.format("The organization with the ID or login %s does not exist.", identifier)
+        )
+      );
   }
 }

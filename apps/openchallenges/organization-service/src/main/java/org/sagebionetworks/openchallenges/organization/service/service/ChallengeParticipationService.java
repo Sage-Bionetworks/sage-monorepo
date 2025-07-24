@@ -11,6 +11,7 @@ import org.sagebionetworks.openchallenges.organization.service.model.entity.Orga
 import org.sagebionetworks.openchallenges.organization.service.model.mapper.ChallengeParticipationMapper;
 import org.sagebionetworks.openchallenges.organization.service.model.repository.ChallengeParticipationRepository;
 import org.sagebionetworks.openchallenges.organization.service.model.repository.OrganizationRepository;
+import org.sagebionetworks.openchallenges.organization.service.service.OrganizationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -24,16 +25,19 @@ public class ChallengeParticipationService {
 
   private final OrganizationRepository organizationRepository;
   private final ChallengeParticipationRepository challengeParticipationRepository;
+  private final OrganizationService organizationService;
 
   private ChallengeParticipationMapper challengeParticipationMapper =
     new ChallengeParticipationMapper();
 
   public ChallengeParticipationService(
     OrganizationRepository organizationRepository,
-    ChallengeParticipationRepository challengeParticipationRepository
+    ChallengeParticipationRepository challengeParticipationRepository,
+    OrganizationService organizationService
   ) {
     this.organizationRepository = organizationRepository;
     this.challengeParticipationRepository = challengeParticipationRepository;
+    this.organizationService = organizationService;
   }
 
   @Transactional(readOnly = false)
@@ -41,21 +45,8 @@ public class ChallengeParticipationService {
     String org,
     ChallengeParticipationCreateRequestDto request
   ) {
-    // Find the organization by login or id
-    String orgLogin = String.valueOf(org);
-    Long orgId = null;
-    try {
-      orgId = Long.valueOf(orgLogin);
-    } catch (NumberFormatException ignore) {
-      // Ignore - identifier is not a numeric ID
-    }
-    OrganizationEntity orgEntity = organizationRepository
-      .findByIdOrLogin(orgId, orgLogin)
-      .orElseThrow(() ->
-        new OrganizationNotFoundException(
-          String.format("The organization with the ID or login %s does not exist.", org)
-        )
-      );
+    // Find the organization
+    OrganizationEntity orgEntity = organizationService.getOrganizationByIdentifier(org);
 
     // Create the participation entity
     ChallengeParticipationEntity participation = ChallengeParticipationEntity.builder()
@@ -102,21 +93,8 @@ public class ChallengeParticipationService {
     Long challengeId,
     ChallengeParticipationRoleDto role
   ) {
-    // Find the organization by login or id
-    String orgLogin = String.valueOf(org);
-    Long orgId = null;
-    try {
-      orgId = Long.valueOf(orgLogin);
-    } catch (NumberFormatException ignore) {
-      // Ignore - identifier is not a numeric ID
-    }
-    OrganizationEntity orgEntity = organizationRepository
-      .findByIdOrLogin(orgId, orgLogin)
-      .orElseThrow(() ->
-        new OrganizationNotFoundException(
-          String.format("The organization with the ID or login %s does not exist.", org)
-        )
-      );
+    // Find the organization
+    OrganizationEntity orgEntity = organizationService.getOrganizationByIdentifier(org);
 
     // Find the participation
     ChallengeParticipationEntity participation = challengeParticipationRepository
