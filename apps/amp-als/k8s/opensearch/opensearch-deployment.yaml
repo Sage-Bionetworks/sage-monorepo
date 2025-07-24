@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: amp-als-opensearch
+  namespace: amp-als
+  labels:
+    app: amp-als-opensearch
+    component: search
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: amp-als-opensearch
+  template:
+    metadata:
+      labels:
+        app: amp-als-opensearch
+        component: search
+    spec:
+      containers:
+        - name: opensearch
+          image: ghcr.io/sage-bionetworks/amp-als-opensearch:local
+          ports:
+            - containerPort: 8402
+              name: http
+            - containerPort: 9300
+              name: transport
+          env:
+            - name: node.name
+              value: 'amp-als-opensearch'
+            - name: cluster.name
+              value: 'amp-als-opensearch'
+            - name: discovery.type
+              value: 'single-node'
+            - name: bootstrap.memory_lock
+              value: 'true'
+            - name: OPENSEARCH_JAVA_OPTS
+              value: '-Xms512m -Xmx512m'
+            - name: http.port
+              value: '8402'
+            - name: DISABLE_SECURITY_PLUGIN
+              value: 'true'
+          resources:
+            limits:
+              memory: 2Gi
+              cpu: 1000m
+            requests:
+              memory: 1Gi
+              cpu: 500m
+          volumeMounts:
+            - name: opensearch-data
+              mountPath: /usr/share/opensearch/data
+          securityContext:
+            capabilities:
+              add:
+                - IPC_LOCK
+      volumes:
+        - name: opensearch-data
+          persistentVolumeClaim:
+            claimName: amp-als-opensearch-pvc
