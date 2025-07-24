@@ -14,8 +14,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionDto;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionUpdateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionRoleDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionUpdateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.security.AuthenticatedUser;
 import org.sagebionetworks.openchallenges.challenge.service.service.ChallengeContributionService;
 import org.springframework.http.HttpStatus;
@@ -67,13 +67,15 @@ class ChallengeContributionApiDelegateImplTest {
       .organizationId(organizationId)
       .role(role);
 
-    when(challengeContributionService.addChallengeContribution(challengeId, request)).thenReturn(
+    when(challengeContributionService.createChallengeContribution(challengeId, request)).thenReturn(
       expectedResponse
     );
 
     // when
-    ResponseEntity<ChallengeContributionDto> response =
-      apiDelegate.addChallengeContribution(challengeId, request);
+    ResponseEntity<ChallengeContributionDto> response = apiDelegate.createChallengeContribution(
+      challengeId,
+      request
+    );
 
     // then
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
@@ -82,7 +84,7 @@ class ChallengeContributionApiDelegateImplTest {
     assertThat(response.getBody().getChallengeId()).isEqualTo(challengeId);
     assertThat(response.getBody().getOrganizationId()).isEqualTo(organizationId);
     assertThat(response.getBody().getRole()).isEqualTo(role);
-    verify(challengeContributionService).addChallengeContribution(challengeId, request);
+    verify(challengeContributionService).createChallengeContribution(challengeId, request);
   }
 
   @Test
@@ -105,13 +107,16 @@ class ChallengeContributionApiDelegateImplTest {
       .organizationId(newOrganizationId)
       .role(newRole);
 
-    when(challengeContributionService.updateChallengeContribution(challengeId, contributionId, request)).thenReturn(
-      expectedResponse
-    );
+    when(
+      challengeContributionService.updateChallengeContribution(challengeId, contributionId, request)
+    ).thenReturn(expectedResponse);
 
     // when
-    ResponseEntity<ChallengeContributionDto> response =
-      apiDelegate.updateChallengeContribution(challengeId, contributionId, request);
+    ResponseEntity<ChallengeContributionDto> response = apiDelegate.updateChallengeContribution(
+      challengeId,
+      contributionId,
+      request
+    );
 
     // then
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -120,7 +125,11 @@ class ChallengeContributionApiDelegateImplTest {
     assertThat(response.getBody().getChallengeId()).isEqualTo(challengeId);
     assertThat(response.getBody().getOrganizationId()).isEqualTo(newOrganizationId);
     assertThat(response.getBody().getRole()).isEqualTo(newRole);
-    verify(challengeContributionService).updateChallengeContribution(challengeId, contributionId, request);
+    verify(challengeContributionService).updateChallengeContribution(
+      challengeId,
+      contributionId,
+      request
+    );
   }
 
   @Test
@@ -131,7 +140,10 @@ class ChallengeContributionApiDelegateImplTest {
     Long contributionId = 456L;
 
     // when
-    ResponseEntity<Void> response = apiDelegate.deleteChallengeContribution(challengeId, contributionId);
+    ResponseEntity<Void> response = apiDelegate.deleteChallengeContribution(
+      challengeId,
+      contributionId
+    );
 
     // then
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
@@ -152,13 +164,15 @@ class ChallengeContributionApiDelegateImplTest {
       .organizationId(123L)
       .role(ChallengeContributionRoleDto.CHALLENGE_ORGANIZER);
 
-    when(challengeContributionService.getChallengeContribution(challengeId, contributionId)).thenReturn(
-      expectedResponse
-    );
+    when(
+      challengeContributionService.getChallengeContribution(challengeId, contributionId)
+    ).thenReturn(expectedResponse);
 
     // when
-    ResponseEntity<ChallengeContributionDto> response =
-      apiDelegate.getChallengeContribution(challengeId, contributionId);
+    ResponseEntity<ChallengeContributionDto> response = apiDelegate.getChallengeContribution(
+      challengeId,
+      contributionId
+    );
 
     // then
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -166,7 +180,9 @@ class ChallengeContributionApiDelegateImplTest {
     assertThat(response.getBody().getId()).isEqualTo(contributionId);
     assertThat(response.getBody().getChallengeId()).isEqualTo(challengeId);
     assertThat(response.getBody().getOrganizationId()).isEqualTo(123L);
-    assertThat(response.getBody().getRole()).isEqualTo(ChallengeContributionRoleDto.CHALLENGE_ORGANIZER);
+    assertThat(response.getBody().getRole()).isEqualTo(
+      ChallengeContributionRoleDto.CHALLENGE_ORGANIZER
+    );
     verify(challengeContributionService).getChallengeContribution(challengeId, contributionId);
   }
 }

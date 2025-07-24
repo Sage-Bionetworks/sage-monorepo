@@ -131,7 +131,7 @@ paths:
       summary: Create a new contribution for a challenge
       description: |
         Creates a new contribution record associated with a challenge ID.
-      operationId: addChallengeContribution
+      operationId: createChallengeContribution
       security:
         - apiBearerAuth: []
       requestBody:
@@ -207,8 +207,7 @@ paths:
         - ChallengeContribution
       summary: Update an existing challenge contribution
       description: |
-        Updates an existing contribution record for a challenge.
-        Only the organization ID and role can be modified.
+        Updates an existing challenge contribution.
       operationId: updateChallengeContribution
       security:
         - apiBearerAuth: []
@@ -274,7 +273,7 @@ paths:
                 $ref: '#/components/schemas/ChallengesPerYear'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /challengePlatforms:
+  /challenge-platforms:
     get:
       tags:
         - ChallengePlatform
@@ -294,7 +293,36 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /challengePlatforms/{challengePlatformId}:
+    post:
+      tags:
+        - ChallengePlatform
+      summary: Create a challenge platform
+      description: Create a challenge platform with the specified ID
+      operationId: createChallengePlatform
+      security:
+        - apiBearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengePlatformCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengePlatform'
+          description: Success
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /challenge-platforms/{challengePlatformId}:
     parameters:
       - $ref: '#/components/parameters/challengePlatformId'
     get:
@@ -312,6 +340,40 @@ paths:
                 $ref: '#/components/schemas/ChallengePlatform'
         '404':
           $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - ChallengePlatform
+      summary: Update an existing challenge platform
+      description: |
+        Updates an existing challenge platform.
+      operationId: updateChallengePlatform
+      security:
+        - apiBearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengePlatformUpdateRequest'
+      responses:
+        '200':
+          description: Challange platform updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengePlatform'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
@@ -601,10 +663,11 @@ components:
       format: int64
       example: 1
     ChallengePlatformName:
-      description: The name of the challenge platform.
+      description: The display name of the challenge platform.
       type: string
       minLength: 3
-      maxLength: 30
+      maxLength: 50
+      example: Example Challenge Platform
     SimpleChallengePlatform:
       type: object
       description: A simple challenge platform.
@@ -928,6 +991,10 @@ components:
           description: A string of search terms used to filter the results.
           type: string
           example: synapse
+    AvatarKey:
+      description: The avatar key
+      type: string
+      example: logo/dream.png
     ChallengePlatform:
       type: object
       description: A challenge platform
@@ -939,28 +1006,15 @@ components:
         name:
           $ref: '#/components/schemas/ChallengePlatformName'
         avatarKey:
-          type: string
-          example: logo/dream.png
+          $ref: '#/components/schemas/AvatarKey'
         websiteUrl:
-          type: string
-          format: url
-          example: https://example.com
-        createdAt:
-          type: string
-          format: date-time
-          example: '2022-07-04T22:19:11Z'
-        updatedAt:
-          type: string
-          format: date-time
-          example: '2022-07-04T22:19:11Z'
+          $ref: '#/components/schemas/Url'
       required:
         - id
         - slug
         - name
         - avatarKey
         - websiteUrl
-        - createdAt
-        - updatedAt
     ChallengePlatformsPage:
       type: object
       description: A page of challenge platforms.
@@ -977,6 +1031,40 @@ components:
             - challengePlatforms
       x-java-class-annotations:
         - '@lombok.Builder'
+    ChallengePlatformCreateRequest:
+      type: object
+      description: The information used to create a challenge platform
+      properties:
+        slug:
+          $ref: '#/components/schemas/ChallengePlatformSlug'
+        name:
+          $ref: '#/components/schemas/ChallengePlatformName'
+        avatarKey:
+          $ref: '#/components/schemas/AvatarKey'
+        websiteUrl:
+          $ref: '#/components/schemas/Url'
+      required:
+        - slug
+        - name
+        - avatarKey
+        - websiteUrl
+    ChallengePlatformUpdateRequest:
+      type: object
+      description: A challenge platform update request.
+      properties:
+        slug:
+          $ref: '#/components/schemas/ChallengePlatformSlug'
+        name:
+          $ref: '#/components/schemas/ChallengePlatformName'
+        avatarKey:
+          $ref: '#/components/schemas/AvatarKey'
+        websiteUrl:
+          $ref: '#/components/schemas/Url'
+      required:
+        - slug
+        - name
+        - avatarKey
+        - websiteUrl
     EdamConceptSort:
       description: What to sort results by.
       type: string

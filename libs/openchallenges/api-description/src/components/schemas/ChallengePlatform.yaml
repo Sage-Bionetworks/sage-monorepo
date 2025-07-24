@@ -8,25 +8,12 @@ properties:
   name:
     $ref: ChallengePlatformName.yaml
   avatarKey:
-    type: string
-    example: logo/dream.png
+    $ref: AvatarKey.yaml
   websiteUrl:
-    type: string
-    format: url
-    example: https://example.com
-  createdAt:
-    type: string
-    format: date-time
-    example: '2022-07-04T22:19:11Z'
-  updatedAt:
-    type: string
-    format: date-time
-    example: '2022-07-04T22:19:11Z'
+    $ref: Url.yaml
 required:
   - id
   - slug
   - name
   - avatarKey
   - websiteUrl
-  - createdAt
-  - updatedAt

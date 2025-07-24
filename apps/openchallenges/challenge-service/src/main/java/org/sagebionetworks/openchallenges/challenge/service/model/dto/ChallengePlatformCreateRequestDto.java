@@ -16,15 +16,13 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * A challenge platform
+ * The information used to create a challenge platform
  */
 
-@Schema(name = "ChallengePlatform", description = "A challenge platform")
-@JsonTypeName("ChallengePlatform")
+@Schema(name = "ChallengePlatformCreateRequest", description = "The information used to create a challenge platform")
+@JsonTypeName("ChallengePlatformCreateRequest")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
-public class ChallengePlatformDto {
-
-  private Long id;
+public class ChallengePlatformCreateRequestDto {
 
   private String slug;
 
@@ -34,42 +32,21 @@ public class ChallengePlatformDto {
 
   private String websiteUrl = null;
 
-  public ChallengePlatformDto() {
+  public ChallengePlatformCreateRequestDto() {
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-  public ChallengePlatformDto(Long id, String slug, String name, String avatarKey, String websiteUrl) {
-    this.id = id;
+  public ChallengePlatformCreateRequestDto(String slug, String name, String avatarKey, String websiteUrl) {
     this.slug = slug;
     this.name = name;
     this.avatarKey = avatarKey;
     this.websiteUrl = websiteUrl;
   }
 
-  public ChallengePlatformDto id(Long id) {
-    this.id = id;
-    return this;
-  }
-
-  /**
-   * The unique identifier of a challenge platform.
-   * @return id
-   */
-  @NotNull 
-  @Schema(name = "id", example = "1", description = "The unique identifier of a challenge platform.", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("id")
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public ChallengePlatformDto slug(String slug) {
+  public ChallengePlatformCreateRequestDto slug(String slug) {
     this.slug = slug;
     return this;
   }
@@ -89,7 +66,7 @@ public class ChallengePlatformDto {
     this.slug = slug;
   }
 
-  public ChallengePlatformDto name(String name) {
+  public ChallengePlatformCreateRequestDto name(String name) {
     this.name = name;
     return this;
   }
@@ -109,7 +86,7 @@ public class ChallengePlatformDto {
     this.name = name;
   }
 
-  public ChallengePlatformDto avatarKey(String avatarKey) {
+  public ChallengePlatformCreateRequestDto avatarKey(String avatarKey) {
     this.avatarKey = avatarKey;
     return this;
   }
@@ -129,7 +106,7 @@ public class ChallengePlatformDto {
     this.avatarKey = avatarKey;
   }
 
-  public ChallengePlatformDto websiteUrl(String websiteUrl) {
+  public ChallengePlatformCreateRequestDto websiteUrl(String websiteUrl) {
     this.websiteUrl = websiteUrl;
     return this;
   }
@@ -157,24 +134,22 @@ public class ChallengePlatformDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ChallengePlatformDto challengePlatform = (ChallengePlatformDto) o;
-    return Objects.equals(this.id, challengePlatform.id) &&
-        Objects.equals(this.slug, challengePlatform.slug) &&
-        Objects.equals(this.name, challengePlatform.name) &&
-        Objects.equals(this.avatarKey, challengePlatform.avatarKey) &&
-        Objects.equals(this.websiteUrl, challengePlatform.websiteUrl);
+    ChallengePlatformCreateRequestDto challengePlatformCreateRequest = (ChallengePlatformCreateRequestDto) o;
+    return Objects.equals(this.slug, challengePlatformCreateRequest.slug) &&
+        Objects.equals(this.name, challengePlatformCreateRequest.name) &&
+        Objects.equals(this.avatarKey, challengePlatformCreateRequest.avatarKey) &&
+        Objects.equals(this.websiteUrl, challengePlatformCreateRequest.websiteUrl);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, slug, name, avatarKey, websiteUrl);
+    return Objects.hash(slug, name, avatarKey, websiteUrl);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ChallengePlatformDto {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("class ChallengePlatformCreateRequestDto {\n");
     sb.append("    slug: ").append(toIndentedString(slug)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    avatarKey: ").append(toIndentedString(avatarKey)).append("\n");
@@ -196,18 +171,17 @@ public class ChallengePlatformDto {
   
   public static class Builder {
 
-    private ChallengePlatformDto instance;
+    private ChallengePlatformCreateRequestDto instance;
 
     public Builder() {
-      this(new ChallengePlatformDto());
+      this(new ChallengePlatformCreateRequestDto());
     }
 
-    protected Builder(ChallengePlatformDto instance) {
+    protected Builder(ChallengePlatformCreateRequestDto instance) {
       this.instance = instance;
     }
 
-    protected Builder copyOf(ChallengePlatformDto value) { 
-      this.instance.setId(value.id);
+    protected Builder copyOf(ChallengePlatformCreateRequestDto value) { 
       this.instance.setSlug(value.slug);
       this.instance.setName(value.name);
       this.instance.setAvatarKey(value.avatarKey);
@@ -215,37 +189,32 @@ public class ChallengePlatformDto {
       return this;
     }
 
-    public ChallengePlatformDto.Builder id(Long id) {
-      this.instance.id(id);
-      return this;
-    }
-    
-    public ChallengePlatformDto.Builder slug(String slug) {
+    public ChallengePlatformCreateRequestDto.Builder slug(String slug) {
       this.instance.slug(slug);
       return this;
     }
     
-    public ChallengePlatformDto.Builder name(String name) {
+    public ChallengePlatformCreateRequestDto.Builder name(String name) {
       this.instance.name(name);
       return this;
     }
     
-    public ChallengePlatformDto.Builder avatarKey(String avatarKey) {
+    public ChallengePlatformCreateRequestDto.Builder avatarKey(String avatarKey) {
       this.instance.avatarKey(avatarKey);
       return this;
     }
     
-    public ChallengePlatformDto.Builder websiteUrl(String websiteUrl) {
+    public ChallengePlatformCreateRequestDto.Builder websiteUrl(String websiteUrl) {
       this.instance.websiteUrl(websiteUrl);
       return this;
     }
     
     /**
-    * returns a built ChallengePlatformDto instance.
+    * returns a built ChallengePlatformCreateRequestDto instance.
     *
     * The builder is not reusable (NullPointerException)
     */
-    public ChallengePlatformDto build() {
+    public ChallengePlatformCreateRequestDto build() {
       try {
         return this.instance;
       } finally {
@@ -263,15 +232,15 @@ public class ChallengePlatformDto {
   /**
   * Create a builder with no initialized field (except for the default values).
   */
-  public static ChallengePlatformDto.Builder builder() {
-    return new ChallengePlatformDto.Builder();
+  public static ChallengePlatformCreateRequestDto.Builder builder() {
+    return new ChallengePlatformCreateRequestDto.Builder();
   }
 
   /**
   * Create a builder with a shallow copy of this instance.
   */
-  public ChallengePlatformDto.Builder toBuilder() {
-    ChallengePlatformDto.Builder builder = new ChallengePlatformDto.Builder();
+  public ChallengePlatformCreateRequestDto.Builder toBuilder() {
+    ChallengePlatformCreateRequestDto.Builder builder = new ChallengePlatformCreateRequestDto.Builder();
     return builder.copyOf(this);
   }
 

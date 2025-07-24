@@ -41,9 +41,9 @@ public interface ChallengeContributionApiDelegate {
      *         or The specified resource was not found (status code 404)
      *         or The request conflicts with current state of the target resource (status code 409)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     * @see ChallengeContributionApi#addChallengeContribution
+     * @see ChallengeContributionApi#createChallengeContribution
      */
-    default ResponseEntity<ChallengeContributionDto> addChallengeContribution(Long challengeId,
+    default ResponseEntity<ChallengeContributionDto> createChallengeContribution(Long challengeId,
         ChallengeContributionCreateRequestDto challengeContributionCreateRequestDto) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
@@ -245,7 +245,7 @@ public interface ChallengeContributionApiDelegate {
 
     /**
      * PUT /challenges/{challengeId}/contributions/{challengeContributionId} : Update an existing challenge contribution
-     * Updates an existing contribution record for a challenge. Only the organization ID and role can be modified. 
+     * Updates an existing challenge contribution. 
      *
      * @param challengeId The unique identifier of the challenge. (required)
      * @param challengeContributionId The unique identifier of a challenge contribution (required)

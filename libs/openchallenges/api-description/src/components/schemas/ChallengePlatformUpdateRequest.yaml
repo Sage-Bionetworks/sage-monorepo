@@ -1,5 +1,5 @@
 type: object
-description: The information used to create a challenge platform
+description: A challenge platform update request.
 properties:
   slug:
     $ref: ChallengePlatformSlug.yaml

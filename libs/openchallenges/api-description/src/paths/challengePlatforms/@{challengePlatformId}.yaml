@@ -17,6 +17,40 @@ get:
       $ref: ../../components/responses/NotFound.yaml
     '500':
       $ref: ../../components/responses/InternalServerError.yaml
+put:
+  tags:
+    - ChallengePlatform
+  summary: Update an existing challenge platform
+  description: |
+    Updates an existing challenge platform.
+  operationId: updateChallengePlatform
+  security:
+    - apiBearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/ChallengePlatformUpdateRequest.yaml
+  responses:
+    '200':
+      description: Challange platform updated successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/ChallengePlatform.yaml
+    '400':
+      $ref: ../../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../components/responses/NotFound.yaml
+    '409':
+      $ref: ../../components/responses/Conflict.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml
 delete:
   tags:
     - ChallengePlatform
