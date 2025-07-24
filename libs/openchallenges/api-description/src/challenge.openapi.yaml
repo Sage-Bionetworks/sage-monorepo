@@ -35,14 +35,14 @@ paths:
     $ref: paths/challenges/@{challengeId}/contributions.yaml
   /challenges/{challengeId}/contributions/{challengeContributionId}:
     $ref: paths/challenges/@{challengeId}/contributions/@{challengeContributionId}.yaml
-  /challengeAnalytics/challengesPerYear:
-    $ref: paths/challengeAnalytics/challengesPerYear.yaml
+  /challenge-analytics/challenges-per-year:
+    $ref: paths/challenge-analytics/challenges-per-year.yaml
   /challenge-platforms:
     $ref: paths/challengePlatforms.yaml
   /challenge-platforms/{challengePlatformId}:
     $ref: paths/challengePlatforms/@{challengePlatformId}.yaml
-  /edamConcepts:
-    $ref: paths/edamConcepts.yaml
+  /edam-concepts:
+    $ref: paths/edam-concepts.yaml
 components:
   securitySchemes:
     apiBearerAuth:
