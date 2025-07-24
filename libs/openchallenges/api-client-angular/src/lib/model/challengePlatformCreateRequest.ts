@@ -9,13 +9,9 @@
  */
 
 /**
- * A simple challenge platform.
+ * The information used to create a challenge platform
  */
-export interface SimpleChallengePlatform {
-  /**
-   * The unique identifier of a challenge platform.
-   */
-  id: number;
+export interface ChallengePlatformCreateRequest {
   /**
    * The slug of the challenge platform.
    */
@@ -24,4 +20,12 @@ export interface SimpleChallengePlatform {
    * The display name of the challenge platform.
    */
   name: string;
+  /**
+   * The avatar key
+   */
+  avatarKey: string;
+  /**
+   * A URL to the website or image.
+   */
+  websiteUrl: string | null;
 }
