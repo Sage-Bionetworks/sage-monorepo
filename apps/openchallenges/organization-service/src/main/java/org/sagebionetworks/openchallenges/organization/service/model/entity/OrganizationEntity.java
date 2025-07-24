@@ -16,12 +16,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.search.engine.backend.types.Sortable;
+import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
+import org.hibernate.search.mapper.pojo.extractor.mapping.annotation.ContainerExtract;
+import org.hibernate.search.mapper.pojo.extractor.mapping.annotation.ContainerExtraction;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 import org.sagebionetworks.openchallenges.organization.service.model.search.OrganizationNameValueBridge;
+import org.sagebionetworks.openchallenges.organization.service.model.search.UniqueChallengeCountValueBinder;
 
 @Entity
 @Table(name = "organization")
@@ -67,6 +71,12 @@ public class OrganizationEntity {
 
   @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY)
   @IndexedEmbedded(name = "challenge_participations", includePaths = { "role" })
+  @GenericField(
+    name = "challenge_count_2",
+    valueBinder = @ValueBinderRef(type = UniqueChallengeCountValueBinder.class),
+    extraction = @ContainerExtraction(extract = ContainerExtract.NO),
+    sortable = Sortable.YES
+  )
   private List<ChallengeParticipationEntity> challengeParticipations;
 
   @Column(nullable = true)
