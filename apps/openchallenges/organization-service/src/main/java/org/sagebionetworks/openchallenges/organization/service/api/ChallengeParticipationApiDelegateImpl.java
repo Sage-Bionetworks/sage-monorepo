@@ -32,23 +32,22 @@ public class ChallengeParticipationApiDelegateImpl implements ChallengeParticipa
   @PreAuthorize("authentication.principal.admin")
   public ResponseEntity<ChallengeParticipationDto> createChallengeParticipation(
     String org,
-    ChallengeParticipationCreateRequestDto challengeParticipationCreateRequestDto
+    ChallengeParticipationCreateRequestDto request
   ) {
     AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
       .getAuthentication()
       .getPrincipal();
     logger.info(
-      "User {} (role: {}) is creating a challenge participation for org: {}",
+      "User {} (role: {}) is creating a challenge participation for org: {}, challengeId: {}, role: {}",
       user.getUsername(),
       user.getRole(),
-      org
+      org,
+      request.getChallengeId(),
+      request.getRole()
     );
 
     ChallengeParticipationDto createdParticipation =
-      challengeParticipationService.createChallengeParticipation(
-        org,
-        challengeParticipationCreateRequestDto
-      );
+      challengeParticipationService.createChallengeParticipation(org, request);
     return ResponseEntity.status(HttpStatus.CREATED).body(createdParticipation);
   }
 
