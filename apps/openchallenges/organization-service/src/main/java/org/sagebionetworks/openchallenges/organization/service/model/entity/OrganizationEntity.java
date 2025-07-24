@@ -61,9 +61,6 @@ public class OrganizationEntity {
   @Column(name = "website_url", nullable = true)
   private String websiteUrl;
 
-  @Column(name = "challenge_count", nullable = false)
-  private Integer challengeCount;
-
   @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY)
   @IndexedEmbedded(name = "categories", includePaths = { "category" })
   private List<OrganizationCategoryEntity> categories;
@@ -91,4 +88,18 @@ public class OrganizationEntity {
 
   @Column(name = "acronym", nullable = true)
   private String acronym;
+
+  /**
+   * Returns the unique number of challenges this organization has participated in.
+   */
+  public int getChallengeCount() {
+    if (challengeParticipations == null) {
+      return 0;
+    }
+    return (int) challengeParticipations
+      .stream()
+      .map(ChallengeParticipationEntity::getChallengeId)
+      .distinct()
+      .count();
+  }
 }

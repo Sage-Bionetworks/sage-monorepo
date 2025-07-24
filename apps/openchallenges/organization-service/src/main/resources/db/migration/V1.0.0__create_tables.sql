@@ -7,7 +7,6 @@ CREATE TABLE organization (
   avatar_key            VARCHAR(255),
   website_url           VARCHAR(500),
   description           VARCHAR(1000),
-  challenge_count       INTEGER DEFAULT 0,
   created_at            TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at            TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   acronym               VARCHAR(20),

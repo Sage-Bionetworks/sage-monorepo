@@ -123,7 +123,6 @@ public class OrganizationService {
       .description(request.getDescription())
       .avatarKey(request.getAvatarKey())
       .websiteUrl(request.getWebsiteUrl())
-      .challengeCount(0)
       .acronym(request.getAcronym())
       .build();
 
