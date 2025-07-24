@@ -38,9 +38,9 @@ paths:
   /challenge-analytics/challenges-per-year:
     $ref: paths/challenge-analytics/challenges-per-year.yaml
   /challenge-platforms:
-    $ref: paths/challengePlatforms.yaml
+    $ref: paths/challenge-platforms.yaml
   /challenge-platforms/{challengePlatformId}:
-    $ref: paths/challengePlatforms/@{challengePlatformId}.yaml
+    $ref: paths/challenge-platforms/@{challengePlatformId}.yaml
   /edam-concepts:
     $ref: paths/edam-concepts.yaml
 components:
