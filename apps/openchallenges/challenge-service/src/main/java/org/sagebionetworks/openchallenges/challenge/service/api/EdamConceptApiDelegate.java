@@ -28,7 +28,7 @@ public interface EdamConceptApiDelegate {
     }
 
     /**
-     * GET /edamConcepts : List EDAM concepts
+     * GET /edam-concepts : List EDAM concepts
      * List EDAM concepts
      *
      * @param edamConceptSearchQuery The search query used to find EDAM concepts. (optional)

@@ -39,7 +39,7 @@ public interface ChallengeAnalyticsApi {
     }
 
     /**
-     * GET /challengeAnalytics/challengesPerYear : Get the number of challenges tracked per year
+     * GET /challenge-analytics/challenges-per-year : Get the number of challenges tracked per year
      * Returns the number of challenges tracked per year
      *
      * @return An object (status code 200)
@@ -63,7 +63,7 @@ public interface ChallengeAnalyticsApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/challengeAnalytics/challengesPerYear",
+        value = "/challenge-analytics/challenges-per-year",
         produces = { "application/json", "application/problem+json" }
     )
     
