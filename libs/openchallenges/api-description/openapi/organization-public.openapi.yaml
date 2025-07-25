@@ -16,6 +16,8 @@ servers:
 tags:
   - name: Organization
     description: Operations about organizations
+    x-audience:
+      - public
 paths:
   /organizations:
     get:

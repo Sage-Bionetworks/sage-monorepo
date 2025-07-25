@@ -1,8 +1,0 @@
-inputs:
-  # The info property of the first input file is used for the merged API.
-  # TODO: Still need a way to set info for the merged API (can't use info from auth API).
-  - inputFile: openapi/auth-public.openapi.yaml
-  - inputFile: openapi/challenge-public.openapi.yaml
-  - inputFile: openapi/image-public.openapi.yaml
-  - inputFile: openapi/organization-public.openapi.yaml
-output: openapi/openapi.yaml

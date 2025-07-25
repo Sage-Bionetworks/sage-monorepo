@@ -1,37 +1,64 @@
 openapi: 3.0.3
 info:
   version: 1.0.0
-  title: OpenChallenges Auth API
-  description: 'Discover, explore, and contribute to open biomedical challenges.'
+  title: OpenChallenges API
+  description: Discover, explore, and contribute to open biomedical challenges.
   license:
     name: Apache 2.0
-    url: 'https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt'
+    url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
   contact:
     name: Support
-    url: 'https://github.com/Sage-Bionetworks/sage-monorepo'
+    url: https://github.com/Sage-Bionetworks/sage-monorepo
   x-logo:
-    url: 'https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png'
+    url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
-  - url: 'http://localhost/v1'
+  - url: http://localhost/v1
 tags:
   - name: Authentication
     description: Operations about authentication
+    x-audience:
+      - public
+    x-displayName: Authentication
   - name: API Key
     description: Operations about API key management
+    x-audience:
+      - public
+    x-displayName: API Key
   - name: Challenge
     description: Operations about challenges.
+    x-audience:
+      - public
+    x-displayName: Challenge
   - name: ChallengeContribution
     description: Operations about challenge contributions.
+    x-audience:
+      - public
+    x-displayName: ChallengeContribution
   - name: ChallengeAnalytics
     description: Operations about challenge analytics.
+    x-audience:
+      - public
+    x-displayName: ChallengeAnalytics
   - name: ChallengePlatform
     description: Operations about challenge platforms.
+    x-audience:
+      - public
+    x-displayName: ChallengePlatform
   - name: EdamConcept
     description: Operations about EDAM concepts.
+    x-audience:
+      - public
+    x-displayName: EdamConcept
   - name: Image
     description: Operations about images
+    x-audience:
+      - public
+    x-displayName: Image
   - name: Organization
     description: Operations about organizations
+    x-audience:
+      - public
+    x-displayName: Organization
 paths:
   /auth/login:
     post:
@@ -112,7 +139,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  '/auth/api-keys/{keyId}':
+  /auth/api-keys/{keyId}:
     delete:
       tags:
         - API Key
@@ -162,7 +189,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  '/challenges/{challengeId}':
+  /challenges/{challengeId}:
     parameters:
       - $ref: '#/components/parameters/challengeId'
     get:
@@ -206,7 +233,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  '/challenges/{challengeId}/json-ld':
+  /challenges/{challengeId}/json-ld:
     parameters:
       - $ref: '#/components/parameters/challengeId'
     get:
@@ -228,7 +255,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  '/challenges/{challengeId}/contributions':
+  /challenges/{challengeId}/contributions:
     parameters:
       - $ref: '#/components/parameters/challengeId'
     get:
@@ -288,10 +315,8 @@ paths:
       tags:
         - ChallengeContribution
       summary: Delete all contributions for a specific challenge
-      description: >
-        Deletes all associated contributions for a given challenge, identified
-        by its ID.
-
+      description: |
+        Deletes all associated contributions for a given challenge, identified by its ID.
         This action is irreversible.
       operationId: deleteAllChallengeContributions
       security:
@@ -307,7 +332,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  '/challenges/{challengeId}/contributions/{challengeContributionId}':
+  /challenges/{challengeId}/contributions/{challengeContributionId}:
     parameters:
       - $ref: '#/components/parameters/challengeId'
       - $ref: '#/components/parameters/challengeContributionId'
@@ -315,9 +340,8 @@ paths:
       tags:
         - ChallengeContribution
       summary: Get a specific challenge contribution
-      description: >
-        Retrieves a specific contribution record for a challenge, identified by
-        its ID.
+      description: |
+        Retrieves a specific contribution record for a challenge, identified by its ID.
       operationId: getChallengeContribution
       x-audience:
         - public
@@ -374,10 +398,8 @@ paths:
       tags:
         - ChallengeContribution
       summary: Delete a specific challenge contribution
-      description: >
-        Deletes a specific contribution record for a challenge, identified by
-        its ID.
-
+      description: |
+        Deletes a specific contribution record for a challenge, identified by its ID.
         This action is irreversible.
       operationId: deleteChallengeContribution
       x-audience:
@@ -466,7 +488,7 @@ paths:
           $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  '/challenge-platforms/{challengePlatformId}':
+  /challenge-platforms/{challengePlatformId}:
     parameters:
       - $ref: '#/components/parameters/challengePlatformId'
     get:
@@ -528,9 +550,8 @@ paths:
       tags:
         - ChallengePlatform
       summary: Delete a challenge platform
-      description: >
-        Deletes a challenge platform by its unique ID. This action is
-        irreversible.
+      description: |
+        Deletes a challenge platform by its unique ID. This action is irreversible.
       operationId: deleteChallengePlatform
       x-audience:
         - public
@@ -644,7 +665,7 @@ paths:
           $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  '/organizations/{org}':
+  /organizations/{org}:
     parameters:
       - $ref: '#/components/parameters/org'
     get:
@@ -722,7 +743,21 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /organizations/{org}/participations:
+    parameters:
+      - $ref: '#/components/parameters/org'
+  /organizations/{org}/participations/{challengeId}/roles/{role}:
+    parameters:
+      - $ref: '#/components/parameters/org'
+      - $ref: '#/components/parameters/challengeId'
+      - $ref: '#/components/parameters/challengeParticipationRole'
 components:
+  securitySchemes:
+    apiBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: api_key
+      description: API key obtained from /auth/login endpoint
   schemas:
     LoginRequest:
       type: object
@@ -775,9 +810,7 @@ components:
           description: The HTTP status code
         detail:
           type: string
-          description: >-
-            A human readable explanation specific to this occurrence of the
-            problem
+          description: A human readable explanation specific to this occurrence of the problem
         type:
           type: string
           description: An absolute URI that identifies the problem type
@@ -833,9 +866,7 @@ components:
           maxLength: 100
         expiresIn:
           type: integer
-          description: >-
-            Number of days until the API key expires (optional, default is no
-            expiration)
+          description: Number of days until the API key expires (optional, default is no expiration)
           example: 365
           minimum: 1
           maximum: 3650
@@ -902,7 +933,7 @@ components:
       type: string
       minLength: 3
       maxLength: 30
-      pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
       example: example-challenge-platform
     OrganizationId:
       description: The unique identifier of an organization
@@ -1076,7 +1107,7 @@ components:
       type: string
       minLength: 3
       maxLength: 255
-      pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
       example: awesome-challenge
     ChallengeName:
       description: The name of the challenge.
@@ -1102,7 +1133,7 @@ components:
       format: url
       maxLength: 120
       nullable: true
-      example: 'https://doi.org/123/abc'
+      example: https://doi.org/123/abc
     ChallengePlatformId:
       description: The unique identifier of a challenge platform.
       type: integer
@@ -1135,7 +1166,7 @@ components:
       format: url
       maxLength: 500
       nullable: true
-      example: 'https://openchallenges.io'
+      example: https://openchallenges.io
     EdamConcept:
       type: object
       description: The EDAM concept.
@@ -1144,7 +1175,7 @@ components:
           $ref: '#/components/schemas/EdamConceptId'
         classId:
           type: string
-          example: 'http://edamontology.org/data_0850'
+          example: http://edamontology.org/data_0850
           maxLength: 60
         preferredLabel:
           type: string
@@ -1270,10 +1301,10 @@ components:
           properties:
             '@context':
               type: string
-              example: 'https://schema.org'
+              example: https://schema.org
             '@id':
               type: string
-              example: 'https://openchallenges.io/api/v1/challenges/1'
+              example: https://openchallenges.io/api/v1/challenges/1
             '@type':
               type: string
               example: Challenge
@@ -1543,9 +1574,7 @@ components:
           type: string
           example: sequence image
         sections:
-          description: >-
-            An array of EDAM sections (sub-ontologies) used to filter the
-            results.
+          description: An array of EDAM sections (sub-ontologies) used to filter the results.
           type: array
           items:
             $ref: '#/components/schemas/EdamSection'
@@ -1569,7 +1598,7 @@ components:
       description: The unique identifier of the image.
       type: string
       example: logo/dream.png
-      pattern: '^[a-zA-Z0-9\/_-]+.[a-zA-Z0-9\/_-]+'
+      pattern: ^[a-zA-Z0-9\/_-]+.[a-zA-Z0-9\/_-]+
     ImageHeight:
       description: The height of the image.
       type: string
@@ -1582,9 +1611,7 @@ components:
         - 250px
         - 500px
     ImageAspectRatio:
-      description: >-
-        The aspect ratio of the image (the height of the image must be
-        specified).
+      description: The aspect ratio of the image (the height of the image must be specified).
       type: string
       default: original
       enum:
@@ -1611,7 +1638,7 @@ components:
       properties:
         url:
           type: string
-          example: 'http://example.com/an-image.png'
+          example: http://example.com/an-image.png
       required:
         - url
       x-java-class-annotations:
@@ -1682,7 +1709,7 @@ components:
       type: string
       minLength: 2
       maxLength: 64
-      pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
       example: example-org
     Organization:
       type: object
@@ -1790,7 +1817,7 @@ components:
         avatarKey:
           type: string
           format: url
-          example: 'https://via.placeholder.com/300.png'
+          example: https://via.placeholder.com/300.png
           nullable: true
         websiteUrl:
           $ref: '#/components/schemas/Url'
@@ -1851,12 +1878,6 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-  securitySchemes:
-    apiBearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: api_key
-      description: API key obtained from /auth/login endpoint
   parameters:
     challengeSearchQuery:
       name: challengeSearchQuery
@@ -1932,3 +1953,21 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/ChallengeParticipationRole'
+x-tagGroups:
+  - name: OpenChallenges Auth API
+    tags:
+      - Authentication
+      - API Key
+  - name: OpenChallenges Challenge API
+    tags:
+      - Challenge
+      - ChallengeContribution
+      - ChallengeAnalytics
+      - ChallengePlatform
+      - EdamConcept
+  - name: OpenChallenges Image API
+    tags:
+      - Image
+  - name: OpenChallenges Organization API
+    tags:
+      - Organization

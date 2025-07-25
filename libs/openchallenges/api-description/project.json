@@ -24,8 +24,12 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "openapi-merge-cli --config openapi-merge.yaml",
-        "cwd": "{projectRoot}"
+        "commands": [
+          "redocly join openapi/*-public.openapi.yaml --output openapi/openapi.yaml",
+          "redocly bundle openchallenges-public --output openapi/openapi.yaml"
+        ],
+        "cwd": "{projectRoot}",
+        "parallel": false
       },
       "dependsOn": ["build-individuals"]
     },
