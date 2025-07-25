@@ -6,7 +6,7 @@ apis:
       filter-in:
         property: x-audience
         value: [public]
-  auth-internal:
+  auth-all:
     root: ./src/auth.openapi.yaml
     decorators:
       filter-in:
@@ -20,7 +20,7 @@ apis:
       filter-in:
         property: x-audience
         value: [public]
-  challenge-internal:
+  challenge-all:
     root: ./src/challenge.openapi.yaml
     decorators:
       filter-in:
@@ -34,7 +34,7 @@ apis:
       filter-in:
         property: x-audience
         value: [public]
-  image-internal:
+  image-all:
     root: ./src/image.openapi.yaml
     decorators:
       filter-in:
@@ -48,7 +48,7 @@ apis:
       filter-in:
         property: x-audience
         value: [public]
-  organization-internal:
+  organization-all:
     root: ./src/organization.openapi.yaml
     decorators:
       filter-in:

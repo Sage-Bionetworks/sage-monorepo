@@ -8,13 +8,13 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "redocly bundle auth-internal --output openapi/auth-internal.openapi.yaml",
+          "redocly bundle auth-all --output openapi/auth-all.openapi.yaml",
           "redocly bundle auth-public --output openapi/auth-public.openapi.yaml",
-          "redocly bundle challenge-internal --output openapi/challenge-internal.openapi.yaml",
+          "redocly bundle challenge-all --output openapi/challenge-all.openapi.yaml",
           "redocly bundle challenge-public --output openapi/challenge-public.openapi.yaml",
-          "redocly bundle image-internal --output openapi/image-internal.openapi.yaml",
+          "redocly bundle image-all --output openapi/image-all.openapi.yaml",
           "redocly bundle image-public --output openapi/image-public.openapi.yaml",
-          "redocly bundle organization-internal --output openapi/organization-internal.openapi.yaml",
+          "redocly bundle organization-all --output openapi/organization-all.openapi.yaml",
           "redocly bundle organization-public --output openapi/organization-public.openapi.yaml"
         ],
         "parallel": true,
