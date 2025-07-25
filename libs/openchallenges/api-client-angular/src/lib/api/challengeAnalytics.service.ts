@@ -181,7 +181,7 @@ export class ChallengeAnalyticsService {
       }
     }
 
-    let localVarPath = `/challengeAnalytics/challengesPerYear`;
+    let localVarPath = `/challenge-analytics/challenges-per-year`;
     return this.httpClient.request<ChallengesPerYear>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,

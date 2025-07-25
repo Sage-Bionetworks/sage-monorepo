@@ -32,9 +32,11 @@ model/challengeParticipation.ts
 model/challengeParticipationCreateRequest.ts
 model/challengeParticipationRole.ts
 model/challengePlatform.ts
+model/challengePlatformCreateRequest.ts
 model/challengePlatformDirection.ts
 model/challengePlatformSearchQuery.ts
 model/challengePlatformSort.ts
+model/challengePlatformUpdateRequest.ts
 model/challengePlatformsPage.ts
 model/challengeSearchQuery.ts
 model/challengeSort.ts

@@ -107,7 +107,7 @@ public class EdamConceptApi {
     ParameterizedTypeReference<EdamConceptsPage> localVarReturnType =
       new ParameterizedTypeReference<>() {};
     return apiClient.invokeAPI(
-      "/edamConcepts",
+      "/edam-concepts",
       HttpMethod.GET,
       pathParams,
       queryParams,

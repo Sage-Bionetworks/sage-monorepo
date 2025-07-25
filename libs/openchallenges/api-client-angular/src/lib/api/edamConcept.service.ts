@@ -197,7 +197,7 @@ export class EdamConceptService {
       }
     }
 
-    let localVarPath = `/edamConcepts`;
+    let localVarPath = `/edam-concepts`;
     return this.httpClient.request<EdamConceptsPage>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,

@@ -21,11 +21,15 @@ export interface ChallengePlatform {
    */
   slug: string;
   /**
-   * The name of the challenge platform.
+   * The display name of the challenge platform.
    */
   name: string;
+  /**
+   * The avatar key
+   */
   avatarKey: string;
-  websiteUrl: string;
-  createdAt: string;
-  updatedAt: string;
+  /**
+   * A URL to the website or image.
+   */
+  websiteUrl: string | null;
 }

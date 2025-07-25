@@ -555,7 +555,7 @@ paths:
         - application/problem+json
       x-tags:
         - tag: ChallengeContribution
-  /challengeAnalytics/challengesPerYear:
+  /challenge-analytics/challenges-per-year:
     get:
       description: Returns the number of challenges tracked per year
       operationId: getChallengesPerYear
@@ -839,7 +839,7 @@ paths:
         - application/problem+json
       x-tags:
         - tag: ChallengePlatform
-  /edamConcepts:
+  /edam-concepts:
     get:
       description: List EDAM concepts
       operationId: listEdamConcepts

@@ -27,7 +27,7 @@ public interface ChallengeAnalyticsApiDelegate {
     }
 
     /**
-     * GET /challengeAnalytics/challengesPerYear : Get the number of challenges tracked per year
+     * GET /challenge-analytics/challenges-per-year : Get the number of challenges tracked per year
      * Returns the number of challenges tracked per year
      *
      * @return An object (status code 200)

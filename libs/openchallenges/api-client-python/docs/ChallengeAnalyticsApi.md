@@ -1,13 +1,13 @@
 # openchallenges_api_client_python.ChallengeAnalyticsApi
 
-All URIs are relative to *http://localhost/v1*
+All URIs are relative to _http://localhost/v1_
 
-Method | HTTP request | Description
-------------- | ------------- | -------------
-[**get_challenges_per_year**](ChallengeAnalyticsApi.md#get_challenges_per_year) | **GET** /challengeAnalytics/challengesPerYear | Get the number of challenges tracked per year
-
+| Method                                                                          | HTTP request                                     | Description                                   |
+| ------------------------------------------------------------------------------- | ------------------------------------------------ | --------------------------------------------- |
+| [**get_challenges_per_year**](ChallengeAnalyticsApi.md#get_challenges_per_year) | **GET** /challenge-analytics/challenges-per-year | Get the number of challenges tracked per year |
 
 # **get_challenges_per_year**
+
 > ChallengesPerYear get_challenges_per_year()
 
 Get the number of challenges tracked per year
@@ -15,7 +15,6 @@ Get the number of challenges tracked per year
 Returns the number of challenges tracked per year
 
 ### Example
-
 
 ```python
 import openchallenges_api_client_python
@@ -44,8 +43,6 @@ with openchallenges_api_client_python.ApiClient(configuration) as api_client:
         print("Exception when calling ChallengeAnalyticsApi->get_challenges_per_year: %s\n" % e)
 ```
 
-
-
 ### Parameters
 
 This endpoint does not need any parameter.
@@ -60,15 +57,14 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | An object |  -  |
-**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | An object                                                         | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-

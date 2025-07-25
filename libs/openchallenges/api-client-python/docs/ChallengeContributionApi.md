@@ -4,16 +4,16 @@ All URIs are relative to _http://localhost/v1_
 
 | Method                                                                                                   | HTTP request                                                                 | Description                                       |
 | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------- |
-| [**add_challenge_contribution**](ChallengeContributionApi.md#add_challenge_contribution)                 | **POST** /challenges/{challengeId}/contributions                             | Create a new contribution for a challenge         |
+| [**create_challenge_contribution**](ChallengeContributionApi.md#create_challenge_contribution)           | **POST** /challenges/{challengeId}/contributions                             | Create a new contribution for a challenge         |
 | [**delete_all_challenge_contributions**](ChallengeContributionApi.md#delete_all_challenge_contributions) | **DELETE** /challenges/{challengeId}/contributions                           | Delete all contributions for a specific challenge |
 | [**delete_challenge_contribution**](ChallengeContributionApi.md#delete_challenge_contribution)           | **DELETE** /challenges/{challengeId}/contributions/{challengeContributionId} | Delete a specific challenge contribution          |
 | [**get_challenge_contribution**](ChallengeContributionApi.md#get_challenge_contribution)                 | **GET** /challenges/{challengeId}/contributions/{challengeContributionId}    | Get a specific challenge contribution             |
 | [**list_challenge_contributions**](ChallengeContributionApi.md#list_challenge_contributions)             | **GET** /challenges/{challengeId}/contributions                              | List challenge contributions                      |
 | [**update_challenge_contribution**](ChallengeContributionApi.md#update_challenge_contribution)           | **PUT** /challenges/{challengeId}/contributions/{challengeContributionId}    | Update an existing challenge contribution         |
 
-# **add_challenge_contribution**
+# **create_challenge_contribution**
 
-> ChallengeContribution add_challenge_contribution(challenge_id, challenge_contribution_create_request)
+> ChallengeContribution create_challenge_contribution(challenge_id, challenge_contribution_create_request)
 
 Create a new contribution for a challenge
 
@@ -55,11 +55,11 @@ with openchallenges_api_client_python.ApiClient(configuration) as api_client:
 
     try:
         # Create a new contribution for a challenge
-        api_response = api_instance.add_challenge_contribution(challenge_id, challenge_contribution_create_request)
-        print("The response of ChallengeContributionApi->add_challenge_contribution:\n")
+        api_response = api_instance.create_challenge_contribution(challenge_id, challenge_contribution_create_request)
+        print("The response of ChallengeContributionApi->create_challenge_contribution:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling ChallengeContributionApi->add_challenge_contribution: %s\n" % e)
+        print("Exception when calling ChallengeContributionApi->create_challenge_contribution: %s\n" % e)
 ```
 
 ### Parameters
@@ -396,8 +396,7 @@ No authorization required
 
 Update an existing challenge contribution
 
-Updates an existing contribution record for a challenge.
-Only the organization ID and role can be modified.
+Updates an existing challenge contribution.
 
 ### Example
 
