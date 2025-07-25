@@ -1,3 +1,16 @@
+# Redocly configuration file for OpenChallenges API
+#
+# About `x-audience`:
+# - The optional `x-audience` annotation can be applied to OpenAPI nodes such as tags, paths,
+#   components, and others.
+# - When using decorators like `filter-in` or `filter-out`, only nodes annotated with `x-audience`
+#   are evaluated for inclusion or exclusion.
+# - Nodes without an `x-audience` annotation are not affected by these filters and will always be
+#   included in the output OpenAPI files.
+# - This allows you to selectively expose or hide parts of your API for different audiences, while
+#   keeping unannotated nodes visible in all outputs.
+# - Best practice: Be intentional and always specify the `x-audience` annotation on nodes.
+
 apis:
   # OpenChallenges API
   openchallenges-public:
@@ -14,9 +27,9 @@ apis:
           name: Support
           url: https://github.com/Sage-Bionetworks/sage-monorepo
         x-logo:
-          url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
+          url: https://openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
       servers:
-        - url: http://localhost/v1
+        - url: https://openchallenges.io/api/v1
 
   # Auth API
   auth-public:
@@ -31,6 +44,7 @@ apis:
       filter-in:
         property: x-audience
         value: [public, internal]
+        matchStrategy: any
 
   # Challenge API
   challenge-public:
@@ -45,6 +59,7 @@ apis:
       filter-in:
         property: x-audience
         value: [public, internal]
+        matchStrategy: any
 
   # Image API
   image-public:
@@ -59,6 +74,7 @@ apis:
       filter-in:
         property: x-audience
         value: [public, internal]
+        matchStrategy: any
 
   # Organization API
   organization-public:
@@ -73,3 +89,4 @@ apis:
       filter-in:
         property: x-audience
         value: [public, internal]
+        matchStrategy: any
