@@ -11,6 +11,9 @@
 #   keeping unannotated nodes visible in all outputs.
 # - Best practice: Be intentional and always specify the `x-audience` annotation on nodes.
 
+plugins:
+  - './plugins/plugin.js'
+
 apis:
   # OpenChallenges API
   openchallenges-public:
@@ -28,6 +31,8 @@ apis:
           url: https://github.com/Sage-Bionetworks/sage-monorepo
         x-logo:
           url: https://openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
+      plugin/replace-servers-url:
+        serverUrl: 'https://openchallenges.io/api/v1'
 
   # Auth API
   auth-public:

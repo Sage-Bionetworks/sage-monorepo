@@ -12,7 +12,7 @@ info:
   x-logo:
     url: https://openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
-  - url: http://localhost/v1
+  - url: https://openchallenges.io/api/v1
 tags:
   - name: Authentication
     description: Operations about authentication
