@@ -26,6 +26,8 @@ paths:
       summary: User login
       description: Authenticate user and return JWT token
       operationId: login
+      x-audience:
+        - public
       requestBody:
         required: true
         content:
@@ -50,6 +52,8 @@ paths:
       summary: List API keys
       description: Get all API keys for the authenticated user
       operationId: listApiKeys
+      x-audience:
+        - public
       security:
         - apiBearerAuth: []
       responses:
@@ -71,6 +75,8 @@ paths:
       summary: Create API key
       description: Generate a new API key for the authenticated user
       operationId: createApiKey
+      x-audience:
+        - public
       security:
         - apiBearerAuth: []
       requestBody:
@@ -99,6 +105,8 @@ paths:
       summary: Delete API key
       description: Revoke an API key
       operationId: deleteApiKey
+      x-audience:
+        - public
       security:
         - apiBearerAuth: []
       parameters:
@@ -125,6 +133,8 @@ paths:
       summary: Validate API key
       description: Internal endpoint to validate API keys (used by other services)
       operationId: validateApiKey
+      x-audience:
+        - internal
       requestBody:
         required: true
         content:

@@ -26,6 +26,8 @@ paths:
       summary: List organizations
       description: List organizations
       operationId: listOrganizations
+      x-audience:
+        - public
       parameters:
         - $ref: '#/components/parameters/organizationSearchQuery'
       responses:
@@ -45,6 +47,8 @@ paths:
       summary: Create an organization
       description: Create an organization with the specified account name
       operationId: createOrganization
+      x-audience:
+        - public
       security:
         - apiBearerAuth: []
       requestBody:
@@ -77,6 +81,8 @@ paths:
       summary: Get an organization
       description: Returns the organization identified by its login or ID.
       operationId: getOrganization
+      x-audience:
+        - public
       responses:
         '200':
           description: Organization retrieved successfully
@@ -94,6 +100,8 @@ paths:
       summary: Update an existing organization
       description: Updates an existing organization.
       operationId: updateOrganization
+      x-audience:
+        - public
       security:
         - apiBearerAuth: []
       requestBody:
@@ -127,6 +135,8 @@ paths:
       summary: Delete an organization
       description: Deletes the organization specified by its login or ID.
       operationId: deleteOrganization
+      x-audience:
+        - public
       security:
         - apiBearerAuth: []
       responses:
@@ -149,6 +159,8 @@ paths:
       summary: Create a new challenge participation
       description: Creates a new challenge participation.
       operationId: createChallengeParticipation
+      x-audience:
+        - internal
       security:
         - apiBearerAuth: []
       requestBody:
@@ -185,6 +197,8 @@ paths:
       summary: Delete a specific challenge participation
       description: Delete a specific challenge participation.
       operationId: deleteChallengeParticipation
+      x-audience:
+        - internal
       security:
         - apiBearerAuth: []
       responses:
