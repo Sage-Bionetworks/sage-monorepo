@@ -6,6 +6,7 @@ get:
   summary: Get an organization
   description: Returns the organization identified by its login or ID.
   operationId: getOrganization
+  x-audience: [public]
   responses:
     '200':
       description: Organization retrieved successfully
@@ -23,6 +24,7 @@ put:
   summary: Update an existing organization
   description: Updates an existing organization.
   operationId: updateOrganization
+  x-audience: [public]
   security:
     - apiBearerAuth: []
   requestBody:
@@ -56,6 +58,7 @@ delete:
   summary: Delete an organization
   description: Deletes the organization specified by its login or ID.
   operationId: deleteOrganization
+  x-audience: [public]
   security:
     - apiBearerAuth: []
   responses:

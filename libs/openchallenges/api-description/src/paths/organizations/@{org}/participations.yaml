@@ -6,6 +6,7 @@ post:
   summary: Create a new challenge participation
   description: Creates a new challenge participation.
   operationId: createChallengeParticipation
+  x-audience: [internal]
   security:
     - apiBearerAuth: []
   requestBody:

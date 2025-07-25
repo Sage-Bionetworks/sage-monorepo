@@ -8,6 +8,7 @@ delete:
   summary: Delete a specific challenge participation
   description: Delete a specific challenge participation.
   operationId: deleteChallengeParticipation
+  x-audience: [internal]
   security:
     - apiBearerAuth: []
   responses:

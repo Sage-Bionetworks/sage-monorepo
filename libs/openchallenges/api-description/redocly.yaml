@@ -1,0 +1,56 @@
+apis:
+  # Auth API
+  auth-public:
+    root: ./src/auth.openapi.yaml
+    decorators:
+      filter-in:
+        property: x-audience
+        value: [public]
+  auth-internal:
+    root: ./src/auth.openapi.yaml
+    decorators:
+      filter-in:
+        property: x-audience
+        value: [public, internal]
+
+  # Challenge API
+  challenge-public:
+    root: ./src/challenge.openapi.yaml
+    decorators:
+      filter-in:
+        property: x-audience
+        value: [public]
+  challenge-internal:
+    root: ./src/challenge.openapi.yaml
+    decorators:
+      filter-in:
+        property: x-audience
+        value: [public, internal]
+
+  # Image API
+  image-public:
+    root: ./src/image.openapi.yaml
+    decorators:
+      filter-in:
+        property: x-audience
+        value: [public]
+  image-internal:
+    root: ./src/image.openapi.yaml
+    decorators:
+      filter-in:
+        property: x-audience
+        value: [public, internal]
+
+  # Organization API
+  organization-public:
+    root: ./src/organization.openapi.yaml
+    decorators:
+      filter-in:
+        property: x-audience
+        value: [public]
+  organization-internal:
+    root: ./src/organization.openapi.yaml
+    decorators:
+      filter-in:
+        property: x-audience
+        value: [public, internal]
