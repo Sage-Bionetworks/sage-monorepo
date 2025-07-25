@@ -34,6 +34,7 @@ get:
   summary: List challenges
   description: List challenges
   operationId: listChallenges
+  x-audience: [public]
   parameters:
     - $ref: ../components/parameters/query/challengeSearchQuery.yaml
   responses:

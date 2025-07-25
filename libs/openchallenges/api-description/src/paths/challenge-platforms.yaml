@@ -4,6 +4,7 @@ get:
   summary: List challenge platforms
   description: List challenge platforms
   operationId: listChallengePlatforms
+  x-audience: [public]
   parameters:
     - $ref: ../components/parameters/query/challengePlatformSearchQuery.yaml
   responses:
@@ -23,6 +24,7 @@ post:
   summary: Create a challenge platform
   description: Create a challenge platform with the specified ID
   operationId: createChallengePlatform
+  x-audience: [public]
   security:
     - apiBearerAuth: []
   requestBody:

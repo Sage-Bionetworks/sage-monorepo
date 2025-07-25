@@ -6,6 +6,7 @@ get:
   summary: Get a challenge platform
   description: Returns the challenge platform identified by its unique ID
   operationId: getChallengePlatform
+  x-audience: [public]
   responses:
     '200':
       description: Success
@@ -24,6 +25,7 @@ put:
   description: |
     Updates an existing challenge platform.
   operationId: updateChallengePlatform
+  x-audience: [public]
   security:
     - apiBearerAuth: []
   requestBody:
@@ -58,6 +60,7 @@ delete:
   description: |
     Deletes a challenge platform by its unique ID. This action is irreversible.
   operationId: deleteChallengePlatform
+  x-audience: [public]
   security:
     - apiBearerAuth: []
   responses:

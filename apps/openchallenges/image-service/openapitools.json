@@ -6,7 +6,7 @@
     "generators": {
       "openchallenges-image-service": {
         "generatorName": "spring",
-        "inputSpec": "#{cwd}/../../../libs/openchallenges/api-description/build/image.openapi.yaml",
+        "inputSpec": "#{cwd}/../../../libs/openchallenges/api-description/openapi/image-service.openapi.yaml",
         "output": "#{cwd}",
         "templateDir": "templates",
         "additionalProperties": {

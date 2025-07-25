@@ -6,7 +6,7 @@
     "generators": {
       "openchallenges-auth-service": {
         "generatorName": "spring",
-        "inputSpec": "#{cwd}/../../../libs/openchallenges/api-description/openapi/auth.openapi.yaml",
+        "inputSpec": "#{cwd}/../../../libs/openchallenges/api-description/openapi/auth-service.openapi.yaml",
         "output": "#{cwd}",
         "additionalProperties": {
           "apiPackage": "org.sagebionetworks.openchallenges.auth.service.api",

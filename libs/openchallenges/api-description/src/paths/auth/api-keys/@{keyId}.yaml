@@ -4,6 +4,7 @@ delete:
   summary: Delete API key
   description: Revoke an API key
   operationId: deleteApiKey
+  x-audience: [public]
   security:
     - apiBearerAuth: []
   parameters:

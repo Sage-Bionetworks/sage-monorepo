@@ -1,24 +1,37 @@
 package org.sagebionetworks.openchallenges.image.service.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import java.net.URI;
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.OffsetDateTime;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
 import java.util.*;
 import javax.annotation.Generated;
-import javax.validation.constraints.*;
 
-/** The height of the image. */
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
+/**
+ * The height of the image.
+ */
+
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public enum ImageHeightDto {
+  
   ORIGINAL("original"),
-
+  
   _32PX("32px"),
-
+  
   _100PX("100px"),
-
+  
   _140PX("140px"),
-
+  
   _250PX("250px"),
-
+  
   _500PX("500px");
 
   private String value;
@@ -47,3 +60,4 @@ public enum ImageHeightDto {
     throw new IllegalArgumentException("Unexpected value '" + value + "'");
   }
 }
+

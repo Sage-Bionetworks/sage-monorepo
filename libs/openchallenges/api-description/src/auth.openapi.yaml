@@ -16,8 +16,10 @@ servers:
 tags:
   - name: Authentication
     description: Operations about authentication
+    x-audience: [public]
   - name: API Key
     description: Operations about API key management
+    x-audience: [public]
 paths:
   /auth/login:
     $ref: paths/auth/login.yaml

@@ -6,6 +6,7 @@ get:
   summary: Get a challenge in JSON-LD format
   description: Returns the challenge specified in JSON-LD format
   operationId: getChallengeJsonLd
+  x-audience: [public]
   responses:
     '200':
       description: A challenge

@@ -1,14 +1,23 @@
 package org.sagebionetworks.openchallenges.image.service.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.*;
+import java.net.URI;
 import java.util.Objects;
-import javax.annotation.Generated;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.time.OffsetDateTime;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-/** An image */
+
+import java.util.*;
+import javax.annotation.Generated;
+
+/**
+ * An image
+ */
+
 @Schema(name = "Image", description = "An image")
 @JsonTypeName("Image")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
@@ -21,7 +30,9 @@ public class ImageDto {
     super();
   }
 
-  /** Constructor with only required parameters */
+  /**
+   * Constructor with only required parameters
+   */
   public ImageDto(String url) {
     this.url = url;
   }
@@ -33,15 +44,10 @@ public class ImageDto {
 
   /**
    * Get url
-   *
    * @return url
-   */
-  @NotNull
-  @Schema(
-    name = "url",
-    example = "http://example.com/an-image.png",
-    requiredMode = Schema.RequiredMode.REQUIRED
-  )
+  */
+  @NotNull 
+  @Schema(name = "url", example = "http://example.com/an-image.png", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("url")
   public String getUrl() {
     return url;
@@ -78,7 +84,8 @@ public class ImageDto {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
    */
   private String toIndentedString(Object o) {
     if (o == null) {
@@ -87,3 +94,4 @@ public class ImageDto {
     return o.toString().replace("\n", "\n    ");
   }
 }
+

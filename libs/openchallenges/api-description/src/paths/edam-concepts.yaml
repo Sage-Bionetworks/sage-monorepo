@@ -4,6 +4,7 @@ get:
   summary: List EDAM concepts
   description: List EDAM concepts
   operationId: listEdamConcepts
+  x-audience: [public]
   parameters:
     - $ref: ../components/parameters/query/edamConceptSearchQuery.yaml
   responses:

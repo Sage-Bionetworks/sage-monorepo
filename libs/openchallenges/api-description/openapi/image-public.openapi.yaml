@@ -16,6 +16,8 @@ servers:
 tags:
   - name: Image
     description: Operations about images
+    x-audience:
+      - public
 paths:
   /images:
     get:
@@ -24,6 +26,8 @@ paths:
       summary: Get an image
       description: Returns the image specified.
       operationId: getImage
+      x-audience:
+        - public
       parameters:
         - $ref: '#/components/parameters/imageQuery'
       responses:

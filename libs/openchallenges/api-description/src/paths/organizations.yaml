@@ -4,6 +4,7 @@ get:
   summary: List organizations
   description: List organizations
   operationId: listOrganizations
+  x-audience: [public]
   parameters:
     - $ref: ../components/parameters/query/organizationSearchQuery.yaml
   responses:
@@ -23,6 +24,7 @@ post:
   summary: Create an organization
   description: Create an organization with the specified account name
   operationId: createOrganization
+  x-audience: [public]
   security:
     - apiBearerAuth: []
   requestBody:

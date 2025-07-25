@@ -16,14 +16,19 @@ servers:
 tags:
   - name: Challenge
     description: Operations about challenges.
+    x-audience: [public]
   - name: ChallengeContribution
     description: Operations about challenge contributions.
+    x-audience: [public]
   - name: ChallengeAnalytics
     description: Operations about challenge analytics.
+    x-audience: [public]
   - name: ChallengePlatform
     description: Operations about challenge platforms.
+    x-audience: [public]
   - name: EdamConcept
     description: Operations about EDAM concepts.
+    x-audience: [public]
 paths:
   /challenges:
     $ref: paths/challenges.yaml

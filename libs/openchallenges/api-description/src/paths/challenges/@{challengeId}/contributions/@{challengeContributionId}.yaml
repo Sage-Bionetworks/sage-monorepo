@@ -8,6 +8,7 @@ get:
   description: |
     Retrieves a specific contribution record for a challenge, identified by its ID.
   operationId: getChallengeContribution
+  x-audience: [public]
   responses:
     '200':
       description: Challenge contribution retrieved successfully
@@ -28,6 +29,7 @@ put:
   description: |
     Updates an existing challenge contribution.
   operationId: updateChallengeContribution
+  x-audience: [public]
   security:
     - apiBearerAuth: []
   requestBody:
@@ -63,6 +65,7 @@ delete:
     Deletes a specific contribution record for a challenge, identified by its ID.
     This action is irreversible.
   operationId: deleteChallengeContribution
+  x-audience: [public]
   security:
     - apiBearerAuth: []
   responses:

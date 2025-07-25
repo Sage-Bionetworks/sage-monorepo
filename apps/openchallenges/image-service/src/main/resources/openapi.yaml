@@ -3,10 +3,11 @@ info:
   contact:
     name: Support
     url: https://github.com/Sage-Bionetworks/sage-monorepo
+  description: 'Discover, explore, and contribute to open biomedical challenges.'
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
-  title: OpenChallenges Image REST API
+  title: OpenChallenges Image API
   version: 1.0.0
   x-logo:
     url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
@@ -15,6 +16,8 @@ servers:
 tags:
   - description: Operations about images
     name: Image
+    x-audience:
+      - public
 paths:
   /images:
     get:
@@ -52,6 +55,8 @@ paths:
       summary: Get an image
       tags:
         - Image
+      x-audience:
+        - public
       x-accepts: application/json
       x-tags:
         - tag: Image
