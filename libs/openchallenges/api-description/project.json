@@ -8,18 +8,19 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "redocly bundle auth-all --output openapi/auth-all.openapi.yaml",
+          "redocly bundle auth-service --output openapi/auth-service.openapi.yaml",
           "redocly bundle auth-public --output openapi/auth-public.openapi.yaml",
-          "redocly bundle challenge-all --output openapi/challenge-all.openapi.yaml",
+          "redocly bundle challenge-service --output openapi/challenge-service.openapi.yaml",
           "redocly bundle challenge-public --output openapi/challenge-public.openapi.yaml",
-          "redocly bundle image-all --output openapi/image-all.openapi.yaml",
+          "redocly bundle image-service --output openapi/image-service.openapi.yaml",
           "redocly bundle image-public --output openapi/image-public.openapi.yaml",
-          "redocly bundle organization-all --output openapi/organization-all.openapi.yaml",
+          "redocly bundle organization-service --output openapi/organization-service.openapi.yaml",
           "redocly bundle organization-public --output openapi/organization-public.openapi.yaml"
         ],
         "parallel": true,
         "cwd": "{projectRoot}"
-      }
+      },
+      "dependsOn": ["clean"]
     },
     "build": {
       "executor": "nx:run-commands",
@@ -39,8 +40,13 @@
         "command": "redocly lint --config redocly.yaml {projectName}"
       },
       "dependsOn": ["build"]
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rm -fr openapi/*"
+      }
     }
   },
-  "tags": ["language:openapi"],
-  "implicitDependencies": []
+  "tags": ["language:openapi"]
 }
