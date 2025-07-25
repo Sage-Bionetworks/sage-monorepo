@@ -32,8 +32,6 @@ tags:
     description: Operations about images
   - name: Organization
     description: Operations about organizations
-  - name: Challenge Participation
-    description: Operations about a challenge participation
 paths:
   /auth/login:
     post:

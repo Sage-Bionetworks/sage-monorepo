@@ -18,6 +18,8 @@ tags:
     description: Operations about organizations
   - name: Challenge Participation
     description: Operations about a challenge participation
+    x-audience:
+      - internal
 paths:
   /organizations:
     get:
