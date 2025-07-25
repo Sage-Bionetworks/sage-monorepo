@@ -6,6 +6,7 @@ get:
   summary: Get a challenge
   description: Returns the challenge specified
   operationId: getChallenge
+  x-audience: [public]
   responses:
     '200':
       description: A challenge
@@ -24,6 +25,7 @@ delete:
   description: |
     Deletes a challenge by its unique ID. This action is irreversible.
   operationId: deleteChallengeById
+  x-audience: [public]
   security:
     - apiBearerAuth: []
   responses:

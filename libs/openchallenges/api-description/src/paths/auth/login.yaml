@@ -4,6 +4,7 @@ post:
   summary: User login
   description: Authenticate user and return JWT token
   operationId: login
+  x-audience: [public]
   requestBody:
     required: true
     content:

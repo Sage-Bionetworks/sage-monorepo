@@ -6,6 +6,7 @@ get:
   summary: List challenge contributions
   description: List challenge contributions
   operationId: listChallengeContributions
+  x-audience: [public]
   responses:
     '200':
       content:
@@ -24,6 +25,7 @@ post:
   description: |
     Creates a new contribution record associated with a challenge ID.
   operationId: createChallengeContribution
+  x-audience: [public]
   security:
     - apiBearerAuth: []
   requestBody:
