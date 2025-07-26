@@ -264,6 +264,8 @@ paths:
       summary: Delete all contributions for a specific challenge
       tags:
         - ChallengeContribution
+      x-audience:
+        - internal
       x-accepts:
         - application/problem+json
       x-tags:
@@ -494,90 +496,6 @@ paths:
         - ChallengeContribution
       x-audience:
         - public
-      x-accepts:
-        - application/json
-        - application/problem+json
-      x-tags:
-        - tag: ChallengeContribution
-    put:
-      description: |
-        Updates an existing challenge contribution.
-      operationId: updateChallengeContribution
-      parameters:
-        - description: The unique identifier of the challenge.
-          explode: false
-          in: path
-          name: challengeId
-          required: true
-          schema:
-            $ref: '#/components/schemas/ChallengeId'
-          style: simple
-        - description: The unique identifier of a challenge contribution
-          explode: false
-          in: path
-          name: challengeContributionId
-          required: true
-          schema:
-            $ref: '#/components/schemas/ChallengeContributionId'
-          style: simple
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ChallengeContributionUpdateRequest'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ChallengeContribution'
-          description: Contribution updated successfully
-        '400':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Invalid request
-        '401':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Unauthorized
-        '403':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The user does not have the permission to perform this action
-        '404':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The specified resource was not found
-        '409':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request conflicts with current state of the target resource
-        '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
-      security:
-        - apiBearerAuth: []
-      summary: Update an existing challenge contribution
-      tags:
-        - ChallengeContribution
-      x-audience:
-        - public
-      x-content-type: application/json
       x-accepts:
         - application/json
         - application/problem+json
@@ -1723,20 +1641,6 @@ components:
         - '@lombok.Builder'
     ChallengeContributionCreateRequest:
       description: A challenge contribution to be created.
-      properties:
-        organizationId:
-          description: The unique identifier of an organization
-          example: 1
-          format: int64
-          type: integer
-        role:
-          $ref: '#/components/schemas/ChallengeContributionRole'
-      required:
-        - organizationId
-        - role
-      type: object
-    ChallengeContributionUpdateRequest:
-      description: A challenge contribution update request.
       properties:
         organizationId:
           description: The unique identifier of an organization

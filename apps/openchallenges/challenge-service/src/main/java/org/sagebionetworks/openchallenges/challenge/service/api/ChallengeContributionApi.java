@@ -8,7 +8,6 @@ package org.sagebionetworks.openchallenges.challenge.service.api;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.BasicErrorDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionDto;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionUpdateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionsPageDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
@@ -290,76 +289,6 @@ public interface ChallengeContributionApi {
         @Parameter(name = "challengeId", description = "The unique identifier of the challenge.", required = true, in = ParameterIn.PATH) @PathVariable("challengeId") Long challengeId
     ) {
         return getDelegate().listChallengeContributions(challengeId);
-    }
-
-
-    /**
-     * PUT /challenges/{challengeId}/contributions/{challengeContributionId} : Update an existing challenge contribution
-     * Updates an existing challenge contribution. 
-     *
-     * @param challengeId The unique identifier of the challenge. (required)
-     * @param challengeContributionId The unique identifier of a challenge contribution (required)
-     * @param challengeContributionUpdateRequestDto  (required)
-     * @return Contribution updated successfully (status code 200)
-     *         or Invalid request (status code 400)
-     *         or Unauthorized (status code 401)
-     *         or The user does not have the permission to perform this action (status code 403)
-     *         or The specified resource was not found (status code 404)
-     *         or The request conflicts with current state of the target resource (status code 409)
-     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     */
-    @Operation(
-        operationId = "updateChallengeContribution",
-        summary = "Update an existing challenge contribution",
-        description = "Updates an existing challenge contribution. ",
-        tags = { "ChallengeContribution" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Contribution updated successfully", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ChallengeContributionDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ChallengeContributionDto.class))
-            }),
-            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "409", description = "The request conflicts with current state of the target resource", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            })
-        },
-        security = {
-            @SecurityRequirement(name = "apiBearerAuth")
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.PUT,
-        value = "/challenges/{challengeId}/contributions/{challengeContributionId}",
-        produces = { "application/json", "application/problem+json" },
-        consumes = { "application/json" }
-    )
-    
-    default ResponseEntity<ChallengeContributionDto> updateChallengeContribution(
-        @Parameter(name = "challengeId", description = "The unique identifier of the challenge.", required = true, in = ParameterIn.PATH) @PathVariable("challengeId") Long challengeId,
-        @Parameter(name = "challengeContributionId", description = "The unique identifier of a challenge contribution", required = true, in = ParameterIn.PATH) @PathVariable("challengeContributionId") Long challengeContributionId,
-        @Parameter(name = "ChallengeContributionUpdateRequestDto", description = "", required = true) @Valid @RequestBody ChallengeContributionUpdateRequestDto challengeContributionUpdateRequestDto
-    ) {
-        return getDelegate().updateChallengeContribution(challengeId, challengeContributionId, challengeContributionUpdateRequestDto);
     }
 
 }
