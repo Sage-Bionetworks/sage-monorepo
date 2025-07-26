@@ -184,6 +184,8 @@ public class ChallengeContributionService {
       );
     }
 
+    // Delete the participation for this organization
+
     // Delete the contribution
     challengeContributionRepository.delete(existingContribution);
   }
