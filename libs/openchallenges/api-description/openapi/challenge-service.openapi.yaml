@@ -187,6 +187,8 @@ paths:
         Deletes all associated contributions for a given challenge, identified by its ID.
         This action is irreversible.
       operationId: deleteAllChallengeContributions
+      x-audience:
+        - internal
       security:
         - apiBearerAuth: []
       responses:
@@ -224,42 +226,6 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-    put:
-      tags:
-        - ChallengeContribution
-      summary: Update an existing challenge contribution
-      description: |
-        Updates an existing challenge contribution.
-      operationId: updateChallengeContribution
-      x-audience:
-        - public
-      security:
-        - apiBearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ChallengeContributionUpdateRequest'
-      responses:
-        '200':
-          description: Contribution updated successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ChallengeContribution'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '409':
-          $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
@@ -948,17 +914,6 @@ components:
     ChallengeContributionCreateRequest:
       type: object
       description: A challenge contribution to be created.
-      properties:
-        organizationId:
-          $ref: '#/components/schemas/OrganizationId'
-        role:
-          $ref: '#/components/schemas/ChallengeContributionRole'
-      required:
-        - organizationId
-        - role
-    ChallengeContributionUpdateRequest:
-      type: object
-      description: A challenge contribution update request.
       properties:
         organizationId:
           $ref: '#/components/schemas/OrganizationId'
