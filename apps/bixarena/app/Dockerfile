@@ -8,6 +8,9 @@ RUN pip install --no-cache-dir \
     torch==2.2.2 \
     transformers==4.40.1
 
+COPY models.json /app/models.json
+WORKDIR /app
+
 EXPOSE 8100
 
-ENTRYPOINT ["/bin/sh", "-c", "python -m fastchat.serve.gradio_web_server_multi --controller-url http://${CONTROLLER_HOST}:${CONTROLLER_PORT} --port 8100"]
+ENTRYPOINT ["sh", "-c", "python -m fastchat.serve.gradio_web_server_multi --controller-url http://${CONTROLLER_HOST}:${CONTROLLER_PORT} --port 8100 --register-api-endpoint-file /app/models.json"]
