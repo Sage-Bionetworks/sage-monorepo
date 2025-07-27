@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * Feign client for communicating with the OpenChallenges Organization Service
@@ -25,8 +26,8 @@ public interface OrganizationServiceClient {
    * @param orgId the organization ID
    * @return the organization details
    */
-  @GetMapping("/organizations/{orgId}")
-  OrganizationDto getOrganization(@PathVariable("orgId") Long orgId);
+  @GetMapping("/organizations/{org}")
+  OrganizationDto getOrganization(@PathVariable Long org);
 
   /**
    * Creates a challenge participation for an organization
@@ -37,8 +38,8 @@ public interface OrganizationServiceClient {
    */
   @PostMapping("/organizations/{org}/participations")
   ChallengeParticipationDto createChallengeParticipation(
-    String org,
-    ChallengeParticipationCreateRequestDto request
+    @PathVariable String org,
+    @RequestBody ChallengeParticipationCreateRequestDto request
   );
 
   /**
@@ -50,9 +51,9 @@ public interface OrganizationServiceClient {
    * @return void
    */
   @DeleteMapping("/organizations/{org}/participations/challenge/{challengeId}/role/{role}")
-  Void deleteChallengeParticipation(
-    String org,
-    Long challengeId,
-    ChallengeParticipationRoleDto role
+  void deleteChallengeParticipation(
+    @PathVariable String org,
+    @PathVariable Long challengeId,
+    @PathVariable ChallengeParticipationRoleDto role
   );
 }

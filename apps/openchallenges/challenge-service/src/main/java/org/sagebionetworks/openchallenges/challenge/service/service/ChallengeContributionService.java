@@ -10,17 +10,22 @@ import org.sagebionetworks.openchallenges.challenge.service.exception.Organizati
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionsPageDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.organization.ChallengeParticipationRoleDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeContributionEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengeContributionMapper;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeContributionRepository;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ChallengeContributionService {
+
+  private static final Logger logger = LoggerFactory.getLogger(ChallengeContributionService.class);
 
   private final ChallengeContributionRepository challengeContributionRepository;
   private final ChallengeRepository challengeRepository;
@@ -184,7 +189,31 @@ public class ChallengeContributionService {
       );
     }
 
-    // Delete the participation for this organization
+    // Delete this organization's challenge participation
+    try {
+      organizationServiceClient.deleteChallengeParticipation(
+        String.valueOf(existingContribution.getOrganizationId()),
+        challengeId,
+        ChallengeParticipationRoleDto.fromValue(existingContribution.getRole())
+      );
+    } catch (FeignException.NotFound e) {
+      // If the participation does not exist, we can still delete the contribution
+      // Log this as a warning but do not throw an error
+      logger.warn(
+        "Challenge participation for organization {} in challenge {} with role {} not found. Proceeding with deletion.",
+        existingContribution.getOrganizationId(),
+        challengeId,
+        existingContribution.getRole()
+      );
+    } catch (FeignException e) {
+      throw new RuntimeException(
+        "Failed to delete challenge participation for organization " +
+        existingContribution.getOrganizationId() +
+        ". Reason: " +
+        e.getMessage(),
+        e
+      );
+    }
 
     // Delete the contribution
     challengeContributionRepository.delete(existingContribution);
