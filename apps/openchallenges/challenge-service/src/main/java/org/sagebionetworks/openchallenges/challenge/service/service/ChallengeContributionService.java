@@ -191,6 +191,7 @@ public class ChallengeContributionService {
 
     // Delete this organization's challenge participation
     try {
+      // TODO: fix error because the request is not authenticated (401 error)
       organizationServiceClient.deleteChallengeParticipation(
         String.valueOf(existingContribution.getOrganizationId()),
         challengeId,
