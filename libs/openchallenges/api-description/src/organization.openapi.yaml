@@ -27,8 +27,8 @@ paths:
     $ref: paths/organizations/@{org}.yaml
   /organizations/{org}/participations:
     $ref: paths/organizations/@{org}/participations.yaml
-  /organizations/{org}/participations/{challengeId}/roles/{role}:
-    $ref: paths/organizations/@{org}/participations/@{challengeId}/roles/${role}.yaml
+  /organizations/{org}/participations/{challengeId}/role/{role}:
+    $ref: paths/organizations/@{org}/participations/@{challengeId}/role/${role}.yaml
 components:
   securitySchemes:
     apiBearerAuth:

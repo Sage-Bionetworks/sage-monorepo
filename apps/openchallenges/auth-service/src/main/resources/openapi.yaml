@@ -253,6 +253,7 @@ components:
             - admin
             - user
             - readonly
+            - service
           example: admin
           type: string
       type: object
@@ -413,6 +414,7 @@ components:
             - admin
             - user
             - readonly
+            - service
           example: admin
           type: string
         scopes:

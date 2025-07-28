@@ -22,41 +22,6 @@ get:
       $ref: ../../../../components/responses/NotFound.yaml
     '500':
       $ref: ../../../../components/responses/InternalServerError.yaml
-put:
-  tags:
-    - ChallengeContribution
-  summary: Update an existing challenge contribution
-  description: |
-    Updates an existing challenge contribution.
-  operationId: updateChallengeContribution
-  x-audience: [public]
-  security:
-    - apiBearerAuth: []
-  requestBody:
-    required: true
-    content:
-      application/json:
-        schema:
-          $ref: ../../../../components/schemas/ChallengeContributionUpdateRequest.yaml
-  responses:
-    '200':
-      description: Contribution updated successfully
-      content:
-        application/json:
-          schema:
-            $ref: ../../../../components/schemas/ChallengeContribution.yaml
-    '400':
-      $ref: ../../../../components/responses/BadRequest.yaml
-    '401':
-      $ref: ../../../../components/responses/Unauthorized.yaml
-    '403':
-      $ref: ../../../../components/responses/Forbidden.yaml
-    '404':
-      $ref: ../../../../components/responses/NotFound.yaml
-    '409':
-      $ref: ../../../../components/responses/Conflict.yaml
-    '500':
-      $ref: ../../../../components/responses/InternalServerError.yaml
 delete:
   tags:
     - ChallengeContribution

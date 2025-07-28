@@ -52,7 +52,7 @@ public class ChallengeParticipationApiDelegateImpl implements ChallengeParticipa
   }
 
   @Override
-  @PreAuthorize("authentication.principal.admin")
+  @PreAuthorize("authentication.principal.admin or authentication.principal.role == 'service'")
   public ResponseEntity<Void> deleteChallengeParticipation(
     String org,
     Long challengeId,

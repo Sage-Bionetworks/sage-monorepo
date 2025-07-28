@@ -84,7 +84,7 @@ public interface ChallengeParticipationApiDelegate {
     }
 
     /**
-     * DELETE /organizations/{org}/participations/{challengeId}/roles/{role} : Delete a specific challenge participation
+     * DELETE /organizations/{org}/participations/{challengeId}/role/{role} : Delete a specific challenge participation
      * Delete a specific challenge participation.
      *
      * @param org The id or login of the organization. (required)

@@ -39,7 +39,9 @@ public class LoginResponseDto {
     
     USER("user"),
     
-    READONLY("readonly");
+    READONLY("readonly"),
+    
+    SERVICE("service");
 
     private final String value;
 

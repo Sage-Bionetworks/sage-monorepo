@@ -20,7 +20,17 @@ public enum ErrorConstants {
     "Sorting strategy not implemented",
     HttpStatus.NOT_IMPLEMENTED
   ),
-  DELETE_NOT_ALLOWED("CHALLENGE-SERVICE-1005", "Delete not allowed", HttpStatus.CONFLICT);
+  DELETE_NOT_ALLOWED("CHALLENGE-SERVICE-1005", "Delete not allowed", HttpStatus.CONFLICT),
+  CHALLENGE_PARTICIPATION_DELETE_ERROR(
+    "CHALLENGE-SERVICE-1006",
+    "Error deleting challenge participation",
+    HttpStatus.BAD_GATEWAY
+  ),
+  CHALLENGE_PARTICIPATION_NOT_FOUND(
+    "CHALLENGE-SERVICE-1007",
+    "Challenge participation not found",
+    HttpStatus.NOT_FOUND
+  );
 
   private String type;
   private String title;

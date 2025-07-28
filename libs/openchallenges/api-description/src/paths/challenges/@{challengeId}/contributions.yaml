@@ -59,6 +59,7 @@ delete:
     Deletes all associated contributions for a given challenge, identified by its ID.
     This action is irreversible.
   operationId: deleteAllChallengeContributions
+  x-audience: [internal]
   security:
     - apiBearerAuth: []
   responses:

@@ -289,7 +289,7 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Challenge Participation
-  /organizations/{org}/participations/{challengeId}/roles/{role}:
+  /organizations/{org}/participations/{challengeId}/role/{role}:
     delete:
       description: Delete a specific challenge participation.
       operationId: deleteChallengeParticipation
