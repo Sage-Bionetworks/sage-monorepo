@@ -112,7 +112,7 @@ explorers-home-card {
   }
 }
 
-@media (max-width: $home-mobile-md-max-width) {
+@media (width < $home-mobile-md-max-width) {
   #home-page {
     background-image: url('/model-ad-assets/images/home-arc-bg-mobile.svg');
   }
@@ -164,7 +164,7 @@ explorers-home-card {
   }
 }
 
-@media (max-width: $home-mobile-sm-max-width) {
+@media (width < $home-mobile-sm-max-width) {
   .text-marquee {
     max-width: 100%;
   }
@@ -178,7 +178,7 @@ explorers-home-card {
   }
 }
 
-@media (max-width: $home-mobile-xs-max-width) {
+@media (width < $home-mobile-xs-max-width) {
   .stats-container {
     padding-top: 150px;
 
