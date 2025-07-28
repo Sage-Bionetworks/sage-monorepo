@@ -155,6 +155,7 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
         "users:write",
       };
       case "user" -> new String[] { "organizations:read", "challenges:read" };
+      case "service" -> new String[] { "organizations:write" };
       default -> new String[] { "organizations:read" };
     };
   }
