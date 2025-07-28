@@ -5,6 +5,7 @@ import java.util.List;
 import org.sagebionetworks.openchallenges.challenge.service.client.OrganizationServiceClient;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeContributionNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeNotFoundException;
+import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeParticipationDeleteException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.DuplicateContributionException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.OrganizationNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
@@ -207,6 +208,15 @@ public class ChallengeContributionService {
         existingContribution.getRole()
       );
     } catch (FeignException e) {
+      if (e.status() == 401) {
+        throw new ChallengeParticipationDeleteException(
+          "Failed to delete challenge participation for organization " +
+          existingContribution.getOrganizationId() +
+          " due to authentication error (401 Unauthorized). " +
+          "Reason: " +
+          e.getMessage()
+        );
+      }
       throw new RuntimeException(
         "Failed to delete challenge participation for organization " +
         existingContribution.getOrganizationId() +
