@@ -264,9 +264,6 @@ importers:
       '@nx/angular':
         specifier: 21.2.1
         version: 21.2.1(82a450c692b1ae1dcbecf3c273080d96)
-      '@nx/cypress':
-        specifier: 21.2.1
-        version: 21.2.1(@babel/traverse@7.27.4)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.12))(@zkochan/js-yaml@0.0.7)(cypress@14.3.2)(debug@4.3.7)(eslint@8.57.0)(nx@21.2.1(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))(typescript@5.8.3)
       '@nx/devkit':
         specifier: 21.2.1
         version: 21.2.1(nx@21.2.1(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))
@@ -444,18 +441,12 @@ importers:
       coveralls:
         specifier: 3.1.1
         version: 3.1.1
-      cypress:
-        specifier: 14.3.2
-        version: 14.3.2
       eslint:
         specifier: 8.57.0
         version: 8.57.0
       eslint-config-standard:
         specifier: 17.0.0
         version: 17.0.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.34.1(eslint@8.57.0)(typescript@5.8.3))(eslint@8.57.0))(eslint-plugin-n@15.6.0(eslint@8.57.0))(eslint-plugin-promise@6.1.1(eslint@8.57.0))(eslint@8.57.0)
-      eslint-plugin-cypress:
-        specifier: 3.5.0
-        version: 3.5.0(eslint@8.57.0)
       eslint-plugin-import:
         specifier: 2.31.0
         version: 2.31.0(@typescript-eslint/parser@8.34.1(eslint@8.57.0)(typescript@5.8.3))(eslint@8.57.0)
@@ -2940,14 +2931,6 @@ packages:
       '@angular/build':
         optional: true
       ng-packagr:
-        optional: true
-
-  '@nx/cypress@21.2.1':
-    resolution: {integrity: sha512-dwhRyx4AbgpJJW2X6TBSlIEsqnBILvDWbmN/sgrGj8ykupwRf3X0zaGhmEpYnAkL3F/JS1HG40gaLZnZtBUdIg==}
-    peerDependencies:
-      cypress: '>= 3 < 15'
-    peerDependenciesMeta:
-      cypress:
         optional: true
 
   '@nx/cypress@21.3.2':
@@ -7689,11 +7672,6 @@ packages:
         optional: true
       eslint-import-resolver-webpack:
         optional: true
-
-  eslint-plugin-cypress@3.5.0:
-    resolution: {integrity: sha512-JZQ6XnBTNI8h1B9M7wJSFzc48SYbh7VMMKaNTQOFa3BQlnmXPrVc4PKen8R+fpv6VleiPeej6VxloGb42zdRvw==}
-    peerDependencies:
-      eslint: '>=7'
 
   eslint-plugin-es@3.0.1:
     resolution: {integrity: sha512-GUmAsJaN4Fc7Gbtl8uOBlayo2DqhwWvEzykMHSCZHU3XdJ+NSzzZcVhXh3VxX5icqQ+oQdIEawXX8xkR3mIFmQ==}
@@ -13830,6 +13808,11 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
+  typescript@5.9.0-dev.20250728:
+    resolution: {integrity: sha512-+fJjHucw7t3WfY6SoCVVaSzJRpCDxu2g81wOEm0mPxyuJjs/4k1VoXIS+7SN/jEBpymlFAzxQJoK1CpIKY9OYQ==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
   ua-parser-js@1.0.38:
     resolution: {integrity: sha512-Aq5ppTOfvrCMgAPneW1HfWj66Xi7XL+/mIy996R1/CLS/rcyJQm6QZdsKrUeivDFQ+Oc9Wyuwor8Ze8peEoUoQ==}
 
@@ -16793,6 +16776,7 @@ snapshots:
       tough-cookie: 5.1.2
       tunnel-agent: 0.6.0
       uuid: 8.3.2
+    optional: true
 
   '@cypress/xvfb@1.2.4(supports-color@8.1.1)':
     dependencies:
@@ -16800,6 +16784,7 @@ snapshots:
       lodash.once: 4.1.1
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   '@dabh/diagnostics@2.0.3':
     dependencies:
@@ -18243,30 +18228,6 @@ snapshots:
       - vue-tsc
       - webpack-cli
       - webpack-hot-middleware
-
-  '@nx/cypress@21.2.1(@babel/traverse@7.27.4)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.12))(@zkochan/js-yaml@0.0.7)(cypress@14.3.2)(debug@4.3.7)(eslint@8.57.0)(nx@21.2.1(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))(typescript@5.8.3)':
-    dependencies:
-      '@nx/devkit': 21.2.1(nx@21.2.1(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))
-      '@nx/eslint': 21.2.1(@babel/traverse@7.27.4)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.12))(@zkochan/js-yaml@0.0.7)(debug@4.3.7)(eslint@8.57.0)(nx@21.2.1(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))
-      '@nx/js': 21.2.1(@babel/traverse@7.27.4)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)(nx@21.2.1(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))
-      '@phenomnomnominal/tsquery': 5.0.1(typescript@5.8.3)
-      detect-port: 1.6.1
-      semver: 7.7.2
-      tree-kill: 1.2.2
-      tslib: 2.4.1
-    optionalDependencies:
-      cypress: 14.3.2
-    transitivePeerDependencies:
-      - '@babel/traverse'
-      - '@swc-node/register'
-      - '@swc/core'
-      - '@zkochan/js-yaml'
-      - debug
-      - eslint
-      - nx
-      - supports-color
-      - typescript
-      - verdaccio
 
   '@nx/cypress@21.3.2(@babel/traverse@7.27.4)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.12))(@zkochan/js-yaml@0.0.7)(cypress@14.3.2)(debug@4.3.7)(eslint@8.57.0)(nx@21.2.1(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))(typescript@5.8.3)':
     dependencies:
@@ -21145,9 +21106,11 @@ snapshots:
 
   '@types/shimmer@1.2.0': {}
 
-  '@types/sinonjs__fake-timers@8.1.1': {}
+  '@types/sinonjs__fake-timers@8.1.1':
+    optional: true
 
-  '@types/sizzle@2.3.8': {}
+  '@types/sizzle@2.3.8':
+    optional: true
 
   '@types/sockjs@0.3.36':
     dependencies:
@@ -21671,6 +21634,7 @@ snapshots:
     dependencies:
       clean-stack: 2.2.0
       indent-string: 4.0.0
+    optional: true
 
   ajv-formats@2.1.1(ajv@8.17.1):
     optionalDependencies:
@@ -21740,7 +21704,8 @@ snapshots:
       normalize-path: 3.0.0
       picomatch: 2.3.1
 
-  arch@2.2.0: {}
+  arch@2.2.0:
+    optional: true
 
   arch@3.0.0: {}
 
@@ -22182,7 +22147,8 @@ snapshots:
       inherits: 2.0.4
       readable-stream: 3.6.2
 
-  blob-util@2.0.2: {}
+  blob-util@2.0.2:
+    optional: true
 
   bluebird@3.7.2: {}
 
@@ -22527,7 +22493,8 @@ snapshots:
 
   check-error@2.1.1: {}
 
-  check-more-types@2.24.0: {}
+  check-more-types@2.24.0:
+    optional: true
 
   chevrotain-allstar@0.3.1(chevrotain@11.0.3):
     dependencies:
@@ -22607,7 +22574,8 @@ snapshots:
     dependencies:
       source-map: 0.6.1
 
-  clean-stack@2.2.0: {}
+  clean-stack@2.2.0:
+    optional: true
 
   cli-boxes@2.2.1: {}
 
@@ -22653,6 +22621,7 @@ snapshots:
       string-width: 4.2.3
     optionalDependencies:
       '@colors/colors': 1.5.0
+    optional: true
 
   cli-table@0.3.11:
     dependencies:
@@ -22813,7 +22782,8 @@ snapshots:
 
   common-path-prefix@3.0.0: {}
 
-  common-tags@1.8.2: {}
+  common-tags@1.8.2:
+    optional: true
 
   commonmark@0.31.0:
     dependencies:
@@ -23302,6 +23272,7 @@ snapshots:
       tree-kill: 1.2.2
       untildify: 4.0.0
       yauzl: 2.10.0
+    optional: true
 
   cytoscape-cose-bilkent@4.1.0(cytoscape@3.32.0):
     dependencies:
@@ -23712,6 +23683,7 @@ snapshots:
       ms: 2.1.3
     optionalDependencies:
       supports-color: 8.1.1
+    optional: true
 
   debug@4.3.1:
     dependencies:
@@ -24017,7 +23989,7 @@ snapshots:
     dependencies:
       semver: 7.7.2
       shelljs: 0.8.5
-      typescript: 5.9.0-dev.20250725
+      typescript: 5.9.0-dev.20250728
 
   dunder-proto@1.0.1:
     dependencies:
@@ -24393,11 +24365,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-cypress@3.5.0(eslint@8.57.0):
-    dependencies:
-      eslint: 8.57.0
-      globals: 13.24.0
-
   eslint-plugin-es@3.0.1(eslint@8.57.0):
     dependencies:
       eslint: 8.57.0
@@ -24675,7 +24642,8 @@ snapshots:
 
   event-target-shim@5.0.1: {}
 
-  eventemitter2@6.4.7: {}
+  eventemitter2@6.4.7:
+    optional: true
 
   eventemitter3@4.0.7: {}
 
@@ -24704,6 +24672,7 @@ snapshots:
       onetime: 5.1.2
       signal-exit: 3.0.7
       strip-final-newline: 2.0.0
+    optional: true
 
   execa@5.1.1:
     dependencies:
@@ -24732,6 +24701,7 @@ snapshots:
   executable@4.1.1:
     dependencies:
       pify: 2.3.0
+    optional: true
 
   exit@0.1.2: {}
 
@@ -24858,6 +24828,7 @@ snapshots:
       '@types/yauzl': 2.10.3
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   extsprintf@1.3.0: {}
 
@@ -25342,6 +25313,7 @@ snapshots:
   getos@3.2.1:
     dependencies:
       async: 3.2.5
+    optional: true
 
   getpass@0.1.7:
     dependencies:
@@ -25412,6 +25384,7 @@ snapshots:
   global-dirs@3.0.1:
     dependencies:
       ini: 2.0.0
+    optional: true
 
   global-modules@1.0.0:
     dependencies:
@@ -25766,6 +25739,7 @@ snapshots:
       assert-plus: 1.0.0
       jsprim: 2.0.2
       sshpk: 1.18.0
+    optional: true
 
   http2-client@1.3.5: {}
 
@@ -25793,7 +25767,8 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  human-signals@1.1.1: {}
+  human-signals@1.1.1:
+    optional: true
 
   human-signals@2.1.0: {}
 
@@ -25874,7 +25849,8 @@ snapshots:
 
   ini@1.3.8: {}
 
-  ini@2.0.0: {}
+  ini@2.0.0:
+    optional: true
 
   ini@5.0.0: {}
 
@@ -26061,6 +26037,7 @@ snapshots:
     dependencies:
       global-dirs: 3.0.1
       is-path-inside: 3.0.3
+    optional: true
 
   is-interactive@1.0.0: {}
 
@@ -26988,6 +26965,7 @@ snapshots:
       extsprintf: 1.3.0
       json-schema: 0.4.0
       verror: 1.10.0
+    optional: true
 
   jsx-ast-utils@3.3.5:
     dependencies:
@@ -27108,7 +27086,8 @@ snapshots:
   layout-base@2.0.1:
     optional: true
 
-  lazy-ass@1.6.0: {}
+  lazy-ass@1.6.0:
+    optional: true
 
   lazystream@1.0.1:
     dependencies:
@@ -27217,6 +27196,7 @@ snapshots:
       wrap-ansi: 7.0.0
     optionalDependencies:
       enquirer: 2.4.1
+    optional: true
 
   listr2@8.2.4:
     dependencies:
@@ -27306,7 +27286,8 @@ snapshots:
 
   lodash.merge@4.6.2: {}
 
-  lodash.once@4.1.1: {}
+  lodash.once@4.1.1:
+    optional: true
 
   lodash.truncate@4.4.2: {}
 
@@ -27346,6 +27327,7 @@ snapshots:
       cli-cursor: 3.1.0
       slice-ansi: 4.0.0
       wrap-ansi: 6.2.0
+    optional: true
 
   log-update@6.1.0:
     dependencies:
@@ -28589,7 +28571,8 @@ snapshots:
 
   os-tmpdir@1.0.2: {}
 
-  ospath@1.2.2: {}
+  ospath@1.2.2:
+    optional: true
 
   outdent@0.8.0: {}
 
@@ -28632,6 +28615,7 @@ snapshots:
   p-map@4.0.0:
     dependencies:
       aggregate-error: 3.1.0
+    optional: true
 
   p-map@7.0.3: {}
 
@@ -29411,7 +29395,8 @@ snapshots:
 
   prettier@3.3.3: {}
 
-  pretty-bytes@5.6.0: {}
+  pretty-bytes@5.6.0:
+    optional: true
 
   pretty-error@4.0.0:
     dependencies:
@@ -29467,7 +29452,8 @@ snapshots:
       memoizee: 0.4.17
       type: 2.7.3
 
-  process@0.11.10: {}
+  process@0.11.10:
+    optional: true
 
   progress@2.0.3:
     optional: true
@@ -29529,7 +29515,8 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  proxy-from-env@1.0.0: {}
+  proxy-from-env@1.0.0:
+    optional: true
 
   proxy-from-env@1.1.0: {}
 
@@ -29850,6 +29837,7 @@ snapshots:
   request-progress@3.0.0:
     dependencies:
       throttleit: 1.0.1
+    optional: true
 
   request@2.88.2:
     dependencies:
@@ -31502,7 +31490,8 @@ snapshots:
 
   throat@5.0.0: {}
 
-  throttleit@1.0.1: {}
+  throttleit@1.0.1:
+    optional: true
 
   through@2.3.8: {}
 
@@ -31538,11 +31527,13 @@ snapshots:
 
   tinyspy@4.0.3: {}
 
-  tldts-core@6.1.86: {}
+  tldts-core@6.1.86:
+    optional: true
 
   tldts@6.1.86:
     dependencies:
       tldts-core: 6.1.86
+    optional: true
 
   tmp@0.0.33:
     dependencies:
@@ -31589,6 +31580,7 @@ snapshots:
   tough-cookie@5.1.2:
     dependencies:
       tldts: 6.1.86
+    optional: true
 
   tr46@0.0.3: {}
 
@@ -31893,6 +31885,8 @@ snapshots:
   typescript@5.8.3: {}
 
   typescript@5.9.0-dev.20250725: {}
+
+  typescript@5.9.0-dev.20250728: {}
 
   ua-parser-js@1.0.38: {}
 
