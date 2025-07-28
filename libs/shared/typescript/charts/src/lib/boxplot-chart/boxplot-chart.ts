@@ -62,6 +62,7 @@ export class BoxplotChart {
       summaries,
       title,
       xAxisTitle,
+      xAxisLabelFormatter,
       yAxisTitle,
       yAxisMin,
       yAxisMax,
@@ -83,9 +84,10 @@ export class BoxplotChart {
     }
 
     const xAxisCategories =
-      noPoints && summaries
+      boxplotProps.xAxisCategories ??
+      (noPoints && summaries
         ? (getUniqueValues(summaries, 'xAxisCategory') as string[])
-        : (getUniqueValues(points, 'xAxisCategory') as string[]);
+        : (getUniqueValues(points, 'xAxisCategory') as string[]));
     const pointCategories = getUniqueValues(points, 'pointCategory') as string[];
     const hasPointCategories = pointCategories.length > 0;
 
@@ -309,6 +311,13 @@ export class BoxplotChart {
             color: 'black',
             fontWeight: 'bold',
             fontSize: '14px',
+            interval: 0, // ensure all labels are shown
+            formatter: (value) => {
+              if (xAxisLabelFormatter) {
+                return xAxisLabelFormatter(value);
+              }
+              return value;
+            },
           },
           axisTick: {
             alignWithLabel: true,

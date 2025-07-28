@@ -9,7 +9,7 @@
  */
 
 /**
- * Model Overview Links
+ * Model Overview Link
  */
 export interface ModelOverviewLink {
   /**

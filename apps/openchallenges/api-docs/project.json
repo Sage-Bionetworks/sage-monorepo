@@ -4,13 +4,6 @@
   "sourceRoot": "apps/openchallenges/api-docs/src",
   "projectType": "application",
   "targets": {
-    "create-config": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "cp -n .env.example .env",
-        "cwd": "{projectRoot}"
-      }
-    },
     "build": {
       "executor": "nx:run-commands",
       "options": {
@@ -24,21 +17,8 @@
         "command": "redocly preview-docs --config redocly.yaml --port 8010",
         "cwd": "apps/openchallenges/api-docs"
       }
-    },
-    "serve-detach": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "docker/openchallenges/serve-detach.sh openchallenges-api-docs"
-      }
-    },
-    "scan-image": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "trivy image ghcr.io/sage-bionetworks/openchallenges-api-docs:local --quiet",
-        "color": true
-      }
     }
   },
-  "tags": ["type:docs", "scope:backend"],
+  "tags": ["type:docs"],
   "implicitDependencies": ["openchallenges-api-description"]
 }

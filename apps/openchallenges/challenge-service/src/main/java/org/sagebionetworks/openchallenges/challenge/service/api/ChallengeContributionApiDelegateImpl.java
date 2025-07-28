@@ -68,7 +68,7 @@ public class ChallengeContributionApiDelegateImpl implements ChallengeContributi
 
   @Override
   @PreAuthorize("authentication.principal.admin")
-  public ResponseEntity<ChallengeContributionDto> addChallengeContribution(
+  public ResponseEntity<ChallengeContributionDto> createChallengeContribution(
     Long challengeId,
     ChallengeContributionCreateRequestDto challengeContributionCreateRequestDto
   ) {
@@ -85,13 +85,13 @@ public class ChallengeContributionApiDelegateImpl implements ChallengeContributi
       challengeContributionCreateRequestDto.getRole()
     );
 
-    ChallengeContributionDto response =
-      challengeContributionService.addChallengeContribution(
+    ChallengeContributionDto createdContribution =
+      challengeContributionService.createChallengeContribution(
         challengeId,
         challengeContributionCreateRequestDto
       );
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    return ResponseEntity.status(HttpStatus.CREATED).body(createdContribution);
   }
 
   @Override

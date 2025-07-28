@@ -120,7 +120,7 @@ export class ChallengeContributionService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public addChallengeContribution(
+  public createChallengeContribution(
     challengeId: number,
     challengeContributionCreateRequest: ChallengeContributionCreateRequest,
     observe?: 'body',
@@ -131,7 +131,7 @@ export class ChallengeContributionService {
       transferCache?: boolean;
     },
   ): Observable<ChallengeContribution>;
-  public addChallengeContribution(
+  public createChallengeContribution(
     challengeId: number,
     challengeContributionCreateRequest: ChallengeContributionCreateRequest,
     observe?: 'response',
@@ -142,7 +142,7 @@ export class ChallengeContributionService {
       transferCache?: boolean;
     },
   ): Observable<HttpResponse<ChallengeContribution>>;
-  public addChallengeContribution(
+  public createChallengeContribution(
     challengeId: number,
     challengeContributionCreateRequest: ChallengeContributionCreateRequest,
     observe?: 'events',
@@ -153,7 +153,7 @@ export class ChallengeContributionService {
       transferCache?: boolean;
     },
   ): Observable<HttpEvent<ChallengeContribution>>;
-  public addChallengeContribution(
+  public createChallengeContribution(
     challengeId: number,
     challengeContributionCreateRequest: ChallengeContributionCreateRequest,
     observe: any = 'body',
@@ -166,7 +166,7 @@ export class ChallengeContributionService {
   ): Observable<any> {
     if (challengeId === null || challengeId === undefined) {
       throw new Error(
-        'Required parameter challengeId was null or undefined when calling addChallengeContribution.',
+        'Required parameter challengeId was null or undefined when calling createChallengeContribution.',
       );
     }
     if (
@@ -174,7 +174,7 @@ export class ChallengeContributionService {
       challengeContributionCreateRequest === undefined
     ) {
       throw new Error(
-        'Required parameter challengeContributionCreateRequest was null or undefined when calling addChallengeContribution.',
+        'Required parameter challengeContributionCreateRequest was null or undefined when calling createChallengeContribution.',
       );
     }
 
@@ -679,7 +679,7 @@ export class ChallengeContributionService {
 
   /**
    * Update an existing challenge contribution
-   * Updates an existing contribution record for a challenge. Only the organization ID and role can be modified.
+   * Updates an existing challenge contribution.
    * @param challengeId The unique identifier of the challenge.
    * @param challengeContributionId The unique identifier of a challenge contribution
    * @param challengeContributionUpdateRequest

@@ -1,3 +1,4 @@
+export * from './lib/breakpoint-config.service';
 export * from './lib/cached-api.service';
 export * from './lib/comparison-tool.service';
 export * from './lib/global-error-handler.service';

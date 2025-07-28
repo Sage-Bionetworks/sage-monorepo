@@ -3,7 +3,9 @@
   sageBoxplot
   [style.height]="450"
   [points]="points()"
-  [yAxisTitle]="formatYAxisTitle()"
+  [xAxisLabelFormatter]="xAxisLabelFormatter"
+  [xAxisCategories]="genotypeOrder()"
+  [yAxisTitle]="yAxisTitle()"
   [pointTooltipFormatter]="pointTooltipFormatter"
   [pointCategoryColors]="pointCategoryColors"
   [pointCategoryShapes]="pointCategoryShapes"

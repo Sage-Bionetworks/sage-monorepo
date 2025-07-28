@@ -6,8 +6,10 @@
 package org.sagebionetworks.openchallenges.challenge.service.api;
 
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.BasicErrorDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformSearchQueryDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformUpdateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformsPageDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,7 +43,63 @@ public interface ChallengePlatformApi {
     }
 
     /**
-     * DELETE /challengePlatforms/{challengePlatformId} : Delete a challenge platform
+     * POST /challenge-platforms : Create a challenge platform
+     * Create a challenge platform with the specified ID
+     *
+     * @param challengePlatformCreateRequestDto  (required)
+     * @return Success (status code 201)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The request conflicts with current state of the target resource (status code 409)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "createChallengePlatform",
+        summary = "Create a challenge platform",
+        description = "Create a challenge platform with the specified ID",
+        tags = { "ChallengePlatform" },
+        responses = {
+            @ApiResponse(responseCode = "201", description = "Success", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ChallengePlatformDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ChallengePlatformDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "409", description = "The request conflicts with current state of the target resource", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "apiBearerAuth")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/challenge-platforms",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<ChallengePlatformDto> createChallengePlatform(
+        @Parameter(name = "ChallengePlatformCreateRequestDto", description = "", required = true) @Valid @RequestBody ChallengePlatformCreateRequestDto challengePlatformCreateRequestDto
+    ) {
+        return getDelegate().createChallengePlatform(challengePlatformCreateRequestDto);
+    }
+
+
+    /**
+     * DELETE /challenge-platforms/{challengePlatformId} : Delete a challenge platform
      * Deletes a challenge platform by its unique ID. This action is irreversible. 
      *
      * @param challengePlatformId The unique identifier of the challenge platform. (required)
@@ -77,7 +135,7 @@ public interface ChallengePlatformApi {
     )
     @RequestMapping(
         method = RequestMethod.DELETE,
-        value = "/challengePlatforms/{challengePlatformId}",
+        value = "/challenge-platforms/{challengePlatformId}",
         produces = { "application/problem+json" }
     )
     
@@ -89,7 +147,7 @@ public interface ChallengePlatformApi {
 
 
     /**
-     * GET /challengePlatforms/{challengePlatformId} : Get a challenge platform
+     * GET /challenge-platforms/{challengePlatformId} : Get a challenge platform
      * Returns the challenge platform identified by its unique ID
      *
      * @param challengePlatformId The unique identifier of the challenge platform. (required)
@@ -119,7 +177,7 @@ public interface ChallengePlatformApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/challengePlatforms/{challengePlatformId}",
+        value = "/challenge-platforms/{challengePlatformId}",
         produces = { "application/json", "application/problem+json" }
     )
     
@@ -131,7 +189,7 @@ public interface ChallengePlatformApi {
 
 
     /**
-     * GET /challengePlatforms : List challenge platforms
+     * GET /challenge-platforms : List challenge platforms
      * List challenge platforms
      *
      * @param challengePlatformSearchQuery The search query used to find challenge platforms. (optional)
@@ -161,7 +219,7 @@ public interface ChallengePlatformApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/challengePlatforms",
+        value = "/challenge-platforms",
         produces = { "application/json", "application/problem+json" }
     )
     
@@ -169,6 +227,74 @@ public interface ChallengePlatformApi {
         @Parameter(name = "challengePlatformSearchQuery", description = "The search query used to find challenge platforms.", in = ParameterIn.QUERY) @Valid ChallengePlatformSearchQueryDto challengePlatformSearchQuery
     ) {
         return getDelegate().listChallengePlatforms(challengePlatformSearchQuery);
+    }
+
+
+    /**
+     * PUT /challenge-platforms/{challengePlatformId} : Update an existing challenge platform
+     * Updates an existing challenge platform. 
+     *
+     * @param challengePlatformId The unique identifier of the challenge platform. (required)
+     * @param challengePlatformUpdateRequestDto  (required)
+     * @return Challange platform updated successfully (status code 200)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request conflicts with current state of the target resource (status code 409)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "updateChallengePlatform",
+        summary = "Update an existing challenge platform",
+        description = "Updates an existing challenge platform. ",
+        tags = { "ChallengePlatform" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Challange platform updated successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ChallengePlatformDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ChallengePlatformDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "409", description = "The request conflicts with current state of the target resource", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "apiBearerAuth")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.PUT,
+        value = "/challenge-platforms/{challengePlatformId}",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<ChallengePlatformDto> updateChallengePlatform(
+        @Parameter(name = "challengePlatformId", description = "The unique identifier of the challenge platform.", required = true, in = ParameterIn.PATH) @PathVariable("challengePlatformId") Long challengePlatformId,
+        @Parameter(name = "ChallengePlatformUpdateRequestDto", description = "", required = true) @Valid @RequestBody ChallengePlatformUpdateRequestDto challengePlatformUpdateRequestDto
+    ) {
+        return getDelegate().updateChallengePlatform(challengePlatformId, challengePlatformUpdateRequestDto);
     }
 
 }

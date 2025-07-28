@@ -79,7 +79,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
 
   getData() {
     this.modelOverviewService
-      .getModelOverview()
+      .getModelOverviews()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (data) => {

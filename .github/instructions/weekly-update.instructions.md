@@ -43,7 +43,7 @@ Common project areas include:
 - OpenChallenges Platform
 - Agora Platform
 - Explorers Framework
-- Bioarena Project
+- BixArena Project
 
 ### 4. Technical Improvements (🛠️)
 
@@ -143,7 +143,7 @@ This week's progress was made possible by the following contributors:
 
 ## 🔮 Coming Next
 
-The team continues to focus on improving data infrastructure, modernizing Angular implementations, and enhancing API capabilities across multiple platforms. Stay tuned for continued progress on the Bioarena project and further infrastructure optimizations.
+The team continues to focus on improving data infrastructure, modernizing Angular implementations, and enhancing API capabilities across multiple platforms. Stay tuned for continued progress on the BixArena project and further infrastructure optimizations.
 ```
 
 ## Common PR Types to Look For

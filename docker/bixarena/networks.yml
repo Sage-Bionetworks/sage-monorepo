@@ -1,0 +1,4 @@
+networks:
+  bixarena:
+    name: bixarena
+    driver: bridge

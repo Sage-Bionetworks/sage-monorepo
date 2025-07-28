@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * What to sort results by.
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public enum OrganizationSortDto {
   
   CHALLENGE_COUNT("challenge_count"),
@@ -30,7 +30,7 @@ public enum OrganizationSortDto {
   
   RELEVANCE("relevance");
 
-  private String value;
+  private final String value;
 
   OrganizationSortDto(String value) {
     this.value = value;

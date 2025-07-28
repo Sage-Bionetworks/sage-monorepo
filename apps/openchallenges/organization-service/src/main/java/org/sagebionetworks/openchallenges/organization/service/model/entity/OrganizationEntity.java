@@ -16,12 +16,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.search.engine.backend.types.Sortable;
+import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
+import org.hibernate.search.mapper.pojo.extractor.mapping.annotation.ContainerExtract;
+import org.hibernate.search.mapper.pojo.extractor.mapping.annotation.ContainerExtraction;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 import org.sagebionetworks.openchallenges.organization.service.model.search.OrganizationNameValueBridge;
+import org.sagebionetworks.openchallenges.organization.service.model.search.UniqueChallengeCountValueBinder;
 
 @Entity
 @Table(name = "organization")
@@ -57,29 +61,45 @@ public class OrganizationEntity {
   @Column(name = "website_url", nullable = true)
   private String websiteUrl;
 
-  @Column(name = "challenge_count", nullable = false)
-  @GenericField(name = "challenge_count", sortable = Sortable.YES)
-  private Integer challengeCount;
-
   @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY)
   @IndexedEmbedded(name = "categories", includePaths = { "category" })
   private List<OrganizationCategoryEntity> categories;
 
   @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY)
-  @IndexedEmbedded(name = "challenge_contributions", includePaths = { "role" })
-  private List<ChallengeContributionEntity> challengeContributions;
+  @IndexedEmbedded(name = "challenge_participations", includePaths = { "role" })
+  @GenericField(
+    name = "challenge_count",
+    valueBinder = @ValueBinderRef(type = UniqueChallengeCountValueBinder.class),
+    extraction = @ContainerExtraction(extract = ContainerExtract.NO),
+    sortable = Sortable.YES
+  )
+  private List<ChallengeParticipationEntity> challengeParticipations;
 
   @Column(nullable = true)
   @FullTextField
   private String description;
 
-  @Column(name = "created_at")
+  @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
   @GenericField(name = "created_at", sortable = Sortable.YES)
   private OffsetDateTime createdAt;
 
-  @Column(name = "updated_at")
+  @Column(name = "updated_at", nullable = false, insertable = false, updatable = false)
   private OffsetDateTime updatedAt;
 
   @Column(name = "acronym", nullable = true)
   private String acronym;
+
+  /**
+   * Returns the unique number of challenges this organization has participated in.
+   */
+  public int getChallengeCount() {
+    if (challengeParticipations == null) {
+      return 0;
+    }
+    return (int) challengeParticipations
+      .stream()
+      .map(ChallengeParticipationEntity::getChallengeId)
+      .distinct()
+      .count();
+  }
 }

@@ -40,7 +40,7 @@ public interface EdamConceptApi {
     }
 
     /**
-     * GET /edamConcepts : List EDAM concepts
+     * GET /edam-concepts : List EDAM concepts
      * List EDAM concepts
      *
      * @param edamConceptSearchQuery The search query used to find EDAM concepts. (optional)
@@ -70,7 +70,7 @@ public interface EdamConceptApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/edamConcepts",
+        value = "/edam-concepts",
         produces = { "application/json", "application/problem+json" }
     )
     

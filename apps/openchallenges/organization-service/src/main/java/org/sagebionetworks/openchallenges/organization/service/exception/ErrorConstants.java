@@ -14,7 +14,12 @@ public enum ErrorConstants {
     HttpStatus.CONFLICT
   ),
   INVALID_ORGANIZATION("ORGANIZATION-SERVICE-1002", "Invalid organization", HttpStatus.BAD_REQUEST),
-  BAD_REQUEST("ORGANIZATION-SERVICE-1003", "Bad request", HttpStatus.BAD_REQUEST);
+  BAD_REQUEST("ORGANIZATION-SERVICE-1003", "Bad request", HttpStatus.BAD_REQUEST),
+  CHALLENGE_PARTICIPATION_ALREADY_EXISTS(
+    "ORGANIZATION-SERVICE-1003",
+    "Challenge participation already exists",
+    HttpStatus.CONFLICT
+  );
 
   private String type;
   private String title;

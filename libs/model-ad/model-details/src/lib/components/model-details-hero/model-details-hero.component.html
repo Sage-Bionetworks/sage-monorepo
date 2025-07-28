@@ -8,7 +8,7 @@
 
     <h4>{{ `Modified Gene${model().genetic_info.length > 1 ? 's' : '' }`}}</h4>
     <div class="modified-genes">
-      @for (gene of model().genetic_info; track gene.ensembl_gene_id) {
+      @for (gene of model().genetic_info; track gene.ensembl_gene_id + gene.allele) {
         <div class="modified-gene">
           <p>
             {{ gene.modified_gene }} |

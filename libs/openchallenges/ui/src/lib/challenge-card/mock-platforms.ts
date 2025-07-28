@@ -7,8 +7,6 @@ export const MOCK_PLATFORMS: ChallengePlatform[] = [
     name: 'Synapse',
     websiteUrl: 'https://synapse.org',
     avatarKey: 'logo/synapse.png',
-    createdAt: '',
-    updatedAt: '',
   },
   {
     id: 2,
@@ -16,7 +14,5 @@ export const MOCK_PLATFORMS: ChallengePlatform[] = [
     name: 'Grand Challenges',
     websiteUrl: 'https://grand-challenge.org',
     avatarKey: 'logo/synapse.png',
-    createdAt: '',
-    updatedAt: '',
   },
 ];

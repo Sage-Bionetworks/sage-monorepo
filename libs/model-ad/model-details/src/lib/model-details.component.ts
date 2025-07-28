@@ -2,13 +2,13 @@ import { Location } from '@angular/common';
 import { AfterViewInit, Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Panel } from '@sagebionetworks/explorers/models';
+import { Panel, SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { HelperService } from '@sagebionetworks/explorers/services';
 import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { Model, ModelsService } from '@sagebionetworks/model-ad/api-client-angular';
 import { ConfigService, ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
-import { ModelDetailsBoxplotsGridComponent } from './components/model-details-boxplots-grid/model-details-boxplots-grid.component';
+import { ModelDetailsBoxplotsSelectorComponent } from './components/model-details-boxplots-selector/model-details-boxplots-selector.component';
 import { ModelDetailsHeroComponent } from './components/model-details-hero/model-details-hero.component';
 import { ModelDetailsOmicsComponent } from './components/model-details-omics/model-details-omics.component';
 import { ModelDetailsResourcesComponent } from './components/model-details-resources/model-details-resources.component';
@@ -21,7 +21,7 @@ import { ModelDetailsResourcesComponent } from './components/model-details-resou
     ModelDetailsOmicsComponent,
     ModelDetailsResourcesComponent,
     ModelDetailsHeroComponent,
-    ModelDetailsBoxplotsGridComponent,
+    ModelDetailsBoxplotsSelectorComponent,
   ],
   templateUrl: './model-details.component.html',
   styleUrls: ['./model-details.component.scss'],
@@ -38,6 +38,9 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
   isLoading = true;
 
   model: Model | undefined;
+
+  biomarkersWikiParams: SynapseWikiParams = { ownerId: 'syn66271427', wikiId: '632871' };
+  pathologyWikiParams: SynapseWikiParams = { ownerId: 'syn66271427', wikiId: '632872' };
 
   panels: Panel[] = [
     {
@@ -147,7 +150,10 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
     this.activePanel = activePanel;
     this.activeParent = activeParent;
 
-    const basePath = `/${ROUTE_PATHS.MODELS}/${this.model?.model}`;
+    const encodedModel = this.helperService.encodeParenthesesForwardSlashes(
+      encodeURIComponent(this.model?.model || ''),
+    );
+    const basePath = `/${ROUTE_PATHS.MODELS}/${encodedModel}`;
     const fullPath = this.helperService.getPanelUrl(basePath, this.activePanel, this.activeParent);
     this.location.replaceState(fullPath);
   }

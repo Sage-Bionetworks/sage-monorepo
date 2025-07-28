@@ -112,7 +112,7 @@ export class ModelOverviewService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getModelOverview(
+  public getModelOverviews(
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -121,7 +121,7 @@ export class ModelOverviewService {
       transferCache?: boolean;
     },
   ): Observable<Array<ModelOverview>>;
-  public getModelOverview(
+  public getModelOverviews(
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -130,7 +130,7 @@ export class ModelOverviewService {
       transferCache?: boolean;
     },
   ): Observable<HttpResponse<Array<ModelOverview>>>;
-  public getModelOverview(
+  public getModelOverviews(
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -139,7 +139,7 @@ export class ModelOverviewService {
       transferCache?: boolean;
     },
   ): Observable<HttpEvent<Array<ModelOverview>>>;
-  public getModelOverview(
+  public getModelOverviews(
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {

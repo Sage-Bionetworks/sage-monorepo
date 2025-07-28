@@ -3,7 +3,7 @@ import { cache, setHeaders } from '../helpers';
 import { ModelOverviewCollection } from '../models';
 import { ModelOverview } from '@sagebionetworks/model-ad/api-client-angular';
 
-export async function getModelOverview() {
+export async function getModelOverviews() {
   const cacheKey = 'modelOverview';
   const cachedResult: ModelOverview[] | null | undefined = cache.get(cacheKey);
 
@@ -19,7 +19,7 @@ export async function getModelOverview() {
 
 export async function modelOverviewRoute(req: Request, res: Response, next: NextFunction) {
   try {
-    const result = await getModelOverview();
+    const result = await getModelOverviews();
 
     if (!result || result.length === 0) {
       res.status(404).contentType('application/problem+json').json({
