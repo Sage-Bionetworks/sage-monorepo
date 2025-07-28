@@ -25,6 +25,11 @@ public enum ErrorConstants {
     "CHALLENGE-SERVICE-1006",
     "Error deleting challenge participation",
     HttpStatus.BAD_GATEWAY
+  ),
+  CHALLENGE_PARTICIPATION_NOT_FOUND(
+    "CHALLENGE-SERVICE-1007",
+    "Challenge participation not found",
+    HttpStatus.NOT_FOUND
   );
 
   private String type;

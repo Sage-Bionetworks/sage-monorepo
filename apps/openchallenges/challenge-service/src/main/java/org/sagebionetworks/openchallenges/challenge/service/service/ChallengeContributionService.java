@@ -6,6 +6,7 @@ import org.sagebionetworks.openchallenges.challenge.service.client.OrganizationS
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeContributionNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeParticipationDeleteException;
+import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeParticipationNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.DuplicateContributionException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.OrganizationNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
@@ -192,20 +193,20 @@ public class ChallengeContributionService {
 
     // Delete this organization's challenge participation
     try {
-      // TODO: fix error because the request is not authenticated (401 error)
       organizationServiceClient.deleteChallengeParticipation(
         String.valueOf(existingContribution.getOrganizationId()),
         challengeId,
-        ChallengeParticipationRoleDto.fromValue(existingContribution.getRole())
+        existingContribution.getRole()
       );
     } catch (FeignException.NotFound e) {
-      // If the participation does not exist, we can still delete the contribution
-      // Log this as a warning but do not throw an error
-      logger.warn(
-        "Challenge participation for organization {} in challenge {} with role {} not found. Proceeding with deletion.",
-        existingContribution.getOrganizationId(),
-        challengeId,
-        existingContribution.getRole()
+      throw new ChallengeParticipationNotFoundException(
+        "Challenge participation for organization " +
+        existingContribution.getOrganizationId() +
+        " in challenge " +
+        challengeId +
+        " with role " +
+        existingContribution.getRole() +
+        " not found. Cannot delete."
       );
     } catch (FeignException e) {
       if (e.status() == 401) {

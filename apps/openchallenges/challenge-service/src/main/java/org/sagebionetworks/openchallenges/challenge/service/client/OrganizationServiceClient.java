@@ -1,5 +1,6 @@
 package org.sagebionetworks.openchallenges.challenge.service.client;
 
+import org.sagebionetworks.openchallenges.challenge.service.configuration.OrganizationServiceClientConfiguration;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.organization.ChallengeParticipationCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.organization.ChallengeParticipationDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.organization.ChallengeParticipationRoleDto;
@@ -17,7 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(
   name = "organization-service",
   url = "${openchallenges-challenge-service.organization-service.base-url:http://openchallenges-organization-service:8084}",
-  path = "/v1"
+  path = "/v1",
+  configuration = OrganizationServiceClientConfiguration.class
 )
 public interface OrganizationServiceClient {
   /**
@@ -50,10 +52,10 @@ public interface OrganizationServiceClient {
    * @param role the role of the participation to delete
    * @return void
    */
-  @DeleteMapping("/organizations/{org}/participations/challenge/{challengeId}/role/{role}")
+  @DeleteMapping("/organizations/{org}/participations/{challengeId}/role/{role}")
   void deleteChallengeParticipation(
     @PathVariable String org,
     @PathVariable Long challengeId,
-    @PathVariable ChallengeParticipationRoleDto role
+    @PathVariable String role
   );
 }

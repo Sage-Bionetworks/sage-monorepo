@@ -106,7 +106,7 @@ public interface ChallengeParticipationApi {
 
 
     /**
-     * DELETE /organizations/{org}/participations/{challengeId}/roles/{role} : Delete a specific challenge participation
+     * DELETE /organizations/{org}/participations/{challengeId}/role/{role} : Delete a specific challenge participation
      * Delete a specific challenge participation.
      *
      * @param org The id or login of the organization. (required)
@@ -144,7 +144,7 @@ public interface ChallengeParticipationApi {
     )
     @RequestMapping(
         method = RequestMethod.DELETE,
-        value = "/organizations/{org}/participations/{challengeId}/roles/{role}",
+        value = "/organizations/{org}/participations/{challengeId}/role/{role}",
         produces = { "application/problem+json" }
     )
     
