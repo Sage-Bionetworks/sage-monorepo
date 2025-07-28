@@ -164,6 +164,7 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
       case admin -> LoginResponseDto.RoleEnum.ADMIN;
       case user -> LoginResponseDto.RoleEnum.USER;
       case readonly -> LoginResponseDto.RoleEnum.READONLY;
+      case service -> LoginResponseDto.RoleEnum.SERVICE;
     };
   }
 
@@ -172,6 +173,7 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
       case admin -> ValidateApiKeyResponseDto.RoleEnum.ADMIN;
       case user -> ValidateApiKeyResponseDto.RoleEnum.USER;
       case readonly -> ValidateApiKeyResponseDto.RoleEnum.READONLY;
+      case service -> ValidateApiKeyResponseDto.RoleEnum.SERVICE;
     };
   }
 }

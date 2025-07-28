@@ -203,6 +203,7 @@ components:
             - admin
             - user
             - readonly
+            - service
     BasicError:
       type: object
       description: Problem details (tools.ietf.org/html/rfc7807)
@@ -339,6 +340,7 @@ components:
             - admin
             - user
             - readonly
+            - service
         scopes:
           type: array
           items:

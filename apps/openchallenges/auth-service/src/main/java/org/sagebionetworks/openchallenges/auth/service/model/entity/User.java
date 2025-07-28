@@ -59,6 +59,7 @@ public class User {
     admin,
     user,
     readonly,
+    service,
   }
 
   // Business logic methods to ensure Jacoco coverage instrumentation
