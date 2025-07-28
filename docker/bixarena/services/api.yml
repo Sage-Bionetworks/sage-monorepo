@@ -1,0 +1,14 @@
+services:
+  bixarena-api:
+    image: ghcr.io/sage-bionetworks/bixarena-api:${bixarena_VERSION:-local}
+    container_name: bixarena-api
+    restart: always
+    networks:
+      - bixarena
+    ports:
+      - '21002:21002'
+    env_file:
+      - ../../../apps/bixarena/api/.env
+    depends_on:
+      bixarena-controller:
+        condition: service_started
