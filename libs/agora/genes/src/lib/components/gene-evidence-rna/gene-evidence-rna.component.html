@@ -23,10 +23,10 @@
           <h3>
             Overall Expression of
             {{ _gene.hgnc_symbol || _gene.ensembl_gene_id }} Across Brain Regions
-            <agora-download-dom-image
+            <explorers-download-dom-image
               [target]="rnaOEChart"
               [filename]="_gene.ensembl_gene_id + '_rna_overall_expression'"
-            ></agora-download-dom-image>
+            ></explorers-download-dom-image>
           </h3>
           <p>
             This plot depicts the median expression of the selected gene across brain regions, as
@@ -80,10 +80,10 @@
           <h3>
             Differential Expression of
             {{ _gene.hgnc_symbol || _gene.ensembl_gene_id }} Across Brain Regions
-            <agora-download-dom-image
+            <explorers-download-dom-image
               [target]="rnaDEChart"
               [filename]="_gene.ensembl_gene_id + '_rna_differential_expression'"
-            ></agora-download-dom-image>
+            ></explorers-download-dom-image>
           </h3>
           <p class="mb-0">
             After selecting a statistical model, you will be able to see whether the selected gene
@@ -121,10 +121,10 @@
         <div class="container-sm">
           <h3>
             Consistency of Change in Expression
-            <agora-download-dom-image
+            <explorers-download-dom-image
               [target]="rnaCCChart"
               [filename]="_gene.ensembl_gene_id + '_rna_consistency_of_change_in_expression'"
-            ></agora-download-dom-image>
+            ></explorers-download-dom-image>
           </h3>
           <p class="mb-0">
             This forest plot indicates the estimate of the log fold change with standard errors
@@ -157,10 +157,10 @@
         <div class="container-sm">
           <h3>
             Correlation of {{ _gene.hgnc_symbol || _gene.ensembl_gene_id }} with Hallmarks of AD
-            <agora-download-dom-image
+            <explorers-download-dom-image
               [target]="rnaCorrChart"
               [filename]="_gene.ensembl_gene_id + '_rna_correlation_with_hallmarks_of_AD'"
-            ></agora-download-dom-image>
+            ></explorers-download-dom-image>
           </h3>
           <div class="mb-md">
             <agora-modal-link
