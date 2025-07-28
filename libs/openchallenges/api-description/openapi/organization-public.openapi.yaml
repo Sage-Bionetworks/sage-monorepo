@@ -16,8 +16,8 @@ servers:
 tags:
   - name: Organization
     description: Operations about organizations
-  - name: Challenge Participation
-    description: Operations about a challenge participation
+    x-audience:
+      - public
 paths:
   /organizations:
     get:
@@ -26,6 +26,8 @@ paths:
       summary: List organizations
       description: List organizations
       operationId: listOrganizations
+      x-audience:
+        - public
       parameters:
         - $ref: '#/components/parameters/organizationSearchQuery'
       responses:
@@ -45,6 +47,8 @@ paths:
       summary: Create an organization
       description: Create an organization with the specified account name
       operationId: createOrganization
+      x-audience:
+        - public
       security:
         - apiBearerAuth: []
       requestBody:
@@ -77,6 +81,8 @@ paths:
       summary: Get an organization
       description: Returns the organization identified by its login or ID.
       operationId: getOrganization
+      x-audience:
+        - public
       responses:
         '200':
           description: Organization retrieved successfully
@@ -94,6 +100,8 @@ paths:
       summary: Update an existing organization
       description: Updates an existing organization.
       operationId: updateOrganization
+      x-audience:
+        - public
       security:
         - apiBearerAuth: []
       requestBody:
@@ -127,6 +135,8 @@ paths:
       summary: Delete an organization
       description: Deletes the organization specified by its login or ID.
       operationId: deleteOrganization
+      x-audience:
+        - public
       security:
         - apiBearerAuth: []
       responses:
@@ -143,61 +153,11 @@ paths:
   /organizations/{org}/participations:
     parameters:
       - $ref: '#/components/parameters/org'
-    post:
-      tags:
-        - Challenge Participation
-      summary: Create a new challenge participation
-      description: Creates a new challenge participation.
-      operationId: createChallengeParticipation
-      security:
-        - apiBearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ChallengeParticipationCreateRequest'
-      responses:
-        '201':
-          description: Participation created successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ChallengeParticipation'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '409':
-          $ref: '#/components/responses/Conflict'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
   /organizations/{org}/participations/{challengeId}/roles/{role}:
     parameters:
       - $ref: '#/components/parameters/org'
       - $ref: '#/components/parameters/challengeId'
       - $ref: '#/components/parameters/challengeParticipationRole'
-    delete:
-      tags:
-        - Challenge Participation
-      summary: Delete a specific challenge participation
-      description: Delete a specific challenge participation.
-      operationId: deleteChallengeParticipation
-      security:
-        - apiBearerAuth: []
-      responses:
-        '204':
-          description: Participation deleted successfully
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
     apiBearerAuth:
@@ -500,41 +460,6 @@ components:
         - data_contributor
         - sponsor
       example: challenge_organizer
-    ChallengeParticipationCreateRequest:
-      type: object
-      description: |
-        A request to create a challenge participation for an organization, defined by a challenge ID and a
-        role.
-      properties:
-        challengeId:
-          $ref: '#/components/schemas/ChallengeId'
-        role:
-          $ref: '#/components/schemas/ChallengeParticipationRole'
-      required:
-        - challengeId
-        - role
-    ChallengeParticipationId:
-      description: The unique identifier of a challenge participation
-      type: integer
-      format: int64
-      example: 1
-    ChallengeParticipation:
-      type: object
-      description: An challenge participation.
-      properties:
-        id:
-          $ref: '#/components/schemas/ChallengeParticipationId'
-        challengeId:
-          $ref: '#/components/schemas/ChallengeId'
-        organizationId:
-          $ref: '#/components/schemas/OrganizationId'
-        role:
-          $ref: '#/components/schemas/ChallengeParticipationRole'
-      required:
-        - id
-        - challengeId
-        - organizationId
-        - role
   parameters:
     organizationSearchQuery:
       name: organizationSearchQuery

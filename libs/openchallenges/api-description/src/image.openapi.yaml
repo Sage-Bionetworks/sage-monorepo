@@ -16,6 +16,7 @@ servers:
 tags:
   - name: Image
     description: Operations about images
+    x-audience: [public]
 paths:
   /images:
     $ref: paths/images.yaml

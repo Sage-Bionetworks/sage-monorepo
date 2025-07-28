@@ -1,15 +1,26 @@
 package org.sagebionetworks.openchallenges.image.service.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.*;
+import java.net.URI;
 import java.util.Objects;
-import javax.annotation.Generated;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
+import org.sagebionetworks.openchallenges.image.service.model.dto.ImageAspectRatioDto;
+import org.sagebionetworks.openchallenges.image.service.model.dto.ImageHeightDto;
+import java.time.OffsetDateTime;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-/** An image query. */
+
+import java.util.*;
+import javax.annotation.Generated;
+
+/**
+ * An image query.
+ */
+
 @Schema(name = "ImageQuery", description = "An image query.")
 @JsonTypeName("ImageQuery")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
@@ -26,7 +37,9 @@ public class ImageQueryDto {
     super();
   }
 
-  /** Constructor with only required parameters */
+  /**
+   * Constructor with only required parameters
+   */
   public ImageQueryDto(String objectKey) {
     this.objectKey = objectKey;
   }
@@ -38,17 +51,10 @@ public class ImageQueryDto {
 
   /**
    * The unique identifier of the image.
-   *
    * @return objectKey
-   */
-  @NotNull
-  @Pattern(regexp = "^[a-zA-Z0-9/_-]+.[a-zA-Z0-9/_-]+")
-  @Schema(
-    name = "objectKey",
-    example = "logo/dream.png",
-    description = "The unique identifier of the image.",
-    requiredMode = Schema.RequiredMode.REQUIRED
-  )
+  */
+  @NotNull @Pattern(regexp = "^[a-zA-Z0-9/_-]+.[a-zA-Z0-9/_-]+") 
+  @Schema(name = "objectKey", example = "logo/dream.png", description = "The unique identifier of the image.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("objectKey")
   public String getObjectKey() {
     return objectKey;
@@ -65,10 +71,9 @@ public class ImageQueryDto {
 
   /**
    * Get height
-   *
    * @return height
-   */
-  @Valid
+  */
+  @Valid 
   @Schema(name = "height", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("height")
   public ImageHeightDto getHeight() {
@@ -86,10 +91,9 @@ public class ImageQueryDto {
 
   /**
    * Get aspectRatio
-   *
    * @return aspectRatio
-   */
-  @Valid
+  */
+  @Valid 
   @Schema(name = "aspectRatio", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("aspectRatio")
   public ImageAspectRatioDto getAspectRatio() {
@@ -109,11 +113,9 @@ public class ImageQueryDto {
       return false;
     }
     ImageQueryDto imageQuery = (ImageQueryDto) o;
-    return (
-      Objects.equals(this.objectKey, imageQuery.objectKey) &&
-      Objects.equals(this.height, imageQuery.height) &&
-      Objects.equals(this.aspectRatio, imageQuery.aspectRatio)
-    );
+    return Objects.equals(this.objectKey, imageQuery.objectKey) &&
+        Objects.equals(this.height, imageQuery.height) &&
+        Objects.equals(this.aspectRatio, imageQuery.aspectRatio);
   }
 
   @Override
@@ -133,7 +135,8 @@ public class ImageQueryDto {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
    */
   private String toIndentedString(Object o) {
     if (o == null) {
@@ -142,3 +145,4 @@ public class ImageQueryDto {
     return o.toString().replace("\n", "\n    ");
   }
 }
+

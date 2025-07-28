@@ -16,14 +16,24 @@ servers:
 tags:
   - description: Operations about challenges.
     name: Challenge
+    x-audience:
+      - public
   - description: Operations about challenge contributions.
     name: ChallengeContribution
+    x-audience:
+      - public
   - description: Operations about challenge analytics.
     name: ChallengeAnalytics
+    x-audience:
+      - public
   - description: Operations about challenge platforms.
     name: ChallengePlatform
+    x-audience:
+      - public
   - description: Operations about EDAM concepts.
     name: EdamConcept
+    x-audience:
+      - public
 paths:
   /challenges:
     get:
@@ -61,6 +71,8 @@ paths:
       summary: List challenges
       tags:
         - Challenge
+      x-audience:
+        - public
       x-accepts:
         - application/json
         - application/problem+json
@@ -113,6 +125,8 @@ paths:
       summary: Delete a challenge
       tags:
         - Challenge
+      x-audience:
+        - public
       x-accepts:
         - application/problem+json
       x-tags:
@@ -152,6 +166,8 @@ paths:
       summary: Get a challenge
       tags:
         - Challenge
+      x-audience:
+        - public
       x-accepts:
         - application/json
         - application/problem+json
@@ -193,6 +209,8 @@ paths:
       summary: Get a challenge in JSON-LD format
       tags:
         - Challenge
+      x-audience:
+        - public
       x-accepts:
         - application/ld+json
         - application/problem+json
@@ -285,6 +303,8 @@ paths:
       summary: List challenge contributions
       tags:
         - ChallengeContribution
+      x-audience:
+        - public
       x-accepts:
         - application/json
         - application/problem+json
@@ -352,6 +372,8 @@ paths:
       summary: Create a new contribution for a challenge
       tags:
         - ChallengeContribution
+      x-audience:
+        - public
       x-content-type: application/json
       x-accepts:
         - application/json
@@ -414,6 +436,8 @@ paths:
       summary: Delete a specific challenge contribution
       tags:
         - ChallengeContribution
+      x-audience:
+        - public
       x-accepts:
         - application/problem+json
       x-tags:
@@ -468,6 +492,8 @@ paths:
       summary: Get a specific challenge contribution
       tags:
         - ChallengeContribution
+      x-audience:
+        - public
       x-accepts:
         - application/json
         - application/problem+json
@@ -549,6 +575,8 @@ paths:
       summary: Update an existing challenge contribution
       tags:
         - ChallengeContribution
+      x-audience:
+        - public
       x-content-type: application/json
       x-accepts:
         - application/json
@@ -576,6 +604,8 @@ paths:
       summary: Get the number of challenges tracked per year
       tags:
         - ChallengeAnalytics
+      x-audience:
+        - public
       x-accepts:
         - application/json
         - application/problem+json
@@ -617,6 +647,8 @@ paths:
       summary: List challenge platforms
       tags:
         - ChallengePlatform
+      x-audience:
+        - public
       x-accepts:
         - application/json
         - application/problem+json
@@ -668,6 +700,8 @@ paths:
       summary: Create a challenge platform
       tags:
         - ChallengePlatform
+      x-audience:
+        - public
       x-content-type: application/json
       x-accepts:
         - application/json
@@ -721,6 +755,8 @@ paths:
       summary: Delete a challenge platform
       tags:
         - ChallengePlatform
+      x-audience:
+        - public
       x-accepts:
         - application/problem+json
       x-tags:
@@ -760,6 +796,8 @@ paths:
       summary: Get a challenge platform
       tags:
         - ChallengePlatform
+      x-audience:
+        - public
       x-accepts:
         - application/json
         - application/problem+json
@@ -833,6 +871,8 @@ paths:
       summary: Update an existing challenge platform
       tags:
         - ChallengePlatform
+      x-audience:
+        - public
       x-content-type: application/json
       x-accepts:
         - application/json
@@ -875,6 +915,8 @@ paths:
       summary: List EDAM concepts
       tags:
         - EdamConcept
+      x-audience:
+        - public
       x-accepts:
         - application/json
         - application/problem+json

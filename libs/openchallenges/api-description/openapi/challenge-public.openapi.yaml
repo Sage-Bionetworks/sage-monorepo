@@ -16,14 +16,24 @@ servers:
 tags:
   - name: Challenge
     description: Operations about challenges.
+    x-audience:
+      - public
   - name: ChallengeContribution
     description: Operations about challenge contributions.
+    x-audience:
+      - public
   - name: ChallengeAnalytics
     description: Operations about challenge analytics.
+    x-audience:
+      - public
   - name: ChallengePlatform
     description: Operations about challenge platforms.
+    x-audience:
+      - public
   - name: EdamConcept
     description: Operations about EDAM concepts.
+    x-audience:
+      - public
 paths:
   /challenges:
     get:
@@ -32,6 +42,8 @@ paths:
       summary: List challenges
       description: List challenges
       operationId: listChallenges
+      x-audience:
+        - public
       parameters:
         - $ref: '#/components/parameters/challengeSearchQuery'
       responses:
@@ -54,6 +66,8 @@ paths:
       summary: Get a challenge
       description: Returns the challenge specified
       operationId: getChallenge
+      x-audience:
+        - public
       responses:
         '200':
           description: A challenge
@@ -72,6 +86,8 @@ paths:
       description: |
         Deletes a challenge by its unique ID. This action is irreversible.
       operationId: deleteChallengeById
+      x-audience:
+        - public
       security:
         - apiBearerAuth: []
       responses:
@@ -94,6 +110,8 @@ paths:
       summary: Get a challenge in JSON-LD format
       description: Returns the challenge specified in JSON-LD format
       operationId: getChallengeJsonLd
+      x-audience:
+        - public
       responses:
         '200':
           description: A challenge
@@ -114,6 +132,8 @@ paths:
       summary: List challenge contributions
       description: List challenge contributions
       operationId: listChallengeContributions
+      x-audience:
+        - public
       responses:
         '200':
           content:
@@ -132,6 +152,8 @@ paths:
       description: |
         Creates a new contribution record associated with a challenge ID.
       operationId: createChallengeContribution
+      x-audience:
+        - public
       security:
         - apiBearerAuth: []
       requestBody:
@@ -189,6 +211,8 @@ paths:
       description: |
         Retrieves a specific contribution record for a challenge, identified by its ID.
       operationId: getChallengeContribution
+      x-audience:
+        - public
       responses:
         '200':
           description: Challenge contribution retrieved successfully
@@ -209,6 +233,8 @@ paths:
       description: |
         Updates an existing challenge contribution.
       operationId: updateChallengeContribution
+      x-audience:
+        - public
       security:
         - apiBearerAuth: []
       requestBody:
@@ -244,6 +270,8 @@ paths:
         Deletes a specific contribution record for a challenge, identified by its ID.
         This action is irreversible.
       operationId: deleteChallengeContribution
+      x-audience:
+        - public
       security:
         - apiBearerAuth: []
       responses:
@@ -264,6 +292,8 @@ paths:
       summary: Get the number of challenges tracked per year
       description: Returns the number of challenges tracked per year
       operationId: getChallengesPerYear
+      x-audience:
+        - public
       responses:
         '200':
           description: An object
@@ -280,6 +310,8 @@ paths:
       summary: List challenge platforms
       description: List challenge platforms
       operationId: listChallengePlatforms
+      x-audience:
+        - public
       parameters:
         - $ref: '#/components/parameters/challengePlatformSearchQuery'
       responses:
@@ -299,6 +331,8 @@ paths:
       summary: Create a challenge platform
       description: Create a challenge platform with the specified ID
       operationId: createChallengePlatform
+      x-audience:
+        - public
       security:
         - apiBearerAuth: []
       requestBody:
@@ -331,6 +365,8 @@ paths:
       summary: Get a challenge platform
       description: Returns the challenge platform identified by its unique ID
       operationId: getChallengePlatform
+      x-audience:
+        - public
       responses:
         '200':
           description: Success
@@ -349,6 +385,8 @@ paths:
       description: |
         Updates an existing challenge platform.
       operationId: updateChallengePlatform
+      x-audience:
+        - public
       security:
         - apiBearerAuth: []
       requestBody:
@@ -383,6 +421,8 @@ paths:
       description: |
         Deletes a challenge platform by its unique ID. This action is irreversible.
       operationId: deleteChallengePlatform
+      x-audience:
+        - public
       security:
         - apiBearerAuth: []
       responses:
@@ -403,6 +443,8 @@ paths:
       summary: List EDAM concepts
       description: List EDAM concepts
       operationId: listEdamConcepts
+      x-audience:
+        - public
       parameters:
         - $ref: '#/components/parameters/edamConceptSearchQuery'
       responses:

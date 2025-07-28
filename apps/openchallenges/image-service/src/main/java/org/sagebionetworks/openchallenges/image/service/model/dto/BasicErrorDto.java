@@ -1,14 +1,23 @@
 package org.sagebionetworks.openchallenges.image.service.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.*;
+import java.net.URI;
 import java.util.Objects;
-import javax.annotation.Generated;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.time.OffsetDateTime;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-/** Problem details (tools.ietf.org/html/rfc7807) */
+
+import java.util.*;
+import javax.annotation.Generated;
+
+/**
+ * Problem details (tools.ietf.org/html/rfc7807)
+ */
+
 @Schema(name = "BasicError", description = "Problem details (tools.ietf.org/html/rfc7807)")
 @JsonTypeName("BasicError")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
@@ -28,7 +37,9 @@ public class BasicErrorDto {
     super();
   }
 
-  /** Constructor with only required parameters */
+  /**
+   * Constructor with only required parameters
+   */
   public BasicErrorDto(String title, Integer status) {
     this.title = title;
     this.status = status;
@@ -41,15 +52,10 @@ public class BasicErrorDto {
 
   /**
    * A human readable documentation for the problem type
-   *
    * @return title
-   */
-  @NotNull
-  @Schema(
-    name = "title",
-    description = "A human readable documentation for the problem type",
-    requiredMode = Schema.RequiredMode.REQUIRED
-  )
+  */
+  @NotNull 
+  @Schema(name = "title", description = "A human readable documentation for the problem type", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("title")
   public String getTitle() {
     return title;
@@ -66,15 +72,10 @@ public class BasicErrorDto {
 
   /**
    * The HTTP status code
-   *
    * @return status
-   */
-  @NotNull
-  @Schema(
-    name = "status",
-    description = "The HTTP status code",
-    requiredMode = Schema.RequiredMode.REQUIRED
-  )
+  */
+  @NotNull 
+  @Schema(name = "status", description = "The HTTP status code", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("status")
   public Integer getStatus() {
     return status;
@@ -91,14 +92,10 @@ public class BasicErrorDto {
 
   /**
    * A human readable explanation specific to this occurrence of the problem
-   *
    * @return detail
-   */
-  @Schema(
-    name = "detail",
-    description = "A human readable explanation specific to this occurrence of the problem",
-    requiredMode = Schema.RequiredMode.NOT_REQUIRED
-  )
+  */
+  
+  @Schema(name = "detail", description = "A human readable explanation specific to this occurrence of the problem", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("detail")
   public String getDetail() {
     return detail;
@@ -115,14 +112,10 @@ public class BasicErrorDto {
 
   /**
    * An absolute URI that identifies the problem type
-   *
    * @return type
-   */
-  @Schema(
-    name = "type",
-    description = "An absolute URI that identifies the problem type",
-    requiredMode = Schema.RequiredMode.NOT_REQUIRED
-  )
+  */
+  
+  @Schema(name = "type", description = "An absolute URI that identifies the problem type", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("type")
   public String getType() {
     return type;
@@ -141,12 +134,10 @@ public class BasicErrorDto {
       return false;
     }
     BasicErrorDto basicError = (BasicErrorDto) o;
-    return (
-      Objects.equals(this.title, basicError.title) &&
-      Objects.equals(this.status, basicError.status) &&
-      Objects.equals(this.detail, basicError.detail) &&
-      Objects.equals(this.type, basicError.type)
-    );
+    return Objects.equals(this.title, basicError.title) &&
+        Objects.equals(this.status, basicError.status) &&
+        Objects.equals(this.detail, basicError.detail) &&
+        Objects.equals(this.type, basicError.type);
   }
 
   @Override
@@ -167,7 +158,8 @@ public class BasicErrorDto {
   }
 
   /**
-   * Convert the given object to string with each line indented by 4 spaces (except the first line).
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
    */
   private String toIndentedString(Object o) {
     if (o == null) {
@@ -176,3 +168,4 @@ public class BasicErrorDto {
     return o.toString().replace("\n", "\n    ");
   }
 }
+

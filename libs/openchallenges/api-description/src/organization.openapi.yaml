@@ -16,8 +16,10 @@ servers:
 tags:
   - name: Organization
     description: Operations about organizations
+    x-audience: [public]
   - name: Challenge Participation
     description: Operations about a challenge participation
+    x-audience: [internal]
 paths:
   /organizations:
     $ref: paths/organizations.yaml
