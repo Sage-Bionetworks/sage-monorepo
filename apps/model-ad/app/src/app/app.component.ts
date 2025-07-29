@@ -62,14 +62,14 @@ export class AppComponent implements OnInit {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (data) => {
-            this.dataVersion = this.getDataVersion(data);
+            this.dataVersion = this.formatDataVersion(data);
           },
           error: (error) => console.error('Error loading data version:', error),
         });
     }, this.platformId);
   }
 
-  getDataVersion(dataVersion: Dataversion) {
+  formatDataVersion(dataVersion: Dataversion) {
     return `${dataVersion.data_file}-v${dataVersion.data_version}`;
   }
 }
