@@ -1,23 +1,18 @@
 openapi: 3.0.3
 info:
   version: 1.0.0
-  title: AMP-ALS API
+  title: AMP-ALS Dataset Service API
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
   contact:
     name: Support
     url: https://github.com/Sage-Bionetworks/sage-monorepo
-  description: Discover, explore, and contribute to AMP-ALS datasets.
 servers:
   - url: http://localhost/v1
 tags:
   - name: Dataset
     description: Operations about datasets.
-    x-displayName: Dataset
-  - name: HealthCheck
-    description: Operations about health checks
-    x-displayName: HealthCheck
 paths:
   /datasets:
     get:
@@ -57,22 +52,6 @@ paths:
                 $ref: '#/components/schemas/Dataset'
         '404':
           $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /healthcheck:
-    get:
-      tags:
-        - HealthCheck
-      summary: Get health check information
-      description: Get information about the health of the service
-      operationId: getHealthCheck
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HealthCheck'
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
@@ -246,19 +225,6 @@ components:
       x-java-class-annotations:
         - '@lombok.AllArgsConstructor'
         - '@lombok.Builder'
-    HealthCheck:
-      type: object
-      description: Represents the health of a service
-      properties:
-        status:
-          description: Indicates whether the service status is acceptable or not
-          type: string
-          enum:
-            - pass
-            - fail
-            - warn
-      required:
-        - status
   parameters:
     datasetSearchQuery:
       name: datasetSearchQuery
@@ -292,10 +258,3 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-x-tagGroups:
-  - name: AMP-ALS Dataset Service API
-    tags:
-      - Dataset
-  - name: AMP-ALS User Service API
-    tags:
-      - HealthCheck

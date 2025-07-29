@@ -8,19 +8,23 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "redocly bundle --output openapi/base.openapi.yaml src/base.openapi.yaml",
-          "redocly bundle --output openapi/dataset.openapi.yaml src/dataset.openapi.yaml",
-          "redocly bundle --output openapi/user.openapi.yaml src/user.openapi.yaml"
+          "redocly bundle dataset-service --output openapi/dataset-service.openapi.yaml",
+          "redocly bundle dataset-public --output openapi/dataset-public.openapi.yaml",
+          "redocly bundle user-service --output openapi/user-service.openapi.yaml",
+          "redocly bundle user-public --output openapi/user-public.openapi.yaml"
         ],
-        "parallel": true,
         "cwd": "{projectRoot}"
       }
     },
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "openapi-merge-cli --config openapi-merge.yaml",
-        "cwd": "{projectRoot}"
+        "commands": [
+          "redocly join openapi/*-public.openapi.yaml --output openapi/openapi.yaml",
+          "redocly bundle amp-als-public --output openapi/openapi.yaml"
+        ],
+        "cwd": "{projectRoot}",
+        "parallel": false
       },
       "dependsOn": ["build-individuals"]
     },
@@ -30,6 +34,12 @@
         "command": "redocly lint --config redocly.yaml {projectName}"
       },
       "dependsOn": ["build"]
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rm -fr openapi/*"
+      }
     }
   },
   "tags": ["language:openapi"]
