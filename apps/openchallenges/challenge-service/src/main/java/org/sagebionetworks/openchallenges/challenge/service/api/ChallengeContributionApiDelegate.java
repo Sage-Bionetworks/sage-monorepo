@@ -3,6 +3,7 @@ package org.sagebionetworks.openchallenges.challenge.service.api;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.BasicErrorDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionRoleDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionsPageDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -124,11 +125,12 @@ public interface ChallengeContributionApiDelegate {
     }
 
     /**
-     * DELETE /challenges/{challengeId}/contributions/{challengeContributionId} : Delete a specific challenge contribution
-     * Deletes a specific contribution record for a challenge, identified by its ID. This action is irreversible. 
+     * DELETE /challenges/{challengeId}/contributions/{organizationId}/role/{role} : Delete a specific challenge contribution
+     * Delete a specific challenge contribution.
      *
      * @param challengeId The unique identifier of the challenge. (required)
-     * @param challengeContributionId The unique identifier of a challenge contribution (required)
+     * @param organizationId The unique identifier of the organization. (required)
+     * @param role A challenge contribution role. (required)
      * @return Contribution deleted successfully (status code 204)
      *         or Unauthorized (status code 401)
      *         or The user does not have the permission to perform this action (status code 403)
@@ -137,7 +139,8 @@ public interface ChallengeContributionApiDelegate {
      * @see ChallengeContributionApi#deleteChallengeContribution
      */
     default ResponseEntity<Void> deleteChallengeContribution(Long challengeId,
-        Long challengeContributionId) {
+        Long organizationId,
+        ChallengeContributionRoleDto role) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
@@ -167,11 +170,12 @@ public interface ChallengeContributionApiDelegate {
     }
 
     /**
-     * GET /challenges/{challengeId}/contributions/{challengeContributionId} : Get a specific challenge contribution
+     * GET /challenges/{challengeId}/contributions/{organizationId}/role/{role} : Get a specific challenge contribution
      * Retrieves a specific contribution record for a challenge, identified by its ID. 
      *
      * @param challengeId The unique identifier of the challenge. (required)
-     * @param challengeContributionId The unique identifier of a challenge contribution (required)
+     * @param organizationId The unique identifier of the organization. (required)
+     * @param role A challenge contribution role. (required)
      * @return Challenge contribution retrieved successfully (status code 200)
      *         or Invalid request (status code 400)
      *         or The specified resource was not found (status code 404)
@@ -179,7 +183,8 @@ public interface ChallengeContributionApiDelegate {
      * @see ChallengeContributionApi#getChallengeContribution
      */
     default ResponseEntity<ChallengeContributionDto> getChallengeContribution(Long challengeId,
-        Long challengeContributionId) {
+        Long organizationId,
+        ChallengeContributionRoleDto role) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {

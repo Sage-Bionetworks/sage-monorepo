@@ -91,18 +91,24 @@ class ChallengeContributionApiDelegateImplTest {
   void shouldDeleteChallengeContributionAndReturnNoContentStatus() {
     // given
     Long challengeId = 1L;
-    Long contributionId = 456L;
+    Long organizationId = 123L;
+    ChallengeContributionRoleDto role = ChallengeContributionRoleDto.CHALLENGE_ORGANIZER;
 
     // when
     ResponseEntity<Void> response = apiDelegate.deleteChallengeContribution(
       challengeId,
-      contributionId
+      organizationId,
+      role
     );
 
     // then
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     assertThat(response.getBody()).isNull();
-    verify(challengeContributionService).deleteChallengeContribution(challengeId, contributionId);
+    verify(challengeContributionService).deleteChallengeContribution(
+      challengeId,
+      organizationId,
+      role
+    );
   }
 
   @Test
@@ -110,33 +116,37 @@ class ChallengeContributionApiDelegateImplTest {
   void shouldGetChallengeContributionAndReturnOkStatus() {
     // given
     Long challengeId = 1L;
-    Long contributionId = 456L;
+    Long organizationId = 123L;
+    ChallengeContributionRoleDto role = ChallengeContributionRoleDto.CHALLENGE_ORGANIZER;
 
     ChallengeContributionDto expectedResponse = new ChallengeContributionDto()
-      .id(contributionId)
+      .id(456L)
       .challengeId(challengeId)
-      .organizationId(123L)
-      .role(ChallengeContributionRoleDto.CHALLENGE_ORGANIZER);
+      .organizationId(organizationId)
+      .role(role);
 
     when(
-      challengeContributionService.getChallengeContribution(challengeId, contributionId)
+      challengeContributionService.getChallengeContribution(challengeId, organizationId, role)
     ).thenReturn(expectedResponse);
 
     // when
     ResponseEntity<ChallengeContributionDto> response = apiDelegate.getChallengeContribution(
       challengeId,
-      contributionId
+      organizationId,
+      role
     );
 
     // then
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
-    assertThat(response.getBody().getId()).isEqualTo(contributionId);
+    assertThat(response.getBody().getId()).isEqualTo(456L);
     assertThat(response.getBody().getChallengeId()).isEqualTo(challengeId);
-    assertThat(response.getBody().getOrganizationId()).isEqualTo(123L);
-    assertThat(response.getBody().getRole()).isEqualTo(
-      ChallengeContributionRoleDto.CHALLENGE_ORGANIZER
+    assertThat(response.getBody().getOrganizationId()).isEqualTo(organizationId);
+    assertThat(response.getBody().getRole()).isEqualTo(role);
+    verify(challengeContributionService).getChallengeContribution(
+      challengeId,
+      organizationId,
+      role
     );
-    verify(challengeContributionService).getChallengeContribution(challengeId, contributionId);
   }
 }
