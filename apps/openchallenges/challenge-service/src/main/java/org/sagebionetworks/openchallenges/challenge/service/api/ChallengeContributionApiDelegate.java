@@ -84,18 +84,22 @@ public interface ChallengeContributionApiDelegate {
     }
 
     /**
-     * DELETE /challenges/{challengeId}/contributions : Delete all contributions for a specific challenge
-     * Deletes all associated contributions for a given challenge, identified by its ID. This action is irreversible. 
+     * DELETE /challenges/{challengeId}/contributions/{organizationId}/role/{role} : Delete a specific challenge contribution
+     * Delete a specific challenge contribution.
      *
      * @param challengeId The unique identifier of the challenge. (required)
-     * @return Deletion successful (status code 204)
+     * @param organizationId The unique identifier of the organization. (required)
+     * @param role A challenge contribution role. (required)
+     * @return Contribution deleted successfully (status code 204)
      *         or Unauthorized (status code 401)
      *         or The user does not have the permission to perform this action (status code 403)
      *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     * @see ChallengeContributionApi#deleteAllChallengeContributions
+     * @see ChallengeContributionApi#deleteChallengeContribution
      */
-    default ResponseEntity<Void> deleteAllChallengeContributions(Long challengeId) {
+    default ResponseEntity<Void> deleteChallengeContribution(Long challengeId,
+        Long organizationId,
+        ChallengeContributionRoleDto role) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
@@ -125,22 +129,18 @@ public interface ChallengeContributionApiDelegate {
     }
 
     /**
-     * DELETE /challenges/{challengeId}/contributions/{organizationId}/role/{role} : Delete a specific challenge contribution
-     * Delete a specific challenge contribution.
+     * DELETE /challenges/{challengeId}/contributions : Delete the contributions for a specific challenge
+     * Deletes the associated contributions for a given challenge, identified by its ID.
      *
      * @param challengeId The unique identifier of the challenge. (required)
-     * @param organizationId The unique identifier of the organization. (required)
-     * @param role A challenge contribution role. (required)
-     * @return Contribution deleted successfully (status code 204)
+     * @return Deletion successful (status code 204)
      *         or Unauthorized (status code 401)
      *         or The user does not have the permission to perform this action (status code 403)
      *         or The specified resource was not found (status code 404)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     * @see ChallengeContributionApi#deleteChallengeContribution
+     * @see ChallengeContributionApi#deleteChallengeContributions
      */
-    default ResponseEntity<Void> deleteChallengeContribution(Long challengeId,
-        Long organizationId,
-        ChallengeContributionRoleDto role) {
+    default ResponseEntity<Void> deleteChallengeContributions(Long challengeId) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {

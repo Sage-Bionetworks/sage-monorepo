@@ -218,10 +218,9 @@ paths:
         - tag: Challenge
   /challenges/{challengeId}/contributions:
     delete:
-      description: |
-        Deletes all associated contributions for a given challenge, identified by its ID.
-        This action is irreversible.
-      operationId: deleteAllChallengeContributions
+      description: "Deletes the associated contributions for a given challenge, identified\
+        \ by its ID."
+      operationId: deleteChallengeContributions
       parameters:
         - description: The unique identifier of the challenge.
           explode: false
@@ -261,7 +260,7 @@ paths:
             error
       security:
         - apiBearerAuth: []
-      summary: Delete all contributions for a specific challenge
+      summary: Delete the contributions for a specific challenge
       tags:
         - ChallengeContribution
       x-audience:

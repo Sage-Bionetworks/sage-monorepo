@@ -95,7 +95,7 @@ public class ChallengeContributionService {
   }
 
   @Transactional
-  public void deleteAllChallengeContributions(Long challengeId) {
+  public void deleteChallengeContributions(Long challengeId) {
     challengeContributionRepository.deleteByChallengeId(challengeId);
   }
 
