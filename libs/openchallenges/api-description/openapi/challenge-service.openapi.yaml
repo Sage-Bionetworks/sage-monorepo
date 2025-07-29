@@ -202,10 +202,11 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /challenges/{challengeId}/contributions/{challengeContributionId}:
+  /challenges/{challengeId}/contributions/{org}/role/{role}:
     parameters:
       - $ref: '#/components/parameters/challengeId'
-      - $ref: '#/components/parameters/challengeContributionId'
+      - $ref: '#/components/parameters/org'
+      - $ref: '#/components/parameters/challengeContributionRole'
     get:
       tags:
         - ChallengeContribution
@@ -232,9 +233,7 @@ paths:
       tags:
         - ChallengeContribution
       summary: Delete a specific challenge contribution
-      description: |
-        Deletes a specific contribution record for a challenge, identified by its ID.
-        This action is irreversible.
+      description: Delete a specific challenge contribution.
       operationId: deleteChallengeContribution
       x-audience:
         - public
@@ -1150,13 +1149,27 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/ChallengeId'
-    challengeContributionId:
-      name: challengeContributionId
+    org:
+      name: org
       in: path
-      description: The unique identifier of a challenge contribution
+      description: The id or login of the organization.
       required: true
       schema:
-        $ref: '#/components/schemas/ChallengeContributionId'
+        type: string
+        minLength: 1
+        maxLength: 64
+      examples:
+        byString:
+          value: dream
+        byId:
+          value: '1'
+    challengeContributionRole:
+      name: role
+      in: path
+      description: A challenge contribution role.
+      required: true
+      schema:
+        $ref: '#/components/schemas/ChallengeContributionRole'
     challengePlatformSearchQuery:
       name: challengePlatformSearchQuery
       description: The search query used to find challenge platforms.

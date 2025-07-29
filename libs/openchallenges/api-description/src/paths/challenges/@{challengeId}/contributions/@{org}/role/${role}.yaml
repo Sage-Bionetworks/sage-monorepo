@@ -1,0 +1,45 @@
+parameters:
+  - $ref: ../../../../../../components/parameters/path/challengeId.yaml
+  - $ref: ../../../../../../components/parameters/path/org.yaml
+  - $ref: ../../../../../../components/parameters/path/challengeContributionRole.yaml
+get:
+  tags:
+    - ChallengeContribution
+  summary: Get a specific challenge contribution
+  description: |
+    Retrieves a specific contribution record for a challenge, identified by its ID.
+  operationId: getChallengeContribution
+  x-audience: [public]
+  responses:
+    '200':
+      description: Challenge contribution retrieved successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../../../../../components/schemas/ChallengeContribution.yaml
+    '400':
+      $ref: ../../../../../../components/responses/BadRequest.yaml
+    '404':
+      $ref: ../../../../../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../../../../../components/responses/InternalServerError.yaml
+delete:
+  tags:
+    - ChallengeContribution
+  summary: Delete a specific challenge contribution
+  description: Delete a specific challenge contribution.
+  operationId: deleteChallengeContribution
+  x-audience: [public]
+  security:
+    - apiBearerAuth: []
+  responses:
+    '204':
+      description: Contribution deleted successfully
+    '401':
+      $ref: ../../../../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../../../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../../../../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../../../../../components/responses/InternalServerError.yaml
