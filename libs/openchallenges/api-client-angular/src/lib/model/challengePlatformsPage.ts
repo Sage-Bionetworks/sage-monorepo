@@ -40,5 +40,5 @@ export interface ChallengePlatformsPage {
   /**
    * A list of challenge platforms.
    */
-  challengePlatforms?: Array<ChallengePlatform>;
+  challengePlatforms: Array<ChallengePlatform>;
 }

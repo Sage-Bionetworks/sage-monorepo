@@ -50,13 +50,14 @@ public class EdamConceptsPageDto {
   /**
    * Constructor with only required parameters
    */
-  public EdamConceptsPageDto(Integer number, Integer size, Long totalElements, Integer totalPages, Boolean hasNext, Boolean hasPrevious) {
+  public EdamConceptsPageDto(Integer number, Integer size, Long totalElements, Integer totalPages, Boolean hasNext, Boolean hasPrevious, List<@Valid EdamConceptDto> edamConcepts) {
     this.number = number;
     this.size = size;
     this.totalElements = totalElements;
     this.totalPages = totalPages;
     this.hasNext = hasNext;
     this.hasPrevious = hasPrevious;
+    this.edamConcepts = edamConcepts;
   }
 
   public EdamConceptsPageDto number(Integer number) {
@@ -196,8 +197,8 @@ public class EdamConceptsPageDto {
    * A list of EDAM concepts.
    * @return edamConcepts
    */
-  @Valid 
-  @Schema(name = "edamConcepts", description = "A list of EDAM concepts.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid 
+  @Schema(name = "edamConcepts", description = "A list of EDAM concepts.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("edamConcepts")
   public List<@Valid EdamConceptDto> getEdamConcepts() {
     return edamConcepts;

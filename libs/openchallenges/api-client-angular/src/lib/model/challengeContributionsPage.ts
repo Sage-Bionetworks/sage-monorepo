@@ -40,5 +40,5 @@ export interface ChallengeContributionsPage {
   /**
    * A list of challenge contributions.
    */
-  challengeContributions?: Array<ChallengeContribution>;
+  challengeContributions: Array<ChallengeContribution>;
 }

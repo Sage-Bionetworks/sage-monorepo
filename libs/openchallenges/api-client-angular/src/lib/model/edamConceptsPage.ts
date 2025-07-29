@@ -40,5 +40,5 @@ export interface EdamConceptsPage {
   /**
    * A list of EDAM concepts.
    */
-  edamConcepts?: Array<EdamConcept>;
+  edamConcepts: Array<EdamConcept>;
 }

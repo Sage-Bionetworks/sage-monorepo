@@ -50,13 +50,14 @@ public class ChallengePlatformsPageDto {
   /**
    * Constructor with only required parameters
    */
-  public ChallengePlatformsPageDto(Integer number, Integer size, Long totalElements, Integer totalPages, Boolean hasNext, Boolean hasPrevious) {
+  public ChallengePlatformsPageDto(Integer number, Integer size, Long totalElements, Integer totalPages, Boolean hasNext, Boolean hasPrevious, List<@Valid ChallengePlatformDto> challengePlatforms) {
     this.number = number;
     this.size = size;
     this.totalElements = totalElements;
     this.totalPages = totalPages;
     this.hasNext = hasNext;
     this.hasPrevious = hasPrevious;
+    this.challengePlatforms = challengePlatforms;
   }
 
   public ChallengePlatformsPageDto number(Integer number) {
@@ -196,8 +197,8 @@ public class ChallengePlatformsPageDto {
    * A list of challenge platforms.
    * @return challengePlatforms
    */
-  @Valid 
-  @Schema(name = "challengePlatforms", description = "A list of challenge platforms.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid 
+  @Schema(name = "challengePlatforms", description = "A list of challenge platforms.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("challengePlatforms")
   public List<@Valid ChallengePlatformDto> getChallengePlatforms() {
     return challengePlatforms;

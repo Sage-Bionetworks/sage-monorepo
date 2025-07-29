@@ -4,15 +4,15 @@ A page of challenge platforms.
 
 ## Properties
 
-| Name                    | Type                                                | Description                                 | Notes      |
-| ----------------------- | --------------------------------------------------- | ------------------------------------------- | ---------- |
+| Name                    | Type                                                | Description                                 | Notes |
+| ----------------------- | --------------------------------------------------- | ------------------------------------------- | ----- |
 | **number**              | **int**                                             | The page number.                            |
 | **size**                | **int**                                             | The number of items in a single page.       |
 | **total_elements**      | **int**                                             | Total number of elements in the result set. |
 | **total_pages**         | **int**                                             | Total number of pages in the result set.    |
 | **has_next**            | **bool**                                            | Returns if there is a next page.            |
 | **has_previous**        | **bool**                                            | Returns if there is a previous page.        |
-| **challenge_platforms** | [**List[ChallengePlatform]**](ChallengePlatform.md) | A list of challenge platforms.              | [optional] |
+| **challenge_platforms** | [**List[ChallengePlatform]**](ChallengePlatform.md) | A list of challenge platforms.              |
 
 ## Example
 

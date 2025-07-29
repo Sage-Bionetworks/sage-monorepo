@@ -905,7 +905,7 @@ components:
               items:
                 $ref: '#/components/schemas/ChallengeContribution'
           required:
-            - Challenge Contributions
+            - challengeContributions
       x-java-class-annotations:
         - '@lombok.Builder'
     ChallengeContributionCreateRequest:
@@ -1022,7 +1022,7 @@ components:
               items:
                 $ref: '#/components/schemas/ChallengePlatform'
           required:
-            - Challenge Platforms
+            - challengePlatforms
       x-java-class-annotations:
         - '@lombok.Builder'
     ChallengePlatformCreateRequest:
@@ -1130,7 +1130,7 @@ components:
               items:
                 $ref: '#/components/schemas/EdamConcept'
           required:
-            - Edam Concept
+            - edamConcepts
       x-java-class-annotations:
         - '@lombok.Builder'
   parameters:

@@ -4,15 +4,15 @@ A page of EDAM concepts.
 
 ## Properties
 
-| Name               | Type                                    | Description                                 | Notes      |
-| ------------------ | --------------------------------------- | ------------------------------------------- | ---------- |
+| Name               | Type                                    | Description                                 | Notes |
+| ------------------ | --------------------------------------- | ------------------------------------------- | ----- |
 | **number**         | **int**                                 | The page number.                            |
 | **size**           | **int**                                 | The number of items in a single page.       |
 | **total_elements** | **int**                                 | Total number of elements in the result set. |
 | **total_pages**    | **int**                                 | Total number of pages in the result set.    |
 | **has_next**       | **bool**                                | Returns if there is a next page.            |
 | **has_previous**   | **bool**                                | Returns if there is a previous page.        |
-| **edam_concepts**  | [**List[EdamConcept]**](EdamConcept.md) | A list of EDAM concepts.                    | [optional] |
+| **edam_concepts**  | [**List[EdamConcept]**](EdamConcept.md) | A list of EDAM concepts.                    |
 
 ## Example
 

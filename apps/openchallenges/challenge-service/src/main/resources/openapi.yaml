@@ -1639,7 +1639,7 @@ components:
                 $ref: '#/components/schemas/ChallengeContribution'
               type: array
           required:
-            - Challenge Contributions
+            - challengeContributions
           type: object
       description: A page of challenge challenge contributions.
       example:
@@ -1808,7 +1808,7 @@ components:
                 $ref: '#/components/schemas/ChallengePlatform'
               type: array
           required:
-            - Challenge Platforms
+            - challengePlatforms
           type: object
       description: A page of challenge platforms.
       example:
@@ -1967,7 +1967,7 @@ components:
                 $ref: '#/components/schemas/EdamConcept'
               type: array
           required:
-            - Edam Concept
+            - edamConcepts
           type: object
       description: A page of EDAM concepts.
       example:
