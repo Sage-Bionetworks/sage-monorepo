@@ -78,7 +78,7 @@ public class EdamConceptsPage {
 
   public static final String JSON_PROPERTY_EDAM_CONCEPTS = "edamConcepts";
 
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   private List<EdamConcept> edamConcepts = new ArrayList<>();
 
   public EdamConceptsPage() {}
@@ -215,7 +215,9 @@ public class EdamConceptsPage {
     this.hasPrevious = hasPrevious;
   }
 
-  public EdamConceptsPage edamConcepts(@jakarta.annotation.Nonnull List<EdamConcept> edamConcepts) {
+  public EdamConceptsPage edamConcepts(
+    @jakarta.annotation.Nullable List<EdamConcept> edamConcepts
+  ) {
     this.edamConcepts = edamConcepts;
     return this;
   }
@@ -232,16 +234,16 @@ public class EdamConceptsPage {
    * A list of EDAM concepts.
    * @return edamConcepts
    */
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_EDAM_CONCEPTS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<EdamConcept> getEdamConcepts() {
     return edamConcepts;
   }
 
   @JsonProperty(JSON_PROPERTY_EDAM_CONCEPTS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setEdamConcepts(@jakarta.annotation.Nonnull List<EdamConcept> edamConcepts) {
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEdamConcepts(@jakarta.annotation.Nullable List<EdamConcept> edamConcepts) {
     this.edamConcepts = edamConcepts;
   }
 

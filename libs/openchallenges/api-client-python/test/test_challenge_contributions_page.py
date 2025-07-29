@@ -59,13 +59,6 @@ class TestChallengeContributionsPage(unittest.TestCase):
                 total_pages = 99,
                 has_next = True,
                 has_previous = True,
-                challenge_contributions = [
-                    openchallenges_api_client_python.models.challenge_contribution.ChallengeContribution(
-                        id = 1, 
-                        challenge_id = 1, 
-                        organization_id = 1, 
-                        role = 'challenge_organizer', )
-                    ],
         )
         """
 

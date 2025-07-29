@@ -56,12 +56,6 @@ class TestEdamConceptsPage(unittest.TestCase):
                 total_pages = 99,
                 has_next = True,
                 has_previous = True,
-                edam_concepts = [
-                    openchallenges_api_client_python.models.edam_concept.EdamConcept(
-                        id = 1, 
-                        class_id = 'http://edamontology.org/data_0850', 
-                        preferred_label = 'Sequence set', )
-                    ],
         )
         """
 

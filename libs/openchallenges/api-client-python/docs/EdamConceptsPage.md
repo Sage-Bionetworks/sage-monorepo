@@ -4,15 +4,15 @@ A page of EDAM concepts.
 
 ## Properties
 
-Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
-**number** | **int** | The page number. | 
-**size** | **int** | The number of items in a single page. | 
-**total_elements** | **int** | Total number of elements in the result set. | 
-**total_pages** | **int** | Total number of pages in the result set. | 
-**has_next** | **bool** | Returns if there is a next page. | 
-**has_previous** | **bool** | Returns if there is a previous page. | 
-**edam_concepts** | [**List[EdamConcept]**](EdamConcept.md) | A list of EDAM concepts. | 
+| Name               | Type                                    | Description                                 | Notes      |
+| ------------------ | --------------------------------------- | ------------------------------------------- | ---------- |
+| **number**         | **int**                                 | The page number.                            |
+| **size**           | **int**                                 | The number of items in a single page.       |
+| **total_elements** | **int**                                 | Total number of elements in the result set. |
+| **total_pages**    | **int**                                 | Total number of pages in the result set.    |
+| **has_next**       | **bool**                                | Returns if there is a next page.            |
+| **has_previous**   | **bool**                                | Returns if there is a previous page.        |
+| **edam_concepts**  | [**List[EdamConcept]**](EdamConcept.md) | A list of EDAM concepts.                    | [optional] |
 
 ## Example
 
@@ -31,6 +31,5 @@ edam_concepts_page_dict = edam_concepts_page_instance.to_dict()
 # create an instance of EdamConceptsPage from a dict
 edam_concepts_page_from_dict = EdamConceptsPage.from_dict(edam_concepts_page_dict)
 ```
+
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
-
-

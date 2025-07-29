@@ -78,7 +78,7 @@ public class ChallengePlatformsPage {
 
   public static final String JSON_PROPERTY_CHALLENGE_PLATFORMS = "challengePlatforms";
 
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   private List<ChallengePlatform> challengePlatforms = new ArrayList<>();
 
   public ChallengePlatformsPage() {}
@@ -216,7 +216,7 @@ public class ChallengePlatformsPage {
   }
 
   public ChallengePlatformsPage challengePlatforms(
-    @jakarta.annotation.Nonnull List<ChallengePlatform> challengePlatforms
+    @jakarta.annotation.Nullable List<ChallengePlatform> challengePlatforms
   ) {
     this.challengePlatforms = challengePlatforms;
     return this;
@@ -236,17 +236,17 @@ public class ChallengePlatformsPage {
    * A list of challenge platforms.
    * @return challengePlatforms
    */
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_CHALLENGE_PLATFORMS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<ChallengePlatform> getChallengePlatforms() {
     return challengePlatforms;
   }
 
   @JsonProperty(JSON_PROPERTY_CHALLENGE_PLATFORMS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setChallengePlatforms(
-    @jakarta.annotation.Nonnull List<ChallengePlatform> challengePlatforms
+    @jakarta.annotation.Nullable List<ChallengePlatform> challengePlatforms
   ) {
     this.challengePlatforms = challengePlatforms;
   }

@@ -78,7 +78,7 @@ public class ChallengeContributionsPage {
 
   public static final String JSON_PROPERTY_CHALLENGE_CONTRIBUTIONS = "challengeContributions";
 
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   private List<ChallengeContribution> challengeContributions = new ArrayList<>();
 
   public ChallengeContributionsPage() {}
@@ -216,7 +216,7 @@ public class ChallengeContributionsPage {
   }
 
   public ChallengeContributionsPage challengeContributions(
-    @jakarta.annotation.Nonnull List<ChallengeContribution> challengeContributions
+    @jakarta.annotation.Nullable List<ChallengeContribution> challengeContributions
   ) {
     this.challengeContributions = challengeContributions;
     return this;
@@ -236,17 +236,17 @@ public class ChallengeContributionsPage {
    * A list of challenge contributions.
    * @return challengeContributions
    */
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_CHALLENGE_CONTRIBUTIONS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public List<ChallengeContribution> getChallengeContributions() {
     return challengeContributions;
   }
 
   @JsonProperty(JSON_PROPERTY_CHALLENGE_CONTRIBUTIONS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setChallengeContributions(
-    @jakarta.annotation.Nonnull List<ChallengeContribution> challengeContributions
+    @jakarta.annotation.Nullable List<ChallengeContribution> challengeContributions
   ) {
     this.challengeContributions = challengeContributions;
   }

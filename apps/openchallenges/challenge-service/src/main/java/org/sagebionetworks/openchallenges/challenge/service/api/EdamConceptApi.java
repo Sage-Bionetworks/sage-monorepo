@@ -32,7 +32,7 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 @Validated
-@Tag(name = "EdamConcept", description = "Operations about EDAM concepts.")
+@Tag(name = "Edam Concept", description = "the Edam Concept API")
 public interface EdamConceptApi {
 
     default EdamConceptApiDelegate getDelegate() {
@@ -52,7 +52,7 @@ public interface EdamConceptApi {
         operationId = "listEdamConcepts",
         summary = "List EDAM concepts",
         description = "List EDAM concepts",
-        tags = { "EdamConcept" },
+        tags = { "Edam Concept" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = EdamConceptsPageDto.class)),

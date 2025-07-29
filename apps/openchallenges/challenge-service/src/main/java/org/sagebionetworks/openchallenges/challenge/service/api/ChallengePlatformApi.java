@@ -35,7 +35,7 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 @Validated
-@Tag(name = "ChallengePlatform", description = "Operations about challenge platforms.")
+@Tag(name = "Challenge Platform", description = "the Challenge Platform API")
 public interface ChallengePlatformApi {
 
     default ChallengePlatformApiDelegate getDelegate() {
@@ -57,7 +57,7 @@ public interface ChallengePlatformApi {
         operationId = "createChallengePlatform",
         summary = "Create a challenge platform",
         description = "Create a challenge platform with the specified ID",
-        tags = { "ChallengePlatform" },
+        tags = { "Challenge Platform" },
         responses = {
             @ApiResponse(responseCode = "201", description = "Success", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ChallengePlatformDto.class)),
@@ -113,7 +113,7 @@ public interface ChallengePlatformApi {
         operationId = "deleteChallengePlatform",
         summary = "Delete a challenge platform",
         description = "Deletes a challenge platform by its unique ID. This action is irreversible. ",
-        tags = { "ChallengePlatform" },
+        tags = { "Challenge Platform" },
         responses = {
             @ApiResponse(responseCode = "204", description = "Deletion successful"),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
@@ -159,7 +159,7 @@ public interface ChallengePlatformApi {
         operationId = "getChallengePlatform",
         summary = "Get a challenge platform",
         description = "Returns the challenge platform identified by its unique ID",
-        tags = { "ChallengePlatform" },
+        tags = { "Challenge Platform" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ChallengePlatformDto.class)),
@@ -201,7 +201,7 @@ public interface ChallengePlatformApi {
         operationId = "listChallengePlatforms",
         summary = "List challenge platforms",
         description = "List challenge platforms",
-        tags = { "ChallengePlatform" },
+        tags = { "Challenge Platform" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ChallengePlatformsPageDto.class)),
@@ -248,7 +248,7 @@ public interface ChallengePlatformApi {
         operationId = "updateChallengePlatform",
         summary = "Update an existing challenge platform",
         description = "Updates an existing challenge platform. ",
-        tags = { "ChallengePlatform" },
+        tags = { "Challenge Platform" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Challange platform updated successfully", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ChallengePlatformDto.class)),

@@ -17,7 +17,7 @@ import re  # noqa: F401
 import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt
-from typing import Any, ClassVar, Dict, List
+from typing import Any, ClassVar, Dict, List, Optional
 from openchallenges_api_client_python.models.challenge_platform import ChallengePlatform
 from typing import Optional, Set
 from typing_extensions import Self
@@ -42,8 +42,10 @@ class ChallengePlatformsPage(BaseModel):
     has_previous: StrictBool = Field(
         description="Returns if there is a previous page.", alias="hasPrevious"
     )
-    challenge_platforms: List[ChallengePlatform] = Field(
-        description="A list of challenge platforms.", alias="challengePlatforms"
+    challenge_platforms: Optional[List[ChallengePlatform]] = Field(
+        default=None,
+        description="A list of challenge platforms.",
+        alias="challengePlatforms",
     )
     __properties: ClassVar[List[str]] = [
         "number",

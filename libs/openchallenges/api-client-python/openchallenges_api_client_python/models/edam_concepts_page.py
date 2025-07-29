@@ -42,8 +42,8 @@ class EdamConceptsPage(BaseModel):
     has_previous: StrictBool = Field(
         description="Returns if there is a previous page.", alias="hasPrevious"
     )
-    edam_concepts: List[Optional[EdamConcept]] = Field(
-        description="A list of EDAM concepts.", alias="edamConcepts"
+    edam_concepts: Optional[List[Optional[EdamConcept]]] = Field(
+        default=None, description="A list of EDAM concepts.", alias="edamConcepts"
     )
     __properties: ClassVar[List[str]] = [
         "number",
