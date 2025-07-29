@@ -45,12 +45,12 @@ apis:
         matchStrategy: any
 
   # Gene API
-  # gene-public:
-  #   root: ./src/gene.openapi.yaml
-  #   decorators:
-  #     filter-in:
-  #       property: x-audience
-  #       value: [public]
+  gene-public:
+    root: ./src/gene.openapi.yaml
+    decorators:
+      filter-in:
+        property: x-audience
+        value: [public]
   gene-service:
     root: ./src/gene.openapi.yaml
     decorators:

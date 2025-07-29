@@ -10,6 +10,7 @@
         "commands": [
           "redocly bundle api-public --output openapi/api-public.openapi.yaml",
           "redocly bundle api-service --output openapi/api-service.openapi.yaml",
+          "redocly bundle gene-public --output openapi/gene-public.openapi.yaml",
           "redocly bundle gene-service --output openapi/gene-service.openapi.yaml"
         ],
         "cwd": "{projectRoot}"
