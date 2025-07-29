@@ -63,16 +63,19 @@
     li {
       padding-bottom: 10px;
 
-      a {
+      button {
+        background: none;
+        border: none;
+        padding: 0;
         color: var(--color-text);
         font-weight: 700;
         font-size: 18px;
         line-height: 20px;
         cursor: pointer;
-        pointer-events: all;
         text-decoration: underline;
 
-        &:hover {
+        &:hover,
+        &:focus {
           color: var(--color-action-primary);
         }
       }

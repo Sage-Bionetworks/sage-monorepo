@@ -44,9 +44,9 @@
     <ul class="table-of-contents">
       @for (evidenceType of evidenceTypes(); track evidenceType) {
         <li>
-          <a (click)="scrollToSection(generateAnchorId(evidenceType))">{{
-            evidenceType | decodeGreekEntity
-          }}</a>
+          <button (click)="scrollToSection(generateAnchorId(evidenceType))">
+            {{ evidenceType | decodeGreekEntity }}
+          </button>
         </li>
       }
     </ul>

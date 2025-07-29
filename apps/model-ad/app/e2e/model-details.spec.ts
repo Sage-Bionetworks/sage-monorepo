@@ -179,7 +179,7 @@ test.describe('model details - boxplots selector - table of contents', () => {
     await expect(page.getByRole('heading', { level: 2, name: 'Table of Contents' })).toBeVisible();
 
     const toc = page.locator('.table-of-contents-container');
-    const tocLinks = toc.locator('a');
+    const tocLinks = toc.getByRole('button');
     const tocLinksCount = await tocLinks.count();
 
     for (let i = 0; i < tocLinksCount; i++) {
