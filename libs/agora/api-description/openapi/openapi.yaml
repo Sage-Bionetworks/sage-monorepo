@@ -4,15 +4,15 @@ info:
   title: Agora REST API
   license:
     name: Apache 2.0
-    url: 'https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt'
+    url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
   contact:
     name: Support
-    url: 'https://github.com/Sage-Bionetworks/sage-monorepo'
+    url: https://github.com/Sage-Bionetworks/sage-monorepo
   x-logo:
-    url: 'https://agora.adknowledgeportal.org/images/logo.png'
+    url: https://agora.adknowledgeportal.org/images/logo.png
     altText: Agora
 servers:
-  - url: 'http://localhost/v1'
+  - url: http://localhost/v1
 tags:
   - name: Dataversion
     description: Operations about dataversion.
@@ -41,7 +41,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  '/biodomains/{ensg}':
+  /biodomains/{ensg}:
     get:
       tags:
         - BioDomains
@@ -73,9 +73,7 @@ paths:
       tags:
         - Genes
       summary: Retrieve a list of genes or filter by Ensembl gene IDs
-      description: >-
-        This endpoint returns all genes or filters genes by Ensembl gene IDs if
-        provided.
+      description: This endpoint returns all genes or filters genes by Ensembl gene IDs if provided.
       operationId: getGenes
       parameters:
         - in: query
@@ -84,7 +82,7 @@ paths:
             type: string
             description: Comma-separated list of Ensembl gene IDs to filter.
           required: false
-          example: 'ENSG00000139618,ENSG00000248378'
+          example: ENSG00000139618,ENSG00000248378
       responses:
         '200':
           description: A list of genes.
@@ -98,7 +96,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  '/genes/{ensg}':
+  /genes/{ensg}:
     get:
       tags:
         - Genes
@@ -162,9 +160,7 @@ paths:
             enum:
               - RNA - Differential Expression
               - Protein - Differential Expression
-          description: >-
-            The category of the comparison (either RNA or Protein Differential
-            Expression).
+          description: The category of the comparison (either RNA or Protein Differential Expression).
         - in: query
           name: subCategory
           required: true
@@ -254,7 +250,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  '/teamMembers/{name}/image':
+  /teamMembers/{name}/image:
     get:
       tags:
         - Teams
@@ -306,17 +302,13 @@ components:
           description: The HTTP status code
         detail:
           type: string
-          description: >-
-            A human readable explanation specific to this occurrence of the
-            problem
+          description: A human readable explanation specific to this occurrence of the problem
         type:
           type: string
           description: An absolute URI that identifies the problem type
         instance:
           type: string
-          description: >-
-            An absolute URI that identifies the specific occurrence of the
-            problem
+          description: An absolute URI that identifies the specific occurrence of the problem
       required:
         - title
         - status
@@ -440,9 +432,7 @@ components:
         classification:
           type: string
           example: Enzyme
-          description: >-
-            classification should really be named
-            sm_druggability_bucket_definition
+          description: classification should really be named sm_druggability_bucket_definition
         safety_bucket_definition:
           type: string
           example: Low risk
@@ -571,7 +561,7 @@ components:
               type: number
             minItems: 5
             maxItems: 5
-          description: 'min, first quartile, median, third quartile, max'
+          description: min, first quartile, median, third quartile, max
       required:
         - _id
         - associated_gene_name
@@ -1235,7 +1225,7 @@ components:
           type: number
         type:
           type: string
-          description: 'Type of proteomics distribution (e.g., LFQ, SRM, TMT)'
+          description: Type of proteomics distribution (e.g., LFQ, SRM, TMT)
       required:
         - _id
         - tissue
@@ -1260,7 +1250,7 @@ components:
             type: array
             items:
               type: number
-          description: 'Bins used in the distribution, array of [binStart, binEnd]'
+          description: Bins used in the distribution, array of [binStart, binEnd]
         min:
           type: number
         max:

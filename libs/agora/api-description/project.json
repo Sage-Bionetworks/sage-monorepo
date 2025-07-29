@@ -8,18 +8,18 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "redocly bundle --output openapi/base.openapi.yaml src/base.openapi.yaml",
-          "redocly bundle --output openapi/api.openapi.yaml src/api.openapi.yaml",
-          "redocly bundle --output openapi/gene-api.openapi.yaml src/gene-api.openapi.yaml"
+          "redocly bundle api --output openapi/api.openapi.yaml",
+          "redocly bundle gene-api --output openapi/gene-api.openapi.yaml"
         ],
         "parallel": true,
         "cwd": "{projectRoot}"
-      }
+      },
+      "dependsOn": ["clean"]
     },
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["openapi-merge-cli --config openapi-merge.yaml"],
+        "commands": ["redocly bundle agora --output openapi/openapi.yaml"],
         "cwd": "{projectRoot}"
       },
       "dependsOn": ["build-individuals"]
@@ -30,6 +30,12 @@
         "command": "redocly lint --config redocly.yaml {projectName}"
       },
       "dependsOn": ["build"]
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rm -fr openapi/*"
+      }
     }
   },
   "tags": ["language:openapi", "scope:agora"]
