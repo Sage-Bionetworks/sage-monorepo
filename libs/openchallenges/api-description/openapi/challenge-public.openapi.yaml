@@ -18,7 +18,7 @@ tags:
     description: Operations about challenges.
     x-audience:
       - public
-  - name: ChallengeContribution
+  - name: Challenge Contribution
     description: Operations about challenge contributions.
     x-audience:
       - public
@@ -128,7 +128,7 @@ paths:
       - $ref: '#/components/parameters/challengeId'
     get:
       tags:
-        - ChallengeContribution
+        - Challenge Contribution
       summary: List challenge contributions
       description: List challenge contributions
       operationId: listChallengeContributions
@@ -147,7 +147,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     post:
       tags:
-        - ChallengeContribution
+        - Challenge Contribution
       summary: Create a new contribution for a challenge
       description: |
         Creates a new contribution record associated with a challenge ID.
@@ -186,7 +186,7 @@ paths:
       - $ref: '#/components/parameters/challengeContributionRole'
     get:
       tags:
-        - ChallengeContribution
+        - Challenge Contribution
       summary: Get a specific challenge contribution
       description: |
         Retrieves a specific contribution record for a challenge, identified by its ID.
@@ -208,7 +208,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     delete:
       tags:
-        - ChallengeContribution
+        - Challenge Contribution
       summary: Delete a specific challenge contribution
       description: Delete a specific challenge contribution.
       operationId: deleteChallengeContribution
@@ -230,7 +230,7 @@ paths:
   /challenge-analytics/challenges-per-year:
     get:
       tags:
-        - ChallengeAnalytics
+        - Challenge Analytics
       summary: Get the number of challenges tracked per year
       description: Returns the number of challenges tracked per year
       operationId: getChallengesPerYear
@@ -248,7 +248,7 @@ paths:
   /challenge-platforms:
     get:
       tags:
-        - ChallengePlatform
+        - Challenge Platform
       summary: List challenge platforms
       description: List challenge platforms
       operationId: listChallengePlatforms
@@ -269,7 +269,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     post:
       tags:
-        - ChallengePlatform
+        - Challenge Platform
       summary: Create a challenge platform
       description: Create a challenge platform with the specified ID
       operationId: createChallengePlatform
@@ -303,7 +303,7 @@ paths:
       - $ref: '#/components/parameters/challengePlatformId'
     get:
       tags:
-        - ChallengePlatform
+        - Challenge Platform
       summary: Get a challenge platform
       description: Returns the challenge platform identified by its unique ID
       operationId: getChallengePlatform
@@ -322,7 +322,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     put:
       tags:
-        - ChallengePlatform
+        - Challenge Platform
       summary: Update an existing challenge platform
       description: |
         Updates an existing challenge platform.
@@ -358,7 +358,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
     delete:
       tags:
-        - ChallengePlatform
+        - Challenge Platform
       summary: Delete a challenge platform
       description: |
         Deletes a challenge platform by its unique ID. This action is irreversible.
@@ -381,7 +381,7 @@ paths:
   /edam-concepts:
     get:
       tags:
-        - EdamConcept
+        - Edam Concept
       summary: List EDAM concepts
       description: List EDAM concepts
       operationId: listEdamConcepts
@@ -884,7 +884,7 @@ components:
               items:
                 $ref: '#/components/schemas/ChallengeContribution'
           required:
-            - challengeContributions
+            - Challenge Contributions
       x-java-class-annotations:
         - '@lombok.Builder'
     ChallengeContributionCreateRequest:
@@ -1001,7 +1001,7 @@ components:
               items:
                 $ref: '#/components/schemas/ChallengePlatform'
           required:
-            - challengePlatforms
+            - Challenge Platforms
       x-java-class-annotations:
         - '@lombok.Builder'
     ChallengePlatformCreateRequest:
@@ -1109,7 +1109,7 @@ components:
               items:
                 $ref: '#/components/schemas/EdamConcept'
           required:
-            - edamConcepts
+            - Edam Concept
       x-java-class-annotations:
         - '@lombok.Builder'
   parameters:

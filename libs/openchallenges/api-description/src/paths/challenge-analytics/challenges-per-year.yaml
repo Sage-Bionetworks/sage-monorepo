@@ -1,6 +1,6 @@
 get:
   tags:
-    - ChallengeAnalytics
+    - Challenge Analytics
   summary: Get the number of challenges tracked per year
   description: Returns the number of challenges tracked per year
   operationId: getChallengesPerYear

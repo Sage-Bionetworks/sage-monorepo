@@ -1,6 +1,6 @@
 get:
   tags:
-    - ChallengePlatform
+    - Challenge Platform
   summary: List challenge platforms
   description: List challenge platforms
   operationId: listChallengePlatforms
@@ -20,7 +20,7 @@ get:
       $ref: ../components/responses/InternalServerError.yaml
 post:
   tags:
-    - ChallengePlatform
+    - Challenge Platform
   summary: Create a challenge platform
   description: Create a challenge platform with the specified ID
   operationId: createChallengePlatform

@@ -4,7 +4,7 @@ parameters:
   - $ref: ../../../../../../components/parameters/path/challengeContributionRole.yaml
 get:
   tags:
-    - ChallengeContribution
+    - Challenge Contribution
   summary: Get a specific challenge contribution
   description: |
     Retrieves a specific contribution record for a challenge, identified by its ID.
@@ -25,7 +25,7 @@ get:
       $ref: ../../../../../../components/responses/InternalServerError.yaml
 delete:
   tags:
-    - ChallengeContribution
+    - Challenge Contribution
   summary: Delete a specific challenge contribution
   description: Delete a specific challenge contribution.
   operationId: deleteChallengeContribution

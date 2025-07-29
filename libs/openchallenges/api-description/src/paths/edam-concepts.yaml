@@ -1,6 +1,6 @@
 get:
   tags:
-    - EdamConcept
+    - Edam Concept
   summary: List EDAM concepts
   description: List EDAM concepts
   operationId: listEdamConcepts

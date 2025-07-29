@@ -10,6 +10,6 @@ allOf:
         items:
           $ref: ChallengePlatform.yaml
     required:
-      - challengePlatforms
+      - Challenge Platforms
 x-java-class-annotations:
   - '@lombok.Builder'
