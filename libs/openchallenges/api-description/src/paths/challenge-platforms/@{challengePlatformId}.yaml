@@ -2,7 +2,7 @@ parameters:
   - $ref: ../../components/parameters/path/challengePlatformId.yaml
 get:
   tags:
-    - ChallengePlatform
+    - Challenge Platform
   summary: Get a challenge platform
   description: Returns the challenge platform identified by its unique ID
   operationId: getChallengePlatform
@@ -20,7 +20,7 @@ get:
       $ref: ../../components/responses/InternalServerError.yaml
 put:
   tags:
-    - ChallengePlatform
+    - Challenge Platform
   summary: Update an existing challenge platform
   description: |
     Updates an existing challenge platform.
@@ -55,7 +55,7 @@ put:
       $ref: ../../components/responses/InternalServerError.yaml
 delete:
   tags:
-    - ChallengePlatform
+    - Challenge Platform
   summary: Delete a challenge platform
   description: |
     Deletes a challenge platform by its unique ID. This action is irreversible.

@@ -30,10 +30,10 @@ tags:
       - public
     x-displayName: Challenge
   - description: Operations about challenge contributions.
-    name: ChallengeContribution
+    name: Challenge Contribution
     x-audience:
       - public
-    x-displayName: ChallengeContribution
+    x-displayName: Challenge Contribution
   - description: Operations about challenge analytics.
     name: ChallengeAnalytics
     x-audience:
@@ -49,6 +49,12 @@ tags:
     x-audience:
       - public
     x-displayName: EdamConcept
+  - name: Challenge Analytics
+    x-displayName: Challenge Analytics
+  - name: Challenge Platform
+    x-displayName: Challenge Platform
+  - name: Edam Concept
+    x-displayName: Edam Concept
   - description: Operations about images
     name: Image
     x-audience:
@@ -434,7 +440,7 @@ paths:
             error
       summary: List challenge contributions
       tags:
-        - ChallengeContribution
+        - Challenge Contribution
       x-audience:
         - public
       x-accepts:
@@ -501,7 +507,7 @@ paths:
         - apiBearerAuth: []
       summary: Create a new contribution for a challenge
       tags:
-        - ChallengeContribution
+        - Challenge Contribution
       x-audience:
         - public
       x-content-type: application/json
@@ -569,7 +575,7 @@ paths:
         - apiBearerAuth: []
       summary: Delete a specific challenge contribution
       tags:
-        - ChallengeContribution
+        - Challenge Contribution
       x-audience:
         - public
       x-accepts:
@@ -631,7 +637,7 @@ paths:
             error
       summary: Get a specific challenge contribution
       tags:
-        - ChallengeContribution
+        - Challenge Contribution
       x-audience:
         - public
       x-accepts:
@@ -657,7 +663,7 @@ paths:
             error
       summary: Get the number of challenges tracked per year
       tags:
-        - ChallengeAnalytics
+        - Challenge Analytics
       x-audience:
         - public
       x-accepts:
@@ -698,7 +704,7 @@ paths:
             error
       summary: List challenge platforms
       tags:
-        - ChallengePlatform
+        - Challenge Platform
       x-audience:
         - public
       x-accepts:
@@ -749,7 +755,7 @@ paths:
         - apiBearerAuth: []
       summary: Create a challenge platform
       tags:
-        - ChallengePlatform
+        - Challenge Platform
       x-audience:
         - public
       x-content-type: application/json
@@ -802,7 +808,7 @@ paths:
         - apiBearerAuth: []
       summary: Delete a challenge platform
       tags:
-        - ChallengePlatform
+        - Challenge Platform
       x-audience:
         - public
       x-accepts:
@@ -841,7 +847,7 @@ paths:
             error
       summary: Get a challenge platform
       tags:
-        - ChallengePlatform
+        - Challenge Platform
       x-audience:
         - public
       x-accepts:
@@ -914,7 +920,7 @@ paths:
         - apiBearerAuth: []
       summary: Update an existing challenge platform
       tags:
-        - ChallengePlatform
+        - Challenge Platform
       x-audience:
         - public
       x-content-type: application/json
@@ -956,7 +962,7 @@ paths:
             error
       summary: List EDAM concepts
       tags:
-        - EdamConcept
+        - Edam Concept
       x-audience:
         - public
       x-accepts:
@@ -2973,10 +2979,13 @@ x-tagGroups:
   - name: OpenChallenges Challenge API
     tags:
       - Challenge
-      - ChallengeContribution
+      - Challenge Contribution
       - ChallengeAnalytics
       - ChallengePlatform
       - EdamConcept
+      - Challenge Analytics
+      - Challenge Platform
+      - Edam Concept
   - name: OpenChallenges Image API
     tags:
       - Image

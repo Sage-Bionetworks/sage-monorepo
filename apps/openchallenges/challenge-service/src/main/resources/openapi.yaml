@@ -19,7 +19,7 @@ tags:
     x-audience:
       - public
   - description: Operations about challenge contributions.
-    name: ChallengeContribution
+    name: Challenge Contribution
     x-audience:
       - public
   - description: Operations about challenge analytics.
@@ -262,13 +262,13 @@ paths:
         - apiBearerAuth: []
       summary: Delete the contributions for a specific challenge
       tags:
-        - ChallengeContribution
+        - Challenge Contribution
       x-audience:
         - internal
       x-accepts:
         - application/problem+json
       x-tags:
-        - tag: ChallengeContribution
+        - tag: Challenge Contribution
     get:
       description: List challenge contributions
       operationId: listChallengeContributions
@@ -303,14 +303,14 @@ paths:
             error
       summary: List challenge contributions
       tags:
-        - ChallengeContribution
+        - Challenge Contribution
       x-audience:
         - public
       x-accepts:
         - application/json
         - application/problem+json
       x-tags:
-        - tag: ChallengeContribution
+        - tag: Challenge Contribution
     post:
       description: |
         Creates a new contribution record associated with a challenge ID.
@@ -372,7 +372,7 @@ paths:
         - apiBearerAuth: []
       summary: Create a new contribution for a challenge
       tags:
-        - ChallengeContribution
+        - Challenge Contribution
       x-audience:
         - public
       x-content-type: application/json
@@ -380,7 +380,7 @@ paths:
         - application/json
         - application/problem+json
       x-tags:
-        - tag: ChallengeContribution
+        - tag: Challenge Contribution
   /challenges/{challengeId}/contributions/{organizationId}/role/{role}:
     delete:
       description: Delete a specific challenge contribution.
@@ -442,13 +442,13 @@ paths:
         - apiBearerAuth: []
       summary: Delete a specific challenge contribution
       tags:
-        - ChallengeContribution
+        - Challenge Contribution
       x-audience:
         - public
       x-accepts:
         - application/problem+json
       x-tags:
-        - tag: ChallengeContribution
+        - tag: Challenge Contribution
     get:
       description: |
         Retrieves a specific contribution record for a challenge, identified by its ID.
@@ -506,14 +506,14 @@ paths:
             error
       summary: Get a specific challenge contribution
       tags:
-        - ChallengeContribution
+        - Challenge Contribution
       x-audience:
         - public
       x-accepts:
         - application/json
         - application/problem+json
       x-tags:
-        - tag: ChallengeContribution
+        - tag: Challenge Contribution
   /challenge-analytics/challenges-per-year:
     get:
       description: Returns the number of challenges tracked per year
@@ -534,14 +534,14 @@ paths:
             error
       summary: Get the number of challenges tracked per year
       tags:
-        - ChallengeAnalytics
+        - Challenge Analytics
       x-audience:
         - public
       x-accepts:
         - application/json
         - application/problem+json
       x-tags:
-        - tag: ChallengeAnalytics
+        - tag: Challenge Analytics
   /challenge-platforms:
     get:
       description: List challenge platforms
@@ -577,14 +577,14 @@ paths:
             error
       summary: List challenge platforms
       tags:
-        - ChallengePlatform
+        - Challenge Platform
       x-audience:
         - public
       x-accepts:
         - application/json
         - application/problem+json
       x-tags:
-        - tag: ChallengePlatform
+        - tag: Challenge Platform
     post:
       description: Create a challenge platform with the specified ID
       operationId: createChallengePlatform
@@ -630,7 +630,7 @@ paths:
         - apiBearerAuth: []
       summary: Create a challenge platform
       tags:
-        - ChallengePlatform
+        - Challenge Platform
       x-audience:
         - public
       x-content-type: application/json
@@ -638,7 +638,7 @@ paths:
         - application/json
         - application/problem+json
       x-tags:
-        - tag: ChallengePlatform
+        - tag: Challenge Platform
   /challenge-platforms/{challengePlatformId}:
     delete:
       description: |
@@ -685,13 +685,13 @@ paths:
         - apiBearerAuth: []
       summary: Delete a challenge platform
       tags:
-        - ChallengePlatform
+        - Challenge Platform
       x-audience:
         - public
       x-accepts:
         - application/problem+json
       x-tags:
-        - tag: ChallengePlatform
+        - tag: Challenge Platform
     get:
       description: Returns the challenge platform identified by its unique ID
       operationId: getChallengePlatform
@@ -726,14 +726,14 @@ paths:
             error
       summary: Get a challenge platform
       tags:
-        - ChallengePlatform
+        - Challenge Platform
       x-audience:
         - public
       x-accepts:
         - application/json
         - application/problem+json
       x-tags:
-        - tag: ChallengePlatform
+        - tag: Challenge Platform
     put:
       description: |
         Updates an existing challenge platform.
@@ -801,7 +801,7 @@ paths:
         - apiBearerAuth: []
       summary: Update an existing challenge platform
       tags:
-        - ChallengePlatform
+        - Challenge Platform
       x-audience:
         - public
       x-content-type: application/json
@@ -809,7 +809,7 @@ paths:
         - application/json
         - application/problem+json
       x-tags:
-        - tag: ChallengePlatform
+        - tag: Challenge Platform
   /edam-concepts:
     get:
       description: List EDAM concepts
@@ -845,14 +845,14 @@ paths:
             error
       summary: List EDAM concepts
       tags:
-        - EdamConcept
+        - Edam Concept
       x-audience:
         - public
       x-accepts:
         - application/json
         - application/problem+json
       x-tags:
-        - tag: EdamConcept
+        - tag: Edam Concept
 components:
   parameters:
     challengeSearchQuery:

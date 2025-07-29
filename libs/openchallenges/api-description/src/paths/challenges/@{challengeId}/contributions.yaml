@@ -2,7 +2,7 @@ parameters:
   - $ref: ../../../components/parameters/path/challengeId.yaml
 get:
   tags:
-    - ChallengeContribution
+    - Challenge Contribution
   summary: List challenge contributions
   description: List challenge contributions
   operationId: listChallengeContributions
@@ -20,7 +20,7 @@ get:
       $ref: ../../../components/responses/InternalServerError.yaml
 post:
   tags:
-    - ChallengeContribution
+    - Challenge Contribution
   summary: Create a new contribution for a challenge
   description: |
     Creates a new contribution record associated with a challenge ID.
@@ -53,7 +53,7 @@ post:
       $ref: ../../../components/responses/InternalServerError.yaml
 delete:
   tags:
-    - ChallengeContribution
+    - Challenge Contribution
   summary: Delete the contributions for a specific challenge
   description: Deletes the associated contributions for a given challenge, identified by its ID.
   operationId: deleteChallengeContributions

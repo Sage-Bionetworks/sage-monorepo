@@ -34,7 +34,7 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 @Validated
-@Tag(name = "ChallengeContribution", description = "Operations about challenge contributions.")
+@Tag(name = "Challenge Contribution", description = "Operations about challenge contributions.")
 public interface ChallengeContributionApi {
 
     default ChallengeContributionApiDelegate getDelegate() {
@@ -58,7 +58,7 @@ public interface ChallengeContributionApi {
         operationId = "createChallengeContribution",
         summary = "Create a new contribution for a challenge",
         description = "Creates a new contribution record associated with a challenge ID. ",
-        tags = { "ChallengeContribution" },
+        tags = { "Challenge Contribution" },
         responses = {
             @ApiResponse(responseCode = "201", description = "Contribution created successfully", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ChallengeContributionDto.class)),
@@ -121,7 +121,7 @@ public interface ChallengeContributionApi {
         operationId = "deleteChallengeContribution",
         summary = "Delete a specific challenge contribution",
         description = "Delete a specific challenge contribution.",
-        tags = { "ChallengeContribution" },
+        tags = { "Challenge Contribution" },
         responses = {
             @ApiResponse(responseCode = "204", description = "Contribution deleted successfully"),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
@@ -171,7 +171,7 @@ public interface ChallengeContributionApi {
         operationId = "deleteChallengeContributions",
         summary = "Delete the contributions for a specific challenge",
         description = "Deletes the associated contributions for a given challenge, identified by its ID.",
-        tags = { "ChallengeContribution" },
+        tags = { "Challenge Contribution" },
         responses = {
             @ApiResponse(responseCode = "204", description = "Deletion successful"),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
@@ -220,7 +220,7 @@ public interface ChallengeContributionApi {
         operationId = "getChallengeContribution",
         summary = "Get a specific challenge contribution",
         description = "Retrieves a specific contribution record for a challenge, identified by its ID. ",
-        tags = { "ChallengeContribution" },
+        tags = { "Challenge Contribution" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Challenge contribution retrieved successfully", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ChallengeContributionDto.class)),
@@ -268,7 +268,7 @@ public interface ChallengeContributionApi {
         operationId = "listChallengeContributions",
         summary = "List challenge contributions",
         description = "List challenge contributions",
-        tags = { "ChallengeContribution" },
+        tags = { "Challenge Contribution" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ChallengeContributionsPageDto.class)),

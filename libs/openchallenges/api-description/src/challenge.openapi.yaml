@@ -17,7 +17,7 @@ tags:
   - name: Challenge
     description: Operations about challenges.
     x-audience: [public]
-  - name: ChallengeContribution
+  - name: Challenge Contribution
     description: Operations about challenge contributions.
     x-audience: [public]
   - name: ChallengeAnalytics
