@@ -8,7 +8,6 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./comparison-tool-table-link.component.scss'],
 })
 export class ComparisonToolTableLinkComponent {
-  // TODO in a future release data release, this will be required
   linkText = input<string>('');
   linkUrl = input<string>('');
 
