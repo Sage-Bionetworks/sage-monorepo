@@ -382,11 +382,9 @@ paths:
         - application/problem+json
       x-tags:
         - tag: ChallengeContribution
-  /challenges/{challengeId}/contributions/{challengeContributionId}:
+  /challenges/{challengeId}/contributions/{organizationId}/role/{role}:
     delete:
-      description: |
-        Deletes a specific contribution record for a challenge, identified by its ID.
-        This action is irreversible.
+      description: Delete a specific challenge contribution.
       operationId: deleteChallengeContribution
       parameters:
         - description: The unique identifier of the challenge.
@@ -397,13 +395,21 @@ paths:
           schema:
             $ref: '#/components/schemas/ChallengeId'
           style: simple
-        - description: The unique identifier of a challenge contribution
+        - description: The unique identifier of the organization.
           explode: false
           in: path
-          name: challengeContributionId
+          name: organizationId
           required: true
           schema:
-            $ref: '#/components/schemas/ChallengeContributionId'
+            $ref: '#/components/schemas/OrganizationId'
+          style: simple
+        - description: A challenge contribution role.
+          explode: false
+          in: path
+          name: role
+          required: true
+          schema:
+            $ref: '#/components/schemas/ChallengeContributionRole'
           style: simple
       responses:
         '204':
@@ -457,13 +463,21 @@ paths:
           schema:
             $ref: '#/components/schemas/ChallengeId'
           style: simple
-        - description: The unique identifier of a challenge contribution
+        - description: The unique identifier of the organization.
           explode: false
           in: path
-          name: challengeContributionId
+          name: organizationId
           required: true
           schema:
-            $ref: '#/components/schemas/ChallengeContributionId'
+            $ref: '#/components/schemas/OrganizationId'
+          style: simple
+        - description: A challenge contribution role.
+          explode: false
+          in: path
+          name: role
+          required: true
+          schema:
+            $ref: '#/components/schemas/ChallengeContributionRole'
           style: simple
       responses:
         '200':
@@ -860,14 +874,23 @@ components:
       schema:
         $ref: '#/components/schemas/ChallengeId'
       style: simple
-    challengeContributionId:
-      description: The unique identifier of a challenge contribution
+    organizationId:
+      description: The unique identifier of the organization.
       explode: false
       in: path
-      name: challengeContributionId
+      name: organizationId
       required: true
       schema:
-        $ref: '#/components/schemas/ChallengeContributionId'
+        $ref: '#/components/schemas/OrganizationId'
+      style: simple
+    challengeContributionRole:
+      description: A challenge contribution role.
+      explode: false
+      in: path
+      name: role
+      required: true
+      schema:
+        $ref: '#/components/schemas/ChallengeContributionRole'
       style: simple
     challengePlatformSearchQuery:
       description: The search query used to find challenge platforms.

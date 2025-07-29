@@ -179,10 +179,10 @@ paths:
           $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /challenges/{challengeId}/contributions/{org}/role/{role}:
+  /challenges/{challengeId}/contributions/{organizationId}/role/{role}:
     parameters:
       - $ref: '#/components/parameters/challengeId'
-      - $ref: '#/components/parameters/org'
+      - $ref: '#/components/parameters/organizationId'
       - $ref: '#/components/parameters/challengeContributionRole'
     get:
       tags:
@@ -1126,20 +1126,13 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/ChallengeId'
-    org:
-      name: org
+    organizationId:
+      name: organizationId
       in: path
-      description: The id or login of the organization.
+      description: The unique identifier of the organization.
       required: true
       schema:
-        type: string
-        minLength: 1
-        maxLength: 64
-      examples:
-        byString:
-          value: dream
-        byId:
-          value: '1'
+        $ref: '#/components/schemas/OrganizationId'
     challengeContributionRole:
       name: role
       in: path

@@ -8,6 +8,7 @@ package org.sagebionetworks.openchallenges.challenge.service.api;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.BasicErrorDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionRoleDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionsPageDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
@@ -152,11 +153,12 @@ public interface ChallengeContributionApi {
 
 
     /**
-     * DELETE /challenges/{challengeId}/contributions/{challengeContributionId} : Delete a specific challenge contribution
-     * Deletes a specific contribution record for a challenge, identified by its ID. This action is irreversible. 
+     * DELETE /challenges/{challengeId}/contributions/{organizationId}/role/{role} : Delete a specific challenge contribution
+     * Delete a specific challenge contribution.
      *
      * @param challengeId The unique identifier of the challenge. (required)
-     * @param challengeContributionId The unique identifier of a challenge contribution (required)
+     * @param organizationId The unique identifier of the organization. (required)
+     * @param role A challenge contribution role. (required)
      * @return Contribution deleted successfully (status code 204)
      *         or Unauthorized (status code 401)
      *         or The user does not have the permission to perform this action (status code 403)
@@ -166,7 +168,7 @@ public interface ChallengeContributionApi {
     @Operation(
         operationId = "deleteChallengeContribution",
         summary = "Delete a specific challenge contribution",
-        description = "Deletes a specific contribution record for a challenge, identified by its ID. This action is irreversible. ",
+        description = "Delete a specific challenge contribution.",
         tags = { "ChallengeContribution" },
         responses = {
             @ApiResponse(responseCode = "204", description = "Contribution deleted successfully"),
@@ -189,24 +191,26 @@ public interface ChallengeContributionApi {
     )
     @RequestMapping(
         method = RequestMethod.DELETE,
-        value = "/challenges/{challengeId}/contributions/{challengeContributionId}",
+        value = "/challenges/{challengeId}/contributions/{organizationId}/role/{role}",
         produces = { "application/problem+json" }
     )
     
     default ResponseEntity<Void> deleteChallengeContribution(
         @Parameter(name = "challengeId", description = "The unique identifier of the challenge.", required = true, in = ParameterIn.PATH) @PathVariable("challengeId") Long challengeId,
-        @Parameter(name = "challengeContributionId", description = "The unique identifier of a challenge contribution", required = true, in = ParameterIn.PATH) @PathVariable("challengeContributionId") Long challengeContributionId
+        @Parameter(name = "organizationId", description = "The unique identifier of the organization.", required = true, in = ParameterIn.PATH) @PathVariable("organizationId") Long organizationId,
+        @Parameter(name = "role", description = "A challenge contribution role.", required = true, in = ParameterIn.PATH) @PathVariable("role") ChallengeContributionRoleDto role
     ) {
-        return getDelegate().deleteChallengeContribution(challengeId, challengeContributionId);
+        return getDelegate().deleteChallengeContribution(challengeId, organizationId, role);
     }
 
 
     /**
-     * GET /challenges/{challengeId}/contributions/{challengeContributionId} : Get a specific challenge contribution
+     * GET /challenges/{challengeId}/contributions/{organizationId}/role/{role} : Get a specific challenge contribution
      * Retrieves a specific contribution record for a challenge, identified by its ID. 
      *
      * @param challengeId The unique identifier of the challenge. (required)
-     * @param challengeContributionId The unique identifier of a challenge contribution (required)
+     * @param organizationId The unique identifier of the organization. (required)
+     * @param role A challenge contribution role. (required)
      * @return Challenge contribution retrieved successfully (status code 200)
      *         or Invalid request (status code 400)
      *         or The specified resource was not found (status code 404)
@@ -238,15 +242,16 @@ public interface ChallengeContributionApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/challenges/{challengeId}/contributions/{challengeContributionId}",
+        value = "/challenges/{challengeId}/contributions/{organizationId}/role/{role}",
         produces = { "application/json", "application/problem+json" }
     )
     
     default ResponseEntity<ChallengeContributionDto> getChallengeContribution(
         @Parameter(name = "challengeId", description = "The unique identifier of the challenge.", required = true, in = ParameterIn.PATH) @PathVariable("challengeId") Long challengeId,
-        @Parameter(name = "challengeContributionId", description = "The unique identifier of a challenge contribution", required = true, in = ParameterIn.PATH) @PathVariable("challengeContributionId") Long challengeContributionId
+        @Parameter(name = "organizationId", description = "The unique identifier of the organization.", required = true, in = ParameterIn.PATH) @PathVariable("organizationId") Long organizationId,
+        @Parameter(name = "role", description = "A challenge contribution role.", required = true, in = ParameterIn.PATH) @PathVariable("role") ChallengeContributionRoleDto role
     ) {
-        return getDelegate().getChallengeContribution(challengeId, challengeContributionId);
+        return getDelegate().getChallengeContribution(challengeId, organizationId, role);
     }
 
 

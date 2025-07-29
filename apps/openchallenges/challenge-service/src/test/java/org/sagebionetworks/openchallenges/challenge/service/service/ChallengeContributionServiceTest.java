@@ -375,7 +375,7 @@ class ChallengeContributionServiceTest {
 
     List<ChallengeContributionEntity> entities = List.of(entity1, entity2);
 
-    when(challengeContributionRepository.findAllByChallenge_id(challengeId)).thenReturn(entities);
+    when(challengeContributionRepository.findAllByChallengeId(challengeId)).thenReturn(entities);
 
     // when
     ChallengeContributionsPageDto result = challengeContributionService.listChallengeContributions(
@@ -408,7 +408,7 @@ class ChallengeContributionServiceTest {
     assertThat(result.getHasNext()).isFalse();
     assertThat(result.getHasPrevious()).isFalse();
 
-    verify(challengeContributionRepository).findAllByChallenge_id(challengeId);
+    verify(challengeContributionRepository).findAllByChallengeId(challengeId);
   }
 
   @Test
@@ -416,7 +416,8 @@ class ChallengeContributionServiceTest {
   void shouldDeleteChallengeContributionWhenValidIdsProvided() {
     // given
     Long challengeId = 1L;
-    Long contributionId = 456L;
+    Long organizationId = 123L;
+    ChallengeContributionRoleDto role = ChallengeContributionRoleDto.CHALLENGE_ORGANIZER;
 
     ChallengeEntity challenge = ChallengeEntity.builder()
       .id(challengeId)
@@ -424,23 +425,36 @@ class ChallengeContributionServiceTest {
       .build();
 
     ChallengeContributionEntity existingEntity = ChallengeContributionEntity.builder()
-      .id(contributionId)
+      .id(456L)
       .challenge(challenge)
-      .organizationId(123L)
-      .role("challenge_organizer")
+      .organizationId(organizationId)
+      .role(role.getValue())
       .build();
 
     when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));
-    when(challengeContributionRepository.findById(contributionId)).thenReturn(
-      Optional.of(existingEntity)
-    );
+    when(
+      challengeContributionRepository.findByChallengeIdAndOrganizationIdAndRole(
+        challengeId,
+        organizationId,
+        role.getValue()
+      )
+    ).thenReturn(Optional.of(existingEntity));
 
     // when
-    challengeContributionService.deleteChallengeContribution(challengeId, contributionId);
+    challengeContributionService.deleteChallengeContribution(challengeId, organizationId, role);
 
     // then
     verify(challengeRepository).findById(challengeId);
-    verify(challengeContributionRepository).findById(contributionId);
+    verify(challengeContributionRepository).findByChallengeIdAndOrganizationIdAndRole(
+      challengeId,
+      organizationId,
+      role.getValue()
+    );
+    verify(organizationServiceClient).deleteChallengeParticipation(
+      String.valueOf(organizationId),
+      challengeId,
+      role.getValue()
+    );
     verify(challengeContributionRepository).delete(existingEntity);
   }
 
@@ -449,13 +463,14 @@ class ChallengeContributionServiceTest {
   void shouldThrowExceptionWhenChallengeNotFoundDuringDelete() {
     // given
     Long challengeId = 999L;
-    Long contributionId = 456L;
+    Long organizationId = 123L;
+    ChallengeContributionRoleDto role = ChallengeContributionRoleDto.CHALLENGE_ORGANIZER;
 
     when(challengeRepository.findById(challengeId)).thenReturn(Optional.empty());
 
     // when & then
     assertThatThrownBy(() ->
-      challengeContributionService.deleteChallengeContribution(challengeId, contributionId)
+      challengeContributionService.deleteChallengeContribution(challengeId, organizationId, role)
     )
       .isInstanceOf(ChallengeNotFoundException.class)
       .hasMessage("Challenge not found with id: " + challengeId);
@@ -468,7 +483,8 @@ class ChallengeContributionServiceTest {
   void shouldThrowExceptionWhenContributionNotFoundDuringDelete() {
     // given
     Long challengeId = 1L;
-    Long contributionId = 999L;
+    Long organizationId = 999L;
+    ChallengeContributionRoleDto role = ChallengeContributionRoleDto.CHALLENGE_ORGANIZER;
 
     ChallengeEntity challenge = ChallengeEntity.builder()
       .id(challengeId)
@@ -476,62 +492,34 @@ class ChallengeContributionServiceTest {
       .build();
 
     when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));
-    when(challengeContributionRepository.findById(contributionId)).thenReturn(Optional.empty());
+    when(
+      challengeContributionRepository.findByChallengeIdAndOrganizationIdAndRole(
+        challengeId,
+        organizationId,
+        role.getValue()
+      )
+    ).thenReturn(Optional.empty());
 
     // when & then
     assertThatThrownBy(() ->
-      challengeContributionService.deleteChallengeContribution(challengeId, contributionId)
-    )
-      .isInstanceOf(ChallengeContributionNotFoundException.class)
-      .hasMessage("Challenge contribution not found with id: " + contributionId);
-
-    verify(challengeRepository).findById(challengeId);
-    verify(challengeContributionRepository).findById(contributionId);
-  }
-
-  @Test
-  @DisplayName(
-    "should throw exception when deleting contribution that belongs to different challenge"
-  )
-  void shouldThrowExceptionWhenDeletingContributionBelongsToDifferentChallenge() {
-    // given
-    Long challengeId = 1L;
-    Long differentChallengeId = 2L;
-    Long contributionId = 456L;
-
-    ChallengeEntity challenge = ChallengeEntity.builder()
-      .id(challengeId)
-      .slug("test-challenge")
-      .build();
-
-    ChallengeEntity differentChallenge = ChallengeEntity.builder()
-      .id(differentChallengeId)
-      .slug("different-challenge")
-      .build();
-
-    ChallengeContributionEntity existingEntity = ChallengeContributionEntity.builder()
-      .id(contributionId)
-      .challenge(differentChallenge)
-      .organizationId(123L)
-      .role("challenge_organizer")
-      .build();
-
-    when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));
-    when(challengeContributionRepository.findById(contributionId)).thenReturn(
-      Optional.of(existingEntity)
-    );
-
-    // when & then
-    assertThatThrownBy(() ->
-      challengeContributionService.deleteChallengeContribution(challengeId, contributionId)
+      challengeContributionService.deleteChallengeContribution(challengeId, organizationId, role)
     )
       .isInstanceOf(ChallengeContributionNotFoundException.class)
       .hasMessage(
-        "Challenge contribution " + contributionId + " does not belong to challenge " + challengeId
+        "Challenge contribution not found for challenge " +
+        challengeId +
+        ", organization " +
+        organizationId +
+        ", and role " +
+        role.getValue()
       );
 
     verify(challengeRepository).findById(challengeId);
-    verify(challengeContributionRepository).findById(contributionId);
+    verify(challengeContributionRepository).findByChallengeIdAndOrganizationIdAndRole(
+      challengeId,
+      organizationId,
+      role.getValue()
+    );
   }
 
   @Test
@@ -539,7 +527,8 @@ class ChallengeContributionServiceTest {
   void shouldReturnChallengeContributionWhenValidIdsAreProvided() {
     // given
     Long challengeId = 1L;
-    Long contributionId = 456L;
+    Long organizationId = 123L;
+    ChallengeContributionRoleDto role = ChallengeContributionRoleDto.CHALLENGE_ORGANIZER;
 
     ChallengeEntity challenge = ChallengeEntity.builder()
       .id(challengeId)
@@ -547,30 +536,41 @@ class ChallengeContributionServiceTest {
       .build();
 
     ChallengeContributionEntity entity = ChallengeContributionEntity.builder()
-      .id(contributionId)
+      .id(456L)
       .challenge(challenge)
-      .organizationId(123L)
-      .role("challenge_organizer")
+      .organizationId(organizationId)
+      .role(role.getValue())
       .build();
 
     when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));
-    when(challengeContributionRepository.findById(contributionId)).thenReturn(Optional.of(entity));
+    when(
+      challengeContributionRepository.findByChallengeIdAndOrganizationIdAndRole(
+        challengeId,
+        organizationId,
+        role.getValue()
+      )
+    ).thenReturn(Optional.of(entity));
 
     // when
     ChallengeContributionDto result = challengeContributionService.getChallengeContribution(
       challengeId,
-      contributionId
+      organizationId,
+      role
     );
 
     // then
     assertThat(result).isNotNull();
-    assertThat(result.getId()).isEqualTo(contributionId);
+    assertThat(result.getId()).isEqualTo(456L);
     assertThat(result.getChallengeId()).isEqualTo(challengeId);
-    assertThat(result.getOrganizationId()).isEqualTo(123L);
-    assertThat(result.getRole()).isEqualTo(ChallengeContributionRoleDto.CHALLENGE_ORGANIZER);
+    assertThat(result.getOrganizationId()).isEqualTo(organizationId);
+    assertThat(result.getRole()).isEqualTo(role);
 
     verify(challengeRepository).findById(challengeId);
-    verify(challengeContributionRepository).findById(contributionId);
+    verify(challengeContributionRepository).findByChallengeIdAndOrganizationIdAndRole(
+      challengeId,
+      organizationId,
+      role.getValue()
+    );
   }
 
   @Test
@@ -578,13 +578,14 @@ class ChallengeContributionServiceTest {
   void shouldThrowExceptionWhenChallengeNotFoundForGetOperation() {
     // given
     Long challengeId = 999L;
-    Long contributionId = 456L;
+    Long organizationId = 123L;
+    ChallengeContributionRoleDto role = ChallengeContributionRoleDto.CHALLENGE_ORGANIZER;
 
     when(challengeRepository.findById(challengeId)).thenReturn(Optional.empty());
 
     // when & then
     assertThatThrownBy(() ->
-      challengeContributionService.getChallengeContribution(challengeId, contributionId)
+      challengeContributionService.getChallengeContribution(challengeId, organizationId, role)
     )
       .isInstanceOf(ChallengeNotFoundException.class)
       .hasMessage("Challenge not found with id: " + challengeId);
@@ -597,7 +598,8 @@ class ChallengeContributionServiceTest {
   void shouldThrowExceptionWhenContributionNotFoundForGetOperation() {
     // given
     Long challengeId = 1L;
-    Long contributionId = 999L;
+    Long organizationId = 999L;
+    ChallengeContributionRoleDto role = ChallengeContributionRoleDto.CHALLENGE_ORGANIZER;
 
     ChallengeEntity challenge = ChallengeEntity.builder()
       .id(challengeId)
@@ -605,59 +607,33 @@ class ChallengeContributionServiceTest {
       .build();
 
     when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));
-    when(challengeContributionRepository.findById(contributionId)).thenReturn(Optional.empty());
+    when(
+      challengeContributionRepository.findByChallengeIdAndOrganizationIdAndRole(
+        challengeId,
+        organizationId,
+        role.getValue()
+      )
+    ).thenReturn(Optional.empty());
 
     // when & then
     assertThatThrownBy(() ->
-      challengeContributionService.getChallengeContribution(challengeId, contributionId)
-    )
-      .isInstanceOf(ChallengeContributionNotFoundException.class)
-      .hasMessage("Challenge contribution not found with id: " + contributionId);
-
-    verify(challengeRepository).findById(challengeId);
-    verify(challengeContributionRepository).findById(contributionId);
-  }
-
-  @Test
-  @DisplayName(
-    "should throw exception when getting contribution that belongs to different challenge"
-  )
-  void shouldThrowExceptionWhenGettingContributionBelongsToDifferentChallenge() {
-    // given
-    Long challengeId = 1L;
-    Long differentChallengeId = 2L;
-    Long contributionId = 456L;
-
-    ChallengeEntity challenge = ChallengeEntity.builder()
-      .id(challengeId)
-      .slug("test-challenge")
-      .build();
-
-    ChallengeEntity differentChallenge = ChallengeEntity.builder()
-      .id(differentChallengeId)
-      .slug("different-challenge")
-      .build();
-
-    ChallengeContributionEntity entity = ChallengeContributionEntity.builder()
-      .id(contributionId)
-      .challenge(differentChallenge)
-      .organizationId(123L)
-      .role("challenge_organizer")
-      .build();
-
-    when(challengeRepository.findById(challengeId)).thenReturn(Optional.of(challenge));
-    when(challengeContributionRepository.findById(contributionId)).thenReturn(Optional.of(entity));
-
-    // when & then
-    assertThatThrownBy(() ->
-      challengeContributionService.getChallengeContribution(challengeId, contributionId)
+      challengeContributionService.getChallengeContribution(challengeId, organizationId, role)
     )
       .isInstanceOf(ChallengeContributionNotFoundException.class)
       .hasMessage(
-        "Challenge contribution " + contributionId + " does not belong to challenge " + challengeId
+        "Challenge contribution not found for challenge " +
+        challengeId +
+        ", organization " +
+        organizationId +
+        ", and role " +
+        role.getValue()
       );
 
     verify(challengeRepository).findById(challengeId);
-    verify(challengeContributionRepository).findById(contributionId);
+    verify(challengeContributionRepository).findByChallengeIdAndOrganizationIdAndRole(
+      challengeId,
+      organizationId,
+      role.getValue()
+    );
   }
 }

@@ -2,6 +2,7 @@ package org.sagebionetworks.openchallenges.challenge.service.api;
 
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionRoleDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionsPageDto;
 import org.sagebionetworks.openchallenges.challenge.service.security.AuthenticatedUser;
 import org.sagebionetworks.openchallenges.challenge.service.service.ChallengeContributionService;
@@ -56,11 +57,13 @@ public class ChallengeContributionApiDelegateImpl implements ChallengeContributi
   @Override
   public ResponseEntity<ChallengeContributionDto> getChallengeContribution(
     Long challengeId,
-    Long challengeContributionId
+    Long organizationId,
+    ChallengeContributionRoleDto role
   ) {
     ChallengeContributionDto contribution = challengeContributionService.getChallengeContribution(
       challengeId,
-      challengeContributionId
+      organizationId,
+      role
     );
     return ResponseEntity.ok(contribution);
   }
@@ -97,21 +100,23 @@ public class ChallengeContributionApiDelegateImpl implements ChallengeContributi
   @PreAuthorize("authentication.principal.admin")
   public ResponseEntity<Void> deleteChallengeContribution(
     Long challengeId,
-    Long challengeContributionId
+    Long organizationId,
+    ChallengeContributionRoleDto role
   ) {
     // Log the authenticated user for audit purposes
     AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
       .getAuthentication()
       .getPrincipal();
     logger.info(
-      "User {} (role: {}) is deleting contribution {} for challenge: {}",
+      "User {} (role: {}) is deleting challenge contribution for challengeId: {}, organizationId: {}, role: {}",
       user.getUsername(),
       user.getRole(),
-      challengeContributionId,
-      challengeId
+      challengeId,
+      organizationId,
+      role
     );
 
-    challengeContributionService.deleteChallengeContribution(challengeId, challengeContributionId);
+    challengeContributionService.deleteChallengeContribution(challengeId, organizationId, role);
     return ResponseEntity.noContent().build();
   }
 }

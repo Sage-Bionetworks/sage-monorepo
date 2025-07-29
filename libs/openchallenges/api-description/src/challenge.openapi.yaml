@@ -38,8 +38,8 @@ paths:
     $ref: paths/challenges/@{challengeId}/json-ld.yaml
   /challenges/{challengeId}/contributions:
     $ref: paths/challenges/@{challengeId}/contributions.yaml
-  /challenges/{challengeId}/contributions/{org}/role/{role}:
-    $ref: paths/challenges/@{challengeId}/contributions/@{org}/role/${role}.yaml
+  /challenges/{challengeId}/contributions/{organizationId}/role/{role}:
+    $ref: paths/challenges/@{challengeId}/contributions/@{organizationId}/role/${role}.yaml
   /challenge-analytics/challenges-per-year:
     $ref: paths/challenge-analytics/challenges-per-year.yaml
   /challenge-platforms:
