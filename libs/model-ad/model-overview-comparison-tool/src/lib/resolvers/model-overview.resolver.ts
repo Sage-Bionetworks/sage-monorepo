@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable, EMPTY } from 'rxjs';
-import { map, catchError, retry } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import {
   ComparisonToolConfig,
   ComparisonToolConfigService,
@@ -19,7 +19,7 @@ export class ModelOverviewResolver implements Resolve<ComparisonToolConfig | nul
     _state: RouterStateSnapshot,
   ): Observable<ComparisonToolConfig | null> {
     return this.comparisonToolConfigService
-      .getComparisonToolConfig(ComparisonToolPages.ModelOverview + 'asdf')
+      .getComparisonToolConfig(ComparisonToolPages.ModelOverview)
       .pipe(
         // model overview only has one config (no dropdowns), so return the first one or null
         map((config) => config[0] ?? null),
@@ -28,7 +28,6 @@ export class ModelOverviewResolver implements Resolve<ComparisonToolConfig | nul
           const errorMessage = 'Failed to load ModelOverview configuration';
 
           console.error(`${errorMessage}: `, error);
-          console.log(attemptedUrl);
           this.router.navigate([ROUTE_PATHS.ERROR_PAGE], {
             queryParams: {
               message: errorMessage,
