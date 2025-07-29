@@ -1,0 +1,37 @@
+{
+  "kimi-k2": {
+    "model_name": "moonshotai/kimi-k2:free",
+    "api_base": "https://openrouter.ai/api/v1",
+    "api_type": "openai",
+    "api_key": "${OPENAI_API_KEY}",
+    "anony_only": false
+  },
+  "deepseek-r1-0528": {
+    "model_name": "deepseek/deepseek-r1-0528:free",
+    "api_base": "https://openrouter.ai/api/v1",
+    "api_type": "openai",
+    "api_key": "${OPENAI_API_KEY}",
+    "anony_only": false
+  },
+  "qwen3-235b-a22b-2507": {
+    "model_name": "qwen/qwen3-235b-a22b-2507:free",
+    "api_base": "https://openrouter.ai/api/v1",
+    "api_type": "openai",
+    "api_key": "${OPENAI_API_KEY}",
+    "anony_only": false
+  },
+  "deepseek-chat-v3-0324": {
+    "model_name": "deepseek/deepseek-chat-v3-0324:free",
+    "api_base": "https://openrouter.ai/api/v1",
+    "api_type": "openai",
+    "api_key": "${OPENAI_API_KEY}",
+    "anony_only": false
+  },
+  "deepseek-r1": {
+    "model_name": "deepseek/deepseek-r1:free",
+    "api_base": "https://openrouter.ai/api/v1",
+    "api_type": "openai",
+    "api_key": "${OPENAI_API_KEY}",
+    "anony_only": false
+  }
+}
