@@ -721,6 +721,10 @@ components:
         type:
           description: An absolute URI that identifies the problem type
           type: string
+        instance:
+          description: An absolute URI that identifies the specific occurrence of
+            the problem
+          type: string
       required:
         - status
         - title
