@@ -1,5 +1,5 @@
 /*
- * OpenChallenges REST API
+ * OpenChallenges API
  * Discover, explore, and contribute to open biomedical challenges.
  *
  * The version of the OpenAPI document: 1.0.0
@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.sagebionetworks.openchallenges.api.client.model.BasicError;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengeContribution;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengeContributionCreateRequest;
-import org.sagebionetworks.openchallenges.api.client.model.ChallengeContributionUpdateRequest;
+import org.sagebionetworks.openchallenges.api.client.model.ChallengeContributionRole;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengeContributionsPage;
 
 /**
@@ -50,27 +50,16 @@ public class ChallengeContributionApiTest {
   }
 
   /**
-   * Delete all contributions for a specific challenge
-   *
-   * Deletes all associated contributions for a given challenge, identified by its ID. This action is irreversible.
-   */
-  @Test
-  public void deleteAllChallengeContributionsTest() {
-    Long challengeId = null;
-    api.deleteAllChallengeContributions(challengeId);
-    // TODO: test validations
-  }
-
-  /**
    * Delete a specific challenge contribution
    *
-   * Deletes a specific contribution record for a challenge, identified by its ID. This action is irreversible.
+   * Delete a specific challenge contribution.
    */
   @Test
   public void deleteChallengeContributionTest() {
     Long challengeId = null;
-    Long challengeContributionId = null;
-    api.deleteChallengeContribution(challengeId, challengeContributionId);
+    Long organizationId = null;
+    ChallengeContributionRole role = null;
+    api.deleteChallengeContribution(challengeId, organizationId, role);
     // TODO: test validations
   }
 
@@ -82,10 +71,12 @@ public class ChallengeContributionApiTest {
   @Test
   public void getChallengeContributionTest() {
     Long challengeId = null;
-    Long challengeContributionId = null;
+    Long organizationId = null;
+    ChallengeContributionRole role = null;
     ChallengeContribution response = api.getChallengeContribution(
       challengeId,
-      challengeContributionId
+      organizationId,
+      role
     );
     // TODO: test validations
   }
@@ -99,24 +90,6 @@ public class ChallengeContributionApiTest {
   public void listChallengeContributionsTest() {
     Long challengeId = null;
     ChallengeContributionsPage response = api.listChallengeContributions(challengeId);
-    // TODO: test validations
-  }
-
-  /**
-   * Update an existing challenge contribution
-   *
-   * Updates an existing challenge contribution.
-   */
-  @Test
-  public void updateChallengeContributionTest() {
-    Long challengeId = null;
-    Long challengeContributionId = null;
-    ChallengeContributionUpdateRequest challengeContributionUpdateRequest = null;
-    ChallengeContribution response = api.updateChallengeContribution(
-      challengeId,
-      challengeContributionId,
-      challengeContributionUpdateRequest
-    );
     // TODO: test validations
   }
 }

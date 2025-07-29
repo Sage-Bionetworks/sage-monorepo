@@ -1,5 +1,5 @@
 /**
- * OpenChallenges REST API
+ * OpenChallenges API
  *
  *
  *
@@ -27,10 +27,11 @@ export interface LoginResponse {
   role?: LoginResponse.RoleEnum;
 }
 export namespace LoginResponse {
-  export type RoleEnum = 'admin' | 'user' | 'readonly';
+  export type RoleEnum = 'admin' | 'user' | 'readonly' | 'service';
   export const RoleEnum = {
     Admin: 'admin' as RoleEnum,
     User: 'user' as RoleEnum,
     Readonly: 'readonly' as RoleEnum,
+    Service: 'service' as RoleEnum,
   };
 }

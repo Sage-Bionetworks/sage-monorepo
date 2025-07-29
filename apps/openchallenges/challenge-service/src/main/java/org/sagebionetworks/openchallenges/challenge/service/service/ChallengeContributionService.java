@@ -2,6 +2,10 @@ package org.sagebionetworks.openchallenges.challenge.service.service;
 
 import feign.FeignException;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 import org.sagebionetworks.openchallenges.challenge.service.client.OrganizationServiceClient;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeContributionNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeNotFoundException;
@@ -95,7 +99,89 @@ public class ChallengeContributionService {
   }
 
   @Transactional
-  public void deleteAllChallengeContributions(Long challengeId) {
+  public void deleteChallengeContributions(Long challengeId) {
+    // First, fetch all existing contributions for this challenge
+    List<ChallengeContributionEntity> contributions =
+      challengeContributionRepository.findAllByChallengeId(challengeId);
+
+    if (!contributions.isEmpty()) {
+      // Delete all challenge participations concurrently using a thread pool
+      ExecutorService executor = Executors.newFixedThreadPool(Math.min(contributions.size(), 10)); // Limit to 10 concurrent threads
+
+      try {
+        List<CompletableFuture<Void>> deletionFutures = contributions
+          .stream()
+          .map(contribution ->
+            CompletableFuture.runAsync(
+              () -> {
+                try {
+                  organizationServiceClient.deleteChallengeParticipation(
+                    String.valueOf(contribution.getOrganizationId()),
+                    challengeId,
+                    contribution.getRole()
+                  );
+                  logger.debug(
+                    "Successfully deleted challenge participation for challengeId: {}, organizationId: {}, role: {}",
+                    challengeId,
+                    contribution.getOrganizationId(),
+                    contribution.getRole()
+                  );
+                } catch (FeignException.NotFound e) {
+                  logger.error(
+                    "Challenge participation not found for challengeId: {}, organizationId: {}, role: {}. Error: {}",
+                    challengeId,
+                    contribution.getOrganizationId(),
+                    contribution.getRole(),
+                    e.getMessage()
+                  );
+                  throw new ChallengeParticipationNotFoundException(
+                    "Challenge participation for organization " +
+                    contribution.getOrganizationId() +
+                    " in challenge " +
+                    challengeId +
+                    " with role " +
+                    contribution.getRole() +
+                    " not found. Cannot delete."
+                  );
+                } catch (FeignException e) {
+                  logger.error(
+                    "Failed to delete challenge participation for challengeId: {}, organizationId: {}, role: {}. Error: {}",
+                    challengeId,
+                    contribution.getOrganizationId(),
+                    contribution.getRole(),
+                    e.getMessage()
+                  );
+                  throw new ChallengeParticipationDeleteException(
+                    "Failed to delete challenge participation for organization " +
+                    contribution.getOrganizationId() +
+                    " in challenge " +
+                    challengeId +
+                    " with role " +
+                    contribution.getRole() +
+                    ". Reason: " +
+                    e.getMessage()
+                  );
+                }
+              },
+              executor
+            )
+          )
+          .collect(Collectors.toList());
+
+        // Wait for all deletion operations to complete
+        CompletableFuture.allOf(deletionFutures.toArray(new CompletableFuture[0])).join();
+
+        logger.info(
+          "Successfully deleted {} challenge participations for challengeId: {}",
+          contributions.size(),
+          challengeId
+        );
+      } finally {
+        executor.shutdown();
+      }
+    }
+
+    // After all participations are deleted, delete the contributions from the database
     challengeContributionRepository.deleteByChallengeId(challengeId);
   }
 

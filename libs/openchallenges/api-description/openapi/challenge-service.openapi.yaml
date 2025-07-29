@@ -182,11 +182,9 @@ paths:
     delete:
       tags:
         - ChallengeContribution
-      summary: Delete all contributions for a specific challenge
-      description: |
-        Deletes all associated contributions for a given challenge, identified by its ID.
-        This action is irreversible.
-      operationId: deleteAllChallengeContributions
+      summary: Delete the contributions for a specific challenge
+      description: Deletes the associated contributions for a given challenge, identified by its ID.
+      operationId: deleteChallengeContributions
       x-audience:
         - internal
       security:

@@ -7,7 +7,6 @@ api/authentication.service.ts
 api/challenge.service.ts
 api/challengeAnalytics.service.ts
 api/challengeContribution.service.ts
-api/challengeParticipation.service.ts
 api/challengePlatform.service.ts
 api/edamConcept.service.ts
 api/image.service.ts
@@ -23,13 +22,10 @@ model/challengeCategory.ts
 model/challengeContribution.ts
 model/challengeContributionCreateRequest.ts
 model/challengeContributionRole.ts
-model/challengeContributionUpdateRequest.ts
 model/challengeContributionsPage.ts
 model/challengeDirection.ts
 model/challengeIncentive.ts
 model/challengeJsonLd.ts
-model/challengeParticipation.ts
-model/challengeParticipationCreateRequest.ts
 model/challengeParticipationRole.ts
 model/challengePlatform.ts
 model/challengePlatformCreateRequest.ts
@@ -69,7 +65,5 @@ model/organizationUpdateRequest.ts
 model/organizationsPage.ts
 model/pageMetadata.ts
 model/simpleChallengePlatform.ts
-model/validateApiKeyRequest.ts
-model/validateApiKeyResponse.ts
 param.ts
 variables.ts

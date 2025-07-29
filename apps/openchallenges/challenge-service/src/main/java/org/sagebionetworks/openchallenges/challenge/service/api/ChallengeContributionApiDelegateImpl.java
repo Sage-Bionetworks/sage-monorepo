@@ -31,7 +31,7 @@ public class ChallengeContributionApiDelegateImpl implements ChallengeContributi
 
   @Override
   @PreAuthorize("authentication.principal.admin")
-  public ResponseEntity<Void> deleteAllChallengeContributions(Long challengeId) {
+  public ResponseEntity<Void> deleteChallengeContributions(Long challengeId) {
     // Log the authenticated user for audit purposes
     AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
       .getAuthentication()
@@ -43,7 +43,7 @@ public class ChallengeContributionApiDelegateImpl implements ChallengeContributi
       challengeId
     );
 
-    challengeContributionService.deleteAllChallengeContributions(challengeId);
+    challengeContributionService.deleteChallengeContributions(challengeId);
     return ResponseEntity.noContent().build();
   }
 

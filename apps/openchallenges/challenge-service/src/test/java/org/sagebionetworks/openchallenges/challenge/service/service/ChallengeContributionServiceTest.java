@@ -3,6 +3,7 @@ package org.sagebionetworks.openchallenges.challenge.service.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -18,6 +19,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.openchallenges.challenge.service.client.OrganizationServiceClient;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeContributionNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeNotFoundException;
+import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeParticipationDeleteException;
+import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeParticipationNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.DuplicateContributionException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.OrganizationNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
@@ -635,5 +638,135 @@ class ChallengeContributionServiceTest {
       organizationId,
       role.getValue()
     );
+  }
+
+  @Test
+  @DisplayName(
+    "should delete all challenge contributions and participations when contributions exist"
+  )
+  void shouldDeleteAllChallengeContributionsAndParticipationsWhenContributionsExist() {
+    // given
+    Long challengeId = 1L;
+    ChallengeContributionEntity contribution1 = ChallengeContributionEntity.builder()
+      .id(1L)
+      .organizationId(100L)
+      .role("organizer")
+      .build();
+    ChallengeContributionEntity contribution2 = ChallengeContributionEntity.builder()
+      .id(2L)
+      .organizationId(200L)
+      .role("sponsor")
+      .build();
+    List<ChallengeContributionEntity> contributions = List.of(contribution1, contribution2);
+
+    when(challengeContributionRepository.findAllByChallengeId(challengeId)).thenReturn(
+      contributions
+    );
+
+    // when
+    challengeContributionService.deleteChallengeContributions(challengeId);
+
+    // then
+    verify(challengeContributionRepository).findAllByChallengeId(challengeId);
+    verify(organizationServiceClient).deleteChallengeParticipation("100", challengeId, "organizer");
+    verify(organizationServiceClient).deleteChallengeParticipation("200", challengeId, "sponsor");
+    verify(challengeContributionRepository).deleteByChallengeId(challengeId);
+  }
+
+  @Test
+  @DisplayName("should delete challenge contributions even when no contributions exist")
+  void shouldDeleteChallengeContributionsEvenWhenNoContributionsExist() {
+    // given
+    Long challengeId = 1L;
+    when(challengeContributionRepository.findAllByChallengeId(challengeId)).thenReturn(List.of());
+
+    // when
+    challengeContributionService.deleteChallengeContributions(challengeId);
+
+    // then
+    verify(challengeContributionRepository).findAllByChallengeId(challengeId);
+    verify(challengeContributionRepository).deleteByChallengeId(challengeId);
+  }
+
+  @Test
+  @DisplayName(
+    "should throw challenge participation not found exception when participation not found"
+  )
+  void shouldThrowChallengeParticipationNotFoundExceptionWhenParticipationNotFound() {
+    // given
+    Long challengeId = 1L;
+    ChallengeContributionEntity contribution = ChallengeContributionEntity.builder()
+      .id(1L)
+      .organizationId(100L)
+      .role("organizer")
+      .build();
+
+    when(challengeContributionRepository.findAllByChallengeId(challengeId)).thenReturn(
+      List.of(contribution)
+    );
+    doThrow(FeignException.NotFound.class)
+      .when(organizationServiceClient)
+      .deleteChallengeParticipation("100", challengeId, "organizer");
+
+    // when & then
+    assertThatThrownBy(() -> challengeContributionService.deleteChallengeContributions(challengeId)
+    ).satisfiesAnyOf(
+      // Direct exception
+      exception ->
+        assertThat(exception)
+          .isInstanceOf(ChallengeParticipationNotFoundException.class)
+          .hasMessageContaining(
+            "Challenge participation for organization 100 in challenge " +
+            challengeId +
+            " with role organizer not found"
+          ),
+      // Exception wrapped in CompletionException (from CompletableFuture)
+      exception ->
+        assertThat(exception)
+          .isInstanceOf(RuntimeException.class)
+          .hasCauseInstanceOf(ChallengeParticipationNotFoundException.class)
+    );
+
+    verify(challengeContributionRepository).findAllByChallengeId(challengeId);
+    verify(organizationServiceClient).deleteChallengeParticipation("100", challengeId, "organizer");
+  }
+
+  @Test
+  @DisplayName(
+    "should throw challenge participation delete exception when challenge participation deletion fails"
+  )
+  void shouldThrowChallengeParticipationDeleteExceptionWhenChallengeParticipationDeletionFails() {
+    // given
+    Long challengeId = 1L;
+    ChallengeContributionEntity contribution = ChallengeContributionEntity.builder()
+      .id(1L)
+      .organizationId(100L)
+      .role("organizer")
+      .build();
+
+    when(challengeContributionRepository.findAllByChallengeId(challengeId)).thenReturn(
+      List.of(contribution)
+    );
+    doThrow(FeignException.BadRequest.class)
+      .when(organizationServiceClient)
+      .deleteChallengeParticipation("100", challengeId, "organizer");
+
+    // when & then
+    assertThatThrownBy(() -> challengeContributionService.deleteChallengeContributions(challengeId)
+    ).satisfiesAnyOf(
+      // Direct exception
+      exception ->
+        assertThat(exception)
+          .isInstanceOf(ChallengeParticipationDeleteException.class)
+          .hasMessageContaining("Failed to delete challenge participation for organization 100"),
+      // Exception wrapped in CompletionException (from CompletableFuture)
+      exception ->
+        assertThat(exception)
+          .isInstanceOf(RuntimeException.class)
+          .hasCauseInstanceOf(ChallengeParticipationDeleteException.class)
+    );
+
+    verify(challengeContributionRepository).findAllByChallengeId(challengeId);
+    verify(organizationServiceClient).deleteChallengeParticipation("100", challengeId, "organizer");
   }
 }

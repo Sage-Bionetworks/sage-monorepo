@@ -1,6 +1,6 @@
 # openchallenges_api_client_python.EdamConceptApi
 
-All URIs are relative to _http://localhost/v1_
+All URIs are relative to *https://openchallenges.io/api/v1*
 
 | Method                                                         | HTTP request           | Description        |
 | -------------------------------------------------------------- | ---------------------- | ------------------ |
@@ -23,10 +23,10 @@ from openchallenges_api_client_python.models.edam_concepts_page import EdamConce
 from openchallenges_api_client_python.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost/v1
+# Defining the host is optional and defaults to https://openchallenges.io/api/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = openchallenges_api_client_python.Configuration(
-    host = "http://localhost/v1"
+    host = "https://openchallenges.io/api/v1"
 )
 
 

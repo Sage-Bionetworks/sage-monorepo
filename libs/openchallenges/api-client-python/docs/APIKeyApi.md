@@ -1,6 +1,6 @@
 # openchallenges_api_client_python.APIKeyApi
 
-All URIs are relative to _http://localhost/v1_
+All URIs are relative to *https://openchallenges.io/api/v1*
 
 | Method                                            | HTTP request                      | Description    |
 | ------------------------------------------------- | --------------------------------- | -------------- |
@@ -27,10 +27,10 @@ from openchallenges_api_client_python.models.create_api_key_response import Crea
 from openchallenges_api_client_python.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost/v1
+# Defining the host is optional and defaults to https://openchallenges.io/api/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = openchallenges_api_client_python.Configuration(
-    host = "http://localhost/v1"
+    host = "https://openchallenges.io/api/v1"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -105,10 +105,10 @@ import openchallenges_api_client_python
 from openchallenges_api_client_python.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost/v1
+# Defining the host is optional and defaults to https://openchallenges.io/api/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = openchallenges_api_client_python.Configuration(
-    host = "http://localhost/v1"
+    host = "https://openchallenges.io/api/v1"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -182,10 +182,10 @@ from openchallenges_api_client_python.models.api_key import ApiKey
 from openchallenges_api_client_python.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost/v1
+# Defining the host is optional and defaults to https://openchallenges.io/api/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = openchallenges_api_client_python.Configuration(
-    host = "http://localhost/v1"
+    host = "https://openchallenges.io/api/v1"
 )
 
 # The client must configure the authentication and authorization parameters
