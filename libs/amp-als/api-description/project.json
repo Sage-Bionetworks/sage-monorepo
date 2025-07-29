@@ -38,7 +38,8 @@
     "clean": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "rm -fr openapi/*"
+        "command": "rm -fr openapi/*",
+        "cwd": "{projectRoot}"
       }
     }
   },
