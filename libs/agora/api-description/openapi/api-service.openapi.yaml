@@ -9,7 +9,7 @@ info:
     name: Support
     url: https://github.com/Sage-Bionetworks/sage-monorepo
   x-logo:
-    url: https://agora.adknowledgeportal.org/images/logo.png
+    url: https://raw.githubusercontent.com/Sage-Bionetworks/agora-images/main/og-social.png
     altText: Agora
 servers:
   - url: http://localhost/v1
@@ -151,8 +151,6 @@ paths:
       summary: Get comparison genes based on category and subcategory
       description: Get comparison genes based on category and subcategory
       operationId: getComparisonGenes
-      x-audience:
-        - internal
       parameters:
         - in: query
           name: category

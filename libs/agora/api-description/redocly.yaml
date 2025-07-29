@@ -1,7 +1,20 @@
+# Redocly configuration file for Agora API
+#
+# About `x-audience`:
+# - The optional `x-audience` annotation can be applied to OpenAPI nodes such as tags, paths,
+#   components, and others.
+# - When using decorators like `filter-in` or `filter-out`, only nodes annotated with `x-audience`
+#   are evaluated for inclusion or exclusion.
+# - Nodes without an `x-audience` annotation are not affected by these filters and will always be
+#   included in the output OpenAPI files.
+# - This allows you to selectively expose or hide parts of your API for different audiences, while
+#   keeping unannotated nodes visible in all outputs.
+# - Best practice: Be intentional and always specify the `x-audience` annotation on path nodes.
+
 apis:
   # Agora API
   agora-public:
-    root: ./openapi/openapi.yaml
+    root: ./openapi/api-public.openapi.yaml
     decorators:
       info-override:
         version: 1.0.0
@@ -13,8 +26,8 @@ apis:
           name: Support
           url: https://github.com/Sage-Bionetworks/sage-monorepo
         x-logo:
-          url: https://agora.adknowledgeportal.org/images/logo.png
-          altText: Agora
+          url: https://raw.githubusercontent.com/Sage-Bionetworks/agora-images/main/og-social.png
+          altText: Agora logo
 
   # Base API
   api-public:
@@ -32,12 +45,12 @@ apis:
         matchStrategy: any
 
   # Gene API
-  gene-public:
-    root: ./src/gene.openapi.yaml
-    decorators:
-      filter-in:
-        property: x-audience
-        value: [public]
+  # gene-public:
+  #   root: ./src/gene.openapi.yaml
+  #   decorators:
+  #     filter-in:
+  #       property: x-audience
+  #       value: [public]
   gene-service:
     root: ./src/gene.openapi.yaml
     decorators:

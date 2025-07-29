@@ -9,13 +9,15 @@ info:
   title: Agora Gene API
   version: 1.0.0-draft
   x-logo:
-    url: https://agora.adknowledgeportal.org/images/logo.png
+    url: https://raw.githubusercontent.com/Sage-Bionetworks/agora-images/main/og-social.png
     altText: Agora
 servers:
   - url: http://localhost/v1
 tags:
   - description: Operations about genes.
     name: Genes
+    x-audience:
+      - internal
 paths:
   /genes/comparison:
     get:
