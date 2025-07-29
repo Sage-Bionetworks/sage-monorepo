@@ -1,5 +1,5 @@
 /**
- * Agora REST API
+ * Agora API
  *
  *
  *
