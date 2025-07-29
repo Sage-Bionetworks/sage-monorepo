@@ -6,7 +6,7 @@
     "generators": {
       "amp-als-dataset-service": {
         "generatorName": "spring",
-        "inputSpec": "#{cwd}/../../../libs/amp-als/api-description/openapi/dataset.openapi.yaml",
+        "inputSpec": "#{cwd}/../../../libs/amp-als/api-description/openapi/dataset-service.openapi.yaml",
         "output": "#{cwd}",
         "additionalProperties": {
           "apiPackage": "org.sagebionetworks.amp.als.dataset.service.api",

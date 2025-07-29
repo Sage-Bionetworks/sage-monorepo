@@ -14,8 +14,7 @@
           "redocly bundle user-public --output openapi/user-public.openapi.yaml"
         ],
         "cwd": "{projectRoot}"
-      },
-      "dependsOn": ["clean"]
+      }
     },
     "build": {
       "executor": "nx:run-commands",
