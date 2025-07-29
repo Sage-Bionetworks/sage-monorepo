@@ -19,8 +19,7 @@
         ],
         "parallel": true,
         "cwd": "{projectRoot}"
-      },
-      "dependsOn": ["clean"]
+      }
     },
     "build": {
       "executor": "nx:run-commands",
@@ -44,7 +43,8 @@
     "clean": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "rm -fr openapi/*"
+        "command": "rm -fr openapi/*",
+        "cwd": "{projectRoot}"
       }
     }
   },
