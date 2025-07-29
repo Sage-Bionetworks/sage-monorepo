@@ -1,4 +1,4 @@
-import { Component, computed, effect, input, signal } from '@angular/core';
+import { Component, computed, effect, ElementRef, input, signal, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { DecodeGreekEntityPipe, ModalLinkComponent } from '@sagebionetworks/explorers/util';
@@ -19,6 +19,8 @@ import { ModelDetailsBoxplotsGridComponent } from '../model-details-boxplots-gri
   styleUrls: ['./model-details-boxplots-selector.component.scss'],
 })
 export class ModelDetailsBoxplotsSelectorComponent {
+  @ViewChild('boxplotsContainer', { static: false }) boxplotsContainer!: ElementRef<HTMLElement>;
+
   title = input.required<string>();
   modelName = input.required<string>();
   modelControls = input.required<string[]>();
@@ -36,6 +38,8 @@ export class ModelDetailsBoxplotsSelectorComponent {
     return Array.from(new Set(this.modelDataList().map((item) => item.tissue)));
   });
   selectedTissueOption = signal('');
+
+  private readonly SCROLL_PADDING = 15;
 
   constructor() {
     effect(() => {
@@ -82,8 +86,15 @@ export class ModelDetailsBoxplotsSelectorComponent {
   }
 
   scrollToSection(anchorId: string): void {
-    if (typeof document !== 'undefined' && typeof window !== 'undefined') {
-      const element = document.getElementById(anchorId);
+    if (
+      typeof document !== 'undefined' &&
+      typeof window !== 'undefined' &&
+      this.boxplotsContainer
+    ) {
+      const element = this.boxplotsContainer.nativeElement.querySelector(
+        `#${anchorId}`,
+      ) as HTMLElement;
+
       if (element) {
         const tocElement = document.querySelector('.table-of-contents-container');
         const tocHeight = tocElement ? tocElement.getBoundingClientRect().height : 0;
@@ -92,7 +103,7 @@ export class ModelDetailsBoxplotsSelectorComponent {
           getComputedStyle(document.documentElement).getPropertyValue('--panel-nav-height'),
         );
 
-        const yOffset = -(tocHeight + panelNavHeight + 15); // provide padding
+        const yOffset = -(tocHeight + panelNavHeight + this.SCROLL_PADDING);
 
         const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
         window.scrollTo({ top: y, behavior: 'smooth' });

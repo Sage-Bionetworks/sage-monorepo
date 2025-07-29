@@ -52,7 +52,7 @@
     </ul>
   </div>
 
-  <div class="boxplots-container">
+  <div class="boxplots-container" #boxplotsContainer>
     @for (evidenceType of evidenceTypes(); track evidenceType; let last = $last) {
       <div class="boxplots-evidence-type" [id]="generateAnchorId(evidenceType)">
         <model-ad-model-details-boxplots-grid
