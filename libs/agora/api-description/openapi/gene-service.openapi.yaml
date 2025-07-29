@@ -16,6 +16,8 @@ servers:
 tags:
   - name: Genes
     description: Operations about genes.
+    x-audience:
+      - internal
 paths:
   /genes/comparison:
     get:
@@ -24,6 +26,8 @@ paths:
       summary: Get comparison genes based on category and subcategory
       description: Get comparison genes based on category and subcategory
       operationId: getComparisonGenes
+      x-audience:
+        - internal
       parameters:
         - in: query
           name: category

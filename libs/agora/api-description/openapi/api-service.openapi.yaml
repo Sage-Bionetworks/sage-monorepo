@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   version: 1.0.0
-  title: Agora REST API
+  title: Agora API
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -151,6 +151,8 @@ paths:
       summary: Get comparison genes based on category and subcategory
       description: Get comparison genes based on category and subcategory
       operationId: getComparisonGenes
+      x-audience:
+        - internal
       parameters:
         - in: query
           name: category

@@ -16,6 +16,7 @@ servers:
 tags:
   - name: Genes # TODO: consider using "Gene" instead of "Genes" to be consistent with the other APIs
     description: Operations about genes.
+    x-audience: [internal]
 paths:
   /genes/comparison:
     $ref: paths/genes/comparison.yaml
@@ -23,5 +24,7 @@ components:
   schemas:
     Gene:
       $ref: components/schemas/Gene.yaml
+      x-audience: [internal]
     Team:
       $ref: components/schemas/Team.yaml
+      x-audience: [internal]

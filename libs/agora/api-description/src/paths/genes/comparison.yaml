@@ -4,6 +4,7 @@ get:
   summary: Get comparison genes based on category and subcategory
   description: Get comparison genes based on category and subcategory
   operationId: getComparisonGenes
+  x-audience: [internal]
   parameters:
     - in: query
       name: category

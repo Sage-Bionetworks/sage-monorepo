@@ -8,10 +8,11 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "redocly bundle api --output openapi/api.openapi.yaml",
-          "redocly bundle gene-api --output openapi/gene-api.openapi.yaml"
+          "redocly bundle api-service --output openapi/api-service.openapi.yaml",
+          "redocly bundle api-public --output openapi/api-public.openapi.yaml",
+          "redocly bundle gene-service --output openapi/gene-service.openapi.yaml",
+          "redocly bundle gene-public --output openapi/gene-public.openapi.yaml"
         ],
-        "parallel": true,
         "cwd": "{projectRoot}"
       },
       "dependsOn": ["clean"]
@@ -19,8 +20,12 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["redocly bundle agora --output openapi/openapi.yaml"],
-        "cwd": "{projectRoot}"
+        "commands": [
+          "redocly join openapi/*-public.openapi.yaml --output openapi/openapi.yaml",
+          "redocly bundle agora-public --output openapi/openapi.yaml"
+        ],
+        "cwd": "{projectRoot}",
+        "parallel": false
       },
       "dependsOn": ["build-individuals"]
     },
@@ -34,7 +39,8 @@
     "clean": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "rm -fr openapi/*"
+        "command": "rm -fr openapi/*",
+        "cwd": "{projectRoot}"
       }
     }
   },

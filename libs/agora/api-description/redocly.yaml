@@ -1,10 +1,11 @@
 apis:
-  agora:
+  # Agora API
+  agora-public:
     root: ./openapi/openapi.yaml
     decorators:
       info-override:
         version: 1.0.0
-        title: Agora REST API
+        title: Agora API
         license:
           name: Apache 2.0
           url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -15,8 +16,32 @@ apis:
           url: https://agora.adknowledgeportal.org/images/logo.png
           altText: Agora
 
-  api:
+  # Base API
+  api-public:
     root: ./src/api.openapi.yaml
+    decorators:
+      filter-in:
+        property: x-audience
+        value: [public]
+  api-service:
+    root: ./src/api.openapi.yaml
+    decorators:
+      filter-in:
+        property: x-audience
+        value: [public, internal]
+        matchStrategy: any
 
-  gene-api:
-    root: ./src/gene-api.openapi.yaml
+  # Gene API
+  gene-public:
+    root: ./src/gene.openapi.yaml
+    decorators:
+      filter-in:
+        property: x-audience
+        value: [public]
+  gene-service:
+    root: ./src/gene.openapi.yaml
+    decorators:
+      filter-in:
+        property: x-audience
+        value: [public, internal]
+        matchStrategy: any
