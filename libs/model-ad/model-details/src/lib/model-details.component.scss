@@ -2,7 +2,7 @@
 
 .model-details {
   min-height: calc(100vh - var(--header-height) - var(--footer-height));
-  overflow-x: hidden;
+  overflow-x: clip;
 
   &.loading {
     display: flex;

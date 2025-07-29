@@ -4,7 +4,6 @@
 @use 'explorers/styles/src/lib/mixins';
 
 :host {
-  --panel-nav-height: 80px;
   --panel-subnav-offset: -19px;
   --panel-shadow: 0 4px 4px rgb(0 0 0 / 25%);
 }

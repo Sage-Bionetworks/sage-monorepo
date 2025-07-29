@@ -1,14 +1,20 @@
 import { Component, computed, effect, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
-import { ModalLinkComponent } from '@sagebionetworks/explorers/util';
+import { DecodeGreekEntityPipe, ModalLinkComponent } from '@sagebionetworks/explorers/util';
 import { IndividualData, ModelData } from '@sagebionetworks/model-ad/api-client-angular';
 import { SelectModule } from 'primeng/select';
 import { ModelDetailsBoxplotsGridComponent } from '../model-details-boxplots-grid/model-details-boxplots-grid.component';
 
 @Component({
   selector: 'model-ad-model-details-boxplots-selector',
-  imports: [FormsModule, SelectModule, ModelDetailsBoxplotsGridComponent, ModalLinkComponent],
+  imports: [
+    FormsModule,
+    SelectModule,
+    ModelDetailsBoxplotsGridComponent,
+    ModalLinkComponent,
+    DecodeGreekEntityPipe,
+  ],
   templateUrl: './model-details-boxplots-selector.component.html',
   styleUrls: ['./model-details-boxplots-selector.component.scss'],
 })
@@ -66,5 +72,31 @@ export class ModelDetailsBoxplotsSelectorComponent {
     return this.selectedModelDataList().filter(
       (modelData) => modelData.evidence_type === evidenceType,
     );
+  }
+
+  generateAnchorId(evidenceType: string): string {
+    return evidenceType
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, '-')
+      .replace(/-+/g, '-');
+  }
+
+  scrollToSection(anchorId: string): void {
+    if (typeof document !== 'undefined' && typeof window !== 'undefined') {
+      const element = document.getElementById(anchorId);
+      if (element) {
+        const tocElement = document.querySelector('.table-of-contents-container');
+        const tocHeight = tocElement ? tocElement.getBoundingClientRect().height : 0;
+
+        const panelNavHeight = parseInt(
+          getComputedStyle(document.documentElement).getPropertyValue('--panel-nav-height'),
+        );
+
+        const yOffset = -(tocHeight + panelNavHeight + 15); // provide padding
+
+        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    }
   }
 }

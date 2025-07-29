@@ -116,4 +116,11 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
       ]);
     });
   });
+
+  it('should convert evidence type to anchor id', async () => {
+    const { component } = await setup();
+    expect(component.generateAnchorId('Amyloid Beta')).toBe('amyloid-beta');
+    expect(component.generateAnchorId('A&beta;42')).toBe('a-beta-42');
+    expect(component.generateAnchorId('Tau-pS396')).toBe('tau-ps396');
+  });
 });
