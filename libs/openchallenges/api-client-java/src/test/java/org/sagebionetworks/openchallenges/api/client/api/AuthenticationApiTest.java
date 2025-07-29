@@ -1,5 +1,5 @@
 /*
- * OpenChallenges REST API
+ * OpenChallenges API
  * Discover, explore, and contribute to open biomedical challenges.
  *
  * The version of the OpenAPI document: 1.0.0
@@ -22,8 +22,6 @@ import org.junit.jupiter.api.Test;
 import org.sagebionetworks.openchallenges.api.client.model.BasicError;
 import org.sagebionetworks.openchallenges.api.client.model.LoginRequest;
 import org.sagebionetworks.openchallenges.api.client.model.LoginResponse;
-import org.sagebionetworks.openchallenges.api.client.model.ValidateApiKeyRequest;
-import org.sagebionetworks.openchallenges.api.client.model.ValidateApiKeyResponse;
 
 /**
  * API tests for AuthenticationApi
@@ -42,18 +40,6 @@ public class AuthenticationApiTest {
   public void loginTest() {
     LoginRequest loginRequest = null;
     LoginResponse response = api.login(loginRequest);
-    // TODO: test validations
-  }
-
-  /**
-   * Validate API key
-   *
-   * Internal endpoint to validate API keys (used by other services)
-   */
-  @Test
-  public void validateApiKeyTest() {
-    ValidateApiKeyRequest validateApiKeyRequest = null;
-    ValidateApiKeyResponse response = api.validateApiKey(validateApiKeyRequest);
     // TODO: test validations
   }
 }

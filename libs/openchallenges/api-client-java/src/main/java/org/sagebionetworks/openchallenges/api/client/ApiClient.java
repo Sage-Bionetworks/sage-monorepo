@@ -1,5 +1,5 @@
 /*
- * OpenChallenges REST API
+ * OpenChallenges API
  * Discover, explore, and contribute to open biomedical challenges.
  *
  * The version of the OpenAPI document: 1.0.0
@@ -79,7 +79,7 @@ public class ApiClient extends JavaTimeFormatter {
   private final HttpHeaders defaultHeaders = new HttpHeaders();
   private final MultiValueMap<String, String> defaultCookies = new LinkedMultiValueMap<>();
 
-  private String basePath = "http://localhost/v1";
+  private String basePath = "https://openchallenges.io/api/v1";
 
   private final RestClient restClient;
   private final DateFormat dateFormat;

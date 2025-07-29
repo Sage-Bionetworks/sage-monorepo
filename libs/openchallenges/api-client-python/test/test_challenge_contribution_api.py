@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-OpenChallenges REST API
+OpenChallenges API
 
 Discover, explore, and contribute to open biomedical challenges.
 
@@ -34,13 +34,6 @@ class TestChallengeContributionApi(unittest.TestCase):
         """
         pass
 
-    def test_delete_all_challenge_contributions(self) -> None:
-        """Test case for delete_all_challenge_contributions
-
-        Delete all contributions for a specific challenge
-        """
-        pass
-
     def test_delete_challenge_contribution(self) -> None:
         """Test case for delete_challenge_contribution
 
@@ -59,13 +52,6 @@ class TestChallengeContributionApi(unittest.TestCase):
         """Test case for list_challenge_contributions
 
         List challenge contributions
-        """
-        pass
-
-    def test_update_challenge_contribution(self) -> None:
-        """Test case for update_challenge_contribution
-
-        Update an existing challenge contribution
         """
         pass
 

@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-OpenChallenges REST API
+OpenChallenges API
 
 Discover, explore, and contribute to open biomedical challenges.
 
@@ -43,8 +43,10 @@ class LoginResponse(BaseModel):
         if value is None:
             return value
 
-        if value not in set(["admin", "user", "readonly"]):
-            raise ValueError("must be one of enum values ('admin', 'user', 'readonly')")
+        if value not in set(["admin", "user", "readonly", "service"]):
+            raise ValueError(
+                "must be one of enum values ('admin', 'user', 'readonly', 'service')"
+            )
         return value
 
     model_config = ConfigDict(

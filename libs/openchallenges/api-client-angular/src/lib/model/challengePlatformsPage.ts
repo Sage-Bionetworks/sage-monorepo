@@ -1,5 +1,5 @@
 /**
- * OpenChallenges REST API
+ * OpenChallenges API
  *
  *
  *

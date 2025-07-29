@@ -1,5 +1,5 @@
 /*
- * OpenChallenges REST API
+ * OpenChallenges API
  * Discover, explore, and contribute to open biomedical challenges.
  *
  * The version of the OpenAPI document: 1.0.0

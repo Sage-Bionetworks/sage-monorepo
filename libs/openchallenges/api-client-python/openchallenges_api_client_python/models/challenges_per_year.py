@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-OpenChallenges REST API
+OpenChallenges API
 
 Discover, explore, and contribute to open biomedical challenges.
 

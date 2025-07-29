@@ -11,14 +11,10 @@ docs/ChallengeContribution.md
 docs/ChallengeContributionApi.md
 docs/ChallengeContributionCreateRequest.md
 docs/ChallengeContributionRole.md
-docs/ChallengeContributionUpdateRequest.md
 docs/ChallengeContributionsPage.md
 docs/ChallengeDirection.md
 docs/ChallengeIncentive.md
 docs/ChallengeJsonLd.md
-docs/ChallengeParticipation.md
-docs/ChallengeParticipationApi.md
-docs/ChallengeParticipationCreateRequest.md
 docs/ChallengeParticipationRole.md
 docs/ChallengePlatform.md
 docs/ChallengePlatformApi.md
@@ -61,8 +57,6 @@ docs/OrganizationUpdateRequest.md
 docs/OrganizationsPage.md
 docs/PageMetadata.md
 docs/SimpleChallengePlatform.md
-docs/ValidateApiKeyRequest.md
-docs/ValidateApiKeyResponse.md
 openchallenges_api_client_python/__init__.py
 openchallenges_api_client_python/api/__init__.py
 openchallenges_api_client_python/api/api_key_api.py
@@ -70,7 +64,6 @@ openchallenges_api_client_python/api/authentication_api.py
 openchallenges_api_client_python/api/challenge_analytics_api.py
 openchallenges_api_client_python/api/challenge_api.py
 openchallenges_api_client_python/api/challenge_contribution_api.py
-openchallenges_api_client_python/api/challenge_participation_api.py
 openchallenges_api_client_python/api/challenge_platform_api.py
 openchallenges_api_client_python/api/edam_concept_api.py
 openchallenges_api_client_python/api/image_api.py
@@ -87,13 +80,10 @@ openchallenges_api_client_python/models/challenge_category.py
 openchallenges_api_client_python/models/challenge_contribution.py
 openchallenges_api_client_python/models/challenge_contribution_create_request.py
 openchallenges_api_client_python/models/challenge_contribution_role.py
-openchallenges_api_client_python/models/challenge_contribution_update_request.py
 openchallenges_api_client_python/models/challenge_contributions_page.py
 openchallenges_api_client_python/models/challenge_direction.py
 openchallenges_api_client_python/models/challenge_incentive.py
 openchallenges_api_client_python/models/challenge_json_ld.py
-openchallenges_api_client_python/models/challenge_participation.py
-openchallenges_api_client_python/models/challenge_participation_create_request.py
 openchallenges_api_client_python/models/challenge_participation_role.py
 openchallenges_api_client_python/models/challenge_platform.py
 openchallenges_api_client_python/models/challenge_platform_create_request.py
@@ -132,8 +122,6 @@ openchallenges_api_client_python/models/organization_update_request.py
 openchallenges_api_client_python/models/organizations_page.py
 openchallenges_api_client_python/models/page_metadata.py
 openchallenges_api_client_python/models/simple_challenge_platform.py
-openchallenges_api_client_python/models/validate_api_key_request.py
-openchallenges_api_client_python/models/validate_api_key_response.py
 openchallenges_api_client_python/py.typed
 openchallenges_api_client_python/rest.py
 test/__init__.py
@@ -149,14 +137,10 @@ test/test_challenge_contribution.py
 test/test_challenge_contribution_api.py
 test/test_challenge_contribution_create_request.py
 test/test_challenge_contribution_role.py
-test/test_challenge_contribution_update_request.py
 test/test_challenge_contributions_page.py
 test/test_challenge_direction.py
 test/test_challenge_incentive.py
 test/test_challenge_json_ld.py
-test/test_challenge_participation.py
-test/test_challenge_participation_api.py
-test/test_challenge_participation_create_request.py
 test/test_challenge_participation_role.py
 test/test_challenge_platform.py
 test/test_challenge_platform_api.py
@@ -199,5 +183,3 @@ test/test_organization_update_request.py
 test/test_organizations_page.py
 test/test_page_metadata.py
 test/test_simple_challenge_platform.py
-test/test_validate_api_key_request.py
-test/test_validate_api_key_response.py

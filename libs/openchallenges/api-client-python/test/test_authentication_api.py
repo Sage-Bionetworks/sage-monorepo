@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-OpenChallenges REST API
+OpenChallenges API
 
 Discover, explore, and contribute to open biomedical challenges.
 
@@ -29,13 +29,6 @@ class TestAuthenticationApi(unittest.TestCase):
         """Test case for login
 
         User login
-        """
-        pass
-
-    def test_validate_api_key(self) -> None:
-        """Test case for validate_api_key
-
-        Validate API key
         """
         pass
 

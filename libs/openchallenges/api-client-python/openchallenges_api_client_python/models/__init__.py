@@ -2,7 +2,7 @@
 
 # flake8: noqa
 """
-OpenChallenges REST API
+OpenChallenges API
 
 Discover, explore, and contribute to open biomedical challenges.
 
@@ -26,9 +26,6 @@ from openchallenges_api_client_python.models.challenge_contribution_create_reque
 from openchallenges_api_client_python.models.challenge_contribution_role import (
     ChallengeContributionRole,
 )
-from openchallenges_api_client_python.models.challenge_contribution_update_request import (
-    ChallengeContributionUpdateRequest,
-)
 from openchallenges_api_client_python.models.challenge_contributions_page import (
     ChallengeContributionsPage,
 )
@@ -39,12 +36,6 @@ from openchallenges_api_client_python.models.challenge_incentive import (
     ChallengeIncentive,
 )
 from openchallenges_api_client_python.models.challenge_json_ld import ChallengeJsonLd
-from openchallenges_api_client_python.models.challenge_participation import (
-    ChallengeParticipation,
-)
-from openchallenges_api_client_python.models.challenge_participation_create_request import (
-    ChallengeParticipationCreateRequest,
-)
 from openchallenges_api_client_python.models.challenge_participation_role import (
     ChallengeParticipationRole,
 )
@@ -122,10 +113,4 @@ from openchallenges_api_client_python.models.organizations_page import Organizat
 from openchallenges_api_client_python.models.page_metadata import PageMetadata
 from openchallenges_api_client_python.models.simple_challenge_platform import (
     SimpleChallengePlatform,
-)
-from openchallenges_api_client_python.models.validate_api_key_request import (
-    ValidateApiKeyRequest,
-)
-from openchallenges_api_client_python.models.validate_api_key_response import (
-    ValidateApiKeyResponse,
 )

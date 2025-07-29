@@ -3,7 +3,7 @@
 # flake8: noqa
 
 """
-OpenChallenges REST API
+OpenChallenges API
 
 Discover, explore, and contribute to open biomedical challenges.
 
@@ -23,7 +23,6 @@ __all__ = [
     "ChallengeAnalyticsApi",
     "ChallengeContributionApi",
     "ChallengePlatformApi",
-    "ChallengeParticipationApi",
     "EdamConceptApi",
     "ImageApi",
     "OrganizationApi",
@@ -43,13 +42,10 @@ __all__ = [
     "ChallengeContribution",
     "ChallengeContributionCreateRequest",
     "ChallengeContributionRole",
-    "ChallengeContributionUpdateRequest",
     "ChallengeContributionsPage",
     "ChallengeDirection",
     "ChallengeIncentive",
     "ChallengeJsonLd",
-    "ChallengeParticipation",
-    "ChallengeParticipationCreateRequest",
     "ChallengeParticipationRole",
     "ChallengePlatform",
     "ChallengePlatformCreateRequest",
@@ -88,8 +84,6 @@ __all__ = [
     "OrganizationsPage",
     "PageMetadata",
     "SimpleChallengePlatform",
-    "ValidateApiKeyRequest",
-    "ValidateApiKeyResponse",
 ]
 
 # import apis into sdk package
@@ -108,9 +102,6 @@ from openchallenges_api_client_python.api.challenge_contribution_api import (
 )
 from openchallenges_api_client_python.api.challenge_platform_api import (
     ChallengePlatformApi as ChallengePlatformApi,
-)
-from openchallenges_api_client_python.api.challenge_participation_api import (
-    ChallengeParticipationApi as ChallengeParticipationApi,
 )
 from openchallenges_api_client_python.api.edam_concept_api import (
     EdamConceptApi as EdamConceptApi,
@@ -153,9 +144,6 @@ from openchallenges_api_client_python.models.challenge_contribution_create_reque
 from openchallenges_api_client_python.models.challenge_contribution_role import (
     ChallengeContributionRole as ChallengeContributionRole,
 )
-from openchallenges_api_client_python.models.challenge_contribution_update_request import (
-    ChallengeContributionUpdateRequest as ChallengeContributionUpdateRequest,
-)
 from openchallenges_api_client_python.models.challenge_contributions_page import (
     ChallengeContributionsPage as ChallengeContributionsPage,
 )
@@ -167,12 +155,6 @@ from openchallenges_api_client_python.models.challenge_incentive import (
 )
 from openchallenges_api_client_python.models.challenge_json_ld import (
     ChallengeJsonLd as ChallengeJsonLd,
-)
-from openchallenges_api_client_python.models.challenge_participation import (
-    ChallengeParticipation as ChallengeParticipation,
-)
-from openchallenges_api_client_python.models.challenge_participation_create_request import (
-    ChallengeParticipationCreateRequest as ChallengeParticipationCreateRequest,
 )
 from openchallenges_api_client_python.models.challenge_participation_role import (
     ChallengeParticipationRole as ChallengeParticipationRole,
@@ -283,10 +265,4 @@ from openchallenges_api_client_python.models.page_metadata import (
 )
 from openchallenges_api_client_python.models.simple_challenge_platform import (
     SimpleChallengePlatform as SimpleChallengePlatform,
-)
-from openchallenges_api_client_python.models.validate_api_key_request import (
-    ValidateApiKeyRequest as ValidateApiKeyRequest,
-)
-from openchallenges_api_client_python.models.validate_api_key_response import (
-    ValidateApiKeyResponse as ValidateApiKeyResponse,
 )

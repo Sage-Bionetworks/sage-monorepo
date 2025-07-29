@@ -11,8 +11,6 @@ import org.sagebionetworks.openchallenges.api.client.ApiClient;
 import org.sagebionetworks.openchallenges.api.client.model.BasicError;
 import org.sagebionetworks.openchallenges.api.client.model.LoginRequest;
 import org.sagebionetworks.openchallenges.api.client.model.LoginResponse;
-import org.sagebionetworks.openchallenges.api.client.model.ValidateApiKeyRequest;
-import org.sagebionetworks.openchallenges.api.client.model.ValidateApiKeyResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.FileSystemResource;
@@ -156,115 +154,5 @@ public class AuthenticationApi {
   public ResponseSpec loginWithResponseSpec(@jakarta.annotation.Nonnull LoginRequest loginRequest)
     throws RestClientResponseException {
     return loginRequestCreation(loginRequest);
-  }
-
-  /**
-   * Validate API key
-   * Internal endpoint to validate API keys (used by other services)
-   * <p><b>200</b> - API key is valid
-   * <p><b>401</b> - Unauthorized
-   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
-   * @param validateApiKeyRequest The validateApiKeyRequest parameter
-   * @return ValidateApiKeyResponse
-   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
-   */
-  private ResponseSpec validateApiKeyRequestCreation(
-    @jakarta.annotation.Nonnull ValidateApiKeyRequest validateApiKeyRequest
-  ) throws RestClientResponseException {
-    Object postBody = validateApiKeyRequest;
-    // verify the required parameter 'validateApiKeyRequest' is set
-    if (validateApiKeyRequest == null) {
-      throw new RestClientResponseException(
-        "Missing the required parameter 'validateApiKeyRequest' when calling validateApiKey",
-        HttpStatus.BAD_REQUEST.value(),
-        HttpStatus.BAD_REQUEST.getReasonPhrase(),
-        null,
-        null,
-        null
-      );
-    }
-    // create path and map variables
-    final Map<String, Object> pathParams = new HashMap<>();
-
-    final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-    final HttpHeaders headerParams = new HttpHeaders();
-    final MultiValueMap<String, String> cookieParams = new LinkedMultiValueMap<>();
-    final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<>();
-
-    final String[] localVarAccepts = { "application/json", "application/problem+json" };
-    final List<MediaType> localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-    final String[] localVarContentTypes = { "application/json" };
-    final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] {};
-
-    ParameterizedTypeReference<ValidateApiKeyResponse> localVarReturnType =
-      new ParameterizedTypeReference<>() {};
-    return apiClient.invokeAPI(
-      "/auth/validate",
-      HttpMethod.POST,
-      pathParams,
-      queryParams,
-      postBody,
-      headerParams,
-      cookieParams,
-      formParams,
-      localVarAccept,
-      localVarContentType,
-      localVarAuthNames,
-      localVarReturnType
-    );
-  }
-
-  /**
-   * Validate API key
-   * Internal endpoint to validate API keys (used by other services)
-   * <p><b>200</b> - API key is valid
-   * <p><b>401</b> - Unauthorized
-   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
-   * @param validateApiKeyRequest The validateApiKeyRequest parameter
-   * @return ValidateApiKeyResponse
-   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
-   */
-  public ValidateApiKeyResponse validateApiKey(
-    @jakarta.annotation.Nonnull ValidateApiKeyRequest validateApiKeyRequest
-  ) throws RestClientResponseException {
-    ParameterizedTypeReference<ValidateApiKeyResponse> localVarReturnType =
-      new ParameterizedTypeReference<>() {};
-    return validateApiKeyRequestCreation(validateApiKeyRequest).body(localVarReturnType);
-  }
-
-  /**
-   * Validate API key
-   * Internal endpoint to validate API keys (used by other services)
-   * <p><b>200</b> - API key is valid
-   * <p><b>401</b> - Unauthorized
-   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
-   * @param validateApiKeyRequest The validateApiKeyRequest parameter
-   * @return ResponseEntity&lt;ValidateApiKeyResponse&gt;
-   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
-   */
-  public ResponseEntity<ValidateApiKeyResponse> validateApiKeyWithHttpInfo(
-    @jakarta.annotation.Nonnull ValidateApiKeyRequest validateApiKeyRequest
-  ) throws RestClientResponseException {
-    ParameterizedTypeReference<ValidateApiKeyResponse> localVarReturnType =
-      new ParameterizedTypeReference<>() {};
-    return validateApiKeyRequestCreation(validateApiKeyRequest).toEntity(localVarReturnType);
-  }
-
-  /**
-   * Validate API key
-   * Internal endpoint to validate API keys (used by other services)
-   * <p><b>200</b> - API key is valid
-   * <p><b>401</b> - Unauthorized
-   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
-   * @param validateApiKeyRequest The validateApiKeyRequest parameter
-   * @return ResponseSpec
-   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
-   */
-  public ResponseSpec validateApiKeyWithResponseSpec(
-    @jakarta.annotation.Nonnull ValidateApiKeyRequest validateApiKeyRequest
-  ) throws RestClientResponseException {
-    return validateApiKeyRequestCreation(validateApiKeyRequest);
   }
 }
