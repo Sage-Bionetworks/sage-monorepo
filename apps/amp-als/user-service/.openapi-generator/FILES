@@ -8,4 +8,3 @@ src/main/java/org/sagebionetworks/amp/als/user/service/configuration/SpringDocCo
 src/main/java/org/sagebionetworks/amp/als/user/service/model/dto/BasicErrorDto.java
 src/main/java/org/sagebionetworks/amp/als/user/service/model/dto/HealthCheckDto.java
 src/main/resources/openapi.yaml
-src/test/java/org/sagebionetworks/amp/als/user/service/OpenApiGeneratorApplicationTests.java

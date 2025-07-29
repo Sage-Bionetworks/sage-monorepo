@@ -27,11 +27,7 @@ import { Observable } from 'rxjs';
 // @ts-ignore
 import { BasicError } from '../model/basicError';
 // @ts-ignore
-import { Dataset } from '../model/dataset';
-// @ts-ignore
-import { DatasetSearchQuery } from '../model/datasetSearchQuery';
-// @ts-ignore
-import { DatasetsPage } from '../model/datasetsPage';
+import { HealthCheck } from '../model/healthCheck';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -40,7 +36,7 @@ import { Configuration } from '../configuration';
 @Injectable({
   providedIn: 'root',
 })
-export class DatasetService {
+export class HealthCheckService {
   protected basePath = 'http://localhost/v1';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
@@ -112,41 +108,36 @@ export class DatasetService {
   }
 
   /**
-   * Get a dataset
-   * Returns the dataset specified
-   * @param datasetId The unique identifier of the dataset.
+   * Get health check information
+   * Get information about the health of the service
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getDataset(
-    datasetId: number,
+  public getHealthCheck(
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
       httpHeaderAccept?: 'application/json' | 'application/problem+json';
       context?: HttpContext;
     },
-  ): Observable<Dataset>;
-  public getDataset(
-    datasetId: number,
+  ): Observable<HealthCheck>;
+  public getHealthCheck(
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
       httpHeaderAccept?: 'application/json' | 'application/problem+json';
       context?: HttpContext;
     },
-  ): Observable<HttpResponse<Dataset>>;
-  public getDataset(
-    datasetId: number,
+  ): Observable<HttpResponse<HealthCheck>>;
+  public getHealthCheck(
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
       httpHeaderAccept?: 'application/json' | 'application/problem+json';
       context?: HttpContext;
     },
-  ): Observable<HttpEvent<Dataset>>;
-  public getDataset(
-    datasetId: number,
+  ): Observable<HttpEvent<HealthCheck>>;
+  public getHealthCheck(
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -154,12 +145,6 @@ export class DatasetService {
       context?: HttpContext;
     },
   ): Observable<any> {
-    if (datasetId === null || datasetId === undefined) {
-      throw new Error(
-        'Required parameter datasetId was null or undefined when calling getDataset.',
-      );
-    }
-
     let localVarHeaders = this.defaultHeaders;
 
     let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -188,101 +173,9 @@ export class DatasetService {
       }
     }
 
-    let localVarPath = `/datasets/${this.configuration.encodeParam({ name: 'datasetId', value: datasetId, in: 'path', style: 'simple', explode: false, dataType: 'number', dataFormat: 'int64' })}`;
-    return this.httpClient.get<Dataset>(`${this.configuration.basePath}${localVarPath}`, {
+    let localVarPath = `/healthcheck`;
+    return this.httpClient.get<HealthCheck>(`${this.configuration.basePath}${localVarPath}`, {
       context: localVarHttpContext,
-      responseType: <any>responseType_,
-      withCredentials: this.configuration.withCredentials,
-      headers: localVarHeaders,
-      observe: observe,
-      reportProgress: reportProgress,
-    });
-  }
-
-  /**
-   * List datasets
-   * List datasets
-   * @param datasetSearchQuery The search query used to find datasets.
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public listDatasets(
-    datasetSearchQuery?: DatasetSearchQuery,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json' | 'application/problem+json';
-      context?: HttpContext;
-    },
-  ): Observable<DatasetsPage>;
-  public listDatasets(
-    datasetSearchQuery?: DatasetSearchQuery,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json' | 'application/problem+json';
-      context?: HttpContext;
-    },
-  ): Observable<HttpResponse<DatasetsPage>>;
-  public listDatasets(
-    datasetSearchQuery?: DatasetSearchQuery,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json' | 'application/problem+json';
-      context?: HttpContext;
-    },
-  ): Observable<HttpEvent<DatasetsPage>>;
-  public listDatasets(
-    datasetSearchQuery?: DatasetSearchQuery,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: {
-      httpHeaderAccept?: 'application/json' | 'application/problem+json';
-      context?: HttpContext;
-    },
-  ): Observable<any> {
-    let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
-    if (datasetSearchQuery !== undefined && datasetSearchQuery !== null) {
-      localVarQueryParameters = this.addToHttpParams(
-        localVarQueryParameters,
-        <any>datasetSearchQuery,
-        'datasetSearchQuery',
-      );
-    }
-
-    let localVarHeaders = this.defaultHeaders;
-
-    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['application/json', 'application/problem+json'];
-      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-    }
-
-    let localVarHttpContext: HttpContext | undefined = options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/datasets`;
-    return this.httpClient.get<DatasetsPage>(`${this.configuration.basePath}${localVarPath}`, {
-      context: localVarHttpContext,
-      params: localVarQueryParameters,
       responseType: <any>responseType_,
       withCredentials: this.configuration.withCredentials,
       headers: localVarHeaders,

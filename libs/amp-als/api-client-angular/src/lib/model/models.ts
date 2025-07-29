@@ -5,4 +5,5 @@ export * from './datasetSearchQuery';
 export * from './datasetSort';
 export * from './datasetsPage';
 export * from './datasetsPageAllOf';
+export * from './healthCheck';
 export * from './pageMetadata';

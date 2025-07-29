@@ -3,6 +3,7 @@ README.md
 api.module.ts
 api/api.ts
 api/dataset.service.ts
+api/healthCheck.service.ts
 configuration.ts
 encoder.ts
 git_push.sh
@@ -14,6 +15,7 @@ model/datasetSearchQuery.ts
 model/datasetSort.ts
 model/datasetsPage.ts
 model/datasetsPageAllOf.ts
+model/healthCheck.ts
 model/models.ts
 model/pageMetadata.ts
 param.ts
