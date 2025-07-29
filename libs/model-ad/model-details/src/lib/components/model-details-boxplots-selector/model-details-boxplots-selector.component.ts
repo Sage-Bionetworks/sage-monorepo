@@ -101,6 +101,7 @@ export class ModelDetailsBoxplotsSelectorComponent {
 
         const panelNavHeight = parseInt(
           getComputedStyle(document.documentElement).getPropertyValue('--panel-nav-height'),
+          10,
         );
 
         const yOffset = -(tocHeight + panelNavHeight + this.SCROLL_PADDING);
