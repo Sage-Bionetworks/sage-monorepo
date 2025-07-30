@@ -114,7 +114,7 @@ paths:
               $ref: '#/components/schemas/OrganizationUpdateRequest'
       responses:
         '200':
-          description: Organization updated successfully
+          description: Organization successfully updated
           content:
             application/json:
               schema:

@@ -112,20 +112,54 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - Challenge
+      summary: Update an existing challenge
+      description: Updates an existing challenge.
+      operationId: updateChallenge
+      x-audience:
+        - public
+      security:
+        - apiBearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengeUpdateRequest'
+      responses:
+        '200':
+          description: Challenge successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Challenge'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
     delete:
       tags:
         - Challenge
       summary: Delete a challenge
-      description: |
-        Deletes a challenge by its unique ID. This action is irreversible.
-      operationId: deleteChallengeById
+      description: Deletes a challenge by its unique ID.
+      operationId: deleteChallenge
       x-audience:
         - public
       security:
         - apiBearerAuth: []
       responses:
         '204':
-          description: Deletion successful
+          description: Challenge successfully deleted
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -870,6 +904,35 @@ components:
         - name
         - description
         - status
+    ChallengeUpdateRequest:
+      type: object
+      description: The information required to update a challenge
+      properties:
+        slug:
+          $ref: '#/components/schemas/ChallengeSlug'
+        name:
+          $ref: '#/components/schemas/ChallengeName'
+        headline:
+          $ref: '#/components/schemas/ChallengeHeadline'
+        description:
+          $ref: '#/components/schemas/ChallengeDescription'
+        doi:
+          $ref: '#/components/schemas/ChallengeDoi'
+        status:
+          $ref: '#/components/schemas/ChallengeStatus'
+        websiteUrl:
+          $ref: '#/components/schemas/Url'
+        avatarUrl:
+          $ref: '#/components/schemas/Url'
+      required:
+        - slug
+        - name
+        - headline
+        - description
+        - doi
+        - status
+        - websiteUrl
+        - avatarUrl
     ChallengeJsonLd:
       type: object
       description: A challenge

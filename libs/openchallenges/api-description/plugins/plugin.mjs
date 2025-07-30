@@ -1,5 +1,5 @@
 // Source: https://redocly.com/docs/cli/guides/replace-servers-url
-import ReplaceServersURL from './decorators/replace-servers-url.js';
+import ReplaceServersURL from './decorators/replace-servers-url.mjs';
 
 /** @type {import('@redocly/cli').DecoratorsConfig} */
 const decorators = {

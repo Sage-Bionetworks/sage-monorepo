@@ -12,7 +12,7 @@
 # - Best practice: Be intentional and always specify the `x-audience` annotation on nodes.
 
 plugins:
-  - './plugins/plugin.js'
+  - './plugins/plugin.mjs'
 
 apis:
   # OpenChallenges API
