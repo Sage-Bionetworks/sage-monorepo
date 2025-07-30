@@ -45,14 +45,14 @@ public class SecurityConfiguration {
           // All read-only endpoints are publicly accessible
           .requestMatchers(HttpMethod.GET, "/v1/challenges/**")
           .permitAll()
-          .requestMatchers(HttpMethod.GET, "/v1/challengePlatforms/**")
+          .requestMatchers(HttpMethod.GET, "/v1/challenge-platforms/**")
           .permitAll()
-          .requestMatchers(HttpMethod.GET, "/v1/edamConcepts/**")
+          .requestMatchers(HttpMethod.GET, "/v1/edam-concepts/**")
           .permitAll()
-          .requestMatchers(HttpMethod.GET, "/v1/challengeAnalytics/**")
+          .requestMatchers(HttpMethod.GET, "/v1/challenge-analytics/**")
           .permitAll()
           // Protected endpoints - require authentication but no specific scope
-          .requestMatchers(HttpMethod.DELETE, "/v1/challengePlatforms/**")
+          .requestMatchers(HttpMethod.DELETE, "/v1/challenge-platforms/**")
           .authenticated()
           .requestMatchers(HttpMethod.POST, "/v1/challenges/*/contributions")
           .authenticated()

@@ -6,7 +6,7 @@
     "generators": {
       "agora-gene-api": {
         "generatorName": "spring",
-        "inputSpec": "#{cwd}/../../../libs/agora/api-description/openapi/gene-api.openapi.yaml",
+        "inputSpec": "#{cwd}/../../../libs/agora/api-description/openapi/gene-service.openapi.yaml",
         "output": "#{cwd}",
         "additionalProperties": {
           "apiPackage": "org.sagebionetworks.agora.gene.api.api",

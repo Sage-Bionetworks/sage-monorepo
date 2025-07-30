@@ -6,7 +6,7 @@
     "generators": {
       "amp-als-user-service": {
         "generatorName": "spring",
-        "inputSpec": "#{cwd}/../../../libs/amp-als/api-description/openapi/user.openapi.yaml",
+        "inputSpec": "#{cwd}/../../../libs/amp-als/api-description/openapi/user-service.openapi.yaml",
         "output": "#{cwd}",
         "additionalProperties": {
           "apiPackage": "org.sagebionetworks.amp.als.user.service.api",

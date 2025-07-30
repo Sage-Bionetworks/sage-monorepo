@@ -17,4 +17,4 @@ properties:
     type: string
     description: User role
     example: admin
-    enum: [admin, user, readonly]
+    enum: [admin, user, readonly, service]

@@ -1,6 +1,7 @@
 package org.sagebionetworks.openchallenges.organization.service.configuration;
 
 import org.sagebionetworks.openchallenges.organization.service.model.dto.ChallengeContributionRoleDto;
+import org.sagebionetworks.openchallenges.organization.service.model.dto.ChallengeParticipationRoleDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationCategoryDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationDirectionDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationSortDto;
@@ -9,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 
-@Configuration
+@Configuration(value = "org.sagebionetworks.openchallenges.organization.service.configuration.enumConverterConfiguration")
 public class EnumConverterConfiguration {
 
     @Bean(name = "org.sagebionetworks.openchallenges.organization.service.configuration.EnumConverterConfiguration.challengeContributionRoleConverter")
@@ -18,6 +19,15 @@ public class EnumConverterConfiguration {
             @Override
             public ChallengeContributionRoleDto convert(String source) {
                 return ChallengeContributionRoleDto.fromValue(source);
+            }
+        };
+    }
+    @Bean(name = "org.sagebionetworks.openchallenges.organization.service.configuration.EnumConverterConfiguration.challengeParticipationRoleConverter")
+    Converter<String, ChallengeParticipationRoleDto> challengeParticipationRoleConverter() {
+        return new Converter<String, ChallengeParticipationRoleDto>() {
+            @Override
+            public ChallengeParticipationRoleDto convert(String source) {
+                return ChallengeParticipationRoleDto.fromValue(source);
             }
         };
     }

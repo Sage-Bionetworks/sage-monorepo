@@ -3,9 +3,9 @@ package org.sagebionetworks.openchallenges.auth.service.api;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -211,6 +211,33 @@ class AuthenticationApiDelegateImplTest {
     assertThat(response.getBody().getRole()).isEqualTo(LoginResponseDto.RoleEnum.READONLY);
   }
 
+  @Test
+  void shouldLoginHandleServiceRoleWhenUserIsService() {
+    // Arrange
+    User serviceUser = User.builder()
+      .id(UUID.randomUUID())
+      .username("service")
+      .passwordHash("hashedpassword")
+      .role(User.Role.service)
+      .build();
+
+    LoginRequestDto serviceLoginRequest = new LoginRequestDto()
+      .username("service")
+      .password("servicepassword");
+
+    when(userService.findByUsername("service")).thenReturn(Optional.of(serviceUser));
+    when(passwordEncoder.matches("servicepassword", "hashedpassword")).thenReturn(true);
+    when(apiKeyService.generateApiKey(serviceUser, "Login Session")).thenReturn(testApiKey);
+
+    // Act
+    ResponseEntity<LoginResponseDto> response = authenticationApiDelegate.login(serviceLoginRequest);
+
+    // Assert
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(response.getBody()).isNotNull();
+    assertThat(response.getBody().getRole()).isEqualTo(LoginResponseDto.RoleEnum.SERVICE);
+  }
+
   // ========== Validate API Key Tests ==========
 
   @Test
@@ -402,7 +429,8 @@ class AuthenticationApiDelegateImplTest {
 
   @Test
   void shouldValidateApiKeyReturnValidResponseWithReadonlyScopesWhenUserIsReadonly() {
-    // Arrange
+    // Test that readonly role gets default scopes since it's not explicitly handled in getDefaultScopes
+    // The readonly role should fall through to the default case
     User readonlyUser = User.builder()
       .id(UUID.randomUUID())
       .username("readonly")
@@ -432,7 +460,43 @@ class AuthenticationApiDelegateImplTest {
     assertThat(response.getBody()).isNotNull();
     assertThat(response.getBody().getValid()).isTrue();
     assertThat(response.getBody().getRole()).isEqualTo(ValidateApiKeyResponseDto.RoleEnum.READONLY);
+    // readonly role should get default scopes since it's not in the switch statement
     assertThat(response.getBody().getScopes()).containsExactly("organizations:read");
+  }
+
+  @Test
+  void shouldValidateApiKeyReturnValidResponseWithServiceScopesWhenUserIsService() {
+    // Arrange
+    User serviceUser = User.builder()
+      .id(UUID.randomUUID())
+      .username("service")
+      .passwordHash("hashedpassword")
+      .role(User.Role.service)
+      .build();
+
+    ApiKey serviceApiKey = ApiKey.builder()
+      .id(UUID.randomUUID())
+      .user(serviceUser)
+      .name("Service API Key")
+      .keyPrefix("oc_dev_")
+      .keyHash("servicekey")
+      .createdAt(OffsetDateTime.now())
+      .expiresAt(OffsetDateTime.now().plusDays(30))
+      .build();
+
+    when(apiKeyService.findByKeyValue("oc_dev_1234567890abcdef")).thenReturn(Optional.of(serviceApiKey));
+
+    // Act
+    ResponseEntity<ValidateApiKeyResponseDto> response = authenticationApiDelegate.validateApiKey(
+      validateApiKeyRequest
+    );
+
+    // Assert
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    assertThat(response.getBody()).isNotNull();
+    assertThat(response.getBody().getValid()).isTrue();
+    assertThat(response.getBody().getRole()).isEqualTo(ValidateApiKeyResponseDto.RoleEnum.SERVICE);
+    assertThat(response.getBody().getScopes()).containsExactly("organizations:write");
   }
 
   @Test
@@ -492,6 +556,33 @@ class AuthenticationApiDelegateImplTest {
     assertThat(response.getBody().getValid()).isTrue();
     // Default scopes should be applied (organizations:read)
     assertThat(response.getBody().getScopes()).containsExactly("organizations:read");
+  }
+
+  @Test
+  void shouldValidateApiKeyReturnInternalServerErrorWhenUserRoleIsNull() {
+    // Test that null role causes an exception because user.getRole().name() will throw NPE
+    User nullRoleUser = mock(User.class);
+    lenient().when(nullRoleUser.getId()).thenReturn(UUID.randomUUID());
+    lenient().when(nullRoleUser.getUsername()).thenReturn("nullroleuser");
+    when(nullRoleUser.getRole()).thenReturn(null);
+
+    ApiKey nullRoleApiKey = mock(ApiKey.class);
+    when(nullRoleApiKey.getUser()).thenReturn(nullRoleUser);
+    lenient().when(nullRoleApiKey.getExpiresAt()).thenReturn(OffsetDateTime.now().plusDays(30));
+
+    when(apiKeyService.findByKeyValue("oc_dev_1234567890abcdef")).thenReturn(Optional.of(nullRoleApiKey));
+
+    // Act
+    ResponseEntity<ValidateApiKeyResponseDto> response = authenticationApiDelegate.validateApiKey(
+      validateApiKeyRequest
+    );
+
+    // Assert
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+    assertThat(response.getBody()).isNull();
+
+    // Verify updateLastUsed was called before the NPE occurred
+    verify(apiKeyService).updateLastUsed(nullRoleApiKey);
   }
 
   @Test

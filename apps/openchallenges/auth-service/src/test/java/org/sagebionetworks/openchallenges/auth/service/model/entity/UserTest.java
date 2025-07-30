@@ -213,11 +213,12 @@ class UserTest {
     void shouldHaveAllExpectedRoleValues() {
       User.Role[] roles = User.Role.values();
 
-      assertThat(roles).hasSize(3);
+      assertThat(roles).hasSize(4);
       assertThat(roles).containsExactlyInAnyOrder(
         User.Role.admin,
         User.Role.user,
-        User.Role.readonly
+        User.Role.readonly,
+        User.Role.service
       );
     }
 

@@ -41,11 +41,20 @@
 
   <div class="table-of-contents-container full-width-container">
     <h2>Table of Contents</h2>
+    <ul class="table-of-contents">
+      @for (evidenceType of evidenceTypes(); track evidenceType) {
+        <li>
+          <button (click)="scrollToSection(generateAnchorId(evidenceType))">
+            {{ evidenceType | decodeGreekEntity }}
+          </button>
+        </li>
+      }
+    </ul>
   </div>
 
-  <div class="boxplots-container">
+  <div class="boxplots-container" #boxplotsContainer>
     @for (evidenceType of evidenceTypes(); track evidenceType; let last = $last) {
-      <div class="boxplots-evidence-type">
+      <div class="boxplots-evidence-type" [id]="generateAnchorId(evidenceType)">
         <model-ad-model-details-boxplots-grid
           [modelDataList]="getSelectedModelDataForEvidenceType(evidenceType)"
           [genotypeOrder]="genotypeOrder()"

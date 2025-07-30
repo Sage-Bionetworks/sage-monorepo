@@ -1,0 +1,16 @@
+type: object
+description: A challenge platform update request.
+properties:
+  slug:
+    $ref: ChallengePlatformSlug.yaml
+  name:
+    $ref: ChallengePlatformName.yaml
+  avatarKey:
+    $ref: AvatarKey.yaml
+  websiteUrl:
+    $ref: Url.yaml
+required:
+  - slug
+  - name
+  - avatarKey
+  - websiteUrl

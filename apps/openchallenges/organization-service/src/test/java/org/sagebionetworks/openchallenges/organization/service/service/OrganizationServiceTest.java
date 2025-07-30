@@ -18,7 +18,7 @@ import org.sagebionetworks.openchallenges.organization.service.exception.Organiz
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationDto;
 import org.sagebionetworks.openchallenges.organization.service.model.entity.OrganizationEntity;
 import org.sagebionetworks.openchallenges.organization.service.model.mapper.OrganizationMapper;
-import org.sagebionetworks.openchallenges.organization.service.model.repository.ChallengeContributionRepository;
+import org.sagebionetworks.openchallenges.organization.service.model.repository.ChallengeParticipationRepository;
 import org.sagebionetworks.openchallenges.organization.service.model.repository.OrganizationRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,7 +28,7 @@ class OrganizationServiceTest {
   private OrganizationRepository organizationRepository;
 
   @Mock
-  private ChallengeContributionRepository challengeContributionRepository;
+  private ChallengeParticipationRepository challengeParticipationRepository;
 
   @Mock
   private OrganizationMapper organizationMapper;
@@ -39,7 +39,7 @@ class OrganizationServiceTest {
   void setup() {
     organizationService = new OrganizationService(
       organizationRepository,
-      challengeContributionRepository
+      challengeParticipationRepository
     );
   }
 

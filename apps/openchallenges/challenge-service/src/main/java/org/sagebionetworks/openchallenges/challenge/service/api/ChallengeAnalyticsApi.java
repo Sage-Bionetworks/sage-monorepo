@@ -31,7 +31,7 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 @Validated
-@Tag(name = "ChallengeAnalytics", description = "Operations about challenge analytics.")
+@Tag(name = "Challenge Analytics", description = "the Challenge Analytics API")
 public interface ChallengeAnalyticsApi {
 
     default ChallengeAnalyticsApiDelegate getDelegate() {
@@ -39,7 +39,7 @@ public interface ChallengeAnalyticsApi {
     }
 
     /**
-     * GET /challengeAnalytics/challengesPerYear : Get the number of challenges tracked per year
+     * GET /challenge-analytics/challenges-per-year : Get the number of challenges tracked per year
      * Returns the number of challenges tracked per year
      *
      * @return An object (status code 200)
@@ -49,7 +49,7 @@ public interface ChallengeAnalyticsApi {
         operationId = "getChallengesPerYear",
         summary = "Get the number of challenges tracked per year",
         description = "Returns the number of challenges tracked per year",
-        tags = { "ChallengeAnalytics" },
+        tags = { "Challenge Analytics" },
         responses = {
             @ApiResponse(responseCode = "200", description = "An object", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ChallengesPerYearDto.class)),
@@ -63,7 +63,7 @@ public interface ChallengeAnalyticsApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/challengeAnalytics/challengesPerYear",
+        value = "/challenge-analytics/challenges-per-year",
         produces = { "application/json", "application/problem+json" }
     )
     

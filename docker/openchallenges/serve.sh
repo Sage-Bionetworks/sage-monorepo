@@ -4,7 +4,6 @@ product_name="openchallenges"
 
 args=(
   # List of services in alphanumeric order
-  --file docker/"$product_name"/services/data-lambda.yml
 
   --file docker/"$product_name"/networks.yml
   --file docker/"$product_name"/volumes.yml

@@ -18,8 +18,7 @@
         "commands": [
           "rm -fr src/lib/*",
           "openapi-generator-cli generate",
-          "prettier --write \"src/**/*{.ts,.md}\"",
-          "echo 'TODO: fix services that return JSON-LD objects in **/*.service.ts'"
+          "prettier --write \"src/**/*{.ts,.md}\""
         ],
         "cwd": "{projectRoot}",
         "parallel": false

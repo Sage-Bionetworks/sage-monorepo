@@ -1,0 +1,45 @@
+# Redocly configuration file for Model-AD API
+#
+# About `x-audience`:
+# - The optional `x-audience` annotation can be applied to OpenAPI nodes such as tags, paths,
+#   components, and others.
+# - When using decorators like `filter-in` or `filter-out`, only nodes annotated with `x-audience`
+#   are evaluated for inclusion or exclusion.
+# - Nodes without an `x-audience` annotation are not affected by these filters and will always be
+#   included in the output OpenAPI files.
+# - This allows you to selectively expose or hide parts of your API for different audiences, while
+#   keeping unannotated nodes visible in all outputs.
+# - Best practice: Be intentional and always specify the `x-audience` annotation on path nodes.
+
+apis:
+  # Model-AD API
+  model-ad-public:
+    root: ./openapi/api-public.openapi.yaml
+    decorators:
+      info-override:
+        version: 1.0.0
+        title: Model-AD API
+        license:
+          name: Apache 2.0
+          url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
+        contact:
+          name: Support
+          url: https://github.com/Sage-Bionetworks/sage-monorepo
+        x-logo:
+          url: https://dev.modeladexplorer.org/opengraph/opengraph.png
+          altText: Model-AD Explorer
+
+  # Primary API
+  api-public:
+    root: ./src/api.openapi.yaml
+    decorators:
+      filter-in:
+        property: x-audience
+        value: [public]
+  api-service:
+    root: ./src/api.openapi.yaml
+    decorators:
+      filter-in:
+        property: x-audience
+        value: [public, internal]
+        matchStrategy: any

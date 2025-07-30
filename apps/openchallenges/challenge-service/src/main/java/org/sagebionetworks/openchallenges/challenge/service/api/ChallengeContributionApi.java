@@ -8,7 +8,7 @@ package org.sagebionetworks.openchallenges.challenge.service.api;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.BasicErrorDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionDto;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionUpdateRequestDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionRoleDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionsPageDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,7 +34,7 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 @Validated
-@Tag(name = "ChallengeContribution", description = "Operations about challenge contributions.")
+@Tag(name = "Challenge Contribution", description = "Operations about challenge contributions.")
 public interface ChallengeContributionApi {
 
     default ChallengeContributionApiDelegate getDelegate() {
@@ -55,10 +55,10 @@ public interface ChallengeContributionApi {
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
-        operationId = "addChallengeContribution",
+        operationId = "createChallengeContribution",
         summary = "Create a new contribution for a challenge",
         description = "Creates a new contribution record associated with a challenge ID. ",
-        tags = { "ChallengeContribution" },
+        tags = { "Challenge Contribution" },
         responses = {
             @ApiResponse(responseCode = "201", description = "Contribution created successfully", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ChallengeContributionDto.class)),
@@ -96,17 +96,69 @@ public interface ChallengeContributionApi {
         consumes = { "application/json" }
     )
     
-    default ResponseEntity<ChallengeContributionDto> addChallengeContribution(
+    default ResponseEntity<ChallengeContributionDto> createChallengeContribution(
         @Parameter(name = "challengeId", description = "The unique identifier of the challenge.", required = true, in = ParameterIn.PATH) @PathVariable("challengeId") Long challengeId,
         @Parameter(name = "ChallengeContributionCreateRequestDto", description = "", required = true) @Valid @RequestBody ChallengeContributionCreateRequestDto challengeContributionCreateRequestDto
     ) {
-        return getDelegate().addChallengeContribution(challengeId, challengeContributionCreateRequestDto);
+        return getDelegate().createChallengeContribution(challengeId, challengeContributionCreateRequestDto);
     }
 
 
     /**
-     * DELETE /challenges/{challengeId}/contributions : Delete all contributions for a specific challenge
-     * Deletes all associated contributions for a given challenge, identified by its ID. This action is irreversible. 
+     * DELETE /challenges/{challengeId}/contributions/{organizationId}/role/{role} : Delete a specific challenge contribution
+     * Delete a specific challenge contribution.
+     *
+     * @param challengeId The unique identifier of the challenge. (required)
+     * @param organizationId The unique identifier of the organization. (required)
+     * @param role A challenge contribution role. (required)
+     * @return Contribution deleted successfully (status code 204)
+     *         or Unauthorized (status code 401)
+     *         or The user does not have the permission to perform this action (status code 403)
+     *         or The specified resource was not found (status code 404)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "deleteChallengeContribution",
+        summary = "Delete a specific challenge contribution",
+        description = "Delete a specific challenge contribution.",
+        tags = { "Challenge Contribution" },
+        responses = {
+            @ApiResponse(responseCode = "204", description = "Contribution deleted successfully"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "apiBearerAuth")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.DELETE,
+        value = "/challenges/{challengeId}/contributions/{organizationId}/role/{role}",
+        produces = { "application/problem+json" }
+    )
+    
+    default ResponseEntity<Void> deleteChallengeContribution(
+        @Parameter(name = "challengeId", description = "The unique identifier of the challenge.", required = true, in = ParameterIn.PATH) @PathVariable("challengeId") Long challengeId,
+        @Parameter(name = "organizationId", description = "The unique identifier of the organization.", required = true, in = ParameterIn.PATH) @PathVariable("organizationId") Long organizationId,
+        @Parameter(name = "role", description = "A challenge contribution role.", required = true, in = ParameterIn.PATH) @PathVariable("role") ChallengeContributionRoleDto role
+    ) {
+        return getDelegate().deleteChallengeContribution(challengeId, organizationId, role);
+    }
+
+
+    /**
+     * DELETE /challenges/{challengeId}/contributions : Delete the contributions for a specific challenge
+     * Deletes the associated contributions for a given challenge, identified by its ID.
      *
      * @param challengeId The unique identifier of the challenge. (required)
      * @return Deletion successful (status code 204)
@@ -116,10 +168,10 @@ public interface ChallengeContributionApi {
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
-        operationId = "deleteAllChallengeContributions",
-        summary = "Delete all contributions for a specific challenge",
-        description = "Deletes all associated contributions for a given challenge, identified by its ID. This action is irreversible. ",
-        tags = { "ChallengeContribution" },
+        operationId = "deleteChallengeContributions",
+        summary = "Delete the contributions for a specific challenge",
+        description = "Deletes the associated contributions for a given challenge, identified by its ID.",
+        tags = { "Challenge Contribution" },
         responses = {
             @ApiResponse(responseCode = "204", description = "Deletion successful"),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
@@ -145,69 +197,20 @@ public interface ChallengeContributionApi {
         produces = { "application/problem+json" }
     )
     
-    default ResponseEntity<Void> deleteAllChallengeContributions(
+    default ResponseEntity<Void> deleteChallengeContributions(
         @Parameter(name = "challengeId", description = "The unique identifier of the challenge.", required = true, in = ParameterIn.PATH) @PathVariable("challengeId") Long challengeId
     ) {
-        return getDelegate().deleteAllChallengeContributions(challengeId);
+        return getDelegate().deleteChallengeContributions(challengeId);
     }
 
 
     /**
-     * DELETE /challenges/{challengeId}/contributions/{challengeContributionId} : Delete a specific challenge contribution
-     * Deletes a specific contribution record for a challenge, identified by its ID. This action is irreversible. 
-     *
-     * @param challengeId The unique identifier of the challenge. (required)
-     * @param challengeContributionId The unique identifier of a challenge contribution (required)
-     * @return Contribution deleted successfully (status code 204)
-     *         or Unauthorized (status code 401)
-     *         or The user does not have the permission to perform this action (status code 403)
-     *         or The specified resource was not found (status code 404)
-     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     */
-    @Operation(
-        operationId = "deleteChallengeContribution",
-        summary = "Delete a specific challenge contribution",
-        description = "Deletes a specific contribution record for a challenge, identified by its ID. This action is irreversible. ",
-        tags = { "ChallengeContribution" },
-        responses = {
-            @ApiResponse(responseCode = "204", description = "Contribution deleted successfully"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            })
-        },
-        security = {
-            @SecurityRequirement(name = "apiBearerAuth")
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.DELETE,
-        value = "/challenges/{challengeId}/contributions/{challengeContributionId}",
-        produces = { "application/problem+json" }
-    )
-    
-    default ResponseEntity<Void> deleteChallengeContribution(
-        @Parameter(name = "challengeId", description = "The unique identifier of the challenge.", required = true, in = ParameterIn.PATH) @PathVariable("challengeId") Long challengeId,
-        @Parameter(name = "challengeContributionId", description = "The unique identifier of a challenge contribution", required = true, in = ParameterIn.PATH) @PathVariable("challengeContributionId") Long challengeContributionId
-    ) {
-        return getDelegate().deleteChallengeContribution(challengeId, challengeContributionId);
-    }
-
-
-    /**
-     * GET /challenges/{challengeId}/contributions/{challengeContributionId} : Get a specific challenge contribution
+     * GET /challenges/{challengeId}/contributions/{organizationId}/role/{role} : Get a specific challenge contribution
      * Retrieves a specific contribution record for a challenge, identified by its ID. 
      *
      * @param challengeId The unique identifier of the challenge. (required)
-     * @param challengeContributionId The unique identifier of a challenge contribution (required)
+     * @param organizationId The unique identifier of the organization. (required)
+     * @param role A challenge contribution role. (required)
      * @return Challenge contribution retrieved successfully (status code 200)
      *         or Invalid request (status code 400)
      *         or The specified resource was not found (status code 404)
@@ -217,7 +220,7 @@ public interface ChallengeContributionApi {
         operationId = "getChallengeContribution",
         summary = "Get a specific challenge contribution",
         description = "Retrieves a specific contribution record for a challenge, identified by its ID. ",
-        tags = { "ChallengeContribution" },
+        tags = { "Challenge Contribution" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Challenge contribution retrieved successfully", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ChallengeContributionDto.class)),
@@ -239,15 +242,16 @@ public interface ChallengeContributionApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/challenges/{challengeId}/contributions/{challengeContributionId}",
+        value = "/challenges/{challengeId}/contributions/{organizationId}/role/{role}",
         produces = { "application/json", "application/problem+json" }
     )
     
     default ResponseEntity<ChallengeContributionDto> getChallengeContribution(
         @Parameter(name = "challengeId", description = "The unique identifier of the challenge.", required = true, in = ParameterIn.PATH) @PathVariable("challengeId") Long challengeId,
-        @Parameter(name = "challengeContributionId", description = "The unique identifier of a challenge contribution", required = true, in = ParameterIn.PATH) @PathVariable("challengeContributionId") Long challengeContributionId
+        @Parameter(name = "organizationId", description = "The unique identifier of the organization.", required = true, in = ParameterIn.PATH) @PathVariable("organizationId") Long organizationId,
+        @Parameter(name = "role", description = "A challenge contribution role.", required = true, in = ParameterIn.PATH) @PathVariable("role") ChallengeContributionRoleDto role
     ) {
-        return getDelegate().getChallengeContribution(challengeId, challengeContributionId);
+        return getDelegate().getChallengeContribution(challengeId, organizationId, role);
     }
 
 
@@ -264,7 +268,7 @@ public interface ChallengeContributionApi {
         operationId = "listChallengeContributions",
         summary = "List challenge contributions",
         description = "List challenge contributions",
-        tags = { "ChallengeContribution" },
+        tags = { "Challenge Contribution" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ChallengeContributionsPageDto.class)),
@@ -290,76 +294,6 @@ public interface ChallengeContributionApi {
         @Parameter(name = "challengeId", description = "The unique identifier of the challenge.", required = true, in = ParameterIn.PATH) @PathVariable("challengeId") Long challengeId
     ) {
         return getDelegate().listChallengeContributions(challengeId);
-    }
-
-
-    /**
-     * PUT /challenges/{challengeId}/contributions/{challengeContributionId} : Update an existing challenge contribution
-     * Updates an existing contribution record for a challenge. Only the organization ID and role can be modified. 
-     *
-     * @param challengeId The unique identifier of the challenge. (required)
-     * @param challengeContributionId The unique identifier of a challenge contribution (required)
-     * @param challengeContributionUpdateRequestDto  (required)
-     * @return Contribution updated successfully (status code 200)
-     *         or Invalid request (status code 400)
-     *         or Unauthorized (status code 401)
-     *         or The user does not have the permission to perform this action (status code 403)
-     *         or The specified resource was not found (status code 404)
-     *         or The request conflicts with current state of the target resource (status code 409)
-     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     */
-    @Operation(
-        operationId = "updateChallengeContribution",
-        summary = "Update an existing challenge contribution",
-        description = "Updates an existing contribution record for a challenge. Only the organization ID and role can be modified. ",
-        tags = { "ChallengeContribution" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Contribution updated successfully", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ChallengeContributionDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ChallengeContributionDto.class))
-            }),
-            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "403", description = "The user does not have the permission to perform this action", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "409", description = "The request conflicts with current state of the target resource", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            })
-        },
-        security = {
-            @SecurityRequirement(name = "apiBearerAuth")
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.PUT,
-        value = "/challenges/{challengeId}/contributions/{challengeContributionId}",
-        produces = { "application/json", "application/problem+json" },
-        consumes = { "application/json" }
-    )
-    
-    default ResponseEntity<ChallengeContributionDto> updateChallengeContribution(
-        @Parameter(name = "challengeId", description = "The unique identifier of the challenge.", required = true, in = ParameterIn.PATH) @PathVariable("challengeId") Long challengeId,
-        @Parameter(name = "challengeContributionId", description = "The unique identifier of a challenge contribution", required = true, in = ParameterIn.PATH) @PathVariable("challengeContributionId") Long challengeContributionId,
-        @Parameter(name = "ChallengeContributionUpdateRequestDto", description = "", required = true) @Valid @RequestBody ChallengeContributionUpdateRequestDto challengeContributionUpdateRequestDto
-    ) {
-        return getDelegate().updateChallengeContribution(challengeId, challengeContributionId, challengeContributionUpdateRequestDto);
     }
 
 }

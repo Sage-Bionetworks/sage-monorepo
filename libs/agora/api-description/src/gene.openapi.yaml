@@ -1,0 +1,30 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0-draft
+  title: Agora Gene API
+  license:
+    name: Apache 2.0
+    url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
+  contact:
+    name: Support
+    url: https://github.com/Sage-Bionetworks/sage-monorepo
+  x-logo:
+    url: https://raw.githubusercontent.com/Sage-Bionetworks/agora-images/main/og-social.png
+    altText: Agora
+servers:
+  - url: http://localhost/v1
+tags:
+  - name: Genes # TODO: consider using "Gene" instead of "Genes" to be consistent with the other APIs
+    description: Operations about genes.
+    x-audience: [internal]
+paths:
+  /genes/comparison:
+    $ref: paths/genes/comparison.yaml
+components:
+  schemas:
+    Gene:
+      $ref: components/schemas/Gene.yaml
+      x-audience: [internal]
+    Team:
+      $ref: components/schemas/Team.yaml
+      x-audience: [internal]

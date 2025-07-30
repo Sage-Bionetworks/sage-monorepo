@@ -1,11 +1,4 @@
 <div id="home-page">
-  <div class="top-background-wrapper">
-    <explorers-svg-image
-      imagePath="/model-ad-assets/images/home-background-top.svg"
-      altText="top background image"
-      class="top-background"
-    />
-  </div>
   <div class="section">
     <div class="content">
       <div class="text-marquee">
@@ -59,13 +52,6 @@
         />
       </div>
       <div class="stats-container">
-        <div class="stats-background-wrapper">
-          <explorers-svg-image
-            imagePath="/model-ad-assets/images/home-background-bottom.svg"
-            altText="background image"
-            class="stats-background"
-          />
-        </div>
         @for (stat of stats; track stat) {
           <div class="stat">
             <h3 class="stat-label">{{ stat.label }}</h3>
@@ -88,6 +74,7 @@
           <explorers-svg-image
             imagePath="/model-ad-assets/images/methodology.svg"
             altText="methodology image"
+            sizeMode="full-width"
           />
         </div>
       </div>

@@ -1,0 +1,29 @@
+type: object
+description: The information required to update an org account
+properties:
+  name:
+    type: string
+    example: Example organization
+  description:
+    type: string
+    example: A short description of the organization.
+    nullable: true
+  avatarKey:
+    type: string
+    format: url
+    example: https://via.placeholder.com/300.png
+    nullable: true
+  websiteUrl:
+    $ref: Url.yaml
+  acronym:
+    description: An acronym of the organization.
+    type: string
+    maxLength: 10
+    example: 'OC'
+    nullable: true
+required:
+  - name
+  - description
+  - avatarKey
+  - websiteUrl
+  - acronym

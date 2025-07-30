@@ -1,20 +1,23 @@
 openapi: 3.0.3
 info:
   version: 1.0.0
-  title: AMP-ALS REST API
+  title: AMP-ALS API
   license:
     name: Apache 2.0
-    url: 'https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt'
+    url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
   contact:
     name: Support
-    url: 'https://github.com/Sage-Bionetworks/sage-monorepo'
+    url: https://github.com/Sage-Bionetworks/sage-monorepo
+  description: Discover, explore, and contribute to AMP-ALS datasets.
 servers:
-  - url: 'http://localhost/v1'
+  - url: http://localhost/v1
 tags:
   - name: Dataset
     description: Operations about datasets.
+    x-displayName: Dataset
   - name: HealthCheck
     description: Operations about health checks
+    x-displayName: HealthCheck
 paths:
   /datasets:
     get:
@@ -36,7 +39,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  '/datasets/{datasetId}':
+  /datasets/{datasetId}:
     parameters:
       - $ref: '#/components/parameters/datasetId'
     get:
@@ -233,9 +236,7 @@ components:
           description: The HTTP status code
         detail:
           type: string
-          description: >-
-            A human readable explanation specific to this occurrence of the
-            problem
+          description: A human readable explanation specific to this occurrence of the problem
         type:
           type: string
           description: An absolute URI that identifies the problem type
@@ -258,6 +259,20 @@ components:
             - warn
       required:
         - status
+  parameters:
+    datasetSearchQuery:
+      name: datasetSearchQuery
+      description: The search query used to find datasets.
+      in: query
+      schema:
+        $ref: '#/components/schemas/DatasetSearchQuery'
+    datasetId:
+      name: datasetId
+      in: path
+      description: The unique identifier of the dataset.
+      required: true
+      schema:
+        $ref: '#/components/schemas/DatasetId'
   responses:
     BadRequest:
       description: Invalid request
@@ -277,17 +292,10 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-  parameters:
-    datasetSearchQuery:
-      name: datasetSearchQuery
-      description: The search query used to find datasets.
-      in: query
-      schema:
-        $ref: '#/components/schemas/DatasetSearchQuery'
-    datasetId:
-      name: datasetId
-      in: path
-      description: The unique identifier of the dataset.
-      required: true
-      schema:
-        $ref: '#/components/schemas/DatasetId'
+x-tagGroups:
+  - name: AMP-ALS Dataset Service API
+    tags:
+      - Dataset
+  - name: AMP-ALS User Service API
+    tags:
+      - HealthCheck

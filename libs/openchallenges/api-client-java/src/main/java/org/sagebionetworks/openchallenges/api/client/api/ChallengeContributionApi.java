@@ -11,7 +11,7 @@ import org.sagebionetworks.openchallenges.api.client.ApiClient;
 import org.sagebionetworks.openchallenges.api.client.model.BasicError;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengeContribution;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengeContributionCreateRequest;
-import org.sagebionetworks.openchallenges.api.client.model.ChallengeContributionUpdateRequest;
+import org.sagebionetworks.openchallenges.api.client.model.ChallengeContributionRole;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengeContributionsPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -65,7 +65,7 @@ public class ChallengeContributionApi {
    * @return ChallengeContribution
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
    */
-  private ResponseSpec addChallengeContributionRequestCreation(
+  private ResponseSpec createChallengeContributionRequestCreation(
     @jakarta.annotation.Nonnull Long challengeId,
     @jakarta.annotation.Nonnull ChallengeContributionCreateRequest challengeContributionCreateRequest
   ) throws RestClientResponseException {
@@ -73,7 +73,7 @@ public class ChallengeContributionApi {
     // verify the required parameter 'challengeId' is set
     if (challengeId == null) {
       throw new RestClientResponseException(
-        "Missing the required parameter 'challengeId' when calling addChallengeContribution",
+        "Missing the required parameter 'challengeId' when calling createChallengeContribution",
         HttpStatus.BAD_REQUEST.value(),
         HttpStatus.BAD_REQUEST.getReasonPhrase(),
         null,
@@ -84,7 +84,7 @@ public class ChallengeContributionApi {
     // verify the required parameter 'challengeContributionCreateRequest' is set
     if (challengeContributionCreateRequest == null) {
       throw new RestClientResponseException(
-        "Missing the required parameter 'challengeContributionCreateRequest' when calling addChallengeContribution",
+        "Missing the required parameter 'challengeContributionCreateRequest' when calling createChallengeContribution",
         HttpStatus.BAD_REQUEST.value(),
         HttpStatus.BAD_REQUEST.getReasonPhrase(),
         null,
@@ -141,13 +141,13 @@ public class ChallengeContributionApi {
    * @return ChallengeContribution
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
    */
-  public ChallengeContribution addChallengeContribution(
+  public ChallengeContribution createChallengeContribution(
     @jakarta.annotation.Nonnull Long challengeId,
     @jakarta.annotation.Nonnull ChallengeContributionCreateRequest challengeContributionCreateRequest
   ) throws RestClientResponseException {
     ParameterizedTypeReference<ChallengeContribution> localVarReturnType =
       new ParameterizedTypeReference<>() {};
-    return addChallengeContributionRequestCreation(
+    return createChallengeContributionRequestCreation(
       challengeId,
       challengeContributionCreateRequest
     ).body(localVarReturnType);
@@ -167,13 +167,13 @@ public class ChallengeContributionApi {
    * @return ResponseEntity&lt;ChallengeContribution&gt;
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
    */
-  public ResponseEntity<ChallengeContribution> addChallengeContributionWithHttpInfo(
+  public ResponseEntity<ChallengeContribution> createChallengeContributionWithHttpInfo(
     @jakarta.annotation.Nonnull Long challengeId,
     @jakarta.annotation.Nonnull ChallengeContributionCreateRequest challengeContributionCreateRequest
   ) throws RestClientResponseException {
     ParameterizedTypeReference<ChallengeContribution> localVarReturnType =
       new ParameterizedTypeReference<>() {};
-    return addChallengeContributionRequestCreation(
+    return createChallengeContributionRequestCreation(
       challengeId,
       challengeContributionCreateRequest
     ).toEntity(localVarReturnType);
@@ -193,141 +193,33 @@ public class ChallengeContributionApi {
    * @return ResponseSpec
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
    */
-  public ResponseSpec addChallengeContributionWithResponseSpec(
+  public ResponseSpec createChallengeContributionWithResponseSpec(
     @jakarta.annotation.Nonnull Long challengeId,
     @jakarta.annotation.Nonnull ChallengeContributionCreateRequest challengeContributionCreateRequest
   ) throws RestClientResponseException {
-    return addChallengeContributionRequestCreation(challengeId, challengeContributionCreateRequest);
-  }
-
-  /**
-   * Delete all contributions for a specific challenge
-   * Deletes all associated contributions for a given challenge, identified by its ID. This action is irreversible.
-   * <p><b>204</b> - Deletion successful
-   * <p><b>401</b> - Unauthorized
-   * <p><b>403</b> - The user does not have the permission to perform this action
-   * <p><b>404</b> - The specified resource was not found
-   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
-   * @param challengeId The unique identifier of the challenge.
-   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
-   */
-  private ResponseSpec deleteAllChallengeContributionsRequestCreation(
-    @jakarta.annotation.Nonnull Long challengeId
-  ) throws RestClientResponseException {
-    Object postBody = null;
-    // verify the required parameter 'challengeId' is set
-    if (challengeId == null) {
-      throw new RestClientResponseException(
-        "Missing the required parameter 'challengeId' when calling deleteAllChallengeContributions",
-        HttpStatus.BAD_REQUEST.value(),
-        HttpStatus.BAD_REQUEST.getReasonPhrase(),
-        null,
-        null,
-        null
-      );
-    }
-    // create path and map variables
-    final Map<String, Object> pathParams = new HashMap<>();
-
-    pathParams.put("challengeId", challengeId);
-
-    final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-    final HttpHeaders headerParams = new HttpHeaders();
-    final MultiValueMap<String, String> cookieParams = new LinkedMultiValueMap<>();
-    final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<>();
-
-    final String[] localVarAccepts = { "application/problem+json" };
-    final List<MediaType> localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-    final String[] localVarContentTypes = {};
-    final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "apiBearerAuth" };
-
-    ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
-    return apiClient.invokeAPI(
-      "/challenges/{challengeId}/contributions",
-      HttpMethod.DELETE,
-      pathParams,
-      queryParams,
-      postBody,
-      headerParams,
-      cookieParams,
-      formParams,
-      localVarAccept,
-      localVarContentType,
-      localVarAuthNames,
-      localVarReturnType
+    return createChallengeContributionRequestCreation(
+      challengeId,
+      challengeContributionCreateRequest
     );
   }
 
   /**
-   * Delete all contributions for a specific challenge
-   * Deletes all associated contributions for a given challenge, identified by its ID. This action is irreversible.
-   * <p><b>204</b> - Deletion successful
-   * <p><b>401</b> - Unauthorized
-   * <p><b>403</b> - The user does not have the permission to perform this action
-   * <p><b>404</b> - The specified resource was not found
-   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
-   * @param challengeId The unique identifier of the challenge.
-   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
-   */
-  public void deleteAllChallengeContributions(@jakarta.annotation.Nonnull Long challengeId)
-    throws RestClientResponseException {
-    ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
-    deleteAllChallengeContributionsRequestCreation(challengeId).body(localVarReturnType);
-  }
-
-  /**
-   * Delete all contributions for a specific challenge
-   * Deletes all associated contributions for a given challenge, identified by its ID. This action is irreversible.
-   * <p><b>204</b> - Deletion successful
-   * <p><b>401</b> - Unauthorized
-   * <p><b>403</b> - The user does not have the permission to perform this action
-   * <p><b>404</b> - The specified resource was not found
-   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
-   * @param challengeId The unique identifier of the challenge.
-   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
-   */
-  public ResponseEntity<Void> deleteAllChallengeContributionsWithHttpInfo(
-    @jakarta.annotation.Nonnull Long challengeId
-  ) throws RestClientResponseException {
-    ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
-    return deleteAllChallengeContributionsRequestCreation(challengeId).toEntity(localVarReturnType);
-  }
-
-  /**
-   * Delete all contributions for a specific challenge
-   * Deletes all associated contributions for a given challenge, identified by its ID. This action is irreversible.
-   * <p><b>204</b> - Deletion successful
-   * <p><b>401</b> - Unauthorized
-   * <p><b>403</b> - The user does not have the permission to perform this action
-   * <p><b>404</b> - The specified resource was not found
-   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
-   * @param challengeId The unique identifier of the challenge.
-   * @return ResponseSpec
-   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
-   */
-  public ResponseSpec deleteAllChallengeContributionsWithResponseSpec(
-    @jakarta.annotation.Nonnull Long challengeId
-  ) throws RestClientResponseException {
-    return deleteAllChallengeContributionsRequestCreation(challengeId);
-  }
-
-  /**
    * Delete a specific challenge contribution
-   * Deletes a specific contribution record for a challenge, identified by its ID. This action is irreversible.
+   * Delete a specific challenge contribution.
    * <p><b>204</b> - Contribution deleted successfully
    * <p><b>401</b> - Unauthorized
    * <p><b>403</b> - The user does not have the permission to perform this action
    * <p><b>404</b> - The specified resource was not found
    * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
    * @param challengeId The unique identifier of the challenge.
-   * @param challengeContributionId The unique identifier of a challenge contribution
+   * @param organizationId The unique identifier of the organization.
+   * @param role A challenge contribution role.
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
    */
   private ResponseSpec deleteChallengeContributionRequestCreation(
     @jakarta.annotation.Nonnull Long challengeId,
-    @jakarta.annotation.Nonnull Long challengeContributionId
+    @jakarta.annotation.Nonnull Long organizationId,
+    @jakarta.annotation.Nonnull ChallengeContributionRole role
   ) throws RestClientResponseException {
     Object postBody = null;
     // verify the required parameter 'challengeId' is set
@@ -341,10 +233,21 @@ public class ChallengeContributionApi {
         null
       );
     }
-    // verify the required parameter 'challengeContributionId' is set
-    if (challengeContributionId == null) {
+    // verify the required parameter 'organizationId' is set
+    if (organizationId == null) {
       throw new RestClientResponseException(
-        "Missing the required parameter 'challengeContributionId' when calling deleteChallengeContribution",
+        "Missing the required parameter 'organizationId' when calling deleteChallengeContribution",
+        HttpStatus.BAD_REQUEST.value(),
+        HttpStatus.BAD_REQUEST.getReasonPhrase(),
+        null,
+        null,
+        null
+      );
+    }
+    // verify the required parameter 'role' is set
+    if (role == null) {
+      throw new RestClientResponseException(
+        "Missing the required parameter 'role' when calling deleteChallengeContribution",
         HttpStatus.BAD_REQUEST.value(),
         HttpStatus.BAD_REQUEST.getReasonPhrase(),
         null,
@@ -356,7 +259,8 @@ public class ChallengeContributionApi {
     final Map<String, Object> pathParams = new HashMap<>();
 
     pathParams.put("challengeId", challengeId);
-    pathParams.put("challengeContributionId", challengeContributionId);
+    pathParams.put("organizationId", organizationId);
+    pathParams.put("role", role);
 
     final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
     final HttpHeaders headerParams = new HttpHeaders();
@@ -372,7 +276,7 @@ public class ChallengeContributionApi {
 
     ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
     return apiClient.invokeAPI(
-      "/challenges/{challengeId}/contributions/{challengeContributionId}",
+      "/challenges/{challengeId}/contributions/{organizationId}/role/{role}",
       HttpMethod.DELETE,
       pathParams,
       queryParams,
@@ -389,67 +293,72 @@ public class ChallengeContributionApi {
 
   /**
    * Delete a specific challenge contribution
-   * Deletes a specific contribution record for a challenge, identified by its ID. This action is irreversible.
+   * Delete a specific challenge contribution.
    * <p><b>204</b> - Contribution deleted successfully
    * <p><b>401</b> - Unauthorized
    * <p><b>403</b> - The user does not have the permission to perform this action
    * <p><b>404</b> - The specified resource was not found
    * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
    * @param challengeId The unique identifier of the challenge.
-   * @param challengeContributionId The unique identifier of a challenge contribution
+   * @param organizationId The unique identifier of the organization.
+   * @param role A challenge contribution role.
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
    */
   public void deleteChallengeContribution(
     @jakarta.annotation.Nonnull Long challengeId,
-    @jakarta.annotation.Nonnull Long challengeContributionId
+    @jakarta.annotation.Nonnull Long organizationId,
+    @jakarta.annotation.Nonnull ChallengeContributionRole role
   ) throws RestClientResponseException {
     ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
-    deleteChallengeContributionRequestCreation(challengeId, challengeContributionId).body(
+    deleteChallengeContributionRequestCreation(challengeId, organizationId, role).body(
       localVarReturnType
     );
   }
 
   /**
    * Delete a specific challenge contribution
-   * Deletes a specific contribution record for a challenge, identified by its ID. This action is irreversible.
+   * Delete a specific challenge contribution.
    * <p><b>204</b> - Contribution deleted successfully
    * <p><b>401</b> - Unauthorized
    * <p><b>403</b> - The user does not have the permission to perform this action
    * <p><b>404</b> - The specified resource was not found
    * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
    * @param challengeId The unique identifier of the challenge.
-   * @param challengeContributionId The unique identifier of a challenge contribution
+   * @param organizationId The unique identifier of the organization.
+   * @param role A challenge contribution role.
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
    */
   public ResponseEntity<Void> deleteChallengeContributionWithHttpInfo(
     @jakarta.annotation.Nonnull Long challengeId,
-    @jakarta.annotation.Nonnull Long challengeContributionId
+    @jakarta.annotation.Nonnull Long organizationId,
+    @jakarta.annotation.Nonnull ChallengeContributionRole role
   ) throws RestClientResponseException {
     ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
-    return deleteChallengeContributionRequestCreation(
-      challengeId,
-      challengeContributionId
-    ).toEntity(localVarReturnType);
+    return deleteChallengeContributionRequestCreation(challengeId, organizationId, role).toEntity(
+      localVarReturnType
+    );
   }
 
   /**
    * Delete a specific challenge contribution
-   * Deletes a specific contribution record for a challenge, identified by its ID. This action is irreversible.
+   * Delete a specific challenge contribution.
    * <p><b>204</b> - Contribution deleted successfully
    * <p><b>401</b> - Unauthorized
    * <p><b>403</b> - The user does not have the permission to perform this action
    * <p><b>404</b> - The specified resource was not found
    * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
    * @param challengeId The unique identifier of the challenge.
-   * @param challengeContributionId The unique identifier of a challenge contribution
+   * @param organizationId The unique identifier of the organization.
+   * @param role A challenge contribution role.
    * @return ResponseSpec
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
    */
   public ResponseSpec deleteChallengeContributionWithResponseSpec(
     @jakarta.annotation.Nonnull Long challengeId,
-    @jakarta.annotation.Nonnull Long challengeContributionId
+    @jakarta.annotation.Nonnull Long organizationId,
+    @jakarta.annotation.Nonnull ChallengeContributionRole role
   ) throws RestClientResponseException {
-    return deleteChallengeContributionRequestCreation(challengeId, challengeContributionId);
+    return deleteChallengeContributionRequestCreation(challengeId, organizationId, role);
   }
 
   /**
@@ -460,13 +369,15 @@ public class ChallengeContributionApi {
    * <p><b>404</b> - The specified resource was not found
    * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
    * @param challengeId The unique identifier of the challenge.
-   * @param challengeContributionId The unique identifier of a challenge contribution
+   * @param organizationId The unique identifier of the organization.
+   * @param role A challenge contribution role.
    * @return ChallengeContribution
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
    */
   private ResponseSpec getChallengeContributionRequestCreation(
     @jakarta.annotation.Nonnull Long challengeId,
-    @jakarta.annotation.Nonnull Long challengeContributionId
+    @jakarta.annotation.Nonnull Long organizationId,
+    @jakarta.annotation.Nonnull ChallengeContributionRole role
   ) throws RestClientResponseException {
     Object postBody = null;
     // verify the required parameter 'challengeId' is set
@@ -480,10 +391,21 @@ public class ChallengeContributionApi {
         null
       );
     }
-    // verify the required parameter 'challengeContributionId' is set
-    if (challengeContributionId == null) {
+    // verify the required parameter 'organizationId' is set
+    if (organizationId == null) {
       throw new RestClientResponseException(
-        "Missing the required parameter 'challengeContributionId' when calling getChallengeContribution",
+        "Missing the required parameter 'organizationId' when calling getChallengeContribution",
+        HttpStatus.BAD_REQUEST.value(),
+        HttpStatus.BAD_REQUEST.getReasonPhrase(),
+        null,
+        null,
+        null
+      );
+    }
+    // verify the required parameter 'role' is set
+    if (role == null) {
+      throw new RestClientResponseException(
+        "Missing the required parameter 'role' when calling getChallengeContribution",
         HttpStatus.BAD_REQUEST.value(),
         HttpStatus.BAD_REQUEST.getReasonPhrase(),
         null,
@@ -495,7 +417,8 @@ public class ChallengeContributionApi {
     final Map<String, Object> pathParams = new HashMap<>();
 
     pathParams.put("challengeId", challengeId);
-    pathParams.put("challengeContributionId", challengeContributionId);
+    pathParams.put("organizationId", organizationId);
+    pathParams.put("role", role);
 
     final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
     final HttpHeaders headerParams = new HttpHeaders();
@@ -512,7 +435,7 @@ public class ChallengeContributionApi {
     ParameterizedTypeReference<ChallengeContribution> localVarReturnType =
       new ParameterizedTypeReference<>() {};
     return apiClient.invokeAPI(
-      "/challenges/{challengeId}/contributions/{challengeContributionId}",
+      "/challenges/{challengeId}/contributions/{organizationId}/role/{role}",
       HttpMethod.GET,
       pathParams,
       queryParams,
@@ -535,17 +458,19 @@ public class ChallengeContributionApi {
    * <p><b>404</b> - The specified resource was not found
    * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
    * @param challengeId The unique identifier of the challenge.
-   * @param challengeContributionId The unique identifier of a challenge contribution
+   * @param organizationId The unique identifier of the organization.
+   * @param role A challenge contribution role.
    * @return ChallengeContribution
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
    */
   public ChallengeContribution getChallengeContribution(
     @jakarta.annotation.Nonnull Long challengeId,
-    @jakarta.annotation.Nonnull Long challengeContributionId
+    @jakarta.annotation.Nonnull Long organizationId,
+    @jakarta.annotation.Nonnull ChallengeContributionRole role
   ) throws RestClientResponseException {
     ParameterizedTypeReference<ChallengeContribution> localVarReturnType =
       new ParameterizedTypeReference<>() {};
-    return getChallengeContributionRequestCreation(challengeId, challengeContributionId).body(
+    return getChallengeContributionRequestCreation(challengeId, organizationId, role).body(
       localVarReturnType
     );
   }
@@ -558,17 +483,19 @@ public class ChallengeContributionApi {
    * <p><b>404</b> - The specified resource was not found
    * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
    * @param challengeId The unique identifier of the challenge.
-   * @param challengeContributionId The unique identifier of a challenge contribution
+   * @param organizationId The unique identifier of the organization.
+   * @param role A challenge contribution role.
    * @return ResponseEntity&lt;ChallengeContribution&gt;
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
    */
   public ResponseEntity<ChallengeContribution> getChallengeContributionWithHttpInfo(
     @jakarta.annotation.Nonnull Long challengeId,
-    @jakarta.annotation.Nonnull Long challengeContributionId
+    @jakarta.annotation.Nonnull Long organizationId,
+    @jakarta.annotation.Nonnull ChallengeContributionRole role
   ) throws RestClientResponseException {
     ParameterizedTypeReference<ChallengeContribution> localVarReturnType =
       new ParameterizedTypeReference<>() {};
-    return getChallengeContributionRequestCreation(challengeId, challengeContributionId).toEntity(
+    return getChallengeContributionRequestCreation(challengeId, organizationId, role).toEntity(
       localVarReturnType
     );
   }
@@ -581,15 +508,17 @@ public class ChallengeContributionApi {
    * <p><b>404</b> - The specified resource was not found
    * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
    * @param challengeId The unique identifier of the challenge.
-   * @param challengeContributionId The unique identifier of a challenge contribution
+   * @param organizationId The unique identifier of the organization.
+   * @param role A challenge contribution role.
    * @return ResponseSpec
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
    */
   public ResponseSpec getChallengeContributionWithResponseSpec(
     @jakarta.annotation.Nonnull Long challengeId,
-    @jakarta.annotation.Nonnull Long challengeContributionId
+    @jakarta.annotation.Nonnull Long organizationId,
+    @jakarta.annotation.Nonnull ChallengeContributionRole role
   ) throws RestClientResponseException {
-    return getChallengeContributionRequestCreation(challengeId, challengeContributionId);
+    return getChallengeContributionRequestCreation(challengeId, organizationId, role);
   }
 
   /**
@@ -702,184 +631,5 @@ public class ChallengeContributionApi {
     @jakarta.annotation.Nonnull Long challengeId
   ) throws RestClientResponseException {
     return listChallengeContributionsRequestCreation(challengeId);
-  }
-
-  /**
-   * Update an existing challenge contribution
-   * Updates an existing contribution record for a challenge. Only the organization ID and role can be modified.
-   * <p><b>200</b> - Contribution updated successfully
-   * <p><b>400</b> - Invalid request
-   * <p><b>401</b> - Unauthorized
-   * <p><b>403</b> - The user does not have the permission to perform this action
-   * <p><b>404</b> - The specified resource was not found
-   * <p><b>409</b> - The request conflicts with current state of the target resource
-   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
-   * @param challengeId The unique identifier of the challenge.
-   * @param challengeContributionId The unique identifier of a challenge contribution
-   * @param challengeContributionUpdateRequest The challengeContributionUpdateRequest parameter
-   * @return ChallengeContribution
-   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
-   */
-  private ResponseSpec updateChallengeContributionRequestCreation(
-    @jakarta.annotation.Nonnull Long challengeId,
-    @jakarta.annotation.Nonnull Long challengeContributionId,
-    @jakarta.annotation.Nonnull ChallengeContributionUpdateRequest challengeContributionUpdateRequest
-  ) throws RestClientResponseException {
-    Object postBody = challengeContributionUpdateRequest;
-    // verify the required parameter 'challengeId' is set
-    if (challengeId == null) {
-      throw new RestClientResponseException(
-        "Missing the required parameter 'challengeId' when calling updateChallengeContribution",
-        HttpStatus.BAD_REQUEST.value(),
-        HttpStatus.BAD_REQUEST.getReasonPhrase(),
-        null,
-        null,
-        null
-      );
-    }
-    // verify the required parameter 'challengeContributionId' is set
-    if (challengeContributionId == null) {
-      throw new RestClientResponseException(
-        "Missing the required parameter 'challengeContributionId' when calling updateChallengeContribution",
-        HttpStatus.BAD_REQUEST.value(),
-        HttpStatus.BAD_REQUEST.getReasonPhrase(),
-        null,
-        null,
-        null
-      );
-    }
-    // verify the required parameter 'challengeContributionUpdateRequest' is set
-    if (challengeContributionUpdateRequest == null) {
-      throw new RestClientResponseException(
-        "Missing the required parameter 'challengeContributionUpdateRequest' when calling updateChallengeContribution",
-        HttpStatus.BAD_REQUEST.value(),
-        HttpStatus.BAD_REQUEST.getReasonPhrase(),
-        null,
-        null,
-        null
-      );
-    }
-    // create path and map variables
-    final Map<String, Object> pathParams = new HashMap<>();
-
-    pathParams.put("challengeId", challengeId);
-    pathParams.put("challengeContributionId", challengeContributionId);
-
-    final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-    final HttpHeaders headerParams = new HttpHeaders();
-    final MultiValueMap<String, String> cookieParams = new LinkedMultiValueMap<>();
-    final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<>();
-
-    final String[] localVarAccepts = { "application/json", "application/problem+json" };
-    final List<MediaType> localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-    final String[] localVarContentTypes = { "application/json" };
-    final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "apiBearerAuth" };
-
-    ParameterizedTypeReference<ChallengeContribution> localVarReturnType =
-      new ParameterizedTypeReference<>() {};
-    return apiClient.invokeAPI(
-      "/challenges/{challengeId}/contributions/{challengeContributionId}",
-      HttpMethod.PUT,
-      pathParams,
-      queryParams,
-      postBody,
-      headerParams,
-      cookieParams,
-      formParams,
-      localVarAccept,
-      localVarContentType,
-      localVarAuthNames,
-      localVarReturnType
-    );
-  }
-
-  /**
-   * Update an existing challenge contribution
-   * Updates an existing contribution record for a challenge. Only the organization ID and role can be modified.
-   * <p><b>200</b> - Contribution updated successfully
-   * <p><b>400</b> - Invalid request
-   * <p><b>401</b> - Unauthorized
-   * <p><b>403</b> - The user does not have the permission to perform this action
-   * <p><b>404</b> - The specified resource was not found
-   * <p><b>409</b> - The request conflicts with current state of the target resource
-   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
-   * @param challengeId The unique identifier of the challenge.
-   * @param challengeContributionId The unique identifier of a challenge contribution
-   * @param challengeContributionUpdateRequest The challengeContributionUpdateRequest parameter
-   * @return ChallengeContribution
-   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
-   */
-  public ChallengeContribution updateChallengeContribution(
-    @jakarta.annotation.Nonnull Long challengeId,
-    @jakarta.annotation.Nonnull Long challengeContributionId,
-    @jakarta.annotation.Nonnull ChallengeContributionUpdateRequest challengeContributionUpdateRequest
-  ) throws RestClientResponseException {
-    ParameterizedTypeReference<ChallengeContribution> localVarReturnType =
-      new ParameterizedTypeReference<>() {};
-    return updateChallengeContributionRequestCreation(
-      challengeId,
-      challengeContributionId,
-      challengeContributionUpdateRequest
-    ).body(localVarReturnType);
-  }
-
-  /**
-   * Update an existing challenge contribution
-   * Updates an existing contribution record for a challenge. Only the organization ID and role can be modified.
-   * <p><b>200</b> - Contribution updated successfully
-   * <p><b>400</b> - Invalid request
-   * <p><b>401</b> - Unauthorized
-   * <p><b>403</b> - The user does not have the permission to perform this action
-   * <p><b>404</b> - The specified resource was not found
-   * <p><b>409</b> - The request conflicts with current state of the target resource
-   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
-   * @param challengeId The unique identifier of the challenge.
-   * @param challengeContributionId The unique identifier of a challenge contribution
-   * @param challengeContributionUpdateRequest The challengeContributionUpdateRequest parameter
-   * @return ResponseEntity&lt;ChallengeContribution&gt;
-   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
-   */
-  public ResponseEntity<ChallengeContribution> updateChallengeContributionWithHttpInfo(
-    @jakarta.annotation.Nonnull Long challengeId,
-    @jakarta.annotation.Nonnull Long challengeContributionId,
-    @jakarta.annotation.Nonnull ChallengeContributionUpdateRequest challengeContributionUpdateRequest
-  ) throws RestClientResponseException {
-    ParameterizedTypeReference<ChallengeContribution> localVarReturnType =
-      new ParameterizedTypeReference<>() {};
-    return updateChallengeContributionRequestCreation(
-      challengeId,
-      challengeContributionId,
-      challengeContributionUpdateRequest
-    ).toEntity(localVarReturnType);
-  }
-
-  /**
-   * Update an existing challenge contribution
-   * Updates an existing contribution record for a challenge. Only the organization ID and role can be modified.
-   * <p><b>200</b> - Contribution updated successfully
-   * <p><b>400</b> - Invalid request
-   * <p><b>401</b> - Unauthorized
-   * <p><b>403</b> - The user does not have the permission to perform this action
-   * <p><b>404</b> - The specified resource was not found
-   * <p><b>409</b> - The request conflicts with current state of the target resource
-   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
-   * @param challengeId The unique identifier of the challenge.
-   * @param challengeContributionId The unique identifier of a challenge contribution
-   * @param challengeContributionUpdateRequest The challengeContributionUpdateRequest parameter
-   * @return ResponseSpec
-   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
-   */
-  public ResponseSpec updateChallengeContributionWithResponseSpec(
-    @jakarta.annotation.Nonnull Long challengeId,
-    @jakarta.annotation.Nonnull Long challengeContributionId,
-    @jakarta.annotation.Nonnull ChallengeContributionUpdateRequest challengeContributionUpdateRequest
-  ) throws RestClientResponseException {
-    return updateChallengeContributionRequestCreation(
-      challengeId,
-      challengeContributionId,
-      challengeContributionUpdateRequest
-    );
   }
 }

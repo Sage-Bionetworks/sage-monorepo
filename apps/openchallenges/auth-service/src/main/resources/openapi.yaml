@@ -3,6 +3,7 @@ info:
   contact:
     name: Support
     url: https://github.com/Sage-Bionetworks/sage-monorepo
+  description: 'Discover, explore, and contribute to open biomedical challenges.'
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -15,8 +16,12 @@ servers:
 tags:
   - description: Operations about authentication
     name: Authentication
+    x-audience:
+      - public
   - description: Operations about API key management
     name: API Key
+    x-audience:
+      - public
 paths:
   /auth/login:
     post:
@@ -42,6 +47,8 @@ paths:
       summary: User login
       tags:
         - Authentication
+      x-audience:
+        - public
       x-content-type: application/json
       x-accepts:
         - application/json
@@ -70,6 +77,8 @@ paths:
       summary: List API keys
       tags:
         - API Key
+      x-audience:
+        - public
       x-accepts:
         - application/json
         - application/problem+json
@@ -102,6 +111,8 @@ paths:
       summary: Create API key
       tags:
         - API Key
+      x-audience:
+        - public
       x-content-type: application/json
       x-accepts:
         - application/json
@@ -136,6 +147,8 @@ paths:
       summary: Delete API key
       tags:
         - API Key
+      x-audience:
+        - public
       x-accepts:
         - application/problem+json
       x-tags:
@@ -164,6 +177,8 @@ paths:
       summary: Validate API key
       tags:
         - Authentication
+      x-audience:
+        - internal
       x-content-type: application/json
       x-accepts:
         - application/json
@@ -238,6 +253,7 @@ components:
             - admin
             - user
             - readonly
+            - service
           example: admin
           type: string
       type: object
@@ -398,6 +414,7 @@ components:
             - admin
             - user
             - readonly
+            - service
           example: admin
           type: string
         scopes:

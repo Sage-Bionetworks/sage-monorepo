@@ -4,11 +4,12 @@ get:
   tags:
     - Organization
   summary: Get an organization
-  description: Returns the organization specified
+  description: Returns the organization identified by its login or ID.
   operationId: getOrganization
+  x-audience: [public]
   responses:
     '200':
-      description: An organization
+      description: Organization retrieved successfully
       content:
         application/json:
           schema:
@@ -17,15 +18,49 @@ get:
       $ref: ../../components/responses/NotFound.yaml
     '500':
       $ref: ../../components/responses/InternalServerError.yaml
+put:
+  tags:
+    - Organization
+  summary: Update an existing organization
+  description: Updates an existing organization.
+  operationId: updateOrganization
+  x-audience: [public]
+  security:
+    - apiBearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/OrganizationUpdateRequest.yaml
+  responses:
+    '200':
+      description: Organization updated successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/Organization.yaml
+    '400':
+      $ref: ../../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../components/responses/NotFound.yaml
+    '409':
+      $ref: ../../components/responses/Conflict.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml
 delete:
   tags:
     - Organization
   summary: Delete an organization
-  description: Deletes the organization specified
+  description: Deletes the organization specified by its login or ID.
   operationId: deleteOrganization
+  x-audience: [public]
   security:
-    - apiBearerAuth:
-        - organizations:delete
+    - apiBearerAuth: []
   responses:
     '204':
       description: Organization successfully deleted

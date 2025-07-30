@@ -19,14 +19,14 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * The direction to sort the results by.
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public enum OrganizationDirectionDto {
   
   ASC("asc"),
   
   DESC("desc");
 
-  private String value;
+  private final String value;
 
   OrganizationDirectionDto(String value) {
     this.value = value;

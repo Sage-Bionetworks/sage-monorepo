@@ -8,11 +8,14 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "redocly bundle --output openapi/auth.openapi.yaml src/auth.openapi.yaml",
-          "redocly bundle --output openapi/base.openapi.yaml src/base.openapi.yaml",
-          "redocly bundle --output openapi/challenge.openapi.yaml src/challenge.openapi.yaml",
-          "redocly bundle --output openapi/image.openapi.yaml src/image.openapi.yaml",
-          "redocly bundle --output openapi/organization.openapi.yaml src/organization.openapi.yaml"
+          "redocly bundle auth-service --output openapi/auth-service.openapi.yaml",
+          "redocly bundle auth-public --output openapi/auth-public.openapi.yaml",
+          "redocly bundle challenge-service --output openapi/challenge-service.openapi.yaml",
+          "redocly bundle challenge-public --output openapi/challenge-public.openapi.yaml",
+          "redocly bundle image-service --output openapi/image-service.openapi.yaml",
+          "redocly bundle image-public --output openapi/image-public.openapi.yaml",
+          "redocly bundle organization-service --output openapi/organization-service.openapi.yaml",
+          "redocly bundle organization-public --output openapi/organization-public.openapi.yaml"
         ],
         "parallel": true,
         "cwd": "{projectRoot}"
@@ -21,8 +24,12 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "openapi-merge-cli --config openapi-merge.yaml",
-        "cwd": "{projectRoot}"
+        "commands": [
+          "redocly join openapi/*-public.openapi.yaml --output openapi/openapi.yaml",
+          "redocly bundle openchallenges-public --output openapi/openapi.yaml"
+        ],
+        "cwd": "{projectRoot}",
+        "parallel": false
       },
       "dependsOn": ["build-individuals"]
     },
@@ -32,8 +39,14 @@
         "command": "redocly lint --config redocly.yaml {projectName}"
       },
       "dependsOn": ["build"]
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rm -fr openapi/*",
+        "cwd": "{projectRoot}"
+      }
     }
   },
-  "tags": ["language:openapi"],
-  "implicitDependencies": []
+  "tags": ["language:openapi"]
 }

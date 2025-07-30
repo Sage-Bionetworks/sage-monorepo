@@ -3,6 +3,7 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 import { DatasetService } from './api/dataset.service';
+import { HealthCheckService } from './api/healthCheck.service';
 
 @NgModule({
   imports: [],

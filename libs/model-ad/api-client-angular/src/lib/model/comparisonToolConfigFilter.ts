@@ -1,5 +1,5 @@
 /**
- * MODEL-AD REST API
+ * Model-AD API
  *
  *
  *

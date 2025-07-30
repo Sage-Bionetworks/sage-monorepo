@@ -1,7 +1,0 @@
-inputs:
-  # info is defined in base OA definition. This file must be listed first.
-  - inputFile: openapi/base.openapi.yaml
-  # list files in alphanumeric order
-  - inputFile: openapi/dataset.openapi.yaml
-  - inputFile: openapi/user.openapi.yaml
-output: openapi/openapi.yaml

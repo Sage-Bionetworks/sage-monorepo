@@ -33,6 +33,8 @@ public class BasicErrorDto {
 
   private @Nullable String type;
 
+  private @Nullable String instance;
+
   public BasicErrorDto() {
     super();
   }
@@ -125,6 +127,26 @@ public class BasicErrorDto {
     this.type = type;
   }
 
+  public BasicErrorDto instance(String instance) {
+    this.instance = instance;
+    return this;
+  }
+
+  /**
+   * An absolute URI that identifies the specific occurrence of the problem
+   * @return instance
+   */
+  
+  @Schema(name = "instance", description = "An absolute URI that identifies the specific occurrence of the problem", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("instance")
+  public String getInstance() {
+    return instance;
+  }
+
+  public void setInstance(String instance) {
+    this.instance = instance;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -137,12 +159,13 @@ public class BasicErrorDto {
     return Objects.equals(this.title, basicError.title) &&
         Objects.equals(this.status, basicError.status) &&
         Objects.equals(this.detail, basicError.detail) &&
-        Objects.equals(this.type, basicError.type);
+        Objects.equals(this.type, basicError.type) &&
+        Objects.equals(this.instance, basicError.instance);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(title, status, detail, type);
+    return Objects.hash(title, status, detail, type, instance);
   }
 
   @Override
@@ -153,6 +176,7 @@ public class BasicErrorDto {
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    detail: ").append(toIndentedString(detail)).append("\n");
     sb.append("    type: ").append(toIndentedString(type)).append("\n");
+    sb.append("    instance: ").append(toIndentedString(instance)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -185,6 +209,7 @@ public class BasicErrorDto {
       this.instance.setStatus(value.status);
       this.instance.setDetail(value.detail);
       this.instance.setType(value.type);
+      this.instance.setInstance(value.instance);
       return this;
     }
 
@@ -205,6 +230,11 @@ public class BasicErrorDto {
     
     public BasicErrorDto.Builder type(String type) {
       this.instance.type(type);
+      return this;
+    }
+    
+    public BasicErrorDto.Builder instance(String instance) {
+      this.instance.instance(instance);
       return this;
     }
     

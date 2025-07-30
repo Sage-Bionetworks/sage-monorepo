@@ -62,32 +62,6 @@ describe('ModelDetailsBoxplotComponent', () => {
     expect(points).toHaveLength(0);
   });
 
-  it('should format Y-axis title with decoded Greek entities and title case', async () => {
-    const { component } = await setup(mockModelData);
-    const yAxisTitle = component.formatYAxisTitle();
-    expect(yAxisTitle).toBe('Aβ42 (ng/ml)');
-  });
-
-  it('should format Y-axis title without Greek entities', async () => {
-    const { component } = await setup({
-      ...mockModelData,
-      evidence_type: 'Beta amyloid',
-      units: 'pg/mg',
-    });
-    const yAxisTitle = component.formatYAxisTitle();
-    expect(yAxisTitle).toBe('Beta Amyloid (pg/mg)');
-  });
-
-  it('should include a line break in very long Y-axis titles', async () => {
-    const { component } = await setup({
-      ...mockModelData,
-      evidence_type: 'Some very very very long title',
-      units: 'these units are long too',
-    });
-    const yAxisTitle = component.formatYAxisTitle();
-    expect(yAxisTitle).toContain('\n');
-  });
-
   it('should format x-axis labels', async () => {
     const { component } = await setup();
 

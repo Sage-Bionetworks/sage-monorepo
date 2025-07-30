@@ -1,5 +1,5 @@
 /**
- * OpenChallenges REST API
+ * OpenChallenges API
  *
  *
  *
@@ -21,7 +21,7 @@ export interface SimpleChallengePlatform {
    */
   slug: string;
   /**
-   * The name of the challenge platform.
+   * The display name of the challenge platform.
    */
   name: string;
 }

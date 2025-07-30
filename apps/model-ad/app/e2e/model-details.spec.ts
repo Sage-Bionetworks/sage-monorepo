@@ -170,3 +170,27 @@ test.describe('model details - model with special characters', () => {
     );
   });
 });
+
+test.describe('model details - boxplots selector - table of contents', () => {
+  test('clicking on table of contents link scrolls to appropriate section', async ({ page }) => {
+    const model = '3xTg-AD';
+    await page.goto(`/models/${model}/biomarkers`);
+    await expect(page.getByRole('heading', { level: 1, name: model })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 2, name: 'Table of Contents' })).toBeVisible();
+
+    const toc = page.locator('.table-of-contents-container');
+    const tocLinks = toc.getByRole('button');
+    const tocLinksCount = await tocLinks.count();
+
+    for (let i = 0; i < tocLinksCount; i++) {
+      await test.step(`validate link ${i}`, async () => {
+        const tocLink = tocLinks.nth(i);
+        const tocLinkName = (await tocLink.textContent()) ?? '';
+        await tocLink.click();
+        await expect(
+          page.getByRole('heading', { level: 2, name: tocLinkName, exact: true }),
+        ).toBeInViewport();
+      });
+    }
+  });
+});

@@ -2,26 +2,36 @@ package org.sagebionetworks.openchallenges.challenge.service.service;
 
 import feign.FeignException;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 import org.sagebionetworks.openchallenges.challenge.service.client.OrganizationServiceClient;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeContributionNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeNotFoundException;
+import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeParticipationDeleteException;
+import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeParticipationNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.DuplicateContributionException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.OrganizationNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionDto;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionUpdateRequestDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionRoleDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionsPageDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeContributionEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengeContributionMapper;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeContributionRepository;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ChallengeContributionService {
+
+  private static final Logger logger = LoggerFactory.getLogger(ChallengeContributionService.class);
 
   private final ChallengeContributionRepository challengeContributionRepository;
   private final ChallengeRepository challengeRepository;
@@ -42,7 +52,7 @@ public class ChallengeContributionService {
 
   public ChallengeContributionsPageDto listChallengeContributions(Long challengeId) {
     List<ChallengeContributionEntity> entities =
-      challengeContributionRepository.findAllByChallenge_id(challengeId);
+      challengeContributionRepository.findAllByChallengeId(challengeId);
     List<ChallengeContributionDto> contributions = challengeContributionMapper.convertToDtoList(
       entities
     );
@@ -58,7 +68,11 @@ public class ChallengeContributionService {
       .build();
   }
 
-  public ChallengeContributionDto getChallengeContribution(Long challengeId, Long challengeContributionId) {
+  public ChallengeContributionDto getChallengeContribution(
+    Long challengeId,
+    Long organizationId,
+    ChallengeContributionRoleDto role
+  ) {
     // Verify the challenge exists
     challengeRepository
       .findById(challengeId)
@@ -68,31 +82,111 @@ public class ChallengeContributionService {
 
     // Find the contribution
     ChallengeContributionEntity contribution = challengeContributionRepository
-      .findById(challengeContributionId)
+      .findByChallengeIdAndOrganizationIdAndRole(challengeId, organizationId, role.getValue())
       .orElseThrow(() ->
         new ChallengeContributionNotFoundException(
-          "Challenge contribution not found with id: " + challengeContributionId
+          "Challenge contribution not found for challenge " +
+          challengeId +
+          ", organization " +
+          organizationId +
+          ", and role " +
+          role.getValue()
         )
       );
-
-    // Verify the contribution belongs to the specified challenge
-    if (!contribution.getChallenge().getId().equals(challengeId)) {
-      throw new ChallengeContributionNotFoundException(
-        "Challenge contribution " + challengeContributionId + " does not belong to challenge " + challengeId
-      );
-    }
 
     // Return the contribution as DTO
     return challengeContributionMapper.convertToDto(contribution);
   }
 
   @Transactional
-  public void deleteAllChallengeContributions(Long challengeId) {
+  public void deleteChallengeContributions(Long challengeId) {
+    // First, fetch all existing contributions for this challenge
+    List<ChallengeContributionEntity> contributions =
+      challengeContributionRepository.findAllByChallengeId(challengeId);
+
+    if (!contributions.isEmpty()) {
+      // Delete all challenge participations concurrently using a thread pool
+      ExecutorService executor = Executors.newFixedThreadPool(Math.min(contributions.size(), 10)); // Limit to 10 concurrent threads
+
+      try {
+        List<CompletableFuture<Void>> deletionFutures = contributions
+          .stream()
+          .map(contribution ->
+            CompletableFuture.runAsync(
+              () -> {
+                try {
+                  organizationServiceClient.deleteChallengeParticipation(
+                    String.valueOf(contribution.getOrganizationId()),
+                    challengeId,
+                    contribution.getRole()
+                  );
+                  logger.debug(
+                    "Successfully deleted challenge participation for challengeId: {}, organizationId: {}, role: {}",
+                    challengeId,
+                    contribution.getOrganizationId(),
+                    contribution.getRole()
+                  );
+                } catch (FeignException.NotFound e) {
+                  logger.error(
+                    "Challenge participation not found for challengeId: {}, organizationId: {}, role: {}. Error: {}",
+                    challengeId,
+                    contribution.getOrganizationId(),
+                    contribution.getRole(),
+                    e.getMessage()
+                  );
+                  throw new ChallengeParticipationNotFoundException(
+                    "Challenge participation for organization " +
+                    contribution.getOrganizationId() +
+                    " in challenge " +
+                    challengeId +
+                    " with role " +
+                    contribution.getRole() +
+                    " not found. Cannot delete."
+                  );
+                } catch (FeignException e) {
+                  logger.error(
+                    "Failed to delete challenge participation for challengeId: {}, organizationId: {}, role: {}. Error: {}",
+                    challengeId,
+                    contribution.getOrganizationId(),
+                    contribution.getRole(),
+                    e.getMessage()
+                  );
+                  throw new ChallengeParticipationDeleteException(
+                    "Failed to delete challenge participation for organization " +
+                    contribution.getOrganizationId() +
+                    " in challenge " +
+                    challengeId +
+                    " with role " +
+                    contribution.getRole() +
+                    ". Reason: " +
+                    e.getMessage()
+                  );
+                }
+              },
+              executor
+            )
+          )
+          .collect(Collectors.toList());
+
+        // Wait for all deletion operations to complete
+        CompletableFuture.allOf(deletionFutures.toArray(new CompletableFuture[0])).join();
+
+        logger.info(
+          "Successfully deleted {} challenge participations for challengeId: {}",
+          contributions.size(),
+          challengeId
+        );
+      } finally {
+        executor.shutdown();
+      }
+    }
+
+    // After all participations are deleted, delete the contributions from the database
     challengeContributionRepository.deleteByChallengeId(challengeId);
   }
 
   @Transactional
-  public ChallengeContributionDto addChallengeContribution(
+  public ChallengeContributionDto createChallengeContribution(
     Long challengeId,
     ChallengeContributionCreateRequestDto request
   ) {
@@ -152,10 +246,10 @@ public class ChallengeContributionService {
   }
 
   @Transactional
-  public ChallengeContributionDto updateChallengeContribution(
+  public void deleteChallengeContribution(
     Long challengeId,
-    Long challengeContributionId,
-    ChallengeContributionUpdateRequestDto request
+    Long organizationId,
+    ChallengeContributionRoleDto role
   ) {
     // Verify the challenge exists
     challengeRepository
@@ -166,96 +260,61 @@ public class ChallengeContributionService {
 
     // Find the existing contribution
     ChallengeContributionEntity existingContribution = challengeContributionRepository
-      .findById(challengeContributionId)
+      .findByChallengeIdAndOrganizationIdAndRole(challengeId, organizationId, role.getValue())
       .orElseThrow(() ->
         new ChallengeContributionNotFoundException(
-          "Challenge contribution not found with id: " + challengeContributionId
+          "Challenge contribution not found for challenge " +
+          challengeId +
+          ", organization " +
+          organizationId +
+          ", and role " +
+          role.getValue()
         )
       );
 
-    // Verify the contribution belongs to the specified challenge
-    if (!existingContribution.getChallenge().getId().equals(challengeId)) {
-      throw new ChallengeContributionNotFoundException(
-        "Challenge contribution " +
-        challengeContributionId +
-        " does not belong to challenge " +
-        challengeId
-      );
-    }
-
-    // Validate organization exists by querying the organization service
+    // Delete this organization's challenge participation
     try {
-      organizationServiceClient.getOrganization(request.getOrganizationId());
+      organizationServiceClient.deleteChallengeParticipation(
+        String.valueOf(existingContribution.getOrganizationId()),
+        challengeId,
+        existingContribution.getRole()
+      );
     } catch (FeignException.NotFound e) {
-      throw new OrganizationNotFoundException(
-        "Organization not found with id: " + request.getOrganizationId()
+      throw new ChallengeParticipationNotFoundException(
+        "Challenge participation for organization " +
+        existingContribution.getOrganizationId() +
+        " in challenge " +
+        challengeId +
+        " with role " +
+        existingContribution.getRole() +
+        " not found. Cannot delete."
       );
     } catch (FeignException e) {
+      if (e.status() == 401) {
+        throw new ChallengeParticipationDeleteException(
+          "Failed to delete challenge participation for organization " +
+          existingContribution.getOrganizationId() +
+          " due to authentication error (401 Unauthorized). " +
+          "Reason: " +
+          e.getMessage()
+        );
+      }
       throw new RuntimeException(
-        "Failed to validate organization with id: " +
-        request.getOrganizationId() +
+        "Failed to delete challenge participation for organization " +
+        existingContribution.getOrganizationId() +
         ". Reason: " +
         e.getMessage(),
         e
       );
     }
 
-    // Update the contribution
-    existingContribution.setOrganizationId(request.getOrganizationId());
-    existingContribution.setRole(request.getRole().getValue());
-
-    try {
-      // Save the updated entity
-      ChallengeContributionEntity updatedEntity = challengeContributionRepository.save(
-        existingContribution
-      );
-
-      // Return the updated contribution as DTO
-      return challengeContributionMapper.convertToDto(updatedEntity);
-    } catch (DataIntegrityViolationException e) {
-      // Check if this is the unique constraint violation
-      if (e.getMessage() != null && e.getMessage().contains("unique_contribution")) {
-        throw new DuplicateContributionException(
-          String.format(
-            "A contribution with role '%s' already exists for organization %d in challenge %d.",
-            request.getRole().getValue(),
-            request.getOrganizationId(),
-            challengeId
-          ),
-          e
-        );
-      }
-      // Re-throw the original exception if it's not the constraint we're looking for
-      throw e;
-    }
-  }
-
-  @Transactional
-  public void deleteChallengeContribution(Long challengeId, Long challengeContributionId) {
-    // Verify the challenge exists
-    challengeRepository
-      .findById(challengeId)
-      .orElseThrow(() ->
-        new ChallengeNotFoundException("Challenge not found with id: " + challengeId)
-      );
-
-    // Find the existing contribution
-    ChallengeContributionEntity existingContribution = challengeContributionRepository
-      .findById(challengeContributionId)
-      .orElseThrow(() ->
-        new ChallengeContributionNotFoundException(
-          "Challenge contribution not found with id: " + challengeContributionId
-        )
-      );
-
-    // Verify the contribution belongs to the specified challenge
-    if (!existingContribution.getChallenge().getId().equals(challengeId)) {
-      throw new ChallengeContributionNotFoundException(
-        "Challenge contribution " + challengeContributionId + " does not belong to challenge " + challengeId
-      );
-    }
-
     // Delete the contribution
     challengeContributionRepository.delete(existingContribution);
+    logger.debug(
+      "Successfully deleted challenge contribution for challengeId: {}, organizationId: {}, role: {}",
+      organizationId,
+      challengeId,
+      role
+    );
   }
 }
