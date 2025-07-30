@@ -46,6 +46,41 @@
 
 .table-of-contents-container {
   box-shadow: 0 4px 4px 0 rgb(0 0 0 / 25%);
+  position: sticky;
+  top: var(--panel-nav-height);
+  z-index: 10;
+  background-color: white;
+
+  h2 {
+    padding: 20px 0 25px;
+    margin-bottom: 0;
+  }
+
+  .table-of-contents {
+    list-style: none;
+    padding: 0;
+
+    li {
+      padding-bottom: 10px;
+
+      button {
+        background: none;
+        border: none;
+        padding: 0;
+        color: var(--color-text);
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 20px;
+        cursor: pointer;
+        text-decoration: underline;
+
+        &:hover,
+        &:focus {
+          color: var(--color-action-primary);
+        }
+      }
+    }
+  }
 }
 
 .boxplots-separator {
