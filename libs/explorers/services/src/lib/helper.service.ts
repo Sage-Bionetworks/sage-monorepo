@@ -84,4 +84,8 @@ export class HelperService {
         .replace(/\)/g, '%29')
     );
   }
+
+  getNumberFromCSSValue(cssValue: string) {
+    return parseFloat(cssValue);
+  }
 }

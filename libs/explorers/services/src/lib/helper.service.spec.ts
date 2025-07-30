@@ -43,4 +43,10 @@ describe('Service: Helper', () => {
       '/models/5xFAD %28IU%2FJax%2FPitt%29',
     );
   });
+
+  it('should get number from CSS value', () => {
+    expect(helperService.getNumberFromCSSValue('12px')).toBe(12);
+    expect(helperService.getNumberFromCSSValue('0.4px')).toBe(0.4);
+    expect(helperService.getNumberFromCSSValue('-120px')).toBe(-120);
+  });
 });

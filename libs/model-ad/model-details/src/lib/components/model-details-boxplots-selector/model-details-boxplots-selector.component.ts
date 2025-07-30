@@ -1,6 +1,16 @@
-import { Component, computed, effect, ElementRef, input, signal, ViewChild } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
+import { HelperService } from '@sagebionetworks/explorers/services';
 import { DecodeGreekEntityPipe, ModalLinkComponent } from '@sagebionetworks/explorers/util';
 import { IndividualData, ModelData } from '@sagebionetworks/model-ad/api-client-angular';
 import { SelectModule } from 'primeng/select';
@@ -19,6 +29,8 @@ import { ModelDetailsBoxplotsGridComponent } from '../model-details-boxplots-gri
   styleUrls: ['./model-details-boxplots-selector.component.scss'],
 })
 export class ModelDetailsBoxplotsSelectorComponent {
+  private readonly helperService = inject(HelperService);
+
   @ViewChild('boxplotsContainer', { static: false }) boxplotsContainer!: ElementRef<HTMLElement>;
 
   title = input.required<string>();
@@ -99,14 +111,13 @@ export class ModelDetailsBoxplotsSelectorComponent {
         const tocElement = document.querySelector('.table-of-contents-container');
         const tocHeight = tocElement ? tocElement.getBoundingClientRect().height : 0;
 
-        const panelNavHeight = parseInt(
+        const panelNavHeight = this.helperService.getNumberFromCSSValue(
           getComputedStyle(document.documentElement).getPropertyValue('--panel-nav-height'),
-          10,
         );
 
         const yOffset = -(tocHeight + panelNavHeight + this.SCROLL_PADDING);
-
-        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        const elementOffset = this.helperService.getOffset(element);
+        const y = elementOffset.top + yOffset;
         window.scrollTo({ top: y, behavior: 'smooth' });
       }
     }
