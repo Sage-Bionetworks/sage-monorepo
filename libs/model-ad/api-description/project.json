@@ -4,12 +4,24 @@
   "sourceRoot": "libs/model-ad/api-description/src",
   "projectType": "library",
   "targets": {
+    "build-individuals": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "redocly bundle api-public --output openapi/api-public.openapi.yaml",
+          "redocly bundle api-service --output openapi/api-service.openapi.yaml"
+        ],
+        "cwd": "{projectRoot}"
+      }
+    },
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "redocly bundle --output openapi/openapi.yaml src/openapi.yaml",
-        "cwd": "{projectRoot}"
-      }
+        "commands": ["redocly bundle model-ad-public --output openapi/openapi.yaml"],
+        "cwd": "{projectRoot}",
+        "parallel": false
+      },
+      "dependsOn": ["build-individuals"]
     },
     "lint": {
       "executor": "nx:run-commands",
@@ -17,6 +29,13 @@
         "command": "redocly lint --config redocly.yaml {projectName}"
       },
       "dependsOn": ["build"]
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "rm -fr openapi/*",
+        "cwd": "{projectRoot}"
+      }
     }
   },
   "tags": ["language:openapi", "scope:model-ad"]
