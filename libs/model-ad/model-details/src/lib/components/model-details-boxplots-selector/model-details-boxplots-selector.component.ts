@@ -1,4 +1,6 @@
+import { Location } from '@angular/common';
 import {
+  afterNextRender,
   Component,
   computed,
   effect,
@@ -9,6 +11,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { HelperService } from '@sagebionetworks/explorers/services';
 import { DecodeGreekEntityPipe, ModalLinkComponent } from '@sagebionetworks/explorers/util';
@@ -30,6 +33,9 @@ import { ModelDetailsBoxplotsGridComponent } from '../model-details-boxplots-gri
 })
 export class ModelDetailsBoxplotsSelectorComponent {
   private readonly helperService = inject(HelperService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly location = inject(Location);
 
   @ViewChild('boxplotsContainer', { static: false }) boxplotsContainer!: ElementRef<HTMLElement>;
 
@@ -52,6 +58,7 @@ export class ModelDetailsBoxplotsSelectorComponent {
   selectedTissueOption = signal('');
 
   private readonly SCROLL_PADDING = 15;
+  isInitialScrollDone = false;
 
   constructor() {
     effect(() => {
@@ -59,6 +66,10 @@ export class ModelDetailsBoxplotsSelectorComponent {
       if (options.length > 0 && !this.selectedTissueOption()) {
         this.selectedTissueOption.set(options[0]);
       }
+    });
+
+    afterNextRender(() => {
+      this.initialScrollToSection();
     });
   }
 
@@ -90,6 +101,13 @@ export class ModelDetailsBoxplotsSelectorComponent {
     );
   }
 
+  initialScrollToSection() {
+    if (typeof window !== 'undefined' && !this.isInitialScrollDone) {
+      const hash = window.location.hash.slice(1);
+      this.isInitialScrollDone = this.scrollToSection(hash, false);
+    }
+  }
+
   generateAnchorId(evidenceType: string): string {
     return evidenceType
       .toLowerCase()
@@ -97,7 +115,13 @@ export class ModelDetailsBoxplotsSelectorComponent {
       .replace(/-+/g, '-');
   }
 
-  scrollToSection(anchorId: string): void {
+  updateUrlFragment(fragment: string): void {
+    const currentPath = this.location.path();
+    const basePath = currentPath.split('#')[0];
+    this.location.replaceState(`${basePath}#${fragment}`);
+  }
+
+  scrollToSection(anchorId: string, updateUrl = true): boolean {
     if (
       typeof document !== 'undefined' &&
       typeof window !== 'undefined' &&
@@ -119,7 +143,12 @@ export class ModelDetailsBoxplotsSelectorComponent {
         const elementOffset = this.helperService.getOffset(element);
         const y = elementOffset.top + yOffset;
         window.scrollTo({ top: y, behavior: 'smooth' });
+
+        if (updateUrl) this.updateUrlFragment(anchorId);
+
+        return true;
       }
     }
+    return false;
   }
 }
