@@ -193,4 +193,49 @@ test.describe('model details - boxplots selector - table of contents', () => {
       });
     }
   });
+
+  test('appropriate section is shown when url includes an evidence type fragment', async ({
+    page,
+  }) => {
+    const model = 'Abca7*V1599M';
+    const fragment = 'soluble-a-beta-40';
+    const section = 'Soluble Aβ40';
+    await page.goto(`/models/${model}/biomarkers#${fragment}`);
+    await expect(page.getByRole('heading', { level: 1, name: model })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { level: 2, name: section, exact: true }),
+    ).toBeInViewport();
+  });
+
+  test('clicking on a section adds fragment to url', async ({ page }) => {
+    const model = 'Abca7*V1599M';
+    const basePath = `/models/${model}/biomarkers`;
+    const section = 'NfL';
+    const fragment = 'nfl';
+
+    await page.goto(basePath);
+    await expect(page.getByRole('heading', { level: 1, name: model })).toBeVisible();
+
+    const nflButton = page.getByRole('button', { name: section });
+    await nflButton.click();
+
+    await expect(page.getByRole('heading', { level: 2, name: section })).toBeInViewport();
+    await page.waitForURL(`${basePath}#${fragment}`);
+  });
+
+  test('clicking on a section updates fragment in url', async ({ page }) => {
+    const model = 'Abca7*V1599M';
+    const basePath = `/models/${model}/biomarkers`;
+    const section = 'NfL';
+    const fragment = 'nfl';
+
+    await page.goto(`${basePath}#soluble-a-beta-40`);
+    await expect(page.getByRole('heading', { level: 1, name: model })).toBeVisible();
+
+    const nflButton = page.getByRole('button', { name: section });
+    await nflButton.click();
+
+    await expect(page.getByRole('heading', { level: 2, name: section })).toBeInViewport();
+    await page.waitForURL(`${basePath}#${fragment}`);
+  });
 });
