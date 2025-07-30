@@ -4,12 +4,12 @@ A challenge contribution.
 
 ## Properties
 
-| Name                | Type                                                          | Description                                       | Notes |
-| ------------------- | ------------------------------------------------------------- | ------------------------------------------------- | ----- |
-| **id**              | **int**                                                       | The unique identifier of a challenge contribution |
-| **challenge_id**    | **int**                                                       | The unique identifier of the challenge.           |
-| **organization_id** | **int**                                                       | The unique identifier of an organization          |
-| **role**            | [**ChallengeContributionRole**](ChallengeContributionRole.md) |                                                   |
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**id** | **int** | The unique identifier of a challenge contribution | 
+**challenge_id** | **int** | The unique identifier of the challenge. | 
+**organization_id** | **int** | The unique identifier of an organization | 
+**role** | [**ChallengeContributionRole**](ChallengeContributionRole.md) |  | 
 
 ## Example
 
@@ -28,5 +28,6 @@ challenge_contribution_dict = challenge_contribution_instance.to_dict()
 # create an instance of ChallengeContribution from a dict
 challenge_contribution_from_dict = ChallengeContribution.from_dict(challenge_contribution_dict)
 ```
-
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

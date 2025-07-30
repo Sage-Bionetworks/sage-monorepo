@@ -23,6 +23,7 @@ model/challengeContribution.ts
 model/challengeContributionCreateRequest.ts
 model/challengeContributionRole.ts
 model/challengeContributionsPage.ts
+model/challengeCreateRequest.ts
 model/challengeDirection.ts
 model/challengeIncentive.ts
 model/challengeJsonLd.ts
@@ -38,6 +39,7 @@ model/challengeSearchQuery.ts
 model/challengeSort.ts
 model/challengeStatus.ts
 model/challengeSubmissionType.ts
+model/challengeUpdateRequest.ts
 model/challengesPage.ts
 model/challengesPerYear.ts
 model/createApiKeyRequest.ts

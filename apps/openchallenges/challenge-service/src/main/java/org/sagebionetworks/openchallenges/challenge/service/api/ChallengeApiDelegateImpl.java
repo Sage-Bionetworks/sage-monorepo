@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeJsonLdDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSearchQueryDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeUpdateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengesPageDto;
 import org.sagebionetworks.openchallenges.challenge.service.security.AuthenticatedUser;
 import org.sagebionetworks.openchallenges.challenge.service.service.ChallengeService;
@@ -38,7 +39,7 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
 
   @Override
   @PreAuthorize("authentication.principal.admin")
-  public ResponseEntity<Void> deleteChallengeById(Long challengeId) {
+  public ResponseEntity<Void> deleteChallenge(Long challengeId) {
     // Log the authenticated user for audit purposes
     AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
       .getAuthentication()
@@ -51,6 +52,16 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
     );
 
     challengeService.deleteChallenge(challengeId);
+    return ResponseEntity.noContent().build();
+  }
+
+  @Override
+  @PreAuthorize("authentication.principal.admin")
+  public ResponseEntity<ChallengeDto> updateChallenge(
+    Long challengeId,
+    ChallengeUpdateRequestDto request
+  ) {
+    // return ResponseEntity.ok(challengeService.updateChallenge(challengeId, request));
     return ResponseEntity.noContent().build();
   }
 

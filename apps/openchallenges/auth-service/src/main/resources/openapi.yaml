@@ -3,7 +3,7 @@ info:
   contact:
     name: Support
     url: https://github.com/Sage-Bionetworks/sage-monorepo
-  description: 'Discover, explore, and contribute to open biomedical challenges.'
+  description: "Discover, explore, and contribute to open biomedical challenges."
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -12,16 +12,16 @@ info:
   x-logo:
     url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
-  - url: http://localhost/v1
+- url: http://localhost/v1
 tags:
-  - description: Operations about authentication
-    name: Authentication
-    x-audience:
-      - public
-  - description: Operations about API key management
-    name: API Key
-    x-audience:
-      - public
+- description: Operations about authentication
+  name: Authentication
+  x-audience:
+  - public
+- description: Operations about API key management
+  name: API Key
+  x-audience:
+  - public
 paths:
   /auth/login:
     post:
@@ -31,59 +31,59 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginRequest'
+              $ref: "#/components/schemas/LoginRequest"
         required: true
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LoginResponse'
+                $ref: "#/components/schemas/LoginResponse"
           description: Login successful
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
       summary: User login
       tags:
-        - Authentication
+      - Authentication
       x-audience:
-        - public
+      - public
       x-content-type: application/json
       x-accepts:
-        - application/json
-        - application/problem+json
+      - application/json
+      - application/problem+json
       x-tags:
-        - tag: Authentication
+      - tag: Authentication
   /auth/api-keys:
     get:
       description: Get all API keys for the authenticated user
       operationId: listApiKeys
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/ApiKey'
+                  $ref: "#/components/schemas/ApiKey"
                 type: array
           description: List of API keys
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
       security:
-        - apiBearerAuth: []
+      - apiBearerAuth: []
       summary: List API keys
       tags:
-        - API Key
+      - API Key
       x-audience:
-        - public
+      - public
       x-accepts:
-        - application/json
-        - application/problem+json
+      - application/json
+      - application/problem+json
       x-tags:
-        - tag: API Key
+      - tag: API Key
     post:
       description: Generate a new API key for the authenticated user
       operationId: createApiKey
@@ -91,68 +91,68 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateApiKeyRequest'
+              $ref: "#/components/schemas/CreateApiKeyRequest"
         required: true
       responses:
-        '201':
+        "201":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateApiKeyResponse'
+                $ref: "#/components/schemas/CreateApiKeyResponse"
           description: API key created successfully
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
       security:
-        - apiBearerAuth: []
+      - apiBearerAuth: []
       summary: Create API key
       tags:
-        - API Key
+      - API Key
       x-audience:
-        - public
+      - public
       x-content-type: application/json
       x-accepts:
-        - application/json
-        - application/problem+json
+      - application/json
+      - application/problem+json
       x-tags:
-        - tag: API Key
+      - tag: API Key
   /auth/api-keys/{keyId}:
     delete:
       description: Revoke an API key
       operationId: deleteApiKey
       parameters:
-        - description: The API key ID to delete
-          explode: false
-          in: path
-          name: keyId
-          required: true
-          schema:
-            format: uuid
-            type: string
-          style: simple
+      - description: The API key ID to delete
+        explode: false
+        in: path
+        name: keyId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
       responses:
-        '204':
+        "204":
           description: API key deleted successfully
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
       security:
-        - apiBearerAuth: []
+      - apiBearerAuth: []
       summary: Delete API key
       tags:
-        - API Key
+      - API Key
       x-audience:
-        - public
+      - public
       x-accepts:
-        - application/problem+json
+      - application/problem+json
       x-tags:
-        - tag: API Key
+      - tag: API Key
   /auth/validate:
     post:
       description: Internal endpoint to validate API keys (used by other services)
@@ -161,55 +161,55 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ValidateApiKeyRequest'
+              $ref: "#/components/schemas/ValidateApiKeyRequest"
         required: true
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ValidateApiKeyResponse'
+                $ref: "#/components/schemas/ValidateApiKeyResponse"
           description: API key is valid
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
       summary: Validate API key
       tags:
-        - Authentication
+      - Authentication
       x-audience:
-        - internal
+      - internal
       x-content-type: application/json
       x-accepts:
-        - application/json
-        - application/problem+json
+      - application/json
+      - application/problem+json
       x-tags:
-        - tag: Authentication
+      - tag: Authentication
 components:
   responses:
     Unauthorized:
       content:
         application/problem+json:
           schema:
-            $ref: '#/components/schemas/BasicError'
+            $ref: "#/components/schemas/BasicError"
       description: Unauthorized
     InternalServerError:
       content:
         application/problem+json:
           schema:
-            $ref: '#/components/schemas/BasicError'
+            $ref: "#/components/schemas/BasicError"
       description: The request cannot be fulfilled due to an unexpected server error
     BadRequest:
       content:
         application/problem+json:
           schema:
-            $ref: '#/components/schemas/BasicError'
+            $ref: "#/components/schemas/BasicError"
       description: Invalid request
     NotFound:
       content:
         application/problem+json:
           schema:
-            $ref: '#/components/schemas/BasicError'
+            $ref: "#/components/schemas/BasicError"
       description: The specified resource was not found
   schemas:
     LoginRequest:
@@ -224,8 +224,8 @@ components:
           format: password
           type: string
       required:
-        - password
-        - username
+      - password
+      - username
       type: object
     LoginResponse:
       example:
@@ -250,10 +250,10 @@ components:
         role:
           description: User role
           enum:
-            - admin
-            - user
-            - readonly
-            - service
+          - admin
+          - user
+          - readonly
+          - service
           example: admin
           type: string
       type: object
@@ -274,12 +274,12 @@ components:
           description: An absolute URI that identifies the problem type
           type: string
       required:
-        - status
-        - title
+      - status
+      - title
       type: object
       x-java-class-annotations:
-        - '@lombok.AllArgsConstructor'
-        - '@lombok.Builder'
+      - '@lombok.AllArgsConstructor'
+      - '@lombok.Builder'
     ApiKey:
       example:
         createdAt: 2024-01-15T10:30:00Z
@@ -336,7 +336,7 @@ components:
           minimum: 1
           type: integer
       required:
-        - name
+      - name
       type: object
     CreateApiKeyResponse:
       example:
@@ -383,15 +383,15 @@ components:
           example: oc_prod_abcd1234567890abcdef1234567890abcdef1234
           type: string
       required:
-        - apiKey
+      - apiKey
       type: object
     ValidateApiKeyResponse:
       example:
         valid: true
         role: admin
         scopes:
-          - organizations:read
-          - organizations:write
+        - organizations:read
+        - organizations:write
         userId: 123e4567-e89b-12d3-a456-426614174000
         username: admin
       properties:
@@ -411,17 +411,17 @@ components:
         role:
           description: Role of the API key owner (only if valid)
           enum:
-            - admin
-            - user
-            - readonly
-            - service
+          - admin
+          - user
+          - readonly
+          - service
           example: admin
           type: string
         scopes:
           description: Permissions granted to this API key (only if valid)
           example:
-            - organizations:read
-            - organizations:write
+          - organizations:read
+          - organizations:write
           items:
             type: string
           type: array

@@ -21,8 +21,10 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.sagebionetworks.openchallenges.api.client.model.BasicError;
 import org.sagebionetworks.openchallenges.api.client.model.Challenge;
+import org.sagebionetworks.openchallenges.api.client.model.ChallengeCreateRequest;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengeJsonLd;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengeSearchQuery;
+import org.sagebionetworks.openchallenges.api.client.model.ChallengeUpdateRequest;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengesPage;
 
 /**
@@ -34,14 +36,26 @@ public class ChallengeApiTest {
   private final ChallengeApi api = new ChallengeApi();
 
   /**
-   * Delete a challenge
+   * Create a challenge
    *
-   * Deletes a challenge by its unique ID. This action is irreversible.
+   * Create a challenge with the specified details
    */
   @Test
-  public void deleteChallengeByIdTest() {
+  public void createChallengeTest() {
+    ChallengeCreateRequest challengeCreateRequest = null;
+    Challenge response = api.createChallenge(challengeCreateRequest);
+    // TODO: test validations
+  }
+
+  /**
+   * Delete a challenge
+   *
+   * Deletes a challenge by its unique ID.
+   */
+  @Test
+  public void deleteChallengeTest() {
     Long challengeId = null;
-    api.deleteChallengeById(challengeId);
+    api.deleteChallenge(challengeId);
     // TODO: test validations
   }
 
@@ -78,6 +92,19 @@ public class ChallengeApiTest {
   public void listChallengesTest() {
     ChallengeSearchQuery challengeSearchQuery = null;
     ChallengesPage response = api.listChallenges(challengeSearchQuery);
+    // TODO: test validations
+  }
+
+  /**
+   * Update an existing challenge
+   *
+   * Updates an existing challenge.
+   */
+  @Test
+  public void updateChallengeTest() {
+    Long challengeId = null;
+    ChallengeUpdateRequest challengeUpdateRequest = null;
+    Challenge response = api.updateChallenge(challengeId, challengeUpdateRequest);
     // TODO: test validations
   }
 }

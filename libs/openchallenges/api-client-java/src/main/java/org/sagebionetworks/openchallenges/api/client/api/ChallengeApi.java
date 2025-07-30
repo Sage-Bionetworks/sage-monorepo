@@ -10,8 +10,10 @@ import java.util.stream.Collectors;
 import org.sagebionetworks.openchallenges.api.client.ApiClient;
 import org.sagebionetworks.openchallenges.api.client.model.BasicError;
 import org.sagebionetworks.openchallenges.api.client.model.Challenge;
+import org.sagebionetworks.openchallenges.api.client.model.ChallengeCreateRequest;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengeJsonLd;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengeSearchQuery;
+import org.sagebionetworks.openchallenges.api.client.model.ChallengeUpdateRequest;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengesPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -52,9 +54,131 @@ public class ChallengeApi {
   }
 
   /**
+   * Create a challenge
+   * Create a challenge with the specified details
+   * <p><b>201</b> - Challenge created successfully
+   * <p><b>400</b> - Invalid request
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>409</b> - The request conflicts with current state of the target resource
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengeCreateRequest The challengeCreateRequest parameter
+   * @return Challenge
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  private ResponseSpec createChallengeRequestCreation(
+    @jakarta.annotation.Nonnull ChallengeCreateRequest challengeCreateRequest
+  ) throws RestClientResponseException {
+    Object postBody = challengeCreateRequest;
+    // verify the required parameter 'challengeCreateRequest' is set
+    if (challengeCreateRequest == null) {
+      throw new RestClientResponseException(
+        "Missing the required parameter 'challengeCreateRequest' when calling createChallenge",
+        HttpStatus.BAD_REQUEST.value(),
+        HttpStatus.BAD_REQUEST.getReasonPhrase(),
+        null,
+        null,
+        null
+      );
+    }
+    // create path and map variables
+    final Map<String, Object> pathParams = new HashMap<>();
+
+    final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+    final HttpHeaders headerParams = new HttpHeaders();
+    final MultiValueMap<String, String> cookieParams = new LinkedMultiValueMap<>();
+    final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<>();
+
+    final String[] localVarAccepts = { "application/json", "application/problem+json" };
+    final List<MediaType> localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+    final String[] localVarContentTypes = { "application/json" };
+    final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+
+    String[] localVarAuthNames = new String[] { "apiBearerAuth" };
+
+    ParameterizedTypeReference<Challenge> localVarReturnType =
+      new ParameterizedTypeReference<>() {};
+    return apiClient.invokeAPI(
+      "/challenges",
+      HttpMethod.POST,
+      pathParams,
+      queryParams,
+      postBody,
+      headerParams,
+      cookieParams,
+      formParams,
+      localVarAccept,
+      localVarContentType,
+      localVarAuthNames,
+      localVarReturnType
+    );
+  }
+
+  /**
+   * Create a challenge
+   * Create a challenge with the specified details
+   * <p><b>201</b> - Challenge created successfully
+   * <p><b>400</b> - Invalid request
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>409</b> - The request conflicts with current state of the target resource
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengeCreateRequest The challengeCreateRequest parameter
+   * @return Challenge
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public Challenge createChallenge(
+    @jakarta.annotation.Nonnull ChallengeCreateRequest challengeCreateRequest
+  ) throws RestClientResponseException {
+    ParameterizedTypeReference<Challenge> localVarReturnType =
+      new ParameterizedTypeReference<>() {};
+    return createChallengeRequestCreation(challengeCreateRequest).body(localVarReturnType);
+  }
+
+  /**
+   * Create a challenge
+   * Create a challenge with the specified details
+   * <p><b>201</b> - Challenge created successfully
+   * <p><b>400</b> - Invalid request
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>409</b> - The request conflicts with current state of the target resource
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengeCreateRequest The challengeCreateRequest parameter
+   * @return ResponseEntity&lt;Challenge&gt;
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public ResponseEntity<Challenge> createChallengeWithHttpInfo(
+    @jakarta.annotation.Nonnull ChallengeCreateRequest challengeCreateRequest
+  ) throws RestClientResponseException {
+    ParameterizedTypeReference<Challenge> localVarReturnType =
+      new ParameterizedTypeReference<>() {};
+    return createChallengeRequestCreation(challengeCreateRequest).toEntity(localVarReturnType);
+  }
+
+  /**
+   * Create a challenge
+   * Create a challenge with the specified details
+   * <p><b>201</b> - Challenge created successfully
+   * <p><b>400</b> - Invalid request
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>409</b> - The request conflicts with current state of the target resource
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengeCreateRequest The challengeCreateRequest parameter
+   * @return ResponseSpec
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public ResponseSpec createChallengeWithResponseSpec(
+    @jakarta.annotation.Nonnull ChallengeCreateRequest challengeCreateRequest
+  ) throws RestClientResponseException {
+    return createChallengeRequestCreation(challengeCreateRequest);
+  }
+
+  /**
    * Delete a challenge
-   * Deletes a challenge by its unique ID. This action is irreversible.
-   * <p><b>204</b> - Deletion successful
+   * Deletes a challenge by its unique ID.
+   * <p><b>204</b> - Challenge successfully deleted
    * <p><b>401</b> - Unauthorized
    * <p><b>403</b> - The user does not have the permission to perform this action
    * <p><b>404</b> - The specified resource was not found
@@ -62,14 +186,13 @@ public class ChallengeApi {
    * @param challengeId The unique identifier of the challenge.
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
    */
-  private ResponseSpec deleteChallengeByIdRequestCreation(
-    @jakarta.annotation.Nonnull Long challengeId
-  ) throws RestClientResponseException {
+  private ResponseSpec deleteChallengeRequestCreation(@jakarta.annotation.Nonnull Long challengeId)
+    throws RestClientResponseException {
     Object postBody = null;
     // verify the required parameter 'challengeId' is set
     if (challengeId == null) {
       throw new RestClientResponseException(
-        "Missing the required parameter 'challengeId' when calling deleteChallengeById",
+        "Missing the required parameter 'challengeId' when calling deleteChallenge",
         HttpStatus.BAD_REQUEST.value(),
         HttpStatus.BAD_REQUEST.getReasonPhrase(),
         null,
@@ -113,8 +236,8 @@ public class ChallengeApi {
 
   /**
    * Delete a challenge
-   * Deletes a challenge by its unique ID. This action is irreversible.
-   * <p><b>204</b> - Deletion successful
+   * Deletes a challenge by its unique ID.
+   * <p><b>204</b> - Challenge successfully deleted
    * <p><b>401</b> - Unauthorized
    * <p><b>403</b> - The user does not have the permission to perform this action
    * <p><b>404</b> - The specified resource was not found
@@ -122,16 +245,16 @@ public class ChallengeApi {
    * @param challengeId The unique identifier of the challenge.
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
    */
-  public void deleteChallengeById(@jakarta.annotation.Nonnull Long challengeId)
+  public void deleteChallenge(@jakarta.annotation.Nonnull Long challengeId)
     throws RestClientResponseException {
     ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
-    deleteChallengeByIdRequestCreation(challengeId).body(localVarReturnType);
+    deleteChallengeRequestCreation(challengeId).body(localVarReturnType);
   }
 
   /**
    * Delete a challenge
-   * Deletes a challenge by its unique ID. This action is irreversible.
-   * <p><b>204</b> - Deletion successful
+   * Deletes a challenge by its unique ID.
+   * <p><b>204</b> - Challenge successfully deleted
    * <p><b>401</b> - Unauthorized
    * <p><b>403</b> - The user does not have the permission to perform this action
    * <p><b>404</b> - The specified resource was not found
@@ -139,17 +262,17 @@ public class ChallengeApi {
    * @param challengeId The unique identifier of the challenge.
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
    */
-  public ResponseEntity<Void> deleteChallengeByIdWithHttpInfo(
+  public ResponseEntity<Void> deleteChallengeWithHttpInfo(
     @jakarta.annotation.Nonnull Long challengeId
   ) throws RestClientResponseException {
     ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
-    return deleteChallengeByIdRequestCreation(challengeId).toEntity(localVarReturnType);
+    return deleteChallengeRequestCreation(challengeId).toEntity(localVarReturnType);
   }
 
   /**
    * Delete a challenge
-   * Deletes a challenge by its unique ID. This action is irreversible.
-   * <p><b>204</b> - Deletion successful
+   * Deletes a challenge by its unique ID.
+   * <p><b>204</b> - Challenge successfully deleted
    * <p><b>401</b> - Unauthorized
    * <p><b>403</b> - The user does not have the permission to perform this action
    * <p><b>404</b> - The specified resource was not found
@@ -158,10 +281,9 @@ public class ChallengeApi {
    * @return ResponseSpec
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
    */
-  public ResponseSpec deleteChallengeByIdWithResponseSpec(
-    @jakarta.annotation.Nonnull Long challengeId
-  ) throws RestClientResponseException {
-    return deleteChallengeByIdRequestCreation(challengeId);
+  public ResponseSpec deleteChallengeWithResponseSpec(@jakarta.annotation.Nonnull Long challengeId)
+    throws RestClientResponseException {
+    return deleteChallengeRequestCreation(challengeId);
   }
 
   /**
@@ -550,5 +672,156 @@ public class ChallengeApi {
     @jakarta.annotation.Nullable ChallengeSearchQuery challengeSearchQuery
   ) throws RestClientResponseException {
     return listChallengesRequestCreation(challengeSearchQuery);
+  }
+
+  /**
+   * Update an existing challenge
+   * Updates an existing challenge.
+   * <p><b>200</b> - Challenge successfully updated
+   * <p><b>400</b> - Invalid request
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>409</b> - The request conflicts with current state of the target resource
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengeId The unique identifier of the challenge.
+   * @param challengeUpdateRequest The challengeUpdateRequest parameter
+   * @return Challenge
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  private ResponseSpec updateChallengeRequestCreation(
+    @jakarta.annotation.Nonnull Long challengeId,
+    @jakarta.annotation.Nonnull ChallengeUpdateRequest challengeUpdateRequest
+  ) throws RestClientResponseException {
+    Object postBody = challengeUpdateRequest;
+    // verify the required parameter 'challengeId' is set
+    if (challengeId == null) {
+      throw new RestClientResponseException(
+        "Missing the required parameter 'challengeId' when calling updateChallenge",
+        HttpStatus.BAD_REQUEST.value(),
+        HttpStatus.BAD_REQUEST.getReasonPhrase(),
+        null,
+        null,
+        null
+      );
+    }
+    // verify the required parameter 'challengeUpdateRequest' is set
+    if (challengeUpdateRequest == null) {
+      throw new RestClientResponseException(
+        "Missing the required parameter 'challengeUpdateRequest' when calling updateChallenge",
+        HttpStatus.BAD_REQUEST.value(),
+        HttpStatus.BAD_REQUEST.getReasonPhrase(),
+        null,
+        null,
+        null
+      );
+    }
+    // create path and map variables
+    final Map<String, Object> pathParams = new HashMap<>();
+
+    pathParams.put("challengeId", challengeId);
+
+    final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+    final HttpHeaders headerParams = new HttpHeaders();
+    final MultiValueMap<String, String> cookieParams = new LinkedMultiValueMap<>();
+    final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<>();
+
+    final String[] localVarAccepts = { "application/json", "application/problem+json" };
+    final List<MediaType> localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+    final String[] localVarContentTypes = { "application/json" };
+    final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+
+    String[] localVarAuthNames = new String[] { "apiBearerAuth" };
+
+    ParameterizedTypeReference<Challenge> localVarReturnType =
+      new ParameterizedTypeReference<>() {};
+    return apiClient.invokeAPI(
+      "/challenges/{challengeId}",
+      HttpMethod.PUT,
+      pathParams,
+      queryParams,
+      postBody,
+      headerParams,
+      cookieParams,
+      formParams,
+      localVarAccept,
+      localVarContentType,
+      localVarAuthNames,
+      localVarReturnType
+    );
+  }
+
+  /**
+   * Update an existing challenge
+   * Updates an existing challenge.
+   * <p><b>200</b> - Challenge successfully updated
+   * <p><b>400</b> - Invalid request
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>409</b> - The request conflicts with current state of the target resource
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengeId The unique identifier of the challenge.
+   * @param challengeUpdateRequest The challengeUpdateRequest parameter
+   * @return Challenge
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public Challenge updateChallenge(
+    @jakarta.annotation.Nonnull Long challengeId,
+    @jakarta.annotation.Nonnull ChallengeUpdateRequest challengeUpdateRequest
+  ) throws RestClientResponseException {
+    ParameterizedTypeReference<Challenge> localVarReturnType =
+      new ParameterizedTypeReference<>() {};
+    return updateChallengeRequestCreation(challengeId, challengeUpdateRequest).body(
+      localVarReturnType
+    );
+  }
+
+  /**
+   * Update an existing challenge
+   * Updates an existing challenge.
+   * <p><b>200</b> - Challenge successfully updated
+   * <p><b>400</b> - Invalid request
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>409</b> - The request conflicts with current state of the target resource
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengeId The unique identifier of the challenge.
+   * @param challengeUpdateRequest The challengeUpdateRequest parameter
+   * @return ResponseEntity&lt;Challenge&gt;
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public ResponseEntity<Challenge> updateChallengeWithHttpInfo(
+    @jakarta.annotation.Nonnull Long challengeId,
+    @jakarta.annotation.Nonnull ChallengeUpdateRequest challengeUpdateRequest
+  ) throws RestClientResponseException {
+    ParameterizedTypeReference<Challenge> localVarReturnType =
+      new ParameterizedTypeReference<>() {};
+    return updateChallengeRequestCreation(challengeId, challengeUpdateRequest).toEntity(
+      localVarReturnType
+    );
+  }
+
+  /**
+   * Update an existing challenge
+   * Updates an existing challenge.
+   * <p><b>200</b> - Challenge successfully updated
+   * <p><b>400</b> - Invalid request
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
+   * <p><b>404</b> - The specified resource was not found
+   * <p><b>409</b> - The request conflicts with current state of the target resource
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param challengeId The unique identifier of the challenge.
+   * @param challengeUpdateRequest The challengeUpdateRequest parameter
+   * @return ResponseSpec
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public ResponseSpec updateChallengeWithResponseSpec(
+    @jakarta.annotation.Nonnull Long challengeId,
+    @jakarta.annotation.Nonnull ChallengeUpdateRequest challengeUpdateRequest
+  ) throws RestClientResponseException {
+    return updateChallengeRequestCreation(challengeId, challengeUpdateRequest);
   }
 }
