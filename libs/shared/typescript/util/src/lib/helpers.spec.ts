@@ -1,4 +1,4 @@
-import { getRandomInt, isExternalLink, removeParenthesis, toKebabCase } from './helpers';
+import { getRandomInt, isExternalLink, removeParentheses, toKebabCase } from './helpers';
 
 describe('getRandomInt', () => {
   it('should return an integer within the specified range', () => {
@@ -17,25 +17,25 @@ describe('getRandomInt', () => {
   });
 });
 
-describe('removeParenthesis', () => {
+describe('removeParentheses', () => {
   it('should remove parentheses from a string', () => {
     const input = 'test(value)';
     const expected = 'testvalue';
-    const result = removeParenthesis(input);
+    const result = removeParentheses(input);
     expect(result).toEqual(expected);
   });
 
   it('should handle strings without parentheses', () => {
     const input = 'testvalue';
     const expected = 'testvalue';
-    const result = removeParenthesis(input);
+    const result = removeParentheses(input);
     expect(result).toEqual(expected);
   });
 
   it('should handle empty strings', () => {
     const input = '';
     const expected = '';
-    const result = removeParenthesis(input);
+    const result = removeParentheses(input);
     expect(result).toEqual(expected);
   });
 });

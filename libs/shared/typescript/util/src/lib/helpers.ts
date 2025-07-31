@@ -31,7 +31,7 @@ export function getRandomInt(minInclusive: number, maxExclusive: number): number
  * @param s - The string to process
  * @returns String with parentheses removed
  */
-export function removeParenthesis(s: string): string {
+export function removeParentheses(s: string): string {
   return s.replace('(', '').replace(')', '');
 }
 

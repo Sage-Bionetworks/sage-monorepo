@@ -83,7 +83,7 @@ paths:
           description: Name of the page to retrieve the Comparison Tool configuration for
           required: true
           schema:
-            $ref: '#/components/schemas/ComparisonToolPages'
+            $ref: '#/components/schemas/ComparisonToolPage'
       responses:
         '200':
           description: Successfully retrieved Comparison Tool configuration
@@ -306,7 +306,7 @@ components:
         - genetic_info
         - biomarkers
         - pathology
-    ComparisonToolPages:
+    ComparisonToolPage:
       type: string
       description: The type of comparison tool page
       enum:
@@ -363,7 +363,7 @@ components:
       type: object
       properties:
         page:
-          $ref: '#/components/schemas/ComparisonToolPages'
+          $ref: '#/components/schemas/ComparisonToolPage'
         dropdowns:
           type: array
           description: List of dropdown options

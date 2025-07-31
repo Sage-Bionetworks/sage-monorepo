@@ -1,7 +1,7 @@
 type: object
 properties:
   page:
-    $ref: './ComparisonToolPages.yaml'
+    $ref: './ComparisonToolPage.yaml'
   dropdowns:
     type: array
     description: List of dropdown options

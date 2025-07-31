@@ -27,7 +27,7 @@ import { BasicError } from '../model/basicError';
 // @ts-ignore
 import { ComparisonToolConfig } from '../model/comparisonToolConfig';
 // @ts-ignore
-import { ComparisonToolPages } from '../model/comparisonToolPages';
+import { ComparisonToolPage } from '../model/comparisonToolPage';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -116,7 +116,7 @@ export class ComparisonToolConfigService {
    * @param reportProgress flag to report request and response progress.
    */
   public getComparisonToolConfig(
-    page: ComparisonToolPages,
+    page: ComparisonToolPage,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -126,7 +126,7 @@ export class ComparisonToolConfigService {
     },
   ): Observable<Array<ComparisonToolConfig>>;
   public getComparisonToolConfig(
-    page: ComparisonToolPages,
+    page: ComparisonToolPage,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -136,7 +136,7 @@ export class ComparisonToolConfigService {
     },
   ): Observable<HttpResponse<Array<ComparisonToolConfig>>>;
   public getComparisonToolConfig(
-    page: ComparisonToolPages,
+    page: ComparisonToolPage,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -146,7 +146,7 @@ export class ComparisonToolConfigService {
     },
   ): Observable<HttpEvent<Array<ComparisonToolConfig>>>;
   public getComparisonToolConfig(
-    page: ComparisonToolPages,
+    page: ComparisonToolPage,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {

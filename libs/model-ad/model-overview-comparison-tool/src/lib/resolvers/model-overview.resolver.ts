@@ -5,7 +5,7 @@ import { map, catchError } from 'rxjs/operators';
 import {
   ComparisonToolConfig,
   ComparisonToolConfigService,
-  ComparisonToolPages,
+  ComparisonToolPage,
 } from '@sagebionetworks/model-ad/api-client-angular';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 
@@ -19,7 +19,7 @@ export class ModelOverviewResolver implements Resolve<ComparisonToolConfig | nul
     _state: RouterStateSnapshot,
   ): Observable<ComparisonToolConfig | null> {
     return this.comparisonToolConfigService
-      .getComparisonToolConfig(ComparisonToolPages.ModelOverview)
+      .getComparisonToolConfig(ComparisonToolPage.ModelOverview)
       .pipe(
         // model overview only has one config (no dropdowns), so return the first one or null
         map((config) => config[0] ?? null),
