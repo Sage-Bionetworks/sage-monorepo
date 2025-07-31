@@ -30,6 +30,7 @@ dev = ["black==23.3.0", "pylint==2.8.2"]
 "Bug Tracker" = "https://github.com/lm-sys/fastchat/issues"
 
 [tool.setuptools.packages.find]
+where = ["src"]
 exclude = ["assets*", "benchmark*", "docs", "dist*", "playground*", "scripts*", "tests*"]
 
 [tool.wheel]
