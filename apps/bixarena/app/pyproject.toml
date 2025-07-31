@@ -7,7 +7,7 @@ name = "bixarena-app"
 version = "0.2.36"
 description = "Bixarena application for serving and evaluating large language models"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = "==3.11.9"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: Apache Software License",
@@ -20,7 +20,7 @@ dependencies = [
 
 [project.optional-dependencies]
 model_worker = ["accelerate>=0.21", "peft", "sentencepiece", "torch", "transformers>=4.31.0", "protobuf"]
-webui = ["gradio>=4.10"]
+webui = ["gradio>=4.10", "plotly"]
 train = ["einops", "flash-attn>=2.0", "wandb"]
 llm_judge = ["openai<1", "anthropic>=0.3", "ray"]
 dev = ["black==23.3.0", "pylint==2.8.2"]
