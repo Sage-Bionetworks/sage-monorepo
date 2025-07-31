@@ -5,18 +5,21 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.challenge.service.ChallengeServiceApplication;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeNotFoundException;
+import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengePlatformNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeJsonLdDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeUpdateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengesPageDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeEntity;
+import org.sagebionetworks.openchallenges.challenge.service.model.entity.SimpleChallengePlatformEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengeJsonLdMapper;
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengeMapper;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeCategoryRepository;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeContributionRepository;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeIncentiveRepository;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeInputDataTypeRepository;
+import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengePlatformRepository;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeRepository;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeStarRepository;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeSubmissionTypeRepository;
@@ -34,6 +37,7 @@ public class ChallengeService {
   private static final Logger logger = LoggerFactory.getLogger(ChallengeService.class);
 
   private final ChallengeRepository challengeRepository;
+  private final ChallengePlatformRepository challengePlatformRepository;
   private final ChallengeContributionRepository challengeContributionRepository;
   private final ChallengeIncentiveRepository challengeIncentiveRepository;
   private final ChallengeSubmissionTypeRepository challengeSubmissionTypeRepository;
@@ -43,6 +47,7 @@ public class ChallengeService {
 
   public ChallengeService(
     ChallengeRepository challengeRepository,
+    ChallengePlatformRepository challengePlatformRepository,
     ChallengeContributionRepository challengeContributionRepository,
     ChallengeIncentiveRepository challengeIncentiveRepository,
     ChallengeSubmissionTypeRepository challengeSubmissionTypeRepository,
@@ -51,6 +56,7 @@ public class ChallengeService {
     ChallengeInputDataTypeRepository challengeInputDataTypeRepository
   ) {
     this.challengeRepository = challengeRepository;
+    this.challengePlatformRepository = challengePlatformRepository;
     this.challengeContributionRepository = challengeContributionRepository;
     this.challengeIncentiveRepository = challengeIncentiveRepository;
     this.challengeSubmissionTypeRepository = challengeSubmissionTypeRepository;
@@ -123,6 +129,24 @@ public class ChallengeService {
       );
   }
 
+  private SimpleChallengePlatformEntity getChallengePlatformEntity(Long platformId) 
+      throws ChallengePlatformNotFoundException {
+    return challengePlatformRepository
+      .findById(platformId)
+      .map(platform -> SimpleChallengePlatformEntity.builder()
+        .id(platform.getId())
+        .slug(platform.getSlug())
+        .name(platform.getName())
+        .avatarKey(platform.getAvatarKey())
+        .websiteUrl(platform.getWebsiteUrl())
+        .build())
+      .orElseThrow(() ->
+        new ChallengePlatformNotFoundException(
+          String.format("The challenge platform with ID %d does not exist.", platformId)
+        )
+      );
+  }
+
   @Transactional
   public void deleteChallenge(Long challengeId) {
     // Verify challenge exists before deletion
@@ -170,6 +194,15 @@ public class ChallengeService {
     existingChallenge.setStatus(request.getStatus().toString());
     existingChallenge.setWebsiteUrl(request.getWebsiteUrl());
     existingChallenge.setAvatarUrl(request.getAvatarUrl());
+
+    // Update platform if provided
+    if (request.getPlatformId() != null) {
+      SimpleChallengePlatformEntity platform = getChallengePlatformEntity(request.getPlatformId());
+      existingChallenge.setPlatform(platform);
+    } else {
+      // If platformId is null, remove the platform association
+      existingChallenge.setPlatform(null);
+    }
 
     // Save the updated entity
     ChallengeEntity updatedEntity = challengeRepository.save(existingChallenge);

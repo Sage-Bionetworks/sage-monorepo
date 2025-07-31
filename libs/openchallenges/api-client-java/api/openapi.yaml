@@ -2369,6 +2369,7 @@ components:
         avatarUrl: https://openchallenges.io
         name: Awesome Challenge
         description: This is an example description of the challenge.
+        platformId: 1
         headline: Example challenge headline
         slug: awesome-challenge
         doi: https://doi.org/123/abc
@@ -2409,6 +2410,11 @@ components:
           type: string
         status:
           $ref: '#/components/schemas/ChallengeStatus'
+        platformId:
+          description: The unique identifier of a challenge platform.
+          example: 1
+          format: int64
+          type: integer
         websiteUrl:
           description: A URL to the website or image.
           example: https://openchallenges.io
@@ -2429,6 +2435,7 @@ components:
       - doi
       - headline
       - name
+      - platformId
       - slug
       - status
       - websiteUrl

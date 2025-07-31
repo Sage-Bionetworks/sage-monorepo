@@ -13,8 +13,8 @@ properties:
     $ref: ChallengeDoi.yaml
   status:
     $ref: ChallengeStatus.yaml
-  # platform:
-  #   $ref: SimpleChallengePlatform.yaml
+  platformId:
+    $ref: ChallengePlatformId.yaml
   websiteUrl:
     $ref: Url.yaml
   avatarUrl:
@@ -26,6 +26,7 @@ required:
   - description
   - doi
   - status
+  - platformId
   - websiteUrl
   - avatarUrl
   # - incentives

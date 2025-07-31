@@ -16,7 +16,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from openchallenges_api_client_python.models.challenge_status import ChallengeStatus
@@ -45,6 +45,9 @@ class ChallengeUpdateRequest(BaseModel):
         description="The DOI of the challenge."
     )
     status: ChallengeStatus
+    platform_id: StrictInt = Field(
+        description="The unique identifier of a challenge platform.", alias="platformId"
+    )
     website_url: Optional[Annotated[str, Field(strict=True, max_length=500)]] = Field(
         description="A URL to the website or image.", alias="websiteUrl"
     )
@@ -58,6 +61,7 @@ class ChallengeUpdateRequest(BaseModel):
         "description",
         "doi",
         "status",
+        "platformId",
         "websiteUrl",
         "avatarUrl",
     ]
@@ -147,6 +151,7 @@ class ChallengeUpdateRequest(BaseModel):
                 "description": obj.get("description"),
                 "doi": obj.get("doi"),
                 "status": obj.get("status"),
+                "platformId": obj.get("platformId"),
                 "websiteUrl": obj.get("websiteUrl"),
                 "avatarUrl": obj.get("avatarUrl"),
             }

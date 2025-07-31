@@ -43,6 +43,7 @@ class TestChallengeUpdateRequest(unittest.TestCase):
                 description = 'This is an example description of the challenge.',
                 doi = 'https://doi.org/123/abc',
                 status = 'active',
+                platform_id = 1,
                 website_url = 'https://openchallenges.io',
                 avatar_url = 'https://openchallenges.io'
             )
@@ -54,6 +55,7 @@ class TestChallengeUpdateRequest(unittest.TestCase):
                 description = 'This is an example description of the challenge.',
                 doi = 'https://doi.org/123/abc',
                 status = 'active',
+                platform_id = 1,
                 website_url = 'https://openchallenges.io',
                 avatar_url = 'https://openchallenges.io',
         )

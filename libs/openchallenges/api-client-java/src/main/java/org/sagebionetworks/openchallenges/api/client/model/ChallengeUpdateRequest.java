@@ -34,6 +34,7 @@ import org.sagebionetworks.openchallenges.api.client.model.ChallengeStatus;
     ChallengeUpdateRequest.JSON_PROPERTY_DESCRIPTION,
     ChallengeUpdateRequest.JSON_PROPERTY_DOI,
     ChallengeUpdateRequest.JSON_PROPERTY_STATUS,
+    ChallengeUpdateRequest.JSON_PROPERTY_PLATFORM_ID,
     ChallengeUpdateRequest.JSON_PROPERTY_WEBSITE_URL,
     ChallengeUpdateRequest.JSON_PROPERTY_AVATAR_URL,
   }
@@ -73,6 +74,11 @@ public class ChallengeUpdateRequest {
 
   @jakarta.annotation.Nonnull
   private ChallengeStatus status;
+
+  public static final String JSON_PROPERTY_PLATFORM_ID = "platformId";
+
+  @jakarta.annotation.Nonnull
+  private Long platformId;
 
   public static final String JSON_PROPERTY_WEBSITE_URL = "websiteUrl";
 
@@ -218,6 +224,28 @@ public class ChallengeUpdateRequest {
     this.status = status;
   }
 
+  public ChallengeUpdateRequest platformId(@jakarta.annotation.Nonnull Long platformId) {
+    this.platformId = platformId;
+    return this;
+  }
+
+  /**
+   * The unique identifier of a challenge platform.
+   * @return platformId
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_PLATFORM_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public Long getPlatformId() {
+    return platformId;
+  }
+
+  @JsonProperty(JSON_PROPERTY_PLATFORM_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setPlatformId(@jakarta.annotation.Nonnull Long platformId) {
+    this.platformId = platformId;
+  }
+
   public ChallengeUpdateRequest websiteUrl(@jakarta.annotation.Nullable String websiteUrl) {
     this.websiteUrl = websiteUrl;
     return this;
@@ -278,6 +306,7 @@ public class ChallengeUpdateRequest {
       Objects.equals(this.description, challengeUpdateRequest.description) &&
       Objects.equals(this.doi, challengeUpdateRequest.doi) &&
       Objects.equals(this.status, challengeUpdateRequest.status) &&
+      Objects.equals(this.platformId, challengeUpdateRequest.platformId) &&
       Objects.equals(this.websiteUrl, challengeUpdateRequest.websiteUrl) &&
       Objects.equals(this.avatarUrl, challengeUpdateRequest.avatarUrl)
     );
@@ -285,7 +314,17 @@ public class ChallengeUpdateRequest {
 
   @Override
   public int hashCode() {
-    return Objects.hash(slug, name, headline, description, doi, status, websiteUrl, avatarUrl);
+    return Objects.hash(
+      slug,
+      name,
+      headline,
+      description,
+      doi,
+      status,
+      platformId,
+      websiteUrl,
+      avatarUrl
+    );
   }
 
   @Override
@@ -298,6 +337,7 @@ public class ChallengeUpdateRequest {
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    doi: ").append(toIndentedString(doi)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    platformId: ").append(toIndentedString(platformId)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
     sb.append("}");

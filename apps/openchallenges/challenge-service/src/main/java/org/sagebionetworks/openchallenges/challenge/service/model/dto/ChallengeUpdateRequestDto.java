@@ -38,6 +38,8 @@ public class ChallengeUpdateRequestDto {
 
   private ChallengeStatusDto status;
 
+  private Long platformId;
+
   private String websiteUrl = null;
 
   private String avatarUrl = null;
@@ -49,13 +51,14 @@ public class ChallengeUpdateRequestDto {
   /**
    * Constructor with only required parameters
    */
-  public ChallengeUpdateRequestDto(String slug, String name, String headline, String description, String doi, ChallengeStatusDto status, String websiteUrl, String avatarUrl) {
+  public ChallengeUpdateRequestDto(String slug, String name, String headline, String description, String doi, ChallengeStatusDto status, Long platformId, String websiteUrl, String avatarUrl) {
     this.slug = slug;
     this.name = name;
     this.headline = headline;
     this.description = description;
     this.doi = doi;
     this.status = status;
+    this.platformId = platformId;
     this.websiteUrl = websiteUrl;
     this.avatarUrl = avatarUrl;
   }
@@ -180,6 +183,26 @@ public class ChallengeUpdateRequestDto {
     this.status = status;
   }
 
+  public ChallengeUpdateRequestDto platformId(Long platformId) {
+    this.platformId = platformId;
+    return this;
+  }
+
+  /**
+   * The unique identifier of a challenge platform.
+   * @return platformId
+   */
+  @NotNull 
+  @Schema(name = "platformId", example = "1", description = "The unique identifier of a challenge platform.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("platformId")
+  public Long getPlatformId() {
+    return platformId;
+  }
+
+  public void setPlatformId(Long platformId) {
+    this.platformId = platformId;
+  }
+
   public ChallengeUpdateRequestDto websiteUrl(String websiteUrl) {
     this.websiteUrl = websiteUrl;
     return this;
@@ -235,13 +258,14 @@ public class ChallengeUpdateRequestDto {
         Objects.equals(this.description, challengeUpdateRequest.description) &&
         Objects.equals(this.doi, challengeUpdateRequest.doi) &&
         Objects.equals(this.status, challengeUpdateRequest.status) &&
+        Objects.equals(this.platformId, challengeUpdateRequest.platformId) &&
         Objects.equals(this.websiteUrl, challengeUpdateRequest.websiteUrl) &&
         Objects.equals(this.avatarUrl, challengeUpdateRequest.avatarUrl);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(slug, name, headline, description, doi, status, websiteUrl, avatarUrl);
+    return Objects.hash(slug, name, headline, description, doi, status, platformId, websiteUrl, avatarUrl);
   }
 
   @Override
@@ -254,6 +278,7 @@ public class ChallengeUpdateRequestDto {
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    doi: ").append(toIndentedString(doi)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    platformId: ").append(toIndentedString(platformId)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
     sb.append("}");
@@ -290,6 +315,7 @@ public class ChallengeUpdateRequestDto {
       this.instance.setDescription(value.description);
       this.instance.setDoi(value.doi);
       this.instance.setStatus(value.status);
+      this.instance.setPlatformId(value.platformId);
       this.instance.setWebsiteUrl(value.websiteUrl);
       this.instance.setAvatarUrl(value.avatarUrl);
       return this;
@@ -322,6 +348,11 @@ public class ChallengeUpdateRequestDto {
     
     public ChallengeUpdateRequestDto.Builder status(ChallengeStatusDto status) {
       this.instance.status(status);
+      return this;
+    }
+    
+    public ChallengeUpdateRequestDto.Builder platformId(Long platformId) {
+      this.instance.platformId(platformId);
       return this;
     }
     

@@ -1343,6 +1343,8 @@ components:
           $ref: '#/components/schemas/ChallengeDoi'
         status:
           $ref: '#/components/schemas/ChallengeStatus'
+        platformId:
+          $ref: '#/components/schemas/ChallengePlatformId'
         websiteUrl:
           $ref: '#/components/schemas/Url'
         avatarUrl:
@@ -1354,6 +1356,7 @@ components:
         - description
         - doi
         - status
+        - platformId
         - websiteUrl
         - avatarUrl
     ChallengeJsonLd:

@@ -35,6 +35,10 @@ export interface ChallengeUpdateRequest {
   doi: string | null;
   status: ChallengeStatus;
   /**
+   * The unique identifier of a challenge platform.
+   */
+  platformId: number;
+  /**
    * A URL to the website or image.
    */
   websiteUrl: string | null;

@@ -86,6 +86,14 @@ class ChallengeUpdateRequestTest {
   }
 
   /**
+   * Test the property 'platformId'
+   */
+  @Test
+  void platformIdTest() {
+    // TODO: test platformId
+  }
+
+  /**
    * Test the property 'websiteUrl'
    */
   @Test

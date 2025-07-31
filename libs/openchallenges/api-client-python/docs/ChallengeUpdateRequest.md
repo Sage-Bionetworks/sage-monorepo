@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **description** | **str** | The description of the challenge. | 
 **doi** | **str** | The DOI of the challenge. | 
 **status** | [**ChallengeStatus**](ChallengeStatus.md) |  | 
+**platform_id** | **int** | The unique identifier of a challenge platform. | 
 **website_url** | **str** | A URL to the website or image. | 
 **avatar_url** | **str** | A URL to the website or image. | 
 

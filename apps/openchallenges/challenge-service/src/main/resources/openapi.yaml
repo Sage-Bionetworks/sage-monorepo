@@ -1768,6 +1768,11 @@ components:
           type: string
         status:
           $ref: '#/components/schemas/ChallengeStatus'
+        platformId:
+          description: The unique identifier of a challenge platform.
+          example: 1
+          format: int64
+          type: integer
         websiteUrl:
           description: A URL to the website or image.
           example: https://openchallenges.io
@@ -1788,6 +1793,7 @@ components:
       - doi
       - headline
       - name
+      - platformId
       - slug
       - status
       - websiteUrl
