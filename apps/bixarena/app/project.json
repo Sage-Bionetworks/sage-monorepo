@@ -14,24 +14,14 @@
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "uv sync",
+        "command": "uv sync --extra model_worker --extra webui",
         "cwd": "{projectRoot}"
-      }
-    },
-    "install": {
-      "executor": "@nxlv/python:run-commands",
-      "options": {
-        "command": ["uv pip install --upgrade pip", "uv pip install -e '.[model_worker,webui]'"],
-        "cwd": "{projectRoot}",
-        "silent": false,
-        "verbose": false,
-        "debug": false
       }
     },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "uv run src/main.py",
+        "command": "uv run python -m fastchat.serve.gradio_web_server_multi --port ${APP_PORT} --register-api-endpoint-file models.template.json",
         "cwd": "{projectRoot}"
       }
     },
