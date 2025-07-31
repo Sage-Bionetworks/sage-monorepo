@@ -74,6 +74,14 @@ export class HelperService {
     }
   }
 
+  getUrlParam(name: string) {
+    if (typeof window === 'undefined') return null;
+
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    return urlParams.get(name);
+  }
+
   encodeParenthesesForwardSlashes(uri: string) {
     return (
       uri
