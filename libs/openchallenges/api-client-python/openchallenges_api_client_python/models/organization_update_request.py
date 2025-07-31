@@ -23,34 +23,23 @@ from typing_extensions import Annotated
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class OrganizationUpdateRequest(BaseModel):
     """
     The information required to update an org account
-    """  # noqa: E501
-
+    """ # noqa: E501
     name: StrictStr
     description: Optional[StrictStr]
     avatar_key: Optional[StrictStr] = Field(alias="avatarKey")
-    website_url: Optional[Annotated[str, Field(strict=True, max_length=500)]] = Field(
-        description="A URL to the website or image.", alias="websiteUrl"
-    )
-    acronym: Optional[Annotated[str, Field(strict=True, max_length=10)]] = Field(
-        description="An acronym of the organization."
-    )
-    __properties: ClassVar[List[str]] = [
-        "name",
-        "description",
-        "avatarKey",
-        "websiteUrl",
-        "acronym",
-    ]
+    website_url: Optional[Annotated[str, Field(strict=True, max_length=500)]] = Field(description="A URL to the website or image.", alias="websiteUrl")
+    acronym: Optional[Annotated[str, Field(strict=True, max_length=10)]] = Field(description="An acronym of the organization.")
+    __properties: ClassVar[List[str]] = ["name", "description", "avatarKey", "websiteUrl", "acronym"]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -76,7 +65,8 @@ class OrganizationUpdateRequest(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -86,22 +76,22 @@ class OrganizationUpdateRequest(BaseModel):
         # set to None if description (nullable) is None
         # and model_fields_set contains the field
         if self.description is None and "description" in self.model_fields_set:
-            _dict["description"] = None
+            _dict['description'] = None
 
         # set to None if avatar_key (nullable) is None
         # and model_fields_set contains the field
         if self.avatar_key is None and "avatar_key" in self.model_fields_set:
-            _dict["avatarKey"] = None
+            _dict['avatarKey'] = None
 
         # set to None if website_url (nullable) is None
         # and model_fields_set contains the field
         if self.website_url is None and "website_url" in self.model_fields_set:
-            _dict["websiteUrl"] = None
+            _dict['websiteUrl'] = None
 
         # set to None if acronym (nullable) is None
         # and model_fields_set contains the field
         if self.acronym is None and "acronym" in self.model_fields_set:
-            _dict["acronym"] = None
+            _dict['acronym'] = None
 
         return _dict
 
@@ -114,13 +104,13 @@ class OrganizationUpdateRequest(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "name": obj.get("name"),
-                "description": obj.get("description"),
-                "avatarKey": obj.get("avatarKey"),
-                "websiteUrl": obj.get("websiteUrl"),
-                "acronym": obj.get("acronym"),
-            }
-        )
+        _obj = cls.model_validate({
+            "name": obj.get("name"),
+            "description": obj.get("description"),
+            "avatarKey": obj.get("avatarKey"),
+            "websiteUrl": obj.get("websiteUrl"),
+            "acronym": obj.get("acronym")
+        })
         return _obj
+
+

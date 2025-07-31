@@ -24,56 +24,26 @@ from openchallenges_api_client_python.models.challenge_status import ChallengeSt
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class ChallengeCreateRequest(BaseModel):
     """
     The information used to create a challenge
-    """  # noqa: E501
-
-    slug: Annotated[str, Field(min_length=3, strict=True, max_length=255)] = Field(
-        description="The unique slug of the challenge."
-    )
-    name: Annotated[str, Field(min_length=3, strict=True, max_length=255)] = Field(
-        description="The name of the challenge."
-    )
-    headline: Optional[
-        Annotated[str, Field(min_length=0, strict=True, max_length=80)]
-    ] = Field(default=None, description="The headline of the challenge.")
-    description: Optional[
-        Annotated[str, Field(min_length=0, strict=True, max_length=1000)]
-    ] = Field(default=None, description="The description of the challenge.")
-    doi: Optional[Annotated[str, Field(strict=True, max_length=120)]] = Field(
-        default=None, description="The DOI of the challenge."
-    )
+    """ # noqa: E501
+    slug: Annotated[str, Field(min_length=3, strict=True, max_length=255)] = Field(description="The unique slug of the challenge.")
+    name: Annotated[str, Field(min_length=3, strict=True, max_length=255)] = Field(description="The name of the challenge.")
+    headline: Optional[Annotated[str, Field(min_length=0, strict=True, max_length=80)]] = Field(default=None, description="The headline of the challenge.")
+    description: Optional[Annotated[str, Field(min_length=0, strict=True, max_length=1000)]] = Field(default=None, description="The description of the challenge.")
+    doi: Optional[Annotated[str, Field(strict=True, max_length=120)]] = Field(default=None, description="The DOI of the challenge.")
     status: ChallengeStatus
-    platform_id: StrictInt = Field(
-        description="The unique identifier of a challenge platform.", alias="platformId"
-    )
-    website_url: Optional[Annotated[str, Field(strict=True, max_length=500)]] = Field(
-        default=None, description="A URL to the website or image.", alias="websiteUrl"
-    )
-    avatar_url: Optional[Annotated[str, Field(strict=True, max_length=500)]] = Field(
-        default=None, description="A URL to the website or image.", alias="avatarUrl"
-    )
-    __properties: ClassVar[List[str]] = [
-        "slug",
-        "name",
-        "headline",
-        "description",
-        "doi",
-        "status",
-        "platformId",
-        "websiteUrl",
-        "avatarUrl",
-    ]
+    platform_id: StrictInt = Field(description="The unique identifier of a challenge platform.", alias="platformId")
+    website_url: Optional[Annotated[str, Field(strict=True, max_length=500)]] = Field(default=None, description="A URL to the website or image.", alias="websiteUrl")
+    avatar_url: Optional[Annotated[str, Field(strict=True, max_length=500)]] = Field(default=None, description="A URL to the website or image.", alias="avatarUrl")
+    __properties: ClassVar[List[str]] = ["slug", "name", "headline", "description", "doi", "status", "platformId", "websiteUrl", "avatarUrl"]
 
-    @field_validator("slug")
+    @field_validator('slug')
     def slug_validate_regular_expression(cls, value):
         """Validates the regular expression"""
         if not re.match(r"^[a-z0-9]+(?:-[a-z0-9]+)*$", value):
-            raise ValueError(
-                r"must validate the regular expression /^[a-z0-9]+(?:-[a-z0-9]+)*$/"
-            )
+            raise ValueError(r"must validate the regular expression /^[a-z0-9]+(?:-[a-z0-9]+)*$/")
         return value
 
     model_config = ConfigDict(
@@ -81,6 +51,7 @@ class ChallengeCreateRequest(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -106,7 +77,8 @@ class ChallengeCreateRequest(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -116,22 +88,22 @@ class ChallengeCreateRequest(BaseModel):
         # set to None if headline (nullable) is None
         # and model_fields_set contains the field
         if self.headline is None and "headline" in self.model_fields_set:
-            _dict["headline"] = None
+            _dict['headline'] = None
 
         # set to None if doi (nullable) is None
         # and model_fields_set contains the field
         if self.doi is None and "doi" in self.model_fields_set:
-            _dict["doi"] = None
+            _dict['doi'] = None
 
         # set to None if website_url (nullable) is None
         # and model_fields_set contains the field
         if self.website_url is None and "website_url" in self.model_fields_set:
-            _dict["websiteUrl"] = None
+            _dict['websiteUrl'] = None
 
         # set to None if avatar_url (nullable) is None
         # and model_fields_set contains the field
         if self.avatar_url is None and "avatar_url" in self.model_fields_set:
-            _dict["avatarUrl"] = None
+            _dict['avatarUrl'] = None
 
         return _dict
 
@@ -144,17 +116,17 @@ class ChallengeCreateRequest(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "slug": obj.get("slug"),
-                "name": obj.get("name"),
-                "headline": obj.get("headline"),
-                "description": obj.get("description"),
-                "doi": obj.get("doi"),
-                "status": obj.get("status"),
-                "platformId": obj.get("platformId"),
-                "websiteUrl": obj.get("websiteUrl"),
-                "avatarUrl": obj.get("avatarUrl"),
-            }
-        )
+        _obj = cls.model_validate({
+            "slug": obj.get("slug"),
+            "name": obj.get("name"),
+            "headline": obj.get("headline"),
+            "description": obj.get("description"),
+            "doi": obj.get("doi"),
+            "status": obj.get("status"),
+            "platformId": obj.get("platformId"),
+            "websiteUrl": obj.get("websiteUrl"),
+            "avatarUrl": obj.get("avatarUrl")
+        })
         return _obj
+
+

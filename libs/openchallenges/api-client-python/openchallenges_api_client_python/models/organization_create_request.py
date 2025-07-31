@@ -23,40 +23,23 @@ from typing_extensions import Annotated
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class OrganizationCreateRequest(BaseModel):
     """
     The information required to create an org account
-    """  # noqa: E501
-
-    login: Annotated[str, Field(min_length=2, strict=True, max_length=64)] = Field(
-        description="The unique login of an organization."
-    )
+    """ # noqa: E501
+    login: Annotated[str, Field(min_length=2, strict=True, max_length=64)] = Field(description="The unique login of an organization.")
     name: StrictStr
     description: Optional[StrictStr] = None
     avatar_key: Optional[StrictStr] = Field(default=None, alias="avatarKey")
-    website_url: Optional[Annotated[str, Field(strict=True, max_length=500)]] = Field(
-        description="A URL to the website or image.", alias="websiteUrl"
-    )
-    acronym: Optional[Annotated[str, Field(strict=True, max_length=10)]] = Field(
-        default=None, description="An acronym of the organization."
-    )
-    __properties: ClassVar[List[str]] = [
-        "login",
-        "name",
-        "description",
-        "avatarKey",
-        "websiteUrl",
-        "acronym",
-    ]
+    website_url: Optional[Annotated[str, Field(strict=True, max_length=500)]] = Field(description="A URL to the website or image.", alias="websiteUrl")
+    acronym: Optional[Annotated[str, Field(strict=True, max_length=10)]] = Field(default=None, description="An acronym of the organization.")
+    __properties: ClassVar[List[str]] = ["login", "name", "description", "avatarKey", "websiteUrl", "acronym"]
 
-    @field_validator("login")
+    @field_validator('login')
     def login_validate_regular_expression(cls, value):
         """Validates the regular expression"""
         if not re.match(r"^[a-z0-9]+(?:-[a-z0-9]+)*$", value):
-            raise ValueError(
-                r"must validate the regular expression /^[a-z0-9]+(?:-[a-z0-9]+)*$/"
-            )
+            raise ValueError(r"must validate the regular expression /^[a-z0-9]+(?:-[a-z0-9]+)*$/")
         return value
 
     model_config = ConfigDict(
@@ -64,6 +47,7 @@ class OrganizationCreateRequest(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -89,7 +73,8 @@ class OrganizationCreateRequest(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -99,22 +84,22 @@ class OrganizationCreateRequest(BaseModel):
         # set to None if description (nullable) is None
         # and model_fields_set contains the field
         if self.description is None and "description" in self.model_fields_set:
-            _dict["description"] = None
+            _dict['description'] = None
 
         # set to None if avatar_key (nullable) is None
         # and model_fields_set contains the field
         if self.avatar_key is None and "avatar_key" in self.model_fields_set:
-            _dict["avatarKey"] = None
+            _dict['avatarKey'] = None
 
         # set to None if website_url (nullable) is None
         # and model_fields_set contains the field
         if self.website_url is None and "website_url" in self.model_fields_set:
-            _dict["websiteUrl"] = None
+            _dict['websiteUrl'] = None
 
         # set to None if acronym (nullable) is None
         # and model_fields_set contains the field
         if self.acronym is None and "acronym" in self.model_fields_set:
-            _dict["acronym"] = None
+            _dict['acronym'] = None
 
         return _dict
 
@@ -127,14 +112,14 @@ class OrganizationCreateRequest(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "login": obj.get("login"),
-                "name": obj.get("name"),
-                "description": obj.get("description"),
-                "avatarKey": obj.get("avatarKey"),
-                "websiteUrl": obj.get("websiteUrl"),
-                "acronym": obj.get("acronym"),
-            }
-        )
+        _obj = cls.model_validate({
+            "login": obj.get("login"),
+            "name": obj.get("name"),
+            "description": obj.get("description"),
+            "avatarKey": obj.get("avatarKey"),
+            "websiteUrl": obj.get("websiteUrl"),
+            "acronym": obj.get("acronym")
+        })
         return _obj
+
+

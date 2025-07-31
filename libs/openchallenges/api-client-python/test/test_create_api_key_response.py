@@ -14,10 +14,7 @@
 
 import unittest
 
-from openchallenges_api_client_python.models.create_api_key_response import (
-    CreateApiKeyResponse,
-)
-
+from openchallenges_api_client_python.models.create_api_key_response import CreateApiKeyResponse
 
 class TestCreateApiKeyResponse(unittest.TestCase):
     """CreateApiKeyResponse unit test stubs"""
@@ -30,9 +27,9 @@ class TestCreateApiKeyResponse(unittest.TestCase):
 
     def make_instance(self, include_optional) -> CreateApiKeyResponse:
         """Test CreateApiKeyResponse
-        include_optional is a boolean, when False only required
-        params are included, when True both required and
-        optional params are included"""
+            include_optional is a boolean, when False only required
+            params are included, when True both required and
+            optional params are included """
         # uncomment below to create an instance of `CreateApiKeyResponse`
         """
         model = CreateApiKeyResponse()
@@ -55,6 +52,5 @@ class TestCreateApiKeyResponse(unittest.TestCase):
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

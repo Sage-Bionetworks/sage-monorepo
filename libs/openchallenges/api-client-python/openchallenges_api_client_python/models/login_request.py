@@ -22,12 +22,10 @@ from typing import Any, ClassVar, Dict, List
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class LoginRequest(BaseModel):
     """
     LoginRequest
-    """  # noqa: E501
-
+    """ # noqa: E501
     username: StrictStr = Field(description="Username or email")
     password: SecretStr = Field(description="User password")
     __properties: ClassVar[List[str]] = ["username", "password"]
@@ -37,6 +35,7 @@ class LoginRequest(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -62,7 +61,8 @@ class LoginRequest(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -80,7 +80,10 @@ class LoginRequest(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {"username": obj.get("username"), "password": obj.get("password")}
-        )
+        _obj = cls.model_validate({
+            "username": obj.get("username"),
+            "password": obj.get("password")
+        })
         return _obj
+
+

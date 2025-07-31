@@ -14,10 +14,7 @@
 
 import unittest
 
-from openchallenges_api_client_python.models.organization_direction import (
-    OrganizationDirection,
-)
-
+from openchallenges_api_client_python.models.organization_direction import OrganizationDirection
 
 class TestOrganizationDirection(unittest.TestCase):
     """OrganizationDirection unit test stubs"""
@@ -32,6 +29,5 @@ class TestOrganizationDirection(unittest.TestCase):
         """Test OrganizationDirection"""
         # inst = OrganizationDirection()
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

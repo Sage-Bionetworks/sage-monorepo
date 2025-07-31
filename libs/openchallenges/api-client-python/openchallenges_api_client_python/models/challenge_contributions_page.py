@@ -19,50 +19,29 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt
 from typing import Any, ClassVar, Dict, List
-from openchallenges_api_client_python.models.challenge_contribution import (
-    ChallengeContribution,
-)
+from openchallenges_api_client_python.models.challenge_contribution import ChallengeContribution
 from typing import Optional, Set
 from typing_extensions import Self
-
 
 class ChallengeContributionsPage(BaseModel):
     """
     A page of challenge challenge contributions.
-    """  # noqa: E501
-
+    """ # noqa: E501
     number: StrictInt = Field(description="The page number.")
     size: StrictInt = Field(description="The number of items in a single page.")
-    total_elements: StrictInt = Field(
-        description="Total number of elements in the result set.", alias="totalElements"
-    )
-    total_pages: StrictInt = Field(
-        description="Total number of pages in the result set.", alias="totalPages"
-    )
-    has_next: StrictBool = Field(
-        description="Returns if there is a next page.", alias="hasNext"
-    )
-    has_previous: StrictBool = Field(
-        description="Returns if there is a previous page.", alias="hasPrevious"
-    )
-    challenge_contributions: List[ChallengeContribution] = Field(
-        description="A list of challenge contributions.", alias="challengeContributions"
-    )
-    __properties: ClassVar[List[str]] = [
-        "number",
-        "size",
-        "totalElements",
-        "totalPages",
-        "hasNext",
-        "hasPrevious",
-        "challengeContributions",
-    ]
+    total_elements: StrictInt = Field(description="Total number of elements in the result set.", alias="totalElements")
+    total_pages: StrictInt = Field(description="Total number of pages in the result set.", alias="totalPages")
+    has_next: StrictBool = Field(description="Returns if there is a next page.", alias="hasNext")
+    has_previous: StrictBool = Field(description="Returns if there is a previous page.", alias="hasPrevious")
+    challenge_contributions: List[ChallengeContribution] = Field(description="A list of challenge contributions.", alias="challengeContributions")
+    __properties: ClassVar[List[str]] = ["number", "size", "totalElements", "totalPages", "hasNext", "hasPrevious", "challengeContributions"]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -88,7 +67,8 @@ class ChallengeContributionsPage(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -101,7 +81,7 @@ class ChallengeContributionsPage(BaseModel):
             for _item_challenge_contributions in self.challenge_contributions:
                 if _item_challenge_contributions:
                     _items.append(_item_challenge_contributions.to_dict())
-            _dict["challengeContributions"] = _items
+            _dict['challengeContributions'] = _items
         return _dict
 
     @classmethod
@@ -113,22 +93,15 @@ class ChallengeContributionsPage(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "number": obj.get("number"),
-                "size": obj.get("size"),
-                "totalElements": obj.get("totalElements"),
-                "totalPages": obj.get("totalPages"),
-                "hasNext": obj.get("hasNext"),
-                "hasPrevious": obj.get("hasPrevious"),
-                "challengeContributions": (
-                    [
-                        ChallengeContribution.from_dict(_item)
-                        for _item in obj["challengeContributions"]
-                    ]
-                    if obj.get("challengeContributions") is not None
-                    else None
-                ),
-            }
-        )
+        _obj = cls.model_validate({
+            "number": obj.get("number"),
+            "size": obj.get("size"),
+            "totalElements": obj.get("totalElements"),
+            "totalPages": obj.get("totalPages"),
+            "hasNext": obj.get("hasNext"),
+            "hasPrevious": obj.get("hasPrevious"),
+            "challengeContributions": [ChallengeContribution.from_dict(_item) for _item in obj["challengeContributions"]] if obj.get("challengeContributions") is not None else None
+        })
         return _obj
+
+

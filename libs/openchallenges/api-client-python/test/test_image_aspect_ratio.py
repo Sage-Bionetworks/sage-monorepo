@@ -16,7 +16,6 @@ import unittest
 
 from openchallenges_api_client_python.models.image_aspect_ratio import ImageAspectRatio
 
-
 class TestImageAspectRatio(unittest.TestCase):
     """ImageAspectRatio unit test stubs"""
 
@@ -30,6 +29,5 @@ class TestImageAspectRatio(unittest.TestCase):
         """Test ImageAspectRatio"""
         # inst = ImageAspectRatio()
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

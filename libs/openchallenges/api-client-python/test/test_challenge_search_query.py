@@ -14,10 +14,7 @@
 
 import unittest
 
-from openchallenges_api_client_python.models.challenge_search_query import (
-    ChallengeSearchQuery,
-)
-
+from openchallenges_api_client_python.models.challenge_search_query import ChallengeSearchQuery
 
 class TestChallengeSearchQuery(unittest.TestCase):
     """ChallengeSearchQuery unit test stubs"""
@@ -30,9 +27,9 @@ class TestChallengeSearchQuery(unittest.TestCase):
 
     def make_instance(self, include_optional) -> ChallengeSearchQuery:
         """Test ChallengeSearchQuery
-        include_optional is a boolean, when False only required
-        params are included, when True both required and
-        optional params are included"""
+            include_optional is a boolean, when False only required
+            params are included, when True both required and
+            optional params are included """
         # uncomment below to create an instance of `ChallengeSearchQuery`
         """
         model = ChallengeSearchQuery()
@@ -81,6 +78,5 @@ class TestChallengeSearchQuery(unittest.TestCase):
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

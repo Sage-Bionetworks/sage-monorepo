@@ -26,13 +26,15 @@ class EdamSection(str, Enum):
     """
     allowed enum values
     """
-    DATA = "data"
-    FORMAT = "format"
-    IDENTIFIER = "identifier"
-    OPERATION = "operation"
-    TOPIC = "topic"
+    DATA = 'data'
+    FORMAT = 'format'
+    IDENTIFIER = 'identifier'
+    OPERATION = 'operation'
+    TOPIC = 'topic'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
         """Create an instance of EdamSection from a JSON string"""
         return cls(json.loads(json_str))
+
+

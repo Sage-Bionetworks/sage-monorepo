@@ -3,7 +3,7 @@ info:
   contact:
     name: Support
     url: https://github.com/Sage-Bionetworks/sage-monorepo
-  description: 'Discover, explore, and contribute to open biomedical challenges.'
+  description: "Discover, explore, and contribute to open biomedical challenges."
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -12,59 +12,59 @@ info:
   x-logo:
     url: https://openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
-  - url: https://openchallenges.io/api/v1
+- url: https://openchallenges.io/api/v1
 tags:
-  - description: Operations about authentication
-    name: Authentication
-    x-audience:
-      - public
-    x-displayName: Authentication
-  - description: Operations about API key management
-    name: API Key
-    x-audience:
-      - public
-    x-displayName: API Key
-  - description: Operations about challenges.
-    name: Challenge
-    x-audience:
-      - public
-    x-displayName: Challenge
-  - description: Operations about challenge contributions.
-    name: Challenge Contribution
-    x-audience:
-      - public
-    x-displayName: Challenge Contribution
-  - description: Operations about challenge analytics.
-    name: ChallengeAnalytics
-    x-audience:
-      - public
-    x-displayName: ChallengeAnalytics
-  - description: Operations about challenge platforms.
-    name: ChallengePlatform
-    x-audience:
-      - public
-    x-displayName: ChallengePlatform
-  - description: Operations about EDAM concepts.
-    name: EdamConcept
-    x-audience:
-      - public
-    x-displayName: EdamConcept
-  - name: Challenge Analytics
-    x-displayName: Challenge Analytics
-  - name: Challenge Platform
-    x-displayName: Challenge Platform
-  - name: Edam Concept
-    x-displayName: Edam Concept
-  - description: Operations about images
-    name: Image
-    x-audience:
-      - public
-    x-displayName: Image
-  - description: Operations about organizations
-    name: Organization
-    x-audience:
-      - public
-    x-displayName: Organization
+- description: Operations about authentication
+  name: Authentication
+  x-audience:
+  - public
+  x-displayName: Authentication
+- description: Operations about API key management
+  name: API Key
+  x-audience:
+  - public
+  x-displayName: API Key
+- description: Operations about challenges.
+  name: Challenge
+  x-audience:
+  - public
+  x-displayName: Challenge
+- description: Operations about challenge contributions.
+  name: Challenge Contribution
+  x-audience:
+  - public
+  x-displayName: Challenge Contribution
+- description: Operations about challenge analytics.
+  name: ChallengeAnalytics
+  x-audience:
+  - public
+  x-displayName: ChallengeAnalytics
+- description: Operations about challenge platforms.
+  name: ChallengePlatform
+  x-audience:
+  - public
+  x-displayName: ChallengePlatform
+- description: Operations about EDAM concepts.
+  name: EdamConcept
+  x-audience:
+  - public
+  x-displayName: EdamConcept
+- name: Challenge Analytics
+  x-displayName: Challenge Analytics
+- name: Challenge Platform
+  x-displayName: Challenge Platform
+- name: Edam Concept
+  x-displayName: Edam Concept
+- description: Operations about images
+  name: Image
+  x-audience:
+  - public
+  x-displayName: Image
+- description: Operations about organizations
+  name: Organization
+  x-audience:
+  - public
+  x-displayName: Organization
 paths:
   /auth/login:
     post:
@@ -77,19 +77,19 @@ paths:
               $ref: '#/components/schemas/LoginRequest'
         required: true
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/LoginResponse'
           description: Login successful
-        '401':
+        "401":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -98,19 +98,19 @@ paths:
             error
       summary: User login
       tags:
-        - Authentication
+      - Authentication
       x-audience:
-        - public
+      - public
       x-content-type: application/json
       x-accepts:
-        - application/json
-        - application/problem+json
+      - application/json
+      - application/problem+json
   /auth/api-keys:
     get:
       description: Get all API keys for the authenticated user
       operationId: listApiKeys
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
@@ -118,13 +118,13 @@ paths:
                   $ref: '#/components/schemas/ApiKey'
                 type: array
           description: List of API keys
-        '401':
+        "401":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -132,15 +132,15 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-        - apiBearerAuth: []
+      - apiBearerAuth: []
       summary: List API keys
       tags:
-        - API Key
+      - API Key
       x-audience:
-        - public
+      - public
       x-accepts:
-        - application/json
-        - application/problem+json
+      - application/json
+      - application/problem+json
     post:
       description: Generate a new API key for the authenticated user
       operationId: createApiKey
@@ -151,25 +151,25 @@ paths:
               $ref: '#/components/schemas/CreateApiKeyRequest'
         required: true
       responses:
-        '201':
+        "201":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreateApiKeyResponse'
           description: API key created successfully
-        '400':
+        "400":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        '401':
+        "401":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -177,46 +177,46 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-        - apiBearerAuth: []
+      - apiBearerAuth: []
       summary: Create API key
       tags:
-        - API Key
+      - API Key
       x-audience:
-        - public
+      - public
       x-content-type: application/json
       x-accepts:
-        - application/json
-        - application/problem+json
+      - application/json
+      - application/problem+json
   /auth/api-keys/{keyId}:
     delete:
       description: Revoke an API key
       operationId: deleteApiKey
       parameters:
-        - description: The API key ID to delete
-          explode: false
-          in: path
-          name: keyId
-          required: true
-          schema:
-            format: uuid
-            type: string
-          style: simple
+      - description: The API key ID to delete
+        explode: false
+        in: path
+        name: keyId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
       responses:
-        '204':
+        "204":
           description: API key deleted successfully
-        '401':
+        "401":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        '404':
+        "404":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -224,41 +224,41 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-        - apiBearerAuth: []
+      - apiBearerAuth: []
       summary: Delete API key
       tags:
-        - API Key
+      - API Key
       x-audience:
-        - public
+      - public
       x-accepts:
-        - application/problem+json
+      - application/problem+json
   /challenges:
     get:
       description: List challenges
       operationId: listChallenges
       parameters:
-        - description: The search query used to find challenges.
-          explode: true
-          in: query
-          name: challengeSearchQuery
-          required: false
-          schema:
-            $ref: '#/components/schemas/ChallengeSearchQuery'
-          style: form
+      - description: The search query used to find challenges.
+        explode: true
+        in: query
+        name: challengeSearchQuery
+        required: false
+        schema:
+          $ref: '#/components/schemas/ChallengeSearchQuery'
+        style: form
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ChallengesPage'
           description: Success
-        '400':
+        "400":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -267,12 +267,12 @@ paths:
             error
       summary: List challenges
       tags:
-        - Challenge
+      - Challenge
       x-audience:
-        - public
+      - public
       x-accepts:
-        - application/json
-        - application/problem+json
+      - application/json
+      - application/problem+json
     post:
       description: Create a challenge with the specified details
       operationId: createChallenge
@@ -283,37 +283,37 @@ paths:
               $ref: '#/components/schemas/ChallengeCreateRequest'
         required: true
       responses:
-        '201':
+        "201":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Challenge'
           description: Challenge created successfully
-        '400':
+        "400":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        '401':
+        "401":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        '403':
+        "403":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The user does not have the permission to perform this action
-        '409':
+        "409":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The request conflicts with current state of the target resource
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -321,51 +321,51 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-        - apiBearerAuth: []
+      - apiBearerAuth: []
       summary: Create a challenge
       tags:
-        - Challenge
+      - Challenge
       x-audience:
-        - public
+      - public
       x-content-type: application/json
       x-accepts:
-        - application/json
-        - application/problem+json
+      - application/json
+      - application/problem+json
   /challenges/{challengeId}:
     delete:
       description: Deletes a challenge by its unique ID.
       operationId: deleteChallenge
       parameters:
-        - description: The unique identifier of the challenge.
-          explode: false
-          in: path
-          name: challengeId
-          required: true
-          schema:
-            $ref: '#/components/schemas/ChallengeId'
-          style: simple
+      - description: The unique identifier of the challenge.
+        explode: false
+        in: path
+        name: challengeId
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeId'
+        style: simple
       responses:
-        '204':
+        "204":
           description: Challenge successfully deleted
-        '401':
+        "401":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        '403':
+        "403":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The user does not have the permission to perform this action
-        '404':
+        "404":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -373,40 +373,40 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-        - apiBearerAuth: []
+      - apiBearerAuth: []
       summary: Delete a challenge
       tags:
-        - Challenge
+      - Challenge
       x-audience:
-        - public
+      - public
       x-accepts:
-        - application/problem+json
+      - application/problem+json
     get:
       description: Returns the challenge specified
       operationId: getChallenge
       parameters:
-        - description: The unique identifier of the challenge.
-          explode: false
-          in: path
-          name: challengeId
-          required: true
-          schema:
-            $ref: '#/components/schemas/ChallengeId'
-          style: simple
+      - description: The unique identifier of the challenge.
+        explode: false
+        in: path
+        name: challengeId
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeId'
+        style: simple
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Challenge'
           description: A challenge
-        '404':
+        "404":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -415,24 +415,24 @@ paths:
             error
       summary: Get a challenge
       tags:
-        - Challenge
+      - Challenge
       x-audience:
-        - public
+      - public
       x-accepts:
-        - application/json
-        - application/problem+json
+      - application/json
+      - application/problem+json
     put:
       description: Updates an existing challenge.
       operationId: updateChallenge
       parameters:
-        - description: The unique identifier of the challenge.
-          explode: false
-          in: path
-          name: challengeId
-          required: true
-          schema:
-            $ref: '#/components/schemas/ChallengeId'
-          style: simple
+      - description: The unique identifier of the challenge.
+        explode: false
+        in: path
+        name: challengeId
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeId'
+        style: simple
       requestBody:
         content:
           application/json:
@@ -440,43 +440,43 @@ paths:
               $ref: '#/components/schemas/ChallengeUpdateRequest'
         required: true
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Challenge'
           description: Challenge successfully updated
-        '400':
+        "400":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        '401':
+        "401":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        '403':
+        "403":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The user does not have the permission to perform this action
-        '404':
+        "404":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        '409':
+        "409":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The request conflicts with current state of the target resource
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -484,43 +484,43 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-        - apiBearerAuth: []
+      - apiBearerAuth: []
       summary: Update an existing challenge
       tags:
-        - Challenge
+      - Challenge
       x-audience:
-        - public
+      - public
       x-content-type: application/json
       x-accepts:
-        - application/json
-        - application/problem+json
+      - application/json
+      - application/problem+json
   /challenges/{challengeId}/json-ld:
     get:
       description: Returns the challenge specified in JSON-LD format
       operationId: getChallengeJsonLd
       parameters:
-        - description: The unique identifier of the challenge.
-          explode: false
-          in: path
-          name: challengeId
-          required: true
-          schema:
-            $ref: '#/components/schemas/ChallengeId'
-          style: simple
+      - description: The unique identifier of the challenge.
+        explode: false
+        in: path
+        name: challengeId
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeId'
+        style: simple
       responses:
-        '200':
+        "200":
           content:
             application/ld+json:
               schema:
                 $ref: '#/components/schemas/ChallengeJsonLd'
           description: A challenge
-        '404':
+        "404":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -529,39 +529,39 @@ paths:
             error
       summary: Get a challenge in JSON-LD format
       tags:
-        - Challenge
+      - Challenge
       x-audience:
-        - public
+      - public
       x-accepts:
-        - application/ld+json
-        - application/problem+json
+      - application/ld+json
+      - application/problem+json
   /challenges/{challengeId}/contributions:
     get:
       description: List challenge contributions
       operationId: listChallengeContributions
       parameters:
-        - description: The unique identifier of the challenge.
-          explode: false
-          in: path
-          name: challengeId
-          required: true
-          schema:
-            $ref: '#/components/schemas/ChallengeId'
-          style: simple
+      - description: The unique identifier of the challenge.
+        explode: false
+        in: path
+        name: challengeId
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeId'
+        style: simple
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ChallengeContributionsPage'
           description: Success
-        '400':
+        "400":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -570,25 +570,25 @@ paths:
             error
       summary: List challenge contributions
       tags:
-        - Challenge Contribution
+      - Challenge Contribution
       x-audience:
-        - public
+      - public
       x-accepts:
-        - application/json
-        - application/problem+json
+      - application/json
+      - application/problem+json
     post:
       description: |
         Creates a new contribution record associated with a challenge ID.
       operationId: createChallengeContribution
       parameters:
-        - description: The unique identifier of the challenge.
-          explode: false
-          in: path
-          name: challengeId
-          required: true
-          schema:
-            $ref: '#/components/schemas/ChallengeId'
-          style: simple
+      - description: The unique identifier of the challenge.
+        explode: false
+        in: path
+        name: challengeId
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeId'
+        style: simple
       requestBody:
         content:
           application/json:
@@ -596,37 +596,37 @@ paths:
               $ref: '#/components/schemas/ChallengeContributionCreateRequest'
         required: true
       responses:
-        '201':
+        "201":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ChallengeContribution'
           description: Contribution created successfully
-        '401':
+        "401":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        '403':
+        "403":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The user does not have the permission to perform this action
-        '404':
+        "404":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        '409':
+        "409":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The request conflicts with current state of the target resource
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -634,67 +634,67 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-        - apiBearerAuth: []
+      - apiBearerAuth: []
       summary: Create a new contribution for a challenge
       tags:
-        - Challenge Contribution
+      - Challenge Contribution
       x-audience:
-        - public
+      - public
       x-content-type: application/json
       x-accepts:
-        - application/json
-        - application/problem+json
+      - application/json
+      - application/problem+json
   /challenges/{challengeId}/contributions/{organizationId}/role/{role}:
     delete:
       description: Delete a specific challenge contribution.
       operationId: deleteChallengeContribution
       parameters:
-        - description: The unique identifier of the challenge.
-          explode: false
-          in: path
-          name: challengeId
-          required: true
-          schema:
-            $ref: '#/components/schemas/ChallengeId'
-          style: simple
-        - description: The unique identifier of the organization.
-          explode: false
-          in: path
-          name: organizationId
-          required: true
-          schema:
-            $ref: '#/components/schemas/OrganizationId'
-          style: simple
-        - description: A challenge contribution role.
-          explode: false
-          in: path
-          name: role
-          required: true
-          schema:
-            $ref: '#/components/schemas/ChallengeContributionRole'
-          style: simple
+      - description: The unique identifier of the challenge.
+        explode: false
+        in: path
+        name: challengeId
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeId'
+        style: simple
+      - description: The unique identifier of the organization.
+        explode: false
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/OrganizationId'
+        style: simple
+      - description: A challenge contribution role.
+        explode: false
+        in: path
+        name: role
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeContributionRole'
+        style: simple
       responses:
-        '204':
+        "204":
           description: Contribution deleted successfully
-        '401':
+        "401":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        '403':
+        "403":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The user does not have the permission to perform this action
-        '404':
+        "404":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -702,63 +702,63 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-        - apiBearerAuth: []
+      - apiBearerAuth: []
       summary: Delete a specific challenge contribution
       tags:
-        - Challenge Contribution
+      - Challenge Contribution
       x-audience:
-        - public
+      - public
       x-accepts:
-        - application/problem+json
+      - application/problem+json
     get:
       description: |
         Retrieves a specific contribution record for a challenge, identified by its ID.
       operationId: getChallengeContribution
       parameters:
-        - description: The unique identifier of the challenge.
-          explode: false
-          in: path
-          name: challengeId
-          required: true
-          schema:
-            $ref: '#/components/schemas/ChallengeId'
-          style: simple
-        - description: The unique identifier of the organization.
-          explode: false
-          in: path
-          name: organizationId
-          required: true
-          schema:
-            $ref: '#/components/schemas/OrganizationId'
-          style: simple
-        - description: A challenge contribution role.
-          explode: false
-          in: path
-          name: role
-          required: true
-          schema:
-            $ref: '#/components/schemas/ChallengeContributionRole'
-          style: simple
+      - description: The unique identifier of the challenge.
+        explode: false
+        in: path
+        name: challengeId
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeId'
+        style: simple
+      - description: The unique identifier of the organization.
+        explode: false
+        in: path
+        name: organizationId
+        required: true
+        schema:
+          $ref: '#/components/schemas/OrganizationId'
+        style: simple
+      - description: A challenge contribution role.
+        explode: false
+        in: path
+        name: role
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeContributionRole'
+        style: simple
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ChallengeContribution'
           description: Challenge contribution retrieved successfully
-        '400':
+        "400":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        '404':
+        "404":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -767,24 +767,24 @@ paths:
             error
       summary: Get a specific challenge contribution
       tags:
-        - Challenge Contribution
+      - Challenge Contribution
       x-audience:
-        - public
+      - public
       x-accepts:
-        - application/json
-        - application/problem+json
+      - application/json
+      - application/problem+json
   /challenge-analytics/challenges-per-year:
     get:
       description: Returns the number of challenges tracked per year
       operationId: getChallengesPerYear
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ChallengesPerYear'
           description: An object
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -793,39 +793,39 @@ paths:
             error
       summary: Get the number of challenges tracked per year
       tags:
-        - Challenge Analytics
+      - Challenge Analytics
       x-audience:
-        - public
+      - public
       x-accepts:
-        - application/json
-        - application/problem+json
+      - application/json
+      - application/problem+json
   /challenge-platforms:
     get:
       description: List challenge platforms
       operationId: listChallengePlatforms
       parameters:
-        - description: The search query used to find challenge platforms.
-          explode: true
-          in: query
-          name: challengePlatformSearchQuery
-          required: false
-          schema:
-            $ref: '#/components/schemas/ChallengePlatformSearchQuery'
-          style: form
+      - description: The search query used to find challenge platforms.
+        explode: true
+        in: query
+        name: challengePlatformSearchQuery
+        required: false
+        schema:
+          $ref: '#/components/schemas/ChallengePlatformSearchQuery'
+        style: form
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ChallengePlatformsPage'
           description: Success
-        '400':
+        "400":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -834,12 +834,12 @@ paths:
             error
       summary: List challenge platforms
       tags:
-        - Challenge Platform
+      - Challenge Platform
       x-audience:
-        - public
+      - public
       x-accepts:
-        - application/json
-        - application/problem+json
+      - application/json
+      - application/problem+json
     post:
       description: Create a challenge platform with the specified ID
       operationId: createChallengePlatform
@@ -850,31 +850,31 @@ paths:
               $ref: '#/components/schemas/ChallengePlatformCreateRequest'
         required: true
       responses:
-        '201':
+        "201":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ChallengePlatform'
           description: Success
-        '401':
+        "401":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        '403':
+        "403":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The user does not have the permission to perform this action
-        '409':
+        "409":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The request conflicts with current state of the target resource
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -882,52 +882,52 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-        - apiBearerAuth: []
+      - apiBearerAuth: []
       summary: Create a challenge platform
       tags:
-        - Challenge Platform
+      - Challenge Platform
       x-audience:
-        - public
+      - public
       x-content-type: application/json
       x-accepts:
-        - application/json
-        - application/problem+json
+      - application/json
+      - application/problem+json
   /challenge-platforms/{challengePlatformId}:
     delete:
       description: |
         Deletes a challenge platform by its unique ID. This action is irreversible.
       operationId: deleteChallengePlatform
       parameters:
-        - description: The unique identifier of the challenge platform.
-          explode: false
-          in: path
-          name: challengePlatformId
-          required: true
-          schema:
-            $ref: '#/components/schemas/ChallengePlatformId'
-          style: simple
+      - description: The unique identifier of the challenge platform.
+        explode: false
+        in: path
+        name: challengePlatformId
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengePlatformId'
+        style: simple
       responses:
-        '204':
+        "204":
           description: Deletion successful
-        '401':
+        "401":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        '403':
+        "403":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The user does not have the permission to perform this action
-        '404':
+        "404":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -935,40 +935,40 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-        - apiBearerAuth: []
+      - apiBearerAuth: []
       summary: Delete a challenge platform
       tags:
-        - Challenge Platform
+      - Challenge Platform
       x-audience:
-        - public
+      - public
       x-accepts:
-        - application/problem+json
+      - application/problem+json
     get:
       description: Returns the challenge platform identified by its unique ID
       operationId: getChallengePlatform
       parameters:
-        - description: The unique identifier of the challenge platform.
-          explode: false
-          in: path
-          name: challengePlatformId
-          required: true
-          schema:
-            $ref: '#/components/schemas/ChallengePlatformId'
-          style: simple
+      - description: The unique identifier of the challenge platform.
+        explode: false
+        in: path
+        name: challengePlatformId
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengePlatformId'
+        style: simple
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ChallengePlatform'
           description: Success
-        '404':
+        "404":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -977,25 +977,25 @@ paths:
             error
       summary: Get a challenge platform
       tags:
-        - Challenge Platform
+      - Challenge Platform
       x-audience:
-        - public
+      - public
       x-accepts:
-        - application/json
-        - application/problem+json
+      - application/json
+      - application/problem+json
     put:
       description: |
         Updates an existing challenge platform.
       operationId: updateChallengePlatform
       parameters:
-        - description: The unique identifier of the challenge platform.
-          explode: false
-          in: path
-          name: challengePlatformId
-          required: true
-          schema:
-            $ref: '#/components/schemas/ChallengePlatformId'
-          style: simple
+      - description: The unique identifier of the challenge platform.
+        explode: false
+        in: path
+        name: challengePlatformId
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengePlatformId'
+        style: simple
       requestBody:
         content:
           application/json:
@@ -1003,43 +1003,43 @@ paths:
               $ref: '#/components/schemas/ChallengePlatformUpdateRequest'
         required: true
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ChallengePlatform'
           description: Challange platform updated successfully
-        '400':
+        "400":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        '401':
+        "401":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        '403':
+        "403":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The user does not have the permission to perform this action
-        '404':
+        "404":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        '409':
+        "409":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The request conflicts with current state of the target resource
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -1047,43 +1047,43 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-        - apiBearerAuth: []
+      - apiBearerAuth: []
       summary: Update an existing challenge platform
       tags:
-        - Challenge Platform
+      - Challenge Platform
       x-audience:
-        - public
+      - public
       x-content-type: application/json
       x-accepts:
-        - application/json
-        - application/problem+json
+      - application/json
+      - application/problem+json
   /edam-concepts:
     get:
       description: List EDAM concepts
       operationId: listEdamConcepts
       parameters:
-        - description: The search query used to find EDAM concepts.
-          explode: true
-          in: query
-          name: edamConceptSearchQuery
-          required: false
-          schema:
-            $ref: '#/components/schemas/EdamConceptSearchQuery'
-          style: form
+      - description: The search query used to find EDAM concepts.
+        explode: true
+        in: query
+        name: edamConceptSearchQuery
+        required: false
+        schema:
+          $ref: '#/components/schemas/EdamConceptSearchQuery'
+        style: form
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/EdamConceptsPage'
           description: Success
-        '400':
+        "400":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -1092,39 +1092,39 @@ paths:
             error
       summary: List EDAM concepts
       tags:
-        - Edam Concept
+      - Edam Concept
       x-audience:
-        - public
+      - public
       x-accepts:
-        - application/json
-        - application/problem+json
+      - application/json
+      - application/problem+json
   /images:
     get:
       description: Returns the image specified.
       operationId: getImage
       parameters:
-        - description: The query used to get an image.
-          explode: true
-          in: query
-          name: imageQuery
-          required: false
-          schema:
-            $ref: '#/components/schemas/ImageQuery'
-          style: deepObject
+      - description: The query used to get an image.
+        explode: true
+        in: query
+        name: imageQuery
+        required: false
+        schema:
+          $ref: '#/components/schemas/ImageQuery'
+        style: deepObject
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Image'
           description: An image
-        '404':
+        "404":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -1133,39 +1133,39 @@ paths:
             error
       summary: Get an image
       tags:
-        - Image
+      - Image
       x-audience:
-        - public
+      - public
       x-accepts:
-        - application/json
-        - application/problem+json
+      - application/json
+      - application/problem+json
   /organizations:
     get:
       description: List organizations
       operationId: listOrganizations
       parameters:
-        - description: The search query used to find organizations.
-          explode: true
-          in: query
-          name: organizationSearchQuery
-          required: false
-          schema:
-            $ref: '#/components/schemas/OrganizationSearchQuery'
-          style: form
+      - description: The search query used to find organizations.
+        explode: true
+        in: query
+        name: organizationSearchQuery
+        required: false
+        schema:
+          $ref: '#/components/schemas/OrganizationSearchQuery'
+        style: form
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/OrganizationsPage'
           description: Success
-        '400':
+        "400":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -1174,12 +1174,12 @@ paths:
             error
       summary: List organizations
       tags:
-        - Organization
+      - Organization
       x-audience:
-        - public
+      - public
       x-accepts:
-        - application/json
-        - application/problem+json
+      - application/json
+      - application/problem+json
     post:
       description: Create an organization with the specified account name
       operationId: createOrganization
@@ -1190,37 +1190,37 @@ paths:
               $ref: '#/components/schemas/OrganizationCreateRequest'
         required: true
       responses:
-        '201':
+        "201":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Organization'
           description: Organization created successfully
-        '400':
+        "400":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        '401':
+        "401":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        '403':
+        "403":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The user does not have the permission to perform this action
-        '409':
+        "409":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The request conflicts with current state of the target resource
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -1228,58 +1228,58 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-        - apiBearerAuth: []
+      - apiBearerAuth: []
       summary: Create an organization
       tags:
-        - Organization
+      - Organization
       x-audience:
-        - public
+      - public
       x-content-type: application/json
       x-accepts:
-        - application/json
-        - application/problem+json
+      - application/json
+      - application/problem+json
   /organizations/{org}:
     delete:
       description: Deletes the organization specified by its login or ID.
       operationId: deleteOrganization
       parameters:
-        - description: The id or login of the organization.
-          examples:
-            byString:
-              value: dream
-            byId:
-              value: '1'
-          explode: false
-          in: path
-          name: org
-          required: true
-          schema:
-            maxLength: 64
-            minLength: 1
-            type: string
-          style: simple
+      - description: The id or login of the organization.
+        examples:
+          byString:
+            value: dream
+          byId:
+            value: "1"
+        explode: false
+        in: path
+        name: org
+        required: true
+        schema:
+          maxLength: 64
+          minLength: 1
+          type: string
+        style: simple
       responses:
-        '204':
+        "204":
           description: Organization successfully deleted
-        '401':
+        "401":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        '403':
+        "403":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The user does not have the permission to perform this action
-        '404':
+        "404":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -1287,47 +1287,47 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-        - apiBearerAuth: []
+      - apiBearerAuth: []
       summary: Delete an organization
       tags:
-        - Organization
+      - Organization
       x-audience:
-        - public
+      - public
       x-accepts:
-        - application/problem+json
+      - application/problem+json
     get:
       description: Returns the organization identified by its login or ID.
       operationId: getOrganization
       parameters:
-        - description: The id or login of the organization.
-          examples:
-            byString:
-              value: dream
-            byId:
-              value: '1'
-          explode: false
-          in: path
-          name: org
-          required: true
-          schema:
-            maxLength: 64
-            minLength: 1
-            type: string
-          style: simple
+      - description: The id or login of the organization.
+        examples:
+          byString:
+            value: dream
+          byId:
+            value: "1"
+        explode: false
+        in: path
+        name: org
+        required: true
+        schema:
+          maxLength: 64
+          minLength: 1
+          type: string
+        style: simple
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Organization'
           description: Organization retrieved successfully
-        '404':
+        "404":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -1336,31 +1336,31 @@ paths:
             error
       summary: Get an organization
       tags:
-        - Organization
+      - Organization
       x-audience:
-        - public
+      - public
       x-accepts:
-        - application/json
-        - application/problem+json
+      - application/json
+      - application/problem+json
     put:
       description: Updates an existing organization.
       operationId: updateOrganization
       parameters:
-        - description: The id or login of the organization.
-          examples:
-            byString:
-              value: dream
-            byId:
-              value: '1'
-          explode: false
-          in: path
-          name: org
-          required: true
-          schema:
-            maxLength: 64
-            minLength: 1
-            type: string
-          style: simple
+      - description: The id or login of the organization.
+        examples:
+          byString:
+            value: dream
+          byId:
+            value: "1"
+        explode: false
+        in: path
+        name: org
+        required: true
+        schema:
+          maxLength: 64
+          minLength: 1
+          type: string
+        style: simple
       requestBody:
         content:
           application/json:
@@ -1368,43 +1368,43 @@ paths:
               $ref: '#/components/schemas/OrganizationUpdateRequest'
         required: true
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Organization'
           description: Organization successfully updated
-        '400':
+        "400":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        '401':
+        "401":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        '403':
+        "403":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The user does not have the permission to perform this action
-        '404':
+        "404":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        '409':
+        "409":
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The request conflicts with current state of the target resource
-        '500':
+        "500":
           content:
             application/problem+json:
               schema:
@@ -1412,18 +1412,18 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-        - apiBearerAuth: []
+      - apiBearerAuth: []
       summary: Update an existing organization
       tags:
-        - Organization
+      - Organization
       x-audience:
-        - public
+      - public
       x-content-type: application/json
       x-accepts:
-        - application/json
-        - application/problem+json
+      - application/json
+      - application/problem+json
   /organizations/{org}/participations: {}
-  /organizations/{org}/participations/{challengeId}/role/{role}: {}
+  /organizations/{org}/participations/{challengeId}/roles/{role}: {}
 components:
   parameters:
     challengeSearchQuery:
@@ -1513,7 +1513,7 @@ components:
         byString:
           value: dream
         byId:
-          value: '1'
+          value: "1"
       explode: false
       in: path
       name: org
@@ -1585,8 +1585,8 @@ components:
           format: password
           type: string
       required:
-        - password
-        - username
+      - password
+      - username
       type: object
     LoginResponse:
       example:
@@ -1611,10 +1611,10 @@ components:
         role:
           description: User role
           enum:
-            - admin
-            - user
-            - readonly
-            - service
+          - admin
+          - user
+          - readonly
+          - service
           example: admin
           type: string
       type: object
@@ -1635,12 +1635,12 @@ components:
           description: An absolute URI that identifies the problem type
           type: string
       required:
-        - status
-        - title
+      - status
+      - title
       type: object
       x-java-class-annotations:
-        - '@lombok.AllArgsConstructor'
-        - '@lombok.Builder'
+      - '@lombok.AllArgsConstructor'
+      - '@lombok.Builder'
     ApiKey:
       example:
         createdAt: 2024-01-15T10:30:00Z
@@ -1700,7 +1700,7 @@ components:
           minimum: 1
           type: integer
       required:
-        - name
+      - name
       type: object
     CreateApiKeyResponse:
       example:
@@ -1744,27 +1744,27 @@ components:
       default: relevance
       description: What to sort results by.
       enum:
-        - created
-        - random
-        - relevance
-        - starred
-        - start_date
-        - end_date
+      - created
+      - random
+      - relevance
+      - starred
+      - start_date
+      - end_date
       type: string
     ChallengeDirection:
       description: The direction to sort the results by.
       enum:
-        - asc
-        - desc
+      - asc
+      - desc
       nullable: true
       type: string
     ChallengeIncentive:
       description: The incentive type of the challenge.
       enum:
-        - monetary
-        - publication
-        - speaking_engagement
-        - other
+      - monetary
+      - publication
+      - speaking_engagement
+      - other
       example: publication
       type: string
     ChallengePlatformSlug:
@@ -1772,7 +1772,7 @@ components:
       example: example-challenge-platform
       maxLength: 30
       minLength: 3
-      pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+      pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
       type: string
     OrganizationId:
       description: The unique identifier of an organization
@@ -1782,19 +1782,19 @@ components:
     ChallengeStatus:
       description: The status of the challenge.
       enum:
-        - upcoming
-        - active
-        - completed
+      - upcoming
+      - active
+      - completed
       example: active
       type: string
     ChallengeSubmissionType:
       description: The submission type of the challenge.
       enum:
-        - container_image
-        - prediction_file
-        - notebook
-        - mlcube
-        - other
+      - container_image
+      - prediction_file
+      - notebook
+      - mlcube
+      - other
       example: container_image
       type: string
     EdamConceptId:
@@ -1805,13 +1805,13 @@ components:
     ChallengeCategory:
       description: The category of the challenge.
       enum:
-        - featured
-        - benchmark
-        - hackathon
-        - starting_soon
-        - ending_soon
-        - recently_started
-        - recently_ended
+      - featured
+      - benchmark
+      - hackathon
+      - starting_soon
+      - ending_soon
+      - recently_started
+      - recently_ended
       example: featured
       type: string
     ChallengeSearchQuery:
@@ -1929,12 +1929,12 @@ components:
           example: true
           type: boolean
       required:
-        - hasNext
-        - hasPrevious
-        - number
-        - size
-        - totalElements
-        - totalPages
+      - hasNext
+      - hasPrevious
+      - number
+      - size
+      - totalElements
+      - totalPages
       type: object
     ChallengeId:
       description: The unique identifier of the challenge.
@@ -1946,7 +1946,7 @@ components:
       example: awesome-challenge
       maxLength: 255
       minLength: 3
-      pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+      pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
       type: string
     ChallengeName:
       description: The name of the challenge.
@@ -2003,7 +2003,7 @@ components:
           example: example-challenge-platform
           maxLength: 30
           minLength: 3
-          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           type: string
         name:
           description: The display name of the challenge platform.
@@ -2012,9 +2012,9 @@ components:
           minLength: 3
           type: string
       required:
-        - id
-        - name
-        - slug
+      - id
+      - name
+      - slug
       type: object
     Url:
       description: A URL to the website or image.
@@ -2045,9 +2045,9 @@ components:
           maxLength: 80
           type: string
       required:
-        - classId
-        - id
-        - preferredLabel
+      - classId
+      - id
+      - preferredLabel
       type: object
     ChallengeStartDate:
       description: The start date of the challenge.
@@ -2084,17 +2084,17 @@ components:
         starredCount: 100
         createdAt: 2022-07-04T22:19:11Z
         incentives:
-          - publication
-          - publication
+        - publication
+        - publication
         submissionTypes:
-          - container_image
-          - container_image
+        - container_image
+        - container_image
         websiteUrl: https://openchallenges.io
         name: Awesome Challenge
         id: 1
         categories:
-          - featured
-          - featured
+        - featured
+        - featured
         headline: Example challenge headline
         operation:
           classId: http://edamontology.org/data_0850
@@ -2105,12 +2105,12 @@ components:
         doi: https://doi.org/123/abc
         status: active
         inputDataTypes:
-          - classId: http://edamontology.org/data_0850
-            preferredLabel: Sequence set
-            id: 1
-          - classId: http://edamontology.org/data_0850
-            preferredLabel: Sequence set
-            id: 1
+        - classId: http://edamontology.org/data_0850
+          preferredLabel: Sequence set
+          id: 1
+        - classId: http://edamontology.org/data_0850
+          preferredLabel: Sequence set
+          id: 1
         updatedAt: 2022-07-04T22:19:11Z
       properties:
         id:
@@ -2123,7 +2123,7 @@ components:
           example: awesome-challenge
           maxLength: 255
           minLength: 3
-          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           type: string
         name:
           description: The name of the challenge.
@@ -2216,118 +2216,118 @@ components:
           format: date-time
           type: string
       required:
-        - categories
-        - createdAt
-        - description
-        - id
-        - incentives
-        - name
-        - slug
-        - starredCount
-        - status
-        - submissionTypes
-        - updatedAt
+      - categories
+      - createdAt
+      - description
+      - id
+      - incentives
+      - name
+      - slug
+      - starredCount
+      - status
+      - submissionTypes
+      - updatedAt
       type: object
     ChallengesPage:
       allOf:
-        - $ref: '#/components/schemas/PageMetadata'
-        - properties:
-            challenges:
-              description: A list of challenges.
-              items:
-                $ref: '#/components/schemas/Challenge'
-              type: array
-          required:
-            - challenges
-          type: object
+      - $ref: '#/components/schemas/PageMetadata'
+      - properties:
+          challenges:
+            description: A list of challenges.
+            items:
+              $ref: '#/components/schemas/Challenge'
+            type: array
+        required:
+        - challenges
+        type: object
       description: A page of challenges.
       example:
         number: 99
         size: 99
         challenges:
-          - avatarUrl: https://openchallenges.io
-            endDate: 2017-07-21
-            description: This is an example description of the challenge.
-            platform:
-              name: Example Challenge Platform
-              id: 1
-              slug: example-challenge-platform
-            starredCount: 100
-            createdAt: 2022-07-04T22:19:11Z
-            incentives:
-              - publication
-              - publication
-            submissionTypes:
-              - container_image
-              - container_image
-            websiteUrl: https://openchallenges.io
-            name: Awesome Challenge
+        - avatarUrl: https://openchallenges.io
+          endDate: 2017-07-21
+          description: This is an example description of the challenge.
+          platform:
+            name: Example Challenge Platform
             id: 1
-            categories:
-              - featured
-              - featured
-            headline: Example challenge headline
-            operation:
-              classId: http://edamontology.org/data_0850
-              preferredLabel: Sequence set
-              id: 1
-            slug: awesome-challenge
-            startDate: 2017-07-21
-            doi: https://doi.org/123/abc
-            status: active
-            inputDataTypes:
-              - classId: http://edamontology.org/data_0850
-                preferredLabel: Sequence set
-                id: 1
-              - classId: http://edamontology.org/data_0850
-                preferredLabel: Sequence set
-                id: 1
-            updatedAt: 2022-07-04T22:19:11Z
-          - avatarUrl: https://openchallenges.io
-            endDate: 2017-07-21
-            description: This is an example description of the challenge.
-            platform:
-              name: Example Challenge Platform
-              id: 1
-              slug: example-challenge-platform
-            starredCount: 100
-            createdAt: 2022-07-04T22:19:11Z
-            incentives:
-              - publication
-              - publication
-            submissionTypes:
-              - container_image
-              - container_image
-            websiteUrl: https://openchallenges.io
-            name: Awesome Challenge
+            slug: example-challenge-platform
+          starredCount: 100
+          createdAt: 2022-07-04T22:19:11Z
+          incentives:
+          - publication
+          - publication
+          submissionTypes:
+          - container_image
+          - container_image
+          websiteUrl: https://openchallenges.io
+          name: Awesome Challenge
+          id: 1
+          categories:
+          - featured
+          - featured
+          headline: Example challenge headline
+          operation:
+            classId: http://edamontology.org/data_0850
+            preferredLabel: Sequence set
             id: 1
-            categories:
-              - featured
-              - featured
-            headline: Example challenge headline
-            operation:
-              classId: http://edamontology.org/data_0850
-              preferredLabel: Sequence set
-              id: 1
-            slug: awesome-challenge
-            startDate: 2017-07-21
-            doi: https://doi.org/123/abc
-            status: active
-            inputDataTypes:
-              - classId: http://edamontology.org/data_0850
-                preferredLabel: Sequence set
-                id: 1
-              - classId: http://edamontology.org/data_0850
-                preferredLabel: Sequence set
-                id: 1
-            updatedAt: 2022-07-04T22:19:11Z
+          slug: awesome-challenge
+          startDate: 2017-07-21
+          doi: https://doi.org/123/abc
+          status: active
+          inputDataTypes:
+          - classId: http://edamontology.org/data_0850
+            preferredLabel: Sequence set
+            id: 1
+          - classId: http://edamontology.org/data_0850
+            preferredLabel: Sequence set
+            id: 1
+          updatedAt: 2022-07-04T22:19:11Z
+        - avatarUrl: https://openchallenges.io
+          endDate: 2017-07-21
+          description: This is an example description of the challenge.
+          platform:
+            name: Example Challenge Platform
+            id: 1
+            slug: example-challenge-platform
+          starredCount: 100
+          createdAt: 2022-07-04T22:19:11Z
+          incentives:
+          - publication
+          - publication
+          submissionTypes:
+          - container_image
+          - container_image
+          websiteUrl: https://openchallenges.io
+          name: Awesome Challenge
+          id: 1
+          categories:
+          - featured
+          - featured
+          headline: Example challenge headline
+          operation:
+            classId: http://edamontology.org/data_0850
+            preferredLabel: Sequence set
+            id: 1
+          slug: awesome-challenge
+          startDate: 2017-07-21
+          doi: https://doi.org/123/abc
+          status: active
+          inputDataTypes:
+          - classId: http://edamontology.org/data_0850
+            preferredLabel: Sequence set
+            id: 1
+          - classId: http://edamontology.org/data_0850
+            preferredLabel: Sequence set
+            id: 1
+          updatedAt: 2022-07-04T22:19:11Z
         totalPages: 99
         hasPrevious: true
         hasNext: true
         totalElements: 99
       type: object
       x-java-class-annotations:
-        - '@lombok.Builder'
+      - '@lombok.Builder'
     ChallengeCreateRequest:
       description: The information used to create a challenge
       example:
@@ -2346,7 +2346,7 @@ components:
           example: awesome-challenge
           maxLength: 255
           minLength: 3
-          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           type: string
         name:
           description: The name of the challenge.
@@ -2396,17 +2396,17 @@ components:
           nullable: true
           type: string
       required:
-        - name
-        - platformId
-        - slug
-        - status
+      - name
+      - platformId
+      - slug
+      - status
       type: object
     ChallengeUpdateRequest:
       description: The information required to update a challenge
       example:
         incentives:
-          - publication
-          - publication
+        - publication
+        - publication
         websiteUrl: https://openchallenges.io
         avatarUrl: https://openchallenges.io
         name: Awesome Challenge
@@ -2422,7 +2422,7 @@ components:
           example: awesome-challenge
           maxLength: 255
           minLength: 3
-          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           type: string
         name:
           description: The name of the challenge.
@@ -2476,35 +2476,35 @@ components:
             $ref: '#/components/schemas/ChallengeIncentive'
           type: array
       required:
-        - avatarUrl
-        - description
-        - doi
-        - headline
-        - incentives
-        - name
-        - platformId
-        - slug
-        - status
-        - websiteUrl
+      - avatarUrl
+      - description
+      - doi
+      - headline
+      - incentives
+      - name
+      - platformId
+      - slug
+      - status
+      - websiteUrl
       type: object
     ChallengeJsonLd:
       allOf:
-        - $ref: '#/components/schemas/Challenge'
-        - properties:
-            '@context':
-              example: https://schema.org
-              type: string
-            '@id':
-              example: https://openchallenges.io/api/v1/challenges/1
-              type: string
-            '@type':
-              example: Challenge
-              type: string
-          required:
-            - '@context'
-            - '@id'
-            - '@type'
-          type: object
+      - $ref: '#/components/schemas/Challenge'
+      - properties:
+          '@context':
+            example: https://schema.org
+            type: string
+          '@id':
+            example: https://openchallenges.io/api/v1/challenges/1
+            type: string
+          '@type':
+            example: Challenge
+            type: string
+        required:
+        - '@context'
+        - '@id'
+        - '@type'
+        type: object
       description: A challenge
       type: object
     ChallengeContributionId:
@@ -2515,9 +2515,9 @@ components:
     ChallengeContributionRole:
       description: The nature of a challenge contribution.
       enum:
-        - challenge_organizer
-        - data_contributor
-        - sponsor
+      - challenge_organizer
+      - data_contributor
+      - sponsor
       example: challenge_organizer
       type: string
     ChallengeContribution:
@@ -2546,43 +2546,43 @@ components:
         role:
           $ref: '#/components/schemas/ChallengeContributionRole'
       required:
-        - challengeId
-        - id
-        - organizationId
-        - role
+      - challengeId
+      - id
+      - organizationId
+      - role
       type: object
     ChallengeContributionsPage:
       allOf:
-        - $ref: '#/components/schemas/PageMetadata'
-        - properties:
-            challengeContributions:
-              description: A list of challenge contributions.
-              items:
-                $ref: '#/components/schemas/ChallengeContribution'
-              type: array
-          required:
-            - challengeContributions
-          type: object
+      - $ref: '#/components/schemas/PageMetadata'
+      - properties:
+          challengeContributions:
+            description: A list of challenge contributions.
+            items:
+              $ref: '#/components/schemas/ChallengeContribution'
+            type: array
+        required:
+        - challengeContributions
+        type: object
       description: A page of challenge challenge contributions.
       example:
         number: 99
         size: 99
         challengeContributions:
-          - organizationId: 1
-            challengeId: 1
-            role: challenge_organizer
-            id: 1
-          - organizationId: 1
-            challengeId: 1
-            role: challenge_organizer
-            id: 1
+        - organizationId: 1
+          challengeId: 1
+          role: challenge_organizer
+          id: 1
+        - organizationId: 1
+          challengeId: 1
+          role: challenge_organizer
+          id: 1
         totalPages: 99
         hasPrevious: true
         hasNext: true
         totalElements: 99
       type: object
       x-java-class-annotations:
-        - '@lombok.Builder'
+      - '@lombok.Builder'
     ChallengeContributionCreateRequest:
       description: A challenge contribution to be created.
       example:
@@ -2597,19 +2597,19 @@ components:
         role:
           $ref: '#/components/schemas/ChallengeContributionRole'
       required:
-        - organizationId
-        - role
+      - organizationId
+      - role
       type: object
     ChallengesPerYear:
       description: An object
       example:
         undatedChallengeCount: 0
         challengeCounts:
-          - 0
-          - 0
+        - 0
+        - 0
         years:
-          - years
-          - years
+        - years
+        - years
       properties:
         years:
           items:
@@ -2625,24 +2625,24 @@ components:
           minimum: 0
           type: integer
       required:
-        - challengeCounts
-        - undatedChallengeCount
-        - years
+      - challengeCounts
+      - undatedChallengeCount
+      - years
       type: object
       x-java-class-annotations:
-        - '@lombok.Builder'
+      - '@lombok.Builder'
     ChallengePlatformSort:
       default: relevance
       description: What to sort results by.
       enum:
-        - name
-        - relevance
+      - name
+      - relevance
       type: string
     ChallengePlatformDirection:
       description: The direction to sort the results by.
       enum:
-        - asc
-        - desc
+      - asc
+      - desc
       nullable: true
       type: string
     ChallengePlatformSearchQuery:
@@ -2697,7 +2697,7 @@ components:
           example: example-challenge-platform
           maxLength: 30
           minLength: 3
-          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           type: string
         name:
           description: The display name of the challenge platform.
@@ -2717,46 +2717,46 @@ components:
           nullable: true
           type: string
       required:
-        - avatarKey
-        - id
-        - name
-        - slug
-        - websiteUrl
+      - avatarKey
+      - id
+      - name
+      - slug
+      - websiteUrl
       type: object
     ChallengePlatformsPage:
       allOf:
-        - $ref: '#/components/schemas/PageMetadata'
-        - properties:
-            challengePlatforms:
-              description: A list of challenge platforms.
-              items:
-                $ref: '#/components/schemas/ChallengePlatform'
-              type: array
-          required:
-            - challengePlatforms
-          type: object
+      - $ref: '#/components/schemas/PageMetadata'
+      - properties:
+          challengePlatforms:
+            description: A list of challenge platforms.
+            items:
+              $ref: '#/components/schemas/ChallengePlatform'
+            type: array
+        required:
+        - challengePlatforms
+        type: object
       description: A page of challenge platforms.
       example:
         number: 99
         size: 99
         challengePlatforms:
-          - avatarKey: logo/dream.png
-            websiteUrl: https://openchallenges.io
-            name: Example Challenge Platform
-            id: 1
-            slug: example-challenge-platform
-          - avatarKey: logo/dream.png
-            websiteUrl: https://openchallenges.io
-            name: Example Challenge Platform
-            id: 1
-            slug: example-challenge-platform
+        - avatarKey: logo/dream.png
+          websiteUrl: https://openchallenges.io
+          name: Example Challenge Platform
+          id: 1
+          slug: example-challenge-platform
+        - avatarKey: logo/dream.png
+          websiteUrl: https://openchallenges.io
+          name: Example Challenge Platform
+          id: 1
+          slug: example-challenge-platform
         totalPages: 99
         hasPrevious: true
         hasNext: true
         totalElements: 99
       type: object
       x-java-class-annotations:
-        - '@lombok.Builder'
+      - '@lombok.Builder'
     ChallengePlatformCreateRequest:
       description: The information used to create a challenge platform
       example:
@@ -2770,7 +2770,7 @@ components:
           example: example-challenge-platform
           maxLength: 30
           minLength: 3
-          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           type: string
         name:
           description: The display name of the challenge platform.
@@ -2790,10 +2790,10 @@ components:
           nullable: true
           type: string
       required:
-        - avatarKey
-        - name
-        - slug
-        - websiteUrl
+      - avatarKey
+      - name
+      - slug
+      - websiteUrl
       type: object
     ChallengePlatformUpdateRequest:
       description: A challenge platform update request.
@@ -2808,7 +2808,7 @@ components:
           example: example-challenge-platform
           maxLength: 30
           minLength: 3
-          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           type: string
         name:
           description: The display name of the challenge platform.
@@ -2828,33 +2828,33 @@ components:
           nullable: true
           type: string
       required:
-        - avatarKey
-        - name
-        - slug
-        - websiteUrl
+      - avatarKey
+      - name
+      - slug
+      - websiteUrl
       type: object
     EdamConceptSort:
       default: relevance
       description: What to sort results by.
       enum:
-        - preferred_label
-        - relevance
+      - preferred_label
+      - relevance
       type: string
     EdamConceptDirection:
       description: The direction to sort the results by.
       enum:
-        - asc
-        - desc
+      - asc
+      - desc
       nullable: true
       type: string
     EdamSection:
       description: The EDAM section (sub-ontology).
       enum:
-        - data
-        - format
-        - identifier
-        - operation
-        - topic
+      - data
+      - format
+      - identifier
+      - operation
+      - topic
       example: data
       type: string
     EdamConceptSearchQuery:
@@ -2894,16 +2894,16 @@ components:
       type: object
     EdamConceptsPage:
       allOf:
-        - $ref: '#/components/schemas/PageMetadata'
-        - properties:
-            edamConcepts:
-              description: A list of EDAM concepts.
-              items:
-                $ref: '#/components/schemas/EdamConcept'
-              type: array
-          required:
-            - edamConcepts
-          type: object
+      - $ref: '#/components/schemas/PageMetadata'
+      - properties:
+          edamConcepts:
+            description: A list of EDAM concepts.
+            items:
+              $ref: '#/components/schemas/EdamConcept'
+            type: array
+        required:
+        - edamConcepts
+        type: object
       description: A page of EDAM concepts.
       example:
         number: 99
@@ -2912,16 +2912,16 @@ components:
         hasPrevious: true
         hasNext: true
         edamConcepts:
-          - classId: http://edamontology.org/data_0850
-            preferredLabel: Sequence set
-            id: 1
-          - classId: http://edamontology.org/data_0850
-            preferredLabel: Sequence set
-            id: 1
+        - classId: http://edamontology.org/data_0850
+          preferredLabel: Sequence set
+          id: 1
+        - classId: http://edamontology.org/data_0850
+          preferredLabel: Sequence set
+          id: 1
         totalElements: 99
       type: object
       x-java-class-annotations:
-        - '@lombok.Builder'
+      - '@lombok.Builder'
     ImageKey:
       description: The unique identifier of the image.
       example: logo/dream.png
@@ -2931,23 +2931,23 @@ components:
       default: original
       description: The height of the image.
       enum:
-        - original
-        - 32px
-        - 100px
-        - 140px
-        - 250px
-        - 500px
+      - original
+      - 32px
+      - 100px
+      - 140px
+      - 250px
+      - 500px
       type: string
     ImageAspectRatio:
       default: original
       description: The aspect ratio of the image (the height of the image must be
         specified).
       enum:
-        - original
-        - 16_9
-        - 1_1
-        - 3_2
-        - 2_3
+      - original
+      - 16_9
+      - 1_1
+      - 3_2
+      - 2_3
       type: string
     ImageQuery:
       description: An image query.
@@ -2962,7 +2962,7 @@ components:
         aspectRatio:
           $ref: '#/components/schemas/ImageAspectRatio'
       required:
-        - objectKey
+      - objectKey
       type: object
     Image:
       description: An image
@@ -2973,30 +2973,30 @@ components:
           example: http://example.com/an-image.png
           type: string
       required:
-        - url
+      - url
       type: object
       x-java-class-annotations:
-        - '@lombok.Builder'
+      - '@lombok.Builder'
     OrganizationCategory:
       description: The category of the organization.
       enum:
-        - featured
+      - featured
       example: featured
       type: string
     OrganizationSort:
       default: relevance
       description: What to sort results by.
       enum:
-        - challenge_count
-        - created
-        - name
-        - relevance
+      - challenge_count
+      - created
+      - name
+      - relevance
       type: string
     OrganizationDirection:
       description: The direction to sort the results by.
       enum:
-        - asc
-        - desc
+      - asc
+      - desc
       nullable: true
       type: string
     OrganizationSearchQuery:
@@ -3044,7 +3044,7 @@ components:
       example: example-org
       maxLength: 64
       minLength: 2
-      pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+      pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
       type: string
     Organization:
       description: An organization
@@ -3074,7 +3074,7 @@ components:
           example: example-org
           maxLength: 64
           minLength: 2
-          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           type: string
         description:
           description: A description of the organization.
@@ -3115,58 +3115,58 @@ components:
           format: date-time
           type: string
       required:
-        - challengeCount
-        - createdAt
-        - id
-        - login
-        - name
-        - updatedAt
-        - websiteUrl
+      - challengeCount
+      - createdAt
+      - id
+      - login
+      - name
+      - updatedAt
+      - websiteUrl
       type: object
     OrganizationsPage:
       allOf:
-        - $ref: '#/components/schemas/PageMetadata'
-        - properties:
-            organizations:
-              description: A list of organizations
-              items:
-                $ref: '#/components/schemas/Organization'
-              type: array
-          required:
-            - organizations
-          type: object
+      - $ref: '#/components/schemas/PageMetadata'
+      - properties:
+          organizations:
+            description: A list of organizations
+            items:
+              $ref: '#/components/schemas/Organization'
+            type: array
+        required:
+        - organizations
+        type: object
       description: A page of organizations
       example:
         number: 99
         size: 99
         totalPages: 99
         organizations:
-          - createdAt: 2022-07-04T22:19:11Z
-            avatarKey: logo/dream.png
-            websiteUrl: https://openchallenges.io
-            acronym: OC
-            name: Example organization
-            description: A description of the organization.
-            id: 1
-            challengeCount: 10
-            login: example-org
-            updatedAt: 2022-07-04T22:19:11Z
-          - createdAt: 2022-07-04T22:19:11Z
-            avatarKey: logo/dream.png
-            websiteUrl: https://openchallenges.io
-            acronym: OC
-            name: Example organization
-            description: A description of the organization.
-            id: 1
-            challengeCount: 10
-            login: example-org
-            updatedAt: 2022-07-04T22:19:11Z
+        - createdAt: 2022-07-04T22:19:11Z
+          avatarKey: logo/dream.png
+          websiteUrl: https://openchallenges.io
+          acronym: OC
+          name: Example organization
+          description: A description of the organization.
+          id: 1
+          challengeCount: 10
+          login: example-org
+          updatedAt: 2022-07-04T22:19:11Z
+        - createdAt: 2022-07-04T22:19:11Z
+          avatarKey: logo/dream.png
+          websiteUrl: https://openchallenges.io
+          acronym: OC
+          name: Example organization
+          description: A description of the organization.
+          id: 1
+          challengeCount: 10
+          login: example-org
+          updatedAt: 2022-07-04T22:19:11Z
         hasPrevious: true
         hasNext: true
         totalElements: 99
       type: object
       x-java-class-annotations:
-        - '@lombok.Builder'
+      - '@lombok.Builder'
     OrganizationCreateRequest:
       description: The information required to create an org account
       example:
@@ -3182,7 +3182,7 @@ components:
           example: example-org
           maxLength: 64
           minLength: 2
-          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           type: string
         name:
           example: Example organization
@@ -3209,9 +3209,9 @@ components:
           nullable: true
           type: string
       required:
-        - login
-        - name
-        - websiteUrl
+      - login
+      - name
+      - websiteUrl
       type: object
     OrganizationUpdateRequest:
       description: The information required to update an org account
@@ -3248,18 +3248,18 @@ components:
           nullable: true
           type: string
       required:
-        - acronym
-        - avatarKey
-        - description
-        - name
-        - websiteUrl
+      - acronym
+      - avatarKey
+      - description
+      - name
+      - websiteUrl
       type: object
     ChallengeParticipationRole:
       description: The nature of a challenge participation.
       enum:
-        - challenge_organizer
-        - data_contributor
-        - sponsor
+      - challenge_organizer
+      - data_contributor
+      - sponsor
       example: challenge_organizer
       type: string
   securitySchemes:
@@ -3269,23 +3269,24 @@ components:
       scheme: bearer
       type: http
 x-tagGroups:
-  - name: OpenChallenges Auth API
-    tags:
-      - Authentication
-      - API Key
-  - name: OpenChallenges Challenge API
-    tags:
-      - Challenge
-      - Challenge Contribution
-      - ChallengeAnalytics
-      - ChallengePlatform
-      - EdamConcept
-      - Challenge Analytics
-      - Challenge Platform
-      - Edam Concept
-  - name: OpenChallenges Image API
-    tags:
-      - Image
-  - name: OpenChallenges Organization API
-    tags:
-      - Organization
+- name: OpenChallenges Auth API
+  tags:
+  - Authentication
+  - API Key
+- name: OpenChallenges Challenge API
+  tags:
+  - Challenge
+  - Challenge Contribution
+  - ChallengeAnalytics
+  - ChallengePlatform
+  - EdamConcept
+  - Challenge Analytics
+  - Challenge Platform
+  - Edam Concept
+- name: OpenChallenges Image API
+  tags:
+  - Image
+- name: OpenChallenges Organization API
+  tags:
+  - Organization
+

@@ -23,44 +23,24 @@ from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class CreateApiKeyResponse(BaseModel):
     """
     CreateApiKeyResponse
-    """  # noqa: E501
-
+    """ # noqa: E501
     id: Optional[StrictStr] = Field(default=None, description="API key ID")
-    key: Optional[StrictStr] = Field(
-        default=None, description="The actual API key (only returned on creation)"
-    )
-    name: Optional[StrictStr] = Field(
-        default=None, description="Human-readable name for the API key"
-    )
-    prefix: Optional[StrictStr] = Field(
-        default=None, description="First 8 characters of the API key for identification"
-    )
-    created_at: Optional[datetime] = Field(
-        default=None, description="When the API key was created", alias="createdAt"
-    )
-    expires_at: Optional[datetime] = Field(
-        default=None,
-        description="When the API key expires (null if no expiration)",
-        alias="expiresAt",
-    )
-    __properties: ClassVar[List[str]] = [
-        "id",
-        "key",
-        "name",
-        "prefix",
-        "createdAt",
-        "expiresAt",
-    ]
+    key: Optional[StrictStr] = Field(default=None, description="The actual API key (only returned on creation)")
+    name: Optional[StrictStr] = Field(default=None, description="Human-readable name for the API key")
+    prefix: Optional[StrictStr] = Field(default=None, description="First 8 characters of the API key for identification")
+    created_at: Optional[datetime] = Field(default=None, description="When the API key was created", alias="createdAt")
+    expires_at: Optional[datetime] = Field(default=None, description="When the API key expires (null if no expiration)", alias="expiresAt")
+    __properties: ClassVar[List[str]] = ["id", "key", "name", "prefix", "createdAt", "expiresAt"]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -86,7 +66,8 @@ class CreateApiKeyResponse(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -96,7 +77,7 @@ class CreateApiKeyResponse(BaseModel):
         # set to None if expires_at (nullable) is None
         # and model_fields_set contains the field
         if self.expires_at is None and "expires_at" in self.model_fields_set:
-            _dict["expiresAt"] = None
+            _dict['expiresAt'] = None
 
         return _dict
 
@@ -109,14 +90,14 @@ class CreateApiKeyResponse(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "id": obj.get("id"),
-                "key": obj.get("key"),
-                "name": obj.get("name"),
-                "prefix": obj.get("prefix"),
-                "createdAt": obj.get("createdAt"),
-                "expiresAt": obj.get("expiresAt"),
-            }
-        )
+        _obj = cls.model_validate({
+            "id": obj.get("id"),
+            "key": obj.get("key"),
+            "name": obj.get("name"),
+            "prefix": obj.get("prefix"),
+            "createdAt": obj.get("createdAt"),
+            "expiresAt": obj.get("expiresAt")
+        })
         return _obj
+
+

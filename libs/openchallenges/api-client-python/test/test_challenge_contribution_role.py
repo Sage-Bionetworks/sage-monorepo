@@ -14,10 +14,7 @@
 
 import unittest
 
-from openchallenges_api_client_python.models.challenge_contribution_role import (
-    ChallengeContributionRole,
-)
-
+from openchallenges_api_client_python.models.challenge_contribution_role import ChallengeContributionRole
 
 class TestChallengeContributionRole(unittest.TestCase):
     """ChallengeContributionRole unit test stubs"""
@@ -32,6 +29,5 @@ class TestChallengeContributionRole(unittest.TestCase):
         """Test ChallengeContributionRole"""
         # inst = ChallengeContributionRole()
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

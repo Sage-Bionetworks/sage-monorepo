@@ -20,15 +20,9 @@ from pydantic import Field
 from typing import Optional
 from typing_extensions import Annotated
 from openchallenges_api_client_python.models.organization import Organization
-from openchallenges_api_client_python.models.organization_create_request import (
-    OrganizationCreateRequest,
-)
-from openchallenges_api_client_python.models.organization_search_query import (
-    OrganizationSearchQuery,
-)
-from openchallenges_api_client_python.models.organization_update_request import (
-    OrganizationUpdateRequest,
-)
+from openchallenges_api_client_python.models.organization_create_request import OrganizationCreateRequest
+from openchallenges_api_client_python.models.organization_search_query import OrganizationSearchQuery
+from openchallenges_api_client_python.models.organization_update_request import OrganizationUpdateRequest
 from openchallenges_api_client_python.models.organizations_page import OrganizationsPage
 
 from openchallenges_api_client_python.api_client import ApiClient, RequestSerialized
@@ -48,6 +42,7 @@ class OrganizationApi:
             api_client = ApiClient.get_default()
         self.api_client = api_client
 
+
     @validate_call
     def create_organization(
         self,
@@ -56,8 +51,9 @@ class OrganizationApi:
             None,
             Annotated[StrictFloat, Field(gt=0)],
             Tuple[
-                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
-            ],
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
         ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
@@ -90,32 +86,34 @@ class OrganizationApi:
                             in the spec for a single request.
         :type _host_index: int, optional
         :return: Returns the result object.
-        """  # noqa: E501
+        """ # noqa: E501
 
         _param = self._create_organization_serialize(
             organization_create_request=organization_create_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index,
+            _host_index=_host_index
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            "201": "Organization",
-            "400": "BasicError",
-            "401": "BasicError",
-            "403": "BasicError",
-            "409": "BasicError",
-            "500": "BasicError",
+            '201': "Organization",
+            '400': "BasicError",
+            '401': "BasicError",
+            '403': "BasicError",
+            '409': "BasicError",
+            '500': "BasicError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout
+            *_param,
+            _request_timeout=_request_timeout
         )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
+
 
     @validate_call
     def create_organization_with_http_info(
@@ -125,8 +123,9 @@ class OrganizationApi:
             None,
             Annotated[StrictFloat, Field(gt=0)],
             Tuple[
-                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
-            ],
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
         ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
@@ -159,32 +158,34 @@ class OrganizationApi:
                             in the spec for a single request.
         :type _host_index: int, optional
         :return: Returns the result object.
-        """  # noqa: E501
+        """ # noqa: E501
 
         _param = self._create_organization_serialize(
             organization_create_request=organization_create_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index,
+            _host_index=_host_index
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            "201": "Organization",
-            "400": "BasicError",
-            "401": "BasicError",
-            "403": "BasicError",
-            "409": "BasicError",
-            "500": "BasicError",
+            '201': "Organization",
+            '400': "BasicError",
+            '401': "BasicError",
+            '403': "BasicError",
+            '409': "BasicError",
+            '500': "BasicError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout
+            *_param,
+            _request_timeout=_request_timeout
         )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
+
 
     @validate_call
     def create_organization_without_preload_content(
@@ -194,8 +195,9 @@ class OrganizationApi:
             None,
             Annotated[StrictFloat, Field(gt=0)],
             Tuple[
-                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
-            ],
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
         ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
@@ -228,28 +230,30 @@ class OrganizationApi:
                             in the spec for a single request.
         :type _host_index: int, optional
         :return: Returns the result object.
-        """  # noqa: E501
+        """ # noqa: E501
 
         _param = self._create_organization_serialize(
             organization_create_request=organization_create_request,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index,
+            _host_index=_host_index
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            "201": "Organization",
-            "400": "BasicError",
-            "401": "BasicError",
-            "403": "BasicError",
-            "409": "BasicError",
-            "500": "BasicError",
+            '201': "Organization",
+            '400': "BasicError",
+            '401': "BasicError",
+            '403': "BasicError",
+            '409': "BasicError",
+            '500': "BasicError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout
+            *_param,
+            _request_timeout=_request_timeout
         )
         return response_data.response
+
 
     def _create_organization_serialize(
         self,
@@ -262,7 +266,8 @@ class OrganizationApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {}
+        _collection_formats: Dict[str, str] = {
+        }
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
@@ -281,28 +286,38 @@ class OrganizationApi:
         if organization_create_request is not None:
             _body_params = organization_create_request
 
+
         # set the HTTP header `Accept`
-        if "Accept" not in _header_params:
-            _header_params["Accept"] = self.api_client.select_header_accept(
-                ["application/json", "application/problem+json"]
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json', 
+                    'application/problem+json'
+                ]
             )
 
         # set the HTTP header `Content-Type`
         if _content_type:
-            _header_params["Content-Type"] = _content_type
+            _header_params['Content-Type'] = _content_type
         else:
-            _default_content_type = self.api_client.select_header_content_type(
-                ["application/json"]
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
             )
             if _default_content_type is not None:
-                _header_params["Content-Type"] = _default_content_type
+                _header_params['Content-Type'] = _default_content_type
 
         # authentication setting
-        _auth_settings: List[str] = ["apiBearerAuth"]
+        _auth_settings: List[str] = [
+            'apiBearerAuth'
+        ]
 
         return self.api_client.param_serialize(
-            method="POST",
-            resource_path="/organizations",
+            method='POST',
+            resource_path='/organizations',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -312,27 +327,23 @@ class OrganizationApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth,
+            _request_auth=_request_auth
         )
+
+
+
 
     @validate_call
     def delete_organization(
         self,
-        org: Annotated[
-            str,
-            Field(
-                min_length=1,
-                strict=True,
-                max_length=64,
-                description="The id or login of the organization.",
-            ),
-        ],
+        org: Annotated[str, Field(min_length=1, strict=True, max_length=64, description="The id or login of the organization.")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
             Tuple[
-                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
-            ],
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
         ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
@@ -365,25 +376,26 @@ class OrganizationApi:
                             in the spec for a single request.
         :type _host_index: int, optional
         :return: Returns the result object.
-        """  # noqa: E501
+        """ # noqa: E501
 
         _param = self._delete_organization_serialize(
             org=org,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index,
+            _host_index=_host_index
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            "204": None,
-            "401": "BasicError",
-            "403": "BasicError",
-            "404": "BasicError",
-            "500": "BasicError",
+            '204': None,
+            '401': "BasicError",
+            '403': "BasicError",
+            '404': "BasicError",
+            '500': "BasicError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout
+            *_param,
+            _request_timeout=_request_timeout
         )
         response_data.read()
         return self.api_client.response_deserialize(
@@ -391,24 +403,18 @@ class OrganizationApi:
             response_types_map=_response_types_map,
         ).data
 
+
     @validate_call
     def delete_organization_with_http_info(
         self,
-        org: Annotated[
-            str,
-            Field(
-                min_length=1,
-                strict=True,
-                max_length=64,
-                description="The id or login of the organization.",
-            ),
-        ],
+        org: Annotated[str, Field(min_length=1, strict=True, max_length=64, description="The id or login of the organization.")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
             Tuple[
-                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
-            ],
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
         ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
@@ -441,25 +447,26 @@ class OrganizationApi:
                             in the spec for a single request.
         :type _host_index: int, optional
         :return: Returns the result object.
-        """  # noqa: E501
+        """ # noqa: E501
 
         _param = self._delete_organization_serialize(
             org=org,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index,
+            _host_index=_host_index
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            "204": None,
-            "401": "BasicError",
-            "403": "BasicError",
-            "404": "BasicError",
-            "500": "BasicError",
+            '204': None,
+            '401': "BasicError",
+            '403': "BasicError",
+            '404': "BasicError",
+            '500': "BasicError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout
+            *_param,
+            _request_timeout=_request_timeout
         )
         response_data.read()
         return self.api_client.response_deserialize(
@@ -467,24 +474,18 @@ class OrganizationApi:
             response_types_map=_response_types_map,
         )
 
+
     @validate_call
     def delete_organization_without_preload_content(
         self,
-        org: Annotated[
-            str,
-            Field(
-                min_length=1,
-                strict=True,
-                max_length=64,
-                description="The id or login of the organization.",
-            ),
-        ],
+        org: Annotated[str, Field(min_length=1, strict=True, max_length=64, description="The id or login of the organization.")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
             Tuple[
-                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
-            ],
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
         ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
@@ -517,27 +518,29 @@ class OrganizationApi:
                             in the spec for a single request.
         :type _host_index: int, optional
         :return: Returns the result object.
-        """  # noqa: E501
+        """ # noqa: E501
 
         _param = self._delete_organization_serialize(
             org=org,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index,
+            _host_index=_host_index
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            "204": None,
-            "401": "BasicError",
-            "403": "BasicError",
-            "404": "BasicError",
-            "500": "BasicError",
+            '204': None,
+            '401': "BasicError",
+            '403': "BasicError",
+            '404': "BasicError",
+            '500': "BasicError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout
+            *_param,
+            _request_timeout=_request_timeout
         )
         return response_data.response
+
 
     def _delete_organization_serialize(
         self,
@@ -550,7 +553,8 @@ class OrganizationApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {}
+        _collection_formats: Dict[str, str] = {
+        }
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
@@ -563,24 +567,30 @@ class OrganizationApi:
 
         # process the path parameters
         if org is not None:
-            _path_params["org"] = org
+            _path_params['org'] = org
         # process the query parameters
         # process the header parameters
         # process the form parameters
         # process the body parameter
 
+
         # set the HTTP header `Accept`
-        if "Accept" not in _header_params:
-            _header_params["Accept"] = self.api_client.select_header_accept(
-                ["application/problem+json"]
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/problem+json'
+                ]
             )
 
+
         # authentication setting
-        _auth_settings: List[str] = ["apiBearerAuth"]
+        _auth_settings: List[str] = [
+            'apiBearerAuth'
+        ]
 
         return self.api_client.param_serialize(
-            method="DELETE",
-            resource_path="/organizations/{org}",
+            method='DELETE',
+            resource_path='/organizations/{org}',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -590,27 +600,23 @@ class OrganizationApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth,
+            _request_auth=_request_auth
         )
+
+
+
 
     @validate_call
     def get_organization(
         self,
-        org: Annotated[
-            str,
-            Field(
-                min_length=1,
-                strict=True,
-                max_length=64,
-                description="The id or login of the organization.",
-            ),
-        ],
+        org: Annotated[str, Field(min_length=1, strict=True, max_length=64, description="The id or login of the organization.")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
             Tuple[
-                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
-            ],
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
         ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
@@ -643,23 +649,24 @@ class OrganizationApi:
                             in the spec for a single request.
         :type _host_index: int, optional
         :return: Returns the result object.
-        """  # noqa: E501
+        """ # noqa: E501
 
         _param = self._get_organization_serialize(
             org=org,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index,
+            _host_index=_host_index
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            "200": "Organization",
-            "404": "BasicError",
-            "500": "BasicError",
+            '200': "Organization",
+            '404': "BasicError",
+            '500': "BasicError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout
+            *_param,
+            _request_timeout=_request_timeout
         )
         response_data.read()
         return self.api_client.response_deserialize(
@@ -667,24 +674,18 @@ class OrganizationApi:
             response_types_map=_response_types_map,
         ).data
 
+
     @validate_call
     def get_organization_with_http_info(
         self,
-        org: Annotated[
-            str,
-            Field(
-                min_length=1,
-                strict=True,
-                max_length=64,
-                description="The id or login of the organization.",
-            ),
-        ],
+        org: Annotated[str, Field(min_length=1, strict=True, max_length=64, description="The id or login of the organization.")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
             Tuple[
-                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
-            ],
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
         ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
@@ -717,23 +718,24 @@ class OrganizationApi:
                             in the spec for a single request.
         :type _host_index: int, optional
         :return: Returns the result object.
-        """  # noqa: E501
+        """ # noqa: E501
 
         _param = self._get_organization_serialize(
             org=org,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index,
+            _host_index=_host_index
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            "200": "Organization",
-            "404": "BasicError",
-            "500": "BasicError",
+            '200': "Organization",
+            '404': "BasicError",
+            '500': "BasicError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout
+            *_param,
+            _request_timeout=_request_timeout
         )
         response_data.read()
         return self.api_client.response_deserialize(
@@ -741,24 +743,18 @@ class OrganizationApi:
             response_types_map=_response_types_map,
         )
 
+
     @validate_call
     def get_organization_without_preload_content(
         self,
-        org: Annotated[
-            str,
-            Field(
-                min_length=1,
-                strict=True,
-                max_length=64,
-                description="The id or login of the organization.",
-            ),
-        ],
+        org: Annotated[str, Field(min_length=1, strict=True, max_length=64, description="The id or login of the organization.")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
             Tuple[
-                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
-            ],
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
         ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
@@ -791,25 +787,27 @@ class OrganizationApi:
                             in the spec for a single request.
         :type _host_index: int, optional
         :return: Returns the result object.
-        """  # noqa: E501
+        """ # noqa: E501
 
         _param = self._get_organization_serialize(
             org=org,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index,
+            _host_index=_host_index
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            "200": "Organization",
-            "404": "BasicError",
-            "500": "BasicError",
+            '200': "Organization",
+            '404': "BasicError",
+            '500': "BasicError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout
+            *_param,
+            _request_timeout=_request_timeout
         )
         return response_data.response
+
 
     def _get_organization_serialize(
         self,
@@ -822,7 +820,8 @@ class OrganizationApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {}
+        _collection_formats: Dict[str, str] = {
+        }
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
@@ -835,24 +834,30 @@ class OrganizationApi:
 
         # process the path parameters
         if org is not None:
-            _path_params["org"] = org
+            _path_params['org'] = org
         # process the query parameters
         # process the header parameters
         # process the form parameters
         # process the body parameter
 
+
         # set the HTTP header `Accept`
-        if "Accept" not in _header_params:
-            _header_params["Accept"] = self.api_client.select_header_accept(
-                ["application/json", "application/problem+json"]
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json', 
+                    'application/problem+json'
+                ]
             )
 
+
         # authentication setting
-        _auth_settings: List[str] = []
+        _auth_settings: List[str] = [
+        ]
 
         return self.api_client.param_serialize(
-            method="GET",
-            resource_path="/organizations/{org}",
+            method='GET',
+            resource_path='/organizations/{org}',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -862,22 +867,23 @@ class OrganizationApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth,
+            _request_auth=_request_auth
         )
+
+
+
 
     @validate_call
     def list_organizations(
         self,
-        organization_search_query: Annotated[
-            Optional[OrganizationSearchQuery],
-            Field(description="The search query used to find organizations."),
-        ] = None,
+        organization_search_query: Annotated[Optional[OrganizationSearchQuery], Field(description="The search query used to find organizations.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
             Tuple[
-                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
-            ],
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
         ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
@@ -910,23 +916,24 @@ class OrganizationApi:
                             in the spec for a single request.
         :type _host_index: int, optional
         :return: Returns the result object.
-        """  # noqa: E501
+        """ # noqa: E501
 
         _param = self._list_organizations_serialize(
             organization_search_query=organization_search_query,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index,
+            _host_index=_host_index
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            "200": "OrganizationsPage",
-            "400": "BasicError",
-            "500": "BasicError",
+            '200': "OrganizationsPage",
+            '400': "BasicError",
+            '500': "BasicError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout
+            *_param,
+            _request_timeout=_request_timeout
         )
         response_data.read()
         return self.api_client.response_deserialize(
@@ -934,19 +941,18 @@ class OrganizationApi:
             response_types_map=_response_types_map,
         ).data
 
+
     @validate_call
     def list_organizations_with_http_info(
         self,
-        organization_search_query: Annotated[
-            Optional[OrganizationSearchQuery],
-            Field(description="The search query used to find organizations."),
-        ] = None,
+        organization_search_query: Annotated[Optional[OrganizationSearchQuery], Field(description="The search query used to find organizations.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
             Tuple[
-                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
-            ],
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
         ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
@@ -979,23 +985,24 @@ class OrganizationApi:
                             in the spec for a single request.
         :type _host_index: int, optional
         :return: Returns the result object.
-        """  # noqa: E501
+        """ # noqa: E501
 
         _param = self._list_organizations_serialize(
             organization_search_query=organization_search_query,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index,
+            _host_index=_host_index
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            "200": "OrganizationsPage",
-            "400": "BasicError",
-            "500": "BasicError",
+            '200': "OrganizationsPage",
+            '400': "BasicError",
+            '500': "BasicError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout
+            *_param,
+            _request_timeout=_request_timeout
         )
         response_data.read()
         return self.api_client.response_deserialize(
@@ -1003,19 +1010,18 @@ class OrganizationApi:
             response_types_map=_response_types_map,
         )
 
+
     @validate_call
     def list_organizations_without_preload_content(
         self,
-        organization_search_query: Annotated[
-            Optional[OrganizationSearchQuery],
-            Field(description="The search query used to find organizations."),
-        ] = None,
+        organization_search_query: Annotated[Optional[OrganizationSearchQuery], Field(description="The search query used to find organizations.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
             Tuple[
-                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
-            ],
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
         ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
@@ -1048,25 +1054,27 @@ class OrganizationApi:
                             in the spec for a single request.
         :type _host_index: int, optional
         :return: Returns the result object.
-        """  # noqa: E501
+        """ # noqa: E501
 
         _param = self._list_organizations_serialize(
             organization_search_query=organization_search_query,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index,
+            _host_index=_host_index
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            "200": "OrganizationsPage",
-            "400": "BasicError",
-            "500": "BasicError",
+            '200': "OrganizationsPage",
+            '400': "BasicError",
+            '500': "BasicError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout
+            *_param,
+            _request_timeout=_request_timeout
         )
         return response_data.response
+
 
     def _list_organizations_serialize(
         self,
@@ -1079,7 +1087,8 @@ class OrganizationApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {}
+        _collection_formats: Dict[str, str] = {
+        }
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
@@ -1093,25 +1102,31 @@ class OrganizationApi:
         # process the path parameters
         # process the query parameters
         if organization_search_query is not None:
-
-            _query_params.append(("organizationSearchQuery", organization_search_query))
-
+            
+            _query_params.append(('organizationSearchQuery', organization_search_query))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
 
+
         # set the HTTP header `Accept`
-        if "Accept" not in _header_params:
-            _header_params["Accept"] = self.api_client.select_header_accept(
-                ["application/json", "application/problem+json"]
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json', 
+                    'application/problem+json'
+                ]
             )
 
+
         # authentication setting
-        _auth_settings: List[str] = []
+        _auth_settings: List[str] = [
+        ]
 
         return self.api_client.param_serialize(
-            method="GET",
-            resource_path="/organizations",
+            method='GET',
+            resource_path='/organizations',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -1121,28 +1136,24 @@ class OrganizationApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth,
+            _request_auth=_request_auth
         )
+
+
+
 
     @validate_call
     def update_organization(
         self,
-        org: Annotated[
-            str,
-            Field(
-                min_length=1,
-                strict=True,
-                max_length=64,
-                description="The id or login of the organization.",
-            ),
-        ],
+        org: Annotated[str, Field(min_length=1, strict=True, max_length=64, description="The id or login of the organization.")],
         organization_update_request: OrganizationUpdateRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
             Tuple[
-                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
-            ],
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
         ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
@@ -1177,7 +1188,7 @@ class OrganizationApi:
                             in the spec for a single request.
         :type _host_index: int, optional
         :return: Returns the result object.
-        """  # noqa: E501
+        """ # noqa: E501
 
         _param = self._update_organization_serialize(
             org=org,
@@ -1185,20 +1196,21 @@ class OrganizationApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index,
+            _host_index=_host_index
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            "200": "Organization",
-            "400": "BasicError",
-            "401": "BasicError",
-            "403": "BasicError",
-            "404": "BasicError",
-            "409": "BasicError",
-            "500": "BasicError",
+            '200': "Organization",
+            '400': "BasicError",
+            '401': "BasicError",
+            '403': "BasicError",
+            '404': "BasicError",
+            '409': "BasicError",
+            '500': "BasicError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout
+            *_param,
+            _request_timeout=_request_timeout
         )
         response_data.read()
         return self.api_client.response_deserialize(
@@ -1206,25 +1218,19 @@ class OrganizationApi:
             response_types_map=_response_types_map,
         ).data
 
+
     @validate_call
     def update_organization_with_http_info(
         self,
-        org: Annotated[
-            str,
-            Field(
-                min_length=1,
-                strict=True,
-                max_length=64,
-                description="The id or login of the organization.",
-            ),
-        ],
+        org: Annotated[str, Field(min_length=1, strict=True, max_length=64, description="The id or login of the organization.")],
         organization_update_request: OrganizationUpdateRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
             Tuple[
-                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
-            ],
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
         ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
@@ -1259,7 +1265,7 @@ class OrganizationApi:
                             in the spec for a single request.
         :type _host_index: int, optional
         :return: Returns the result object.
-        """  # noqa: E501
+        """ # noqa: E501
 
         _param = self._update_organization_serialize(
             org=org,
@@ -1267,20 +1273,21 @@ class OrganizationApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index,
+            _host_index=_host_index
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            "200": "Organization",
-            "400": "BasicError",
-            "401": "BasicError",
-            "403": "BasicError",
-            "404": "BasicError",
-            "409": "BasicError",
-            "500": "BasicError",
+            '200': "Organization",
+            '400': "BasicError",
+            '401': "BasicError",
+            '403': "BasicError",
+            '404': "BasicError",
+            '409': "BasicError",
+            '500': "BasicError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout
+            *_param,
+            _request_timeout=_request_timeout
         )
         response_data.read()
         return self.api_client.response_deserialize(
@@ -1288,25 +1295,19 @@ class OrganizationApi:
             response_types_map=_response_types_map,
         )
 
+
     @validate_call
     def update_organization_without_preload_content(
         self,
-        org: Annotated[
-            str,
-            Field(
-                min_length=1,
-                strict=True,
-                max_length=64,
-                description="The id or login of the organization.",
-            ),
-        ],
+        org: Annotated[str, Field(min_length=1, strict=True, max_length=64, description="The id or login of the organization.")],
         organization_update_request: OrganizationUpdateRequest,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
             Tuple[
-                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
-            ],
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
         ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
@@ -1341,7 +1342,7 @@ class OrganizationApi:
                             in the spec for a single request.
         :type _host_index: int, optional
         :return: Returns the result object.
-        """  # noqa: E501
+        """ # noqa: E501
 
         _param = self._update_organization_serialize(
             org=org,
@@ -1349,22 +1350,24 @@ class OrganizationApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index,
+            _host_index=_host_index
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            "200": "Organization",
-            "400": "BasicError",
-            "401": "BasicError",
-            "403": "BasicError",
-            "404": "BasicError",
-            "409": "BasicError",
-            "500": "BasicError",
+            '200': "Organization",
+            '400': "BasicError",
+            '401': "BasicError",
+            '403': "BasicError",
+            '404': "BasicError",
+            '409': "BasicError",
+            '500': "BasicError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout
+            *_param,
+            _request_timeout=_request_timeout
         )
         return response_data.response
+
 
     def _update_organization_serialize(
         self,
@@ -1378,7 +1381,8 @@ class OrganizationApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {}
+        _collection_formats: Dict[str, str] = {
+        }
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
@@ -1391,7 +1395,7 @@ class OrganizationApi:
 
         # process the path parameters
         if org is not None:
-            _path_params["org"] = org
+            _path_params['org'] = org
         # process the query parameters
         # process the header parameters
         # process the form parameters
@@ -1399,28 +1403,38 @@ class OrganizationApi:
         if organization_update_request is not None:
             _body_params = organization_update_request
 
+
         # set the HTTP header `Accept`
-        if "Accept" not in _header_params:
-            _header_params["Accept"] = self.api_client.select_header_accept(
-                ["application/json", "application/problem+json"]
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json', 
+                    'application/problem+json'
+                ]
             )
 
         # set the HTTP header `Content-Type`
         if _content_type:
-            _header_params["Content-Type"] = _content_type
+            _header_params['Content-Type'] = _content_type
         else:
-            _default_content_type = self.api_client.select_header_content_type(
-                ["application/json"]
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
             )
             if _default_content_type is not None:
-                _header_params["Content-Type"] = _default_content_type
+                _header_params['Content-Type'] = _default_content_type
 
         # authentication setting
-        _auth_settings: List[str] = ["apiBearerAuth"]
+        _auth_settings: List[str] = [
+            'apiBearerAuth'
+        ]
 
         return self.api_client.param_serialize(
-            method="PUT",
-            resource_path="/organizations/{org}",
+            method='PUT',
+            resource_path='/organizations/{org}',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -1430,5 +1444,7 @@ class OrganizationApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth,
+            _request_auth=_request_auth
         )
+
+
