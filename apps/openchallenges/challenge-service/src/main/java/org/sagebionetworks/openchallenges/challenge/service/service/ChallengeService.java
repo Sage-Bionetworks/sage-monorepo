@@ -8,6 +8,7 @@ import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeN
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeJsonLdDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSearchQueryDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeUpdateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengesPageDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengeJsonLdMapper;
@@ -153,5 +154,30 @@ public class ChallengeService {
     challengeRepository.deleteById(challengeId);
 
     logger.info("Successfully deleted challenge with ID: {}", challengeId);
+  }
+
+  @Transactional
+  public ChallengeDto updateChallenge(Long challengeId, ChallengeUpdateRequestDto request) {
+    // Find the existing challenge
+    ChallengeEntity existingChallenge = getChallengeEntity(challengeId);
+
+    // Update the challenge fields
+    existingChallenge.setSlug(request.getSlug());
+    existingChallenge.setName(request.getName());
+    existingChallenge.setHeadline(request.getHeadline());
+    existingChallenge.setDescription(request.getDescription());
+    existingChallenge.setDoi(request.getDoi());
+    existingChallenge.setStatus(request.getStatus().toString());
+    existingChallenge.setWebsiteUrl(request.getWebsiteUrl());
+    existingChallenge.setAvatarUrl(request.getAvatarUrl());
+
+    // Save the updated entity
+    ChallengeEntity updatedEntity = challengeRepository.save(existingChallenge);
+    challengeRepository.flush();
+
+    logger.info("Successfully updated challenge with ID: {}", challengeId);
+
+    // Return the updated challenge as DTO
+    return challengeMapper.convertToDto(updatedEntity);
   }
 }

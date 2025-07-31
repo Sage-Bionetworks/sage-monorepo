@@ -57,7 +57,7 @@ public class ChallengeCreateRequestDto {
    * @return name
    */
   @NotNull @Size(min = 3, max = 255) 
-  @Schema(name = "name", description = "The name of the challenge.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(name = "name", example = "Awesome Challenge", description = "The name of the challenge.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("name")
   public String getName() {
     return name;

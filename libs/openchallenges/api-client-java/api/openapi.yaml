@@ -1950,6 +1950,7 @@ components:
       type: string
     ChallengeName:
       description: The name of the challenge.
+      example: Awesome Challenge
       maxLength: 255
       minLength: 3
       type: string
@@ -2089,7 +2090,7 @@ components:
         - container_image
         - container_image
         websiteUrl: https://openchallenges.io
-        name: name
+        name: Awesome Challenge
         id: 1
         categories:
         - featured
@@ -2126,6 +2127,7 @@ components:
           type: string
         name:
           description: The name of the challenge.
+          example: Awesome Challenge
           maxLength: 255
           minLength: 3
           type: string
@@ -2259,7 +2261,7 @@ components:
           - container_image
           - container_image
           websiteUrl: https://openchallenges.io
-          name: name
+          name: Awesome Challenge
           id: 1
           categories:
           - featured
@@ -2297,7 +2299,7 @@ components:
           - container_image
           - container_image
           websiteUrl: https://openchallenges.io
-          name: name
+          name: Awesome Challenge
           id: 1
           categories:
           - featured
@@ -2329,13 +2331,14 @@ components:
     ChallengeCreateRequest:
       description: The information used to create a challenge
       example:
-        name: name
+        name: Awesome Challenge
         description: This is an example description of the challenge.
         headline: Example challenge headline
         status: active
       properties:
         name:
           description: The name of the challenge.
+          example: Awesome Challenge
           maxLength: 255
           minLength: 3
           type: string
@@ -2364,7 +2367,7 @@ components:
       example:
         websiteUrl: https://openchallenges.io
         avatarUrl: https://openchallenges.io
-        name: name
+        name: Awesome Challenge
         description: This is an example description of the challenge.
         headline: Example challenge headline
         slug: awesome-challenge
@@ -2380,6 +2383,7 @@ components:
           type: string
         name:
           description: The name of the challenge.
+          example: Awesome Challenge
           maxLength: 255
           minLength: 3
           type: string

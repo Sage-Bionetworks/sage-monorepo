@@ -38,7 +38,7 @@ class TestChallengeUpdateRequest(unittest.TestCase):
         if include_optional:
             return ChallengeUpdateRequest(
                 slug = 'awesome-challenge',
-                name = '012',
+                name = 'Awesome Challenge',
                 headline = 'Example challenge headline',
                 description = 'This is an example description of the challenge.',
                 doi = 'https://doi.org/123/abc',
@@ -49,7 +49,7 @@ class TestChallengeUpdateRequest(unittest.TestCase):
         else:
             return ChallengeUpdateRequest(
                 slug = 'awesome-challenge',
-                name = '012',
+                name = 'Awesome Challenge',
                 headline = 'Example challenge headline',
                 description = 'This is an example description of the challenge.',
                 doi = 'https://doi.org/123/abc',

@@ -61,8 +61,19 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
     Long challengeId,
     ChallengeUpdateRequestDto request
   ) {
-    // return ResponseEntity.ok(challengeService.updateChallenge(challengeId, request));
-    return ResponseEntity.noContent().build();
+    // Log the authenticated user for audit purposes
+    AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
+      .getAuthentication()
+      .getPrincipal();
+    logger.info(
+      "User {} (role: {}) is updating challenge {}",
+      user.getUsername(),
+      user.getRole(),
+      challengeId
+    );
+
+    ChallengeDto updatedChallenge = challengeService.updateChallenge(challengeId, request);
+    return ResponseEntity.ok(updatedChallenge);
   }
 
   @Override

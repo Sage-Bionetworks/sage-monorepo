@@ -1132,6 +1132,7 @@ components:
       type: string
       minLength: 3
       maxLength: 255
+      example: Awesome Challenge
     ChallengeHeadline:
       description: The headline of the challenge.
       type: string

@@ -37,14 +37,14 @@ class TestChallengeCreateRequest(unittest.TestCase):
         model = ChallengeCreateRequest()
         if include_optional:
             return ChallengeCreateRequest(
-                name = '012',
+                name = 'Awesome Challenge',
                 headline = 'Example challenge headline',
                 description = 'This is an example description of the challenge.',
                 status = 'active'
             )
         else:
             return ChallengeCreateRequest(
-                name = '012',
+                name = 'Awesome Challenge',
                 description = 'This is an example description of the challenge.',
                 status = 'active',
         )
