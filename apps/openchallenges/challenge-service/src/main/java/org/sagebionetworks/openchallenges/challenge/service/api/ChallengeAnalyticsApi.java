@@ -31,7 +31,7 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 @Validated
-@Tag(name = "Challenge Analytics", description = "the Challenge Analytics API")
+@Tag(name = "Challenge Analytics", description = "Operations about challenge analytics.")
 public interface ChallengeAnalyticsApi {
 
     default ChallengeAnalyticsApiDelegate getDelegate() {
