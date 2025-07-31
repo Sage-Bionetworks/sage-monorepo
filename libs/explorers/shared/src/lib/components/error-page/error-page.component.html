@@ -4,7 +4,9 @@
     <p>
       {{ errorMessage }}
     </p>
-    <p-button label="Retry" (click)="retry()" [rounded]="true" size="small" />
+    @if (retryUrl !== '') {
+      <p-button label="Retry" (click)="retry()" [rounded]="true" size="small" />
+    }
     <p-button label="Go Home" (click)="goHome()" [rounded]="true" size="small" />
     <p>
       For help, please contact us at <a href="mailto:{{ supportEmail() }}">{{ supportEmail() }}</a>

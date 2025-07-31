@@ -37,10 +37,19 @@ describe('ErrorPageComponent', () => {
   });
 
   it('should have retry button', async () => {
-    await setup();
+    await setup({
+      queryParams: { retryUrl: '/retry-url' },
+    });
     // The retry button should be present (by role or text)
     const retryButton = screen.getByRole('button', { name: /Retry/i });
     expect(retryButton).toBeInTheDocument();
+  });
+
+  it('should not have retry button if retry url not specified', async () => {
+    await setup();
+    // The retry button should not be present when no retryUrl is provided
+    const retryButton = screen.queryByRole('button', { name: /Retry/i });
+    expect(retryButton).not.toBeInTheDocument();
   });
 
   it('should have home button', async () => {

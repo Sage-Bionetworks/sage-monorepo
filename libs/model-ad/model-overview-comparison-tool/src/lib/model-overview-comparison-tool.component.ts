@@ -15,7 +15,6 @@ import { ActivatedRoute } from '@angular/router';
 import { ComparisonToolService, PlatformService } from '@sagebionetworks/explorers/services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ModelOverviewMainTableComponent } from './components/model-overview-main-table/model-overview-main-table.component';
-import { runInBrowser } from '@sagebionetworks/explorers/util';
 
 @Component({
   selector: 'model-ad-model-overview-comparison-tool',
@@ -49,16 +48,16 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
   config!: ComparisonToolConfig;
 
   constructor() {
-    runInBrowser(() => {
+    if (this.platformService.isBrowser) {
       this.config = this.getConfig();
       this.columns.set(this.getColumnsFromConfig(this.config));
-    }, this.platformService.platformId);
+    }
   }
 
   ngOnInit() {
-    runInBrowser(() => {
+    if (this.platformService.isBrowser) {
       this.getData();
-    }, this.platformService.platformId);
+    }
   }
 
   getConfig() {

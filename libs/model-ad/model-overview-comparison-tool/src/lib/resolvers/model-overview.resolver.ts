@@ -5,8 +5,8 @@ import { map, catchError } from 'rxjs/operators';
 import {
   ComparisonToolConfig,
   ComparisonToolConfigService,
+  ComparisonToolPages,
 } from '@sagebionetworks/model-ad/api-client-angular';
-import { ComparisonToolPages } from '@sagebionetworks/model-ad/util';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 
 @Injectable({ providedIn: 'root' })
@@ -28,7 +28,7 @@ export class ModelOverviewResolver implements Resolve<ComparisonToolConfig | nul
           const errorMessage = 'Failed to load ModelOverview configuration';
 
           console.error(`${errorMessage}: `, error);
-          this.router.navigate([ROUTE_PATHS.ERROR_PAGE], {
+          this.router.navigate([ROUTE_PATHS.ERROR], {
             queryParams: {
               message: errorMessage,
               retryUrl: attemptedUrl,

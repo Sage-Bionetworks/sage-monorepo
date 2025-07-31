@@ -1,15 +1,21 @@
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
+import { PlatformService } from '@sagebionetworks/explorers/services';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { ModelsService } from '@sagebionetworks/model-ad/api-client-angular';
-import { ConfigService, MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
-import { configMock, modelMock } from '@sagebionetworks/model-ad/testing';
+import { MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
+import { modelMock } from '@sagebionetworks/model-ad/testing';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { of } from 'rxjs';
 import { ModelDetailsComponent } from './model-details.component';
 
-async function setup(model = modelMock, tab = 'omics', subtab = null, config = configMock) {
+async function setup(
+  model = modelMock,
+  tab = 'omics',
+  subtab = null,
+  platformService: Partial<PlatformService> | null = null,
+) {
   const user = userEvent.setup();
 
   const mockActivatedRoute = {
@@ -20,19 +26,20 @@ async function setup(model = modelMock, tab = 'omics', subtab = null, config = c
     getModelByName: jest.fn(() => of(model)),
   };
 
-  const configServiceMock = {
-    config: config,
+  const mockPlatformService = platformService || {
+    isBrowser: true,
+    isServer: false,
   };
 
   const component = await render(ModelDetailsComponent, {
     imports: [LoadingIconComponent],
     providers: [
       { provide: ModelsService, useValue: mockModelsService },
+      { provide: PlatformService, useValue: mockPlatformService },
       {
         provide: ActivatedRoute,
         useValue: mockActivatedRoute,
       },
-      { provide: ConfigService, useValue: configServiceMock },
       provideLoadingIconColors(MODEL_AD_LOADING_ICON_COLORS),
     ],
   });
@@ -66,9 +73,13 @@ describe('ModelDetailsComponent', () => {
   });
 
   it('should show loading icon on server', async () => {
-    const configServer = { ...configMock, isPlatformServer: true };
-    await setup(modelMock, 'omics', null, configServer);
-    expect(document.querySelector('.loading-icon')).toBeVisible();
+    const mockPlatformService = {
+      isBrowser: false,
+      isServer: true,
+    };
+
+    const { component } = await setup(modelMock, 'omics', null, mockPlatformService);
+    expect(component.container.querySelector('.loading-icon')).toBeVisible();
     expect(screen.queryByText(/This page isn't available/i)).not.toBeInTheDocument();
   });
 });

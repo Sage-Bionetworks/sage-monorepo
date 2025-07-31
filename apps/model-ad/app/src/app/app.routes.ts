@@ -125,7 +125,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: ROUTE_PATHS.ERROR_PAGE,
+    path: ROUTE_PATHS.ERROR,
     loadChildren: () =>
       import('@sagebionetworks/explorers/shared').then((routes) => routes.errorPageRoute),
     data: {

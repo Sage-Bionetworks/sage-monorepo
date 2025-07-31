@@ -7,14 +7,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ComparisonToolPages } from './comparisonToolPages';
 import { ComparisonToolConfigColumn } from './comparisonToolConfigColumn';
 import { ComparisonToolConfigFilter } from './comparisonToolConfigFilter';
 
 export interface ComparisonToolConfig {
-  /**
-   * Page name
-   */
-  page: string;
+  page: ComparisonToolPages;
   /**
    * List of dropdown options
    */
@@ -25,3 +23,4 @@ export interface ComparisonToolConfig {
   columns: Array<ComparisonToolConfigColumn>;
   filters?: ComparisonToolConfigFilter;
 }
+export namespace ComparisonToolConfig {}

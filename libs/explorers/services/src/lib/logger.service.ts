@@ -18,6 +18,6 @@ export class LoggerService {
 
   // Send to remote server
   trackError(err: any) {
-    // TODO implement remote logging
+    // TODO implement remote logging https://sagebionetworks.jira.com/browse/MG-230
   }
 }

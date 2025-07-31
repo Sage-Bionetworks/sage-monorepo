@@ -39,6 +39,8 @@ paths:
           description: Success
         '400':
           $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /models/{model}:
@@ -81,8 +83,7 @@ paths:
           description: Name of the page to retrieve the Comparison Tool configuration for
           required: true
           schema:
-            type: string
-            example: model-overview
+            $ref: '#/components/schemas/ComparisonToolPages'
       responses:
         '200':
           description: Successfully retrieved Comparison Tool configuration
@@ -305,6 +306,14 @@ components:
         - genetic_info
         - biomarkers
         - pathology
+    ComparisonToolPages:
+      type: string
+      description: The type of comparison tool page
+      enum:
+        - Model Overview
+        - Gene Expression
+        - Disease Correlation
+      example: Gene Expression
     ComparisonToolConfigColumn:
       type: object
       properties:
@@ -354,9 +363,7 @@ components:
       type: object
       properties:
         page:
-          type: string
-          description: Page name
-          example: Gene Expression
+          $ref: '#/components/schemas/ComparisonToolPages'
         dropdowns:
           type: array
           description: List of dropdown options
@@ -449,14 +456,14 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-    InternalServerError:
-      description: The request cannot be fulfilled due to an unexpected server error
+    NotFound:
+      description: The specified resource was not found
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-    NotFound:
-      description: The specified resource was not found
+    InternalServerError:
+      description: The request cannot be fulfilled due to an unexpected server error
       content:
         application/problem+json:
           schema:

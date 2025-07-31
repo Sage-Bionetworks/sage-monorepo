@@ -1,10 +1,10 @@
-import { Component, DestroyRef, inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
 import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/constants';
-import { MetaTagService } from '@sagebionetworks/explorers/services';
+import { MetaTagService, PlatformService } from '@sagebionetworks/explorers/services';
 import { FooterComponent, HeaderComponent } from '@sagebionetworks/explorers/ui';
-import { runInBrowser } from '@sagebionetworks/explorers/util';
 import { Dataversion, DataversionService } from '@sagebionetworks/model-ad/api-client-angular';
 import { ConfigService, MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
 import { footerLinks, headerLinks } from '@sagebionetworks/model-ad/util';
@@ -34,7 +34,7 @@ import { ToastModule } from 'primeng/toast';
   ],
 })
 export class AppComponent implements OnInit {
-  private readonly platformId = inject(PLATFORM_ID);
+  private platformService = inject(PlatformService);
   private destroyRef = inject(DestroyRef);
   configService = inject(ConfigService);
   dataVersionService = inject(DataversionService);
@@ -56,7 +56,11 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    runInBrowser(() => {
+    this.getDataVersion();
+  }
+
+  getDataVersion() {
+    if (this.platformService.isBrowser) {
       this.dataVersionService
         .getDataversion()
         .pipe(takeUntilDestroyed(this.destroyRef))
@@ -66,7 +70,7 @@ export class AppComponent implements OnInit {
           },
           error: (error) => console.error('Error loading data version:', error),
         });
-    }, this.platformId);
+    }
   }
 
   formatDataVersion(dataVersion: Dataversion) {

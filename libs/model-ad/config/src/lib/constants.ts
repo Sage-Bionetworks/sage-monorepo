@@ -21,5 +21,5 @@ export const ROUTE_PATHS = {
   MODELS: 'models',
   TERMS_OF_SERVICE: 'terms-of-service',
   NOT_FOUND: 'not-found',
-  ERROR_PAGE: 'error-page',
+  ERROR: 'error',
 } as const;

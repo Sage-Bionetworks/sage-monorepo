@@ -2,6 +2,7 @@ export * from './basicError';
 export * from './comparisonToolConfig';
 export * from './comparisonToolConfigColumn';
 export * from './comparisonToolConfigFilter';
+export * from './comparisonToolPages';
 export * from './dataversion';
 export * from './geneticInfo';
 export * from './individualData';

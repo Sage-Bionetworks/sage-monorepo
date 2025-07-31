@@ -14,9 +14,9 @@ export class GlobalErrorHandler implements ErrorHandler {
   handleError(message: string): void;
   handleError(message: string, error: any): void;
   handleError(arg1: any, arg2?: any): void {
-    const isString = typeof arg1 === 'string';
-    const message = isString ? arg1 : arg1?.message || 'An unexpected error has occurred.';
-    const error = isString ? arg2 : arg1;
+    const arg1IsString = typeof arg1 === 'string';
+    const message = arg1IsString ? arg1 : arg1?.message || 'An unexpected error has occurred.';
+    const error = arg1IsString ? arg2 : arg1;
 
     this.logger.error(message, error);
 

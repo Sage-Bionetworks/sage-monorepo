@@ -21,7 +21,7 @@ export class ErrorPageComponent {
   constructor() {
     this.route.queryParams.subscribe((params) => {
       this.errorMessage = params['message'] || 'Unknown Error';
-      this.retryUrl = params['retryUrl'] || '/';
+      this.retryUrl = params['retryUrl'] || '';
     });
   }
 
