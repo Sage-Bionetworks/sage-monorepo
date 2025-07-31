@@ -1,21 +1,36 @@
 [build-system]
-requires = ["pdm-backend"]
-build-backend = "pdm.backend"
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
 
 [project]
-authors = [
-    {name = "Hallie Swan", email = "hallie.swan@sagebase.org"},
-]
-requires-python = "==3.11.9"
-dependencies = []
 name = "bixarena-app"
-version = "0.1.0"
-description = "BixArena App Release"
+version = "0.2.36"
+description = "Bixarena application for serving and evaluating large language models"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+]
+dependencies = [
+    "aiohttp", "fastapi", "httpx", "markdown2[all]", "nh3", "numpy",
+    "prompt_toolkit>=3.0.0", "pydantic", "requests", "rich>=10.0.0",
+    "shortuuid", "tiktoken", "uvicorn",
+]
 
-[dependency-groups]
-dev = []
-prod = []
-test = []
+[project.optional-dependencies]
+model_worker = ["accelerate>=0.21", "peft", "sentencepiece", "torch", "transformers>=4.31.0", "protobuf"]
+webui = ["gradio>=4.10"]
+train = ["einops", "flash-attn>=2.0", "wandb"]
+llm_judge = ["openai<1", "anthropic>=0.3", "ray"]
+dev = ["black==23.3.0", "pylint==2.8.2"]
 
-[tool.uv]
-default-groups = []
+[project.urls]
+"Homepage" = "https://github.com/lm-sys/fastchat"
+"Bug Tracker" = "https://github.com/lm-sys/fastchat/issues"
+
+[tool.setuptools.packages.find]
+exclude = ["assets*", "benchmark*", "docs", "dist*", "playground*", "scripts*", "tests*"]
+
+[tool.wheel]
+exclude = ["assets*", "benchmark*", "docs", "dist*", "playground*", "scripts*", "tests*"]

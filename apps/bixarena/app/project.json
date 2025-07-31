@@ -18,6 +18,16 @@
         "cwd": "{projectRoot}"
       }
     },
+    "install": {
+      "executor": "@nxlv/python:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": ["uv pip install --upgrade pip", "uv pip install -e '.[model_worker,webui]'"],
+        "silent": false,
+        "verbose": false,
+        "debug": false
+      }
+    },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
