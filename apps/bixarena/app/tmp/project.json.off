@@ -1,27 +1,12 @@
 {
   "name": "bixarena-app",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/bixarena/app/src",
   "projectType": "application",
   "targets": {
     "create-config": {
       "executor": "nx:run-commands",
       "options": {
         "command": "cp -n .env.example .env",
-        "cwd": "{projectRoot}"
-      }
-    },
-    "prepare": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "uv sync",
-        "cwd": "{projectRoot}"
-      }
-    },
-    "serve": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "uv run src/main.py",
         "cwd": "{projectRoot}"
       }
     },
@@ -39,6 +24,5 @@
       }
     }
   },
-  "tags": ["type:app", "scope:backend", "language:python", "package-manager:uv"],
-  "implicitDependencies": []
+  "tags": ["type:service", "scope:backend"]
 }

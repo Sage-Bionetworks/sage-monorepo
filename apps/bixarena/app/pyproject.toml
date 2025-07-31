@@ -1,0 +1,21 @@
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[project]
+authors = [
+    {name = "Hallie Swan", email = "hallie.swan@sagebase.org"},
+]
+requires-python = "==3.11.9"
+dependencies = []
+name = "bixarena-app"
+version = "0.1.0"
+description = "BixArena App Release"
+
+[dependency-groups]
+dev = []
+prod = []
+test = []
+
+[tool.uv]
+default-groups = []
