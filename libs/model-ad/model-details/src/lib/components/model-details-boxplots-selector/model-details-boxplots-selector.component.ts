@@ -11,7 +11,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { HelperService } from '@sagebionetworks/explorers/services';
 import { DecodeGreekEntityPipe, ModalLinkComponent } from '@sagebionetworks/explorers/util';
@@ -33,8 +32,6 @@ import { ModelDetailsBoxplotsGridComponent } from '../model-details-boxplots-gri
 })
 export class ModelDetailsBoxplotsSelectorComponent {
   private readonly helperService = inject(HelperService);
-  private readonly route = inject(ActivatedRoute);
-  private readonly router = inject(Router);
   private readonly location = inject(Location);
 
   @ViewChild('boxplotsContainer', { static: false }) boxplotsContainer!: ElementRef<HTMLElement>;
@@ -50,7 +47,8 @@ export class ModelDetailsBoxplotsSelectorComponent {
     { label: 'Female', value: ['Female'] },
     { label: 'Male', value: ['Male'] },
   ];
-  selectedSexOption = signal(this.sexOptions[0]);
+  defaultSexOption = this.sexOptions[0];
+  selectedSexOption = signal(this.defaultSexOption);
 
   tissueOptions = computed(() => {
     return Array.from(new Set(this.modelDataList().map((item) => item.tissue)));
@@ -59,17 +57,25 @@ export class ModelDetailsBoxplotsSelectorComponent {
 
   private readonly SCROLL_PADDING = 15;
   isInitialScrollDone = false;
+  hasInitializedOptions = false;
 
   constructor() {
     effect(() => {
-      const options = this.tissueOptions();
-      if (options.length > 0 && !this.selectedTissueOption()) {
-        this.selectedTissueOption.set(options[0]);
+      const sexOption = this.selectedSexOption();
+      const tissueOption = this.selectedTissueOption();
+
+      if (this.hasInitializedOptions) {
+        this.updateQueryParams(sexOption.label, tissueOption);
       }
     });
 
     afterNextRender(() => {
-      this.initialScrollToSection();
+      this.initializeOptionsFromUrlParams();
+
+      setTimeout(() => {
+        // provide time to render boxplots after initializing options before attempting to scroll
+        this.initialScrollToSection();
+      }, 10);
     });
   }
 
@@ -101,10 +107,26 @@ export class ModelDetailsBoxplotsSelectorComponent {
     );
   }
 
+  getDefaultTissue() {
+    return this.tissueOptions()[0] || '';
+  }
+
+  initializeOptionsFromUrlParams() {
+    const sexParam = this.helperService.getUrlParam('sex');
+    const tissueParam = this.helperService.getUrlParam('tissue');
+
+    const matchingSexOption = this.sexOptions.find((option) => option.label === sexParam);
+    if (matchingSexOption !== undefined) this.selectedSexOption.set(matchingSexOption);
+
+    this.selectedTissueOption.set(tissueParam || this.getDefaultTissue());
+
+    this.hasInitializedOptions = true;
+  }
+
   initialScrollToSection() {
     if (typeof window !== 'undefined' && !this.isInitialScrollDone) {
       const hash = window.location.hash.slice(1);
-      this.isInitialScrollDone = this.scrollToSection(hash, false);
+      this.isInitialScrollDone = hash === '' ? true : this.scrollToSection(hash, false);
     }
   }
 
@@ -116,9 +138,29 @@ export class ModelDetailsBoxplotsSelectorComponent {
   }
 
   updateUrlFragment(fragment: string): void {
-    const currentPath = this.location.path();
-    const basePath = currentPath.split('#')[0];
-    this.location.replaceState(`${basePath}#${fragment}`);
+    const newUrl = `${window.location.pathname}${window.location.search}#${fragment}`;
+    this.location.replaceState(newUrl);
+  }
+
+  updateQueryParams(sex: string, tissue: string) {
+    const params = new URLSearchParams(window.location.search);
+
+    if (sex !== this.defaultSexOption.label) {
+      params.set('sex', sex);
+    } else {
+      params.delete('sex');
+    }
+
+    if (tissue !== this.getDefaultTissue()) {
+      params.set('tissue', tissue);
+    } else {
+      params.delete('tissue');
+    }
+
+    const queryString = params.toString();
+    const queryStringFormatted = queryString ? `?${queryString}` : '';
+    const newUrl = `${window.location.pathname}${queryStringFormatted}${window.location.hash}`;
+    this.location.replaceState(newUrl);
   }
 
   scrollToSection(anchorId: string, updateUrl = true): boolean {

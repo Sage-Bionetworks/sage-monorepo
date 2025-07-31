@@ -239,3 +239,88 @@ test.describe('model details - boxplots selector - table of contents', () => {
     await page.waitForURL(`${basePath}#${fragment}`);
   });
 });
+
+test.describe('model details - boxplots selector - share links - initial load', () => {
+  const basePath = '/models/Abca7*V1599M/biomarkers';
+  const tissueDefault = 'Cerebral Cortex';
+  const sexDefault = 'Female & Male';
+
+  test('default filters are set when there are no query parameters', async ({ page }) => {
+    await page.goto(basePath);
+    await expect(page.getByRole('combobox', { name: tissueDefault })).toBeVisible();
+    await expect(page.getByRole('combobox', { name: sexDefault })).toBeVisible();
+  });
+
+  test('sex filter can be set from query parameter', async ({ page }) => {
+    const sexFilter = 'Male';
+    await page.goto(`${basePath}?sex=${sexFilter}`);
+    await expect(page.getByRole('combobox', { name: tissueDefault })).toBeVisible();
+    await expect(page.getByRole('combobox', { name: sexFilter })).toBeVisible();
+  });
+
+  test('tissue filter can be set from query parameter', async ({ page }) => {
+    const tissueFilter = 'Hippocampus';
+    await page.goto(`${basePath}?tissue=${tissueFilter}`);
+    await expect(page.getByRole('combobox', { name: tissueFilter })).toBeVisible();
+    await expect(page.getByRole('combobox', { name: sexDefault })).toBeVisible();
+  });
+
+  test('sex and tissue filters can be set from query parameters', async ({ page }) => {
+    const tissueFilter = 'Hippocampus';
+    const sexFilter = 'Male';
+    await page.goto(`${basePath}?tissue=${tissueFilter}&sex=${sexFilter}`);
+    await expect(page.getByRole('combobox', { name: tissueFilter })).toBeVisible();
+    await expect(page.getByRole('combobox', { name: sexFilter })).toBeVisible();
+  });
+
+  test('filters are set from query parameters and page scrolls to appropriate section based on fragment', async ({
+    page,
+  }) => {
+    const tissueFilter = 'Hippocampus';
+    const sexFilter = 'Male';
+    await page.goto(`${basePath}?tissue=${tissueFilter}&sex=${sexFilter}#soluble-a-beta-42`);
+    await expect(page.getByRole('combobox', { name: tissueFilter })).toBeVisible();
+    await expect(page.getByRole('combobox', { name: sexFilter })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { level: 2, name: 'Soluble Aβ42', exact: true }),
+    ).toBeInViewport();
+  });
+});
+
+test.describe('model details - boxplots selector - share links - updates', () => {
+  const basePath = '/models/Abca7*V1599M/biomarkers';
+
+  test('query parameters are updated when filters change', async ({ page }) => {
+    const tissueInitial = 'Hippocampus';
+    const tissueChosen = 'Plasma';
+    const sexInitial = 'Male';
+    const sexChosen = 'Female';
+    await page.goto(`${basePath}?tissue=${tissueInitial}&sex=${sexInitial}`);
+
+    await page.getByRole('combobox', { name: tissueInitial }).click();
+    await page.getByRole('option', { name: tissueChosen }).click();
+
+    await page.waitForURL(`${basePath}?tissue=${tissueChosen}&sex=${sexInitial}`);
+
+    await page.getByRole('combobox', { name: sexInitial }).click();
+    await page.getByRole('option', { name: sexChosen, exact: true }).click();
+
+    await page.waitForURL(`${basePath}?tissue=${tissueChosen}&sex=${sexChosen}`);
+  });
+
+  test('query parameters are maintained when fragment is updated', async ({ page }) => {
+    const pathWithParams = `${basePath}?tissue=Hippocampus&sex=Male`;
+    await page.goto(pathWithParams);
+    await page.getByRole('button', { name: 'Soluble Aβ42', exact: true }).click();
+    await page.waitForURL(`${pathWithParams}#soluble-a-beta-42`);
+  });
+
+  test('fragment is maintained when query parameters are updated', async ({ page }) => {
+    const tissueChosen = 'Plasma';
+    const fragment = '#soluble-a-beta-42';
+    await page.goto(`${basePath}${fragment}`);
+    await page.getByRole('combobox', { name: 'Cerebral Cortex' }).click();
+    await page.getByRole('option', { name: tissueChosen }).click();
+    await page.waitForURL(`${basePath}?tissue=${tissueChosen}${fragment}`);
+  });
+});

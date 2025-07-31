@@ -45,10 +45,15 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
     expect(screen.getByRole('combobox', { name: /sex/i })).toBeVisible();
   });
 
-  it('should automatically select first tissue when data loads', async () => {
+  it('should use default values for sex and tissue', async () => {
     await setup();
-    const tissueSelect = screen.getByRole('combobox', { name: /tissue/i });
 
+    const sexSelect = screen.getByRole('combobox', { name: /sex/i });
+    await waitFor(() => {
+      expect(sexSelect).toHaveAccessibleName('Female & Male');
+    });
+
+    const tissueSelect = screen.getByRole('combobox', { name: /tissue/i });
     const firstTissue = modelMock.pathology[0].tissue;
     await waitFor(() => {
       expect(tissueSelect).toHaveAccessibleName(firstTissue);
