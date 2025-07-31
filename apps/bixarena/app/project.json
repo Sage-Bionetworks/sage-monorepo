@@ -7,7 +7,7 @@
     "create-config": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "cp -n .env.example .env",
+        "commands": ["cp -n .env.example .env", "uv run generate_model_config.py"],
         "cwd": "{projectRoot}"
       }
     },
@@ -18,10 +18,17 @@
         "cwd": "{projectRoot}"
       }
     },
+    "show-packages": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "uv pip list",
+        "cwd": "{projectRoot}"
+      }
+    },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "uv run python -m fastchat.serve.gradio_web_server_multi --port ${APP_PORT} --register-api-endpoint-file models.template.json",
+        "command": "uv run python -m fastchat.serve.gradio_web_server_multi --port ${APP_PORT} --register-api-endpoint-file data/model_config.json",
         "cwd": "{projectRoot}"
       }
     },
