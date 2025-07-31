@@ -23,15 +23,15 @@ tags:
     x-audience:
       - public
   - description: Operations about challenge analytics.
-    name: ChallengeAnalytics
+    name: Challenge Analytics
     x-audience:
       - public
   - description: Operations about challenge platforms.
-    name: ChallengePlatform
+    name: Challenge Platform
     x-audience:
       - public
   - description: Operations about EDAM concepts.
-    name: EdamConcept
+    name: Edam Concept
     x-audience:
       - public
 paths:

@@ -26,13 +26,15 @@ class ImageAspectRatio(str, Enum):
     """
     allowed enum values
     """
-    ORIGINAL = "original"
-    ENUM_16_9 = "16_9"
-    ENUM_1_1 = "1_1"
-    ENUM_3_2 = "3_2"
-    ENUM_2_3 = "2_3"
+    ORIGINAL = 'original'
+    ENUM_16_9 = '16_9'
+    ENUM_1_1 = '1_1'
+    ENUM_3_2 = '3_2'
+    ENUM_2_3 = '2_3'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
         """Create an instance of ImageAspectRatio from a JSON string"""
         return cls(json.loads(json_str))
+
+

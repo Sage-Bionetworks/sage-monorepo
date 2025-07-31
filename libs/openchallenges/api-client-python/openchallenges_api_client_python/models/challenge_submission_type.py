@@ -26,13 +26,15 @@ class ChallengeSubmissionType(str, Enum):
     """
     allowed enum values
     """
-    CONTAINER_IMAGE = "container_image"
-    PREDICTION_FILE = "prediction_file"
-    NOTEBOOK = "notebook"
-    MLCUBE = "mlcube"
-    OTHER = "other"
+    CONTAINER_IMAGE = 'container_image'
+    PREDICTION_FILE = 'prediction_file'
+    NOTEBOOK = 'notebook'
+    MLCUBE = 'mlcube'
+    OTHER = 'other'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
         """Create an instance of ChallengeSubmissionType from a JSON string"""
         return cls(json.loads(json_str))
+
+

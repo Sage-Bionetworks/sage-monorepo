@@ -23,20 +23,12 @@ from typing_extensions import Annotated
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class CreateApiKeyRequest(BaseModel):
     """
     CreateApiKeyRequest
-    """  # noqa: E501
-
-    name: Annotated[str, Field(min_length=1, strict=True, max_length=100)] = Field(
-        description="Human-readable name for the API key"
-    )
-    expires_in: Optional[Annotated[int, Field(le=3650, strict=True, ge=1)]] = Field(
-        default=None,
-        description="Number of days until the API key expires (optional, default is no expiration)",
-        alias="expiresIn",
-    )
+    """ # noqa: E501
+    name: Annotated[str, Field(min_length=1, strict=True, max_length=100)] = Field(description="Human-readable name for the API key")
+    expires_in: Optional[Annotated[int, Field(le=3650, strict=True, ge=1)]] = Field(default=None, description="Number of days until the API key expires (optional, default is no expiration)", alias="expiresIn")
     __properties: ClassVar[List[str]] = ["name", "expiresIn"]
 
     model_config = ConfigDict(
@@ -44,6 +36,7 @@ class CreateApiKeyRequest(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -69,7 +62,8 @@ class CreateApiKeyRequest(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -87,7 +81,10 @@ class CreateApiKeyRequest(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {"name": obj.get("name"), "expiresIn": obj.get("expiresIn")}
-        )
+        _obj = cls.model_validate({
+            "name": obj.get("name"),
+            "expiresIn": obj.get("expiresIn")
+        })
         return _obj
+
+

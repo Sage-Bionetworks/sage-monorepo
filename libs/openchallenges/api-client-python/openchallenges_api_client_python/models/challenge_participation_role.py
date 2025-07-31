@@ -26,11 +26,13 @@ class ChallengeParticipationRole(str, Enum):
     """
     allowed enum values
     """
-    CHALLENGE_ORGANIZER = "challenge_organizer"
-    DATA_CONTRIBUTOR = "data_contributor"
-    SPONSOR = "sponsor"
+    CHALLENGE_ORGANIZER = 'challenge_organizer'
+    DATA_CONTRIBUTOR = 'data_contributor'
+    SPONSOR = 'sponsor'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
         """Create an instance of ChallengeParticipationRole from a JSON string"""
         return cls(json.loads(json_str))
+
+

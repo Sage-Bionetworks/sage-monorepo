@@ -26,9 +26,11 @@ class OrganizationCategory(str, Enum):
     """
     allowed enum values
     """
-    FEATURED = "featured"
+    FEATURED = 'featured'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
         """Create an instance of OrganizationCategory from a JSON string"""
         return cls(json.loads(json_str))
+
+

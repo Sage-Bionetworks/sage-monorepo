@@ -14,9 +14,7 @@
 
 import unittest
 
-from openchallenges_api_client_python.api.challenge_platform_api import (
-    ChallengePlatformApi,
-)
+from openchallenges_api_client_python.api.challenge_platform_api import ChallengePlatformApi
 
 
 class TestChallengePlatformApi(unittest.TestCase):
@@ -64,5 +62,5 @@ class TestChallengePlatformApi(unittest.TestCase):
         pass
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

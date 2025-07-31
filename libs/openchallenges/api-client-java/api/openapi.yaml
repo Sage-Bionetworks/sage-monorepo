@@ -35,25 +35,19 @@ tags:
       - public
     x-displayName: Challenge Contribution
   - description: Operations about challenge analytics.
-    name: ChallengeAnalytics
+    name: Challenge Analytics
     x-audience:
       - public
-    x-displayName: ChallengeAnalytics
-  - description: Operations about challenge platforms.
-    name: ChallengePlatform
-    x-audience:
-      - public
-    x-displayName: ChallengePlatform
-  - description: Operations about EDAM concepts.
-    name: EdamConcept
-    x-audience:
-      - public
-    x-displayName: EdamConcept
-  - name: Challenge Analytics
     x-displayName: Challenge Analytics
-  - name: Challenge Platform
+  - description: Operations about challenge platforms.
+    name: Challenge Platform
+    x-audience:
+      - public
     x-displayName: Challenge Platform
-  - name: Edam Concept
+  - description: Operations about EDAM concepts.
+    name: Edam Concept
+    x-audience:
+      - public
     x-displayName: Edam Concept
   - description: Operations about images
     name: Image
@@ -1423,7 +1417,7 @@ paths:
         - application/json
         - application/problem+json
   /organizations/{org}/participations: {}
-  /organizations/{org}/participations/{challengeId}/role/{role}: {}
+  /organizations/{org}/participations/{challengeId}/roles/{role}: {}
 components:
   parameters:
     challengeSearchQuery:
@@ -3277,9 +3271,6 @@ x-tagGroups:
     tags:
       - Challenge
       - Challenge Contribution
-      - ChallengeAnalytics
-      - ChallengePlatform
-      - EdamConcept
       - Challenge Analytics
       - Challenge Platform
       - Edam Concept

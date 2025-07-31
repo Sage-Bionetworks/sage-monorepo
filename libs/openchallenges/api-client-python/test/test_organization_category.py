@@ -14,10 +14,7 @@
 
 import unittest
 
-from openchallenges_api_client_python.models.organization_category import (
-    OrganizationCategory,
-)
-
+from openchallenges_api_client_python.models.organization_category import OrganizationCategory
 
 class TestOrganizationCategory(unittest.TestCase):
     """OrganizationCategory unit test stubs"""
@@ -32,6 +29,5 @@ class TestOrganizationCategory(unittest.TestCase):
         """Test OrganizationCategory"""
         # inst = OrganizationCategory()
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

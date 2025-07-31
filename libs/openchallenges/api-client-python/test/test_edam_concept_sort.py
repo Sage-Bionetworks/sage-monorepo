@@ -16,7 +16,6 @@ import unittest
 
 from openchallenges_api_client_python.models.edam_concept_sort import EdamConceptSort
 
-
 class TestEdamConceptSort(unittest.TestCase):
     """EdamConceptSort unit test stubs"""
 
@@ -30,6 +29,5 @@ class TestEdamConceptSort(unittest.TestCase):
         """Test EdamConceptSort"""
         # inst = EdamConceptSort()
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
