@@ -6,9 +6,9 @@
   styleClass="download-dom-image-panel"
   (rotate)="onRotate()"
   (window:resize)="onResize()"
-  >
+>
   <div class="download-dom-image-header">
-    {{ heading }}
+    {{ heading() }}
   </div>
   <div class="download-dom-image-body">
     @for (type of types; track type) {

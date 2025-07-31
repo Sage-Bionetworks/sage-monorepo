@@ -20,13 +20,13 @@
 .p-radiobutton-checked {
   // outer circle color
   .p-radiobutton-box {
-    border-color: var(--primary-color, #5081a7) !important;
+    border-color: var(--primary-color, #007bff) !important;
   }
 
   .p-radiobutton-icon {
     width: 6px !important;
     height: 6px !important;
     border-radius: 50% !important;
-    background-color: var(--primary-color, #5081a7) !important;
+    background-color: var(--primary-color, #007bff) !important;
   }
 }

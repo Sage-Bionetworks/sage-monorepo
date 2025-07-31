@@ -3958,8 +3958,8 @@ export const BasePreset = definePreset(Lara, {
     },
     radiobutton: {
       root: {
-        width: '1.5rem',
-        height: '1.5rem',
+        width: '16px',
+        height: '16px',
         background: '{form.field.background}',
         checkedBackground: '{primary.color}',
         checkedHoverBackground: '{primary.hover.color}',

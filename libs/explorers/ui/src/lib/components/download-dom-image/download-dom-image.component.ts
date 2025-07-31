@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 import domtoimage from 'dom-to-image-more';
 
-
-import { Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, input, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faDownload, faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -17,22 +16,16 @@ interface Type {
 }
 
 @Component({
-  selector: 'agora-download-dom-image',
-  imports: [
-    FormsModule,
-    PopoverModule,
-    RadioButtonModule,
-    ButtonModule,
-    FontAwesomeModule
-],
+  selector: 'explorers-download-dom-image',
+  imports: [FormsModule, PopoverModule, RadioButtonModule, ButtonModule, FontAwesomeModule],
   templateUrl: './download-dom-image.component.html',
   styleUrls: ['./download-dom-image.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 export class DownloadDomImageComponent {
-  @Input() target: HTMLElement = {} as HTMLElement;
-  @Input() heading = 'Download this plot as:';
-  @Input() filename = 'agora';
+  target = input.required<HTMLElement>();
+  heading = input('Download this plot as:');
+  filename = input.required();
 
   downloadIcon = faDownload;
   spinnerIcon = faSpinner;
@@ -67,13 +60,13 @@ export class DownloadDomImageComponent {
     // width and height need to be specified
     // known issue: https://github.com/1904labs/dom-to-image-more/issues/198
     domtoimage
-      .toBlob(this.target, {
+      .toBlob(this.target(), {
         bgcolor: '#fff',
-        width: this.target.offsetWidth,
-        height: this.target.offsetHeight,
+        width: this.target().offsetWidth,
+        height: this.target().offsetHeight,
       })
       .then((blob: any) => {
-        saveAs(blob, this.filename + this.selectedType);
+        saveAs(blob, this.filename() + this.selectedType);
         this.isLoading = false;
         this.hide();
       })

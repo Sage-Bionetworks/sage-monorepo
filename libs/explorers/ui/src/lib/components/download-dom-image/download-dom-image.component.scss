@@ -1,6 +1,3 @@
-@use 'agora/styles/src/lib/variables';
-@use 'agora/styles/src/lib/mixins';
-
 .download-dom-image-icon {
   transform: translateY(6px);
   margin-left: 10px;
@@ -29,16 +26,9 @@
     > div:not(:last-child) {
       margin-bottom: 15px;
     }
-  }
 
-  .p-button {
-    width: 100%;
-    height: 100%;
-
-    i {
-      position: absolute;
-      top: 8px;
-      left: 10px;
+    .p-button {
+      width: 100%;
     }
   }
 
