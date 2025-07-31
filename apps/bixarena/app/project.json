@@ -1,8 +1,8 @@
 {
   "name": "bixarena-app",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/bixarena/app/src",
   "projectType": "application",
+  "sourceRoot": "apps/bixarena/app",
   "targets": {
     "create-config": {
       "executor": "nx:run-commands",
@@ -21,8 +21,8 @@
     "install": {
       "executor": "@nxlv/python:run-commands",
       "options": {
-        "cwd": "{projectRoot}",
         "command": ["uv pip install --upgrade pip", "uv pip install -e '.[model_worker,webui]'"],
+        "cwd": "{projectRoot}",
         "silent": false,
         "verbose": false,
         "debug": false
