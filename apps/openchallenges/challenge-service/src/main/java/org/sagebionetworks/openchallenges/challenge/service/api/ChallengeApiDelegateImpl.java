@@ -2,6 +2,7 @@ package org.sagebionetworks.openchallenges.challenge.service.api;
 
 import java.util.List;
 import java.util.Optional;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeJsonLdDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSearchQueryDto;
@@ -35,6 +36,26 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
   @Override
   public Optional<NativeWebRequest> getRequest() {
     return Optional.ofNullable(request);
+  }
+
+  @Override
+  @PreAuthorize("authentication.principal.admin")
+  public ResponseEntity<ChallengeDto> createChallenge(
+    ChallengeCreateRequestDto challengeCreateRequestDto
+  ) {
+    // Log the authenticated user for audit purposes
+    AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
+      .getAuthentication()
+      .getPrincipal();
+    logger.info(
+      "User {} (role: {}) is creating challenge with name: {}",
+      user.getUsername(),
+      user.getRole(),
+      challengeCreateRequestDto.getName()
+    );
+
+    ChallengeDto createdChallenge = challengeService.createChallenge(challengeCreateRequestDto);
+    return ResponseEntity.status(201).body(createdChallenge);
   }
 
   @Override

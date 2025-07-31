@@ -1,10 +1,12 @@
 package org.sagebionetworks.openchallenges.challenge.service.service;
 
 import jakarta.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengePlatformNotFoundException;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeJsonLdDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSearchQueryDto;
@@ -26,6 +28,7 @@ import org.sagebionetworks.openchallenges.challenge.service.model.repository.Cha
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeSubmissionTypeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -185,6 +188,50 @@ public class ChallengeService {
     challengeRepository.deleteById(challengeId);
 
     logger.info("Successfully deleted challenge with ID: {}", challengeId);
+  }
+
+  @Transactional
+  public ChallengeDto createChallenge(ChallengeCreateRequestDto request) {
+    // Create a new challenge entity
+    ChallengeEntity newChallenge = new ChallengeEntity();
+    newChallenge.setSlug(request.getSlug());
+    newChallenge.setName(request.getName());
+    newChallenge.setHeadline(request.getHeadline());
+    newChallenge.setDescription(request.getDescription());
+    newChallenge.setDoi(request.getDoi());
+    newChallenge.setStatus(request.getStatus().toString());
+    newChallenge.setWebsiteUrl(request.getWebsiteUrl());
+    newChallenge.setAvatarUrl(request.getAvatarUrl());
+
+    // Initialize empty collections to prevent NullPointerException in mapper
+    newChallenge.setSubmissionTypes(new ArrayList<>());
+    newChallenge.setIncentives(new ArrayList<>());
+    newChallenge.setCategories(new ArrayList<>());
+    newChallenge.setInputDataTypes(new ArrayList<>());
+    newChallenge.setStars(new ArrayList<>());
+    newChallenge.setContributions(new ArrayList<>());
+
+    // Set platform
+    SimpleChallengePlatformEntity platform = getChallengePlatformEntity(request.getPlatformId());
+    newChallenge.setPlatform(platform);
+
+    try {
+      // Save the challenge entity first to get the ID
+      ChallengeEntity savedChallenge = challengeRepository.save(newChallenge);
+      challengeRepository.flush();
+
+      logger.info("Successfully created challenge with ID: {}", savedChallenge.getId());
+
+      // Return the created challenge as DTO
+      return challengeMapper.convertToDto(savedChallenge);
+    } catch (DataIntegrityViolationException e) {
+      // Handle potential unique constraint violations (e.g., slug uniqueness)
+      throw new RuntimeException(
+        "Challenge creation failed due to data constraint violation. " +
+        "This may be due to a duplicate slug or other unique constraint violation.",
+        e
+      );
+    }
   }
 
   @Transactional
