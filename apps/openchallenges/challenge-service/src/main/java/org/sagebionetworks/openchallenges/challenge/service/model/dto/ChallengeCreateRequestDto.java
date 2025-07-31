@@ -26,13 +26,23 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 public class ChallengeCreateRequestDto {
 
+  private String slug;
+
   private String name;
 
   private @Nullable String headline = null;
 
-  private String description;
+  private @Nullable String description;
+
+  private @Nullable String doi = null;
 
   private ChallengeStatusDto status;
+
+  private Long platformId;
+
+  private @Nullable String websiteUrl = null;
+
+  private @Nullable String avatarUrl = null;
 
   public ChallengeCreateRequestDto() {
     super();
@@ -41,10 +51,31 @@ public class ChallengeCreateRequestDto {
   /**
    * Constructor with only required parameters
    */
-  public ChallengeCreateRequestDto(String name, String description, ChallengeStatusDto status) {
+  public ChallengeCreateRequestDto(String slug, String name, ChallengeStatusDto status, Long platformId) {
+    this.slug = slug;
     this.name = name;
-    this.description = description;
     this.status = status;
+    this.platformId = platformId;
+  }
+
+  public ChallengeCreateRequestDto slug(String slug) {
+    this.slug = slug;
+    return this;
+  }
+
+  /**
+   * The unique slug of the challenge.
+   * @return slug
+   */
+  @NotNull @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$") @Size(min = 3, max = 255) 
+  @Schema(name = "slug", example = "awesome-challenge", description = "The unique slug of the challenge.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("slug")
+  public String getSlug() {
+    return slug;
+  }
+
+  public void setSlug(String slug) {
+    this.slug = slug;
   }
 
   public ChallengeCreateRequestDto name(String name) {
@@ -96,8 +127,8 @@ public class ChallengeCreateRequestDto {
    * The description of the challenge.
    * @return description
    */
-  @NotNull @Size(min = 0, max = 1000) 
-  @Schema(name = "description", example = "This is an example description of the challenge.", description = "The description of the challenge.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Size(min = 0, max = 1000) 
+  @Schema(name = "description", example = "This is an example description of the challenge.", description = "The description of the challenge.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("description")
   public String getDescription() {
     return description;
@@ -105,6 +136,26 @@ public class ChallengeCreateRequestDto {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public ChallengeCreateRequestDto doi(String doi) {
+    this.doi = doi;
+    return this;
+  }
+
+  /**
+   * The DOI of the challenge.
+   * @return doi
+   */
+  @Size(max = 120) 
+  @Schema(name = "doi", example = "https://doi.org/123/abc", description = "The DOI of the challenge.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("doi")
+  public String getDoi() {
+    return doi;
+  }
+
+  public void setDoi(String doi) {
+    this.doi = doi;
   }
 
   public ChallengeCreateRequestDto status(ChallengeStatusDto status) {
@@ -127,6 +178,66 @@ public class ChallengeCreateRequestDto {
     this.status = status;
   }
 
+  public ChallengeCreateRequestDto platformId(Long platformId) {
+    this.platformId = platformId;
+    return this;
+  }
+
+  /**
+   * The unique identifier of a challenge platform.
+   * @return platformId
+   */
+  @NotNull 
+  @Schema(name = "platformId", example = "1", description = "The unique identifier of a challenge platform.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("platformId")
+  public Long getPlatformId() {
+    return platformId;
+  }
+
+  public void setPlatformId(Long platformId) {
+    this.platformId = platformId;
+  }
+
+  public ChallengeCreateRequestDto websiteUrl(String websiteUrl) {
+    this.websiteUrl = websiteUrl;
+    return this;
+  }
+
+  /**
+   * A URL to the website or image.
+   * @return websiteUrl
+   */
+  @Size(max = 500) 
+  @Schema(name = "websiteUrl", example = "https://openchallenges.io", description = "A URL to the website or image.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("websiteUrl")
+  public String getWebsiteUrl() {
+    return websiteUrl;
+  }
+
+  public void setWebsiteUrl(String websiteUrl) {
+    this.websiteUrl = websiteUrl;
+  }
+
+  public ChallengeCreateRequestDto avatarUrl(String avatarUrl) {
+    this.avatarUrl = avatarUrl;
+    return this;
+  }
+
+  /**
+   * A URL to the website or image.
+   * @return avatarUrl
+   */
+  @Size(max = 500) 
+  @Schema(name = "avatarUrl", example = "https://openchallenges.io", description = "A URL to the website or image.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("avatarUrl")
+  public String getAvatarUrl() {
+    return avatarUrl;
+  }
+
+  public void setAvatarUrl(String avatarUrl) {
+    this.avatarUrl = avatarUrl;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -136,25 +247,35 @@ public class ChallengeCreateRequestDto {
       return false;
     }
     ChallengeCreateRequestDto challengeCreateRequest = (ChallengeCreateRequestDto) o;
-    return Objects.equals(this.name, challengeCreateRequest.name) &&
+    return Objects.equals(this.slug, challengeCreateRequest.slug) &&
+        Objects.equals(this.name, challengeCreateRequest.name) &&
         Objects.equals(this.headline, challengeCreateRequest.headline) &&
         Objects.equals(this.description, challengeCreateRequest.description) &&
-        Objects.equals(this.status, challengeCreateRequest.status);
+        Objects.equals(this.doi, challengeCreateRequest.doi) &&
+        Objects.equals(this.status, challengeCreateRequest.status) &&
+        Objects.equals(this.platformId, challengeCreateRequest.platformId) &&
+        Objects.equals(this.websiteUrl, challengeCreateRequest.websiteUrl) &&
+        Objects.equals(this.avatarUrl, challengeCreateRequest.avatarUrl);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, headline, description, status);
+    return Objects.hash(slug, name, headline, description, doi, status, platformId, websiteUrl, avatarUrl);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ChallengeCreateRequestDto {\n");
+    sb.append("    slug: ").append(toIndentedString(slug)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    headline: ").append(toIndentedString(headline)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    doi: ").append(toIndentedString(doi)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    platformId: ").append(toIndentedString(platformId)).append("\n");
+    sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
+    sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -183,13 +304,23 @@ public class ChallengeCreateRequestDto {
     }
 
     protected Builder copyOf(ChallengeCreateRequestDto value) { 
+      this.instance.setSlug(value.slug);
       this.instance.setName(value.name);
       this.instance.setHeadline(value.headline);
       this.instance.setDescription(value.description);
+      this.instance.setDoi(value.doi);
       this.instance.setStatus(value.status);
+      this.instance.setPlatformId(value.platformId);
+      this.instance.setWebsiteUrl(value.websiteUrl);
+      this.instance.setAvatarUrl(value.avatarUrl);
       return this;
     }
 
+    public ChallengeCreateRequestDto.Builder slug(String slug) {
+      this.instance.slug(slug);
+      return this;
+    }
+    
     public ChallengeCreateRequestDto.Builder name(String name) {
       this.instance.name(name);
       return this;
@@ -205,8 +336,28 @@ public class ChallengeCreateRequestDto {
       return this;
     }
     
+    public ChallengeCreateRequestDto.Builder doi(String doi) {
+      this.instance.doi(doi);
+      return this;
+    }
+    
     public ChallengeCreateRequestDto.Builder status(ChallengeStatusDto status) {
       this.instance.status(status);
+      return this;
+    }
+    
+    public ChallengeCreateRequestDto.Builder platformId(Long platformId) {
+      this.instance.platformId(platformId);
+      return this;
+    }
+    
+    public ChallengeCreateRequestDto.Builder websiteUrl(String websiteUrl) {
+      this.instance.websiteUrl(websiteUrl);
+      return this;
+    }
+    
+    public ChallengeCreateRequestDto.Builder avatarUrl(String avatarUrl) {
+      this.instance.avatarUrl(avatarUrl);
       return this;
     }
     

@@ -914,18 +914,29 @@ components:
       type: object
       description: The information used to create a challenge
       properties:
+        slug:
+          $ref: '#/components/schemas/ChallengeSlug'
         name:
           $ref: '#/components/schemas/ChallengeName'
         headline:
           $ref: '#/components/schemas/ChallengeHeadline'
         description:
           $ref: '#/components/schemas/ChallengeDescription'
+        doi:
+          $ref: '#/components/schemas/ChallengeDoi'
         status:
           $ref: '#/components/schemas/ChallengeStatus'
+        platformId:
+          $ref: '#/components/schemas/ChallengePlatformId'
+        websiteUrl:
+          $ref: '#/components/schemas/Url'
+        avatarUrl:
+          $ref: '#/components/schemas/Url'
       required:
+        - slug
         - name
-        - description
         - status
+        - platformId
     ChallengeUpdateRequest:
       type: object
       description: The information required to update a challenge

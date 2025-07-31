@@ -42,6 +42,14 @@ class ChallengeCreateRequestTest {
   }
 
   /**
+   * Test the property 'slug'
+   */
+  @Test
+  void slugTest() {
+    // TODO: test slug
+  }
+
+  /**
    * Test the property 'name'
    */
   @Test
@@ -66,10 +74,42 @@ class ChallengeCreateRequestTest {
   }
 
   /**
+   * Test the property 'doi'
+   */
+  @Test
+  void doiTest() {
+    // TODO: test doi
+  }
+
+  /**
    * Test the property 'status'
    */
   @Test
   void statusTest() {
     // TODO: test status
+  }
+
+  /**
+   * Test the property 'platformId'
+   */
+  @Test
+  void platformIdTest() {
+    // TODO: test platformId
+  }
+
+  /**
+   * Test the property 'websiteUrl'
+   */
+  @Test
+  void websiteUrlTest() {
+    // TODO: test websiteUrl
+  }
+
+  /**
+   * Test the property 'avatarUrl'
+   */
+  @Test
+  void avatarUrlTest() {
+    // TODO: test avatarUrl
   }
 }

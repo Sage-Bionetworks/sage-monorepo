@@ -32,10 +32,15 @@ import org.sagebionetworks.openchallenges.api.client.model.ChallengeStatus;
  */
 @JsonPropertyOrder(
   {
+    ChallengeCreateRequest.JSON_PROPERTY_SLUG,
     ChallengeCreateRequest.JSON_PROPERTY_NAME,
     ChallengeCreateRequest.JSON_PROPERTY_HEADLINE,
     ChallengeCreateRequest.JSON_PROPERTY_DESCRIPTION,
+    ChallengeCreateRequest.JSON_PROPERTY_DOI,
     ChallengeCreateRequest.JSON_PROPERTY_STATUS,
+    ChallengeCreateRequest.JSON_PROPERTY_PLATFORM_ID,
+    ChallengeCreateRequest.JSON_PROPERTY_WEBSITE_URL,
+    ChallengeCreateRequest.JSON_PROPERTY_AVATAR_URL,
   }
 )
 @jakarta.annotation.Generated(
@@ -43,6 +48,11 @@ import org.sagebionetworks.openchallenges.api.client.model.ChallengeStatus;
   comments = "Generator version: 7.13.0"
 )
 public class ChallengeCreateRequest {
+
+  public static final String JSON_PROPERTY_SLUG = "slug";
+
+  @jakarta.annotation.Nonnull
+  private String slug;
 
   public static final String JSON_PROPERTY_NAME = "name";
 
@@ -56,15 +66,57 @@ public class ChallengeCreateRequest {
 
   public static final String JSON_PROPERTY_DESCRIPTION = "description";
 
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   private String description;
+
+  public static final String JSON_PROPERTY_DOI = "doi";
+
+  @jakarta.annotation.Nullable
+  private JsonNullable<String> doi = JsonNullable.<String>undefined();
 
   public static final String JSON_PROPERTY_STATUS = "status";
 
   @jakarta.annotation.Nonnull
   private ChallengeStatus status;
 
+  public static final String JSON_PROPERTY_PLATFORM_ID = "platformId";
+
+  @jakarta.annotation.Nonnull
+  private Long platformId;
+
+  public static final String JSON_PROPERTY_WEBSITE_URL = "websiteUrl";
+
+  @jakarta.annotation.Nullable
+  private JsonNullable<String> websiteUrl = JsonNullable.<String>undefined();
+
+  public static final String JSON_PROPERTY_AVATAR_URL = "avatarUrl";
+
+  @jakarta.annotation.Nullable
+  private JsonNullable<String> avatarUrl = JsonNullable.<String>undefined();
+
   public ChallengeCreateRequest() {}
+
+  public ChallengeCreateRequest slug(@jakarta.annotation.Nonnull String slug) {
+    this.slug = slug;
+    return this;
+  }
+
+  /**
+   * The unique slug of the challenge.
+   * @return slug
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_SLUG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public String getSlug() {
+    return slug;
+  }
+
+  @JsonProperty(JSON_PROPERTY_SLUG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setSlug(@jakarta.annotation.Nonnull String slug) {
+    this.slug = slug;
+  }
 
   public ChallengeCreateRequest name(@jakarta.annotation.Nonnull String name) {
     this.name = name;
@@ -119,7 +171,7 @@ public class ChallengeCreateRequest {
     this.headline = JsonNullable.<String>of(headline);
   }
 
-  public ChallengeCreateRequest description(@jakarta.annotation.Nonnull String description) {
+  public ChallengeCreateRequest description(@jakarta.annotation.Nullable String description) {
     this.description = description;
     return this;
   }
@@ -128,17 +180,48 @@ public class ChallengeCreateRequest {
    * The description of the challenge.
    * @return description
    */
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_DESCRIPTION)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public String getDescription() {
     return description;
   }
 
   @JsonProperty(JSON_PROPERTY_DESCRIPTION)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setDescription(@jakarta.annotation.Nonnull String description) {
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDescription(@jakarta.annotation.Nullable String description) {
     this.description = description;
+  }
+
+  public ChallengeCreateRequest doi(@jakarta.annotation.Nullable String doi) {
+    this.doi = JsonNullable.<String>of(doi);
+
+    return this;
+  }
+
+  /**
+   * The DOI of the challenge.
+   * @return doi
+   */
+  @jakarta.annotation.Nullable
+  @JsonIgnore
+  public String getDoi() {
+    return doi.orElse(null);
+  }
+
+  @JsonProperty(JSON_PROPERTY_DOI)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public JsonNullable<String> getDoi_JsonNullable() {
+    return doi;
+  }
+
+  @JsonProperty(JSON_PROPERTY_DOI)
+  public void setDoi_JsonNullable(JsonNullable<String> doi) {
+    this.doi = doi;
+  }
+
+  public void setDoi(@jakarta.annotation.Nullable String doi) {
+    this.doi = JsonNullable.<String>of(doi);
   }
 
   public ChallengeCreateRequest status(@jakarta.annotation.Nonnull ChallengeStatus status) {
@@ -163,6 +246,90 @@ public class ChallengeCreateRequest {
     this.status = status;
   }
 
+  public ChallengeCreateRequest platformId(@jakarta.annotation.Nonnull Long platformId) {
+    this.platformId = platformId;
+    return this;
+  }
+
+  /**
+   * The unique identifier of a challenge platform.
+   * @return platformId
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_PLATFORM_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public Long getPlatformId() {
+    return platformId;
+  }
+
+  @JsonProperty(JSON_PROPERTY_PLATFORM_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setPlatformId(@jakarta.annotation.Nonnull Long platformId) {
+    this.platformId = platformId;
+  }
+
+  public ChallengeCreateRequest websiteUrl(@jakarta.annotation.Nullable String websiteUrl) {
+    this.websiteUrl = JsonNullable.<String>of(websiteUrl);
+
+    return this;
+  }
+
+  /**
+   * A URL to the website or image.
+   * @return websiteUrl
+   */
+  @jakarta.annotation.Nullable
+  @JsonIgnore
+  public String getWebsiteUrl() {
+    return websiteUrl.orElse(null);
+  }
+
+  @JsonProperty(JSON_PROPERTY_WEBSITE_URL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public JsonNullable<String> getWebsiteUrl_JsonNullable() {
+    return websiteUrl;
+  }
+
+  @JsonProperty(JSON_PROPERTY_WEBSITE_URL)
+  public void setWebsiteUrl_JsonNullable(JsonNullable<String> websiteUrl) {
+    this.websiteUrl = websiteUrl;
+  }
+
+  public void setWebsiteUrl(@jakarta.annotation.Nullable String websiteUrl) {
+    this.websiteUrl = JsonNullable.<String>of(websiteUrl);
+  }
+
+  public ChallengeCreateRequest avatarUrl(@jakarta.annotation.Nullable String avatarUrl) {
+    this.avatarUrl = JsonNullable.<String>of(avatarUrl);
+
+    return this;
+  }
+
+  /**
+   * A URL to the website or image.
+   * @return avatarUrl
+   */
+  @jakarta.annotation.Nullable
+  @JsonIgnore
+  public String getAvatarUrl() {
+    return avatarUrl.orElse(null);
+  }
+
+  @JsonProperty(JSON_PROPERTY_AVATAR_URL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public JsonNullable<String> getAvatarUrl_JsonNullable() {
+    return avatarUrl;
+  }
+
+  @JsonProperty(JSON_PROPERTY_AVATAR_URL)
+  public void setAvatarUrl_JsonNullable(JsonNullable<String> avatarUrl) {
+    this.avatarUrl = avatarUrl;
+  }
+
+  public void setAvatarUrl(@jakarta.annotation.Nullable String avatarUrl) {
+    this.avatarUrl = JsonNullable.<String>of(avatarUrl);
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -173,10 +340,15 @@ public class ChallengeCreateRequest {
     }
     ChallengeCreateRequest challengeCreateRequest = (ChallengeCreateRequest) o;
     return (
+      Objects.equals(this.slug, challengeCreateRequest.slug) &&
       Objects.equals(this.name, challengeCreateRequest.name) &&
       equalsNullable(this.headline, challengeCreateRequest.headline) &&
       Objects.equals(this.description, challengeCreateRequest.description) &&
-      Objects.equals(this.status, challengeCreateRequest.status)
+      equalsNullable(this.doi, challengeCreateRequest.doi) &&
+      Objects.equals(this.status, challengeCreateRequest.status) &&
+      Objects.equals(this.platformId, challengeCreateRequest.platformId) &&
+      equalsNullable(this.websiteUrl, challengeCreateRequest.websiteUrl) &&
+      equalsNullable(this.avatarUrl, challengeCreateRequest.avatarUrl)
     );
   }
 
@@ -193,7 +365,17 @@ public class ChallengeCreateRequest {
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, hashCodeNullable(headline), description, status);
+    return Objects.hash(
+      slug,
+      name,
+      hashCodeNullable(headline),
+      description,
+      hashCodeNullable(doi),
+      status,
+      platformId,
+      hashCodeNullable(websiteUrl),
+      hashCodeNullable(avatarUrl)
+    );
   }
 
   private static <T> int hashCodeNullable(JsonNullable<T> a) {
@@ -207,10 +389,15 @@ public class ChallengeCreateRequest {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ChallengeCreateRequest {\n");
+    sb.append("    slug: ").append(toIndentedString(slug)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    headline: ").append(toIndentedString(headline)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    doi: ").append(toIndentedString(doi)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    platformId: ").append(toIndentedString(platformId)).append("\n");
+    sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
+    sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
     sb.append("}");
     return sb.toString();
   }

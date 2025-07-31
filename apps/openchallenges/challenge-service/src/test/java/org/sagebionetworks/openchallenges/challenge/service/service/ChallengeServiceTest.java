@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+import jakarta.persistence.EntityManager;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import org.sagebionetworks.openchallenges.challenge.service.model.repository.Cha
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeContributionRepository;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeIncentiveRepository;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeInputDataTypeRepository;
+import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengePlatformRepository;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeRepository;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeStarRepository;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeSubmissionTypeRepository;
@@ -28,6 +30,9 @@ class ChallengeServiceTest {
 
   @Mock
   private ChallengeRepository challengeRepository;
+
+  @Mock
+  private ChallengePlatformRepository challengePlatformRepository;
 
   @Mock
   private ChallengeContributionRepository challengeContributionRepository;
@@ -46,6 +51,9 @@ class ChallengeServiceTest {
 
   @Mock
   private ChallengeInputDataTypeRepository challengeInputDataTypeRepository;
+
+  @Mock
+  private EntityManager entityManager;
 
   @InjectMocks
   private ChallengeService challengeService;

@@ -58,7 +58,7 @@ class ChallengeApiDelegateImplTest {
     Long challengeId = 1L;
 
     // when
-    ResponseEntity<Void> response = apiDelegate.deleteChallengeById(challengeId);
+    ResponseEntity<Void> response = apiDelegate.deleteChallenge(challengeId);
 
     // then
     verify(challengeService).deleteChallenge(challengeId);

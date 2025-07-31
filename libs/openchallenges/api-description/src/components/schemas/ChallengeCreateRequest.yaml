@@ -1,17 +1,24 @@
 type: object
 description: The information used to create a challenge
 properties:
+  slug:
+    $ref: ChallengeSlug.yaml
   name:
     $ref: ChallengeName.yaml
   headline:
     $ref: ChallengeHeadline.yaml
   description:
     $ref: ChallengeDescription.yaml
-  #   websiteUrl:
-  #     type: string
-  #     format: url
+  doi:
+    $ref: ChallengeDoi.yaml
   status:
     $ref: ChallengeStatus.yaml
+  platformId:
+    $ref: ChallengePlatformId.yaml
+  websiteUrl:
+    $ref: Url.yaml
+  avatarUrl:
+    $ref: Url.yaml
     #   startDate:
     #     type: string
     #     format: date
@@ -53,9 +60,10 @@ properties:
 #     minimum: 0
 #     nullable: true
 required:
+  - slug
   - name
-  - description
   - status
+  - platformId
 # example:
 #   name: awesome-challenge
 #   displayName: Awesome Challenge

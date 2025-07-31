@@ -37,16 +37,22 @@ class TestChallengeCreateRequest(unittest.TestCase):
         model = ChallengeCreateRequest()
         if include_optional:
             return ChallengeCreateRequest(
+                slug = 'awesome-challenge',
                 name = 'Awesome Challenge',
                 headline = 'Example challenge headline',
                 description = 'This is an example description of the challenge.',
-                status = 'active'
+                doi = 'https://doi.org/123/abc',
+                status = 'active',
+                platform_id = 1,
+                website_url = 'https://openchallenges.io',
+                avatar_url = 'https://openchallenges.io'
             )
         else:
             return ChallengeCreateRequest(
+                slug = 'awesome-challenge',
                 name = 'Awesome Challenge',
-                description = 'This is an example description of the challenge.',
                 status = 'active',
+                platform_id = 1,
         )
         """
 
