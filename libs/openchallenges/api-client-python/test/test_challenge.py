@@ -38,7 +38,7 @@ class TestChallenge(unittest.TestCase):
             return Challenge(
                 id = 1,
                 slug = 'awesome-challenge',
-                name = '012',
+                name = 'Awesome Challenge',
                 headline = 'Example challenge headline',
                 description = 'This is an example description of the challenge.',
                 doi = 'https://doi.org/123/abc',
@@ -78,7 +78,7 @@ class TestChallenge(unittest.TestCase):
             return Challenge(
                 id = 1,
                 slug = 'awesome-challenge',
-                name = '012',
+                name = 'Awesome Challenge',
                 description = 'This is an example description of the challenge.',
                 status = 'active',
                 incentives = [

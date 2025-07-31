@@ -102,6 +102,7 @@ class OrganizationApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             "201": "Organization",
+            "400": "BasicError",
             "401": "BasicError",
             "403": "BasicError",
             "409": "BasicError",
@@ -170,6 +171,7 @@ class OrganizationApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             "201": "Organization",
+            "400": "BasicError",
             "401": "BasicError",
             "403": "BasicError",
             "409": "BasicError",
@@ -238,6 +240,7 @@ class OrganizationApi:
 
         _response_types_map: Dict[str, Optional[str]] = {
             "201": "Organization",
+            "400": "BasicError",
             "401": "BasicError",
             "403": "BasicError",
             "409": "BasicError",

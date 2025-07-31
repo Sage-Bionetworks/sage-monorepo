@@ -35,7 +35,7 @@ put:
           $ref: ../../components/schemas/OrganizationUpdateRequest.yaml
   responses:
     '200':
-      description: Organization updated successfully
+      description: Organization successfully updated
       content:
         application/json:
           schema:

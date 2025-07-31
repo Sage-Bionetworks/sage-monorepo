@@ -4,11 +4,11 @@ A simple challenge platform.
 
 ## Properties
 
-| Name     | Type    | Description                                    | Notes |
-| -------- | ------- | ---------------------------------------------- | ----- |
-| **id**   | **int** | The unique identifier of a challenge platform. |
-| **slug** | **str** | The slug of the challenge platform.            |
-| **name** | **str** | The display name of the challenge platform.    |
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**id** | **int** | The unique identifier of a challenge platform. | 
+**slug** | **str** | The slug of the challenge platform. | 
+**name** | **str** | The display name of the challenge platform. | 
 
 ## Example
 
@@ -27,5 +27,6 @@ simple_challenge_platform_dict = simple_challenge_platform_instance.to_dict()
 # create an instance of SimpleChallengePlatform from a dict
 simple_challenge_platform_from_dict = SimpleChallengePlatform.from_dict(simple_challenge_platform_dict)
 ```
-
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

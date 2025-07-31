@@ -44,6 +44,7 @@ __all__ = [
     "ChallengeContributionCreateRequest",
     "ChallengeContributionRole",
     "ChallengeContributionsPage",
+    "ChallengeCreateRequest",
     "ChallengeDirection",
     "ChallengeIncentive",
     "ChallengeJsonLd",
@@ -59,6 +60,7 @@ __all__ = [
     "ChallengeSort",
     "ChallengeStatus",
     "ChallengeSubmissionType",
+    "ChallengeUpdateRequest",
     "ChallengesPage",
     "ChallengesPerYear",
     "CreateApiKeyRequest",
@@ -148,6 +150,9 @@ from openchallenges_api_client_python.models.challenge_contribution_role import 
 from openchallenges_api_client_python.models.challenge_contributions_page import (
     ChallengeContributionsPage as ChallengeContributionsPage,
 )
+from openchallenges_api_client_python.models.challenge_create_request import (
+    ChallengeCreateRequest as ChallengeCreateRequest,
+)
 from openchallenges_api_client_python.models.challenge_direction import (
     ChallengeDirection as ChallengeDirection,
 )
@@ -192,6 +197,9 @@ from openchallenges_api_client_python.models.challenge_status import (
 )
 from openchallenges_api_client_python.models.challenge_submission_type import (
     ChallengeSubmissionType as ChallengeSubmissionType,
+)
+from openchallenges_api_client_python.models.challenge_update_request import (
+    ChallengeUpdateRequest as ChallengeUpdateRequest,
 )
 from openchallenges_api_client_python.models.challenges_page import (
     ChallengesPage as ChallengesPage,

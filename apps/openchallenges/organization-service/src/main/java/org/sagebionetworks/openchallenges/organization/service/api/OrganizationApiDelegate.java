@@ -37,6 +37,7 @@ public interface OrganizationApiDelegate {
      *
      * @param organizationCreateRequestDto  (required)
      * @return Organization created successfully (status code 201)
+     *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
      *         or The user does not have the permission to perform this action (status code 403)
      *         or The request conflicts with current state of the target resource (status code 409)
@@ -49,6 +50,11 @@ public interface OrganizationApiDelegate {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"createdAt\" : \"2022-07-04T22:19:11Z\", \"avatarKey\" : \"logo/dream.png\", \"websiteUrl\" : \"https://openchallenges.io\", \"acronym\" : \"OC\", \"name\" : \"Example organization\", \"description\" : \"A description of the organization.\", \"id\" : 1, \"challengeCount\" : 10, \"login\" : \"example-org\", \"updatedAt\" : \"2022-07-04T22:19:11Z\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
@@ -192,7 +198,7 @@ public interface OrganizationApiDelegate {
      *
      * @param org The id or login of the organization. (required)
      * @param organizationUpdateRequestDto  (required)
-     * @return Organization updated successfully (status code 200)
+     * @return Organization successfully updated (status code 200)
      *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
      *         or The user does not have the permission to perform this action (status code 403)

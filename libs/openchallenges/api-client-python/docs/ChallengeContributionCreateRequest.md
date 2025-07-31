@@ -4,10 +4,10 @@ A challenge contribution to be created.
 
 ## Properties
 
-| Name                | Type                                                          | Description                              | Notes |
-| ------------------- | ------------------------------------------------------------- | ---------------------------------------- | ----- |
-| **organization_id** | **int**                                                       | The unique identifier of an organization |
-| **role**            | [**ChallengeContributionRole**](ChallengeContributionRole.md) |                                          |
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**organization_id** | **int** | The unique identifier of an organization | 
+**role** | [**ChallengeContributionRole**](ChallengeContributionRole.md) |  | 
 
 ## Example
 
@@ -26,5 +26,6 @@ challenge_contribution_create_request_dict = challenge_contribution_create_reque
 # create an instance of ChallengeContributionCreateRequest from a dict
 challenge_contribution_create_request_from_dict = ChallengeContributionCreateRequest.from_dict(challenge_contribution_create_request_dict)
 ```
-
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

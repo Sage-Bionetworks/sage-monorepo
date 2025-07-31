@@ -46,7 +46,7 @@ class TestChallengesPage(unittest.TestCase):
                     openchallenges_api_client_python.models.challenge.Challenge(
                         id = 1, 
                         slug = 'awesome-challenge', 
-                        name = '012', 
+                        name = 'Awesome Challenge', 
                         headline = 'Example challenge headline', 
                         description = 'This is an example description of the challenge.', 
                         doi = 'https://doi.org/123/abc', 
@@ -95,7 +95,7 @@ class TestChallengesPage(unittest.TestCase):
                     openchallenges_api_client_python.models.challenge.Challenge(
                         id = 1, 
                         slug = 'awesome-challenge', 
-                        name = '012', 
+                        name = 'Awesome Challenge', 
                         headline = 'Example challenge headline', 
                         description = 'This is an example description of the challenge.', 
                         doi = 'https://doi.org/123/abc', 

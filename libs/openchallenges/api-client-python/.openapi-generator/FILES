@@ -12,6 +12,7 @@ docs/ChallengeContributionApi.md
 docs/ChallengeContributionCreateRequest.md
 docs/ChallengeContributionRole.md
 docs/ChallengeContributionsPage.md
+docs/ChallengeCreateRequest.md
 docs/ChallengeDirection.md
 docs/ChallengeIncentive.md
 docs/ChallengeJsonLd.md
@@ -28,6 +29,7 @@ docs/ChallengeSearchQuery.md
 docs/ChallengeSort.md
 docs/ChallengeStatus.md
 docs/ChallengeSubmissionType.md
+docs/ChallengeUpdateRequest.md
 docs/ChallengesPage.md
 docs/ChallengesPerYear.md
 docs/CreateApiKeyRequest.md
@@ -81,6 +83,7 @@ openchallenges_api_client_python/models/challenge_contribution.py
 openchallenges_api_client_python/models/challenge_contribution_create_request.py
 openchallenges_api_client_python/models/challenge_contribution_role.py
 openchallenges_api_client_python/models/challenge_contributions_page.py
+openchallenges_api_client_python/models/challenge_create_request.py
 openchallenges_api_client_python/models/challenge_direction.py
 openchallenges_api_client_python/models/challenge_incentive.py
 openchallenges_api_client_python/models/challenge_json_ld.py
@@ -96,6 +99,7 @@ openchallenges_api_client_python/models/challenge_search_query.py
 openchallenges_api_client_python/models/challenge_sort.py
 openchallenges_api_client_python/models/challenge_status.py
 openchallenges_api_client_python/models/challenge_submission_type.py
+openchallenges_api_client_python/models/challenge_update_request.py
 openchallenges_api_client_python/models/challenges_page.py
 openchallenges_api_client_python/models/challenges_per_year.py
 openchallenges_api_client_python/models/create_api_key_request.py
@@ -138,6 +142,7 @@ test/test_challenge_contribution_api.py
 test/test_challenge_contribution_create_request.py
 test/test_challenge_contribution_role.py
 test/test_challenge_contributions_page.py
+test/test_challenge_create_request.py
 test/test_challenge_direction.py
 test/test_challenge_incentive.py
 test/test_challenge_json_ld.py
@@ -154,6 +159,7 @@ test/test_challenge_search_query.py
 test/test_challenge_sort.py
 test/test_challenge_status.py
 test/test_challenge_submission_type.py
+test/test_challenge_update_request.py
 test/test_challenges_page.py
 test/test_challenges_per_year.py
 test/test_create_api_key_request.py

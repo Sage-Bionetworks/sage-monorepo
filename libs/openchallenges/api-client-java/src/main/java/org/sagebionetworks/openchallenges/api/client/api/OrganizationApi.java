@@ -56,6 +56,7 @@ public class OrganizationApi {
    * Create an organization
    * Create an organization with the specified account name
    * <p><b>201</b> - Organization created successfully
+   * <p><b>400</b> - Invalid request
    * <p><b>401</b> - Unauthorized
    * <p><b>403</b> - The user does not have the permission to perform this action
    * <p><b>409</b> - The request conflicts with current state of the target resource
@@ -116,6 +117,7 @@ public class OrganizationApi {
    * Create an organization
    * Create an organization with the specified account name
    * <p><b>201</b> - Organization created successfully
+   * <p><b>400</b> - Invalid request
    * <p><b>401</b> - Unauthorized
    * <p><b>403</b> - The user does not have the permission to perform this action
    * <p><b>409</b> - The request conflicts with current state of the target resource
@@ -136,6 +138,7 @@ public class OrganizationApi {
    * Create an organization
    * Create an organization with the specified account name
    * <p><b>201</b> - Organization created successfully
+   * <p><b>400</b> - Invalid request
    * <p><b>401</b> - Unauthorized
    * <p><b>403</b> - The user does not have the permission to perform this action
    * <p><b>409</b> - The request conflicts with current state of the target resource
@@ -158,6 +161,7 @@ public class OrganizationApi {
    * Create an organization
    * Create an organization with the specified account name
    * <p><b>201</b> - Organization created successfully
+   * <p><b>400</b> - Invalid request
    * <p><b>401</b> - Unauthorized
    * <p><b>403</b> - The user does not have the permission to perform this action
    * <p><b>409</b> - The request conflicts with current state of the target resource
@@ -535,7 +539,7 @@ public class OrganizationApi {
   /**
    * Update an existing organization
    * Updates an existing organization.
-   * <p><b>200</b> - Organization updated successfully
+   * <p><b>200</b> - Organization successfully updated
    * <p><b>400</b> - Invalid request
    * <p><b>401</b> - Unauthorized
    * <p><b>403</b> - The user does not have the permission to perform this action
@@ -612,7 +616,7 @@ public class OrganizationApi {
   /**
    * Update an existing organization
    * Updates an existing organization.
-   * <p><b>200</b> - Organization updated successfully
+   * <p><b>200</b> - Organization successfully updated
    * <p><b>400</b> - Invalid request
    * <p><b>401</b> - Unauthorized
    * <p><b>403</b> - The user does not have the permission to perform this action
@@ -638,7 +642,7 @@ public class OrganizationApi {
   /**
    * Update an existing organization
    * Updates an existing organization.
-   * <p><b>200</b> - Organization updated successfully
+   * <p><b>200</b> - Organization successfully updated
    * <p><b>400</b> - Invalid request
    * <p><b>401</b> - Unauthorized
    * <p><b>403</b> - The user does not have the permission to perform this action
@@ -664,7 +668,7 @@ public class OrganizationApi {
   /**
    * Update an existing organization
    * Updates an existing organization.
-   * <p><b>200</b> - Organization updated successfully
+   * <p><b>200</b> - Organization successfully updated
    * <p><b>400</b> - Invalid request
    * <p><b>401</b> - Unauthorized
    * <p><b>403</b> - The user does not have the permission to perform this action

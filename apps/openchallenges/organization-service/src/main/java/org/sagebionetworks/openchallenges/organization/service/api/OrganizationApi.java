@@ -50,6 +50,7 @@ public interface OrganizationApi {
      *
      * @param organizationCreateRequestDto  (required)
      * @return Organization created successfully (status code 201)
+     *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
      *         or The user does not have the permission to perform this action (status code 403)
      *         or The request conflicts with current state of the target resource (status code 409)
@@ -64,6 +65,10 @@ public interface OrganizationApi {
             @ApiResponse(responseCode = "201", description = "Organization created successfully", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = OrganizationDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = OrganizationDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
@@ -238,7 +243,7 @@ public interface OrganizationApi {
      *
      * @param org The id or login of the organization. (required)
      * @param organizationUpdateRequestDto  (required)
-     * @return Organization updated successfully (status code 200)
+     * @return Organization successfully updated (status code 200)
      *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
      *         or The user does not have the permission to perform this action (status code 403)
@@ -252,7 +257,7 @@ public interface OrganizationApi {
         description = "Updates an existing organization.",
         tags = { "Organization" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "Organization updated successfully", content = {
+            @ApiResponse(responseCode = "200", description = "Organization successfully updated", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = OrganizationDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = OrganizationDto.class))
             }),

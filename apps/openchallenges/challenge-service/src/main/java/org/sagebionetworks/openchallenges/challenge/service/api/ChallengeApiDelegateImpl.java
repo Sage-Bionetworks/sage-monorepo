@@ -2,9 +2,11 @@ package org.sagebionetworks.openchallenges.challenge.service.api;
 
 import java.util.List;
 import java.util.Optional;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeJsonLdDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSearchQueryDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeUpdateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengesPageDto;
 import org.sagebionetworks.openchallenges.challenge.service.security.AuthenticatedUser;
 import org.sagebionetworks.openchallenges.challenge.service.service.ChallengeService;
@@ -38,7 +40,27 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
 
   @Override
   @PreAuthorize("authentication.principal.admin")
-  public ResponseEntity<Void> deleteChallengeById(Long challengeId) {
+  public ResponseEntity<ChallengeDto> createChallenge(
+    ChallengeCreateRequestDto challengeCreateRequestDto
+  ) {
+    // Log the authenticated user for audit purposes
+    AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
+      .getAuthentication()
+      .getPrincipal();
+    logger.info(
+      "User {} (role: {}) is creating challenge with name: {}",
+      user.getUsername(),
+      user.getRole(),
+      challengeCreateRequestDto.getName()
+    );
+
+    ChallengeDto createdChallenge = challengeService.createChallenge(challengeCreateRequestDto);
+    return ResponseEntity.status(201).body(createdChallenge);
+  }
+
+  @Override
+  @PreAuthorize("authentication.principal.admin")
+  public ResponseEntity<Void> deleteChallenge(Long challengeId) {
     // Log the authenticated user for audit purposes
     AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
       .getAuthentication()
@@ -52,6 +74,27 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
 
     challengeService.deleteChallenge(challengeId);
     return ResponseEntity.noContent().build();
+  }
+
+  @Override
+  @PreAuthorize("authentication.principal.admin")
+  public ResponseEntity<ChallengeDto> updateChallenge(
+    Long challengeId,
+    ChallengeUpdateRequestDto request
+  ) {
+    // Log the authenticated user for audit purposes
+    AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
+      .getAuthentication()
+      .getPrincipal();
+    logger.info(
+      "User {} (role: {}) is updating challenge {}",
+      user.getUsername(),
+      user.getRole(),
+      challengeId
+    );
+
+    ChallengeDto updatedChallenge = challengeService.updateChallenge(challengeId, request);
+    return ResponseEntity.ok(updatedChallenge);
   }
 
   @Override

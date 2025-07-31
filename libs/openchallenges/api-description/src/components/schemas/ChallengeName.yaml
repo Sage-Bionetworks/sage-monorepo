@@ -2,3 +2,4 @@ description: The name of the challenge.
 type: string
 minLength: 3
 maxLength: 255
+example: 'Awesome Challenge'

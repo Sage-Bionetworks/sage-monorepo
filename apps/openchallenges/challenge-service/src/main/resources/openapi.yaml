@@ -78,11 +78,70 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Challenge
+    post:
+      description: Create a challenge with the specified details
+      operationId: createChallenge
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengeCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Challenge'
+          description: Challenge created successfully
+        '400':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        '401':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        '403':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The user does not have the permission to perform this action
+        '409':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request conflicts with current state of the target resource
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+        - apiBearerAuth: []
+      summary: Create a challenge
+      tags:
+        - Challenge
+      x-audience:
+        - public
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Challenge
   /challenges/{challengeId}:
     delete:
-      description: |
-        Deletes a challenge by its unique ID. This action is irreversible.
-      operationId: deleteChallengeById
+      description: Deletes a challenge by its unique ID.
+      operationId: deleteChallenge
       parameters:
         - description: The unique identifier of the challenge.
           explode: false
@@ -94,7 +153,7 @@ paths:
           style: simple
       responses:
         '204':
-          description: Deletion successful
+          description: Challenge successfully deleted
         '401':
           content:
             application/problem+json:
@@ -168,6 +227,81 @@ paths:
         - Challenge
       x-audience:
         - public
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Challenge
+    put:
+      description: Updates an existing challenge.
+      operationId: updateChallenge
+      parameters:
+        - description: The unique identifier of the challenge.
+          explode: false
+          in: path
+          name: challengeId
+          required: true
+          schema:
+            $ref: '#/components/schemas/ChallengeId'
+          style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengeUpdateRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Challenge'
+          description: Challenge successfully updated
+        '400':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        '401':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        '403':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The user does not have the permission to perform this action
+        '404':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        '409':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request conflicts with current state of the target resource
+        '500':
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+        - apiBearerAuth: []
+      summary: Update an existing challenge
+      tags:
+        - Challenge
+      x-audience:
+        - public
+      x-content-type: application/json
       x-accepts:
         - application/json
         - application/problem+json
@@ -931,12 +1065,6 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: The request cannot be fulfilled due to an unexpected server error
-    NotFound:
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-      description: The specified resource was not found
     Unauthorized:
       content:
         application/problem+json:
@@ -955,6 +1083,12 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: The request conflicts with current state of the target resource
+    NotFound:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The specified resource was not found
   schemas:
     ChallengeSort:
       default: relevance
@@ -1166,6 +1300,7 @@ components:
       type: string
     ChallengeName:
       description: The name of the challenge.
+      example: Awesome Challenge
       maxLength: 255
       minLength: 3
       type: string
@@ -1305,7 +1440,7 @@ components:
           - container_image
           - container_image
         websiteUrl: https://openchallenges.io
-        name: name
+        name: Awesome Challenge
         id: 1
         categories:
           - featured
@@ -1342,6 +1477,7 @@ components:
           type: string
         name:
           description: The name of the challenge.
+          example: Awesome Challenge
           maxLength: 255
           minLength: 3
           type: string
@@ -1475,7 +1611,7 @@ components:
               - container_image
               - container_image
             websiteUrl: https://openchallenges.io
-            name: name
+            name: Awesome Challenge
             id: 1
             categories:
               - featured
@@ -1513,7 +1649,7 @@ components:
               - container_image
               - container_image
             websiteUrl: https://openchallenges.io
-            name: name
+            name: Awesome Challenge
             id: 1
             categories:
               - featured
@@ -1565,6 +1701,142 @@ components:
       x-java-class-annotations:
         - '@lombok.AllArgsConstructor'
         - '@lombok.Builder'
+    ChallengeCreateRequest:
+      description: The information used to create a challenge
+      properties:
+        slug:
+          description: The unique slug of the challenge.
+          example: awesome-challenge
+          maxLength: 255
+          minLength: 3
+          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          type: string
+        name:
+          description: The name of the challenge.
+          example: Awesome Challenge
+          maxLength: 255
+          minLength: 3
+          type: string
+        headline:
+          description: The headline of the challenge.
+          example: Example challenge headline
+          maxLength: 80
+          minLength: 0
+          nullable: true
+          type: string
+        description:
+          description: The description of the challenge.
+          example: This is an example description of the challenge.
+          maxLength: 1000
+          minLength: 0
+          type: string
+        doi:
+          description: The DOI of the challenge.
+          example: https://doi.org/123/abc
+          format: url
+          maxLength: 120
+          nullable: true
+          type: string
+        status:
+          $ref: '#/components/schemas/ChallengeStatus'
+        platformId:
+          description: The unique identifier of a challenge platform.
+          example: 1
+          format: int64
+          type: integer
+        websiteUrl:
+          description: A URL to the website or image.
+          example: https://openchallenges.io
+          format: url
+          maxLength: 500
+          nullable: true
+          type: string
+        avatarUrl:
+          description: A URL to the website or image.
+          example: https://openchallenges.io
+          format: url
+          maxLength: 500
+          nullable: true
+          type: string
+      required:
+        - name
+        - platformId
+        - slug
+        - status
+      type: object
+    ChallengeUpdateRequest:
+      description: The information required to update a challenge
+      properties:
+        slug:
+          description: The unique slug of the challenge.
+          example: awesome-challenge
+          maxLength: 255
+          minLength: 3
+          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          type: string
+        name:
+          description: The name of the challenge.
+          example: Awesome Challenge
+          maxLength: 255
+          minLength: 3
+          type: string
+        headline:
+          description: The headline of the challenge.
+          example: Example challenge headline
+          maxLength: 80
+          minLength: 0
+          nullable: true
+          type: string
+        description:
+          description: The description of the challenge.
+          example: This is an example description of the challenge.
+          maxLength: 1000
+          minLength: 0
+          type: string
+        doi:
+          description: The DOI of the challenge.
+          example: https://doi.org/123/abc
+          format: url
+          maxLength: 120
+          nullable: true
+          type: string
+        status:
+          $ref: '#/components/schemas/ChallengeStatus'
+        platformId:
+          description: The unique identifier of a challenge platform.
+          example: 1
+          format: int64
+          type: integer
+        websiteUrl:
+          description: A URL to the website or image.
+          example: https://openchallenges.io
+          format: url
+          maxLength: 500
+          nullable: true
+          type: string
+        avatarUrl:
+          description: A URL to the website or image.
+          example: https://openchallenges.io
+          format: url
+          maxLength: 500
+          nullable: true
+          type: string
+        incentives:
+          items:
+            $ref: '#/components/schemas/ChallengeIncentive'
+          type: array
+      required:
+        - avatarUrl
+        - description
+        - doi
+        - headline
+        - incentives
+        - name
+        - platformId
+        - slug
+        - status
+        - websiteUrl
+      type: object
     ChallengeJsonLd:
       allOf:
         - $ref: '#/components/schemas/Challenge'

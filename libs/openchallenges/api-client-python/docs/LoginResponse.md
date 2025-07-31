@@ -1,13 +1,14 @@
 # LoginResponse
 
+
 ## Properties
 
-| Name         | Type    | Description                | Notes      |
-| ------------ | ------- | -------------------------- | ---------- |
-| **api_key**  | **str** | API key for authentication | [optional] |
-| **user_id**  | **str** | User ID                    | [optional] |
-| **username** | **str** | Username                   | [optional] |
-| **role**     | **str** | User role                  | [optional] |
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**api_key** | **str** | API key for authentication | [optional] 
+**user_id** | **str** | User ID | [optional] 
+**username** | **str** | Username | [optional] 
+**role** | **str** | User role | [optional] 
 
 ## Example
 
@@ -26,5 +27,6 @@ login_response_dict = login_response_instance.to_dict()
 # create an instance of LoginResponse from a dict
 login_response_from_dict = LoginResponse.from_dict(login_response_dict)
 ```
-
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+

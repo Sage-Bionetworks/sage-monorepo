@@ -26,8 +26,15 @@ class TestChallengeApi(unittest.TestCase):
     def tearDown(self) -> None:
         pass
 
-    def test_delete_challenge_by_id(self) -> None:
-        """Test case for delete_challenge_by_id
+    def test_create_challenge(self) -> None:
+        """Test case for create_challenge
+
+        Create a challenge
+        """
+        pass
+
+    def test_delete_challenge(self) -> None:
+        """Test case for delete_challenge
 
         Delete a challenge
         """
@@ -51,6 +58,13 @@ class TestChallengeApi(unittest.TestCase):
         """Test case for list_challenges
 
         List challenges
+        """
+        pass
+
+    def test_update_challenge(self) -> None:
+        """Test case for update_challenge
+
+        Update an existing challenge
         """
         pass
 

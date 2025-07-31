@@ -30,6 +30,9 @@ from openchallenges_api_client_python.models.challenge_contribution_role import 
 from openchallenges_api_client_python.models.challenge_contributions_page import (
     ChallengeContributionsPage,
 )
+from openchallenges_api_client_python.models.challenge_create_request import (
+    ChallengeCreateRequest,
+)
 from openchallenges_api_client_python.models.challenge_direction import (
     ChallengeDirection,
 )
@@ -66,6 +69,9 @@ from openchallenges_api_client_python.models.challenge_sort import ChallengeSort
 from openchallenges_api_client_python.models.challenge_status import ChallengeStatus
 from openchallenges_api_client_python.models.challenge_submission_type import (
     ChallengeSubmissionType,
+)
+from openchallenges_api_client_python.models.challenge_update_request import (
+    ChallengeUpdateRequest,
 )
 from openchallenges_api_client_python.models.challenges_page import ChallengesPage
 from openchallenges_api_client_python.models.challenges_per_year import (

@@ -4,14 +4,14 @@ The information required to create an org account
 
 ## Properties
 
-| Name            | Type    | Description                          | Notes      |
-| --------------- | ------- | ------------------------------------ | ---------- |
-| **login**       | **str** | The unique login of an organization. |
-| **name**        | **str** |                                      |
-| **description** | **str** |                                      | [optional] |
-| **avatar_key**  | **str** |                                      | [optional] |
-| **website_url** | **str** | A URL to the website or image.       |
-| **acronym**     | **str** | An acronym of the organization.      | [optional] |
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**login** | **str** | The unique login of an organization. | 
+**name** | **str** |  | 
+**description** | **str** |  | [optional] 
+**avatar_key** | **str** |  | [optional] 
+**website_url** | **str** | A URL to the website or image. | 
+**acronym** | **str** | An acronym of the organization. | [optional] 
 
 ## Example
 
@@ -30,5 +30,6 @@ organization_create_request_dict = organization_create_request_instance.to_dict(
 # create an instance of OrganizationCreateRequest from a dict
 organization_create_request_from_dict = OrganizationCreateRequest.from_dict(organization_create_request_dict)
 ```
-
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+
