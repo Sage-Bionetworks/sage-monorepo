@@ -18,34 +18,78 @@ from openchallenges_api_client_python.models.api_key import ApiKey
 from openchallenges_api_client_python.models.basic_error import BasicError
 from openchallenges_api_client_python.models.challenge import Challenge
 from openchallenges_api_client_python.models.challenge_category import ChallengeCategory
-from openchallenges_api_client_python.models.challenge_contribution import ChallengeContribution
-from openchallenges_api_client_python.models.challenge_contribution_create_request import ChallengeContributionCreateRequest
-from openchallenges_api_client_python.models.challenge_contribution_role import ChallengeContributionRole
-from openchallenges_api_client_python.models.challenge_contributions_page import ChallengeContributionsPage
-from openchallenges_api_client_python.models.challenge_create_request import ChallengeCreateRequest
-from openchallenges_api_client_python.models.challenge_direction import ChallengeDirection
-from openchallenges_api_client_python.models.challenge_incentive import ChallengeIncentive
+from openchallenges_api_client_python.models.challenge_contribution import (
+    ChallengeContribution,
+)
+from openchallenges_api_client_python.models.challenge_contribution_create_request import (
+    ChallengeContributionCreateRequest,
+)
+from openchallenges_api_client_python.models.challenge_contribution_role import (
+    ChallengeContributionRole,
+)
+from openchallenges_api_client_python.models.challenge_contributions_page import (
+    ChallengeContributionsPage,
+)
+from openchallenges_api_client_python.models.challenge_create_request import (
+    ChallengeCreateRequest,
+)
+from openchallenges_api_client_python.models.challenge_direction import (
+    ChallengeDirection,
+)
+from openchallenges_api_client_python.models.challenge_incentive import (
+    ChallengeIncentive,
+)
 from openchallenges_api_client_python.models.challenge_json_ld import ChallengeJsonLd
-from openchallenges_api_client_python.models.challenge_participation_role import ChallengeParticipationRole
+from openchallenges_api_client_python.models.challenge_participation_role import (
+    ChallengeParticipationRole,
+)
 from openchallenges_api_client_python.models.challenge_platform import ChallengePlatform
-from openchallenges_api_client_python.models.challenge_platform_create_request import ChallengePlatformCreateRequest
-from openchallenges_api_client_python.models.challenge_platform_direction import ChallengePlatformDirection
-from openchallenges_api_client_python.models.challenge_platform_search_query import ChallengePlatformSearchQuery
-from openchallenges_api_client_python.models.challenge_platform_sort import ChallengePlatformSort
-from openchallenges_api_client_python.models.challenge_platform_update_request import ChallengePlatformUpdateRequest
-from openchallenges_api_client_python.models.challenge_platforms_page import ChallengePlatformsPage
-from openchallenges_api_client_python.models.challenge_search_query import ChallengeSearchQuery
+from openchallenges_api_client_python.models.challenge_platform_create_request import (
+    ChallengePlatformCreateRequest,
+)
+from openchallenges_api_client_python.models.challenge_platform_direction import (
+    ChallengePlatformDirection,
+)
+from openchallenges_api_client_python.models.challenge_platform_search_query import (
+    ChallengePlatformSearchQuery,
+)
+from openchallenges_api_client_python.models.challenge_platform_sort import (
+    ChallengePlatformSort,
+)
+from openchallenges_api_client_python.models.challenge_platform_update_request import (
+    ChallengePlatformUpdateRequest,
+)
+from openchallenges_api_client_python.models.challenge_platforms_page import (
+    ChallengePlatformsPage,
+)
+from openchallenges_api_client_python.models.challenge_search_query import (
+    ChallengeSearchQuery,
+)
 from openchallenges_api_client_python.models.challenge_sort import ChallengeSort
 from openchallenges_api_client_python.models.challenge_status import ChallengeStatus
-from openchallenges_api_client_python.models.challenge_submission_type import ChallengeSubmissionType
-from openchallenges_api_client_python.models.challenge_update_request import ChallengeUpdateRequest
+from openchallenges_api_client_python.models.challenge_submission_type import (
+    ChallengeSubmissionType,
+)
+from openchallenges_api_client_python.models.challenge_update_request import (
+    ChallengeUpdateRequest,
+)
 from openchallenges_api_client_python.models.challenges_page import ChallengesPage
-from openchallenges_api_client_python.models.challenges_per_year import ChallengesPerYear
-from openchallenges_api_client_python.models.create_api_key_request import CreateApiKeyRequest
-from openchallenges_api_client_python.models.create_api_key_response import CreateApiKeyResponse
+from openchallenges_api_client_python.models.challenges_per_year import (
+    ChallengesPerYear,
+)
+from openchallenges_api_client_python.models.create_api_key_request import (
+    CreateApiKeyRequest,
+)
+from openchallenges_api_client_python.models.create_api_key_response import (
+    CreateApiKeyResponse,
+)
 from openchallenges_api_client_python.models.edam_concept import EdamConcept
-from openchallenges_api_client_python.models.edam_concept_direction import EdamConceptDirection
-from openchallenges_api_client_python.models.edam_concept_search_query import EdamConceptSearchQuery
+from openchallenges_api_client_python.models.edam_concept_direction import (
+    EdamConceptDirection,
+)
+from openchallenges_api_client_python.models.edam_concept_search_query import (
+    EdamConceptSearchQuery,
+)
 from openchallenges_api_client_python.models.edam_concept_sort import EdamConceptSort
 from openchallenges_api_client_python.models.edam_concepts_page import EdamConceptsPage
 from openchallenges_api_client_python.models.edam_section import EdamSection
@@ -56,12 +100,24 @@ from openchallenges_api_client_python.models.image_query import ImageQuery
 from openchallenges_api_client_python.models.login_request import LoginRequest
 from openchallenges_api_client_python.models.login_response import LoginResponse
 from openchallenges_api_client_python.models.organization import Organization
-from openchallenges_api_client_python.models.organization_category import OrganizationCategory
-from openchallenges_api_client_python.models.organization_create_request import OrganizationCreateRequest
-from openchallenges_api_client_python.models.organization_direction import OrganizationDirection
-from openchallenges_api_client_python.models.organization_search_query import OrganizationSearchQuery
+from openchallenges_api_client_python.models.organization_category import (
+    OrganizationCategory,
+)
+from openchallenges_api_client_python.models.organization_create_request import (
+    OrganizationCreateRequest,
+)
+from openchallenges_api_client_python.models.organization_direction import (
+    OrganizationDirection,
+)
+from openchallenges_api_client_python.models.organization_search_query import (
+    OrganizationSearchQuery,
+)
 from openchallenges_api_client_python.models.organization_sort import OrganizationSort
-from openchallenges_api_client_python.models.organization_update_request import OrganizationUpdateRequest
+from openchallenges_api_client_python.models.organization_update_request import (
+    OrganizationUpdateRequest,
+)
 from openchallenges_api_client_python.models.organizations_page import OrganizationsPage
 from openchallenges_api_client_python.models.page_metadata import PageMetadata
-from openchallenges_api_client_python.models.simple_challenge_platform import SimpleChallengePlatform
+from openchallenges_api_client_python.models.simple_challenge_platform import (
+    SimpleChallengePlatform,
+)

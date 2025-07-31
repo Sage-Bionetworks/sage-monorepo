@@ -14,7 +14,10 @@
 
 import unittest
 
-from openchallenges_api_client_python.models.challenge_platform_direction import ChallengePlatformDirection
+from openchallenges_api_client_python.models.challenge_platform_direction import (
+    ChallengePlatformDirection,
+)
+
 
 class TestChallengePlatformDirection(unittest.TestCase):
     """ChallengePlatformDirection unit test stubs"""
@@ -29,5 +32,6 @@ class TestChallengePlatformDirection(unittest.TestCase):
         """Test ChallengePlatformDirection"""
         # inst = ChallengePlatformDirection()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

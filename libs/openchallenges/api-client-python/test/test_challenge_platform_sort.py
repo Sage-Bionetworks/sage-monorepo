@@ -14,7 +14,10 @@
 
 import unittest
 
-from openchallenges_api_client_python.models.challenge_platform_sort import ChallengePlatformSort
+from openchallenges_api_client_python.models.challenge_platform_sort import (
+    ChallengePlatformSort,
+)
+
 
 class TestChallengePlatformSort(unittest.TestCase):
     """ChallengePlatformSort unit test stubs"""
@@ -29,5 +32,6 @@ class TestChallengePlatformSort(unittest.TestCase):
         """Test ChallengePlatformSort"""
         # inst = ChallengePlatformSort()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()
