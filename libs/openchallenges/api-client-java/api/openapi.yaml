@@ -2365,6 +2365,9 @@ components:
     ChallengeUpdateRequest:
       description: The information required to update a challenge
       example:
+        incentives:
+        - publication
+        - publication
         websiteUrl: https://openchallenges.io
         avatarUrl: https://openchallenges.io
         name: Awesome Challenge
@@ -2429,11 +2432,16 @@ components:
           maxLength: 500
           nullable: true
           type: string
+        incentives:
+          items:
+            $ref: '#/components/schemas/ChallengeIncentive'
+          type: array
       required:
       - avatarUrl
       - description
       - doi
       - headline
+      - incentives
       - name
       - platformId
       - slug

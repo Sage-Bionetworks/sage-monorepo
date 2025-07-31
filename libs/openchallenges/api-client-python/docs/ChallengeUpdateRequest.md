@@ -15,6 +15,7 @@ Name | Type | Description | Notes
 **platform_id** | **int** | The unique identifier of a challenge platform. | 
 **website_url** | **str** | A URL to the website or image. | 
 **avatar_url** | **str** | A URL to the website or image. | 
+**incentives** | [**List[ChallengeIncentive]**](ChallengeIncentive.md) |  | 
 
 ## Example
 

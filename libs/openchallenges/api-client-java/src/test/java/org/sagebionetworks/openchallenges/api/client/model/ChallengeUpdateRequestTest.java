@@ -17,9 +17,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.sagebionetworks.openchallenges.api.client.model.ChallengeIncentive;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengeStatus;
 
 /**
@@ -107,5 +111,13 @@ class ChallengeUpdateRequestTest {
   @Test
   void avatarUrlTest() {
     // TODO: test avatarUrl
+  }
+
+  /**
+   * Test the property 'incentives'
+   */
+  @Test
+  void incentivesTest() {
+    // TODO: test incentives
   }
 }

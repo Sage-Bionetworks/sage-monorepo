@@ -1787,11 +1787,16 @@ components:
           maxLength: 500
           nullable: true
           type: string
+        incentives:
+          items:
+            $ref: '#/components/schemas/ChallengeIncentive'
+          type: array
       required:
       - avatarUrl
       - description
       - doi
       - headline
+      - incentives
       - name
       - platformId
       - slug

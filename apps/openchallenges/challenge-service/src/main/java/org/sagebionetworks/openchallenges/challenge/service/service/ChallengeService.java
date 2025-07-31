@@ -1,9 +1,8 @@
 package org.sagebionetworks.openchallenges.challenge.service.service;
 
+import jakarta.persistence.EntityManager;
 import java.util.Arrays;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
-import org.sagebionetworks.openchallenges.challenge.service.ChallengeServiceApplication;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengePlatformNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
@@ -12,7 +11,9 @@ import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeS
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeUpdateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengesPageDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeEntity;
+import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeIncentiveEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.SimpleChallengePlatformEntity;
+import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengeIncentiveMapper;
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengeJsonLdMapper;
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengeMapper;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeCategoryRepository;
@@ -44,6 +45,7 @@ public class ChallengeService {
   private final ChallengeCategoryRepository challengeCategoryRepository;
   private final ChallengeStarRepository challengeStarRepository;
   private final ChallengeInputDataTypeRepository challengeInputDataTypeRepository;
+  private final EntityManager entityManager;
 
   public ChallengeService(
     ChallengeRepository challengeRepository,
@@ -53,7 +55,8 @@ public class ChallengeService {
     ChallengeSubmissionTypeRepository challengeSubmissionTypeRepository,
     ChallengeCategoryRepository challengeCategoryRepository,
     ChallengeStarRepository challengeStarRepository,
-    ChallengeInputDataTypeRepository challengeInputDataTypeRepository
+    ChallengeInputDataTypeRepository challengeInputDataTypeRepository,
+    EntityManager entityManager
   ) {
     this.challengeRepository = challengeRepository;
     this.challengePlatformRepository = challengePlatformRepository;
@@ -63,10 +66,12 @@ public class ChallengeService {
     this.challengeCategoryRepository = challengeCategoryRepository;
     this.challengeStarRepository = challengeStarRepository;
     this.challengeInputDataTypeRepository = challengeInputDataTypeRepository;
+    this.entityManager = entityManager;
   }
 
   private ChallengeMapper challengeMapper = new ChallengeMapper();
   private ChallengeJsonLdMapper challengeJsonLdMapper = new ChallengeJsonLdMapper();
+  private ChallengeIncentiveMapper challengeIncentiveMapper = new ChallengeIncentiveMapper();
 
   private static final List<String> SEARCHABLE_FIELDS = Arrays.asList(
     "description",
@@ -129,17 +134,19 @@ public class ChallengeService {
       );
   }
 
-  private SimpleChallengePlatformEntity getChallengePlatformEntity(Long platformId) 
-      throws ChallengePlatformNotFoundException {
+  private SimpleChallengePlatformEntity getChallengePlatformEntity(Long platformId)
+    throws ChallengePlatformNotFoundException {
     return challengePlatformRepository
       .findById(platformId)
-      .map(platform -> SimpleChallengePlatformEntity.builder()
-        .id(platform.getId())
-        .slug(platform.getSlug())
-        .name(platform.getName())
-        .avatarKey(platform.getAvatarKey())
-        .websiteUrl(platform.getWebsiteUrl())
-        .build())
+      .map(platform ->
+        SimpleChallengePlatformEntity.builder()
+          .id(platform.getId())
+          .slug(platform.getSlug())
+          .name(platform.getName())
+          .avatarKey(platform.getAvatarKey())
+          .websiteUrl(platform.getWebsiteUrl())
+          .build()
+      )
       .orElseThrow(() ->
         new ChallengePlatformNotFoundException(
           String.format("The challenge platform with ID %d does not exist.", platformId)
@@ -204,13 +211,33 @@ public class ChallengeService {
       existingChallenge.setPlatform(null);
     }
 
+    // Update incentives - first delete existing ones, then convert DTOs to entities
+    challengeIncentiveRepository.deleteByChallengeId(challengeId);
+
+    // Convert DTOs to entities and save them individually
+    if (request.getIncentives() != null && !request.getIncentives().isEmpty()) {
+      List<ChallengeIncentiveEntity> incentiveEntities =
+        challengeIncentiveMapper.convertToEntityList(request.getIncentives(), existingChallenge);
+
+      // Save incentive entities (they will be associated with the challenge automatically)
+      for (ChallengeIncentiveEntity incentive : incentiveEntities) {
+        challengeIncentiveRepository.save(incentive);
+      }
+    }
+
     // Save the updated entity
-    ChallengeEntity updatedEntity = challengeRepository.save(existingChallenge);
+    challengeRepository.save(existingChallenge);
     challengeRepository.flush();
+
+    // Clear the session cache to force fresh fetch of incentives
+    entityManager.clear();
+
+    // Refresh the entity to get the updated incentives
+    ChallengeEntity refreshedEntity = getChallengeEntity(challengeId);
 
     logger.info("Successfully updated challenge with ID: {}", challengeId);
 
     // Return the updated challenge as DTO
-    return challengeMapper.convertToDto(updatedEntity);
+    return challengeMapper.convertToDto(refreshedEntity);
   }
 }

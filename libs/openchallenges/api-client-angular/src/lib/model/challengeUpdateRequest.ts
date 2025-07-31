@@ -8,6 +8,7 @@
  * Do not edit the class manually.
  */
 import { ChallengeStatus } from './challengeStatus';
+import { ChallengeIncentive } from './challengeIncentive';
 
 /**
  * The information required to update a challenge
@@ -46,5 +47,6 @@ export interface ChallengeUpdateRequest {
    * A URL to the website or image.
    */
   avatarUrl: string | null;
+  incentives: Array<ChallengeIncentive>;
 }
 export namespace ChallengeUpdateRequest {}

@@ -1349,6 +1349,10 @@ components:
           $ref: '#/components/schemas/Url'
         avatarUrl:
           $ref: '#/components/schemas/Url'
+        incentives:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeIncentive'
       required:
         - slug
         - name
@@ -1359,6 +1363,7 @@ components:
         - platformId
         - websiteUrl
         - avatarUrl
+        - incentives
     ChallengeJsonLd:
       type: object
       description: A challenge

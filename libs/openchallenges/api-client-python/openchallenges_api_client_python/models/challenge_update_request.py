@@ -19,6 +19,9 @@ import json
 from pydantic import BaseModel, ConfigDict, Field, StrictInt, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
+from openchallenges_api_client_python.models.challenge_incentive import (
+    ChallengeIncentive,
+)
 from openchallenges_api_client_python.models.challenge_status import ChallengeStatus
 from typing import Optional, Set
 from typing_extensions import Self
@@ -54,6 +57,7 @@ class ChallengeUpdateRequest(BaseModel):
     avatar_url: Optional[Annotated[str, Field(strict=True, max_length=500)]] = Field(
         description="A URL to the website or image.", alias="avatarUrl"
     )
+    incentives: List[ChallengeIncentive]
     __properties: ClassVar[List[str]] = [
         "slug",
         "name",
@@ -64,6 +68,7 @@ class ChallengeUpdateRequest(BaseModel):
         "platformId",
         "websiteUrl",
         "avatarUrl",
+        "incentives",
     ]
 
     @field_validator("slug")
@@ -154,6 +159,7 @@ class ChallengeUpdateRequest(BaseModel):
                 "platformId": obj.get("platformId"),
                 "websiteUrl": obj.get("websiteUrl"),
                 "avatarUrl": obj.get("avatarUrl"),
+                "incentives": obj.get("incentives"),
             }
         )
         return _obj

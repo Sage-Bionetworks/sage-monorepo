@@ -19,8 +19,12 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import org.sagebionetworks.openchallenges.api.client.model.ChallengeIncentive;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengeStatus;
 
 /**
@@ -37,6 +41,7 @@ import org.sagebionetworks.openchallenges.api.client.model.ChallengeStatus;
     ChallengeUpdateRequest.JSON_PROPERTY_PLATFORM_ID,
     ChallengeUpdateRequest.JSON_PROPERTY_WEBSITE_URL,
     ChallengeUpdateRequest.JSON_PROPERTY_AVATAR_URL,
+    ChallengeUpdateRequest.JSON_PROPERTY_INCENTIVES,
   }
 )
 @jakarta.annotation.Generated(
@@ -89,6 +94,11 @@ public class ChallengeUpdateRequest {
 
   @jakarta.annotation.Nullable
   private String avatarUrl;
+
+  public static final String JSON_PROPERTY_INCENTIVES = "incentives";
+
+  @jakarta.annotation.Nonnull
+  private List<ChallengeIncentive> incentives = new ArrayList<>();
 
   public ChallengeUpdateRequest() {}
 
@@ -290,6 +300,38 @@ public class ChallengeUpdateRequest {
     this.avatarUrl = avatarUrl;
   }
 
+  public ChallengeUpdateRequest incentives(
+    @jakarta.annotation.Nonnull List<ChallengeIncentive> incentives
+  ) {
+    this.incentives = incentives;
+    return this;
+  }
+
+  public ChallengeUpdateRequest addIncentivesItem(ChallengeIncentive incentivesItem) {
+    if (this.incentives == null) {
+      this.incentives = new ArrayList<>();
+    }
+    this.incentives.add(incentivesItem);
+    return this;
+  }
+
+  /**
+   * Get incentives
+   * @return incentives
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_INCENTIVES)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public List<ChallengeIncentive> getIncentives() {
+    return incentives;
+  }
+
+  @JsonProperty(JSON_PROPERTY_INCENTIVES)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setIncentives(@jakarta.annotation.Nonnull List<ChallengeIncentive> incentives) {
+    this.incentives = incentives;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -308,7 +350,8 @@ public class ChallengeUpdateRequest {
       Objects.equals(this.status, challengeUpdateRequest.status) &&
       Objects.equals(this.platformId, challengeUpdateRequest.platformId) &&
       Objects.equals(this.websiteUrl, challengeUpdateRequest.websiteUrl) &&
-      Objects.equals(this.avatarUrl, challengeUpdateRequest.avatarUrl)
+      Objects.equals(this.avatarUrl, challengeUpdateRequest.avatarUrl) &&
+      Objects.equals(this.incentives, challengeUpdateRequest.incentives)
     );
   }
 
@@ -323,7 +366,8 @@ public class ChallengeUpdateRequest {
       status,
       platformId,
       websiteUrl,
-      avatarUrl
+      avatarUrl,
+      incentives
     );
   }
 
@@ -340,6 +384,7 @@ public class ChallengeUpdateRequest {
     sb.append("    platformId: ").append(toIndentedString(platformId)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
+    sb.append("    incentives: ").append(toIndentedString(incentives)).append("\n");
     sb.append("}");
     return sb.toString();
   }

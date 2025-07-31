@@ -45,7 +45,10 @@ class TestChallengeUpdateRequest(unittest.TestCase):
                 status = 'active',
                 platform_id = 1,
                 website_url = 'https://openchallenges.io',
-                avatar_url = 'https://openchallenges.io'
+                avatar_url = 'https://openchallenges.io',
+                incentives = [
+                    'publication'
+                    ]
             )
         else:
             return ChallengeUpdateRequest(
@@ -58,6 +61,9 @@ class TestChallengeUpdateRequest(unittest.TestCase):
                 platform_id = 1,
                 website_url = 'https://openchallenges.io',
                 avatar_url = 'https://openchallenges.io',
+                incentives = [
+                    'publication'
+                    ],
         )
         """
 

@@ -19,6 +19,10 @@ properties:
     $ref: Url.yaml
   avatarUrl:
     $ref: Url.yaml
+  incentives:
+    type: array
+    items:
+      $ref: ChallengeIncentive.yaml
 required:
   - slug
   - name
@@ -29,6 +33,6 @@ required:
   - platformId
   - websiteUrl
   - avatarUrl
-  # - incentives
+  - incentives
   # - submissionTypes
   # - categories

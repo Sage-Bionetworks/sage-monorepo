@@ -6,6 +6,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeStatusDto;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
@@ -44,6 +48,9 @@ public class ChallengeUpdateRequestDto {
 
   private String avatarUrl = null;
 
+  @Valid
+  private List<ChallengeIncentiveDto> incentives = new ArrayList<>();
+
   public ChallengeUpdateRequestDto() {
     super();
   }
@@ -51,7 +58,7 @@ public class ChallengeUpdateRequestDto {
   /**
    * Constructor with only required parameters
    */
-  public ChallengeUpdateRequestDto(String slug, String name, String headline, String description, String doi, ChallengeStatusDto status, Long platformId, String websiteUrl, String avatarUrl) {
+  public ChallengeUpdateRequestDto(String slug, String name, String headline, String description, String doi, ChallengeStatusDto status, Long platformId, String websiteUrl, String avatarUrl, List<ChallengeIncentiveDto> incentives) {
     this.slug = slug;
     this.name = name;
     this.headline = headline;
@@ -61,6 +68,7 @@ public class ChallengeUpdateRequestDto {
     this.platformId = platformId;
     this.websiteUrl = websiteUrl;
     this.avatarUrl = avatarUrl;
+    this.incentives = incentives;
   }
 
   public ChallengeUpdateRequestDto slug(String slug) {
@@ -243,6 +251,34 @@ public class ChallengeUpdateRequestDto {
     this.avatarUrl = avatarUrl;
   }
 
+  public ChallengeUpdateRequestDto incentives(List<ChallengeIncentiveDto> incentives) {
+    this.incentives = incentives;
+    return this;
+  }
+
+  public ChallengeUpdateRequestDto addIncentivesItem(ChallengeIncentiveDto incentivesItem) {
+    if (this.incentives == null) {
+      this.incentives = new ArrayList<>();
+    }
+    this.incentives.add(incentivesItem);
+    return this;
+  }
+
+  /**
+   * Get incentives
+   * @return incentives
+   */
+  @NotNull @Valid 
+  @Schema(name = "incentives", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("incentives")
+  public List<ChallengeIncentiveDto> getIncentives() {
+    return incentives;
+  }
+
+  public void setIncentives(List<ChallengeIncentiveDto> incentives) {
+    this.incentives = incentives;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -260,12 +296,13 @@ public class ChallengeUpdateRequestDto {
         Objects.equals(this.status, challengeUpdateRequest.status) &&
         Objects.equals(this.platformId, challengeUpdateRequest.platformId) &&
         Objects.equals(this.websiteUrl, challengeUpdateRequest.websiteUrl) &&
-        Objects.equals(this.avatarUrl, challengeUpdateRequest.avatarUrl);
+        Objects.equals(this.avatarUrl, challengeUpdateRequest.avatarUrl) &&
+        Objects.equals(this.incentives, challengeUpdateRequest.incentives);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(slug, name, headline, description, doi, status, platformId, websiteUrl, avatarUrl);
+    return Objects.hash(slug, name, headline, description, doi, status, platformId, websiteUrl, avatarUrl, incentives);
   }
 
   @Override
@@ -281,6 +318,7 @@ public class ChallengeUpdateRequestDto {
     sb.append("    platformId: ").append(toIndentedString(platformId)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
+    sb.append("    incentives: ").append(toIndentedString(incentives)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -318,6 +356,7 @@ public class ChallengeUpdateRequestDto {
       this.instance.setPlatformId(value.platformId);
       this.instance.setWebsiteUrl(value.websiteUrl);
       this.instance.setAvatarUrl(value.avatarUrl);
+      this.instance.setIncentives(value.incentives);
       return this;
     }
 
@@ -363,6 +402,11 @@ public class ChallengeUpdateRequestDto {
     
     public ChallengeUpdateRequestDto.Builder avatarUrl(String avatarUrl) {
       this.instance.avatarUrl(avatarUrl);
+      return this;
+    }
+    
+    public ChallengeUpdateRequestDto.Builder incentives(List<ChallengeIncentiveDto> incentives) {
+      this.instance.incentives(incentives);
       return this;
     }
     
