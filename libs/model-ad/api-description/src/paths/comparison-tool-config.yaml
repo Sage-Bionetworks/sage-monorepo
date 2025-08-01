@@ -10,8 +10,7 @@ get:
       description: Name of the page to retrieve the Comparison Tool configuration for
       required: true
       schema:
-        type: string
-        example: model-overview
+        $ref: ../components/schemas/ComparisonToolPage.yaml
   responses:
     '200':
       description: Successfully retrieved Comparison Tool configuration

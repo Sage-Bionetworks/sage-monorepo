@@ -1,9 +1,7 @@
 type: object
 properties:
   page:
-    type: string
-    description: Page name
-    example: Gene Expression
+    $ref: './ComparisonToolPage.yaml'
   dropdowns:
     type: array
     description: List of dropdown options

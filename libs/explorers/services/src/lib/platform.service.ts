@@ -5,7 +5,7 @@ import { Injectable, inject, PLATFORM_ID } from '@angular/core';
   providedIn: 'root',
 })
 export class PlatformService {
-  readonly platformId: Record<string, any> = inject(PLATFORM_ID);
+  private platformId: Record<string, any> = inject(PLATFORM_ID);
 
   public get isBrowser(): boolean {
     return isPlatformBrowser(this.platformId);

@@ -20,7 +20,7 @@ export class ComparisonToolColumnsComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.headerTable.onFilter.subscribe(() => this.updateResultsCount());
-    this.headerTable.onSort.subscribe(() => this.updateResultsCount());
+    this.headerTable.onSort.subscribe(() => this.updateSort());
     // set the initial count
     this.updateResultsCount();
   }
@@ -35,5 +35,9 @@ export class ComparisonToolColumnsComponent implements AfterViewInit {
         this.resultsCount.set(0);
       }
     }
+  }
+
+  updateSort() {
+    // TODO implement
   }
 }

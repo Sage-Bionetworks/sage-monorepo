@@ -3,11 +3,11 @@ import { AfterViewInit, Component, DestroyRef, inject, OnInit } from '@angular/c
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Panel, SynapseWikiParams } from '@sagebionetworks/explorers/models';
-import { HelperService } from '@sagebionetworks/explorers/services';
+import { HelperService, PlatformService } from '@sagebionetworks/explorers/services';
 import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { Model, ModelsService } from '@sagebionetworks/model-ad/api-client-angular';
-import { ConfigService, ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
+import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { ModelDetailsBoxplotsSelectorComponent } from './components/model-details-boxplots-selector/model-details-boxplots-selector.component';
 import { ModelDetailsHeroComponent } from './components/model-details-hero/model-details-hero.component';
 import { ModelDetailsOmicsComponent } from './components/model-details-omics/model-details-omics.component';
@@ -33,7 +33,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
   helperService = inject(HelperService);
   modelsService = inject(ModelsService);
   destroyRef = inject(DestroyRef);
-  configService = inject(ConfigService);
+  platformService = inject(PlatformService);
 
   isLoading = true;
 
@@ -73,7 +73,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
       this.isLoading = true;
 
       // only fetch data during client hydration
-      if (!this.configService.config.isPlatformServer) {
+      if (this.platformService.isBrowser) {
         this.loadPanelData(params);
         this.setActivePanelAndParentFromUrl(params);
       }

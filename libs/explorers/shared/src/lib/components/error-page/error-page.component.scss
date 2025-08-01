@@ -1,6 +1,6 @@
 @use 'explorers/styles/src/lib/mixins';
 
-.page-not-found {
+.error-page {
   min-height: calc(100vh - var(--header-height) - var(--footer-height));
   color: white;
   background-size: cover !important;
@@ -26,6 +26,10 @@
       a {
         color: white;
       }
+    }
+
+    p-button {
+      margin-right: 10px;
     }
   }
 }

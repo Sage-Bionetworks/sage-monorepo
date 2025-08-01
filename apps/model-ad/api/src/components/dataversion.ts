@@ -11,17 +11,15 @@ export async function getDataVersion() {
     return cachedResult;
   }
 
-  try {
-    const result = await DataVersionCollection.findOne();
-    if (result !== null && result !== undefined) {
-      cache.set(cacheKey, result);
-    }
-    return result;
-  } catch (err) {
-    // Log DB errors and return undefined so the route handler can handle it
-    console.error('Error fetching data version:', err);
-    return undefined;
+  const result = await DataVersionCollection.findOne();
+
+  if (result !== null && result !== undefined) {
+    cache.set(cacheKey, result);
+  } else {
+    // TODO add error handling here
   }
+
+  return result;
 }
 
 export async function dataVersionRoute(req: Request, res: Response, next: NextFunction) {

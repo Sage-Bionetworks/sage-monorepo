@@ -24,7 +24,7 @@ import { providePrimeNG } from 'primeng/config';
 import { CustomUrlSerializer } from './app.custom-url-serializer';
 import { routes } from './app.routes';
 import { ModelAdPreset } from './primeNGPreset';
-import { ErrorService } from '@sagebionetworks/model-ad/services';
+import { GlobalErrorHandler } from '@sagebionetworks/explorers/services';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -64,6 +64,6 @@ export const appConfig: ApplicationConfig = {
     ),
     { provide: UrlSerializer, useClass: CustomUrlSerializer },
     MessageService,
-    { provide: ErrorHandler, useClass: ErrorService },
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
   ],
 };

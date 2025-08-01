@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { HelpLinksComponent } from '@sagebionetworks/explorers/comparison-tools';
+import { AppError } from '@sagebionetworks/explorers/models';
 
 @Component({
   selector: 'model-ad-model-overview-help-links',
@@ -13,6 +14,6 @@ export class ModelOverviewHelpLinksComponent {
 
   toggleVisualizationOverview() {
     // TODO implement this method.  For now, throw a new Error
-    throw new Error('not implemented');
+    throw new AppError('not implemented', true);
   }
 }

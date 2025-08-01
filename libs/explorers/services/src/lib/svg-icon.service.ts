@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Observable, map, of, shareReplay } from 'rxjs';
+import { isExternalLink } from '@sagebionetworks/shared/util';
 
 @Injectable({
   providedIn: 'root',
@@ -51,7 +52,7 @@ export class SvgIconService {
   isValidImagePath(path: string): boolean {
     // We don't want to load SVGs from external sources
     // Block URLs
-    if (path.startsWith('http://') || path.startsWith('https://')) {
+    if (isExternalLink(path)) {
       return false;
     }
     // Ensure the path comes from '.*/icons/*.svg'

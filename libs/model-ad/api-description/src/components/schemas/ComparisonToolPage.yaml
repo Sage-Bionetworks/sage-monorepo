@@ -1,0 +1,7 @@
+type: string
+description: The type of comparison tool page
+enum:
+  - Model Overview
+  - Gene Expression
+  - Disease Correlation
+example: Gene Expression

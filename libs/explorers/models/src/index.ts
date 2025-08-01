@@ -1,3 +1,4 @@
+export * from './lib/app-error';
 export * from './lib/loading-icon-colors';
 export * from './lib/navigation-link';
 export * from './lib/panel';
