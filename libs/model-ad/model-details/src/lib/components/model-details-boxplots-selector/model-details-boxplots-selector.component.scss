@@ -86,8 +86,18 @@
 }
 
 .boxplots-container {
-  h2 {
+  .boxplots-evidence-type-title-bar {
     padding-bottom: 30px;
+    display: flex;
+
+    .boxplots-evidence-type-title {
+      display: flex;
+      gap: 15px;
+
+      h2 {
+        margin-bottom: 0;
+      }
+    }
   }
 
   .boxplots-separator {

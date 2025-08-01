@@ -56,7 +56,21 @@
     @for (evidenceType of evidenceTypes(); track evidenceType; let last = $last) {
       <div class="boxplots-evidence-type" [id]="generateAnchorId(evidenceType)">
         <div class="boxplots-evidence-type-title-bar">
-          <h2>{{ evidenceType | decodeGreekEntity }}</h2>
+          <div class="boxplots-evidence-type-title">
+            <h2>{{ evidenceType | decodeGreekEntity }}</h2>
+            <button
+              (click)="scrollToSection(generateAnchorId(evidenceType))"
+              [attr.aria-label]="`Update URL to link to ${evidenceType | decodeGreekEntity }`"
+            >
+              <explorers-svg-icon
+                imagePath="/explorers-assets/icons/link.svg"
+                altText="link"
+                color="#878E95"
+                [height]="12"
+                [width]="24"
+              />
+            </button>
+          </div>
           <!-- <explorers-download-dom-image /> -->
         </div>
 

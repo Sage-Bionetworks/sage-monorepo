@@ -13,7 +13,11 @@ import {
 import { FormsModule } from '@angular/forms';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { HelperService } from '@sagebionetworks/explorers/services';
-import { DecodeGreekEntityPipe, ModalLinkComponent } from '@sagebionetworks/explorers/util';
+import {
+  DecodeGreekEntityPipe,
+  ModalLinkComponent,
+  SvgIconComponent,
+} from '@sagebionetworks/explorers/util';
 import { IndividualData, ModelData } from '@sagebionetworks/model-ad/api-client-angular';
 import { SelectModule } from 'primeng/select';
 import { ModelDetailsBoxplotsGridComponent } from '../model-details-boxplots-grid/model-details-boxplots-grid.component';
@@ -25,6 +29,7 @@ import { ModelDetailsBoxplotsGridComponent } from '../model-details-boxplots-gri
     SelectModule,
     ModelDetailsBoxplotsGridComponent,
     ModalLinkComponent,
+    SvgIconComponent,
     DecodeGreekEntityPipe,
   ],
   templateUrl: './model-details-boxplots-selector.component.html',
