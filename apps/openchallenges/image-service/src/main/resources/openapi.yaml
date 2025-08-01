@@ -3,7 +3,7 @@ info:
   contact:
     name: Support
     url: https://github.com/Sage-Bionetworks/sage-monorepo
-  description: "Discover, explore, and contribute to open biomedical challenges."
+  description: 'Discover, explore, and contribute to open biomedical challenges.'
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -12,54 +12,47 @@ info:
   x-logo:
     url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
-- url: http://localhost/v1
+  - url: http://localhost/v1
 tags:
-- description: Operations about images
-  name: Image
-  x-audience:
-  - public
+  - description: Operations about images
+    name: Image
+    x-audience:
+      - public
 paths:
   /images:
     get:
       description: Returns the image specified.
       operationId: getImage
       parameters:
-      - description: The query used to get an image.
-        explode: true
-        in: query
-        name: imageQuery
-        required: false
-        schema:
-          $ref: '#/components/schemas/ImageQuery'
-        style: deepObject
+        - description: The query used to get an image.
+          explode: true
+          in: query
+          name: imageQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/ImageQuery'
+          style: deepObject
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Image'
           description: An image
-        "404":
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The specified resource was not found
-        "500":
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: Get an image
       tags:
-      - Image
+        - Image
       x-audience:
-      - public
-      x-accepts: application/json
+        - public
+      x-accepts:
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Image
+        - tag: Image
 components:
   parameters:
     imageQuery:
@@ -94,23 +87,23 @@ components:
       default: original
       description: The height of the image.
       enum:
-      - original
-      - 32px
-      - 100px
-      - 140px
-      - 250px
-      - 500px
+        - original
+        - 32px
+        - 100px
+        - 140px
+        - 250px
+        - 500px
       type: string
     ImageAspectRatio:
       default: original
       description: The aspect ratio of the image (the height of the image must be
         specified).
       enum:
-      - original
-      - 16_9
-      - 1_1
-      - 3_2
-      - 2_3
+        - original
+        - 16_9
+        - 1_1
+        - 3_2
+        - 2_3
       type: string
     ImageQuery:
       description: An image query.
@@ -125,7 +118,7 @@ components:
         aspectRatio:
           $ref: '#/components/schemas/ImageAspectRatio'
       required:
-      - objectKey
+        - objectKey
       type: object
     Image:
       description: An image
@@ -136,10 +129,10 @@ components:
           example: http://example.com/an-image.png
           type: string
       required:
-      - url
+        - url
       type: object
       x-java-class-annotations:
-      - '@lombok.Builder'
+        - '@lombok.Builder'
     BasicError:
       description: Problem details (tools.ietf.org/html/rfc7807)
       properties:
@@ -157,9 +150,9 @@ components:
           description: An absolute URI that identifies the problem type
           type: string
       required:
-      - status
-      - title
+        - status
+        - title
       type: object
       x-java-class-annotations:
-      - '@lombok.AllArgsConstructor'
-      - '@lombok.Builder'
+        - '@lombok.AllArgsConstructor'
+        - '@lombok.Builder'

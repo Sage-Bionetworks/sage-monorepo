@@ -19,6 +19,7 @@ repositories {
 }
 
 dependencies {
+  // implementation(libs.spring.data.commons)
   annotationProcessor(libs.lombok)
   compileOnly(libs.lombok)
   implementation(libs.jackson.databind)
@@ -31,8 +32,8 @@ dependencies {
   implementation(libs.spring.boot.starter.validation)
   implementation(libs.spring.boot.starter.web)
   implementation(libs.spring.cloud.starter.netflix.eureka.client)
-  // implementation(libs.spring.data.commons)
   implementation(libs.springdoc.openapi.ui)
+  implementation(libs.squareup.pollexor)
   implementation(platform(libs.spring.boot.dependencies))
   runtimeOnly(libs.spring.boot.devtools)
   testAnnotationProcessor(libs.lombok)
@@ -41,7 +42,6 @@ dependencies {
   testImplementation(libs.spring.security.test)
   testImplementation(libs.testcontainers.junit.jupiter)
   testImplementation(platform(libs.testcontainers.bom))
-  testRuntimeOnly(libs.h2database.h2)
 }
 
 jacoco {
@@ -61,7 +61,7 @@ tasks.withType<Test>().configureEach {
 // Task for unit tests only (excludes integration tests)
 tasks.register<Test>("testUnit") {
   group = "verification"
-  description = "Runs unit tests only (fast)"
+  description = "Runs unit tests only"
 
   useJUnitPlatform {
     excludeTags("integration")
@@ -75,7 +75,7 @@ tasks.register<Test>("testUnit") {
 // Task for integration tests only
 tasks.register<Test>("testIntegration") {
   group = "verification"
-  description = "Runs integration tests only (slow)"
+  description = "Runs integration tests only"
 
   useJUnitPlatform {
     includeTags("integration")

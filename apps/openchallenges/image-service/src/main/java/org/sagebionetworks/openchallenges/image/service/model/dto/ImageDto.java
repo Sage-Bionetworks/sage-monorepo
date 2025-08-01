@@ -5,14 +5,15 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 
 import java.util.*;
-import javax.annotation.Generated;
+import jakarta.annotation.Generated;
 
 /**
  * An image
@@ -20,8 +21,7 @@ import javax.annotation.Generated;
 
 @Schema(name = "Image", description = "An image")
 @JsonTypeName("Image")
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-@lombok.Builder
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class ImageDto {
 
   private String url;
@@ -45,7 +45,7 @@ public class ImageDto {
   /**
    * Get url
    * @return url
-  */
+   */
   @NotNull 
   @Schema(name = "url", example = "http://example.com/an-image.png", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("url")
@@ -93,5 +93,63 @@ public class ImageDto {
     }
     return o.toString().replace("\n", "\n    ");
   }
+  
+  public static class Builder {
+
+    private ImageDto instance;
+
+    public Builder() {
+      this(new ImageDto());
+    }
+
+    protected Builder(ImageDto instance) {
+      this.instance = instance;
+    }
+
+    protected Builder copyOf(ImageDto value) { 
+      this.instance.setUrl(value.url);
+      return this;
+    }
+
+    public ImageDto.Builder url(String url) {
+      this.instance.url(url);
+      return this;
+    }
+    
+    /**
+    * returns a built ImageDto instance.
+    *
+    * The builder is not reusable (NullPointerException)
+    */
+    public ImageDto build() {
+      try {
+        return this.instance;
+      } finally {
+        // ensure that this.instance is not reused
+        this.instance = null;
+      }
+    }
+
+    @Override
+    public String toString() {
+      return getClass() + "=(" + instance + ")";
+    }
+  }
+
+  /**
+  * Create a builder with no initialized field (except for the default values).
+  */
+  public static ImageDto.Builder builder() {
+    return new ImageDto.Builder();
+  }
+
+  /**
+  * Create a builder with a shallow copy of this instance.
+  */
+  public ImageDto.Builder toBuilder() {
+    ImageDto.Builder builder = new ImageDto.Builder();
+    return builder.copyOf(this);
+  }
+
 }
 

@@ -8,14 +8,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageAspectRatioDto;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageHeightDto;
+import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 
 import java.util.*;
-import javax.annotation.Generated;
+import jakarta.annotation.Generated;
 
 /**
  * An image query.
@@ -23,8 +24,7 @@ import javax.annotation.Generated;
 
 @Schema(name = "ImageQuery", description = "An image query.")
 @JsonTypeName("ImageQuery")
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-// TODO Add x-java-class-annotations
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class ImageQueryDto {
 
   private String objectKey;
@@ -52,7 +52,7 @@ public class ImageQueryDto {
   /**
    * The unique identifier of the image.
    * @return objectKey
-  */
+   */
   @NotNull @Pattern(regexp = "^[a-zA-Z0-9/_-]+.[a-zA-Z0-9/_-]+") 
   @Schema(name = "objectKey", example = "logo/dream.png", description = "The unique identifier of the image.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("objectKey")
@@ -72,7 +72,7 @@ public class ImageQueryDto {
   /**
    * Get height
    * @return height
-  */
+   */
   @Valid 
   @Schema(name = "height", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("height")
@@ -92,7 +92,7 @@ public class ImageQueryDto {
   /**
    * Get aspectRatio
    * @return aspectRatio
-  */
+   */
   @Valid 
   @Schema(name = "aspectRatio", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("aspectRatio")
@@ -144,5 +144,75 @@ public class ImageQueryDto {
     }
     return o.toString().replace("\n", "\n    ");
   }
+  
+  public static class Builder {
+
+    private ImageQueryDto instance;
+
+    public Builder() {
+      this(new ImageQueryDto());
+    }
+
+    protected Builder(ImageQueryDto instance) {
+      this.instance = instance;
+    }
+
+    protected Builder copyOf(ImageQueryDto value) { 
+      this.instance.setObjectKey(value.objectKey);
+      this.instance.setHeight(value.height);
+      this.instance.setAspectRatio(value.aspectRatio);
+      return this;
+    }
+
+    public ImageQueryDto.Builder objectKey(String objectKey) {
+      this.instance.objectKey(objectKey);
+      return this;
+    }
+    
+    public ImageQueryDto.Builder height(ImageHeightDto height) {
+      this.instance.height(height);
+      return this;
+    }
+    
+    public ImageQueryDto.Builder aspectRatio(ImageAspectRatioDto aspectRatio) {
+      this.instance.aspectRatio(aspectRatio);
+      return this;
+    }
+    
+    /**
+    * returns a built ImageQueryDto instance.
+    *
+    * The builder is not reusable (NullPointerException)
+    */
+    public ImageQueryDto build() {
+      try {
+        return this.instance;
+      } finally {
+        // ensure that this.instance is not reused
+        this.instance = null;
+      }
+    }
+
+    @Override
+    public String toString() {
+      return getClass() + "=(" + instance + ")";
+    }
+  }
+
+  /**
+  * Create a builder with no initialized field (except for the default values).
+  */
+  public static ImageQueryDto.Builder builder() {
+    return new ImageQueryDto.Builder();
+  }
+
+  /**
+  * Create a builder with a shallow copy of this instance.
+  */
+  public ImageQueryDto.Builder toBuilder() {
+    ImageQueryDto.Builder builder = new ImageQueryDto.Builder();
+    return builder.copyOf(this);
+  }
+
 }
 
