@@ -59,7 +59,9 @@
           <div class="boxplots-evidence-type-title">
             <h2>{{ evidenceType | decodeGreekEntity }}</h2>
             <button
+              type="button"
               (click)="scrollToSection(generateAnchorId(evidenceType))"
+              [attr.aria-describedby]="generateAnchorId(evidenceType)"
               [attr.aria-label]="`Update URL to link to ${evidenceType | decodeGreekEntity }`"
             >
               <explorers-svg-icon

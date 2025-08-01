@@ -7,6 +7,7 @@ import {
   ElementRef,
   inject,
   input,
+  OnInit,
   signal,
   ViewChild,
 } from '@angular/core';
@@ -35,7 +36,7 @@ import { ModelDetailsBoxplotsGridComponent } from '../model-details-boxplots-gri
   templateUrl: './model-details-boxplots-selector.component.html',
   styleUrls: ['./model-details-boxplots-selector.component.scss'],
 })
-export class ModelDetailsBoxplotsSelectorComponent {
+export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
   private readonly helperService = inject(HelperService);
   private readonly location = inject(Location);
 
@@ -78,13 +79,12 @@ export class ModelDetailsBoxplotsSelectorComponent {
     });
 
     afterNextRender(() => {
-      this.initializeOptionsFromUrlParams();
-
-      setTimeout(() => {
-        // provide time to render boxplots after initializing options before attempting to scroll
-        this.initialScrollToSection();
-      }, 10);
+      this.initialScrollToSection();
     });
+  }
+
+  ngOnInit(): void {
+    this.initializeOptionsFromUrlParams();
   }
 
   selectedModelDataList = computed(() => {

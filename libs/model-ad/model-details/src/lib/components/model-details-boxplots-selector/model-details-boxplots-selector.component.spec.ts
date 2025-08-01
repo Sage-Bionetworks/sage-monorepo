@@ -48,25 +48,13 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
   it('should use default values for sex and tissue', async () => {
     await setup();
 
-    const sexSelect = screen.getByRole('combobox', { name: /sex/i });
-    await waitFor(() => {
-      expect(sexSelect).toHaveAccessibleName('Female & Male');
-    });
+    const sexFilter = await screen.findByRole('combobox', { name: 'Female & Male' });
+    expect(sexFilter).toBeVisible();
 
-    const tissueSelect = screen.getByRole('combobox', { name: /tissue/i });
-    const firstTissue = modelMock.pathology[0].tissue;
-    await waitFor(() => {
-      expect(tissueSelect).toHaveAccessibleName(firstTissue);
+    const tissueFilter = await screen.findByRole('combobox', {
+      name: modelMock.pathology[0].tissue,
     });
-  });
-
-  it('should use default value for sex', async () => {
-    await setup();
-    const sexSelect = screen.getByRole('combobox', { name: /sex/i });
-
-    await waitFor(() => {
-      expect(sexSelect).toHaveAccessibleName('Female & Male');
-    });
+    expect(tissueFilter).toBeVisible();
   });
 
   it('should return the expected genotype order', async () => {
