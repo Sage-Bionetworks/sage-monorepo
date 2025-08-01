@@ -3,10 +3,6 @@
 		respond `{"status":"healthy"}` 200
 		header Content-Type application/json
 	}
-	
-	handle_path /controller* {
-		reverse_proxy {env.CONTROLLER_HOST}:{env.CONTROLLER_PORT}
-	}
 
 	handle {
 		reverse_proxy {env.APP_HOST}:{env.APP_PORT}
