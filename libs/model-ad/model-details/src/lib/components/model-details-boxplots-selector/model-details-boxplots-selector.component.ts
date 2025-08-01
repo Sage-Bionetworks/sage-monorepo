@@ -55,6 +55,9 @@ export class ModelDetailsBoxplotsSelectorComponent {
   });
   selectedTissueOption = signal('');
 
+  private readonly TISSUE_QUERY_KEY = 'tissue';
+  private readonly SEX_QUERY_KEY = 'sex';
+
   private readonly SCROLL_PADDING = 15;
   isInitialScrollDone = false;
   hasInitializedOptions = false;
@@ -112,8 +115,8 @@ export class ModelDetailsBoxplotsSelectorComponent {
   }
 
   initializeOptionsFromUrlParams() {
-    const sexParam = this.helperService.getUrlParam('sex');
-    const tissueParam = this.helperService.getUrlParam('tissue');
+    const sexParam = this.helperService.getUrlParam(this.SEX_QUERY_KEY);
+    const tissueParam = this.helperService.getUrlParam(this.TISSUE_QUERY_KEY);
 
     const matchingSexOption = this.sexOptions.find((option) => option.label === sexParam);
     if (matchingSexOption !== undefined) this.selectedSexOption.set(matchingSexOption);
@@ -146,15 +149,15 @@ export class ModelDetailsBoxplotsSelectorComponent {
     const params = new URLSearchParams(window.location.search);
 
     if (sex !== this.defaultSexOption.label) {
-      params.set('sex', sex);
+      params.set(this.SEX_QUERY_KEY, sex);
     } else {
-      params.delete('sex');
+      params.delete(this.SEX_QUERY_KEY);
     }
 
     if (tissue !== this.getDefaultTissue()) {
-      params.set('tissue', tissue);
+      params.set(this.TISSUE_QUERY_KEY, tissue);
     } else {
-      params.delete('tissue');
+      params.delete(this.TISSUE_QUERY_KEY);
     }
 
     const queryString = params.toString();
