@@ -14,8 +14,13 @@
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "uv sync --extra model_worker --extra webui",
-        "cwd": "{projectRoot}"
+        "commands": [
+          "sudo apt-get update -qq -y",
+          "sudo apt-get install --no-install-recommends -qq -y gettext-base",
+          "uv sync --extra model_worker --extra webui"
+        ],
+        "cwd": "{projectRoot}",
+        "parallel": false
       }
     },
     "show-packages": {
