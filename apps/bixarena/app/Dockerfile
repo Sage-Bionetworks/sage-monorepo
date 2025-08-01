@@ -35,7 +35,6 @@ ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 ENV APP_DIR=/app \
     APP_USERNAME=${USERNAME}
-# ENV PYTHONPATH="${APP_DIR}"
 ENV PYTHONPATH="${APP_DIR}/deps"
 
 
@@ -52,14 +51,10 @@ RUN groupadd --gid "$USER_GID" "$USERNAME" \
 # Copy the runtime dependencies from the builder stage.
 COPY --from=builder /app/deps ${APP_DIR}/deps
 
-# Copy the application code.
-# COPY ./src ${APP_DIR}/src
-# RUN chown -R ${APP_USERNAME}:${APP_USERNAME} ${APP_DIR}
-
 # Copy config files
 COPY model_config.template.json ${APP_DIR}/
 COPY generate_model_config.py ${APP_DIR}/
-COPY docker-entrypoint.sh ./
+COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 RUN chown -R ${APP_USERNAME}:${APP_USERNAME} ${APP_DIR} && \
     chmod +x docker-entrypoint.sh && \
