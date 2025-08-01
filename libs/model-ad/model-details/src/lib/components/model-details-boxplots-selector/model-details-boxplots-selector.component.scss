@@ -85,8 +85,14 @@
   }
 }
 
-.boxplots-separator {
-  margin-top: 80px;
-  margin-bottom: 80px;
-  border: 2px solid var(--color-gray-300);
+.boxplots-container {
+  h2 {
+    padding-bottom: 30px;
+  }
+
+  .boxplots-separator {
+    margin-top: 80px;
+    margin-bottom: 80px;
+    border: 2px solid var(--color-gray-300);
+  }
 }
