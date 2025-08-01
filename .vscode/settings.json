@@ -80,12 +80,12 @@
     },
     {
       "previewLimit": 50,
-      "server": "bixarena-postgres",
+      "server": "localhost",
       "port": 21000,
       "driver": "PostgreSQL",
-      "name": "bixarena-dataset-service",
-      "database": "dataset-service",
-      "username": "dataset-service",
+      "name": "bixarena-postgres",
+      "database": "bixarena",
+      "username": "postgres",
       "password": "changeme"
     },
     {

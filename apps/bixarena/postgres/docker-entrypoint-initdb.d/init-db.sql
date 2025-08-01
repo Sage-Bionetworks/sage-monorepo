@@ -1,37 +1,41 @@
--- Create databases
-CREATE DATABASE dataset_service;
+-- Create the bixarena database
+CREATE DATABASE bixarena;
 
--- Create admin role with necessary privileges
-CREATE ROLE role_admin;
+-- Connect to the bixarena database to set up privileges
+\c bixarena;
 
--- Connect to dataset_service database and grant privileges to role_admin
-\c dataset_service;
-GRANT ALL PRIVILEGES ON DATABASE dataset_service TO role_admin;
-GRANT ALL PRIVILEGES ON SCHEMA public TO role_admin;
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO role_admin;
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO role_admin;
-GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO role_admin;
+-- Grant all privileges on the bixarena database to postgres user
+GRANT ALL PRIVILEGES ON DATABASE bixarena TO postgres;
+GRANT ALL PRIVILEGES ON SCHEMA public TO postgres;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO postgres;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO postgres;
+GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO postgres;
+
 -- Grant privileges on future objects
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO role_admin;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO role_admin;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON FUNCTIONS TO role_admin;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO postgres;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO postgres;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON FUNCTIONS TO postgres;
 
--- Switch back to default database
-\c postgres;
+-- Create Conversation table
+CREATE TABLE conversations (
+    role VARCHAR(50) NOT NULL CHECK (role IN ('system', 'user', 'assistant', 'tool')),
+    content TEXT NOT NULL,
+    num_tokens INTEGER,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
--- Grant role_admin to postgres user (assuming postgres user exists)
-GRANT role_admin TO postgres;
+-- Create indexes for better performance
+CREATE INDEX idx_conversations_role ON conversations(role);
+CREATE INDEX idx_conversations_timestamp ON conversations(timestamp);
 
--- Create user for amp-als-dataset-service
-CREATE ROLE dataset_service LOGIN PASSWORD 'changeme';
-GRANT CONNECT ON DATABASE dataset_service TO dataset_service;
+-- Insert sample conversation data
+INSERT INTO conversations (role, content, num_tokens) VALUES
+    ('user', 'Hello', 2),
+    ('assistant', 'Hello! How can I help you today?', 8);
 
--- Grant privileges on dataset_service database
-\c dataset_service;
-GRANT ALL PRIVILEGES ON SCHEMA public TO dataset_service;
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO dataset_service;
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO dataset_service;
-GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO dataset_service;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO dataset_service;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO dataset_service;
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON FUNCTIONS TO dataset_service;
+-- Comments explaining the schema
+COMMENT ON TABLE conversations IS 'Individual conversation messages/turns in chat format';
+
+COMMENT ON COLUMN conversations.role IS 'Message role: system, user, assistant, or tool (OpenAI protocol)';
+COMMENT ON COLUMN conversations.content IS 'The actual message content/text';
+COMMENT ON COLUMN conversations.num_tokens IS 'Token count for the message content';
