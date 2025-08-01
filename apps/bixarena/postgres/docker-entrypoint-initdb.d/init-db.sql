@@ -1,6 +1,3 @@
--- Create the bixarena database
-CREATE DATABASE bixarena;
-
 -- Connect to the bixarena database to set up privileges
 \c bixarena;
 
@@ -18,13 +15,13 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON FUNCTIONS TO postgres;
 
 -- Create Conversation table
 CREATE TABLE conversations (
-    role VARCHAR(50) NOT NULL CHECK (role IN ('system', 'user', 'assistant', 'tool')),
+    role VARCHAR(50) NOT NULL CHECK (role IN ('user', 'assistant')),
     content TEXT NOT NULL,
     num_tokens INTEGER,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Create indexes for better performance
+-- Create indexes
 CREATE INDEX idx_conversations_role ON conversations(role);
 CREATE INDEX idx_conversations_timestamp ON conversations(timestamp);
 
@@ -32,10 +29,3 @@ CREATE INDEX idx_conversations_timestamp ON conversations(timestamp);
 INSERT INTO conversations (role, content, num_tokens) VALUES
     ('user', 'Hello', 2),
     ('assistant', 'Hello! How can I help you today?', 8);
-
--- Comments explaining the schema
-COMMENT ON TABLE conversations IS 'Individual conversation messages/turns in chat format';
-
-COMMENT ON COLUMN conversations.role IS 'Message role: system, user, assistant, or tool (OpenAI protocol)';
-COMMENT ON COLUMN conversations.content IS 'The actual message content/text';
-COMMENT ON COLUMN conversations.num_tokens IS 'Token count for the message content';
