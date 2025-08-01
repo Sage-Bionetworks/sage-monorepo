@@ -121,7 +121,8 @@ export class ModelDetailsBoxplotsSelectorComponent {
     const matchingSexOption = this.sexOptions.find((option) => option.label === sexParam);
     if (matchingSexOption !== undefined) this.selectedSexOption.set(matchingSexOption);
 
-    this.selectedTissueOption.set(tissueParam || this.getDefaultTissue());
+    const matchingTissueOption = this.tissueOptions().find((option) => option === tissueParam);
+    this.selectedTissueOption.set(matchingTissueOption || this.getDefaultTissue());
 
     this.hasInitializedOptions = true;
   }
@@ -129,7 +130,16 @@ export class ModelDetailsBoxplotsSelectorComponent {
   initialScrollToSection() {
     if (typeof window !== 'undefined' && !this.isInitialScrollDone) {
       const hash = window.location.hash.slice(1);
-      this.isInitialScrollDone = hash === '' ? true : this.scrollToSection(hash, false);
+      const matchingHash = this.evidenceTypes().find(
+        (evidenceType) => this.generateAnchorId(evidenceType) === hash,
+      );
+
+      if (matchingHash) {
+        this.isInitialScrollDone = this.scrollToSection(this.generateAnchorId(matchingHash), false);
+      } else {
+        this.isInitialScrollDone = true;
+        this.updateUrlFragment(matchingHash);
+      }
     }
   }
 
@@ -140,8 +150,9 @@ export class ModelDetailsBoxplotsSelectorComponent {
       .replace(/-+/g, '-');
   }
 
-  updateUrlFragment(fragment: string): void {
-    const newUrl = `${window.location.pathname}${window.location.search}#${fragment}`;
+  updateUrlFragment(fragment: string | undefined): void {
+    const fragmentPart = fragment ? `#${fragment}` : '';
+    const newUrl = `${window.location.pathname}${window.location.search}${fragmentPart}`;
     this.location.replaceState(newUrl);
   }
 

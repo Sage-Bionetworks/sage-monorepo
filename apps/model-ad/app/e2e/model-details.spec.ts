@@ -285,6 +285,24 @@ test.describe('model details - boxplots selector - share links - initial load', 
       page.getByRole('heading', { level: 2, name: 'Soluble Aβ42', exact: true }),
     ).toBeInViewport();
   });
+
+  test('falls back to default filters when query parameters are invalid', async ({ page }) => {
+    const invalidTissue = 'InvalidTissue';
+    const invalidSex = 'InvalidSex';
+    const fragment = '#soluble-a-beta-42';
+    await page.goto(`${basePath}?tissue=${invalidTissue}&sex=${invalidSex}${fragment}`);
+    await expect(page.getByRole('combobox', { name: tissueDefault })).toBeVisible();
+    await expect(page.getByRole('combobox', { name: sexDefault })).toBeVisible();
+    await page.waitForURL(`${basePath}${fragment}`);
+  });
+
+  test('does not scroll and removes invalid fragment from url', async ({ page }) => {
+    const invalidFragment = 'invalid-section';
+    const queryParam = '?sex=Male';
+    await page.goto(`${basePath}${queryParam}#${invalidFragment}`);
+    await expect(page.getByRole('heading', { level: 1, name: 'Abca7*V1599M' })).toBeInViewport();
+    await page.waitForURL(`${basePath}${queryParam}`);
+  });
 });
 
 test.describe('model details - boxplots selector - share links - updates', () => {
