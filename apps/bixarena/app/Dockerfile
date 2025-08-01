@@ -64,3 +64,4 @@ WORKDIR ${APP_DIR}
 EXPOSE 8100
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["python"]
