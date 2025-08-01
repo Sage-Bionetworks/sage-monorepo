@@ -1,14 +1,13 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, computed, inject, input } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { DecodeGreekEntityPipe } from '@sagebionetworks/explorers/util';
 import { BreakpointConfigService } from '@sagebionetworks/explorers/services';
 import { IndividualData, ModelData } from '@sagebionetworks/model-ad/api-client-angular';
 import { ModelDetailsBoxplotComponent } from '../model-details-boxplot/model-details-boxplot.component';
 
 @Component({
   selector: 'model-ad-model-details-boxplots-grid',
-  imports: [ModelDetailsBoxplotComponent, DecodeGreekEntityPipe],
+  imports: [ModelDetailsBoxplotComponent],
   templateUrl: './model-details-boxplots-grid.component.html',
   styleUrls: ['./model-details-boxplots-grid.component.scss'],
 })
@@ -19,7 +18,6 @@ export class ModelDetailsBoxplotsGridComponent {
   modelDataList = input.required<ModelData[]>();
   genotypeOrder = input<string[] | undefined>();
   sexes = input.required<IndividualData.SexEnum[]>();
-  title = input.required<string>();
 
   private readonly observeLargeScreen = toSignal(
     this.breakpointObserver.observe(`(min-width: ${this.breakpointConfigService.largeBreakpoint})`),

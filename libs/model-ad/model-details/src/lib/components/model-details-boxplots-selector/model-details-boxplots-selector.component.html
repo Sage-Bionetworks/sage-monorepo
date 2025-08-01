@@ -55,11 +55,15 @@
   <div class="boxplots-container" #boxplotsContainer>
     @for (evidenceType of evidenceTypes(); track evidenceType; let last = $last) {
       <div class="boxplots-evidence-type" [id]="generateAnchorId(evidenceType)">
+        <div class="boxplots-evidence-type-title-bar">
+          <h2>{{ evidenceType | decodeGreekEntity }}</h2>
+          <!-- <explorers-download-dom-image /> -->
+        </div>
+
         <model-ad-model-details-boxplots-grid
           [modelDataList]="getSelectedModelDataForEvidenceType(evidenceType)"
           [genotypeOrder]="genotypeOrder()"
           [sexes]="selectedSexOption().value"
-          [title]="evidenceType"
         />
         @if (!last) {
           <hr class="boxplots-separator" />
