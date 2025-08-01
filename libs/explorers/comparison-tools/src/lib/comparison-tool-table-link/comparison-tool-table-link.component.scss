@@ -1,0 +1,21 @@
+.comparison-tool-table-link {
+  display: flex;
+  align-items: start;
+
+  a {
+    text-decoration: none;
+    font-weight: 600;
+    color: gray;
+
+    i {
+      margin-left: 10px;
+      color: gray;
+      font-weight: 600;
+    }
+
+    &:hover,
+    &:hover i {
+      color: blue;
+    }
+  }
+}

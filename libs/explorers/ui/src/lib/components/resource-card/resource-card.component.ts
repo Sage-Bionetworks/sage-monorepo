@@ -1,7 +1,7 @@
-
 import { Component, inject, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { SvgImageComponent } from '../svg-image/svg-image.component';
+import { isExternalLink } from '@sagebionetworks/shared/util';
 
 @Component({
   selector: 'explorers-resource-card',
@@ -20,7 +20,7 @@ export class ResourceCardComponent {
   @Input() altText = '';
 
   onClick() {
-    if (this.link.startsWith('http')) {
+    if (isExternalLink(this.link)) {
       window.open(this.link, '_blank');
     } else {
       // https://github.com/angular/angular/issues/45202

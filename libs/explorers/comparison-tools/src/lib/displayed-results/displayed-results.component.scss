@@ -1,0 +1,17 @@
+.displayed-results {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  width: 200px;
+  border: 1px solid gray;
+
+  h5 {
+    font-weight: 700;
+  }
+
+  p {
+    margin-top: 10px;
+  }
+}

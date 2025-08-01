@@ -1,0 +1,15 @@
+<div class="error-page" [style.background-image]="'url(' + backgroundImagePath + ')'">
+  <div>
+    <h1 class="error-page-heading">Something went wrong</h1>
+    <p>
+      {{ errorMessage }}
+    </p>
+    @if (retryUrl !== '') {
+      <p-button label="Retry" (click)="retry()" [rounded]="true" size="small" />
+    }
+    <p-button label="Go Home" (click)="goHome()" [rounded]="true" size="small" />
+    <p>
+      For help, please contact us at <a href="mailto:{{ supportEmail() }}">{{ supportEmail() }}</a>
+    </p>
+  </div>
+</div>

@@ -125,6 +125,16 @@ export const routes: Route[] = [
     },
   },
   {
+    path: ROUTE_PATHS.ERROR,
+    loadChildren: () =>
+      import('@sagebionetworks/explorers/shared').then((routes) => routes.errorPageRoute),
+    data: {
+      title: 'Model AD Explorer | Error',
+      description: 'Error Page',
+      supportEmail: SUPPORT_EMAIL,
+    },
+  },
+  {
     path: '**',
     redirectTo: `/${ROUTE_PATHS.NOT_FOUND}`,
   },

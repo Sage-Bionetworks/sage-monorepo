@@ -1,8 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
 import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/constants';
-import { MetaTagService } from '@sagebionetworks/explorers/services';
+import { MetaTagService, PlatformService } from '@sagebionetworks/explorers/services';
 import { FooterComponent, HeaderComponent } from '@sagebionetworks/explorers/ui';
 import { Dataversion, DataversionService } from '@sagebionetworks/model-ad/api-client-angular';
 import { ConfigService, MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
@@ -32,7 +33,9 @@ import { ToastModule } from 'primeng/toast';
     createGoogleTagManagerIdProvider(),
   ],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  private platformService = inject(PlatformService);
+  private destroyRef = inject(DestroyRef);
   configService = inject(ConfigService);
   dataVersionService = inject(DataversionService);
   metaTagService = inject(MetaTagService);
@@ -50,19 +53,27 @@ export class AppComponent {
     this.useGoogleTagManager = isGoogleTagManagerIdSet(
       this.configService.config.googleTagManagerId,
     );
-
-    this.dataVersionService
-      .getDataversion()
-      .pipe(takeUntilDestroyed())
-      .subscribe({
-        next: (data) => {
-          this.dataVersion = this.getDataVersion(data);
-        },
-        error: (error) => console.error('Error loading data version:', error),
-      });
   }
 
-  getDataVersion(dataVersion: Dataversion) {
+  ngOnInit() {
+    this.getDataVersion();
+  }
+
+  getDataVersion() {
+    if (this.platformService.isBrowser) {
+      this.dataVersionService
+        .getDataversion()
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (data) => {
+            this.dataVersion = this.formatDataVersion(data);
+          },
+          error: (error) => console.error('Error loading data version:', error),
+        });
+    }
+  }
+
+  formatDataVersion(dataVersion: Dataversion) {
     return `${dataVersion.data_file}-v${dataVersion.data_version}`;
   }
 }

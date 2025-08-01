@@ -7,7 +7,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 // Internal
 // -------------------------------------------------------------------------- //
 import { HelperService } from '@sagebionetworks/agora/services';
-import { getRandomInt } from '@sagebionetworks/agora/shared';
+import { getRandomInt } from '@sagebionetworks/shared/util';
 import { geneMock1 } from '@sagebionetworks/agora/testing';
 import { BiodomainsChartComponent } from './biodomains-chart.component';
 
