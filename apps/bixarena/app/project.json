@@ -28,7 +28,7 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "uv run python -m fastchat.serve.gradio_web_server_multi --port ${APP_PORT} --register-api-endpoint-file model_config.json",
+        "command": "uv run python -m fastchat.serve.gradio_web_server_multi --port ${APP_PORT} --controller-url '' --register-api-endpoint-file model_config.json",
         "cwd": "{projectRoot}"
       }
     },
