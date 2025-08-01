@@ -15,7 +15,7 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON FUNCTIONS TO postgres;
 
 -- Create Conversation table
 CREATE TABLE conversations (
-    role VARCHAR(50) NOT NULL CHECK (role IN ('user', 'assistant')),
+    role VARCHAR(20) NOT NULL CHECK (role IN ('user', 'assistant')),
     content TEXT NOT NULL,
     num_tokens INTEGER,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
