@@ -1,8 +1,5 @@
 import os
 import re
-from dotenv import load_dotenv
-
-load_dotenv()  # Automatically loads from .env
 
 with open("model_config.template.json") as f:
     content = f.read()

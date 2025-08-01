@@ -7,17 +7,14 @@
     "create-config": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "cp -n .env.example .env",
+        "commands": ["cp -n .env.example .env", "uv run generate_model_config.py"],
         "cwd": "{projectRoot}"
       }
     },
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "uv sync --extra model_worker --extra webui",
-          "uv run generate_model_config.py"
-        ],
+        "command": "uv sync --extra model_worker --extra webui",
         "cwd": "{projectRoot}"
       }
     },
