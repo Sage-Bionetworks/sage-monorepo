@@ -9,6 +9,3 @@ services:
       - '8100:8100'
     env_file:
       - ../../../apps/bixarena/app/.env
-    depends_on:
-      bixarena-controller:
-        condition: service_started

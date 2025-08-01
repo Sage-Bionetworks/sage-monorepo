@@ -1,14 +1,41 @@
 import { NextFunction, Request, Response } from 'express';
-import { setHeaders } from '../helpers';
+import { cache, setHeaders } from '../helpers';
 import { DataVersionCollection } from '../models';
+import { Dataversion } from '@sagebionetworks/model-ad/api-client-angular';
 
 export async function getDataVersion() {
-  return await DataVersionCollection.findOne();
+  const cacheKey = 'dataVersion';
+  const cachedResult: Dataversion | null | undefined = cache.get(cacheKey);
+
+  if (cachedResult !== undefined) {
+    return cachedResult;
+  }
+
+  const result = await DataVersionCollection.findOne();
+
+  if (result !== null && result !== undefined) {
+    cache.set(cacheKey, result);
+  } else {
+    // TODO add error handling here
+  }
+
+  return result;
 }
 
 export async function dataVersionRoute(req: Request, res: Response, next: NextFunction) {
   try {
     const result = await getDataVersion();
+
+    if (!result) {
+      res.status(404).contentType('application/problem+json').json({
+        title: 'Not Found',
+        status: 404,
+        detail: 'Data Version not found',
+        instance: req.path,
+      });
+      return;
+    }
+
     setHeaders(res);
     res.json(result);
   } catch (err) {

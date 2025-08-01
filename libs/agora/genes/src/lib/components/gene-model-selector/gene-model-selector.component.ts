@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { removeParenthesis } from '@sagebionetworks/agora/util';
+import { removeParentheses } from '@sagebionetworks/shared/util';
 import { SelectModule } from 'primeng/select';
 
 interface Option {
@@ -26,7 +26,7 @@ export class GeneModelSelectorComponent implements OnInit {
     this.selected = {} as Option;
     this._options =
       options?.map((option: any) => {
-        const newValue = removeParenthesis(option);
+        const newValue = removeParentheses(option);
         return {
           name: option,
           value: newValue,

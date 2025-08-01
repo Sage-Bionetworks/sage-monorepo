@@ -1,0 +1,37 @@
+# Python
+__pycache__
+*.pyc
+*.egg-info
+dist
+.venv
+
+# Log
+*.log
+*.log.*
+*.json
+!project.json
+!model_config.template.json
+!src/playground/deepspeed_config_s2.json
+!src/playground/deepspeed_config_s3.json
+
+# Editor
+.idea
+*.swp
+
+# Other
+.DS_Store
+wandb
+output
+checkpoints_flant5_3b
+
+# Data
+*.pkl
+*.csv
+src/tests/state_of_the_union.txt
+
+# Build
+build
+src/docs
+src/assets
+src/fastchat/serve/example_images/*
+src/fastchat/llm_judge/data/mt_bench/misc/radar.png

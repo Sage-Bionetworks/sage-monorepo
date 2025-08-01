@@ -2,6 +2,7 @@ import { provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/c
 import {
   APP_ID,
   ApplicationConfig,
+  ErrorHandler,
   inject,
   provideAppInitializer,
   provideZoneChangeDetection,
@@ -23,6 +24,7 @@ import { providePrimeNG } from 'primeng/config';
 import { CustomUrlSerializer } from './app.custom-url-serializer';
 import { routes } from './app.routes';
 import { ModelAdPreset } from './primeNGPreset';
+import { GlobalErrorHandler } from '@sagebionetworks/explorers/services';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -62,5 +64,6 @@ export const appConfig: ApplicationConfig = {
     ),
     { provide: UrlSerializer, useClass: CustomUrlSerializer },
     MessageService,
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
   ],
 };
