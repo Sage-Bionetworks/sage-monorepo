@@ -16,3 +16,5 @@ services:
         condition: service_started
       bixarena-controller:
         condition: service_started
+      bixarena-postgres:
+        condition: service_healthy

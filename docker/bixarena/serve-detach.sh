@@ -7,6 +7,7 @@ args=(
   --file docker/"$product_name"/services/apex.yml
   --file docker/"$product_name"/services/app.yml
   --file docker/"$product_name"/services/controller.yml
+  --file docker/"$product_name"/services/postgres.yml
 
   --file docker/"$product_name"/networks.yml
   --file docker/"$product_name"/volumes.yml
