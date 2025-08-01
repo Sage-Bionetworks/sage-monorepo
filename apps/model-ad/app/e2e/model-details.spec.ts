@@ -216,7 +216,7 @@ test.describe('model details - boxplots selector - table of contents', () => {
     await page.goto(basePath);
     await expect(page.getByRole('heading', { level: 1, name: model })).toBeVisible();
 
-    const nflButton = page.getByRole('button', { name: section });
+    const nflButton = page.getByRole('button', { name: section, exact: true });
     await nflButton.click();
 
     await expect(page.getByRole('heading', { level: 2, name: section })).toBeInViewport();
@@ -232,7 +232,7 @@ test.describe('model details - boxplots selector - table of contents', () => {
     await page.goto(`${basePath}#soluble-a-beta-40`);
     await expect(page.getByRole('heading', { level: 1, name: model })).toBeVisible();
 
-    const nflButton = page.getByRole('button', { name: section });
+    const nflButton = page.getByRole('button', { name: section, exact: true });
     await nflButton.click();
 
     await expect(page.getByRole('heading', { level: 2, name: section })).toBeInViewport();
@@ -340,5 +340,17 @@ test.describe('model details - boxplots selector - share links - updates', () =>
     await page.getByRole('combobox', { name: 'Cerebral Cortex' }).click();
     await page.getByRole('option', { name: tissueChosen }).click();
     await page.waitForURL(`${basePath}?tissue=${tissueChosen}${fragment}`);
+  });
+});
+
+test.describe('model details - boxplots selector - share links - link button', () => {
+  const basePath = '/models/Abca7*V1599M/biomarkers';
+  test('clicking share link button updates fragment', async ({ page }) => {
+    await page.goto(`${basePath}#soluble-a-beta-42`);
+
+    const button = page.getByRole('button', { name: 'Update URL to link to Nfl' });
+    await button.click();
+
+    await page.waitForURL(`${basePath}#nfl`);
   });
 });
