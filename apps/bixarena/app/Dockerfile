@@ -43,7 +43,7 @@ RUN groupadd --gid "$USER_GID" "$USERNAME" \
   # Install sudo
   && apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install --no-install-recommends -qq -y \
-    gosu \
+    gettext-base gosu \
   && apt-get -y clean \
   && apt-get -y autoremove \
   && rm -rf /var/lib/apt/lists/*
@@ -53,12 +53,10 @@ COPY --from=builder /app/deps ${APP_DIR}/deps
 
 # Copy config files
 COPY model_config.template.json ${APP_DIR}/
-COPY generate_model_config.py ${APP_DIR}/
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 RUN chown -R ${APP_USERNAME}:${APP_USERNAME} ${APP_DIR} && \
-    chmod +x docker-entrypoint.sh && \
-    chmod +x ${APP_DIR}/generate_model_config.py
+    chmod +x docker-entrypoint.sh
 
 WORKDIR ${APP_DIR}
 EXPOSE 8100
