@@ -1,19 +1,17 @@
 # openchallenges_api_client_python.ChallengeContributionApi
 
-All URIs are relative to _http://localhost/v1_
+All URIs are relative to *https://openchallenges.io/api/v1*
 
-| Method                                                                                                   | HTTP request                                                                 | Description                                       |
-| -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------- |
-| [**add_challenge_contribution**](ChallengeContributionApi.md#add_challenge_contribution)                 | **POST** /challenges/{challengeId}/contributions                             | Create a new contribution for a challenge         |
-| [**delete_all_challenge_contributions**](ChallengeContributionApi.md#delete_all_challenge_contributions) | **DELETE** /challenges/{challengeId}/contributions                           | Delete all contributions for a specific challenge |
-| [**delete_challenge_contribution**](ChallengeContributionApi.md#delete_challenge_contribution)           | **DELETE** /challenges/{challengeId}/contributions/{challengeContributionId} | Delete a specific challenge contribution          |
-| [**get_challenge_contribution**](ChallengeContributionApi.md#get_challenge_contribution)                 | **GET** /challenges/{challengeId}/contributions/{challengeContributionId}    | Get a specific challenge contribution             |
-| [**list_challenge_contributions**](ChallengeContributionApi.md#list_challenge_contributions)             | **GET** /challenges/{challengeId}/contributions                              | List challenge contributions                      |
-| [**update_challenge_contribution**](ChallengeContributionApi.md#update_challenge_contribution)           | **PUT** /challenges/{challengeId}/contributions/{challengeContributionId}    | Update an existing challenge contribution         |
+| Method                                                                                         | HTTP request                                                                    | Description                               |
+| ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | ----------------------------------------- |
+| [**create_challenge_contribution**](ChallengeContributionApi.md#create_challenge_contribution) | **POST** /challenges/{challengeId}/contributions                                | Create a new contribution for a challenge |
+| [**delete_challenge_contribution**](ChallengeContributionApi.md#delete_challenge_contribution) | **DELETE** /challenges/{challengeId}/contributions/{organizationId}/role/{role} | Delete a specific challenge contribution  |
+| [**get_challenge_contribution**](ChallengeContributionApi.md#get_challenge_contribution)       | **GET** /challenges/{challengeId}/contributions/{organizationId}/role/{role}    | Get a specific challenge contribution     |
+| [**list_challenge_contributions**](ChallengeContributionApi.md#list_challenge_contributions)   | **GET** /challenges/{challengeId}/contributions                                 | List challenge contributions              |
 
-# **add_challenge_contribution**
+# **create_challenge_contribution**
 
-> ChallengeContribution add_challenge_contribution(challenge_id, challenge_contribution_create_request)
+> ChallengeContribution create_challenge_contribution(challenge_id, challenge_contribution_create_request)
 
 Create a new contribution for a challenge
 
@@ -30,10 +28,10 @@ from openchallenges_api_client_python.models.challenge_contribution_create_reque
 from openchallenges_api_client_python.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost/v1
+# Defining the host is optional and defaults to https://openchallenges.io/api/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = openchallenges_api_client_python.Configuration(
-    host = "http://localhost/v1"
+    host = "https://openchallenges.io/api/v1"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -55,11 +53,11 @@ with openchallenges_api_client_python.ApiClient(configuration) as api_client:
 
     try:
         # Create a new contribution for a challenge
-        api_response = api_instance.add_challenge_contribution(challenge_id, challenge_contribution_create_request)
-        print("The response of ChallengeContributionApi->add_challenge_contribution:\n")
+        api_response = api_instance.create_challenge_contribution(challenge_id, challenge_contribution_create_request)
+        print("The response of ChallengeContributionApi->create_challenge_contribution:\n")
         pprint(api_response)
     except Exception as e:
-        print("Exception when calling ChallengeContributionApi->add_challenge_contribution: %s\n" % e)
+        print("Exception when calling ChallengeContributionApi->create_challenge_contribution: %s\n" % e)
 ```
 
 ### Parameters
@@ -95,92 +93,13 @@ with openchallenges_api_client_python.ApiClient(configuration) as api_client:
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **delete_all_challenge_contributions**
-
-> delete_all_challenge_contributions(challenge_id)
-
-Delete all contributions for a specific challenge
-
-Deletes all associated contributions for a given challenge, identified by its ID.
-This action is irreversible.
-
-### Example
-
-- Bearer (api_key) Authentication (apiBearerAuth):
-
-```python
-import openchallenges_api_client_python
-from openchallenges_api_client_python.rest import ApiException
-from pprint import pprint
-
-# Defining the host is optional and defaults to http://localhost/v1
-# See configuration.py for a list of all supported configuration parameters.
-configuration = openchallenges_api_client_python.Configuration(
-    host = "http://localhost/v1"
-)
-
-# The client must configure the authentication and authorization parameters
-# in accordance with the API server security policy.
-# Examples for each auth method are provided below, use the example that
-# satisfies your auth use case.
-
-# Configure Bearer authorization (api_key): apiBearerAuth
-configuration = openchallenges_api_client_python.Configuration(
-    access_token = os.environ["BEARER_TOKEN"]
-)
-
-# Enter a context with an instance of the API client
-with openchallenges_api_client_python.ApiClient(configuration) as api_client:
-    # Create an instance of the API class
-    api_instance = openchallenges_api_client_python.ChallengeContributionApi(api_client)
-    challenge_id = 56 # int | The unique identifier of the challenge.
-
-    try:
-        # Delete all contributions for a specific challenge
-        api_instance.delete_all_challenge_contributions(challenge_id)
-    except Exception as e:
-        print("Exception when calling ChallengeContributionApi->delete_all_challenge_contributions: %s\n" % e)
-```
-
-### Parameters
-
-| Name             | Type    | Description                             | Notes |
-| ---------------- | ------- | --------------------------------------- | ----- |
-| **challenge_id** | **int** | The unique identifier of the challenge. |
-
-### Return type
-
-void (empty response body)
-
-### Authorization
-
-[apiBearerAuth](../README.md#apiBearerAuth)
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/problem+json
-
-### HTTP response details
-
-| Status code | Description                                                       | Response headers |
-| ----------- | ----------------------------------------------------------------- | ---------------- |
-| **204**     | Deletion successful                                               | -                |
-| **401**     | Unauthorized                                                      | -                |
-| **403**     | The user does not have the permission to perform this action      | -                |
-| **404**     | The specified resource was not found                              | -                |
-| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
 # **delete_challenge_contribution**
 
-> delete_challenge_contribution(challenge_id, challenge_contribution_id)
+> delete_challenge_contribution(challenge_id, organization_id, role)
 
 Delete a specific challenge contribution
 
-Deletes a specific contribution record for a challenge, identified by its ID.
-This action is irreversible.
+Delete a specific challenge contribution.
 
 ### Example
 
@@ -188,13 +107,14 @@ This action is irreversible.
 
 ```python
 import openchallenges_api_client_python
+from openchallenges_api_client_python.models.challenge_contribution_role import ChallengeContributionRole
 from openchallenges_api_client_python.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost/v1
+# Defining the host is optional and defaults to https://openchallenges.io/api/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = openchallenges_api_client_python.Configuration(
-    host = "http://localhost/v1"
+    host = "https://openchallenges.io/api/v1"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -212,21 +132,23 @@ with openchallenges_api_client_python.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = openchallenges_api_client_python.ChallengeContributionApi(api_client)
     challenge_id = 56 # int | The unique identifier of the challenge.
-    challenge_contribution_id = 56 # int | The unique identifier of a challenge contribution
+    organization_id = 56 # int | The unique identifier of the organization.
+    role = openchallenges_api_client_python.ChallengeContributionRole() # ChallengeContributionRole | A challenge contribution role.
 
     try:
         # Delete a specific challenge contribution
-        api_instance.delete_challenge_contribution(challenge_id, challenge_contribution_id)
+        api_instance.delete_challenge_contribution(challenge_id, organization_id, role)
     except Exception as e:
         print("Exception when calling ChallengeContributionApi->delete_challenge_contribution: %s\n" % e)
 ```
 
 ### Parameters
 
-| Name                          | Type    | Description                                       | Notes |
-| ----------------------------- | ------- | ------------------------------------------------- | ----- |
-| **challenge_id**              | **int** | The unique identifier of the challenge.           |
-| **challenge_contribution_id** | **int** | The unique identifier of a challenge contribution |
+| Name                | Type                                 | Description                                | Notes |
+| ------------------- | ------------------------------------ | ------------------------------------------ | ----- |
+| **challenge_id**    | **int**                              | The unique identifier of the challenge.    |
+| **organization_id** | **int**                              | The unique identifier of the organization. |
+| **role**            | [**ChallengeContributionRole**](.md) | A challenge contribution role.             |
 
 ### Return type
 
@@ -255,7 +177,7 @@ void (empty response body)
 
 # **get_challenge_contribution**
 
-> ChallengeContribution get_challenge_contribution(challenge_id, challenge_contribution_id)
+> ChallengeContribution get_challenge_contribution(challenge_id, organization_id, role)
 
 Get a specific challenge contribution
 
@@ -266,13 +188,14 @@ Retrieves a specific contribution record for a challenge, identified by its ID.
 ```python
 import openchallenges_api_client_python
 from openchallenges_api_client_python.models.challenge_contribution import ChallengeContribution
+from openchallenges_api_client_python.models.challenge_contribution_role import ChallengeContributionRole
 from openchallenges_api_client_python.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost/v1
+# Defining the host is optional and defaults to https://openchallenges.io/api/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = openchallenges_api_client_python.Configuration(
-    host = "http://localhost/v1"
+    host = "https://openchallenges.io/api/v1"
 )
 
 
@@ -281,11 +204,12 @@ with openchallenges_api_client_python.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = openchallenges_api_client_python.ChallengeContributionApi(api_client)
     challenge_id = 56 # int | The unique identifier of the challenge.
-    challenge_contribution_id = 56 # int | The unique identifier of a challenge contribution
+    organization_id = 56 # int | The unique identifier of the organization.
+    role = openchallenges_api_client_python.ChallengeContributionRole() # ChallengeContributionRole | A challenge contribution role.
 
     try:
         # Get a specific challenge contribution
-        api_response = api_instance.get_challenge_contribution(challenge_id, challenge_contribution_id)
+        api_response = api_instance.get_challenge_contribution(challenge_id, organization_id, role)
         print("The response of ChallengeContributionApi->get_challenge_contribution:\n")
         pprint(api_response)
     except Exception as e:
@@ -294,10 +218,11 @@ with openchallenges_api_client_python.ApiClient(configuration) as api_client:
 
 ### Parameters
 
-| Name                          | Type    | Description                                       | Notes |
-| ----------------------------- | ------- | ------------------------------------------------- | ----- |
-| **challenge_id**              | **int** | The unique identifier of the challenge.           |
-| **challenge_contribution_id** | **int** | The unique identifier of a challenge contribution |
+| Name                | Type                                 | Description                                | Notes |
+| ------------------- | ------------------------------------ | ------------------------------------------ | ----- |
+| **challenge_id**    | **int**                              | The unique identifier of the challenge.    |
+| **organization_id** | **int**                              | The unique identifier of the organization. |
+| **role**            | [**ChallengeContributionRole**](.md) | A challenge contribution role.             |
 
 ### Return type
 
@@ -339,10 +264,10 @@ from openchallenges_api_client_python.models.challenge_contributions_page import
 from openchallenges_api_client_python.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to http://localhost/v1
+# Defining the host is optional and defaults to https://openchallenges.io/api/v1
 # See configuration.py for a list of all supported configuration parameters.
 configuration = openchallenges_api_client_python.Configuration(
-    host = "http://localhost/v1"
+    host = "https://openchallenges.io/api/v1"
 )
 
 
@@ -386,94 +311,6 @@ No authorization required
 | ----------- | ----------------------------------------------------------------- | ---------------- |
 | **200**     | Success                                                           | -                |
 | **400**     | Invalid request                                                   | -                |
-| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **update_challenge_contribution**
-
-> ChallengeContribution update_challenge_contribution(challenge_id, challenge_contribution_id, challenge_contribution_update_request)
-
-Update an existing challenge contribution
-
-Updates an existing contribution record for a challenge.
-Only the organization ID and role can be modified.
-
-### Example
-
-- Bearer (api_key) Authentication (apiBearerAuth):
-
-```python
-import openchallenges_api_client_python
-from openchallenges_api_client_python.models.challenge_contribution import ChallengeContribution
-from openchallenges_api_client_python.models.challenge_contribution_update_request import ChallengeContributionUpdateRequest
-from openchallenges_api_client_python.rest import ApiException
-from pprint import pprint
-
-# Defining the host is optional and defaults to http://localhost/v1
-# See configuration.py for a list of all supported configuration parameters.
-configuration = openchallenges_api_client_python.Configuration(
-    host = "http://localhost/v1"
-)
-
-# The client must configure the authentication and authorization parameters
-# in accordance with the API server security policy.
-# Examples for each auth method are provided below, use the example that
-# satisfies your auth use case.
-
-# Configure Bearer authorization (api_key): apiBearerAuth
-configuration = openchallenges_api_client_python.Configuration(
-    access_token = os.environ["BEARER_TOKEN"]
-)
-
-# Enter a context with an instance of the API client
-with openchallenges_api_client_python.ApiClient(configuration) as api_client:
-    # Create an instance of the API class
-    api_instance = openchallenges_api_client_python.ChallengeContributionApi(api_client)
-    challenge_id = 56 # int | The unique identifier of the challenge.
-    challenge_contribution_id = 56 # int | The unique identifier of a challenge contribution
-    challenge_contribution_update_request = openchallenges_api_client_python.ChallengeContributionUpdateRequest() # ChallengeContributionUpdateRequest |
-
-    try:
-        # Update an existing challenge contribution
-        api_response = api_instance.update_challenge_contribution(challenge_id, challenge_contribution_id, challenge_contribution_update_request)
-        print("The response of ChallengeContributionApi->update_challenge_contribution:\n")
-        pprint(api_response)
-    except Exception as e:
-        print("Exception when calling ChallengeContributionApi->update_challenge_contribution: %s\n" % e)
-```
-
-### Parameters
-
-| Name                                      | Type                                                                            | Description                                       | Notes |
-| ----------------------------------------- | ------------------------------------------------------------------------------- | ------------------------------------------------- | ----- |
-| **challenge_id**                          | **int**                                                                         | The unique identifier of the challenge.           |
-| **challenge_contribution_id**             | **int**                                                                         | The unique identifier of a challenge contribution |
-| **challenge_contribution_update_request** | [**ChallengeContributionUpdateRequest**](ChallengeContributionUpdateRequest.md) |                                                   |
-
-### Return type
-
-[**ChallengeContribution**](ChallengeContribution.md)
-
-### Authorization
-
-[apiBearerAuth](../README.md#apiBearerAuth)
-
-### HTTP request headers
-
-- **Content-Type**: application/json
-- **Accept**: application/json, application/problem+json
-
-### HTTP response details
-
-| Status code | Description                                                       | Response headers |
-| ----------- | ----------------------------------------------------------------- | ---------------- |
-| **200**     | Contribution updated successfully                                 | -                |
-| **400**     | Invalid request                                                   | -                |
-| **401**     | Unauthorized                                                      | -                |
-| **403**     | The user does not have the permission to perform this action      | -                |
-| **404**     | The specified resource was not found                              | -                |
-| **409**     | The request conflicts with current state of the target resource   | -                |
 | **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

@@ -1,5 +1,5 @@
 /**
- * MODEL-AD REST API
+ * Model-AD API
  *
  *
  *
@@ -9,7 +9,7 @@
  */
 
 /**
- * Model Overview Links
+ * Model Overview Link
  */
 export interface ModelOverviewLink {
   /**

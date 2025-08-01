@@ -1,5 +1,5 @@
 /**
- * OpenChallenges REST API
+ * OpenChallenges API
  *
  *
  *
@@ -35,7 +35,7 @@ import { Configuration } from '../configuration';
   providedIn: 'root',
 })
 export class ChallengeAnalyticsService {
-  protected basePath = 'http://localhost/v1';
+  protected basePath = 'https://openchallenges.io/api/v1';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
   public encoder: HttpParameterCodec;
@@ -181,7 +181,7 @@ export class ChallengeAnalyticsService {
       }
     }
 
-    let localVarPath = `/challengeAnalytics/challengesPerYear`;
+    let localVarPath = `/challenge-analytics/challenges-per-year`;
     return this.httpClient.request<ChallengesPerYear>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,

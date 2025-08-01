@@ -1,5 +1,5 @@
 /**
- * MODEL-AD REST API
+ * Model-AD API
  *
  *
  *
@@ -16,20 +16,24 @@ export interface ModelOverview {
   /**
    * Model name
    */
-  model?: string;
+  model: string;
   /**
    * Model type (e.g., Late Onset AD, Familial AD)
    */
-  model_type?: string;
+  model_type: string;
   /**
-   * List of matched control models
+   * A comma-delimited list of matched control models
    */
-  matched_controls?: Array<string>;
-  gene_expression?: ModelOverviewLink;
-  disease_correlation?: ModelOverviewLink;
-  biomarkers?: ModelOverviewLink;
-  pathology?: ModelOverviewLink;
-  study_data?: ModelOverviewLink;
-  jax_strain?: ModelOverviewLink;
-  center?: ModelOverviewLink;
+  matched_controls: string;
+  gene_expression?: ModelOverviewLink | null;
+  disease_correlation?: ModelOverviewLink | null;
+  biomarkers?: ModelOverviewLink | null;
+  pathology?: ModelOverviewLink | null;
+  study_data: ModelOverviewLink | null;
+  jax_strain: ModelOverviewLink | null;
+  center: ModelOverviewLink | null;
+  /**
+   * List of modified genes in the model
+   */
+  modified_genes: Array<string>;
 }

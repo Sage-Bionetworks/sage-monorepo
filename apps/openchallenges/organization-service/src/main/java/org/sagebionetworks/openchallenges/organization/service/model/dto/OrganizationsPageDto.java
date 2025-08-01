@@ -25,7 +25,7 @@ import jakarta.annotation.Generated;
 
 @Schema(name = "OrganizationsPage", description = "A page of organizations")
 @JsonTypeName("OrganizationsPage")
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class OrganizationsPageDto {
 
   private Integer number;

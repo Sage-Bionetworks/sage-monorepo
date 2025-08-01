@@ -1,62 +1,32 @@
-p-radiobutton {
-  display: flex;
+.p-radiobutton {
+  display: inline-flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  vertical-align: middle !important;
+  margin-right: 5px;
 
   .p-radiobutton-box {
-    display: inline-block;
-    width: 15px;
-    height: 15px;
-    font-size: 12px;
-    border: 1px solid var(--color-border);
-    border-radius: 50%;
-    transition: $transition-duration;
-    margin-right: 10px;
+    width: 14px !important;
+    height: 14px !important;
+    min-width: 14px !important;
+    min-height: 14px !important;
+    background-color: transparent !important;
+    border: 2px solid var(--surface-border, #dee2e6) !important;
+    border-radius: 50% !important;
+  }
+}
 
-    .p-radiobutton-icon {
-      display: flex;
-      width: 100%;
-      height: 100%;
-      align-items: center;
-      justify-content: center;
-      transition: $transition-duration;
-      top: 0;
-      left: 0;
-      margin: 0;
-
-      &::before {
-        content: ' ';
-        display: block;
-        width: 7px;
-        height: 7px;
-        background: var(--color-primary);
-        border-radius: 50%;
-      }
-    }
-
-    &.p-focus {
-      border-color: var(--color-primary);
-    }
-
-    &.p-radiobutton-checked {
-      border-color: var(--color-primary);
-
-      .p-radiobutton-icon {
-        color: var(--color-primary);
-
-        &,
-        &::before {
-          margin: 0;
-        }
-      }
-    }
+// modify visual design of the radio button
+.p-radiobutton-checked {
+  // outer circle color
+  .p-radiobutton-box {
+    border-color: var(--primary-color, #5081a7) !important;
   }
 
-  /* 
-    In PrimeNG v19, the radiobutton label does not have this class and is not a child of p-radiobutton, 
-    so this style does not apply to the label. TODO: move this style into the preset.
-  */
-  .p-radiobutton-label {
-    font-size: 16px;
-    color: var(--color-text);
-    cursor: pointer;
+  .p-radiobutton-icon {
+    width: 6px !important;
+    height: 6px !important;
+    border-radius: 50% !important;
+    background-color: var(--primary-color, #5081a7) !important;
   }
 }

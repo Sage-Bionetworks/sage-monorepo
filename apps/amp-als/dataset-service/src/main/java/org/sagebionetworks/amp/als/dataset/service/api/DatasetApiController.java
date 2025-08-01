@@ -30,7 +30,7 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 @Controller
-@RequestMapping("${openapi.aMPALSDatasetREST.base-path:/v1}")
+@RequestMapping("${openapi.aMPALSDatasetService.base-path:/v1}")
 public class DatasetApiController implements DatasetApi {
 
     private final DatasetApiDelegate delegate;

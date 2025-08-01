@@ -1,0 +1,38 @@
+type: object
+description: The information required to update a challenge
+properties:
+  slug:
+    $ref: ChallengeSlug.yaml
+  name:
+    $ref: ChallengeName.yaml
+  headline:
+    $ref: ChallengeHeadline.yaml
+  description:
+    $ref: ChallengeDescription.yaml
+  doi:
+    $ref: ChallengeDoi.yaml
+  status:
+    $ref: ChallengeStatus.yaml
+  platformId:
+    $ref: ChallengePlatformId.yaml
+  websiteUrl:
+    $ref: Url.yaml
+  avatarUrl:
+    $ref: Url.yaml
+  incentives:
+    type: array
+    items:
+      $ref: ChallengeIncentive.yaml
+required:
+  - slug
+  - name
+  - headline
+  - description
+  - doi
+  - status
+  - platformId
+  - websiteUrl
+  - avatarUrl
+  - incentives
+  # - submissionTypes
+  # - categories

@@ -1,5 +1,5 @@
 /**
- * MODEL-AD REST API
+ * Model-AD API
  *
  *
  *
@@ -14,13 +14,9 @@ export interface ComparisonToolConfigColumn {
    */
   name: string;
   /**
-   * The data type of the column.
+   * The data type of the column. Must be \'text\' or \'heat_map\'.
    */
-  type: string;
-  /**
-   * The UI-specific type of the column.
-   */
-  column_type: string;
+  type: ComparisonToolConfigColumn.TypeEnum;
   /**
    * Tooltip text for the column.
    */
@@ -29,4 +25,11 @@ export interface ComparisonToolConfigColumn {
    * Tooltip text for the column\'s sort functionality.
    */
   sort_tooltip: string;
+}
+export namespace ComparisonToolConfigColumn {
+  export type TypeEnum = 'text' | 'heat_map';
+  export const TypeEnum = {
+    Text: 'text' as TypeEnum,
+    HeatMap: 'heat_map' as TypeEnum,
+  };
 }

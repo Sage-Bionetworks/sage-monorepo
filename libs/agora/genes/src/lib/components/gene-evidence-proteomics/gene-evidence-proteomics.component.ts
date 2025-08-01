@@ -10,7 +10,7 @@ import { BoxPlotComponent } from '@sagebionetworks/agora/charts';
 import { BoxPlotChartItem, ChartRange } from '@sagebionetworks/agora/models';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { ModalLinkComponent } from '@sagebionetworks/agora/shared';
-import { DownloadDomImageComponent } from '../download-dom-image/download-dom-image.component';
+import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
 import { GeneProteinSelectorComponent } from '../gene-protein-selector/gene-protein-selector.component';
 
 @Component({

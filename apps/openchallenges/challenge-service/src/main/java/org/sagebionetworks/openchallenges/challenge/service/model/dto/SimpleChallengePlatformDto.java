@@ -89,11 +89,11 @@ public class SimpleChallengePlatformDto {
   }
 
   /**
-   * The name of the challenge platform.
+   * The display name of the challenge platform.
    * @return name
    */
-  @NotNull @Size(min = 3, max = 30) 
-  @Schema(name = "name", description = "The name of the challenge platform.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotNull @Size(min = 3, max = 50) 
+  @Schema(name = "name", example = "Example Challenge Platform", description = "The display name of the challenge platform.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("name")
   public String getName() {
     return name;

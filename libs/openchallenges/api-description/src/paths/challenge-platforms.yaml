@@ -1,0 +1,50 @@
+get:
+  tags:
+    - Challenge Platform
+  summary: List challenge platforms
+  description: List challenge platforms
+  operationId: listChallengePlatforms
+  x-audience: [public]
+  parameters:
+    - $ref: ../components/parameters/query/challengePlatformSearchQuery.yaml
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ChallengePlatformsPage.yaml
+      description: Success
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml
+post:
+  tags:
+    - Challenge Platform
+  summary: Create a challenge platform
+  description: Create a challenge platform with the specified ID
+  operationId: createChallengePlatform
+  x-audience: [public]
+  security:
+    - apiBearerAuth: []
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/ChallengePlatformCreateRequest.yaml
+    required: true
+  responses:
+    '201':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ChallengePlatform.yaml
+      description: Success
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../components/responses/Forbidden.yaml
+    '409':
+      $ref: ../components/responses/Conflict.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

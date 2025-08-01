@@ -8,33 +8,35 @@
           <div>
             <a class="read-more" href="{{ org.websiteUrl }}"
               >Continue reading <mat-icon aria-hidden="true" inline="true">open_in_new</mat-icon></a
-              >
-            </div>
-          }
-        </div>
+            >
+          </div>
+        }
       </div>
-      <div id="details">
-        <h3 class="section-title">Organization Details</h3>
-        <table>
-          <tbody>
-            <tr>
-              <td class="text-right">Acronym</td>
-              <td [ngClass]="{ 'text-grey': org.acronym === '' }">{{ useNaIfFalsey(org.acronym) }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <hr />
-      <span class="mat-caption created-updated-dates"
-        >Added to the OC on {{ org.createdAt }} and last modified on {{ org.updatedAt }} // See
-        something missing or not up-to-date?
-        <a
-      href="https://docs.google.com/forms/d/e/1FAIpQLSfQbQl11MG_5TXT7fL07YenRD3MIQYfG2lXrpo3jnh_iA4nsw/viewform?usp=pp_url&entry.414773782={{
-        organization.id
-      }}&entry.1040159972={{ organization.login }}"
-          target="_blank"
-          >Suggest an edit here!</a
-          >
-        </span>
-      </main>
-    }
+    </div>
+    <div id="details">
+      <h3 class="section-title">Organization Details</h3>
+      <table>
+        <tbody>
+          <tr>
+            <td class="text-right">Acronym</td>
+            <td [ngClass]="{ 'text-grey': org.acronym === '' }">
+              {{ useNaIfFalsey(org.acronym) }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <hr />
+    <span class="mat-caption created-updated-dates"
+      >Added to the OC on {{ org.createdAt }} and last modified on {{ org.updatedAt }} // See
+      something missing or not up-to-date?
+      <a
+        href="https://docs.google.com/forms/d/e/1FAIpQLSfQbQl11MG_5TXT7fL07YenRD3MIQYfG2lXrpo3jnh_iA4nsw/viewform?usp=pp_url&entry.414773782={{
+          organization.id
+        }}&entry.1040159972={{ organization.login }}"
+        target="_blank"
+        >Suggest an edit here!</a
+      >
+    </span>
+  </main>
+}

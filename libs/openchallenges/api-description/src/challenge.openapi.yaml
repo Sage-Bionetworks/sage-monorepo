@@ -16,14 +16,19 @@ servers:
 tags:
   - name: Challenge
     description: Operations about challenges.
-  - name: ChallengeContribution
+    x-audience: [public]
+  - name: Challenge Contribution
     description: Operations about challenge contributions.
-  - name: ChallengeAnalytics
+    x-audience: [public]
+  - name: Challenge Analytics
     description: Operations about challenge analytics.
-  - name: ChallengePlatform
+    x-audience: [public]
+  - name: Challenge Platform
     description: Operations about challenge platforms.
-  - name: EdamConcept
+    x-audience: [public]
+  - name: Edam Concept
     description: Operations about EDAM concepts.
+    x-audience: [public]
 paths:
   /challenges:
     $ref: paths/challenges.yaml
@@ -33,16 +38,16 @@ paths:
     $ref: paths/challenges/@{challengeId}/json-ld.yaml
   /challenges/{challengeId}/contributions:
     $ref: paths/challenges/@{challengeId}/contributions.yaml
-  /challenges/{challengeId}/contributions/{challengeContributionId}:
-    $ref: paths/challenges/@{challengeId}/contributions/@{challengeContributionId}.yaml
-  /challengeAnalytics/challengesPerYear:
-    $ref: paths/challengeAnalytics/challengesPerYear.yaml
-  /challengePlatforms:
-    $ref: paths/challengePlatforms.yaml
-  /challengePlatforms/{challengePlatformId}:
-    $ref: paths/challengePlatforms/@{challengePlatformId}.yaml
-  /edamConcepts:
-    $ref: paths/edamConcepts.yaml
+  /challenges/{challengeId}/contributions/{organizationId}/role/{role}:
+    $ref: paths/challenges/@{challengeId}/contributions/@{organizationId}/role/${role}.yaml
+  /challenge-analytics/challenges-per-year:
+    $ref: paths/challenge-analytics/challenges-per-year.yaml
+  /challenge-platforms:
+    $ref: paths/challenge-platforms.yaml
+  /challenge-platforms/{challengePlatformId}:
+    $ref: paths/challenge-platforms/@{challengePlatformId}.yaml
+  /edam-concepts:
+    $ref: paths/edam-concepts.yaml
 components:
   securitySchemes:
     apiBearerAuth:

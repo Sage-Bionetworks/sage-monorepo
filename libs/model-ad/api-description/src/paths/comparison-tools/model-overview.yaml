@@ -3,7 +3,7 @@ get:
     - ModelOverview
   summary: Get model overview for comparison tools
   description: Returns a list of model overview objects for use in comparison tools.
-  operationId: getModelOverview
+  operationId: getModelOverviews
   responses:
     '200':
       description: A list of model overview objects

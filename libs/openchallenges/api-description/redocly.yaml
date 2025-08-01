@@ -1,0 +1,95 @@
+# Redocly configuration file for OpenChallenges API
+#
+# About `x-audience`:
+# - The optional `x-audience` annotation can be applied to OpenAPI nodes such as tags, paths,
+#   components, and others.
+# - When using decorators like `filter-in` or `filter-out`, only nodes annotated with `x-audience`
+#   are evaluated for inclusion or exclusion.
+# - Nodes without an `x-audience` annotation are not affected by these filters and will always be
+#   included in the output OpenAPI files.
+# - This allows you to selectively expose or hide parts of your API for different audiences, while
+#   keeping unannotated nodes visible in all outputs.
+# - Best practice: Be intentional and always specify the `x-audience` annotation on nodes.
+
+plugins:
+  - './plugins/plugin.mjs'
+
+apis:
+  # OpenChallenges API
+  openchallenges-public:
+    root: ./openapi/openapi.yaml
+    decorators:
+      info-override:
+        version: 1.0.0
+        title: OpenChallenges API
+        description: Discover, explore, and contribute to open biomedical challenges.
+        license:
+          name: Apache 2.0
+          url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
+        contact:
+          name: Support
+          url: https://github.com/Sage-Bionetworks/sage-monorepo
+        x-logo:
+          url: https://openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
+      plugin/replace-servers-url:
+        serverUrl: 'https://openchallenges.io/api/v1'
+
+  # Auth API
+  auth-public:
+    root: ./src/auth.openapi.yaml
+    decorators:
+      filter-in:
+        property: x-audience
+        value: [public]
+  auth-service:
+    root: ./src/auth.openapi.yaml
+    decorators:
+      filter-in:
+        property: x-audience
+        value: [public, internal]
+        matchStrategy: any
+
+  # Challenge API
+  challenge-public:
+    root: ./src/challenge.openapi.yaml
+    decorators:
+      filter-in:
+        property: x-audience
+        value: [public]
+  challenge-service:
+    root: ./src/challenge.openapi.yaml
+    decorators:
+      filter-in:
+        property: x-audience
+        value: [public, internal]
+        matchStrategy: any
+
+  # Image API
+  image-public:
+    root: ./src/image.openapi.yaml
+    decorators:
+      filter-in:
+        property: x-audience
+        value: [public]
+  image-service:
+    root: ./src/image.openapi.yaml
+    decorators:
+      filter-in:
+        property: x-audience
+        value: [public, internal]
+        matchStrategy: any
+
+  # Organization API
+  organization-public:
+    root: ./src/organization.openapi.yaml
+    decorators:
+      filter-in:
+        property: x-audience
+        value: [public]
+  organization-service:
+    root: ./src/organization.openapi.yaml
+    decorators:
+      filter-in:
+        property: x-audience
+        value: [public, internal]
+        matchStrategy: any

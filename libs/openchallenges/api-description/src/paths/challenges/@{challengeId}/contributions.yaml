@@ -2,10 +2,11 @@ parameters:
   - $ref: ../../../components/parameters/path/challengeId.yaml
 get:
   tags:
-    - ChallengeContribution
+    - Challenge Contribution
   summary: List challenge contributions
   description: List challenge contributions
   operationId: listChallengeContributions
+  x-audience: [public]
   responses:
     '200':
       content:
@@ -19,11 +20,12 @@ get:
       $ref: ../../../components/responses/InternalServerError.yaml
 post:
   tags:
-    - ChallengeContribution
+    - Challenge Contribution
   summary: Create a new contribution for a challenge
   description: |
     Creates a new contribution record associated with a challenge ID.
-  operationId: addChallengeContribution
+  operationId: createChallengeContribution
+  x-audience: [public]
   security:
     - apiBearerAuth: []
   requestBody:
@@ -51,12 +53,11 @@ post:
       $ref: ../../../components/responses/InternalServerError.yaml
 delete:
   tags:
-    - ChallengeContribution
-  summary: Delete all contributions for a specific challenge
-  description: |
-    Deletes all associated contributions for a given challenge, identified by its ID.
-    This action is irreversible.
-  operationId: deleteAllChallengeContributions
+    - Challenge Contribution
+  summary: Delete the contributions for a specific challenge
+  description: Deletes the associated contributions for a given challenge, identified by its ID.
+  operationId: deleteChallengeContributions
+  x-audience: [internal]
   security:
     - apiBearerAuth: []
   responses:

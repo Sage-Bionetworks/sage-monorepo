@@ -2,6 +2,7 @@ openapi: 3.0.3
 info:
   version: 1.0.0
   title: OpenChallenges Organization API
+  description: Discover, explore, and contribute to open biomedical challenges.
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -13,15 +14,21 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - name: Authentication
-    description: Operations about authentication
   - name: Organization
     description: Operations about organizations
+    x-audience: [public]
+  - name: Challenge Participation
+    description: Operations about a challenge participation
+    x-audience: [internal]
 paths:
   /organizations:
     $ref: paths/organizations.yaml
   /organizations/{org}:
     $ref: paths/organizations/@{org}.yaml
+  /organizations/{org}/participations:
+    $ref: paths/organizations/@{org}/participations.yaml
+  /organizations/{org}/participations/{challengeId}/roles/{role}:
+    $ref: paths/organizations/@{org}/participations/@{challengeId}/roles/${role}.yaml
 components:
   securitySchemes:
     apiBearerAuth:

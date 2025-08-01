@@ -1,0 +1,16 @@
+type: object
+description: An challenge participation.
+properties:
+  id:
+    $ref: ChallengeParticipationId.yaml
+  challengeId:
+    $ref: ChallengeId.yaml
+  organizationId:
+    $ref: OrganizationId.yaml
+  role:
+    $ref: ChallengeParticipationRole.yaml
+required:
+  - id
+  - challengeId
+  - organizationId
+  - role

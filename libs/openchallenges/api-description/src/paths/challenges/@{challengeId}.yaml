@@ -6,6 +6,7 @@ get:
   summary: Get a challenge
   description: Returns the challenge specified
   operationId: getChallenge
+  x-audience: [public]
   responses:
     '200':
       description: A challenge
@@ -17,18 +18,52 @@ get:
       $ref: ../../components/responses/NotFound.yaml
     '500':
       $ref: ../../components/responses/InternalServerError.yaml
+put:
+  tags:
+    - Challenge
+  summary: Update an existing challenge
+  description: Updates an existing challenge.
+  operationId: updateChallenge
+  x-audience: [public]
+  security:
+    - apiBearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/ChallengeUpdateRequest.yaml
+  responses:
+    '200':
+      description: Challenge successfully updated
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/Challenge.yaml
+    '400':
+      $ref: ../../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../components/responses/Forbidden.yaml
+    '404':
+      $ref: ../../components/responses/NotFound.yaml
+    '409':
+      $ref: ../../components/responses/Conflict.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml
 delete:
   tags:
     - Challenge
   summary: Delete a challenge
-  description: |
-    Deletes a challenge by its unique ID. This action is irreversible.
-  operationId: deleteChallengeById
+  description: Deletes a challenge by its unique ID.
+  operationId: deleteChallenge
+  x-audience: [public]
   security:
     - apiBearerAuth: []
   responses:
     '204':
-      description: Deletion successful
+      description: Challenge successfully deleted
     '401':
       $ref: ../../components/responses/Unauthorized.yaml
     '403':

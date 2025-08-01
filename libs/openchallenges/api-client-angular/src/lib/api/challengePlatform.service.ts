@@ -1,5 +1,5 @@
 /**
- * OpenChallenges REST API
+ * OpenChallenges API
  *
  *
  *
@@ -27,7 +27,11 @@ import { BasicError } from '../model/basicError';
 // @ts-ignore
 import { ChallengePlatform } from '../model/challengePlatform';
 // @ts-ignore
+import { ChallengePlatformCreateRequest } from '../model/challengePlatformCreateRequest';
+// @ts-ignore
 import { ChallengePlatformSearchQuery } from '../model/challengePlatformSearchQuery';
+// @ts-ignore
+import { ChallengePlatformUpdateRequest } from '../model/challengePlatformUpdateRequest';
 // @ts-ignore
 import { ChallengePlatformsPage } from '../model/challengePlatformsPage';
 
@@ -39,7 +43,7 @@ import { Configuration } from '../configuration';
   providedIn: 'root',
 })
 export class ChallengePlatformService {
-  protected basePath = 'http://localhost/v1';
+  protected basePath = 'https://openchallenges.io/api/v1';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
   public encoder: HttpParameterCodec;
@@ -108,6 +112,124 @@ export class ChallengePlatformService {
       throw Error('key may not be null if value is not object or array');
     }
     return httpParams;
+  }
+
+  /**
+   * Create a challenge platform
+   * Create a challenge platform with the specified ID
+   * @param challengePlatformCreateRequest
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public createChallengePlatform(
+    challengePlatformCreateRequest: ChallengePlatformCreateRequest,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<ChallengePlatform>;
+  public createChallengePlatform(
+    challengePlatformCreateRequest: ChallengePlatformCreateRequest,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<ChallengePlatform>>;
+  public createChallengePlatform(
+    challengePlatformCreateRequest: ChallengePlatformCreateRequest,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<ChallengePlatform>>;
+  public createChallengePlatform(
+    challengePlatformCreateRequest: ChallengePlatformCreateRequest,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (challengePlatformCreateRequest === null || challengePlatformCreateRequest === undefined) {
+      throw new Error(
+        'Required parameter challengePlatformCreateRequest was null or undefined when calling createChallengePlatform.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (apiBearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('apiBearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json', 'application/problem+json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/challenge-platforms`;
+    return this.httpClient.request<ChallengePlatform>(
+      'post',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        body: challengePlatformCreateRequest,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
   }
 
   /**
@@ -203,7 +325,7 @@ export class ChallengePlatformService {
       }
     }
 
-    let localVarPath = `/challengePlatforms/${this.configuration.encodeParam({ name: 'challengePlatformId', value: challengePlatformId, in: 'path', style: 'simple', explode: false, dataType: 'number', dataFormat: 'int64' })}`;
+    let localVarPath = `/challenge-platforms/${this.configuration.encodeParam({ name: 'challengePlatformId', value: challengePlatformId, in: 'path', style: 'simple', explode: false, dataType: 'number', dataFormat: 'int64' })}`;
     return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`, {
       context: localVarHttpContext,
       responseType: <any>responseType_,
@@ -301,7 +423,7 @@ export class ChallengePlatformService {
       }
     }
 
-    let localVarPath = `/challengePlatforms/${this.configuration.encodeParam({ name: 'challengePlatformId', value: challengePlatformId, in: 'path', style: 'simple', explode: false, dataType: 'number', dataFormat: 'int64' })}`;
+    let localVarPath = `/challenge-platforms/${this.configuration.encodeParam({ name: 'challengePlatformId', value: challengePlatformId, in: 'path', style: 'simple', explode: false, dataType: 'number', dataFormat: 'int64' })}`;
     return this.httpClient.request<ChallengePlatform>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
@@ -406,13 +528,141 @@ export class ChallengePlatformService {
       }
     }
 
-    let localVarPath = `/challengePlatforms`;
+    let localVarPath = `/challenge-platforms`;
     return this.httpClient.request<ChallengePlatformsPage>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
         params: localVarQueryParameters,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * Update an existing challenge platform
+   * Updates an existing challenge platform.
+   * @param challengePlatformId The unique identifier of the challenge platform.
+   * @param challengePlatformUpdateRequest
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public updateChallengePlatform(
+    challengePlatformId: number,
+    challengePlatformUpdateRequest: ChallengePlatformUpdateRequest,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<ChallengePlatform>;
+  public updateChallengePlatform(
+    challengePlatformId: number,
+    challengePlatformUpdateRequest: ChallengePlatformUpdateRequest,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<ChallengePlatform>>;
+  public updateChallengePlatform(
+    challengePlatformId: number,
+    challengePlatformUpdateRequest: ChallengePlatformUpdateRequest,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<ChallengePlatform>>;
+  public updateChallengePlatform(
+    challengePlatformId: number,
+    challengePlatformUpdateRequest: ChallengePlatformUpdateRequest,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (challengePlatformId === null || challengePlatformId === undefined) {
+      throw new Error(
+        'Required parameter challengePlatformId was null or undefined when calling updateChallengePlatform.',
+      );
+    }
+    if (challengePlatformUpdateRequest === null || challengePlatformUpdateRequest === undefined) {
+      throw new Error(
+        'Required parameter challengePlatformUpdateRequest was null or undefined when calling updateChallengePlatform.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (apiBearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('apiBearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json', 'application/problem+json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/challenge-platforms/${this.configuration.encodeParam({ name: 'challengePlatformId', value: challengePlatformId, in: 'path', style: 'simple', explode: false, dataType: 'number', dataFormat: 'int64' })}`;
+    return this.httpClient.request<ChallengePlatform>(
+      'put',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        body: challengePlatformUpdateRequest,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,

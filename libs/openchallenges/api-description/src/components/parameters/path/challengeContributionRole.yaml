@@ -1,0 +1,6 @@
+name: role
+in: path
+description: A challenge contribution role.
+required: true
+schema:
+  $ref: ../../schemas/ChallengeContributionRole.yaml

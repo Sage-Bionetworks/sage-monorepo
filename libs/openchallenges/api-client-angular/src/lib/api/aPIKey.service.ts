@@ -1,5 +1,5 @@
 /**
- * OpenChallenges REST API
+ * OpenChallenges API
  *
  *
  *
@@ -39,7 +39,7 @@ import { Configuration } from '../configuration';
   providedIn: 'root',
 })
 export class APIKeyService {
-  protected basePath = 'http://localhost/v1';
+  protected basePath = 'https://openchallenges.io/api/v1';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
   public encoder: HttpParameterCodec;

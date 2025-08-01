@@ -62,19 +62,21 @@ describe('ModelDetailsBoxplotComponent', () => {
     expect(points).toHaveLength(0);
   });
 
-  it('should format Y-axis title with decoded Greek entities and title case', async () => {
-    const { component } = await setup(mockModelData);
-    const yAxisTitle = component.formatYAxisTitle();
-    expect(yAxisTitle).toBe('Aβ42 (ng/ml)');
-  });
+  it('should format x-axis labels', async () => {
+    const { component } = await setup();
 
-  it('should format Y-axis title without Greek entities', async () => {
-    const { component } = await setup({
-      ...mockModelData,
-      evidence_type: 'Beta amyloid',
-      units: 'pg/mg',
-    });
-    const yAxisTitle = component.formatYAxisTitle();
-    expect(yAxisTitle).toBe('Beta Amyloid (pg/mg)');
+    const labelToExpectedFormattedLabel = {
+      'short-dash': 'short-dash',
+      'short*star': 'short*star',
+      'long-onedash': 'long-\nonedash',
+      'long*onestar': 'long*\nonestar',
+      'long-multi-dash': 'long-\nmulti-dash',
+      'long*multi*star': 'long*\nmulti*star',
+    };
+
+    for (const [label, expectedFormattedLabel] of Object.entries(labelToExpectedFormattedLabel)) {
+      const formattedLabel = component.xAxisLabelFormatter(label);
+      expect(formattedLabel).toBe(expectedFormattedLabel);
+    }
   });
 });

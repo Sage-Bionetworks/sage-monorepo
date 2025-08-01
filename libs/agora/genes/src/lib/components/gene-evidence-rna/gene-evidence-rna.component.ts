@@ -17,7 +17,7 @@ import { BoxPlotChartItem, RowChartItem } from '@sagebionetworks/agora/models';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { ModalLinkComponent } from '@sagebionetworks/agora/shared';
 import { getStatisticalModels } from '../../helpers';
-import { DownloadDomImageComponent } from '../download-dom-image/download-dom-image.component';
+import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
 import { GeneModelSelectorComponent } from '../gene-model-selector/gene-model-selector.component';
 import { GeneNetworkComponent } from '../gene-network/gene-network.component';
 

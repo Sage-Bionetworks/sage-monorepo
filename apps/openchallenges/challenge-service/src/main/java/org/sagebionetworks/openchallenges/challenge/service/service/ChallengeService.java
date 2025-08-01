@@ -1,26 +1,34 @@
 package org.sagebionetworks.openchallenges.challenge.service.service;
 
+import jakarta.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
-import org.sagebionetworks.openchallenges.challenge.service.ChallengeServiceApplication;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeNotFoundException;
+import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengePlatformNotFoundException;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeJsonLdDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSearchQueryDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeUpdateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengesPageDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeEntity;
+import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeIncentiveEntity;
+import org.sagebionetworks.openchallenges.challenge.service.model.entity.SimpleChallengePlatformEntity;
+import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengeIncentiveMapper;
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengeJsonLdMapper;
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengeMapper;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeCategoryRepository;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeContributionRepository;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeIncentiveRepository;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeInputDataTypeRepository;
+import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengePlatformRepository;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeRepository;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeStarRepository;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeSubmissionTypeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,33 +41,40 @@ public class ChallengeService {
   private static final Logger logger = LoggerFactory.getLogger(ChallengeService.class);
 
   private final ChallengeRepository challengeRepository;
+  private final ChallengePlatformRepository challengePlatformRepository;
   private final ChallengeContributionRepository challengeContributionRepository;
   private final ChallengeIncentiveRepository challengeIncentiveRepository;
   private final ChallengeSubmissionTypeRepository challengeSubmissionTypeRepository;
   private final ChallengeCategoryRepository challengeCategoryRepository;
   private final ChallengeStarRepository challengeStarRepository;
   private final ChallengeInputDataTypeRepository challengeInputDataTypeRepository;
+  private final EntityManager entityManager;
 
   public ChallengeService(
     ChallengeRepository challengeRepository,
+    ChallengePlatformRepository challengePlatformRepository,
     ChallengeContributionRepository challengeContributionRepository,
     ChallengeIncentiveRepository challengeIncentiveRepository,
     ChallengeSubmissionTypeRepository challengeSubmissionTypeRepository,
     ChallengeCategoryRepository challengeCategoryRepository,
     ChallengeStarRepository challengeStarRepository,
-    ChallengeInputDataTypeRepository challengeInputDataTypeRepository
+    ChallengeInputDataTypeRepository challengeInputDataTypeRepository,
+    EntityManager entityManager
   ) {
     this.challengeRepository = challengeRepository;
+    this.challengePlatformRepository = challengePlatformRepository;
     this.challengeContributionRepository = challengeContributionRepository;
     this.challengeIncentiveRepository = challengeIncentiveRepository;
     this.challengeSubmissionTypeRepository = challengeSubmissionTypeRepository;
     this.challengeCategoryRepository = challengeCategoryRepository;
     this.challengeStarRepository = challengeStarRepository;
     this.challengeInputDataTypeRepository = challengeInputDataTypeRepository;
+    this.entityManager = entityManager;
   }
 
   private ChallengeMapper challengeMapper = new ChallengeMapper();
   private ChallengeJsonLdMapper challengeJsonLdMapper = new ChallengeJsonLdMapper();
+  private ChallengeIncentiveMapper challengeIncentiveMapper = new ChallengeIncentiveMapper();
 
   private static final List<String> SEARCHABLE_FIELDS = Arrays.asList(
     "description",
@@ -122,6 +137,26 @@ public class ChallengeService {
       );
   }
 
+  private SimpleChallengePlatformEntity getChallengePlatformEntity(Long platformId)
+    throws ChallengePlatformNotFoundException {
+    return challengePlatformRepository
+      .findById(platformId)
+      .map(platform ->
+        SimpleChallengePlatformEntity.builder()
+          .id(platform.getId())
+          .slug(platform.getSlug())
+          .name(platform.getName())
+          .avatarKey(platform.getAvatarKey())
+          .websiteUrl(platform.getWebsiteUrl())
+          .build()
+      )
+      .orElseThrow(() ->
+        new ChallengePlatformNotFoundException(
+          String.format("The challenge platform with ID %d does not exist.", platformId)
+        )
+      );
+  }
+
   @Transactional
   public void deleteChallenge(Long challengeId) {
     // Verify challenge exists before deletion
@@ -153,5 +188,103 @@ public class ChallengeService {
     challengeRepository.deleteById(challengeId);
 
     logger.info("Successfully deleted challenge with ID: {}", challengeId);
+  }
+
+  @Transactional
+  public ChallengeDto createChallenge(ChallengeCreateRequestDto request) {
+    // Create a new challenge entity
+    ChallengeEntity newChallenge = new ChallengeEntity();
+    newChallenge.setSlug(request.getSlug());
+    newChallenge.setName(request.getName());
+    newChallenge.setHeadline(request.getHeadline());
+    newChallenge.setDescription(request.getDescription());
+    newChallenge.setDoi(request.getDoi());
+    newChallenge.setStatus(request.getStatus().toString());
+    newChallenge.setWebsiteUrl(request.getWebsiteUrl());
+    newChallenge.setAvatarUrl(request.getAvatarUrl());
+
+    // Initialize empty collections to prevent NullPointerException in mapper
+    newChallenge.setSubmissionTypes(new ArrayList<>());
+    newChallenge.setIncentives(new ArrayList<>());
+    newChallenge.setCategories(new ArrayList<>());
+    newChallenge.setInputDataTypes(new ArrayList<>());
+    newChallenge.setStars(new ArrayList<>());
+    newChallenge.setContributions(new ArrayList<>());
+
+    // Set platform
+    SimpleChallengePlatformEntity platform = getChallengePlatformEntity(request.getPlatformId());
+    newChallenge.setPlatform(platform);
+
+    try {
+      // Save the challenge entity first to get the ID
+      ChallengeEntity savedChallenge = challengeRepository.save(newChallenge);
+      challengeRepository.flush();
+
+      logger.info("Successfully created challenge with ID: {}", savedChallenge.getId());
+
+      // Return the created challenge as DTO
+      return challengeMapper.convertToDto(savedChallenge);
+    } catch (DataIntegrityViolationException e) {
+      // Handle potential unique constraint violations (e.g., slug uniqueness)
+      throw new RuntimeException(
+        "Challenge creation failed due to data constraint violation. " +
+        "This may be due to a duplicate slug or other unique constraint violation.",
+        e
+      );
+    }
+  }
+
+  @Transactional
+  public ChallengeDto updateChallenge(Long challengeId, ChallengeUpdateRequestDto request) {
+    // Find the existing challenge
+    ChallengeEntity existingChallenge = getChallengeEntity(challengeId);
+
+    // Update the challenge fields
+    existingChallenge.setSlug(request.getSlug());
+    existingChallenge.setName(request.getName());
+    existingChallenge.setHeadline(request.getHeadline());
+    existingChallenge.setDescription(request.getDescription());
+    existingChallenge.setDoi(request.getDoi());
+    existingChallenge.setStatus(request.getStatus().toString());
+    existingChallenge.setWebsiteUrl(request.getWebsiteUrl());
+    existingChallenge.setAvatarUrl(request.getAvatarUrl());
+
+    // Update platform if provided
+    if (request.getPlatformId() != null) {
+      SimpleChallengePlatformEntity platform = getChallengePlatformEntity(request.getPlatformId());
+      existingChallenge.setPlatform(platform);
+    } else {
+      // If platformId is null, remove the platform association
+      existingChallenge.setPlatform(null);
+    }
+
+    // Update incentives - first delete existing ones, then convert DTOs to entities
+    challengeIncentiveRepository.deleteByChallengeId(challengeId);
+
+    // Convert DTOs to entities and save them individually
+    if (request.getIncentives() != null && !request.getIncentives().isEmpty()) {
+      List<ChallengeIncentiveEntity> incentiveEntities =
+        challengeIncentiveMapper.convertToEntityList(request.getIncentives(), existingChallenge);
+
+      // Save incentive entities (they will be associated with the challenge automatically)
+      for (ChallengeIncentiveEntity incentive : incentiveEntities) {
+        challengeIncentiveRepository.save(incentive);
+      }
+    }
+
+    // Save the updated entity
+    challengeRepository.save(existingChallenge);
+    challengeRepository.flush();
+
+    // Clear the session cache to force fresh fetch of incentives
+    entityManager.clear();
+
+    // Refresh the entity to get the updated incentives
+    ChallengeEntity refreshedEntity = getChallengeEntity(challengeId);
+
+    logger.info("Successfully updated challenge with ID: {}", challengeId);
+
+    // Return the updated challenge as DTO
+    return challengeMapper.convertToDto(refreshedEntity);
   }
 }

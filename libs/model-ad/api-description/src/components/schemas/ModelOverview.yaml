@@ -8,21 +8,39 @@ properties:
     type: string
     description: Model type (e.g., Late Onset AD, Familial AD)
   matched_controls:
+    type: string
+    description: A comma-delimited list of matched control models
+  gene_expression:
+    $ref: './ModelOverviewLink.yaml'
+    nullable: true
+  disease_correlation:
+    $ref: './ModelOverviewLink.yaml'
+    nullable: true
+  biomarkers:
+    $ref: './ModelOverviewLink.yaml'
+    nullable: true
+  pathology:
+    $ref: './ModelOverviewLink.yaml'
+    nullable: true
+  study_data:
+    $ref: './ModelOverviewLink.yaml'
+    nullable: true
+  jax_strain:
+    $ref: './ModelOverviewLink.yaml'
+    nullable: true
+  center:
+    $ref: './ModelOverviewLink.yaml'
+    nullable: true
+  modified_genes:
     type: array
     items:
       type: string
-    description: List of matched control models
-  gene_expression:
-    $ref: './ModelOverviewLink.yaml'
-  disease_correlation:
-    $ref: './ModelOverviewLink.yaml'
-  biomarkers:
-    $ref: './ModelOverviewLink.yaml'
-  pathology:
-    $ref: './ModelOverviewLink.yaml'
-  study_data:
-    $ref: './ModelOverviewLink.yaml'
-  jax_strain:
-    $ref: './ModelOverviewLink.yaml'
-  center:
-    $ref: './ModelOverviewLink.yaml'
+    description: List of modified genes in the model
+required:
+  - model
+  - model_type
+  - matched_controls
+  - study_data
+  - jax_strain
+  - center
+  - modified_genes

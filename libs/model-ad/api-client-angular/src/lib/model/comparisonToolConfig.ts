@@ -1,5 +1,5 @@
 /**
- * MODEL-AD REST API
+ * Model-AD API
  *
  *
  *
@@ -8,6 +8,7 @@
  * Do not edit the class manually.
  */
 import { ComparisonToolConfigColumn } from './comparisonToolConfigColumn';
+import { ComparisonToolConfigFilter } from './comparisonToolConfigFilter';
 
 export interface ComparisonToolConfig {
   /**
@@ -22,4 +23,5 @@ export interface ComparisonToolConfig {
    * List of column definitions
    */
   columns: Array<ComparisonToolConfigColumn>;
+  filters?: ComparisonToolConfigFilter;
 }

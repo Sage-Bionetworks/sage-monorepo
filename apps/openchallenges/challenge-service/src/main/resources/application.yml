@@ -5,6 +5,7 @@ openchallenges-challenge-service:
     timeout: 5000ms
   organization-service:
     base-url: http://openchallenges-organization-service:8084
+    api-key: 'oc_dev_H52Ph_J9EE8PxvOdCHn4tCrQwu5IpyPfYCfIO8Os'
     timeout: 5000ms
 
 server:
@@ -13,11 +14,13 @@ server:
 spring:
   application:
     name: openchallenges-challenge-service
-  profiles:
-    active: dev
   flyway:
     enabled: true
     clean-disabled: false
+  jackson:
+    date-format: org.sagebionetworks.openchallenges.challenge.service.RFC3339DateFormat
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
   jpa:
     hibernate:
       ddl-auto: validate
@@ -32,10 +35,8 @@ spring:
             hosts: openchallenges-opensearch:9200
             # username: admin
             # password: admin
-  jackson:
-    date-format: org.sagebionetworks.openchallenges.challenge.service.RFC3339DateFormat
-    serialization:
-      WRITE_DATES_AS_TIMESTAMPS: false
+  profiles:
+    active: dev
 
 eureka:
   client:

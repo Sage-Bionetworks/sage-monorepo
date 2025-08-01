@@ -17,6 +17,8 @@ const renderTestComponent = async (props: BoxplotProps) => {
       [summaries]="summaries"
       [title]="title"
       [xAxisTitle]="xAxisTitle"
+      [xAxisLabelFormatter]="xAxisLabelFormatter"
+      [xAxisCategories]="xAxisCategories"
       [yAxisTitle]="yAxisTitle"
       [yAxisMin]="yAxisMin"
       [yAxisMax]="yAxisMax"
@@ -33,6 +35,8 @@ const renderTestComponent = async (props: BoxplotProps) => {
     summaries = props.summaries;
     title = props.title;
     xAxisTitle = props.xAxisTitle;
+    xAxisLabelFormatter = props.xAxisLabelFormatter;
+    xAxisCategories = props.xAxisCategories;
     yAxisTitle = props.yAxisTitle;
     yAxisMin = props.yAxisMin;
     yAxisMax = props.yAxisMax;
