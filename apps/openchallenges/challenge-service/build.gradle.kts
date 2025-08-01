@@ -1,6 +1,7 @@
 buildscript {
   dependencies {
     classpath(libs.flyway.database.postgresql)
+    classpath(libs.postgresql)
   }
 }
 
