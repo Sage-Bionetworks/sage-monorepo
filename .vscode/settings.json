@@ -80,7 +80,7 @@
     },
     {
       "previewLimit": 50,
-      "server": "localhost",
+      "server": "bixarena-postgres",
       "port": 21000,
       "driver": "PostgreSQL",
       "name": "bixarena-postgres",
