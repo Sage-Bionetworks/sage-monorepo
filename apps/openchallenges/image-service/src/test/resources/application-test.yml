@@ -7,7 +7,7 @@ server:
 
 openchallenges-image-service:
   welcome-message: 'Welcome to the image service test.'
-  thumbor-host: http://localhost:8082/img/
+  thumbor-host: http://localhost:8000/img/
   thumbor-security-key: changeme
   is-deployed-on-aws: false
 
