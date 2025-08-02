@@ -19,7 +19,6 @@ repositories {
 }
 
 dependencies {
-  // implementation(libs.spring.data.commons)
   annotationProcessor(libs.lombok)
   compileOnly(libs.lombok)
   implementation(libs.jackson.databind)

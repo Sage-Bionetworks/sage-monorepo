@@ -1,3 +1,11 @@
+.gradle
+bin/
+gradlew.bat
+lib/*.jar
+log/
+maven-legacy/
+tmp/
+
 HELP.md
 target/
 !**/src/main/**/target/
