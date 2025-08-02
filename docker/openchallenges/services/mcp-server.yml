@@ -11,7 +11,7 @@ services:
       - '8887:8887'
     depends_on:
       openchallenges-api-gateway:
-        condition: service_healthy
+        condition: service_started
       openchallenges-challenge-service:
         condition: service_started
       openchallenges-organization-service:

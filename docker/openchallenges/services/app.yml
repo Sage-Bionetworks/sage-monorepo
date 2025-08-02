@@ -15,7 +15,7 @@ services:
           memory: 1G
     depends_on:
       openchallenges-api-gateway:
-        condition: service_healthy
+        condition: service_started
       openchallenges-challenge-service:
         condition: service_started
       openchallenges-image-service:
