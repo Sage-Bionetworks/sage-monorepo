@@ -1,6 +1,5 @@
-package org.sagebionetworks.openchallenges.image.service.api.impl;
+package org.sagebionetworks.openchallenges.image.service.api;
 
-import org.sagebionetworks.openchallenges.image.service.api.ImageApiDelegate;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageDto;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageQueryDto;
 import org.sagebionetworks.openchallenges.image.service.service.ImageService;

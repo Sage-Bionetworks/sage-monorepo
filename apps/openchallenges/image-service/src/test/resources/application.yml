@@ -1,7 +1,5 @@
-openchallenges-image-service:
-  welcome-message: 'Welcome to the image service.'
-  thumbor-host: http://localhost:8082/img/
-  thumbor-security-key: changeme
+openchallenges-organization-service:
+  welcome-message: 'Welcome to the image service (test)'
 
 spring:
   application:
@@ -13,3 +11,7 @@ spring:
       enabled: false
     discovery:
       enabled: false
+
+eureka:
+  client:
+    enabled: false

@@ -15,7 +15,7 @@ services:
       openchallenges-config-server:
         condition: service_healthy
       openchallenges-image-service:
-        condition: service_healthy
+        condition: service_started
       openchallenges-opensearch:
         condition: service_healthy
       openchallenges-postgres:

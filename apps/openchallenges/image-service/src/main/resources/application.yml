@@ -1,12 +1,50 @@
+openchallenges-image-service:
+  welcome-message: 'Welcome to the image service.'
+  # The Thumbor host must be accessible from the web client.
+  thumbor-host: http://localhost:8000/img/
+  thumbor-security-key: changeme
+
+server:
+  port: 8086
+
 spring:
   application:
     name: openchallenges-image-service
+  jackson:
+    date-format: org.sagebionetworks.openchallenges.image.service.RFC3339DateFormat
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
   profiles:
-    active: dev,local
-  config:
-    import: 'configserver:'
-  cloud:
-    config:
-      uri: http://openchallenges-config-server:8090
-      username: openchallenges
-      password: changeme
+    active: dev
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://openchallenges-service-registry:8081/eureka
+  instance:
+    preferIpAddress: true
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: health, prometheus
+      path-mapping:
+        prometheus: metrics
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+    prometheus:
+      cache.time-to-live: 1ms
+
+info:
+  application:
+    name: ${spring.application.name}

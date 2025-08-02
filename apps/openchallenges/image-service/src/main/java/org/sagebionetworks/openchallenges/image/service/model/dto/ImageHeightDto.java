@@ -4,13 +4,13 @@ import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.time.OffsetDateTime;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 
 import java.util.*;
-import javax.annotation.Generated;
+import jakarta.annotation.Generated;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * The height of the image.
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public enum ImageHeightDto {
   
   ORIGINAL("original"),
@@ -34,7 +34,7 @@ public enum ImageHeightDto {
   
   _500PX("500px");
 
-  private String value;
+  private final String value;
 
   ImageHeightDto(String value) {
     this.value = value;

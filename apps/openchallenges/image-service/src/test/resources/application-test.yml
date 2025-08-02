@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: openchallenges-image-service-test
+
+server:
+  port: 8086
+
+openchallenges-image-service:
+  welcome-message: 'Welcome to the image service test.'
+  thumbor-host: http://localhost:8000/img/
+  thumbor-security-key: changeme
+  is-deployed-on-aws: false
+
+logging:
+  level:
+    org.sagebionetworks.openchallenges: DEBUG

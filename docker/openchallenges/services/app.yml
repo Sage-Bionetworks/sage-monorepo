@@ -19,6 +19,6 @@ services:
       openchallenges-challenge-service:
         condition: service_started
       openchallenges-image-service:
-        condition: service_healthy
+        condition: service_started
       openchallenges-organization-service:
         condition: service_started

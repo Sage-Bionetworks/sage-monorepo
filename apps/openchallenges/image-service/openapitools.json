@@ -2,13 +2,12 @@
   "$schema": "../../../node_modules/@openapitools/openapi-generator-cli/config.schema.json",
   "spaces": 2,
   "generator-cli": {
-    "version": "7.0.0",
+    "version": "7.14.0",
     "generators": {
       "openchallenges-image-service": {
         "generatorName": "spring",
         "inputSpec": "#{cwd}/../../../libs/openchallenges/api-description/openapi/image-service.openapi.yaml",
         "output": "#{cwd}",
-        "templateDir": "templates",
         "additionalProperties": {
           "apiPackage": "org.sagebionetworks.openchallenges.image.service.api",
           "basePackage": "org.sagebionetworks.openchallenges.image.service",
@@ -19,7 +18,9 @@
           "modelNameSuffix": "Dto",
           "modelPackage": "org.sagebionetworks.openchallenges.image.service.model.dto",
           "useTags": true,
-          "openApiNullable": false
+          "openApiNullable": false,
+          "useSpringBoot3": true,
+          "generateBuilders": true
         }
       }
     }
