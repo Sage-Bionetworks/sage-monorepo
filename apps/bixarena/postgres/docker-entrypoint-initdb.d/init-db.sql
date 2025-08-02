@@ -14,18 +14,18 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO postgres;
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON FUNCTIONS TO postgres;
 
 -- Create Conversation table
-CREATE TABLE conversations (
+CREATE TABLE conversation (
     role VARCHAR(20) NOT NULL CHECK (role IN ('user', 'assistant')),
     content TEXT NOT NULL,
     num_tokens INTEGER,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Create indexes
-CREATE INDEX idx_conversations_role ON conversations(role);
-CREATE INDEX idx_conversations_timestamp ON conversations(timestamp);
+CREATE INDEX idx_conversation_role ON conversation(role);
+CREATE INDEX idx_conversation_created_at ON conversation(created_at);
 
 -- Insert sample conversation data
-INSERT INTO conversations (role, content, num_tokens) VALUES
+INSERT INTO conversation (role, content, num_tokens) VALUES
     ('user', 'Hello', 2),
     ('assistant', 'Hello! How can I help you today?', 8);
