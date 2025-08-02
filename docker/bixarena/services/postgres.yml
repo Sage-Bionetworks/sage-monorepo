@@ -1,0 +1,19 @@
+services:
+  bixarena-postgres:
+    image: ghcr.io/sage-bionetworks/bixarena-postgres:${BIXARENA_VERSION:-local}
+    container_name: bixarena-postgres
+    restart: always
+    env_file:
+      - ../../../apps/bixarena/postgres/.env
+    volumes:
+      - ../../../apps/bixarena/postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    networks:
+      - bixarena
+    ports:
+      - '21000:21000'
+    deploy:
+      resources:
+        limits:
+          memory: 500M
+    # set shared memory limit when using docker compose
+    shm_size: 128mb

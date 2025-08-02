@@ -80,6 +80,16 @@
     },
     {
       "previewLimit": 50,
+      "server": "bixarena-postgres",
+      "port": 21000,
+      "driver": "PostgreSQL",
+      "name": "bixarena-postgres",
+      "database": "bixarena",
+      "username": "postgres",
+      "password": "changeme"
+    },
+    {
+      "previewLimit": 50,
       "server": "openchallenges-postgres",
       "port": 8091,
       "driver": "PostgreSQL",
