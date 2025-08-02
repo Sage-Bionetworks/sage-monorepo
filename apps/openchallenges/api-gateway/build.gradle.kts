@@ -33,9 +33,9 @@ dependencies {
   testImplementation(libs.spring.boot.starter.test)
 }
 
-// jacoco {
-//   toolVersion = "0.8.13"
-// }
+jacoco {
+  toolVersion = "0.8.13"
+}
 
 tasks.withType<Test>().configureEach {
   maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
@@ -75,50 +75,50 @@ tasks.register<Test>("testIntegration") {
   }
 }
 
-// val coverageExclusions = listOf()
+val coverageExclusions = listOf<String>()
 
-// val coverageIncludeExclusions = listOf()
+val coverageIncludeExclusions = listOf<String>()
 
-// val coverageClassFiles = files(
-//   fileTree(layout.buildDirectory.dir("classes/java/main")) {
-//     exclude(coverageExclusions)
-//     exclude(coverageIncludeExclusions)
-//   },
-//   fileTree(layout.buildDirectory.dir("classes/java/main")) {
-//   }
-// )
+val coverageClassFiles = files(
+  fileTree(layout.buildDirectory.dir("classes/java/main")) {
+    exclude(coverageExclusions)
+    exclude(coverageIncludeExclusions)
+  },
+  fileTree(layout.buildDirectory.dir("classes/java/main")) {
+  }
+)
 
-// tasks.jacocoTestReport {
-//   dependsOn(tasks.test)
+tasks.jacocoTestReport {
+  dependsOn(tasks.test)
 
-//   classDirectories.setFrom(coverageClassFiles)
+  classDirectories.setFrom(coverageClassFiles)
 
-//   reports {
-//     xml.required = true
-//     html.required = true
-//     csv.required = false
-//     html.outputLocation = layout.buildDirectory.dir("jacocoHtml")
-//   }
-// }
+  reports {
+    xml.required = true
+    html.required = true
+    csv.required = false
+    html.outputLocation = layout.buildDirectory.dir("jacocoHtml")
+  }
+}
 
-// tasks.jacocoTestCoverageVerification {
-//   classDirectories.setFrom(coverageClassFiles)
+tasks.jacocoTestCoverageVerification {
+  classDirectories.setFrom(coverageClassFiles)
 
-//   violationRules {
-//     rule {
-//       element = "CLASS"
-//       limit {
-//         counter = "LINE"
-//         value = "COVEREDRATIO"
-//         minimum = "0".toBigDecimal()
-//       }
-//     }
-//   }
-// }
+  violationRules {
+    rule {
+      element = "CLASS"
+      limit {
+        counter = "LINE"
+        value = "COVEREDRATIO"
+        minimum = "0".toBigDecimal()
+      }
+    }
+  }
+}
 
-// tasks.check {
-//   dependsOn(tasks.jacocoTestReport, tasks.jacocoTestCoverageVerification)
-// }
+tasks.check {
+  dependsOn(tasks.jacocoTestReport, tasks.jacocoTestCoverageVerification)
+}
 
 tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
   imageName.set("ghcr.io/sage-bionetworks/${project.name}-base:local")
