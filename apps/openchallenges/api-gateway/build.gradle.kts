@@ -33,9 +33,9 @@ dependencies {
   testImplementation(libs.spring.boot.starter.test)
 }
 
-jacoco {
-  toolVersion = "0.8.13"
-}
+// jacoco {
+//   toolVersion = "0.8.13"
+// }
 
 tasks.withType<Test>().configureEach {
   maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
@@ -120,6 +120,6 @@ tasks.register<Test>("testIntegration") {
 //   dependsOn(tasks.jacocoTestReport, tasks.jacocoTestCoverageVerification)
 // }
 
-// tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
-//   imageName.set("ghcr.io/sage-bionetworks/${project.name}-base:local")
-// }
+tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
+  imageName.set("ghcr.io/sage-bionetworks/${project.name}-base:local")
+}
