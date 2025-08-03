@@ -43,7 +43,6 @@ dependencies {
   implementation(libs.spring.boot.starter.security)
   implementation(libs.spring.boot.starter.validation)
   implementation(libs.spring.boot.starter.web)
-  implementation(libs.spring.cloud.starter.netflix.eureka.client)
   implementation(libs.spring.cloud.starter.openfeign)
   implementation(libs.spring.data.commons)
   implementation(libs.springdoc.openapi.ui)

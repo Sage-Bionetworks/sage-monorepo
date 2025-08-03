@@ -40,13 +40,6 @@ spring:
   profiles:
     active: dev
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://openchallenges-service-registry:8081/eureka
-  instance:
-    preferIpAddress: true
-
 management:
   endpoints:
     web:
