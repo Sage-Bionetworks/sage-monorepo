@@ -20,19 +20,19 @@ spring:
               - PUT
       routes:
         - id: openchallenges-organization-service
-          uri: lb://openchallenges-organization-service
+          uri: http://openchallenges-organization-service:8084
           predicates:
             - Path=/api/v1/organizations/**
           filters:
             - StripPrefix=1
         - id: openchallenges-challenge-service
-          uri: lb://openchallenges-challenge-service
+          uri: http://openchallenges-challenge-service:8085
           predicates:
             - Path=/api/v1/challenges/**,/api/v1/challenge-analytics/**,/api/v1/challenge-platforms/**,/api/v1/edam-concepts/**
           filters:
             - StripPrefix=1
         - id: openchallenges-image-service
-          uri: lb://openchallenges-image-service
+          uri: http://openchallenges-image-service:8086
           predicates:
             - Path=/api/v1/images/**
           filters:

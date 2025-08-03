@@ -28,15 +28,11 @@ declare -a hostnames=(
   "127.0.0.1 openchallenges-app"
   "127.0.0.1 openchallenges-auth-service"
   "127.0.0.1 openchallenges-challenge-service"
-  "127.0.0.1 openchallenges-config-server"
-  "127.0.0.1 openchallenges-core-service"
   "127.0.0.1 openchallenges-image-service"
   "127.0.0.1 openchallenges-mcp-server"
   "127.0.0.1 openchallenges-opensearch"
   "127.0.0.1 openchallenges-organization-service"
   "127.0.0.1 openchallenges-postgres"
-  "127.0.0.1 openchallenges-schema-registry"
-  "127.0.0.1 openchallenges-service-registry"
   "127.0.0.1 openchallenges-thumbor"
 )
 
