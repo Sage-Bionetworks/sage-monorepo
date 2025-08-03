@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<configuration>
-  <property name="LOG_DIR" value="./log" />
-  <property name="APP_NAME" value="service-registry" />
-
-  <include resource="logback-common.xml" />
-
-  <!-- <logger name="org.apache.kafka" level="debug" /> -->
-</configuration>

@@ -1,3 +1,0 @@
-openchallenges-service-registry:
-  welcome-message: 'Welcome to the service registry (local config).'
-  is-deployed-on-aws: false
