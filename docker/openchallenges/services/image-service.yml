@@ -10,8 +10,6 @@ services:
     ports:
       - '8086:8086'
     depends_on:
-      openchallenges-service-registry:
-        condition: service_healthy
       openchallenges-thumbor:
         condition: service_healthy
     deploy:
