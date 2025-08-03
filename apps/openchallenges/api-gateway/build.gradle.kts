@@ -26,7 +26,7 @@ dependencies {
   implementation(libs.openchallenges.app.config.data)
   implementation(libs.spring.boot.starter.actuator)
   implementation(libs.spring.boot.starter.security)
-  implementation(libs.spring.cloud.starter.gateway)
+  implementation(libs.spring.cloud.starter.gateway.server.webflux)
   implementation(platform(libs.spring.boot.dependencies))
   runtimeOnly(libs.spring.boot.devtools)
   testImplementation(libs.spring.boot.starter.test)
