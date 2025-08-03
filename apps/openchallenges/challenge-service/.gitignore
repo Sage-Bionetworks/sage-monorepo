@@ -1,9 +1,10 @@
 .gradle
 bin/
+gradlew.bat
 lib/*.jar
+log/
 maven-legacy/
 tmp/
-log/
 
 HELP.md
 target/
