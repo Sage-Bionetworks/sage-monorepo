@@ -3,60 +3,6 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/openchallenges/api-client-java/src",
   "projectType": "library",
-  "targets": {
-    "prepare": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": ["./gradlew --version 1> /dev/null"],
-        "cwd": "{projectRoot}"
-      }
-    },
-    "build": {
-      "executor": "nx:run-commands",
-      "outputs": ["{projectRoot}/build"],
-      "options": {
-        "command": "./gradlew build",
-        "cwd": "{projectRoot}"
-      },
-      "dependsOn": ["^install"]
-    },
-    "install": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "./gradlew publishToMavenLocal",
-        "cwd": "libs/openchallenges/api-client-java"
-      },
-      "dependsOn": ["build"]
-    },
-    "test": {
-      "executor": "nx:run-commands",
-      "outputs": ["{projectRoot}/build"],
-      "options": {
-        "command": "./gradlew test",
-        "cwd": "{projectRoot}"
-      },
-      "dependsOn": ["^install"]
-    },
-    "clean": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "./gradlew clean",
-        "cwd": "{projectRoot}"
-      }
-    },
-    "generate": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": [
-          "rm -fr src/",
-          "openapi-generator-cli generate",
-          "prettier --write \"src/**/*.java\""
-        ],
-        "cwd": "{projectRoot}",
-        "parallel": false
-      },
-      "dependsOn": ["^build"]
-    }
-  },
+  "targets": {},
   "tags": ["type:library", "scope:openchallenges", "language:java", "package-manager:gradle"]
 }

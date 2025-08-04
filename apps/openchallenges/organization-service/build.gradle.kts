@@ -5,24 +5,9 @@ buildscript {
 }
 
 plugins {
+    // id("dev.nx.gradle.project-graph") version("0.1.4")
   alias(libs.plugins.flyway)
-  alias(libs.plugins.spring.boot)
-  jacoco
-  java
-}
-
-group = "org.sagebionetworks.openchallenges"
-version = "0.0.1-SNAPSHOT"
-
-java {
-  toolchain {
-    languageVersion = JavaLanguageVersion.of(21)
-  }
-}
-
-repositories {
-	mavenCentral()
-  mavenLocal()
+  // Spring Boot plugin will be applied by the root build.gradle.kts
 }
 
 dependencies {
@@ -58,20 +43,9 @@ dependencies {
   testImplementation(libs.testcontainers.postgresql)
   testImplementation(platform(libs.testcontainers.bom))
   testRuntimeOnly(libs.h2database.h2)
-}
 
-jacoco {
-  toolVersion = "0.8.13"
-}
-
-tasks.withType<Test>().configureEach {
-  maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
-
-  useJUnitPlatform()
-
-  testLogging {
-    events("passed", "skipped", "failed")
-  }
+  // Add dependency on the API client module
+  implementation(project(":openchallenges-api-client-java"))
 }
 
 // Task for unit tests only (excludes integration tests)
@@ -169,3 +143,9 @@ flyway {
   password = System.getenv("FLYWAY_PASSWORD") ?: "changeme"
   cleanDisabled = false
 }
+
+// allprojects {
+//     apply {
+//         plugin("dev.nx.gradle.project-graph")
+//     }
+// }

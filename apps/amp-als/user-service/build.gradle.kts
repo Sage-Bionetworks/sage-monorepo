@@ -1,4 +1,5 @@
 plugins {
+    id("dev.nx.gradle.project-graph") version("0.1.4")
 	java
 	alias(libs.plugins.spring.dependency.management)
 	alias(libs.plugins.spring.boot)
@@ -39,4 +40,10 @@ tasks.withType<Javadoc> {
 
 tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
   imageName.set("ghcr.io/sage-bionetworks/${project.name}-base:local")
+}
+
+allprojects {
+    apply {
+        plugin("dev.nx.gradle.project-graph")
+    }
 }

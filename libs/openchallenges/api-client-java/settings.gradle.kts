@@ -1,1 +1,0 @@
-rootProject.name = "openchallenges-api-client-java"

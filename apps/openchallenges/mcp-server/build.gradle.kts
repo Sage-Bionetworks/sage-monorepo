@@ -1,4 +1,5 @@
 plugins {
+    id("dev.nx.gradle.project-graph") version("0.1.4")
   alias(libs.plugins.graalvm.native)
   alias(libs.plugins.spring.boot)
   java
@@ -59,7 +60,7 @@ graalvmNative {
 
 tasks.withType<Test>().configureEach {
   maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
-  
+
   useJUnitPlatform()
 
   testLogging {
@@ -69,4 +70,9 @@ tasks.withType<Test>().configureEach {
 
 tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
   imageName.set("ghcr.io/sage-bionetworks/${project.name}-base:local")
+}
+allprojects {
+    apply {
+        plugin("dev.nx.gradle.project-graph")
+    }
 }

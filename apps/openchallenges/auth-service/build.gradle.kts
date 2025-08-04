@@ -5,6 +5,7 @@ buildscript {
 }
 
 plugins {
+    id("dev.nx.gradle.project-graph") version("0.1.4")
   alias(libs.plugins.flyway)
   alias(libs.plugins.spring.boot)
   jacoco
@@ -174,3 +175,9 @@ tasks.named("generatePasswordHashes") {
 }
 
 
+
+allprojects {
+    apply {
+        plugin("dev.nx.gradle.project-graph")
+    }
+}

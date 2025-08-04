@@ -1,4 +1,5 @@
 plugins {
+    id("dev.nx.gradle.project-graph") version("0.1.4")
   alias(libs.plugins.spring.boot)
   jacoco
   java
@@ -117,4 +118,10 @@ tasks.check {
 
 tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
   imageName.set("ghcr.io/sage-bionetworks/${project.name}-base:local")
+}
+
+allprojects {
+    apply {
+        plugin("dev.nx.gradle.project-graph")
+    }
 }

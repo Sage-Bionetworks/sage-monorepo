@@ -5,6 +5,7 @@ buildscript {
 }
 
 plugins {
+    id "dev.nx.gradle.project-graph" version "0.1.0"
   id 'java'
   id 'maven-publish'
   id 'org.springframework.boot' version "${springBootVersion}"
@@ -49,4 +50,10 @@ bootJar {
 jar {
 	enabled = true
   archiveClassifier = '' // use empty string
+}
+
+allprojects {
+    apply {
+        plugin("dev.nx.gradle.project-graph")
+    }
 }

@@ -5,6 +5,7 @@ buildscript {
 }
 
 plugins {
+    id("dev.nx.gradle.project-graph") version("0.1.4")
   alias(libs.plugins.flyway)
   alias(libs.plugins.spring.boot)
   jacoco
@@ -168,4 +169,10 @@ flyway {
   user = System.getenv("FLYWAY_USER") ?: "challenge_service"
   password = System.getenv("FLYWAY_PASSWORD") ?: "changeme"
   cleanDisabled = false
+}
+
+allprojects {
+    apply {
+        plugin("dev.nx.gradle.project-graph")
+    }
 }
