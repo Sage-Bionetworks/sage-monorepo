@@ -30,7 +30,7 @@ subprojects {
 
 // Configure specific modules
 configure(listOf(project(":openchallenges-api-client-java"))) {
-    // apply(plugin = "maven-publish")
+    apply(plugin = "maven-publish")
     apply(plugin = "dev.nx.gradle.project-graph")
 
     // configure<PublishingExtension> {

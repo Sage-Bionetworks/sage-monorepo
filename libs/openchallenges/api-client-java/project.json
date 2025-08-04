@@ -3,6 +3,13 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/openchallenges/api-client-java/src",
   "projectType": "library",
-  "targets": {},
+  "targets": {
+    "install": {
+      "executor": "@nx/gradle:gradle",
+      "options": {
+        "taskName": ":openchallenges-api-client-java:publishToMavenLocal"
+      }
+    }
+  },
   "tags": ["type:library", "scope:openchallenges", "language:java", "package-manager:gradle"]
 }

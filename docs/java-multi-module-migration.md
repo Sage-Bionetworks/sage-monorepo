@@ -1,6 +1,7 @@
 # OpenChallenges Java Multi-Module Migration
 
 ## Overview
+
 Successfully migrated two Java projects from individual Gradle wrappers to a unified multi-module Gradle setup using Nx's @nx/gradle plugin:
 
 - `libs/openchallenges/api-client-java` (library)
@@ -9,11 +10,13 @@ Successfully migrated two Java projects from individual Gradle wrappers to a uni
 ## Architecture Changes
 
 ### Before
+
 - Each project had its own `gradlew` wrapper and individual `settings.gradle.kts`
 - Projects were managed independently
 - Dependency management was duplicated across projects
 
 ### After
+
 - Single root `gradlew` wrapper at the monorepo level
 - Unified `settings.gradle.kts` and `build.gradle.kts` at the root
 - Shared dependency management through version catalogs
@@ -22,12 +25,14 @@ Successfully migrated two Java projects from individual Gradle wrappers to a uni
 ## Key Files Created/Modified
 
 ### Root Level
+
 - **`settings.gradle.kts`**: Defines the multi-module structure
 - **`build.gradle.kts`**: Common configuration and module-specific settings
 - **`gradle.properties`**: Shared Gradle properties
 - **`gradle/libs.versions.toml`**: Centralized dependency version management
 
 ### Module Level
+
 - Updated `build.gradle.kts` files to use shared version catalog
 - Updated `project.json` files for Nx integration
 - Removed individual `settings.gradle.kts` files
@@ -44,6 +49,7 @@ dependencies {
 ```
 
 This is verified in the dependency tree:
+
 ```
 \--- project :openchallenges-api-client-java
 ```
@@ -51,6 +57,7 @@ This is verified in the dependency tree:
 ## Nx Integration
 
 The @nx/gradle plugin automatically detects and manages Gradle tasks:
+
 - Builds are coordinated through Nx
 - Dependency graph is properly maintained
 - Caching and task distribution work correctly
@@ -58,6 +65,7 @@ The @nx/gradle plugin automatically detects and manages Gradle tasks:
 ## Build Commands
 
 ### Multi-Module Commands
+
 ```bash
 # Build all modules
 ./gradlew build
@@ -74,6 +82,7 @@ The @nx/gradle plugin automatically detects and manages Gradle tasks:
 ```
 
 ### Nx Commands
+
 ```bash
 # Nx automatically detects Gradle projects
 npx nx show projects --affected
@@ -94,6 +103,7 @@ npx nx generate openchallenges-api-client-java
 ## Testing
 
 The migration has been verified by:
+
 - ✅ Building both modules independently
 - ✅ Building all modules together
 - ✅ Verifying dependency resolution
