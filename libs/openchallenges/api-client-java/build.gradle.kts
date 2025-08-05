@@ -1,7 +1,3 @@
-// plugins {
-//   alias(libs.plugins.nx.gradle)
-// }
-
 dependencies {
   implementation(libs.findbugs.jsr305)
   implementation(libs.spring.web)
@@ -16,16 +12,3 @@ dependencies {
   testImplementation(libs.junit.jupiter.api)
   testRuntimeOnly(libs.junit.jupiter.engine)
 }
-
-// tasks.register<JavaExec>("execute") {
-//   mainClass.set(System.getProperty("mainClass"))
-//   classpath = sourceSets["main"].runtimeClasspath
-// }
-
-// tasks.test {
-//   useJUnitPlatform()
-//   dependsOn("cleanTest")
-//   testLogging {
-//     events("passed", "skipped", "failed")
-//   }
-// }
