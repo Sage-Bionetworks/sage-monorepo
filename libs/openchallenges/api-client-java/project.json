@@ -8,7 +8,8 @@
       "executor": "@nx/gradle:gradle",
       "options": {
         "taskName": ":openchallenges-api-client-java:publishToMavenLocal"
-      }
+      },
+      "dependsOn": ["build"]
     }
   },
   "tags": ["type:library", "scope:openchallenges", "language:java", "package-manager:gradle"]

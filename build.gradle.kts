@@ -33,14 +33,14 @@ configure(listOf(project(":openchallenges-api-client-java"))) {
     apply(plugin = "maven-publish")
     apply(plugin = "dev.nx.gradle.project-graph")
 
-    // configure<PublishingExtension> {
-    //     publications {
-    //         create<MavenPublication>("maven") {
-    //             artifactId = "openchallenges-api-client-java"
-    //             from(components["java"])
-    //         }
-    //     }
-    // }
+    configure<PublishingExtension> {
+        publications {
+            create<MavenPublication>("maven") {
+                artifactId = "openchallenges-api-client-java"
+                from(components["java"])
+            }
+        }
+    }
 }
 
 configure(listOf(project(":openchallenges-organization-service"))) {
