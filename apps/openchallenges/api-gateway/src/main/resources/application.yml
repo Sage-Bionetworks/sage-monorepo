@@ -9,43 +9,38 @@ spring:
     name: openchallenges-api-gateway
   cloud:
     gateway:
-      globalcors:
-        corsConfigurations:
-          '[/**]':
-            allowedOrigins: '*'
-            allowedMethods:
-              - GET
-              - POST
-              - DELETE
-              - PUT
-      routes:
-        - id: openchallenges-organization-service
-          uri: lb://openchallenges-organization-service
-          predicates:
-            - Path=/api/v1/organizations/**
-          filters:
-            - StripPrefix=1
-        - id: openchallenges-challenge-service
-          uri: lb://openchallenges-challenge-service
-          predicates:
-            - Path=/api/v1/challenges/**,/api/v1/challenge-analytics/**,/api/v1/challenge-platforms/**,/api/v1/edam-concepts/**
-          filters:
-            - StripPrefix=1
-        - id: openchallenges-image-service
-          uri: lb://openchallenges-image-service
-          predicates:
-            - Path=/api/v1/images/**
-          filters:
-            - StripPrefix=1
+      server:
+        webflux:
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedorigins: '*'
+                allowedmethods:
+                  - GET
+                  - POST
+                  - DELETE
+                  - PUT
+          routes:
+            - id: openchallenges-organization-service
+              uri: http://openchallenges-organization-service:8084
+              predicates:
+                - Path=/api/v1/organizations/**
+              filters:
+                - StripPrefix=1
+            - id: openchallenges-challenge-service
+              uri: http://openchallenges-challenge-service:8085
+              predicates:
+                - Path=/api/v1/challenges/**,/api/v1/challenge-analytics/**,/api/v1/challenge-platforms/**,/api/v1/edam-concepts/**
+              filters:
+                - StripPrefix=1
+            - id: openchallenges-image-service
+              uri: http://openchallenges-image-service:8086
+              predicates:
+                - Path=/api/v1/images/**
+              filters:
+                - StripPrefix=1
   profiles:
     active: dev
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://openchallenges-service-registry:8081/eureka
-  instance:
-    preferIpAddress: true
 
 management:
   endpoints:

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  */
 @FeignClient(
   name = "auth-service",
-  url = "${openchallenges-challenge-service.auth-service.base-url:http://openchallenges-auth-service:8087}",
+  url = "${openchallenges-challenge-service.auth-service.base-url}",
   path = "/v1"
 )
 public interface AuthServiceClient {

@@ -30,7 +30,6 @@ dependencies {
   implementation(libs.spring.boot.starter.security)
   implementation(libs.spring.boot.starter.validation)
   implementation(libs.spring.boot.starter.web)
-  implementation(libs.spring.cloud.starter.netflix.eureka.client)
   implementation(libs.springdoc.openapi.ui)
   implementation(libs.squareup.pollexor)
   implementation(platform(libs.spring.boot.dependencies))

@@ -3,7 +3,6 @@ package org.sagebionetworks.openchallenges.challenge.service.client;
 import org.sagebionetworks.openchallenges.challenge.service.configuration.OrganizationServiceClientConfiguration;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.organization.ChallengeParticipationCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.organization.ChallengeParticipationDto;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.organization.ChallengeParticipationRoleDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.organization.OrganizationDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  */
 @FeignClient(
   name = "organization-service",
-  url = "${openchallenges-challenge-service.organization-service.base-url:http://openchallenges-organization-service:8084}",
+  url = "${openchallenges-challenge-service.organization-service.base-url}",
   path = "/v1",
   configuration = OrganizationServiceClientConfiguration.class
 )

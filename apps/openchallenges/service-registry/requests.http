@@ -1,5 +1,0 @@
-@serviceRegistryHost = http://localhost:8081
-
-### Check service registry info
-
-GET {{serviceRegistryHost}}/actuator/info
