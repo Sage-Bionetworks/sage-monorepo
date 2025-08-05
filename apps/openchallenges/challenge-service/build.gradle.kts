@@ -1,29 +1,10 @@
 buildscript {
+  repositories {
+    mavenCentral()
+  }
   dependencies {
     classpath(libs.flyway.database.postgresql)
   }
-}
-
-plugins {
-    id("dev.nx.gradle.project-graph") version("0.1.4")
-  alias(libs.plugins.flyway)
-  alias(libs.plugins.spring.boot)
-  jacoco
-  java
-}
-
-group = "org.sagebionetworks.openchallenges"
-version = "0.0.1-SNAPSHOT"
-
-java {
-  toolchain {
-    languageVersion = JavaLanguageVersion.of(21)
-  }
-}
-
-repositories {
-	mavenCentral()
-  mavenLocal()
 }
 
 dependencies {
@@ -36,7 +17,7 @@ dependencies {
   implementation(libs.jackson.databind)
   implementation(libs.jackson.dataformat.yaml)
   implementation(libs.jackson.datatype.jsr310)
-  implementation(libs.openchallenges.app.config.data)
+  implementation(project(":openchallenges-app-config-data"))
   implementation(libs.sagebionetworks.util)
   implementation(libs.spring.boot.starter.actuator)
   implementation(libs.spring.boot.starter.data.jpa)
@@ -59,10 +40,6 @@ dependencies {
   testImplementation(libs.testcontainers.postgresql)
   testImplementation(platform(libs.testcontainers.bom))
   testRuntimeOnly(libs.h2database.h2)
-}
-
-jacoco {
-  toolVersion = "0.8.13"
 }
 
 tasks.withType<Test>().configureEach {
@@ -169,10 +146,4 @@ flyway {
   user = System.getenv("FLYWAY_USER") ?: "challenge_service"
   password = System.getenv("FLYWAY_PASSWORD") ?: "changeme"
   cleanDisabled = false
-}
-
-allprojects {
-    apply {
-        plugin("dev.nx.gradle.project-graph")
-    }
 }

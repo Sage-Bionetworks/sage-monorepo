@@ -44,6 +44,21 @@ configure(listOf(project(":openchallenges-api-client-java"))) {
   }
 }
 
+configure(listOf(project(":openchallenges-app-config-data"))) {
+  apply(plugin = "org.springframework.boot")
+  apply(plugin = "maven-publish")
+  apply(plugin = "dev.nx.gradle.project-graph")
+
+  configure<PublishingExtension> {
+    publications {
+      create<MavenPublication>("maven") {
+        artifactId = "openchallenges-app-config-data"
+        from(components["java"])
+      }
+    }
+  }
+}
+
 configure(listOf(project(":openchallenges-organization-service"))) {
   apply(plugin = "org.springframework.boot")
   apply(plugin = "jacoco")
@@ -58,4 +73,15 @@ configure(listOf(project(":openchallenges-mcp-server"))) {
   apply(plugin = "org.springframework.boot")
   apply(plugin = "org.graalvm.buildtools.native")
   apply(plugin = "dev.nx.gradle.project-graph")
+}
+
+configure(listOf(project(":openchallenges-challenge-service"))) {
+  apply(plugin = "org.springframework.boot")
+  apply(plugin = "org.flywaydb.flyway")
+  apply(plugin = "jacoco")
+  apply(plugin = "dev.nx.gradle.project-graph")
+
+  configure<JacocoPluginExtension> {
+    toolVersion = "0.8.13"
+  }
 }
