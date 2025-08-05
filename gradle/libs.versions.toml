@@ -6,6 +6,7 @@ hibernate-search = "7.2.3.Final"
 jackson = "2.18.3"
 junit = "5.10.2"
 lombok = "1.18.38"
+nx-gradle = "0.1.4"
 openchallenges = "0.0.1-SNAPSHOT"
 postgresql = "42.7.7"
 sagebionetworks = "0.0.1-SNAPSHOT"
@@ -64,4 +65,5 @@ testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.
 
 [plugins]
 flyway = { id = "org.flywaydb.flyway", version.ref = "flyway" }
+nx-gradle = { id = "dev.nx.gradle.project-graph", version.ref = "nx-gradle" }
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }

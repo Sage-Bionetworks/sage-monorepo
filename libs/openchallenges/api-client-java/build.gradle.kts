@@ -1,6 +1,6 @@
-plugins {
-  // id("dev.nx.gradle.project-graph") version("0.1.4")
-}
+// plugins {
+//   alias(libs.plugins.nx.gradle)
+// }
 
 dependencies {
   implementation(libs.findbugs.jsr305)

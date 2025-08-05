@@ -1,8 +1,8 @@
 plugins {
     // Apply external plugins to be used in subprojects
-    id("org.springframework.boot") version("3.4.5") apply false
-    id("org.flywaydb.flyway") version("11.9.1") apply false
-    id("dev.nx.gradle.project-graph") version("0.1.4") apply false
+    alias(libs.plugins.spring.boot) apply false
+    alias(libs.plugins.flyway) apply false
+    alias(libs.plugins.nx.gradle) apply false
 }
 
 allprojects {
