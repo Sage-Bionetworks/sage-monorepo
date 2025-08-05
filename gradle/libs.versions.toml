@@ -1,15 +1,18 @@
 [versions]
 findbugs = "3.0.2"
 flyway = "11.9.1"
+graalvm = "0.10.6"
 h2database = "2.3.232"
 hibernate-search = "7.2.3.Final"
 jackson = "2.18.3"
 junit = "5.10.2"
+junit-platform = "1.10.2"
 lombok = "1.18.38"
 nx-gradle = "0.1.4"
 openchallenges = "0.0.1-SNAPSHOT"
 postgresql = "42.7.7"
 sagebionetworks = "0.0.1-SNAPSHOT"
+spring-ai = "1.0.0"
 spring-boot = "3.4.5"
 spring-cloud = "4.3.0"
 spring-data = "3.4.5"
@@ -54,10 +57,13 @@ hibernate-search-mapper-orm = { module = "org.hibernate.search:hibernate-search-
 jakarta-annotation-api = { module = "jakarta.annotation:jakarta.annotation-api", version = "2.1.1" }
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit-platform" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+openchallenges-api-client-java = { group = "org.sagebionetworks.openchallenges", name = "openchallenges-api-client-java", version.ref = "openchallenges" }
 openchallenges-app-config-data = { group = "org.sagebionetworks.openchallenges", name = "openchallenges-app-config-data", version.ref = "openchallenges" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
 sagebionetworks-util = { group = "org.sagebionetworks", name = "util", version.ref = "sagebionetworks" }
+spring-ai-starter-mcp-server-webflux = { module = "org.springframework.ai:spring-ai-starter-mcp-server-webflux", version.ref = "spring-ai" }
 springdoc-openapi-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }
 testcontainers-bom = { module = "org.testcontainers:testcontainers-bom", version.ref = "testcontainers" }
 testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers" }
@@ -65,5 +71,6 @@ testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.
 
 [plugins]
 flyway = { id = "org.flywaydb.flyway", version.ref = "flyway" }
+graalvm-native = { id = "org.graalvm.buildtools.native", version.ref = "graalvm" }
 nx-gradle = { id = "dev.nx.gradle.project-graph", version.ref = "nx-gradle" }
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }

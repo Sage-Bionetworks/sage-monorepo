@@ -14,7 +14,7 @@
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["./gradlew --version 1> /dev/null"],
+        "commands": ["../../../gradlew --version 1> /dev/null"],
         "cwd": "{projectRoot}"
       }
     },
@@ -22,7 +22,7 @@
       "executor": "nx:run-commands",
       "outputs": ["{projectRoot}/build"],
       "options": {
-        "command": "./gradlew build",
+        "command": "../../../gradlew :openchallenges-mcp-server:build",
         "cwd": "{projectRoot}"
       },
       "dependsOn": ["^install"]
@@ -31,7 +31,7 @@
       "executor": "nx:run-commands",
       "outputs": ["{projectRoot}/build"],
       "options": {
-        "command": "./gradlew test",
+        "command": "../../../gradlew :openchallenges-mcp-server:test",
         "cwd": "{projectRoot}"
       },
       "dependsOn": ["^install"]
@@ -39,14 +39,17 @@
     "clean": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "./gradlew clean",
+        "command": "../../../gradlew :openchallenges-mcp-server:clean",
         "cwd": "{projectRoot}"
       }
     },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
+        "commands": [
+          "../../../gradlew :openchallenges-mcp-server:build --continuous",
+          "../../../gradlew :openchallenges-mcp-server:bootRun"
+        ],
         "cwd": "{projectRoot}"
       },
       "dependsOn": ["^install"]
@@ -61,7 +64,7 @@
     "build-image-base": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "./gradlew bootBuildImage",
+        "command": "../../../gradlew :openchallenges-mcp-server:bootBuildImage",
         "cwd": "{projectRoot}"
       },
       "dependsOn": ["^install"]

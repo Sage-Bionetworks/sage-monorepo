@@ -1,22 +1,10 @@
-plugins {
-  alias(libs.plugins.graalvm.native)
-  alias(libs.plugins.spring.boot)
-  java
-}
-
 group = "org.sagebionetworks.openchallenges"
 version = "0.0.1-SNAPSHOT"
 
 java {
   toolchain {
     languageVersion = JavaLanguageVersion.of(21)
-    nativeImageCapable = true
   }
-}
-
-repositories {
-	mavenCentral()
-  mavenLocal()
 }
 
 dependencies {
