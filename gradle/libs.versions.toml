@@ -63,6 +63,7 @@ junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 openchallenges-api-client-java = { group = "org.sagebionetworks.openchallenges", name = "openchallenges-api-client-java", version.ref = "openchallenges" }
 openchallenges-app-config-data = { group = "org.sagebionetworks.openchallenges", name = "openchallenges-app-config-data", version.ref = "openchallenges" }
+amp-als-app-config-data = { group = "org.sagebionetworks.amp.als", name = "amp-als-app-config-data", version.ref = "openchallenges" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
 sagebionetworks-util = { group = "org.sagebionetworks", name = "util", version.ref = "sagebionetworks" }
 spring-ai-starter-mcp-server-webflux = { module = "org.springframework.ai:spring-ai-starter-mcp-server-webflux", version.ref = "spring-ai" }

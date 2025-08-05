@@ -11,38 +11,6 @@
         "cwd": "{projectRoot}"
       }
     },
-    "prepare": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": ["../../../gradlew --version 1> /dev/null"],
-        "cwd": "{projectRoot}"
-      }
-    },
-    "build": {
-      "executor": "nx:run-commands",
-      "outputs": ["{projectRoot}/build"],
-      "options": {
-        "command": "../../../gradlew :openchallenges-mcp-server:build",
-        "cwd": "{projectRoot}"
-      },
-      "dependsOn": ["^install"]
-    },
-    "test": {
-      "executor": "nx:run-commands",
-      "outputs": ["{projectRoot}/build"],
-      "options": {
-        "command": "../../../gradlew :openchallenges-mcp-server:test",
-        "cwd": "{projectRoot}"
-      },
-      "dependsOn": ["^install"]
-    },
-    "clean": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "../../../gradlew :openchallenges-mcp-server:clean",
-        "cwd": "{projectRoot}"
-      }
-    },
     "serve": {
       "executor": "nx:run-commands",
       "options": {

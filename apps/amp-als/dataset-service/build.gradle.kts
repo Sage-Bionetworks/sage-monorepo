@@ -1,35 +1,16 @@
 buildscript {
+  repositories {
+    mavenCentral()
+  }
   dependencies {
     classpath(libs.flyway.database.postgresql)
   }
 }
 
-plugins {
-    id("dev.nx.gradle.project-graph") version("0.1.4")
-  alias(libs.plugins.flyway)
-  alias(libs.plugins.spring.boot)
-  jacoco
-  java
-}
-
-group = "org.sagebionetworks.amp.als"
-version = "0.0.1-SNAPSHOT"
-
-java {
-  toolchain {
-    languageVersion = JavaLanguageVersion.of(21)
-  }
-}
-
-repositories {
-  mavenCentral()
-  mavenLocal()
-}
-
 dependencies {
   annotationProcessor(libs.lombok)
   compileOnly(libs.lombok)
-  implementation(libs.amp.als.app.config.data)
+  implementation(project(":amp-als-app-config-data"))
   implementation(libs.findbugs.jsr305)
   implementation(libs.flyway.core)
   implementation(libs.hibernate.search.backend.elasticsearch)
@@ -52,13 +33,14 @@ dependencies {
   testAnnotationProcessor(libs.lombok)
   testCompileOnly(libs.lombok)
   testImplementation(libs.spring.boot.starter.test)
+  testRuntimeOnly(libs.h2database.h2)
 }
 
-tasks.withType<JavaCompile> {
+tasks.withType<JavaCompile>().configureEach {
   options.encoding = "UTF-8"
 }
 
-tasks.withType<Javadoc> {
+tasks.withType<Javadoc>().configureEach {
   options.encoding = "UTF-8"
 }
 
@@ -71,9 +53,4 @@ flyway {
   user = System.getenv("FLYWAY_USER") ?: "dataset_service"
   password = System.getenv("FLYWAY_PASSWORD") ?: "changeme"
   cleanDisabled = false
-}
-allprojects {
-    apply {
-        plugin("dev.nx.gradle.project-graph")
-    }
 }

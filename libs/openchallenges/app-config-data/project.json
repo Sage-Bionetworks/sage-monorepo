@@ -4,45 +4,12 @@
   "sourceRoot": "libs/openchallenges/app-config-data/src",
   "projectType": "library",
   "targets": {
-    "prepare": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": ["./gradlew --version 1> /dev/null"],
-        "cwd": "{projectRoot}"
-      }
-    },
-    "build": {
-      "executor": "nx:run-commands",
-      "outputs": ["{projectRoot}/build"],
-      "options": {
-        "command": "./gradlew build",
-        "cwd": "{projectRoot}"
-      },
-      "dependsOn": ["^install"]
-    },
     "install": {
-      "executor": "nx:run-commands",
+      "executor": "@nx/gradle:gradle",
       "options": {
-        "command": "./gradlew publishToMavenLocal",
-        "cwd": "libs/openchallenges/app-config-data"
+        "taskName": ":openchallenges-app-config-data:publishToMavenLocal"
       },
       "dependsOn": ["build"]
-    },
-    "test": {
-      "executor": "nx:run-commands",
-      "outputs": ["{projectRoot}/build"],
-      "options": {
-        "command": "./gradlew test",
-        "cwd": "{projectRoot}"
-      },
-      "dependsOn": ["^install"]
-    },
-    "clean": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "./gradlew clean",
-        "cwd": "{projectRoot}"
-      }
     }
   },
   "tags": ["type:library", "scope:openchallenges", "language:java", "package-manager:gradle"]

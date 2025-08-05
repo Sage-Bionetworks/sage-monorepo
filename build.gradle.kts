@@ -85,3 +85,24 @@ configure(listOf(project(":openchallenges-challenge-service"))) {
     toolVersion = "0.8.13"
   }
 }
+
+configure(listOf(project(":amp-als-app-config-data"))) {
+  apply(plugin = "org.springframework.boot")
+  apply(plugin = "maven-publish")
+  apply(plugin = "dev.nx.gradle.project-graph")
+
+  configure<PublishingExtension> {
+    publications {
+      create<MavenPublication>("maven") {
+        artifactId = "amp-als-app-config-data"
+        from(components["java"])
+      }
+    }
+  }
+}
+
+configure(listOf(project(":amp-als-dataset-service"))) {
+  apply(plugin = "org.springframework.boot")
+  apply(plugin = "org.flywaydb.flyway")
+  apply(plugin = "dev.nx.gradle.project-graph")
+}
