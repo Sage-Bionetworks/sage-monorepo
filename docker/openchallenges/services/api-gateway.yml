@@ -10,8 +10,6 @@ services:
     ports:
       - '8082:8082'
     depends_on:
-      openchallenges-config-server:
-        condition: service_healthy
       openchallenges-service-registry:
         condition: service_started
     deploy:

@@ -1,0 +1,20 @@
+openchallenges-api-gatewau:
+  welcome-message: 'Welcome to OpenChallenges API Gateway'
+
+server:
+  port: 8082
+
+spring:
+  application:
+    name: openchallenges-api-gateway
+  profiles:
+    active: test
+  cloud:
+    config:
+      enabled: false
+    discovery:
+      enabled: false
+
+eureka:
+  client:
+    enabled: false

@@ -12,8 +12,6 @@ services:
     depends_on:
       openchallenges-auth-service:
         condition: service_started
-      openchallenges-config-server:
-        condition: service_healthy
       openchallenges-image-service:
         condition: service_started
       openchallenges-opensearch:

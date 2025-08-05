@@ -10,8 +10,6 @@ services:
     ports:
       - '8085:8085'
     depends_on:
-      openchallenges-config-server:
-        condition: service_healthy
       openchallenges-opensearch:
         condition: service_healthy
       openchallenges-postgres:

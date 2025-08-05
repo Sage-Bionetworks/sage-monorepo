@@ -46,18 +46,20 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
+        "commands": [
+          "./gradlew build --exclude-task check --continuous",
+          "./gradlew bootRun --exclude-task check"
+        ],
         "cwd": "apps/openchallenges/api-gateway",
         "parallel": true
       },
-      "dependsOn": []
+      "dependsOn": ["^install"]
     },
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker/openchallenges/serve-detach.sh openchallenges-api-gateway"
-      },
-      "dependsOn": []
+        "command": "docker/openchallenges/serve-detach.sh {projectName}"
+      }
     },
     "build-image-base": {
       "executor": "nx:run-commands",
@@ -70,7 +72,7 @@
     "scan-image": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "trivy image ghcr.io/sage-bionetworks/openchallenges-api-gateway:local --quiet",
+        "command": "trivy image ghcr.io/sage-bionetworks/{projectName}:local --quiet",
         "color": true
       }
     }

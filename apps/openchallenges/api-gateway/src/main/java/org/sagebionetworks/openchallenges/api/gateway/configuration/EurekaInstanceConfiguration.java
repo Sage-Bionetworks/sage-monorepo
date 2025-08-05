@@ -1,4 +1,4 @@
-package org.sagebionetworks.openchallenges.api.gateway.config;
+package org.sagebionetworks.openchallenges.api.gateway.configuration;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

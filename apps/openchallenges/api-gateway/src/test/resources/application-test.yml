@@ -1,0 +1,23 @@
+openchallenges-organization-service:
+  welcome-message: 'Welcome to OpenChallenges API Gateway (test)'
+
+spring:
+  application:
+    name: openchallenges-api-gateway-test
+  # profiles:
+  #   active: test
+  # cloud:
+  #   gateway:
+  #     discovery:
+  #       locator:
+  #         enabled: false
+  # security:
+  #   oauth2:
+  #     resourceserver:
+  #       jwt:
+  #         issuer-uri: http://localhost:8080/auth/realms/test
+  #         jwk-set-uri: http://localhost:8080/auth/realms/test/protocol/openid_connect/certs
+
+logging:
+  level:
+    org.sagebionetworks.openchallenges: DEBUG
