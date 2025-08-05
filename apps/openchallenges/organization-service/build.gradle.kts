@@ -5,9 +5,7 @@ buildscript {
 }
 
 plugins {
-    // id("dev.nx.gradle.project-graph") version("0.1.4")
   alias(libs.plugins.flyway)
-  // Spring Boot plugin will be applied by the root build.gradle.kts
 }
 
 dependencies {
@@ -143,9 +141,3 @@ flyway {
   password = System.getenv("FLYWAY_PASSWORD") ?: "changeme"
   cleanDisabled = false
 }
-
-// allprojects {
-//     apply {
-//         plugin("dev.nx.gradle.project-graph")
-//     }
-// }

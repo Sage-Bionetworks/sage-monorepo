@@ -80,7 +80,6 @@
   "implicitDependencies": [
     "openchallenges-api-description",
     "openchallenges-app-config-data",
-    "shared-java-util",
-    "openchallenges-api-client-java"
+    "shared-java-util"
   ]
 }
