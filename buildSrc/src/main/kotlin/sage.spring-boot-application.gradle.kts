@@ -12,7 +12,6 @@ plugins {
 
 // Configure testing
 tasks.withType<Test>().configureEach {
-    maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
     useJUnitPlatform()
     testLogging {
         events("passed", "skipped", "failed")
@@ -22,7 +21,7 @@ tasks.withType<Test>().configureEach {
 // Task for unit tests only (excludes integration tests)
 tasks.register<Test>("testUnit") {
     group = "verification"
-    description = "Runs unit tests only (fast)"
+    description = "Runs unit tests"
 
     useJUnitPlatform {
         excludeTags("integration")
@@ -36,7 +35,7 @@ tasks.register<Test>("testUnit") {
 // Task for integration tests only
 tasks.register<Test>("testIntegration") {
     group = "verification"
-    description = "Runs integration tests only (slow)"
+    description = "Runs integration tests"
 
     useJUnitPlatform {
         includeTags("integration")
