@@ -5,6 +5,8 @@ graalvm = "0.10.6"
 h2database = "2.3.232"
 hibernate-search = "7.2.3.Final"
 jackson = "2.18.3"
+jacoco = "0.8.13"
+java = "21"
 junit = "5.10.2"
 junit-platform = "1.10.2"
 lombok = "1.18.38"
@@ -75,5 +77,6 @@ testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.
 [plugins]
 flyway = { id = "org.flywaydb.flyway", version.ref = "flyway" }
 graalvm-native = { id = "org.graalvm.buildtools.native", version.ref = "graalvm" }
+jacoco = { id = "jacoco" }
 nx-gradle = { id = "dev.nx.gradle.project-graph", version.ref = "nx-gradle" }
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }

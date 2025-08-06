@@ -1,3 +1,8 @@
+plugins {
+    id("sage.spring-boot-application")
+    id("org.graalvm.buildtools.native")
+}
+
 group = "org.sagebionetworks.openchallenges"
 version = "0.0.1-SNAPSHOT"
 
@@ -43,18 +48,4 @@ graalvmNative {
       buildArgs.add("-O0")
     }
   }
-}
-
-tasks.withType<Test>().configureEach {
-  maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
-
-  useJUnitPlatform()
-
-  testLogging {
-    events("passed", "skipped", "failed")
-  }
-}
-
-tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
-  imageName.set("ghcr.io/sage-bionetworks/${project.name}-base:local")
 }

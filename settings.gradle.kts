@@ -1,4 +1,4 @@
-rootProject.name = "sage-monorepo-gradle"
+rootProject.name = "sagebionetworks"
 
 // Include the OpenChallenges projects as submodules
 include(":openchallenges-api-client-java")

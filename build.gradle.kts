@@ -1,9 +1,9 @@
+import org.gradle.api.plugins.JavaPluginExtension
+
 plugins {
   // Apply external plugins to be used in subprojects
-  alias(libs.plugins.spring.boot) apply false
   alias(libs.plugins.flyway) apply false
   alias(libs.plugins.nx.gradle) apply false
-  alias(libs.plugins.graalvm.native) apply false
 }
 
 allprojects {
@@ -14,95 +14,38 @@ allprojects {
 }
 
 subprojects {
-  apply(plugin = "java")
-
-  configure<JavaPluginExtension> {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
-  }
-
-  tasks.withType<Test> {
-    useJUnitPlatform()
-    testLogging {
-      events("passed", "skipped", "failed")
-    }
-  }
-}
-
-// Configure specific modules
-configure(listOf(project(":openchallenges-api-client-java"))) {
-  apply(plugin = "maven-publish")
+  // Apply nx-gradle plugin to all subprojects
   apply(plugin = "dev.nx.gradle.project-graph")
 
-  configure<PublishingExtension> {
-    publications {
-      create<MavenPublication>("maven") {
-        artifactId = "openchallenges-api-client-java"
-        from(components["java"])
+  // Apply convention plugins based on project location and type
+  when {
+    // Library projects in libs/ folder
+    projectDir.path.contains("/libs/") -> {
+      when {
+        // Spring Boot libraries (app-config-data projects)
+        name.contains("app-config-data") -> {
+          apply(plugin = "sage.spring-boot-library")
+        }
+        // Regular Java libraries
+        else -> {
+          apply(plugin = "sage.java-library")
+        }
+      }
+    }
+
+    // Application projects in apps/ folder
+    projectDir.path.contains("/apps/") -> {
+      apply(plugin = "sage.spring-boot-application")
+
+      // Apply additional plugins based on project needs
+      when {
+        name.contains("organization-service") || name.contains("challenge-service") -> {
+          apply(plugin = "sage.jacoco-coverage")
+        }
+        name.contains("challenge-service") || name.contains("dataset-service") -> {
+          apply(plugin = "org.flywaydb.flyway")
+        }
       }
     }
   }
-}
-
-configure(listOf(project(":openchallenges-app-config-data"))) {
-  apply(plugin = "org.springframework.boot")
-  apply(plugin = "maven-publish")
-  apply(plugin = "dev.nx.gradle.project-graph")
-
-  configure<PublishingExtension> {
-    publications {
-      create<MavenPublication>("maven") {
-        artifactId = "openchallenges-app-config-data"
-        from(components["java"])
-      }
-    }
-  }
-}
-
-configure(listOf(project(":openchallenges-organization-service"))) {
-  apply(plugin = "org.springframework.boot")
-  apply(plugin = "jacoco")
-  apply(plugin = "dev.nx.gradle.project-graph")
-
-  configure<JacocoPluginExtension> {
-      toolVersion = "0.8.13"
-  }
-}
-
-configure(listOf(project(":openchallenges-mcp-server"))) {
-  apply(plugin = "org.springframework.boot")
-  apply(plugin = "org.graalvm.buildtools.native")
-  apply(plugin = "dev.nx.gradle.project-graph")
-}
-
-configure(listOf(project(":openchallenges-challenge-service"))) {
-  apply(plugin = "org.springframework.boot")
-  apply(plugin = "org.flywaydb.flyway")
-  apply(plugin = "jacoco")
-  apply(plugin = "dev.nx.gradle.project-graph")
-
-  configure<JacocoPluginExtension> {
-    toolVersion = "0.8.13"
-  }
-}
-
-configure(listOf(project(":amp-als-app-config-data"))) {
-  apply(plugin = "org.springframework.boot")
-  apply(plugin = "maven-publish")
-  apply(plugin = "dev.nx.gradle.project-graph")
-
-  configure<PublishingExtension> {
-    publications {
-      create<MavenPublication>("maven") {
-        artifactId = "amp-als-app-config-data"
-        from(components["java"])
-      }
-    }
-  }
-}
-
-configure(listOf(project(":amp-als-dataset-service"))) {
-  apply(plugin = "org.springframework.boot")
-  apply(plugin = "org.flywaydb.flyway")
-  apply(plugin = "dev.nx.gradle.project-graph")
 }

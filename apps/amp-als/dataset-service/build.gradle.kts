@@ -7,6 +7,11 @@ buildscript {
   }
 }
 
+plugins {
+  id("sage.spring-boot-application")
+  alias(libs.plugins.flyway)
+}
+
 dependencies {
   annotationProcessor(libs.lombok)
   compileOnly(libs.lombok)
