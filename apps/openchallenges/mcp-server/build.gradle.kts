@@ -6,12 +6,6 @@ plugins {
 group = "org.sagebionetworks.openchallenges"
 version = "0.0.1-SNAPSHOT"
 
-java {
-  toolchain {
-    languageVersion = JavaLanguageVersion.of(21)
-  }
-}
-
 dependencies {
 	implementation(libs.spring.ai.starter.mcp.server.webflux)
 	testImplementation(libs.spring.boot.starter.test)
