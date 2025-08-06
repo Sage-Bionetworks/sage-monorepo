@@ -41,10 +41,6 @@ dependencies {
   testRuntimeOnly(libs.h2database.h2)
 }
 
-tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
-  imageName.set("ghcr.io/sage-bionetworks/${project.name}-base:local")
-}
-
 flyway {
   url = "jdbc:postgresql://amp-als-postgres:8401/dataset_service"
   user = System.getenv("FLYWAY_USER") ?: "dataset_service"
