@@ -6,23 +6,8 @@ import org.gradle.api.tasks.testing.Test
 import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 
 plugins {
-    java
+    id("sage.java-common")
     id("org.springframework.boot")
-}
-
-// Configure Java
-configure<JavaPluginExtension> {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
-}
-
-// Configure encoding
-tasks.withType<JavaCompile>().configureEach {
-    options.encoding = "UTF-8"
-}
-
-tasks.withType<Javadoc>().configureEach {
-    options.encoding = "UTF-8"
 }
 
 // Configure testing
