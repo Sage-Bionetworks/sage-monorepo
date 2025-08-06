@@ -22,6 +22,8 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 // Configure JUnit dependencies
+// NOTE: These versions MUST match gradle/libs.versions.toml
+// TODO: Consider automated version sync check
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.11.4")

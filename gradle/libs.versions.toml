@@ -7,8 +7,8 @@ hibernate-search = "7.2.3.Final"
 jackson = "2.18.3"
 jacoco = "0.8.13"
 java = "21"
-junit = "5.10.2"
-junit-platform = "1.10.2"
+junit = "5.11.4"
+junit-platform = "1.11.4"
 lombok = "1.18.38"
 nx-gradle = "0.1.4"
 openchallenges = "0.0.1-SNAPSHOT"
@@ -59,6 +59,7 @@ h2database-h2 = { module = "com.h2database:h2", version.ref = "h2database" }
 hibernate-search-backend-elasticsearch = { module = "org.hibernate.search:hibernate-search-backend-elasticsearch", version.ref = "hibernate-search" }
 hibernate-search-mapper-orm = { module = "org.hibernate.search:hibernate-search-mapper-orm", version.ref = "hibernate-search" }
 jakarta-annotation-api = { module = "jakarta.annotation:jakarta.annotation-api", version = "2.1.1" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit-platform" }
