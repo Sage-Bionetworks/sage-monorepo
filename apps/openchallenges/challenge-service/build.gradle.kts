@@ -47,14 +47,11 @@ dependencies {
 
 // Configure project-specific Jacoco coverage exclusions
 jacocoCoverage {
-  // Folder exclusions
-  exclusions = listOf(
+  classExcludes = listOf(
+    // Project-specific folder exclusions
     "org/sagebionetworks/openchallenges/challenge/service/model/dto/**",
-    "org/sagebionetworks/openchallenges/challenge/service/api/**"
-  )
-
-  // Configuration and generated class exclusions
-  configurationExclusions = listOf(
+    "org/sagebionetworks/openchallenges/challenge/service/api/**",
+    // Configuration and generated class exclusions
     "org/sagebionetworks/openchallenges/challenge/service/configuration/EnumConverterConfiguration*",
     "org/sagebionetworks/openchallenges/challenge/service/configuration/Flyway*",
     "org/sagebionetworks/openchallenges/challenge/service/configuration/HibernateSearch*",
@@ -64,7 +61,7 @@ jacocoCoverage {
   )
 
   // Include specific implementation classes that should be covered
-  additionalIncludes = listOf(
+  forceClassIncludes = listOf(
     "org/sagebionetworks/openchallenges/challenge/service/api/*Impl.class"
   )
 }

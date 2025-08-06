@@ -5,6 +5,7 @@ plugins {
 
 jacocoCoverage {
     // No exclusions - include all generated API client code in coverage reports
+    classExcludes = emptyList()
 }
 
 dependencies {

@@ -20,7 +20,6 @@ dependencies {
   implementation(libs.jackson.databind)
   implementation(libs.jackson.dataformat.yaml)
   implementation(libs.jackson.datatype.jsr310)
-  implementation(project(":openchallenges-app-config-data"))
   implementation(libs.sagebionetworks.util)
   implementation(libs.spring.boot.starter.actuator)
   implementation(libs.spring.boot.starter.data.jpa)
@@ -32,6 +31,8 @@ dependencies {
   implementation(libs.spring.data.commons)
   implementation(libs.springdoc.openapi.ui)
   implementation(platform(libs.spring.boot.dependencies))
+  implementation(project(":openchallenges-api-client-java"))
+  implementation(project(":openchallenges-app-config-data"))
   runtimeOnly(libs.flyway.database.postgresql)
   runtimeOnly(libs.postgresql)
   runtimeOnly(libs.spring.boot.devtools)
@@ -43,21 +44,15 @@ dependencies {
   testImplementation(libs.testcontainers.postgresql)
   testImplementation(platform(libs.testcontainers.bom))
   testRuntimeOnly(libs.h2database.h2)
-
-  // Add dependency on the API client module
-  implementation(project(":openchallenges-api-client-java"))
 }
 
 // Configure project-specific Jacoco coverage exclusions
 jacocoCoverage {
-  // Folder exclusions
-  exclusions = listOf(
+  classExcludes = listOf(
+    // Project-specific folder exclusions
     "org/sagebionetworks/openchallenges/organization/service/model/dto/**",
-    "org/sagebionetworks/openchallenges/organization/service/api/**"
-  )
-
-  // Configuration and generated class exclusions
-  configurationExclusions = listOf(
+    "org/sagebionetworks/openchallenges/organization/service/api/**",
+    // Configuration and generated class exclusions
     "org/sagebionetworks/openchallenges/organization/service/configuration/EnumConverterConfiguration*",
     "org/sagebionetworks/openchallenges/organization/service/configuration/Flyway*",
     "org/sagebionetworks/openchallenges/organization/service/configuration/HibernateSearch*",
@@ -67,7 +62,7 @@ jacocoCoverage {
   )
 
   // Include specific implementation classes that should be covered
-  additionalIncludes = listOf(
+  forceClassIncludes = listOf(
     "org/sagebionetworks/openchallenges/organization/service/api/*Impl.class"
   )
 }

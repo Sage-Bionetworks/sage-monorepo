@@ -9,9 +9,8 @@ plugins {
 
 // Extension to allow projects to customize coverage exclusions
 open class JacocoCoverageExtension {
-  var exclusions: List<String> = emptyList()
-  var configurationExclusions: List<String> = emptyList()
-  var additionalIncludes: List<String> = emptyList()
+  var classExcludes: List<String> = emptyList()
+  var forceClassIncludes: List<String> = emptyList()
 }
 
 // Add the extension to the project
@@ -24,13 +23,13 @@ configure<JacocoPluginExtension> {
 
 // Configure coverage class files after evaluation to access extension values
 afterEvaluate {
-    val coverageClassFiles = if (jacocoCoverage.additionalIncludes.isNotEmpty()) {
+    val coverageClassFiles = if (jacocoCoverage.forceClassIncludes.isNotEmpty()) {
         // If there are specific includes, create separate file trees and combine them
         files(
             fileTree(layout.buildDirectory.dir("classes/java/main")) {
-                exclude(jacocoCoverage.exclusions)
+                exclude(jacocoCoverage.classExcludes)
             },
-            *jacocoCoverage.additionalIncludes.map { pattern ->
+            *jacocoCoverage.forceClassIncludes.map { pattern ->
                 fileTree(layout.buildDirectory.dir("classes/java/main")) {
                     include(pattern)
                 }
@@ -39,7 +38,7 @@ afterEvaluate {
     } else {
         // Standard exclusion-only approach
         fileTree(layout.buildDirectory.dir("classes/java/main")) {
-            exclude(jacocoCoverage.exclusions)
+            exclude(jacocoCoverage.classExcludes)
         }
     }
 
