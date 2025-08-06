@@ -1,6 +1,7 @@
 import org.gradle.api.JavaVersion
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.compile.JavaCompile
+import org.gradle.api.tasks.javadoc.Javadoc
 import org.gradle.api.tasks.testing.Test
 import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 
@@ -17,6 +18,10 @@ configure<JavaPluginExtension> {
 
 // Configure encoding
 tasks.withType<JavaCompile>().configureEach {
+    options.encoding = "UTF-8"
+}
+
+tasks.withType<Javadoc>().configureEach {
     options.encoding = "UTF-8"
 }
 

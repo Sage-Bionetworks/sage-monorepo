@@ -3,6 +3,7 @@ import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.tasks.compile.JavaCompile
+import org.gradle.api.tasks.javadoc.Javadoc
 import org.gradle.api.tasks.testing.Test
 
 plugins {
@@ -18,6 +19,10 @@ configure<JavaPluginExtension> {
 
 // Configure encoding
 tasks.withType<JavaCompile>().configureEach {
+    options.encoding = "UTF-8"
+}
+
+tasks.withType<Javadoc>().configureEach {
     options.encoding = "UTF-8"
 }
 

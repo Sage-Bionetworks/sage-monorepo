@@ -41,14 +41,6 @@ dependencies {
   testRuntimeOnly(libs.h2database.h2)
 }
 
-tasks.withType<JavaCompile>().configureEach {
-  options.encoding = "UTF-8"
-}
-
-tasks.withType<Javadoc>().configureEach {
-  options.encoding = "UTF-8"
-}
-
 tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
   imageName.set("ghcr.io/sage-bionetworks/${project.name}-base:local")
 }
