@@ -47,7 +47,7 @@ dependencies {
 
 // Configure project-specific Jacoco coverage exclusions
 jacocoCoverage {
-  // Project-specific exclusions (beyond default OpenAPI exclusions)
+  // Folder exclusions
   exclusions = listOf(
     "org/sagebionetworks/openchallenges/challenge/service/model/dto/**",
     "org/sagebionetworks/openchallenges/challenge/service/api/**"

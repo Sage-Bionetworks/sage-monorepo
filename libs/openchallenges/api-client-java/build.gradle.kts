@@ -1,5 +1,10 @@
 plugins {
     id("sage.java-library")
+    id("sage.jacoco-coverage")
+}
+
+jacocoCoverage {
+    // No exclusions - include all generated API client code in coverage reports
 }
 
 dependencies {
