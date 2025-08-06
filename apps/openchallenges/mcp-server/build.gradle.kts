@@ -1,5 +1,6 @@
 plugins {
     id("sage.spring-boot-application")
+    id("sage.lombok")
     id("org.graalvm.buildtools.native")
 }
 
@@ -7,12 +8,8 @@ dependencies {
 	implementation(libs.spring.ai.starter.mcp.server.webflux)
 	testImplementation(libs.spring.boot.starter.test)
 	testRuntimeOnly(libs.junit.platform.launcher)
-  annotationProcessor(libs.lombok)
-  compileOnly(libs.lombok)
   implementation(project(":openchallenges-api-client-java"))
   implementation(platform(libs.spring.boot.dependencies))
-  testAnnotationProcessor(libs.lombok)
-  testCompileOnly(libs.lombok)
 }
 
 graalvmNative {
