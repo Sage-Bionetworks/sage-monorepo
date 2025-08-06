@@ -2,7 +2,6 @@ import org.gradle.api.plugins.JavaPluginExtension
 
 plugins {
   // Apply external plugins to be used in subprojects
-  alias(libs.plugins.flyway) apply false
   alias(libs.plugins.nx.gradle) apply false
 }
 
@@ -41,9 +40,6 @@ subprojects {
       when {
         name.contains("organization-service") || name.contains("challenge-service") -> {
           apply(plugin = "sage.jacoco-coverage")
-        }
-        name.contains("challenge-service") || name.contains("dataset-service") -> {
-          apply(plugin = "org.flywaydb.flyway")
         }
       }
     }
