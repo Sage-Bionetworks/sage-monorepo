@@ -3,9 +3,6 @@ plugins {
     id("org.graalvm.buildtools.native")
 }
 
-group = "org.sagebionetworks.openchallenges"
-version = "0.0.1-SNAPSHOT"
-
 dependencies {
 	implementation(libs.spring.ai.starter.mcp.server.webflux)
 	testImplementation(libs.spring.boot.starter.test)
