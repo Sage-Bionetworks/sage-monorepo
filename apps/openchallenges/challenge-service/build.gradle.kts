@@ -1,7 +1,4 @@
 buildscript {
-  repositories {
-    mavenCentral()
-  }
   dependencies {
     classpath(libs.flyway.database.postgresql)
   }
