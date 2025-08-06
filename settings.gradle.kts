@@ -6,6 +6,7 @@ include(":openchallenges-app-config-data")
 include(":openchallenges-organization-service")
 include(":openchallenges-mcp-server")
 include(":openchallenges-challenge-service")
+include(":openchallenges-image-service")
 
 // Include the AMP-ALS projects as submodules
 include(":amp-als-app-config-data")
@@ -17,5 +18,6 @@ project(":openchallenges-app-config-data").projectDir = file("libs/openchallenge
 project(":openchallenges-organization-service").projectDir = file("apps/openchallenges/organization-service")
 project(":openchallenges-mcp-server").projectDir = file("apps/openchallenges/mcp-server")
 project(":openchallenges-challenge-service").projectDir = file("apps/openchallenges/challenge-service")
+project(":openchallenges-image-service").projectDir = file("apps/openchallenges/image-service")
 project(":amp-als-app-config-data").projectDir = file("libs/amp-als/app-config-data")
 project(":amp-als-dataset-service").projectDir = file("apps/amp-als/dataset-service")

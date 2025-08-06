@@ -20,6 +20,7 @@ spring-data = "3.4.5"
 spring-security = "6.5.1"
 spring-web = "6.1.6"
 springdoc = "2.8.6"
+squareup = "3.0.0"
 testcontainers = "1.20.4"
 
 [libraries]
@@ -67,6 +68,7 @@ postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" 
 sagebionetworks-util = { group = "org.sagebionetworks", name = "util", version.ref = "sagebionetworks" }
 spring-ai-starter-mcp-server-webflux = { module = "org.springframework.ai:spring-ai-starter-mcp-server-webflux", version.ref = "spring-ai" }
 springdoc-openapi-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }
+squareup-pollexor = { module = "com.squareup:pollexor", version.ref = "squareup" }
 testcontainers-bom = { module = "org.testcontainers:testcontainers-bom", version.ref = "testcontainers" }
 testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers" }
 testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "testcontainers" }
