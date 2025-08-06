@@ -11,7 +11,6 @@ junit = "5.11.4"
 junit-platform = "1.11.4"
 lombok = "1.18.38"
 nx-gradle = "0.1.4"
-openchallenges = "0.0.1-SNAPSHOT"
 postgresql = "42.7.7"
 sagebionetworks = "0.0.1-SNAPSHOT"
 spring-ai = "1.0.0"
@@ -64,9 +63,6 @@ junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.re
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit-platform" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
-openchallenges-api-client-java = { group = "org.sagebionetworks.openchallenges", name = "openchallenges-api-client-java", version.ref = "openchallenges" }
-openchallenges-app-config-data = { group = "org.sagebionetworks.openchallenges", name = "openchallenges-app-config-data", version.ref = "openchallenges" }
-amp-als-app-config-data = { group = "org.sagebionetworks.amp.als", name = "amp-als-app-config-data", version.ref = "openchallenges" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
 sagebionetworks-util = { group = "org.sagebionetworks", name = "util", version.ref = "sagebionetworks" }
 spring-ai-starter-mcp-server-webflux = { module = "org.springframework.ai:spring-ai-starter-mcp-server-webflux", version.ref = "spring-ai" }

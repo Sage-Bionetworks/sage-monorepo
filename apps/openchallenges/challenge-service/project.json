@@ -30,10 +30,10 @@
     "build-image-base": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "./gradlew bootBuildImage",
-        "cwd": "{projectRoot}"
+        "command": "./gradlew :openchallenges-challenge-service:bootBuildImage",
+        "cwd": "{workspaceRoot}"
       },
-      "dependsOn": ["^install"]
+      "dependsOn": ["build"]
     },
     "scan-image": {
       "executor": "nx:run-commands",

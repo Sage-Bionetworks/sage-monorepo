@@ -9,7 +9,7 @@ dependencies {
 	testRuntimeOnly(libs.junit.platform.launcher)
   annotationProcessor(libs.lombok)
   compileOnly(libs.lombok)
-  implementation(libs.openchallenges.api.client.java)
+  implementation(project(":openchallenges-api-client-java"))
   implementation(platform(libs.spring.boot.dependencies))
   testAnnotationProcessor(libs.lombok)
   testCompileOnly(libs.lombok)

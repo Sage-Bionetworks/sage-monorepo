@@ -20,7 +20,7 @@ dependencies {
   implementation(libs.jackson.databind)
   implementation(libs.jackson.dataformat.yaml)
   implementation(libs.jackson.datatype.jsr310)
-  implementation(libs.openchallenges.app.config.data)
+  implementation(project(":openchallenges-app-config-data"))
   implementation(libs.sagebionetworks.util)
   implementation(libs.spring.boot.starter.actuator)
   implementation(libs.spring.boot.starter.data.jpa)
