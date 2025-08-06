@@ -12,6 +12,9 @@ include(":openchallenges-image-service")
 include(":amp-als-app-config-data")
 include(":amp-als-dataset-service")
 
+// Include the shared Java utilities
+include(":sagebionetworks-util")
+
 // Set the project directories
 project(":openchallenges-api-client-java").projectDir = file("libs/openchallenges/api-client-java")
 project(":openchallenges-app-config-data").projectDir = file("libs/openchallenges/app-config-data")
@@ -21,3 +24,4 @@ project(":openchallenges-challenge-service").projectDir = file("apps/openchallen
 project(":openchallenges-image-service").projectDir = file("apps/openchallenges/image-service")
 project(":amp-als-app-config-data").projectDir = file("libs/amp-als/app-config-data")
 project(":amp-als-dataset-service").projectDir = file("apps/amp-als/dataset-service")
+project(":sagebionetworks-util").projectDir = file("libs/shared/java/util")
