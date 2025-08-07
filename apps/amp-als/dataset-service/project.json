@@ -16,8 +16,7 @@
       "options": {
         "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
         "cwd": "{projectRoot}"
-      },
-      "dependsOn": ["^install"]
+      }
     },
     "serve-detach": {
       "executor": "nx:run-commands",

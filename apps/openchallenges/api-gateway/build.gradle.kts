@@ -11,3 +11,8 @@ dependencies {
   runtimeOnly(libs.spring.boot.devtools)
   testImplementation(libs.spring.boot.starter.test)
 }
+
+jacocoCoverage {
+  classExcludes = listOf<String>()
+  forceClassIncludes = listOf<String>()
+}

@@ -17,12 +17,9 @@
         "commands": [
           "./gradlew :openchallenges-organization-service:build -x check --continuous",
           "./gradlew :openchallenges-organization-service:bootRun -x check"
-        ],
-        "cwd": "{workspaceRoot}",
-        "parallel": true
+        ]
       },
-      "continuous": true,
-      "dependsOn": ["^build"]
+      "continuous": true
     },
     "serve-detach": {
       "executor": "nx:run-commands",
@@ -33,10 +30,8 @@
     "build-image-base": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "./gradlew :openchallenges-organization-service:bootBuildImage",
-        "cwd": "{workspaceRoot}"
-      },
-      "dependsOn": ["build"]
+        "command": "./gradlew :{projectName}:bootBuildImage"
+      }
     },
     "scan-image": {
       "executor": "nx:run-commands",
@@ -54,20 +49,6 @@
       },
       "dependsOn": ["^build"]
     },
-    "flyway-clean": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "./gradlew :openchallenges-organization-service:flywayClean --no-configuration-cache",
-        "cwd": "{workspaceRoot}"
-      }
-    },
-    "flyway-migrate": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "./gradlew :openchallenges-organization-service:flywayMigrate --no-configuration-cache",
-        "cwd": "{workspaceRoot}"
-      }
-    },
     "demo-auth": {
       "executor": "nx:run-commands",
       "options": {
@@ -77,9 +58,5 @@
     }
   },
   "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],
-  "implicitDependencies": [
-    "openchallenges-api-description",
-    "openchallenges-app-config-data",
-    "shared-java-util"
-  ]
+  "implicitDependencies": ["openchallenges-api-description"]
 }

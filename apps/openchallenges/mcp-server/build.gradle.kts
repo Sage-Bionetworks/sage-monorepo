@@ -8,8 +8,8 @@ dependencies {
 	implementation(libs.spring.ai.starter.mcp.server.webflux)
 	testImplementation(libs.spring.boot.starter.test)
 	testRuntimeOnly(libs.junit.platform.launcher)
-  implementation(project(":openchallenges-api-client-java"))
   implementation(platform(libs.spring.boot.dependencies))
+  implementation(project(":openchallenges-api-client-java"))
 }
 
 graalvmNative {

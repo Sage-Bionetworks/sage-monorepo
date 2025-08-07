@@ -19,7 +19,6 @@ dependencies {
   implementation(libs.jackson.databind)
   implementation(libs.jackson.dataformat.yaml)
   implementation(libs.jackson.datatype.jsr310)
-  implementation(project(":sagebionetworks-util"))
   implementation(libs.spring.boot.starter.actuator)
   implementation(libs.spring.boot.starter.data.jpa)
   implementation(libs.spring.boot.starter.jdbc)
@@ -31,6 +30,7 @@ dependencies {
   implementation(libs.springdoc.openapi.ui)
   implementation(platform(libs.spring.boot.dependencies))
   implementation(project(":openchallenges-app-config-data"))
+  implementation(project(":sagebionetworks-util"))
   runtimeOnly(libs.flyway.database.postgresql)
   runtimeOnly(libs.postgresql)
   runtimeOnly(libs.spring.boot.devtools)
@@ -42,13 +42,10 @@ dependencies {
   testRuntimeOnly(libs.h2database.h2)
 }
 
-// Configure project-specific Jacoco coverage exclusions
 jacocoCoverage {
   classExcludes = listOf(
-    // Project-specific folder exclusions
     "org/sagebionetworks/openchallenges/organization/service/model/dto/**",
     "org/sagebionetworks/openchallenges/organization/service/api/**",
-    // Configuration and generated class exclusions
     "org/sagebionetworks/openchallenges/organization/service/configuration/EnumConverterConfiguration*",
     "org/sagebionetworks/openchallenges/organization/service/configuration/Flyway*",
     "org/sagebionetworks/openchallenges/organization/service/configuration/HibernateSearch*",
@@ -57,7 +54,6 @@ jacocoCoverage {
     "org/sagebionetworks/openchallenges/organization/service/RFC3339DateFormat*"
   )
 
-  // Include specific implementation classes that should be covered
   forceClassIncludes = listOf(
     "org/sagebionetworks/openchallenges/organization/service/api/*Impl.class"
   )

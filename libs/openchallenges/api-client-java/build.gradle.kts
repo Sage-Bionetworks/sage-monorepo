@@ -3,11 +3,6 @@ plugins {
     id("sage.jacoco-coverage")
 }
 
-jacocoCoverage {
-    // No exclusions - include all generated API client code in coverage reports
-    classExcludes = emptyList()
-}
-
 dependencies {
     implementation(libs.findbugs.jsr305)
     implementation(libs.spring.web)
@@ -19,4 +14,9 @@ dependencies {
     implementation(libs.jackson.databind.nullable)
     implementation(libs.jackson.datatype.jsr310)
     implementation(libs.jakarta.annotation.api)
+}
+
+jacocoCoverage {
+  classExcludes = listOf<String>()
+  forceClassIncludes = listOf<String>()
 }
