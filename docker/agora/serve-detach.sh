@@ -9,7 +9,6 @@ args=(
   --file docker/"$product_name"/services/api.yml
   --file docker/"$product_name"/services/app.yml
   --file docker/"$product_name"/services/data.yml
-  --file docker/"$product_name"/services/gene-api.yml
   --file docker/"$product_name"/services/mongo.yml
 
   --file docker/"$product_name"/networks.yml

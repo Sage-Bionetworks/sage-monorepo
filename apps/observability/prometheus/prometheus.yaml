@@ -2,10 +2,10 @@ global:
   scrape_interval: 15s
 
 scrape_configs:
-  - job_name: 'agora-gene-api'
-    metrics_path: '/actuator/prometheus'
-    static_configs:
-      - targets: ['agora-gene-api:3334']
+  # - job_name: 'agora-gene-api'
+  #   metrics_path: '/actuator/prometheus'
+  #   static_configs:
+  #     - targets: ['agora-gene-api:3334']
 
   - job_name: 'observability-otel-collector'
     scrape_interval: 5s
