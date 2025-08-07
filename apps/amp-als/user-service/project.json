@@ -28,10 +28,8 @@
     "build-image-base": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "./gradlew :amp-als-user-service:bootBuildImage",
-        "cwd": "{workspaceRoot}"
-      },
-      "dependsOn": ["build"]
+        "command": "./gradlew :{projectName}:bootBuildImage"
+      }
     },
     "scan-image": {
       "executor": "nx:run-commands",

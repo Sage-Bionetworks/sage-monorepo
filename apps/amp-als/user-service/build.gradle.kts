@@ -15,7 +15,6 @@ dependencies {
   testImplementation(libs.spring.boot.starter.test)
 }
 
-// Configure Jacoco coverage
 jacocoCoverage {
   classExcludes = listOf<String>()
   forceClassIncludes = listOf<String>()

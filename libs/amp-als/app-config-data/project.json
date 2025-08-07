@@ -3,14 +3,6 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/amp-als/app-config-data/src",
   "projectType": "library",
-  "targets": {
-    "install": {
-      "executor": "@nx/gradle:gradle",
-      "options": {
-        "taskName": ":amp-als-app-config-data:publishToMavenLocal"
-      },
-      "dependsOn": ["build"]
-    }
-  },
+  "targets": {},
   "tags": ["type:library", "scope:amp-als", "language:java", "package-manager:gradle"]
 }

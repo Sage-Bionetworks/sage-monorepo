@@ -12,7 +12,6 @@ plugins {
 dependencies {
   annotationProcessor(libs.lombok)
   compileOnly(libs.lombok)
-  implementation(project(":amp-als-app-config-data"))
   implementation(libs.findbugs.jsr305)
   implementation(libs.flyway.core)
   implementation(libs.hibernate.search.backend.elasticsearch)
@@ -20,7 +19,6 @@ dependencies {
   implementation(libs.jackson.databind)
   implementation(libs.jackson.dataformat.yaml)
   implementation(libs.jackson.datatype.jsr310)
-  implementation(project(":sagebionetworks-util"))
   implementation(libs.spring.boot.starter.actuator)
   implementation(libs.spring.boot.starter.data.jpa)
   implementation(libs.spring.boot.starter.jdbc)
@@ -29,6 +27,8 @@ dependencies {
   implementation(libs.spring.boot.starter.web)
   implementation(libs.springdoc.openapi.ui)
   implementation(platform(libs.spring.boot.dependencies))
+  implementation(project(":amp-als-app-config-data"))
+  implementation(project(":sagebionetworks-util"))
   runtimeOnly(libs.flyway.database.postgresql)
   runtimeOnly(libs.postgresql)
   runtimeOnly(libs.spring.boot.devtools)
@@ -36,6 +36,11 @@ dependencies {
   testCompileOnly(libs.lombok)
   testImplementation(libs.spring.boot.starter.test)
   testRuntimeOnly(libs.h2database.h2)
+}
+
+jacocoCoverage {
+  classExcludes = listOf<String>()
+  forceClassIncludes = listOf<String>()
 }
 
 flyway {
