@@ -6,6 +6,7 @@ buildscript {
 
 plugins {
   id("sage.spring-boot-application")
+  id("sage.jacoco-coverage")
   alias(libs.plugins.flyway)
 }
 
