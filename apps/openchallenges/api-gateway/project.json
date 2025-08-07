@@ -11,38 +11,6 @@
         "cwd": "{projectRoot}"
       }
     },
-    "prepare": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": ["./gradlew --version 1> /dev/null"],
-        "cwd": "{projectRoot}"
-      }
-    },
-    "build": {
-      "executor": "nx:run-commands",
-      "outputs": ["{projectRoot}/build"],
-      "options": {
-        "command": "./gradlew build",
-        "cwd": "{projectRoot}"
-      },
-      "dependsOn": ["^install"]
-    },
-    "test": {
-      "executor": "nx:run-commands",
-      "outputs": ["{projectRoot}/build"],
-      "options": {
-        "command": "./gradlew test",
-        "cwd": "{projectRoot}"
-      },
-      "dependsOn": ["^install"]
-    },
-    "clean": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "./gradlew clean",
-        "cwd": "{projectRoot}"
-      }
-    },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
@@ -64,10 +32,10 @@
     "build-image-base": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "./gradlew bootBuildImage",
-        "cwd": "{projectRoot}"
+        "command": "./gradlew :openchallenges-api-gateway:bootBuildImage",
+        "cwd": "{workspaceRoot}"
       },
-      "dependsOn": ["^install"]
+      "dependsOn": ["build"]
     },
     "scan-image": {
       "executor": "nx:run-commands",
