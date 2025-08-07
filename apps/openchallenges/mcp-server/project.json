@@ -11,14 +11,20 @@
         "cwd": "{projectRoot}"
       }
     },
+    "build-dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./gradlew :{projectName}:build --continuous --exclude-task check"
+      },
+      "continuous": true
+    },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "./gradlew :openchallenges-mcp-server:build --continuous",
-          "./gradlew :openchallenges-mcp-server:bootRun"
-        ]
-      }
+        "command": "./gradlew :{projectName}:bootRun --exclude-task check"
+      },
+      "continuous": true,
+      "dependsOn": ["build-dev"]
     },
     "serve-detach": {
       "executor": "nx:run-commands",

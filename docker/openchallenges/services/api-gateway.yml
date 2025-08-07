@@ -1,5 +1,17 @@
+# Define a reusable anchor that maps service hostnames to the Docker host's gateway IP. This allows
+# containers to reach these services running on the host (or accessible via the host) using
+# consistent hostnames instead of IP addresses or 'localhost'.
+x-common-extra-hosts: &common-extra-hosts
+  extra_hosts:
+    - 'openchallenges-auth-service:host-gateway'
+    - 'openchallenges-challenge-service:host-gateway'
+    - 'openchallenges-image-service:host-gateway'
+    - 'openchallenges-organization-service:host-gateway'
+
 services:
   openchallenges-api-gateway:
+    # Include the common extra_hosts mappings defined above
+    <<: *common-extra-hosts
     image: ghcr.io/sage-bionetworks/openchallenges-api-gateway:${OPENCHALLENGES_VERSION:-local}
     container_name: openchallenges-api-gateway
     restart: always

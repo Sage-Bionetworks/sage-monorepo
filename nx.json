@@ -208,5 +208,8 @@
   "useInferencePlugins": false,
   "defaultBase": "main",
   "packageManager": "pnpm",
-  "nxCloudId": "686fbf8b26cf276f670bc4b0"
+  "nxCloudId": "686fbf8b26cf276f670bc4b0",
+  "tui": {
+    "enabled": false
+  }
 }

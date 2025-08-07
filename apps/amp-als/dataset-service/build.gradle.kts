@@ -7,12 +7,11 @@ buildscript {
 plugins {
   id("sage.spring-boot-application")
   id("sage.jacoco-coverage")
+  id("sage.lombok")
   alias(libs.plugins.flyway)
 }
 
 dependencies {
-  annotationProcessor(libs.lombok)
-  compileOnly(libs.lombok)
   implementation(libs.findbugs.jsr305)
   implementation(libs.flyway.core)
   implementation(libs.hibernate.search.backend.elasticsearch)
@@ -33,8 +32,6 @@ dependencies {
   runtimeOnly(libs.flyway.database.postgresql)
   runtimeOnly(libs.postgresql)
   runtimeOnly(libs.spring.boot.devtools)
-  testAnnotationProcessor(libs.lombok)
-  testCompileOnly(libs.lombok)
   testImplementation(libs.spring.boot.starter.test)
   testRuntimeOnly(libs.h2database.h2)
 }
