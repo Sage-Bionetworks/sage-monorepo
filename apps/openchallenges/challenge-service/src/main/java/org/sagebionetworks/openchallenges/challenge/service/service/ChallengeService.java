@@ -18,7 +18,9 @@ import org.sagebionetworks.openchallenges.challenge.service.model.dto.Challenges
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeCategoryEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeIncentiveEntity;
+import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeInputDataTypeEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeSubmissionTypeEntity;
+import org.sagebionetworks.openchallenges.challenge.service.model.entity.EdamConceptEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.SimpleChallengePlatformEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengeIncentiveMapper;
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengeJsonLdMapper;
@@ -31,6 +33,7 @@ import org.sagebionetworks.openchallenges.challenge.service.model.repository.Cha
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeRepository;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeStarRepository;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeSubmissionTypeRepository;
+import org.sagebionetworks.openchallenges.challenge.service.model.repository.EdamConceptRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -53,6 +56,7 @@ public class ChallengeService {
   private final ChallengeCategoryRepository challengeCategoryRepository;
   private final ChallengeStarRepository challengeStarRepository;
   private final ChallengeInputDataTypeRepository challengeInputDataTypeRepository;
+  private final EdamConceptRepository edamConceptRepository;
   private final EntityManager entityManager;
 
   public ChallengeService(
@@ -64,6 +68,7 @@ public class ChallengeService {
     ChallengeCategoryRepository challengeCategoryRepository,
     ChallengeStarRepository challengeStarRepository,
     ChallengeInputDataTypeRepository challengeInputDataTypeRepository,
+    EdamConceptRepository edamConceptRepository,
     EntityManager entityManager
   ) {
     this.challengeRepository = challengeRepository;
@@ -74,6 +79,7 @@ public class ChallengeService {
     this.challengeCategoryRepository = challengeCategoryRepository;
     this.challengeStarRepository = challengeStarRepository;
     this.challengeInputDataTypeRepository = challengeInputDataTypeRepository;
+    this.edamConceptRepository = edamConceptRepository;
     this.entityManager = entityManager;
   }
 
@@ -250,6 +256,7 @@ public class ChallengeService {
     updateIncentives(existingChallenge, request.getIncentives());
     updateSubmissionTypes(existingChallenge, request.getSubmissionTypes());
     updateCategories(existingChallenge, request.getCategories());
+    updateInputDataTypes(existingChallenge, request.getInputDataTypes());
 
     // Save the updated entity
     challengeRepository.save(existingChallenge);
@@ -386,6 +393,33 @@ public class ChallengeService {
         challengeCategoryRepository.save(newCategory);
         existingCategories.add(newCategory);
       }
+    }
+  }
+
+  private void updateInputDataTypes(ChallengeEntity challenge, List<Long> inputDataTypeIds) {
+    List<Long> newInputDataTypeIds = inputDataTypeIds != null
+      ? inputDataTypeIds
+      : new ArrayList<>();
+
+    // Clear existing input data types for this challenge
+    challengeInputDataTypeRepository.deleteAllByChallengeId(challenge.getId());
+
+    // Add new input data types
+    for (Long newInputDataTypeId : newInputDataTypeIds) {
+      EdamConceptEntity edamConcept = edamConceptRepository
+        .findById(newInputDataTypeId)
+        .orElseThrow(() ->
+          new RuntimeException(
+            String.format("EDAM concept with ID %d not found", newInputDataTypeId)
+          )
+        );
+
+      ChallengeInputDataTypeEntity newInputDataType = ChallengeInputDataTypeEntity.builder()
+        .challenge(challenge)
+        .edamConcept(edamConcept)
+        .createdAt(java.time.OffsetDateTime.now())
+        .build();
+      challengeInputDataTypeRepository.save(newInputDataType);
     }
   }
 
