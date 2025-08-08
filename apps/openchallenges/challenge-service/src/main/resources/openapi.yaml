@@ -1829,8 +1829,13 @@ components:
           items:
             $ref: '#/components/schemas/ChallengeSubmissionType'
           type: array
+        categories:
+          items:
+            $ref: '#/components/schemas/ChallengeCategory'
+          type: array
       required:
         - avatarUrl
+        - categories
         - description
         - doi
         - headline

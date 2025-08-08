@@ -27,6 +27,10 @@ properties:
     type: array
     items:
       $ref: ChallengeSubmissionType.yaml
+  categories:
+    type: array
+    items:
+      $ref: ChallengeCategory.yaml
 required:
   - slug
   - name
@@ -39,4 +43,4 @@ required:
   - avatarUrl
   - incentives
   - submissionTypes
-  # - categories
+  - categories

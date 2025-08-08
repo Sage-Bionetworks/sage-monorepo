@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeCategoryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSubmissionTypeDto;
@@ -55,6 +56,9 @@ public class ChallengeUpdateRequestDto {
   @Valid
   private List<ChallengeSubmissionTypeDto> submissionTypes = new ArrayList<>();
 
+  @Valid
+  private List<ChallengeCategoryDto> categories = new ArrayList<>();
+
   public ChallengeUpdateRequestDto() {
     super();
   }
@@ -62,7 +66,7 @@ public class ChallengeUpdateRequestDto {
   /**
    * Constructor with only required parameters
    */
-  public ChallengeUpdateRequestDto(String slug, String name, String headline, String description, String doi, ChallengeStatusDto status, Long platformId, String websiteUrl, String avatarUrl, List<ChallengeIncentiveDto> incentives, List<ChallengeSubmissionTypeDto> submissionTypes) {
+  public ChallengeUpdateRequestDto(String slug, String name, String headline, String description, String doi, ChallengeStatusDto status, Long platformId, String websiteUrl, String avatarUrl, List<ChallengeIncentiveDto> incentives, List<ChallengeSubmissionTypeDto> submissionTypes, List<ChallengeCategoryDto> categories) {
     this.slug = slug;
     this.name = name;
     this.headline = headline;
@@ -74,6 +78,7 @@ public class ChallengeUpdateRequestDto {
     this.avatarUrl = avatarUrl;
     this.incentives = incentives;
     this.submissionTypes = submissionTypes;
+    this.categories = categories;
   }
 
   public ChallengeUpdateRequestDto slug(String slug) {
@@ -312,6 +317,34 @@ public class ChallengeUpdateRequestDto {
     this.submissionTypes = submissionTypes;
   }
 
+  public ChallengeUpdateRequestDto categories(List<ChallengeCategoryDto> categories) {
+    this.categories = categories;
+    return this;
+  }
+
+  public ChallengeUpdateRequestDto addCategoriesItem(ChallengeCategoryDto categoriesItem) {
+    if (this.categories == null) {
+      this.categories = new ArrayList<>();
+    }
+    this.categories.add(categoriesItem);
+    return this;
+  }
+
+  /**
+   * Get categories
+   * @return categories
+   */
+  @NotNull @Valid 
+  @Schema(name = "categories", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("categories")
+  public List<ChallengeCategoryDto> getCategories() {
+    return categories;
+  }
+
+  public void setCategories(List<ChallengeCategoryDto> categories) {
+    this.categories = categories;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -331,12 +364,13 @@ public class ChallengeUpdateRequestDto {
         Objects.equals(this.websiteUrl, challengeUpdateRequest.websiteUrl) &&
         Objects.equals(this.avatarUrl, challengeUpdateRequest.avatarUrl) &&
         Objects.equals(this.incentives, challengeUpdateRequest.incentives) &&
-        Objects.equals(this.submissionTypes, challengeUpdateRequest.submissionTypes);
+        Objects.equals(this.submissionTypes, challengeUpdateRequest.submissionTypes) &&
+        Objects.equals(this.categories, challengeUpdateRequest.categories);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(slug, name, headline, description, doi, status, platformId, websiteUrl, avatarUrl, incentives, submissionTypes);
+    return Objects.hash(slug, name, headline, description, doi, status, platformId, websiteUrl, avatarUrl, incentives, submissionTypes, categories);
   }
 
   @Override
@@ -354,6 +388,7 @@ public class ChallengeUpdateRequestDto {
     sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
     sb.append("    incentives: ").append(toIndentedString(incentives)).append("\n");
     sb.append("    submissionTypes: ").append(toIndentedString(submissionTypes)).append("\n");
+    sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -393,6 +428,7 @@ public class ChallengeUpdateRequestDto {
       this.instance.setAvatarUrl(value.avatarUrl);
       this.instance.setIncentives(value.incentives);
       this.instance.setSubmissionTypes(value.submissionTypes);
+      this.instance.setCategories(value.categories);
       return this;
     }
 
@@ -448,6 +484,11 @@ public class ChallengeUpdateRequestDto {
     
     public ChallengeUpdateRequestDto.Builder submissionTypes(List<ChallengeSubmissionTypeDto> submissionTypes) {
       this.instance.submissionTypes(submissionTypes);
+      return this;
+    }
+    
+    public ChallengeUpdateRequestDto.Builder categories(List<ChallengeCategoryDto> categories) {
+      this.instance.categories(categories);
       return this;
     }
     
