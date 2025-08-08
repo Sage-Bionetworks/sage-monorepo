@@ -14,6 +14,7 @@ import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeU
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengesPageDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeIncentiveEntity;
+import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeSubmissionTypeEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.SimpleChallengePlatformEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengeIncentiveMapper;
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengeJsonLdMapper;
@@ -260,13 +261,15 @@ public class ChallengeService {
 
     // Update incentives - only delete those no longer needed and add new ones
     List<ChallengeIncentiveEntity> existingIncentives = existingChallenge.getIncentives();
-    List<ChallengeIncentiveEntity> newIncentives = request.getIncentives() != null
-      ? challengeIncentiveMapper.convertToEntityList(request.getIncentives(), existingChallenge)
+    List<String> newIncentiveNames = request.getIncentives() != null
+      ? request.getIncentives().stream().map(dto -> dto.getValue()).toList()
       : new ArrayList<>();
 
     // Find incentives to delete (present in DB but not in request)
     for (ChallengeIncentiveEntity existing : new ArrayList<>(existingIncentives)) {
-      boolean stillPresent = newIncentives.stream().anyMatch(n -> n.equals(existing));
+      boolean stillPresent = newIncentiveNames
+        .stream()
+        .anyMatch(name -> name.equals(existing.getName()));
       if (!stillPresent) {
         challengeIncentiveRepository.delete(existing);
         existingIncentives.remove(existing);
@@ -274,11 +277,52 @@ public class ChallengeService {
     }
 
     // Find incentives to add (present in request but not in DB)
-    for (ChallengeIncentiveEntity incoming : newIncentives) {
-      boolean alreadyExists = existingIncentives.stream().anyMatch(e -> e.equals(incoming));
+    for (String newIncentiveName : newIncentiveNames) {
+      boolean alreadyExists = existingIncentives
+        .stream()
+        .anyMatch(existing -> existing.getName().equals(newIncentiveName));
       if (!alreadyExists) {
-        challengeIncentiveRepository.save(incoming);
-        existingIncentives.add(incoming);
+        ChallengeIncentiveEntity newIncentive = ChallengeIncentiveEntity.builder()
+          .name(newIncentiveName)
+          .challenge(existingChallenge)
+          .createdAt(java.time.OffsetDateTime.now())
+          .build();
+        challengeIncentiveRepository.save(newIncentive);
+        existingIncentives.add(newIncentive);
+      }
+    }
+
+    // Update submission types - only delete those no longer needed and add new ones
+    List<ChallengeSubmissionTypeEntity> existingSubmissionTypes =
+      existingChallenge.getSubmissionTypes();
+    List<String> newSubmissionTypeNames = request.getSubmissionTypes() != null
+      ? request.getSubmissionTypes().stream().map(dto -> dto.getValue()).toList()
+      : new ArrayList<>();
+
+    // Find submission types to delete (present in DB but not in request)
+    for (ChallengeSubmissionTypeEntity existing : new ArrayList<>(existingSubmissionTypes)) {
+      boolean stillPresent = newSubmissionTypeNames
+        .stream()
+        .anyMatch(name -> name.equals(existing.getName()));
+      if (!stillPresent) {
+        challengeSubmissionTypeRepository.delete(existing);
+        existingSubmissionTypes.remove(existing);
+      }
+    }
+
+    // Find submission types to add (present in request but not in DB)
+    for (String newTypeName : newSubmissionTypeNames) {
+      boolean alreadyExists = existingSubmissionTypes
+        .stream()
+        .anyMatch(existing -> existing.getName().equals(newTypeName));
+      if (!alreadyExists) {
+        ChallengeSubmissionTypeEntity newSubmissionType = ChallengeSubmissionTypeEntity.builder()
+          .name(newTypeName)
+          .challenge(existingChallenge)
+          .createdAt(java.time.OffsetDateTime.now())
+          .build();
+        challengeSubmissionTypeRepository.save(newSubmissionType);
+        existingSubmissionTypes.add(newSubmissionType);
       }
     }
 
