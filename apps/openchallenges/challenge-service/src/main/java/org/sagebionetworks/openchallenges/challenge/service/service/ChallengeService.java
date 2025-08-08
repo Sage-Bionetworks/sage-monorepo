@@ -8,8 +8,10 @@ import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeN
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengePlatformNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeJsonLdDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSearchQueryDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSubmissionTypeDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeUpdateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengesPageDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeEntity;
@@ -240,29 +242,50 @@ public class ChallengeService {
     // Find the existing challenge
     ChallengeEntity existingChallenge = getChallengeEntity(challengeId);
 
-    // Update the challenge fields
-    existingChallenge.setSlug(request.getSlug());
-    existingChallenge.setName(request.getName());
-    existingChallenge.setHeadline(request.getHeadline());
-    existingChallenge.setDescription(request.getDescription());
-    existingChallenge.setDoi(request.getDoi());
-    existingChallenge.setStatus(request.getStatus().toString());
-    existingChallenge.setWebsiteUrl(request.getWebsiteUrl());
-    existingChallenge.setAvatarUrl(request.getAvatarUrl());
+    // Update the challenge components
+    updateBasicFields(existingChallenge, request);
+    updatePlatform(existingChallenge, request.getPlatformId());
+    updateIncentives(existingChallenge, request.getIncentives());
+    updateSubmissionTypes(existingChallenge, request.getSubmissionTypes());
 
-    // Update platform if provided
-    if (request.getPlatformId() != null) {
-      SimpleChallengePlatformEntity platform = getChallengePlatformEntity(request.getPlatformId());
-      existingChallenge.setPlatform(platform);
+    // Save the updated entity
+    challengeRepository.save(existingChallenge);
+    challengeRepository.flush();
+
+    // Refresh the entity to get the updated state
+    ChallengeEntity refreshedEntity = refreshChallengeEntity(challengeId);
+
+    logger.info("Successfully updated challenge with ID: {}", challengeId);
+
+    // Return the updated challenge as DTO
+    return challengeMapper.convertToDto(refreshedEntity);
+  }
+
+  private void updateBasicFields(ChallengeEntity challenge, ChallengeUpdateRequestDto request) {
+    challenge.setSlug(request.getSlug());
+    challenge.setName(request.getName());
+    challenge.setHeadline(request.getHeadline());
+    challenge.setDescription(request.getDescription());
+    challenge.setDoi(request.getDoi());
+    challenge.setStatus(request.getStatus().toString());
+    challenge.setWebsiteUrl(request.getWebsiteUrl());
+    challenge.setAvatarUrl(request.getAvatarUrl());
+  }
+
+  private void updatePlatform(ChallengeEntity challenge, Long platformId) {
+    if (platformId != null) {
+      SimpleChallengePlatformEntity platform = getChallengePlatformEntity(platformId);
+      challenge.setPlatform(platform);
     } else {
       // If platformId is null, remove the platform association
-      existingChallenge.setPlatform(null);
+      challenge.setPlatform(null);
     }
+  }
 
-    // Update incentives - only delete those no longer needed and add new ones
-    List<ChallengeIncentiveEntity> existingIncentives = existingChallenge.getIncentives();
-    List<String> newIncentiveNames = request.getIncentives() != null
-      ? request.getIncentives().stream().map(dto -> dto.getValue()).toList()
+  private void updateIncentives(ChallengeEntity challenge, List<ChallengeIncentiveDto> incentives) {
+    List<ChallengeIncentiveEntity> existingIncentives = challenge.getIncentives();
+    List<String> newIncentiveNames = incentives != null
+      ? incentives.stream().map(dto -> dto.getValue()).toList()
       : new ArrayList<>();
 
     // Find incentives to delete (present in DB but not in request)
@@ -284,19 +307,22 @@ public class ChallengeService {
       if (!alreadyExists) {
         ChallengeIncentiveEntity newIncentive = ChallengeIncentiveEntity.builder()
           .name(newIncentiveName)
-          .challenge(existingChallenge)
+          .challenge(challenge)
           .createdAt(java.time.OffsetDateTime.now())
           .build();
         challengeIncentiveRepository.save(newIncentive);
         existingIncentives.add(newIncentive);
       }
     }
+  }
 
-    // Update submission types - only delete those no longer needed and add new ones
-    List<ChallengeSubmissionTypeEntity> existingSubmissionTypes =
-      existingChallenge.getSubmissionTypes();
-    List<String> newSubmissionTypeNames = request.getSubmissionTypes() != null
-      ? request.getSubmissionTypes().stream().map(dto -> dto.getValue()).toList()
+  private void updateSubmissionTypes(
+    ChallengeEntity challenge,
+    List<ChallengeSubmissionTypeDto> submissionTypes
+  ) {
+    List<ChallengeSubmissionTypeEntity> existingSubmissionTypes = challenge.getSubmissionTypes();
+    List<String> newSubmissionTypeNames = submissionTypes != null
+      ? submissionTypes.stream().map(dto -> dto.getValue()).toList()
       : new ArrayList<>();
 
     // Find submission types to delete (present in DB but not in request)
@@ -318,27 +344,19 @@ public class ChallengeService {
       if (!alreadyExists) {
         ChallengeSubmissionTypeEntity newSubmissionType = ChallengeSubmissionTypeEntity.builder()
           .name(newTypeName)
-          .challenge(existingChallenge)
+          .challenge(challenge)
           .createdAt(java.time.OffsetDateTime.now())
           .build();
         challengeSubmissionTypeRepository.save(newSubmissionType);
         existingSubmissionTypes.add(newSubmissionType);
       }
     }
+  }
 
-    // Save the updated entity
-    challengeRepository.save(existingChallenge);
-    challengeRepository.flush();
-
+  private ChallengeEntity refreshChallengeEntity(Long challengeId) {
     // Clear the session cache to force fresh fetch of incentives
     entityManager.clear();
-
     // Refresh the entity to get the updated incentives
-    ChallengeEntity refreshedEntity = getChallengeEntity(challengeId);
-
-    logger.info("Successfully updated challenge with ID: {}", challengeId);
-
-    // Return the updated challenge as DTO
-    return challengeMapper.convertToDto(refreshedEntity);
+    return getChallengeEntity(challengeId);
   }
 }
