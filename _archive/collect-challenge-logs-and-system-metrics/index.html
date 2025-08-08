@@ -1,0 +1,2648 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A development environment for building robust apps faster.">
+      
+      
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.16">
+    
+    
+      
+        <title>Collect challenge logs and system metrics - Sage Monorepo</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+  
+  
+    
+    
+  
+    
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M1%207.775V2.75C1%201.784%201.784%201%202.75%201h5.025c.464%200%20.91.184%201.238.513l6.25%206.25a1.75%201.75%200%200%201%200%202.474l-5.026%205.026a1.75%201.75%200%200%201-2.474%200l-6.25-6.25A1.75%201.75%200%200%201%201%207.775m1.5%200c0%20.066.026.13.073.177l6.25%206.25a.25.25%200%200%200%20.354%200l5.025-5.025a.25.25%200%200%200%200-.354l-6.25-6.25a.25.25%200%200%200-.177-.073H2.75a.25.25%200%200%200-.25.25ZM6%205a1%201%200%201%201%200%202%201%201%200%200%201%200-2%22/%3E%3C/svg%3E');--md-admonition-icon--info:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M0%208a8%208%200%201%201%2016%200A8%208%200%200%201%200%208m8-6.5a6.5%206.5%200%201%200%200%2013%206.5%206.5%200%200%200%200-13M6.5%207.75A.75.75%200%200%201%207.25%207h1a.75.75%200%200%201%20.75.75v2.75h.25a.75.75%200%200%201%200%201.5h-2a.75.75%200%200%201%200-1.5h.25v-2h-.25a.75.75%200%200%201-.75-.75M8%206a1%201%200%201%201%200-2%201%201%200%200%201%200%202%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../termynal.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#objectives" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Sage Monorepo" class="md-header__button md-logo" aria-label="Sage Monorepo" data-md-component="logo">
+      
+  <img src="../../images/sage.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Sage Monorepo
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Collect challenge logs and system metrics
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Sage-Bionetworks/sage-monorepo" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    sage-monorepo
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../.." class="md-tabs__link">
+          
+  
+  
+  Home
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../getting-started/what-is-angular/" class="md-tabs__link">
+          
+  
+  
+  Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tutorials/angular/add-app/" class="md-tabs__link">
+          
+  
+  
+  Tutorials
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../developers-guide/developing-on-a-remote-host/" class="md-tabs__link">
+          
+  
+  
+  Developers Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../reference/agora/" class="md-tabs__link">
+          
+  
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Sage Monorepo" class="md-nav__button md-logo" aria-label="Sage Monorepo" data-md-component="logo">
+      
+  <img src="../../images/sage.png" alt="logo">
+
+    </a>
+    Sage Monorepo
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Sage-Bionetworks/sage-monorepo" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    sage-monorepo
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            Home
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Sage Monorepo
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../news/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    What's new
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_3" id="__nav_1_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Contributing
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_3">
+            <span class="md-nav__icon md-icon"></span>
+            Contributing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributions/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributions/bug-report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Reporting a bug
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributions/guidelines/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Adding a feature
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Getting Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/what-is-angular/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    What is Angular Universal?
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/what-is-devcontainer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    What is a devcontainer?
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/what-is-nx/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    What is Nx?
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Setup
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            Setup
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/local-dev/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Develop Locally
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/remote-dev/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Develop On a Remote Host
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Tutorials
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Tutorials
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Angular
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            Angular
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/angular/add-app/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Create an Angular app
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/angular/add-api-client/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Add an Angular API client
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/angular/add-component/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Add an Angular component
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/angular/add-library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Add an Angular library
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Docker
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Docker
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/docker/new-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Create a Docker-based project
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Java
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Java
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/java/add-library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Add a Java library
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/java/add-rest-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Add a Java REST API
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Python
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Python
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/python/add-rest-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Add a Python REST API
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    R
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            R
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/r/new-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Add an R project
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Developers Guide
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Developers Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers-guide/developing-on-a-remote-host/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Developing on a remote host
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers-guide/creating-a-commit-with-multiple-authors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Creating a commit with multiple authors
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers-guide/faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Common Issues
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_1" id="__nav_5_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Agora
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_1">
+            <span class="md-nav__icon md-icon"></span>
+            Agora
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/agora/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    API
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    OpenChallenges
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            OpenChallenges
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/oc-microservices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Microservices
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/oc-schemas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Schemas
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      Objectives
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architecture
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cost-estimate" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cost estimate
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#authors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Authors
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contents
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Requirements
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deploy-the-elk-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deploy the ELK Stack
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deploy the ELK Stack">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-the-ec2-instance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Create the EC2 instance
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connect-to-the-instance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Connect to the instance
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Connect to the instance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ssm-with-ssh" class="md-nav__link">
+    <span class="md-ellipsis">
+      SSM with SSH
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prepare-the-instance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prepare the instance
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configure-the-elk-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configure the ELK Stack
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#start-the-elk-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      Start the ELK Stack
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connect-to-kibana" class="md-nav__link">
+    <span class="md-ellipsis">
+      Connect to Kibana
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deploy-beat-agents" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deploy Beat agents
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deploy Beat agents">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#metricbeat" class="md-nav__link">
+    <span class="md-ellipsis">
+      Metricbeat
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filebeat" class="md-nav__link">
+    <span class="md-ellipsis">
+      Filebeat
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#set-up-beat-assets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Set up Beat assets
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#explore-and-visualize-data-in-kibana" class="md-nav__link">
+    <span class="md-ellipsis">
+      Explore and visualize data in Kibana
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Explore and visualize data in Kibana">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      Inventory
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logs-stream" class="md-nav__link">
+    <span class="md-ellipsis">
+      Logs Stream
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dashboards" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dashboards
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dashboards">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#metricbeat-system-overview-ecs" class="md-nav__link">
+    <span class="md-ellipsis">
+      [Metricbeat System] Overview ECS
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#discover" class="md-nav__link">
+    <span class="md-ellipsis">
+      Discover
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#improvements-and-future-activities" class="md-nav__link">
+    <span class="md-ellipsis">
+      Improvements and future activities
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+  <h1>Collect challenge logs and system metrics</h1>
+
+<p>This document describes how to centralize and explore the logs and system metrics generated by a
+fleet of hosts (EC2 instances) and Docker containers. The instructions are provided in the context
+of monitoring hosts and containers during a scientific challenge organized by Sage Bionetworks.</p>
+<h2 id="objectives">Objectives<a class="headerlink" href="#objectives" title="Permanent link">&para;</a></h2>
+<p>The solution described here offers a single, user-friendly interface to monitor logs and visualize
+system metrics generated by a fleet of hosts and containers. This solution contributes to</p>
+<ul>
+<li>
+<p><strong>Enhanced security</strong></p>
+</li>
+<li>
+<p>Quickly access to network usage (in/out).</p>
+</li>
+<li>
+<p>Set alerts.</p>
+<ul>
+<li>E.g., send an email notification when unusual inbound and/or outbound network traffic occur.</li>
+</ul>
+</li>
+<li>
+<p><strong>Improved stability</strong></p>
+</li>
+<li>
+<p>Quickly access system health information.</p>
+</li>
+<li>
+<p>Set alerts.</p>
+<ul>
+<li>E.g., send an email notification when the filesystem of a host is almost filled to its
+  capacity, which can lead to a crash of the system. The alert enables an engineer to
+  preemptively increase the available storage space.</li>
+</ul>
+</li>
+<li>
+<p><strong>Better engineer experience</strong></p>
+</li>
+<li>
+<p>A single, user-friendly dashboard enables the engineer in charge of monitoring the system to
+    quickly access logs and system health information.</p>
+</li>
+<li>
+<p><strong>Enhanced reporting</strong></p>
+</li>
+<li>Collect and visualize information about how the system is used. This data can help to better
+    understand the needs of the users and better dimension the system to cut costs.</li>
+</ul>
+<p>In the context of the organization of a scientific challenge, the collected data aim to answer the
+following questions:</p>
+<ul>
+<li>Are all the EC2 instances up?</li>
+<li>Is an instance at risk of crashing because its storage capacity is nearly filled up?</li>
+<li>Are submissions using all the CPU cores available?</li>
+<li>Are submissions using the GPU cores available?</li>
+<li>Is a submission crashing due to a memory leak (memory usage, logs)?</li>
+<li>Is a submission generating too much data (logs, scratch/pre-processed/output files)</li>
+<li>What fraction of the uptime of an EC2 instance is used to process submissions?</li>
+<li>How much money could we have saved using on-demand EC2 instances?</li>
+</ul>
+<h2 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h2>
+<p><img src="drawio/diagrams/collect-challenge-resource-metrics.drawio.svg"></p>
+<p>The components of the stack are:</p>
+<ul>
+<li><code>challenge-elk</code>: EC2 instance that runs the <a href="https://www.elastic.co/what-is/elk-stack">ELK stack</a></li>
+<li><code>challenge-node-*</code>: EC2 instances that run Beat agents (Metricbeat, Filebeat).</li>
+</ul>
+<blockquote>
+<p><strong>Note</strong>
+Instructions on how to deploy and use this monitoring solution are given below. The instructions are
+given in the context of monitoring a stack used to process submissions received during a scientific
+challenge. However, this solution can be used to monitor hosts and containers deployed for other
+applications.</p>
+</blockquote>
+<h3 id="cost-estimate">Cost estimate<a class="headerlink" href="#cost-estimate" title="Permanent link">&para;</a></h3>
+<p>The only additional resource introduced by this architecture is the EC2 instance where the ELK stack
+is deployed. The instance must have at least 4 GB and 2 vCPUs, which is why a <code>t2.medium</code> is
+recommended. The storage capacity needed depends on the number of instances monitored, the size and
+frequency of the data collected. It is currently recommended to allocate 100 GB of storage (under
+evaluation).</p>
+<p>For example, here is a cost estimate for the recommended EC2 instance (valid on 2022-07-24).</p>
+<ul>
+<li>$0.0464 per On Demand Linux <code>t2.medium</code> Instance Hour</li>
+<li>$0.10 per GB-month of General Purpose SSD (gp2) provisioned storage - US East (Northern Virginia)</li>
+</ul>
+<p>Total: 30 _ 24 _ 0.0464 + 100 * 0.10 = $43.4/month</p>
+<h2 id="authors">Authors<a class="headerlink" href="#authors" title="Permanent link">&para;</a></h2>
+<p>Please give credit to the following persons if you are using or building on top of this solution.</p>
+<ul>
+<li><a href="https://github.com/tschaffter">Thomas Schaffter</a></li>
+<li><a href="https://github.com/vpchung">Verena Chung</a></li>
+</ul>
+<hr />
+<h2 id="contents">Contents<a class="headerlink" href="#contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li><a href="#requirements">Requirements</a></li>
+<li><a href="#deploy-the-elk-stack">Deploy the ELK Stack</a></li>
+<li><a href="#create-the-ec2-instance">Create the EC2 instance</a></li>
+<li><a href="#connect-to-the-instance">Connect to the instance</a><ul>
+<li><a href="#ssm-with-ssh">SSM with SSH</a></li>
+</ul>
+</li>
+<li><a href="#prepare-the-instance">Prepare the instance</a></li>
+<li><a href="#configure-the-elk-stack">Configure the ELK Stack</a></li>
+<li><a href="#start-the-elk-stack">Start the ELK Stack</a></li>
+<li><a href="#connect-to-kibana">Connect to Kibana</a></li>
+<li><a href="#deploy-beat-agents">Deploy Beat agents</a></li>
+<li><a href="#metricbeat">Metricbeat</a></li>
+<li><a href="#filebeat">Filebeat</a></li>
+<li><a href="#set-up-beat-assets">Set up Beat assets</a></li>
+<li><a href="#explore-and-visualize-data-in-kibana">Explore and visualize data in Kibana</a></li>
+<li><a href="#inventory">Inventory</a></li>
+<li><a href="#logs-stream">Logs Stream</a></li>
+<li><a href="#dashboards">Dashboards</a><ul>
+<li><a href="#metricbeat-system-overview-ecs">[Metricbeat System] Overview ECS</a></li>
+</ul>
+</li>
+<li><a href="#discover">Discover</a></li>
+<li><a href="#improvements-and-future-activities">Improvements and future activities</a></li>
+</ol>
+<h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
+<ul>
+<li>1 EC2 instance where the <a href="https://www.elastic.co/what-is/elk-stack">ELK Stack</a> will be deployed.</li>
+<li>This instance requires the Docker Engine (see <a href="https://github.com/Sage-Bionetworks/docker-elk#host-setup">ELK Stack host requirements</a>).</li>
+<li>N EC2 instances to monitor using Beat agents (Metricbeat, Filebeat).</li>
+</ul>
+<h2 id="deploy-the-elk-stack">Deploy the ELK Stack<a class="headerlink" href="#deploy-the-elk-stack" title="Permanent link">&para;</a></h2>
+<h3 id="create-the-ec2-instance">Create the EC2 instance<a class="headerlink" href="#create-the-ec2-instance" title="Permanent link">&para;</a></h3>
+<p>Create an EC2 instance in the AWS account <code>CnbAccount</code> with the following specifications.</p>
+<blockquote>
+<p><strong>Note</strong> &gt; <code>CnbAccount</code> represents the AWS account of the Challenge &amp; Benchmarking group at Sage.</p>
+</blockquote>
+<ul>
+<li>
+<p><strong>Name and tags</strong></p>
+</li>
+<li>
+<p>Name: <code>&lt;challenge name&gt;-elk</code> (e.g. <code>ptb-challenge-elk</code>)</p>
+</li>
+<li>
+<p>Tags:</p>
+<ul>
+<li><code>Department</code>: <code>CNB</code></li>
+<li><code>Project</code>: <code>challenge</code> (selected from <a href="https://github.com/Sage-Bionetworks-IT/organizations-infra/blob/master/sceptre/scipool/sc-tag-options/internal/Projects.json">this
+  list</a>)</li>
+<li><code>CostCenter</code>: select value from <a href="https://github.com/Sage-Bionetworks/aws-infra/tree/master/templates/tags">these
+  lists</a></li>
+</ul>
+</li>
+<li>
+<p><strong>Application and OS Images (Amazon Machine Image)</strong></p>
+</li>
+<li>
+<p>Amazon Machine Image (AMI): <code>Ubuntu Server 22.04 LTS (HVM), SSD Volume Type</code></p>
+</li>
+<li>
+<p>Architecture: <code>64-bit (x86)</code></p>
+</li>
+<li>
+<p><strong>Instance type</strong></p>
+</li>
+<li>
+<p>Instace type: <code>t2.medium</code>
+    &gt; <strong>Note</strong>
+    &gt; The instance needs at least 2 vCPUs and 4 GB of memory.</p>
+</li>
+<li>
+<p><strong>Key pair</strong></p>
+</li>
+<li>
+<p>Select your SSH key pair or create a new one.</p>
+</li>
+<li>
+<p><strong>Network settings</strong></p>
+</li>
+<li>
+<p>Click on <code>Edit</code></p>
+</li>
+<li>VPC: <code>vpc-0a70996f3e816e067</code></li>
+<li>Subnet: <code>subnet-01898b708714fa3b6</code></li>
+<li>Firewall<ul>
+<li>Select <code>Select existing security group</code>.</li>
+<li>Select <code>sg-0807a0e374542affd (cnbvpc-VpnSecurityGroup-JBXT9AUVDXCA)</code>.</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>Note</strong> These values will be different if you are creating the EC2 instance from an AWS account
+different from <code>CnbAccount</code>.</p>
+</blockquote>
+<ul>
+<li><strong>Configure storage</strong></li>
+<li>1x 100 GB gp2</li>
+</ul>
+<p>Once the instance has been created, configure it to use the following IAM:</p>
+<ul>
+<li>Go to <code>EC2</code> &gt; <code>Instances</code>.</li>
+<li>Select the ELK instance.</li>
+<li>Click on the button <code>Actions</code> &gt; <code>Security</code> &gt; <code>Modify IAM role</code>.</li>
+<li>Select the IAM role <code>AmazonSSMRoleForInstancesQuickSetup</code>.</li>
+</ul>
+<h3 id="connect-to-the-instance">Connect to the instance<a class="headerlink" href="#connect-to-the-instance" title="Permanent link">&para;</a></h3>
+<p>Use the <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/ssm-agent.html">AWS Systems Manager Agent (SSM Agent)</a> to connect to the EC2 instance. If this is your
+first time ever connecting to an instance created by the CnbAccount AWS account, complete the
+following step first. Otherwise, skip to steps 2 and 3.</p>
+<ol>
+<li>Create an <code>~/.aws/config</code> file if you do not already have one. Add the following:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="go">[profile cnb]</span>
+<span class="go">region = us-east-1</span>
+<span class="go">sso_start_url = https://d-906769aa66.awsapps.com/start</span>
+<span class="go">sso_region = us-east-1</span>
+<span class="go">sso_account_id = 216152803258</span>
+<span class="go">sso_role_name = Administrator</span>
+<span class="go">output = json</span>
+</code></pre></div>
+<p>This will create a named AWS profile called <code>cnb</code>.</p>
+<ol>
+<li>Before connecting to any <code>cnb</code> instances, first login to AWS SSO:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="go">aws --profile cnb sso login</span>
+</code></pre></div>
+<p>A browser window will pop up, asking for access from an application. Click <code>Allow</code>. You are now
+   authenticated for remote access for the next 8-10 hours. Re-login as necessary.</p>
+<ol>
+<li>Connect to the instance as <code>ubuntu</code>, passing the <code>Instance ID</code> to <code>--target</code>:
+   <div class="highlight"><pre><span></span><code><span class="go">aws ssm start-session \</span>
+<span class="go">  --profile cnb \</span>
+<span class="go">  --document-name AWS-StartInteractiveCommand \</span>
+<span class="go">  --parameters command=&quot;sudo su - ubuntu&quot; \</span>
+<span class="go">  --target &lt;instance id&gt;</span>
+</code></pre></div></li>
+</ol>
+<h4 id="ssm-with-ssh">SSM with SSH<a class="headerlink" href="#ssm-with-ssh" title="Permanent link">&para;</a></h4>
+<p>Follow these instructions to connect to the instance via SSH using the command <code>ssh &lt;profile name&gt;</code>.</p>
+<ol>
+<li>Add a new profile to the <code>~/.ssh/config</code> file.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="go">Host &lt;challenge name&gt;-elk</span>
+<span class="go">  HostName i-0fad4cb3e6543283e</span>
+<span class="go">  User ubuntu</span>
+<span class="go">  IdentityFile ~/.ssh/&lt;your pem file&gt;</span>
+<span class="go">  ProxyCommand sh -c &quot;AWS_PROFILE=cnb aws ssm start-session --target %h --document-name AWS-StartSSHSession --parameters &#39;portNumber=%p&#39;&quot;</span>
+</code></pre></div>
+<ol>
+<li>
+<p>Copy the public portion of your SSH key (on your local computer) to the instance’s
+   <code>~/.ssh/authorizedkeys</code> file.</p>
+</li>
+<li>
+<p>Set the permission of the authorizedkeys file to 600.</p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="go">chmod 600 ~/.ssh/authorizedkeys</span>
+</code></pre></div>
+<ol>
+<li>Connect to the instance.
+   <div class="highlight"><pre><span></span><code><span class="go">ssh &lt;challenge name&gt;-elk</span>
+</code></pre></div></li>
+</ol>
+<h3 id="prepare-the-instance">Prepare the instance<a class="headerlink" href="#prepare-the-instance" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Start by updating the system packages on the instance. System packages should be regularly
+   updated for enhanced security. On Ubuntu,</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="go">sudo apt update</span>
+<span class="go">sudo apt upgrade -y</span>
+</code></pre></div>
+<ol>
+<li>
+<p><a href="https://docs.docker.com/engine/install/ubuntu">Install the Docker Engine</a>.</p>
+</li>
+<li>
+<p><a href="https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user">Enable the non-root user to execute Docker commands</a>.</p>
+</li>
+<li>
+<p>Enable the Docker Engine to start at startup.
+     <div class="highlight"><pre><span></span><code><span class="go">sudo systemctl enable docker</span>
+</code></pre></div></p>
+</li>
+<li>
+<p>We will use the hostname of the EC2 instances to filter logs and metrics in Kibana. Therefore, it
+   is recommended to use short and descriptive hostnames. To update the hostname of an EC2 instance:</p>
+</li>
+<li>Open the file <code>/etc/hostname</code>.</li>
+<li>Set the hostname to <code>&lt;challenge name&gt;-elk</code>. For example, <code>ptb-challenge-elk</code> for the instance
+     running the ELK stack for the Preterm Birth Prediction DREAM Challenge, and
+     <code>ptb-challenge-node-&lt;uuid&gt;</code> for instances that process challenge submissions.</li>
+</ol>
+<h3 id="configure-the-elk-stack">Configure the ELK Stack<a class="headerlink" href="#configure-the-elk-stack" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Clone the GH repository of the ELK stack.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="go">git clone --depth 1 https://github.com/Sage-Bionetworks/docker-elk.git</span>
+</code></pre></div>
+<ol>
+<li>
+<p>Configure the ELK stack.</p>
+</li>
+<li>
+<p><a href="https://github.com/Sage-Bionetworks/docker-elk#how-to-disable-paid-features">Disable paid features</a>.</p>
+</li>
+<li>
+<p>Set new passwords in <code>.env</code>.</p>
+<blockquote>
+<p><strong>Note</strong> Create new passwords using the password generator that should come with your
+favorite password manager.</p>
+</blockquote>
+<p>Save the new passwords in Sage password manager.</p>
+</li>
+</ol>
+<h3 id="start-the-elk-stack">Start the ELK Stack<a class="headerlink" href="#start-the-elk-stack" title="Permanent link">&para;</a></h3>
+<p>Start the ELK stack services using Docker Compose:</p>
+<div class="highlight"><pre><span></span><code><span class="go">docker compose up -d</span>
+</code></pre></div>
+<blockquote>
+<p><strong>Note</strong>
+The stack can be stopped with <code>docker compose stop</code> and restarted with <code>docker compose start</code>.</p>
+</blockquote>
+<h3 id="connect-to-kibana">Connect to Kibana<a class="headerlink" href="#connect-to-kibana" title="Permanent link">&para;</a></h3>
+<p><a href="https://www.elastic.co/kibana/">Kibana</a> (the "K" in ELK) is a free and open user interface that lets you visualize your
+Elasticsearch data and navigate the Elastic Stack.</p>
+<p>To access Kibana, start by forwarding the Kibana port (5601) to your localhost using AWS SSM.</p>
+<div class="highlight"><pre><span></span><code><span class="gp">$ </span><span class="nv">AWS_PROFILE</span><span class="o">=</span>cnb<span class="w"> </span>aws<span class="w"> </span>ssm<span class="w"> </span>start-session<span class="w"> </span>--target<span class="w"> </span>&lt;instance<span class="w"> </span>id&gt;<span class="w"> </span>--document-name<span class="w"> </span>AWS-StartPortForwardingSession<span class="w"> </span>--parameters<span class="w"> </span><span class="s1">&#39;{&quot;portNumber&quot;:[&quot;5601&quot;], &quot;localPortNumber&quot;:[&quot;5601&quot;]}&#39;</span>
+
+<span class="go">Starting session with SessionId: ...</span>
+<span class="go">Port 5601 opened for sessionId ...</span>
+<span class="go">Waiting for connections...</span>
+</code></pre></div>
+<blockquote>
+<p><strong>Note</strong> For developers of the OpenChallenges, VS Code is already forwarding the port 5601 to
+localhost when running the project dev container. Either make sure that the dev container is not
+running when accessing Kibana or forward the Kibana port to another port on localhost, e.g. with
+<code>--parameters '{"portNumber":["5601"], "localPortNumber":["56010"]}'</code> (notice the trailing <code>0</code>).</p>
+</blockquote>
+<p>Give Kibana about 2-3 minutes to initialize after having started it, then access the Kibana web UI
+by opening <code>http://localhost:5601</code> in a web browser and use the following (default) credentials
+to log in:</p>
+<ul>
+<li>user: <code>elastic</code></li>
+<li>password: <code>&lt;elastic password&gt;</code></li>
+</ul>
+<p>Congrats! You have successfully logged into Kibana. You should be welcomed with a dialog that
+invites you to install integration components. You can skip this step.</p>
+<h2 id="deploy-beat-agents">Deploy Beat agents<a class="headerlink" href="#deploy-beat-agents" title="Permanent link">&para;</a></h2>
+<h3 id="metricbeat">Metricbeat<a class="headerlink" href="#metricbeat" title="Permanent link">&para;</a></h3>
+<p><a href="https://www.elastic.co/beats/metricbeat">Metricbeat</a> is a Elastic Beat agent that we will deploy on all the EC2 instances, including the
+instance that runs the ELK stack, to monitor the following metrics: CPU usage, memory usage,
+filesystem usage, and network usage. Metricbeat will send this information at the host and Docker
+container levels.</p>
+<ol>
+<li>Ssh to an EC2 instance.</li>
+<li><a href="https://www.elastic.co/guide/en/beats/metricbeat/current/metricbeat-installation-configuration.html#install">Install Metricbeat</a> (select the <code>DEB</code> tab).</li>
+</ol>
+<blockquote>
+<p><strong>Note</strong> The version of Metricbeat must match the version of the ELK stack. The version of the
+ELK stack is specified in the configuration file <code>.env</code> of the ELK stack.</p>
+</blockquote>
+<ol>
+<li>Enable the Metricbeat <code>docker</code> module.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="go">sudo metricbeat modules enable docker</span>
+</code></pre></div>
+<ol>
+<li>Check that the following modules are enable: <code>system</code>, <code>docker</code>.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="go">sudo metricbeat modules list</span>
+</code></pre></div>
+<ol>
+<li>
+<p>Specify the IP address and credentials that Metricbeat must use to connect to the EKL stack.</p>
+</li>
+<li>
+<p>Open the Metricbeat configuration file <code>/etc/metricbeat/metricbeat.yml</code>.</p>
+</li>
+<li>
+<p>Update the configuration for the section <code>output.elasticsearch</code>.
+     <div class="highlight"><pre><span></span><code><span class="go">output.elasticsearch:</span>
+<span class="go">  hosts: [&quot;&lt;elasticsearch ip&gt;:9200&quot;]</span>
+<span class="go">  username: &quot;elastic&quot;</span>
+<span class="go">  password: &quot;&lt;elastic password&gt;&quot;</span>
+</code></pre></div></p>
+</li>
+<li>
+<p>Update the metrics that the <code>docker</code> module should capture.</p>
+</li>
+<li>
+<p>Open the <code>docker</code> module configuration file <code>/etc/metricbeat/modules.d/docker.yml</code>.</p>
+</li>
+<li>
+<p>Use the following configuration:
+     <div class="highlight"><pre><span></span><code><span class="go">- module: docker</span>
+<span class="go">  metricsets:</span>
+<span class="go">    - container</span>
+<span class="go">    - cpu</span>
+<span class="go">    - diskio</span>
+<span class="go">    - event</span>
+<span class="go">    - healthcheck</span>
+<span class="go">    - image</span>
+<span class="go">    - info</span>
+<span class="go">    - memory</span>
+<span class="go">    - network</span>
+<span class="gp">  #  </span>-<span class="w"> </span>network_summary
+<span class="go">  period: 10s</span>
+<span class="go">  hosts: [&quot;unix:///var/run/docker.sock&quot;]</span>
+</code></pre></div></p>
+</li>
+<li>
+<p>Enable Metricbeat to start at startup.</p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="go">sudo systemctl enable metricbeat</span>
+</code></pre></div>
+<ol>
+<li>Start Metricbeat.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="go">sudo systemctl start metricbeat</span>
+</code></pre></div>
+<ol>
+<li>Check that Metricbeat has successfully started.
+   <div class="highlight"><pre><span></span><code><span class="go">sudo systemctl status metricbeat</span>
+</code></pre></div>
+   Look at the logs for any error messages. If Metricbeat failed to start, try restarting it with
+   <code>sudo systemctl restart metricbeat</code>.</li>
+</ol>
+<p>Metricbeat should now be sending data to the ELK Stack!</p>
+<h3 id="filebeat">Filebeat<a class="headerlink" href="#filebeat" title="Permanent link">&para;</a></h3>
+<p><a href="https://www.elastic.co/beats/filebeat">Filebeat</a> is a Elastic Beat agent that we will deploy on all the EC2 instances, including the
+instance that runs the ELK stack, to monitor system log files.</p>
+<ol>
+<li>Ssh to an EC2 instance.</li>
+<li><a href="https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-installation-configuration.html#installation">Install Filebeat</a> (select the <code>DEB</code> tab).</li>
+</ol>
+<blockquote>
+<p><strong>Note</strong> The version of Filebeat must match the version of the ELK stack. The version of the
+ELK stack is specified in the configuration file <code>.env</code> of the ELK stack.</p>
+</blockquote>
+<ol>
+<li>Enable the Filebeat <code>system</code> module.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="go">sudo filebeat modules enable system</span>
+</code></pre></div>
+<ol>
+<li>Check that the following modules are enable: <code>system</code>.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="go">sudo filebeat modules list</span>
+</code></pre></div>
+<ol>
+<li>
+<p>Specify the IP address and credentials that Filebeat must use to connect to the EKL stack.</p>
+</li>
+<li>
+<p>Open the Filebeat configuration file <code>/etc/filebeat/filebeat.yml</code>.</p>
+</li>
+<li>
+<p>Update the configuration for the section <code>output.elasticsearch</code>.
+     <div class="highlight"><pre><span></span><code><span class="go">output.elasticsearch:</span>
+<span class="go">  hosts: [&quot;&lt;elasticsearch ip&gt;:9200&quot;]</span>
+<span class="go">  username: &quot;elastic&quot;</span>
+<span class="go">  password: &quot;&lt;elastic password&gt;&quot;</span>
+</code></pre></div></p>
+</li>
+<li>
+<p>Update the metrics that the <code>system</code> module should capture.</p>
+</li>
+<li>
+<p>Open the <code>system</code> module configuration file <code>/etc/filebeat/modules.d/system.yml</code>.</p>
+</li>
+<li>
+<p>Use the following configuration:
+     <div class="highlight"><pre><span></span><code><span class="go">- module: system</span>
+<span class="go">  syslog:</span>
+<span class="go">    enabled: true</span>
+</code></pre></div></p>
+</li>
+<li>
+<p>Enable Filebeat to start at startup.</p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="go">sudo systemctl enable filebeat</span>
+</code></pre></div>
+<ol>
+<li>Start Filebeat.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="go">sudo systemctl start filebeat</span>
+</code></pre></div>
+<ol>
+<li>Check that Filebeat has successfully started.
+   <div class="highlight"><pre><span></span><code><span class="go">sudo systemctl status filebeat</span>
+</code></pre></div><blockquote>
+<p><strong>Note</strong> Look at the logs for any error messages. If Filebeat failed to start, try restarting
+it with <code>sudo systemctl restart filebeat</code>.</p>
+</blockquote>
+</li>
+</ol>
+<p>Filebeat should now be sending data to the ELK Stack!</p>
+<h3 id="set-up-beat-assets">Set up Beat assets<a class="headerlink" href="#set-up-beat-assets" title="Permanent link">&para;</a></h3>
+<p>Beats such as Metricbeat and Filebeat comes with predefined assets for parsing, indexing, and
+visualizing your data. To load these assets, run the following commands from the EC2 instance
+that runs the ELK stack.</p>
+<div class="highlight"><pre><span></span><code><span class="go">sudo metricbeat setup -e --dashboards</span>
+<span class="go">sudo filebeat setup -e --dashboards</span>
+</code></pre></div>
+<p>These commands may take 1-2 minutes to complete.</p>
+<h2 id="explore-and-visualize-data-in-kibana">Explore and visualize data in Kibana<a class="headerlink" href="#explore-and-visualize-data-in-kibana" title="Permanent link">&para;</a></h2>
+<p>After logging in Kibana, try to access the following sections to start exploring and monitoring the
+data sent to the ELK stack.</p>
+<h3 id="inventory">Inventory<a class="headerlink" href="#inventory" title="Permanent link">&para;</a></h3>
+<p>This page shows the compute resources used by all the hosts (EC2 instances) and Docker containers.
+To open the Inventory,</p>
+<ol>
+<li>Click on the top-left menu button.</li>
+<li>Click on <code>Observability</code> &gt; <code>Metrics</code>.</li>
+</ol>
+<p>Each host is represented by a tile in the Inventory. Click on one of the hosts to quickly access
+information about CPU, memory and network usage. The same dialog gives access to the following
+information:</p>
+<ul>
+<li>Tab <code>Logs</code>: access the logs generated by the host (sent by Filebeat).</li>
+<li>Tab <code>Processes</code>: see the list of processes running on the host.</li>
+<li>Tab <code>Metadata</code>: see host metadata such as OS distrubution name and version, architecture, etc.</li>
+</ul>
+<p><img src="images/collect-challenge-logs-and-system-metrics/kibana-inventory.png"></p>
+<p>To display similar information for the running Docker containers, set the value of the menu <code>Show</code>
+to <code>Docker Containers</code>. The tiles shown now represent the Docker containers running across all the
+hosts. Use the search bar to filter hosts and containers. For example, enter <code>host.hostname:
+ptb-challenge-gpu</code> to show only the containers running on the host <code>ptb-challenge-gpu</code>.</p>
+<h3 id="logs-stream">Logs Stream<a class="headerlink" href="#logs-stream" title="Permanent link">&para;</a></h3>
+<p>This page shows the logs generated by all the hosts and sent by Filebeat to the ELK stack. To open
+the Logs Stream,</p>
+<ol>
+<li>Click on the top-left menu button.</li>
+<li>Click on <code>Observability</code> &gt; <code>Logs</code>.</li>
+</ol>
+<p><img src="images/collect-challenge-logs-and-system-metrics/kibana-logs-stream.png"></p>
+<h3 id="dashboards">Dashboards<a class="headerlink" href="#dashboards" title="Permanent link">&para;</a></h3>
+<p>Earlier, we initialized the ELK Stack with Beats assets, which include several dashboards that we
+can use to monitor the fleet of hosts and containers. Here is a list of dashboards that are useful
+for monitoring the challenge hosts and containers.</p>
+<p>To access the complete list of dashboards,</p>
+<ol>
+<li>Click on the top-left menu button.</li>
+<li>Click on <code>Analytics</code> &gt; <code>Dashboard</code>.</li>
+</ol>
+<h4 id="metricbeat-system-overview-ecs">[Metricbeat System] Overview ECS<a class="headerlink" href="#metricbeat-system-overview-ecs" title="Permanent link">&para;</a></h4>
+<p>This dashboard provides an overview of system metrics such as CPU, memory, network and filesystem
+usage. By default, the dashboard displays information aggregated across all the hosts and Docker
+containers. A filter can be specified to display data for a single host. For example, by specifying
+the filter <code>host.name:"&lt;instance hostname&gt;"</code>.</p>
+<p><img src="images/collect-challenge-logs-and-system-metrics/kibana-dashboard-metricbeat-system-overview-ecs.png"></p>
+<h2 id="discover">Discover<a class="headerlink" href="#discover" title="Permanent link">&para;</a></h2>
+<p>The Discover page enables us to quickly explore all the data indexed in the ELK stack.</p>
+<p>To access the Discover page,</p>
+<ol>
+<li>Click on the top-left menu button.</li>
+<li>Click on <code>Analytics</code> &gt; <code>Discover</code>.</li>
+</ol>
+<p>For example, we want to visualize the evolution of the available filesystem of all the hosts. This
+information is important when troubleshooting the crash of an host as it is possible that the crash
+occurred because the filesystem was filled up to its capacity.</p>
+<p>On the Discovery page,</p>
+<ol>
+<li>Click on the top-left button included in the Discovery page, select the index <code>metricbeat-*</code>.</li>
+<li>In the <code>Search field names</code> input, enter <code>system.filesystem.available</code>.</li>
+<li>
+<p>In the list of available fields, click on <code>system.filesystem.available</code>, then click on the
+   button <code>Visualize</code>.</p>
+</li>
+<li>
+<p>In the right panel, set the following properties:</p>
+</li>
+<li>
+<p>Horizontal axis: <code>@timestamp</code></p>
+</li>
+<li>Vertical axis: <code>Median of system.filesystem.available</code></li>
+<li>
+<p>Break down by: <code>host.name</code></p>
+</li>
+<li>
+<p>Generate a line plot by selecting <code>Line</code> after clicking on one of the menu button above the plot.</p>
+</li>
+</ol>
+<p>You should now be able to see a view similar to the one shown below.</p>
+<p><img src="images/collect-challenge-logs-and-system-metrics/kibana-discover-filesystem-available.png"></p>
+<p>From there, the following actions are available:</p>
+<ul>
+<li>Download the plot data in CSV format Click by clicking on the button <code>Download as CSV</code>.</li>
+<li>Save the plot to access it later by clicking on the button <code>Save</code>.</li>
+</ul>
+<h2 id="improvements-and-future-activities">Improvements and future activities<a class="headerlink" href="#improvements-and-future-activities" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Configure the ELK stack to use https connections.</li>
+<li>when the user connects to Kibana</li>
+<li>when the Beat agents pushes data to Elasticsearch/Logstash</li>
+<li>Deploy the Beat agents using Docker.</li>
+<li>Configure the <code>aws</code> module of Metricbeat to collect CloudWatch data, including billing
+  information.</li>
+<li>Create a custom dashboard in Kibana that shows all the information relevant.</li>
+<li>Collect logs generated by the Challenge Orchestrator.</li>
+<li>Collect GPU usage.</li>
+<li>The Beat <a href="https://github.com/eBay/nvidiagpubeat">Nvidiagpubeat</a> only supports ELK v6 and v7. We are currently using ELK v8.3.0.</li>
+<li>Develop a custom Beat to collect information specific to our projects. For instance, a Beat that
+  sends information about the number of submission in a queue to the ELK stack.</li>
+<li>See <a href="https://www.elastic.co/guide/en/beats/libbeat/current/community-beats.html">Community Beats</a>.</li>
+</ul>
+<!-- Links -->
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "navigation.footer", "navigation.sections", "navigation.tabs", "search.highlight", "search.share", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.50899def.min.js"></script>
+      
+        <script src="../../termynal.js"></script>
+      
+    
+  </body>
+</html>
