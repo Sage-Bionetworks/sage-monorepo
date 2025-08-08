@@ -276,6 +276,9 @@ importers:
       '@nx/express':
         specifier: 21.2.1
         version: 21.2.1(@babel/traverse@7.27.4)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.12))(@types/node@22.5.1)(@zkochan/js-yaml@0.0.7)(babel-plugin-macros@3.1.0)(debug@4.3.7)(eslint@8.57.0)(express@4.21.2)(nx@21.2.1(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))(ts-node@10.9.1(@swc/core@1.5.29(@swc/helpers@0.5.12))(@types/node@22.5.1)(typescript@5.8.3))(typescript@5.8.3)
+      '@nx/gradle':
+        specifier: 21.3.11
+        version: 21.3.11(nx@21.2.1(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))
       '@nx/jest':
         specifier: 21.2.1
         version: 21.2.1(@babel/traverse@7.27.4)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.12))(@types/node@22.5.1)(babel-plugin-macros@3.1.0)(debug@4.3.7)(nx@21.2.1(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))(ts-node@10.9.1(@swc/core@1.5.29(@swc/helpers@0.5.12))(@types/node@22.5.1)(typescript@5.8.3))(typescript@5.8.3)
@@ -602,13 +605,13 @@ importers:
     dependencies:
       '@nx/devkit':
         specifier: 19.8.0
-        version: 19.8.0(nx@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))
+        version: 19.8.0(nx@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))
       '@nx/js':
         specifier: 19.8.0
-        version: 19.8.0(@babel/traverse@7.27.4)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(@types/node@22.5.5)(debug@4.3.7)(nx@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))(typescript@5.9.0-dev.20250725)
+        version: 19.8.0(@babel/traverse@7.27.4)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(@types/node@22.5.5)(debug@4.3.7)(nx@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))(typescript@6.0.0-dev.20250803)
       nx:
         specifier: 19.8.0
-        version: 19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)
+        version: 19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)
       tslib:
         specifier: ^2.3.0
         version: 2.4.1
@@ -2948,6 +2951,11 @@ packages:
     peerDependencies:
       nx: 21.2.1
 
+  '@nx/devkit@21.3.11':
+    resolution: {integrity: sha512-JOV8TAa9K5+ZwTA/EUi0g5qcKEg5vmi0AyOUsrNUHlv3BgQnwZtPLDDTPPZ+ezq24o6YzgwueZWj3CLEdMHEDg==}
+    peerDependencies:
+      nx: 21.3.11
+
   '@nx/devkit@21.3.2':
     resolution: {integrity: sha512-9OgECr93fcFVl5zwZMliCqLxVYhioY+fgBedup3xtedwNi9MEGvhx7NwchipI/FRrVG5av6T2jrry4ydhZMtPg==}
     peerDependencies:
@@ -2987,6 +2995,9 @@ packages:
     peerDependenciesMeta:
       express:
         optional: true
+
+  '@nx/gradle@21.3.11':
+    resolution: {integrity: sha512-16rENPVXY0L1CBHYZ3/xA7QRg+KdzwVrUNznn9CJ8rb2nTVmSpVPvIBWXpl7JtsBgOE0TybZE0HkF/Z2dlDKbg==}
 
   '@nx/jest@21.2.1':
     resolution: {integrity: sha512-REwI01V+oSpX9d3GDgf5M1Nqcy1Ug8aglwMQxmPouBL23olktDX6oV1sE4P4mU5UnPq9p/AIcChBYbUlxLo75A==}
@@ -13776,13 +13787,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  typescript@5.9.0-dev.20250725:
-    resolution: {integrity: sha512-iCfSsyPg1NMRP2ythXNvkljHbmMTppyUUZSnnD4DwGxKEn2GJwz0nBByLOJNbAeYggqo+/zgraMry9U+BZgJMw==}
-    engines: {node: '>=14.17'}
-    hasBin: true
-
-  typescript@5.9.0-dev.20250729:
-    resolution: {integrity: sha512-+tqV9F9lsLD6c/vZ+ZqJim/uVsEPmwmgE+Ib9VFyoR9Ibw0uDWx6rDN4hO5PaL6MJP/8eVJTfags7B4BdbW7Dg==}
+  typescript@6.0.0-dev.20250803:
+    resolution: {integrity: sha512-ppdfFspbt/ysZ/RVxn1a/bIrC2JxsdiL4ytaKut8+6B5CzT5JBhrnSoouOgDMXlmca6tJhJcidSETgRnkGzcPw==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -18035,15 +18041,15 @@ snapshots:
       - bluebird
       - supports-color
 
-  '@nrwl/devkit@19.8.0(nx@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))':
+  '@nrwl/devkit@19.8.0(nx@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))':
     dependencies:
-      '@nx/devkit': 19.8.0(nx@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))
+      '@nx/devkit': 19.8.0(nx@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))
     transitivePeerDependencies:
       - nx
 
-  '@nrwl/js@19.8.0(@babel/traverse@7.27.4)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(@types/node@22.5.5)(debug@4.3.7)(nx@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))(typescript@5.9.0-dev.20250725)':
+  '@nrwl/js@19.8.0(@babel/traverse@7.27.4)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(@types/node@22.5.5)(debug@4.3.7)(nx@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))(typescript@6.0.0-dev.20250803)':
     dependencies:
-      '@nx/js': 19.8.0(@babel/traverse@7.27.4)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(@types/node@22.5.5)(debug@4.3.7)(nx@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))(typescript@5.9.0-dev.20250725)
+      '@nx/js': 19.8.0(@babel/traverse@7.27.4)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(@types/node@22.5.5)(debug@4.3.7)(nx@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))(typescript@6.0.0-dev.20250803)
     transitivePeerDependencies:
       - '@babel/traverse'
       - '@swc-node/register'
@@ -18056,18 +18062,18 @@ snapshots:
       - typescript
       - verdaccio
 
-  '@nrwl/tao@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)':
+  '@nrwl/tao@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)':
     dependencies:
-      nx: 19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)
+      nx: 19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)
       tslib: 2.4.1
     transitivePeerDependencies:
       - '@swc-node/register'
       - '@swc/core'
       - debug
 
-  '@nrwl/workspace@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)':
+  '@nrwl/workspace@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)':
     dependencies:
-      '@nx/workspace': 19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)
+      '@nx/workspace': 19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)
     transitivePeerDependencies:
       - '@swc-node/register'
       - '@swc/core'
@@ -18220,20 +18226,32 @@ snapshots:
       - typescript
       - verdaccio
 
-  '@nx/devkit@19.8.0(nx@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))':
+  '@nx/devkit@19.8.0(nx@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))':
     dependencies:
-      '@nrwl/devkit': 19.8.0(nx@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))
+      '@nrwl/devkit': 19.8.0(nx@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))
       ejs: 3.1.10
       enquirer: 2.3.6
       ignore: 5.3.2
       minimatch: 9.0.3
-      nx: 19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)
+      nx: 19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)
       semver: 7.7.2
       tmp: 0.2.3
       tslib: 2.4.1
       yargs-parser: 21.1.1
 
   '@nx/devkit@21.2.1(nx@21.2.1(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))':
+    dependencies:
+      ejs: 3.1.10
+      enquirer: 2.3.6
+      ignore: 5.3.2
+      minimatch: 9.0.3
+      nx: 21.2.1(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)
+      semver: 7.7.2
+      tmp: 0.2.3
+      tslib: 2.4.1
+      yargs-parser: 21.1.1
+
+  '@nx/devkit@21.3.11(nx@21.2.1(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))':
     dependencies:
       ejs: 3.1.10
       enquirer: 2.3.6
@@ -18355,6 +18373,12 @@ snapshots:
       - typescript
       - verdaccio
 
+  '@nx/gradle@21.3.11(nx@21.2.1(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))':
+    dependencies:
+      '@nx/devkit': 21.3.11(nx@21.2.1(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))
+    transitivePeerDependencies:
+      - nx
+
   '@nx/jest@21.2.1(@babel/traverse@7.27.4)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.12))(@types/node@22.5.1)(babel-plugin-macros@3.1.0)(debug@4.3.7)(nx@21.2.1(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))(ts-node@10.9.1(@swc/core@1.5.29(@swc/helpers@0.5.12))(@types/node@22.5.1)(typescript@5.8.3))(typescript@5.8.3)':
     dependencies:
       '@jest/reporters': 29.7.0
@@ -18386,7 +18410,7 @@ snapshots:
       - typescript
       - verdaccio
 
-  '@nx/js@19.8.0(@babel/traverse@7.27.4)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(@types/node@22.5.5)(debug@4.3.7)(nx@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))(typescript@5.9.0-dev.20250725)':
+  '@nx/js@19.8.0(@babel/traverse@7.27.4)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(@types/node@22.5.5)(debug@4.3.7)(nx@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))(typescript@6.0.0-dev.20250803)':
     dependencies:
       '@babel/core': 7.27.4
       '@babel/plugin-proposal-decorators': 7.24.7(@babel/core@7.27.4)
@@ -18395,9 +18419,9 @@ snapshots:
       '@babel/preset-env': 7.27.2(@babel/core@7.27.4)
       '@babel/preset-typescript': 7.24.7(@babel/core@7.27.4)
       '@babel/runtime': 7.27.1
-      '@nrwl/js': 19.8.0(@babel/traverse@7.27.4)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(@types/node@22.5.5)(debug@4.3.7)(nx@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))(typescript@5.9.0-dev.20250725)
-      '@nx/devkit': 19.8.0(nx@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))
-      '@nx/workspace': 19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)
+      '@nrwl/js': 19.8.0(@babel/traverse@7.27.4)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(@types/node@22.5.5)(debug@4.3.7)(nx@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))(typescript@6.0.0-dev.20250803)
+      '@nx/devkit': 19.8.0(nx@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))
+      '@nx/workspace': 19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)
       babel-plugin-const-enum: 1.2.0(@babel/core@7.27.4)
       babel-plugin-macros: 2.8.0
       babel-plugin-transform-typescript-metadata: 0.3.2(@babel/core@7.27.4)(@babel/traverse@7.27.4)
@@ -18414,7 +18438,7 @@ snapshots:
       ora: 5.3.0
       semver: 7.7.2
       source-map-support: 0.5.19
-      ts-node: 10.9.1(@swc/core@1.5.29(@swc/helpers@0.5.12))(@types/node@22.5.5)(typescript@5.9.0-dev.20250725)
+      ts-node: 10.9.1(@swc/core@1.5.29(@swc/helpers@0.5.12))(@types/node@22.5.5)(typescript@6.0.0-dev.20250803)
       tsconfig-paths: 4.2.0
       tslib: 2.4.1
     transitivePeerDependencies:
@@ -18926,13 +18950,13 @@ snapshots:
       - vue-template-compiler
       - webpack-cli
 
-  '@nx/workspace@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)':
+  '@nx/workspace@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)':
     dependencies:
-      '@nrwl/workspace': 19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)
-      '@nx/devkit': 19.8.0(nx@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))
+      '@nrwl/workspace': 19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)
+      '@nx/devkit': 19.8.0(nx@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))
       chalk: 4.1.2
       enquirer: 2.3.6
-      nx: 19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)
+      nx: 19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)
       tslib: 2.4.1
       yargs-parser: 21.1.1
     transitivePeerDependencies:
@@ -20414,7 +20438,7 @@ snapshots:
       - '@swc/types'
       - supports-color
 
-  '@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725)':
+  '@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803)':
     dependencies:
       '@swc-node/core': 1.13.3(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)
       '@swc-node/sourcemap-support': 0.5.1
@@ -20423,7 +20447,7 @@ snapshots:
       debug: 4.3.7(supports-color@8.1.1)
       pirates: 4.0.6
       tslib: 2.8.1
-      typescript: 5.9.0-dev.20250725
+      typescript: 6.0.0-dev.20250803
     transitivePeerDependencies:
       - '@swc/types'
       - supports-color
@@ -23949,7 +23973,7 @@ snapshots:
     dependencies:
       semver: 7.7.2
       shelljs: 0.8.5
-      typescript: 5.9.0-dev.20250729
+      typescript: 6.0.0-dev.20250803
 
   dunder-proto@1.0.1:
     dependencies:
@@ -28143,10 +28167,10 @@ snapshots:
 
   nwsapi@2.2.12: {}
 
-  nx@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7):
+  nx@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7):
     dependencies:
       '@napi-rs/wasm-runtime': 0.2.4
-      '@nrwl/tao': 19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)
+      '@nrwl/tao': 19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)
       '@yarnpkg/lockfile': 1.1.0
       '@yarnpkg/parsers': 3.0.0-rc.46
       '@zkochan/js-yaml': 0.0.7
@@ -28191,7 +28215,7 @@ snapshots:
       '@nx/nx-linux-x64-musl': 19.8.0
       '@nx/nx-win32-arm64-msvc': 19.8.0
       '@nx/nx-win32-x64-msvc': 19.8.0
-      '@swc-node/register': 1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.9.0-dev.20250725)
+      '@swc-node/register': 1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@6.0.0-dev.20250803)
       '@swc/core': 1.5.29(@swc/helpers@0.5.12)
     transitivePeerDependencies:
       - debug
@@ -31640,7 +31664,7 @@ snapshots:
     optionalDependencies:
       '@swc/core': 1.5.29(@swc/helpers@0.5.12)
 
-  ts-node@10.9.1(@swc/core@1.5.29(@swc/helpers@0.5.12))(@types/node@22.5.5)(typescript@5.9.0-dev.20250725):
+  ts-node@10.9.1(@swc/core@1.5.29(@swc/helpers@0.5.12))(@types/node@22.5.5)(typescript@6.0.0-dev.20250803):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.11
@@ -31654,7 +31678,7 @@ snapshots:
       create-require: 1.1.1
       diff: 4.0.2
       make-error: 1.3.6
-      typescript: 5.9.0-dev.20250725
+      typescript: 6.0.0-dev.20250803
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
     optionalDependencies:
@@ -31816,9 +31840,7 @@ snapshots:
 
   typescript@5.8.3: {}
 
-  typescript@5.9.0-dev.20250725: {}
-
-  typescript@5.9.0-dev.20250729: {}
+  typescript@6.0.0-dev.20250803: {}
 
   ua-parser-js@1.0.38: {}
 

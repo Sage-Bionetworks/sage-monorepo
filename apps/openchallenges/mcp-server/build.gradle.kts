@@ -1,34 +1,15 @@
 plugins {
-  alias(libs.plugins.graalvm.native)
-  alias(libs.plugins.spring.boot)
-  java
-}
-
-group = "org.sagebionetworks.openchallenges"
-version = "0.0.1-SNAPSHOT"
-
-java {
-  toolchain {
-    languageVersion = JavaLanguageVersion.of(21)
-    nativeImageCapable = true
-  }
-}
-
-repositories {
-	mavenCentral()
-  mavenLocal()
+    id("sage.spring-boot-application")
+    id("sage.lombok")
+    id("org.graalvm.buildtools.native")
 }
 
 dependencies {
 	implementation(libs.spring.ai.starter.mcp.server.webflux)
 	testImplementation(libs.spring.boot.starter.test)
 	testRuntimeOnly(libs.junit.platform.launcher)
-  annotationProcessor(libs.lombok)
-  compileOnly(libs.lombok)
-  implementation(libs.openchallenges.api.client.java)
   implementation(platform(libs.spring.boot.dependencies))
-  testAnnotationProcessor(libs.lombok)
-  testCompileOnly(libs.lombok)
+  implementation(project(":openchallenges-api-client-java"))
 }
 
 graalvmNative {
@@ -55,18 +36,4 @@ graalvmNative {
       buildArgs.add("-O0")
     }
   }
-}
-
-tasks.withType<Test>().configureEach {
-  maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
-  
-  useJUnitPlatform()
-
-  testLogging {
-    events("passed", "skipped", "failed")
-  }
-}
-
-tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
-  imageName.set("ghcr.io/sage-bionetworks/${project.name}-base:local")
 }

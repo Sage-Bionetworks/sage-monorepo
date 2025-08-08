@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: false
+    properties:
+      hibernate:
+        search:
+          enabled: false # Disable Hibernate Search for tests
+  flyway:
+    enabled: false # Disable Flyway for simple tests
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration
+  cloud:
+    discovery:
+      enabled: false
+
+logging:
+  level:
+    org.sagebionetworks.amp.als: DEBUG
+    org.hibernate.search: OFF

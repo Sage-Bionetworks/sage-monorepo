@@ -11,60 +11,32 @@
         "cwd": "{projectRoot}"
       }
     },
-    "prepare": {
+    "build-dev": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["./gradlew --version 1> /dev/null"],
-        "cwd": "{projectRoot}"
-      }
-    },
-    "build": {
-      "executor": "nx:run-commands",
-      "outputs": ["{projectRoot}/build"],
-      "options": {
-        "command": "./gradlew build",
-        "cwd": "{projectRoot}"
+        "command": "./gradlew :{projectName}:build --continuous --exclude-task check"
       },
-      "dependsOn": ["^install"]
-    },
-    "test": {
-      "executor": "nx:run-commands",
-      "outputs": ["{projectRoot}/build"],
-      "options": {
-        "command": "./gradlew test",
-        "cwd": "{projectRoot}"
-      },
-      "dependsOn": ["^install"]
-    },
-    "clean": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "./gradlew clean",
-        "cwd": "{projectRoot}"
-      }
+      "continuous": true
     },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
-        "cwd": "{projectRoot}"
+        "command": "./gradlew :{projectName}:bootRun --exclude-task check"
       },
-      "dependsOn": ["^install"]
+      "continuous": true,
+      "dependsOn": ["build-dev"]
     },
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
         "command": "docker/amp-als/serve-detach.sh {projectName}"
-      },
-      "dependsOn": []
+      }
     },
     "build-image-base": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "./gradlew bootBuildImage",
-        "cwd": "{projectRoot}"
-      },
-      "dependsOn": ["^install"]
+        "command": "./gradlew :{projectName}:bootBuildImage"
+      }
     },
     "scan-image": {
       "executor": "nx:run-commands",
@@ -84,5 +56,5 @@
     }
   },
   "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],
-  "implicitDependencies": ["amp-als-api-description", "amp-als-app-config-data", "shared-java-util"]
+  "implicitDependencies": ["amp-als-api-description"]
 }

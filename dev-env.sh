@@ -34,11 +34,6 @@ function workspace-install {
   nx run-many --target=create-config
   # Projects that can be prepared in parallel
   nx run-many --target=prepare --projects=!tag:language:java
-  # Java projects must be installed one at a time
-  nx run-many --target=prepare --projects=tag:language:java --parallel=1
-
-  # See https://sagebionetworks.jira.com/browse/SMR-78
-  workspace-install-java-lib-projects
 }
 
 function workspace-install-affected {
@@ -48,16 +43,6 @@ function workspace-install-affected {
   nx affected --target=create-config
   # Projects that can be prepared in parallel
   nx affected --target=prepare --exclude='tag:language:java'
-  # Java projects must be installed one at a time
-  nx affected --target=prepare --exclude='!tag:language:java' --parallel=1
-
-  # See https://sagebionetworks.jira.com/browse/SMR-78
-  workspace-install-java-lib-projects
-}
-
-function workspace-install-java-lib-projects {
-  # Only library projects provide the install task.
-  nx run-many --target=install --projects=tag:language:java
 }
 
 # Setup Python virtualenvs
@@ -245,7 +230,7 @@ function workspace-docker-stop {
 function workspace-unset-empty-nx-env-vars {
   # Get all environment variables that start with "NX_" and have empty values
   local empty_nx_vars=$(env | grep '^NX_' | grep '=$' | cut -d= -f1)
-  
+
   if [ -n "$empty_nx_vars" ]; then
     while IFS= read -r var_name; do
       if [ -n "$var_name" ]; then

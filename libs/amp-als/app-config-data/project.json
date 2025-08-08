@@ -3,47 +3,6 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/amp-als/app-config-data/src",
   "projectType": "library",
-  "targets": {
-    "prepare": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": ["./gradlew --version 1> /dev/null"],
-        "cwd": "{projectRoot}"
-      }
-    },
-    "build": {
-      "executor": "nx:run-commands",
-      "outputs": ["{projectRoot}/build"],
-      "options": {
-        "command": "./gradlew build",
-        "cwd": "{projectRoot}"
-      },
-      "dependsOn": ["^install"]
-    },
-    "install": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "./gradlew publishToMavenLocal",
-        "cwd": "{projectRoot}"
-      },
-      "dependsOn": ["build"]
-    },
-    "test": {
-      "executor": "nx:run-commands",
-      "outputs": ["{projectRoot}/build"],
-      "options": {
-        "command": "./gradlew test",
-        "cwd": "{projectRoot}"
-      },
-      "dependsOn": ["^install"]
-    },
-    "clean": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "./gradlew clean",
-        "cwd": "{projectRoot}"
-      }
-    }
-  },
+  "targets": {},
   "tags": ["type:library", "scope:amp-als", "language:java", "package-manager:gradle"]
 }

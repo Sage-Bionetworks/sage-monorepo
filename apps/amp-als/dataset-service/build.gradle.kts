@@ -5,30 +5,13 @@ buildscript {
 }
 
 plugins {
+  id("sage.spring-boot-application")
+  id("sage.jacoco-coverage")
+  id("sage.lombok")
   alias(libs.plugins.flyway)
-  alias(libs.plugins.spring.boot)
-  jacoco
-  java
-}
-
-group = "org.sagebionetworks.amp.als"
-version = "0.0.1-SNAPSHOT"
-
-java {
-  toolchain {
-    languageVersion = JavaLanguageVersion.of(21)
-  }
-}
-
-repositories {
-  mavenCentral()
-  mavenLocal()
 }
 
 dependencies {
-  annotationProcessor(libs.lombok)
-  compileOnly(libs.lombok)
-  implementation(libs.amp.als.app.config.data)
   implementation(libs.findbugs.jsr305)
   implementation(libs.flyway.core)
   implementation(libs.hibernate.search.backend.elasticsearch)
@@ -36,7 +19,6 @@ dependencies {
   implementation(libs.jackson.databind)
   implementation(libs.jackson.dataformat.yaml)
   implementation(libs.jackson.datatype.jsr310)
-  implementation(libs.sagebionetworks.util)
   implementation(libs.spring.boot.starter.actuator)
   implementation(libs.spring.boot.starter.data.jpa)
   implementation(libs.spring.boot.starter.jdbc)
@@ -45,24 +27,18 @@ dependencies {
   implementation(libs.spring.boot.starter.web)
   implementation(libs.springdoc.openapi.ui)
   implementation(platform(libs.spring.boot.dependencies))
+  implementation(project(":amp-als-app-config-data"))
+  implementation(project(":sagebionetworks-util"))
   runtimeOnly(libs.flyway.database.postgresql)
   runtimeOnly(libs.postgresql)
   runtimeOnly(libs.spring.boot.devtools)
-  testAnnotationProcessor(libs.lombok)
-  testCompileOnly(libs.lombok)
   testImplementation(libs.spring.boot.starter.test)
+  testRuntimeOnly(libs.h2database.h2)
 }
 
-tasks.withType<JavaCompile> {
-  options.encoding = "UTF-8"
-}
-
-tasks.withType<Javadoc> {
-  options.encoding = "UTF-8"
-}
-
-tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
-  imageName.set("ghcr.io/sage-bionetworks/${project.name}-base:local")
+jacocoCoverage {
+  classExcludes = listOf<String>()
+  forceClassIncludes = listOf<String>()
 }
 
 flyway {

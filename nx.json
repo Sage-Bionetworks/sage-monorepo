@@ -95,6 +95,9 @@
       }
     },
     {
+      "plugin": "@nx/gradle"
+    },
+    {
       "plugin": "@sagebionetworks/sage-monorepo-nx-plugin",
       "options": {
         "buildImageTargetName": "build-image"
@@ -198,11 +201,15 @@
       "!{projectRoot}/src/test-setup.[jt]s",
       "!{projectRoot}/**/*.stories.@(js|jsx|ts|tsx|mdx)",
       "!{projectRoot}/.storybook/**/*",
-      "!{projectRoot}/tsconfig.storybook.json"
+      "!{projectRoot}/tsconfig.storybook.json",
+      "!{projectRoot}/src/test/**/*"
     ]
   },
   "useInferencePlugins": false,
   "defaultBase": "main",
   "packageManager": "pnpm",
-  "nxCloudId": "686fbf8b26cf276f670bc4b0"
+  "nxCloudId": "686fbf8b26cf276f670bc4b0",
+  "tui": {
+    "enabled": false
+  }
 }
