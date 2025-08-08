@@ -1,6 +1,7 @@
 [versions]
 findbugs = "3.0.2"
 flyway = "11.9.1"
+gradle-versions = "0.52.0"
 graalvm = "0.10.6"
 h2database = "2.3.232"
 hibernate-search = "7.2.3.Final"
@@ -77,6 +78,7 @@ testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.
 [plugins]
 flyway = { id = "org.flywaydb.flyway", version.ref = "flyway" }
 graalvm-native = { id = "org.graalvm.buildtools.native", version.ref = "graalvm" }
+gradle-versions = { id = "com.github.ben-manes.versions", version.ref = "gradle-versions" }
 jacoco = { id = "jacoco" }
 nx-gradle = { id = "dev.nx.gradle.project-graph", version.ref = "nx-gradle" }
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
