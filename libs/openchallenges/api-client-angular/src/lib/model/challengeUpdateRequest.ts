@@ -7,8 +7,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ChallengeCategory } from './challengeCategory';
 import { ChallengeStatus } from './challengeStatus';
 import { ChallengeIncentive } from './challengeIncentive';
+import { ChallengeSubmissionType } from './challengeSubmissionType';
 
 /**
  * The information required to update a challenge
@@ -48,5 +50,7 @@ export interface ChallengeUpdateRequest {
    */
   avatarUrl: string | null;
   incentives: Array<ChallengeIncentive>;
+  submissionTypes: Array<ChallengeSubmissionType>;
+  categories: Array<ChallengeCategory>;
 }
 export namespace ChallengeUpdateRequest {}

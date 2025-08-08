@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengePlatformNotFoundException;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeCategoryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeIncentiveDto;
@@ -14,6 +15,7 @@ import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeS
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSubmissionTypeDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeUpdateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengesPageDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeCategoryEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeIncentiveEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeSubmissionTypeEntity;
@@ -247,6 +249,7 @@ public class ChallengeService {
     updatePlatform(existingChallenge, request.getPlatformId());
     updateIncentives(existingChallenge, request.getIncentives());
     updateSubmissionTypes(existingChallenge, request.getSubmissionTypes());
+    updateCategories(existingChallenge, request.getCategories());
 
     // Save the updated entity
     challengeRepository.save(existingChallenge);
@@ -349,6 +352,39 @@ public class ChallengeService {
           .build();
         challengeSubmissionTypeRepository.save(newSubmissionType);
         existingSubmissionTypes.add(newSubmissionType);
+      }
+    }
+  }
+
+  private void updateCategories(ChallengeEntity challenge, List<ChallengeCategoryDto> categories) {
+    List<ChallengeCategoryEntity> existingCategories = challenge.getCategories();
+    List<String> newCategoryNames = categories != null
+      ? categories.stream().map(dto -> dto.getValue()).toList()
+      : new ArrayList<>();
+
+    // Find categories to delete (present in DB but not in request)
+    for (ChallengeCategoryEntity existing : new ArrayList<>(existingCategories)) {
+      boolean stillPresent = newCategoryNames
+        .stream()
+        .anyMatch(name -> name.equals(existing.getName()));
+      if (!stillPresent) {
+        challengeCategoryRepository.delete(existing);
+        existingCategories.remove(existing);
+      }
+    }
+
+    // Find categories to add (present in request but not in DB)
+    for (String newCategoryName : newCategoryNames) {
+      boolean alreadyExists = existingCategories
+        .stream()
+        .anyMatch(existing -> existing.getName().equals(newCategoryName));
+      if (!alreadyExists) {
+        ChallengeCategoryEntity newCategory = ChallengeCategoryEntity.builder()
+          .name(newCategoryName)
+          .challenge(challenge)
+          .build();
+        challengeCategoryRepository.save(newCategory);
+        existingCategories.add(newCategory);
       }
     }
   }
