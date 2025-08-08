@@ -258,17 +258,27 @@ public class ChallengeService {
       existingChallenge.setPlatform(null);
     }
 
-    // Update incentives - first delete existing ones, then convert DTOs to entities
-    challengeIncentiveRepository.deleteByChallengeId(challengeId);
+    // Update incentives - only delete those no longer needed and add new ones
+    List<ChallengeIncentiveEntity> existingIncentives = existingChallenge.getIncentives();
+    List<ChallengeIncentiveEntity> newIncentives = request.getIncentives() != null
+      ? challengeIncentiveMapper.convertToEntityList(request.getIncentives(), existingChallenge)
+      : new ArrayList<>();
 
-    // Convert DTOs to entities and save them individually
-    if (request.getIncentives() != null && !request.getIncentives().isEmpty()) {
-      List<ChallengeIncentiveEntity> incentiveEntities =
-        challengeIncentiveMapper.convertToEntityList(request.getIncentives(), existingChallenge);
+    // Find incentives to delete (present in DB but not in request)
+    for (ChallengeIncentiveEntity existing : new ArrayList<>(existingIncentives)) {
+      boolean stillPresent = newIncentives.stream().anyMatch(n -> n.equals(existing));
+      if (!stillPresent) {
+        challengeIncentiveRepository.delete(existing);
+        existingIncentives.remove(existing);
+      }
+    }
 
-      // Save incentive entities (they will be associated with the challenge automatically)
-      for (ChallengeIncentiveEntity incentive : incentiveEntities) {
-        challengeIncentiveRepository.save(incentive);
+    // Find incentives to add (present in request but not in DB)
+    for (ChallengeIncentiveEntity incoming : newIncentives) {
+      boolean alreadyExists = existingIncentives.stream().anyMatch(e -> e.equals(incoming));
+      if (!alreadyExists) {
+        challengeIncentiveRepository.save(incoming);
+        existingIncentives.add(incoming);
       }
     }
 
