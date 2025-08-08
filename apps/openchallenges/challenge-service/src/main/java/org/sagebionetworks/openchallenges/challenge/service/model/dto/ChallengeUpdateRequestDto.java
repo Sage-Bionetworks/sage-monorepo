@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeStatusDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSubmissionTypeDto;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -51,6 +52,9 @@ public class ChallengeUpdateRequestDto {
   @Valid
   private List<ChallengeIncentiveDto> incentives = new ArrayList<>();
 
+  @Valid
+  private List<ChallengeSubmissionTypeDto> submissionTypes = new ArrayList<>();
+
   public ChallengeUpdateRequestDto() {
     super();
   }
@@ -58,7 +62,7 @@ public class ChallengeUpdateRequestDto {
   /**
    * Constructor with only required parameters
    */
-  public ChallengeUpdateRequestDto(String slug, String name, String headline, String description, String doi, ChallengeStatusDto status, Long platformId, String websiteUrl, String avatarUrl, List<ChallengeIncentiveDto> incentives) {
+  public ChallengeUpdateRequestDto(String slug, String name, String headline, String description, String doi, ChallengeStatusDto status, Long platformId, String websiteUrl, String avatarUrl, List<ChallengeIncentiveDto> incentives, List<ChallengeSubmissionTypeDto> submissionTypes) {
     this.slug = slug;
     this.name = name;
     this.headline = headline;
@@ -69,6 +73,7 @@ public class ChallengeUpdateRequestDto {
     this.websiteUrl = websiteUrl;
     this.avatarUrl = avatarUrl;
     this.incentives = incentives;
+    this.submissionTypes = submissionTypes;
   }
 
   public ChallengeUpdateRequestDto slug(String slug) {
@@ -279,6 +284,34 @@ public class ChallengeUpdateRequestDto {
     this.incentives = incentives;
   }
 
+  public ChallengeUpdateRequestDto submissionTypes(List<ChallengeSubmissionTypeDto> submissionTypes) {
+    this.submissionTypes = submissionTypes;
+    return this;
+  }
+
+  public ChallengeUpdateRequestDto addSubmissionTypesItem(ChallengeSubmissionTypeDto submissionTypesItem) {
+    if (this.submissionTypes == null) {
+      this.submissionTypes = new ArrayList<>();
+    }
+    this.submissionTypes.add(submissionTypesItem);
+    return this;
+  }
+
+  /**
+   * Get submissionTypes
+   * @return submissionTypes
+   */
+  @NotNull @Valid 
+  @Schema(name = "submissionTypes", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("submissionTypes")
+  public List<ChallengeSubmissionTypeDto> getSubmissionTypes() {
+    return submissionTypes;
+  }
+
+  public void setSubmissionTypes(List<ChallengeSubmissionTypeDto> submissionTypes) {
+    this.submissionTypes = submissionTypes;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -297,12 +330,13 @@ public class ChallengeUpdateRequestDto {
         Objects.equals(this.platformId, challengeUpdateRequest.platformId) &&
         Objects.equals(this.websiteUrl, challengeUpdateRequest.websiteUrl) &&
         Objects.equals(this.avatarUrl, challengeUpdateRequest.avatarUrl) &&
-        Objects.equals(this.incentives, challengeUpdateRequest.incentives);
+        Objects.equals(this.incentives, challengeUpdateRequest.incentives) &&
+        Objects.equals(this.submissionTypes, challengeUpdateRequest.submissionTypes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(slug, name, headline, description, doi, status, platformId, websiteUrl, avatarUrl, incentives);
+    return Objects.hash(slug, name, headline, description, doi, status, platformId, websiteUrl, avatarUrl, incentives, submissionTypes);
   }
 
   @Override
@@ -319,6 +353,7 @@ public class ChallengeUpdateRequestDto {
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
     sb.append("    incentives: ").append(toIndentedString(incentives)).append("\n");
+    sb.append("    submissionTypes: ").append(toIndentedString(submissionTypes)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -357,6 +392,7 @@ public class ChallengeUpdateRequestDto {
       this.instance.setWebsiteUrl(value.websiteUrl);
       this.instance.setAvatarUrl(value.avatarUrl);
       this.instance.setIncentives(value.incentives);
+      this.instance.setSubmissionTypes(value.submissionTypes);
       return this;
     }
 
@@ -407,6 +443,11 @@ public class ChallengeUpdateRequestDto {
     
     public ChallengeUpdateRequestDto.Builder incentives(List<ChallengeIncentiveDto> incentives) {
       this.instance.incentives(incentives);
+      return this;
+    }
+    
+    public ChallengeUpdateRequestDto.Builder submissionTypes(List<ChallengeSubmissionTypeDto> submissionTypes) {
+      this.instance.submissionTypes(submissionTypes);
       return this;
     }
     

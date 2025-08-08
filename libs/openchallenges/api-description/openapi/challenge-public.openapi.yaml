@@ -942,6 +942,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ChallengeIncentive'
+        submissionTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeSubmissionType'
       required:
         - slug
         - name
@@ -953,6 +957,7 @@ components:
         - websiteUrl
         - avatarUrl
         - incentives
+        - submissionTypes
     ChallengeJsonLd:
       type: object
       description: A challenge
