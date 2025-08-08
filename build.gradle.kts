@@ -1,6 +1,8 @@
 import org.gradle.api.plugins.JavaPluginExtension
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 plugins {
+  alias(libs.plugins.gradle.versions)
   // Apply external plugins to be used in subprojects
   alias(libs.plugins.nx.gradle) apply false
 }
@@ -56,8 +58,18 @@ subprojects {
       version = "0.0.1-SNAPSHOT"
     }
     name.startsWith("sagebionetworks") -> {
-      group = "org.sagebionetworks.sagebionetworks"
+      group = "org.sagebionetworks"
       version = "0.0.1-SNAPSHOT"
     }
+  }
+}
+
+// Configure Gradle Versions Plugin
+tasks.withType<DependencyUpdatesTask> {
+  rejectVersionIf {
+    // Reject release candidates and alpha/beta versions unless specified
+    val rejected = listOf("alpha", "beta", "rc", "cr", "m", "preview", "b", "ea")
+      .any { qualifier -> candidate.version.lowercase().contains(qualifier) }
+    rejected
   }
 }

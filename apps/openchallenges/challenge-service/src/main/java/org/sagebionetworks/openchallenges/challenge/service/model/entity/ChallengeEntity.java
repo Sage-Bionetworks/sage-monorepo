@@ -18,8 +18,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.search.engine.backend.types.Searchable;
 import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
@@ -110,8 +110,7 @@ public class ChallengeEntity {
   private List<ChallengeIncentiveEntity> incentives;
 
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
-  @LazyCollection(LazyCollectionOption.EXTRA)
-  // @IndexedEmbedded(includePaths = {"userId"})
+  @Fetch(FetchMode.SUBSELECT)
   @GenericField(
     name = "starred_count",
     valueBridge = @ValueBridgeRef(type = CollectionSizeBridge.class),
