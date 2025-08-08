@@ -130,40 +130,42 @@ void shouldThrowExceptionWhenInputIsNull() {
 
 ## Project Execution (Gradle)
 
-### Monorepo Structure
+### Multi-Module Gradle Workspace
 
-In this Sage monorepo, each Java project has its own `gradlew` wrapper. Navigate to the specific project directory before running tests.
+This Sage monorepo uses a multi-module Gradle setup. **You no longer need to navigate to project directories.** Run all Gradle tasks from the repository root using the project path notation.
 
 **For OpenChallenges projects:**
 
 ```bash
-cd /workspaces/sage-monorepo/apps/openchallenges/auth-service
-./gradlew test --info
+# Run from repository root /workspaces/sage-monorepo
+./gradlew :openchallenges-challenge-service:test --info
+./gradlew :openchallenges-auth-service:test --info
 ```
 
 **For other projects, examples:**
 
 ```bash
-cd /workspaces/sage-monorepo/apps/amp-als/user-service
-./gradlew test --info
+# Run from repository root /workspaces/sage-monorepo
+./gradlew :amp-als-user-service:test --info
+./gradlew :agora-api:test --info
 ```
 
 ### Running Specific Tests
 
-When running tests from a Java subproject, use targeted commands to minimize execution time and get meaningful feedback:
+When running tests in the multi-module workspace, use targeted commands with project path notation:
 
 ```bash
 # RECOMMENDED: Start with specific test class to identify issues quickly
-./gradlew test --tests "*YourTestClass*" --stacktrace --no-daemon --console=plain
+./gradlew :openchallenges-challenge-service:test --tests "*YourTestClass*" --stacktrace --no-daemon --console=plain
 
 # If tests fail, use --rerun-tasks to bypass cache
-./gradlew test --tests "*YourTestClass*" --rerun-tasks --stacktrace --no-daemon --console=plain
+./gradlew :openchallenges-challenge-service:test --tests "*YourTestClass*" --rerun-tasks --stacktrace --no-daemon --console=plain
 
-# After fixes, verify all unit tests pass
-./gradlew testUnit --no-daemon --console=plain
+# After fixes, verify all unit tests pass for the specific project
+./gradlew :openchallenges-challenge-service:testUnit --no-daemon --console=plain
 
-# Finally, verify integration tests still work
-./gradlew testIntegration --no-daemon --console=plain
+# Finally, verify integration tests still work for the specific project
+./gradlew :openchallenges-challenge-service:testIntegration --no-daemon --console=plain
 ```
 
 **Efficient Testing Strategy:**
