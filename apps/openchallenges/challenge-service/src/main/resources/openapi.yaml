@@ -1833,6 +1833,10 @@ components:
           items:
             $ref: '#/components/schemas/ChallengeCategory'
           type: array
+        inputDataTypes:
+          items:
+            $ref: '#/components/schemas/EdamConceptId'
+          type: array
       required:
         - avatarUrl
         - categories
@@ -1840,6 +1844,7 @@ components:
         - doi
         - headline
         - incentives
+        - inputDataTypes
         - name
         - platformId
         - slug

@@ -52,5 +52,6 @@ export interface ChallengeUpdateRequest {
   incentives: Array<ChallengeIncentive>;
   submissionTypes: Array<ChallengeSubmissionType>;
   categories: Array<ChallengeCategory>;
+  inputDataTypes: Array<number>;
 }
 export namespace ChallengeUpdateRequest {}

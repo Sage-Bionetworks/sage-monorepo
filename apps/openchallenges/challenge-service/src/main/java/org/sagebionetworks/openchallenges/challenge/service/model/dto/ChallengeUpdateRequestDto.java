@@ -59,6 +59,9 @@ public class ChallengeUpdateRequestDto {
   @Valid
   private List<ChallengeCategoryDto> categories = new ArrayList<>();
 
+  @Valid
+  private List<Long> inputDataTypes = new ArrayList<>();
+
   public ChallengeUpdateRequestDto() {
     super();
   }
@@ -66,7 +69,7 @@ public class ChallengeUpdateRequestDto {
   /**
    * Constructor with only required parameters
    */
-  public ChallengeUpdateRequestDto(String slug, String name, String headline, String description, String doi, ChallengeStatusDto status, Long platformId, String websiteUrl, String avatarUrl, List<ChallengeIncentiveDto> incentives, List<ChallengeSubmissionTypeDto> submissionTypes, List<ChallengeCategoryDto> categories) {
+  public ChallengeUpdateRequestDto(String slug, String name, String headline, String description, String doi, ChallengeStatusDto status, Long platformId, String websiteUrl, String avatarUrl, List<ChallengeIncentiveDto> incentives, List<ChallengeSubmissionTypeDto> submissionTypes, List<ChallengeCategoryDto> categories, List<Long> inputDataTypes) {
     this.slug = slug;
     this.name = name;
     this.headline = headline;
@@ -79,6 +82,7 @@ public class ChallengeUpdateRequestDto {
     this.incentives = incentives;
     this.submissionTypes = submissionTypes;
     this.categories = categories;
+    this.inputDataTypes = inputDataTypes;
   }
 
   public ChallengeUpdateRequestDto slug(String slug) {
@@ -345,6 +349,34 @@ public class ChallengeUpdateRequestDto {
     this.categories = categories;
   }
 
+  public ChallengeUpdateRequestDto inputDataTypes(List<Long> inputDataTypes) {
+    this.inputDataTypes = inputDataTypes;
+    return this;
+  }
+
+  public ChallengeUpdateRequestDto addInputDataTypesItem(Long inputDataTypesItem) {
+    if (this.inputDataTypes == null) {
+      this.inputDataTypes = new ArrayList<>();
+    }
+    this.inputDataTypes.add(inputDataTypesItem);
+    return this;
+  }
+
+  /**
+   * Get inputDataTypes
+   * @return inputDataTypes
+   */
+  @NotNull 
+  @Schema(name = "inputDataTypes", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("inputDataTypes")
+  public List<Long> getInputDataTypes() {
+    return inputDataTypes;
+  }
+
+  public void setInputDataTypes(List<Long> inputDataTypes) {
+    this.inputDataTypes = inputDataTypes;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -365,12 +397,13 @@ public class ChallengeUpdateRequestDto {
         Objects.equals(this.avatarUrl, challengeUpdateRequest.avatarUrl) &&
         Objects.equals(this.incentives, challengeUpdateRequest.incentives) &&
         Objects.equals(this.submissionTypes, challengeUpdateRequest.submissionTypes) &&
-        Objects.equals(this.categories, challengeUpdateRequest.categories);
+        Objects.equals(this.categories, challengeUpdateRequest.categories) &&
+        Objects.equals(this.inputDataTypes, challengeUpdateRequest.inputDataTypes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(slug, name, headline, description, doi, status, platformId, websiteUrl, avatarUrl, incentives, submissionTypes, categories);
+    return Objects.hash(slug, name, headline, description, doi, status, platformId, websiteUrl, avatarUrl, incentives, submissionTypes, categories, inputDataTypes);
   }
 
   @Override
@@ -389,6 +422,7 @@ public class ChallengeUpdateRequestDto {
     sb.append("    incentives: ").append(toIndentedString(incentives)).append("\n");
     sb.append("    submissionTypes: ").append(toIndentedString(submissionTypes)).append("\n");
     sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
+    sb.append("    inputDataTypes: ").append(toIndentedString(inputDataTypes)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -429,6 +463,7 @@ public class ChallengeUpdateRequestDto {
       this.instance.setIncentives(value.incentives);
       this.instance.setSubmissionTypes(value.submissionTypes);
       this.instance.setCategories(value.categories);
+      this.instance.setInputDataTypes(value.inputDataTypes);
       return this;
     }
 
@@ -489,6 +524,11 @@ public class ChallengeUpdateRequestDto {
     
     public ChallengeUpdateRequestDto.Builder categories(List<ChallengeCategoryDto> categories) {
       this.instance.categories(categories);
+      return this;
+    }
+    
+    public ChallengeUpdateRequestDto.Builder inputDataTypes(List<Long> inputDataTypes) {
+      this.instance.inputDataTypes(inputDataTypes);
       return this;
     }
     

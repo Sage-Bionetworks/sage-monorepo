@@ -64,6 +64,7 @@ class ChallengeUpdateRequest(BaseModel):
     incentives: List[ChallengeIncentive]
     submission_types: List[ChallengeSubmissionType] = Field(alias="submissionTypes")
     categories: List[ChallengeCategory]
+    input_data_types: List[StrictInt] = Field(alias="inputDataTypes")
     __properties: ClassVar[List[str]] = [
         "slug",
         "name",
@@ -77,6 +78,7 @@ class ChallengeUpdateRequest(BaseModel):
         "incentives",
         "submissionTypes",
         "categories",
+        "inputDataTypes",
     ]
 
     @field_validator("slug")
@@ -170,6 +172,7 @@ class ChallengeUpdateRequest(BaseModel):
                 "incentives": obj.get("incentives"),
                 "submissionTypes": obj.get("submissionTypes"),
                 "categories": obj.get("categories"),
+                "inputDataTypes": obj.get("inputDataTypes"),
             }
         )
         return _obj

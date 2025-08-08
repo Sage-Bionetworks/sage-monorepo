@@ -54,6 +54,9 @@ class TestChallengeUpdateRequest(unittest.TestCase):
                     ],
                 categories = [
                     'featured'
+                    ],
+                input_data_types = [
+                    1
                     ]
             )
         else:
@@ -75,6 +78,9 @@ class TestChallengeUpdateRequest(unittest.TestCase):
                     ],
                 categories = [
                     'featured'
+                    ],
+                input_data_types = [
+                    1
                     ],
         )
         """
