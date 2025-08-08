@@ -2,9 +2,9 @@ import org.gradle.api.plugins.JavaPluginExtension
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 plugins {
+  alias(libs.plugins.gradle.versions)
   // Apply external plugins to be used in subprojects
   alias(libs.plugins.nx.gradle) apply false
-  alias(libs.plugins.gradle.versions)
 }
 
 allprojects {
