@@ -255,26 +255,35 @@ public class ChallengeService {
     // Find the existing challenge
     ChallengeEntity existingChallenge = getChallengeEntity(challengeId);
 
-    // Update the challenge components
-    updateBasicFields(existingChallenge, request);
-    updatePlatform(existingChallenge, request.getPlatformId());
-    updateOperation(existingChallenge, request.getOperation());
-    updateIncentives(existingChallenge, request.getIncentives());
-    updateSubmissionTypes(existingChallenge, request.getSubmissionTypes());
-    updateCategories(existingChallenge, request.getCategories());
-    updateInputDataTypes(existingChallenge, request.getInputDataTypes());
+    try {
+      // Update the challenge components
+      updateBasicFields(existingChallenge, request);
+      updatePlatform(existingChallenge, request.getPlatformId());
+      updateOperation(existingChallenge, request.getOperation());
+      updateIncentives(existingChallenge, request.getIncentives());
+      updateSubmissionTypes(existingChallenge, request.getSubmissionTypes());
+      updateCategories(existingChallenge, request.getCategories());
+      updateInputDataTypes(existingChallenge, request.getInputDataTypes());
 
-    // Save the updated entity
-    challengeRepository.save(existingChallenge);
-    challengeRepository.flush();
+      // Save the updated entity
+      challengeRepository.save(existingChallenge);
+      challengeRepository.flush();
 
-    // Refresh the entity to get the updated state
-    ChallengeEntity refreshedEntity = refreshChallengeEntity(challengeId);
+      // Refresh the entity to get the updated state
+      ChallengeEntity refreshedEntity = refreshChallengeEntity(challengeId);
 
-    logger.info("Successfully updated challenge with ID: {}", challengeId);
+      logger.info("Successfully updated challenge with ID: {}", challengeId);
 
-    // Return the updated challenge as DTO
-    return challengeMapper.convertToDto(refreshedEntity);
+      // Return the updated challenge as DTO
+      return challengeMapper.convertToDto(refreshedEntity);
+    } catch (DataIntegrityViolationException e) {
+      // Handle potential unique constraint violations (e.g., slug uniqueness)
+      throw new RuntimeException(
+        "Challenge update failed due to data constraint violation. " +
+        "This may be due to a duplicate slug or other unique constraint violation.",
+        e
+      );
+    }
   }
 
   private void updateBasicFields(ChallengeEntity challenge, ChallengeUpdateRequestDto request) {
