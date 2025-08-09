@@ -5,20 +5,12 @@
   --lg-breakpoint: vars.$lg-breakpoint;
 }
 
-h2 {
-  padding-bottom: 30px;
-}
+.boxplots-grid {
+  display: grid;
+  gap: 30px 50px;
+  grid-template-columns: minmax(0, 1fr);
 
-.boxplots-grid-container {
-  overflow-x: hidden;
-
-  .boxplots-grid {
-    display: grid;
-    gap: 30px 50px;
-    grid-template-columns: minmax(0, 1fr);
-
-    @include mixins.respond-to('large') {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+  @include mixins.respond-to('large') {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
