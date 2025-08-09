@@ -31,6 +31,12 @@ properties:
     type: array
     items:
       $ref: ChallengeCategory.yaml
+  inputDataTypes:
+    type: array
+    items:
+      $ref: EdamConceptId.yaml
+  operation:
+    $ref: EdamConceptId.yaml
 required:
   - slug
   - name
@@ -44,3 +50,5 @@ required:
   - incentives
   - submissionTypes
   - categories
+  - inputDataTypes
+  - operation

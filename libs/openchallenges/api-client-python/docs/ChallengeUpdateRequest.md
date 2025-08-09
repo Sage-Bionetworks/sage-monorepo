@@ -18,6 +18,8 @@ The information required to update a challenge
 | **incentives**       | [**List[ChallengeIncentive]**](ChallengeIncentive.md)           |                                                |
 | **submission_types** | [**List[ChallengeSubmissionType]**](ChallengeSubmissionType.md) |                                                |
 | **categories**       | [**List[ChallengeCategory]**](ChallengeCategory.md)             |                                                |
+| **input_data_types** | **List[int]**                                                   |                                                |
+| **operation**        | **int**                                                         | The unique identifier of the EDAM concept.     |
 
 ## Example
 
