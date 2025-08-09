@@ -57,7 +57,8 @@ class TestChallengeUpdateRequest(unittest.TestCase):
                     ],
                 input_data_types = [
                     1
-                    ]
+                    ],
+                operation = 1
             )
         else:
             return ChallengeUpdateRequest(
@@ -82,6 +83,7 @@ class TestChallengeUpdateRequest(unittest.TestCase):
                 input_data_types = [
                     1
                     ],
+                operation = 1,
         )
         """
 

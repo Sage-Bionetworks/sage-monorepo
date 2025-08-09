@@ -954,6 +954,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EdamConceptId'
+        operation:
+          $ref: '#/components/schemas/EdamConceptId'
       required:
         - slug
         - name
@@ -968,6 +970,7 @@ components:
         - submissionTypes
         - categories
         - inputDataTypes
+        - operation
     ChallengeJsonLd:
       type: object
       description: A challenge

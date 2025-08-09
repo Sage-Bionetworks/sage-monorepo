@@ -65,6 +65,9 @@ class ChallengeUpdateRequest(BaseModel):
     submission_types: List[ChallengeSubmissionType] = Field(alias="submissionTypes")
     categories: List[ChallengeCategory]
     input_data_types: List[StrictInt] = Field(alias="inputDataTypes")
+    operation: StrictInt = Field(
+        description="The unique identifier of the EDAM concept."
+    )
     __properties: ClassVar[List[str]] = [
         "slug",
         "name",
@@ -79,6 +82,7 @@ class ChallengeUpdateRequest(BaseModel):
         "submissionTypes",
         "categories",
         "inputDataTypes",
+        "operation",
     ]
 
     @field_validator("slug")
@@ -173,6 +177,7 @@ class ChallengeUpdateRequest(BaseModel):
                 "submissionTypes": obj.get("submissionTypes"),
                 "categories": obj.get("categories"),
                 "inputDataTypes": obj.get("inputDataTypes"),
+                "operation": obj.get("operation"),
             }
         )
         return _obj

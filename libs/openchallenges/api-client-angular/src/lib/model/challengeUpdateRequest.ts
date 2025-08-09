@@ -53,5 +53,9 @@ export interface ChallengeUpdateRequest {
   submissionTypes: Array<ChallengeSubmissionType>;
   categories: Array<ChallengeCategory>;
   inputDataTypes: Array<number>;
+  /**
+   * The unique identifier of the EDAM concept.
+   */
+  operation: number;
 }
 export namespace ChallengeUpdateRequest {}

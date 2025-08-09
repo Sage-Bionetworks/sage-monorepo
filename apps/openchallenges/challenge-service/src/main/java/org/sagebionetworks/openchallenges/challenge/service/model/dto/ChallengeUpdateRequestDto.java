@@ -62,6 +62,8 @@ public class ChallengeUpdateRequestDto {
   @Valid
   private List<Long> inputDataTypes = new ArrayList<>();
 
+  private Long operation;
+
   public ChallengeUpdateRequestDto() {
     super();
   }
@@ -69,7 +71,7 @@ public class ChallengeUpdateRequestDto {
   /**
    * Constructor with only required parameters
    */
-  public ChallengeUpdateRequestDto(String slug, String name, String headline, String description, String doi, ChallengeStatusDto status, Long platformId, String websiteUrl, String avatarUrl, List<ChallengeIncentiveDto> incentives, List<ChallengeSubmissionTypeDto> submissionTypes, List<ChallengeCategoryDto> categories, List<Long> inputDataTypes) {
+  public ChallengeUpdateRequestDto(String slug, String name, String headline, String description, String doi, ChallengeStatusDto status, Long platformId, String websiteUrl, String avatarUrl, List<ChallengeIncentiveDto> incentives, List<ChallengeSubmissionTypeDto> submissionTypes, List<ChallengeCategoryDto> categories, List<Long> inputDataTypes, Long operation) {
     this.slug = slug;
     this.name = name;
     this.headline = headline;
@@ -83,6 +85,7 @@ public class ChallengeUpdateRequestDto {
     this.submissionTypes = submissionTypes;
     this.categories = categories;
     this.inputDataTypes = inputDataTypes;
+    this.operation = operation;
   }
 
   public ChallengeUpdateRequestDto slug(String slug) {
@@ -377,6 +380,26 @@ public class ChallengeUpdateRequestDto {
     this.inputDataTypes = inputDataTypes;
   }
 
+  public ChallengeUpdateRequestDto operation(Long operation) {
+    this.operation = operation;
+    return this;
+  }
+
+  /**
+   * The unique identifier of the EDAM concept.
+   * @return operation
+   */
+  @NotNull 
+  @Schema(name = "operation", example = "1", description = "The unique identifier of the EDAM concept.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("operation")
+  public Long getOperation() {
+    return operation;
+  }
+
+  public void setOperation(Long operation) {
+    this.operation = operation;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -398,12 +421,13 @@ public class ChallengeUpdateRequestDto {
         Objects.equals(this.incentives, challengeUpdateRequest.incentives) &&
         Objects.equals(this.submissionTypes, challengeUpdateRequest.submissionTypes) &&
         Objects.equals(this.categories, challengeUpdateRequest.categories) &&
-        Objects.equals(this.inputDataTypes, challengeUpdateRequest.inputDataTypes);
+        Objects.equals(this.inputDataTypes, challengeUpdateRequest.inputDataTypes) &&
+        Objects.equals(this.operation, challengeUpdateRequest.operation);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(slug, name, headline, description, doi, status, platformId, websiteUrl, avatarUrl, incentives, submissionTypes, categories, inputDataTypes);
+    return Objects.hash(slug, name, headline, description, doi, status, platformId, websiteUrl, avatarUrl, incentives, submissionTypes, categories, inputDataTypes, operation);
   }
 
   @Override
@@ -423,6 +447,7 @@ public class ChallengeUpdateRequestDto {
     sb.append("    submissionTypes: ").append(toIndentedString(submissionTypes)).append("\n");
     sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
     sb.append("    inputDataTypes: ").append(toIndentedString(inputDataTypes)).append("\n");
+    sb.append("    operation: ").append(toIndentedString(operation)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -464,6 +489,7 @@ public class ChallengeUpdateRequestDto {
       this.instance.setSubmissionTypes(value.submissionTypes);
       this.instance.setCategories(value.categories);
       this.instance.setInputDataTypes(value.inputDataTypes);
+      this.instance.setOperation(value.operation);
       return this;
     }
 
@@ -529,6 +555,11 @@ public class ChallengeUpdateRequestDto {
     
     public ChallengeUpdateRequestDto.Builder inputDataTypes(List<Long> inputDataTypes) {
       this.instance.inputDataTypes(inputDataTypes);
+      return this;
+    }
+    
+    public ChallengeUpdateRequestDto.Builder operation(Long operation) {
+      this.instance.operation(operation);
       return this;
     }
     

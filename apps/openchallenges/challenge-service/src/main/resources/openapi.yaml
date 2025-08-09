@@ -1837,6 +1837,11 @@ components:
           items:
             $ref: '#/components/schemas/EdamConceptId'
           type: array
+        operation:
+          description: The unique identifier of the EDAM concept.
+          example: 1
+          format: int64
+          type: integer
       required:
         - avatarUrl
         - categories
@@ -1846,6 +1851,7 @@ components:
         - incentives
         - inputDataTypes
         - name
+        - operation
         - platformId
         - slug
         - status

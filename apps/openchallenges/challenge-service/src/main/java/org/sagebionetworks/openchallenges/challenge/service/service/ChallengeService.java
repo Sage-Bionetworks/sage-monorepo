@@ -253,6 +253,7 @@ public class ChallengeService {
     // Update the challenge components
     updateBasicFields(existingChallenge, request);
     updatePlatform(existingChallenge, request.getPlatformId());
+    updateOperation(existingChallenge, request.getOperation());
     updateIncentives(existingChallenge, request.getIncentives());
     updateSubmissionTypes(existingChallenge, request.getSubmissionTypes());
     updateCategories(existingChallenge, request.getCategories());
@@ -289,6 +290,30 @@ public class ChallengeService {
     } else {
       // If platformId is null, remove the platform association
       challenge.setPlatform(null);
+    }
+  }
+
+  private void updateOperation(ChallengeEntity challenge, Long operationId) {
+    if (operationId != null) {
+      // Check if the operation is already set to the same value
+      if (
+        challenge.getOperation() != null && challenge.getOperation().getId().equals(operationId)
+      ) {
+        // Operation is already set to the requested value, no changes needed
+        return;
+      }
+
+      // Find the EDAM concept for the operation
+      EdamConceptEntity operation = edamConceptRepository
+        .findById(operationId)
+        .orElseThrow(() ->
+          new RuntimeException(String.format("EDAM concept with ID %d not found", operationId))
+        );
+
+      challenge.setOperation(operation);
+    } else {
+      // If operationId is null, remove the operation association
+      challenge.setOperation(null);
     }
   }
 
