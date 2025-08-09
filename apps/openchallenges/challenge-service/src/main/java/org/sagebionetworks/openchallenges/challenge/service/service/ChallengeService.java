@@ -281,6 +281,8 @@ public class ChallengeService {
     challenge.setStatus(request.getStatus().toString());
     challenge.setWebsiteUrl(request.getWebsiteUrl());
     challenge.setAvatarUrl(request.getAvatarUrl());
+    challenge.setStartDate(request.getStartDate());
+    challenge.setEndDate(request.getEndDate());
   }
 
   private void updatePlatform(ChallengeEntity challenge, Long platformId) {

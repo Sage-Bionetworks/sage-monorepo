@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,6 +14,7 @@ import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeC
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSubmissionTypeDto;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -64,6 +66,12 @@ public class ChallengeUpdateRequestDto {
 
   private Long operation;
 
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+  private LocalDate startDate = null;
+
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+  private LocalDate endDate = null;
+
   public ChallengeUpdateRequestDto() {
     super();
   }
@@ -71,7 +79,7 @@ public class ChallengeUpdateRequestDto {
   /**
    * Constructor with only required parameters
    */
-  public ChallengeUpdateRequestDto(String slug, String name, String headline, String description, String doi, ChallengeStatusDto status, Long platformId, String websiteUrl, String avatarUrl, List<ChallengeIncentiveDto> incentives, List<ChallengeSubmissionTypeDto> submissionTypes, List<ChallengeCategoryDto> categories, List<Long> inputDataTypes, Long operation) {
+  public ChallengeUpdateRequestDto(String slug, String name, String headline, String description, String doi, ChallengeStatusDto status, Long platformId, String websiteUrl, String avatarUrl, List<ChallengeIncentiveDto> incentives, List<ChallengeSubmissionTypeDto> submissionTypes, List<ChallengeCategoryDto> categories, List<Long> inputDataTypes, Long operation, LocalDate startDate, LocalDate endDate) {
     this.slug = slug;
     this.name = name;
     this.headline = headline;
@@ -86,6 +94,8 @@ public class ChallengeUpdateRequestDto {
     this.categories = categories;
     this.inputDataTypes = inputDataTypes;
     this.operation = operation;
+    this.startDate = startDate;
+    this.endDate = endDate;
   }
 
   public ChallengeUpdateRequestDto slug(String slug) {
@@ -400,6 +410,46 @@ public class ChallengeUpdateRequestDto {
     this.operation = operation;
   }
 
+  public ChallengeUpdateRequestDto startDate(LocalDate startDate) {
+    this.startDate = startDate;
+    return this;
+  }
+
+  /**
+   * The start date of the challenge.
+   * @return startDate
+   */
+  @NotNull @Valid 
+  @Schema(name = "startDate", example = "2017-07-21", description = "The start date of the challenge.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("startDate")
+  public LocalDate getStartDate() {
+    return startDate;
+  }
+
+  public void setStartDate(LocalDate startDate) {
+    this.startDate = startDate;
+  }
+
+  public ChallengeUpdateRequestDto endDate(LocalDate endDate) {
+    this.endDate = endDate;
+    return this;
+  }
+
+  /**
+   * The end date of the challenge.
+   * @return endDate
+   */
+  @NotNull @Valid 
+  @Schema(name = "endDate", example = "2017-07-21", description = "The end date of the challenge.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("endDate")
+  public LocalDate getEndDate() {
+    return endDate;
+  }
+
+  public void setEndDate(LocalDate endDate) {
+    this.endDate = endDate;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -422,12 +472,14 @@ public class ChallengeUpdateRequestDto {
         Objects.equals(this.submissionTypes, challengeUpdateRequest.submissionTypes) &&
         Objects.equals(this.categories, challengeUpdateRequest.categories) &&
         Objects.equals(this.inputDataTypes, challengeUpdateRequest.inputDataTypes) &&
-        Objects.equals(this.operation, challengeUpdateRequest.operation);
+        Objects.equals(this.operation, challengeUpdateRequest.operation) &&
+        Objects.equals(this.startDate, challengeUpdateRequest.startDate) &&
+        Objects.equals(this.endDate, challengeUpdateRequest.endDate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(slug, name, headline, description, doi, status, platformId, websiteUrl, avatarUrl, incentives, submissionTypes, categories, inputDataTypes, operation);
+    return Objects.hash(slug, name, headline, description, doi, status, platformId, websiteUrl, avatarUrl, incentives, submissionTypes, categories, inputDataTypes, operation, startDate, endDate);
   }
 
   @Override
@@ -448,6 +500,8 @@ public class ChallengeUpdateRequestDto {
     sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
     sb.append("    inputDataTypes: ").append(toIndentedString(inputDataTypes)).append("\n");
     sb.append("    operation: ").append(toIndentedString(operation)).append("\n");
+    sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
+    sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -490,6 +544,8 @@ public class ChallengeUpdateRequestDto {
       this.instance.setCategories(value.categories);
       this.instance.setInputDataTypes(value.inputDataTypes);
       this.instance.setOperation(value.operation);
+      this.instance.setStartDate(value.startDate);
+      this.instance.setEndDate(value.endDate);
       return this;
     }
 
@@ -560,6 +616,16 @@ public class ChallengeUpdateRequestDto {
     
     public ChallengeUpdateRequestDto.Builder operation(Long operation) {
       this.instance.operation(operation);
+      return this;
+    }
+    
+    public ChallengeUpdateRequestDto.Builder startDate(LocalDate startDate) {
+      this.instance.startDate(startDate);
+      return this;
+    }
+    
+    public ChallengeUpdateRequestDto.Builder endDate(LocalDate endDate) {
+      this.instance.endDate(endDate);
       return this;
     }
     

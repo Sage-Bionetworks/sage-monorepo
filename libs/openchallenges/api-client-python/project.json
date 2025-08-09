@@ -45,14 +45,14 @@
       },
       "cache": true
     },
-    "format": {
-      "executor": "@nxlv/python:ruff-format",
-      "outputs": [],
-      "options": {
-        "filePatterns": ["openchallenges_api_client_python", "test"]
-      },
-      "cache": true
-    },
+    // "format": {
+    //   "executor": "@nxlv/python:ruff-format",
+    //   "outputs": [],
+    //   "options": {
+    //     "filePatterns": ["openchallenges_api_client_python", "test"]
+    //   },
+    //   "cache": true
+    // },
     "test": {
       "executor": "@nxlv/python:run-commands",
       "outputs": [
@@ -84,11 +84,7 @@
     "generate": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "xargs rm -fr <.openapi-generator/FILES",
-          "openapi-generator-cli generate",
-          "nx run format"
-        ],
+        "commands": ["xargs rm -fr <.openapi-generator/FILES", "openapi-generator-cli generate"],
         "cwd": "{projectRoot}",
         "parallel": false
       },
