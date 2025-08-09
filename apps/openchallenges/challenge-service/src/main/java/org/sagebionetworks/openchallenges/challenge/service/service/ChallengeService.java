@@ -85,7 +85,6 @@ public class ChallengeService {
 
   private ChallengeMapper challengeMapper = new ChallengeMapper();
   private ChallengeJsonLdMapper challengeJsonLdMapper = new ChallengeJsonLdMapper();
-  private ChallengeIncentiveMapper challengeIncentiveMapper = new ChallengeIncentiveMapper();
 
   private static final List<String> SEARCHABLE_FIELDS = Arrays.asList(
     "description",
@@ -204,37 +203,43 @@ public class ChallengeService {
   @Transactional
   public ChallengeDto createChallenge(ChallengeCreateRequestDto request) {
     // Create a new challenge entity
-    ChallengeEntity newChallenge = new ChallengeEntity();
-    newChallenge.setSlug(request.getSlug());
-    newChallenge.setName(request.getName());
-    newChallenge.setHeadline(request.getHeadline());
-    newChallenge.setDescription(request.getDescription());
-    newChallenge.setDoi(request.getDoi());
-    newChallenge.setStatus(request.getStatus().toString());
-    newChallenge.setWebsiteUrl(request.getWebsiteUrl());
-    newChallenge.setAvatarUrl(request.getAvatarUrl());
-
     // Initialize empty collections to prevent NullPointerException in mapper
-    newChallenge.setSubmissionTypes(new ArrayList<>());
-    newChallenge.setIncentives(new ArrayList<>());
-    newChallenge.setCategories(new ArrayList<>());
-    newChallenge.setInputDataTypes(new ArrayList<>());
-    newChallenge.setStars(new ArrayList<>());
-    newChallenge.setContributions(new ArrayList<>());
+    ChallengeEntity newChallenge = ChallengeEntity.builder()
+      .submissionTypes(new ArrayList<>())
+      .incentives(new ArrayList<>())
+      .categories(new ArrayList<>())
+      .inputDataTypes(new ArrayList<>())
+      .stars(new ArrayList<>())
+      .contributions(new ArrayList<>())
+      .build();
 
-    // Set platform
-    SimpleChallengePlatformEntity platform = getChallengePlatformEntity(request.getPlatformId());
-    newChallenge.setPlatform(platform);
+    // Set basic fields using helper method
+    updateBasicFields(newChallenge, request);
 
     try {
       // Save the challenge entity first to get the ID
       ChallengeEntity savedChallenge = challengeRepository.save(newChallenge);
       challengeRepository.flush();
 
+      // Set non-basic information using helper methods
+      updatePlatform(savedChallenge, request.getPlatformId());
+      updateOperation(savedChallenge, request.getOperation());
+      updateIncentives(savedChallenge, request.getIncentives());
+      updateSubmissionTypes(savedChallenge, request.getSubmissionTypes());
+      updateCategories(savedChallenge, request.getCategories());
+      updateInputDataTypes(savedChallenge, request.getInputDataTypes());
+
+      // Save the updated entity
+      challengeRepository.save(savedChallenge);
+      challengeRepository.flush();
+
+      // Refresh the entity to get the updated state
+      ChallengeEntity refreshedEntity = refreshChallengeEntity(savedChallenge.getId());
+
       logger.info("Successfully created challenge with ID: {}", savedChallenge.getId());
 
       // Return the created challenge as DTO
-      return challengeMapper.convertToDto(savedChallenge);
+      return challengeMapper.convertToDto(refreshedEntity);
     } catch (DataIntegrityViolationException e) {
       // Handle potential unique constraint violations (e.g., slug uniqueness)
       throw new RuntimeException(
@@ -273,6 +278,19 @@ public class ChallengeService {
   }
 
   private void updateBasicFields(ChallengeEntity challenge, ChallengeUpdateRequestDto request) {
+    challenge.setSlug(request.getSlug());
+    challenge.setName(request.getName());
+    challenge.setHeadline(request.getHeadline());
+    challenge.setDescription(request.getDescription());
+    challenge.setDoi(request.getDoi());
+    challenge.setStatus(request.getStatus().toString());
+    challenge.setWebsiteUrl(request.getWebsiteUrl());
+    challenge.setAvatarUrl(request.getAvatarUrl());
+    challenge.setStartDate(request.getStartDate());
+    challenge.setEndDate(request.getEndDate());
+  }
+
+  private void updateBasicFields(ChallengeEntity challenge, ChallengeCreateRequestDto request) {
     challenge.setSlug(request.getSlug());
     challenge.setName(request.getName());
     challenge.setHeadline(request.getHeadline());
