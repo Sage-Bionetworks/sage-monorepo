@@ -62,9 +62,9 @@ public class ChallengeUpdateRequestDto {
   private List<ChallengeCategoryDto> categories = new ArrayList<>();
 
   @Valid
-  private List<Long> inputDataTypes = new ArrayList<>();
+  private List<@Min(1)Integer> inputDataTypes = new ArrayList<>();
 
-  private Long operation;
+  private Integer operation;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   private LocalDate startDate = null;
@@ -79,7 +79,7 @@ public class ChallengeUpdateRequestDto {
   /**
    * Constructor with only required parameters
    */
-  public ChallengeUpdateRequestDto(String slug, String name, String headline, String description, String doi, ChallengeStatusDto status, Long platformId, String websiteUrl, String avatarUrl, List<ChallengeIncentiveDto> incentives, List<ChallengeSubmissionTypeDto> submissionTypes, List<ChallengeCategoryDto> categories, List<Long> inputDataTypes, Long operation, LocalDate startDate, LocalDate endDate) {
+  public ChallengeUpdateRequestDto(String slug, String name, String headline, String description, String doi, ChallengeStatusDto status, Long platformId, String websiteUrl, String avatarUrl, List<ChallengeIncentiveDto> incentives, List<ChallengeSubmissionTypeDto> submissionTypes, List<ChallengeCategoryDto> categories, List<@Min(1)Integer> inputDataTypes, Integer operation, LocalDate startDate, LocalDate endDate) {
     this.slug = slug;
     this.name = name;
     this.headline = headline;
@@ -362,12 +362,12 @@ public class ChallengeUpdateRequestDto {
     this.categories = categories;
   }
 
-  public ChallengeUpdateRequestDto inputDataTypes(List<Long> inputDataTypes) {
+  public ChallengeUpdateRequestDto inputDataTypes(List<@Min(1)Integer> inputDataTypes) {
     this.inputDataTypes = inputDataTypes;
     return this;
   }
 
-  public ChallengeUpdateRequestDto addInputDataTypesItem(Long inputDataTypesItem) {
+  public ChallengeUpdateRequestDto addInputDataTypesItem(Integer inputDataTypesItem) {
     if (this.inputDataTypes == null) {
       this.inputDataTypes = new ArrayList<>();
     }
@@ -382,31 +382,32 @@ public class ChallengeUpdateRequestDto {
   @NotNull 
   @Schema(name = "inputDataTypes", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("inputDataTypes")
-  public List<Long> getInputDataTypes() {
+  public List<@Min(1)Integer> getInputDataTypes() {
     return inputDataTypes;
   }
 
-  public void setInputDataTypes(List<Long> inputDataTypes) {
+  public void setInputDataTypes(List<@Min(1)Integer> inputDataTypes) {
     this.inputDataTypes = inputDataTypes;
   }
 
-  public ChallengeUpdateRequestDto operation(Long operation) {
+  public ChallengeUpdateRequestDto operation(Integer operation) {
     this.operation = operation;
     return this;
   }
 
   /**
    * The unique identifier of the EDAM concept.
+   * minimum: 1
    * @return operation
    */
-  @NotNull 
+  @NotNull @Min(1) 
   @Schema(name = "operation", example = "1", description = "The unique identifier of the EDAM concept.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("operation")
-  public Long getOperation() {
+  public Integer getOperation() {
     return operation;
   }
 
-  public void setOperation(Long operation) {
+  public void setOperation(Integer operation) {
     this.operation = operation;
   }
 
@@ -609,12 +610,12 @@ public class ChallengeUpdateRequestDto {
       return this;
     }
     
-    public ChallengeUpdateRequestDto.Builder inputDataTypes(List<Long> inputDataTypes) {
+    public ChallengeUpdateRequestDto.Builder inputDataTypes(List<Integer> inputDataTypes) {
       this.instance.inputDataTypes(inputDataTypes);
       return this;
     }
     
-    public ChallengeUpdateRequestDto.Builder operation(Long operation) {
+    public ChallengeUpdateRequestDto.Builder operation(Integer operation) {
       this.instance.operation(operation);
       return this;
     }

@@ -322,7 +322,7 @@ public class ChallengeService {
     }
   }
 
-  private void updateOperation(ChallengeEntity challenge, Long operationId) {
+  private void updateOperation(ChallengeEntity challenge, Integer operationId) {
     if (operationId != null) {
       // Check if the operation is already set to the same value
       if (
@@ -450,8 +450,8 @@ public class ChallengeService {
     }
   }
 
-  private void updateInputDataTypes(ChallengeEntity challenge, List<Long> inputDataTypeIds) {
-    List<Long> newInputDataTypeIds = inputDataTypeIds != null
+  private void updateInputDataTypes(ChallengeEntity challenge, List<Integer> inputDataTypeIds) {
+    List<Integer> newInputDataTypeIds = inputDataTypeIds != null
       ? inputDataTypeIds
       : new ArrayList<>();
 
@@ -459,7 +459,7 @@ public class ChallengeService {
     challengeInputDataTypeRepository.deleteAllByChallengeId(challenge.getId());
 
     // Add new input data types
-    for (Long newInputDataTypeId : newInputDataTypeIds) {
+    for (Integer newInputDataTypeId : newInputDataTypeIds) {
       EdamConceptEntity edamConcept = edamConceptRepository
         .findById(newInputDataTypeId)
         .orElseThrow(() ->

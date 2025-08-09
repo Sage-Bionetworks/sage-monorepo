@@ -1150,7 +1150,8 @@ components:
     EdamConceptId:
       description: The unique identifier of the EDAM concept.
       example: 1
-      format: int64
+      format: int32
+      minimum: 1
       type: integer
     ChallengeCategory:
       description: The category of the challenge.
@@ -1384,7 +1385,8 @@ components:
         id:
           description: The unique identifier of the EDAM concept.
           example: 1
-          format: int64
+          format: int32
+          minimum: 1
           type: integer
         classId:
           example: http://edamontology.org/data_0850
@@ -1789,7 +1791,8 @@ components:
         operation:
           description: The unique identifier of the EDAM concept.
           example: 1
-          format: int64
+          format: int32
+          minimum: 1
           type: integer
       required:
         - name
@@ -1873,7 +1876,8 @@ components:
         operation:
           description: The unique identifier of the EDAM concept.
           example: 1
-          format: int64
+          format: int32
+          minimum: 1
           type: integer
         startDate:
           description: The start date of the challenge.

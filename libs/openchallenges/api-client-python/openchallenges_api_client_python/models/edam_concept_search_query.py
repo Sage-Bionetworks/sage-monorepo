@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from openchallenges_api_client_python.models.edam_concept_direction import (
@@ -44,7 +44,7 @@ class EdamConceptSearchQuery(BaseModel):
     )
     sort: Optional[EdamConceptSort] = EdamConceptSort.RELEVANCE
     direction: Optional[EdamConceptDirection] = None
-    ids: Optional[List[StrictInt]] = Field(
+    ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(
         default=None,
         description="An array of EDAM concept ids used to filter the results.",
     )

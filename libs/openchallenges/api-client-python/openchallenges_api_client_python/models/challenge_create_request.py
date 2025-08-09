@@ -76,10 +76,10 @@ class ChallengeCreateRequest(BaseModel):
         default=None, alias="submissionTypes"
     )
     categories: Optional[List[ChallengeCategory]] = None
-    input_data_types: Optional[List[StrictInt]] = Field(
+    input_data_types: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(
         default=None, alias="inputDataTypes"
     )
-    operation: Optional[StrictInt] = Field(
+    operation: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(
         default=None, description="The unique identifier of the EDAM concept."
     )
     __properties: ClassVar[List[str]] = [

@@ -24,7 +24,7 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 public class EdamConceptDto {
 
-  private Long id;
+  private Integer id;
 
   private String classId;
 
@@ -37,29 +37,30 @@ public class EdamConceptDto {
   /**
    * Constructor with only required parameters
    */
-  public EdamConceptDto(Long id, String classId, String preferredLabel) {
+  public EdamConceptDto(Integer id, String classId, String preferredLabel) {
     this.id = id;
     this.classId = classId;
     this.preferredLabel = preferredLabel;
   }
 
-  public EdamConceptDto id(Long id) {
+  public EdamConceptDto id(Integer id) {
     this.id = id;
     return this;
   }
 
   /**
    * The unique identifier of the EDAM concept.
+   * minimum: 1
    * @return id
    */
-  @NotNull 
+  @NotNull @Min(1) 
   @Schema(name = "id", example = "1", description = "The unique identifier of the EDAM concept.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("id")
-  public Long getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -163,7 +164,7 @@ public class EdamConceptDto {
       return this;
     }
 
-    public EdamConceptDto.Builder id(Long id) {
+    public EdamConceptDto.Builder id(Integer id) {
       this.instance.id(id);
       return this;
     }

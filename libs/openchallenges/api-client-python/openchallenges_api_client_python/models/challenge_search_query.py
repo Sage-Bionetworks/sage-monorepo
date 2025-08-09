@@ -92,12 +92,12 @@ class ChallengeSearchQuery(BaseModel):
         description="An array of challenge submission types used to filter the results.",
         alias="submissionTypes",
     )
-    input_data_types: Optional[List[StrictInt]] = Field(
+    input_data_types: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(
         default=None,
         description="An array of EDAM concept ID used to filter the results.",
         alias="inputDataTypes",
     )
-    operations: Optional[List[StrictInt]] = Field(
+    operations: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(
         default=None,
         description="An array of EDAM concept ID used to filter the results.",
     )

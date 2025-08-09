@@ -68,9 +68,9 @@ public class ChallengeCreateRequestDto {
   private List<ChallengeCategoryDto> categories = new ArrayList<>();
 
   @Valid
-  private List<Long> inputDataTypes = new ArrayList<>();
+  private List<@Min(1)Integer> inputDataTypes = new ArrayList<>();
 
-  private @Nullable Long operation;
+  private @Nullable Integer operation;
 
   public ChallengeCreateRequestDto() {
     super();
@@ -390,12 +390,12 @@ public class ChallengeCreateRequestDto {
     this.categories = categories;
   }
 
-  public ChallengeCreateRequestDto inputDataTypes(List<Long> inputDataTypes) {
+  public ChallengeCreateRequestDto inputDataTypes(List<@Min(1)Integer> inputDataTypes) {
     this.inputDataTypes = inputDataTypes;
     return this;
   }
 
-  public ChallengeCreateRequestDto addInputDataTypesItem(Long inputDataTypesItem) {
+  public ChallengeCreateRequestDto addInputDataTypesItem(Integer inputDataTypesItem) {
     if (this.inputDataTypes == null) {
       this.inputDataTypes = new ArrayList<>();
     }
@@ -410,31 +410,32 @@ public class ChallengeCreateRequestDto {
   
   @Schema(name = "inputDataTypes", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("inputDataTypes")
-  public List<Long> getInputDataTypes() {
+  public List<@Min(1)Integer> getInputDataTypes() {
     return inputDataTypes;
   }
 
-  public void setInputDataTypes(List<Long> inputDataTypes) {
+  public void setInputDataTypes(List<@Min(1)Integer> inputDataTypes) {
     this.inputDataTypes = inputDataTypes;
   }
 
-  public ChallengeCreateRequestDto operation(Long operation) {
+  public ChallengeCreateRequestDto operation(Integer operation) {
     this.operation = operation;
     return this;
   }
 
   /**
    * The unique identifier of the EDAM concept.
+   * minimum: 1
    * @return operation
    */
-  
+  @Min(1) 
   @Schema(name = "operation", example = "1", description = "The unique identifier of the EDAM concept.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("operation")
-  public Long getOperation() {
+  public Integer getOperation() {
     return operation;
   }
 
-  public void setOperation(Long operation) {
+  public void setOperation(Integer operation) {
     this.operation = operation;
   }
 
@@ -607,12 +608,12 @@ public class ChallengeCreateRequestDto {
       return this;
     }
     
-    public ChallengeCreateRequestDto.Builder inputDataTypes(List<Long> inputDataTypes) {
+    public ChallengeCreateRequestDto.Builder inputDataTypes(List<Integer> inputDataTypes) {
       this.instance.inputDataTypes(inputDataTypes);
       return this;
     }
     
-    public ChallengeCreateRequestDto.Builder operation(Long operation) {
+    public ChallengeCreateRequestDto.Builder operation(Integer operation) {
       this.instance.operation(operation);
       return this;
     }

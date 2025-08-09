@@ -11,7 +11,7 @@ CREATE TABLE challenge_platform (
 
 -- create edam_concept table
 CREATE TABLE edam_concept (
-  id BIGSERIAL PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   class_id VARCHAR(60) NOT NULL UNIQUE,
   preferred_label VARCHAR(80) NOT NULL
 );

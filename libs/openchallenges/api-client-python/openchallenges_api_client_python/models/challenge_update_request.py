@@ -66,8 +66,10 @@ class ChallengeUpdateRequest(BaseModel):
     incentives: List[ChallengeIncentive]
     submission_types: List[ChallengeSubmissionType] = Field(alias="submissionTypes")
     categories: List[ChallengeCategory]
-    input_data_types: List[StrictInt] = Field(alias="inputDataTypes")
-    operation: StrictInt = Field(
+    input_data_types: List[Annotated[int, Field(strict=True, ge=1)]] = Field(
+        alias="inputDataTypes"
+    )
+    operation: Annotated[int, Field(strict=True, ge=1)] = Field(
         description="The unique identifier of the EDAM concept."
     )
     start_date: Optional[date] = Field(

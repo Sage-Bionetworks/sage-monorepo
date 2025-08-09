@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Any, ClassVar, Dict, List
 from typing_extensions import Annotated
 from typing import Optional, Set
@@ -29,7 +29,9 @@ class EdamConcept(BaseModel):
     The EDAM concept.
     """  # noqa: E501
 
-    id: StrictInt = Field(description="The unique identifier of the EDAM concept.")
+    id: Annotated[int, Field(strict=True, ge=1)] = Field(
+        description="The unique identifier of the EDAM concept."
+    )
     class_id: Annotated[str, Field(strict=True, max_length=60)] = Field(alias="classId")
     preferred_label: Annotated[str, Field(strict=True, max_length=80)] = Field(
         alias="preferredLabel"
