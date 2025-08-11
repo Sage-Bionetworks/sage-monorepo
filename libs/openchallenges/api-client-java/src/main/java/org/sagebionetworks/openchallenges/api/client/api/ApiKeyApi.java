@@ -13,7 +13,6 @@ import org.sagebionetworks.openchallenges.api.client.model.ApiKey;
 import org.sagebionetworks.openchallenges.api.client.model.BasicError;
 import org.sagebionetworks.openchallenges.api.client.model.CreateApiKeyRequest;
 import org.sagebionetworks.openchallenges.api.client.model.CreateApiKeyResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
@@ -28,7 +27,7 @@ import org.springframework.web.client.RestClientResponseException;
 
 @jakarta.annotation.Generated(
   value = "org.openapitools.codegen.languages.JavaClientCodegen",
-  comments = "Generator version: 7.13.0"
+  comments = "Generator version: 7.14.0"
 )
 public class ApiKeyApi {
 
@@ -38,7 +37,6 @@ public class ApiKeyApi {
     this(new ApiClient());
   }
 
-  @Autowired
   public ApiKeyApi(ApiClient apiClient) {
     this.apiClient = apiClient;
   }

@@ -29,10 +29,11 @@ import java.util.function.Function;
 
 @jakarta.annotation.Generated(
   value = "org.openapitools.codegen.languages.JavaClientCodegen",
-  comments = "Generator version: 7.13.0"
+  comments = "Generator version: 7.14.0"
 )
 public class RFC3339InstantDeserializer<T extends Temporal> extends InstantDeserializer<T> {
 
+  private static final long serialVersionUID = 1L;
   private static final boolean DEFAULT_NORMALIZE_ZONE_ID =
     JavaTimeFeature.NORMALIZE_DESERIALIZED_ZONE_ID.enabledByDefault();
   private static final boolean DEFAULT_ALWAYS_ALLOW_STRINGIFIED_DATE_TIMESTAMPS =

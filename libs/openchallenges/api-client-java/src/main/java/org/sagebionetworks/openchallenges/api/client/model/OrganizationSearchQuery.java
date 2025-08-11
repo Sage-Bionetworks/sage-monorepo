@@ -50,7 +50,7 @@ import org.sagebionetworks.openchallenges.api.client.model.OrganizationSort;
 )
 @jakarta.annotation.Generated(
   value = "org.openapitools.codegen.languages.JavaClientCodegen",
-  comments = "Generator version: 7.13.0"
+  comments = "Generator version: 7.14.0"
 )
 public class OrganizationSearchQuery {
 

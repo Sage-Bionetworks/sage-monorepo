@@ -28,7 +28,7 @@ import java.util.Objects;
 @JsonPropertyOrder({ LoginRequest.JSON_PROPERTY_USERNAME, LoginRequest.JSON_PROPERTY_PASSWORD })
 @jakarta.annotation.Generated(
   value = "org.openapitools.codegen.languages.JavaClientCodegen",
-  comments = "Generator version: 7.13.0"
+  comments = "Generator version: 7.14.0"
 )
 public class LoginRequest {
 

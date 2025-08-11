@@ -43,7 +43,7 @@ import org.openapitools.jackson.nullable.JsonNullable;
 )
 @jakarta.annotation.Generated(
   value = "org.openapitools.codegen.languages.JavaClientCodegen",
-  comments = "Generator version: 7.13.0"
+  comments = "Generator version: 7.14.0"
 )
 public class ApiKey {
 

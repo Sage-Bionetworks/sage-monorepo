@@ -54,7 +54,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @jakarta.annotation.Generated(
   value = "org.openapitools.codegen.languages.JavaClientCodegen",
-  comments = "Generator version: 7.13.0"
+  comments = "Generator version: 7.14.0"
 )
 public class ApiClient extends JavaTimeFormatter {
 
@@ -65,27 +65,27 @@ public class ApiClient extends JavaTimeFormatter {
     PIPES("|"),
     MULTI(null);
 
-    private final String separator;
+    protected final String separator;
 
     CollectionFormat(String separator) {
       this.separator = separator;
     }
 
-    private String collectionToString(Collection<?> collection) {
+    protected String collectionToString(Collection<?> collection) {
       return StringUtils.collectionToDelimitedString(collection, separator);
     }
   }
 
-  private final HttpHeaders defaultHeaders = new HttpHeaders();
-  private final MultiValueMap<String, String> defaultCookies = new LinkedMultiValueMap<>();
+  protected final HttpHeaders defaultHeaders = new HttpHeaders();
+  protected final MultiValueMap<String, String> defaultCookies = new LinkedMultiValueMap<>();
 
-  private String basePath = "https://openchallenges.io/api/v1";
+  protected String basePath = "https://openchallenges.io/api/v1";
 
-  private final RestClient restClient;
-  private final DateFormat dateFormat;
-  private final ObjectMapper objectMapper;
+  protected final RestClient restClient;
+  protected final DateFormat dateFormat;
+  protected final ObjectMapper objectMapper;
 
-  private Map<String, Authentication> authentications;
+  protected Map<String, Authentication> authentications;
 
   public ApiClient() {
     this(null);
@@ -108,7 +108,7 @@ public class ApiClient extends JavaTimeFormatter {
     this.init();
   }
 
-  private ApiClient(RestClient restClient, DateFormat format) {
+  protected ApiClient(RestClient restClient, DateFormat format) {
     this(restClient, createDefaultObjectMapper(format), format);
   }
 
@@ -622,7 +622,7 @@ public class ApiClient extends JavaTimeFormatter {
    * @param uriParams The path parameters
    * return templatized query string
    */
-  private String generateQueryUri(
+  protected String generateQueryUri(
     MultiValueMap<String, String> queryParams,
     Map<String, Object> uriParams
   ) {
@@ -651,7 +651,7 @@ public class ApiClient extends JavaTimeFormatter {
     return queryBuilder.toString();
   }
 
-  private RestClient.RequestBodySpec prepareRequest(
+  protected RestClient.RequestBodySpec prepareRequest(
     String path,
     HttpMethod method,
     Map<String, Object> pathParams,
@@ -694,6 +694,17 @@ public class ApiClient extends JavaTimeFormatter {
     addHeadersToRequest(defaultHeaders, requestBuilder);
     addCookiesToRequest(cookieParams, requestBuilder);
     addCookiesToRequest(defaultCookies, requestBuilder);
+
+    if (MediaType.MULTIPART_FORM_DATA.isCompatibleWith(contentType)) {
+      formParams.forEach((k, v) -> {
+        if (v instanceof java.util.ArrayList) {
+          Object o = v.get(0);
+          if (o != null && o.getClass().getEnumConstants() != null) {
+            v.set(0, o.toString());
+          }
+        }
+      });
+    }
 
     var selectedBody = selectBody(body, formParams, contentType);
     if (selectedBody != null) {
@@ -744,7 +755,7 @@ public class ApiClient extends JavaTimeFormatter {
    * @param cookies map all cookies
    * @return header string for cookies.
    */
-  private String buildCookieHeader(MultiValueMap<String, String> cookies) {
+  protected String buildCookieHeader(MultiValueMap<String, String> cookies) {
     final StringBuilder cookieValue = new StringBuilder();
     String delimiter = "";
     for (final Map.Entry<String, List<String>> entry : cookies.entrySet()) {

@@ -17,14 +17,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.sagebionetworks.openchallenges.api.client.model.ChallengeCategory;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengeIncentive;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengeStatus;
+import org.sagebionetworks.openchallenges.api.client.model.ChallengeSubmissionType;
 
 /**
  * Model tests for ChallengeUpdateRequest
@@ -119,5 +122,53 @@ class ChallengeUpdateRequestTest {
   @Test
   void incentivesTest() {
     // TODO: test incentives
+  }
+
+  /**
+   * Test the property 'submissionTypes'
+   */
+  @Test
+  void submissionTypesTest() {
+    // TODO: test submissionTypes
+  }
+
+  /**
+   * Test the property 'categories'
+   */
+  @Test
+  void categoriesTest() {
+    // TODO: test categories
+  }
+
+  /**
+   * Test the property 'inputDataTypes'
+   */
+  @Test
+  void inputDataTypesTest() {
+    // TODO: test inputDataTypes
+  }
+
+  /**
+   * Test the property 'operation'
+   */
+  @Test
+  void operationTest() {
+    // TODO: test operation
+  }
+
+  /**
+   * Test the property 'startDate'
+   */
+  @Test
+  void startDateTest() {
+    // TODO: test startDate
+  }
+
+  /**
+   * Test the property 'endDate'
+   */
+  @Test
+  void endDateTest() {
+    // TODO: test endDate
   }
 }
