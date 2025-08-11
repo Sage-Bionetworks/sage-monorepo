@@ -866,8 +866,6 @@ components:
                 $ref: '#/components/schemas/Challenge'
           required:
             - challenges
-      x-java-class-annotations:
-        - '@lombok.Builder'
     BasicError:
       type: object
       description: Problem details (tools.ietf.org/html/rfc7807)
@@ -887,9 +885,6 @@ components:
       required:
         - title
         - status
-      x-java-class-annotations:
-        - '@lombok.AllArgsConstructor'
-        - '@lombok.Builder'
     ChallengeCreateRequest:
       type: object
       description: The information used to create a challenge
@@ -1065,8 +1060,6 @@ components:
                 $ref: '#/components/schemas/ChallengeContribution'
           required:
             - challengeContributions
-      x-java-class-annotations:
-        - '@lombok.Builder'
     ChallengeContributionCreateRequest:
       type: object
       description: A challenge contribution to be created.
@@ -1099,8 +1092,6 @@ components:
         - years
         - challengeCounts
         - undatedChallengeCount
-      x-java-class-annotations:
-        - '@lombok.Builder'
     ChallengePlatformSort:
       description: What to sort results by.
       type: string
@@ -1182,8 +1173,6 @@ components:
                 $ref: '#/components/schemas/ChallengePlatform'
           required:
             - challengePlatforms
-      x-java-class-annotations:
-        - '@lombok.Builder'
     ChallengePlatformCreateRequest:
       type: object
       description: The information used to create a challenge platform
@@ -1290,8 +1279,6 @@ components:
                 $ref: '#/components/schemas/EdamConcept'
           required:
             - edamConcepts
-      x-java-class-annotations:
-        - '@lombok.Builder'
   parameters:
     challengeSearchQuery:
       name: challengeSearchQuery

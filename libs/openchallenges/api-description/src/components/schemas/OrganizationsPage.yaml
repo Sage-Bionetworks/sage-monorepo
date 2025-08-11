@@ -11,5 +11,3 @@ allOf:
           $ref: Organization.yaml
     required:
       - organizations
-x-java-class-annotations:
-  - '@lombok.Builder'

@@ -829,9 +829,6 @@ components:
       required:
         - title
         - status
-      x-java-class-annotations:
-        - '@lombok.AllArgsConstructor'
-        - '@lombok.Builder'
     ApiKey:
       type: object
       properties:
@@ -1304,8 +1301,6 @@ components:
                 $ref: '#/components/schemas/Challenge'
           required:
             - challenges
-      x-java-class-annotations:
-        - '@lombok.Builder'
     ChallengeCreateRequest:
       type: object
       description: The information used to create a challenge
@@ -1481,8 +1476,6 @@ components:
                 $ref: '#/components/schemas/ChallengeContribution'
           required:
             - challengeContributions
-      x-java-class-annotations:
-        - '@lombok.Builder'
     ChallengeContributionCreateRequest:
       type: object
       description: A challenge contribution to be created.
@@ -1515,8 +1508,6 @@ components:
         - years
         - challengeCounts
         - undatedChallengeCount
-      x-java-class-annotations:
-        - '@lombok.Builder'
     ChallengePlatformSort:
       description: What to sort results by.
       type: string
@@ -1598,8 +1589,6 @@ components:
                 $ref: '#/components/schemas/ChallengePlatform'
           required:
             - challengePlatforms
-      x-java-class-annotations:
-        - '@lombok.Builder'
     ChallengePlatformCreateRequest:
       type: object
       description: The information used to create a challenge platform
@@ -1706,8 +1695,6 @@ components:
                 $ref: '#/components/schemas/EdamConcept'
           required:
             - edamConcepts
-      x-java-class-annotations:
-        - '@lombok.Builder'
     ImageKey:
       description: The unique identifier of the image.
       type: string
@@ -1755,8 +1742,6 @@ components:
           example: http://example.com/an-image.png
       required:
         - url
-      x-java-class-annotations:
-        - '@lombok.Builder'
     OrganizationCategory:
       description: The category of the organization.
       type: string
@@ -1886,8 +1871,6 @@ components:
                 $ref: '#/components/schemas/Organization'
           required:
             - organizations
-      x-java-class-annotations:
-        - '@lombok.Builder'
     OrganizationCreateRequest:
       type: object
       description: The information required to create an org account

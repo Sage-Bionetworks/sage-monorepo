@@ -11,7 +11,3 @@ required:
   - id
   - slug
   - name
-x-java-class-annotations:
-  - '@lombok.Builder'
-  - '@lombok.NoArgsConstructor'
-  - '@lombok.AllArgsConstructor'
