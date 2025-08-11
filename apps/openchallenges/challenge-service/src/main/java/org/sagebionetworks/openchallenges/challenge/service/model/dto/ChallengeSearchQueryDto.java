@@ -68,10 +68,10 @@ public class ChallengeSearchQueryDto {
   private List<ChallengeSubmissionTypeDto> submissionTypes = new ArrayList<>();
 
   @Valid
-  private List<Long> inputDataTypes = new ArrayList<>();
+  private List<@Min(1)Integer> inputDataTypes = new ArrayList<>();
 
   @Valid
-  private List<Long> operations = new ArrayList<>();
+  private List<@Min(1)Integer> operations = new ArrayList<>();
 
   @Valid
   private List<ChallengeCategoryDto> categories = new ArrayList<>();
@@ -362,12 +362,12 @@ public class ChallengeSearchQueryDto {
     this.submissionTypes = submissionTypes;
   }
 
-  public ChallengeSearchQueryDto inputDataTypes(List<Long> inputDataTypes) {
+  public ChallengeSearchQueryDto inputDataTypes(List<@Min(1)Integer> inputDataTypes) {
     this.inputDataTypes = inputDataTypes;
     return this;
   }
 
-  public ChallengeSearchQueryDto addInputDataTypesItem(Long inputDataTypesItem) {
+  public ChallengeSearchQueryDto addInputDataTypesItem(Integer inputDataTypesItem) {
     if (this.inputDataTypes == null) {
       this.inputDataTypes = new ArrayList<>();
     }
@@ -382,20 +382,20 @@ public class ChallengeSearchQueryDto {
   
   @Schema(name = "inputDataTypes", description = "An array of EDAM concept ID used to filter the results.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("inputDataTypes")
-  public List<Long> getInputDataTypes() {
+  public List<@Min(1)Integer> getInputDataTypes() {
     return inputDataTypes;
   }
 
-  public void setInputDataTypes(List<Long> inputDataTypes) {
+  public void setInputDataTypes(List<@Min(1)Integer> inputDataTypes) {
     this.inputDataTypes = inputDataTypes;
   }
 
-  public ChallengeSearchQueryDto operations(List<Long> operations) {
+  public ChallengeSearchQueryDto operations(List<@Min(1)Integer> operations) {
     this.operations = operations;
     return this;
   }
 
-  public ChallengeSearchQueryDto addOperationsItem(Long operationsItem) {
+  public ChallengeSearchQueryDto addOperationsItem(Integer operationsItem) {
     if (this.operations == null) {
       this.operations = new ArrayList<>();
     }
@@ -410,11 +410,11 @@ public class ChallengeSearchQueryDto {
   
   @Schema(name = "operations", description = "An array of EDAM concept ID used to filter the results.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("operations")
-  public List<Long> getOperations() {
+  public List<@Min(1)Integer> getOperations() {
     return operations;
   }
 
-  public void setOperations(List<Long> operations) {
+  public void setOperations(List<@Min(1)Integer> operations) {
     this.operations = operations;
   }
 
@@ -625,12 +625,12 @@ public class ChallengeSearchQueryDto {
       return this;
     }
     
-    public ChallengeSearchQueryDto.Builder inputDataTypes(List<Long> inputDataTypes) {
+    public ChallengeSearchQueryDto.Builder inputDataTypes(List<Integer> inputDataTypes) {
       this.instance.inputDataTypes(inputDataTypes);
       return this;
     }
     
-    public ChallengeSearchQueryDto.Builder operations(List<Long> operations) {
+    public ChallengeSearchQueryDto.Builder operations(List<Integer> operations) {
       this.instance.operations(operations);
       return this;
     }

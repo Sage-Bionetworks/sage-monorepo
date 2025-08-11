@@ -973,7 +973,8 @@ components:
     EdamConceptId:
       description: The unique identifier of the EDAM concept.
       type: integer
-      format: int64
+      format: int32
+      minimum: 1
       example: 1
     ChallengeCategory:
       description: The category of the challenge.
@@ -1327,11 +1328,33 @@ components:
           $ref: '#/components/schemas/Url'
         avatarUrl:
           $ref: '#/components/schemas/Url'
+        startDate:
+          $ref: '#/components/schemas/ChallengeStartDate'
+        endDate:
+          $ref: '#/components/schemas/ChallengeEndDate'
+        incentives:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeIncentive'
+        submissionTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeSubmissionType'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeCategory'
+        inputDataTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/EdamConceptId'
+        operation:
+          $ref: '#/components/schemas/EdamConceptId'
       required:
         - slug
         - name
         - status
-        - platformId
+        - websiteUrl
     ChallengeUpdateRequest:
       type: object
       description: The information required to update a challenge
@@ -1372,6 +1395,10 @@ components:
             $ref: '#/components/schemas/EdamConceptId'
         operation:
           $ref: '#/components/schemas/EdamConceptId'
+        startDate:
+          $ref: '#/components/schemas/ChallengeStartDate'
+        endDate:
+          $ref: '#/components/schemas/ChallengeEndDate'
       required:
         - slug
         - name
@@ -1387,6 +1414,9 @@ components:
         - categories
         - inputDataTypes
         - operation
+        - startDate
+        - endDate
+        - doi
     ChallengeJsonLd:
       type: object
       description: A challenge

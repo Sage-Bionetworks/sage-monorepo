@@ -4,4 +4,4 @@ import org.sagebionetworks.openchallenges.challenge.service.model.entity.EdamCon
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EdamConceptRepository
-  extends JpaRepository<EdamConceptEntity, Long>, CustomEdamConceptRepository {}
+  extends JpaRepository<EdamConceptEntity, Integer>, CustomEdamConceptRepository {}

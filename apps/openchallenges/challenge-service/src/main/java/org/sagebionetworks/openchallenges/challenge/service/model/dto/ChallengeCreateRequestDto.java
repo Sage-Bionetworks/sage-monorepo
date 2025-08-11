@@ -6,7 +6,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeCategoryDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeStatusDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSubmissionTypeDto;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
@@ -38,11 +46,31 @@ public class ChallengeCreateRequestDto {
 
   private ChallengeStatusDto status;
 
-  private Long platformId;
+  private @Nullable Long platformId;
 
-  private @Nullable String websiteUrl = null;
+  private String websiteUrl = null;
 
   private @Nullable String avatarUrl = null;
+
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+  private @Nullable LocalDate startDate = null;
+
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+  private @Nullable LocalDate endDate = null;
+
+  @Valid
+  private List<ChallengeIncentiveDto> incentives = new ArrayList<>();
+
+  @Valid
+  private List<ChallengeSubmissionTypeDto> submissionTypes = new ArrayList<>();
+
+  @Valid
+  private List<ChallengeCategoryDto> categories = new ArrayList<>();
+
+  @Valid
+  private List<@Min(1)Integer> inputDataTypes = new ArrayList<>();
+
+  private @Nullable Integer operation;
 
   public ChallengeCreateRequestDto() {
     super();
@@ -51,11 +79,11 @@ public class ChallengeCreateRequestDto {
   /**
    * Constructor with only required parameters
    */
-  public ChallengeCreateRequestDto(String slug, String name, ChallengeStatusDto status, Long platformId) {
+  public ChallengeCreateRequestDto(String slug, String name, ChallengeStatusDto status, String websiteUrl) {
     this.slug = slug;
     this.name = name;
     this.status = status;
-    this.platformId = platformId;
+    this.websiteUrl = websiteUrl;
   }
 
   public ChallengeCreateRequestDto slug(String slug) {
@@ -187,8 +215,8 @@ public class ChallengeCreateRequestDto {
    * The unique identifier of a challenge platform.
    * @return platformId
    */
-  @NotNull 
-  @Schema(name = "platformId", example = "1", description = "The unique identifier of a challenge platform.", requiredMode = Schema.RequiredMode.REQUIRED)
+  
+  @Schema(name = "platformId", example = "1", description = "The unique identifier of a challenge platform.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("platformId")
   public Long getPlatformId() {
     return platformId;
@@ -207,8 +235,8 @@ public class ChallengeCreateRequestDto {
    * A URL to the website or image.
    * @return websiteUrl
    */
-  @Size(max = 500) 
-  @Schema(name = "websiteUrl", example = "https://openchallenges.io", description = "A URL to the website or image.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Size(max = 500) 
+  @Schema(name = "websiteUrl", example = "https://openchallenges.io", description = "A URL to the website or image.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("websiteUrl")
   public String getWebsiteUrl() {
     return websiteUrl;
@@ -238,6 +266,179 @@ public class ChallengeCreateRequestDto {
     this.avatarUrl = avatarUrl;
   }
 
+  public ChallengeCreateRequestDto startDate(LocalDate startDate) {
+    this.startDate = startDate;
+    return this;
+  }
+
+  /**
+   * The start date of the challenge.
+   * @return startDate
+   */
+  @Valid 
+  @Schema(name = "startDate", example = "2017-07-21", description = "The start date of the challenge.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("startDate")
+  public LocalDate getStartDate() {
+    return startDate;
+  }
+
+  public void setStartDate(LocalDate startDate) {
+    this.startDate = startDate;
+  }
+
+  public ChallengeCreateRequestDto endDate(LocalDate endDate) {
+    this.endDate = endDate;
+    return this;
+  }
+
+  /**
+   * The end date of the challenge.
+   * @return endDate
+   */
+  @Valid 
+  @Schema(name = "endDate", example = "2017-07-21", description = "The end date of the challenge.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("endDate")
+  public LocalDate getEndDate() {
+    return endDate;
+  }
+
+  public void setEndDate(LocalDate endDate) {
+    this.endDate = endDate;
+  }
+
+  public ChallengeCreateRequestDto incentives(List<ChallengeIncentiveDto> incentives) {
+    this.incentives = incentives;
+    return this;
+  }
+
+  public ChallengeCreateRequestDto addIncentivesItem(ChallengeIncentiveDto incentivesItem) {
+    if (this.incentives == null) {
+      this.incentives = new ArrayList<>();
+    }
+    this.incentives.add(incentivesItem);
+    return this;
+  }
+
+  /**
+   * Get incentives
+   * @return incentives
+   */
+  @Valid 
+  @Schema(name = "incentives", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("incentives")
+  public List<ChallengeIncentiveDto> getIncentives() {
+    return incentives;
+  }
+
+  public void setIncentives(List<ChallengeIncentiveDto> incentives) {
+    this.incentives = incentives;
+  }
+
+  public ChallengeCreateRequestDto submissionTypes(List<ChallengeSubmissionTypeDto> submissionTypes) {
+    this.submissionTypes = submissionTypes;
+    return this;
+  }
+
+  public ChallengeCreateRequestDto addSubmissionTypesItem(ChallengeSubmissionTypeDto submissionTypesItem) {
+    if (this.submissionTypes == null) {
+      this.submissionTypes = new ArrayList<>();
+    }
+    this.submissionTypes.add(submissionTypesItem);
+    return this;
+  }
+
+  /**
+   * Get submissionTypes
+   * @return submissionTypes
+   */
+  @Valid 
+  @Schema(name = "submissionTypes", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("submissionTypes")
+  public List<ChallengeSubmissionTypeDto> getSubmissionTypes() {
+    return submissionTypes;
+  }
+
+  public void setSubmissionTypes(List<ChallengeSubmissionTypeDto> submissionTypes) {
+    this.submissionTypes = submissionTypes;
+  }
+
+  public ChallengeCreateRequestDto categories(List<ChallengeCategoryDto> categories) {
+    this.categories = categories;
+    return this;
+  }
+
+  public ChallengeCreateRequestDto addCategoriesItem(ChallengeCategoryDto categoriesItem) {
+    if (this.categories == null) {
+      this.categories = new ArrayList<>();
+    }
+    this.categories.add(categoriesItem);
+    return this;
+  }
+
+  /**
+   * Get categories
+   * @return categories
+   */
+  @Valid 
+  @Schema(name = "categories", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("categories")
+  public List<ChallengeCategoryDto> getCategories() {
+    return categories;
+  }
+
+  public void setCategories(List<ChallengeCategoryDto> categories) {
+    this.categories = categories;
+  }
+
+  public ChallengeCreateRequestDto inputDataTypes(List<@Min(1)Integer> inputDataTypes) {
+    this.inputDataTypes = inputDataTypes;
+    return this;
+  }
+
+  public ChallengeCreateRequestDto addInputDataTypesItem(Integer inputDataTypesItem) {
+    if (this.inputDataTypes == null) {
+      this.inputDataTypes = new ArrayList<>();
+    }
+    this.inputDataTypes.add(inputDataTypesItem);
+    return this;
+  }
+
+  /**
+   * Get inputDataTypes
+   * @return inputDataTypes
+   */
+  
+  @Schema(name = "inputDataTypes", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("inputDataTypes")
+  public List<@Min(1)Integer> getInputDataTypes() {
+    return inputDataTypes;
+  }
+
+  public void setInputDataTypes(List<@Min(1)Integer> inputDataTypes) {
+    this.inputDataTypes = inputDataTypes;
+  }
+
+  public ChallengeCreateRequestDto operation(Integer operation) {
+    this.operation = operation;
+    return this;
+  }
+
+  /**
+   * The unique identifier of the EDAM concept.
+   * minimum: 1
+   * @return operation
+   */
+  @Min(1) 
+  @Schema(name = "operation", example = "1", description = "The unique identifier of the EDAM concept.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("operation")
+  public Integer getOperation() {
+    return operation;
+  }
+
+  public void setOperation(Integer operation) {
+    this.operation = operation;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -255,12 +456,19 @@ public class ChallengeCreateRequestDto {
         Objects.equals(this.status, challengeCreateRequest.status) &&
         Objects.equals(this.platformId, challengeCreateRequest.platformId) &&
         Objects.equals(this.websiteUrl, challengeCreateRequest.websiteUrl) &&
-        Objects.equals(this.avatarUrl, challengeCreateRequest.avatarUrl);
+        Objects.equals(this.avatarUrl, challengeCreateRequest.avatarUrl) &&
+        Objects.equals(this.startDate, challengeCreateRequest.startDate) &&
+        Objects.equals(this.endDate, challengeCreateRequest.endDate) &&
+        Objects.equals(this.incentives, challengeCreateRequest.incentives) &&
+        Objects.equals(this.submissionTypes, challengeCreateRequest.submissionTypes) &&
+        Objects.equals(this.categories, challengeCreateRequest.categories) &&
+        Objects.equals(this.inputDataTypes, challengeCreateRequest.inputDataTypes) &&
+        Objects.equals(this.operation, challengeCreateRequest.operation);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(slug, name, headline, description, doi, status, platformId, websiteUrl, avatarUrl);
+    return Objects.hash(slug, name, headline, description, doi, status, platformId, websiteUrl, avatarUrl, startDate, endDate, incentives, submissionTypes, categories, inputDataTypes, operation);
   }
 
   @Override
@@ -276,6 +484,13 @@ public class ChallengeCreateRequestDto {
     sb.append("    platformId: ").append(toIndentedString(platformId)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
+    sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
+    sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
+    sb.append("    incentives: ").append(toIndentedString(incentives)).append("\n");
+    sb.append("    submissionTypes: ").append(toIndentedString(submissionTypes)).append("\n");
+    sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
+    sb.append("    inputDataTypes: ").append(toIndentedString(inputDataTypes)).append("\n");
+    sb.append("    operation: ").append(toIndentedString(operation)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -313,6 +528,13 @@ public class ChallengeCreateRequestDto {
       this.instance.setPlatformId(value.platformId);
       this.instance.setWebsiteUrl(value.websiteUrl);
       this.instance.setAvatarUrl(value.avatarUrl);
+      this.instance.setStartDate(value.startDate);
+      this.instance.setEndDate(value.endDate);
+      this.instance.setIncentives(value.incentives);
+      this.instance.setSubmissionTypes(value.submissionTypes);
+      this.instance.setCategories(value.categories);
+      this.instance.setInputDataTypes(value.inputDataTypes);
+      this.instance.setOperation(value.operation);
       return this;
     }
 
@@ -358,6 +580,41 @@ public class ChallengeCreateRequestDto {
     
     public ChallengeCreateRequestDto.Builder avatarUrl(String avatarUrl) {
       this.instance.avatarUrl(avatarUrl);
+      return this;
+    }
+    
+    public ChallengeCreateRequestDto.Builder startDate(LocalDate startDate) {
+      this.instance.startDate(startDate);
+      return this;
+    }
+    
+    public ChallengeCreateRequestDto.Builder endDate(LocalDate endDate) {
+      this.instance.endDate(endDate);
+      return this;
+    }
+    
+    public ChallengeCreateRequestDto.Builder incentives(List<ChallengeIncentiveDto> incentives) {
+      this.instance.incentives(incentives);
+      return this;
+    }
+    
+    public ChallengeCreateRequestDto.Builder submissionTypes(List<ChallengeSubmissionTypeDto> submissionTypes) {
+      this.instance.submissionTypes(submissionTypes);
+      return this;
+    }
+    
+    public ChallengeCreateRequestDto.Builder categories(List<ChallengeCategoryDto> categories) {
+      this.instance.categories(categories);
+      return this;
+    }
+    
+    public ChallengeCreateRequestDto.Builder inputDataTypes(List<Integer> inputDataTypes) {
+      this.instance.inputDataTypes(inputDataTypes);
+      return this;
+    }
+    
+    public ChallengeCreateRequestDto.Builder operation(Integer operation) {
+      this.instance.operation(operation);
       return this;
     }
     

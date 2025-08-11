@@ -169,7 +169,7 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
   ) {
     return pf
       .bool(b -> {
-        for (Long operation : query.getOperations()) {
+        for (Integer operation : query.getOperations()) {
           b.should(pf.match().field("operation.id").matching(operation));
         }
       })
@@ -203,7 +203,7 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
   ) {
     return pf
       .bool(b -> {
-        for (Long edamConceptId : query.getInputDataTypes()) {
+        for (Integer edamConceptId : query.getInputDataTypes()) {
           b.should(pf.match().field("input_data_types.id").matching(edamConceptId));
         }
       })

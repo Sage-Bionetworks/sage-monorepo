@@ -7,7 +7,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ChallengeCategory } from './challengeCategory';
 import { ChallengeStatus } from './challengeStatus';
+import { ChallengeIncentive } from './challengeIncentive';
+import { ChallengeSubmissionType } from './challengeSubmissionType';
 
 /**
  * The information used to create a challenge
@@ -37,14 +40,30 @@ export interface ChallengeCreateRequest {
   /**
    * The unique identifier of a challenge platform.
    */
-  platformId: number;
+  platformId?: number;
   /**
    * A URL to the website or image.
    */
-  websiteUrl?: string | null;
+  websiteUrl: string | null;
   /**
    * A URL to the website or image.
    */
   avatarUrl?: string | null;
+  /**
+   * The start date of the challenge.
+   */
+  startDate?: string | null;
+  /**
+   * The end date of the challenge.
+   */
+  endDate?: string | null;
+  incentives?: Array<ChallengeIncentive>;
+  submissionTypes?: Array<ChallengeSubmissionType>;
+  categories?: Array<ChallengeCategory>;
+  inputDataTypes?: Array<number>;
+  /**
+   * The unique identifier of the EDAM concept.
+   */
+  operation?: number;
 }
 export namespace ChallengeCreateRequest {}

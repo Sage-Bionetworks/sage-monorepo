@@ -20,6 +20,8 @@ The information required to update a challenge
 | **categories**       | [**List[ChallengeCategory]**](ChallengeCategory.md)             |                                                |
 | **input_data_types** | **List[int]**                                                   |                                                |
 | **operation**        | **int**                                                         | The unique identifier of the EDAM concept.     |
+| **start_date**       | **date**                                                        | The start date of the challenge.               |
+| **end_date**         | **date**                                                        | The end date of the challenge.                 |
 
 ## Example
 

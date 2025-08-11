@@ -57,5 +57,13 @@ export interface ChallengeUpdateRequest {
    * The unique identifier of the EDAM concept.
    */
   operation: number;
+  /**
+   * The start date of the challenge.
+   */
+  startDate: string | null;
+  /**
+   * The end date of the challenge.
+   */
+  endDate: string | null;
 }
 export namespace ChallengeUpdateRequest {}

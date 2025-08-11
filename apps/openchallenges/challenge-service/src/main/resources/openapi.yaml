@@ -1150,7 +1150,8 @@ components:
     EdamConceptId:
       description: The unique identifier of the EDAM concept.
       example: 1
-      format: int64
+      format: int32
+      minimum: 1
       type: integer
     ChallengeCategory:
       description: The category of the challenge.
@@ -1384,7 +1385,8 @@ components:
         id:
           description: The unique identifier of the EDAM concept.
           example: 1
-          format: int64
+          format: int32
+          minimum: 1
           type: integer
         classId:
           example: http://edamontology.org/data_0850
@@ -1758,11 +1760,45 @@ components:
           maxLength: 500
           nullable: true
           type: string
+        startDate:
+          description: The start date of the challenge.
+          example: 2017-07-21
+          format: date
+          nullable: true
+          type: string
+        endDate:
+          description: The end date of the challenge.
+          example: 2017-07-21
+          format: date
+          nullable: true
+          type: string
+        incentives:
+          items:
+            $ref: '#/components/schemas/ChallengeIncentive'
+          type: array
+        submissionTypes:
+          items:
+            $ref: '#/components/schemas/ChallengeSubmissionType'
+          type: array
+        categories:
+          items:
+            $ref: '#/components/schemas/ChallengeCategory'
+          type: array
+        inputDataTypes:
+          items:
+            $ref: '#/components/schemas/EdamConceptId'
+          type: array
+        operation:
+          description: The unique identifier of the EDAM concept.
+          example: 1
+          format: int32
+          minimum: 1
+          type: integer
       required:
         - name
-        - platformId
         - slug
         - status
+        - websiteUrl
       type: object
     ChallengeUpdateRequest:
       description: The information required to update a challenge
@@ -1840,13 +1876,28 @@ components:
         operation:
           description: The unique identifier of the EDAM concept.
           example: 1
-          format: int64
+          format: int32
+          minimum: 1
           type: integer
+        startDate:
+          description: The start date of the challenge.
+          example: 2017-07-21
+          format: date
+          nullable: true
+          type: string
+        endDate:
+          description: The end date of the challenge.
+          example: 2017-07-21
+          format: date
+          nullable: true
+          type: string
       required:
         - avatarUrl
         - categories
         - description
         - doi
+        - doi
+        - endDate
         - headline
         - incentives
         - inputDataTypes
@@ -1854,6 +1905,7 @@ components:
         - operation
         - platformId
         - slug
+        - startDate
         - status
         - submissionTypes
         - websiteUrl

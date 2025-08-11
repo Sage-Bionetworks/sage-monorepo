@@ -40,7 +40,7 @@ public class EdamConceptSearchQueryDto {
   private @Nullable EdamConceptDirectionDto direction = null;
 
   @Valid
-  private List<Long> ids = new ArrayList<>();
+  private List<@Min(1)Integer> ids = new ArrayList<>();
 
   private @Nullable String searchTerms;
 
@@ -129,12 +129,12 @@ public class EdamConceptSearchQueryDto {
     this.direction = direction;
   }
 
-  public EdamConceptSearchQueryDto ids(List<Long> ids) {
+  public EdamConceptSearchQueryDto ids(List<@Min(1)Integer> ids) {
     this.ids = ids;
     return this;
   }
 
-  public EdamConceptSearchQueryDto addIdsItem(Long idsItem) {
+  public EdamConceptSearchQueryDto addIdsItem(Integer idsItem) {
     if (this.ids == null) {
       this.ids = new ArrayList<>();
     }
@@ -149,11 +149,11 @@ public class EdamConceptSearchQueryDto {
   
   @Schema(name = "ids", description = "An array of EDAM concept ids used to filter the results.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("ids")
-  public List<Long> getIds() {
+  public List<@Min(1)Integer> getIds() {
     return ids;
   }
 
-  public void setIds(List<Long> ids) {
+  public void setIds(List<@Min(1)Integer> ids) {
     this.ids = ids;
   }
 
@@ -297,7 +297,7 @@ public class EdamConceptSearchQueryDto {
       return this;
     }
     
-    public EdamConceptSearchQueryDto.Builder ids(List<Long> ids) {
+    public EdamConceptSearchQueryDto.Builder ids(List<Integer> ids) {
       this.instance.ids(ids);
       return this;
     }

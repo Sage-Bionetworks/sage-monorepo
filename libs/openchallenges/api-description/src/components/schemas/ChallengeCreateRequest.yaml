@@ -19,71 +19,30 @@ properties:
     $ref: Url.yaml
   avatarUrl:
     $ref: Url.yaml
-    #   startDate:
-    #     type: string
-    #     format: date
-    #     nullable: true
-    #   endDate:
-    #     type: string
-    #     format: date
-    #     nullable: true
-  # incentives:
-  #   type: array
-  #   items:
-  #     $ref: ChallengeIncentive.yaml
-  #   platformId:
-  #     $ref: ChallengePlatformId.yaml
-  #     nullable: true
-#   submissionTypes:
-#     type: array
-#     items:
-#       $ref: ChallengeSubmissionType.yaml
-#     nullable: true
-#   topics:
-#     type: array
-#     items:
-#       $ref: Topic.yaml
-#     # uniqueItems: true
-#     maxItems: 30
-#   inputDataTypes:
-#     type: array
-#     items:
-#       $ref: ChallengeInputDataType.yaml
-#     maxItems: 10
-#     nullable: true
-#   doi:
-#     type: string
-#     # pattern: "^10.\d{4,9}/[-._;()/:A-Z0-9]+$"
-#     nullable: true
-#   participantCount:
-#     type: integer
-#     minimum: 0
-#     nullable: true
+  startDate:
+    $ref: ChallengeStartDate.yaml
+  endDate:
+    $ref: ChallengeEndDate.yaml
+  incentives:
+    type: array
+    items:
+      $ref: ChallengeIncentive.yaml
+  submissionTypes:
+    type: array
+    items:
+      $ref: ChallengeSubmissionType.yaml
+  categories:
+    type: array
+    items:
+      $ref: ChallengeCategory.yaml
+  inputDataTypes:
+    type: array
+    items:
+      $ref: EdamConceptId.yaml
+  operation:
+    $ref: EdamConceptId.yaml
 required:
   - slug
   - name
   - status
-  - platformId
-# example:
-#   name: awesome-challenge
-#   displayName: Awesome Challenge
-#   description: This challenge is awesome.
-#   websiteUrl: https://synapse.org/awesome-challenge
-#   status: active
-#   startDate: '2020-11-10'
-#   endDate: '2020-12-31'
-#   platformId: 507f1f77bcf86cd799439011
-#   submissionTypes:
-#     - PredictionFile
-#     - DockerImage
-#   incentiveTypes:
-#     - Monetary
-#     - Publication
-#   topics:
-#     - breast-cancer
-#     - covid
-#   dataTypes:
-#     - genomic
-#     - ehr
-#   doi: http://doi.org/10.5281/zenodo.3714971
-#   participantCount: 100
+  - websiteUrl

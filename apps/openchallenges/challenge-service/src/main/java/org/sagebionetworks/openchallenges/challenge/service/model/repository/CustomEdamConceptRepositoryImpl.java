@@ -83,7 +83,7 @@ public class CustomEdamConceptRepositoryImpl implements CustomEdamConceptReposit
   ) {
     return pf
       .bool(b -> {
-        for (Long id : query.getIds()) {
+        for (Integer id : query.getIds()) {
           b.should(pf.match().field("id").matching(id));
         }
       })

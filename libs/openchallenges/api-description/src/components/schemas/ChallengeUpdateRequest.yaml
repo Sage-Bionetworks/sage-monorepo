@@ -37,6 +37,10 @@ properties:
       $ref: EdamConceptId.yaml
   operation:
     $ref: EdamConceptId.yaml
+  startDate:
+    $ref: ChallengeStartDate.yaml
+  endDate:
+    $ref: ChallengeEndDate.yaml
 required:
   - slug
   - name
@@ -52,3 +56,6 @@ required:
   - categories
   - inputDataTypes
   - operation
+  - startDate
+  - endDate
+  - doi
