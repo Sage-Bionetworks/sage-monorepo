@@ -1,7 +1,7 @@
 {
   "java.checkstyle.configuration": "checkstyle.xml",
   "java.checkstyle.version": "10.23.1",
-  "java.jdt.ls.java.home": "/usr/lib/jvm/java-17-openjdk-amd64",
+  "java.jdt.ls.java.home": "/usr/local/sdkman/candidates/java/current",
   "java.format.enabled": false,
   "java.compile.nullAnalysis.mode": "disabled",
   "java.configuration.updateBuildConfiguration": "automatic",
