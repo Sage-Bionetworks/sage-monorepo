@@ -3,7 +3,7 @@ info:
   contact:
     name: Support
     url: https://github.com/Sage-Bionetworks/sage-monorepo
-  description: "Discover, explore, and contribute to open biomedical challenges."
+  description: 'Discover, explore, and contribute to open biomedical challenges.'
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -12,51 +12,51 @@ info:
   x-logo:
     url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
-- url: http://localhost/v1
+  - url: http://localhost/v1
 tags:
-- description: Operations about organizations
-  name: Organization
-  x-audience:
-  - public
-- description: Operations about a challenge participation
-  name: Challenge Participation
-  x-audience:
-  - internal
+  - description: Operations about organizations
+    name: Organization
+    x-audience:
+      - public
+  - description: Operations about a challenge participation
+    name: Challenge Participation
+    x-audience:
+      - internal
 paths:
   /organizations:
     get:
       description: List organizations
       operationId: listOrganizations
       parameters:
-      - description: The search query used to find organizations.
-        explode: true
-        in: query
-        name: organizationSearchQuery
-        required: false
-        schema:
-          $ref: "#/components/schemas/OrganizationSearchQuery"
-        style: form
+        - description: The search query used to find organizations.
+          explode: true
+          in: query
+          name: organizationSearchQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/OrganizationSearchQuery'
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/OrganizationsPage"
+                $ref: '#/components/schemas/OrganizationsPage'
           description: Success
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: List organizations
       tags:
-      - Organization
+        - Organization
       x-audience:
-      - public
+        - public
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Organization
+        - tag: Organization
     post:
       description: Create an organization with the specified account name
       operationId: createOrganization
@@ -64,291 +64,291 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/OrganizationCreateRequest"
+              $ref: '#/components/schemas/OrganizationCreateRequest'
         required: true
       responses:
-        "201":
+        '201':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Organization"
+                $ref: '#/components/schemas/Organization'
           description: Organization created successfully
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "409":
-          $ref: "#/components/responses/Conflict"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       security:
-      - apiBearerAuth: []
+        - apiBearerAuth: []
       summary: Create an organization
       tags:
-      - Organization
+        - Organization
       x-audience:
-      - public
+        - public
       x-content-type: application/json
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Organization
+        - tag: Organization
   /organizations/{org}:
     delete:
       description: Deletes the organization specified by its login or ID.
       operationId: deleteOrganization
       parameters:
-      - description: The id or login of the organization.
-        examples:
-          byString:
-            value: dream
-          byId:
-            value: "1"
-        explode: false
-        in: path
-        name: org
-        required: true
-        schema:
-          maxLength: 64
-          minLength: 1
-          type: string
-        style: simple
+        - description: The id or login of the organization.
+          examples:
+            byString:
+              value: dream
+            byId:
+              value: '1'
+          explode: false
+          in: path
+          name: org
+          required: true
+          schema:
+            maxLength: 64
+            minLength: 1
+            type: string
+          style: simple
       responses:
-        "204":
+        '204':
           description: Organization successfully deleted
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       security:
-      - apiBearerAuth: []
+        - apiBearerAuth: []
       summary: Delete an organization
       tags:
-      - Organization
+        - Organization
       x-audience:
-      - public
+        - public
       x-accepts:
-      - application/problem+json
+        - application/problem+json
       x-tags:
-      - tag: Organization
+        - tag: Organization
     get:
       description: Returns the organization identified by its login or ID.
       operationId: getOrganization
       parameters:
-      - description: The id or login of the organization.
-        examples:
-          byString:
-            value: dream
-          byId:
-            value: "1"
-        explode: false
-        in: path
-        name: org
-        required: true
-        schema:
-          maxLength: 64
-          minLength: 1
-          type: string
-        style: simple
+        - description: The id or login of the organization.
+          examples:
+            byString:
+              value: dream
+            byId:
+              value: '1'
+          explode: false
+          in: path
+          name: org
+          required: true
+          schema:
+            maxLength: 64
+            minLength: 1
+            type: string
+          style: simple
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Organization"
+                $ref: '#/components/schemas/Organization'
           description: Organization retrieved successfully
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: Get an organization
       tags:
-      - Organization
+        - Organization
       x-audience:
-      - public
+        - public
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Organization
+        - tag: Organization
     put:
       description: Updates an existing organization.
       operationId: updateOrganization
       parameters:
-      - description: The id or login of the organization.
-        examples:
-          byString:
-            value: dream
-          byId:
-            value: "1"
-        explode: false
-        in: path
-        name: org
-        required: true
-        schema:
-          maxLength: 64
-          minLength: 1
-          type: string
-        style: simple
+        - description: The id or login of the organization.
+          examples:
+            byString:
+              value: dream
+            byId:
+              value: '1'
+          explode: false
+          in: path
+          name: org
+          required: true
+          schema:
+            maxLength: 64
+            minLength: 1
+            type: string
+          style: simple
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/OrganizationUpdateRequest"
+              $ref: '#/components/schemas/OrganizationUpdateRequest'
         required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Organization"
+                $ref: '#/components/schemas/Organization'
           description: Organization successfully updated
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "409":
-          $ref: "#/components/responses/Conflict"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       security:
-      - apiBearerAuth: []
+        - apiBearerAuth: []
       summary: Update an existing organization
       tags:
-      - Organization
+        - Organization
       x-audience:
-      - public
+        - public
       x-content-type: application/json
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Organization
+        - tag: Organization
   /organizations/{org}/participations:
     post:
       description: Creates a new challenge participation.
       operationId: createChallengeParticipation
       parameters:
-      - description: The id or login of the organization.
-        examples:
-          byString:
-            value: dream
-          byId:
-            value: "1"
-        explode: false
-        in: path
-        name: org
-        required: true
-        schema:
-          maxLength: 64
-          minLength: 1
-          type: string
-        style: simple
+        - description: The id or login of the organization.
+          examples:
+            byString:
+              value: dream
+            byId:
+              value: '1'
+          explode: false
+          in: path
+          name: org
+          required: true
+          schema:
+            maxLength: 64
+            minLength: 1
+            type: string
+          style: simple
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ChallengeParticipationCreateRequest"
+              $ref: '#/components/schemas/ChallengeParticipationCreateRequest'
         required: true
       responses:
-        "201":
+        '201':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ChallengeParticipation"
+                $ref: '#/components/schemas/ChallengeParticipation'
           description: Participation created successfully
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "409":
-          $ref: "#/components/responses/Conflict"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       security:
-      - apiBearerAuth: []
+        - apiBearerAuth: []
       summary: Create a new challenge participation
       tags:
-      - Challenge Participation
+        - Challenge Participation
       x-audience:
-      - internal
+        - internal
       x-content-type: application/json
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Challenge Participation
+        - tag: Challenge Participation
   /organizations/{org}/participations/{challengeId}/roles/{role}:
     delete:
       description: Delete a specific challenge participation.
       operationId: deleteChallengeParticipation
       parameters:
-      - description: The id or login of the organization.
-        examples:
-          byString:
-            value: dream
-          byId:
-            value: "1"
-        explode: false
-        in: path
-        name: org
-        required: true
-        schema:
-          maxLength: 64
-          minLength: 1
-          type: string
-        style: simple
-      - description: The unique identifier of the challenge.
-        explode: false
-        in: path
-        name: challengeId
-        required: true
-        schema:
-          $ref: "#/components/schemas/ChallengeId"
-        style: simple
-      - description: A challenge participation role.
-        explode: false
-        in: path
-        name: role
-        required: true
-        schema:
-          $ref: "#/components/schemas/ChallengeParticipationRole"
-        style: simple
+        - description: The id or login of the organization.
+          examples:
+            byString:
+              value: dream
+            byId:
+              value: '1'
+          explode: false
+          in: path
+          name: org
+          required: true
+          schema:
+            maxLength: 64
+            minLength: 1
+            type: string
+          style: simple
+        - description: The unique identifier of the challenge.
+          explode: false
+          in: path
+          name: challengeId
+          required: true
+          schema:
+            $ref: '#/components/schemas/ChallengeId'
+          style: simple
+        - description: A challenge participation role.
+          explode: false
+          in: path
+          name: role
+          required: true
+          schema:
+            $ref: '#/components/schemas/ChallengeParticipationRole'
+          style: simple
       responses:
-        "204":
+        '204':
           description: Participation deleted successfully
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "403":
-          $ref: "#/components/responses/Forbidden"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       security:
-      - apiBearerAuth: []
+        - apiBearerAuth: []
       summary: Delete a specific challenge participation
       tags:
-      - Challenge Participation
+        - Challenge Participation
       x-audience:
-      - internal
+        - internal
       x-accepts:
-      - application/problem+json
+        - application/problem+json
       x-tags:
-      - tag: Challenge Participation
+        - tag: Challenge Participation
 components:
   parameters:
     organizationSearchQuery:
@@ -358,7 +358,7 @@ components:
       name: organizationSearchQuery
       required: false
       schema:
-        $ref: "#/components/schemas/OrganizationSearchQuery"
+        $ref: '#/components/schemas/OrganizationSearchQuery'
       style: form
     org:
       description: The id or login of the organization.
@@ -366,7 +366,7 @@ components:
         byString:
           value: dream
         byId:
-          value: "1"
+          value: '1'
       explode: false
       in: path
       name: org
@@ -383,7 +383,7 @@ components:
       name: challengeId
       required: true
       schema:
-        $ref: "#/components/schemas/ChallengeId"
+        $ref: '#/components/schemas/ChallengeId'
       style: simple
     challengeParticipationRole:
       description: A challenge participation role.
@@ -392,74 +392,74 @@ components:
       name: role
       required: true
       schema:
-        $ref: "#/components/schemas/ChallengeParticipationRole"
+        $ref: '#/components/schemas/ChallengeParticipationRole'
       style: simple
   responses:
     BadRequest:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/BasicError"
+            $ref: '#/components/schemas/BasicError'
       description: Invalid request
     InternalServerError:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/BasicError"
+            $ref: '#/components/schemas/BasicError'
       description: The request cannot be fulfilled due to an unexpected server error
     Unauthorized:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/BasicError"
+            $ref: '#/components/schemas/BasicError'
       description: Unauthorized
     Forbidden:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/BasicError"
+            $ref: '#/components/schemas/BasicError'
       description: The user does not have the permission to perform this action
     Conflict:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/BasicError"
+            $ref: '#/components/schemas/BasicError'
       description: The request conflicts with current state of the target resource
     NotFound:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/BasicError"
+            $ref: '#/components/schemas/BasicError'
       description: The specified resource was not found
   schemas:
     OrganizationCategory:
       description: The category of the organization.
       enum:
-      - featured
+        - featured
       example: featured
       type: string
     ChallengeContributionRole:
       description: The nature of a challenge contribution.
       enum:
-      - challenge_organizer
-      - data_contributor
-      - sponsor
+        - challenge_organizer
+        - data_contributor
+        - sponsor
       example: challenge_organizer
       type: string
     OrganizationSort:
       default: relevance
       description: What to sort results by.
       enum:
-      - challenge_count
-      - created
-      - name
-      - relevance
+        - challenge_count
+        - created
+        - name
+        - relevance
       type: string
     OrganizationDirection:
       description: The direction to sort the results by.
       enum:
-      - asc
-      - desc
+        - asc
+        - desc
       nullable: true
       type: string
     OrganizationId:
@@ -485,22 +485,22 @@ components:
         categories:
           description: The array of organization categories used to filter the results.
           items:
-            $ref: "#/components/schemas/OrganizationCategory"
+            $ref: '#/components/schemas/OrganizationCategory'
           type: array
         challengeContributionRoles:
           description: An array of challenge contribution roles used to filter the
             results.
           items:
-            $ref: "#/components/schemas/ChallengeContributionRole"
+            $ref: '#/components/schemas/ChallengeContributionRole'
           type: array
         sort:
-          $ref: "#/components/schemas/OrganizationSort"
+          $ref: '#/components/schemas/OrganizationSort'
         direction:
-          $ref: "#/components/schemas/OrganizationDirection"
+          $ref: '#/components/schemas/OrganizationDirection'
         ids:
           description: An array of organization ids used to filter the results.
           items:
-            $ref: "#/components/schemas/OrganizationId"
+            $ref: '#/components/schemas/OrganizationId'
           type: array
         searchTerms:
           description: A string of search terms used to filter the results.
@@ -539,19 +539,19 @@ components:
           example: true
           type: boolean
       required:
-      - hasNext
-      - hasPrevious
-      - number
-      - size
-      - totalElements
-      - totalPages
+        - hasNext
+        - hasPrevious
+        - number
+        - size
+        - totalElements
+        - totalPages
       type: object
     OrganizationLogin:
       description: The unique login of an organization.
       example: example-org
       maxLength: 64
       minLength: 2
-      pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
       type: string
     Url:
       description: A URL to the website or image.
@@ -598,7 +598,7 @@ components:
           example: example-org
           maxLength: 64
           minLength: 2
-          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
           type: string
         description:
           description: A description of the organization.
@@ -639,58 +639,56 @@ components:
           format: date-time
           type: string
       required:
-      - challengeCount
-      - createdAt
-      - id
-      - login
-      - name
-      - updatedAt
-      - websiteUrl
+        - challengeCount
+        - createdAt
+        - id
+        - login
+        - name
+        - updatedAt
+        - websiteUrl
       type: object
     OrganizationsPage:
       allOf:
-      - $ref: "#/components/schemas/PageMetadata"
-      - properties:
-          organizations:
-            description: A list of organizations
-            items:
-              $ref: "#/components/schemas/Organization"
-            type: array
-        required:
-        - organizations
-        type: object
+        - $ref: '#/components/schemas/PageMetadata'
+        - properties:
+            organizations:
+              description: A list of organizations
+              items:
+                $ref: '#/components/schemas/Organization'
+              type: array
+          required:
+            - organizations
+          type: object
       description: A page of organizations
       example:
         number: 99
         size: 99
         totalPages: 99
         organizations:
-        - createdAt: 2022-07-04T22:19:11Z
-          avatarKey: logo/dream.png
-          websiteUrl: https://openchallenges.io
-          acronym: OC
-          name: Example organization
-          description: A description of the organization.
-          id: 1
-          challengeCount: 10
-          login: example-org
-          updatedAt: 2022-07-04T22:19:11Z
-        - createdAt: 2022-07-04T22:19:11Z
-          avatarKey: logo/dream.png
-          websiteUrl: https://openchallenges.io
-          acronym: OC
-          name: Example organization
-          description: A description of the organization.
-          id: 1
-          challengeCount: 10
-          login: example-org
-          updatedAt: 2022-07-04T22:19:11Z
+          - createdAt: 2022-07-04T22:19:11Z
+            avatarKey: logo/dream.png
+            websiteUrl: https://openchallenges.io
+            acronym: OC
+            name: Example organization
+            description: A description of the organization.
+            id: 1
+            challengeCount: 10
+            login: example-org
+            updatedAt: 2022-07-04T22:19:11Z
+          - createdAt: 2022-07-04T22:19:11Z
+            avatarKey: logo/dream.png
+            websiteUrl: https://openchallenges.io
+            acronym: OC
+            name: Example organization
+            description: A description of the organization.
+            id: 1
+            challengeCount: 10
+            login: example-org
+            updatedAt: 2022-07-04T22:19:11Z
         hasPrevious: true
         hasNext: true
         totalElements: 99
       type: object
-      x-java-class-annotations:
-      - '@lombok.Builder'
     BasicError:
       description: Problem details (tools.ietf.org/html/rfc7807)
       properties:
@@ -708,12 +706,9 @@ components:
           description: An absolute URI that identifies the problem type
           type: string
       required:
-      - status
-      - title
+        - status
+        - title
       type: object
-      x-java-class-annotations:
-      - '@lombok.AllArgsConstructor'
-      - '@lombok.Builder'
     OrganizationCreateRequest:
       description: The information required to create an org account
       properties:
@@ -722,7 +717,7 @@ components:
           example: example-org
           maxLength: 64
           minLength: 2
-          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
           type: string
         name:
           example: Example organization
@@ -749,9 +744,9 @@ components:
           nullable: true
           type: string
       required:
-      - login
-      - name
-      - websiteUrl
+        - login
+        - name
+        - websiteUrl
       type: object
     OrganizationUpdateRequest:
       description: The information required to update an org account
@@ -782,11 +777,11 @@ components:
           nullable: true
           type: string
       required:
-      - acronym
-      - avatarKey
-      - description
-      - name
-      - websiteUrl
+        - acronym
+        - avatarKey
+        - description
+        - name
+        - websiteUrl
       type: object
     ChallengeId:
       description: The unique identifier of the challenge.
@@ -796,9 +791,9 @@ components:
     ChallengeParticipationRole:
       description: The nature of a challenge participation.
       enum:
-      - challenge_organizer
-      - data_contributor
-      - sponsor
+        - challenge_organizer
+        - data_contributor
+        - sponsor
       example: challenge_organizer
       type: string
     ChallengeParticipationCreateRequest:
@@ -812,10 +807,10 @@ components:
           format: int64
           type: integer
         role:
-          $ref: "#/components/schemas/ChallengeParticipationRole"
+          $ref: '#/components/schemas/ChallengeParticipationRole'
       required:
-      - challengeId
-      - role
+        - challengeId
+        - role
       type: object
     ChallengeParticipationId:
       description: The unique identifier of a challenge participation
@@ -846,12 +841,12 @@ components:
           format: int64
           type: integer
         role:
-          $ref: "#/components/schemas/ChallengeParticipationRole"
+          $ref: '#/components/schemas/ChallengeParticipationRole'
       required:
-      - challengeId
-      - id
-      - organizationId
-      - role
+        - challengeId
+        - id
+        - organizationId
+        - role
       type: object
   securitySchemes:
     apiBearerAuth:
