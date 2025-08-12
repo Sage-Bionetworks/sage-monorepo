@@ -40,7 +40,7 @@ export class ModelDetailsBoxplotsSelectorComponent {
   wikiParams = input.required<SynapseWikiParams>();
 
   sexOptions: { label: string; value: IndividualData.SexEnum[] }[] = [
-    { label: 'Male & Female', value: ['Male', 'Female'] },
+    { label: 'Female & Male', value: ['Female', 'Male'] },
     { label: 'Female', value: ['Female'] },
     { label: 'Male', value: ['Male'] },
   ];

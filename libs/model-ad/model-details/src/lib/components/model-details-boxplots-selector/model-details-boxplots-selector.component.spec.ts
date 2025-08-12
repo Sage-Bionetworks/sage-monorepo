@@ -60,7 +60,7 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
     const sexSelect = screen.getByRole('combobox', { name: /sex/i });
 
     await waitFor(() => {
-      expect(sexSelect).toHaveAccessibleName('Male & Female');
+      expect(sexSelect).toHaveAccessibleName('Female & Male');
     });
   });
 

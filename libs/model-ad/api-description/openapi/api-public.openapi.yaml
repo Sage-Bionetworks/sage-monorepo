@@ -193,8 +193,8 @@ components:
         sex:
           type: string
           enum:
-            - Male
             - Female
+            - Male
           description: Sex of the individual
         individual_id:
           type: string
