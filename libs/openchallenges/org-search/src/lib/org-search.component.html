@@ -17,7 +17,7 @@
             [(ngModel)]="searchedTerms"
             (input)="onSearchChange()"
             placeholder="Search organizations"
-            />
+          />
         </p-inputGroup>
       </div>
       <div class="sort-field">
@@ -36,53 +36,52 @@
   <section id="bottom" class="content">
     <div class="facets">
       <p-panel
-        header="{{ challengeContributionRolesFilter.label }}"
+        header="{{ challengeParticipationRolesFilter.label }}"
         [toggleable]="true"
-        [collapsed]="challengeContributionRolesFilter.collapsed"
-        >
+        [collapsed]="challengeParticipationRolesFilter.collapsed"
+      >
         <openchallenges-checkbox-filter
-          [options]="challengeContributionRolesFilter.options"
-          [selectedOptions]="selectedChallengeContributionRoles"
-          (selectionChange)="onParamChange({ challengeContributionRoles: $event })"
-          inputId="{{ challengeContributionRolesFilter.query }}"
-          />
+          [options]="challengeParticipationRolesFilter.options"
+          [selectedOptions]="selectedChallengeParticipationRoles"
+          (selectionChange)="onParamChange({ challengeParticipationRoles: $event })"
+          inputId="{{ challengeParticipationRolesFilter.query }}"
+        />
       </p-panel>
       <p-divider></p-divider>
       <p-panel
         header="{{ categoriesFilter.label }}"
         [toggleable]="true"
         [collapsed]="categoriesFilter.collapsed"
-        >
+      >
         <openchallenges-checkbox-filter
           [options]="categoriesFilter.options"
           [selectedOptions]="selectedCategories"
           (selectionChange)="onParamChange({ categories: $event })"
           inputId="{{ categoriesFilter.query }}"
-          />
+        />
       </p-panel>
     </div>
     <div class="main col">
       <h3>
-        Results @if (searchResultsCount !== undefined) {
-        <span>({{ searchResultsCount }})</span>
-      }
-    </h3>
-    <div class="card-group">
-      @for (organizationCard of organizationCards; track organizationCard) {
-        <openchallenges-organization-card
-          [organizationCard]="organizationCard"
-          />
-      }
-    </div>
-    <openchallenges-paginator
-      #paginator
-      [pageNumber]="selectedPageNumber || defaultPageNumber"
-      [pageSize]="selectedPageSize || defaultPageSize"
-      [totalElements]="searchResultsCount"
-      (pageChange)="onParamChange({ pageNumber: $event.page, pageSize: $event.rows })"
+        Results
+        @if (searchResultsCount !== undefined) {
+          <span>({{ searchResultsCount }})</span>
+        }
+      </h3>
+      <div class="card-group">
+        @for (organizationCard of organizationCards; track organizationCard) {
+          <openchallenges-organization-card [organizationCard]="organizationCard" />
+        }
+      </div>
+      <openchallenges-paginator
+        #paginator
+        [pageNumber]="selectedPageNumber || defaultPageNumber"
+        [pageSize]="selectedPageSize || defaultPageSize"
+        [totalElements]="searchResultsCount"
+        (pageChange)="onParamChange({ pageNumber: $event.page, pageSize: $event.rows })"
       />
-  </div>
-</section>
+    </div>
+  </section>
 </main>
 
 <openchallenges-footer
@@ -91,4 +90,4 @@
   [privacyPolicyUrl]="privacyPolicyUrl"
   [termsOfUseUrl]="termsOfUseUrl"
   [apiDocsUrl]="apiDocsUrl"
-  />
+/>

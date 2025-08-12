@@ -1,13 +1,13 @@
 import { FilterPanel } from '@sagebionetworks/openchallenges/ui';
 import {
-  challengeContributionRolesFilter,
+  challengeParticipationRolesFilter,
   organizationCategoriesFilter,
 } from './org-search-filters';
 
-export const challengeContributionRolesFilterPanel: FilterPanel = {
-  query: 'challengeContributionRoles',
-  label: 'Contribution Role',
-  options: challengeContributionRolesFilter,
+export const challengeParticipationRolesFilterPanel: FilterPanel = {
+  query: 'challengeParticipationRoles',
+  label: 'Participation Role',
+  options: challengeParticipationRolesFilter,
   collapsed: false,
 };
 

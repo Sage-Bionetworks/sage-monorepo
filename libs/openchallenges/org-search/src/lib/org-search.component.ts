@@ -18,7 +18,7 @@ import {
   ImageAspectRatio,
   Organization,
   OrganizationSort,
-  ChallengeContributionRole,
+  ChallengeParticipationRole,
   OrganizationCategory,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
@@ -32,7 +32,7 @@ import {
   PaginatorComponent,
 } from '@sagebionetworks/openchallenges/ui';
 import {
-  challengeContributionRolesFilterPanel,
+  challengeParticipationRolesFilterPanel,
   organizationCategoriesFilterPanel,
 } from './org-search-filter-panels';
 import { organizationSortFilter } from './org-search-filters';
@@ -121,7 +121,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
 
   // use @Input to retrieve the route param
   @Input({ required: false }) categories!: OrganizationCategory[];
-  @Input({ required: false }) challengeContributionRoles!: ChallengeContributionRole[];
+  @Input({ required: false }) challengeParticipationRoles!: ChallengeParticipationRole[];
   @Input({ required: false }) pageNumber!: number;
   @Input({ required: false }) searchTerms!: string;
   @Input({ required: false }) sort!: OrganizationSort;
@@ -145,11 +145,11 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   sortFilters: Filter[] = organizationSortFilter;
 
   // checkbox filters
-  challengeContributionRolesFilter = challengeContributionRolesFilterPanel;
+  challengeParticipationRolesFilter = challengeParticipationRolesFilterPanel;
   categoriesFilter = organizationCategoriesFilterPanel;
 
   // define selected filter values
-  selectedChallengeContributionRoles!: ChallengeContributionRole[];
+  selectedChallengeParticipationRoles!: ChallengeParticipationRole[];
   selectedCategories!: OrganizationCategory[];
 
   constructor() {
@@ -232,7 +232,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private updateSelectedValues() {
     // update selected filter values based on params in url
-    this.selectedChallengeContributionRoles = this.splitParam(this.challengeContributionRoles);
+    this.selectedChallengeParticipationRoles = this.splitParam(this.challengeParticipationRoles);
     this.selectedCategories = this.splitParam(this.categories);
     this.searchedTerms = this.searchTerms || '';
     this.selectedPageNumber = +this.pageNumber || this.defaultPageNumber;
@@ -246,7 +246,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
       pageSize: this.selectedPageSize,
       sort: this.sortedBy,
       searchTerms: this.searchedTerms,
-      challengeContributionRoles: this.selectedChallengeContributionRoles,
+      challengeParticipationRoles: this.selectedChallengeParticipationRoles,
       categories: this.selectedCategories,
     };
 
