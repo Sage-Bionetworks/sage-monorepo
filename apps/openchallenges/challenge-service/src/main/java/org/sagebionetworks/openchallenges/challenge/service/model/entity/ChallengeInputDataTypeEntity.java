@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "challenge_input_data_type")
@@ -36,6 +37,7 @@ public class ChallengeInputDataTypeEntity {
   @JoinColumn(name = "edam_concept_id", nullable = false)
   private EdamConceptEntity edamConcept;
 
-  @Column(name = "created_at")
+  @Column(name = "created_at", nullable = false, updatable = false)
+  @CreationTimestamp
   private OffsetDateTime createdAt;
 }
