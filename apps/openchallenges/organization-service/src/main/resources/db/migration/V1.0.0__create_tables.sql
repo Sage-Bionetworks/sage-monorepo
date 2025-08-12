@@ -7,8 +7,8 @@ CREATE TABLE organization (
   avatar_key            VARCHAR(255),
   website_url           VARCHAR(500),
   description           VARCHAR(1000),
-  created_at            TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at            TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created_at            TIMESTAMPTZ NOT NULL,
+  updated_at            TIMESTAMPTZ NOT NULL,
   acronym               VARCHAR(20),
   CONSTRAINT login_check CHECK (
     char_length(login) >= 2 AND login ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$'
@@ -25,7 +25,6 @@ CREATE TABLE organization_category (
     CONSTRAINT fk_organization
       FOREIGN KEY (organization_id)
       REFERENCES organization(id)
-      ON DELETE CASCADE
 );
 
 
@@ -40,7 +39,6 @@ CREATE TABLE challenge_participation (
     ),
     CONSTRAINT fk_organization
       FOREIGN KEY (organization_id)
-      REFERENCES organization(id)
-      ON DELETE CASCADE,
+      REFERENCES organization(id),
     CONSTRAINT uq_participation UNIQUE (challenge_id, organization_id, role)
 );

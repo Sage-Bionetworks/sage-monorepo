@@ -14,6 +14,7 @@ import org.sagebionetworks.openchallenges.organization.service.model.dto.Organiz
 import org.sagebionetworks.openchallenges.organization.service.model.entity.OrganizationEntity;
 import org.sagebionetworks.openchallenges.organization.service.model.mapper.OrganizationMapper;
 import org.sagebionetworks.openchallenges.organization.service.model.repository.ChallengeParticipationRepository;
+import org.sagebionetworks.openchallenges.organization.service.model.repository.OrganizationCategoryRepository;
 import org.sagebionetworks.openchallenges.organization.service.model.repository.OrganizationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,16 +32,19 @@ public class OrganizationService {
 
   private final OrganizationRepository organizationRepository;
   private final ChallengeParticipationRepository challengeParticipationRepository;
+  private final OrganizationCategoryRepository organizationCategoryRepository;
 
   @PersistenceContext
   private EntityManager entityManager;
 
   public OrganizationService(
     OrganizationRepository organizationRepository,
-    ChallengeParticipationRepository challengeParticipationRepository
+    ChallengeParticipationRepository challengeParticipationRepository,
+    OrganizationCategoryRepository organizationCategoryRepository
   ) {
     this.organizationRepository = organizationRepository;
     this.challengeParticipationRepository = challengeParticipationRepository;
+    this.organizationCategoryRepository = organizationCategoryRepository;
   }
 
   private OrganizationMapper organizationMapper = new OrganizationMapper();
@@ -68,6 +72,10 @@ public class OrganizationService {
     // First delete all challenge participations that reference this organization
     logger.info("Deleting challenge participations for organization: {}", orgEntity.getId());
     challengeParticipationRepository.deleteByOrganization(orgEntity);
+
+    // Delete all organization categories that reference this organization
+    logger.info("Deleting organization categories for organization: {}", orgEntity.getId());
+    organizationCategoryRepository.deleteByOrganization(orgEntity);
 
     // Now delete the organization
     organizationRepository.delete(orgEntity);

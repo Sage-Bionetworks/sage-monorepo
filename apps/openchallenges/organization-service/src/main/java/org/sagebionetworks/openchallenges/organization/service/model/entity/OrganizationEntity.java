@@ -14,7 +14,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBinderRef;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
@@ -79,11 +81,13 @@ public class OrganizationEntity {
   @FullTextField
   private String description;
 
-  @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
+  @Column(name = "created_at", nullable = false, updatable = false)
   @GenericField(name = "created_at", sortable = Sortable.YES)
+  @CreationTimestamp
   private OffsetDateTime createdAt;
 
-  @Column(name = "updated_at", nullable = false, insertable = false, updatable = false)
+  @Column(name = "updated_at", nullable = false)
+  @UpdateTimestamp
   private OffsetDateTime updatedAt;
 
   @Column(name = "acronym", nullable = true)
