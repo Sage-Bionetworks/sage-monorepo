@@ -18,8 +18,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.search.engine.backend.types.Searchable;
 import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.automaticindexing.ReindexOnUpdate;
@@ -137,10 +139,12 @@ public class ChallengeEntity {
   @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
   private EdamConceptEntity operation;
 
-  @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
+  @Column(name = "created_at", nullable = false, updatable = false)
   @GenericField(name = "created_at", sortable = Sortable.YES)
+  @CreationTimestamp
   private OffsetDateTime createdAt;
 
-  @Column(name = "updated_at", nullable = false, insertable = false, updatable = false)
+  @Column(name = "updated_at", nullable = false)
+  @UpdateTimestamp
   private OffsetDateTime updatedAt;
 }

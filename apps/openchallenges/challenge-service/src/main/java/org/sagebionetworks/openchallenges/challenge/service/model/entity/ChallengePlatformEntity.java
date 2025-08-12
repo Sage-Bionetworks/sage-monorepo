@@ -11,6 +11,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
@@ -52,9 +54,11 @@ public class ChallengePlatformEntity {
   @Column(name = "website_url", nullable = false, length = 500)
   private String websiteUrl;
 
-  @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
+  @Column(name = "created_at", nullable = false, updatable = false)
+  @CreationTimestamp
   private OffsetDateTime createdAt;
 
-  @Column(name = "updated_at", nullable = false, insertable = false, updatable = false)
+  @Column(name = "updated_at", nullable = false)
+  @UpdateTimestamp
   private OffsetDateTime updatedAt;
 }

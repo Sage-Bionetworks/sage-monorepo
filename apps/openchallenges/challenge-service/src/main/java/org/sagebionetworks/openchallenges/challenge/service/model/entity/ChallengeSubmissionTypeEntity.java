@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 
 @Entity
@@ -37,6 +38,7 @@ public class ChallengeSubmissionTypeEntity {
   @JoinColumn(name = "challenge_id", nullable = false)
   private ChallengeEntity challenge;
 
-  @Column(name = "created_at")
+  @Column(name = "created_at", nullable = false, updatable = false)
+  @CreationTimestamp
   private OffsetDateTime createdAt;
 }

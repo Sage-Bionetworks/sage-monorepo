@@ -5,8 +5,8 @@ CREATE TABLE challenge_platform (
   name VARCHAR(255) NOT NULL UNIQUE,
   avatar_key VARCHAR(255),
   website_url VARCHAR(500) NOT NULL,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+  updated_at TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
 -- create edam_concept table
@@ -31,8 +31,8 @@ CREATE TABLE challenge (
   start_date DATE,
   end_date DATE,
   operation_id BIGINT,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+  updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
   CONSTRAINT fk_platform FOREIGN KEY (platform_id) REFERENCES challenge_platform(id),
   CONSTRAINT fk_operation FOREIGN KEY (operation_id) REFERENCES edam_concept(id),
   CONSTRAINT slug_check CHECK (
@@ -60,7 +60,7 @@ CREATE TABLE challenge_incentive (
     name IN ('monetary', 'publication', 'speaking_engagement', 'other')
   ),
   challenge_id BIGINT NOT NULL,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL,
   CONSTRAINT fk_challenge_inc FOREIGN KEY (challenge_id) REFERENCES challenge(id),
   CONSTRAINT unique_incentive UNIQUE (name, challenge_id)
 );
@@ -72,7 +72,7 @@ CREATE TABLE challenge_submission_type (
     name IN ('container_image', 'prediction_file', 'notebook', 'mlcube', 'other')
   ),
   challenge_id BIGINT NOT NULL,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL,
   CONSTRAINT fk_challenge_sub FOREIGN KEY (challenge_id) REFERENCES challenge(id),
   CONSTRAINT unique_submission_type UNIQUE (name, challenge_id)
 );
@@ -82,7 +82,7 @@ CREATE TABLE challenge_input_data_type (
   id BIGSERIAL PRIMARY KEY,
   challenge_id BIGINT NOT NULL,
   edam_concept_id BIGINT NOT NULL,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL,
   CONSTRAINT fk_challenge_input FOREIGN KEY (challenge_id) REFERENCES challenge(id),
   CONSTRAINT fk_edam_concept FOREIGN KEY (edam_concept_id) REFERENCES edam_concept(id),
   CONSTRAINT unique_input_data_type UNIQUE (challenge_id, edam_concept_id)
@@ -93,7 +93,7 @@ CREATE TABLE challenge_star (
   id BIGSERIAL PRIMARY KEY,
   challenge_id BIGINT NOT NULL,
   user_id BIGINT NOT NULL,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL,
   CONSTRAINT fk_challenge_star FOREIGN KEY (challenge_id) REFERENCES challenge(id),
   CONSTRAINT unique_star UNIQUE (challenge_id, user_id)
 );
