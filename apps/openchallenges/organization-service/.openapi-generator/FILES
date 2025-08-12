@@ -10,7 +10,6 @@ src/main/java/org/sagebionetworks/openchallenges/organization/service/configurat
 src/main/java/org/sagebionetworks/openchallenges/organization/service/configuration/HomeController.java
 src/main/java/org/sagebionetworks/openchallenges/organization/service/configuration/SpringDocConfiguration.java
 src/main/java/org/sagebionetworks/openchallenges/organization/service/model/dto/BasicErrorDto.java
-src/main/java/org/sagebionetworks/openchallenges/organization/service/model/dto/ChallengeContributionRoleDto.java
 src/main/java/org/sagebionetworks/openchallenges/organization/service/model/dto/ChallengeParticipationCreateRequestDto.java
 src/main/java/org/sagebionetworks/openchallenges/organization/service/model/dto/ChallengeParticipationDto.java
 src/main/java/org/sagebionetworks/openchallenges/organization/service/model/dto/ChallengeParticipationRoleDto.java

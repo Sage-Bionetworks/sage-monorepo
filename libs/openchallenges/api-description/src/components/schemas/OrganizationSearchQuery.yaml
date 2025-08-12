@@ -18,11 +18,11 @@ properties:
     type: array
     items:
       $ref: OrganizationCategory.yaml
-  challengeContributionRoles:
-    description: An array of challenge contribution roles used to filter the results.
+  challengeParticipationRoles:
+    description: An array of challenge participation roles used to filter the results.
     type: array
     items:
-      $ref: ChallengeContributionRole.yaml
+      $ref: ChallengeParticipationRole.yaml
   sort:
     $ref: OrganizationSort.yaml
   direction:
