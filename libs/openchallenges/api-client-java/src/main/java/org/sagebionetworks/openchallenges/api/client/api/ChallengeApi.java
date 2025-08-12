@@ -15,7 +15,6 @@ import org.sagebionetworks.openchallenges.api.client.model.ChallengeJsonLd;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengeSearchQuery;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengeUpdateRequest;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengesPage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
@@ -30,7 +29,7 @@ import org.springframework.web.client.RestClientResponseException;
 
 @jakarta.annotation.Generated(
   value = "org.openapitools.codegen.languages.JavaClientCodegen",
-  comments = "Generator version: 7.13.0"
+  comments = "Generator version: 7.14.0"
 )
 public class ChallengeApi {
 
@@ -40,7 +39,6 @@ public class ChallengeApi {
     this(new ApiClient());
   }
 
-  @Autowired
   public ChallengeApi(ApiClient apiClient) {
     this.apiClient = apiClient;
   }

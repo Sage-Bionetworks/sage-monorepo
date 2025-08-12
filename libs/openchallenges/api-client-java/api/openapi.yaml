@@ -78,18 +78,9 @@ paths:
                 $ref: '#/components/schemas/LoginResponse'
           description: Login successful
         '401':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       summary: User login
       tags:
         - Authentication
@@ -113,18 +104,9 @@ paths:
                 type: array
           description: List of API keys
         '401':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       security:
         - apiBearerAuth: []
       summary: List API keys
@@ -152,24 +134,11 @@ paths:
                 $ref: '#/components/schemas/CreateApiKeyResponse'
           description: API key created successfully
         '400':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Invalid request
+          $ref: '#/components/responses/BadRequest'
         '401':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       security:
         - apiBearerAuth: []
       summary: Create API key
@@ -199,24 +168,11 @@ paths:
         '204':
           description: API key deleted successfully
         '401':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '404':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The specified resource was not found
+          $ref: '#/components/responses/NotFound'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       security:
         - apiBearerAuth: []
       summary: Delete API key
@@ -247,18 +203,9 @@ paths:
                 $ref: '#/components/schemas/ChallengesPage'
           description: Success
         '400':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Invalid request
+          $ref: '#/components/responses/BadRequest'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       summary: List challenges
       tags:
         - Challenge
@@ -284,36 +231,15 @@ paths:
                 $ref: '#/components/schemas/Challenge'
           description: Challenge created successfully
         '400':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Invalid request
+          $ref: '#/components/responses/BadRequest'
         '401':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The user does not have the permission to perform this action
+          $ref: '#/components/responses/Forbidden'
         '409':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request conflicts with current state of the target resource
+          $ref: '#/components/responses/Conflict'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       security:
         - apiBearerAuth: []
       summary: Create a challenge
@@ -342,30 +268,13 @@ paths:
         '204':
           description: Challenge successfully deleted
         '401':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The user does not have the permission to perform this action
+          $ref: '#/components/responses/Forbidden'
         '404':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The specified resource was not found
+          $ref: '#/components/responses/NotFound'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       security:
         - apiBearerAuth: []
       summary: Delete a challenge
@@ -395,18 +304,9 @@ paths:
                 $ref: '#/components/schemas/Challenge'
           description: A challenge
         '404':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The specified resource was not found
+          $ref: '#/components/responses/NotFound'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       summary: Get a challenge
       tags:
         - Challenge
@@ -441,42 +341,17 @@ paths:
                 $ref: '#/components/schemas/Challenge'
           description: Challenge successfully updated
         '400':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Invalid request
+          $ref: '#/components/responses/BadRequest'
         '401':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The user does not have the permission to perform this action
+          $ref: '#/components/responses/Forbidden'
         '404':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The specified resource was not found
+          $ref: '#/components/responses/NotFound'
         '409':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request conflicts with current state of the target resource
+          $ref: '#/components/responses/Conflict'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       security:
         - apiBearerAuth: []
       summary: Update an existing challenge
@@ -509,18 +384,9 @@ paths:
                 $ref: '#/components/schemas/ChallengeJsonLd'
           description: A challenge
         '404':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The specified resource was not found
+          $ref: '#/components/responses/NotFound'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       summary: Get a challenge in JSON-LD format
       tags:
         - Challenge
@@ -550,18 +416,9 @@ paths:
                 $ref: '#/components/schemas/ChallengeContributionsPage'
           description: Success
         '400':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Invalid request
+          $ref: '#/components/responses/BadRequest'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       summary: List challenge contributions
       tags:
         - Challenge Contribution
@@ -597,36 +454,15 @@ paths:
                 $ref: '#/components/schemas/ChallengeContribution'
           description: Contribution created successfully
         '401':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The user does not have the permission to perform this action
+          $ref: '#/components/responses/Forbidden'
         '404':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The specified resource was not found
+          $ref: '#/components/responses/NotFound'
         '409':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request conflicts with current state of the target resource
+          $ref: '#/components/responses/Conflict'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       security:
         - apiBearerAuth: []
       summary: Create a new contribution for a challenge
@@ -671,30 +507,13 @@ paths:
         '204':
           description: Contribution deleted successfully
         '401':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The user does not have the permission to perform this action
+          $ref: '#/components/responses/Forbidden'
         '404':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The specified resource was not found
+          $ref: '#/components/responses/NotFound'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       security:
         - apiBearerAuth: []
       summary: Delete a specific challenge contribution
@@ -741,24 +560,11 @@ paths:
                 $ref: '#/components/schemas/ChallengeContribution'
           description: Challenge contribution retrieved successfully
         '400':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Invalid request
+          $ref: '#/components/responses/BadRequest'
         '404':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The specified resource was not found
+          $ref: '#/components/responses/NotFound'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       summary: Get a specific challenge contribution
       tags:
         - Challenge Contribution
@@ -779,12 +585,7 @@ paths:
                 $ref: '#/components/schemas/ChallengesPerYear'
           description: An object
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       summary: Get the number of challenges tracked per year
       tags:
         - Challenge Analytics
@@ -814,18 +615,9 @@ paths:
                 $ref: '#/components/schemas/ChallengePlatformsPage'
           description: Success
         '400':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Invalid request
+          $ref: '#/components/responses/BadRequest'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       summary: List challenge platforms
       tags:
         - Challenge Platform
@@ -851,30 +643,13 @@ paths:
                 $ref: '#/components/schemas/ChallengePlatform'
           description: Success
         '401':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The user does not have the permission to perform this action
+          $ref: '#/components/responses/Forbidden'
         '409':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request conflicts with current state of the target resource
+          $ref: '#/components/responses/Conflict'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       security:
         - apiBearerAuth: []
       summary: Create a challenge platform
@@ -904,30 +679,13 @@ paths:
         '204':
           description: Deletion successful
         '401':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The user does not have the permission to perform this action
+          $ref: '#/components/responses/Forbidden'
         '404':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The specified resource was not found
+          $ref: '#/components/responses/NotFound'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       security:
         - apiBearerAuth: []
       summary: Delete a challenge platform
@@ -957,18 +715,9 @@ paths:
                 $ref: '#/components/schemas/ChallengePlatform'
           description: Success
         '404':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The specified resource was not found
+          $ref: '#/components/responses/NotFound'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       summary: Get a challenge platform
       tags:
         - Challenge Platform
@@ -1004,42 +753,17 @@ paths:
                 $ref: '#/components/schemas/ChallengePlatform'
           description: Challange platform updated successfully
         '400':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Invalid request
+          $ref: '#/components/responses/BadRequest'
         '401':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The user does not have the permission to perform this action
+          $ref: '#/components/responses/Forbidden'
         '404':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The specified resource was not found
+          $ref: '#/components/responses/NotFound'
         '409':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request conflicts with current state of the target resource
+          $ref: '#/components/responses/Conflict'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       security:
         - apiBearerAuth: []
       summary: Update an existing challenge platform
@@ -1072,18 +796,9 @@ paths:
                 $ref: '#/components/schemas/EdamConceptsPage'
           description: Success
         '400':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Invalid request
+          $ref: '#/components/responses/BadRequest'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       summary: List EDAM concepts
       tags:
         - Edam Concept
@@ -1113,18 +828,9 @@ paths:
                 $ref: '#/components/schemas/Image'
           description: An image
         '404':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The specified resource was not found
+          $ref: '#/components/responses/NotFound'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       summary: Get an image
       tags:
         - Image
@@ -1154,18 +860,9 @@ paths:
                 $ref: '#/components/schemas/OrganizationsPage'
           description: Success
         '400':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Invalid request
+          $ref: '#/components/responses/BadRequest'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       summary: List organizations
       tags:
         - Organization
@@ -1191,36 +888,15 @@ paths:
                 $ref: '#/components/schemas/Organization'
           description: Organization created successfully
         '400':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Invalid request
+          $ref: '#/components/responses/BadRequest'
         '401':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The user does not have the permission to perform this action
+          $ref: '#/components/responses/Forbidden'
         '409':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request conflicts with current state of the target resource
+          $ref: '#/components/responses/Conflict'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       security:
         - apiBearerAuth: []
       summary: Create an organization
@@ -1256,30 +932,13 @@ paths:
         '204':
           description: Organization successfully deleted
         '401':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The user does not have the permission to perform this action
+          $ref: '#/components/responses/Forbidden'
         '404':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The specified resource was not found
+          $ref: '#/components/responses/NotFound'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       security:
         - apiBearerAuth: []
       summary: Delete an organization
@@ -1316,18 +975,9 @@ paths:
                 $ref: '#/components/schemas/Organization'
           description: Organization retrieved successfully
         '404':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The specified resource was not found
+          $ref: '#/components/responses/NotFound'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       summary: Get an organization
       tags:
         - Organization
@@ -1369,42 +1019,17 @@ paths:
                 $ref: '#/components/schemas/Organization'
           description: Organization successfully updated
         '400':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Invalid request
+          $ref: '#/components/responses/BadRequest'
         '401':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Unauthorized
+          $ref: '#/components/responses/Unauthorized'
         '403':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The user does not have the permission to perform this action
+          $ref: '#/components/responses/Forbidden'
         '404':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The specified resource was not found
+          $ref: '#/components/responses/NotFound'
         '409':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request conflicts with current state of the target resource
+          $ref: '#/components/responses/Conflict'
         '500':
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
+          $ref: '#/components/responses/InternalServerError'
       security:
         - apiBearerAuth: []
       summary: Update an existing organization
@@ -1632,9 +1257,6 @@ components:
         - status
         - title
       type: object
-      x-java-class-annotations:
-        - '@lombok.AllArgsConstructor'
-        - '@lombok.Builder'
     ApiKey:
       example:
         createdAt: 2024-01-15T10:30:00Z
@@ -1794,7 +1416,8 @@ components:
     EdamConceptId:
       description: The unique identifier of the EDAM concept.
       example: 1
-      format: int64
+      format: int32
+      minimum: 1
       type: integer
     ChallengeCategory:
       description: The category of the challenge.
@@ -2028,7 +1651,8 @@ components:
         id:
           description: The unique identifier of the EDAM concept.
           example: 1
-          format: int64
+          format: int32
+          minimum: 1
           type: integer
         classId:
           example: http://edamontology.org/data_0850
@@ -2320,20 +1944,33 @@ components:
         hasNext: true
         totalElements: 99
       type: object
-      x-java-class-annotations:
-        - '@lombok.Builder'
     ChallengeCreateRequest:
       description: The information used to create a challenge
       example:
-        websiteUrl: https://openchallenges.io
         avatarUrl: https://openchallenges.io
-        name: Awesome Challenge
+        endDate: 2017-07-21
         description: This is an example description of the challenge.
         platformId: 1
+        incentives:
+          - publication
+          - publication
+        submissionTypes:
+          - container_image
+          - container_image
+        websiteUrl: https://openchallenges.io
+        name: Awesome Challenge
+        categories:
+          - featured
+          - featured
         headline: Example challenge headline
+        operation: 1
         slug: awesome-challenge
+        startDate: 2017-07-21
         doi: https://doi.org/123/abc
         status: active
+        inputDataTypes:
+          - 1
+          - 1
       properties:
         slug:
           description: The unique slug of the challenge.
@@ -2389,27 +2026,73 @@ components:
           maxLength: 500
           nullable: true
           type: string
+        startDate:
+          description: The start date of the challenge.
+          example: 2017-07-21
+          format: date
+          nullable: true
+          type: string
+        endDate:
+          description: The end date of the challenge.
+          example: 2017-07-21
+          format: date
+          nullable: true
+          type: string
+        incentives:
+          items:
+            $ref: '#/components/schemas/ChallengeIncentive'
+          type: array
+        submissionTypes:
+          items:
+            $ref: '#/components/schemas/ChallengeSubmissionType'
+          type: array
+        categories:
+          items:
+            $ref: '#/components/schemas/ChallengeCategory'
+          type: array
+        inputDataTypes:
+          items:
+            $ref: '#/components/schemas/EdamConceptId'
+          type: array
+        operation:
+          description: The unique identifier of the EDAM concept.
+          example: 1
+          format: int32
+          minimum: 1
+          type: integer
       required:
         - name
-        - platformId
         - slug
         - status
+        - websiteUrl
       type: object
     ChallengeUpdateRequest:
       description: The information required to update a challenge
       example:
+        avatarUrl: https://openchallenges.io
+        endDate: 2017-07-21
+        description: This is an example description of the challenge.
+        platformId: 1
         incentives:
           - publication
           - publication
+        submissionTypes:
+          - container_image
+          - container_image
         websiteUrl: https://openchallenges.io
-        avatarUrl: https://openchallenges.io
         name: Awesome Challenge
-        description: This is an example description of the challenge.
-        platformId: 1
+        categories:
+          - featured
+          - featured
         headline: Example challenge headline
+        operation: 1
         slug: awesome-challenge
+        startDate: 2017-07-21
         doi: https://doi.org/123/abc
         status: active
+        inputDataTypes:
+          - 1
+          - 1
       properties:
         slug:
           description: The unique slug of the challenge.
@@ -2469,16 +2152,53 @@ components:
           items:
             $ref: '#/components/schemas/ChallengeIncentive'
           type: array
+        submissionTypes:
+          items:
+            $ref: '#/components/schemas/ChallengeSubmissionType'
+          type: array
+        categories:
+          items:
+            $ref: '#/components/schemas/ChallengeCategory'
+          type: array
+        inputDataTypes:
+          items:
+            $ref: '#/components/schemas/EdamConceptId'
+          type: array
+        operation:
+          description: The unique identifier of the EDAM concept.
+          example: 1
+          format: int32
+          minimum: 1
+          type: integer
+        startDate:
+          description: The start date of the challenge.
+          example: 2017-07-21
+          format: date
+          nullable: true
+          type: string
+        endDate:
+          description: The end date of the challenge.
+          example: 2017-07-21
+          format: date
+          nullable: true
+          type: string
       required:
         - avatarUrl
+        - categories
         - description
         - doi
+        - doi
+        - endDate
         - headline
         - incentives
+        - inputDataTypes
         - name
+        - operation
         - platformId
         - slug
+        - startDate
         - status
+        - submissionTypes
         - websiteUrl
       type: object
     ChallengeJsonLd:
@@ -2575,8 +2295,6 @@ components:
         hasNext: true
         totalElements: 99
       type: object
-      x-java-class-annotations:
-        - '@lombok.Builder'
     ChallengeContributionCreateRequest:
       description: A challenge contribution to be created.
       example:
@@ -2623,8 +2341,6 @@ components:
         - undatedChallengeCount
         - years
       type: object
-      x-java-class-annotations:
-        - '@lombok.Builder'
     ChallengePlatformSort:
       default: relevance
       description: What to sort results by.
@@ -2749,8 +2465,6 @@ components:
         hasNext: true
         totalElements: 99
       type: object
-      x-java-class-annotations:
-        - '@lombok.Builder'
     ChallengePlatformCreateRequest:
       description: The information used to create a challenge platform
       example:
@@ -2914,8 +2628,6 @@ components:
             id: 1
         totalElements: 99
       type: object
-      x-java-class-annotations:
-        - '@lombok.Builder'
     ImageKey:
       description: The unique identifier of the image.
       example: logo/dream.png
@@ -2969,8 +2681,6 @@ components:
       required:
         - url
       type: object
-      x-java-class-annotations:
-        - '@lombok.Builder'
     OrganizationCategory:
       description: The category of the organization.
       enum:
@@ -3159,8 +2869,6 @@ components:
         hasNext: true
         totalElements: 99
       type: object
-      x-java-class-annotations:
-        - '@lombok.Builder'
     OrganizationCreateRequest:
       description: The information required to create an org account
       example:

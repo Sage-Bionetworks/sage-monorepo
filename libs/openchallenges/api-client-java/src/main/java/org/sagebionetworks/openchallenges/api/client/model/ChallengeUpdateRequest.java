@@ -19,13 +19,16 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import org.sagebionetworks.openchallenges.api.client.model.ChallengeCategory;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengeIncentive;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengeStatus;
+import org.sagebionetworks.openchallenges.api.client.model.ChallengeSubmissionType;
 
 /**
  * The information required to update a challenge
@@ -42,11 +45,17 @@ import org.sagebionetworks.openchallenges.api.client.model.ChallengeStatus;
     ChallengeUpdateRequest.JSON_PROPERTY_WEBSITE_URL,
     ChallengeUpdateRequest.JSON_PROPERTY_AVATAR_URL,
     ChallengeUpdateRequest.JSON_PROPERTY_INCENTIVES,
+    ChallengeUpdateRequest.JSON_PROPERTY_SUBMISSION_TYPES,
+    ChallengeUpdateRequest.JSON_PROPERTY_CATEGORIES,
+    ChallengeUpdateRequest.JSON_PROPERTY_INPUT_DATA_TYPES,
+    ChallengeUpdateRequest.JSON_PROPERTY_OPERATION,
+    ChallengeUpdateRequest.JSON_PROPERTY_START_DATE,
+    ChallengeUpdateRequest.JSON_PROPERTY_END_DATE,
   }
 )
 @jakarta.annotation.Generated(
   value = "org.openapitools.codegen.languages.JavaClientCodegen",
-  comments = "Generator version: 7.13.0"
+  comments = "Generator version: 7.14.0"
 )
 public class ChallengeUpdateRequest {
 
@@ -99,6 +108,36 @@ public class ChallengeUpdateRequest {
 
   @jakarta.annotation.Nonnull
   private List<ChallengeIncentive> incentives = new ArrayList<>();
+
+  public static final String JSON_PROPERTY_SUBMISSION_TYPES = "submissionTypes";
+
+  @jakarta.annotation.Nonnull
+  private List<ChallengeSubmissionType> submissionTypes = new ArrayList<>();
+
+  public static final String JSON_PROPERTY_CATEGORIES = "categories";
+
+  @jakarta.annotation.Nonnull
+  private List<ChallengeCategory> categories = new ArrayList<>();
+
+  public static final String JSON_PROPERTY_INPUT_DATA_TYPES = "inputDataTypes";
+
+  @jakarta.annotation.Nonnull
+  private List<Integer> inputDataTypes = new ArrayList<>();
+
+  public static final String JSON_PROPERTY_OPERATION = "operation";
+
+  @jakarta.annotation.Nonnull
+  private Integer operation;
+
+  public static final String JSON_PROPERTY_START_DATE = "startDate";
+
+  @jakarta.annotation.Nullable
+  private LocalDate startDate;
+
+  public static final String JSON_PROPERTY_END_DATE = "endDate";
+
+  @jakarta.annotation.Nullable
+  private LocalDate endDate;
 
   public ChallengeUpdateRequest() {}
 
@@ -332,6 +371,173 @@ public class ChallengeUpdateRequest {
     this.incentives = incentives;
   }
 
+  public ChallengeUpdateRequest submissionTypes(
+    @jakarta.annotation.Nonnull List<ChallengeSubmissionType> submissionTypes
+  ) {
+    this.submissionTypes = submissionTypes;
+    return this;
+  }
+
+  public ChallengeUpdateRequest addSubmissionTypesItem(
+    ChallengeSubmissionType submissionTypesItem
+  ) {
+    if (this.submissionTypes == null) {
+      this.submissionTypes = new ArrayList<>();
+    }
+    this.submissionTypes.add(submissionTypesItem);
+    return this;
+  }
+
+  /**
+   * Get submissionTypes
+   * @return submissionTypes
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_SUBMISSION_TYPES)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public List<ChallengeSubmissionType> getSubmissionTypes() {
+    return submissionTypes;
+  }
+
+  @JsonProperty(JSON_PROPERTY_SUBMISSION_TYPES)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setSubmissionTypes(
+    @jakarta.annotation.Nonnull List<ChallengeSubmissionType> submissionTypes
+  ) {
+    this.submissionTypes = submissionTypes;
+  }
+
+  public ChallengeUpdateRequest categories(
+    @jakarta.annotation.Nonnull List<ChallengeCategory> categories
+  ) {
+    this.categories = categories;
+    return this;
+  }
+
+  public ChallengeUpdateRequest addCategoriesItem(ChallengeCategory categoriesItem) {
+    if (this.categories == null) {
+      this.categories = new ArrayList<>();
+    }
+    this.categories.add(categoriesItem);
+    return this;
+  }
+
+  /**
+   * Get categories
+   * @return categories
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_CATEGORIES)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public List<ChallengeCategory> getCategories() {
+    return categories;
+  }
+
+  @JsonProperty(JSON_PROPERTY_CATEGORIES)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setCategories(@jakarta.annotation.Nonnull List<ChallengeCategory> categories) {
+    this.categories = categories;
+  }
+
+  public ChallengeUpdateRequest inputDataTypes(
+    @jakarta.annotation.Nonnull List<Integer> inputDataTypes
+  ) {
+    this.inputDataTypes = inputDataTypes;
+    return this;
+  }
+
+  public ChallengeUpdateRequest addInputDataTypesItem(Integer inputDataTypesItem) {
+    if (this.inputDataTypes == null) {
+      this.inputDataTypes = new ArrayList<>();
+    }
+    this.inputDataTypes.add(inputDataTypesItem);
+    return this;
+  }
+
+  /**
+   * Get inputDataTypes
+   * @return inputDataTypes
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_INPUT_DATA_TYPES)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public List<Integer> getInputDataTypes() {
+    return inputDataTypes;
+  }
+
+  @JsonProperty(JSON_PROPERTY_INPUT_DATA_TYPES)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setInputDataTypes(@jakarta.annotation.Nonnull List<Integer> inputDataTypes) {
+    this.inputDataTypes = inputDataTypes;
+  }
+
+  public ChallengeUpdateRequest operation(@jakarta.annotation.Nonnull Integer operation) {
+    this.operation = operation;
+    return this;
+  }
+
+  /**
+   * The unique identifier of the EDAM concept.
+   * minimum: 1
+   * @return operation
+   */
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_OPERATION)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public Integer getOperation() {
+    return operation;
+  }
+
+  @JsonProperty(JSON_PROPERTY_OPERATION)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setOperation(@jakarta.annotation.Nonnull Integer operation) {
+    this.operation = operation;
+  }
+
+  public ChallengeUpdateRequest startDate(@jakarta.annotation.Nullable LocalDate startDate) {
+    this.startDate = startDate;
+    return this;
+  }
+
+  /**
+   * The start date of the challenge.
+   * @return startDate
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_START_DATE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public LocalDate getStartDate() {
+    return startDate;
+  }
+
+  @JsonProperty(JSON_PROPERTY_START_DATE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setStartDate(@jakarta.annotation.Nullable LocalDate startDate) {
+    this.startDate = startDate;
+  }
+
+  public ChallengeUpdateRequest endDate(@jakarta.annotation.Nullable LocalDate endDate) {
+    this.endDate = endDate;
+    return this;
+  }
+
+  /**
+   * The end date of the challenge.
+   * @return endDate
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_END_DATE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public LocalDate getEndDate() {
+    return endDate;
+  }
+
+  @JsonProperty(JSON_PROPERTY_END_DATE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setEndDate(@jakarta.annotation.Nullable LocalDate endDate) {
+    this.endDate = endDate;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -351,7 +557,13 @@ public class ChallengeUpdateRequest {
       Objects.equals(this.platformId, challengeUpdateRequest.platformId) &&
       Objects.equals(this.websiteUrl, challengeUpdateRequest.websiteUrl) &&
       Objects.equals(this.avatarUrl, challengeUpdateRequest.avatarUrl) &&
-      Objects.equals(this.incentives, challengeUpdateRequest.incentives)
+      Objects.equals(this.incentives, challengeUpdateRequest.incentives) &&
+      Objects.equals(this.submissionTypes, challengeUpdateRequest.submissionTypes) &&
+      Objects.equals(this.categories, challengeUpdateRequest.categories) &&
+      Objects.equals(this.inputDataTypes, challengeUpdateRequest.inputDataTypes) &&
+      Objects.equals(this.operation, challengeUpdateRequest.operation) &&
+      Objects.equals(this.startDate, challengeUpdateRequest.startDate) &&
+      Objects.equals(this.endDate, challengeUpdateRequest.endDate)
     );
   }
 
@@ -367,7 +579,13 @@ public class ChallengeUpdateRequest {
       platformId,
       websiteUrl,
       avatarUrl,
-      incentives
+      incentives,
+      submissionTypes,
+      categories,
+      inputDataTypes,
+      operation,
+      startDate,
+      endDate
     );
   }
 
@@ -385,6 +603,12 @@ public class ChallengeUpdateRequest {
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
     sb.append("    incentives: ").append(toIndentedString(incentives)).append("\n");
+    sb.append("    submissionTypes: ").append(toIndentedString(submissionTypes)).append("\n");
+    sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
+    sb.append("    inputDataTypes: ").append(toIndentedString(inputDataTypes)).append("\n");
+    sb.append("    operation: ").append(toIndentedString(operation)).append("\n");
+    sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
+    sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
     sb.append("}");
     return sb.toString();
   }

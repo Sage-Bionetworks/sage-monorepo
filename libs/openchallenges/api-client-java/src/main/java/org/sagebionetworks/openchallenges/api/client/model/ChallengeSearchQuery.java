@@ -61,7 +61,7 @@ import org.sagebionetworks.openchallenges.api.client.model.ChallengeSubmissionTy
 )
 @jakarta.annotation.Generated(
   value = "org.openapitools.codegen.languages.JavaClientCodegen",
-  comments = "Generator version: 7.13.0"
+  comments = "Generator version: 7.14.0"
 )
 public class ChallengeSearchQuery {
 
@@ -128,12 +128,12 @@ public class ChallengeSearchQuery {
   public static final String JSON_PROPERTY_INPUT_DATA_TYPES = "inputDataTypes";
 
   @jakarta.annotation.Nullable
-  private List<Long> inputDataTypes = new ArrayList<>();
+  private List<Integer> inputDataTypes = new ArrayList<>();
 
   public static final String JSON_PROPERTY_OPERATIONS = "operations";
 
   @jakarta.annotation.Nullable
-  private List<Long> operations = new ArrayList<>();
+  private List<Integer> operations = new ArrayList<>();
 
   public static final String JSON_PROPERTY_CATEGORIES = "categories";
 
@@ -498,13 +498,13 @@ public class ChallengeSearchQuery {
   }
 
   public ChallengeSearchQuery inputDataTypes(
-    @jakarta.annotation.Nullable List<Long> inputDataTypes
+    @jakarta.annotation.Nullable List<Integer> inputDataTypes
   ) {
     this.inputDataTypes = inputDataTypes;
     return this;
   }
 
-  public ChallengeSearchQuery addInputDataTypesItem(Long inputDataTypesItem) {
+  public ChallengeSearchQuery addInputDataTypesItem(Integer inputDataTypesItem) {
     if (this.inputDataTypes == null) {
       this.inputDataTypes = new ArrayList<>();
     }
@@ -519,22 +519,22 @@ public class ChallengeSearchQuery {
   @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_INPUT_DATA_TYPES)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public List<Long> getInputDataTypes() {
+  public List<Integer> getInputDataTypes() {
     return inputDataTypes;
   }
 
   @JsonProperty(JSON_PROPERTY_INPUT_DATA_TYPES)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setInputDataTypes(@jakarta.annotation.Nullable List<Long> inputDataTypes) {
+  public void setInputDataTypes(@jakarta.annotation.Nullable List<Integer> inputDataTypes) {
     this.inputDataTypes = inputDataTypes;
   }
 
-  public ChallengeSearchQuery operations(@jakarta.annotation.Nullable List<Long> operations) {
+  public ChallengeSearchQuery operations(@jakarta.annotation.Nullable List<Integer> operations) {
     this.operations = operations;
     return this;
   }
 
-  public ChallengeSearchQuery addOperationsItem(Long operationsItem) {
+  public ChallengeSearchQuery addOperationsItem(Integer operationsItem) {
     if (this.operations == null) {
       this.operations = new ArrayList<>();
     }
@@ -549,13 +549,13 @@ public class ChallengeSearchQuery {
   @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_OPERATIONS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public List<Long> getOperations() {
+  public List<Integer> getOperations() {
     return operations;
   }
 
   @JsonProperty(JSON_PROPERTY_OPERATIONS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setOperations(@jakarta.annotation.Nullable List<Long> operations) {
+  public void setOperations(@jakarta.annotation.Nullable List<Integer> operations) {
     this.operations = operations;
   }
 

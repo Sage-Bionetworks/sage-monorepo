@@ -20,12 +20,19 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Arrays;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import org.openapitools.jackson.nullable.JsonNullable;
 import org.openapitools.jackson.nullable.JsonNullable;
+import org.sagebionetworks.openchallenges.api.client.model.ChallengeCategory;
+import org.sagebionetworks.openchallenges.api.client.model.ChallengeIncentive;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengeStatus;
+import org.sagebionetworks.openchallenges.api.client.model.ChallengeSubmissionType;
 
 /**
  * The information used to create a challenge
@@ -41,11 +48,18 @@ import org.sagebionetworks.openchallenges.api.client.model.ChallengeStatus;
     ChallengeCreateRequest.JSON_PROPERTY_PLATFORM_ID,
     ChallengeCreateRequest.JSON_PROPERTY_WEBSITE_URL,
     ChallengeCreateRequest.JSON_PROPERTY_AVATAR_URL,
+    ChallengeCreateRequest.JSON_PROPERTY_START_DATE,
+    ChallengeCreateRequest.JSON_PROPERTY_END_DATE,
+    ChallengeCreateRequest.JSON_PROPERTY_INCENTIVES,
+    ChallengeCreateRequest.JSON_PROPERTY_SUBMISSION_TYPES,
+    ChallengeCreateRequest.JSON_PROPERTY_CATEGORIES,
+    ChallengeCreateRequest.JSON_PROPERTY_INPUT_DATA_TYPES,
+    ChallengeCreateRequest.JSON_PROPERTY_OPERATION,
   }
 )
 @jakarta.annotation.Generated(
   value = "org.openapitools.codegen.languages.JavaClientCodegen",
-  comments = "Generator version: 7.13.0"
+  comments = "Generator version: 7.14.0"
 )
 public class ChallengeCreateRequest {
 
@@ -81,18 +95,53 @@ public class ChallengeCreateRequest {
 
   public static final String JSON_PROPERTY_PLATFORM_ID = "platformId";
 
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   private Long platformId;
 
   public static final String JSON_PROPERTY_WEBSITE_URL = "websiteUrl";
 
   @jakarta.annotation.Nullable
-  private JsonNullable<String> websiteUrl = JsonNullable.<String>undefined();
+  private String websiteUrl;
 
   public static final String JSON_PROPERTY_AVATAR_URL = "avatarUrl";
 
   @jakarta.annotation.Nullable
   private JsonNullable<String> avatarUrl = JsonNullable.<String>undefined();
+
+  public static final String JSON_PROPERTY_START_DATE = "startDate";
+
+  @jakarta.annotation.Nullable
+  private JsonNullable<LocalDate> startDate = JsonNullable.<LocalDate>undefined();
+
+  public static final String JSON_PROPERTY_END_DATE = "endDate";
+
+  @jakarta.annotation.Nullable
+  private JsonNullable<LocalDate> endDate = JsonNullable.<LocalDate>undefined();
+
+  public static final String JSON_PROPERTY_INCENTIVES = "incentives";
+
+  @jakarta.annotation.Nullable
+  private List<ChallengeIncentive> incentives = new ArrayList<>();
+
+  public static final String JSON_PROPERTY_SUBMISSION_TYPES = "submissionTypes";
+
+  @jakarta.annotation.Nullable
+  private List<ChallengeSubmissionType> submissionTypes = new ArrayList<>();
+
+  public static final String JSON_PROPERTY_CATEGORIES = "categories";
+
+  @jakarta.annotation.Nullable
+  private List<ChallengeCategory> categories = new ArrayList<>();
+
+  public static final String JSON_PROPERTY_INPUT_DATA_TYPES = "inputDataTypes";
+
+  @jakarta.annotation.Nullable
+  private List<Integer> inputDataTypes = new ArrayList<>();
+
+  public static final String JSON_PROPERTY_OPERATION = "operation";
+
+  @jakarta.annotation.Nullable
+  private Integer operation;
 
   public ChallengeCreateRequest() {}
 
@@ -246,7 +295,7 @@ public class ChallengeCreateRequest {
     this.status = status;
   }
 
-  public ChallengeCreateRequest platformId(@jakarta.annotation.Nonnull Long platformId) {
+  public ChallengeCreateRequest platformId(@jakarta.annotation.Nullable Long platformId) {
     this.platformId = platformId;
     return this;
   }
@@ -255,22 +304,21 @@ public class ChallengeCreateRequest {
    * The unique identifier of a challenge platform.
    * @return platformId
    */
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_PLATFORM_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public Long getPlatformId() {
     return platformId;
   }
 
   @JsonProperty(JSON_PROPERTY_PLATFORM_ID)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setPlatformId(@jakarta.annotation.Nonnull Long platformId) {
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPlatformId(@jakarta.annotation.Nullable Long platformId) {
     this.platformId = platformId;
   }
 
   public ChallengeCreateRequest websiteUrl(@jakarta.annotation.Nullable String websiteUrl) {
-    this.websiteUrl = JsonNullable.<String>of(websiteUrl);
-
+    this.websiteUrl = websiteUrl;
     return this;
   }
 
@@ -279,24 +327,16 @@ public class ChallengeCreateRequest {
    * @return websiteUrl
    */
   @jakarta.annotation.Nullable
-  @JsonIgnore
-  public String getWebsiteUrl() {
-    return websiteUrl.orElse(null);
-  }
-
   @JsonProperty(JSON_PROPERTY_WEBSITE_URL)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public JsonNullable<String> getWebsiteUrl_JsonNullable() {
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public String getWebsiteUrl() {
     return websiteUrl;
   }
 
   @JsonProperty(JSON_PROPERTY_WEBSITE_URL)
-  public void setWebsiteUrl_JsonNullable(JsonNullable<String> websiteUrl) {
-    this.websiteUrl = websiteUrl;
-  }
-
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setWebsiteUrl(@jakarta.annotation.Nullable String websiteUrl) {
-    this.websiteUrl = JsonNullable.<String>of(websiteUrl);
+    this.websiteUrl = websiteUrl;
   }
 
   public ChallengeCreateRequest avatarUrl(@jakarta.annotation.Nullable String avatarUrl) {
@@ -330,6 +370,223 @@ public class ChallengeCreateRequest {
     this.avatarUrl = JsonNullable.<String>of(avatarUrl);
   }
 
+  public ChallengeCreateRequest startDate(@jakarta.annotation.Nullable LocalDate startDate) {
+    this.startDate = JsonNullable.<LocalDate>of(startDate);
+
+    return this;
+  }
+
+  /**
+   * The start date of the challenge.
+   * @return startDate
+   */
+  @jakarta.annotation.Nullable
+  @JsonIgnore
+  public LocalDate getStartDate() {
+    return startDate.orElse(null);
+  }
+
+  @JsonProperty(JSON_PROPERTY_START_DATE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public JsonNullable<LocalDate> getStartDate_JsonNullable() {
+    return startDate;
+  }
+
+  @JsonProperty(JSON_PROPERTY_START_DATE)
+  public void setStartDate_JsonNullable(JsonNullable<LocalDate> startDate) {
+    this.startDate = startDate;
+  }
+
+  public void setStartDate(@jakarta.annotation.Nullable LocalDate startDate) {
+    this.startDate = JsonNullable.<LocalDate>of(startDate);
+  }
+
+  public ChallengeCreateRequest endDate(@jakarta.annotation.Nullable LocalDate endDate) {
+    this.endDate = JsonNullable.<LocalDate>of(endDate);
+
+    return this;
+  }
+
+  /**
+   * The end date of the challenge.
+   * @return endDate
+   */
+  @jakarta.annotation.Nullable
+  @JsonIgnore
+  public LocalDate getEndDate() {
+    return endDate.orElse(null);
+  }
+
+  @JsonProperty(JSON_PROPERTY_END_DATE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public JsonNullable<LocalDate> getEndDate_JsonNullable() {
+    return endDate;
+  }
+
+  @JsonProperty(JSON_PROPERTY_END_DATE)
+  public void setEndDate_JsonNullable(JsonNullable<LocalDate> endDate) {
+    this.endDate = endDate;
+  }
+
+  public void setEndDate(@jakarta.annotation.Nullable LocalDate endDate) {
+    this.endDate = JsonNullable.<LocalDate>of(endDate);
+  }
+
+  public ChallengeCreateRequest incentives(
+    @jakarta.annotation.Nullable List<ChallengeIncentive> incentives
+  ) {
+    this.incentives = incentives;
+    return this;
+  }
+
+  public ChallengeCreateRequest addIncentivesItem(ChallengeIncentive incentivesItem) {
+    if (this.incentives == null) {
+      this.incentives = new ArrayList<>();
+    }
+    this.incentives.add(incentivesItem);
+    return this;
+  }
+
+  /**
+   * Get incentives
+   * @return incentives
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_INCENTIVES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public List<ChallengeIncentive> getIncentives() {
+    return incentives;
+  }
+
+  @JsonProperty(JSON_PROPERTY_INCENTIVES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIncentives(@jakarta.annotation.Nullable List<ChallengeIncentive> incentives) {
+    this.incentives = incentives;
+  }
+
+  public ChallengeCreateRequest submissionTypes(
+    @jakarta.annotation.Nullable List<ChallengeSubmissionType> submissionTypes
+  ) {
+    this.submissionTypes = submissionTypes;
+    return this;
+  }
+
+  public ChallengeCreateRequest addSubmissionTypesItem(
+    ChallengeSubmissionType submissionTypesItem
+  ) {
+    if (this.submissionTypes == null) {
+      this.submissionTypes = new ArrayList<>();
+    }
+    this.submissionTypes.add(submissionTypesItem);
+    return this;
+  }
+
+  /**
+   * Get submissionTypes
+   * @return submissionTypes
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SUBMISSION_TYPES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public List<ChallengeSubmissionType> getSubmissionTypes() {
+    return submissionTypes;
+  }
+
+  @JsonProperty(JSON_PROPERTY_SUBMISSION_TYPES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSubmissionTypes(
+    @jakarta.annotation.Nullable List<ChallengeSubmissionType> submissionTypes
+  ) {
+    this.submissionTypes = submissionTypes;
+  }
+
+  public ChallengeCreateRequest categories(
+    @jakarta.annotation.Nullable List<ChallengeCategory> categories
+  ) {
+    this.categories = categories;
+    return this;
+  }
+
+  public ChallengeCreateRequest addCategoriesItem(ChallengeCategory categoriesItem) {
+    if (this.categories == null) {
+      this.categories = new ArrayList<>();
+    }
+    this.categories.add(categoriesItem);
+    return this;
+  }
+
+  /**
+   * Get categories
+   * @return categories
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CATEGORIES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public List<ChallengeCategory> getCategories() {
+    return categories;
+  }
+
+  @JsonProperty(JSON_PROPERTY_CATEGORIES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCategories(@jakarta.annotation.Nullable List<ChallengeCategory> categories) {
+    this.categories = categories;
+  }
+
+  public ChallengeCreateRequest inputDataTypes(
+    @jakarta.annotation.Nullable List<Integer> inputDataTypes
+  ) {
+    this.inputDataTypes = inputDataTypes;
+    return this;
+  }
+
+  public ChallengeCreateRequest addInputDataTypesItem(Integer inputDataTypesItem) {
+    if (this.inputDataTypes == null) {
+      this.inputDataTypes = new ArrayList<>();
+    }
+    this.inputDataTypes.add(inputDataTypesItem);
+    return this;
+  }
+
+  /**
+   * Get inputDataTypes
+   * @return inputDataTypes
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_INPUT_DATA_TYPES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public List<Integer> getInputDataTypes() {
+    return inputDataTypes;
+  }
+
+  @JsonProperty(JSON_PROPERTY_INPUT_DATA_TYPES)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setInputDataTypes(@jakarta.annotation.Nullable List<Integer> inputDataTypes) {
+    this.inputDataTypes = inputDataTypes;
+  }
+
+  public ChallengeCreateRequest operation(@jakarta.annotation.Nullable Integer operation) {
+    this.operation = operation;
+    return this;
+  }
+
+  /**
+   * The unique identifier of the EDAM concept.
+   * minimum: 1
+   * @return operation
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_OPERATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public Integer getOperation() {
+    return operation;
+  }
+
+  @JsonProperty(JSON_PROPERTY_OPERATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setOperation(@jakarta.annotation.Nullable Integer operation) {
+    this.operation = operation;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -347,8 +604,15 @@ public class ChallengeCreateRequest {
       equalsNullable(this.doi, challengeCreateRequest.doi) &&
       Objects.equals(this.status, challengeCreateRequest.status) &&
       Objects.equals(this.platformId, challengeCreateRequest.platformId) &&
-      equalsNullable(this.websiteUrl, challengeCreateRequest.websiteUrl) &&
-      equalsNullable(this.avatarUrl, challengeCreateRequest.avatarUrl)
+      Objects.equals(this.websiteUrl, challengeCreateRequest.websiteUrl) &&
+      equalsNullable(this.avatarUrl, challengeCreateRequest.avatarUrl) &&
+      equalsNullable(this.startDate, challengeCreateRequest.startDate) &&
+      equalsNullable(this.endDate, challengeCreateRequest.endDate) &&
+      Objects.equals(this.incentives, challengeCreateRequest.incentives) &&
+      Objects.equals(this.submissionTypes, challengeCreateRequest.submissionTypes) &&
+      Objects.equals(this.categories, challengeCreateRequest.categories) &&
+      Objects.equals(this.inputDataTypes, challengeCreateRequest.inputDataTypes) &&
+      Objects.equals(this.operation, challengeCreateRequest.operation)
     );
   }
 
@@ -373,8 +637,15 @@ public class ChallengeCreateRequest {
       hashCodeNullable(doi),
       status,
       platformId,
-      hashCodeNullable(websiteUrl),
-      hashCodeNullable(avatarUrl)
+      websiteUrl,
+      hashCodeNullable(avatarUrl),
+      hashCodeNullable(startDate),
+      hashCodeNullable(endDate),
+      incentives,
+      submissionTypes,
+      categories,
+      inputDataTypes,
+      operation
     );
   }
 
@@ -398,6 +669,13 @@ public class ChallengeCreateRequest {
     sb.append("    platformId: ").append(toIndentedString(platformId)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
+    sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
+    sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
+    sb.append("    incentives: ").append(toIndentedString(incentives)).append("\n");
+    sb.append("    submissionTypes: ").append(toIndentedString(submissionTypes)).append("\n");
+    sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
+    sb.append("    inputDataTypes: ").append(toIndentedString(inputDataTypes)).append("\n");
+    sb.append("    operation: ").append(toIndentedString(operation)).append("\n");
     sb.append("}");
     return sb.toString();
   }

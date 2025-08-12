@@ -11,5 +11,3 @@ allOf:
           $ref: ChallengePlatform.yaml
     required:
       - challengePlatforms
-x-java-class-annotations:
-  - '@lombok.Builder'

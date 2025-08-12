@@ -11,5 +11,3 @@ allOf:
           $ref: EdamConcept.yaml
     required:
       - edamConcepts
-x-java-class-annotations:
-  - '@lombok.Builder'

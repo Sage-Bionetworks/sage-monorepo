@@ -48,7 +48,7 @@ import org.sagebionetworks.openchallenges.api.client.model.EdamSection;
 )
 @jakarta.annotation.Generated(
   value = "org.openapitools.codegen.languages.JavaClientCodegen",
-  comments = "Generator version: 7.13.0"
+  comments = "Generator version: 7.14.0"
 )
 public class EdamConceptSearchQuery {
 
@@ -77,7 +77,7 @@ public class EdamConceptSearchQuery {
   public static final String JSON_PROPERTY_IDS = "ids";
 
   @jakarta.annotation.Nullable
-  private List<Long> ids = new ArrayList<>();
+  private List<Integer> ids = new ArrayList<>();
 
   public static final String JSON_PROPERTY_SEARCH_TERMS = "searchTerms";
 
@@ -192,12 +192,12 @@ public class EdamConceptSearchQuery {
     this.direction = JsonNullable.<EdamConceptDirection>of(direction);
   }
 
-  public EdamConceptSearchQuery ids(@jakarta.annotation.Nullable List<Long> ids) {
+  public EdamConceptSearchQuery ids(@jakarta.annotation.Nullable List<Integer> ids) {
     this.ids = ids;
     return this;
   }
 
-  public EdamConceptSearchQuery addIdsItem(Long idsItem) {
+  public EdamConceptSearchQuery addIdsItem(Integer idsItem) {
     if (this.ids == null) {
       this.ids = new ArrayList<>();
     }
@@ -212,13 +212,13 @@ public class EdamConceptSearchQuery {
   @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_IDS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public List<Long> getIds() {
+  public List<Integer> getIds() {
     return ids;
   }
 
   @JsonProperty(JSON_PROPERTY_IDS)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setIds(@jakarta.annotation.Nullable List<Long> ids) {
+  public void setIds(@jakarta.annotation.Nullable List<Integer> ids) {
     this.ids = ids;
   }
 

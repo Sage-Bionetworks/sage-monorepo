@@ -33,7 +33,7 @@ public class ChallengeService {
     Guidelines for using this tool:
     - If a parameter is not specified, you can omit it and default values will be applied.
     - Do not use `minStartDate` or `maxStartDate` unless the user specifies a time window (e.g., “challenges starting after June”).
-    - Only apply filters that the user has explicitly requested or implied. 
+    - Only apply filters that the user has explicitly requested or implied.
     - If the user mentions "Docker" or "Container", include "container_image" in the submissionTypes, while still allowing other types.
     - If the user describes specific types of input data / training data:
         1. First call the `list_edam_concepts` tool with the user's keywords as `searchTerms`.
@@ -86,9 +86,9 @@ public class ChallengeService {
       description = "Submission types: container_image, prediction_file, notebook, mlcube, other."
     ) @Nullable List<ChallengeSubmissionType> submissionTypes,
     @ToolParam(description = "EDAM concept IDs for input data types.") @Nullable List<
-      Long
+      Integer
     > inputDataTypes,
-    @ToolParam(description = "EDAM concept IDs for operations.") @Nullable List<Long> operations,
+    @ToolParam(description = "EDAM concept IDs for operations.") @Nullable List<Integer> operations,
     @ToolParam(
       description = "Challenge categories: featured, benchmark, hackathon, starting_soon, ending_soon, recently_started, recently_ended."
     ) @Nullable List<ChallengeCategory> categories,

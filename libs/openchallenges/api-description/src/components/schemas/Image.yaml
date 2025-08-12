@@ -6,5 +6,3 @@ properties:
     example: http://example.com/an-image.png
 required:
   - url
-x-java-class-annotations:
-  - '@lombok.Builder'

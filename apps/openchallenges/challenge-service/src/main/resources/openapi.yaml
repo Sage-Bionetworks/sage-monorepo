@@ -1678,8 +1678,6 @@ components:
         hasNext: true
         totalElements: 99
       type: object
-      x-java-class-annotations:
-        - '@lombok.Builder'
     BasicError:
       description: Problem details (tools.ietf.org/html/rfc7807)
       properties:
@@ -1700,9 +1698,6 @@ components:
         - status
         - title
       type: object
-      x-java-class-annotations:
-        - '@lombok.AllArgsConstructor'
-        - '@lombok.Builder'
     ChallengeCreateRequest:
       description: The information used to create a challenge
       properties:
@@ -2004,8 +1999,6 @@ components:
         hasNext: true
         totalElements: 99
       type: object
-      x-java-class-annotations:
-        - '@lombok.Builder'
     ChallengeContributionCreateRequest:
       description: A challenge contribution to be created.
       properties:
@@ -2049,8 +2042,6 @@ components:
         - undatedChallengeCount
         - years
       type: object
-      x-java-class-annotations:
-        - '@lombok.Builder'
     ChallengePlatformSort:
       default: relevance
       description: What to sort results by.
@@ -2175,8 +2166,6 @@ components:
         hasNext: true
         totalElements: 99
       type: object
-      x-java-class-annotations:
-        - '@lombok.Builder'
     ChallengePlatformCreateRequest:
       description: The information used to create a challenge platform
       properties:
@@ -2330,8 +2319,6 @@ components:
             id: 1
         totalElements: 99
       type: object
-      x-java-class-annotations:
-        - '@lombok.Builder'
   securitySchemes:
     apiBearerAuth:
       bearerFormat: api_key

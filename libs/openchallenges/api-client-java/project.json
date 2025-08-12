@@ -3,6 +3,20 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/openchallenges/api-client-java/src",
   "projectType": "library",
-  "targets": {},
+  "targets": {
+    "generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "rm -fr src/",
+          "openapi-generator-cli generate",
+          "prettier --write \"src/**/*.java\""
+        ],
+        "cwd": "{projectRoot}",
+        "parallel": false
+      },
+      "dependsOn": ["^build"]
+    }
+  },
   "tags": ["type:library", "scope:openchallenges", "language:java", "package-manager:gradle"]
 }

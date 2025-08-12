@@ -11,7 +11,6 @@ import org.sagebionetworks.openchallenges.api.client.ApiClient;
 import org.sagebionetworks.openchallenges.api.client.model.BasicError;
 import org.sagebionetworks.openchallenges.api.client.model.Image;
 import org.sagebionetworks.openchallenges.api.client.model.ImageQuery;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
@@ -26,7 +25,7 @@ import org.springframework.web.client.RestClientResponseException;
 
 @jakarta.annotation.Generated(
   value = "org.openapitools.codegen.languages.JavaClientCodegen",
-  comments = "Generator version: 7.13.0"
+  comments = "Generator version: 7.14.0"
 )
 public class ImageApi {
 
@@ -36,7 +35,6 @@ public class ImageApi {
     this(new ApiClient());
   }
 
-  @Autowired
   public ImageApi(ApiClient apiClient) {
     this.apiClient = apiClient;
   }

@@ -34,14 +34,14 @@ import java.util.Objects;
 )
 @jakarta.annotation.Generated(
   value = "org.openapitools.codegen.languages.JavaClientCodegen",
-  comments = "Generator version: 7.13.0"
+  comments = "Generator version: 7.14.0"
 )
 public class EdamConcept {
 
   public static final String JSON_PROPERTY_ID = "id";
 
   @jakarta.annotation.Nonnull
-  private Long id;
+  private Integer id;
 
   public static final String JSON_PROPERTY_CLASS_ID = "classId";
 
@@ -55,25 +55,26 @@ public class EdamConcept {
 
   public EdamConcept() {}
 
-  public EdamConcept id(@jakarta.annotation.Nonnull Long id) {
+  public EdamConcept id(@jakarta.annotation.Nonnull Integer id) {
     this.id = id;
     return this;
   }
 
   /**
    * The unique identifier of the EDAM concept.
+   * minimum: 1
    * @return id
    */
   @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public Long getId() {
+  public Integer getId() {
     return id;
   }
 
   @JsonProperty(JSON_PROPERTY_ID)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setId(@jakarta.annotation.Nonnull Long id) {
+  public void setId(@jakarta.annotation.Nonnull Integer id) {
     this.id = id;
   }
 

@@ -18,5 +18,3 @@ required:
   - years
   - challengeCounts
   - undatedChallengeCount
-x-java-class-annotations:
-  - '@lombok.Builder'

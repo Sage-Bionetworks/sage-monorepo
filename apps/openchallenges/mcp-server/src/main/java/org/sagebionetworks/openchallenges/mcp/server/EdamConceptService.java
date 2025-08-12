@@ -67,7 +67,7 @@ public class EdamConceptService {
       description = "Sort field: preferred_label, relevance."
     ) @Nullable EdamConceptSort sort,
     @ToolParam(description = "Sort direction: asc, desc.") @Nullable EdamConceptDirection direction,
-    @ToolParam(description = "List of EDAM concept IDs.") @Nullable List<Long> ids,
+    @ToolParam(description = "List of EDAM concept IDs.") @Nullable List<Integer> ids,
     @ToolParam(
       description = "Free-text search terms to match concept names or descriptions."
     ) @Nullable String searchTerms,

@@ -14,7 +14,6 @@ import org.sagebionetworks.openchallenges.api.client.model.OrganizationCreateReq
 import org.sagebionetworks.openchallenges.api.client.model.OrganizationSearchQuery;
 import org.sagebionetworks.openchallenges.api.client.model.OrganizationUpdateRequest;
 import org.sagebionetworks.openchallenges.api.client.model.OrganizationsPage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
@@ -29,7 +28,7 @@ import org.springframework.web.client.RestClientResponseException;
 
 @jakarta.annotation.Generated(
   value = "org.openapitools.codegen.languages.JavaClientCodegen",
-  comments = "Generator version: 7.13.0"
+  comments = "Generator version: 7.14.0"
 )
 public class OrganizationApi {
 
@@ -39,7 +38,6 @@ public class OrganizationApi {
     this(new ApiClient());
   }
 
-  @Autowired
   public OrganizationApi(ApiClient apiClient) {
     this.apiClient = apiClient;
   }
