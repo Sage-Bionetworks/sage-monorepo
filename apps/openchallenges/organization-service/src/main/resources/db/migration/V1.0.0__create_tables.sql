@@ -25,7 +25,6 @@ CREATE TABLE organization_category (
     CONSTRAINT fk_organization
       FOREIGN KEY (organization_id)
       REFERENCES organization(id)
-      ON DELETE CASCADE
 );
 
 
@@ -40,7 +39,6 @@ CREATE TABLE challenge_participation (
     ),
     CONSTRAINT fk_organization
       FOREIGN KEY (organization_id)
-      REFERENCES organization(id)
-      ON DELETE CASCADE,
+      REFERENCES organization(id),
     CONSTRAINT uq_participation UNIQUE (challenge_id, organization_id, role)
 );
