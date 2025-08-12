@@ -7,8 +7,8 @@ CREATE TABLE organization (
   avatar_key            VARCHAR(255),
   website_url           VARCHAR(500),
   description           VARCHAR(1000),
-  created_at            TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at            TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created_at            TIMESTAMPTZ NOT NULL,
+  updated_at            TIMESTAMPTZ NOT NULL,
   acronym               VARCHAR(20),
   CONSTRAINT login_check CHECK (
     char_length(login) >= 2 AND login ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$'
