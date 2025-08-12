@@ -1748,6 +1748,14 @@ components:
       enum:
         - featured
       example: featured
+    ChallengeParticipationRole:
+      description: The nature of a challenge participation.
+      type: string
+      enum:
+        - challenge_organizer
+        - data_contributor
+        - sponsor
+      example: challenge_organizer
     OrganizationSort:
       description: What to sort results by.
       type: string
@@ -1785,11 +1793,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/OrganizationCategory'
-        challengeContributionRoles:
-          description: An array of challenge contribution roles used to filter the results.
+        challengeParticipationRoles:
+          description: An array of challenge participation roles used to filter the results.
           type: array
           items:
-            $ref: '#/components/schemas/ChallengeContributionRole'
+            $ref: '#/components/schemas/ChallengeParticipationRole'
         sort:
           $ref: '#/components/schemas/OrganizationSort'
         direction:
@@ -1930,14 +1938,6 @@ components:
         - avatarKey
         - websiteUrl
         - acronym
-    ChallengeParticipationRole:
-      description: The nature of a challenge participation.
-      type: string
-      enum:
-        - challenge_organizer
-        - data_contributor
-        - sponsor
-      example: challenge_organizer
   responses:
     Unauthorized:
       description: Unauthorized

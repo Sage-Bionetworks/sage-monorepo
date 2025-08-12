@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.sagebionetworks.openchallenges.organization.service.model.dto.ChallengeContributionRoleDto;
+import org.sagebionetworks.openchallenges.organization.service.model.dto.ChallengeParticipationRoleDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationCategoryDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationDirectionDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationSortDto;
@@ -40,7 +40,7 @@ public class OrganizationSearchQueryDto {
   private List<OrganizationCategoryDto> categories = new ArrayList<>();
 
   @Valid
-  private List<ChallengeContributionRoleDto> challengeContributionRoles = new ArrayList<>();
+  private List<ChallengeParticipationRoleDto> challengeParticipationRoles = new ArrayList<>();
 
   private OrganizationSortDto sort = OrganizationSortDto.RELEVANCE;
 
@@ -121,32 +121,32 @@ public class OrganizationSearchQueryDto {
     this.categories = categories;
   }
 
-  public OrganizationSearchQueryDto challengeContributionRoles(List<ChallengeContributionRoleDto> challengeContributionRoles) {
-    this.challengeContributionRoles = challengeContributionRoles;
+  public OrganizationSearchQueryDto challengeParticipationRoles(List<ChallengeParticipationRoleDto> challengeParticipationRoles) {
+    this.challengeParticipationRoles = challengeParticipationRoles;
     return this;
   }
 
-  public OrganizationSearchQueryDto addChallengeContributionRolesItem(ChallengeContributionRoleDto challengeContributionRolesItem) {
-    if (this.challengeContributionRoles == null) {
-      this.challengeContributionRoles = new ArrayList<>();
+  public OrganizationSearchQueryDto addChallengeParticipationRolesItem(ChallengeParticipationRoleDto challengeParticipationRolesItem) {
+    if (this.challengeParticipationRoles == null) {
+      this.challengeParticipationRoles = new ArrayList<>();
     }
-    this.challengeContributionRoles.add(challengeContributionRolesItem);
+    this.challengeParticipationRoles.add(challengeParticipationRolesItem);
     return this;
   }
 
   /**
-   * An array of challenge contribution roles used to filter the results.
-   * @return challengeContributionRoles
+   * An array of challenge participation roles used to filter the results.
+   * @return challengeParticipationRoles
    */
   @Valid 
-  @Schema(name = "challengeContributionRoles", description = "An array of challenge contribution roles used to filter the results.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("challengeContributionRoles")
-  public List<ChallengeContributionRoleDto> getChallengeContributionRoles() {
-    return challengeContributionRoles;
+  @Schema(name = "challengeParticipationRoles", description = "An array of challenge participation roles used to filter the results.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("challengeParticipationRoles")
+  public List<ChallengeParticipationRoleDto> getChallengeParticipationRoles() {
+    return challengeParticipationRoles;
   }
 
-  public void setChallengeContributionRoles(List<ChallengeContributionRoleDto> challengeContributionRoles) {
-    this.challengeContributionRoles = challengeContributionRoles;
+  public void setChallengeParticipationRoles(List<ChallengeParticipationRoleDto> challengeParticipationRoles) {
+    this.challengeParticipationRoles = challengeParticipationRoles;
   }
 
   public OrganizationSearchQueryDto sort(OrganizationSortDto sort) {
@@ -249,7 +249,7 @@ public class OrganizationSearchQueryDto {
     return Objects.equals(this.pageNumber, organizationSearchQuery.pageNumber) &&
         Objects.equals(this.pageSize, organizationSearchQuery.pageSize) &&
         Objects.equals(this.categories, organizationSearchQuery.categories) &&
-        Objects.equals(this.challengeContributionRoles, organizationSearchQuery.challengeContributionRoles) &&
+        Objects.equals(this.challengeParticipationRoles, organizationSearchQuery.challengeParticipationRoles) &&
         Objects.equals(this.sort, organizationSearchQuery.sort) &&
         Objects.equals(this.direction, organizationSearchQuery.direction) &&
         Objects.equals(this.ids, organizationSearchQuery.ids) &&
@@ -258,7 +258,7 @@ public class OrganizationSearchQueryDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, categories, challengeContributionRoles, sort, direction, ids, searchTerms);
+    return Objects.hash(pageNumber, pageSize, categories, challengeParticipationRoles, sort, direction, ids, searchTerms);
   }
 
   @Override
@@ -268,7 +268,7 @@ public class OrganizationSearchQueryDto {
     sb.append("    pageNumber: ").append(toIndentedString(pageNumber)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
     sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
-    sb.append("    challengeContributionRoles: ").append(toIndentedString(challengeContributionRoles)).append("\n");
+    sb.append("    challengeParticipationRoles: ").append(toIndentedString(challengeParticipationRoles)).append("\n");
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    direction: ").append(toIndentedString(direction)).append("\n");
     sb.append("    ids: ").append(toIndentedString(ids)).append("\n");
@@ -304,7 +304,7 @@ public class OrganizationSearchQueryDto {
       this.instance.setPageNumber(value.pageNumber);
       this.instance.setPageSize(value.pageSize);
       this.instance.setCategories(value.categories);
-      this.instance.setChallengeContributionRoles(value.challengeContributionRoles);
+      this.instance.setChallengeParticipationRoles(value.challengeParticipationRoles);
       this.instance.setSort(value.sort);
       this.instance.setDirection(value.direction);
       this.instance.setIds(value.ids);
@@ -327,8 +327,8 @@ public class OrganizationSearchQueryDto {
       return this;
     }
     
-    public OrganizationSearchQueryDto.Builder challengeContributionRoles(List<ChallengeContributionRoleDto> challengeContributionRoles) {
-      this.instance.challengeContributionRoles(challengeContributionRoles);
+    public OrganizationSearchQueryDto.Builder challengeParticipationRoles(List<ChallengeParticipationRoleDto> challengeParticipationRoles) {
+      this.instance.challengeParticipationRoles(challengeParticipationRoles);
       return this;
     }
     

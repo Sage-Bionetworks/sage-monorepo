@@ -438,8 +438,8 @@ components:
         - featured
       example: featured
       type: string
-    ChallengeContributionRole:
-      description: The nature of a challenge contribution.
+    ChallengeParticipationRole:
+      description: The nature of a challenge participation.
       enum:
         - challenge_organizer
         - data_contributor
@@ -487,11 +487,11 @@ components:
           items:
             $ref: '#/components/schemas/OrganizationCategory'
           type: array
-        challengeContributionRoles:
-          description: An array of challenge contribution roles used to filter the
+        challengeParticipationRoles:
+          description: An array of challenge participation roles used to filter the
             results.
           items:
-            $ref: '#/components/schemas/ChallengeContributionRole'
+            $ref: '#/components/schemas/ChallengeParticipationRole'
           type: array
         sort:
           $ref: '#/components/schemas/OrganizationSort'
@@ -788,14 +788,6 @@ components:
       example: 1
       format: int64
       type: integer
-    ChallengeParticipationRole:
-      description: The nature of a challenge participation.
-      enum:
-        - challenge_organizer
-        - data_contributor
-        - sponsor
-      example: challenge_organizer
-      type: string
     ChallengeParticipationCreateRequest:
       description: |
         A request to create a challenge participation for an organization, defined by a challenge ID and a

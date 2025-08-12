@@ -16,7 +16,7 @@ import org.hibernate.search.engine.search.sort.dsl.SortOrder;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.sagebionetworks.openchallenges.organization.service.exception.BadRequestException;
-import org.sagebionetworks.openchallenges.organization.service.model.dto.ChallengeContributionRoleDto;
+import org.sagebionetworks.openchallenges.organization.service.model.dto.ChallengeParticipationRoleDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationCategoryDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationDirectionDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationSearchQueryDto;
@@ -70,10 +70,10 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
       predicates.add(getCategoriesPredicate(pf, query));
     }
     if (
-      query.getChallengeContributionRoles() != null &&
-      !query.getChallengeContributionRoles().isEmpty()
+      query.getChallengeParticipationRoles() != null &&
+      !query.getChallengeParticipationRoles().isEmpty()
     ) {
-      predicates.add(getChallengeContributionRolesPredicate(pf, query));
+      predicates.add(getChallengeParticipationRolesPredicate(pf, query));
     }
 
     SearchSort sort = getSearchSort(sf, query);
@@ -121,14 +121,14 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
    * @param query
    * @return
    */
-  private SearchPredicate getChallengeContributionRolesPredicate(
+  private SearchPredicate getChallengeParticipationRolesPredicate(
     SearchPredicateFactory pf,
     OrganizationSearchQueryDto query
   ) {
     return pf
       .bool(b -> {
-        for (ChallengeContributionRoleDto role : query.getChallengeContributionRoles()) {
-          b.should(pf.match().field("challenge_contributions.role").matching(role.toString()));
+        for (ChallengeParticipationRoleDto role : query.getChallengeParticipationRoles()) {
+          b.should(pf.match().field("challenge_participations.role").matching(role.toString()));
         }
       })
       .toPredicate();
