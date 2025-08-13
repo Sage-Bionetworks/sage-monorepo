@@ -73,10 +73,21 @@
               />
             </button>
           </div>
-          <!-- <explorers-download-dom-image /> -->
+          <explorers-download-dom-image
+            [target]="getBoxplotsHTMLElement(evidenceType)"
+            [filename]="
+              generateBoxplotsFilename(
+                evidenceType,
+                selectedTissueOption(),
+                selectedSexOption().value,
+                modelName()
+              )
+            "
+          />
         </div>
 
         <model-ad-model-details-boxplots-grid
+          [id]="generateBoxplotsHtmlElementId(evidenceType)"
           [modelDataList]="getSelectedModelDataForEvidenceType(evidenceType)"
           [genotypeOrder]="genotypeOrder()"
           [sexes]="selectedSexOption().value"
