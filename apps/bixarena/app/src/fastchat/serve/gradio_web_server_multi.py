@@ -87,6 +87,19 @@ def load_demo(url_params, request: gr.Request):
     )
 
 
+def build_header():
+    """Build a minimal header with two buttons"""
+    with gr.Row():
+        with gr.Column(scale=1):
+            gr.HTML("<h2>BixArena</h2>")
+        with gr.Column(scale=1):
+            with gr.Row():
+                battle_btn = gr.Button("Battle")
+                leaderboard_btn = gr.Button("Leaderboard")
+
+    return battle_btn, leaderboard_btn
+
+
 def build_demo(models, vl_models, elo_results_file, leaderboard_table_file):
     text_size = gr.themes.sizes.text_md
     if args.show_terms_of_use:
@@ -116,6 +129,9 @@ window.__gradio_mode__ = "app";
         css=block_css,
         head=head_js,
     ) as demo:
+
+        battle_btn, leaderboard_btn = build_header()
+
         with gr.Tabs() as tabs:
             with gr.Tab("Arena (battle)", id=0):
                 side_by_side_anony_list = build_side_by_side_ui_anony(models)
