@@ -73,13 +73,15 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
       const sexOption = this.selectedSexOption();
       const tissueOption = this.selectedTissueOption();
 
+      // Keep URL query parameters in sync with filter selections, but avoid updating
+      // during initialization to prevent circular updates when reading from URL params
       if (this.hasInitializedOptions) {
         this.updateQueryParams(sexOption.label, tissueOption);
       }
     });
 
     afterNextRender(() => {
-      this.initialScrollToSection();
+      this.scrollToSectionOnFirstRender();
     });
   }
 
@@ -132,18 +134,22 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
     this.hasInitializedOptions = true;
   }
 
-  initialScrollToSection() {
+  scrollToSectionOnFirstRender() {
     if (typeof window !== 'undefined' && !this.isInitialScrollDone) {
-      const hash = window.location.hash.slice(1);
-      const matchingHash = this.evidenceTypes().find(
-        (evidenceType) => this.generateAnchorId(evidenceType) === hash,
+      // Extract hash fragment from URL (e.g. "nfl" from "#nfl")
+      const hashFragment = window.location.hash.slice(1);
+      const matchingHashFragment = this.evidenceTypes().find(
+        (evidenceType) => this.generateAnchorId(evidenceType) === hashFragment,
       );
 
-      if (matchingHash) {
-        this.isInitialScrollDone = this.scrollToSection(this.generateAnchorId(matchingHash), false);
+      if (matchingHashFragment) {
+        this.isInitialScrollDone = this.scrollToSection(
+          this.generateAnchorId(matchingHashFragment),
+          false,
+        );
       } else {
         this.isInitialScrollDone = true;
-        this.updateUrlFragment(matchingHash);
+        this.updateUrlFragment(matchingHashFragment);
       }
     }
   }
@@ -167,12 +173,14 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
     if (sex !== this.defaultSexOption.label) {
       params.set(this.SEX_QUERY_KEY, sex);
     } else {
+      // Don't set query param for default value
       params.delete(this.SEX_QUERY_KEY);
     }
 
     if (tissue !== this.getDefaultTissue()) {
       params.set(this.TISSUE_QUERY_KEY, tissue);
     } else {
+      // Don't set query param for default value
       params.delete(this.TISSUE_QUERY_KEY);
     }
 
