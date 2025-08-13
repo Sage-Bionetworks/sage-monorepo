@@ -233,7 +233,7 @@ class OpenAPICleanup {
     console.log('   🛤️ Path (API endpoint definitions)');
     console.log('   🧬 Schema (data model definitions)');
     console.log('   📤 Response (HTTP response definitions)');
-    console.log('   ✏️  Parameter (request parameter definitions)');
+    console.log('   🔼 Parameter (request parameter definitions)');
     console.log('   🔐 Security (authentication/authorization schemes)');
     console.log('   🔗 Link (OpenAPI link definitions)');
     console.log('   🔗 → Dependency chain (shows reference flow)');
@@ -260,10 +260,10 @@ class OpenAPICleanup {
     this.printCategoryDependencies('🛤️ Paths', categories.paths);
     this.printCategoryDependencies('🧬 Schemas', categories.schemas);
     this.printCategoryDependencies('📤 Responses', categories.responses);
-    this.printCategoryDependencies('✏️  Parameters', categories.parameters);
+    this.printCategoryDependencies('🔼 Parameters', categories.parameters);
     this.printCategoryDependencies('🔐 Security', categories.security);
     this.printCategoryDependencies('🔗 Links', categories.links);
-    this.printCategoryDependencies('📄 Other', categories.other);
+    this.printCategoryDependencies('🌈 Other', categories.other);
   }
 
   /**
@@ -334,7 +334,7 @@ class OpenAPICleanup {
                 const stepName = path.basename(step, path.extname(step));
                 if (step.includes('/schemas/')) return `🧬 ${stepName}`;
                 if (step.includes('/responses/')) return `📤 ${stepName}`;
-                if (step.includes('/parameters/')) return `✏️  ${stepName}`;
+                if (step.includes('/parameters/')) return `🔼  ${stepName}`;
                 if (step.includes('/paths/')) return `🛤️ ${stepName}`;
                 if (step.includes('/securitySchemes/')) return `🔐 ${stepName}`;
                 if (step.includes('/links/')) return `🔗 ${stepName}`;
