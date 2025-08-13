@@ -193,4 +193,178 @@ test.describe('model details - boxplots selector - table of contents', () => {
       });
     }
   });
+
+  test('appropriate section is shown when url includes an evidence type fragment', async ({
+    page,
+  }) => {
+    const model = 'Abca7*V1599M';
+    const fragment = 'soluble-a-beta-40';
+    const section = 'Soluble Aβ40';
+    await page.goto(`/models/${model}/biomarkers#${fragment}`);
+    await expect(page.getByRole('heading', { level: 1, name: model })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { level: 2, name: section, exact: true }),
+    ).toBeInViewport();
+  });
+
+  test('clicking on a section adds fragment to url', async ({ page }) => {
+    const model = 'Abca7*V1599M';
+    const basePath = `/models/${model}/biomarkers`;
+    const section = 'NfL';
+    const fragment = 'nfl';
+
+    await page.goto(basePath);
+    await expect(page.getByRole('heading', { level: 1, name: model })).toBeVisible();
+
+    const nflButton = page.getByRole('button', { name: section, exact: true });
+    await nflButton.click();
+
+    await expect(page.getByRole('heading', { level: 2, name: section })).toBeInViewport();
+    await page.waitForURL(`${basePath}#${fragment}`);
+  });
+
+  test('clicking on a section updates fragment in url', async ({ page }) => {
+    const model = 'Abca7*V1599M';
+    const basePath = `/models/${model}/biomarkers`;
+    const section = 'NfL';
+    const fragment = 'nfl';
+
+    await page.goto(`${basePath}#soluble-a-beta-40`);
+    await expect(page.getByRole('heading', { level: 1, name: model })).toBeVisible();
+
+    const nflButton = page.getByRole('button', { name: section, exact: true });
+    await nflButton.click();
+
+    await expect(page.getByRole('heading', { level: 2, name: section })).toBeInViewport();
+    await page.waitForURL(`${basePath}#${fragment}`);
+  });
+});
+
+test.describe('model details - boxplots selector - share links - initial load', () => {
+  const basePath = '/models/Abca7*V1599M/biomarkers';
+  const tissueDefault = 'Cerebral Cortex';
+  const sexDefault = 'Female & Male';
+
+  test('default filters are set when there are no query parameters', async ({ page }) => {
+    await page.goto(basePath);
+    await expect(page.getByRole('combobox', { name: tissueDefault })).toBeVisible();
+    await expect(page.getByRole('combobox', { name: sexDefault })).toBeVisible();
+  });
+
+  test('sex filter can be set from query parameter', async ({ page }) => {
+    const sexFilter = 'Male';
+    await page.goto(`${basePath}?sex=${sexFilter}`);
+    await expect(page.getByRole('combobox', { name: tissueDefault })).toBeVisible();
+    await expect(page.getByRole('combobox', { name: sexFilter })).toBeVisible();
+  });
+
+  test('tissue filter can be set from query parameter', async ({ page }) => {
+    const tissueFilter = 'Hippocampus';
+    await page.goto(`${basePath}?tissue=${tissueFilter}`);
+    await expect(page.getByRole('combobox', { name: tissueFilter })).toBeVisible();
+    await expect(page.getByRole('combobox', { name: sexDefault })).toBeVisible();
+  });
+
+  test('sex and tissue filters can be set from query parameters', async ({ page }) => {
+    const tissueFilter = 'Hippocampus';
+    const sexFilter = 'Male';
+    await page.goto(`${basePath}?tissue=${tissueFilter}&sex=${sexFilter}`);
+    await expect(page.getByRole('combobox', { name: tissueFilter })).toBeVisible();
+    await expect(page.getByRole('combobox', { name: sexFilter })).toBeVisible();
+  });
+
+  test('filters are set from query parameters and page scrolls to appropriate section based on fragment', async ({
+    page,
+  }) => {
+    const tissueFilter = 'Hippocampus';
+    const sexFilter = 'Male';
+    await page.goto(`${basePath}?tissue=${tissueFilter}&sex=${sexFilter}#soluble-a-beta-42`);
+    await expect(page.getByRole('combobox', { name: tissueFilter })).toBeVisible();
+    await expect(page.getByRole('combobox', { name: sexFilter })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { level: 2, name: 'Soluble Aβ42', exact: true }),
+    ).toBeInViewport();
+  });
+
+  test('falls back to default filters when query parameters are invalid', async ({ page }) => {
+    const invalidTissue = 'InvalidTissue';
+    const invalidSex = 'InvalidSex';
+    const fragment = '#soluble-a-beta-42';
+    await page.goto(`${basePath}?tissue=${invalidTissue}&sex=${invalidSex}${fragment}`);
+    await expect(page.getByRole('combobox', { name: tissueDefault })).toBeVisible();
+    await expect(page.getByRole('combobox', { name: sexDefault })).toBeVisible();
+    await page.waitForURL(`${basePath}${fragment}`);
+  });
+
+  test('does not scroll and removes invalid fragment from url', async ({ page }) => {
+    const invalidFragment = 'invalid-section';
+    const queryParam = '?sex=Male';
+    await page.goto(`${basePath}${queryParam}#${invalidFragment}`);
+    await expect(page.getByRole('heading', { level: 1, name: 'Abca7*V1599M' })).toBeInViewport();
+    await page.waitForURL(`${basePath}${queryParam}`);
+  });
+});
+
+test.describe('model details - boxplots selector - share links - updates', () => {
+  const basePath = '/models/Abca7*V1599M/biomarkers';
+  const tissueDefault = 'Cerebral Cortex';
+
+  test('query parameters are updated when filters change', async ({ page }) => {
+    const tissueInitial = 'Hippocampus';
+    const tissueChosen = 'Plasma';
+    const sexInitial = 'Male';
+    const sexChosen = 'Female';
+    await page.goto(`${basePath}?tissue=${tissueInitial}&sex=${sexInitial}`);
+
+    await page.getByRole('combobox', { name: tissueInitial }).click();
+    await page.getByRole('option', { name: tissueChosen }).click();
+
+    await page.waitForURL(`${basePath}?tissue=${tissueChosen}&sex=${sexInitial}`);
+
+    await page.getByRole('combobox', { name: sexInitial }).click();
+    await page.getByRole('option', { name: sexChosen, exact: true }).click();
+
+    await page.waitForURL(`${basePath}?tissue=${tissueChosen}&sex=${sexChosen}`);
+  });
+
+  test('query parameters are maintained when fragment is updated', async ({ page }) => {
+    const pathWithParams = `${basePath}?tissue=Hippocampus&sex=Male`;
+    await page.goto(pathWithParams);
+    await page.getByRole('button', { name: 'Soluble Aβ42', exact: true }).click();
+    await page.waitForURL(`${pathWithParams}#soluble-a-beta-42`);
+  });
+
+  test('preserves fragment that remains valid when query parameters are updated', async ({
+    page,
+  }) => {
+    const tissueChosen = 'Hippocampus';
+    const fragment = '#soluble-a-beta-42';
+    await page.goto(`${basePath}${fragment}`);
+    await page.getByRole('combobox', { name: tissueDefault }).click();
+    await page.getByRole('option', { name: tissueChosen }).click();
+    await page.waitForURL(`${basePath}?tissue=${tissueChosen}${fragment}`);
+  });
+
+  test('removes fragment that becomes invalid when query parameters are updated', async ({
+    page,
+  }) => {
+    const tissueChosen = 'Hippocampus';
+    const fragment = '#nfl';
+    await page.goto(`${basePath}${fragment}`);
+    await page.getByRole('combobox', { name: tissueDefault }).click();
+    await page.getByRole('option', { name: tissueChosen }).click();
+    await page.waitForURL(`${basePath}?tissue=${tissueChosen}`);
+  });
+});
+
+test.describe('model details - boxplots selector - share links - link button', () => {
+  const basePath = '/models/Abca7*V1599M/biomarkers';
+  test('clicking share link button updates fragment', async ({ page }) => {
+    await page.goto(`${basePath}#soluble-a-beta-42`);
+
+    const button = page.getByRole('button', { name: 'Update URL to link to Nfl' });
+    await button.click();
+
+    await page.waitForURL(`${basePath}#nfl`);
+  });
 });

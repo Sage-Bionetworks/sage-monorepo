@@ -1,17 +1,24 @@
+import { Location } from '@angular/common';
 import {
+  afterNextRender,
   Component,
   computed,
   effect,
   ElementRef,
   inject,
   input,
+  OnInit,
   signal,
   ViewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { HelperService } from '@sagebionetworks/explorers/services';
-import { DecodeGreekEntityPipe, ModalLinkComponent } from '@sagebionetworks/explorers/util';
+import {
+  DecodeGreekEntityPipe,
+  ModalLinkComponent,
+  SvgIconComponent,
+} from '@sagebionetworks/explorers/util';
 import { IndividualData, ModelData } from '@sagebionetworks/model-ad/api-client-angular';
 import { SelectModule } from 'primeng/select';
 import { ModelDetailsBoxplotsGridComponent } from '../model-details-boxplots-grid/model-details-boxplots-grid.component';
@@ -23,13 +30,15 @@ import { ModelDetailsBoxplotsGridComponent } from '../model-details-boxplots-gri
     SelectModule,
     ModelDetailsBoxplotsGridComponent,
     ModalLinkComponent,
+    SvgIconComponent,
     DecodeGreekEntityPipe,
   ],
   templateUrl: './model-details-boxplots-selector.component.html',
   styleUrls: ['./model-details-boxplots-selector.component.scss'],
 })
-export class ModelDetailsBoxplotsSelectorComponent {
+export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
   private readonly helperService = inject(HelperService);
+  private readonly location = inject(Location);
 
   @ViewChild('boxplotsContainer', { static: false }) boxplotsContainer!: ElementRef<HTMLElement>;
 
@@ -44,22 +53,40 @@ export class ModelDetailsBoxplotsSelectorComponent {
     { label: 'Female', value: ['Female'] },
     { label: 'Male', value: ['Male'] },
   ];
-  selectedSexOption = signal(this.sexOptions[0]);
+  defaultSexOption = this.sexOptions[0];
+  selectedSexOption = signal(this.defaultSexOption);
 
   tissueOptions = computed(() => {
     return Array.from(new Set(this.modelDataList().map((item) => item.tissue)));
   });
   selectedTissueOption = signal('');
 
+  private readonly TISSUE_QUERY_KEY = 'tissue';
+  private readonly SEX_QUERY_KEY = 'sex';
+
   private readonly SCROLL_PADDING = 15;
+  isInitialScrollDone = false;
+  hasInitializedOptions = false;
 
   constructor() {
     effect(() => {
-      const options = this.tissueOptions();
-      if (options.length > 0 && !this.selectedTissueOption()) {
-        this.selectedTissueOption.set(options[0]);
+      const sexOption = this.selectedSexOption();
+      const tissueOption = this.selectedTissueOption();
+
+      // Keep URL query parameters in sync with filter selections, but avoid updating
+      // during initialization to prevent circular updates when reading from URL params
+      if (this.hasInitializedOptions) {
+        this.updateQueryParams(sexOption.label, tissueOption);
       }
     });
+
+    afterNextRender(() => {
+      this.scrollToSectionOnFirstRender();
+    });
+  }
+
+  ngOnInit(): void {
+    this.initializeOptionsFromUrlParams();
   }
 
   selectedModelDataList = computed(() => {
@@ -90,6 +117,46 @@ export class ModelDetailsBoxplotsSelectorComponent {
     );
   }
 
+  getDefaultTissue() {
+    return this.tissueOptions()[0] || '';
+  }
+
+  initializeOptionsFromUrlParams() {
+    const sexParam = this.helperService.getUrlParam(this.SEX_QUERY_KEY);
+    const tissueParam = this.helperService.getUrlParam(this.TISSUE_QUERY_KEY);
+
+    const matchingSexOption = this.sexOptions.find((option) => option.label === sexParam);
+    if (matchingSexOption !== undefined) this.selectedSexOption.set(matchingSexOption);
+
+    const matchingTissueOption = this.tissueOptions().find((option) => option === tissueParam);
+    this.selectedTissueOption.set(matchingTissueOption || this.getDefaultTissue());
+
+    this.hasInitializedOptions = true;
+  }
+
+  getHashFragment() {
+    // Extract hash fragment from URL (e.g. "nfl" from "#nfl")
+    return window.location.hash.slice(1);
+  }
+
+  isValidHashFragment(hashFragment: string): boolean {
+    return this.evidenceTypes().some(
+      (evidenceType) => this.generateAnchorId(evidenceType) === hashFragment,
+    );
+  }
+
+  scrollToSectionOnFirstRender() {
+    if (typeof window !== 'undefined' && !this.isInitialScrollDone) {
+      const hashFragment = this.getHashFragment();
+      if (this.isValidHashFragment(hashFragment)) {
+        this.isInitialScrollDone = this.scrollToSection(hashFragment, false);
+      } else {
+        this.isInitialScrollDone = true;
+        this.updateUrlFragment(hashFragment);
+      }
+    }
+  }
+
   generateAnchorId(evidenceType: string): string {
     return evidenceType
       .toLowerCase()
@@ -97,7 +164,40 @@ export class ModelDetailsBoxplotsSelectorComponent {
       .replace(/-+/g, '-');
   }
 
-  scrollToSection(anchorId: string): void {
+  updateUrlFragment(fragment: string | undefined): void {
+    const fragmentPart = fragment ? `#${fragment}` : '';
+    const newUrl = `${window.location.pathname}${window.location.search}${fragmentPart}`;
+    this.location.replaceState(newUrl);
+  }
+
+  updateQueryParams(sex: string, tissue: string) {
+    const params = new URLSearchParams(window.location.search);
+
+    if (sex !== this.defaultSexOption.label) {
+      params.set(this.SEX_QUERY_KEY, sex);
+    } else {
+      // Don't set query param for default value
+      params.delete(this.SEX_QUERY_KEY);
+    }
+
+    if (tissue !== this.getDefaultTissue()) {
+      params.set(this.TISSUE_QUERY_KEY, tissue);
+    } else {
+      // Don't set query param for default value
+      params.delete(this.TISSUE_QUERY_KEY);
+    }
+
+    const queryString = params.toString();
+    const queryStringFormatted = queryString ? `?${queryString}` : '';
+
+    const hashFragment = this.getHashFragment();
+    const hash = this.isValidHashFragment(hashFragment) ? `#${hashFragment}` : '';
+
+    const newUrl = `${window.location.pathname}${queryStringFormatted}${hash}`;
+    this.location.replaceState(newUrl);
+  }
+
+  scrollToSection(anchorId: string, updateUrl = true): boolean {
     if (
       typeof document !== 'undefined' &&
       typeof window !== 'undefined' &&
@@ -119,7 +219,12 @@ export class ModelDetailsBoxplotsSelectorComponent {
         const elementOffset = this.helperService.getOffset(element);
         const y = elementOffset.top + yOffset;
         window.scrollTo({ top: y, behavior: 'smooth' });
+
+        if (updateUrl) this.updateUrlFragment(anchorId);
+
+        return true;
       }
     }
+    return false;
   }
 }

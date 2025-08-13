@@ -6,6 +6,8 @@
 }
 
 .title-container {
+  padding-top: 0;
+
   p {
     padding-bottom: 25px;
   }
@@ -83,8 +85,24 @@
   }
 }
 
-.boxplots-separator {
-  margin-top: 80px;
-  margin-bottom: 80px;
-  border: 2px solid var(--color-gray-300);
+.boxplots-container {
+  .boxplots-evidence-type-title-bar {
+    padding-bottom: 30px;
+    display: flex;
+
+    .boxplots-evidence-type-title {
+      display: flex;
+      gap: 15px;
+
+      h2 {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .boxplots-separator {
+    margin-top: 80px;
+    margin-bottom: 80px;
+    border: 2px solid var(--color-gray-300);
+  }
 }
