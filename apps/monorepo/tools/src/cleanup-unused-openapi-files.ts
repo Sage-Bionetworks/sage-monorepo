@@ -44,7 +44,8 @@ class OpenAPICleanup {
 
     // Process each entry point to build reference graph
     for (const entryPoint of entryPoints) {
-      await this.processFile(entryPoint, 'ENTRY_POINT');
+      const entryPointName = path.relative(this.srcDir, entryPoint);
+      await this.processFile(entryPoint, `ENTRY:${entryPointName}`);
     }
 
     // Find unused files
@@ -201,19 +202,84 @@ class OpenAPICleanup {
     console.log(`Unused files: ${unusedFiles.length}\n`);
 
     if (unusedFiles.length > 0) {
-      console.log('Unused files:');
+      console.log('🗑️  Unused files:');
       unusedFiles.sort().forEach((file) => {
-        console.log(`  - ${file}`);
+        console.log(`   ${file}`);
       });
+      console.log('');
     }
 
-    console.log('\nFile dependencies:');
-    Array.from(this.fileReferences.entries())
-      .filter(([, ref]) => ref.referencedBy.length > 0)
-      .sort()
-      .forEach(([filePath, ref]) => {
-        console.log(`  ${filePath} (referenced by: ${ref.referencedBy.join(', ')})`);
-      });
+    // Generate dependency tree
+    this.generateDependencyTree();
+  }
+
+  /**
+   * Generate a tree view of dependencies
+   */
+  private generateDependencyTree(): void {
+    console.log('📊 Dependency Tree:\n');
+
+    // Find all entry points
+    const entryPoints = Array.from(this.fileReferences.entries())
+      .filter(([filePath]) => this.isEntryPoint(filePath))
+      .map(([filePath]) => filePath)
+      .sort();
+
+    for (const entryPoint of entryPoints) {
+      console.log(`📄 ${entryPoint}`);
+      this.printDependencyTree(entryPoint, new Set(), '');
+      console.log('');
+    }
+  }
+
+  /**
+   * Recursively print the dependency tree for a file
+   */
+  private printDependencyTree(filePath: string, visited: Set<string>, prefix: string): void {
+    if (visited.has(filePath)) {
+      return; // Avoid infinite recursion
+    }
+    visited.add(filePath);
+
+    // Find all files that this file references
+    const content = this.getFileContent(filePath);
+    if (!content) return;
+
+    const baseDir = path.dirname(path.join(this.srcDir, filePath));
+    const references = this.extractReferences(content, baseDir);
+    const relativeRefs = references.map((ref) => path.relative(this.srcDir, ref)).sort();
+
+    relativeRefs.forEach((ref, index) => {
+      const isLast = index === relativeRefs.length - 1;
+      const currentPrefix = prefix + (isLast ? '└── ' : '├── ');
+      const nextPrefix = prefix + (isLast ? '    ' : '│   ');
+
+      // Determine file type icon
+      let icon = '📄';
+      if (ref.includes('/schemas/')) icon = '🔧';
+      else if (ref.includes('/responses/')) icon = '📤';
+      else if (ref.includes('/parameters/')) icon = '📝';
+      else if (ref.includes('/paths/')) icon = '🛤️';
+      else if (ref.includes('/securitySchemes/')) icon = '🔐';
+      else if (ref.includes('/links/')) icon = '🔗';
+
+      console.log(`${currentPrefix}${icon} ${ref}`);
+
+      // Recursively print dependencies of this file
+      this.printDependencyTree(ref, new Set(visited), nextPrefix);
+    });
+  }
+
+  /**
+   * Get file content safely
+   */
+  private getFileContent(filePath: string): string | null {
+    try {
+      const fullPath = path.join(this.srcDir, filePath);
+      return fs.readFileSync(fullPath, 'utf8');
+    } catch {
+      return null;
+    }
   }
 
   /**
