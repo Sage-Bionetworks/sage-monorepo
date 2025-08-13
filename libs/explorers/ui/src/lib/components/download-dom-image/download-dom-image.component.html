@@ -1,5 +1,13 @@
-<p-button type="button" rounded="true" size="small" (click)="op.toggle($event)">
+<p-button
+  class="download-dom-image-action-button"
+  type="button"
+  rounded="true"
+  size="small"
+  (click)="op.toggle($event)"
+  [variant]="buttonLabel() ? 'text' : undefined"
+>
   <fa-icon [icon]="downloadIcon"></fa-icon>
+  {{ buttonLabel() }}
 </p-button>
 <p-popover
   #op
