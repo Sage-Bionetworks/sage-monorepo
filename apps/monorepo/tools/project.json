@@ -4,10 +4,10 @@
   "sourceRoot": "apps/monorepo/tools/src",
   "projectType": "application",
   "targets": {
-    "cleanup-openapi": {
+    "analyze-openapi": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "tsx apps/monorepo/tools/src/cleanup-unused-openapi-files.ts",
+        "command": "tsx apps/monorepo/tools/src/openapi-dependency-analyzer.ts",
         "cwd": "{workspaceRoot}"
       }
     }
