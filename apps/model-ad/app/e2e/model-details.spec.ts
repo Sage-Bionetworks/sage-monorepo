@@ -307,6 +307,7 @@ test.describe('model details - boxplots selector - share links - initial load', 
 
 test.describe('model details - boxplots selector - share links - updates', () => {
   const basePath = '/models/Abca7*V1599M/biomarkers';
+  const tissueDefault = 'Cerebral Cortex';
 
   test('query parameters are updated when filters change', async ({ page }) => {
     const tissueInitial = 'Hippocampus';
@@ -333,13 +334,26 @@ test.describe('model details - boxplots selector - share links - updates', () =>
     await page.waitForURL(`${pathWithParams}#soluble-a-beta-42`);
   });
 
-  test('fragment is maintained when query parameters are updated', async ({ page }) => {
-    const tissueChosen = 'Plasma';
+  test('preserves fragment that remains valid when query parameters are updated', async ({
+    page,
+  }) => {
+    const tissueChosen = 'Hippocampus';
     const fragment = '#soluble-a-beta-42';
     await page.goto(`${basePath}${fragment}`);
-    await page.getByRole('combobox', { name: 'Cerebral Cortex' }).click();
+    await page.getByRole('combobox', { name: tissueDefault }).click();
     await page.getByRole('option', { name: tissueChosen }).click();
     await page.waitForURL(`${basePath}?tissue=${tissueChosen}${fragment}`);
+  });
+
+  test('removes fragment that becomes invalid when query parameters are updated', async ({
+    page,
+  }) => {
+    const tissueChosen = 'Hippocampus';
+    const fragment = '#nfl';
+    await page.goto(`${basePath}${fragment}`);
+    await page.getByRole('combobox', { name: tissueDefault }).click();
+    await page.getByRole('option', { name: tissueChosen }).click();
+    await page.waitForURL(`${basePath}?tissue=${tissueChosen}`);
   });
 });
 
