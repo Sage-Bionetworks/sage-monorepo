@@ -167,6 +167,10 @@ window.__gradio_mode__ = "app";
             build_leaderboard_page()
             leaderboard_btn.click(lambda: gr.Tabs(selected=4), outputs=tabs)
 
+        battle_btn.click(
+            lambda: [gr.Column(visible=True), gr.Column(visible=False)],
+            outputs=[tabs, leaderboard_page],
+        )
         leaderboard_btn.click(
             lambda: [gr.Column(visible=False), gr.Column(visible=True)],
             outputs=[tabs, leaderboard_page],
