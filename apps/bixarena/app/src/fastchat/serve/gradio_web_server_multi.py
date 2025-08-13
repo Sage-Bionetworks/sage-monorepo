@@ -39,6 +39,9 @@ from fastchat.utils import (
     parse_gradio_auth_creds,
 )
 
+from fastchat.serve.gradio_leaderboard_page import build_leaderboard_page
+
+
 logger = build_logger("gradio_web_server_multi", "gradio_web_server_multi.log")
 
 
@@ -159,6 +162,15 @@ window.__gradio_mode__ = "app";
 
             with gr.Tab("About Us", id=5):
                 about = build_about()
+
+        with gr.Column(visible=False) as leaderboard_page:
+            build_leaderboard_page()
+            leaderboard_btn.click(lambda: gr.Tabs(selected=4), outputs=tabs)
+
+        leaderboard_btn.click(
+            lambda: [gr.Column(visible=False), gr.Column(visible=True)],
+            outputs=[tabs, leaderboard_page],
+        )
 
         url_params = gr.JSON(visible=False)
 
