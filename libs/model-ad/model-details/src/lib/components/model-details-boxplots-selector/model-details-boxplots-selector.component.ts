@@ -134,22 +134,25 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
     this.hasInitializedOptions = true;
   }
 
+  getHashFragment() {
+    // Extract hash fragment from URL (e.g. "nfl" from "#nfl")
+    return window.location.hash.slice(1);
+  }
+
+  isValidHashFragment(hashFragment: string): boolean {
+    return this.evidenceTypes().some(
+      (evidenceType) => this.generateAnchorId(evidenceType) === hashFragment,
+    );
+  }
+
   scrollToSectionOnFirstRender() {
     if (typeof window !== 'undefined' && !this.isInitialScrollDone) {
-      // Extract hash fragment from URL (e.g. "nfl" from "#nfl")
-      const hashFragment = window.location.hash.slice(1);
-      const matchingHashFragment = this.evidenceTypes().find(
-        (evidenceType) => this.generateAnchorId(evidenceType) === hashFragment,
-      );
-
-      if (matchingHashFragment) {
-        this.isInitialScrollDone = this.scrollToSection(
-          this.generateAnchorId(matchingHashFragment),
-          false,
-        );
+      const hashFragment = this.getHashFragment();
+      if (this.isValidHashFragment(hashFragment)) {
+        this.isInitialScrollDone = this.scrollToSection(hashFragment, false);
       } else {
         this.isInitialScrollDone = true;
-        this.updateUrlFragment(matchingHashFragment);
+        this.updateUrlFragment(hashFragment);
       }
     }
   }
@@ -186,7 +189,11 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
 
     const queryString = params.toString();
     const queryStringFormatted = queryString ? `?${queryString}` : '';
-    const newUrl = `${window.location.pathname}${queryStringFormatted}${window.location.hash}`;
+
+    const hashFragment = this.getHashFragment();
+    const hash = this.isValidHashFragment(hashFragment) ? `#${hashFragment}` : '';
+
+    const newUrl = `${window.location.pathname}${queryStringFormatted}${hash}`;
     this.location.replaceState(newUrl);
   }
 
