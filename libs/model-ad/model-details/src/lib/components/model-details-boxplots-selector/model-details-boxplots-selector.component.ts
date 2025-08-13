@@ -230,10 +230,14 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
     return false;
   }
 
+  decodeHtmlEntities(text: string): string {
+    const htmlEntityRegex = /&([^;]+);/g;
+    return text.replace(htmlEntityRegex, '$1');
+  }
+
   generateBoxplotsFilename(evidenceType: string, tissue: string, sex: string[], modelName: string) {
     const invalidFilenameCharsRegex = /[<>:"\\/|?*]/g;
-    const htmlEntityRegex = /[&;]/g;
-    const filename = `${modelName}_${evidenceType.replace(htmlEntityRegex, '')}_${tissue}_${sex.join('_')}`;
+    const filename = `${modelName}_${this.decodeHtmlEntities(evidenceType)}_${tissue}_${sex.join('_')}`;
     const cleanFilename = filename.replace(invalidFilenameCharsRegex, '_').replace(/ /g, '_');
     return cleanFilename;
   }

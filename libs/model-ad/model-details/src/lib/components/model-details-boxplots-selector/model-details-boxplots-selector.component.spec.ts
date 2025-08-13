@@ -117,6 +117,14 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
     expect(component.generateAnchorId('Tau-pS396')).toBe('tau-ps396');
   });
 
+  it('should decode HTML entities correctly', async () => {
+    const { component } = await setup();
+    expect(component.decodeHtmlEntities('A&beta;42')).toBe('Abeta42');
+    expect(component.decodeHtmlEntities('&alpha;-&gamma; test')).toBe('alpha-gamma test');
+    expect(component.decodeHtmlEntities('no entities here')).toBe('no entities here');
+    expect(component.decodeHtmlEntities('Insoluble A&beta;40')).toBe('Insoluble Abeta40');
+  });
+
   it('should generate boxplots filename correctly', async () => {
     const { component } = await setup();
     expect(
