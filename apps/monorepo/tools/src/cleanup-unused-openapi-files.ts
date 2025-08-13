@@ -1,3 +1,10 @@
+// Handle EPIPE errors gracefully (e.g., when output is piped to head or grep)
+process.stdout.on('error', (error) => {
+  if (error.code === 'EPIPE') {
+    process.exit(0);
+  }
+});
+
 import * as fs from 'fs';
 import * as path from 'path';
 import { parse } from 'yaml';
@@ -197,9 +204,13 @@ class OpenAPICleanup {
       }
     });
 
-    console.log(`Total files: ${this.fileReferences.size}`);
-    console.log(`Used files: ${usedFiles.length}`);
-    console.log(`Unused files: ${unusedFiles.length}\n`);
+    console.log(`📊 Summary:`);
+    console.log(`   Total files: ${this.fileReferences.size}`);
+    console.log(`   Used files: ${usedFiles.length}`);
+    console.log(`   Unused files: ${unusedFiles.length}\n`);
+
+    // Show emoji legend
+    this.printEmojiLegend();
 
     if (unusedFiles.length > 0) {
       console.log('🗑️  Unused files:');
@@ -209,65 +220,213 @@ class OpenAPICleanup {
       console.log('');
     }
 
-    // Generate dependency tree
-    this.generateDependencyTree();
+    // Generate dependency graph
+    this.generateDependencyGraph();
   }
 
   /**
-   * Generate a tree view of dependencies
+   * Print legend for emojis used in the report
    */
-  private generateDependencyTree(): void {
-    console.log('📊 Dependency Tree:\n');
+  private printEmojiLegend(): void {
+    console.log('📖 Legend:');
+    console.log('   📄 Entry Point (main OpenAPI spec files)');
+    console.log('   🛤️ Path (API endpoint definitions)');
+    console.log('   🧬 Schema (data model definitions)');
+    console.log('   📤 Response (HTTP response definitions)');
+    console.log('   ✏️  Parameter (request parameter definitions)');
+    console.log('   🔐 Security (authentication/authorization schemes)');
+    console.log('   🔗 Link (OpenAPI link definitions)');
+    console.log('   🔗 → Dependency chain (shows reference flow)');
+    console.log('');
+  }
 
-    // Find all entry points
+  /**
+   * Generate a graph view of dependencies
+   */
+  private generateDependencyGraph(): void {
+    console.log('� Dependency Graph:\n');
+
+    // Group files by category for better organization
+    const categories = this.groupFilesByCategory();
+
+    // Show entry points first
+    console.log('📋 Entry Points:');
+    categories.entryPoints.forEach((file) => {
+      console.log(`   📄 ${file}`);
+    });
+    console.log('');
+
+    // Show files grouped by type with their dependencies
+    this.printCategoryDependencies('🛤️ Paths', categories.paths);
+    this.printCategoryDependencies('🧬 Schemas', categories.schemas);
+    this.printCategoryDependencies('📤 Responses', categories.responses);
+    this.printCategoryDependencies('✏️  Parameters', categories.parameters);
+    this.printCategoryDependencies('🔐 Security', categories.security);
+    this.printCategoryDependencies('🔗 Links', categories.links);
+    this.printCategoryDependencies('📄 Other', categories.other);
+  }
+
+  /**
+   * Group files by their category/type
+   */
+  private groupFilesByCategory() {
+    const categories = {
+      entryPoints: [] as string[],
+      paths: [] as string[],
+      schemas: [] as string[],
+      responses: [] as string[],
+      parameters: [] as string[],
+      security: [] as string[],
+      links: [] as string[],
+      other: [] as string[],
+    };
+
+    Array.from(this.fileReferences.entries())
+      .filter(([, ref]) => ref.referencedBy.length > 0)
+      .sort()
+      .forEach(([filePath]) => {
+        if (this.isEntryPoint(filePath)) {
+          categories.entryPoints.push(filePath);
+        } else if (filePath.includes('/paths/')) {
+          categories.paths.push(filePath);
+        } else if (filePath.includes('/schemas/')) {
+          categories.schemas.push(filePath);
+        } else if (filePath.includes('/responses/')) {
+          categories.responses.push(filePath);
+        } else if (filePath.includes('/parameters/')) {
+          categories.parameters.push(filePath);
+        } else if (filePath.includes('/securitySchemes/')) {
+          categories.security.push(filePath);
+        } else if (filePath.includes('/links/')) {
+          categories.links.push(filePath);
+        } else {
+          categories.other.push(filePath);
+        }
+      });
+
+    return categories;
+  }
+
+  /**
+   * Print dependencies for a specific category with complete chains
+   */
+  private printCategoryDependencies(categoryName: string, files: string[]): void {
+    if (files.length === 0) return;
+
+    console.log(`${categoryName}:`);
+    files.forEach((file) => {
+      const ref = this.fileReferences.get(file);
+      if (ref && ref.referencedBy.length > 0) {
+        const fileName = path.basename(file, path.extname(file));
+        console.log(`\n   ${fileName}`);
+
+        // Find all paths from entry points to this file
+        const chains = this.findDependencyChains(file);
+
+        if (chains.length > 0) {
+          console.log(`     🔗 Dependency chains:`);
+          chains.forEach((chain, index) => {
+            const chainDisplay = chain
+              .map((step) => {
+                if (step.startsWith('ENTRY:')) {
+                  return `📄 ${step.substring(6)}`;
+                }
+                const stepName = path.basename(step, path.extname(step));
+                if (step.includes('/schemas/')) return `🧬 ${stepName}`;
+                if (step.includes('/responses/')) return `📤 ${stepName}`;
+                if (step.includes('/parameters/')) return `✏️  ${stepName}`;
+                if (step.includes('/paths/')) return `🛤️ ${stepName}`;
+                if (step.includes('/securitySchemes/')) return `🔐 ${stepName}`;
+                if (step.includes('/links/')) return `🔗 ${stepName}`;
+                return `📄 ${stepName}`;
+              })
+              .join(' → ');
+
+            console.log(`       ${index + 1}. ${chainDisplay}`);
+          });
+        }
+      }
+    });
+    console.log('');
+  }
+
+  /**
+   * Find all dependency chains from entry points to a target file
+   */
+  private findDependencyChains(targetFile: string): string[][] {
+    const chains: string[][] = [];
+
+    // Find all paths from entry points to the target
     const entryPoints = Array.from(this.fileReferences.entries())
       .filter(([filePath]) => this.isEntryPoint(filePath))
-      .map(([filePath]) => filePath)
-      .sort();
+      .map(([filePath]) => filePath);
 
     for (const entryPoint of entryPoints) {
-      console.log(`📄 ${entryPoint}`);
-      this.printDependencyTree(entryPoint, new Set(), '');
-      console.log('');
+      this.findChainsRecursive(
+        `ENTRY:${entryPoint}`,
+        targetFile,
+        [`ENTRY:${entryPoint}`],
+        chains,
+        new Set(),
+      );
     }
+
+    // Remove duplicate chains and sort by length (shorter chains first)
+    const uniqueChains = chains
+      .filter((chain, index) => {
+        const chainStr = chain.join('→');
+        return chains.findIndex((c) => c.join('→') === chainStr) === index;
+      })
+      .sort((a, b) => a.length - b.length);
+
+    return uniqueChains.slice(0, 5); // Limit to 5 chains to avoid overwhelming output
   }
 
   /**
-   * Recursively print the dependency tree for a file
+   * Recursively find dependency chains
    */
-  private printDependencyTree(filePath: string, visited: Set<string>, prefix: string): void {
-    if (visited.has(filePath)) {
-      return; // Avoid infinite recursion
-    }
-    visited.add(filePath);
+  private findChainsRecursive(
+    currentFile: string,
+    targetFile: string,
+    currentChain: string[],
+    allChains: string[][],
+    visited: Set<string>,
+  ): void {
+    if (visited.has(currentFile)) return;
+    visited.add(currentFile);
 
-    // Find all files that this file references
-    const content = this.getFileContent(filePath);
+    // Get the actual file path
+    const actualFile = currentFile.startsWith('ENTRY:') ? currentFile.substring(6) : currentFile;
+
+    // If we found the target, add this chain
+    if (actualFile === targetFile) {
+      allChains.push([...currentChain]);
+      return;
+    }
+
+    // Get references from this file
+    const content = this.getFileContent(actualFile);
     if (!content) return;
 
-    const baseDir = path.dirname(path.join(this.srcDir, filePath));
+    const baseDir = path.dirname(path.join(this.srcDir, actualFile));
     const references = this.extractReferences(content, baseDir);
-    const relativeRefs = references.map((ref) => path.relative(this.srcDir, ref)).sort();
 
-    relativeRefs.forEach((ref, index) => {
-      const isLast = index === relativeRefs.length - 1;
-      const currentPrefix = prefix + (isLast ? '└── ' : '├── ');
-      const nextPrefix = prefix + (isLast ? '    ' : '│   ');
-
-      // Determine file type icon
-      let icon = '📄';
-      if (ref.includes('/schemas/')) icon = '🔧';
-      else if (ref.includes('/responses/')) icon = '📤';
-      else if (ref.includes('/parameters/')) icon = '📝';
-      else if (ref.includes('/paths/')) icon = '🛤️';
-      else if (ref.includes('/securitySchemes/')) icon = '🔐';
-      else if (ref.includes('/links/')) icon = '🔗';
-
-      console.log(`${currentPrefix}${icon} ${ref}`);
-
-      // Recursively print dependencies of this file
-      this.printDependencyTree(ref, new Set(visited), nextPrefix);
-    });
+    for (const ref of references) {
+      const refPath = path.relative(this.srcDir, ref);
+      if (refPath === targetFile) {
+        // Found direct reference to target
+        allChains.push([...currentChain, refPath]);
+      } else if (!currentChain.includes(refPath)) {
+        // Continue searching through this reference
+        this.findChainsRecursive(
+          refPath,
+          targetFile,
+          [...currentChain, refPath],
+          allChains,
+          new Set(visited),
+        );
+      }
+    }
   }
 
   /**
@@ -371,6 +530,14 @@ Examples:
     return;
   }
 
+  // Handle EPIPE errors gracefully (when output is piped to commands like head/grep)
+  process.stdout.on('error', (err: NodeJS.ErrnoException) => {
+    if (err.code === 'EPIPE') {
+      process.exit(0); // Exit gracefully on broken pipe
+    }
+    throw err;
+  });
+
   try {
     const cleanup = new OpenAPICleanup(srcDir);
 
@@ -387,7 +554,15 @@ Examples:
 }
 
 if (require.main === module) {
-  main();
+  main().catch((error) => {
+    // Handle EPIPE errors gracefully
+    if (error.code === 'EPIPE') {
+      process.exit(0);
+    } else {
+      console.error('Error:', error.message);
+      process.exit(1);
+    }
+  });
 }
 
 export { OpenAPICleanup };
