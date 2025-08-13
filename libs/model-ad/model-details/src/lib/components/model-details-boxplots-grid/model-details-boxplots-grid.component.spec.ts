@@ -10,7 +10,7 @@ async function setup(modelDataList = mockModelDataList) {
     imports: [],
     componentInputs: {
       modelDataList: modelDataList,
-      sexes: ['Male', 'Female'],
+      sexes: ['Female', 'Male'],
       title: mockTitle,
     },
   });

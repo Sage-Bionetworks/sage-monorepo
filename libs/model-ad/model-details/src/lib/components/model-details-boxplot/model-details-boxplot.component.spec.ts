@@ -18,7 +18,7 @@ const mockModelData: ModelData = {
 
 async function setup(
   modelData = mockModelData,
-  sexes: IndividualData.SexEnum[] = ['Male', 'Female'],
+  sexes: IndividualData.SexEnum[] = ['Female', 'Male'],
 ) {
   const { fixture } = await render(ModelDetailsBoxplotComponent, {
     imports: [],
@@ -45,7 +45,7 @@ describe('ModelDetailsBoxplotComponent', () => {
   });
 
   it('should include both sexes when both are selected', async () => {
-    const { component } = await setup(mockModelData, ['Male', 'Female']);
+    const { component } = await setup(mockModelData, ['Female', 'Male']);
 
     const points = component.points();
     expect(points).toHaveLength(4);
