@@ -28,7 +28,7 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import org.openapitools.jackson.nullable.JsonNullable;
 import org.openapitools.jackson.nullable.JsonNullable;
-import org.sagebionetworks.openchallenges.api.client.model.ChallengeContributionRole;
+import org.sagebionetworks.openchallenges.api.client.model.ChallengeParticipationRole;
 import org.sagebionetworks.openchallenges.api.client.model.OrganizationCategory;
 import org.sagebionetworks.openchallenges.api.client.model.OrganizationDirection;
 import org.sagebionetworks.openchallenges.api.client.model.OrganizationSort;
@@ -41,7 +41,7 @@ import org.sagebionetworks.openchallenges.api.client.model.OrganizationSort;
     OrganizationSearchQuery.JSON_PROPERTY_PAGE_NUMBER,
     OrganizationSearchQuery.JSON_PROPERTY_PAGE_SIZE,
     OrganizationSearchQuery.JSON_PROPERTY_CATEGORIES,
-    OrganizationSearchQuery.JSON_PROPERTY_CHALLENGE_CONTRIBUTION_ROLES,
+    OrganizationSearchQuery.JSON_PROPERTY_CHALLENGE_PARTICIPATION_ROLES,
     OrganizationSearchQuery.JSON_PROPERTY_SORT,
     OrganizationSearchQuery.JSON_PROPERTY_DIRECTION,
     OrganizationSearchQuery.JSON_PROPERTY_IDS,
@@ -69,11 +69,11 @@ public class OrganizationSearchQuery {
   @jakarta.annotation.Nullable
   private List<OrganizationCategory> categories = new ArrayList<>();
 
-  public static final String JSON_PROPERTY_CHALLENGE_CONTRIBUTION_ROLES =
-    "challengeContributionRoles";
+  public static final String JSON_PROPERTY_CHALLENGE_PARTICIPATION_ROLES =
+    "challengeParticipationRoles";
 
   @jakarta.annotation.Nullable
-  private List<ChallengeContributionRole> challengeContributionRoles = new ArrayList<>();
+  private List<ChallengeParticipationRole> challengeParticipationRoles = new ArrayList<>();
 
   public static final String JSON_PROPERTY_SORT = "sort";
 
@@ -177,40 +177,40 @@ public class OrganizationSearchQuery {
     this.categories = categories;
   }
 
-  public OrganizationSearchQuery challengeContributionRoles(
-    @jakarta.annotation.Nullable List<ChallengeContributionRole> challengeContributionRoles
+  public OrganizationSearchQuery challengeParticipationRoles(
+    @jakarta.annotation.Nullable List<ChallengeParticipationRole> challengeParticipationRoles
   ) {
-    this.challengeContributionRoles = challengeContributionRoles;
+    this.challengeParticipationRoles = challengeParticipationRoles;
     return this;
   }
 
-  public OrganizationSearchQuery addChallengeContributionRolesItem(
-    ChallengeContributionRole challengeContributionRolesItem
+  public OrganizationSearchQuery addChallengeParticipationRolesItem(
+    ChallengeParticipationRole challengeParticipationRolesItem
   ) {
-    if (this.challengeContributionRoles == null) {
-      this.challengeContributionRoles = new ArrayList<>();
+    if (this.challengeParticipationRoles == null) {
+      this.challengeParticipationRoles = new ArrayList<>();
     }
-    this.challengeContributionRoles.add(challengeContributionRolesItem);
+    this.challengeParticipationRoles.add(challengeParticipationRolesItem);
     return this;
   }
 
   /**
-   * An array of challenge contribution roles used to filter the results.
-   * @return challengeContributionRoles
+   * An array of challenge participation roles used to filter the results.
+   * @return challengeParticipationRoles
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_CHALLENGE_CONTRIBUTION_ROLES)
+  @JsonProperty(JSON_PROPERTY_CHALLENGE_PARTICIPATION_ROLES)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public List<ChallengeContributionRole> getChallengeContributionRoles() {
-    return challengeContributionRoles;
+  public List<ChallengeParticipationRole> getChallengeParticipationRoles() {
+    return challengeParticipationRoles;
   }
 
-  @JsonProperty(JSON_PROPERTY_CHALLENGE_CONTRIBUTION_ROLES)
+  @JsonProperty(JSON_PROPERTY_CHALLENGE_PARTICIPATION_ROLES)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setChallengeContributionRoles(
-    @jakarta.annotation.Nullable List<ChallengeContributionRole> challengeContributionRoles
+  public void setChallengeParticipationRoles(
+    @jakarta.annotation.Nullable List<ChallengeParticipationRole> challengeParticipationRoles
   ) {
-    this.challengeContributionRoles = challengeContributionRoles;
+    this.challengeParticipationRoles = challengeParticipationRoles;
   }
 
   public OrganizationSearchQuery sort(@jakarta.annotation.Nullable OrganizationSort sort) {
@@ -334,8 +334,8 @@ public class OrganizationSearchQuery {
       Objects.equals(this.pageSize, organizationSearchQuery.pageSize) &&
       Objects.equals(this.categories, organizationSearchQuery.categories) &&
       Objects.equals(
-        this.challengeContributionRoles,
-        organizationSearchQuery.challengeContributionRoles
+        this.challengeParticipationRoles,
+        organizationSearchQuery.challengeParticipationRoles
       ) &&
       Objects.equals(this.sort, organizationSearchQuery.sort) &&
       equalsNullable(this.direction, organizationSearchQuery.direction) &&
@@ -361,7 +361,7 @@ public class OrganizationSearchQuery {
       pageNumber,
       pageSize,
       categories,
-      challengeContributionRoles,
+      challengeParticipationRoles,
       sort,
       hashCodeNullable(direction),
       ids,
@@ -384,8 +384,8 @@ public class OrganizationSearchQuery {
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
     sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
     sb
-      .append("    challengeContributionRoles: ")
-      .append(toIndentedString(challengeContributionRoles))
+      .append("    challengeParticipationRoles: ")
+      .append(toIndentedString(challengeParticipationRoles))
       .append("\n");
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    direction: ").append(toIndentedString(direction)).append("\n");

@@ -16,7 +16,6 @@ import unittest
 
 from openchallenges_api_client_python.models.challenge_category import ChallengeCategory
 
-
 class TestChallengeCategory(unittest.TestCase):
     """ChallengeCategory unit test stubs"""
 
@@ -30,6 +29,5 @@ class TestChallengeCategory(unittest.TestCase):
         """Test ChallengeCategory"""
         # inst = ChallengeCategory()
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

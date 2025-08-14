@@ -205,57 +205,6 @@ public interface ChallengeContributionApi {
 
 
     /**
-     * GET /challenges/{challengeId}/contributions/{organizationId}/role/{role} : Get a specific challenge contribution
-     * Retrieves a specific contribution record for a challenge, identified by its ID. 
-     *
-     * @param challengeId The unique identifier of the challenge. (required)
-     * @param organizationId The unique identifier of the organization. (required)
-     * @param role A challenge contribution role. (required)
-     * @return Challenge contribution retrieved successfully (status code 200)
-     *         or Invalid request (status code 400)
-     *         or The specified resource was not found (status code 404)
-     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     */
-    @Operation(
-        operationId = "getChallengeContribution",
-        summary = "Get a specific challenge contribution",
-        description = "Retrieves a specific contribution record for a challenge, identified by its ID. ",
-        tags = { "Challenge Contribution" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Challenge contribution retrieved successfully", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ChallengeContributionDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ChallengeContributionDto.class))
-            }),
-            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            })
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/challenges/{challengeId}/contributions/{organizationId}/role/{role}",
-        produces = { "application/json", "application/problem+json" }
-    )
-    
-    default ResponseEntity<ChallengeContributionDto> getChallengeContribution(
-        @Parameter(name = "challengeId", description = "The unique identifier of the challenge.", required = true, in = ParameterIn.PATH) @PathVariable("challengeId") Long challengeId,
-        @Parameter(name = "organizationId", description = "The unique identifier of the organization.", required = true, in = ParameterIn.PATH) @PathVariable("organizationId") Long organizationId,
-        @Parameter(name = "role", description = "A challenge contribution role.", required = true, in = ParameterIn.PATH) @PathVariable("role") ChallengeContributionRoleDto role
-    ) {
-        return getDelegate().getChallengeContribution(challengeId, organizationId, role);
-    }
-
-
-    /**
      * GET /challenges/{challengeId}/contributions : List challenge contributions
      * List challenge contributions
      *

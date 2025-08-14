@@ -26,12 +26,14 @@ class OrganizationSort(str, Enum):
     """
     allowed enum values
     """
-    CHALLENGE_COUNT = "challenge_count"
-    CREATED = "created"
-    NAME = "name"
-    RELEVANCE = "relevance"
+    CHALLENGE_COUNT = 'challenge_count'
+    CREATED = 'created'
+    NAME = 'name'
+    RELEVANCE = 'relevance'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
         """Create an instance of OrganizationSort from a JSON string"""
         return cls(json.loads(json_str))
+
+

@@ -26,10 +26,12 @@ class EdamConceptSort(str, Enum):
     """
     allowed enum values
     """
-    PREFERRED_LABEL = "preferred_label"
-    RELEVANCE = "relevance"
+    PREFERRED_LABEL = 'preferred_label'
+    RELEVANCE = 'relevance'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
         """Create an instance of EdamConceptSort from a JSON string"""
         return cls(json.loads(json_str))
+
+

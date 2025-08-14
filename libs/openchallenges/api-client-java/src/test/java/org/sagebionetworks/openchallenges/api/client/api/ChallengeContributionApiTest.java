@@ -64,24 +64,6 @@ public class ChallengeContributionApiTest {
   }
 
   /**
-   * Get a specific challenge contribution
-   *
-   * Retrieves a specific contribution record for a challenge, identified by its ID.
-   */
-  @Test
-  public void getChallengeContributionTest() {
-    Long challengeId = null;
-    Long organizationId = null;
-    ChallengeContributionRole role = null;
-    ChallengeContribution response = api.getChallengeContribution(
-      challengeId,
-      organizationId,
-      role
-    );
-    // TODO: test validations
-  }
-
-  /**
    * List challenge contributions
    *
    * List challenge contributions

@@ -14,10 +14,7 @@
 
 import unittest
 
-from openchallenges_api_client_python.models.edam_concept_direction import (
-    EdamConceptDirection,
-)
-
+from openchallenges_api_client_python.models.edam_concept_direction import EdamConceptDirection
 
 class TestEdamConceptDirection(unittest.TestCase):
     """EdamConceptDirection unit test stubs"""
@@ -32,6 +29,5 @@ class TestEdamConceptDirection(unittest.TestCase):
         """Test EdamConceptDirection"""
         # inst = EdamConceptDirection()
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

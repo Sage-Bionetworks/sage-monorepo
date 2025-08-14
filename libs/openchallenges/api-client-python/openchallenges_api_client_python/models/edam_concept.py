@@ -23,19 +23,13 @@ from typing_extensions import Annotated
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class EdamConcept(BaseModel):
     """
     The EDAM concept.
-    """  # noqa: E501
-
-    id: Annotated[int, Field(strict=True, ge=1)] = Field(
-        description="The unique identifier of the EDAM concept."
-    )
+    """ # noqa: E501
+    id: Annotated[int, Field(strict=True, ge=1)] = Field(description="The unique identifier of the EDAM concept.")
     class_id: Annotated[str, Field(strict=True, max_length=60)] = Field(alias="classId")
-    preferred_label: Annotated[str, Field(strict=True, max_length=80)] = Field(
-        alias="preferredLabel"
-    )
+    preferred_label: Annotated[str, Field(strict=True, max_length=80)] = Field(alias="preferredLabel")
     __properties: ClassVar[List[str]] = ["id", "classId", "preferredLabel"]
 
     model_config = ConfigDict(
@@ -43,6 +37,7 @@ class EdamConcept(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -68,7 +63,8 @@ class EdamConcept(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -86,11 +82,11 @@ class EdamConcept(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "id": obj.get("id"),
-                "classId": obj.get("classId"),
-                "preferredLabel": obj.get("preferredLabel"),
-            }
-        )
+        _obj = cls.model_validate({
+            "id": obj.get("id"),
+            "classId": obj.get("classId"),
+            "preferredLabel": obj.get("preferredLabel")
+        })
         return _obj
+
+

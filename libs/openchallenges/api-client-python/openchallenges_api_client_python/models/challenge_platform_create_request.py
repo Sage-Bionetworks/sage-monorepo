@@ -23,31 +23,21 @@ from typing_extensions import Annotated
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class ChallengePlatformCreateRequest(BaseModel):
     """
     The information used to create a challenge platform
-    """  # noqa: E501
-
-    slug: Annotated[str, Field(min_length=3, strict=True, max_length=30)] = Field(
-        description="The slug of the challenge platform."
-    )
-    name: Annotated[str, Field(min_length=3, strict=True, max_length=50)] = Field(
-        description="The display name of the challenge platform."
-    )
+    """ # noqa: E501
+    slug: Annotated[str, Field(min_length=3, strict=True, max_length=30)] = Field(description="The slug of the challenge platform.")
+    name: Annotated[str, Field(min_length=3, strict=True, max_length=50)] = Field(description="The display name of the challenge platform.")
     avatar_key: StrictStr = Field(description="The avatar key", alias="avatarKey")
-    website_url: Optional[Annotated[str, Field(strict=True, max_length=500)]] = Field(
-        description="A URL to the website or image.", alias="websiteUrl"
-    )
+    website_url: Optional[Annotated[str, Field(strict=True, max_length=500)]] = Field(description="A URL to the website or image.", alias="websiteUrl")
     __properties: ClassVar[List[str]] = ["slug", "name", "avatarKey", "websiteUrl"]
 
-    @field_validator("slug")
+    @field_validator('slug')
     def slug_validate_regular_expression(cls, value):
         """Validates the regular expression"""
         if not re.match(r"^[a-z0-9]+(?:-[a-z0-9]+)*$", value):
-            raise ValueError(
-                r"must validate the regular expression /^[a-z0-9]+(?:-[a-z0-9]+)*$/"
-            )
+            raise ValueError(r"must validate the regular expression /^[a-z0-9]+(?:-[a-z0-9]+)*$/")
         return value
 
     model_config = ConfigDict(
@@ -55,6 +45,7 @@ class ChallengePlatformCreateRequest(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -80,7 +71,8 @@ class ChallengePlatformCreateRequest(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -90,7 +82,7 @@ class ChallengePlatformCreateRequest(BaseModel):
         # set to None if website_url (nullable) is None
         # and model_fields_set contains the field
         if self.website_url is None and "website_url" in self.model_fields_set:
-            _dict["websiteUrl"] = None
+            _dict['websiteUrl'] = None
 
         return _dict
 
@@ -103,12 +95,12 @@ class ChallengePlatformCreateRequest(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "slug": obj.get("slug"),
-                "name": obj.get("name"),
-                "avatarKey": obj.get("avatarKey"),
-                "websiteUrl": obj.get("websiteUrl"),
-            }
-        )
+        _obj = cls.model_validate({
+            "slug": obj.get("slug"),
+            "name": obj.get("name"),
+            "avatarKey": obj.get("avatarKey"),
+            "websiteUrl": obj.get("websiteUrl")
+        })
         return _obj
+
+

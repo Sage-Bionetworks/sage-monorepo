@@ -26,14 +26,16 @@ class ChallengeSort(str, Enum):
     """
     allowed enum values
     """
-    CREATED = "created"
-    RANDOM = "random"
-    RELEVANCE = "relevance"
-    STARRED = "starred"
-    START_DATE = "start_date"
-    END_DATE = "end_date"
+    CREATED = 'created'
+    RANDOM = 'random'
+    RELEVANCE = 'relevance'
+    STARRED = 'starred'
+    START_DATE = 'start_date'
+    END_DATE = 'end_date'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
         """Create an instance of ChallengeSort from a JSON string"""
         return cls(json.loads(json_str))
+
+

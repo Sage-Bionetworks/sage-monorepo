@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 **page_number** | **int** | The page number. | [optional] [default to 0]
 **page_size** | **int** | The number of items in a single page. | [optional] [default to 100]
 **categories** | [**List[OrganizationCategory]**](OrganizationCategory.md) | The array of organization categories used to filter the results. | [optional] 
-**challenge_contribution_roles** | [**List[ChallengeContributionRole]**](ChallengeContributionRole.md) | An array of challenge contribution roles used to filter the results. | [optional] 
+**challenge_participation_roles** | [**List[ChallengeParticipationRole]**](ChallengeParticipationRole.md) | An array of challenge participation roles used to filter the results. | [optional] 
 **sort** | [**OrganizationSort**](OrganizationSort.md) |  | [optional] [default to OrganizationSort.RELEVANCE]
 **direction** | [**OrganizationDirection**](OrganizationDirection.md) |  | [optional] 
 **ids** | **List[int]** | An array of organization ids used to filter the results. | [optional] 

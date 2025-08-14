@@ -436,8 +436,8 @@ public class OrganizationApi {
     queryParams.putAll(
       apiClient.parameterToMultiValueMap(
         null,
-        "challengeContributionRoles",
-        organizationSearchQuery.getChallengeContributionRoles()
+        "challengeParticipationRoles",
+        organizationSearchQuery.getChallengeParticipationRoles()
       )
     );
     queryParams.putAll(

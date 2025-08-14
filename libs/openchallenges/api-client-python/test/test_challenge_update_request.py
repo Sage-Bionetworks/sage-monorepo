@@ -14,10 +14,7 @@
 
 import unittest
 
-from openchallenges_api_client_python.models.challenge_update_request import (
-    ChallengeUpdateRequest,
-)
-
+from openchallenges_api_client_python.models.challenge_update_request import ChallengeUpdateRequest
 
 class TestChallengeUpdateRequest(unittest.TestCase):
     """ChallengeUpdateRequest unit test stubs"""
@@ -30,9 +27,9 @@ class TestChallengeUpdateRequest(unittest.TestCase):
 
     def make_instance(self, include_optional) -> ChallengeUpdateRequest:
         """Test ChallengeUpdateRequest
-        include_optional is a boolean, when False only required
-        params are included, when True both required and
-        optional params are included"""
+            include_optional is a boolean, when False only required
+            params are included, when True both required and
+            optional params are included """
         # uncomment below to create an instance of `ChallengeUpdateRequest`
         """
         model = ChallengeUpdateRequest()
@@ -97,6 +94,5 @@ class TestChallengeUpdateRequest(unittest.TestCase):
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
