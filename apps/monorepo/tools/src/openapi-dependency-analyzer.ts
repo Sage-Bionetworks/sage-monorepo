@@ -1,8 +1,22 @@
 // Handle EPIPE errors gracefully (e.g., when output is piped to head or grep)
-process.stdout.on('error', (error) => {
+process.stdout.on('error', (error: NodeJS.ErrnoException) => {
   if (error.code === 'EPIPE') {
     process.exit(0);
   }
+});
+
+process.stderr.on('error', (error: NodeJS.ErrnoException) => {
+  if (error.code === 'EPIPE') {
+    process.exit(0);
+  }
+});
+
+// Handle uncaught EPIPE errors globally
+process.on('uncaughtException', (error: NodeJS.ErrnoException) => {
+  if (error.code === 'EPIPE') {
+    process.exit(0);
+  }
+  throw error;
 });
 
 import * as fs from 'fs';
@@ -204,11 +218,6 @@ class OpenAPICleanup {
       }
     });
 
-    console.log(`📊 Summary:`);
-    console.log(`   Total files: ${this.fileReferences.size}`);
-    console.log(`   Used files: ${usedFiles.length}`);
-    console.log(`   Unused files: ${unusedFiles.length}\n`);
-
     // Show emoji legend
     this.printEmojiLegend();
 
@@ -222,6 +231,12 @@ class OpenAPICleanup {
 
     // Generate dependency graph
     this.generateDependencyGraph();
+
+    // Show summary at the end
+    console.log(`📊 Summary:`);
+    console.log(`   Total files: ${this.fileReferences.size}`);
+    console.log(`   Used files: ${usedFiles.length}`);
+    console.log(`   Unused files: ${unusedFiles.length}\n`);
   }
 
   /**
@@ -546,14 +561,6 @@ Examples:
     `);
     return;
   }
-
-  // Handle EPIPE errors gracefully (when output is piped to commands like head/grep)
-  process.stdout.on('error', (err: NodeJS.ErrnoException) => {
-    if (err.code === 'EPIPE') {
-      process.exit(0); // Exit gracefully on broken pipe
-    }
-    throw err;
-  });
 
   try {
     const cleanup = new OpenAPICleanup(srcDir);
