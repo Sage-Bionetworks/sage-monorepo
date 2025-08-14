@@ -1,9 +1,0 @@
-type: object
-description: The unique identifier of a challenge sponsor
-properties:
-  id:
-    $ref: ChallengeSponsorId.yaml
-required:
-  - id
-example:
-  id: 507f1f77bcf86cd799439011

@@ -1,4 +1,0 @@
-description: An email address.
-type: string
-format: email
-example: john.smith@example.com

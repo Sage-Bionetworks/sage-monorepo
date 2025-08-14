@@ -1,6 +1,0 @@
-name: challengePlatformName
-in: path
-description: The unique identifier of the challenge platform.
-required: true
-schema:
-  $ref: ../../schemas/ChallengePlatformName.yaml

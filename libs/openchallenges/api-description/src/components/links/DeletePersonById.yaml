@@ -1,6 +1,0 @@
-operationId: deletePerson
-description: >
-  The `id` value returned in the response can be used as the
-  `personId` parameter in `DELETE /persons/{personId}`
-parameters:
-  personId: $response.body#/personId

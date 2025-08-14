@@ -1,6 +1,0 @@
-name: image
-in: path
-description: The unique identifier of the image.
-required: true
-schema:
-  $ref: ../../schemas/ImageKey.yaml

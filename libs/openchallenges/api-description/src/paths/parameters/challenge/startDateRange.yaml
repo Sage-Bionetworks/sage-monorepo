@@ -1,8 +1,0 @@
-name: startDateRange
-description: Return challenges that start during the date range specified
-in: query
-required: false
-style: deepObject
-explode: true
-schema:
-  $ref: ../../../components/schemas/DateRange.yaml
