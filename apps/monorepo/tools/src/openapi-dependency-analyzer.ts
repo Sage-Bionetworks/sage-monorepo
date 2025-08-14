@@ -526,7 +526,7 @@ class OpenAPICleanup {
 // CLI interface
 async function main() {
   const args = process.argv.slice(2);
-  const srcDir = args[0] || 'libs/openchallenges/api-description/src';
+  const srcDir = args[0];
   const shouldDelete = args.includes('--delete');
   const showReport = args.includes('--report');
 
@@ -540,9 +540,8 @@ Options:
   --help, -h  Show this help message
 
 Examples:
-  nx run monorepo-tools:analyze-openapi
-  nx run monorepo-tools:analyze-openapi --report
-  nx run monorepo-tools:analyze-openapi --delete
+  nx run monorepo-tools:analyze-openapi -- --help
+  nx run monorepo-tools:analyze-openapi libs/openchallenges/api-description/src --report
   nx run monorepo-tools:analyze-openapi libs/openchallenges/api-description/src --delete
     `);
     return;
