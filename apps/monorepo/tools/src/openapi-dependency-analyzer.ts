@@ -237,7 +237,7 @@ class OpenAPICleanup {
     console.log('   🔍 Query Parameter (URL query parameter definitions)');
     console.log('   🔐 Security (authentication/authorization schemes)');
     console.log('   🔗 Link (OpenAPI link definitions)');
-    console.log('   🔗 → Dependency chain (shows reference flow)');
+    console.log('    → Dependency chain (shows reference flow)');
     console.log('');
   }
 
