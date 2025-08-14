@@ -1,6 +1,6 @@
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Meta, StoryObj } from '@storybook/angular';
 import { DownloadDomImageComponent } from './download-dom-image.component';
-import { Component, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'explorers-download-dom-image-wrapper',
@@ -10,6 +10,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
         [target]="plot"
         [filename]="filename"
         [heading]="heading"
+        [buttonLabel]="buttonLabel"
       ></explorers-download-dom-image>
       <div
         #plot
@@ -26,6 +27,7 @@ class StorybookDownloadDomImageWrapper {
   @ViewChild('plot', { static: true }) plotRef!: ElementRef<HTMLElement>;
   filename = 'my-plot';
   heading = 'Download this plot as:';
+  buttonLabel = '';
 
   getTarget = () => this.plotRef.nativeElement;
 }
@@ -33,13 +35,22 @@ class StorybookDownloadDomImageWrapper {
 const meta: Meta<StorybookDownloadDomImageWrapper> = {
   title: 'UI/DownloadDomImageComponent',
   component: StorybookDownloadDomImageWrapper,
+  args: {
+    filename: 'plot',
+    heading: 'Download this plot as:',
+  },
 };
 export default meta;
 type Story = StoryObj<StorybookDownloadDomImageWrapper>;
 
-export const Default: Story = {
+export const IconActionButton: Story = {
   args: {
-    filename: 'plot',
-    heading: 'Download this plot as:',
+    buttonLabel: '',
+  },
+};
+
+export const TextActionButton: Story = {
+  args: {
+    buttonLabel: 'Download',
   },
 };

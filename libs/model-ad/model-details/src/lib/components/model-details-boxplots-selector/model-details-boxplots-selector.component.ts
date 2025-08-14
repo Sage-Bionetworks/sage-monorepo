@@ -14,6 +14,7 @@ import {
 import { FormsModule } from '@angular/forms';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { HelperService } from '@sagebionetworks/explorers/services';
+import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
 import {
   DecodeGreekEntityPipe,
   ModalLinkComponent,
@@ -32,6 +33,7 @@ import { ModelDetailsBoxplotsGridComponent } from '../model-details-boxplots-gri
     ModalLinkComponent,
     SvgIconComponent,
     DecodeGreekEntityPipe,
+    DownloadDomImageComponent,
   ],
   templateUrl: './model-details-boxplots-selector.component.html',
   styleUrls: ['./model-details-boxplots-selector.component.scss'],
@@ -226,5 +228,26 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
       }
     }
     return false;
+  }
+
+  decodeHtmlEntities(text: string): string {
+    const htmlEntityRegex = /&([^;]+);/g;
+    return text.replace(htmlEntityRegex, '$1');
+  }
+
+  generateBoxplotsFilename(evidenceType: string, tissue: string, sex: string[], modelName: string) {
+    const invalidFilenameCharsRegex = /[<>:"\\/|?*]/g;
+    const filename = `${modelName}_${this.decodeHtmlEntities(evidenceType)}_${tissue}_${sex.join('_')}`;
+    const cleanFilename = filename.replace(invalidFilenameCharsRegex, '_').replace(/ /g, '_');
+    return cleanFilename;
+  }
+
+  generateBoxplotsHtmlElementId(evidenceType: string): string {
+    return `${this.generateAnchorId(evidenceType)}-boxplots-grid`;
+  }
+
+  getBoxplotsHTMLElement(evidenceType: string) {
+    const id = this.generateBoxplotsHtmlElementId(evidenceType);
+    return document.getElementById(id) as HTMLElement;
   }
 }

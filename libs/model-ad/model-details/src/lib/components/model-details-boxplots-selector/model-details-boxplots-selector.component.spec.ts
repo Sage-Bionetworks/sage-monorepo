@@ -116,4 +116,40 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
     expect(component.generateAnchorId('A&beta;42')).toBe('a-beta-42');
     expect(component.generateAnchorId('Tau-pS396')).toBe('tau-ps396');
   });
+
+  it('should decode HTML entities correctly', async () => {
+    const { component } = await setup();
+    expect(component.decodeHtmlEntities('A&beta;42')).toBe('Abeta42');
+    expect(component.decodeHtmlEntities('&alpha;-&gamma; test')).toBe('alpha-gamma test');
+    expect(component.decodeHtmlEntities('no entities here')).toBe('no entities here');
+    expect(component.decodeHtmlEntities('Insoluble A&beta;40')).toBe('Insoluble Abeta40');
+  });
+
+  it('should generate boxplots filename correctly', async () => {
+    const { component } = await setup();
+    expect(
+      component.generateBoxplotsFilename(
+        'Insoluble A&beta;40',
+        'Cerebral Cortex',
+        ['Female', 'Male'],
+        '3xTg-AD',
+      ),
+    ).toBe('3xTg-AD_Insoluble_Abeta40_Cerebral_Cortex_Female_Male');
+    expect(
+      component.generateBoxplotsFilename(
+        'Dystrophic Neurites (LAMP1)',
+        'Hippocampus',
+        ['Male'],
+        '5xFAD (UCI)',
+      ),
+    ).toBe('5xFAD_(UCI)_Dystrophic_Neurites_(LAMP1)_Hippocampus_Male');
+    expect(
+      component.generateBoxplotsFilename(
+        'Plaque Size (Thio-S)',
+        'Hippocampus',
+        ['Female'],
+        'Abca7*V1599M',
+      ),
+    ).toBe('Abca7_V1599M_Plaque_Size_(Thio-S)_Hippocampus_Female');
+  });
 });

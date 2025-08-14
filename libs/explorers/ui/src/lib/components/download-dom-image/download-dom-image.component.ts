@@ -26,6 +26,7 @@ export class DownloadDomImageComponent {
   target = input.required<HTMLElement>();
   heading = input('Download this plot as:');
   filename = input.required();
+  buttonLabel = input('');
 
   downloadIcon = faDownload;
   spinnerIcon = faSpinner;

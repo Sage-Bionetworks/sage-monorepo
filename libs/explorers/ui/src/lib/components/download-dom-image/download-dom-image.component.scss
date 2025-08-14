@@ -1,7 +1,11 @@
-.download-dom-image-icon {
-  transform: translateY(6px);
-  margin-left: 10px;
-  cursor: pointer;
+.download-dom-image-action-button {
+  button.p-button-text {
+    color: var(--color-gray-1000);
+
+    &:hover {
+      color: var(--color-action-primary);
+    }
+  }
 }
 
 .download-dom-image-panel {
