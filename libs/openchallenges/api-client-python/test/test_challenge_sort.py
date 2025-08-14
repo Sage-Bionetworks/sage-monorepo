@@ -16,7 +16,6 @@ import unittest
 
 from openchallenges_api_client_python.models.challenge_sort import ChallengeSort
 
-
 class TestChallengeSort(unittest.TestCase):
     """ChallengeSort unit test stubs"""
 
@@ -30,6 +29,5 @@ class TestChallengeSort(unittest.TestCase):
         """Test ChallengeSort"""
         # inst = ChallengeSort()
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

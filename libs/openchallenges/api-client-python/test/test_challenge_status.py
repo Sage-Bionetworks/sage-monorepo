@@ -16,7 +16,6 @@ import unittest
 
 from openchallenges_api_client_python.models.challenge_status import ChallengeStatus
 
-
 class TestChallengeStatus(unittest.TestCase):
     """ChallengeStatus unit test stubs"""
 
@@ -30,6 +29,5 @@ class TestChallengeStatus(unittest.TestCase):
         """Test ChallengeStatus"""
         # inst = ChallengeStatus()
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

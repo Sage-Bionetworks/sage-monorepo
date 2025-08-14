@@ -22,32 +22,24 @@ from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class LoginResponse(BaseModel):
     """
     LoginResponse
-    """  # noqa: E501
-
-    api_key: Optional[StrictStr] = Field(
-        default=None, description="API key for authentication", alias="apiKey"
-    )
-    user_id: Optional[StrictStr] = Field(
-        default=None, description="User ID", alias="userId"
-    )
+    """ # noqa: E501
+    api_key: Optional[StrictStr] = Field(default=None, description="API key for authentication", alias="apiKey")
+    user_id: Optional[StrictStr] = Field(default=None, description="User ID", alias="userId")
     username: Optional[StrictStr] = Field(default=None, description="Username")
     role: Optional[StrictStr] = Field(default=None, description="User role")
     __properties: ClassVar[List[str]] = ["apiKey", "userId", "username", "role"]
 
-    @field_validator("role")
+    @field_validator('role')
     def role_validate_enum(cls, value):
         """Validates the enum"""
         if value is None:
             return value
 
-        if value not in set(["admin", "user", "readonly", "service"]):
-            raise ValueError(
-                "must be one of enum values ('admin', 'user', 'readonly', 'service')"
-            )
+        if value not in set(['admin', 'user', 'readonly', 'service']):
+            raise ValueError("must be one of enum values ('admin', 'user', 'readonly', 'service')")
         return value
 
     model_config = ConfigDict(
@@ -55,6 +47,7 @@ class LoginResponse(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -80,7 +73,8 @@ class LoginResponse(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -98,12 +92,12 @@ class LoginResponse(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "apiKey": obj.get("apiKey"),
-                "userId": obj.get("userId"),
-                "username": obj.get("username"),
-                "role": obj.get("role"),
-            }
-        )
+        _obj = cls.model_validate({
+            "apiKey": obj.get("apiKey"),
+            "userId": obj.get("userId"),
+            "username": obj.get("username"),
+            "role": obj.get("role")
+        })
         return _obj
+
+

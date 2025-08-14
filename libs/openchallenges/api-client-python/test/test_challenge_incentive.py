@@ -14,10 +14,7 @@
 
 import unittest
 
-from openchallenges_api_client_python.models.challenge_incentive import (
-    ChallengeIncentive,
-)
-
+from openchallenges_api_client_python.models.challenge_incentive import ChallengeIncentive
 
 class TestChallengeIncentive(unittest.TestCase):
     """ChallengeIncentive unit test stubs"""
@@ -32,6 +29,5 @@ class TestChallengeIncentive(unittest.TestCase):
         """Test ChallengeIncentive"""
         # inst = ChallengeIncentive()
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

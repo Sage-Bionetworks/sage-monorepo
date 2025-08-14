@@ -23,28 +23,20 @@ from typing_extensions import Annotated
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class SimpleChallengePlatform(BaseModel):
     """
     A simple challenge platform.
-    """  # noqa: E501
-
+    """ # noqa: E501
     id: StrictInt = Field(description="The unique identifier of a challenge platform.")
-    slug: Annotated[str, Field(min_length=3, strict=True, max_length=30)] = Field(
-        description="The slug of the challenge platform."
-    )
-    name: Annotated[str, Field(min_length=3, strict=True, max_length=50)] = Field(
-        description="The display name of the challenge platform."
-    )
+    slug: Annotated[str, Field(min_length=3, strict=True, max_length=30)] = Field(description="The slug of the challenge platform.")
+    name: Annotated[str, Field(min_length=3, strict=True, max_length=50)] = Field(description="The display name of the challenge platform.")
     __properties: ClassVar[List[str]] = ["id", "slug", "name"]
 
-    @field_validator("slug")
+    @field_validator('slug')
     def slug_validate_regular_expression(cls, value):
         """Validates the regular expression"""
         if not re.match(r"^[a-z0-9]+(?:-[a-z0-9]+)*$", value):
-            raise ValueError(
-                r"must validate the regular expression /^[a-z0-9]+(?:-[a-z0-9]+)*$/"
-            )
+            raise ValueError(r"must validate the regular expression /^[a-z0-9]+(?:-[a-z0-9]+)*$/")
         return value
 
     model_config = ConfigDict(
@@ -52,6 +44,7 @@ class SimpleChallengePlatform(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -77,7 +70,8 @@ class SimpleChallengePlatform(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -95,7 +89,11 @@ class SimpleChallengePlatform(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {"id": obj.get("id"), "slug": obj.get("slug"), "name": obj.get("name")}
-        )
+        _obj = cls.model_validate({
+            "id": obj.get("id"),
+            "slug": obj.get("slug"),
+            "name": obj.get("name")
+        })
         return _obj
+
+

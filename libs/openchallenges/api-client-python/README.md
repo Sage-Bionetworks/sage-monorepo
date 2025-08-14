@@ -108,7 +108,6 @@ Class | Method | HTTP request | Description
 *ChallengeAnalyticsApi* | [**get_challenges_per_year**](docs/ChallengeAnalyticsApi.md#get_challenges_per_year) | **GET** /challenge-analytics/challenges-per-year | Get the number of challenges tracked per year
 *ChallengeContributionApi* | [**create_challenge_contribution**](docs/ChallengeContributionApi.md#create_challenge_contribution) | **POST** /challenges/{challengeId}/contributions | Create a new contribution for a challenge
 *ChallengeContributionApi* | [**delete_challenge_contribution**](docs/ChallengeContributionApi.md#delete_challenge_contribution) | **DELETE** /challenges/{challengeId}/contributions/{organizationId}/role/{role} | Delete a specific challenge contribution
-*ChallengeContributionApi* | [**get_challenge_contribution**](docs/ChallengeContributionApi.md#get_challenge_contribution) | **GET** /challenges/{challengeId}/contributions/{organizationId}/role/{role} | Get a specific challenge contribution
 *ChallengeContributionApi* | [**list_challenge_contributions**](docs/ChallengeContributionApi.md#list_challenge_contributions) | **GET** /challenges/{challengeId}/contributions | List challenge contributions
 *ChallengePlatformApi* | [**create_challenge_platform**](docs/ChallengePlatformApi.md#create_challenge_platform) | **POST** /challenge-platforms | Create a challenge platform
 *ChallengePlatformApi* | [**delete_challenge_platform**](docs/ChallengePlatformApi.md#delete_challenge_platform) | **DELETE** /challenge-platforms/{challengePlatformId} | Delete a challenge platform

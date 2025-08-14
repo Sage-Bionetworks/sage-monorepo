@@ -26,12 +26,14 @@ class ChallengeIncentive(str, Enum):
     """
     allowed enum values
     """
-    MONETARY = "monetary"
-    PUBLICATION = "publication"
-    SPEAKING_ENGAGEMENT = "speaking_engagement"
-    OTHER = "other"
+    MONETARY = 'monetary'
+    PUBLICATION = 'publication'
+    SPEAKING_ENGAGEMENT = 'speaking_engagement'
+    OTHER = 'other'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
         """Create an instance of ChallengeIncentive from a JSON string"""
         return cls(json.loads(json_str))
+
+

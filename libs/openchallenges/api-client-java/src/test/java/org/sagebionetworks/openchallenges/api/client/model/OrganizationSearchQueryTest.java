@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openapitools.jackson.nullable.JsonNullable;
 import org.openapitools.jackson.nullable.JsonNullable;
-import org.sagebionetworks.openchallenges.api.client.model.ChallengeContributionRole;
+import org.sagebionetworks.openchallenges.api.client.model.ChallengeParticipationRole;
 import org.sagebionetworks.openchallenges.api.client.model.OrganizationCategory;
 import org.sagebionetworks.openchallenges.api.client.model.OrganizationDirection;
 import org.sagebionetworks.openchallenges.api.client.model.OrganizationSort;
@@ -72,11 +72,11 @@ class OrganizationSearchQueryTest {
   }
 
   /**
-   * Test the property 'challengeContributionRoles'
+   * Test the property 'challengeParticipationRoles'
    */
   @Test
-  void challengeContributionRolesTest() {
-    // TODO: test challengeContributionRoles
+  void challengeParticipationRolesTest() {
+    // TODO: test challengeParticipationRoles
   }
 
   /**

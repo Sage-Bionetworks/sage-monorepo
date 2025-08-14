@@ -16,7 +16,6 @@ import unittest
 
 from openchallenges_api_client_python.models.image_height import ImageHeight
 
-
 class TestImageHeight(unittest.TestCase):
     """ImageHeight unit test stubs"""
 
@@ -30,6 +29,5 @@ class TestImageHeight(unittest.TestCase):
         """Test ImageHeight"""
         # inst = ImageHeight()
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

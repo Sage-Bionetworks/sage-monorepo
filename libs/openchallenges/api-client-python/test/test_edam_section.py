@@ -16,7 +16,6 @@ import unittest
 
 from openchallenges_api_client_python.models.edam_section import EdamSection
 
-
 class TestEdamSection(unittest.TestCase):
     """EdamSection unit test stubs"""
 
@@ -30,6 +29,5 @@ class TestEdamSection(unittest.TestCase):
         """Test EdamSection"""
         # inst = EdamSection()
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

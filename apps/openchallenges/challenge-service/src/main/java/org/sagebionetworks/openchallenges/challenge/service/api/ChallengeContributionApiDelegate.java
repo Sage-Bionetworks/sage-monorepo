@@ -170,50 +170,6 @@ public interface ChallengeContributionApiDelegate {
     }
 
     /**
-     * GET /challenges/{challengeId}/contributions/{organizationId}/role/{role} : Get a specific challenge contribution
-     * Retrieves a specific contribution record for a challenge, identified by its ID. 
-     *
-     * @param challengeId The unique identifier of the challenge. (required)
-     * @param organizationId The unique identifier of the organization. (required)
-     * @param role A challenge contribution role. (required)
-     * @return Challenge contribution retrieved successfully (status code 200)
-     *         or Invalid request (status code 400)
-     *         or The specified resource was not found (status code 404)
-     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     * @see ChallengeContributionApi#getChallengeContribution
-     */
-    default ResponseEntity<ChallengeContributionDto> getChallengeContribution(Long challengeId,
-        Long organizationId,
-        ChallengeContributionRoleDto role) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"organizationId\" : 1, \"challengeId\" : 1, \"role\" : \"challenge_organizer\", \"id\" : 1 }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
-                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
-                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
-                    break;
-                }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
-                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
-                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
-                    break;
-                }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
-                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
-                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
-                    break;
-                }
-            }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
-    }
-
-    /**
      * GET /challenges/{challengeId}/contributions : List challenge contributions
      * List challenge contributions
      *

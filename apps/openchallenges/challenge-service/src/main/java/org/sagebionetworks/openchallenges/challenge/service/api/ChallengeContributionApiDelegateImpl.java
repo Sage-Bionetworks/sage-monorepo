@@ -55,20 +55,6 @@ public class ChallengeContributionApiDelegateImpl implements ChallengeContributi
   }
 
   @Override
-  public ResponseEntity<ChallengeContributionDto> getChallengeContribution(
-    Long challengeId,
-    Long organizationId,
-    ChallengeContributionRoleDto role
-  ) {
-    ChallengeContributionDto contribution = challengeContributionService.getChallengeContribution(
-      challengeId,
-      organizationId,
-      role
-    );
-    return ResponseEntity.ok(contribution);
-  }
-
-  @Override
   @PreAuthorize("authentication.principal.admin")
   public ResponseEntity<ChallengeContributionDto> createChallengeContribution(
     Long challengeId,

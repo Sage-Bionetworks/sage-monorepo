@@ -26,15 +26,17 @@ class ChallengeCategory(str, Enum):
     """
     allowed enum values
     """
-    FEATURED = "featured"
-    BENCHMARK = "benchmark"
-    HACKATHON = "hackathon"
-    STARTING_SOON = "starting_soon"
-    ENDING_SOON = "ending_soon"
-    RECENTLY_STARTED = "recently_started"
-    RECENTLY_ENDED = "recently_ended"
+    FEATURED = 'featured'
+    BENCHMARK = 'benchmark'
+    HACKATHON = 'hackathon'
+    STARTING_SOON = 'starting_soon'
+    ENDING_SOON = 'ending_soon'
+    RECENTLY_STARTED = 'recently_started'
+    RECENTLY_ENDED = 'recently_ended'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
         """Create an instance of ChallengeCategory from a JSON string"""
         return cls(json.loads(json_str))
+
+

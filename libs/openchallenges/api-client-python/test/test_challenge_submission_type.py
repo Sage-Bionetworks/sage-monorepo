@@ -14,10 +14,7 @@
 
 import unittest
 
-from openchallenges_api_client_python.models.challenge_submission_type import (
-    ChallengeSubmissionType,
-)
-
+from openchallenges_api_client_python.models.challenge_submission_type import ChallengeSubmissionType
 
 class TestChallengeSubmissionType(unittest.TestCase):
     """ChallengeSubmissionType unit test stubs"""
@@ -32,6 +29,5 @@ class TestChallengeSubmissionType(unittest.TestCase):
         """Test ChallengeSubmissionType"""
         # inst = ChallengeSubmissionType()
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

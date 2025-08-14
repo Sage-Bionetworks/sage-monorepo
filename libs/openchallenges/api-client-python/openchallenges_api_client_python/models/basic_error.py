@@ -22,23 +22,14 @@ from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class BasicError(BaseModel):
     """
     Problem details (tools.ietf.org/html/rfc7807)
-    """  # noqa: E501
-
-    title: StrictStr = Field(
-        description="A human readable documentation for the problem type"
-    )
+    """ # noqa: E501
+    title: StrictStr = Field(description="A human readable documentation for the problem type")
     status: StrictInt = Field(description="The HTTP status code")
-    detail: Optional[StrictStr] = Field(
-        default=None,
-        description="A human readable explanation specific to this occurrence of the problem",
-    )
-    type: Optional[StrictStr] = Field(
-        default=None, description="An absolute URI that identifies the problem type"
-    )
+    detail: Optional[StrictStr] = Field(default=None, description="A human readable explanation specific to this occurrence of the problem")
+    type: Optional[StrictStr] = Field(default=None, description="An absolute URI that identifies the problem type")
     __properties: ClassVar[List[str]] = ["title", "status", "detail", "type"]
 
     model_config = ConfigDict(
@@ -46,6 +37,7 @@ class BasicError(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -71,7 +63,8 @@ class BasicError(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -89,12 +82,12 @@ class BasicError(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate(
-            {
-                "title": obj.get("title"),
-                "status": obj.get("status"),
-                "detail": obj.get("detail"),
-                "type": obj.get("type"),
-            }
-        )
+        _obj = cls.model_validate({
+            "title": obj.get("title"),
+            "status": obj.get("status"),
+            "detail": obj.get("detail"),
+            "type": obj.get("type")
+        })
         return _obj
+
+
