@@ -1,31 +1,3 @@
-// Handle EPIPE errors gracefully (e.g., when output is piped to head or grep)
-<<<<<<< HEAD
-process.stdout.on('error', (error: NodeJS.ErrnoException) => {
-=======
-process.stdout.on('error', (error) => {
->>>>>>> b1decf88e (chore: squash merge openchallenges/clean-api-description)
-  if (error.code === 'EPIPE') {
-    process.exit(0);
-  }
-});
-
-<<<<<<< HEAD
-process.stderr.on('error', (error: NodeJS.ErrnoException) => {
-  if (error.code === 'EPIPE') {
-    process.exit(0);
-  }
-});
-
-// Handle uncaught EPIPE errors globally
-process.on('uncaughtException', (error: NodeJS.ErrnoException) => {
-  if (error.code === 'EPIPE') {
-    process.exit(0);
-  }
-  throw error;
-});
-
-=======
->>>>>>> b1decf88e (chore: squash merge openchallenges/clean-api-description)
 import * as fs from 'fs';
 import * as path from 'path';
 import { parse } from 'yaml';
@@ -225,6 +197,11 @@ class OpenAPICleanup {
       }
     });
 
+    console.log(`📊 Summary:`);
+    console.log(`   Total files: ${this.fileReferences.size}`);
+    console.log(`   Used files: ${usedFiles.length}`);
+    console.log(`   Unused files: ${unusedFiles.length}\n`);
+
     // Show emoji legend
     this.printEmojiLegend();
 
@@ -238,17 +215,6 @@ class OpenAPICleanup {
 
     // Generate dependency graph
     this.generateDependencyGraph();
-
-    // Show summary at the end
-    const totalFiles = this.fileReferences.size;
-    const usedPercentage = totalFiles > 0 ? Math.round((usedFiles.length / totalFiles) * 100) : 0;
-    const unusedPercentage =
-      totalFiles > 0 ? Math.round((unusedFiles.length / totalFiles) * 100) : 0;
-
-    console.log(`📊 Summary:`);
-    console.log(`   Total files: ${totalFiles}`);
-    console.log(`   Used files: ${usedFiles.length} (${usedPercentage}%)`);
-    console.log(`   Unused files: ${unusedFiles.length} (${unusedPercentage}%)\n`);
   }
 
   /**
@@ -257,14 +223,13 @@ class OpenAPICleanup {
   private printEmojiLegend(): void {
     console.log('📖 Legend:');
     console.log('   📄 Entry Point (main OpenAPI spec files)');
-    console.log('   🛤️ Path (API endpoint definitions)');
+    console.log('   🛤️  Path (API endpoint definitions)');
     console.log('   🧬 Schema (data model definitions)');
     console.log('   📤 Response (HTTP response definitions)');
-    console.log('   📁 Path Parameter (URL path parameter definitions)');
-    console.log('   🔍 Query Parameter (URL query parameter definitions)');
+    console.log('   🎛️  Parameter (request parameter definitions)');
     console.log('   🔐 Security (authentication/authorization schemes)');
     console.log('   🔗 Link (OpenAPI link definitions)');
-    console.log('    → Dependency chain (shows reference flow)');
+    console.log('   → Dependency chain (shows reference flow)');
     console.log('');
   }
 
@@ -272,7 +237,7 @@ class OpenAPICleanup {
    * Generate a graph view of dependencies
    */
   private generateDependencyGraph(): void {
-    console.log('🔗 Dependency Graph:\n');
+    console.log('� Dependency Graph:\n');
 
     // Group files by category for better organization
     const categories = this.groupFilesByCategory();
@@ -285,26 +250,13 @@ class OpenAPICleanup {
     console.log('');
 
     // Show files grouped by type with their dependencies
-    this.printCategoryDependencies(`🛤️ Paths (${categories.paths.length})`, categories.paths);
-    this.printCategoryDependencies(`🧬 Schemas (${categories.schemas.length})`, categories.schemas);
-    this.printCategoryDependencies(
-      `📤 Responses (${categories.responses.length})`,
-      categories.responses,
-    );
-    this.printCategoryDependencies(
-      `📁 Path Parameters (${categories.pathParameters.length})`,
-      categories.pathParameters,
-    );
-    this.printCategoryDependencies(
-      `🔍 Query Parameters (${categories.queryParameters.length})`,
-      categories.queryParameters,
-    );
-    this.printCategoryDependencies(
-      `🔐 Security (${categories.security.length})`,
-      categories.security,
-    );
-    this.printCategoryDependencies(`🔗 Links (${categories.links.length})`, categories.links);
-    this.printCategoryDependencies(`🌈 Other (${categories.other.length})`, categories.other);
+    this.printCategoryDependencies('🛤️  Paths', categories.paths);
+    this.printCategoryDependencies('🔧 Schemas', categories.schemas);
+    this.printCategoryDependencies('� Responses', categories.responses);
+    this.printCategoryDependencies('📝 Parameters', categories.parameters);
+    this.printCategoryDependencies('🔐 Security', categories.security);
+    this.printCategoryDependencies('🔗 Links', categories.links);
+    this.printCategoryDependencies('📄 Other', categories.other);
   }
 
   /**
@@ -316,15 +268,14 @@ class OpenAPICleanup {
       paths: [] as string[],
       schemas: [] as string[],
       responses: [] as string[],
-      pathParameters: [] as string[],
-      queryParameters: [] as string[],
+      parameters: [] as string[],
       security: [] as string[],
       links: [] as string[],
       other: [] as string[],
     };
 
     Array.from(this.fileReferences.entries())
-      .filter(([filePath, ref]) => ref.referencedBy.length > 0 || this.isEntryPoint(filePath))
+      .filter(([, ref]) => ref.referencedBy.length > 0)
       .sort()
       .forEach(([filePath]) => {
         if (this.isEntryPoint(filePath)) {
@@ -335,10 +286,8 @@ class OpenAPICleanup {
           categories.schemas.push(filePath);
         } else if (filePath.includes('/responses/')) {
           categories.responses.push(filePath);
-        } else if (filePath.includes('/parameters/path/')) {
-          categories.pathParameters.push(filePath);
-        } else if (filePath.includes('/parameters/query/')) {
-          categories.queryParameters.push(filePath);
+        } else if (filePath.includes('/parameters/')) {
+          categories.parameters.push(filePath);
         } else if (filePath.includes('/securitySchemes/')) {
           categories.security.push(filePath);
         } else if (filePath.includes('/links/')) {
@@ -378,8 +327,7 @@ class OpenAPICleanup {
                 const stepName = path.basename(step, path.extname(step));
                 if (step.includes('/schemas/')) return `🧬 ${stepName}`;
                 if (step.includes('/responses/')) return `📤 ${stepName}`;
-                if (step.includes('/parameters/path/')) return `📁 ${stepName}`;
-                if (step.includes('/parameters/query/')) return `🔍 ${stepName}`;
+                if (step.includes('/parameters/')) return `🎛️ ${stepName}`;
                 if (step.includes('/paths/')) return `🛤️ ${stepName}`;
                 if (step.includes('/securitySchemes/')) return `🔐 ${stepName}`;
                 if (step.includes('/links/')) return `🔗 ${stepName}`;
@@ -424,7 +372,7 @@ class OpenAPICleanup {
       })
       .sort((a, b) => a.length - b.length);
 
-    return uniqueChains.slice(0, 8); // Show more dependency chains for better visibility
+    return uniqueChains.slice(0, 5); // Limit to 5 chains to avoid overwhelming output
   }
 
   /**
@@ -553,13 +501,13 @@ class OpenAPICleanup {
 // CLI interface
 async function main() {
   const args = process.argv.slice(2);
-  const srcDir = args[0];
+  const srcDir = args[0] || 'libs/openchallenges/api-description/src';
   const shouldDelete = args.includes('--delete');
   const showReport = args.includes('--report');
 
   if (args.includes('--help') || args.includes('-h')) {
     console.log(`
-Usage: nx run monorepo-tools:analyze-openapi [src-dir] [options]
+Usage: nx run monorepo-tools:cleanup-openapi [src-dir] [options]
 
 Options:
   --delete    Actually delete unused files (default: dry run)
@@ -567,9 +515,10 @@ Options:
   --help, -h  Show this help message
 
 Examples:
-  nx run monorepo-tools:analyze-openapi -- --help
-  nx run monorepo-tools:analyze-openapi libs/openchallenges/api-description/src --report
-  nx run monorepo-tools:analyze-openapi libs/openchallenges/api-description/src --delete
+  nx run monorepo-tools:cleanup-openapi
+  nx run monorepo-tools:cleanup-openapi --report
+  nx run monorepo-tools:cleanup-openapi --delete
+  nx run monorepo-tools:cleanup-openapi libs/openchallenges/api-description/src --delete
     `);
     return;
   }
@@ -590,15 +539,7 @@ Examples:
 }
 
 if (require.main === module) {
-  main().catch((error) => {
-    // Handle EPIPE errors gracefully
-    if (error.code === 'EPIPE') {
-      process.exit(0);
-    } else {
-      console.error('Error:', error.message);
-      process.exit(1);
-    }
-  });
+  main();
 }
 
 export { OpenAPICleanup };
