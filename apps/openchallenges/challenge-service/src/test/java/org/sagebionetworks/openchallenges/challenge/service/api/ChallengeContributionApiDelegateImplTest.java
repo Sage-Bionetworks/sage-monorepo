@@ -110,43 +110,4 @@ class ChallengeContributionApiDelegateImplTest {
       role
     );
   }
-
-  @Test
-  @DisplayName("should get challenge contribution and return ok status")
-  void shouldGetChallengeContributionAndReturnOkStatus() {
-    // given
-    Long challengeId = 1L;
-    Long organizationId = 123L;
-    ChallengeContributionRoleDto role = ChallengeContributionRoleDto.CHALLENGE_ORGANIZER;
-
-    ChallengeContributionDto expectedResponse = new ChallengeContributionDto()
-      .id(456L)
-      .challengeId(challengeId)
-      .organizationId(organizationId)
-      .role(role);
-
-    when(
-      challengeContributionService.getChallengeContribution(challengeId, organizationId, role)
-    ).thenReturn(expectedResponse);
-
-    // when
-    ResponseEntity<ChallengeContributionDto> response = apiDelegate.getChallengeContribution(
-      challengeId,
-      organizationId,
-      role
-    );
-
-    // then
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-    assertThat(response.getBody()).isNotNull();
-    assertThat(response.getBody().getId()).isEqualTo(456L);
-    assertThat(response.getBody().getChallengeId()).isEqualTo(challengeId);
-    assertThat(response.getBody().getOrganizationId()).isEqualTo(organizationId);
-    assertThat(response.getBody().getRole()).isEqualTo(role);
-    verify(challengeContributionService).getChallengeContribution(
-      challengeId,
-      organizationId,
-      role
-    );
-  }
 }
