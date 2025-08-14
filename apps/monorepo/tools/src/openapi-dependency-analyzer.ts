@@ -297,7 +297,7 @@ class OpenAPICleanup {
     };
 
     Array.from(this.fileReferences.entries())
-      .filter(([, ref]) => ref.referencedBy.length > 0)
+      .filter(([filePath, ref]) => ref.referencedBy.length > 0 || this.isEntryPoint(filePath))
       .sort()
       .forEach(([filePath]) => {
         if (this.isEntryPoint(filePath)) {
