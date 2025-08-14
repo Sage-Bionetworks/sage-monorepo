@@ -3,7 +3,7 @@ package org.sagebionetworks.openchallenges.mcp.server;
 import io.micrometer.common.lang.Nullable;
 import java.util.List;
 import org.sagebionetworks.openchallenges.api.client.api.OrganizationApi;
-import org.sagebionetworks.openchallenges.api.client.model.ChallengeContributionRole;
+import org.sagebionetworks.openchallenges.api.client.model.ChallengeParticipationRole;
 import org.sagebionetworks.openchallenges.api.client.model.OrganizationCategory;
 import org.sagebionetworks.openchallenges.api.client.model.OrganizationDirection;
 import org.sagebionetworks.openchallenges.api.client.model.OrganizationSearchQuery;
@@ -46,8 +46,8 @@ public class OrganizationService {
       OrganizationCategory
     > categories,
     @ToolParam(
-      description = "Challenge contribution roles: challenge_organizer, data_contributor, sponsor"
-    ) @Nullable List<ChallengeContributionRole> challengeContributionRoles,
+      description = "Challenge participation roles: challenge_organizer, data_contributor, sponsor"
+    ) @Nullable List<ChallengeParticipationRole> challengeParticipationRoles,
     @ToolParam(
       description = "Sort field: challenge_count, created, name, relevance"
     ) @Nullable OrganizationSort sort,
@@ -61,7 +61,7 @@ public class OrganizationService {
     query.setPageNumber(pageNumber);
     query.setPageSize(pageSize);
     query.setCategories(categories);
-    query.setChallengeContributionRoles(challengeContributionRoles);
+    query.setChallengeParticipationRoles(challengeParticipationRoles);
     query.setSort(sort);
     query.setDirection(direction);
     query.setIds(ids);
