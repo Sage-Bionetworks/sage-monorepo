@@ -152,4 +152,24 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
       ),
     ).toBe('Abca7_V1599M_Plaque_Size_(Thio-S)_Hippocampus_Female');
   });
+
+  it('should generate boxplots zip filename correctly', async () => {
+    const { component } = await setup();
+    expect(
+      component.generateBoxplotsZipFilename(
+        'Cerebral Cortex',
+        ['Female', 'Male'],
+        'Abca7*V1599M',
+        'Pathology',
+      ),
+    ).toBe('Abca7_V1599M_Cerebral_Cortex_Female_Male_Pathology');
+    expect(
+      component.generateBoxplotsZipFilename(
+        'Cerebral Cortex',
+        ['Female', 'Male'],
+        'Abca7*V1599M',
+        'Biomarkers',
+      ),
+    ).toBe('Abca7_V1599M_Cerebral_Cortex_Female_Male_Biomarkers');
+  });
 });
