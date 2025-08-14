@@ -12,7 +12,20 @@ export class ComparisonToolTableLinkComponent {
   linkText = input<string>('');
   linkUrl = input<string>('');
 
-  isExternalLink() {
-    return isExternalLink(this.linkUrl());
+  get internalLinkUrl(): string {
+    const url = this.linkUrl().trim();
+
+    // Return URL as-is if it already starts with '/'
+    if (url.startsWith('/')) {
+      return url;
+    }
+
+    // Prepend '/' to make it a proper internal route
+    return `/${url}`;
+  }
+
+  isExternalLink(): boolean {
+    const url = this.linkUrl()?.trim();
+    return url ? isExternalLink(url) : false;
   }
 }

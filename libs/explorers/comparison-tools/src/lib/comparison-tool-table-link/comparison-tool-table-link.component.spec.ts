@@ -23,5 +23,16 @@ describe('ComparisonToolTableLinkComponent', () => {
     await setup(linkText, linkUrl);
     const link = screen.getByRole('link', { name: /My Link/i });
     expect(link).toBeInTheDocument();
+    expect(link).toHaveAttribute('href', linkUrl);
+  });
+
+  it('should render internal link without leading slash character with correct text and url', async () => {
+    const linkText = 'My Link';
+    const linkUrl = 'my-url';
+    const expectedLinkUrl = '/my-url';
+    await setup(linkText, linkUrl);
+    const link = screen.getByRole('link', { name: /My Link/i });
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveAttribute('href', expectedLinkUrl);
   });
 });
