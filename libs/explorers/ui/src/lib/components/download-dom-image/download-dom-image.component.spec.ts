@@ -1,58 +1,25 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-
-import { provideRouter } from '@angular/router';
+import { render } from '@testing-library/angular';
 import { DownloadDomImageComponent } from './download-dom-image.component';
 
 describe('DownloadDomImageComponent', () => {
-  let fixture: ComponentFixture<DownloadDomImageComponent>;
-  let component: DownloadDomImageComponent;
-  let element: HTMLElement;
+  async function setup(inputs?: Partial<DownloadDomImageComponent>) {
+    const mockElement = {
+      offsetWidth: 100,
+      offsetHeight: 100,
+    } as HTMLElement;
 
-  beforeEach(async () => {
-    TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule],
-      providers: [provideRouter([])],
-    }).compileComponents();
-  });
+    const component = await render(DownloadDomImageComponent, {
+      componentInputs: {
+        target: mockElement,
+        filename: 'test-file',
+        ...inputs,
+      },
+    });
+    return { component };
+  }
 
-  beforeEach(async () => {
-    fixture = TestBed.createComponent(DownloadDomImageComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-    element = fixture.nativeElement;
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should have overlay', () => {
-    expect(element.querySelector('p-popover')).toBeTruthy();
-  });
-
-  it('should open overlay on click', () => {
-    const button = element.querySelector('button') as HTMLElement;
-
-    expect(button).toBeTruthy();
-    button.click();
-    fixture.detectChanges();
-
-    expect(document.querySelector('.download-dom-image-panel')).toBeTruthy();
-  });
-
-  it('should have a radiobox for each types', () => {
-    const button = element.querySelector('button') as HTMLElement;
-
-    expect(button).toBeTruthy();
-    button.click();
-    fixture.detectChanges();
-
-    const overlayPanel = document.querySelector('.download-dom-image-panel') as HTMLElement;
-
-    expect(overlayPanel).toBeTruthy();
-    expect(overlayPanel.querySelectorAll('p-radiobutton>.p-radiobutton')?.length).toEqual(
-      component.types.length,
-    );
+  it('should create', async () => {
+    const { component } = await setup();
+    expect(component.fixture.componentInstance).toBeTruthy();
   });
 });

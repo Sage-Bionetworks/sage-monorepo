@@ -1,0 +1,43 @@
+<p-button
+  class="base-download-dom-image-action-button"
+  type="button"
+  rounded="true"
+  size="small"
+  (click)="op.toggle($event)"
+  [variant]="buttonLabel() ? 'text' : undefined"
+>
+  <fa-icon [icon]="downloadIcon"></fa-icon>
+  {{ buttonLabel() }}
+</p-button>
+<p-popover
+  #op
+  styleClass="base-download-dom-image-panel"
+  (rotate)="onRotate()"
+  (window:resize)="onResize()"
+>
+  <div class="base-download-dom-image-header">
+    {{ heading() }}
+  </div>
+  <div class="base-download-dom-image-body">
+    @for (type of types; track type) {
+      <div class="base-download-dom-image-option">
+        <p-radiobutton
+          value="{{ type.value }}"
+          inputId="download-radio-{{ type.label }}"
+          [(ngModel)]="selectedType"
+        ></p-radiobutton>
+        <label for="download-radio-{{ type.label }}">{{ type.label }}</label>
+      </div>
+    }
+    <div>
+      <p-button [label]="modalButtonLabel()" rounded="true" size="small" (click)="download()">
+        @if (isLoading()) {
+          <fa-icon [icon]="spinnerIcon" animation="spin"></fa-icon>
+        }
+      </p-button>
+      @if (error()) {
+        <div class="base-download-dom-image-error">{{ error() }}</div>
+      }
+    </div>
+  </div>
+</p-popover>
