@@ -233,10 +233,15 @@ class OpenAPICleanup {
     this.generateDependencyGraph();
 
     // Show summary at the end
+    const totalFiles = this.fileReferences.size;
+    const usedPercentage = totalFiles > 0 ? Math.round((usedFiles.length / totalFiles) * 100) : 0;
+    const unusedPercentage =
+      totalFiles > 0 ? Math.round((unusedFiles.length / totalFiles) * 100) : 0;
+
     console.log(`📊 Summary:`);
-    console.log(`   Total files: ${this.fileReferences.size}`);
-    console.log(`   Used files: ${usedFiles.length}`);
-    console.log(`   Unused files: ${unusedFiles.length}\n`);
+    console.log(`   Total files: ${totalFiles}`);
+    console.log(`   Used files: ${usedFiles.length} (${usedPercentage}%)`);
+    console.log(`   Unused files: ${unusedFiles.length} (${unusedPercentage}%)\n`);
   }
 
   /**
