@@ -25,16 +25,18 @@ dependencies {
 }
 
 jacocoCoverage {
-  classExcludes = listOf(
-    "org/sagebionetworks/openchallenges/image/service/model/dto/**",
-    "org/sagebionetworks/openchallenges/image/service/api/**",
-    "org/sagebionetworks/openchallenges/image/service/configuration/EnumConverterConfiguration*",
-    "org/sagebionetworks/openchallenges/image/service/configuration/HomeController*",
-    "org/sagebionetworks/openchallenges/image/service/configuration/SpringDocConfiguration*",
-    "org/sagebionetworks/openchallenges/image/service/RFC3339DateFormat*"
-  )
+  classExcludes =
+    listOf(
+      "org/sagebionetworks/openchallenges/image/service/model/dto/**",
+      "org/sagebionetworks/openchallenges/image/service/api/**",
+      "org/sagebionetworks/openchallenges/image/service/configuration/EnumConverterConfiguration*",
+      "org/sagebionetworks/openchallenges/image/service/configuration/HomeController*",
+      "org/sagebionetworks/openchallenges/image/service/configuration/SpringDocConfiguration*",
+      "org/sagebionetworks/openchallenges/image/service/RFC3339DateFormat*",
+    )
 
-  forceClassIncludes = listOf(
-    "org/sagebionetworks/openchallenges/image/service/api/*Impl.class"
-  )
+  forceClassIncludes =
+    listOf(
+      "org/sagebionetworks/openchallenges/image/service/api/*Impl.class",
+    )
 }

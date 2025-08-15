@@ -43,20 +43,22 @@ dependencies {
 }
 
 jacocoCoverage {
-  classExcludes = listOf(
-    "org/sagebionetworks/openchallenges/organization/service/model/dto/**",
-    "org/sagebionetworks/openchallenges/organization/service/api/**",
-    "org/sagebionetworks/openchallenges/organization/service/configuration/EnumConverterConfiguration*",
-    "org/sagebionetworks/openchallenges/organization/service/configuration/Flyway*",
-    "org/sagebionetworks/openchallenges/organization/service/configuration/HibernateSearch*",
-    "org/sagebionetworks/openchallenges/organization/service/configuration/HomeController*",
-    "org/sagebionetworks/openchallenges/organization/service/configuration/SpringDocConfiguration*",
-    "org/sagebionetworks/openchallenges/organization/service/RFC3339DateFormat*"
-  )
+  classExcludes =
+    listOf(
+      "org/sagebionetworks/openchallenges/organization/service/model/dto/**",
+      "org/sagebionetworks/openchallenges/organization/service/api/**",
+      "org/sagebionetworks/openchallenges/organization/service/configuration/EnumConverterConfiguration*",
+      "org/sagebionetworks/openchallenges/organization/service/configuration/Flyway*",
+      "org/sagebionetworks/openchallenges/organization/service/configuration/HibernateSearch*",
+      "org/sagebionetworks/openchallenges/organization/service/configuration/HomeController*",
+      "org/sagebionetworks/openchallenges/organization/service/configuration/SpringDocConfiguration*",
+      "org/sagebionetworks/openchallenges/organization/service/RFC3339DateFormat*",
+    )
 
-  forceClassIncludes = listOf(
-    "org/sagebionetworks/openchallenges/organization/service/api/*Impl.class"
-  )
+  forceClassIncludes =
+    listOf(
+      "org/sagebionetworks/openchallenges/organization/service/api/*Impl.class",
+    )
 }
 
 flyway {

@@ -1,13 +1,13 @@
 plugins {
-    id("sage.spring-boot-application")
-    id("sage.lombok")
-    id("org.graalvm.buildtools.native")
+  id("sage.spring-boot-application")
+  id("sage.lombok")
+  id("org.graalvm.buildtools.native")
 }
 
 dependencies {
-	implementation(libs.spring.ai.starter.mcp.server.webflux)
-	testImplementation(libs.spring.boot.starter.test)
-	testRuntimeOnly(libs.junit.platform.launcher)
+  implementation(libs.spring.ai.starter.mcp.server.webflux)
+  testImplementation(libs.spring.boot.starter.test)
+  testRuntimeOnly(libs.junit.platform.launcher)
   implementation(platform(libs.spring.boot.dependencies))
   implementation(project(":openchallenges-api-client-java"))
 }
@@ -16,10 +16,12 @@ graalvmNative {
   binaries {
     named("main") {
       // Enable GraalVM Toolchain detection
-      javaLauncher.set(javaToolchains.launcherFor {
-        languageVersion.set(JavaLanguageVersion.of(21))
-        vendor.set(JvmVendorSpec.matching("Oracle"))
-      })
+      javaLauncher.set(
+        javaToolchains.launcherFor {
+          languageVersion.set(JavaLanguageVersion.of(21))
+          vendor.set(JvmVendorSpec.matching("Oracle"))
+        },
+      )
 
       imageName.set(project.name)
       buildArgs.add("--static")
@@ -28,10 +30,12 @@ graalvmNative {
     }
     named("test") {
       // Enable GraalVM Toolchain detection
-      javaLauncher.set(javaToolchains.launcherFor {
-        languageVersion.set(JavaLanguageVersion.of(21))
-        vendor.set(JvmVendorSpec.matching("Oracle"))
-      })
+      javaLauncher.set(
+        javaToolchains.launcherFor {
+          languageVersion.set(JavaLanguageVersion.of(21))
+          vendor.set(JvmVendorSpec.matching("Oracle"))
+        },
+      )
 
       buildArgs.add("-O0")
     }
