@@ -53,7 +53,7 @@
   "python.analysis.typeCheckingMode": "basic",
   "python.terminal.activateEnvInCurrentTerminal": false,
   "[python]": {
-    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.defaultFormatter": "charliermarsh.ruff",
     "editor.tabSize": 4
   },
   "sqltools.autoOpenSessionFiles": false,
