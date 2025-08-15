@@ -45,7 +45,6 @@ package-mode = false
 
 [dependency-groups]
 dev = [
-  "black==24.8.0",
   "sqlfluff==3.2.0",
   "ruff==0.12.9",
   "autopep8>=2.3.1",
