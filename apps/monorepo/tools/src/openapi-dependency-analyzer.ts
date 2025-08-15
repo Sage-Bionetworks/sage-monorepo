@@ -1,15 +1,10 @@
 // Handle EPIPE errors gracefully (e.g., when output is piped to head or grep)
-<<<<<<< HEAD
 process.stdout.on('error', (error: NodeJS.ErrnoException) => {
-=======
-process.stdout.on('error', (error) => {
->>>>>>> b1decf88e (chore: squash merge openchallenges/clean-api-description)
   if (error.code === 'EPIPE') {
     process.exit(0);
   }
 });
 
-<<<<<<< HEAD
 process.stderr.on('error', (error: NodeJS.ErrnoException) => {
   if (error.code === 'EPIPE') {
     process.exit(0);
@@ -24,8 +19,6 @@ process.on('uncaughtException', (error: NodeJS.ErrnoException) => {
   throw error;
 });
 
-=======
->>>>>>> b1decf88e (chore: squash merge openchallenges/clean-api-description)
 import * as fs from 'fs';
 import * as path from 'path';
 import { parse } from 'yaml';
