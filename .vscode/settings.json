@@ -56,12 +56,6 @@
     "editor.defaultFormatter": "ms-python.black-formatter",
     "editor.tabSize": 4
   },
-  "[kotlin]": {
-    "editor.defaultFormatter": "fwcd.kotlin"
-  },
-  "[kotlinscript]": {
-    "editor.defaultFormatter": "fwcd.kotlin"
-  },
   "sqltools.autoOpenSessionFiles": false,
   "sqltools.connections": [
     {
