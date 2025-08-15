@@ -203,6 +203,7 @@
       "extensions": [
         "alefragnani.Bookmarks",
         "Angular.ng-template",
+        "charliermarsh.ruff",
         "dbaeumer.vscode-eslint",
         "eamodio.gitlens",
         "emeraldwalk.RunOnSave",
@@ -216,7 +217,6 @@
         "mhutchie.git-graph",
         "mongodb.mongodb-vscode",
         "ms-playwright.playwright",
-        "ms-python.black-formatter",
         "ms-python.python",
         "ms-toolsai.jupyter",
         "mtxr.sqltools-driver-mysql",
