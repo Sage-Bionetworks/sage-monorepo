@@ -57,14 +57,10 @@
     "editor.tabSize": 4
   },
   "[kotlin]": {
-    "editor.defaultFormatter": "fwcd.kotlin",
-    "editor.formatOnSave": true,
-    "editor.tabSize": 4
+    "editor.defaultFormatter": "fwcd.kotlin"
   },
   "[kotlinscript]": {
-    "editor.defaultFormatter": "fwcd.kotlin",
-    "editor.formatOnSave": true,
-    "editor.tabSize": 4
+    "editor.defaultFormatter": "fwcd.kotlin"
   },
   "sqltools.autoOpenSessionFiles": false,
   "sqltools.connections": [
