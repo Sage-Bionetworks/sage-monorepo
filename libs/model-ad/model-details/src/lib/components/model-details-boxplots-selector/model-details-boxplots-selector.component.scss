@@ -53,9 +53,15 @@
   z-index: 10;
   background-color: white;
 
-  h2 {
+  .table-of-contents-title-bar {
     padding: 20px 0 25px;
-    margin-bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h2 {
+      margin-bottom: 0;
+    }
   }
 
   .table-of-contents {

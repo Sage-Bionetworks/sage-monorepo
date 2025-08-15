@@ -40,7 +40,20 @@
   </div>
 
   <div class="table-of-contents-container full-width-container">
-    <h2>Table of Contents</h2>
+    <div class="table-of-contents-title-bar">
+      <h2>Table of Contents</h2>
+      <explorers-download-dom-images-zip
+        [domFiles]="domFiles()"
+        [filename]="
+          generateBoxplotsZipFilename(
+            selectedTissueOption(),
+            selectedSexOption().value,
+            modelName(),
+            title()
+          )
+        "
+      />
+    </div>
     <ul class="table-of-contents">
       @for (evidenceType of evidenceTypes(); track evidenceType) {
         <li>
@@ -74,7 +87,7 @@
             </button>
           </div>
           <explorers-download-dom-image
-            [target]="getBoxplotsHTMLElement(evidenceType)"
+            [target]="getBoxplotsGridTargetByEvidenceType(evidenceType)"
             buttonLabel="Download"
             [filename]="
               generateBoxplotsFilename(
@@ -88,7 +101,6 @@
         </div>
 
         <model-ad-model-details-boxplots-grid
-          [id]="generateBoxplotsHtmlElementId(evidenceType)"
           [modelDataList]="getSelectedModelDataForEvidenceType(evidenceType)"
           [genotypeOrder]="genotypeOrder()"
           [sexes]="selectedSexOption().value"

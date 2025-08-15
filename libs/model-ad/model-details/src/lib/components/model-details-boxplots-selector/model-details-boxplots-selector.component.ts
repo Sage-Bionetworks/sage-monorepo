@@ -9,12 +9,16 @@ import {
   input,
   OnInit,
   signal,
-  ViewChild,
+  viewChild,
+  viewChildren,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { HelperService } from '@sagebionetworks/explorers/services';
-import { DownloadDomImageComponent } from '@sagebionetworks/explorers/ui';
+import {
+  DownloadDomImageComponent,
+  DownloadDomImagesZipComponent,
+} from '@sagebionetworks/explorers/ui';
 import {
   DecodeGreekEntityPipe,
   ModalLinkComponent,
@@ -34,6 +38,7 @@ import { ModelDetailsBoxplotsGridComponent } from '../model-details-boxplots-gri
     SvgIconComponent,
     DecodeGreekEntityPipe,
     DownloadDomImageComponent,
+    DownloadDomImagesZipComponent,
   ],
   templateUrl: './model-details-boxplots-selector.component.html',
   styleUrls: ['./model-details-boxplots-selector.component.scss'],
@@ -42,7 +47,8 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
   private readonly helperService = inject(HelperService);
   private readonly location = inject(Location);
 
-  @ViewChild('boxplotsContainer', { static: false }) boxplotsContainer!: ElementRef<HTMLElement>;
+  boxplotsContainer = viewChild('boxplotsContainer', { read: ElementRef });
+  boxplotGrids = viewChildren(ModelDetailsBoxplotsGridComponent, { read: ElementRef });
 
   title = input.required<string>();
   modelName = input.required<string>();
@@ -120,6 +126,27 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
   evidenceTypes = computed(() => {
     return Array.from(new Set(this.selectedModelDataList().map((item) => item.evidence_type)));
   });
+
+  domFiles = computed(() => {
+    if (this.boxplotGrids().length === 0) return [];
+
+    return this.evidenceTypes().map((evidenceType: string, index: number) => {
+      return {
+        target: this.boxplotGrids()[index].nativeElement,
+        filename: this.generateBoxplotsFilename(
+          evidenceType,
+          this.selectedTissueOption(),
+          this.selectedSexOption().value,
+          this.modelName(),
+        ),
+      };
+    });
+  });
+
+  getBoxplotsGridTargetByEvidenceType(evidenceType: string) {
+    const index = this.evidenceTypes().indexOf(evidenceType);
+    return this.domFiles()[index].target;
+  }
 
   getSelectedModelDataForEvidenceType(evidenceType: string) {
     return this.selectedModelDataList().filter(
@@ -208,14 +235,9 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
   }
 
   scrollToSection(anchorId: string, updateUrl = true): boolean {
-    if (
-      typeof document !== 'undefined' &&
-      typeof window !== 'undefined' &&
-      this.boxplotsContainer
-    ) {
-      const element = this.boxplotsContainer.nativeElement.querySelector(
-        `#${anchorId}`,
-      ) as HTMLElement;
+    const container = this.boxplotsContainer();
+    if (typeof document !== 'undefined' && typeof window !== 'undefined' && container) {
+      const element = container.nativeElement.querySelector(`#${anchorId}`) as HTMLElement;
 
       if (element) {
         const tocElement = document.querySelector('.table-of-contents-container');
@@ -243,19 +265,18 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
     return text.replace(htmlEntityRegex, '$1');
   }
 
-  generateBoxplotsFilename(evidenceType: string, tissue: string, sex: string[], modelName: string) {
+  cleanFilename(filename: string) {
     const invalidFilenameCharsRegex = /[<>:"\\/|?*]/g;
+    return filename.replace(invalidFilenameCharsRegex, '_').replace(/ /g, '_');
+  }
+
+  generateBoxplotsZipFilename(tissue: string, sex: string[], modelName: string, title: string) {
+    const filename = `${modelName}_${tissue}_${sex.join('_')}_${title}`;
+    return this.cleanFilename(filename);
+  }
+
+  generateBoxplotsFilename(evidenceType: string, tissue: string, sex: string[], modelName: string) {
     const filename = `${modelName}_${this.decodeHtmlEntities(evidenceType)}_${tissue}_${sex.join('_')}`;
-    const cleanFilename = filename.replace(invalidFilenameCharsRegex, '_').replace(/ /g, '_');
-    return cleanFilename;
-  }
-
-  generateBoxplotsHtmlElementId(evidenceType: string): string {
-    return `${this.generateAnchorId(evidenceType)}-boxplots-grid`;
-  }
-
-  getBoxplotsHTMLElement(evidenceType: string) {
-    const id = this.generateBoxplotsHtmlElementId(evidenceType);
-    return document.getElementById(id) as HTMLElement;
+    return this.cleanFilename(filename);
   }
 }
