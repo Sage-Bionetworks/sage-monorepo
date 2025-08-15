@@ -28,6 +28,8 @@ checkpoints_flant5_3b
 *.pkl
 *.csv
 src/tests/state_of_the_union.txt
+!src/data/dummy_elo_results.pkl
+!src/data/dummy_leaderboard_table.csv
 
 # Build
 build
