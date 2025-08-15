@@ -47,10 +47,10 @@ package-mode = false
 dev = [
   "black==24.8.0",
   "sqlfluff==3.2.0",
-  "ruff>=0.8.2",
+  "ruff==0.12.9",
   "autopep8>=2.3.1",
   "pytest>=8.3.4",
   "pytest-sugar>=1.0.0",
   "pytest-cov>=6.0.0",
-  "pytest-html>=4.1.1"
+  "pytest-html>=4.1.1",
 ]
