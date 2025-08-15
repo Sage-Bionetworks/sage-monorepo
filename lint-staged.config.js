@@ -21,8 +21,8 @@ module.exports = {
   ],
 
   '**/*.py': (filenames) => [
-    // Format files with Black
-    `uv run black ${filenames.join(' ')}`,
+    // Format files with Ruff
+    `uv run ruff format ${filenames.join(' ')}`,
     // Lint the projects affected by the staged files
     `nx affected --target=lint --files=${filenames.join(',')}`,
     // Type check the projects affected by the staged files
