@@ -13,16 +13,18 @@ from tqdm import tqdm
 
 
 NUM_SERVERS = 14
-LOG_ROOT_DIR = "~/fastchat_logs"
+LOG_ROOT_DIR = "src/logs"
 
 
 def get_log_files(max_num_files=None):
     log_root = os.path.expanduser(LOG_ROOT_DIR)
     filenames = []
-    for i in range(NUM_SERVERS):
-        for filename in os.listdir(f"{log_root}/server{i}"):
+
+    # look directly in lLOG_ROOT_DIR (no server subdirectories)
+    if os.path.exists(log_root):
+        for filename in os.listdir(log_root):
             if filename.endswith("-conv.json"):
-                filepath = f"{log_root}/server{i}/{filename}"
+                filepath = f"{log_root}/{filename}"
                 name_tstamp_tuple = (filepath, os.path.getmtime(filepath))
                 filenames.append(name_tstamp_tuple)
     # sort by tstamp

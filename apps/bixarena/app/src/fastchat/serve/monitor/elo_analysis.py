@@ -337,6 +337,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--rating-system", type=str, choices=["bt", "elo"], default="bt"
     )
+    parser.add_argument("--exclude-model-names", type=str, nargs="+")
     parser.add_argument("--exclude-tie", action="store_true", default=False)
     args = parser.parse_args()
 
@@ -348,7 +349,7 @@ if __name__ == "__main__":
     else:
         # Read data from all log files
         log_files = get_log_files(args.max_num_files)
-        battles = clean_battle_data(log_files)
+        battles = clean_battle_data(log_files, args.exclude_model_names)
 
     results = report_elo_analysis_results(
         battles, rating_system=args.rating_system, num_bootstrap=args.num_bootstrap
