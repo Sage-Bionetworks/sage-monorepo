@@ -29,7 +29,7 @@ module.exports = {
     `nx affected --target=type-check --files=${filenames.join(',')}`,
   ],
 
-  '**/*.kts': (filenames) => [
+  '**/*.{kt,kts}': (filenames) => [
     // Format files with ktlint
     `ktlint --format ${filenames.join(' ')}`,
   ],
