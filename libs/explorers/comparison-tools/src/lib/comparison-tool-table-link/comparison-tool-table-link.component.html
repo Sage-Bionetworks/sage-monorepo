@@ -5,7 +5,7 @@
         >{{ linkText() }} <i class="pi pi-external-link"></i
       ></a>
     } @else {
-      <a routerLink="{{ internalLinkUrl }}">{{ linkText() }} <i class="pi pi-external-link"></i></a>
+      <a [routerLink]="internalLinkUrl()">{{ linkText() }} <i class="pi pi-external-link"></i></a>
     }
   </div>
 }

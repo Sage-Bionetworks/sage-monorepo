@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { isExternalLink } from '@sagebionetworks/shared/util';
 
@@ -12,7 +12,7 @@ export class ComparisonToolTableLinkComponent {
   linkText = input<string>('');
   linkUrl = input<string>('');
 
-  get internalLinkUrl(): string {
+  internalLinkUrl = computed(() => {
     const url = this.linkUrl().trim();
 
     // Return URL as-is if it already starts with '/'
@@ -22,10 +22,10 @@ export class ComparisonToolTableLinkComponent {
 
     // Prepend '/' to make it a proper internal route
     return `/${url}`;
-  }
+  });
 
   isExternalLink(): boolean {
-    const url = this.linkUrl()?.trim();
+    const url = this.linkUrl();
     return url ? isExternalLink(url) : false;
   }
 }
