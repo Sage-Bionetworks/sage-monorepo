@@ -90,7 +90,7 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
     const { component } = await setup(
       {
         ...modelMock,
-        model: 'ModelName',
+        model: 'ModelName (Some Qualifier)',
         matched_controls: ['Control1', 'Control2'],
         pathology: mockModelDataList,
       },
