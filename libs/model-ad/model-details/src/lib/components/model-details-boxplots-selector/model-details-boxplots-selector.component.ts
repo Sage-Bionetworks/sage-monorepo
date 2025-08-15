@@ -98,7 +98,13 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
   });
 
   genotypeOrder = computed(() => {
-    const baseGenotypes = new Set([...this.modelControls(), this.modelName()]);
+    // MG-331: ensure that model name aligns with genotype values
+    // For example, model name "5xFAD (UCI)" should match genotype values "5xFAD"
+    const modelNameWithoutParentheticalQualifier = this.modelName().replace(/\s\([^)]*\)$/, '');
+    const baseGenotypes = new Set([
+      ...this.modelControls(),
+      modelNameWithoutParentheticalQualifier,
+    ]);
     const extraGenotypes = [
       ...new Set(
         this.selectedModelDataList().flatMap((modelData) =>
