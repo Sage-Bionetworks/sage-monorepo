@@ -1,5 +1,0 @@
-type: object
-description: A challenge sponsor
-allOf:
-  - $ref: ChallengeSponsorCreateResponse.yaml
-  - $ref: ChallengeSponsorCreateRequest.yaml

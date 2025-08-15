@@ -1,6 +1,0 @@
-description: The role of the challenge organizer
-type: string
-enum:
-  - ChallengeLead
-  - InfrastructureLead
-example: ChallengeLead

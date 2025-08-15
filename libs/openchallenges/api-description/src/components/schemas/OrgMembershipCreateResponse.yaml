@@ -1,9 +1,0 @@
-type: object
-description: The unique identifier of the org membership
-properties:
-  id:
-    $ref: OrgMembershipId.yaml
-required:
-  - id
-example:
-  id: 507f1f77bcf86cd799439011

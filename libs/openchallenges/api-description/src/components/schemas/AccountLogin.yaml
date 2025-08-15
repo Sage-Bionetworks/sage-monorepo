@@ -1,6 +1,0 @@
-description: The user or organization account name
-type: string
-minLength: 3
-maxLength: 25
-pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
-example: awesome-user

@@ -1,7 +1,0 @@
-operationId: deleteChallengePlatform
-description: >
-  The `id` value returned in the response can be used as the
-  `challengePlatformId` parameter in `DELETE
-  /challengePlatforms/{challengePlatformId}`
-parameters:
-  challengePlatformId: $response.body#/challengePlatformId

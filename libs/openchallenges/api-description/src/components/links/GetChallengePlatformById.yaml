@@ -1,7 +1,0 @@
-operationId: getChallengePlatform
-description: >
-  The `id` value returned in the response can be used as the
-  `challengePlatformId` parameter in `GET
-  /challengePlatforms/{challengePlatformId}`
-parameters:
-  challengePlatformId: $response.body#/challengeId

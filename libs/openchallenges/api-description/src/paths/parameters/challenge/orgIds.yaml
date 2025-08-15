@@ -1,8 +1,0 @@
-name: orgIds
-description: Array of organization ids used to filter the results
-in: query
-required: false
-schema:
-  type: array
-  items:
-    $ref: ../../../components/schemas/OrgId.yaml

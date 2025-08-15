@@ -1,5 +1,0 @@
-type: object
-description: Information about an org membership
-allOf:
-  - $ref: OrgMembershipCreateResponse.yaml
-  - $ref: OrgMembershipCreateRequest.yaml
