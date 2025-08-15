@@ -2,7 +2,9 @@ import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ConfigService } from '@sagebionetworks/agora/config';
 import { MetaTagService } from '@sagebionetworks/agora/services';
-import { FooterComponent, HeaderComponent } from '@sagebionetworks/agora/ui';
+import { HeaderComponent } from '@sagebionetworks/agora/ui';
+import { FooterComponent } from '@sagebionetworks/explorers/ui';
+import { footerLinks } from '@sagebionetworks/agora/util';
 import {
   CONFIG_SERVICE_TOKEN,
   GoogleTagManagerComponent,
@@ -29,6 +31,10 @@ export class AppComponent {
   configService = inject(ConfigService);
 
   readonly useGoogleTagManager: boolean;
+
+  dataVersion = '';
+
+  footerLinks = footerLinks;
 
   constructor() {
     this.metaTagService.updateMetaTags();
