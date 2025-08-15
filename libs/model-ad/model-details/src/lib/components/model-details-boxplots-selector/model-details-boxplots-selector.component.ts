@@ -99,7 +99,9 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
 
   genotypeOrder = computed(() => {
     // MG-331: ensure that model name aligns with genotype values
-    // For example, model name "5xFAD (UCI)" should match genotype values "5xFAD"
+    // to prevent adding additional boxplot x-axis labels
+    // For example, model name "5xFAD (UCI)" should match genotype values "5xFAD",
+    // so boxplot only shows "5xFAD" x-axis label rather than "FxFAD" and "FxFAD (UCI)" labels
     const modelNameWithoutParentheticalQualifier = this.modelName().replace(/\s\([^)]*\)$/, '');
     const baseGenotypes = new Set([
       ...this.modelControls(),
