@@ -1,0 +1,7 @@
+name: leaderboardModelHistoryQuery
+description: The query used to filter and paginate historical model performance data.
+in: query
+style: deepObject
+explode: true
+schema:
+  $ref: ../../schemas/LeaderboardModelHistoryQuery.yaml

@@ -1,0 +1,24 @@
+type: object
+description: A page of leaderboard entries.
+allOf:
+  - $ref: PageMetadata.yaml
+  - type: object
+    properties:
+      lastUpdated:
+        type: string
+        format: date-time
+        description: When this leaderboard was last updated
+        example: '2025-08-16T14:30:00Z'
+      snapshotId:
+        type: string
+        description: Identifier for this snapshot/timepoint
+        example: 'snapshot_2025-08-16_14-30'
+      entries:
+        description: A list of leaderboard entries.
+        type: array
+        items:
+          $ref: LeaderboardEntry.yaml
+    required:
+      - lastUpdated
+      - snapshotId
+      - entries

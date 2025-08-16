@@ -1,0 +1,34 @@
+type: object
+description: A query for retrieving historical leaderboard data for a model.
+properties:
+  pageNumber:
+    description: The page number.
+    type: integer
+    format: int32
+    default: 0
+    minimum: 0
+    example: 0
+  pageSize:
+    description: The number of items in a single page.
+    type: integer
+    format: int32
+    default: 100
+    minimum: 1
+    maximum: 1000
+    example: 50
+  sort:
+    $ref: LeaderboardHistorySort.yaml
+  direction:
+    $ref: SortDirection.yaml
+  fromDate:
+    description: Include only entries created on or after this date.
+    type: string
+    format: date
+    nullable: true
+    example: '2025-08-01'
+  toDate:
+    description: Include only entries created on or before this date.
+    type: string
+    format: date
+    nullable: true
+    example: '2025-08-16'

@@ -1,0 +1,8 @@
+type: string
+description: The field to sort historical entries by.
+enum:
+  - created_at
+  - bt_score
+  - rank
+default: created_at
+example: created_at

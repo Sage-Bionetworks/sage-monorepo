@@ -1,0 +1,13 @@
+type: object
+description: A page of leaderboard snapshots.
+allOf:
+  - $ref: PageMetadata.yaml
+  - type: object
+    properties:
+      snapshots:
+        description: A list of leaderboard snapshots.
+        type: array
+        items:
+          $ref: LeaderboardSnapshot.yaml
+    required:
+      - snapshots

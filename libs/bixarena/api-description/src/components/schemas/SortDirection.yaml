@@ -1,0 +1,7 @@
+type: string
+description: The direction to sort results.
+enum:
+  - asc
+  - desc
+default: asc
+example: desc

@@ -15,6 +15,8 @@ apis:
     root: libs/amp-als/api-description/openapi/openapi.yaml
   agora-api-description:
     root: libs/agora/api-description/openapi/openapi.yaml
+  bixarena-api-description:
+    root: libs/bixarena/api-description/openapi/openapi.yaml
   model-ad-api-description:
     root: libs/model-ad/api-description/openapi/openapi.yaml
   openchallenges-api-description:
