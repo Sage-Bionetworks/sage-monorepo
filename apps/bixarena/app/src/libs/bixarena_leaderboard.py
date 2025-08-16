@@ -40,7 +40,7 @@ def create_dummy_leaderboard_data():
             987.6,
             954.1,
         ],
-        "95% CI (±)": [
+        "95% CI": [
             "[1441.8, 1470.6]",
             "[1384.2, 1413.1]",
             "[1352.6, 1381.5]",
@@ -164,10 +164,9 @@ def build_leaderboard_page():
                 "Rank",
                 "Model",
                 "BT Score",
-                "95% CI (±)",
+                "95% CI",
                 "Total Votes",
                 "Organization",
-                "License",
             ],
         )
 
