@@ -1,0 +1,28 @@
+{
+  "$schema": "../../../node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "7.14.0",
+    "generators": {
+      "bixarena-api": {
+        "generatorName": "spring",
+        "inputSpec": "#{cwd}/../../../libs/bixarena/api-description/openapi/api-service.openapi.yaml",
+        "output": "#{cwd}",
+        "additionalProperties": {
+          "apiPackage": "org.sagebionetworks.bixarena.api.api",
+          "basePackage": "org.sagebionetworks.bixarena.api",
+          "configPackage": "org.sagebionetworks.bixarena.api.configuration",
+          "delegatePattern": true,
+          "hideGenerationTimestamp": true,
+          "library": "spring-boot",
+          "modelNameSuffix": "Dto",
+          "modelPackage": "org.sagebionetworks.bixarena.api.model.dto",
+          "useTags": true,
+          "openApiNullable": false,
+          "useSpringBoot3": true,
+          "generateBuilders": true
+        }
+      }
+    }
+  }
+}
