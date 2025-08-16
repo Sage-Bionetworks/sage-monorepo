@@ -77,7 +77,7 @@ def build_cta_section():
             </div>
             """)
 
-    # Start Evaluating Button
+    # Button will take to the battle page
     with gr.Row():
         with gr.Column(scale=2):
             pass

@@ -47,7 +47,6 @@
         "command": "docker/bixarena/serve-detach.sh {projectName}"
       }
     },
-
     "serve-demo": {
       "executor": "nx:run-commands",
       "options": {
