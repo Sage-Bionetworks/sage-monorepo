@@ -46,7 +46,7 @@
       "options": {
         "commands": [
           "envsubst < model_config.template.json > model_config.json",
-          "uv run python -m app --port ${APP_PORT} --controller-url '' --register-api-endpoint-file model_config.json"
+          "uv run python -m main --port ${APP_PORT} --controller-url '' --register-api-endpoint-file model_config.json"
         ],
         "cwd": "{projectRoot}",
         "parallel": false
