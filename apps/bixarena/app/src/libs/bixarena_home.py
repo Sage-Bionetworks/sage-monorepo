@@ -7,7 +7,7 @@ def create_intro_section():
     with gr.Row():
         with gr.Column():
             gr.HTML("""
-            <div style="text-align: center; padding: 60px 20px;">
+            <div style="text-align: center; padding: 45px 20px;">
                 <h1 style="font-size: 3rem; margin-bottom: 30px; color: white;">
                     Welcome to BixArena
                 </h1>
@@ -98,17 +98,11 @@ def build_home_page():
         # Add some spacing after header
         gr.HTML("<br>")
 
-        # Hero Section
+        # Intro Section
         create_intro_section()
-
-        # Spacing
-        gr.HTML("<br>")
 
         # Stats Section
         build_stats_section()
-
-        # Spacing
-        gr.HTML("<br><br>")
 
         # Call to Action Section
         start_btn = build_cta_section()
