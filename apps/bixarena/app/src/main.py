@@ -1,3 +1,4 @@
+import argparse
 import gradio as gr
 from libs.bixarena_header import build_header
 from libs.bixarena_battle import build_battle_page
@@ -17,8 +18,17 @@ class PageNavigator:
         return [gr.Column(visible=(i == page_index)) for i in range(len(self.sections))]
 
 
-def create_bixarena_app():
-    """Create the main BixArena application with clean navigation"""
+def parse_args():
+    """Parse command line arguments"""
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--host", type=str, default="localhost")
+    parser.add_argument("--port", type=int)
+
+    return parser.parse_args()
+
+
+def build_app():
+    """Create the main application"""
 
     with gr.Blocks(title="BixArena - Biomedical LLM Evaluation") as app:
         # Header
@@ -59,7 +69,9 @@ def create_bixarena_app():
     return app
 
 
-# Create and launch the app
+# Launch the app
 if __name__ == "__main__":
-    app = create_bixarena_app()
-    app.launch()
+    args = parse_args()
+
+    app = build_app()
+    app.launch(server_port=args.port)

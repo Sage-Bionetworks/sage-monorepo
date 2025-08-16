@@ -30,7 +30,7 @@
         "cwd": "{projectRoot}"
       }
     },
-    "serve2": {
+    "serve": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
@@ -41,21 +41,19 @@
         "parallel": false
       }
     },
-    "serve": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": [
-          "envsubst < model_config.template.json > model_config.json",
-          "uv run python -m main --port ${APP_PORT} --controller-url '' --register-api-endpoint-file model_config.json"
-        ],
-        "cwd": "{projectRoot}",
-        "parallel": false
-      }
-    },
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
         "command": "docker/bixarena/serve-detach.sh {projectName}"
+      }
+    },
+
+    "serve-demo": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "uv run python -m main --port ${APP_PORT}",
+        "cwd": "{projectRoot}",
+        "parallel": false
       }
     },
     "scan-image": {
