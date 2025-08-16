@@ -9,7 +9,7 @@ spring:
     name: bixarena-api
   datasource:
     url: jdbc:postgresql://bixarena-postgres:21000/bixarena
-    username: bixarena
+    username: postgres
     password: changeme
     driver-class-name: org.postgresql.Driver
   flyway:

@@ -14,8 +14,6 @@ plugins {
 dependencies {
   implementation(libs.findbugs.jsr305)
   implementation(libs.flyway.core)
-  implementation(libs.hibernate.search.backend.elasticsearch)
-  implementation(libs.hibernate.search.mapper.orm)
   implementation(libs.jackson.databind)
   implementation(libs.jackson.dataformat.yaml)
   implementation(libs.jackson.datatype.jsr310)
@@ -27,7 +25,7 @@ dependencies {
   implementation(libs.spring.boot.starter.web)
   implementation(libs.springdoc.openapi.ui)
   implementation(platform(libs.spring.boot.dependencies))
-  implementation(project(":sagebionetworks-util"))
+  // implementation(project(":sagebionetworks-util"))
   runtimeOnly(libs.flyway.database.postgresql)
   runtimeOnly(libs.postgresql)
   runtimeOnly(libs.spring.boot.devtools)
