@@ -1,0 +1,24 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: BixArena API
+  license:
+    name: Apache 2.0
+    url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
+  contact:
+    name: Support
+    url: https://github.com/Sage-Bionetworks/sage-monorepo
+servers:
+  - url: http://localhost/v1
+tags:
+  - name: Leaderboard
+    description: Operations about leaderboards.
+paths:
+  /leaderboards:
+    $ref: paths/leaderboards.yaml
+  /leaderboards/{leaderboardId}:
+    $ref: paths/leaderboards@{leaderboardId}.yaml
+  /leaderboards/{leaderboardId}/history/{modelId}:
+    $ref: paths/leaderboards@{leaderboardId}@history@{modelId}.yaml
+  /leaderboards/{leaderboardId}/snapshots:
+    $ref: paths/leaderboards@{leaderboardId}@snapshots.yaml

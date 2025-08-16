@@ -1,0 +1,23 @@
+type: object
+description: A page of historical leaderboard entries for a specific model.
+allOf:
+  - $ref: PageMetadata.yaml
+  - type: object
+    properties:
+      modelId:
+        type: string
+        description: Identifier for the model
+        example: 'model_456'
+      modelName:
+        type: string
+        description: Display name of the model
+        example: 'GPT-4o'
+      history:
+        description: A list of historical leaderboard entries.
+        type: array
+        items:
+          $ref: HistoricalLeaderboardEntry.yaml
+    required:
+      - modelId
+      - modelName
+      - history
