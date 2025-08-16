@@ -10,7 +10,7 @@ import org.springframework.context.annotation.FullyQualifiedAnnotationBeanNameGe
 
 @SpringBootApplication(nameGenerator = FullyQualifiedAnnotationBeanNameGenerator.class)
 @ComponentScan(
-  basePackages = { "org.sagebionetworks.bixarena.api" },
+  basePackages = { "org.sagebionetworks.bixarena.api", "org.sagebionetworks.bixarena.api.api" },
   nameGenerator = FullyQualifiedAnnotationBeanNameGenerator.class
 )
 public class BixArenaApiApplication implements CommandLineRunner {
