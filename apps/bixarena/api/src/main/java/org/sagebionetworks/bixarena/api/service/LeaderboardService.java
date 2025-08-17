@@ -112,7 +112,7 @@ public class LeaderboardService {
         .filter(s -> s.getSnapshotIdentifier().equals(snapshotId))
         .findFirst()
         .orElseThrow(() ->
-          new LeaderboardSnapshotNotFoundException("Snapshot not found: " + snapshotId)
+          new LeaderboardSnapshotNotFoundException("Leaderboard Snapshot not found: " + snapshotId)
         );
     } else {
       // Get latest snapshot
