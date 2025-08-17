@@ -29,11 +29,10 @@ public interface LeaderboardSnapshotRepository
 
   @Query(
     "SELECT s.id as id, s.snapshotIdentifier as snapshotIdentifier, s.description as description, " +
-    "s.createdAt as createdAt, COUNT(e) as entryCount " +
+    "s.createdAt as createdAt, " +
+    "(SELECT COUNT(e) FROM LeaderboardEntryEntity e WHERE e.snapshot = s) as entryCount " +
     "FROM LeaderboardSnapshotEntity s " +
-    "LEFT JOIN LeaderboardEntryEntity e ON e.snapshot = s " +
     "WHERE s.leaderboard = :leaderboard " +
-    "GROUP BY s.id, s.snapshotIdentifier, s.description, s.createdAt " +
     "ORDER BY s.createdAt DESC"
   )
   Page<SnapshotWithEntryCount> findSnapshotsWithEntryCountByLeaderboard(
