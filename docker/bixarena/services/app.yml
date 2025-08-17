@@ -12,3 +12,5 @@ services:
     depends_on:
       bixarena-postgres:
         condition: service_healthy
+      bixarena-api:
+        condition: service_started
