@@ -32,7 +32,7 @@ public class ListLeaderboards200ResponseInnerDto {
   private String description;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-  private OffsetDateTime lastUpdated;
+  private OffsetDateTime updatedAt;
 
   public ListLeaderboards200ResponseInnerDto() {
     super();
@@ -41,11 +41,11 @@ public class ListLeaderboards200ResponseInnerDto {
   /**
    * Constructor with only required parameters
    */
-  public ListLeaderboards200ResponseInnerDto(String id, String name, String description, OffsetDateTime lastUpdated) {
+  public ListLeaderboards200ResponseInnerDto(String id, String name, String description, OffsetDateTime updatedAt) {
     this.id = id;
     this.name = name;
     this.description = description;
-    this.lastUpdated = lastUpdated;
+    this.updatedAt = updatedAt;
   }
 
   public ListLeaderboards200ResponseInnerDto id(String id) {
@@ -108,24 +108,24 @@ public class ListLeaderboards200ResponseInnerDto {
     this.description = description;
   }
 
-  public ListLeaderboards200ResponseInnerDto lastUpdated(OffsetDateTime lastUpdated) {
-    this.lastUpdated = lastUpdated;
+  public ListLeaderboards200ResponseInnerDto updatedAt(OffsetDateTime updatedAt) {
+    this.updatedAt = updatedAt;
     return this;
   }
 
   /**
    * When this leaderboard was last updated
-   * @return lastUpdated
+   * @return updatedAt
    */
   @NotNull @Valid 
-  @Schema(name = "lastUpdated", example = "2025-08-16T14:30Z", description = "When this leaderboard was last updated", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("lastUpdated")
-  public OffsetDateTime getLastUpdated() {
-    return lastUpdated;
+  @Schema(name = "updatedAt", example = "2025-08-16T14:30Z", description = "When this leaderboard was last updated", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("updatedAt")
+  public OffsetDateTime getUpdatedAt() {
+    return updatedAt;
   }
 
-  public void setLastUpdated(OffsetDateTime lastUpdated) {
-    this.lastUpdated = lastUpdated;
+  public void setUpdatedAt(OffsetDateTime updatedAt) {
+    this.updatedAt = updatedAt;
   }
 
   @Override
@@ -140,12 +140,12 @@ public class ListLeaderboards200ResponseInnerDto {
     return Objects.equals(this.id, listLeaderboards200ResponseInner.id) &&
         Objects.equals(this.name, listLeaderboards200ResponseInner.name) &&
         Objects.equals(this.description, listLeaderboards200ResponseInner.description) &&
-        Objects.equals(this.lastUpdated, listLeaderboards200ResponseInner.lastUpdated);
+        Objects.equals(this.updatedAt, listLeaderboards200ResponseInner.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, description, lastUpdated);
+    return Objects.hash(id, name, description, updatedAt);
   }
 
   @Override
@@ -155,7 +155,7 @@ public class ListLeaderboards200ResponseInnerDto {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    lastUpdated: ").append(toIndentedString(lastUpdated)).append("\n");
+    sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -187,7 +187,7 @@ public class ListLeaderboards200ResponseInnerDto {
       this.instance.setId(value.id);
       this.instance.setName(value.name);
       this.instance.setDescription(value.description);
-      this.instance.setLastUpdated(value.lastUpdated);
+      this.instance.setUpdatedAt(value.updatedAt);
       return this;
     }
 
@@ -206,8 +206,8 @@ public class ListLeaderboards200ResponseInnerDto {
       return this;
     }
     
-    public ListLeaderboards200ResponseInnerDto.Builder lastUpdated(OffsetDateTime lastUpdated) {
-      this.instance.lastUpdated(lastUpdated);
+    public ListLeaderboards200ResponseInnerDto.Builder updatedAt(OffsetDateTime updatedAt) {
+      this.instance.updatedAt(updatedAt);
       return this;
     }
     

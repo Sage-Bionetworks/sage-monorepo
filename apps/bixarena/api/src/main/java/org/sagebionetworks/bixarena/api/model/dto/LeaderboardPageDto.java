@@ -43,7 +43,7 @@ public class LeaderboardPageDto {
   private Boolean hasPrevious;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-  private OffsetDateTime lastUpdated;
+  private OffsetDateTime updatedAt;
 
   private String snapshotId;
 
@@ -57,14 +57,14 @@ public class LeaderboardPageDto {
   /**
    * Constructor with only required parameters
    */
-  public LeaderboardPageDto(Integer number, Integer size, Long totalElements, Integer totalPages, Boolean hasNext, Boolean hasPrevious, OffsetDateTime lastUpdated, String snapshotId, List<@Valid LeaderboardEntryDto> entries) {
+  public LeaderboardPageDto(Integer number, Integer size, Long totalElements, Integer totalPages, Boolean hasNext, Boolean hasPrevious, OffsetDateTime updatedAt, String snapshotId, List<@Valid LeaderboardEntryDto> entries) {
     this.number = number;
     this.size = size;
     this.totalElements = totalElements;
     this.totalPages = totalPages;
     this.hasNext = hasNext;
     this.hasPrevious = hasPrevious;
-    this.lastUpdated = lastUpdated;
+    this.updatedAt = updatedAt;
     this.snapshotId = snapshotId;
     this.entries = entries;
   }
@@ -189,24 +189,24 @@ public class LeaderboardPageDto {
     this.hasPrevious = hasPrevious;
   }
 
-  public LeaderboardPageDto lastUpdated(OffsetDateTime lastUpdated) {
-    this.lastUpdated = lastUpdated;
+  public LeaderboardPageDto updatedAt(OffsetDateTime updatedAt) {
+    this.updatedAt = updatedAt;
     return this;
   }
 
   /**
    * When this leaderboard was last updated
-   * @return lastUpdated
+   * @return updatedAt
    */
   @NotNull @Valid 
-  @Schema(name = "lastUpdated", example = "2025-08-16T14:30Z", description = "When this leaderboard was last updated", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("lastUpdated")
-  public OffsetDateTime getLastUpdated() {
-    return lastUpdated;
+  @Schema(name = "updatedAt", example = "2025-08-16T14:30Z", description = "When this leaderboard was last updated", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("updatedAt")
+  public OffsetDateTime getUpdatedAt() {
+    return updatedAt;
   }
 
-  public void setLastUpdated(OffsetDateTime lastUpdated) {
-    this.lastUpdated = lastUpdated;
+  public void setUpdatedAt(OffsetDateTime updatedAt) {
+    this.updatedAt = updatedAt;
   }
 
   public LeaderboardPageDto snapshotId(String snapshotId) {
@@ -272,14 +272,14 @@ public class LeaderboardPageDto {
         Objects.equals(this.totalPages, leaderboardPage.totalPages) &&
         Objects.equals(this.hasNext, leaderboardPage.hasNext) &&
         Objects.equals(this.hasPrevious, leaderboardPage.hasPrevious) &&
-        Objects.equals(this.lastUpdated, leaderboardPage.lastUpdated) &&
+        Objects.equals(this.updatedAt, leaderboardPage.updatedAt) &&
         Objects.equals(this.snapshotId, leaderboardPage.snapshotId) &&
         Objects.equals(this.entries, leaderboardPage.entries);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(number, size, totalElements, totalPages, hasNext, hasPrevious, lastUpdated, snapshotId, entries);
+    return Objects.hash(number, size, totalElements, totalPages, hasNext, hasPrevious, updatedAt, snapshotId, entries);
   }
 
   @Override
@@ -292,7 +292,7 @@ public class LeaderboardPageDto {
     sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    hasNext: ").append(toIndentedString(hasNext)).append("\n");
     sb.append("    hasPrevious: ").append(toIndentedString(hasPrevious)).append("\n");
-    sb.append("    lastUpdated: ").append(toIndentedString(lastUpdated)).append("\n");
+    sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("    snapshotId: ").append(toIndentedString(snapshotId)).append("\n");
     sb.append("    entries: ").append(toIndentedString(entries)).append("\n");
     sb.append("}");
@@ -329,7 +329,7 @@ public class LeaderboardPageDto {
       this.instance.setTotalPages(value.totalPages);
       this.instance.setHasNext(value.hasNext);
       this.instance.setHasPrevious(value.hasPrevious);
-      this.instance.setLastUpdated(value.lastUpdated);
+      this.instance.setUpdatedAt(value.updatedAt);
       this.instance.setSnapshotId(value.snapshotId);
       this.instance.setEntries(value.entries);
       return this;
@@ -365,8 +365,8 @@ public class LeaderboardPageDto {
       return this;
     }
     
-    public LeaderboardPageDto.Builder lastUpdated(OffsetDateTime lastUpdated) {
-      this.instance.lastUpdated(lastUpdated);
+    public LeaderboardPageDto.Builder updatedAt(OffsetDateTime updatedAt) {
+      this.instance.updatedAt(updatedAt);
       return this;
     }
     

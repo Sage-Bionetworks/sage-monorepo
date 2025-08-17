@@ -438,7 +438,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/PageMetadata'
         - properties:
-            lastUpdated:
+            updatedAt:
               description: When this leaderboard was last updated
               example: 2025-08-16T14:30:00Z
               format: date-time
@@ -454,13 +454,12 @@ components:
               type: array
           required:
             - entries
-            - lastUpdated
             - snapshotId
+            - updatedAt
           type: object
       description: A page of leaderboard entries.
       example:
         number: 99
-        lastUpdated: 2025-08-16T14:30:00Z
         entries:
           - modelName: GPT-4o
             license: MIT
@@ -486,6 +485,7 @@ components:
         hasPrevious: true
         hasNext: true
         totalElements: 99
+        updatedAt: 2025-08-16T14:30:00Z
       type: object
     LeaderboardHistorySort:
       default: created_at
@@ -717,10 +717,10 @@ components:
       type: object
     listLeaderboards_200_response_inner:
       example:
-        lastUpdated: 2025-08-16T14:30:00Z
         name: Open Source Models
         description: Performance ranking of open-source AI models
         id: open-source
+        updatedAt: 2025-08-16T14:30:00Z
       properties:
         id:
           description: Unique identifier for the leaderboard
@@ -734,7 +734,7 @@ components:
           description: Description of what this leaderboard measures
           example: Performance ranking of open-source AI models
           type: string
-        lastUpdated:
+        updatedAt:
           description: When this leaderboard was last updated
           example: 2025-08-16T14:30:00Z
           format: date-time
@@ -742,6 +742,6 @@ components:
       required:
         - description
         - id
-        - lastUpdated
         - name
+        - updatedAt
       type: object

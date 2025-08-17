@@ -82,7 +82,7 @@ public class LeaderboardService {
 
     return LeaderboardPageDto.builder()
       .entries(entryMapper.convertToDtoList(entriesPage.getContent()))
-      .lastUpdated(snapshot.getCreatedAt())
+      .updatedAt(snapshot.getCreatedAt())
       .snapshotId(snapshot.getSnapshotIdentifier())
       .number(entriesPage.getNumber())
       .size(entriesPage.getSize())
@@ -178,7 +178,7 @@ public class LeaderboardService {
   private ListLeaderboards200ResponseInnerDto convertToListResponse(LeaderboardEntity entity) {
     // Get latest snapshot for last updated time
     List<LeaderboardSnapshotEntity> snapshots = snapshotRepository.findLatestByLeaderboard(entity);
-    OffsetDateTime lastUpdated = snapshots.isEmpty()
+    OffsetDateTime updatedAt = snapshots.isEmpty()
       ? entity.getUpdatedAt()
       : snapshots.get(0).getCreatedAt();
 
@@ -186,7 +186,7 @@ public class LeaderboardService {
       .id(entity.getSlug())
       .name(entity.getName())
       .description(entity.getDescription())
-      .lastUpdated(lastUpdated)
+      .updatedAt(updatedAt)
       .build();
   }
 }

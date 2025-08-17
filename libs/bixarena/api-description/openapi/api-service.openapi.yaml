@@ -44,7 +44,7 @@ paths:
                       type: string
                       description: Description of what this leaderboard measures
                       example: Performance ranking of open-source AI models
-                    lastUpdated:
+                    updatedAt:
                       type: string
                       format: date-time
                       description: When this leaderboard was last updated
@@ -53,7 +53,7 @@ paths:
                     - id
                     - name
                     - description
-                    - lastUpdated
+                    - updatedAt
         '500':
           $ref: '#/components/responses/InternalServerError'
   /leaderboards/{leaderboardId}:
@@ -310,7 +310,7 @@ components:
         - $ref: '#/components/schemas/PageMetadata'
         - type: object
           properties:
-            lastUpdated:
+            updatedAt:
               type: string
               format: date-time
               description: When this leaderboard was last updated
@@ -325,7 +325,7 @@ components:
               items:
                 $ref: '#/components/schemas/LeaderboardEntry'
           required:
-            - lastUpdated
+            - updatedAt
             - snapshotId
             - entries
     LeaderboardHistorySort:

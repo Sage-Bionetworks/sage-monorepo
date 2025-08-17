@@ -4,7 +4,7 @@ allOf:
   - $ref: PageMetadata.yaml
   - type: object
     properties:
-      lastUpdated:
+      updatedAt:
         type: string
         format: date-time
         description: When this leaderboard was last updated
@@ -19,6 +19,6 @@ allOf:
         items:
           $ref: LeaderboardEntry.yaml
     required:
-      - lastUpdated
+      - updatedAt
       - snapshotId
       - entries

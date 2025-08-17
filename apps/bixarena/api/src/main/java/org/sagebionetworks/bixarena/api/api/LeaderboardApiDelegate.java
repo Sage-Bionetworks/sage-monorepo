@@ -50,7 +50,7 @@ public interface LeaderboardApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"number\" : 99, \"lastUpdated\" : \"2025-08-16T14:30:00Z\", \"entries\" : [ { \"modelName\" : \"GPT-4o\", \"license\" : \"MIT\", \"createdAt\" : \"2025-08-16T10:30:00Z\", \"secondaryScore\" : 0.887, \"modelId\" : \"model_456\", \"btScore\" : 0.925, \"rank\" : 1, \"id\" : \"entry_123\", \"voteCount\" : 1250 }, { \"modelName\" : \"GPT-4o\", \"license\" : \"MIT\", \"createdAt\" : \"2025-08-16T10:30:00Z\", \"secondaryScore\" : 0.887, \"modelId\" : \"model_456\", \"btScore\" : 0.925, \"rank\" : 1, \"id\" : \"entry_123\", \"voteCount\" : 1250 } ], \"snapshotId\" : \"snapshot_2025-08-16_14-30\", \"size\" : 99, \"totalPages\" : 99, \"hasPrevious\" : true, \"hasNext\" : true, \"totalElements\" : 99 }";
+                    String exampleString = "{ \"number\" : 99, \"entries\" : [ { \"modelName\" : \"GPT-4o\", \"license\" : \"MIT\", \"createdAt\" : \"2025-08-16T10:30:00Z\", \"secondaryScore\" : 0.887, \"modelId\" : \"model_456\", \"btScore\" : 0.925, \"rank\" : 1, \"id\" : \"entry_123\", \"voteCount\" : 1250 }, { \"modelName\" : \"GPT-4o\", \"license\" : \"MIT\", \"createdAt\" : \"2025-08-16T10:30:00Z\", \"secondaryScore\" : 0.887, \"modelId\" : \"model_456\", \"btScore\" : 0.925, \"rank\" : 1, \"id\" : \"entry_123\", \"voteCount\" : 1250 } ], \"snapshotId\" : \"snapshot_2025-08-16_14-30\", \"size\" : 99, \"totalPages\" : 99, \"hasPrevious\" : true, \"hasNext\" : true, \"totalElements\" : 99, \"updatedAt\" : \"2025-08-16T14:30:00Z\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -173,7 +173,7 @@ public interface LeaderboardApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "[ { \"lastUpdated\" : \"2025-08-16T14:30:00Z\", \"name\" : \"Open Source Models\", \"description\" : \"Performance ranking of open-source AI models\", \"id\" : \"open-source\" }, { \"lastUpdated\" : \"2025-08-16T14:30:00Z\", \"name\" : \"Open Source Models\", \"description\" : \"Performance ranking of open-source AI models\", \"id\" : \"open-source\" } ]";
+                    String exampleString = "[ { \"name\" : \"Open Source Models\", \"description\" : \"Performance ranking of open-source AI models\", \"id\" : \"open-source\", \"updatedAt\" : \"2025-08-16T14:30:00Z\" }, { \"name\" : \"Open Source Models\", \"description\" : \"Performance ranking of open-source AI models\", \"id\" : \"open-source\", \"updatedAt\" : \"2025-08-16T14:30:00Z\" } ]";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
