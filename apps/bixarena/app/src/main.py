@@ -23,11 +23,15 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--host", type=str, default="localhost")
     parser.add_argument("--port", type=int)
-
+    parser.add_argument(
+        "--register-api-endpoint-file",
+        type=str,
+        help="Register API-based model endpoints from a JSON file",
+    )
     return parser.parse_args()
 
 
-def build_app():
+def build_app(register_api_endpoint_file=None):
     """Create the main application"""
 
     with gr.Blocks(title="BixArena - Biomedical LLM Evaluation") as app:
@@ -39,7 +43,7 @@ def build_app():
             home_content, cta_btn = build_home_page()
 
         with gr.Column(visible=False) as battle_page:
-            battle_content = build_battle_page()
+            battle_content = build_battle_page(register_api_endpoint_file)
 
         with gr.Column(visible=False) as leaderboard_page:
             leaderboard_content = build_leaderboard_page()
@@ -73,5 +77,5 @@ def build_app():
 if __name__ == "__main__":
     args = parse_args()
 
-    app = build_app()
+    app = build_app(args.register_api_endpoint_file)
     app.launch(server_port=args.port)

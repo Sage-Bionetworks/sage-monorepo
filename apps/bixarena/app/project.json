@@ -50,7 +50,7 @@
     "serve-demo": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "uv run python -m main --port ${APP_PORT}",
+        "command": "uv run python -m main --port ${APP_PORT} --register-api-endpoint-file model_config.json",
         "cwd": "{projectRoot}",
         "parallel": false
       }

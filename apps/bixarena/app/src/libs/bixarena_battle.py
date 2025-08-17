@@ -2,8 +2,9 @@ import gradio as gr
 import json
 import time
 import datetime
-import random
 from enum import Enum
+from server.model_selection import get_battle_pair
+from server.model_loader import load_models_from_config
 
 
 class VoteState(Enum):
@@ -30,32 +31,20 @@ class ConversationState:
         self.vote_data = None
 
 
-# Mock model responses (replace with actual model API calls in production)
-MOCK_MODELS = [
-    "gpt-4-turbo",
-    "claude-3-opus",
-    "gemini-1.5-pro",
-    "gpt-4",
-    "claude-3-sonnet",
-    "mixtral-8x7b",
-    "llama-2-70b-chat",
-    "deepseek-coder",
-    "yi-34b-chat",
-    "qwen-max",
-]
-
-
 def generate_mock_response() -> str:
     """Generate mock responses for demonstration purposes."""
     return "Hello! I'm an anonymous AI assistant participating in this evaluation. This is currently a testing environment, so I won't be able to provide actual responses to your queries. I apologize for any inconvenience."
 
 
-def select_random_models() -> list[str]:
-    """Select two random models for comparison."""
-    return random.sample(MOCK_MODELS, 2)
+def select_random_models(register_api_endpoint_file=None):
+    """Select two models using FastChat's weighted sampling."""
+    config_models = load_models_from_config(register_api_endpoint_file)
+    if not config_models:
+        return [], []
+    return get_battle_pair(config_models)
 
 
-def build_battle_page():
+def build_battle_page(register_api_endpoint_file=None):
     """
     Build and return the BixArena battle page component.
     This function can be imported and called from main application.
@@ -138,7 +127,7 @@ def build_battle_page():
         # Helper Functions
         def start_new_conversation():
             """Start a new conversation with random models."""
-            models = select_random_models()
+            models = select_random_models(register_api_endpoint_file)
             new_state = ConversationState()
             new_state.reset()
             new_state.models = models
@@ -170,7 +159,7 @@ def build_battle_page():
                 )
 
             if not models:
-                models = select_random_models()
+                models = select_random_models(register_api_endpoint_file)
                 conv_state.reset()
                 conv_state.models = models
 
