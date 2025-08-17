@@ -3,8 +3,8 @@ import json
 import time
 import datetime
 from enum import Enum
+from server.model_config import get_model_list
 from server.model_selection import get_battle_pair
-from server.model_loader import load_models_from_config
 
 
 class VoteState(Enum):
@@ -37,11 +37,11 @@ def generate_mock_response() -> str:
 
 
 def select_random_models(register_api_endpoint_file=None):
-    """Select two models using FastChat's weighted sampling."""
-    config_models = load_models_from_config(register_api_endpoint_file)
-    if not config_models:
+    # Read API-based models info and set text arena
+    visible_models, all_models = get_model_list(register_api_endpoint_file, False)
+    if not visible_models:
         return [], []
-    return get_battle_pair(config_models)
+    return get_battle_pair(visible_models)
 
 
 def build_battle_page(register_api_endpoint_file=None):
