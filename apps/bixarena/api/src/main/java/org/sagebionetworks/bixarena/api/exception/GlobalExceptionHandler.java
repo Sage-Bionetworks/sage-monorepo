@@ -41,6 +41,21 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       );
   }
 
+  @ExceptionHandler(LeaderboardModelNotFoundException.class)
+  protected ResponseEntity<BasicErrorDto> handleModelNotFound(
+    LeaderboardModelNotFoundException ex,
+    Locale locale
+  ) {
+    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+      .body(
+        BasicErrorDto.builder()
+          .title("Model Not Found")
+          .status(HttpStatus.NOT_FOUND.value())
+          .detail(ex.getMessage())
+          .build()
+      );
+  }
+
   @ExceptionHandler({ Exception.class })
   protected ResponseEntity<BasicErrorDto> handleGenericException(Exception ex, Locale locale) {
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
