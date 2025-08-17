@@ -1,15 +1,15 @@
 -- Insert sample leaderboards
 INSERT INTO leaderboard (id, slug, name, description, created_at, updated_at) VALUES
-  ('11111111-1111-1111-1111-111111111111', 'open-source', 'Open Source Models', 'Performance ranking of open-source AI models', now(), now()),
-  ('22222222-2222-2222-2222-222222222222', 'commercial', 'Commercial Models', 'Performance ranking of commercial AI models', now(), now());
+  ('11111111-1111-1111-1111-111111111111', 'open-source', 'Open Source Models', 'Performance ranking of open-source AI models', '2025-08-01 10:00:00+00', '2025-08-16 14:30:00+00'),
+  ('22222222-2222-2222-2222-222222222222', 'commercial', 'Commercial Models', 'Performance ranking of commercial AI models', '2025-08-01 10:00:00+00', '2025-08-16 14:30:00+00');
 
 -- Insert sample models
 INSERT INTO model (id, slug, name, license, created_at, updated_at) VALUES
-  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'gpt-4-turbo', 'GPT-4 Turbo', 'Commercial', now(), now()),
-  ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'claude-3-opus', 'Claude 3 Opus', 'Commercial', now(), now()),
-  ('cccccccc-cccc-cccc-cccc-cccccccccccc', 'llama-2-70b', 'Llama 2 70B', 'MIT', now(), now()),
-  ('dddddddd-dddd-dddd-dddd-dddddddddddd', 'mixtral-8x7b', 'Mixtral 8x7B', 'Apache 2.0', now(), now()),
-  ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', 'gemini-pro', 'Gemini Pro', 'Commercial', now(), now());
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'gpt-4-turbo', 'GPT-4 Turbo', 'Commercial', '2025-07-15 09:00:00+00', '2025-08-10 12:00:00+00'),
+  ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'claude-3-opus', 'Claude 3 Opus', 'Commercial', '2025-07-20 10:30:00+00', '2025-08-12 15:30:00+00'),
+  ('cccccccc-cccc-cccc-cccc-cccccccccccc', 'llama-2-70b', 'Llama 2 70B', 'MIT', '2025-07-10 08:15:00+00', '2025-08-14 11:45:00+00'),
+  ('dddddddd-dddd-dddd-dddd-dddddddddddd', 'mixtral-8x7b', 'Mixtral 8x7B', 'Apache 2.0', '2025-07-25 14:20:00+00', '2025-08-15 16:10:00+00'),
+  ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', 'gemini-pro', 'Gemini Pro', 'Commercial', '2025-08-05 11:00:00+00', '2025-08-16 13:20:00+00');
 
 -- Insert current snapshots
 INSERT INTO leaderboard_snapshot (id, leaderboard_id, snapshot_identifier, description, created_at) VALUES
