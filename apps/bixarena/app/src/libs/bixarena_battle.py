@@ -1,8 +1,3 @@
-"""
-BixArena Battle Page Module
-A simple battle page component for biomedical LLM evaluation.
-"""
-
 import gradio as gr
 import json
 import time
@@ -50,29 +45,9 @@ MOCK_MODELS = [
 ]
 
 
-def generate_mock_response(prompt: str, model_name: str) -> str:
+def generate_mock_response() -> str:
     """Generate mock responses for demonstration purposes."""
-    responses = {
-        "gpt-4-turbo": f"GPT-4 Turbo response to: '{prompt[:50]}...' - This is a comprehensive biomedical analysis considering multiple factors including clinical efficacy, safety profiles, and current research findings.",
-        "claude-3-opus": f"Claude-3 Opus analysis: '{prompt[:50]}...' - From a biomedical perspective, this requires careful consideration of evidence-based practices and current literature.",
-        "gemini-1.5-pro": f"Gemini 1.5 Pro evaluation: '{prompt[:50]}...' - Based on current medical knowledge and research findings, here's my assessment of this biomedical query.",
-        "gpt-4": f"GPT-4 response: '{prompt[:50]}...' - This biomedical question involves several key considerations that I'll address systematically.",
-        "claude-3-sonnet": f"Claude-3 Sonnet: '{prompt[:50]}...' - In the biomedical context, this requires analysis of clinical data and therapeutic implications.",
-    }
-
-    base_response = responses.get(
-        model_name,
-        f"{model_name} response to: '{prompt[:50]}...' - Detailed biomedical analysis follows.",
-    )
-
-    # Add some variation to make responses feel more realistic
-    variations = [
-        "\n\nKey clinical considerations include:\n• Patient safety profiles\n• Efficacy data from recent studies\n• Contraindications and interactions",
-        "\n\nBased on current literature:\n• Meta-analysis results show...\n• Clinical trials indicate...\n• Best practice guidelines recommend...",
-        "\n\nImportant factors to consider:\n• Dosage and administration\n• Patient population specifics\n• Long-term outcomes data",
-    ]
-
-    return base_response + random.choice(variations)
+    return "Hello! I'm an anonymous AI assistant participating in this evaluation. This is currently a testing environment, so I won't be able to provide actual responses to your queries. I apologize for any inconvenience."
 
 
 def select_random_models() -> list[str]:
@@ -86,43 +61,6 @@ def build_battle_page():
     This function can be imported and called from main application.
     """
 
-    # Battle page CSS
-    battle_css = """
-    .battle-container { 
-        padding: 20px; 
-        max-width: 1200px; 
-        margin: 0 auto;
-    }
-    .model-response { 
-        border: 1px solid #ddd; 
-        border-radius: 8px; 
-        padding: 15px; 
-        margin: 10px 0;
-        background-color: #f9f9f9;
-        min-height: 100px;
-    }
-    .voting-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-        margin: 20px 0;
-    }
-    .instructions {
-        background-color: #f0f8ff;
-        padding: 20px;
-        border-radius: 10px;
-        border-left: 4px solid #007acc;
-        margin-bottom: 20px;
-    }
-    .reveal-section {
-        background-color: #f0fff0;
-        padding: 20px;
-        border-radius: 10px;
-        border-left: 4px solid #28a745;
-        margin-top: 20px;
-    }
-    """
-
     with gr.Column(elem_classes="battle-container") as battle_page:
         # State management
         models_state = gr.State([])
@@ -132,27 +70,21 @@ def build_battle_page():
         with gr.Group(elem_classes="instructions"):
             gr.Markdown("""
             # 🥊 BixArena: Biomedical LLM Battle
-            
-            **How to participate in LLM comparison:**
-            1. **Ask a biomedical question** - Enter your prompt about medical topics, research, diagnostics, treatments, etc.
-            2. **Review responses** - Two anonymous models will provide answers side-by-side
-            3. **Vote for the better response** - Compare quality, accuracy, and helpfulness
-            4. **Ask follow-ups** - Continue the conversation to make an informed decision
-            5. **Submit your vote** - Help improve biomedical AI by sharing your preference
             """)
 
-        # Input Section
-        with gr.Group():
+        # Input Section - Minimal button width for closer alignment
+        with gr.Row():
             prompt_input = gr.Textbox(
                 placeholder="Ask any biomedical relevant questions...",
-                label="Your Question",
                 lines=3,
                 interactive=True,
+                show_label=False,
+                scale=10,
             )
-
-            with gr.Row():
-                submit_btn = gr.Button("Send", variant="primary", size="lg")
-                new_chat_btn = gr.Button("New Chat", variant="secondary", size="lg")
+            with gr.Column(scale=0, min_width=35):
+                gr.HTML("")
+                send_btn = gr.Button("↑", variant="primary", size="sm")
+                gr.HTML("")
 
         # Model Responses Section
         with gr.Row():
@@ -190,13 +122,18 @@ def build_battle_page():
             gr.Markdown("### 🎭 Models Revealed!")
             model_reveal = gr.Markdown("")
 
-            with gr.Row():
-                continue_btn = gr.Button(
-                    "Continue Evaluating", variant="primary", size="lg"
-                )
-                view_leaderboard_btn = gr.Button(
-                    "View Leaderboard", variant="secondary", size="lg"
-                )
+            view_leaderboard_btn = gr.Button(
+                "View Leaderboard", variant="secondary", size="lg"
+            )
+
+        # New Chat Button - Always available
+        with gr.Row():
+            with gr.Column(scale=2):
+                pass
+            with gr.Column(scale=1):
+                new_chat_btn = gr.Button("Start New Chat", variant="primary", size="lg")
+            with gr.Column(scale=2):
+                pass
 
         # Helper Functions
         def start_new_conversation():
@@ -218,7 +155,7 @@ def build_battle_page():
                 "",  # model_reveal
             )
 
-        def submit_prompt(prompt, models, conv_state):
+        def send_prompt(prompt, models, conv_state):
             """Submit prompt and get responses from both models."""
             if not prompt.strip():
                 return (
@@ -238,8 +175,8 @@ def build_battle_page():
                 conv_state.models = models
 
             # Generate responses (replace with actual model API calls)
-            response_a = generate_mock_response(prompt, models[0])
-            response_b = generate_mock_response(prompt, models[1])
+            response_a = generate_mock_response()
+            response_b = generate_mock_response()
 
             # Add to conversation history
             conv_state.conversation_history.append(
@@ -336,8 +273,8 @@ def build_battle_page():
             ],
         )
 
-        submit_btn.click(
-            submit_prompt,
+        send_btn.click(
+            send_prompt,
             inputs=[prompt_input, models_state, conversation_state],
             outputs=[
                 models_state,
@@ -352,7 +289,7 @@ def build_battle_page():
         )
 
         prompt_input.submit(
-            submit_prompt,
+            send_prompt,
             inputs=[prompt_input, models_state, conversation_state],
             outputs=[
                 models_state,
@@ -402,19 +339,4 @@ def build_battle_page():
             ],
         )
 
-        continue_btn.click(
-            start_new_conversation,
-            outputs=[
-                models_state,
-                conversation_state,
-                prompt_input,
-                model_a_response,
-                model_b_response,
-                voting_section,
-                reveal_section,
-                vote_status,
-                model_reveal,
-            ],
-        )
-
-    return battle_page, battle_css
+    return battle_page
