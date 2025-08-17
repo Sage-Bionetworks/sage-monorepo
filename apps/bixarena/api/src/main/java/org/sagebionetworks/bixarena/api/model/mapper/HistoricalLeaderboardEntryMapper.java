@@ -18,9 +18,6 @@ public class HistoricalLeaderboardEntryMapper {
       .voteCount(entity.getVoteCount())
       .rank(entity.getRank())
       .createdAt(entity.getCreatedAt())
-      .secondaryScore(
-        entity.getSecondaryScore() != null ? entity.getSecondaryScore().doubleValue() : null
-      )
       .build();
   }
 

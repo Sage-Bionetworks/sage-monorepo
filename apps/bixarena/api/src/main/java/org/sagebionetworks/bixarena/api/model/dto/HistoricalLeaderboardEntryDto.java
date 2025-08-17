@@ -37,8 +37,6 @@ public class HistoricalLeaderboardEntryDto {
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
 
-  private @Nullable Double secondaryScore = null;
-
   public HistoricalLeaderboardEntryDto() {
     super();
   }
@@ -154,26 +152,6 @@ public class HistoricalLeaderboardEntryDto {
     this.createdAt = createdAt;
   }
 
-  public HistoricalLeaderboardEntryDto secondaryScore(@Nullable Double secondaryScore) {
-    this.secondaryScore = secondaryScore;
-    return this;
-  }
-
-  /**
-   * Optional secondary scoring metric at this point in time
-   * @return secondaryScore
-   */
-  
-  @Schema(name = "secondaryScore", example = "0.875", description = "Optional secondary scoring metric at this point in time", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("secondaryScore")
-  public @Nullable Double getSecondaryScore() {
-    return secondaryScore;
-  }
-
-  public void setSecondaryScore(@Nullable Double secondaryScore) {
-    this.secondaryScore = secondaryScore;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -187,13 +165,12 @@ public class HistoricalLeaderboardEntryDto {
         Objects.equals(this.btScore, historicalLeaderboardEntry.btScore) &&
         Objects.equals(this.voteCount, historicalLeaderboardEntry.voteCount) &&
         Objects.equals(this.rank, historicalLeaderboardEntry.rank) &&
-        Objects.equals(this.createdAt, historicalLeaderboardEntry.createdAt) &&
-        Objects.equals(this.secondaryScore, historicalLeaderboardEntry.secondaryScore);
+        Objects.equals(this.createdAt, historicalLeaderboardEntry.createdAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(snapshotId, btScore, voteCount, rank, createdAt, secondaryScore);
+    return Objects.hash(snapshotId, btScore, voteCount, rank, createdAt);
   }
 
   @Override
@@ -205,7 +182,6 @@ public class HistoricalLeaderboardEntryDto {
     sb.append("    voteCount: ").append(toIndentedString(voteCount)).append("\n");
     sb.append("    rank: ").append(toIndentedString(rank)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
-    sb.append("    secondaryScore: ").append(toIndentedString(secondaryScore)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -239,7 +215,6 @@ public class HistoricalLeaderboardEntryDto {
       this.instance.setVoteCount(value.voteCount);
       this.instance.setRank(value.rank);
       this.instance.setCreatedAt(value.createdAt);
-      this.instance.setSecondaryScore(value.secondaryScore);
       return this;
     }
 
@@ -265,11 +240,6 @@ public class HistoricalLeaderboardEntryDto {
     
     public HistoricalLeaderboardEntryDto.Builder createdAt(OffsetDateTime createdAt) {
       this.instance.createdAt(createdAt);
-      return this;
-    }
-    
-    public HistoricalLeaderboardEntryDto.Builder secondaryScore(Double secondaryScore) {
-      this.instance.secondaryScore(secondaryScore);
       return this;
     }
     

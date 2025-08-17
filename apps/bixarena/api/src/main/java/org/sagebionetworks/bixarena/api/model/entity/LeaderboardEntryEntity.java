@@ -52,9 +52,6 @@ public class LeaderboardEntryEntity {
   @Column(name = "rank", nullable = false)
   private Integer rank;
 
-  @Column(name = "secondary_score", precision = 10, scale = 6)
-  private BigDecimal secondaryScore;
-
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)
   private OffsetDateTime createdAt;

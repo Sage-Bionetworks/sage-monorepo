@@ -35,12 +35,6 @@ properties:
     format: date-time
     description: When this entry was created
     example: '2025-08-16T10:30:00Z'
-  secondaryScore:
-    type: number
-    format: double
-    nullable: true
-    description: Optional secondary scoring metric
-    example: 0.887
 required:
   - id
   - modelId

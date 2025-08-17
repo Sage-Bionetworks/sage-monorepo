@@ -377,7 +377,6 @@ components:
         modelName: GPT-4o
         license: MIT
         createdAt: 2025-08-16T10:30:00Z
-        secondaryScore: 0.887
         modelId: model_456
         btScore: 0.925
         rank: 1
@@ -418,12 +417,6 @@ components:
           example: 2025-08-16T10:30:00Z
           format: date-time
           type: string
-        secondaryScore:
-          description: Optional secondary scoring metric
-          example: 0.887
-          format: double
-          nullable: true
-          type: number
       required:
         - btScore
         - createdAt
@@ -464,7 +457,6 @@ components:
           - modelName: GPT-4o
             license: MIT
             createdAt: 2025-08-16T10:30:00Z
-            secondaryScore: 0.887
             modelId: model_456
             btScore: 0.925
             rank: 1
@@ -473,7 +465,6 @@ components:
           - modelName: GPT-4o
             license: MIT
             createdAt: 2025-08-16T10:30:00Z
-            secondaryScore: 0.887
             modelId: model_456
             btScore: 0.925
             rank: 1
@@ -536,7 +527,6 @@ components:
         point in time.
       example:
         createdAt: 2025-08-15T10:00:00Z
-        secondaryScore: 0.875
         snapshotId: snapshot_2025-08-15_10-00
         btScore: 0.915
         rank: 2
@@ -564,12 +554,6 @@ components:
           example: 2025-08-15T10:00:00Z
           format: date-time
           type: string
-        secondaryScore:
-          description: Optional secondary scoring metric at this point in time
-          example: 0.875
-          format: double
-          nullable: true
-          type: number
       required:
         - btScore
         - createdAt
@@ -610,13 +594,11 @@ components:
         hasNext: true
         history:
           - createdAt: 2025-08-15T10:00:00Z
-            secondaryScore: 0.875
             snapshotId: snapshot_2025-08-15_10-00
             btScore: 0.915
             rank: 2
             voteCount: 1180
           - createdAt: 2025-08-15T10:00:00Z
-            secondaryScore: 0.875
             snapshotId: snapshot_2025-08-15_10-00
             btScore: 0.915
             rank: 2

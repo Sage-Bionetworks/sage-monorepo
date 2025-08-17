@@ -288,12 +288,6 @@ components:
           format: date-time
           description: When this entry was created
           example: '2025-08-16T10:30:00Z'
-        secondaryScore:
-          type: number
-          format: double
-          nullable: true
-          description: Optional secondary scoring metric
-          example: 0.887
       required:
         - id
         - modelId
@@ -398,12 +392,6 @@ components:
           format: date-time
           description: When this snapshot was created
           example: '2025-08-15T10:00:00Z'
-        secondaryScore:
-          type: number
-          format: double
-          nullable: true
-          description: Optional secondary scoring metric at this point in time
-          example: 0.875
       required:
         - snapshotId
         - btScore
