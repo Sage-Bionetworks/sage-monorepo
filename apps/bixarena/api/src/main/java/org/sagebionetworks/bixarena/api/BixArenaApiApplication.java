@@ -5,14 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FullyQualifiedAnnotationBeanNameGenerator;
 
-@SpringBootApplication(nameGenerator = FullyQualifiedAnnotationBeanNameGenerator.class)
-@ComponentScan(
-  basePackages = { "org.sagebionetworks.bixarena.api", "org.sagebionetworks.bixarena.api.api" },
-  nameGenerator = FullyQualifiedAnnotationBeanNameGenerator.class
-)
+@SpringBootApplication
 public class BixArenaApiApplication implements CommandLineRunner {
 
   private static final Logger logger = LoggerFactory.getLogger(BixArenaApiApplication.class);
@@ -23,6 +17,6 @@ public class BixArenaApiApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    logger.info("Welcome to BixArena API");
+    logger.info("Welcome to BixArena API!");
   }
 }
