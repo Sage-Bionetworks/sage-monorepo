@@ -1,331 +1,306 @@
+"""
+The gradio demo server with multiple tabs.
+It supports chatting with a single model or chatting with two models side-by-side.
+"""
+
+import argparse
+
 import gradio as gr
-import json
-import time
-import datetime
-from enum import Enum
-from server.model_config import get_model_list
-from server.model_selection import get_battle_pair
+
+from fastchat.serve.gradio_block_arena_anony import (
+    build_side_by_side_ui_anony,
+    load_demo_side_by_side_anony,
+    set_global_vars_anony,
+)
+from fastchat.serve.gradio_block_arena_named import (
+    build_side_by_side_ui_named,
+    load_demo_side_by_side_named,
+    set_global_vars_named,
+)
+from fastchat.serve.gradio_block_arena_vision import (
+    build_single_vision_language_model_ui,
+)
+from fastchat.serve.gradio_web_server import (
+    set_global_vars,
+    block_css,
+    build_single_model_ui,
+    build_about,
+    get_model_list,
+    load_demo_single,
+    get_ip,
+)
+from fastchat.serve.monitor.monitor import build_leaderboard_tab
+from fastchat.utils import (
+    build_logger,
+    get_window_url_params_js,
+    get_window_url_params_with_tos_js,
+    parse_gradio_auth_creds,
+)
+
+from fastchat.serve.gradio_leaderboard_page import build_leaderboard_page
 
 
-class VoteState(Enum):
-    NOT_VOTED = "not_voted"
-    VOTED = "voted"
-    REVEALED = "revealed"
+logger = build_logger("gradio_web_server_multi", "gradio_web_server_multi.log")
 
 
-class ConversationState:
-    def __init__(self):
-        self.conversation_history = []
-        self.models = []
-        self.vote_state = VoteState.NOT_VOTED
-        self.conversation_id = None
-        self.start_time = None
-        self.vote_data = None
+def load_demo(url_params, request: gr.Request):
+    global models, all_models, vl_models
 
-    def reset(self):
-        self.conversation_history = []
-        self.models = []
-        self.vote_state = VoteState.NOT_VOTED
-        self.conversation_id = f"conv_{int(time.time() * 1000)}"
-        self.start_time = datetime.datetime.now()
-        self.vote_data = None
+    ip = get_ip(request)
+    logger.info(f"load_demo. ip: {ip}. params: {url_params}")
 
+    selected = 0
+    if "arena" in url_params:
+        selected = 0
+    elif "compare" in url_params:
+        selected = 1
+    elif "direct" in url_params or "model" in url_params:
+        selected = 2
+    elif "vision" in url_params:
+        selected = 3
+    elif "leaderboard" in url_params:
+        selected = 4
 
-def generate_mock_response() -> str:
-    """Generate mock responses for demonstration purposes."""
-    return "Hello! I'm an anonymous AI assistant participating in this evaluation. This is currently a testing environment, so I won't be able to provide actual responses to your queries. I apologize for any inconvenience."
-
-
-def select_random_models(register_api_endpoint_file=None):
-    # Read API-based models info and set text arena
-    visible_models, all_models = get_model_list(register_api_endpoint_file, False)
-    if not visible_models:
-        return [], []
-    return get_battle_pair(visible_models)
-
-
-def build_battle_page(register_api_endpoint_file=None):
-    """
-    Build and return the BixArena battle page component.
-    This function can be imported and called from main application.
-    """
-
-    with gr.Column(elem_classes="battle-container") as battle_page:
-        # State management
-        models_state = gr.State([])
-        conversation_state = gr.State(ConversationState())
-
-        # Instructions Section
-        with gr.Group(elem_classes="instructions"):
-            gr.Markdown("""
-            # 🥊 BixArena: Biomedical LLM Battle
-            """)
-
-        # Input Section - Minimal button width for closer alignment
-        with gr.Row():
-            prompt_input = gr.Textbox(
-                placeholder="Ask any biomedical relevant questions...",
-                lines=3,
-                interactive=True,
-                show_label=False,
-                scale=10,
-            )
-            with gr.Column(scale=0, min_width=35):
-                gr.HTML("")
-                send_btn = gr.Button("↑", variant="primary", size="sm")
-                gr.HTML("")
-
-        # Model Responses Section
-        with gr.Row():
-            with gr.Column():
-                gr.Markdown("### Assistant A")
-                model_a_response = gr.Markdown(
-                    "*Waiting for your question...*", elem_classes="model-response"
-                )
-
-            with gr.Column():
-                gr.Markdown("### Assistant B")
-                model_b_response = gr.Markdown(
-                    "*Waiting for your question...*", elem_classes="model-response"
-                )
-
-        # Voting Section (initially hidden)
-        with gr.Group(visible=False) as voting_section:
-            gr.Markdown("### 🗳️ Which response is better?")
-
-            with gr.Row(elem_classes="voting-buttons"):
-                vote_a_btn = gr.Button(
-                    "← Assistant A is Better", variant="secondary", size="lg"
-                )
-                vote_tie_btn = gr.Button(
-                    "🤝 It's a Tie", variant="secondary", size="lg"
-                )
-                vote_b_btn = gr.Button(
-                    "Assistant B is Better →", variant="secondary", size="lg"
-                )
-
-            vote_status = gr.Markdown("", visible=False)
-
-        # Model Reveal Section (initially hidden)
-        with gr.Group(visible=False, elem_classes="reveal-section") as reveal_section:
-            gr.Markdown("### 🎭 Models Revealed!")
-            model_reveal = gr.Markdown("")
-
-            view_leaderboard_btn = gr.Button(
-                "View Leaderboard", variant="secondary", size="lg"
-            )
-
-        # New Chat Button - Always available
-        with gr.Row():
-            with gr.Column(scale=2):
-                pass
-            with gr.Column(scale=1):
-                new_chat_btn = gr.Button("Start New Chat", variant="primary", size="lg")
-            with gr.Column(scale=2):
-                pass
-
-        # Helper Functions
-        def start_new_conversation():
-            """Start a new conversation with random models."""
-            models = select_random_models(register_api_endpoint_file)
-            new_state = ConversationState()
-            new_state.reset()
-            new_state.models = models
-
-            return (
-                models,  # models_state
-                new_state,  # conversation_state
-                "",  # prompt_input
-                "*Waiting for your question...*",  # model_a_response
-                "*Waiting for your question...*",  # model_b_response
-                gr.update(visible=False),  # voting_section
-                gr.update(visible=False),  # reveal_section
-                "",  # vote_status
-                "",  # model_reveal
-            )
-
-        def send_prompt(prompt, models, conv_state):
-            """Submit prompt and get responses from both models."""
-            if not prompt.strip():
-                return (
-                    models,
-                    conv_state,
-                    prompt,
-                    "*Please enter a question*",
-                    "*Please enter a question*",
-                    gr.update(visible=False),
-                    gr.update(visible=False),
-                    "",
-                )
-
-            if not models:
-                models = select_random_models(register_api_endpoint_file)
-                conv_state.reset()
-                conv_state.models = models
-
-            # Generate responses (replace with actual model API calls)
-            response_a = generate_mock_response()
-            response_b = generate_mock_response()
-
-            # Add to conversation history
-            conv_state.conversation_history.append(
-                {
-                    "prompt": prompt,
-                    "response_a": response_a,
-                    "response_b": response_b,
-                    "timestamp": datetime.datetime.now().isoformat(),
-                }
-            )
-
-            return (
-                models,  # models_state
-                conv_state,  # conversation_state
-                "",  # clear prompt_input
-                response_a,  # model_a_response
-                response_b,  # model_b_response
-                gr.update(visible=True),  # show voting_section
-                gr.update(visible=False),  # hide reveal_section
-                "",  # vote_status
-            )
-
-        def vote_for_model(choice, models, conv_state):
-            """Handle voting and reveal models."""
-            if not models or not conv_state.conversation_history:
-                return (
-                    conv_state,
-                    "",
-                    gr.update(visible=False),
-                    gr.update(visible=False),
-                    "",
-                )
-
-            # Prepare vote data according to BixArena schema
-            vote_data = {
-                "id": conv_state.conversation_id,
-                "timestamp": datetime.datetime.now().isoformat(),
-                "username": "anonymous_user",  # Replace with actual Synapse user
-                "model_a": models[0],
-                "model_b": models[1],
-                "vote": choice,
-                "prompt": conv_state.conversation_history[-1]["prompt"],
-                "round": len(conv_state.conversation_history),
-                "language": "en",  # Detect language in production
-            }
-
-            # Print vote data to console (replace with database save in production)
-            print("=== VOTE SUBMITTED ===")
-            print(json.dumps(vote_data, indent=2))
-            print("=====================")
-
-            conv_state.vote_data = vote_data
-            conv_state.vote_state = VoteState.VOTED
-
-            # Prepare reveal message
-            choice_text = {
-                "model_a": "You chose **Assistant A**",
-                "model_b": "You chose **Assistant B**",
-                "tie": "You declared it a **Tie**",
-            }
-
-            reveal_text = f"""
-            {choice_text[choice]}
-            
-            **Assistant A:** `{models[0]}`  
-            **Assistant B:** `{models[1]}`
-            
-            ✅ Thank you for your evaluation! Your vote helps improve biomedical AI.
-            
-            The conversation is now locked. Start a new chat to evaluate more models.
-            """
-
-            return (
-                conv_state,  # conversation_state
-                "Vote submitted successfully! ✅",  # vote_status
-                gr.update(visible=False),  # hide voting_section
-                gr.update(visible=True),  # show reveal_section
-                reveal_text,  # model_reveal
-            )
-
-        # Event Handlers
-        new_chat_btn.click(
-            start_new_conversation,
-            outputs=[
-                models_state,
-                conversation_state,
-                prompt_input,
-                model_a_response,
-                model_b_response,
-                voting_section,
-                reveal_section,
-                vote_status,
-                model_reveal,
-            ],
+    if args.model_list_mode == "reload":
+        models, all_models = get_model_list(
+            args.controller_url,
+            args.register_api_endpoint_file,
+            False,
         )
 
-        send_btn.click(
-            send_prompt,
-            inputs=[prompt_input, models_state, conversation_state],
-            outputs=[
-                models_state,
-                conversation_state,
-                prompt_input,
-                model_a_response,
-                model_b_response,
-                voting_section,
-                reveal_section,
-                vote_status,
-            ],
+        vl_models, all_vl_models = get_model_list(
+            args.controller_url,
+            args.register_api_endpoint_file,
+            True,
         )
 
-        prompt_input.submit(
-            send_prompt,
-            inputs=[prompt_input, models_state, conversation_state],
-            outputs=[
-                models_state,
-                conversation_state,
-                prompt_input,
-                model_a_response,
-                model_b_response,
-                voting_section,
-                reveal_section,
-                vote_status,
-            ],
+    single_updates = load_demo_single(models, url_params)
+    side_by_side_anony_updates = load_demo_side_by_side_anony(all_models, url_params)
+    side_by_side_named_updates = load_demo_side_by_side_named(models, url_params)
+    vision_language_updates = load_demo_single(vl_models, url_params)
+
+    return (
+        (gr.Tabs(selected=selected),)
+        + single_updates
+        + side_by_side_anony_updates
+        + side_by_side_named_updates
+        + vision_language_updates
+    )
+
+
+def build_header():
+    """Build a minimal header with two buttons"""
+    with gr.Row():
+        with gr.Column(scale=1):
+            gr.HTML("<h2>BixArena</h2>")
+        with gr.Column(scale=1):
+            with gr.Row():
+                battle_btn = gr.Button("Battle")
+                leaderboard_btn = gr.Button("Leaderboard")
+
+    return battle_btn, leaderboard_btn
+
+
+def build_demo(models, vl_models, elo_results_file, leaderboard_table_file):
+    text_size = gr.themes.sizes.text_md
+    if args.show_terms_of_use:
+        load_js = get_window_url_params_with_tos_js
+    else:
+        load_js = get_window_url_params_js
+
+    head_js = """
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+"""
+    if args.ga_id is not None:
+        head_js += f"""
+<script async src="https://www.googletagmanager.com/gtag/js?id={args.ga_id}"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){{dataLayer.push(arguments);}}
+gtag('js', new Date());
+
+gtag('config', '{args.ga_id}');
+window.__gradio_mode__ = "app";
+</script>
+        """
+
+    with gr.Blocks(
+        title="Chat with Open Large Language Models",
+        theme=gr.themes.Default(text_size=text_size),
+        css=block_css,
+        head=head_js,
+    ) as demo:
+        battle_btn, leaderboard_btn = build_header()
+
+        with gr.Tabs() as tabs:
+            with gr.Tab("Arena (battle)", id=0):
+                side_by_side_anony_list = build_side_by_side_ui_anony(models)
+
+            with gr.Tab("Arena (side-by-side)", id=1):
+                side_by_side_named_list = build_side_by_side_ui_named(models)
+
+            with gr.Tab("Direct Chat", id=2):
+                single_model_list = build_single_model_ui(
+                    models, add_promotion_links=True
+                )
+
+            with gr.Tab(
+                "Vision-Language Model Direct Chat", id=3, visible=args.multimodal
+            ):
+                single_vision_language_model_list = (
+                    build_single_vision_language_model_ui(
+                        vl_models, add_promotion_links=True
+                    )
+                )
+
+            if elo_results_file:
+                with gr.Tab("Leaderboard", id=4):
+                    build_leaderboard_tab(elo_results_file, leaderboard_table_file)
+
+            with gr.Tab("About Us", id=5):
+                about = build_about()
+
+        with gr.Column(visible=False) as leaderboard_page:
+            build_leaderboard_page()
+            leaderboard_btn.click(lambda: gr.Tabs(selected=4), outputs=tabs)
+
+        battle_btn.click(
+            lambda: [gr.Column(visible=True), gr.Column(visible=False)],
+            outputs=[tabs, leaderboard_page],
+        )
+        leaderboard_btn.click(
+            lambda: [gr.Column(visible=False), gr.Column(visible=True)],
+            outputs=[tabs, leaderboard_page],
         )
 
-        vote_a_btn.click(
-            lambda models, conv_state: vote_for_model("model_a", models, conv_state),
-            inputs=[models_state, conversation_state],
-            outputs=[
-                conversation_state,
-                vote_status,
-                voting_section,
-                reveal_section,
-                model_reveal,
-            ],
+        url_params = gr.JSON(visible=False)
+
+        if args.model_list_mode not in ["once", "reload"]:
+            raise ValueError(f"Unknown model list mode: {args.model_list_mode}")
+
+        demo.load(
+            load_demo,
+            [url_params],
+            [tabs]
+            + single_model_list
+            + side_by_side_anony_list
+            + side_by_side_named_list
+            + single_vision_language_model_list,
+            js=load_js,
         )
 
-        vote_tie_btn.click(
-            lambda models, conv_state: vote_for_model("tie", models, conv_state),
-            inputs=[models_state, conversation_state],
-            outputs=[
-                conversation_state,
-                vote_status,
-                voting_section,
-                reveal_section,
-                model_reveal,
-            ],
-        )
+    return demo
 
-        vote_b_btn.click(
-            lambda models, conv_state: vote_for_model("model_b", models, conv_state),
-            inputs=[models_state, conversation_state],
-            outputs=[
-                conversation_state,
-                vote_status,
-                voting_section,
-                reveal_section,
-                model_reveal,
-            ],
-        )
 
-    return battle_page
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--host", type=str, default="0.0.0.0")
+    parser.add_argument("--port", type=int)
+    parser.add_argument(
+        "--share",
+        action="store_true",
+        help="Whether to generate a public, shareable link",
+    )
+    parser.add_argument(
+        "--controller-url",
+        type=str,
+        default="http://localhost:21001",
+        help="The address of the controller",
+    )
+    parser.add_argument(
+        "--concurrency-count",
+        type=int,
+        default=10,
+        help="The concurrency count of the gradio queue",
+    )
+    parser.add_argument(
+        "--model-list-mode",
+        type=str,
+        default="once",
+        choices=["once", "reload"],
+        help="Whether to load the model list once or reload the model list every time.",
+    )
+    parser.add_argument(
+        "--moderate",
+        action="store_true",
+        help="Enable content moderation to block unsafe inputs",
+    )
+    parser.add_argument(
+        "--show-terms-of-use",
+        action="store_true",
+        help="Shows term of use before loading the demo",
+    )
+    parser.add_argument(
+        "--multimodal", action="store_true", help="Show multi modal tabs."
+    )
+    parser.add_argument(
+        "--register-api-endpoint-file",
+        type=str,
+        help="Register API-based model endpoints from a JSON file",
+    )
+    parser.add_argument(
+        "--gradio-auth-path",
+        type=str,
+        help='Set the gradio authentication file path. The file should contain one or more user:password pairs in this format: "u1:p1,u2:p2,u3:p3"',
+        default=None,
+    )
+    parser.add_argument(
+        "--elo-results-file", type=str, help="Load leaderboard results and plots"
+    )
+    parser.add_argument(
+        "--leaderboard-table-file", type=str, help="Load leaderboard results and plots"
+    )
+    parser.add_argument(
+        "--gradio-root-path",
+        type=str,
+        help="Sets the gradio root path, eg /abc/def. Useful when running behind a reverse-proxy or at a custom URL path prefix",
+    )
+    parser.add_argument(
+        "--ga-id",
+        type=str,
+        help="the Google Analytics ID",
+        default=None,
+    )
+    args = parser.parse_args()
+    logger.info(f"args: {args}")
+
+    # Set global variables
+    set_global_vars(args.controller_url, args.moderate)
+    set_global_vars_named(args.moderate)
+    set_global_vars_anony(args.moderate)
+    models, all_models = get_model_list(
+        args.controller_url,
+        args.register_api_endpoint_file,
+        False,
+    )
+
+    vl_models, all_vl_models = get_model_list(
+        args.controller_url,
+        args.register_api_endpoint_file,
+        True,
+    )
+
+    # Set authorization credentials
+    auth = None
+    if args.gradio_auth_path is not None:
+        auth = parse_gradio_auth_creds(args.gradio_auth_path)
+
+    # Launch the demo
+    demo = build_demo(
+        models,
+        vl_models,
+        args.elo_results_file,
+        args.leaderboard_table_file,
+    )
+    demo.queue(
+        default_concurrency_limit=args.concurrency_count,
+        status_update_rate=10,
+        api_open=False,
+    ).launch(
+        server_name=args.host,
+        server_port=args.port,
+        share=args.share,
+        max_threads=200,
+        auth=auth,
+        root_path=args.gradio_root_path,
+    )
