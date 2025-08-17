@@ -5,8 +5,8 @@ import org.sagebionetworks.bixarena.api.exception.LeaderboardNotFoundException;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSnapshotPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSnapshotQueryDto;
 import org.sagebionetworks.bixarena.api.model.entity.LeaderboardEntity;
-import org.sagebionetworks.bixarena.api.model.entity.LeaderboardSnapshotEntity;
 import org.sagebionetworks.bixarena.api.model.mapper.LeaderboardSnapshotMapper;
+import org.sagebionetworks.bixarena.api.model.projection.SnapshotWithEntryCount;
 import org.sagebionetworks.bixarena.api.model.repository.LeaderboardRepository;
 import org.sagebionetworks.bixarena.api.model.repository.LeaderboardSnapshotRepository;
 import org.slf4j.Logger;
@@ -52,12 +52,12 @@ public class LeaderboardSnapshotService {
     // Create pageable with sorting
     Pageable pageable = createPageable(snapshotQuery);
 
-    // Find snapshots for this leaderboard
-    Page<LeaderboardSnapshotEntity> snapshotsPage =
-      snapshotRepository.findByLeaderboardOrderByCreatedAtDesc(leaderboard, pageable);
+    // Find snapshots for this leaderboard with entry counts in a single query
+    Page<SnapshotWithEntryCount> snapshotsPage =
+      snapshotRepository.findSnapshotsWithEntryCountByLeaderboard(leaderboard, pageable);
 
     return LeaderboardSnapshotPageDto.builder()
-      .snapshots(snapshotMapper.convertToDtoList(snapshotsPage.getContent()))
+      .snapshots(snapshotMapper.convertFromProjectionList(snapshotsPage.getContent()))
       .number(snapshotsPage.getNumber())
       .size(snapshotsPage.getSize())
       .totalElements(snapshotsPage.getTotalElements())
