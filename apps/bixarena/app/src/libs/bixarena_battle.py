@@ -192,7 +192,11 @@ window.__gradio_mode__ = "app";
     return demo
 
 
-if __name__ == "__main__":
+def build_battle_page(
+    register_api_endpoint_file=None,
+    controller_url=None,
+    moderate=False,
+):
     parser = argparse.ArgumentParser()
     parser.add_argument("--host", type=str, default="0.0.0.0")
     parser.add_argument("--port", type=int)
@@ -292,15 +296,16 @@ if __name__ == "__main__":
         args.elo_results_file,
         args.leaderboard_table_file,
     )
-    demo.queue(
-        default_concurrency_limit=args.concurrency_count,
-        status_update_rate=10,
-        api_open=False,
-    ).launch(
-        server_name=args.host,
-        server_port=args.port,
-        share=args.share,
-        max_threads=200,
-        auth=auth,
-        root_path=args.gradio_root_path,
-    )
+    # demo.queue(
+    #     default_concurrency_limit=args.concurrency_count,
+    #     status_update_rate=10,
+    #     api_open=False,
+    # ).launch(
+    #     server_name=args.host,
+    #     server_port=args.port,
+    #     share=args.share,
+    #     max_threads=200,
+    #     auth=auth,
+    #     root_path=args.gradio_root_path,
+    # )
+    return demo
