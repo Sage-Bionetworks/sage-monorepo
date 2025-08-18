@@ -54,6 +54,8 @@ paths:
                     - name
                     - description
                     - updatedAt
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /leaderboards/{leaderboardId}:
@@ -493,14 +495,14 @@ components:
           required:
             - snapshots
   responses:
-    InternalServerError:
-      description: The request cannot be fulfilled due to an unexpected server error
+    BadRequest:
+      description: Invalid request parameters
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-    BadRequest:
-      description: Invalid request parameters
+    InternalServerError:
+      description: The request cannot be fulfilled due to an unexpected server error
       content:
         application/problem+json:
           schema:
