@@ -1,7 +1,7 @@
 type: object
 description: Data associated with a model
 properties:
-  model:
+  name:
     type: string
     description: Name of the model
   evidence_type:
@@ -22,7 +22,7 @@ properties:
     items:
       $ref: IndividualData.yaml
 required:
-  - model
+  - name
   - evidence_type
   - tissue
   - age

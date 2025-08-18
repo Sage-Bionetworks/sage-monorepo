@@ -3,8 +3,8 @@ import { NextFunction, Request, Response } from 'express';
 import { cache, setHeaders } from '../helpers';
 import { ModelsCollection } from '../models';
 
-export async function getModel(model: string) {
-  const cacheKey = 'model-' + model;
+export async function getModel(name: string) {
+  const cacheKey = 'model-' + name;
   const cachedResult: Model | null | undefined = cache.get(cacheKey);
 
   // If we have a cached result (including null), return it
@@ -13,7 +13,7 @@ export async function getModel(model: string) {
   }
 
   const result = await ModelsCollection.findOne({
-    model: model,
+    name: name,
   })
     .lean()
     .exec();
@@ -23,18 +23,18 @@ export async function getModel(model: string) {
 }
 
 export async function modelRoute(req: Request, res: Response, next: NextFunction) {
-  if (!req.params?.model) {
+  if (!req.params?.name) {
     res.status(400).contentType('application/problem+json').json({
       title: 'Bad Request',
       status: 400,
-      detail: 'Model parameter is required',
+      detail: 'Name parameter is required',
       instance: req.path,
     });
     return;
   }
 
   try {
-    const result = await getModel(req.params.model);
+    const result = await getModel(req.params.name);
 
     if (!result) {
       res.status(404).contentType('application/problem+json').json({

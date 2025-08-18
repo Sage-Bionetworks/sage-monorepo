@@ -16,7 +16,7 @@ export interface ModelOverview {
   /**
    * Model name
    */
-  model: string;
+  name: string;
   /**
    * Model type (e.g., Late Onset AD, Familial AD)
    */
@@ -36,4 +36,18 @@ export interface ModelOverview {
    * List of modified genes in the model
    */
   modified_genes: Array<string>;
+  available_data: Array<ModelOverview.AvailableDataEnum>;
+}
+export namespace ModelOverview {
+  export type AvailableDataEnum =
+    | 'Gene Expression'
+    | 'Pathology'
+    | 'Biomarkers'
+    | 'Disease Correlation';
+  export const AvailableDataEnum = {
+    GeneExpression: 'Gene Expression' as AvailableDataEnum,
+    Pathology: 'Pathology' as AvailableDataEnum,
+    Biomarkers: 'Biomarkers' as AvailableDataEnum,
+    DiseaseCorrelation: 'Disease Correlation' as AvailableDataEnum,
+  };
 }

@@ -1,6 +1,6 @@
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
-import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import { PlatformService } from '@sagebionetworks/explorers/services';
+import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
 import { ModelsService } from '@sagebionetworks/model-ad/api-client-angular';
 import { MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
@@ -19,7 +19,7 @@ async function setup(
   const user = userEvent.setup();
 
   const mockActivatedRoute = {
-    paramMap: of(convertToParamMap({ model: model.model, tab: tab, subtab: subtab })),
+    paramMap: of(convertToParamMap({ name: model.name, tab: tab, subtab: subtab })),
   };
 
   const mockModelsService = {
@@ -52,7 +52,7 @@ describe('ModelDetailsComponent', () => {
 
   it('should display the model name', async () => {
     await setup();
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(modelMock.model);
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(modelMock.name);
   });
 
   it('should display all tabs for which the model has data', async () => {

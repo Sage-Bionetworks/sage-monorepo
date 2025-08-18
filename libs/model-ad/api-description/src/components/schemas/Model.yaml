@@ -1,7 +1,7 @@
 type: object
 description: Model details
 properties:
-  model:
+  name:
     type: string
     description: Name of the model
   matched_controls:
@@ -51,7 +51,7 @@ properties:
     items:
       $ref: ModelData.yaml
 required:
-  - model
+  - name
   - matched_controls
   - model_type
   - contributing_group

@@ -50,7 +50,7 @@ mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection 
 const router = express.Router();
 mongoose.connection.once('open', async () => {
   router.get('/dataversion', dataVersionRoute);
-  router.get('/models/:model', modelRoute);
+  router.get('/models/:name', modelRoute);
   router.get('/comparison-tool-config', comparisonToolConfigRoute);
   router.get('/comparison-tools/model-overview', modelOverviewRoute);
 });

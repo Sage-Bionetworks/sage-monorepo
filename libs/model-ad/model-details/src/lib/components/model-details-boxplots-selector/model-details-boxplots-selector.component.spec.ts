@@ -17,7 +17,7 @@ async function setup(model = modelMock, title = mockTitle, wikiParams = validWik
     imports: [MockWikiComponent],
     componentInputs: {
       title: title,
-      modelName: model.model,
+      modelName: model.name,
       modelControls: model.matched_controls,
       modelDataList: model.pathology,
       wikiParams: wikiParams,
@@ -36,7 +36,7 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
 
   it('should render description with model name', async () => {
     await setup();
-    expect(screen.getByText(modelMock.model, { exact: false })).toBeVisible();
+    expect(screen.getByText(modelMock.name, { exact: false })).toBeVisible();
   });
 
   it('should render filters', async () => {
@@ -61,7 +61,7 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
     const basePt = { sex: IndividualData.SexEnum.Male, individual_id: '1', value: 100 };
     const mockModelDataList = [
       {
-        model: 'ModelName',
+        name: 'ModelName',
         evidence_type: 'Test',
         tissue: 'Brain',
         age: '4 months',
@@ -75,7 +75,7 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
         ],
       },
       {
-        model: 'ModelName',
+        name: 'ModelName',
         evidence_type: 'Test2',
         tissue: 'Brain',
         age: '4 months',
@@ -90,7 +90,7 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
     const { component } = await setup(
       {
         ...modelMock,
-        model: 'ModelName (Some Qualifier)',
+        name: 'ModelName (Some Qualifier)',
         matched_controls: ['Control1', 'Control2'],
         pathology: mockModelDataList,
       },

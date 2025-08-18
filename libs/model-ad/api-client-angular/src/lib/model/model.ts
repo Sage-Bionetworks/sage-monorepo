@@ -17,7 +17,7 @@ export interface Model {
   /**
    * Name of the model
    */
-  model: string;
+  name: string;
   /**
    * List of matched controls
    */

@@ -1,7 +1,7 @@
 type: object
 description: Model Overview object for comparison tools
 properties:
-  model:
+  name:
     type: string
     description: Model name
   model_type:
@@ -36,11 +36,21 @@ properties:
     items:
       type: string
     description: List of modified genes in the model
+  available_data:
+    type: array
+    items:
+      type: string
+      enum:
+        - Gene Expression
+        - Pathology
+        - Biomarkers
+        - Disease Correlation
 required:
-  - model
+  - name
   - model_type
   - matched_controls
   - study_data
   - jax_strain
   - center
   - modified_genes
+  - available_data

@@ -43,7 +43,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /models/{model}:
+  /models/{name}:
     get:
       tags:
         - Models
@@ -51,7 +51,7 @@ paths:
       description: Retrieve detailed information for a specific model by its name
       operationId: getModelByName
       parameters:
-        - name: model
+        - name: name
           in: path
           description: Name of the model to retrieve
           required: true
@@ -212,7 +212,7 @@ components:
       type: object
       description: Data associated with a model
       properties:
-        model:
+        name:
           type: string
           description: Name of the model
         evidence_type:
@@ -233,7 +233,7 @@ components:
           items:
             $ref: '#/components/schemas/IndividualData'
       required:
-        - model
+        - name
         - evidence_type
         - tissue
         - age
@@ -243,7 +243,7 @@ components:
       type: object
       description: Model details
       properties:
-        model:
+        name:
           type: string
           description: Name of the model
         matched_controls:
@@ -293,7 +293,7 @@ components:
           items:
             $ref: '#/components/schemas/ModelData'
       required:
-        - model
+        - name
         - matched_controls
         - model_type
         - contributing_group
@@ -406,7 +406,7 @@ components:
       type: object
       description: Model Overview object for comparison tools
       properties:
-        model:
+        name:
           type: string
           description: Model name
         model_type:
@@ -441,14 +441,24 @@ components:
           items:
             type: string
           description: List of modified genes in the model
+        available_data:
+          type: array
+          items:
+            type: string
+            enum:
+              - Gene Expression
+              - Pathology
+              - Biomarkers
+              - Disease Correlation
       required:
-        - model
+        - name
         - model_type
         - matched_controls
         - study_data
         - jax_strain
         - center
         - modified_genes
+        - available_data
   responses:
     BadRequest:
       description: Invalid request

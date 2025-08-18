@@ -14,12 +14,12 @@
     <div class="panel-content">
       @switch (activePanel) {
         @case ('omics') {
-          <model-ad-model-details-omics [modelName]="model.model" />
+          <model-ad-model-details-omics [modelName]="model.name" />
         }
         @case ('biomarkers') {
           <model-ad-model-details-boxplots-selector
             [title]="'Biomarkers'"
-            [modelName]="model.model"
+            [modelName]="model.name"
             [modelControls]="model.matched_controls"
             [modelDataList]="model.biomarkers"
             [wikiParams]="biomarkersWikiParams"
@@ -28,7 +28,7 @@
         @case ('pathology') {
           <model-ad-model-details-boxplots-selector
             [title]="'Pathology'"
-            [modelName]="model.model"
+            [modelName]="model.name"
             [modelControls]="model.matched_controls"
             [modelDataList]="model.pathology"
             [wikiParams]="pathologyWikiParams"
