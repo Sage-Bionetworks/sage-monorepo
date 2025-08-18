@@ -18,8 +18,8 @@ paths:
   /leaderboards:
     $ref: paths/leaderboards.yaml
   /leaderboards/{leaderboardId}:
-    $ref: paths/leaderboards@{leaderboardId}.yaml
+    $ref: paths/leaderboards/{leaderboardId}.yaml
   /leaderboards/{leaderboardId}/history/{modelId}:
-    $ref: paths/leaderboards@{leaderboardId}@history@{modelId}.yaml
+    $ref: paths/leaderboards/{leaderboardId}/history/{modelId}.yaml
   /leaderboards/{leaderboardId}/snapshots:
-    $ref: paths/leaderboards@{leaderboardId}@snapshots.yaml
+    $ref: paths/leaderboards/{leaderboardId}/snapshots.yaml
