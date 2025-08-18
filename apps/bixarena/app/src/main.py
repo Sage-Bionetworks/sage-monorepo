@@ -21,13 +21,24 @@ class PageNavigator:
 def parse_args():
     """Parse command line arguments"""
     parser = argparse.ArgumentParser()
-    parser.add_argument("--host", type=str, default="localhost")
+    parser.add_argument("--host", type=str, default="127.0.0.1")
     parser.add_argument("--port", type=int)
+    parser.add_argument(
+        "--share",
+        action="store_true",
+        help="Whether to generate a public, shareable link",
+    )
     parser.add_argument(
         "--controller-url",
         type=str,
         default="",
         help="The address of the controller",
+    )
+    parser.add_argument(
+        "--concurrency-count",
+        type=int,
+        default=10,
+        help="The concurrency count of the gradio queue",
     )
     parser.add_argument(
         "--register-api-endpoint-file",
@@ -38,6 +49,11 @@ def parse_args():
         "--moderate",
         action="store_true",
         help="Enable content moderation to block unsafe inputs",
+    )
+    parser.add_argument(
+        "--gradio-root-path",
+        type=str,
+        help="Sets the gradio root path, eg /abc/def. Useful when running behind a reverse-proxy or at a custom URL path prefix",
     )
     return parser.parse_args()
 
@@ -95,4 +111,15 @@ if __name__ == "__main__":
         controller_url=args.controller_url,
         moderate=args.moderate,
     )
-    app.launch(server_port=args.port, server_name=args.host)
+
+    app.queue(
+        default_concurrency_limit=args.concurrency_count,
+        status_update_rate=10,
+        api_open=False,
+    ).launch(
+        server_name=args.host,
+        server_port=args.port,
+        share=args.share,
+        max_threads=200,
+        root_path=args.gradio_root_path,
+    )

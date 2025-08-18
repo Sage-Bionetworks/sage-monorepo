@@ -3,8 +3,6 @@ The gradio demo server with multiple tabs.
 It supports chatting with a single model or chatting with two models side-by-side.
 """
 
-import argparse
-
 import gradio as gr
 
 from fastchat.serve.gradio_block_arena_anony import (
@@ -34,7 +32,6 @@ from fastchat.utils import (
     build_logger,
     get_window_url_params_js,
     get_window_url_params_with_tos_js,
-    parse_gradio_auth_creds,
 )
 
 from fastchat.serve.gradio_leaderboard_page import build_leaderboard_page
@@ -197,115 +194,47 @@ def build_battle_page(
     controller_url=None,
     moderate=False,
 ):
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--host", type=str, default="0.0.0.0")
-    parser.add_argument("--port", type=int)
-    parser.add_argument(
-        "--share",
-        action="store_true",
-        help="Whether to generate a public, shareable link",
-    )
-    parser.add_argument(
-        "--controller-url",
-        type=str,
-        default="http://localhost:21001",
-        help="The address of the controller",
-    )
-    parser.add_argument(
-        "--concurrency-count",
-        type=int,
-        default=10,
-        help="The concurrency count of the gradio queue",
-    )
-    parser.add_argument(
-        "--model-list-mode",
-        type=str,
-        default="once",
-        choices=["once", "reload"],
-        help="Whether to load the model list once or reload the model list every time.",
-    )
-    parser.add_argument(
-        "--moderate",
-        action="store_true",
-        help="Enable content moderation to block unsafe inputs",
-    )
-    parser.add_argument(
-        "--show-terms-of-use",
-        action="store_true",
-        help="Shows term of use before loading the demo",
-    )
-    parser.add_argument(
-        "--multimodal", action="store_true", help="Show multi modal tabs."
-    )
-    parser.add_argument(
-        "--register-api-endpoint-file",
-        type=str,
-        help="Register API-based model endpoints from a JSON file",
-    )
-    parser.add_argument(
-        "--gradio-auth-path",
-        type=str,
-        help='Set the gradio authentication file path. The file should contain one or more user:password pairs in this format: "u1:p1,u2:p2,u3:p3"',
-        default=None,
-    )
-    parser.add_argument(
-        "--elo-results-file", type=str, help="Load leaderboard results and plots"
-    )
-    parser.add_argument(
-        "--leaderboard-table-file", type=str, help="Load leaderboard results and plots"
-    )
-    parser.add_argument(
-        "--gradio-root-path",
-        type=str,
-        help="Sets the gradio root path, eg /abc/def. Useful when running behind a reverse-proxy or at a custom URL path prefix",
-    )
-    parser.add_argument(
-        "--ga-id",
-        type=str,
-        help="the Google Analytics ID",
-        default=None,
-    )
-    args = parser.parse_args()
+    # Create simple args object with default values
+    class Args:
+        def __init__(self):
+            self.controller_url = controller_url
+            self.register_api_endpoint_file = register_api_endpoint_file
+            self.moderate = moderate
+            self.show_terms_of_use = False
+            self.multimodal = False
+            self.ga_id = None
+            self.gradio_auth_path = None
+            self.elo_results_file = None
+            self.leaderboard_table_file = None
+            self.model_list_mode = "once"
+
+    # Make args available at module level for the other functions
+    global args, models, all_models, vl_models
+    args = Args()
     logger.info(f"args: {args}")
 
     # Set global variables
-    set_global_vars(args.controller_url, args.moderate)
-    set_global_vars_named(args.moderate)
-    set_global_vars_anony(args.moderate)
+    set_global_vars(controller_url, moderate)
+    set_global_vars_named(moderate)
+    set_global_vars_anony(moderate)
     models, all_models = get_model_list(
-        args.controller_url,
-        args.register_api_endpoint_file,
+        controller_url,
+        register_api_endpoint_file,
         False,
     )
 
     vl_models, all_vl_models = get_model_list(
-        args.controller_url,
-        args.register_api_endpoint_file,
+        controller_url,
+        register_api_endpoint_file,
         True,
     )
 
-    # Set authorization credentials
-    auth = None
-    if args.gradio_auth_path is not None:
-        auth = parse_gradio_auth_creds(args.gradio_auth_path)
-
-    # Launch the demo
+    # Build the demo
     demo = build_demo(
         models,
         vl_models,
         args.elo_results_file,
         args.leaderboard_table_file,
     )
-    # demo.queue(
-    #     default_concurrency_limit=args.concurrency_count,
-    #     status_update_rate=10,
-    #     api_open=False,
-    # ).launch(
-    #     server_name=args.host,
-    #     server_port=args.port,
-    #     share=args.share,
-    #     max_threads=200,
-    #     auth=auth,
-    #     root_path=args.gradio_root_path,
-    # )
+
     return demo
