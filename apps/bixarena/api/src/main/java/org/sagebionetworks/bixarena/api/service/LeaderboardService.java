@@ -6,9 +6,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.sagebionetworks.bixarena.api.exception.LeaderboardNotFoundException;
 import org.sagebionetworks.bixarena.api.exception.LeaderboardSnapshotNotFoundException;
-import org.sagebionetworks.bixarena.api.model.dto.LeaderboardPageDto;
+import org.sagebionetworks.bixarena.api.model.dto.LeaderboardEntryPageDto;
+import org.sagebionetworks.bixarena.api.model.dto.LeaderboardListInnerDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSearchQueryDto;
-import org.sagebionetworks.bixarena.api.model.dto.ListLeaderboards200ResponseInnerDto;
 import org.sagebionetworks.bixarena.api.model.entity.LeaderboardEntity;
 import org.sagebionetworks.bixarena.api.model.entity.LeaderboardEntryEntity;
 import org.sagebionetworks.bixarena.api.model.entity.LeaderboardSnapshotEntity;
@@ -46,7 +46,7 @@ public class LeaderboardService {
   }
 
   @Transactional(readOnly = true)
-  public List<ListLeaderboards200ResponseInnerDto> listLeaderboards() {
+  public List<LeaderboardListInnerDto> listLeaderboards() {
     logger.info("Listing all leaderboards");
 
     List<LeaderboardEntity> leaderboards = leaderboardRepository.findAll();
@@ -55,7 +55,10 @@ public class LeaderboardService {
   }
 
   @Transactional(readOnly = true)
-  public LeaderboardPageDto getLeaderboard(String leaderboardId, LeaderboardSearchQueryDto query) {
+  public LeaderboardEntryPageDto getLeaderboard(
+    String leaderboardId,
+    LeaderboardSearchQueryDto query
+  ) {
     logger.info("Getting leaderboard {} with query {}", leaderboardId, query);
 
     // Use default query if not provided
@@ -80,7 +83,7 @@ public class LeaderboardService {
       pageable
     );
 
-    return LeaderboardPageDto.builder()
+    return LeaderboardEntryPageDto.builder()
       .entries(entryMapper.convertToDtoList(entriesPage.getContent()))
       .updatedAt(snapshot.getCreatedAt())
       .snapshotId(snapshot.getSnapshotIdentifier())
@@ -175,14 +178,14 @@ public class LeaderboardService {
     }
   }
 
-  private ListLeaderboards200ResponseInnerDto convertToListResponse(LeaderboardEntity entity) {
+  private LeaderboardListInnerDto convertToListResponse(LeaderboardEntity entity) {
     // Get latest snapshot for last updated time
     List<LeaderboardSnapshotEntity> snapshots = snapshotRepository.findLatestByLeaderboard(entity);
     OffsetDateTime updatedAt = snapshots.isEmpty()
       ? entity.getUpdatedAt()
       : snapshots.get(0).getCreatedAt();
 
-    return ListLeaderboards200ResponseInnerDto.builder()
+    return LeaderboardListInnerDto.builder()
       .id(entity.getSlug())
       .name(entity.getName())
       .description(entity.getDescription())

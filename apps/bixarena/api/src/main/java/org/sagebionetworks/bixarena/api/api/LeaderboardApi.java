@@ -6,13 +6,13 @@
 package org.sagebionetworks.bixarena.api.api;
 
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
+import org.sagebionetworks.bixarena.api.model.dto.LeaderboardEntryPageDto;
+import org.sagebionetworks.bixarena.api.model.dto.LeaderboardListInnerDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardModelHistoryPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardModelHistoryQueryDto;
-import org.sagebionetworks.bixarena.api.model.dto.LeaderboardPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSnapshotPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSnapshotQueryDto;
-import org.sagebionetworks.bixarena.api.model.dto.ListLeaderboards200ResponseInnerDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -64,8 +64,8 @@ public interface LeaderboardApi {
         tags = { "Leaderboard" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = LeaderboardPageDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = LeaderboardPageDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = LeaderboardEntryPageDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = LeaderboardEntryPageDto.class))
             }),
             @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
@@ -87,7 +87,7 @@ public interface LeaderboardApi {
         produces = { "application/json", "application/problem+json" }
     )
     
-    default ResponseEntity<LeaderboardPageDto> getLeaderboard(
+    default ResponseEntity<LeaderboardEntryPageDto> getLeaderboard(
         @Parameter(name = "leaderboardId", description = "The unique identifier of a leaderboard", required = true, in = ParameterIn.PATH) @PathVariable("leaderboardId") String leaderboardId,
         @Parameter(name = "leaderboardSearchQuery", description = "The search query used to find and filter leaderboard entries.", in = ParameterIn.QUERY) @Valid @Nullable LeaderboardSearchQueryDto leaderboardSearchQuery
     ) {
@@ -200,6 +200,7 @@ public interface LeaderboardApi {
      * Get a list of all available leaderboards with their metadata
      *
      * @return Success (status code 200)
+     *         or Invalid request parameters (status code 400)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
@@ -209,8 +210,12 @@ public interface LeaderboardApi {
         tags = { "Leaderboard" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
-                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = ListLeaderboards200ResponseInnerDto.class))),
-                @Content(mediaType = "application/problem+json", array = @ArraySchema(schema = @Schema(implementation = ListLeaderboards200ResponseInnerDto.class)))
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = LeaderboardListInnerDto.class))),
+                @Content(mediaType = "application/problem+json", array = @ArraySchema(schema = @Schema(implementation = LeaderboardListInnerDto.class)))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
             @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
@@ -224,7 +229,7 @@ public interface LeaderboardApi {
         produces = { "application/json", "application/problem+json" }
     )
     
-    default ResponseEntity<List<ListLeaderboards200ResponseInnerDto>> listLeaderboards(
+    default ResponseEntity<List<LeaderboardListInnerDto>> listLeaderboards(
         
     ) {
         return getDelegate().listLeaderboards();

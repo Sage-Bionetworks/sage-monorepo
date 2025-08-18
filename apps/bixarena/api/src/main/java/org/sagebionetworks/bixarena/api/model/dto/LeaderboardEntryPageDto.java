@@ -25,10 +25,10 @@ import jakarta.annotation.Generated;
  * A page of leaderboard entries.
  */
 
-@Schema(name = "LeaderboardPage", description = "A page of leaderboard entries.")
-@JsonTypeName("LeaderboardPage")
+@Schema(name = "LeaderboardEntryPage", description = "A page of leaderboard entries.")
+@JsonTypeName("LeaderboardEntryPage")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
-public class LeaderboardPageDto {
+public class LeaderboardEntryPageDto {
 
   private Integer number;
 
@@ -50,14 +50,14 @@ public class LeaderboardPageDto {
   @Valid
   private List<@Valid LeaderboardEntryDto> entries = new ArrayList<>();
 
-  public LeaderboardPageDto() {
+  public LeaderboardEntryPageDto() {
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-  public LeaderboardPageDto(Integer number, Integer size, Long totalElements, Integer totalPages, Boolean hasNext, Boolean hasPrevious, OffsetDateTime updatedAt, String snapshotId, List<@Valid LeaderboardEntryDto> entries) {
+  public LeaderboardEntryPageDto(Integer number, Integer size, Long totalElements, Integer totalPages, Boolean hasNext, Boolean hasPrevious, OffsetDateTime updatedAt, String snapshotId, List<@Valid LeaderboardEntryDto> entries) {
     this.number = number;
     this.size = size;
     this.totalElements = totalElements;
@@ -69,7 +69,7 @@ public class LeaderboardPageDto {
     this.entries = entries;
   }
 
-  public LeaderboardPageDto number(Integer number) {
+  public LeaderboardEntryPageDto number(Integer number) {
     this.number = number;
     return this;
   }
@@ -89,7 +89,7 @@ public class LeaderboardPageDto {
     this.number = number;
   }
 
-  public LeaderboardPageDto size(Integer size) {
+  public LeaderboardEntryPageDto size(Integer size) {
     this.size = size;
     return this;
   }
@@ -109,7 +109,7 @@ public class LeaderboardPageDto {
     this.size = size;
   }
 
-  public LeaderboardPageDto totalElements(Long totalElements) {
+  public LeaderboardEntryPageDto totalElements(Long totalElements) {
     this.totalElements = totalElements;
     return this;
   }
@@ -129,7 +129,7 @@ public class LeaderboardPageDto {
     this.totalElements = totalElements;
   }
 
-  public LeaderboardPageDto totalPages(Integer totalPages) {
+  public LeaderboardEntryPageDto totalPages(Integer totalPages) {
     this.totalPages = totalPages;
     return this;
   }
@@ -149,7 +149,7 @@ public class LeaderboardPageDto {
     this.totalPages = totalPages;
   }
 
-  public LeaderboardPageDto hasNext(Boolean hasNext) {
+  public LeaderboardEntryPageDto hasNext(Boolean hasNext) {
     this.hasNext = hasNext;
     return this;
   }
@@ -169,7 +169,7 @@ public class LeaderboardPageDto {
     this.hasNext = hasNext;
   }
 
-  public LeaderboardPageDto hasPrevious(Boolean hasPrevious) {
+  public LeaderboardEntryPageDto hasPrevious(Boolean hasPrevious) {
     this.hasPrevious = hasPrevious;
     return this;
   }
@@ -189,7 +189,7 @@ public class LeaderboardPageDto {
     this.hasPrevious = hasPrevious;
   }
 
-  public LeaderboardPageDto updatedAt(OffsetDateTime updatedAt) {
+  public LeaderboardEntryPageDto updatedAt(OffsetDateTime updatedAt) {
     this.updatedAt = updatedAt;
     return this;
   }
@@ -209,7 +209,7 @@ public class LeaderboardPageDto {
     this.updatedAt = updatedAt;
   }
 
-  public LeaderboardPageDto snapshotId(String snapshotId) {
+  public LeaderboardEntryPageDto snapshotId(String snapshotId) {
     this.snapshotId = snapshotId;
     return this;
   }
@@ -229,12 +229,12 @@ public class LeaderboardPageDto {
     this.snapshotId = snapshotId;
   }
 
-  public LeaderboardPageDto entries(List<@Valid LeaderboardEntryDto> entries) {
+  public LeaderboardEntryPageDto entries(List<@Valid LeaderboardEntryDto> entries) {
     this.entries = entries;
     return this;
   }
 
-  public LeaderboardPageDto addEntriesItem(LeaderboardEntryDto entriesItem) {
+  public LeaderboardEntryPageDto addEntriesItem(LeaderboardEntryDto entriesItem) {
     if (this.entries == null) {
       this.entries = new ArrayList<>();
     }
@@ -265,16 +265,16 @@ public class LeaderboardPageDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    LeaderboardPageDto leaderboardPage = (LeaderboardPageDto) o;
-    return Objects.equals(this.number, leaderboardPage.number) &&
-        Objects.equals(this.size, leaderboardPage.size) &&
-        Objects.equals(this.totalElements, leaderboardPage.totalElements) &&
-        Objects.equals(this.totalPages, leaderboardPage.totalPages) &&
-        Objects.equals(this.hasNext, leaderboardPage.hasNext) &&
-        Objects.equals(this.hasPrevious, leaderboardPage.hasPrevious) &&
-        Objects.equals(this.updatedAt, leaderboardPage.updatedAt) &&
-        Objects.equals(this.snapshotId, leaderboardPage.snapshotId) &&
-        Objects.equals(this.entries, leaderboardPage.entries);
+    LeaderboardEntryPageDto leaderboardEntryPage = (LeaderboardEntryPageDto) o;
+    return Objects.equals(this.number, leaderboardEntryPage.number) &&
+        Objects.equals(this.size, leaderboardEntryPage.size) &&
+        Objects.equals(this.totalElements, leaderboardEntryPage.totalElements) &&
+        Objects.equals(this.totalPages, leaderboardEntryPage.totalPages) &&
+        Objects.equals(this.hasNext, leaderboardEntryPage.hasNext) &&
+        Objects.equals(this.hasPrevious, leaderboardEntryPage.hasPrevious) &&
+        Objects.equals(this.updatedAt, leaderboardEntryPage.updatedAt) &&
+        Objects.equals(this.snapshotId, leaderboardEntryPage.snapshotId) &&
+        Objects.equals(this.entries, leaderboardEntryPage.entries);
   }
 
   @Override
@@ -285,7 +285,7 @@ public class LeaderboardPageDto {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class LeaderboardPageDto {\n");
+    sb.append("class LeaderboardEntryPageDto {\n");
     sb.append("    number: ").append(toIndentedString(number)).append("\n");
     sb.append("    size: ").append(toIndentedString(size)).append("\n");
     sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
@@ -312,17 +312,17 @@ public class LeaderboardPageDto {
   
   public static class Builder {
 
-    private LeaderboardPageDto instance;
+    private LeaderboardEntryPageDto instance;
 
     public Builder() {
-      this(new LeaderboardPageDto());
+      this(new LeaderboardEntryPageDto());
     }
 
-    protected Builder(LeaderboardPageDto instance) {
+    protected Builder(LeaderboardEntryPageDto instance) {
       this.instance = instance;
     }
 
-    protected Builder copyOf(LeaderboardPageDto value) { 
+    protected Builder copyOf(LeaderboardEntryPageDto value) { 
       this.instance.setNumber(value.number);
       this.instance.setSize(value.size);
       this.instance.setTotalElements(value.totalElements);
@@ -335,57 +335,57 @@ public class LeaderboardPageDto {
       return this;
     }
 
-    public LeaderboardPageDto.Builder number(Integer number) {
+    public LeaderboardEntryPageDto.Builder number(Integer number) {
       this.instance.number(number);
       return this;
     }
     
-    public LeaderboardPageDto.Builder size(Integer size) {
+    public LeaderboardEntryPageDto.Builder size(Integer size) {
       this.instance.size(size);
       return this;
     }
     
-    public LeaderboardPageDto.Builder totalElements(Long totalElements) {
+    public LeaderboardEntryPageDto.Builder totalElements(Long totalElements) {
       this.instance.totalElements(totalElements);
       return this;
     }
     
-    public LeaderboardPageDto.Builder totalPages(Integer totalPages) {
+    public LeaderboardEntryPageDto.Builder totalPages(Integer totalPages) {
       this.instance.totalPages(totalPages);
       return this;
     }
     
-    public LeaderboardPageDto.Builder hasNext(Boolean hasNext) {
+    public LeaderboardEntryPageDto.Builder hasNext(Boolean hasNext) {
       this.instance.hasNext(hasNext);
       return this;
     }
     
-    public LeaderboardPageDto.Builder hasPrevious(Boolean hasPrevious) {
+    public LeaderboardEntryPageDto.Builder hasPrevious(Boolean hasPrevious) {
       this.instance.hasPrevious(hasPrevious);
       return this;
     }
     
-    public LeaderboardPageDto.Builder updatedAt(OffsetDateTime updatedAt) {
+    public LeaderboardEntryPageDto.Builder updatedAt(OffsetDateTime updatedAt) {
       this.instance.updatedAt(updatedAt);
       return this;
     }
     
-    public LeaderboardPageDto.Builder snapshotId(String snapshotId) {
+    public LeaderboardEntryPageDto.Builder snapshotId(String snapshotId) {
       this.instance.snapshotId(snapshotId);
       return this;
     }
     
-    public LeaderboardPageDto.Builder entries(List<LeaderboardEntryDto> entries) {
+    public LeaderboardEntryPageDto.Builder entries(List<LeaderboardEntryDto> entries) {
       this.instance.entries(entries);
       return this;
     }
     
     /**
-    * returns a built LeaderboardPageDto instance.
+    * returns a built LeaderboardEntryPageDto instance.
     *
     * The builder is not reusable (NullPointerException)
     */
-    public LeaderboardPageDto build() {
+    public LeaderboardEntryPageDto build() {
       try {
         return this.instance;
       } finally {
@@ -403,15 +403,15 @@ public class LeaderboardPageDto {
   /**
   * Create a builder with no initialized field (except for the default values).
   */
-  public static LeaderboardPageDto.Builder builder() {
-    return new LeaderboardPageDto.Builder();
+  public static LeaderboardEntryPageDto.Builder builder() {
+    return new LeaderboardEntryPageDto.Builder();
   }
 
   /**
   * Create a builder with a shallow copy of this instance.
   */
-  public LeaderboardPageDto.Builder toBuilder() {
-    LeaderboardPageDto.Builder builder = new LeaderboardPageDto.Builder();
+  public LeaderboardEntryPageDto.Builder toBuilder() {
+    LeaderboardEntryPageDto.Builder builder = new LeaderboardEntryPageDto.Builder();
     return builder.copyOf(this);
   }
 

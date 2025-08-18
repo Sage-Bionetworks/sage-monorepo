@@ -1,15 +1,15 @@
 package org.sagebionetworks.bixarena.api.api;
 
 import java.util.List;
+import org.sagebionetworks.bixarena.api.model.dto.LeaderboardEntryPageDto;
+import org.sagebionetworks.bixarena.api.model.dto.LeaderboardListInnerDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardModelHistoryPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardModelHistoryQueryDto;
-import org.sagebionetworks.bixarena.api.model.dto.LeaderboardPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSnapshotPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSnapshotQueryDto;
-import org.sagebionetworks.bixarena.api.model.dto.ListLeaderboards200ResponseInnerDto;
-import org.sagebionetworks.bixarena.api.service.LeaderboardService;
 import org.sagebionetworks.bixarena.api.service.LeaderboardModelHistoryService;
+import org.sagebionetworks.bixarena.api.service.LeaderboardService;
 import org.sagebionetworks.bixarena.api.service.LeaderboardSnapshotService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -32,11 +32,13 @@ public class LeaderboardApiDelegateImpl implements LeaderboardApiDelegate {
   }
 
   @Override
-  public ResponseEntity<LeaderboardPageDto> getLeaderboard(
+  public ResponseEntity<LeaderboardEntryPageDto> getLeaderboard(
     String leaderboardId,
     LeaderboardSearchQueryDto leaderboardSearchQuery
   ) {
-    return ResponseEntity.ok(leaderboardService.getLeaderboard(leaderboardId, leaderboardSearchQuery));
+    return ResponseEntity.ok(
+      leaderboardService.getLeaderboard(leaderboardId, leaderboardSearchQuery)
+    );
   }
 
   @Override
@@ -44,7 +46,9 @@ public class LeaderboardApiDelegateImpl implements LeaderboardApiDelegate {
     String leaderboardId,
     LeaderboardSnapshotQueryDto leaderboardSnapshotQuery
   ) {
-    return ResponseEntity.ok(leaderboardSnapshotService.getLeaderboardSnapshots(leaderboardId, leaderboardSnapshotQuery));
+    return ResponseEntity.ok(
+      leaderboardSnapshotService.getLeaderboardSnapshots(leaderboardId, leaderboardSnapshotQuery)
+    );
   }
 
   @Override
@@ -53,11 +57,17 @@ public class LeaderboardApiDelegateImpl implements LeaderboardApiDelegate {
     String modelId,
     LeaderboardModelHistoryQueryDto leaderboardModelHistoryQuery
   ) {
-    return ResponseEntity.ok(leaderboardModelHistoryService.getModelHistory(leaderboardId, modelId, leaderboardModelHistoryQuery));
+    return ResponseEntity.ok(
+      leaderboardModelHistoryService.getModelHistory(
+        leaderboardId,
+        modelId,
+        leaderboardModelHistoryQuery
+      )
+    );
   }
 
   @Override
-  public ResponseEntity<List<ListLeaderboards200ResponseInnerDto>> listLeaderboards() {
+  public ResponseEntity<List<LeaderboardListInnerDto>> listLeaderboards() {
     return ResponseEntity.ok(leaderboardService.listLeaderboards());
   }
 }

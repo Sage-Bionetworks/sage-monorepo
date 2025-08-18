@@ -24,10 +24,10 @@ paths:
           content:
             application/json:
               schema:
-                items:
-                  $ref: '#/components/schemas/listLeaderboards_200_response_inner'
-                type: array
+                $ref: '#/components/schemas/LeaderboardList'
           description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
       summary: List all available leaderboards
@@ -65,7 +65,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LeaderboardPage'
+                $ref: '#/components/schemas/LeaderboardEntryPage'
           description: Success
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -234,18 +234,18 @@ components:
         $ref: '#/components/schemas/LeaderboardSnapshotQuery'
       style: deepObject
   responses:
-    InternalServerError:
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-      description: The request cannot be fulfilled due to an unexpected server error
     BadRequest:
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: Invalid request parameters
+    InternalServerError:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The request cannot be fulfilled due to an unexpected server error
     NotFound:
       content:
         application/problem+json:
@@ -253,6 +253,11 @@ components:
             $ref: '#/components/schemas/BasicError'
       description: The requested resource was not found
   schemas:
+    LeaderboardList:
+      description: A list of leaderboards.
+      items:
+        $ref: '#/components/schemas/LeaderboardList_inner'
+      type: array
     BasicError:
       description: Problem details (tools.ietf.org/html/rfc7807)
       properties:
@@ -427,7 +432,7 @@ components:
         - rank
         - voteCount
       type: object
-    LeaderboardPage:
+    LeaderboardEntryPage:
       allOf:
         - $ref: '#/components/schemas/PageMetadata'
         - properties:
@@ -697,7 +702,7 @@ components:
         hasNext: true
         totalElements: 99
       type: object
-    listLeaderboards_200_response_inner:
+    LeaderboardList_inner:
       example:
         name: Open Source Models
         description: Performance ranking of open-source AI models

@@ -1,13 +1,13 @@
 package org.sagebionetworks.bixarena.api.api;
 
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
+import org.sagebionetworks.bixarena.api.model.dto.LeaderboardEntryPageDto;
+import org.sagebionetworks.bixarena.api.model.dto.LeaderboardListInnerDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardModelHistoryPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardModelHistoryQueryDto;
-import org.sagebionetworks.bixarena.api.model.dto.LeaderboardPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSnapshotPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSnapshotQueryDto;
-import org.sagebionetworks.bixarena.api.model.dto.ListLeaderboards200ResponseInnerDto;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

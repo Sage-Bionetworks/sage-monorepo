@@ -1,13 +1,13 @@
 package org.sagebionetworks.bixarena.api.api;
 
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
+import org.sagebionetworks.bixarena.api.model.dto.LeaderboardEntryPageDto;
+import org.sagebionetworks.bixarena.api.model.dto.LeaderboardListInnerDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardModelHistoryPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardModelHistoryQueryDto;
-import org.sagebionetworks.bixarena.api.model.dto.LeaderboardPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSnapshotPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSnapshotQueryDto;
-import org.sagebionetworks.bixarena.api.model.dto.ListLeaderboards200ResponseInnerDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +45,7 @@ public interface LeaderboardApiDelegate {
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see LeaderboardApi#getLeaderboard
      */
-    default ResponseEntity<LeaderboardPageDto> getLeaderboard(String leaderboardId,
+    default ResponseEntity<LeaderboardEntryPageDto> getLeaderboard(String leaderboardId,
         LeaderboardSearchQueryDto leaderboardSearchQuery) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
@@ -166,15 +166,21 @@ public interface LeaderboardApiDelegate {
      * Get a list of all available leaderboards with their metadata
      *
      * @return Success (status code 200)
+     *         or Invalid request parameters (status code 400)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      * @see LeaderboardApi#listLeaderboards
      */
-    default ResponseEntity<List<ListLeaderboards200ResponseInnerDto>> listLeaderboards() {
+    default ResponseEntity<List<LeaderboardListInnerDto>> listLeaderboards() {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "[ { \"name\" : \"Open Source Models\", \"description\" : \"Performance ranking of open-source AI models\", \"id\" : \"open-source\", \"updatedAt\" : \"2025-08-16T14:30:00Z\" }, { \"name\" : \"Open Source Models\", \"description\" : \"Performance ranking of open-source AI models\", \"id\" : \"open-source\", \"updatedAt\" : \"2025-08-16T14:30:00Z\" } ]";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {

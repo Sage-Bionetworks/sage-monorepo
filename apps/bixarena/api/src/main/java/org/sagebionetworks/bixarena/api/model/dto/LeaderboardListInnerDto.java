@@ -18,12 +18,12 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * ListLeaderboards200ResponseInnerDto
+ * LeaderboardListInnerDto
  */
 
-@JsonTypeName("listLeaderboards_200_response_inner")
+@JsonTypeName("LeaderboardList_inner")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
-public class ListLeaderboards200ResponseInnerDto {
+public class LeaderboardListInnerDto {
 
   private String id;
 
@@ -34,21 +34,21 @@ public class ListLeaderboards200ResponseInnerDto {
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime updatedAt;
 
-  public ListLeaderboards200ResponseInnerDto() {
+  public LeaderboardListInnerDto() {
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-  public ListLeaderboards200ResponseInnerDto(String id, String name, String description, OffsetDateTime updatedAt) {
+  public LeaderboardListInnerDto(String id, String name, String description, OffsetDateTime updatedAt) {
     this.id = id;
     this.name = name;
     this.description = description;
     this.updatedAt = updatedAt;
   }
 
-  public ListLeaderboards200ResponseInnerDto id(String id) {
+  public LeaderboardListInnerDto id(String id) {
     this.id = id;
     return this;
   }
@@ -68,7 +68,7 @@ public class ListLeaderboards200ResponseInnerDto {
     this.id = id;
   }
 
-  public ListLeaderboards200ResponseInnerDto name(String name) {
+  public LeaderboardListInnerDto name(String name) {
     this.name = name;
     return this;
   }
@@ -88,7 +88,7 @@ public class ListLeaderboards200ResponseInnerDto {
     this.name = name;
   }
 
-  public ListLeaderboards200ResponseInnerDto description(String description) {
+  public LeaderboardListInnerDto description(String description) {
     this.description = description;
     return this;
   }
@@ -108,7 +108,7 @@ public class ListLeaderboards200ResponseInnerDto {
     this.description = description;
   }
 
-  public ListLeaderboards200ResponseInnerDto updatedAt(OffsetDateTime updatedAt) {
+  public LeaderboardListInnerDto updatedAt(OffsetDateTime updatedAt) {
     this.updatedAt = updatedAt;
     return this;
   }
@@ -136,11 +136,11 @@ public class ListLeaderboards200ResponseInnerDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ListLeaderboards200ResponseInnerDto listLeaderboards200ResponseInner = (ListLeaderboards200ResponseInnerDto) o;
-    return Objects.equals(this.id, listLeaderboards200ResponseInner.id) &&
-        Objects.equals(this.name, listLeaderboards200ResponseInner.name) &&
-        Objects.equals(this.description, listLeaderboards200ResponseInner.description) &&
-        Objects.equals(this.updatedAt, listLeaderboards200ResponseInner.updatedAt);
+    LeaderboardListInnerDto leaderboardListInner = (LeaderboardListInnerDto) o;
+    return Objects.equals(this.id, leaderboardListInner.id) &&
+        Objects.equals(this.name, leaderboardListInner.name) &&
+        Objects.equals(this.description, leaderboardListInner.description) &&
+        Objects.equals(this.updatedAt, leaderboardListInner.updatedAt);
   }
 
   @Override
@@ -151,7 +151,7 @@ public class ListLeaderboards200ResponseInnerDto {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ListLeaderboards200ResponseInnerDto {\n");
+    sb.append("class LeaderboardListInnerDto {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
@@ -173,17 +173,17 @@ public class ListLeaderboards200ResponseInnerDto {
   
   public static class Builder {
 
-    private ListLeaderboards200ResponseInnerDto instance;
+    private LeaderboardListInnerDto instance;
 
     public Builder() {
-      this(new ListLeaderboards200ResponseInnerDto());
+      this(new LeaderboardListInnerDto());
     }
 
-    protected Builder(ListLeaderboards200ResponseInnerDto instance) {
+    protected Builder(LeaderboardListInnerDto instance) {
       this.instance = instance;
     }
 
-    protected Builder copyOf(ListLeaderboards200ResponseInnerDto value) { 
+    protected Builder copyOf(LeaderboardListInnerDto value) { 
       this.instance.setId(value.id);
       this.instance.setName(value.name);
       this.instance.setDescription(value.description);
@@ -191,32 +191,32 @@ public class ListLeaderboards200ResponseInnerDto {
       return this;
     }
 
-    public ListLeaderboards200ResponseInnerDto.Builder id(String id) {
+    public LeaderboardListInnerDto.Builder id(String id) {
       this.instance.id(id);
       return this;
     }
     
-    public ListLeaderboards200ResponseInnerDto.Builder name(String name) {
+    public LeaderboardListInnerDto.Builder name(String name) {
       this.instance.name(name);
       return this;
     }
     
-    public ListLeaderboards200ResponseInnerDto.Builder description(String description) {
+    public LeaderboardListInnerDto.Builder description(String description) {
       this.instance.description(description);
       return this;
     }
     
-    public ListLeaderboards200ResponseInnerDto.Builder updatedAt(OffsetDateTime updatedAt) {
+    public LeaderboardListInnerDto.Builder updatedAt(OffsetDateTime updatedAt) {
       this.instance.updatedAt(updatedAt);
       return this;
     }
     
     /**
-    * returns a built ListLeaderboards200ResponseInnerDto instance.
+    * returns a built LeaderboardListInnerDto instance.
     *
     * The builder is not reusable (NullPointerException)
     */
-    public ListLeaderboards200ResponseInnerDto build() {
+    public LeaderboardListInnerDto build() {
       try {
         return this.instance;
       } finally {
@@ -234,15 +234,15 @@ public class ListLeaderboards200ResponseInnerDto {
   /**
   * Create a builder with no initialized field (except for the default values).
   */
-  public static ListLeaderboards200ResponseInnerDto.Builder builder() {
-    return new ListLeaderboards200ResponseInnerDto.Builder();
+  public static LeaderboardListInnerDto.Builder builder() {
+    return new LeaderboardListInnerDto.Builder();
   }
 
   /**
   * Create a builder with a shallow copy of this instance.
   */
-  public ListLeaderboards200ResponseInnerDto.Builder toBuilder() {
-    ListLeaderboards200ResponseInnerDto.Builder builder = new ListLeaderboards200ResponseInnerDto.Builder();
+  public LeaderboardListInnerDto.Builder toBuilder() {
+    LeaderboardListInnerDto.Builder builder = new LeaderboardListInnerDto.Builder();
     return builder.copyOf(this);
   }
 
