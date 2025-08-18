@@ -1,0 +1,7 @@
+name: modelId
+description: The unique identifier of a model
+in: path
+required: true
+schema:
+  type: string
+  example: 'model_456'

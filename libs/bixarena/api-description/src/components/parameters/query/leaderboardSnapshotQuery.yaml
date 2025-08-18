@@ -1,0 +1,7 @@
+name: leaderboardSnapshotQuery
+description: The query used to filter and paginate leaderboard snapshots.
+in: query
+style: deepObject
+explode: true
+schema:
+  $ref: ../../schemas/LeaderboardSnapshotQuery.yaml

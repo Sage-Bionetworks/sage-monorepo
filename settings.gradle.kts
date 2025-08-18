@@ -1,5 +1,13 @@
 rootProject.name = "sagebionetworks"
 
+// Include the AMP-ALS projects as submodules
+include(":amp-als-app-config-data")
+include(":amp-als-dataset-service")
+include(":amp-als-user-service")
+
+// Include the BixArena projects as submodules
+include(":bixarena-api")
+
 // Include the OpenChallenges projects as submodules
 include(":openchallenges-api-client-java")
 include(":openchallenges-api-gateway")
@@ -10,11 +18,6 @@ include(":openchallenges-image-service")
 include(":openchallenges-mcp-server")
 include(":openchallenges-organization-service")
 
-// Include the AMP-ALS projects as submodules
-include(":amp-als-app-config-data")
-include(":amp-als-dataset-service")
-include(":amp-als-user-service")
-
 // Include the shared Java utilities
 include(":sagebionetworks-util")
 
@@ -22,6 +25,7 @@ include(":sagebionetworks-util")
 project(":amp-als-app-config-data").projectDir = file("libs/amp-als/app-config-data")
 project(":amp-als-dataset-service").projectDir = file("apps/amp-als/dataset-service")
 project(":amp-als-user-service").projectDir = file("apps/amp-als/user-service")
+project(":bixarena-api").projectDir = file("apps/bixarena/api")
 project(":openchallenges-api-client-java").projectDir = file("libs/openchallenges/api-client-java")
 project(":openchallenges-api-gateway").projectDir = file("apps/openchallenges/api-gateway")
 project(":openchallenges-app-config-data").projectDir = file("libs/openchallenges/app-config-data")

@@ -1,0 +1,24 @@
+get:
+  tags:
+    - Leaderboard
+  summary: Get model performance history
+  description: Get historical performance data for a specific model in a leaderboard
+  operationId: getModelHistory
+  x-audience: [public]
+  parameters:
+    - $ref: ../../../../components/parameters/path/leaderboardId.yaml
+    - $ref: ../../../../components/parameters/path/modelId.yaml
+    - $ref: ../../../../components/parameters/query/leaderboardModelHistoryQuery.yaml
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../../../../components/schemas/LeaderboardModelHistoryPage.yaml
+    '400':
+      $ref: ../../../../components/responses/BadRequest.yaml
+    '404':
+      $ref: ../../../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../../../components/responses/InternalServerError.yaml

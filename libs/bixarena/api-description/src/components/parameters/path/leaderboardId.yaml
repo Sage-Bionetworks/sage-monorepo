@@ -1,0 +1,7 @@
+name: leaderboardId
+description: The unique identifier of a leaderboard
+in: path
+required: true
+schema:
+  type: string
+  example: 'open-source'

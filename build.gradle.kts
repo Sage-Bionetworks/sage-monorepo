@@ -53,6 +53,10 @@ subprojects {
       group = "org.sagebionetworks.amp.als"
       version = "0.0.1-SNAPSHOT"
     }
+    name.startsWith("bixarena") -> {
+      group = "org.sagebionetworks.bixarena"
+      version = "0.0.1-SNAPSHOT"
+    }
     name.startsWith("openchallenges") -> {
       group = "org.sagebionetworks.openchallenges"
       version = "0.0.1-SNAPSHOT"
