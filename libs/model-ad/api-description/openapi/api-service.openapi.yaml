@@ -441,6 +441,15 @@ components:
           items:
             type: string
           description: List of modified genes in the model
+        available_data:
+          type: array
+          items:
+            type: string
+            enum:
+              - Gene Expression
+              - Pathology
+              - Biomarkers
+              - Disease Correlation
       required:
         - name
         - model_type
@@ -449,6 +458,7 @@ components:
         - jax_strain
         - center
         - modified_genes
+        - available_data
   responses:
     BadRequest:
       description: Invalid request

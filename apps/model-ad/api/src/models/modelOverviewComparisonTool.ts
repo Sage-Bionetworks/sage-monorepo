@@ -19,6 +19,11 @@ const ModelOverviewSchema = new Schema<ModelOverview>(
     jax_strain: { type: ModelOverviewLinkSchema, required: true },
     center: { type: ModelOverviewLinkSchema, required: true },
     modified_genes: { type: [String], required: true },
+    available_data: {
+      type: [String],
+      required: true,
+      enum: ModelOverview.AvailableDataEnum,
+    },
   },
   {
     collection: 'model_overview',

@@ -9,7 +9,7 @@ export { Model } from '@sagebionetworks/model-ad/api-client-angular';
 
 const IndividualDataSchema = new Schema<IndividualData>({
   genotype: { type: String, required: true },
-  sex: { type: String, required: true, enum: ['Female', 'Male'] },
+  sex: { type: String, required: true, enum: IndividualData.SexEnum },
   individual_id: { type: String, required: true },
   value: { type: Number, required: true },
 });
