@@ -10,32 +10,7 @@ get:
       content:
         application/json:
           schema:
-            type: array
-            items:
-              type: object
-              properties:
-                id:
-                  type: string
-                  description: Unique identifier for the leaderboard
-                  example: 'open-source'
-                name:
-                  type: string
-                  description: Display name for the leaderboard
-                  example: 'Open Source Models'
-                description:
-                  type: string
-                  description: Description of what this leaderboard measures
-                  example: 'Performance ranking of open-source AI models'
-                updatedAt:
-                  type: string
-                  format: date-time
-                  description: When this leaderboard was last updated
-                  example: '2025-08-16T14:30:00Z'
-              required:
-                - id
-                - name
-                - description
-                - updatedAt
+            $ref: ../components/schemas/LeaderboardList.yaml
     '400':
       $ref: ../components/responses/BadRequest.yaml
     '500':

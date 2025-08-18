@@ -28,32 +28,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                      description: Unique identifier for the leaderboard
-                      example: open-source
-                    name:
-                      type: string
-                      description: Display name for the leaderboard
-                      example: Open Source Models
-                    description:
-                      type: string
-                      description: Description of what this leaderboard measures
-                      example: Performance ranking of open-source AI models
-                    updatedAt:
-                      type: string
-                      format: date-time
-                      description: When this leaderboard was last updated
-                      example: '2025-08-16T14:30:00Z'
-                  required:
-                    - id
-                    - name
-                    - description
-                    - updatedAt
+                $ref: '#/components/schemas/LeaderboardList'
         '400':
           $ref: '#/components/responses/BadRequest'
         '500':
@@ -76,7 +51,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LeaderboardPage'
+                $ref: '#/components/schemas/LeaderboardEntryPage'
         '400':
           $ref: '#/components/responses/BadRequest'
         '404':
@@ -136,6 +111,34 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    LeaderboardList:
+      type: array
+      description: A list of leaderboards.
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+            description: Unique identifier for the leaderboard
+            example: open-source
+          name:
+            type: string
+            description: Display name for the leaderboard
+            example: Open Source Models
+          description:
+            type: string
+            description: Description of what this leaderboard measures
+            example: Performance ranking of open-source AI models
+          updatedAt:
+            type: string
+            format: date-time
+            description: When this leaderboard was last updated
+            example: '2025-08-16T14:30:00Z'
+        required:
+          - id
+          - name
+          - description
+          - updatedAt
     BasicError:
       type: object
       description: Problem details (tools.ietf.org/html/rfc7807)
@@ -299,7 +302,7 @@ components:
         - voteCount
         - rank
         - createdAt
-    LeaderboardPage:
+    LeaderboardEntryPage:
       type: object
       description: A page of leaderboard entries.
       allOf:

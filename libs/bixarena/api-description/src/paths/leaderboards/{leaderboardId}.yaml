@@ -14,7 +14,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: ../../components/schemas/LeaderboardEntriesPage.yaml
+            $ref: ../../components/schemas/LeaderboardEntryPage.yaml
     '400':
       $ref: ../../components/responses/BadRequest.yaml
     '404':
