@@ -16,7 +16,7 @@ export interface ModelOverview {
   /**
    * Model name
    */
-  model: string;
+  name: string;
   /**
    * Model type (e.g., Late Onset AD, Familial AD)
    */

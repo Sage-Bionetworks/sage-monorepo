@@ -1,7 +1,7 @@
 import { Model } from '@sagebionetworks/model-ad/api-client-angular';
 
 export const modelMock: Model = {
-  model: '3xTg-AD',
+  name: '3xTg-AD',
   matched_controls: ['B6129'],
   model_type: 'Familial AD',
   contributing_group: 'UCI',
@@ -36,7 +36,7 @@ export const modelMock: Model = {
   ],
   biomarkers: [
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Insoluble A&beta;40',
       tissue: 'Cerebral Cortex',
       age: '4 months',
@@ -64,7 +64,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Insoluble A&beta;40',
       tissue: 'Cerebral Cortex',
       age: '12 months',
@@ -91,7 +91,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Insoluble A&beta;40',
       tissue: 'Cerebral Cortex',
       age: '18 months',
@@ -118,7 +118,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Insoluble A&beta;40',
       tissue: 'Hippocampus',
       age: '4 months',
@@ -146,7 +146,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Insoluble A&beta;40',
       tissue: 'Hippocampus',
       age: '12 months',
@@ -173,7 +173,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Insoluble A&beta;40',
       tissue: 'Hippocampus',
       age: '18 months',
@@ -200,7 +200,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Insoluble A&beta;42',
       tissue: 'Cerebral Cortex',
       age: '4 months',
@@ -228,7 +228,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Insoluble A&beta;42',
       tissue: 'Cerebral Cortex',
       age: '12 months',
@@ -255,7 +255,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Insoluble A&beta;42',
       tissue: 'Cerebral Cortex',
       age: '18 months',
@@ -281,7 +281,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Insoluble A&beta;42',
       tissue: 'Hippocampus',
       age: '4 months',
@@ -309,7 +309,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Insoluble A&beta;42',
       tissue: 'Hippocampus',
       age: '12 months',
@@ -336,7 +336,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Insoluble A&beta;42',
       tissue: 'Hippocampus',
       age: '18 months',
@@ -363,7 +363,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Soluble A&beta;40',
       tissue: 'Cerebral Cortex',
       age: '4 months',
@@ -391,7 +391,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Soluble A&beta;40',
       tissue: 'Cerebral Cortex',
       age: '12 months',
@@ -419,7 +419,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Soluble A&beta;40',
       tissue: 'Cerebral Cortex',
       age: '18 months',
@@ -446,7 +446,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Soluble A&beta;40',
       tissue: 'Hippocampus',
       age: '4 months',
@@ -474,7 +474,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Soluble A&beta;40',
       tissue: 'Hippocampus',
       age: '12 months',
@@ -500,7 +500,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Soluble A&beta;40',
       tissue: 'Hippocampus',
       age: '18 months',
@@ -527,7 +527,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Soluble A&beta;42',
       tissue: 'Cerebral Cortex',
       age: '4 months',
@@ -555,7 +555,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Soluble A&beta;42',
       tissue: 'Cerebral Cortex',
       age: '12 months',
@@ -583,7 +583,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Soluble A&beta;42',
       tissue: 'Cerebral Cortex',
       age: '18 months',
@@ -610,7 +610,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Soluble A&beta;42',
       tissue: 'Hippocampus',
       age: '4 months',
@@ -638,7 +638,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Soluble A&beta;42',
       tissue: 'Hippocampus',
       age: '12 months',
@@ -664,7 +664,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Soluble A&beta;42',
       tissue: 'Hippocampus',
       age: '18 months',
@@ -693,7 +693,7 @@ export const modelMock: Model = {
   ],
   pathology: [
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Astrocyte Cell Density (GFAP)',
       tissue: 'Cerebral Cortex',
       age: '4 months',
@@ -726,7 +726,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Astrocyte Cell Density (GFAP)',
       tissue: 'Cerebral Cortex',
       age: '12 months',
@@ -759,7 +759,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Astrocyte Cell Density (GFAP)',
       tissue: 'Cerebral Cortex',
       age: '18 months',
@@ -792,7 +792,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Astrocyte Cell Density (GFAP)',
       tissue: 'Hippocampus',
       age: '4 months',
@@ -825,7 +825,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Astrocyte Cell Density (GFAP)',
       tissue: 'Hippocampus',
       age: '12 months',
@@ -858,7 +858,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Astrocyte Cell Density (GFAP)',
       tissue: 'Hippocampus',
       age: '18 months',
@@ -891,7 +891,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Astrocyte Cell Density (S100B)',
       tissue: 'Cerebral Cortex',
       age: '4 months',
@@ -924,7 +924,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Astrocyte Cell Density (S100B)',
       tissue: 'Cerebral Cortex',
       age: '12 months',
@@ -957,7 +957,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Astrocyte Cell Density (S100B)',
       tissue: 'Cerebral Cortex',
       age: '18 months',
@@ -990,7 +990,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Astrocyte Cell Density (S100B)',
       tissue: 'Hippocampus',
       age: '4 months',
@@ -1023,7 +1023,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Astrocyte Cell Density (S100B)',
       tissue: 'Hippocampus',
       age: '12 months',
@@ -1056,7 +1056,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Astrocyte Cell Density (S100B)',
       tissue: 'Hippocampus',
       age: '18 months',
@@ -1089,7 +1089,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Dystrophic Neurites (LAMP1)',
       tissue: 'Cerebral Cortex',
       age: '4 months',
@@ -1122,7 +1122,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Dystrophic Neurites (LAMP1)',
       tissue: 'Cerebral Cortex',
       age: '12 months',
@@ -1155,7 +1155,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Dystrophic Neurites (LAMP1)',
       tissue: 'Cerebral Cortex',
       age: '18 months',
@@ -1187,7 +1187,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Dystrophic Neurites (LAMP1)',
       tissue: 'Hippocampus',
       age: '4 months',
@@ -1220,7 +1220,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Dystrophic Neurites (LAMP1)',
       tissue: 'Hippocampus',
       age: '12 months',
@@ -1253,7 +1253,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Dystrophic Neurites (LAMP1)',
       tissue: 'Hippocampus',
       age: '18 months',
@@ -1285,7 +1285,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Microglia Cell Density (IBA1)',
       tissue: 'Cerebral Cortex',
       age: '4 months',
@@ -1318,7 +1318,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Microglia Cell Density (IBA1)',
       tissue: 'Cerebral Cortex',
       age: '12 months',
@@ -1351,7 +1351,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Microglia Cell Density (IBA1)',
       tissue: 'Cerebral Cortex',
       age: '18 months',
@@ -1384,7 +1384,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Microglia Cell Density (IBA1)',
       tissue: 'Hippocampus',
       age: '4 months',
@@ -1417,7 +1417,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Microglia Cell Density (IBA1)',
       tissue: 'Hippocampus',
       age: '12 months',
@@ -1450,7 +1450,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Microglia Cell Density (IBA1)',
       tissue: 'Hippocampus',
       age: '18 months',
@@ -1483,7 +1483,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Phospho-tau (AT8)',
       tissue: 'Hippocampus',
       age: '4 months',
@@ -1516,7 +1516,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Phospho-tau (AT8)',
       tissue: 'Hippocampus',
       age: '12 months',
@@ -1549,7 +1549,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Phospho-tau (AT8)',
       tissue: 'Hippocampus',
       age: '18 months',
@@ -1582,7 +1582,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Plaque Density (Thio-S)',
       tissue: 'Cerebral Cortex',
       age: '4 months',
@@ -1615,7 +1615,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Plaque Density (Thio-S)',
       tissue: 'Cerebral Cortex',
       age: '12 months',
@@ -1648,7 +1648,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Plaque Density (Thio-S)',
       tissue: 'Cerebral Cortex',
       age: '18 months',
@@ -1681,7 +1681,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Plaque Density (Thio-S)',
       tissue: 'Hippocampus',
       age: '4 months',
@@ -1714,7 +1714,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Plaque Density (Thio-S)',
       tissue: 'Hippocampus',
       age: '12 months',
@@ -1747,7 +1747,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Plaque Density (Thio-S)',
       tissue: 'Hippocampus',
       age: '18 months',
@@ -1780,7 +1780,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Plaque Size (Thio-S)',
       tissue: 'Cerebral Cortex',
       age: '4 months',
@@ -1813,7 +1813,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Plaque Size (Thio-S)',
       tissue: 'Cerebral Cortex',
       age: '12 months',
@@ -1846,7 +1846,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Plaque Size (Thio-S)',
       tissue: 'Cerebral Cortex',
       age: '18 months',
@@ -1879,7 +1879,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Plaque Size (Thio-S)',
       tissue: 'Hippocampus',
       age: '4 months',
@@ -1912,7 +1912,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Plaque Size (Thio-S)',
       tissue: 'Hippocampus',
       age: '12 months',
@@ -1945,7 +1945,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Plaque Size (Thio-S)',
       tissue: 'Hippocampus',
       age: '18 months',
@@ -1978,7 +1978,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Tau (HT7)',
       tissue: 'Hippocampus',
       age: '4 months',
@@ -2011,7 +2011,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Tau (HT7)',
       tissue: 'Hippocampus',
       age: '12 months',
@@ -2044,7 +2044,7 @@ export const modelMock: Model = {
       ],
     },
     {
-      model: '3xTg-AD',
+      name: '3xTg-AD',
       evidence_type: 'Tau (HT7)',
       tissue: 'Hippocampus',
       age: '18 months',

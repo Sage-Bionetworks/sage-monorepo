@@ -81,7 +81,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
   }
 
   private loadPanelData(params: ParamMap) {
-    const modelName = params.get('model');
+    const modelName = params.get('name');
     if (modelName) {
       this.modelsService
         .getModelByName(modelName)
@@ -131,7 +131,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (!this.model?.model) {
+    if (!this.model?.name) {
       this.isLoading = true;
     }
   }
@@ -151,7 +151,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
     this.activeParent = activeParent;
 
     const encodedModel = this.helperService.encodeParenthesesForwardSlashes(
-      encodeURIComponent(this.model?.model || ''),
+      encodeURIComponent(this.model?.name || ''),
     );
     const basePath = `/${ROUTE_PATHS.MODELS}/${encodedModel}`;
     const fullPath = this.helperService.getPanelUrl(basePath, this.activePanel, this.activeParent);

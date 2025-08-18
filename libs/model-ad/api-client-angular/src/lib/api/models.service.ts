@@ -109,12 +109,12 @@ export class ModelsService {
   /**
    * Get details for a specific model
    * Retrieve detailed information for a specific model by its name
-   * @param model Name of the model to retrieve
+   * @param name Name of the model to retrieve
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public getModelByName(
-    model: string,
+    name: string,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -124,7 +124,7 @@ export class ModelsService {
     },
   ): Observable<Model>;
   public getModelByName(
-    model: string,
+    name: string,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -134,7 +134,7 @@ export class ModelsService {
     },
   ): Observable<HttpResponse<Model>>;
   public getModelByName(
-    model: string,
+    name: string,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -144,7 +144,7 @@ export class ModelsService {
     },
   ): Observable<HttpEvent<Model>>;
   public getModelByName(
-    model: string,
+    name: string,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -153,10 +153,8 @@ export class ModelsService {
       transferCache?: boolean;
     },
   ): Observable<any> {
-    if (model === null || model === undefined) {
-      throw new Error(
-        'Required parameter model was null or undefined when calling getModelByName.',
-      );
+    if (name === null || name === undefined) {
+      throw new Error('Required parameter name was null or undefined when calling getModelByName.');
     }
 
     let localVarHeaders = this.defaultHeaders;
@@ -192,7 +190,7 @@ export class ModelsService {
       }
     }
 
-    let localVarPath = `/models/${this.configuration.encodeParam({ name: 'model', value: model, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
+    let localVarPath = `/models/${this.configuration.encodeParam({ name: 'name', value: name, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
     return this.httpClient.request<Model>('get', `${this.configuration.basePath}${localVarPath}`, {
       context: localVarHttpContext,
       responseType: <any>responseType_,

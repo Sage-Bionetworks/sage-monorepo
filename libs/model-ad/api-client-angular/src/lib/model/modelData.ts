@@ -16,7 +16,7 @@ export interface ModelData {
   /**
    * Name of the model
    */
-  model: string;
+  name: string;
   /**
    * Type of evidence
    */

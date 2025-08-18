@@ -14,7 +14,7 @@ async function setup(model = modelMock) {
 describe('ModelDetailsHeroComponent', () => {
   it('should display model name', async () => {
     await setup();
-    expect(screen.getByRole('heading', { level: 1, name: modelMock.model })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: modelMock.name })).toBeInTheDocument();
   });
 
   it('should display model type', async () => {

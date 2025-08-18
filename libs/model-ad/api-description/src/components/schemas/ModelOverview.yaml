@@ -1,7 +1,7 @@
 type: object
 description: Model Overview object for comparison tools
 properties:
-  model:
+  name:
     type: string
     description: Model name
   model_type:
@@ -37,7 +37,7 @@ properties:
       type: string
     description: List of modified genes in the model
 required:
-  - model
+  - name
   - model_type
   - matched_controls
   - study_data

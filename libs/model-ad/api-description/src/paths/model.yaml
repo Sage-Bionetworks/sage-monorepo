@@ -5,7 +5,7 @@ get:
   description: Retrieve detailed information for a specific model by its name
   operationId: getModelByName
   parameters:
-    - name: model
+    - name: name
       in: path
       description: Name of the model to retrieve
       required: true

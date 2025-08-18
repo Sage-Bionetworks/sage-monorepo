@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/angular';
 import { ModelDetailsBoxplotComponent } from './model-details-boxplot.component';
 
 const mockModelData: ModelData = {
-  model: '3xTg-AD',
+  name: '3xTg-AD',
   evidence_type: 'A&beta;42',
   tissue: 'Cerebral Cortex',
   age: '6 months',

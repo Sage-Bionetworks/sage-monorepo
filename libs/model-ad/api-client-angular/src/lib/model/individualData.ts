@@ -30,9 +30,9 @@ export interface IndividualData {
   value: number;
 }
 export namespace IndividualData {
-  export type SexEnum = 'Male' | 'Female';
+  export type SexEnum = 'Female' | 'Male';
   export const SexEnum = {
-    Male: 'Male' as SexEnum,
     Female: 'Female' as SexEnum,
+    Male: 'Male' as SexEnum,
   };
 }

@@ -78,22 +78,22 @@ export const routes: Route[] = [
     },
   },
   {
-    path: `${ROUTE_PATHS.MODELS}/:model`,
+    path: `${ROUTE_PATHS.MODELS}/:name`,
     loadChildren: () =>
       import('@sagebionetworks/model-ad/model-details').then((routes) => routes.routes),
     data: {
-      title: (route: ActivatedRouteSnapshot) => `Model Details | ${route.params['model']} AD model`,
+      title: (route: ActivatedRouteSnapshot) => `Model Details | ${route.params['name']} AD model`,
       description: (route: ActivatedRouteSnapshot) =>
-        `Explore information and results for the ${route.params['model']} Alzheimer's Disease mouse model.`,
+        `Explore information and results for the ${route.params['name']} Alzheimer's Disease mouse model.`,
     },
   },
   {
-    path: `${ROUTE_PATHS.MODELS}/:model/:tab`,
+    path: `${ROUTE_PATHS.MODELS}/:name/:tab`,
     loadChildren: () =>
       import('@sagebionetworks/model-ad/model-details').then((routes) => routes.routes),
   },
   {
-    path: `${ROUTE_PATHS.MODELS}/:model/:tab/:subtab`,
+    path: `${ROUTE_PATHS.MODELS}/:name/:tab/:subtab`,
     loadChildren: () =>
       import('@sagebionetworks/model-ad/model-details').then((routes) => routes.routes),
   },

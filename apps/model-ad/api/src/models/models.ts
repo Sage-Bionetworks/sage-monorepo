@@ -15,7 +15,7 @@ const IndividualDataSchema = new Schema<IndividualData>({
 });
 
 const ModelDataSchema = new Schema<ModelData>({
-  model: { type: String, required: true },
+  name: { type: String, required: true },
   evidence_type: { type: String, required: true },
   tissue: { type: String, required: true },
   age: { type: String, required: true },
@@ -33,7 +33,7 @@ const GeneticInfoSchema = new Schema<GeneticInfo>({
 
 const ModelSchema = new Schema<Model>(
   {
-    model: { type: String, required: true },
+    name: { type: String, required: true },
     matched_controls: { type: [String], required: true },
     model_type: { type: String, required: true },
     contributing_group: { type: String, required: true },

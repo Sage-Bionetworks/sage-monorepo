@@ -8,7 +8,7 @@ const ModelOverviewLinkSchema = new Schema<ModelOverviewLink>({
 
 const ModelOverviewSchema = new Schema<ModelOverview>(
   {
-    model: { type: String, required: true },
+    name: { type: String, required: true },
     model_type: { type: String, required: true },
     matched_controls: { type: String, required: true },
     gene_expression: { type: ModelOverviewLinkSchema, required: false },
