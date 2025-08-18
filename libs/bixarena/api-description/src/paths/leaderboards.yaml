@@ -1,0 +1,17 @@
+get:
+  tags:
+    - Leaderboard
+  summary: List all available leaderboards
+  description: Get a list of all available leaderboards with their metadata
+  operationId: listLeaderboards
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/LeaderboardList.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

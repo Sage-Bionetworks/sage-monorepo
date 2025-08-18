@@ -1,0 +1,7 @@
+name: leaderboardSearchQuery
+description: The search query used to find and filter leaderboard entries.
+in: query
+style: deepObject
+explode: true
+schema:
+  $ref: ../../schemas/LeaderboardSearchQuery.yaml

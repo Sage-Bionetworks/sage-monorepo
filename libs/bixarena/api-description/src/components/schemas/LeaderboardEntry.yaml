@@ -1,0 +1,46 @@
+type: object
+description: A single entry in a leaderboard representing a model's performance.
+properties:
+  id:
+    type: string
+    description: Unique identifier for this leaderboard entry
+    example: 'entry_123'
+  modelId:
+    type: string
+    description: Identifier for the model
+    example: 'model_456'
+  modelName:
+    type: string
+    description: Display name of the model
+    example: 'GPT-4o'
+  license:
+    type: string
+    description: License type of the model
+    example: 'MIT'
+  btScore:
+    type: number
+    format: double
+    description: Primary scoring metric (higher is better)
+    example: 0.925
+  voteCount:
+    type: integer
+    description: Number of votes/evaluations
+    example: 1250
+  rank:
+    type: integer
+    description: Current rank position (1-based)
+    example: 1
+  createdAt:
+    type: string
+    format: date-time
+    description: When this entry was created
+    example: '2025-08-16T10:30:00Z'
+required:
+  - id
+  - modelId
+  - modelName
+  - license
+  - btScore
+  - voteCount
+  - rank
+  - createdAt

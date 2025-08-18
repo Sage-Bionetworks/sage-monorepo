@@ -1,0 +1,734 @@
+openapi: 3.0.3
+info:
+  contact:
+    name: Support
+    url: https://github.com/Sage-Bionetworks/sage-monorepo
+  description: Advance bioinformatics by evaluating and ranking AI agents.
+  license:
+    name: Apache 2.0
+    url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
+  title: BixArena API
+  version: 1.0.0
+servers:
+  - url: http://localhost/v1
+tags:
+  - description: Operations about leaderboards.
+    name: Leaderboard
+paths:
+  /leaderboards:
+    get:
+      description: Get a list of all available leaderboards with their metadata
+      operationId: listLeaderboards
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeaderboardList'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: List all available leaderboards
+      tags:
+        - Leaderboard
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Leaderboard
+  /leaderboards/{leaderboardId}:
+    get:
+      description: Get paginated leaderboard entries for a specific leaderboard
+      operationId: getLeaderboard
+      parameters:
+        - description: The unique identifier of a leaderboard
+          explode: false
+          in: path
+          name: leaderboardId
+          required: true
+          schema:
+            example: open-source
+            type: string
+          style: simple
+        - description: The search query used to find and filter leaderboard entries.
+          explode: true
+          in: query
+          name: leaderboardSearchQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/LeaderboardSearchQuery'
+          style: deepObject
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeaderboardEntryPage'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Get leaderboard entries
+      tags:
+        - Leaderboard
+      x-audience:
+        - public
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Leaderboard
+  /leaderboards/{leaderboardId}/history/{modelId}:
+    get:
+      description: Get historical performance data for a specific model in a leaderboard
+      operationId: getModelHistory
+      parameters:
+        - description: The unique identifier of a leaderboard
+          explode: false
+          in: path
+          name: leaderboardId
+          required: true
+          schema:
+            example: open-source
+            type: string
+          style: simple
+        - description: The unique identifier of a model
+          explode: false
+          in: path
+          name: modelId
+          required: true
+          schema:
+            example: model_456
+            type: string
+          style: simple
+        - description: The query used to filter and paginate historical model performance
+            data.
+          explode: true
+          in: query
+          name: leaderboardModelHistoryQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/LeaderboardModelHistoryQuery'
+          style: deepObject
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeaderboardModelHistoryPage'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Get model performance history
+      tags:
+        - Leaderboard
+      x-audience:
+        - public
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Leaderboard
+  /leaderboards/{leaderboardId}/snapshots:
+    get:
+      description: Get a paginated list of available snapshots for a leaderboard
+      operationId: getLeaderboardSnapshots
+      parameters:
+        - description: The unique identifier of a leaderboard
+          explode: false
+          in: path
+          name: leaderboardId
+          required: true
+          schema:
+            example: open-source
+            type: string
+          style: simple
+        - description: The query used to filter and paginate leaderboard snapshots.
+          explode: true
+          in: query
+          name: leaderboardSnapshotQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/LeaderboardSnapshotQuery'
+          style: deepObject
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeaderboardSnapshotPage'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Get leaderboard snapshots
+      tags:
+        - Leaderboard
+      x-audience:
+        - public
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Leaderboard
+components:
+  parameters:
+    leaderboardId:
+      description: The unique identifier of a leaderboard
+      explode: false
+      in: path
+      name: leaderboardId
+      required: true
+      schema:
+        example: open-source
+        type: string
+      style: simple
+    leaderboardSearchQuery:
+      description: The search query used to find and filter leaderboard entries.
+      explode: true
+      in: query
+      name: leaderboardSearchQuery
+      required: false
+      schema:
+        $ref: '#/components/schemas/LeaderboardSearchQuery'
+      style: deepObject
+    modelId:
+      description: The unique identifier of a model
+      explode: false
+      in: path
+      name: modelId
+      required: true
+      schema:
+        example: model_456
+        type: string
+      style: simple
+    leaderboardModelHistoryQuery:
+      description: The query used to filter and paginate historical model performance
+        data.
+      explode: true
+      in: query
+      name: leaderboardModelHistoryQuery
+      required: false
+      schema:
+        $ref: '#/components/schemas/LeaderboardModelHistoryQuery'
+      style: deepObject
+    leaderboardSnapshotQuery:
+      description: The query used to filter and paginate leaderboard snapshots.
+      explode: true
+      in: query
+      name: leaderboardSnapshotQuery
+      required: false
+      schema:
+        $ref: '#/components/schemas/LeaderboardSnapshotQuery'
+      style: deepObject
+  responses:
+    BadRequest:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: Invalid request parameters
+    InternalServerError:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The request cannot be fulfilled due to an unexpected server error
+    NotFound:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The requested resource was not found
+  schemas:
+    LeaderboardList:
+      description: A list of leaderboards.
+      items:
+        $ref: '#/components/schemas/LeaderboardList_inner'
+      type: array
+    BasicError:
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          description: A human readable documentation for the problem type
+          type: string
+        status:
+          description: The HTTP status code
+          type: integer
+        detail:
+          description: A human readable explanation specific to this occurrence of
+            the problem
+          type: string
+        type:
+          description: An absolute URI that identifies the problem type
+          type: string
+        instance:
+          description: An absolute URI that identifies the specific occurrence of
+            the problem
+          type: string
+      required:
+        - status
+        - title
+      type: object
+      x-java-class-annotations:
+        - '@lombok.AllArgsConstructor'
+        - '@lombok.Builder'
+    LeaderboardSort:
+      default: rank
+      description: The field to sort leaderboard entries by.
+      enum:
+        - rank
+        - bt_score
+        - vote_count
+        - created_at
+        - model_name
+      example: bt_score
+      type: string
+    SortDirection:
+      default: asc
+      description: The direction to sort results.
+      enum:
+        - asc
+        - desc
+      example: desc
+      type: string
+    LeaderboardSearchQuery:
+      description: A leaderboard search query with pagination and filtering options.
+      properties:
+        pageNumber:
+          default: 0
+          description: The page number.
+          example: 0
+          format: int32
+          minimum: 0
+          type: integer
+        pageSize:
+          default: 100
+          description: The number of items in a single page.
+          example: 25
+          format: int32
+          maximum: 1000
+          minimum: 1
+          type: integer
+        sort:
+          $ref: '#/components/schemas/LeaderboardSort'
+        direction:
+          $ref: '#/components/schemas/SortDirection'
+        search:
+          description: Search by model name (case-insensitive partial match).
+          example: gpt
+          nullable: true
+          type: string
+        snapshotId:
+          description: Get a specific historical snapshot instead of latest.
+          example: snapshot_2025-08-15_10-00
+          nullable: true
+          type: string
+      type: object
+    PageMetadata:
+      description: The metadata of a page.
+      properties:
+        number:
+          description: The page number.
+          example: 99
+          format: int32
+          type: integer
+        size:
+          description: The number of items in a single page.
+          example: 99
+          format: int32
+          type: integer
+        totalElements:
+          description: Total number of elements in the result set.
+          example: 99
+          format: int64
+          type: integer
+        totalPages:
+          description: Total number of pages in the result set.
+          example: 99
+          format: int32
+          type: integer
+        hasNext:
+          description: Returns if there is a next page.
+          example: true
+          type: boolean
+        hasPrevious:
+          description: Returns if there is a previous page.
+          example: true
+          type: boolean
+      required:
+        - hasNext
+        - hasPrevious
+        - number
+        - size
+        - totalElements
+        - totalPages
+      type: object
+    LeaderboardEntry:
+      description: A single entry in a leaderboard representing a model's performance.
+      example:
+        modelName: GPT-4o
+        license: MIT
+        createdAt: 2025-08-16T10:30:00Z
+        modelId: model_456
+        btScore: 0.925
+        rank: 1
+        id: entry_123
+        voteCount: 1250
+      properties:
+        id:
+          description: Unique identifier for this leaderboard entry
+          example: entry_123
+          type: string
+        modelId:
+          description: Identifier for the model
+          example: model_456
+          type: string
+        modelName:
+          description: Display name of the model
+          example: GPT-4o
+          type: string
+        license:
+          description: License type of the model
+          example: MIT
+          type: string
+        btScore:
+          description: Primary scoring metric (higher is better)
+          example: 0.925
+          format: double
+          type: number
+        voteCount:
+          description: Number of votes/evaluations
+          example: 1250
+          type: integer
+        rank:
+          description: Current rank position (1-based)
+          example: 1
+          type: integer
+        createdAt:
+          description: When this entry was created
+          example: 2025-08-16T10:30:00Z
+          format: date-time
+          type: string
+      required:
+        - btScore
+        - createdAt
+        - id
+        - license
+        - modelId
+        - modelName
+        - rank
+        - voteCount
+      type: object
+    LeaderboardEntryPage:
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - properties:
+            updatedAt:
+              description: When this leaderboard was last updated
+              example: 2025-08-16T14:30:00Z
+              format: date-time
+              type: string
+            snapshotId:
+              description: Identifier for this snapshot/timepoint
+              example: snapshot_2025-08-16_14-30
+              type: string
+            entries:
+              description: A list of leaderboard entries.
+              items:
+                $ref: '#/components/schemas/LeaderboardEntry'
+              type: array
+          required:
+            - entries
+            - snapshotId
+            - updatedAt
+          type: object
+      description: A page of leaderboard entries.
+      example:
+        number: 99
+        entries:
+          - modelName: GPT-4o
+            license: MIT
+            createdAt: 2025-08-16T10:30:00Z
+            modelId: model_456
+            btScore: 0.925
+            rank: 1
+            id: entry_123
+            voteCount: 1250
+          - modelName: GPT-4o
+            license: MIT
+            createdAt: 2025-08-16T10:30:00Z
+            modelId: model_456
+            btScore: 0.925
+            rank: 1
+            id: entry_123
+            voteCount: 1250
+        snapshotId: snapshot_2025-08-16_14-30
+        size: 99
+        totalPages: 99
+        hasPrevious: true
+        hasNext: true
+        totalElements: 99
+        updatedAt: 2025-08-16T14:30:00Z
+      type: object
+    LeaderboardHistorySort:
+      default: created_at
+      description: The field to sort historical entries by.
+      enum:
+        - created_at
+        - bt_score
+        - rank
+      example: created_at
+      type: string
+    LeaderboardModelHistoryQuery:
+      description: A query for retrieving historical leaderboard data for a model.
+      properties:
+        pageNumber:
+          default: 0
+          description: The page number.
+          example: 0
+          format: int32
+          minimum: 0
+          type: integer
+        pageSize:
+          default: 100
+          description: The number of items in a single page.
+          example: 50
+          format: int32
+          maximum: 1000
+          minimum: 1
+          type: integer
+        sort:
+          $ref: '#/components/schemas/LeaderboardHistorySort'
+        direction:
+          $ref: '#/components/schemas/SortDirection'
+        fromDate:
+          description: Include only entries created on or after this date.
+          example: 2025-08-01
+          format: date
+          nullable: true
+          type: string
+        toDate:
+          description: Include only entries created on or before this date.
+          example: 2025-08-16
+          format: date
+          nullable: true
+          type: string
+      type: object
+    HistoricalLeaderboardEntry:
+      description: A historical entry representing a model's performance at a specific
+        point in time.
+      example:
+        createdAt: 2025-08-15T10:00:00Z
+        snapshotId: snapshot_2025-08-15_10-00
+        btScore: 0.915
+        rank: 2
+        voteCount: 1180
+      properties:
+        snapshotId:
+          description: Identifier for the snapshot/timepoint
+          example: snapshot_2025-08-15_10-00
+          type: string
+        btScore:
+          description: Primary scoring metric at this point in time
+          example: 0.915
+          format: double
+          type: number
+        voteCount:
+          description: Number of votes/evaluations at this point in time
+          example: 1180
+          type: integer
+        rank:
+          description: Rank position at this point in time (1-based)
+          example: 2
+          type: integer
+        createdAt:
+          description: When this snapshot was created
+          example: 2025-08-15T10:00:00Z
+          format: date-time
+          type: string
+      required:
+        - btScore
+        - createdAt
+        - rank
+        - snapshotId
+        - voteCount
+      type: object
+    LeaderboardModelHistoryPage:
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - properties:
+            modelId:
+              description: Identifier for the model
+              example: model_456
+              type: string
+            modelName:
+              description: Display name of the model
+              example: GPT-4o
+              type: string
+            history:
+              description: A list of historical leaderboard entries.
+              items:
+                $ref: '#/components/schemas/HistoricalLeaderboardEntry'
+              type: array
+          required:
+            - history
+            - modelId
+            - modelName
+          type: object
+      description: A page of historical leaderboard entries for a specific model.
+      example:
+        number: 99
+        modelName: GPT-4o
+        size: 99
+        modelId: model_456
+        totalPages: 99
+        hasPrevious: true
+        hasNext: true
+        history:
+          - createdAt: 2025-08-15T10:00:00Z
+            snapshotId: snapshot_2025-08-15_10-00
+            btScore: 0.915
+            rank: 2
+            voteCount: 1180
+          - createdAt: 2025-08-15T10:00:00Z
+            snapshotId: snapshot_2025-08-15_10-00
+            btScore: 0.915
+            rank: 2
+            voteCount: 1180
+        totalElements: 99
+      type: object
+    LeaderboardSnapshotSort:
+      default: created_at
+      description: The field to sort snapshots by.
+      enum:
+        - created_at
+      example: created_at
+      type: string
+    LeaderboardSnapshotQuery:
+      description: A query for retrieving leaderboard snapshots.
+      properties:
+        pageNumber:
+          default: 0
+          description: The page number.
+          example: 0
+          format: int32
+          minimum: 0
+          type: integer
+        pageSize:
+          default: 100
+          description: The number of items in a single page.
+          example: 20
+          format: int32
+          maximum: 1000
+          minimum: 1
+          type: integer
+        sort:
+          $ref: '#/components/schemas/LeaderboardSnapshotSort'
+        direction:
+          $ref: '#/components/schemas/SortDirection'
+      type: object
+    LeaderboardSnapshot:
+      description: A snapshot representing the state of a leaderboard at a specific
+        point in time.
+      example:
+        createdAt: 2025-08-16T14:30:00Z
+        entryCount: 50
+        description: Weekly evaluation run
+        id: snapshot_2025-08-16_14-30
+      properties:
+        id:
+          description: Unique identifier for this snapshot
+          example: snapshot_2025-08-16_14-30
+          type: string
+        createdAt:
+          description: When this snapshot was created
+          example: 2025-08-16T14:30:00Z
+          format: date-time
+          type: string
+        entryCount:
+          description: Number of models in this snapshot
+          example: 50
+          type: integer
+        description:
+          description: Optional description of this snapshot
+          example: Weekly evaluation run
+          nullable: true
+          type: string
+      required:
+        - createdAt
+        - entryCount
+        - id
+      type: object
+    LeaderboardSnapshotPage:
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - properties:
+            snapshots:
+              description: A list of leaderboard snapshots.
+              items:
+                $ref: '#/components/schemas/LeaderboardSnapshot'
+              type: array
+          required:
+            - snapshots
+          type: object
+      description: A page of leaderboard snapshots.
+      example:
+        snapshots:
+          - createdAt: 2025-08-16T14:30:00Z
+            entryCount: 50
+            description: Weekly evaluation run
+            id: snapshot_2025-08-16_14-30
+          - createdAt: 2025-08-16T14:30:00Z
+            entryCount: 50
+            description: Weekly evaluation run
+            id: snapshot_2025-08-16_14-30
+        number: 99
+        size: 99
+        totalPages: 99
+        hasPrevious: true
+        hasNext: true
+        totalElements: 99
+      type: object
+    LeaderboardList_inner:
+      example:
+        name: Open Source Models
+        description: Performance ranking of open-source AI models
+        id: open-source
+        updatedAt: 2025-08-16T14:30:00Z
+      properties:
+        id:
+          description: Unique identifier for the leaderboard
+          example: open-source
+          type: string
+        name:
+          description: Display name for the leaderboard
+          example: Open Source Models
+          type: string
+        description:
+          description: Description of what this leaderboard measures
+          example: Performance ranking of open-source AI models
+          type: string
+        updatedAt:
+          description: When this leaderboard was last updated
+          example: 2025-08-16T14:30:00Z
+          format: date-time
+          type: string
+      required:
+        - description
+        - id
+        - name
+        - updatedAt
+      type: object
