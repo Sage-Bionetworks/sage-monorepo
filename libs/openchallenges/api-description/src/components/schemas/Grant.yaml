@@ -1,5 +1,0 @@
-type: object
-description: Information about monetary resources for challenge
-allOf:
-  - $ref: GrantCreateResponse.yaml
-  - $ref: GrantCreateRequest.yaml

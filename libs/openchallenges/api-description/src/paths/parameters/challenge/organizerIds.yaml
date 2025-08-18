@@ -1,8 +1,0 @@
-name: organizerIds
-description: Array of organizer identifiers used to filter the results
-in: query
-required: false
-schema:
-  type: array
-  items:
-    $ref: ../../../components/schemas/UserId.yaml
