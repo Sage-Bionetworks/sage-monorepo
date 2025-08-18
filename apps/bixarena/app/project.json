@@ -47,6 +47,14 @@
         "command": "docker/bixarena/serve-detach.sh {projectName}"
       }
     },
+    "serve-demo": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "uv run python -m main --port ${APP_PORT}",
+        "cwd": "{projectRoot}",
+        "parallel": false
+      }
+    },
     "scan-image": {
       "executor": "nx:run-commands",
       "options": {
