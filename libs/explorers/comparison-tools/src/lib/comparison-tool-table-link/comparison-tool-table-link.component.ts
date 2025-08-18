@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, PLATFORM_ID } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { isExternalLink } from '@sagebionetworks/shared/util';
 
@@ -39,11 +39,10 @@ export class ComparisonToolTableLinkComponent {
     return { path, queryParams };
   });
 
-  isExternalLink(): boolean {
-    const url = this.linkUrl();
-    return url ? isExternalLink(url) : false;
-  }
-
   internalLinkPath = computed(() => this.parsedUrl().path);
   internalLinkQueryParams = computed(() => this.parsedUrl().queryParams);
+
+  isExternalUrl(): boolean {
+    return isExternalLink(this.linkUrl());
+  }
 }
