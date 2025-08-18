@@ -1,9 +1,0 @@
-type: object
-description: The unique identifier of the challenge organizer created
-properties:
-  id:
-    $ref: ChallengeOrganizerId.yaml
-required:
-  - id
-example:
-  id: 507f1f77bcf86cd799439011

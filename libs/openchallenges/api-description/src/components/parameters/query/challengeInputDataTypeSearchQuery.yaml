@@ -1,5 +1,0 @@
-name: challengeInputDataTypeSearchQuery
-description: The search query used to find challenge input data types.
-in: query
-schema:
-  $ref: ../../schemas/ChallengeInputDataTypeSearchQuery.yaml

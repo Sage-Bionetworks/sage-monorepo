@@ -1,6 +1,0 @@
-operationId: getGrant
-description: >
-  The `id` value returned in the response can be used as the
-  `grantId` parameter in `GET /grants/{grantId}`
-parameters:
-  grantId: $response.body#/grantId

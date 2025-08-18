@@ -1,0 +1,16 @@
+{
+  "name": "monorepo-tools",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/monorepo/tools/src",
+  "projectType": "application",
+  "targets": {
+    "analyze-openapi": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsx apps/monorepo/tools/src/openapi-dependency-analyzer.ts",
+        "cwd": "{workspaceRoot}"
+      }
+    }
+  },
+  "tags": ["type:util", "scope:monorepo", "language:typescript"]
+}

@@ -1,6 +1,0 @@
-name: searchTerms
-description: A string of search terms used to filter the results
-in: query
-required: false
-schema:
-  type: string
