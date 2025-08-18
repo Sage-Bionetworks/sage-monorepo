@@ -152,7 +152,7 @@ def build_leaderboard_page():
         # Filter controls
         with gr.Row():
             model_filter = gr.Textbox(
-                label="Filter by Model Name", placeholder="Search models...", scale=3
+                show_label=False, placeholder="Search models...", scale=3
             )
 
         # Main leaderboard table
