@@ -542,10 +542,10 @@ def add_text(
 def bot_response_multi(
     state0,
     state1,
-    temperature,
-    top_p,
-    max_new_tokens,
     request: gr.Request,
+    temperature=0.7,
+    top_p=1.0,
+    max_new_tokens=1024,
 ):
     logger.info(f"bot_response_multi (anony). ip: {get_ip(request)}")
 
@@ -655,32 +655,6 @@ def build_side_by_side_ui_anony(models):
     with gr.Row():
         clear_btn = gr.Button(value="🎲 New Round", interactive=False)
 
-    with gr.Accordion("Parameters", open=False) as parameter_row:
-        temperature = gr.Slider(
-            minimum=0.0,
-            maximum=1.0,
-            value=0.7,
-            step=0.1,
-            interactive=True,
-            label="Temperature",
-        )
-        top_p = gr.Slider(
-            minimum=0.0,
-            maximum=1.0,
-            value=1.0,
-            step=0.1,
-            interactive=True,
-            label="Top P",
-        )
-        max_output_tokens = gr.Slider(
-            minimum=16,
-            maximum=2048,
-            value=1024,
-            step=64,
-            interactive=True,
-            label="Max output tokens",
-        )
-
     gr.Markdown(acknowledgment_md, elem_id="ack_markdown")
 
     # Register listeners
@@ -717,7 +691,7 @@ def build_side_by_side_ui_anony(models):
         states + chatbots + [textbox] + btn_list + [slow_warning],
     ).then(
         bot_response_multi,
-        states + [temperature, top_p, max_output_tokens],
+        states,
         states + chatbots + btn_list,
     ).then(
         flash_buttons,
@@ -731,7 +705,7 @@ def build_side_by_side_ui_anony(models):
         states + chatbots + [textbox] + btn_list,
     ).then(
         bot_response_multi,
-        states + [temperature, top_p, max_output_tokens],
+        states,
         states + chatbots + btn_list,
     ).then(flash_buttons, [], btn_list)
 
