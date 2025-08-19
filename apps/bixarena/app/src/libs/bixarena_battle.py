@@ -27,7 +27,6 @@ from fastchat.serve.gradio_web_server import (
 from fastchat.serve.gradio_block_arena_named import flash_buttons
 from fastchat.serve.gradio_web_server import (
     acknowledgment_md,
-    get_model_description_md,
 )
 from fastchat.utils import (
     build_logger,
@@ -57,11 +56,6 @@ def build_side_by_side_ui_anony(models):
     gr.Markdown(notice_markdown, elem_id="notice_markdown")
 
     with gr.Group(elem_id="share-region-anony"):
-        with gr.Accordion(
-            f"🔍 Expand to see the descriptions of {len(models)} models", open=False
-        ):
-            model_description_md = get_model_description_md(models)
-            gr.Markdown(model_description_md, elem_id="model_description_markdown")
         with gr.Row():
             for i in range(num_sides):
                 label = "Model A" if i == 0 else "Model B"
