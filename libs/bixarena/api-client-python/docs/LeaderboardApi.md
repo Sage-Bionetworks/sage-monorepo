@@ -1,0 +1,289 @@
+# bixarena_api_client_python.LeaderboardApi
+
+All URIs are relative to _http://localhost/v1_
+
+| Method                                                                       | HTTP request                                            | Description                     |
+| ---------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------- |
+| [**get_leaderboard**](LeaderboardApi.md#get_leaderboard)                     | **GET** /leaderboards/{leaderboardId}                   | Get leaderboard entries         |
+| [**get_leaderboard_snapshots**](LeaderboardApi.md#get_leaderboard_snapshots) | **GET** /leaderboards/{leaderboardId}/snapshots         | Get leaderboard snapshots       |
+| [**get_model_history**](LeaderboardApi.md#get_model_history)                 | **GET** /leaderboards/{leaderboardId}/history/{modelId} | Get model performance history   |
+| [**list_leaderboards**](LeaderboardApi.md#list_leaderboards)                 | **GET** /leaderboards                                   | List all available leaderboards |
+
+# **get_leaderboard**
+
+> LeaderboardEntryPage get_leaderboard(leaderboard_id, leaderboard_search_query=leaderboard_search_query)
+
+Get leaderboard entries
+
+Get paginated leaderboard entries for a specific leaderboard
+
+### Example
+
+```python
+import bixarena_api_client_python
+from bixarena_api_client_python.models.leaderboard_entry_page import LeaderboardEntryPage
+from bixarena_api_client_python.models.leaderboard_search_query import LeaderboardSearchQuery
+from bixarena_api_client_python.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to http://localhost/v1
+# See configuration.py for a list of all supported configuration parameters.
+configuration = bixarena_api_client_python.Configuration(
+    host = "http://localhost/v1"
+)
+
+
+# Enter a context with an instance of the API client
+with bixarena_api_client_python.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = bixarena_api_client_python.LeaderboardApi(api_client)
+    leaderboard_id = 'open-source' # str | The unique identifier of a leaderboard
+    leaderboard_search_query = bixarena_api_client_python.LeaderboardSearchQuery() # LeaderboardSearchQuery | The search query used to find and filter leaderboard entries. (optional)
+
+    try:
+        # Get leaderboard entries
+        api_response = api_instance.get_leaderboard(leaderboard_id, leaderboard_search_query=leaderboard_search_query)
+        print("The response of LeaderboardApi->get_leaderboard:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling LeaderboardApi->get_leaderboard: %s\n" % e)
+```
+
+### Parameters
+
+| Name                         | Type                              | Description                                                   | Notes      |
+| ---------------------------- | --------------------------------- | ------------------------------------------------------------- | ---------- |
+| **leaderboard_id**           | **str**                           | The unique identifier of a leaderboard                        |
+| **leaderboard_search_query** | [**LeaderboardSearchQuery**](.md) | The search query used to find and filter leaderboard entries. | [optional] |
+
+### Return type
+
+[**LeaderboardEntryPage**](LeaderboardEntryPage.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+### HTTP response details
+
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | Success                                                           | -                |
+| **400**     | Invalid request parameters                                        | -                |
+| **404**     | The requested resource was not found                              | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_leaderboard_snapshots**
+
+> LeaderboardSnapshotPage get_leaderboard_snapshots(leaderboard_id, leaderboard_snapshot_query=leaderboard_snapshot_query)
+
+Get leaderboard snapshots
+
+Get a paginated list of available snapshots for a leaderboard
+
+### Example
+
+```python
+import bixarena_api_client_python
+from bixarena_api_client_python.models.leaderboard_snapshot_page import LeaderboardSnapshotPage
+from bixarena_api_client_python.models.leaderboard_snapshot_query import LeaderboardSnapshotQuery
+from bixarena_api_client_python.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to http://localhost/v1
+# See configuration.py for a list of all supported configuration parameters.
+configuration = bixarena_api_client_python.Configuration(
+    host = "http://localhost/v1"
+)
+
+
+# Enter a context with an instance of the API client
+with bixarena_api_client_python.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = bixarena_api_client_python.LeaderboardApi(api_client)
+    leaderboard_id = 'open-source' # str | The unique identifier of a leaderboard
+    leaderboard_snapshot_query = bixarena_api_client_python.LeaderboardSnapshotQuery() # LeaderboardSnapshotQuery | The query used to filter and paginate leaderboard snapshots. (optional)
+
+    try:
+        # Get leaderboard snapshots
+        api_response = api_instance.get_leaderboard_snapshots(leaderboard_id, leaderboard_snapshot_query=leaderboard_snapshot_query)
+        print("The response of LeaderboardApi->get_leaderboard_snapshots:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling LeaderboardApi->get_leaderboard_snapshots: %s\n" % e)
+```
+
+### Parameters
+
+| Name                           | Type                                | Description                                                  | Notes      |
+| ------------------------------ | ----------------------------------- | ------------------------------------------------------------ | ---------- |
+| **leaderboard_id**             | **str**                             | The unique identifier of a leaderboard                       |
+| **leaderboard_snapshot_query** | [**LeaderboardSnapshotQuery**](.md) | The query used to filter and paginate leaderboard snapshots. | [optional] |
+
+### Return type
+
+[**LeaderboardSnapshotPage**](LeaderboardSnapshotPage.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+### HTTP response details
+
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | Success                                                           | -                |
+| **400**     | Invalid request parameters                                        | -                |
+| **404**     | The requested resource was not found                              | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_model_history**
+
+> LeaderboardModelHistoryPage get_model_history(leaderboard_id, model_id, leaderboard_model_history_query=leaderboard_model_history_query)
+
+Get model performance history
+
+Get historical performance data for a specific model in a leaderboard
+
+### Example
+
+```python
+import bixarena_api_client_python
+from bixarena_api_client_python.models.leaderboard_model_history_page import LeaderboardModelHistoryPage
+from bixarena_api_client_python.models.leaderboard_model_history_query import LeaderboardModelHistoryQuery
+from bixarena_api_client_python.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to http://localhost/v1
+# See configuration.py for a list of all supported configuration parameters.
+configuration = bixarena_api_client_python.Configuration(
+    host = "http://localhost/v1"
+)
+
+
+# Enter a context with an instance of the API client
+with bixarena_api_client_python.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = bixarena_api_client_python.LeaderboardApi(api_client)
+    leaderboard_id = 'open-source' # str | The unique identifier of a leaderboard
+    model_id = 'model_456' # str | The unique identifier of a model
+    leaderboard_model_history_query = bixarena_api_client_python.LeaderboardModelHistoryQuery() # LeaderboardModelHistoryQuery | The query used to filter and paginate historical model performance data. (optional)
+
+    try:
+        # Get model performance history
+        api_response = api_instance.get_model_history(leaderboard_id, model_id, leaderboard_model_history_query=leaderboard_model_history_query)
+        print("The response of LeaderboardApi->get_model_history:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling LeaderboardApi->get_model_history: %s\n" % e)
+```
+
+### Parameters
+
+| Name                                | Type                                    | Description                                                              | Notes      |
+| ----------------------------------- | --------------------------------------- | ------------------------------------------------------------------------ | ---------- |
+| **leaderboard_id**                  | **str**                                 | The unique identifier of a leaderboard                                   |
+| **model_id**                        | **str**                                 | The unique identifier of a model                                         |
+| **leaderboard_model_history_query** | [**LeaderboardModelHistoryQuery**](.md) | The query used to filter and paginate historical model performance data. | [optional] |
+
+### Return type
+
+[**LeaderboardModelHistoryPage**](LeaderboardModelHistoryPage.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+### HTTP response details
+
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | Success                                                           | -                |
+| **400**     | Invalid request parameters                                        | -                |
+| **404**     | The requested resource was not found                              | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **list_leaderboards**
+
+> List[LeaderboardListInner] list_leaderboards()
+
+List all available leaderboards
+
+Get a list of all available leaderboards with their metadata
+
+### Example
+
+```python
+import bixarena_api_client_python
+from bixarena_api_client_python.models.leaderboard_list_inner import LeaderboardListInner
+from bixarena_api_client_python.rest import ApiException
+from pprint import pprint
+
+# Defining the host is optional and defaults to http://localhost/v1
+# See configuration.py for a list of all supported configuration parameters.
+configuration = bixarena_api_client_python.Configuration(
+    host = "http://localhost/v1"
+)
+
+
+# Enter a context with an instance of the API client
+with bixarena_api_client_python.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = bixarena_api_client_python.LeaderboardApi(api_client)
+
+    try:
+        # List all available leaderboards
+        api_response = api_instance.list_leaderboards()
+        print("The response of LeaderboardApi->list_leaderboards:\n")
+        pprint(api_response)
+    except Exception as e:
+        print("Exception when calling LeaderboardApi->list_leaderboards: %s\n" % e)
+```
+
+### Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+[**List[LeaderboardListInner]**](LeaderboardListInner.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
+
+### HTTP response details
+
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | Success                                                           | -                |
+| **400**     | Invalid request parameters                                        | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

@@ -1,0 +1,92 @@
+{
+  "name": "bixarena-api-client-python",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/bixarena/api-client-python/bixarena_api_client_python",
+  "targets": {
+    "lock": {
+      "executor": "@nxlv/python:lock",
+      "options": {
+        "update": false
+      }
+    },
+    "sync": {
+      "executor": "@nxlv/python:sync",
+      "options": {}
+    },
+    "add": {
+      "executor": "@nxlv/python:add",
+      "options": {}
+    },
+    "update": {
+      "executor": "@nxlv/python:update",
+      "options": {}
+    },
+    "remove": {
+      "executor": "@nxlv/python:remove",
+      "options": {}
+    },
+    "build": {
+      "executor": "@nxlv/python:build",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "outputPath": "{projectRoot}/dist",
+        "publish": false,
+        "lockedVersions": true,
+        "bundleLocalDependencies": true
+      },
+      "cache": true
+    },
+    "lint-excluded": {
+      "executor": "@nxlv/python:ruff-check",
+      "outputs": [],
+      "options": {
+        "lintFilePatterns": ["bixarena_api_client_python", "test"]
+      },
+      "cache": true
+    },
+    "test": {
+      "executor": "@nxlv/python:run-commands",
+      "outputs": [
+        "{workspaceRoot}/reports/{projectRoot}/unittests",
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "command": "uv run pytest test/",
+        "cwd": "{projectRoot}"
+      },
+      "cache": true
+    },
+    "install": {
+      "executor": "@nxlv/python:install",
+      "options": {
+        "silent": false,
+        "args": "",
+        "verbose": false,
+        "debug": false
+      }
+    },
+    "run-python-version": {
+      "executor": "@nxlv/python:run-commands",
+      "options": {
+        "command": "python --version",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["xargs rm -fr <.openapi-generator/FILES", "openapi-generator-cli generate"],
+        "cwd": "{projectRoot}",
+        "parallel": false
+      },
+      "dependsOn": ["^build"]
+    }
+  },
+  "tags": ["language:python", "package-manager:uv"],
+  "release": {
+    "version": {
+      "versionActions": "@nxlv/python/src/release/version-actions"
+    }
+  }
+}
