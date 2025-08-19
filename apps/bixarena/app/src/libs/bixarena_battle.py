@@ -28,7 +28,6 @@ from fastchat.serve.gradio_web_server import (
     enable_btn,
     disable_btn,
     invisible_btn,
-    acknowledgment_md,
     get_ip,
 )
 
@@ -654,8 +653,6 @@ def build_side_by_side_ui_anony(models):
 
     with gr.Row():
         clear_btn = gr.Button(value="🎲 New Round", interactive=False)
-
-    gr.Markdown(acknowledgment_md, elem_id="ack_markdown")
 
     # Register listeners
     btn_list = [
