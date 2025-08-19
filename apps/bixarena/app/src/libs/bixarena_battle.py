@@ -21,15 +21,19 @@ from server.constants import (
 )
 
 from fastchat.serve.gradio_web_server import (
+    get_ip,
+)
+from server.model_response import (
     State,
-    bot_response,
     get_model_list,
+    # set_global_vars,
+    # set_global_vars_anony,
+    bot_response,
     get_conv_log_filename,
     no_change_btn,
     enable_btn,
     disable_btn,
     invisible_btn,
-    get_ip,
 )
 
 from server.utils import build_logger
@@ -39,11 +43,6 @@ logger = build_logger("bixarena_battle", "bixarena_battle.log")
 num_sides = 2
 anony_names = ["", ""]
 models = []
-
-
-def set_global_vars_anony(enable_moderation_):
-    global enable_moderation
-    enable_moderation = enable_moderation_
 
 
 def load_demo_side_by_side_anony(models_, url_params):
@@ -393,8 +392,12 @@ def build_battle_page(
     moderate=False,
 ):
     # Set global variables
-    set_global_vars_anony(moderate)
+    # set_global_vars_anony(moderate)
+    # set_global_vars(controller_url, moderate)
 
+    from server.model_response import set_global_vars
+
+    set_global_vars(controller_url, moderate)
     # Load models once and only for text-only models
     models, all_models = get_model_list(
         controller_url,
