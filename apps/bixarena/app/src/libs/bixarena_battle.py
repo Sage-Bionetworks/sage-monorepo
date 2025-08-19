@@ -32,7 +32,7 @@ from fastchat.serve.gradio_web_server import (
     get_ip,
 )
 
-from fastchat.utils import build_logger
+from server.utils import build_logger
 
 logger = build_logger("bixarena_battle", "bixarena_battle.log")
 
