@@ -2,18 +2,11 @@ import gradio as gr
 import time
 import requests
 
-import datetime
 import json
-import os
 import uuid
 
 
-from fastchat.serve.gradio_web_server import (
-    get_conv_log_filename,
-)
-
-
-from server.constants import LOGDIR, ErrorCode, SERVER_ERROR_MSG
+from server.constants import ErrorCode, SERVER_ERROR_MSG
 from server.utils import build_logger
 
 from fastchat.serve.api_provider import get_api_provider_stream_iter
@@ -61,12 +54,6 @@ class State:
 def set_global_vars_anony(enable_moderation_):
     global enable_moderation
     enable_moderation = enable_moderation_
-
-
-def get_conv_log_filename():
-    t = datetime.datetime.now()
-    name = os.path.join(LOGDIR, f"{t.year}-{t.month:02d}-{t.day:02d}-conv.json")
-    return name
 
 
 def get_model_list(register_api_endpoint_file, multimodal):
@@ -194,18 +181,18 @@ def bot_response(
     finish_tstamp = time.time()
     logger.info(f"{output}")
 
-    with open(get_conv_log_filename(), "a") as fout:
-        data = {
-            "tstamp": round(finish_tstamp, 4),
-            "type": "chat",
-            "model": model_name,
-            "gen_params": {
-                "temperature": temperature,
-                "top_p": top_p,
-                "max_new_tokens": max_new_tokens,
-            },
-            "start": round(start_tstamp, 4),
-            "finish": round(finish_tstamp, 4),
-            "state": state.dict(),
-        }
-        fout.write(json.dumps(data) + "\n")
+    # Log the exact same data to console instead of file
+    data = {
+        "tstamp": round(finish_tstamp, 4),
+        "type": "chat",
+        "model": model_name,
+        "gen_params": {
+            "temperature": temperature,
+            "top_p": top_p,
+            "max_new_tokens": max_new_tokens,
+        },
+        "start": round(start_tstamp, 4),
+        "finish": round(finish_tstamp, 4),
+        "state": state.dict(),
+    }
+    logger.info(f"Conversation data: {json.dumps(data)}")

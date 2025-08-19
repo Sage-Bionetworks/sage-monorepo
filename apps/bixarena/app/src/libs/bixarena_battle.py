@@ -25,7 +25,6 @@ from server.model_response import (
     get_model_list,
     set_global_vars_anony,
     bot_response,
-    get_conv_log_filename,
     no_change_btn,
     enable_btn,
     disable_btn,
@@ -55,14 +54,14 @@ def load_demo_side_by_side_anony(models_, url_params):
 
 
 def vote_last_response(states, vote_type, model_selectors, request: gr.Request):
-    with open(get_conv_log_filename(), "a") as fout:
-        data = {
-            "tstamp": round(time.time(), 4),
-            "type": vote_type,
-            "models": [x for x in model_selectors],
-            "states": [x.dict() for x in states],
-        }
-        fout.write(json.dumps(data) + "\n")
+    # Log the exact same format as before, but to console instead of file
+    data = {
+        "tstamp": round(time.time(), 4),
+        "type": vote_type,
+        "models": [x for x in model_selectors],
+        "states": [x.dict() for x in states],
+    }
+    logger.info(f"Vote data: {json.dumps(data)}")
 
     if ":" not in model_selectors[0]:
         for i in range(5):
