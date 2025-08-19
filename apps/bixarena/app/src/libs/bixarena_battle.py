@@ -26,8 +26,7 @@ from fastchat.serve.gradio_web_server import (
 from server.model_response import (
     State,
     get_model_list,
-    # set_global_vars,
-    # set_global_vars_anony,
+    set_global_vars_anony,
     bot_response,
     get_conv_log_filename,
     no_change_btn,
@@ -388,19 +387,14 @@ def build_side_by_side_ui_anony(models):
 
 def build_battle_page(
     register_api_endpoint_file=None,
-    controller_url=None,
     moderate=False,
 ):
     # Set global variables
-    # set_global_vars_anony(moderate)
+    set_global_vars_anony(moderate)
     # set_global_vars(controller_url, moderate)
 
-    from server.model_response import set_global_vars
-
-    set_global_vars(controller_url, moderate)
     # Load models once and only for text-only models
     models, all_models = get_model_list(
-        controller_url,
         register_api_endpoint_file,
         False,
     )

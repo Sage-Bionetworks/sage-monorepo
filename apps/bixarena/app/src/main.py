@@ -29,12 +29,6 @@ def parse_args():
         help="Whether to generate a public, shareable link",
     )
     parser.add_argument(
-        "--controller-url",
-        type=str,
-        default="",
-        help="The address of the controller",
-    )
-    parser.add_argument(
         "--concurrency-count",
         type=int,
         default=10,
@@ -58,7 +52,7 @@ def parse_args():
     return parser.parse_args()
 
 
-def build_app(register_api_endpoint_file=None, controller_url=None, moderate=False):
+def build_app(register_api_endpoint_file=None, moderate=False):
     """Create the main application"""
 
     with gr.Blocks(title="BixArena - Biomedical LLM Evaluation") as app:
@@ -70,9 +64,7 @@ def build_app(register_api_endpoint_file=None, controller_url=None, moderate=Fal
             home_content, cta_btn = build_home_page()
 
         with gr.Column(visible=False) as battle_page:
-            battle_content = build_battle_page(
-                register_api_endpoint_file, controller_url, moderate
-            )
+            battle_content = build_battle_page(register_api_endpoint_file, moderate)
 
         with gr.Column(visible=False) as leaderboard_page:
             leaderboard_content = build_leaderboard_page()
@@ -108,7 +100,6 @@ if __name__ == "__main__":
 
     app = build_app(
         register_api_endpoint_file=args.register_api_endpoint_file,
-        controller_url=args.controller_url,
         moderate=args.moderate,
     )
 

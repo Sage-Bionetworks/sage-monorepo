@@ -21,7 +21,6 @@ from fastchat.model.model_registry import model_info
 
 from server.constants import (
     LOGDIR,
-    WORKER_API_TIMEOUT,
     ErrorCode,
     RATE_LIMIT_MSG,
     SERVER_ERROR_MSG,
@@ -38,7 +37,6 @@ from fastchat.model.model_adapter import (
 
 logger = build_logger("gradio_web_server", "gradio_web_server.log")
 
-headers = {"User-Agent": "FastChat Client"}
 no_change_btn = gr.Button()
 enable_btn = gr.Button(interactive=True, visible=True)
 disable_btn = gr.Button(interactive=False)
@@ -88,24 +86,10 @@ def get_conv_log_filename():
     return name
 
 
-def get_model_list(controller_url, register_api_endpoint_file, multimodal):
+def get_model_list(register_api_endpoint_file, multimodal):
     global api_endpoint_info
-
-    # Add models from the controller
-    if controller_url:
-        ret = requests.post(controller_url + "/refresh_all_workers")
-        assert ret.status_code == 200
-
-        if multimodal:
-            ret = requests.post(controller_url + "/list_multimodal_models")
-            models = ret.json()["models"]
-        else:
-            ret = requests.post(controller_url + "/list_language_models")
-            models = ret.json()["models"]
-    else:
-        models = []
-
-    # Add models from the API providers
+    models = []  # Initiate models list
+    # Load models from API providers only
     if register_api_endpoint_file:
         api_endpoint_info = json.load(open(register_api_endpoint_file))
         for mdl, mdl_dict in api_endpoint_info.items():
@@ -134,47 +118,47 @@ def get_model_list(controller_url, register_api_endpoint_file, multimodal):
     return visible_models, models
 
 
-def model_worker_stream_iter(
-    conv,
-    model_name,
-    worker_addr,
-    prompt,
-    temperature,
-    repetition_penalty,
-    top_p,
-    max_new_tokens,
-    images,
-):
-    # Make requests
-    gen_params = {
-        "model": model_name,
-        "prompt": prompt,
-        "temperature": temperature,
-        "repetition_penalty": repetition_penalty,
-        "top_p": top_p,
-        "max_new_tokens": max_new_tokens,
-        "stop": conv.stop_str,
-        "stop_token_ids": conv.stop_token_ids,
-        "echo": False,
-    }
+# def model_worker_stream_iter(
+#     conv,
+#     model_name,
+#     worker_addr,
+#     prompt,
+#     temperature,
+#     repetition_penalty,
+#     top_p,
+#     max_new_tokens,
+#     images,
+# ):
+#     # Make requests
+#     gen_params = {
+#         "model": model_name,
+#         "prompt": prompt,
+#         "temperature": temperature,
+#         "repetition_penalty": repetition_penalty,
+#         "top_p": top_p,
+#         "max_new_tokens": max_new_tokens,
+#         "stop": conv.stop_str,
+#         "stop_token_ids": conv.stop_token_ids,
+#         "echo": False,
+#     }
 
-    logger.info(f"==== request ====\n{gen_params}")
+#     logger.info(f"==== request ====\n{gen_params}")
 
-    if len(images) > 0:
-        gen_params["images"] = images
+#     if len(images) > 0:
+#         gen_params["images"] = images
 
-    # Stream output
-    response = requests.post(
-        worker_addr + "/worker_generate_stream",
-        headers=headers,
-        json=gen_params,
-        stream=True,
-        timeout=WORKER_API_TIMEOUT,
-    )
-    for chunk in response.iter_lines(decode_unicode=False, delimiter=b"\0"):
-        if chunk:
-            data = json.loads(chunk.decode())
-            yield data
+#     # Stream output
+#     response = requests.post(
+#         worker_addr + "/worker_generate_stream",
+#         headers=headers,
+#         json=gen_params,
+#         stream=True,
+#         timeout=WORKER_API_TIMEOUT,
+#     )
+#     for chunk in response.iter_lines(decode_unicode=False, delimiter=b"\0"):
+#         if chunk:
+#             data = json.loads(chunk.decode())
+#             yield data
 
 
 def is_limit_reached(model_name, ip):
@@ -208,7 +192,7 @@ def bot_response(
     if state.skip_next:
         # This generate call is skipped due to invalid inputs
         state.skip_next = False
-        yield (state, state.to_gradio_chatbot()) + (no_change_btn,) * 5
+        yield (state, state.to_gradio_chatbot()) + (no_change_btn,) * 4
         return
 
     if apply_rate_limit:
@@ -217,7 +201,7 @@ def bot_response(
             error_msg = RATE_LIMIT_MSG + "\n\n" + ret["reason"]
             logger.info(f"rate limit reached. ip: {ip}. error_msg: {ret['reason']}")
             state.conv.update_last_message(error_msg)
-            yield (state, state.to_gradio_chatbot()) + (no_change_btn,) * 5
+            yield (state, state.to_gradio_chatbot()) + (no_change_btn,) * 4
             return
 
     conv, model_name = state.conv, state.model_name
@@ -226,69 +210,32 @@ def bot_response(
     )
     images = conv.get_images()
 
-    print(model_api_dict)
+    # Only use API endpoints - no controller/worker logic
     if model_api_dict is None:
-        # Query worker address
-        ret = requests.post(
-            controller_url + "/get_worker_address", json={"model": model_name}
-        )
-        worker_addr = ret.json()["address"]
-        logger.info(f"model_name: {model_name}, worker_addr: {worker_addr}")
+        logger.error(f"UNEXPECTED: Model {model_name} not in api_endpoint_info.")
+        conv.update_last_message(f"Configuration error: Model {model_name} not found")
+        yield (state, state.to_gradio_chatbot()) + (enable_btn,) * 4
+        return
 
-        # No available worker
-        if worker_addr == "":
-            conv.update_last_message(SERVER_ERROR_MSG)
-            yield (
-                state,
-                state.to_gradio_chatbot(),
-                disable_btn,
-                disable_btn,
-                disable_btn,
-                enable_btn,
-                enable_btn,
-            )
-            return
-
-        # Construct prompt.
-        # We need to call it here, so it will not be affected by "▌".
-        prompt = conv.get_prompt()
-
-        # Set repetition_penalty
-        if "t5" in model_name:
-            repetition_penalty = 1.2
-        else:
-            repetition_penalty = 1.0
-
-        stream_iter = model_worker_stream_iter(
-            conv,
-            model_name,
-            worker_addr,
-            prompt,
-            temperature,
-            repetition_penalty,
-            top_p,
-            max_new_tokens,
-            images,
-        )
-    else:
-        stream_iter = get_api_provider_stream_iter(
-            conv,
-            model_name,
-            model_api_dict,
-            temperature,
-            top_p,
-            max_new_tokens,
-        )
+    # Use API provider stream
+    stream_iter = get_api_provider_stream_iter(
+        conv,
+        model_name,
+        model_api_dict,
+        temperature,
+        top_p,
+        max_new_tokens,
+    )
 
     conv.update_last_message("▌")
-    yield (state, state.to_gradio_chatbot()) + (disable_btn,) * 5
+    yield (state, state.to_gradio_chatbot()) + (disable_btn,) * 4
 
     try:
         for i, data in enumerate(stream_iter):
             if data["error_code"] == 0:
                 output = data["text"].strip()
                 conv.update_last_message(output + "▌")
-                yield (state, state.to_gradio_chatbot()) + (disable_btn,) * 5
+                yield (state, state.to_gradio_chatbot()) + (disable_btn,) * 4
             else:
                 output = data["text"] + f"\n\n(error_code: {data['error_code']})"
                 conv.update_last_message(output)
@@ -302,7 +249,7 @@ def bot_response(
                 return
         output = data["text"].strip()
         conv.update_last_message(output)
-        yield (state, state.to_gradio_chatbot()) + (enable_btn,) * 5
+        yield (state, state.to_gradio_chatbot()) + (enable_btn,) * 4
     except requests.exceptions.RequestException as e:
         conv.update_last_message(
             f"{SERVER_ERROR_MSG}\n\n(error_code: {ErrorCode.GRADIO_REQUEST_ERROR}, {e})"

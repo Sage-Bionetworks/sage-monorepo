@@ -65,7 +65,7 @@
     "serve-leaderboard": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "uv run python -m fastchat.serve.gradio_web_server_multi --port ${APP_PORT} --controller-url '' --register-api-endpoint-file model_config.json --elo-results-file src/data/dummy_elo_results.pkl --leaderboard-table-file src/data/dummy_leaderboard_table.csv",
+        "command": "uv run python -m fastchat.serve.gradio_web_server_multi --port ${APP_PORT} --register-api-endpoint-file model_config.json --elo-results-file src/data/dummy_elo_results.pkl --leaderboard-table-file src/data/dummy_leaderboard_table.csv",
         "cwd": "{projectRoot}"
       }
     }
