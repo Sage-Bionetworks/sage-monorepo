@@ -10,7 +10,7 @@ import time
 
 import gradio as gr
 
-from server.model_selection import get_battle_pair
+from server.model_selection import get_battle_pair, moderation_filter
 
 from server.constants import (
     MODERATION_MSG,
@@ -32,7 +32,7 @@ from fastchat.serve.gradio_web_server import (
     get_ip,
 )
 
-from fastchat.utils import build_logger, moderation_filter
+from fastchat.utils import build_logger
 
 logger = build_logger("bixarena_battle", "bixarena_battle.log")
 

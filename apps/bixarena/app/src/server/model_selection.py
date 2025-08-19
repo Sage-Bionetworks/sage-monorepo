@@ -1,4 +1,5 @@
 import numpy as np
+import os
 
 SAMPLING_WEIGHTS = {
     # tier 0
@@ -269,6 +270,43 @@ SAMPLING_BOOST_MODELS = [
 
 # outage models won't be sampled.
 OUTAGE_MODELS = []
+
+
+def oai_moderation(text):
+    """
+    Check whether the text violates OpenAI moderation API.
+    """
+    import openai
+
+    client = openai.OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+
+    threshold_dict = {
+        "sexual": 0.2,
+    }
+    MAX_RETRY = 3
+    for _ in range(MAX_RETRY):
+        try:
+            res = client.moderations.create(input=text)
+            flagged = res.results[0].flagged
+            for category, threshold in threshold_dict.items():
+                if getattr(res.results[0].category_scores, category) > threshold:
+                    flagged = True
+            break
+        except (openai.OpenAIError, KeyError, IndexError) as e:
+            # flag true to be conservative
+            flagged = True
+            print(f"MODERATION ERROR: {e}\nInput: {text}")
+    return flagged
+
+
+def moderation_filter(text, model_list):
+    MODEL_KEYWORDS = ["claude", "gpt-4", "bard"]
+
+    for keyword in MODEL_KEYWORDS:
+        for model in model_list:
+            if keyword in model and oai_moderation(text):
+                return True
+    return False
 
 
 def get_sample_weight(model):
