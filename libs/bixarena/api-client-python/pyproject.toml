@@ -1,0 +1,71 @@
+[tool.coverage.run]
+branch = true
+source = [ "bixarena_api_client_python" ]
+
+[tool.coverage.report]
+exclude_lines = ['if TYPE_CHECKING:']
+show_missing = true
+
+[tool.pytest.ini_options]
+addopts = """
+ --cov
+ --cov-report html:'../../../coverage/libs/bixarena/api-client-python/html'
+ --cov-report xml:'../../../coverage/libs/bixarena/api-client-python/coverage.xml'
+ --html='../../../reports/libs/bixarena/api-client-python/unittests/html/index.html'
+ --junitxml='../../../reports/libs/bixarena/api-client-python/unittests/junit.xml'
+"""
+
+[project]
+name = "bixarena-api-client-python"
+version = "1.0.0"
+description = "Discover, explore, and contribute to open biomedical challenges"
+requires-python = ">=3.9,<4"
+readme = 'README.md'
+dependencies = [
+  "urllib3>=2.1.0,<3.0.0",
+  "python-dateutil>=2.8.2",
+  "pydantic>=2",
+  "typing-extensions>=4.7.1",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["bixarena_api_client_python"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+exclude = [
+  ".ruff_cache",
+  ".svn",
+  ".tox",
+  ".venv",
+  "dist",
+]
+
+line-length = 88
+indent-width = 4
+
+[tool.ruff.lint]
+select = [
+  # pycodestyle
+  "E",
+  # Pyflakes
+  "F",
+  # pyupgrade
+  "UP",
+  # flake8-bugbear
+  "B",
+  # flake8-simplify
+  "SIM",
+  # isort
+  "I",
+]
+ignore = []
+
+fixable = ["ALL"]
+unfixable = []

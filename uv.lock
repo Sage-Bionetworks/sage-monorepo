@@ -4,6 +4,7 @@ requires-python = "==3.13.3"
 
 [manifest]
 members = [
+    "bixarena-api-client-python",
     "bixarena-tools",
     "openchallenges-api-client-python",
     "openchallenges-tools",
@@ -38,6 +39,25 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/50/d8/30873d2b7b57dee9263e53d142da044c4600a46f2d28374b3e38b023df16/autopep8-2.3.2.tar.gz", hash = "sha256:89440a4f969197b69a995e4ce0661b031f455a9f776d2c5ba3dbd83466931758", size = 92210, upload-time = "2025-01-14T14:46:18.454Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/9e/43/53afb8ba17218f19b77c7834128566c5bbb100a0ad9ba2e8e89d089d7079/autopep8-2.3.2-py2.py3-none-any.whl", hash = "sha256:ce8ad498672c845a0c3de2629c15b635ec2b05ef8177a6e7c91c74f3e9b51128", size = 45807, upload-time = "2025-01-14T14:46:15.466Z" },
+]
+
+[[package]]
+name = "bixarena-api-client-python"
+version = "1.0.0"
+source = { editable = "libs/bixarena/api-client-python" }
+dependencies = [
+    { name = "pydantic" },
+    { name = "python-dateutil" },
+    { name = "typing-extensions" },
+    { name = "urllib3" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "pydantic", specifier = ">=2" },
+    { name = "python-dateutil", specifier = ">=2.8.2" },
+    { name = "typing-extensions", specifier = ">=4.7.1" },
+    { name = "urllib3", specifier = ">=2.1.0,<3.0.0" },
 ]
 
 [[package]]
@@ -589,6 +609,7 @@ name = "sage-monorepo"
 version = "1.0.0"
 source = { editable = "." }
 dependencies = [
+    { name = "bixarena-api-client-python" },
     { name = "bixarena-tools" },
     { name = "openchallenges-api-client-python" },
     { name = "openchallenges-tools" },
@@ -607,6 +628,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "bixarena-api-client-python", editable = "libs/bixarena/api-client-python" },
     { name = "bixarena-tools", editable = "apps/bixarena/tools" },
     { name = "openchallenges-api-client-python", editable = "libs/openchallenges/api-client-python" },
     { name = "openchallenges-tools", editable = "apps/openchallenges/tools" },
