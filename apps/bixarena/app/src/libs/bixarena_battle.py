@@ -6,8 +6,7 @@ simplified to a single function for a single-page LLM comparison arena.
 """
 
 import gradio as gr
-import time
-import json
+
 from fastchat.serve.gradio_block_arena_anony import (
     set_global_vars_anony,
     leftvote_last_response,
@@ -19,12 +18,9 @@ from fastchat.serve.gradio_block_arena_anony import (
     share_click,
     add_text,
     bot_response_multi,
-    load_demo_side_by_side_anony,
+    load_demo_side_by_side_anony,  # Add this import
 )
 from fastchat.serve.gradio_web_server import (
-    get_conv_log_filename,
-    disable_btn,
-    invisible_btn,
     get_model_list,
 )
 
@@ -40,101 +36,6 @@ logger = build_logger("bixarena_battle", "bixarena_battle.log")
 
 num_sides = 2
 anony_names = ["", ""]
-
-
-def vote_last_response(states, vote_type, model_selectors, request: gr.Request):
-    with open(get_conv_log_filename(), "a") as fout:
-        data = {
-            "tstamp": round(time.time(), 4),
-            "type": vote_type,
-            "models": [x for x in model_selectors],
-            "states": [x.dict() for x in states],
-        }
-        fout.write(json.dumps(data) + "\n")
-
-    if ":" not in model_selectors[0]:
-        for i in range(5):
-            names = (
-                "### Model A: " + states[0].model_name,
-                "### Model B: " + states[1].model_name,
-            )
-            yield names + ("",) + (disable_btn,) * 4
-            time.sleep(0.1)
-    else:
-        names = (
-            "### Model A: " + states[0].model_name,
-            "### Model B: " + states[1].model_name,
-        )
-        yield names + ("",) + (disable_btn,) * 4
-
-
-def leftvote_last_response(
-    state0, state1, model_selector0, model_selector1, request: gr.Request
-):
-    logger.info("leftvote (anony)")
-    for x in vote_last_response(
-        [state0, state1], "leftvote", [model_selector0, model_selector1], request
-    ):
-        yield x
-
-
-def rightvote_last_response(
-    state0, state1, model_selector0, model_selector1, request: gr.Request
-):
-    logger.info("rightvote (anony)")
-    for x in vote_last_response(
-        [state0, state1], "rightvote", [model_selector0, model_selector1], request
-    ):
-        yield x
-
-
-def tievote_last_response(
-    state0, state1, model_selector0, model_selector1, request: gr.Request
-):
-    logger.info("tievote (anony)")
-    for x in vote_last_response(
-        [state0, state1], "tievote", [model_selector0, model_selector1], request
-    ):
-        yield x
-
-
-def bothbad_vote_last_response(
-    state0, state1, model_selector0, model_selector1, request: gr.Request
-):
-    logger.info("bothbad_vote (anony)")
-    for x in vote_last_response(
-        [state0, state1], "bothbad_vote", [model_selector0, model_selector1], request
-    ):
-        yield x
-
-
-def regenerate(state0, state1, request: gr.Request):
-    logger.info("regenerate (anony)")
-    states = [state0, state1]
-    for i in range(num_sides):
-        states[i].conv.update_last_message(None)
-    return states + [x.to_gradio_chatbot() for x in states] + [""] + [disable_btn] * 6
-
-
-def clear_history(request: gr.Request):
-    logger.info("clear_history (anony)")
-    return (
-        [None] * num_sides
-        + [None] * num_sides
-        + anony_names
-        + [""]
-        + [invisible_btn] * 4
-        + [disable_btn] * 2
-        + [""]
-    )
-
-
-def share_click(state0, state1, model_selector0, model_selector1, request: gr.Request):
-    logger.info("share (anony)")
-    if state0 is not None and state1 is not None:
-        vote_last_response(
-            [state0, state1], "share", [model_selector0, model_selector1], request
-        )
 
 
 def build_side_by_side_ui_anony(models):
