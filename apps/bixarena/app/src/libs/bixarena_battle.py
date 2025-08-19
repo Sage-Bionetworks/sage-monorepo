@@ -12,7 +12,7 @@ import gradio as gr
 
 from server.model_selection import get_battle_pair
 
-from fastchat.constants import (
+from server.constants import (
     MODERATION_MSG,
     CONVERSATION_LIMIT_MSG,
     SLOW_MODEL_MSG,
