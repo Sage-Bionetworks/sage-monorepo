@@ -3,7 +3,6 @@ import time
 import requests
 
 import datetime
-import hashlib
 import json
 import os
 import uuid
@@ -27,9 +26,6 @@ from server.constants import (
 from server.utils import build_logger
 
 from fastchat.serve.api_provider import get_api_provider_stream_iter
-from fastchat.utils import (
-    load_image,
-)
 from fastchat.model.model_adapter import (
     get_conversation_template,
 )
@@ -111,49 +107,6 @@ def get_model_list(register_api_endpoint_file, multimodal):
     return visible_models, models
 
 
-# def model_worker_stream_iter(
-#     conv,
-#     model_name,
-#     worker_addr,
-#     prompt,
-#     temperature,
-#     repetition_penalty,
-#     top_p,
-#     max_new_tokens,
-#     images,
-# ):
-#     # Make requests
-#     gen_params = {
-#         "model": model_name,
-#         "prompt": prompt,
-#         "temperature": temperature,
-#         "repetition_penalty": repetition_penalty,
-#         "top_p": top_p,
-#         "max_new_tokens": max_new_tokens,
-#         "stop": conv.stop_str,
-#         "stop_token_ids": conv.stop_token_ids,
-#         "echo": False,
-#     }
-
-#     logger.info(f"==== request ====\n{gen_params}")
-
-#     if len(images) > 0:
-#         gen_params["images"] = images
-
-#     # Stream output
-#     response = requests.post(
-#         worker_addr + "/worker_generate_stream",
-#         headers=headers,
-#         json=gen_params,
-#         stream=True,
-#         timeout=WORKER_API_TIMEOUT,
-#     )
-#     for chunk in response.iter_lines(decode_unicode=False, delimiter=b"\0"):
-#         if chunk:
-#             data = json.loads(chunk.decode())
-#             yield data
-
-
 def is_limit_reached(model_name, ip):
     monitor_url = "http://localhost:9090"
     try:
@@ -200,7 +153,6 @@ def bot_response(
     model_api_dict = (
         api_endpoint_info[model_name] if model_name in api_endpoint_info else None
     )
-    images = conv.get_images()
 
     # Only use API endpoints - no controller/worker logic
     if model_api_dict is None:
@@ -271,20 +223,6 @@ def bot_response(
     finish_tstamp = time.time()
     logger.info(f"{output}")
 
-    # We load the image because gradio accepts base64 but that increases file size by ~1.33x
-    loaded_images = [load_image(image) for image in images]
-    images_hash = [hashlib.md5(image.tobytes()).hexdigest() for image in loaded_images]
-    for image, hash_str in zip(loaded_images, images_hash, strict=False):
-        t = datetime.datetime.now()
-        filename = os.path.join(
-            LOGDIR,
-            "serve_images",
-            f"{hash_str}.jpg",
-        )
-        if not os.path.isfile(filename):
-            os.makedirs(os.path.dirname(filename), exist_ok=True)
-            image.save(filename)
-
     with open(get_conv_log_filename(), "a") as fout:
         data = {
             "tstamp": round(finish_tstamp, 4),
@@ -298,6 +236,5 @@ def bot_response(
             "start": round(start_tstamp, 4),
             "finish": round(finish_tstamp, 4),
             "state": state.dict(),
-            "images": images_hash,
         }
         fout.write(json.dumps(data) + "\n")
