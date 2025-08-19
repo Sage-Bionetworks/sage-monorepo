@@ -20,9 +20,6 @@ from server.constants import (
     CONVERSATION_TURN_LIMIT,
 )
 
-from fastchat.serve.gradio_web_server import (
-    get_ip,
-)
 from server.model_response import (
     State,
     get_model_list,
@@ -64,7 +61,6 @@ def vote_last_response(states, vote_type, model_selectors, request: gr.Request):
             "type": vote_type,
             "models": [x for x in model_selectors],
             "states": [x.dict() for x in states],
-            "ip": get_ip(request),
         }
         fout.write(json.dumps(data) + "\n")
 
@@ -87,7 +83,7 @@ def vote_last_response(states, vote_type, model_selectors, request: gr.Request):
 def leftvote_last_response(
     state0, state1, model_selector0, model_selector1, request: gr.Request
 ):
-    logger.info(f"leftvote (anony). ip: {get_ip(request)}")
+    logger.info("leftvote (anony).")
     for x in vote_last_response(
         [state0, state1], "leftvote", [model_selector0, model_selector1], request
     ):
@@ -97,7 +93,7 @@ def leftvote_last_response(
 def rightvote_last_response(
     state0, state1, model_selector0, model_selector1, request: gr.Request
 ):
-    logger.info(f"rightvote (anony). ip: {get_ip(request)}")
+    logger.info("rightvote (anony).")
     for x in vote_last_response(
         [state0, state1], "rightvote", [model_selector0, model_selector1], request
     ):
@@ -107,7 +103,7 @@ def rightvote_last_response(
 def tievote_last_response(
     state0, state1, model_selector0, model_selector1, request: gr.Request
 ):
-    logger.info(f"tievote (anony). ip: {get_ip(request)}")
+    logger.info("tievote (anony).")
     for x in vote_last_response(
         [state0, state1], "tievote", [model_selector0, model_selector1], request
     ):
@@ -115,7 +111,7 @@ def tievote_last_response(
 
 
 def clear_history(request: gr.Request):
-    logger.info(f"clear_history (anony). ip: {get_ip(request)}")
+    logger.info("clear_history (anony).")
     return (
         [None] * num_sides
         + [None] * num_sides
@@ -140,8 +136,7 @@ def flash_buttons():
 def add_text(
     state0, state1, model_selector0, model_selector1, text, request: gr.Request
 ):
-    ip = get_ip(request)
-    logger.info(f"add_text (anony). ip: {ip}. len: {len(text)}")
+    logger.info(f"add_text (anony). len: {len(text)}")
     states = [state0, state1]
     model_selectors = [model_selector0, model_selector1]
 
@@ -172,13 +167,13 @@ def add_text(
     model_list = [states[i].model_name for i in range(num_sides)]
     flagged = moderation_filter(text, model_list)
     if flagged:
-        logger.info(f"violate moderation (anony). ip: {ip}. text: {text}")
+        logger.info(f"violate moderation (anony). text: {text}")
         # overwrite the original text
         text = MODERATION_MSG
 
     conv = states[0].conv
     if (len(conv.messages) - conv.offset) // 2 >= CONVERSATION_TURN_LIMIT:
-        logger.info(f"conversation turn limit. ip: {get_ip(request)}. text: {text}")
+        logger.info(f"conversation turn limit. text: {text}")
         for i in range(num_sides):
             states[i].skip_next = True
         return (
@@ -222,7 +217,7 @@ def bot_response_multi(
     top_p=1.0,
     max_new_tokens=1024,
 ):
-    logger.info(f"bot_response_multi (anony). ip: {get_ip(request)}")
+    logger.info("bot_response_multi (anony).")
 
     if state0 is None or state0.skip_next:
         # This generate call is skipped due to invalid inputs

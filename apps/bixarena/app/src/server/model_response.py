@@ -14,7 +14,6 @@ from fastchat.serve.gradio_web_server import (
     no_change_btn,
     enable_btn,
     disable_btn,
-    get_ip,
 )
 
 from fastchat.model.model_registry import model_info
@@ -71,12 +70,6 @@ class State:
 
 def set_global_vars_anony(enable_moderation_):
     global enable_moderation
-    enable_moderation = enable_moderation_
-
-
-def set_global_vars(controller_url_, enable_moderation_):
-    global controller_url, enable_moderation
-    controller_url = controller_url_
     enable_moderation = enable_moderation_
 
 
@@ -182,8 +175,7 @@ def bot_response(
     request: gr.Request,
     apply_rate_limit=True,
 ):
-    ip = get_ip(request)
-    logger.info(f"bot_response. ip: {ip}")
+    logger.info("bot_response. ")
     start_tstamp = time.time()
     temperature = float(temperature)
     top_p = float(top_p)
@@ -306,7 +298,6 @@ def bot_response(
             "start": round(start_tstamp, 4),
             "finish": round(finish_tstamp, 4),
             "state": state.dict(),
-            "ip": get_ip(request),
             "images": images_hash,
         }
         fout.write(json.dumps(data) + "\n")
