@@ -23,5 +23,6 @@ model/modelData.ts
 model/modelOverview.ts
 model/modelOverviewLink.ts
 model/models.ts
+model/searchResult.ts
 param.ts
 variables.ts

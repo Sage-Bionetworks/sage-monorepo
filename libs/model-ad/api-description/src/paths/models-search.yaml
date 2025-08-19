@@ -1,0 +1,26 @@
+get:
+  tags:
+    - Models
+  summary: Search Models
+  description: Search for a particular model
+  operationId: searchModels
+  parameters:
+    - name: q
+      in: query
+      description: Search query
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../components/schemas/SearchResult.yaml
+      description: Successfully retrieved search results
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

@@ -5,6 +5,7 @@ import {
   dataVersionRoute,
   modelOverviewRoute,
   modelRoute,
+  modelsSearchRoute,
 } from './components';
 
 const mongodbUser = process.env.MONGODB_USER;
@@ -50,6 +51,7 @@ mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection 
 const router = express.Router();
 mongoose.connection.once('open', async () => {
   router.get('/dataversion', dataVersionRoute);
+  router.get('/models/search', modelsSearchRoute);
   router.get('/models/:name', modelRoute);
   router.get('/comparison-tool-config', comparisonToolConfigRoute);
   router.get('/comparison-tools/model-overview', modelOverviewRoute);
