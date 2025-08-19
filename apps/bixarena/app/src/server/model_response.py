@@ -10,12 +10,8 @@ import uuid
 
 from fastchat.serve.gradio_web_server import (
     get_conv_log_filename,
-    no_change_btn,
-    enable_btn,
-    disable_btn,
 )
 
-from fastchat.model.model_registry import model_info
 
 from server.constants import LOGDIR, ErrorCode, SERVER_ERROR_MSG
 from server.utils import build_logger
@@ -97,9 +93,8 @@ def get_model_list(register_api_endpoint_file, multimodal):
             visible_models.remove(mdl)
 
     # Sort models and add descriptions
-    priority = {k: f"___{i:03d}" for i, k in enumerate(model_info)}
-    models.sort(key=lambda x: priority.get(x, x))
-    visible_models.sort(key=lambda x: priority.get(x, x))
+    models.sort()  # Simple A-Z sorting
+    visible_models.sort()
     logger.info(f"All models: {models}")
     logger.info(f"Visible models: {visible_models}")
     return visible_models, models
