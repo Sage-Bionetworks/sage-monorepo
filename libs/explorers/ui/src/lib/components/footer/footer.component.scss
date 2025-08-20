@@ -1,3 +1,4 @@
+@use 'explorers/styles/src/lib/variables';
 @use 'explorers/styles/src/lib/mixins';
 
 footer {
@@ -9,7 +10,7 @@ footer {
   padding: 10px;
   min-height: var(--footer-height);
 
-  @include mixins.respond-to('medium') {
+  @media (min-width: variables.$md-breakpoint) {
     justify-content: space-between;
   }
 
@@ -23,16 +24,8 @@ footer {
       padding: 0;
       margin: 10px 0;
 
-      @include mixins.respond-to('medium') {
+      @media (min-width: variables.$md-breakpoint) {
         margin: 0;
-      }
-
-      > :first-child {
-        display: none;
-
-        @include mixins.respond-to('small') {
-          display: block;
-        }
       }
 
       li {
@@ -53,6 +46,14 @@ footer {
         height: 64px;
         display: flex;
         align-items: center;
+
+        @media (width < 600px) {
+          display: none;
+        }
+
+        @media (width >= 600px) {
+          display: flex;
+        }
       }
     }
   }
@@ -66,7 +67,7 @@ footer {
     gap: 50px;
     margin: 10px 0;
 
-    @include mixins.respond-to('medium') {
+    @media (min-width: variables.$md-breakpoint) {
       margin: 0;
     }
 
