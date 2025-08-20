@@ -238,7 +238,6 @@ def build_side_by_side_ui_anony():
                         elem_id="chatbot",
                         height=550,
                         show_copy_button=True,
-                        type="messages",
                     )
                     chatbots.append(chatbot)
 
