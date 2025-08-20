@@ -16,8 +16,7 @@
       "options": {
         "commands": [
           "sudo apt-get update -qq -y",
-          "sudo apt-get install --no-install-recommends -qq -y gettext-base",
-          "uv sync --extra model_worker --extra webui"
+          "sudo apt-get install --no-install-recommends -qq -y gettext-base"
         ],
         "cwd": "{projectRoot}",
         "parallel": false
