@@ -8,7 +8,7 @@ import uuid
 from fastchat.model.model_adapter import get_conversation_template
 from fastchat.serve.api_provider import get_api_provider_stream_iter
 
-from server.constants import ErrorCode, SERVER_ERROR_MSG
+from configs.constants import ErrorCode, SERVER_ERROR_MSG
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -190,3 +190,60 @@ def bot_response(
         "state": state.dict(),
     }
     logger.info(f"Conversation data: {json.dumps(data)}")
+
+
+def bot_response_multi(
+    state0,
+    state1,
+    request: gr.Request,
+    temperature=0.7,
+    top_p=1.0,
+    max_new_tokens=1024,
+):
+    logger.info("bot_response_multi (anony).")
+    num_sides = 2
+    if state0 is None or state0.skip_next:
+        # This generate call is skipped due to invalid inputs
+        yield (
+            state0,
+            state1,
+            state0.to_gradio_chatbot(),
+            state1.to_gradio_chatbot(),
+        ) + (no_change_btn,) * 4
+        return
+
+    states = [state0, state1]
+    gen = []
+    for i in range(num_sides):
+        gen.append(
+            bot_response(
+                states[i],
+                temperature,
+                top_p,
+                max_new_tokens,
+                request,
+                apply_rate_limit=False,
+            )
+        )
+
+    is_gemini = []
+    for i in range(num_sides):
+        is_gemini.append(states[i].model_name in ["gemini-pro", "gemini-pro-dev-api"])
+    chatbots = [None] * num_sides
+    iters = 0
+    while True:
+        stop = True
+        iters += 1
+        for i in range(num_sides):
+            try:
+                # yield gemini fewer times as its chunk size is larger
+                # otherwise, gemini will stream too fast
+                if not is_gemini[i] or (iters % 30 == 1 or iters < 3):
+                    ret = next(gen[i])
+                    states[i], chatbots[i] = ret[0], ret[1]
+                stop = False
+            except StopIteration:
+                pass
+        yield states + chatbots + [disable_btn] * 4
+        if stop:
+            break

@@ -11,9 +11,8 @@ import time
 
 import gradio as gr
 
-from server.model_selection import get_battle_pair, moderation_filter
 
-from server.constants import (
+from configs.constants import (
     MODERATION_MSG,
     CONVERSATION_LIMIT_MSG,
     SLOW_MODEL_MSG,
@@ -21,11 +20,14 @@ from server.constants import (
     CONVERSATION_TURN_LIMIT,
 )
 
-from server.model_response import (
+from models.model_selection import get_battle_pair, moderation_filter
+
+
+from models.model_response import (
     State,
     get_model_list,
     set_global_vars_anony,
-    bot_response,
+    bot_response_multi,
     no_change_btn,
     enable_btn,
     disable_btn,
@@ -209,64 +211,7 @@ def add_text(
     )
 
 
-def bot_response_multi(
-    state0,
-    state1,
-    request: gr.Request,
-    temperature=0.7,
-    top_p=1.0,
-    max_new_tokens=1024,
-):
-    logger.info("bot_response_multi (anony).")
-
-    if state0 is None or state0.skip_next:
-        # This generate call is skipped due to invalid inputs
-        yield (
-            state0,
-            state1,
-            state0.to_gradio_chatbot(),
-            state1.to_gradio_chatbot(),
-        ) + (no_change_btn,) * 4
-        return
-
-    states = [state0, state1]
-    gen = []
-    for i in range(num_sides):
-        gen.append(
-            bot_response(
-                states[i],
-                temperature,
-                top_p,
-                max_new_tokens,
-                request,
-                apply_rate_limit=False,
-            )
-        )
-
-    is_gemini = []
-    for i in range(num_sides):
-        is_gemini.append(states[i].model_name in ["gemini-pro", "gemini-pro-dev-api"])
-    chatbots = [None] * num_sides
-    iters = 0
-    while True:
-        stop = True
-        iters += 1
-        for i in range(num_sides):
-            try:
-                # yield gemini fewer times as its chunk size is larger
-                # otherwise, gemini will stream too fast
-                if not is_gemini[i] or (iters % 30 == 1 or iters < 3):
-                    ret = next(gen[i])
-                    states[i], chatbots[i] = ret[0], ret[1]
-                stop = False
-            except StopIteration:
-                pass
-        yield states + chatbots + [disable_btn] * 4
-        if stop:
-            break
-
-
-def build_side_by_side_ui_anony(models):
+def build_side_by_side_ui_anony():
     notice_markdown = """
 # ⚔️  BixArena: Benchmarking LLMs for Biomedical Breakthroughs
 
@@ -293,6 +238,7 @@ def build_side_by_side_ui_anony(models):
                         elem_id="chatbot",
                         height=550,
                         show_copy_button=True,
+                        type="messages",
                     )
                     chatbots.append(chatbot)
 
@@ -388,7 +334,6 @@ def build_battle_page(
 ):
     # Set global variables
     set_global_vars_anony(moderate)
-    # set_global_vars(controller_url, moderate)
 
     # Load models once and only for text-only models
     models, all_models = get_model_list(
@@ -400,6 +345,6 @@ def build_battle_page(
     load_demo_side_by_side_anony(models, {})
 
     with gr.Blocks(title="BixArena - Biomedical LLM Battle") as battle_page:
-        build_side_by_side_ui_anony(models)
+        build_side_by_side_ui_anony()
 
     return battle_page
