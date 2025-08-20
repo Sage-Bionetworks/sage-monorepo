@@ -1,9 +1,13 @@
-<div class="comparison-tool-table-link">
-  @if (isExternalLink()) {
-    <a target="_blank" href="{{ linkUrl() }}"
-      >{{ linkText() }} <i class="pi pi-external-link"></i
-    ></a>
-  } @else {
-    <a routerLink="{{ linkUrl() }}">{{ linkText() }} <i class="pi pi-external-link"></i></a>
-  }
-</div>
+@if (linkUrl()) {
+  <div class="comparison-tool-table-link">
+    @if (isExternalUrl()) {
+      <a target="_blank" href="{{ linkUrl() }}"
+        >{{ linkText() }} <i class="pi pi-external-link"></i
+      ></a>
+    } @else {
+      <a [routerLink]="internalLinkPath()" [queryParams]="internalLinkQueryParams()"
+        >{{ linkText() }} <i class="pi pi-external-link"></i
+      ></a>
+    }
+  </div>
+}
