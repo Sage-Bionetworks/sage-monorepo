@@ -190,7 +190,7 @@ def add_text(
     text = text[:INPUT_CHAR_LEN_LIMIT]  # Hard cut-off
     for i in range(num_sides):
         states[i].conv.append_message(states[i].conv.roles[0], text)
-        states[i].conv.append_message(states[i].conv.roles[1], None)
+        states[i].conv.append_message(states[i].conv.roles[1], None)  # type: ignore
         states[i].skip_next = False
 
     hint_msg = ""
@@ -278,8 +278,8 @@ def build_side_by_side_ui_anony(models):
 """
 
     states = [gr.State() for _ in range(num_sides)]
-    model_selectors = [None] * num_sides
-    chatbots = [None] * num_sides
+    model_selectors = []
+    chatbots = []
 
     gr.Markdown(notice_markdown, elem_id="notice_markdown")
 
@@ -288,19 +288,21 @@ def build_side_by_side_ui_anony(models):
             for i in range(num_sides):
                 label = "Model A" if i == 0 else "Model B"
                 with gr.Column():
-                    chatbots[i] = gr.Chatbot(
+                    chatbot = gr.Chatbot(
                         label=label,
                         elem_id="chatbot",
                         height=550,
                         show_copy_button=True,
                     )
+                    chatbots.append(chatbot)
 
         with gr.Row():
             for i in range(num_sides):
                 with gr.Column():
-                    model_selectors[i] = gr.Markdown(
+                    model_selector = gr.Markdown(
                         anony_names[i], elem_id="model_selector_md"
                     )
+                    model_selectors.append(model_selector)
         with gr.Row():
             slow_warning = gr.Markdown("", elem_id="notice_markdown")
 
