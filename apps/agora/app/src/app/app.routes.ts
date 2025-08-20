@@ -105,9 +105,9 @@ export const routes: Route[] = [
     loadChildren: () =>
       import('@sagebionetworks/explorers/shared').then((routes) => routes.termsOfServiceRoute),
     data: {
-      title: 'Model AD Explorer | Terms of Service',
+      title: 'Agora | Terms of Service',
       description:
-        'The Model AD Explorer is powered by Synapse, a platform for supporting scientific collaborations centered around shared biomedical data sets. Our goal is to make biomedical research more transparent, more reproducible, and more accessible to a broader audience of scientists.',
+        'Agora is powered by Synapse, a platform for supporting scientific collaborations centered around shared biomedical data sets. Our goal is to make biomedical research more transparent, more reproducible, and more accessible to a broader audience of scientists.',
     },
   },
   {
