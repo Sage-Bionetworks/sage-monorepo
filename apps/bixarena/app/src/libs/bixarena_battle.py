@@ -6,6 +6,7 @@ simplified to a single function for a single-page LLM comparison arena.
 """
 
 import json
+import logging
 import time
 
 import gradio as gr
@@ -31,9 +32,9 @@ from server.model_response import (
     invisible_btn,
 )
 
-from server.utils import build_logger
 
-logger = build_logger("bixarena_battle", "bixarena_battle.log")
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 num_sides = 2
 anony_names = ["", ""]
@@ -54,7 +55,7 @@ def load_demo_side_by_side_anony(models_, url_params):
 
 
 def vote_last_response(states, vote_type, model_selectors, request: gr.Request):
-    # Log the exact same format as before, but to console instead of file
+    # Log the exact same data to console instead of file
     data = {
         "tstamp": round(time.time(), 4),
         "type": vote_type,

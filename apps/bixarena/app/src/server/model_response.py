@@ -1,20 +1,17 @@
+import logging
 import gradio as gr
-import time
-import requests
-
 import json
+import requests
+import time
 import uuid
 
+from fastchat.model.model_adapter import get_conversation_template
+from fastchat.serve.api_provider import get_api_provider_stream_iter
 
 from server.constants import ErrorCode, SERVER_ERROR_MSG
-from server.utils import build_logger
 
-from fastchat.serve.api_provider import get_api_provider_stream_iter
-from fastchat.model.model_adapter import (
-    get_conversation_template,
-)
-
-logger = build_logger("gradio_web_server", "gradio_web_server.log")
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 no_change_btn = gr.Button()
 enable_btn = gr.Button(interactive=True, visible=True)
@@ -23,9 +20,6 @@ invisible_btn = gr.Button(interactive=False, visible=False)
 
 controller_url = ""
 enable_moderation = False
-
-total_requests = 0
-MAX_REQUESTS = 10
 
 api_endpoint_info = {}
 
