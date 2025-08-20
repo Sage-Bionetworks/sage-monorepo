@@ -13,7 +13,7 @@
     "api_key": "${OPENAI_API_KEY}",
     "anony_only": false
   },
-  "qwen3-235b-a22b-2507": {
+  "qwen3-235b-a22b": {
     "model_name": "qwen/qwen3-235b-a22b:free",
     "api_base": "https://openrouter.ai/api/v1",
     "api_type": "openai",
