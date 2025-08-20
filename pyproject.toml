@@ -42,6 +42,7 @@ workspace = true
 
 [tool.uv.workspace]
 members = [
+  "apps/bixarena/app",
   "apps/bixarena/tools",
   "apps/openchallenges/tools",
   "libs/bixarena/api-client-python",
