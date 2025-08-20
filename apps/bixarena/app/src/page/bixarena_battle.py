@@ -268,9 +268,13 @@ def build_side_by_side_ui_anony():
             elem_id="input_box",
         )
         send_btn = gr.Button(value="Send", variant="primary", scale=0)
-
     with gr.Row():
-        clear_btn = gr.Button(value="🎲 New Round", interactive=False)
+        with gr.Column(scale=2):
+            pass
+        with gr.Column(scale=1):
+            clear_btn = gr.Button(value="🎯 Next Battle", interactive=False)
+        with gr.Column(scale=2):
+            pass
 
     # Register listeners
     btn_list = [
