@@ -8,7 +8,7 @@ import uuid
 from fastchat.model.model_adapter import get_conversation_template
 from fastchat.serve.api_provider import get_api_provider_stream_iter
 
-from configs.constants import ErrorCode, SERVER_ERROR_MSG
+from config.constants import ErrorCode, SERVER_ERROR_MSG
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

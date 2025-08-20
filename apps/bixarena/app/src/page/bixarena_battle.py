@@ -12,7 +12,7 @@ import time
 import gradio as gr
 
 
-from configs.constants import (
+from config.constants import (
     MODERATION_MSG,
     CONVERSATION_LIMIT_MSG,
     SLOW_MODEL_MSG,
@@ -20,10 +20,10 @@ from configs.constants import (
     CONVERSATION_TURN_LIMIT,
 )
 
-from models.model_selection import get_battle_pair, moderation_filter
+from model.model_selection import get_battle_pair, moderation_filter
 
 
-from models.model_response import (
+from model.model_response import (
     State,
     get_model_list,
     set_global_vars_anony,

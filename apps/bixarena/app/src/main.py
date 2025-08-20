@@ -1,10 +1,10 @@
 import argparse
 import gradio as gr
-from libs.bixarena_header import build_header
-from libs.bixarena_battle import build_battle_page
-from libs.bixarena_leaderboard import build_leaderboard_page
-from libs.bixarena_home import build_home_page
-from libs.login import build_login_page
+from page.bixarena_header import build_header
+from page.bixarena_battle import build_battle_page
+from page.bixarena_leaderboard import build_leaderboard_page
+from page.bixarena_home import build_home_page
+from page.login import build_login_page
 
 
 class PageNavigator:
