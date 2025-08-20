@@ -13,9 +13,9 @@
  */
 export interface SearchResult {
   /**
-   * Name of result
+   * ID of result
    */
-  name: string;
+  id: string;
   /**
    * Field that matched the query
    */

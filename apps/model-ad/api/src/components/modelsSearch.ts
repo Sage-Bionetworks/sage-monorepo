@@ -61,7 +61,7 @@ export async function searchModels(query: string) {
     { $sort: { 'match_info.precedence': 1, name: 1 } },
     {
       $project: {
-        name: 1,
+        id: '$name',
         match_field: '$match_info.match_field',
         match_value: '$match_info.match_value',
       },
