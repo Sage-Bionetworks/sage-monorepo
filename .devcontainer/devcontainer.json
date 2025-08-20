@@ -220,6 +220,7 @@
         "matthewpi.caddyfile-support",
         "mhutchie.git-graph",
         "mongodb.mongodb-vscode",
+        "ms-ossdata.vscode-pgsql",
         "ms-playwright.playwright",
         "ms-python.python",
         "ms-toolsai.jupyter",
