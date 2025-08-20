@@ -1,4 +1,0 @@
-key,Model,Elo Rating,Description,Link,Organization,License,num_battles,rating,rating_q975,rating_q025,final_ranking,MT-bench (score),MMLU,Arena Hard,AlpacaEval-2.0
-deepseek-chat-v3-0324,deepseek-chat-v3-0324,1004,Register the description at fastchat/model/model_registry.py,,DeepSeek,Proprietary,2,1004,1003.988487,1003.976975,1,8.2,75.3,65.1,22.4
-deepseek-r1,deepseek-r1,998,Register the description at fastchat/model/model_registry.py,,DeepSeek,Proprietary,0,998,998.011513,996.023025,2,8.1,74.8,64.2,21.8
-deepseek-r1-0528,deepseek-r1-0528,998,Register the description at fastchat/model/model_registry.py,,DeepSeek,Proprietary,0,998,998.011513,996.023025,3,8.0,74.5,63.9,21.5
