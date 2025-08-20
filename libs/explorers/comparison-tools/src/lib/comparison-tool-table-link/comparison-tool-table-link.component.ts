@@ -24,15 +24,9 @@ export class ComparisonToolTableLinkComponent {
 
     // if url has parameters, parse them
     if (urlParts.length > 1) {
-      const paramsString = urlParts[1];
-      paramsString.split('&').forEach((param) => {
-        const paramParts = param.split('=');
-        // Ensure there is a key
-        if (paramParts[0]) {
-          const key = decodeURIComponent(paramParts[0]);
-          const value = paramParts.length > 1 ? decodeURIComponent(paramParts[1]) : true;
-          queryParams[key] = value;
-        }
+      const params = new URLSearchParams(urlParts[1] || '');
+      params.forEach((value, key) => {
+        queryParams[key] = value;
       });
     }
 
