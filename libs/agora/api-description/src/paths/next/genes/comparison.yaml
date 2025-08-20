@@ -1,9 +1,9 @@
 get:
   tags:
-    - Gene
+    - Gene Next
   summary: Get comparison genes based on category and subcategory
   description: Get comparison genes based on category and subcategory
-  operationId: getComparisonGenes
+  operationId: getComparisonGenesNext
   parameters:
     - in: query
       name: category
@@ -26,8 +26,8 @@ get:
       content:
         application/json:
           schema:
-            $ref: ../../components/schemas/GCTGenesList.yaml
+            $ref: ../../../components/schemas/GCTGenesList.yaml
     '404':
-      $ref: ../../components/responses/NotFound.yaml
+      $ref: ../../../components/responses/NotFound.yaml
     '500':
-      $ref: ../../components/responses/InternalServerError.yaml
+      $ref: ../../../components/responses/InternalServerError.yaml

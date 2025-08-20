@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   version: 1.0.0-draft
-  title: Agora Gene API
+  title: Agora Next API
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -14,12 +14,12 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - name: Genes # TODO: consider using "Gene" instead of "Genes" to be consistent with the other APIs
+  - name: Gene Next
     description: Operations about genes.
     x-audience: [internal]
 paths:
-  /genes/comparison:
-    $ref: paths/genes/comparison.yaml
+  /next/genes/comparison:
+    $ref: paths/next/genes/comparison.yaml
 components:
   schemas:
     Gene:
