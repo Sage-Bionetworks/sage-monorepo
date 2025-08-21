@@ -1,6 +1,6 @@
 services:
   bixarena-apex:
-    image: ghcr.io/sage-bionetworks/bixarena-apex:${bixarena_VERSION:-local}
+    image: ghcr.io/sage-bionetworks/bixarena-apex:${BIXARENA_VERSION:-local}
     container_name: bixarena-apex
     restart: always
     env_file:

@@ -24,13 +24,14 @@ RUN groupadd --gid "$USER_GID" "$USERNAME" \
 
 WORKDIR ${APP_DIR}
 
-# Copy the root workspace files for dependency resolution
-COPY pyproject.toml uv.lock ./
-COPY libs/bixarena/api-client-python/ ./libs/bixarena/api-client-python/
+# WORKAROUND: API client should be bundled but isn't due to build configuration issue
+# TODO: Fix the build process to properly bundle bixarena-api-client-python code
+COPY libs/bixarena/api-client-python/ /tmp/api-client/
+RUN cd /tmp/api-client && uv build && uv pip install dist/*.whl --system
 
-# Install the built wheel - this will install all dependencies including the local API client
-COPY apps/bixarena/app/dist/*.whl /tmp/
-RUN uv pip install /tmp/*.whl --system
+# Install the built sdist - this will install all other dependencies
+COPY apps/bixarena/app/dist/*.tar.gz /tmp/
+RUN uv pip install /tmp/*.tar.gz --system
 
 # Copy configuration files
 COPY apps/bixarena/app/model_config.template.json ${APP_DIR}/

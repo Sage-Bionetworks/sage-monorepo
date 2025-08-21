@@ -1,6 +1,6 @@
 services:
   bixarena-app:
-    image: ghcr.io/sage-bionetworks/bixarena-app:${bixarena_VERSION:-local}
+    image: ghcr.io/sage-bionetworks/bixarena-app:${BIXARENA_VERSION:-local}
     container_name: bixarena-app
     restart: always
     networks:

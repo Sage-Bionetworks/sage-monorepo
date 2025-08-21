@@ -10,7 +10,7 @@ def fetch_leaderboard_data():
     """Fetch leaderboard data from the BixArena API"""
     try:
         # Configure the API client
-        configuration = Configuration(host="http://localhost:8112/v1")
+        configuration = Configuration(host="http://bixarena-api:8112/v1")
         print(f"🔗 Attempting to connect to API at: {configuration.host}")
 
         # Create API client and leaderboard API instance

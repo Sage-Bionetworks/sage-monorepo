@@ -28,6 +28,9 @@ dev = ["black==23.3.0", "pylint==2.8.2"]
 where = ["src"]
 exclude = ["assets*", "benchmark*", "docs", "dist*", "playground*", "scripts*", "tests*"]
 
+[tool.setuptools]
+py-modules = ["main"]
+
 [tool.wheel]
 exclude = ["assets*", "benchmark*", "docs", "dist*", "playground*", "scripts*", "tests*"]
 
