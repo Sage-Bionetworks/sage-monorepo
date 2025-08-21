@@ -1,0 +1,62 @@
+# agora-next-api:
+#   welcome-message: 'Welcome to the BixArena API'
+
+server:
+  port: 8112
+
+spring:
+  application:
+    name: agora-next-api
+  datasource:
+    url: jdbc:postgresql://agora-next-postgres:21000/agora-next
+    username: postgres
+    password: changeme
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
+    clean-disabled: false
+  jackson:
+    date-format: org.sagebionetworks.agora-next.api.RFC3339DateFormat
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        jdbc:
+          time_zone: UTC
+    open-in-view: false
+  # autoconfigure:
+  #   # Prevent Spring Boot from auto-configuring a default Elasticsearch client,
+  #   # which Hibernate Search might incorrectly use, leading to node sniffing errors
+  #   # when a local cluster is not available.
+  #   exclude: org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: health, prometheus
+      path-mapping:
+        prometheus: metrics
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+    prometheus:
+      cache.time-to-live: 1ms
+
+info:
+  application:
+    name: ${spring.application.name}
