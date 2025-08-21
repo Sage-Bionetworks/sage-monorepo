@@ -23,6 +23,6 @@
 #!docs/README.md
 pom.xml
 README.md
-**/application.properties
-**/OpenApiGeneratorApplication.java
-**/OpenApiGeneratorApplicationTests.java
+# **/application.properties
+# **/OpenApiGeneratorApplication.java
+# **/OpenApiGeneratorApplicationTests.java

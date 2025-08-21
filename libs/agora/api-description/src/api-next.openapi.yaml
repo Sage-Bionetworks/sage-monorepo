@@ -14,18 +14,10 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - name: Gene # Does not conflict with primary API because we use the singular form here
-    description: Operations about genes.
+  - name: Health Check
+    description: Operations about health checks.
     x-audience: [internal]
 paths:
   # We prefix all the paths with the segment "next/" to prevent conflicts with the primary API
-  /next/genes/comparison:
-    $ref: paths/next/genes/comparison.yaml
-# components:
-#   schemas:
-#     Gene:
-#       $ref: components/schemas/Gene.yaml
-#       x-audience: [internal]
-#     Team:
-#       $ref: components/schemas/Team.yaml
-#       x-audience: [internal]
+  /next/health-check:
+    $ref: paths/next/health-check.yaml
