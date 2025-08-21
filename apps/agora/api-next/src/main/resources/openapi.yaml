@@ -12,70 +12,70 @@ info:
     url: https://raw.githubusercontent.com/Sage-Bionetworks/agora-images/main/og-social.png
     altText: Agora
 servers:
-- url: http://localhost/v1
+  - url: http://localhost/v1
 tags:
-- description: Operations about genes.
-  name: Gene Next
-  x-audience:
-  - internal
+  - description: Operations about genes.
+    name: Gene Next
+    x-audience:
+      - internal
 paths:
   /next/genes/comparison:
     get:
       description: Get comparison genes based on category and subcategory
       operationId: getComparisonGenesNext
       parameters:
-      - description: The category of the comparison (either RNA or Protein Differential
-          Expression).
-        explode: true
-        in: query
-        name: category
-        required: true
-        schema:
-          enum:
-          - RNA - Differential Expression
-          - Protein - Differential Expression
-          type: string
-        style: form
-      - description: The subcategory for gene comparison (sub-category must be a string).
-        explode: true
-        in: query
-        name: subCategory
-        required: true
-        schema:
-          type: string
-        style: form
+        - description: The category of the comparison (either RNA or Protein Differential
+            Expression).
+          explode: true
+          in: query
+          name: category
+          required: true
+          schema:
+            enum:
+              - RNA - Differential Expression
+              - Protein - Differential Expression
+            type: string
+          style: form
+        - description: The subcategory for gene comparison (sub-category must be a string).
+          explode: true
+          in: query
+          name: subCategory
+          required: true
+          schema:
+            type: string
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GCTGenesList"
+                $ref: '#/components/schemas/GCTGenesList'
           description: Successful response with comparison genes
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       summary: Get comparison genes based on category and subcategory
       tags:
-      - Gene Next
+        - Gene Next
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Gene Next
+        - tag: Gene Next
 components:
   responses:
     NotFound:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/BasicError"
+            $ref: '#/components/schemas/BasicError'
       description: The specified resource was not found
     InternalServerError:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/BasicError"
+            $ref: '#/components/schemas/BasicError'
       description: The request cannot be fulfilled due to an unexpected server error
   schemas:
     Gene:
@@ -113,15 +113,15 @@ components:
           type: boolean
         target_nominations:
           items:
-            $ref: "#/components/schemas/TargetNomination"
+            $ref: '#/components/schemas/TargetNomination'
           nullable: true
           type: array
         median_expression:
           items:
-            $ref: "#/components/schemas/MedianExpression"
+            $ref: '#/components/schemas/MedianExpression'
           type: array
         druggability:
-          $ref: "#/components/schemas/Druggability"
+          $ref: '#/components/schemas/Druggability'
         total_nominations:
           nullable: true
           type: integer
@@ -135,51 +135,51 @@ components:
         rna_differential_expression:
           description: added by API (not in mongo document)
           items:
-            $ref: "#/components/schemas/RnaDifferentialExpression"
+            $ref: '#/components/schemas/RnaDifferentialExpression'
           nullable: true
           type: array
         proteomics_LFQ:
           description: added by API (not in mongo document)
           items:
-            $ref: "#/components/schemas/ProteinDifferentialExpression"
+            $ref: '#/components/schemas/ProteinDifferentialExpression'
           nullable: true
           type: array
         proteomics_SRM:
           description: added by API (not in mongo document)
           items:
-            $ref: "#/components/schemas/ProteinDifferentialExpression"
+            $ref: '#/components/schemas/ProteinDifferentialExpression'
           nullable: true
           type: array
         proteomics_TMT:
           description: added by API (not in mongo document)
           items:
-            $ref: "#/components/schemas/ProteinDifferentialExpression"
+            $ref: '#/components/schemas/ProteinDifferentialExpression'
           nullable: true
           type: array
         metabolomics:
-          $ref: "#/components/schemas/Metabolomics"
+          $ref: '#/components/schemas/Metabolomics'
         overall_scores:
-          $ref: "#/components/schemas/OverallScores"
+          $ref: '#/components/schemas/OverallScores'
         neuropathologic_correlations:
           description: added by API (not in mongo document)
           items:
-            $ref: "#/components/schemas/NeuropathologicCorrelation"
+            $ref: '#/components/schemas/NeuropathologicCorrelation'
           nullable: true
           type: array
         experimental_validation:
           description: added by API (not in mongo document)
           items:
-            $ref: "#/components/schemas/ExperimentalValidation"
+            $ref: '#/components/schemas/ExperimentalValidation'
           nullable: true
           type: array
         links:
           description: added by API (not in mongo document)
           items:
-            $ref: "#/components/schemas/GeneNetworkLinks"
+            $ref: '#/components/schemas/GeneNetworkLinks'
           nullable: true
           type: array
         similar_genes_network:
-          $ref: "#/components/schemas/SimilarGenesNetwork"
+          $ref: '#/components/schemas/SimilarGenesNetwork'
         ab_modality_display_value:
           nullable: true
           type: string
@@ -228,27 +228,27 @@ components:
           nullable: true
           type: string
         bio_domains:
-          $ref: "#/components/schemas/BioDomains"
+          $ref: '#/components/schemas/BioDomains'
         ensembl_info:
-          $ref: "#/components/schemas/EnsemblInfo"
+          $ref: '#/components/schemas/EnsemblInfo'
       required:
-      - _id
-      - alias
-      - druggability
-      - ensembl_gene_id
-      - ensembl_info
-      - hgnc_symbol
-      - is_any_protein_changed_in_ad_brain
-      - is_any_rna_changed_in_ad_brain
-      - is_eqtl
-      - is_igap
-      - median_expression
-      - name
-      - protein_brain_change_studied
-      - rna_brain_change_studied
-      - summary
-      - target_nominations
-      - total_nominations
+        - _id
+        - alias
+        - druggability
+        - ensembl_gene_id
+        - ensembl_info
+        - hgnc_symbol
+        - is_any_protein_changed_in_ad_brain
+        - is_any_rna_changed_in_ad_brain
+        - is_eqtl
+        - is_igap
+        - median_expression
+        - name
+        - protein_brain_change_studied
+        - rna_brain_change_studied
+        - summary
+        - target_nominations
+        - total_nominations
       type: object
     Team:
       description: Team
@@ -263,14 +263,14 @@ components:
           type: string
         members:
           items:
-            $ref: "#/components/schemas/TeamMember"
+            $ref: '#/components/schemas/TeamMember'
           type: array
       required:
-      - description
-      - members
-      - program
-      - team
-      - team_full
+        - description
+        - members
+        - program
+        - team
+        - team_full
       type: object
     MedianExpression:
       description: MedianExpression
@@ -304,7 +304,7 @@ components:
         tissue:
           type: string
       required:
-      - tissue
+        - tissue
       type: object
     GCTGeneTissue:
       description: GCTGeneTissue
@@ -343,35 +343,35 @@ components:
           format: float
           type: number
         medianexpression:
-          $ref: "#/components/schemas/MedianExpression"
+          $ref: '#/components/schemas/MedianExpression'
       required:
-      - adj_p_val
-      - ci_l
-      - ci_r
-      - logfc
-      - mediaexpression
-      - name
+        - adj_p_val
+        - ci_l
+        - ci_r
+        - logfc
+        - mediaexpression
+        - name
       type: object
     GCTGeneNominations:
       description: GCTGeneNominations
       example:
         teams:
-        - teams
-        - teams
+          - teams
+          - teams
         year: 7
         inputs:
-        - inputs
-        - inputs
+          - inputs
+          - inputs
         count: 4
         studies:
-        - studies
-        - studies
+          - studies
+          - studies
         programs:
-        - programs
-        - programs
+          - programs
+          - programs
         validations:
-        - validations
-        - validations
+          - validations
+          - validations
       properties:
         count:
           description: The total number of gene nominations.
@@ -405,83 +405,83 @@ components:
             type: string
           type: array
       required:
-      - count
-      - inputs
-      - programs
-      - studies
-      - teams
-      - validations
-      - year
+        - count
+        - inputs
+        - programs
+        - studies
+        - teams
+        - validations
+        - year
       type: object
     GCTGene:
       description: GCT Gene
       example:
         associations:
-        - 1.2315135367772556
-        - 1.2315135367772556
+          - 1.2315135367772556
+          - 1.2315135367772556
         pinned: true
         tissues:
-        - adj_p_val: 6.0274563
-          logfc: 0.8008282
-          ci_r: 5.962134
-          name: name
-          ci_l: 1.4658129
-          medianexpression:
-            min: 5.637377
-            first_quartile: 2.302136
-            median: 7.0614014
-            max: 2.027123
-            mean: 9.301444
-            tissue: tissue
-            third_quartile: 3.6160767
-        - adj_p_val: 6.0274563
-          logfc: 0.8008282
-          ci_r: 5.962134
-          name: name
-          ci_l: 1.4658129
-          medianexpression:
-            min: 5.637377
-            first_quartile: 2.302136
-            median: 7.0614014
-            max: 2.027123
-            mean: 9.301444
-            tissue: tissue
-            third_quartile: 3.6160767
+          - adj_p_val: 6.0274563
+            logfc: 0.8008282
+            ci_r: 5.962134
+            name: name
+            ci_l: 1.4658129
+            medianexpression:
+              min: 5.637377
+              first_quartile: 2.302136
+              median: 7.0614014
+              max: 2.027123
+              mean: 9.301444
+              tissue: tissue
+              third_quartile: 3.6160767
+          - adj_p_val: 6.0274563
+            logfc: 0.8008282
+            ci_r: 5.962134
+            name: name
+            ci_l: 1.4658129
+            medianexpression:
+              min: 5.637377
+              first_quartile: 2.302136
+              median: 7.0614014
+              max: 2.027123
+              mean: 9.301444
+              tissue: tissue
+              third_quartile: 3.6160767
         search_string: search_string
         nominations:
           teams:
-          - teams
-          - teams
+            - teams
+            - teams
           year: 7
           inputs:
-          - inputs
-          - inputs
+            - inputs
+            - inputs
           count: 4
           studies:
-          - studies
-          - studies
+            - studies
+            - studies
           programs:
-          - programs
-          - programs
+            - programs
+            - programs
           validations:
-          - validations
-          - validations
+            - validations
+            - validations
         multi_omics_score: 6.84685269835264
         uid: uid
         target_risk_score: 1.0246457001441578
         ensembl_gene_id: ensembl_gene_id
         search_array:
-        - search_array
-        - search_array
+          - search_array
+          - search_array
         hgnc_symbol: hgnc_symbol
         genetics_score: 1.4894159098541704
         uniprotid: uniprotid
         biodomains:
-        - biodomains
-        - biodomains
+          - biodomains
+          - biodomains
         target_enabling_resources:
-        - target_enabling_resources
-        - target_enabling_resources
+          - target_enabling_resources
+          - target_enabling_resources
       properties:
         ensembl_gene_id:
           description: Ensembl gene identifier
@@ -510,10 +510,10 @@ components:
         tissues:
           description: Array of gene tissues
           items:
-            $ref: "#/components/schemas/GCTGeneTissue"
+            $ref: '#/components/schemas/GCTGeneTissue'
           type: array
         nominations:
-          $ref: "#/components/schemas/GCTGeneNominations"
+          $ref: '#/components/schemas/GCTGeneNominations'
         associations:
           description: Array of association values
           items:
@@ -549,153 +549,153 @@ components:
           nullable: true
           type: array
       required:
-      - ensembl_gene_id
-      - genetics_score
-      - hgnc_symbol
-      - multi_omics_score
-      - target_risk_score
-      - tissues
+        - ensembl_gene_id
+        - genetics_score
+        - hgnc_symbol
+        - multi_omics_score
+        - target_risk_score
+        - tissues
       type: object
     GCTGenesList:
       description: List of GCTGene
       example:
         items:
-        - associations:
-          - 1.2315135367772556
-          - 1.2315135367772556
-          pinned: true
-          tissues:
-          - adj_p_val: 6.0274563
-            logfc: 0.8008282
-            ci_r: 5.962134
-            name: name
-            ci_l: 1.4658129
-            medianexpression:
-              min: 5.637377
-              first_quartile: 2.302136
-              median: 7.0614014
-              max: 2.027123
-              mean: 9.301444
-              tissue: tissue
-              third_quartile: 3.6160767
-          - adj_p_val: 6.0274563
-            logfc: 0.8008282
-            ci_r: 5.962134
-            name: name
-            ci_l: 1.4658129
-            medianexpression:
-              min: 5.637377
-              first_quartile: 2.302136
-              median: 7.0614014
-              max: 2.027123
-              mean: 9.301444
-              tissue: tissue
-              third_quartile: 3.6160767
-          search_string: search_string
-          nominations:
-            teams:
-            - teams
-            - teams
-            year: 7
-            inputs:
-            - inputs
-            - inputs
-            count: 4
-            studies:
-            - studies
-            - studies
-            programs:
-            - programs
-            - programs
-            validations:
-            - validations
-            - validations
-          multi_omics_score: 6.84685269835264
-          uid: uid
-          target_risk_score: 1.0246457001441578
-          ensembl_gene_id: ensembl_gene_id
-          search_array:
-          - search_array
-          - search_array
-          hgnc_symbol: hgnc_symbol
-          genetics_score: 1.4894159098541704
-          uniprotid: uniprotid
-          biodomains:
-          - biodomains
-          - biodomains
-          target_enabling_resources:
-          - target_enabling_resources
-          - target_enabling_resources
-        - associations:
-          - 1.2315135367772556
-          - 1.2315135367772556
-          pinned: true
-          tissues:
-          - adj_p_val: 6.0274563
-            logfc: 0.8008282
-            ci_r: 5.962134
-            name: name
-            ci_l: 1.4658129
-            medianexpression:
-              min: 5.637377
-              first_quartile: 2.302136
-              median: 7.0614014
-              max: 2.027123
-              mean: 9.301444
-              tissue: tissue
-              third_quartile: 3.6160767
-          - adj_p_val: 6.0274563
-            logfc: 0.8008282
-            ci_r: 5.962134
-            name: name
-            ci_l: 1.4658129
-            medianexpression:
-              min: 5.637377
-              first_quartile: 2.302136
-              median: 7.0614014
-              max: 2.027123
-              mean: 9.301444
-              tissue: tissue
-              third_quartile: 3.6160767
-          search_string: search_string
-          nominations:
-            teams:
-            - teams
-            - teams
-            year: 7
-            inputs:
-            - inputs
-            - inputs
-            count: 4
-            studies:
-            - studies
-            - studies
-            programs:
-            - programs
-            - programs
-            validations:
-            - validations
-            - validations
-          multi_omics_score: 6.84685269835264
-          uid: uid
-          target_risk_score: 1.0246457001441578
-          ensembl_gene_id: ensembl_gene_id
-          search_array:
-          - search_array
-          - search_array
-          hgnc_symbol: hgnc_symbol
-          genetics_score: 1.4894159098541704
-          uniprotid: uniprotid
-          biodomains:
-          - biodomains
-          - biodomains
-          target_enabling_resources:
-          - target_enabling_resources
-          - target_enabling_resources
+          - associations:
+              - 1.2315135367772556
+              - 1.2315135367772556
+            pinned: true
+            tissues:
+              - adj_p_val: 6.0274563
+                logfc: 0.8008282
+                ci_r: 5.962134
+                name: name
+                ci_l: 1.4658129
+                medianexpression:
+                  min: 5.637377
+                  first_quartile: 2.302136
+                  median: 7.0614014
+                  max: 2.027123
+                  mean: 9.301444
+                  tissue: tissue
+                  third_quartile: 3.6160767
+              - adj_p_val: 6.0274563
+                logfc: 0.8008282
+                ci_r: 5.962134
+                name: name
+                ci_l: 1.4658129
+                medianexpression:
+                  min: 5.637377
+                  first_quartile: 2.302136
+                  median: 7.0614014
+                  max: 2.027123
+                  mean: 9.301444
+                  tissue: tissue
+                  third_quartile: 3.6160767
+            search_string: search_string
+            nominations:
+              teams:
+                - teams
+                - teams
+              year: 7
+              inputs:
+                - inputs
+                - inputs
+              count: 4
+              studies:
+                - studies
+                - studies
+              programs:
+                - programs
+                - programs
+              validations:
+                - validations
+                - validations
+            multi_omics_score: 6.84685269835264
+            uid: uid
+            target_risk_score: 1.0246457001441578
+            ensembl_gene_id: ensembl_gene_id
+            search_array:
+              - search_array
+              - search_array
+            hgnc_symbol: hgnc_symbol
+            genetics_score: 1.4894159098541704
+            uniprotid: uniprotid
+            biodomains:
+              - biodomains
+              - biodomains
+            target_enabling_resources:
+              - target_enabling_resources
+              - target_enabling_resources
+          - associations:
+              - 1.2315135367772556
+              - 1.2315135367772556
+            pinned: true
+            tissues:
+              - adj_p_val: 6.0274563
+                logfc: 0.8008282
+                ci_r: 5.962134
+                name: name
+                ci_l: 1.4658129
+                medianexpression:
+                  min: 5.637377
+                  first_quartile: 2.302136
+                  median: 7.0614014
+                  max: 2.027123
+                  mean: 9.301444
+                  tissue: tissue
+                  third_quartile: 3.6160767
+              - adj_p_val: 6.0274563
+                logfc: 0.8008282
+                ci_r: 5.962134
+                name: name
+                ci_l: 1.4658129
+                medianexpression:
+                  min: 5.637377
+                  first_quartile: 2.302136
+                  median: 7.0614014
+                  max: 2.027123
+                  mean: 9.301444
+                  tissue: tissue
+                  third_quartile: 3.6160767
+            search_string: search_string
+            nominations:
+              teams:
+                - teams
+                - teams
+              year: 7
+              inputs:
+                - inputs
+                - inputs
+              count: 4
+              studies:
+                - studies
+                - studies
+              programs:
+                - programs
+                - programs
+              validations:
+                - validations
+                - validations
+            multi_omics_score: 6.84685269835264
+            uid: uid
+            target_risk_score: 1.0246457001441578
+            ensembl_gene_id: ensembl_gene_id
+            search_array:
+              - search_array
+              - search_array
+            hgnc_symbol: hgnc_symbol
+            genetics_score: 1.4894159098541704
+            uniprotid: uniprotid
+            biodomains:
+              - biodomains
+              - biodomains
+            target_enabling_resources:
+              - target_enabling_resources
+              - target_enabling_resources
       properties:
         items:
           items:
-            $ref: "#/components/schemas/GCTGene"
+            $ref: '#/components/schemas/GCTGene'
           type: array
       type: object
     BasicError:
@@ -719,12 +719,12 @@ components:
             the problem
           type: string
       required:
-      - status
-      - title
+        - status
+        - title
       type: object
       x-java-class-annotations:
-      - '@lombok.AllArgsConstructor'
-      - '@lombok.Builder'
+        - '@lombok.AllArgsConstructor'
+        - '@lombok.Builder'
     TargetNomination:
       description: TargetNomination
       properties:
@@ -755,18 +755,18 @@ components:
         initial_nomination:
           type: number
       required:
-      - data_synapseid
-      - data_used_to_support_target_selection
-      - hgnc_symbol
-      - initial_nomination
-      - input_data
-      - predicted_therapeutic_direction
-      - rank
-      - source
-      - study
-      - target_choice_justification
-      - team
-      - validation_study_details
+        - data_synapseid
+        - data_used_to_support_target_selection
+        - hgnc_symbol
+        - initial_nomination
+        - input_data
+        - predicted_therapeutic_direction
+        - rank
+        - source
+        - study
+        - target_choice_justification
+        - team
+        - validation_study_details
       type: object
     Druggability:
       description: Druggability
@@ -795,12 +795,12 @@ components:
           example: Moderate bioavailability
           type: string
       required:
-      - abability_bucket
-      - abability_bucket_definition
-      - classification
-      - safety_bucket
-      - safety_bucket_definition
-      - sm_druggability_bucket
+        - abability_bucket
+        - abability_bucket_definition
+        - classification
+        - safety_bucket
+        - safety_bucket_definition
+        - sm_druggability_bucket
       type: object
     RnaDifferentialExpression:
       description: RnaDifferentialExpression
@@ -828,17 +828,17 @@ components:
         model:
           type: string
       required:
-      - _id
-      - adj_p_val
-      - ci_l
-      - ci_r
-      - ensembl_gene_id
-      - fc
-      - hgnc_symbol
-      - logfc
-      - model
-      - study
-      - tissue
+        - _id
+        - adj_p_val
+        - ci_l
+        - ci_r
+        - ensembl_gene_id
+        - fc
+        - hgnc_symbol
+        - logfc
+        - model
+        - study
+        - tissue
       type: object
     ProteinDifferentialExpression:
       description: ProteinDifferentialExpression
@@ -866,17 +866,17 @@ components:
         cor_pval:
           type: number
       required:
-      - _id
-      - ci_lwr
-      - ci_upr
-      - cor_pval
-      - ensembl_gene_id
-      - hgnc_symbol
-      - log2_fc
-      - pval
-      - tissue
-      - uniprotid
-      - uniqid
+        - _id
+        - ci_lwr
+        - ci_upr
+        - cor_pval
+        - ensembl_gene_id
+        - hgnc_symbol
+        - log2_fc
+        - pval
+        - tissue
+        - uniprotid
+        - uniqid
       type: object
     Metabolomics:
       description: Metabolomics
@@ -909,7 +909,7 @@ components:
             type: number
           type: array
         transposed_boxplot_stats:
-          description: "min, first quartile, median, third quartile, max"
+          description: 'min, first quartile, median, third quartile, max'
           items:
             items:
               type: number
@@ -918,17 +918,17 @@ components:
             type: array
           type: array
       required:
-      - _id
-      - ad_diagnosis_p_value
-      - associated_gene_name
-      - association_p
-      - boxplot_group_names
-      - ensembl_gene_id
-      - gene_wide_p_threshold_1kgp
-      - metabolite_full_name
-      - metabolite_id
-      - n_per_group
-      - transposed_boxplot_stats
+        - _id
+        - ad_diagnosis_p_value
+        - associated_gene_name
+        - association_p
+        - boxplot_group_names
+        - ensembl_gene_id
+        - gene_wide_p_threshold_1kgp
+        - metabolite_full_name
+        - metabolite_id
+        - n_per_group
+        - transposed_boxplot_stats
       type: object
     OverallScores:
       description: OverallScores
@@ -944,11 +944,11 @@ components:
         literature_score:
           type: number
       required:
-      - ensembl_gene_id
-      - genetics_score
-      - literature_score
-      - multi_omics_score
-      - target_risk_score
+        - ensembl_gene_id
+        - genetics_score
+        - literature_score
+        - multi_omics_score
+        - target_risk_score
       type: object
     NeuropathologicCorrelation:
       description: NeuropathologicCorrelation
@@ -972,15 +972,15 @@ components:
         neuropath_type:
           type: string
       required:
-      - _id
-      - ci_lower
-      - ci_upper
-      - ensg
-      - gname
-      - neuropath_type
-      - oddsratio
-      - pval
-      - pval_adj
+        - _id
+        - ci_lower
+        - ci_upper
+        - ensg
+        - gname
+        - neuropath_type
+        - oddsratio
+        - pval
+        - pval_adj
       type: object
     ExperimentalValidation:
       description: Experimental Validation
@@ -1018,23 +1018,23 @@ components:
         date_report:
           type: string
       required:
-      - _id
-      - abability_bucket_definition
-      - balanced_for_sex
-      - contributors
-      - date_report
-      - ensembl_gene_id
-      - hgnc_symbol
-      - hypothesis_tested
-      - model_system
-      - outcome_measure
-      - outcome_measure_details
-      - published
-      - reference
-      - reference_doi
-      - species
-      - summary_findings
-      - team
+        - _id
+        - abability_bucket_definition
+        - balanced_for_sex
+        - contributors
+        - date_report
+        - ensembl_gene_id
+        - hgnc_symbol
+        - hypothesis_tested
+        - model_system
+        - outcome_measure
+        - outcome_measure_details
+        - published
+        - reference
+        - reference_doi
+        - species
+        - summary_findings
+        - team
       type: object
     GeneNetworkLinks:
       description: Gene Network Links
@@ -1057,12 +1057,12 @@ components:
           description: Associated brain region
           type: string
       required:
-      - _id
-      - brainRegion
-      - geneA_ensembl_gene_id
-      - geneA_external_gene_name
-      - geneB_ensembl_gene_id
-      - geneB_external_gene_name
+        - _id
+        - brainRegion
+        - geneA_ensembl_gene_id
+        - geneA_external_gene_name
+        - geneB_ensembl_gene_id
+        - geneB_external_gene_name
       type: object
     SimilarGenesNetworkNode:
       description: SimilarGenesNetworkNode
@@ -1076,9 +1076,9 @@ components:
             type: string
           type: array
       required:
-      - brain_regions
-      - ensembl_gene_id
-      - hgnc_symbol
+        - brain_regions
+        - ensembl_gene_id
+        - hgnc_symbol
       type: object
     SimilarGenesNetworkLink:
       description: SimilarGenesNetworkLink
@@ -1096,32 +1096,32 @@ components:
             type: string
           type: array
       required:
-      - brain_regions
-      - source
-      - source_hgnc_symbol
-      - target
-      - target_hgnc_symbol
+        - brain_regions
+        - source
+        - source_hgnc_symbol
+        - target
+        - target_hgnc_symbol
       type: object
     SimilarGenesNetwork:
       description: SimilarGenesNetwork
       properties:
         nodes:
           items:
-            $ref: "#/components/schemas/SimilarGenesNetworkNode"
+            $ref: '#/components/schemas/SimilarGenesNetworkNode'
           type: array
         links:
           items:
-            $ref: "#/components/schemas/SimilarGenesNetworkLink"
+            $ref: '#/components/schemas/SimilarGenesNetworkLink'
           type: array
         min:
           type: number
         max:
           type: number
       required:
-      - links
-      - max
-      - min
-      - nodes
+        - links
+        - max
+        - min
+        - nodes
       type: object
     BioDomain:
       description: BioDomain
@@ -1145,11 +1145,11 @@ components:
           format: float
           type: number
       required:
-      - biodomain
-      - go_terms
-      - n_biodomain_terms
-      - n_gene_biodomain_terms
-      - pct_linking_terms
+        - biodomain
+        - go_terms
+        - n_biodomain_terms
+        - n_gene_biodomain_terms
+        - pct_linking_terms
       type: object
     BioDomains:
       description: BioDomains
@@ -1160,11 +1160,11 @@ components:
         gene_biodomains:
           description: A list of gene biodomains.
           items:
-            $ref: "#/components/schemas/BioDomain"
+            $ref: '#/components/schemas/BioDomain'
           type: array
       required:
-      - ensembl_gene_id
-      - gene_biodomains
+        - ensembl_gene_id
+        - gene_biodomains
       type: object
     EnsemblInfo:
       description: EnsemblInfo
@@ -1178,9 +1178,9 @@ components:
         ensembl_permalink:
           type: string
       required:
-      - ensembl_permalink
-      - ensembl_possible_replacements
-      - ensembl_release
+        - ensembl_permalink
+        - ensembl_possible_replacements
+        - ensembl_release
       type: object
     TeamMember:
       description: Team Member
@@ -1192,6 +1192,6 @@ components:
         url:
           type: string
       required:
-      - isprimaryinvestigator
-      - name
+        - isprimaryinvestigator
+        - name
       type: object
