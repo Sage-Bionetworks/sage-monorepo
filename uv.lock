@@ -1945,12 +1945,6 @@ wheels = [
 name = "sage-monorepo"
 version = "1.0.0"
 source = { editable = "." }
-dependencies = [
-    { name = "bixarena-api-client-python" },
-    { name = "bixarena-tools" },
-    { name = "openchallenges-api-client-python" },
-    { name = "openchallenges-tools" },
-]
 
 [package.dev-dependencies]
 dev = [
@@ -1967,12 +1961,6 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [
-    { name = "bixarena-api-client-python", editable = "libs/bixarena/api-client-python" },
-    { name = "bixarena-tools", editable = "apps/bixarena/tools" },
-    { name = "openchallenges-api-client-python", editable = "libs/openchallenges/api-client-python" },
-    { name = "openchallenges-tools", editable = "apps/openchallenges/tools" },
-]
 
 [package.metadata.requires-dev]
 dev = [
