@@ -6,6 +6,11 @@
   <div id="main-content">
     <router-outlet></router-outlet>
   </div>
-  <agora-footer></agora-footer>
+  <explorers-footer
+    footerLogoPath="/agora-assets/images/footer-logo.svg"
+    [footerLinks]="footerLinks"
+    [siteVersion]="siteVersion"
+    [dataVersion]="dataVersion"
+  ></explorers-footer>
 </div>
 <p-toast class="global-toast" position="bottom-center"></p-toast>

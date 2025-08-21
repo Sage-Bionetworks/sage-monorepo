@@ -46,7 +46,7 @@ export class HeaderComponent implements OnInit {
     },
     {
       label: 'Help',
-      url: 'https://help.adknowledgeportal.org/apd/Agora-Help.2663088129.html',
+      url: 'https://help.adknowledgeportal.org/apd/Agora-Resources.2646671361.html',
       target: '_blank',
     },
     {

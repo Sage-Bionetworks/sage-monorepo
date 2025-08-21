@@ -1,4 +1,5 @@
 import { Route } from '@angular/router';
+import { ROUTE_PATHS } from '@sagebionetworks/agora/config';
 
 export const routes: Route[] = [
   {
@@ -11,7 +12,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: 'about',
+    path: ROUTE_PATHS.ABOUT,
     loadChildren: () => import('@sagebionetworks/agora/about').then((routes) => routes.routes),
     data: {
       title: 'About Agora',
@@ -20,7 +21,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: 'news',
+    path: ROUTE_PATHS.NEWS,
     loadChildren: () => import('@sagebionetworks/agora/news').then((routes) => routes.routes),
     data: {
       title: 'News | Agora Releases',
@@ -28,7 +29,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: 'genes/comparison',
+    path: ROUTE_PATHS.GENE_COMPARISON,
     loadChildren: () =>
       import('@sagebionetworks/agora/gene-comparison-tool').then((routes) => routes.routes),
     data: {
@@ -38,7 +39,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: 'genes/nominated-targets',
+    path: ROUTE_PATHS.NOMINATED_TARGETS,
     loadChildren: () =>
       import('@sagebionetworks/agora/nominated-targets').then(
         (routes) => routes.nominatedTargetsRoute,
@@ -51,7 +52,7 @@ export const routes: Route[] = [
   },
   {
     path: 'genes/genes-router:genes-list',
-    redirectTo: 'genes/nominated-targets',
+    redirectTo: ROUTE_PATHS.NOMINATED_TARGETS,
     pathMatch: 'full',
   },
   {
@@ -100,7 +101,17 @@ export const routes: Route[] = [
     },
   },
   {
-    path: 'not-found',
+    path: ROUTE_PATHS.TERMS_OF_SERVICE,
+    loadChildren: () =>
+      import('@sagebionetworks/explorers/shared').then((routes) => routes.termsOfServiceRoute),
+    data: {
+      title: 'Agora | Terms of Service',
+      description:
+        'Agora is powered by Synapse, a platform for supporting scientific collaborations centered around shared biomedical data sets. Our goal is to make biomedical research more transparent, more reproducible, and more accessible to a broader audience of scientists.',
+    },
+  },
+  {
+    path: ROUTE_PATHS.NOT_FOUND,
     loadChildren: () => import('@sagebionetworks/agora/not-found').then((routes) => routes.routes),
     data: {
       title: 'Page not found',
@@ -108,7 +119,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: 'teams',
+    path: ROUTE_PATHS.TEAMS,
     loadChildren: () => import('@sagebionetworks/agora/teams').then((routes) => routes.routes),
     data: {
       title: 'Contributing Teams',
@@ -118,6 +129,6 @@ export const routes: Route[] = [
   },
   {
     path: '**',
-    redirectTo: '/not-found',
+    redirectTo: ROUTE_PATHS.NOT_FOUND,
   },
 ];

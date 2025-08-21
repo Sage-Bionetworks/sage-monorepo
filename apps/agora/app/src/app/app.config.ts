@@ -28,6 +28,7 @@ import { MessageService } from 'primeng/api';
 import { CustomUrlSerializer } from './app.custom-uri-serializer';
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
+import { provideMarkdown } from 'ngx-markdown';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -65,6 +66,7 @@ export const appConfig: ApplicationConfig = {
       provide: RollbarService,
       useFactory: rollbarFactory,
     },
+    provideMarkdown(),
     provideRouter(
       routes,
       withEnabledBlockingInitialNavigation(),
