@@ -26,7 +26,7 @@ paths:
   /auth/api-keys:
     $ref: paths/auth/api-keys.yaml
   /auth/api-keys/{keyId}:
-    $ref: paths/auth/api-keys/@{keyId}.yaml
+    $ref: paths/auth/api-keys/{keyId}.yaml
   /auth/validate:
     $ref: paths/auth/validate.yaml
 components:

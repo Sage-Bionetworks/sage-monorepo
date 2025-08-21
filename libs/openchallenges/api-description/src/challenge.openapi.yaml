@@ -33,19 +33,19 @@ paths:
   /challenges:
     $ref: paths/challenges.yaml
   /challenges/{challengeId}:
-    $ref: paths/challenges/@{challengeId}.yaml
+    $ref: paths/challenges/{challengeId}.yaml
   /challenges/{challengeId}/json-ld:
-    $ref: paths/challenges/@{challengeId}/json-ld.yaml
+    $ref: paths/challenges/{challengeId}/json-ld.yaml
   /challenges/{challengeId}/contributions:
-    $ref: paths/challenges/@{challengeId}/contributions.yaml
+    $ref: paths/challenges/{challengeId}/contributions.yaml
   /challenges/{challengeId}/contributions/{organizationId}/role/{role}:
-    $ref: paths/challenges/@{challengeId}/contributions/@{organizationId}/role/${role}.yaml
+    $ref: paths/challenges/{challengeId}/contributions/{organizationId}/role/{role}.yaml
   /challenge-analytics/challenges-per-year:
     $ref: paths/challenge-analytics/challenges-per-year.yaml
   /challenge-platforms:
     $ref: paths/challenge-platforms.yaml
   /challenge-platforms/{challengePlatformId}:
-    $ref: paths/challenge-platforms/@{challengePlatformId}.yaml
+    $ref: paths/challenge-platforms/{challengePlatformId}.yaml
   /edam-concepts:
     $ref: paths/edam-concepts.yaml
 components:

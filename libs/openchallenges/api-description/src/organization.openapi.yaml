@@ -24,11 +24,11 @@ paths:
   /organizations:
     $ref: paths/organizations.yaml
   /organizations/{org}:
-    $ref: paths/organizations/@{org}.yaml
+    $ref: paths/organizations/{org}.yaml
   /organizations/{org}/participations:
-    $ref: paths/organizations/@{org}/participations.yaml
+    $ref: paths/organizations/{org}/participations.yaml
   /organizations/{org}/participations/{challengeId}/roles/{role}:
-    $ref: paths/organizations/@{org}/participations/@{challengeId}/roles/${role}.yaml
+    $ref: paths/organizations/{org}/participations/{challengeId}/roles/{role}.yaml
 components:
   securitySchemes:
     apiBearerAuth:
