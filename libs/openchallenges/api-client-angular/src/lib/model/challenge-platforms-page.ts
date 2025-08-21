@@ -7,7 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { ChallengePlatform } from './challengePlatform';
+import { ChallengePlatform } from './challenge-platform';
 
 /**
  * A page of challenge platforms.

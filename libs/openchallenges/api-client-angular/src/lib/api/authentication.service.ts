@@ -23,11 +23,11 @@ import { CustomHttpParameterCodec } from '../encoder';
 import { Observable } from 'rxjs';
 
 // @ts-ignore
-import { BasicError } from '../model/basicError';
+import { BasicError } from '../model/basic-error';
 // @ts-ignore
-import { LoginRequest } from '../model/loginRequest';
+import { LoginRequest } from '../model/login-request';
 // @ts-ignore
-import { LoginResponse } from '../model/loginResponse';
+import { LoginResponse } from '../model/login-response';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';

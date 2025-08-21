@@ -23,17 +23,17 @@ import { CustomHttpParameterCodec } from '../encoder';
 import { Observable } from 'rxjs';
 
 // @ts-ignore
-import { BasicError } from '../model/basicError';
+import { BasicError } from '../model/basic-error';
 // @ts-ignore
 import { Organization } from '../model/organization';
 // @ts-ignore
-import { OrganizationCreateRequest } from '../model/organizationCreateRequest';
+import { OrganizationCreateRequest } from '../model/organization-create-request';
 // @ts-ignore
-import { OrganizationSearchQuery } from '../model/organizationSearchQuery';
+import { OrganizationSearchQuery } from '../model/organization-search-query';
 // @ts-ignore
-import { OrganizationUpdateRequest } from '../model/organizationUpdateRequest';
+import { OrganizationUpdateRequest } from '../model/organization-update-request';
 // @ts-ignore
-import { OrganizationsPage } from '../model/organizationsPage';
+import { OrganizationsPage } from '../model/organizations-page';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';

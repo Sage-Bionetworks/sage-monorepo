@@ -23,15 +23,15 @@ import { CustomHttpParameterCodec } from '../encoder';
 import { Observable } from 'rxjs';
 
 // @ts-ignore
-import { BasicError } from '../model/basicError';
+import { BasicError } from '../model/basic-error';
 // @ts-ignore
-import { ChallengeContribution } from '../model/challengeContribution';
+import { ChallengeContribution } from '../model/challenge-contribution';
 // @ts-ignore
-import { ChallengeContributionCreateRequest } from '../model/challengeContributionCreateRequest';
+import { ChallengeContributionCreateRequest } from '../model/challenge-contribution-create-request';
 // @ts-ignore
-import { ChallengeContributionRole } from '../model/challengeContributionRole';
+import { ChallengeContributionRole } from '../model/challenge-contribution-role';
 // @ts-ignore
-import { ChallengeContributionsPage } from '../model/challengeContributionsPage';
+import { ChallengeContributionsPage } from '../model/challenge-contributions-page';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';

@@ -7,10 +7,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { ChallengeCategory } from './challengeCategory';
-import { ChallengeStatus } from './challengeStatus';
-import { ChallengeIncentive } from './challengeIncentive';
-import { ChallengeSubmissionType } from './challengeSubmissionType';
+import { ChallengeCategory } from './challenge-category';
+import { ChallengeStatus } from './challenge-status';
+import { ChallengeIncentive } from './challenge-incentive';
+import { ChallengeSubmissionType } from './challenge-submission-type';
 
 /**
  * The information used to create a challenge

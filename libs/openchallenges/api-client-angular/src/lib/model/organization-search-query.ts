@@ -7,10 +7,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { OrganizationSort } from './organizationSort';
-import { OrganizationDirection } from './organizationDirection';
-import { ChallengeParticipationRole } from './challengeParticipationRole';
-import { OrganizationCategory } from './organizationCategory';
+import { OrganizationSort } from './organization-sort';
+import { OrganizationDirection } from './organization-direction';
+import { ChallengeParticipationRole } from './challenge-participation-role';
+import { OrganizationCategory } from './organization-category';
 
 /**
  * An organization search query.

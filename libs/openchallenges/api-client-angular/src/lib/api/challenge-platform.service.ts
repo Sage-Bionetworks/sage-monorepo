@@ -23,17 +23,17 @@ import { CustomHttpParameterCodec } from '../encoder';
 import { Observable } from 'rxjs';
 
 // @ts-ignore
-import { BasicError } from '../model/basicError';
+import { BasicError } from '../model/basic-error';
 // @ts-ignore
-import { ChallengePlatform } from '../model/challengePlatform';
+import { ChallengePlatform } from '../model/challenge-platform';
 // @ts-ignore
-import { ChallengePlatformCreateRequest } from '../model/challengePlatformCreateRequest';
+import { ChallengePlatformCreateRequest } from '../model/challenge-platform-create-request';
 // @ts-ignore
-import { ChallengePlatformSearchQuery } from '../model/challengePlatformSearchQuery';
+import { ChallengePlatformSearchQuery } from '../model/challenge-platform-search-query';
 // @ts-ignore
-import { ChallengePlatformUpdateRequest } from '../model/challengePlatformUpdateRequest';
+import { ChallengePlatformUpdateRequest } from '../model/challenge-platform-update-request';
 // @ts-ignore
-import { ChallengePlatformsPage } from '../model/challengePlatformsPage';
+import { ChallengePlatformsPage } from '../model/challenge-platforms-page';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
