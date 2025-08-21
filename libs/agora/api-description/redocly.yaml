@@ -29,7 +29,7 @@ apis:
           url: https://raw.githubusercontent.com/Sage-Bionetworks/agora-images/main/og-social.png
           altText: Agora logo
 
-  # Base API
+  # Primary API
   api-public:
     root: ./src/api.openapi.yaml
     decorators:

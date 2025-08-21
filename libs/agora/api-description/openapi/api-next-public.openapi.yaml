@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   version: 1.0.0-draft
-  title: Agora Next API
+  title: Agora API Next
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -17,7 +17,7 @@ paths:
   /next/genes/comparison:
     get:
       tags:
-        - Gene Next
+        - Gene
       summary: Get comparison genes based on category and subcategory
       description: Get comparison genes based on category and subcategory
       operationId: getComparisonGenesNext
