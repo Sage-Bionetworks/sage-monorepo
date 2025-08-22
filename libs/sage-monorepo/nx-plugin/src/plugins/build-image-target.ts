@@ -1,13 +1,22 @@
 import { TargetConfiguration } from '@nx/devkit';
-import { Builder, Framework } from './project-metadata';
+import { Builder, Framework, BaseImageType } from './project-metadata';
 
 export async function buildImageTarget(
   projectRoot: string,
   projectName: string,
   projectBuilder: Builder | undefined | null, // TODO: builder could be app or image, be more specific
   projectFramework: Framework | null,
+  baseImageType: BaseImageType | null,
 ): Promise<TargetConfiguration> {
   const dependsOn = [];
+
+  // Add base image template generation if needed
+  if (baseImageType && baseImageType !== 'custom') {
+    dependsOn.push({
+      target: 'generate-dockerfile',
+    });
+  }
+
   if (projectBuilder === 'gradle') {
     dependsOn.push({
       target: 'build-image-base',
@@ -35,11 +44,18 @@ export async function buildImageTarget(
     context = '.';
   }
 
+  // Determine which Dockerfile to use
+  let dockerfile = 'Dockerfile';
+  if (baseImageType && baseImageType !== 'custom') {
+    dockerfile = 'Dockerfile.generated';
+  }
+
   return {
     executor: '@nx-tools/nx-container:build',
     outputs: [],
     options: {
       context,
+      file: dockerfile,
     },
     cache: false,
     configurations: {

@@ -1,6 +1,6 @@
 import { ProjectConfiguration, ProjectType } from '@nx/devkit';
 import { join } from 'path';
-import { readdirSync } from 'fs';
+import { readdirSync, readFileSync } from 'fs';
 
 export type Builder = 'esbuild' | 'webpack' | 'gradle' | 'maven' | 'uv';
 // export type Linter = 'eslint' | 'pylint';
@@ -10,6 +10,7 @@ export type Builder = 'esbuild' | 'webpack' | 'gradle' | 'maven' | 'uv';
 export type ContainerType = 'docker' | 'singularity';
 // export type Language = 'python' | 'typescript' | 'javascript';
 export type Framework = 'angular';
+export type BaseImageType = 'postgres' | 'apex' | 'custom';
 
 export type ProjectMetadata = {
   projectType: ProjectType;
@@ -25,6 +26,7 @@ export type ProjectMetadata = {
   containerType: ContainerType | null;
   // language: Language;
   framework: Framework | null;
+  baseImageType: BaseImageType | null;
 };
 
 export function inferProjectMetadata(
@@ -38,6 +40,7 @@ export function inferProjectMetadata(
     builder: inferBuilder(siblingFiles, localProjectConfiguration),
     containerType: inferContainerType(siblingFiles),
     framework: inferFramework(localProjectConfiguration),
+    baseImageType: inferBaseImageType(projectRoot, siblingFiles),
   };
 }
 
@@ -89,4 +92,19 @@ function inferFramework(localProjectConfiguration: ProjectConfiguration): Framew
   }
 
   return null;
+}
+
+function inferBaseImageType(projectRoot: string, siblingFiles: string[]): BaseImageType | null {
+  // Only process projects with Dockerfiles
+  if (!siblingFiles.includes('Dockerfile')) return null;
+
+  // Check for specific project types based on project path for postgres and apex
+  // Only target openchallenges and amp-als projects
+  if (projectRoot.includes('openchallenges') || projectRoot.includes('amp-als')) {
+    if (projectRoot.includes('postgres')) return 'postgres';
+    if (projectRoot.includes('apex')) return 'apex';
+  }
+
+  // All other projects with Dockerfiles are treated as custom
+  return 'custom';
 }
