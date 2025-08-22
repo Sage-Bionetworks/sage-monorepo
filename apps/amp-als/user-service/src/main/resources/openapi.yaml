@@ -87,6 +87,3 @@ components:
         - status
         - title
       type: object
-      x-java-class-annotations:
-        - '@lombok.AllArgsConstructor'
-        - '@lombok.Builder'

@@ -321,8 +321,6 @@ components:
             updatedAt: 2022-07-04T22:19:11Z
         totalElements: 99
       type: object
-      x-java-class-annotations:
-        - '@lombok.Builder'
     BasicError:
       description: Problem details (tools.ietf.org/html/rfc7807)
       properties:
@@ -343,6 +341,3 @@ components:
         - status
         - title
       type: object
-      x-java-class-annotations:
-        - '@lombok.AllArgsConstructor'
-        - '@lombok.Builder'
