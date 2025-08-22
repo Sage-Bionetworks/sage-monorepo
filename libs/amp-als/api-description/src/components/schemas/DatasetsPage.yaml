@@ -11,5 +11,3 @@ allOf:
           $ref: Dataset.yaml
     required:
       - datasets
-x-java-class-annotations:
-  - '@lombok.Builder'

@@ -67,9 +67,6 @@ components:
       required:
         - title
         - status
-      x-java-class-annotations:
-        - '@lombok.AllArgsConstructor'
-        - '@lombok.Builder'
   responses:
     InternalServerError:
       description: The request cannot be fulfilled due to an unexpected server error

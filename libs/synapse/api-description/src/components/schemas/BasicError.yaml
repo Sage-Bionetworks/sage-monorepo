@@ -17,5 +17,3 @@ properties:
 required:
   - title
   - status
-x-java-class-annotations:
-  - '@lombok.Builder'
