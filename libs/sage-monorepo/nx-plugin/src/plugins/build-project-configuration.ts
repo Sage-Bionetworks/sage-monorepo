@@ -37,9 +37,6 @@ export async function buildProjectConfiguration(
   if (options.projectMetadata.builder) {
     tags.push(`builder:${options.projectMetadata.builder}`);
   }
-  if (options.projectMetadata.baseImageType) {
-    tags.push(`base-image:${options.projectMetadata.baseImageType}`);
-  }
 
   return { targets, metadata, tags };
 }

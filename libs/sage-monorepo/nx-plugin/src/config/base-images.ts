@@ -6,7 +6,7 @@ export interface BaseImageConfig {
 
 export interface BaseImagesRegistry {
   postgres: BaseImageConfig;
-  apex: BaseImageConfig;
+  caddy: BaseImageConfig;
   // Add other base images as needed in the future
 }
 
@@ -16,7 +16,7 @@ export const BASE_IMAGES: BaseImagesRegistry = {
     version: '16.9-bullseye',
     registry: 'mirror.gcr.io',
   },
-  apex: {
+  caddy: {
     name: 'caddy',
     version: '2.9.1', // Using the newer version from amp-als
     registry: 'mirror.gcr.io',

@@ -1,6 +1,6 @@
 import { ProjectConfiguration, ProjectType } from '@nx/devkit';
 import { join } from 'path';
-import { readdirSync, readFileSync } from 'fs';
+import { readdirSync } from 'fs';
 
 export type Builder = 'esbuild' | 'webpack' | 'gradle' | 'maven' | 'uv';
 // export type Linter = 'eslint' | 'pylint';
@@ -10,7 +10,7 @@ export type Builder = 'esbuild' | 'webpack' | 'gradle' | 'maven' | 'uv';
 export type ContainerType = 'docker' | 'singularity';
 // export type Language = 'python' | 'typescript' | 'javascript';
 export type Framework = 'angular';
-export type BaseImageType = 'postgres' | 'apex' | 'custom';
+export type BaseImageType = 'postgres' | 'caddy' | 'custom';
 
 export type ProjectMetadata = {
   projectType: ProjectType;
@@ -38,9 +38,9 @@ export function inferProjectMetadata(
   return {
     projectType: inferProjectType(projectRoot),
     builder: inferBuilder(siblingFiles, localProjectConfiguration),
-    containerType: inferContainerType(siblingFiles),
+    containerType: inferContainerType(localProjectConfiguration, siblingFiles),
     framework: inferFramework(localProjectConfiguration),
-    baseImageType: inferBaseImageType(projectRoot, siblingFiles),
+    baseImageType: inferBaseImageType(localProjectConfiguration, siblingFiles),
   };
 }
 
@@ -77,8 +77,21 @@ function inferBuilder(
   return null;
 }
 
-function inferContainerType(siblingFiles: string[]): ContainerType | null {
-  if (siblingFiles.includes('Dockerfile')) return 'docker';
+function inferContainerType(
+  localProjectConfiguration: ProjectConfiguration,
+  siblingFiles: string[],
+): ContainerType | null {
+  const tags = localProjectConfiguration.tags || [];
+
+  // Check for new container-image tags (opt-in to centralized system)
+  if (tags.some((tag) => tag.startsWith('container-image:'))) {
+    return 'docker';
+  }
+
+  // Fallback: existing behavior for projects not using new system
+  if (siblingFiles.includes('Dockerfile')) {
+    return 'docker';
+  }
 
   return null;
 }
@@ -94,17 +107,34 @@ function inferFramework(localProjectConfiguration: ProjectConfiguration): Framew
   return null;
 }
 
-function inferBaseImageType(projectRoot: string, siblingFiles: string[]): BaseImageType | null {
-  // Only process projects with Dockerfiles
-  if (!siblingFiles.includes('Dockerfile')) return null;
+function inferBaseImageType(
+  localProjectConfiguration: ProjectConfiguration,
+  siblingFiles: string[],
+): BaseImageType | null {
+  const tags = localProjectConfiguration.tags || [];
 
-  // Check for specific project types based on project path for postgres and apex
-  // Only target openchallenges and amp-als projects
-  if (projectRoot.includes('openchallenges') || projectRoot.includes('amp-als')) {
-    if (projectRoot.includes('postgres')) return 'postgres';
-    if (projectRoot.includes('apex')) return 'apex';
+  // Extract base image type from container-image tags
+  const containerImageTag = tags.find((tag) => tag.startsWith('container-image:'));
+
+  if (containerImageTag) {
+    const imageType = containerImageTag.split(':')[1];
+
+    switch (imageType) {
+      case 'postgres':
+        return 'postgres';
+      case 'caddy':
+        return 'caddy';
+      default:
+        // Unknown container-image type, treat as custom
+        return 'custom';
+    }
   }
 
-  // All other projects with Dockerfiles are treated as custom
-  return 'custom';
+  // Fallback: check for physical Dockerfile (for existing projects)
+  if (siblingFiles.includes('Dockerfile')) {
+    return 'custom';
+  }
+
+  // No container-image tag and no Dockerfile means no container capabilities
+  return null;
 }

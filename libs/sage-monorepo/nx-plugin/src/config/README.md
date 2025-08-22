@@ -1,6 +1,6 @@
 # Centralized Docker Base Images
 
-This system provides centralized management of Docker base images for postgres and apex project types in the openchallenges and amp-als applications.
+This system provides centralized management of Docker base images for postgres and caddy project types in the openchallenges and amp-als applications.
 
 ## How It Works
 
@@ -9,7 +9,7 @@ The Nx plugin automatically detects project types and generates appropriate Dock
 ### Supported Project Types
 
 - **postgres**: For PostgreSQL database projects
-- **apex**: For Caddy reverse proxy projects
+- **caddy**: For Caddy reverse proxy projects
 - **custom**: For all other projects (uses original Dockerfile)
 
 ### Automatic Detection
@@ -17,11 +17,11 @@ The Nx plugin automatically detects project types and generates appropriate Dock
 Projects are automatically classified based on:
 
 1. Project path (must contain `openchallenges` or `amp-als`)
-2. Project name containing `postgres` or `apex`
+2. Project name containing `postgres` or `apex` (apex projects use caddy base image)
 
 ### Generated Targets
 
-For postgres and apex projects, the plugin automatically creates:
+For postgres and caddy projects, the plugin automatically creates:
 
 - `generate-dockerfile`: Creates `Dockerfile.generated` with the correct base image
 - `build-image`: Builds the Docker image (depends on `generate-dockerfile`)
@@ -37,13 +37,13 @@ libs/sage-monorepo/nx-plugin/src/config/base-images.ts
 Current configuration:
 
 - **postgres**: `mirror.gcr.io/postgres:16.9-bullseye`
-- **apex**: `mirror.gcr.io/caddy:2.9.1`
+- **caddy**: `mirror.gcr.io/caddy:2.9.1`
 
 ## Usage
 
 ### Building Images
 
-For postgres/apex projects:
+For postgres/caddy projects:
 
 ```bash
 # This will automatically generate Dockerfile.generated and build
@@ -89,7 +89,7 @@ nx show project openchallenges-postgres --json | jq '.targets | keys'
 Dockerfile templates are stored in:
 
 - `libs/sage-monorepo/nx-plugin/src/templates/postgres.Dockerfile.template`
-- `libs/sage-monorepo/nx-plugin/src/templates/apex.Dockerfile.template`
+- `libs/sage-monorepo/nx-plugin/src/templates/caddy.Dockerfile.template`
 
 These templates support variable substitution:
 
