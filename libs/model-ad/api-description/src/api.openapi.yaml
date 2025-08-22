@@ -25,6 +25,8 @@ tags:
 paths:
   /dataversion:
     $ref: paths/dataversion.yaml
+  /models/search:
+    $ref: paths/models-search.yaml
   /models/{name}:
     $ref: paths/model.yaml
   /comparison-tool-config:

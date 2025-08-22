@@ -10,3 +10,4 @@ export * from './model';
 export * from './modelData';
 export * from './modelOverview';
 export * from './modelOverviewLink';
+export * from './searchResult';
