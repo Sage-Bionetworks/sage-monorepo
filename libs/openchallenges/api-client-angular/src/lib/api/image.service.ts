@@ -23,11 +23,11 @@ import { CustomHttpParameterCodec } from '../encoder';
 import { Observable } from 'rxjs';
 
 // @ts-ignore
-import { BasicError } from '../model/basicError';
+import { BasicError } from '../model/basic-error';
 // @ts-ignore
 import { Image } from '../model/image';
 // @ts-ignore
-import { ImageQuery } from '../model/imageQuery';
+import { ImageQuery } from '../model/image-query';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';

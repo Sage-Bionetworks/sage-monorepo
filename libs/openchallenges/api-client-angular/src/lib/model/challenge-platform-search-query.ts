@@ -7,8 +7,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { ChallengePlatformDirection } from './challengePlatformDirection';
-import { ChallengePlatformSort } from './challengePlatformSort';
+import { ChallengePlatformDirection } from './challenge-platform-direction';
+import { ChallengePlatformSort } from './challenge-platform-sort';
 
 /**
  * A challenge platform search query.

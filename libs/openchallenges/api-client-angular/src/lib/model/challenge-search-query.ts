@@ -7,12 +7,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { ChallengeDirection } from './challengeDirection';
-import { ChallengeCategory } from './challengeCategory';
-import { ChallengeSort } from './challengeSort';
-import { ChallengeStatus } from './challengeStatus';
-import { ChallengeIncentive } from './challengeIncentive';
-import { ChallengeSubmissionType } from './challengeSubmissionType';
+import { ChallengeDirection } from './challenge-direction';
+import { ChallengeCategory } from './challenge-category';
+import { ChallengeSort } from './challenge-sort';
+import { ChallengeStatus } from './challenge-status';
+import { ChallengeIncentive } from './challenge-incentive';
+import { ChallengeSubmissionType } from './challenge-submission-type';
 
 /**
  * A challenge search query.

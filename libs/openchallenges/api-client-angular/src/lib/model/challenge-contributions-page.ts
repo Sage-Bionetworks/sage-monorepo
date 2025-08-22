@@ -7,12 +7,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { EdamConcept } from './edamConcept';
+import { ChallengeContribution } from './challenge-contribution';
 
 /**
- * A page of EDAM concepts.
+ * A page of challenge challenge contributions.
  */
-export interface EdamConceptsPage {
+export interface ChallengeContributionsPage {
   /**
    * The page number.
    */
@@ -38,7 +38,7 @@ export interface EdamConceptsPage {
    */
   hasPrevious: boolean;
   /**
-   * A list of EDAM concepts.
+   * A list of challenge contributions.
    */
-  edamConcepts: Array<EdamConcept>;
+  challengeContributions: Array<ChallengeContribution>;
 }

@@ -23,9 +23,9 @@ import { CustomHttpParameterCodec } from '../encoder';
 import { Observable } from 'rxjs';
 
 // @ts-ignore
-import { BasicError } from '../model/basicError';
+import { BasicError } from '../model/basic-error';
 // @ts-ignore
-import { ChallengesPerYear } from '../model/challengesPerYear';
+import { ChallengesPerYear } from '../model/challenges-per-year';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';

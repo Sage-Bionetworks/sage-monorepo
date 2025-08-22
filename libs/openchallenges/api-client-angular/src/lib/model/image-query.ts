@@ -7,8 +7,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { ImageHeight } from './imageHeight';
-import { ImageAspectRatio } from './imageAspectRatio';
+import { ImageHeight } from './image-height';
+import { ImageAspectRatio } from './image-aspect-ratio';
 
 /**
  * An image query.

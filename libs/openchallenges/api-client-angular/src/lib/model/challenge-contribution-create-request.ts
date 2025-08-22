@@ -7,7 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { ChallengeContributionRole } from './challengeContributionRole';
+import { ChallengeContributionRole } from './challenge-contribution-role';
 
 /**
  * A challenge contribution to be created.

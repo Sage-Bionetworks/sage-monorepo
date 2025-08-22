@@ -23,13 +23,13 @@ import { CustomHttpParameterCodec } from '../encoder';
 import { Observable } from 'rxjs';
 
 // @ts-ignore
-import { ApiKey } from '../model/apiKey';
+import { ApiKey } from '../model/api-key';
 // @ts-ignore
-import { BasicError } from '../model/basicError';
+import { BasicError } from '../model/basic-error';
 // @ts-ignore
-import { CreateApiKeyRequest } from '../model/createApiKeyRequest';
+import { CreateApiKeyRequest } from '../model/create-api-key-request';
 // @ts-ignore
-import { CreateApiKeyResponse } from '../model/createApiKeyResponse';
+import { CreateApiKeyResponse } from '../model/create-api-key-response';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';

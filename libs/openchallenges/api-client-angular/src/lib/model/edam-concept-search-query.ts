@@ -7,9 +7,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { EdamSection } from './edamSection';
-import { EdamConceptSort } from './edamConceptSort';
-import { EdamConceptDirection } from './edamConceptDirection';
+import { EdamSection } from './edam-section';
+import { EdamConceptSort } from './edam-concept-sort';
+import { EdamConceptDirection } from './edam-concept-direction';
 
 /**
  * An EDAM concept search query.

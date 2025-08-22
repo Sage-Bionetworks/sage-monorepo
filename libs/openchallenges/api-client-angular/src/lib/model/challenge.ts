@@ -7,12 +7,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { ChallengeCategory } from './challengeCategory';
-import { EdamConcept } from './edamConcept';
-import { SimpleChallengePlatform } from './simpleChallengePlatform';
-import { ChallengeStatus } from './challengeStatus';
-import { ChallengeIncentive } from './challengeIncentive';
-import { ChallengeSubmissionType } from './challengeSubmissionType';
+import { ChallengeCategory } from './challenge-category';
+import { EdamConcept } from './edam-concept';
+import { SimpleChallengePlatform } from './simple-challenge-platform';
+import { ChallengeStatus } from './challenge-status';
+import { ChallengeIncentive } from './challenge-incentive';
+import { ChallengeSubmissionType } from './challenge-submission-type';
 
 /**
  * A challenge

@@ -23,11 +23,11 @@ import { CustomHttpParameterCodec } from '../encoder';
 import { Observable } from 'rxjs';
 
 // @ts-ignore
-import { BasicError } from '../model/basicError';
+import { BasicError } from '../model/basic-error';
 // @ts-ignore
-import { EdamConceptSearchQuery } from '../model/edamConceptSearchQuery';
+import { EdamConceptSearchQuery } from '../model/edam-concept-search-query';
 // @ts-ignore
-import { EdamConceptsPage } from '../model/edamConceptsPage';
+import { EdamConceptsPage } from '../model/edam-concepts-page';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
