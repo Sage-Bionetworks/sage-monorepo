@@ -465,9 +465,6 @@ components:
       required:
         - title
         - status
-      x-java-class-annotations:
-        - '@lombok.AllArgsConstructor'
-        - '@lombok.Builder'
     TargetNomination:
       type: object
       description: TargetNomination
