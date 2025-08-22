@@ -282,9 +282,6 @@ components:
         - status
         - title
       type: object
-      x-java-class-annotations:
-        - '@lombok.AllArgsConstructor'
-        - '@lombok.Builder'
     LeaderboardSort:
       default: rank
       description: The field to sort leaderboard entries by.
