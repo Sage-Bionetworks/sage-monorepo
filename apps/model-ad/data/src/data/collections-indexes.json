@@ -1,7 +1,7 @@
 [
   {
     "name": "model_details",
-    "indexes": [{ "model": 1 }]
+    "indexes": [{ "name": 1 }]
   },
   {
     "name": "ui_config",
@@ -9,10 +9,10 @@
   },
   {
     "name": "model_overview",
-    "indexes": [{ "model": 1 }]
+    "indexes": [{ "name": 1 }]
   },
   {
     "name": "disease_correlation",
-    "indexes": [{ "model": 1 }]
+    "indexes": [{ "name": 1 }]
   }
 ]
