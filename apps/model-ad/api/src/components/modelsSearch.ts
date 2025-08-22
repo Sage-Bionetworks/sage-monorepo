@@ -2,9 +2,15 @@ import { SearchResult } from '@sagebionetworks/model-ad/api-client-angular';
 import { NextFunction, Request, Response } from 'express';
 import { cache, setHeaders } from '../helpers';
 import { ModelsCollection } from '../models';
+import { escapeRegexChars } from '../utils/regex';
 
 export async function searchModels(query: string) {
-  const cacheKey = 'model-search-' + query;
+  // Validate input is a primitive string and not an object
+  if (typeof query !== 'string') {
+    throw new Error('Query must be a string');
+  }
+
+  const cacheKey = 'model-search-' + Buffer.from(query).toString('base64');
   const cachedResult: SearchResult[] | null | undefined = cache.get(cacheKey);
 
   // If we have a cached result (including null), return it
@@ -12,7 +18,7 @@ export async function searchModels(query: string) {
     return cachedResult;
   }
 
-  const queryTrimmed = query.trim();
+  const queryTrimmed = escapeRegexChars(query.trim());
   const result: SearchResult[] = await ModelsCollection.aggregate([
     {
       $addFields: {
@@ -73,18 +79,30 @@ export async function searchModels(query: string) {
 }
 
 export async function modelsSearchRoute(req: Request, res: Response, next: NextFunction) {
-  if (!req.query.q) {
+  if (!req.query.q || typeof req.query.q !== 'string') {
     res.status(400).contentType('application/problem+json').json({
       title: 'Bad Request',
       status: 400,
-      detail: 'Query parameter q is required',
+      detail: 'Query parameter q is required and must be a string',
+      instance: req.path,
+    });
+    return;
+  }
+
+  const query = req.query.q;
+
+  if (query.length < 3 || query.length > 100) {
+    res.status(400).contentType('application/problem+json').json({
+      title: 'Bad Request',
+      status: 400,
+      detail: 'Query parameter q must be between 3 and 100 characters',
       instance: req.path,
     });
     return;
   }
 
   try {
-    const result = await searchModels(req.query.q as string);
+    const result = await searchModels(query);
     setHeaders(res);
     res.json(result);
   } catch (err) {
