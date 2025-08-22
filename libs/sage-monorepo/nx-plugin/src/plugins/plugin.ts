@@ -95,6 +95,7 @@ async function createNodesInternal(
     projectName,
     pluginConfig,
     projectMetadata,
+    projectConfiguration: projectFileContent,
   };
   projectConfigurationsCache[hash] ??= await buildProjectConfiguration(
     projectConfigurationBuilderOptions,

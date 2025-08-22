@@ -119,13 +119,15 @@ function inferBaseImageType(
   if (containerImageTag) {
     const imageType = containerImageTag.split(':')[1];
 
+    // No validation here - let task execution handle invalid values
     switch (imageType) {
       case 'postgres':
         return 'postgres';
       case 'caddy':
         return 'caddy';
       default:
-        // Unknown container-image type, treat as custom
+        // For any other value (including 'custom' and invalid values), return 'custom'
+        // Task generation will validate and provide helpful errors for invalid values
         return 'custom';
     }
   }
