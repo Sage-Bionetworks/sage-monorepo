@@ -12,16 +12,6 @@ export function generateDockerfileTarget(
 
   const baseImage = getBaseImageString(baseImageType);
 
-  // Special handling for apex projects to determine health check port
-  let healthCheckPort = '8000'; // default
-  if (baseImageType === 'apex') {
-    if (projectRoot.includes('amp-als')) {
-      healthCheckPort = '8400';
-    } else if (projectRoot.includes('openchallenges')) {
-      healthCheckPort = '8000';
-    }
-  }
-
   const templatePath = `libs/sage-monorepo/nx-plugin/src/templates/${baseImageType}.Dockerfile.template`;
 
   return {
@@ -32,7 +22,7 @@ export function generateDockerfileTarget(
           command: `echo "Generating Dockerfile with base image: ${baseImage}"`,
         },
         {
-          command: `sed 's|{{baseImage}}|${baseImage}|g; s|{{healthCheckPort}}|${healthCheckPort}|g' ${templatePath} > ${projectRoot}/Dockerfile.generated`,
+          command: `sed 's|{{baseImage}}|${baseImage}|g' ${templatePath} > ${projectRoot}/Dockerfile.generated`,
         },
       ],
     },

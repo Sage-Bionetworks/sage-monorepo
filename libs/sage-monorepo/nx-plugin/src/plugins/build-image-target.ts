@@ -55,7 +55,7 @@ export async function buildImageTarget(
     outputs: [],
     options: {
       context,
-      file: dockerfile,
+      file: `${context}/${dockerfile}`,
     },
     cache: false,
     configurations: {

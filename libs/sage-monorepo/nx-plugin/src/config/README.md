@@ -94,7 +94,6 @@ Dockerfile templates are stored in:
 These templates support variable substitution:
 
 - `{{baseImage}}`: Replaced with the centralized base image
-- `{{healthCheckPort}}`: Replaced with project-specific health check port
 
 ## Benefits
 
