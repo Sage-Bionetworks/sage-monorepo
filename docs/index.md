@@ -1,5 +1,3 @@
-![sage-mono-repo](images/logo-1.png)
-
 # Sage Monorepo
 
 _Build robust biomedical research apps faster_
@@ -13,7 +11,12 @@ _Build robust biomedical research apps faster_
 
 ## Overview
 
-The Sage Monorepo is a comprehensive development platform that enables teams to build and deploy biomedical research applications faster and more efficiently. By centralizing shared components, standardizing development practices, and providing modern tooling, we eliminate the problems of siloed development, duplicated efforts, and reduced maintainability.
+Developers building components in silos can lead to a number of problems, including duplicated
+components, increased maintenance, and reduced visibility.
+
+Sage Monorepo addresses these problems by providing a centralized repository for standardized,
+reusable components. This solution also improves the developer experience (DX), which can lead to
+increased morale, productivity, retention, and knowledge transfer.
 
 ## Why Sage Monorepo?
 
@@ -45,14 +48,14 @@ Ready to start building? Choose your path:
 
 Explore the biomedical research platforms built with Sage Monorepo:
 
-| Product | Description | Links |
-|---------|-------------|-------|
-| **[Agora](https://agora.adknowledgeportal.org/genes)** | High-dimensional human transcriptomic, proteomic, and metabolomic evidence for genes associated with Alzheimer's disease | [Docs](products/agora.md) • [API](api/agora.md) |
-| **[AMP-ALS](https://www.amp-als.org/)** | Accelerating Medicines Partnership for ALS research collaboration | [API](api/amp-als.md) |
-| **[BixArena](https://bixarena.synapse.org/)** | Platform for biomedical data analysis competitions and challenges | [API](api/bixarena.md) |
-| **[Model-AD](https://www.model-ad.org/)** | Resource for Alzheimer's disease model development and validation | [API](api/model-ad.md) |
-| **[OpenChallenges](https://openchallenges.io/home)** | Cloud-native platform for biomedical challenges and citizen science data benchmarking | [Docs](products/openchallenges.md) • [API](api/openchallenges.md) |
-| **[Synapse](https://www.synapse.org/)** | Collaborative platform for data sharing and analysis in biomedical research | [API](api/synapse.md) |
+| Product                                                | Description                                                                                                              | Links                                                             |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------- |
+| **[Agora](https://agora.adknowledgeportal.org/genes)** | High-dimensional human transcriptomic, proteomic, and metabolomic evidence for genes associated with Alzheimer's disease | [Docs](products/agora.md) • [API](api/agora.md)                   |
+| **[AMP-ALS](https://www.amp-als.org/)**                | Accelerating Medicines Partnership for ALS research collaboration                                                        | [API](api/amp-als.md)                                             |
+| **[BixArena](https://bixarena.synapse.org/)**          | Platform for biomedical data analysis competitions and challenges                                                        | [API](api/bixarena.md)                                            |
+| **[Model-AD](https://www.model-ad.org/)**              | Resource for Alzheimer's disease model development and validation                                                        | [API](api/model-ad.md)                                            |
+| **[OpenChallenges](https://openchallenges.io/home)**   | Cloud-native platform for biomedical challenges and citizen science data benchmarking                                    | [Docs](products/openchallenges.md) • [API](api/openchallenges.md) |
+| **[Synapse](https://www.synapse.org/)**                | Collaborative platform for data sharing and analysis in biomedical research                                              | [API](api/synapse.md)                                             |
 
 ## Platform Statistics
 
@@ -81,36 +84,4 @@ Join our community and contribute to advancing biomedical research:
 
 ---
 
-*Ready to build the future of biomedical research? [Get started](develop/quick-start.md) today!*repo](images/logo-1.png)
-
-# Sage Monorepo
-
-_Build robust apps faster_
-
----
-
-<img src="https://img.shields.io/github/actions/workflow/status/Sage-Bionetworks/sage-monorepo/ci.yml?branch=main&color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github&label=CI/CD" alt="Sage Monorepo CI/CD" />
-<img src="https://img.shields.io/github/license/Sage-Bionetworks/sage-monorepo.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE" alt="Sage Monorepo License" />
-
----
-
-Developers building components in silos can lead to a number of problems, including duplicated
-components, increased maintenance, and reduced visibility.
-
-Sage Monorepo addresses these problems by providing a centralized repository for standardized,
-reusable components. This solution also improves the developer experience (DX), which can lead to
-increased morale, productivity, retention, and knowledge transfer.
-
-## Key Features
-
-- Build apps faster
-- Use latest technologies
-- Open-source
-
-## Current Projects
-
-| Name                                               | Description                                                                                                                                                   |
-| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Agora](https://agora.adknowledgeportal.org/genes) | Agora hosts high-dimensional human transcriptomic, proteomic, and metabolomic evidence for whether or not genes are associated with Alzheimer’s disease (AD). |
-| [iAtlas](https://isb-cgc.shinyapps.io/iatlas/)     | The iAtlas portal serves as an interactive tool for exploring and analyzing immuno-oncology data.                                                             |
-| [OpenChallenges](https://openchallenges.io/home)   | OpenChallenges (OC) aggregates biomedical challenges to accelerate citizen science and data benchmarking                                                      |
+_Ready to build the future of biomedical research? [Get started](develop/quick-start.md) today!_ |
