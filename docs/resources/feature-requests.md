@@ -100,5 +100,5 @@ topic of your request.
 [upstream remote]: https://help.github.com/en/articles/configuring-a-remote-for-a-fork
 [reaction]: https://github.blog/2016-03-10-add-reactions-to-pull-requests-issues-and-comments/
 [Forking Workflow]: https://www.atlassian.com/git/tutorials/comparing-workflows/forking-workflow
-[package.json]: ../package.json
+[package.json]: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/package.json
 [README.md]: ../README.md

@@ -3,58 +3,54 @@ site_description: A development environment for building robust apps faster.
 repo_url: https://github.com/Sage-Bionetworks/sage-monorepo
 repo_name: sage-monorepo
 nav:
-  - Home:
-      - Overview: index.md
-      - Get Started: getting-started/local-dev.md
-      - Contributing: contributions/overview.md
-  - Updates: news.md
-  - Blog: 
-      - Latest Posts: blog/index.md
+  - Home: index.md
+  - Updates: updates.md
+  - Blog: blog/index.md
   - Products:
-      - Service Catalog: reference/services.md
-      - Agora: reference/agora.md
-      - AMP-ALS: reference/api/amp-als.md
-      - BixArena: reference/api/bixarena.md
-      - Model-AD: reference/api/model-ad.md
-      - OpenChallenges: reference/oc-microservices.md
-      - Synapse: reference/api/synapse.md
+      - Service Catalog: products/services.md
+      - Agora: products/agora.md
+      - AMP-ALS: api/amp-als.md
+      - BixArena: api/bixarena.md
+      - Model-AD: api/model-ad.md
+      - OpenChallenges: products/openchallenges.md
+      - Synapse: api/synapse.md
   - Develop:
-      - Quick Start: getting-started/local-dev.md
-      - Remote Development: getting-started/remote-dev.md
+      - Quick Start: develop/quick-start.md
+      - Remote Development: develop/remote-dev.md
       - Architecture:
-          - Nx Workspace: getting-started/what-is-nx.md
-          - Dev Containers: getting-started/what-is-devcontainer.md
-          - Angular Universal: getting-started/what-is-angular.md
+          - Nx Workspace: develop/architecture/what-is-nx.md
+          - Dev Containers: develop/architecture/what-is-devcontainer.md
+          - Angular Universal: develop/architecture/what-is-angular.md
       - Tutorials:
           - Angular:
-              - Create App: tutorials/angular/add-app.md
-              - Add API Client: tutorials/angular/add-api-client.md
-              - Add Component: tutorials/angular/add-component.md
-              - Add Library: tutorials/angular/add-library.md
+              - Create App: develop/tutorials/angular/add-app.md
+              - Add API Client: develop/tutorials/angular/add-api-client.md
+              - Add Component: develop/tutorials/angular/add-component.md
+              - Add Library: develop/tutorials/angular/add-library.md
           - Java:
-              - Add Library: tutorials/java/add-library.md
-              - Add REST API: tutorials/java/add-rest-api.md
+              - Add Library: develop/tutorials/java/add-library.md
+              - Add REST API: develop/tutorials/java/add-rest-api.md
           - Python:
-              - Add REST API: tutorials/python/add-rest-api.md
+              - Add REST API: develop/tutorials/python/add-rest-api.md
           - Docker:
-              - New Project: tutorials/docker/new-project.md
+              - New Project: develop/tutorials/docker/new-project.md
           - R:
-              - New Project: tutorials/r/new-project.md
+              - New Project: develop/tutorials/r/new-project.md
       - Advanced:
-          - Remote Development: developers-guide/developing-on-a-remote-host.md
-          - Multi-author Commits: developers-guide/creating-a-commit-with-multiple-authors.md
+          - Remote Development: develop/advanced/developing-on-a-remote-host.md
+          - Multi-author Commits: develop/advanced/creating-a-commit-with-multiple-authors.md
   - API:
-      - Agora: reference/api/agora.md
-      - AMP-ALS: reference/api/amp-als.md
-      - BixArena: reference/api/bixarena.md
-      - Model-AD: reference/api/model-ad.md
-      - OpenChallenges: reference/api/openchallenges.md
-      - Synapse: reference/api/synapse.md
+      - Agora: api/agora.md
+      - AMP-ALS: api/amp-als.md
+      - BixArena: api/bixarena.md
+      - Model-AD: api/model-ad.md
+      - OpenChallenges: api/openchallenges.md
+      - Synapse: api/synapse.md
   - Resources:
-      - FAQ: developers-guide/faq.md
-      - Bug Reports: contributions/bug-report.md
-      - Feature Requests: contributions/guidelines.md
-      - OpenChallenges Schemas: reference/oc-schemas.md
+      - FAQ: resources/faq.md
+      - Bug Reports: resources/bug-report.md
+      - Feature Requests: resources/feature-requests.md
+      - OpenChallenges Schemas: resources/oc-schemas.md
 theme:
   name: material
   palette:

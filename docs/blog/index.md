@@ -21,9 +21,9 @@ Stay tuned for our first posts!
 To stay updated with our latest blog posts:
 
 - Watch this repository on GitHub
-- Follow our [Updates](../news.md) page for regular announcements
+- Follow our [Updates](../updates.md) page for regular announcements
 - Check back here regularly for new content
 
 ---
 
-*Want to contribute a blog post? Check out our [Contributing Guidelines](../contributions/guidelines.md) to learn how to share your story with the community.*
+*Want to contribute a blog post? Check out our [Contributing Guidelines](../resources/feature-requests.md) to learn how to share your story with the community.*
