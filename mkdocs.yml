@@ -4,52 +4,57 @@ repo_url: https://github.com/Sage-Bionetworks/sage-monorepo
 repo_name: sage-monorepo
 nav:
   - Home:
-      - Sage Monorepo: index.md
-      - What's new: news.md
-      - Contributing:
-          - Overview: contributions/overview.md
-          - Reporting a bug: contributions/bug-report.md
-          - Adding a feature: contributions/guidelines.md
-  - Getting Started:
-      - What is Angular Universal?: getting-started/what-is-angular.md
-      - What is a devcontainer?: getting-started/what-is-devcontainer.md
-      - What is Nx?: getting-started/what-is-nx.md
-      - Setup:
-          - Develop Locally: getting-started/local-dev.md
-          - Develop On a Remote Host: getting-started/remote-dev.md
-  - Tutorials:
-      - Angular:
-          - Create an Angular app: tutorials/angular/add-app.md
-          - Add an Angular API client: tutorials/angular/add-api-client.md
-          - Add an Angular component: tutorials/angular/add-component.md
-          - Add an Angular library: tutorials/angular/add-library.md
-      - Docker:
-          - Create a Docker-based project: tutorials/docker/new-project.md
-      - Java:
-          - Add a Java library: tutorials/java/add-library.md
-          - Add a Java REST API: tutorials/java/add-rest-api.md
-      - Python:
-          - Add a Python REST API: tutorials/python/add-rest-api.md
-      - R:
-          - Add an R project: tutorials/r/new-project.md
-  - Developers Guide:
-      - Developing on a remote host: developers-guide/developing-on-a-remote-host.md
-      - Creating a commit with multiple authors: developers-guide/creating-a-commit-with-multiple-authors.md
-      - Common Issues: developers-guide/faq.md
-  - Reference:
+      - Overview: index.md
+      - Get Started: getting-started/local-dev.md
+      - Contributing: contributions/overview.md
+  - Updates: news.md
+  - Blog: 
+      - Latest Posts: blog/index.md
+  - Products:
       - Service Catalog: reference/services.md
-      - Agora:
-          - API: reference/agora.md
-      - OpenChallenges:
-          - Microservices: reference/oc-microservices.md
-          - Schemas: reference/oc-schemas.md
-      - API:
-          - Synapse: reference/api/synapse.md
-          - Openchallenges: reference/api/openchallenges.md
-          - Model-ad: reference/api/model-ad.md
-          - Bixarena: reference/api/bixarena.md
-          - Amp-als: reference/api/amp-als.md
-          - Agora: reference/api/agora.md
+      - Agora: reference/agora.md
+      - AMP-ALS: reference/api/amp-als.md
+      - BixArena: reference/api/bixarena.md
+      - Model-AD: reference/api/model-ad.md
+      - OpenChallenges: reference/oc-microservices.md
+      - Synapse: reference/api/synapse.md
+  - Develop:
+      - Quick Start: getting-started/local-dev.md
+      - Remote Development: getting-started/remote-dev.md
+      - Architecture:
+          - Nx Workspace: getting-started/what-is-nx.md
+          - Dev Containers: getting-started/what-is-devcontainer.md
+          - Angular Universal: getting-started/what-is-angular.md
+      - Tutorials:
+          - Angular:
+              - Create App: tutorials/angular/add-app.md
+              - Add API Client: tutorials/angular/add-api-client.md
+              - Add Component: tutorials/angular/add-component.md
+              - Add Library: tutorials/angular/add-library.md
+          - Java:
+              - Add Library: tutorials/java/add-library.md
+              - Add REST API: tutorials/java/add-rest-api.md
+          - Python:
+              - Add REST API: tutorials/python/add-rest-api.md
+          - Docker:
+              - New Project: tutorials/docker/new-project.md
+          - R:
+              - New Project: tutorials/r/new-project.md
+      - Advanced:
+          - Remote Development: developers-guide/developing-on-a-remote-host.md
+          - Multi-author Commits: developers-guide/creating-a-commit-with-multiple-authors.md
+  - API:
+      - Agora: reference/api/agora.md
+      - AMP-ALS: reference/api/amp-als.md
+      - BixArena: reference/api/bixarena.md
+      - Model-AD: reference/api/model-ad.md
+      - OpenChallenges: reference/api/openchallenges.md
+      - Synapse: reference/api/synapse.md
+  - Resources:
+      - FAQ: developers-guide/faq.md
+      - Bug Reports: contributions/bug-report.md
+      - Feature Requests: contributions/guidelines.md
+      - OpenChallenges Schemas: reference/oc-schemas.md
 theme:
   name: material
   palette:
