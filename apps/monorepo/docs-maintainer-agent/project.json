@@ -1,0 +1,85 @@
+{
+  "name": "monorepo-docs-maintainer-agent",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/monorepo/docs-maintainer-agent/src",
+  "projectType": "application",
+  "tags": ["type:agent", "scope:monorepo", "language:typescript"],
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/apps/monorepo/docs-maintainer-agent",
+        "format": ["cjs"],
+        "bundle": false,
+        "main": "apps/monorepo/docs-maintainer-agent/src/main.ts",
+        "tsConfig": "apps/monorepo/docs-maintainer-agent/tsconfig.app.json",
+        "assets": ["apps/monorepo/docs-maintainer-agent/src/assets"],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "docs-maintainer-agent:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "docs-maintainer-agent:build:development"
+        },
+        "production": {
+          "buildTarget": "docs-maintainer-agent:build:production"
+        }
+      }
+    },
+    "run": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node dist/apps/monorepo/docs-maintainer-agent/apps/monorepo/docs-maintainer-agent/src/main.js"
+      }
+    },
+    "run-dry": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node dist/apps/monorepo/docs-maintainer-agent/apps/monorepo/docs-maintainer-agent/src/main.js --mode=dry-run"
+      }
+    },
+    "run-propose": {
+      "executor": "nx:run-commands", 
+      "options": {
+        "command": "node dist/apps/monorepo/docs-maintainer-agent/apps/monorepo/docs-maintainer-agent/src/main.js --mode=analyze-and-propose"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "options": {
+        "passWithNoTests": true
+      }
+    }
+  }
+}
