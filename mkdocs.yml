@@ -26,7 +26,6 @@ nav:
       - Architecture:
           - Nx Workspace: develop/architecture/what-is-nx.md
           - Dev Containers: develop/architecture/what-is-devcontainer.md
-          - Angular Universal: develop/architecture/what-is-angular.md
       - Tutorials:
           - Angular:
               - Create App: develop/tutorials/angular/add-app.md
@@ -56,17 +55,18 @@ nav:
       - FAQ: resources/faq.md
       - Bug Reports: resources/bug-report.md
       - Feature Requests: resources/feature-requests.md
+      - Contributing: contributions/overview.md
       - OpenChallenges Schemas: resources/oc-schemas.md
 theme:
   name: material
   palette:
-    - media: "(prefers-color-scheme: light)"
+    - media: '(prefers-color-scheme: light)'
       scheme: default
       primary: blue
       toggle:
         icon: material/toggle-switch-off-outline
         name: Switch to dark mode
-    - media: "(prefers-color-scheme: dark)"
+    - media: '(prefers-color-scheme: dark)'
       scheme: slate
       primary: blue
       toggle:
