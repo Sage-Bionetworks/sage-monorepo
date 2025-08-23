@@ -1,10 +1,10 @@
 # Centralized Docker Base Images
 
-This system provides centralized management of Docker base images for postgres and caddy project types in the openchallenges and amp-als applications.
+This system provides centralized management of Docker container images for postgres and caddy project types in the openchallenges and amp-als applications.
 
 ## How It Works
 
-The Nx plugin automatically detects project types and generates appropriate Dockerfiles with centralized base image references.
+The Nx plugin automatically detects project types and generates appropriate Dockerfiles with centralized container image references.
 
 ### Supported Project Types
 
@@ -17,13 +17,13 @@ The Nx plugin automatically detects project types and generates appropriate Dock
 Projects are automatically classified based on:
 
 1. Project path (must contain `openchallenges` or `amp-als`)
-2. Project name containing `postgres` or `apex` (apex projects use caddy base image)
+2. Project name containing `postgres` or `apex` (apex projects use caddy container image)
 
 ### Generated Targets
 
 For postgres and caddy projects, the plugin automatically creates:
 
-- `generate-dockerfile`: Creates `Dockerfile.generated` with the correct base image
+- `generate-dockerfile`: Creates `Dockerfile.generated` with the correct container image
 - `build-image`: Builds the Docker image (depends on `generate-dockerfile`)
 
 ## Base Image Configuration
@@ -62,7 +62,7 @@ nx run bixarena-postgres:build-image
 
 ### Updating Base Images
 
-To update a base image version:
+To update a container image version:
 
 1. Edit `libs/sage-monorepo/nx-plugin/src/config/base-images.ts`
 2. Update the version for the desired image type
@@ -75,7 +75,7 @@ To update a base image version:
 View project classification:
 
 ```bash
-# Check project tags to see base image type
+# Check project tags to see container image type
 nx show project openchallenges-postgres --json | jq '.tags'
 # Output: ["base-image:postgres", "type:db", "scope:backend"]
 
@@ -93,12 +93,12 @@ Dockerfile templates are stored in:
 
 These templates support variable substitution:
 
-- `{{baseImage}}`: Replaced with the centralized base image
+- `{{baseImage}}`: Replaced with the centralized container image
 
 ## Benefits
 
-1. **Centralized Version Management**: Update base image versions in one place
+1. **Centralized Version Management**: Update container image versions in one place
 2. **Automatic Generation**: No manual Dockerfile maintenance for standard projects
-3. **Type Safety**: TypeScript ensures base image configurations are valid
+3. **Type Safety**: TypeScript ensures container image configurations are valid
 4. **Backward Compatibility**: Custom projects continue to use original Dockerfiles
 5. **Project-Specific Customization**: Templates can be customized per project type
