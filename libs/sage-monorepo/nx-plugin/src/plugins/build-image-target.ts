@@ -1,17 +1,17 @@
 import { TargetConfiguration } from '@nx/devkit';
-import { Builder, Framework, BaseImageType } from './project-metadata';
+import { Builder, Framework, ContainerImageType } from './project-metadata';
 
 export async function buildImageTarget(
   projectRoot: string,
   projectName: string,
   projectBuilder: Builder | undefined | null, // TODO: builder could be app or image, be more specific
   projectFramework: Framework | null,
-  baseImageType: BaseImageType | null,
+  containerImageType: ContainerImageType | null,
 ): Promise<TargetConfiguration> {
   const dependsOn = [];
 
-  // Add base image template generation if needed
-  if (baseImageType && baseImageType !== 'custom') {
+  // Add container image template generation if needed
+  if (containerImageType && containerImageType !== 'custom') {
     dependsOn.push({
       target: 'generate-dockerfile',
     });
@@ -46,7 +46,7 @@ export async function buildImageTarget(
 
   // Determine which Dockerfile to use
   let dockerfile = 'Dockerfile';
-  if (baseImageType && baseImageType !== 'custom') {
+  if (containerImageType && containerImageType !== 'custom') {
     dockerfile = 'Dockerfile.generated';
   }
 

@@ -10,7 +10,7 @@ export type Builder = 'esbuild' | 'webpack' | 'gradle' | 'maven' | 'uv';
 export type ContainerType = 'docker' | 'singularity';
 // export type Language = 'python' | 'typescript' | 'javascript';
 export type Framework = 'angular';
-export type BaseImageType = 'postgres' | 'caddy' | 'custom';
+export type ContainerImageType = 'postgres' | 'caddy' | 'custom';
 
 export type ProjectMetadata = {
   projectType: ProjectType;
@@ -26,7 +26,7 @@ export type ProjectMetadata = {
   containerType: ContainerType | null;
   // language: Language;
   framework: Framework | null;
-  baseImageType: BaseImageType | null;
+  containerImageType: ContainerImageType | null;
 };
 
 export function inferProjectMetadata(
@@ -40,7 +40,7 @@ export function inferProjectMetadata(
     builder: inferBuilder(siblingFiles, localProjectConfiguration),
     containerType: inferContainerType(localProjectConfiguration, siblingFiles),
     framework: inferFramework(localProjectConfiguration),
-    baseImageType: inferBaseImageType(localProjectConfiguration, siblingFiles),
+    containerImageType: inferContainerImageType(localProjectConfiguration, siblingFiles),
   };
 }
 
@@ -107,10 +107,10 @@ function inferFramework(localProjectConfiguration: ProjectConfiguration): Framew
   return null;
 }
 
-function inferBaseImageType(
+function inferContainerImageType(
   localProjectConfiguration: ProjectConfiguration,
   siblingFiles: string[],
-): BaseImageType | null {
+): ContainerImageType | null {
   const tags = localProjectConfiguration.tags || [];
 
   // Extract base image type from container-image tags

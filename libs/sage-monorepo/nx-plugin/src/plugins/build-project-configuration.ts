@@ -3,10 +3,10 @@ import { buildImageTarget } from './build-image-target';
 import { generateDockerfileTarget } from './generate-dockerfile-target';
 import { SageMonorepoProjectConfiguration } from './project-configuration';
 import { ProjectConfigurationBuilderOptions } from './project-configuration-builder-options';
-import { BASE_IMAGES } from '../config/base-images';
+import { CONTAINER_IMAGES } from '../config/container-images';
 
 function createValidationErrorTarget(projectName: string, invalidTag: string): TargetConfiguration {
-  const supportedImageTypes = Object.keys(BASE_IMAGES);
+  const supportedImageTypes = Object.keys(CONTAINER_IMAGES);
   const validValues = [...supportedImageTypes, 'custom']
     .map((type) => `container-image:${type}`)
     .join(', ');
@@ -25,7 +25,7 @@ function validateContainerImageTag(options: ProjectConfigurationBuilderOptions):
 
   if (containerImageTag) {
     const imageType = containerImageTag.split(':')[1];
-    const supportedImageTypes = Object.keys(BASE_IMAGES);
+    const supportedImageTypes = Object.keys(CONTAINER_IMAGES);
     const validTypes = [...supportedImageTypes, 'custom'];
 
     if (!validTypes.includes(imageType)) {
@@ -35,7 +35,6 @@ function validateContainerImageTag(options: ProjectConfigurationBuilderOptions):
 
   return null; // Valid or no container-image tag
 }
-
 export async function buildProjectConfiguration(
   options: ProjectConfigurationBuilderOptions,
 ): Promise<SageMonorepoProjectConfiguration> {
@@ -54,14 +53,14 @@ export async function buildProjectConfiguration(
         invalidTag,
       );
     } else {
-      // Add dockerfile generation target if using a standard base image
+      // Add dockerfile generation target if using a standard container image
       if (
-        options.projectMetadata.baseImageType &&
-        options.projectMetadata.baseImageType !== 'custom'
+        options.projectMetadata.containerImageType &&
+        options.projectMetadata.containerImageType !== 'custom'
       ) {
         targets['generate-dockerfile'] = generateDockerfileTarget(
           options.projectRoot,
-          options.projectMetadata.baseImageType,
+          options.projectMetadata.containerImageType,
         );
       }
 
@@ -70,7 +69,7 @@ export async function buildProjectConfiguration(
         options.projectName,
         options.projectMetadata.builder,
         options.projectMetadata.framework,
-        options.projectMetadata.baseImageType,
+        options.projectMetadata.containerImageType,
       );
     }
   }

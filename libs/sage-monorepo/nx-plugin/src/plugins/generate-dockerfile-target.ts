@@ -1,25 +1,25 @@
 import { TargetConfiguration } from '@nx/devkit';
-import { BaseImageType } from './project-metadata';
-import { getBaseImageString } from '../config/base-images';
+import { ContainerImageType } from './project-metadata';
+import { getContainerImageString } from '../config/container-images';
 
 export function generateDockerfileTarget(
   projectRoot: string,
-  baseImageType: BaseImageType,
+  containerImageType: ContainerImageType,
 ): TargetConfiguration {
-  if (baseImageType === 'custom') {
-    throw new Error('Cannot generate Dockerfile for custom base image type');
+  if (containerImageType === 'custom') {
+    throw new Error('Cannot generate Dockerfile for custom container image type');
   }
 
-  const baseImage = getBaseImageString(baseImageType);
+  const baseImage = getContainerImageString(containerImageType);
 
-  const templatePath = `libs/sage-monorepo/nx-plugin/src/templates/${baseImageType}.Dockerfile.template`;
+  const templatePath = `libs/sage-monorepo/nx-plugin/src/templates/${containerImageType}.Dockerfile.template`;
 
   return {
     executor: 'nx:run-commands',
     options: {
       commands: [
         {
-          command: `echo "Generating Dockerfile with base image: ${baseImage}"`,
+          command: `echo "Generating Dockerfile with container image: ${baseImage}"`,
         },
         {
           command: `sed 's|{{baseImage}}|${baseImage}|g' ${templatePath} > ${projectRoot}/Dockerfile.generated`,
