@@ -8,7 +8,7 @@ The Sage Monorepo is a comprehensive development platform for building biomedica
 
 ### How do I get started?
 
-Check out our [Quick Start Guide](../getting-started/local-dev.md) to set up your local development environment. For a deeper understanding, explore our [Architecture Overview](../getting-started/what-is-nx.md).
+Check out our [Quick Start Guide](../develop/quick-start.md) to set up your local development environment. For a deeper understanding, explore our [Architecture Overview](../develop/architecture/what-is-nx.md).
 
 ### What technologies are supported?
 
@@ -23,53 +23,53 @@ We support:
 ### How do I create a new project?
 
 Follow our technology-specific tutorials:
-- [Angular App](../tutorials/angular/add-app.md)
-- [Java REST API](../tutorials/java/add-rest-api.md)
-- [Python REST API](../tutorials/python/add-rest-api.md)
-- [Docker Project](../tutorials/docker/new-project.md)
+- [Angular App](../develop/tutorials/angular/add-app.md)
+- [Java REST API](../develop/tutorials/java/add-rest-api.md)
+- [Python REST API](../develop/tutorials/python/add-rest-api.md)
+- [Docker Project](../develop/tutorials/docker/new-project.md)
 
 ### How do I share code between projects?
 
 Use our library creation guides:
-- [Angular Library](../tutorials/angular/add-library.md)
-- [Java Library](../tutorials/java/add-library.md)
+- [Angular Library](../develop/tutorials/angular/add-library.md)
+- [Java Library](../develop/tutorials/java/add-library.md)
 
 ### Can I develop remotely?
 
 Yes! We support remote development through:
-- [Dev Containers](../getting-started/what-is-devcontainer.md)
-- [Remote Host Development](../developers-guide/developing-on-a-remote-host.md)
+- [Dev Containers](../develop/architecture/what-is-devcontainer.md)
+- [Remote Host Development](../develop/advanced/developing-on-a-remote-host.md)
 
 ## Platform & Services
 
 ### What services are available?
 
-See our [Service Catalog](../reference/services.md) for a complete list of all 145 projects, or explore our main products:
-- [Agora](../reference/agora.md)
-- [OpenChallenges](../reference/oc-microservices.md)
-- [API References](../reference/api/synapse.md)
+See our [Service Catalog](../products/services.md) for a complete list of all 145 projects, or explore our main products:
+- [Agora](../products/agora.md)
+- [OpenChallenges](../products/openchallenges.md)
+- [API References](../api/synapse.md)
 
 ### How do I access the APIs?
 
-All our APIs are documented in the [API section](../reference/api/synapse.md). Each service provides OpenAPI specifications and client libraries.
+All our APIs are documented in the [API section](../api/synapse.md). Each service provides OpenAPI specifications and client libraries.
 
 ### Where can I find API documentation?
 
 API documentation is auto-generated and available for:
-- [Synapse API](../reference/api/synapse.md)
-- [OpenChallenges API](../reference/api/openchallenges.md)
-- [Model-AD API](../reference/api/model-ad.md)
-- [BixArena API](../reference/api/bixarena.md)
-- [AMP-ALS API](../reference/api/amp-als.md)
-- [Agora API](../reference/api/agora.md)
+- [Synapse API](../api/synapse.md)
+- [OpenChallenges API](../api/openchallenges.md)
+- [Model-AD API](../api/model-ad.md)
+- [BixArena API](../api/bixarena.md)
+- [AMP-ALS API](../api/amp-als.md)
+- [Agora API](../api/agora.md)
 
 ## Contributing
 
 ### How can I contribute?
 
 We welcome contributions! Check out our [Contributing Guidelines](../contributions/overview.md) to get started. You can:
-- Report bugs using our [Bug Report Template](../contributions/bug-report.md)
-- Request features using our [Feature Request Guidelines](../contributions/guidelines.md)
+- Report bugs using our [Bug Report Template](../resources/bug-report.md)
+- Request features using our [Feature Request Guidelines](../resources/feature-requests.md)
 - Submit pull requests with improvements
 
 ### How do I report issues?
@@ -81,7 +81,7 @@ Use our [GitHub Issues](https://github.com/Sage-Bionetworks/sage-monorepo/issues
 
 ### Can I collaborate with multiple authors on commits?
 
-Yes! See our guide on [Creating Multi-author Commits](../developers-guide/creating-a-commit-with-multiple-authors.md).
+Yes! See our guide on [Creating Multi-author Commits](../develop/advanced/creating-a-commit-with-multiple-authors.md).
 
 ## Troubleshooting
 
@@ -91,7 +91,7 @@ Common solutions:
 1. Ensure you have the required dependencies installed
 2. Check that your environment variables are set correctly
 3. Verify your Docker setup if using containers
-4. Review the [local development guide](../getting-started/local-dev.md)
+4. Review the [local development guide](../develop/quick-start.md)
 
 ### Build or test failures
 
@@ -111,13 +111,13 @@ Common solutions:
 
 ### How do I stay updated?
 
-- Follow our [Updates page](../news.md) for the latest announcements
+- Follow our [Updates page](../updates.md) for the latest announcements
 - Subscribe to our [Blog](../blog/index.md) for technical insights
 - Watch our GitHub repository for releases
 
 ### Where can I find release notes?
 
-Check our [Updates](../news.md) page for version-specific release notes and feature announcements.
+Check our [Updates](../updates.md) page for version-specific release notes and feature announcements.
 
 ## Still Need Help?
 

@@ -32,12 +32,12 @@ Ready to start building? Choose your path:
   <div style="border: 1px solid #ddd; border-radius: 8px; padding: 16px;">
     <h3>🚀 Quick Start</h3>
     <p>Jump right in with our local development setup</p>
-    <a href="getting-started/local-dev.md">Get Started →</a>
+    <a href="develop/quick-start.md">Get Started →</a>
   </div>
   <div style="border: 1px solid #ddd; border-radius: 8px; padding: 16px;">
     <h3>📚 Learn the Basics</h3>
     <p>Understand the architecture and concepts</p>
-    <a href="getting-started/what-is-nx.md">Learn More →</a>
+    <a href="develop/architecture/what-is-nx.md">Learn More →</a>
   </div>
 </div>
 
@@ -47,12 +47,12 @@ Explore the biomedical research platforms built with Sage Monorepo:
 
 | Product | Description | Links |
 |---------|-------------|-------|
-| **[Agora](https://agora.adknowledgeportal.org/genes)** | High-dimensional human transcriptomic, proteomic, and metabolomic evidence for genes associated with Alzheimer's disease | [Docs](reference/agora.md) • [API](reference/api/agora.md) |
-| **[AMP-ALS](https://www.amp-als.org/)** | Accelerating Medicines Partnership for ALS research collaboration | [API](reference/api/amp-als.md) |
-| **[BixArena](https://bixarena.synapse.org/)** | Platform for biomedical data analysis competitions and challenges | [API](reference/api/bixarena.md) |
-| **[Model-AD](https://www.model-ad.org/)** | Resource for Alzheimer's disease model development and validation | [API](reference/api/model-ad.md) |
-| **[OpenChallenges](https://openchallenges.io/home)** | Cloud-native platform for biomedical challenges and citizen science data benchmarking | [Docs](reference/oc-microservices.md) • [API](reference/api/openchallenges.md) |
-| **[Synapse](https://www.synapse.org/)** | Collaborative platform for data sharing and analysis in biomedical research | [API](reference/api/synapse.md) |
+| **[Agora](https://agora.adknowledgeportal.org/genes)** | High-dimensional human transcriptomic, proteomic, and metabolomic evidence for genes associated with Alzheimer's disease | [Docs](products/agora.md) • [API](api/agora.md) |
+| **[AMP-ALS](https://www.amp-als.org/)** | Accelerating Medicines Partnership for ALS research collaboration | [API](api/amp-als.md) |
+| **[BixArena](https://bixarena.synapse.org/)** | Platform for biomedical data analysis competitions and challenges | [API](api/bixarena.md) |
+| **[Model-AD](https://www.model-ad.org/)** | Resource for Alzheimer's disease model development and validation | [API](api/model-ad.md) |
+| **[OpenChallenges](https://openchallenges.io/home)** | Cloud-native platform for biomedical challenges and citizen science data benchmarking | [Docs](products/openchallenges.md) • [API](api/openchallenges.md) |
+| **[Synapse](https://www.synapse.org/)** | Collaborative platform for data sharing and analysis in biomedical research | [API](api/synapse.md) |
 
 ## Platform Statistics
 
@@ -67,9 +67,9 @@ Our monorepo powers a comprehensive ecosystem:
 
 Check out our latest updates and improvements:
 
-- [Latest Updates](news.md) - Recent releases and announcements
+- [Latest Updates](updates.md) - Recent releases and announcements
 - [Blog](blog/index.md) - Technical insights and developer stories
-- [Service Catalog](reference/services.md) - Complete project inventory
+- [Service Catalog](products/services.md) - Complete project inventory
 
 ## Community
 
@@ -77,11 +77,11 @@ Join our community and contribute to advancing biomedical research:
 
 - **Contribute**: Check our [Contributing Guide](contributions/overview.md)
 - **Issues**: Report bugs and request features on [GitHub](https://github.com/Sage-Bionetworks/sage-monorepo/issues)
-- **Support**: Get help through our [FAQ](developers-guide/faq.md) or community channels
+- **Support**: Get help through our [FAQ](resources/faq.md) or community channels
 
 ---
 
-*Ready to build the future of biomedical research? [Get started](getting-started/local-dev.md) today!*repo](images/logo-1.png)
+*Ready to build the future of biomedical research? [Get started](develop/quick-start.md) today!*repo](images/logo-1.png)
 
 # Sage Monorepo
 
