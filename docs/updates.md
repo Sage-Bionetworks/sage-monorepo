@@ -86,6 +86,5 @@ OpenChallenges is a cloud-native platform designed to streamline the management 
 
 ---
 
-## Archive
 
-Looking for older updates? Check our [archived news](_archive/index.md) for historical announcements and release notes.
+```
