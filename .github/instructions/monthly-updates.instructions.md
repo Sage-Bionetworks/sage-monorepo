@@ -1,0 +1,327 @@
+---
+applyTo: 'docs/updates/**'
+---
+
+# Monthly Updates Generation Instructions
+
+This file provides instructions for generating monthly update pages for the Sage Monorepo documentation s### Step 4: Add Context and Statistics
+
+In### Step 6: Update Navigation
+
+Update `mkdocs.yml` to include the new monthly page:
+
+```yaml
+- Updates:
+    - Overview: updates/index.md
+    - [Month Year]: updates/[month-lowercase]-[year].md
+    # ... other months in reverse chronological order
+```
+
+### Step 7: Update Index Page
+
+Add the new month to `docs/updates/index.md`:
+
+```markdown
+- **[Month Year](month-year.md)** - Brief description of key highlights
+```
+
+## Historical Context
+
+This automation process replaces the previous git-based approach with the GitHub API for more accurate and comprehensive data extraction. The GitHub search API provides richer metadata and eliminates the need for manual commit message parsing.r of PRs merged
+
+- Number of unique contributors
+- Key metrics (if available)
+
+### Step 5: Create Monthly Update Page
+
+1. Create file: `docs/updates/[month-year].md`
+2. Follow the template structure provided above
+3. Use data from GitHub API response to populate content
+4. Update the navigation in `mkdocs.yml`
+
+Example file creation:
+
+````markdown
+# August 2025 Update
+
+_Published on September 1, 2025_
+
+August was a productive month with significant progress across multiple projects...
+
+## Summary
+
+- **Total PRs Merged**: 56
+- **Contributors**: 12
+- **Key Areas**: Model-AD enhancements, OpenChallenges refactoring, BixArena features
+
+## Major Features & Improvements
+
+[Continue with categorized PR content...]
+
+````## Overview
+
+Each monthly update page should aggregate all pull requests (PRs) merged to the `main` branch during a specific month and present them in a user-friendly format suitable for the Updates section of the documentation site.
+
+## Monthly Update Page Structure
+
+### Template Structure
+
+```markdown
+# [Month Year] Update
+
+*Published on [Date]*
+
+Brief introduction about the month's activities and key highlights.
+
+## Summary
+
+- **Total PRs Merged**: [number]
+- **Contributors**: [number]
+- **Key Areas**: [list main areas of development]
+
+## Major Features & Improvements
+
+### [Category 1 - e.g., Platform Enhancements]
+- **[PR Title]** ([#PR_NUMBER](link)) - Brief description of the change
+- **[PR Title]** ([#PR_NUMBER](link)) - Brief description of the change
+
+### [Category 2 - e.g., Documentation]
+- **[PR Title]** ([#PR_NUMBER](link)) - Brief description of the change
+
+### [Category 3 - e.g., Bug Fixes]
+- **[PR Title]** ([#PR_NUMBER](link)) - Brief description of the change
+
+## Product-Specific Updates
+
+### Agora
+- List of relevant changes
+
+### OpenChallenges
+- List of relevant changes
+
+### [Other Products as relevant]
+- List of relevant changes
+
+## Developer Experience
+
+- Changes related to development workflow
+- Tooling improvements
+- CI/CD enhancements
+
+## Infrastructure & Operations
+
+- Deployment improvements
+- Performance optimizations
+- Security updates
+
+## Breaking Changes
+
+- List any breaking changes introduced this month
+- Migration guides or notes
+
+## Looking Ahead
+
+- Preview of upcoming features
+- Community feedback incorporation
+- Roadmap updates
+
+---
+
+*Have feedback on this update? [Let us know](https://github.com/Sage-Bionetworks/sage-monorepo/issues/new?assignees=&labels=type%3A+docs&projects=&template=3-documentation.yml&title=%5BDocs%5D+[Month Year]+Update+Feedback) what you think!*
+````
+````
+
+## How to Generate a Monthly Update Page
+
+### Step 1: Gather PR Data
+
+Use the GitHub search API to find all PRs merged during the target month:
+
+```typescript
+// Use mcp_github_search_pull_requests tool with date range
+mcp_github_search_pull_requests({
+  owner: 'Sage-Bionetworks',
+  repo: 'sage-monorepo',
+  query: 'repo:Sage-Bionetworks/sage-monorepo is:merged merged:YYYY-MM-01..YYYY-MM-31',
+});
+```
+
+The API returns comprehensive PR data including:
+
+- PR number, title, and description
+- Author information and assignees
+- Merge date and timestamps
+- Labels and project associations
+- Related issue links (Jira tickets)
+
+Example query for August 2025:
+
+```typescript
+mcp_github_search_pull_requests({
+  owner: 'Sage-Bionetworks',
+  repo: 'sage-monorepo',
+  query: 'repo:Sage-Bionetworks/sage-monorepo is:merged merged:2025-08-01..2025-08-31',
+});
+```
+
+### Step 2: Categorize PRs
+
+Analyze the PR data from the GitHub API response to group PRs by the following categories:
+
+**Advantages of GitHub API over git commands:**
+
+- Access to PR descriptions and body content for better categorization
+- Author and assignee information readily available
+- Direct access to Jira ticket links in PR descriptions
+- Merge timestamps and precise date information
+- No need to parse commit messages manually
+
+Group PRs by the following categories:
+
+1. **Major Features & Improvements**
+
+   - New product features
+   - Significant enhancements
+   - New integrations
+
+2. **Product-Specific Updates**
+
+   - Agora improvements
+   - OpenChallenges features
+   - AMP-ALS updates
+   - BixArena changes
+   - Model-AD enhancements
+   - Synapse improvements
+
+3. **Developer Experience**
+
+   - Build system improvements
+   - Development tooling
+   - Code quality enhancements
+   - Testing improvements
+
+4. **Infrastructure & Operations**
+
+   - CI/CD pipeline updates
+   - Deployment improvements
+   - Performance optimizations
+   - Security patches
+
+5. **Documentation**
+
+   - Documentation updates
+   - API documentation
+   - Tutorial improvements
+
+6. **Bug Fixes**
+   - Critical bug fixes
+   - Performance fixes
+   - UI/UX improvements
+
+### Step 3: Analyze and Extract Information
+
+Use the GitHub API response to extract:
+
+1. **Project Categories**: Look for prefixes like `feat(project-name)`, `fix(project-name)`, `chore(project-name)`
+2. **Jira Tickets**: Extract ticket numbers from PR descriptions (e.g., MG-358, SMR-385)
+3. **Contributors**: Get unique authors and assignees
+4. **Change Types**: Categorize by feat/fix/chore/docs/refactor
+5. **Impact Areas**: Identify affected projects (agora, model-ad, openchallenges, etc.)
+
+**Example Analysis**:
+
+```typescript
+// From the API response, extract categorization data:
+const prsByProject = groupBy(prs, (pr) => extractProjectFromTitle(pr.title));
+const prsByType = groupBy(prs, (pr) => extractChangeType(pr.title));
+const contributors = unique(prs.map((pr) => pr.user.login));
+const jiraTickets = prs.flatMap((pr) => extractJiraTickets(pr.body));
+```
+
+For each PR:
+
+- Use the PR title as the main heading
+- Include the PR number with a link to GitHub
+- Provide a 1-2 sentence description of the impact
+- Focus on user-facing benefits rather than technical details
+
+### Step 4: Add Context and Statistics
+
+Include:
+
+- Total number of PRs merged
+- Number of unique contributors
+- Key metrics (if available)
+- Links to relevant product pages
+- Community feedback incorporation
+
+### Step 5: File Naming Convention
+
+- File name: `docs/updates/[month-lowercase]-[year].md`
+- Examples: `february-2022.md`, `march-2022.md`, `december-2024.md`
+
+### Step 6: Update Navigation
+
+Add the new page to `mkdocs.yml` in the Updates section:
+
+```yaml
+- Updates:
+    - Overview: updates/index.md
+    - [Month Year]: updates/[month-lowercase]-[year].md
+    # ... other months in reverse chronological order
+```
+
+### Step 7: Update Index Page
+
+Add the new month to `docs/updates/index.md`:
+
+```markdown
+- **[Month Year](month-year.md)** - Brief description of key highlights
+```
+
+## Example Git Commands for Specific Months
+
+## Quality Guidelines
+
+1. **User-Focused**: Write for end users, not just developers
+2. **Clear Categories**: Organize changes logically
+3. **Consistent Format**: Follow the template structure
+4. **Links**: Include links to PRs, issues, and relevant documentation
+5. **Completeness**: Don't skip minor but user-visible changes
+6. **Context**: Explain why changes matter to users
+7. **Forward-Looking**: Include preview of upcoming work when possible
+
+## Tips for Effective Updates
+
+- **Aggregate Related PRs**: Group small related changes together
+
+## Quality Guidelines
+
+1. **User-Focused**: Write for end users, not just developers
+2. **Clear Categories**: Organize changes logically
+3. **Consistent Format**: Follow the template structure
+4. **Links**: Include links to PRs, issues, and relevant documentation
+5. **Completeness**: Don't skip minor but user-visible changes
+6. **Context**: Explain why changes matter to users
+7. **Forward-Looking**: Include preview of upcoming work when possible
+
+## Tips for Effective Updates
+
+- **Aggregate Related PRs**: Group small related changes together
+- **Highlight Impact**: Focus on user benefits and improvements
+- **Use Active Voice**: "Added feature X" rather than "Feature X was added"
+- **Include Visuals**: Reference screenshots or demos when applicable
+- **Community Focus**: Acknowledge contributors and community feedback
+- **Cross-Reference**: Link to relevant documentation and resources
+
+## Automation Opportunities
+
+Consider creating scripts to:
+
+- Extract PR data automatically
+- Generate initial categorization
+- Create draft update pages
+- Update navigation files
+- Validate link integrity
+
+This process ensures comprehensive, user-friendly monthly updates that showcase the continuous improvement of the Sage Monorepo platform.
