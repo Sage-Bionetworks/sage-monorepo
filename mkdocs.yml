@@ -4,7 +4,13 @@ repo_url: https://github.com/Sage-Bionetworks/sage-monorepo
 repo_name: sage-monorepo
 nav:
   - Home: index.md
-  - Updates: updates.md
+  - Updates:
+      - Overview: updates/index.md
+      - August 2025: updates/august-2025.md
+      - January 2024: updates/january-2024.md
+      - September 2023: updates/september-2023.md
+      - June 2023: updates/june-2023.md
+      - January 2023: updates/january-2023.md
   - Blog: blog/index.md
   - Products:
       - Service Catalog: products/services.md

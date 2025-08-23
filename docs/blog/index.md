@@ -21,7 +21,7 @@ Stay tuned for our first posts!
 To stay updated with our latest blog posts:
 
 - Watch this repository on GitHub
-- Follow our [Updates](../updates.md) page for regular announcements
+- Follow our [Updates](../updates/index.md) page for regular announcements
 - Check back here regularly for new content
 
 ---

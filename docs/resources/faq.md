@@ -111,13 +111,13 @@ Common solutions:
 
 ### How do I stay updated?
 
-- Follow our [Updates page](../updates.md) for the latest announcements
+- Follow our [Updates page](../updates/index.md) for the latest announcements
 - Subscribe to our [Blog](../blog/index.md) for technical insights
 - Watch our GitHub repository for releases
 
 ### Where can I find release notes?
 
-Check our [Updates](../updates.md) page for version-specific release notes and feature announcements.
+Check our [Updates](../updates/index.md) page for version-specific release notes and feature announcements.
 
 ## Still Need Help?
 

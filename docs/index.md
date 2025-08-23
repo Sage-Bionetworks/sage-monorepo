@@ -67,7 +67,7 @@ Our monorepo powers a comprehensive ecosystem:
 
 Check out our latest updates and improvements:
 
-- [Latest Updates](updates.md) - Recent releases and announcements
+- [Latest Updates](updates/index.md) - Recent releases and announcements
 - [Blog](blog/index.md) - Technical insights and developer stories
 - [Service Catalog](products/services.md) - Complete project inventory
 

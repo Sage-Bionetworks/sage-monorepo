@@ -1,0 +1,23 @@
+# Updates
+
+Welcome to the Sage Monorepo updates! This section contains release notes, feature announcements, and important updates about our platform and tools.
+
+## Recent Updates
+
+Browse our latest updates to stay informed about new features, improvements, and platform changes:
+
+- **[August 2025](august-2025.md)** - Enhanced Documentation & Agent Framework
+- **[January 2024](january-2024.md)** - Documentation Refresh
+- **[September 2023](september-2023.md)** - Agora Platform Launch
+- **[June 2023](june-2023.md)** - Schematic API Integration
+- **[January 2023](january-2023.md)** - OpenChallenges Platform Launch
+
+## Stay Updated
+
+- [Watch our repository](https://github.com/Sage-Bionetworks/sage-monorepo) to get notifications
+- [Report issues](../resources/bug-report.md) if you encounter problems
+- [Request features](../resources/feature-requests.md) to help shape our roadmap
+
+---
+
+*Updates are published monthly or as significant features become available. Each update includes detailed information about new features, improvements, bug fixes, and breaking changes.*
