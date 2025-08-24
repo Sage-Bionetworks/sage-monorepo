@@ -41,7 +41,7 @@ This automation process replaces the previous git-based approach with the GitHub
 
 Example file creation:
 
-````markdown
+`````markdown
 # August 2025 Update
 
 _Published on September 1, 2025_
@@ -58,77 +58,50 @@ August was a productive month with significant progress across multiple projects
 
 [Continue with categorized PR content...]
 
-````## Overview
+```## Overview
 
 Each monthly update page should aggregate all pull requests (PRs) merged to the `main` branch during a specific month and present them in a user-friendly format suitable for the Updates section of the documentation site.
 
-## Monthly Update Page Structure
+## Content Structure Guidelines
 
-### Template Structure
+Structure the monthly update with the following sections in this exact order:
 
-```markdown
-# [Month Year] Update
+1. **Title and Introduction**
+   - Month and year as title
+   - Publication date
+   - Brief welcome paragraph with key statistics (total PRs, main contributors)
 
-*Published on [Date]*
+2. **Technical Architecture Overview**
+   - Start with human-friendly descriptions of key technical decisions and architectural highlights
+   - Focus on the "why" and "what" rather than implementation details
+   - Make it accessible to both technical and non-technical readers
+   - Cover topics like: platform foundations, development approaches, quality assurance, cross-platform compatibility
 
-Brief introduction about the month's activities and key highlights.
+3. **All Pull Requests Merged**
+   - Comprehensive list of every PR merged during the month
+   - Organize PRs into logical categories (e.g., Platform Infrastructure, Applications, Documentation, etc.)
+   - Do NOT include PR counts in section titles (e.g., use "Platform Infrastructure" not "Platform Infrastructure (14 PRs)")
+   - Format each PR as: **[#PR_NUMBER - Title](GitHub_URL)**: Brief description of changes and impact
+   - Ensure all PRs are accounted for and properly categorized
+   - Common categories include:
+     * Platform Infrastructure: Core setup, CI/CD, tooling, build systems, cross-platform compatibility
+     * [Application Name]: Application-specific features, API development, UI components, database integration
+     * Containerization & Docker: Docker setup, container orchestration, development environments
+     * Documentation & Governance: Documentation, community guidelines, setup guides
 
-## Summary
+4. **Community Impact**
+   - Broader impact and significance of the month's work
+   - Focus on values, community, and long-term vision
 
-- **Total PRs Merged**: [number]
-- **Contributors**: [number]
-- **Key Areas**: [list main areas of development]
+5. **Summary**
+   - Key statistics: total PRs, main contributors, repository milestones, focus areas
+   - Keep concise and factual
 
-## Major Features & Improvements
+6. **Closing Statement**
+   - Brief inspirational closing with link to repository
+```
+`````
 
-### [Category 1 - e.g., Platform Enhancements]
-- **[PR Title]** ([#PR_NUMBER](link)) - Brief description of the change
-- **[PR Title]** ([#PR_NUMBER](link)) - Brief description of the change
-
-### [Category 2 - e.g., Documentation]
-- **[PR Title]** ([#PR_NUMBER](link)) - Brief description of the change
-
-### [Category 3 - e.g., Bug Fixes]
-- **[PR Title]** ([#PR_NUMBER](link)) - Brief description of the change
-
-## Product-Specific Updates
-
-### Agora
-- List of relevant changes
-
-### OpenChallenges
-- List of relevant changes
-
-### [Other Products as relevant]
-- List of relevant changes
-
-## Developer Experience
-
-- Changes related to development workflow
-- Tooling improvements
-- CI/CD enhancements
-
-## Infrastructure & Operations
-
-- Deployment improvements
-- Performance optimizations
-- Security updates
-
-## Breaking Changes
-
-- List any breaking changes introduced this month
-- Migration guides or notes
-
-## Looking Ahead
-
-- Preview of upcoming features
-- Community feedback incorporation
-- Roadmap updates
-
----
-
-*Have feedback on this update? [Let us know](https://github.com/Sage-Bionetworks/sage-monorepo/issues/new?assignees=&labels=type%3A+docs&projects=&template=3-documentation.yml&title=%5BDocs%5D+[Month Year]+Update+Feedback) what you think!*
-````
 ````
 
 ## How to Generate a Monthly Update Page
@@ -325,3 +298,4 @@ Consider creating scripts to:
 - Validate link integrity
 
 This process ensures comprehensive, user-friendly monthly updates that showcase the continuous improvement of the Sage Monorepo platform.
+````
