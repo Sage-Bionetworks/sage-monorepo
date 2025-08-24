@@ -49,7 +49,7 @@ When recreating an existing monthly update file:
 
 - Use sentence case for section titles (e.g., "Platform infrastructure", not "Platform Infrastructure")
 - Format PRs as: `- [#PR_NUMBER](GitHub_URL): PR_TITLE (TICKET_NUMBER)`
-- Use anchor links for PR counts: `**[X pull requests](#all-pull-requests-merged)**`
+- Use anchor links for PR counts: `**[X pull requests](#pull-requests-merged)**`
 
 ## Historical Context
 
@@ -96,7 +96,7 @@ Structure the monthly update with the following sections in this exact order:
    - Title format: "# [Month] [Year]" (e.g., "# July 2025", not "# July 2025 Update")
    - Include publication date: "_Published on [Month] [Day], [Year]_"
    - Brief welcome paragraph with key statistics (total PRs, main contributors with links to their GitHub profiles)
-   - Add anchor link to PR count: **[X pull requests](#all-pull-requests-merged)** to link to detailed PR list
+   - Add anchor link to PR count: **[X pull requests](#pull-requests-merged)** to link to detailed PR list
    - **GitHub Username Formatting**: Always link usernames to their GitHub profile pages using the format `[@username](https://github.com/username)`
 
 2. **Technical Architecture Overview**
@@ -114,7 +114,7 @@ Structure the monthly update with the following sections in this exact order:
      * Aim for 1-2 paragraphs per subsection maximum
      * Use parallel structure and consistent tone across subsections
 
-3. **All Pull Requests Merged**
+3. **Pull Requests Merged**
    - Comprehensive list of every PR merged during the month
    - Organize PRs into logical categories (e.g., Platform infrastructure, Applications, Documentation, etc.)
    - **Category Title Capitalization**: Use sentence case for category titles. Only capitalize the first word, proper nouns, and acronyms (e.g., "Platform infrastructure", "OpenChallenges platform infrastructure", "Model-AD user interface enhancements")
@@ -136,13 +136,18 @@ Structure the monthly update with the following sections in this exact order:
 5. **Summary**
    - Use bullet point format with key statistics:
      * **Total Pull Requests**: X merged PRs
-     * **Primary Contributors**: [@username1](https://github.com/username1), [@username2](https://github.com/username2), etc.
      * **Key Focus**: Brief summary of main areas of work
      * **Major Projects**: Highlight significant initiatives
    - Keep concise and factual
    - Follow with horizontal rule (---) and closing statement
 
-6. **Closing Statement**
+6. **Thank You**
+   - Start with: "Last but certainly not least, a big Thank You to the contributors of the Sage monorepo."
+   - Follow with a bullet list of GitHub usernames linked to their profiles
+   - Format each contributor as: `- [@username](https://github.com/username)`
+   - List all unique contributors who had PRs merged during the month
+
+7. **Closing Statement**
    - Brief inspirational paragraph in italics
    - Include link to repository: [Join us](https://github.com/Sage-Bionetworks/sage-monorepo)
 ```
