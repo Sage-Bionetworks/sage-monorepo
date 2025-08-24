@@ -90,7 +90,9 @@ Structure the monthly update with the following sections in this exact order:
    - Comprehensive list of every PR merged during the month
    - Organize PRs into logical categories (e.g., Platform Infrastructure, Applications, Documentation, etc.)
    - Do NOT include PR counts in section titles (e.g., use "Platform Infrastructure" not "Platform Infrastructure (14 PRs)")
-   - Format each PR as: **[#PR_NUMBER - Title](GitHub_URL)**: Brief description of changes and impact
+   - Format each PR as: `- [#PR_NUMBER](GitHub_URL): PR_TITLE (TICKET_NUMBER)`
+   - Use only the PR title from GitHub, do not add additional descriptions or summaries
+   - Include ticket numbers (e.g., SMR-xxx, MG-xxx) when present in the PR title
    - Ensure all PRs are accounted for and properly categorized
    - Common categories include:
      * Platform Infrastructure: Core setup, CI/CD, tooling, build systems, cross-platform compatibility
@@ -228,10 +230,10 @@ const jiraTickets = prs.flatMap((pr) => extractJiraTickets(pr.body));
 
 For each PR:
 
-- Use the PR title as the main heading
+- Use the PR title exactly as it appears in GitHub
 - Include the PR number with a link to GitHub
-- Provide a 1-2 sentence description of the impact
-- Focus on user-facing benefits rather than technical details
+- Include ticket numbers when present in the title (e.g., SMR-xxx, MG-xxx)
+- Do not add additional descriptions or summaries beyond what's in the title
 
 ### Step 4: Add Context and Statistics
 
