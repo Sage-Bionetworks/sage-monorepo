@@ -2,7 +2,7 @@
 
 February 2022 represents the foundational month for the sage-monorepo project, marking the transition to a comprehensive Nx monorepo architecture. This period saw the establishment of core infrastructure, development tooling, and the initial application and library ecosystem that would support future development across multiple technology stacks.
 
-During this month, **[28 pull requests](#all-pull-requests-merged)** were successfully merged, establishing the essential infrastructure and initial applications for the monorepo. The primary contributor was [@tschaffter](https://github.com/tschaffter), who led the architectural design and implementation of the workspace foundation.
+During this month, **[28 pull requests](#pull-requests-merged)** were successfully merged, establishing the essential infrastructure and initial applications for the monorepo. The primary contributor was [@tschaffter](https://github.com/tschaffter), who led the architectural design and implementation of the workspace foundation.
 
 ## Technical architecture overview
 
@@ -20,7 +20,7 @@ A comprehensive containerization strategy was implemented using Docker to ensure
 
 Significant investment was made in development tooling and quality assurance infrastructure to maintain high code quality standards. This included implementing pre-commit hooks with lint-staged configurations, continuous integration pipelines with GitHub Actions, and comprehensive linting and testing frameworks. The team also established cross-platform development support using tools like shx to accommodate different development environments and ensure consistent behavior across operating systems.
 
-## All pull requests merged
+## Pull requests merged
 
 ### Workspace foundation and initial setup
 
@@ -74,9 +74,14 @@ This foundational work enables multiple research teams to collaborate more effec
 ## Summary
 
 - **Total Pull Requests**: 28 merged PRs
-- **Primary Contributors**: [@tschaffter](https://github.com/tschaffter)
 - **Key Focus**: Foundational monorepo architecture establishment and core infrastructure development
 - **Major Projects**: Nx workspace setup, containerization strategy, development tooling, and initial application ecosystem
+
+## Thank You
+
+Last but certainly not least, a big Thank You to the contributors of the Sage monorepo.
+
+- [@tschaffter](https://github.com/tschaffter)
 
 ---
 
