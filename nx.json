@@ -174,6 +174,10 @@
         "{projectRoot}/tsconfig.storybook.json"
       ]
     },
+    "build-individual-openapi": {
+      "cache": true,
+      "inputs": ["default"]
+    },
     "@nx/webpack:webpack": {
       "cache": true,
       "dependsOn": ["^build"],

@@ -4,8 +4,9 @@
   "sourceRoot": "libs/agora/api-description/src",
   "projectType": "library",
   "targets": {
-    "build-individuals": {
+    "build-individual-openapi": {
       "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/openapi"],
       "options": {
         "commands": [
           "redocly bundle api-public --output openapi/api-public.openapi.yaml",
@@ -18,6 +19,7 @@
     },
     "build": {
       "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/openapi"],
       "options": {
         "commands": [
           "redocly join openapi/*-public.openapi.yaml --output openapi/openapi.yaml",
@@ -26,7 +28,7 @@
         "cwd": "{projectRoot}",
         "parallel": false
       },
-      "dependsOn": ["build-individuals"]
+      "dependsOn": ["build-individual-openapi"]
     },
     "lint": {
       "executor": "nx:run-commands",
