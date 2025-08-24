@@ -2,7 +2,7 @@
 
 February 2022 represents the foundational month for the sage-monorepo project, marking the transition to a comprehensive Nx monorepo architecture. This period saw the establishment of core infrastructure, development tooling, and the initial application and library ecosystem that would support future development across multiple technology stacks.
 
-During this month, **[28 pull requests](#all-pull-requests-merged)** were successfully merged, establishing the essential infrastructure and initial applications for the monorepo. The primary contributor was @tschaffter, who led the architectural design and implementation of the workspace foundation.
+During this month, **[28 pull requests](#all-pull-requests-merged)** were successfully merged, establishing the essential infrastructure and initial applications for the monorepo. The primary contributor was [@tschaffter](https://github.com/tschaffter), who led the architectural design and implementation of the workspace foundation.
 
 ## Technical architecture overview
 
@@ -74,7 +74,7 @@ This foundational work enables multiple research teams to collaborate more effec
 ## Summary
 
 - **Total Pull Requests**: 28 merged PRs
-- **Primary Contributors**: @tschaffter
+- **Primary Contributors**: [@tschaffter](https://github.com/tschaffter)
 - **Key Focus**: Foundational monorepo architecture establishment and core infrastructure development
 - **Major Projects**: Nx workspace setup, containerization strategy, development tooling, and initial application ecosystem
 
