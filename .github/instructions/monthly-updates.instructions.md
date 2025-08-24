@@ -285,7 +285,7 @@ Include:
 
 ### Step 6: Update Navigation
 
-Add the new page to `mkdocs.yml` in the Updates section in reverse chronological order (newest first):
+**CRITICAL**: Add the new page to `mkdocs.yml` in the Updates section in reverse chronological order (newest first). The page will NOT be accessible without this step.
 
 ```yaml
 - Updates:
@@ -294,15 +294,40 @@ Add the new page to `mkdocs.yml` in the Updates section in reverse chronological
     # ... other months in reverse chronological order
 ```
 
+Example for March 2022:
+```yaml
+- Updates:
+    - Overview: updates/index.md
+    - August 2025: updates/august-2025.md
+    - July 2025: updates/july-2025.md
+    - January 2024: updates/january-2024.md
+    - September 2023: updates/september-2023.md
+    - June 2023: updates/june-2023.md
+    - January 2023: updates/january-2023.md
+    - March 2022: updates/march-2022.md  # <- Add new entry here
+    - February 2022: updates/february-2022.md
+```
+
 **Important**: Ensure the new update is placed in chronological order with the most recent months first.
 
 ### Step 7: Update Index Page
 
-Add the new month to `docs/updates/index.md`:
+Add the new month to `docs/updates/index.md` in reverse chronological order (newest first):
 
 ```markdown
 - **[Month Year](month-year.md)** - Brief description of key highlights
 ```
+
+**Important**: Place the new entry in the correct chronological position. The index should list updates from newest to oldest.
+
+### Step 8: Final Formatting Check
+
+Ensure the monthly update page includes:
+
+1. **Separator line between Thank You and Closing Statement**: Add a line with just "---" between the Thank You section and the closing statement
+2. **Proper section ordering**: Verify all sections follow the specified order
+3. **GitHub username linking**: Confirm all GitHub usernames are properly linked using `[@username](https://github.com/username)` format
+4. **Sentence case titles**: Verify all section and subsection titles use sentence case capitalization
 
 ## Example Git Commands for Specific Months
 
