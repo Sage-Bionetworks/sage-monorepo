@@ -6,6 +6,7 @@ nav:
   - Home: index.md
   - Updates:
       - Overview: updates/index.md
+      - June 2022: updates/june-2022.md
       - May 2022: updates/may-2022.md
       - April 2022: updates/april-2022.md
       - March 2022: updates/march-2022.md
