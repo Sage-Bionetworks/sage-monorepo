@@ -1,8 +1,16 @@
 # February 2022
 
+_Published on February 28, 2022_
+
 February 2022 represents the foundational month for the sage-monorepo project, marking the transition to a comprehensive Nx monorepo architecture. This period saw the establishment of core infrastructure, development tooling, and the initial application and library ecosystem that would support future development across multiple technology stacks.
 
 During this month, **[28 pull requests](#pull-requests-merged)** were successfully merged, establishing the essential infrastructure and initial applications for the monorepo. The primary contributor was [@tschaffter](https://github.com/tschaffter), who led the architectural design and implementation of the workspace foundation.
+
+## Summary
+
+- **Total Pull Requests**: 28 merged PRs
+- **Key Focus**: Foundational monorepo architecture establishment and core infrastructure development
+- **Major Projects**: Nx workspace setup, containerization strategy, development tooling, and initial application ecosystem
 
 ## Technical architecture overview
 
@@ -70,12 +78,6 @@ Significant investment was made in development tooling and quality assurance inf
 February 2022 represents a pivotal moment in Sage Bionetworks' software development approach, transitioning from isolated application development to a unified, collaborative ecosystem. The establishment of this monorepo architecture demonstrates the organization's commitment to open science principles, code reusability, and efficient development practices.
 
 This foundational work enables multiple research teams to collaborate more effectively, share common components, and maintain consistent quality standards across all biomedical software projects. The emphasis on comprehensive documentation and developer experience ensures that the platform remains accessible to both current team members and future contributors.
-
-## Summary
-
-- **Total Pull Requests**: 28 merged PRs
-- **Key Focus**: Foundational monorepo architecture establishment and core infrastructure development
-- **Major Projects**: Nx workspace setup, containerization strategy, development tooling, and initial application ecosystem
 
 ## Thank You
 
