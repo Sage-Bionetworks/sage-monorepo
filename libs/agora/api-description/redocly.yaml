@@ -29,7 +29,7 @@ apis:
           url: https://raw.githubusercontent.com/Sage-Bionetworks/agora-images/main/og-social.png
           altText: Agora logo
 
-  # Base API
+  # Primary API
   api-public:
     root: ./src/api.openapi.yaml
     decorators:
@@ -44,15 +44,15 @@ apis:
         value: [public, internal]
         matchStrategy: any
 
-  # Gene API
-  gene-public:
-    root: ./src/gene.openapi.yaml
+  # Next API
+  api-next-public:
+    root: ./src/api-next.openapi.yaml
     decorators:
       filter-in:
         property: x-audience
         value: [public]
-  gene-service:
-    root: ./src/gene.openapi.yaml
+  api-next-service:
+    root: ./src/api-next.openapi.yaml
     decorators:
       filter-in:
         property: x-audience

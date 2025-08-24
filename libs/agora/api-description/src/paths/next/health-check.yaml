@@ -1,6 +1,6 @@
 get:
   tags:
-    - HealthCheck
+    - Health Check
   summary: Get health check information
   description: Get information about the health of the service
   operationId: getHealthCheck
@@ -10,6 +10,8 @@ get:
       content:
         application/json:
           schema:
-            $ref: ../components/schemas/HealthCheck.yaml
+            $ref: ../../components/schemas/HealthCheck.yaml
+    '400':
+      $ref: ../../components/responses/BadRequest.yaml
     '500':
-      $ref: ../components/responses/InternalServerError.yaml
+      $ref: ../../components/responses/InternalServerError.yaml
