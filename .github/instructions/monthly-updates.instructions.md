@@ -41,7 +41,7 @@ This automation process replaces the previous git-based approach with the GitHub
 
 Example file creation:
 
-`````markdown
+````markdown
 # August 2025 Update
 
 _Published on September 1, 2025_
@@ -68,7 +68,7 @@ Structure the monthly update with the following sections in this exact order:
 
 1. **Title and Introduction**
    - Title format: "# [Month] [Year]" (e.g., "# July 2025", not "# July 2025 Update")
-   - Include publication date: "_Published on [Month] [Day], [Year]_" 
+   - Include publication date: "_Published on [Month] [Day], [Year]_"
    - Brief welcome paragraph with key statistics (total PRs, main contributors)
    - Add anchor link to PR count: **[X pull requests](#all-pull-requests-merged)** to link to detailed PR list
 
@@ -115,7 +115,7 @@ Structure the monthly update with the following sections in this exact order:
    - Brief inspirational paragraph in italics
    - Include link to repository: [Join us](https://github.com/Sage-Bionetworks/sage-monorepo)
 ```
-`````
+````
 
 ````
 
