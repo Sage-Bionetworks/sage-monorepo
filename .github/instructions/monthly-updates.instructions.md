@@ -35,6 +35,22 @@ When recreating an existing monthly update file:
 4. **Consistent Section Order**: Follow the exact section order specified in the content structure guidelines
 5. **Verification**: After file creation, verify that no duplicated content exists
 
+## Formatting Guidelines
+
+### GitHub Username Formatting
+
+- **Always link GitHub usernames to profile pages**: Use the format `[@username](https://github.com/username)`
+- **Apply consistently**: This applies to all mentions of GitHub usernames throughout the document, including:
+  - Primary Contributors in summary sections
+  - Author mentions in introduction paragraphs
+  - Any other references to GitHub users
+
+### Other Formatting Rules
+
+- Use sentence case for section titles (e.g., "Platform infrastructure", not "Platform Infrastructure")
+- Format PRs as: `- [#PR_NUMBER](GitHub_URL): PR_TITLE (TICKET_NUMBER)`
+- Use anchor links for PR counts: `**[X pull requests](#all-pull-requests-merged)**`
+
 ## Historical Context
 
 This automation process replaces the previous git-based approach with the GitHub API for more accurate and comprehensive data extraction. The GitHub search API provides richer metadata and eliminates the need for manual commit message parsing.r of PRs merged
@@ -79,8 +95,9 @@ Structure the monthly update with the following sections in this exact order:
 1. **Title and Introduction**
    - Title format: "# [Month] [Year]" (e.g., "# July 2025", not "# July 2025 Update")
    - Include publication date: "_Published on [Month] [Day], [Year]_"
-   - Brief welcome paragraph with key statistics (total PRs, main contributors)
+   - Brief welcome paragraph with key statistics (total PRs, main contributors with links to their GitHub profiles)
    - Add anchor link to PR count: **[X pull requests](#all-pull-requests-merged)** to link to detailed PR list
+   - **GitHub Username Formatting**: Always link usernames to their GitHub profile pages using the format `[@username](https://github.com/username)`
 
 2. **Technical Architecture Overview**
    - Use subsections (###) to organize different architectural areas
@@ -119,7 +136,7 @@ Structure the monthly update with the following sections in this exact order:
 5. **Summary**
    - Use bullet point format with key statistics:
      * **Total Pull Requests**: X merged PRs
-     * **Primary Contributors**: @username1, @username2, etc.
+     * **Primary Contributors**: [@username1](https://github.com/username1), [@username2](https://github.com/username2), etc.
      * **Key Focus**: Brief summary of main areas of work
      * **Major Projects**: Highlight significant initiatives
    - Keep concise and factual
