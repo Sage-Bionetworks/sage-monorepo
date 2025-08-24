@@ -19,7 +19,7 @@ addopts = """
 name = "openchallenges-api-client-python"
 version = "1.0.0"
 description = "Discover, explore, and contribute to open biomedical challenges"
-requires-python = ">=3.9,<4"
+requires-python = "==3.13.3"
 readme = 'README.md'
 dependencies = [
   "urllib3>=2.1.0,<3.0.0",

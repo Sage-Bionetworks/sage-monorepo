@@ -1,5 +1,67 @@
 import gradio as gr
 import pandas as pd
+from bixarena_api_client_python import ApiClient, Configuration, LeaderboardApi
+from bixarena_api_client_python.exceptions import ApiException
+
+print("🚀 bixarena_leaderboard.py module loaded successfully!")
+
+
+def fetch_leaderboard_data():
+    """Fetch leaderboard data from the BixArena API"""
+    try:
+        # Configure the API client
+        configuration = Configuration(host="http://bixarena-api:8112/v1")
+        print(f"🔗 Attempting to connect to API at: {configuration.host}")
+
+        # Create API client and leaderboard API instance
+        with ApiClient(configuration) as api_client:
+            api_instance = LeaderboardApi(api_client)
+
+            # Fetch leaderboard entries for "open-source" leaderboard
+            print("📊 Fetching leaderboard data for 'open-source'...")
+            leaderboard_response = api_instance.get_leaderboard(
+                leaderboard_id="open-source"
+            )
+
+            print(
+                f"✅ API call successful! Received {len(leaderboard_response.entries)} entries"
+            )
+
+            # Convert API response to DataFrame
+            data = {
+                "Rank": [],
+                "Model": [],
+                "BT Score": [],
+                "95% CI": [],
+                "Total Votes": [],
+                "Organization": [],
+            }
+
+            for entry in leaderboard_response.entries:
+                data["Rank"].append(entry.rank)
+                data["Model"].append(entry.model_name)
+                data["BT Score"].append(entry.bt_score)
+                # Placeholder CI calculation
+                ci_lower = entry.bt_score - 15
+                ci_upper = entry.bt_score + 15
+                data["95% CI"].append(f"[{ci_lower:.1f}, {ci_upper:.1f}]")
+                data["Total Votes"].append(entry.vote_count)
+                # API doesn't provide organization, using placeholder
+                data["Organization"].append("Unknown")
+
+            print(f"📋 Converted to DataFrame with {len(data['Rank'])} rows")
+            return pd.DataFrame(data)
+
+    except ApiException as e:
+        print(f"❌ API Exception when calling LeaderboardApi->get_leaderboard: {e}")
+        print("🔄 Falling back to dummy data...")
+        # Fallback to dummy data if API call fails
+        return create_dummy_leaderboard_data()
+    except Exception as e:
+        print(f"❌ Unexpected error fetching leaderboard data: {e}")
+        print("🔄 Falling back to dummy data...")
+        # Fallback to dummy data if any other error occurs
+        return create_dummy_leaderboard_data()
 
 
 def create_dummy_leaderboard_data():
@@ -105,11 +167,16 @@ def filter_dataframe(df, model_filter):
 
 def build_leaderboard_page():
     """Build the BixArena leaderboard page"""
+    print("📊 Building leaderboard page...")
 
-    # Get initial data
-    df = create_dummy_leaderboard_data()
+    # Get initial data from API
+    print("🔄 Calling fetch_leaderboard_data()...")
+    df = fetch_leaderboard_data()
     total_votes = df["Total Votes"].sum()
     total_models = len(df)
+    print(
+        f"📈 Leaderboard built with {total_models} models and {total_votes} total votes"
+    )
 
     with gr.Column():
         # Title and stats
@@ -145,8 +212,8 @@ def build_leaderboard_page():
         # Disclaimer sections
         with gr.Accordion("⚠️ Important Disclaimer", open=True):
             gr.Markdown("""
-            **This is demonstration data only.** The scores and rankings shown are for demo purposes 
-            and do not represent actual performance comparisons of these models.            
+            **This is demonstration data only.** The scores and rankings shown are for demo purposes
+            and do not represent actual performance comparisons of these models.
             """)
 
         # Filter controls
