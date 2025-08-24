@@ -6,12 +6,8 @@ Welcome to the Sage Monorepo updates! This section contains release notes, featu
 
 Browse our latest updates to stay informed about new features, improvements, and platform changes:
 
-- **[August 2025](august-2025.md)** - Enhanced Documentation & Agent Framework
-- **[July 2025](july-2025.md)** - OpenChallenges Evolution & Model-AD Enhancements
-- **[January 2024](january-2024.md)** - Documentation Refresh
-- **[September 2023](september-2023.md)** - Agora Platform Launch
-- **[June 2023](june-2023.md)** - Schematic API Integration
-- **[January 2023](january-2023.md)** - OpenChallenges Platform Launch
+- **[June 2022](june-2022.md)** - Backend Microservices & UI Modernization
+- **[May 2022](may-2022.md)** - Microservices Architecture & Authentication Infrastructure
 - **[April 2022](april-2022.md)** - Development Environment Standardization & UI Enhancements
 - **[March 2022](march-2022.md)** - Coverage Reporting & Development Environment Evolution
 - **[February 2022](february-2022.md)** - Platform Foundation & Initial Launch
