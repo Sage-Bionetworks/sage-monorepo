@@ -47,7 +47,8 @@ When recreating an existing monthly update file:
 
 ### Other Formatting Rules
 
-- Use sentence case for section titles (e.g., "Platform infrastructure", not "Platform Infrastructure")
+- **Main Section Headers (##)**: Use exact capitalization as specified in the content structure (e.g., "Summary", "Technical Architecture Overview", "Pull Requests Merged", "Community Impact", "Thank You")
+- **Subsection Headers (###) and Category Headers**: Use sentence case (e.g., "Platform infrastructure", "API modernization initiative", "Development environment standardization")
 - Format PRs as: `- [#PR_NUMBER](GitHub_URL): PR_TITLE (TICKET_NUMBER)`
 - Use anchor links for PR counts: `**[X pull requests](#pull-requests-merged)**`
 
@@ -113,7 +114,7 @@ Structure the monthly update with the following sections in this exact order:
    - Make it accessible to both technical and non-technical readers
    - Cover topics like: platform foundations, development approaches, quality assurance, cross-platform compatibility
    - Examples of subsections: Platform evolution, User experience enhancements, API modernization, Infrastructure updates, Developer experience
-   - **Section Title Capitalization**: Use sentence case for all section titles (###). Only capitalize the first word, proper nouns, and acronyms (e.g., "API modernization initiative", "OpenChallenges platform evolution", "Model-AD user interface enhancements")
+   - **Subsection Title Capitalization**: Use sentence case for all subsection titles (###). Only capitalize the first word, proper nouns, and acronyms (e.g., "API modernization initiative", "OpenChallenges platform evolution", "Model-AD user interface enhancements")
    - **Readability Guidelines**:
      * Keep paragraphs short (2-3 sentences max when possible)
      * Break long sentences into shorter, more digestible ones
@@ -327,7 +328,8 @@ Ensure the monthly update page includes:
 1. **Separator line between Thank You and Closing Statement**: Add a line with just "---" between the Thank You section and the closing statement
 2. **Proper section ordering**: Verify all sections follow the specified order
 3. **GitHub username linking**: Confirm all GitHub usernames are properly linked using `[@username](https://github.com/username)` format
-4. **Sentence case titles**: Verify all section and subsection titles use sentence case capitalization
+4. **Main section header capitalization**: Verify main section headers (##) use exact capitalization as specified: "Summary", "Technical Architecture Overview", "Pull Requests Merged", "Community Impact", "Thank You"
+5. **Subsection header capitalization**: Verify subsection headers (###) and category headers use sentence case capitalization
 
 ## Example Git Commands for Specific Months
 

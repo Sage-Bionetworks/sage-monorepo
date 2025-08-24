@@ -12,6 +12,8 @@ Browse our latest updates to stay informed about new features, improvements, and
 - **[September 2023](september-2023.md)** - Agora Platform Launch
 - **[June 2023](june-2023.md)** - Schematic API Integration
 - **[January 2023](january-2023.md)** - OpenChallenges Platform Launch
+- **[April 2022](april-2022.md)** - Development Environment Standardization & UI Enhancements
+- **[March 2022](march-2022.md)** - Coverage Reporting & Development Environment Evolution
 - **[February 2022](february-2022.md)** - Platform Foundation & Initial Launch
 
 ## Stay Updated
