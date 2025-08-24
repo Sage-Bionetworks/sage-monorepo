@@ -67,15 +67,24 @@ Each monthly update page should aggregate all pull requests (PRs) merged to the 
 Structure the monthly update with the following sections in this exact order:
 
 1. **Title and Introduction**
-   - Month and year as title
-   - Publication date
+   - Title format: "# [Month] [Year]" (e.g., "# July 2025", not "# July 2025 Update")
+   - Include publication date: "_Published on [Month] [Day], [Year]_" 
    - Brief welcome paragraph with key statistics (total PRs, main contributors)
+   - Add anchor link to PR count: **[X pull requests](#all-pull-requests-merged)** to link to detailed PR list
 
 2. **Technical Architecture Overview**
+   - Use subsections (###) to organize different architectural areas
    - Start with human-friendly descriptions of key technical decisions and architectural highlights
    - Focus on the "why" and "what" rather than implementation details
    - Make it accessible to both technical and non-technical readers
    - Cover topics like: platform foundations, development approaches, quality assurance, cross-platform compatibility
+   - Examples of subsections: Platform Evolution, User Experience Enhancements, API Modernization, Infrastructure Updates, Developer Experience
+   - **Readability Guidelines**:
+     * Keep paragraphs short (2-3 sentences max when possible)
+     * Break long sentences into shorter, more digestible ones
+     * Use natural paragraph breaks to separate related but distinct concepts
+     * Aim for 1-2 paragraphs per subsection maximum
+     * Use parallel structure and consistent tone across subsections
 
 3. **All Pull Requests Merged**
    - Comprehensive list of every PR merged during the month
@@ -94,11 +103,17 @@ Structure the monthly update with the following sections in this exact order:
    - Focus on values, community, and long-term vision
 
 5. **Summary**
-   - Key statistics: total PRs, main contributors, repository milestones, focus areas
+   - Use bullet point format with key statistics:
+     * **Total Pull Requests**: X merged PRs
+     * **Primary Contributors**: @username1, @username2, etc.
+     * **Key Focus**: Brief summary of main areas of work
+     * **Major Projects**: Highlight significant initiatives
    - Keep concise and factual
+   - Follow with horizontal rule (---) and closing statement
 
 6. **Closing Statement**
-   - Brief inspirational closing with link to repository
+   - Brief inspirational paragraph in italics
+   - Include link to repository: [Join us](https://github.com/Sage-Bionetworks/sage-monorepo)
 ```
 `````
 
@@ -235,7 +250,7 @@ Include:
 
 ### Step 6: Update Navigation
 
-Add the new page to `mkdocs.yml` in the Updates section:
+Add the new page to `mkdocs.yml` in the Updates section in reverse chronological order (newest first):
 
 ```yaml
 - Updates:
@@ -243,6 +258,8 @@ Add the new page to `mkdocs.yml` in the Updates section:
     - [Month Year]: updates/[month-lowercase]-[year].md
     # ... other months in reverse chronological order
 ```
+
+**Important**: Ensure the new update is placed in chronological order with the most recent months first.
 
 ### Step 7: Update Index Page
 
