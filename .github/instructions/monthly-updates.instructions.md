@@ -99,7 +99,14 @@ Structure the monthly update with the following sections in this exact order:
    - Add anchor link to PR count: **[X pull requests](#pull-requests-merged)** to link to detailed PR list
    - **GitHub Username Formatting**: Always link usernames to their GitHub profile pages using the format `[@username](https://github.com/username)`
 
-2. **Technical Architecture Overview**
+2. **Summary**
+   - Use bullet point format with key statistics:
+     * **Total Pull Requests**: X merged PRs
+     * **Key Focus**: Brief summary of main areas of work
+     * **Major Projects**: Highlight significant initiatives
+   - Keep concise and factual
+
+3. **Technical Architecture Overview**
    - Use subsections (###) to organize different architectural areas
    - Start with human-friendly descriptions of key technical decisions and architectural highlights
    - Focus on the "why" and "what" rather than implementation details
@@ -114,7 +121,7 @@ Structure the monthly update with the following sections in this exact order:
      * Aim for 1-2 paragraphs per subsection maximum
      * Use parallel structure and consistent tone across subsections
 
-3. **Pull Requests Merged**
+4. **Pull Requests Merged**
    - Comprehensive list of every PR merged during the month
    - Organize PRs into logical categories (e.g., Platform infrastructure, Applications, Documentation, etc.)
    - **Category Title Capitalization**: Use sentence case for category titles. Only capitalize the first word, proper nouns, and acronyms (e.g., "Platform infrastructure", "OpenChallenges platform infrastructure", "Model-AD user interface enhancements")
@@ -129,20 +136,12 @@ Structure the monthly update with the following sections in this exact order:
      * Containerization & Docker: Docker setup, container orchestration, development environments
      * Documentation & governance: Documentation, community guidelines, setup guides
 
-4. **Community Impact**
+5. **Community Impact**
    - Broader impact and significance of the month's work
    - Focus on values, community, and long-term vision
 
-5. **Summary**
-   - Use bullet point format with key statistics:
-     * **Total Pull Requests**: X merged PRs
-     * **Key Focus**: Brief summary of main areas of work
-     * **Major Projects**: Highlight significant initiatives
-   - Keep concise and factual
-   - Follow with horizontal rule (---) and closing statement
-
 6. **Thank You**
-   - Start with: "Last but certainly not least, a big Thank You to the contributors of the Sage monorepo."
+   - Start with: "Last but certainly not least, a big **_Thank You_** to the contributors of the Sage monorepo."
    - Follow with a bullet list of GitHub usernames linked to their profiles
    - Format each contributor as: `- [@username](https://github.com/username)`
    - List all unique contributors who had PRs merged during the month
