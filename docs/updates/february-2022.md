@@ -1,50 +1,34 @@
 # February 2022
 
-_Published on March 1, 2022_
+February 2022 represents the foundational month for the sage-monorepo project, marking the transition to a comprehensive Nx monorepo architecture. This period saw the establishment of core infrastructure, development tooling, and the initial application and library ecosystem that would support future development across multiple technology stacks.
 
-February marked the foundational month for the Sage Monorepo initiative, with the establishment of a comprehensive development ecosystem designed to streamline biomedical research software development. The team successfully merged [**28 pull requests**](#all-pull-requests-merged) across multiple projects, setting up the architectural framework that would support the future growth of Sage Bionetworks' research platform.
+During this month, **[28 pull requests](#all-pull-requests-merged)** were successfully merged, establishing the essential infrastructure and initial applications for the monorepo. The primary contributor was @tschaffter, who led the architectural design and implementation of the workspace foundation.
 
-This month focused on establishing the core infrastructure, implementing best practices for code quality, and creating the foundation for collaborative development across multiple biomedical applications.
+## Technical architecture overview
 
-## Technical Architecture Overview
+February 2022 was a pivotal month focused on establishing robust architectural foundations and development infrastructure. The team implemented a sophisticated Nx monorepo structure designed to support multiple applications and shared libraries across different technology stacks while maintaining code quality and development efficiency.
 
-### Platform Foundation and Monorepo Structure
+### Monorepo workspace establishment
 
-The team established a robust Nx-based monorepo architecture, providing a unified workspace for multiple biomedical applications and shared libraries. This approach enables efficient code sharing, consistent development practices, and streamlined CI/CD processes across all Sage Bionetworks projects.
+The development team established a comprehensive Nx workspace architecture designed to support multiple applications and shared libraries across TypeScript, Angular, React, and Web Components technologies. This architectural foundation enables efficient code sharing, dependency management, and coordinated development across different technology stacks. The workspace structure provides clear separation of concerns between applications, libraries, and shared resources while maintaining consistent development patterns and build processes.
 
-The foundation includes comprehensive tooling for build automation, testing frameworks, and code quality enforcement through automated linting and pre-commit hooks.
+### Containerization and deployment infrastructure
 
-### API-First Development Approach
+A comprehensive containerization strategy was implemented using Docker to ensure consistent deployment across different environments. Each application received its own Docker configuration with optimized build processes, enabling independent deployment and scaling capabilities. The team established Docker Compose orchestration for local development, simplifying the setup process for new contributors and ensuring environment consistency across the development team.
 
-A comprehensive API specification and client generation system was implemented to ensure consistent data access patterns across all applications. This includes OpenAPI specifications, automated Angular client generation, and proper API documentation infrastructure.
+### Development tooling and quality assurance
 
-The API-first approach guarantees type safety and consistent interfaces between frontend applications and backend services.
+Significant investment was made in development tooling and quality assurance infrastructure to maintain high code quality standards. This included implementing pre-commit hooks with lint-staged configurations, continuous integration pipelines with GitHub Actions, and comprehensive linting and testing frameworks. The team also established cross-platform development support using tools like shx to accommodate different development environments and ensure consistent behavior across operating systems.
 
-### Containerization and Development Environment
+## All pull requests merged
 
-Docker-based containerization was implemented for all major components, including API servers, database services, and web applications. This ensures consistent development environments and simplified deployment processes.
-
-The containerization strategy supports both local development and production deployment scenarios with unified configuration management.
-
-### Quality Assurance and Development Standards
-
-Automated code quality enforcement was established through ESLint configuration, pre-commit hooks, and comprehensive CI/CD pipelines. The team implemented both pre-commit linting and pre-push testing to maintain code quality standards.
-
-These practices ensure consistent code style and prevent regressions from entering the main branch.
-
-### Cross-Platform Development Support
-
-The platform was designed with cross-platform compatibility in mind, using shell-agnostic commands and cross-platform utilities like `shx` for file operations. This enables developers to work effectively on Windows, macOS, and Linux environments.
-
-The team also established proper environment management with development scripts and configuration files.
-
-## All Pull Requests Merged
-
-### Platform Infrastructure
+### Workspace foundation and initial setup
 
 - [#1](https://github.com/Sage-Bionetworks/sage-monorepo/pull/1): Scafold workspace
+
+### Platform infrastructure
+
 - [#6](https://github.com/Sage-Bionetworks/sage-monorepo/pull/6): Add CI workflow
-- [#7](https://github.com/Sage-Bionetworks/sage-monorepo/pull/7): Configure target `lint` and `lint-fix` for existing apps and libs
 - [#8](https://github.com/Sage-Bionetworks/sage-monorepo/pull/8): Fix CI workflow
 - [#10](https://github.com/Sage-Bionetworks/sage-monorepo/pull/10): Replace npm commands by yarn in CI workflow
 - [#12](https://github.com/Sage-Bionetworks/sage-monorepo/pull/12): Add targets `build` and `test`
@@ -53,15 +37,32 @@ The team also established proper environment management with development scripts
 - [#39](https://github.com/Sage-Bionetworks/sage-monorepo/pull/39): Set yarn min version required
 - [#46](https://github.com/Sage-Bionetworks/sage-monorepo/pull/46): Run cp command with shx
 
-### Challenge Registry Application
+### Libraries and shared components
 
 - [#2](https://github.com/Sage-Bionetworks/sage-monorepo/pull/2): Add lib api-docs
+- [#7](https://github.com/Sage-Bionetworks/sage-monorepo/pull/7): Configure target `lint` and `lint-fix` for existing apps and libs
+- [#28](https://github.com/Sage-Bionetworks/sage-monorepo/pull/28): Show how to use a Web Components UI library in Angular and React
+- [#30](https://github.com/Sage-Bionetworks/sage-monorepo/pull/30): Import sage-angular lib
+- [#31](https://github.com/Sage-Bionetworks/sage-monorepo/pull/31): Add Web Components (WC) component example
+
+### Applications
+
 - [#4](https://github.com/Sage-Bionetworks/sage-monorepo/pull/4): Add API app
 - [#5](https://github.com/Sage-Bionetworks/sage-monorepo/pull/5): Add db-cli
 - [#16](https://github.com/Sage-Bionetworks/sage-monorepo/pull/16): Add project `api-db`
 - [#20](https://github.com/Sage-Bionetworks/sage-monorepo/pull/20): Create project `web-app`
 - [#25](https://github.com/Sage-Bionetworks/sage-monorepo/pull/25): Dockerize the projects `api` and `api-db`
-- [#28](https://github.com/Sage-Bionetworks/sage-monorepo/pull/28): Show how to use a Web Components UI library in Angular and React
+- [#33](https://github.com/Sage-Bionetworks/sage-monorepo/pull/33): Integrate `api-angular` into `web-app`
+- [#35](https://github.com/Sage-Bionetworks/sage-monorepo/pull/35): Dockerize `web-app`
+
+### Documentation
+
+- [#13](https://github.com/Sage-Bionetworks/sage-monorepo/pull/13): Move initial README generated by Nx to docs/nx.md
+- [#40](https://github.com/Sage-Bionetworks/sage-monorepo/pull/40): Document how to start the web app with Docker
+- [#43](https://github.com/Sage-Bionetworks/sage-monorepo/pull/43): Add docs/legacy.md
+- [#44](https://github.com/Sage-Bionetworks/sage-monorepo/pull/44): Add Code Of Conduct and Contributing Guide
+- [#48](https://github.com/Sage-Bionetworks/sage-monorepo/pull/48): Add documentation
+- [#49](https://github.com/Sage-Bionetworks/sage-monorepo/pull/49): Fix doc on how to start with Docker
 - [#29](https://github.com/Sage-Bionetworks/sage-monorepo/pull/29): Import UI components from forked sage-angular library
 - [#30](https://github.com/Sage-Bionetworks/sage-monorepo/pull/30): Import sage-angular lib
 - [#31](https://github.com/Sage-Bionetworks/sage-monorepo/pull/31): Add Web Components (WC) component example

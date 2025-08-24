@@ -25,6 +25,16 @@ Add the new month to `docs/updates/index.md`:
 - **[Month Year](month-year.md)** - Brief description of key highlights
 ```
 
+## File Creation and Regeneration Guidelines
+
+When recreating an existing monthly update file:
+
+1. **Complete File Replacement**: Always replace the entire content of the file from start to finish
+2. **Single Content Generation**: Ensure only one complete version of all sections exists in the file
+3. **No Content Duplication**: Avoid creating multiple versions of the same section (e.g., multiple "All Pull Requests Merged" sections)
+4. **Consistent Section Order**: Follow the exact section order specified in the content structure guidelines
+5. **Verification**: After file creation, verify that no duplicated content exists
+
 ## Historical Context
 
 This automation process replaces the previous git-based approach with the GitHub API for more accurate and comprehensive data extraction. The GitHub search API provides richer metadata and eliminates the need for manual commit message parsing.r of PRs merged
@@ -78,7 +88,8 @@ Structure the monthly update with the following sections in this exact order:
    - Focus on the "why" and "what" rather than implementation details
    - Make it accessible to both technical and non-technical readers
    - Cover topics like: platform foundations, development approaches, quality assurance, cross-platform compatibility
-   - Examples of subsections: Platform Evolution, User Experience Enhancements, API Modernization, Infrastructure Updates, Developer Experience
+   - Examples of subsections: Platform evolution, User experience enhancements, API modernization, Infrastructure updates, Developer experience
+   - **Section Title Capitalization**: Use sentence case for all section titles (###). Only capitalize the first word, proper nouns, and acronyms (e.g., "API modernization initiative", "OpenChallenges platform evolution", "Model-AD user interface enhancements")
    - **Readability Guidelines**:
      * Keep paragraphs short (2-3 sentences max when possible)
      * Break long sentences into shorter, more digestible ones
@@ -88,17 +99,18 @@ Structure the monthly update with the following sections in this exact order:
 
 3. **All Pull Requests Merged**
    - Comprehensive list of every PR merged during the month
-   - Organize PRs into logical categories (e.g., Platform Infrastructure, Applications, Documentation, etc.)
-   - Do NOT include PR counts in section titles (e.g., use "Platform Infrastructure" not "Platform Infrastructure (14 PRs)")
+   - Organize PRs into logical categories (e.g., Platform infrastructure, Applications, Documentation, etc.)
+   - **Category Title Capitalization**: Use sentence case for category titles. Only capitalize the first word, proper nouns, and acronyms (e.g., "Platform infrastructure", "OpenChallenges platform infrastructure", "Model-AD user interface enhancements")
+   - Do NOT include PR counts in section titles (e.g., use "Platform infrastructure" not "Platform infrastructure (14 PRs)")
    - Format each PR as: `- [#PR_NUMBER](GitHub_URL): PR_TITLE (TICKET_NUMBER)`
    - Use only the PR title from GitHub, do not add additional descriptions or summaries
    - Include ticket numbers (e.g., SMR-xxx, MG-xxx) when present in the PR title
    - Ensure all PRs are accounted for and properly categorized
    - Common categories include:
-     * Platform Infrastructure: Core setup, CI/CD, tooling, build systems, cross-platform compatibility
+     * Platform infrastructure: Core setup, CI/CD, tooling, build systems, cross-platform compatibility
      * [Application Name]: Application-specific features, API development, UI components, database integration
      * Containerization & Docker: Docker setup, container orchestration, development environments
-     * Documentation & Governance: Documentation, community guidelines, setup guides
+     * Documentation & governance: Documentation, community guidelines, setup guides
 
 4. **Community Impact**
    - Broader impact and significance of the month's work
