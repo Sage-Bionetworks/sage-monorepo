@@ -1,5 +1,8 @@
 rootProject.name = "sagebionetworks"
 
+// Include the Agora projects as submodules
+include(":agora-api-next")
+
 // Include the AMP-ALS projects as submodules
 include(":amp-als-app-config-data")
 include(":amp-als-dataset-service")
@@ -22,6 +25,7 @@ include(":openchallenges-organization-service")
 include(":sagebionetworks-util")
 
 // Set the project directories
+project(":agora-api-next").projectDir = file("apps/agora/api-next")
 project(":amp-als-app-config-data").projectDir = file("libs/amp-als/app-config-data")
 project(":amp-als-dataset-service").projectDir = file("apps/amp-als/dataset-service")
 project(":amp-als-user-service").projectDir = file("apps/amp-als/user-service")
