@@ -29,6 +29,7 @@ export class SearchInputComponent {
     return this.modelsService.searchModels(query);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   checkQueryForErrors = (query: string): string => {
     return ''; // empty string if no error
   };

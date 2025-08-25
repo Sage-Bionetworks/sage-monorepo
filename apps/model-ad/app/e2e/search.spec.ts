@@ -97,6 +97,23 @@ test.describe('search', () => {
     await expect(searchListItems.first()).toHaveText(model);
   });
 
+  test('can search and navigate to model with special characters', async ({ page }) => {
+    const modelQuery = '(iu';
+    const modelName = '5xFAD (IU/Jax/Pitt)';
+
+    await page.goto('/');
+
+    const searchListItems = await searchAndGetSearchListItems(modelQuery, page);
+    expect(await searchListItems.count()).toBe(1);
+    const firstResult = searchListItems.first();
+    await expect(firstResult).toHaveText(modelName);
+
+    await firstResult.click();
+
+    await page.waitForURL(/5xfad/i);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(modelName);
+  });
+
   test('shows error when query is too short', async ({ page }) => {
     await page.goto('/');
 
@@ -104,6 +121,35 @@ test.describe('search', () => {
     await input.pressSequentially('ab');
     await expect(
       page.getByRole('listitem').filter({ hasText: /please enter at least three characters/i }),
+    ).toBeVisible();
+  });
+
+  test('shows error when no results are returned', async ({ page }) => {
+    await page.goto('/');
+    const input = page.getByPlaceholder(headerSearchPlaceholder);
+    await input.pressSequentially('this-model-does-not-exist');
+    await expect(
+      page.getByRole('listitem').filter({ hasText: /no results match your search string/i }),
+    ).toBeVisible();
+  });
+
+  test('can search again after unknown error', async ({ page }) => {
+    const query = 'a'.repeat(101);
+    await page.goto('/');
+
+    const input = page.getByPlaceholder(headerSearchPlaceholder);
+    await input.pressSequentially(query);
+
+    await expect(
+      page
+        .getByRole('listitem')
+        .filter({ hasText: /an unknown error occurred, please try again./i }),
+    ).toBeVisible();
+
+    await input.press('Backspace');
+
+    await expect(
+      page.getByRole('listitem').filter({ hasText: /no results match your search string/i }),
     ).toBeVisible();
   });
 });

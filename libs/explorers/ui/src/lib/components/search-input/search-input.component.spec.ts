@@ -85,7 +85,7 @@ describe('SearchInputComponent', () => {
 
     await waitForSpinner();
 
-    await screen.findByText('No results found. Try searching again.');
+    await screen.findByText('No results match your search string.');
   });
 
   it('should display results when search is successful', async () => {

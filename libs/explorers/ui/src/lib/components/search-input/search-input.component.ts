@@ -25,7 +25,6 @@ import {
   fromEvent,
   Observable,
   switchMap,
-  throwError,
 } from 'rxjs';
 import { SvgImageComponent } from '../svg-image/svg-image.component';
 
@@ -65,7 +64,7 @@ export class SearchInputComponent implements AfterViewInit {
 
   showResults = false;
   errorMessages: { [key: string]: string } = {
-    notFound: 'No results found. Try searching again.',
+    notFound: 'No results match your search string.',
     notValidSearch: 'Please enter at least three characters.',
     unknown: 'An unknown error occurred, please try again.',
   };
@@ -85,12 +84,14 @@ export class SearchInputComponent implements AfterViewInit {
         debounceTime(500),
         distinctUntilChanged(),
         switchMap((event: any) => {
-          return this.search(event.target.value);
-        }),
-        catchError((err) => {
-          this.error = this.errorMessages['unknown'];
-          this.isLoading = false;
-          return throwError(() => new Error(err));
+          return this.search(event.target.value).pipe(
+            catchError(() => {
+              this.error = this.errorMessages['unknown'];
+              this.isLoading = false;
+              this.showResults = true;
+              return [[]];
+            }),
+          );
         }),
       )
       .subscribe((response: SearchResult[]) => {
@@ -102,7 +103,14 @@ export class SearchInputComponent implements AfterViewInit {
   search(query: string): Observable<SearchResult[]> {
     this.results = [];
     this.error = '';
-    this.query = query = query.trim().replace(/[^a-z0-9-_]/gi, '');
+    this.query = query = query.replace(/[^a-z0-9\-_()/*: /]/gi, '');
+
+    // If query is empty after sanitization, hide results and return
+    if (query.length === 0) {
+      this.showResults = false;
+      this.isLoading = false;
+      return EMPTY;
+    }
 
     if (query.length > 0 && query.length < 3) {
       this.error = this.errorMessages['notValidSearch'];
@@ -114,12 +122,12 @@ export class SearchInputComponent implements AfterViewInit {
       this.showResults = true;
     }
 
-    this.isLoading = query && !this.error ? true : false;
+    this.isLoading = !!(query && !this.error);
     return this.isLoading ? this.getSearchResults()(query) : EMPTY;
   }
 
   setResults(results: SearchResult[]) {
-    if (results.length < 1) {
+    if (results.length < 1 && !this.error) {
       this.error = this.errorMessages['notFound'];
     }
     this.results = results;
@@ -146,6 +154,7 @@ export class SearchInputComponent implements AfterViewInit {
     this.query = '';
     this.error = '';
     this.results = [];
+    this.showResults = false;
   }
 
   checkClickIsInsideComponent(event: Event) {
