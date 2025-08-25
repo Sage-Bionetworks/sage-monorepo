@@ -17,7 +17,8 @@
       "options": {
         "command": "redocly bundle synapse-public --output openapi/openapi.yaml",
         "cwd": "{projectRoot}"
-      }
+      },
+      "dependsOn": ["get-openapi"]
     },
     "lint": {
       "executor": "nx:run-commands",
