@@ -33,28 +33,28 @@ jobs:
       - name: Set up the dev container
         uses: ./.github/actions/setup-dev-container
 
-      - name: Download and check for API changes
+      - name: Build API description and check for changes
         id: check_changes
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && echo '🔄 Downloading latest OpenAPI specification...' \
-            && nx get synapse-api-description"
+            && echo '🔄 Building API description (includes downloading latest OpenAPI specification)...' \
+            && nx build synapse-api-description"
 
-          # Check if there are any changes in the OpenAPI files
-          if git diff --quiet libs/synapse/api-description/openapi/; then
+          # Check if there are any changes in the repository
+          if git diff --quiet; then
             echo "has_changes=false" >> $GITHUB_OUTPUT
             echo "🔍 No changes detected in OpenAPI specification"
           else
             echo "has_changes=true" >> $GITHUB_OUTPUT
             echo "📝 Changes detected in OpenAPI specification"
-
+            
             # Show a summary of changes for logging
             echo "## Changes Summary:" >> $GITHUB_STEP_SUMMARY
             echo "The OpenAPI specification has been updated on the Synapse server." >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "### Changed files:" >> $GITHUB_STEP_SUMMARY
             echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-            git diff --name-only libs/synapse/api-description/openapi/ >> $GITHUB_STEP_SUMMARY
+            git diff --name-only >> $GITHUB_STEP_SUMMARY
             echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
           fi
 
@@ -63,13 +63,6 @@ jobs:
             echo "has_changes=true" >> $GITHUB_OUTPUT
             echo "🔄 Force update requested, proceeding regardless of changes"
           fi
-
-      - name: Build API description
-        if: steps.check_changes.outputs.has_changes == 'true'
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && echo '🔄 Running build task for synapse-api-description...' \
-            && nx build synapse-api-description"
 
       - name: Regenerate dependent clients
         if: steps.check_changes.outputs.has_changes == 'true'
