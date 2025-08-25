@@ -25,13 +25,14 @@
           [description]="
             'Find a model organism by name to get detailed information and additional experimental results, including pathology results and biomarker evidence.'
           "
-          [imagePath]="'/model-ad-assets/images/mouse.svg'"
-          [imageAltText]="'mouse icon'"
-          [searchPlaceholder]="'Find model by name...'"
-          [navigateToResult]="navigateToResult"
-          [getSearchResults]="getSearchResults"
-          [checkQueryForErrors]="checkQueryForErrors"
-        />
+        >
+          <model-ad-search-input
+            [searchPlaceholder]="'Find model by name...'"
+            [searchImagePath]="'/model-ad-assets/images/mouse.svg'"
+            [searchImageAltText]="'mouse icon'"
+            [hasThickBorder]="true"
+          />
+        </explorers-home-card>
         <explorers-home-card
           [title]="'Gene Expression'"
           [description]="

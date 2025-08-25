@@ -48,9 +48,10 @@
           <ul class="search-results-list">
             @for (result of results; track result) {
               <li (click)="goToResult(result.id)">
-                <span class="result-name">
-                  {{ formatResultForDisplay()(result) }}
-                </span>
+                <span
+                  class="result-name"
+                  [innerHtml]="formatResultForDisplay()(result) | sanitizeHtml"
+                ></span>
               </li>
             }
           </ul>

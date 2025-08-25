@@ -16,6 +16,7 @@ import { Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faMagnifyingGlass, faSpinner, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { SearchResult } from '@sagebionetworks/explorers/models';
+import { SanitizeHtmlPipe } from '@sagebionetworks/explorers/util';
 import {
   catchError,
   debounceTime,
@@ -30,7 +31,7 @@ import { SvgImageComponent } from '../svg-image/svg-image.component';
 
 @Component({
   selector: 'explorers-search-input',
-  imports: [SvgImageComponent, FormsModule, FontAwesomeModule],
+  imports: [SvgImageComponent, FormsModule, FontAwesomeModule, SanitizeHtmlPipe],
   templateUrl: './search-input.component.html',
   styleUrls: ['./search-input.component.scss'],
   standalone: true,
