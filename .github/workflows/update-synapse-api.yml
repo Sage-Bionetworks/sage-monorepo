@@ -1,4 +1,4 @@
-name: Update Synapse API Description
+name: Update Synapse API description and regenerate clients
 
 on:
   schedule:
@@ -47,7 +47,7 @@ jobs:
           else
             echo "has_changes=true" >> $GITHUB_OUTPUT
             echo "📝 Changes detected in OpenAPI specification"
-            
+
             # Show a summary of changes for logging
             echo "## Changes Summary:" >> $GITHUB_STEP_SUMMARY
             echo "The OpenAPI specification has been updated on the Synapse server." >> $GITHUB_STEP_SUMMARY
@@ -157,8 +157,8 @@ jobs:
 
           ---
 
-          **Triggered:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')  
-          **Workflow:** [Update Synapse API Description](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})  
+          **Triggered:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          **Workflow:** [Update Synapse API Description](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
           **Source:** https://rest-docs.synapse.org/rest/openapi/openapispecification.json
 
           This PR was automatically created by the \`update-synapse-api.yml\` workflow."
