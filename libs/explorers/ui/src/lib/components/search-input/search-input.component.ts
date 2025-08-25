@@ -24,6 +24,7 @@ import {
   EMPTY,
   fromEvent,
   Observable,
+  of,
   switchMap,
 } from 'rxjs';
 import { SvgImageComponent } from '../svg-image/svg-image.component';
@@ -83,13 +84,14 @@ export class SearchInputComponent implements AfterViewInit {
         takeUntilDestroyed(this.destroyRef),
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap((event: any) => {
-          return this.search(event.target.value).pipe(
+        switchMap((event: Event) => {
+          const target = event.target as HTMLInputElement;
+          return this.search(target.value).pipe(
             catchError(() => {
               this.error = this.errorMessages['unknown'];
               this.isLoading = false;
               this.showResults = true;
-              return [[]];
+              return of([]);
             }),
           );
         }),
@@ -103,7 +105,8 @@ export class SearchInputComponent implements AfterViewInit {
   search(query: string): Observable<SearchResult[]> {
     this.results = [];
     this.error = '';
-    this.query = query = query.replace(/[^a-z0-9\-_()/*: /]/gi, '');
+    // Allow model names with special characters - backend handles sanitization
+    this.query = query = query.replace(/[^a-z0-9\-_()/*: ]/gi, '');
 
     // If query is empty after sanitization, hide results and return
     if (query.length === 0) {
