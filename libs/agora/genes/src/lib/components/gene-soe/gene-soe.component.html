@@ -50,7 +50,9 @@
   <div class="section section-gray-100">
     <div class="section-inner">
       <div class="container-lg">
-        <agora-gene-soe-charts [gene]="gene"></agora-gene-soe-charts>
+        @defer {
+          <agora-gene-soe-charts [gene]="gene"></agora-gene-soe-charts>
+        }
       </div>
     </div>
   </div>
@@ -90,7 +92,9 @@
           </div>
         </div>
       </div>
-      <agora-gene-biodomains [gene]="gene"></agora-gene-biodomains>
+      @defer {
+        <agora-gene-biodomains [gene]="gene"></agora-gene-biodomains>
+      }
     </div>
   </div>
 }
