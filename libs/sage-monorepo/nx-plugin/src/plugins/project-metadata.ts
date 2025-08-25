@@ -132,7 +132,7 @@ function inferContainerImageType(
     }
   }
 
-  // Fallback: check for physical Dockerfile (for existing projects)
+  // Fallback: check for existing Dockerfile (for existing projects)
   if (siblingFiles.includes('Dockerfile')) {
     return 'custom';
   }
