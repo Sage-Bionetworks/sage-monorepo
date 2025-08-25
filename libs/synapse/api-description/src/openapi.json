@@ -20,7 +20,7 @@
     },
     {
       "name": "Agent Chat Services",
-      "description": "The Synapse chat services allow the user to chat with a 'bot' (agent) that has\n access to Synapse data. By default, Synapse provides a 'baseline' agent that\n has basic access to all of the supported Synapse action group functions and\n knowledge bases. Sage authorized collaborators can create their own agents\n that can also utilize the same action groups and knowledge bases used by the\n baseline agent. The collaborator's agent can then be used to override the\n baseline agent for chat sessions.\n </p>\n To get started, the first step is to create a new session by calling:\n <a href=\"${POST.agent.session}\">POST /agent/session</a>. You will need the\n sessionId from the resulting <a href=\"${org.sagebionetworks.repo.model.agent.AgentSession}\">AgentSession</a>. The\n sessionId uniquely identifies a single conversation between the user and the\n agent. Specifically, the session contains user's chat requests, agent\n responses and all of the data gathered by the agent to meet user requests.\n The session data is the context provided to the Large Language Model (LLM)\n used by the agent. Only the user that create a session will have access to\n its data and be able to use it for an agent conversation.\n </p>\n The user's conversation with an agent is a series of asynchronous jobs under\n the provided sessionId, where each job is started by providing the user's\n prompt to the agent. The job's response will then include the agent's\n response to the user's prompt. Use:\n <a href=\"POST.agent.chat.async.start\">POST /agent/chat/async/start<a/> to\n start a chat job and <a href=\"GET.agent.chat.async.get.asyncToken\">GET\n /agent/chat/async/get/{asyncToken}</a> to get the job's results."
+      "description": "The Synapse chat services allow the user to chat with a 'bot' (agent) that\n has access to Synapse data. By default, Synapse provides a 'baseline' agent\n that has basic access to all of the supported Synapse action group functions\n and knowledge bases. Sage authorized collaborators can create their own\n agents that can also utilize the same action groups and knowledge bases used\n by the baseline agent. The collaborator's agent can then be used to override\n the baseline agent for chat sessions.\n </p>\n To get started, the first step is to create a new session by calling:\n <a href=\"${POST.agent.session}\">POST /agent/session</a>. You will need the\n sessionId from the resulting <a href=\"${org.sagebionetworks.repo.model.agent.AgentSession}\">AgentSession</a>. The\n sessionId uniquely identifies a single conversation between the user and the\n agent. Specifically, the session contains user's chat requests, agent\n responses and all of the data gathered by the agent to meet user requests.\n The session data is the context provided to the Large Language Model (LLM)\n used by the agent. Only the user that create a session will have access to\n its data and be able to use it for an agent conversation.\n </p>\n The user's conversation with an agent is a series of asynchronous jobs under\n the provided sessionId, where each job is started by providing the user's\n prompt to the agent. The job's response will then include the agent's\n response to the user's prompt. Use:\n <a href=\"POST.agent.chat.async.start\">POST /agent/chat/async/start</a> to\n start a chat job and <a href=\"GET.agent.chat.async.get.asyncToken\">GET\n /agent/chat/async/get/{asyncToken}</a> to get the job's results."
     },
     {
       "name": "Asynchronous Job Services",
@@ -95,8 +95,12 @@
       "description": "Collection of APIs from managing and submitting form data. There are two\n basic objects:\n <ul>\n <li><a href=\"${org.sagebionetworks.repo.model.form.FormData}\">FormData</a> -\n Represent an end user's data gathered from a form template. All FormData\n belongs to a single FormGroup.</li>\n <li><a href=\"${org.sagebionetworks.repo.model.form.FormGroup}\">FormGroup</a>\n - Represents a grouping of FormData with an\n <a href=\"${org.sagebionetworks.repo.model.AccessControlList}\">Access Control\n List (ACL)</a> for administration. The ACL controls both who can submit data\n to the group and who has access to the submitted data.</li>\n </ul>\n <p>\n To download the data associated with a FormData object use:\n <a href=\"${POST.fileHandle.batch}\">POST /fileHandle/batch</a> providing the\n formData.dataFileHandleId with <a href=\"${org.sagebionetworks.repo.model.file.FileHandleAssociateType}\">FileHandleAssociateType.FormData</a>"
     },
     {
+      "name": "Grid Services",
+      "description": "Services for create and managing grid data session."
+    },
+    {
       "name": "JSON Schema Services",
-      "description": "This set of services provide project designers with tools to define their own\n schemas to control and validate metadata applied to Projects, Folders, and\n Files. All schemas are defined using JSON schemas following\n <a href=\"https://json-schema.org/\">json-schema.org</a> specification.\n <p>\n To get started, you will need to either create a new <a href=\"${org.sagebionetworks.repo.model.schema.Organization}\">Organization</a> or\n join an existing Organization. Each Organization has an AccessControlList\n (ACL) that controls which users/teams are authorized to contribute schemas\n under that Organization's name-space. The Organization's name-space is\n referenced using the Organization's name, which is also the root of all\n schema $ids within the Organization."
+      "description": "This set of services provide project designers with tools to define their own\n schemas to control and validate metadata applied to Projects, Folders, and\n Files. All schemas are defined using JSON schemas following\n <a href=\"https://json-schema.org/\">json-schema.org</a> specification.\n <p>\n To get started, you will need to either create a new <a href=\"${org.sagebionetworks.repo.model.schema.Organization}\">Organization</a> or\n join an existing Organization. Each Organization has an AccessControlList\n (ACL) that controls which users/teams are authorized to contribute schemas\n under that Organization's name-space. The Organization's name-space is\n referenced using the Organization's name, which is also the root of all\n schema $ids within the Organization.\n </p>\n \n \n <p>\n <b>Binding JSON schemas to Entities:</b>\n <ul>\n <li><a href=\"${PUT.entity.id.schema.binding}\">PUT /entity/{id}/schema/binding</a></li>\n <li><a href=\"${GET.entity.id.schema.binding}\">GET /entity/{id}/schema/binding</a></li>\n <li><a href=\"${DELETE.entity.id.schema.binding}\">DELETE /entity/{id}/schema/binding</a></li>\n </ul>\n </p>\n <p>\n <b>Entity schema validation results:</b>\n <ul>\n <li><a href=\"${GET.entity.id.schema.validation}\">GET /entity/{id}/schema/validation</a></li>\n <li><a href=\"${GET.entity.id.schema.validation.statistics}\">GET /entity/{id}/schema/validation/statistics</a></li>\n <li><a href=\"${POST.entity.id.schema.validation.invalid}\">POST /entity/{id}/schema/validation/invalid</a></li>\n <li><a href=\"${GET.entity.id.derivedKeys}\">GET /entity/{id}/derivedKeys</a></li>\n </ul>\n </p>  \n \n <b>Service Limits</b>\n <table border=\"1\">\n <tr>\n <th>resource</th>\n <th>limit</th>\n </tr>\n <tr>\n <td>Maximum number of characters in a JSON schema</td>\n <td>2^24 characters</td>\n </tr>\n </table>"
     },
     {
       "name": "Log Service",
@@ -119,12 +123,20 @@
       "description": "The OpenID Connect (OIDC) services implement OAuth 2.0 with the OpenID identity extensions."
     },
     {
+      "name": "Portals Services",
+      "description": "Provides APIs to manage Synapse portals, generally managed by Synapse administrators."
+    },
+    {
       "name": "Principal Services",
       "description": "A <a href=\"http://en.wikipedia.org/wiki/Principal_%28computer_security%29\">\n Principal</a> in Synapse can be a User, Group, or a Team. This is a set of\n services that provides the means to look-up principals by their various\n attributes and also to test unique names such as USER_NAME, USER_EMAIL, or\n TEAM_NAME are available for use."
     },
     {
       "name": "Project Settings Services",
       "description": "The project settings services provide configuration options that can be applied to projects. In particular through the <a href=\"${POST.projectSettings}\">POST /projectSettings</a> and <a href=\"${PUT.projectSettings}\">PUT /projectSettings</a> services\n a user can create or update the setting of a specific <a href=\"${org.sagebionetworks.repo.model.project.ProjectSettingsType}\">type</a> for a project.\n </p>\n Currently supported settings for a project are:\n \n <ul>\n <li><a href=\"${org.sagebionetworks.repo.model.project.UploadDestinationListSetting}\">UploadDestinationListSetting</a>: Used to customize the storage location for files in a project</li>\n </ul>\n\n </p>\n The <a href=\"${POST.storageLocation}\">POST /storageLocation</a> service is provided in order to create <a href=\"${org.sagebionetworks.repo.model.project.StorageLocationSetting}\">StorageLocationSetting</a>. The id of a\n <a href=\"${org.sagebionetworks.repo.model.project.StorageLocationSetting}\">StorageLocationSetting</a> can then be set in the <b>locations</b> property of \n the <a href=\"${org.sagebionetworks.repo.model.project.UploadDestinationListSetting}\">UploadDestinationListSetting</a>.\n </p>\n When uploading a file the id of the default <a href=\"${org.sagebionetworks.repo.model.project.StorageLocationSetting}\">StorageLocationSetting</a> to be used on a folder can be retrieved\n using the <a href=\"${GET.entity.id.uploadDestination}\">GET /entity/{id}/uploadDestination</a> service using the id of the parent entity (e.g. a folder or a project).\n </p>\n By setting a custom storage location, users can store the data in their own S3 or Google Cloud bucket. Note that when a folder or a project is configured to use a custom storage location,\n only future uploads through Synapse are affected (e.g. changing the storage location does not automatically change the location of existing files).\n For a guide on setting a custom storage location, see the <a href=\"https://help.synapse.org/docs/Custom-Storage-Locations.2048327803.html\">Custom Storage Location</a> documentation\n article.\n </p>"
+    },
+    {
+      "name": "Project Storage Services",
+      "description": "Services to manage project storage usage and limits."
     },
     {
       "name": "Recycle Bin Services",
@@ -918,13 +930,82 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/org.sagebionetworks.repo.model.auth.AccessToken"
+                "$ref": "#/components/schemas/org.sagebionetworks.repo.model.auth.TermsOfServiceSignRequest"
               }
             }
           },
           "required": true
         },
         "responses": { "204": { "description": "Void" } }
+      }
+    },
+    "/auth/v1/termsOfUse2/info": {
+      "get": {
+        "tags": ["Authentication Services"],
+        "operationId": "get-/auth/v1/termsOfUse2/info",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.auth.TermsOfServiceInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/v1/termsOfUse2/status": {
+      "get": {
+        "tags": ["Authentication Services"],
+        "operationId": "get-/auth/v1/termsOfUse2/status",
+        "parameters": [],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "The status of the terms of service for the current authenticated user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.auth.TermsOfServiceStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/v1/termsOfUse2/requirements": {
+      "put": {
+        "tags": ["Authentication Services"],
+        "operationId": "put-/auth/v1/termsOfUse2/requirements",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/org.sagebionetworks.repo.model.auth.TermsOfServiceRequirements"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.auth.TermsOfServiceInfo"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/auth/v1/secretKey": {
@@ -4154,7 +4235,14 @@
       "post": {
         "tags": ["Search Services"],
         "operationId": "post-/repo/v1/search",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "isOpenSearchEnable",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean" }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -4168,7 +4256,7 @@
         "security": [{ "bearerAuth": [] }],
         "responses": {
           "201": {
-            "description": "search results from CloudSearch",
+            "description": "search results from OpenSearch or CloudSearch depending upon parameter isOpenSearchEnable",
             "content": {
               "application/json": {
                 "schema": {
@@ -6708,6 +6796,63 @@
         }
       }
     },
+    "/repo/v1/dataAccessSubmission/{submissionId}/userAccessApproval": {
+      "get": {
+        "tags": ["Data Access Services"],
+        "operationId": "get-/repo/v1/dataAccessSubmission/{submissionId}/userAccessApproval",
+        "parameters": [
+          {
+            "name": "submissionId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.AccessApproval"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repo/v1/dataAccessSubmission/userRequests": {
+      "post": {
+        "tags": ["Data Access Services"],
+        "operationId": "post-/repo/v1/dataAccessSubmission/userRequests",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/org.sagebionetworks.repo.model.dataaccess.UserSubmissionSearchRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.dataaccess.UserSubmissionSearchResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/dockerRegistryListener/v1/events": {
       "post": {
         "tags": ["Docker Registry Event Services"],
@@ -7060,6 +7205,41 @@
             "required": true,
             "description": "The ID of the Entity to get the EntityHeader for.",
             "schema": { "type": "string" }
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.EntityHeader"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repo/v1/entity/{id}/version/{versionNumber}/type": {
+      "get": {
+        "tags": ["Entity Services"],
+        "operationId": "get-/repo/v1/entity/{id}/version/{versionNumber}/type",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the Entity to get the EntityHeader for.",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "versionNumber",
+            "in": "path",
+            "required": true,
+            "description": "The version number of the Entity to get the EntityHeader for.",
+            "schema": { "type": "number" }
           }
         ],
         "security": [{ "bearerAuth": [] }],
@@ -8205,6 +8385,244 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/org.sagebionetworks.repo.model.annotation.v2.Keys"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repo/v1/grid/session/async/start": {
+      "post": {
+        "tags": ["Grid Services"],
+        "operationId": "post-/repo/v1/grid/session/async/start",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.CreateGridRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "201": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.asynch.AsyncJobId"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repo/v1/grid/session/async/get/{asyncToken}": {
+      "get": {
+        "tags": ["Grid Services"],
+        "operationId": "get-/repo/v1/grid/session/async/get/{asyncToken}",
+        "parameters": [
+          {
+            "name": "asyncToken",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.CreateGridResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repo/v1/grid/session/{sessionId}": {
+      "get": {
+        "tags": ["Grid Services"],
+        "operationId": "get-/repo/v1/grid/session/{sessionId}",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.GridSession"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Grid Services"],
+        "operationId": "delete-/repo/v1/grid/session/{sessionId}",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": { "200": { "description": "Void" } }
+      }
+    },
+    "/repo/v1/grid/session/{sessionId}/replica": {
+      "post": {
+        "tags": ["Grid Services"],
+        "operationId": "post-/repo/v1/grid/session/{sessionId}/replica",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "description": "- The grid session ID.",
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.CreateReplicaRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "201": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.CreateReplicaResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repo/v1/grid/session/{sessionId}/replica/{replicaId}": {
+      "get": {
+        "tags": ["Grid Services"],
+        "operationId": "get-/repo/v1/grid/session/{sessionId}/replica/{replicaId}",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "description": "- The grid session ID.",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "replicaId",
+            "in": "path",
+            "required": true,
+            "description": "- The ID of the replica.",
+            "schema": { "type": "number" }
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.GridReplica"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repo/v1/grid/session/{sessionId}/presigned/url": {
+      "post": {
+        "tags": ["Grid Services"],
+        "operationId": "post-/repo/v1/grid/session/{sessionId}/presigned/url",
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.CreateGridPresignedUrlRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "201": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.CreateGridPresignedUrlResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repo/v1/grid/session/list": {
+      "post": {
+        "tags": ["Grid Services"],
+        "operationId": "post-/repo/v1/grid/session/list",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.ListGridSessionsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.ListGridSessionsResponse"
                 }
               }
             }
@@ -11432,6 +11850,70 @@
         }
       }
     },
+    "/repo/v1/project/{projectId}/storage/usage": {
+      "get": {
+        "tags": ["Project Storage Services"],
+        "operationId": "get-/repo/v1/project/{projectId}/storage/usage",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.limits.ProjectStorageUsage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repo/v1/project/{projectId}/storage/limit": {
+      "put": {
+        "tags": ["Project Storage Services"],
+        "operationId": "put-/repo/v1/project/{projectId}/storage/limit",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/org.sagebionetworks.repo.model.limits.ProjectStorageLocationLimit"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.limits.ProjectStorageLocationLimit"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/repo/v1/agent/session": {
       "post": {
         "tags": ["Agent Chat Services"],
@@ -11574,6 +12056,102 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/org.sagebionetworks.repo.model.agent.AgentChatResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repo/v1/agent/chat/trace/{jobId}": {
+      "post": {
+        "tags": ["Agent Chat Services"],
+        "operationId": "post-/repo/v1/agent/chat/trace/{jobId}",
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "required": true,
+            "description": "- The jobID of the asynchronous job started for an\n                AgentChatRequest.",
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/org.sagebionetworks.repo.model.agent.TraceEventsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.agent.TraceEventsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repo/v1/agent/registration": {
+      "put": {
+        "tags": ["Agent Chat Services"],
+        "operationId": "put-/repo/v1/agent/registration",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/org.sagebionetworks.repo.model.agent.AgentRegistrationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "201": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.agent.AgentRegistration"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repo/v1/agent/registration/{agentRegistrationId}": {
+      "get": {
+        "tags": ["Agent Chat Services"],
+        "operationId": "get-/repo/v1/agent/registration/{agentRegistrationId}",
+        "parameters": [
+          {
+            "name": "agentRegistrationId",
+            "in": "path",
+            "required": true,
+            "description": "The Synapse issued agent registration id.",
+            "schema": { "type": "string" }
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.agent.AgentRegistration"
                 }
               }
             }
@@ -12391,6 +12969,12 @@
         "operationId": "get-/repo/v1/doi",
         "parameters": [
           {
+            "name": "portalId",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
             "name": "id",
             "in": "query",
             "required": true,
@@ -12400,7 +12984,9 @@
             "name": "type",
             "in": "query",
             "required": true,
-            "schema": { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.ObjectType" }
+            "schema": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.doi.v2.DoiObjectType"
+            }
           },
           {
             "name": "version",
@@ -12429,6 +13015,12 @@
         "operationId": "get-/repo/v1/doi/association",
         "parameters": [
           {
+            "name": "portalId",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
             "name": "id",
             "in": "query",
             "required": true,
@@ -12438,7 +13030,9 @@
             "name": "type",
             "in": "query",
             "required": true,
-            "schema": { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.ObjectType" }
+            "schema": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.doi.v2.DoiObjectType"
+            }
           },
           {
             "name": "version",
@@ -12525,6 +13119,12 @@
         "operationId": "get-/repo/v1/doi/locate",
         "parameters": [
           {
+            "name": "portalId",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
             "name": "id",
             "in": "query",
             "required": true,
@@ -12534,7 +13134,9 @@
             "name": "type",
             "in": "query",
             "required": true,
-            "schema": { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.ObjectType" }
+            "schema": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.doi.v2.DoiObjectType"
+            }
           },
           {
             "name": "version",
@@ -13347,6 +13949,78 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.ValidateDefiningSqlResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repo/v1/entity/{id}/table/download/pfb/async/start": {
+      "post": {
+        "tags": ["Table Services"],
+        "operationId": "post-/repo/v1/entity/{id}/table/download/pfb/async/start",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the TableEntity.",
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.DownloadPFBRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "201": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.asynch.AsyncJobId"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repo/v1/entity/{id}/table/download/pfb/async/get/{asyncToken}": {
+      "get": {
+        "tags": ["Table Services"],
+        "operationId": "get-/repo/v1/entity/{id}/table/download/pfb/async/get/{asyncToken}",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the TableEntity.",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "asyncToken",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "201": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.DownloadPFBResult"
                 }
               }
             }
@@ -15383,6 +16057,231 @@
         }
       }
     },
+    "/repo/v1/portal": {
+      "post": {
+        "tags": ["Portals Services"],
+        "operationId": "post-/repo/v1/portal",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/org.sagebionetworks.repo.model.portals.CreateOrUpdatePortalRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "201": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.portals.Portal"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repo/v1/portal/{portalId}": {
+      "get": {
+        "tags": ["Portals Services"],
+        "operationId": "get-/repo/v1/portal/{portalId}",
+        "parameters": [
+          {
+            "name": "portalId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.portals.Portal"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Portals Services"],
+        "operationId": "put-/repo/v1/portal/{portalId}",
+        "parameters": [
+          {
+            "name": "portalId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/org.sagebionetworks.repo.model.portals.CreateOrUpdatePortalRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.portals.Portal"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Portals Services"],
+        "operationId": "delete-/repo/v1/portal/{portalId}",
+        "parameters": [
+          {
+            "name": "portalId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": { "200": { "description": "Void" } }
+      }
+    },
+    "/repo/v1/portal/list": {
+      "post": {
+        "tags": ["Portals Services"],
+        "operationId": "post-/repo/v1/portal/list",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/org.sagebionetworks.repo.model.portals.ListPortalsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.portals.ListPortalsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repo/v1/portal/{portalId}/acl": {
+      "get": {
+        "tags": ["Portals Services"],
+        "operationId": "get-/repo/v1/portal/{portalId}/acl",
+        "parameters": [
+          {
+            "name": "portalId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.AccessControlList"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Portals Services"],
+        "operationId": "put-/repo/v1/portal/{portalId}/acl",
+        "parameters": [
+          {
+            "name": "portalId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/org.sagebionetworks.repo.model.AccessControlList"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.AccessControlList"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/repo/v1/portal/{portalId}/permissions": {
+      "get": {
+        "tags": ["Portals Services"],
+        "operationId": "get-/repo/v1/portal/{portalId}/permissions",
+        "parameters": [
+          {
+            "name": "portalId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Auto-generated description",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/org.sagebionetworks.repo.model.auth.UserPortalPermissions"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/repo/v1/verificationSubmission": {
       "post": {
         "tags": ["Verification Services"],
@@ -16123,6 +17022,20 @@
         "type": "string",
         "enum": ["PROCESSING", "FAILED", "COMPLETE"]
       },
+      "org.sagebionetworks.repo.model.oauth.GA4GHVisa": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string" },
+          "asserted": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "value": { "type": "string" },
+          "source": { "type": "string" },
+          "by": { "type": "string" }
+        },
+        "description": "GA4GH Visa"
+      },
       "org.sagebionetworks.repo.model.principal.EmailValidationSignedToken": {
         "type": "object",
         "properties": {
@@ -16218,6 +17131,14 @@
         "type": "string",
         "enum": ["access_token", "refresh_token"]
       },
+      "org.sagebionetworks.repo.model.auth.TermsOfServiceSignRequest": {
+        "type": "object",
+        "properties": {
+          "accessToken": { "type": "string" },
+          "termsOfServiceVersion": { "type": "string" }
+        },
+        "description": "Request to agree to the terms of service."
+      },
       "org.sagebionetworks.repo.model.message.multipart.Attachment": {
         "type": "object",
         "properties": {
@@ -16284,6 +17205,14 @@
         },
         "description": "Identifies both the field and direction for a single sort operation"
       },
+      "org.sagebionetworks.repo.model.portals.CreateOrUpdatePortalRequest": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "url": { "type": "string" }
+        },
+        "description": "JSON schema for a request to create or update a Portal."
+      },
       "org.sagebionetworks.repo.model.file.MultipartRequest": {
         "type": "object",
         "properties": {
@@ -16348,7 +17277,10 @@
           "MULTIPART_AUTO_CLEANUP",
           "DATA_DOWNLOAD_THROUGH_CLOUDFRONT",
           "CHANGE_PASSWORD_2FA_CHECK_BYPASS",
-          "USE_NEW_ASYNC_GOOGLE_MULTIPART_UPLOAD"
+          "USE_NEW_ASYNC_GOOGLE_MULTIPART_UPLOAD",
+          "ENFORCE_PROJECT_STORAGE_LIMITS",
+          "ALLOW_AGENT_WRITES",
+          "DISABLE_2FA_REQUIREMENT"
         ]
       },
       "org.sagebionetworks.repo.model.dataaccess.AccessApprovalNotificationResponse": {
@@ -16657,6 +17589,20 @@
         ],
         "discriminator": { "propertyName": "concreteType" }
       },
+      "org.sagebionetworks.repo.model.portals.Portal": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "etag": { "type": "string" },
+          "name": { "type": "string" },
+          "url": { "type": "string" },
+          "createdBy": { "type": "string" },
+          "createdOn": { "type": "string" },
+          "modifiedBy": { "type": "string" },
+          "modifiedOn": { "type": "string" }
+        },
+        "description": "JSON schema for a Synapse Portal."
+      },
       "org.sagebionetworks.repo.model.table.CsvTableDescriptor": {
         "type": "object",
         "properties": {
@@ -16678,6 +17624,14 @@
           "updatedOn": { "type": "string" }
         },
         "description": "Response for an Object's DataType."
+      },
+      "org.sagebionetworks.repo.model.auth.TermsOfServiceAgreement": {
+        "type": "object",
+        "properties": {
+          "agreedOn": { "type": "string" },
+          "version": { "type": "string" }
+        },
+        "description": "Information about the user agreement for a specific version of the TOS"
       },
       "org.sagebionetworks.repo.model.registry.RenameData": {
         "type": "object",
@@ -17513,6 +18467,14 @@
               "format": "int32"
             }
           },
+          "versionHistory": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.VersionInfo",
+              "description": "JSON schema for VersionInfo POJO"
+            },
+            "description": "The list of entity versions."
+          },
           "annotations": {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.annotation.v2.Annotations",
             "description": "Annotations are additional key-value pair metadata that are associated with an object."
@@ -17524,6 +18486,10 @@
           "internalAnnotations": {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.annotation.v2.Annotations",
             "description": "Annotations are additional key-value pair metadata that are associated with an object."
+          },
+          "projectStorageUsage": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.limits.ProjectStorageUsage",
+            "description": "Provides information about file allocations and limits for each storage location associated with a single project."
           },
           "id": { "type": "string" },
           "name": { "type": "string" },
@@ -17895,6 +18861,21 @@
         },
         "description": "Batch response of part pre-signed URLs."
       },
+      "org.sagebionetworks.repo.model.grid.CreateGridRequest": {
+        "type": "object",
+        "properties": {
+          "concreteType": {
+            "type": "string",
+            "enum": ["org.sagebionetworks.repo.model.grid.CreateGridRequest"]
+          },
+          "initialQuery": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.Query"
+          },
+          "schema$id": { "type": "string" }
+        },
+        "description": "Start a job to create a new Grid session.",
+        "required": ["concreteType"]
+      },
       "org.sagebionetworks.evaluation.model.EvaluationRound": {
         "type": "object",
         "properties": {
@@ -17957,7 +18938,7 @@
         "type": "object",
         "properties": {
           "agentAccessLevel": { "type": "string" },
-          "agentId": { "type": "string" }
+          "agentRegistrationId": { "type": "string" }
         },
         "description": "Information about a specific session (conversation) with an agent.  Only the acess level can be changed on an existing session.  You will need to start a new session if you wish to use a different agentId."
       },
@@ -18065,7 +19046,6 @@
           "PRINCIPAL",
           "GROUP_MEMBERS",
           "CREDENTIAL",
-          "TERMS_OF_USE_AGREEMENT",
           "AUTHENTICATED_ON",
           "PRINCIPAL_ALIAS",
           "NOTIFICATION_EMAIL",
@@ -18110,6 +19090,7 @@
           "ACL_ACCESS_TYPE",
           "FAVORITE",
           "TRASH_CAN",
+          "PORTAL",
           "DOI",
           "CHALLENGE",
           "CHALLENGE_TEAM",
@@ -18175,7 +19156,17 @@
           "WEBHOOK",
           "WEBHOOK_VERIFICATION",
           "WEBHOOK_ALLOWED_DOMAIN",
+          "AGENT_REGISTRATION",
           "AGENT_SESSION",
+          "TOS_REQUIREMENTS",
+          "TOS_AGREEMENT",
+          "PROJECT_STORAGE_DATA",
+          "PROJECT_STORAGE_LIMIT",
+          "GRID_SESSION",
+          "GRID_REPLICA",
+          "GRID_CONNECTION",
+          "GRID_PATCH",
+          "USER_STATUS",
           "CHANGE"
         ]
       },
@@ -18211,6 +19202,11 @@
           }
         },
         "description": "Represents a reference to the id and version of an entity to be used in collections."
+      },
+      "org.sagebionetworks.repo.model.auth.UserPortalPermissions": {
+        "type": "object",
+        "properties": { "canMintDoi": { "type": "boolean" } },
+        "description": "The permissions that a user has for a specific Synapse portal."
       },
       "org.sagebionetworks.repo.model.project.ProxyStorageLocationSettings": {
         "type": "object",
@@ -18261,12 +19257,30 @@
           "openid",
           "email",
           "profile",
+          "ga4gh_passport_v1",
           "view",
           "download",
           "modify",
           "authorize",
           "offline_access"
         ]
+      },
+      "org.sagebionetworks.repo.model.auth.TermsOfServiceState": {
+        "type": "string",
+        "enum": ["MUST_AGREE_NOW", "MUST_AGREE_SOON", "UP_TO_DATE"]
+      },
+      "org.sagebionetworks.repo.model.grid.sql.ColumnReference": {
+        "type": "object",
+        "properties": {
+          "concreteType": {
+            "type": "string",
+            "enum": ["org.sagebionetworks.repo.model.grid.sql.ColumnReference"]
+          },
+          "column": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.Identifier"
+          }
+        },
+        "required": ["concreteType"]
       },
       "org.sagebionetworks.repo.model.download.ActionRequiredCount": {
         "type": "object",
@@ -18467,6 +19481,11 @@
           },
           "uploadType": { "type": "string" },
           "banner": { "type": "string" },
+          "destinationProjectId": { "type": "string" },
+          "projectStorageLocationUsage": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.limits.ProjectStorageLocationUsage",
+            "description": "Represent the current size and limits for a single project storage location."
+          },
           "baseKey": { "type": "string" }
         },
         "description": "An upload destination with an optional base key",
@@ -18483,6 +19502,19 @@
         ],
         "required": ["concreteType"],
         "discriminator": { "propertyName": "concreteType" }
+      },
+      "org.sagebionetworks.repo.model.agent.AgentChatResponse": {
+        "type": "object",
+        "properties": {
+          "concreteType": {
+            "type": "string",
+            "enum": ["org.sagebionetworks.repo.model.agent.AgentChatResponse"]
+          },
+          "sessionId": { "type": "string" },
+          "responseText": { "type": "string" }
+        },
+        "description": "The response to an agent chat request.",
+        "required": ["concreteType"]
       },
       "org.sagebionetworks.repo.model.audit.AccessRecord": {
         "type": "object",
@@ -18527,19 +19559,6 @@
           "authenticationMethod": { "type": "string" }
         },
         "description": "Data recored from a single web-services methods."
-      },
-      "org.sagebionetworks.repo.model.agent.AgentChatResponse": {
-        "type": "object",
-        "properties": {
-          "concreteType": {
-            "type": "string",
-            "enum": ["org.sagebionetworks.repo.model.agent.AgentChatResponse"]
-          },
-          "sessionId": { "type": "string" },
-          "responseText": { "type": "string" }
-        },
-        "description": "The response to an agent chat request.",
-        "required": ["concreteType"]
       },
       "org.sagebionetworks.repo.model.table.FacetColumnRequest": {
         "type": "object",
@@ -18610,6 +19629,10 @@
         ],
         "required": ["concreteType"],
         "discriminator": { "propertyName": "concreteType" }
+      },
+      "org.sagebionetworks.repo.model.oauth.GA4GHByType": {
+        "type": "string",
+        "enum": ["self", "peer", "system", "so", "dac"]
       },
       "org.sagebionetworks.evaluation.model.SubmissionEligibility": {
         "type": "object",
@@ -18745,7 +19768,8 @@
           "resourceType": {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.doi.v2.DoiResourceType",
             "description": "Required. Describes the type of media that the DOI Metadata refers to."
-          }
+          },
+          "publisher": { "type": "string" }
         },
         "description": "JSON schema for metadata that is submitted to DataCite and can later be retrieved via DOI in Synapse, with the DataCite REST API, or with external citation services.",
         "oneOf": [{ "$ref": "#/components/schemas/org.sagebionetworks.repo.model.doi.v2.Doi" }],
@@ -19011,6 +20035,18 @@
         "description": "JSON schema for out of band 'Access Control Team' controlled Access Requirement, a 'tier 3' Access Requirement. This access requirement directs user to contact an ACT member to gain access to the data.",
         "required": ["concreteType"]
       },
+      "org.sagebionetworks.repo.model.grid.ListGridSessionsRequest": {
+        "type": "object",
+        "properties": {
+          "sourceId": { "type": "string" },
+          "nextPageToken": { "type": "string" }
+        },
+        "description": "Request to list a user's active grid sessions."
+      },
+      "org.sagebionetworks.repo.model.grid.slq.OrderByDirection": {
+        "type": "string",
+        "enum": ["ASC", "DESC"]
+      },
       "org.sagebionetworks.evaluation.model.EvaluationRoundListRequest": {
         "type": "object",
         "properties": { "nextPageToken": { "type": "string" } },
@@ -19216,6 +20252,24 @@
           }
         }
       },
+      "org.sagebionetworks.repo.model.dataaccess.UserSubmissionSearchResult": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "createdOn": { "type": "string" },
+          "modifiedOn": { "type": "string" },
+          "accessRequirementId": { "type": "string" },
+          "accessRequirementVersion": { "type": "string" },
+          "accessRequirementName": { "type": "string" },
+          "submitterId": { "type": "string" },
+          "state": { "type": "string" },
+          "userAccessApproval": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.AccessApproval",
+            "description": "JSON schema for AccessApproval POJO"
+          }
+        },
+        "description": "The result item in a User Data Access Submission Search"
+      },
       "org.sagebionetworks.repo.model.docker.DockerRegistryEvent": {
         "type": "object",
         "properties": {
@@ -19285,6 +20339,14 @@
           }
         },
         "description": "A paginated list of ChallengeTeam objects"
+      },
+      "org.sagebionetworks.repo.model.grid.CellId": {
+        "type": "object",
+        "properties": {
+          "rowId": { "type": "string" },
+          "columnName": { "type": "string" }
+        },
+        "description": "The immutable (stable) identifier for a cell."
       },
       "org.sagebionetworks.repo.model.auth.AccessTokenState": {
         "type": "string",
@@ -19461,6 +20523,21 @@
         },
         "description": "Identifies both the field and direction for a single sort operation"
       },
+      "org.sagebionetworks.repo.model.grid.ListGridSessionsResponse": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.GridSession",
+              "description": "Basic information about a grid session."
+            },
+            "description": "A single page of results that match the request parameters."
+          },
+          "nextPageToken": { "type": "string" }
+        },
+        "description": "Response to a request to list a user's active grid session."
+      },
       "org.sagebionetworks.repo.model.dataaccess.SubmissionSearchResponse": {
         "type": "object",
         "properties": {
@@ -19548,11 +20625,63 @@
         },
         "description": "Information about the version of the stack"
       },
+      "org.sagebionetworks.repo.model.limits.ProjectStorageData": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "etag": { "type": "string" },
+          "modifiedOn": { "type": "string" },
+          "runtimeMs": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "storageLocationData": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        },
+        "description": "Internal DTO object that is used to store data about the current storage usage of a project"
+      },
       "org.sagebionetworks.repo.model.asynch.AsynchronousRequestBody": {
         "type": "object",
         "properties": { "concreteType": { "type": "string" } },
         "description": "The body of an Asynchronous job request.",
         "oneOf": [
+          {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.download.AddToDownloadListRequest"
+          },
+          {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.DownloadFromTableRequest"
+          },
+          {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.download.DownloadListPackageRequest"
+          },
+          {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.QueryBundleRequest"
+          },
+          {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.TableSearchChangeRequest"
+          },
+          {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.TableUpdateTransactionRequest"
+          },
+          {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.download.DownloadListQueryRequest"
+          },
+          { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.agent.AgentChatRequest" },
+          { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.CreateGridRequest" },
+          {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.file.FileHandleRestoreRequest"
+          },
+          {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.QueryNextPageToken"
+          },
           {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.download.DownloadListManifestRequest"
           },
@@ -19560,16 +20689,10 @@
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.report.DownloadStorageReportRequest"
           },
           {
-            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.download.AddToDownloadListRequest"
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.DownloadPFBRequest"
           },
           {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.UploadToTablePreviewRequest"
-          },
-          {
-            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.DownloadFromTableRequest"
-          },
-          {
-            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.download.DownloadListPackageRequest"
           },
           { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.doi.v2.DoiRequest" },
           {
@@ -19582,19 +20705,7 @@
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.ViewColumnModelRequest"
           },
           {
-            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.QueryBundleRequest"
-          },
-          {
-            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.TableSearchChangeRequest"
-          },
-          {
-            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.TableUpdateTransactionRequest"
-          },
-          {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.file.FileHandleArchivalRequest"
-          },
-          {
-            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.download.DownloadListQueryRequest"
           },
           {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.file.BulkFileDownloadRequest"
@@ -19602,7 +20713,6 @@
           {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.migration.AsyncMigrationRequest"
           },
-          { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.agent.AgentChatRequest" },
           {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.AppendableRowSetRequest"
           },
@@ -19611,12 +20721,6 @@
           },
           {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.schema.GetValidationSchemaRequest"
-          },
-          {
-            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.file.FileHandleRestoreRequest"
-          },
-          {
-            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.QueryNextPageToken"
           },
           {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.file.AddFileToDownloadListRequest"
@@ -19746,6 +20850,18 @@
           }
         },
         "description": "Reference for a single Row of a TableEntity"
+      },
+      "org.sagebionetworks.repo.model.grid.sql.Row": {
+        "type": "object",
+        "properties": {
+          "rowId": { "type": "string" },
+          "values": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Cell values for a single row of a query result."
+          }
+        },
+        "description": ""
       },
       "org.sagebionetworks.repo.model.table.QueryResult": {
         "type": "object",
@@ -20131,6 +21247,44 @@
         },
         "description": "Metadata for a paginated list of personal access token records."
       },
+      "org.sagebionetworks.repo.model.migration.BackfillLastSeenOnResponse": {
+        "type": "object",
+        "properties": {
+          "concreteType": {
+            "type": "string",
+            "enum": ["org.sagebionetworks.repo.model.migration.BackfillLastSeenOnResponse"]
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "description": "Results for a lastSeenOn backfill request.",
+        "required": ["concreteType"]
+      },
+      "org.sagebionetworks.repo.model.grid.sql.InExpression": {
+        "type": "object",
+        "properties": {
+          "concreteType": {
+            "type": "string",
+            "enum": ["org.sagebionetworks.repo.model.grid.sql.InExpression"]
+          },
+          "left": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.ColumnReference"
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.Literal",
+              "description": "Literal is a single value of a given type."
+            },
+            "description": "An array of literal values for the 'IN' operator."
+          },
+          "not": { "type": "boolean" }
+        },
+        "description": "In expression is used for a where condition using the 'in' opperator.",
+        "required": ["concreteType"]
+      },
       "PaginatedResultsOfSubmissionStatus": {
         "type": "object",
         "properties": {
@@ -20413,6 +21567,20 @@
           "originalParentId": { "type": "string" }
         },
         "description": "JSON schema for the TrashEntity POJO. A trashed entity is an entity in the trash can."
+      },
+      "org.sagebionetworks.repo.model.grid.sql.SelectClause": {
+        "type": "object",
+        "properties": {
+          "setQuantifier": { "type": "string" },
+          "selectList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.SelectItem"
+            },
+            "description": "One ore more select items."
+          }
+        },
+        "description": "Object model describing the SELECT statment of a SQL query."
       },
       "org.sagebionetworks.repo.model.dataaccess.AccessRequirementStatus": {
         "type": "object",
@@ -20767,6 +21935,19 @@
         },
         "description": "Describes the eligibility of a Challenge Team to submit to an Evalution queue, reflecting the queue's submission quotas and current submissions."
       },
+      "org.sagebionetworks.repo.model.grid.sql.SetValue": {
+        "type": "object",
+        "properties": {
+          "columnName": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.ColumnReference"
+          },
+          "value": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.Literal",
+            "description": "Literal is a single value of a given type."
+          }
+        },
+        "description": "Set the value of a column."
+      },
       "org.sagebionetworks.repo.model.form.FormGroup": {
         "type": "object",
         "properties": {
@@ -20897,6 +22078,19 @@
           }
         }
       },
+      "org.sagebionetworks.repo.model.table.DownloadPFBResult": {
+        "type": "object",
+        "properties": {
+          "concreteType": {
+            "type": "string",
+            "enum": ["org.sagebionetworks.repo.model.table.DownloadPFBResult"]
+          },
+          "resultsFileHandleId": { "type": "string" },
+          "tableId": { "type": "string" }
+        },
+        "description": "Response of a PFB download",
+        "required": ["concreteType"]
+      },
       "org.sagebionetworks.repo.model.dataaccess.AccessRequirementSearchSort": {
         "type": "object",
         "properties": {
@@ -20965,7 +22159,8 @@
             "enum": ["org.sagebionetworks.repo.model.table.TextMatchesQueryFilter"]
           },
           "isDefiningCondition": { "type": "boolean" },
-          "searchExpression": { "type": "string" }
+          "searchExpression": { "type": "string" },
+          "searchMode": { "type": "string" }
         },
         "description": "A filter to apply a TEXT_MATCHES predicate (full text search) to the query using the given searchExpression as value.",
         "required": ["concreteType"]
@@ -21043,6 +22238,33 @@
         ],
         "discriminator": { "propertyName": "concreteType" }
       },
+      "org.sagebionetworks.repo.model.table.ReplicatedEvent": {
+        "type": "object",
+        "properties": {
+          "concreteType": {
+            "type": "string",
+            "enum": ["org.sagebionetworks.repo.model.table.ReplicatedEvent"]
+          },
+          "objectId": { "type": "string" },
+          "objectVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "objectType": { "type": "string" },
+          "timestamp": { "type": "string" },
+          "replicatedObjectType": { "type": "string" },
+          "pathIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "description": "The distinct set of pathIs associated a batch of objects that were replciated."
+          }
+        },
+        "description": "Event created after data is replcated.",
+        "required": ["concreteType"]
+      },
       "org.sagebionetworks.repo.model.auth.ChangePasswordInterface": {
         "type": "object",
         "properties": {
@@ -21113,6 +22335,23 @@
         "properties": { "nextPageToken": { "type": "string" } },
         "description": "Request for a single page of DownloadOrderSummary objects."
       },
+      "org.sagebionetworks.repo.model.grid.sql.FunctionName": {
+        "type": "string",
+        "enum": [
+          "AVG",
+          "COUNT",
+          "COUNT_DISTINCT",
+          "MAX",
+          "MIN",
+          "STD",
+          "STDPOP",
+          "STDDEV_SAMP",
+          "SUM",
+          "VAR_POP",
+          "VAR_SAMP",
+          "VARIANCE"
+        ]
+      },
       "org.sagebionetworks.repo.model.doi.v2.Doi": {
         "type": "object",
         "properties": {
@@ -21140,10 +22379,12 @@
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.doi.v2.DoiResourceType",
             "description": "Required. Describes the type of media that the DOI Metadata refers to."
           },
+          "publisher": { "type": "string" },
           "associationId": { "type": "string" },
           "etag": { "type": "string" },
           "doiUri": { "type": "string" },
           "doiUrl": { "type": "string" },
+          "portalId": { "type": "string" },
           "objectId": { "type": "string" },
           "objectType": { "type": "string" },
           "objectVersion": {
@@ -21168,6 +22409,11 @@
         },
         "description": "Results for a backup type job.",
         "required": ["concreteType"]
+      },
+      "org.sagebionetworks.repo.model.grid.CreateReplicaRequest": {
+        "type": "object",
+        "properties": { "gridSessionId": { "type": "string" } },
+        "description": "Request to create a new replica. A replica represents an 'in-memory' grid document identifed by a unique replicaId."
       },
       "org.sagebionetworks.repo.model.dataaccess.AccessRequirementSearchResult": {
         "type": "object",
@@ -21446,6 +22692,17 @@
         "type": "string",
         "enum": ["IN_PROCESS", "CREATED", "READY", "ERROR"]
       },
+      "org.sagebionetworks.repo.model.grid.GridQueryRequest": {
+        "type": "object",
+        "properties": {
+          "gridSessionId": { "type": "string" },
+          "query": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.Query",
+            "description": "Defines a SQL query to be run against the current grid."
+          }
+        },
+        "description": "Request to query the grid."
+      },
       "org.sagebionetworks.repo.model.LogEntry": {
         "type": "object",
         "properties": {
@@ -21454,6 +22711,26 @@
           "stacktrace": { "type": "string" }
         },
         "description": "JSON schema for a log entry"
+      },
+      "org.sagebionetworks.repo.model.grid.sql.FunctionCall": {
+        "type": "object",
+        "properties": {
+          "concreteType": {
+            "type": "string",
+            "enum": ["org.sagebionetworks.repo.model.grid.sql.FunctionCall"]
+          },
+          "name": { "type": "string" },
+          "arguments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.SqlExpression",
+              "description": "A generic SQL expression."
+            },
+            "description": "An array of arguments passed to the function."
+          },
+          "distinct": { "type": "boolean" }
+        },
+        "required": ["concreteType"]
       },
       "org.sagebionetworks.repo.model.file.UploadType": {
         "type": "string",
@@ -21729,6 +23006,14 @@
       "org.sagebionetworks.repo.model.attachment.URLStatus": {
         "type": "string",
         "enum": ["DOES_NOT_EXIST", "READ_FOR_DOWNLOAD"]
+      },
+      "org.sagebionetworks.repo.model.auth.TermsOfServiceRequirements": {
+        "type": "object",
+        "properties": {
+          "requirementDate": { "type": "string" },
+          "minimumTermsOfServiceVersion": { "type": "string" }
+        },
+        "description": "Information about the global ToS Synapse requirements that all users must agree to."
       },
       "org.sagebionetworks.repo.model.message.MessageToUser": {
         "type": "object",
@@ -22095,7 +23380,8 @@
           "period": {
             "type": "integer",
             "format": "int32"
-          }
+          },
+          "username": { "type": "string" }
         },
         "description": "The generated shared secret to enable two factor authentication with TOTP compatible authenticator app. The secret is not active."
       },
@@ -22178,6 +23464,7 @@
           "modifiedBy": { "type": "string" },
           "contentSize": { "type": "string" },
           "contentMd5": { "type": "string" },
+          "fileHandleId": { "type": "string" },
           "modifiedByPrincipalId": { "type": "string" },
           "modifiedOn": { "type": "string" }
         },
@@ -22223,11 +23510,6 @@
         "description": "A token returned to the user upon successful authentication.",
         "required": ["concreteType"]
       },
-      "org.sagebionetworks.repo.model.auth.AccessToken": {
-        "type": "object",
-        "properties": { "accessToken": { "type": "string" } },
-        "description": "Holds an access token used for short-term authentication with Synapse"
-      },
       "org.sagebionetworks.repo.model.asynch.AsynchronousResponseBody": {
         "type": "object",
         "properties": { "concreteType": { "type": "string" } },
@@ -22239,6 +23521,7 @@
           {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.schema.CreateSchemaResponse"
           },
+          { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.CreateGridResponse" },
           {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.RowReferenceSetResults"
           },
@@ -22293,6 +23576,7 @@
           {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.TableSchemaChangeResponse"
           },
+          { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.DownloadPFBResult" },
           {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.download.DownloadListPackageResponse"
           },
@@ -22319,6 +23603,17 @@
         },
         "description": "Paginated results of strings"
       },
+      "org.sagebionetworks.repo.model.grid.sql.Star": {
+        "type": "object",
+        "properties": {
+          "concreteType": {
+            "type": "string",
+            "enum": ["org.sagebionetworks.repo.model.grid.sql.Star"]
+          }
+        },
+        "description": "Indicates an asterisk (*).",
+        "required": ["concreteType"]
+      },
       "org.sagebionetworks.repo.model.download.SortField": {
         "type": "string",
         "enum": [
@@ -22332,6 +23627,23 @@
           "fileSize",
           "isEligibleForPackaging"
         ]
+      },
+      "org.sagebionetworks.repo.model.grid.sql.BinaryOperator": {
+        "type": "string",
+        "enum": [
+          "EQUALS",
+          "NOT_EQUALS",
+          "GREATER_THAN",
+          "LESS_THAN",
+          "GREATER_THAN_OR_EQUALS",
+          "LESS_THAN_OR_EQUALS",
+          "AND",
+          "OR"
+        ]
+      },
+      "org.sagebionetworks.repo.model.agent.AgentType": {
+        "type": "string",
+        "enum": ["BASELINE", "CUSTOM"]
       },
       "org.sagebionetworks.repo.model.quiz.QuizGenerator": {
         "type": "object",
@@ -22376,7 +23688,8 @@
             "enum": ["org.sagebionetworks.repo.model.agent.AgentChatRequest"]
           },
           "sessionId": { "type": "string" },
-          "chatText": { "type": "string" }
+          "chatText": { "type": "string" },
+          "enableTrace": { "type": "boolean" }
         },
         "description": "Send a chat message to the Synapse chat agent",
         "required": ["concreteType"]
@@ -22473,6 +23786,25 @@
       "org.sagebionetworks.repo.model.sts.StsPermission": {
         "type": "string",
         "enum": ["read_only", "read_write"]
+      },
+      "org.sagebionetworks.repo.model.limits.ProjectStorageLocationUsage": {
+        "type": "object",
+        "properties": {
+          "storageLocationId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sumFileBytes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxAllowedFileBytes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isOverLimit": { "type": "boolean" }
+        },
+        "description": "Represent the current size and limits for a single project storage location."
       },
       "org.sagebionetworks.repo.model.download.RemoveBatchOfFilesFromDownloadListResponse": {
         "type": "object",
@@ -22715,7 +24047,8 @@
           "validated_orcid",
           "validated_at",
           "refresh_token_id",
-          "token_type"
+          "token_type",
+          "ga4gh_passport_v1"
         ]
       },
       "org.sagebionetworks.repo.model.project.ProjectSetting": {
@@ -22770,6 +24103,10 @@
         "description": "A materialized view is a type of table that is automatically built from a Synapse SQL query. Its content is persisted. The SQL of the materialized view may contain JOIN clauses on multiple tables.",
         "required": ["concreteType"]
       },
+      "org.sagebionetworks.repo.model.grid.sql.LiteralType": {
+        "type": "string",
+        "enum": ["string", "integner", "float", "boolean"]
+      },
       "org.sagebionetworks.repo.model.file.ExternalUploadDestination": {
         "type": "object",
         "properties": {
@@ -22783,6 +24120,11 @@
           },
           "uploadType": { "type": "string" },
           "banner": { "type": "string" },
+          "destinationProjectId": { "type": "string" },
+          "projectStorageLocationUsage": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.limits.ProjectStorageLocationUsage",
+            "description": "Represent the current size and limits for a single project storage location."
+          },
           "url": { "type": "string" }
         },
         "description": "This upload destination contains information to start an upload to an SFTP or HTTPS destination. The destination is mapped from an <a href=\"${org.sagebionetworks.repo.model.project.ExternalStorageLocationSetting}\">ExternalStorageLocationSetting</a>.",
@@ -22826,7 +24168,12 @@
             "format": "int32"
           },
           "uploadType": { "type": "string" },
-          "banner": { "type": "string" }
+          "banner": { "type": "string" },
+          "destinationProjectId": { "type": "string" },
+          "projectStorageLocationUsage": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.limits.ProjectStorageLocationUsage",
+            "description": "Represent the current size and limits for a single project storage location."
+          }
         },
         "description": "The upload destination contains information to start an upload of a file generated according to the underlying <a href=\"${org.sagebionetworks.repo.model.project.StorageLocationSetting}\">StorageLocationSetting</a>.",
         "oneOf": [
@@ -22958,6 +24305,19 @@
         },
         "description": "JSON schema for a batch of search documents."
       },
+      "org.sagebionetworks.repo.model.grid.sql.Literal": {
+        "type": "object",
+        "properties": {
+          "concreteType": {
+            "type": "string",
+            "enum": ["org.sagebionetworks.repo.model.grid.sql.Literal"]
+          },
+          "value": { "type": "string" },
+          "dataType": { "type": "string" }
+        },
+        "description": "Literal is a single value of a given type.",
+        "required": ["concreteType"]
+      },
       "org.sagebionetworks.repo.model.RestResourceList": {
         "type": "object",
         "properties": {
@@ -22995,6 +24355,16 @@
               "$ref": "#/components/schemas/org.sagebionetworks.repo.model.v2.wiki.V2WikiHeader"
             }
           }
+        }
+      },
+      "org.sagebionetworks.repo.model.grid.sql.OrderByItem": {
+        "type": "object",
+        "properties": {
+          "expression": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.SqlExpression",
+            "description": "A generic SQL expression."
+          },
+          "direction": { "type": "string" }
         }
       },
       "org.sagebionetworks.repo.model.schema.JsonSchemaVersionInfo": {
@@ -23082,6 +24452,11 @@
         "description": "A user preference of type boolean",
         "required": ["concreteType"]
       },
+      "org.sagebionetworks.repo.model.grid.CreateGridPresignedUrlResponse": {
+        "type": "object",
+        "properties": { "presignedUrl": { "type": "string" } },
+        "description": "Response to create a grid presigned URL."
+      },
       "org.sagebionetworks.repo.model.quiz.QuestionResponse": {
         "type": "object",
         "properties": {
@@ -23163,6 +24538,25 @@
         },
         "description": "Contains a set of IDs of the intended recipients of a message"
       },
+      "org.sagebionetworks.repo.model.grid.sql.QueryResult": {
+        "type": "object",
+        "properties": {
+          "columnNames": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "The column names from the select."
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.Row",
+              "description": ""
+            },
+            "description": "The page of rows."
+          }
+        },
+        "description": "Tabular query results from a SQL query."
+      },
       "org.sagebionetworks.repo.model.file.StsUploadDestination": {
         "type": "object",
         "properties": {
@@ -23173,6 +24567,11 @@
           },
           "uploadType": { "type": "string" },
           "banner": { "type": "string" },
+          "destinationProjectId": { "type": "string" },
+          "projectStorageLocationUsage": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.limits.ProjectStorageLocationUsage",
+            "description": "Represent the current size and limits for a single project storage location."
+          },
           "baseKey": { "type": "string" },
           "stsEnabled": { "type": "boolean" }
         },
@@ -23214,6 +24613,63 @@
         "description": "The response body of an asynchronous CSV table download job.",
         "required": ["concreteType"]
       },
+      "org.sagebionetworks.repo.model.table.DownloadPFBRequest": {
+        "type": "object",
+        "properties": {
+          "concreteType": {
+            "type": "string",
+            "enum": ["org.sagebionetworks.repo.model.table.DownloadPFBRequest"]
+          },
+          "entityId": { "type": "string" },
+          "pfbEntityName": { "type": "string" },
+          "fileName": { "type": "string" },
+          "sql": { "type": "string" },
+          "additionalFilters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.QueryFilter"
+            },
+            "description": "Appends additional filters to the SQL query. These are applied before facets. Filters within the list have an AND relationship. If a WHERE clause already exists on the SQL query or facets are selected, it will also be ANDed with the query generated by these additional filters."
+          },
+          "selectedFacets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.FacetColumnRequest",
+              "description": "A set of values that have been selected for filtering in a faceted column"
+            },
+            "description": "The selected facet filters."
+          },
+          "includeEntityEtag": { "type": "boolean" },
+          "selectFileColumn": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "selectFileVersionColumn": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "offset": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.SortItem"
+            }
+          }
+        },
+        "description": "Request to download a Portable Format for Biomedical (PFB) file from a table/view query result.",
+        "required": ["concreteType"]
+      },
+      "org.sagebionetworks.repo.model.doi.v2.DoiObjectType": {
+        "type": "string",
+        "enum": ["ENTITY", "PORTAL_RESOURCE"]
+      },
       "org.sagebionetworks.repo.model.SubmissionTeamPagedResults": {
         "type": "object",
         "properties": {
@@ -23251,6 +24707,10 @@
           },
           { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.message.ChangeMessage" },
           {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.limits.ProjectStorageEvent"
+          },
+          { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.ReplicatedEvent" },
+          {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.dataaccess.DataAccessSubmissionEvent"
           },
           { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.file.FileEvent" },
@@ -23286,6 +24746,20 @@
           "date": { "type": "string" }
         },
         "description": "JSON schema for StatusHistoryRecord POJO"
+      },
+      "org.sagebionetworks.repo.model.grid.GridQueryResponse": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.QueryResult",
+              "description": "Tabular query results from a SQL query."
+            },
+            "description": ""
+          }
+        },
+        "description": ""
       },
       "org.sagebionetworks.repo.model.webhook.SynapseObjectType": {
         "type": "string",
@@ -23336,6 +24810,10 @@
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.QueryCacheHitEvent"
           },
           {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.limits.ProjectStorageEvent"
+          },
+          { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.ReplicatedEvent" },
+          {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.dataaccess.DataAccessSubmissionEvent"
           },
           { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.file.FileEvent" },
@@ -23378,6 +24856,17 @@
           "errorMessage": { "type": "string" }
         },
         "description": "Response from adding a part to multi-part upload or copy."
+      },
+      "org.sagebionetworks.repo.model.agent.TraceEventsRequest": {
+        "type": "object",
+        "properties": {
+          "jobId": { "type": "string" },
+          "newerThanTimestamp": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "description": "A request to get a single page of trace events for a specified asynchronous job."
       },
       "org.sagebionetworks.repo.model.principal.AccountCreationToken": {
         "type": "object",
@@ -23499,6 +24988,16 @@
           "uploadStatus": { "type": "string" }
         },
         "description": "This object is deprecated and will be removed in future versions of Synapse."
+      },
+      "org.sagebionetworks.repo.model.grid.CreateReplicaResponse": {
+        "type": "object",
+        "properties": {
+          "replica": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.GridReplica",
+            "description": "Information about a replica."
+          }
+        },
+        "description": "Response to a create replica request."
       },
       "org.sagebionetworks.repo.model.discussion.MessageURL": {
         "type": "object",
@@ -23648,6 +25147,16 @@
         },
         "description": "The response body from validateDefiningSql"
       },
+      "org.sagebionetworks.repo.model.oauth.GA4GHVisaType": {
+        "type": "string",
+        "enum": [
+          "AffiliationAndRole",
+          "AcceptedTermsAndPolicies",
+          "ResearcherStatus",
+          "ControlledAccessGrants",
+          "LinkedIdentities"
+        ]
+      },
       "org.sagebionetworks.repo.model.dataaccess.AccessApprovalSearchResponse": {
         "type": "object",
         "properties": {
@@ -23684,13 +25193,13 @@
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.migration.MigrationTypeCounts"
           },
           {
-            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.migration.DatasetBackfillResponse"
-          },
-          {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.migration.MigrationRangeChecksum"
           },
           {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.migration.MigrationTypeCount"
+          },
+          {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.migration.BackfillLastSeenOnResponse"
           },
           {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.migration.BatchChecksumResponse"
@@ -23840,6 +25349,9 @@
           },
           {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.TableUpdateTransactionRequest"
+          },
+          {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.DownloadPFBRequest"
           },
           {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.DownloadFromTableRequest"
@@ -24042,7 +25554,10 @@
           "TABLE_STATUS_EVENT",
           "DATA_ACCESS_SUBMISSION_EVENT",
           "FILE_EVENT",
-          "QUERY_CACHE_HIT"
+          "QUERY_CACHE_HIT",
+          "PROJECT_STORAGE_EVENT",
+          "REPLICATED_EVENT",
+          "PORTAL"
         ]
       },
       "org.sagebionetworks.repo.model.InviteeVerificationSignedToken": {
@@ -24199,6 +25714,21 @@
         },
         "description": "An array of Reference objects"
       },
+      "org.sagebionetworks.repo.model.agent.TraceEventsResponse": {
+        "type": "object",
+        "properties": {
+          "jobId": { "type": "string" },
+          "page": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.agent.TraceEvent",
+              "description": "Represents a single trace event generated during an agent chat asynchronous job request."
+            },
+            "description": "A single page of trace events."
+          }
+        },
+        "description": "A single page of an agent trace events for an asynchronous agent chat job. The events are sorted by timestamp ascending."
+      },
       "org.sagebionetworks.repo.model.project.ProjectSettingsType": {
         "type": "string",
         "enum": ["upload"]
@@ -24338,6 +25868,7 @@
           "etag": { "type": "string" },
           "doiUri": { "type": "string" },
           "doiUrl": { "type": "string" },
+          "portalId": { "type": "string" },
           "objectId": { "type": "string" },
           "objectType": { "type": "string" },
           "objectVersion": {
@@ -24358,6 +25889,28 @@
           "fileHandleId": { "type": "string" }
         },
         "description": "Request changes to a FormData object."
+      },
+      "org.sagebionetworks.repo.model.limits.ProjectStorageEvent": {
+        "type": "object",
+        "properties": {
+          "concreteType": {
+            "type": "string",
+            "enum": ["org.sagebionetworks.repo.model.limits.ProjectStorageEvent"]
+          },
+          "objectId": { "type": "string" },
+          "objectVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "objectType": { "type": "string" },
+          "timestamp": { "type": "string" },
+          "projectId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "description": "Event send when project storage changes needs to be propagated.",
+        "required": ["concreteType"]
       },
       "org.sagebionetworks.repo.model.table.TableStatus": {
         "type": "object",
@@ -24419,6 +25972,11 @@
           },
           "uploadType": { "type": "string" },
           "banner": { "type": "string" },
+          "destinationProjectId": { "type": "string" },
+          "projectStorageLocationUsage": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.limits.ProjectStorageLocationUsage",
+            "description": "Represent the current size and limits for a single project storage location."
+          },
           "endpointUrl": { "type": "string" },
           "bucket": { "type": "string" },
           "keyPrefixUUID": { "type": "string" }
@@ -24459,6 +26017,11 @@
           },
           "uploadType": { "type": "string" },
           "banner": { "type": "string" },
+          "destinationProjectId": { "type": "string" },
+          "projectStorageLocationUsage": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.limits.ProjectStorageLocationUsage",
+            "description": "Represent the current size and limits for a single project storage location."
+          },
           "baseKey": { "type": "string" },
           "bucket": { "type": "string" }
         },
@@ -24484,9 +26047,35 @@
         "type": "string",
         "enum": ["CREATED_ON"]
       },
+      "org.sagebionetworks.repo.model.auth.TermsOfServiceInfo": {
+        "type": "object",
+        "properties": {
+          "termsOfServiceUrl": { "type": "string" },
+          "latestTermsOfServiceVersion": { "type": "string" },
+          "currentRequirements": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.auth.TermsOfServiceRequirements",
+            "description": "Information about the global ToS Synapse requirements that all users must agree to."
+          }
+        },
+        "description": "Information about the current Synapse Terms of Service (ToS)."
+      },
       "org.sagebionetworks.repo.model.AcquisitionStatusNames": {
         "type": "string",
         "enum": ["requested", "approved", "denied", "pending", "acquired"]
+      },
+      "org.sagebionetworks.repo.model.limits.ProjectStorageUsage": {
+        "type": "object",
+        "properties": {
+          "projectId": { "type": "string" },
+          "locations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.limits.ProjectStorageLocationUsage",
+              "description": "Represent the current size and limits for a single project storage location."
+            }
+          }
+        },
+        "description": "Provides information about file allocations and limits for each storage location associated with a single project."
       },
       "org.sagebionetworks.repo.model.download.DownloadListItem": {
         "type": "object",
@@ -24543,6 +26132,10 @@
         },
         "description": "Defines a single sub-column of a column of type JSON.  This can be used to enable the faceting of the sub-columns."
       },
+      "org.sagebionetworks.repo.model.table.TextMatchesMode": {
+        "type": "string",
+        "enum": ["NATURAL_LANGUAGE", "BOOLEAN"]
+      },
       "org.sagebionetworks.repo.model.TeamMembershipStatus": {
         "type": "object",
         "properties": {
@@ -24558,9 +26151,53 @@
         },
         "description": "JSON schema for the possible status of a User with respect to Team membership."
       },
+      "org.sagebionetworks.repo.model.grid.sql.Update": {
+        "type": "object",
+        "properties": {
+          "set": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.SetValue",
+              "description": "Set the value of a column."
+            },
+            "description": "Values to set."
+          },
+          "where": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.SqlExpression",
+              "description": "A generic SQL expression."
+            },
+            "description": "Optional WHERE clause."
+          },
+          "limit": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "description": "SQL used to update cells of a grid."
+      },
       "org.sagebionetworks.repo.model.discussion.DiscussionThreadOrder": {
         "type": "string",
         "enum": ["NUMBER_OF_REPLIES", "NUMBER_OF_VIEWS", "PINNED_AND_LAST_ACTIVITY", "THREAD_TITLE"]
+      },
+      "org.sagebionetworks.repo.model.grid.sql.SqlExpression": {
+        "type": "object",
+        "properties": { "concreteType": { "type": "string" } },
+        "description": "A generic SQL expression.",
+        "oneOf": [
+          { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.Star" },
+          { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.Literal" },
+          {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.BinaryExpression"
+          },
+          { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.Identifier" },
+          { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.InExpression" },
+          { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.FunctionCall" },
+          { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.ColumnReference" }
+        ],
+        "required": ["concreteType"],
+        "discriminator": { "propertyName": "concreteType" }
       },
       "org.sagebionetworks.repo.model.form.ListResponse": {
         "type": "object",
@@ -25035,6 +26672,10 @@
         },
         "description": "Response to an alias check request."
       },
+      "org.sagebionetworks.repo.model.grid.slq.SetQuantifier": {
+        "type": "string",
+        "enum": ["DISNTICT"]
+      },
       "org.sagebionetworks.repo.model.dataaccess.AccessorGroupRequest": {
         "type": "object",
         "properties": {
@@ -25055,6 +26696,16 @@
           }
         },
         "description": "List of Migration types."
+      },
+      "org.sagebionetworks.repo.model.grid.UpdateGridResponse": {
+        "type": "object",
+        "properties": {
+          "updatedRowCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "description": "Response to an Update grid SQL request."
       },
       "org.sagebionetworks.repo.model.TermsOfUseAccessRequirement": {
         "type": "object",
@@ -25157,6 +26808,22 @@
         "description": "The external upload destination setting contains information to generate an external S3 upload destination connected with Synapse. For details on how to create a custom S3 storage location in the web client, see <a href=\"https://help.synapse.org/docs/Custom-Storage-Locations.2048327803.html\">Custom Storage Locations</a>",
         "required": ["bucket", "concreteType"]
       },
+      "org.sagebionetworks.repo.model.limits.ProjectStorageLocationLimit": {
+        "type": "object",
+        "properties": {
+          "projectId": { "type": "string" },
+          "storageLocationId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxAllowedFileBytes": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "description": "Set the limit on the number of files bytes for a single project storage location",
+        "required": ["projectId", "storageLocationId"]
+      },
       "org.sagebionetworks.repo.model.table.EntityUpdateFailureCode": {
         "type": "string",
         "enum": ["NOT_FOUND", "UNAUTHORIZED", "CONCURRENT_UPDATE", "ILLEGAL_ARGUMENT", "UNKNOWN"]
@@ -25190,6 +26857,21 @@
           "failureCode": { "type": "string" }
         },
         "description": "Result of a FileHandleCopyRequest."
+      },
+      "org.sagebionetworks.repo.model.dataaccess.UserSubmissionSearchResponse": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.dataaccess.UserSubmissionSearchResult",
+              "description": "The result item in a User Data Access Submission Search"
+            },
+            "description": "The matching submissions information corresponding to the search parameters"
+          },
+          "nextPageToken": { "type": "string" }
+        },
+        "description": "Response for the request to search through the user data access submissions"
       },
       "org.sagebionetworks.repo.model.file.BatchFileResult": {
         "type": "object",
@@ -25254,6 +26936,25 @@
           }
         },
         "description": "JSON schema for an error returned by Drs Services. Used to align error messages with <a href=\"https://ga4gh.github.io/data-repository-service-schemas/preview/release/drs-1.2.0/docs/#tag/ErrorModel\">Error</a>",
+        "required": ["concreteType"]
+      },
+      "org.sagebionetworks.repo.model.grid.sql.BinaryExpression": {
+        "type": "object",
+        "properties": {
+          "concreteType": {
+            "type": "string",
+            "enum": ["org.sagebionetworks.repo.model.grid.sql.BinaryExpression"]
+          },
+          "left": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.SqlExpression",
+            "description": "A generic SQL expression."
+          },
+          "operator": { "type": "string" },
+          "right": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.SqlExpression",
+            "description": "A generic SQL expression."
+          }
+        },
         "required": ["concreteType"]
       },
       "org.sagebionetworks.repo.model.ACTAccessRequirementInterface": {
@@ -25488,6 +27189,17 @@
         },
         "description": "JSON schema for the fields of a search document.  Note that awesome search does not support camel case so we have to deviate from the usual naming scheme for properties."
       },
+      "org.sagebionetworks.repo.model.agent.AgentRegistration": {
+        "type": "object",
+        "properties": {
+          "agentRegistrationId": { "type": "string" },
+          "awsAgentId": { "type": "string" },
+          "awsAliasId": { "type": "string" },
+          "registeredOn": { "type": "string" },
+          "type": { "type": "string" }
+        },
+        "description": "The registration of a custom AWS agent."
+      },
       "org.sagebionetworks.repo.model.schema.ValidationSummaryStatistics": {
         "type": "object",
         "properties": {
@@ -25511,6 +27223,21 @@
           "generatedOn": { "type": "string" }
         },
         "description": "Summary statistics for the JSON schema validation results for the children of an Entity container (Project or Folder)"
+      },
+      "org.sagebionetworks.repo.model.grid.CreateGridResponse": {
+        "type": "object",
+        "properties": {
+          "concreteType": {
+            "type": "string",
+            "enum": ["org.sagebionetworks.repo.model.grid.CreateGridResponse"]
+          },
+          "gridSession": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.GridSession",
+            "description": "Basic information about a grid session."
+          }
+        },
+        "description": "The response to creating a new grid sesion.",
+        "required": ["concreteType"]
       },
       "org.sagebionetworks.repo.model.oauth.OIDCClaimsRequestDetails": {
         "type": "object",
@@ -25557,6 +27284,24 @@
           "nextPageToken": { "type": "string" }
         },
         "description": "A request to retrieve a page of Submission Information"
+      },
+      "org.sagebionetworks.repo.model.grid.internal.Connection": {
+        "type": "object",
+        "properties": {
+          "gridSessionId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "replicaId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "description": "Connection information from a presigned URL."
       },
       "org.sagebionetworks.repo.model.auth.TwoFactorAuthLoginRequest": {
         "type": "object",
@@ -25752,6 +27497,17 @@
         "description": "Contains a AnnotationV2's value and its type",
         "required": ["value"]
       },
+      "org.sagebionetworks.repo.model.grid.CreateGridPresignedUrlRequest": {
+        "type": "object",
+        "properties": {
+          "gridSessionId": { "type": "string" },
+          "replicaId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "description": "Request to create a new presigned URL that is used to establish a grid websocket connection."
+      },
       "org.sagebionetworks.repo.model.table.SortItem": {
         "type": "object",
         "properties": {
@@ -25812,21 +27568,6 @@
         },
         "description": "The external upload destination setting contains information to generate an upload destination for an S3 object storage NOT managed by Synapse. This is different from ExternalS3StorageLocationSetting, which contains information about an external S3 storage that is managed by Synapse",
         "required": ["bucket", "endpointUrl", "concreteType"]
-      },
-      "org.sagebionetworks.repo.model.migration.DatasetBackfillResponse": {
-        "type": "object",
-        "properties": {
-          "concreteType": {
-            "type": "string",
-            "enum": ["org.sagebionetworks.repo.model.migration.DatasetBackfillResponse"]
-          },
-          "count": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "description": "Response of DatasetBackfillingRequest.",
-        "required": ["concreteType"]
       },
       "org.sagebionetworks.repo.model.table.AppendableRowSetRequest": {
         "type": "object",
@@ -25985,7 +27726,7 @@
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.migration.AsyncMigrationTypeCountsRequest"
           },
           {
-            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.migration.DatasetBackfillRequest"
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.migration.BackfillLastSeenOnRequest"
           },
           {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.migration.AsyncMigrationRangeChecksumRequest"
@@ -26008,6 +27749,20 @@
         ],
         "required": ["concreteType"],
         "discriminator": { "propertyName": "concreteType" }
+      },
+      "org.sagebionetworks.repo.model.grid.GridReplica": {
+        "type": "object",
+        "properties": {
+          "gridSessionId": { "type": "string" },
+          "replicaId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "createdBy": { "type": "string" },
+          "isAgentReplica": { "type": "boolean" },
+          "createdOn": { "type": "string" }
+        },
+        "description": "Information about a replica."
       },
       "org.sagebionetworks.repo.model.dataaccess.SubmissionPageRequest": {
         "type": "object",
@@ -26151,6 +27906,21 @@
         "description": "Array of annotation keys",
         "required": ["keys"]
       },
+      "org.sagebionetworks.repo.model.portals.ListPortalsResponse": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.portals.Portal",
+              "description": "JSON schema for a Synapse Portal."
+            },
+            "description": "A page of portals that match the request filters."
+          },
+          "nextPageToken": { "type": "string" }
+        },
+        "description": "JSON schema for a list of Portals"
+      },
       "org.sagebionetworks.repo.model.schema.ListJsonSchemaInfoRequest": {
         "type": "object",
         "properties": {
@@ -26222,7 +27992,9 @@
           "INVALID_TABLE_QUERY_FACET_COLUMN_REQUEST",
           "OAUTH_CLIENT_NOT_VERIFIED",
           "TWO_FA_REQUIRED",
-          "UNSUPPORTED_WEBHOOK_DOMAIN"
+          "UNSUPPORTED_WEBHOOK_DOMAIN",
+          "PROJECT_STORAGE_LIMIT_EXCEEDED",
+          "TWO_FA_ENABLED_REQUIRED"
         ]
       },
       "org.sagebionetworks.repo.model.download.Action": {
@@ -26279,6 +28051,21 @@
       "org.sagebionetworks.repo.model.entity.SortBy": {
         "type": "string",
         "enum": ["NAME", "CREATED_ON", "MODIFIED_ON"]
+      },
+      "org.sagebionetworks.repo.model.migration.BackfillLastSeenOnRequest": {
+        "type": "object",
+        "properties": {
+          "concreteType": {
+            "type": "string",
+            "enum": ["org.sagebionetworks.repo.model.migration.BackfillLastSeenOnRequest"]
+          },
+          "maxUsersCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "description": "Request to backfill the lastSeenOn status for existing users.",
+        "required": ["concreteType"]
       },
       "org.sagebionetworks.repo.model.table.TableSearchChangeResponse": {
         "type": "object",
@@ -26454,6 +28241,19 @@
         "description": "Response of an asynchronous that returns RowReferenceSet.",
         "required": ["concreteType"]
       },
+      "org.sagebionetworks.repo.model.utils.github.Release": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": { "type": "string" },
+          "url": { "type": "string" },
+          "tag_name": { "type": "string" }
+        },
+        "description": "A Github repository release."
+      },
       "PaginatedResultsOfEntityHeader": {
         "type": "object",
         "properties": {
@@ -26525,6 +28325,15 @@
           }
         },
         "description": "The model object represents a list of EntityThreadCounts"
+      },
+      "org.sagebionetworks.repo.model.grid.sql.SelectItem": {
+        "type": "object",
+        "properties": {
+          "expression": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.SqlExpression",
+            "description": "A generic SQL expression."
+          }
+        }
       },
       "org.sagebionetworks.repo.model.Node": {
         "type": "object",
@@ -26611,6 +28420,47 @@
           "nextPageToken": { "type": "string" }
         },
         "description": "A single page of the JSON schema validation results."
+      },
+      "org.sagebionetworks.repo.model.grid.sql.Query": {
+        "type": "object",
+        "properties": {
+          "select": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.SelectClause",
+            "description": "Object model describing the SELECT statment of a SQL query."
+          },
+          "where": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.SqlExpression",
+              "description": "A generic SQL expression."
+            },
+            "description": "Optional WHERE clause."
+          },
+          "groupBy": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.SqlExpression",
+              "description": "A generic SQL expression."
+            },
+            "description": "Optional GROUP BY clause."
+          },
+          "orderBy": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.OrderByItem"
+            },
+            "description": "Optional ORDER BY clause."
+          },
+          "limit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "offset": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "description": "Defines a SQL query to be run against the current grid."
       },
       "org.sagebionetworks.repo.model.schema.BoundObjectType": {
         "type": "string",
@@ -26752,6 +28602,7 @@
           },
           "query": { "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.Query" },
           "parentId": { "type": "string" },
+          "recursive": { "type": "boolean" },
           "useVersionNumber": { "type": "boolean" }
         },
         "description": "Start an asynchronous job to add files from the given view query or folder to the user's download list,",
@@ -26819,6 +28670,22 @@
           }
         ],
         "discriminator": { "propertyName": "concreteType" }
+      },
+      "org.sagebionetworks.repo.model.dataaccess.UserSubmissionSearchRequest": {
+        "type": "object",
+        "properties": {
+          "accessRequirementId": { "type": "string" },
+          "submissionState": { "type": "string" },
+          "sort": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.dataaccess.SubmissionSearchSort",
+              "description": "Identifies both the field and direction for a single sort operation"
+            }
+          },
+          "nextPageToken": { "type": "string" }
+        },
+        "description": "A request to search through the user data access submissions"
       },
       "org.sagebionetworks.repo.model.annotation.StringAnnotation": {
         "type": "object",
@@ -27062,6 +28929,14 @@
         },
         "description": "Request to get a single page of files from the user's download list for files that are currently available for download."
       },
+      "org.sagebionetworks.repo.model.agent.AgentRegistrationRequest": {
+        "type": "object",
+        "properties": {
+          "awsAgentId": { "type": "string" },
+          "awsAliasId": { "type": "string" }
+        },
+        "description": "Request to register a custom AWS agent with Synapse.  Currently, only internal users are authorized to register custom agents."
+      },
       "org.sagebionetworks.repo.model.dataaccess.SubmissionState": {
         "type": "string",
         "enum": ["SUBMITTED", "APPROVED", "REJECTED", "CANCELLED"]
@@ -27182,6 +29057,17 @@
         },
         "description": "Specify which field should be returned as facets and the format of the results for each field"
       },
+      "org.sagebionetworks.repo.model.agent.TraceEvent": {
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": { "type": "string" }
+        },
+        "description": "Represents a single trace event generated during an agent chat asynchronous job request."
+      },
       "org.sagebionetworks.repo.model.statistics.FilesCountStatistics": {
         "type": "object",
         "properties": {
@@ -27197,6 +29083,11 @@
           }
         },
         "description": "Describes an aggregate of file actions (e.g. downloads/uploads) and (unique) users count for a specific time frame"
+      },
+      "org.sagebionetworks.repo.model.portals.ListPortalsRequest": {
+        "type": "object",
+        "properties": { "nextPageToken": { "type": "string" } },
+        "description": "JSON schema for a request to list a page of Portals, the list will be ordered by name."
       },
       "org.sagebionetworks.repo.model.oauth.OAuthAuthorizationResponse": {
         "type": "object",
@@ -27512,6 +29403,7 @@
           },
           "passed": { "type": "boolean" },
           "passedOn": { "type": "string" },
+          "createdOn": { "type": "string" },
           "revokedOn": { "type": "string" },
           "revoked": { "type": "boolean" },
           "certified": { "type": "boolean" },
@@ -27627,6 +29519,27 @@
         },
         "description": "A user response and whether it is correct."
       },
+      "org.sagebionetworks.repo.model.grid.GridSession": {
+        "type": "object",
+        "properties": {
+          "sessionId": { "type": "string" },
+          "startedBy": { "type": "string" },
+          "startedOn": { "type": "string" },
+          "etag": { "type": "string" },
+          "modifiedOn": { "type": "string" },
+          "lastReplicaIdClient": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastReplicaIdService": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gridJsonSchema$Id": { "type": "string" },
+          "sourceEntityId": { "type": "string" }
+        },
+        "description": "Basic information about a grid session."
+      },
       "org.sagebionetworks.repo.model.file.FileEvent": {
         "type": "object",
         "properties": {
@@ -27716,6 +29629,9 @@
         "oneOf": [
           {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.QueryBundleRequest"
+          },
+          {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.DownloadPFBRequest"
           },
           {
             "$ref": "#/components/schemas/org.sagebionetworks.repo.model.table.DownloadFromTableRequest"
@@ -28383,6 +30299,16 @@
         "description": "Signed token containing the information needed to retrieve a membership invitation.",
         "required": ["concreteType"]
       },
+      "org.sagebionetworks.repo.model.auth.TermsOfServiceStatus": {
+        "type": "object",
+        "properties": {
+          "userId": { "type": "string" },
+          "userCurrentTermsOfServiceState": { "type": "string" },
+          "lastAgreementDate": { "type": "string" },
+          "lastAgreementVersion": { "type": "string" }
+        },
+        "description": "The status of a user's ToS agreement"
+      },
       "org.sagebionetworks.repo.model.agent.AgentSession": {
         "type": "object",
         "properties": {
@@ -28394,7 +30320,7 @@
             "format": "int32"
           },
           "modifiedOn": { "type": "string" },
-          "agentId": { "type": "string" },
+          "agentRegistrationId": { "type": "string" },
           "etag": { "type": "string" }
         },
         "description": "Information about a specific session (conversation) with an agent.  Only the acess level can be changed on an existing session.  You will need to start a new session if you wish to use a different agentId."
@@ -28528,6 +30454,17 @@
         "required": ["concreteType"],
         "discriminator": { "propertyName": "concreteType" }
       },
+      "org.sagebionetworks.repo.model.grid.sql.Identifier": {
+        "type": "object",
+        "properties": {
+          "concreteType": {
+            "type": "string",
+            "enum": ["org.sagebionetworks.repo.model.grid.sql.Identifier"]
+          },
+          "value": { "type": "string" }
+        },
+        "required": ["concreteType"]
+      },
       "org.sagebionetworks.repo.model.OAuthErrorResponse": {
         "type": "object",
         "properties": {
@@ -28551,6 +30488,11 @@
           },
           "uploadType": { "type": "string" },
           "banner": { "type": "string" },
+          "destinationProjectId": { "type": "string" },
+          "projectStorageLocationUsage": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.limits.ProjectStorageLocationUsage",
+            "description": "Represent the current size and limits for a single project storage location."
+          },
           "baseKey": { "type": "string" },
           "stsEnabled": { "type": "boolean" },
           "endpointUrl": { "type": "string" },
@@ -28592,20 +30534,24 @@
         "description": "Signed token containing the information for a new user.",
         "required": ["concreteType"]
       },
+      "org.sagebionetworks.repo.model.grid.UpdateGridRequest": {
+        "type": "object",
+        "properties": {
+          "gridSessionId": { "type": "string" },
+          "replicaId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "update": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.grid.sql.Update",
+            "description": "SQL used to update cells of a grid."
+          }
+        },
+        "description": "Request to update the grid by executing a SQL update command."
+      },
       "org.sagebionetworks.repo.model.dataaccess.SubmissionSortField": {
         "type": "string",
         "enum": ["MODIFIED_ON", "CREATED_ON"]
-      },
-      "org.sagebionetworks.repo.model.migration.DatasetBackfillRequest": {
-        "type": "object",
-        "properties": {
-          "concreteType": {
-            "type": "string",
-            "enum": ["org.sagebionetworks.repo.model.migration.DatasetBackfillRequest"]
-          }
-        },
-        "description": "Dataset back filling of checksum, size and count request.",
-        "required": ["concreteType"]
       },
       "org.sagebionetworks.repo.model.docker.RegistryEventAction": {
         "type": "string",
@@ -28653,7 +30599,15 @@
             "uniqueItems": true
           },
           "createdOn": { "type": "string" },
-          "twoFactorAuthEnabled": { "type": "boolean" }
+          "twoFactorAuthEnabled": { "type": "boolean" },
+          "tosAgreements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/org.sagebionetworks.repo.model.auth.TermsOfServiceAgreement",
+              "description": "Information about the user agreement for a specific version of the TOS"
+            },
+            "description": "The list of term of service versions that the user agreed to"
+          }
         },
         "description": "JSON schema for UserProfile POJO"
       },
@@ -28881,6 +30835,11 @@
           },
           "uploadType": { "type": "string" },
           "banner": { "type": "string" },
+          "destinationProjectId": { "type": "string" },
+          "projectStorageLocationUsage": {
+            "$ref": "#/components/schemas/org.sagebionetworks.repo.model.limits.ProjectStorageLocationUsage",
+            "description": "Represent the current size and limits for a single project storage location."
+          },
           "baseKey": { "type": "string" },
           "stsEnabled": { "type": "boolean" }
         },
