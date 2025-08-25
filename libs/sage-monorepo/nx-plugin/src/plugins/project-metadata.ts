@@ -10,6 +10,7 @@ export type Builder = 'esbuild' | 'webpack' | 'gradle' | 'maven' | 'uv';
 export type ContainerType = 'docker' | 'singularity';
 // export type Language = 'python' | 'typescript' | 'javascript';
 export type Framework = 'angular';
+export type ContainerImageType = 'postgres' | 'caddy' | 'custom';
 
 export type ProjectMetadata = {
   projectType: ProjectType;
@@ -25,6 +26,7 @@ export type ProjectMetadata = {
   containerType: ContainerType | null;
   // language: Language;
   framework: Framework | null;
+  containerImageType: ContainerImageType | null;
 };
 
 export function inferProjectMetadata(
@@ -36,8 +38,9 @@ export function inferProjectMetadata(
   return {
     projectType: inferProjectType(projectRoot),
     builder: inferBuilder(siblingFiles, localProjectConfiguration),
-    containerType: inferContainerType(siblingFiles),
+    containerType: inferContainerType(localProjectConfiguration, siblingFiles),
     framework: inferFramework(localProjectConfiguration),
+    containerImageType: inferContainerImageType(localProjectConfiguration, siblingFiles),
   };
 }
 
@@ -74,8 +77,21 @@ function inferBuilder(
   return null;
 }
 
-function inferContainerType(siblingFiles: string[]): ContainerType | null {
-  if (siblingFiles.includes('Dockerfile')) return 'docker';
+function inferContainerType(
+  localProjectConfiguration: ProjectConfiguration,
+  siblingFiles: string[],
+): ContainerType | null {
+  const tags = localProjectConfiguration.tags || [];
+
+  // Check for new container-image tags (opt-in to centralized system)
+  if (tags.some((tag) => tag.startsWith('container-image:'))) {
+    return 'docker';
+  }
+
+  // Fallback: existing behavior for projects not using new system
+  if (siblingFiles.includes('Dockerfile')) {
+    return 'docker';
+  }
 
   return null;
 }
@@ -88,5 +104,39 @@ function inferFramework(localProjectConfiguration: ProjectConfiguration): Framew
     return 'angular';
   }
 
+  return null;
+}
+
+function inferContainerImageType(
+  localProjectConfiguration: ProjectConfiguration,
+  siblingFiles: string[],
+): ContainerImageType | null {
+  const tags = localProjectConfiguration.tags || [];
+
+  // Extract base image type from container-image tags
+  const containerImageTag = tags.find((tag) => tag.startsWith('container-image:'));
+
+  if (containerImageTag) {
+    const imageType = containerImageTag.split(':')[1];
+
+    // No validation here - let task execution handle invalid values
+    switch (imageType) {
+      case 'postgres':
+        return 'postgres';
+      case 'caddy':
+        return 'caddy';
+      default:
+        // For any other value (including 'custom' and invalid values), return 'custom'
+        // Task generation will validate and provide helpful errors for invalid values
+        return 'custom';
+    }
+  }
+
+  // Fallback: check for existing Dockerfile (for existing projects)
+  if (siblingFiles.includes('Dockerfile')) {
+    return 'custom';
+  }
+
+  // No container-image tag and no Dockerfile means no container capabilities
   return null;
 }

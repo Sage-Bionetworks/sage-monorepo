@@ -17,5 +17,5 @@
       }
     }
   },
-  "tags": ["type:db", "scope:backend"]
+  "tags": ["container-image:postgres"]
 }

@@ -1,0 +1,3 @@
+FROM {{baseImage}}
+
+COPY Caddyfile /etc/caddy/
