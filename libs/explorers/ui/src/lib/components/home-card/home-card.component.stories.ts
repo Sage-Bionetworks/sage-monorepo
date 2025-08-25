@@ -2,7 +2,7 @@ import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { provideRouter } from '@angular/router';
 import {
   mockCheckQueryForErrors,
-  mockGetSearchResultsList,
+  mockGetSearchResults,
   mockNavigateToResult,
 } from '@sagebionetworks/explorers/testing';
 import type { Meta, StoryObj } from '@storybook/angular';
@@ -19,7 +19,7 @@ const meta: Meta<HomeCardComponent> = {
   ],
   argTypes: {
     navigateToResult: { control: false },
-    getSearchResultsList: { control: false },
+    getSearchResults: { control: false },
     checkQueryForErrors: { control: false },
   },
 };
@@ -46,7 +46,7 @@ export const SearchHomeCard: Story = {
     imageAltText: 'gene comparison icon',
     searchPlaceholder: 'Find Gene by Name...',
     navigateToResult: mockNavigateToResult,
-    getSearchResultsList: mockGetSearchResultsList,
+    getSearchResults: mockGetSearchResults,
     checkQueryForErrors: mockCheckQueryForErrors,
   },
 };

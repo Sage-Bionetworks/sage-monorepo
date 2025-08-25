@@ -6,7 +6,9 @@
     headerLogoPath="/model-ad-assets/images/header-logo.svg"
     [headerLinks]="headerLinks"
     [footerLinks]="footerLinks"
-  ></explorers-header>
+  >
+    <model-ad-search-input [searchPlaceholder]="'Search models'" />
+  </explorers-header>
   <div class="container">
     <router-outlet></router-outlet>
   </div>

@@ -6,17 +6,25 @@ import { MetaTagService, PlatformService } from '@sagebionetworks/explorers/serv
 import { FooterComponent, HeaderComponent } from '@sagebionetworks/explorers/ui';
 import { Dataversion, DataversionService } from '@sagebionetworks/model-ad/api-client-angular';
 import { ConfigService, MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
+import { SearchInputComponent } from '@sagebionetworks/model-ad/ui';
 import { footerLinks, headerLinks } from '@sagebionetworks/model-ad/util';
 import {
   CONFIG_SERVICE_TOKEN,
-  GoogleTagManagerComponent,
   createGoogleTagManagerIdProvider,
+  GoogleTagManagerComponent,
   isGoogleTagManagerIdSet,
 } from '@sagebionetworks/shared/google-tag-manager';
 import { ToastModule } from 'primeng/toast';
 
 @Component({
-  imports: [RouterModule, FooterComponent, HeaderComponent, ToastModule, GoogleTagManagerComponent],
+  imports: [
+    RouterModule,
+    FooterComponent,
+    HeaderComponent,
+    ToastModule,
+    GoogleTagManagerComponent,
+    SearchInputComponent,
+  ],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

@@ -1,4 +1,3 @@
-
 import {
   AfterViewInit,
   Component,
@@ -16,7 +15,8 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faMagnifyingGlass, faSpinner, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { SearchResult, SearchResultsList } from '@sagebionetworks/explorers/models';
+import { SearchResult } from '@sagebionetworks/explorers/models';
+import { SanitizeHtmlPipe } from '@sagebionetworks/explorers/util';
 import {
   catchError,
   debounceTime,
@@ -24,14 +24,14 @@ import {
   EMPTY,
   fromEvent,
   Observable,
+  of,
   switchMap,
-  throwError,
 } from 'rxjs';
 import { SvgImageComponent } from '../svg-image/svg-image.component';
 
 @Component({
   selector: 'explorers-search-input',
-  imports: [SvgImageComponent, FormsModule, FontAwesomeModule],
+  imports: [SvgImageComponent, FormsModule, FontAwesomeModule, SanitizeHtmlPipe],
   templateUrl: './search-input.component.html',
   styleUrls: ['./search-input.component.scss'],
   standalone: true,
@@ -48,8 +48,11 @@ export class SearchInputComponent implements AfterViewInit {
   hasThickBorder = input<boolean>(false);
 
   navigateToResult = input.required<(id: string) => void>();
-  getSearchResultsList = input.required<(query: string) => Observable<SearchResultsList>>();
+  getSearchResults = input.required<(query: string) => Observable<SearchResult[]>>();
   checkQueryForErrors = input.required<(query: string) => string>(); // empty string if no error
+  formatResultForDisplay = input<(result: SearchResult) => string>(
+    (result: SearchResult) => result.id,
+  );
 
   faMagnifyingGlass = faMagnifyingGlass;
   faSpinner = faSpinner;
@@ -62,8 +65,8 @@ export class SearchInputComponent implements AfterViewInit {
 
   showResults = false;
   errorMessages: { [key: string]: string } = {
-    notFound: 'No results found. Try searching again.',
-    notValidSearch: 'Please enter at least two characters.',
+    notFound: 'No results match your search string.',
+    notValidSearch: 'Please enter at least three characters.',
     unknown: 'An unknown error occurred, please try again.',
   };
 
@@ -81,27 +84,38 @@ export class SearchInputComponent implements AfterViewInit {
         takeUntilDestroyed(this.destroyRef),
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap((event: any) => {
-          return this.search(event.target.value);
-        }),
-        catchError((err) => {
-          this.error = this.errorMessages['unknown'];
-          this.isLoading = false;
-          return throwError(() => new Error(err));
+        switchMap((event: Event) => {
+          const target = event.target as HTMLInputElement;
+          return this.search(target.value).pipe(
+            catchError(() => {
+              this.error = this.errorMessages['unknown'];
+              this.isLoading = false;
+              this.showResults = true;
+              return of([]);
+            }),
+          );
         }),
       )
-      .subscribe((response: any) => {
+      .subscribe((response: SearchResult[]) => {
         this.showResults = true;
-        this.setResults(response.items);
+        this.setResults(response);
       });
   }
 
-  search(query: string): Observable<SearchResultsList> {
+  search(query: string): Observable<SearchResult[]> {
     this.results = [];
     this.error = '';
-    this.query = query = query.trim().replace(/[^a-z0-9-_]/gi, '');
+    // Allow model names with special characters - backend handles sanitization
+    this.query = query = query.replace(/[^a-z0-9\-_()/*: ]/gi, '');
 
-    if (query.length > 0 && query.length < 2) {
+    // If query is empty after sanitization, hide results and return
+    if (query.length === 0) {
+      this.showResults = false;
+      this.isLoading = false;
+      return EMPTY;
+    }
+
+    if (query.length > 0 && query.length < 3) {
       this.error = this.errorMessages['notValidSearch'];
     } else {
       this.error = this.checkQueryForErrors()(query);
@@ -111,12 +125,12 @@ export class SearchInputComponent implements AfterViewInit {
       this.showResults = true;
     }
 
-    this.isLoading = query && !this.error ? true : false;
-    return this.isLoading ? this.getSearchResultsList()(query) : EMPTY;
+    this.isLoading = !!(query && !this.error);
+    return this.isLoading ? this.getSearchResults()(query) : EMPTY;
   }
 
   setResults(results: SearchResult[]) {
-    if (results.length < 1) {
+    if (results.length < 1 && !this.error) {
       this.error = this.errorMessages['notFound'];
     }
     this.results = results;
@@ -132,13 +146,6 @@ export class SearchInputComponent implements AfterViewInit {
     this.navigateToResult()(id);
   }
 
-  hasAlias(result: SearchResult): boolean {
-    return (
-      !result.name.toLowerCase().includes(this.query.toLowerCase()) &&
-      result.alias?.map((s: string) => s.toLowerCase()).includes(this.query.toLowerCase())
-    );
-  }
-
   onFocus() {
     if (this.results.length > 0 || this.error) {
       this.showResults = true;
@@ -150,6 +157,7 @@ export class SearchInputComponent implements AfterViewInit {
     this.query = '';
     this.error = '';
     this.results = [];
+    this.showResults = false;
   }
 
   checkClickIsInsideComponent(event: Event) {

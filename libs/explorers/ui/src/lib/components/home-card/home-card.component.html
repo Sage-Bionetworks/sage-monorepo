@@ -16,21 +16,10 @@
           [enableHoverEffects]="false"
         />
       </div>
-    } @else if (
-      !!searchPlaceholder() &&
-      !!navigateToResult() &&
-      !!getSearchResultsList() &&
-      !!checkQueryForErrors()
-    ) {
-      <explorers-search-input
-        [searchPlaceholder]="searchPlaceholder()!"
-        [searchImagePath]="imagePath()"
-        [searchImageAltText]="imageAltText()"
-        [hasThickBorder]="true"
-        [navigateToResult]="navigateToResult()!"
-        [getSearchResultsList]="getSearchResultsList()!"
-        [checkQueryForErrors]="checkQueryForErrors()!"
-      />
+    } @else {
+      <div class="search-container">
+        <ng-content></ng-content>
+      </div>
     }
   </div>
 </ng-template>

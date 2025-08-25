@@ -3,7 +3,7 @@ import { provideRouter } from '@angular/router';
 import { SvgIconService } from '@sagebionetworks/explorers/services';
 import {
   mockCheckQueryForErrors,
-  mockGetSearchResultsList,
+  mockGetSearchResults,
   SvgIconServiceStub,
 } from '@sagebionetworks/explorers/testing';
 import { render, screen, waitFor } from '@testing-library/angular';
@@ -41,7 +41,7 @@ async function setup() {
       searchImageAltText: 'gene search icon',
       hasThickBorder: true,
       navigateToResult: mockNavigateToResult,
-      getSearchResultsList: mockGetSearchResultsList,
+      getSearchResults: mockGetSearchResults,
       checkQueryForErrors: mockCheckQueryForErrors,
     },
   });
@@ -58,10 +58,10 @@ describe('SearchInputComponent', () => {
     const { user } = await setup();
     const input = getInput();
 
-    await user.type(input, 'a');
-    expect(input).toHaveValue('a');
+    await user.type(input, 'ab');
+    expect(input).toHaveValue('ab');
 
-    await screen.findByText('Please enter at least two characters.');
+    await screen.findByText('Please enter at least three characters.');
   });
 
   it('should display error returned by checkQueryForErrors', async () => {
@@ -85,7 +85,7 @@ describe('SearchInputComponent', () => {
 
     await waitForSpinner();
 
-    await screen.findByText('No results found. Try searching again.');
+    await screen.findByText('No results match your search string.');
   });
 
   it('should display results when search is successful', async () => {
