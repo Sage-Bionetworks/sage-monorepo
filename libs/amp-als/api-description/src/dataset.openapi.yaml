@@ -17,4 +17,4 @@ paths:
   /datasets:
     $ref: paths/datasets.yaml
   /datasets/{datasetId}:
-    $ref: paths/datasets/@{datasetId}.yaml
+    $ref: paths/datasets/{datasetId}.yaml
