@@ -58,10 +58,10 @@ describe('SearchInputComponent', () => {
     const { user } = await setup();
     const input = getInput();
 
-    await user.type(input, 'a');
-    expect(input).toHaveValue('a');
+    await user.type(input, 'ab');
+    expect(input).toHaveValue('ab');
 
-    await screen.findByText('Please enter at least two characters.');
+    await screen.findByText('Please enter at least three characters.');
   });
 
   it('should display error returned by checkQueryForErrors', async () => {

@@ -49,6 +49,9 @@ export class SearchInputComponent implements AfterViewInit {
   navigateToResult = input.required<(id: string) => void>();
   getSearchResults = input.required<(query: string) => Observable<SearchResult[]>>();
   checkQueryForErrors = input.required<(query: string) => string>(); // empty string if no error
+  formatResultForDisplay = input<(result: SearchResult) => string>(
+    (result: SearchResult) => result.id,
+  );
 
   faMagnifyingGlass = faMagnifyingGlass;
   faSpinner = faSpinner;
@@ -62,7 +65,7 @@ export class SearchInputComponent implements AfterViewInit {
   showResults = false;
   errorMessages: { [key: string]: string } = {
     notFound: 'No results found. Try searching again.',
-    notValidSearch: 'Please enter at least two characters.',
+    notValidSearch: 'Please enter at least three characters.',
     unknown: 'An unknown error occurred, please try again.',
   };
 
@@ -100,7 +103,7 @@ export class SearchInputComponent implements AfterViewInit {
     this.error = '';
     this.query = query = query.trim().replace(/[^a-z0-9-_]/gi, '');
 
-    if (query.length > 0 && query.length < 2) {
+    if (query.length > 0 && query.length < 3) {
       this.error = this.errorMessages['notValidSearch'];
     } else {
       this.error = this.checkQueryForErrors()(query);
@@ -129,13 +132,6 @@ export class SearchInputComponent implements AfterViewInit {
     this.showResults = false;
     this.searchNavigated.emit();
     this.navigateToResult()(id);
-  }
-
-  hasAlias(result: SearchResult): boolean {
-    return (
-      !result.name.toLowerCase().includes(this.query.toLowerCase()) &&
-      result.alias?.map((s: string) => s.toLowerCase()).includes(this.query.toLowerCase())
-    );
   }
 
   onFocus() {

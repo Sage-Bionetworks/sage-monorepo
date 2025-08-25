@@ -49,13 +49,8 @@
             @for (result of results; track result) {
               <li (click)="goToResult(result.id)">
                 <span class="result-name">
-                  {{ result.id || result.name }}
+                  {{ formatResultForDisplay()(result) }}
                 </span>
-                @if (hasAlias(result)) {
-                  <span class="result-aliases">
-                    &nbsp;(Also known as&nbsp;{{ query.toUpperCase() }})
-                  </span>
-                }
               </li>
             }
           </ul>

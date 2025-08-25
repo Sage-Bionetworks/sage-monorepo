@@ -3,14 +3,14 @@ import { delay, Observable, of } from 'rxjs';
 
 const dummySearchResults: SearchResult[] = [
   {
-    name: 'Dummy Name',
-    alias: ['Dummy Alias', 'Another Alias'],
     id: 'dummy_id',
+    match_field: 'id',
+    match_value: 'Dummy Name',
   },
   {
-    name: 'Dummy Name 2',
-    alias: ['Dummy Alias 2', 'Another Alias 2'],
     id: 'dummy_id_2',
+    match_field: 'aliases',
+    match_value: 'Alternate Name',
   },
 ];
 
