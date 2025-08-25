@@ -1,0 +1,98 @@
+openapi: 3.0.3
+info:
+  contact:
+    name: Support
+    url: https://github.com/Sage-Bionetworks/sage-monorepo
+  license:
+    name: Apache 2.0
+    url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
+  title: Agora API Next
+  version: 1.0.0-draft
+  x-logo:
+    url: https://raw.githubusercontent.com/Sage-Bionetworks/agora-images/main/og-social.png
+    altText: Agora
+servers:
+  - url: http://localhost/v1
+tags:
+  - description: Operations about health checks.
+    name: Health Check
+    x-audience:
+      - internal
+paths:
+  /next/health-check:
+    get:
+      description: Get information about the health of the service
+      operationId: getHealthCheck
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthCheck'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Get health check information
+      tags:
+        - Health Check
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Health Check
+components:
+  responses:
+    BadRequest:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: Invalid request
+    InternalServerError:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The request cannot be fulfilled due to an unexpected server error
+  schemas:
+    HealthCheck:
+      description: Represents the health of a service
+      example:
+        status: pass
+      properties:
+        status:
+          description: Indicates whether the service status is acceptable or not
+          enum:
+            - pass
+            - fail
+            - warn
+          type: string
+      required:
+        - status
+      type: object
+    BasicError:
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          description: A human readable documentation for the problem type
+          type: string
+        status:
+          description: The HTTP status code
+          type: integer
+        detail:
+          description: A human readable explanation specific to this occurrence of
+            the problem
+          type: string
+        type:
+          description: An absolute URI that identifies the problem type
+          type: string
+        instance:
+          description: An absolute URI that identifies the specific occurrence of
+            the problem
+          type: string
+      required:
+        - status
+        - title
+      type: object

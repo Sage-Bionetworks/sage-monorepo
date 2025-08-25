@@ -1,0 +1,15 @@
+README.md
+pom.xml
+src/main/java/org/sagebionetworks/agora/api/next/OpenApiGeneratorApplication.java
+src/main/java/org/sagebionetworks/agora/api/next/RFC3339DateFormat.java
+src/main/java/org/sagebionetworks/agora/api/next/api/ApiUtil.java
+src/main/java/org/sagebionetworks/agora/api/next/api/HealthCheckApi.java
+src/main/java/org/sagebionetworks/agora/api/next/api/HealthCheckApiController.java
+src/main/java/org/sagebionetworks/agora/api/next/api/HealthCheckApiDelegate.java
+src/main/java/org/sagebionetworks/agora/api/next/configuration/HomeController.java
+src/main/java/org/sagebionetworks/agora/api/next/configuration/SpringDocConfiguration.java
+src/main/java/org/sagebionetworks/agora/api/next/model/dto/BasicErrorDto.java
+src/main/java/org/sagebionetworks/agora/api/next/model/dto/HealthCheckDto.java
+src/main/resources/application.properties
+src/main/resources/openapi.yaml
+src/test/java/org/sagebionetworks/agora/api/next/OpenApiGeneratorApplicationTests.java

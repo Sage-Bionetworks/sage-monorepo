@@ -49,6 +49,10 @@ subprojects {
 
   // Configure group and version based on project name patterns
   when {
+    name.startsWith("agora") -> {
+      group = "org.sagebionetworks.agora"
+      version = "0.0.1-SNAPSHOT"
+    }
     name.startsWith("amp-als") -> {
       group = "org.sagebionetworks.amp.als"
       version = "0.0.1-SNAPSHOT"

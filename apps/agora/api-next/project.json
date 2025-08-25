@@ -1,0 +1,60 @@
+{
+  "name": "agora-api-next",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/agora/api-next/src",
+  "projectType": "application",
+  "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "build-dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./gradlew :{projectName}:build --continuous --exclude-task check"
+      },
+      "continuous": true
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./gradlew :{projectName}:bootRun --exclude-task check"
+      },
+      "continuous": true,
+      "dependsOn": ["build-dev"]
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/agora/serve-detach.sh {projectName}"
+      }
+    },
+    "build-image-base": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./gradlew :{projectName}:bootBuildImage"
+      }
+    },
+    "scan-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "trivy image ghcr.io/sage-bionetworks/{projectName}:local --quiet",
+        "color": true
+      }
+    },
+    "generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["xargs rm -fr <.openapi-generator/FILES", "openapi-generator-cli generate"],
+        "cwd": "{projectRoot}",
+        "parallel": false
+      },
+      "dependsOn": ["^build"]
+    }
+  },
+  "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],
+  "implicitDependencies": ["agora-api-description"]
+}
