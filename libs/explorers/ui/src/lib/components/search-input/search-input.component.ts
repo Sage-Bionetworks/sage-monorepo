@@ -1,4 +1,3 @@
-
 import {
   AfterViewInit,
   Component,
@@ -16,7 +15,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faMagnifyingGlass, faSpinner, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { SearchResult, SearchResultsList } from '@sagebionetworks/explorers/models';
+import { SearchResult } from '@sagebionetworks/explorers/models';
 import {
   catchError,
   debounceTime,
@@ -48,7 +47,7 @@ export class SearchInputComponent implements AfterViewInit {
   hasThickBorder = input<boolean>(false);
 
   navigateToResult = input.required<(id: string) => void>();
-  getSearchResultsList = input.required<(query: string) => Observable<SearchResultsList>>();
+  getSearchResults = input.required<(query: string) => Observable<SearchResult[]>>();
   checkQueryForErrors = input.required<(query: string) => string>(); // empty string if no error
 
   faMagnifyingGlass = faMagnifyingGlass;
@@ -90,13 +89,13 @@ export class SearchInputComponent implements AfterViewInit {
           return throwError(() => new Error(err));
         }),
       )
-      .subscribe((response: any) => {
+      .subscribe((response: SearchResult[]) => {
         this.showResults = true;
-        this.setResults(response.items);
+        this.setResults(response);
       });
   }
 
-  search(query: string): Observable<SearchResultsList> {
+  search(query: string): Observable<SearchResult[]> {
     this.results = [];
     this.error = '';
     this.query = query = query.trim().replace(/[^a-z0-9-_]/gi, '');
@@ -112,7 +111,7 @@ export class SearchInputComponent implements AfterViewInit {
     }
 
     this.isLoading = query && !this.error ? true : false;
-    return this.isLoading ? this.getSearchResultsList()(query) : EMPTY;
+    return this.isLoading ? this.getSearchResults()(query) : EMPTY;
   }
 
   setResults(results: SearchResult[]) {

@@ -19,7 +19,7 @@
     } @else if (
       !!searchPlaceholder() &&
       !!navigateToResult() &&
-      !!getSearchResultsList() &&
+      !!getSearchResults() &&
       !!checkQueryForErrors()
     ) {
       <explorers-search-input
@@ -28,7 +28,7 @@
         [searchImageAltText]="imageAltText()"
         [hasThickBorder]="true"
         [navigateToResult]="navigateToResult()!"
-        [getSearchResultsList]="getSearchResultsList()!"
+        [getSearchResults]="getSearchResults()!"
         [checkQueryForErrors]="checkQueryForErrors()!"
       />
     }

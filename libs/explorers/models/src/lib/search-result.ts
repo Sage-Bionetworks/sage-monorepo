@@ -3,7 +3,3 @@ export interface SearchResult {
   alias: string[];
   id: string;
 }
-
-export interface SearchResultsList {
-  items?: SearchResult[];
-}

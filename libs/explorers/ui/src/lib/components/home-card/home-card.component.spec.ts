@@ -1,17 +1,17 @@
 import { provideHttpClient } from '@angular/common/http';
+import { Component } from '@angular/core';
 import { provideRouter, Router } from '@angular/router';
-import { SearchResultsList } from '@sagebionetworks/explorers/models';
+import { SearchResult } from '@sagebionetworks/explorers/models';
 import { SvgIconService } from '@sagebionetworks/explorers/services';
 import {
   mockCheckQueryForErrors,
-  mockGetSearchResultsList,
+  mockGetSearchResults,
   SvgIconServiceStub,
 } from '@sagebionetworks/explorers/testing';
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { Observable } from 'rxjs';
 import { HomeCardComponent } from './home-card.component';
-import { Component } from '@angular/core';
 
 const mockRouterLink = 'mock-router-link';
 const mockTitle = 'Mock Title';
@@ -27,7 +27,7 @@ async function setup(
   routerLink?: string,
   searchPlaceholder?: string,
   navigateToResult?: (id: string) => void,
-  getSearchResultsList?: (query: string) => Observable<SearchResultsList>,
+  getSearchResults?: (query: string) => Observable<SearchResult[]>,
   checkQueryForErrors?: (query: string) => string,
 ) {
   const user = userEvent.setup();
@@ -50,7 +50,7 @@ async function setup(
       routerLink: routerLink,
       searchPlaceholder: searchPlaceholder,
       navigateToResult: navigateToResult,
-      getSearchResultsList: getSearchResultsList,
+      getSearchResults: getSearchResults,
       checkQueryForErrors: checkQueryForErrors,
     },
   });
@@ -92,7 +92,7 @@ describe('HomeCardComponent', () => {
       undefined,
       mockSearchPlaceholder,
       mockNavigateToResult,
-      mockGetSearchResultsList,
+      mockGetSearchResults,
       mockCheckQueryForErrors,
     );
     expect(screen.getByPlaceholderText(mockSearchPlaceholder)).toBeInTheDocument();

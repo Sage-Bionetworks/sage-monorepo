@@ -2,7 +2,7 @@ import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { provideRouter } from '@angular/router';
 import {
   mockCheckQueryForErrors,
-  mockGetSearchResultsList,
+  mockGetSearchResults,
   mockNavigateToResult,
 } from '@sagebionetworks/explorers/testing';
 import type { Meta, StoryObj } from '@storybook/angular';
@@ -19,7 +19,7 @@ const meta: Meta<SearchInputComponent> = {
   ],
   argTypes: {
     navigateToResult: { control: false },
-    getSearchResultsList: { control: false },
+    getSearchResults: { control: false },
     checkQueryForErrors: { control: false },
   },
 };
@@ -30,7 +30,7 @@ export const HeaderSearchInput: Story = {
   args: {
     searchPlaceholder: 'Search genes',
     navigateToResult: mockNavigateToResult,
-    getSearchResultsList: mockGetSearchResultsList,
+    getSearchResults: mockGetSearchResults,
     checkQueryForErrors: mockCheckQueryForErrors,
   },
 };
@@ -42,7 +42,7 @@ export const HomeSearchInput: Story = {
     searchImageAltText: 'gene search icon',
     hasThickBorder: true,
     navigateToResult: mockNavigateToResult,
-    getSearchResultsList: mockGetSearchResultsList,
+    getSearchResults: mockGetSearchResults,
     checkQueryForErrors: mockCheckQueryForErrors,
   },
 };

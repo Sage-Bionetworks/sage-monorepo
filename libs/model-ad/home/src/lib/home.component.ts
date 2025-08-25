@@ -3,7 +3,7 @@ import { HomeCardComponent, SvgImageComponent } from '@sagebionetworks/explorers
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import {
   checkQueryForErrors,
-  getSearchResultsList,
+  getSearchResults,
   navigateToResult,
 } from '@sagebionetworks/model-ad/util';
 
@@ -20,7 +20,7 @@ interface Stat {
 })
 export class HomeComponent {
   navigateToResult = navigateToResult;
-  getSearchResultsList = getSearchResultsList;
+  getSearchResults = getSearchResults;
   checkQueryForErrors = checkQueryForErrors;
 
   ROUTE_PATHS = ROUTE_PATHS;

@@ -3,7 +3,7 @@ import { provideRouter } from '@angular/router';
 import { SvgIconService } from '@sagebionetworks/explorers/services';
 import {
   mockCheckQueryForErrors,
-  mockGetSearchResultsList,
+  mockGetSearchResults,
   SvgIconServiceStub,
 } from '@sagebionetworks/explorers/testing';
 import { render, screen, waitFor } from '@testing-library/angular';
@@ -41,7 +41,7 @@ async function setup() {
       searchImageAltText: 'gene search icon',
       hasThickBorder: true,
       navigateToResult: mockNavigateToResult,
-      getSearchResultsList: mockGetSearchResultsList,
+      getSearchResults: mockGetSearchResults,
       checkQueryForErrors: mockCheckQueryForErrors,
     },
   });
