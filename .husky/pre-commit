@@ -1,6 +1,3 @@
-# Run formatters and linters against staged git files
+# Pre-commit: run only fast, auto-fixable checks on staged files
+# (formatters + ultra-fast linters; keep this step under a few seconds)
 pnpm dlx lint-staged --relative
-# nx affected --uncommitted --target=lint
-
-# Re-index the staged files after they have been formatted
-# git diff --name-only --cached | xargs -l git add

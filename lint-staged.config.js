@@ -26,6 +26,7 @@ module.exports = {
     // Lint the projects affected by the staged files
     `nx affected --target=lint --files=${filenames.join(',')}`,
     // Type check the projects affected by the staged files
+    // TODO: Consider moving to pre-push if longer than 5s
     `nx affected --target=type-check --files=${filenames.join(',')}`,
   ],
 
@@ -46,9 +47,6 @@ module.exports = {
     // `poetry run sqlfluff lint ${filenames.join(' ')}`,
   ],
 
-  '**/*': (filenames) => [
-    // Test the projects affected by the staged files. This task assumes that formatting files and
-    // testing affected projects can be safely run in parallel.
-    `nx affected --target=test --files=${filenames.join(',')}`,
-  ],
+  // Note: Tests are intentionally removed from pre-commit to improve developer velocity.
+  // Lightweight tests run in pre-push hook and CI pipeline instead.
 };
