@@ -1,20 +1,21 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
+import { Dataversion, DataversionService } from '@sagebionetworks/agora/api-client-angular';
+import { AGORA_LOADING_ICON_COLORS, ConfigService } from '@sagebionetworks/agora/config';
+import { HeaderComponent } from '@sagebionetworks/agora/ui';
+import { footerLinks } from '@sagebionetworks/agora/util';
+import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/constants';
 import {
   GitHubService,
   MetaTagService,
   PlatformService,
 } from '@sagebionetworks/explorers/services';
-import { HeaderComponent } from '@sagebionetworks/agora/ui';
 import { FooterComponent } from '@sagebionetworks/explorers/ui';
-import { DataversionService, Dataversion } from '@sagebionetworks/agora/api-client-angular';
-import { ConfigService } from '@sagebionetworks/agora/config';
-import { footerLinks } from '@sagebionetworks/agora/util';
 import {
   CONFIG_SERVICE_TOKEN,
-  GoogleTagManagerComponent,
   createGoogleTagManagerIdProvider,
+  GoogleTagManagerComponent,
   isGoogleTagManagerIdSet,
 } from '@sagebionetworks/shared/google-tag-manager';
 import { ToastModule } from 'primeng/toast';
@@ -28,6 +29,10 @@ import { ToastModule } from 'primeng/toast';
     {
       provide: CONFIG_SERVICE_TOKEN,
       useFactory: () => inject(ConfigService),
+    },
+    {
+      provide: LOADING_ICON_COLORS,
+      useValue: AGORA_LOADING_ICON_COLORS,
     },
     createGoogleTagManagerIdProvider(),
   ],
