@@ -4,6 +4,8 @@
   "projectType": "library",
   "sourceRoot": "libs/openchallenges/challenge/src",
   "prefix": "openchallenges",
+  "tags": ["type:feature", "scope:openchallenges", "language:typescript"],
+  "implicitDependencies": [],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
@@ -21,7 +23,5 @@
         "fix": true
       }
     }
-  },
-  "tags": ["type:feature", "scope:openchallenges", "language:typescript"],
-  "implicitDependencies": []
+  }
 }

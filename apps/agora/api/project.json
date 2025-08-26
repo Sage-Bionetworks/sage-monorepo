@@ -3,6 +3,7 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/agora/api/src",
   "projectType": "application",
+  "tags": [],
   "targets": {
     "create-config": {
       "executor": "nx:run-commands",
@@ -74,6 +75,5 @@
         "jestConfig": "apps/agora/api/jest.config.ts"
       }
     }
-  },
-  "tags": []
+  }
 }

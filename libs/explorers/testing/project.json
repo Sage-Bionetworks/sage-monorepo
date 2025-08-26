@@ -4,6 +4,8 @@
   "projectType": "library",
   "sourceRoot": "libs/explorers/testing/src",
   "prefix": "explorers",
+  "tags": ["type:feature", "scope:explorers", "language:typescript"],
+  "implicitDependencies": [],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
@@ -21,7 +23,5 @@
         "fix": true
       }
     }
-  },
-  "tags": ["type:feature", "scope:explorers", "language:typescript"],
-  "implicitDependencies": []
+  }
 }

@@ -4,6 +4,7 @@
   "sourceRoot": "libs/amp-als/api-client-angular/src",
   "projectType": "library",
   "prefix": "amp-als",
+  "tags": ["language:typescript"],
   "targets": {
     "build": {
       "executor": "@nx/angular:ng-packagr-lite",
@@ -42,6 +43,5 @@
         "parallel": false
       }
     }
-  },
-  "tags": ["language:typescript"]
+  }
 }

@@ -4,6 +4,8 @@
   "projectType": "library",
   "sourceRoot": "libs/agora/config/src",
   "prefix": "agora",
+  "tags": ["type:feature", "scope:agora", "language:typescript"],
+  "implicitDependencies": [],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
@@ -21,7 +23,5 @@
         "fix": true
       }
     }
-  },
-  "tags": ["type:feature", "scope:agora", "language:typescript"],
-  "implicitDependencies": []
+  }
 }

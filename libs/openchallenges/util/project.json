@@ -4,6 +4,8 @@
   "projectType": "library",
   "sourceRoot": "libs/openchallenges/util/src",
   "prefix": "openchallenges",
+  "tags": ["type:util", "scope:openchallenges", "language:typescript"],
+  "implicitDependencies": [],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
@@ -15,7 +17,5 @@
     "lint": {
       "executor": "@nx/eslint:lint"
     }
-  },
-  "tags": ["type:util", "scope:openchallenges", "language:typescript"],
-  "implicitDependencies": []
+  }
 }
