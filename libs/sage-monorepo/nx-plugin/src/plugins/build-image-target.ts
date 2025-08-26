@@ -8,6 +8,12 @@ export async function buildImageTarget(
   projectFramework: Framework | null,
   containerImageType: ContainerImageType | null,
 ): Promise<TargetConfiguration> {
+  console.log(
+    `[buildImageTarget] ENTER - projectName: ${projectName}, projectRoot: ${projectRoot}`,
+  );
+  console.log(`[buildImageTarget] projectBuilder: ${projectBuilder}`);
+  console.log(`[buildImageTarget] projectFramework: ${projectFramework}`);
+  console.log(`[buildImageTarget] containerImageType: ${containerImageType}`);
   const dependsOn = [];
 
   // Add container image template generation if needed
@@ -40,7 +46,9 @@ export async function buildImageTarget(
   let context = projectRoot;
   // TODO: The context must be set to '.' for Angular app. Be more specific.
   // Actually, this is also valid for `agora-api` built with Webpack.
-  if (projectBuilder === 'webpack') {
+  // TODO: Consider setting the context per project types once implemented (e.g. 'angular-app')
+  // instead of per builder.
+  if (projectBuilder === 'webpack' || projectBuilder === 'esbuild') {
     context = '.';
   }
 
@@ -50,12 +58,13 @@ export async function buildImageTarget(
     dockerfile = 'Dockerfile.generated';
   }
 
+  console.log(`[buildImageTarget] EXIT - returning configuration for ${projectName}`);
   return {
     executor: '@nx-tools/nx-container:build',
     outputs: [],
     options: {
       context,
-      file: `${context}/${dockerfile}`,
+      file: `${projectRoot}/${dockerfile}`,
     },
     cache: false,
     configurations: {
