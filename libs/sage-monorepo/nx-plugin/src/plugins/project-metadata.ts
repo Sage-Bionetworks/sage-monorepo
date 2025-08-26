@@ -64,14 +64,19 @@ function inferBuilder(
   }
 
   const executor = localProjectConfiguration?.targets?.['build']?.executor ?? '';
-  const webpackExecutors = [
-    '@angular-devkit/build-angular:browser',
+  const webpackExecutors = ['@angular-devkit/build-angular:browser', '@nx/webpack:webpack'];
+
+  const esbuildExecutors = [
+    '@angular-devkit/build-angular:application',
+    '@angular-devkit/build-angular:browser-esbuild',
     '@nx/angular:application',
-    '@nx/webpack:webpack',
+    '@nx/esbuild:esbuild',
   ];
 
   if (webpackExecutors.includes(executor)) {
     return 'webpack';
+  } else if (esbuildExecutors.includes(executor)) {
+    return 'esbuild';
   }
 
   return null;

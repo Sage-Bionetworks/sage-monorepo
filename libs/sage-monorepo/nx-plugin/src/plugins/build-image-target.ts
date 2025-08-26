@@ -40,7 +40,9 @@ export async function buildImageTarget(
   let context = projectRoot;
   // TODO: The context must be set to '.' for Angular app. Be more specific.
   // Actually, this is also valid for `agora-api` built with Webpack.
-  if (projectBuilder === 'webpack') {
+  // TODO: Consider setting the context per project types once implemented (e.g. 'angular-app')
+  // instead of per builder.
+  if (projectBuilder === 'webpack' || projectBuilder === 'esbuild') {
     context = '.';
   }
 
@@ -55,7 +57,7 @@ export async function buildImageTarget(
     outputs: [],
     options: {
       context,
-      file: `${context}/${dockerfile}`,
+      file: `${projectRoot}/${dockerfile}`,
     },
     cache: false,
     configurations: {
