@@ -8,12 +8,6 @@ export async function buildImageTarget(
   projectFramework: Framework | null,
   containerImageType: ContainerImageType | null,
 ): Promise<TargetConfiguration> {
-  console.log(
-    `[buildImageTarget] ENTER - projectName: ${projectName}, projectRoot: ${projectRoot}`,
-  );
-  console.log(`[buildImageTarget] projectBuilder: ${projectBuilder}`);
-  console.log(`[buildImageTarget] projectFramework: ${projectFramework}`);
-  console.log(`[buildImageTarget] containerImageType: ${containerImageType}`);
   const dependsOn = [];
 
   // Add container image template generation if needed
@@ -58,7 +52,6 @@ export async function buildImageTarget(
     dockerfile = 'Dockerfile.generated';
   }
 
-  console.log(`[buildImageTarget] EXIT - returning configuration for ${projectName}`);
   return {
     executor: '@nx-tools/nx-container:build',
     outputs: [],
