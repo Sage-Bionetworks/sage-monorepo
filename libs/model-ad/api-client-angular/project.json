@@ -4,6 +4,8 @@
   "sourceRoot": "libs/model-ad/api-client-angular/src",
   "projectType": "library",
   "prefix": "model-ad",
+  "tags": ["language:typescript", "scope:model-ad"],
+  "implicitDependencies": ["model-ad-api-description"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
@@ -25,7 +27,5 @@
       },
       "dependsOn": ["^build"]
     }
-  },
-  "tags": ["language:typescript", "scope:model-ad"],
-  "implicitDependencies": ["model-ad-api-description"]
+  }
 }

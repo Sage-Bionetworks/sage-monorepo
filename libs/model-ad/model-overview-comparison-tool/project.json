@@ -4,6 +4,8 @@
   "projectType": "library",
   "sourceRoot": "libs/model-ad/model-overview-comparison-tool/src",
   "prefix": "model-ad",
+  "tags": ["type:feature", "scope:model-ad", "language:typescript"],
+  "implicitDependencies": [],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
@@ -21,7 +23,5 @@
         "fix": true
       }
     }
-  },
-  "tags": ["type:feature", "scope:model-ad", "language:typescript"],
-  "implicitDependencies": []
+  }
 }

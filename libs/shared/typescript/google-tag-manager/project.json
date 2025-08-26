@@ -4,6 +4,8 @@
   "projectType": "library",
   "sourceRoot": "libs/shared/typescript/google-tag-manager/src",
   "prefix": "sage",
+  "tags": ["type:util", "scope:shared", "language:typescript"],
+  "implicitDependencies": [],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
@@ -21,7 +23,5 @@
         "fix": true
       }
     }
-  },
-  "tags": ["type:util", "scope:shared", "language:typescript"],
-  "implicitDependencies": []
+  }
 }

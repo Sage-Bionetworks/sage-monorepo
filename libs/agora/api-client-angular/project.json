@@ -4,6 +4,8 @@
   "sourceRoot": "libs/agora/api-client-angular/src",
   "projectType": "library",
   "prefix": "agora",
+  "tags": ["language:typescript", "scope:agora"],
+  "implicitDependencies": ["agora-api-description"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
@@ -25,7 +27,5 @@
       },
       "dependsOn": ["^build"]
     }
-  },
-  "tags": ["language:typescript", "scope:agora"],
-  "implicitDependencies": ["agora-api-description"]
+  }
 }

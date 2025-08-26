@@ -3,6 +3,8 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/model-ad/api/src",
   "projectType": "application",
+  "tags": ["type:service", "scope:backend", "language:typescript"],
+  "implicitDependencies": ["model-ad-api-description"],
   "targets": {
     "create-config": {
       "executor": "nx:run-commands",
@@ -75,7 +77,5 @@
         "jestConfig": "{projectRoot}/jest.config.ts"
       }
     }
-  },
-  "tags": ["type:service", "scope:backend", "language:typescript"],
-  "implicitDependencies": ["model-ad-api-description"]
+  }
 }

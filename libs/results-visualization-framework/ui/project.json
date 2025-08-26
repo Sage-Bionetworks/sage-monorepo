@@ -4,6 +4,8 @@
   "projectType": "library",
   "sourceRoot": "libs/results-visualization-framework/ui/src",
   "prefix": "results-visualization-framework",
+  "tags": ["type:feature", "scope:results-visualization-framework", "language:typescript"],
+  "implicitDependencies": [],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
@@ -56,7 +58,5 @@
         }
       }
     }
-  },
-  "tags": ["type:feature", "scope:results-visualization-framework", "language:typescript"],
-  "implicitDependencies": []
+  }
 }

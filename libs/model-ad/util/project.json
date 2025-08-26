@@ -4,6 +4,8 @@
   "projectType": "library",
   "sourceRoot": "libs/model-ad/util/src",
   "prefix": "model-ad",
+  "tags": ["type:util", "scope:model-ad", "language:typescript"],
+  "implicitDependencies": [],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
@@ -15,7 +17,5 @@
     "lint": {
       "executor": "@nx/eslint:lint"
     }
-  },
-  "tags": ["type:util", "scope:model-ad", "language:typescript"],
-  "implicitDependencies": []
+  }
 }

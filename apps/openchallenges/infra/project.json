@@ -3,6 +3,8 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/openchallenges/infra/src",
   "projectType": "application",
+  "tags": ["type:app", "scope:admin"],
+  "implicitDependencies": [],
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
@@ -30,7 +32,5 @@
         "jestConfig": "apps/openchallenges/infra/jest.config.ts"
       }
     }
-  },
-  "tags": ["type:app", "scope:admin"],
-  "implicitDependencies": []
+  }
 }

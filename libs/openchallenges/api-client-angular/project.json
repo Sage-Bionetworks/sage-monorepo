@@ -4,6 +4,8 @@
   "sourceRoot": "libs/openchallenges/api-client-angular/src",
   "projectType": "library",
   "prefix": "openchallenges",
+  "tags": ["language:typescript"],
+  "implicitDependencies": ["openchallenges-api-description"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
@@ -25,7 +27,5 @@
       },
       "dependsOn": ["^build"]
     }
-  },
-  "tags": ["language:typescript"],
-  "implicitDependencies": ["openchallenges-api-description"]
+  }
 }

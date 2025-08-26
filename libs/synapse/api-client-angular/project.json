@@ -4,6 +4,8 @@
   "sourceRoot": "libs/synapse/api-client-angular/src",
   "projectType": "library",
   "prefix": "synapse",
+  "tags": ["language:typescript"],
+  "implicitDependencies": ["synapse-api-description"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
@@ -25,7 +27,5 @@
       },
       "dependsOn": ["^build"]
     }
-  },
-  "tags": ["language:typescript"],
-  "implicitDependencies": ["synapse-api-description"]
+  }
 }
