@@ -1,6 +1,6 @@
 [versions]
 findbugs = "3.0.2"
-flyway = "11.10.5"
+flyway = "11.11.2"
 graalvm = "0.11.0"
 gradle-versions = "0.52.0"
 h2database = "2.3.232"
@@ -12,15 +12,15 @@ java = "21"
 junit = "5.13.4"
 junit-platform = "1.13.4"
 lombok = "1.18.38"
-nx-gradle = "0.1.4"
+nx-gradle = "0.1.5"
 postgresql = "42.7.7"
-spring = "6.2.9"
+spring = "6.2.10"
 spring-ai = "1.0.1"
-spring-boot = "3.5.4"
+spring-boot = "3.5.5"
 spring-cloud = "4.3.0"
-spring-data = "3.5.2"
-spring-security = "6.5.2"
-springdoc = "2.8.9"
+spring-data = "3.5.3"
+spring-security = "6.5.3"
+springdoc = "2.8.11"
 squareup = "3.0.0"
 testcontainers = "1.21.3"
 
@@ -29,7 +29,7 @@ testcontainers = "1.21.3"
 jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jackson" }
 jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
-jackson-databind-nullable = { module = "org.openapitools:jackson-databind-nullable", version = "0.2.6" }
+jackson-databind-nullable = { module = "org.openapitools:jackson-databind-nullable", version = "0.2.7" }
 jackson-dataformat-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref = "jackson" }
 jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
 jackson-jaxrs-json-provider = { module = "com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider", version.ref = "jackson" }
