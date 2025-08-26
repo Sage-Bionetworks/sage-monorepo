@@ -1,3 +1,4 @@
+import { ProjectConfiguration } from '@nx/devkit';
 import { SageMonorepoPluginConfiguration } from './plugin-configuration';
 import { ProjectMetadata } from './project-metadata';
 
@@ -6,4 +7,5 @@ export type ProjectConfigurationBuilderOptions = {
   projectName: string;
   pluginConfig: SageMonorepoPluginConfiguration;
   projectMetadata: ProjectMetadata;
+  projectConfiguration: ProjectConfiguration;
 };
