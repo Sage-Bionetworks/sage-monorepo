@@ -1,2 +1,5 @@
-# yarn nx affected --target=test
-# yarn nx affected --target=integration-test
+# Pre-push sanity checks (fast, affected projects only)
+# - Runs slower linters
+# - Runs lightweight smoke tests
+# - Skips long integration/E2E (keep CI responsible)
+# - Uses Nx caching and enforces a time budget
