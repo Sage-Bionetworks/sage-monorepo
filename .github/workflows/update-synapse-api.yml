@@ -100,7 +100,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           # Create a new branch with timestamp
-          BRANCH_NAME="synapse/update-synapse-api-$(date +%Y%m%d-%H%M%S)"
+          BRANCH_NAME="synapse/update-synapse-api"
           git checkout -b "$BRANCH_NAME"
 
           # Add all changes
@@ -116,8 +116,7 @@ jobs:
           - libs/synapse/api-description/openapi/openapi.yaml (bundled specification)
           - Regenerated synapse-* client libraries
 
-          Source: https://rest-docs.synapse.org/rest/openapi/openapispecification.json
-          Triggered: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          Source: https://rest-docs.synapse.org/rest/openapi/openapispecification.json"
 
           git commit -m "$COMMIT_MSG"
 
@@ -157,7 +156,6 @@ jobs:
 
           ---
 
-          **Triggered:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')
           **Workflow:** [Update Synapse API Description](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
           **Source:** https://rest-docs.synapse.org/rest/openapi/openapispecification.json
 
