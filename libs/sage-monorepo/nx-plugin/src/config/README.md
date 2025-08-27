@@ -31,13 +31,8 @@ For postgres and caddy projects, the plugin automatically creates:
 Base images are centrally configured in:
 
 ```
-libs/sage-monorepo/nx-plugin/src/config/base-images.ts
+libs/sage-monorepo/nx-plugin/src/config/container-images.ts
 ```
-
-Current configuration:
-
-- **postgres**: `mirror.gcr.io/postgres:16.9-bullseye`
-- **caddy**: `mirror.gcr.io/caddy:2.9.1`
 
 ## Usage
 
@@ -60,11 +55,11 @@ For custom projects:
 nx run bixarena-postgres:build-image
 ```
 
-### Updating Base Images
+### Updating Container Images
 
 To update a container image version:
 
-1. Edit `libs/sage-monorepo/nx-plugin/src/config/base-images.ts`
+1. Edit `libs/sage-monorepo/nx-plugin/src/config/container-images.ts`
 2. Update the version for the desired image type
 3. Rebuild the plugin: `nx build sage-monorepo-nx-plugin`
 4. Reset Nx cache: `nx reset`
@@ -77,11 +72,11 @@ View project classification:
 ```bash
 # Check project tags to see container image type
 nx show project openchallenges-postgres --json | jq '.tags'
-# Output: ["base-image:postgres", "type:db", "scope:backend"]
+# Output: ["container-image:postgres", "type:db", "scope:backend"]
 
 # Check available targets
 nx show project openchallenges-postgres --json | jq '.targets | keys'
-# Output: ["build-image", "create-config", "generate-dockerfile", "serve-detach"]
+# Output: ["container-image", "create-config", "generate-dockerfile", "serve-detach"]
 ```
 
 ## Templates
@@ -93,7 +88,7 @@ Dockerfile templates are stored in:
 
 These templates support variable substitution:
 
-- `{{baseImage}}`: Replaced with the centralized container image
+- `{{containerImage}}`: Replaced with the centralized container image
 
 ## Benefits
 
