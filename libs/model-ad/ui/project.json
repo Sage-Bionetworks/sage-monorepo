@@ -1,0 +1,27 @@
+{
+  "name": "model-ad-ui",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/model-ad/ui/src",
+  "prefix": "model-ad",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/model-ad/ui"],
+      "options": {
+        "jestConfig": "libs/model-ad/ui/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "lint-fix": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "fix": true
+      }
+    }
+  },
+  "tags": ["type:feature", "scope:model-ad", "language:typescript"],
+  "implicitDependencies": []
+}

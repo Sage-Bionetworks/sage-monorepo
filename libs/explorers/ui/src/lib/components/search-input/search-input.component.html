@@ -48,14 +48,10 @@
           <ul class="search-results-list">
             @for (result of results; track result) {
               <li (click)="goToResult(result.id)">
-                <span class="result-name">
-                  {{ result.id || result.name }}
-                </span>
-                @if (hasAlias(result)) {
-                  <span class="result-aliases">
-                    &nbsp;(Also known as&nbsp;{{ query.toUpperCase() }})
-                  </span>
-                }
+                <span
+                  class="result-name"
+                  [innerHtml]="formatResultForDisplay()(result) | sanitizeHtml"
+                ></span>
               </li>
             }
           </ul>
