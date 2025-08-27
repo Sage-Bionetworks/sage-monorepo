@@ -1,13 +1,7 @@
-# Project
-site_name: 'Sage Monorepo'
-site_description: >-
-  A development environment for building robust apps faster.
-
-# Repository
+site_name: Sage Monorepo
+site_description: A development environment for building robust apps faster.
 repo_url: https://github.com/Sage-Bionetworks/sage-monorepo
 repo_name: sage-monorepo
-
-# Navigation
 nav:
   - Home:
       - Sage Monorepo: index.md
@@ -43,13 +37,19 @@ nav:
       - Creating a commit with multiple authors: developers-guide/creating-a-commit-with-multiple-authors.md
       - Common Issues: developers-guide/faq.md
   - Reference:
+      - Service Catalog: reference/services.md
       - Agora:
           - API: reference/agora.md
       - OpenChallenges:
           - Microservices: reference/oc-microservices.md
           - Schemas: reference/oc-schemas.md
-
-# Theme configuration
+      - API:
+          - Synapse: reference/api/synapse.md
+          - Openchallenges: reference/api/openchallenges.md
+          - Model-ad: reference/api/model-ad.md
+          - Bixarena: reference/api/bixarena.md
+          - Amp-als: reference/api/amp-als.md
+          - Agora: reference/api/agora.md
 theme:
   name: material
   palette:
@@ -79,12 +79,9 @@ theme:
     - search.share
     - search.suggest
     - toc.follow
-
 plugins:
   - autorefs
   - search
-  - termynal
-
 markdown_extensions:
   - admonition
   - pymdownx.details

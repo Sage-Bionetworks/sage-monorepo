@@ -25,7 +25,7 @@ interface OpenAPISpec {
 }
 
 interface ChangeDetection {
-  type: 'openapi' | 'nx-project' | 'readme';
+  type: 'openapi' | 'nx-project' | 'readme' | 'project-status' | 'getting-started';
   path: string;
   action: string;
   metadata?: any;
@@ -36,6 +36,16 @@ interface DocumentationUpdate {
   filePath: string;
   content: string;
   description: string;
+}
+
+interface ProjectInfo {
+  name: string;
+  type: 'application' | 'library';
+  language: string;
+  scope: string;
+  description?: string;
+  status: 'active' | 'experimental' | 'deprecated';
+  tags: string[];
 }
 
 class DocsMaintenanceAgent {
@@ -110,10 +120,24 @@ class DocsMaintenanceAgent {
     if (serviceCatalogNeedsUpdate) {
       changes.push({
         type: 'nx-project',
-        path: 'workspace',
-        action: 'update-service-catalog',
+        path: 'services-catalog',
+        action: 'update-services-catalog',
       });
     }
+
+    // Check for project status updates
+    const projectStatusNeedsUpdate = await this.projectStatusNeedsUpdate();
+    if (projectStatusNeedsUpdate) {
+      changes.push({
+        type: 'project-status',
+        path: 'docs/index.md',
+        action: 'update-project-status',
+      });
+    }
+
+    // Check for README changes that might affect documentation
+    const readmeChanges = await this.detectReadmeChanges();
+    changes.push(...readmeChanges);
 
     return changes;
   }
@@ -164,6 +188,16 @@ class DocsMaintenanceAgent {
           if (catalogDoc) updates.push(catalogDoc);
           break;
         }
+        case 'project-status': {
+          const statusDoc = await this.generateProjectStatusUpdate();
+          if (statusDoc) updates.push(statusDoc);
+          break;
+        }
+        case 'readme': {
+          const readmeDoc = await this.syncReadmeTooDocs(change);
+          if (readmeDoc) updates.push(readmeDoc);
+          break;
+        }
       }
     }
 
@@ -198,10 +232,14 @@ class DocsMaintenanceAgent {
         content += '\n';
       }
 
-      // Add paths overview
+      // Add paths overview with more details
       if (parsedSpec.paths) {
         content += `## API Endpoints\n\n`;
         content += `This API provides ${Object.keys(parsedSpec.paths).length} endpoints:\n\n`;
+
+        // Group endpoints by tags if available
+        const endpointsByTag: Record<string, any[]> = {};
+        const untaggedEndpoints: any[] = [];
 
         Object.entries(parsedSpec.paths).forEach(([pathName, pathInfo]: [string, any]) => {
           const methods = Object.keys(pathInfo).filter((key) =>
@@ -210,10 +248,67 @@ class DocsMaintenanceAgent {
 
           methods.forEach((method) => {
             const operation = pathInfo[method];
-            const summary = operation?.summary || `${method.toUpperCase()} ${pathName}`;
-            content += `- **${method.toUpperCase()}** \`${pathName}\` - ${summary}\n`;
+            const tags = operation?.tags || [];
+            const endpoint = {
+              method: method.toUpperCase(),
+              path: pathName,
+              summary: operation?.summary || `${method.toUpperCase()} ${pathName}`,
+              description: operation?.description,
+              deprecated: operation?.deprecated || false,
+            };
+
+            if (tags.length > 0) {
+              tags.forEach((tag: string) => {
+                if (!endpointsByTag[tag]) endpointsByTag[tag] = [];
+                endpointsByTag[tag].push(endpoint);
+              });
+            } else {
+              untaggedEndpoints.push(endpoint);
+            }
           });
         });
+
+        // Render endpoints by tag
+        Object.entries(endpointsByTag).forEach(([tag, endpoints]) => {
+          content += `### ${tag}\n\n`;
+          endpoints.forEach((endpoint) => {
+            const deprecatedFlag = endpoint.deprecated ? ' ⚠️ *Deprecated*' : '';
+            content += `- **${endpoint.method}** \`${endpoint.path}\`${deprecatedFlag}\n`;
+            content += `  ${endpoint.summary}\n`;
+            if (endpoint.description && endpoint.description !== endpoint.summary) {
+              content += `  \n  ${endpoint.description}\n`;
+            }
+            content += '\n';
+          });
+        });
+
+        // Render untagged endpoints
+        if (untaggedEndpoints.length > 0) {
+          content += `### Other Endpoints\n\n`;
+          untaggedEndpoints.forEach((endpoint) => {
+            const deprecatedFlag = endpoint.deprecated ? ' ⚠️ *Deprecated*' : '';
+            content += `- **${endpoint.method}** \`${endpoint.path}\`${deprecatedFlag}\n`;
+            content += `  ${endpoint.summary}\n`;
+            if (endpoint.description && endpoint.description !== endpoint.summary) {
+              content += `  \n  ${endpoint.description}\n`;
+            }
+            content += '\n';
+          });
+        }
+      }
+
+      // Add authentication info if available
+      if (parsedSpec.components?.securitySchemes) {
+        content += `## Authentication\n\n`;
+        Object.entries(parsedSpec.components.securitySchemes).forEach(
+          ([name, scheme]: [string, any]) => {
+            content += `- **${name}**: ${scheme.type}`;
+            if (scheme.description) {
+              content += ` - ${scheme.description}`;
+            }
+            content += '\n';
+          },
+        );
         content += '\n';
       }
 
@@ -252,9 +347,17 @@ class DocsMaintenanceAgent {
 
       let content = `# Service Catalog\n\n`;
       content += `This page provides an overview of all services and applications in the Sage Monorepo.\n\n`;
+      content += `*Last updated: ${new Date().toISOString()}*\n\n`;
 
       // Group projects by scope
       const services = new Map<string, any[]>();
+      const stats = {
+        totalProjects: 0,
+        applications: 0,
+        libraries: 0,
+        byLanguage: {} as Record<string, number>,
+        byScope: {} as Record<string, number>,
+      };
 
       for (const projectPath of projectPaths) {
         try {
@@ -263,23 +366,41 @@ class DocsMaintenanceAgent {
           const tags = projectConfig.tags || [];
           const scope =
             tags.find((tag: string) => tag.startsWith('scope:'))?.replace('scope:', '') || 'shared';
+          const projectType =
+            tags.find((tag: string) => tag.startsWith('type:'))?.replace('type:', '') || 'unknown';
+          const language =
+            tags.find((tag: string) => tag.startsWith('language:'))?.replace('language:', '') ||
+            'unknown';
+
+          // Update statistics
+          stats.totalProjects++;
+          if (projectConfig.projectType === 'application') stats.applications++;
+          if (projectConfig.projectType === 'library') stats.libraries++;
+          stats.byLanguage[language] = (stats.byLanguage[language] || 0) + 1;
+          stats.byScope[scope] = (stats.byScope[scope] || 0) + 1;
 
           if (!services.has(scope)) {
             services.set(scope, []);
           }
 
+          // Get README path if it exists
+          const readmePath = path.join(path.dirname(projectPath), 'README.md');
+          const hasReadme = fs.existsSync(path.join(this.config.repoPath, readmePath));
+
           const scopeProjects = services.get(scope);
           if (scopeProjects) {
             scopeProjects.push({
               name: projectConfig.name,
-              type:
-                tags.find((tag: string) => tag.startsWith('type:'))?.replace('type:', '') ||
-                'unknown',
-              language:
-                tags.find((tag: string) => tag.startsWith('language:'))?.replace('language:', '') ||
-                'unknown',
+              type: projectType,
+              projectType: projectConfig.projectType || 'library',
+              language,
               root: projectConfig.root || path.dirname(projectPath),
               targets: Object.keys(projectConfig.targets || {}),
+              hasReadme,
+              description: this.extractProjectDescription(
+                projectConfig,
+                path.join(this.config.repoPath, readmePath),
+              ),
             });
           }
         } catch (error) {
@@ -287,19 +408,78 @@ class DocsMaintenanceAgent {
         }
       }
 
-      // Generate catalog by product
-      services.forEach((projectList, scope) => {
-        content += `## ${scope.charAt(0).toUpperCase() + scope.slice(1)}\n\n`;
+      // Add summary statistics
+      content += `## Overview\n\n`;
+      content += `- **Total Projects**: ${stats.totalProjects}\n`;
+      content += `- **Applications**: ${stats.applications}\n`;
+      content += `- **Libraries**: ${stats.libraries}\n\n`;
 
-        projectList
-          .sort((a, b) => a.name.localeCompare(b.name))
-          .forEach((project) => {
-            content += `### ${project.name}\n\n`;
-            content += `- **Type**: ${project.type}\n`;
-            content += `- **Language**: ${project.language}\n`;
-            content += `- **Location**: \`${project.root}\`\n`;
-            content += `- **Available Tasks**: ${project.targets.join(', ')}\n\n`;
-          });
+      content += `### By Language\n\n`;
+      Object.entries(stats.byLanguage)
+        .sort(([, a], [, b]) => b - a)
+        .forEach(([language, count]) => {
+          content += `- **${language}**: ${count} projects\n`;
+        });
+      content += '\n';
+
+      content += `### By Scope\n\n`;
+      Object.entries(stats.byScope)
+        .sort(([, a], [, b]) => b - a)
+        .forEach(([scope, count]) => {
+          content += `- **${scope}**: ${count} projects\n`;
+        });
+      content += '\n';
+
+      // Generate catalog by product/scope
+      const sortedScopes = Array.from(services.keys()).sort();
+      sortedScopes.forEach((scope) => {
+        const projectList = services.get(scope);
+        if (!projectList) return;
+
+        content += `## ${scope.charAt(0).toUpperCase() + scope.slice(1)} Projects\n\n`;
+
+        // Group by project type within scope
+        const apps = projectList.filter((p) => p.projectType === 'application');
+        const libs = projectList.filter((p) => p.projectType === 'library');
+
+        if (apps.length > 0) {
+          content += `### Applications\n\n`;
+          apps
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .forEach((project) => {
+              content += `#### ${project.name}\n\n`;
+              if (project.description) {
+                content += `${project.description}\n\n`;
+              }
+              content += `- **Language**: ${project.language}\n`;
+              content += `- **Location**: \`${project.root}\`\n`;
+              content += `- **Available Tasks**: ${project.targets.join(', ')}\n`;
+              if (project.hasReadme) {
+                content += `- **Documentation**: [README](https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/${project.root}/README.md)\n`;
+              }
+              content += '\n';
+            });
+        }
+
+        if (libs.length > 0) {
+          content += `### Libraries\n\n`;
+          libs
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .forEach((project) => {
+              content += `#### ${project.name}\n\n`;
+              if (project.description) {
+                content += `${project.description}\n\n`;
+              }
+              content += `- **Type**: ${project.type}\n`;
+              content += `- **Language**: ${project.language}\n`;
+              content += `- **Location**: \`${project.root}\`\n`;
+              content += `- **Available Tasks**: ${project.targets.join(', ')}\n`;
+              if (project.hasReadme) {
+                content += `- **Documentation**: [README](https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/${project.root}/README.md)\n`;
+              }
+              content += '\n';
+            });
+        }
       });
 
       content += `---\n*This catalog was automatically generated from the Nx workspace configuration.*\n`;
@@ -421,6 +601,271 @@ class DocsMaintenanceAgent {
     } catch {
       return false;
     }
+  }
+
+  private async projectStatusNeedsUpdate(): Promise<boolean> {
+    // Check if the main index.md needs project status updates
+    // This could be triggered by new projects, changed README files, etc.
+    const indexPath = path.join(this.config.repoPath, 'docs/index.md');
+
+    if (!fs.existsSync(indexPath)) {
+      return true;
+    }
+
+    // For now, check if any README.md files have changed
+    try {
+      const status = await this.git.status();
+      return status.files.some(
+        (file: any) => file.path.includes('README.md') && ['M', 'A'].includes(file.index),
+      );
+    } catch {
+      return false;
+    }
+  }
+
+  private async detectReadmeChanges(): Promise<ChangeDetection[]> {
+    const changes: ChangeDetection[] = [];
+
+    try {
+      // Find README files in app and lib directories that might need doc updates
+      const readmePaths = await glob('{apps,libs}/**/README.md', {
+        cwd: this.config.repoPath,
+        ignore: ['node_modules/**', '**/node_modules/**'],
+      });
+
+      for (const readmePath of readmePaths) {
+        const hasChanged = await this.hasFileChanged(readmePath);
+        if (hasChanged) {
+          changes.push({
+            type: 'readme',
+            path: readmePath,
+            action: 'sync-readme-to-docs',
+            metadata: { readmePath },
+          });
+        }
+      }
+    } catch (error) {
+      console.warn('⚠️  Could not detect README changes:', error);
+    }
+
+    return changes;
+  }
+
+  private async generateProjectStatusUpdate(): Promise<DocumentationUpdate | null> {
+    try {
+      // Get all projects from the workspace
+      const projects = await this.getAllProjects();
+
+      // Read current index.md
+      const indexPath = 'docs/index.md';
+      const fullIndexPath = path.join(this.config.repoPath, indexPath);
+      let content = '';
+
+      if (fs.existsSync(fullIndexPath)) {
+        content = fs.readFileSync(fullIndexPath, 'utf-8');
+      }
+
+      // Generate new project table
+      const projectTable = this.generateProjectTable(projects);
+
+      // Replace or add the project table in index.md
+      const updatedContent = this.updateProjectTableInIndex(content, projectTable);
+
+      return {
+        type: 'project-status',
+        filePath: indexPath,
+        content: updatedContent,
+        description: 'Updated project status table in main documentation',
+      };
+    } catch (error) {
+      console.error('❌ Failed to generate project status update:', error);
+      return null;
+    }
+  }
+
+  private async syncReadmeTooDocs(change: ChangeDetection): Promise<DocumentationUpdate | null> {
+    try {
+      const readmePath = change.metadata.readmePath;
+      const fullReadmePath = path.join(this.config.repoPath, readmePath);
+
+      if (!fs.existsSync(fullReadmePath)) {
+        return null;
+      }
+
+      const readmeContent = fs.readFileSync(fullReadmePath, 'utf-8');
+
+      // Extract project name from path (apps/project-name/README.md or libs/project-name/README.md)
+      const pathParts = readmePath.split('/');
+      const projectType = pathParts[0]; // 'apps' or 'libs'
+      const projectName = pathParts[1];
+
+      // Generate docs path
+      const docsPath = `docs/reference/${projectType}/${projectName}.md`;
+
+      // Create documentation content with header and processed README content
+      let docContent = `# ${projectName}\n\n`;
+      docContent += `*This documentation is automatically synced from [${readmePath}](https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/${readmePath})*\n\n`;
+      docContent += '---\n\n';
+      docContent += readmeContent;
+
+      return {
+        type: 'readme-sync',
+        filePath: docsPath,
+        content: docContent,
+        description: `Synced README from ${readmePath}`,
+      };
+    } catch (error) {
+      console.error(`❌ Failed to sync README ${change.path}:`, error);
+      return null;
+    }
+  }
+
+  private async getAllProjects(): Promise<ProjectInfo[]> {
+    const projects: ProjectInfo[] = [];
+
+    try {
+      const projectPaths = await glob('**/project.json', {
+        cwd: this.config.repoPath,
+        ignore: ['node_modules/**', '**/node_modules/**'],
+      });
+
+      for (const projectPath of projectPaths) {
+        try {
+          const fullPath = path.join(this.config.repoPath, projectPath);
+          const projectConfig = JSON.parse(fs.readFileSync(fullPath, 'utf-8'));
+
+          const projectName = projectConfig.name || path.basename(path.dirname(projectPath));
+          const tags = projectConfig.tags || [];
+
+          // Extract metadata from tags
+          const scopeTag =
+            tags.find((tag: string) => tag.startsWith('scope:'))?.split(':')[1] || 'unknown';
+          const languageTag =
+            tags.find((tag: string) => tag.startsWith('language:'))?.split(':')[1] || 'unknown';
+
+          // Determine project type
+          const projectType =
+            projectConfig.projectType === 'application' ? 'application' : 'library';
+
+          // Determine status (could be enhanced with more logic)
+          let status: 'active' | 'experimental' | 'deprecated' = 'active';
+          if (tags.includes('status:experimental')) status = 'experimental';
+          if (tags.includes('status:deprecated')) status = 'deprecated';
+
+          projects.push({
+            name: projectName,
+            type: projectType,
+            language: languageTag,
+            scope: scopeTag,
+            status,
+            tags,
+          });
+        } catch {
+          console.warn(`⚠️  Could not parse project config at ${projectPath}`);
+        }
+      }
+    } catch (error) {
+      console.error('❌ Failed to get all projects:', error);
+    }
+
+    return projects.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  private generateProjectTable(projects: ProjectInfo[]): string {
+    if (projects.length === 0) {
+      return '| Name | Type | Language | Scope | Status |\n| --- | --- | --- | --- | --- |\n| No projects found | - | - | - | - |\n';
+    }
+
+    let table = '| Name | Type | Language | Scope | Status |\n';
+    table += '| --- | --- | --- | --- | --- |\n';
+
+    // Group by scope for better organization
+    const projectsByScope = projects.reduce(
+      (acc, project) => {
+        if (!acc[project.scope]) acc[project.scope] = [];
+        acc[project.scope].push(project);
+        return acc;
+      },
+      {} as Record<string, ProjectInfo[]>,
+    );
+
+    // Sort scopes and add projects
+    Object.keys(projectsByScope)
+      .sort()
+      .forEach((scope) => {
+        projectsByScope[scope].forEach((project) => {
+          const statusIcon =
+            project.status === 'active' ? '✅' : project.status === 'experimental' ? '🧪' : '⚠️';
+
+          table += `| **${project.name}** | ${project.type} | ${project.language} | ${project.scope} | ${statusIcon} ${project.status} |\n`;
+        });
+      });
+
+    return table;
+  }
+
+  private updateProjectTableInIndex(content: string, newTable: string): string {
+    // Look for existing project table section
+    const tableStartMarker = '## Current Projects';
+    const tableStartIndex = content.indexOf(tableStartMarker);
+
+    if (tableStartIndex === -1) {
+      // No existing table, add it at the end
+      return content + '\n\n' + tableStartMarker + '\n\n' + newTable + '\n';
+    }
+
+    // Find the end of the current table (next ## section or end of file)
+    const afterTableStart = tableStartIndex + tableStartMarker.length;
+    const nextSectionIndex = content.indexOf('\n## ', afterTableStart);
+    const endIndex = nextSectionIndex === -1 ? content.length : nextSectionIndex;
+
+    // Replace the section
+    const beforeTable = content.substring(0, tableStartIndex);
+    const afterTable = content.substring(endIndex);
+
+    return beforeTable + tableStartMarker + '\n\n' + newTable + '\n' + afterTable;
+  }
+
+  private extractProjectDescription(projectConfig: any, readmePath: string): string {
+    // Try to get description from project config first
+    if (projectConfig.description) {
+      return projectConfig.description;
+    }
+
+    // If no description in config, try to extract from README
+    try {
+      if (fs.existsSync(readmePath)) {
+        const readmeContent = fs.readFileSync(readmePath, 'utf-8');
+        // Look for first paragraph after title
+        const lines = readmeContent.split('\n');
+        let inFirstSection = false;
+
+        for (const line of lines) {
+          const trimmed = line.trim();
+
+          // Skip empty lines and markdown headers
+          if (!trimmed || trimmed.startsWith('#')) {
+            if (trimmed.startsWith('#')) inFirstSection = true;
+            continue;
+          }
+
+          // If we're in the first section and find a non-empty line, use it
+          if (inFirstSection && trimmed.length > 10) {
+            // Clean up the description
+            return (
+              trimmed
+                .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // Remove markdown links
+                .replace(/`([^`]+)`/g, '$1') // Remove code blocks
+                .substring(0, 200) + (trimmed.length > 200 ? '...' : '')
+            );
+          }
+        }
+      }
+    } catch {
+      // Ignore errors reading README
+    }
+
+    return '';
   }
 }
 
