@@ -1,0 +1,191 @@
+name: Update Synapse API description and regenerate clients
+
+on:
+  schedule:
+    # Run daily at 9 AM UTC (4 AM EST, 1 AM PST)
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+    # Allow manual trigger
+    inputs:
+      force_update:
+        description: 'Force update even if no changes detected'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  NX_BRANCH: ${{ github.ref_name }}
+  NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
+
+jobs:
+  update-synapse-api:
+    runs-on: ubuntu-latest
+    env:
+      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN_READ_WRITE }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch full history for proper comparison
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up the dev container
+        uses: ./.github/actions/setup-dev-container
+
+      - name: Build API description and check for changes
+        id: check_changes
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && echo '🔄 Building API description (includes downloading latest OpenAPI specification)...' \
+            && nx build synapse-api-description"
+
+          # Check if there are any changes in the repository
+          if git diff --quiet; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "🔍 No changes detected in OpenAPI specification"
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "📝 Changes detected in OpenAPI specification"
+
+            # Show a summary of changes for logging
+            echo "## Changes Summary:" >> $GITHUB_STEP_SUMMARY
+            echo "The OpenAPI specification has been updated on the Synapse server." >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Changed files:" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            git diff --name-only >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # Check if force update is requested
+          if [ "${{ github.event.inputs.force_update }}" = "true" ]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "🔄 Force update requested, proceeding regardless of changes"
+          fi
+
+      - name: Regenerate dependent clients
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && echo '🔄 Regenerating synapse-* clients...' \
+            && nx run-many --target=generate --projects='synapse-*' --skip-nx-cache"
+
+      - name: Check for generated changes
+        if: steps.check_changes.outputs.has_changes == 'true'
+        id: check_generated_changes
+        run: |
+          # Check if there are any changes to commit
+          if git diff --quiet && git diff --cached --quiet; then
+            echo "has_generated_changes=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ No changes were generated during the update process"
+          else
+            echo "has_generated_changes=true" >> $GITHUB_OUTPUT
+            echo "📝 Changes were generated and are ready to commit"
+
+            # Show what files changed
+            echo "## Generated Changes:" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            git diff --name-only >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Create Pull Request
+        if: steps.check_changes.outputs.has_changes == 'true' && steps.check_generated_changes.outputs.has_generated_changes == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Configure git
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Create a new branch with timestamp
+          BRANCH_NAME="synapse/update-synapse-api"
+          git checkout -b "$BRANCH_NAME"
+
+          # Add all changes
+          git add .
+
+          # Create commit message
+          COMMIT_MSG="chore(synapse): update Synapse API description and regenerate clients
+
+          This is an automated update triggered by changes detected in the Synapse OpenAPI specification.
+
+          Updated components:
+          - libs/synapse/api-description/openapi/openapi.json (source specification)
+          - libs/synapse/api-description/openapi/openapi.yaml (bundled specification)
+          - Regenerated synapse-* client libraries
+
+          Source: https://rest-docs.synapse.org/rest/openapi/openapispecification.json"
+
+          git commit -m "$COMMIT_MSG"
+
+          # Push the branch
+          git push origin "$BRANCH_NAME"
+
+          # Create pull request body
+          PR_BODY="## Description
+
+          This is an automated update triggered by changes detected in the [Synapse OpenAPI specification](https://rest-docs.synapse.org/rest/openapi/openapispecification.json).
+
+          The workflow downloads the latest OpenAPI specification from Synapse, compares it with the current version, and regenerates all dependent client libraries to ensure they stay in sync with the API.
+
+          ## Related Issue
+
+          This is an automated maintenance task to keep Synapse API clients up-to-date. No specific issue is associated with this update.
+
+          ## Changelog
+
+          - Update \`libs/synapse/api-description/openapi/openapi.json\` with latest specification
+          - Update \`libs/synapse/api-description/openapi/openapi.yaml\` with bundled specification
+          - Regenerate Angular API client (\`synapse-api-client-angular\`)
+          - Update any other synapse-* projects with generate tasks
+
+          ## Preview
+
+          ### Files changed:
+          \`\`\`
+          $(git diff --name-only HEAD~1)
+          \`\`\`
+
+          ### ⚠️ Review checklist:
+          - [ ] Verify that the API changes are expected
+          - [ ] Check that generated clients compile successfully
+          - [ ] Run tests to ensure compatibility
+          - [ ] Review any breaking changes in the API
+
+          ---
+
+          **Workflow:** [Update Synapse API Description](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          **Source:** https://rest-docs.synapse.org/rest/openapi/openapispecification.json
+
+          This PR was automatically created by the \`update-synapse-api.yml\` workflow."
+
+          # Create the pull request
+          gh pr create \
+            --title "chore(synapse): update Synapse API description and regenerate clients" \
+            --body "$PR_BODY" \
+            --label "automated" \
+            --label "synapse" \
+            --label "api-update" \
+            --base main \
+            --head "$BRANCH_NAME"
+
+          echo "✅ Pull request created successfully"
+          echo "🔗 View at: ${{ github.server_url }}/${{ github.repository }}/pull/$(gh pr view --json number --jq .number)"
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## 📊 Workflow Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **OpenAPI changes detected:** ${{ steps.check_changes.outputs.has_changes }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Generated changes:** ${{ steps.check_generated_changes.outputs.has_generated_changes || 'N/A' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Workflow run:** [View details](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ steps.check_changes.outputs.has_changes }}" = "false" ]; then
+            echo "- **Result:** ✅ No update needed - API specification unchanged" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ steps.check_generated_changes.outputs.has_generated_changes }}" = "true" ]; then
+            echo "- **Result:** ✅ Pull request created with updates" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ steps.check_changes.outputs.has_changes }}" = "true" ]; then
+            echo "- **Result:** ⚠️ API changes detected but no files were modified" >> $GITHUB_STEP_SUMMARY
+          fi

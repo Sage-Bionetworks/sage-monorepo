@@ -1,0 +1,3 @@
+apis:
+  synapse-public:
+    root: ./src/openapi.json

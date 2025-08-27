@@ -4,19 +4,21 @@
   "sourceRoot": "libs/synapse/api-description/src",
   "projectType": "library",
   "targets": {
-    "get": {
+    "get-openapi": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "curl -fsSL https://rest-docs.synapse.org/rest/openapi/openapispecification.json -o openapi/openapi.json",
+        "command": "curl -fsSL https://rest-docs.synapse.org/rest/openapi/openapispecification.json --output src/openapi.json",
         "cwd": "{projectRoot}"
       }
     },
     "build": {
       "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/openapi"],
       "options": {
-        "command": "redocly bundle --output openapi/openapi.yaml src/openapi.yaml",
+        "command": "redocly bundle synapse-public --output openapi/openapi.yaml",
         "cwd": "{projectRoot}"
-      }
+      },
+      "dependsOn": ["get-openapi"]
     },
     "lint": {
       "executor": "nx:run-commands",

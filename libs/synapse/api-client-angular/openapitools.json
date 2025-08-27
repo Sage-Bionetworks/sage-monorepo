@@ -6,7 +6,7 @@
     "generators": {
       "api-client-angular": {
         "generatorName": "typescript-angular",
-        "inputSpec": "#{cwd}/../api-description/openapi/openapi.json",
+        "inputSpec": "#{cwd}/../api-description/openapi/openapi.yaml",
         "output": "#{cwd}/src/lib/",
         "additionalProperties": {
           "queryParamObjectFormat": "key"
