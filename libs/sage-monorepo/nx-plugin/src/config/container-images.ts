@@ -24,7 +24,7 @@ export const CONTAINER_IMAGES: ContainerImagesRegistry = {
 };
 
 /**
- * Get the full container image string (registry/name:version) for a given image type
+ * Get the full base container image string (registry/name:version) for a given image type
  */
 export function getContainerImageString(imageKey: keyof ContainerImagesRegistry): string {
   const config = CONTAINER_IMAGES[imageKey];

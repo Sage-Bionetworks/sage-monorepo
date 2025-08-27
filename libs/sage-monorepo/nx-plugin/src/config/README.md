@@ -88,7 +88,7 @@ Dockerfile templates are stored in:
 
 These templates support variable substitution:
 
-- `{{containerImage}}`: Replaced with the centralized container image
+- `{{baseImage}}`: Replaced with the base image
 
 ## Benefits
 
