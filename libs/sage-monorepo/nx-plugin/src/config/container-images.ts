@@ -18,7 +18,7 @@ export const CONTAINER_IMAGES: ContainerImagesRegistry = {
   },
   caddy: {
     name: 'caddy',
-    version: '2.9.1', // Using the newer version from amp-als
+    version: '2.10.2',
     registry: 'mirror.gcr.io',
   },
 };
