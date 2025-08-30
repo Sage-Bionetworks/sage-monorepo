@@ -49,6 +49,88 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /auth/oauth2/authorize:
+    post:
+      tags:
+        - Authentication
+      summary: Initiate OAuth2 authentication
+      description: Start OAuth2 flow with external provider (Google, Synapse)
+      operationId: initiateOAuth2
+      x-audience:
+        - public
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OAuth2AuthorizeRequest'
+      responses:
+        '200':
+          description: OAuth2 authorization URL generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuth2AuthorizeResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /auth/oauth2/callback:
+    post:
+      tags:
+        - Authentication
+      summary: Complete OAuth2 authentication
+      description: Handle OAuth2 callback and exchange code for JWT tokens
+      operationId: completeOAuth2
+      x-audience:
+        - public
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OAuth2CallbackRequest'
+      responses:
+        '200':
+          description: OAuth2 authentication successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /auth/jwt/refresh:
+    post:
+      tags:
+        - Authentication
+      summary: Refresh JWT access token
+      description: Exchange refresh token for new access token
+      operationId: refreshJwt
+      x-audience:
+        - public
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+      responses:
+        '200':
+          description: New access token generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefreshTokenResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /auth/api-keys:
     get:
       tags:
@@ -137,6 +219,11 @@ components:
       scheme: bearer
       bearerFormat: api_key
       description: API key obtained from /auth/login endpoint
+    jwtBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT access token obtained from /auth/login or /auth/oauth2/callback endpoint
   schemas:
     LoginRequest:
       type: object
@@ -156,9 +243,26 @@ components:
     LoginResponse:
       type: object
       properties:
+        accessToken:
+          type: string
+          description: JWT access token (15-60 minutes expiry)
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        refreshToken:
+          type: string
+          description: JWT refresh token (7 days expiry)
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        tokenType:
+          type: string
+          description: Token type
+          example: Bearer
+          default: Bearer
+        expiresIn:
+          type: integer
+          description: Access token expiry time in seconds
+          example: 3600
         apiKey:
           type: string
-          description: API key for authentication
+          description: API key for automation and service-to-service authentication
           example: oc_prod_abcd1234567890abcdef1234567890abcdef1234
         userId:
           type: string
@@ -197,6 +301,84 @@ components:
       required:
         - title
         - status
+    OAuth2AuthorizeRequest:
+      type: object
+      required:
+        - provider
+        - redirectUri
+      properties:
+        provider:
+          type: string
+          description: OAuth2 provider
+          enum:
+            - google
+            - synapse
+          example: google
+        redirectUri:
+          type: string
+          format: uri
+          description: Client redirect URI after OAuth2 completion
+          example: https://openchallenges.io/auth/callback
+        state:
+          type: string
+          description: State parameter for CSRF protection (optional)
+          example: random_state_string
+    OAuth2AuthorizeResponse:
+      type: object
+      properties:
+        authorizationUrl:
+          type: string
+          format: uri
+          description: URL to redirect user for OAuth2 authorization
+          example: https://accounts.google.com/oauth2/authorize?client_id=...
+        state:
+          type: string
+          description: State parameter to include in authorization request
+          example: random_state_string
+    OAuth2CallbackRequest:
+      type: object
+      required:
+        - code
+        - state
+      properties:
+        code:
+          type: string
+          description: Authorization code from OAuth2 provider
+          example: 4/0AX4XfWjYZ1234567890abcdef
+        state:
+          type: string
+          description: State parameter for verification
+          example: random_state_string
+        redirectUri:
+          type: string
+          format: uri
+          description: Original redirect URI used in authorization request
+          example: https://openchallenges.io/auth/callback
+    RefreshTokenRequest:
+      type: object
+      required:
+        - refreshToken
+      properties:
+        refreshToken:
+          type: string
+          description: JWT refresh token
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+    RefreshTokenResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          description: New JWT access token
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        tokenType:
+          type: string
+          description: Token type
+          example: Bearer
+          default: Bearer
+        expiresIn:
+          type: integer
+          description: Access token expiry time in seconds
+          example: 3600
     ApiKey:
       type: object
       properties:

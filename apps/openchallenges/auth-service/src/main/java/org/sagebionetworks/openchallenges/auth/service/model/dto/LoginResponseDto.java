@@ -25,6 +25,14 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class LoginResponseDto {
 
+  private @Nullable String accessToken;
+
+  private @Nullable String refreshToken;
+
+  private String tokenType = "Bearer";
+
+  private @Nullable Integer expiresIn;
+
   private @Nullable String apiKey;
 
   private @Nullable UUID userId;
@@ -72,17 +80,97 @@ public class LoginResponseDto {
 
   private @Nullable RoleEnum role;
 
+  public LoginResponseDto accessToken(@Nullable String accessToken) {
+    this.accessToken = accessToken;
+    return this;
+  }
+
+  /**
+   * JWT access token (15-60 minutes expiry)
+   * @return accessToken
+   */
+  
+  @Schema(name = "accessToken", example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...", description = "JWT access token (15-60 minutes expiry)", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("accessToken")
+  public @Nullable String getAccessToken() {
+    return accessToken;
+  }
+
+  public void setAccessToken(@Nullable String accessToken) {
+    this.accessToken = accessToken;
+  }
+
+  public LoginResponseDto refreshToken(@Nullable String refreshToken) {
+    this.refreshToken = refreshToken;
+    return this;
+  }
+
+  /**
+   * JWT refresh token (7 days expiry)
+   * @return refreshToken
+   */
+  
+  @Schema(name = "refreshToken", example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...", description = "JWT refresh token (7 days expiry)", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("refreshToken")
+  public @Nullable String getRefreshToken() {
+    return refreshToken;
+  }
+
+  public void setRefreshToken(@Nullable String refreshToken) {
+    this.refreshToken = refreshToken;
+  }
+
+  public LoginResponseDto tokenType(String tokenType) {
+    this.tokenType = tokenType;
+    return this;
+  }
+
+  /**
+   * Token type
+   * @return tokenType
+   */
+  
+  @Schema(name = "tokenType", example = "Bearer", description = "Token type", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("tokenType")
+  public String getTokenType() {
+    return tokenType;
+  }
+
+  public void setTokenType(String tokenType) {
+    this.tokenType = tokenType;
+  }
+
+  public LoginResponseDto expiresIn(@Nullable Integer expiresIn) {
+    this.expiresIn = expiresIn;
+    return this;
+  }
+
+  /**
+   * Access token expiry time in seconds
+   * @return expiresIn
+   */
+  
+  @Schema(name = "expiresIn", example = "3600", description = "Access token expiry time in seconds", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("expiresIn")
+  public @Nullable Integer getExpiresIn() {
+    return expiresIn;
+  }
+
+  public void setExpiresIn(@Nullable Integer expiresIn) {
+    this.expiresIn = expiresIn;
+  }
+
   public LoginResponseDto apiKey(@Nullable String apiKey) {
     this.apiKey = apiKey;
     return this;
   }
 
   /**
-   * API key for authentication
+   * API key for automation and service-to-service authentication
    * @return apiKey
    */
   
-  @Schema(name = "apiKey", example = "oc_prod_abcd1234567890abcdef1234567890abcdef1234", description = "API key for authentication", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Schema(name = "apiKey", example = "oc_prod_abcd1234567890abcdef1234567890abcdef1234", description = "API key for automation and service-to-service authentication", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("apiKey")
   public @Nullable String getApiKey() {
     return apiKey;
@@ -161,7 +249,11 @@ public class LoginResponseDto {
       return false;
     }
     LoginResponseDto loginResponse = (LoginResponseDto) o;
-    return Objects.equals(this.apiKey, loginResponse.apiKey) &&
+    return Objects.equals(this.accessToken, loginResponse.accessToken) &&
+        Objects.equals(this.refreshToken, loginResponse.refreshToken) &&
+        Objects.equals(this.tokenType, loginResponse.tokenType) &&
+        Objects.equals(this.expiresIn, loginResponse.expiresIn) &&
+        Objects.equals(this.apiKey, loginResponse.apiKey) &&
         Objects.equals(this.userId, loginResponse.userId) &&
         Objects.equals(this.username, loginResponse.username) &&
         Objects.equals(this.role, loginResponse.role);
@@ -169,13 +261,17 @@ public class LoginResponseDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(apiKey, userId, username, role);
+    return Objects.hash(accessToken, refreshToken, tokenType, expiresIn, apiKey, userId, username, role);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class LoginResponseDto {\n");
+    sb.append("    accessToken: ").append(toIndentedString(accessToken)).append("\n");
+    sb.append("    refreshToken: ").append(toIndentedString(refreshToken)).append("\n");
+    sb.append("    tokenType: ").append(toIndentedString(tokenType)).append("\n");
+    sb.append("    expiresIn: ").append(toIndentedString(expiresIn)).append("\n");
     sb.append("    apiKey: ").append(toIndentedString(apiKey)).append("\n");
     sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
@@ -208,6 +304,10 @@ public class LoginResponseDto {
     }
 
     protected Builder copyOf(LoginResponseDto value) { 
+      this.instance.setAccessToken(value.accessToken);
+      this.instance.setRefreshToken(value.refreshToken);
+      this.instance.setTokenType(value.tokenType);
+      this.instance.setExpiresIn(value.expiresIn);
       this.instance.setApiKey(value.apiKey);
       this.instance.setUserId(value.userId);
       this.instance.setUsername(value.username);
@@ -215,6 +315,26 @@ public class LoginResponseDto {
       return this;
     }
 
+    public LoginResponseDto.Builder accessToken(String accessToken) {
+      this.instance.accessToken(accessToken);
+      return this;
+    }
+    
+    public LoginResponseDto.Builder refreshToken(String refreshToken) {
+      this.instance.refreshToken(refreshToken);
+      return this;
+    }
+    
+    public LoginResponseDto.Builder tokenType(String tokenType) {
+      this.instance.tokenType(tokenType);
+      return this;
+    }
+    
+    public LoginResponseDto.Builder expiresIn(Integer expiresIn) {
+      this.instance.expiresIn(expiresIn);
+      return this;
+    }
+    
     public LoginResponseDto.Builder apiKey(String apiKey) {
       this.instance.apiKey(apiKey);
       return this;

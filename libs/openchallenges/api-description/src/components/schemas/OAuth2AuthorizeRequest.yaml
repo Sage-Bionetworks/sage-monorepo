@@ -1,0 +1,19 @@
+type: object
+required:
+  - provider
+  - redirectUri
+properties:
+  provider:
+    type: string
+    description: OAuth2 provider
+    enum: [google, synapse]
+    example: google
+  redirectUri:
+    type: string
+    format: uri
+    description: Client redirect URI after OAuth2 completion
+    example: https://openchallenges.io/auth/callback
+  state:
+    type: string
+    description: State parameter for CSRF protection (optional)
+    example: random_state_string

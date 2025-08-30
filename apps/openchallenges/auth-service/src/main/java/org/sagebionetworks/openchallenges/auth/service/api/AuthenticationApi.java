@@ -8,8 +8,15 @@ package org.sagebionetworks.openchallenges.auth.service.api;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.BasicErrorDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginResponseDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2AuthorizeRequestDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2AuthorizeResponseDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2CallbackRequestDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.RefreshTokenRequestDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.RefreshTokenResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyResponseDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateJwtRequestDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateJwtResponseDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -42,6 +49,97 @@ public interface AuthenticationApi {
     default AuthenticationApiDelegate getDelegate() {
         return new AuthenticationApiDelegate() {};
     }
+
+    /**
+     * POST /auth/oauth2/callback : Complete OAuth2 authentication
+     * Handle OAuth2 callback and exchange code for JWT tokens
+     *
+     * @param oauth2CallbackRequestDto  (required)
+     * @return OAuth2 authentication successful (status code 200)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "completeOAuth2",
+        summary = "Complete OAuth2 authentication",
+        description = "Handle OAuth2 callback and exchange code for JWT tokens",
+        tags = { "Authentication" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "OAuth2 authentication successful", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = LoginResponseDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = LoginResponseDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/auth/oauth2/callback",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<LoginResponseDto> completeOAuth2(
+        @Parameter(name = "OAuth2CallbackRequestDto", description = "", required = true) @Valid @RequestBody OAuth2CallbackRequestDto oauth2CallbackRequestDto
+    ) {
+        return getDelegate().completeOAuth2(oauth2CallbackRequestDto);
+    }
+
+
+    /**
+     * POST /auth/oauth2/authorize : Initiate OAuth2 authentication
+     * Start OAuth2 flow with external provider (Google, Synapse)
+     *
+     * @param oauth2AuthorizeRequestDto  (required)
+     * @return OAuth2 authorization URL generated (status code 200)
+     *         or Invalid request (status code 400)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "initiateOAuth2",
+        summary = "Initiate OAuth2 authentication",
+        description = "Start OAuth2 flow with external provider (Google, Synapse)",
+        tags = { "Authentication" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "OAuth2 authorization URL generated", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = OAuth2AuthorizeResponseDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = OAuth2AuthorizeResponseDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/auth/oauth2/authorize",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<OAuth2AuthorizeResponseDto> initiateOAuth2(
+        @Parameter(name = "OAuth2AuthorizeRequestDto", description = "", required = true) @Valid @RequestBody OAuth2AuthorizeRequestDto oauth2AuthorizeRequestDto
+    ) {
+        return getDelegate().initiateOAuth2(oauth2AuthorizeRequestDto);
+    }
+
 
     /**
      * POST /auth/login : User login
@@ -87,6 +185,54 @@ public interface AuthenticationApi {
 
 
     /**
+     * POST /auth/jwt/refresh : Refresh JWT access token
+     * Exchange refresh token for new access token
+     *
+     * @param refreshTokenRequestDto  (required)
+     * @return New access token generated (status code 200)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "refreshJwt",
+        summary = "Refresh JWT access token",
+        description = "Exchange refresh token for new access token",
+        tags = { "Authentication" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "New access token generated", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = RefreshTokenResponseDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = RefreshTokenResponseDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/auth/jwt/refresh",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<RefreshTokenResponseDto> refreshJwt(
+        @Parameter(name = "RefreshTokenRequestDto", description = "", required = true) @Valid @RequestBody RefreshTokenRequestDto refreshTokenRequestDto
+    ) {
+        return getDelegate().refreshJwt(refreshTokenRequestDto);
+    }
+
+
+    /**
      * POST /auth/validate : Validate API key
      * Internal endpoint to validate API keys (used by other services)
      *
@@ -126,6 +272,49 @@ public interface AuthenticationApi {
         @Parameter(name = "ValidateApiKeyRequestDto", description = "", required = true) @Valid @RequestBody ValidateApiKeyRequestDto validateApiKeyRequestDto
     ) {
         return getDelegate().validateApiKey(validateApiKeyRequestDto);
+    }
+
+
+    /**
+     * POST /auth/jwt/validate : Validate JWT token
+     * Internal endpoint to validate JWT tokens (used by other services)
+     *
+     * @param validateJwtRequestDto  (required)
+     * @return JWT validation result (status code 200)
+     *         or Invalid request (status code 400)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "validateJwt",
+        summary = "Validate JWT token",
+        description = "Internal endpoint to validate JWT tokens (used by other services)",
+        tags = { "Authentication" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "JWT validation result", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = ValidateJwtResponseDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ValidateJwtResponseDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/auth/jwt/validate",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<ValidateJwtResponseDto> validateJwt(
+        @Parameter(name = "ValidateJwtRequestDto", description = "", required = true) @Valid @RequestBody ValidateJwtRequestDto validateJwtRequestDto
+    ) {
+        return getDelegate().validateJwt(validateJwtRequestDto);
     }
 
 }

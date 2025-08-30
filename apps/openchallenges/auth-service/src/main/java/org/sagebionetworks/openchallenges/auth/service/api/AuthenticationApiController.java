@@ -3,8 +3,15 @@ package org.sagebionetworks.openchallenges.auth.service.api;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.BasicErrorDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginResponseDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2AuthorizeRequestDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2AuthorizeResponseDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2CallbackRequestDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.RefreshTokenRequestDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.RefreshTokenResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyResponseDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateJwtRequestDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateJwtResponseDto;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

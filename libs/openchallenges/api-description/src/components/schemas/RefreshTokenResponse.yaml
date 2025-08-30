@@ -1,0 +1,15 @@
+type: object
+properties:
+  accessToken:
+    type: string
+    description: New JWT access token
+    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+  tokenType:
+    type: string
+    description: Token type
+    example: Bearer
+    default: Bearer
+  expiresIn:
+    type: integer
+    description: Access token expiry time in seconds
+    example: 3600

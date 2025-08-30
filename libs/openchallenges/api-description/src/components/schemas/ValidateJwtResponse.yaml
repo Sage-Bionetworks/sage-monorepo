@@ -1,0 +1,25 @@
+type: object
+properties:
+  valid:
+    type: boolean
+    description: Whether the JWT token is valid
+    example: true
+  userId:
+    type: string
+    format: uuid
+    description: User ID from token (if valid)
+    example: 123e4567-e89b-12d3-a456-426614174000
+  username:
+    type: string
+    description: Username from token (if valid)
+    example: admin
+  role:
+    type: string
+    description: User role from token (if valid)
+    example: admin
+    enum: [admin, user, readonly, service]
+  expiresAt:
+    type: string
+    format: date-time
+    description: Token expiration time (if valid)
+    example: 2025-08-30T15:30:00Z

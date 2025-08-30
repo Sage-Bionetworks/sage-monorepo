@@ -1,0 +1,8 @@
+type: object
+required:
+  - token
+properties:
+  token:
+    type: string
+    description: JWT token to validate
+    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
