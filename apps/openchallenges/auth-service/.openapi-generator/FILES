@@ -14,6 +14,13 @@ src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/CreateAp
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/CreateApiKeyResponseDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/LoginRequestDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/LoginResponseDto.java
+src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/OAuth2AuthorizeRequestDto.java
+src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/OAuth2AuthorizeResponseDto.java
+src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/OAuth2CallbackRequestDto.java
+src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/RefreshTokenRequestDto.java
+src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/RefreshTokenResponseDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/ValidateApiKeyRequestDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/ValidateApiKeyResponseDto.java
+src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/ValidateJwtRequestDto.java
+src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/ValidateJwtResponseDto.java
 src/main/resources/openapi.yaml

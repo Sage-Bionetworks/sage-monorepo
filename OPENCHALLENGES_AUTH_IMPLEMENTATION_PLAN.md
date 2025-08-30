@@ -98,12 +98,21 @@ User Login (username/password) → API Key Generation → API Key Validation (St
 
 #### Tasks:
 
-- [ ] **1.0.1** Update OpenAPI source files in `libs/openchallenges/api-description/src/`
-- [ ] **1.0.2** Add OAuth2 authentication endpoints to auth service spec
-- [ ] **1.0.3** Update existing login endpoint response schema for JWT
-- [ ] **1.0.4** Add JWT validation and refresh endpoints
-- [ ] **1.0.5** Run `nx build openchallenges-api-description` to generate specs
-- [ ] **1.0.6** Regenerate API clients with `nx run <project-name>:generate`
+- [x] **1.0.1** Update OpenAPI source files in `libs/openchallenges/api-description/src/`
+- [x] **1.0.2** Add OAuth2 authentication endpoints to auth service spec
+- [x] **1.0.3** Update existing login endpoint response schema for JWT
+- [x] **1.0.4** Add JWT validation and refresh endpoints
+- [x] **1.0.5** Run `nx build openchallenges-api-description` to generate specs
+- [x] **1.0.6** Regenerate API clients with `nx run <project-name>:generate`
+
+#### ✅ **COMPLETED** - OpenAPI specifications updated with:
+
+- JWT-based LoginResponse with accessToken, refreshToken, tokenType, expiresIn
+- OAuth2 endpoints: `/auth/oauth2/authorize` and `/auth/oauth2/callback`
+- JWT management: `/auth/jwt/validate` and `/auth/jwt/refresh`
+- New DTOs: OAuth2AuthorizeRequest/Response, OAuth2CallbackRequest, ValidateJwtRequest/Response, RefreshTokenRequest/Response
+- Updated security schemes with JwtBearerAuth
+- Generated Java DTOs and API interfaces successfully
 
 #### OpenAPI Changes Required:
 

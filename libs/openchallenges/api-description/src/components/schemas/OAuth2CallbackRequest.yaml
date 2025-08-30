@@ -1,0 +1,18 @@
+type: object
+required:
+  - code
+  - state
+properties:
+  code:
+    type: string
+    description: Authorization code from OAuth2 provider
+    example: 4/0AX4XfWjYZ1234567890abcdef
+  state:
+    type: string
+    description: State parameter for verification
+    example: random_state_string
+  redirectUri:
+    type: string
+    format: uri
+    description: Original redirect URI used in authorization request
+    example: https://openchallenges.io/auth/callback

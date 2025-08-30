@@ -1,0 +1,24 @@
+post:
+  tags:
+    - Authentication
+  summary: Validate JWT token
+  description: Internal endpoint to validate JWT tokens (used by other services)
+  operationId: validateJwt
+  x-audience: [internal]
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/ValidateJwtRequest.yaml
+  responses:
+    '200':
+      description: JWT validation result
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/ValidateJwtResponse.yaml
+    '400':
+      $ref: ../../components/responses/BadRequest.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml

@@ -23,6 +23,14 @@ tags:
 paths:
   /auth/login:
     $ref: paths/auth/login.yaml
+  /auth/oauth2/authorize:
+    $ref: paths/auth/oauth2-authorize.yaml
+  /auth/oauth2/callback:
+    $ref: paths/auth/oauth2-callback.yaml
+  /auth/jwt/validate:
+    $ref: paths/auth/jwt-validate.yaml
+  /auth/jwt/refresh:
+    $ref: paths/auth/jwt-refresh.yaml
   /auth/api-keys:
     $ref: paths/auth/api-keys.yaml
   /auth/api-keys/{keyId}:
@@ -33,3 +41,5 @@ components:
   securitySchemes:
     apiBearerAuth:
       $ref: components/securitySchemes/ApiBearerAuth.yaml
+    jwtBearerAuth:
+      $ref: components/securitySchemes/JwtBearerAuth.yaml

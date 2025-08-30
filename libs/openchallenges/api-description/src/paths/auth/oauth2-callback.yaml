@@ -1,0 +1,26 @@
+post:
+  tags:
+    - Authentication
+  summary: Complete OAuth2 authentication
+  description: Handle OAuth2 callback and exchange code for JWT tokens
+  operationId: completeOAuth2
+  x-audience: [public]
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/OAuth2CallbackRequest.yaml
+  responses:
+    '200':
+      description: OAuth2 authentication successful
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/LoginResponse.yaml
+    '400':
+      $ref: ../../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../components/responses/Unauthorized.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml

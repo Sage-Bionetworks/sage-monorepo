@@ -39,6 +39,11 @@ public class SpringDocConfiguration {
                                         .scheme("bearer")
                                         .bearerFormat("api_key")
                                 )
+                                .addSecuritySchemes("jwtBearerAuth", new SecurityScheme()
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT")
+                                )
                 )
         ;
     }
