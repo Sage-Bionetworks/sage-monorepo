@@ -8,6 +8,51 @@ This document outlines the implementation plan for upgrading the OpenChallenges 
 2. **OAuth2/OIDC Integration** (Google and Synapse)
 3. **User-Delegated MCP Authentication** for the MCP server
 
+## OpenAPI-First Development Approach
+
+OpenChallenges follows an **API-spec first approach** where:
+
+- **OpenAPI source files** are in `libs/openchallenges/api-description/src/`
+- **Generated OpenAPI specs** are in `libs/openchallenges/api-description/openapi/` (auto-generated, never edit directly)
+- **Code generation** uses the generated specs to create server stubs and API clients
+- **All changes** to APIs must start with source file updates in `src/`
+
+### OpenAPI Development Workflow
+
+```
+1. Edit source files in: libs/openchallenges/api-description/src/
+2. Build API specs: nx build openchallenges-api-description
+3. Generate code: nx run <project-name>:generate
+4. Implement business logic in generated delegate classes
+```
+
+### Current OpenAPI Structure
+
+```
+libs/openchallenges/api-description/
+├── src/                             # ⭐ Edit these source files
+│   ├── auth/                        # Auth service source specs
+│   ├── challenge/                   # Challenge service source specs
+│   └── organization/                # Organization service source specs
+└── openapi/                         # 🚫 Auto-generated (never edit directly)
+    ├── auth-service.openapi.yaml    # Generated auth service spec
+    ├── challenge-service.openapi.yaml # Generated challenge service spec
+    └── openapi.yaml                 # Combined public API spec
+```
+
+### Code Generation Commands
+
+```bash
+# 1. Build API specifications from source
+nx build openchallenges-api-description
+
+# 2. Generate server stubs and clients
+nx run openchallenges-auth-service:generate
+nx run openchallenges-api-client-java:generate
+nx run openchallenges-api-client-angular:generate
+nx run openchallenges-api-client-python:generate
+```
+
 ## Architecture Overview
 
 ### Current State
@@ -48,6 +93,259 @@ User Login (username/password) → API Key Generation → API Key Validation (St
 ```
 
 ## Phase 1: JWT-Centric Auth Service Implementation
+
+### 1.0 OpenAPI Specification Updates (API-First)
+
+#### Tasks:
+
+- [ ] **1.0.1** Update OpenAPI source files in `libs/openchallenges/api-description/src/`
+- [ ] **1.0.2** Add OAuth2 authentication endpoints to auth service spec
+- [ ] **1.0.3** Update existing login endpoint response schema for JWT
+- [ ] **1.0.4** Add JWT validation and refresh endpoints
+- [ ] **1.0.5** Run `nx build openchallenges-api-description` to generate specs
+- [ ] **1.0.6** Regenerate API clients with `nx run <project-name>:generate`
+
+#### OpenAPI Changes Required:
+
+**auth-service.openapi.yaml additions:**
+
+```yaml
+paths:
+  /auth/login:
+    post:
+      # Update existing endpoint to return JWT + API key
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtLoginResponse'
+
+  /auth/oauth2/{provider}/authorize:
+    post:
+      summary: Initiate OAuth2 authentication
+      parameters:
+        - name: provider
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [google, synapse]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OAuth2AuthorizeRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuth2AuthorizeResponse'
+
+  /auth/oauth2/{provider}/callback:
+    post:
+      summary: Complete OAuth2 authentication
+      parameters:
+        - name: provider
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [google, synapse]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OAuth2CallbackRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtLoginResponse'
+
+  /auth/jwt/validate:
+    post:
+      summary: Validate JWT token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateJwtRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateJwtResponse'
+
+  /auth/jwt/refresh:
+    post:
+      summary: Refresh JWT token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtLoginResponse'
+
+components:
+  schemas:
+    JwtLoginResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          description: JWT access token
+        refreshToken:
+          type: string
+          description: JWT refresh token
+        tokenType:
+          type: string
+          enum: [Bearer]
+        expiresIn:
+          type: integer
+          description: Token expiry in seconds
+        user:
+          $ref: '#/components/schemas/User'
+        apiKey:
+          type: string
+          description: Optional API key for backward compatibility
+      required:
+        - accessToken
+        - refreshToken
+        - tokenType
+        - expiresIn
+        - user
+
+    OAuth2AuthorizeRequest:
+      type: object
+      properties:
+        redirectUri:
+          type: string
+          format: uri
+        state:
+          type: string
+      required:
+        - redirectUri
+
+    OAuth2AuthorizeResponse:
+      type: object
+      properties:
+        authorizationUrl:
+          type: string
+          format: uri
+        state:
+          type: string
+      required:
+        - authorizationUrl
+
+    OAuth2CallbackRequest:
+      type: object
+      properties:
+        authorizationCode:
+          type: string
+        redirectUri:
+          type: string
+          format: uri
+        state:
+          type: string
+      required:
+        - authorizationCode
+        - redirectUri
+
+    ValidateJwtRequest:
+      type: object
+      properties:
+        token:
+          type: string
+      required:
+        - token
+
+    ValidateJwtResponse:
+      type: object
+      properties:
+        valid:
+          type: boolean
+        userId:
+          type: string
+          format: uuid
+        username:
+          type: string
+        role:
+          type: string
+        scopes:
+          type: array
+          items:
+            type: string
+        expiresAt:
+          type: string
+          format: date-time
+      required:
+        - valid
+
+    RefreshTokenRequest:
+      type: object
+      properties:
+        refreshToken:
+          type: string
+      required:
+        - refreshToken
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        displayName:
+          type: string
+        role:
+          type: string
+          enum: [admin, user, readonly, service]
+        authProvider:
+          type: string
+          enum: [local, google, synapse]
+        enabled:
+          type: boolean
+      required:
+        - id
+        - username
+        - role
+        - authProvider
+        - enabled
+```
+
+#### Code Generation Commands:
+
+```bash
+# Generate auth service server stubs
+cd apps/openchallenges/auth-service
+npx @openapitools/openapi-generator-cli generate
+
+# Generate Java API client
+cd libs/openchallenges/api-client-java
+npx @openapitools/openapi-generator-cli generate
+
+# Generate Angular API client
+cd libs/openchallenges/api-client-angular
+npx @openapitools/openapi-generator-cli generate
+
+# Generate Python API client
+cd libs/openchallenges/api-client-python
+npx @openapitools/openapi-generator-cli generate
+```
 
 ### 1.1 Database Schema Extensions
 
@@ -185,31 +483,32 @@ public class OAuth2AuthenticationService {
 
 #### Tasks:
 
-- [ ] **1.6.1** Update OpenAPI specification
-- [ ] **1.6.2** Modify existing `/auth/login` endpoint
-- [ ] **1.6.3** Add OAuth2 endpoints (`/auth/oauth2/{provider}/authorize`, `/auth/oauth2/{provider}/callback`)
-- [ ] **1.6.4** Add JWT validation endpoint
-- [ ] **1.6.5** Update response DTOs
+- [ ] **1.6.1** ✅ Update OpenAPI specification (completed in 1.0)
+- [ ] **1.6.2** ✅ Regenerate server stubs (completed in 1.0)
+- [ ] **1.6.3** Implement `AuthenticationApiDelegateImpl` methods
+- [ ] **1.6.4** Implement OAuth2 endpoint delegates
+- [ ] **1.6.5** Update existing login implementation
+- [ ] **1.6.6** Test all endpoint implementations
 
-#### New Endpoints:
+#### Implementation Notes:
 
-```yaml
-# OpenAPI additions
-/auth/oauth2/{provider}/authorize:
-  post:
-    summary: Initiate OAuth2 authentication
+- Server stubs and DTOs are auto-generated from OpenAPI spec
+- Only implement business logic in `*ApiDelegateImpl` classes
+- Do not modify generated `*Api`, `*ApiController`, or DTO classes
+- Use generated DTOs for request/response mapping
 
-/auth/oauth2/{provider}/callback:
-  post:
-    summary: Complete OAuth2 authentication
+#### Key Implementation Files:
 
-/auth/jwt/validate:
-  post:
-    summary: Validate JWT token
+```java
+// Generated (do not modify)
+AuthenticationApi.java
+AuthenticationApiController.java
+OAuth2AuthorizeRequestDto.java
+JwtLoginResponseDto.java
 
-/auth/jwt/refresh:
-  post:
-    summary: Refresh JWT token
+// Implement business logic here
+AuthenticationApiDelegateImpl.java
+OAuth2AuthenticationApiDelegateImpl.java  // New
 ```
 
 ### 1.7 Update Authentication Flow
@@ -256,9 +555,10 @@ public class OAuth2AuthenticationService {
 
 #### Tasks:
 
-- [ ] **2.1.1** Add authentication dependencies to MCP server
-- [ ] **2.1.2** Add OpenChallenges auth client dependency
-- [ ] **2.1.3** Configure security properties
+- [ ] **2.1.1** ✅ Update OpenChallenges API client dependency (generated from 1.0)
+- [ ] **2.1.2** Add authentication dependencies to MCP server
+- [ ] **2.1.3** Add OpenChallenges auth client dependency
+- [ ] **2.1.4** Configure security properties
 
 #### Dependencies:
 
@@ -266,8 +566,14 @@ public class OAuth2AuthenticationService {
 // In mcp-server/build.gradle.kts
 implementation("org.springframework.boot:spring-boot-starter-security")
 implementation("org.springframework.security:spring-security-oauth2-jose")
-implementation(project(":openchallenges-auth-service-client")) // New client library
+implementation(project(":openchallenges-api-client-java")) // Updated with JWT support
 ```
+
+#### API Client Benefits:
+
+- Auto-generated `AuthenticationApi` client with JWT endpoints
+- Type-safe DTOs for all authentication requests/responses
+- Built-in OAuth2 support via generated client methods
 
 ### 2.2 Authentication Manager
 
@@ -408,7 +714,27 @@ openchallenges-mcp-server:
 
 #### Tasks:
 
-- [ ] **3.1.1** Test complete authentication flow
+- [ ] **3.1.1** Validate all API client generations (Java, Angular, Python)
+- [ ] **3.1.2** Test complete authentication flow
+- [ ] **3.1.3** Validate JWT token exchange
+- [ ] **3.1.4** Test OAuth2 integrations
+- [ ] **3.1.5** Verify permission enforcement
+- [ ] **3.1.6** Test MCP tool operations
+
+#### API Client Validation:
+
+```bash
+# Verify all clients generate successfully
+cd libs/openchallenges/api-client-java && npm run generate
+cd libs/openchallenges/api-client-angular && npm run generate
+cd libs/openchallenges/api-client-python && npm run generate
+
+# Test client compilation
+cd libs/openchallenges/api-client-java && ./gradlew build
+cd libs/openchallenges/api-client-angular && npm run build
+cd libs/openchallenges/api-client-python && python -m build
+```
+
 - [ ] **3.1.2** Validate JWT token exchange
 - [ ] **3.1.3** Test OAuth2 integrations
 - [ ] **3.1.4** Verify permission enforcement
@@ -480,6 +806,7 @@ openchallenges-mcp-server:
 
 ### Phase 1: JWT-Centric Auth Service
 
+- [ ] **OpenAPI specification updates (1.0)** ⭐ **Start Here - API-First**
 - [ ] Database schema extensions (1.1)
 - [ ] Add OAuth2/JWT dependencies (1.2)
 - [ ] Update entity models (1.3)
@@ -576,6 +903,6 @@ MCP_OAUTH_REDIRECT_URI=http://localhost:3000/auth/callback
 
 ---
 
-**Document Version**: 1.0  
-**Last Updated**: August 30, 2025  
+**Document Version**: 1.0
+**Last Updated**: August 30, 2025
 **Next Review**: Before each phase implementation
