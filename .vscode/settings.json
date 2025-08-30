@@ -124,7 +124,9 @@
   "jest.runMode": "on-demand",
   "nxConsole.generateAiAgentRules": true,
   "chat.tools.terminal.autoApprove": {
-    "/^(?:\\.\\/)?gradlew(?:\\s+.+)?$/": true,
+    "/^nx test .+/": true,
+    "/^\\./gradlew (compileJava|test) .+/": true,
+    "/^\\./gradlew\\s+:(?:[^:\\s]+:)+(compileJava|compileTestJava|test) .+/": true,
     "cat": true,
     "cd": true,
     "echo": true,
@@ -143,6 +145,7 @@
     "wget": false,
     "eval": false,
     "chmod": false,
-    "chown": false
+    "chown": false,
+    "wc": true
   }
 }

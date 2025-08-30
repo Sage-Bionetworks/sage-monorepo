@@ -1,6 +1,7 @@
 package org.sagebionetworks.openchallenges.auth.service.configuration;
 
 import org.sagebionetworks.openchallenges.auth.service.security.ApiKeyAuthenticationFilter;
+import org.sagebionetworks.openchallenges.auth.service.security.JwtAuthenticationFilter;
 import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,11 +26,15 @@ public class SecurityConfiguration {
   }
 
   /**
-   * Configure security filter chain with API key authentication
+   * Configure security filter chain with API key and JWT authentication
    */
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http, ApiKeyService apiKeyService)
+  public SecurityFilterChain filterChain(
+      HttpSecurity http, 
+      ApiKeyService apiKeyService,
+      JwtAuthenticationFilter jwtAuthenticationFilter)
     throws Exception {
+    
     // Create the API key authentication filter here to avoid circular dependency
     ApiKeyAuthenticationFilter apiKeyAuthenticationFilter = new ApiKeyAuthenticationFilter(
       apiKeyService
@@ -54,7 +59,9 @@ public class SecurityConfiguration {
             .anyRequest()
             .authenticated() // All other endpoints require authentication
       )
-      .addFilterBefore(apiKeyAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Add API key filter
+      // Add filters in order: JWT first, then API Key
+      .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // JWT filter
+      .addFilterAfter(apiKeyAuthenticationFilter, JwtAuthenticationFilter.class); // API key filter after JWT
 
     return http.build();
   }

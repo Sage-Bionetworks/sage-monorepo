@@ -23,6 +23,11 @@ import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
 import org.sagebionetworks.openchallenges.auth.service.service.UserService;
+import org.sagebionetworks.openchallenges.auth.service.service.JwtService;
+import org.sagebionetworks.openchallenges.auth.service.service.OAuth2ConfigurationService;
+import org.sagebionetworks.openchallenges.auth.service.repository.UserRepository;
+import org.sagebionetworks.openchallenges.auth.service.repository.ExternalAccountRepository;
+import org.sagebionetworks.openchallenges.auth.service.repository.RefreshTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -55,6 +60,21 @@ class ApiKeyApiDelegateImplWebTest {
 
   @MockBean
   private UserService userService;
+
+  @MockBean
+  private JwtService jwtService;
+
+  @MockBean
+  private UserRepository userRepository;
+
+  @MockBean
+  private ExternalAccountRepository externalAccountRepository;
+
+  @MockBean
+  private RefreshTokenRepository refreshTokenRepository;
+
+  @MockBean
+  private OAuth2ConfigurationService oAuth2ConfigurationService;
 
   @MockBean
   private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
