@@ -150,6 +150,10 @@ class UserTest {
         username,
         passwordHash,
         "test@example.com", // email field
+        "John", // firstName
+        "Doe", // lastName
+        "https://example.com/avatar.jpg", // avatarUrl
+        true, // emailVerified
         role,
         enabled,
         createdAt,
