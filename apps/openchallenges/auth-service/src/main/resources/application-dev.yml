@@ -11,6 +11,29 @@ openchallenges:
       prefix: oc_dev_
       length: 40
 
+# JWT Configuration
+app:
+  security:
+    jwt:
+      secret: openchallenges-default-jwt-secret-key-change-in-production
+      access-token-expiration-ms: 3600000 # 1 hour
+      refresh-token-expiration-ms: 604800000 # 7 days
+      issuer: openchallenges-auth-service
+
+  # OAuth2 Configuration
+  oauth2:
+    google:
+      client-id: placeholder-will-be-overridden-by-env
+      client-secret: placeholder-will-be-overridden-by-env
+      redirect-uri: http://localhost:3000/auth/callback
+      scope: openid,profile,email
+    synapse:
+      client-id: synapse-client-id
+      client-secret: synapse-client-secret
+      redirect-uri: http://localhost:3000/auth/callback
+      scope: openid,profile,email
+  base-url: ${BASE_URL:http://localhost:8087}
+
 logging:
   level:
     org.sagebionetworks.openchallenges: DEBUG

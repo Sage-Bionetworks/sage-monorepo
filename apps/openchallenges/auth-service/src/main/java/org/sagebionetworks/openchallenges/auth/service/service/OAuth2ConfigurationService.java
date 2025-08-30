@@ -19,11 +19,11 @@ public class OAuth2ConfigurationService {
     private final String baseUrl;
 
     public OAuth2ConfigurationService(
-            @Value("${app.security.oauth2.google.client-id:}") String googleClientId,
-            @Value("${app.security.oauth2.google.client-secret:}") String googleClientSecret,
-            @Value("${app.security.oauth2.synapse.client-id:}") String synapseClientId,
-            @Value("${app.security.oauth2.synapse.client-secret:}") String synapseClientSecret,
-            @Value("${app.base-url:http://localhost:8085}") String baseUrl) {
+            @Value("${app.oauth2.google.client-id:}") String googleClientId,
+            @Value("${app.oauth2.google.client-secret:}") String googleClientSecret,
+            @Value("${app.oauth2.synapse.client-id:}") String synapseClientId,
+            @Value("${app.oauth2.synapse.client-secret:}") String synapseClientSecret,
+            @Value("${app.base-url:http://localhost:8087}") String baseUrl) {
         
         this.googleClientId = googleClientId;
         this.googleClientSecret = googleClientSecret;
@@ -32,7 +32,8 @@ public class OAuth2ConfigurationService {
         this.baseUrl = baseUrl;
         
         log.info("OAuth2 Configuration Service initialized for base URL: {}", baseUrl);
-        log.info("Google OAuth2 enabled: {}", !googleClientId.isEmpty());
+        log.info("Google OAuth2 enabled: {} (client ID: {})", !googleClientId.isEmpty(), 
+                 googleClientId.isEmpty() ? "NOT_SET" : googleClientId.substring(0, Math.min(10, googleClientId.length())) + "...");
         log.info("Synapse OAuth2 enabled: {}", !synapseClientId.isEmpty());
     }
 
@@ -40,33 +41,44 @@ public class OAuth2ConfigurationService {
      * Get OAuth2 authorization URL for provider
      */
     public String getAuthorizationUrl(ExternalAccount.Provider provider, String state) {
+        log.debug("Generating authorization URL for provider: {}", provider);
+        
         if (!isProviderConfigured(provider)) {
+            log.error("OAuth2 provider not configured: {}. Client ID empty: {}", 
+                     provider, 
+                     provider == ExternalAccount.Provider.google ? googleClientId.isEmpty() : synapseClientId.isEmpty());
             throw new IllegalArgumentException("OAuth2 provider not configured: " + provider);
         }
 
-        return switch (provider) {
+        String redirectUri = getRedirectUri(provider);
+        log.debug("Using redirect URI: {}", redirectUri);
+
+        String authUrl = switch (provider) {
             case google -> String.format(
                 "https://accounts.google.com/o/oauth2/v2/auth?client_id=%s&redirect_uri=%s&scope=%s&response_type=code&state=%s",
                 googleClientId, 
-                getRedirectUri(provider), 
-                "openid email profile", 
+                redirectUri, 
+                "openid%20email%20profile", 
                 state
             );
             case synapse -> String.format(
                 "https://signin.synapse.org/oauth2/authorize?client_id=%s&redirect_uri=%s&scope=%s&response_type=code&state=%s",
                 synapseClientId, 
-                getRedirectUri(provider), 
-                "openid email profile", 
+                redirectUri, 
+                "openid%20email%20profile", 
                 state
             );
         };
+        
+        log.debug("Generated authorization URL: {}", authUrl);
+        return authUrl;
     }
 
     /**
      * Get redirect URI for provider
      */
     public String getRedirectUri(ExternalAccount.Provider provider) {
-        return String.format("%s/api/v1/auth/oauth2/callback/%s", 
+        return String.format("%s/v1/auth/oauth2/callback/%s", 
                 baseUrl.replaceAll("/$", ""), provider.name().toLowerCase());
     }
 

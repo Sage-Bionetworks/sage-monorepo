@@ -27,6 +27,7 @@ public class AuthenticationService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
+    private final OAuth2ConfigurationService oAuth2ConfigurationService;
 
     /**
      * Authenticate user with username/password and generate JWT tokens
@@ -68,9 +69,11 @@ public class AuthenticationService {
             throw new RuntimeException("Unsupported OAuth2 provider: " + request.getProvider());
         }
 
-        // For now, create a simple placeholder response
-        String authorizationUrl = String.format("https://oauth.example.com/%s/authorize", request.getProvider().getValue());
-        String state = UUID.randomUUID().toString();
+        // Generate state for CSRF protection
+        String state = request.getState() != null ? request.getState() : UUID.randomUUID().toString();
+        
+        // Get authorization URL from OAuth2 configuration service
+        String authorizationUrl = oAuth2ConfigurationService.getAuthorizationUrl(provider, state);
 
         try {
             return OAuth2AuthorizeResponseDto.builder()
@@ -103,6 +106,7 @@ public class AuthenticationService {
         // 4. Link external account
         // 5. Generate JWT tokens
         
+        log.debug("OAuth2 callback for provider {} not yet implemented", oauthProvider);
         throw new RuntimeException("OAuth2 callback handling not yet implemented");
     }
 
