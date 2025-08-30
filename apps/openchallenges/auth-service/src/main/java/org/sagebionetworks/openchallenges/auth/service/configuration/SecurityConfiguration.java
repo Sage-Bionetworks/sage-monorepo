@@ -42,7 +42,11 @@ public class SecurityConfiguration {
         authz ->
           authz
             .requestMatchers("/v1/auth/login", "/v1/auth/validate")
-            .permitAll() // Public endpoints
+            .permitAll() // Public authentication endpoints
+            .requestMatchers("/v1/auth/oauth2/**")
+            .permitAll() // Public OAuth2 endpoints
+            .requestMatchers("/v1/auth/jwt/**")
+            .permitAll() // Public JWT endpoints (validate, refresh)
             .requestMatchers("/actuator/health", "/actuator/info")
             .permitAll() // Health checks
             .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")

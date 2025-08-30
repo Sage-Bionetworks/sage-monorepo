@@ -149,6 +149,7 @@ class UserTest {
         id,
         username,
         passwordHash,
+        "test@example.com", // email field
         role,
         enabled,
         createdAt,

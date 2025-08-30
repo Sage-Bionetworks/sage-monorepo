@@ -5,17 +5,23 @@ import java.util.Arrays;
 import java.util.Optional;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginResponseDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2AuthorizeRequestDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2AuthorizeResponseDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2CallbackRequestDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.RefreshTokenRequestDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.RefreshTokenResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyResponseDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateJwtRequestDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateJwtResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
-import org.sagebionetworks.openchallenges.auth.service.service.UserService;
+import org.sagebionetworks.openchallenges.auth.service.service.AuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -23,62 +29,109 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
 
   private static final Logger logger = LoggerFactory.getLogger(AuthenticationApiDelegateImpl.class);
 
-  private final UserService userService;
   private final ApiKeyService apiKeyService;
-  private final PasswordEncoder passwordEncoder;
+  private final AuthenticationService authenticationService;
 
   public AuthenticationApiDelegateImpl(
-    UserService userService,
     ApiKeyService apiKeyService,
-    PasswordEncoder passwordEncoder
+    AuthenticationService authenticationService
   ) {
-    this.userService = userService;
     this.apiKeyService = apiKeyService;
-    this.passwordEncoder = passwordEncoder;
+    this.authenticationService = authenticationService;
   }
 
   @Override
   public ResponseEntity<LoginResponseDto> login(LoginRequestDto loginRequestDto) {
-    logger.info("Login attempt for username: {}", loginRequestDto.getUsername());
+    logger.info("JWT login attempt for username: {}", loginRequestDto.getUsername());
     try {
-      // Find user by username
-      Optional<User> userOptional = userService.findByUsername(loginRequestDto.getUsername());
-
-      if (userOptional.isEmpty()) {
-        logger.warn("Login failed: user not found for username: {}", loginRequestDto.getUsername());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-      }
-
-      User user = userOptional.get();
-
-      // Verify password
-      if (!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPasswordHash())) {
-        logger.warn(
-          "Login failed: invalid password for username: {}",
-          loginRequestDto.getUsername()
-        );
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-      }
-
-      // Generate a new API key for this login session
-      ApiKey apiKey = apiKeyService.generateApiKey(user, "Login Session");
-
-      logger.info("Login successful for username: {}", loginRequestDto.getUsername());
-
-      // Build response
-      LoginResponseDto response = new LoginResponseDto()
-        .userId(user.getId())
-        .username(user.getUsername())
-        .role(convertToRoleEnum(user.getRole()))
-        .apiKey(apiKey.getPlainKey()); // Use the transient field with the plain key
-
-      return ResponseEntity.ok(response);
-    } catch (Exception e) {
-      logger.error(
-        "Unexpected error during login for username: {}",
-        loginRequestDto.getUsername(),
-        e
+      // Use the AuthenticationService for JWT-based authentication
+      LoginResponseDto response = authenticationService.authenticateUser(
+        loginRequestDto.getUsername(), 
+        loginRequestDto.getPassword()
       );
+      
+      logger.info("JWT login successful for username: {}", loginRequestDto.getUsername());
+      return ResponseEntity.ok(response);
+    } catch (RuntimeException e) {
+      logger.warn("JWT login failed for username: {} - {}", loginRequestDto.getUsername(), e.getMessage());
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    } catch (Exception e) {
+      logger.error("Unexpected error during JWT login for username: {}", loginRequestDto.getUsername(), e);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+  }
+
+  @Override
+  public ResponseEntity<OAuth2AuthorizeResponseDto> initiateOAuth2(OAuth2AuthorizeRequestDto oauth2AuthorizeRequestDto) {
+    logger.info("OAuth2 authorization request for provider");
+    try {
+      OAuth2AuthorizeResponseDto response = authenticationService.authorizeOAuth2(oauth2AuthorizeRequestDto);
+      logger.info("OAuth2 authorization URL generated successfully");
+      return ResponseEntity.ok(response);
+    } catch (RuntimeException e) {
+      logger.warn("OAuth2 authorization failed: {}", e.getMessage());
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    } catch (Exception e) {
+      logger.error("Unexpected error during OAuth2 authorization", e);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+  }
+
+  @Override
+  public ResponseEntity<LoginResponseDto> completeOAuth2(OAuth2CallbackRequestDto oauth2CallbackRequestDto) {
+    logger.info("OAuth2 callback processing");
+    try {
+      LoginResponseDto response = authenticationService.handleOAuth2Callback(
+        "google", // TODO: Extract provider from request or add provider parameter
+        oauth2CallbackRequestDto.getCode(),
+        oauth2CallbackRequestDto.getState()
+      );
+      logger.info("OAuth2 authentication completed successfully");
+      return ResponseEntity.ok(response);
+    } catch (RuntimeException e) {
+      logger.warn("OAuth2 callback failed: {}", e.getMessage());
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    } catch (Exception e) {
+      logger.error("Unexpected error during OAuth2 callback", e);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+  }
+
+  @Override
+  public ResponseEntity<ValidateJwtResponseDto> validateJwt(ValidateJwtRequestDto validateJwtRequestDto) {
+    logger.debug("JWT validation request received");
+    try {
+      ValidateJwtResponseDto response = authenticationService.validateJwt(validateJwtRequestDto.getToken());
+      logger.debug("JWT validation completed");
+      return ResponseEntity.ok(response);
+    } catch (RuntimeException e) {
+      logger.warn("JWT validation failed: {}", e.getMessage());
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    } catch (Exception e) {
+      logger.error("Unexpected error during JWT validation", e);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+  }
+
+  @Override
+  public ResponseEntity<RefreshTokenResponseDto> refreshJwt(RefreshTokenRequestDto refreshTokenRequestDto) {
+    logger.info("JWT refresh token request received");
+    try {
+      LoginResponseDto loginResponse = authenticationService.refreshToken(refreshTokenRequestDto.getRefreshToken());
+      
+      // Convert LoginResponseDto to RefreshTokenResponseDto
+      RefreshTokenResponseDto response = new RefreshTokenResponseDto()
+        .accessToken(loginResponse.getAccessToken())
+        .tokenType("Bearer")
+        .expiresIn(loginResponse.getExpiresIn());
+        
+      logger.info("JWT refresh completed successfully");
+      return ResponseEntity.ok(response);
+    } catch (RuntimeException e) {
+      logger.warn("JWT refresh failed: {}", e.getMessage());
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    } catch (Exception e) {
+      logger.error("Unexpected error during JWT refresh", e);
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
   }
@@ -157,15 +210,6 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
       case "user" -> new String[] { "organizations:read", "challenges:read" };
       case "service" -> new String[] { "organizations:write" };
       default -> new String[] { "organizations:read" };
-    };
-  }
-
-  private LoginResponseDto.RoleEnum convertToRoleEnum(User.Role role) {
-    return switch (role) {
-      case admin -> LoginResponseDto.RoleEnum.ADMIN;
-      case user -> LoginResponseDto.RoleEnum.USER;
-      case readonly -> LoginResponseDto.RoleEnum.READONLY;
-      case service -> LoginResponseDto.RoleEnum.SERVICE;
     };
   }
 

@@ -24,22 +24,18 @@ import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyR
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
-import org.sagebionetworks.openchallenges.auth.service.service.UserService;
+import org.sagebionetworks.openchallenges.auth.service.service.AuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @ExtendWith(MockitoExtension.class)
 class AuthenticationApiDelegateImplTest {
 
   @Mock
-  private UserService userService;
-
-  @Mock
   private ApiKeyService apiKeyService;
 
   @Mock
-  private PasswordEncoder passwordEncoder;
+  private AuthenticationService authenticationService;
 
   private AuthenticationApiDelegateImpl authenticationApiDelegate;
 
@@ -51,9 +47,8 @@ class AuthenticationApiDelegateImplTest {
   @BeforeEach
   void setUp() {
     authenticationApiDelegate = new AuthenticationApiDelegateImpl(
-      userService,
       apiKeyService,
-      passwordEncoder
+      authenticationService
     );
 
     testUser = User.builder()
@@ -594,9 +589,8 @@ class AuthenticationApiDelegateImplTest {
     PasswordEncoder mockPasswordEncoder = mock(PasswordEncoder.class);
 
     AuthenticationApiDelegateImpl delegate = new AuthenticationApiDelegateImpl(
-      mockUserService,
       mockApiKeyService,
-      mockPasswordEncoder
+      mock(org.sagebionetworks.openchallenges.auth.service.service.AuthenticationService.class)
     );
 
     // The delegate should be properly initialized
