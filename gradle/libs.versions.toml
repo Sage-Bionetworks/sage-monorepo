@@ -9,6 +9,7 @@ jackson = "2.19.2"
 jacoco = "0.8.13"
 jakarta-annotation = "3.0.0"
 java = "21"
+jjwt = "0.12.7"
 junit = "5.13.4"
 junit-platform = "1.13.4"
 lombok = "1.18.38"
@@ -42,6 +43,8 @@ spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter",
 spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "spring-boot" }
 spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "spring-boot" }
 spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc", version.ref = "spring-boot" }
+spring-boot-starter-oauth2-client = { module = "org.springframework.boot:spring-boot-starter-oauth2-client", version.ref = "spring-boot" }
+spring-boot-starter-oauth2-resource-server = { module = "org.springframework.boot:spring-boot-starter-oauth2-resource-server", version.ref = "spring-boot" }
 spring-boot-starter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security", version.ref = "spring-boot" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
 spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation", version.ref = "spring-boot" }
@@ -50,6 +53,7 @@ spring-cloud-starter-gateway-server-webflux = { module = "org.springframework.cl
 spring-cloud-starter-openfeign = { module = "org.springframework.cloud:spring-cloud-starter-openfeign", version.ref = "spring-cloud" }
 spring-context = { module = "org.springframework:spring-context", version.ref = "spring" }
 spring-data-commons = { module = "org.springframework.data:spring-data-commons", version.ref = "spring-data" }
+spring-security-oauth2-jose = { module = "org.springframework.security:spring-security-oauth2-jose", version.ref = "spring-security" }
 spring-security-test = { module = "org.springframework.security:spring-security-test", version.ref = "spring-security" }
 spring-web = { module = "org.springframework:spring-web", version.ref = "spring" }
 
@@ -61,6 +65,9 @@ h2database-h2 = { module = "com.h2database:h2", version.ref = "h2database" }
 hibernate-search-backend-elasticsearch = { module = "org.hibernate.search:hibernate-search-backend-elasticsearch", version.ref = "hibernate-search" }
 hibernate-search-mapper-orm = { module = "org.hibernate.search:hibernate-search-mapper-orm", version.ref = "hibernate-search" }
 jakarta-annotation-api = { module = "jakarta.annotation:jakarta.annotation-api", version.ref = "jakarta-annotation" }
+jjwt-api = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jjwt" }
+jjwt-impl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jjwt" }
+jjwt-jackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jjwt" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
 junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
