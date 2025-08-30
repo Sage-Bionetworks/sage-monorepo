@@ -1,5 +1,11 @@
 package org.sagebionetworks.openchallenges.auth.service.service;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.time.OffsetDateTime;
+import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.*;
@@ -9,210 +15,424 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.time.OffsetDateTime;
-import java.util.Optional;
-import java.util.UUID;
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
 @Transactional
 public class AuthenticationService {
 
-    private final UserRepository userRepository;
-    private final ExternalAccountRepository externalAccountRepository;
-    private final RefreshTokenRepository refreshTokenRepository;
-    private final JwtService jwtService;
-    private final PasswordEncoder passwordEncoder;
-    private final OAuth2ConfigurationService oAuth2ConfigurationService;
+  private final UserRepository userRepository;
+  private final ExternalAccountRepository externalAccountRepository;
+  private final RefreshTokenRepository refreshTokenRepository;
+  private final JwtService jwtService;
+  private final PasswordEncoder passwordEncoder;
+  private final OAuth2ConfigurationService oAuth2ConfigurationService;
+  private final OAuth2Service oAuth2Service;
 
-    /**
-     * Authenticate user with username/password and generate JWT tokens
-     */
-    public LoginResponseDto authenticateUser(String username, String password) {
-        log.debug("Authenticating user: {}", username);
-        
-        Optional<User> userOpt = userRepository.findByUsernameIgnoreCase(username);
-        if (userOpt.isEmpty()) {
-            log.debug("User not found: {}", username);
-            throw new RuntimeException("Invalid credentials");
-        }
-        
-        User user = userOpt.get();
+  /**
+   * Authenticate user with username/password and generate JWT tokens
+   */
+  public LoginResponseDto authenticateUser(String username, String password) {
+    log.debug("Authenticating user: {}", username);
+
+    Optional<User> userOpt = userRepository.findByUsernameIgnoreCase(username);
+    if (userOpt.isEmpty()) {
+      log.debug("User not found: {}", username);
+      throw new RuntimeException("Invalid credentials");
+    }
+
+    User user = userOpt.get();
+    if (!user.isActive()) {
+      log.debug("User account is disabled: {}", username);
+      throw new RuntimeException("Account is disabled");
+    }
+
+    if (!passwordEncoder.matches(password, user.getPasswordHash())) {
+      log.debug("Invalid password for user: {}", username);
+      throw new RuntimeException("Invalid credentials");
+    }
+
+    log.info("User successfully authenticated: {}", username);
+    return generateTokenResponse(user);
+  }
+
+  /**
+   * Generate OAuth2 authorization URL for provider
+   */
+  public OAuth2AuthorizeResponseDto authorizeOAuth2(OAuth2AuthorizeRequestDto request) {
+    log.debug("Generating OAuth2 authorization URL for provider: {}", request.getProvider());
+
+    ExternalAccount.Provider provider;
+    try {
+      provider = ExternalAccount.Provider.valueOf(request.getProvider().getValue());
+    } catch (IllegalArgumentException e) {
+      throw new RuntimeException("Unsupported OAuth2 provider: " + request.getProvider());
+    }
+
+    // Generate state for CSRF protection
+    String state = request.getState() != null ? request.getState() : UUID.randomUUID().toString();
+
+    // Get authorization URL from OAuth2 configuration service
+    String authorizationUrl = oAuth2ConfigurationService.getAuthorizationUrl(provider, state);
+
+    try {
+      return OAuth2AuthorizeResponseDto.builder()
+        .authorizationUrl(new java.net.URI(authorizationUrl))
+        .state(state)
+        .build();
+    } catch (java.net.URISyntaxException e) {
+      throw new RuntimeException("Invalid authorization URL", e);
+    }
+  }
+
+  /**
+   * Handle OAuth2 callback and generate JWT tokens
+   */
+  public LoginResponseDto handleOAuth2Callback(String provider, String code, String state) {
+    log.debug("Handling OAuth2 callback for provider: {}", provider);
+
+    ExternalAccount.Provider oauthProvider;
+    try {
+      oauthProvider = ExternalAccount.Provider.valueOf(provider.toLowerCase());
+    } catch (IllegalArgumentException e) {
+      throw new RuntimeException("Unsupported OAuth2 provider: " + provider);
+    }
+
+    // 1. Generate redirect URI for this provider
+    String redirectUri = oAuth2ConfigurationService.getRedirectUri(oauthProvider);
+
+    // 2. Exchange authorization code for access token
+    var tokenResponse = oAuth2Service.exchangeCodeForToken(oauthProvider, code, redirectUri);
+    log.debug("Successfully exchanged code for access token");
+
+    // 3. Fetch user info from OAuth provider
+    var userInfo = oAuth2Service.getUserInfo(oauthProvider, tokenResponse.getAccessToken());
+    log.debug("Successfully fetched user info for provider ID: {}", userInfo.getProviderId());
+
+    // 4. Find or create user account
+    User user = findOrCreateOAuth2User(oauthProvider, userInfo);
+
+    // 5. Create or update external account linking
+    createOrUpdateExternalAccount(user, oauthProvider, userInfo);
+
+    // 6. Generate JWT tokens
+    return generateLoginResponse(user);
+  }
+
+  /**
+   * Validate JWT token
+   */
+  public ValidateJwtResponseDto validateJwt(String token) {
+    JwtService.JwtValidationResult result = jwtService.validateToken(token);
+
+    return ValidateJwtResponseDto.builder()
+      .valid(result.isValid())
+      .userId(result.getUserId())
+      .username(result.getUsername())
+      .build();
+  }
+
+  /**
+   * Refresh JWT tokens using refresh token
+   */
+  public LoginResponseDto refreshToken(String refreshToken) {
+    log.debug("Refreshing JWT token");
+
+    String tokenHash = hashToken(refreshToken);
+
+    // Find and validate refresh token
+    Optional<RefreshToken> tokenEntity = refreshTokenRepository.findByTokenHashAndUserId(
+      tokenHash,
+      extractUserIdFromRefreshToken(refreshToken)
+    );
+
+    if (tokenEntity.isEmpty()) {
+      log.debug("Refresh token not found");
+      throw new RuntimeException("Invalid refresh token");
+    }
+
+    RefreshToken token = tokenEntity.get();
+    if (token.isExpired() || token.getRevoked()) {
+      log.debug("Refresh token is expired or revoked");
+      throw new RuntimeException("Refresh token is expired or revoked");
+    }
+
+    User user = token.getUser();
+    if (!user.isActive()) {
+      log.debug("User account is disabled");
+      throw new RuntimeException("User account is disabled");
+    }
+
+    log.info("Refresh token successfully validated for user: {}", user.getUsername());
+
+    // Generate new tokens
+    LoginResponseDto response = generateTokenResponse(user);
+
+    // Revoke old refresh token
+    refreshTokenRepository.deleteByTokenHashAndUserId(tokenHash, user.getId());
+
+    return response;
+  }
+
+  /**
+   * Generate JWT token response with access and refresh tokens
+   */
+  private LoginResponseDto generateTokenResponse(User user) {
+    String accessToken = jwtService.generateAccessToken(user);
+    String refreshToken = jwtService.generateRefreshToken(user);
+
+    // Store refresh token hash
+    RefreshToken refreshTokenEntity = RefreshToken.builder()
+      .user(user)
+      .tokenHash(hashToken(refreshToken))
+      .expiresAt(OffsetDateTime.now().plusSeconds(jwtService.getRefreshTokenExpirationSeconds()))
+      .revoked(false)
+      .build();
+
+    refreshTokenRepository.save(refreshTokenEntity);
+
+    return LoginResponseDto.builder()
+      .accessToken(accessToken)
+      .refreshToken(refreshToken)
+      .tokenType("Bearer")
+      .expiresIn((int) jwtService.getAccessTokenExpirationSeconds())
+      .build();
+  }
+
+  /**
+   * Find existing user by external account or create new user for OAuth2
+   */
+  private User findOrCreateOAuth2User(ExternalAccount.Provider provider, OAuth2UserInfo userInfo) {
+    log.debug(
+      "Finding or creating OAuth2 user for provider: {} and ID: {}",
+      provider,
+      userInfo.getProviderId()
+    );
+
+    // 1. Check if external account already exists
+    Optional<ExternalAccount> existingAccount =
+      externalAccountRepository.findByProviderAndExternalId(provider, userInfo.getProviderId());
+
+    if (existingAccount.isPresent()) {
+      User user = existingAccount.get().getUser();
+      log.debug("Found existing user: {} for external account", user.getUsername());
+
+      if (!user.isActive()) {
+        throw new RuntimeException("User account is disabled");
+      }
+
+      return user;
+    }
+
+    // 2. Check if user exists by email
+    if (userInfo.getEmail() != null) {
+      Optional<User> existingUserByEmail = userRepository.findByEmail(userInfo.getEmail());
+      if (existingUserByEmail.isPresent()) {
+        User user = existingUserByEmail.get();
+        log.debug("Found existing user by email: {}", user.getEmail());
+
         if (!user.isActive()) {
-            log.debug("User account is disabled: {}", username);
-            throw new RuntimeException("Account is disabled");
+          throw new RuntimeException("User account is disabled");
         }
-        
-        if (!passwordEncoder.matches(password, user.getPasswordHash())) {
-            log.debug("Invalid password for user: {}", username);
-            throw new RuntimeException("Invalid credentials");
-        }
-        
-        log.info("User successfully authenticated: {}", username);
-        return generateTokenResponse(user);
+
+        return user;
+      }
     }
 
-    /**
-     * Generate OAuth2 authorization URL for provider
-     */
-    public OAuth2AuthorizeResponseDto authorizeOAuth2(OAuth2AuthorizeRequestDto request) {
-        log.debug("Generating OAuth2 authorization URL for provider: {}", request.getProvider());
-        
-        ExternalAccount.Provider provider;
-        try {
-            provider = ExternalAccount.Provider.valueOf(request.getProvider().getValue());
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Unsupported OAuth2 provider: " + request.getProvider());
-        }
+    // 3. Create new user account
+    return createNewOAuth2User(provider, userInfo);
+  }
 
-        // Generate state for CSRF protection
-        String state = request.getState() != null ? request.getState() : UUID.randomUUID().toString();
-        
-        // Get authorization URL from OAuth2 configuration service
-        String authorizationUrl = oAuth2ConfigurationService.getAuthorizationUrl(provider, state);
+  /**
+   * Create new user account from OAuth2 user info
+   */
+  private User createNewOAuth2User(ExternalAccount.Provider provider, OAuth2UserInfo userInfo) {
+    log.debug("Creating new user account for OAuth2 provider: {}", provider);
 
-        try {
-            return OAuth2AuthorizeResponseDto.builder()
-                    .authorizationUrl(new java.net.URI(authorizationUrl))
-                    .state(state)
-                    .build();
-        } catch (java.net.URISyntaxException e) {
-            throw new RuntimeException("Invalid authorization URL", e);
-        }
+    // Generate unique username if needed
+    String username = generateUniqueUsername(userInfo);
+
+    User newUser = User.builder()
+      .username(username)
+      .email(userInfo.getEmail())
+      .firstName(extractFirstName(userInfo))
+      .lastName(extractLastName(userInfo))
+      .emailVerified(userInfo.getEmailVerified() != null ? userInfo.getEmailVerified() : false)
+      .role(User.Role.user) // Default role for new OAuth2 users
+      .enabled(true)
+      .build();
+
+    User savedUser = userRepository.save(newUser);
+    log.info(
+      "Created new user account: {} for OAuth2 provider: {}",
+      savedUser.getUsername(),
+      provider
+    );
+
+    return savedUser;
+  }
+
+  /**
+   * Generate unique username from OAuth2 user info
+   */
+  private String generateUniqueUsername(OAuth2UserInfo userInfo) {
+    // Start with preferred username sources
+    String baseUsername = null;
+
+    if (userInfo.getUsername() != null) {
+      baseUsername = userInfo.getUsername();
+    } else if (userInfo.getEmail() != null) {
+      baseUsername = userInfo.getEmail().split("@")[0];
+    } else if (userInfo.getName() != null) {
+      baseUsername = userInfo.getName().toLowerCase().replace(" ", ".");
+    } else {
+      baseUsername = "user" + System.currentTimeMillis();
     }
 
-    /**
-     * Handle OAuth2 callback and generate JWT tokens
-     */
-    public LoginResponseDto handleOAuth2Callback(String provider, String code, String state) {
-        log.debug("Handling OAuth2 callback for provider: {}", provider);
-        
-        ExternalAccount.Provider oauthProvider;
-        try {
-            oauthProvider = ExternalAccount.Provider.valueOf(provider.toLowerCase());
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Unsupported OAuth2 provider: " + provider);
+    // Clean username (alphanumeric, dots, underscores, hyphens only)
+    baseUsername = baseUsername.replaceAll("[^a-zA-Z0-9._-]", "");
+
+    // Check for uniqueness and add suffix if needed
+    String username = baseUsername;
+    int suffix = 1;
+
+    while (userRepository.findByUsernameIgnoreCase(username).isPresent()) {
+      username = baseUsername + suffix;
+      suffix++;
+    }
+
+    return username;
+  }
+
+  /**
+   * Extract first name from OAuth2 user info
+   */
+  private String extractFirstName(OAuth2UserInfo userInfo) {
+    if (userInfo.getGivenName() != null) {
+      return userInfo.getGivenName();
+    } else if (userInfo.getName() != null) {
+      String[] nameParts = userInfo.getName().split(" ");
+      return nameParts.length > 0 ? nameParts[0] : null;
+    }
+    return null;
+  }
+
+  /**
+   * Extract last name from OAuth2 user info
+   */
+  private String extractLastName(OAuth2UserInfo userInfo) {
+    if (userInfo.getFamilyName() != null) {
+      return userInfo.getFamilyName();
+    } else if (userInfo.getName() != null) {
+      String[] nameParts = userInfo.getName().split(" ");
+      return nameParts.length > 1 ? nameParts[nameParts.length - 1] : null;
+    }
+    return null;
+  }
+
+  /**
+   * Create or update external account linking
+   */
+  private void createOrUpdateExternalAccount(
+    User user,
+    ExternalAccount.Provider provider,
+    OAuth2UserInfo userInfo
+  ) {
+    log.debug(
+      "Creating or updating external account for user: {} and provider: {}",
+      user.getUsername(),
+      provider
+    );
+
+    Optional<ExternalAccount> existingAccount =
+      externalAccountRepository.findByProviderAndExternalId(provider, userInfo.getProviderId());
+
+    if (existingAccount.isPresent()) {
+      // Update existing account
+      ExternalAccount account = existingAccount.get();
+      account.setExternalEmail(userInfo.getEmail());
+      account.setExternalUsername(userInfo.getUsername());
+      account.setUpdatedAt(OffsetDateTime.now());
+
+      externalAccountRepository.save(account);
+      log.debug("Updated existing external account for user: {}", user.getUsername());
+    } else {
+      // Create new external account
+      ExternalAccount newAccount = ExternalAccount.builder()
+        .user(user)
+        .provider(provider)
+        .externalId(userInfo.getProviderId())
+        .externalEmail(userInfo.getEmail())
+        .externalUsername(userInfo.getUsername())
+        .createdAt(OffsetDateTime.now())
+        .updatedAt(OffsetDateTime.now())
+        .build();
+
+      externalAccountRepository.save(newAccount);
+      log.info(
+        "Created new external account for user: {} and provider: {}",
+        user.getUsername(),
+        provider
+      );
+    }
+  }
+
+  /**
+   * Generate LoginResponse with JWT tokens for user
+   */
+  private LoginResponseDto generateLoginResponse(User user) {
+    log.debug("Generating login response for user: {}", user.getUsername());
+
+    // Generate JWT tokens
+    String accessToken = jwtService.generateAccessToken(user);
+    String refreshToken = jwtService.generateRefreshToken(user);
+
+    // Save refresh token
+    RefreshToken refreshTokenEntity = RefreshToken.builder()
+      .user(user)
+      .tokenHash(hashToken(refreshToken))
+      .expiresAt(OffsetDateTime.now().plusSeconds(jwtService.getRefreshTokenExpirationSeconds()))
+      .revoked(false)
+      .build();
+
+    refreshTokenRepository.save(refreshTokenEntity);
+
+    return LoginResponseDto.builder()
+      .accessToken(accessToken)
+      .refreshToken(refreshToken)
+      .tokenType("Bearer")
+      .expiresIn((int) jwtService.getAccessTokenExpirationSeconds())
+      .userId(user.getId())
+      .username(user.getUsername())
+      .role(LoginResponseDto.RoleEnum.fromValue(user.getRole().name().toLowerCase()))
+      .build();
+  }
+
+  /**
+   * Hash token for secure storage
+   */
+  private String hashToken(String token) {
+    try {
+      MessageDigest digest = MessageDigest.getInstance("SHA-256");
+      byte[] hash = digest.digest(token.getBytes(StandardCharsets.UTF_8));
+      StringBuilder hexString = new StringBuilder();
+      for (byte b : hash) {
+        String hex = Integer.toHexString(0xff & b);
+        if (hex.length() == 1) {
+          hexString.append('0');
         }
-
-        // For now, we'll create a placeholder implementation
-        // In a real implementation, this would:
-        // 1. Exchange code for access token
-        // 2. Fetch user info from OAuth provider
-        // 3. Find or create user account
-        // 4. Link external account
-        // 5. Generate JWT tokens
-        
-        log.debug("OAuth2 callback for provider {} not yet implemented", oauthProvider);
-        throw new RuntimeException("OAuth2 callback handling not yet implemented");
+        hexString.append(hex);
+      }
+      return hexString.toString();
+    } catch (NoSuchAlgorithmException e) {
+      throw new RuntimeException("SHA-256 algorithm not available", e);
     }
+  }
 
-    /**
-     * Validate JWT token
-     */
-    public ValidateJwtResponseDto validateJwt(String token) {
-        JwtService.JwtValidationResult result = jwtService.validateToken(token);
-        
-        return ValidateJwtResponseDto.builder()
-                .valid(result.isValid())
-                .userId(result.getUserId())
-                .username(result.getUsername())
-                .build();
-    }
-
-    /**
-     * Refresh JWT tokens using refresh token
-     */
-    public LoginResponseDto refreshToken(String refreshToken) {
-        log.debug("Refreshing JWT token");
-        
-        String tokenHash = hashToken(refreshToken);
-        
-        // Find and validate refresh token
-        Optional<RefreshToken> tokenEntity = refreshTokenRepository.findByTokenHashAndUserId(
-                tokenHash, extractUserIdFromRefreshToken(refreshToken));
-        
-        if (tokenEntity.isEmpty()) {
-            log.debug("Refresh token not found");
-            throw new RuntimeException("Invalid refresh token");
-        }
-        
-        RefreshToken token = tokenEntity.get();
-        if (token.isExpired() || token.getRevoked()) {
-            log.debug("Refresh token is expired or revoked");
-            throw new RuntimeException("Refresh token is expired or revoked");
-        }
-        
-        User user = token.getUser();
-        if (!user.isActive()) {
-            log.debug("User account is disabled");
-            throw new RuntimeException("User account is disabled");
-        }
-        
-        log.info("Refresh token successfully validated for user: {}", user.getUsername());
-        
-        // Generate new tokens
-        LoginResponseDto response = generateTokenResponse(user);
-        
-        // Revoke old refresh token
-        refreshTokenRepository.deleteByTokenHashAndUserId(tokenHash, user.getId());
-        
-        return response;
-    }
-
-    /**
-     * Generate JWT token response with access and refresh tokens
-     */
-    private LoginResponseDto generateTokenResponse(User user) {
-        String accessToken = jwtService.generateAccessToken(user);
-        String refreshToken = jwtService.generateRefreshToken(user);
-        
-        // Store refresh token hash
-        RefreshToken refreshTokenEntity = RefreshToken.builder()
-                .user(user)
-                .tokenHash(hashToken(refreshToken))
-                .expiresAt(OffsetDateTime.now().plusSeconds(jwtService.getRefreshTokenExpirationSeconds()))
-                .revoked(false)
-                .build();
-        
-        refreshTokenRepository.save(refreshTokenEntity);
-        
-        return LoginResponseDto.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .tokenType("Bearer")
-                .expiresIn((int) jwtService.getAccessTokenExpirationSeconds())
-                .build();
-    }
-
-    /**
-     * Hash token for secure storage
-     */
-    private String hashToken(String token) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(token.getBytes(StandardCharsets.UTF_8));
-            StringBuilder hexString = new StringBuilder();
-            for (byte b : hash) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) {
-                    hexString.append('0');
-                }
-                hexString.append(hex);
-            }
-            return hexString.toString();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("SHA-256 algorithm not available", e);
-        }
-    }
-
-    /**
-     * Extract user ID from refresh token (simplified implementation)
-     */
-    private UUID extractUserIdFromRefreshToken(String refreshToken) {
-        return jwtService.extractUserIdFromToken(refreshToken);
-    }
+  /**
+   * Extract user ID from refresh token (simplified implementation)
+   */
+  private UUID extractUserIdFromRefreshToken(String refreshToken) {
+    return jwtService.extractUserIdFromToken(refreshToken);
+  }
 }
