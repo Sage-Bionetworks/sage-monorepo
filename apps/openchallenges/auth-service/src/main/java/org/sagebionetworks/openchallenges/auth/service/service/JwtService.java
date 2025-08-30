@@ -131,6 +131,37 @@ public class JwtService {
     }
 
     /**
+     * Extract username from token
+     */
+    public String extractUsername(String token) {
+        try {
+            Claims claims = Jwts.parser()
+                    .verifyWith(jwtSigningKey)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+            
+            return claims.get("username", String.class);
+        } catch (JwtException | IllegalArgumentException e) {
+            log.debug("Failed to extract username from token: {}", e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Check if token is valid for the given username
+     */
+    public boolean isTokenValid(String token, String username) {
+        try {
+            JwtValidationResult result = validateToken(token);
+            return result.isValid() && username.equals(result.getUsername());
+        } catch (Exception e) {
+            log.debug("Token validation failed for username {}: {}", username, e.getMessage());
+            return false;
+        }
+    }
+
+    /**
      * Check if token is expired without throwing exceptions
      */
     public boolean isTokenExpired(String token) {

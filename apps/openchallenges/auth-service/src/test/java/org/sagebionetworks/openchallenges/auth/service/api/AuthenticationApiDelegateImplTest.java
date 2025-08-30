@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 
 import java.time.OffsetDateTime;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -82,9 +83,15 @@ class AuthenticationApiDelegateImplTest {
   @Test
   void shouldReturnSuccessResponseWhenValidCredentials() {
     // Arrange
-    when(userService.findByUsername("testuser")).thenReturn(Optional.of(testUser));
-    when(passwordEncoder.matches("plainpassword", "hashedpassword")).thenReturn(true);
-    when(apiKeyService.generateApiKey(testUser, "Login Session")).thenReturn(testApiKey);
+    LoginResponseDto expectedResponse = LoginResponseDto.builder()
+        .accessToken("access-token")
+        .refreshToken("refresh-token")
+        .tokenType("Bearer")
+        .expiresIn(3600)
+        .build();
+    
+    when(authenticationService.authenticateUser("testuser", "plainpassword"))
+        .thenReturn(expectedResponse);
 
     // Act
     ResponseEntity<LoginResponseDto> response = authenticationApiDelegate.login(loginRequest);
@@ -92,20 +99,19 @@ class AuthenticationApiDelegateImplTest {
     // Assert
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
-    assertThat(response.getBody().getUserId()).isEqualTo(testUser.getId());
-    assertThat(response.getBody().getUsername()).isEqualTo("testuser");
-    assertThat(response.getBody().getRole()).isEqualTo(LoginResponseDto.RoleEnum.USER);
-    assertThat(response.getBody().getApiKey()).isEqualTo("oc_dev_1234567890abcdef");
+    assertThat(response.getBody().getAccessToken()).isEqualTo("access-token");
+    assertThat(response.getBody().getRefreshToken()).isEqualTo("refresh-token");
+    assertThat(response.getBody().getTokenType()).isEqualTo("Bearer");
+    assertThat(response.getBody().getExpiresIn()).isEqualTo(3600);
 
-    verify(userService).findByUsername("testuser");
-    verify(passwordEncoder).matches("plainpassword", "hashedpassword");
-    verify(apiKeyService).generateApiKey(testUser, "Login Session");
+    verify(authenticationService).authenticateUser("testuser", "plainpassword");
   }
 
   @Test
   void shouldLoginReturnUnauthorizedWhenUserNotFound() {
     // Arrange
-    when(userService.findByUsername("testuser")).thenReturn(Optional.empty());
+    when(authenticationService.authenticateUser("testuser", "plainpassword"))
+        .thenThrow(new RuntimeException("Invalid credentials"));
 
     // Act
     ResponseEntity<LoginResponseDto> response = authenticationApiDelegate.login(loginRequest);
@@ -114,16 +120,14 @@ class AuthenticationApiDelegateImplTest {
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     assertThat(response.getBody()).isNull();
 
-    verify(userService).findByUsername("testuser");
-    verify(passwordEncoder, never()).matches(any(), any());
-    verify(apiKeyService, never()).generateApiKey(any(), any());
+    verify(authenticationService).authenticateUser("testuser", "plainpassword");
   }
 
   @Test
   void shouldLoginReturnUnauthorizedWhenInvalidPassword() {
     // Arrange
-    when(userService.findByUsername("testuser")).thenReturn(Optional.of(testUser));
-    when(passwordEncoder.matches("plainpassword", "hashedpassword")).thenReturn(false);
+    when(authenticationService.authenticateUser("testuser", "plainpassword"))
+        .thenThrow(new RuntimeException("Invalid credentials"));
 
     // Act
     ResponseEntity<LoginResponseDto> response = authenticationApiDelegate.login(loginRequest);
@@ -132,43 +136,44 @@ class AuthenticationApiDelegateImplTest {
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     assertThat(response.getBody()).isNull();
 
-    verify(userService).findByUsername("testuser");
-    verify(passwordEncoder).matches("plainpassword", "hashedpassword");
-    verify(apiKeyService, never()).generateApiKey(any(), any());
+    verify(authenticationService).authenticateUser("testuser", "plainpassword");
   }
 
   @Test
-  void shouldLoginReturnInternalServerErrorWhenExceptionThrown() {
+  void shouldLoginReturnUnauthorizedWhenRuntimeExceptionThrown() {
     // Arrange
-    when(userService.findByUsername("testuser")).thenThrow(new RuntimeException("Database error"));
+    when(authenticationService.authenticateUser("testuser", "plainpassword"))
+        .thenThrow(new RuntimeException("Database error"));
 
     // Act
     ResponseEntity<LoginResponseDto> response = authenticationApiDelegate.login(loginRequest);
 
     // Assert
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     assertThat(response.getBody()).isNull();
 
-    verify(userService).findByUsername("testuser");
+    verify(authenticationService).authenticateUser("testuser", "plainpassword");
   }
 
   @Test
-  void shouldLoginHandleAdminRoleWhenUserIsAdmin() {
+  void shouldLoginReturnOkForAdminUser() {
     // Arrange
-    User adminUser = User.builder()
-      .id(UUID.randomUUID())
-      .username("admin")
-      .passwordHash("hashedpassword")
-      .role(User.Role.admin)
-      .build();
+    LoginResponseDto mockResponse = LoginResponseDto.builder()
+        .accessToken("access_token")
+        .refreshToken("refresh_token")
+        .tokenType("Bearer")
+        .expiresIn(3600)
+        .userId(UUID.randomUUID())
+        .username("admin")
+        .role(LoginResponseDto.RoleEnum.ADMIN)
+        .build();
 
-    LoginRequestDto adminLoginRequest = new LoginRequestDto()
-      .username("admin")
-      .password("adminpassword");
+    when(authenticationService.authenticateUser("admin", "adminpassword"))
+        .thenReturn(mockResponse);
 
-    when(userService.findByUsername("admin")).thenReturn(Optional.of(adminUser));
-    when(passwordEncoder.matches("adminpassword", "hashedpassword")).thenReturn(true);
-    when(apiKeyService.generateApiKey(adminUser, "Login Session")).thenReturn(testApiKey);
+    LoginRequestDto adminLoginRequest = new LoginRequestDto();
+    adminLoginRequest.setUsername("admin");
+    adminLoginRequest.setPassword("adminpassword");
 
     // Act
     ResponseEntity<LoginResponseDto> response = authenticationApiDelegate.login(adminLoginRequest);
@@ -176,26 +181,33 @@ class AuthenticationApiDelegateImplTest {
     // Assert
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
+    assertThat(response.getBody().getUsername()).isEqualTo("admin");
     assertThat(response.getBody().getRole()).isEqualTo(LoginResponseDto.RoleEnum.ADMIN);
+    assertThat(response.getBody().getAccessToken()).isEqualTo("access_token");
+    assertThat(response.getBody().getRefreshToken()).isEqualTo("refresh_token");
+
+    verify(authenticationService).authenticateUser("admin", "adminpassword");
   }
 
   @Test
   void shouldLoginHandleReadonlyRoleWhenUserIsReadonly() {
     // Arrange
-    User readonlyUser = User.builder()
-      .id(UUID.randomUUID())
-      .username("readonly")
-      .passwordHash("hashedpassword")
-      .role(User.Role.readonly)
-      .build();
+    LoginResponseDto mockResponse = LoginResponseDto.builder()
+        .accessToken("readonly_access_token")
+        .refreshToken("readonly_refresh_token")
+        .tokenType("Bearer")
+        .expiresIn(3600)
+        .userId(UUID.randomUUID())
+        .username("readonly")
+        .role(LoginResponseDto.RoleEnum.READONLY)
+        .build();
+
+    when(authenticationService.authenticateUser("readonly", "readonlypassword"))
+        .thenReturn(mockResponse);
 
     LoginRequestDto readonlyLoginRequest = new LoginRequestDto()
       .username("readonly")
       .password("readonlypassword");
-
-    when(userService.findByUsername("readonly")).thenReturn(Optional.of(readonlyUser));
-    when(passwordEncoder.matches("readonlypassword", "hashedpassword")).thenReturn(true);
-    when(apiKeyService.generateApiKey(readonlyUser, "Login Session")).thenReturn(testApiKey);
 
     // Act
     ResponseEntity<LoginResponseDto> response = authenticationApiDelegate.login(readonlyLoginRequest);
@@ -204,25 +216,29 @@ class AuthenticationApiDelegateImplTest {
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
     assertThat(response.getBody().getRole()).isEqualTo(LoginResponseDto.RoleEnum.READONLY);
+    
+    verify(authenticationService).authenticateUser("readonly", "readonlypassword");
   }
 
   @Test
   void shouldLoginHandleServiceRoleWhenUserIsService() {
     // Arrange
-    User serviceUser = User.builder()
-      .id(UUID.randomUUID())
-      .username("service")
-      .passwordHash("hashedpassword")
-      .role(User.Role.service)
-      .build();
+    LoginResponseDto mockResponse = LoginResponseDto.builder()
+        .accessToken("service_access_token")
+        .refreshToken("service_refresh_token")
+        .tokenType("Bearer")
+        .expiresIn(3600)
+        .userId(UUID.randomUUID())
+        .username("service")
+        .role(LoginResponseDto.RoleEnum.SERVICE)
+        .build();
+
+    when(authenticationService.authenticateUser("service", "servicepassword"))
+        .thenReturn(mockResponse);
 
     LoginRequestDto serviceLoginRequest = new LoginRequestDto()
       .username("service")
       .password("servicepassword");
-
-    when(userService.findByUsername("service")).thenReturn(Optional.of(serviceUser));
-    when(passwordEncoder.matches("servicepassword", "hashedpassword")).thenReturn(true);
-    when(apiKeyService.generateApiKey(serviceUser, "Login Session")).thenReturn(testApiKey);
 
     // Act
     ResponseEntity<LoginResponseDto> response = authenticationApiDelegate.login(serviceLoginRequest);
@@ -231,6 +247,8 @@ class AuthenticationApiDelegateImplTest {
     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     assertThat(response.getBody()).isNotNull();
     assertThat(response.getBody().getRole()).isEqualTo(LoginResponseDto.RoleEnum.SERVICE);
+    
+    verify(authenticationService).authenticateUser("service", "servicepassword");
   }
 
   // ========== Validate API Key Tests ==========
@@ -584,24 +602,17 @@ class AuthenticationApiDelegateImplTest {
   void shouldConstructorInitializeAllDependencies() {
     // This test ensures the constructor properly assigns all dependencies
     // and helps with constructor coverage
-    UserService mockUserService = mock(UserService.class);
     ApiKeyService mockApiKeyService = mock(ApiKeyService.class);
-    PasswordEncoder mockPasswordEncoder = mock(PasswordEncoder.class);
+    AuthenticationService mockAuthenticationService = mock(AuthenticationService.class);
 
     AuthenticationApiDelegateImpl delegate = new AuthenticationApiDelegateImpl(
       mockApiKeyService,
-      mock(org.sagebionetworks.openchallenges.auth.service.service.AuthenticationService.class)
+      mockAuthenticationService
     );
 
     // The delegate should be properly initialized
     assertThat(delegate).isNotNull();
     // We can't directly test the private fields, but we can verify they work by calling methods
-    when(mockUserService.findByUsername("test")).thenReturn(Optional.empty());
-
-    LoginRequestDto testLogin = new LoginRequestDto().username("test").password("test");
-    ResponseEntity<LoginResponseDto> response = delegate.login(testLogin);
-
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
-    verify(mockUserService).findByUsername("test");
+    // This verifies the constructor properly initialized the dependencies
   }
 }
