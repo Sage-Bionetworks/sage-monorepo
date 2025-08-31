@@ -4,7 +4,7 @@ openchallenges-api-gateway:
 # Auth Service configuration
 openchallenges:
   auth:
-    service-url: ${AUTH_SERVICE_URL:http://openchallenges-auth-service:8087/api/v1}
+    service-url: ${AUTH_SERVICE_URL:http://openchallenges-auth-service:8087/v1}
     realm: ${AUTH_REALM:OpenChallenges}
 
 server:
