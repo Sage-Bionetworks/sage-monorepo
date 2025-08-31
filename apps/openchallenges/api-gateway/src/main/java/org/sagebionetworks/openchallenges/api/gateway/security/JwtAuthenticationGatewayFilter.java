@@ -1,5 +1,6 @@
 package org.sagebionetworks.openchallenges.api.gateway.security;
 
+import org.sagebionetworks.openchallenges.api.gateway.configuration.AuthConfiguration;
 import org.sagebionetworks.openchallenges.api.gateway.service.GatewayAuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,9 +34,13 @@ public class JwtAuthenticationGatewayFilter implements WebFilter {
   // TODO: Add X_SCOPES_HEADER when JWT validation includes scope information
 
   private final GatewayAuthenticationService authenticationService;
+  private final AuthConfiguration authConfiguration;
 
-  public JwtAuthenticationGatewayFilter(GatewayAuthenticationService authenticationService) {
+  public JwtAuthenticationGatewayFilter(
+      GatewayAuthenticationService authenticationService,
+      AuthConfiguration authConfiguration) {
     this.authenticationService = authenticationService;
+    this.authConfiguration = authConfiguration;
   }
 
   @Override
@@ -60,7 +65,8 @@ public class JwtAuthenticationGatewayFilter implements WebFilter {
           if (!validationResponse.isValid()) {
             logger.warn("Invalid JWT token for request to: {}", path);
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-            exchange.getResponse().getHeaders().add("WWW-Authenticate", "Bearer");
+            exchange.getResponse().getHeaders().add("WWW-Authenticate", 
+                String.format("Bearer realm=\"%s\"", authConfiguration.getRealm()));
             return exchange.getResponse().setComplete();
           }
 
@@ -92,7 +98,8 @@ public class JwtAuthenticationGatewayFilter implements WebFilter {
         .onErrorResume(GatewayAuthenticationService.AuthenticationException.class, ex -> {
           logger.warn("JWT authentication failed for request to {}: {}", path, ex.getMessage());
           exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-          exchange.getResponse().getHeaders().add("WWW-Authenticate", "Bearer");
+          exchange.getResponse().getHeaders().add("WWW-Authenticate", 
+              String.format("Bearer realm=\"%s\"", authConfiguration.getRealm()));
           return exchange.getResponse().setComplete();
         })
         .onErrorResume(Exception.class, ex -> {

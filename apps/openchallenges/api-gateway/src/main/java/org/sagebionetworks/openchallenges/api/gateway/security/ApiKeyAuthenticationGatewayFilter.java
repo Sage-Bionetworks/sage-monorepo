@@ -1,5 +1,6 @@
 package org.sagebionetworks.openchallenges.api.gateway.security;
 
+import org.sagebionetworks.openchallenges.api.gateway.configuration.AuthConfiguration;
 import org.sagebionetworks.openchallenges.api.gateway.service.GatewayAuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,9 +35,13 @@ public class ApiKeyAuthenticationGatewayFilter implements WebFilter {
   private static final String X_SCOPES_HEADER = "X-Scopes";
 
   private final GatewayAuthenticationService authenticationService;
+  private final AuthConfiguration authConfiguration;
 
-  public ApiKeyAuthenticationGatewayFilter(GatewayAuthenticationService authenticationService) {
+  public ApiKeyAuthenticationGatewayFilter(
+      GatewayAuthenticationService authenticationService,
+      AuthConfiguration authConfiguration) {
     this.authenticationService = authenticationService;
+    this.authConfiguration = authConfiguration;
   }
 
   @Override
@@ -66,7 +71,8 @@ public class ApiKeyAuthenticationGatewayFilter implements WebFilter {
           if (!validationResponse.isValid()) {
             logger.warn("Invalid API key for request to: {}", path);
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-            exchange.getResponse().getHeaders().add("WWW-Authenticate", "ApiKey");
+            exchange.getResponse().getHeaders().add("WWW-Authenticate", 
+                String.format("ApiKey realm=\"%s\"", authConfiguration.getRealm()));
             return exchange.getResponse().setComplete();
           }
 
@@ -100,7 +106,8 @@ public class ApiKeyAuthenticationGatewayFilter implements WebFilter {
         .onErrorResume(GatewayAuthenticationService.AuthenticationException.class, ex -> {
           logger.warn("API key authentication failed for request to {}: {}", path, ex.getMessage());
           exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-          exchange.getResponse().getHeaders().add("WWW-Authenticate", "ApiKey");
+          exchange.getResponse().getHeaders().add("WWW-Authenticate", 
+              String.format("ApiKey realm=\"%s\"", authConfiguration.getRealm()));
           return exchange.getResponse().setComplete();
         })
         .onErrorResume(Exception.class, ex -> {
