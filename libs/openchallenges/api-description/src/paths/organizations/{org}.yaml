@@ -26,7 +26,9 @@ put:
   operationId: updateOrganization
   x-audience: [public]
   security:
-    - apiBearerAuth: []
+    - jwtBearerAuth: []
+    - apiKeyAuth: []
+    - apiBearerAuth: [] # Legacy support
   requestBody:
     required: true
     content:
@@ -60,7 +62,9 @@ delete:
   operationId: deleteOrganization
   x-audience: [public]
   security:
-    - apiBearerAuth: []
+    - jwtBearerAuth: []
+    - apiKeyAuth: []
+    - apiBearerAuth: [] # Legacy support
   responses:
     '204':
       description: Organization successfully deleted

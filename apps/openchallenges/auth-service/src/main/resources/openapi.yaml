@@ -363,7 +363,6 @@ components:
       example:
         expiresIn: 3600
         role: admin
-        apiKey: oc_prod_abcd1234567890abcdef1234567890abcdef1234
         accessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
         tokenType: Bearer
         userId: 123e4567-e89b-12d3-a456-426614174000
@@ -387,10 +386,6 @@ components:
           description: Access token expiry time in seconds
           example: 3600
           type: integer
-        apiKey:
-          description: API key for automation and service-to-service authentication
-          example: oc_prod_abcd1234567890abcdef1234567890abcdef1234
-          type: string
         userId:
           description: User ID
           example: 123e4567-e89b-12d3-a456-426614174000
@@ -708,8 +703,9 @@ components:
       type: object
   securitySchemes:
     apiBearerAuth:
-      bearerFormat: api_key
-      description: API key obtained from /auth/login endpoint
+      bearerFormat: JWT
+      description: JWT token from authentication service or API key for programmatic
+        access
       scheme: bearer
       type: http
     jwtBearerAuth:

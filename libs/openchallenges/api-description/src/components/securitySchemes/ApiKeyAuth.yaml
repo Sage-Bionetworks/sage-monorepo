@@ -1,0 +1,4 @@
+type: apiKey
+in: header
+name: X-API-Key
+description: API key for programmatic access (create and manage via /auth/api-keys endpoints)
