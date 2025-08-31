@@ -17,25 +17,10 @@ public class SecurityConfiguration {
     return http
       .authorizeExchange(exchanges ->
         exchanges
-          // PUBLIC ENDPOINTS - no authentication required
-          .pathMatchers("/actuator/health/**")
-          .permitAll()
-          .pathMatchers("/api/v1/auth/**")
-          .permitAll()
-          .pathMatchers("/api/v1/users/register")
-          .permitAll()
-          // PUBLIC READ ACCESS - no authentication required for GET requests
-          .pathMatchers("/api/v1/challenge-analytics/**")
-          .permitAll()
-          .pathMatchers("/api/v1/challenge-platforms/**")
-          .permitAll()
-          .pathMatchers("/api/v1/edam-concepts/**")
-          .permitAll()
-          // Note: Authentication for other endpoints is handled by Gateway Filters
-          // The filters will validate JWT/API keys and add user context headers
-          // If validation fails, the filters will return 401 Unauthorized
+          // All authentication logic is handled by GlobalFilters
+          // Spring Security just provides basic web security (CORS, headers, etc.)
           .anyExchange()
-          .permitAll() // Let gateway filters handle authentication
+          .permitAll()
       )
       .csrf(csrf -> csrf.disable())
       .build();

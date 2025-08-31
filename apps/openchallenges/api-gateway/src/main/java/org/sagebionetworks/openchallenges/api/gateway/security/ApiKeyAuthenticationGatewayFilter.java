@@ -1,6 +1,7 @@
 package org.sagebionetworks.openchallenges.api.gateway.security;
 
 import org.sagebionetworks.openchallenges.api.gateway.service.GatewayAuthenticationService;
+import org.sagebionetworks.openchallenges.api.gateway.service.PublicEndpointService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -31,9 +32,12 @@ public class ApiKeyAuthenticationGatewayFilter implements GlobalFilter, Ordered 
   private static final String X_SERVICE_NAME_HEADER = "X-Service-Name";
 
   private final GatewayAuthenticationService authenticationService;
+  private final PublicEndpointService publicEndpointService;
 
-  public ApiKeyAuthenticationGatewayFilter(GatewayAuthenticationService authenticationService) {
+  public ApiKeyAuthenticationGatewayFilter(GatewayAuthenticationService authenticationService,
+                                           PublicEndpointService publicEndpointService) {
     this.authenticationService = authenticationService;
+    this.publicEndpointService = publicEndpointService;
   }
 
   @Override
@@ -48,7 +52,7 @@ public class ApiKeyAuthenticationGatewayFilter implements GlobalFilter, Ordered 
     }
 
     // Skip authentication for public endpoints
-    if (isPublicEndpoint(path)) {
+    if (publicEndpointService.isPublicEndpoint(path)) {
       logger.debug("Skipping API key authentication for public endpoint: {}", path);
       return chain.filter(exchange);
     }
@@ -98,21 +102,6 @@ public class ApiKeyAuthenticationGatewayFilter implements GlobalFilter, Ordered 
           logger.error("Unexpected error during API key authentication for request to {}: {}", path, ex.getMessage());
           return Mono.error(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Authentication service error"));
         });
-  }
-
-  /**
-   * Determines if an endpoint is public and doesn't require authentication.
-   */
-  private boolean isPublicEndpoint(String path) {
-    return path.startsWith("/actuator/health") ||
-           path.startsWith("/api/v1/auth/login") ||
-           path.startsWith("/api/v1/auth/oauth2") ||
-           path.startsWith("/api/v1/auth/jwt/validate") ||
-           path.startsWith("/api/v1/auth/validate") ||
-           path.equals("/api/v1/users/register") ||
-           path.startsWith("/api/v1/challenge-analytics") ||
-           path.startsWith("/api/v1/challenge-platforms") ||
-           path.startsWith("/api/v1/edam-concepts");
   }
 
   @Override
