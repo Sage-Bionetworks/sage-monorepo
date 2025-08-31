@@ -28,7 +28,6 @@ put:
   security:
     - jwtBearerAuth: []
     - apiKeyAuth: []
-    - apiBearerAuth: [] # Legacy support
   requestBody:
     required: true
     content:
@@ -64,7 +63,6 @@ delete:
   security:
     - jwtBearerAuth: []
     - apiKeyAuth: []
-    - apiBearerAuth: [] # Legacy support
   responses:
     '204':
       description: Organization successfully deleted

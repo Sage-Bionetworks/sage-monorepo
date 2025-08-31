@@ -56,7 +56,6 @@ paths:
       security:
         - jwtBearerAuth: []
         - apiKeyAuth: []
-        - apiBearerAuth: []
       requestBody:
         content:
           application/json:
@@ -113,7 +112,6 @@ paths:
       security:
         - jwtBearerAuth: []
         - apiKeyAuth: []
-        - apiBearerAuth: []
       requestBody:
         required: true
         content:
@@ -150,7 +148,6 @@ paths:
       security:
         - jwtBearerAuth: []
         - apiKeyAuth: []
-        - apiBearerAuth: []
       responses:
         '204':
           description: Organization successfully deleted
@@ -176,7 +173,6 @@ paths:
       security:
         - jwtBearerAuth: []
         - apiKeyAuth: []
-        - apiBearerAuth: []
       requestBody:
         required: true
         content:
@@ -216,7 +212,6 @@ paths:
       security:
         - jwtBearerAuth: []
         - apiKeyAuth: []
-        - apiBearerAuth: []
       responses:
         '204':
           description: Participation deleted successfully
@@ -240,11 +235,6 @@ components:
       in: header
       name: X-API-Key
       description: API key for programmatic access (create and manage via /auth/api-keys endpoints)
-    apiBearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: JWT token from authentication service or API key for programmatic access
   schemas:
     OrganizationCategory:
       description: The category of the organization.

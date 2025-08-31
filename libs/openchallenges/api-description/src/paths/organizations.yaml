@@ -28,7 +28,6 @@ post:
   security:
     - jwtBearerAuth: []
     - apiKeyAuth: []
-    - apiBearerAuth: [] # Legacy support
   requestBody:
     content:
       application/json:
