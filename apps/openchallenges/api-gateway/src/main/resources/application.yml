@@ -14,6 +14,31 @@ spring:
     name: openchallenges-api-gateway
   cloud:
     gateway:
+      default-filters:
+        # SECURITY: Strip ALL potentially spoofed identity headers from incoming requests
+        # These headers are considered "trusted" and may ONLY be set by the gateway after authentication
+
+        # Standard authentication headers
+        - RemoveRequestHeader=X-Authenticated-User
+        - RemoveRequestHeader=X-Authenticated-User-Id
+        - RemoveRequestHeader=X-Authenticated-Roles
+        - RemoveRequestHeader=X-Scopes
+
+        # Additional standard security headers
+        - RemoveRequestHeader=X-Subject
+        - RemoveRequestHeader=X-Principal
+        - RemoveRequestHeader=X-User-Email
+        - RemoveRequestHeader=X-User-Groups
+
+        # OAuth2/JWT related headers that could be spoofed
+        - RemoveRequestHeader=X-Token-Subject
+        - RemoveRequestHeader=X-Token-Issuer
+        - RemoveRequestHeader=X-JWT-Claims
+
+        # Service-to-service authentication headers
+        - RemoveRequestHeader=X-Service-Token
+        - RemoveRequestHeader=X-Internal-Auth
+        - RemoveRequestHeader=X-Gateway-Auth
       server:
         webflux:
           globalcors:
@@ -25,6 +50,8 @@ spring:
                   - POST
                   - DELETE
                   - PUT
+                allowedheaders: '*'
+                maxAge: 3600
           routes:
             - id: openchallenges-auth-service
               uri: http://openchallenges-auth-service:8087
@@ -52,6 +79,12 @@ spring:
                 - StripPrefix=1
   profiles:
     active: dev
+
+logging:
+  level:
+    org.sagebionetworks.openchallenges.api.gateway: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.cloud.gateway: DEBUG
 
 management:
   endpoints:
