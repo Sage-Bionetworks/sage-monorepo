@@ -69,10 +69,11 @@ public class AuthenticationService {
       throw new RuntimeException("Unsupported OAuth2 provider: " + request.getProvider());
     }
 
-    // Generate state for CSRF protection
-    String state = request.getState() != null ? request.getState() : UUID.randomUUID().toString();
+    // Generate state for CSRF protection with provider information
+    String baseState = request.getState() != null ? request.getState() : UUID.randomUUID().toString();
+    String state = provider.name() + ":" + baseState; // Encode provider in state
 
-    // Get authorization URL from OAuth2 configuration service
+    // Get authorization URL from OAuth2 configuration service  
     String authorizationUrl = oAuth2ConfigurationService.getAuthorizationUrl(provider, state);
 
     try {
@@ -83,6 +84,23 @@ public class AuthenticationService {
     } catch (java.net.URISyntaxException e) {
       throw new RuntimeException("Invalid authorization URL", e);
     }
+  }
+
+  /**
+   * Handle OAuth2 callback and generate JWT tokens (extract provider from state)
+   */
+  public LoginResponseDto handleOAuth2Callback(String code, String state) {
+    log.debug("Handling OAuth2 callback with state: {}", state);
+
+    // Extract provider from state (format: "provider:originalState")
+    String provider;
+    if (state != null && state.contains(":")) {
+      provider = state.split(":", 2)[0];
+    } else {
+      throw new RuntimeException("Invalid state parameter - provider information missing");
+    }
+
+    return handleOAuth2Callback(provider, code, state);
   }
 
   /**

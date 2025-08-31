@@ -82,7 +82,6 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
     logger.info("OAuth2 callback processing");
     try {
       LoginResponseDto response = authenticationService.handleOAuth2Callback(
-        "google", // TODO: Extract provider from request or add provider parameter
         oauth2CallbackRequestDto.getCode(),
         oauth2CallbackRequestDto.getState()
       );
