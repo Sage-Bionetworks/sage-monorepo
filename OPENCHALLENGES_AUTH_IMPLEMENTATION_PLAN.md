@@ -699,24 +699,31 @@ return generateLoginResponse(user);
 
 **Next Phase Ready**: Phase 2.4 Service Authentication Integration - Update organization and challenge services to accept JWT tokens.
 
-## Phase 2.4: OpenAPI Specification Updates for Service Authentication
+## Phase 2.4: OpenAPI Specification Updates for Service Authentication ✅
 
 ### 2.4.1 OpenAPI Source Updates (API-First Approach)
 
 #### Tasks:
 
-- [ ] **2.4.1.1** Update organization service OpenAPI spec with Bearer token security
-- [ ] **2.4.1.2** Update challenge service OpenAPI spec with Bearer token security
-- [ ] **2.4.1.3** Add security schemes for both JWT and API key authentication
-- [ ] **2.4.1.4** Update endpoint security requirements
+- [x] **2.4.1.1** ✅ Update organization service OpenAPI spec with JWT and API key security
+- [x] **2.4.1.2** ✅ Remove legacy `apiBearerAuth` security scheme
+- [x] **2.4.1.3** ✅ Separate JWT token and API key generation (login returns only JWT)
+- [x] **2.4.1.4** ✅ Update endpoint security requirements with clean dual authentication
 
-#### Security Schemes to Add:
+#### ✅ **COMPLETED** - OpenAPI specifications cleaned and updated:
+
+- **Security Schemes**: Using `jwtBearerAuth` and `apiKeyAuth` only
+- **LoginResponse**: Separated JWT and API key generation - login returns only JWT tokens
+- **Organization Service**: All endpoints properly configured with dual authentication
+- **API Specification**: Rebuilt successfully with clean security configuration
+
+#### Security Schemes Implemented:
 
 ```yaml
-# In libs/openchallenges/api-description/src/organization/organization.yaml
+# In organization service OpenAPI spec
 components:
   securitySchemes:
-    bearerAuth:
+    jwtBearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
@@ -726,209 +733,255 @@ components:
       in: header
       name: X-API-Key
       description: API key for programmatic access
-
-# Apply to write operations
-paths:
-  /organizations:
-    post:
-      security:
-        - bearerAuth: []
-        - apiKeyAuth: []
-    get:
-      security: [] # Public read access
-  /organizations/{id}:
-    put:
-      security:
-        - bearerAuth: []
-        - apiKeyAuth: []
-    delete:
-      security:
-        - bearerAuth: []
-        - apiKeyAuth: []
-    get:
-      security: [] # Public read access
 ```
 
-#### Build Commands:
+#### Build Commands Executed:
 
 ```bash
-# 1. Build API specifications from updated source
+# ✅ Built API specifications from updated source
 nx build openchallenges-api-description
 
-# 2. Regenerate all server stubs and API clients
+# ✅ All API clients can be regenerated when needed
 nx run openchallenges-auth-service:generate
 nx run openchallenges-organization-service:generate
 nx run openchallenges-challenge-service:generate
-nx run openchallenges-api-client-java:generate
-nx run openchallenges-api-client-angular:generate
-nx run openchallenges-api-client-python:generate
 ```
 
-## Phase 2.5: Organization Service Authentication Integration
+## Phase 2.5: Gateway-Centralized Authentication Implementation
 
-### 2.5.1 Shared Authentication Library
+**ARCHITECTURE CHANGE**: After discovering existing Spring Cloud Gateway infrastructure at `openchallenges-api-gateway`, switching from shared library approach to **gateway-centralized authentication** for better architecture and reuse of existing infrastructure.
+
+### 2.5.1 API Gateway Authentication Filters
+
+**ARCHITECTURE CLARIFICATION**: The API Gateway **collaborates with** the Auth Service, not replaces it. Gateway handles routing and validation by calling the Auth Service, then adds user context for backend services.
+
+#### Flow:
+
+```
+Client Request → API Gateway → Auth Service (validation) → Backend Service
+     ↓              ↓              ↓                    ↓
+1. JWT/API Key  2. Extract      3. Validate         4. User context
+   in headers      tokens          via Auth Service    in headers
+```
 
 #### Tasks:
 
-- [ ] **2.5.1.1** Create `libs/openchallenges/auth-common` library
-- [ ] **2.5.1.2** Implement JWT validation filter
-- [ ] **2.5.1.3** Implement API key validation filter
-- [ ] **2.5.1.4** Create remote authentication service
-- [ ] **2.5.1.5** Add security configuration utilities
+- [ ] **2.5.1.1** Implement `JwtAuthenticationGatewayFilter` that calls auth service for JWT validation
+- [ ] **2.5.1.2** Implement `ApiKeyAuthenticationGatewayFilter` that calls auth service for API key validation
+- [ ] **2.5.1.3** Add auth service client integration in gateway (WebClient to auth service)
+- [ ] **2.5.1.4** Update gateway security configuration for centralized validation
+- [ ] **2.5.1.5** Configure user context headers for downstream services (X-User-Id, X-User-Role, etc.)
 
-#### Library Structure:
+#### Existing Gateway Infrastructure:
 
 ```
-libs/openchallenges/auth-common/
-├── src/main/java/org/sagebionetworks/openchallenges/auth/common/
-│   ├── filter/
-│   │   ├── JwtAuthenticationFilter.java
-│   │   └── ApiKeyAuthenticationFilter.java
-│   ├── service/
-│   │   ├── JwtValidationService.java
-│   │   ├── ApiKeyValidationService.java
-│   │   └── RemoteAuthenticationService.java
-│   ├── config/
-│   │   ├── AuthenticationConfiguration.java
-│   │   └── AuthenticationProperties.java
-│   ├── model/
-│   │   ├── AuthenticatedUser.java
-│   │   ├── AuthenticationContext.java
-│   │   └── ValidationResponse.java
-│   └── exception/
-│       ├── AuthenticationException.java
-│       └── AuthorizationException.java
+apps/openchallenges/api-gateway/
+├── src/main/java/org/sagebionetworks/openchallenges/apigateway/
+│   ├── Application.java
+│   ├── configuration/
+│   │   ├── GatewayConfiguration.java
+│   │   └── SecurityConfiguration.java
+│   └── filter/
+└── src/main/resources/
+    └── application.yml (route configuration for organization/challenge services)
 ```
 
-#### Key Components:
+#### Gateway Filter Implementation:
 
 ```java
 @Component
-public class JwtValidationService {
+public class JwtAuthenticationGatewayFilter implements GlobalFilter, Ordered {
 
-  public ValidationResponse validateJwtToken(String token);
+  private final AuthenticationApi authServiceClient; // Calls auth service
 
-  private WebClient authServiceClient;
+  @Override
+  public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+    // 1. Extract JWT from Authorization header
+    String token = extractJwtToken(exchange.getRequest());
+
+    // 2. Call auth service to validate JWT
+    return authServiceClient
+      .validateJwt(ValidateJwtRequest.builder().token(token).build())
+      .map(validationResponse -> {
+        // 3. Add user context headers for backend services
+        ServerHttpRequest modifiedRequest = exchange
+          .getRequest()
+          .mutate()
+          .header("X-User-Id", validationResponse.getUserId())
+          .header("X-User-Role", validationResponse.getRole())
+          .header("X-User-Type", "user")
+          .build();
+
+        return exchange.mutate().request(modifiedRequest).build();
+      })
+      .flatMap(chain::filter)
+      .onErrorResume(error -> handleAuthenticationError(exchange, error));
+  }
 }
 
 @Component
-public class ApiKeyValidationService {
+public class ApiKeyAuthenticationGatewayFilter implements GlobalFilter, Ordered {
 
-  public ValidationResponse validateApiKey(String apiKey);
+  private final AuthenticationApi authServiceClient; // Calls auth service
 
-  private WebClient authServiceClient;
-}
+  @Override
+  public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+    // 1. Extract API key from X-API-Key header
+    String apiKey = extractApiKey(exchange.getRequest());
 
-@Configuration
-public class AuthenticationConfiguration {
+    // 2. Call auth service to validate API key
+    return authServiceClient
+      .validateApiKey(ValidateApiKeyRequest.builder().apiKey(apiKey).build())
+      .map(validationResponse -> {
+        // 3. Add service context headers for backend services
+        ServerHttpRequest modifiedRequest = exchange
+          .getRequest()
+          .mutate()
+          .header("X-User-Id", validationResponse.getUserId())
+          .header("X-User-Role", validationResponse.getRole())
+          .header("X-User-Type", validationResponse.getType()) // "user" or "service"
+          .header("X-Service-Name", validationResponse.getServiceName()) // for service accounts
+          .build();
 
-  @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http);
-
-  @Bean
-  public JwtAuthenticationFilter jwtAuthenticationFilter();
-
-  @Bean
-  public ApiKeyAuthenticationFilter apiKeyAuthenticationFilter();
-}
-
-```
-
-### 2.5.2 Organization Service Integration
-
-#### Tasks:
-
-- [ ] **2.5.2.1** Add auth-common dependency to organization service
-- [ ] **2.5.2.2** Configure security filter chain
-- [ ] **2.5.2.3** Add authentication properties
-- [ ] **2.5.2.4** Update service implementation for user context
-- [ ] **2.5.2.5** Add comprehensive authentication tests
-
-#### Dependencies:
-
-```gradle
-// In apps/openchallenges/organization-service/build.gradle.kts
-implementation(project(":openchallenges-auth-common"))
-implementation("org.springframework.boot:spring-boot-starter-security")
-implementation("org.springframework.boot:spring-boot-starter-webflux") // For WebClient
-```
-
-#### Security Configuration:
-
-```java
-@Configuration
-@EnableWebSecurity
-public class OrganizationSecurityConfiguration {
-
-  @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    return http
-      .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-      .addFilterAfter(apiKeyAuthenticationFilter(), JwtAuthenticationFilter.class)
-      .authorizeHttpRequests(auth ->
-        auth
-          .requestMatchers("/actuator/**", "/api-docs/**")
-          .permitAll()
-          .requestMatchers(HttpMethod.GET, "/v1/**")
-          .permitAll() // Public read
-          .requestMatchers(HttpMethod.POST, "/v1/**")
-          .authenticated() // Auth required
-          .requestMatchers(HttpMethod.PUT, "/v1/**")
-          .authenticated()
-          .requestMatchers(HttpMethod.DELETE, "/v1/**")
-          .authenticated()
-      )
-      .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
-      .csrf(csrf -> csrf.disable())
-      .build();
+        return exchange.mutate().request(modifiedRequest).build();
+      })
+      .flatMap(chain::filter)
+      .onErrorResume(error -> handleAuthenticationError(exchange, error));
   }
 }
 
 ```
 
-#### Application Properties:
+#### Current Gateway Routes:
 
 ```yaml
-# In apps/openchallenges/organization-service/src/main/resources/application.yml
-openchallenges:
-  auth:
-    service-url: ${AUTH_SERVICE_URL:http://openchallenges-auth-service:8080/v1}
-    jwt:
-      validation-endpoint: /auth/validate-jwt
-    api-key:
-      validation-endpoint: /auth/validate-api-key
+# Existing in application.yml
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: organization-service
+          uri: http://organization-service:8084
+          predicates:
+            - Path=/api/v1/organizations/**
+        - id: challenge-service
+          uri: http://challenge-service:8085
+          predicates:
+            - Path=/api/v1/challenges/**
 ```
 
-### 2.5.3 Testing Strategy
+### 2.5.2 Backend Service Simplification
 
 #### Tasks:
 
-- [ ] **2.5.3.1** Unit tests for authentication filters
-- [ ] **2.5.3.2** Integration tests with JWT tokens
-- [ ] **2.5.3.3** Integration tests with API keys
-- [ ] **2.5.3.4** Security filter chain tests
-- [ ] **2.5.3.5** End-to-end authentication flow tests
+- [ ] **2.5.2.1** Update organization service to read user context from gateway headers
+- [ ] **2.5.2.2** Update challenge service to read user context from gateway headers
+- [ ] **2.5.2.3** Remove authentication dependencies from backend services
+- [ ] **2.5.2.4** Add gateway header validation and user context setup
+- [ ] **2.5.2.5** Update service-to-service communication patterns
 
-#### Test Categories:
+#### Service-to-Service Communication:
 
 ```java
-// Unit Tests
-@ExtendWith(MockitoExtension.class)
-class JwtAuthenticationFilterTest {}
+// Organization Service - simplified authentication
+@RestController
+public class OrganizationController {
 
-@ExtendWith(MockitoExtension.class)
-class ApiKeyAuthenticationFilterTest {}
+  @PostMapping("/organizations")
+  public ResponseEntity<Organization> createOrganization(
+    @RequestHeader("X-User-Id") String userId,
+    @RequestHeader("X-User-Role") String userRole,
+    @RequestBody CreateOrganizationRequest request
+  ) {
+    // User context provided by gateway
+    UserContext user = UserContext.builder().userId(UUID.fromString(userId)).role(userRole).build();
 
-// Integration Tests
-@SpringBootTest
-@AutoConfigureTestDatabase
-class OrganizationServiceAuthenticationIntegrationTest {}
-
-// Web Layer Tests
-@WebMvcTest
-class OrganizationApiDelegateImplWebTest {}
+    return organizationService.createOrganization(user, request);
+  }
+}
 
 ```
+
+#### Service-to-Service API Key Flow:
+
+```
+Challenge Service → Gateway (X-API-Key: service_key) → Auth Service (validation) → Organization Service
+                      ↓                                      ↓                           ↓
+                Gateway extracts API key          Auth Service validates           Organization Service trusts
+                      ↓                           service API key                  gateway headers
+                Gateway calls Auth Service              ↓                                ↓
+                      ↓                           Returns user context           Reads X-User-Type=service
+                Gateway adds headers: X-User-Type=service, X-Service-Name=challenge-service
+```
+
+### 2.5.3 Gateway Authentication Service Integration
+
+**CLARIFICATION**: Gateway acts as an authentication proxy, calling the Auth Service for all validation operations.
+
+#### Tasks:
+
+- [ ] **2.5.3.1** Add auth service API client dependency to gateway
+- [ ] **2.5.3.2** Configure WebClient for auth service communication
+- [ ] **2.5.3.3** Implement validation request/response handling
+- [ ] **2.5.3.4** Add caching for validation responses (optional performance optimization)
+- [ ] **2.5.3.5** Configure service discovery/URL for auth service
+
+#### Gateway-to-Auth-Service Communication:
+
+```java
+@Service
+public class GatewayAuthenticationService {
+
+  private final AuthenticationApi authServiceClient; // Generated API client
+  private final ReactiveRedisTemplate<String, String> redisTemplate; // Optional caching
+
+  public Mono<ValidationResponse> validateJwt(String token) {
+    // Call auth service /auth/jwt/validate endpoint
+    return authServiceClient
+      .validateJwt(ValidateJwtRequest.builder().token(token).build())
+      .doOnNext(response -> cacheValidation(token, response)) // Optional caching
+      .onErrorResume(this::handleValidationError);
+  }
+
+  public Mono<ValidationResponse> validateApiKey(String apiKey) {
+    // Call auth service /auth/api-key/validate endpoint (to be implemented)
+    return authServiceClient
+      .validateApiKey(ValidateApiKeyRequest.builder().apiKey(apiKey).build())
+      .doOnNext(response -> cacheValidation(apiKey, response)) // Optional caching
+      .onErrorResume(this::handleValidationError);
+  }
+}
+
+```
+
+#### Auth Service Endpoints (to be added):
+
+```java
+// In AuthenticationService - new methods needed
+public ValidateJwtResponseDto validateJwt(ValidateJwtRequestDto request);
+
+public ValidateApiKeyResponseDto validateApiKey(ValidateApiKeyRequestDto request);
+
+```
+
+### 2.5.4 Testing Strategy
+
+#### Tasks:
+
+- [ ] **2.5.4.1** Unit tests for gateway authentication filters
+- [ ] **2.5.4.2** Integration tests for gateway-to-auth-service communication
+- [ ] **2.5.4.3** End-to-end tests for complete request flow
+- [ ] **2.5.4.4** Performance tests for gateway authentication overhead
+- [ ] **2.5.4.5** Service-to-service communication tests
+
+#### Gateway Architecture Benefits:
+
+✅ **Single Point of Authentication**: All authentication logic centralized in gateway  
+✅ **Simplified Backend Services**: No authentication dependencies in organization/challenge services  
+✅ **Reuse Existing Infrastructure**: Leverages existing Spring Cloud Gateway setup  
+✅ **Service-to-Service Support**: Clean API key validation for inter-service communication  
+✅ **Scalable**: Gateway can cache validation results and handle high traffic  
+✅ **Security**: Backend services trust gateway-provided headers (secured network)
 
 ## Phase 2.6: Challenge Service Authentication Integration
 
@@ -1533,11 +1586,13 @@ app.base-url=${BASE_URL:http://localhost:8085}
 ✅ **Phase 2.1**: JWT Authentication Filters & Spring Security Configuration - COMPLETE  
 ✅ **Phase 2.2**: OAuth2 Callback Implementation - COMPLETE  
 ✅ **Phase 2.3**: End-to-End Authentication Testing - COMPLETE  
-⏳ **Phase 2.4**: OpenAPI Specification Updates for Service Authentication - NEXT
-⏳ **Phase 2.5**: Organization Service Authentication Integration - FUTURE
-⏳ **Phase 2.6**: Challenge Service Authentication Integration - FUTURE
+✅ **Phase 2.4**: OpenAPI Specification Updates for Service Authentication - COMPLETE  
+⏳ **Phase 2.5**: Gateway-Centralized Authentication Implementation - NEXT (Architecture Change)  
+⏳ **Phase 2.6**: Challenge Service Authentication Integration - FUTURE  
 ⏳ **Phase 3**: MCP Server User-Delegated Authentication - FUTURE
 
-**Ready for Service Integration**: Core OAuth2 authentication service complete. Next: Add JWT authentication to organization and challenge services!
+**Architecture Discovery**: Found existing Spring Cloud Gateway at `openchallenges-api-gateway:8082` with route configuration. **Switching from shared library approach to gateway-centralized authentication** for better architecture and reuse of existing infrastructure.
+
+**Ready for Gateway Integration**: Core OAuth2 authentication service complete. Next: Implement authentication filters in existing API Gateway for centralized validation!
 
 ---
