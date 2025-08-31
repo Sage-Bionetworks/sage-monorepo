@@ -17,28 +17,25 @@ public class SecurityConfiguration {
     return http
       .authorizeExchange(exchanges ->
         exchanges
-          // ALLOWING REGISTER API FOR DIRECT ACCESS
+          // PUBLIC ENDPOINTS - no authentication required
+          .pathMatchers("/actuator/health/**")
+          .permitAll()
+          .pathMatchers("/api/v1/auth/**")
+          .permitAll()
           .pathMatchers("/api/v1/users/register")
           .permitAll()
-          .pathMatchers("/api/v1/auth/login")
-          .permitAll()
-          .pathMatchers("/actuator/health/readiness")
-          .permitAll()
+          // PUBLIC READ ACCESS - no authentication required for GET requests
           .pathMatchers("/api/v1/challenge-analytics/**")
           .permitAll()
           .pathMatchers("/api/v1/challenge-platforms/**")
           .permitAll()
-          .pathMatchers("/api/v1/challenges/**")
-          .permitAll()
           .pathMatchers("/api/v1/edam-concepts/**")
           .permitAll()
-          .pathMatchers("/api/v1/images/**")
-          .permitAll()
-          .pathMatchers("/api/v1/organizations/**")
-          .permitAll()
-          // ALL OTHER APIS ARE AUTHENTICATED
+          // Note: Authentication for other endpoints is handled by Gateway Filters
+          // The filters will validate JWT/API keys and add user context headers
+          // If validation fails, the filters will return 401 Unauthorized
           .anyExchange()
-          .authenticated()
+          .permitAll() // Let gateway filters handle authentication
       )
       .csrf(csrf -> csrf.disable())
       .build();
