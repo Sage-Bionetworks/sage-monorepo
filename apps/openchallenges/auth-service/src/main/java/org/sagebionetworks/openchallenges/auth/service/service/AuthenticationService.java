@@ -143,11 +143,28 @@ public class AuthenticationService {
   public ValidateJwtResponseDto validateJwt(String token) {
     JwtService.JwtValidationResult result = jwtService.validateToken(token);
 
-    return ValidateJwtResponseDto.builder()
+    ValidateJwtResponseDto response = new ValidateJwtResponseDto()
       .valid(result.isValid())
       .userId(result.getUserId())
-      .username(result.getUsername())
-      .build();
+      .username(result.getUsername());
+
+    // Add role and expiresAt if token is valid
+    if (result.isValid() && result.getRole() != null) {
+      // Convert User.Role to ValidateJwtResponseDto.RoleEnum
+      ValidateJwtResponseDto.RoleEnum roleEnum = switch (result.getRole()) {
+        case admin -> ValidateJwtResponseDto.RoleEnum.ADMIN;
+        case user -> ValidateJwtResponseDto.RoleEnum.USER;
+        case readonly -> ValidateJwtResponseDto.RoleEnum.READONLY;
+        case service -> ValidateJwtResponseDto.RoleEnum.SERVICE;
+      };
+      response.role(roleEnum);
+    }
+
+    if (result.isValid() && result.getExpiresAt() != null) {
+      response.expiresAt(result.getExpiresAt());
+    }
+
+    return response;
   }
 
   /**

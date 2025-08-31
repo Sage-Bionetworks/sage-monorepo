@@ -48,6 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         "/api/v1/auth/oauth2/callback",
         "/api/v1/auth/refresh",
         "/api/v1/auth/validate",
+        "/api/v1/auth/jwt/validate",
         "/actuator",
         "/v3/api-docs",
         "/swagger-ui",

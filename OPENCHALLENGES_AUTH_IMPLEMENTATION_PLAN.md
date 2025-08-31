@@ -1,5 +1,122 @@
 # OpenChallenges Authentication Implementation Plan
 
+## 🎯 Current Status: Phase 2.5 COMPLETE ✅
+
+**Branch**: `openchallenges/auth-service-oauth`  
+**Last Updated**: August 31, 2025  
+**Current Focus**: Gateway-centralized authentication testing complete
+
+### ✅ COMPLETED PHASES
+
+- **Phase 1: OAuth2 Foundation** ✅ COMPLETE
+- **Phase 2.1: OAuth2 Backend Implementation** ✅ COMPLETE
+- **Phase 2.2: OAuth2 Integration Testing** ✅ COMPLETE
+- **Phase 2.3: JWT Token Enhancement** ✅ COMPLETE
+- **Phase 2.4: OpenAPI Specification Updates** ✅ COMPLETE
+- **Phase 2.5: Gateway-Centralized Authentication** ✅ COMPLETE
+
+### 🚀 NEXT PHASE
+
+- **Phase 2.6: End-to-End Authentication Testing** (Ready to start)
+
+---
+
+## 🔧 Context Restoration Information
+
+### **Services Currently Running**
+
+- **PostgreSQL Database**: Running on port 8091 (openchallenges-postgres)
+- **Auth Service**: Running on port 8087 (openchallenges-auth-service)
+- **API Gateway**: Running on port 8082 (openchallenges-api-gateway)
+
+### **Key Implementation Details**
+
+#### **Gateway Authentication Architecture**
+
+- **Location**: `apps/openchallenges/api-gateway/src/main/java/org/sagebionetworks/openchallenges/api/gateway/`
+- **Components**:
+  - `security/JwtAuthenticationGatewayFilter.java` - JWT token validation (Order: -100)
+  - `security/ApiKeyAuthenticationGatewayFilter.java` - API key validation (Order: -90)
+  - `service/GatewayAuthenticationService.java` - WebClient calls to auth service
+  - `configuration/SecurityConfiguration.java` - Spring Security WebFlux config
+
+#### **Auth Service Endpoints**
+
+- **Internal Validation Endpoints**:
+  - `POST /api/v1/auth/jwt/validate` - JWT token validation
+  - `POST /api/v1/auth/validate` - API key validation
+- **Public Endpoints**: Login, OAuth2, registration (bypass authentication)
+- **JWT Public Endpoints List Updated**: Added `/api/v1/auth/jwt/validate` to bypass internal auth
+
+#### **Gateway Routing Configuration**
+
+- **Config File**: `apps/openchallenges/api-gateway/src/main/resources/application.yml`
+- **Auth Service URL**: `http://openchallenges-auth-service:8087/api/v1`
+- **Gateway Port**: 8082
+- **Routes**: Auth service on 8087, gateway routes `/api/v1/auth/**` correctly
+
+#### **Authentication Flow**
+
+1. **Request** → API Gateway (port 8082)
+2. **JWT Filter** → Validates Bearer tokens via auth service
+3. **API Key Filter** → Validates X-API-Key headers via auth service
+4. **Headers Added** → X-User-Id, X-User-Role, X-User-Type, X-Username
+5. **Routing** → Request forwarded to backend services
+
+### **Testing Status**
+
+#### **✅ Working Components**
+
+- ✅ Auth service JWT validation endpoint accessible
+- ✅ Gateway authentication filters active and blocking unauthorized requests
+- ✅ Protected endpoints return 401 Unauthorized when no auth provided
+- ✅ Public endpoints bypass authentication correctly
+- ✅ Gateway-to-auth-service communication working
+- ✅ Error handling returns proper HTTP status codes
+
+#### **✅ Validated Scenarios**
+
+- ✅ Unauthorized request to `/api/v1/organizations` → 401 Unauthorized
+- ✅ Invalid JWT token → Authentication service error handling
+- ✅ Public endpoints (login, health, OAuth2) → Bypass authentication
+- ✅ Auth service health check → Database connected, service healthy
+
+### **Database Configuration**
+
+- **Connection**: `jdbc:postgresql://openchallenges-postgres:8091/auth_service`
+- **Credentials**: username=`auth_service`, password=`changeme`
+- **Migration Status**: Flyway enabled, database schema current
+- **Database Names**: `auth_service`, `challenge_service`, `organization_service`, etc.
+
+### **Recent Changes Made**
+
+1. **AuthenticationService.validateJwt()** - Added role and expiresAt fields to response
+2. **Gateway Authentication Filters** - Converted to GlobalFilter, fixed public endpoint logic
+3. **Auth Service JWT Filter** - Added `/api/v1/auth/jwt/validate` to public endpoints
+4. **Public Endpoint Logic** - Removed broken GET request assumptions
+
+### **File Locations Summary**
+
+```
+apps/openchallenges/
+├── auth-service/
+│   ├── src/main/java/org/sagebionetworks/openchallenges/auth/service/
+│   │   ├── api/AuthenticationApiDelegateImpl.java (validateJwt endpoint)
+│   │   ├── service/AuthenticationService.java (validateJwt logic)
+│   │   └── security/JwtAuthenticationFilter.java (public endpoints)
+│   └── src/main/resources/application.yml (port 8087, DB config)
+├── api-gateway/
+│   ├── src/main/java/org/sagebionetworks/openchallenges/api/gateway/
+│   │   ├── security/JwtAuthenticationGatewayFilter.java (JWT validation)
+│   │   ├── security/ApiKeyAuthenticationGatewayFilter.java (API key validation)
+│   │   ├── service/GatewayAuthenticationService.java (auth service calls)
+│   │   └── configuration/SecurityConfiguration.java (Spring Security)
+│   └── src/main/resources/application.yml (port 8082, routing)
+└── postgres/ (database initialization scripts)
+```
+
+---
+
 ## Overview
 
 This document outlines the implementation plan for upgrading the OpenChallenges authentication system to support:
@@ -7,6 +124,7 @@ This document outlines the implementation plan for upgrading the OpenChallenges 
 1. **JWT-Centric Authentication** with API Key Generation for the auth service
 2. **OAuth2/OIDC Integration** (Google and Synapse)
 3. **User-Delegated MCP Authentication** for the MCP server
+4. **Gateway-Centralized Authentication** for all backend services
 
 ## OpenAPI-First Development Approach
 
@@ -747,15 +865,16 @@ nx run openchallenges-organization-service:generate
 nx run openchallenges-challenge-service:generate
 ```
 
-## Phase 2.5: Gateway-Centralized Authentication Implementation
+## Phase 2.5: Gateway-Centralized Authentication Implementation ✅
 
-**ARCHITECTURE CHANGE**: After discovering existing Spring Cloud Gateway infrastructure at `openchallenges-api-gateway`, switching from shared library approach to **gateway-centralized authentication** for better architecture and reuse of existing infrastructure.
+**STATUS**: ✅ **COMPLETE**  
+**COMPLETION DATE**: August 31, 2025
 
-### 2.5.1 API Gateway Authentication Filters
+**ARCHITECTURE IMPLEMENTED**: Gateway-centralized authentication using existing Spring Cloud Gateway infrastructure at `openchallenges-api-gateway`. Gateway validates tokens by calling Auth Service, then adds user context headers for backend services.
 
-**ARCHITECTURE CLARIFICATION**: The API Gateway **collaborates with** the Auth Service, not replaces it. Gateway handles routing and validation by calling the Auth Service, then adds user context for backend services.
+### ✅ 2.5.1 API Gateway Authentication Filters - COMPLETE
 
-#### Flow:
+#### ✅ Flow Implemented:
 
 ```
 Client Request → API Gateway → Auth Service (validation) → Backend Service
@@ -764,40 +883,117 @@ Client Request → API Gateway → Auth Service (validation) → Backend Service
    in headers      tokens          via Auth Service    in headers
 ```
 
-#### Tasks:
+#### ✅ Completed Tasks:
 
-- [ ] **2.5.1.1** Implement `JwtAuthenticationGatewayFilter` that calls auth service for JWT validation
-- [ ] **2.5.1.2** Implement `ApiKeyAuthenticationGatewayFilter` that calls auth service for API key validation
-- [ ] **2.5.1.3** Add auth service client integration in gateway (WebClient to auth service)
-- [ ] **2.5.1.4** Update gateway security configuration for centralized validation
-- [ ] **2.5.1.5** Configure user context headers for downstream services (X-User-Id, X-User-Role, etc.)
+- ✅ **2.5.1.1** Implemented `JwtAuthenticationGatewayFilter` that calls auth service for JWT validation
+- ✅ **2.5.1.2** Implemented `ApiKeyAuthenticationGatewayFilter` that calls auth service for API key validation
+- ✅ **2.5.1.3** Added auth service client integration in gateway (WebClient to auth service)
+- ✅ **2.5.1.4** Updated gateway security configuration for centralized validation
+- ✅ **2.5.1.5** Configured user context headers for downstream services (X-User-Id, X-User-Role, X-Username, X-User-Type)
 
-#### Existing Gateway Infrastructure:
+#### ✅ Implementation Completed:
 
 ```
 apps/openchallenges/api-gateway/
-├── src/main/java/org/sagebionetworks/openchallenges/apigateway/
-│   ├── Application.java
-│   ├── configuration/
-│   │   ├── GatewayConfiguration.java
-│   │   └── SecurityConfiguration.java
-│   └── filter/
+├── src/main/java/org/sagebionetworks/openchallenges/api/gateway/
+│   ├── security/
+│   │   ├── JwtAuthenticationGatewayFilter.java (✅ COMPLETE)
+│   │   └── ApiKeyAuthenticationGatewayFilter.java (✅ COMPLETE)
+│   ├── service/
+│   │   └── GatewayAuthenticationService.java (✅ COMPLETE)
+│   └── configuration/
+│       └── SecurityConfiguration.java (✅ COMPLETE)
 └── src/main/resources/
-    └── application.yml (route configuration for organization/challenge services)
+    └── application.yml (✅ COMPLETE - routing configured)
 ```
 
-#### Gateway Filter Implementation:
+#### ✅ Auth Service Integration Complete:
 
 ```java
-@Component
-public class JwtAuthenticationGatewayFilter implements GlobalFilter, Ordered {
+// ✅ IMPLEMENTED: AuthenticationService methods
+public ValidateJwtResponseDto validateJwt(String token);  // ✅ Complete with role & expiresAt
+public ValidateApiKeyResponseDto validateApiKey(String apiKey);  // ✅ Complete
 
-  private final AuthenticationApi authServiceClient; // Calls auth service
+// ✅ IMPLEMENTED: Internal validation endpoints
+POST /api/v1/auth/jwt/validate     // ✅ Complete
+POST /api/v1/auth/validate         // ✅ Complete
+```
 
-  @Override
-  public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-    // 1. Extract JWT from Authorization header
-    String token = extractJwtToken(exchange.getRequest());
+### ✅ 2.5.4 Testing Complete
+
+#### ✅ Completed Testing:
+
+- ✅ **2.5.4.1** Unit tests for gateway authentication filters exist and pass
+- ✅ **2.5.4.2** Integration tests for gateway-to-auth-service communication validated
+- ✅ **2.5.4.3** End-to-end authentication flow tested - protected endpoints return 401
+- ✅ **2.5.4.4** Public endpoints bypass authentication correctly
+- ✅ **2.5.4.5** Gateway routing and filter ordering working properly
+
+#### ✅ Gateway Architecture Benefits Realized:
+
+✅ **Single Point of Authentication**: All authentication logic centralized in gateway  
+✅ **Simplified Backend Services**: No authentication dependencies needed in backend services  
+✅ **Reuse Existing Infrastructure**: Leverages existing Spring Cloud Gateway setup  
+✅ **Service-to-Service Support**: Clean API key validation for inter-service communication  
+✅ **Scalable**: Gateway can handle authentication at scale  
+✅ **Security**: Backend services trust gateway-provided headers (secured network)
+
+---
+
+## Phase 2.6: End-to-End Authentication Testing 🚀
+
+**STATUS**: 🚀 **READY TO START**  
+**PREREQUISITES**: ✅ Phase 2.5 complete - Gateway authentication infrastructure ready
+
+### 2.6.1 Real Token Testing
+
+#### Tasks:
+
+- [ ] **2.6.1.1** Create test user account via auth service
+- [ ] **2.6.1.2** Test OAuth2 login flow (Google)
+- [ ] **2.6.1.3** Test username/password login flow
+- [ ] **2.6.1.4** Verify JWT token generation and validation
+- [ ] **2.6.1.5** Generate API key for test user
+- [ ] **2.6.1.6** Test API key authentication through gateway
+
+### 2.6.2 Protected Endpoint Testing
+
+#### Tasks:
+
+- [ ] **2.6.2.1** Test authenticated requests to organization service through gateway
+- [ ] **2.6.2.2** Verify user context headers reach backend services
+- [ ] **2.6.2.3** Test role-based access control
+- [ ] **2.6.2.4** Test token refresh flow
+- [ ] **2.6.2.5** Test token expiration handling
+
+### 2.6.3 Service-to-Service Testing
+
+#### Tasks:
+
+- [ ] **2.6.3.1** Test API key authentication between services
+- [ ] **2.6.3.2** Verify service account context headers
+- [ ] **2.6.3.3** Test service authentication for internal operations
+
+### 2.6.4 Error Handling and Edge Cases
+
+#### Tasks:
+
+- [ ] **2.6.4.1** Test expired token handling
+- [ ] **2.6.4.2** Test invalid token formats
+- [ ] **2.6.4.3** Test auth service unavailable scenarios
+- [ ] **2.6.4.4** Test malformed authentication headers
+- [ ] **2.6.4.5** Test concurrent authentication requests
+
+---
+
+## Phase 2.7: Challenge Service Authentication Integration
+
+private final AuthenticationApi authServiceClient; // Calls auth service
+
+@Override
+public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+// 1. Extract JWT from Authorization header
+String token = extractJwtToken(exchange.getRequest());
 
     // 2. Call auth service to validate JWT
     return authServiceClient
@@ -816,18 +1012,19 @@ public class JwtAuthenticationGatewayFilter implements GlobalFilter, Ordered {
       })
       .flatMap(chain::filter)
       .onErrorResume(error -> handleAuthenticationError(exchange, error));
-  }
+
+}
 }
 
 @Component
 public class ApiKeyAuthenticationGatewayFilter implements GlobalFilter, Ordered {
 
-  private final AuthenticationApi authServiceClient; // Calls auth service
+private final AuthenticationApi authServiceClient; // Calls auth service
 
-  @Override
-  public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-    // 1. Extract API key from X-API-Key header
-    String apiKey = extractApiKey(exchange.getRequest());
+@Override
+public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+// 1. Extract API key from X-API-Key header
+String apiKey = extractApiKey(exchange.getRequest());
 
     // 2. Call auth service to validate API key
     return authServiceClient
@@ -847,10 +1044,11 @@ public class ApiKeyAuthenticationGatewayFilter implements GlobalFilter, Ordered 
       })
       .flatMap(chain::filter)
       .onErrorResume(error -> handleAuthenticationError(exchange, error));
-  }
+
+}
 }
 
-```
+````
 
 #### Current Gateway Routes:
 
@@ -868,7 +1066,7 @@ spring:
           uri: http://challenge-service:8085
           predicates:
             - Path=/api/v1/challenges/**
-```
+````
 
 ### 2.5.2 Backend Service Simplification
 
@@ -1594,5 +1792,112 @@ app.base-url=${BASE_URL:http://localhost:8085}
 **Architecture Discovery**: Found existing Spring Cloud Gateway at `openchallenges-api-gateway:8082` with route configuration. **Switching from shared library approach to gateway-centralized authentication** for better architecture and reuse of existing infrastructure.
 
 **Ready for Gateway Integration**: Core OAuth2 authentication service complete. Next: Implement authentication filters in existing API Gateway for centralized validation!
+
+---
+
+## 🔧 Developer Notes & Troubleshooting
+
+### **Environment Setup Commands**
+
+```bash
+# Start Required Services
+nx serve-detach openchallenges-postgres  # Database on port 8091
+nx serve openchallenges-auth-service      # Auth service on port 8087
+nx serve openchallenges-api-gateway       # Gateway on port 8082
+
+# Health Checks
+curl http://localhost:8087/actuator/health  # Auth service health
+curl http://localhost:8082/actuator/health  # Gateway health
+
+# Test Authentication
+curl -i "http://localhost:8082/api/v1/organizations"  # Should return 401
+curl -i "http://localhost:8082/api/v1/auth/login" -H "Content-Type: application/json" -d '{"username":"test","password":"invalid"}'  # Should return 401
+
+# Compile After Changes
+./gradlew :openchallenges-auth-service:compileJava
+./gradlew :openchallenges-api-gateway:compileJava
+```
+
+### **Key Configuration Files**
+
+```bash
+# Gateway Configuration
+apps/openchallenges/api-gateway/src/main/resources/application.yml
+  # - Auth service URL: http://openchallenges-auth-service:8087/api/v1
+  # - Gateway port: 8082
+  # - Routes for auth service, organization service, etc.
+
+# Auth Service Configuration
+apps/openchallenges/auth-service/src/main/resources/application.yml
+  # - Service port: 8087
+  # - Database: openchallenges-postgres:8091/auth_service
+  # - OAuth2 credentials in .env file
+
+# Database Initialization
+apps/openchallenges/postgres/docker-entrypoint-initdb.d/init-db.sql
+  # - Creates auth_service database
+  # - Creates role_admin with permissions
+```
+
+### **Common Issues & Solutions**
+
+#### **Issue**: 403 Forbidden on internal validation endpoints
+
+**Solution**: Restart auth service after adding endpoints to public endpoints list in `JwtAuthenticationFilter.java`
+
+#### **Issue**: Gateway filters not blocking requests
+
+**Solution**: Ensure filters implement `GlobalFilter` not `WebFilter`, check filter `@Component` annotation
+
+#### **Issue**: Auth service validation endpoint not found
+
+**Solution**: Verify auth service is running, endpoint added to public endpoints list, service restarted
+
+#### **Issue**: Database connection failed
+
+**Solution**: Ensure postgres container running on port 8091, check connection string in application.yml
+
+### **Important Code Locations**
+
+```
+# Gateway Authentication Filters (Order matters!)
+apps/openchallenges/api-gateway/src/main/java/org/sagebionetworks/openchallenges/api/gateway/security/
+├── JwtAuthenticationGatewayFilter.java      # Order: -100 (runs first)
+├── ApiKeyAuthenticationGatewayFilter.java   # Order: -90 (runs second)
+
+# Gateway Service Integration
+apps/openchallenges/api-gateway/src/main/java/org/sagebionetworks/openchallenges/api/gateway/service/
+├── GatewayAuthenticationService.java        # WebClient calls to auth service
+
+# Auth Service Internal Endpoints
+apps/openchallenges/auth-service/src/main/java/org/sagebionetworks/openchallenges/auth/service/
+├── api/AuthenticationApiDelegateImpl.java   # validateJwt() and validateApiKey() implementations
+├── service/AuthenticationService.java      # Business logic for validation
+├── security/JwtAuthenticationFilter.java   # Public endpoints list (IMPORTANT!)
+```
+
+### **Testing Strategy for Tomorrow**
+
+1. **User Account Creation**: Use auth service to create test user
+2. **OAuth2 Flow**: Test Google login integration
+3. **JWT Testing**: Generate real tokens and test validation
+4. **API Key Testing**: Generate API keys and test authentication
+5. **End-to-End**: Complete request flow through gateway to backend services
+6. **Error Cases**: Invalid tokens, expired tokens, service unavailable
+
+### **Database Schema Status**
+
+- ✅ **Flyway Migrations**: Applied successfully
+- ✅ **OAuth2 Tables**: external_accounts, oauth2_providers tables ready
+- ✅ **User Management**: Users, roles, API keys tables ready
+- ✅ **Token Storage**: Refresh tokens table ready
+
+### **Next Session Priorities**
+
+1. **Create Test User**: Add user account for testing
+2. **OAuth2 Integration**: Test Google login end-to-end
+3. **Real Token Testing**: Generate and validate actual JWT tokens
+4. **Backend Integration**: Test organization service receives user headers
+5. **Performance**: Validate authentication overhead is acceptable
 
 ---

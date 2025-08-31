@@ -50,7 +50,9 @@ public class JwtAuthenticationGatewayFilter implements GlobalFilter, Ordered {
     String authHeader = request.getHeaders().getFirst(AUTHORIZATION_HEADER);
     if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) {
       logger.debug("No JWT token found in request to: {}", path);
-      return chain.filter(exchange); // Let API key filter handle it or proceed unauthenticated
+      // For protected endpoints, require authentication
+      // Let API key filter handle it, but if that also fails, should return 401
+      return chain.filter(exchange);
     }
 
     String token = authHeader.substring(BEARER_PREFIX.length());
@@ -94,23 +96,12 @@ public class JwtAuthenticationGatewayFilter implements GlobalFilter, Ordered {
     return path.startsWith("/actuator/health") ||
            path.startsWith("/api/v1/auth/login") ||
            path.startsWith("/api/v1/auth/oauth2") ||
+           path.startsWith("/api/v1/auth/jwt/validate") ||
+           path.startsWith("/api/v1/auth/validate") ||
            path.equals("/api/v1/users/register") ||
-           (path.startsWith("/api/v1/organizations") && isGetRequest(path)) ||
-           (path.startsWith("/api/v1/challenges") && isGetRequest(path)) ||
-           (path.startsWith("/api/v1/images") && isGetRequest(path)) ||
            path.startsWith("/api/v1/challenge-analytics") ||
            path.startsWith("/api/v1/challenge-platforms") ||
            path.startsWith("/api/v1/edam-concepts");
-  }
-
-  /**
-   * Helper method to determine if this is a GET request (read-only, typically public).
-   * Note: This is a simplified check. In practice, you might want to examine the actual HTTP method.
-   */
-  private boolean isGetRequest(String path) {
-    // For now, assume GET requests are public reads
-    // This could be enhanced to check the actual HTTP method from the request
-    return true; // Simplified for this implementation
   }
 
   @Override
