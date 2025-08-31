@@ -1,100 +1,104 @@
 package org.sagebionetworks.openchallenges.api.gateway.security;
 
 import org.sagebionetworks.openchallenges.api.gateway.service.GatewayAuthenticationService;
-import org.sagebionetworks.openchallenges.api.gateway.service.PublicEndpointService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cloud.gateway.filter.GatewayFilterChain;
-import org.springframework.cloud.gateway.filter.GlobalFilter;
-import org.springframework.core.Ordered;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.WebFilter;
+import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 /**
- * Gateway filter that validates JWT tokens by calling the Auth Service
- * and adds user context headers for downstream services.
+ * WebFilter that handles JWT authentication.
+ * Runs BEFORE Spring Security authorization filters.
  */
 @Component
-public class JwtAuthenticationGatewayFilter implements GlobalFilter, Ordered {
+public class JwtAuthenticationGatewayFilter implements WebFilter {
 
   private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationGatewayFilter.class);
-  
-  private static final String AUTHORIZATION_HEADER = "Authorization";
-  private static final String BEARER_PREFIX = "Bearer ";
-  private static final String X_USER_ID_HEADER = "X-User-Id";
-  private static final String X_USER_ROLE_HEADER = "X-User-Role";
-  private static final String X_USER_TYPE_HEADER = "X-User-Type";
-  private static final String X_USERNAME_HEADER = "X-Username";
+
+  // Standard trusted headers for downstream services
+  private static final String X_AUTHENTICATED_USER_ID_HEADER = "X-Authenticated-User-Id";
+  private static final String X_AUTHENTICATED_USER_HEADER = "X-Authenticated-User";
+  private static final String X_AUTHENTICATED_ROLES_HEADER = "X-Authenticated-Roles";
+  // TODO: Add X_SCOPES_HEADER when JWT validation includes scope information
 
   private final GatewayAuthenticationService authenticationService;
-  private final PublicEndpointService publicEndpointService;
 
-  public JwtAuthenticationGatewayFilter(GatewayAuthenticationService authenticationService,
-                                        PublicEndpointService publicEndpointService) {
+  public JwtAuthenticationGatewayFilter(GatewayAuthenticationService authenticationService) {
     this.authenticationService = authenticationService;
-    this.publicEndpointService = publicEndpointService;
   }
 
   @Override
-  public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+  public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
     ServerHttpRequest request = exchange.getRequest();
     String path = request.getPath().toString();
 
-    // Skip authentication for public endpoints
-    if (publicEndpointService.isPublicEndpoint(path)) {
-      logger.debug("Skipping JWT authentication for public endpoint: {}", path);
-      return chain.filter(exchange);
-    }
-
     // Extract JWT token from Authorization header
-    String authHeader = request.getHeaders().getFirst(AUTHORIZATION_HEADER);
-    if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) {
-      logger.debug("No JWT token found in request to: {}", path);
-      // For protected endpoints, require authentication
-      // Let API key filter handle it, but if that also fails, should return 401
+    String authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+      logger.debug("No Bearer token found for request to: {}", path);
+      // No JWT token - continue to API key authentication or Spring Security
       return chain.filter(exchange);
     }
 
-    String token = authHeader.substring(BEARER_PREFIX.length());
+    String jwtToken = authHeader.substring(7); // Remove "Bearer " prefix
     logger.debug("Validating JWT token for request to: {}", path);
 
     // Validate JWT token with Auth Service
-    return authenticationService.validateJwt(token)
+    return authenticationService.validateJwt(jwtToken)
         .flatMap(validationResponse -> {
           if (!validationResponse.isValid()) {
             logger.warn("Invalid JWT token for request to: {}", path);
-            return Mono.error(new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid JWT token"));
+            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+            exchange.getResponse().getHeaders().add("WWW-Authenticate", "Bearer");
+            return exchange.getResponse().setComplete();
           }
 
-          // Add user context headers for downstream services
-          ServerHttpRequest modifiedRequest = request.mutate()
-              .header(X_USER_ID_HEADER, validationResponse.getUserId())
-              .header(X_USERNAME_HEADER, validationResponse.getUsername())
-              .header(X_USER_ROLE_HEADER, validationResponse.getRole())
-              .header(X_USER_TYPE_HEADER, "user")
-              .build();
+          // Add standard user context headers for downstream services
+          ServerHttpRequest.Builder requestBuilder = request.mutate()
+              .header(X_AUTHENTICATED_USER_ID_HEADER, validationResponse.getUserId())
+              .header(X_AUTHENTICATED_USER_HEADER, validationResponse.getUsername())
+              .header(X_AUTHENTICATED_ROLES_HEADER, validationResponse.getRole());
+
+          // Add scopes if available  
+          // TODO: Add X_SCOPES_HEADER when JWT validation includes scope information
+
+          ServerHttpRequest modifiedRequest = requestBuilder.build();
+
+          // Create Spring Security Authentication for authorization
+          var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + validationResponse.getRole()));
+          var authentication = new UsernamePasswordAuthenticationToken(
+              validationResponse.getUsername(), 
+              null, 
+              authorities
+          );
 
           logger.debug("JWT authentication successful for user: {} accessing: {}", 
               validationResponse.getUsername(), path);
 
-          return chain.filter(exchange.mutate().request(modifiedRequest).build());
+          return chain.filter(exchange.mutate().request(modifiedRequest).build())
+              .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
         })
         .onErrorResume(GatewayAuthenticationService.AuthenticationException.class, ex -> {
           logger.warn("JWT authentication failed for request to {}: {}", path, ex.getMessage());
-          return Mono.error(new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authentication failed"));
+          exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+          exchange.getResponse().getHeaders().add("WWW-Authenticate", "Bearer");
+          return exchange.getResponse().setComplete();
         })
         .onErrorResume(Exception.class, ex -> {
           logger.error("Unexpected error during JWT authentication for request to {}: {}", path, ex.getMessage());
-          return Mono.error(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Authentication service error"));
+          exchange.getResponse().setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
+          return exchange.getResponse().setComplete();
         });
-  }
-
-  @Override
-  public int getOrder() {
-    return -100; // High priority, execute before other filters
   }
 }
