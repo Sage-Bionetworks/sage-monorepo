@@ -1,6 +1,11 @@
 openchallenges-api-gateway:
   welcome-message: 'Welcome to OpenChallenges API Gateway.'
 
+# Auth Service configuration
+openchallenges:
+  auth:
+    service-url: ${AUTH_SERVICE_URL:http://openchallenges-auth-service:8080/v1}
+
 server:
   port: 8082
 
@@ -21,6 +26,12 @@ spring:
                   - DELETE
                   - PUT
           routes:
+            - id: openchallenges-auth-service
+              uri: http://openchallenges-auth-service:8080
+              predicates:
+                - Path=/api/v1/auth/**,/api/v1/users/register
+              filters:
+                - StripPrefix=1
             - id: openchallenges-organization-service
               uri: http://openchallenges-organization-service:8084
               predicates:
