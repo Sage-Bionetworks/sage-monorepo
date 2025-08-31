@@ -1,6 +1,7 @@
 package org.sagebionetworks.openchallenges.api.gateway.security;
 
 import org.sagebionetworks.openchallenges.api.gateway.service.GatewayAuthenticationService;
+import org.sagebionetworks.openchallenges.api.gateway.service.PublicEndpointService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -30,9 +31,12 @@ public class JwtAuthenticationGatewayFilter implements GlobalFilter, Ordered {
   private static final String X_USERNAME_HEADER = "X-Username";
 
   private final GatewayAuthenticationService authenticationService;
+  private final PublicEndpointService publicEndpointService;
 
-  public JwtAuthenticationGatewayFilter(GatewayAuthenticationService authenticationService) {
+  public JwtAuthenticationGatewayFilter(GatewayAuthenticationService authenticationService,
+                                        PublicEndpointService publicEndpointService) {
     this.authenticationService = authenticationService;
+    this.publicEndpointService = publicEndpointService;
   }
 
   @Override
@@ -41,7 +45,7 @@ public class JwtAuthenticationGatewayFilter implements GlobalFilter, Ordered {
     String path = request.getPath().toString();
 
     // Skip authentication for public endpoints
-    if (isPublicEndpoint(path)) {
+    if (publicEndpointService.isPublicEndpoint(path)) {
       logger.debug("Skipping JWT authentication for public endpoint: {}", path);
       return chain.filter(exchange);
     }
@@ -87,21 +91,6 @@ public class JwtAuthenticationGatewayFilter implements GlobalFilter, Ordered {
           logger.error("Unexpected error during JWT authentication for request to {}: {}", path, ex.getMessage());
           return Mono.error(new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Authentication service error"));
         });
-  }
-
-  /**
-   * Determines if an endpoint is public and doesn't require authentication.
-   */
-  private boolean isPublicEndpoint(String path) {
-    return path.startsWith("/actuator/health") ||
-           path.startsWith("/api/v1/auth/login") ||
-           path.startsWith("/api/v1/auth/oauth2") ||
-           path.startsWith("/api/v1/auth/jwt/validate") ||
-           path.startsWith("/api/v1/auth/validate") ||
-           path.equals("/api/v1/users/register") ||
-           path.startsWith("/api/v1/challenge-analytics") ||
-           path.startsWith("/api/v1/challenge-platforms") ||
-           path.startsWith("/api/v1/edam-concepts");
   }
 
   @Override
