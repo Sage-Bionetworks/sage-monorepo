@@ -56,9 +56,9 @@ public class ApiKeyAuthenticationGatewayFilter implements GlobalFilter, Ordered 
     // Extract API key from X-API-Key header
     String apiKey = request.getHeaders().getFirst(API_KEY_HEADER);
     if (apiKey == null || apiKey.trim().isEmpty()) {
-      logger.debug("No API key found in request to: {}", path);
-      // For now, let unauthenticated requests through - this will be tightened based on security requirements
-      return chain.filter(exchange);
+      logger.warn("No authentication token found for protected endpoint: {}", path);
+      // Protected endpoint requires authentication - return 401 Unauthorized
+      return Mono.error(new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Authentication required"));
     }
 
     logger.debug("Validating API key for request to: {}", path);
@@ -107,23 +107,12 @@ public class ApiKeyAuthenticationGatewayFilter implements GlobalFilter, Ordered 
     return path.startsWith("/actuator/health") ||
            path.startsWith("/api/v1/auth/login") ||
            path.startsWith("/api/v1/auth/oauth2") ||
+           path.startsWith("/api/v1/auth/jwt/validate") ||
+           path.startsWith("/api/v1/auth/validate") ||
            path.equals("/api/v1/users/register") ||
-           (path.startsWith("/api/v1/organizations") && isGetRequest(path)) ||
-           (path.startsWith("/api/v1/challenges") && isGetRequest(path)) ||
-           (path.startsWith("/api/v1/images") && isGetRequest(path)) ||
            path.startsWith("/api/v1/challenge-analytics") ||
            path.startsWith("/api/v1/challenge-platforms") ||
            path.startsWith("/api/v1/edam-concepts");
-  }
-
-  /**
-   * Helper method to determine if this is a GET request (read-only, typically public).
-   * Note: This is a simplified check. In practice, you might want to examine the actual HTTP method.
-   */
-  private boolean isGetRequest(String path) {
-    // For now, assume GET requests are public reads
-    // This could be enhanced to check the actual HTTP method from the request
-    return true; // Simplified for this implementation
   }
 
   @Override

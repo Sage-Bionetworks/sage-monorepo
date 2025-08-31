@@ -4,7 +4,7 @@ openchallenges-api-gateway:
 # Auth Service configuration
 openchallenges:
   auth:
-    service-url: ${AUTH_SERVICE_URL:http://openchallenges-auth-service:8080/v1}
+    service-url: ${AUTH_SERVICE_URL:http://openchallenges-auth-service:8087/api/v1}
 
 server:
   port: 8082
@@ -27,7 +27,7 @@ spring:
                   - PUT
           routes:
             - id: openchallenges-auth-service
-              uri: http://openchallenges-auth-service:8080
+              uri: http://openchallenges-auth-service:8087
               predicates:
                 - Path=/api/v1/auth/**,/api/v1/users/register
               filters:
