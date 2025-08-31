@@ -33,8 +33,6 @@ public class LoginResponseDto {
 
   private @Nullable Integer expiresIn;
 
-  private @Nullable String apiKey;
-
   private @Nullable UUID userId;
 
   private @Nullable String username;
@@ -160,26 +158,6 @@ public class LoginResponseDto {
     this.expiresIn = expiresIn;
   }
 
-  public LoginResponseDto apiKey(@Nullable String apiKey) {
-    this.apiKey = apiKey;
-    return this;
-  }
-
-  /**
-   * API key for automation and service-to-service authentication
-   * @return apiKey
-   */
-  
-  @Schema(name = "apiKey", example = "oc_prod_abcd1234567890abcdef1234567890abcdef1234", description = "API key for automation and service-to-service authentication", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("apiKey")
-  public @Nullable String getApiKey() {
-    return apiKey;
-  }
-
-  public void setApiKey(@Nullable String apiKey) {
-    this.apiKey = apiKey;
-  }
-
   public LoginResponseDto userId(@Nullable UUID userId) {
     this.userId = userId;
     return this;
@@ -253,7 +231,6 @@ public class LoginResponseDto {
         Objects.equals(this.refreshToken, loginResponse.refreshToken) &&
         Objects.equals(this.tokenType, loginResponse.tokenType) &&
         Objects.equals(this.expiresIn, loginResponse.expiresIn) &&
-        Objects.equals(this.apiKey, loginResponse.apiKey) &&
         Objects.equals(this.userId, loginResponse.userId) &&
         Objects.equals(this.username, loginResponse.username) &&
         Objects.equals(this.role, loginResponse.role);
@@ -261,7 +238,7 @@ public class LoginResponseDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(accessToken, refreshToken, tokenType, expiresIn, apiKey, userId, username, role);
+    return Objects.hash(accessToken, refreshToken, tokenType, expiresIn, userId, username, role);
   }
 
   @Override
@@ -272,7 +249,6 @@ public class LoginResponseDto {
     sb.append("    refreshToken: ").append(toIndentedString(refreshToken)).append("\n");
     sb.append("    tokenType: ").append(toIndentedString(tokenType)).append("\n");
     sb.append("    expiresIn: ").append(toIndentedString(expiresIn)).append("\n");
-    sb.append("    apiKey: ").append(toIndentedString(apiKey)).append("\n");
     sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    role: ").append(toIndentedString(role)).append("\n");
@@ -308,7 +284,6 @@ public class LoginResponseDto {
       this.instance.setRefreshToken(value.refreshToken);
       this.instance.setTokenType(value.tokenType);
       this.instance.setExpiresIn(value.expiresIn);
-      this.instance.setApiKey(value.apiKey);
       this.instance.setUserId(value.userId);
       this.instance.setUsername(value.username);
       this.instance.setRole(value.role);
@@ -332,11 +307,6 @@ public class LoginResponseDto {
     
     public LoginResponseDto.Builder expiresIn(Integer expiresIn) {
       this.instance.expiresIn(expiresIn);
-      return this;
-    }
-    
-    public LoginResponseDto.Builder apiKey(String apiKey) {
-      this.instance.apiKey(apiKey);
       return this;
     }
     

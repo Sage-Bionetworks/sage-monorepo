@@ -17,10 +17,6 @@ properties:
     type: integer
     description: Access token expiry time in seconds
     example: 3600
-  apiKey:
-    type: string
-    description: API key for automation and service-to-service authentication
-    example: oc_prod_abcd1234567890abcdef1234567890abcdef1234
   userId:
     type: string
     format: uuid

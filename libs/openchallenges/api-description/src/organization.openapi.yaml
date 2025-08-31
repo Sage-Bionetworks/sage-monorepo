@@ -31,5 +31,10 @@ paths:
     $ref: paths/organizations/{org}/participations/{challengeId}/roles/{role}.yaml
 components:
   securitySchemes:
+    jwtBearerAuth:
+      $ref: components/securitySchemes/JwtBearerAuth.yaml
+    apiKeyAuth:
+      $ref: components/securitySchemes/ApiKeyAuth.yaml
+    # Legacy support - will be deprecated
     apiBearerAuth:
       $ref: components/securitySchemes/ApiBearerAuth.yaml

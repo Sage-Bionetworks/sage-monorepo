@@ -52,7 +52,7 @@ public interface AuthenticationApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"expiresIn\" : 3600, \"role\" : \"admin\", \"apiKey\" : \"oc_prod_abcd1234567890abcdef1234567890abcdef1234\", \"accessToken\" : \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\", \"tokenType\" : \"Bearer\", \"userId\" : \"123e4567-e89b-12d3-a456-426614174000\", \"refreshToken\" : \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\", \"username\" : \"admin\" }";
+                    String exampleString = "{ \"expiresIn\" : 3600, \"role\" : \"admin\", \"accessToken\" : \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\", \"tokenType\" : \"Bearer\", \"userId\" : \"123e4567-e89b-12d3-a456-426614174000\", \"refreshToken\" : \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\", \"username\" : \"admin\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -125,7 +125,7 @@ public interface AuthenticationApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"expiresIn\" : 3600, \"role\" : \"admin\", \"apiKey\" : \"oc_prod_abcd1234567890abcdef1234567890abcdef1234\", \"accessToken\" : \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\", \"tokenType\" : \"Bearer\", \"userId\" : \"123e4567-e89b-12d3-a456-426614174000\", \"refreshToken\" : \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\", \"username\" : \"admin\" }";
+                    String exampleString = "{ \"expiresIn\" : 3600, \"role\" : \"admin\", \"accessToken\" : \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\", \"tokenType\" : \"Bearer\", \"userId\" : \"123e4567-e89b-12d3-a456-426614174000\", \"refreshToken\" : \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\", \"username\" : \"admin\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

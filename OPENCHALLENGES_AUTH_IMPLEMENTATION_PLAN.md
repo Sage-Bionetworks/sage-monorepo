@@ -697,18 +697,271 @@ return generateLoginResponse(user);
 - OAuth2 callback implementation ready for provider extraction from state
 - End-to-end authentication flow validated through integration testing
 
-**Next Phase Ready**: Phase 3 MCP Server User-Delegated Authentication can now begin with a fully functional OAuth2 authentication service.
+**Next Phase Ready**: Phase 2.4 Service Authentication Integration - Update organization and challenge services to accept JWT tokens.
 
-## Phase 3: MCP Server User-Delegated Authentication
+## Phase 2.4: OpenAPI Specification Updates for Service Authentication
 
-### 2.1 MCP Server Dependencies
+### 2.4.1 OpenAPI Source Updates (API-First Approach)
 
 #### Tasks:
 
-- [ ] **2.1.1** ✅ Update OpenChallenges API client dependency (generated from 1.0)
-- [ ] **2.1.2** Add authentication dependencies to MCP server
-- [ ] **2.1.3** Add OpenChallenges auth client dependency
-- [ ] **2.1.4** Configure security properties
+- [ ] **2.4.1.1** Update organization service OpenAPI spec with Bearer token security
+- [ ] **2.4.1.2** Update challenge service OpenAPI spec with Bearer token security
+- [ ] **2.4.1.3** Add security schemes for both JWT and API key authentication
+- [ ] **2.4.1.4** Update endpoint security requirements
+
+#### Security Schemes to Add:
+
+```yaml
+# In libs/openchallenges/api-description/src/organization/organization.yaml
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token from authentication service
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key for programmatic access
+
+# Apply to write operations
+paths:
+  /organizations:
+    post:
+      security:
+        - bearerAuth: []
+        - apiKeyAuth: []
+    get:
+      security: [] # Public read access
+  /organizations/{id}:
+    put:
+      security:
+        - bearerAuth: []
+        - apiKeyAuth: []
+    delete:
+      security:
+        - bearerAuth: []
+        - apiKeyAuth: []
+    get:
+      security: [] # Public read access
+```
+
+#### Build Commands:
+
+```bash
+# 1. Build API specifications from updated source
+nx build openchallenges-api-description
+
+# 2. Regenerate all server stubs and API clients
+nx run openchallenges-auth-service:generate
+nx run openchallenges-organization-service:generate
+nx run openchallenges-challenge-service:generate
+nx run openchallenges-api-client-java:generate
+nx run openchallenges-api-client-angular:generate
+nx run openchallenges-api-client-python:generate
+```
+
+## Phase 2.5: Organization Service Authentication Integration
+
+### 2.5.1 Shared Authentication Library
+
+#### Tasks:
+
+- [ ] **2.5.1.1** Create `libs/openchallenges/auth-common` library
+- [ ] **2.5.1.2** Implement JWT validation filter
+- [ ] **2.5.1.3** Implement API key validation filter
+- [ ] **2.5.1.4** Create remote authentication service
+- [ ] **2.5.1.5** Add security configuration utilities
+
+#### Library Structure:
+
+```
+libs/openchallenges/auth-common/
+├── src/main/java/org/sagebionetworks/openchallenges/auth/common/
+│   ├── filter/
+│   │   ├── JwtAuthenticationFilter.java
+│   │   └── ApiKeyAuthenticationFilter.java
+│   ├── service/
+│   │   ├── JwtValidationService.java
+│   │   ├── ApiKeyValidationService.java
+│   │   └── RemoteAuthenticationService.java
+│   ├── config/
+│   │   ├── AuthenticationConfiguration.java
+│   │   └── AuthenticationProperties.java
+│   ├── model/
+│   │   ├── AuthenticatedUser.java
+│   │   ├── AuthenticationContext.java
+│   │   └── ValidationResponse.java
+│   └── exception/
+│       ├── AuthenticationException.java
+│       └── AuthorizationException.java
+```
+
+#### Key Components:
+
+```java
+@Component
+public class JwtValidationService {
+
+  public ValidationResponse validateJwtToken(String token);
+
+  private WebClient authServiceClient;
+}
+
+@Component
+public class ApiKeyValidationService {
+
+  public ValidationResponse validateApiKey(String apiKey);
+
+  private WebClient authServiceClient;
+}
+
+@Configuration
+public class AuthenticationConfiguration {
+
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http);
+
+  @Bean
+  public JwtAuthenticationFilter jwtAuthenticationFilter();
+
+  @Bean
+  public ApiKeyAuthenticationFilter apiKeyAuthenticationFilter();
+}
+
+```
+
+### 2.5.2 Organization Service Integration
+
+#### Tasks:
+
+- [ ] **2.5.2.1** Add auth-common dependency to organization service
+- [ ] **2.5.2.2** Configure security filter chain
+- [ ] **2.5.2.3** Add authentication properties
+- [ ] **2.5.2.4** Update service implementation for user context
+- [ ] **2.5.2.5** Add comprehensive authentication tests
+
+#### Dependencies:
+
+```gradle
+// In apps/openchallenges/organization-service/build.gradle.kts
+implementation(project(":openchallenges-auth-common"))
+implementation("org.springframework.boot:spring-boot-starter-security")
+implementation("org.springframework.boot:spring-boot-starter-webflux") // For WebClient
+```
+
+#### Security Configuration:
+
+```java
+@Configuration
+@EnableWebSecurity
+public class OrganizationSecurityConfiguration {
+
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    return http
+      .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+      .addFilterAfter(apiKeyAuthenticationFilter(), JwtAuthenticationFilter.class)
+      .authorizeHttpRequests(auth ->
+        auth
+          .requestMatchers("/actuator/**", "/api-docs/**")
+          .permitAll()
+          .requestMatchers(HttpMethod.GET, "/v1/**")
+          .permitAll() // Public read
+          .requestMatchers(HttpMethod.POST, "/v1/**")
+          .authenticated() // Auth required
+          .requestMatchers(HttpMethod.PUT, "/v1/**")
+          .authenticated()
+          .requestMatchers(HttpMethod.DELETE, "/v1/**")
+          .authenticated()
+      )
+      .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
+      .csrf(csrf -> csrf.disable())
+      .build();
+  }
+}
+
+```
+
+#### Application Properties:
+
+```yaml
+# In apps/openchallenges/organization-service/src/main/resources/application.yml
+openchallenges:
+  auth:
+    service-url: ${AUTH_SERVICE_URL:http://openchallenges-auth-service:8080/v1}
+    jwt:
+      validation-endpoint: /auth/validate-jwt
+    api-key:
+      validation-endpoint: /auth/validate-api-key
+```
+
+### 2.5.3 Testing Strategy
+
+#### Tasks:
+
+- [ ] **2.5.3.1** Unit tests for authentication filters
+- [ ] **2.5.3.2** Integration tests with JWT tokens
+- [ ] **2.5.3.3** Integration tests with API keys
+- [ ] **2.5.3.4** Security filter chain tests
+- [ ] **2.5.3.5** End-to-end authentication flow tests
+
+#### Test Categories:
+
+```java
+// Unit Tests
+@ExtendWith(MockitoExtension.class)
+class JwtAuthenticationFilterTest {}
+
+@ExtendWith(MockitoExtension.class)
+class ApiKeyAuthenticationFilterTest {}
+
+// Integration Tests
+@SpringBootTest
+@AutoConfigureTestDatabase
+class OrganizationServiceAuthenticationIntegrationTest {}
+
+// Web Layer Tests
+@WebMvcTest
+class OrganizationApiDelegateImplWebTest {}
+
+```
+
+## Phase 2.6: Challenge Service Authentication Integration
+
+### 2.6.1 Challenge Service Integration
+
+#### Tasks:
+
+- [ ] **2.6.1.1** Apply same auth-common pattern to challenge service
+- [ ] **2.6.1.2** Configure security for all challenge endpoints
+- [ ] **2.6.1.3** Add authentication properties
+- [ ] **2.6.1.4** Update service implementation
+- [ ] **2.6.1.5** Add comprehensive testing
+
+#### Implementation Notes:
+
+Same pattern as organization service, but applied to challenge service endpoints:
+
+- Public read access for challenge browsing
+- Authenticated write access for challenge management
+- User context available in service layer
+
+## Phase 3: MCP Server User-Delegated Authentication
+
+## Phase 3: MCP Server User-Delegated Authentication
+
+### 3.1 MCP Server Dependencies
+
+#### Tasks:
+
+- [ ] **3.1.1** ✅ Update OpenChallenges API client dependency (generated from 2.4)
+- [ ] **3.1.2** Add authentication dependencies to MCP server
+- [ ] **3.1.3** Add OpenChallenges auth client dependency
+- [ ] **3.1.4** Configure security properties
 
 #### Dependencies:
 
@@ -717,6 +970,7 @@ return generateLoginResponse(user);
 implementation("org.springframework.boot:spring-boot-starter-security")
 implementation("org.springframework.security:spring-security-oauth2-jose")
 implementation(project(":openchallenges-api-client-java")) // Updated with JWT support
+implementation(project(":openchallenges-auth-common")) // Shared auth utilities
 ```
 
 #### API Client Benefits:
@@ -724,15 +978,16 @@ implementation(project(":openchallenges-api-client-java")) // Updated with JWT s
 - Auto-generated `AuthenticationApi` client with JWT endpoints
 - Type-safe DTOs for all authentication requests/responses
 - Built-in OAuth2 support via generated client methods
+- Organization and Challenge APIs now support Bearer token authentication
 
-### 2.2 Authentication Manager
+### 3.2 Authentication Manager
 
 #### Tasks:
 
-- [ ] **2.2.1** Create `UserAuthenticationManager`
-- [ ] **2.2.2** Implement session management
-- [ ] **2.2.3** Add token refresh logic
-- [ ] **2.2.4** Create authentication tools
+- [ ] **3.2.1** Create `UserAuthenticationManager`
+- [ ] **3.2.2** Implement session management
+- [ ] **3.2.3** Add token refresh logic
+- [ ] **3.2.4** Create authentication tools
 
 #### Key Components:
 
@@ -752,14 +1007,14 @@ public class UserAuthenticationManager {
 
 ```
 
-### 2.3 OAuth2 Support for MCP
+### 3.3 OAuth2 Support for MCP
 
 #### Tasks:
 
-- [ ] **2.3.1** Create OAuth2 authentication tools
-- [ ] **2.3.2** Implement authorization URL generation
-- [ ] **2.3.3** Add callback handling
-- [ ] **2.3.4** Support Google and Synapse providers
+- [ ] **3.3.1** Create OAuth2 authentication tools
+- [ ] **3.3.2** Implement authorization URL generation
+- [ ] **3.3.3** Add callback handling
+- [ ] **3.3.4** Support Google and Synapse providers
 
 #### OAuth2 Tools:
 
@@ -779,14 +1034,14 @@ public class OAuth2AuthenticationManager {
 
 ```
 
-### 2.4 Authenticated API Client
+### 3.4 Authenticated API Client
 
 #### Tasks:
 
-- [ ] **2.4.1** Create authenticated API client wrapper
-- [ ] **2.4.2** Implement automatic token refresh
-- [ ] **2.4.3** Add permission validation
-- [ ] **2.4.4** Update existing service classes
+- [ ] **3.4.1** Create authenticated API client wrapper
+- [ ] **3.4.2** Implement automatic token refresh
+- [ ] **3.4.3** Add permission validation
+- [ ] **3.4.4** Update existing service classes
 
 #### Implementation:
 
@@ -803,15 +1058,15 @@ public class AuthenticatedApiClientFactory {
 
 ```
 
-### 2.5 Update MCP Tools
+### 3.5 Update MCP Tools
 
 #### Tasks:
 
-- [ ] **2.5.1** Update `ChallengeService` with auth support
-- [ ] **2.5.2** Update `OrganizationService` with auth support
-- [ ] **2.5.3** Add permission-based operation validation
-- [ ] **2.5.4** Implement read/write operation separation
-- [ ] **2.5.5** Add comprehensive error handling
+- [ ] **3.5.1** Update `ChallengeService` with auth support
+- [ ] **3.5.2** Update `OrganizationService` with auth support
+- [ ] **3.5.3** Add permission-based operation validation
+- [ ] **3.5.4** Implement read/write operation separation
+- [ ] **3.5.5** Add comprehensive error handling
 
 #### Tool Categories:
 
@@ -832,20 +1087,22 @@ public class AuthenticatedApiClientFactory {
 @Tool("manageUsers")
 ```
 
-### 2.6 Configuration and Properties
+### 3.6 Configuration and Properties
 
 #### Tasks:
 
-- [ ] **2.6.1** Add authentication configuration properties
-- [ ] **2.6.2** Configure OAuth2 client settings
-- [ ] **2.6.3** Add environment variable support
-- [ ] **2.6.4** Update Docker configuration
+- [ ] **3.6.1** Add authentication configuration properties
+- [ ] **3.6.2** Configure OAuth2 client settings
+- [ ] **3.6.3** Add environment variable support
+- [ ] **3.6.4** Update Docker configuration
 
 #### Configuration:
 
 ```yaml
 openchallenges-mcp-server:
   auth-service-url: ${AUTH_SERVICE_URL:http://openchallenges-auth-service:8080/v1}
+  organization-service-url: ${ORGANIZATION_SERVICE_URL:http://openchallenges-organization-service:8080/v1}
+  challenge-service-url: ${CHALLENGE_SERVICE_URL:http://openchallenges-challenge-service:8080/v1}
   oauth2:
     google:
       client-id: ${GOOGLE_CLIENT_ID}
@@ -858,46 +1115,41 @@ openchallenges-mcp-server:
     session-timeout: 3600
 ```
 
-## Phase 3: Integration and Testing
+## Phase 4: Integration and Testing
 
-### 3.1 End-to-End Integration
+### 4.1 End-to-End Integration
 
 #### Tasks:
 
-- [ ] **3.1.1** Validate all API client generations (Java, Angular, Python)
-- [ ] **3.1.2** Test complete authentication flow
-- [ ] **3.1.3** Validate JWT token exchange
-- [ ] **3.1.4** Test OAuth2 integrations
-- [ ] **3.1.5** Verify permission enforcement
-- [ ] **3.1.6** Test MCP tool operations
+- [ ] **4.1.1** Validate all API client generations (Java, Angular, Python)
+- [ ] **4.1.2** Test complete authentication flow
+- [ ] **4.1.3** Validate JWT token exchange
+- [ ] **4.1.4** Test OAuth2 integrations
+- [ ] **4.1.5** Verify permission enforcement
+- [ ] **4.1.6** Test MCP tool operations
 
 #### API Client Validation:
 
 ```bash
 # Verify all clients generate successfully
-cd libs/openchallenges/api-client-java && npm run generate
-cd libs/openchallenges/api-client-angular && npm run generate
-cd libs/openchallenges/api-client-python && npm run generate
+nx run openchallenges-api-client-java:generate
+nx run openchallenges-api-client-angular:generate
+nx run openchallenges-api-client-python:generate
 
 # Test client compilation
-cd libs/openchallenges/api-client-java && ./gradlew build
-cd libs/openchallenges/api-client-angular && npm run build
-cd libs/openchallenges/api-client-python && python -m build
+nx run openchallenges-api-client-java:build
+nx run openchallenges-api-client-angular:build
+nx run openchallenges-api-client-python:build
 ```
 
-- [ ] **3.1.2** Validate JWT token exchange
-- [ ] **3.1.3** Test OAuth2 integrations
-- [ ] **3.1.4** Verify permission enforcement
-- [ ] **3.1.5** Test MCP tool operations
-
-### 3.2 Security Validation
+### 4.2 Security Validation
 
 #### Tasks:
 
-- [ ] **3.2.1** Security audit of JWT implementation
-- [ ] **3.2.2** OAuth2 security review
-- [ ] **3.2.3** Token expiration testing
-- [ ] **3.2.4** Permission boundary testing
+- [ ] **4.2.1** Security audit of JWT implementation
+- [ ] **4.2.2** OAuth2 security review
+- [ ] **4.2.3** Token expiration testing
+- [ ] **4.2.4** Permission boundary testing
 - [ ] **3.2.5** OWASP security checklist
 
 ### 3.3 Performance Testing
@@ -920,37 +1172,37 @@ cd libs/openchallenges/api-client-python && python -m build
 - [ ] **3.4.4** Migration guide for existing users
 - [ ] **3.4.5** Troubleshooting documentation
 
-## Phase 4: Deployment and Migration
+## Phase 5: Deployment and Migration
 
-### 4.1 Environment Setup
-
-#### Tasks:
-
-- [ ] **4.1.1** Configure OAuth2 applications (Google, Synapse)
-- [ ] **4.1.2** Set up environment variables
-- [ ] **4.1.3** Update Docker configurations
-- [ ] **4.1.4** Configure load balancer settings
-- [ ] **4.1.5** Set up monitoring and alerting
-
-### 4.2 Data Migration
+### 5.1 Environment Setup
 
 #### Tasks:
 
-- [ ] **4.2.1** Backup existing authentication data
-- [ ] **4.2.2** Run database migrations
-- [ ] **4.2.3** Migrate existing API keys
-- [ ] **4.2.4** Validate data integrity
-- [ ] **4.2.5** Test rollback procedures
+- [ ] **5.1.1** Configure OAuth2 applications (Google, Synapse)
+- [ ] **5.1.2** Set up environment variables
+- [ ] **5.1.3** Update Docker configurations
+- [ ] **5.1.4** Configure load balancer settings
+- [ ] **5.1.5** Set up monitoring and alerting
 
-### 4.3 Gradual Rollout
+### 5.2 Data Migration
 
 #### Tasks:
 
-- [ ] **4.3.1** Deploy to development environment
-- [ ] **4.3.2** Deploy to staging environment
-- [ ] **4.3.3** Limited production rollout
-- [ ] **4.3.4** Monitor authentication metrics
-- [ ] **4.3.5** Full production deployment
+- [ ] **5.2.1** Backup existing authentication data
+- [ ] **5.2.2** Run database migrations
+- [ ] **5.2.3** Migrate existing API keys
+- [ ] **5.2.4** Validate data integrity
+- [ ] **5.2.5** Test rollback procedures
+
+### 5.3 Gradual Rollout
+
+#### Tasks:
+
+- [ ] **5.3.1** Deploy to development environment
+- [ ] **5.3.2** Deploy to staging environment
+- [ ] **5.3.3** Limited production rollout
+- [ ] **5.3.4** Monitor authentication metrics
+- [ ] **5.3.5** Full production deployment
 
 ## Implementation Checklist Summary
 
@@ -1280,9 +1532,12 @@ app.base-url=${BASE_URL:http://localhost:8085}
 ✅ **Phase 1**: JWT-Centric Auth Service Implementation - COMPLETE  
 ✅ **Phase 2.1**: JWT Authentication Filters & Spring Security Configuration - COMPLETE  
 ✅ **Phase 2.2**: OAuth2 Callback Implementation - COMPLETE  
-⏳ **Phase 2.3**: End-to-End Authentication Testing - NEXT  
+✅ **Phase 2.3**: End-to-End Authentication Testing - COMPLETE  
+⏳ **Phase 2.4**: OpenAPI Specification Updates for Service Authentication - NEXT
+⏳ **Phase 2.5**: Organization Service Authentication Integration - FUTURE
+⏳ **Phase 2.6**: Challenge Service Authentication Integration - FUTURE
 ⏳ **Phase 3**: MCP Server User-Delegated Authentication - FUTURE
 
-**Ready for Production**: Core authentication infrastructure complete with JWT + OAuth2 support!
+**Ready for Service Integration**: Core OAuth2 authentication service complete. Next: Add JWT authentication to organization and challenge services!
 
 ---

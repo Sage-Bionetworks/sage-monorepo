@@ -8,7 +8,9 @@ post:
   operationId: createChallengeParticipation
   x-audience: [internal]
   security:
-    - apiBearerAuth: []
+    - jwtBearerAuth: []
+    - apiKeyAuth: []
+    - apiBearerAuth: [] # Legacy support
   requestBody:
     required: true
     content:
