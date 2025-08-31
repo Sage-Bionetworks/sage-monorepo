@@ -57,6 +57,12 @@ public class JwtAuthenticationGatewayFilter implements WebFilter {
     }
 
     String jwtToken = authHeader.substring(7); // Remove "Bearer " prefix
+    if (jwtToken.trim().isEmpty()) {
+      logger.debug("Empty Bearer token found for request to: {}", path);
+      // Empty JWT token - continue to API key authentication or Spring Security
+      return chain.filter(exchange);
+    }
+    
     logger.debug("Validating JWT token for request to: {}", path);
 
     // Validate JWT token with Auth Service

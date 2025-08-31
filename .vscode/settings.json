@@ -136,6 +136,7 @@
     "git show": true,
     "git status": true,
     "grep": true,
+    "head": true,
     "ls": true,
     "pwd": true,
     "rm": false,

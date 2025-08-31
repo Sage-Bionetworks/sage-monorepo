@@ -49,9 +49,9 @@ public class ApiKeyAuthenticationGatewayFilter implements WebFilter {
     ServerHttpRequest request = exchange.getRequest();
     String path = request.getPath().toString();
 
-    // Skip if already authenticated by JWT (check for standard auth headers)
+    // Skip if already authenticated by JWT filter (check for auth headers added by JWT filter)
     if (request.getHeaders().containsKey(X_AUTHENTICATED_USER_ID_HEADER)) {
-      logger.debug("Request already authenticated by JWT, skipping API key validation for: {}", path);
+      logger.debug("Request already authenticated by JWT filter, skipping API key validation for: {}", path);
       return chain.filter(exchange);
     }
 
