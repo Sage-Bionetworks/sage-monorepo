@@ -81,3 +81,15 @@ tasks.register<JavaExec>("generatePasswordHashes") {
 tasks.named("generatePasswordHashes") {
   dependsOn("compileJava")
 }
+
+// Task to generate API key hashes
+tasks.register<JavaExec>("generateApiKeyHashes") {
+  group = "application"
+  description = "Generate BCrypt API key hashes"
+  classpath = sourceSets["main"].runtimeClasspath
+  mainClass.set("org.sagebionetworks.openchallenges.auth.service.util.ApiKeyHashGenerator")
+}
+
+tasks.named("generateApiKeyHashes") {
+  dependsOn("compileJava")
+}
