@@ -12,7 +12,6 @@ delete:
   security:
     - jwtBearerAuth: []
     - apiKeyAuth: []
-    - apiBearerAuth: [] # Legacy support
   responses:
     '204':
       description: Participation deleted successfully

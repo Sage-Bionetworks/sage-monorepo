@@ -88,7 +88,9 @@ public interface OrganizationApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "apiBearerAuth")
+            @SecurityRequirement(name = "apiBearerAuth"),
+            @SecurityRequirement(name = "apiKeyAuth"),
+            @SecurityRequirement(name = "jwtBearerAuth")
         }
     )
     @RequestMapping(
@@ -137,7 +139,9 @@ public interface OrganizationApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "apiBearerAuth")
+            @SecurityRequirement(name = "apiBearerAuth"),
+            @SecurityRequirement(name = "apiKeyAuth"),
+            @SecurityRequirement(name = "jwtBearerAuth")
         }
     )
     @RequestMapping(
@@ -287,7 +291,9 @@ public interface OrganizationApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "apiBearerAuth")
+            @SecurityRequirement(name = "apiBearerAuth"),
+            @SecurityRequirement(name = "apiKeyAuth"),
+            @SecurityRequirement(name = "jwtBearerAuth")
         }
     )
     @RequestMapping(

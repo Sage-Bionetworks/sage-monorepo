@@ -714,7 +714,6 @@ paths:
       security:
         - jwtBearerAuth: []
         - apiKeyAuth: []
-        - apiBearerAuth: []
       requestBody:
         content:
           application/json:
@@ -771,7 +770,6 @@ paths:
       security:
         - jwtBearerAuth: []
         - apiKeyAuth: []
-        - apiBearerAuth: []
       requestBody:
         required: true
         content:
@@ -808,7 +806,6 @@ paths:
       security:
         - jwtBearerAuth: []
         - apiKeyAuth: []
-        - apiBearerAuth: []
       responses:
         '204':
           description: Organization successfully deleted
