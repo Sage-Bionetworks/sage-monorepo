@@ -26,12 +26,12 @@ public class JwtService {
     private final String issuer;
 
     public JwtService(
-            @Value("${app.security.jwt.secret:openchallenges-default-jwt-secret-key-change-in-production}") String jwtSecret,
+            @Value("${app.security.jwt.secret-key:openchallenges-default-jwt-secret-key-change-in-production}") String jwtSecretKey,
             @Value("${app.security.jwt.access-token-expiration-ms:3600000}") long accessTokenExpirationMs, // 1 hour
             @Value("${app.security.jwt.refresh-token-expiration-ms:604800000}") long refreshTokenExpirationMs, // 7 days
             @Value("${app.security.jwt.issuer:openchallenges-auth-service}") String issuer) {
         
-        this.jwtSigningKey = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+        this.jwtSigningKey = Keys.hmacShaKeyFor(jwtSecretKey.getBytes(StandardCharsets.UTF_8));
         this.accessTokenExpirationMs = accessTokenExpirationMs;
         this.refreshTokenExpirationMs = refreshTokenExpirationMs;
         this.issuer = issuer;
