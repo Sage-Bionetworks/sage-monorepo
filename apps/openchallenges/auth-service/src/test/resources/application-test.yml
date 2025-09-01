@@ -9,3 +9,14 @@ spring:
     locations: classpath:db/migration
     clean-disabled: false
 # Testcontainers will dynamically configure the datasource properties
+
+# OAuth2 test configuration
+app:
+  oauth2:
+    google:
+      client-id: test-google-client-id
+      client-secret: test-google-client-secret
+    synapse:
+      client-id: test-synapse-client-id
+      client-secret: test-synapse-client-secret
+  base-url: http://localhost:8087

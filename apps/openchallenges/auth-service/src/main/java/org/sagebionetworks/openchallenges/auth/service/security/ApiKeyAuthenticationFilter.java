@@ -98,6 +98,11 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
       requestURI.equals("/v1/auth/login") ||
       requestURI.equals("/v1/auth/validate") ||
       requestURI.equals("/v1/auth/jwt/validate") ||
+      requestURI.equals("/v1/auth/oauth2/authorize") ||
+      requestURI.equals("/v1/auth/oauth2/callback") ||
+      requestURI.equals("/login") ||
+      requestURI.equals("/auth/oauth2/google") ||
+      requestURI.equals("/auth/callback") ||
       requestURI.startsWith("/actuator/") ||
       requestURI.startsWith("/v3/api-docs") ||
       requestURI.startsWith("/swagger-ui")

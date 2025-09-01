@@ -78,8 +78,8 @@ public class OAuth2ConfigurationService {
      * Get redirect URI for provider
      */
     public String getRedirectUri(ExternalAccount.Provider provider) {
-        return String.format("%s/v1/auth/oauth2/callback/%s", 
-                baseUrl.replaceAll("/$", ""), provider.name().toLowerCase());
+        return String.format("%s/auth/callback", 
+                baseUrl.replaceAll("/$", ""));
     }
 
     /**
