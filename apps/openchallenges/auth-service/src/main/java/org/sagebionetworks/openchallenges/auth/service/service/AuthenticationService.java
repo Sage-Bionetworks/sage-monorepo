@@ -14,6 +14,7 @@ import org.sagebionetworks.openchallenges.auth.service.repository.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -168,45 +169,77 @@ public class AuthenticationService {
   }
 
   /**
-   * Refresh JWT tokens using refresh token
+   * Refresh JWT tokens using refresh token with rotation for enhanced security
    */
+  @Transactional
   public LoginResponseDto refreshToken(String refreshToken) {
-    log.debug("Refreshing JWT token");
+    log.debug("Refreshing JWT token with rotation");
 
     String tokenHash = hashToken(refreshToken);
+    UUID userId = extractUserIdFromRefreshToken(refreshToken);
 
     // Find and validate refresh token
     Optional<RefreshToken> tokenEntity = refreshTokenRepository.findByTokenHashAndUserId(
       tokenHash,
-      extractUserIdFromRefreshToken(refreshToken)
+      userId
     );
 
     if (tokenEntity.isEmpty()) {
-      log.debug("Refresh token not found");
+      log.warn("Refresh token not found for user: {}", userId);
+      // Potential token theft - revoke all refresh tokens for this user
+      revokeAllUserRefreshTokens(userId);
       throw new RuntimeException("Invalid refresh token");
     }
 
     RefreshToken token = tokenEntity.get();
-    if (token.isExpired() || token.getRevoked()) {
-      log.debug("Refresh token is expired or revoked");
-      throw new RuntimeException("Refresh token is expired or revoked");
+    
+    // Check if token is already revoked (possible replay attack)
+    if (token.getRevoked()) {
+      log.warn("Attempted reuse of revoked refresh token for user: {}", userId);
+      // Definite token theft - revoke all refresh tokens for this user
+      revokeAllUserRefreshTokens(userId);
+      throw new RuntimeException("Refresh token has been revoked due to security concerns");
+    }
+    
+    if (token.isExpired()) {
+      log.debug("Refresh token is expired for user: {}", userId);
+      // Clean up expired token
+      refreshTokenRepository.delete(token);
+      throw new RuntimeException("Refresh token is expired");
     }
 
     User user = token.getUser();
     if (!user.isActive()) {
-      log.debug("User account is disabled");
+      log.debug("User account is disabled: {}", user.getUsername());
       throw new RuntimeException("User account is disabled");
     }
 
     log.info("Refresh token successfully validated for user: {}", user.getUsername());
 
-    // Generate new tokens
+    // CRITICAL: Immediately revoke the old refresh token to prevent reuse
+    token.revoke();
+    token.markAsUsed();
+    refreshTokenRepository.save(token);
+
+    // Generate new tokens (this creates a new refresh token)
     LoginResponseDto response = generateTokenResponse(user);
 
-    // Revoke old refresh token
-    refreshTokenRepository.deleteByTokenHashAndUserId(tokenHash, user.getId());
-
+    log.debug("Token rotation completed for user: {}", user.getUsername());
     return response;
+  }
+
+  /**
+   * Revoke all refresh tokens for a user (used when token theft is detected)
+   */
+  @Transactional
+  private void revokeAllUserRefreshTokens(UUID userId) {
+    log.warn("Revoking all refresh tokens for user: {} due to security concerns", userId);
+    
+    // Find user and revoke all tokens
+    Optional<User> userOpt = userRepository.findById(userId);
+    if (userOpt.isPresent()) {
+      refreshTokenRepository.revokeAllTokensForUser(userOpt.get());
+    }
   }
 
   /**
