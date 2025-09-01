@@ -22,6 +22,14 @@ tags:
     name: API Key
     x-audience:
       - public
+  - description: Standard OAuth2 and OIDC endpoints for authorization and authentication
+    name: OAuth2
+    x-audience:
+      - public
+  - description: Operations about user management and profile information
+    name: User
+    x-audience:
+      - public
 paths:
   /auth/login:
     post:
@@ -385,6 +393,386 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Authentication
+  /oauth2/authorize:
+    get:
+      description: |
+        Standard OAuth2 authorization endpoint for third-party applications.
+        Redirects users to consent page and returns authorization code.
+      operationId: oauth2Authorize
+      parameters:
+        - description: "Response type, must be 'code' for authorization code flow"
+          explode: true
+          in: query
+          name: response_type
+          required: true
+          schema:
+            enum:
+              - code
+            type: string
+          style: form
+        - description: OAuth2 client identifier
+          explode: true
+          in: query
+          name: client_id
+          required: true
+          schema:
+            type: string
+          style: form
+        - description: Redirect URI for the OAuth2 client
+          explode: true
+          in: query
+          name: redirect_uri
+          required: true
+          schema:
+            format: uri
+            type: string
+          style: form
+        - description: Space-separated list of requested scopes
+          example: read:org write:org user:profile
+          explode: true
+          in: query
+          name: scope
+          required: false
+          schema:
+            type: string
+          style: form
+        - description: Opaque state value for CSRF protection
+          explode: true
+          in: query
+          name: state
+          required: false
+          schema:
+            type: string
+          style: form
+      responses:
+        '200':
+          content:
+            text/html:
+              schema:
+                description: HTML consent page
+                type: string
+          description: Authorization consent page (when user needs to grant consent)
+        '302':
+          description: Redirect to client application with authorization code
+          headers:
+            Location:
+              description: Redirect URI with authorization code or error
+              explode: false
+              schema:
+                format: uri
+                type: string
+              style: simple
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: OAuth2 Authorization Endpoint
+      tags:
+        - OAuth2
+      x-audience:
+        - public
+      x-accepts:
+        - application/problem+json
+        - text/html
+      x-tags:
+        - tag: OAuth2
+  /oauth2/token:
+    post:
+      description: |
+        Standard OAuth2 token endpoint for exchanging authorization codes for access tokens.
+        Also supports refresh token grant and client credentials grant.
+      operationId: oauth2Token
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/oauth2Token_request'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuth2TokenResponse'
+          description: Access token response
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuth2Error'
+          description: Invalid request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuth2Error'
+          description: Invalid client credentials
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: OAuth2 Token Endpoint
+      tags:
+        - OAuth2
+      x-audience:
+        - public
+      x-content-type: application/x-www-form-urlencoded
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: OAuth2
+  /oauth2/revoke:
+    post:
+      description: |
+        Revoke an access token or refresh token according to RFC 7009.
+        This endpoint invalidates the specified token and any associated tokens.
+      operationId: oauth2RevokeToken
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/oauth2RevokeToken_request'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/oauth2RevokeToken_200_response'
+          description: Token successfully revoked
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuth2Error'
+          description: Invalid request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuth2Error'
+          description: Unauthorized
+      security:
+        - OAuth2:
+            - admin:auth
+      summary: Revoke access or refresh token
+      tags:
+        - OAuth2
+      x-content-type: application/x-www-form-urlencoded
+      x-accepts:
+        - application/json
+      x-tags:
+        - tag: OAuth2
+  /oauth2/introspect:
+    post:
+      description: |
+        RFC 7662 token introspection endpoint to determine the active state of a token
+        and to determine meta-information about this token.
+      operationId: oauth2Introspect
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/oauth2Introspect_request'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/oauth2Introspect_200_response'
+          description: Token introspection response
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuth2Error'
+          description: Invalid request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuth2Error'
+          description: Unauthorized
+      security:
+        - OAuth2:
+            - admin:auth
+      summary: Token introspection endpoint
+      tags:
+        - OAuth2
+      x-content-type: application/x-www-form-urlencoded
+      x-accepts:
+        - application/json
+      x-tags:
+        - tag: OAuth2
+  /user:
+    get:
+      description: |
+        Get information about the currently authenticated user.
+        This is an alias for the OAuth2 userinfo endpoint for backward compatibility.
+      operationId: getCurrentUser
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getCurrentUser_200_response'
+          description: User information
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuth2Error'
+          description: Invalid or expired access token
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuth2Error'
+          description: Insufficient scope
+      security:
+        - jwtBearerAuth: []
+        - OAuth2:
+            - openid
+            - profile
+            - email
+      summary: Get current user information
+      tags:
+        - User
+      x-accepts:
+        - application/json
+      x-tags:
+        - tag: User
+  /oauth2/userinfo:
+    get:
+      description: |
+        Standard OAuth2/OIDC user info endpoint that returns information about the authenticated user.
+        Requires a valid access token with appropriate scopes.
+      operationId: oauth2UserInfo
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getCurrentUser_200_response'
+          description: User information
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuth2Error'
+          description: Invalid or expired access token
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuth2Error'
+          description: Insufficient scope
+      security:
+        - OAuth2:
+            - openid
+            - profile
+            - email
+      summary: OAuth2 user info endpoint
+      tags:
+        - OAuth2
+      x-accepts:
+        - application/json
+      x-tags:
+        - tag: OAuth2
+  /.well-known/openid-configuration:
+    get:
+      description: |
+        RFC 8414 OAuth2 Authorization Server Metadata endpoint.
+        Returns the OAuth2/OIDC discovery document with server configuration.
+      operationId: oauth2WellKnownOpenidConfiguration
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/oauth2WellKnownOpenidConfiguration_200_response'
+          description: OAuth2 Authorization Server Metadata
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/oauth2WellKnownOpenidConfiguration_404_response'
+          description: Configuration not found
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: OAuth2 Authorization Server Metadata
+      tags:
+        - OAuth2
+      x-audience:
+        - public
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: OAuth2
+  /.well-known/jwks.json:
+    get:
+      description: |
+        RFC 7517 JSON Web Key Set document containing the public keys used to verify JWT tokens.
+      operationId: oauth2JwksJson
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/oauth2JwksJson_200_response'
+          description: JSON Web Key Set
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/oauth2JwksJson_404_response'
+          description: JWKS not found
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: JSON Web Key Set
+      tags:
+        - OAuth2
+      x-audience:
+        - public
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: OAuth2
+  /.well-known/oauth-authorization-server:
+    get:
+      description: |
+        RFC 8414 OAuth2 Authorization Server Metadata endpoint.
+        Returns the OAuth2 authorization server discovery document.
+      operationId: oauth2AuthorizationServerMetadata
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/oauth2AuthorizationServerMetadata_200_response'
+          description: OAuth2 Authorization Server Metadata
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuth2Error'
+          description: Discovery document not available
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: OAuth2 Authorization Server Discovery
+      tags:
+        - OAuth2
+      x-audience:
+        - public
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: OAuth2
 components:
   responses:
     Unauthorized:
@@ -828,16 +1216,632 @@ components:
             type: string
           type: array
       type: object
+    OAuth2TokenResponse:
+      description: OAuth2 access token response
+      example:
+        access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        refresh_token: def456...
+        scope: read:org write:org user:profile
+        token_type: Bearer
+        expires_in: 3600
+      properties:
+        access_token:
+          description: The access token
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+          type: string
+        token_type:
+          description: "Token type, always 'Bearer'"
+          example: Bearer
+          type: string
+        expires_in:
+          description: Token lifetime in seconds
+          example: 3600
+          type: integer
+        refresh_token:
+          description: Refresh token for obtaining new access tokens
+          example: def456...
+          type: string
+        scope:
+          description: Space-separated list of granted scopes
+          example: read:org write:org user:profile
+          type: string
+      required:
+        - access_token
+        - expires_in
+        - token_type
+      type: object
+    OAuth2Error:
+      description: OAuth2 error response
+      example:
+        error_description: The request is missing a required parameter
+        error: invalid_request
+        error_uri: https://openapi-generator.tech
+      properties:
+        error:
+          description: Error code
+          enum:
+            - invalid_request
+            - invalid_client
+            - invalid_grant
+            - unauthorized_client
+            - unsupported_grant_type
+            - invalid_scope
+          example: invalid_request
+          type: string
+        error_description:
+          description: Human-readable error description
+          example: The request is missing a required parameter
+          type: string
+        error_uri:
+          description: URI to documentation about the error
+          format: uri
+          type: string
+      required:
+        - error
+      type: object
+    oauth2Token_request:
+      properties:
+        grant_type:
+          description: OAuth2 grant type
+          enum:
+            - authorization_code
+            - refresh_token
+            - client_credentials
+          type: string
+        code:
+          description: Authorization code (required for authorization_code grant)
+          type: string
+        redirect_uri:
+          description: Redirect URI (required for authorization_code grant)
+          format: uri
+          type: string
+        client_id:
+          description: OAuth2 client identifier
+          type: string
+        client_secret:
+          description: OAuth2 client secret
+          type: string
+        refresh_token:
+          description: Refresh token (required for refresh_token grant)
+          type: string
+        scope:
+          description: 'Requested scope (optional, space-separated)'
+          type: string
+      required:
+        - client_id
+        - grant_type
+      type: object
+    oauth2RevokeToken_request:
+      properties:
+        token:
+          description: The token to revoke (access token or refresh token)
+          example: 2YotnFZFEjr1zCsicMWpAA
+          type: string
+        token_type_hint:
+          description: Hint about the type of token being revoked
+          enum:
+            - access_token
+            - refresh_token
+          example: access_token
+          type: string
+        client_id:
+          description: Client identifier
+          example: s6BhdRkqt3
+          type: string
+        client_secret:
+          description: Client secret (if required)
+          example: 7Fjfp0ZBr1KtDRbnfVdmIw
+          type: string
+      required:
+        - token
+      type: object
+    oauth2RevokeToken_200_response:
+      example:
+        message: Token revoked successfully
+      properties:
+        message:
+          example: Token revoked successfully
+          type: string
+      type: object
+    oauth2Introspect_request:
+      properties:
+        token:
+          description: The token to introspect
+          example: 2YotnFZFEjr1zCsicMWpAA
+          type: string
+        token_type_hint:
+          description: Hint about the type of token being introspected
+          enum:
+            - access_token
+            - refresh_token
+          example: access_token
+          type: string
+      required:
+        - token
+      type: object
+    oauth2Introspect_200_response:
+      example:
+        sub: Z5O3upPC88QrAjx00dis
+        aud: https://protected.example.net/resource
+        scope: read:org user:profile
+        iss: https://server.example.com/
+        active: true
+        token_type: Bearer
+        exp: 1419356238
+        iat: 1419350238
+        client_id: l238j323ds-23ij4
+        username: jdoe
+      properties:
+        active:
+          description: Whether the token is active
+          example: true
+          type: boolean
+        scope:
+          description: Space-separated list of scopes
+          example: read:org user:profile
+          type: string
+        client_id:
+          description: Client identifier
+          example: l238j323ds-23ij4
+          type: string
+        username:
+          description: Human-readable identifier for the resource owner
+          example: jdoe
+          type: string
+        token_type:
+          description: Type of the token
+          example: Bearer
+          type: string
+        exp:
+          description: Token expiration timestamp
+          example: 1419356238
+          type: integer
+        iat:
+          description: Token issued at timestamp
+          example: 1419350238
+          type: integer
+        sub:
+          description: Subject of the token
+          example: Z5O3upPC88QrAjx00dis
+          type: string
+        aud:
+          description: Intended audience
+          example: https://protected.example.net/resource
+          type: string
+        iss:
+          description: Token issuer
+          example: https://server.example.com/
+          type: string
+      required:
+        - active
+      type: object
+    getCurrentUser_200_response:
+      example:
+        sub: '248289761001'
+        website: https://janedoe.example.com
+        email_verified: true
+        updated_at: 1311280970
+        name: Jane Doe
+        preferred_username: j.doe
+        given_name: Jane
+        locale: en-US
+        family_name: Doe
+        email: janedoe@example.com
+        picture: https://example.com/profile.jpg
+      properties:
+        sub:
+          description: Subject identifier (user ID)
+          example: '248289761001'
+          type: string
+        name:
+          description: Full name of the user
+          example: Jane Doe
+          type: string
+        given_name:
+          description: Given name of the user
+          example: Jane
+          type: string
+        family_name:
+          description: Family name of the user
+          example: Doe
+          type: string
+        preferred_username:
+          description: Preferred username
+          example: j.doe
+          type: string
+        email:
+          description: Email address
+          example: janedoe@example.com
+          format: email
+          type: string
+        email_verified:
+          description: Whether the email address has been verified
+          example: true
+          type: boolean
+        picture:
+          description: Profile picture URL
+          example: https://example.com/profile.jpg
+          format: uri
+          type: string
+        website:
+          description: User's website
+          example: https://janedoe.example.com
+          format: uri
+          type: string
+        locale:
+          description: User's locale
+          example: en-US
+          type: string
+        updated_at:
+          description: Time the user's information was last updated
+          example: 1311280970
+          type: integer
+      required:
+        - sub
+      type: object
+    oauth2WellKnownOpenidConfiguration_200_response:
+      example:
+        response_types_supported:
+          - code
+          - token
+          - id_token
+        introspection_endpoint: https://api.openchallenges.io/oauth2/introspect
+        grant_types_supported:
+          - authorization_code
+          - refresh_token
+          - client_credentials
+        revocation_endpoint: https://api.openchallenges.io/oauth2/revoke
+        scopes_supported:
+          - openid
+          - profile
+          - email
+          - user:profile
+          - read:org
+          - write:org
+        issuer: https://api.openchallenges.io
+        authorization_endpoint: https://api.openchallenges.io/oauth2/authorize
+        userinfo_endpoint: https://api.openchallenges.io/oauth2/userinfo
+        code_challenge_methods_supported:
+          - S256
+          - plain
+        jwks_uri: https://api.openchallenges.io/.well-known/jwks.json
+        subject_types_supported:
+          - public
+        id_token_signing_alg_values_supported:
+          - RS256
+          - HS256
+        token_endpoint_auth_methods_supported:
+          - client_secret_basic
+          - client_secret_post
+        token_endpoint: https://api.openchallenges.io/oauth2/token
+      properties:
+        issuer:
+          description: Authorization server's issuer identifier
+          example: https://api.openchallenges.io
+          format: uri
+          type: string
+        authorization_endpoint:
+          description: Authorization endpoint URL
+          example: https://api.openchallenges.io/oauth2/authorize
+          format: uri
+          type: string
+        token_endpoint:
+          description: Token endpoint URL
+          example: https://api.openchallenges.io/oauth2/token
+          format: uri
+          type: string
+        userinfo_endpoint:
+          description: UserInfo endpoint URL
+          example: https://api.openchallenges.io/oauth2/userinfo
+          format: uri
+          type: string
+        jwks_uri:
+          description: JSON Web Key Set document URL
+          example: https://api.openchallenges.io/.well-known/jwks.json
+          format: uri
+          type: string
+        scopes_supported:
+          description: Supported OAuth2 scopes
+          example:
+            - openid
+            - profile
+            - email
+            - user:profile
+            - read:org
+            - write:org
+          items:
+            type: string
+          type: array
+        response_types_supported:
+          description: Supported OAuth2 response types
+          example:
+            - code
+            - token
+            - id_token
+          items:
+            type: string
+          type: array
+        grant_types_supported:
+          description: Supported OAuth2 grant types
+          example:
+            - authorization_code
+            - refresh_token
+            - client_credentials
+          items:
+            type: string
+          type: array
+        subject_types_supported:
+          description: Supported subject identifier types
+          example:
+            - public
+          items:
+            type: string
+          type: array
+        id_token_signing_alg_values_supported:
+          description: Supported ID token signing algorithms
+          example:
+            - RS256
+            - HS256
+          items:
+            type: string
+          type: array
+        revocation_endpoint:
+          description: Token revocation endpoint URL
+          example: https://api.openchallenges.io/oauth2/revoke
+          format: uri
+          type: string
+        introspection_endpoint:
+          description: Token introspection endpoint URL
+          example: https://api.openchallenges.io/oauth2/introspect
+          format: uri
+          type: string
+        code_challenge_methods_supported:
+          description: Supported PKCE code challenge methods
+          example:
+            - S256
+            - plain
+          items:
+            type: string
+          type: array
+        token_endpoint_auth_methods_supported:
+          description: Supported client authentication methods at token endpoint
+          example:
+            - client_secret_basic
+            - client_secret_post
+          items:
+            type: string
+          type: array
+      required:
+        - authorization_endpoint
+        - id_token_signing_alg_values_supported
+        - issuer
+        - response_types_supported
+        - subject_types_supported
+        - token_endpoint
+      type: object
+    oauth2WellKnownOpenidConfiguration_404_response:
+      example:
+        error_description: OAuth2 configuration is not available
+        error: configuration_not_found
+      properties:
+        error:
+          example: configuration_not_found
+          type: string
+        error_description:
+          example: OAuth2 configuration is not available
+          type: string
+      type: object
+    oauth2JwksJson_200_response_keys_inner:
+      example:
+        kty: RSA
+        e: AQAB
+        use: sig
+        kid: 2011-04-29
+        alg: RS256
+        'n': 0vx7agoebGcQSuuPiLJXZptN9nndrQmbXEps2aiAFbWhM78LhWx4cbbfAAtVT86zwu1RK7aPFFxuhDR1L6tSoc_BJECPebWKRXjBZCiFV4n3oknjhMstn64tZ_2W-5JsGY4Hc5n9yBXArwl93lqt7_RN5w6Cf0h4QyQ5v-65YGjQR0_FDW2QvzqY368QQMicAtaSqzs8KJZgnYb9c7d0zgdAZHzu6qMQvRL5hajrn1n91CbOpbIS
+      properties:
+        kty:
+          description: Key type
+          example: RSA
+          type: string
+        use:
+          description: Public key use
+          example: sig
+          type: string
+        kid:
+          description: Key ID
+          example: 2011-04-29
+          type: string
+        alg:
+          description: Algorithm
+          example: RS256
+          type: string
+        'n':
+          description: RSA modulus
+          example: 0vx7agoebGcQSuuPiLJXZptN9nndrQmbXEps2aiAFbWhM78LhWx4cbbfAAtVT86zwu1RK7aPFFxuhDR1L6tSoc_BJECPebWKRXjBZCiFV4n3oknjhMstn64tZ_2W-5JsGY4Hc5n9yBXArwl93lqt7_RN5w6Cf0h4QyQ5v-65YGjQR0_FDW2QvzqY368QQMicAtaSqzs8KJZgnYb9c7d0zgdAZHzu6qMQvRL5hajrn1n91CbOpbIS
+          type: string
+        e:
+          description: RSA exponent
+          example: AQAB
+          type: string
+      required:
+        - alg
+        - kid
+        - kty
+        - use
+      type: object
+    oauth2JwksJson_200_response:
+      example:
+        keys:
+          - kty: RSA
+            e: AQAB
+            use: sig
+            kid: 2011-04-29
+            alg: RS256
+            'n': 0vx7agoebGcQSuuPiLJXZptN9nndrQmbXEps2aiAFbWhM78LhWx4cbbfAAtVT86zwu1RK7aPFFxuhDR1L6tSoc_BJECPebWKRXjBZCiFV4n3oknjhMstn64tZ_2W-5JsGY4Hc5n9yBXArwl93lqt7_RN5w6Cf0h4QyQ5v-65YGjQR0_FDW2QvzqY368QQMicAtaSqzs8KJZgnYb9c7d0zgdAZHzu6qMQvRL5hajrn1n91CbOpbIS
+          - kty: RSA
+            e: AQAB
+            use: sig
+            kid: 2011-04-29
+            alg: RS256
+            'n': 0vx7agoebGcQSuuPiLJXZptN9nndrQmbXEps2aiAFbWhM78LhWx4cbbfAAtVT86zwu1RK7aPFFxuhDR1L6tSoc_BJECPebWKRXjBZCiFV4n3oknjhMstn64tZ_2W-5JsGY4Hc5n9yBXArwl93lqt7_RN5w6Cf0h4QyQ5v-65YGjQR0_FDW2QvzqY368QQMicAtaSqzs8KJZgnYb9c7d0zgdAZHzu6qMQvRL5hajrn1n91CbOpbIS
+      properties:
+        keys:
+          description: Array of JSON Web Keys
+          items:
+            $ref: '#/components/schemas/oauth2JwksJson_200_response_keys_inner'
+          type: array
+      required:
+        - keys
+      type: object
+    oauth2JwksJson_404_response:
+      example:
+        error_description: JSON Web Key Set is not available
+        error: jwks_not_found
+      properties:
+        error:
+          example: jwks_not_found
+          type: string
+        error_description:
+          example: JSON Web Key Set is not available
+          type: string
+      type: object
+    oauth2AuthorizationServerMetadata_200_response:
+      example:
+        response_types_supported:
+          - code
+          - token
+        code_challenge_methods_supported:
+          - S256
+          - plain
+        introspection_endpoint: https://api.openchallenges.io/oauth2/introspect
+        grant_types_supported:
+          - authorization_code
+          - refresh_token
+          - client_credentials
+        revocation_endpoint: https://api.openchallenges.io/oauth2/revoke
+        token_endpoint_auth_methods_supported:
+          - client_secret_basic
+          - client_secret_post
+        scopes_supported:
+          - openid
+          - profile
+          - email
+          - user:profile
+          - read:org
+          - write:org
+        issuer: https://api.openchallenges.io
+        authorization_endpoint: https://api.openchallenges.io/oauth2/authorize
+        token_endpoint: https://api.openchallenges.io/oauth2/token
+      properties:
+        issuer:
+          description: Authorization server's issuer identifier
+          example: https://api.openchallenges.io
+          format: uri
+          type: string
+        authorization_endpoint:
+          description: Authorization endpoint URL
+          example: https://api.openchallenges.io/oauth2/authorize
+          format: uri
+          type: string
+        token_endpoint:
+          description: Token endpoint URL
+          example: https://api.openchallenges.io/oauth2/token
+          format: uri
+          type: string
+        revocation_endpoint:
+          description: Token revocation endpoint URL
+          example: https://api.openchallenges.io/oauth2/revoke
+          format: uri
+          type: string
+        introspection_endpoint:
+          description: Token introspection endpoint URL
+          example: https://api.openchallenges.io/oauth2/introspect
+          format: uri
+          type: string
+        response_types_supported:
+          description: Supported OAuth2 response types
+          example:
+            - code
+            - token
+          items:
+            type: string
+          type: array
+        grant_types_supported:
+          description: Supported OAuth2 grant types
+          example:
+            - authorization_code
+            - refresh_token
+            - client_credentials
+          items:
+            type: string
+          type: array
+        scopes_supported:
+          description: Supported OAuth2 scopes
+          example:
+            - openid
+            - profile
+            - email
+            - user:profile
+            - read:org
+            - write:org
+          items:
+            type: string
+          type: array
+        token_endpoint_auth_methods_supported:
+          description: Supported client authentication methods at token endpoint
+          example:
+            - client_secret_basic
+            - client_secret_post
+          items:
+            type: string
+          type: array
+        code_challenge_methods_supported:
+          description: Supported PKCE code challenge methods
+          example:
+            - S256
+            - plain
+          items:
+            type: string
+          type: array
+      required:
+        - authorization_endpoint
+        - grant_types_supported
+        - issuer
+        - response_types_supported
+        - token_endpoint
+      type: object
   securitySchemes:
-    apiBearerAuth:
-      bearerFormat: JWT
-      description: JWT token from authentication service or API key for programmatic
-        access
-      scheme: bearer
-      type: http
+    OAuth2:
+      description: OAuth2 Authorization Code Flow with PKCE for secure authentication
+      flows:
+        authorizationCode:
+          authorizationUrl: /oauth2/authorize
+          refreshUrl: /oauth2/token
+          scopes:
+            openid: OpenID Connect authentication
+            profile: Access to user's basic profile information
+            email: Access to user's email address
+            user:profile: Access to user profile information
+            user:email: Access to user email settings
+            user:keys: Manage API keys
+            read:org: Read organization information
+            write:org: Create and update organizations
+            delete:org: Delete organizations
+            admin:org: Administrative access to organizations
+            admin:auth: Administrative access to authentication service
+            admin:all: Full administrative access to all resources
+          tokenUrl: /oauth2/token
+      type: oauth2
     jwtBearerAuth:
       bearerFormat: JWT
       description: JWT access token obtained from /auth/login or /auth/oauth2/callback
         endpoint
+      scheme: bearer
+      type: http
+    apiBearerAuth:
+      bearerFormat: JWT
+      description: JWT token from authentication service or API key for programmatic
+        access
       scheme: bearer
       type: http
