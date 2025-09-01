@@ -1,7 +1,6 @@
 package org.sagebionetworks.openchallenges.auth.service.api;
 
 import org.sagebionetworks.openchallenges.auth.service.model.dto.BasicErrorDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.GetCurrentUser200ResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2ErrorDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2TokenResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.Oauth2AuthorizationServerMetadata200ResponseDto;
@@ -9,6 +8,7 @@ import org.sagebionetworks.openchallenges.auth.service.model.dto.Oauth2Introspec
 import org.sagebionetworks.openchallenges.auth.service.model.dto.Oauth2JwksJson200ResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.Oauth2JwksJson404ResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.Oauth2RevokeToken200ResponseDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.Oauth2UserInfo200ResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.Oauth2WellKnownOpenidConfiguration200ResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.Oauth2WellKnownOpenidConfiguration404ResponseDto;
 import java.net.URI;
@@ -284,7 +284,7 @@ public interface OAuth2ApiDelegate {
      *         or Insufficient scope (status code 403)
      * @see OAuth2Api#oauth2UserInfo
      */
-    default ResponseEntity<GetCurrentUser200ResponseDto> oauth2UserInfo() {
+    default ResponseEntity<Oauth2UserInfo200ResponseDto> oauth2UserInfo() {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {

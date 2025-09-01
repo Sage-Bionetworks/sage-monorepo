@@ -1,7 +1,6 @@
 package org.sagebionetworks.openchallenges.auth.service.api;
 
 import org.sagebionetworks.openchallenges.auth.service.model.dto.BasicErrorDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.GetCurrentUser200ResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2ErrorDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2TokenResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.Oauth2AuthorizationServerMetadata200ResponseDto;
@@ -9,6 +8,7 @@ import org.sagebionetworks.openchallenges.auth.service.model.dto.Oauth2Introspec
 import org.sagebionetworks.openchallenges.auth.service.model.dto.Oauth2JwksJson200ResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.Oauth2JwksJson404ResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.Oauth2RevokeToken200ResponseDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.Oauth2UserInfo200ResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.Oauth2WellKnownOpenidConfiguration200ResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.Oauth2WellKnownOpenidConfiguration404ResponseDto;
 import java.net.URI;
@@ -39,7 +39,7 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Controller
-@RequestMapping("${openapi.openChallengesAuth.base-path:/v1}")
+@RequestMapping("${openapi.openChallengesAuth.base-path:}")
 public class OAuth2ApiController implements OAuth2Api {
 
     private final OAuth2ApiDelegate delegate;

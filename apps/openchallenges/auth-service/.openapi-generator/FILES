@@ -18,7 +18,6 @@ src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/ApiKeyDt
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/BasicErrorDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/CreateApiKeyRequestDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/CreateApiKeyResponseDto.java
-src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/GetCurrentUser200ResponseDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/LoginRequestDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/LoginResponseDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/LogoutRequestDto.java
@@ -35,6 +34,7 @@ src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/Oauth2Jw
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/Oauth2JwksJson200ResponseKeysInnerDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/Oauth2JwksJson404ResponseDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/Oauth2RevokeToken200ResponseDto.java
+src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/Oauth2UserInfo200ResponseDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/Oauth2WellKnownOpenidConfiguration200ResponseDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/Oauth2WellKnownOpenidConfiguration404ResponseDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/RefreshTokenRequestDto.java

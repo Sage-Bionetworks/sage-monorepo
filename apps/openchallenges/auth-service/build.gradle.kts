@@ -28,6 +28,7 @@ dependencies {
   // OAuth2 and JWT dependencies
   implementation(libs.spring.boot.starter.oauth2.client)
   implementation(libs.spring.boot.starter.oauth2.resource.server)
+  implementation(libs.spring.security.oauth2.authorization.server)
   implementation(libs.spring.security.oauth2.jose)
   implementation(libs.spring.boot.starter.webflux)
   implementation(libs.jjwt.api)

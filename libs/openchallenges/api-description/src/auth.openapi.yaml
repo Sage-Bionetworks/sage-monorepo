@@ -12,7 +12,8 @@ info:
   x-logo:
     url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
-  - url: http://localhost/v1
+  - url: http://localhost
+    description: Local/dev base
 tags:
   - name: Authentication
     description: Operations about authentication
@@ -27,29 +28,7 @@ tags:
     description: Operations about user management and profile information
     x-audience: [public]
 paths:
-  # Existing custom authentication endpoints
-  /auth/login:
-    $ref: paths/auth/login.yaml
-  /auth/oauth2/authorize:
-    $ref: paths/auth/oauth2-authorize.yaml
-  /auth/oauth2/callback:
-    $ref: paths/auth/oauth2-callback.yaml
-  /auth/oauth2/revoke:
-    $ref: paths/auth/oauth2-revoke.yaml
-  /auth/jwt/validate:
-    $ref: paths/auth/jwt-validate.yaml
-  /auth/jwt/refresh:
-    $ref: paths/auth/jwt-refresh.yaml
-  /auth/logout:
-    $ref: paths/auth/logout.yaml
-  /auth/api-keys:
-    $ref: paths/auth/api-keys.yaml
-  /auth/api-keys/{keyId}:
-    $ref: paths/auth/api-keys/{keyId}.yaml
-  /auth/validate:
-    $ref: paths/auth/validate.yaml
-
-  # Standard OAuth2 Authorization Server endpoints
+  # OAuth2 & OIDC endpoints (UNVERSIONED - standard OAuth2/OIDC specification)
   /oauth2/authorize:
     $ref: paths/oauth2/authorize.yaml
   /oauth2/token:
@@ -58,22 +37,42 @@ paths:
     $ref: paths/oauth2/revoke.yaml
   /oauth2/introspect:
     $ref: paths/oauth2/introspect.yaml
-
-  # OIDC-style endpoints
-  /user:
-    $ref: paths/user.yaml
-
-  # OAuth2 userinfo endpoint
   /oauth2/userinfo:
     $ref: paths/oauth2/userinfo.yaml
 
-  # Well-known discovery endpoints
+  # Well-known discovery endpoints (UNVERSIONED - standard OIDC specification)
   /.well-known/openid-configuration:
     $ref: paths/well-known/openid-configuration.yaml
   /.well-known/jwks.json:
     $ref: paths/well-known/jwks.yaml
   /.well-known/oauth-authorization-server:
     $ref: paths/well-known/oauth-authorization-server.yaml
+
+  # API Resources (VERSIONED - custom OpenChallenges API)
+  /v1/auth/login:
+    $ref: paths/auth/login.yaml
+  /v1/auth/oauth2/authorize:
+    $ref: paths/auth/oauth2-authorize.yaml
+  /v1/auth/oauth2/callback:
+    $ref: paths/auth/oauth2-callback.yaml
+  /v1/auth/oauth2/revoke:
+    $ref: paths/auth/oauth2-revoke.yaml
+  /v1/auth/jwt/validate:
+    $ref: paths/auth/jwt-validate.yaml
+  /v1/auth/jwt/refresh:
+    $ref: paths/auth/jwt-refresh.yaml
+  /v1/auth/logout:
+    $ref: paths/auth/logout.yaml
+  /v1/auth/api-keys:
+    $ref: paths/auth/api-keys.yaml
+  /v1/auth/api-keys/{keyId}:
+    $ref: paths/auth/api-keys/{keyId}.yaml
+  /v1/auth/validate:
+    $ref: paths/auth/validate.yaml
+
+  # User management (VERSIONED)
+  /v1/user:
+    $ref: paths/user.yaml
 components:
   securitySchemes:
     # OAuth2 Authorization Code Flow with PKCE

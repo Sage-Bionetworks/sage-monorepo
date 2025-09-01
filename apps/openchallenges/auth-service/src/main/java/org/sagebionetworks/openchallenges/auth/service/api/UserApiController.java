@@ -1,7 +1,7 @@
 package org.sagebionetworks.openchallenges.auth.service.api;
 
-import org.sagebionetworks.openchallenges.auth.service.model.dto.GetCurrentUser200ResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2ErrorDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.Oauth2UserInfo200ResponseDto;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Controller
-@RequestMapping("${openapi.openChallengesAuth.base-path:/v1}")
+@RequestMapping("${openapi.openChallengesAuth.base-path:}")
 public class UserApiController implements UserApi {
 
     private final UserApiDelegate delegate;

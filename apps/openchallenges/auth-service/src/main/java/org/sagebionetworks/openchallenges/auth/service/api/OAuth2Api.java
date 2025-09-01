@@ -6,7 +6,6 @@
 package org.sagebionetworks.openchallenges.auth.service.api;
 
 import org.sagebionetworks.openchallenges.auth.service.model.dto.BasicErrorDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.GetCurrentUser200ResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2ErrorDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2TokenResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.Oauth2AuthorizationServerMetadata200ResponseDto;
@@ -14,6 +13,7 @@ import org.sagebionetworks.openchallenges.auth.service.model.dto.Oauth2Introspec
 import org.sagebionetworks.openchallenges.auth.service.model.dto.Oauth2JwksJson200ResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.Oauth2JwksJson404ResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.Oauth2RevokeToken200ResponseDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.Oauth2UserInfo200ResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.Oauth2WellKnownOpenidConfiguration200ResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.Oauth2WellKnownOpenidConfiguration404ResponseDto;
 import java.net.URI;
@@ -358,7 +358,7 @@ public interface OAuth2Api {
         tags = { "OAuth2" },
         responses = {
             @ApiResponse(responseCode = "200", description = "User information", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = GetCurrentUser200ResponseDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = Oauth2UserInfo200ResponseDto.class))
             }),
             @ApiResponse(responseCode = "401", description = "Invalid or expired access token", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = OAuth2ErrorDto.class))
@@ -377,7 +377,7 @@ public interface OAuth2Api {
         produces = { "application/json" }
     )
     
-    default ResponseEntity<GetCurrentUser200ResponseDto> oauth2UserInfo(
+    default ResponseEntity<Oauth2UserInfo200ResponseDto> oauth2UserInfo(
         
     ) {
         return getDelegate().oauth2UserInfo();

@@ -1,7 +1,7 @@
 package org.sagebionetworks.openchallenges.auth.service.api;
 
-import org.sagebionetworks.openchallenges.auth.service.model.dto.GetCurrentUser200ResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2ErrorDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.Oauth2UserInfo200ResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +28,7 @@ public interface UserApiDelegate {
     }
 
     /**
-     * GET /user : Get current user information
+     * GET /v1/user : Get current user information
      * Get information about the currently authenticated user. This is an alias for the OAuth2 userinfo endpoint for backward compatibility. 
      *
      * @return User information (status code 200)
@@ -36,7 +36,7 @@ public interface UserApiDelegate {
      *         or Insufficient scope (status code 403)
      * @see UserApi#getCurrentUser
      */
-    default ResponseEntity<GetCurrentUser200ResponseDto> getCurrentUser() {
+    default ResponseEntity<Oauth2UserInfo200ResponseDto> getCurrentUser() {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
