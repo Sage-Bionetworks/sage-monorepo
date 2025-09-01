@@ -125,8 +125,8 @@
   "nxConsole.generateAiAgentRules": true,
   "chat.tools.terminal.autoApprove": {
     "/^nx test .+/": true,
-    "/^\\./gradlew (clean|compileJava|compileTestJava|test) .+/": true,
-    "/^\\./gradlew\\s+:(?:[^:\\s]+:)+(clean|compileJava|compileTestJava|dependencies|test) .+/": true,
+    "/^\\./gradlew (clean|compileJava|compileTestJava|dependencies|test)(?:\\s+.*)?$": true,
+    "/^\\./gradlew\\s+:(?:[^:\\s]+:)+(clean|compileJava|compileTestJava|dependencies|test)(?:\\s+.*)?$": true,
     "cat": true,
     "cd": true,
     "echo": true,
@@ -137,6 +137,7 @@
     "git status": true,
     "grep": true,
     "head": true,
+    "jq": true,
     "ls": true,
     "pwd": true,
     "rm": false,
