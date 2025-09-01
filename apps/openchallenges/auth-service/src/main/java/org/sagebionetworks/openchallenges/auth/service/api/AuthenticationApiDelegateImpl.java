@@ -5,9 +5,12 @@ import java.util.Arrays;
 import java.util.Optional;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginResponseDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.LogoutRequestDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.LogoutResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2AuthorizeRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2AuthorizeResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2CallbackRequestDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2RevokeResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.RefreshTokenRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.RefreshTokenResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyRequestDto;
@@ -228,5 +231,44 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
       case readonly -> ValidateApiKeyResponseDto.RoleEnum.READONLY;
       case service -> ValidateApiKeyResponseDto.RoleEnum.SERVICE;
     };
+  }
+
+  @Override
+  public ResponseEntity<LogoutResponseDto> logout(LogoutRequestDto logoutRequestDto) {
+    logger.info("User logout request received");
+    try {
+      int revokedTokens = authenticationService.logout(
+        logoutRequestDto.getRefreshToken(),
+        logoutRequestDto.getRevokeAllTokens() != null ? logoutRequestDto.getRevokeAllTokens() : false
+      );
+
+      LogoutResponseDto response = new LogoutResponseDto()
+        .message("Successfully logged out")
+        .revokedTokens(revokedTokens);
+
+      logger.info("User successfully logged out, {} tokens revoked", revokedTokens);
+      return ResponseEntity.ok(response);
+    } catch (Exception e) {
+      logger.error("Error during logout", e);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+  }
+
+  @Override
+  public ResponseEntity<OAuth2RevokeResponseDto> revokeOAuth2Token(String token, String tokenTypeHint) {
+    logger.info("OAuth2 token revocation request received, type hint: {}", tokenTypeHint);
+    try {
+      int revokedTokens = authenticationService.revokeOAuth2Token(token, tokenTypeHint);
+
+      OAuth2RevokeResponseDto response = new OAuth2RevokeResponseDto()
+        .message("Token successfully revoked")
+        .revokedTokens(revokedTokens);
+
+      logger.info("OAuth2 token successfully revoked, {} tokens revoked", revokedTokens);
+      return ResponseEntity.ok(response);
+    } catch (Exception e) {
+      logger.error("Error during OAuth2 token revocation", e);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
   }
 }

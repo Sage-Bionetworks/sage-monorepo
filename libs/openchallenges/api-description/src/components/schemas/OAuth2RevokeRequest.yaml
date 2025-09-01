@@ -1,0 +1,15 @@
+type: object
+required:
+  - token
+properties:
+  token:
+    type: string
+    description: The token to revoke (access token or refresh token)
+    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+  token_type_hint:
+    type: string
+    description: Hint about the type of token being revoked
+    enum:
+      - access_token
+      - refresh_token
+    example: refresh_token

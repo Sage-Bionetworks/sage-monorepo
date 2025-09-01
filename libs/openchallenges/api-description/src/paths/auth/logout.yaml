@@ -1,0 +1,26 @@
+post:
+  tags:
+    - Authentication
+  summary: User logout
+  description: Logout user and revoke refresh tokens for security
+  operationId: logout
+  x-audience: [public]
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/LogoutRequest.yaml
+  responses:
+    '200':
+      description: Logout successful
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/LogoutResponse.yaml
+    '400':
+      $ref: ../../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../components/responses/Unauthorized.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml

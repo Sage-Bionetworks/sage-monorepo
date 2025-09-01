@@ -3,9 +3,12 @@ package org.sagebionetworks.openchallenges.auth.service.api;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.BasicErrorDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginResponseDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.LogoutRequestDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.LogoutResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2AuthorizeRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2AuthorizeResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2CallbackRequestDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2RevokeResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.RefreshTokenRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.RefreshTokenResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyRequestDto;
@@ -146,6 +149,46 @@ public interface AuthenticationApiDelegate {
     }
 
     /**
+     * POST /auth/logout : User logout
+     * Logout user and revoke refresh tokens for security
+     *
+     * @param logoutRequestDto  (required)
+     * @return Logout successful (status code 200)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     * @see AuthenticationApi#logout
+     */
+    default ResponseEntity<LogoutResponseDto> logout(LogoutRequestDto logoutRequestDto) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"message\" : \"Successfully logged out\", \"revokedTokens\" : 1 }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
      * POST /auth/jwt/refresh : Refresh JWT access token
      * Exchange refresh token for new access token
      *
@@ -161,6 +204,48 @@ public interface AuthenticationApiDelegate {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"expiresIn\" : 3600, \"accessToken\" : \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\", \"tokenType\" : \"Bearer\" }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+    /**
+     * POST /auth/oauth2/revoke : Revoke OAuth2 token
+     * Revoke access or refresh tokens according to RFC 7009
+     *
+     * @param token The token to revoke (access token or refresh token) (required)
+     * @param tokenTypeHint Hint about the type of token being revoked (optional)
+     * @return Token revocation successful (or token was already invalid) (status code 200)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     * @see AuthenticationApi#revokeOAuth2Token
+     */
+    default ResponseEntity<OAuth2RevokeResponseDto> revokeOAuth2Token(String token,
+        String tokenTypeHint) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"message\" : \"Token successfully revoked\", \"revokedTokens\" : 1 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

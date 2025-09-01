@@ -234,14 +234,20 @@ public class AuthenticationService {
    * Revoke all refresh tokens for a user (used when token theft is detected)
    */
   @Transactional
-  private void revokeAllUserRefreshTokens(UUID userId) {
+  private int revokeAllUserRefreshTokens(UUID userId) {
     log.warn("Revoking all refresh tokens for user: {} due to security concerns", userId);
 
     // Find user and revoke all tokens
     Optional<User> userOpt = userRepository.findById(userId);
     if (userOpt.isPresent()) {
+      // Count active tokens before revoking
+      int count = refreshTokenRepository.countByUserAndRevokedFalse(userOpt.get());
       refreshTokenRepository.revokeAllTokensForUser(userOpt.get());
+      log.info("Revoked {} refresh tokens for user: {}", count, userId);
+      return count;
     }
+    
+    return 0;
   }
 
   /**
@@ -504,5 +510,156 @@ public class AuthenticationService {
    */
   private UUID extractUserIdFromRefreshToken(String refreshToken) {
     return jwtService.extractUserIdFromToken(refreshToken);
+  }
+
+  /**
+   * User logout - revoke refresh tokens for security
+   */
+  @Transactional
+  public int logout(String refreshToken, boolean revokeAllTokens) {
+    log.info("User logout requested, revokeAllTokens: {}", revokeAllTokens);
+
+    try {
+      UUID userId = extractUserIdFromRefreshToken(refreshToken);
+      
+      if (revokeAllTokens) {
+        // Revoke all tokens for the user
+        return revokeAllUserRefreshTokens(userId);
+      } else {
+        // Revoke only the specific refresh token
+        String tokenHash = hashToken(refreshToken);
+        Optional<RefreshToken> tokenEntity = refreshTokenRepository.findByTokenHashAndUserId(
+          tokenHash, userId
+        );
+
+        if (tokenEntity.isPresent()) {
+          RefreshToken token = tokenEntity.get();
+          if (!token.getRevoked()) {
+            token.revoke();
+            refreshTokenRepository.save(token);
+            log.info("Refresh token revoked for user: {}", userId);
+            return 1;
+          }
+        }
+        
+        log.debug("Refresh token not found or already revoked for user: {}", userId);
+        return 0;
+      }
+    } catch (Exception e) {
+      log.error("Error during logout for refresh token", e);
+      throw new RuntimeException("Error during logout", e);
+    }
+  }
+
+  /**
+   * OAuth2 token revocation according to RFC 7009
+   */
+  @Transactional
+  public int revokeOAuth2Token(String token, String tokenTypeHint) {
+    log.info("OAuth2 token revocation requested, type hint: {}", tokenTypeHint);
+
+    try {
+      // For refresh tokens, extract user ID and revoke
+      if ("refresh_token".equals(tokenTypeHint) || isRefreshToken(token)) {
+        return revokeRefreshToken(token);
+      }
+      
+      // For access tokens, we can't directly revoke them (they're stateless JWTs)
+      // but we can revoke associated refresh tokens if we can identify the user
+      if ("access_token".equals(tokenTypeHint) || isAccessToken(token)) {
+        return revokeAccessTokenByUser(token);
+      }
+
+      // If we can't determine token type, try both approaches
+      log.debug("Unknown token type, attempting to revoke as refresh token first");
+      int revokedCount = revokeRefreshToken(token);
+      
+      if (revokedCount == 0) {
+        log.debug("Token not found as refresh token, attempting to revoke associated tokens");
+        revokedCount = revokeAccessTokenByUser(token);
+      }
+
+      return revokedCount;
+    } catch (Exception e) {
+      log.error("Error during OAuth2 token revocation", e);
+      // According to RFC 7009, the revocation endpoint should return success
+      // even if the token is invalid or already revoked for security reasons
+      return 0;
+    }
+  }
+
+  /**
+   * Revoke a specific refresh token
+   */
+  private int revokeRefreshToken(String refreshToken) {
+    try {
+      UUID userId = extractUserIdFromRefreshToken(refreshToken);
+      String tokenHash = hashToken(refreshToken);
+      
+      Optional<RefreshToken> tokenEntity = refreshTokenRepository.findByTokenHashAndUserId(
+        tokenHash, userId
+      );
+
+      if (tokenEntity.isPresent()) {
+        RefreshToken token = tokenEntity.get();
+        if (!token.getRevoked()) {
+          token.revoke();
+          refreshTokenRepository.save(token);
+          log.info("Refresh token revoked for user: {}", userId);
+          return 1;
+        }
+      }
+      
+      return 0;
+    } catch (Exception e) {
+      log.debug("Failed to revoke as refresh token: {}", e.getMessage());
+      return 0;
+    }
+  }
+
+  /**
+   * Revoke associated refresh tokens for a user identified by access token
+   */
+  private int revokeAccessTokenByUser(String accessToken) {
+    try {
+      // Validate the access token to get user information
+      JwtService.JwtValidationResult result = jwtService.validateToken(accessToken);
+      
+      if (result.isValid() && result.getUserId() != null) {
+        // Revoke all refresh tokens for this user
+        return revokeAllUserRefreshTokens(result.getUserId());
+      }
+      
+      return 0;
+    } catch (Exception e) {
+      log.debug("Failed to revoke by access token: {}", e.getMessage());
+      return 0;
+    }
+  }
+
+  /**
+   * Check if token looks like a refresh token (longer and contains user ID)
+   */
+  private boolean isRefreshToken(String token) {
+    try {
+      // Refresh tokens are longer and contain user ID claims
+      UUID userId = jwtService.extractUserIdFromToken(token);
+      return userId != null;
+    } catch (Exception e) {
+      return false;
+    }
+  }
+
+  /**
+   * Check if token looks like an access token
+   */
+  private boolean isAccessToken(String token) {
+    try {
+      // Access tokens can be validated by the JWT service
+      JwtService.JwtValidationResult result = jwtService.validateToken(token);
+      return result.isValid();
+    } catch (Exception e) {
+      return false;
+    }
   }
 }

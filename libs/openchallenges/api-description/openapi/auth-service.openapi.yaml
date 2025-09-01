@@ -103,6 +103,34 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /auth/oauth2/revoke:
+    post:
+      tags:
+        - Authentication
+      summary: Revoke OAuth2 token
+      description: Revoke access or refresh tokens according to RFC 7009
+      operationId: revokeOAuth2Token
+      x-audience:
+        - public
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OAuth2RevokeRequest'
+      responses:
+        '200':
+          description: Token revocation successful (or token was already invalid)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuth2RevokeResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /auth/jwt/validate:
     post:
       tags:
@@ -151,6 +179,34 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RefreshTokenResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /auth/logout:
+    post:
+      tags:
+        - Authentication
+      summary: User logout
+      description: Logout user and revoke refresh tokens for security
+      operationId: logout
+      x-audience:
+        - public
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+      responses:
+        '200':
+          description: Logout successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogoutResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -402,6 +458,33 @@ components:
           format: uri
           description: Original redirect URI used in authorization request
           example: https://openchallenges.io/auth/callback
+    OAuth2RevokeRequest:
+      type: object
+      required:
+        - token
+      properties:
+        token:
+          type: string
+          description: The token to revoke (access token or refresh token)
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        token_type_hint:
+          type: string
+          description: Hint about the type of token being revoked
+          enum:
+            - access_token
+            - refresh_token
+          example: refresh_token
+    OAuth2RevokeResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Token revocation status message
+          example: Token successfully revoked
+        revokedTokens:
+          type: integer
+          description: Number of tokens revoked
+          example: 1
     ValidateJwtRequest:
       type: object
       required:
@@ -466,6 +549,31 @@ components:
           type: integer
           description: Access token expiry time in seconds
           example: 3600
+    LogoutRequest:
+      type: object
+      required:
+        - refreshToken
+      properties:
+        refreshToken:
+          type: string
+          description: JWT refresh token to revoke
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        revokeAllTokens:
+          type: boolean
+          description: Whether to revoke all refresh tokens for the user (default false)
+          example: false
+          default: false
+    LogoutResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Logout success message
+          example: Successfully logged out
+        revokedTokens:
+          type: integer
+          description: Number of refresh tokens revoked
+          example: 1
     ApiKey:
       type: object
       properties:

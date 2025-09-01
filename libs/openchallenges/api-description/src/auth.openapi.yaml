@@ -27,10 +27,14 @@ paths:
     $ref: paths/auth/oauth2-authorize.yaml
   /auth/oauth2/callback:
     $ref: paths/auth/oauth2-callback.yaml
+  /auth/oauth2/revoke:
+    $ref: paths/auth/oauth2-revoke.yaml
   /auth/jwt/validate:
     $ref: paths/auth/jwt-validate.yaml
   /auth/jwt/refresh:
     $ref: paths/auth/jwt-refresh.yaml
+  /auth/logout:
+    $ref: paths/auth/logout.yaml
   /auth/api-keys:
     $ref: paths/auth/api-keys.yaml
   /auth/api-keys/{keyId}:
