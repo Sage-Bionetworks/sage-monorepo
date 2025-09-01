@@ -2,6 +2,8 @@ package org.sagebionetworks.openchallenges.auth.service.web;
 
 import org.sagebionetworks.openchallenges.auth.service.api.AuthenticationApiDelegate;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginResponseDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.LogoutRequestDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.LogoutResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2AuthorizeRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2AuthorizeResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2CallbackRequestDto;
@@ -10,10 +12,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.net.URI;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Web controller for OAuth2 authentication flow.
@@ -125,6 +130,86 @@ public class OAuth2WebController {
             logger.error("Error processing OAuth2 callback", e);
             model.addAttribute("error", "Error processing authentication: " + e.getMessage());
             return "oauth2-error";
+        }
+    }
+
+    /**
+     * Display logout page
+     */
+    @GetMapping("/logout")
+    public String logoutPage() {
+        logger.debug("Displaying logout page");
+        return "logout";
+    }
+
+    /**
+     * Handle logout form submission
+     */
+    @PostMapping("/logout/token")
+    public String handleLogout(
+            @RequestParam String refreshToken,
+            @RequestParam(required = false) Boolean revokeAllTokens,
+            Model model) {
+        
+        logger.debug("Processing logout request with token - revokeAllTokens: {}", revokeAllTokens);
+        
+        if (refreshToken == null || refreshToken.trim().isEmpty()) {
+            logger.warn("Logout request missing refresh token");
+            return "redirect:/logout?error=Missing refresh token";
+        }
+        
+        try {
+            LogoutRequestDto request = new LogoutRequestDto()
+                    .refreshToken(refreshToken.trim())
+                    .revokeAllTokens(revokeAllTokens != null ? revokeAllTokens : false);
+            
+            LogoutResponseDto response = authenticationDelegate.logout(request).getBody();
+            
+            if (response != null) {
+                logger.debug("Logout successful - {} tokens revoked", response.getRevokedTokens());
+                
+                // Add logout details to model for display
+                model.addAttribute("revokedTokens", response.getRevokedTokens());
+                model.addAttribute("revokeAllTokens", revokeAllTokens != null ? revokeAllTokens : false);
+                model.addAttribute("timestamp", OffsetDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                
+                return "logout-success";
+            } else {
+                logger.error("Logout completed but no response received");
+                return "redirect:/logout?error=Logout failed - no response received";
+            }
+            
+        } catch (Exception e) {
+            logger.error("Error processing logout", e);
+            return "redirect:/logout?error=Error processing logout: " + e.getMessage();
+        }
+    }
+
+    /**
+     * Handle logout - clears session and shows logout success
+     */
+    @PostMapping("/logout")
+    public String handleLogout(Model model) {
+        logger.debug("Processing logout request");
+        
+        try {
+            // For logout, we just clear the session and redirect to success
+            // In a real application, you might want to:
+            // - Clear any session cookies
+            // - Invalidate any stored sessions
+            // - Log the logout event
+            
+            logger.info("User performed logout");
+            
+            // Add logout details to model for display
+            model.addAttribute("simpleLogout", true);
+            model.addAttribute("timestamp", OffsetDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            
+            return "logout-success";
+            
+        } catch (Exception e) {
+            logger.error("Error processing logout", e);
+            return "redirect:/logout?error=Error processing logout: " + e.getMessage();
         }
     }
 }

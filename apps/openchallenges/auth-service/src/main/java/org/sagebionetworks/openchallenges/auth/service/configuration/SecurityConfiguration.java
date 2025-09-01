@@ -43,6 +43,7 @@ public class SecurityConfiguration {
     http
       .csrf(csrf -> csrf.disable()) // Disable CSRF for API
       .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless for API
+      .logout(logout -> logout.disable()) // Disable Spring Security's default logout
       .authorizeHttpRequests(
         authz ->
           authz
@@ -54,6 +55,8 @@ public class SecurityConfiguration {
             .permitAll() // Public JWT endpoints (validate, refresh)
             .requestMatchers("/login", "/auth/oauth2/google", "/auth/callback")
             .permitAll() // OAuth2 web interface endpoints (not part of API spec)
+            .requestMatchers("/logout", "/logout/**")
+            .permitAll() // Logout web interface endpoints
             .requestMatchers("/actuator/health", "/actuator/info")
             .permitAll() // Health checks
             .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
