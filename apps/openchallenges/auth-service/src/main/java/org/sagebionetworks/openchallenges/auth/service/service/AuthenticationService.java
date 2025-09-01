@@ -14,12 +14,10 @@ import org.sagebionetworks.openchallenges.auth.service.repository.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@Transactional
 public class AuthenticationService {
 
   private final UserRepository userRepository;
@@ -71,10 +69,12 @@ public class AuthenticationService {
     }
 
     // Generate state for CSRF protection with provider information
-    String baseState = request.getState() != null ? request.getState() : UUID.randomUUID().toString();
+    String baseState = request.getState() != null
+      ? request.getState()
+      : UUID.randomUUID().toString();
     String state = provider.name() + ":" + baseState; // Encode provider in state
 
-    // Get authorization URL from OAuth2 configuration service  
+    // Get authorization URL from OAuth2 configuration service
     String authorizationUrl = oAuth2ConfigurationService.getAuthorizationUrl(provider, state);
 
     try {
@@ -107,6 +107,7 @@ public class AuthenticationService {
   /**
    * Handle OAuth2 callback and generate JWT tokens
    */
+  @Transactional
   public LoginResponseDto handleOAuth2Callback(String provider, String code, String state) {
     log.debug("Handling OAuth2 callback for provider: {}", provider);
 
@@ -152,12 +153,13 @@ public class AuthenticationService {
     // Add role and expiresAt if token is valid
     if (result.isValid() && result.getRole() != null) {
       // Convert User.Role to ValidateJwtResponseDto.RoleEnum
-      ValidateJwtResponseDto.RoleEnum roleEnum = switch (result.getRole()) {
-        case admin -> ValidateJwtResponseDto.RoleEnum.ADMIN;
-        case user -> ValidateJwtResponseDto.RoleEnum.USER;
-        case readonly -> ValidateJwtResponseDto.RoleEnum.READONLY;
-        case service -> ValidateJwtResponseDto.RoleEnum.SERVICE;
-      };
+      ValidateJwtResponseDto.RoleEnum roleEnum =
+        switch (result.getRole()) {
+          case admin -> ValidateJwtResponseDto.RoleEnum.ADMIN;
+          case user -> ValidateJwtResponseDto.RoleEnum.USER;
+          case readonly -> ValidateJwtResponseDto.RoleEnum.READONLY;
+          case service -> ValidateJwtResponseDto.RoleEnum.SERVICE;
+        };
       response.role(roleEnum);
     }
 
@@ -192,7 +194,7 @@ public class AuthenticationService {
     }
 
     RefreshToken token = tokenEntity.get();
-    
+
     // Check if token is already revoked (possible replay attack)
     if (token.getRevoked()) {
       log.warn("Attempted reuse of revoked refresh token for user: {}", userId);
@@ -200,7 +202,7 @@ public class AuthenticationService {
       revokeAllUserRefreshTokens(userId);
       throw new RuntimeException("Refresh token has been revoked due to security concerns");
     }
-    
+
     if (token.isExpired()) {
       log.debug("Refresh token is expired for user: {}", userId);
       // Clean up expired token
@@ -234,7 +236,7 @@ public class AuthenticationService {
   @Transactional
   private void revokeAllUserRefreshTokens(UUID userId) {
     log.warn("Revoking all refresh tokens for user: {} due to security concerns", userId);
-    
+
     // Find user and revoke all tokens
     Optional<User> userOpt = userRepository.findById(userId);
     if (userOpt.isPresent()) {
