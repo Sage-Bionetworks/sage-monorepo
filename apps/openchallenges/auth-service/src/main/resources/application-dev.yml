@@ -25,12 +25,12 @@ app:
     google:
       client-id: placeholder-will-be-overridden-by-env
       client-secret: placeholder-will-be-overridden-by-env
-      redirect-uri: http://localhost:3000/auth/callback
+      redirect-uri: http://localhost:8087/auth/callback
       scope: openid,profile,email
     synapse:
       client-id: synapse-client-id
       client-secret: synapse-client-secret
-      redirect-uri: http://localhost:3000/auth/callback
+      redirect-uri: http://localhost:8087/auth/callback
       scope: openid,profile,email
   base-url: ${BASE_URL:http://localhost:8087}
 

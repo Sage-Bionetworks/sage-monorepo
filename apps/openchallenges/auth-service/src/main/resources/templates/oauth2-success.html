@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OpenChallenges - Authentication Success</title>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .container {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        width: 90%;
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+      .logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 0.5rem;
+      }
+      .success {
+        color: #28a745;
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+      }
+      .token-section {
+        margin-bottom: 1.5rem;
+      }
+      .token-label {
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 0.5rem;
+      }
+      .token-value {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        padding: 10px;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        word-break: break-all;
+        overflow-wrap: break-word;
+      }
+      .copy-btn {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        margin-top: 5px;
+      }
+      .copy-btn:hover {
+        background: #0056b3;
+      }
+      .info {
+        background: #d1ecf1;
+        color: #0c5460;
+        padding: 15px;
+        border-radius: 5px;
+        margin-top: 1rem;
+        border: 1px solid #bee5eb;
+      }
+      .test-section {
+        background: #fff3cd;
+        color: #856404;
+        padding: 15px;
+        border-radius: 5px;
+        margin-top: 1rem;
+        border: 1px solid #ffeaa7;
+      }
+      .back-btn {
+        display: inline-block;
+        background: #6c757d;
+        color: white;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        margin-top: 1rem;
+      }
+      .back-btn:hover {
+        background: #545b62;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="logo">OpenChallenges</div>
+        <div class="success">✅ OAuth2 Authentication Successful!</div>
+      </div>
+
+      <div class="token-section">
+        <div class="token-label">Access Token:</div>
+        <div class="token-value" th:text="${accessToken}">jwt_access_token_here</div>
+        <button class="copy-btn" onclick="copyToClipboard('accessToken')">Copy</button>
+      </div>
+
+      <div class="token-section">
+        <div class="token-label">Refresh Token:</div>
+        <div class="token-value" th:text="${refreshToken}">jwt_refresh_token_here</div>
+        <button class="copy-btn" onclick="copyToClipboard('refreshToken')">Copy</button>
+      </div>
+
+      <div class="token-section">
+        <div class="token-label">Token Type:</div>
+        <div class="token-value" th:text="${tokenType}">Bearer</div>
+      </div>
+
+      <div class="token-section">
+        <div class="token-label">Expires In:</div>
+        <div class="token-value" th:text="${expiresIn} + ' seconds'">3600 seconds</div>
+      </div>
+
+      <div class="test-section">
+        <strong>🧪 Testing with API Gateway:</strong><br />
+        Use this command to test the access token through the API Gateway:<br /><br />
+        <code
+          >curl -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"
+          http://localhost:8082/v1/organizations</code
+        >
+      </div>
+
+      <div class="info">
+        <strong>Token Information:</strong><br />
+        • Use the <strong>Access Token</strong> for API requests<br />
+        • Include it in the <code>Authorization: Bearer &lt;token&gt;</code> header<br />
+        • Access tokens expire in 1 hour by default<br />
+        • Use the refresh token to get new access tokens
+      </div>
+
+      <div style="text-align: center">
+        <a href="/login" class="back-btn">← Back to Login</a>
+      </div>
+    </div>
+
+    <script>
+      function copyToClipboard(elementType) {
+        const tokenValue = document.querySelector(
+          '.token-section:has([onclick*="' + elementType + '"]) .token-value',
+        ).textContent;
+        navigator.clipboard.writeText(tokenValue).then(function () {
+          alert('Token copied to clipboard!');
+        });
+      }
+    </script>
+  </body>
+</html>

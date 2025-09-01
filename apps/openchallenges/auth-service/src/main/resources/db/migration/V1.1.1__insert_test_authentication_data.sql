@@ -7,7 +7,7 @@ INSERT INTO app_user (username, password_hash, email, first_name, last_name, rol
 
 -- Insert test developer user for API development
 INSERT INTO app_user (username, password_hash, email, first_name, last_name, role, email_verified, created_at, updated_at) VALUES
-('developer', '$2a$12$lWQA8qj1Pp9NfAsWY53rQuK/uChV.EJ1RTxhisDFuV0uHrJFm0/J6', 'developer@example.com', 'API', 'Developer', 'developer', true, NOW(), NOW());
+('developer', '$2a$12$lWQA8qj1Pp9NfAsWY53rQuK/uChV.EJ1RTxhisDFuV0uHrJFm0/J6', 'developer@example.com', 'API', 'Developer', 'user', true, NOW(), NOW());
 
 -- Insert test organization admin user
 INSERT INTO app_user (username, password_hash, email, first_name, last_name, role, email_verified, created_at, updated_at) VALUES
@@ -80,7 +80,7 @@ INSERT INTO api_key (user_id, key_hash, key_prefix, name, expires_at, created_at
 -- Test credentials summary:
 -- Users (all with password 'changeme'):
 -- - testuser (role: user)
--- - developer (role: developer)  
+-- - developer (role: user)  
 -- - org-admin (role: admin)
 -- 
 -- API Keys:

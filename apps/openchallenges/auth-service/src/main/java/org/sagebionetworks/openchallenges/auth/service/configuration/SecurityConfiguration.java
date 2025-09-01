@@ -52,6 +52,8 @@ public class SecurityConfiguration {
             .permitAll() // Public OAuth2 endpoints
             .requestMatchers("/v1/auth/jwt/**")
             .permitAll() // Public JWT endpoints (validate, refresh)
+            .requestMatchers("/login", "/auth/oauth2/google", "/auth/callback")
+            .permitAll() // OAuth2 web interface endpoints (not part of API spec)
             .requestMatchers("/actuator/health", "/actuator/info")
             .permitAll() // Health checks
             .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
