@@ -5,6 +5,7 @@ import org.sagebionetworks.openchallenges.auth.service.security.JwtAuthenticatio
 import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -29,6 +30,7 @@ public class SecurityConfiguration {
    * Configure security filter chain with API key and JWT authentication
    */
   @Bean
+  @Order(2)
   public SecurityFilterChain filterChain(
       HttpSecurity http, 
       ApiKeyService apiKeyService,
@@ -50,7 +52,11 @@ public class SecurityConfiguration {
             .requestMatchers("/v1/auth/login", "/v1/auth/validate")
             .permitAll() // Public authentication endpoints
             .requestMatchers("/v1/auth/oauth2/**")
-            .permitAll() // Public OAuth2 endpoints
+            .permitAll() // Public custom OAuth2 endpoints
+            .requestMatchers("/oauth2/**")
+            .permitAll() // Standard OAuth2 endpoints (unversioned)
+            .requestMatchers("/.well-known/**")
+            .permitAll() // OIDC discovery endpoints
             .requestMatchers("/v1/auth/jwt/**")
             .permitAll() // Public JWT endpoints (validate, refresh)
             .requestMatchers("/login", "/auth/oauth2/google", "/auth/callback")

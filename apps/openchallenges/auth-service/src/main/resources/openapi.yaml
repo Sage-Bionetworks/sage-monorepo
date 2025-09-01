@@ -12,7 +12,8 @@ info:
   x-logo:
     url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
-  - url: http://localhost/v1
+  - description: Local/dev base
+    url: http://localhost
 tags:
   - description: Operations about authentication
     name: Authentication
@@ -31,368 +32,6 @@ tags:
     x-audience:
       - public
 paths:
-  /auth/login:
-    post:
-      description: Authenticate user and return JWT token
-      operationId: login
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LoginRequest'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LoginResponse'
-          description: Login successful
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-      summary: User login
-      tags:
-        - Authentication
-      x-audience:
-        - public
-      x-content-type: application/json
-      x-accepts:
-        - application/json
-        - application/problem+json
-      x-tags:
-        - tag: Authentication
-  /auth/oauth2/authorize:
-    post:
-      description: 'Start OAuth2 flow with external provider (Google, Synapse)'
-      operationId: initiateOAuth2
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/OAuth2AuthorizeRequest'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OAuth2AuthorizeResponse'
-          description: OAuth2 authorization URL generated
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-      summary: Initiate OAuth2 authentication
-      tags:
-        - Authentication
-      x-audience:
-        - public
-      x-content-type: application/json
-      x-accepts:
-        - application/json
-        - application/problem+json
-      x-tags:
-        - tag: Authentication
-  /auth/oauth2/callback:
-    post:
-      description: Handle OAuth2 callback and exchange code for JWT tokens
-      operationId: completeOAuth2
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/OAuth2CallbackRequest'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LoginResponse'
-          description: OAuth2 authentication successful
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-      summary: Complete OAuth2 authentication
-      tags:
-        - Authentication
-      x-audience:
-        - public
-      x-content-type: application/json
-      x-accepts:
-        - application/json
-        - application/problem+json
-      x-tags:
-        - tag: Authentication
-  /auth/oauth2/revoke:
-    post:
-      description: Revoke access or refresh tokens according to RFC 7009
-      operationId: revokeOAuth2Token
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/OAuth2RevokeRequest'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OAuth2RevokeResponse'
-          description: Token revocation successful (or token was already invalid)
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-      summary: Revoke OAuth2 token
-      tags:
-        - Authentication
-      x-audience:
-        - public
-      x-content-type: application/x-www-form-urlencoded
-      x-accepts:
-        - application/json
-        - application/problem+json
-      x-tags:
-        - tag: Authentication
-  /auth/jwt/validate:
-    post:
-      description: Internal endpoint to validate JWT tokens (used by other services)
-      operationId: validateJwt
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ValidateJwtRequest'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidateJwtResponse'
-          description: JWT validation result
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-      summary: Validate JWT token
-      tags:
-        - Authentication
-      x-audience:
-        - internal
-      x-content-type: application/json
-      x-accepts:
-        - application/json
-        - application/problem+json
-      x-tags:
-        - tag: Authentication
-  /auth/jwt/refresh:
-    post:
-      description: Exchange refresh token for new access token
-      operationId: refreshJwt
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RefreshTokenRequest'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RefreshTokenResponse'
-          description: New access token generated
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-      summary: Refresh JWT access token
-      tags:
-        - Authentication
-      x-audience:
-        - public
-      x-content-type: application/json
-      x-accepts:
-        - application/json
-        - application/problem+json
-      x-tags:
-        - tag: Authentication
-  /auth/logout:
-    post:
-      description: Logout user and revoke refresh tokens for security
-      operationId: logout
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LogoutRequest'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LogoutResponse'
-          description: Logout successful
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-      summary: User logout
-      tags:
-        - Authentication
-      x-audience:
-        - public
-      x-content-type: application/json
-      x-accepts:
-        - application/json
-        - application/problem+json
-      x-tags:
-        - tag: Authentication
-  /auth/api-keys:
-    get:
-      description: Get all API keys for the authenticated user
-      operationId: listApiKeys
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/ApiKey'
-                type: array
-          description: List of API keys
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-      security:
-        - apiBearerAuth: []
-      summary: List API keys
-      tags:
-        - API Key
-      x-audience:
-        - public
-      x-accepts:
-        - application/json
-        - application/problem+json
-      x-tags:
-        - tag: API Key
-    post:
-      description: Generate a new API key for the authenticated user
-      operationId: createApiKey
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateApiKeyRequest'
-        required: true
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateApiKeyResponse'
-          description: API key created successfully
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-      security:
-        - apiBearerAuth: []
-      summary: Create API key
-      tags:
-        - API Key
-      x-audience:
-        - public
-      x-content-type: application/json
-      x-accepts:
-        - application/json
-        - application/problem+json
-      x-tags:
-        - tag: API Key
-  /auth/api-keys/{keyId}:
-    delete:
-      description: Revoke an API key
-      operationId: deleteApiKey
-      parameters:
-        - description: The API key ID to delete
-          explode: false
-          in: path
-          name: keyId
-          required: true
-          schema:
-            format: uuid
-            type: string
-          style: simple
-      responses:
-        '204':
-          description: API key deleted successfully
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-      security:
-        - apiBearerAuth: []
-      summary: Delete API key
-      tags:
-        - API Key
-      x-audience:
-        - public
-      x-accepts:
-        - application/problem+json
-      x-tags:
-        - tag: API Key
-  /auth/validate:
-    post:
-      description: Internal endpoint to validate API keys (used by other services)
-      operationId: validateApiKey
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ValidateApiKeyRequest'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidateApiKeyResponse'
-          description: API key is valid
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-      summary: Validate API key
-      tags:
-        - Authentication
-      x-audience:
-        - internal
-      x-content-type: application/json
-      x-accepts:
-        - application/json
-        - application/problem+json
-      x-tags:
-        - tag: Authentication
   /oauth2/authorize:
     get:
       description: |
@@ -606,44 +245,6 @@ paths:
         - application/json
       x-tags:
         - tag: OAuth2
-  /user:
-    get:
-      description: |
-        Get information about the currently authenticated user.
-        This is an alias for the OAuth2 userinfo endpoint for backward compatibility.
-      operationId: getCurrentUser
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/getCurrentUser_200_response'
-          description: User information
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OAuth2Error'
-          description: Invalid or expired access token
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OAuth2Error'
-          description: Insufficient scope
-      security:
-        - jwtBearerAuth: []
-        - OAuth2:
-            - openid
-            - profile
-            - email
-      summary: Get current user information
-      tags:
-        - User
-      x-accepts:
-        - application/json
-      x-tags:
-        - tag: User
   /oauth2/userinfo:
     get:
       description: |
@@ -655,7 +256,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getCurrentUser_200_response'
+                $ref: '#/components/schemas/oauth2UserInfo_200_response'
           description: User information
         '401':
           content:
@@ -773,8 +374,414 @@ paths:
         - application/problem+json
       x-tags:
         - tag: OAuth2
+  /v1/auth/login:
+    post:
+      description: Authenticate user and return JWT token
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+          description: Login successful
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: User login
+      tags:
+        - Authentication
+      x-audience:
+        - public
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Authentication
+  /v1/auth/oauth2/authorize:
+    post:
+      description: 'Start OAuth2 flow with external provider (Google, Synapse)'
+      operationId: initiateOAuth2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OAuth2AuthorizeRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuth2AuthorizeResponse'
+          description: OAuth2 authorization URL generated
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Initiate OAuth2 authentication
+      tags:
+        - Authentication
+      x-audience:
+        - public
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Authentication
+  /v1/auth/oauth2/callback:
+    post:
+      description: Handle OAuth2 callback and exchange code for JWT tokens
+      operationId: completeOAuth2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OAuth2CallbackRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+          description: OAuth2 authentication successful
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Complete OAuth2 authentication
+      tags:
+        - Authentication
+      x-audience:
+        - public
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Authentication
+  /v1/auth/oauth2/revoke:
+    post:
+      description: Revoke access or refresh tokens according to RFC 7009
+      operationId: revokeOAuth2Token
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OAuth2RevokeRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuth2RevokeResponse'
+          description: Token revocation successful (or token was already invalid)
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Revoke OAuth2 token
+      tags:
+        - Authentication
+      x-audience:
+        - public
+      x-content-type: application/x-www-form-urlencoded
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Authentication
+  /v1/auth/jwt/validate:
+    post:
+      description: Internal endpoint to validate JWT tokens (used by other services)
+      operationId: validateJwt
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateJwtRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateJwtResponse'
+          description: JWT validation result
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Validate JWT token
+      tags:
+        - Authentication
+      x-audience:
+        - internal
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Authentication
+  /v1/auth/jwt/refresh:
+    post:
+      description: Exchange refresh token for new access token
+      operationId: refreshJwt
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefreshTokenResponse'
+          description: New access token generated
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Refresh JWT access token
+      tags:
+        - Authentication
+      x-audience:
+        - public
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Authentication
+  /v1/auth/logout:
+    post:
+      description: Logout user and revoke refresh tokens for security
+      operationId: logout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogoutResponse'
+          description: Logout successful
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: User logout
+      tags:
+        - Authentication
+      x-audience:
+        - public
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Authentication
+  /v1/auth/api-keys:
+    get:
+      description: Get all API keys for the authenticated user
+      operationId: listApiKeys
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ApiKey'
+                type: array
+          description: List of API keys
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - apiBearerAuth: []
+      summary: List API keys
+      tags:
+        - API Key
+      x-audience:
+        - public
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: API Key
+    post:
+      description: Generate a new API key for the authenticated user
+      operationId: createApiKey
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateApiKeyRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateApiKeyResponse'
+          description: API key created successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - apiBearerAuth: []
+      summary: Create API key
+      tags:
+        - API Key
+      x-audience:
+        - public
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: API Key
+  /v1/auth/api-keys/{keyId}:
+    delete:
+      description: Revoke an API key
+      operationId: deleteApiKey
+      parameters:
+        - description: The API key ID to delete
+          explode: false
+          in: path
+          name: keyId
+          required: true
+          schema:
+            format: uuid
+            type: string
+          style: simple
+      responses:
+        '204':
+          description: API key deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - apiBearerAuth: []
+      summary: Delete API key
+      tags:
+        - API Key
+      x-audience:
+        - public
+      x-accepts:
+        - application/problem+json
+      x-tags:
+        - tag: API Key
+  /v1/auth/validate:
+    post:
+      description: Internal endpoint to validate API keys (used by other services)
+      operationId: validateApiKey
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateApiKeyRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateApiKeyResponse'
+          description: API key is valid
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Validate API key
+      tags:
+        - Authentication
+      x-audience:
+        - internal
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Authentication
+  /v1/user:
+    get:
+      description: |
+        Get information about the currently authenticated user.
+        This is an alias for the OAuth2 userinfo endpoint for backward compatibility.
+      operationId: getCurrentUser
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/oauth2UserInfo_200_response'
+          description: User information
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuth2Error'
+          description: Invalid or expired access token
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuth2Error'
+          description: Insufficient scope
+      security:
+        - jwtBearerAuth: []
+        - OAuth2:
+            - openid
+            - profile
+            - email
+      summary: Get current user information
+      tags:
+        - User
+      x-accepts:
+        - application/json
+      x-tags:
+        - tag: User
 components:
   responses:
+    BadRequest:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: Invalid request
     Unauthorized:
       content:
         application/problem+json:
@@ -787,12 +794,6 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: The request cannot be fulfilled due to an unexpected server error
-    BadRequest:
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-      description: Invalid request
     NotFound:
       content:
         application/problem+json:
@@ -800,6 +801,89 @@ components:
             $ref: '#/components/schemas/BasicError'
       description: The specified resource was not found
   schemas:
+    BasicError:
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          description: A human readable documentation for the problem type
+          type: string
+        status:
+          description: The HTTP status code
+          type: integer
+        detail:
+          description: A human readable explanation specific to this occurrence of
+            the problem
+          type: string
+        type:
+          description: An absolute URI that identifies the problem type
+          type: string
+      required:
+        - status
+        - title
+      type: object
+    OAuth2TokenResponse:
+      description: OAuth2 access token response
+      example:
+        access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        refresh_token: def456...
+        scope: read:org write:org user:profile
+        token_type: Bearer
+        expires_in: 3600
+      properties:
+        access_token:
+          description: The access token
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+          type: string
+        token_type:
+          description: "Token type, always 'Bearer'"
+          example: Bearer
+          type: string
+        expires_in:
+          description: Token lifetime in seconds
+          example: 3600
+          type: integer
+        refresh_token:
+          description: Refresh token for obtaining new access tokens
+          example: def456...
+          type: string
+        scope:
+          description: Space-separated list of granted scopes
+          example: read:org write:org user:profile
+          type: string
+      required:
+        - access_token
+        - expires_in
+        - token_type
+      type: object
+    OAuth2Error:
+      description: OAuth2 error response
+      example:
+        error_description: The request is missing a required parameter
+        error: invalid_request
+        error_uri: https://openapi-generator.tech
+      properties:
+        error:
+          description: Error code
+          enum:
+            - invalid_request
+            - invalid_client
+            - invalid_grant
+            - unauthorized_client
+            - unsupported_grant_type
+            - invalid_scope
+          example: invalid_request
+          type: string
+        error_description:
+          description: Human-readable error description
+          example: The request is missing a required parameter
+          type: string
+        error_uri:
+          description: URI to documentation about the error
+          format: uri
+          type: string
+      required:
+        - error
+      type: object
     LoginRequest:
       properties:
         username:
@@ -860,26 +944,6 @@ components:
             - service
           example: admin
           type: string
-      type: object
-    BasicError:
-      description: Problem details (tools.ietf.org/html/rfc7807)
-      properties:
-        title:
-          description: A human readable documentation for the problem type
-          type: string
-        status:
-          description: The HTTP status code
-          type: integer
-        detail:
-          description: A human readable explanation specific to this occurrence of
-            the problem
-          type: string
-        type:
-          description: An absolute URI that identifies the problem type
-          type: string
-      required:
-        - status
-        - title
       type: object
     OAuth2AuthorizeRequest:
       properties:
@@ -1216,69 +1280,6 @@ components:
             type: string
           type: array
       type: object
-    OAuth2TokenResponse:
-      description: OAuth2 access token response
-      example:
-        access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-        refresh_token: def456...
-        scope: read:org write:org user:profile
-        token_type: Bearer
-        expires_in: 3600
-      properties:
-        access_token:
-          description: The access token
-          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-          type: string
-        token_type:
-          description: "Token type, always 'Bearer'"
-          example: Bearer
-          type: string
-        expires_in:
-          description: Token lifetime in seconds
-          example: 3600
-          type: integer
-        refresh_token:
-          description: Refresh token for obtaining new access tokens
-          example: def456...
-          type: string
-        scope:
-          description: Space-separated list of granted scopes
-          example: read:org write:org user:profile
-          type: string
-      required:
-        - access_token
-        - expires_in
-        - token_type
-      type: object
-    OAuth2Error:
-      description: OAuth2 error response
-      example:
-        error_description: The request is missing a required parameter
-        error: invalid_request
-        error_uri: https://openapi-generator.tech
-      properties:
-        error:
-          description: Error code
-          enum:
-            - invalid_request
-            - invalid_client
-            - invalid_grant
-            - unauthorized_client
-            - unsupported_grant_type
-            - invalid_scope
-          example: invalid_request
-          type: string
-        error_description:
-          description: Human-readable error description
-          example: The request is missing a required parameter
-          type: string
-        error_uri:
-          description: URI to documentation about the error
-          format: uri
-          type: string
-      required:
-        - error
-      type: object
     oauth2Token_request:
       properties:
         grant_type:
@@ -1415,7 +1416,7 @@ components:
       required:
         - active
       type: object
-    getCurrentUser_200_response:
+    oauth2UserInfo_200_response:
       example:
         sub: '248289761001'
         website: https://janedoe.example.com

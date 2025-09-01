@@ -5,8 +5,8 @@
  */
 package org.sagebionetworks.openchallenges.auth.service.api;
 
-import org.sagebionetworks.openchallenges.auth.service.model.dto.GetCurrentUser200ResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2ErrorDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.Oauth2UserInfo200ResponseDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -41,7 +41,7 @@ public interface UserApi {
     }
 
     /**
-     * GET /user : Get current user information
+     * GET /v1/user : Get current user information
      * Get information about the currently authenticated user. This is an alias for the OAuth2 userinfo endpoint for backward compatibility. 
      *
      * @return User information (status code 200)
@@ -55,7 +55,7 @@ public interface UserApi {
         tags = { "User" },
         responses = {
             @ApiResponse(responseCode = "200", description = "User information", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = GetCurrentUser200ResponseDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = Oauth2UserInfo200ResponseDto.class))
             }),
             @ApiResponse(responseCode = "401", description = "Invalid or expired access token", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = OAuth2ErrorDto.class))
@@ -71,11 +71,11 @@ public interface UserApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/user",
+        value = "/v1/user",
         produces = { "application/json" }
     )
     
-    default ResponseEntity<GetCurrentUser200ResponseDto> getCurrentUser(
+    default ResponseEntity<Oauth2UserInfo200ResponseDto> getCurrentUser(
         
     ) {
         return getDelegate().getCurrentUser();

@@ -44,7 +44,7 @@ public interface ApiKeyApi {
     }
 
     /**
-     * POST /auth/api-keys : Create API key
+     * POST /v1/auth/api-keys : Create API key
      * Generate a new API key for the authenticated user
      *
      * @param createApiKeyRequestDto  (required)
@@ -82,7 +82,7 @@ public interface ApiKeyApi {
     )
     @RequestMapping(
         method = RequestMethod.POST,
-        value = "/auth/api-keys",
+        value = "/v1/auth/api-keys",
         produces = { "application/json", "application/problem+json" },
         consumes = { "application/json" }
     )
@@ -95,7 +95,7 @@ public interface ApiKeyApi {
 
 
     /**
-     * DELETE /auth/api-keys/{keyId} : Delete API key
+     * DELETE /v1/auth/api-keys/{keyId} : Delete API key
      * Revoke an API key
      *
      * @param keyId The API key ID to delete (required)
@@ -127,7 +127,7 @@ public interface ApiKeyApi {
     )
     @RequestMapping(
         method = RequestMethod.DELETE,
-        value = "/auth/api-keys/{keyId}",
+        value = "/v1/auth/api-keys/{keyId}",
         produces = { "application/problem+json" }
     )
     
@@ -139,7 +139,7 @@ public interface ApiKeyApi {
 
 
     /**
-     * GET /auth/api-keys : List API keys
+     * GET /v1/auth/api-keys : List API keys
      * Get all API keys for the authenticated user
      *
      * @return List of API keys (status code 200)
@@ -171,7 +171,7 @@ public interface ApiKeyApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/auth/api-keys",
+        value = "/v1/auth/api-keys",
         produces = { "application/json", "application/problem+json" }
     )
     

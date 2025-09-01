@@ -17,12 +17,12 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * GetCurrentUser200ResponseDto
+ * Oauth2UserInfo200ResponseDto
  */
 
-@JsonTypeName("getCurrentUser_200_response")
+@JsonTypeName("oauth2UserInfo_200_response")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
-public class GetCurrentUser200ResponseDto {
+public class Oauth2UserInfo200ResponseDto {
 
   private String sub;
 
@@ -46,18 +46,18 @@ public class GetCurrentUser200ResponseDto {
 
   private @Nullable Integer updatedAt;
 
-  public GetCurrentUser200ResponseDto() {
+  public Oauth2UserInfo200ResponseDto() {
     super();
   }
 
   /**
    * Constructor with only required parameters
    */
-  public GetCurrentUser200ResponseDto(String sub) {
+  public Oauth2UserInfo200ResponseDto(String sub) {
     this.sub = sub;
   }
 
-  public GetCurrentUser200ResponseDto sub(String sub) {
+  public Oauth2UserInfo200ResponseDto sub(String sub) {
     this.sub = sub;
     return this;
   }
@@ -77,7 +77,7 @@ public class GetCurrentUser200ResponseDto {
     this.sub = sub;
   }
 
-  public GetCurrentUser200ResponseDto name(@Nullable String name) {
+  public Oauth2UserInfo200ResponseDto name(@Nullable String name) {
     this.name = name;
     return this;
   }
@@ -97,7 +97,7 @@ public class GetCurrentUser200ResponseDto {
     this.name = name;
   }
 
-  public GetCurrentUser200ResponseDto givenName(@Nullable String givenName) {
+  public Oauth2UserInfo200ResponseDto givenName(@Nullable String givenName) {
     this.givenName = givenName;
     return this;
   }
@@ -117,7 +117,7 @@ public class GetCurrentUser200ResponseDto {
     this.givenName = givenName;
   }
 
-  public GetCurrentUser200ResponseDto familyName(@Nullable String familyName) {
+  public Oauth2UserInfo200ResponseDto familyName(@Nullable String familyName) {
     this.familyName = familyName;
     return this;
   }
@@ -137,7 +137,7 @@ public class GetCurrentUser200ResponseDto {
     this.familyName = familyName;
   }
 
-  public GetCurrentUser200ResponseDto preferredUsername(@Nullable String preferredUsername) {
+  public Oauth2UserInfo200ResponseDto preferredUsername(@Nullable String preferredUsername) {
     this.preferredUsername = preferredUsername;
     return this;
   }
@@ -157,7 +157,7 @@ public class GetCurrentUser200ResponseDto {
     this.preferredUsername = preferredUsername;
   }
 
-  public GetCurrentUser200ResponseDto email(@Nullable String email) {
+  public Oauth2UserInfo200ResponseDto email(@Nullable String email) {
     this.email = email;
     return this;
   }
@@ -177,7 +177,7 @@ public class GetCurrentUser200ResponseDto {
     this.email = email;
   }
 
-  public GetCurrentUser200ResponseDto emailVerified(@Nullable Boolean emailVerified) {
+  public Oauth2UserInfo200ResponseDto emailVerified(@Nullable Boolean emailVerified) {
     this.emailVerified = emailVerified;
     return this;
   }
@@ -197,7 +197,7 @@ public class GetCurrentUser200ResponseDto {
     this.emailVerified = emailVerified;
   }
 
-  public GetCurrentUser200ResponseDto picture(@Nullable URI picture) {
+  public Oauth2UserInfo200ResponseDto picture(@Nullable URI picture) {
     this.picture = picture;
     return this;
   }
@@ -217,7 +217,7 @@ public class GetCurrentUser200ResponseDto {
     this.picture = picture;
   }
 
-  public GetCurrentUser200ResponseDto website(@Nullable URI website) {
+  public Oauth2UserInfo200ResponseDto website(@Nullable URI website) {
     this.website = website;
     return this;
   }
@@ -237,7 +237,7 @@ public class GetCurrentUser200ResponseDto {
     this.website = website;
   }
 
-  public GetCurrentUser200ResponseDto locale(@Nullable String locale) {
+  public Oauth2UserInfo200ResponseDto locale(@Nullable String locale) {
     this.locale = locale;
     return this;
   }
@@ -257,7 +257,7 @@ public class GetCurrentUser200ResponseDto {
     this.locale = locale;
   }
 
-  public GetCurrentUser200ResponseDto updatedAt(@Nullable Integer updatedAt) {
+  public Oauth2UserInfo200ResponseDto updatedAt(@Nullable Integer updatedAt) {
     this.updatedAt = updatedAt;
     return this;
   }
@@ -285,18 +285,18 @@ public class GetCurrentUser200ResponseDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GetCurrentUser200ResponseDto getCurrentUser200Response = (GetCurrentUser200ResponseDto) o;
-    return Objects.equals(this.sub, getCurrentUser200Response.sub) &&
-        Objects.equals(this.name, getCurrentUser200Response.name) &&
-        Objects.equals(this.givenName, getCurrentUser200Response.givenName) &&
-        Objects.equals(this.familyName, getCurrentUser200Response.familyName) &&
-        Objects.equals(this.preferredUsername, getCurrentUser200Response.preferredUsername) &&
-        Objects.equals(this.email, getCurrentUser200Response.email) &&
-        Objects.equals(this.emailVerified, getCurrentUser200Response.emailVerified) &&
-        Objects.equals(this.picture, getCurrentUser200Response.picture) &&
-        Objects.equals(this.website, getCurrentUser200Response.website) &&
-        Objects.equals(this.locale, getCurrentUser200Response.locale) &&
-        Objects.equals(this.updatedAt, getCurrentUser200Response.updatedAt);
+    Oauth2UserInfo200ResponseDto oauth2UserInfo200Response = (Oauth2UserInfo200ResponseDto) o;
+    return Objects.equals(this.sub, oauth2UserInfo200Response.sub) &&
+        Objects.equals(this.name, oauth2UserInfo200Response.name) &&
+        Objects.equals(this.givenName, oauth2UserInfo200Response.givenName) &&
+        Objects.equals(this.familyName, oauth2UserInfo200Response.familyName) &&
+        Objects.equals(this.preferredUsername, oauth2UserInfo200Response.preferredUsername) &&
+        Objects.equals(this.email, oauth2UserInfo200Response.email) &&
+        Objects.equals(this.emailVerified, oauth2UserInfo200Response.emailVerified) &&
+        Objects.equals(this.picture, oauth2UserInfo200Response.picture) &&
+        Objects.equals(this.website, oauth2UserInfo200Response.website) &&
+        Objects.equals(this.locale, oauth2UserInfo200Response.locale) &&
+        Objects.equals(this.updatedAt, oauth2UserInfo200Response.updatedAt);
   }
 
   @Override
@@ -307,7 +307,7 @@ public class GetCurrentUser200ResponseDto {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GetCurrentUser200ResponseDto {\n");
+    sb.append("class Oauth2UserInfo200ResponseDto {\n");
     sb.append("    sub: ").append(toIndentedString(sub)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    givenName: ").append(toIndentedString(givenName)).append("\n");
@@ -336,17 +336,17 @@ public class GetCurrentUser200ResponseDto {
   
   public static class Builder {
 
-    private GetCurrentUser200ResponseDto instance;
+    private Oauth2UserInfo200ResponseDto instance;
 
     public Builder() {
-      this(new GetCurrentUser200ResponseDto());
+      this(new Oauth2UserInfo200ResponseDto());
     }
 
-    protected Builder(GetCurrentUser200ResponseDto instance) {
+    protected Builder(Oauth2UserInfo200ResponseDto instance) {
       this.instance = instance;
     }
 
-    protected Builder copyOf(GetCurrentUser200ResponseDto value) { 
+    protected Builder copyOf(Oauth2UserInfo200ResponseDto value) { 
       this.instance.setSub(value.sub);
       this.instance.setName(value.name);
       this.instance.setGivenName(value.givenName);
@@ -361,67 +361,67 @@ public class GetCurrentUser200ResponseDto {
       return this;
     }
 
-    public GetCurrentUser200ResponseDto.Builder sub(String sub) {
+    public Oauth2UserInfo200ResponseDto.Builder sub(String sub) {
       this.instance.sub(sub);
       return this;
     }
     
-    public GetCurrentUser200ResponseDto.Builder name(String name) {
+    public Oauth2UserInfo200ResponseDto.Builder name(String name) {
       this.instance.name(name);
       return this;
     }
     
-    public GetCurrentUser200ResponseDto.Builder givenName(String givenName) {
+    public Oauth2UserInfo200ResponseDto.Builder givenName(String givenName) {
       this.instance.givenName(givenName);
       return this;
     }
     
-    public GetCurrentUser200ResponseDto.Builder familyName(String familyName) {
+    public Oauth2UserInfo200ResponseDto.Builder familyName(String familyName) {
       this.instance.familyName(familyName);
       return this;
     }
     
-    public GetCurrentUser200ResponseDto.Builder preferredUsername(String preferredUsername) {
+    public Oauth2UserInfo200ResponseDto.Builder preferredUsername(String preferredUsername) {
       this.instance.preferredUsername(preferredUsername);
       return this;
     }
     
-    public GetCurrentUser200ResponseDto.Builder email(String email) {
+    public Oauth2UserInfo200ResponseDto.Builder email(String email) {
       this.instance.email(email);
       return this;
     }
     
-    public GetCurrentUser200ResponseDto.Builder emailVerified(Boolean emailVerified) {
+    public Oauth2UserInfo200ResponseDto.Builder emailVerified(Boolean emailVerified) {
       this.instance.emailVerified(emailVerified);
       return this;
     }
     
-    public GetCurrentUser200ResponseDto.Builder picture(URI picture) {
+    public Oauth2UserInfo200ResponseDto.Builder picture(URI picture) {
       this.instance.picture(picture);
       return this;
     }
     
-    public GetCurrentUser200ResponseDto.Builder website(URI website) {
+    public Oauth2UserInfo200ResponseDto.Builder website(URI website) {
       this.instance.website(website);
       return this;
     }
     
-    public GetCurrentUser200ResponseDto.Builder locale(String locale) {
+    public Oauth2UserInfo200ResponseDto.Builder locale(String locale) {
       this.instance.locale(locale);
       return this;
     }
     
-    public GetCurrentUser200ResponseDto.Builder updatedAt(Integer updatedAt) {
+    public Oauth2UserInfo200ResponseDto.Builder updatedAt(Integer updatedAt) {
       this.instance.updatedAt(updatedAt);
       return this;
     }
     
     /**
-    * returns a built GetCurrentUser200ResponseDto instance.
+    * returns a built Oauth2UserInfo200ResponseDto instance.
     *
     * The builder is not reusable (NullPointerException)
     */
-    public GetCurrentUser200ResponseDto build() {
+    public Oauth2UserInfo200ResponseDto build() {
       try {
         return this.instance;
       } finally {
@@ -439,15 +439,15 @@ public class GetCurrentUser200ResponseDto {
   /**
   * Create a builder with no initialized field (except for the default values).
   */
-  public static GetCurrentUser200ResponseDto.Builder builder() {
-    return new GetCurrentUser200ResponseDto.Builder();
+  public static Oauth2UserInfo200ResponseDto.Builder builder() {
+    return new Oauth2UserInfo200ResponseDto.Builder();
   }
 
   /**
   * Create a builder with a shallow copy of this instance.
   */
-  public GetCurrentUser200ResponseDto.Builder toBuilder() {
-    GetCurrentUser200ResponseDto.Builder builder = new GetCurrentUser200ResponseDto.Builder();
+  public Oauth2UserInfo200ResponseDto.Builder toBuilder() {
+    Oauth2UserInfo200ResponseDto.Builder builder = new Oauth2UserInfo200ResponseDto.Builder();
     return builder.copyOf(this);
   }
 

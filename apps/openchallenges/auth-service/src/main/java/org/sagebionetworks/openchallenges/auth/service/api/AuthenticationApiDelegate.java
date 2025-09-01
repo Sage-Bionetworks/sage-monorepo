@@ -41,7 +41,7 @@ public interface AuthenticationApiDelegate {
     }
 
     /**
-     * POST /auth/oauth2/callback : Complete OAuth2 authentication
+     * POST /v1/auth/oauth2/callback : Complete OAuth2 authentication
      * Handle OAuth2 callback and exchange code for JWT tokens
      *
      * @param oauth2CallbackRequestDto  (required)
@@ -81,7 +81,7 @@ public interface AuthenticationApiDelegate {
     }
 
     /**
-     * POST /auth/oauth2/authorize : Initiate OAuth2 authentication
+     * POST /v1/auth/oauth2/authorize : Initiate OAuth2 authentication
      * Start OAuth2 flow with external provider (Google, Synapse)
      *
      * @param oauth2AuthorizeRequestDto  (required)
@@ -115,7 +115,7 @@ public interface AuthenticationApiDelegate {
     }
 
     /**
-     * POST /auth/login : User login
+     * POST /v1/auth/login : User login
      * Authenticate user and return JWT token
      *
      * @param loginRequestDto  (required)
@@ -149,7 +149,7 @@ public interface AuthenticationApiDelegate {
     }
 
     /**
-     * POST /auth/logout : User logout
+     * POST /v1/auth/logout : User logout
      * Logout user and revoke refresh tokens for security
      *
      * @param logoutRequestDto  (required)
@@ -189,7 +189,7 @@ public interface AuthenticationApiDelegate {
     }
 
     /**
-     * POST /auth/jwt/refresh : Refresh JWT access token
+     * POST /v1/auth/jwt/refresh : Refresh JWT access token
      * Exchange refresh token for new access token
      *
      * @param refreshTokenRequestDto  (required)
@@ -229,7 +229,7 @@ public interface AuthenticationApiDelegate {
     }
 
     /**
-     * POST /auth/oauth2/revoke : Revoke OAuth2 token
+     * POST /v1/auth/oauth2/revoke : Revoke OAuth2 token
      * Revoke access or refresh tokens according to RFC 7009
      *
      * @param token The token to revoke (access token or refresh token) (required)
@@ -271,7 +271,7 @@ public interface AuthenticationApiDelegate {
     }
 
     /**
-     * POST /auth/validate : Validate API key
+     * POST /v1/auth/validate : Validate API key
      * Internal endpoint to validate API keys (used by other services)
      *
      * @param validateApiKeyRequestDto  (required)
@@ -305,7 +305,7 @@ public interface AuthenticationApiDelegate {
     }
 
     /**
-     * POST /auth/jwt/validate : Validate JWT token
+     * POST /v1/auth/jwt/validate : Validate JWT token
      * Internal endpoint to validate JWT tokens (used by other services)
      *
      * @param validateJwtRequestDto  (required)

@@ -25,6 +25,7 @@ class ApiKeyPropertiesIntegrationTest {
       "spring.jpa.hibernate.ddl-auto=create-drop",
       "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect",
       "spring.flyway.enabled=false",
+      "app.oauth2.authorization-server.enabled=false",
     }
   )
   @ActiveProfiles("dev")
@@ -51,6 +52,7 @@ class ApiKeyPropertiesIntegrationTest {
       "spring.jpa.hibernate.ddl-auto=create-drop",
       "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect",
       "spring.flyway.enabled=false",
+      "app.oauth2.authorization-server.enabled=false",
     }
   )
   @ActiveProfiles("stage")
@@ -77,6 +79,7 @@ class ApiKeyPropertiesIntegrationTest {
       "spring.jpa.hibernate.ddl-auto=create-drop",
       "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect",
       "spring.flyway.enabled=false",
+      "app.oauth2.authorization-server.enabled=false",
     }
   )
   @ActiveProfiles("prod")
