@@ -8,9 +8,12 @@ package org.sagebionetworks.openchallenges.auth.service.api;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.BasicErrorDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginResponseDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.LogoutRequestDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.LogoutResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2AuthorizeRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2AuthorizeResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2CallbackRequestDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2RevokeResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.RefreshTokenRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.RefreshTokenResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyRequestDto;
@@ -185,6 +188,54 @@ public interface AuthenticationApi {
 
 
     /**
+     * POST /auth/logout : User logout
+     * Logout user and revoke refresh tokens for security
+     *
+     * @param logoutRequestDto  (required)
+     * @return Logout successful (status code 200)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "logout",
+        summary = "User logout",
+        description = "Logout user and revoke refresh tokens for security",
+        tags = { "Authentication" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Logout successful", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = LogoutResponseDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = LogoutResponseDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/auth/logout",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<LogoutResponseDto> logout(
+        @Parameter(name = "LogoutRequestDto", description = "", required = true) @Valid @RequestBody LogoutRequestDto logoutRequestDto
+    ) {
+        return getDelegate().logout(logoutRequestDto);
+    }
+
+
+    /**
      * POST /auth/jwt/refresh : Refresh JWT access token
      * Exchange refresh token for new access token
      *
@@ -229,6 +280,56 @@ public interface AuthenticationApi {
         @Parameter(name = "RefreshTokenRequestDto", description = "", required = true) @Valid @RequestBody RefreshTokenRequestDto refreshTokenRequestDto
     ) {
         return getDelegate().refreshJwt(refreshTokenRequestDto);
+    }
+
+
+    /**
+     * POST /auth/oauth2/revoke : Revoke OAuth2 token
+     * Revoke access or refresh tokens according to RFC 7009
+     *
+     * @param token The token to revoke (access token or refresh token) (required)
+     * @param tokenTypeHint Hint about the type of token being revoked (optional)
+     * @return Token revocation successful (or token was already invalid) (status code 200)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "revokeOAuth2Token",
+        summary = "Revoke OAuth2 token",
+        description = "Revoke access or refresh tokens according to RFC 7009",
+        tags = { "Authentication" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Token revocation successful (or token was already invalid)", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = OAuth2RevokeResponseDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = OAuth2RevokeResponseDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/auth/oauth2/revoke",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/x-www-form-urlencoded" }
+    )
+    
+    default ResponseEntity<OAuth2RevokeResponseDto> revokeOAuth2Token(
+        @Parameter(name = "token", description = "The token to revoke (access token or refresh token)", required = true) @Valid @RequestParam(value = "token", required = true) String token,
+        @Parameter(name = "token_type_hint", description = "Hint about the type of token being revoked") @Valid @RequestParam(value = "token_type_hint", required = false) String tokenTypeHint
+    ) {
+        return getDelegate().revokeOAuth2Token(token, tokenTypeHint);
     }
 
 

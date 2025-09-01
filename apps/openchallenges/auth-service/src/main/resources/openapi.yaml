@@ -121,6 +121,40 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Authentication
+  /auth/oauth2/revoke:
+    post:
+      description: Revoke access or refresh tokens according to RFC 7009
+      operationId: revokeOAuth2Token
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OAuth2RevokeRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuth2RevokeResponse'
+          description: Token revocation successful (or token was already invalid)
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: Revoke OAuth2 token
+      tags:
+        - Authentication
+      x-audience:
+        - public
+      x-content-type: application/x-www-form-urlencoded
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Authentication
   /auth/jwt/validate:
     post:
       description: Internal endpoint to validate JWT tokens (used by other services)
@@ -177,6 +211,40 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       summary: Refresh JWT access token
+      tags:
+        - Authentication
+      x-audience:
+        - public
+      x-content-type: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Authentication
+  /auth/logout:
+    post:
+      description: Logout user and revoke refresh tokens for security
+      operationId: logout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoutRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogoutResponse'
+          description: Logout successful
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: User logout
       tags:
         - Authentication
       x-audience:
@@ -481,6 +549,36 @@ components:
         - code
         - state
       type: object
+    OAuth2RevokeRequest:
+      properties:
+        token:
+          description: The token to revoke (access token or refresh token)
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+          type: string
+        token_type_hint:
+          description: Hint about the type of token being revoked
+          enum:
+            - access_token
+            - refresh_token
+          example: refresh_token
+          type: string
+      required:
+        - token
+      type: object
+    OAuth2RevokeResponse:
+      example:
+        message: Token successfully revoked
+        revokedTokens: 1
+      properties:
+        message:
+          description: Token revocation status message
+          example: Token successfully revoked
+          type: string
+        revokedTokens:
+          description: Number of tokens revoked
+          example: 1
+          type: integer
+      type: object
     ValidateJwtRequest:
       properties:
         token:
@@ -553,6 +651,35 @@ components:
         expiresIn:
           description: Access token expiry time in seconds
           example: 3600
+          type: integer
+      type: object
+    LogoutRequest:
+      properties:
+        refreshToken:
+          description: JWT refresh token to revoke
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+          type: string
+        revokeAllTokens:
+          default: false
+          description: Whether to revoke all refresh tokens for the user (default
+            false)
+          example: false
+          type: boolean
+      required:
+        - refreshToken
+      type: object
+    LogoutResponse:
+      example:
+        message: Successfully logged out
+        revokedTokens: 1
+      properties:
+        message:
+          description: Logout success message
+          example: Successfully logged out
+          type: string
+        revokedTokens:
+          description: Number of refresh tokens revoked
+          example: 1
           type: integer
       type: object
     ApiKey:

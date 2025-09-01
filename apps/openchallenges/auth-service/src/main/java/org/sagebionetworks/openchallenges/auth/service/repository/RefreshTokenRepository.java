@@ -106,4 +106,9 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, UUID
     "rt.expiresAt > :now AND rt.revoked = false"
   )
   long countValidTokensForUser(@Param("user") User user, @Param("now") OffsetDateTime now);
+  
+  /**
+   * Count non-revoked refresh tokens for a user (regardless of expiration)
+   */
+  int countByUserAndRevokedFalse(User user);
 }

@@ -1,0 +1,13 @@
+type: object
+required:
+  - refreshToken
+properties:
+  refreshToken:
+    type: string
+    description: JWT refresh token to revoke
+    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+  revokeAllTokens:
+    type: boolean
+    description: Whether to revoke all refresh tokens for the user (default false)
+    example: false
+    default: false
