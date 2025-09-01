@@ -1,0 +1,93 @@
+post:
+  tags:
+    - OAuth2
+  summary: Token introspection endpoint
+  description: |
+    RFC 7662 token introspection endpoint to determine the active state of a token
+    and to determine meta-information about this token.
+  operationId: oauth2Introspect
+  security:
+    - OAuth2:
+        - admin:auth
+  requestBody:
+    required: true
+    content:
+      application/x-www-form-urlencoded:
+        schema:
+          type: object
+          properties:
+            token:
+              type: string
+              description: The token to introspect
+              example: '2YotnFZFEjr1zCsicMWpAA'
+            token_type_hint:
+              type: string
+              description: Hint about the type of token being introspected
+              enum:
+                - access_token
+                - refresh_token
+              example: 'access_token'
+          required:
+            - token
+  responses:
+    '200':
+      description: Token introspection response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              active:
+                type: boolean
+                description: Whether the token is active
+                example: true
+              scope:
+                type: string
+                description: Space-separated list of scopes
+                example: 'read:org user:profile'
+              client_id:
+                type: string
+                description: Client identifier
+                example: 'l238j323ds-23ij4'
+              username:
+                type: string
+                description: Human-readable identifier for the resource owner
+                example: 'jdoe'
+              token_type:
+                type: string
+                description: Type of the token
+                example: 'Bearer'
+              exp:
+                type: integer
+                description: Token expiration timestamp
+                example: 1419356238
+              iat:
+                type: integer
+                description: Token issued at timestamp
+                example: 1419350238
+              sub:
+                type: string
+                description: Subject of the token
+                example: 'Z5O3upPC88QrAjx00dis'
+              aud:
+                type: string
+                description: Intended audience
+                example: 'https://protected.example.net/resource'
+              iss:
+                type: string
+                description: Token issuer
+                example: 'https://server.example.com/'
+            required:
+              - active
+    '400':
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/OAuth2Error.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/OAuth2Error.yaml'

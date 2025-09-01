@@ -1,0 +1,27 @@
+type: object
+description: OAuth2 access token response
+properties:
+  access_token:
+    type: string
+    description: The access token
+    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+  token_type:
+    type: string
+    description: Token type, always 'Bearer'
+    example: 'Bearer'
+  expires_in:
+    type: integer
+    description: Token lifetime in seconds
+    example: 3600
+  refresh_token:
+    type: string
+    description: Refresh token for obtaining new access tokens
+    example: 'def456...'
+  scope:
+    type: string
+    description: Space-separated list of granted scopes
+    example: 'read:org write:org user:profile'
+required:
+  - access_token
+  - token_type
+  - expires_in

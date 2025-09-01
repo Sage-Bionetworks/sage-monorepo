@@ -1,0 +1,86 @@
+get:
+  tags:
+    - OAuth2
+  summary: OAuth2 Authorization Server Discovery
+  description: |
+    RFC 8414 OAuth2 Authorization Server Metadata endpoint.
+    Returns the OAuth2 authorization server discovery document.
+  operationId: oauth2AuthorizationServerMetadata
+  x-audience: [public]
+  responses:
+    '200':
+      description: OAuth2 Authorization Server Metadata
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              issuer:
+                type: string
+                format: uri
+                description: Authorization server's issuer identifier
+                example: 'https://api.openchallenges.io'
+              authorization_endpoint:
+                type: string
+                format: uri
+                description: Authorization endpoint URL
+                example: 'https://api.openchallenges.io/oauth2/authorize'
+              token_endpoint:
+                type: string
+                format: uri
+                description: Token endpoint URL
+                example: 'https://api.openchallenges.io/oauth2/token'
+              revocation_endpoint:
+                type: string
+                format: uri
+                description: Token revocation endpoint URL
+                example: 'https://api.openchallenges.io/oauth2/revoke'
+              introspection_endpoint:
+                type: string
+                format: uri
+                description: Token introspection endpoint URL
+                example: 'https://api.openchallenges.io/oauth2/introspect'
+              response_types_supported:
+                type: array
+                items:
+                  type: string
+                description: Supported OAuth2 response types
+                example: ['code', 'token']
+              grant_types_supported:
+                type: array
+                items:
+                  type: string
+                description: Supported OAuth2 grant types
+                example: ['authorization_code', 'refresh_token', 'client_credentials']
+              scopes_supported:
+                type: array
+                items:
+                  type: string
+                description: Supported OAuth2 scopes
+                example: ['openid', 'profile', 'email', 'user:profile', 'read:org', 'write:org']
+              token_endpoint_auth_methods_supported:
+                type: array
+                items:
+                  type: string
+                description: Supported client authentication methods at token endpoint
+                example: ['client_secret_basic', 'client_secret_post']
+              code_challenge_methods_supported:
+                type: array
+                items:
+                  type: string
+                description: Supported PKCE code challenge methods
+                example: ['S256', 'plain']
+            required:
+              - issuer
+              - authorization_endpoint
+              - token_endpoint
+              - response_types_supported
+              - grant_types_supported
+    '404':
+      description: Discovery document not available
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/OAuth2Error.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml

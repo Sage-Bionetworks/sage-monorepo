@@ -1,0 +1,62 @@
+post:
+  tags:
+    - OAuth2
+  summary: Revoke access or refresh token
+  description: |
+    Revoke an access token or refresh token according to RFC 7009.
+    This endpoint invalidates the specified token and any associated tokens.
+  operationId: oauth2RevokeToken
+  security:
+    - OAuth2:
+        - admin:auth
+  requestBody:
+    required: true
+    content:
+      application/x-www-form-urlencoded:
+        schema:
+          type: object
+          properties:
+            token:
+              type: string
+              description: The token to revoke (access token or refresh token)
+              example: '2YotnFZFEjr1zCsicMWpAA'
+            token_type_hint:
+              type: string
+              description: Hint about the type of token being revoked
+              enum:
+                - access_token
+                - refresh_token
+              example: 'access_token'
+            client_id:
+              type: string
+              description: Client identifier
+              example: 's6BhdRkqt3'
+            client_secret:
+              type: string
+              description: Client secret (if required)
+              example: '7Fjfp0ZBr1KtDRbnfVdmIw'
+          required:
+            - token
+  responses:
+    '200':
+      description: Token successfully revoked
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: 'Token revoked successfully'
+    '400':
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/OAuth2Error.yaml'
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/OAuth2Error.yaml'

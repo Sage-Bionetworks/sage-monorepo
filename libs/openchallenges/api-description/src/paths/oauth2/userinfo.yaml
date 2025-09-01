@@ -1,0 +1,82 @@
+get:
+  tags:
+    - OAuth2
+  summary: OAuth2 user info endpoint
+  description: |
+    Standard OAuth2/OIDC user info endpoint that returns information about the authenticated user.
+    Requires a valid access token with appropriate scopes.
+  operationId: oauth2UserInfo
+  security:
+    - OAuth2:
+        - openid
+        - profile
+        - email
+  responses:
+    '200':
+      description: User information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              sub:
+                type: string
+                description: Subject identifier (user ID)
+                example: '248289761001'
+              name:
+                type: string
+                description: Full name of the user
+                example: 'Jane Doe'
+              given_name:
+                type: string
+                description: Given name of the user
+                example: 'Jane'
+              family_name:
+                type: string
+                description: Family name of the user
+                example: 'Doe'
+              preferred_username:
+                type: string
+                description: Preferred username
+                example: 'j.doe'
+              email:
+                type: string
+                format: email
+                description: Email address
+                example: 'janedoe@example.com'
+              email_verified:
+                type: boolean
+                description: Whether the email address has been verified
+                example: true
+              picture:
+                type: string
+                format: uri
+                description: Profile picture URL
+                example: 'https://example.com/profile.jpg'
+              website:
+                type: string
+                format: uri
+                description: User's website
+                example: 'https://janedoe.example.com'
+              locale:
+                type: string
+                description: User's locale
+                example: 'en-US'
+              updated_at:
+                type: integer
+                description: Time the user's information was last updated
+                example: 1311280970
+            required:
+              - sub
+    '401':
+      description: Invalid or expired access token
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/OAuth2Error.yaml'
+    '403':
+      description: Insufficient scope
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/OAuth2Error.yaml'
