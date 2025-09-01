@@ -79,16 +79,25 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
 
   @Override
   public ResponseEntity<LoginResponseDto> completeOAuth2(OAuth2CallbackRequestDto oauth2CallbackRequestDto) {
-    logger.info("OAuth2 callback processing");
+    logger.info("OAuth2 callback processing - code: {}, state: {}", 
+                oauth2CallbackRequestDto.getCode() != null ? "present" : "null",
+                oauth2CallbackRequestDto.getState());
     try {
       LoginResponseDto response = authenticationService.handleOAuth2Callback(
         oauth2CallbackRequestDto.getCode(),
         oauth2CallbackRequestDto.getState()
       );
-      logger.info("OAuth2 authentication completed successfully");
+      logger.info("OAuth2 authentication completed successfully - response: {}", 
+                  response != null ? "present" : "null");
+      if (response != null) {
+        logger.debug("OAuth2 response details - accessToken: {}, refreshToken: {}, userId: {}", 
+                     response.getAccessToken() != null ? "present" : "null",
+                     response.getRefreshToken() != null ? "present" : "null", 
+                     response.getUserId());
+      }
       return ResponseEntity.ok(response);
     } catch (RuntimeException e) {
-      logger.warn("OAuth2 callback failed: {}", e.getMessage());
+      logger.warn("OAuth2 callback failed: {}", e.getMessage(), e);
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     } catch (Exception e) {
       logger.error("Unexpected error during OAuth2 callback", e);
