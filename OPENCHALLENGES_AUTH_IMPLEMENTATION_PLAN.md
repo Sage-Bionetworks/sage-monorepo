@@ -1522,7 +1522,7 @@ nx run openchallenges-api-client-python:build
 
 ```bash
 # Auth Service
-JWT_SECRET=your-jwt-secret-key
+JWT_SECRET_KEY=your-jwt-secret-key
 JWT_ACCESS_TOKEN_EXPIRY=3600
 JWT_REFRESH_TOKEN_EXPIRY=604800
 
@@ -1610,7 +1610,7 @@ MCP_OAUTH_REDIRECT_URI=http://localhost:3000/auth/callback
 
 ```properties
 # JWT Configuration
-app.security.jwt.secret=${JWT_SECRET:openchallenges-default-jwt-secret-key-change-in-production}
+app.security.jwt.secret-key=${JWT_SECRET_KEY:openchallenges-default-jwt-secret-key-change-in-production}
 app.security.jwt.access-token-expiration-ms=${JWT_ACCESS_EXPIRATION:3600000}  # 1 hour
 app.security.jwt.refresh-token-expiration-ms=${JWT_REFRESH_EXPIRATION:604800000}  # 7 days
 app.security.jwt.issuer=${JWT_ISSUER:openchallenges-auth-service}

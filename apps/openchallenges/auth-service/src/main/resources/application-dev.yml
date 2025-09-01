@@ -15,7 +15,7 @@ openchallenges:
 app:
   security:
     jwt:
-      secret: openchallenges-default-jwt-secret-key-change-in-production
+      secret-key: openchallenges-default-jwt-secret-key-change-in-production
       access-token-expiration-ms: 3600000 # 1 hour
       refresh-token-expiration-ms: 604800000 # 7 days
       issuer: openchallenges-auth-service
