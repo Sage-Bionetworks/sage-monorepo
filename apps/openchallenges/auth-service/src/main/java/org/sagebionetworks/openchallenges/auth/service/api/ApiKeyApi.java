@@ -36,7 +36,7 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Validated
-@Tag(name = "API Key", description = "Operations for API key management and service-to-service authentication")
+@Tag(name = "API Key", description = "API key management for service-to-service authentication")
 public interface ApiKeyApi {
 
     default ApiKeyApiDelegate getDelegate() {
@@ -44,7 +44,7 @@ public interface ApiKeyApi {
     }
 
     /**
-     * POST /v1/auth/api-keys : Create API key
+     * POST /auth/api-keys : Create API key
      * Generate a new API key for the authenticated user
      *
      * @param createApiKeyRequestDto  (required)
@@ -82,7 +82,7 @@ public interface ApiKeyApi {
     )
     @RequestMapping(
         method = RequestMethod.POST,
-        value = "/v1/auth/api-keys",
+        value = "/auth/api-keys",
         produces = { "application/json", "application/problem+json" },
         consumes = { "application/json" }
     )
@@ -95,7 +95,7 @@ public interface ApiKeyApi {
 
 
     /**
-     * DELETE /v1/auth/api-keys/{keyId} : Delete API key
+     * DELETE /auth/api-keys/{keyId} : Delete API key
      * Revoke an API key
      *
      * @param keyId The API key ID to delete (required)
@@ -127,7 +127,7 @@ public interface ApiKeyApi {
     )
     @RequestMapping(
         method = RequestMethod.DELETE,
-        value = "/v1/auth/api-keys/{keyId}",
+        value = "/auth/api-keys/{keyId}",
         produces = { "application/problem+json" }
     )
     
@@ -139,7 +139,7 @@ public interface ApiKeyApi {
 
 
     /**
-     * GET /v1/auth/api-keys : List API keys
+     * GET /auth/api-keys : List API keys
      * Get all API keys for the authenticated user
      *
      * @return List of API keys (status code 200)
@@ -171,7 +171,7 @@ public interface ApiKeyApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/v1/auth/api-keys",
+        value = "/auth/api-keys",
         produces = { "application/json", "application/problem+json" }
     )
     

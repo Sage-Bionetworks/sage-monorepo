@@ -14,10 +14,6 @@ src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/AuthScop
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/BasicErrorDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/CreateApiKeyRequestDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/CreateApiKeyResponseDto.java
-src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/LoginRequestDto.java
-src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/LoginResponseDto.java
-src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/LogoutRequestDto.java
-src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/LogoutResponseDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/UpdateUserProfileRequestDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/UserProfileDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/UserRoleDto.java

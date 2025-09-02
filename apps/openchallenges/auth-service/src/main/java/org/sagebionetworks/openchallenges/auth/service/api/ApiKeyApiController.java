@@ -32,7 +32,7 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Controller
-@RequestMapping("${openapi.openChallengesAuth.base-path:}")
+@RequestMapping("${openapi.openChallengesAuth.base-path:/v1}")
 public class ApiKeyApiController implements ApiKeyApi {
 
     private final ApiKeyApiDelegate delegate;

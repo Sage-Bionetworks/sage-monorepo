@@ -6,10 +6,6 @@
 package org.sagebionetworks.openchallenges.auth.service.api;
 
 import org.sagebionetworks.openchallenges.auth.service.model.dto.BasicErrorDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginRequestDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginResponseDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.LogoutRequestDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.LogoutResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.UpdateUserProfileRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.UserProfileDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyRequestDto;
@@ -40,7 +36,7 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Validated
-@Tag(name = "Authentication", description = "Operations for user authentication and token management")
+@Tag(name = "Authentication", description = "User profile and token validation operations")
 public interface AuthenticationApi {
 
     default AuthenticationApiDelegate getDelegate() {
@@ -48,7 +44,7 @@ public interface AuthenticationApi {
     }
 
     /**
-     * GET /v1/auth/profile : Get user profile
+     * GET /auth/profile : Get user profile
      * Get the authenticated user&#39;s profile information
      *
      * @return User profile information (status code 200)
@@ -75,13 +71,14 @@ public interface AuthenticationApi {
             })
         },
         security = {
+            @SecurityRequirement(name = "OAuth2", scopes={ "profile" }),
             @SecurityRequirement(name = "apiBearerAuth"),
             @SecurityRequirement(name = "jwtBearerAuth")
         }
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/v1/auth/profile",
+        value = "/auth/profile",
         produces = { "application/json", "application/problem+json" }
     )
     
@@ -93,98 +90,7 @@ public interface AuthenticationApi {
 
 
     /**
-     * POST /v1/auth/login : User login
-     * Authenticate user and return JWT token
-     *
-     * @param loginRequestDto  (required)
-     * @return Login successful (status code 200)
-     *         or Unauthorized (status code 401)
-     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     */
-    @Operation(
-        operationId = "login",
-        summary = "User login",
-        description = "Authenticate user and return JWT token",
-        tags = { "Authentication" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Login successful", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = LoginResponseDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = LoginResponseDto.class))
-            }),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            })
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.POST,
-        value = "/v1/auth/login",
-        produces = { "application/json", "application/problem+json" },
-        consumes = { "application/json" }
-    )
-    
-    default ResponseEntity<LoginResponseDto> login(
-        @Parameter(name = "LoginRequestDto", description = "", required = true) @Valid @RequestBody LoginRequestDto loginRequestDto
-    ) {
-        return getDelegate().login(loginRequestDto);
-    }
-
-
-    /**
-     * POST /v1/auth/logout : User logout
-     * Logout user and revoke refresh tokens for security
-     *
-     * @param logoutRequestDto  (required)
-     * @return Logout successful (status code 200)
-     *         or Invalid request (status code 400)
-     *         or Unauthorized (status code 401)
-     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     */
-    @Operation(
-        operationId = "logout",
-        summary = "User logout",
-        description = "Logout user and revoke refresh tokens for security",
-        tags = { "Authentication" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Logout successful", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = LogoutResponseDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = LogoutResponseDto.class))
-            }),
-            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            })
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.POST,
-        value = "/v1/auth/logout",
-        produces = { "application/json", "application/problem+json" },
-        consumes = { "application/json" }
-    )
-    
-    default ResponseEntity<LogoutResponseDto> logout(
-        @Parameter(name = "LogoutRequestDto", description = "", required = true) @Valid @RequestBody LogoutRequestDto logoutRequestDto
-    ) {
-        return getDelegate().logout(logoutRequestDto);
-    }
-
-
-    /**
-     * PUT /v1/auth/profile : Update user profile
+     * PUT /auth/profile : Update user profile
      * Update the authenticated user&#39;s profile information
      *
      * @param updateUserProfileRequestDto  (required)
@@ -217,12 +123,13 @@ public interface AuthenticationApi {
             })
         },
         security = {
+            @SecurityRequirement(name = "OAuth2", scopes={ "profile" }),
             @SecurityRequirement(name = "jwtBearerAuth")
         }
     )
     @RequestMapping(
         method = RequestMethod.PUT,
-        value = "/v1/auth/profile",
+        value = "/auth/profile",
         produces = { "application/json", "application/problem+json" },
         consumes = { "application/json" }
     )
@@ -235,7 +142,7 @@ public interface AuthenticationApi {
 
 
     /**
-     * POST /v1/auth/validate : Validate API key
+     * POST /auth/api-keys/validate : Validate API key
      * Internal endpoint to validate API keys (used by other services)
      *
      * @param validateApiKeyRequestDto  (required)
@@ -265,7 +172,7 @@ public interface AuthenticationApi {
     )
     @RequestMapping(
         method = RequestMethod.POST,
-        value = "/v1/auth/validate",
+        value = "/auth/api-keys/validate",
         produces = { "application/json", "application/problem+json" },
         consumes = { "application/json" }
     )

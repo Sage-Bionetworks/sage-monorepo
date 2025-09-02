@@ -31,7 +31,7 @@ public interface ApiKeyApiDelegate {
     }
 
     /**
-     * POST /v1/auth/api-keys : Create API key
+     * POST /auth/api-keys : Create API key
      * Generate a new API key for the authenticated user
      *
      * @param createApiKeyRequestDto  (required)
@@ -71,7 +71,7 @@ public interface ApiKeyApiDelegate {
     }
 
     /**
-     * DELETE /v1/auth/api-keys/{keyId} : Delete API key
+     * DELETE /auth/api-keys/{keyId} : Delete API key
      * Revoke an API key
      *
      * @param keyId The API key ID to delete (required)
@@ -106,7 +106,7 @@ public interface ApiKeyApiDelegate {
     }
 
     /**
-     * GET /v1/auth/api-keys : List API keys
+     * GET /auth/api-keys : List API keys
      * Get all API keys for the authenticated user
      *
      * @return List of API keys (status code 200)
