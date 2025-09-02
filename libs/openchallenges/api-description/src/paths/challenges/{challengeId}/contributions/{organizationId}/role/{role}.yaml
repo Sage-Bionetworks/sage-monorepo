@@ -10,7 +10,7 @@ delete:
   operationId: deleteChallengeContribution
   x-audience: [public]
   security:
-    - apiBearerAuth: []
+    - apiKeyAuth: []
   responses:
     '204':
       description: Contribution deleted successfully

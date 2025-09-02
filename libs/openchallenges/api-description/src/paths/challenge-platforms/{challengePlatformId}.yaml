@@ -27,7 +27,7 @@ put:
   operationId: updateChallengePlatform
   x-audience: [public]
   security:
-    - apiBearerAuth: []
+    - apiKeyAuth: []
   requestBody:
     required: true
     content:
@@ -62,7 +62,7 @@ delete:
   operationId: deleteChallengePlatform
   x-audience: [public]
   security:
-    - apiBearerAuth: []
+    - apiKeyAuth: []
   responses:
     '204':
       description: Deletion successful
