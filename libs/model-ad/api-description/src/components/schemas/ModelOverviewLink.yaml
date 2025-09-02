@@ -7,10 +7,3 @@ properties:
   link_url:
     type: string
     description: URL for the related resource
-oneOf:
-  - required: [link_text]
-    not:
-      required: [link_url]
-  - required: [link_url]
-    not:
-      required: [link_text]

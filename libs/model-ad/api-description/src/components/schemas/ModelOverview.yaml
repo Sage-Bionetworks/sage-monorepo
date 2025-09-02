@@ -8,8 +8,10 @@ properties:
     type: string
     description: Model type (e.g., Late Onset AD, Familial AD)
   matched_controls:
-    type: string
-    description: A comma-delimited list of matched control models
+    type: array
+    items:
+      type: string
+    description: List of matched control models
   gene_expression:
     $ref: './ModelOverviewLink.yaml'
     nullable: true

@@ -22,16 +22,16 @@ export interface ModelOverview {
    */
   model_type: string;
   /**
-   * A comma-delimited list of matched control models
+   * List of matched control models
    */
-  matched_controls: string;
-  gene_expression?: ModelOverviewLink | null;
-  disease_correlation?: ModelOverviewLink | null;
-  biomarkers?: ModelOverviewLink | null;
-  pathology?: ModelOverviewLink | null;
-  study_data: ModelOverviewLink | null;
-  jax_strain: ModelOverviewLink | null;
-  center: ModelOverviewLink | null;
+  matched_controls: Array<string>;
+  gene_expression?: ModelOverviewLink;
+  disease_correlation?: ModelOverviewLink;
+  biomarkers?: ModelOverviewLink;
+  pathology?: ModelOverviewLink;
+  study_data: ModelOverviewLink;
+  jax_strain: ModelOverviewLink;
+  center: ModelOverviewLink;
   /**
    * List of modified genes in the model
    */

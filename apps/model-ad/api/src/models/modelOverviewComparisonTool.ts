@@ -10,7 +10,7 @@ const ModelOverviewSchema = new Schema<ModelOverview>(
   {
     name: { type: String, required: true },
     model_type: { type: String, required: true },
-    matched_controls: { type: String, required: true },
+    matched_controls: { type: [String], required: true },
     gene_expression: { type: ModelOverviewLinkSchema, required: false },
     disease_correlation: { type: ModelOverviewLinkSchema, required: false },
     biomarkers: { type: ModelOverviewLinkSchema, required: false },
