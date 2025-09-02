@@ -5,6 +5,8 @@ import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginRequestDto
 import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.LogoutRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.LogoutResponseDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.UpdateUserProfileRequestDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.UserProfileDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyResponseDto;
 

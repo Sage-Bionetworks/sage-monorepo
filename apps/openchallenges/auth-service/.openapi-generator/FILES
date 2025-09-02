@@ -6,9 +6,11 @@ src/main/java/org/sagebionetworks/openchallenges/auth/service/api/ApiUtil.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/api/AuthenticationApi.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/api/AuthenticationApiController.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/api/AuthenticationApiDelegate.java
+src/main/java/org/sagebionetworks/openchallenges/auth/service/configuration/EnumConverterConfiguration.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/configuration/HomeController.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/configuration/SpringDocConfiguration.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/ApiKeyDto.java
+src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/AuthScopeDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/BasicErrorDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/CreateApiKeyRequestDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/CreateApiKeyResponseDto.java
@@ -16,7 +18,9 @@ src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/LoginReq
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/LoginResponseDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/LogoutRequestDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/LogoutResponseDto.java
-src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/Oauth2JwksJson200ResponseKeysInnerDto.java
+src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/UpdateUserProfileRequestDto.java
+src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/UserProfileDto.java
+src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/UserRoleDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/ValidateApiKeyRequestDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/ValidateApiKeyResponseDto.java
 src/main/resources/openapi.yaml
