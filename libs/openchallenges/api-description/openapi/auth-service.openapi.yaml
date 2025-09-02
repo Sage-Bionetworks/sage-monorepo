@@ -56,7 +56,7 @@ paths:
       x-audience:
         - public
       security:
-        - OAuth2:
+        - oauth2:
             - profile
         - jwtBearerAuth: []
         - apiBearerAuth: []
@@ -80,7 +80,7 @@ paths:
       x-audience:
         - public
       security:
-        - OAuth2:
+        - oauth2:
             - profile
         - jwtBearerAuth: []
       requestBody:
@@ -211,7 +211,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
-    OAuth2:
+    oauth2:
       type: oauth2
       description: OAuth2 Authorization Code Flow for user authentication via Google/Synapse
       flows:
@@ -230,12 +230,12 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-      description: JWT access token obtained from OAuth2 authorization flow
+      description: JWT access token obtained from /auth/login or /auth/oauth2/callback endpoint
     apiBearerAuth:
       type: http
       scheme: bearer
-      bearerFormat: API-Key
-      description: API key for programmatic access and service-to-service communication
+      bearerFormat: JWT
+      description: JWT token from authentication service or API key for programmatic access
   schemas:
     UserRole:
       type: string
