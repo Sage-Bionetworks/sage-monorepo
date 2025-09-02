@@ -6,7 +6,7 @@ delete:
   operationId: deleteApiKey
   x-audience: [public]
   security:
-    - apiBearerAuth: []
+    - apiKeyAuth: []
   parameters:
     - name: keyId
       in: path

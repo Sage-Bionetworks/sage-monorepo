@@ -26,7 +26,7 @@ post:
   operationId: createChallengePlatform
   x-audience: [public]
   security:
-    - apiBearerAuth: []
+    - apiKeyAuth: []
   requestBody:
     content:
       application/json:

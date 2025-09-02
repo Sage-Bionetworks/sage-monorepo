@@ -59,7 +59,7 @@ paths:
         - oauth2:
             - profile
         - jwtBearerAuth: []
-        - apiBearerAuth: []
+        - apiKeyAuth: []
       responses:
         '200':
           description: User profile information
@@ -112,7 +112,7 @@ paths:
       x-audience:
         - public
       security:
-        - apiBearerAuth: []
+        - apiKeyAuth: []
       responses:
         '200':
           description: List of API keys
@@ -135,7 +135,7 @@ paths:
       x-audience:
         - public
       security:
-        - apiBearerAuth: []
+        - apiKeyAuth: []
       requestBody:
         required: true
         content:
@@ -165,7 +165,7 @@ paths:
       x-audience:
         - public
       security:
-        - apiBearerAuth: []
+        - apiKeyAuth: []
       parameters:
         - name: keyId
           in: path
@@ -205,11 +205,11 @@ components:
       scheme: bearer
       bearerFormat: JWT
       description: JWT access token obtained from /auth/login or /auth/oauth2/callback endpoint
-    apiBearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: JWT token from authentication service or API key for programmatic access
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key for programmatic access (create and manage via /auth/api-keys endpoints)
   schemas:
     UserRole:
       type: string

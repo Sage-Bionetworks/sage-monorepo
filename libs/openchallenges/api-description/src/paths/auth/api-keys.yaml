@@ -6,7 +6,7 @@ get:
   operationId: listApiKeys
   x-audience: [public]
   security:
-    - apiBearerAuth: []
+    - apiKeyAuth: []
   responses:
     '200':
       description: List of API keys
@@ -29,7 +29,7 @@ post:
   operationId: createApiKey
   x-audience: [public]
   security:
-    - apiBearerAuth: []
+    - apiKeyAuth: []
   requestBody:
     required: true
     content:

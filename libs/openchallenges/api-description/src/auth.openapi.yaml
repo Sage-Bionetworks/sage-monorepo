@@ -63,5 +63,5 @@ components:
       $ref: components/securitySchemes/JwtBearerAuth.yaml
 
     # API Key for programmatic access to OpenChallenges APIs
-    apiBearerAuth:
-      $ref: components/securitySchemes/ApiBearerAuth.yaml
+    apiKeyAuth:
+      $ref: components/securitySchemes/ApiKeyAuth.yaml

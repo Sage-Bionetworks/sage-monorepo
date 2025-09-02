@@ -8,7 +8,7 @@ get:
   security:
     - oauth2: ['profile']
     - jwtBearerAuth: []
-    - apiBearerAuth: []
+    - apiKeyAuth: []
   responses:
     '200':
       description: User profile information

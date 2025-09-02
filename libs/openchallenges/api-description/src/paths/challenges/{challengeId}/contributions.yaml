@@ -27,7 +27,7 @@ post:
   operationId: createChallengeContribution
   x-audience: [public]
   security:
-    - apiBearerAuth: []
+    - apiKeyAuth: []
   requestBody:
     required: true
     content:
@@ -59,7 +59,7 @@ delete:
   operationId: deleteChallengeContributions
   x-audience: [internal]
   security:
-    - apiBearerAuth: []
+    - apiKeyAuth: []
   responses:
     '204':
       description: Deletion successful

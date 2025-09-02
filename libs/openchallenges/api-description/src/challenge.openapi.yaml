@@ -48,7 +48,7 @@ paths:
     $ref: paths/challenge-platforms/{challengePlatformId}.yaml
   /edam-concepts:
     $ref: paths/edam-concepts.yaml
-# components:
-#   securitySchemes:
-#     apiBearerAuth:
-#       $ref: components/securitySchemes/ApiBearerAuth.yaml
+components:
+  securitySchemes:
+    apiKeyAuth:
+      $ref: components/securitySchemes/ApiKeyAuth.yaml
