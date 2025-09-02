@@ -6,6 +6,7 @@ get:
   operationId: getUserProfile
   x-audience: [public]
   security:
+    - OAuth2: ['profile']
     - jwtBearerAuth: []
     - apiBearerAuth: []
   responses:
@@ -28,6 +29,7 @@ put:
   operationId: updateUserProfile
   x-audience: [public]
   security:
+    - OAuth2: ['profile']
     - jwtBearerAuth: []
   requestBody:
     required: true

@@ -6,18 +6,25 @@ info:
     Authentication and authorization service for OpenChallenges.
 
     This service provides:
-    - JWT-based user authentication via username/password
+    - OAuth2 Authorization Server with Google/Synapse login
     - API key management for service-to-service communication
-    - Role-based access control with defined scopes
-    - Token validation for accessing protected resources
+    - JWT token validation for API access
+    - User profile management
+
+    **OAuth2 Endpoints** (Spring Authorization Server - not documented here):
+    - `GET /oauth2/authorize` - OAuth2 authorization endpoint
+    - `POST /oauth2/token` - Token exchange endpoint
+    - `GET /.well-known/oauth-authorization-server` - OAuth2 discovery
+
+    **Custom API Endpoints** (documented below):
+    - `/v1/auth/api-keys` - API key management
+    - `/v1/auth/profile` - User profile management
+    - `/v1/auth/api-keys/validate` - API key validation
 
     **Authentication Methods**:
-    - `/v1/auth/login` - Username/password authentication returning JWT tokens
-    - `/v1/auth/api-keys` - API key management for programmatic access
-    - `/v1/auth/validate` - Token validation for protected resources
-
-    **Authorization Scopes**:
-    API access is controlled through role-based permissions and scopes defined below.
+    - **OAuth2**: Use standard OAuth2 flows for user login via Google/Synapse
+    - **API Keys**: Use for service-to-service communication
+    - **JWT**: Tokens issued by OAuth2 server for API access
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -27,73 +34,19 @@ info:
   x-logo:
     url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
-  - url: http://localhost
+  - url: http://localhost/v1
     description: Local/dev base
 tags:
   - name: Authentication
-    description: Operations for user authentication and token management
+    description: User profile and token validation operations
     x-audience:
       - public
   - name: API Key
-    description: Operations for API key management and service-to-service authentication
+    description: API key management for service-to-service authentication
     x-audience:
       - public
 paths:
-  /v1/auth/login:
-    post:
-      tags:
-        - Authentication
-      summary: User login
-      description: Authenticate user and return JWT token
-      operationId: login
-      x-audience:
-        - public
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LoginRequest'
-      responses:
-        '200':
-          description: Login successful
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LoginResponse'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /v1/auth/logout:
-    post:
-      tags:
-        - Authentication
-      summary: User logout
-      description: Logout user and revoke refresh tokens for security
-      operationId: logout
-      x-audience:
-        - public
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LogoutRequest'
-      responses:
-        '200':
-          description: Logout successful
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LogoutResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /v1/auth/profile:
+  /auth/profile:
     get:
       tags:
         - Authentication
@@ -103,6 +56,8 @@ paths:
       x-audience:
         - public
       security:
+        - OAuth2:
+            - profile
         - jwtBearerAuth: []
         - apiBearerAuth: []
       responses:
@@ -125,6 +80,8 @@ paths:
       x-audience:
         - public
       security:
+        - OAuth2:
+            - profile
         - jwtBearerAuth: []
       requestBody:
         required: true
@@ -145,7 +102,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /v1/auth/api-keys:
+  /auth/api-keys:
     get:
       tags:
         - API Key
@@ -198,7 +155,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /v1/auth/api-keys/{keyId}:
+  /auth/api-keys/{keyId}:
     delete:
       tags:
         - API Key
@@ -228,114 +185,32 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
+    OAuth2:
+      type: oauth2
+      description: OAuth2 Authorization Code Flow for user authentication via Google/Synapse
+      flows:
+        authorizationCode:
+          authorizationUrl: /oauth2/authorize
+          tokenUrl: /oauth2/token
+          refreshUrl: /oauth2/token
+          scopes:
+            openid: OpenID Connect authentication
+            profile: Access to user's basic profile information
+            email: Access to user's email address
+            api:read: Read access to API resources
+            api:write: Write access to API resources
+            api:admin: Administrative access to API resources
     jwtBearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-      description: JWT access token obtained from /auth/login or /auth/oauth2/callback endpoint
+      description: JWT access token obtained from OAuth2 authorization flow
     apiBearerAuth:
       type: http
       scheme: bearer
-      bearerFormat: JWT
-      description: JWT token from authentication service or API key for programmatic access
+      bearerFormat: API-Key
+      description: API key for programmatic access and service-to-service communication
   schemas:
-    LoginRequest:
-      type: object
-      required:
-        - username
-        - password
-      properties:
-        username:
-          type: string
-          description: Username or email
-          example: admin
-        password:
-          type: string
-          format: password
-          description: User password
-          example: changeme
-    LoginResponse:
-      type: object
-      properties:
-        accessToken:
-          type: string
-          description: JWT access token (15-60 minutes expiry)
-          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-        refreshToken:
-          type: string
-          description: JWT refresh token (7 days expiry)
-          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-        tokenType:
-          type: string
-          description: Token type
-          example: Bearer
-          default: Bearer
-        expiresIn:
-          type: integer
-          description: Access token expiry time in seconds
-          example: 3600
-        userId:
-          type: string
-          format: uuid
-          description: User ID
-          example: 123e4567-e89b-12d3-a456-426614174000
-        username:
-          type: string
-          description: Username
-          example: admin
-        role:
-          type: string
-          description: User role
-          example: admin
-          enum:
-            - admin
-            - user
-            - readonly
-            - service
-    BasicError:
-      type: object
-      description: Problem details (tools.ietf.org/html/rfc7807)
-      properties:
-        title:
-          type: string
-          description: A human readable documentation for the problem type
-        status:
-          type: integer
-          description: The HTTP status code
-        detail:
-          type: string
-          description: A human readable explanation specific to this occurrence of the problem
-        type:
-          type: string
-          description: An absolute URI that identifies the problem type
-      required:
-        - title
-        - status
-    LogoutRequest:
-      type: object
-      required:
-        - refreshToken
-      properties:
-        refreshToken:
-          type: string
-          description: JWT refresh token to revoke
-          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-        revokeAllTokens:
-          type: boolean
-          description: Whether to revoke all refresh tokens for the user (default false)
-          example: false
-          default: false
-    LogoutResponse:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Logout success message
-          example: Successfully logged out
-        revokedTokens:
-          type: integer
-          description: Number of refresh tokens revoked
-          example: 1
     UserRole:
       type: string
       enum:
@@ -423,6 +298,25 @@ components:
           format: date-time
           description: Timestamp when the user profile was last updated
           example: '2024-02-01T14:20:00Z'
+    BasicError:
+      type: object
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          type: string
+          description: A human readable documentation for the problem type
+        status:
+          type: integer
+          description: The HTTP status code
+        detail:
+          type: string
+          description: A human readable explanation specific to this occurrence of the problem
+        type:
+          type: string
+          description: An absolute URI that identifies the problem type
+      required:
+        - title
+        - status
     UpdateUserProfileRequest:
       type: object
       properties:

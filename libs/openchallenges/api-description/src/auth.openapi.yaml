@@ -6,18 +6,25 @@ info:
     Authentication and authorization service for OpenChallenges.
 
     This service provides:
-    - JWT-based user authentication via username/password
+    - OAuth2 Authorization Server with Google/Synapse login
     - API key management for service-to-service communication
-    - Role-based access control with defined scopes
-    - Token validation for accessing protected resources
+    - JWT token validation for API access
+    - User profile management
+
+    **OAuth2 Endpoints** (Spring Authorization Server - not documented here):
+    - `GET /oauth2/authorize` - OAuth2 authorization endpoint
+    - `POST /oauth2/token` - Token exchange endpoint
+    - `GET /.well-known/oauth-authorization-server` - OAuth2 discovery
+
+    **Custom API Endpoints** (documented below):
+    - `/v1/auth/api-keys` - API key management
+    - `/v1/auth/profile` - User profile management
+    - `/v1/auth/api-keys/validate` - API key validation
 
     **Authentication Methods**:
-    - `/v1/auth/login` - Username/password authentication returning JWT tokens
-    - `/v1/auth/api-keys` - API key management for programmatic access
-    - `/v1/auth/validate` - Token validation for protected resources
-
-    **Authorization Scopes**:
-    API access is controlled through role-based permissions and scopes defined below.
+    - **OAuth2**: Use standard OAuth2 flows for user login via Google/Synapse
+    - **API Keys**: Use for service-to-service communication
+    - **JWT**: Tokens issued by OAuth2 server for API access
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -27,34 +34,56 @@ info:
   x-logo:
     url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
-  - url: http://localhost
+  - url: http://localhost/v1
     description: Local/dev base
 tags:
   - name: Authentication
-    description: Operations for user authentication and token management
+    description: User profile and token validation operations
     x-audience: [public]
   - name: API Key
-    description: Operations for API key management and service-to-service authentication
+    description: API key management for service-to-service authentication
     x-audience: [public]
 paths:
-  /v1/auth/login:
-    $ref: paths/auth/login.yaml
-  /v1/auth/logout:
-    $ref: paths/auth/logout.yaml
-  /v1/auth/profile:
+  /auth/profile:
     $ref: paths/auth/profile.yaml
-  /v1/auth/api-keys:
+  /auth/api-keys:
     $ref: paths/auth/api-keys.yaml
-  /v1/auth/api-keys/{keyId}:
+  /auth/api-keys/{keyId}:
     $ref: paths/auth/api-keys/{keyId}.yaml
-  /v1/auth/validate:
-    $ref: paths/auth/validate.yaml
+  /auth/api-keys/validate:
+    $ref: paths/auth/api-keys/validate.yaml
 components:
   securitySchemes:
-    # JWT Bearer for user authentication
+    # OAuth2 for user authentication (Spring Authorization Server)
+    OAuth2:
+      type: oauth2
+      description: OAuth2 Authorization Code Flow for user authentication via Google/Synapse
+      flows:
+        authorizationCode:
+          authorizationUrl: /oauth2/authorize
+          tokenUrl: /oauth2/token
+          refreshUrl: /oauth2/token
+          scopes:
+            # OpenID Connect scopes
+            openid: OpenID Connect authentication
+            profile: Access to user's basic profile information
+            email: Access to user's email address
+
+            # Application-specific scopes
+            'api:read': Read access to API resources
+            'api:write': Write access to API resources
+            'api:admin': Administrative access to API resources
+
+    # JWT Bearer tokens (issued by OAuth2 server)
     jwtBearerAuth:
-      $ref: components/securitySchemes/JwtBearerAuth.yaml
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT access token obtained from OAuth2 authorization flow
 
     # API Key for service-to-service communication
     apiBearerAuth:
-      $ref: components/securitySchemes/ApiBearerAuth.yaml
+      type: http
+      scheme: bearer
+      bearerFormat: API-Key
+      description: API key for programmatic access and service-to-service communication

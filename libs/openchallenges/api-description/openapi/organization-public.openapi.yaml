@@ -164,17 +164,6 @@ paths:
       - $ref: '#/components/parameters/challengeId'
       - $ref: '#/components/parameters/challengeParticipationRole'
 components:
-  securitySchemes:
-    jwtBearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: JWT access token obtained from /auth/login or /auth/oauth2/callback endpoint
-    apiKeyAuth:
-      type: apiKey
-      in: header
-      name: X-API-Key
-      description: API key for programmatic access (create and manage via /auth/api-keys endpoints)
   schemas:
     OrganizationCategory:
       description: The category of the organization.

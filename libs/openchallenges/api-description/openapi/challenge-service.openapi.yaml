@@ -467,12 +467,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
-  securitySchemes:
-    apiBearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: JWT token from authentication service or API key for programmatic access
   schemas:
     ChallengeSort:
       description: What to sort results by.
