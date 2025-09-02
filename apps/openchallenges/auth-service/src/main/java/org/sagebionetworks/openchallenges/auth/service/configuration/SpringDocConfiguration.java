@@ -19,7 +19,7 @@ public class SpringDocConfiguration {
                 .info(
                         new Info()
                                 .title("OpenChallenges Auth API")
-                                .description("Modern OAuth2 and OpenID Connect authentication service for OpenChallenges.  This service provides: - Standard OAuth2 Authorization Server with PKCE support - OpenID Connect for user authentication - API key management for service-to-service communication - Legacy username/password authentication  **OAuth2 Endpoints** (unversioned, standards-compliant): - Use `/oauth2/_*` endpoints for standard OAuth2 flows - Use `/.well-known/_*` endpoints for discovery - Replaces legacy `/v1/auth/jwt/_*` and `/v1/auth/oauth2/_*` endpoints  **Custom API Endpoints** (versioned): - Use `/v1/auth/_*` for domain-specific functionality like API keys - Use `/v1/auth/login` for legacy username/password authentication ")
+                                .description("Authentication and authorization service for OpenChallenges.  This service provides: - JWT-based user authentication via username/password - API key management for service-to-service communication - Role-based access control with defined scopes - Token validation for accessing protected resources  **Authentication Methods**: - `/v1/auth/login` - Username/password authentication returning JWT tokens - `/v1/auth/api-keys` - API key management for programmatic access - `/v1/auth/validate` - Token validation for protected resources  **Authorization Scopes**: API access is controlled through role-based permissions and scopes defined below. ")
                                 .contact(
                                         new Contact()
                                                 .name("Support")
@@ -34,9 +34,6 @@ public class SpringDocConfiguration {
                 )
                 .components(
                         new Components()
-                                .addSecuritySchemes("OAuth2", new SecurityScheme()
-                                        .type(SecurityScheme.Type.OAUTH2)
-                                )
                                 .addSecuritySchemes("jwtBearerAuth", new SecurityScheme()
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer")

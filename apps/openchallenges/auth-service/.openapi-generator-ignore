@@ -26,25 +26,3 @@ README.md
 **/application.properties
 **/OpenApiGeneratorApplication.java
 **/OpenApiGeneratorApplicationTests.java
-
-# Exclude OAuth2 API files - these endpoints are handled by Spring OAuth2 Authorization Server
-src/main/java/org/sagebionetworks/openchallenges/auth/service/api/OAuth2Api.java
-src/main/java/org/sagebionetworks/openchallenges/auth/service/api/OAuth2ApiController.java
-src/main/java/org/sagebionetworks/openchallenges/auth/service/api/OAuth2ApiDelegate.java
-
-# Exclude specific OAuth2 DTOs that conflict with Spring OAuth2 Authorization Server
-# But keep OAuth2TokenResponse and OAuth2UserInfo which are used by our internal services
-src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/OAuth2TokenResponseDto.java
-src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/OAuth2ErrorDto.java
-src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/Oauth2AuthorizationServerMetadata200ResponseDto.java
-src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/Oauth2Introspect200ResponseDto.java
-src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/Oauth2JwksJson200ResponseDto.java
-src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/Oauth2JwksJson404ResponseDto.java
-src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/Oauth2RevokeToken200ResponseDto.java
-src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/Oauth2UserInfo200ResponseDto.java
-src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/Oauth2WellKnownOpenidConfiguration200ResponseDto.java
-src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/Oauth2WellKnownOpenidConfiguration404ResponseDto.java
-
-# Protect our manually created internal DTOs from being overwritten
-src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/OAuth2TokenResponse.java
-src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/OAuth2UserInfo.java

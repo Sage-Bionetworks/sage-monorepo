@@ -10,6 +10,8 @@ import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginRequestDto
 import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.LogoutRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.LogoutResponseDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.UpdateUserProfileRequestDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.UserProfileDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyResponseDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
@@ -38,12 +40,57 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Validated
-@Tag(name = "Authentication", description = "Operations about authentication")
+@Tag(name = "Authentication", description = "Operations for user authentication and token management")
 public interface AuthenticationApi {
 
     default AuthenticationApiDelegate getDelegate() {
         return new AuthenticationApiDelegate() {};
     }
+
+    /**
+     * GET /v1/auth/profile : Get user profile
+     * Get the authenticated user&#39;s profile information
+     *
+     * @return User profile information (status code 200)
+     *         or Unauthorized (status code 401)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "getUserProfile",
+        summary = "Get user profile",
+        description = "Get the authenticated user's profile information",
+        tags = { "Authentication" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "User profile information", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = UserProfileDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = UserProfileDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "apiBearerAuth"),
+            @SecurityRequirement(name = "jwtBearerAuth")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/v1/auth/profile",
+        produces = { "application/json", "application/problem+json" }
+    )
+    
+    default ResponseEntity<UserProfileDto> getUserProfile(
+        
+    ) {
+        return getDelegate().getUserProfile();
+    }
+
 
     /**
      * POST /v1/auth/login : User login
@@ -133,6 +180,57 @@ public interface AuthenticationApi {
         @Parameter(name = "LogoutRequestDto", description = "", required = true) @Valid @RequestBody LogoutRequestDto logoutRequestDto
     ) {
         return getDelegate().logout(logoutRequestDto);
+    }
+
+
+    /**
+     * PUT /v1/auth/profile : Update user profile
+     * Update the authenticated user&#39;s profile information
+     *
+     * @param updateUserProfileRequestDto  (required)
+     * @return User profile updated successfully (status code 200)
+     *         or Invalid request (status code 400)
+     *         or Unauthorized (status code 401)
+     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+     */
+    @Operation(
+        operationId = "updateUserProfile",
+        summary = "Update user profile",
+        description = "Update the authenticated user's profile information",
+        tags = { "Authentication" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "User profile updated successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = UserProfileDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = UserProfileDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearerAuth")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.PUT,
+        value = "/v1/auth/profile",
+        produces = { "application/json", "application/problem+json" },
+        consumes = { "application/json" }
+    )
+    
+    default ResponseEntity<UserProfileDto> updateUserProfile(
+        @Parameter(name = "UpdateUserProfileRequestDto", description = "", required = true) @Valid @RequestBody UpdateUserProfileRequestDto updateUserProfileRequestDto
+    ) {
+        return getDelegate().updateUserProfile(updateUserProfileRequestDto);
     }
 
 

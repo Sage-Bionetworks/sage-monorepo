@@ -36,7 +36,7 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Validated
-@Tag(name = "API Key", description = "Operations about API key management")
+@Tag(name = "API Key", description = "Operations for API key management and service-to-service authentication")
 public interface ApiKeyApi {
 
     default ApiKeyApiDelegate getDelegate() {
