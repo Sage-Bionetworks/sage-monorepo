@@ -98,6 +98,7 @@ paths:
         - oauth2:
             - profile
         - jwtBearerAuth: []
+        - apiKeyAuth: []
       requestBody:
         required: true
         content:
@@ -127,7 +128,9 @@ paths:
       x-audience:
         - public
       security:
-        - apiKeyAuth: []
+        - oauth2:
+            - api:read
+        - jwtBearerAuth: []
       responses:
         '200':
           description: List of API keys
@@ -150,7 +153,9 @@ paths:
       x-audience:
         - public
       security:
-        - apiKeyAuth: []
+        - oauth2:
+            - api:write
+        - jwtBearerAuth: []
       requestBody:
         required: true
         content:
@@ -180,7 +185,9 @@ paths:
       x-audience:
         - public
       security:
-        - apiKeyAuth: []
+        - oauth2:
+            - api:write
+        - jwtBearerAuth: []
       parameters:
         - name: keyId
           in: path
