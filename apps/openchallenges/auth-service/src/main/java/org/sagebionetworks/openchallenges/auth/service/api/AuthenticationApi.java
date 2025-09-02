@@ -71,8 +71,8 @@ public interface AuthenticationApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "OAuth2", scopes={ "profile" }),
-            @SecurityRequirement(name = "apiBearerAuth"),
+            @SecurityRequirement(name = "apiKeyAuth"),
+            @SecurityRequirement(name = "oauth2", scopes={ "profile" }),
             @SecurityRequirement(name = "jwtBearerAuth")
         }
     )
@@ -123,7 +123,8 @@ public interface AuthenticationApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "OAuth2", scopes={ "profile" }),
+            @SecurityRequirement(name = "apiKeyAuth"),
+            @SecurityRequirement(name = "oauth2", scopes={ "profile" }),
             @SecurityRequirement(name = "jwtBearerAuth")
         }
     )

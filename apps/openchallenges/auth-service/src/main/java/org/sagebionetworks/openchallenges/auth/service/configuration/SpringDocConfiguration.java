@@ -19,7 +19,7 @@ public class SpringDocConfiguration {
                 .info(
                         new Info()
                                 .title("OpenChallenges Auth API")
-                                .description("Authentication and authorization service for OpenChallenges.  This service provides: - OAuth2 Authorization Server with Google/Synapse login - API key management for service-to-service communication - JWT token validation for API access - User profile management  **OAuth2 Endpoints** (Spring Authorization Server - not documented here): - `GET /oauth2/authorize` - OAuth2 authorization endpoint - `POST /oauth2/token` - Token exchange endpoint - `GET /.well-known/oauth-authorization-server` - OAuth2 discovery  **Custom API Endpoints** (documented below): - `/v1/auth/api-keys` - API key management - `/v1/auth/profile` - User profile management - `/v1/auth/api-keys/validate` - API key validation  **Authentication Methods**: - **OAuth2**: Use standard OAuth2 flows for user login via Google/Synapse - **API Keys**: Use for service-to-service communication - **JWT**: Tokens issued by OAuth2 server for API access ")
+                                .description("Authentication and authorization service for OpenChallenges.  This service provides: - OAuth2 Authorization Server with Google/Synapse login - API key management for programmatic access to OpenChallenges APIs - JWT token validation for API access - User profile management  **OAuth2 Endpoints** (Spring Authorization Server - not documented here): - `GET /oauth2/authorize` - OAuth2 authorization endpoint - `POST /oauth2/token` - Token exchange endpoint - `GET /.well-known/oauth-authorization-server` - OAuth2 discovery  **Custom API Endpoints** (documented below): - `/v1/auth/api-keys` - API key management - `/v1/auth/profile` - User profile management - `/v1/auth/api-keys/validate` - API key validation  **Authentication Methods**: - **OAuth2**: Use standard OAuth2 flows for user login via Google/Synapse - **API Keys**: Use for programmatic access to OpenChallenges APIs (users and services) - **JWT**: Tokens issued by OAuth2 server for API access ")
                                 .contact(
                                         new Contact()
                                                 .name("Support")
@@ -34,7 +34,7 @@ public class SpringDocConfiguration {
                 )
                 .components(
                         new Components()
-                                .addSecuritySchemes("OAuth2", new SecurityScheme()
+                                .addSecuritySchemes("oauth2", new SecurityScheme()
                                         .type(SecurityScheme.Type.OAUTH2)
                                 )
                                 .addSecuritySchemes("jwtBearerAuth", new SecurityScheme()
@@ -42,10 +42,10 @@ public class SpringDocConfiguration {
                                         .scheme("bearer")
                                         .bearerFormat("JWT")
                                 )
-                                .addSecuritySchemes("apiBearerAuth", new SecurityScheme()
-                                        .type(SecurityScheme.Type.HTTP)
-                                        .scheme("bearer")
-                                        .bearerFormat("API-Key")
+                                .addSecuritySchemes("apiKeyAuth", new SecurityScheme()
+                                        .type(SecurityScheme.Type.APIKEY)
+                                        .in(SecurityScheme.In.HEADER)
+                                        .name("X-API-Key")
                                 )
                 )
         ;
