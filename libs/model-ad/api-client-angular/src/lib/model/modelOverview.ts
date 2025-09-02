@@ -22,9 +22,9 @@ export interface ModelOverview {
    */
   model_type: string;
   /**
-   * A comma-delimited list of matched control models
+   * List of matched control models
    */
-  matched_controls: string;
+  matched_controls: Array<string>;
   gene_expression?: ModelOverviewLink;
   disease_correlation?: ModelOverviewLink;
   biomarkers?: ModelOverviewLink;
