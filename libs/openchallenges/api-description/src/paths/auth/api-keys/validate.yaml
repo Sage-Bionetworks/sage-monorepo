@@ -10,15 +10,15 @@ post:
     content:
       application/json:
         schema:
-          $ref: ../../components/schemas/ValidateApiKeyRequest.yaml
+          $ref: ../../../components/schemas/ValidateApiKeyRequest.yaml
   responses:
     '200':
       description: API key is valid
       content:
         application/json:
           schema:
-            $ref: ../../components/schemas/ValidateApiKeyResponse.yaml
+            $ref: ../../../components/schemas/ValidateApiKeyResponse.yaml
     '401':
-      $ref: ../../components/responses/Unauthorized.yaml
+      $ref: ../../../components/responses/Unauthorized.yaml
     '500':
-      $ref: ../../components/responses/InternalServerError.yaml
+      $ref: ../../../components/responses/InternalServerError.yaml
