@@ -64,8 +64,3 @@ openchallenges:
     api-key:
       length: 40
       # prefix is defined in profile-specific configuration files
-
-app:
-  oauth2:
-    authorization-server:
-      enabled: true # Enable OAuth2 Authorization Server

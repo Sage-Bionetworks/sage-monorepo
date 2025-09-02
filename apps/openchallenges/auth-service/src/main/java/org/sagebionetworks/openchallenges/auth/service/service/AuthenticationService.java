@@ -55,37 +55,7 @@ public class AuthenticationService {
     return generateTokenResponse(user);
   }
 
-  /**
-   * Generate OAuth2 authorization URL for provider
-   */
-  public OAuth2AuthorizeResponseDto authorizeOAuth2(OAuth2AuthorizeRequestDto request) {
-    log.debug("Generating OAuth2 authorization URL for provider: {}", request.getProvider());
-
-    ExternalAccount.Provider provider;
-    try {
-      provider = ExternalAccount.Provider.valueOf(request.getProvider().getValue());
-    } catch (IllegalArgumentException e) {
-      throw new RuntimeException("Unsupported OAuth2 provider: " + request.getProvider());
-    }
-
-    // Generate state for CSRF protection with provider information
-    String baseState = request.getState() != null
-      ? request.getState()
-      : UUID.randomUUID().toString();
-    String state = provider.name() + ":" + baseState; // Encode provider in state
-
-    // Get authorization URL from OAuth2 configuration service
-    String authorizationUrl = oAuth2ConfigurationService.getAuthorizationUrl(provider, state);
-
-    try {
-      return OAuth2AuthorizeResponseDto.builder()
-        .authorizationUrl(new java.net.URI(authorizationUrl))
-        .state(state)
-        .build();
-    } catch (java.net.URISyntaxException e) {
-      throw new RuntimeException("Invalid authorization URL", e);
-    }
-  }
+  
 
   /**
    * Handle OAuth2 callback and generate JWT tokens (extract provider from state)
@@ -139,36 +109,7 @@ public class AuthenticationService {
     return generateLoginResponse(user);
   }
 
-  /**
-   * Validate JWT token
-   */
-  public ValidateJwtResponseDto validateJwt(String token) {
-    JwtService.JwtValidationResult result = jwtService.validateToken(token);
 
-    ValidateJwtResponseDto response = new ValidateJwtResponseDto()
-      .valid(result.isValid())
-      .userId(result.getUserId())
-      .username(result.getUsername());
-
-    // Add role and expiresAt if token is valid
-    if (result.isValid() && result.getRole() != null) {
-      // Convert User.Role to ValidateJwtResponseDto.RoleEnum
-      ValidateJwtResponseDto.RoleEnum roleEnum =
-        switch (result.getRole()) {
-          case admin -> ValidateJwtResponseDto.RoleEnum.ADMIN;
-          case user -> ValidateJwtResponseDto.RoleEnum.USER;
-          case readonly -> ValidateJwtResponseDto.RoleEnum.READONLY;
-          case service -> ValidateJwtResponseDto.RoleEnum.SERVICE;
-        };
-      response.role(roleEnum);
-    }
-
-    if (result.isValid() && result.getExpiresAt() != null) {
-      response.expiresAt(result.getExpiresAt());
-    }
-
-    return response;
-  }
 
   /**
    * Refresh JWT tokens using refresh token with rotation for enhanced security
