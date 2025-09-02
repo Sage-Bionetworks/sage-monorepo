@@ -19,7 +19,7 @@ public class SpringDocConfiguration {
                 .info(
                         new Info()
                                 .title("OpenChallenges Auth API")
-                                .description("Discover, explore, and contribute to open biomedical challenges.")
+                                .description("Modern OAuth2 and OpenID Connect authentication service for OpenChallenges.  This service provides: - Standard OAuth2 Authorization Server with PKCE support - OpenID Connect for user authentication - API key management for service-to-service communication - Legacy username/password authentication  **OAuth2 Endpoints** (unversioned, standards-compliant): - Use `/oauth2/_*` endpoints for standard OAuth2 flows - Use `/.well-known/_*` endpoints for discovery - Replaces legacy `/v1/auth/jwt/_*` and `/v1/auth/oauth2/_*` endpoints  **Custom API Endpoints** (versioned): - Use `/v1/auth/_*` for domain-specific functionality like API keys - Use `/v1/auth/login` for legacy username/password authentication ")
                                 .contact(
                                         new Contact()
                                                 .name("Support")

@@ -2,7 +2,23 @@ openapi: 3.0.3
 info:
   version: 1.0.0
   title: OpenChallenges Auth API
-  description: Discover, explore, and contribute to open biomedical challenges.
+  description: |
+    Modern OAuth2 and OpenID Connect authentication service for OpenChallenges.
+
+    This service provides:
+    - Standard OAuth2 Authorization Server with PKCE support
+    - OpenID Connect for user authentication
+    - API key management for service-to-service communication
+    - Legacy username/password authentication
+
+    **OAuth2 Endpoints** (unversioned, standards-compliant):
+    - Use `/oauth2/*` endpoints for standard OAuth2 flows
+    - Use `/.well-known/*` endpoints for discovery
+    - Replaces legacy `/v1/auth/jwt/*` and `/v1/auth/oauth2/*` endpoints
+
+    **Custom API Endpoints** (versioned):
+    - Use `/v1/auth/*` for domain-specific functionality like API keys
+    - Use `/v1/auth/login` for legacy username/password authentication
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -51,16 +67,6 @@ paths:
   # API Resources (VERSIONED - custom OpenChallenges API)
   /v1/auth/login:
     $ref: paths/auth/login.yaml
-  /v1/auth/oauth2/authorize:
-    $ref: paths/auth/oauth2-authorize.yaml
-  /v1/auth/oauth2/callback:
-    $ref: paths/auth/oauth2-callback.yaml
-  /v1/auth/oauth2/revoke:
-    $ref: paths/auth/oauth2-revoke.yaml
-  /v1/auth/jwt/validate:
-    $ref: paths/auth/jwt-validate.yaml
-  /v1/auth/jwt/refresh:
-    $ref: paths/auth/jwt-refresh.yaml
   /v1/auth/logout:
     $ref: paths/auth/logout.yaml
   /v1/auth/api-keys:
@@ -69,10 +75,6 @@ paths:
     $ref: paths/auth/api-keys/{keyId}.yaml
   /v1/auth/validate:
     $ref: paths/auth/validate.yaml
-
-  # User management (VERSIONED)
-  /v1/user:
-    $ref: paths/user.yaml
 components:
   securitySchemes:
     # OAuth2 Authorization Code Flow with PKCE

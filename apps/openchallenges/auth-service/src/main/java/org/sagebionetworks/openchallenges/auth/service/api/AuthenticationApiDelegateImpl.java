@@ -7,16 +7,8 @@ import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginRequestDto
 import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.LogoutRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.LogoutResponseDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2AuthorizeRequestDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2AuthorizeResponseDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2CallbackRequestDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2RevokeResponseDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.RefreshTokenRequestDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.RefreshTokenResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyResponseDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateJwtRequestDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateJwtResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
@@ -60,89 +52,6 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     } catch (Exception e) {
       logger.error("Unexpected error during JWT login for username: {}", loginRequestDto.getUsername(), e);
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    }
-  }
-
-  @Override
-  public ResponseEntity<OAuth2AuthorizeResponseDto> initiateOAuth2(OAuth2AuthorizeRequestDto oauth2AuthorizeRequestDto) {
-    logger.info("OAuth2 authorization request for provider");
-    try {
-      OAuth2AuthorizeResponseDto response = authenticationService.authorizeOAuth2(oauth2AuthorizeRequestDto);
-      logger.info("OAuth2 authorization URL generated successfully");
-      return ResponseEntity.ok(response);
-    } catch (RuntimeException e) {
-      logger.warn("OAuth2 authorization failed: {}", e.getMessage());
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-    } catch (Exception e) {
-      logger.error("Unexpected error during OAuth2 authorization", e);
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    }
-  }
-
-  @Override
-  public ResponseEntity<LoginResponseDto> completeOAuth2(OAuth2CallbackRequestDto oauth2CallbackRequestDto) {
-    logger.info("OAuth2 callback processing - code: {}, state: {}", 
-                oauth2CallbackRequestDto.getCode() != null ? "present" : "null",
-                oauth2CallbackRequestDto.getState());
-    try {
-      LoginResponseDto response = authenticationService.handleOAuth2Callback(
-        oauth2CallbackRequestDto.getCode(),
-        oauth2CallbackRequestDto.getState()
-      );
-      logger.info("OAuth2 authentication completed successfully - response: {}", 
-                  response != null ? "present" : "null");
-      if (response != null) {
-        logger.debug("OAuth2 response details - accessToken: {}, refreshToken: {}, userId: {}", 
-                     response.getAccessToken() != null ? "present" : "null",
-                     response.getRefreshToken() != null ? "present" : "null", 
-                     response.getUserId());
-      }
-      return ResponseEntity.ok(response);
-    } catch (RuntimeException e) {
-      logger.warn("OAuth2 callback failed: {}", e.getMessage(), e);
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    } catch (Exception e) {
-      logger.error("Unexpected error during OAuth2 callback", e);
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    }
-  }
-
-  @Override
-  public ResponseEntity<ValidateJwtResponseDto> validateJwt(ValidateJwtRequestDto validateJwtRequestDto) {
-    logger.debug("JWT validation request received");
-    try {
-      ValidateJwtResponseDto response = authenticationService.validateJwt(validateJwtRequestDto.getToken());
-      logger.debug("JWT validation completed");
-      return ResponseEntity.ok(response);
-    } catch (RuntimeException e) {
-      logger.warn("JWT validation failed: {}", e.getMessage());
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-    } catch (Exception e) {
-      logger.error("Unexpected error during JWT validation", e);
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    }
-  }
-
-  @Override
-  public ResponseEntity<RefreshTokenResponseDto> refreshJwt(RefreshTokenRequestDto refreshTokenRequestDto) {
-    logger.info("JWT refresh token request received");
-    try {
-      LoginResponseDto loginResponse = authenticationService.refreshToken(refreshTokenRequestDto.getRefreshToken());
-      
-      // Convert LoginResponseDto to RefreshTokenResponseDto
-      RefreshTokenResponseDto response = new RefreshTokenResponseDto()
-        .accessToken(loginResponse.getAccessToken())
-        .tokenType("Bearer")
-        .expiresIn(loginResponse.getExpiresIn());
-        
-      logger.info("JWT refresh completed successfully");
-      return ResponseEntity.ok(response);
-    } catch (RuntimeException e) {
-      logger.warn("JWT refresh failed: {}", e.getMessage());
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    } catch (Exception e) {
-      logger.error("Unexpected error during JWT refresh", e);
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
   }
@@ -250,24 +159,6 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
       return ResponseEntity.ok(response);
     } catch (Exception e) {
       logger.error("Error during logout", e);
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    }
-  }
-
-  @Override
-  public ResponseEntity<OAuth2RevokeResponseDto> revokeOAuth2Token(String token, String tokenTypeHint) {
-    logger.info("OAuth2 token revocation request received, type hint: {}", tokenTypeHint);
-    try {
-      int revokedTokens = authenticationService.revokeOAuth2Token(token, tokenTypeHint);
-
-      OAuth2RevokeResponseDto response = new OAuth2RevokeResponseDto()
-        .message("Token successfully revoked")
-        .revokedTokens(revokedTokens);
-
-      logger.info("OAuth2 token successfully revoked, {} tokens revoked", revokedTokens);
-      return ResponseEntity.ok(response);
-    } catch (Exception e) {
-      logger.error("Error during OAuth2 token revocation", e);
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
   }

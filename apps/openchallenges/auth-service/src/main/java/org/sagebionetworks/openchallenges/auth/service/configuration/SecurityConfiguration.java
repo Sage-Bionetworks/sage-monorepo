@@ -55,12 +55,12 @@ public class SecurityConfiguration {
             .permitAll() // Public custom OAuth2 endpoints
             .requestMatchers("/oauth2/**")
             .permitAll() // Standard OAuth2 endpoints (unversioned)
-            .requestMatchers("/.well-known/**")
-            .permitAll() // OIDC discovery endpoints
             .requestMatchers("/v1/auth/jwt/**")
             .permitAll() // Public JWT endpoints (validate, refresh)
             .requestMatchers("/login", "/auth/oauth2/google", "/auth/callback")
-            .permitAll() // OAuth2 web interface endpoints (not part of API spec)
+            .permitAll() // OAuth2 web interface endpoints and login page
+            .requestMatchers("/error")
+            .permitAll() // Error page
             .requestMatchers("/logout", "/logout/**")
             .permitAll() // Logout web interface endpoints
             .requestMatchers("/actuator/health", "/actuator/info")
