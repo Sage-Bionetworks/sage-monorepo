@@ -1,10 +1,6 @@
 package org.sagebionetworks.openchallenges.auth.service.api;
 
 import org.sagebionetworks.openchallenges.auth.service.model.dto.BasicErrorDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginRequestDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginResponseDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.LogoutRequestDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.LogoutResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.UpdateUserProfileRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.UserProfileDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyRequestDto;
@@ -35,7 +31,7 @@ public interface AuthenticationApiDelegate {
     }
 
     /**
-     * GET /v1/auth/profile : Get user profile
+     * GET /auth/profile : Get user profile
      * Get the authenticated user&#39;s profile information
      *
      * @return User profile information (status code 200)
@@ -68,81 +64,7 @@ public interface AuthenticationApiDelegate {
     }
 
     /**
-     * POST /v1/auth/login : User login
-     * Authenticate user and return JWT token
-     *
-     * @param loginRequestDto  (required)
-     * @return Login successful (status code 200)
-     *         or Unauthorized (status code 401)
-     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     * @see AuthenticationApi#login
-     */
-    default ResponseEntity<LoginResponseDto> login(LoginRequestDto loginRequestDto) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"expiresIn\" : 3600, \"role\" : \"admin\", \"accessToken\" : \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\", \"tokenType\" : \"Bearer\", \"userId\" : \"123e4567-e89b-12d3-a456-426614174000\", \"refreshToken\" : \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\", \"username\" : \"admin\" }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
-                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
-                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
-                    break;
-                }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
-                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
-                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
-                    break;
-                }
-            }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
-    }
-
-    /**
-     * POST /v1/auth/logout : User logout
-     * Logout user and revoke refresh tokens for security
-     *
-     * @param logoutRequestDto  (required)
-     * @return Logout successful (status code 200)
-     *         or Invalid request (status code 400)
-     *         or Unauthorized (status code 401)
-     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     * @see AuthenticationApi#logout
-     */
-    default ResponseEntity<LogoutResponseDto> logout(LogoutRequestDto logoutRequestDto) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"message\" : \"Successfully logged out\", \"revokedTokens\" : 1 }";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
-                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
-                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
-                    break;
-                }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
-                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
-                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
-                    break;
-                }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
-                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
-                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
-                    break;
-                }
-            }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
-    }
-
-    /**
-     * PUT /v1/auth/profile : Update user profile
+     * PUT /auth/profile : Update user profile
      * Update the authenticated user&#39;s profile information
      *
      * @param updateUserProfileRequestDto  (required)
@@ -182,7 +104,7 @@ public interface AuthenticationApiDelegate {
     }
 
     /**
-     * POST /v1/auth/validate : Validate API key
+     * POST /auth/api-keys/validate : Validate API key
      * Internal endpoint to validate API keys (used by other services)
      *
      * @param validateApiKeyRequestDto  (required)

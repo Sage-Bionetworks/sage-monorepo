@@ -1,10 +1,6 @@
 package org.sagebionetworks.openchallenges.auth.service.api;
 
 import org.sagebionetworks.openchallenges.auth.service.model.dto.BasicErrorDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginRequestDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginResponseDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.LogoutRequestDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.LogoutResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.UpdateUserProfileRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.UserProfileDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyRequestDto;
@@ -36,7 +32,7 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Controller
-@RequestMapping("${openapi.openChallengesAuth.base-path:}")
+@RequestMapping("${openapi.openChallengesAuth.base-path:/v1}")
 public class AuthenticationApiController implements AuthenticationApi {
 
     private final AuthenticationApiDelegate delegate;
