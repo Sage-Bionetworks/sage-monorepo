@@ -8,7 +8,7 @@ info:
 
     This service provides:
     - OAuth2 Authorization Server with Google/Synapse login
-    - API key management for service-to-service communication
+    - API key management for programmatic access to OpenChallenges APIs
     - JWT token validation for API access
     - User profile management
 
@@ -24,7 +24,7 @@ info:
 
     **Authentication Methods**:
     - **OAuth2**: Use standard OAuth2 flows for user login via Google/Synapse
-    - **API Keys**: Use for service-to-service communication
+    - **API Keys**: Use for programmatic access to OpenChallenges APIs (users and services)
     - **JWT**: Tokens issued by OAuth2 server for API access
   license:
     name: Apache 2.0
@@ -41,7 +41,7 @@ tags:
     name: Authentication
     x-audience:
       - public
-  - description: API key management for service-to-service authentication
+  - description: API key management for programmatic access to OpenChallenges APIs
     name: API Key
     x-audience:
       - public
@@ -62,10 +62,10 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - OAuth2:
+        - oauth2:
             - profile
         - jwtBearerAuth: []
-        - apiBearerAuth: []
+        - apiKeyAuth: []
       summary: Get user profile
       tags:
         - Authentication
@@ -99,9 +99,10 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - OAuth2:
+        - oauth2:
             - profile
         - jwtBearerAuth: []
+        - apiKeyAuth: []
       summary: Update user profile
       tags:
         - Authentication
@@ -131,7 +132,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - apiBearerAuth: []
+        - oauth2:
+            - api:read
+        - jwtBearerAuth: []
       summary: List API keys
       tags:
         - API Key
@@ -165,7 +168,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - apiBearerAuth: []
+        - oauth2:
+            - api:write
+        - jwtBearerAuth: []
       summary: Create API key
       tags:
         - API Key
@@ -201,7 +206,9 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - apiBearerAuth: []
+        - oauth2:
+            - api:write
+        - jwtBearerAuth: []
       summary: Delete API key
       tags:
         - API Key
@@ -567,7 +574,7 @@ components:
           type: array
       type: object
   securitySchemes:
-    OAuth2:
+    oauth2:
       description: OAuth2 Authorization Code Flow for user authentication via Google/Synapse
       flows:
         authorizationCode:
@@ -584,11 +591,13 @@ components:
       type: oauth2
     jwtBearerAuth:
       bearerFormat: JWT
-      description: JWT access token obtained from OAuth2 authorization flow
+      description: JWT access token obtained from /auth/login or /auth/oauth2/callback
+        endpoint
       scheme: bearer
       type: http
-    apiBearerAuth:
-      bearerFormat: API-Key
-      description: API key for programmatic access and service-to-service communication
-      scheme: bearer
-      type: http
+    apiKeyAuth:
+      description: API key for programmatic access (create and manage via /auth/api-keys
+        endpoints)
+      in: header
+      name: X-API-Key
+      type: apiKey
