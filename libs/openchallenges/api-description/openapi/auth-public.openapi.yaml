@@ -7,7 +7,7 @@ info:
 
     This service provides:
     - OAuth2 Authorization Server with Google/Synapse login
-    - API key management for service-to-service communication
+    - API key management for programmatic access to OpenChallenges APIs
     - JWT token validation for API access
     - User profile management
 
@@ -23,7 +23,7 @@ info:
 
     **Authentication Methods**:
     - **OAuth2**: Use standard OAuth2 flows for user login via Google/Synapse
-    - **API Keys**: Use for service-to-service communication
+    - **API Keys**: Use for programmatic access to OpenChallenges APIs (users and services)
     - **JWT**: Tokens issued by OAuth2 server for API access
   license:
     name: Apache 2.0
@@ -42,7 +42,7 @@ tags:
     x-audience:
       - public
   - name: API Key
-    description: API key management for service-to-service authentication
+    description: API key management for programmatic access to OpenChallenges APIs
     x-audience:
       - public
 paths:
