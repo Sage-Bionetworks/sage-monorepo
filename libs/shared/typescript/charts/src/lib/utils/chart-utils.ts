@@ -29,14 +29,28 @@ export function resizeChartOnWindowResize(
   resizeObserver.observe(chartDom);
 }
 
-export function setNoDataOption(chart: ECharts) {
-  const noDataOptions: EChartsOption = {
-    title: {
+export function setNoDataOption(chart: ECharts, noDataStyle: 'textOnly' | 'grayBackground') {
+  const noDataStyleOptions = {
+    textOnly: {
       text: 'No data is currently available.',
+      textColor: 'rgb(174, 181, 188)',
+      backgroundColor: 'transparent',
+    },
+    grayBackground: {
+      text: 'Data unavailable',
+      textColor: '#4A5056',
+      backgroundColor: '#DFE2E6',
+    },
+  };
+
+  const noDataOptions: EChartsOption = {
+    backgroundColor: noDataStyleOptions[noDataStyle].backgroundColor,
+    title: {
+      text: noDataStyleOptions[noDataStyle].text,
       left: 'center',
       top: 'middle',
       textStyle: {
-        color: 'rgb(174, 181, 188)',
+        color: noDataStyleOptions[noDataStyle].textColor,
         fontStyle: 'italic',
         fontWeight: 400,
         fontSize: 18,
@@ -45,7 +59,7 @@ export function setNoDataOption(chart: ECharts) {
     aria: {
       enabled: true,
       label: {
-        description: 'No data is currently available.',
+        description: noDataStyleOptions[noDataStyle].text,
       },
     },
   };

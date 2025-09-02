@@ -74,12 +74,13 @@ export class BoxplotChart {
     } = boxplotProps;
 
     const showLegend = boxplotProps.showLegend || false;
+    const noDataStyle = boxplotProps.noDataStyle || 'textOnly';
 
     const noPoints = points.length === 0;
     const noSummaries = summaries == null || summaries.length === 0;
 
     if (noPoints && noSummaries) {
-      setNoDataOption(this.chart);
+      setNoDataOption(this.chart, noDataStyle);
       return;
     }
 
