@@ -1,0 +1,23 @@
+type: string
+enum:
+  # Profile and authentication scopes
+  - 'user:profile' # Access to user profile information
+  - 'user:email' # Access to user email settings
+  - 'user:keys' # Manage API keys
+
+  # Organization scopes
+  - 'read:org' # Read organization information
+  - 'write:org' # Create and update organizations
+  - 'delete:org' # Delete organizations
+  - 'admin:org' # Administrative access to organizations
+
+  # Challenge scopes
+  - 'read:challenge' # Read challenge information
+  - 'write:challenge' # Create and update challenges
+  - 'delete:challenge' # Delete challenges
+  - 'admin:challenge' # Administrative access to challenges
+
+  # System administration
+  - 'admin:auth' # Administrative access to authentication service
+  - 'admin:all' # Full administrative access to all resources
+description: Permission scope defining specific access rights

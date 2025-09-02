@@ -1,0 +1,61 @@
+type: object
+required:
+  - id
+  - username
+  - email
+  - role
+  - createdAt
+properties:
+  id:
+    type: string
+    description: Unique user identifier
+    example: 'user_123456789'
+  username:
+    type: string
+    description: User's username
+    example: 'johndoe'
+  email:
+    type: string
+    format: email
+    description: User's email address
+    example: 'john.doe@example.com'
+  firstName:
+    type: string
+    description: User's first name
+    example: 'John'
+  lastName:
+    type: string
+    description: User's last name
+    example: 'Doe'
+  role:
+    $ref: ./UserRole.yaml
+  scopes:
+    type: array
+    items:
+      $ref: ./AuthScope.yaml
+    description: User's authorized scopes/permissions
+  avatarUrl:
+    type: string
+    format: uri
+    description: URL to user's avatar image
+    example: 'https://example.com/avatars/johndoe.jpg'
+  bio:
+    type: string
+    description: User's biography or description
+    maxLength: 500
+    example: 'Researcher in computational biology'
+  website:
+    type: string
+    format: uri
+    description: User's website URL
+    example: 'https://johndoe.com'
+  createdAt:
+    type: string
+    format: date-time
+    description: Timestamp when the user account was created
+    example: '2024-01-15T10:30:00Z'
+  updatedAt:
+    type: string
+    format: date-time
+    description: Timestamp when the user profile was last updated
+    example: '2024-02-01T14:20:00Z'

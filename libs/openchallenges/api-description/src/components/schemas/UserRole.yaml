@@ -1,0 +1,7 @@
+type: string
+enum:
+  - user # Standard user with basic access
+  - moderator # Can moderate content and users
+  - admin # Full administrative access
+  - service # Service account for system-to-system communication
+description: User role defining the level of access and permissions

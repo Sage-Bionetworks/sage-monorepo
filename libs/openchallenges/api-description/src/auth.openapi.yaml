@@ -3,22 +3,21 @@ info:
   version: 1.0.0
   title: OpenChallenges Auth API
   description: |
-    Modern OAuth2 and OpenID Connect authentication service for OpenChallenges.
+    Authentication and authorization service for OpenChallenges.
 
     This service provides:
-    - Standard OAuth2 Authorization Server with PKCE support
-    - OpenID Connect for user authentication
+    - JWT-based user authentication via username/password
     - API key management for service-to-service communication
-    - Legacy username/password authentication
+    - Role-based access control with defined scopes
+    - Token validation for accessing protected resources
 
-    **OAuth2 Endpoints** (unversioned, standards-compliant):
-    - Use `/oauth2/*` endpoints for standard OAuth2 flows
-    - Use `/.well-known/*` endpoints for discovery
-    - Replaces legacy `/v1/auth/jwt/*` and `/v1/auth/oauth2/*` endpoints
+    **Authentication Methods**:
+    - `/v1/auth/login` - Username/password authentication returning JWT tokens
+    - `/v1/auth/api-keys` - API key management for programmatic access
+    - `/v1/auth/validate` - Token validation for protected resources
 
-    **Custom API Endpoints** (versioned):
-    - Use `/v1/auth/*` for domain-specific functionality like API keys
-    - Use `/v1/auth/login` for legacy username/password authentication
+    **Authorization Scopes**:
+    API access is controlled through role-based permissions and scopes defined below.
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -32,43 +31,18 @@ servers:
     description: Local/dev base
 tags:
   - name: Authentication
-    description: Operations about authentication
+    description: Operations for user authentication and token management
     x-audience: [public]
   - name: API Key
-    description: Operations about API key management
-    x-audience: [public]
-  - name: OAuth2
-    description: Standard OAuth2 and OIDC endpoints for authorization and authentication
-    x-audience: [public]
-  - name: User
-    description: Operations about user management and profile information
+    description: Operations for API key management and service-to-service authentication
     x-audience: [public]
 paths:
-  # OAuth2 & OIDC endpoints (UNVERSIONED - standard OAuth2/OIDC specification)
-  /oauth2/authorize:
-    $ref: paths/oauth2/authorize.yaml
-  /oauth2/token:
-    $ref: paths/oauth2/token.yaml
-  /oauth2/revoke:
-    $ref: paths/oauth2/revoke.yaml
-  /oauth2/introspect:
-    $ref: paths/oauth2/introspect.yaml
-  /oauth2/userinfo:
-    $ref: paths/oauth2/userinfo.yaml
-
-  # Well-known discovery endpoints (UNVERSIONED - standard OIDC specification)
-  /.well-known/openid-configuration:
-    $ref: paths/well-known/openid-configuration.yaml
-  /.well-known/jwks.json:
-    $ref: paths/well-known/jwks.yaml
-  /.well-known/oauth-authorization-server:
-    $ref: paths/well-known/oauth-authorization-server.yaml
-
-  # API Resources (VERSIONED - custom OpenChallenges API)
   /v1/auth/login:
     $ref: paths/auth/login.yaml
   /v1/auth/logout:
     $ref: paths/auth/logout.yaml
+  /v1/auth/profile:
+    $ref: paths/auth/profile.yaml
   /v1/auth/api-keys:
     $ref: paths/auth/api-keys.yaml
   /v1/auth/api-keys/{keyId}:
@@ -77,40 +51,10 @@ paths:
     $ref: paths/auth/validate.yaml
 components:
   securitySchemes:
-    # OAuth2 Authorization Code Flow with PKCE
-    OAuth2:
-      type: oauth2
-      description: OAuth2 Authorization Code Flow with PKCE for secure authentication
-      flows:
-        authorizationCode:
-          authorizationUrl: /oauth2/authorize
-          tokenUrl: /oauth2/token
-          refreshUrl: /oauth2/token
-          scopes:
-            # OpenID Connect scopes
-            openid: OpenID Connect authentication
-            profile: Access to user's basic profile information
-            email: Access to user's email address
-
-            # User management scopes
-            user:profile: Access to user profile information
-            user:email: Access to user email settings
-            user:keys: Manage API keys
-
-            # Organization scopes
-            read:org: Read organization information
-            write:org: Create and update organizations
-            delete:org: Delete organizations
-            admin:org: Administrative access to organizations
-
-            # System administration
-            admin:auth: Administrative access to authentication service
-            admin:all: Full administrative access to all resources
-
-    # JWT Bearer for existing APIs (use shared definition)
+    # JWT Bearer for user authentication
     jwtBearerAuth:
       $ref: components/securitySchemes/JwtBearerAuth.yaml
 
-    # API Key for service-to-service communication (use shared definition)
+    # API Key for service-to-service communication
     apiBearerAuth:
       $ref: components/securitySchemes/ApiBearerAuth.yaml
