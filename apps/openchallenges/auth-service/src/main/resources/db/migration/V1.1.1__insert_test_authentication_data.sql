@@ -14,13 +14,13 @@ INSERT INTO app_user (username, password_hash, email, first_name, last_name, rol
 ('org-admin', '$2a$12$lWQA8qj1Pp9NfAsWY53rQuK/uChV.EJ1RTxhisDFuV0uHrJFm0/J6', 'org-admin@example.com', 'Organization', 'Admin', 'admin', true, NOW(), NOW());
 
 -- Insert API key for testuser (for API key authentication testing)
--- Key value: oc_test_1234567890abcdef (this is what the user would use)
--- Hash: BCrypt hash of "oc_test_1234567890abcdef"
+-- Key value: oc_dev_test_1234567890abcdef (this is what the user would use)
+-- Hash: BCrypt hash of "oc_dev_test_1234567890abcdef"
 INSERT INTO api_key (user_id, key_hash, key_prefix, name, expires_at, created_at, updated_at) VALUES
 (
     (SELECT id FROM app_user WHERE username = 'testuser'),
-    '$2a$12$E8.tF8z8D8L.0vJzZy4uAOJ8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8',
-    'oc_test_',
+    '$2a$12$71IJAwVtX8GpMzVzH8lq3.k7De/c5Tc7TIvmuXAgiN0M6VWPd4i1K',
+    'oc_dev_',
     'Test API Key',
     NOW() + INTERVAL '1 year', -- Expires in 1 year
     NOW(),
@@ -28,12 +28,12 @@ INSERT INTO api_key (user_id, key_hash, key_prefix, name, expires_at, created_at
 );
 
 -- Insert API key for developer (for API development testing)
--- Key value: oc_dev_9876543210fedcba (this is what the developer would use)
--- Hash: BCrypt hash of "oc_dev_9876543210fedcba"
+-- Key value: oc_dev_developer_9876543210fedcba (this is what the developer would use)
+-- Hash: BCrypt hash of "oc_dev_developer_9876543210fedcba"
 INSERT INTO api_key (user_id, key_hash, key_prefix, name, expires_at, created_at, updated_at) VALUES
 (
     (SELECT id FROM app_user WHERE username = 'developer'),
-    '$2a$12$A1.bC2d3E4f5G6h7I8j9K0L1M2N3O4P5Q6R7S8T9U0V1W2X3Y4Z5A6',
+    '$2a$12$TG/Ty67DQkbYWRD6IJPNpu1y3mEE9NVMv2dHRA.Kb0HGXmUPUpeTO',
     'oc_dev_',
     'Developer API Key',
     NOW() + INTERVAL '1 year', -- Expires in 1 year
@@ -42,13 +42,13 @@ INSERT INTO api_key (user_id, key_hash, key_prefix, name, expires_at, created_at
 );
 
 -- Insert API key for org-admin (for admin operations testing)
--- Key value: oc_admin_abcd1234efgh5678 (this is what the admin would use)
--- Hash: BCrypt hash of "oc_admin_abcd1234efgh5678"
+-- Key value: oc_dev_admin_abcd1234efgh5678 (this is what the admin would use)
+-- Hash: BCrypt hash of "oc_dev_admin_abcd1234efgh5678"
 INSERT INTO api_key (user_id, key_hash, key_prefix, name, expires_at, created_at, updated_at) VALUES
 (
     (SELECT id FROM app_user WHERE username = 'org-admin'),
-    '$2a$12$X9.yZ0a1B2c3D4e5F6g7H8i9J0k1L2m3N4o5P6q7R8s9T0u1V2w3X4',
-    'oc_admin_',
+    '$2a$12$EUPPJ0euYyruWcHKGQZ7P.zUZcPJDB1FeNjt7OJ1XMX41ni3YgMO.',
+    'oc_dev_',
     'Admin API Key',
     NOW() + INTERVAL '1 year', -- Expires in 1 year
     NOW(),
@@ -84,7 +84,7 @@ INSERT INTO api_key (user_id, key_hash, key_prefix, name, expires_at, created_at
 -- - org-admin (role: admin)
 -- 
 -- API Keys:
--- - oc_test_1234567890abcdef (testuser)
--- - oc_dev_9876543210fedcba (developer)
--- - oc_admin_abcd1234efgh5678 (org-admin)
+-- - oc_dev_test_1234567890abcdef (testuser)
+-- - oc_dev_developer_9876543210fedcba (developer)
+-- - oc_dev_admin_abcd1234efgh5678 (org-admin)
 -- - oc_service_xyz789abc123def456 (challenge-service)

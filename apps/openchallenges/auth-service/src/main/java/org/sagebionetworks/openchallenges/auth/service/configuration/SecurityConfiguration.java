@@ -49,22 +49,31 @@ public class SecurityConfiguration {
       .authorizeHttpRequests(
         authz ->
           authz
-            .requestMatchers("/v1/auth/login", "/v1/auth/validate")
-            .permitAll() // Public authentication endpoints
-            .requestMatchers("/v1/auth/oauth2/**")
-            .permitAll() // Public custom OAuth2 endpoints
+            // OAuth2 Authorization Server endpoints
             .requestMatchers("/oauth2/**")
-            .permitAll() // Standard OAuth2 endpoints (unversioned)
-            .requestMatchers("/v1/auth/jwt/**")
-            .permitAll() // Public JWT endpoints (validate, refresh)
+            .permitAll() // Standard OAuth2 endpoints (authorization, token, etc.)
+            .requestMatchers("/.well-known/oauth-authorization-server")
+            .permitAll() // OAuth2 Authorization Server discovery endpoint
+            .requestMatchers("/.well-known/openid_configuration")
+            .permitAll() // OpenID Connect discovery endpoint
+            .requestMatchers("/.well-known/**")
+            .permitAll() // Other well-known endpoints
+            // Custom API endpoints (v1)
+            .requestMatchers("/v1/auth/api-keys/validate")
+            .permitAll() // API key validation (internal endpoint)
+            .requestMatchers("/v1/**")
+            .authenticated() // All other v1 API endpoints require authentication
+            // Web interface endpoints for OAuth2
             .requestMatchers("/login", "/auth/oauth2/google", "/auth/callback")
             .permitAll() // OAuth2 web interface endpoints and login page
-            .requestMatchers("/error")
-            .permitAll() // Error page
             .requestMatchers("/logout", "/logout/**")
             .permitAll() // Logout web interface endpoints
+            .requestMatchers("/error")
+            .permitAll() // Error page
+            // Actuator endpoints
             .requestMatchers("/actuator/health", "/actuator/info")
             .permitAll() // Health checks
+            // OpenAPI documentation
             .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
             .permitAll() // OpenAPI docs
             .anyRequest()

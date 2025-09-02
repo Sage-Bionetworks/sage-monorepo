@@ -1,6 +1,7 @@
 package org.sagebionetworks.openchallenges.auth.service.service;
 
 import java.util.Optional;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.UpdateUserProfileRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.repository.UserRepository;
 import org.slf4j.Logger;
@@ -72,6 +73,37 @@ public class UserService {
 
     User savedUser = userRepository.save(user);
     logger.info("Successfully created user: {}", username);
+    return savedUser;
+  }
+
+  /**
+   * Update user profile information
+   */
+  public User updateUserProfile(User user, UpdateUserProfileRequestDto updateRequest) {
+    logger.info("Updating profile for user: {}", user.getUsername());
+    
+    if (updateRequest.getFirstName() != null) {
+      user.setFirstName(updateRequest.getFirstName());
+    }
+    
+    if (updateRequest.getLastName() != null) {
+      user.setLastName(updateRequest.getLastName());
+    }
+    
+    if (updateRequest.getBio() != null) {
+      user.setBio(updateRequest.getBio());
+    }
+    
+    if (updateRequest.getWebsite() != null) {
+      user.setWebsite(updateRequest.getWebsite().toString());
+    }
+    
+    if (updateRequest.getAvatarUrl() != null) {
+      user.setAvatarUrl(updateRequest.getAvatarUrl().toString());
+    }
+    
+    User savedUser = userRepository.save(user);
+    logger.info("Successfully updated profile for user: {}", user.getUsername());
     return savedUser;
   }
 

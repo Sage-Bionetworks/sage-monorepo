@@ -46,6 +46,12 @@ public class User {
   @Column(name = "avatar_url")
   private String avatarUrl;
 
+  @Column(name = "bio")
+  private String bio;
+
+  @Column(name = "website")
+  private String website;
+
   @Column(name = "email_verified")
   @Builder.Default
   private Boolean emailVerified = false;
