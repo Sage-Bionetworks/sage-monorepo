@@ -21,7 +21,7 @@ tags:
       - public
     x-displayName: Authentication
   - name: API Key
-    description: API key management for service-to-service authentication
+    description: API key management for programmatic access to OpenChallenges APIs
     x-audience:
       - public
     x-displayName: API Key
