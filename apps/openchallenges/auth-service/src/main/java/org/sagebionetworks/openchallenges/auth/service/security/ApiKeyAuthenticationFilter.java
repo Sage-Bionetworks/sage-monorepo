@@ -61,13 +61,13 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
       if (apiKeyOptional.isPresent()) {
         ApiKey apiKey = apiKeyOptional.get();
 
-        // Create authentication token
+        // Create authentication token with username as principal
         List<SimpleGrantedAuthority> authorities = List.of(
           new SimpleGrantedAuthority("ROLE_" + apiKey.getUser().getRole().name().toUpperCase())
         );
 
         UsernamePasswordAuthenticationToken authentication =
-          new UsernamePasswordAuthenticationToken(apiKey.getUser(), null, authorities);
+          new UsernamePasswordAuthenticationToken(apiKey.getUser().getUsername(), null, authorities);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         logger.debug(
