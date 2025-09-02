@@ -17,13 +17,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
- * Filter to authenticate requests using API keys in the Authorization header
+ * Filter to authenticate requests using API keys in the X-API-Key header
  */
 public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
 
   private static final Logger logger = LoggerFactory.getLogger(ApiKeyAuthenticationFilter.class);
-  private static final String API_KEY_HEADER = "Authorization";
-  private static final String API_KEY_PREFIX = "Bearer ";
+  private static final String API_KEY_HEADER = "X-API-Key";
 
   private final ApiKeyService apiKeyService;
 
@@ -47,15 +46,13 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
       return;
     }
 
-    // Extract API key from Authorization header
-    String authHeader = request.getHeader(API_KEY_HEADER);
-    if (authHeader == null || !authHeader.startsWith(API_KEY_PREFIX)) {
-      logger.debug("No valid Authorization header found for: {}", requestURI);
+    // Extract API key from X-API-Key header
+    String apiKeyValue = request.getHeader(API_KEY_HEADER);
+    if (apiKeyValue == null || apiKeyValue.trim().isEmpty()) {
+      logger.debug("No valid X-API-Key header found for: {}", requestURI);
       filterChain.doFilter(request, response);
       return;
     }
-
-    String apiKeyValue = authHeader.substring(API_KEY_PREFIX.length());
 
     try {
       // Validate API key

@@ -1,165 +1,174 @@
 package org.sagebionetworks.openchallenges.auth.service.api;
 
-import java.time.OffsetDateTime;
-import java.util.Arrays;
+import java.net.URI;
 import java.util.Optional;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginRequestDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginResponseDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.LogoutRequestDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.LogoutResponseDto;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.UserProfileDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.UpdateUserProfileRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyResponseDto;
-import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.UserRoleDto;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
+import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
-import org.sagebionetworks.openchallenges.auth.service.service.AuthenticationService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.sagebionetworks.openchallenges.auth.service.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+/**
+ * Implementation of the Authentication API delegate.
+ * 
+ * This implementation focuses on user profile management and API key validation.
+ * OAuth2 authentication flows are handled by Spring Authorization Server.
+ */
 @Component
+@RequiredArgsConstructor
+@Slf4j
 public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate {
 
-  private static final Logger logger = LoggerFactory.getLogger(AuthenticationApiDelegateImpl.class);
-
+  private final UserService userService;
   private final ApiKeyService apiKeyService;
-  private final AuthenticationService authenticationService;
 
-  public AuthenticationApiDelegateImpl(
-    ApiKeyService apiKeyService,
-    AuthenticationService authenticationService
-  ) {
-    this.apiKeyService = apiKeyService;
-    this.authenticationService = authenticationService;
-  }
-
+  /**
+   * Get the authenticated user's profile.
+   */
   @Override
-  public ResponseEntity<LoginResponseDto> login(LoginRequestDto loginRequestDto) {
-    logger.info("JWT login attempt for username: {}", loginRequestDto.getUsername());
-    try {
-      // Use the AuthenticationService for JWT-based authentication
-      LoginResponseDto response = authenticationService.authenticateUser(
-        loginRequestDto.getUsername(), 
-        loginRequestDto.getPassword()
-      );
-      
-      logger.info("JWT login successful for username: {}", loginRequestDto.getUsername());
-      return ResponseEntity.ok(response);
-    } catch (RuntimeException e) {
-      logger.warn("JWT login failed for username: {} - {}", loginRequestDto.getUsername(), e.getMessage());
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    } catch (Exception e) {
-      logger.error("Unexpected error during JWT login for username: {}", loginRequestDto.getUsername(), e);
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    }
-  }
+  public ResponseEntity<UserProfileDto> getUserProfile() {
+    log.debug("Getting user profile for authenticated user");
 
-  @Override
-  public ResponseEntity<ValidateApiKeyResponseDto> validateApiKey(
-    ValidateApiKeyRequestDto validateApiKeyRequestDto
-  ) {
-    logger.debug("API key validation request received");
     try {
-      String apiKeyValue = validateApiKeyRequestDto.getApiKey();
-
-      if (apiKeyValue == null || apiKeyValue.trim().isEmpty()) {
-        logger.warn("API key validation failed: empty or null API key");
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      if (authentication == null || !authentication.isAuthenticated()) {
+        log.debug("No authenticated user found");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       }
 
-      // Find and validate API key
-      Optional<ApiKey> apiKeyOptional = apiKeyService.findByKeyValue(apiKeyValue);
+      String username = authentication.getName();
+      log.debug("Getting profile for user: {}", username);
 
-      if (apiKeyOptional.isEmpty()) {
-        logger.warn("API key validation failed: API key not found");
-        // API key not found
-        ValidateApiKeyResponseDto response = new ValidateApiKeyResponseDto().valid(false);
-        return ResponseEntity.ok(response);
+      Optional<User> userOpt = userService.findByUsername(username);
+      if (userOpt.isEmpty()) {
+        log.debug("User not found: {}", username);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
       }
 
-      ApiKey apiKey = apiKeyOptional.get();
-
-      // Check if API key is expired
-      if (apiKey.getExpiresAt() != null && apiKey.getExpiresAt().isBefore(OffsetDateTime.now())) {
-        logger.warn(
-          "API key validation failed: API key expired for user: {}",
-          apiKey.getUser().getUsername()
-        );
-        ValidateApiKeyResponseDto response = new ValidateApiKeyResponseDto().valid(false);
-        return ResponseEntity.ok(response);
-      }
-
-      // Update last used timestamp
-      apiKeyService.updateLastUsed(apiKey);
-
-      User user = apiKey.getUser();
-      logger.info("API key validation successful for user: {}", user.getUsername());
-
-      // Define basic scopes based on user role
-      String[] scopes = getDefaultScopes(user.getRole().name());
-
-      // Build success response
-      ValidateApiKeyResponseDto response = new ValidateApiKeyResponseDto()
-        .valid(true)
-        .userId(user.getId())
+      User user = userOpt.get();
+      UserProfileDto profile = UserProfileDto.builder()
+        .id(user.getId().toString())
         .username(user.getUsername())
-        .role(convertToValidateRoleEnum(user.getRole()))
-        .scopes(Arrays.asList(scopes));
+        .email(user.getEmail())
+        .firstName(user.getFirstName())
+        .lastName(user.getLastName())
+        .bio(user.getBio())
+        .website(user.getWebsite() != null ? URI.create(user.getWebsite()) : null)
+        .avatarUrl(user.getAvatarUrl() != null ? URI.create(user.getAvatarUrl()) : null)
+        .role(UserRoleDto.fromValue(user.getRole().name()))
+        .createdAt(user.getCreatedAt())
+        .updatedAt(user.getUpdatedAt())
+        .build();
 
-      return ResponseEntity.ok(response);
+      log.debug("Returning profile for user: {}", username);
+      return ResponseEntity.ok(profile);
+
     } catch (Exception e) {
-      logger.error("Unexpected error during API key validation", e);
+      log.error("Error getting user profile", e);
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
   }
 
-  private String[] getDefaultScopes(String role) {
-    return switch (role.toLowerCase()) {
-      case "admin" -> new String[] {
-        "organizations:read",
-        "organizations:write",
-        "organizations:delete",
-        "challenges:read",
-        "challenges:write",
-        "challenges:delete",
-        "users:read",
-        "users:write",
-      };
-      case "user" -> new String[] { "organizations:read", "challenges:read" };
-      case "service" -> new String[] { "organizations:write" };
-      default -> new String[] { "organizations:read" };
-    };
-  }
-
-  private ValidateApiKeyResponseDto.RoleEnum convertToValidateRoleEnum(User.Role role) {
-    return switch (role) {
-      case admin -> ValidateApiKeyResponseDto.RoleEnum.ADMIN;
-      case user -> ValidateApiKeyResponseDto.RoleEnum.USER;
-      case readonly -> ValidateApiKeyResponseDto.RoleEnum.READONLY;
-      case service -> ValidateApiKeyResponseDto.RoleEnum.SERVICE;
-    };
-  }
-
+  /**
+   * Update the authenticated user's profile.
+   */
   @Override
-  public ResponseEntity<LogoutResponseDto> logout(LogoutRequestDto logoutRequestDto) {
-    logger.info("User logout request received");
+  public ResponseEntity<UserProfileDto> updateUserProfile(UpdateUserProfileRequestDto updateRequest) {
+    log.debug("Updating user profile for authenticated user");
+
     try {
-      int revokedTokens = authenticationService.logout(
-        logoutRequestDto.getRefreshToken(),
-        logoutRequestDto.getRevokeAllTokens() != null ? logoutRequestDto.getRevokeAllTokens() : false
-      );
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      if (authentication == null || !authentication.isAuthenticated()) {
+        log.debug("No authenticated user found");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+      }
 
-      LogoutResponseDto response = new LogoutResponseDto()
-        .message("Successfully logged out")
-        .revokedTokens(revokedTokens);
+      String username = authentication.getName();
+      log.debug("Updating profile for user: {}", username);
 
-      logger.info("User successfully logged out, {} tokens revoked", revokedTokens);
-      return ResponseEntity.ok(response);
+      Optional<User> userOpt = userService.findByUsername(username);
+      if (userOpt.isEmpty()) {
+        log.debug("User not found for update: {}", username);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+      }
+
+      User updatedUser = userService.updateUserProfile(userOpt.get(), updateRequest);
+      UserProfileDto profile = UserProfileDto.builder()
+        .id(updatedUser.getId().toString())
+        .username(updatedUser.getUsername())
+        .email(updatedUser.getEmail())
+        .firstName(updatedUser.getFirstName())
+        .lastName(updatedUser.getLastName())
+        .bio(updatedUser.getBio())
+        .website(updatedUser.getWebsite() != null ? URI.create(updatedUser.getWebsite()) : null)
+        .avatarUrl(updatedUser.getAvatarUrl() != null ? URI.create(updatedUser.getAvatarUrl()) : null)
+        .role(UserRoleDto.fromValue(updatedUser.getRole().name()))
+        .createdAt(updatedUser.getCreatedAt())
+        .updatedAt(updatedUser.getUpdatedAt())
+        .build();
+
+      log.debug("Profile updated for user: {}", username);
+      return ResponseEntity.ok(profile);
+
     } catch (Exception e) {
-      logger.error("Error during logout", e);
+      log.error("Error updating user profile", e);
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+  }
+
+  /**
+   * Validate an API key.
+   */
+  @Override
+  public ResponseEntity<ValidateApiKeyResponseDto> validateApiKey(ValidateApiKeyRequestDto validateRequest) {
+    log.debug("Validating API key");
+
+    try {
+      String apiKey = validateRequest.getApiKey();
+      if (apiKey == null || apiKey.trim().isEmpty()) {
+        log.debug("Empty API key provided");
+        return ResponseEntity.ok(
+          ValidateApiKeyResponseDto.builder()
+            .valid(false)
+            .build()
+        );
+      }
+
+      Optional<ApiKey> apiKeyOpt = apiKeyService.validateApiKey(apiKey);
+      boolean isValid = apiKeyOpt.isPresent();
+      
+      ValidateApiKeyResponseDto.Builder responseBuilder = ValidateApiKeyResponseDto.builder()
+        .valid(isValid);
+      
+      if (isValid) {
+        ApiKey validApiKey = apiKeyOpt.get();
+        responseBuilder
+          .userId(validApiKey.getUser().getId())
+          .username(validApiKey.getUser().getUsername())
+          .role(ValidateApiKeyResponseDto.RoleEnum.fromValue(validApiKey.getUser().getRole().name()));
+      }
+
+      log.debug("API key validation result: {}", isValid);
+      return ResponseEntity.ok(responseBuilder.build());
+
+    } catch (Exception e) {
+      log.error("Error validating API key", e);
+      return ResponseEntity.ok(
+        ValidateApiKeyResponseDto.builder()
+          .valid(false)
+          .build()
+      );
     }
   }
 }

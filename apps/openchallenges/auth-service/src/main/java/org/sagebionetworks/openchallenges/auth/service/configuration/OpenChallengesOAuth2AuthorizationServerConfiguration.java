@@ -39,14 +39,17 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
     throws Exception {
     
     // Configure the specific paths for our OAuth2 Authorization Server
-    http.securityMatcher("/oauth2/**");
+    http.securityMatcher("/oauth2/**", "/.well-known/**");
     
     // Apply OAuth2 Authorization Server configuration
-    http.apply(new OAuth2AuthorizationServerConfigurer());
+    http.with(OAuth2AuthorizationServerConfigurer.authorizationServer(), (authz) -> {});
     
-    // Allow public access to JWK endpoint
+    // Allow public access to discovery and JWK endpoints
     http.authorizeHttpRequests(authz -> authz
       .requestMatchers("/oauth2/jwks").permitAll() // Public JWK endpoint
+      .requestMatchers("/.well-known/oauth-authorization-server").permitAll() // OAuth2 discovery
+      .requestMatchers("/.well-known/openid_configuration").permitAll() // OIDC discovery
+      .requestMatchers("/.well-known/**").permitAll() // Other well-known endpoints
       .anyRequest().authenticated() // All other OAuth2 endpoints require auth
     );
     
