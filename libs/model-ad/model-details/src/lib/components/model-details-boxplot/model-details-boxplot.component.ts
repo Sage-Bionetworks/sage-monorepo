@@ -2,6 +2,7 @@ import { TitleCasePipe } from '@angular/common';
 import { Component, computed, inject, input } from '@angular/core';
 import { DecodeGreekEntityPipe } from '@sagebionetworks/explorers/util';
 import { IndividualData, ModelData } from '@sagebionetworks/model-ad/api-client-angular';
+import { MODEL_DETAILS_BOXPLOT_POINT_STYLES } from '@sagebionetworks/model-ad/config';
 import { CategoryPoint, getTextWidth } from '@sagebionetworks/shared/charts';
 import { BoxplotDirective } from '@sagebionetworks/shared/charts-angular';
 import { CallbackDataParams } from 'echarts/types/dist/shared';
@@ -20,15 +21,13 @@ export class ModelDetailsBoxplotComponent {
   private readonly X_AXIS_LABEL_MAX_WIDTH = 100;
   private readonly X_AXIS_LABEL_FONT = "bold 14px 'DM Sans Variable', sans-serif";
 
-  pointCategoryColors = {
-    Male: '#1B00B3',
-    Female: '#DB00FF',
-  };
+  pointCategoryColors = Object.fromEntries(
+    MODEL_DETAILS_BOXPLOT_POINT_STYLES.map((style) => [style.label, style.color]),
+  );
 
-  pointCategoryShapes = {
-    Male: 'circle',
-    Female: 'triangle',
-  };
+  pointCategoryShapes = Object.fromEntries(
+    MODEL_DETAILS_BOXPLOT_POINT_STYLES.map((style) => [style.label, style.shape]),
+  );
 
   modelData = input.required<ModelData>();
   sexes = input.required<IndividualData.SexEnum[]>();

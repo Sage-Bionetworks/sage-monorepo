@@ -1,4 +1,5 @@
 import { LoadingIconColors } from '@sagebionetworks/explorers/models';
+import { PointStyle } from '@sagebionetworks/shared/charts';
 
 export const HELP_URL =
   'https://help.adknowledgeportal.org/apd/Model-AD+Explorer+Resources.4077682781.html';
@@ -23,3 +24,18 @@ export const ROUTE_PATHS = {
   NOT_FOUND: 'not-found',
   ERROR: 'error',
 } as const;
+
+export const MODEL_DETAILS_BOXPLOT_POINT_STYLES: PointStyle[] = [
+  {
+    label: 'Female',
+    color: '#DB00FF',
+    shape: 'triangle',
+    opacity: 0.5,
+  },
+  {
+    label: 'Male',
+    color: '#1B00B3',
+    shape: 'circle',
+    opacity: 0.5,
+  },
+];

@@ -1,4 +1,5 @@
 import { DatasetComponentOption, ECharts, EChartsOption, SeriesOption } from 'echarts';
+import { DEFAULT_POINT_SIZE } from '../constants';
 import { BoxplotProps, CategoryPoint } from '../models';
 import {
   addXAxisValueToBoxplotSummaries,
@@ -26,7 +27,6 @@ const boxplotStyle = {
 
 const yAxisPadding = 0.2;
 const defaultPointShape = 'circle';
-const defaultPointSize = 18;
 const defaultPointColor = '#8b8ad1';
 const defaultPointOpacity = 0.8;
 
@@ -96,7 +96,7 @@ export class BoxplotChart {
       points,
       xAxisCategories,
       pointCategories,
-      0.1,
+      0.3,
       0.02,
     );
     const dataForStaticBoxplotSummaries = summaries
@@ -194,7 +194,7 @@ export class BoxplotChart {
           x: 'xAxisValue',
           y: 'value',
         },
-        symbolSize: defaultPointSize,
+        symbolSize: DEFAULT_POINT_SIZE,
         symbol:
           id === 'points'
             ? defaultPointShape
@@ -262,8 +262,8 @@ export class BoxplotChart {
         orient: 'horizontal',
         left: 'left',
         top: 'bottom',
-        itemHeight: defaultPointSize,
-        itemWidth: defaultPointSize,
+        itemHeight: DEFAULT_POINT_SIZE,
+        itemWidth: DEFAULT_POINT_SIZE,
         selectedMode: false,
       },
       grid: {
