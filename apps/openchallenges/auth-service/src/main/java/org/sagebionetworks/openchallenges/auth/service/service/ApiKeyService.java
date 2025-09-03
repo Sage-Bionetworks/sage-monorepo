@@ -109,7 +109,7 @@ public class ApiKeyService {
   /**
    * Validate an API key and return the associated user
    */
-  @Transactional(readOnly = true)
+  @Transactional
   public Optional<ApiKey> validateApiKey(String apiKey) {
     logger.debug(
       "Validating API key with prefix: {}",
