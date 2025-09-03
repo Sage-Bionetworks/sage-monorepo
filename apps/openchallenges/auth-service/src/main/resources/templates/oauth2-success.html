@@ -117,16 +117,20 @@
       <div class="header">
         <div class="logo">OpenChallenges</div>
         <div class="success">✅ OAuth2 Authentication Successful!</div>
+        <p style="color: #666; margin-top: 0.5rem">
+          You have been authenticated and received OpenChallenges JWT tokens for accessing OC
+          resources.
+        </p>
       </div>
 
       <div class="token-section">
-        <div class="token-label">Access Token:</div>
+        <div class="token-label">OpenChallenges Access Token (JWT):</div>
         <div class="token-value" th:text="${accessToken}">jwt_access_token_here</div>
         <button class="copy-btn" onclick="copyToClipboard('accessToken')">Copy</button>
       </div>
 
       <div class="token-section">
-        <div class="token-label">Refresh Token:</div>
+        <div class="token-label">OpenChallenges Refresh Token:</div>
         <div class="token-value" th:text="${refreshToken}">jwt_refresh_token_here</div>
         <button class="copy-btn" onclick="copyToClipboard('refreshToken')">Copy</button>
       </div>
@@ -142,8 +146,13 @@
       </div>
 
       <div class="test-section">
-        <strong>🧪 Testing with API Gateway:</strong><br />
-        Use this command to test the access token through the API Gateway:<br /><br />
+        <strong>🧪 Testing OpenChallenges APIs:</strong><br />
+        Use this command to test the access token with OpenChallenges APIs:<br /><br />
+        <code
+          >curl -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"
+          http://localhost:8087/v1/auth/profile</code
+        ><br /><br />
+        Or test with API Gateway:<br />
         <code
           >curl -H "Authorization: Bearer &lt;ACCESS_TOKEN&gt;"
           http://localhost:8082/v1/organizations</code

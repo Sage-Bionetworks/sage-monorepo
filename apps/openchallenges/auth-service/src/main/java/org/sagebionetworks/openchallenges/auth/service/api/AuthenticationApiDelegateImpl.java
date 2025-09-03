@@ -47,16 +47,15 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       }
 
-      String username = authentication.getName();
-      log.debug("Getting profile for user: {}", username);
-
-      Optional<User> userOpt = userService.findByUsername(username);
-      if (userOpt.isEmpty()) {
-        log.debug("User not found: {}", username);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+      // Get the user from the authentication principal (set by JwtAuthenticationFilter)
+      Object principal = authentication.getPrincipal();
+      if (!(principal instanceof User)) {
+        log.debug("Authentication principal is not a User entity: {}", principal.getClass());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       }
 
-      User user = userOpt.get();
+      User user = (User) principal;
+      log.debug("Getting profile for user with ID: {} and username: {}", user.getId(), user.getUsername());
       UserProfileDto profile = UserProfileDto.builder()
         .id(user.getId().toString())
         .username(user.getUsername())
@@ -71,7 +70,7 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
         .updatedAt(user.getUpdatedAt())
         .build();
 
-      log.debug("Returning profile for user: {}", username);
+      log.debug("Returning profile for user: {}", user.getUsername());
       return ResponseEntity.ok(profile);
 
     } catch (Exception e) {
