@@ -166,6 +166,8 @@
       .logout-btn {
         background: #dc3545;
         color: white;
+        border: none;
+        cursor: pointer;
       }
 
       .logout-btn:hover {
@@ -266,7 +268,9 @@
 
       <!-- Action Buttons -->
       <div class="button-group">
-        <a href="/logout" class="btn logout-btn"> Logout </a>
+        <form method="post" action="/logout" style="display: inline">
+          <button type="submit" class="btn logout-btn">Logout</button>
+        </form>
       </div>
     </div>
   </body>
