@@ -63,7 +63,7 @@ spring:
             - id: openchallenges-auth-service
               uri: http://openchallenges-auth-service:8087
               predicates:
-                - Path=/api/v1/auth/**,/api/v1/users/register
+                - Path=/api/v1/auth/**
               filters:
                 - StripPrefix=1
             - id: openchallenges-organization-service

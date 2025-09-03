@@ -14,8 +14,8 @@ dependencies {
   implementation(libs.spring.boot.starter.oauth2.resource.server)
   implementation(libs.spring.security.oauth2.jose)
   implementation(libs.jjwt.api)
-  implementation(libs.jjwt.impl)
-  implementation(libs.jjwt.jackson)
+  runtimeOnly(libs.jjwt.impl)
+  runtimeOnly(libs.jjwt.jackson)
 
   // Lombok support
   compileOnly(libs.lombok)

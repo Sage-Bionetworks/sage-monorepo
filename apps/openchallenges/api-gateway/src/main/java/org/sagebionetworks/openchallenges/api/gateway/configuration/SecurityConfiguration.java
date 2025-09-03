@@ -44,10 +44,8 @@ public class SecurityConfiguration {
         // OAuth2 standard endpoints (served by auth service)
         .pathMatchers("/oauth2/**", "/.well-known/**").permitAll()
         
-        // Auth service specific endpoints
-        .pathMatchers("/api/v1/auth/login/**", "/api/v1/auth/oauth2/**").permitAll()
-        .pathMatchers("/api/v1/auth/validate").permitAll() // API key validation
-        .pathMatchers("/api/v1/users/register").permitAll()
+        // Auth service internal endpoints (used by gateway)
+        .pathMatchers("/api/v1/auth/api-keys/validate").permitAll() // API key validation
         
         // Public read-only endpoints
         .pathMatchers(HttpMethod.GET, "/api/v1/challenge-analytics/**").permitAll()
@@ -56,14 +54,21 @@ public class SecurityConfiguration {
         
         // Read operations on domain APIs can be public (adjust as needed)
         .pathMatchers(HttpMethod.GET, "/api/v1/challenges/**").permitAll()
-        .pathMatchers(HttpMethod.GET, "/api/v1/organizations/**").permitAll()
+        // Organizations now require authentication for all operations
         .pathMatchers(HttpMethod.GET, "/api/v1/images/**").permitAll()
         
-        // Unsafe methods on domain APIs require authentication
-        .pathMatchers(HttpMethod.POST, "/api/v1/challenges/**", "/api/v1/organizations/**", "/api/v1/images/**").authenticated()
-        .pathMatchers(HttpMethod.PUT, "/api/v1/challenges/**", "/api/v1/organizations/**", "/api/v1/images/**").authenticated()
-        .pathMatchers(HttpMethod.DELETE, "/api/v1/challenges/**", "/api/v1/organizations/**", "/api/v1/images/**").authenticated()
-        .pathMatchers(HttpMethod.PATCH, "/api/v1/challenges/**", "/api/v1/organizations/**", "/api/v1/images/**").authenticated()
+        // All operations on organizations require authentication
+        .pathMatchers("/api/v1/organizations/**").authenticated()
+        
+        // Auth service user-facing endpoints require authentication
+        .pathMatchers("/api/v1/auth/profile/**").authenticated()
+        .pathMatchers("/api/v1/auth/api-keys/**").authenticated()
+        
+        // Unsafe methods on other domain APIs require authentication
+        .pathMatchers(HttpMethod.POST, "/api/v1/challenges/**", "/api/v1/images/**").authenticated()
+        .pathMatchers(HttpMethod.PUT, "/api/v1/challenges/**", "/api/v1/images/**").authenticated()
+        .pathMatchers(HttpMethod.DELETE, "/api/v1/challenges/**", "/api/v1/images/**").authenticated()
+        .pathMatchers(HttpMethod.PATCH, "/api/v1/challenges/**", "/api/v1/images/**").authenticated()
         
         // Everything else requires authentication
         .anyExchange().authenticated()

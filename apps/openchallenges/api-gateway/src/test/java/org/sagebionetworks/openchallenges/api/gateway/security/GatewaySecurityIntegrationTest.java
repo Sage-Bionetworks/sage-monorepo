@@ -84,10 +84,9 @@ class GatewaySecurityIntegrationTest {
         .responseTimeout(Duration.ofSeconds(10))
         .build();
 
-    // when - access public auth endpoint (user registration)
-    var response = client.post()
-        .uri("/api/v1/users/register")
-        .header("Content-Type", "application/json")
+    // when - access OAuth2 well-known endpoint (public)
+    var response = client.get()
+        .uri("/.well-known/oauth-authorization-server")
         .exchange();
         
         // then - should attempt to route to auth service, expect 404 since service route not found in test
@@ -114,20 +113,20 @@ class GatewaySecurityIntegrationTest {
   }
   
   @Test
-  @DisplayName("should allow public GET access to organizations")
-  void shouldAllowPublicGetAccessToOrganizations() {
+  @DisplayName("should require authentication for organizations access")
+  void shouldRequireAuthenticationForOrganizationsAccess() {
     // given
     WebTestClient client = WebTestClient.bindToServer()
         .baseUrl("http://localhost:" + port)
         .responseTimeout(Duration.ofSeconds(10))
         .build();
 
-    // when - access public GET endpoint (read access)
+    // when - access organizations endpoint without authentication
     var response = client.get()
         .uri("/api/v1/organizations")
         .exchange();
         
-        // then - should attempt to route to organization service (public read access)
-        response.expectStatus().isNotFound(); // Organization service not available in integration test
+        // then - should require authentication
+        response.expectStatus().isUnauthorized();
   }
 }
