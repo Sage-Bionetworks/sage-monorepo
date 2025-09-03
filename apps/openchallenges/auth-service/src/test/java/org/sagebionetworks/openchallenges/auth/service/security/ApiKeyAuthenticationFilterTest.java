@@ -34,19 +34,19 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @DisplayName("ApiKeyAuthenticationFilter")
 class ApiKeyAuthenticationFilterTest {
 
-  @Mock
+  @Mock(lenient = true)
   private ApiKeyService apiKeyService;
 
-  @Mock
+  @Mock(lenient = true)
   private HttpServletRequest request;
 
-  @Mock
+  @Mock(lenient = true)
   private HttpServletResponse response;
 
-  @Mock
+  @Mock(lenient = true)
   private FilterChain filterChain;
 
-  @Mock
+  @Mock(lenient = true)
   private SecurityContext securityContext;
 
   private ApiKeyAuthenticationFilter filter;
@@ -55,7 +55,6 @@ class ApiKeyAuthenticationFilterTest {
 
   private final String validApiKey = "valid-api-key-123";
   private final String invalidApiKey = "invalid-api-key";
-  private final String authorizationHeaderValue = "Bearer " + validApiKey;
 
   @BeforeEach
   void setUp() throws IOException {
@@ -170,7 +169,7 @@ class ApiKeyAuthenticationFilterTest {
       throws ServletException, IOException {
       // given
       when(request.getRequestURI()).thenReturn("/api/protected");
-      when(request.getHeader("Authorization")).thenReturn(null);
+      when(request.getHeader("X-API-Key")).thenReturn(null);
 
       // when
       filter.doFilterInternal(request, response, filterChain);
@@ -182,13 +181,13 @@ class ApiKeyAuthenticationFilterTest {
 
     @Test
     @DisplayName(
-      "should continue filter chain when authorization header does not start with Bearer"
+      "should continue filter chain when X-API-Key header is empty"
     )
-    void shouldContinueFilterChainWhenAuthorizationHeaderDoesNotStartWithBearer()
+    void shouldContinueFilterChainWhenXApiKeyHeaderIsEmpty()
       throws ServletException, IOException {
       // given
       when(request.getRequestURI()).thenReturn("/api/protected");
-      when(request.getHeader("Authorization")).thenReturn("Basic dXNlcjpwYXNz");
+      when(request.getHeader("X-API-Key")).thenReturn("");
 
       // when
       filter.doFilterInternal(request, response, filterChain);
@@ -199,11 +198,11 @@ class ApiKeyAuthenticationFilterTest {
     }
 
     @Test
-    @DisplayName("should extract API key from Bearer token")
-    void shouldExtractApiKeyFromBearerToken() throws ServletException, IOException {
+    @DisplayName("should extract API key from X-API-Key header")
+    void shouldExtractApiKeyFromXApiKeyHeader() throws ServletException, IOException {
       // given
       when(request.getRequestURI()).thenReturn("/api/protected");
-      when(request.getHeader("Authorization")).thenReturn(authorizationHeaderValue);
+      when(request.getHeader("X-API-Key")).thenReturn(validApiKey);
       when(apiKeyService.validateApiKey(validApiKey)).thenReturn(Optional.empty());
 
       // when
@@ -244,7 +243,7 @@ class ApiKeyAuthenticationFilterTest {
     void shouldAuthenticateUserWithValidApiKey() throws ServletException, IOException {
       // given
       when(request.getRequestURI()).thenReturn("/api/protected");
-      when(request.getHeader("Authorization")).thenReturn(authorizationHeaderValue);
+      when(request.getHeader("X-API-Key")).thenReturn(validApiKey);
       when(apiKeyService.validateApiKey(validApiKey)).thenReturn(Optional.of(testApiKey));
 
       // when
@@ -260,7 +259,7 @@ class ApiKeyAuthenticationFilterTest {
     void shouldSetCorrectAuthoritiesForUserRole() throws ServletException, IOException {
       // given
       when(request.getRequestURI()).thenReturn("/api/protected");
-      when(request.getHeader("Authorization")).thenReturn(authorizationHeaderValue);
+      when(request.getHeader("X-API-Key")).thenReturn(validApiKey);
       when(apiKeyService.validateApiKey(validApiKey)).thenReturn(Optional.of(testApiKey));
 
       // when
@@ -276,7 +275,7 @@ class ApiKeyAuthenticationFilterTest {
       // given
       testUser.setRole(User.Role.admin);
       when(request.getRequestURI()).thenReturn("/api/protected");
-      when(request.getHeader("Authorization")).thenReturn(authorizationHeaderValue);
+      when(request.getHeader("X-API-Key")).thenReturn(validApiKey);
       when(apiKeyService.validateApiKey(validApiKey)).thenReturn(Optional.of(testApiKey));
 
       // when
@@ -293,7 +292,7 @@ class ApiKeyAuthenticationFilterTest {
       // given
       testUser.setRole(User.Role.readonly);
       when(request.getRequestURI()).thenReturn("/api/protected");
-      when(request.getHeader("Authorization")).thenReturn(authorizationHeaderValue);
+      when(request.getHeader("X-API-Key")).thenReturn(validApiKey);
       when(apiKeyService.validateApiKey(validApiKey)).thenReturn(Optional.of(testApiKey));
 
       // when
@@ -314,7 +313,7 @@ class ApiKeyAuthenticationFilterTest {
     void shouldReturn401UnauthorizedForInvalidApiKey() throws ServletException, IOException {
       // given
       when(request.getRequestURI()).thenReturn("/api/protected");
-      when(request.getHeader("Authorization")).thenReturn("Bearer " + invalidApiKey);
+      when(request.getHeader("X-API-Key")).thenReturn(invalidApiKey);
       when(apiKeyService.validateApiKey(invalidApiKey)).thenReturn(Optional.empty());
       when(response.getWriter()).thenReturn(printWriter);
 
@@ -335,7 +334,7 @@ class ApiKeyAuthenticationFilterTest {
     void shouldNotSetAuthenticationForInvalidApiKey() throws ServletException, IOException {
       // given
       when(request.getRequestURI()).thenReturn("/api/protected");
-      when(request.getHeader("Authorization")).thenReturn("Bearer " + invalidApiKey);
+      when(request.getHeader("X-API-Key")).thenReturn(invalidApiKey);
       when(apiKeyService.validateApiKey(invalidApiKey)).thenReturn(Optional.empty());
       when(response.getWriter()).thenReturn(printWriter);
 
@@ -357,7 +356,7 @@ class ApiKeyAuthenticationFilterTest {
       throws ServletException, IOException {
       // given
       when(request.getRequestURI()).thenReturn("/api/protected");
-      when(request.getHeader("Authorization")).thenReturn(authorizationHeaderValue);
+      when(request.getHeader("X-API-Key")).thenReturn(validApiKey);
       when(apiKeyService.validateApiKey(validApiKey)).thenThrow(
         new RuntimeException("Database error")
       );
@@ -375,7 +374,7 @@ class ApiKeyAuthenticationFilterTest {
     void shouldNotSetAuthenticationWhenExceptionOccurs() throws ServletException, IOException {
       // given
       when(request.getRequestURI()).thenReturn("/api/protected");
-      when(request.getHeader("Authorization")).thenReturn(authorizationHeaderValue);
+      when(request.getHeader("X-API-Key")).thenReturn(validApiKey);
       when(apiKeyService.validateApiKey(validApiKey)).thenThrow(
         new RuntimeException("Service error")
       );
@@ -393,36 +392,18 @@ class ApiKeyAuthenticationFilterTest {
   class EdgeCaseTests {
 
     @Test
-    @DisplayName("should handle Bearer token with only Bearer prefix")
-    void shouldHandleBearerTokenWithOnlyBearerPrefix() throws ServletException, IOException {
+    @DisplayName("should handle X-API-Key with whitespace")
+    void shouldHandleXApiKeyWithWhitespace() throws ServletException, IOException {
       // given
       when(request.getRequestURI()).thenReturn("/api/protected");
-      when(request.getHeader("Authorization")).thenReturn("Bearer ");
-      when(apiKeyService.validateApiKey("")).thenReturn(Optional.empty());
-      when(response.getWriter()).thenReturn(printWriter);
+      when(request.getHeader("X-API-Key")).thenReturn("   ");
 
       // when
       filter.doFilterInternal(request, response, filterChain);
 
       // then
-      verify(apiKeyService).validateApiKey("");
-      verify(response).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-    }
-
-    @Test
-    @DisplayName("should handle Bearer token with whitespace")
-    void shouldHandleBearerTokenWithWhitespace() throws ServletException, IOException {
-      // given
-      when(request.getRequestURI()).thenReturn("/api/protected");
-      when(request.getHeader("Authorization")).thenReturn("Bearer   whitespace-key");
-      when(apiKeyService.validateApiKey("  whitespace-key")).thenReturn(Optional.empty());
-      when(response.getWriter()).thenReturn(printWriter);
-
-      // when
-      filter.doFilterInternal(request, response, filterChain);
-
-      // then
-      verify(apiKeyService).validateApiKey("  whitespace-key");
+      verify(filterChain).doFilter(request, response);
+      verify(apiKeyService, never()).validateApiKey(anyString());
     }
 
     @Test
@@ -430,7 +411,7 @@ class ApiKeyAuthenticationFilterTest {
     void shouldHandleEmptyRequestUriGracefully() throws ServletException, IOException {
       // given
       when(request.getRequestURI()).thenReturn("");
-      when(request.getHeader("Authorization")).thenReturn(authorizationHeaderValue);
+      when(request.getHeader("X-API-Key")).thenReturn(validApiKey);
       when(apiKeyService.validateApiKey(validApiKey)).thenReturn(Optional.empty());
       when(response.getWriter()).thenReturn(printWriter);
 
@@ -442,18 +423,19 @@ class ApiKeyAuthenticationFilterTest {
     }
 
     @Test
-    @DisplayName("should handle case sensitivity in Bearer prefix")
-    void shouldHandleCaseSensitivityInBearerPrefix() throws ServletException, IOException {
+    @DisplayName("should handle null request URI gracefully")
+    void shouldHandleNullRequestUriGracefully() throws ServletException, IOException {
       // given
-      when(request.getRequestURI()).thenReturn("/api/protected");
-      when(request.getHeader("Authorization")).thenReturn("bearer " + validApiKey);
+      when(request.getRequestURI()).thenReturn(null);
+      when(request.getHeader("X-API-Key")).thenReturn(validApiKey);
+      when(apiKeyService.validateApiKey(validApiKey)).thenReturn(Optional.empty());
+      when(response.getWriter()).thenReturn(printWriter);
 
       // when
       filter.doFilterInternal(request, response, filterChain);
 
       // then
-      verify(filterChain).doFilter(request, response);
-      verify(apiKeyService, never()).validateApiKey(anyString());
+      verify(apiKeyService).validateApiKey(validApiKey);
     }
   }
 

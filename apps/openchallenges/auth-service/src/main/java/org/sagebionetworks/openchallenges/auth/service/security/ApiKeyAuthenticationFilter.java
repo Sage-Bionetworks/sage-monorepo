@@ -91,6 +91,9 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
   }
 
   private boolean isPublicEndpoint(String requestURI) {
+    if (requestURI == null) {
+      return false;
+    }
     return (
       requestURI.equals("/v1/auth/login") ||
       requestURI.equals("/v1/auth/validate") ||
