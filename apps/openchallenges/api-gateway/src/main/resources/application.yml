@@ -54,6 +54,12 @@ spring:
                 allowedheaders: '*'
                 maxAge: 3600
           routes:
+            - id: openchallenges-auth-service-oauth2
+              uri: http://openchallenges-auth-service:8087
+              predicates:
+                - Path=/oauth2/**,/.well-known/**
+              filters:
+                # No StripPrefix for OAuth2 standard endpoints
             - id: openchallenges-auth-service
               uri: http://openchallenges-auth-service:8087
               predicates:

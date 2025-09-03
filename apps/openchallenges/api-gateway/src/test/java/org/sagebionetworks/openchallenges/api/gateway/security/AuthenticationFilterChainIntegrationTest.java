@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.openchallenges.api.gateway.configuration.AuthConfiguration;
 import org.sagebionetworks.openchallenges.api.gateway.service.GatewayAuthenticationService;
+import org.sagebionetworks.openchallenges.api.gateway.service.OAuth2JwtService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.http.server.reactive.MockServerHttpRequest;
@@ -28,7 +29,8 @@ import static org.mockito.Mockito.never;
 @ExtendWith(MockitoExtension.class)
 class AuthenticationFilterChainIntegrationTest {
 
-  private final GatewayAuthenticationService authenticationService = mock(GatewayAuthenticationService.class);
+  private final OAuth2JwtService oAuth2JwtService = mock(OAuth2JwtService.class);
+  private final GatewayAuthenticationService gatewayAuthenticationService = mock(GatewayAuthenticationService.class);
   private final AuthConfiguration authConfiguration = mock(AuthConfiguration.class);
   private final WebFilterChain chain = mock(WebFilterChain.class);
 
@@ -40,9 +42,9 @@ class AuthenticationFilterChainIntegrationTest {
     when(authConfiguration.getRealm()).thenReturn("OpenChallenges");
     
     JwtAuthenticationGatewayFilter jwtFilter = 
-        new JwtAuthenticationGatewayFilter(authenticationService, authConfiguration);
+        new JwtAuthenticationGatewayFilter(oAuth2JwtService, authConfiguration);
     ApiKeyAuthenticationGatewayFilter apiKeyFilter = 
-        new ApiKeyAuthenticationGatewayFilter(authenticationService, authConfiguration);
+        new ApiKeyAuthenticationGatewayFilter(gatewayAuthenticationService, authConfiguration);
     
     String validToken = "valid.jwt.token";
     MockServerHttpRequest request = MockServerHttpRequest
@@ -52,14 +54,15 @@ class AuthenticationFilterChainIntegrationTest {
         .build();
     MockServerWebExchange exchange = MockServerWebExchange.from(request);
     
-    GatewayAuthenticationService.JwtValidationResponse validJwtResponse = 
-        new GatewayAuthenticationService.JwtValidationResponse();
-    validJwtResponse.setValid(true);
-    validJwtResponse.setUserId("jwt-user-123");
-    validJwtResponse.setUsername("jwtuser");
-    validJwtResponse.setRole("USER");
+    OAuth2JwtService.JwtValidationResponse validJwtResponse = 
+        OAuth2JwtService.JwtValidationResponse.builder()
+            .valid(true)
+            .userId("jwt-user-123")
+            .username("jwtuser")
+            .role("USER")
+            .build();
     
-    when(authenticationService.validateJwt(validToken))
+    when(oAuth2JwtService.validateJwt(validToken))
         .thenReturn(Mono.just(validJwtResponse));
 
     // Simulate filter chain: JWT filter -> API key filter -> downstream
@@ -69,8 +72,8 @@ class AuthenticationFilterChainIntegrationTest {
     jwtFilter.filter(exchange, jwtToApiKeyChain).block();
 
     // then
-    verify(authenticationService).validateJwt(validToken);
-    verify(authenticationService, never()).validateApiKey(anyString()); // API key should be skipped due to JWT auth headers
+    verify(oAuth2JwtService).validateJwt(validToken);
+    verify(gatewayAuthenticationService, never()).validateApiKey(anyString()); // API key should be skipped due to JWT auth headers
     verify(chain).filter(any()); // Should reach the end of the chain
     assertThat(exchange.getResponse().getStatusCode()).isNull(); // No error status
   }
@@ -83,9 +86,9 @@ class AuthenticationFilterChainIntegrationTest {
     when(authConfiguration.getRealm()).thenReturn("OpenChallenges");
     
     JwtAuthenticationGatewayFilter jwtFilter = 
-        new JwtAuthenticationGatewayFilter(authenticationService, authConfiguration);
+        new JwtAuthenticationGatewayFilter(oAuth2JwtService, authConfiguration);
     ApiKeyAuthenticationGatewayFilter apiKeyFilter = 
-        new ApiKeyAuthenticationGatewayFilter(authenticationService, authConfiguration);
+        new ApiKeyAuthenticationGatewayFilter(gatewayAuthenticationService, authConfiguration);
     
     String validApiKey = "valid-api-key";
     MockServerHttpRequest request = MockServerHttpRequest
@@ -102,7 +105,7 @@ class AuthenticationFilterChainIntegrationTest {
     validApiKeyResponse.setRole("SERVICE");
     validApiKeyResponse.setScopes(new String[]{"read", "write"});
     
-    when(authenticationService.validateApiKey(validApiKey))
+    when(gatewayAuthenticationService.validateApiKey(validApiKey))
         .thenReturn(Mono.just(validApiKeyResponse));
 
     // Simulate filter chain: JWT filter -> API key filter -> downstream
@@ -112,8 +115,8 @@ class AuthenticationFilterChainIntegrationTest {
     jwtFilter.filter(exchange, jwtToApiKeyChain).block();
 
     // then
-    verify(authenticationService, never()).validateJwt(anyString()); // JWT should be skipped
-    verify(authenticationService).validateApiKey(validApiKey);
+    verify(oAuth2JwtService, never()).validateJwt(anyString()); // JWT should be skipped
+    verify(gatewayAuthenticationService).validateApiKey(validApiKey);
     verify(chain).filter(any()); // Should reach the end of the chain
     assertThat(exchange.getResponse().getStatusCode()).isNull(); // No error status
   }
@@ -125,9 +128,9 @@ class AuthenticationFilterChainIntegrationTest {
     when(authConfiguration.getRealm()).thenReturn("OpenChallenges");
     
     JwtAuthenticationGatewayFilter jwtFilter = 
-        new JwtAuthenticationGatewayFilter(authenticationService, authConfiguration);
+        new JwtAuthenticationGatewayFilter(oAuth2JwtService, authConfiguration);
     ApiKeyAuthenticationGatewayFilter apiKeyFilter = 
-        new ApiKeyAuthenticationGatewayFilter(authenticationService, authConfiguration);
+        new ApiKeyAuthenticationGatewayFilter(gatewayAuthenticationService, authConfiguration);
     
     String invalidToken = "invalid.jwt.token";
     MockServerHttpRequest request = MockServerHttpRequest
@@ -137,11 +140,10 @@ class AuthenticationFilterChainIntegrationTest {
         .build();
     MockServerWebExchange exchange = MockServerWebExchange.from(request);
     
-    GatewayAuthenticationService.JwtValidationResponse invalidJwtResponse = 
-        new GatewayAuthenticationService.JwtValidationResponse();
-    invalidJwtResponse.setValid(false);
+    OAuth2JwtService.JwtValidationResponse invalidJwtResponse = 
+        OAuth2JwtService.JwtValidationResponse.invalid("Invalid token");
     
-    when(authenticationService.validateJwt(invalidToken))
+    when(oAuth2JwtService.validateJwt(invalidToken))
         .thenReturn(Mono.just(invalidJwtResponse));
 
     // Simulate filter chain: JWT filter -> API key filter -> downstream
@@ -151,8 +153,8 @@ class AuthenticationFilterChainIntegrationTest {
     jwtFilter.filter(exchange, jwtToApiKeyChain).block();
 
     // then
-    verify(authenticationService).validateJwt(invalidToken);
-    verify(authenticationService, never()).validateApiKey(anyString()); // Should fail before reaching API key
+    verify(oAuth2JwtService).validateJwt(invalidToken);
+    verify(gatewayAuthenticationService, never()).validateApiKey(anyString()); // Should fail before reaching API key
     verify(chain, never()).filter(any()); // Should not reach the end of the chain
     assertThat(exchange.getResponse().getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     assertThat(exchange.getResponse().getHeaders().getFirst(HttpHeaders.WWW_AUTHENTICATE))
@@ -166,9 +168,9 @@ class AuthenticationFilterChainIntegrationTest {
     when(chain.filter(any())).thenReturn(Mono.empty());
     
     JwtAuthenticationGatewayFilter jwtFilter = 
-        new JwtAuthenticationGatewayFilter(authenticationService, authConfiguration);
+        new JwtAuthenticationGatewayFilter(oAuth2JwtService, authConfiguration);
     ApiKeyAuthenticationGatewayFilter apiKeyFilter = 
-        new ApiKeyAuthenticationGatewayFilter(authenticationService, authConfiguration);
+        new ApiKeyAuthenticationGatewayFilter(gatewayAuthenticationService, authConfiguration);
     
     MockServerHttpRequest request = MockServerHttpRequest
         .post("/api/v1/organizations")
@@ -182,8 +184,8 @@ class AuthenticationFilterChainIntegrationTest {
     jwtFilter.filter(exchange, jwtToApiKeyChain).block();
 
     // then
-    verify(authenticationService, never()).validateJwt(anyString());
-    verify(authenticationService, never()).validateApiKey(anyString());
+    verify(oAuth2JwtService, never()).validateJwt(anyString());
+    verify(gatewayAuthenticationService, never()).validateApiKey(anyString());
     verify(chain).filter(any()); // Should reach Spring Security for authorization decision
     assertThat(exchange.getResponse().getStatusCode()).isNull(); // No error status
   }

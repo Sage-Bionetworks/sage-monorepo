@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.openchallenges.api.gateway.configuration.AuthConfiguration;
-import org.sagebionetworks.openchallenges.api.gateway.service.GatewayAuthenticationService;
+import org.sagebionetworks.openchallenges.api.gateway.service.OAuth2JwtService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.http.server.reactive.MockServerHttpRequest;
@@ -29,7 +29,7 @@ import static org.mockito.Mockito.never;
 class JwtAuthenticationGatewayFilterTest {
 
   @Mock
-  private GatewayAuthenticationService authenticationService;
+  private OAuth2JwtService oAuth2JwtService;
 
   @Mock
   private AuthConfiguration authConfiguration;
@@ -55,7 +55,7 @@ class JwtAuthenticationGatewayFilterTest {
     filter.filter(exchange, chain).block();
 
     // then
-    verify(authenticationService, never()).validateJwt(anyString());
+    verify(oAuth2JwtService, never()).validateJwt(anyString());
     verify(chain).filter(exchange);
   }
 
@@ -75,7 +75,7 @@ class JwtAuthenticationGatewayFilterTest {
     filter.filter(exchange, chain).block();
 
     // then
-    verify(authenticationService, never()).validateJwt(anyString());
+    verify(oAuth2JwtService, never()).validateJwt(anyString());
     verify(chain).filter(exchange);
   }
 
@@ -95,7 +95,7 @@ class JwtAuthenticationGatewayFilterTest {
     filter.filter(exchange, chain).block();
 
     // then
-    verify(authenticationService, never()).validateJwt(anyString());
+    verify(oAuth2JwtService, never()).validateJwt(anyString());
     verify(chain).filter(exchange);
   }
 
@@ -112,11 +112,10 @@ class JwtAuthenticationGatewayFilterTest {
         .build();
     MockServerWebExchange exchange = MockServerWebExchange.from(request);
     
-    GatewayAuthenticationService.JwtValidationResponse invalidResponse = 
-        new GatewayAuthenticationService.JwtValidationResponse();
-    invalidResponse.setValid(false);
+    OAuth2JwtService.JwtValidationResponse invalidResponse = 
+        OAuth2JwtService.JwtValidationResponse.invalid("Invalid token");
     
-    when(authenticationService.validateJwt(invalidToken))
+    when(oAuth2JwtService.validateJwt(invalidToken))
         .thenReturn(Mono.just(invalidResponse));
 
     // when
@@ -142,15 +141,16 @@ class JwtAuthenticationGatewayFilterTest {
         .build();
     MockServerWebExchange exchange = MockServerWebExchange.from(request);
     
-    GatewayAuthenticationService.JwtValidationResponse validResponse = 
-        new GatewayAuthenticationService.JwtValidationResponse();
-    validResponse.setValid(true);
-    validResponse.setUserId("user123");
-    validResponse.setUsername("testuser");
-    validResponse.setRole("USER");
-    validResponse.setExpiresAt("2024-12-31T23:59:59Z");
+    OAuth2JwtService.JwtValidationResponse validResponse = 
+        OAuth2JwtService.JwtValidationResponse.builder()
+            .valid(true)
+            .userId("user123")
+            .username("testuser")
+            .role("USER")
+            .expiresAt("2024-12-31T23:59:59Z")
+            .build();
     
-    when(authenticationService.validateJwt(validToken))
+    when(oAuth2JwtService.validateJwt(validToken))
         .thenReturn(Mono.just(validResponse));
 
     // when

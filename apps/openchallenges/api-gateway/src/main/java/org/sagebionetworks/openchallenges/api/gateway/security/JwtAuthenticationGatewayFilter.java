@@ -1,7 +1,7 @@
 package org.sagebionetworks.openchallenges.api.gateway.security;
 
 import org.sagebionetworks.openchallenges.api.gateway.configuration.AuthConfiguration;
-import org.sagebionetworks.openchallenges.api.gateway.service.GatewayAuthenticationService;
+import org.sagebionetworks.openchallenges.api.gateway.service.OAuth2JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -19,7 +19,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 /**
- * WebFilter that handles JWT authentication.
+ * WebFilter that handles JWT authentication using OAuth2 standards.
  * Runs BEFORE Spring Security authorization filters.
  */
 @Component
@@ -33,13 +33,13 @@ public class JwtAuthenticationGatewayFilter implements WebFilter {
   private static final String X_AUTHENTICATED_ROLES_HEADER = "X-Authenticated-Roles";
   // TODO: Add X_SCOPES_HEADER when JWT validation includes scope information
 
-  private final GatewayAuthenticationService authenticationService;
+  private final OAuth2JwtService oAuth2JwtService;
   private final AuthConfiguration authConfiguration;
 
   public JwtAuthenticationGatewayFilter(
-      GatewayAuthenticationService authenticationService,
+      OAuth2JwtService oAuth2JwtService,
       AuthConfiguration authConfiguration) {
-    this.authenticationService = authenticationService;
+    this.oAuth2JwtService = oAuth2JwtService;
     this.authConfiguration = authConfiguration;
   }
 
@@ -65,8 +65,8 @@ public class JwtAuthenticationGatewayFilter implements WebFilter {
     
     logger.debug("Validating JWT token for request to: {}", path);
 
-    // Validate JWT token with Auth Service
-    return authenticationService.validateJwt(jwtToken)
+    // Validate JWT token with OAuth2 JWT Service
+    return oAuth2JwtService.validateJwt(jwtToken)
         .flatMap(validationResponse -> {
           if (!validationResponse.isValid()) {
             logger.warn("Invalid JWT token for request to: {}", path);
@@ -101,16 +101,11 @@ public class JwtAuthenticationGatewayFilter implements WebFilter {
           return chain.filter(exchange.mutate().request(modifiedRequest).build())
               .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
         })
-        .onErrorResume(GatewayAuthenticationService.AuthenticationException.class, ex -> {
+        .onErrorResume(Exception.class, ex -> {
           logger.warn("JWT authentication failed for request to {}: {}", path, ex.getMessage());
           exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
           exchange.getResponse().getHeaders().add("WWW-Authenticate", 
               String.format("Bearer realm=\"%s\"", authConfiguration.getRealm()));
-          return exchange.getResponse().setComplete();
-        })
-        .onErrorResume(Exception.class, ex -> {
-          logger.error("Unexpected error during JWT authentication for request to {}: {}", path, ex.getMessage());
-          exchange.getResponse().setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
           return exchange.getResponse().setComplete();
         });
   }
