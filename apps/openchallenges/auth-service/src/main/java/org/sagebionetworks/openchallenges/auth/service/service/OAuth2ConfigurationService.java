@@ -55,7 +55,7 @@ public class OAuth2ConfigurationService {
 
         String authUrl = switch (provider) {
             case google -> String.format(
-                "https://accounts.google.com/o/oauth2/v2/auth?client_id=%s&redirect_uri=%s&scope=%s&response_type=code&access_type=offline&prompt=consent&state=%s",
+                "https://accounts.google.com/o/oauth2/v2/auth?client_id=%s&redirect_uri=%s&scope=%s&response_type=code&access_type=offline&prompt=select_account&state=%s",
                 googleClientId, 
                 redirectUri, 
                 "openid%20email%20profile", 
