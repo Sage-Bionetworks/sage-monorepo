@@ -68,7 +68,7 @@ public class GatewayAuthenticationService {
     
     return authServiceClient
         .post()
-        .uri("/auth/validate")
+        .uri("/auth/api-keys/validate")
         .bodyValue(request)
         .retrieve()
         .bodyToMono(ApiKeyValidationResponse.class)
