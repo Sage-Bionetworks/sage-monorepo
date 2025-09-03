@@ -7,7 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { MedianExpression } from './medianExpression';
+import { MedianExpression } from './median-expression';
 
 /**
  * GCTGeneTissue

@@ -7,7 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { BioDomain } from './bioDomain';
+import { BioDomain } from './bio-domain';
 
 /**
  * BioDomains

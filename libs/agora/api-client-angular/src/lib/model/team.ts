@@ -7,7 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { TeamMember } from './teamMember';
+import { TeamMember } from './team-member';
 
 /**
  * Team

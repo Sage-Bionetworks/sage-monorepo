@@ -23,15 +23,15 @@ import { CustomHttpParameterCodec } from '../encoder';
 import { Observable } from 'rxjs';
 
 // @ts-ignore
-import { BasicError } from '../model/basicError';
+import { BasicError } from '../model/basic-error';
 // @ts-ignore
-import { GCTGenesList } from '../model/gCTGenesList';
+import { GCTGenesList } from '../model/gct-genes-list';
 // @ts-ignore
 import { Gene } from '../model/gene';
 // @ts-ignore
-import { GenesList } from '../model/genesList';
+import { GenesList } from '../model/genes-list';
 // @ts-ignore
-import { NominatedGenesList } from '../model/nominatedGenesList';
+import { NominatedGenesList } from '../model/nominated-genes-list';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';

@@ -7,7 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { GCTGene } from './gCTGene';
+import { GCTGene } from './gct-gene';
 
 /**
  * List of GCTGene

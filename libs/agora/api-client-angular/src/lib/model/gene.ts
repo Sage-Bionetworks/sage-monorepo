@@ -8,18 +8,18 @@
  * Do not edit the class manually.
  */
 import { Metabolomics } from './metabolomics';
-import { ExperimentalValidation } from './experimentalValidation';
-import { BioDomains } from './bioDomains';
-import { TargetNomination } from './targetNomination';
-import { SimilarGenesNetwork } from './similarGenesNetwork';
+import { ExperimentalValidation } from './experimental-validation';
+import { BioDomains } from './bio-domains';
+import { TargetNomination } from './target-nomination';
+import { SimilarGenesNetwork } from './similar-genes-network';
 import { Druggability } from './druggability';
-import { MedianExpression } from './medianExpression';
-import { EnsemblInfo } from './ensemblInfo';
-import { RnaDifferentialExpression } from './rnaDifferentialExpression';
-import { GeneNetworkLinks } from './geneNetworkLinks';
-import { NeuropathologicCorrelation } from './neuropathologicCorrelation';
-import { OverallScores } from './overallScores';
-import { ProteinDifferentialExpression } from './proteinDifferentialExpression';
+import { MedianExpression } from './median-expression';
+import { EnsemblInfo } from './ensembl-info';
+import { RnaDifferentialExpression } from './rna-differential-expression';
+import { GeneNetworkLinks } from './gene-network-links';
+import { NeuropathologicCorrelation } from './neuropathologic-correlation';
+import { OverallScores } from './overall-scores';
+import { ProteinDifferentialExpression } from './protein-differential-expression';
 
 /**
  * Gene

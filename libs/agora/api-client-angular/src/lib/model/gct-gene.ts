@@ -7,8 +7,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { GCTGeneNominations } from './gCTGeneNominations';
-import { GCTGeneTissue } from './gCTGeneTissue';
+import { GCTGeneNominations } from './gct-gene-nominations';
+import { GCTGeneTissue } from './gct-gene-tissue';
 
 /**
  * GCT Gene
