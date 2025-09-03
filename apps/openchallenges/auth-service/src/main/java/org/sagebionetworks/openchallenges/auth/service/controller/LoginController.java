@@ -17,4 +17,13 @@ public class LoginController {
     // Return the existing OAuth2 login page
     return "oauth2-login";
   }
+
+  /**
+   * Handle logout request and redirect to login page.
+   */
+  @GetMapping("/logout")
+  public String logout() {
+    // Redirect to login page after logout
+    return "redirect:/login";
+  }
 }
