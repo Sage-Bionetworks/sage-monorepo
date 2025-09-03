@@ -30,6 +30,9 @@ const defaultPointShape = 'circle';
 const defaultPointColor = '#8b8ad1';
 const defaultPointOpacity = 0.8;
 
+const defaultPointCategoryOffset = 0.3;
+const defaultPointCategoryJitterMax = 0.02;
+
 const Y_AXIS_TICK_LABELS_MAX_WIDTH = 80;
 const SPACE_FOR_Y_AXIS_NAME = 40;
 
@@ -96,8 +99,8 @@ export class BoxplotChart {
       points,
       xAxisCategories,
       pointCategories,
-      0.3,
-      0.02,
+      defaultPointCategoryOffset,
+      defaultPointCategoryJitterMax,
     );
     const dataForStaticBoxplotSummaries = summaries
       ? addXAxisValueToBoxplotSummaries(summaries, xAxisCategories)
