@@ -33,7 +33,7 @@ class AuthenticationServiceOAuth2Test {
     private ExternalAccountRepository externalAccountRepository;
 
     @Mock
-    private JwtService jwtService;
+    private OAuth2TokenGeneratorService oAuth2TokenGeneratorService;
 
     @Mock
     private OAuth2ConfigurationService oAuth2ConfigurationService;
@@ -48,7 +48,7 @@ class AuthenticationServiceOAuth2Test {
         authenticationService = new AuthenticationService(
             userRepository,
             externalAccountRepository,
-            jwtService,
+            oAuth2TokenGeneratorService,
             oAuth2ConfigurationService,
             oAuth2Service
         );
@@ -107,12 +107,10 @@ class AuthenticationServiceOAuth2Test {
             .thenReturn(savedUser);
 
         // Mock JWT generation
-        when(jwtService.generateAccessToken(savedUser))
+        when(oAuth2TokenGeneratorService.generateAccessToken(savedUser))
             .thenReturn("jwt-access-token");
-        when(jwtService.generateRefreshToken(savedUser))
+        when(oAuth2TokenGeneratorService.generateRefreshToken(savedUser))
             .thenReturn("jwt-refresh-token");
-        when(jwtService.getAccessTokenExpirationSeconds())
-            .thenReturn(3600L);
 
         // When
         OAuth2CallbackResponseDto result = authenticationService.handleOAuth2Callback(provider, code, state);
@@ -197,12 +195,10 @@ class AuthenticationServiceOAuth2Test {
             .thenReturn(Optional.of(existingAccount));
 
         // Mock JWT generation
-        when(jwtService.generateAccessToken(existingUser))
+        when(oAuth2TokenGeneratorService.generateAccessToken(existingUser))
             .thenReturn("jwt-access-token-existing");
-        when(jwtService.generateRefreshToken(existingUser))
+        when(oAuth2TokenGeneratorService.generateRefreshToken(existingUser))
             .thenReturn("jwt-refresh-token-existing");
-        when(jwtService.getAccessTokenExpirationSeconds())
-            .thenReturn(3600L);
 
         // When
         OAuth2CallbackResponseDto result = authenticationService.handleOAuth2Callback(provider, code, state);
@@ -260,12 +256,10 @@ class AuthenticationServiceOAuth2Test {
             .thenReturn(Optional.of(existingUser));
 
         // Mock JWT generation
-        when(jwtService.generateAccessToken(existingUser))
+        when(oAuth2TokenGeneratorService.generateAccessToken(existingUser))
             .thenReturn("jwt-access-token-linked");
-        when(jwtService.generateRefreshToken(existingUser))
+        when(oAuth2TokenGeneratorService.generateRefreshToken(existingUser))
             .thenReturn("jwt-refresh-token-linked");
-        when(jwtService.getAccessTokenExpirationSeconds())
-            .thenReturn(3600L);
 
         // When
         OAuth2CallbackResponseDto result = authenticationService.handleOAuth2Callback(provider, code, state);
