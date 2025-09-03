@@ -51,8 +51,8 @@ class AuthenticationApiDelegateImplTest {
   @BeforeEach
   void setUp() {
     authenticationApiDelegate = new AuthenticationApiDelegateImpl(
-      apiKeyService,
-      userService
+      userService,
+      apiKeyService
     );
 
     // Set up test user
@@ -70,7 +70,9 @@ class AuthenticationApiDelegateImplTest {
     // Set up test API key
     testApiKey = new ApiKey();
     testApiKey.setId(UUID.randomUUID());
-    testApiKey.setKeyValue("test-api-key-value");
+    testApiKey.setKeyHash("hashed-test-api-key-value");
+    testApiKey.setKeyPrefix("test-api");
+    testApiKey.setName("Test API Key");
     testApiKey.setUser(testUser);
     testApiKey.setCreatedAt(OffsetDateTime.now());
   }
@@ -81,7 +83,7 @@ class AuthenticationApiDelegateImplTest {
     ValidateApiKeyRequestDto request = new ValidateApiKeyRequestDto()
       .apiKey("test-api-key-value");
 
-    when(apiKeyService.findByKeyValue("test-api-key-value"))
+    when(apiKeyService.validateApiKey("test-api-key-value"))
       .thenReturn(Optional.of(testApiKey));
 
     // Act
@@ -94,8 +96,6 @@ class AuthenticationApiDelegateImplTest {
     assertThat(response.getBody().getValid()).isTrue();
     assertThat(response.getBody().getUsername()).isEqualTo("testuser");
     assertThat(response.getBody().getUserId()).isEqualTo(testUser.getId());
-
-    verify(apiKeyService).updateLastUsed(testApiKey);
   }
 
   @Test
@@ -104,7 +104,7 @@ class AuthenticationApiDelegateImplTest {
     ValidateApiKeyRequestDto request = new ValidateApiKeyRequestDto()
       .apiKey("invalid-key");
 
-    when(apiKeyService.findByKeyValue("invalid-key"))
+    when(apiKeyService.validateApiKey("invalid-key"))
       .thenReturn(Optional.empty());
 
     // Act
@@ -123,8 +123,7 @@ class AuthenticationApiDelegateImplTest {
     SecurityContextHolder.setContext(securityContext);
     when(securityContext.getAuthentication()).thenReturn(authentication);
     when(authentication.isAuthenticated()).thenReturn(true);
-    when(authentication.getName()).thenReturn("testuser");
-    when(userService.findByUsername("testuser")).thenReturn(Optional.of(testUser));
+    when(authentication.getPrincipal()).thenReturn(testUser);
 
     // Act
     ResponseEntity<UserProfileDto> response = authenticationApiDelegate.getUserProfile();

@@ -8,8 +8,8 @@ import org.sagebionetworks.openchallenges.auth.service.service.AuthenticationSer
 import org.sagebionetworks.openchallenges.auth.service.service.OAuth2ConfigurationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,15 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
  * OAuth2 web controller for handling OAuth2 login flows.
  */
 @Controller
+@RequiredArgsConstructor
 public class OAuth2WebController {
 
   private static final Logger logger = LoggerFactory.getLogger(OAuth2WebController.class);
 
-  @Autowired
-  private OAuth2ConfigurationService oAuth2ConfigurationService;
-
-  @Autowired
-  private AuthenticationService authenticationService;
+  private final OAuth2ConfigurationService oAuth2ConfigurationService;
+  private final AuthenticationService authenticationService;
 
   /**
    * Initiate Google OAuth2 login flow.

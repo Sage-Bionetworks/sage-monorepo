@@ -153,6 +153,8 @@ class UserTest {
         "John", // firstName
         "Doe", // lastName
         "https://example.com/avatar.jpg", // avatarUrl
+        "Test bio", // bio
+        "https://example.com", // website
         true, // emailVerified
         role,
         enabled,

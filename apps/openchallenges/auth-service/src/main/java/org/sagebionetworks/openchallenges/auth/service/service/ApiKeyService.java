@@ -12,33 +12,22 @@ import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.repository.ApiKeyRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ApiKeyService {
 
   private static final Logger logger = LoggerFactory.getLogger(ApiKeyService.class);
 
   private final ApiKeyRepository apiKeyRepository;
   private final PasswordEncoder passwordEncoder;
-  private final SecureRandom secureRandom;
   private final ApiKeyProperties apiKeyProperties;
-
-  @Autowired
-  public ApiKeyService(
-    ApiKeyRepository apiKeyRepository,
-    PasswordEncoder passwordEncoder,
-    ApiKeyProperties apiKeyProperties
-  ) {
-    this.apiKeyRepository = apiKeyRepository;
-    this.passwordEncoder = passwordEncoder;
-    this.apiKeyProperties = apiKeyProperties;
-    this.secureRandom = new SecureRandom();
-  }
+  private final SecureRandom secureRandom = new SecureRandom();
 
   /**
    * Create a new API key for a user

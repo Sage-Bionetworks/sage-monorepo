@@ -6,25 +6,20 @@ import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserService {
 
   private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
-
-  @Autowired
-  public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-    this.userRepository = userRepository;
-    this.passwordEncoder = passwordEncoder;
-  }
 
   /**
    * Authenticate a user with username and password

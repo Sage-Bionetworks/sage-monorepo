@@ -9,9 +9,9 @@ import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
 import org.sagebionetworks.openchallenges.auth.service.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,15 +25,13 @@ import java.util.UUID;
  * Profile controller for displaying user profile page.
  */
 @Controller
+@RequiredArgsConstructor
 public class ProfileController {
 
     private static final Logger logger = LoggerFactory.getLogger(ProfileController.class);
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private ApiKeyService apiKeyService;
+    private final UserService userService;
+    private final ApiKeyService apiKeyService;
 
     /**
      * Display user profile page.

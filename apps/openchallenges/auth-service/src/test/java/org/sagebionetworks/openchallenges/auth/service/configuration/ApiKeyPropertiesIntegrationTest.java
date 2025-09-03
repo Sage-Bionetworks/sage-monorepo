@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
@@ -15,17 +16,15 @@ import org.springframework.test.context.TestPropertySource;
  */
 class ApiKeyPropertiesIntegrationTest {
 
-  @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+  @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE, classes = {
+    ApiKeyProperties.class
+  })
+  @EnableConfigurationProperties(ApiKeyProperties.class)
   @TestPropertySource(
     properties = {
-      "spring.datasource.url=jdbc:h2:mem:testdb",
-      "spring.datasource.driverClassName=org.h2.Driver",
-      "spring.datasource.username=sa",
-      "spring.datasource.password=",
-      "spring.jpa.hibernate.ddl-auto=create-drop",
-      "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect",
-      "spring.flyway.enabled=false",
       "app.oauth2.authorization-server.enabled=false",
+      "openchallenges.auth.api-key.prefix=oc_dev_",
+      "openchallenges.auth.api-key.length=40"
     }
   )
   @ActiveProfiles("dev")
@@ -42,17 +41,15 @@ class ApiKeyPropertiesIntegrationTest {
     }
   }
 
-  @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+  @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE, classes = {
+    ApiKeyProperties.class
+  })
+  @EnableConfigurationProperties(ApiKeyProperties.class)
   @TestPropertySource(
     properties = {
-      "spring.datasource.url=jdbc:h2:mem:testdb",
-      "spring.datasource.driverClassName=org.h2.Driver",
-      "spring.datasource.username=sa",
-      "spring.datasource.password=",
-      "spring.jpa.hibernate.ddl-auto=create-drop",
-      "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect",
-      "spring.flyway.enabled=false",
       "app.oauth2.authorization-server.enabled=false",
+      "openchallenges.auth.api-key.prefix=oc_stage_",
+      "openchallenges.auth.api-key.length=40"
     }
   )
   @ActiveProfiles("stage")
@@ -69,17 +66,15 @@ class ApiKeyPropertiesIntegrationTest {
     }
   }
 
-  @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+  @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE, classes = {
+    ApiKeyProperties.class
+  })
+  @EnableConfigurationProperties(ApiKeyProperties.class)
   @TestPropertySource(
     properties = {
-      "spring.datasource.url=jdbc:h2:mem:testdb",
-      "spring.datasource.driverClassName=org.h2.Driver",
-      "spring.datasource.username=sa",
-      "spring.datasource.password=",
-      "spring.jpa.hibernate.ddl-auto=create-drop",
-      "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect",
-      "spring.flyway.enabled=false",
       "app.oauth2.authorization-server.enabled=false",
+      "openchallenges.auth.api-key.prefix=oc_prod_",
+      "openchallenges.auth.api-key.length=40"
     }
   )
   @ActiveProfiles("prod")

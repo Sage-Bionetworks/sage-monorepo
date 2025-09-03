@@ -148,8 +148,10 @@ class OAuth2ServiceTest {
         
         OAuth2UserInfo expectedUserInfo = OAuth2UserInfo.builder()
             .id("google-user-id")
+            .providerId("google-user-id")
             .email("test@example.com")
             .name("Test User")
+            .displayName("Test User")
             .givenName("Test")
             .familyName("User")
             .picture("https://example.com/picture.jpg")
@@ -184,6 +186,8 @@ class OAuth2ServiceTest {
         
         OAuth2UserInfo expectedUserInfo = OAuth2UserInfo.builder()
             .sub("synapse-user-sub")
+            .id("synapse-user-sub")
+            .providerId("synapse-user-sub")
             .email("synapse@example.com")
             .username("synapse_user")
             .displayName("Synapse User")

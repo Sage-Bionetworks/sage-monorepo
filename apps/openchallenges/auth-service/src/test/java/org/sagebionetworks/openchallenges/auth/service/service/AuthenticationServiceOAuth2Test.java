@@ -10,10 +10,8 @@ import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2CallbackR
 import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2TokenResponse;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2UserInfo;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ExternalAccount;
-import org.sagebionetworks.openchallenges.auth.service.model.entity.RefreshToken;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.repository.ExternalAccountRepository;
-import org.sagebionetworks.openchallenges.auth.service.repository.RefreshTokenRepository;
 import org.sagebionetworks.openchallenges.auth.service.repository.UserRepository;
 
 import java.time.OffsetDateTime;
@@ -35,9 +33,6 @@ class AuthenticationServiceOAuth2Test {
     private ExternalAccountRepository externalAccountRepository;
 
     @Mock
-    private RefreshTokenRepository refreshTokenRepository;
-
-    @Mock
     private JwtService jwtService;
 
     @Mock
@@ -53,7 +48,6 @@ class AuthenticationServiceOAuth2Test {
         authenticationService = new AuthenticationService(
             userRepository,
             externalAccountRepository,
-            refreshTokenRepository,
             jwtService,
             oAuth2ConfigurationService,
             oAuth2Service
@@ -119,8 +113,6 @@ class AuthenticationServiceOAuth2Test {
             .thenReturn("jwt-refresh-token");
         when(jwtService.getAccessTokenExpirationSeconds())
             .thenReturn(3600L);
-        when(jwtService.getRefreshTokenExpirationSeconds())
-            .thenReturn(604800L);
 
         // When
         OAuth2CallbackResponseDto result = authenticationService.handleOAuth2Callback(provider, code, state);
@@ -154,9 +146,6 @@ class AuthenticationServiceOAuth2Test {
         assertThat(capturedAccount.getExternalId()).isEqualTo("google-user-id");
         assertThat(capturedAccount.getExternalEmail()).isEqualTo("john.doe@gmail.com");
         assertThat(capturedAccount.getExternalUsername()).isNull(); // Google doesn't provide username
-
-        // Verify refresh token storage
-        verify(refreshTokenRepository).save(any(RefreshToken.class));
     }
 
     @Test
