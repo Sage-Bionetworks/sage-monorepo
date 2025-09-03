@@ -7,8 +7,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { ModelData } from './modelData';
-import { GeneticInfo } from './geneticInfo';
+import { ModelData } from './model-data';
+import { GeneticInfo } from './genetic-info';
 
 /**
  * Model details
