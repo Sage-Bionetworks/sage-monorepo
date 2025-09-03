@@ -1,9 +1,9 @@
 package org.sagebionetworks.openchallenges.auth.service.controller;
 
-import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2TokenResponse;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2CallbackResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ExternalAccount;
+import org.sagebionetworks.openchallenges.auth.service.service.AuthenticationService;
 import org.sagebionetworks.openchallenges.auth.service.service.OAuth2ConfigurationService;
-import org.sagebionetworks.openchallenges.auth.service.service.OAuth2Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class OAuth2WebController {
   private OAuth2ConfigurationService oAuth2ConfigurationService;
 
   @Autowired
-  private OAuth2Service oAuth2Service;
+  private AuthenticationService authenticationService;
 
   /**
    * Initiate Google OAuth2 login flow.
@@ -73,33 +73,30 @@ public class OAuth2WebController {
     }
 
     try {
-      // Exchange authorization code for tokens
-      logger.debug("Exchanging authorization code for tokens");
-      String redirectUri = oAuth2ConfigurationService.getRedirectUri(
-        ExternalAccount.Provider.google
-      );
-
-      OAuth2TokenResponse tokenResponse = oAuth2Service.exchangeCodeForToken(
-        ExternalAccount.Provider.google,
+      // Process OAuth2 callback through AuthenticationService
+      logger.debug("Processing OAuth2 callback through AuthenticationService");
+      
+      OAuth2CallbackResponseDto response = authenticationService.handleOAuth2Callback(
+        "google", // Currently only supporting Google
         code,
-        redirectUri
+        state
       );
 
       // Add token information to model for display
-      model.addAttribute("accessToken", tokenResponse.getAccessToken());
-      model.addAttribute("refreshToken", tokenResponse.getRefreshToken());
-      model.addAttribute("tokenType", tokenResponse.getTokenType());
-      model.addAttribute("expiresIn", tokenResponse.getExpiresIn());
+      model.addAttribute("accessToken", response.getAccessToken());
+      model.addAttribute("refreshToken", response.getRefreshToken());
+      model.addAttribute("tokenType", response.getTokenType());
+      model.addAttribute("expiresIn", response.getExpiresIn());
 
       logger.debug(
-        "Adding tokens to model - accessToken: {}, refreshToken: {}, tokenType: {}, expiresIn: {}",
-        tokenResponse.getAccessToken() != null ? "present" : "null",
-        tokenResponse.getRefreshToken() != null ? "present" : "null",
-        tokenResponse.getTokenType(),
-        tokenResponse.getExpiresIn()
+        "Adding OC tokens to model - accessToken: {}, refreshToken: {}, tokenType: {}, expiresIn: {}",
+        response.getAccessToken() != null ? "present" : "null",
+        response.getRefreshToken() != null ? "present" : "null",
+        response.getTokenType(),
+        response.getExpiresIn()
       );
 
-      logger.debug("OAuth2 token exchange successful");
+      logger.debug("OAuth2 authentication successful");
       return "oauth2-success";
     } catch (Exception e) {
       logger.error("Error exchanging authorization code for tokens", e);

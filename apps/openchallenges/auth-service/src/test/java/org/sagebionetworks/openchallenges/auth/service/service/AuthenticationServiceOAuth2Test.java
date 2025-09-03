@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginResponseDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2CallbackResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2TokenResponse;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2UserInfo;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ExternalAccount;
@@ -15,7 +15,6 @@ import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.repository.ExternalAccountRepository;
 import org.sagebionetworks.openchallenges.auth.service.repository.RefreshTokenRepository;
 import org.sagebionetworks.openchallenges.auth.service.repository.UserRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.OffsetDateTime;
 import java.util.Optional;
@@ -24,7 +23,6 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,9 +41,6 @@ class AuthenticationServiceOAuth2Test {
     private JwtService jwtService;
 
     @Mock
-    private PasswordEncoder passwordEncoder;
-
-    @Mock
     private OAuth2ConfigurationService oAuth2ConfigurationService;
 
     @Mock
@@ -60,7 +55,6 @@ class AuthenticationServiceOAuth2Test {
             externalAccountRepository,
             refreshTokenRepository,
             jwtService,
-            passwordEncoder,
             oAuth2ConfigurationService,
             oAuth2Service
         );
@@ -129,7 +123,7 @@ class AuthenticationServiceOAuth2Test {
             .thenReturn(604800L);
 
         // When
-        LoginResponseDto result = authenticationService.handleOAuth2Callback(provider, code, state);
+        OAuth2CallbackResponseDto result = authenticationService.handleOAuth2Callback(provider, code, state);
 
         // Then
         assertThat(result).isNotNull();
@@ -139,7 +133,7 @@ class AuthenticationServiceOAuth2Test {
         assertThat(result.getExpiresIn()).isEqualTo(3600);
         assertThat(result.getUserId()).isEqualTo(savedUser.getId());
         assertThat(result.getUsername()).isEqualTo("john.doe");
-        assertThat(result.getRole()).isEqualTo(LoginResponseDto.RoleEnum.USER);
+        assertThat(result.getRole()).isEqualTo(OAuth2CallbackResponseDto.RoleEnum.USER);
 
         // Verify user creation
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
@@ -222,7 +216,7 @@ class AuthenticationServiceOAuth2Test {
             .thenReturn(3600L);
 
         // When
-        LoginResponseDto result = authenticationService.handleOAuth2Callback(provider, code, state);
+        OAuth2CallbackResponseDto result = authenticationService.handleOAuth2Callback(provider, code, state);
 
         // Then
         assertThat(result).isNotNull();
@@ -285,7 +279,7 @@ class AuthenticationServiceOAuth2Test {
             .thenReturn(3600L);
 
         // When
-        LoginResponseDto result = authenticationService.handleOAuth2Callback(provider, code, state);
+        OAuth2CallbackResponseDto result = authenticationService.handleOAuth2Callback(provider, code, state);
 
         // Then
         assertThat(result).isNotNull();
