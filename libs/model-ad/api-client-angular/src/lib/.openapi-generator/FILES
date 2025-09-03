@@ -3,9 +3,9 @@ README.md
 api.module.ts
 api/api.ts
 api/comparison-tool-config.service.ts
-api/dataversion.service.ts
+api/data-version.service.ts
 api/model-overview.service.ts
-api/models.service.ts
+api/model.service.ts
 configuration.ts
 encoder.ts
 git_push.sh
@@ -15,7 +15,7 @@ model/comparison-tool-config-column.ts
 model/comparison-tool-config-filter.ts
 model/comparison-tool-config.ts
 model/comparison-tool-page.ts
-model/dataversion.ts
+model/data-version.ts
 model/genetic-info.ts
 model/individual-data.ts
 model/model-data.ts

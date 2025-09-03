@@ -2,7 +2,7 @@ import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { PlatformService } from '@sagebionetworks/explorers/services';
 import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
-import { ModelsService } from '@sagebionetworks/model-ad/api-client-angular';
+import { ModelService } from '@sagebionetworks/model-ad/api-client-angular';
 import { MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
 import { modelMock } from '@sagebionetworks/model-ad/testing';
 import { render, screen } from '@testing-library/angular';
@@ -22,7 +22,7 @@ async function setup(
     paramMap: of(convertToParamMap({ name: model.name, tab: tab, subtab: subtab })),
   };
 
-  const mockModelsService = {
+  const mockModelService = {
     getModelByName: jest.fn(() => of(model)),
   };
 
@@ -34,7 +34,7 @@ async function setup(
   const component = await render(ModelDetailsComponent, {
     imports: [LoadingIconComponent],
     providers: [
-      { provide: ModelsService, useValue: mockModelsService },
+      { provide: ModelService, useValue: mockModelService },
       { provide: PlatformService, useValue: mockPlatformService },
       {
         provide: ActivatedRoute,

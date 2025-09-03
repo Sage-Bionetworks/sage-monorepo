@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/constants';
 import { MetaTagService, PlatformService } from '@sagebionetworks/explorers/services';
 import { FooterComponent, HeaderComponent } from '@sagebionetworks/explorers/ui';
-import { Dataversion, DataversionService } from '@sagebionetworks/model-ad/api-client-angular';
+import { DataVersion, DataVersionService } from '@sagebionetworks/model-ad/api-client-angular';
 import { ConfigService, MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
 import { SearchInputComponent } from '@sagebionetworks/model-ad/ui';
 import { footerLinks, headerLinks } from '@sagebionetworks/model-ad/util';
@@ -44,7 +44,7 @@ export class AppComponent implements OnInit {
   private platformService = inject(PlatformService);
   private destroyRef = inject(DestroyRef);
   configService = inject(ConfigService);
-  dataVersionService = inject(DataversionService);
+  dataVersionService = inject(DataVersionService);
   metaTagService = inject(MetaTagService);
 
   readonly useGoogleTagManager: boolean;
@@ -69,7 +69,7 @@ export class AppComponent implements OnInit {
   getDataVersion() {
     if (this.platformService.isBrowser) {
       this.dataVersionService
-        .getDataversion()
+        .getDataVersion()
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (data) => {
@@ -80,7 +80,7 @@ export class AppComponent implements OnInit {
     }
   }
 
-  formatDataVersion(dataVersion: Dataversion) {
+  formatDataVersion(dataVersion: DataVersion) {
     return `${dataVersion.data_file}-v${dataVersion.data_version}`;
   }
 }

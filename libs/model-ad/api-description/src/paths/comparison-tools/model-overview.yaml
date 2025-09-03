@@ -1,6 +1,6 @@
 get:
   tags:
-    - ModelOverview
+    - Model Overview
   summary: Get model overview for comparison tools
   description: Returns a list of model overview objects for use in comparison tools.
   operationId: getModelOverviews

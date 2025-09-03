@@ -14,28 +14,28 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - name: Dataversion
-    description: Operations about dataversion.
-  - name: Models
+  - name: Data Version
+    description: Operations about the data version.
+  - name: Model
     description: Operations about models.
-  - name: ModelOverview
+  - name: Model Overview
     description: Operations about Model Overview.
-  - name: ComparisonToolConfig
+  - name: Comparison Tool Config
     description: Operations about Comparison Tool UI configuration.
 paths:
   /dataversion:
     get:
       tags:
-        - Dataversion
-      summary: Get dataversion
-      description: Get dataversion
-      operationId: getDataversion
+        - Data Version
+      summary: Get data version
+      description: Get data version
+      operationId: getDataVersion
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Dataversion'
+                $ref: '#/components/schemas/DataVersion'
           description: Success
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -46,7 +46,7 @@ paths:
   /models/search:
     get:
       tags:
-        - Models
+        - Model
       summary: Search Models
       description: Search for a particular model
       operationId: searchModels
@@ -73,7 +73,7 @@ paths:
   /models/{name}:
     get:
       tags:
-        - Models
+        - Model
       summary: Get details for a specific model
       description: Retrieve detailed information for a specific model by its name
       operationId: getModelByName
@@ -100,7 +100,7 @@ paths:
   /comparison-tool-config:
     get:
       tags:
-        - ComparisonToolConfig
+        - Comparison Tool Config
       summary: Get Comparison Tool configuration
       description: Retrieve the Comparison Tool configuration schema for the Model-AD application
       operationId: getComparisonToolConfig
@@ -129,7 +129,7 @@ paths:
   /comparison-tools/model-overview:
     get:
       tags:
-        - ModelOverview
+        - Model Overview
       summary: Get model overview for comparison tools
       description: Returns a list of model overview objects for use in comparison tools.
       operationId: getModelOverviews
@@ -150,7 +150,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    Dataversion:
+    DataVersion:
       type: object
       description: Synapse data version
       properties:
