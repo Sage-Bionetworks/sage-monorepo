@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OpenChallenges - User Profile</title>
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .profile-container {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        max-width: 600px;
+        width: 90%;
+        text-align: center;
+      }
+
+      .profile-header {
+        margin-bottom: 30px;
+      }
+
+      .profile-title {
+        color: #333;
+        font-size: 28px;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+
+      .profile-subtitle {
+        color: #666;
+        font-size: 16px;
+        margin-bottom: 20px;
+      }
+
+      .welcome-message {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 30px;
+      }
+
+      .user-info {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 25px;
+        margin: 20px 0;
+        text-align: left;
+      }
+
+      .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid #e9ecef;
+      }
+
+      .info-row:last-child {
+        border-bottom: none;
+      }
+
+      .info-label {
+        font-weight: 600;
+        color: #495057;
+        flex: 1;
+      }
+
+      .info-value {
+        color: #333;
+        flex: 2;
+        text-align: right;
+        word-break: break-all;
+      }
+
+      .token-section {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 15px;
+        padding: 20px;
+        margin: 20px 0;
+      }
+
+      .token-title {
+        color: #856404;
+        font-weight: 600;
+        margin-bottom: 15px;
+        font-size: 18px;
+      }
+
+      .token-warning {
+        color: #856404;
+        font-size: 14px;
+        margin-bottom: 15px;
+        font-style: italic;
+      }
+
+      .token-display {
+        background: white;
+        border: 1px solid #ffd93d;
+        border-radius: 10px;
+        padding: 15px;
+        font-family: 'Courier New', monospace;
+        font-size: 12px;
+        word-break: break-all;
+        margin: 10px 0;
+        max-height: 100px;
+        overflow-y: auto;
+      }
+
+      .button-group {
+        margin-top: 30px;
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 50px;
+        font-size: 16px;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-block;
+        min-width: 120px;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+      }
+
+      .btn-secondary {
+        background: #6c757d;
+        color: white;
+      }
+
+      .btn-secondary:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(108, 117, 125, 0.3);
+      }
+
+      .logout-btn {
+        background: #dc3545;
+        color: white;
+      }
+
+      .logout-btn:hover {
+        background: #c82333;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(220, 53, 69, 0.3);
+      }
+
+      @media (max-width: 768px) {
+        .profile-container {
+          padding: 30px 20px;
+          margin: 20px;
+        }
+
+        .profile-title {
+          font-size: 24px;
+        }
+
+        .welcome-message {
+          font-size: 20px;
+        }
+
+        .info-row {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 5px;
+        }
+
+        .info-value {
+          text-align: left;
+        }
+
+        .button-group {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .btn {
+          width: 100%;
+          max-width: 200px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="profile-container">
+      <div class="profile-header">
+        <h1 class="profile-title">OpenChallenges Authentication</h1>
+        <p class="profile-subtitle">User Profile</p>
+        <div class="welcome-message" th:text="'Welcome, ' + ${displayName} + '!'">
+          Welcome, User!
+        </div>
+      </div>
+
+      <div class="user-info">
+        <div class="info-row">
+          <span class="info-label">Username:</span>
+          <span class="info-value" th:text="${username}">username</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Email:</span>
+          <span class="info-value" th:text="${email}">email@example.com</span>
+        </div>
+        <div class="info-row" th:if="${firstName}">
+          <span class="info-label">First Name:</span>
+          <span class="info-value" th:text="${firstName}">First</span>
+        </div>
+        <div class="info-row" th:if="${lastName}">
+          <span class="info-label">Last Name:</span>
+          <span class="info-value" th:text="${lastName}">Last</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Role:</span>
+          <span class="info-value" th:text="${role}">user</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">User ID:</span>
+          <span class="info-value" th:text="${user.id}">user-id</span>
+        </div>
+      </div>
+
+      <div class="token-section" th:if="${accessToken}">
+        <div class="token-title">🔐 Authentication Tokens</div>
+        <div class="token-warning">
+          These tokens are for API access. Keep them secure and do not share them.
+        </div>
+
+        <div>
+          <strong>Access Token:</strong>
+          <div class="token-display" th:text="${accessToken}">access-token-here</div>
+        </div>
+
+        <div th:if="${refreshToken}">
+          <strong>Refresh Token:</strong>
+          <div class="token-display" th:text="${refreshToken}">refresh-token-here</div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="button-group">
+        <a href="/logout" class="btn logout-btn"> Logout </a>
+      </div>
+    </div>
+  </body>
+</html>
