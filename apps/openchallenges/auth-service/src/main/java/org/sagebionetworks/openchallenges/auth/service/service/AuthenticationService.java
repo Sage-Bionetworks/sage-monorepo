@@ -26,7 +26,7 @@ public class AuthenticationService {
 
   private final UserRepository userRepository;
   private final ExternalAccountRepository externalAccountRepository;
-  private final JwtService jwtService;
+  private final OAuth2TokenGeneratorService oAuth2TokenGeneratorService;
   private final OAuth2ConfigurationService oAuth2ConfigurationService;
   private final OAuth2Service oAuth2Service;
 
@@ -65,18 +65,18 @@ public class AuthenticationService {
       throw new RuntimeException("User account is disabled");
     }
     
-    // Generate OpenChallenges JWT tokens
-    String accessToken = jwtService.generateAccessToken(user);
-    String refreshToken = jwtService.generateRefreshToken(user);
+    // Generate OpenChallenges JWT tokens using OAuth2 Authorization Server
+    String accessToken = oAuth2TokenGeneratorService.generateAccessToken(user);
+    String refreshToken = oAuth2TokenGeneratorService.generateRefreshToken(user);
     
-    log.info("Successfully generated OC tokens for user: {}", user.getUsername());
+    log.info("Successfully generated OAuth2-compatible tokens for user: {}", user.getUsername());
     
-    // Return login response with OC tokens
+    // Return login response with OAuth2-compatible tokens
     return OAuth2CallbackResponseDto.builder()
       .accessToken(accessToken)
       .refreshToken(refreshToken)
       .tokenType("Bearer")
-      .expiresIn(Math.toIntExact(jwtService.getAccessTokenExpirationSeconds()))
+      .expiresIn(3600) // 1 hour - standard OAuth2 access token expiration
       .userId(user.getId())
       .username(user.getUsername())
       .role(OAuth2CallbackResponseDto.RoleEnum.fromValue(user.getRole().name().toLowerCase()))
