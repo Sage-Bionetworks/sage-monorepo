@@ -82,22 +82,13 @@ public class OAuth2WebController {
         state
       );
 
-      // Add token information to model for display
-      model.addAttribute("accessToken", response.getAccessToken());
-      model.addAttribute("refreshToken", response.getRefreshToken());
-      model.addAttribute("tokenType", response.getTokenType());
-      model.addAttribute("expiresIn", response.getExpiresIn());
-
-      logger.debug(
-        "Adding OC tokens to model - accessToken: {}, refreshToken: {}, tokenType: {}, expiresIn: {}",
-        response.getAccessToken() != null ? "present" : "null",
-        response.getRefreshToken() != null ? "present" : "null",
-        response.getTokenType(),
-        response.getExpiresIn()
-      );
-
-      logger.debug("OAuth2 authentication successful");
-      return "oauth2-success";
+      logger.debug("OAuth2 authentication successful, redirecting to profile page");
+      
+      // Redirect to profile page with token information
+      return "redirect:/profile" +
+             "?accessToken=" + response.getAccessToken() +
+             "&refreshToken=" + response.getRefreshToken() +
+             "&username=" + response.getUsername();
     } catch (Exception e) {
       logger.error("Error exchanging authorization code for tokens", e);
       model.addAttribute("error", "Failed to exchange authorization code: " + e.getMessage());
