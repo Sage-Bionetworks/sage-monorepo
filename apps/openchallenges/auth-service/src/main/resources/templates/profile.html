@@ -119,6 +119,100 @@
         margin: 10px 0;
         max-height: 100px;
         overflow-y: auto;
+        min-height: 20px;
+        transition: all 0.3s ease;
+      }
+
+      /* Secure token display styles */
+      .token-item {
+        margin-bottom: 20px;
+        border: 1px solid #ffd93d;
+        border-radius: 10px;
+        padding: 15px;
+        background: white;
+      }
+
+      .token-label {
+        margin-bottom: 10px;
+      }
+
+      .token-info {
+        font-size: 12px;
+        color: #856404;
+        font-style: italic;
+        margin-left: 8px;
+      }
+
+      .token-controls {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .token-display-container {
+        flex: 1;
+      }
+
+      .token-display.masked {
+        background: #f8f9fa;
+        color: #6c757d;
+        font-size: 14px;
+        letter-spacing: 2px;
+        text-align: center;
+        border: 1px solid #e0e0e0;
+      }
+
+      .token-display.revealed {
+        background: white;
+        color: #333;
+        border: 1px solid #ffd93d;
+      }
+
+      .token-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .token-btn {
+        padding: 6px 12px;
+        border: none;
+        border-radius: 6px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        min-width: 70px;
+      }
+
+      .reveal-btn {
+        background: #17a2b8;
+        color: white;
+      }
+
+      .reveal-btn:hover {
+        background: #138496;
+      }
+
+      .reveal-btn.hide {
+        background: #dc3545;
+      }
+
+      .reveal-btn.hide:hover {
+        background: #c82333;
+      }
+
+      /* Token copy button - adapted for light background */
+      .token-btn.copy-btn {
+        padding: 8px 12px;
+        background: #28a745;
+        border: 1px solid #1e7e34;
+        color: white;
+        transition: all 0.3s ease;
+      }
+
+      .token-btn.copy-btn:hover {
+        background: #218838;
+        border-color: #1c7430;
       }
 
       .button-group {
@@ -657,7 +751,7 @@
                   onsubmit="return confirm('Are you sure you want to delete this API key? This action cannot be undone.')"
                 >
                   <input type="hidden" name="keyId" th:value="${apiKey.id}" />
-                  <button type="submit" class="btn btn-danger btn-small">🗑️ Delete</button>
+                  <button type="submit" class="btn btn-danger btn-small">Delete</button>
                 </form>
               </div>
             </div>
@@ -758,14 +852,56 @@ curl -X GET "http://localhost:8087/v1/auth/profile" \
           These tokens are for API access. Keep them secure and do not share them.
         </div>
 
-        <div>
-          <strong>Access Token:</strong>
-          <div class="token-display" th:text="${accessToken}">access-token-here</div>
+        <div class="token-item">
+          <div class="token-label">
+            <strong>Access Token:</strong>
+            <span class="token-info">(JWT token for API authentication)</span>
+          </div>
+          <div class="token-controls">
+            <div class="token-display-container">
+              <div class="token-display masked" id="accessTokenDisplay">
+                ••••••••••••••••••••••••••••••••
+              </div>
+              <input type="hidden" id="accessTokenValue" th:value="${accessToken}" />
+            </div>
+            <div class="token-buttons">
+              <button
+                class="token-btn reveal-btn"
+                onclick="toggleTokenVisibility('accessToken')"
+                id="accessTokenToggle"
+              >
+                Show
+              </button>
+              <button class="token-btn copy-btn" onclick="copyToken('accessToken')">📋 Copy</button>
+            </div>
+          </div>
         </div>
 
-        <div th:if="${refreshToken}">
-          <strong>Refresh Token:</strong>
-          <div class="token-display" th:text="${refreshToken}">refresh-token-here</div>
+        <div th:if="${refreshToken}" class="token-item">
+          <div class="token-label">
+            <strong>Refresh Token:</strong>
+            <span class="token-info">(Used to obtain new access tokens)</span>
+          </div>
+          <div class="token-controls">
+            <div class="token-display-container">
+              <div class="token-display masked" id="refreshTokenDisplay">
+                ••••••••••••••••••••••••••••••••
+              </div>
+              <input type="hidden" id="refreshTokenValue" th:value="${refreshToken}" />
+            </div>
+            <div class="token-buttons">
+              <button
+                class="token-btn reveal-btn"
+                onclick="toggleTokenVisibility('refreshToken')"
+                id="refreshTokenToggle"
+              >
+                Show
+              </button>
+              <button class="token-btn copy-btn" onclick="copyToken('refreshToken')">
+                📋 Copy
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -858,6 +994,72 @@ curl -X GET "http://localhost:8087/v1/auth/profile" \
           setTimeout(() => {
             apiKeyDisplay.remove();
           }, 500);
+        }
+      }
+
+      // Token visibility management
+      const visibleTokens = new Set();
+      const autoHideTimeouts = new Map();
+
+      function toggleTokenVisibility(tokenType) {
+        const display = document.getElementById(tokenType + 'Display');
+        const value = document.getElementById(tokenType + 'Value').value;
+        const toggle = document.getElementById(tokenType + 'Toggle');
+
+        if (visibleTokens.has(tokenType)) {
+          // Hide token
+          display.textContent = '••••••••••••••••••••••••••••••••';
+          display.className = 'token-display masked';
+          toggle.innerHTML = 'Show';
+          toggle.className = 'token-btn reveal-btn';
+          visibleTokens.delete(tokenType);
+
+          // Clear auto-hide timeout
+          if (autoHideTimeouts.has(tokenType)) {
+            clearTimeout(autoHideTimeouts.get(tokenType));
+            autoHideTimeouts.delete(tokenType);
+          }
+        } else {
+          // Show token
+          display.textContent = value;
+          display.className = 'token-display revealed';
+          toggle.innerHTML = 'Hide';
+          toggle.className = 'token-btn reveal-btn hide';
+          visibleTokens.add(tokenType);
+
+          // Auto-hide after 30 seconds for security
+          const timeout = setTimeout(() => {
+            toggleTokenVisibility(tokenType);
+          }, 30000);
+          autoHideTimeouts.set(tokenType, timeout);
+        }
+      }
+
+      function copyToken(tokenType) {
+        const value = document.getElementById(tokenType + 'Value').value;
+        const button = document.querySelector(`button[onclick="copyToken('${tokenType}')"]`);
+
+        try {
+          // Create temporary textarea to copy value
+          const textarea = document.createElement('textarea');
+          textarea.value = value;
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textarea);
+
+          // Visual feedback
+          const originalText = button.textContent;
+          button.textContent = '✅ Copied!';
+          button.style.background = '#218838';
+
+          setTimeout(() => {
+            button.textContent = originalText;
+            button.style.background = '#28a745';
+          }, 2000);
+        } catch (err) {
+          console.error('Failed to copy token: ', err);
+          alert('Failed to copy token. Please copy it manually.');
         }
       }
     </script>
