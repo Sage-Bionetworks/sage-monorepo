@@ -316,6 +316,7 @@
         border-radius: 8px;
         font-size: 14px;
         transition: border-color 0.3s ease;
+        box-sizing: border-box; /* Include padding and border in width calculation */
       }
 
       .form-group input:focus,
@@ -323,6 +324,23 @@
         outline: none;
         border-color: #667eea;
         box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      /* Hide password manager buttons/icons */
+      .form-group input[data-lpignore='true']::-webkit-contacts-auto-fill-button,
+      .form-group input[data-lpignore='true']::-webkit-credentials-auto-fill-button {
+        display: none !important;
+      }
+
+      /* Hide LastPass, 1Password, Bitwarden icons */
+      input[data-lpignore='true'] + div[id*='lp'],
+      input[data-1p-ignore='true'] + div[class*='onepassword'],
+      input[data-bwignore='true'] + div[class*='bitwarden'],
+      input[name='name'] + div[style*='z-index'],
+      .form-group div[data-lastpass-icon-root],
+      .form-group span[data-suffix] {
+        display: none !important;
+        visibility: hidden !important;
       }
 
       /* Existing API Keys */
@@ -537,6 +555,14 @@
                 id="apiKeyName"
                 name="name"
                 placeholder="e.g., My Production Key"
+                autocomplete="off"
+                autocapitalize="off"
+                spellcheck="false"
+                data-lpignore="true"
+                data-1p-ignore="true"
+                data-bwignore="true"
+                data-form-type="other"
+                role="textbox"
                 required
               />
             </div>
