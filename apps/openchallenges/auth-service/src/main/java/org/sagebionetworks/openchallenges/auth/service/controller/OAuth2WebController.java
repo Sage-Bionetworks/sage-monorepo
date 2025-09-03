@@ -87,10 +87,10 @@ public class OAuth2WebController {
 
       logger.debug("OAuth2 authentication successful, setting secure cookies");
       
-      // Set secure HTTP-only cookies for tokens
+            // Set secure HTTP-only cookies with appropriate expiration times
       setSecureCookie(response, "oc_access_token", authResponse.getAccessToken(), 3600); // 1 hour
       setSecureCookie(response, "oc_refresh_token", authResponse.getRefreshToken(), 604800); // 7 days
-      setSecureCookie(response, "oc_username", authResponse.getUsername(), 3600); // 1 hour
+      setSecureCookie(response, "oc_username", authResponse.getUsername(), 604800); // 7 days - longer session
       
       logger.debug("Secure cookies set, redirecting to profile page");
       
