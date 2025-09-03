@@ -1,6 +1,6 @@
 get:
   tags:
-    - Genes
+    - Gene
   summary: Get nominated genes
   description: Retrieves a list of genes with nominations and relevant information.
   operationId: getNominatedGenes

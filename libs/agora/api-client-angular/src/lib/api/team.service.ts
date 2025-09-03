@@ -25,7 +25,7 @@ import { Observable } from 'rxjs';
 // @ts-ignore
 import { BasicError } from '../model/basic-error';
 // @ts-ignore
-import { Dataversion } from '../model/dataversion';
+import { TeamsList } from '../model/teams-list';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -34,7 +34,7 @@ import { Configuration } from '../configuration';
 @Injectable({
   providedIn: 'root',
 })
-export class DataversionService {
+export class TeamService {
   protected basePath = 'http://localhost/v1';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
@@ -107,12 +107,104 @@ export class DataversionService {
   }
 
   /**
-   * Get dataversion
-   * Get dataversion
+   * Get Team Member Image
+   * Get Team Member Image
+   * @param name
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getDataversion(
+  public getTeamMemberImage(
+    name: string,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'image/jpg' | 'image/jpeg' | 'image/png' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<Blob>;
+  public getTeamMemberImage(
+    name: string,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'image/jpg' | 'image/jpeg' | 'image/png' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<Blob>>;
+  public getTeamMemberImage(
+    name: string,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'image/jpg' | 'image/jpeg' | 'image/png' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<Blob>>;
+  public getTeamMemberImage(
+    name: string,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'image/jpg' | 'image/jpeg' | 'image/png' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (name === null || name === undefined) {
+      throw new Error(
+        'Required parameter name was null or undefined when calling getTeamMemberImage.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = [
+        'image/jpg',
+        'image/jpeg',
+        'image/png',
+        'application/problem+json',
+      ];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    let localVarPath = `/teamMembers/${this.configuration.encodeParam({ name: 'name', value: name, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}/image`;
+    return this.httpClient.request('get', `${this.configuration.basePath}${localVarPath}`, {
+      context: localVarHttpContext,
+      responseType: 'blob',
+      withCredentials: this.configuration.withCredentials,
+      headers: localVarHeaders,
+      observe: observe,
+      transferCache: localVarTransferCache,
+      reportProgress: reportProgress,
+    });
+  }
+
+  /**
+   * List Teams
+   * List Teams
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public listTeams(
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -120,8 +212,8 @@ export class DataversionService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<Dataversion>;
-  public getDataversion(
+  ): Observable<TeamsList>;
+  public listTeams(
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -129,8 +221,8 @@ export class DataversionService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<Dataversion>>;
-  public getDataversion(
+  ): Observable<HttpResponse<TeamsList>>;
+  public listTeams(
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -138,8 +230,8 @@ export class DataversionService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<Dataversion>>;
-  public getDataversion(
+  ): Observable<HttpEvent<TeamsList>>;
+  public listTeams(
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -181,8 +273,8 @@ export class DataversionService {
       }
     }
 
-    let localVarPath = `/dataversion`;
-    return this.httpClient.request<Dataversion>(
+    let localVarPath = `/teams`;
+    return this.httpClient.request<TeamsList>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {

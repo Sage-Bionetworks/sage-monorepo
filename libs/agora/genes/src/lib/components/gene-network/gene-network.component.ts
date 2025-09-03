@@ -6,7 +6,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import {
   Gene,
-  GenesService,
+  GeneService,
   SimilarGenesNetworkLink,
   SimilarGenesNetworkNode,
 } from '@sagebionetworks/agora/api-client-angular';
@@ -27,7 +27,7 @@ import { TooltipModule } from 'primeng/tooltip';
 })
 export class GeneNetworkComponent {
   router = inject(Router);
-  geneService = inject(GenesService);
+  geneService = inject(GeneService);
 
   _gene: Gene | undefined;
   get gene(): Gene | undefined {

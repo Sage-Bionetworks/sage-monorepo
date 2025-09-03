@@ -1,6 +1,6 @@
 get:
   tags:
-    - Genes
+    - Gene
   summary: Get gene details by Ensembl Gene ID
   operationId: getGene
   parameters:

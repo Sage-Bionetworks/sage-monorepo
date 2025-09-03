@@ -1,9 +1,9 @@
 // team-service.mock.ts
 import { Injectable } from '@angular/core';
-import { Team, TeamsService } from '@sagebionetworks/agora/api-client-angular';
+import { Team, TeamService } from '@sagebionetworks/agora/api-client-angular';
 
 @Injectable()
-export class MockTeamService extends TeamsService {
+export class MockTeamService extends TeamService {
   getMembers(): Promise<Team> {
     return Promise.resolve({
       team: 'Test Team',

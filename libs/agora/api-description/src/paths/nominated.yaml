@@ -1,6 +1,6 @@
 get:
   tags:
-    - NominatedGenes
+    - Nominated Gene
   summary: Get nominated genes
   description: Get nominated genes
   operationId: listNominatedGenes

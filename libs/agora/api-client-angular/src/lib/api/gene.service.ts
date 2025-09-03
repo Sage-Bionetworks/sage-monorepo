@@ -40,7 +40,7 @@ import { Configuration } from '../configuration';
 @Injectable({
   providedIn: 'root',
 })
-export class GenesService {
+export class GeneService {
   protected basePath = 'http://localhost/v1';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();

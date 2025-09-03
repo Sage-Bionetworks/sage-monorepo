@@ -14,12 +14,18 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - name: Dataversion
-    description: Operations about dataversion.
+  - name: Bio Domain
+    description: Operations about bio domains.
+  - name: Data Version
+    description: Operations about the data version.
+  - name: Distribution
+    description: Operations about distributions.
+  - name: Gene
+    description: Operations about genes.
+  - name: Nominated Gene
+    description: Operations about nominated genes.
   - name: Team
     description: Operations about teams.
-  - name: TeamMember
-    description: Operations about team members.
 paths:
   /biodomains:
     $ref: paths/biodomains.yaml
@@ -36,7 +42,7 @@ paths:
   /genes/nominated:
     $ref: paths/genes/nominated.yaml
   /dataversion:
-    $ref: paths/dataversion.yaml
+    $ref: paths/data-version.yaml
   /distribution:
     $ref: paths/distribution.yaml
   /teams:

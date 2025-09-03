@@ -3,7 +3,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
-import { GenesService } from '@sagebionetworks/agora/api-client-angular';
+import { GeneService } from '@sagebionetworks/agora/api-client-angular';
 import { HelperService, SvgIconService } from '@sagebionetworks/agora/services';
 import {
   ActivatedRouteStub,
@@ -32,7 +32,7 @@ describe('Component: Gene Details', () => {
         Location,
         HelperService,
         {
-          provide: GenesService,
+          provide: GeneService,
           useValue: new GenesServiceStub(),
         },
         { provide: SvgIconService, useClass: SvgIconServiceStub },

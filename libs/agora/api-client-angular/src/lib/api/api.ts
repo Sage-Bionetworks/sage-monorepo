@@ -1,17 +1,17 @@
-export * from './bio-domains.service';
-import { BioDomainsService } from './bio-domains.service';
-export * from './dataversion.service';
-import { DataversionService } from './dataversion.service';
+export * from './bio-domain.service';
+import { BioDomainService } from './bio-domain.service';
+export * from './data-version.service';
+import { DataVersionService } from './data-version.service';
 export * from './distribution.service';
 import { DistributionService } from './distribution.service';
-export * from './genes.service';
-import { GenesService } from './genes.service';
-export * from './teams.service';
-import { TeamsService } from './teams.service';
+export * from './gene.service';
+import { GeneService } from './gene.service';
+export * from './team.service';
+import { TeamService } from './team.service';
 export const APIS = [
-  BioDomainsService,
-  DataversionService,
+  BioDomainService,
+  DataVersionService,
   DistributionService,
-  GenesService,
-  TeamsService,
+  GeneService,
+  TeamService,
 ];

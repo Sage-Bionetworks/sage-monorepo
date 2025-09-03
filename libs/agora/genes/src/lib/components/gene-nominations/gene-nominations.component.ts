@@ -1,7 +1,6 @@
 import { Component, inject, Input } from '@angular/core';
 
-
-import { Gene, Team, TeamsService } from '@sagebionetworks/agora/api-client-angular';
+import { Gene, Team, TeamService } from '@sagebionetworks/agora/api-client-angular';
 import { TargetNominationWithTeamData } from '../../models/TargetNominationWithTeamData';
 
 @Component({
@@ -11,7 +10,7 @@ import { TargetNominationWithTeamData } from '../../models/TargetNominationWithT
   styleUrls: ['./gene-nominations.component.scss'],
 })
 export class GeneNominationsComponent {
-  teamService = inject(TeamsService);
+  teamService = inject(TeamService);
 
   _gene: Gene | undefined;
   get gene(): Gene | undefined {

@@ -2,11 +2,11 @@
 README.md
 api.module.ts
 api/api.ts
-api/bio-domains.service.ts
-api/dataversion.service.ts
+api/bio-domain.service.ts
+api/data-version.service.ts
 api/distribution.service.ts
-api/genes.service.ts
-api/teams.service.ts
+api/gene.service.ts
+api/team.service.ts
 configuration.ts
 encoder.ts
 git_push.sh
@@ -15,7 +15,7 @@ model/basic-error.ts
 model/bio-domain-info.ts
 model/bio-domain.ts
 model/bio-domains.ts
-model/dataversion.ts
+model/data-version.ts
 model/distribution.ts
 model/druggability.ts
 model/ensembl-info.ts

@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
-import { Team, TeamsList, TeamsService } from '@sagebionetworks/agora/api-client-angular';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Team, TeamService, TeamsList } from '@sagebionetworks/agora/api-client-angular';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { catchError, finalize, map, Observable, of } from 'rxjs';
 import { TeamListComponent } from './team-list/team-list.component';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'agora-teams',
@@ -16,7 +16,7 @@ export class TeamsComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   helperService = inject(HelperService);
-  teamsService = inject(TeamsService);
+  teamService = inject(TeamService);
 
   teams$!: Observable<Team[]>;
 
@@ -27,7 +27,7 @@ export class TeamsComponent implements OnInit {
   loadTeams() {
     this.helperService.setLoading(true);
 
-    this.teams$ = this.teamsService.listTeams().pipe(
+    this.teams$ = this.teamService.listTeams().pipe(
       takeUntilDestroyed(this.destroyRef),
       map((res: TeamsList) => res.items || []),
       catchError((error: Error) => {

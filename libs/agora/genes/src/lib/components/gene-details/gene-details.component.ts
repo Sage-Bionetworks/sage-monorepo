@@ -12,7 +12,7 @@ import {
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
-import { Gene, GenesService } from '@sagebionetworks/agora/api-client-angular';
+import { Gene, GeneService } from '@sagebionetworks/agora/api-client-angular';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { GeneEvidenceMetabolomicsComponent } from '../gene-evidence-metabolomics/gene-evidence-metabolomics.component';
 import { GeneEvidenceProteomicsComponent } from '../gene-evidence-proteomics/gene-evidence-proteomics.component';
@@ -52,7 +52,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
   router = inject(Router);
   location = inject(Location);
   helperService = inject(HelperService);
-  geneService = inject(GenesService);
+  geneService = inject(GeneService);
   private readonly platformId: Record<string, any> = inject(PLATFORM_ID);
 
   faAngleRight = faAngleRight;

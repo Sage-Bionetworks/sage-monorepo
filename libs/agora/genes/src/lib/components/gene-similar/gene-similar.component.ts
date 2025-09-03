@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router, RouterLink } from '@angular/router';
-import { Gene, GenesService } from '@sagebionetworks/agora/api-client-angular';
+import { Gene, GeneService } from '@sagebionetworks/agora/api-client-angular';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { ModalLinkComponent, SvgIconComponent } from '@sagebionetworks/agora/shared';
 import { GeneTableComponent } from '../gene-table/gene-table.component';
@@ -21,7 +21,7 @@ interface TableColumn {
 export class GeneSimilarComponent implements OnInit {
   route = inject(ActivatedRoute);
   router = inject(Router);
-  geneService = inject(GenesService);
+  geneService = inject(GeneService);
   helperService = inject(HelperService);
 
   gene: Gene = {} as Gene;

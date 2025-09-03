@@ -7,7 +7,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { GenesService, TeamsService } from '@sagebionetworks/agora/api-client-angular';
+import { GeneService, TeamService } from '@sagebionetworks/agora/api-client-angular';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { ExperimentalValidationComponent } from './gene-experimental-validation.component';
 
@@ -20,7 +20,7 @@ describe('Component: Gene Experimental Validation', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [GenesService, TeamsService, HelperService, provideHttpClient()],
+      providers: [GeneService, TeamService, HelperService, provideHttpClient()],
     }).compileComponents();
   });
 

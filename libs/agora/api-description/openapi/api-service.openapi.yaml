@@ -14,19 +14,25 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - name: Dataversion
-    description: Operations about dataversion.
+  - name: Bio Domain
+    description: Operations about bio domains.
+  - name: Data Version
+    description: Operations about the data version.
+  - name: Distribution
+    description: Operations about distributions.
+  - name: Gene
+    description: Operations about genes.
+  - name: Nominated Gene
+    description: Operations about nominated genes.
   - name: Team
     description: Operations about teams.
-  - name: TeamMember
-    description: Operations about team members.
 paths:
   /biodomains:
     get:
       tags:
-        - BioDomains
-      summary: List BioDomains
-      description: List BioDomains
+        - Bio Domain
+      summary: List Bio Domains
+      description: List Bio Domains
       operationId: listBioDomains
       responses:
         '200':
@@ -44,7 +50,7 @@ paths:
   /biodomains/{ensg}:
     get:
       tags:
-        - BioDomains
+        - Bio Domain
       summary: Retrieve bioDomain for a given ENSG
       description: Get bioDomain
       operationId: getBioDomain
@@ -71,7 +77,7 @@ paths:
   /genes:
     get:
       tags:
-        - Genes
+        - Gene
       summary: Retrieve a list of genes or filter by Ensembl gene IDs
       description: This endpoint returns all genes or filters genes by Ensembl gene IDs if provided.
       operationId: getGenes
@@ -99,7 +105,7 @@ paths:
   /genes/{ensg}:
     get:
       tags:
-        - Genes
+        - Gene
       summary: Get gene details by Ensembl Gene ID
       operationId: getGene
       parameters:
@@ -123,7 +129,7 @@ paths:
   /genes/search:
     get:
       tags:
-        - Genes
+        - Gene
       summary: Search Genes
       description: Search Genes
       operationId: searchGene
@@ -147,7 +153,7 @@ paths:
   /genes/comparison:
     get:
       tags:
-        - Genes
+        - Gene
       summary: Get comparison genes based on category and subcategory
       description: Get comparison genes based on category and subcategory
       operationId: getComparisonGenes
@@ -181,7 +187,7 @@ paths:
   /genes/nominated:
     get:
       tags:
-        - Genes
+        - Gene
       summary: Get nominated genes
       description: Retrieves a list of genes with nominations and relevant information.
       operationId: getNominatedGenes
@@ -199,16 +205,16 @@ paths:
   /dataversion:
     get:
       tags:
-        - Dataversion
-      summary: Get dataversion
-      description: Get dataversion
-      operationId: getDataversion
+        - Data Version
+      summary: Get data version
+      description: Get data version
+      operationId: getDataVersion
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Dataversion'
+                $ref: '#/components/schemas/DataVersion'
           description: Success
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -235,7 +241,7 @@ paths:
   /teams:
     get:
       tags:
-        - Teams
+        - Team
       summary: List Teams
       description: List Teams
       operationId: listTeams
@@ -253,7 +259,7 @@ paths:
   /teamMembers/{name}/image:
     get:
       tags:
-        - Teams
+        - Team
       summary: Get Team Member Image
       description: Get Team Member Image
       operationId: getTeamMemberImage
@@ -1151,7 +1157,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Gene'
-    Dataversion:
+    DataVersion:
       type: object
       description: Synapse data version
       properties:

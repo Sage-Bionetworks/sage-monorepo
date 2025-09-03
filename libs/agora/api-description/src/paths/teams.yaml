@@ -1,6 +1,6 @@
 get:
   tags:
-    - Teams
+    - Team
   summary: List Teams
   description: List Teams
   operationId: listTeams
