@@ -32,11 +32,10 @@ public class SecurityConfiguration {
   @Bean
   @Order(2)
   public SecurityFilterChain filterChain(
-      HttpSecurity http, 
-      ApiKeyService apiKeyService,
-      JwtAuthenticationFilter jwtAuthenticationFilter)
-    throws Exception {
-    
+    HttpSecurity http,
+    ApiKeyService apiKeyService,
+    JwtAuthenticationFilter jwtAuthenticationFilter
+  ) throws Exception {
     // Create the API key authentication filter here to avoid circular dependency
     ApiKeyAuthenticationFilter apiKeyAuthenticationFilter = new ApiKeyAuthenticationFilter(
       apiKeyService
