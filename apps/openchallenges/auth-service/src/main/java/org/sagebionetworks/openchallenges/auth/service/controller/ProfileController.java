@@ -3,7 +3,9 @@ package org.sagebionetworks.openchallenges.auth.service.controller;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
+import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
 import org.sagebionetworks.openchallenges.auth.service.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +15,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Profile controller for displaying user profile page.
@@ -24,6 +31,9 @@ public class ProfileController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ApiKeyService apiKeyService;
 
     /**
      * Display user profile page.
@@ -76,13 +86,17 @@ public class ProfileController {
         model.addAttribute("accessToken", accessToken);
         model.addAttribute("refreshToken", refreshToken);
 
+        // Get user's API keys
+        List<ApiKey> apiKeys = apiKeyService.getUserApiKeys(user);
+        model.addAttribute("apiKeys", apiKeys);
+
         // Create display name
         String displayName = user.getFirstName() != null && user.getLastName() != null 
             ? user.getFirstName() + " " + user.getLastName()
             : user.getUsername();
         model.addAttribute("displayName", displayName);
 
-        logger.debug("Profile page prepared for user: {}", displayName);
+        logger.debug("Profile page prepared for user: {} with {} API keys", displayName, apiKeys.size());
         return "profile";
     }
 
@@ -128,5 +142,102 @@ public class ProfileController {
         response.addCookie(cookie);
         
         logger.debug("Cleared cookie: {}", cookieName);
+    }
+
+    /**
+     * Create a new API key for the user.
+     */
+    @PostMapping("/profile/api-keys/create")
+    public String createApiKey(
+        @RequestParam String name,
+        @RequestParam(required = false) Integer expiresInDays,
+        HttpServletRequest request,
+        Authentication authentication,
+        RedirectAttributes redirectAttributes
+    ) {
+        logger.debug("Creating API key with name: {}", name);
+        
+        User user = getAuthenticatedUser(request, authentication);
+        if (user == null) {
+            logger.warn("No authenticated user found for API key creation");
+            redirectAttributes.addFlashAttribute("error", "Authentication required");
+            return "redirect:/profile";
+        }
+
+        try {
+            ApiKey newApiKey = apiKeyService.createApiKey(user, name, expiresInDays);
+            logger.info("Successfully created API key '{}' for user: {}", name, user.getUsername());
+            
+            // Add the newly created key with the plain key to flash attributes
+            // This is the only time the user will see the full API key
+            redirectAttributes.addFlashAttribute("newApiKey", newApiKey);
+            redirectAttributes.addFlashAttribute("success", "API key created successfully!");
+            
+        } catch (Exception e) {
+            logger.error("Error creating API key '{}' for user: {}", name, user.getUsername(), e);
+            redirectAttributes.addFlashAttribute("error", "Failed to create API key: " + e.getMessage());
+        }
+
+        return "redirect:/profile";
+    }
+
+    /**
+     * Delete an API key.
+     */
+    @PostMapping("/profile/api-keys/delete")
+    public String deleteApiKey(
+        @RequestParam UUID keyId,
+        HttpServletRequest request,
+        Authentication authentication,
+        RedirectAttributes redirectAttributes
+    ) {
+        logger.debug("Deleting API key with ID: {}", keyId);
+        
+        User user = getAuthenticatedUser(request, authentication);
+        if (user == null) {
+            logger.warn("No authenticated user found for API key deletion");
+            redirectAttributes.addFlashAttribute("error", "Authentication required");
+            return "redirect:/profile";
+        }
+
+        try {
+            boolean deleted = apiKeyService.deleteApiKey(keyId, user);
+            
+            if (deleted) {
+                logger.info("Successfully deleted API key {} for user: {}", keyId, user.getUsername());
+                redirectAttributes.addFlashAttribute("success", "API key deleted successfully");
+            } else {
+                logger.warn("API key {} not found or not owned by user: {}", keyId, user.getUsername());
+                redirectAttributes.addFlashAttribute("error", "API key not found or access denied");
+            }
+            
+        } catch (Exception e) {
+            logger.error("Error deleting API key {} for user: {}", keyId, user.getUsername(), e);
+            redirectAttributes.addFlashAttribute("error", "Failed to delete API key: " + e.getMessage());
+        }
+
+        return "redirect:/profile";
+    }
+
+    /**
+     * Helper method to get authenticated user from either Authentication or cookies.
+     */
+    private User getAuthenticatedUser(HttpServletRequest request, Authentication authentication) {
+        // Try to get user from authentication first (if user is logged in via JWT)
+        if (authentication != null && authentication.getPrincipal() instanceof User) {
+            return (User) authentication.getPrincipal();
+        }
+        
+        // Fallback to username from cookie (from OAuth2 callback)
+        String username = getCookieValue(request, "oc_username");
+        if (username != null) {
+            try {
+                return userService.findByUsername(username).orElse(null);
+            } catch (Exception e) {
+                logger.error("Error finding user by username: {}", username, e);
+            }
+        }
+        
+        return null;
     }
 }

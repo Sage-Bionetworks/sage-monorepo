@@ -176,6 +176,235 @@
         box-shadow: 0 10px 30px rgba(220, 53, 69, 0.3);
       }
 
+      /* API Key Management Styles */
+      .api-keys-section {
+        margin-top: 30px;
+        padding: 20px 0;
+        border-top: 2px solid #f0f0f0;
+      }
+
+      .section-title {
+        color: #333;
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+
+      .section-description {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 20px;
+      }
+
+      /* Alert Styles */
+      .alert {
+        padding: 12px 16px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 14px;
+      }
+
+      .alert-error {
+        background: #fee;
+        border-left: 4px solid #dc3545;
+        color: #721c24;
+      }
+
+      .alert-success {
+        background: #eff;
+        border-left: 4px solid #28a745;
+        color: #155724;
+      }
+
+      /* New API Key Display */
+      .new-api-key-display {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+      }
+
+      .new-key-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .new-key-warning {
+        font-size: 14px;
+        margin-bottom: 15px;
+        opacity: 0.9;
+      }
+
+      .new-key-container {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 15px;
+        border-radius: 8px;
+      }
+
+      .new-key-name {
+        font-size: 14px;
+        margin-bottom: 10px;
+        opacity: 0.9;
+      }
+
+      .new-key-value-container {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .new-key-value {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        border-radius: 6px;
+        font-family: 'Courier New', monospace;
+        font-size: 13px;
+        background: rgba(255, 255, 255, 0.9);
+        color: #333;
+      }
+
+      .copy-btn {
+        padding: 10px 15px;
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        transition: all 0.3s ease;
+      }
+
+      .copy-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+      }
+
+      /* Create API Key Form */
+      .create-api-key-form {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+      }
+
+      .form-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 15px;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+        color: #555;
+        font-size: 14px;
+      }
+
+      .form-group input,
+      .form-group select {
+        width: 100%;
+        padding: 10px 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: border-color 0.3s ease;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      /* Existing API Keys */
+      .existing-api-keys {
+        margin-top: 25px;
+      }
+
+      .existing-keys-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 15px;
+      }
+
+      .no-keys-message {
+        text-align: center;
+        color: #666;
+        font-style: italic;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 8px;
+      }
+
+      .api-keys-list {
+        space-y: 10px;
+      }
+
+      .api-key-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        transition: border-color 0.3s ease;
+      }
+
+      .api-key-item:hover {
+        border-color: #667eea;
+      }
+
+      .api-key-info {
+        flex: 1;
+      }
+
+      .api-key-name {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 5px;
+      }
+
+      .api-key-details {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        font-size: 13px;
+        color: #666;
+      }
+
+      .api-key-prefix {
+        font-family: 'Courier New', monospace;
+        background: #f0f0f0;
+        padding: 2px 6px;
+        border-radius: 4px;
+      }
+
+      .btn-danger {
+        background: #dc3545;
+        color: white;
+      }
+
+      .btn-danger:hover {
+        background: #c82333;
+      }
+
+      .btn-small {
+        padding: 6px 12px;
+        font-size: 12px;
+      }
+
       @media (max-width: 768px) {
         .profile-container {
           padding: 30px 20px;
@@ -200,14 +429,30 @@
           text-align: left;
         }
 
-        .button-group {
+        /* Mobile API Key Styles */
+        .api-key-item {
           flex-direction: column;
-          align-items: center;
+          align-items: flex-start;
+          gap: 10px;
         }
 
-        .btn {
+        .api-key-details {
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .new-key-value-container {
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .new-key-value {
+          font-size: 12px;
+        }
+
+        .copy-btn {
           width: 100%;
-          max-width: 200px;
+          text-align: center;
         }
       }
     </style>
@@ -249,6 +494,117 @@
         </div>
       </div>
 
+      <!-- API Key Management Section -->
+      <div class="api-keys-section">
+        <div class="section-title">🔑 API Key Management</div>
+        <div class="section-description">
+          Manage your API keys for programmatic access to OpenChallenges services.
+        </div>
+
+        <!-- Flash Messages -->
+        <div th:if="${error}" class="alert alert-error">
+          <span th:text="${error}">Error message</span>
+        </div>
+        <div th:if="${success}" class="alert alert-success">
+          <span th:text="${success}">Success message</span>
+        </div>
+
+        <!-- New API Key Display (only shown after creation) -->
+        <div th:if="${newApiKey}" class="new-api-key-display">
+          <div class="new-key-title">🎉 Your New API Key</div>
+          <div class="new-key-warning">
+            ⚠️ This is the only time you'll see this key. Copy it now and store it securely!
+          </div>
+          <div class="new-key-container">
+            <div class="new-key-name" th:text="'Name: ' + ${newApiKey.name}">
+              Name: API Key Name
+            </div>
+            <div class="new-key-value-container">
+              <input type="text" class="new-key-value" th:value="${newApiKey.plainKey}" readonly />
+              <button class="copy-btn" onclick="copyApiKey(this)">📋 Copy</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Create New API Key Form -->
+        <div class="create-api-key-form">
+          <div class="form-title">Create New API Key</div>
+          <form method="post" action="/profile/api-keys/create">
+            <div class="form-group">
+              <label for="apiKeyName">API Key Name:</label>
+              <input
+                type="text"
+                id="apiKeyName"
+                name="name"
+                placeholder="e.g., My Production Key"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="expiresInDays">Expires In (Days):</label>
+              <select id="expiresInDays" name="expiresInDays">
+                <option value="">Never expires</option>
+                <option value="30">30 days</option>
+                <option value="90">90 days</option>
+                <option value="365">1 year</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Create API Key</button>
+          </form>
+        </div>
+
+        <!-- Existing API Keys -->
+        <div class="existing-api-keys">
+          <div class="existing-keys-title">Your API Keys</div>
+          <div th:if="${#lists.isEmpty(apiKeys)}" class="no-keys-message">
+            You don't have any API keys yet. Create one above to get started.
+          </div>
+          <div th:if="${!#lists.isEmpty(apiKeys)}" class="api-keys-list">
+            <div th:each="apiKey : ${apiKeys}" class="api-key-item">
+              <div class="api-key-info">
+                <div class="api-key-name" th:text="${apiKey.name}">API Key Name</div>
+                <div class="api-key-details">
+                  <span class="api-key-prefix" th:text="'Prefix: ' + ${apiKey.keyPrefix} + '***'"
+                    >Prefix: oc_***</span
+                  >
+                  <span
+                    class="api-key-created"
+                    th:text="'Created: ' + ${#temporals.format(apiKey.createdAt, 'MMM dd, yyyy')}"
+                    >Created: Jan 01, 2024</span
+                  >
+                  <span
+                    th:if="${apiKey.expiresAt}"
+                    class="api-key-expires"
+                    th:text="'Expires: ' + ${#temporals.format(apiKey.expiresAt, 'MMM dd, yyyy')}"
+                    >Expires: Dec 31, 2024</span
+                  >
+                  <span
+                    th:if="${apiKey.lastUsedAt}"
+                    class="api-key-last-used"
+                    th:text="'Last used: ' + ${#temporals.format(apiKey.lastUsedAt, 'MMM dd, yyyy HH:mm')}"
+                    >Last used: Jan 15, 2024 10:30</span
+                  >
+                  <span th:unless="${apiKey.lastUsedAt}" class="api-key-never-used"
+                    >Never used</span
+                  >
+                </div>
+              </div>
+              <div class="api-key-actions">
+                <form
+                  method="post"
+                  action="/profile/api-keys/delete"
+                  style="display: inline"
+                  onsubmit="return confirm('Are you sure you want to delete this API key? This action cannot be undone.')"
+                >
+                  <input type="hidden" name="keyId" th:value="${apiKey.id}" />
+                  <button type="submit" class="btn btn-danger btn-small">🗑️ Delete</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="token-section" th:if="${accessToken}">
         <div class="token-title">🔐 Authentication Tokens</div>
         <div class="token-warning">
@@ -273,5 +629,28 @@
         </form>
       </div>
     </div>
+
+    <script>
+      function copyApiKey(button) {
+        const input = button.previousElementSibling;
+        input.select();
+        input.setSelectionRange(0, 99999); // For mobile devices
+
+        try {
+          document.execCommand('copy');
+          const originalText = button.textContent;
+          button.textContent = '✅ Copied!';
+          button.style.background = 'rgba(40, 167, 69, 0.3)';
+
+          setTimeout(() => {
+            button.textContent = originalText;
+            button.style.background = 'rgba(255, 255, 255, 0.2)';
+          }, 2000);
+        } catch (err) {
+          console.error('Failed to copy: ', err);
+          alert('Failed to copy API key. Please copy it manually.');
+        }
+      }
+    </script>
   </body>
 </html>

@@ -65,8 +65,8 @@ public class SecurityConfiguration {
             // Web interface endpoints for OAuth2
             .requestMatchers("/login", "/auth/oauth2/google", "/auth/callback")
             .permitAll() // OAuth2 web interface endpoints and login page
-            .requestMatchers("/profile")
-            .permitAll() // Profile page accessible without JWT authentication
+            .requestMatchers("/profile", "/profile/**")
+            .permitAll() // Profile page and API key management endpoints accessible without JWT authentication
             .requestMatchers("/logout", "/logout/**")
             .permitAll() // Logout web interface endpoints
             .requestMatchers("/error")
