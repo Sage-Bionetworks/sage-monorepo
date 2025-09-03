@@ -223,12 +223,41 @@
         padding: 20px;
         border-radius: 12px;
         margin-bottom: 20px;
+        position: relative;
+      }
+
+      .new-key-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
       }
 
       .new-key-title {
         font-size: 18px;
         font-weight: 600;
-        margin-bottom: 8px;
+        margin: 0;
+      }
+
+      .close-btn {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+      }
+
+      .close-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(1.1);
       }
 
       .new-key-warning {
@@ -528,8 +557,13 @@
         </div>
 
         <!-- New API Key Display (only shown after creation) -->
-        <div th:if="${newApiKey}" class="new-api-key-display">
-          <div class="new-key-title">🎉 Your New API Key</div>
+        <div th:if="${newApiKey}" class="new-api-key-display" id="newApiKeyDisplay">
+          <div class="new-key-header">
+            <div class="new-key-title">🎉 Your New API Key</div>
+            <button class="close-btn" onclick="closeApiKeyDisplay()" title="Close and hide API key">
+              ✕
+            </button>
+          </div>
           <div class="new-key-warning">
             ⚠️ This is the only time you'll see this key. Copy it now and store it securely!
           </div>
@@ -539,7 +573,7 @@
             </div>
             <div class="new-key-value-container">
               <input type="text" class="new-key-value" th:value="${newApiKey.plainKey}" readonly />
-              <button class="copy-btn" onclick="copyApiKey(this)">📋 Copy</button>
+              <button class="copy-btn" onclick="copyApiKeyAndHide(this)">📋 Copy Key</button>
             </div>
           </div>
         </div>
@@ -789,6 +823,41 @@ curl -X GET "http://localhost:8087/v1/auth/profile" \
         } catch (err) {
           console.error('Failed to copy curl example: ', err);
           alert('Failed to copy curl example. Please copy it manually.');
+        }
+      }
+
+      function copyApiKeyAndHide(button) {
+        const input = button.previousElementSibling;
+        input.select();
+        input.setSelectionRange(0, 99999); // For mobile devices
+
+        try {
+          document.execCommand('copy');
+          button.textContent = '✅ Copied!';
+          button.style.background = 'rgba(40, 167, 69, 0.3)';
+
+          // Show success message for 1 second, then hide the entire API key display
+          setTimeout(() => {
+            closeApiKeyDisplay();
+          }, 1000);
+        } catch (err) {
+          console.error('Failed to copy: ', err);
+          alert('Failed to copy API key. Please copy it manually.');
+        }
+      }
+
+      function closeApiKeyDisplay() {
+        const apiKeyDisplay = document.getElementById('newApiKeyDisplay');
+        if (apiKeyDisplay) {
+          // Add a fade-out animation
+          apiKeyDisplay.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+          apiKeyDisplay.style.opacity = '0';
+          apiKeyDisplay.style.transform = 'translateY(-20px)';
+
+          // Remove the element after animation completes
+          setTimeout(() => {
+            apiKeyDisplay.remove();
+          }, 500);
         }
       }
     </script>
