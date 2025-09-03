@@ -29,7 +29,7 @@ public class OAuth2WebController {
   /**
    * Initiate Google OAuth2 login flow.
    */
-  @GetMapping("/v1/auth/oauth2/google")
+  @GetMapping("/auth/oauth2/google")
   public String loginWithGoogle() {
     logger.debug("Initiating Google OAuth2 authorization");
 
@@ -46,7 +46,7 @@ public class OAuth2WebController {
   /**
    * Handle OAuth2 callback.
    */
-  @GetMapping("/v1/auth/callback")
+  @GetMapping("/auth/callback")
   public String oauth2Callback(
     @RequestParam(required = false) String code,
     @RequestParam(required = false) String error,
