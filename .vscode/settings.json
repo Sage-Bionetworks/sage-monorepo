@@ -123,7 +123,7 @@
   "rewrap.wrappingColumn": 100,
   "jest.runMode": "on-demand",
   "nxConsole.generateAiAgentRules": true,
-  "github.copilot.chat.agent.terminal.allowList": {
+  "chat.tools.terminal.autoApprove": {
     "/^(?:\\.\\/)?gradlew(?:\\s+.+)?$/": true,
     "cat": true,
     "cd": true,
@@ -135,16 +135,14 @@
     "git status": true,
     "grep": true,
     "ls": true,
-    "pwd": true
-  },
-  "github.copilot.chat.agent.terminal.denyList": {
-    "rm": true,
-    "rmdir": true,
-    "kill": true,
-    "curl": true,
-    "wget": true,
-    "eval": true,
-    "chmod": true,
-    "chown": true
+    "pwd": true,
+    "rm": false,
+    "rmdir": false,
+    "kill": false,
+    "curl": false,
+    "wget": false,
+    "eval": false,
+    "chmod": false,
+    "chown": false
   }
 }
