@@ -34,19 +34,19 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @DisplayName("ApiKeyAuthenticationFilter")
 class ApiKeyAuthenticationFilterTest {
 
-  @Mock(lenient = true)
+  @Mock
   private ApiKeyService apiKeyService;
 
-  @Mock(lenient = true)
+  @Mock
   private HttpServletRequest request;
 
-  @Mock(lenient = true)
+  @Mock
   private HttpServletResponse response;
 
-  @Mock(lenient = true)
+  @Mock
   private FilterChain filterChain;
 
-  @Mock(lenient = true)
+  @Mock
   private SecurityContext securityContext;
 
   private ApiKeyAuthenticationFilter filter;
@@ -476,13 +476,14 @@ class ApiKeyAuthenticationFilterTest {
     void shouldNotMatchPartialPathsAsPublic() throws ServletException, IOException {
       // given
       when(request.getRequestURI()).thenReturn("/api/v1/auth/login/test");
-      when(request.getHeader("Authorization")).thenReturn(null);
+      when(request.getHeader("X-API-Key")).thenReturn(null);
 
       // when
       filter.doFilterInternal(request, response, filterChain);
 
       // then
       verify(filterChain).doFilter(request, response);
+      verify(apiKeyService, never()).validateApiKey(anyString());
       // This should not be treated as a public endpoint
     }
   }
