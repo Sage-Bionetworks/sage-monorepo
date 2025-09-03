@@ -9,6 +9,18 @@ dependencies {
   implementation(libs.spring.cloud.starter.gateway.server.webflux)
   implementation(libs.spring.boot.starter.webflux) // For WebClient
   implementation(project(":openchallenges-app-config-data"))
+
+  // OAuth2 and JWT support
+  implementation(libs.spring.boot.starter.oauth2.resource.server)
+  implementation(libs.spring.security.oauth2.jose)
+  implementation(libs.jjwt.api)
+  implementation(libs.jjwt.impl)
+  implementation(libs.jjwt.jackson)
+
+  // Lombok support
+  compileOnly(libs.lombok)
+  annotationProcessor(libs.lombok)
+
   // Note: Using WebClient for internal auth service communication instead of API client
   runtimeOnly(libs.spring.boot.devtools)
   testImplementation(libs.spring.boot.starter.test)

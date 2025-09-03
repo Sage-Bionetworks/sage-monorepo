@@ -40,8 +40,13 @@ public class SecurityConfiguration {
       .authorizeExchange(ex -> ex
         // Public routes – completely bypass auth
         .pathMatchers("/actuator/health", "/actuator/metrics").permitAll()
+        
+        // OAuth2 standard endpoints (served by auth service)
+        .pathMatchers("/oauth2/**", "/.well-known/**").permitAll()
+        
+        // Auth service specific endpoints
         .pathMatchers("/api/v1/auth/login/**", "/api/v1/auth/oauth2/**").permitAll()
-        .pathMatchers("/api/v1/auth/jwt/validate", "/api/v1/auth/validate").permitAll()
+        .pathMatchers("/api/v1/auth/validate").permitAll() // API key validation
         .pathMatchers("/api/v1/users/register").permitAll()
         
         // Public read-only endpoints
