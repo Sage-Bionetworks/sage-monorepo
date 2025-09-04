@@ -1,0 +1,14 @@
+type: apiKey
+in: header
+name: X-Authenticated-User-Id
+description: >
+  Authentication via trusted headers set by the API Gateway.
+  The API Gateway validates JWT tokens or API keys and forwards authenticated
+  user information to downstream services via trusted headers:
+  - X-Authenticated-User-Id: The authenticated user's ID
+  - X-Authenticated-User: The authenticated user's username  
+  - X-Authenticated-Roles: The authenticated user's roles
+  - X-Scopes: OAuth2 scopes (if applicable)
+
+  This security scheme is used when services are deployed behind the API Gateway
+  and trust the authentication headers it provides.

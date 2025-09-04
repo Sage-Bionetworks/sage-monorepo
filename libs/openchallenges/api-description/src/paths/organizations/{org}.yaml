@@ -28,6 +28,7 @@ put:
   security:
     - jwtBearerAuth: []
     - apiKeyAuth: []
+    - trustedHeaderAuth: []
   requestBody:
     required: true
     content:
@@ -63,6 +64,7 @@ delete:
   security:
     - jwtBearerAuth: []
     - apiKeyAuth: []
+    - trustedHeaderAuth: []
   responses:
     '204':
       description: Organization successfully deleted
