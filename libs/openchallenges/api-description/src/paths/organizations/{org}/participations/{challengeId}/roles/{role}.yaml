@@ -12,6 +12,7 @@ delete:
   security:
     - jwtBearerAuth: []
     - apiKeyAuth: []
+    - trustedHeaderAuth: []
   responses:
     '204':
       description: Participation deleted successfully

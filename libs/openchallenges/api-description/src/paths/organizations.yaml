@@ -28,6 +28,7 @@ post:
   security:
     - jwtBearerAuth: []
     - apiKeyAuth: []
+    - trustedHeaderAuth: []
   requestBody:
     content:
       application/json:

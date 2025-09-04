@@ -29,9 +29,11 @@ paths:
     $ref: paths/organizations/{org}/participations.yaml
   /organizations/{org}/participations/{challengeId}/roles/{role}:
     $ref: paths/organizations/{org}/participations/{challengeId}/roles/{role}.yaml
-# components:
-#   securitySchemes:
-#     jwtBearerAuth:
-#       $ref: components/securitySchemes/JwtBearerAuth.yaml
-#     apiKeyAuth:
-#       $ref: components/securitySchemes/ApiKeyAuth.yaml
+components:
+  securitySchemes:
+    jwtBearerAuth:
+      $ref: components/securitySchemes/JwtBearerAuth.yaml
+    apiKeyAuth:
+      $ref: components/securitySchemes/ApiKeyAuth.yaml
+    trustedHeaderAuth:
+      $ref: components/securitySchemes/TrustedHeaderAuth.yaml
