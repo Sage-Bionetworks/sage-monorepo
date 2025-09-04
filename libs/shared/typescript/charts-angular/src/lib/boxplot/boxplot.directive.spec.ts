@@ -28,6 +28,7 @@ const renderTestComponent = async (props: BoxplotProps) => {
       [pointCategoryShapes]="pointCategoryShapes"
       [showLegend]="showLegend"
       [pointOpacity]="pointOpacity"
+      [noDataStyle]="noDataStyle"
     ></div>`,
   })
   class TestComponent {
@@ -46,6 +47,7 @@ const renderTestComponent = async (props: BoxplotProps) => {
     pointCategoryShapes = props.pointCategoryShapes;
     showLegend = props.showLegend;
     pointOpacity = props.pointOpacity;
+    noDataStyle = props.noDataStyle;
   }
 
   return await render(TestComponent, {

@@ -3,8 +3,9 @@
     <model-ad-model-details-boxplot
       [modelData]="modelData"
       [sexes]="sexes()"
-      [showLegend]="i === legendIndex()"
+      [showLegend]="false"
       [genotypeOrder]="genotypeOrder()"
     />
   }
 </div>
+<div class="boxplots-grid-legend" sageLegend [pointStyles]="pointStyles()"></div>

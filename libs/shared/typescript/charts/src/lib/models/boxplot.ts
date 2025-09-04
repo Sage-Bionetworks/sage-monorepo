@@ -67,4 +67,5 @@ export interface BoxplotProps {
   pointCategoryShapes?: Record<string, string>;
   showLegend?: boolean;
   pointOpacity?: number;
+  noDataStyle?: 'textOnly' | 'grayBackground';
 }

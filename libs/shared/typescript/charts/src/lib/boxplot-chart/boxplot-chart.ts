@@ -1,4 +1,5 @@
 import { DatasetComponentOption, ECharts, EChartsOption, SeriesOption } from 'echarts';
+import { DEFAULT_POINT_SIZE } from '../constants';
 import { BoxplotProps, CategoryPoint } from '../models';
 import {
   addXAxisValueToBoxplotSummaries,
@@ -26,9 +27,11 @@ const boxplotStyle = {
 
 const yAxisPadding = 0.2;
 const defaultPointShape = 'circle';
-const defaultPointSize = 18;
 const defaultPointColor = '#8b8ad1';
 const defaultPointOpacity = 0.8;
+
+const defaultPointCategoryOffset = 0.3;
+const defaultPointCategoryJitterMax = 0.02;
 
 const Y_AXIS_TICK_LABELS_MAX_WIDTH = 80;
 const SPACE_FOR_Y_AXIS_NAME = 40;
@@ -74,12 +77,13 @@ export class BoxplotChart {
     } = boxplotProps;
 
     const showLegend = boxplotProps.showLegend || false;
+    const noDataStyle = boxplotProps.noDataStyle || 'textOnly';
 
     const noPoints = points.length === 0;
     const noSummaries = summaries == null || summaries.length === 0;
 
     if (noPoints && noSummaries) {
-      setNoDataOption(this.chart);
+      setNoDataOption(this.chart, noDataStyle);
       return;
     }
 
@@ -95,8 +99,8 @@ export class BoxplotChart {
       points,
       xAxisCategories,
       pointCategories,
-      0.1,
-      0.02,
+      defaultPointCategoryOffset,
+      defaultPointCategoryJitterMax,
     );
     const dataForStaticBoxplotSummaries = summaries
       ? addXAxisValueToBoxplotSummaries(summaries, xAxisCategories)
@@ -193,7 +197,7 @@ export class BoxplotChart {
           x: 'xAxisValue',
           y: 'value',
         },
-        symbolSize: defaultPointSize,
+        symbolSize: DEFAULT_POINT_SIZE,
         symbol:
           id === 'points'
             ? defaultPointShape
@@ -261,8 +265,8 @@ export class BoxplotChart {
         orient: 'horizontal',
         left: 'left',
         top: 'bottom',
-        itemHeight: defaultPointSize,
-        itemWidth: defaultPointSize,
+        itemHeight: DEFAULT_POINT_SIZE,
+        itemWidth: DEFAULT_POINT_SIZE,
         selectedMode: false,
       },
       grid: {
