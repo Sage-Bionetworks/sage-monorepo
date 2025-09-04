@@ -69,7 +69,7 @@ export class AppComponent implements OnInit {
   getDataVersion() {
     if (this.platformService.isBrowser) {
       this.dataVersionService
-        .getDataversion()
+        .getDataVersion()
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (data) => {
