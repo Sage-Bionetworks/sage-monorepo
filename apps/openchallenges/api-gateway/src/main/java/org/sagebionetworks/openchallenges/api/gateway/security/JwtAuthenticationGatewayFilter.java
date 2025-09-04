@@ -27,12 +27,6 @@ public class JwtAuthenticationGatewayFilter implements WebFilter {
 
   private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationGatewayFilter.class);
 
-  // Standard trusted headers for downstream services
-  private static final String X_AUTHENTICATED_USER_ID_HEADER = "X-Authenticated-User-Id";
-  private static final String X_AUTHENTICATED_USER_HEADER = "X-Authenticated-User";
-  private static final String X_AUTHENTICATED_ROLES_HEADER = "X-Authenticated-Roles";
-  // TODO: Add X_SCOPES_HEADER when JWT validation includes scope information
-
   private final OAuth2JwtService oAuth2JwtService;
   private final AuthConfiguration authConfiguration;
 
@@ -76,14 +70,12 @@ public class JwtAuthenticationGatewayFilter implements WebFilter {
             return exchange.getResponse().setComplete();
           }
 
-          // Add standard user context headers for downstream services
+          // JWT Passthrough Mode: Pass the original JWT to resource servers
+          // Resource servers will validate JWT directly and extract scopes
+          // Note: Header stripping is handled by Spring Cloud Gateway default filters
           ServerHttpRequest.Builder requestBuilder = request.mutate()
-              .header(X_AUTHENTICATED_USER_ID_HEADER, validationResponse.getUserId())
-              .header(X_AUTHENTICATED_USER_HEADER, validationResponse.getUsername())
-              .header(X_AUTHENTICATED_ROLES_HEADER, validationResponse.getRole());
-
-          // Add scopes if available  
-          // TODO: Add X_SCOPES_HEADER when JWT validation includes scope information
+              // Keep the original Authorization header with JWT
+              .header(HttpHeaders.AUTHORIZATION, authHeader);
 
           ServerHttpRequest modifiedRequest = requestBuilder.build();
 

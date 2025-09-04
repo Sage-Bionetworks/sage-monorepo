@@ -20,6 +20,7 @@ info:
     - `/v1/auth/api-keys` - API key management
     - `/v1/auth/profile` - User profile management
     - `/v1/auth/api-keys/validate` - API key validation
+    - `/v1/auth/api-keys/exchange-for-jwt` - API key to JWT token exchange (internal)
 
     **Authentication Methods**:
     - **OAuth2**: Use standard OAuth2 flows for user login via Google/Synapse
@@ -52,6 +53,8 @@ paths:
     $ref: paths/auth/api-keys/{keyId}.yaml
   /auth/api-keys/validate:
     $ref: paths/auth/api-keys/validate.yaml
+  /auth/api-keys/exchange-for-jwt:
+    $ref: paths/auth/api-keys/exchange-for-jwt.yaml
 components:
   securitySchemes:
     # OAuth2 for user authentication (Spring Authorization Server)

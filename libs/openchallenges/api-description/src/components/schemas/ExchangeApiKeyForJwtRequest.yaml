@@ -1,0 +1,20 @@
+type: object
+required:
+  - apiKey
+properties:
+  apiKey:
+    type: string
+    description: The API key to exchange for a JWT token
+    example: oc_prod_abcd1234567890abcdef1234567890abcdef1234
+  userContext:
+    type: object
+    description: Additional user context for token generation (optional)
+    properties:
+      remoteAddr:
+        type: string
+        description: Client IP address
+        example: 192.168.1.100
+      userAgent:
+        type: string
+        description: Client user agent
+        example: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36

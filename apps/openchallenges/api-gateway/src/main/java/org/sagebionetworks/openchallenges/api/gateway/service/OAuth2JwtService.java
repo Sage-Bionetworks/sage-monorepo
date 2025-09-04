@@ -85,7 +85,8 @@ public class OAuth2JwtService {
         .valid(true)
         .userId(introspection.getSub())
         .username(introspection.getUsername())
-        .role(introspection.getScope()) // could be used for role
+        .role(introspection.getScope()) // Legacy role mapping
+        .scopes(introspection.getScopes()) // Modern scope list
         .expiresAt(String.valueOf(introspection.getExp()))
         .build();
   }
@@ -151,7 +152,8 @@ public class OAuth2JwtService {
     private boolean active;
     private String sub;
     private String username;
-    private String scope;
+    private String scope; // Space-separated scopes or deprecated role field
+    private List<String> scp; // Modern "scp" claim for scopes
     private long exp;
     private OAuth2Audience aud;
     private String iss;
@@ -168,6 +170,22 @@ public class OAuth2JwtService {
     
     public String getScope() { return scope; }
     public void setScope(String scope) { this.scope = scope; }
+    
+    public List<String> getScp() { return scp; }
+    public void setScp(List<String> scp) { this.scp = scp; }
+    
+    /**
+     * Get all scopes, preferring the modern "scp" claim over the legacy "scope" field.
+     */
+    public List<String> getScopes() {
+      if (scp != null && !scp.isEmpty()) {
+        return scp;
+      }
+      if (scope != null && !scope.trim().isEmpty()) {
+        return List.of(scope.split("\\s+"));
+      }
+      return List.of();
+    }
     
     public long getExp() { return exp; }
     public void setExp(long exp) { this.exp = exp; }
@@ -194,6 +212,7 @@ public class OAuth2JwtService {
     private String userId;
     private String username;
     private String role;
+    private List<String> scopes;
     private String expiresAt;
     private String errorMessage;
 
@@ -224,6 +243,9 @@ public class OAuth2JwtService {
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
     
+    public List<String> getScopes() { return scopes; }
+    public void setScopes(List<String> scopes) { this.scopes = scopes; }
+    
     public String getExpiresAt() { return expiresAt; }
     public void setExpiresAt(String expiresAt) { this.expiresAt = expiresAt; }
     
@@ -251,6 +273,11 @@ public class OAuth2JwtService {
 
       public JwtValidationResponseBuilder role(String role) {
         response.role = role;
+        return this;
+      }
+
+      public JwtValidationResponseBuilder scopes(List<String> scopes) {
+        response.scopes = scopes;
         return this;
       }
 

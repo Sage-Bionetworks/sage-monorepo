@@ -15,7 +15,9 @@ import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * WebFilter that handles API key authentication.
@@ -27,12 +29,6 @@ public class ApiKeyAuthenticationGatewayFilter implements WebFilter {
   private static final Logger logger = LoggerFactory.getLogger(ApiKeyAuthenticationGatewayFilter.class);
   
   private static final String API_KEY_HEADER = "X-API-Key";
-  
-  // Standard trusted headers for downstream services
-  private static final String X_AUTHENTICATED_USER_ID_HEADER = "X-Authenticated-User-Id";
-  private static final String X_AUTHENTICATED_USER_HEADER = "X-Authenticated-User";
-  private static final String X_AUTHENTICATED_ROLES_HEADER = "X-Authenticated-Roles";
-  private static final String X_SCOPES_HEADER = "X-Scopes";
 
   private final GatewayAuthenticationService authenticationService;
   private final AuthConfiguration authConfiguration;
@@ -49,9 +45,9 @@ public class ApiKeyAuthenticationGatewayFilter implements WebFilter {
     ServerHttpRequest request = exchange.getRequest();
     String path = request.getPath().toString();
 
-    // Skip if already authenticated by JWT filter (check for auth headers added by JWT filter)
-    if (request.getHeaders().containsKey(X_AUTHENTICATED_USER_ID_HEADER)) {
-      logger.debug("Request already authenticated by JWT filter, skipping API key validation for: {}", path);
+    // Skip if already authenticated by JWT filter
+    if (exchange.getRequest().getHeaders().containsKey("Authorization")) {
+      logger.debug("Request already has Authorization header, skipping API key validation for: {}", path);
       return chain.filter(exchange);
     }
 
@@ -63,42 +59,33 @@ public class ApiKeyAuthenticationGatewayFilter implements WebFilter {
       return chain.filter(exchange);
     }
 
-    logger.debug("Validating API key for request to: {}", path);
+    logger.debug("Exchanging API key for JWT for request to: {}", path);
 
-    // Validate API key with Auth Service
-    return authenticationService.validateApiKey(apiKey)
-        .flatMap(validationResponse -> {
-          if (!validationResponse.isValid()) {
-            logger.warn("Invalid API key for request to: {}", path);
-            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-            exchange.getResponse().getHeaders().add("WWW-Authenticate", 
-                String.format("ApiKey realm=\"%s\"", authConfiguration.getRealm()));
-            return exchange.getResponse().setComplete();
-          }
+    // Exchange API key for JWT using OAuth2 Client Credentials flow
+    return authenticationService.exchangeApiKeyForJwt(apiKey)
+        .flatMap(tokenResponse -> {
+          // Replace the API key with the JWT in the Authorization header
+          ServerHttpRequest modifiedRequest = request.mutate()
+              .header("Authorization", "Bearer " + tokenResponse.getAccessToken())
+              .build();
 
-          // Add standard user context headers for downstream services
-          ServerHttpRequest.Builder requestBuilder = request.mutate()
-              .header(X_AUTHENTICATED_USER_ID_HEADER, validationResponse.getUserId())
-              .header(X_AUTHENTICATED_USER_HEADER, validationResponse.getUsername())
-              .header(X_AUTHENTICATED_ROLES_HEADER, validationResponse.getRole());
-
-          // Add scopes if available
-          if (validationResponse.getScopes() != null && validationResponse.getScopes().length > 0) {
-            requestBuilder.header(X_SCOPES_HEADER, String.join(",", validationResponse.getScopes()));
-          }
-
-          ServerHttpRequest modifiedRequest = requestBuilder.build();
-
-          // Create Spring Security Authentication for authorization
-          var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + validationResponse.getRole()));
+          // Extract scopes from token response for Spring Security
+          String[] scopes = tokenResponse.getScope() != null ? 
+              tokenResponse.getScope().split(" ") : new String[0];
+          
+          var authorities = Arrays.stream(scopes)
+              .map(scope -> new SimpleGrantedAuthority("SCOPE_" + scope))
+              .collect(Collectors.toList());
+          
+          // Create authentication for the service principal (API key client)
           var authentication = new UsernamePasswordAuthenticationToken(
-              validationResponse.getUsername(), 
+              "api-key-client", // principal name for API key clients
               null, 
               authorities
           );
 
-          logger.debug("API key authentication successful for {}: {} accessing: {}", 
-              validationResponse.getType(), validationResponse.getUsername(), path);
+          logger.debug("API key exchanged for JWT successfully: {} scopes accessing: {}", 
+              tokenResponse.getScope(), path);
 
           return chain.filter(exchange.mutate().request(modifiedRequest).build())
               .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
