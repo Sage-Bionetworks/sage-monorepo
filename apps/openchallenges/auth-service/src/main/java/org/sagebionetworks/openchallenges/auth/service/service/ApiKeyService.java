@@ -5,6 +5,7 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -14,6 +15,7 @@ import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.repository.ApiKeyRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
@@ -37,6 +39,7 @@ public class ApiKeyService {
   private final PasswordEncoder passwordEncoder;
   private final ApiKeyProperties apiKeyProperties;
   private final RegisteredClientRepository registeredClientRepository;
+  private final JdbcTemplate jdbcTemplate;
   private final SecureRandom secureRandom = new SecureRandom();
 
   /**
@@ -162,23 +165,92 @@ public class ApiKeyService {
   }
 
   /**
-   * Delete an API key
+   * Delete an API key and its corresponding OAuth2 client
    */
+  @Transactional
   public boolean deleteApiKey(UUID keyId, User user) {
-    Optional<ApiKey> apiKey = apiKeyRepository.findById(keyId);
-    if (apiKey.isPresent() && apiKey.get().getUser().getId().equals(user.getId())) {
-      apiKeyRepository.delete(apiKey.get());
-      return true;
+    logger.debug("Attempting to delete API key {} for user {}", keyId, user.getId());
+    
+    try {
+      // Use DELETE with RETURNING to get the client_id and name in one atomic operation
+      String deleteQuery = "DELETE FROM api_key WHERE id = ? AND user_id = ? RETURNING client_id, name";
+      
+      List<Map<String, Object>> deletedRows = jdbcTemplate.queryForList(deleteQuery, keyId, user.getId());
+      
+      if (!deletedRows.isEmpty()) {
+        Map<String, Object> deletedApiKey = deletedRows.get(0);
+        String clientId = (String) deletedApiKey.get("client_id");
+        String keyName = (String) deletedApiKey.get("name");
+        
+        logger.info("Deleted API key: {} ({})", keyName, keyId);
+        
+        // Now delete the OAuth2 registered client if it exists
+        if (clientId != null) {
+          try {
+            int oauthDeletedRows = jdbcTemplate.update(
+              "DELETE FROM oauth2_registered_client WHERE client_id = ?", 
+              clientId
+            );
+            if (oauthDeletedRows > 0) {
+              logger.info("Deleted OAuth2 client: {}", clientId);
+            } else {
+              logger.warn("OAuth2 client not found in database: {}", clientId);
+            }
+          } catch (Exception e) {
+            logger.warn("Failed to delete OAuth2 client '{}': {}", clientId, e.getMessage());
+            // Don't fail the entire operation if OAuth2 cleanup fails
+          }
+        }
+        
+        return true;
+      } else {
+        logger.warn("API key {} not found or not owned by user {}", keyId, user.getId());
+        return false;
+      }
+      
+    } catch (Exception e) {
+      logger.error("Error during API key deletion for {} (user {}): {}", keyId, user.getId(), e.getMessage());
+      return false;
     }
-    return false;
   }
 
   /**
-   * Clean up expired API keys
+   * Clean up expired API keys and their corresponding OAuth2 clients
    */
   @Transactional
   public void cleanupExpiredApiKeys() {
-    apiKeyRepository.deleteExpiredApiKeys(OffsetDateTime.now());
+    OffsetDateTime now = OffsetDateTime.now();
+    
+    // Find expired API keys before deleting them
+    List<ApiKey> expiredKeys = apiKeyRepository.findExpiredApiKeys(now);
+    
+    // Delete corresponding OAuth2 clients for expired API keys
+    for (ApiKey expiredKey : expiredKeys) {
+      if (expiredKey.getClientId() != null) {
+        try {
+          int deletedRows = jdbcTemplate.update(
+            "DELETE FROM oauth2_registered_client WHERE client_id = ?", 
+            expiredKey.getClientId()
+          );
+          if (deletedRows > 0) {
+            logger.debug("Deleted OAuth2 client for expired API key: {}", expiredKey.getClientId());
+          }
+        } catch (Exception e) {
+          logger.warn("Failed to delete OAuth2 client '{}' during cleanup: {}", 
+                     expiredKey.getClientId(), e.getMessage());
+        }
+      }
+    }
+    
+    // Delete expired API keys using JDBC to avoid optimistic locking issues
+    int deletedCount = jdbcTemplate.update(
+      "DELETE FROM api_key WHERE expires_at IS NOT NULL AND expires_at < ?", 
+      now
+    );
+    
+    if (deletedCount > 0) {
+      logger.info("Deleted {} expired API keys", deletedCount);
+    }
   }
 
   /**

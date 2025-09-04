@@ -206,12 +206,12 @@ public class ProfileController {
                 redirectAttributes.addFlashAttribute("success", "API key deleted successfully");
             } else {
                 logger.warn("API key {} not found or not owned by user: {}", keyId, user.getUsername());
-                redirectAttributes.addFlashAttribute("error", "API key not found or access denied");
+                redirectAttributes.addFlashAttribute("error", "Unable to delete API key");
             }
             
         } catch (Exception e) {
             logger.error("Error deleting API key {} for user: {}", keyId, user.getUsername(), e);
-            redirectAttributes.addFlashAttribute("error", "Failed to delete API key: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Failed to delete API key");
         }
 
         return "redirect:/profile";
