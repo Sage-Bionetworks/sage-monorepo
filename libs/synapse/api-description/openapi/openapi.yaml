@@ -1,13 +1,13 @@
 openapi: 3.0.1
 info:
-  title: Synapse REST API (modified to test the new update workflow)
+  title: Synapse REST API
   version: v1
 servers:
   - url: https://repo-prod.prod.sagebase.org
 tags:
   - name: Access Approval Services
     description: |-
-      The Access Approval services manage the fulfillment of Access Requirements, on a per-user basis.
+      The Access Approval services manage the fulfillment of Access Requirements, on a per-user basis.  
        (See <a href="#org.sagebionetworks.repo.web.controller.AccessRequirementController">
        Access Requirement Services</a> for more information.)  Most of the Access Approval services
        are available only to members of the Synapse Access and Compliance Team (ACT).
@@ -15,11 +15,11 @@ tags:
     description: |-
       These services manage the Access Requirements/Restrictions (ARs) which may be placed on Entities,
        or Teams.  An Access Requirement specifies the type of access being restricted as well
-       as how the requirement is fulfilled.
+       as how the requirement is fulfilled. 
        <p>
        ARs complement Access Control Lists (ACLs) for managing access to Synapse objects.
        While ACLs are managed by entity owners, ARs are managed by the Synapse Access and Compliance Team (ACT), which is
-       responsible for governance of sensitive data.  Before one may access data associated with an
+       responsible for governance of sensitive data.  Before one may access data associated with an 
        AR, there must be a corresponding Access Approval.  For certain ARs --
        of the "self-sign" variety -- one may grant ones own approval by agreeing to associated
        'terms of use.'  For other Access Requirements -- of the 'ACT' variety -- approval may be granted
@@ -33,7 +33,7 @@ tags:
        associated ARs controlling this type of access.
        </p>
        <p>
-       Entity ARs are inherited from ancestors.  E.g. an AR applied to a Folder will control all Files in the Folder,
+       Entity ARs are inherited from ancestors.  E.g. an AR applied to a Folder will control all Files in the Folder, 
        or within sub-folders of the Folder.  Access Requirements are cumulative:  A File will be controlled both
        by ARs applied to it directly and by ARs applied to any and all of its ancestors.
        </p>
@@ -86,7 +86,7 @@ tags:
        an Entity. (The Entity services allow you to specify an activityId that
        creates a generatedBy relationship between an Activity and an Entity.)</li>
        </ul>
-
+       
        </p>
   - name: Agent Chat Services
     description: |-
@@ -127,7 +127,7 @@ tags:
        <p>
        Authentication to Synapse services requires an access token passed in the HTTP Authorization
        header, as per the <a href="https://tools.ietf.org/html/rfc6750#section-2.1">HTTP bearer authorization</a> standard.
-       The access token incorporates a set of 'scopes' and the documentation for each service requiring
+       The access token incorporates a set of 'scopes' and the documentation for each service requiring 
        authorization lists the scopes which the access token must include in order to use that service.
        <p/>
        <p>
@@ -140,15 +140,15 @@ tags:
        <li>Exchange an access token for Personal Access Token</li>
        </ul>
        <p>
-       The username and password are exchanged for an access token
+       The username and password are exchanged for an access token 
        using <a href="${POST.login2}">POST /login2</a> service.
-       This method should only be used by Synapse itself.  No other
+       This method should only be used by Synapse itself.  No other 
        application should prompt a user for their user name and password.
        </p>
        <p>
        Synapse allows authentication via a white listed OAuth 2.0 provider.  Currently only Google is supported.
        The final step is <a href="${POST.oauth2.session2}">POST /oauth2/session2</a> which returns an access token
-       which is included as a Bearer token in the Authorization header of
+       which is included as a Bearer token in the Authorization header of 
        subsequent requests as described above.  Only Synapse itself may use this service, as redirection back
        from the OAuth2 provider is only allowed to the Synapse web portal.
        </p>
@@ -156,11 +156,11 @@ tags:
        A registered OAuth 2.0 client can use the <a href="#org.sagebionetworks.auth.controller.OpenIDConnectController">OAuth 2.0 services</a>
        to authenticate, the final step of which is a request to the token endpoint:
        <a href="${POST.oauth2.token}">POST /oauth2/token</a>
-       The returned access token is included as a Bearer token in the Authorization header of
+       The returned access token is included as a Bearer token in the Authorization header of 
        subsequent requests as described above.
        </p>
        <p>
-       A user may freely generate up to 100 Personal access tokens (PATs) with scoped access using
+       A user may freely generate up to 100 Personal access tokens (PATs) with scoped access using 
        <a href="${POST.personalAccessToken}">POST /personalAccessToken</a>. Unlike OAuth access tokens,
        <ul>
            <li>PATs can be freely generated by a user alone and are not linked to any third party OAuth client and</li>
@@ -170,7 +170,7 @@ tags:
        the least-recently used token(s) will be deleted until the user has no more than 100 tokens.
        </p>
        <p>
-       The returned personal access token is included as a Bearer token in the Authorization header of
+       The returned personal access token is included as a Bearer token in the Authorization header of 
        subsequent requests as described above.
        </p>
   - name: Authentication Services (2FA)
@@ -179,22 +179,22 @@ tags:
        APIs to manage two factor authentication (2FA) in Synapse.
        </p
        <p>
-       Synapse currently supports using authenticator applications that can generate a <a href="https://en.wikipedia.org/wiki/Time-based_one-time_password">TOTP</a> that is used as a second factor.
+       Synapse currently supports using authenticator applications that can generate a <a href="https://en.wikipedia.org/wiki/Time-based_one-time_password">TOTP</a> that is used as a second factor. 
        </p>
        <p>
        To enable 2FA two requests are involved:
-
+       
        <ol>
        <li><a href="${POST.2fa.enroll}">POST /2fa/enroll</a>: Generates a shared secret that is added to the user authenticator application</li>
        <li><a href="${POST.2fa}">POST /2fa</a>: Enables a specific secret generated by 1. to be used as second factor</li>
        </ol>
        </p>
-
+       
        <p>
-       In order to login through 2FA an additional request needs to be performed after the user attempts to authenticate (e.g. through the <a href="${POST.login2}">POST /login2</a> API).
+       In order to login through 2FA an additional request needs to be performed after the user attempts to authenticate (e.g. through the <a href="${POST.login2}">POST /login2</a> API). 
        If the user has 2FA enabled, they will receive a 401 and the body of the response will contain a twoFaToken that can be used in the <a href="${POST.2fa.token}">POST /2fa/token</a> API to obtain an access token.
        </p>
-
+       
        <p>
        The user can additionally generate a set of recovery codes using the <a href="${POST.2fa.recoveryCodes}">POST /2fa/recoveryCodes</a> API. The codes are one time use and can be used in place of a TOTP code when
        performing 2FA authentication. The body of the <a href="${POST.2fa.token}">POST /2fa/token</a> request should specify as otpType RECOVERY_CODE and the value of the otpCode should match one of the generated codes.
@@ -217,25 +217,25 @@ tags:
       <p>Some data in Synapse are governed by an ACTAccessRequirement. To gain access
        to these data, a user must meet all requirements specified in the ACTAccessRequirement.</p>
        <br>
-       <p>These services provide the APIs for users to create request to gain access to
+       <p>These services provide the APIs for users to create request to gain access to 
        controlled data, and APIs for the ACT to review and grant access to users.</p>
   - name: Discussion Services
     description: |-
-      <p>Discussions in Synapse are captured in the Project's Forum. Each
-       Project has a Forum. Each Forum has a set of Moderators. The Moderators manage
+      <p>Discussions in Synapse are captured in the Project's Forum. Each 
+       Project has a Forum. Each Forum has a set of Moderators. The Moderators manage 
        the content of the Forum.</p>
        <br>
-       <p>A Forum has multiple Threads. A Thread is created by an authorized user.
+       <p>A Forum has multiple Threads. A Thread is created by an authorized user. 
        Other authorized users can view and reply to an existing Thread.</p>
        <br>
-       <p>These services provide the APIs for Moderators and authorized users to
+       <p>These services provide the APIs for Moderators and authorized users to 
        create, edit, and manage the conversations that happen in Synapse.</p>
        <br>
   - name: Docker Authorization Services
     description: |-
       These services allow Synapse to act as an authorization service for a Docker Registry.
        For more details see: https://github.com/docker/distribution/blob/master/docs/spec/auth/token.md
-
+       
        Authorization is either:
        <ul>
        <li>User name and password, included in the request as a Basic Authorization header</li>
@@ -253,9 +253,9 @@ tags:
   - name: Docker Registry Event Services
     description: |-
       These services process events from the Docker Registry.
-       They are separated from other Docker Controllers because the authorization
+       They are separated from other Docker Controllers because the authorization 
        is different, i.e. basic authorization using a key/value pair.
-
+       
        These services are not intended to be used by Synapse clients, only by
        the Docker registry.
   - name: Download List Services
@@ -302,7 +302,7 @@ tags:
       <p>
        The <a href="https://ga4gh.github.io/data-repository-service-schemas/preview/release/drs-1.2.0/docs/">
        Data Repository Service</a> API provides access to data objects in single, standard way regardless of
-       where they are stored and how they are managed. The data objects for which information can be fetched are
+       where they are stored and how they are managed. The data objects for which information can be fetched are 
        <a href="${org.sagebionetworks.repo.model.FileEntity}">FileEntity</a> and
        <a href="${org.sagebionetworks.repo.model.table.Dataset}">Dataset</a>.The data object that is downloaded is a file.
        </p>
@@ -354,6 +354,7 @@ tags:
        <li><a href="${org.sagebionetworks.repo.model.table.DatasetCollection}">DatasetCollection</a></li>
        <li><a href="${org.sagebionetworks.repo.model.table.MaterializedView}">MaterializedView</a></li>
        <li><a href="${org.sagebionetworks.repo.model.table.VirtualTable}">VirtualTable</a></li>
+       <li><a href="${org.sagebionetworks.repo.model.RecordSet}">RecordSet</a></li>
        </ul>
        </p>
        <p>
@@ -511,45 +512,45 @@ tags:
        Synapse. This framework provides tools for administrators to collect and analyze data models
        from Synapse users created for a specific goal or purpose.
        </p>
-
+        
        <p>
        The data model of the Evaluation API is built around around two primary objects:
        <ul>
        <li> <a href="${org.sagebionetworks.evaluation.model.Evaluation}">Evaluation</a>: The primary
        object representing a Synapse Evaluation. Access to Evaluations is governed by an <a href="${org.sagebionetworks.repo.model.AccessControlList}">Access Control
        List (ACL)</a>.
-       </li>
+       </li> 
        <li> <a href="${org.sagebionetworks.evaluation.model.Submission}">Submission</a>: A user
        in a Synapse Evaluation can submit a Synapse Entity as Submission to that Evaluation. Submission
        data is owned by the parent Evaluation, and is immutable.
        </ul>
        </p>
-
+       
        <p>
-       The data model includes additional objects to support scoring of Submissions and convenient data
+       The data model includes additional objects to support scoring of Submissions and convenient data 
        access:
        <ul>
        <li> <a href="${org.sagebionetworks.evaluation.model.SubmissionStatus}">SubmissionStatus</a>: An
        object used to track scoring information for a single Submission. This object is intended to be
        modified by the users (or test harnesses) managing the Evaluation.
-       </li>
-       <li> <a href="${org.sagebionetworks.evaluation.model.SubmissionBundle}">SubmissionBundle</a>:
+       </li> 
+       <li> <a href="${org.sagebionetworks.evaluation.model.SubmissionBundle}">SubmissionBundle</a>: 
        A convenience object to transport a Submission and its accompanying SubmissionStatus in a single
        web service call.
        </li>
-       <li> <a href="${org.sagebionetworks.repo.model.table.SubmissionView}">SubmissionView</a>:
-       A submission view can be created using the
+       <li> <a href="${org.sagebionetworks.repo.model.table.SubmissionView}">SubmissionView</a>: 
+       A submission view can be created using the 
        <a href="${org.sagebionetworks.repo.web.controller.EntityController}">Entity Services</a> providing
-       as scope a list of evaluation ids, in order to query the set of submissions through
+       as scope a list of evaluation ids, in order to query the set of submissions through 
        the <a href="${POST.entity.id.table.query.async.start}">Table Query Services</a>.
-       <a href="${org.sagebionetworks.repo.model.annotation.v2.Annotations}">Annotations</a> set in
-       the submissionAnnotations property of a <a href="${org.sagebionetworks.evaluation.model.SubmissionStatus}">SubmissionStatus</a>
+       <a href="${org.sagebionetworks.repo.model.annotation.v2.Annotations}">Annotations</a> set in 
+       the submissionAnnotations property of a <a href="${org.sagebionetworks.evaluation.model.SubmissionStatus}">SubmissionStatus</a> 
        can be exposed in the view.
        </li>
        </ul>
        </p>
-
-       The Evaluation API supports data access mechanisms to monitor Evaluation activity for on-demand
+       
+       The Evaluation API supports data access mechanisms to monitor Evaluation activity for on-demand 
        scoring and leaderboarding.
   - name: File Services
     description: |-
@@ -571,8 +572,8 @@ tags:
        </p>
        <p>
        The first task in multi-part upload is choosing a part size. The minimum part
-       size is 5 MB (1024*1024*5) and the maximum part size is 5 GB (1024*1024*1024*5).
-       Therefore, any file with a size less than or equal to 5 MB will have a single part and a partSize=5242880.
+       size is 5 MB (1024*1024*5) and the maximum part size is 5 GB (1024*1024*1024*5). 
+       Therefore, any file with a size less than or equal to 5 MB will have a single part and a partSize=5242880. 
        The maximum number of parts for a single file 10,000 parts. The following should be used
        to choose a part size:
        </p>
@@ -612,7 +613,7 @@ tags:
        using as the body of the request a <a href="${org.sagebionetworks.repo.model.file.MultipartUploadCopyRequest}">MultipartUploadCopyRequest</a>.
        </p>
        <p>
-       The part size allows to parallelize the copy in multiple sub-parts, the same limits of the upload applies to the copy (e.g. it is possible to copy
+       The part size allows to parallelize the copy in multiple sub-parts, the same limits of the upload applies to the copy (e.g. it is possible to copy 
        a file in a single part up to 5 GB). When initiating a copy we recommend to choose the part size as follows:
        </p>
        <p>
@@ -628,11 +629,11 @@ tags:
        /file/multipart/{uploadId}/presigned/url/batch</a>
        </li>
        <li>
-       For each pre-signed URL perform an HTTP PUT request with no body, the response of the previous endpoint contains a map of headers that are
+       For each pre-signed URL perform an HTTP PUT request with no body, the response of the previous endpoint contains a map of headers that are 
        signed with the URL, all of the headers MUST be included in the PUT request.
        </li>
        <li>Once the copy request is performed, add the part to the multi-part copy using: <a href="${PUT.file.multipart.uploadId.add.partNumber}">PUT
-       /file/multipart/{uploadId}/add/{partNumber}</a>.
+       /file/multipart/{uploadId}/add/{partNumber}</a>. 
        The value of the partMD5Hex parameter will be MD5 checksum returned in the response of the request sent to the pre-signed URL.
        </li>
        <li>
@@ -739,8 +740,8 @@ tags:
        referenced using the Organization's name, which is also the root of all
        schema $ids within the Organization.
        </p>
-
-
+       
+       
        <p>
        <b>Binding JSON schemas to Entities:</b>
        <ul>
@@ -757,8 +758,8 @@ tags:
        <li><a href="${POST.entity.id.schema.validation.invalid}">POST /entity/{id}/schema/validation/invalid</a></li>
        <li><a href="${GET.entity.id.derivedKeys}">GET /entity/{id}/derivedKeys</a></li>
        </ul>
-       </p>
-
+       </p>  
+       
        <b>Service Limits</b>
        <table border="1">
        <tr>
@@ -774,14 +775,14 @@ tags:
     description: https://sagebionetworks.jira.com/wiki/display/PLFM/Repository+Service+API#RepositoryServiceAPI-QueryAPI
   - name: Membership Invitation Services
     description: |-
-      The Membership Invitation Services create, retrieve and delete
+      The Membership Invitation Services create, retrieve and delete 
        membership invitations.  A membership invitation is created by a Team administrator
        to invite a Synapse user to join the Team.  Without the invitation it is not possible
        for an outside user to join.  For more on Teams, see
        <a href="#org.sagebionetworks.repo.web.controller.TeamController">Team Services</a>.
   - name: Membership Request Services
     description: |-
-      The Membership Request Services create, retrieve and delete
+      The Membership Request Services create, retrieve and delete 
        membership requests.  A membership request is created by a Synapse user
        to request admission to a Team.  Without the request it is not possible
        for a Team to admit the user.  For more on Teams, see
@@ -808,14 +809,14 @@ tags:
        a user can create or update the setting of a specific <a href="${org.sagebionetworks.repo.model.project.ProjectSettingsType}">type</a> for a project.
        </p>
        Currently supported settings for a project are:
-
+       
        <ul>
        <li><a href="${org.sagebionetworks.repo.model.project.UploadDestinationListSetting}">UploadDestinationListSetting</a>: Used to customize the storage location for files in a project</li>
        </ul>
 
        </p>
        The <a href="${POST.storageLocation}">POST /storageLocation</a> service is provided in order to create <a href="${org.sagebionetworks.repo.model.project.StorageLocationSetting}">StorageLocationSetting</a>. The id of a
-       <a href="${org.sagebionetworks.repo.model.project.StorageLocationSetting}">StorageLocationSetting</a> can then be set in the <b>locations</b> property of
+       <a href="${org.sagebionetworks.repo.model.project.StorageLocationSetting}">StorageLocationSetting</a> can then be set in the <b>locations</b> property of 
        the <a href="${org.sagebionetworks.repo.model.project.UploadDestinationListSetting}">UploadDestinationListSetting</a>.
        </p>
        When uploading a file the id of the default <a href="${org.sagebionetworks.repo.model.project.StorageLocationSetting}">StorageLocationSetting</a> to be used on a folder can be retrieved
@@ -875,7 +876,7 @@ tags:
        users. Use the <a href="${GET.column}">GET /column</a> services to list all
        of the existing ColumnModels that are currently in use.
        </p>
-
+       
        Once the columns for a TableEntity have been created and assigned to the
        TableEntity, rows can be added to the table using
        <a href="${POST.entity.id.table.transaction.async.start}">POST
@@ -986,17 +987,17 @@ tags:
        </table>
   - name: Team Services
     description: |-
-      Teams are groups of users.  Teams can be granted access permissions to projects,
+      Teams are groups of users.  Teams can be granted access permissions to projects, 
        folders and files, and share other resources by adding them to
        <a href="${org.sagebionetworks.repo.model.AccessControlList}">Access Control
        Lists (ACLs)</a>.  Any authenticated Synapse user
        may create a Team, for which they become an administrator.  Team
        administrators may:
        <ul>
-       <li> invite other users to join the Team,
-       <li> accept membership requests from users wishing to join the Team,
+       <li> invite other users to join the Team, 
+       <li> accept membership requests from users wishing to join the Team, 
        <li> grant or revoke administrative control to Team members,
-       <li> remove a user from the Team.
+       <li> remove a user from the Team.  
        </ul>
        <br>
        Other Synapse users may:
@@ -1022,10 +1023,10 @@ tags:
     description: |-
       Provides APIs to manage webhooks that are triggered by synapse events.
        <p>
-       A webhook can specify the id of a synapse entity to receive events for. For entities that represent a container (folder and project),
+       A webhook can specify the id of a synapse entity to receive events for. For entities that represent a container (folder and project), 
        matching events are published to the webhook endpoint for any entity in their hierarchy.
        <p>
-       Before events are published to the endpoint, the webhook needs to be verified. A special request is sent to the webhook endpoint
+       Before events are published to the endpoint, the webhook needs to be verified. A special request is sent to the webhook endpoint 
        containing a verification code that can be submitted in the body of the <a href="${POST.webhook.webhookId.verify}">POST /webhook/{webhookId}/verify</a> request.
        <h6>Request Format</h6>
        There are two types of requests that can be sent to an endpoint:
@@ -1047,29 +1048,29 @@ tags:
        <li><b>Authorization</b>: Set with the Bearer prefix, followed by an authentication token (See below)</li>
        </ul>
        <h6>Request Handling</h6>
-       A request to an endpoint is sent at least once and retried for a maximum of 3 times. The endpoint needs to provide a response within 2 seconds in order for the request to be considered successful,
-       otherwise the request is retried. Valid HTTP response codes are:
+       A request to an endpoint is sent at least once and retried for a maximum of 3 times. The endpoint needs to provide a response within 2 seconds in order for the request to be considered successful, 
+       otherwise the request is retried. Valid HTTP response codes are: 
        <ul>
-       <li>200 (OK)</li>
+       <li>200 (OK)</li> 
        <li>201 (CREATED)</li>
        <li>202 (ACCEPTED)</li>
-       <li>204 (NO CONTENT)</li>
+       <li>204 (NO CONTENT)</li> 
        </ul>
-       The following response codes are considered for retrying:
+       The following response codes are considered for retrying: 
        <ul>
        <li>429 (TOO MANY REQUESTS)</li>
        <li>500 (INTERNAL SERVER ERROR)</li>
        <li>502 (BAD GATEWAY)</li>
        <li>503 (SERVICE UNAVAILABLE)</li>
-       <li>504 (GATEWAY TIMEOUT)</li>
+       <li>504 (GATEWAY TIMEOUT)</li> 
        </ul>
-       Any other response code is considered a failed delivery and won't be retried. If a webhook endpoint consistently fails to respond to requests, it will eventually be disabled
+       Any other response code is considered a failed delivery and won't be retried. If a webhook endpoint consistently fails to respond to requests, it will eventually be disabled 
        and the <a href="${org.sagebionetworks.repo.model.webhook.WebhookVerificationStatus}">verification status</a> of the webhook will be set to REVOKED and will need to be re-verified.
        <h6>Limits</h6>
        Each user is limited to a maximum of 25 webhooks. The webhook endpoint is checked against a white list of allowed domain patterns, currently only the AWS Api Gateway <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-call-api.html">execute-api</a> is allowed.
        For adding a new domain exception you can submit a request to the <a href="https://sagebionetworks.jira.com/servicedesk/customer/portal/9">Synapse Service Desk</a>.
        <h6>Authentication</h6>
-       By default each request includes a signed JSON Web Token (JWT) in the <b>Authorization</b> header as a bearer token. The token is signed with a JSON Web Key (JWK) and
+       By default each request includes a signed JSON Web Token (JWT) in the <b>Authorization</b> header as a bearer token. The token is signed with a JSON Web Key (JWK) and 
        can be verified using the public JWK id specified in the header of the JWT. The public keys are published under the "well-known" discovery document of the issuer (See below).
        <p>
        The JWT will contain a set of <a href="https://www.iana.org/assignments/jwt/jwt.xhtml#claims">standard claims</a> that can be used to validate the token:
@@ -1103,7 +1104,7 @@ tags:
        WikiPage.attachmentFileHandleIds list. See <a href="https://www.synapse.org">www.synapse.org</a> for details on the
        supported markdown syntax.
        </p>
-
+       
        <p>
        WikiPages are not stand-alone objects, instead they are a component of
        another object such as an Entity or Evaluation. For example, when a WikiPage
@@ -1135,16 +1136,16 @@ tags:
        deleting (CRUD) the WikiPage model objects.
        </p>
        <p>
-       WikiPages are composed of two major parts; a file that contains the markdown text
+       WikiPages are composed of two major parts; a file that contains the markdown text 
        and a list of file attachments. For example, to embed an image from an end-user's
        machine into a WikiPage, the image file must first be uploaded to Synapse as <a href="${org.sagebionetworks.repo.model.file.FileHandle}">FileHandle</a> (see
        <a href="${org.sagebionetworks.file.controller.UploadController}">File
        Services</a>). The FileHandle ID can then be added to a
        WikiPage.attachmentFileHandleIds list. See <a href="https://www.synapse.org">www.synapse.org</a> for details on the
        supported markdown syntax. The markdown text is similarly uploaded as a
-       FileHandle and its FileHandle ID is tracked by the WikiPage.
+       FileHandle and its FileHandle ID is tracked by the WikiPage. 
        </p>
-
+       
        <p>
        WikiPages are not stand-alone objects, instead they are a component of
        another object such as an Entity or Evaluation. For example, when a WikiPage
@@ -1158,10 +1159,10 @@ tags:
        be used to construct a full wiki hierarchy tree for that owner.
        </p>
        <p>
-       To view a timeline of changes made to a WikiPage, use the
+       To view a timeline of changes made to a WikiPage, use the 
        <a href="${GET.entity.ownerId.wiki2.wikiId.wikihistory}">GET/entity/{ownerId}
        /wiki2/{wikiId}/wikihistory</a> method. The returned list of <a href="${org.sagebionetworks.repo.model.v2.wiki.V2WikiHistorySnapshot}">V2WikiHistorySnapshots
-       </a> contain information about who modified the WikiPage and when the changes were made.
+       </a> contain information about who modified the WikiPage and when the changes were made. 
        </p>
        <p>
        Note: WikiPages can be nested to created a hierarchy of sub-pages. However,
@@ -1225,7 +1226,7 @@ paths:
           in: query
           required: false
           description: |-
-            returned along with a page of results, this is passed to
+            returned along with a page of results, this is passed to 
              the server to retrieve the next page.
           schema:
             type: string
@@ -1346,6 +1347,52 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/org.sagebionetworks.repo.model.oauth.OAuthClientVerificationPrecheckResult'
+  /auth/v1/oauth2/client/{id}/acl:
+    get:
+      tags:
+        - OpenID Connect Services
+      operationId: get-/auth/v1/oauth2/client/{id}/acl
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: the ID of the OpenID Client of interest
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.AccessControlList'
+    put:
+      tags:
+        - OpenID Connect Services
+      operationId: put-/auth/v1/oauth2/client/{id}/acl
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.AccessControlList'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.AccessControlList'
   /auth/v1/oauth2/description:
     post:
       tags:
@@ -2037,7 +2084,7 @@ paths:
       responses:
         '201':
           description: |-
-            The generated TOTP secret that can be used in the user authenticator application, the secret is not active.
+            The generated TOTP secret that can be used in the user authenticator application, the secret is not active. 
              To use this secret for 2FA a ,<a href="${POST.2fa}">,POST /2fa,</a>, must be performed that includes the secret id and a totp code.
           content:
             application/json:
@@ -3788,7 +3835,7 @@ paths:
           in: query
           required: false
           description: |-
-            a prefix of the Team name, or a prefix of any sub-string in the name preceded by a space.
+            a prefix of the Team name, or a prefix of any sub-string in the name preceded by a space.  
              If omitted, all Teams are returned.
           schema:
             type: string
@@ -3947,8 +3994,8 @@ paths:
           in: query
           required: false
           description: |-
-            the portal prefix for one-click email unsubscription.
-             A signed, serialized token is appended to create the complete URL:
+            the portal prefix for one-click email unsubscription.  
+             A signed, serialized token is appended to create the complete URL: 
              ,<,ahref="${org.sagebionetworks.repo.model.message.NotificationSettingsSignedToken}",>,NotificationSettingsSignedToken,</a>
           schema:
             type: string
@@ -7775,6 +7822,47 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.ListGridSessionsResponse'
+  /repo/v1/grid/download/csv/async/start:
+    post:
+      tags:
+        - Grid Services
+      operationId: post-/repo/v1/grid/download/csv/async/start
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.DownloadFromGridRequest'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.asynch.AsyncJobId'
+  /repo/v1/grid/download/csv/async/get/{asyncToken}:
+    get:
+      tags:
+        - Grid Services
+      operationId: get-/repo/v1/grid/download/csv/async/get/{asyncToken}
+      parameters:
+        - name: asyncToken
+          in: path
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.DownloadFromGridResult'
   /repo/v1/userProfile:
     get:
       tags:
@@ -7992,7 +8080,7 @@ paths:
           in: query
           required: false
           description: |-
-            Restrict the results to a type of principal.
+            Restrict the results to a type of principal. 
                         Available options: ,<a href="${org.sagebionetworks.repo.model.principal.TypeFilter}">,TypeFilter,</a>,.
           schema:
             $ref: '#/components/schemas/org.sagebionetworks.repo.model.principal.TypeFilter'
@@ -10421,184 +10509,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/org.sagebionetworks.repo.model.limits.ProjectStorageLocationLimit'
-  /repo/v1/agent/session:
-    post:
-      tags:
-        - Agent Chat Services
-      operationId: post-/repo/v1/agent/session
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.CreateAgentSessionRequest'
-        required: true
-      security:
-        - bearerAuth: []
-      responses:
-        '201':
-          description: Auto-generated description
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentSession'
-  /repo/v1/agent/session/{sessionId}:
-    get:
-      tags:
-        - Agent Chat Services
-      operationId: get-/repo/v1/agent/session/{sessionId}
-      parameters:
-        - name: sessionId
-          in: path
-          required: true
-          schema:
-            type: string
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Auto-generated description
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentSession'
-    put:
-      tags:
-        - Agent Chat Services
-      operationId: put-/repo/v1/agent/session/{sessionId}
-      parameters:
-        - name: sessionId
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.UpdateAgentSessionRequest'
-        required: true
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Auto-generated description
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentSession'
-  /repo/v1/agent/chat/async/start:
-    post:
-      tags:
-        - Agent Chat Services
-      operationId: post-/repo/v1/agent/chat/async/start
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentChatRequest'
-        required: true
-      security:
-        - bearerAuth: []
-      responses:
-        '201':
-          description: Auto-generated description
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.asynch.AsyncJobId'
-  /repo/v1/agent/chat/async/get/{asyncToken}:
-    get:
-      tags:
-        - Agent Chat Services
-      operationId: get-/repo/v1/agent/chat/async/get/{asyncToken}
-      parameters:
-        - name: asyncToken
-          in: path
-          required: true
-          schema:
-            type: string
-      security:
-        - bearerAuth: []
-      responses:
-        '201':
-          description: Auto-generated description
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentChatResponse'
-  /repo/v1/agent/chat/trace/{jobId}:
-    post:
-      tags:
-        - Agent Chat Services
-      operationId: post-/repo/v1/agent/chat/trace/{jobId}
-      parameters:
-        - name: jobId
-          in: path
-          required: true
-          description: |-
-            - The jobID of the asynchronous job started for an
-                            AgentChatRequest.
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.TraceEventsRequest'
-        required: true
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Auto-generated description
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.TraceEventsResponse'
-  /repo/v1/agent/registration:
-    put:
-      tags:
-        - Agent Chat Services
-      operationId: put-/repo/v1/agent/registration
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentRegistrationRequest'
-        required: true
-      security:
-        - bearerAuth: []
-      responses:
-        '201':
-          description: Auto-generated description
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentRegistration'
-  /repo/v1/agent/registration/{agentRegistrationId}:
-    get:
-      tags:
-        - Agent Chat Services
-      operationId: get-/repo/v1/agent/registration/{agentRegistrationId}
-      parameters:
-        - name: agentRegistrationId
-          in: path
-          required: true
-          description: The Synapse issued agent registration id.
-          schema:
-            type: string
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Auto-generated description
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentRegistration'
   /repo/v1/challenge:
     post:
       tags:
@@ -10744,8 +10654,8 @@ paths:
           in: query
           required: false
           description: |-
-            If affiliated=true, return just participants affiliated with some
-             registered Team.  If false, return those not affiliated with any registered Team.
+            If affiliated=true, return just participants affiliated with some 
+             registered Team.  If false, return those not affiliated with any registered Team.  
              If omitted return all participants.
           schema:
             type: boolean
@@ -10930,6 +10840,184 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/org.sagebionetworks.repo.model.PaginatedIds'
+  /repo/v1/agent/session:
+    post:
+      tags:
+        - Agent Chat Services
+      operationId: post-/repo/v1/agent/session
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.CreateAgentSessionRequest'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentSession'
+  /repo/v1/agent/session/{sessionId}:
+    get:
+      tags:
+        - Agent Chat Services
+      operationId: get-/repo/v1/agent/session/{sessionId}
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentSession'
+    put:
+      tags:
+        - Agent Chat Services
+      operationId: put-/repo/v1/agent/session/{sessionId}
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.UpdateAgentSessionRequest'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentSession'
+  /repo/v1/agent/chat/async/start:
+    post:
+      tags:
+        - Agent Chat Services
+      operationId: post-/repo/v1/agent/chat/async/start
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentChatRequest'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.asynch.AsyncJobId'
+  /repo/v1/agent/chat/async/get/{asyncToken}:
+    get:
+      tags:
+        - Agent Chat Services
+      operationId: get-/repo/v1/agent/chat/async/get/{asyncToken}
+      parameters:
+        - name: asyncToken
+          in: path
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentChatResponse'
+  /repo/v1/agent/chat/trace/{jobId}:
+    post:
+      tags:
+        - Agent Chat Services
+      operationId: post-/repo/v1/agent/chat/trace/{jobId}
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          description: |-
+            - The jobID of the asynchronous job started for an
+                            AgentChatRequest.
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.TraceEventsRequest'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.TraceEventsResponse'
+  /repo/v1/agent/registration:
+    put:
+      tags:
+        - Agent Chat Services
+      operationId: put-/repo/v1/agent/registration
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentRegistrationRequest'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentRegistration'
+  /repo/v1/agent/registration/{agentRegistrationId}:
+    get:
+      tags:
+        - Agent Chat Services
+      operationId: get-/repo/v1/agent/registration/{agentRegistrationId}
+      parameters:
+        - name: agentRegistrationId
+          in: path
+          required: true
+          description: The Synapse issued agent registration id.
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.agent.AgentRegistration'
   /repo/v1/message:
     post:
       tags:
@@ -11529,7 +11617,7 @@ paths:
                                    Not required for a submission view. For an entity view
                                    following are the possible types: (type=,<mask_hex>,):
                                    File=0x01, Project=0x02, Table=0x04, Folder=0x08,
-                                   View=0x10, Docker=0x20, SubmissionView=0x40, Dataset=0x80,
+                                   View=0x10, Docker=0x20, SubmissionView=0x40, Dataset=0x80, 
                                    DatasetCollection=0x100, MaterializedView=0x200).
           schema:
             type: number
@@ -11928,7 +12016,7 @@ paths:
       responses:
         '201':
           description: |-
-            An object containing the id of the asynchronous job whose results can be fetched using the
+            An object containing the id of the asynchronous job whose results can be fetched using the 
              ,<a href="${GET.column.view.scope.async.get.asyncToken}">,GET /column/view/scope/async/get,</a>, service
           content:
             application/json:
@@ -15035,6 +15123,7 @@ components:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.DatasetCollection'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.EntityView'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.VirtualTable'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.RecordSet'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.SelfSignAccessRequirement'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.ACTAccessRequirement'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.FileEntity'
@@ -16003,6 +16092,14 @@ components:
             $ref: '#/components/schemas/org.sagebionetworks.repo.model.EntityRef'
             description: Represents a reference to the id and version of an entity to be used in collections.
           description: For Datasets and Dataset Collections, the list of entity references the define the view.
+        upsertKey:
+          type: array
+          items:
+            type: string
+          description: For RecordSet, one or more column names that define this upsert key.
+        csvDescriptor:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.CsvTableDescriptor'
+          description: The description of a csv for upload or download.
         reference:
           $ref: '#/components/schemas/org.sagebionetworks.repo.model.Reference'
           description: JSON schema for Reference POJO
@@ -17001,20 +17098,6 @@ components:
         - concreteType
       discriminator:
         propertyName: concreteType
-    org.sagebionetworks.repo.model.agent.AgentChatResponse:
-      type: object
-      properties:
-        concreteType:
-          type: string
-          enum:
-            - org.sagebionetworks.repo.model.agent.AgentChatResponse
-        sessionId:
-          type: string
-        responseText:
-          type: string
-      description: The response to an agent chat request.
-      required:
-        - concreteType
     org.sagebionetworks.repo.model.audit.AccessRecord:
       type: object
       properties:
@@ -17070,6 +17153,20 @@ components:
         authenticationMethod:
           type: string
       description: Data recored from a single web-services methods.
+    org.sagebionetworks.repo.model.agent.AgentChatResponse:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          enum:
+            - org.sagebionetworks.repo.model.agent.AgentChatResponse
+        sessionId:
+          type: string
+        responseText:
+          type: string
+      description: The response to an agent chat request.
+      required:
+        - concreteType
     org.sagebionetworks.repo.model.table.FacetColumnRequest:
       type: object
       properties:
@@ -18189,6 +18286,7 @@ components:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.file.FileHandleRestoreRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.QueryNextPageToken'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.download.DownloadListManifestRequest'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.DownloadFromGridRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.report.DownloadStorageReportRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.DownloadPFBRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.UploadToTablePreviewRequest'
@@ -18685,6 +18783,55 @@ components:
         - AVAILABLE
         - UNLINKED
         - ARCHIVED
+    org.sagebionetworks.repo.model.RecordSet:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        id:
+          type: string
+        etag:
+          type: string
+        createdOn:
+          type: string
+        modifiedOn:
+          type: string
+        createdBy:
+          type: string
+        modifiedBy:
+          type: string
+        parentId:
+          type: string
+        concreteType:
+          type: string
+          enum:
+            - org.sagebionetworks.repo.model.RecordSet
+        versionNumber:
+          type: integer
+          format: int32
+        versionLabel:
+          type: string
+        versionComment:
+          type: string
+        isLatestVersion:
+          type: boolean
+        dataFileHandleId:
+          type: string
+        upsertKey:
+          type: array
+          items:
+            type: string
+          description: One or more column names that define this upsert key for this set.  This key is used to determine if a new record should be treated as an update or an insert.
+        csvDescriptor:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.CsvTableDescriptor'
+          description: The description of a csv for upload or download.
+        fileNameOverride:
+          type: string
+      description: Captures record-based metadata as a special type of CSV. The record set content can be curated using the grid services.
+      required:
+        - concreteType
     org.sagebionetworks.repo.model.EntityChildrenResponse:
       type: object
       properties:
@@ -21024,6 +21171,7 @@ components:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.schema.GetValidationSchemaResponse'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.migration.AsyncMigrationResponse'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.report.DownloadStorageReportResponse'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.DownloadFromGridResult'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.download.AddToDownloadListResponse'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.QueryResultBundle'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.UploadToTablePreviewResult'
@@ -21805,6 +21953,29 @@ components:
           description: A generic SQL expression.
         direction:
           type: string
+    org.sagebionetworks.repo.model.grid.DownloadFromGridRequest:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          enum:
+            - org.sagebionetworks.repo.model.grid.DownloadFromGridRequest
+        sessionId:
+          type: string
+        writeHeader:
+          type: boolean
+        includeRowIdAndRowVersion:
+          type: boolean
+        includeEtag:
+          type: boolean
+        csvTableDescriptor:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.CsvTableDescriptor'
+          description: The description of a csv for upload or download.
+        fileName:
+          type: string
+      description: A CSV Grid download request.
+      required:
+        - concreteType
     org.sagebionetworks.repo.model.schema.JsonSchemaVersionInfo:
       type: object
       properties:
@@ -22251,15 +22422,6 @@ components:
         errorMessage:
           type: string
       description: Response from adding a part to multi-part upload or copy.
-    org.sagebionetworks.repo.model.agent.TraceEventsRequest:
-      type: object
-      properties:
-        jobId:
-          type: string
-        newerThanTimestamp:
-          type: integer
-          format: int32
-      description: A request to get a single page of trace events for a specified asynchronous job.
     org.sagebionetworks.repo.model.principal.AccountCreationToken:
       type: object
       properties:
@@ -22269,6 +22431,15 @@ components:
         encodedMembershipInvtnSignedToken:
           type: string
       description: Information needed to start the process of creating a new account.
+    org.sagebionetworks.repo.model.agent.TraceEventsRequest:
+      type: object
+      properties:
+        jobId:
+          type: string
+        newerThanTimestamp:
+          type: integer
+          format: int32
+      description: A request to get a single page of trace events for a specified asynchronous job.
     org.sagebionetworks.repo.model.search.query.SearchFieldName:
       type: string
       enum:
@@ -22782,6 +22953,7 @@ components:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.DatasetCollection'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.EntityView'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.VirtualTable'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.RecordSet'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.Preview'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.Link'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.FileEntity'
@@ -22917,6 +23089,7 @@ components:
         - PROJECT_STORAGE_EVENT
         - REPLICATED_EVENT
         - PORTAL
+        - OAUTH_CLIENT
     org.sagebionetworks.repo.model.InviteeVerificationSignedToken:
       type: object
       properties:
@@ -25253,6 +25426,20 @@ components:
         - FAILED
         - REVOKED
         - VERIFIED
+    org.sagebionetworks.repo.model.grid.DownloadFromGridResult:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          enum:
+            - org.sagebionetworks.repo.model.grid.DownloadFromGridResult
+        sessionId:
+          type: string
+        resultsFileHandleId:
+          type: string
+      description: The response body of an asynchronous CSV grid download job.
+      required:
+        - concreteType
     org.sagebionetworks.repo.model.annotation.v2.Keys:
       type: object
       properties:
@@ -25407,6 +25594,7 @@ components:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.EntityView'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.VirtualTable'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.MaterializedView'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.RecordSet'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.FileEntity'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.Dataset'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.TableEntity'
@@ -25553,6 +25741,7 @@ components:
         - datasetcollection
         - materializedview
         - virtualtable
+        - recordset
     org.sagebionetworks.evaluation.model.MemberSubmissionEligibility:
       type: object
       properties:
@@ -25730,6 +25919,14 @@ components:
             $ref: '#/components/schemas/org.sagebionetworks.repo.model.EntityRef'
             description: Represents a reference to the id and version of an entity to be used in collections.
           description: For Datasets and Dataset Collections, the list of entity references the define the view.
+        upsertKey:
+          type: array
+          items:
+            type: string
+          description: For RecordSet, one or more column names that define this upsert key.
+        csvDescriptor:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.CsvTableDescriptor'
+          description: The description of a csv for upload or download.
         reference:
           $ref: '#/components/schemas/org.sagebionetworks.repo.model.Reference'
           description: JSON schema for Reference POJO
