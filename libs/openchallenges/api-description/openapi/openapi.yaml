@@ -821,14 +821,12 @@ components:
             read:org: Read organizations
             write:org: Create/update organizations
             delete:org: Delete organizations
-            admin:org: Administer organizations
         clientCredentials:
           tokenUrl: https://openchallenges-auth-service:8087/oauth2/token
           scopes:
             read:org: Read organizations
             write:org: Create/update organizations
             delete:org: Delete organizations
-            admin:org: Administer organizations
     jwtBearer:
       type: http
       scheme: bearer
