@@ -28,8 +28,8 @@ INSERT INTO oauth2_registered_client (
     'http://127.0.0.1:8080/login/oauth2/code/openchallenges-oidc,http://127.0.0.1:8080/authorized',
     'http://127.0.0.1:8080/logged-out',
     'openid,profile,email,user:profile,user:email,user:keys,read:org,write:org,delete:org',
-    '{"@class":"java.util.Map","settings.client.require-proof-key":true,"settings.client.require-authorization-consent":true}',
-    '{"@class":"java.util.Map","settings.token.reuse-refresh-tokens":false,"settings.token.id-token-signature-algorithm":["org.springframework.security.oauth2.jose.jws.SignatureAlgorithm","RS256"],"settings.token.access-token-time-to-live":["java.time.Duration",300.000000000],"settings.token.access-token-format":{"@class":"org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat","value":"self-contained"},"settings.token.refresh-token-time-to-live":["java.time.Duration",3600.000000000],"settings.token.authorization-code-time-to-live":["java.time.Duration",300.000000000],"settings.token.device-code-time-to-live":["java.time.Duration",300.000000000]}'
+    '{"@class":"java.util.HashMap","settings.client.require-proof-key":true,"settings.client.require-authorization-consent":true}',
+    '{"@class":"java.util.HashMap","settings.token.access-token-time-to-live":["java.time.Duration",300.000000000],"settings.token.refresh-token-time-to-live":["java.time.Duration",3600.000000000]}'
 );
 
 -- Create OAuth2 clients for existing API keys
@@ -91,8 +91,8 @@ BEGIN
             NULL,  -- No redirect URIs for API keys
             NULL,  -- No post logout redirect URIs for API keys
             role_scopes,
-            '{"@class":"java.util.Map","settings.client.require-proof-key":false,"settings.client.require-authorization-consent":false}',
-            '{"@class":"java.util.Map","settings.token.reuse-refresh-tokens":false,"settings.token.access-token-time-to-live":["java.time.Duration",900.000000000],"settings.token.access-token-format":{"@class":"org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat","value":"self-contained"}}'
+            '{"@class":"java.util.HashMap","settings.client.require-proof-key":false,"settings.client.require-authorization-consent":false}',
+            '{"@class":"java.util.HashMap","settings.token.access-token-time-to-live":["java.time.Duration",900.000000000],"settings.token.refresh-token-time-to-live":["java.time.Duration",3600.000000000]}'
         );
         
         -- Update api_key record with client_id and scopes
