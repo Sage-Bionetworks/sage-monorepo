@@ -1,8 +1,5 @@
 package org.sagebionetworks.openchallenges.organization.service.configuration;
 
-import org.sagebionetworks.openchallenges.organization.service.security.ApiKeyAuthenticationFilter;
-import org.sagebionetworks.openchallenges.organization.service.security.JwtBearerAuthenticationFilter;
-import org.sagebionetworks.openchallenges.organization.service.security.TrustedHeaderAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,78 +7,76 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Security configuration for the Organization Service as an OAuth2 Resource Server.
+ * Validates JWTs directly and extracts scopes for authorization.
+ */
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(jsr250Enabled = true)
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 
-  @Value("${openchallenges.security.mode:trusted-headers}")
-  private String securityMode;
-
-  @Bean
-  public TrustedHeaderAuthenticationFilter trustedHeaderAuthenticationFilter() {
-    return new TrustedHeaderAuthenticationFilter();
-  }
-
-  @Bean
-  public ApiKeyAuthenticationFilter apiKeyAuthenticationFilter() {
-    return new ApiKeyAuthenticationFilter();
-  }
-
-  @Bean
-  public JwtBearerAuthenticationFilter jwtBearerAuthenticationFilter() {
-    return new JwtBearerAuthenticationFilter();
-  }
+  @Value("${openchallenges.auth.jwk-set-uri:http://openchallenges-auth-service:8087/.well-known/jwks.json}")
+  private String jwkSetUri;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http
-      .csrf(csrf -> csrf.disable())
-      .cors(cors -> cors.disable())
-      .authorizeHttpRequests(auth ->
-        auth
-          // Public endpoints
-          .requestMatchers("/actuator/**")
-          .permitAll()
-          .requestMatchers("/swagger-ui/**", "/v3/api-docs/**")
-          .permitAll()
-          .requestMatchers(HttpMethod.GET, "/v1/organizations/**")
-          .permitAll()
-          .requestMatchers(HttpMethod.POST, "/v1/organizations/search")
-          .permitAll()
-          // Protected endpoints - require authentication
-          .requestMatchers(HttpMethod.DELETE, "/v1/organizations/**")
-          .authenticated()
-          .requestMatchers(HttpMethod.POST, "/v1/organizations")
-          .authenticated()
-          .requestMatchers(HttpMethod.PUT, "/v1/organizations/**")
-          .authenticated()
-          .requestMatchers(HttpMethod.DELETE, "/v1/organizations/*/participations/*/role/*")
-          .authenticated()
-          .requestMatchers(HttpMethod.POST, "/v1/organizations/*/participations")
-          .authenticated()
-          .anyRequest()
-          .authenticated()
-      );
+    return http
+        .csrf(csrf -> csrf.disable())
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authorizeHttpRequests(auth -> auth
+            // Health checks always public
+            .requestMatchers("/actuator/**").permitAll()
+            .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+            
+            // Organization read operations - require read:org scope
+            .requestMatchers(HttpMethod.GET, "/v1/organizations/**").hasAuthority("SCOPE_read:org")
+            .requestMatchers(HttpMethod.POST, "/v1/organizations/search").hasAuthority("SCOPE_read:org")
+            
+            // Organization write operations - require write:org scope  
+            .requestMatchers(HttpMethod.POST, "/v1/organizations").hasAuthority("SCOPE_write:org")
+            .requestMatchers(HttpMethod.PUT, "/v1/organizations/**").hasAuthority("SCOPE_write:org")
+            .requestMatchers(HttpMethod.POST, "/v1/organizations/*/participations").hasAuthority("SCOPE_write:org")
+            
+            // Organization delete operations - require delete:org scope
+            .requestMatchers(HttpMethod.DELETE, "/v1/organizations/**").hasAuthority("SCOPE_delete:org")
+            .requestMatchers(HttpMethod.DELETE, "/v1/organizations/*/participations/*/role/*").hasAuthority("SCOPE_delete:org")
+            
+            // All other requests require authentication
+            .anyRequest().authenticated()
+        )
+        .oauth2ResourceServer(oauth2 -> oauth2
+            .jwt(jwt -> jwt
+                .decoder(jwtDecoder())
+                .jwtAuthenticationConverter(jwtAuthenticationConverter())
+            )
+        )
+        .build();
+  }
 
-    // Configure authentication filters based on security mode
-    if ("trusted-headers".equals(securityMode)) {
-      // API Gateway mode - trust headers from gateway
-      http.addFilterBefore(trustedHeaderAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-    } else if ("direct".equals(securityMode)) {
-      // Direct mode - validate tokens/keys directly (placeholder implementations)
-      http.addFilterBefore(jwtBearerAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-      http.addFilterAfter(apiKeyAuthenticationFilter(), JwtBearerAuthenticationFilter.class);
-    } else {
-      // Default to trusted headers mode
-      http.addFilterBefore(trustedHeaderAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-    }
+  @Bean
+  public JwtDecoder jwtDecoder() {
+    return NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
+  }
 
-    http.httpBasic(httpBasic -> {});
+  @Bean
+  public JwtAuthenticationConverter jwtAuthenticationConverter() {
+    JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
+    
+    // Extract scopes from the "scp" claim (preferred) or "scope" claim (fallback)
+    authoritiesConverter.setAuthoritiesClaimName("scp");
+    authoritiesConverter.setAuthorityPrefix("SCOPE_");
 
-    return http.build();
+    JwtAuthenticationConverter authenticationConverter = new JwtAuthenticationConverter();
+    authenticationConverter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
+    
+    return authenticationConverter;
   }
 }

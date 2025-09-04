@@ -1,0 +1,24 @@
+post:
+  tags:
+    - Authentication
+  summary: Exchange API key for JWT token
+  description: Internal endpoint to exchange valid API keys for JWT tokens (used by API Gateway)
+  operationId: exchangeApiKeyForJwt
+  x-audience: [internal]
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../../components/schemas/ExchangeApiKeyForJwtRequest.yaml
+  responses:
+    '200':
+      description: API key successfully exchanged for JWT token
+      content:
+        application/json:
+          schema:
+            $ref: ../../../components/schemas/ExchangeApiKeyForJwtResponse.yaml
+    '401':
+      $ref: ../../../components/responses/Unauthorized.yaml
+    '500':
+      $ref: ../../../components/responses/InternalServerError.yaml
