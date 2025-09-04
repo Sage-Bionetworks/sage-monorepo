@@ -10,9 +10,11 @@ import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2RefreshToken;
 import org.springframework.security.oauth2.core.OAuth2Token;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
+import org.springframework.security.oauth2.server.authorization.context.AuthorizationServerContext;
 import org.springframework.security.oauth2.server.authorization.token.DefaultOAuth2TokenContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenGenerator;
@@ -33,6 +35,7 @@ public class OAuth2TokenGeneratorService {
 
     private final OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator;
     private final RegisteredClientRepository registeredClientRepository;
+    private final AuthorizationServerContext authorizationServerContext;
 
     /**
      * Generate an access token for the given user using OAuth2 Authorization Server.
@@ -48,29 +51,47 @@ public class OAuth2TokenGeneratorService {
         if (registeredClient == null) {
             throw new RuntimeException("Registered client 'openchallenges-client' not found");
         }
+        log.debug("Found registered client: {}", registeredClient.getClientId());
 
         // Create authentication object for the user
         Authentication authentication = createUserAuthentication(user);
+        log.debug("Created authentication for user: {}", authentication.getName());
 
-        // Build OAuth2 token context
+        // Build OAuth2 token context - use CLIENT_CREDENTIALS for service-to-service after external auth
         OAuth2TokenContext tokenContext = DefaultOAuth2TokenContext.builder()
                 .registeredClient(registeredClient)
                 .principal(authentication)
+                .authorizationServerContext(authorizationServerContext)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
                 .authorizedScopes(registeredClient.getScopes())
                 .tokenType(OAuth2TokenType.ACCESS_TOKEN)
                 .authorizationGrant(authentication)
                 .build();
 
+        log.debug("Built token context with grant type: {}", AuthorizationGrantType.CLIENT_CREDENTIALS);
+
         // Generate the token
         OAuth2Token token = tokenGenerator.generate(tokenContext);
-        if (token == null || !(token instanceof OAuth2AccessToken)) {
+        log.debug("Token generator returned: {}", token != null ? token.getClass().getSimpleName() : "null");
+        
+        if (token == null) {
             throw new RuntimeException("Failed to generate OAuth2 access token");
         }
 
-        OAuth2AccessToken accessToken = (OAuth2AccessToken) token;
+        // Handle both JWT and OAuth2AccessToken cases
+        String tokenValue;
+        if (token instanceof OAuth2AccessToken) {
+            OAuth2AccessToken accessToken = (OAuth2AccessToken) token;
+            tokenValue = accessToken.getTokenValue();
+        } else if (token instanceof Jwt) {
+            Jwt jwt = (Jwt) token;
+            tokenValue = jwt.getTokenValue();
+        } else {
+            throw new RuntimeException("Unexpected token type: " + token.getClass().getSimpleName());
+        }
+
         log.debug("Successfully generated OAuth2 access token for user: {}", user.getUsername());
-        return accessToken.getTokenValue();
+        return tokenValue;
     }
 
     /**
@@ -87,29 +108,47 @@ public class OAuth2TokenGeneratorService {
         if (registeredClient == null) {
             throw new RuntimeException("Registered client 'openchallenges-client' not found");
         }
+        log.debug("Found registered client for refresh token: {}", registeredClient.getClientId());
 
         // Create authentication object for the user
         Authentication authentication = createUserAuthentication(user);
+        log.debug("Created authentication for refresh token: {}", authentication.getName());
 
-        // Build OAuth2 token context for refresh token
+        // Build OAuth2 token context for refresh token - use CLIENT_CREDENTIALS
         OAuth2TokenContext tokenContext = DefaultOAuth2TokenContext.builder()
                 .registeredClient(registeredClient)
                 .principal(authentication)
+                .authorizationServerContext(authorizationServerContext)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
                 .authorizedScopes(registeredClient.getScopes())
                 .tokenType(OAuth2TokenType.REFRESH_TOKEN)
                 .authorizationGrant(authentication)
                 .build();
 
+        log.debug("Built refresh token context with grant type: {}", AuthorizationGrantType.CLIENT_CREDENTIALS);
+
         // Generate the refresh token
         OAuth2Token token = tokenGenerator.generate(tokenContext);
-        if (token == null || !(token instanceof OAuth2RefreshToken)) {
+        log.debug("Refresh token generator returned: {}", token != null ? token.getClass().getSimpleName() : "null");
+        
+        if (token == null) {
             throw new RuntimeException("Failed to generate OAuth2 refresh token");
         }
 
-        OAuth2RefreshToken refreshToken = (OAuth2RefreshToken) token;
+        // Handle both OAuth2RefreshToken and JWT cases
+        String tokenValue;
+        if (token instanceof OAuth2RefreshToken) {
+            OAuth2RefreshToken refreshToken = (OAuth2RefreshToken) token;
+            tokenValue = refreshToken.getTokenValue();
+        } else if (token instanceof Jwt) {
+            Jwt jwt = (Jwt) token;
+            tokenValue = jwt.getTokenValue();
+        } else {
+            throw new RuntimeException("Unexpected refresh token type: " + token.getClass().getSimpleName());
+        }
+
         log.debug("Successfully generated OAuth2 refresh token for user: {}", user.getUsername());
-        return refreshToken.getTokenValue();
+        return tokenValue;
     }
 
     /**
