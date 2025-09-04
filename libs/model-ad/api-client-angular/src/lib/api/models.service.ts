@@ -23,11 +23,11 @@ import { CustomHttpParameterCodec } from '../encoder';
 import { Observable } from 'rxjs';
 
 // @ts-ignore
-import { BasicError } from '../model/basicError';
+import { BasicError } from '../model/basic-error';
 // @ts-ignore
 import { Model } from '../model/model';
 // @ts-ignore
-import { SearchResult } from '../model/searchResult';
+import { SearchResult } from '../model/search-result';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';

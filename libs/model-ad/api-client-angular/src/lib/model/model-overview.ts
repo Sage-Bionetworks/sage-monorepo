@@ -7,7 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { ModelOverviewLink } from './modelOverviewLink';
+import { ModelOverviewLink } from './model-overview-link';
 
 /**
  * Model Overview object for comparison tools

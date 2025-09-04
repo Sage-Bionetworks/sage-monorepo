@@ -7,9 +7,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { ComparisonToolPage } from './comparisonToolPage';
-import { ComparisonToolConfigColumn } from './comparisonToolConfigColumn';
-import { ComparisonToolConfigFilter } from './comparisonToolConfigFilter';
+import { ComparisonToolPage } from './comparison-tool-page';
+import { ComparisonToolConfigColumn } from './comparison-tool-config-column';
+import { ComparisonToolConfigFilter } from './comparison-tool-config-filter';
 
 export interface ComparisonToolConfig {
   page: ComparisonToolPage;

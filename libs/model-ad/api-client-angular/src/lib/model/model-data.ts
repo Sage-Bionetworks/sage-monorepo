@@ -7,7 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { IndividualData } from './individualData';
+import { IndividualData } from './individual-data';
 
 /**
  * Data associated with a model

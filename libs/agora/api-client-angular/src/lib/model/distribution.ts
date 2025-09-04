@@ -7,9 +7,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { RnaDistribution } from './rnaDistribution';
-import { ProteomicsDistribution } from './proteomicsDistribution';
-import { OverallScoresDistribution } from './overallScoresDistribution';
+import { RnaDistribution } from './rna-distribution';
+import { ProteomicsDistribution } from './proteomics-distribution';
+import { OverallScoresDistribution } from './overall-scores-distribution';
 
 /**
  * Distributions

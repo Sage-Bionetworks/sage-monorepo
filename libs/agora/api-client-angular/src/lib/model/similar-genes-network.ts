@@ -7,8 +7,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { SimilarGenesNetworkLink } from './similarGenesNetworkLink';
-import { SimilarGenesNetworkNode } from './similarGenesNetworkNode';
+import { SimilarGenesNetworkLink } from './similar-genes-network-link';
+import { SimilarGenesNetworkNode } from './similar-genes-network-node';
 
 /**
  * SimilarGenesNetwork

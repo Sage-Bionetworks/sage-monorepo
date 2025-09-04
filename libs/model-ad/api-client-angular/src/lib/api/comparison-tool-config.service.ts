@@ -23,11 +23,11 @@ import { CustomHttpParameterCodec } from '../encoder';
 import { Observable } from 'rxjs';
 
 // @ts-ignore
-import { BasicError } from '../model/basicError';
+import { BasicError } from '../model/basic-error';
 // @ts-ignore
-import { ComparisonToolConfig } from '../model/comparisonToolConfig';
+import { ComparisonToolConfig } from '../model/comparison-tool-config';
 // @ts-ignore
-import { ComparisonToolPage } from '../model/comparisonToolPage';
+import { ComparisonToolPage } from '../model/comparison-tool-page';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';

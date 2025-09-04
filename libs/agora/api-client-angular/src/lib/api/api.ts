@@ -1,5 +1,5 @@
-export * from './bioDomains.service';
-import { BioDomainsService } from './bioDomains.service';
+export * from './bio-domains.service';
+import { BioDomainsService } from './bio-domains.service';
 export * from './dataversion.service';
 import { DataversionService } from './dataversion.service';
 export * from './distribution.service';
