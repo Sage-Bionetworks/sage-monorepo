@@ -9,6 +9,7 @@
         "inputSpec": "#{cwd}/../api-description/openapi/openapi.yaml",
         "output": "#{cwd}/src/lib/",
         "additionalProperties": {
+          "fileNaming": "kebab-case",
           "queryParamObjectFormat": "key"
         }
       }
