@@ -25,6 +25,8 @@ import org.springframework.security.oauth2.server.authorization.token.OAuth2Toke
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenGenerator;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.security.oauth2.server.authorization.context.AuthorizationServerContext;
+import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
@@ -194,5 +196,25 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
     }
     keyPairGenerator.initialize(2048);
     return keyPairGenerator.generateKeyPair();
+  }
+
+  /**
+   * Configure AuthorizationServerContext for OAuth2 token generation.
+   */
+  @Bean
+  public AuthorizationServerContext authorizationServerContext() {
+    return new AuthorizationServerContext() {
+      @Override
+      public String getIssuer() {
+        return "http://localhost:8087";
+      }
+      
+      @Override
+      public AuthorizationServerSettings getAuthorizationServerSettings() {
+        return AuthorizationServerSettings.builder()
+            .issuer("http://localhost:8087")
+            .build();
+      }
+    };
   }
 }
