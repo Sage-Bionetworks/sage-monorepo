@@ -1,6 +1,6 @@
 get:
   tags:
-    - Genes
+    - Gene
   summary: Search Genes
   description: Search Genes
   operationId: searchGene

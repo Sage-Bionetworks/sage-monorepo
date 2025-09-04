@@ -1,6 +1,6 @@
 get:
   tags:
-    - BioDomains
+    - Bio Domain
   summary: Retrieve bioDomain for a given ENSG
   description: Get bioDomain
   operationId: getBioDomain

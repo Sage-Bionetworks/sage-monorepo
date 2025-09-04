@@ -7,7 +7,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { GenesService } from '@sagebionetworks/agora/api-client-angular';
+import { GeneService } from '@sagebionetworks/agora/api-client-angular';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { GeneEvidenceProteomicsComponent } from './gene-evidence-proteomics.component';
 
@@ -20,7 +20,7 @@ describe('Component: Gene Proteomics', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [GenesService, HelperService, provideHttpClient()],
+      providers: [GeneService, HelperService, provideHttpClient()],
     }).compileComponents();
   });
 

@@ -11,7 +11,11 @@ import {
   ViewChild,
 } from '@angular/core';
 
-import { Gene, GenesList, GenesService } from '@sagebionetworks/agora/api-client-angular';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faMagnifyingGlass, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { Gene, GeneService, GenesList } from '@sagebionetworks/agora/api-client-angular';
 import {
   catchError,
   debounceTime,
@@ -24,12 +28,8 @@ import {
   takeUntil,
   throwError,
 } from 'rxjs';
-import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faMagnifyingGlass, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { GeneIconComponent } from './assets/gene-icon/gene-icon.component';
 import { CloseIconComponent } from './assets/close-icon/close-icon.component';
+import { GeneIconComponent } from './assets/gene-icon/gene-icon.component';
 
 @Component({
   selector: 'agora-gene-search',
@@ -42,7 +42,7 @@ export class GeneSearchComponent implements AfterViewInit, OnDestroy {
   @Output() searchNavigated = new EventEmitter();
 
   router = inject(Router);
-  apiService = inject(GenesService);
+  apiService = inject(GeneService);
 
   protected unsubscribe$ = new Subject<void>();
 

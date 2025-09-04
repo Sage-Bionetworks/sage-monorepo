@@ -1,7 +1,7 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
-import { Dataversion, DataversionService } from '@sagebionetworks/agora/api-client-angular';
+import { DataVersion, DataVersionService } from '@sagebionetworks/agora/api-client-angular';
 import { AGORA_LOADING_ICON_COLORS, ConfigService } from '@sagebionetworks/agora/config';
 import { HeaderComponent } from '@sagebionetworks/agora/ui';
 import { footerLinks } from '@sagebionetworks/agora/util';
@@ -42,7 +42,7 @@ export class AppComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   configService = inject(ConfigService);
-  dataVersionService = inject(DataversionService);
+  dataVersionService = inject(DataVersionService);
   gitHubService = inject(GitHubService);
   metaTagService = inject(MetaTagService);
 
@@ -69,7 +69,7 @@ export class AppComponent implements OnInit {
   getDataVersion() {
     if (this.platformService.isBrowser) {
       this.dataVersionService
-        .getDataversion()
+        .getDataVersion()
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (data) => {
@@ -80,7 +80,7 @@ export class AppComponent implements OnInit {
     }
   }
 
-  formatDataVersion(dataVersion: Dataversion) {
+  formatDataVersion(dataVersion: DataVersion) {
     return `${dataVersion.data_file}-v${dataVersion.data_version}`;
   }
 

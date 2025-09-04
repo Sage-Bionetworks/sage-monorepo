@@ -1,6 +1,5 @@
-
 import { Component, inject, Input } from '@angular/core';
-import { Team, TeamMember, TeamsService } from '@sagebionetworks/agora/api-client-angular';
+import { Team, TeamMember, TeamService } from '@sagebionetworks/agora/api-client-angular';
 import { map, Observable } from 'rxjs';
 
 @Component({
@@ -10,7 +9,7 @@ import { map, Observable } from 'rxjs';
   styleUrls: ['./team-member-list.component.scss'],
 })
 export class TeamMemberListComponent {
-  teamsService = inject(TeamsService);
+  teamService = inject(TeamService);
 
   _team: Team = {} as Team;
   get team(): Team {
@@ -44,7 +43,7 @@ export class TeamMemberListComponent {
   }
 
   getTeamMemberImageUrl(name: string): Observable<string | undefined> {
-    return this.teamsService.getTeamMemberImage(name).pipe(
+    return this.teamService.getTeamMemberImage(name).pipe(
       map((buffer) => {
         if (!buffer || buffer.size <= 0) {
           return;

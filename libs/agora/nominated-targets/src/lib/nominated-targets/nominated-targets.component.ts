@@ -1,9 +1,8 @@
-
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { Gene, TargetNomination, GenesService } from '@sagebionetworks/agora/api-client-angular';
+import { Gene, GeneService, TargetNomination } from '@sagebionetworks/agora/api-client-angular';
 import { GeneTableComponent } from '@sagebionetworks/agora/genes';
 import { GeneTableColumn } from '@sagebionetworks/agora/models';
 import { ModalLinkComponent, SvgIconComponent } from '@sagebionetworks/agora/shared';
@@ -17,13 +16,13 @@ import { ButtonModule } from 'primeng/button';
     ModalLinkComponent,
     GeneTableComponent,
     ButtonModule,
-    FontAwesomeModule
-],
+    FontAwesomeModule,
+  ],
   templateUrl: './nominated-targets.component.html',
   styleUrls: ['./nominated-targets.component.scss'],
 })
 export class NominatedTargetsComponent implements OnInit {
-  apiService = inject(GenesService);
+  apiService = inject(GeneService);
 
   magnifyingIcon = faMagnifyingGlass;
   genes: Gene[] = [];

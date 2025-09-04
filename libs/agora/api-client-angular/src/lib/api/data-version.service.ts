@@ -25,9 +25,7 @@ import { Observable } from 'rxjs';
 // @ts-ignore
 import { BasicError } from '../model/basic-error';
 // @ts-ignore
-import { BioDomain } from '../model/bio-domain';
-// @ts-ignore
-import { BioDomainInfo } from '../model/bio-domain-info';
+import { DataVersion } from '../model/data-version';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -36,7 +34,7 @@ import { Configuration } from '../configuration';
 @Injectable({
   providedIn: 'root',
 })
-export class BioDomainsService {
+export class DataVersionService {
   protected basePath = 'http://localhost/v1';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
@@ -109,112 +107,12 @@ export class BioDomainsService {
   }
 
   /**
-   * Retrieve bioDomain for a given ENSG
-   * Get bioDomain
-   * @param ensg The ENSG (Ensembl Gene ID) for which to retrieve biodomain data.
+   * Get data version
+   * Get data version
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getBioDomain(
-    ensg: string,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<Array<BioDomain>>;
-  public getBioDomain(
-    ensg: string,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpResponse<Array<BioDomain>>>;
-  public getBioDomain(
-    ensg: string,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<HttpEvent<Array<BioDomain>>>;
-  public getBioDomain(
-    ensg: string,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: {
-      httpHeaderAccept?: 'application/json';
-      context?: HttpContext;
-      transferCache?: boolean;
-    },
-  ): Observable<any> {
-    if (ensg === null || ensg === undefined) {
-      throw new Error('Required parameter ensg was null or undefined when calling getBioDomain.');
-    }
-
-    let localVarHeaders = this.defaultHeaders;
-
-    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['application/json'];
-      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-    }
-
-    let localVarHttpContext: HttpContext | undefined = options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
-    }
-
-    let localVarTransferCache: boolean | undefined = options && options.transferCache;
-    if (localVarTransferCache === undefined) {
-      localVarTransferCache = true;
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    let localVarPath = `/biodomains/${this.configuration.encodeParam({ name: 'ensg', value: ensg, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
-    return this.httpClient.request<Array<BioDomain>>(
-      'get',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: observe,
-        transferCache: localVarTransferCache,
-        reportProgress: reportProgress,
-      },
-    );
-  }
-
-  /**
-   * List BioDomains
-   * List BioDomains
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public listBioDomains(
+  public getDataVersion(
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -222,8 +120,8 @@ export class BioDomainsService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<Array<BioDomainInfo>>;
-  public listBioDomains(
+  ): Observable<DataVersion>;
+  public getDataVersion(
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -231,8 +129,8 @@ export class BioDomainsService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<Array<BioDomainInfo>>>;
-  public listBioDomains(
+  ): Observable<HttpResponse<DataVersion>>;
+  public getDataVersion(
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -240,8 +138,8 @@ export class BioDomainsService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<Array<BioDomainInfo>>>;
-  public listBioDomains(
+  ): Observable<HttpEvent<DataVersion>>;
+  public getDataVersion(
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -283,8 +181,8 @@ export class BioDomainsService {
       }
     }
 
-    let localVarPath = `/biodomains`;
-    return this.httpClient.request<Array<BioDomainInfo>>(
+    let localVarPath = `/dataversion`;
+    return this.httpClient.request<DataVersion>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {

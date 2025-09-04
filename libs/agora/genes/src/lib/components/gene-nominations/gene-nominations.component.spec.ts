@@ -7,7 +7,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 // Internal
 // -------------------------------------------------------------------------- //
 import { provideHttpClient } from '@angular/common/http';
-import { TeamsService } from '@sagebionetworks/agora/api-client-angular';
+import { TeamService } from '@sagebionetworks/agora/api-client-angular';
 import { geneMock1, teamsResponseMock } from '@sagebionetworks/agora/testing';
 import { of } from 'rxjs';
 import { GeneNominationsComponent } from './gene-nominations.component';
@@ -25,7 +25,7 @@ describe('Component: Gene Nominations', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [{ provide: TeamsService, useValue: mockTeamsService }, provideHttpClient()],
+      providers: [{ provide: TeamService, useValue: mockTeamsService }, provideHttpClient()],
     }).compileComponents();
   });
 

@@ -1,11 +1,11 @@
+import { DataVersion } from '@sagebionetworks/agora/api-client-angular';
 import { NextFunction, Request, Response } from 'express';
 import { cache, setHeaders } from '../helpers';
 import { DataVersionCollection } from '../models';
-import { Dataversion } from '@sagebionetworks/agora/api-client-angular';
 
 export async function getDataVersion() {
   const cacheKey = 'dataVersion';
-  const cachedResult: Dataversion | null | undefined = cache.get(cacheKey);
+  const cachedResult: DataVersion | null | undefined = cache.get(cacheKey);
 
   if (cachedResult !== undefined) {
     return cachedResult;

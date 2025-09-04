@@ -1,7 +1,7 @@
+import { DataVersion } from '@sagebionetworks/agora/api-client-angular';
 import { Schema, model } from 'mongoose';
-import { Dataversion } from '@sagebionetworks/agora/api-client-angular';
 
-const DataVersionSchema = new Schema<Dataversion>(
+const DataVersionSchema = new Schema<DataVersion>(
   {
     data_file: { type: String, required: true },
     data_version: { type: String, required: true },
@@ -12,4 +12,4 @@ const DataVersionSchema = new Schema<Dataversion>(
   },
 );
 
-export const DataVersionCollection = model<Dataversion>('DataVersionCollection', DataVersionSchema);
+export const DataVersionCollection = model<DataVersion>('DataVersionCollection', DataVersionSchema);

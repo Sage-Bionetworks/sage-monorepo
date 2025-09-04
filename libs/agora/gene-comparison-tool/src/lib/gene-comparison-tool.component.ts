@@ -13,7 +13,7 @@ import {
   DistributionService,
   GCTGene,
   GCTGeneTissue,
-  GenesService,
+  GeneService,
   OverallScoresDistribution,
 } from '@sagebionetworks/agora/api-client-angular';
 import {
@@ -80,7 +80,7 @@ import { GeneComparisonToolLegendPanelComponent } from './components/gene-compar
 export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDestroy {
   router = inject(Router);
   route = inject(ActivatedRoute);
-  geneService = inject(GenesService);
+  geneService = inject(GeneService);
   distributionService = inject(DistributionService);
   helperService = inject(HelperService);
   messageService = inject(MessageService);

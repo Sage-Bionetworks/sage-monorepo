@@ -1,8 +1,8 @@
 get:
   tags:
-    - BioDomains
-  summary: List BioDomains
-  description: List BioDomains
+    - Bio Domain
+  summary: List Bio Domains
+  description: List Bio Domains
   operationId: listBioDomains
   responses:
     '200':

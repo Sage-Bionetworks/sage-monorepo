@@ -1,7 +1,6 @@
-
 import { Component, inject, Input } from '@angular/core';
 
-import { Gene, TeamsService } from '@sagebionetworks/agora/api-client-angular';
+import { Gene, TeamService } from '@sagebionetworks/agora/api-client-angular';
 import { ExperimentalValidationWithTeamData } from '../../models';
 
 @Component({
@@ -11,7 +10,7 @@ import { ExperimentalValidationWithTeamData } from '../../models';
   styleUrls: ['./gene-experimental-validation.component.scss'],
 })
 export class ExperimentalValidationComponent {
-  teamService = inject(TeamsService);
+  teamService = inject(TeamService);
 
   _gene: Gene | undefined;
   get gene(): Gene | undefined {

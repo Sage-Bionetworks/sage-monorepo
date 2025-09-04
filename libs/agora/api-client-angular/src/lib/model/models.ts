@@ -2,7 +2,7 @@ export * from './basic-error';
 export * from './bio-domain';
 export * from './bio-domain-info';
 export * from './bio-domains';
-export * from './dataversion';
+export * from './data-version';
 export * from './distribution';
 export * from './druggability';
 export * from './ensembl-info';

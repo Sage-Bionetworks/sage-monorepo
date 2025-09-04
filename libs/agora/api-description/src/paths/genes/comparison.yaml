@@ -1,6 +1,6 @@
 get:
   tags:
-    - Genes
+    - Gene
   summary: Get comparison genes based on category and subcategory
   description: Get comparison genes based on category and subcategory
   operationId: getComparisonGenes
