@@ -128,7 +128,12 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
   });
 
   domFiles = computed(() => {
-    if (this.boxplotGrids().length === 0) return [];
+    if (
+      this.boxplotGrids().length === 0 ||
+      this.boxplotGrids().length !== this.evidenceTypes().length
+    ) {
+      return [];
+    }
 
     return this.evidenceTypes().map((evidenceType: string, index: number) => {
       return {
