@@ -1,10 +1,12 @@
 package org.sagebionetworks.openchallenges.auth.service.service;
 
 import java.security.SecureRandom;
+import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import org.sagebionetworks.openchallenges.auth.service.configuration.ApiKeyProperties;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
@@ -13,6 +15,12 @@ import org.sagebionetworks.openchallenges.auth.service.repository.ApiKeyReposito
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
+import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
+import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +31,12 @@ import lombok.RequiredArgsConstructor;
 public class ApiKeyService {
 
   private static final Logger logger = LoggerFactory.getLogger(ApiKeyService.class);
+  private static final String CLIENT_ID_PREFIX = "oc_api_key_";
 
   private final ApiKeyRepository apiKeyRepository;
   private final PasswordEncoder passwordEncoder;
   private final ApiKeyProperties apiKeyProperties;
+  private final RegisteredClientRepository registeredClientRepository;
   private final SecureRandom secureRandom = new SecureRandom();
 
   /**
@@ -55,7 +65,12 @@ public class ApiKeyService {
       .name(name)
       .expiresAt(expiresAt)
       .build();
+    
+    // Save the API key first
     ApiKey saved = apiKeyRepository.save(apiKeyEntity);
+
+    // Now create the OAuth2 service principal for this API key
+    createOAuth2ServicePrincipal(saved, plainApiKey, user);
 
     // Create a temporary field to store the plain key for the response
     saved.setPlainKey(plainApiKey); // This is a transient field
@@ -167,16 +182,90 @@ public class ApiKeyService {
   }
 
   /**
-   * Generate a secure random API key
+   * Generate a secure random API key in the format: {prefix}{suffix}.{secret}
    */
   private String generateApiKey() {
-    byte[] randomBytes = new byte[30]; // 30 bytes = 40 chars in base64
-    secureRandom.nextBytes(randomBytes);
-    String randomPart = Base64.getUrlEncoder()
+    // Generate suffix (identifier part)
+    byte[] suffixBytes = new byte[16]; // 16 bytes = ~22 chars in base64url
+    secureRandom.nextBytes(suffixBytes);
+    String suffix = Base64.getUrlEncoder()
       .withoutPadding()
-      .encodeToString(randomBytes)
-      .substring(0, apiKeyProperties.getLength());
+      .encodeToString(suffixBytes);
+    
+    // Generate secret (authentication part)  
+    byte[] secretBytes = new byte[24]; // 24 bytes = 32 chars in base64url
+    secureRandom.nextBytes(secretBytes);
+    String secret = Base64.getUrlEncoder()
+      .withoutPadding()
+      .encodeToString(secretBytes);
 
-    return apiKeyProperties.getPrefix() + randomPart;
+    return apiKeyProperties.getPrefix() + suffix + "." + secret;
+  }
+
+  /**
+   * Create OAuth2 service principal for an API key
+   */
+  private void createOAuth2ServicePrincipal(ApiKey apiKey, String plainApiKey, User user) {
+    // Parse the API key to extract the client ID suffix
+    String suffix = extractSuffix(plainApiKey);
+    String secret = extractSecret(plainApiKey);
+    String clientId = CLIENT_ID_PREFIX + suffix;
+    
+    logger.info("Creating OAuth2 client '{}' for API key: {}", clientId, apiKey.getName());
+    
+    // Determine scopes based on user role (simplified for now)
+    Set<String> scopes = Set.of("api:read", "api:write");
+    
+    // Create RegisteredClient for this API key
+    RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
+            .clientId(clientId)
+            .clientSecret(passwordEncoder.encode(secret)) // Hash the secret
+            .clientName("API Key: " + apiKey.getName() + " (" + user.getUsername() + ")")
+            .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+            .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+            .scopes(scopeSet -> scopeSet.addAll(scopes))
+            .clientSettings(ClientSettings.builder()
+                    .requireAuthorizationConsent(false) // No consent for API keys
+                    .requireProofKey(false) // No PKCE for client credentials
+                    .build())
+            .tokenSettings(TokenSettings.builder()
+                    .accessTokenTimeToLive(Duration.ofMinutes(15)) // Short-lived tokens
+                    .refreshTokenTimeToLive(Duration.ofHours(1)) // Refresh tokens
+                    .reuseRefreshTokens(false) // No refresh tokens for client credentials
+                    .build())
+            .build();
+            
+    // Save the registered client
+    registeredClientRepository.save(registeredClient);
+    
+    // Update the API key with OAuth2 info
+    apiKey.setClientId(clientId);
+    apiKey.setAllowedScopes(String.join(",", scopes));
+    apiKeyRepository.save(apiKey);
+    
+    logger.info("Created OAuth2 client {} for API key: {}", clientId, apiKey.getName());
+  }
+
+  /**
+   * Extract suffix from API key (everything between prefix and last dot)
+   */
+  private String extractSuffix(String apiKey) {
+    String withoutPrefix = apiKey.substring(apiKeyProperties.getPrefix().length());
+    int lastDot = withoutPrefix.lastIndexOf('.');
+    if (lastDot == -1) {
+      throw new IllegalArgumentException("Invalid API key format: missing secret separator");
+    }
+    return withoutPrefix.substring(0, lastDot);
+  }
+
+  /**
+   * Extract secret from API key (everything after the last dot)
+   */
+  private String extractSecret(String apiKey) {
+    int lastDot = apiKey.lastIndexOf('.');
+    if (lastDot == -1) {
+      throw new IllegalArgumentException("Invalid API key format: missing secret separator");
+    }
+    return apiKey.substring(lastDot + 1);
   }
 }
