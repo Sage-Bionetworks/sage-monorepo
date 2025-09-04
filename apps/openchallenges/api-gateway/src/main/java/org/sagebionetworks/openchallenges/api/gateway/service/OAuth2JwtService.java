@@ -1,5 +1,8 @@
 package org.sagebionetworks.openchallenges.api.gateway.service;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -88,6 +91,60 @@ public class OAuth2JwtService {
   }
 
   /**
+   * Type-safe wrapper for OAuth2 audience field that can be either a string or list of strings.
+   */
+  public static class OAuth2Audience {
+    private final List<String> audiences;
+
+    @JsonCreator
+    public OAuth2Audience(Object value) {
+      if (value instanceof String) {
+        this.audiences = List.of((String) value);
+      } else if (value instanceof List) {
+        @SuppressWarnings("unchecked")
+        List<String> audList = (List<String>) value;
+        this.audiences = List.copyOf(audList);
+      } else {
+        this.audiences = List.of();
+      }
+    }
+
+    /**
+     * Get the primary (first) audience.
+     */
+    public String getPrimary() {
+      return audiences.isEmpty() ? null : audiences.get(0);
+    }
+
+    /**
+     * Get all audiences.
+     */
+    public List<String> getAll() {
+      return audiences;
+    }
+
+    /**
+     * Check if the given audience is present.
+     */
+    public boolean contains(String audience) {
+      return audiences.contains(audience);
+    }
+
+    @JsonValue
+    public Object toJson() {
+      if (audiences.size() == 1) {
+        return audiences.get(0);
+      }
+      return audiences;
+    }
+
+    @Override
+    public String toString() {
+      return "OAuth2Audience{audiences=" + audiences + "}";
+    }
+  }
+
+  /**
    * OAuth2 introspection response DTO.
    */
   public static class IntrospectionResponse {
@@ -96,7 +153,7 @@ public class OAuth2JwtService {
     private String username;
     private String scope;
     private long exp;
-    private Object aud; // Can be String or List<String>
+    private OAuth2Audience aud;
     private String iss;
 
     // Getters and setters
@@ -115,21 +172,14 @@ public class OAuth2JwtService {
     public long getExp() { return exp; }
     public void setExp(long exp) { this.exp = exp; }
     
-    public Object getAud() { return aud; }
-    public void setAud(Object aud) { this.aud = aud; }
+    public OAuth2Audience getAud() { return aud; }
+    public void setAud(OAuth2Audience aud) { this.aud = aud; }
     
     /**
-     * Get the audience as a string, handling both String and List<String> cases.
+     * Get the primary audience as a string for backward compatibility.
      */
     public String getAudAsString() {
-      if (aud instanceof String) {
-        return (String) aud;
-      } else if (aud instanceof java.util.List) {
-        @SuppressWarnings("unchecked")
-        java.util.List<String> audList = (java.util.List<String>) aud;
-        return audList.isEmpty() ? null : audList.get(0);
-      }
-      return null;
+      return aud != null ? aud.getPrimary() : null;
     }
     
     public String getIss() { return iss; }
