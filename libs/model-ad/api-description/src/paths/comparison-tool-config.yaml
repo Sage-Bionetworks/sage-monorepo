@@ -1,6 +1,6 @@
 get:
   tags:
-    - ComparisonToolConfig
+    - Comparison Tool Config
   summary: Get Comparison Tool configuration
   description: Retrieve the Comparison Tool configuration schema for the Model-AD application
   operationId: getComparisonToolConfig

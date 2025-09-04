@@ -1,7 +1,7 @@
 import { Model } from '@sagebionetworks/model-ad/api-client-angular';
 import { NextFunction, Request, Response } from 'express';
 import { cache, setHeaders } from '../helpers';
-import { ModelsCollection } from '../models';
+import { ModelCollection } from '../models';
 
 export async function getModel(name: string) {
   const cacheKey = 'model-' + name;
@@ -12,7 +12,7 @@ export async function getModel(name: string) {
     return cachedResult;
   }
 
-  const result = await ModelsCollection.findOne({
+  const result = await ModelCollection.findOne({
     name: name,
   })
     .lean()

@@ -50,4 +50,4 @@ const ModelSchema = new Schema<Model>(
   { collection: 'model_details' },
 );
 
-export const ModelsCollection = model<Model>('ModelsCollection', ModelSchema);
+export const ModelCollection = model<Model>('ModelCollection', ModelSchema);

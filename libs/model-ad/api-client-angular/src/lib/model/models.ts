@@ -3,7 +3,7 @@ export * from './comparison-tool-config';
 export * from './comparison-tool-config-column';
 export * from './comparison-tool-config-filter';
 export * from './comparison-tool-page';
-export * from './dataversion';
+export * from './data-version';
 export * from './genetic-info';
 export * from './individual-data';
 export * from './model';

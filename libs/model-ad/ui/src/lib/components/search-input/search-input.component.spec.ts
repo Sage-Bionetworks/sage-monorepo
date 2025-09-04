@@ -1,7 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { SearchResult } from '@sagebionetworks/explorers/models';
-import { ModelsService } from '@sagebionetworks/model-ad/api-client-angular';
+import { ModelService } from '@sagebionetworks/model-ad/api-client-angular';
 import { render, screen } from '@testing-library/angular';
 import { of } from 'rxjs';
 import { SearchInputComponent } from './search-input.component';
@@ -13,7 +13,7 @@ const mockSearchResults: SearchResult[] = [
   { id: 'model4', match_field: 'rrid', match_value: 'RRID123' },
 ];
 
-const mockModelsService = {
+const mockModelService = {
   searchModels: jest.fn(),
 };
 
@@ -22,7 +22,7 @@ async function setup(inputs?: { searchPlaceholder?: string }) {
     providers: [
       provideHttpClient(),
       provideRouter([]),
-      { provide: ModelsService, useValue: mockModelsService },
+      { provide: ModelService, useValue: mockModelService },
     ],
     componentInputs: inputs,
   });
@@ -33,7 +33,7 @@ async function setup(inputs?: { searchPlaceholder?: string }) {
 describe('SearchInputComponent', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockModelsService.searchModels.mockReturnValue(of(mockSearchResults));
+    mockModelService.searchModels.mockReturnValue(of(mockSearchResults));
   });
   afterAll(() => jest.restoreAllMocks());
 
@@ -52,7 +52,7 @@ describe('SearchInputComponent', () => {
   it('should call searchModels when getSearchResults is invoked', async () => {
     const { component } = await setup();
     const result = component.getSearchResults('test query');
-    expect(mockModelsService.searchModels).toHaveBeenCalledWith('test query');
+    expect(mockModelService.searchModels).toHaveBeenCalledWith('test query');
     expect(result).toBeDefined();
   });
 

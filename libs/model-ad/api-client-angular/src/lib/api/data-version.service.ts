@@ -25,7 +25,7 @@ import { Observable } from 'rxjs';
 // @ts-ignore
 import { BasicError } from '../model/basic-error';
 // @ts-ignore
-import { Dataversion } from '../model/dataversion';
+import { DataVersion } from '../model/data-version';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -34,7 +34,7 @@ import { Configuration } from '../configuration';
 @Injectable({
   providedIn: 'root',
 })
-export class DataversionService {
+export class DataVersionService {
   protected basePath = 'http://localhost/v1';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
@@ -107,12 +107,12 @@ export class DataversionService {
   }
 
   /**
-   * Get dataversion
-   * Get dataversion
+   * Get data version
+   * Get data version
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getDataversion(
+  public getDataVersion(
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -120,8 +120,8 @@ export class DataversionService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<Dataversion>;
-  public getDataversion(
+  ): Observable<DataVersion>;
+  public getDataVersion(
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -129,8 +129,8 @@ export class DataversionService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<Dataversion>>;
-  public getDataversion(
+  ): Observable<HttpResponse<DataVersion>>;
+  public getDataVersion(
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -138,8 +138,8 @@ export class DataversionService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<Dataversion>>;
-  public getDataversion(
+  ): Observable<HttpEvent<DataVersion>>;
+  public getDataVersion(
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -182,7 +182,7 @@ export class DataversionService {
     }
 
     let localVarPath = `/dataversion`;
-    return this.httpClient.request<Dataversion>(
+    return this.httpClient.request<DataVersion>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {

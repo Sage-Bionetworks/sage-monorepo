@@ -2,7 +2,7 @@ import { Component, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
 import { SearchResult } from '@sagebionetworks/explorers/models';
 import { SearchInputComponent as ExplorersSearchInputComponent } from '@sagebionetworks/explorers/ui';
-import { ModelsService } from '@sagebionetworks/model-ad/api-client-angular';
+import { ModelService } from '@sagebionetworks/model-ad/api-client-angular';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { Observable } from 'rxjs';
 
@@ -14,7 +14,7 @@ import { Observable } from 'rxjs';
 })
 export class SearchInputComponent {
   router = inject(Router);
-  modelsService = inject(ModelsService);
+  modelService = inject(ModelService);
 
   searchPlaceholder = input<string>('Find model by name...');
   searchImagePath = input<string | undefined>();
@@ -26,7 +26,7 @@ export class SearchInputComponent {
   };
 
   getSearchResults = (query: string): Observable<SearchResult[]> => {
-    return this.modelsService.searchModels(query);
+    return this.modelService.searchModels(query);
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

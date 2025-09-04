@@ -6,7 +6,7 @@ import { Panel, SynapseWikiParams } from '@sagebionetworks/explorers/models';
 import { HelperService, PlatformService } from '@sagebionetworks/explorers/services';
 import { PanelNavigationComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
-import { Model, ModelsService } from '@sagebionetworks/model-ad/api-client-angular';
+import { Model, ModelService } from '@sagebionetworks/model-ad/api-client-angular';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { ModelDetailsBoxplotsSelectorComponent } from './components/model-details-boxplots-selector/model-details-boxplots-selector.component';
 import { ModelDetailsHeroComponent } from './components/model-details-hero/model-details-hero.component';
@@ -31,7 +31,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
   router = inject(Router);
   location = inject(Location);
   helperService = inject(HelperService);
-  modelsService = inject(ModelsService);
+  modelService = inject(ModelService);
   destroyRef = inject(DestroyRef);
   platformService = inject(PlatformService);
 
@@ -83,7 +83,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
   private loadPanelData(params: ParamMap) {
     const modelName = params.get('name');
     if (modelName) {
-      this.modelsService
+      this.modelService
         .getModelByName(modelName)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({

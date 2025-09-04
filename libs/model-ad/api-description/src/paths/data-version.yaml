@@ -1,15 +1,15 @@
 get:
   tags:
-    - Dataversion
-  summary: Get dataversion
-  description: Get dataversion
-  operationId: getDataversion
+    - Data Version
+  summary: Get data version
+  description: Get data version
+  operationId: getDataVersion
   responses:
     '200':
       content:
         application/json:
           schema:
-            $ref: ../components/schemas/Dataversion.yaml
+            $ref: ../components/schemas/DataVersion.yaml
       description: Success
     '400':
       $ref: ../components/responses/BadRequest.yaml

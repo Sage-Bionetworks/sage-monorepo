@@ -1,7 +1,7 @@
 import { SearchResult } from '@sagebionetworks/model-ad/api-client-angular';
 import { NextFunction, Request, Response } from 'express';
 import { cache, setHeaders } from '../helpers';
-import { ModelsCollection } from '../models';
+import { ModelCollection } from '../models';
 import { escapeRegexChars } from '../utils/regex';
 
 export async function searchModels(query: string) {
@@ -19,7 +19,7 @@ export async function searchModels(query: string) {
   }
 
   const queryTrimmed = escapeRegexChars(query.trim());
-  const result: SearchResult[] = await ModelsCollection.aggregate([
+  const result: SearchResult[] = await ModelCollection.aggregate([
     {
       $addFields: {
         match_info: {
