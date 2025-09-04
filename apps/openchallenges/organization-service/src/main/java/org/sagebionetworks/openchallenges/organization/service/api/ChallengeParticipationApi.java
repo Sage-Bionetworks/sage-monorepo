@@ -87,9 +87,7 @@ public interface ChallengeParticipationApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "trustedHeaderAuth"),
-            @SecurityRequirement(name = "apiKeyAuth"),
-            @SecurityRequirement(name = "jwtBearerAuth")
+            @SecurityRequirement(name = "jwtBearer", scopes={ "write:org" })
         }
     )
     @RequestMapping(
@@ -141,9 +139,7 @@ public interface ChallengeParticipationApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "trustedHeaderAuth"),
-            @SecurityRequirement(name = "apiKeyAuth"),
-            @SecurityRequirement(name = "jwtBearerAuth")
+            @SecurityRequirement(name = "jwtBearer", scopes={ "write:org" })
         }
     )
     @RequestMapping(

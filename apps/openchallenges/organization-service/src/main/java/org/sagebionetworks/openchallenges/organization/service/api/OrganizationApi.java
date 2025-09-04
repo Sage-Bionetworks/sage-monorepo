@@ -88,9 +88,7 @@ public interface OrganizationApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "trustedHeaderAuth"),
-            @SecurityRequirement(name = "apiKeyAuth"),
-            @SecurityRequirement(name = "jwtBearerAuth")
+            @SecurityRequirement(name = "jwtBearer", scopes={ "write:org" })
         }
     )
     @RequestMapping(
@@ -139,9 +137,7 @@ public interface OrganizationApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "trustedHeaderAuth"),
-            @SecurityRequirement(name = "apiKeyAuth"),
-            @SecurityRequirement(name = "jwtBearerAuth")
+            @SecurityRequirement(name = "jwtBearer", scopes={ "delete:org" })
         }
     )
     @RequestMapping(
@@ -291,9 +287,7 @@ public interface OrganizationApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "trustedHeaderAuth"),
-            @SecurityRequirement(name = "apiKeyAuth"),
-            @SecurityRequirement(name = "jwtBearerAuth")
+            @SecurityRequirement(name = "jwtBearer", scopes={ "write:org" })
         }
     )
     @RequestMapping(
