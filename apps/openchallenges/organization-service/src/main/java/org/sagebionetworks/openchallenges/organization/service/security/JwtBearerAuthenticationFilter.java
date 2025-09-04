@@ -10,17 +10,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
- * Placeholder filter for API key authentication.
+ * Placeholder filter for JWT Bearer token authentication.
  * 
- * This is a placeholder implementation that does not perform actual API key validation.
- * In a production environment, this would validate API keys directly via the auth service,
- * but for now it simply passes through requests.
+ * This is a placeholder implementation that does not perform actual JWT validation.
+ * In a production environment, this would validate JWT tokens directly without
+ * calling the auth service, but for now it simply passes through requests.
  * 
  * When API Gateway is used, trusted headers should be preferred over this filter.
  */
-public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
+public class JwtBearerAuthenticationFilter extends OncePerRequestFilter {
 
-  private static final Logger logger = LoggerFactory.getLogger(ApiKeyAuthenticationFilter.class);
+  private static final Logger logger = LoggerFactory.getLogger(JwtBearerAuthenticationFilter.class);
 
   @Override
   protected void doFilterInternal(
@@ -29,9 +29,9 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
     FilterChain filterChain
   ) throws ServletException, IOException {
     
-    logger.debug("API key authentication filter - placeholder implementation, passing through");
+    logger.debug("JWT Bearer authentication filter - placeholder implementation, passing through");
     
-    // TODO: Implement API key validation logic here if needed for direct authentication mode
+    // TODO: Implement JWT validation logic here if needed for direct authentication mode
     // For now, this is a placeholder that doesn't authenticate users
     
     filterChain.doFilter(request, response);
