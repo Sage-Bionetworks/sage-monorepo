@@ -13,6 +13,8 @@ info:
     url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
   - url: http://localhost/v1
+security:
+  - jwtBearer: []
 tags:
   - description: Operations about organizations
     name: Organization
@@ -47,6 +49,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
+      security: []
       summary: List organizations
       tags:
         - Organization
@@ -84,9 +87,8 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - jwtBearerAuth: []
-        - apiKeyAuth: []
-        - trustedHeaderAuth: []
+        - jwtBearer:
+            - write:org
       summary: Create an organization
       tags:
         - Organization
@@ -130,9 +132,8 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - jwtBearerAuth: []
-        - apiKeyAuth: []
-        - trustedHeaderAuth: []
+        - jwtBearer:
+            - delete:org
       summary: Delete an organization
       tags:
         - Organization
@@ -172,6 +173,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+      security: []
       summary: Get an organization
       tags:
         - Organization
@@ -227,9 +229,8 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - jwtBearerAuth: []
-        - apiKeyAuth: []
-        - trustedHeaderAuth: []
+        - jwtBearer:
+            - write:org
       summary: Update an existing organization
       tags:
         - Organization
@@ -285,9 +286,8 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - jwtBearerAuth: []
-        - apiKeyAuth: []
-        - trustedHeaderAuth: []
+        - jwtBearer:
+            - write:org
       summary: Create a new challenge participation
       tags:
         - Challenge Participation
@@ -347,9 +347,8 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - jwtBearerAuth: []
-        - apiKeyAuth: []
-        - trustedHeaderAuth: []
+        - jwtBearer:
+            - write:org
       summary: Delete a specific challenge participation
       tags:
         - Challenge Participation
@@ -851,22 +850,26 @@ components:
         - role
       type: object
   securitySchemes:
-    jwtBearerAuth:
+    ocOAuth2:
+      description: OAuth2 for OpenChallenges
+      flows:
+        authorizationCode:
+          authorizationUrl: http://openchallenges-auth-service:8087/oauth2/authorize
+          scopes:
+            read:org: Read organizations
+            write:org: Create/update organizations
+            delete:org: Delete organizations
+          tokenUrl: http://openchallenges-auth-service:8087/oauth2/token
+        clientCredentials:
+          scopes:
+            read:org: Read organizations
+            write:org: Create/update organizations
+            delete:org: Delete organizations
+          tokenUrl: https://openchallenges-auth-service:8087/oauth2/token
+      type: oauth2
+    jwtBearer:
       bearerFormat: JWT
       description: JWT access token obtained from /auth/login or /auth/oauth2/callback
         endpoint
       scheme: bearer
       type: http
-    apiKeyAuth:
-      description: API key for programmatic access (create and manage via /auth/api-keys
-        endpoints)
-      in: header
-      name: X-API-Key
-      type: apiKey
-    trustedHeaderAuth:
-      description: |
-        Authentication via trusted headers set by the API Gateway. The API Gateway validates JWT tokens or API keys and forwards authenticated user information to downstream services via trusted headers: - X-Authenticated-User-Id: The authenticated user's ID - X-Authenticated-User: The authenticated user's username   - X-Authenticated-Roles: The authenticated user's roles - X-Scopes: OAuth2 scopes (if applicable)
-        This security scheme is used when services are deployed behind the API Gateway and trust the authentication headers it provides.
-      in: header
-      name: X-Authenticated-User-Id
-      type: apiKey
