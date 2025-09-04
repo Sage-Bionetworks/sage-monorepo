@@ -27,6 +27,8 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.authorization.context.AuthorizationServerContext;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
+import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
+import org.springframework.security.oauth2.server.authorization.InMemoryOAuth2AuthorizationService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
@@ -93,7 +95,7 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
   public RegisteredClientRepository registeredClientRepository() {
     RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
       .clientId("openchallenges-client")
-      .clientSecret("{noop}secret") // In production, use BCrypt
+      .clientSecret("{noop}secret") // Using {noop} prefix for development
       .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
       .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
       .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
@@ -150,7 +152,8 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
       if (context.getPrincipal() != null && context.getPrincipal().getName() != null) {
         // Add OpenChallenges-specific claims
         context.getClaims().claim("tokenType", "ACCESS");
-        context.getClaims().claim("iss", "openchallenges-auth-service");
+        // Use the full issuer URL that matches the authorization server settings
+        context.getClaims().claim("iss", "http://openchallenges-auth-service:8087");
         
         // Add username claim
         context.getClaims().claim("username", context.getPrincipal().getName());
@@ -199,6 +202,15 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
   }
 
   /**
+   * Configure OAuth2 authorization service for storing issued tokens.
+   * This is essential for the introspection endpoint to validate tokens.
+   */
+  @Bean
+  public OAuth2AuthorizationService authorizationService() {
+    return new InMemoryOAuth2AuthorizationService();
+  }
+
+  /**
    * Configure AuthorizationServerContext for OAuth2 token generation.
    */
   @Bean
@@ -206,15 +218,33 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
     return new AuthorizationServerContext() {
       @Override
       public String getIssuer() {
-        return "http://localhost:8087";
+        return "http://openchallenges-auth-service:8087";
       }
       
       @Override
       public AuthorizationServerSettings getAuthorizationServerSettings() {
-        return AuthorizationServerSettings.builder()
-            .issuer("http://localhost:8087")
-            .build();
+        return authorizationServerSettings();
       }
     };
+  }
+
+  /**
+   * OAuth2 Authorization Server settings
+   */
+  @Bean
+  public AuthorizationServerSettings authorizationServerSettings() {
+    return AuthorizationServerSettings.builder()
+      .issuer("http://openchallenges-auth-service:8087") // Service name for container networking
+      .authorizationEndpoint("/oauth2/authorize")
+      .deviceAuthorizationEndpoint("/oauth2/device_authorization")
+      .deviceVerificationEndpoint("/oauth2/device_verification")
+      .tokenEndpoint("/oauth2/token")
+      .tokenIntrospectionEndpoint("/oauth2/introspect")
+      .tokenRevocationEndpoint("/oauth2/revoke")
+      .jwkSetEndpoint("/oauth2/jwks")
+      .oidcLogoutEndpoint("/connect/logout")
+      .oidcUserInfoEndpoint("/userinfo")
+      .oidcClientRegistrationEndpoint("/connect/register")
+      .build();
   }
 }

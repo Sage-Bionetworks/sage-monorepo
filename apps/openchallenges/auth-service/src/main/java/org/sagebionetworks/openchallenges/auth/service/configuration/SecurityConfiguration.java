@@ -9,7 +9,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -19,11 +19,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration {
 
   /**
-   * Configure BCrypt password encoder for hashing passwords and API keys
+   * Default password encoder bean - supports both BCrypt and {noop} prefixes
+   * This will be used by OAuth2 Authorization Server for client authentication
+   * and can handle both user passwords (BCrypt) and OAuth2 client secrets ({noop})
    */
   @Bean
   public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder(12); // Strength 12 for good security
+    return PasswordEncoderFactories.createDelegatingPasswordEncoder();
   }
 
   /**
