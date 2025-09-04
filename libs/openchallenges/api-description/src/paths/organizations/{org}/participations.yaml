@@ -8,9 +8,8 @@ post:
   operationId: createChallengeParticipation
   x-audience: [internal]
   security:
-    - jwtBearerAuth: []
-    - apiKeyAuth: []
-    - trustedHeaderAuth: []
+    - jwtBearer:
+        - write:org
   requestBody:
     required: true
     content:

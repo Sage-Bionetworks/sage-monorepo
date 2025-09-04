@@ -20,6 +20,8 @@ tags:
   - name: Challenge Participation
     description: Operations about a challenge participation
     x-audience: [internal]
+security:
+  - jwtBearer: []
 paths:
   /organizations:
     $ref: paths/organizations.yaml
@@ -31,9 +33,7 @@ paths:
     $ref: paths/organizations/{org}/participations/{challengeId}/roles/{role}.yaml
 components:
   securitySchemes:
-    jwtBearerAuth:
+    ocOAuth2:
+      $ref: components/securitySchemes/OcOAuth2Auth.yaml
+    jwtBearer:
       $ref: components/securitySchemes/JwtBearerAuth.yaml
-    apiKeyAuth:
-      $ref: components/securitySchemes/ApiKeyAuth.yaml
-    trustedHeaderAuth:
-      $ref: components/securitySchemes/TrustedHeaderAuth.yaml
