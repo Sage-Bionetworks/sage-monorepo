@@ -850,16 +850,18 @@ curl -X GET "http://localhost:8087/v1/auth/profile" \
         </div>
       </div>
 
+      <!-- Web Session Tokens Section -->
       <div class="token-section" th:if="${accessToken}">
-        <div class="token-title">🔐 Authentication Tokens</div>
+        <div class="token-title">🔐 Web Session Tokens</div>
         <div class="token-warning">
-          These tokens are for API access. Keep them secure and do not share them.
+          These tokens are for your current web session authentication. They are automatically used
+          when you browse this site.
         </div>
 
         <div class="token-item">
           <div class="token-label">
-            <strong>Access Token:</strong>
-            <span class="token-info">(JWT token for API authentication)</span>
+            <strong>Session Access Token:</strong>
+            <span class="token-info">(HMAC-signed JWT for web session authentication)</span>
           </div>
           <div class="token-controls">
             <div class="token-display-container">
@@ -883,8 +885,8 @@ curl -X GET "http://localhost:8087/v1/auth/profile" \
 
         <div th:if="${refreshToken}" class="token-item">
           <div class="token-label">
-            <strong>Refresh Token:</strong>
-            <span class="token-info">(Used to obtain new access tokens)</span>
+            <strong>Session Refresh Token:</strong>
+            <span class="token-info">(Used to obtain new session access tokens)</span>
           </div>
           <div class="token-controls">
             <div class="token-display-container">
@@ -906,6 +908,174 @@ curl -X GET "http://localhost:8087/v1/auth/profile" \
               </button>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- OAuth2 API Access Section -->
+      <div class="token-section">
+        <div class="token-title">🚀 OAuth2 API Access</div>
+        <div class="token-info">
+          Use these commands to generate OAuth2 tokens for API access through the API Gateway. These
+          are different from your web session tokens above.
+        </div>
+
+        <div style="background: #f8f9fa; border-radius: 10px; padding: 20px; margin: 15px 0">
+          <h4 style="margin-top: 0; color: #495057; font-size: 16px">
+            1. Generate OAuth2 Access Token
+          </h4>
+          <div style="position: relative">
+            <pre
+              id="generateTokenCommand"
+              style="
+                background: #2d3748;
+                color: #e2e8f0;
+                padding: 15px;
+                border-radius: 8px;
+                font-family: 'Courier New', monospace;
+                font-size: 13px;
+                line-height: 1.4;
+                margin: 10px 0;
+                overflow-x: auto;
+                white-space: pre-wrap;
+              "
+            >
+curl -X POST http://localhost:8087/oauth2/token \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "grant_type=client_credentials&scope=openid profile user:profile user:email user:keys email" \
+  -u "openchallenges-client:secret"</pre
+            >
+            <button
+              onclick="copyCommand('generateTokenCommand')"
+              style="
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                color: white;
+                padding: 6px 12px;
+                border-radius: 6px;
+                font-size: 12px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+              "
+              onmouseover="this.style.background='rgba(255, 255, 255, 0.2)'"
+              onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'"
+            >
+              📋 Copy
+            </button>
+          </div>
+        </div>
+
+        <div style="background: #f8f9fa; border-radius: 10px; padding: 20px; margin: 15px 0">
+          <h4 style="margin-top: 0; color: #495057; font-size: 16px">
+            2. Use OAuth2 Token with API Gateway
+          </h4>
+          <div style="position: relative">
+            <pre
+              id="useTokenCommand"
+              style="
+                background: #2d3748;
+                color: #e2e8f0;
+                padding: 15px;
+                border-radius: 8px;
+                font-family: 'Courier New', monospace;
+                font-size: 13px;
+                line-height: 1.4;
+                margin: 10px 0;
+                overflow-x: auto;
+                white-space: pre-wrap;
+              "
+            >
+curl -H "Authorization: Bearer YOUR_OAUTH2_TOKEN_HERE" \
+  http://localhost:8082/api/v1/organizations</pre
+            >
+            <button
+              onclick="copyCommand('useTokenCommand')"
+              style="
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                color: white;
+                padding: 6px 12px;
+                border-radius: 6px;
+                font-size: 12px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+              "
+              onmouseover="this.style.background='rgba(255, 255, 255, 0.2)'"
+              onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'"
+            >
+              📋 Copy
+            </button>
+          </div>
+        </div>
+
+        <div style="background: #f8f9fa; border-radius: 10px; padding: 20px; margin: 15px 0">
+          <h4 style="margin-top: 0; color: #495057; font-size: 16px">
+            3. Introspect OAuth2 Token (Verify)
+          </h4>
+          <div style="position: relative">
+            <pre
+              id="introspectCommand"
+              style="
+                background: #2d3748;
+                color: #e2e8f0;
+                padding: 15px;
+                border-radius: 8px;
+                font-family: 'Courier New', monospace;
+                font-size: 13px;
+                line-height: 1.4;
+                margin: 10px 0;
+                overflow-x: auto;
+                white-space: pre-wrap;
+              "
+            >
+curl -X POST http://localhost:8087/oauth2/introspect \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "token=YOUR_OAUTH2_TOKEN_HERE" \
+  -u "openchallenges-client:secret"</pre
+            >
+            <button
+              onclick="copyCommand('introspectCommand')"
+              style="
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                color: white;
+                padding: 6px 12px;
+                border-radius: 6px;
+                font-size: 12px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+              "
+              onmouseover="this.style.background='rgba(255, 255, 255, 0.2)'"
+              onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'"
+            >
+              📋 Copy
+            </button>
+          </div>
+        </div>
+
+        <div
+          style="
+            margin-top: 15px;
+            padding: 12px;
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            border-radius: 4px;
+          "
+        >
+          <strong style="color: #0c5460">💡 Note:</strong>
+          <span style="color: #0c5460; font-size: 14px"
+            >OAuth2 tokens are RSA-signed and designed for API access. They expire in 5 minutes and
+            must be validated through the OAuth2 introspection endpoint. Session tokens above are
+            HMAC-signed and used for web authentication only.</span
+          >
         </div>
       </div>
 
@@ -1064,6 +1234,35 @@ curl -X GET "http://localhost:8087/v1/auth/profile" \
         } catch (err) {
           console.error('Failed to copy token: ', err);
           alert('Failed to copy token. Please copy it manually.');
+        }
+      }
+
+      function copyCommand(commandId) {
+        const commandElement = document.getElementById(commandId);
+        const commandText = commandElement.textContent;
+        const button = event.target;
+
+        try {
+          // Create temporary textarea to copy command
+          const textarea = document.createElement('textarea');
+          textarea.value = commandText;
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textarea);
+
+          // Visual feedback
+          const originalText = button.textContent;
+          button.textContent = '✅ Copied!';
+          button.style.background = '#218838';
+
+          setTimeout(() => {
+            button.textContent = originalText;
+            button.style.background = '#28a745';
+          }, 2000);
+        } catch (err) {
+          console.error('Failed to copy command: ', err);
+          alert('Failed to copy command. Please copy it manually.');
         }
       }
     </script>
