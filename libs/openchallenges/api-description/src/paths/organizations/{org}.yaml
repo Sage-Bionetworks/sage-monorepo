@@ -7,6 +7,7 @@ get:
   description: Returns the organization identified by its login or ID.
   operationId: getOrganization
   x-audience: [public]
+  security: []
   responses:
     '200':
       description: Organization retrieved successfully
@@ -26,9 +27,8 @@ put:
   operationId: updateOrganization
   x-audience: [public]
   security:
-    - jwtBearerAuth: []
-    - apiKeyAuth: []
-    - trustedHeaderAuth: []
+    - jwtBearer:
+        - write:org
   requestBody:
     required: true
     content:
@@ -62,9 +62,8 @@ delete:
   operationId: deleteOrganization
   x-audience: [public]
   security:
-    - jwtBearerAuth: []
-    - apiKeyAuth: []
-    - trustedHeaderAuth: []
+    - jwtBearer:
+        - delete:org
   responses:
     '204':
       description: Organization successfully deleted
