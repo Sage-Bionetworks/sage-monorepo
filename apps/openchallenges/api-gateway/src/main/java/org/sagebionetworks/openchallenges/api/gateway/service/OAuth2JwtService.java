@@ -96,7 +96,7 @@ public class OAuth2JwtService {
     private String username;
     private String scope;
     private long exp;
-    private String aud;
+    private Object aud; // Can be String or List<String>
     private String iss;
 
     // Getters and setters
@@ -115,8 +115,22 @@ public class OAuth2JwtService {
     public long getExp() { return exp; }
     public void setExp(long exp) { this.exp = exp; }
     
-    public String getAud() { return aud; }
-    public void setAud(String aud) { this.aud = aud; }
+    public Object getAud() { return aud; }
+    public void setAud(Object aud) { this.aud = aud; }
+    
+    /**
+     * Get the audience as a string, handling both String and List<String> cases.
+     */
+    public String getAudAsString() {
+      if (aud instanceof String) {
+        return (String) aud;
+      } else if (aud instanceof java.util.List) {
+        @SuppressWarnings("unchecked")
+        java.util.List<String> audList = (java.util.List<String>) aud;
+        return audList.isEmpty() ? null : audList.get(0);
+      }
+      return null;
+    }
     
     public String getIss() { return iss; }
     public void setIss(String iss) { this.iss = iss; }

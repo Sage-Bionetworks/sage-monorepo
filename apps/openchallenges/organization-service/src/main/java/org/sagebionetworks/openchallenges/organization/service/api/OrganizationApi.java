@@ -88,7 +88,7 @@ public interface OrganizationApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "apiBearerAuth"),
+            @SecurityRequirement(name = "trustedHeaderAuth"),
             @SecurityRequirement(name = "apiKeyAuth"),
             @SecurityRequirement(name = "jwtBearerAuth")
         }
@@ -139,7 +139,7 @@ public interface OrganizationApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "apiBearerAuth"),
+            @SecurityRequirement(name = "trustedHeaderAuth"),
             @SecurityRequirement(name = "apiKeyAuth"),
             @SecurityRequirement(name = "jwtBearerAuth")
         }
@@ -291,7 +291,7 @@ public interface OrganizationApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "apiBearerAuth"),
+            @SecurityRequirement(name = "trustedHeaderAuth"),
             @SecurityRequirement(name = "apiKeyAuth"),
             @SecurityRequirement(name = "jwtBearerAuth")
         }

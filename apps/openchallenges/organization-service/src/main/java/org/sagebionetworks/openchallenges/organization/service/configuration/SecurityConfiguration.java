@@ -1,8 +1,9 @@
 package org.sagebionetworks.openchallenges.organization.service.configuration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.sagebionetworks.openchallenges.organization.service.client.AuthServiceClient;
 import org.sagebionetworks.openchallenges.organization.service.security.ApiKeyAuthenticationFilter;
+import org.sagebionetworks.openchallenges.organization.service.security.JwtBearerAuthenticationFilter;
+import org.sagebionetworks.openchallenges.organization.service.security.TrustedHeaderAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -17,17 +18,22 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity(jsr250Enabled = true)
 public class SecurityConfiguration {
 
-  private final AuthServiceClient authServiceClient;
-  private final ObjectMapper objectMapper;
+  @Value("${openchallenges.security.mode:trusted-headers}")
+  private String securityMode;
 
-  public SecurityConfiguration(AuthServiceClient authServiceClient, ObjectMapper objectMapper) {
-    this.authServiceClient = authServiceClient;
-    this.objectMapper = objectMapper;
+  @Bean
+  public TrustedHeaderAuthenticationFilter trustedHeaderAuthenticationFilter() {
+    return new TrustedHeaderAuthenticationFilter();
   }
 
   @Bean
   public ApiKeyAuthenticationFilter apiKeyAuthenticationFilter() {
-    return new ApiKeyAuthenticationFilter(authServiceClient, objectMapper);
+    return new ApiKeyAuthenticationFilter();
+  }
+
+  @Bean
+  public JwtBearerAuthenticationFilter jwtBearerAuthenticationFilter() {
+    return new JwtBearerAuthenticationFilter();
   }
 
   @Bean
@@ -46,7 +52,7 @@ public class SecurityConfiguration {
           .permitAll()
           .requestMatchers(HttpMethod.POST, "/v1/organizations/search")
           .permitAll()
-          // Protected endpoints - require authentication and specific scopes
+          // Protected endpoints - require authentication
           .requestMatchers(HttpMethod.DELETE, "/v1/organizations/**")
           .authenticated()
           .requestMatchers(HttpMethod.POST, "/v1/organizations")
@@ -59,9 +65,22 @@ public class SecurityConfiguration {
           .authenticated()
           .anyRequest()
           .authenticated()
-      )
-      .addFilterBefore(apiKeyAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-      .httpBasic(httpBasic -> {});
+      );
+
+    // Configure authentication filters based on security mode
+    if ("trusted-headers".equals(securityMode)) {
+      // API Gateway mode - trust headers from gateway
+      http.addFilterBefore(trustedHeaderAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+    } else if ("direct".equals(securityMode)) {
+      // Direct mode - validate tokens/keys directly (placeholder implementations)
+      http.addFilterBefore(jwtBearerAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+      http.addFilterAfter(apiKeyAuthenticationFilter(), JwtBearerAuthenticationFilter.class);
+    } else {
+      // Default to trusted headers mode
+      http.addFilterBefore(trustedHeaderAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+    }
+
+    http.httpBasic(httpBasic -> {});
 
     return http.build();
   }
