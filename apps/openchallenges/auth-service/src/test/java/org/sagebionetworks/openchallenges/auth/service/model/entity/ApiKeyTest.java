@@ -148,6 +148,8 @@ class ApiKeyTest {
         lastUsedAt,
         createdAt,
         updatedAt,
+        null, // clientId
+        null, // allowedScopes
         plainKey
       );
 
