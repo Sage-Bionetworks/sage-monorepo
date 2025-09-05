@@ -143,11 +143,13 @@
       margin: 0;
       max-height: 247px;
       border-top: none;
-      overflow-y: auto;
+      overflow: hidden auto;
 
       li {
         padding: 11px 20px;
         transition: var(--transition-duration);
+        word-wrap: break-word;
+        overflow-wrap: break-word;
       }
 
       &.search-results-list {
@@ -159,6 +161,17 @@
           &:hover {
             background-color: var(--color-action-primary);
             color: white;
+          }
+
+          .result-button {
+            @include mixins.reset-button;
+
+            text-align: left;
+            width: 100%;
+
+            &:hover {
+              cursor: pointer;
+            }
           }
         }
       }
