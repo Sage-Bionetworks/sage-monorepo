@@ -291,8 +291,14 @@ public class ApiKeyService {
     
     logger.info("Creating OAuth2 client '{}' for API key: {}", clientId, apiKey.getName());
     
-    // Determine scopes based on user role (simplified for now)
-    Set<String> scopes = Set.of("api:read", "api:write");
+    // Determine scopes based on user role
+    Set<String> scopes;
+    if (user.isAdmin()) {
+      scopes = Set.of("user:profile", "user:email", "user:keys", "read:org", "write:org", "delete:org");
+    } else {
+      // Default scopes for regular users
+      scopes = Set.of("user:profile", "user:email", "user:keys", "read:org", "write:org");
+    }
     
     // Create RegisteredClient for this API key
     RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
