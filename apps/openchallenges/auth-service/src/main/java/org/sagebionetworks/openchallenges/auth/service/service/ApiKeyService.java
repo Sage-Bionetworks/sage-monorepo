@@ -60,12 +60,19 @@ public class ApiKeyService {
     OffsetDateTime expiresAt = null;
     if (expiresInDays != null && expiresInDays > 0) {
       expiresAt = OffsetDateTime.now().plusDays(expiresInDays);
-    } // Create entity with the HASHED key
+    } 
+    
+    // Extract suffix from the generated API key to create client_id
+    String suffix = extractSuffix(plainApiKey);
+    String clientId = CLIENT_ID_PREFIX + suffix;
+    
+    // Create entity with the HASHED key
     ApiKey apiKeyEntity = ApiKey.builder()
       .user(user)
       .keyHash(keyHash)
       .keyPrefix(apiKeyProperties.getPrefix())
       .name(name)
+      .clientId(clientId)
       .expiresAt(expiresAt)
       .build();
     
@@ -278,10 +285,9 @@ public class ApiKeyService {
    * Create OAuth2 service principal for an API key
    */
   private void createOAuth2ServicePrincipal(ApiKey apiKey, String plainApiKey, User user) {
-    // Parse the API key to extract the client ID suffix
-    String suffix = extractSuffix(plainApiKey);
+    // Use the client_id that was already set on the API key
+    String clientId = apiKey.getClientId();
     String secret = extractSecret(plainApiKey);
-    String clientId = CLIENT_ID_PREFIX + suffix;
     
     logger.info("Creating OAuth2 client '{}' for API key: {}", clientId, apiKey.getName());
     
@@ -310,8 +316,7 @@ public class ApiKeyService {
     // Save the registered client
     registeredClientRepository.save(registeredClient);
     
-    // Update the API key with OAuth2 info
-    apiKey.setClientId(clientId);
+    // Update the API key with OAuth2 scopes (client_id is already set)
     apiKey.setAllowedScopes(String.join(",", scopes));
     apiKeyRepository.save(apiKey);
     
@@ -339,5 +344,15 @@ public class ApiKeyService {
       throw new IllegalArgumentException("Invalid API key format: missing secret separator");
     }
     return apiKey.substring(lastDot + 1);
+  }
+
+  /**
+   * Extract suffix from client_id (everything after the CLIENT_ID_PREFIX)
+   */
+  private String extractSuffixFromClientId(String clientId) {
+    if (clientId == null || !clientId.startsWith(CLIENT_ID_PREFIX)) {
+      throw new IllegalArgumentException("Invalid client ID format: " + clientId);
+    }
+    return clientId.substring(CLIENT_ID_PREFIX.length());
   }
 }
