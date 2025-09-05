@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.openchallenges.api.gateway.configuration.AuthConfiguration;
 import org.sagebionetworks.openchallenges.api.gateway.service.GatewayAuthenticationService;
+import org.sagebionetworks.openchallenges.api.gateway.service.OAuth2TokenResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.http.server.reactive.MockServerHttpRequest;
@@ -48,7 +49,7 @@ class ApiKeyAuthenticationGatewayFilterTest {
     
     MockServerHttpRequest request = MockServerHttpRequest
         .post("/api/v1/organizations")
-        .header("X-Authenticated-User-Id", "user123") // Added by JWT filter
+        .header("Authorization", "Bearer jwt-token") // Added by JWT filter - this should trigger skip
         .header("X-API-Key", "some-api-key") // Should be ignored
         .build();
     MockServerWebExchange exchange = MockServerWebExchange.from(request);
@@ -57,7 +58,7 @@ class ApiKeyAuthenticationGatewayFilterTest {
     filter.filter(exchange, chain).block();
 
     // then
-    verify(authenticationService, never()).validateApiKey(anyString());
+    verify(authenticationService, never()).exchangeApiKeyForJwt(anyString());
     verify(chain).filter(exchange);
   }
 
@@ -113,12 +114,9 @@ class ApiKeyAuthenticationGatewayFilterTest {
         .build();
     MockServerWebExchange exchange = MockServerWebExchange.from(request);
     
-    GatewayAuthenticationService.ApiKeyValidationResponse invalidResponse = 
-        new GatewayAuthenticationService.ApiKeyValidationResponse();
-    invalidResponse.setValid(false);
-    
-    when(authenticationService.validateApiKey(invalidApiKey))
-        .thenReturn(Mono.just(invalidResponse));
+    // Mock OAuth2 exchange failure for invalid API key
+    when(authenticationService.exchangeApiKeyForJwt(invalidApiKey))
+        .thenReturn(Mono.error(new GatewayAuthenticationService.AuthenticationException("API key authentication failed", new RuntimeException())));
 
     // when
     filter.filter(exchange, chain).block();
@@ -143,16 +141,16 @@ class ApiKeyAuthenticationGatewayFilterTest {
         .build();
     MockServerWebExchange exchange = MockServerWebExchange.from(request);
     
-    GatewayAuthenticationService.ApiKeyValidationResponse validResponse = 
-        new GatewayAuthenticationService.ApiKeyValidationResponse();
-    validResponse.setValid(true);
-    validResponse.setUserId("user123");
-    validResponse.setUsername("testuser");
-    validResponse.setRole("USER");
-    validResponse.setScopes(new String[]{"read", "write"});
+    // Mock successful OAuth2 token exchange
+    OAuth2TokenResponse tokenResponse = new OAuth2TokenResponse(
+        "jwt-access-token", 
+        "Bearer", 
+        3600, 
+        "read write user:profile"
+    );
     
-    when(authenticationService.validateApiKey(validApiKey))
-        .thenReturn(Mono.just(validResponse));
+    when(authenticationService.exchangeApiKeyForJwt(validApiKey))
+        .thenReturn(Mono.just(tokenResponse));
 
     // when
     filter.filter(exchange, chain).block();
@@ -161,8 +159,7 @@ class ApiKeyAuthenticationGatewayFilterTest {
     verify(chain).filter(any());
     assertThat(exchange.getResponse().getStatusCode()).isNull(); // No error status set
     
-    // Verify headers were added to the request that was passed to the next filter
-    // Note: We can't easily verify the modified request headers in this test setup
-    // as MockServerWebExchange doesn't provide access to the mutated request
+    // Verify the token exchange was called
+    verify(authenticationService).exchangeApiKeyForJwt(validApiKey);
   }
 }

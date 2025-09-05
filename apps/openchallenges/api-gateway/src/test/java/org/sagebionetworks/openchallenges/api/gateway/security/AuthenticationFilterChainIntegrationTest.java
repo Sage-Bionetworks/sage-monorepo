@@ -7,6 +7,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.openchallenges.api.gateway.configuration.AuthConfiguration;
 import org.sagebionetworks.openchallenges.api.gateway.service.GatewayAuthenticationService;
 import org.sagebionetworks.openchallenges.api.gateway.service.OAuth2JwtService;
+import org.sagebionetworks.openchallenges.api.gateway.service.OAuth2TokenResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.http.server.reactive.MockServerHttpRequest;
@@ -97,16 +98,16 @@ class AuthenticationFilterChainIntegrationTest {
         .build(); // No Authorization header
     MockServerWebExchange exchange = MockServerWebExchange.from(request);
     
-    GatewayAuthenticationService.ApiKeyValidationResponse validApiKeyResponse = 
-        new GatewayAuthenticationService.ApiKeyValidationResponse();
-    validApiKeyResponse.setValid(true);
-    validApiKeyResponse.setUserId("api-user-456");
-    validApiKeyResponse.setUsername("apiuser");
-    validApiKeyResponse.setRole("SERVICE");
-    validApiKeyResponse.setScopes(new String[]{"read", "write"});
+    // Mock successful OAuth2 token exchange for API key
+    OAuth2TokenResponse tokenResponse = new OAuth2TokenResponse(
+        "jwt-access-token", 
+        "Bearer", 
+        3600, 
+        "read write service"
+    );
     
-    when(gatewayAuthenticationService.validateApiKey(validApiKey))
-        .thenReturn(Mono.just(validApiKeyResponse));
+    when(gatewayAuthenticationService.exchangeApiKeyForJwt(validApiKey))
+        .thenReturn(Mono.just(tokenResponse));
 
     // Simulate filter chain: JWT filter -> API key filter -> downstream
     WebFilterChain jwtToApiKeyChain = (ex) -> apiKeyFilter.filter(ex, chain);
@@ -116,7 +117,7 @@ class AuthenticationFilterChainIntegrationTest {
 
     // then
     verify(oAuth2JwtService, never()).validateJwt(anyString()); // JWT should be skipped
-    verify(gatewayAuthenticationService).validateApiKey(validApiKey);
+    verify(gatewayAuthenticationService).exchangeApiKeyForJwt(validApiKey);
     verify(chain).filter(any()); // Should reach the end of the chain
     assertThat(exchange.getResponse().getStatusCode()).isNull(); // No error status
   }
