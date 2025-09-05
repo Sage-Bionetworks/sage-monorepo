@@ -77,25 +77,19 @@
           <div class="boxplots-evidence-type-title">
             <h2>{{ evidenceType | decodeGreekEntity }}</h2>
             @if (activeShareLink() === evidenceType) {
-              <button
-                type="button"
-                (click)="copyShareLink(evidenceType)"
-                [attr.aria-describedby]="generateAnchorId(evidenceType)"
-                [attr.aria-label]="`Copy link to ${evidenceType | decodeGreekEntity }`"
-                [pTooltip]="getShareLinkTooltipText(evidenceType)"
-                (mouseenter)="showTooltip()"
-                (mouseleave)="hideTooltip()"
-                [autoHide]="false"
-                [tooltipEvent]="'focus'"
-              >
-                <explorers-svg-icon
-                  imagePath="/explorers-assets/icons/link.svg"
-                  altText="link"
-                  color="#878E95"
-                  [height]="12"
-                  [width]="24"
-                />
-              </button>
+              <explorers-tooltip-button
+                [onClick]="copyShareLinkCallbackFn(evidenceType)"
+                [buttonAriaDescribedBy]="generateAnchorId(evidenceType)"
+                [buttonAriaLabel]="`Copy link to ${evidenceType | decodeGreekEntity }`"
+                [tooltipText]="getShareLinkTooltipText(evidenceType)"
+                [buttonSvgIconConfig]="{
+                  imagePath: '/explorers-assets/icons/link.svg',
+                  altText: 'link',
+                  color: '#878E95',
+                  height: 12,
+                  width: 24,
+                }"
+              />
             }
           </div>
           <explorers-download-dom-image

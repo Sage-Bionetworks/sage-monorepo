@@ -1,0 +1,16 @@
+@use 'explorers/styles/src/lib/mixins';
+
+button {
+  @include mixins.reset-button;
+
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--color-action-primary);
+
+    @include mixins.link-hover;
+  }
+}

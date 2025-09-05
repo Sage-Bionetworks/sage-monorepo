@@ -1,0 +1,26 @@
+<button
+  type="button"
+  (click)="onClick()()"
+  [attr.aria-describedby]="buttonAriaDescribedBy()"
+  [attr.aria-label]="buttonAriaLabel()"
+  [pTooltip]="tooltipText()"
+  (mouseenter)="showTooltip()"
+  (mouseleave)="hideTooltip()"
+  [autoHide]="false"
+  [tooltipEvent]="'focus'"
+>
+  @if (buttonSvgIconConfig()?.imagePath) {
+    @let cfg = buttonSvgIconConfig()!;
+    <explorers-svg-icon
+      [imagePath]="cfg.imagePath!"
+      [altText]="cfg.altText || ''"
+      [width]="cfg.width || 14"
+      [height]="cfg.height || 14"
+      [color]="cfg.color || 'inherit'"
+      [enableHoverEffects]="cfg.enableHoverEffects || true"
+    />
+  }
+  @if (buttonLabel()) {
+    {{ buttonLabel() }}
+  }
+</button>

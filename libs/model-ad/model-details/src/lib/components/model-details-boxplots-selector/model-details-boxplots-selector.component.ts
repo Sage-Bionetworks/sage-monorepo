@@ -23,11 +23,10 @@ import {
 import {
   DecodeGreekEntityPipe,
   ModalLinkComponent,
-  SvgIconComponent,
+  TooltipButtonComponent,
 } from '@sagebionetworks/explorers/util';
 import { IndividualData, ModelData } from '@sagebionetworks/model-ad/api-client-angular';
 import { SelectModule } from 'primeng/select';
-import { Tooltip, TooltipModule } from 'primeng/tooltip';
 import { ModelDetailsBoxplotsGridComponent } from '../model-details-boxplots-grid/model-details-boxplots-grid.component';
 
 @Component({
@@ -37,12 +36,10 @@ import { ModelDetailsBoxplotsGridComponent } from '../model-details-boxplots-gri
     SelectModule,
     ModelDetailsBoxplotsGridComponent,
     ModalLinkComponent,
-    SvgIconComponent,
     DecodeGreekEntityPipe,
     DownloadDomImageComponent,
     DownloadDomImagesZipComponent,
-    TooltipModule,
-    Tooltip,
+    TooltipButtonComponent,
   ],
   templateUrl: './model-details-boxplots-selector.component.html',
   styleUrls: ['./model-details-boxplots-selector.component.scss'],
@@ -52,7 +49,6 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
   private readonly location = inject(Location);
   private readonly clipboard = inject(Clipboard);
 
-  tooltip = viewChild(Tooltip);
   boxplotsContainer = viewChild('boxplotsContainer', { read: ElementRef });
   boxplotGrids = viewChildren(ModelDetailsBoxplotsGridComponent, { read: ElementRef });
 
@@ -280,18 +276,14 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
       : 'Copy the URL to this section';
   }
 
-  showTooltip() {
-    this.tooltip()?.show();
-  }
-
-  hideTooltip() {
-    this.tooltip()?.hide();
-  }
-
   copyShareLink(evidenceType: string): void {
     this.updateUrlFragment(this.generateAnchorId(evidenceType));
     this.clipboard.copy(window.location.href);
     this.lastShareLinkCopied.set(evidenceType);
+  }
+
+  copyShareLinkCallbackFn(evidenceType: string): () => void {
+    return () => this.copyShareLink(evidenceType);
   }
 
   decodeHtmlEntities(text: string): string {
