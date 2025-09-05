@@ -1,10 +1,5 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
-import {
-  mockCheckQueryForErrors,
-  mockGetSearchResults,
-  mockNavigateToResult,
-} from '@sagebionetworks/explorers/testing';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
 import { HomeCardComponent } from './home-card.component';
@@ -17,11 +12,6 @@ const meta: Meta<HomeCardComponent> = {
       providers: [provideRouter([]), provideHttpClient(withInterceptorsFromDi())],
     }),
   ],
-  argTypes: {
-    navigateToResult: { control: false },
-    getSearchResults: { control: false },
-    checkQueryForErrors: { control: false },
-  },
 };
 export default meta;
 type Story = StoryObj<HomeCardComponent>;
@@ -44,9 +34,5 @@ export const SearchHomeCard: Story = {
       'Search for a gene by name or Ensembl gene ID to view related experimental evidence, find detailed information about nominations, and explore its association with AD.',
     imagePath: '/explorers-assets/images/gene-search-icon.svg',
     imageAltText: 'gene comparison icon',
-    searchPlaceholder: 'Find Gene by Name...',
-    navigateToResult: mockNavigateToResult,
-    getSearchResults: mockGetSearchResults,
-    checkQueryForErrors: mockCheckQueryForErrors,
   },
 };

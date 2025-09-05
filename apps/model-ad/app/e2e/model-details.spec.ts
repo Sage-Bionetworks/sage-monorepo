@@ -359,12 +359,24 @@ test.describe('model details - boxplots selector - share links - updates', () =>
 
 test.describe('model details - boxplots selector - share links - link button', () => {
   const basePath = '/models/Abca7*V1599M/biomarkers';
-  test('clicking share link button updates fragment', async ({ page }) => {
+  test('clicking share link button updates fragment and copies link to clipboard', async ({
+    page,
+    context,
+  }) => {
+    await context.grantPermissions(['clipboard-read']);
+
     await page.goto(`${basePath}#soluble-a-beta-42`);
 
-    const button = page.getByRole('button', { name: 'Update URL to link to Nfl' });
+    // hover on heading, so share link appears
+    const heading = page.getByRole('heading', { level: 2, name: 'Nfl' });
+    await heading.hover();
+
+    const button = page.getByRole('button', { name: 'Copy link to Nfl' });
     await button.click();
 
     await page.waitForURL(`${basePath}#nfl`);
+
+    const clipboardContent = await page.evaluate(() => navigator.clipboard.readText());
+    expect(clipboardContent).toEqual(page.url());
   });
 });
