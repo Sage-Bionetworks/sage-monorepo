@@ -166,4 +166,21 @@ export class SearchInputComponent implements AfterViewInit {
       this.showResults = false;
     }
   }
+
+  highlightMatches(text: string, query: string): string {
+    if (!text || !query || query.length < 1) {
+      return text;
+    }
+
+    // Escape special regex characters in the query
+    const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`(${escapedQuery})`, 'gi');
+
+    return text.replace(regex, '<mark>$1</mark>');
+  }
+
+  formatAndHighlightResultsForDisplay(result: SearchResult): string {
+    const formattedText = this.formatResultForDisplay()(result);
+    return this.highlightMatches(formattedText, this.query);
+  }
 }

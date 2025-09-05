@@ -1,4 +1,4 @@
-<div #root [class]="`search ${hasThickBorder() && 'search-thick-border'} `">
+<div #root [class]="`search ${hasThickBorder() ? 'search-thick-border' : ''}`">
   <div class="search-bar">
     <div class="search-bar-icon">
       @if (isLoading) {
@@ -50,7 +50,7 @@
               <li (click)="goToResult(result.id)">
                 <span
                   class="result-name"
-                  [innerHtml]="formatResultForDisplay()(result) | sanitizeHtml"
+                  [innerHtml]="formatAndHighlightResultsForDisplay(result) | sanitizeHtml"
                 ></span>
               </li>
             }
