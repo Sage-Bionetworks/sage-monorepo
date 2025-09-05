@@ -1,18 +1,8 @@
-@use 'styles/src/lib/variables' as vars;
-@use 'styles/src/lib/mixins';
-
-:host {
-  --lg-breakpoint: vars.$lg-breakpoint;
-}
-
 .boxplots-grid {
   display: grid;
   gap: 30px 50px;
-  grid-template-columns: minmax(0, 1fr);
-
-  @include mixins.respond-to('large') {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+  grid-template-columns: repeat(auto-fit, minmax(495px, 1fr));
+  justify-content: center;
 }
 
 .boxplots-grid-legend {
