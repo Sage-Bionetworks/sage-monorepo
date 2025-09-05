@@ -70,9 +70,16 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
 
   scrollToPanelNavElementOnInitialLoad = false;
 
+  reset() {
+    this.model = undefined;
+    this.activePanel = 'omics';
+    this.activeParent = '';
+    this.isLoading = true;
+  }
+
   ngOnInit() {
     this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params: ParamMap) => {
-      this.isLoading = true;
+      this.reset();
 
       // only fetch data during client hydration
       if (this.platformService.isBrowser) {

@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { searchAndGetSearchListItems } from './helpers';
 
 test.describe('model details', () => {
   test('invalid model results in a 404 redirect', async ({ page }) => {
@@ -47,6 +48,26 @@ test.describe('model details', () => {
     const omicsTab = page.getByRole('button', { name: 'Omics' });
     await omicsTab.click();
     await page.waitForURL(`${modelPath}/omics`);
+    await expect(page.getByRole('heading', { level: 2, name: 'Available Data' })).toBeVisible();
+  });
+
+  test('correct tab is loaded when navigating to new model via search', async ({ page }) => {
+    const initialModelPath = '/models/3xTg-AD';
+    const nextModel = 'LOAD2';
+
+    await page.goto('/models/3xTg-AD');
+    await expect(page.getByRole('heading', { level: 2, name: 'Available Data' })).toBeVisible();
+
+    const pathologyTab = page.getByRole('button', { name: 'Pathology' });
+    await pathologyTab.click();
+    await page.waitForURL(`${initialModelPath}/pathology`);
+    await expect(page.getByRole('heading', { level: 2, name: 'Pathology' })).toBeVisible();
+
+    const searchListItems = await searchAndGetSearchListItems(nextModel, page);
+    await searchListItems.first().click();
+
+    await page.waitForURL(`/models/${nextModel}`);
+    await expect(page.getByRole('heading', { level: 1, name: nextModel })).toBeVisible();
     await expect(page.getByRole('heading', { level: 2, name: 'Available Data' })).toBeVisible();
   });
 
