@@ -3,6 +3,7 @@ package org.sagebionetworks.openchallenges.auth.service.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -12,6 +13,7 @@ import static org.mockito.Mockito.when;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,6 +29,8 @@ import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.repository.ApiKeyRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("ApiKeyService Tests")
@@ -41,6 +45,12 @@ class ApiKeyServiceTest {
   @Mock
   private ApiKeyProperties apiKeyProperties;
 
+  @Mock
+  private RegisteredClientRepository registeredClientRepository;
+
+  @Mock
+  private JdbcTemplate jdbcTemplate;
+
   private ApiKeyService apiKeyService;
 
   private User testUser;
@@ -52,7 +62,12 @@ class ApiKeyServiceTest {
     lenient().when(apiKeyProperties.getPrefix()).thenReturn("oc_test_");
     lenient().when(apiKeyProperties.getLength()).thenReturn(40);
 
-    apiKeyService = new ApiKeyService(apiKeyRepository, passwordEncoder, apiKeyProperties);
+    // Setup lenient stubs for OAuth2 repository operations
+    lenient().doNothing().when(registeredClientRepository).save(any());
+    lenient().when(jdbcTemplate.queryForList(anyString(), (Object[]) any())).thenReturn(List.of());
+    lenient().when(jdbcTemplate.update(anyString(), (Object[]) any())).thenReturn(0);
+
+    apiKeyService = new ApiKeyService(apiKeyRepository, passwordEncoder, apiKeyProperties, registeredClientRepository, jdbcTemplate);
 
     testUser = User.builder()
       .id(UUID.randomUUID())
@@ -83,7 +98,9 @@ class ApiKeyServiceTest {
       ApiKeyService service = new ApiKeyService(
         apiKeyRepository,
         passwordEncoder,
-        apiKeyProperties
+        apiKeyProperties,
+        registeredClientRepository,
+        jdbcTemplate
       );
 
       // Then
@@ -131,8 +148,9 @@ class ApiKeyServiceTest {
       assertThat(result.getPlainKey()).isNotNull();
       assertThat(result.getPlainKey()).startsWith("oc_test_");
 
-      verify(passwordEncoder).encode(anyString());
-      verify(apiKeyRepository).save(any(ApiKey.class));
+      verify(passwordEncoder, times(2)).encode(anyString()); // Once for API key hash, once for OAuth2 client secret
+      verify(apiKeyRepository, times(2)).save(any(ApiKey.class)); // Once for initial save, once for updating scopes
+      verify(registeredClientRepository).save(any()); // OAuth2 client creation
     }
 
     @Test
@@ -160,8 +178,9 @@ class ApiKeyServiceTest {
       assertThat(result.getPlainKey()).isNotNull();
       assertThat(result.getPlainKey()).startsWith("oc_test_");
 
-      verify(passwordEncoder).encode(anyString());
-      verify(apiKeyRepository).save(any(ApiKey.class));
+      verify(passwordEncoder, times(2)).encode(anyString()); // Once for API key hash, once for OAuth2 client secret
+      verify(apiKeyRepository, times(2)).save(any(ApiKey.class)); // Once for initial save, once for updating scopes
+      verify(registeredClientRepository).save(any()); // OAuth2 client creation
     }
 
     @Test
@@ -185,8 +204,9 @@ class ApiKeyServiceTest {
       assertThat(result).isNotNull();
       assertThat(result.getExpiresAt()).isNull(); // Zero days should result in no expiration
 
-      verify(passwordEncoder).encode(anyString());
-      verify(apiKeyRepository).save(any(ApiKey.class));
+      verify(passwordEncoder, times(2)).encode(anyString()); // Once for API key hash, once for OAuth2 client secret
+      verify(apiKeyRepository, times(2)).save(any(ApiKey.class)); // Once for initial save, once for updating scopes
+      verify(registeredClientRepository).save(any()); // OAuth2 client creation
     }
 
     @Test
@@ -212,8 +232,9 @@ class ApiKeyServiceTest {
       assertThat(result1.getPlainKey()).isNotEqualTo(result2.getPlainKey());
       assertThat(result1.getKeyHash()).isNotEqualTo(result2.getKeyHash());
 
-      verify(passwordEncoder, times(2)).encode(anyString());
-      verify(apiKeyRepository, times(2)).save(any(ApiKey.class));
+      verify(passwordEncoder, times(4)).encode(anyString()); // 2 API keys * 2 encodes each = 4 total
+      verify(apiKeyRepository, times(4)).save(any(ApiKey.class)); // 2 API keys * 2 saves each = 4 total
+      verify(registeredClientRepository, times(2)).save(any()); // 2 OAuth2 clients
     }
   }
 
@@ -246,8 +267,9 @@ class ApiKeyServiceTest {
       assertThat(result.getPlainKey()).isNotNull();
       assertThat(result.getPlainKey()).startsWith("oc_test_");
 
-      verify(passwordEncoder).encode(anyString());
-      verify(apiKeyRepository).save(any(ApiKey.class));
+      verify(passwordEncoder, times(2)).encode(anyString()); // Once for API key hash, once for OAuth2 client secret
+      verify(apiKeyRepository, times(2)).save(any(ApiKey.class)); // Once for initial save, once for updating scopes
+      verify(registeredClientRepository).save(any()); // OAuth2 client creation
     }
   }
 
@@ -545,7 +567,15 @@ class ApiKeyServiceTest {
     void shouldDeleteApiKeyWhenUserOwnsIt() {
       // Arrange
       UUID keyId = testApiKey.getId();
-      when(apiKeyRepository.findById(keyId)).thenReturn(Optional.of(testApiKey));
+      Map<String, Object> deletedRow = Map.of(
+        "client_id", "oc_api_key_test123",
+        "name", "Test API Key"
+      );
+      
+      when(jdbcTemplate.queryForList(anyString(), eq(keyId), eq(testUser.getId())))
+        .thenReturn(List.of(deletedRow));
+      when(jdbcTemplate.update(anyString(), eq("oc_api_key_test123")))
+        .thenReturn(1);
 
       // Act
       boolean result = apiKeyService.deleteApiKey(keyId, testUser);
@@ -553,8 +583,8 @@ class ApiKeyServiceTest {
       // Assert
       assertThat(result).isTrue();
 
-      verify(apiKeyRepository).findById(keyId);
-      verify(apiKeyRepository).delete(testApiKey);
+      verify(jdbcTemplate).queryForList(anyString(), eq(keyId), eq(testUser.getId()));
+      verify(jdbcTemplate).update(anyString(), eq("oc_api_key_test123"));
     }
 
     @Test
@@ -564,7 +594,8 @@ class ApiKeyServiceTest {
       UUID keyId = testApiKey.getId();
       User differentUser = User.builder().id(UUID.randomUUID()).username("differentuser").build();
 
-      when(apiKeyRepository.findById(keyId)).thenReturn(Optional.of(testApiKey));
+      when(jdbcTemplate.queryForList(anyString(), eq(keyId), eq(differentUser.getId())))
+        .thenReturn(List.of()); // Empty list means no rows deleted
 
       // Act
       boolean result = apiKeyService.deleteApiKey(keyId, differentUser);
@@ -572,8 +603,8 @@ class ApiKeyServiceTest {
       // Assert
       assertThat(result).isFalse();
 
-      verify(apiKeyRepository).findById(keyId);
-      verify(apiKeyRepository, never()).delete(any(ApiKey.class));
+      verify(jdbcTemplate).queryForList(anyString(), eq(keyId), eq(differentUser.getId()));
+      verify(jdbcTemplate, never()).update(anyString(), (Object[]) any());
     }
 
     @Test
@@ -581,7 +612,8 @@ class ApiKeyServiceTest {
     void shouldNotDeleteApiKeyWhenItDoesNotExist() {
       // Arrange
       UUID nonExistentKeyId = UUID.randomUUID();
-      when(apiKeyRepository.findById(nonExistentKeyId)).thenReturn(Optional.empty());
+      when(jdbcTemplate.queryForList(anyString(), eq(nonExistentKeyId), eq(testUser.getId())))
+        .thenReturn(List.of()); // Empty list means no rows deleted
 
       // Act
       boolean result = apiKeyService.deleteApiKey(nonExistentKeyId, testUser);
@@ -589,8 +621,8 @@ class ApiKeyServiceTest {
       // Assert
       assertThat(result).isFalse();
 
-      verify(apiKeyRepository).findById(nonExistentKeyId);
-      verify(apiKeyRepository, never()).delete(any(ApiKey.class));
+      verify(jdbcTemplate).queryForList(anyString(), eq(nonExistentKeyId), eq(testUser.getId()));
+      verify(jdbcTemplate, never()).update(anyString(), (Object[]) any());
     }
   }
 
@@ -601,12 +633,17 @@ class ApiKeyServiceTest {
     @Test
     @DisplayName("should call repository to delete expired API keys")
     void shouldCallRepositoryToDeleteExpiredApiKeys() {
+      // Arrange
+      when(apiKeyRepository.findExpiredApiKeys(any(OffsetDateTime.class))).thenReturn(List.of());
+      when(jdbcTemplate.update(anyString(), any(OffsetDateTime.class))).thenReturn(0);
+
       // Act
       apiKeyService.cleanupExpiredApiKeys();
 
       // Assert
       ArgumentCaptor<OffsetDateTime> timeCaptor = ArgumentCaptor.forClass(OffsetDateTime.class);
-      verify(apiKeyRepository).deleteExpiredApiKeys(timeCaptor.capture());
+      verify(apiKeyRepository).findExpiredApiKeys(timeCaptor.capture());
+      verify(jdbcTemplate).update(anyString(), any(OffsetDateTime.class));
 
       OffsetDateTime capturedTime = timeCaptor.getValue();
       assertThat(capturedTime).isBeforeOrEqualTo(OffsetDateTime.now());
@@ -638,15 +675,15 @@ class ApiKeyServiceTest {
 
       // Verify the plain key structure
       String plainKey = result.getPlainKey();
-      assertThat(plainKey).hasSize("oc_test_".length() + 40); // prefix + length
-      assertThat(plainKey.substring("oc_test_".length())).matches("[A-Za-z0-9_-]+"); // Base64 URL-safe characters
+      // Format: prefix + suffix(22 chars) + "." + secret(32 chars) = prefix + 55
+      assertThat(plainKey).hasSize("oc_test_".length() + 55); // prefix + suffix + "." + secret
+      assertThat(plainKey.substring("oc_test_".length())).matches("[A-Za-z0-9_.-]+"); // Base64 URL-safe characters + dot
     }
 
     @Test
     @DisplayName("should generate API key with correct length")
     void shouldGenerateApiKeyWithCorrectLength() {
       // Arrange
-      when(apiKeyProperties.getLength()).thenReturn(32); // Different length for testing
       String hashedKey = "hashedkey";
       when(passwordEncoder.encode(anyString())).thenReturn(hashedKey);
       when(apiKeyRepository.save(any(ApiKey.class))).thenAnswer(invocation -> {
@@ -660,7 +697,7 @@ class ApiKeyServiceTest {
 
       // Assert
       String plainKey = result.getPlainKey();
-      assertThat(plainKey).hasSize("oc_test_".length() + 32); // prefix + custom length
+      assertThat(plainKey).hasSize("oc_test_".length() + 55); // prefix + suffix(22) + "." + secret(32)
     }
 
     @Test
