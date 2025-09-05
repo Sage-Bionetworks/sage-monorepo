@@ -68,6 +68,9 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
 
         UsernamePasswordAuthenticationToken authentication =
           new UsernamePasswordAuthenticationToken(apiKey.getUser(), null, authorities);
+        
+        // Store the API key as authentication details for scope resolution
+        authentication.setDetails(apiKey);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         logger.debug(
