@@ -20,7 +20,7 @@ INSERT INTO app_user (username, password_hash, email, first_name, last_name, rol
 INSERT INTO api_key (user_id, key_hash, key_prefix, name, client_id, allowed_scopes, expires_at, created_at, updated_at) VALUES
 (
     (SELECT id FROM app_user WHERE username = 'testuser'),
-    '$2a$12$71IJAwVtX8GpMzVzH8lq3.k7De/c5Tc7TIvmuXAgiN0M6VWPd4i1K', -- BCrypt hash of full key
+    '{bcrypt}$2a$12$71IJAwVtX8GpMzVzH8lq3.k7De/c5Tc7TIvmuXAgiN0M6VWPd4i1K', -- BCrypt hash of full key with prefix
     'oc_dev_',
     'Test API Key',
     'oc_api_key_test1',
@@ -34,7 +34,7 @@ INSERT INTO api_key (user_id, key_hash, key_prefix, name, client_id, allowed_sco
 INSERT INTO api_key (user_id, key_hash, key_prefix, name, client_id, allowed_scopes, expires_at, created_at, updated_at) VALUES
 (
     (SELECT id FROM app_user WHERE username = 'developer'),
-    '$2a$12$TG/Ty67DQkbYWRD6IJPNpu1y3mEE9NVMv2dHRA.Kb0HGXmUPUpeTO', -- BCrypt hash of full key
+    '{bcrypt}$2a$12$TG/Ty67DQkbYWRD6IJPNpu1y3mEE9NVMv2dHRA.Kb0HGXmUPUpeTO', -- BCrypt hash of full key with prefix
     'oc_dev_',
     'Developer API Key',
     'oc_api_key_dev1',
@@ -48,7 +48,7 @@ INSERT INTO api_key (user_id, key_hash, key_prefix, name, client_id, allowed_sco
 INSERT INTO api_key (user_id, key_hash, key_prefix, name, client_id, allowed_scopes, expires_at, created_at, updated_at) VALUES
 (
     (SELECT id FROM app_user WHERE username = 'org-admin'),
-    '$2a$12$EUPPJ0euYyruWcHKGQZ7P.zUZcPJDB1FeNjt7OJ1XMX41ni3YgMO.', -- BCrypt hash of full key
+    '{bcrypt}$2a$12$EUPPJ0euYyruWcHKGQZ7P.zUZcPJDB1FeNjt7OJ1XMX41ni3YgMO.', -- BCrypt hash of full key with prefix
     'oc_dev_',
     'Admin API Key',
     'oc_api_key_admin1',
