@@ -109,9 +109,8 @@ describe('SearchInputComponent', () => {
     await waitForSpinner();
 
     expect(input).toHaveValue('dummy');
-    // search for the text that is not surrounded by <mark>
-    await screen.findByText('_id');
-    await screen.findByText('_id_2');
+    await screen.findByLabelText('dummy_id');
+    await screen.findByLabelText('dummy_id_2');
   });
 
   it('should navigate to result when clicked', async () => {
@@ -121,8 +120,7 @@ describe('SearchInputComponent', () => {
     await user.type(input, 'dummy');
     await waitForSpinner();
 
-    // search for text that is not surrounded by <mark>
-    await user.click(screen.getByText('_id'));
+    await user.click(screen.getByLabelText('dummy_id'));
     expect(mockNavigateToResult).toHaveBeenCalledWith('dummy_id');
 
     expect(getInput()).toHaveValue('');
@@ -135,7 +133,7 @@ describe('SearchInputComponent', () => {
     await user.type(input, 'dummy');
     await waitForSpinner();
 
-    const clearButton = screen.getByRole('button');
+    const clearButton = screen.getByRole('button', { name: 'Clear' });
     await user.click(clearButton);
 
     expect(getInput()).toHaveValue('');

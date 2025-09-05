@@ -162,6 +162,17 @@
             background-color: var(--color-action-primary);
             color: white;
           }
+
+          .result-button {
+            @include mixins.reset-button;
+
+            text-align: left;
+            width: 100%;
+
+            &:hover {
+              cursor: pointer;
+            }
+          }
         }
       }
     }
