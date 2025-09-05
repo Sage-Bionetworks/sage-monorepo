@@ -1,7 +1,12 @@
 package org.sagebionetworks.openchallenges.auth.service.api;
 
 import java.net.URI;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.UserProfileDto;
@@ -9,6 +14,7 @@ import org.sagebionetworks.openchallenges.auth.service.model.dto.UpdateUserProfi
 import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.UserRoleDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.AuthScopeDto;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
@@ -56,6 +62,22 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
 
       User user = (User) principal;
       log.debug("Getting profile for user with ID: {} and username: {}", user.getId(), user.getUsername());
+      
+      // Get API key scopes from authentication details if available
+      List<AuthScopeDto> scopes = Collections.emptyList();
+      Object details = authentication.getDetails();
+      if (details instanceof ApiKey) {
+        ApiKey apiKey = (ApiKey) details;
+        String allowedScopes = apiKey.getAllowedScopes();
+        if (allowedScopes != null && !allowedScopes.trim().isEmpty()) {
+          String[] scopeArray = allowedScopes.split(",");
+          scopes = Arrays.stream(scopeArray)
+              .map(scope -> AuthScopeDto.fromValue(scope.trim()))
+              .collect(Collectors.toList());
+        }
+        log.debug("Retrieved {} scopes from API key: {}", scopes.size(), allowedScopes);
+      }
+      
       UserProfileDto profile = UserProfileDto.builder()
         .id(user.getId().toString())
         .username(user.getUsername())
@@ -66,6 +88,7 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
         .website(user.getWebsite() != null ? URI.create(user.getWebsite()) : null)
         .avatarUrl(user.getAvatarUrl() != null ? URI.create(user.getAvatarUrl()) : null)
         .role(UserRoleDto.fromValue(user.getRole().name()))
+        .scopes(scopes)
         .createdAt(user.getCreatedAt())
         .updatedAt(user.getUpdatedAt())
         .build();

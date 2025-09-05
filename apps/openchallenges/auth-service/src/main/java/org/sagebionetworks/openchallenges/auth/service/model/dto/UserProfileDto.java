@@ -1,22 +1,22 @@
 package org.sagebionetworks.openchallenges.auth.service.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.annotation.Generated;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.AuthScopeDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.UserRoleDto;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Generated;
 
 /**
  * UserProfileDto
@@ -24,7 +24,10 @@ import jakarta.annotation.Generated;
 
 @JsonTypeName("UserProfile")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NONE) // Disable type information for API responses
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
+@Generated(
+  value = "org.openapitools.codegen.languages.SpringCodegen",
+  comments = "Generator version: 7.14.0"
+)
 public class UserProfileDto {
 
   private String id;
@@ -61,7 +64,13 @@ public class UserProfileDto {
   /**
    * Constructor with only required parameters
    */
-  public UserProfileDto(String id, String username, String email, UserRoleDto role, OffsetDateTime createdAt) {
+  public UserProfileDto(
+    String id,
+    String username,
+    String email,
+    UserRoleDto role,
+    OffsetDateTime createdAt
+  ) {
     this.id = id;
     this.username = username;
     this.email = email;
@@ -78,8 +87,13 @@ public class UserProfileDto {
    * Unique user identifier
    * @return id
    */
-  @NotNull 
-  @Schema(name = "id", example = "user_123456789", description = "Unique user identifier", requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotNull
+  @Schema(
+    name = "id",
+    example = "user_123456789",
+    description = "Unique user identifier",
+    requiredMode = Schema.RequiredMode.REQUIRED
+  )
   @JsonProperty("id")
   public String getId() {
     return id;
@@ -98,8 +112,13 @@ public class UserProfileDto {
    * User's username
    * @return username
    */
-  @NotNull 
-  @Schema(name = "username", example = "johndoe", description = "User's username", requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotNull
+  @Schema(
+    name = "username",
+    example = "johndoe",
+    description = "User's username",
+    requiredMode = Schema.RequiredMode.REQUIRED
+  )
   @JsonProperty("username")
   public String getUsername() {
     return username;
@@ -118,8 +137,14 @@ public class UserProfileDto {
    * User's email address
    * @return email
    */
-  @NotNull @jakarta.validation.constraints.Email 
-  @Schema(name = "email", example = "john.doe@example.com", description = "User's email address", requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotNull
+  @jakarta.validation.constraints.Email
+  @Schema(
+    name = "email",
+    example = "john.doe@example.com",
+    description = "User's email address",
+    requiredMode = Schema.RequiredMode.REQUIRED
+  )
   @JsonProperty("email")
   public String getEmail() {
     return email;
@@ -138,8 +163,13 @@ public class UserProfileDto {
    * User's first name
    * @return firstName
    */
-  
-  @Schema(name = "firstName", example = "John", description = "User's first name", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+
+  @Schema(
+    name = "firstName",
+    example = "John",
+    description = "User's first name",
+    requiredMode = Schema.RequiredMode.NOT_REQUIRED
+  )
   @JsonProperty("firstName")
   public @Nullable String getFirstName() {
     return firstName;
@@ -158,8 +188,13 @@ public class UserProfileDto {
    * User's last name
    * @return lastName
    */
-  
-  @Schema(name = "lastName", example = "Doe", description = "User's last name", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+
+  @Schema(
+    name = "lastName",
+    example = "Doe",
+    description = "User's last name",
+    requiredMode = Schema.RequiredMode.NOT_REQUIRED
+  )
   @JsonProperty("lastName")
   public @Nullable String getLastName() {
     return lastName;
@@ -178,7 +213,8 @@ public class UserProfileDto {
    * Get role
    * @return role
    */
-  @NotNull @Valid 
+  @NotNull
+  @Valid
   @Schema(name = "role", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("role")
   public UserRoleDto getRole() {
@@ -206,8 +242,12 @@ public class UserProfileDto {
    * User's authorized scopes/permissions
    * @return scopes
    */
-  @Valid 
-  @Schema(name = "scopes", description = "User's authorized scopes/permissions", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Valid
+  @Schema(
+    name = "scopes",
+    description = "User's authorized scopes/permissions",
+    requiredMode = Schema.RequiredMode.NOT_REQUIRED
+  )
   @JsonProperty("scopes")
   public List<AuthScopeDto> getScopes() {
     return scopes;
@@ -226,8 +266,13 @@ public class UserProfileDto {
    * URL to user's avatar image
    * @return avatarUrl
    */
-  @Valid 
-  @Schema(name = "avatarUrl", example = "https://example.com/avatars/johndoe.jpg", description = "URL to user's avatar image", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Valid
+  @Schema(
+    name = "avatarUrl",
+    example = "https://example.com/avatars/johndoe.jpg",
+    description = "URL to user's avatar image",
+    requiredMode = Schema.RequiredMode.NOT_REQUIRED
+  )
   @JsonProperty("avatarUrl")
   public @Nullable URI getAvatarUrl() {
     return avatarUrl;
@@ -246,8 +291,13 @@ public class UserProfileDto {
    * User's biography or description
    * @return bio
    */
-  @Size(max = 500) 
-  @Schema(name = "bio", example = "Researcher in computational biology", description = "User's biography or description", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Size(max = 500)
+  @Schema(
+    name = "bio",
+    example = "Researcher in computational biology",
+    description = "User's biography or description",
+    requiredMode = Schema.RequiredMode.NOT_REQUIRED
+  )
   @JsonProperty("bio")
   public @Nullable String getBio() {
     return bio;
@@ -266,8 +316,13 @@ public class UserProfileDto {
    * User's website URL
    * @return website
    */
-  @Valid 
-  @Schema(name = "website", example = "https://johndoe.com", description = "User's website URL", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Valid
+  @Schema(
+    name = "website",
+    example = "https://johndoe.com",
+    description = "User's website URL",
+    requiredMode = Schema.RequiredMode.NOT_REQUIRED
+  )
   @JsonProperty("website")
   public @Nullable URI getWebsite() {
     return website;
@@ -286,8 +341,14 @@ public class UserProfileDto {
    * Timestamp when the user account was created
    * @return createdAt
    */
-  @NotNull @Valid 
-  @Schema(name = "createdAt", example = "2024-01-15T10:30Z", description = "Timestamp when the user account was created", requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotNull
+  @Valid
+  @Schema(
+    name = "createdAt",
+    example = "2024-01-15T10:30Z",
+    description = "Timestamp when the user account was created",
+    requiredMode = Schema.RequiredMode.REQUIRED
+  )
   @JsonProperty("createdAt")
   public OffsetDateTime getCreatedAt() {
     return createdAt;
@@ -306,8 +367,13 @@ public class UserProfileDto {
    * Timestamp when the user profile was last updated
    * @return updatedAt
    */
-  @Valid 
-  @Schema(name = "updatedAt", example = "2024-02-01T14:20Z", description = "Timestamp when the user profile was last updated", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Valid
+  @Schema(
+    name = "updatedAt",
+    example = "2024-02-01T14:20Z",
+    description = "Timestamp when the user profile was last updated",
+    requiredMode = Schema.RequiredMode.NOT_REQUIRED
+  )
   @JsonProperty("updatedAt")
   public @Nullable OffsetDateTime getUpdatedAt() {
     return updatedAt;
@@ -326,23 +392,38 @@ public class UserProfileDto {
       return false;
     }
     UserProfileDto userProfile = (UserProfileDto) o;
-    return Objects.equals(this.id, userProfile.id) &&
-        Objects.equals(this.username, userProfile.username) &&
-        Objects.equals(this.email, userProfile.email) &&
-        Objects.equals(this.firstName, userProfile.firstName) &&
-        Objects.equals(this.lastName, userProfile.lastName) &&
-        Objects.equals(this.role, userProfile.role) &&
-        Objects.equals(this.scopes, userProfile.scopes) &&
-        Objects.equals(this.avatarUrl, userProfile.avatarUrl) &&
-        Objects.equals(this.bio, userProfile.bio) &&
-        Objects.equals(this.website, userProfile.website) &&
-        Objects.equals(this.createdAt, userProfile.createdAt) &&
-        Objects.equals(this.updatedAt, userProfile.updatedAt);
+    return (
+      Objects.equals(this.id, userProfile.id) &&
+      Objects.equals(this.username, userProfile.username) &&
+      Objects.equals(this.email, userProfile.email) &&
+      Objects.equals(this.firstName, userProfile.firstName) &&
+      Objects.equals(this.lastName, userProfile.lastName) &&
+      Objects.equals(this.role, userProfile.role) &&
+      Objects.equals(this.scopes, userProfile.scopes) &&
+      Objects.equals(this.avatarUrl, userProfile.avatarUrl) &&
+      Objects.equals(this.bio, userProfile.bio) &&
+      Objects.equals(this.website, userProfile.website) &&
+      Objects.equals(this.createdAt, userProfile.createdAt) &&
+      Objects.equals(this.updatedAt, userProfile.updatedAt)
+    );
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, username, email, firstName, lastName, role, scopes, avatarUrl, bio, website, createdAt, updatedAt);
+    return Objects.hash(
+      id,
+      username,
+      email,
+      firstName,
+      lastName,
+      role,
+      scopes,
+      avatarUrl,
+      bio,
+      website,
+      createdAt,
+      updatedAt
+    );
   }
 
   @Override
@@ -375,7 +456,7 @@ public class UserProfileDto {
     }
     return o.toString().replace("\n", "\n    ");
   }
-  
+
   public static class Builder {
 
     private UserProfileDto instance;
@@ -388,7 +469,7 @@ public class UserProfileDto {
       this.instance = instance;
     }
 
-    protected Builder copyOf(UserProfileDto value) { 
+    protected Builder copyOf(UserProfileDto value) {
       this.instance.setId(value.id);
       this.instance.setUsername(value.username);
       this.instance.setEmail(value.email);
@@ -408,67 +489,67 @@ public class UserProfileDto {
       this.instance.id(id);
       return this;
     }
-    
+
     public UserProfileDto.Builder username(String username) {
       this.instance.username(username);
       return this;
     }
-    
+
     public UserProfileDto.Builder email(String email) {
       this.instance.email(email);
       return this;
     }
-    
+
     public UserProfileDto.Builder firstName(String firstName) {
       this.instance.firstName(firstName);
       return this;
     }
-    
+
     public UserProfileDto.Builder lastName(String lastName) {
       this.instance.lastName(lastName);
       return this;
     }
-    
+
     public UserProfileDto.Builder role(UserRoleDto role) {
       this.instance.role(role);
       return this;
     }
-    
+
     public UserProfileDto.Builder scopes(List<AuthScopeDto> scopes) {
       this.instance.scopes(scopes);
       return this;
     }
-    
+
     public UserProfileDto.Builder avatarUrl(URI avatarUrl) {
       this.instance.avatarUrl(avatarUrl);
       return this;
     }
-    
+
     public UserProfileDto.Builder bio(String bio) {
       this.instance.bio(bio);
       return this;
     }
-    
+
     public UserProfileDto.Builder website(URI website) {
       this.instance.website(website);
       return this;
     }
-    
+
     public UserProfileDto.Builder createdAt(OffsetDateTime createdAt) {
       this.instance.createdAt(createdAt);
       return this;
     }
-    
+
     public UserProfileDto.Builder updatedAt(OffsetDateTime updatedAt) {
       this.instance.updatedAt(updatedAt);
       return this;
     }
-    
+
     /**
-    * returns a built UserProfileDto instance.
-    *
-    * The builder is not reusable (NullPointerException)
-    */
+     * returns a built UserProfileDto instance.
+     *
+     * The builder is not reusable (NullPointerException)
+     */
     public UserProfileDto build() {
       try {
         return this.instance;
@@ -485,19 +566,17 @@ public class UserProfileDto {
   }
 
   /**
-  * Create a builder with no initialized field (except for the default values).
-  */
+   * Create a builder with no initialized field (except for the default values).
+   */
   public static UserProfileDto.Builder builder() {
     return new UserProfileDto.Builder();
   }
 
   /**
-  * Create a builder with a shallow copy of this instance.
-  */
+   * Create a builder with a shallow copy of this instance.
+   */
   public UserProfileDto.Builder toBuilder() {
     UserProfileDto.Builder builder = new UserProfileDto.Builder();
     return builder.copyOf(this);
   }
-
 }
-
