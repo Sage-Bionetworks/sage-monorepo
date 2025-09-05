@@ -1,20 +1,5 @@
-import { expect, Page, test } from '@playwright/test';
-
-const headerSearchPlaceholder = 'Search models';
-
-const searchAndGetSearchListItems = async (
-  query: string,
-  page: Page,
-  searchPlaceholder = headerSearchPlaceholder,
-) => {
-  const responsePromise = page.waitForResponse(`**/models/search?q=${query}`);
-  const input = page.getByPlaceholder(searchPlaceholder);
-  await input.pressSequentially(query);
-  await responsePromise;
-
-  const searchList = page.getByRole('list').filter({ hasText: query });
-  return searchList.getByRole('listitem');
-};
+import { expect, test } from '@playwright/test';
+import { headerSearchPlaceholder, searchAndGetSearchListItems } from './helpers';
 
 test.describe('search', () => {
   test('can search for model and aliases then navigate to model details from search result', async ({
