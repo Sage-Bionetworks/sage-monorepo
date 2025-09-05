@@ -1,5 +1,6 @@
 package org.sagebionetworks.openchallenges.api.gateway.service;
 
+import org.sagebionetworks.openchallenges.api.gateway.service.ApiKeyParser.ParsedApiKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,11 +19,18 @@ public class GatewayAuthenticationService {
   private static final Logger logger = LoggerFactory.getLogger(GatewayAuthenticationService.class);
 
   private final WebClient authServiceClient;
+  private final WebClient oauth2ServiceClient;
 
   public GatewayAuthenticationService(
       @Value("${openchallenges.auth.service-url:http://openchallenges-auth-service:8080/v1}") String authServiceUrl) {
     this.authServiceClient = WebClient.builder()
         .baseUrl(authServiceUrl)
+        .build();
+    
+    // OAuth2 endpoints are at the root level, not under /v1
+    String oauth2ServiceUrl = authServiceUrl.replace("/v1", "");
+    this.oauth2ServiceClient = WebClient.builder()
+        .baseUrl(oauth2ServiceUrl)
         .build();
   }
 
@@ -94,18 +102,12 @@ public class GatewayAuthenticationService {
   public Mono<OAuth2TokenResponse> exchangeApiKeyForJwt(String apiKey) {
     logger.debug("Exchanging API key for JWT using OAuth2 client credentials flow");
     
-    // Parse API key to extract client_id and secret
-    ApiKeyParser.ParsedApiKey parsedKey = ApiKeyParser.parseApiKey(apiKey);
-    String clientId = "oc-ak_" + parsedKey.getSuffix(); // Use suffix for client_id
+        // Parse API key to extract client_id and secret
+    ParsedApiKey parsedKey = ApiKeyParser.parseApiKey(apiKey);
+    String clientId = "oc_api_key_" + parsedKey.getSuffix(); // Use suffix for client_id - matches auth service format
     String clientSecret = parsedKey.getSecret();
     
-    // Prepare OAuth2 client credentials request
-    OAuth2TokenRequest tokenRequest = new OAuth2TokenRequest(
-        "client_credentials",
-        null // no specific scope requested - use client's allowed scopes
-    );
-    
-    return authServiceClient
+    return oauth2ServiceClient
         .post()
         .uri("/oauth2/token")
         .headers(headers -> headers.setBasicAuth(clientId, clientSecret))
