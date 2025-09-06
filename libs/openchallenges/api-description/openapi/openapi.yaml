@@ -72,7 +72,6 @@ paths:
         - public
       security:
         - jwtBearer: []
-        - apiKeyAuth: []
       responses:
         '200':
           description: User profile information
@@ -94,7 +93,6 @@ paths:
         - public
       security:
         - jwtBearer: []
-        - apiKeyAuth: []
       requestBody:
         required: true
         content:
