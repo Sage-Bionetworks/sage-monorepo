@@ -6,18 +6,16 @@ import org.sagebionetworks.openchallenges.organization.service.model.dto.Organiz
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationUpdateRequestDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationsPageDto;
 import org.sagebionetworks.openchallenges.organization.service.service.OrganizationService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 public class OrganizationApiDelegateImpl implements OrganizationApiDelegate {
-
-  private static final Logger logger = LoggerFactory.getLogger(OrganizationApiDelegateImpl.class);
 
   private final OrganizationService organizationService;
 
@@ -33,7 +31,7 @@ public class OrganizationApiDelegateImpl implements OrganizationApiDelegate {
     // Log the authenticated user for audit purposes (from JWT)
     var authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication != null) {
-      logger.info(
+      log.info(
         "User {} is creating an organization",
         authentication.getName()
       );
@@ -51,7 +49,7 @@ public class OrganizationApiDelegateImpl implements OrganizationApiDelegate {
     // Log the authenticated user for audit purposes
     var authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication != null) {
-      logger.info(
+      log.info(
         "User {} is deleting organization: {}",
         authentication.getName(),
         identifier
@@ -71,7 +69,7 @@ public class OrganizationApiDelegateImpl implements OrganizationApiDelegate {
     // Log the authenticated user for audit purposes
     var authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication != null) {
-      logger.info(
+      log.info(
         "User {} is updating organization: {}",
         authentication.getName(),
         org
