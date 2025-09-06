@@ -1,11 +1,13 @@
 package org.sagebionetworks.openchallenges.auth.service.configuration;
 
+import java.util.Set;
 import java.util.UUID;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.server.authorization.client.JdbcRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
@@ -120,6 +122,14 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
         
         // Add username claim
         context.getClaims().claim("username", context.getPrincipal().getName());
+        
+        // Add scopes for client credentials flow
+        if (AuthorizationGrantType.CLIENT_CREDENTIALS.equals(context.getAuthorizationGrantType())) {
+          Set<String> authorizedScopes = context.getAuthorizedScopes();
+          if (authorizedScopes != null && !authorizedScopes.isEmpty()) {
+            context.getClaims().claim("scp", authorizedScopes);
+          }
+        }
         
         // You can add more custom claims here based on the user context
       }

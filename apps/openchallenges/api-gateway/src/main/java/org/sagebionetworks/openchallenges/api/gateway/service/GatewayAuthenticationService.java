@@ -112,7 +112,7 @@ public class GatewayAuthenticationService {
         .uri("/oauth2/token")
         .headers(headers -> headers.setBasicAuth(clientId, clientSecret))
         .header("Content-Type", "application/x-www-form-urlencoded")
-        .bodyValue("grant_type=client_credentials")
+        .bodyValue("grant_type=client_credentials&scope=read:org write:org")
         .retrieve()
         .bodyToMono(OAuth2TokenResponse.class)
         .doOnNext(response -> 
