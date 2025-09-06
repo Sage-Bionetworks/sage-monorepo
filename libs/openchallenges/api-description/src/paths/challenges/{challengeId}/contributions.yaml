@@ -7,6 +7,9 @@ get:
   description: List challenge contributions
   operationId: listChallengeContributions
   x-audience: [public]
+  security:
+    - jwtBearer:
+        - read:challenges
   responses:
     '200':
       content:
@@ -27,7 +30,8 @@ post:
   operationId: createChallengeContribution
   x-audience: [public]
   security:
-    - apiKeyAuth: []
+    - jwtBearer:
+        - update:challenges
   requestBody:
     required: true
     content:
@@ -59,7 +63,8 @@ delete:
   operationId: deleteChallengeContributions
   x-audience: [internal]
   security:
-    - apiKeyAuth: []
+    - jwtBearer:
+        - update:challenges
   responses:
     '204':
       description: Deletion successful

@@ -20,8 +20,6 @@ tags:
   - name: Challenge Participation
     description: Operations about a challenge participation
     x-audience: [internal]
-security:
-  - jwtBearer: []
 paths:
   /organizations:
     $ref: paths/organizations.yaml
@@ -35,3 +33,6 @@ components:
   securitySchemes:
     jwtBearer:
       $ref: components/securitySchemes/JwtBearer.yaml
+security:
+  # Endpoints require authentication by default. Scopes and overrides are specified per endpoint.
+  - jwtBearer: []

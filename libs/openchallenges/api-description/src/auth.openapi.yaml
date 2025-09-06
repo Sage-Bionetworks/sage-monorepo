@@ -59,3 +59,6 @@ components:
   securitySchemes:
     jwtBearer:
       $ref: components/securitySchemes/JwtBearer.yaml
+security:
+  # Endpoints require authentication by default. Scopes and overrides are specified per endpoint.
+  - jwtBearer: []

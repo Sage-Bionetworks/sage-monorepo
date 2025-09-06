@@ -5,6 +5,9 @@ get:
   description: Returns the number of challenges tracked per year
   operationId: getChallengesPerYear
   x-audience: [public]
+  security:
+    - jwtBearer:
+        - read:challenges-analytics
   responses:
     '200':
       description: An object

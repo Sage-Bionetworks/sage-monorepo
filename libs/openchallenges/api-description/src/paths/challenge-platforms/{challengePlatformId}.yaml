@@ -7,6 +7,9 @@ get:
   description: Returns the challenge platform identified by its unique ID
   operationId: getChallengePlatform
   x-audience: [public]
+  security:
+    - jwtBearer:
+        - read:challenge-platforms
   responses:
     '200':
       description: Success
@@ -27,7 +30,8 @@ put:
   operationId: updateChallengePlatform
   x-audience: [public]
   security:
-    - apiKeyAuth: []
+    - jwtBearer:
+        - update:challenge-platforms
   requestBody:
     required: true
     content:
@@ -62,7 +66,8 @@ delete:
   operationId: deleteChallengePlatform
   x-audience: [public]
   security:
-    - apiKeyAuth: []
+    - jwtBearer:
+        - delete:challenge-platforms
   responses:
     '204':
       description: Deletion successful

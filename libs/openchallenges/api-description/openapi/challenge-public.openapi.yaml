@@ -13,6 +13,8 @@ info:
     url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
   - url: http://localhost/v1
+security:
+  - jwtBearer: []
 tags:
   - name: Challenge
     description: Operations about challenges.
@@ -44,6 +46,9 @@ paths:
       operationId: listChallenges
       x-audience:
         - public
+      security:
+        - jwtBearer:
+            - read:challenges
       parameters:
         - $ref: '#/components/parameters/challengeSearchQuery'
       responses:
@@ -66,7 +71,8 @@ paths:
       x-audience:
         - public
       security:
-        - apiKeyAuth: []
+        - jwtBearer:
+            - create:challenges
       requestBody:
         content:
           application/json:
@@ -101,6 +107,9 @@ paths:
       operationId: getChallenge
       x-audience:
         - public
+      security:
+        - jwtBearer:
+            - read:challenges
       responses:
         '200':
           description: A challenge
@@ -121,7 +130,8 @@ paths:
       x-audience:
         - public
       security:
-        - apiKeyAuth: []
+        - jwtBearer:
+            - update:challenges
       requestBody:
         required: true
         content:
@@ -156,7 +166,8 @@ paths:
       x-audience:
         - public
       security:
-        - apiKeyAuth: []
+        - jwtBearer:
+            - delete:challenges
       responses:
         '204':
           description: Challenge successfully deleted
@@ -179,6 +190,9 @@ paths:
       operationId: getChallengeJsonLd
       x-audience:
         - public
+      security:
+        - jwtBearer:
+            - read:challenges
       responses:
         '200':
           description: A challenge
@@ -201,6 +215,9 @@ paths:
       operationId: listChallengeContributions
       x-audience:
         - public
+      security:
+        - jwtBearer:
+            - read:challenges
       responses:
         '200':
           content:
@@ -222,7 +239,8 @@ paths:
       x-audience:
         - public
       security:
-        - apiKeyAuth: []
+        - jwtBearer:
+            - update:challenges
       requestBody:
         required: true
         content:
@@ -260,7 +278,8 @@ paths:
       x-audience:
         - public
       security:
-        - apiKeyAuth: []
+        - jwtBearer:
+            - update:challenges
       responses:
         '204':
           description: Contribution deleted successfully
@@ -281,6 +300,9 @@ paths:
       operationId: getChallengesPerYear
       x-audience:
         - public
+      security:
+        - jwtBearer:
+            - read:challenges-analytics
       responses:
         '200':
           description: An object
@@ -299,6 +321,9 @@ paths:
       operationId: listChallengePlatforms
       x-audience:
         - public
+      security:
+        - jwtBearer:
+            - read:challenge-platforms
       parameters:
         - $ref: '#/components/parameters/challengePlatformSearchQuery'
       responses:
@@ -321,7 +346,8 @@ paths:
       x-audience:
         - public
       security:
-        - apiKeyAuth: []
+        - jwtBearer:
+            - create:challenge-platforms
       requestBody:
         content:
           application/json:
@@ -354,6 +380,9 @@ paths:
       operationId: getChallengePlatform
       x-audience:
         - public
+      security:
+        - jwtBearer:
+            - read:challenge-platforms
       responses:
         '200':
           description: Success
@@ -375,7 +404,8 @@ paths:
       x-audience:
         - public
       security:
-        - apiKeyAuth: []
+        - jwtBearer:
+            - update:challenge-platforms
       requestBody:
         required: true
         content:
@@ -411,7 +441,8 @@ paths:
       x-audience:
         - public
       security:
-        - apiKeyAuth: []
+        - jwtBearer:
+            - delete:challenge-platforms
       responses:
         '204':
           description: Deletion successful
@@ -432,6 +463,9 @@ paths:
       operationId: listEdamConcepts
       x-audience:
         - public
+      security:
+        - jwtBearer:
+            - read:edam-concepts
       parameters:
         - $ref: '#/components/parameters/edamConceptSearchQuery'
       responses:
@@ -447,11 +481,11 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
-    apiKeyAuth:
-      type: apiKey
-      in: header
-      name: X-API-Key
-      description: API key for programmatic access. API keys inherit the scopes and permissions of the user who created them. Create and manage via /auth/api-keys endpoints.
+    jwtBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT access token obtained from OAuth2 authorization flow or API key exchange
   schemas:
     ChallengeSort:
       description: What to sort results by.

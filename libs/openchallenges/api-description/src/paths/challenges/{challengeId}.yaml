@@ -7,6 +7,9 @@ get:
   description: Returns the challenge specified
   operationId: getChallenge
   x-audience: [public]
+  security:
+    - jwtBearer:
+        - read:challenges
   responses:
     '200':
       description: A challenge
@@ -26,7 +29,8 @@ put:
   operationId: updateChallenge
   x-audience: [public]
   security:
-    - apiKeyAuth: []
+    - jwtBearer:
+        - update:challenges
   requestBody:
     required: true
     content:
@@ -60,7 +64,8 @@ delete:
   operationId: deleteChallenge
   x-audience: [public]
   security:
-    - apiKeyAuth: []
+    - jwtBearer:
+        - delete:challenges
   responses:
     '204':
       description: Challenge successfully deleted

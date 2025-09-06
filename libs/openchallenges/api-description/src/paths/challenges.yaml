@@ -5,6 +5,9 @@ get:
   description: List challenges
   operationId: listChallenges
   x-audience: [public]
+  security:
+    - jwtBearer:
+        - read:challenges
   parameters:
     - $ref: ../components/parameters/query/challengeSearchQuery.yaml
   responses:
@@ -26,7 +29,8 @@ post:
   operationId: createChallenge
   x-audience: [public]
   security:
-    - apiKeyAuth: []
+    - jwtBearer:
+        - create:challenges
   requestBody:
     content:
       application/json:

@@ -41,6 +41,8 @@ info:
 servers:
   - url: http://localhost/v1
     description: Local/dev base
+security:
+  - jwtBearer: []
 tags:
   - name: Authentication
     description: User profile and token validation operations

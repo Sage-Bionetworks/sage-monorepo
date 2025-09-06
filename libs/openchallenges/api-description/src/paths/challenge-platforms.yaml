@@ -5,6 +5,9 @@ get:
   description: List challenge platforms
   operationId: listChallengePlatforms
   x-audience: [public]
+  security:
+    - jwtBearer:
+        - read:challenge-platforms
   parameters:
     - $ref: ../components/parameters/query/challengePlatformSearchQuery.yaml
   responses:
@@ -26,7 +29,8 @@ post:
   operationId: createChallengePlatform
   x-audience: [public]
   security:
-    - apiKeyAuth: []
+    - jwtBearer:
+        - create:challenge-platforms
   requestBody:
     content:
       application/json:
