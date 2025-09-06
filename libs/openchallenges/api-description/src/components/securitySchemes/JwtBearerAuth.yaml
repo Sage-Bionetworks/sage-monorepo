@@ -1,4 +1,0 @@
-type: http
-scheme: bearer
-bearerFormat: JWT
-description: JWT access token obtained from /auth/login or /auth/oauth2/callback endpoint

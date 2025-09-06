@@ -6,8 +6,7 @@ get:
   operationId: listApiKeys
   x-audience: [public]
   security:
-    - oauth2: ['api:read']
-    - jwtBearerAuth: []
+    - jwtBearer: ['read:api-key']
   responses:
     '200':
       description: List of API keys
@@ -30,8 +29,7 @@ post:
   operationId: createApiKey
   x-audience: [public]
   security:
-    - oauth2: ['api:write']
-    - jwtBearerAuth: []
+    - jwtBearer: ['create:api-key']
   requestBody:
     required: true
     content:
