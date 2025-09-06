@@ -34,12 +34,6 @@ public class SpringDocConfiguration {
                 )
                 .components(
                         new Components()
-                                .addSecuritySchemes("ocOAuth2", new SecurityScheme()
-                                        .type(SecurityScheme.Type.OAUTH2)
-                                )
-                                .addSecuritySchemes("ocOAuth2", new SecurityScheme()
-                                        .type(SecurityScheme.Type.OAUTH2)
-                                )
                                 .addSecuritySchemes("jwtBearer", new SecurityScheme()
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer")

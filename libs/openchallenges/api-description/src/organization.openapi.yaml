@@ -33,7 +33,5 @@ paths:
     $ref: paths/organizations/{org}/participations/{challengeId}/roles/{role}.yaml
 components:
   securitySchemes:
-    ocOAuth2:
-      $ref: components/securitySchemes/OcOAuth2Auth.yaml
     jwtBearer:
-      $ref: components/securitySchemes/JwtBearerAuth.yaml
+      $ref: components/securitySchemes/JwtBearer.yaml

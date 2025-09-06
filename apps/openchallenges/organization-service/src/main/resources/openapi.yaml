@@ -49,7 +49,9 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-      security: []
+      security:
+        - jwtBearer:
+            - read:org
       summary: List organizations
       tags:
         - Organization
@@ -850,23 +852,6 @@ components:
         - role
       type: object
   securitySchemes:
-    ocOAuth2:
-      description: OAuth2 for OpenChallenges
-      flows:
-        authorizationCode:
-          authorizationUrl: http://openchallenges-auth-service:8087/oauth2/authorize
-          scopes:
-            read:org: Read organizations
-            write:org: Create/update organizations
-            delete:org: Delete organizations
-          tokenUrl: http://openchallenges-auth-service:8087/oauth2/token
-        clientCredentials:
-          scopes:
-            read:org: Read organizations
-            write:org: Create/update organizations
-            delete:org: Delete organizations
-          tokenUrl: https://openchallenges-auth-service:8087/oauth2/token
-      type: oauth2
     jwtBearer:
       bearerFormat: JWT
       description: JWT access token obtained from /auth/login or /auth/oauth2/callback

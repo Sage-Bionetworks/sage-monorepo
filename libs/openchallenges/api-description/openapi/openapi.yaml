@@ -812,23 +812,6 @@ components:
       in: header
       name: X-API-Key
       description: API key for programmatic access (create and manage via /auth/api-keys endpoints)
-    ocOAuth2:
-      type: oauth2
-      description: OAuth2 for OpenChallenges
-      flows:
-        authorizationCode:
-          authorizationUrl: http://openchallenges-auth-service:8087/oauth2/authorize
-          tokenUrl: http://openchallenges-auth-service:8087/oauth2/token
-          scopes:
-            read:org: Read organizations
-            write:org: Create/update organizations
-            delete:org: Delete organizations
-        clientCredentials:
-          tokenUrl: https://openchallenges-auth-service:8087/oauth2/token
-          scopes:
-            read:org: Read organizations
-            write:org: Create/update organizations
-            delete:org: Delete organizations
     jwtBearer:
       type: http
       scheme: bearer
