@@ -31,9 +31,6 @@ dependencies {
   implementation(libs.spring.security.oauth2.authorization.server)
   implementation(libs.spring.security.oauth2.jose)
   implementation(libs.spring.boot.starter.webflux)
-  implementation(libs.jjwt.api)
-  implementation(libs.jjwt.impl)
-  implementation(libs.jjwt.jackson)
 
   runtimeOnly(libs.flyway.database.postgresql)
   runtimeOnly(libs.postgresql)

@@ -174,6 +174,16 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
   }
 
   /**
+   * Configure JWT decoder for web authentication using the same JWK source.
+   * This allows web pages to validate OAuth2 JWTs stored in cookies.
+   */
+  @Bean
+  public org.springframework.security.oauth2.jwt.JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
+    return org.springframework.security.oauth2.jwt.NimbusJwtDecoder.withJwkSetUri("http://openchallenges-auth-service:8087/oauth2/jwks")
+        .build();
+  }
+
+  /**
    * Configure OAuth2 authorization service for storing issued tokens.
    * This is essential for the introspection endpoint to validate tokens.
    */
