@@ -3,22 +3,20 @@ package org.sagebionetworks.openchallenges.api.gateway.service;
 import java.util.List;
 import org.sagebionetworks.openchallenges.api.gateway.configuration.RouteScopeConfiguration;
 import org.sagebionetworks.openchallenges.api.gateway.service.ApiKeyParser.ParsedApiKey;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Service for validating authentication tokens via the Auth Service internal endpoints.
  * Acts as a bridge between the API Gateway and the Auth Service.
  */
+@Slf4j
 @Service
 public class GatewayAuthenticationService {
-
-  private static final Logger logger = LoggerFactory.getLogger(GatewayAuthenticationService.class);
 
   private final WebClient authServiceClient;
   private final WebClient oauth2ServiceClient;
@@ -46,7 +44,7 @@ public class GatewayAuthenticationService {
    * @return A Mono containing the validation response
    */
   public Mono<JwtValidationResponse> validateJwt(String token) {
-    logger.debug("Validating JWT token via Auth Service");
+    log.debug("Validating JWT token via Auth Service");
 
     JwtValidationRequest request = new JwtValidationRequest(token);
 
@@ -57,14 +55,14 @@ public class GatewayAuthenticationService {
       .retrieve()
       .bodyToMono(JwtValidationResponse.class)
       .doOnNext(response ->
-        logger.debug("JWT validation successful for user: {}", response.getUsername())
+        log.debug("JWT validation successful for user: {}", response.getUsername())
       )
       .onErrorResume(WebClientResponseException.class, ex -> {
-        logger.warn("JWT validation failed: {} - {}", ex.getStatusCode(), ex.getMessage());
+        log.warn("JWT validation failed: {} - {}", ex.getStatusCode(), ex.getMessage());
         return Mono.error(new AuthenticationException("JWT validation failed", ex));
       })
       .onErrorResume(Exception.class, ex -> {
-        logger.error("Error during JWT validation", ex);
+        log.error("Error during JWT validation", ex);
         return Mono.error(new AuthenticationException("Authentication service unavailable", ex));
       });
   }
@@ -79,7 +77,7 @@ public class GatewayAuthenticationService {
    * @return A Mono containing the OAuth2 token response
    */
   public Mono<OAuth2TokenResponse> exchangeApiKeyForJwt(String apiKey, String method, String path) {
-    logger.debug("Exchanging API key for JWT using OAuth2 client credentials flow for route: {} {}", method, path);
+    log.debug("Exchanging API key for JWT using OAuth2 client credentials flow for route: {} {}", method, path);
 
     // Parse API key to extract client_id and secret
     ParsedApiKey parsedKey = ApiKeyParser.parseApiKey(apiKey);
@@ -90,7 +88,7 @@ public class GatewayAuthenticationService {
     List<String> requiredScopes = routeScopeConfiguration.getScopesForRoute(method, path);
     String scopeParam = requiredScopes.isEmpty() ? "" : "&scope=" + String.join(" ", requiredScopes);
     
-    logger.debug("Requesting OAuth2 token for client {} with scopes: {}", clientId, requiredScopes);
+    log.debug("Requesting OAuth2 token for client {} with scopes: {}", clientId, requiredScopes);
 
     return oauth2ServiceClient
       .post()
@@ -101,10 +99,10 @@ public class GatewayAuthenticationService {
       .retrieve()
       .bodyToMono(OAuth2TokenResponse.class)
       .doOnNext(response ->
-        logger.debug("OAuth2 token exchange successful for client: {} with scopes: {}", clientId, requiredScopes)
+        log.debug("OAuth2 token exchange successful for client: {} with scopes: {}", clientId, requiredScopes)
       )
       .onErrorResume(WebClientResponseException.class, ex -> {
-        logger.warn(
+        log.warn(
           "OAuth2 token exchange failed for client {}: {} - {}",
           clientId,
           ex.getStatusCode(),
@@ -113,7 +111,7 @@ public class GatewayAuthenticationService {
         return Mono.error(new AuthenticationException("API key authentication failed", ex));
       })
       .onErrorResume(Exception.class, ex -> {
-        logger.error("Error during OAuth2 token exchange for client: {}", clientId, ex);
+        log.error("Error during OAuth2 token exchange for client: {}", clientId, ex);
         return Mono.error(new AuthenticationException("Authentication service unavailable", ex));
       });
   }

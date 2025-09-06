@@ -1,18 +1,16 @@
 package org.sagebionetworks.openchallenges.api.gateway;
 
 import org.sagebionetworks.openchallenges.app.config.data.ApiGatewayConfigData;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @SpringBootApplication
 @ComponentScan(basePackages = "org.sagebionetworks.openchallenges")
 public class ApiGatewayApplication implements CommandLineRunner {
-
-  private static final Logger logger = LoggerFactory.getLogger(ApiGatewayApplication.class);
 
   private final ApiGatewayConfigData apiGatewayConfigData;
 
@@ -26,6 +24,6 @@ public class ApiGatewayApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    logger.info(apiGatewayConfigData.getWelcomeMessage());
+    log.info(apiGatewayConfigData.getWelcomeMessage());
   }
 }
