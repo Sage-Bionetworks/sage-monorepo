@@ -12,6 +12,7 @@ import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
@@ -24,19 +25,13 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class ApiKeyAuthenticationGatewayFilter implements WebFilter {
   
   private static final String API_KEY_HEADER = "X-API-Key";
 
   private final GatewayAuthenticationService authenticationService;
   private final AuthConfiguration authConfiguration;
-
-  public ApiKeyAuthenticationGatewayFilter(
-      GatewayAuthenticationService authenticationService,
-      AuthConfiguration authConfiguration) {
-    this.authenticationService = authenticationService;
-    this.authConfiguration = authConfiguration;
-  }
 
   @Override
   public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {

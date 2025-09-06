@@ -15,10 +15,12 @@ import org.sagebionetworks.openchallenges.organization.service.service.Organizat
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ChallengeParticipationService {
 
   private final OrganizationRepository organizationRepository;
@@ -27,16 +29,6 @@ public class ChallengeParticipationService {
 
   private ChallengeParticipationMapper challengeParticipationMapper =
     new ChallengeParticipationMapper();
-
-  public ChallengeParticipationService(
-    OrganizationRepository organizationRepository,
-    ChallengeParticipationRepository challengeParticipationRepository,
-    OrganizationService organizationService
-  ) {
-    this.organizationRepository = organizationRepository;
-    this.challengeParticipationRepository = challengeParticipationRepository;
-    this.organizationService = organizationService;
-  }
 
   @Transactional(readOnly = false)
   public ChallengeParticipationDto createChallengeParticipation(

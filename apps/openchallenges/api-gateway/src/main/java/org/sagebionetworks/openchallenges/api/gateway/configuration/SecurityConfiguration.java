@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.reactive.EnableWebFlux
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Spring Security configuration for the API Gateway.
@@ -18,17 +19,11 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @Configuration
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfiguration {
 
   private final JwtAuthenticationGatewayFilter jwtAuthenticationFilter;
   private final ApiKeyAuthenticationGatewayFilter apiKeyAuthenticationFilter;
-
-  public SecurityConfiguration(
-      JwtAuthenticationGatewayFilter jwtAuthenticationFilter,
-      ApiKeyAuthenticationGatewayFilter apiKeyAuthenticationFilter) {
-    this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-    this.apiKeyAuthenticationFilter = apiKeyAuthenticationFilter;
-  }
 
   @Bean
   SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
