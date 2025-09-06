@@ -14,19 +14,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class ApiKeyApiDelegateImpl implements ApiKeyApiDelegate {
 
   private final ApiKeyService apiKeyService;
   private final UserService userService;
-
-  public ApiKeyApiDelegateImpl(ApiKeyService apiKeyService, UserService userService) {
-    this.apiKeyService = apiKeyService;
-    this.userService = userService;
-  }
 
   @Override
   public ResponseEntity<CreateApiKeyResponseDto> createApiKey(

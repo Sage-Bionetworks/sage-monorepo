@@ -13,6 +13,7 @@ import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -23,17 +24,11 @@ import java.util.List;
  */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class JwtAuthenticationGatewayFilter implements WebFilter {
 
   private final OAuth2JwtService oAuth2JwtService;
   private final AuthConfiguration authConfiguration;
-
-  public JwtAuthenticationGatewayFilter(
-      OAuth2JwtService oAuth2JwtService,
-      AuthConfiguration authConfiguration) {
-    this.oAuth2JwtService = oAuth2JwtService;
-    this.authConfiguration = authConfiguration;
-  }
 
   @Override
   public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {

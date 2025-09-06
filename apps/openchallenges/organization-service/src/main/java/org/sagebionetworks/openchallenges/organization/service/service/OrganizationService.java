@@ -22,10 +22,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class OrganizationService {
 
   private final OrganizationRepository organizationRepository;
@@ -34,16 +36,6 @@ public class OrganizationService {
 
   @PersistenceContext
   private EntityManager entityManager;
-
-  public OrganizationService(
-    OrganizationRepository organizationRepository,
-    ChallengeParticipationRepository challengeParticipationRepository,
-    OrganizationCategoryRepository organizationCategoryRepository
-  ) {
-    this.organizationRepository = organizationRepository;
-    this.challengeParticipationRepository = challengeParticipationRepository;
-    this.organizationCategoryRepository = organizationCategoryRepository;
-  }
 
   private OrganizationMapper organizationMapper = new OrganizationMapper();
 

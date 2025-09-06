@@ -13,20 +13,18 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * Filter to authenticate requests using API keys in the X-API-Key header
  */
 @Slf4j
+@RequiredArgsConstructor
 public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
   private static final String API_KEY_HEADER = "X-API-Key";
 
   private final ApiKeyService apiKeyService;
-
-  public ApiKeyAuthenticationFilter(ApiKeyService apiKeyService) {
-    this.apiKeyService = apiKeyService;
-  }
 
   @Override
   protected void doFilterInternal(

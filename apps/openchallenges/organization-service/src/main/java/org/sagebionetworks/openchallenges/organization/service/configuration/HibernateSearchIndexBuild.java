@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Configuration;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -17,13 +18,10 @@ import lombok.extern.slf4j.Slf4j;
   value = "spring.jpa.properties.hibernate.search.enabled",
   havingValue = "true"
 )
+@RequiredArgsConstructor
 public class HibernateSearchIndexBuild implements ApplicationListener<ApplicationReadyEvent> {
 
   private final EntityManager entityManager;
-
-  public HibernateSearchIndexBuild(EntityManager entityManager) {
-    this.entityManager = entityManager;
-  }
 
   @Override
   @Transactional
