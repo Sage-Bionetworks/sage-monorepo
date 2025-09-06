@@ -6,7 +6,8 @@ get:
   operationId: getUserProfile
   x-audience: [public]
   security:
-    - jwtBearer: []
+    - jwtBearer:
+        - read:profile
   responses:
     '200':
       description: User profile information
@@ -27,7 +28,8 @@ put:
   operationId: updateUserProfile
   x-audience: [public]
   security:
-    - jwtBearer: []
+    - jwtBearer:
+        - update:profile
   requestBody:
     required: true
     content:
