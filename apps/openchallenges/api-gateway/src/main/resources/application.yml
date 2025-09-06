@@ -6,6 +6,8 @@ openchallenges:
   auth:
     service-url: ${AUTH_SERVICE_URL:http://openchallenges-auth-service:8087/v1}
     realm: ${AUTH_REALM:OpenChallenges}
+  # Route scope mappings are loaded from route-scopes.yml via RouteScopeProperties
+  # To regenerate: nx run openchallenges-api-gateway:generateRouteScopes
 
 server:
   port: 8082

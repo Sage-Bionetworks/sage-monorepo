@@ -62,7 +62,8 @@ public class ApiKeyAuthenticationGatewayFilter implements WebFilter {
     logger.debug("Exchanging API key for JWT for request to: {}", path);
 
     // Exchange API key for JWT using OAuth2 Client Credentials flow
-    return authenticationService.exchangeApiKeyForJwt(apiKey)
+    String method = request.getMethod().name();
+    return authenticationService.exchangeApiKeyForJwt(apiKey, method, path)
         .flatMap(tokenResponse -> {
           // Replace the API key with the JWT in the Authorization header
           ServerHttpRequest modifiedRequest = request.mutate()

@@ -3,7 +3,9 @@ package org.sagebionetworks.openchallenges.api.gateway.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.sagebionetworks.openchallenges.api.gateway.configuration.RouteScopeConfiguration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -11,10 +13,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 class GatewayAuthenticationServiceTest {
 
   private GatewayAuthenticationService gatewayAuthenticationService;
+  
+  @Mock
+  private RouteScopeConfiguration routeScopeConfiguration;
 
   @BeforeEach
   void setUp() {
-    gatewayAuthenticationService = new GatewayAuthenticationService("http://test-auth-service:8080/v1");
+    gatewayAuthenticationService = new GatewayAuthenticationService("http://test-auth-service:8080/v1", routeScopeConfiguration);
   }
 
   @Test

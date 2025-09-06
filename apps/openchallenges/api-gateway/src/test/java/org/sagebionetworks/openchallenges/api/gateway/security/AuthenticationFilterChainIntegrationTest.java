@@ -106,7 +106,7 @@ class AuthenticationFilterChainIntegrationTest {
         "read write service"
     );
     
-    when(gatewayAuthenticationService.exchangeApiKeyForJwt(validApiKey))
+    when(gatewayAuthenticationService.exchangeApiKeyForJwt(validApiKey, "POST", "/api/v1/organizations"))
         .thenReturn(Mono.just(tokenResponse));
 
     // Simulate filter chain: JWT filter -> API key filter -> downstream
@@ -117,7 +117,7 @@ class AuthenticationFilterChainIntegrationTest {
 
     // then
     verify(oAuth2JwtService, never()).validateJwt(anyString()); // JWT should be skipped
-    verify(gatewayAuthenticationService).exchangeApiKeyForJwt(validApiKey);
+    verify(gatewayAuthenticationService).exchangeApiKeyForJwt(validApiKey, "POST", "/api/v1/organizations");
     verify(chain).filter(any()); // Should reach the end of the chain
     assertThat(exchange.getResponse().getStatusCode()).isNull(); // No error status
   }
