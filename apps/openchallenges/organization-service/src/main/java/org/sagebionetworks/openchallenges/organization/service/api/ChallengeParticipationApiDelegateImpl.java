@@ -4,20 +4,16 @@ import org.sagebionetworks.openchallenges.organization.service.model.dto.Challen
 import org.sagebionetworks.openchallenges.organization.service.model.dto.ChallengeParticipationDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.ChallengeParticipationRoleDto;
 import org.sagebionetworks.openchallenges.organization.service.service.ChallengeParticipationService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 public class ChallengeParticipationApiDelegateImpl implements ChallengeParticipationApiDelegate {
-
-  private static final Logger logger = LoggerFactory.getLogger(
-    ChallengeParticipationApiDelegateImpl.class
-  );
 
   private final ChallengeParticipationService challengeParticipationService;
 
@@ -35,7 +31,7 @@ public class ChallengeParticipationApiDelegateImpl implements ChallengeParticipa
   ) {
     var authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication != null) {
-      logger.info(
+      log.info(
         "User {} is creating a challenge participation for org: {}, challengeId: {}, role: {}",
         authentication.getName(),
         org,
@@ -58,7 +54,7 @@ public class ChallengeParticipationApiDelegateImpl implements ChallengeParticipa
   ) {
     var authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication != null) {
-      logger.info(
+      log.info(
         "User {} is deleting challenge participation for org: {}, challengeId: {}, role: {}",
         authentication.getName(),
         org,

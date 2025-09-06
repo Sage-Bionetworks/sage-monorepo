@@ -12,16 +12,14 @@ import org.sagebionetworks.openchallenges.organization.service.model.mapper.Chal
 import org.sagebionetworks.openchallenges.organization.service.model.repository.ChallengeParticipationRepository;
 import org.sagebionetworks.openchallenges.organization.service.model.repository.OrganizationRepository;
 import org.sagebionetworks.openchallenges.organization.service.service.OrganizationService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class ChallengeParticipationService {
-
-  private static final Logger logger = LoggerFactory.getLogger(ChallengeParticipationService.class);
 
   private final OrganizationRepository organizationRepository;
   private final ChallengeParticipationRepository challengeParticipationRepository;
@@ -59,7 +57,7 @@ public class ChallengeParticipationService {
       ChallengeParticipationEntity savedParticipation = challengeParticipationRepository.save(
         participation
       );
-      logger.debug(
+      log.debug(
         "Created challenge participation for org: {}, challengeId: {}, role: {}",
         org,
         request.getChallengeId(),
@@ -113,7 +111,7 @@ public class ChallengeParticipationService {
         )
       );
     challengeParticipationRepository.delete(participation);
-    logger.debug(
+    log.debug(
       "Successfully deleted challenge participation for org: {}, challengeId: {}, role: {}",
       org,
       challengeId,
