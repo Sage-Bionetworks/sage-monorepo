@@ -23,7 +23,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 
-  @Value("${openchallenges.auth.jwk-set-uri:http://openchallenges-auth-service:8087/.well-known/jwks.json}")
+  @Value("${openchallenges.auth.jwk-set-uri:http://openchallenges-auth-service:8087/oauth2/jwks}")
   private String jwkSetUri;
 
   @Bean
