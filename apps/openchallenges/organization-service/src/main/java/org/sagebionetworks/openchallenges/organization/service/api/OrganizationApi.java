@@ -222,6 +222,9 @@ public interface OrganizationApi {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer", scopes={ "read:org" })
         }
     )
     @RequestMapping(
