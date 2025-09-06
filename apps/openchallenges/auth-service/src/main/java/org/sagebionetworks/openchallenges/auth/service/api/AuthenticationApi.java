@@ -8,8 +8,6 @@ package org.sagebionetworks.openchallenges.auth.service.api;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.BasicErrorDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.UpdateUserProfileRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.UserProfileDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyRequestDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyResponseDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -139,49 +137,6 @@ public interface AuthenticationApi {
         @Parameter(name = "UpdateUserProfileRequestDto", description = "", required = true) @Valid @RequestBody UpdateUserProfileRequestDto updateUserProfileRequestDto
     ) {
         return getDelegate().updateUserProfile(updateUserProfileRequestDto);
-    }
-
-
-    /**
-     * POST /auth/api-keys/validate : Validate API key
-     * Internal endpoint to validate API keys (used by other services)
-     *
-     * @param validateApiKeyRequestDto  (required)
-     * @return API key is valid (status code 200)
-     *         or Unauthorized (status code 401)
-     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     */
-    @Operation(
-        operationId = "validateApiKey",
-        summary = "Validate API key",
-        description = "Internal endpoint to validate API keys (used by other services)",
-        tags = { "Authentication" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "API key is valid", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ValidateApiKeyResponseDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ValidateApiKeyResponseDto.class))
-            }),
-            @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            })
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.POST,
-        value = "/auth/api-keys/validate",
-        produces = { "application/json", "application/problem+json" },
-        consumes = { "application/json" }
-    )
-    
-    default ResponseEntity<ValidateApiKeyResponseDto> validateApiKey(
-        @Parameter(name = "ValidateApiKeyRequestDto", description = "", required = true) @Valid @RequestBody ValidateApiKeyRequestDto validateApiKeyRequestDto
-    ) {
-        return getDelegate().validateApiKey(validateApiKeyRequestDto);
     }
 
 }

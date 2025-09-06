@@ -5,19 +5,15 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.UserProfileDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.UpdateUserProfileRequestDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyRequestDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.UserRoleDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.AuthScopeDto;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
-import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
 import org.sagebionetworks.openchallenges.auth.service.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +33,6 @@ import org.springframework.stereotype.Component;
 public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate {
 
   private final UserService userService;
-  private final ApiKeyService apiKeyService;
 
   /**
    * Get the authenticated user's profile.
@@ -146,51 +141,6 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
     } catch (Exception e) {
       log.error("Error updating user profile", e);
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    }
-  }
-
-  /**
-   * Validate an API key.
-   */
-  @Override
-  public ResponseEntity<ValidateApiKeyResponseDto> validateApiKey(ValidateApiKeyRequestDto validateRequest) {
-    log.debug("Validating API key");
-
-    try {
-      String apiKey = validateRequest.getApiKey();
-      if (apiKey == null || apiKey.trim().isEmpty()) {
-        log.debug("Empty API key provided");
-        return ResponseEntity.ok(
-          ValidateApiKeyResponseDto.builder()
-            .valid(false)
-            .build()
-        );
-      }
-
-      Optional<ApiKey> apiKeyOpt = apiKeyService.validateApiKey(apiKey);
-      boolean isValid = apiKeyOpt.isPresent();
-      
-      ValidateApiKeyResponseDto.Builder responseBuilder = ValidateApiKeyResponseDto.builder()
-        .valid(isValid);
-      
-      if (isValid) {
-        ApiKey validApiKey = apiKeyOpt.get();
-        responseBuilder
-          .userId(validApiKey.getUser().getId())
-          .username(validApiKey.getUser().getUsername())
-          .role(ValidateApiKeyResponseDto.RoleEnum.fromValue(validApiKey.getUser().getRole().name()));
-      }
-
-      log.debug("API key validation result: {}", isValid);
-      return ResponseEntity.ok(responseBuilder.build());
-
-    } catch (Exception e) {
-      log.error("Error validating API key", e);
-      return ResponseEntity.ok(
-        ValidateApiKeyResponseDto.builder()
-          .valid(false)
-          .build()
-      );
     }
   }
 }

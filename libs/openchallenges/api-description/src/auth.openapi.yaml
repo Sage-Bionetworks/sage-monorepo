@@ -51,8 +51,6 @@ paths:
     $ref: paths/auth/api-keys.yaml
   /auth/api-keys/{keyId}:
     $ref: paths/auth/api-keys/{keyId}.yaml
-  /auth/api-keys/validate:
-    $ref: paths/auth/api-keys/validate.yaml
 components:
   securitySchemes:
     # OAuth2 for user authentication (Spring Authorization Server)

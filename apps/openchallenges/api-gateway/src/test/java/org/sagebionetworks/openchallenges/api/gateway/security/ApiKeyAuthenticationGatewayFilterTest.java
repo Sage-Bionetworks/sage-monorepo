@@ -77,7 +77,6 @@ class ApiKeyAuthenticationGatewayFilterTest {
     filter.filter(exchange, chain).block();
 
     // then
-    verify(authenticationService, never()).validateApiKey(anyString());
     verify(chain).filter(exchange);
   }
 
@@ -97,7 +96,6 @@ class ApiKeyAuthenticationGatewayFilterTest {
     filter.filter(exchange, chain).block();
 
     // then
-    verify(authenticationService, never()).validateApiKey(anyString());
     verify(chain).filter(exchange);
   }
 

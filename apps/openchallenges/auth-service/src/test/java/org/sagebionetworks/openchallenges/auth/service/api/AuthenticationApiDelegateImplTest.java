@@ -16,11 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.UpdateUserProfileRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.UserProfileDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyRequestDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyResponseDto;
-import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
-import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
 import org.sagebionetworks.openchallenges.auth.service.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +26,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 @ExtendWith(MockitoExtension.class)
 class AuthenticationApiDelegateImplTest {
-
-  @Mock
-  private ApiKeyService apiKeyService;
 
   @Mock
   private UserService userService;
@@ -46,13 +39,11 @@ class AuthenticationApiDelegateImplTest {
   private AuthenticationApiDelegateImpl authenticationApiDelegate;
 
   private User testUser;
-  private ApiKey testApiKey;
 
   @BeforeEach
   void setUp() {
     authenticationApiDelegate = new AuthenticationApiDelegateImpl(
-      userService,
-      apiKeyService
+      userService
     );
 
     // Set up test user
@@ -66,55 +57,6 @@ class AuthenticationApiDelegateImplTest {
       .createdAt(OffsetDateTime.now())
       .updatedAt(OffsetDateTime.now())
       .build();
-
-    // Set up test API key
-    testApiKey = new ApiKey();
-    testApiKey.setId(UUID.randomUUID());
-    testApiKey.setKeyHash("hashed-test-api-key-value");
-    testApiKey.setKeyPrefix("test-api");
-    testApiKey.setName("Test API Key");
-    testApiKey.setUser(testUser);
-    testApiKey.setCreatedAt(OffsetDateTime.now());
-  }
-
-  @Test
-  void validateApiKey_ValidKey_ShouldReturnSuccess() {
-    // Arrange
-    ValidateApiKeyRequestDto request = new ValidateApiKeyRequestDto()
-      .apiKey("test-api-key-value");
-
-    when(apiKeyService.validateApiKey("test-api-key-value"))
-      .thenReturn(Optional.of(testApiKey));
-
-    // Act
-    ResponseEntity<ValidateApiKeyResponseDto> response = 
-      authenticationApiDelegate.validateApiKey(request);
-
-    // Assert
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-    assertThat(response.getBody()).isNotNull();
-    assertThat(response.getBody().getValid()).isTrue();
-    assertThat(response.getBody().getUsername()).isEqualTo("testuser");
-    assertThat(response.getBody().getUserId()).isEqualTo(testUser.getId());
-  }
-
-  @Test
-  void validateApiKey_InvalidKey_ShouldReturnFailure() {
-    // Arrange
-    ValidateApiKeyRequestDto request = new ValidateApiKeyRequestDto()
-      .apiKey("invalid-key");
-
-    when(apiKeyService.validateApiKey("invalid-key"))
-      .thenReturn(Optional.empty());
-
-    // Act
-    ResponseEntity<ValidateApiKeyResponseDto> response = 
-      authenticationApiDelegate.validateApiKey(request);
-
-    // Assert
-    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-    assertThat(response.getBody()).isNotNull();
-    assertThat(response.getBody().getValid()).isFalse();
   }
 
   @Test

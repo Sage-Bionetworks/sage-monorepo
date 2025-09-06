@@ -74,7 +74,6 @@ class AuthenticationFilterChainIntegrationTest {
 
     // then
     verify(oAuth2JwtService).validateJwt(validToken);
-    verify(gatewayAuthenticationService, never()).validateApiKey(anyString()); // API key should be skipped due to JWT auth headers
     verify(chain).filter(any()); // Should reach the end of the chain
     assertThat(exchange.getResponse().getStatusCode()).isNull(); // No error status
   }
@@ -155,7 +154,6 @@ class AuthenticationFilterChainIntegrationTest {
 
     // then
     verify(oAuth2JwtService).validateJwt(invalidToken);
-    verify(gatewayAuthenticationService, never()).validateApiKey(anyString()); // Should fail before reaching API key
     verify(chain, never()).filter(any()); // Should not reach the end of the chain
     assertThat(exchange.getResponse().getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     assertThat(exchange.getResponse().getHeaders().getFirst(HttpHeaders.WWW_AUTHENTICATE))
@@ -186,7 +184,6 @@ class AuthenticationFilterChainIntegrationTest {
 
     // then
     verify(oAuth2JwtService, never()).validateJwt(anyString());
-    verify(gatewayAuthenticationService, never()).validateApiKey(anyString());
     verify(chain).filter(any()); // Should reach Spring Security for authorization decision
     assertThat(exchange.getResponse().getStatusCode()).isNull(); // No error status
   }

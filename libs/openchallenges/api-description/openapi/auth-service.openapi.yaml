@@ -191,32 +191,6 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /auth/api-keys/validate:
-    post:
-      tags:
-        - Authentication
-      summary: Validate API key
-      description: Internal endpoint to validate API keys (used by other services)
-      operationId: validateApiKey
-      x-audience:
-        - internal
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ValidateApiKeyRequest'
-      responses:
-        '200':
-          description: API key is valid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidateApiKeyResponse'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
     oauth2:
@@ -460,48 +434,6 @@ components:
           description: When the API key expires (null if no expiration)
           example: '2025-01-15T10:30:00Z'
           nullable: true
-    ValidateApiKeyRequest:
-      type: object
-      required:
-        - apiKey
-      properties:
-        apiKey:
-          type: string
-          description: The API key to validate
-          example: oc_prod_abcd1234567890abcdef1234567890abcdef1234
-    ValidateApiKeyResponse:
-      type: object
-      properties:
-        valid:
-          type: boolean
-          description: Whether the API key is valid
-          example: true
-        userId:
-          type: string
-          format: uuid
-          description: ID of the user who owns this API key (only if valid)
-          example: 123e4567-e89b-12d3-a456-426614174000
-        username:
-          type: string
-          description: Username of the API key owner (only if valid)
-          example: admin
-        role:
-          type: string
-          description: Role of the API key owner (only if valid)
-          example: admin
-          enum:
-            - admin
-            - user
-            - readonly
-            - service
-        scopes:
-          type: array
-          items:
-            type: string
-          description: Permissions granted to this API key (only if valid)
-          example:
-            - organizations:read
-            - organizations:write
   responses:
     Unauthorized:
       description: Unauthorized

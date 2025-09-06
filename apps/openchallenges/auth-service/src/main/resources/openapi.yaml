@@ -219,38 +219,6 @@ paths:
         - application/problem+json
       x-tags:
         - tag: API Key
-  /auth/api-keys/validate:
-    post:
-      description: Internal endpoint to validate API keys (used by other services)
-      operationId: validateApiKey
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ValidateApiKeyRequest'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidateApiKeyResponse'
-          description: API key is valid
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-      summary: Validate API key
-      tags:
-        - Authentication
-      x-audience:
-        - internal
-      x-content-type: application/json
-      x-accepts:
-        - application/json
-        - application/problem+json
-      x-tags:
-        - tag: Authentication
 components:
   responses:
     Unauthorized:
@@ -523,56 +491,6 @@ components:
           format: date-time
           nullable: true
           type: string
-      type: object
-    ValidateApiKeyRequest:
-      properties:
-        apiKey:
-          description: The API key to validate
-          example: oc_prod_abcd1234567890abcdef1234567890abcdef1234
-          type: string
-      required:
-        - apiKey
-      type: object
-    ValidateApiKeyResponse:
-      example:
-        valid: true
-        role: admin
-        scopes:
-          - organizations:read
-          - organizations:write
-        userId: 123e4567-e89b-12d3-a456-426614174000
-        username: admin
-      properties:
-        valid:
-          description: Whether the API key is valid
-          example: true
-          type: boolean
-        userId:
-          description: ID of the user who owns this API key (only if valid)
-          example: 123e4567-e89b-12d3-a456-426614174000
-          format: uuid
-          type: string
-        username:
-          description: Username of the API key owner (only if valid)
-          example: admin
-          type: string
-        role:
-          description: Role of the API key owner (only if valid)
-          enum:
-            - admin
-            - user
-            - readonly
-            - service
-          example: admin
-          type: string
-        scopes:
-          description: Permissions granted to this API key (only if valid)
-          example:
-            - organizations:read
-            - organizations:write
-          items:
-            type: string
-          type: array
       type: object
   securitySchemes:
     oauth2:
