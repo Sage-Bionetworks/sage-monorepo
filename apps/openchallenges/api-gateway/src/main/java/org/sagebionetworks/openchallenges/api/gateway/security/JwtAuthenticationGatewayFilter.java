@@ -2,8 +2,6 @@ package org.sagebionetworks.openchallenges.api.gateway.security;
 
 import org.sagebionetworks.openchallenges.api.gateway.configuration.AuthConfiguration;
 import org.sagebionetworks.openchallenges.api.gateway.service.OAuth2JwtService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -15,6 +13,7 @@ import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
@@ -22,10 +21,9 @@ import java.util.List;
  * WebFilter that handles JWT authentication using OAuth2 standards.
  * Runs BEFORE Spring Security authorization filters.
  */
+@Slf4j
 @Component
 public class JwtAuthenticationGatewayFilter implements WebFilter {
-
-  private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationGatewayFilter.class);
 
   private final OAuth2JwtService oAuth2JwtService;
   private final AuthConfiguration authConfiguration;
@@ -45,25 +43,25 @@ public class JwtAuthenticationGatewayFilter implements WebFilter {
     // Extract JWT token from Authorization header
     String authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
     if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-      logger.debug("No Bearer token found for request to: {}", path);
+      log.debug("No Bearer token found for request to: {}", path);
       // No JWT token - continue to API key authentication or Spring Security
       return chain.filter(exchange);
     }
 
     String jwtToken = authHeader.substring(7); // Remove "Bearer " prefix
     if (jwtToken.trim().isEmpty()) {
-      logger.debug("Empty Bearer token found for request to: {}", path);
+      log.debug("Empty Bearer token found for request to: {}", path);
       // Empty JWT token - continue to API key authentication or Spring Security
       return chain.filter(exchange);
     }
     
-    logger.debug("Validating JWT token for request to: {}", path);
+    log.debug("Validating JWT token for request to: {}", path);
 
     // Validate JWT token with OAuth2 JWT Service
     return oAuth2JwtService.validateJwt(jwtToken)
         .flatMap(validationResponse -> {
           if (!validationResponse.isValid()) {
-            logger.warn("Invalid JWT token for request to: {}", path);
+            log.warn("Invalid JWT token for request to: {}", path);
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             exchange.getResponse().getHeaders().add("WWW-Authenticate", 
                 String.format("Bearer realm=\"%s\"", authConfiguration.getRealm()));
@@ -87,14 +85,14 @@ public class JwtAuthenticationGatewayFilter implements WebFilter {
               authorities
           );
 
-          logger.debug("JWT authentication successful for user: {} accessing: {}", 
+          log.debug("JWT authentication successful for user: {} accessing: {}", 
               validationResponse.getUsername(), path);
 
           return chain.filter(exchange.mutate().request(modifiedRequest).build())
               .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
         })
         .onErrorResume(Exception.class, ex -> {
-          logger.warn("JWT authentication failed for request to {}: {}", path, ex.getMessage());
+          log.warn("JWT authentication failed for request to {}: {}", path, ex.getMessage());
           exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
           exchange.getResponse().getHeaders().add("WWW-Authenticate", 
               String.format("Bearer realm=\"%s\"", authConfiguration.getRealm()));

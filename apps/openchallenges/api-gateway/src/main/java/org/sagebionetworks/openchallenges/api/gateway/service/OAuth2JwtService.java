@@ -3,12 +3,11 @@ package org.sagebionetworks.openchallenges.api.gateway.service;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Service for validating JWT tokens by calling the auth service validation endpoint.
@@ -17,10 +16,9 @@ import reactor.core.publisher.Mono;
  * instead of doing local validation, which ensures consistency with the auth service's
  * token generation and validation logic.
  */
+@Slf4j
 @Service
 public class OAuth2JwtService {
-
-  private static final Logger log = LoggerFactory.getLogger(OAuth2JwtService.class);
 
   private final WebClient webClient;
   @SuppressWarnings("unused") // Keep for potential future API key validation
