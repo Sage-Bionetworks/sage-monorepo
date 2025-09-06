@@ -5,7 +5,9 @@ get:
   description: List organizations
   operationId: listOrganizations
   x-audience: [public]
-  security: []
+  security:
+    - jwtBearer:
+        - read:org
   parameters:
     - $ref: ../components/parameters/query/organizationSearchQuery.yaml
   responses:
