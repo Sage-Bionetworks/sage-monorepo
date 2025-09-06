@@ -13,9 +13,6 @@ dependencies {
   // OAuth2 and JWT support
   implementation(libs.spring.boot.starter.oauth2.resource.server)
   implementation(libs.spring.security.oauth2.jose)
-  implementation(libs.jjwt.api)
-  runtimeOnly(libs.jjwt.impl)
-  runtimeOnly(libs.jjwt.jackson)
 
   // Jackson YAML support for OpenAPI scope mapper utility
   implementation(libs.jackson.databind)
