@@ -6,10 +6,9 @@ import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2CallbackR
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ExternalAccount;
 import org.sagebionetworks.openchallenges.auth.service.service.AuthenticationService;
 import org.sagebionetworks.openchallenges.auth.service.service.OAuth2ConfigurationService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,11 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 /**
  * OAuth2 web controller for handling OAuth2 login flows.
  */
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class OAuth2WebController {
-
-  private static final Logger logger = LoggerFactory.getLogger(OAuth2WebController.class);
 
   private final OAuth2ConfigurationService oAuth2ConfigurationService;
   private final AuthenticationService authenticationService;
@@ -31,7 +29,7 @@ public class OAuth2WebController {
    */
   @GetMapping("/auth/oauth2/google")
   public String loginWithGoogle() {
-    logger.debug("Initiating Google OAuth2 authorization");
+    log.debug("Initiating Google OAuth2 authorization");
 
     // Generate authorization URL for Google
     String authUrl = oAuth2ConfigurationService.getAuthorizationUrl(
@@ -39,7 +37,7 @@ public class OAuth2WebController {
       "state_" + System.currentTimeMillis() // Simple state parameter for security
     );
 
-    logger.debug("Redirecting to Google authorization URL");
+    log.debug("Redirecting to Google authorization URL");
     return "redirect:" + authUrl;
   }
 
@@ -54,7 +52,7 @@ public class OAuth2WebController {
     Model model,
     HttpServletResponse response
   ) {
-    logger.debug(
+    log.debug(
       "OAuth2 callback received - code: {}, error: {}, state: {}",
       code != null ? "present" : "null",
       error,
@@ -62,20 +60,20 @@ public class OAuth2WebController {
     );
 
     if (error != null) {
-      logger.error("OAuth2 authorization error: {}", error);
+      log.error("OAuth2 authorization error: {}", error);
       model.addAttribute("error", error);
       return "oauth2-error";
     }
 
     if (code == null) {
-      logger.error("No authorization code received in callback");
+      log.error("No authorization code received in callback");
       model.addAttribute("error", "No authorization code received");
       return "oauth2-error";
     }
 
     try {
       // Process OAuth2 callback through AuthenticationService
-      logger.debug("Processing OAuth2 callback through AuthenticationService");
+      log.debug("Processing OAuth2 callback through AuthenticationService");
       
       OAuth2CallbackResponseDto authResponse = authenticationService.handleOAuth2Callback(
         "google", // Currently only supporting Google
@@ -83,19 +81,19 @@ public class OAuth2WebController {
         state
       );
 
-      logger.debug("OAuth2 authentication successful, setting secure cookies");
+      log.debug("OAuth2 authentication successful, setting secure cookies");
       
             // Set secure HTTP-only cookies with appropriate expiration times
       setSecureCookie(response, "oc_access_token", authResponse.getAccessToken(), 3600); // 1 hour
       setSecureCookie(response, "oc_refresh_token", authResponse.getRefreshToken(), 604800); // 7 days
       setSecureCookie(response, "oc_username", authResponse.getUsername(), 604800); // 7 days - longer session
       
-      logger.debug("Secure cookies set, redirecting to profile page");
+      log.debug("Secure cookies set, redirecting to profile page");
       
       // Redirect to clean profile URL without sensitive data
       return "redirect:/profile";
     } catch (Exception e) {
-      logger.error("Error exchanging authorization code for tokens", e);
+      log.error("Error exchanging authorization code for tokens", e);
       model.addAttribute("error", "Failed to exchange authorization code: " + e.getMessage());
       return "oauth2-error";
     }
@@ -112,6 +110,6 @@ public class OAuth2WebController {
     cookie.setMaxAge(maxAge); // Cookie expiration in seconds
     response.addCookie(cookie);
     
-    logger.debug("Set secure cookie: {} with maxAge: {} seconds", name, maxAge);
+    log.debug("Set secure cookie: {} with maxAge: {} seconds", name, maxAge);
   }
 }
