@@ -64,7 +64,3 @@ components:
     # JWT Bearer tokens (issued by OAuth2 server)
     jwtBearer:
       $ref: components/securitySchemes/JwtBearer.yaml
-
-    # API Key for programmatic access to OpenChallenges APIs
-    apiKeyAuth:
-      $ref: components/securitySchemes/ApiKeyAuth.yaml
