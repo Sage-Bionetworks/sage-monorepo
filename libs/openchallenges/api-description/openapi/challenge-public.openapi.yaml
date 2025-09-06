@@ -451,7 +451,7 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
-      description: API key for programmatic access (create and manage via /auth/api-keys endpoints)
+      description: API key for programmatic access. API keys inherit the scopes and permissions of the user who created them. Create and manage via /auth/api-keys endpoints.
   schemas:
     ChallengeSort:
       description: What to sort results by.

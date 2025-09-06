@@ -71,9 +71,7 @@ paths:
       x-audience:
         - public
       security:
-        - oauth2:
-            - profile
-        - jwtBearerAuth: []
+        - jwtBearer: []
         - apiKeyAuth: []
       responses:
         '200':
@@ -95,9 +93,7 @@ paths:
       x-audience:
         - public
       security:
-        - oauth2:
-            - profile
-        - jwtBearerAuth: []
+        - jwtBearer: []
         - apiKeyAuth: []
       requestBody:
         required: true
@@ -128,9 +124,8 @@ paths:
       x-audience:
         - public
       security:
-        - oauth2:
-            - api:read
-        - jwtBearerAuth: []
+        - jwtBearer:
+            - read:api-key
       responses:
         '200':
           description: List of API keys
@@ -153,9 +148,8 @@ paths:
       x-audience:
         - public
       security:
-        - oauth2:
-            - api:write
-        - jwtBearerAuth: []
+        - jwtBearer:
+            - create:api-key
       requestBody:
         required: true
         content:
@@ -185,9 +179,8 @@ paths:
       x-audience:
         - public
       security:
-        - oauth2:
-            - api:write
-        - jwtBearerAuth: []
+        - jwtBearer:
+            - delete:api-key
       parameters:
         - name: keyId
           in: path
@@ -801,24 +794,19 @@ components:
             openid: OpenID Connect authentication
             profile: Access to user's basic profile information
             email: Access to user's email address
-            api:read: Read access to API resources
-            api:write: Write access to API resources
-            api:admin: Administrative access to API resources
-    jwtBearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: JWT access token obtained from /auth/login or /auth/oauth2/callback endpoint
-    apiKeyAuth:
-      type: apiKey
-      in: header
-      name: X-API-Key
-      description: API key for programmatic access (create and manage via /auth/api-keys endpoints)
+            read:org: Read access to organization resources
+            write:org: Write access to organization resources
+            delete:org: Delete access to organization resources
     jwtBearer:
       type: http
       scheme: bearer
       bearerFormat: JWT
-      description: JWT access token obtained from /auth/login or /auth/oauth2/callback endpoint
+      description: JWT access token obtained from OAuth2 authorization flow or API key exchange
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key for programmatic access. API keys inherit the scopes and permissions of the user who created them. Create and manage via /auth/api-keys endpoints.
   schemas:
     UserRole:
       type: string

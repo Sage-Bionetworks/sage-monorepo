@@ -11,7 +11,7 @@ flows:
       profile: Access to user's basic profile information
       email: Access to user's email address
 
-      # Application-specific scopes
-      'api:read': Read access to API resources
-      'api:write': Write access to API resources
-      'api:admin': Administrative access to API resources
+      # OpenChallenges application-specific scopes
+      'read:org': Read access to organization resources
+      'write:org': Write access to organization resources
+      'delete:org': Delete access to organization resources

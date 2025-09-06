@@ -19,13 +19,17 @@ info:
     **Custom API Endpoints** (documented below):
     - `/v1/auth/api-keys` - API key management
     - `/v1/auth/profile` - User profile management
-    - `/v1/auth/api-keys/validate` - API key validation
-    - `/v1/auth/api-keys/exchange-for-jwt` - API key to JWT token exchange (internal)
 
     **Authentication Methods**:
     - **OAuth2**: Use standard OAuth2 flows for user login via Google/Synapse
-    - **API Keys**: Use for programmatic access to OpenChallenges APIs (users and services)
+    - **API Keys**: Use for programmatic access to OpenChallenges APIs. API keys inherit the scopes and permissions of the user who created them.
     - **JWT**: Tokens issued by OAuth2 server for API access
+
+    **Scopes**:
+    - `openid`, `profile`, `email`: Standard OpenID Connect scopes
+    - `read:org`: Read access to organization resources
+    - `write:org`: Write access to organization resources
+    - `delete:org`: Delete access to organization resources
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -58,8 +62,8 @@ components:
       $ref: components/securitySchemes/OAuth2Auth.yaml
 
     # JWT Bearer tokens (issued by OAuth2 server)
-    jwtBearerAuth:
-      $ref: components/securitySchemes/JwtBearerAuth.yaml
+    jwtBearer:
+      $ref: components/securitySchemes/JwtBearer.yaml
 
     # API Key for programmatic access to OpenChallenges APIs
     apiKeyAuth:
