@@ -4,13 +4,13 @@ import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeC
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionRoleDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionsPageDto;
-import org.sagebionetworks.openchallenges.challenge.service.security.AuthenticatedUser;
 import org.sagebionetworks.openchallenges.challenge.service.service.ChallengeContributionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -33,13 +33,10 @@ public class ChallengeContributionApiDelegateImpl implements ChallengeContributi
   @PreAuthorize("authentication.principal.admin")
   public ResponseEntity<Void> deleteChallengeContributions(Long challengeId) {
     // Log the authenticated user for audit purposes
-    AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
-      .getAuthentication()
-      .getPrincipal();
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     logger.info(
-      "User {} (role: {}) is deleting all contributions for challenge: {}",
-      user.getUsername(),
-      user.getRole(),
+      "User {} is deleting all contributions for challenge: {}",
+      authentication.getName(),
       challengeId
     );
 
@@ -61,13 +58,10 @@ public class ChallengeContributionApiDelegateImpl implements ChallengeContributi
     ChallengeContributionCreateRequestDto challengeContributionCreateRequestDto
   ) {
     // Log the authenticated user for audit purposes
-    AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
-      .getAuthentication()
-      .getPrincipal();
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     logger.info(
-      "User {} (role: {}) is adding contribution for challenge: {} with organization: {} and role: {}",
-      user.getUsername(),
-      user.getRole(),
+      "User {} is adding contribution for challenge: {} with organization: {} and role: {}",
+      authentication.getName(),
       challengeId,
       challengeContributionCreateRequestDto.getOrganizationId(),
       challengeContributionCreateRequestDto.getRole()
@@ -90,13 +84,10 @@ public class ChallengeContributionApiDelegateImpl implements ChallengeContributi
     ChallengeContributionRoleDto role
   ) {
     // Log the authenticated user for audit purposes
-    AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
-      .getAuthentication()
-      .getPrincipal();
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     logger.info(
-      "User {} (role: {}) is deleting challenge contribution for challengeId: {}, organizationId: {}, role: {}",
-      user.getUsername(),
-      user.getRole(),
+      "User {} is deleting challenge contribution for challengeId: {}, organizationId: {}, role: {}",
+      authentication.getName(),
       challengeId,
       organizationId,
       role

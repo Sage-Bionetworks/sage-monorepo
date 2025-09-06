@@ -292,10 +292,21 @@ public class ApiKeyService {
     // Determine scopes based on user role
     Set<String> scopes;
     if (user.isAdmin()) {
-      scopes = Set.of("read:profile", "update:profile", "read:api-key", "create:api-key", "delete:api-key", "read:orgs", "create:orgs", "update:orgs", "delete:orgs");
+      scopes = Set.of(
+        "read:profile", "update:profile", "read:api-key", "create:api-key", "delete:api-key", 
+        "read:orgs", "create:orgs", "update:orgs", "delete:orgs",
+        "read:challenges", "create:challenges", "update:challenges", "delete:challenges", 
+        "read:challenges-analytics", "read:challenge-platforms", "create:challenge-platforms", 
+        "update:challenge-platforms", "delete:challenge-platforms", "read:edam-concepts"
+      );
     } else {
       // Default scopes for regular users
-      scopes = Set.of("read:profile", "update:profile", "read:api-key", "create:api-key", "delete:api-key", "read:orgs", "create:orgs", "update:orgs");
+      scopes = Set.of(
+        "read:profile", "update:profile", "read:api-key", "create:api-key", "delete:api-key", 
+        "read:orgs", "create:orgs", "update:orgs",
+        "read:challenges", "create:challenges", "update:challenges", 
+        "read:challenges-analytics", "read:challenge-platforms", "read:edam-concepts"
+      );
     }
     
     // Create RegisteredClient for this API key

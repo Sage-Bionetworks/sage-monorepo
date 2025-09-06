@@ -5,13 +5,13 @@ import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeP
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformUpdateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformsPageDto;
-import org.sagebionetworks.openchallenges.challenge.service.security.AuthenticatedUser;
 import org.sagebionetworks.openchallenges.challenge.service.service.ChallengePlatformService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -32,13 +32,10 @@ public class ChallengePlatformApiDelegateImpl implements ChallengePlatformApiDel
   @PreAuthorize("authentication.principal.admin")
   public ResponseEntity<Void> deleteChallengePlatform(Long challengePlatformId) {
     // Log the authenticated user for audit purposes
-    AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
-      .getAuthentication()
-      .getPrincipal();
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     logger.info(
-      "User {} (role: {}) is deleting challenge platform: {}",
-      user.getUsername(),
-      user.getRole(),
+      "User {} is deleting challenge platform: {}",
+      authentication.getName(),
       challengePlatformId
     );
 
@@ -64,13 +61,10 @@ public class ChallengePlatformApiDelegateImpl implements ChallengePlatformApiDel
     ChallengePlatformCreateRequestDto challengePlatformCreateRequestDto
   ) {
     // Log the authenticated user for audit purposes
-    AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
-      .getAuthentication()
-      .getPrincipal();
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     logger.info(
-      "User {} (role: {}) is creating a new challenge platform",
-      user.getUsername(),
-      user.getRole()
+      "User {} is creating a new challenge platform",
+      authentication.getName()
     );
 
     ChallengePlatformDto createdPlatform = challengePlatformService.createChallengePlatform(
@@ -86,13 +80,10 @@ public class ChallengePlatformApiDelegateImpl implements ChallengePlatformApiDel
     ChallengePlatformUpdateRequestDto challengePlatformUpdateRequestDto
   ) {
     // Log the authenticated user for audit purposes
-    AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
-      .getAuthentication()
-      .getPrincipal();
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     logger.info(
-      "User {} (role: {}) is updating challenge platform {}",
-      user.getUsername(),
-      user.getRole(),
+      "User {} is updating challenge platform {}",
+      authentication.getName(),
       challengePlatformId
     );
 

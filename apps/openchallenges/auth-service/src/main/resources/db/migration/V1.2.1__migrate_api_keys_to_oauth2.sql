@@ -71,7 +71,7 @@ BEGIN
             'client_credentials',
             '',
             '',
-            'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs,create:orgs,update:orgs,delete:orgs',
+            'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs,create:orgs,update:orgs,delete:orgs,read:challenges,create:challenges,update:challenges,delete:challenges,read:challenges-analytics,read:challenge-platforms,create:challenge-platforms,update:challenge-platforms,delete:challenge-platforms,read:edam-concepts',
             '{"@class":"java.util.HashMap","settings.client.require-proof-key":false,"settings.client.require-authorization-consent":false}',
             '{"@class":"java.util.HashMap","settings.token.access-token-time-to-live":["java.time.Duration",3600.000000000],"settings.token.refresh-token-time-to-live":["java.time.Duration",7200.000000000]}'
         );
@@ -80,7 +80,7 @@ BEGIN
         UPDATE api_key 
         SET 
             client_id = client_id_value,
-            allowed_scopes = 'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs,create:orgs,update:orgs,delete:orgs'
+            allowed_scopes = 'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs,create:orgs,update:orgs,delete:orgs,read:challenges,create:challenges,update:challenges,delete:challenges,read:challenges-analytics,read:challenge-platforms,create:challenge-platforms,update:challenge-platforms,delete:challenge-platforms,read:edam-concepts'
         WHERE id = api_key_rec.id;
     END LOOP;
 END $$;

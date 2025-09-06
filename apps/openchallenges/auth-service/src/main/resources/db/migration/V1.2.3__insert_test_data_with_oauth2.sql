@@ -24,7 +24,7 @@ INSERT INTO api_key (user_id, key_hash, key_prefix, name, client_id, allowed_sco
     'oc_dev_',
     'Test API Key',
     'oc_api_key_test1',
-    'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs',
+    'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs,read:challenges,read:challenges-analytics,read:challenge-platforms,read:edam-concepts',
     NOW() + INTERVAL '1 year',
     NOW(),
     NOW()
@@ -38,7 +38,7 @@ INSERT INTO api_key (user_id, key_hash, key_prefix, name, client_id, allowed_sco
     'oc_dev_',
     'Developer API Key',
     'oc_api_key_dev1',
-    'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs,create:orgs,update:orgs',
+    'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs,create:orgs,update:orgs,read:challenges,create:challenges,update:challenges,read:challenges-analytics,read:challenge-platforms,read:edam-concepts',
     NOW() + INTERVAL '1 year',
     NOW(),
     NOW()
@@ -52,7 +52,7 @@ INSERT INTO api_key (user_id, key_hash, key_prefix, name, client_id, allowed_sco
     'oc_dev_',
     'Admin API Key',
     'oc_api_key_admin1',
-    'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs,create:orgs,update:orgs,delete:orgs',
+    'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs,create:orgs,update:orgs,delete:orgs,read:challenges,create:challenges,update:challenges,delete:challenges,read:challenges-analytics,read:challenge-platforms,create:challenge-platforms,update:challenge-platforms,delete:challenge-platforms,read:edam-concepts',
     NOW() + INTERVAL '1 year',
     NOW(),
     NOW()
@@ -85,7 +85,7 @@ INSERT INTO oauth2_registered_client (
     'client_credentials',
     '',
     '',
-    'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs',
+    'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs,read:challenges,read:challenges-analytics,read:challenge-platforms,read:edam-concepts',
     '{"@class":"java.util.HashMap","settings.client.require-proof-key":false,"settings.client.require-authorization-consent":false}',
     '{"@class":"java.util.HashMap","settings.token.access-token-time-to-live":["java.time.Duration",3600.000000000],"settings.token.refresh-token-time-to-live":["java.time.Duration",7200.000000000]}'
 ),
@@ -100,7 +100,7 @@ INSERT INTO oauth2_registered_client (
     'client_credentials',
     '',
     '',
-    'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs,create:orgs,update:orgs',
+    'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs,create:orgs,update:orgs,read:challenges,create:challenges,update:challenges,read:challenges-analytics,read:challenge-platforms,read:edam-concepts',
     '{"@class":"java.util.HashMap","settings.client.require-proof-key":false,"settings.client.require-authorization-consent":false}',
     '{"@class":"java.util.HashMap","settings.token.access-token-time-to-live":["java.time.Duration",3600.000000000],"settings.token.refresh-token-time-to-live":["java.time.Duration",7200.000000000]}'
 ),
@@ -115,7 +115,7 @@ INSERT INTO oauth2_registered_client (
     'client_credentials',
     '',
     '',
-    'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs,create:orgs,update:orgs,delete:orgs',
+    'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs,create:orgs,update:orgs,delete:orgs,read:challenges,create:challenges,update:challenges,delete:challenges,read:challenges-analytics,read:challenge-platforms,create:challenge-platforms,update:challenge-platforms,delete:challenge-platforms,read:edam-concepts',
     '{"@class":"java.util.HashMap","settings.client.require-proof-key":false,"settings.client.require-authorization-consent":false}',
     '{"@class":"java.util.HashMap","settings.token.access-token-time-to-live":["java.time.Duration",3600.000000000],"settings.token.refresh-token-time-to-live":["java.time.Duration",7200.000000000]}'
 );
