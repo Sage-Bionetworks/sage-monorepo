@@ -2,21 +2,39 @@
 openchallenges:
   gateway:
     route-scopes:
+      GET /api/v1/auth/profile:
+        scopes:
+          - 'read:profile'
+      PUT /api/v1/auth/profile:
+        scopes:
+          - 'update:profile'
+      GET /api/v1/auth/api-keys:
+        scopes:
+          - 'read:api-key'
+      POST /api/v1/auth/api-keys:
+        scopes:
+          - 'create:api-key'
+      DELETE /api/v1/auth/api-keys/{keyId}:
+        scopes:
+          - 'delete:api-key'
       GET /api/v1/organizations:
         scopes:
-          - 'read:org'
+          - 'read:orgs'
       POST /api/v1/organizations:
         scopes:
-          - 'write:org'
+          - 'create:orgs'
+      GET /api/v1/organizations/{org}:
+        scopes:
+          - 'read:orgs'
       PUT /api/v1/organizations/{org}:
         scopes:
-          - 'write:org'
+          - 'update:orgs'
       DELETE /api/v1/organizations/{org}:
         scopes:
-          - 'delete:org'
+          - 'delete:orgs'
       POST /api/v1/organizations/{org}/participations:
         scopes:
-          - 'write:org'
+          - 'update:orgs'
       DELETE /api/v1/organizations/{org}/participations/{challengeId}/roles/{role}:
         scopes:
-          - 'write:org'
+          - 'update:orgs'

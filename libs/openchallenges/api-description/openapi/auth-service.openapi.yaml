@@ -207,19 +207,20 @@ components:
     AuthScope:
       type: string
       enum:
-        - user:profile
-        - user:email
-        - user:keys
-        - read:org
-        - write:org
-        - delete:org
-        - admin:org
-        - read:challenge
-        - write:challenge
-        - delete:challenge
-        - admin:challenge
-        - admin:auth
-        - admin:all
+        - openid
+        - profile
+        - email
+        - read:profile
+        - update:profile
+        - read:api-key
+        - create:api-key
+        - update:api-key
+        - delete:api-key
+        - rotate:api-key
+        - read:orgs
+        - create:orgs
+        - update:orgs
+        - delete:orgs
       description: Permission scope defining specific access rights
     UserProfile:
       type: object

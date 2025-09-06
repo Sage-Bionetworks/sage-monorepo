@@ -20,13 +20,17 @@ info:
     **Custom API Endpoints** (documented below):
     - `/v1/auth/api-keys` - API key management
     - `/v1/auth/profile` - User profile management
-    - `/v1/auth/api-keys/validate` - API key validation
-    - `/v1/auth/api-keys/exchange-for-jwt` - API key to JWT token exchange (internal)
 
     **Authentication Methods**:
     - **OAuth2**: Use standard OAuth2 flows for user login via Google/Synapse
-    - **API Keys**: Use for programmatic access to OpenChallenges APIs (users and services)
+    - **API Keys**: Use for programmatic access to OpenChallenges APIs. API keys inherit the scopes and permissions of the user who created them.
     - **JWT**: Tokens issued by OAuth2 server for API access
+
+    **Scopes**:
+    - `openid`, `profile`, `email`: Standard OpenID Connect scopes
+    - `read:org`: Read access to organization resources
+    - `write:org`: Write access to organization resources
+    - `delete:org`: Delete access to organization resources
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -63,10 +67,8 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - oauth2:
-            - profile
-        - jwtBearerAuth: []
-        - apiKeyAuth: []
+        - jwtBearer:
+            - read:profile
       summary: Get user profile
       tags:
         - Authentication
@@ -100,10 +102,8 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - oauth2:
-            - profile
-        - jwtBearerAuth: []
-        - apiKeyAuth: []
+        - jwtBearer:
+            - update:profile
       summary: Update user profile
       tags:
         - Authentication
@@ -133,9 +133,8 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - oauth2:
-            - api:read
-        - jwtBearerAuth: []
+        - jwtBearer:
+            - read:api-key
       summary: List API keys
       tags:
         - API Key
@@ -169,9 +168,8 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - oauth2:
-            - api:write
-        - jwtBearerAuth: []
+        - jwtBearer:
+            - create:api-key
       summary: Create API key
       tags:
         - API Key
@@ -207,9 +205,8 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - oauth2:
-            - api:write
-        - jwtBearerAuth: []
+        - jwtBearer:
+            - delete:api-key
       summary: Delete API key
       tags:
         - API Key
@@ -257,19 +254,20 @@ components:
     AuthScope:
       description: Permission scope defining specific access rights
       enum:
-        - user:profile
-        - user:email
-        - user:keys
-        - read:org
-        - write:org
-        - delete:org
-        - admin:org
-        - read:challenge
-        - write:challenge
-        - delete:challenge
-        - admin:challenge
-        - admin:auth
-        - admin:all
+        - openid
+        - profile
+        - email
+        - read:profile
+        - update:profile
+        - read:api-key
+        - create:api-key
+        - update:api-key
+        - delete:api-key
+        - rotate:api-key
+        - read:orgs
+        - create:orgs
+        - update:orgs
+        - delete:orgs
       type: string
     UserProfile:
       example:
@@ -282,8 +280,8 @@ components:
         bio: Researcher in computational biology
         id: user_123456789
         scopes:
-          - user:profile
-          - user:profile
+          - openid
+          - openid
         email: john.doe@example.com
         username: johndoe
         updatedAt: 2024-02-01T14:20:00Z
@@ -493,30 +491,9 @@ components:
           type: string
       type: object
   securitySchemes:
-    oauth2:
-      description: OAuth2 Authorization Code Flow for user authentication via Google/Synapse
-      flows:
-        authorizationCode:
-          authorizationUrl: /oauth2/authorize
-          refreshUrl: /oauth2/token
-          scopes:
-            openid: OpenID Connect authentication
-            profile: Access to user's basic profile information
-            email: Access to user's email address
-            api:read: Read access to API resources
-            api:write: Write access to API resources
-            api:admin: Administrative access to API resources
-          tokenUrl: /oauth2/token
-      type: oauth2
-    jwtBearerAuth:
+    jwtBearer:
       bearerFormat: JWT
-      description: JWT access token obtained from /auth/login or /auth/oauth2/callback
-        endpoint
+      description: JWT access token obtained from OAuth2 authorization flow or API
+        key exchange
       scheme: bearer
       type: http
-    apiKeyAuth:
-      description: API key for programmatic access (create and manage via /auth/api-keys
-        endpoints)
-      in: header
-      name: X-API-Key
-      type: apiKey

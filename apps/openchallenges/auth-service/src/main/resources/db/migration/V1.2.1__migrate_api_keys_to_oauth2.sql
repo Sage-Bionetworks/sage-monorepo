@@ -27,7 +27,7 @@ INSERT INTO oauth2_registered_client (
     'authorization_code,refresh_token,client_credentials',
     'http://openchallenges-api-gateway:8082/oauth2/code/openchallenges-oidc,http://openchallenges-api-gateway:8082/oauth2/authorized',
     'http://openchallenges-api-gateway:8082/oauth2/logged-out',
-    'openid,profile,email,user:profile,user:email,user:keys,read:org,write:org,delete:org',
+    'openid,profile,email,read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs,create:orgs,update:orgs,delete:orgs',
     '{"@class":"java.util.HashMap","settings.client.require-proof-key":true,"settings.client.require-authorization-consent":true}',
     '{"@class":"java.util.HashMap","settings.token.access-token-time-to-live":["java.time.Duration",300.000000000],"settings.token.refresh-token-time-to-live":["java.time.Duration",3600.000000000]}'
 );
@@ -71,7 +71,7 @@ BEGIN
             'client_credentials',
             '',
             '',
-            'user:profile,user:email,user:keys,read:org,write:org,delete:org',
+            'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs,create:orgs,update:orgs,delete:orgs',
             '{"@class":"java.util.HashMap","settings.client.require-proof-key":false,"settings.client.require-authorization-consent":false}',
             '{"@class":"java.util.HashMap","settings.token.access-token-time-to-live":["java.time.Duration",3600.000000000],"settings.token.refresh-token-time-to-live":["java.time.Duration",7200.000000000]}'
         );
@@ -80,7 +80,7 @@ BEGIN
         UPDATE api_key 
         SET 
             client_id = client_id_value,
-            allowed_scopes = 'user:profile,user:email,user:keys,read:org,write:org,delete:org'
+            allowed_scopes = 'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs,create:orgs,update:orgs,delete:orgs'
         WHERE id = api_key_rec.id;
     END LOOP;
 END $$;

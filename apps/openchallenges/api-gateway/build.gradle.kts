@@ -42,9 +42,8 @@ tasks.register<JavaExec>("generateRouteScopes") {
   // Process all OpenAPI service files that have security requirements
   args =
     listOf(
+      "../../../libs/openchallenges/api-description/openapi/auth-service.openapi.yaml",
       "../../../libs/openchallenges/api-description/openapi/organization-service.openapi.yaml",
-      // Add more service OpenAPI files here as they get security annotations
-      // "../../../libs/openchallenges/api-description/openapi/challenge-service.openapi.yaml"
     )
 
   doFirst {

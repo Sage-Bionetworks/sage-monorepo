@@ -22,31 +22,33 @@ import com.fasterxml.jackson.annotation.JsonValue;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public enum AuthScopeDto {
   
-  USER_PROFILE("user:profile"),
+  OPENID("openid"),
   
-  USER_EMAIL("user:email"),
+  PROFILE("profile"),
   
-  USER_KEYS("user:keys"),
+  EMAIL("email"),
   
-  READ_ORG("read:org"),
+  READ_PROFILE("read:profile"),
   
-  WRITE_ORG("write:org"),
+  UPDATE_PROFILE("update:profile"),
   
-  DELETE_ORG("delete:org"),
+  READ_API_KEY("read:api-key"),
   
-  ADMIN_ORG("admin:org"),
+  CREATE_API_KEY("create:api-key"),
   
-  READ_CHALLENGE("read:challenge"),
+  UPDATE_API_KEY("update:api-key"),
   
-  WRITE_CHALLENGE("write:challenge"),
+  DELETE_API_KEY("delete:api-key"),
   
-  DELETE_CHALLENGE("delete:challenge"),
+  ROTATE_API_KEY("rotate:api-key"),
   
-  ADMIN_CHALLENGE("admin:challenge"),
+  READ_ORGS("read:orgs"),
   
-  ADMIN_AUTH("admin:auth"),
+  CREATE_ORGS("create:orgs"),
   
-  ADMIN_ALL("admin:all");
+  UPDATE_ORGS("update:orgs"),
+  
+  DELETE_ORGS("delete:orgs");
 
   private final String value;
 

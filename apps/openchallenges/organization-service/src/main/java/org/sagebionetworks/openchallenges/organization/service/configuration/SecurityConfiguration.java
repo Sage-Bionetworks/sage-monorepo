@@ -36,17 +36,18 @@ public class SecurityConfiguration {
             .requestMatchers("/actuator/**").permitAll()
             .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
             
-            // Organization read operations - require read:org scope
-            .requestMatchers(HttpMethod.GET, "/v1/organizations/**").hasAuthority("SCOPE_read:org")
-            .requestMatchers(HttpMethod.POST, "/v1/organizations/search").hasAuthority("SCOPE_read:org")
+                        // Organization read operations - require read:orgs scope
+            .requestMatchers(HttpMethod.GET, "/v1/organizations/**").hasAuthority("SCOPE_read:orgs")
+            .requestMatchers(HttpMethod.POST, "/v1/organizations/search").hasAuthority("SCOPE_read:orgs")
             
-            // Organization write operations - require write:org scope  
-            .requestMatchers(HttpMethod.POST, "/v1/organizations").hasAuthority("SCOPE_write:org")
-            .requestMatchers(HttpMethod.PUT, "/v1/organizations/**").hasAuthority("SCOPE_write:org")
-            .requestMatchers(HttpMethod.POST, "/v1/organizations/*/participations").hasAuthority("SCOPE_write:org")
+            // Organization create operations - require create:orgs scope  
+            .requestMatchers(HttpMethod.POST, "/v1/organizations").hasAuthority("SCOPE_create:orgs")
             
-            // Organization delete operations - require delete:org scope
-            .requestMatchers(HttpMethod.DELETE, "/v1/organizations/**").hasAuthority("SCOPE_delete:org")
+            // Organization update operations - require update:orgs scope
+            .requestMatchers(HttpMethod.PUT, "/v1/organizations/**").hasAuthority("SCOPE_update:orgs")
+            
+            // Organization delete operations - require delete:orgs scope
+            .requestMatchers(HttpMethod.DELETE, "/v1/organizations/**").hasAuthority("SCOPE_delete:orgs")
             .requestMatchers(HttpMethod.DELETE, "/v1/organizations/*/participations/*/role/*").hasAuthority("SCOPE_delete:org")
             
             // All other requests require authentication

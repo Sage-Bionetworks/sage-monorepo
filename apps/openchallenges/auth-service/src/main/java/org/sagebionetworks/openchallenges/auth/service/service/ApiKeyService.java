@@ -292,10 +292,10 @@ public class ApiKeyService {
     // Determine scopes based on user role
     Set<String> scopes;
     if (user.isAdmin()) {
-      scopes = Set.of("user:profile", "user:email", "user:keys", "read:org", "write:org", "delete:org");
+      scopes = Set.of("read:profile", "update:profile", "read:api-key", "create:api-key", "delete:api-key", "read:orgs", "create:orgs", "update:orgs", "delete:orgs");
     } else {
       // Default scopes for regular users
-      scopes = Set.of("user:profile", "user:email", "user:keys", "read:org", "write:org");
+      scopes = Set.of("read:profile", "update:profile", "read:api-key", "create:api-key", "delete:api-key", "read:orgs", "create:orgs", "update:orgs");
     }
     
     // Create RegisteredClient for this API key

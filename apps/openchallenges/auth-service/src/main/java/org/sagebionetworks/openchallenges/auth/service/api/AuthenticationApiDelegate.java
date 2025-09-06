@@ -41,7 +41,7 @@ public interface AuthenticationApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"firstName\" : \"John\", \"lastName\" : \"Doe\", \"createdAt\" : \"2024-01-15T10:30:00Z\", \"website\" : \"https://johndoe.com\", \"role\" : \"user\", \"avatarUrl\" : \"https://example.com/avatars/johndoe.jpg\", \"bio\" : \"Researcher in computational biology\", \"id\" : \"user_123456789\", \"scopes\" : [ \"user:profile\", \"user:profile\" ], \"email\" : \"john.doe@example.com\", \"username\" : \"johndoe\", \"updatedAt\" : \"2024-02-01T14:20:00Z\" }";
+                    String exampleString = "{ \"firstName\" : \"John\", \"lastName\" : \"Doe\", \"createdAt\" : \"2024-01-15T10:30:00Z\", \"website\" : \"https://johndoe.com\", \"role\" : \"user\", \"avatarUrl\" : \"https://example.com/avatars/johndoe.jpg\", \"bio\" : \"Researcher in computational biology\", \"id\" : \"user_123456789\", \"scopes\" : [ \"openid\", \"openid\" ], \"email\" : \"john.doe@example.com\", \"username\" : \"johndoe\", \"updatedAt\" : \"2024-02-01T14:20:00Z\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -76,7 +76,7 @@ public interface AuthenticationApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"firstName\" : \"John\", \"lastName\" : \"Doe\", \"createdAt\" : \"2024-01-15T10:30:00Z\", \"website\" : \"https://johndoe.com\", \"role\" : \"user\", \"avatarUrl\" : \"https://example.com/avatars/johndoe.jpg\", \"bio\" : \"Researcher in computational biology\", \"id\" : \"user_123456789\", \"scopes\" : [ \"user:profile\", \"user:profile\" ], \"email\" : \"john.doe@example.com\", \"username\" : \"johndoe\", \"updatedAt\" : \"2024-02-01T14:20:00Z\" }";
+                    String exampleString = "{ \"firstName\" : \"John\", \"lastName\" : \"Doe\", \"createdAt\" : \"2024-01-15T10:30:00Z\", \"website\" : \"https://johndoe.com\", \"role\" : \"user\", \"avatarUrl\" : \"https://example.com/avatars/johndoe.jpg\", \"bio\" : \"Researcher in computational biology\", \"id\" : \"user_123456789\", \"scopes\" : [ \"openid\", \"openid\" ], \"email\" : \"john.doe@example.com\", \"username\" : \"johndoe\", \"updatedAt\" : \"2024-02-01T14:20:00Z\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

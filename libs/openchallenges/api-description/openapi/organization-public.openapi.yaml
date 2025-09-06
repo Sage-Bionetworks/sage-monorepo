@@ -32,7 +32,7 @@ paths:
         - public
       security:
         - jwtBearer:
-            - read:org
+            - read:orgs
       parameters:
         - $ref: '#/components/parameters/organizationSearchQuery'
       responses:
@@ -56,7 +56,7 @@ paths:
         - public
       security:
         - jwtBearer:
-            - write:org
+            - create:orgs
       requestBody:
         content:
           application/json:
@@ -93,7 +93,7 @@ paths:
         - public
       security:
         - jwtBearer:
-            - read:org
+            - read:orgs
       responses:
         '200':
           description: Organization retrieved successfully
@@ -115,7 +115,7 @@ paths:
         - public
       security:
         - jwtBearer:
-            - write:org
+            - update:orgs
       requestBody:
         required: true
         content:
@@ -151,7 +151,7 @@ paths:
         - public
       security:
         - jwtBearer:
-            - delete:org
+            - delete:orgs
       responses:
         '204':
           description: Organization successfully deleted

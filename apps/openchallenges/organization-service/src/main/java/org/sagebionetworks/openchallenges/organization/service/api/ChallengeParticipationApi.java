@@ -87,7 +87,7 @@ public interface ChallengeParticipationApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "jwtBearer", scopes={ "write:org" })
+            @SecurityRequirement(name = "jwtBearer", scopes={ "update:orgs" })
         }
     )
     @RequestMapping(
@@ -139,7 +139,7 @@ public interface ChallengeParticipationApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "jwtBearer", scopes={ "write:org" })
+            @SecurityRequirement(name = "jwtBearer", scopes={ "update:orgs" })
         }
     )
     @RequestMapping(

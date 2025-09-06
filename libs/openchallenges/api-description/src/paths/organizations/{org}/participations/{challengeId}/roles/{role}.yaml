@@ -11,7 +11,7 @@ delete:
   x-audience: [internal]
   security:
     - jwtBearer:
-        - write:org
+        - update:orgs
   responses:
     '204':
       description: Participation deleted successfully

@@ -77,8 +77,7 @@ public interface ApiKeyApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "oauth2", scopes={ "api:write" }),
-            @SecurityRequirement(name = "jwtBearerAuth")
+            @SecurityRequirement(name = "jwtBearer", scopes={ "create:api-key" })
         }
     )
     @RequestMapping(
@@ -123,8 +122,7 @@ public interface ApiKeyApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "oauth2", scopes={ "api:write" }),
-            @SecurityRequirement(name = "jwtBearerAuth")
+            @SecurityRequirement(name = "jwtBearer", scopes={ "delete:api-key" })
         }
     )
     @RequestMapping(
@@ -168,8 +166,7 @@ public interface ApiKeyApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "oauth2", scopes={ "api:read" }),
-            @SecurityRequirement(name = "jwtBearerAuth")
+            @SecurityRequirement(name = "jwtBearer", scopes={ "read:api-key" })
         }
     )
     @RequestMapping(

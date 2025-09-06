@@ -9,7 +9,7 @@ get:
   x-audience: [public]
   security:
     - jwtBearer:
-        - read:org
+        - read:orgs
   responses:
     '200':
       description: Organization retrieved successfully
@@ -30,7 +30,7 @@ put:
   x-audience: [public]
   security:
     - jwtBearer:
-        - write:org
+        - update:orgs
   requestBody:
     required: true
     content:
@@ -65,7 +65,7 @@ delete:
   x-audience: [public]
   security:
     - jwtBearer:
-        - delete:org
+        - delete:orgs
   responses:
     '204':
       description: Organization successfully deleted

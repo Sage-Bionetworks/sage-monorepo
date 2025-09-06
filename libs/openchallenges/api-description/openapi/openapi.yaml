@@ -641,7 +641,7 @@ paths:
         - public
       security:
         - jwtBearer:
-            - read:org
+            - read:orgs
       parameters:
         - $ref: '#/components/parameters/organizationSearchQuery'
       responses:
@@ -665,7 +665,7 @@ paths:
         - public
       security:
         - jwtBearer:
-            - write:org
+            - create:orgs
       requestBody:
         content:
           application/json:
@@ -702,7 +702,7 @@ paths:
         - public
       security:
         - jwtBearer:
-            - read:org
+            - read:orgs
       responses:
         '200':
           description: Organization retrieved successfully
@@ -724,7 +724,7 @@ paths:
         - public
       security:
         - jwtBearer:
-            - write:org
+            - update:orgs
       requestBody:
         required: true
         content:
@@ -760,7 +760,7 @@ paths:
         - public
       security:
         - jwtBearer:
-            - delete:org
+            - delete:orgs
       responses:
         '204':
           description: Organization successfully deleted
@@ -804,19 +804,20 @@ components:
     AuthScope:
       type: string
       enum:
-        - user:profile
-        - user:email
-        - user:keys
-        - read:org
-        - write:org
-        - delete:org
-        - admin:org
-        - read:challenge
-        - write:challenge
-        - delete:challenge
-        - admin:challenge
-        - admin:auth
-        - admin:all
+        - openid
+        - profile
+        - email
+        - read:profile
+        - update:profile
+        - read:api-key
+        - create:api-key
+        - update:api-key
+        - delete:api-key
+        - rotate:api-key
+        - read:orgs
+        - create:orgs
+        - update:orgs
+        - delete:orgs
       description: Permission scope defining specific access rights
     UserProfile:
       type: object

@@ -24,7 +24,7 @@ INSERT INTO api_key (user_id, key_hash, key_prefix, name, client_id, allowed_sco
     'oc_dev_',
     'Test API Key',
     'oc_api_key_test1',
-    'user:profile,user:email,user:keys,read:org',
+    'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs',
     NOW() + INTERVAL '1 year',
     NOW(),
     NOW()
@@ -38,7 +38,7 @@ INSERT INTO api_key (user_id, key_hash, key_prefix, name, client_id, allowed_sco
     'oc_dev_',
     'Developer API Key',
     'oc_api_key_dev1',
-    'user:profile,user:email,user:keys,read:org,write:org',
+    'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs,create:orgs,update:orgs',
     NOW() + INTERVAL '1 year',
     NOW(),
     NOW()
@@ -52,7 +52,7 @@ INSERT INTO api_key (user_id, key_hash, key_prefix, name, client_id, allowed_sco
     'oc_dev_',
     'Admin API Key',
     'oc_api_key_admin1',
-    'user:profile,user:email,user:keys,read:org,write:org,delete:org',
+    'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs,create:orgs,update:orgs,delete:orgs',
     NOW() + INTERVAL '1 year',
     NOW(),
     NOW()
@@ -85,7 +85,7 @@ INSERT INTO oauth2_registered_client (
     'client_credentials',
     '',
     '',
-    'user:profile,user:email,user:keys,read:org',
+    'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs',
     '{"@class":"java.util.HashMap","settings.client.require-proof-key":false,"settings.client.require-authorization-consent":false}',
     '{"@class":"java.util.HashMap","settings.token.access-token-time-to-live":["java.time.Duration",3600.000000000],"settings.token.refresh-token-time-to-live":["java.time.Duration",7200.000000000]}'
 ),
@@ -100,7 +100,7 @@ INSERT INTO oauth2_registered_client (
     'client_credentials',
     '',
     '',
-    'user:profile,user:email,user:keys,read:org,write:org',
+    'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs,create:orgs,update:orgs',
     '{"@class":"java.util.HashMap","settings.client.require-proof-key":false,"settings.client.require-authorization-consent":false}',
     '{"@class":"java.util.HashMap","settings.token.access-token-time-to-live":["java.time.Duration",3600.000000000],"settings.token.refresh-token-time-to-live":["java.time.Duration",7200.000000000]}'
 ),
@@ -115,7 +115,7 @@ INSERT INTO oauth2_registered_client (
     'client_credentials',
     '',
     '',
-    'user:profile,user:email,user:keys,read:org,write:org,delete:org',
+    'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs,create:orgs,update:orgs,delete:orgs',
     '{"@class":"java.util.HashMap","settings.client.require-proof-key":false,"settings.client.require-authorization-consent":false}',
     '{"@class":"java.util.HashMap","settings.token.access-token-time-to-live":["java.time.Duration",3600.000000000],"settings.token.refresh-token-time-to-live":["java.time.Duration",7200.000000000]}'
 );

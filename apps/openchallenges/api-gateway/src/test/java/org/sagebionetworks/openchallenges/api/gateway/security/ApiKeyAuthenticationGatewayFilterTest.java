@@ -144,7 +144,7 @@ class ApiKeyAuthenticationGatewayFilterTest {
         "jwt-access-token", 
         "Bearer", 
         3600, 
-        "read write user:profile"
+        "read:orgs create:orgs update:orgs read:profile update:profile"
     );
     
     when(authenticationService.exchangeApiKeyForJwt(validApiKey, "POST", "/api/v1/organizations"))

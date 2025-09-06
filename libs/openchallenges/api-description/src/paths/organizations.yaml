@@ -7,7 +7,7 @@ get:
   x-audience: [public]
   security:
     - jwtBearer:
-        - read:org
+        - read:orgs
   parameters:
     - $ref: ../components/parameters/query/organizationSearchQuery.yaml
   responses:
@@ -30,7 +30,7 @@ post:
   x-audience: [public]
   security:
     - jwtBearer:
-        - write:org
+        - create:orgs
   requestBody:
     content:
       application/json:
