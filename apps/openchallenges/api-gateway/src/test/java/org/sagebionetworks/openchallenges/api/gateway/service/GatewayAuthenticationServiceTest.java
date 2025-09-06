@@ -60,29 +60,4 @@ class GatewayAuthenticationServiceTest {
     assertThat(response.getRole()).isEqualTo("user");
     assertThat(response.getExpiresAt()).isEqualTo("2025-08-31T12:00:00Z");
   }
-
-  @Test
-  void api_key_validation_request_should_have_api_key() {
-    String testApiKey = "test-api-key";
-    GatewayAuthenticationService.ApiKeyValidationRequest request = 
-        new GatewayAuthenticationService.ApiKeyValidationRequest(testApiKey);
-    
-    assertThat(request.getApiKey()).isEqualTo(testApiKey);
-  }
-
-  @Test
-  void api_key_validation_response_should_determine_type_from_role() {
-    GatewayAuthenticationService.ApiKeyValidationResponse response = 
-        new GatewayAuthenticationService.ApiKeyValidationResponse();
-    
-    response.setRole("service");
-    response.setUsername("challenge-service");
-    
-    assertThat(response.getType()).isEqualTo("service");
-    assertThat(response.getServiceName()).isEqualTo("challenge-service");
-    
-    response.setRole("user");
-    assertThat(response.getType()).isEqualTo("user");
-    assertThat(response.getServiceName()).isNull();
-  }
 }

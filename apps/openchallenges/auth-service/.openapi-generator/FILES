@@ -17,6 +17,4 @@ src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/CreateAp
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/UpdateUserProfileRequestDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/UserProfileDto.java
 src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/UserRoleDto.java
-src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/ValidateApiKeyRequestDto.java
-src/main/java/org/sagebionetworks/openchallenges/auth/service/model/dto/ValidateApiKeyResponseDto.java
 src/main/resources/openapi.yaml
