@@ -36,7 +36,7 @@ jacocoCoverage {
 }
 
 // Task to generate route-to-scope mappings from OpenAPI specifications
-tasks.register<JavaExec>("generateRouteScopeMappings") {
+tasks.register<JavaExec>("generateRouteScopes") {
   group = "application"
   description = "Generate route-to-scope mappings from OpenAPI specifications for API Gateway"
   classpath = sourceSets["main"].runtimeClasspath
@@ -52,10 +52,10 @@ tasks.register<JavaExec>("generateRouteScopeMappings") {
 
   doFirst {
     println("Generating route-to-scope mappings...")
-    println("Output will be displayed below. Copy the YAML configuration to your API Gateway's application.yml")
+    println("Output will be written to src/main/resources/route-scopes.yml")
   }
 }
 
-tasks.named("generateRouteScopeMappings") {
+tasks.named("generateRouteScopes") {
   dependsOn("compileJava")
 }

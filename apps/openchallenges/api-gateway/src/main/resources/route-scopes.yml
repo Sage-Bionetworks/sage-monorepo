@@ -1,0 +1,22 @@
+---
+openchallenges:
+  gateway:
+    route-scopes:
+      GET /api/v1/organizations:
+        scopes:
+          - 'read:org'
+      POST /api/v1/organizations:
+        scopes:
+          - 'write:org'
+      PUT /api/v1/organizations/{org}:
+        scopes:
+          - 'write:org'
+      DELETE /api/v1/organizations/{org}:
+        scopes:
+          - 'delete:org'
+      POST /api/v1/organizations/{org}/participations:
+        scopes:
+          - 'write:org'
+      DELETE /api/v1/organizations/{org}/participations/{challengeId}/roles/{role}:
+        scopes:
+          - 'write:org'

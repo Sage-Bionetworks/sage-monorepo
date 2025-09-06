@@ -5,6 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -32,8 +35,10 @@ public class OpenApiScopeMapper {
         routeScopes.putAll(fileScopes);
       }
 
-      // Output the result in YAML format
-      generateYamlOutput(routeScopes);
+      // Write the result to a YAML file in the resources folder
+      String outputPath = "src/main/resources/route-scopes.yml";
+      writeYamlFile(routeScopes, outputPath);
+      System.err.println("Route-to-scope mappings written to: " + outputPath);
 
     } catch (Exception e) {
       System.err.println("Error processing OpenAPI files: " + e.getMessage());
@@ -78,7 +83,8 @@ public class OpenApiScopeMapper {
         // Extract security requirements for this operation
         List<String> scopes = extractScopes(operation);
         if (!scopes.isEmpty()) {
-          String routeKey = method + " " + path;
+          // Prepend /api/v1 to match the gateway's incoming request paths
+          String routeKey = method + " /api/v1" + path;
           routeScopes.computeIfAbsent(routeKey, k -> new LinkedHashMap<>())
               .put("scopes", scopes);
         }
@@ -124,30 +130,43 @@ public class OpenApiScopeMapper {
   }
 
   /**
-   * Generate YAML output for the route-to-scope mapping.
+   * Write the route-to-scope mapping to a YAML file.
    */
-  private static void generateYamlOutput(Map<String, Map<String, List<String>>> routeScopes) {
-    System.out.println("# Generated route-to-scope mapping for API Gateway");
-    System.out.println("# Copy this configuration to your application.yml file");
-    System.out.println();
-    System.out.println("openchallenges:");
-    System.out.println("  gateway:");
-    System.out.println("    route-scopes:");
+  private static void writeYamlFile(Map<String, Map<String, List<String>>> routeScopes, String outputPath) throws IOException {
+    // Create the directory if it doesn't exist
+    Path filePath = Paths.get(outputPath);
+    Files.createDirectories(filePath.getParent());
+    
+    // Create the YAML structure for Spring Boot configuration
+    Map<String, Object> config = new LinkedHashMap<>();
+    Map<String, Object> openchallenges = new LinkedHashMap<>();
+    Map<String, Object> gateway = new LinkedHashMap<>();
     
     if (routeScopes.isEmpty()) {
-      System.out.println("      {} # No routes with security requirements found");
-      return;
+      gateway.put("route-scopes", new LinkedHashMap<>());
+    } else {
+      gateway.put("route-scopes", routeScopes);
     }
-
-    for (Map.Entry<String, Map<String, List<String>>> entry : routeScopes.entrySet()) {
-      String route = entry.getKey();
-      Map<String, List<String>> routeConfig = entry.getValue();
-      List<String> scopes = routeConfig.get("scopes");
-      
-      System.out.println("      \"" + route + "\":");
-      System.out.print("        scopes: [");
-      System.out.print(String.join(", ", scopes));
-      System.out.println("]");
+    
+    openchallenges.put("gateway", gateway);
+    config.put("openchallenges", openchallenges);
+    
+    // Write to file
+    yamlMapper.writeValue(filePath.toFile(), config);
+    
+    // Also print to console for immediate reference
+    System.out.println("# Generated route-to-scope mapping for API Gateway");
+    System.out.println("# File written to: " + outputPath);
+    System.out.println();
+    if (routeScopes.isEmpty()) {
+      System.out.println("No routes with security requirements found");
+    } else {
+      System.out.println("Routes with security requirements:");
+      for (Map.Entry<String, Map<String, List<String>>> entry : routeScopes.entrySet()) {
+        String route = entry.getKey();
+        List<String> scopes = entry.getValue().get("scopes");
+        System.out.println("  " + route + " -> " + scopes);
+      }
     }
   }
 }

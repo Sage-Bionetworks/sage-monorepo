@@ -58,7 +58,7 @@ class ApiKeyAuthenticationGatewayFilterTest {
     filter.filter(exchange, chain).block();
 
     // then
-    verify(authenticationService, never()).exchangeApiKeyForJwt(anyString());
+    verify(authenticationService, never()).exchangeApiKeyForJwt(anyString(), anyString(), anyString());
     verify(chain).filter(exchange);
   }
 
@@ -115,7 +115,7 @@ class ApiKeyAuthenticationGatewayFilterTest {
     MockServerWebExchange exchange = MockServerWebExchange.from(request);
     
     // Mock OAuth2 exchange failure for invalid API key
-    when(authenticationService.exchangeApiKeyForJwt(invalidApiKey))
+    when(authenticationService.exchangeApiKeyForJwt(invalidApiKey, "POST", "/api/v1/organizations"))
         .thenReturn(Mono.error(new GatewayAuthenticationService.AuthenticationException("API key authentication failed", new RuntimeException())));
 
     // when
@@ -149,7 +149,7 @@ class ApiKeyAuthenticationGatewayFilterTest {
         "read write user:profile"
     );
     
-    when(authenticationService.exchangeApiKeyForJwt(validApiKey))
+    when(authenticationService.exchangeApiKeyForJwt(validApiKey, "POST", "/api/v1/organizations"))
         .thenReturn(Mono.just(tokenResponse));
 
     // when
@@ -160,6 +160,6 @@ class ApiKeyAuthenticationGatewayFilterTest {
     assertThat(exchange.getResponse().getStatusCode()).isNull(); // No error status set
     
     // Verify the token exchange was called
-    verify(authenticationService).exchangeApiKeyForJwt(validApiKey);
+    verify(authenticationService).exchangeApiKeyForJwt(validApiKey, "POST", "/api/v1/organizations");
   }
 }
