@@ -17,6 +17,10 @@ dependencies {
   runtimeOnly(libs.jjwt.impl)
   runtimeOnly(libs.jjwt.jackson)
 
+  // Jackson YAML support for OpenAPI scope mapper utility
+  implementation(libs.jackson.databind)
+  implementation(libs.jackson.dataformat.yaml)
+
   // Lombok support
   compileOnly(libs.lombok)
   annotationProcessor(libs.lombok)
@@ -29,4 +33,29 @@ dependencies {
 jacocoCoverage {
   classExcludes = listOf<String>()
   forceClassIncludes = listOf<String>()
+}
+
+// Task to generate route-to-scope mappings from OpenAPI specifications
+tasks.register<JavaExec>("generateRouteScopeMappings") {
+  group = "application"
+  description = "Generate route-to-scope mappings from OpenAPI specifications for API Gateway"
+  classpath = sourceSets["main"].runtimeClasspath
+  mainClass.set("org.sagebionetworks.openchallenges.api.gateway.util.OpenApiScopeMapper")
+
+  // Process all OpenAPI service files that have security requirements
+  args =
+    listOf(
+      "../../../libs/openchallenges/api-description/openapi/organization-service.openapi.yaml",
+      // Add more service OpenAPI files here as they get security annotations
+      // "../../../libs/openchallenges/api-description/openapi/challenge-service.openapi.yaml"
+    )
+
+  doFirst {
+    println("Generating route-to-scope mappings...")
+    println("Output will be displayed below. Copy the YAML configuration to your API Gateway's application.yml")
+  }
+}
+
+tasks.named("generateRouteScopeMappings") {
+  dependsOn("compileJava")
 }
