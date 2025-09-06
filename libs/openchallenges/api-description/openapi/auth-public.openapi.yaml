@@ -61,7 +61,8 @@ paths:
       x-audience:
         - public
       security:
-        - jwtBearer: []
+        - jwtBearer:
+            - read:profile
       responses:
         '200':
           description: User profile information
@@ -82,7 +83,8 @@ paths:
       x-audience:
         - public
       security:
-        - jwtBearer: []
+        - jwtBearer:
+            - update:profile
       requestBody:
         required: true
         content:
@@ -188,21 +190,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
-    oauth2:
-      type: oauth2
-      description: OAuth2 Authorization Code Flow for user authentication via Google/Synapse
-      flows:
-        authorizationCode:
-          authorizationUrl: /oauth2/authorize
-          tokenUrl: /oauth2/token
-          refreshUrl: /oauth2/token
-          scopes:
-            openid: OpenID Connect authentication
-            profile: Access to user's basic profile information
-            email: Access to user's email address
-            read:org: Read access to organization resources
-            write:org: Write access to organization resources
-            delete:org: Delete access to organization resources
     jwtBearer:
       type: http
       scheme: bearer

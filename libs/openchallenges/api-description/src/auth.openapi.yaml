@@ -57,10 +57,5 @@ paths:
     $ref: paths/auth/api-keys/{keyId}.yaml
 components:
   securitySchemes:
-    # OAuth2 for user authentication (Spring Authorization Server)
-    oauth2:
-      $ref: components/securitySchemes/OAuth2Auth.yaml
-
-    # JWT Bearer tokens (issued by OAuth2 server)
     jwtBearer:
       $ref: components/securitySchemes/JwtBearer.yaml
