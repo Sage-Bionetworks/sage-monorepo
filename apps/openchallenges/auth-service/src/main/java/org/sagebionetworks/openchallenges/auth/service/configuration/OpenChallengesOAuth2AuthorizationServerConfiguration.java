@@ -1,5 +1,13 @@
 package org.sagebionetworks.openchallenges.auth.service.configuration;
 
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.KeyUse;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
+import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
+import com.nimbusds.jose.jwk.source.JWKSource;
+import com.nimbusds.jose.proc.SecurityContext;
 import java.util.Set;
 import java.util.UUID;
 import org.springframework.context.annotation.Bean;
@@ -8,9 +16,17 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.security.oauth2.server.authorization.InMemoryOAuth2AuthorizationService;
+import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.client.JdbcRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
+import org.springframework.security.oauth2.server.authorization.context.AuthorizationServerContext;
+import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
+import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
+import java.time.Duration;
 import org.springframework.security.oauth2.server.authorization.token.DelegatingOAuth2TokenGenerator;
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
 import org.springframework.security.oauth2.server.authorization.token.JwtGenerator;
@@ -18,33 +34,19 @@ import org.springframework.security.oauth2.server.authorization.token.OAuth2Acce
 import org.springframework.security.oauth2.server.authorization.token.OAuth2RefreshTokenGenerator;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenGenerator;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
-import org.springframework.security.oauth2.server.authorization.context.AuthorizationServerContext;
-import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
-import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
-import org.springframework.security.oauth2.server.authorization.InMemoryOAuth2AuthorizationService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.nimbusds.jose.jwk.JWKSet;
-import com.nimbusds.jose.jwk.RSAKey;
-import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
-import com.nimbusds.jose.jwk.source.JWKSource;
-import com.nimbusds.jose.proc.SecurityContext;
-
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
-
 /**
  * OAuth2 Authorization Server configuration for OpenChallenges.
  * 
  * This configuration sets up a standards-compliant OAuth2 Authorization Server
- * without OIDC discovery support for simplicity and reliability.
+ * with RSA256 JWT signing for compatibility with current Spring Security versions.
+ * 
+ * Note: EdDSA support is limited in Spring Security OAuth2 Authorization Server.
+ * See: https://github.com/spring-projects/spring-security/issues/17098
  */
 @Configuration
 public class OpenChallengesOAuth2AuthorizationServerConfiguration {
@@ -137,19 +139,30 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
   }
 
   /**
-   * Configure JWK source for signing JWT tokens.
+   * Configure JWK source for RSA256 JWT signing.
+   * 
+   * Note: EdDSA support is limited in Spring Security OAuth2 Authorization Server.
+   * See: https://github.com/spring-projects/spring-security/issues/17098
+   * 
+   * Using RSA256 for compatibility until Spring Security 7.0 / Spring Authorization Server 2.0
+   * adds proper EdDSA support.
    */
   @Bean
   public JWKSource<SecurityContext> jwkSource() {
-    KeyPair keyPair = generateRsaKey();
-    RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
-    RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-    RSAKey rsaKey = new RSAKey.Builder(publicKey)
-        .privateKey(privateKey)
-        .keyID(UUID.randomUUID().toString())
-        .build();
-    JWKSet jwkSet = new JWKSet(rsaKey);
-    return new ImmutableJWKSet<>(jwkSet);
+    try {
+      // Generate RSA key pair for JWT signing
+      RSAKey rsaKey = new RSAKeyGenerator(2048)
+          .keyID(UUID.randomUUID().toString())
+          .algorithm(JWSAlgorithm.RS256)
+          .keyUse(KeyUse.SIGNATURE)
+          .generate();
+
+      // Create JWK set and return source
+      JWKSet jwkSet = new JWKSet(rsaKey);
+      return new ImmutableJWKSet<>(jwkSet);
+    } catch (Exception ex) {
+      throw new IllegalStateException("Failed to generate RSA key for JWT signing", ex);
+    }
   }
 
   /**
@@ -158,20 +171,6 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
   @Bean
   public JwtEncoder jwtEncoder(JWKSource<SecurityContext> jwkSource) {
     return new NimbusJwtEncoder(jwkSource);
-  }
-
-  /**
-   * Generate RSA key pair for JWT signing.
-   */
-  private static KeyPair generateRsaKey() {
-    KeyPairGenerator keyPairGenerator;
-    try {
-      keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-    } catch (Exception ex) {
-      throw new IllegalStateException(ex);
-    }
-    keyPairGenerator.initialize(2048);
-    return keyPairGenerator.generateKeyPair();
   }
 
   /**
@@ -199,6 +198,19 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
         return authorizationServerSettings();
       }
     };
+  }
+
+  /**
+   * Token settings for access and refresh tokens.
+   * Using default signature algorithm (will be determined by JWK source).
+   */
+  @Bean
+  public TokenSettings tokenSettings() {
+    return TokenSettings.builder()
+        .accessTokenTimeToLive(Duration.ofMinutes(60)) // 1 hour
+        .refreshTokenTimeToLive(Duration.ofHours(24)) // 24 hours
+        .reuseRefreshTokens(false)
+        .build();
   }
 
   /**
