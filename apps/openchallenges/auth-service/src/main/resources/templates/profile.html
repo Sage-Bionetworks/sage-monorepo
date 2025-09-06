@@ -850,67 +850,6 @@ curl -X GET "http://localhost:8087/v1/auth/profile" \
         </div>
       </div>
 
-      <!-- Web Session Tokens Section -->
-      <div class="token-section" th:if="${accessToken}">
-        <div class="token-title">🔐 Web Session Tokens</div>
-        <div class="token-warning">
-          These tokens are for your current web session authentication. They are automatically used
-          when you browse this site.
-        </div>
-
-        <div class="token-item">
-          <div class="token-label">
-            <strong>Session Access Token:</strong>
-            <span class="token-info">(HMAC-signed JWT for web session authentication)</span>
-          </div>
-          <div class="token-controls">
-            <div class="token-display-container">
-              <div class="token-display masked" id="accessTokenDisplay">
-                ••••••••••••••••••••••••••••••••
-              </div>
-              <input type="hidden" id="accessTokenValue" th:value="${accessToken}" />
-            </div>
-            <div class="token-buttons">
-              <button
-                class="token-btn reveal-btn"
-                onclick="toggleTokenVisibility('accessToken')"
-                id="accessTokenToggle"
-              >
-                Show
-              </button>
-              <button class="token-btn copy-btn" onclick="copyToken('accessToken')">📋 Copy</button>
-            </div>
-          </div>
-        </div>
-
-        <div th:if="${refreshToken}" class="token-item">
-          <div class="token-label">
-            <strong>Session Refresh Token:</strong>
-            <span class="token-info">(Used to obtain new session access tokens)</span>
-          </div>
-          <div class="token-controls">
-            <div class="token-display-container">
-              <div class="token-display masked" id="refreshTokenDisplay">
-                ••••••••••••••••••••••••••••••••
-              </div>
-              <input type="hidden" id="refreshTokenValue" th:value="${refreshToken}" />
-            </div>
-            <div class="token-buttons">
-              <button
-                class="token-btn reveal-btn"
-                onclick="toggleTokenVisibility('refreshToken')"
-                id="refreshTokenToggle"
-              >
-                Show
-              </button>
-              <button class="token-btn copy-btn" onclick="copyToken('refreshToken')">
-                📋 Copy
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- OAuth2 API Access Section -->
       <div class="token-section">
         <div class="token-title">🚀 OAuth2 API Access</div>
@@ -1073,8 +1012,8 @@ curl -X POST http://localhost:8087/oauth2/introspect \
           <strong style="color: #0c5460">💡 Note:</strong>
           <span style="color: #0c5460; font-size: 14px"
             >OAuth2 tokens are RSA-signed and designed for API access. They expire in 5 minutes and
-            must be validated through the OAuth2 introspection endpoint. Session tokens above are
-            HMAC-signed and used for web authentication only.</span
+            must be validated through the OAuth2 introspection endpoint. Your web session is
+            authenticated automatically using OAuth2 JWTs stored in secure HTTP-only cookies.</span
           >
         </div>
       </div>
@@ -1173,69 +1112,6 @@ curl -X POST http://localhost:8087/oauth2/introspect \
 
       // Token visibility management
       const visibleTokens = new Set();
-      const autoHideTimeouts = new Map();
-
-      function toggleTokenVisibility(tokenType) {
-        const display = document.getElementById(tokenType + 'Display');
-        const value = document.getElementById(tokenType + 'Value').value;
-        const toggle = document.getElementById(tokenType + 'Toggle');
-
-        if (visibleTokens.has(tokenType)) {
-          // Hide token
-          display.textContent = '••••••••••••••••••••••••••••••••';
-          display.className = 'token-display masked';
-          toggle.innerHTML = 'Show';
-          toggle.className = 'token-btn reveal-btn';
-          visibleTokens.delete(tokenType);
-
-          // Clear auto-hide timeout
-          if (autoHideTimeouts.has(tokenType)) {
-            clearTimeout(autoHideTimeouts.get(tokenType));
-            autoHideTimeouts.delete(tokenType);
-          }
-        } else {
-          // Show token
-          display.textContent = value;
-          display.className = 'token-display revealed';
-          toggle.innerHTML = 'Hide';
-          toggle.className = 'token-btn reveal-btn hide';
-          visibleTokens.add(tokenType);
-
-          // Auto-hide after 30 seconds for security
-          const timeout = setTimeout(() => {
-            toggleTokenVisibility(tokenType);
-          }, 30000);
-          autoHideTimeouts.set(tokenType, timeout);
-        }
-      }
-
-      function copyToken(tokenType) {
-        const value = document.getElementById(tokenType + 'Value').value;
-        const button = document.querySelector(`button[onclick="copyToken('${tokenType}')"]`);
-
-        try {
-          // Create temporary textarea to copy value
-          const textarea = document.createElement('textarea');
-          textarea.value = value;
-          document.body.appendChild(textarea);
-          textarea.select();
-          document.execCommand('copy');
-          document.body.removeChild(textarea);
-
-          // Visual feedback
-          const originalText = button.textContent;
-          button.textContent = '✅ Copied!';
-          button.style.background = '#218838';
-
-          setTimeout(() => {
-            button.textContent = originalText;
-            button.style.background = '#28a745';
-          }, 2000);
-        } catch (err) {
-          console.error('Failed to copy token: ', err);
-          alert('Failed to copy token. Please copy it manually.');
-        }
-      }
 
       function copyCommand(commandId) {
         const commandElement = document.getElementById(commandId);

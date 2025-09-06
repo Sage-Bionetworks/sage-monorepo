@@ -44,28 +44,23 @@ public class ProfileController {
     ) {
         logger.debug("Displaying profile page");
 
-        // Extract tokens and username from secure cookies
-        String accessToken = getCookieValue(request, "oc_access_token");
-        String refreshToken = getCookieValue(request, "oc_refresh_token");
-        String username = getCookieValue(request, "oc_username");
-        
-        logger.debug("Retrieved from cookies - username: {}, accessToken: {}, refreshToken: {}", 
-                     username, accessToken != null ? "present" : "null", refreshToken != null ? "present" : "null");
-
         User user = null;
         
-        // Try to get user from authentication first (if user is logged in via JWT)
+        // Try to get user from authentication first (OAuth2 web authentication)
         if (authentication != null && authentication.getPrincipal() instanceof User) {
             user = (User) authentication.getPrincipal();
-            logger.debug("Got user from authentication: {}", user.getUsername());
+            logger.debug("Got user from OAuth2 authentication: {}", user.getUsername());
         }
-        // Fallback to username from cookie (from OAuth2 callback)
-        else if (username != null) {
-            try {
-                user = userService.findByUsername(username).orElse(null);
-                logger.debug("Got user from username cookie: {}", username);
-            } catch (Exception e) {
-                logger.error("Error finding user by username: {}", username, e);
+        // Fallback to username from cookie (for cases where OAuth2 filter didn't run)
+        else {
+            String username = getCookieValue(request, "oc_username");
+            if (username != null) {
+                try {
+                    user = userService.findByUsername(username).orElse(null);
+                    logger.debug("Got user from username cookie: {}", username);
+                } catch (Exception e) {
+                    logger.error("Error finding user by username: {}", username, e);
+                }
             }
         }
 
@@ -81,8 +76,6 @@ public class ProfileController {
         model.addAttribute("firstName", user.getFirstName());
         model.addAttribute("lastName", user.getLastName());
         model.addAttribute("role", user.getRole());
-        model.addAttribute("accessToken", accessToken);
-        model.addAttribute("refreshToken", refreshToken);
 
         // Get user's API keys
         List<ApiKey> apiKeys = apiKeyService.getUserApiKeys(user);
