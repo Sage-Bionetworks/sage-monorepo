@@ -175,7 +175,9 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-      security: []
+      security:
+        - jwtBearer:
+            - read:org
       summary: Get an organization
       tags:
         - Organization

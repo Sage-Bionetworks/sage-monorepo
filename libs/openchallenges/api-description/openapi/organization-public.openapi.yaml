@@ -91,7 +91,9 @@ paths:
       operationId: getOrganization
       x-audience:
         - public
-      security: []
+      security:
+        - jwtBearer:
+            - read:org
       responses:
         '200':
           description: Organization retrieved successfully
