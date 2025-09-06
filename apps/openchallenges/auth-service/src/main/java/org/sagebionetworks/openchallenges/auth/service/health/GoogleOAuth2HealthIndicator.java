@@ -4,8 +4,6 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.actuate.health.AbstractHealthIndicator;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.http.HttpStatusCode;
@@ -14,6 +12,7 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Health indicator for Google OAuth2 provider.
@@ -29,10 +28,9 @@ import org.springframework.web.client.RestTemplate;
  *   <li>Network connectivity to Google services</li>
  * </ul>
  */
+@Slf4j
 @Component("googleOAuth2")
 public class GoogleOAuth2HealthIndicator extends AbstractHealthIndicator {
-
-    private static final Logger logger = LoggerFactory.getLogger(GoogleOAuth2HealthIndicator.class);
 
     // Google OAuth2 discovery endpoint - well-known configuration URL
     private static final String GOOGLE_DISCOVERY_URL = "https://accounts.google.com/.well-known/openid-configuration";
@@ -69,7 +67,7 @@ public class GoogleOAuth2HealthIndicator extends AbstractHealthIndicator {
             // Check cache first to avoid excessive requests
             CachedHealthResult cached = this.cachedResult;
             if (cached != null && !cached.isExpired()) {
-                logger.debug("Using cached Google OAuth2 health result");
+                log.debug("Using cached Google OAuth2 health result");
                 if (cached.health.getStatus().getCode().equals("UP")) {
                     builder.up();
                 } else {
@@ -80,7 +78,7 @@ public class GoogleOAuth2HealthIndicator extends AbstractHealthIndicator {
             }
 
             // Perform fresh health check
-            logger.debug("Performing fresh Google OAuth2 health check");
+            log.debug("Performing fresh Google OAuth2 health check");
             Health result = performHealthCheck();
             
             // Cache the result
@@ -95,7 +93,7 @@ public class GoogleOAuth2HealthIndicator extends AbstractHealthIndicator {
             builder.withDetails(result.getDetails());
             
         } catch (Exception e) {
-            logger.error("Unexpected error during Google OAuth2 health check", e);
+            log.error("Unexpected error during Google OAuth2 health check", e);
             builder.down()
                    .withDetail("error", "Unexpected health check failure")
                    .withDetail("exception", e.getClass().getSimpleName())
@@ -112,7 +110,7 @@ public class GoogleOAuth2HealthIndicator extends AbstractHealthIndicator {
         Instant startTime = Instant.now();
         
         try {
-            logger.debug("Checking Google OAuth2 discovery endpoint: {}", GOOGLE_DISCOVERY_URL);
+            log.debug("Checking Google OAuth2 discovery endpoint: {}", GOOGLE_DISCOVERY_URL);
             
             ResponseEntity<Map> response = restTemplate.getForEntity(GOOGLE_DISCOVERY_URL, Map.class);
             Duration responseTime = Duration.between(startTime, Instant.now());
@@ -128,7 +126,7 @@ public class GoogleOAuth2HealthIndicator extends AbstractHealthIndicator {
                                           && body.containsKey("issuer");
                 
                 if (hasRequiredFields) {
-                    logger.debug("Google OAuth2 health check successful - response time: {}ms", 
+                    log.debug("Google OAuth2 health check successful - response time: {}ms", 
                                responseTime.toMillis());
                     
                     return Health.up()
@@ -139,7 +137,7 @@ public class GoogleOAuth2HealthIndicator extends AbstractHealthIndicator {
                                  .withDetail("checkTime", Instant.now().toString())
                                  .build();
                 } else {
-                    logger.warn("Google OAuth2 discovery response missing required fields");
+                    log.warn("Google OAuth2 discovery response missing required fields");
                     return Health.down()
                                  .withDetail("provider", "Google OAuth2")
                                  .withDetail("discoveryUrl", GOOGLE_DISCOVERY_URL)
@@ -149,7 +147,7 @@ public class GoogleOAuth2HealthIndicator extends AbstractHealthIndicator {
                                  .build();
                 }
             } else {
-                logger.warn("Google OAuth2 discovery endpoint returned non-success status: {}", statusCode);
+                log.warn("Google OAuth2 discovery endpoint returned non-success status: {}", statusCode);
                 return Health.down()
                              .withDetail("provider", "Google OAuth2")
                              .withDetail("discoveryUrl", GOOGLE_DISCOVERY_URL)
@@ -162,7 +160,7 @@ public class GoogleOAuth2HealthIndicator extends AbstractHealthIndicator {
             
         } catch (RestClientException e) {
             Duration responseTime = Duration.between(startTime, Instant.now());
-            logger.warn("Google OAuth2 discovery endpoint unreachable", e);
+            log.warn("Google OAuth2 discovery endpoint unreachable", e);
             
             return Health.down()
                          .withDetail("provider", "Google OAuth2")

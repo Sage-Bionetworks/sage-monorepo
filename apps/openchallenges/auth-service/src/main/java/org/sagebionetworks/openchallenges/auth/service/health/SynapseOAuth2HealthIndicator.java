@@ -2,11 +2,10 @@ package org.sagebionetworks.openchallenges.auth.service.health;
 
 import java.time.Instant;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.actuate.health.AbstractHealthIndicator;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.stereotype.Component;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Health indicator for Synapse OAuth2 provider.
@@ -23,17 +22,16 @@ import org.springframework.stereotype.Component;
  *   <li>Implement caching similar to GoogleOAuth2HealthIndicator</li>
  * </ul>
  */
+@Slf4j
 @Component("synapseOAuth2")
 public class SynapseOAuth2HealthIndicator extends AbstractHealthIndicator {
-
-    private static final Logger logger = LoggerFactory.getLogger(SynapseOAuth2HealthIndicator.class);
 
     /**
      * Creates a new Synapse OAuth2 health indicator.
      * This is currently a placeholder implementation.
      */
     public SynapseOAuth2HealthIndicator() {
-        logger.info("SynapseOAuth2HealthIndicator initialized as placeholder - no actual health checking performed");
+        log.info("SynapseOAuth2HealthIndicator initialized as placeholder - no actual health checking performed");
     }
 
     /**
@@ -46,7 +44,7 @@ public class SynapseOAuth2HealthIndicator extends AbstractHealthIndicator {
      */
     @Override
     protected void doHealthCheck(Health.Builder builder) {
-        logger.debug("Synapse OAuth2 health check requested - returning placeholder status");
+        log.debug("Synapse OAuth2 health check requested - returning placeholder status");
         
         // Return "unknown" status for placeholder implementation
         builder.unknown()

@@ -13,8 +13,6 @@ import org.sagebionetworks.openchallenges.auth.service.configuration.ApiKeyPrope
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.repository.ApiKeyRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -26,13 +24,13 @@ import org.springframework.security.oauth2.server.authorization.settings.TokenSe
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class ApiKeyService {
-
-  private static final Logger logger = LoggerFactory.getLogger(ApiKeyService.class);
   private static final String CLIENT_ID_PREFIX = "oc_api_key_";
 
   private final ApiKeyRepository apiKeyRepository;
@@ -50,8 +48,8 @@ public class ApiKeyService {
     String plainApiKey = generateApiKey();
     String keyHash = passwordEncoder.encode(plainApiKey);
 
-    logger.debug("Creating API key for user: {}", user.getUsername());
-    logger.debug(
+    log.debug("Creating API key for user: {}", user.getUsername());
+    log.debug(
       "Generated API key with prefix: {}",
       plainApiKey.substring(0, apiKeyProperties.getPrefix().length())
     );
@@ -125,7 +123,7 @@ public class ApiKeyService {
    */
   @Transactional
   public Optional<ApiKey> validateApiKey(String apiKey) {
-    logger.debug(
+    log.debug(
       "Validating API key with prefix: {}",
       apiKey != null && apiKey.length() >= apiKeyProperties.getPrefix().length()
         ? apiKey.substring(0, apiKeyProperties.getPrefix().length())
@@ -133,7 +131,7 @@ public class ApiKeyService {
     );
 
     if (apiKey == null || !apiKey.startsWith(apiKeyProperties.getPrefix())) {
-      logger.debug(
+      log.debug(
         "API key is null or doesn't have correct prefix: {}",
         apiKeyProperties.getPrefix()
       );
@@ -143,19 +141,19 @@ public class ApiKeyService {
     // Find all API keys and check against each hash
     // In a high-performance system, you might want to use a different approach
     List<ApiKey> allKeys = apiKeyRepository.findAll();
-    logger.debug("Found {} API keys in database", allKeys.size());
+    log.debug("Found {} API keys in database", allKeys.size());
 
     for (ApiKey key : allKeys) {
-      logger.debug("Checking key ID: {}", key.getId());
+      log.debug("Checking key ID: {}", key.getId());
 
       boolean matches = passwordEncoder.matches(apiKey, key.getKeyHash());
-      logger.debug("Password matches for key {}: {}", key.getId(), matches);
+      log.debug("Password matches for key {}: {}", key.getId(), matches);
 
       if (matches) {
-        logger.debug("Found matching API key for user: {}", key.getUser().getUsername());
+        log.debug("Found matching API key for user: {}", key.getUser().getUsername());
         // Check if expired
         if (key.isExpired()) {
-          logger.debug("API key is expired");
+          log.debug("API key is expired");
           return Optional.empty();
         }
 
@@ -167,7 +165,7 @@ public class ApiKeyService {
       }
     }
 
-    logger.debug("No matching API key found");
+    log.debug("No matching API key found");
     return Optional.empty();
   }
 
@@ -176,7 +174,7 @@ public class ApiKeyService {
    */
   @Transactional
   public boolean deleteApiKey(UUID keyId, User user) {
-    logger.debug("Attempting to delete API key {} for user {}", keyId, user.getId());
+    log.debug("Attempting to delete API key {} for user {}", keyId, user.getId());
     
     try {
       // Use DELETE with RETURNING to get the client_id and name in one atomic operation
@@ -189,7 +187,7 @@ public class ApiKeyService {
         String clientId = (String) deletedApiKey.get("client_id");
         String keyName = (String) deletedApiKey.get("name");
         
-        logger.info("Deleted API key: {} ({})", keyName, keyId);
+        log.info("Deleted API key: {} ({})", keyName, keyId);
         
         // Now delete the OAuth2 registered client if it exists
         if (clientId != null) {
@@ -199,24 +197,24 @@ public class ApiKeyService {
               clientId
             );
             if (oauthDeletedRows > 0) {
-              logger.info("Deleted OAuth2 client: {}", clientId);
+              log.info("Deleted OAuth2 client: {}", clientId);
             } else {
-              logger.warn("OAuth2 client not found in database: {}", clientId);
+              log.warn("OAuth2 client not found in database: {}", clientId);
             }
           } catch (Exception e) {
-            logger.warn("Failed to delete OAuth2 client '{}': {}", clientId, e.getMessage());
+            log.warn("Failed to delete OAuth2 client '{}': {}", clientId, e.getMessage());
             // Don't fail the entire operation if OAuth2 cleanup fails
           }
         }
         
         return true;
       } else {
-        logger.warn("API key {} not found or not owned by user {}", keyId, user.getId());
+        log.warn("API key {} not found or not owned by user {}", keyId, user.getId());
         return false;
       }
       
     } catch (Exception e) {
-      logger.error("Error during API key deletion for {} (user {}): {}", keyId, user.getId(), e.getMessage());
+      log.error("Error during API key deletion for {} (user {}): {}", keyId, user.getId(), e.getMessage());
       return false;
     }
   }
@@ -240,10 +238,10 @@ public class ApiKeyService {
             expiredKey.getClientId()
           );
           if (deletedRows > 0) {
-            logger.debug("Deleted OAuth2 client for expired API key: {}", expiredKey.getClientId());
+            log.debug("Deleted OAuth2 client for expired API key: {}", expiredKey.getClientId());
           }
         } catch (Exception e) {
-          logger.warn("Failed to delete OAuth2 client '{}' during cleanup: {}", 
+          log.warn("Failed to delete OAuth2 client '{}' during cleanup: {}", 
                      expiredKey.getClientId(), e.getMessage());
         }
       }
@@ -256,7 +254,7 @@ public class ApiKeyService {
     );
     
     if (deletedCount > 0) {
-      logger.info("Deleted {} expired API keys", deletedCount);
+      log.info("Deleted {} expired API keys", deletedCount);
     }
   }
 
@@ -289,7 +287,7 @@ public class ApiKeyService {
     String clientId = apiKey.getClientId();
     String secret = extractSecret(plainApiKey);
     
-    logger.info("Creating OAuth2 client '{}' for API key: {}", clientId, apiKey.getName());
+    log.info("Creating OAuth2 client '{}' for API key: {}", clientId, apiKey.getName());
     
     // Determine scopes based on user role
     Set<String> scopes;
@@ -326,7 +324,7 @@ public class ApiKeyService {
     apiKey.setAllowedScopes(String.join(",", scopes));
     apiKeyRepository.save(apiKey);
     
-    logger.info("Created OAuth2 client {} for API key: {}", clientId, apiKey.getName());
+    log.info("Created OAuth2 client {} for API key: {}", clientId, apiKey.getName());
   }
 
   /**

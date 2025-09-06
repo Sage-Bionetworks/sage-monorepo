@@ -9,19 +9,17 @@ import java.util.List;
 import java.util.Optional;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Filter to authenticate requests using API keys in the X-API-Key header
  */
+@Slf4j
 public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
-
-  private static final Logger logger = LoggerFactory.getLogger(ApiKeyAuthenticationFilter.class);
   private static final String API_KEY_HEADER = "X-API-Key";
 
   private final ApiKeyService apiKeyService;
@@ -37,11 +35,11 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
     FilterChain filterChain
   ) throws ServletException, IOException {
     String requestURI = request.getRequestURI();
-    logger.debug("Processing request: {} {}", request.getMethod(), requestURI);
+    log.debug("Processing request: {} {}", request.getMethod(), requestURI);
 
     // Skip authentication for public endpoints
     if (isPublicEndpoint(requestURI)) {
-      logger.debug("Skipping authentication for public endpoint: {}", requestURI);
+      log.debug("Skipping authentication for public endpoint: {}", requestURI);
       filterChain.doFilter(request, response);
       return;
     }
@@ -49,7 +47,7 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
     // Extract API key from X-API-Key header
     String apiKeyValue = request.getHeader(API_KEY_HEADER);
     if (apiKeyValue == null || apiKeyValue.trim().isEmpty()) {
-      logger.debug("No valid X-API-Key header found for: {}", requestURI);
+      log.debug("No valid X-API-Key header found for: {}", requestURI);
       filterChain.doFilter(request, response);
       return;
     }
@@ -73,13 +71,13 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
         authentication.setDetails(apiKey);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        logger.debug(
+        log.debug(
           "Successfully authenticated user: {} for request: {}",
           apiKey.getUser().getUsername(),
           requestURI
         );
       } else {
-        logger.warn("Invalid API key provided for request: {}", requestURI);
+        log.warn("Invalid API key provided for request: {}", requestURI);
         // Send 401 Unauthorized for invalid API key
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json");
@@ -87,7 +85,7 @@ public class ApiKeyAuthenticationFilter extends OncePerRequestFilter {
         return;
       }
     } catch (Exception e) {
-      logger.error("Error during API key authentication for request: {}", requestURI, e);
+      log.error("Error during API key authentication for request: {}", requestURI, e);
     }
 
     filterChain.doFilter(request, response);

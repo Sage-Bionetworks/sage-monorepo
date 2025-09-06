@@ -7,11 +7,10 @@ import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
 import org.sagebionetworks.openchallenges.auth.service.service.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,11 +23,10 @@ import java.util.UUID;
 /**
  * Profile controller for displaying user profile page.
  */
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class ProfileController {
-
-    private static final Logger logger = LoggerFactory.getLogger(ProfileController.class);
 
     private final UserService userService;
     private final ApiKeyService apiKeyService;
@@ -42,14 +40,14 @@ public class ProfileController {
         Authentication authentication,
         Model model
     ) {
-        logger.debug("Displaying profile page");
+        log.debug("Displaying profile page");
 
         User user = null;
         
         // Try to get user from authentication first (OAuth2 web authentication)
         if (authentication != null && authentication.getPrincipal() instanceof User) {
             user = (User) authentication.getPrincipal();
-            logger.debug("Got user from OAuth2 authentication: {}", user.getUsername());
+            log.debug("Got user from OAuth2 authentication: {}", user.getUsername());
         }
         // Fallback to username from cookie (for cases where OAuth2 filter didn't run)
         else {
@@ -57,15 +55,15 @@ public class ProfileController {
             if (username != null) {
                 try {
                     user = userService.findByUsername(username).orElse(null);
-                    logger.debug("Got user from username cookie: {}", username);
+                    log.debug("Got user from username cookie: {}", username);
                 } catch (Exception e) {
-                    logger.error("Error finding user by username: {}", username, e);
+                    log.error("Error finding user by username: {}", username, e);
                 }
             }
         }
 
         if (user == null) {
-            logger.warn("No user found for profile page, redirecting to login");
+            log.warn("No user found for profile page, redirecting to login");
             return "redirect:/login";
         }
 
@@ -87,7 +85,7 @@ public class ProfileController {
             : user.getUsername();
         model.addAttribute("displayName", displayName);
 
-        logger.debug("Profile page prepared for user: {} with {} API keys", displayName, apiKeys.size());
+        log.debug("Profile page prepared for user: {} with {} API keys", displayName, apiKeys.size());
         return "profile";
     }
 
@@ -110,14 +108,14 @@ public class ProfileController {
      */
     @PostMapping("/logout")
     public String logout(HttpServletResponse response) {
-        logger.debug("Logout requested, clearing secure cookies");
+        log.debug("Logout requested, clearing secure cookies");
         
         // Clear all authentication cookies
         clearCookie(response, "oc_access_token");
         clearCookie(response, "oc_refresh_token");
         clearCookie(response, "oc_username");
         
-        logger.debug("Secure cookies cleared, redirecting to login");
+        log.debug("Secure cookies cleared, redirecting to login");
         return "redirect:/login";
     }
 
@@ -132,7 +130,7 @@ public class ProfileController {
         cookie.setMaxAge(0); // Delete the cookie
         response.addCookie(cookie);
         
-        logger.debug("Cleared cookie: {}", cookieName);
+        log.debug("Cleared cookie: {}", cookieName);
     }
 
     /**
@@ -146,18 +144,18 @@ public class ProfileController {
         Authentication authentication,
         RedirectAttributes redirectAttributes
     ) {
-        logger.debug("Creating API key with name: {}", name);
+        log.debug("Creating API key with name: {}", name);
         
         User user = getAuthenticatedUser(request, authentication);
         if (user == null) {
-            logger.warn("No authenticated user found for API key creation");
+            log.warn("No authenticated user found for API key creation");
             redirectAttributes.addFlashAttribute("error", "Authentication required");
             return "redirect:/profile";
         }
 
         try {
             ApiKey newApiKey = apiKeyService.createApiKey(user, name, expiresInDays);
-            logger.info("Successfully created API key '{}' for user: {}", name, user.getUsername());
+            log.info("Successfully created API key '{}' for user: {}", name, user.getUsername());
             
             // Add the newly created key with the plain key to flash attributes
             // This is the only time the user will see the full API key
@@ -165,7 +163,7 @@ public class ProfileController {
             redirectAttributes.addFlashAttribute("success", "API key created successfully!");
             
         } catch (Exception e) {
-            logger.error("Error creating API key '{}' for user: {}", name, user.getUsername(), e);
+            log.error("Error creating API key '{}' for user: {}", name, user.getUsername(), e);
             redirectAttributes.addFlashAttribute("error", "Failed to create API key: " + e.getMessage());
         }
 
@@ -182,11 +180,11 @@ public class ProfileController {
         Authentication authentication,
         RedirectAttributes redirectAttributes
     ) {
-        logger.debug("Deleting API key with ID: {}", keyId);
+        log.debug("Deleting API key with ID: {}", keyId);
         
         User user = getAuthenticatedUser(request, authentication);
         if (user == null) {
-            logger.warn("No authenticated user found for API key deletion");
+            log.warn("No authenticated user found for API key deletion");
             redirectAttributes.addFlashAttribute("error", "Authentication required");
             return "redirect:/profile";
         }
@@ -195,15 +193,15 @@ public class ProfileController {
             boolean deleted = apiKeyService.deleteApiKey(keyId, user);
             
             if (deleted) {
-                logger.info("Successfully deleted API key {} for user: {}", keyId, user.getUsername());
+                log.info("Successfully deleted API key {} for user: {}", keyId, user.getUsername());
                 redirectAttributes.addFlashAttribute("success", "API key deleted successfully");
             } else {
-                logger.warn("API key {} not found or not owned by user: {}", keyId, user.getUsername());
+                log.warn("API key {} not found or not owned by user: {}", keyId, user.getUsername());
                 redirectAttributes.addFlashAttribute("error", "Unable to delete API key");
             }
             
         } catch (Exception e) {
-            logger.error("Error deleting API key {} for user: {}", keyId, user.getUsername(), e);
+            log.error("Error deleting API key {} for user: {}", keyId, user.getUsername(), e);
             redirectAttributes.addFlashAttribute("error", "Failed to delete API key");
         }
 
@@ -225,7 +223,7 @@ public class ProfileController {
             try {
                 return userService.findByUsername(username).orElse(null);
             } catch (Exception e) {
-                logger.error("Error finding user by username: {}", username, e);
+                log.error("Error finding user by username: {}", username, e);
             }
         }
         
