@@ -1,6 +1,8 @@
 package org.sagebionetworks.openchallenges.challenge.service.service;
 
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeContributionNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.DuplicateContributionException;
@@ -13,30 +15,20 @@ import org.sagebionetworks.openchallenges.challenge.service.model.entity.Challen
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengeContributionMapper;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeContributionRepository;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@RequiredArgsConstructor
 @Service
+@Slf4j
 public class ChallengeContributionService {
-
-  private static final Logger logger = LoggerFactory.getLogger(ChallengeContributionService.class);
 
   private final ChallengeContributionRepository challengeContributionRepository;
   private final ChallengeRepository challengeRepository;
 
   private final ChallengeContributionMapper challengeContributionMapper =
     new ChallengeContributionMapper();
-
-  public ChallengeContributionService(
-    ChallengeContributionRepository challengeContributionRepository,
-    ChallengeRepository challengeRepository
-  ) {
-    this.challengeContributionRepository = challengeContributionRepository;
-    this.challengeRepository = challengeRepository;
-  }
 
   public ChallengeContributionsPageDto listChallengeContributions(Long challengeId) {
     List<ChallengeContributionEntity> entities =
@@ -94,9 +86,11 @@ public class ChallengeContributionService {
 
     if (!contributions.isEmpty()) {
       // TODO: Handle challenge participation deletion through API Gateway JWT token exchange
-      logger.info("Deleting {} challenge contributions for challengeId: {}", 
-                  contributions.size(), challengeId);
-      
+      log.info(
+        "Deleting {} challenge contributions for challengeId: {}",
+        contributions.size(),
+        challengeId
+      );
       // For now, just delete the contributions from database
       // Later: implement JWT token exchange for organization service calls
     }
@@ -118,8 +112,11 @@ public class ChallengeContributionService {
       );
 
     // TODO: Add organization validation through API Gateway JWT token exchange
-    logger.info("Creating contribution for organization: {} on challenge: {}", 
-                request.getOrganizationId(), challengeId);
+    log.info(
+      "Creating contribution for organization: {} on challenge: {}",
+      request.getOrganizationId(),
+      challengeId
+    );
 
     // Create the contribution entity
     ChallengeContributionEntity entity = ChallengeContributionEntity.builder()
@@ -180,12 +177,16 @@ public class ChallengeContributionService {
       );
 
     // TODO: Handle challenge participation deletion through API Gateway JWT token exchange
-    logger.info("Deleting contribution for organization: {} on challenge: {} with role: {}", 
-                existingContribution.getOrganizationId(), challengeId, existingContribution.getRole());
+    log.info(
+      "Deleting contribution for organization: {} on challenge: {} with role: {}",
+      existingContribution.getOrganizationId(),
+      challengeId,
+      existingContribution.getRole()
+    );
 
     // Delete the contribution from database
     challengeContributionRepository.delete(existingContribution);
-    logger.debug(
+    log.debug(
       "Successfully deleted challenge contribution for challengeId: {}, organizationId: {}, role: {}",
       challengeId,
       organizationId,

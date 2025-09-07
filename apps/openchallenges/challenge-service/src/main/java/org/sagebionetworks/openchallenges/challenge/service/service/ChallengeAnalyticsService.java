@@ -2,31 +2,27 @@ package org.sagebionetworks.openchallenges.challenge.service.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengesPerYearDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.projection.YearlyChallengeCount;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@RequiredArgsConstructor
 @Service
+@Slf4j
 public class ChallengeAnalyticsService {
 
-  private static final Logger logger = LoggerFactory.getLogger(ChallengeAnalyticsService.class);
-
   private final ChallengeRepository challengeRepository;
-
-  public ChallengeAnalyticsService(ChallengeRepository challengeRepository) {
-    this.challengeRepository = challengeRepository;
-  }
 
   @Transactional(readOnly = true)
   public ChallengesPerYearDto getChallengesPerYear() {
     List<YearlyChallengeCount> results = challengeRepository.findChallengeCountsByYear();
     int undatedChallengeCount = challengeRepository.countUndatedChallenges();
 
-    logger.debug("undatedChallengeCount: {}", undatedChallengeCount);
+    log.debug("undatedChallengeCount: {}", undatedChallengeCount);
 
     List<String> years = new ArrayList<>();
     List<Integer> challengeCounts = new ArrayList<>();

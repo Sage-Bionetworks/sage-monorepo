@@ -2,6 +2,8 @@ package org.sagebionetworks.openchallenges.challenge.service.service;
 
 import java.util.Arrays;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengePlatformDeleteNotAllowedException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengePlatformNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformCreateRequestDto;
@@ -12,8 +14,6 @@ import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeP
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengePlatformEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengePlatformMapper;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengePlatformRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,20 +21,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@RequiredArgsConstructor
 @Service
+@Slf4j
 public class ChallengePlatformService {
-
-  private static final Logger logger = LoggerFactory.getLogger(ChallengePlatformService.class);
 
   private final ChallengePlatformRepository challengePlatformRepository;
 
   private ChallengePlatformMapper challengePlatformMapper = new ChallengePlatformMapper();
 
   private static final List<String> SEARCHABLE_FIELDS = Arrays.asList("name");
-
-  public ChallengePlatformService(ChallengePlatformRepository challengePlatformRepository) {
-    this.challengePlatformRepository = challengePlatformRepository;
-  }
 
   @Transactional(readOnly = false)
   public void deleteChallengePlatform(Long id) {
@@ -75,7 +71,7 @@ public class ChallengePlatformService {
 
   @Transactional(readOnly = true)
   public ChallengePlatformsPageDto listChallengePlatforms(ChallengePlatformSearchQueryDto query) {
-    logger.info("query {}", query);
+    log.info("query {}", query);
 
     Pageable pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
 
@@ -85,7 +81,7 @@ public class ChallengePlatformService {
       query,
       fieldsToSearchBy.toArray(new String[0])
     );
-    logger.info("entitiesPage {}", entitiesPage);
+    log.info("entitiesPage {}", entitiesPage);
 
     List<ChallengePlatformDto> challengePlatforms = challengePlatformMapper.convertToDtoList(
       entitiesPage.getContent()

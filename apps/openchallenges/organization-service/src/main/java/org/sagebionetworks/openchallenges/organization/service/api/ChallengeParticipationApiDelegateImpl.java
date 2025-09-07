@@ -1,5 +1,7 @@
 package org.sagebionetworks.openchallenges.organization.service.api;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.ChallengeParticipationCreateRequestDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.ChallengeParticipationDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.ChallengeParticipationRoleDto;
@@ -9,8 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component

@@ -1,5 +1,6 @@
 package org.sagebionetworks.openchallenges.challenge.service.model.mapper;
 
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeCategoryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeIncentiveDto;
@@ -7,13 +8,10 @@ import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeS
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSubmissionTypeDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeEntity;
 import org.sagebionetworks.util.model.mapper.BaseMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 
+@Slf4j
 public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {
-
-  private static final Logger logger = LoggerFactory.getLogger(ChallengeMapper.class);
 
   private SimpleChallengePlatformMapper platformMapper = new SimpleChallengePlatformMapper();
   private EdamConceptMapper edamConceptMapper = new EdamConceptMapper();
@@ -30,10 +28,10 @@ public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {
   @Override
   public ChallengeDto convertToDto(ChallengeEntity entity, Object... args) {
     ChallengeDto dto = new ChallengeDto();
-    logger.trace("challenge dto initial: {}", dto);
+    log.trace("challenge dto initial: {}", dto);
     if (entity != null) {
       BeanUtils.copyProperties(entity, dto, "stars", "inputDataTypes", "platform", "operation");
-      logger.trace("challenge dto before set: {}", dto);
+      log.trace("challenge dto before set: {}", dto);
       dto.setStatus(ChallengeStatusDto.fromValue(entity.getStatus()));
       dto.setPlatform(platformMapper.convertToDto(entity.getPlatform()));
       if (entity.getOperation() != null) {
@@ -62,7 +60,7 @@ public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {
       );
       dto.inputDataTypes(edamConceptMapper.convertToDtoList(entity.getInputDataTypes()));
       dto.starredCount(entity.getStars().size());
-      logger.trace("challenge dto: {}", dto);
+      log.trace("challenge dto: {}", dto);
     }
     return dto;
   }
