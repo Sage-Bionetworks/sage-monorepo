@@ -1,24 +1,20 @@
 package org.sagebionetworks.openchallenges.image.service;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.app.config.data.ImageServiceConfigData;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @ComponentScan(basePackages = { "org.sagebionetworks.openchallenges" })
+@RequiredArgsConstructor
+@Slf4j
 @SpringBootApplication
 public class ImageServiceApplication implements CommandLineRunner {
 
-  private static final Logger logger = LoggerFactory.getLogger(ImageServiceApplication.class);
-
   private final ImageServiceConfigData imageServiceConfigData;
-
-  public ImageServiceApplication(ImageServiceConfigData imageServiceConfigData) {
-    this.imageServiceConfigData = imageServiceConfigData;
-  }
 
   public static void main(String[] args) {
     SpringApplication.run(ImageServiceApplication.class, args);
@@ -26,6 +22,6 @@ public class ImageServiceApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    logger.info(imageServiceConfigData.getWelcomeMessage());
+    log.info(imageServiceConfigData.getWelcomeMessage());
   }
 }
