@@ -5,6 +5,7 @@ get:
   description: List organizations
   operationId: listOrganizations
   x-audience: [public]
+  x-anonymous-access: true
   security:
     - jwtBearer:
         - read:orgs

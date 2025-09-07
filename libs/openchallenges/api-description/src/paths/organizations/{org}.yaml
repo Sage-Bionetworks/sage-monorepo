@@ -7,6 +7,7 @@ get:
   description: Returns the organization identified by its login or ID.
   operationId: getOrganization
   x-audience: [public]
+  x-anonymous-access: true
   security:
     - jwtBearer:
         - read:orgs

@@ -30,6 +30,7 @@ paths:
       operationId: listOrganizations
       x-audience:
         - public
+      x-anonymous-access: true
       security:
         - jwtBearer:
             - read:orgs
@@ -91,6 +92,7 @@ paths:
       operationId: getOrganization
       x-audience:
         - public
+      x-anonymous-access: true
       security:
         - jwtBearer:
             - read:orgs
