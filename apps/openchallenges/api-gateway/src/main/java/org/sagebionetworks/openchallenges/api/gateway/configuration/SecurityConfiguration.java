@@ -1,10 +1,10 @@
 package org.sagebionetworks.openchallenges.api.gateway.configuration;
 
+import org.sagebionetworks.openchallenges.api.gateway.security.AnonymousAccessGatewayFilter;
 import org.sagebionetworks.openchallenges.api.gateway.security.ApiKeyAuthenticationGatewayFilter;
 import org.sagebionetworks.openchallenges.api.gateway.security.JwtAuthenticationGatewayFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
@@ -14,7 +14,13 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * Spring Security configuration for the API Gateway.
- * Implements the recommended authorization patterns with proper public/protected endpoint handling.
+ * 
+ * All API endpoints now require JWT authentication, which is provided by:
+ * 1. AnonymousAccessGatewayFilter - generates JWTs for public endpoints
+ * 2. ApiKeyAuthenticationGatewayFilter - exchanges API keys for JWTs
+ * 3. JwtAuthenticationGatewayFilter - validates existing JWTs
+ * 
+ * Backend services use method-level authorization (@PreAuthorize) based on JWT scopes.
  */
 @Configuration
 @EnableWebFluxSecurity
@@ -22,54 +28,39 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-  private final JwtAuthenticationGatewayFilter jwtAuthenticationFilter;
+  private final AnonymousAccessGatewayFilter anonymousAccessFilter;
   private final ApiKeyAuthenticationGatewayFilter apiKeyAuthenticationFilter;
+  private final JwtAuthenticationGatewayFilter jwtAuthenticationFilter;
 
   @Bean
   SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
     return http
       .csrf(ServerHttpSecurity.CsrfSpec::disable)
-      // Add our custom authentication filters BEFORE authorization
-      .addFilterBefore(jwtAuthenticationFilter, SecurityWebFiltersOrder.AUTHORIZATION)
+      // Add our custom authentication filters in order:
+      // 1. Anonymous access (generates JWTs for public endpoints)
+      // 2. API key authentication (exchanges API keys for JWTs)  
+      // 3. JWT validation (validates existing JWTs)
+      .addFilterBefore(anonymousAccessFilter, SecurityWebFiltersOrder.AUTHORIZATION)
       .addFilterBefore(apiKeyAuthenticationFilter, SecurityWebFiltersOrder.AUTHORIZATION)
+      .addFilterBefore(jwtAuthenticationFilter, SecurityWebFiltersOrder.AUTHORIZATION)
       .authorizeExchange(ex -> ex
-        // Public routes – completely bypass auth
+        // Actuator endpoints for health checks
         .pathMatchers("/actuator/health", "/actuator/metrics").permitAll()
         
-        // OAuth2 standard endpoints (served by auth service)
+        // OAuth2 endpoints (served by auth service)
         .pathMatchers("/oauth2/**", "/.well-known/**").permitAll()
         
-        // Auth service internal endpoints (used by gateway)
-        .pathMatchers("/api/v1/auth/api-keys/validate").permitAll() // API key validation
-        
-        // Public read-only endpoints
-        .pathMatchers(HttpMethod.GET, "/api/v1/challenge-analytics/**").permitAll()
-        .pathMatchers(HttpMethod.GET, "/api/v1/challenge-platforms/**").permitAll()
-        .pathMatchers(HttpMethod.GET, "/api/v1/edam-concepts/**").permitAll()
-        
-        // Read operations on domain APIs can be public (adjust as needed)
-        .pathMatchers(HttpMethod.GET, "/api/v1/challenges/**").permitAll()
-        // Organizations now require authentication for all operations
-        .pathMatchers(HttpMethod.GET, "/api/v1/images/**").permitAll()
-        
-        // All operations on organizations require authentication
-        .pathMatchers("/api/v1/organizations/**").authenticated()
-        
-        // Auth service user-facing endpoints require authentication
-        .pathMatchers("/api/v1/auth/profile/**").authenticated()
-        .pathMatchers("/api/v1/auth/api-keys/**").authenticated()
-        
-        // Unsafe methods on other domain APIs require authentication
-        .pathMatchers(HttpMethod.POST, "/api/v1/challenges/**", "/api/v1/images/**").authenticated()
-        .pathMatchers(HttpMethod.PUT, "/api/v1/challenges/**", "/api/v1/images/**").authenticated()
-        .pathMatchers(HttpMethod.DELETE, "/api/v1/challenges/**", "/api/v1/images/**").authenticated()
-        .pathMatchers(HttpMethod.PATCH, "/api/v1/challenges/**", "/api/v1/images/**").authenticated()
+        // All API endpoints require JWT authentication
+        // Authentication is provided by our custom filters:
+        // - Anonymous access filter generates JWTs for public endpoints  
+        // - API key filter exchanges API keys for JWTs
+        // - JWT filter validates existing JWTs
+        // Backend services handle authorization via @PreAuthorize with JWT scopes
+        .pathMatchers("/api/**").authenticated()
         
         // Everything else requires authentication
         .anyExchange().authenticated()
       )
-      // Authentication is handled by our custom WebFilters (JWT and API Key)
-      // Spring Security handles authorization based on the presence of authentication
       .build();
   }
 }
