@@ -71,12 +71,14 @@ openchallenges:
       GET /api/v1/organizations:
         scopes:
           - 'read:orgs'
+        anonymousAccess: true
       POST /api/v1/organizations:
         scopes:
           - 'create:orgs'
       GET /api/v1/organizations/{org}:
         scopes:
           - 'read:orgs'
+        anonymousAccess: true
       PUT /api/v1/organizations/{org}:
         scopes:
           - 'update:orgs'

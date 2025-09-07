@@ -27,11 +27,11 @@ public class OpenApiScopeMapper {
     }
 
     try {
-      Map<String, Map<String, List<String>>> routeScopes = new LinkedHashMap<>();
+      Map<String, Map<String, Object>> routeScopes = new LinkedHashMap<>();
       
       for (String filePath : args) {
         System.err.println("Processing: " + filePath);
-        Map<String, Map<String, List<String>>> fileScopes = parseOpenApiFile(filePath);
+        Map<String, Map<String, Object>> fileScopes = parseOpenApiFile(filePath);
         routeScopes.putAll(fileScopes);
       }
 
@@ -50,14 +50,14 @@ public class OpenApiScopeMapper {
   /**
    * Parse a single OpenAPI file and extract route-to-scope mappings.
    */
-  private static Map<String, Map<String, List<String>>> parseOpenApiFile(String filePath) throws IOException {
+  private static Map<String, Map<String, Object>> parseOpenApiFile(String filePath) throws IOException {
     File file = new File(filePath);
     if (!file.exists()) {
       throw new IOException("File not found: " + filePath);
     }
 
     JsonNode root = yamlMapper.readTree(file);
-    Map<String, Map<String, List<String>>> routeScopes = new LinkedHashMap<>();
+    Map<String, Map<String, Object>> routeScopes = new LinkedHashMap<>();
 
     JsonNode paths = root.get("paths");
     if (paths == null) {
@@ -85,8 +85,14 @@ public class OpenApiScopeMapper {
         if (!scopes.isEmpty()) {
           // Prepend /api/v1 to match the gateway's incoming request paths
           String routeKey = method + " /api/v1" + path;
-          routeScopes.computeIfAbsent(routeKey, k -> new LinkedHashMap<>())
-              .put("scopes", scopes);
+          Map<String, Object> routeConfig = routeScopes.computeIfAbsent(routeKey, k -> new LinkedHashMap<>());
+          routeConfig.put("scopes", scopes);
+          
+          // Extract anonymous access flag
+          JsonNode anonymousAccess = operation.get("x-anonymous-access");
+          if (anonymousAccess != null && anonymousAccess.isBoolean()) {
+            routeConfig.put("anonymousAccess", anonymousAccess.asBoolean());
+          }
         }
       });
     });
@@ -132,7 +138,7 @@ public class OpenApiScopeMapper {
   /**
    * Write the route-to-scope mapping to a YAML file.
    */
-  private static void writeYamlFile(Map<String, Map<String, List<String>>> routeScopes, String outputPath) throws IOException {
+  private static void writeYamlFile(Map<String, Map<String, Object>> routeScopes, String outputPath) throws IOException {
     // Create the directory if it doesn't exist
     Path filePath = Paths.get(outputPath);
     Files.createDirectories(filePath.getParent());
@@ -162,10 +168,13 @@ public class OpenApiScopeMapper {
       System.out.println("No routes with security requirements found");
     } else {
       System.out.println("Routes with security requirements:");
-      for (Map.Entry<String, Map<String, List<String>>> entry : routeScopes.entrySet()) {
+      for (Map.Entry<String, Map<String, Object>> entry : routeScopes.entrySet()) {
         String route = entry.getKey();
-        List<String> scopes = entry.getValue().get("scopes");
-        System.out.println("  " + route + " -> " + scopes);
+        @SuppressWarnings("unchecked")
+        List<String> scopes = (List<String>) entry.getValue().get("scopes");
+        Boolean anonymousAccess = (Boolean) entry.getValue().get("anonymousAccess");
+        System.out.println("  " + route + " -> scopes: " + scopes + 
+                          (anonymousAccess != null && anonymousAccess ? " [anonymous]" : ""));
       }
     }
   }

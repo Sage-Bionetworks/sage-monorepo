@@ -70,6 +70,11 @@ public class RouteScopeConfiguration {
           RouteConfig routeConfig = new RouteConfig();
           List<String> scopeList = (List<String>) entry.getValue().get("scopes");
           routeConfig.setScopes(scopeList != null ? scopeList : List.of());
+          
+          // Parse anonymous access flag
+          Boolean anonymousAccess = (Boolean) entry.getValue().get("anonymousAccess");
+          routeConfig.setAnonymousAccess(anonymousAccess != null && anonymousAccess);
+          
           return routeConfig;
         }
       ));
@@ -105,8 +110,27 @@ public class RouteScopeConfiguration {
     return List.of();
   }
 
+  /**
+   * Check if a route allows anonymous access.
+   *
+   * @param method HTTP method (GET, POST, etc.)
+   * @param path   URL path
+   * @return true if the route allows anonymous access, false otherwise
+   */
+  public boolean isAnonymousAccessAllowed(String method, String path) {
+    if (routeScopes == null) {
+      return false;
+    }
+    
+    String routeKey = method.toUpperCase() + " " + path;
+    RouteConfig config = routeScopes.get(routeKey);
+    
+    return config != null && config.isAnonymousAccess();
+  }
+
   public static class RouteConfig {
     private List<String> scopes;
+    private boolean anonymousAccess = false;
 
     public List<String> getScopes() {
       return scopes;
@@ -114,6 +138,14 @@ public class RouteScopeConfiguration {
 
     public void setScopes(List<String> scopes) {
       this.scopes = scopes;
+    }
+
+    public boolean isAnonymousAccess() {
+      return anonymousAccess;
+    }
+
+    public void setAnonymousAccess(boolean anonymousAccess) {
+      this.anonymousAccess = anonymousAccess;
     }
   }
 }
