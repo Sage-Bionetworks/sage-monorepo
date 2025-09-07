@@ -20,4 +20,17 @@ enum:
   - 'create:orgs'
   - 'update:orgs'
   - 'delete:orgs'
+
+  # Challenge scopes
+  # If these are admin/global on many orgs, prefer plural:
+  - 'read:challenges'
+  - 'create:challenges'
+  - 'update:challenges'
+  - 'delete:challenges'
+  - 'read:challenges-analytics'
+  - 'read:challenge-platforms'
+  - 'create:challenge-platforms'
+  - 'update:challenge-platforms'
+  - 'delete:challenge-platforms'
+  - 'read:edam-concepts'
 description: Permission scope defining specific access rights

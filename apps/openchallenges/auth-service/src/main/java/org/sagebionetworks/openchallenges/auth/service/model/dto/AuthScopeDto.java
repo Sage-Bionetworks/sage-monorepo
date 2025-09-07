@@ -48,7 +48,27 @@ public enum AuthScopeDto {
   
   UPDATE_ORGS("update:orgs"),
   
-  DELETE_ORGS("delete:orgs");
+  DELETE_ORGS("delete:orgs"),
+  
+  READ_CHALLENGES("read:challenges"),
+  
+  CREATE_CHALLENGES("create:challenges"),
+  
+  UPDATE_CHALLENGES("update:challenges"),
+  
+  DELETE_CHALLENGES("delete:challenges"),
+  
+  READ_CHALLENGES_ANALYTICS("read:challenges-analytics"),
+  
+  READ_CHALLENGE_PLATFORMS("read:challenge-platforms"),
+  
+  CREATE_CHALLENGE_PLATFORMS("create:challenge-platforms"),
+  
+  UPDATE_CHALLENGE_PLATFORMS("update:challenge-platforms"),
+  
+  DELETE_CHALLENGE_PLATFORMS("delete:challenge-platforms"),
+  
+  READ_EDAM_CONCEPTS("read:edam-concepts");
 
   private final String value;
 
