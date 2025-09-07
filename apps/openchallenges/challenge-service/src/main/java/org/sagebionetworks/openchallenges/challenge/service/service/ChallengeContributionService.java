@@ -3,13 +3,17 @@ package org.sagebionetworks.openchallenges.challenge.service.service;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.openchallenges.challenge.service.client.OrganizationServiceClient;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeContributionNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.DuplicateContributionException;
+import org.sagebionetworks.openchallenges.challenge.service.exception.OrganizationNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionRoleDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionsPageDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.organization.ChallengeParticipationCreateRequestDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.organization.ChallengeParticipationRoleDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeContributionEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengeContributionMapper;
@@ -18,6 +22,7 @@ import org.sagebionetworks.openchallenges.challenge.service.model.repository.Cha
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestClientException;
 
 @RequiredArgsConstructor
 @Service
@@ -26,6 +31,7 @@ public class ChallengeContributionService {
 
   private final ChallengeContributionRepository challengeContributionRepository;
   private final ChallengeRepository challengeRepository;
+  private final OrganizationServiceClient organizationServiceClient;
 
   private final ChallengeContributionMapper challengeContributionMapper =
     new ChallengeContributionMapper();
@@ -85,14 +91,47 @@ public class ChallengeContributionService {
       challengeContributionRepository.findAllByChallengeId(challengeId);
 
     if (!contributions.isEmpty()) {
-      // TODO: Handle challenge participation deletion through API Gateway JWT token exchange
       log.info(
         "Deleting {} challenge contributions for challengeId: {}",
         contributions.size(),
         challengeId
       );
-      // For now, just delete the contributions from database
-      // Later: implement JWT token exchange for organization service calls
+
+      // Delete challenge participations for each organization/role combination
+      for (ChallengeContributionEntity contribution : contributions) {
+        try {
+          organizationServiceClient.deleteChallengeParticipation(
+            contribution.getOrganizationId().toString(),
+            challengeId,
+            contribution.getRole()
+          );
+          log.debug(
+            "Successfully deleted challenge participation for org: {}, challenge: {}, role: {}",
+            contribution.getOrganizationId(),
+            challengeId,
+            contribution.getRole()
+          );
+        } catch (RestClientException e) {
+          if (e.getMessage() != null && e.getMessage().contains("404")) {
+            // Participation doesn't exist, which is fine - continue with other deletions
+            log.debug(
+              "No challenge participation found for org: {}, challenge: {}, role: {} - continuing",
+              contribution.getOrganizationId(),
+              challengeId,
+              contribution.getRole()
+            );
+          } else {
+            log.error(
+              "Failed to delete challenge participation for org: {}, challenge: {}, role: {}. Error: {}",
+              contribution.getOrganizationId(),
+              challengeId,
+              contribution.getRole(),
+              e.getMessage()
+            );
+            // Continue with other deletions even if one fails
+          }
+        }
+      }
     }
 
     // Delete the contributions from the database
@@ -111,7 +150,24 @@ public class ChallengeContributionService {
         new ChallengeNotFoundException("Challenge not found with id: " + challengeId)
       );
 
-    // TODO: Add organization validation through API Gateway JWT token exchange
+    // Validate organization exists by querying the organization service using JWT token exchange
+    try {
+      organizationServiceClient.getOrganization(request.getOrganizationId());
+    } catch (RestClientException e) {
+      if (e.getMessage() != null && e.getMessage().contains("404")) {
+        throw new OrganizationNotFoundException(
+          "Organization not found with id: " + request.getOrganizationId()
+        );
+      }
+      throw new RuntimeException(
+        "Failed to validate organization with id: " +
+        request.getOrganizationId() +
+        ". Reason: " +
+        e.getMessage(),
+        e
+      );
+    }
+
     log.info(
       "Creating contribution for organization: {} on challenge: {}",
       request.getOrganizationId(),
@@ -128,6 +184,47 @@ public class ChallengeContributionService {
     try {
       // Save the entity
       ChallengeContributionEntity savedEntity = challengeContributionRepository.save(entity);
+
+      // Create a challenge participation for this organization-challenge relationship
+      try {
+        // Convert the contribution role to participation role
+        ChallengeParticipationRoleDto participationRole = 
+          ChallengeParticipationRoleDto.fromValue(request.getRole().getValue());
+        
+        ChallengeParticipationCreateRequestDto participationRequest = 
+          new ChallengeParticipationCreateRequestDto(challengeId, participationRole);
+        
+        organizationServiceClient.createChallengeParticipation(
+          request.getOrganizationId().toString(),
+          participationRequest
+        );
+        log.debug(
+          "Successfully created challenge participation for org: {}, challenge: {}, role: {}",
+          request.getOrganizationId(),
+          challengeId,
+          request.getRole().getValue()
+        );
+      } catch (RestClientException e) {
+        if (e.getMessage() != null && e.getMessage().contains("409")) {
+          // Participation already exists, which is fine - the contribution was still created
+          log.debug(
+            "Challenge participation already exists for org: {}, challenge: {}, role: {} - continuing",
+            request.getOrganizationId(),
+            challengeId,
+            request.getRole().getValue()
+          );
+        } else {
+          log.error(
+            "Failed to create challenge participation for org: {}, challenge: {}, role: {}. Error: {}",
+            request.getOrganizationId(),
+            challengeId,
+            request.getRole().getValue(),
+            e.getMessage()
+          );
+          // Note: We could decide to rollback the contribution creation here,
+          // but for now we'll allow the contribution to exist without participation
+        }
+      }
 
       // Return the full contribution DTO
       return challengeContributionMapper.convertToDto(savedEntity);
@@ -183,6 +280,45 @@ public class ChallengeContributionService {
       challengeId,
       existingContribution.getRole()
     );
+
+    // Delete any challenge participation for this organization before removing the contribution
+    try {
+      organizationServiceClient.deleteChallengeParticipation(
+        existingContribution.getOrganizationId().toString(),
+        challengeId,
+        existingContribution.getRole()
+      );
+      log.debug(
+        "Successfully deleted challenge participation for organizationId: {}, challengeId: {}",
+        existingContribution.getOrganizationId(),
+        challengeId
+      );
+    } catch (RestClientException e) {
+      if (e.getMessage() != null && e.getMessage().contains("404")) {
+        // Participation doesn't exist, which is fine - continue with contribution deletion
+        log.debug(
+          "No challenge participation found for organizationId: {}, challengeId: {} - continuing with contribution deletion",
+          existingContribution.getOrganizationId(),
+          challengeId
+        );
+      } else {
+        log.error(
+          "Failed to delete challenge participation for organizationId: {}, challengeId: {}. Error: {}",
+          existingContribution.getOrganizationId(),
+          challengeId,
+          e.getMessage()
+        );
+        throw new RuntimeException(
+          "Failed to delete challenge participation for organization " +
+          existingContribution.getOrganizationId() +
+          " in challenge " +
+          challengeId +
+          ". Reason: " +
+          e.getMessage(),
+          e
+        );
+      }
+    }
 
     // Delete the contribution from database
     challengeContributionRepository.delete(existingContribution);
