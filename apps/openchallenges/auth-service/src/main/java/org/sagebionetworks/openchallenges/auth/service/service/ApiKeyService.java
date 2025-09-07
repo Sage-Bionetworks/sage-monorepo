@@ -259,6 +259,13 @@ public class ApiKeyService {
   }
 
   /**
+   * Find API key by client ID
+   */
+  public Optional<ApiKey> findByClientId(String clientId) {
+    return apiKeyRepository.findByClientId(clientId);
+  }
+
+  /**
    * Generate a secure random API key in the format: {prefix}{suffix}.{secret}
    */
   private String generateApiKey() {

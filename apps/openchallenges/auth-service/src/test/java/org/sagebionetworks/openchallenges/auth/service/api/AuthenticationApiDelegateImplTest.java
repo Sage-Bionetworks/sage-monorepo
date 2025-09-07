@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.UpdateUserProfileRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.UserProfileDto;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
+import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
 import org.sagebionetworks.openchallenges.auth.service.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,9 @@ class AuthenticationApiDelegateImplTest {
   private UserService userService;
 
   @Mock
+  private ApiKeyService apiKeyService;
+
+  @Mock
   private Authentication authentication;
 
   @Mock
@@ -43,7 +47,7 @@ class AuthenticationApiDelegateImplTest {
   @BeforeEach
   void setUp() {
     authenticationApiDelegate = new AuthenticationApiDelegateImpl(
-      userService
+      userService, apiKeyService
     );
 
     // Set up test user

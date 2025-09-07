@@ -35,4 +35,6 @@ public interface ApiKeyRepository extends JpaRepository<ApiKey, UUID> {
 
   @Query("DELETE FROM ApiKey a WHERE a.expiresAt IS NOT NULL AND a.expiresAt < :now")
   void deleteExpiredApiKeys(@Param("now") OffsetDateTime now);
+
+  Optional<ApiKey> findByClientId(String clientId);
 }

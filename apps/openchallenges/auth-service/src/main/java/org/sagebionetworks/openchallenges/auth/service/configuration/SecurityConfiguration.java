@@ -1,11 +1,10 @@
 package org.sagebionetworks.openchallenges.auth.service.configuration;
 
-import org.sagebionetworks.openchallenges.auth.service.security.ApiKeyAuthenticationFilter;
 import org.sagebionetworks.openchallenges.auth.service.security.OAuth2WebAuthenticationFilter;
-import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -16,6 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 
   /**
@@ -29,24 +29,30 @@ public class SecurityConfiguration {
   }
 
   /**
-   * Configure security filter chain with API key and OAuth2 web authentication
+   * Configure security filter chain with OAuth2 web authentication only
+   * The auth service acts as both:
+   * 1. OAuth2 Authorization Server (issuing JWTs)
+   * 2. OAuth2 Resource Server (validating JWTs for its own API endpoints)
+   * 
+   * API key authentication is handled by the API Gateway, which converts
+   * API keys to JWTs before forwarding requests to this service.
    */
   @Bean
   @Order(2)
   public SecurityFilterChain filterChain(
     HttpSecurity http,
-    ApiKeyService apiKeyService,
-    OAuth2WebAuthenticationFilter oAuth2WebAuthenticationFilter
+    OAuth2WebAuthenticationFilter oAuth2WebAuthenticationFilter,
+    org.springframework.security.oauth2.jwt.JwtDecoder jwtDecoder
   ) throws Exception {
-    // Create the API key authentication filter here to avoid circular dependency
-    ApiKeyAuthenticationFilter apiKeyAuthenticationFilter = new ApiKeyAuthenticationFilter(
-      apiKeyService
-    );
 
     http
       .csrf(csrf -> csrf.disable()) // Disable CSRF for API
       .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless for API
       .logout(logout -> logout.disable()) // Disable Spring Security's default logout
+      // Configure OAuth2 Resource Server for JWT validation on API endpoints
+      .oauth2ResourceServer(oauth2 -> oauth2
+        .jwt(jwt -> jwt.decoder(jwtDecoder))
+      )
       .authorizeHttpRequests(
         authz ->
           authz
@@ -59,20 +65,26 @@ public class SecurityConfiguration {
             .permitAll() // OpenID Connect discovery endpoint
             .requestMatchers("/.well-known/**")
             .permitAll() // Other well-known endpoints
-            // Custom API endpoints (v1)
+            // Internal API endpoints for the API Gateway
             .requestMatchers("/v1/auth/api-keys/validate")
-            .permitAll() // API key validation (internal endpoint)
+            .permitAll() // API key validation (internal endpoint for API Gateway)
+            // Protected API endpoints - require JWT authentication with scopes
+            .requestMatchers("/v1/auth/profile")
+            .authenticated() // Profile endpoints require JWT with proper scopes (handled by @PreAuthorize)
+            .requestMatchers("/v1/auth/api-keys", "/v1/auth/api-keys/**")
+            .authenticated() // API key management requires JWT with proper scopes (handled by @PreAuthorize)
             .requestMatchers("/v1/**")
             .authenticated() // All other v1 API endpoints require authentication
-            // Web interface endpoints for OAuth2
+            // Web interface endpoints for OAuth2 login flow
             .requestMatchers("/login", "/auth/oauth2/google", "/auth/callback")
             .permitAll() // OAuth2 web interface endpoints and login page
-            .requestMatchers("/profile", "/profile/**")
-            .permitAll() // Profile page and API key management endpoints accessible without JWT authentication
             .requestMatchers("/logout", "/logout/**")
             .permitAll() // Logout web interface endpoints
             .requestMatchers("/error")
             .permitAll() // Error page
+            // Web profile management - requires web authentication (not JWT)
+            .requestMatchers("/profile", "/profile/**")
+            .authenticated() // Profile web pages require authentication (handled by web auth filter)
             // Actuator endpoints
             .requestMatchers("/actuator/health", "/actuator/info")
             .permitAll() // Health checks
@@ -82,9 +94,8 @@ public class SecurityConfiguration {
             .anyRequest()
             .authenticated() // All other endpoints require authentication
       )
-      // Add filters in order: OAuth2 web first, then API Key
-      .addFilterBefore(oAuth2WebAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // OAuth2 web filter
-      .addFilterAfter(apiKeyAuthenticationFilter, OAuth2WebAuthenticationFilter.class); // API key filter after OAuth2 web
+      // Add OAuth2 web authentication filter only
+      .addFilterBefore(oAuth2WebAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // OAuth2 web filter
 
     return http.build();
   }

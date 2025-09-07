@@ -15,10 +15,13 @@ import org.sagebionetworks.openchallenges.auth.service.model.dto.AuthScopeDto;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.service.UserService;
+import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
 /**
@@ -33,11 +36,13 @@ import org.springframework.stereotype.Component;
 public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate {
 
   private final UserService userService;
+  private final ApiKeyService apiKeyService;
 
   /**
    * Get the authenticated user's profile.
    */
   @Override
+  @PreAuthorize("hasAuthority('SCOPE_read:profile')")
   public ResponseEntity<UserProfileDto> getUserProfile() {
     log.debug("Getting user profile for authenticated user");
 
@@ -48,30 +53,58 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       }
 
-      // Get the user from the authentication principal (set by JwtAuthenticationFilter)
+      // Handle both JWT and User principals
+      User user = null;
+      List<AuthScopeDto> scopes = Collections.emptyList();
+      
       Object principal = authentication.getPrincipal();
-      if (!(principal instanceof User)) {
-        log.debug("Authentication principal is not a User entity: {}", principal.getClass());
+      
+      if (principal instanceof User) {
+        // Direct User principal (from API key authentication filter)
+        log.debug("Authentication principal is a User entity");
+        user = (User) principal;
+        
+        // Get API key scopes from authentication details if available
+        Object details = authentication.getDetails();
+        if (details instanceof ApiKey) {
+          ApiKey apiKey = (ApiKey) details;
+          scopes = getScopesFromApiKey(apiKey);
+        }
+        
+      } else if (principal instanceof Jwt) {
+        // JWT principal (from OAuth2 Resource Server)
+        log.debug("Authentication principal is a JWT token");
+        Jwt jwt = (Jwt) principal;
+        
+        // Extract user information from JWT claims
+        String clientId = jwt.getSubject(); // e.g., "oc_api_key_dev1"
+        String username = jwt.getClaimAsString("username"); // e.g., "oc_api_key_dev1"
+        
+        log.debug("JWT subject: {}, username: {}", clientId, username);
+        
+        // Find the corresponding API key and user
+        Optional<ApiKey> apiKeyOpt = apiKeyService.findByClientId(clientId);
+        if (apiKeyOpt.isPresent()) {
+          ApiKey apiKey = apiKeyOpt.get();
+          user = apiKey.getUser();
+          scopes = getScopesFromApiKey(apiKey);
+          log.debug("Found user {} for JWT client ID {}", user.getUsername(), clientId);
+        } else {
+          log.debug("No API key found for JWT client ID: {}", clientId);
+          return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        
+      } else {
+        log.debug("Authentication principal is not a User or JWT: {}", principal.getClass());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       }
 
-      User user = (User) principal;
-      log.debug("Getting profile for user with ID: {} and username: {}", user.getId(), user.getUsername());
-      
-      // Get API key scopes from authentication details if available
-      List<AuthScopeDto> scopes = Collections.emptyList();
-      Object details = authentication.getDetails();
-      if (details instanceof ApiKey) {
-        ApiKey apiKey = (ApiKey) details;
-        String allowedScopes = apiKey.getAllowedScopes();
-        if (allowedScopes != null && !allowedScopes.trim().isEmpty()) {
-          String[] scopeArray = allowedScopes.split(",");
-          scopes = Arrays.stream(scopeArray)
-              .map(scope -> AuthScopeDto.fromValue(scope.trim()))
-              .collect(Collectors.toList());
-        }
-        log.debug("Retrieved {} scopes from API key: {}", scopes.size(), allowedScopes);
+      if (user == null) {
+        log.debug("Could not resolve user from authentication");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       }
+      
+      log.debug("Getting profile for user with ID: {} and username: {}", user.getId(), user.getUsername());
       
       UserProfileDto profile = UserProfileDto.builder()
         .id(user.getId().toString())
@@ -98,9 +131,26 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
   }
 
   /**
+   * Extract scopes from an API key.
+   */
+  private List<AuthScopeDto> getScopesFromApiKey(ApiKey apiKey) {
+    String allowedScopes = apiKey.getAllowedScopes();
+    if (allowedScopes != null && !allowedScopes.trim().isEmpty()) {
+      String[] scopeArray = allowedScopes.split(",");
+      List<AuthScopeDto> scopes = Arrays.stream(scopeArray)
+          .map(scope -> AuthScopeDto.fromValue(scope.trim()))
+          .collect(Collectors.toList());
+      log.debug("Retrieved {} scopes from API key: {}", scopes.size(), allowedScopes);
+      return scopes;
+    }
+    return Collections.emptyList();
+  }
+
+  /**
    * Update the authenticated user's profile.
    */
   @Override
+  @PreAuthorize("hasAuthority('SCOPE_update:profile')")
   public ResponseEntity<UserProfileDto> updateUserProfile(UpdateUserProfileRequestDto updateRequest) {
     log.debug("Updating user profile for authenticated user");
 

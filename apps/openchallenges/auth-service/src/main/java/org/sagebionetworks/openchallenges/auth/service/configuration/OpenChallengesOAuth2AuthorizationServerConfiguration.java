@@ -129,7 +129,9 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
         if (AuthorizationGrantType.CLIENT_CREDENTIALS.equals(context.getAuthorizationGrantType())) {
           Set<String> authorizedScopes = context.getAuthorizedScopes();
           if (authorizedScopes != null && !authorizedScopes.isEmpty()) {
+            // Add scopes as both 'scp' (standard) and 'scope' (for Spring Security compatibility)
             context.getClaims().claim("scp", authorizedScopes);
+            context.getClaims().claim("scope", String.join(" ", authorizedScopes));
           }
         }
         

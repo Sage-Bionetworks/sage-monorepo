@@ -11,6 +11,7 @@ import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
 import org.sagebionetworks.openchallenges.auth.service.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,7 @@ public class ApiKeyApiDelegateImpl implements ApiKeyApiDelegate {
   private final UserService userService;
 
   @Override
+  @PreAuthorize("hasAuthority('SCOPE_create:api-key')")
   public ResponseEntity<CreateApiKeyResponseDto> createApiKey(
     CreateApiKeyRequestDto createApiKeyRequestDto
   ) {
@@ -73,6 +75,7 @@ public class ApiKeyApiDelegateImpl implements ApiKeyApiDelegate {
   }
 
   @Override
+  @PreAuthorize("hasAuthority('SCOPE_delete:api-key')")
   public ResponseEntity<Void> deleteApiKey(UUID keyId) {
     log.info("Deleting API key with ID: {}", keyId);
     try {
@@ -108,6 +111,7 @@ public class ApiKeyApiDelegateImpl implements ApiKeyApiDelegate {
   }
 
   @Override
+  @PreAuthorize("hasAuthority('SCOPE_read:api-key')")
   public ResponseEntity<List<ApiKeyDto>> listApiKeys() {
     log.info("Listing API keys");
     try {
