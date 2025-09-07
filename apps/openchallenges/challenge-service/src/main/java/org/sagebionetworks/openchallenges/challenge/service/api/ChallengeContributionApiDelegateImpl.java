@@ -30,7 +30,7 @@ public class ChallengeContributionApiDelegateImpl implements ChallengeContributi
   }
 
   @Override
-  @PreAuthorize("authentication.principal.admin")
+  @PreAuthorize("hasAuthority('SCOPE_update:challenges')")
   public ResponseEntity<Void> deleteChallengeContributions(Long challengeId) {
     // Log the authenticated user for audit purposes
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -45,6 +45,7 @@ public class ChallengeContributionApiDelegateImpl implements ChallengeContributi
   }
 
   @Override
+  @PreAuthorize("hasAuthority('SCOPE_read:challenges')")
   public ResponseEntity<ChallengeContributionsPageDto> listChallengeContributions(
     Long challengeId
   ) {
@@ -52,7 +53,7 @@ public class ChallengeContributionApiDelegateImpl implements ChallengeContributi
   }
 
   @Override
-  @PreAuthorize("authentication.principal.admin")
+  @PreAuthorize("hasAuthority('SCOPE_update:challenges')")
   public ResponseEntity<ChallengeContributionDto> createChallengeContribution(
     Long challengeId,
     ChallengeContributionCreateRequestDto challengeContributionCreateRequestDto
@@ -77,7 +78,7 @@ public class ChallengeContributionApiDelegateImpl implements ChallengeContributi
   }
 
   @Override
-  @PreAuthorize("authentication.principal.admin")
+  @PreAuthorize("hasAuthority('SCOPE_update:challenges')")
   public ResponseEntity<Void> deleteChallengeContribution(
     Long challengeId,
     Long organizationId,

@@ -29,7 +29,7 @@ public class ChallengePlatformApiDelegateImpl implements ChallengePlatformApiDel
   }
 
   @Override
-  @PreAuthorize("authentication.principal.admin")
+  @PreAuthorize("hasAuthority('SCOPE_delete:challenge-platforms')")
   public ResponseEntity<Void> deleteChallengePlatform(Long challengePlatformId) {
     // Log the authenticated user for audit purposes
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -44,11 +44,13 @@ public class ChallengePlatformApiDelegateImpl implements ChallengePlatformApiDel
   }
 
   @Override
+  @PreAuthorize("hasAuthority('SCOPE_read:challenge-platforms')")
   public ResponseEntity<ChallengePlatformDto> getChallengePlatform(Long challengePlatformId) {
     return ResponseEntity.ok(challengePlatformService.getChallengePlatform(challengePlatformId));
   }
 
   @Override
+  @PreAuthorize("hasAuthority('SCOPE_read:challenge-platforms')")
   public ResponseEntity<ChallengePlatformsPageDto> listChallengePlatforms(
     ChallengePlatformSearchQueryDto query
   ) {
@@ -56,7 +58,7 @@ public class ChallengePlatformApiDelegateImpl implements ChallengePlatformApiDel
   }
 
   @Override
-  @PreAuthorize("authentication.principal.admin")
+  @PreAuthorize("hasAuthority('SCOPE_create:challenge-platforms')")
   public ResponseEntity<ChallengePlatformDto> createChallengePlatform(
     ChallengePlatformCreateRequestDto challengePlatformCreateRequestDto
   ) {
@@ -74,7 +76,7 @@ public class ChallengePlatformApiDelegateImpl implements ChallengePlatformApiDel
   }
 
   @Override
-  @PreAuthorize("authentication.principal.admin")
+  @PreAuthorize("hasAuthority('SCOPE_update:challenge-platforms')")
   public ResponseEntity<ChallengePlatformDto> updateChallengePlatform(
     Long challengePlatformId,
     ChallengePlatformUpdateRequestDto challengePlatformUpdateRequestDto

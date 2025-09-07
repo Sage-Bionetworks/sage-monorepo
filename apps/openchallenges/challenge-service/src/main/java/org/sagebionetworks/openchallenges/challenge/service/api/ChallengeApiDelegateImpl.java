@@ -39,7 +39,7 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
   }
 
   @Override
-  @PreAuthorize("authentication.principal.admin")
+  @PreAuthorize("hasAuthority('SCOPE_create:challenges')")
   public ResponseEntity<ChallengeDto> createChallenge(
     ChallengeCreateRequestDto challengeCreateRequestDto
   ) {
@@ -56,7 +56,7 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
   }
 
   @Override
-  @PreAuthorize("authentication.principal.admin")
+  @PreAuthorize("hasAuthority('SCOPE_delete:challenges')")
   public ResponseEntity<Void> deleteChallenge(Long challengeId) {
     // Log the authenticated user for audit purposes
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -71,7 +71,7 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
   }
 
   @Override
-  @PreAuthorize("authentication.principal.admin")
+  @PreAuthorize("hasAuthority('SCOPE_update:challenges')")
   public ResponseEntity<ChallengeDto> updateChallenge(
     Long challengeId,
     ChallengeUpdateRequestDto request
@@ -89,16 +89,19 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
   }
 
   @Override
+  @PreAuthorize("hasAuthority('SCOPE_read:challenges')")
   public ResponseEntity<ChallengeDto> getChallenge(Long challengeId) {
     return ResponseEntity.ok(challengeService.getChallenge(challengeId));
   }
 
   @Override
+  @PreAuthorize("hasAuthority('SCOPE_read:challenges')")
   public ResponseEntity<ChallengeJsonLdDto> getChallengeJsonLd(Long challengeId) {
     return ResponseEntity.ok(challengeService.getChallengeJsonLd(challengeId));
   }
 
   @Override
+  @PreAuthorize("hasAuthority('SCOPE_read:challenges')")
   public ResponseEntity<ChallengesPageDto> listChallenges(ChallengeSearchQueryDto query) {
     return ResponseEntity.ok(challengeService.listChallenges(query));
   }

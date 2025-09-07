@@ -3,6 +3,7 @@ package org.sagebionetworks.openchallenges.challenge.service.api;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengesPerYearDto;
 import org.sagebionetworks.openchallenges.challenge.service.service.ChallengeAnalyticsService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,6 +16,7 @@ public class ChallengeAnalyticsApiDelegateImpl implements ChallengeAnalyticsApiD
   }
 
   @Override
+  @PreAuthorize("hasAuthority('SCOPE_read:challenges-analytics')")
   public ResponseEntity<ChallengesPerYearDto> getChallengesPerYear() {
     return ResponseEntity.ok(challengeAnalyticsService.getChallengesPerYear());
   }

@@ -20,7 +20,7 @@ public class ChallengeParticipationApiDelegateImpl implements ChallengeParticipa
   private final ChallengeParticipationService challengeParticipationService;
 
   @Override
-  @PreAuthorize("hasAuthority('SCOPE_write:org')")
+  @PreAuthorize("hasAuthority('SCOPE_update:orgs')")
   public ResponseEntity<ChallengeParticipationDto> createChallengeParticipation(
     String org,
     ChallengeParticipationCreateRequestDto request
@@ -42,7 +42,7 @@ public class ChallengeParticipationApiDelegateImpl implements ChallengeParticipa
   }
 
   @Override
-  @PreAuthorize("hasAuthority('SCOPE_delete:org')")
+  @PreAuthorize("hasAuthority('SCOPE_update:orgs')")
   public ResponseEntity<Void> deleteChallengeParticipation(
     String org,
     Long challengeId,

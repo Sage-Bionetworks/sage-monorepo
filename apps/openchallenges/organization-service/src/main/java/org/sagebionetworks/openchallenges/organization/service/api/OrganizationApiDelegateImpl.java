@@ -22,7 +22,7 @@ public class OrganizationApiDelegateImpl implements OrganizationApiDelegate {
   private final OrganizationService organizationService;
 
   @Override
-  @PreAuthorize("hasAuthority('SCOPE_write:org')")
+  @PreAuthorize("hasAuthority('SCOPE_create:orgs')")
   public ResponseEntity<OrganizationDto> createOrganization(
     OrganizationCreateRequestDto organizationCreateRequestDto
   ) {
@@ -41,25 +41,25 @@ public class OrganizationApiDelegateImpl implements OrganizationApiDelegate {
     return ResponseEntity.status(HttpStatus.CREATED).body(createdOrganization);
   }
 
-  @Override
-  @PreAuthorize("hasAuthority('SCOPE_delete:org')")
-  public ResponseEntity<Void> deleteOrganization(String identifier) {
+    @Override
+  @PreAuthorize("hasAuthority('SCOPE_delete:orgs')")
+  public ResponseEntity<Void> deleteOrganization(String organizationId) {
     // Log the authenticated user for audit purposes
     var authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication != null) {
       log.info(
         "User {} is deleting organization: {}",
         authentication.getName(),
-        identifier
+        organizationId
       );
     }
 
-    organizationService.deleteOrganization(identifier);
+    organizationService.deleteOrganization(organizationId);
     return ResponseEntity.noContent().build();
   }
 
   @Override
-  @PreAuthorize("hasAuthority('SCOPE_write:org')")
+  @PreAuthorize("hasAuthority('SCOPE_update:orgs')")
   public ResponseEntity<OrganizationDto> updateOrganization(
     String org,
     OrganizationUpdateRequestDto organizationUpdateRequestDto
@@ -82,11 +82,13 @@ public class OrganizationApiDelegateImpl implements OrganizationApiDelegate {
   }
 
   @Override
+  @PreAuthorize("hasAuthority('SCOPE_read:orgs')")
   public ResponseEntity<OrganizationsPageDto> listOrganizations(OrganizationSearchQueryDto query) {
     return ResponseEntity.ok(organizationService.listOrganizations(query));
   }
 
   @Override
+  @PreAuthorize("hasAuthority('SCOPE_read:orgs')")
   public ResponseEntity<OrganizationDto> getOrganization(String identifier) {
     return ResponseEntity.ok(organizationService.getOrganization(identifier));
   }
