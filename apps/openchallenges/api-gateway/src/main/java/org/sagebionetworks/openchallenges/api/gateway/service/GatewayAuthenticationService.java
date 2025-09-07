@@ -127,6 +127,51 @@ public class GatewayAuthenticationService {
     return exchangeApiKeyForJwt(apiKey, "", "");
   }
 
+  /**
+   * Generates an anonymous JWT token for public endpoints using a pre-configured anonymous client.
+   *
+   * @param method HTTP method
+   * @param path URL path  
+   * @return A Mono containing the OAuth2 token response
+   */
+  public Mono<OAuth2TokenResponse> generateAnonymousJwt(String method, String path) {
+    log.debug("Generating anonymous JWT for route: {} {}", method, path);
+
+    // Use a predefined anonymous client for public access
+    String anonymousClientId = "oc_anonymous_client";
+    String anonymousClientSecret = "anonymous_secret_for_public_access";
+
+    // Get required scopes for this route
+    List<String> requiredScopes = routeScopeConfiguration.getScopesForRoute(method, path);
+    String scopeParam = requiredScopes.isEmpty() ? "" : "&scope=" + String.join(" ", requiredScopes);
+
+    log.debug("Requesting anonymous OAuth2 token with scopes: {}", requiredScopes);
+
+    return oauth2ServiceClient
+      .post()
+      .uri("/oauth2/token")
+      .headers(headers -> headers.setBasicAuth(anonymousClientId, anonymousClientSecret))
+      .header("Content-Type", "application/x-www-form-urlencoded")
+      .bodyValue("grant_type=client_credentials" + scopeParam)
+      .retrieve()
+      .bodyToMono(OAuth2TokenResponse.class)
+      .doOnNext(response ->
+        log.debug("Anonymous OAuth2 token generated successfully with scopes: {}", requiredScopes)
+      )
+      .onErrorResume(WebClientResponseException.class, ex -> {
+        log.warn(
+          "Anonymous OAuth2 token generation failed: {} - {}",
+          ex.getStatusCode(),
+          ex.getMessage()
+        );
+        return Mono.error(new AuthenticationException("Anonymous token generation failed", ex));
+      })
+      .onErrorResume(Exception.class, ex -> {
+        log.error("Error during anonymous OAuth2 token generation", ex);
+        return Mono.error(new AuthenticationException("Authentication service unavailable", ex));
+      });
+  }
+
   // Request/Response DTOs for internal communication
 
   public static class JwtValidationRequest {
