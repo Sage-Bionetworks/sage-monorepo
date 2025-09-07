@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -157,6 +158,20 @@ public class ApiKeyApiDelegateImpl implements ApiKeyApiDelegate {
     // If principal is a User object (custom authentication)
     if (principal instanceof User) {
       return (User) principal;
+    }
+
+    // If principal is a JWT (from API gateway), extract client_id and find the user
+    if (principal instanceof Jwt) {
+      Jwt jwt = (Jwt) principal;
+      String clientId = jwt.getSubject(); // client_id is stored in 'sub' claim
+      
+      if (clientId != null) {
+        // Find the API key by client ID to get the associated user
+        return apiKeyService.findByClientId(clientId)
+            .map(ApiKey::getUser)
+            .orElse(null);
+      }
+      return null;
     }
 
     // If principal is UserDetails (Spring Security default), get username and fetch user
