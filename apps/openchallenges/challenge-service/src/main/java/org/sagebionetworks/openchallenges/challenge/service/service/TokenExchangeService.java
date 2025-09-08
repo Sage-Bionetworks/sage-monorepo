@@ -40,22 +40,12 @@ public class TokenExchangeService {
    * @return The new JWT token
    */
   public String exchangeTokenForService(String targetAudience, String requiredScopes) {
-    // Get the current user's JWT from the security context
-    String subjectToken = getCurrentUserToken();
-    if (subjectToken == null) {
-      throw new IllegalStateException("No user authentication context available");
-    }
-
     log.debug("Exchanging token for target audience: {} with scopes: {}", targetAudience, requiredScopes);
 
-    // OAuth 2.0 Token Exchange request (RFC 8693)
-    // Note: resource parameter omitted as Spring Authorization Server doesn't require it
+    // For now, use client_credentials flow instead of token exchange
+    // This is a simplified approach until token exchange is properly supported
     String requestBody = String.format(
-      "grant_type=urn:ietf:params:oauth:grant-type:token-exchange" +
-      "&subject_token=%s" +
-      "&subject_token_type=urn:ietf:params:oauth:token-type:jwt" +
-      "&scope=%s",
-      subjectToken,
+      "grant_type=client_credentials&scope=%s",
       requiredScopes
     );
 
