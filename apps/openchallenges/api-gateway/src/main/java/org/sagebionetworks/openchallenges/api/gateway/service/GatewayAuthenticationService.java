@@ -101,21 +101,26 @@ public class GatewayAuthenticationService {
     List<String> requiredScopes = routeScopeConfiguration.getScopesForRoute(method, path);
     String scopeParam = requiredScopes.isEmpty() ? "" : "&scope=" + String.join(" ", requiredScopes);
     
+    // Get RFC 8707 resource identifier for audience/resource parameter
+    String resourceIdentifier = routeScopeConfiguration.getResourceIdentifierForRoute(method, path);
+    String resourceParam = resourceIdentifier != null ? "&resource=" + resourceIdentifier : "";
+    
     log.info("Required scopes for route: {}", requiredScopes);
+    log.info("RFC 8707 resource identifier for route: {}", resourceIdentifier);
     log.info("OAuth2 request URL: /oauth2/token");
-    log.info("OAuth2 request body: grant_type=client_credentials{}", scopeParam);
+    log.info("OAuth2 request body: grant_type=client_credentials{}{}", scopeParam, resourceParam);
 
     return oauth2ServiceClient
       .post()
       .uri("/oauth2/token")
       .headers(headers -> headers.setBasicAuth(clientId, clientSecret))
       .header("Content-Type", "application/x-www-form-urlencoded")
-      .bodyValue("grant_type=client_credentials" + scopeParam)
+      .bodyValue("grant_type=client_credentials" + scopeParam + resourceParam)
       .retrieve()
       .bodyToMono(OAuth2TokenResponse.class)
       .doOnNext(response -> {
         log.info("=== API GATEWAY: OAuth2 token exchange SUCCESSFUL ===");
-        log.info("Client: {}, Scopes: {}", clientId, requiredScopes);
+        log.info("Client: {}, Scopes: {}, Resource: {}", clientId, requiredScopes, resourceIdentifier);
         log.info("Access token received (length: {})", 
                  response.getAccessToken() != null ? response.getAccessToken().length() : 0);
       })

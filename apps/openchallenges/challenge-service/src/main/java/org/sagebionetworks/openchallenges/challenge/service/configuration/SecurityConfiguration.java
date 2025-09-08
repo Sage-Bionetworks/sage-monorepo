@@ -13,6 +13,8 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Security configuration for the Challenge Service as an OAuth2 Resource Server.
@@ -90,6 +92,8 @@ public class SecurityConfiguration {
 
   @Bean
   public JwtDecoder jwtDecoder() {
+    // For now, use basic JWT decoder without audience validation
+    // TODO: Add audience validation when JWT imports are resolved
     return NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
   }
 

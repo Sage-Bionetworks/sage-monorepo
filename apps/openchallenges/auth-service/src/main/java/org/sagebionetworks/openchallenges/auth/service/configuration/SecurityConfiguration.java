@@ -1,5 +1,6 @@
 package org.sagebionetworks.openchallenges.auth.service.configuration;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.sagebionetworks.openchallenges.auth.service.security.OAuth2WebAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -95,7 +96,22 @@ public class SecurityConfiguration {
             .authenticated() // All other endpoints require authentication
       )
       // Add OAuth2 web authentication filter only
-      .addFilterBefore(oAuth2WebAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // OAuth2 web filter
+      .addFilterBefore(oAuth2WebAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // OAuth2 web filter
+      // Configure exception handling for web authentication
+      .exceptionHandling(exceptions -> exceptions
+        .authenticationEntryPoint((request, response, authException) -> {
+          String requestUri = request.getRequestURI();
+          // For web interface endpoints, redirect to login page
+          if (requestUri.startsWith("/profile") || requestUri.equals("/")) {
+            response.sendRedirect("/login");
+          } else {
+            // For API endpoints, return 401
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\":\"Unauthorized\",\"message\":\"Authentication required\"}");
+          }
+        })
+      );
 
     return http.build();
   }

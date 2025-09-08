@@ -14,12 +14,21 @@ public class OAuth2TokenRequest {
     @JsonProperty("scope")
     private String scope;
 
+    @JsonProperty("resource")
+    private String resource;
+
     // Default constructor for JSON serialization
     public OAuth2TokenRequest() {}
 
     public OAuth2TokenRequest(String grantType, String scope) {
         this.grantType = grantType;
         this.scope = scope;
+    }
+
+    public OAuth2TokenRequest(String grantType, String scope, String resource) {
+        this.grantType = grantType;
+        this.scope = scope;
+        this.resource = resource;
     }
 
     public String getGrantType() {
@@ -38,11 +47,20 @@ public class OAuth2TokenRequest {
         this.scope = scope;
     }
 
+    public String getResource() {
+        return resource;
+    }
+
+    public void setResource(String resource) {
+        this.resource = resource;
+    }
+
     @Override
     public String toString() {
         return "OAuth2TokenRequest{" +
                 "grantType='" + grantType + '\'' +
                 ", scope='" + scope + '\'' +
+                ", resource='" + resource + '\'' +
                 '}';
     }
 }

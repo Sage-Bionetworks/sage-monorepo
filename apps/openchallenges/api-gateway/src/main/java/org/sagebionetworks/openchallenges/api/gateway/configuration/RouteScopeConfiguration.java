@@ -99,30 +99,88 @@ public class RouteScopeConfiguration {
     if (routeScopes == null) {
       return List.of();
     }
-    
-    String routeKey = method.toUpperCase() + " " + path;
+
+    String routeKey = method + " " + path;
+    log.debug("Looking for scopes for route: {}", routeKey);
+
+    // Try exact match first
     RouteConfig config = routeScopes.get(routeKey);
-    
-    if (config != null && config.getScopes() != null) {
+    if (config != null) {
+      log.debug("Found exact match for route: {} -> scopes: {}", routeKey, config.getScopes());
       return config.getScopes();
     }
-    
-    // If exact match fails, try pattern matching for parameterized routes
+
+    // Try pattern matching for parameterized routes
     for (Map.Entry<String, RouteConfig> entry : routeScopes.entrySet()) {
-      String pattern = entry.getKey();
-      if (matchesPattern(routeKey, pattern)) {
-        RouteConfig patternConfig = entry.getValue();
-        if (patternConfig != null && patternConfig.getScopes() != null) {
-          log.debug("Matched route pattern '{}' for request '{}'", pattern, routeKey);
-          return patternConfig.getScopes();
-        }
+      if (matchesPattern(entry.getKey(), routeKey)) {
+        log.debug("Found pattern match for route: {} -> pattern: {} -> scopes: {}", 
+                  routeKey, entry.getKey(), entry.getValue().getScopes());
+        return entry.getValue().getScopes();
       }
     }
-    
+
+    log.debug("No scope configuration found for route: {}", routeKey);
     return List.of();
   }
 
+    /**
+   * Get the target service for a given route.
+   * This is used for RFC 8707 style audience/resource parameter binding.
+   * 
+   * @param method HTTP method (GET, POST, etc.)
+   * @param path   URL path
+   * @return Target service URI, or null if not found
+   */
+  public String getTargetServiceForRoute(String method, String path) {
+    // Map routes to services based on path patterns
+    // This mirrors the Spring Cloud Gateway route configuration
+    
+    if (path.startsWith("/api/v1/auth")) {
+      return "http://openchallenges-auth-service:8087";
+    } else if (path.startsWith("/api/v1/organizations")) {
+      return "http://openchallenges-organization-service:8084";
+    } else if (path.startsWith("/api/v1/challenges") || 
+               path.startsWith("/api/v1/challenge-analytics") ||
+               path.startsWith("/api/v1/challenge-platforms") ||
+               path.startsWith("/api/v1/edam-concepts")) {
+      return "http://openchallenges-challenge-service:8085";
+    } else if (path.startsWith("/api/v1/images")) {
+      return "http://openchallenges-image-service:8086";
+    } else if (path.startsWith("/oauth2/") || path.startsWith("/.well-known/")) {
+      return "http://openchallenges-auth-service:8087";
+    }
+    
+    return null; // Unknown service
+  }
+
   /**
+   * Get the RFC 8707 resource identifier for a given route.
+   * This converts HTTP service URLs to URN-style resource identifiers.
+   * 
+   * @param method HTTP method (GET, POST, etc.)
+   * @param path   URL path
+   * @return RFC 8707 resource identifier (URN), or null if not found
+   */
+  public String getResourceIdentifierForRoute(String method, String path) {
+    // Map routes to RFC 8707 URN-style resource identifiers
+    
+    if (path.startsWith("/api/v1/auth")) {
+      return "urn:openchallenges:auth-service";
+    } else if (path.startsWith("/api/v1/organizations")) {
+      return "urn:openchallenges:organization-service";
+    } else if (path.startsWith("/api/v1/challenges") || 
+               path.startsWith("/api/v1/challenge-analytics") ||
+               path.startsWith("/api/v1/challenge-platforms") ||
+               path.startsWith("/api/v1/edam-concepts")) {
+      return "urn:openchallenges:challenge-service";
+    } else if (path.startsWith("/api/v1/images")) {
+      return "urn:openchallenges:image-service";
+    } else if (path.startsWith("/oauth2/") || path.startsWith("/.well-known/")) {
+      return "urn:openchallenges:auth-service";
+    }
+    
+    return null; // Unknown service
+  }  /**
    * Check if a route key matches a pattern with path parameters.
    * For example: "POST /api/v1/challenges/1/contributions" matches "POST /api/v1/challenges/{challengeId}/contributions"
    */
