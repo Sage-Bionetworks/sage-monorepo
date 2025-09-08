@@ -44,27 +44,34 @@ public class ApiKeyAuthenticationGatewayFilter implements WebFilter {
   public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
     ServerHttpRequest request = exchange.getRequest();
     String path = request.getPath().toString();
+    String method = request.getMethod().name();
+
+    log.info("=== API KEY FILTER: Processing request {} {} ===", method, path);
 
     // Skip if already authenticated by JWT filter
     if (exchange.getRequest().getHeaders().containsKey("Authorization")) {
-      log.debug("Request already has Authorization header, skipping API key validation for: {}", path);
+      log.info("Request already has Authorization header, skipping API key validation for: {}", path);
       return chain.filter(exchange);
     }
 
     // Extract API key from X-API-Key header
     String apiKey = request.getHeaders().getFirst(API_KEY_HEADER);
+    log.info("API Key header present: {}", apiKey != null && !apiKey.trim().isEmpty());
+    
     if (apiKey == null || apiKey.trim().isEmpty()) {
-      log.debug("No API key found for request to: {}", path);
+      log.info("No API key found for request to: {} - continuing without API key auth", path);
       // No API key - let Spring Security decide if this endpoint requires authentication
       return chain.filter(exchange);
     }
 
-    log.debug("Exchanging API key for JWT for request to: {}", path);
+    log.info("Found API key, starting exchange for JWT for request to: {}", path);
 
     // Exchange API key for JWT using OAuth2 Client Credentials flow
-    String method = request.getMethod().name();
     return authenticationService.exchangeApiKeyForJwt(apiKey, method, path)
         .flatMap(tokenResponse -> {
+          log.info("=== API KEY FILTER: JWT exchange successful ===");
+          log.info("Token scope: {}", tokenResponse.getScope());
+          
           // Replace the API key with the JWT in the Authorization header
           ServerHttpRequest modifiedRequest = request.mutate()
               .header("Authorization", "Bearer " + tokenResponse.getAccessToken())
@@ -78,6 +85,8 @@ public class ApiKeyAuthenticationGatewayFilter implements WebFilter {
               .map(scope -> new SimpleGrantedAuthority("SCOPE_" + scope))
               .collect(Collectors.toList());
           
+          log.info("Spring Security authorities created: {}", authorities);
+          
           // Create authentication for the service principal (API key client)
           var authentication = new UsernamePasswordAuthenticationToken(
               "api-key-client", // principal name for API key clients
@@ -85,14 +94,14 @@ public class ApiKeyAuthenticationGatewayFilter implements WebFilter {
               authorities
           );
 
-          log.debug("API key exchanged for JWT successfully: {} scopes accessing: {}", 
-              tokenResponse.getScope(), path);
+          log.info("=== API KEY FILTER: Forwarding request with JWT Authorization header ===");
 
           return chain.filter(exchange.mutate().request(modifiedRequest).build())
               .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
         })
         .onErrorResume(GatewayAuthenticationService.AuthenticationException.class, ex -> {
-          log.warn("API key authentication failed for request to {}: {}", path, ex.getMessage());
+          log.error("=== API KEY FILTER: Authentication failed ===");
+          log.error("Error for request to {}: {}", path, ex.getMessage(), ex);
           exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
           exchange.getResponse().getHeaders().add("WWW-Authenticate", 
               String.format("ApiKey realm=\"%s\"", authConfiguration.getRealm()));

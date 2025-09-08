@@ -77,18 +77,33 @@ public class GatewayAuthenticationService {
    * @return A Mono containing the OAuth2 token response
    */
   public Mono<OAuth2TokenResponse> exchangeApiKeyForJwt(String apiKey, String method, String path) {
-    log.debug("Exchanging API key for JWT using OAuth2 client credentials flow for route: {} {}", method, path);
+    log.info("=== API GATEWAY: Starting API key exchange for JWT ===");
+    log.info("Route: {} {}", method, path);
 
     // Parse API key to extract client_id and secret
-    ParsedApiKey parsedKey = ApiKeyParser.parseApiKey(apiKey);
+    ParsedApiKey parsedKey;
+    try {
+      parsedKey = ApiKeyParser.parseApiKey(apiKey);
+      log.info("Parsed API key - Environment: {}, Suffix: {}, Secret present: {}", 
+               parsedKey.getEnvironmentPrefix(), 
+               parsedKey.getSuffix(), 
+               parsedKey.getSecret() != null && !parsedKey.getSecret().isEmpty());
+    } catch (Exception e) {
+      log.error("Failed to parse API key: {}", e.getMessage());
+      throw e;
+    }
+    
     String clientId = "oc_api_key_" + parsedKey.getSuffix(); // Use suffix for client_id - matches auth service format
     String clientSecret = parsedKey.getSecret();
+    log.info("OAuth2 Client ID: {}", clientId);
 
     // Get required scopes for this route
     List<String> requiredScopes = routeScopeConfiguration.getScopesForRoute(method, path);
     String scopeParam = requiredScopes.isEmpty() ? "" : "&scope=" + String.join(" ", requiredScopes);
     
-    log.debug("Requesting OAuth2 token for client {} with scopes: {}", clientId, requiredScopes);
+    log.info("Required scopes for route: {}", requiredScopes);
+    log.info("OAuth2 request URL: /oauth2/token");
+    log.info("OAuth2 request body: grant_type=client_credentials{}", scopeParam);
 
     return oauth2ServiceClient
       .post()
@@ -98,20 +113,20 @@ public class GatewayAuthenticationService {
       .bodyValue("grant_type=client_credentials" + scopeParam)
       .retrieve()
       .bodyToMono(OAuth2TokenResponse.class)
-      .doOnNext(response ->
-        log.debug("OAuth2 token exchange successful for client: {} with scopes: {}", clientId, requiredScopes)
-      )
+      .doOnNext(response -> {
+        log.info("=== API GATEWAY: OAuth2 token exchange SUCCESSFUL ===");
+        log.info("Client: {}, Scopes: {}", clientId, requiredScopes);
+        log.info("Access token received (length: {})", 
+                 response.getAccessToken() != null ? response.getAccessToken().length() : 0);
+      })
       .onErrorResume(WebClientResponseException.class, ex -> {
-        log.warn(
-          "OAuth2 token exchange failed for client {}: {} - {}",
-          clientId,
-          ex.getStatusCode(),
-          ex.getMessage()
-        );
+        log.error("=== API GATEWAY: OAuth2 token exchange FAILED ===");
+        log.error("Client: {}, Status: {}, Response: {}", clientId, ex.getStatusCode(), ex.getResponseBodyAsString());
         return Mono.error(new AuthenticationException("API key authentication failed", ex));
       })
       .onErrorResume(Exception.class, ex -> {
-        log.error("Error during OAuth2 token exchange for client: {}", clientId, ex);
+        log.error("=== API GATEWAY: OAuth2 token exchange ERROR ===");
+        log.error("Client: {}, Error: {}", clientId, ex.getMessage(), ex);
         return Mono.error(new AuthenticationException("Authentication service unavailable", ex));
       });
   }

@@ -8,12 +8,14 @@ import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import java.time.Duration;
 import java.util.Set;
 import java.util.UUID;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -26,7 +28,6 @@ import org.springframework.security.oauth2.server.authorization.config.annotatio
 import org.springframework.security.oauth2.server.authorization.context.AuthorizationServerContext;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
-import java.time.Duration;
 import org.springframework.security.oauth2.server.authorization.token.DelegatingOAuth2TokenGenerator;
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
 import org.springframework.security.oauth2.server.authorization.token.JwtGenerator;
@@ -37,14 +38,13 @@ import org.springframework.security.oauth2.server.authorization.token.OAuth2Toke
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
  * OAuth2 Authorization Server configuration for OpenChallenges.
- * 
+ *
  * This configuration sets up a standards-compliant OAuth2 Authorization Server
  * with RSA256 JWT signing for compatibility with current Spring Security versions.
- * 
+ *
  * Note: EdDSA support is limited in Spring Security OAuth2 Authorization Server.
  * See: https://github.com/spring-projects/spring-security/issues/17098
  */
@@ -59,22 +59,28 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
   @Order(1)
   public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http)
     throws Exception {
-    
     // Configure the specific paths for our OAuth2 Authorization Server
     http.securityMatcher("/oauth2/**", "/.well-known/**");
-    
+
     // Apply OAuth2 Authorization Server configuration
-    http.with(OAuth2AuthorizationServerConfigurer.authorizationServer(), (authz) -> {});
-    
+    http.with(OAuth2AuthorizationServerConfigurer.authorizationServer(), authz -> {});
+
     // Allow public access to discovery and JWK endpoints
-    http.authorizeHttpRequests(authz -> authz
-      .requestMatchers("/oauth2/jwks").permitAll() // Public JWK endpoint
-      .requestMatchers("/.well-known/oauth-authorization-server").permitAll() // OAuth2 discovery
-      .requestMatchers("/.well-known/openid_configuration").permitAll() // OIDC discovery
-      .requestMatchers("/.well-known/**").permitAll() // Other well-known endpoints
-      .anyRequest().authenticated() // All other OAuth2 endpoints require auth
+    http.authorizeHttpRequests(
+      authz ->
+        authz
+          .requestMatchers("/oauth2/jwks")
+          .permitAll() // Public JWK endpoint
+          .requestMatchers("/.well-known/oauth-authorization-server")
+          .permitAll() // OAuth2 discovery
+          .requestMatchers("/.well-known/openid_configuration")
+          .permitAll() // OIDC discovery
+          .requestMatchers("/.well-known/**")
+          .permitAll() // Other well-known endpoints
+          .anyRequest()
+          .authenticated() // All other OAuth2 endpoints require auth
     );
-    
+
     // Configure exception handling for login redirection
     http.exceptionHandling(exceptions ->
       exceptions.defaultAuthenticationEntryPointFor(
@@ -82,7 +88,7 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
         new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
       )
     );
-    
+
     return http.build();
   }
 
@@ -102,12 +108,15 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
   public OAuth2TokenGenerator<?> tokenGenerator(JwtEncoder jwtEncoder) {
     JwtGenerator jwtGenerator = new JwtGenerator(jwtEncoder);
     jwtGenerator.setJwtCustomizer(jwtTokenCustomizer());
-    
+
     OAuth2AccessTokenGenerator accessTokenGenerator = new OAuth2AccessTokenGenerator();
     OAuth2RefreshTokenGenerator refreshTokenGenerator = new OAuth2RefreshTokenGenerator();
-    
+
     return new DelegatingOAuth2TokenGenerator(
-        jwtGenerator, accessTokenGenerator, refreshTokenGenerator);
+      jwtGenerator,
+      accessTokenGenerator,
+      refreshTokenGenerator
+    );
   }
 
   /**
@@ -121,10 +130,10 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
         context.getClaims().claim("tokenType", "ACCESS");
         // Use the full issuer URL that matches the authorization server settings
         context.getClaims().claim("iss", "http://openchallenges-auth-service:8087");
-        
+
         // Add username claim
         context.getClaims().claim("username", context.getPrincipal().getName());
-        
+
         // Add scopes for client credentials flow
         if (AuthorizationGrantType.CLIENT_CREDENTIALS.equals(context.getAuthorizationGrantType())) {
           Set<String> authorizedScopes = context.getAuthorizedScopes();
@@ -135,6 +144,21 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
           }
         }
         
+        // Add scopes for token exchange flow (RFC 8693)
+        if ("urn:ietf:params:oauth:grant-type:token-exchange".equals(context.getAuthorizationGrantType().getValue())) {
+          Set<String> authorizedScopes = context.getAuthorizedScopes();
+          if (authorizedScopes != null && !authorizedScopes.isEmpty()) {
+            // Add scopes as both 'scp' (standard) and 'scope' (for Spring Security compatibility)
+            context.getClaims().claim("scp", authorizedScopes);
+            context.getClaims().claim("scope", String.join(" ", authorizedScopes));
+          }
+          
+          // For token exchange, we may want to add audience claim
+          String resource = context.get("resource");
+          if (resource != null) {
+            context.getClaims().claim("aud", resource);
+          }
+        }
         // You can add more custom claims here based on the user context
       }
     };
@@ -142,10 +166,10 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
 
   /**
    * Configure JWK source for RSA256 JWT signing.
-   * 
+   *
    * Note: EdDSA support is limited in Spring Security OAuth2 Authorization Server.
    * See: https://github.com/spring-projects/spring-security/issues/17098
-   * 
+   *
    * Using RSA256 for compatibility until Spring Security 7.0 / Spring Authorization Server 2.0
    * adds proper EdDSA support.
    */
@@ -154,10 +178,10 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
     try {
       // Generate RSA key pair for JWT signing
       RSAKey rsaKey = new RSAKeyGenerator(2048)
-          .keyID(UUID.randomUUID().toString())
-          .algorithm(JWSAlgorithm.RS256)
-          .keyUse(KeyUse.SIGNATURE)
-          .generate();
+        .keyID(UUID.randomUUID().toString())
+        .algorithm(JWSAlgorithm.RS256)
+        .keyUse(KeyUse.SIGNATURE)
+        .generate();
 
       // Create JWK set and return source
       JWKSet jwkSet = new JWKSet(rsaKey);
@@ -180,9 +204,12 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
    * This allows web pages to validate OAuth2 JWTs stored in cookies.
    */
   @Bean
-  public org.springframework.security.oauth2.jwt.JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
-    return org.springframework.security.oauth2.jwt.NimbusJwtDecoder.withJwkSetUri("http://openchallenges-auth-service:8087/oauth2/jwks")
-        .build();
+  public org.springframework.security.oauth2.jwt.JwtDecoder jwtDecoder(
+    JWKSource<SecurityContext> jwkSource
+  ) {
+    return org.springframework.security.oauth2.jwt.NimbusJwtDecoder.withJwkSetUri(
+      "http://openchallenges-auth-service:8087/oauth2/jwks"
+    ).build();
   }
 
   /**
@@ -204,7 +231,7 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
       public String getIssuer() {
         return "http://openchallenges-auth-service:8087";
       }
-      
+
       @Override
       public AuthorizationServerSettings getAuthorizationServerSettings() {
         return authorizationServerSettings();
@@ -219,10 +246,10 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
   @Bean
   public TokenSettings tokenSettings() {
     return TokenSettings.builder()
-        .accessTokenTimeToLive(Duration.ofMinutes(60)) // 1 hour
-        .refreshTokenTimeToLive(Duration.ofHours(24)) // 24 hours
-        .reuseRefreshTokens(false)
-        .build();
+      .accessTokenTimeToLive(Duration.ofMinutes(60)) // 1 hour
+      .refreshTokenTimeToLive(Duration.ofHours(24)) // 24 hours
+      .reuseRefreshTokens(false)
+      .build();
   }
 
   /**

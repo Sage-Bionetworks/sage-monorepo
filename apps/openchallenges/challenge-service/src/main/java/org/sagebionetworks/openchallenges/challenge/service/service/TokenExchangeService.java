@@ -49,14 +49,13 @@ public class TokenExchangeService {
     log.debug("Exchanging token for target audience: {} with scopes: {}", targetAudience, requiredScopes);
 
     // OAuth 2.0 Token Exchange request (RFC 8693)
+    // Note: resource parameter omitted as Spring Authorization Server doesn't require it
     String requestBody = String.format(
       "grant_type=urn:ietf:params:oauth:grant-type:token-exchange" +
       "&subject_token=%s" +
       "&subject_token_type=urn:ietf:params:oauth:token-type:jwt" +
-      "&resource=%s" +
       "&scope=%s",
       subjectToken,
-      targetAudience,
       requiredScopes
     );
 

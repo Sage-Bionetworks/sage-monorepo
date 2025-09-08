@@ -72,7 +72,7 @@ public class OrganizationServiceClient {
   ) {
     String token = tokenExchangeService.exchangeTokenForService(
       ORGANIZATION_SERVICE_AUDIENCE, 
-      "create:challenge-participations"
+      "update:orgs"
     );
 
     try {
@@ -102,7 +102,7 @@ public class OrganizationServiceClient {
   public void deleteChallengeParticipation(String org, Long challengeId, String role) {
     String token = tokenExchangeService.exchangeTokenForService(
       ORGANIZATION_SERVICE_AUDIENCE, 
-      "delete:challenge-participations"
+      "update:orgs"
     );
 
     try {

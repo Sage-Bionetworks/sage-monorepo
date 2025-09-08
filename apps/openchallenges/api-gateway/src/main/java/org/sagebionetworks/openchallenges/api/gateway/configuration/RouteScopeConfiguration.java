@@ -107,7 +107,70 @@ public class RouteScopeConfiguration {
       return config.getScopes();
     }
     
+    // If exact match fails, try pattern matching for parameterized routes
+    for (Map.Entry<String, RouteConfig> entry : routeScopes.entrySet()) {
+      String pattern = entry.getKey();
+      if (matchesPattern(routeKey, pattern)) {
+        RouteConfig patternConfig = entry.getValue();
+        if (patternConfig != null && patternConfig.getScopes() != null) {
+          log.debug("Matched route pattern '{}' for request '{}'", pattern, routeKey);
+          return patternConfig.getScopes();
+        }
+      }
+    }
+    
     return List.of();
+  }
+
+  /**
+   * Check if a route key matches a pattern with path parameters.
+   * For example: "POST /api/v1/challenges/1/contributions" matches "POST /api/v1/challenges/{challengeId}/contributions"
+   */
+  private boolean matchesPattern(String routeKey, String pattern) {
+    String[] routeParts = routeKey.split(" ", 2);
+    String[] patternParts = pattern.split(" ", 2);
+    
+    if (routeParts.length != 2 || patternParts.length != 2) {
+      return false;
+    }
+    
+    // Method must match exactly
+    if (!routeParts[0].equals(patternParts[0])) {
+      return false;
+    }
+    
+    // Check path with parameter substitution
+    return matchesPathPattern(routeParts[1], patternParts[1]);
+  }
+  
+  /**
+   * Check if a path matches a pattern with path parameters.
+   * Parameters are indicated by curly braces like {challengeId}
+   */
+  private boolean matchesPathPattern(String path, String pattern) {
+    String[] pathSegments = path.split("/");
+    String[] patternSegments = pattern.split("/");
+    
+    if (pathSegments.length != patternSegments.length) {
+      return false;
+    }
+    
+    for (int i = 0; i < pathSegments.length; i++) {
+      String pathSegment = pathSegments[i];
+      String patternSegment = patternSegments[i];
+      
+      // If pattern segment is a parameter (starts and ends with {}), it matches any value
+      if (patternSegment.startsWith("{") && patternSegment.endsWith("}")) {
+        continue;
+      }
+      
+      // Otherwise, segments must match exactly
+      if (!pathSegment.equals(patternSegment)) {
+        return false;
+      }
+    }
+    
+    return true;
   }
 
   /**
@@ -125,7 +188,22 @@ public class RouteScopeConfiguration {
     String routeKey = method.toUpperCase() + " " + path;
     RouteConfig config = routeScopes.get(routeKey);
     
-    return config != null && config.isAnonymousAccess();
+    if (config != null) {
+      return config.isAnonymousAccess();
+    }
+    
+    // If exact match fails, try pattern matching for parameterized routes
+    for (Map.Entry<String, RouteConfig> entry : routeScopes.entrySet()) {
+      String pattern = entry.getKey();
+      if (matchesPattern(routeKey, pattern)) {
+        RouteConfig patternConfig = entry.getValue();
+        if (patternConfig != null) {
+          return patternConfig.isAnonymousAccess();
+        }
+      }
+    }
+    
+    return false;
   }
 
   public static class RouteConfig {
