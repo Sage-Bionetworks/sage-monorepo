@@ -26,7 +26,7 @@ INSERT INTO oauth2_registered_client (
     'client_credentials',
     '',
     '',
-    'read:orgs,read:challenges,read:challenges-analytics,read:challenge-platforms,read:edam-concepts', -- Read-only scopes for public data
+    'read:organizations,read:challenges,read:challenges-analytics,read:challenge-platforms,read:edam-concepts', -- Read-only scopes for public data
     '{"@class":"java.util.HashMap","settings.client.require-proof-key":false,"settings.client.require-authorization-consent":false}',
     '{"@class":"java.util.HashMap","settings.token.access-token-time-to-live":["java.time.Duration",3600.000000000],"settings.token.refresh-token-time-to-live":["java.time.Duration",7200.000000000]}'
 );

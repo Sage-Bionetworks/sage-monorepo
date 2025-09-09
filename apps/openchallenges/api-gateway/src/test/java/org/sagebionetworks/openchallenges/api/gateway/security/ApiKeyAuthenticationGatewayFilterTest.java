@@ -1,5 +1,12 @@
 package org.sagebionetworks.openchallenges.api.gateway.security;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,13 +22,6 @@ import org.springframework.mock.http.server.reactive.MockServerHttpRequest;
 import org.springframework.mock.web.server.MockServerWebExchange;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.never;
 
 /**
  * Unit tests for ApiKeyAuthenticationGatewayFilter.
@@ -42,23 +42,28 @@ class ApiKeyAuthenticationGatewayFilterTest {
   private ApiKeyAuthenticationGatewayFilter filter;
 
   @Test
-  @DisplayName("should skip validation when request already has authenticated user header from JWT filter")
+  @DisplayName(
+    "should skip validation when request already has authenticated user header from JWT filter"
+  )
   void shouldSkipValidationWhenRequestAlreadyHasAuthenticatedUserHeaderFromJwtFilter() {
     // given
     when(chain.filter(any())).thenReturn(Mono.empty());
-    
-    MockServerHttpRequest request = MockServerHttpRequest
-        .post("/api/v1/organizations")
-        .header("Authorization", "Bearer jwt-token") // Added by JWT filter - this should trigger skip
-        .header("X-API-Key", "some-api-key") // Should be ignored
-        .build();
+
+    MockServerHttpRequest request = MockServerHttpRequest.post("/api/v1/organizations")
+      .header("Authorization", "Bearer jwt-token") // Added by JWT filter - this should trigger skip
+      .header("X-API-Key", "some-api-key") // Should be ignored
+      .build();
     MockServerWebExchange exchange = MockServerWebExchange.from(request);
 
     // when
     filter.filter(exchange, chain).block();
 
     // then
-    verify(authenticationService, never()).exchangeApiKeyForJwt(anyString(), anyString(), anyString());
+    verify(authenticationService, never()).exchangeApiKeyForJwt(
+      anyString(),
+      anyString(),
+      anyString()
+    );
     verify(chain).filter(exchange);
   }
 
@@ -67,10 +72,8 @@ class ApiKeyAuthenticationGatewayFilterTest {
   void shouldContinueChainWhenNoApiKeyHeaderIsPresent() {
     // given
     when(chain.filter(any())).thenReturn(Mono.empty());
-    
-    MockServerHttpRequest request = MockServerHttpRequest
-        .post("/api/v1/organizations")
-        .build();
+
+    MockServerHttpRequest request = MockServerHttpRequest.post("/api/v1/organizations").build();
     MockServerWebExchange exchange = MockServerWebExchange.from(request);
 
     // when
@@ -85,11 +88,10 @@ class ApiKeyAuthenticationGatewayFilterTest {
   void shouldContinueChainWhenApiKeyHeaderIsEmpty() {
     // given
     when(chain.filter(any())).thenReturn(Mono.empty());
-    
-    MockServerHttpRequest request = MockServerHttpRequest
-        .post("/api/v1/organizations")
-        .header("X-API-Key", "")
-        .build();
+
+    MockServerHttpRequest request = MockServerHttpRequest.post("/api/v1/organizations")
+      .header("X-API-Key", "")
+      .build();
     MockServerWebExchange exchange = MockServerWebExchange.from(request);
 
     // when
@@ -104,25 +106,33 @@ class ApiKeyAuthenticationGatewayFilterTest {
   void shouldReturnUnauthorizedWithRealmWhenApiKeyIsInvalid() {
     // given
     when(authConfiguration.getRealm()).thenReturn("OpenChallenges");
-    
+
     String invalidApiKey = "invalid-key";
-    MockServerHttpRequest request = MockServerHttpRequest
-        .post("/api/v1/organizations")
-        .header("X-API-Key", invalidApiKey)
-        .build();
+    MockServerHttpRequest request = MockServerHttpRequest.post("/api/v1/organizations")
+      .header("X-API-Key", invalidApiKey)
+      .build();
     MockServerWebExchange exchange = MockServerWebExchange.from(request);
-    
+
     // Mock OAuth2 exchange failure for invalid API key
-    when(authenticationService.exchangeApiKeyForJwt(invalidApiKey, "POST", "/api/v1/organizations"))
-        .thenReturn(Mono.error(new GatewayAuthenticationService.AuthenticationException("API key authentication failed", new RuntimeException())));
+    when(
+      authenticationService.exchangeApiKeyForJwt(invalidApiKey, "POST", "/api/v1/organizations")
+    ).thenReturn(
+      Mono.error(
+        new GatewayAuthenticationService.AuthenticationException(
+          "API key authentication failed",
+          new RuntimeException()
+        )
+      )
+    );
 
     // when
     filter.filter(exchange, chain).block();
 
     // then
     assertThat(exchange.getResponse().getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
-    assertThat(exchange.getResponse().getHeaders().getFirst(HttpHeaders.WWW_AUTHENTICATE))
-        .isEqualTo("ApiKey realm=\"OpenChallenges\"");
+    assertThat(
+      exchange.getResponse().getHeaders().getFirst(HttpHeaders.WWW_AUTHENTICATE)
+    ).isEqualTo("ApiKey realm=\"OpenChallenges\"");
     verify(chain, never()).filter(exchange);
   }
 
@@ -131,24 +141,24 @@ class ApiKeyAuthenticationGatewayFilterTest {
   void shouldAddAuthenticationHeadersWhenApiKeyIsValid() {
     // given
     when(chain.filter(any())).thenReturn(Mono.empty());
-    
+
     String validApiKey = "valid-key";
-    MockServerHttpRequest request = MockServerHttpRequest
-        .post("/api/v1/organizations")
-        .header("X-API-Key", validApiKey)
-        .build();
+    MockServerHttpRequest request = MockServerHttpRequest.post("/api/v1/organizations")
+      .header("X-API-Key", validApiKey)
+      .build();
     MockServerWebExchange exchange = MockServerWebExchange.from(request);
-    
+
     // Mock successful OAuth2 token exchange
     OAuth2TokenResponse tokenResponse = new OAuth2TokenResponse(
-        "jwt-access-token", 
-        "Bearer", 
-        3600, 
-        "read:orgs create:orgs update:orgs read:profile update:profile"
+      "jwt-access-token",
+      "Bearer",
+      3600,
+      "read:organizations create:organizations update:organizations read:profile update:profile"
     );
-    
-    when(authenticationService.exchangeApiKeyForJwt(validApiKey, "POST", "/api/v1/organizations"))
-        .thenReturn(Mono.just(tokenResponse));
+
+    when(
+      authenticationService.exchangeApiKeyForJwt(validApiKey, "POST", "/api/v1/organizations")
+    ).thenReturn(Mono.just(tokenResponse));
 
     // when
     filter.filter(exchange, chain).block();
@@ -156,8 +166,12 @@ class ApiKeyAuthenticationGatewayFilterTest {
     // then
     verify(chain).filter(any());
     assertThat(exchange.getResponse().getStatusCode()).isNull(); // No error status set
-    
+
     // Verify the token exchange was called
-    verify(authenticationService).exchangeApiKeyForJwt(validApiKey, "POST", "/api/v1/organizations");
+    verify(authenticationService).exchangeApiKeyForJwt(
+      validApiKey,
+      "POST",
+      "/api/v1/organizations"
+    );
   }
 }

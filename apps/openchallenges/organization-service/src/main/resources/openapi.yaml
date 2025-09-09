@@ -51,12 +51,13 @@ paths:
           $ref: '#/components/responses/InternalServerError'
       security:
         - jwtBearer:
-            - read:orgs
+            - read:organizations
       summary: List organizations
       tags:
         - Organization
       x-audience:
         - public
+      x-anonymous-access: true
       x-accepts:
         - application/json
         - application/problem+json
@@ -90,7 +91,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
       security:
         - jwtBearer:
-            - create:orgs
+            - create:organizations
       summary: Create an organization
       tags:
         - Organization
@@ -135,7 +136,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
       security:
         - jwtBearer:
-            - delete:orgs
+            - delete:organizations
       summary: Delete an organization
       tags:
         - Organization
@@ -177,12 +178,13 @@ paths:
           $ref: '#/components/responses/InternalServerError'
       security:
         - jwtBearer:
-            - read:orgs
+            - read:organizations
       summary: Get an organization
       tags:
         - Organization
       x-audience:
         - public
+      x-anonymous-access: true
       x-accepts:
         - application/json
         - application/problem+json
@@ -234,7 +236,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
       security:
         - jwtBearer:
-            - update:orgs
+            - update:organizations
       summary: Update an existing organization
       tags:
         - Organization
@@ -291,7 +293,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
       security:
         - jwtBearer:
-            - update:orgs
+            - update:organizations
       summary: Create a new challenge participation
       tags:
         - Challenge Participation
@@ -352,7 +354,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
       security:
         - jwtBearer:
-            - update:orgs
+            - update:organizations
       summary: Delete a specific challenge participation
       tags:
         - Challenge Participation

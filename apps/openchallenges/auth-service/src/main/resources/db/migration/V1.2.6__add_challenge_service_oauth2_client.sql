@@ -26,7 +26,7 @@ INSERT INTO oauth2_registered_client (
     'urn:ietf:params:oauth:grant-type:token-exchange,client_credentials',
     NULL,
     NULL,
-    'read:orgs,update:orgs',
+    'read:organizations,update:organizations',
     '{"@class":"java.util.HashMap","settings.client.require-proof-key":false,"settings.client.require-authorization-consent":false}',
     '{"@class":"java.util.HashMap","settings.token.access-token-time-to-live":["java.time.Duration",300.000000000],"settings.token.access-token-format":{"@class":"org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat","value":"self-contained"}}'
 );

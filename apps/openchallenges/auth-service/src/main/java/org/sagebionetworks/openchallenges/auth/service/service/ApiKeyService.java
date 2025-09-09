@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.auth.service.configuration.ApiKeyProperties;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
@@ -23,14 +25,13 @@ import org.springframework.security.oauth2.server.authorization.settings.ClientS
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class ApiKeyService {
+
   private static final String CLIENT_ID_PREFIX = "oc_api_key_";
 
   private final ApiKeyRepository apiKeyRepository;
@@ -58,12 +59,12 @@ public class ApiKeyService {
     OffsetDateTime expiresAt = null;
     if (expiresInDays != null && expiresInDays > 0) {
       expiresAt = OffsetDateTime.now().plusDays(expiresInDays);
-    } 
-    
+    }
+
     // Extract suffix from the generated API key to create client_id
     String suffix = extractSuffix(plainApiKey);
     String clientId = CLIENT_ID_PREFIX + suffix;
-    
+
     // Create entity with the HASHED key
     ApiKey apiKeyEntity = ApiKey.builder()
       .user(user)
@@ -73,7 +74,7 @@ public class ApiKeyService {
       .clientId(clientId)
       .expiresAt(expiresAt)
       .build();
-    
+
     // Save the API key first
     ApiKey saved = apiKeyRepository.save(apiKeyEntity);
 
@@ -131,10 +132,7 @@ public class ApiKeyService {
     );
 
     if (apiKey == null || !apiKey.startsWith(apiKeyProperties.getPrefix())) {
-      log.debug(
-        "API key is null or doesn't have correct prefix: {}",
-        apiKeyProperties.getPrefix()
-      );
+      log.debug("API key is null or doesn't have correct prefix: {}", apiKeyProperties.getPrefix());
       return Optional.empty();
     }
 
@@ -175,25 +173,30 @@ public class ApiKeyService {
   @Transactional
   public boolean deleteApiKey(UUID keyId, User user) {
     log.debug("Attempting to delete API key {} for user {}", keyId, user.getId());
-    
+
     try {
       // Use DELETE with RETURNING to get the client_id and name in one atomic operation
-      String deleteQuery = "DELETE FROM api_key WHERE id = ? AND user_id = ? RETURNING client_id, name";
-      
-      List<Map<String, Object>> deletedRows = jdbcTemplate.queryForList(deleteQuery, keyId, user.getId());
-      
+      String deleteQuery =
+        "DELETE FROM api_key WHERE id = ? AND user_id = ? RETURNING client_id, name";
+
+      List<Map<String, Object>> deletedRows = jdbcTemplate.queryForList(
+        deleteQuery,
+        keyId,
+        user.getId()
+      );
+
       if (!deletedRows.isEmpty()) {
         Map<String, Object> deletedApiKey = deletedRows.get(0);
         String clientId = (String) deletedApiKey.get("client_id");
         String keyName = (String) deletedApiKey.get("name");
-        
+
         log.info("Deleted API key: {} ({})", keyName, keyId);
-        
+
         // Now delete the OAuth2 registered client if it exists
         if (clientId != null) {
           try {
             int oauthDeletedRows = jdbcTemplate.update(
-              "DELETE FROM oauth2_registered_client WHERE client_id = ?", 
+              "DELETE FROM oauth2_registered_client WHERE client_id = ?",
               clientId
             );
             if (oauthDeletedRows > 0) {
@@ -206,15 +209,19 @@ public class ApiKeyService {
             // Don't fail the entire operation if OAuth2 cleanup fails
           }
         }
-        
+
         return true;
       } else {
         log.warn("API key {} not found or not owned by user {}", keyId, user.getId());
         return false;
       }
-      
     } catch (Exception e) {
-      log.error("Error during API key deletion for {} (user {}): {}", keyId, user.getId(), e.getMessage());
+      log.error(
+        "Error during API key deletion for {} (user {}): {}",
+        keyId,
+        user.getId(),
+        e.getMessage()
+      );
       return false;
     }
   }
@@ -225,34 +232,37 @@ public class ApiKeyService {
   @Transactional
   public void cleanupExpiredApiKeys() {
     OffsetDateTime now = OffsetDateTime.now();
-    
+
     // Find expired API keys before deleting them
     List<ApiKey> expiredKeys = apiKeyRepository.findExpiredApiKeys(now);
-    
+
     // Delete corresponding OAuth2 clients for expired API keys
     for (ApiKey expiredKey : expiredKeys) {
       if (expiredKey.getClientId() != null) {
         try {
           int deletedRows = jdbcTemplate.update(
-            "DELETE FROM oauth2_registered_client WHERE client_id = ?", 
+            "DELETE FROM oauth2_registered_client WHERE client_id = ?",
             expiredKey.getClientId()
           );
           if (deletedRows > 0) {
             log.debug("Deleted OAuth2 client for expired API key: {}", expiredKey.getClientId());
           }
         } catch (Exception e) {
-          log.warn("Failed to delete OAuth2 client '{}' during cleanup: {}", 
-                     expiredKey.getClientId(), e.getMessage());
+          log.warn(
+            "Failed to delete OAuth2 client '{}' during cleanup: {}",
+            expiredKey.getClientId(),
+            e.getMessage()
+          );
         }
       }
     }
-    
+
     // Delete expired API keys using JDBC to avoid optimistic locking issues
     int deletedCount = jdbcTemplate.update(
-      "DELETE FROM api_key WHERE expires_at IS NOT NULL AND expires_at < ?", 
+      "DELETE FROM api_key WHERE expires_at IS NOT NULL AND expires_at < ?",
       now
     );
-    
+
     if (deletedCount > 0) {
       log.info("Deleted {} expired API keys", deletedCount);
     }
@@ -272,16 +282,12 @@ public class ApiKeyService {
     // Generate suffix (identifier part)
     byte[] suffixBytes = new byte[16]; // 16 bytes = ~22 chars in base64url
     secureRandom.nextBytes(suffixBytes);
-    String suffix = Base64.getUrlEncoder()
-      .withoutPadding()
-      .encodeToString(suffixBytes);
-    
-    // Generate secret (authentication part)  
+    String suffix = Base64.getUrlEncoder().withoutPadding().encodeToString(suffixBytes);
+
+    // Generate secret (authentication part)
     byte[] secretBytes = new byte[24]; // 24 bytes = 32 chars in base64url
     secureRandom.nextBytes(secretBytes);
-    String secret = Base64.getUrlEncoder()
-      .withoutPadding()
-      .encodeToString(secretBytes);
+    String secret = Base64.getUrlEncoder().withoutPadding().encodeToString(secretBytes);
 
     return apiKeyProperties.getPrefix() + suffix + "." + secret;
   }
@@ -293,55 +299,83 @@ public class ApiKeyService {
     // Use the client_id that was already set on the API key
     String clientId = apiKey.getClientId();
     String secret = extractSecret(plainApiKey);
-    
+
     log.info("Creating OAuth2 client '{}' for API key: {}", clientId, apiKey.getName());
-    
+
     // Determine scopes based on user role
     Set<String> scopes;
     if (user.isAdmin()) {
       scopes = Set.of(
-        "read:profile", "update:profile", "read:api-key", "create:api-key", "delete:api-key", 
-        "read:orgs", "create:orgs", "update:orgs", "delete:orgs",
-        "read:challenges", "create:challenges", "update:challenges", "delete:challenges", 
-        "read:challenges-analytics", "read:challenge-platforms", "create:challenge-platforms", 
-        "update:challenge-platforms", "delete:challenge-platforms", "read:edam-concepts"
+        "read:profile",
+        "update:profile",
+        "read:api-key",
+        "create:api-key",
+        "delete:api-key",
+        "read:organizations",
+        "create:organizations",
+        "update:organizations",
+        "delete:organizations",
+        "read:challenges",
+        "create:challenges",
+        "update:challenges",
+        "delete:challenges",
+        "read:challenges-analytics",
+        "read:challenge-platforms",
+        "create:challenge-platforms",
+        "update:challenge-platforms",
+        "delete:challenge-platforms",
+        "read:edam-concepts"
       );
     } else {
       // Default scopes for regular users
       scopes = Set.of(
-        "read:profile", "update:profile", "read:api-key", "create:api-key", "delete:api-key", 
-        "read:orgs", "create:orgs", "update:orgs",
-        "read:challenges", "create:challenges", "update:challenges", 
-        "read:challenges-analytics", "read:challenge-platforms", "read:edam-concepts"
+        "read:profile",
+        "update:profile",
+        "read:api-key",
+        "create:api-key",
+        "delete:api-key",
+        "read:organizations",
+        "create:organizations",
+        "update:organizations",
+        "read:challenges",
+        "create:challenges",
+        "update:challenges",
+        "read:challenges-analytics",
+        "read:challenge-platforms",
+        "read:edam-concepts"
       );
     }
-    
+
     // Create RegisteredClient for this API key
     RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
-            .clientId(clientId)
-            .clientSecret(passwordEncoder.encode(secret)) // Hash the secret
-            .clientName("API Key: " + apiKey.getName() + " (" + user.getUsername() + ")")
-            .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-            .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-            .scopes(scopeSet -> scopeSet.addAll(scopes))
-            .clientSettings(ClientSettings.builder()
-                    .requireAuthorizationConsent(false) // No consent for API keys
-                    .requireProofKey(false) // No PKCE for client credentials
-                    .build())
-            .tokenSettings(TokenSettings.builder()
-                    .accessTokenTimeToLive(Duration.ofMinutes(15)) // Short-lived tokens
-                    .refreshTokenTimeToLive(Duration.ofHours(1)) // Refresh tokens
-                    .reuseRefreshTokens(false) // No refresh tokens for client credentials
-                    .build())
-            .build();
-            
+      .clientId(clientId)
+      .clientSecret(passwordEncoder.encode(secret)) // Hash the secret
+      .clientName("API Key: " + apiKey.getName() + " (" + user.getUsername() + ")")
+      .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+      .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+      .scopes(scopeSet -> scopeSet.addAll(scopes))
+      .clientSettings(
+        ClientSettings.builder()
+          .requireAuthorizationConsent(false) // No consent for API keys
+          .requireProofKey(false) // No PKCE for client credentials
+          .build()
+      )
+      .tokenSettings(
+        TokenSettings.builder()
+          .accessTokenTimeToLive(Duration.ofMinutes(15)) // Short-lived tokens
+          .refreshTokenTimeToLive(Duration.ofHours(1)) // Refresh tokens
+          .reuseRefreshTokens(false) // No refresh tokens for client credentials
+          .build()
+      )
+      .build();
+
     // Save the registered client
     registeredClientRepository.save(registeredClient);
-    
+
     // Update the API key with OAuth2 scopes (client_id is already set)
     apiKey.setAllowedScopes(String.join(",", scopes));
     apiKeyRepository.save(apiKey);
-    
+
     log.info("Created OAuth2 client {} for API key: {}", clientId, apiKey.getName());
   }
 

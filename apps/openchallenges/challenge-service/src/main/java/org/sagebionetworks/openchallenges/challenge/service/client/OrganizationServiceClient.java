@@ -14,8 +14,8 @@ import org.springframework.web.client.RestClientException;
 
 /**
  * Client for communicating with the OpenChallenges Organization Service using JWT tokens.
- * 
- * This client uses OAuth 2.0 Token Exchange (On-Behalf-Of) to obtain properly scoped 
+ *
+ * This client uses OAuth 2.0 Token Exchange (On-Behalf-Of) to obtain properly scoped
  * JWT tokens for service-to-service communication on behalf of users.
  */
 @Component
@@ -33,15 +33,15 @@ public class OrganizationServiceClient {
 
   /**
    * Gets an organization by ID.
-   * 
+   *
    * @param orgId the organization ID
    * @return the organization details
    * @throws RuntimeException if the organization is not found or service call fails
    */
   public OrganizationDto getOrganization(Long orgId) {
     String token = tokenExchangeService.exchangeTokenForService(
-      ORGANIZATION_SERVICE_AUDIENCE, 
-      "read:orgs"
+      ORGANIZATION_SERVICE_AUDIENCE,
+      "read:organizations"
     );
 
     try {
@@ -51,7 +51,6 @@ public class OrganizationServiceClient {
         .header("Authorization", "Bearer " + token)
         .retrieve()
         .body(OrganizationDto.class);
-
     } catch (RestClientException ex) {
       log.error("Failed to get organization {}: {}", orgId, ex.getMessage());
       throw new RuntimeException("Failed to retrieve organization", ex);
@@ -60,7 +59,7 @@ public class OrganizationServiceClient {
 
   /**
    * Creates a challenge participation for an organization.
-   * 
+   *
    * @param org the organization ID
    * @param request the participation creation request
    * @return the created challenge participation details
@@ -71,8 +70,8 @@ public class OrganizationServiceClient {
     ChallengeParticipationCreateRequestDto request
   ) {
     String token = tokenExchangeService.exchangeTokenForService(
-      ORGANIZATION_SERVICE_AUDIENCE, 
-      "update:orgs"
+      ORGANIZATION_SERVICE_AUDIENCE,
+      "update:organizations"
     );
 
     try {
@@ -84,16 +83,19 @@ public class OrganizationServiceClient {
         .body(request)
         .retrieve()
         .body(ChallengeParticipationDto.class);
-
     } catch (RestClientException ex) {
-      log.error("Failed to create challenge participation for organization {}: {}", org, ex.getMessage());
+      log.error(
+        "Failed to create challenge participation for organization {}: {}",
+        org,
+        ex.getMessage()
+      );
       throw new RuntimeException("Failed to create challenge participation", ex);
     }
   }
 
   /**
    * Deletes a challenge participation for an organization.
-   * 
+   *
    * @param org the organization ID
    * @param challengeId the challenge ID
    * @param role the role of the participation to delete
@@ -101,25 +103,38 @@ public class OrganizationServiceClient {
    */
   public void deleteChallengeParticipation(String org, Long challengeId, String role) {
     String token = tokenExchangeService.exchangeTokenForService(
-      ORGANIZATION_SERVICE_AUDIENCE, 
-      "update:orgs"
+      ORGANIZATION_SERVICE_AUDIENCE,
+      "update:organizations"
     );
 
     try {
       restClient
         .delete()
-        .uri(organizationServiceBaseUrl + "/v1/organizations/{org}/participations/{challengeId}/role/{role}", 
-             org, challengeId, role)
+        .uri(
+          organizationServiceBaseUrl +
+          "/v1/organizations/{org}/participations/{challengeId}/role/{role}",
+          org,
+          challengeId,
+          role
+        )
         .header("Authorization", "Bearer " + token)
         .retrieve()
         .toBodilessEntity();
 
-      log.debug("Successfully deleted challenge participation for org: {}, challenge: {}, role: {}", 
-               org, challengeId, role);
-
+      log.debug(
+        "Successfully deleted challenge participation for org: {}, challenge: {}, role: {}",
+        org,
+        challengeId,
+        role
+      );
     } catch (RestClientException ex) {
-      log.error("Failed to delete challenge participation for organization {} challenge {} role {}: {}", 
-               org, challengeId, role, ex.getMessage());
+      log.error(
+        "Failed to delete challenge participation for organization {} challenge {} role {}: {}",
+        org,
+        challengeId,
+        role,
+        ex.getMessage()
+      );
       throw new RuntimeException("Failed to delete challenge participation", ex);
     }
   }

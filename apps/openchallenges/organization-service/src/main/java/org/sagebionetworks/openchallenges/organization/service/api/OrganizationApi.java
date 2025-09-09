@@ -88,7 +88,7 @@ public interface OrganizationApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "jwtBearer", scopes={ "create:orgs" })
+            @SecurityRequirement(name = "jwtBearer", scopes={ "create:organizations" })
         }
     )
     @RequestMapping(
@@ -137,7 +137,7 @@ public interface OrganizationApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "jwtBearer", scopes={ "delete:orgs" })
+            @SecurityRequirement(name = "jwtBearer", scopes={ "delete:organizations" })
         }
     )
     @RequestMapping(
@@ -182,7 +182,7 @@ public interface OrganizationApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "jwtBearer", scopes={ "read:orgs" })
+            @SecurityRequirement(name = "jwtBearer", scopes={ "read:organizations" })
         }
     )
     @RequestMapping(
@@ -227,7 +227,7 @@ public interface OrganizationApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "jwtBearer", scopes={ "read:orgs" })
+            @SecurityRequirement(name = "jwtBearer", scopes={ "read:organizations" })
         }
     )
     @RequestMapping(
@@ -293,7 +293,7 @@ public interface OrganizationApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "jwtBearer", scopes={ "update:orgs" })
+            @SecurityRequirement(name = "jwtBearer", scopes={ "update:organizations" })
         }
     )
     @RequestMapping(

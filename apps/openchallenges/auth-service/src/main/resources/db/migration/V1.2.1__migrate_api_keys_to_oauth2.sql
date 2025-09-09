@@ -27,7 +27,7 @@ INSERT INTO oauth2_registered_client (
     'authorization_code,refresh_token,client_credentials',
     'http://openchallenges-api-gateway:8082/oauth2/code/openchallenges-oidc,http://openchallenges-api-gateway:8082/oauth2/authorized',
     'http://openchallenges-api-gateway:8082/oauth2/logged-out',
-    'openid,profile,email,read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs,create:orgs,update:orgs,delete:orgs',
+    'openid,profile,email,read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:organizations,create:organizations,update:organizations,delete:organizations',
     '{"@class":"java.util.HashMap","settings.client.require-proof-key":true,"settings.client.require-authorization-consent":true}',
     '{"@class":"java.util.HashMap","settings.token.access-token-time-to-live":["java.time.Duration",300.000000000],"settings.token.refresh-token-time-to-live":["java.time.Duration",3600.000000000]}'
 );
@@ -45,7 +45,7 @@ BEGIN
         suffix_part := 'legacy_' || SUBSTRING(api_key_rec.id::text FROM 1 FOR 8);
         client_id_value := 'oc_api_key_' || suffix_part;
         client_id_value := 'oc_api_key_' || suffix_part;
-        
+
         INSERT INTO oauth2_registered_client (
             id,
             client_id,
@@ -71,16 +71,16 @@ BEGIN
             'client_credentials',
             '',
             '',
-            'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs,create:orgs,update:orgs,delete:orgs,read:challenges,create:challenges,update:challenges,delete:challenges,read:challenges-analytics,read:challenge-platforms,create:challenge-platforms,update:challenge-platforms,delete:challenge-platforms,read:edam-concepts',
+            'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:organizations,create:organizations,update:organizations,delete:organizations,read:challenges,create:challenges,update:challenges,delete:challenges,read:challenges-analytics,read:challenge-platforms,create:challenge-platforms,update:challenge-platforms,delete:challenge-platforms,read:edam-concepts',
             '{"@class":"java.util.HashMap","settings.client.require-proof-key":false,"settings.client.require-authorization-consent":false}',
             '{"@class":"java.util.HashMap","settings.token.access-token-time-to-live":["java.time.Duration",3600.000000000],"settings.token.refresh-token-time-to-live":["java.time.Duration",7200.000000000]}'
         );
-        
+
         -- Update API key with OAuth2 client reference
-        UPDATE api_key 
-        SET 
+        UPDATE api_key
+        SET
             client_id = client_id_value,
-            allowed_scopes = 'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:orgs,create:orgs,update:orgs,delete:orgs,read:challenges,create:challenges,update:challenges,delete:challenges,read:challenges-analytics,read:challenge-platforms,create:challenge-platforms,update:challenge-platforms,delete:challenge-platforms,read:edam-concepts'
+            allowed_scopes = 'read:profile,update:profile,read:api-key,create:api-key,delete:api-key,read:organizations,create:organizations,update:organizations,delete:organizations,read:challenges,create:challenges,update:challenges,delete:challenges,read:challenges-analytics,read:challenge-platforms,create:challenge-platforms,update:challenge-platforms,delete:challenge-platforms,read:edam-concepts'
         WHERE id = api_key_rec.id;
     END LOOP;
 END $$;

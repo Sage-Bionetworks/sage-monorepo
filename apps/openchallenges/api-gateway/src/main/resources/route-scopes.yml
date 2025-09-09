@@ -70,24 +70,24 @@ openchallenges:
           - 'read:edam-concepts'
       GET /api/v1/organizations:
         scopes:
-          - 'read:orgs'
+          - 'read:organizations'
         anonymousAccess: true
       POST /api/v1/organizations:
         scopes:
-          - 'create:orgs'
+          - 'create:organizations'
       GET /api/v1/organizations/{org}:
         scopes:
-          - 'read:orgs'
+          - 'read:organizations'
         anonymousAccess: true
       PUT /api/v1/organizations/{org}:
         scopes:
-          - 'update:orgs'
+          - 'update:organizations'
       DELETE /api/v1/organizations/{org}:
         scopes:
-          - 'delete:orgs'
+          - 'delete:organizations'
       POST /api/v1/organizations/{org}/participations:
         scopes:
-          - 'update:orgs'
+          - 'update:organizations'
       DELETE /api/v1/organizations/{org}/participations/{challengeId}/roles/{role}:
         scopes:
-          - 'update:orgs'
+          - 'update:organizations'

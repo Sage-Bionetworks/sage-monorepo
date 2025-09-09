@@ -42,13 +42,13 @@ public enum AuthScopeDto {
   
   ROTATE_API_KEY("rotate:api-key"),
   
-  READ_ORGS("read:orgs"),
+  READ_ORGANIZATIONS("read:organizations"),
   
-  CREATE_ORGS("create:orgs"),
+  CREATE_ORGANIZATIONS("create:organizations"),
   
-  UPDATE_ORGS("update:orgs"),
+  UPDATE_ORGANIZATIONS("update:organizations"),
   
-  DELETE_ORGS("delete:orgs"),
+  DELETE_ORGANIZATIONS("delete:organizations"),
   
   READ_CHALLENGES("read:challenges"),
   
