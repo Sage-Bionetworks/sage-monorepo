@@ -101,9 +101,10 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
    * Configure OAuth2 token generator for access and refresh tokens.
    */
   @Bean
-  public OAuth2TokenGenerator<?> tokenGenerator(JwtEncoder jwtEncoder, ApiKeyRepository apiKeyRepository) {
+  public OAuth2TokenGenerator<?> tokenGenerator(JwtEncoder jwtEncoder, ApiKeyRepository apiKeyRepository, 
+                                                 org.sagebionetworks.openchallenges.auth.service.repository.UserRepository userRepository) {
     JwtGenerator jwtGenerator = new JwtGenerator(jwtEncoder);
-    jwtGenerator.setJwtCustomizer(jwtTokenCustomizer(apiKeyRepository));
+    jwtGenerator.setJwtCustomizer(jwtTokenCustomizer(apiKeyRepository, userRepository));
 
     OAuth2AccessTokenGenerator accessTokenGenerator = new OAuth2AccessTokenGenerator();
     OAuth2RefreshTokenGenerator refreshTokenGenerator = new OAuth2RefreshTokenGenerator();
@@ -154,7 +155,8 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
    * Configure JWT token customizer to add OpenChallenges-specific claims.
    */
   @Bean
-  public OAuth2TokenCustomizer<JwtEncodingContext> jwtTokenCustomizer(ApiKeyRepository apiKeyRepository) {
+  public OAuth2TokenCustomizer<JwtEncodingContext> jwtTokenCustomizer(ApiKeyRepository apiKeyRepository, 
+                                                                       org.sagebionetworks.openchallenges.auth.service.repository.UserRepository userRepository) {
     return context -> {
       if (context.getPrincipal() != null && context.getPrincipal().getName() != null) {
         // Add OpenChallenges-specific claims
@@ -196,15 +198,25 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
             log.error("🎯 JWT CUSTOMIZER: Error looking up API key for client '{}': {}", username, e.getMessage());
           }
         } else if (AuthorizationGrantType.AUTHORIZATION_CODE.equals(context.getAuthorizationGrantType())) {
-          // For authorization code flow (browser login), the principal is already the user
-          // We need to look up the user to get their UUID for the subject
+          // For authorization code flow (browser login), look up the user to get their UUID for the subject
           try {
-            // Note: In authorization code flow, we'd need access to UserService here
-            // For now, we'll use the username as subject, but this should be improved
-            // to use the user's UUID
-            log.info("🎯 JWT CUSTOMIZER: Authorization code flow - using username '{}' as subject (should be improved to use UUID)", username);
+            // In authorization code flow, the principal name is the username
+            // We need to look up the user by username to get their UUID
+            var userOpt = userRepository.findByUsernameIgnoreCase(username);
+            if (userOpt.isPresent()) {
+              var user = userOpt.get();
+              // For authorization code flow, always use User UUID as subject (no service accounts via browser)
+              subjectId = user.getId().toString();
+              log.info("🎯 JWT CUSTOMIZER: Authorization code flow - using user UUID '{}' as subject for user '{}'", subjectId, username);
+            } else {
+              log.warn("🎯 JWT CUSTOMIZER: User not found for authorization code flow: '{}'", username);
+              // Fall back to username if user not found (shouldn't normally happen)
+              subjectId = username;
+            }
           } catch (Exception e) {
-            log.error("🎯 JWT CUSTOMIZER: Error in authorization code flow processing: {}", e.getMessage());
+            log.error("🎯 JWT CUSTOMIZER: Error looking up user for authorization code flow '{}': {}", username, e.getMessage());
+            // Fall back to username if lookup fails
+            subjectId = username;
           }
         }
         
