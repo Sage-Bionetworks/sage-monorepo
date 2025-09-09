@@ -1,8 +1,0 @@
-type: object
-required:
-  - refreshToken
-properties:
-  refreshToken:
-    type: string
-    description: JWT refresh token
-    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
