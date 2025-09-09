@@ -8,7 +8,12 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtAudienceValidator;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtTimestampValidator;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
@@ -92,9 +97,18 @@ public class SecurityConfiguration {
 
   @Bean
   public JwtDecoder jwtDecoder() {
-    // For now, use basic JWT decoder without audience validation
-    // TODO: Add audience validation when JWT imports are resolved
-    return NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
+    // Create JWT decoder with audience validation for challenge service
+    NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
+    
+    // Add audience validation to ensure JWTs are intended for this service
+    String expectedAudience = "urn:openchallenges:challenge-service";
+    OAuth2TokenValidator<Jwt> compositeValidator = new DelegatingOAuth2TokenValidator<>(
+        new JwtTimestampValidator(),
+        new JwtAudienceValidator(expectedAudience)
+    );
+    
+    jwtDecoder.setJwtValidator(compositeValidator);
+    return jwtDecoder;
   }
 
   @Bean
