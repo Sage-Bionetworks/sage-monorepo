@@ -47,6 +47,11 @@ export class ModelDetailsResourcesComponent {
       link: 'https://agora.adknowledgeportal.org/',
     },
     {
+      imagePath: '/model-ad-assets/images/allen-institute-logo.svg',
+      description: 'Explore mouse brain resources in the Allen Brain Atlas.',
+      link: 'https://mouse.brain-map.org/ ',
+    },
+    {
       imagePath: '/model-ad-assets/images/model-ad-logo.svg',
       description: 'Learn about the MODEL-AD program.',
       link: 'https://www.model-ad.org/',

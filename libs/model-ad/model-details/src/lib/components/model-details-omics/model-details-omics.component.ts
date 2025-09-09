@@ -1,4 +1,3 @@
-
 import { Component, computed, input } from '@angular/core';
 import { ResourceCardsComponent } from '@sagebionetworks/explorers/ui';
 
@@ -23,12 +22,6 @@ export class ModelDetailsOmicsComponent {
       description: 'View Disease Correlation results for this model in the comparison tool.',
       title: 'Disease Correlation',
       link: `/comparison/correlation?model=${this.modelName()}`,
-    },
-    {
-      imagePath: '/model-ad-assets/images/allen-institute-logo.svg',
-      description: "View Gene Expression results for this model on the Allen Institute's site.",
-      // TODO: update to finalized link, see MG-252
-      link: 'https://alleninstitute.org/division/brain-science/',
     },
   ]);
 }
