@@ -9,7 +9,6 @@ import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.repository.UserRepository;
 import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
-import org.sagebionetworks.openchallenges.auth.service.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,7 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 public class ApiKeyApiDelegateImpl implements ApiKeyApiDelegate {
 
   private final ApiKeyService apiKeyService;
-  private final UserService userService;
   private final UserRepository userRepository;
 
   @Override
@@ -186,13 +184,8 @@ public class ApiKeyApiDelegateImpl implements ApiKeyApiDelegate {
       return null;
     }
 
-    // If principal is UserDetails (Spring Security default), get username and fetch user
-    if (principal instanceof org.springframework.security.core.userdetails.UserDetails) {
-      String username =
-        ((org.springframework.security.core.userdetails.UserDetails) principal).getUsername();
-      return userService.findByUsername(username).orElse(null);
-    }
-
+    // Unsupported principal type - log for debugging
+    log.warn("Unsupported principal type in security context: {}", principal.getClass().getName());
     return null;
   }
 
