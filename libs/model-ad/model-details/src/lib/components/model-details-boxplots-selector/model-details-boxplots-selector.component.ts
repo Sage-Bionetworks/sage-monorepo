@@ -176,11 +176,6 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
     this.hasInitializedOptions = true;
   }
 
-  getHashFragment() {
-    // Extract hash fragment from URL (e.g. "nfl" from "#nfl")
-    return window.location.hash.slice(1);
-  }
-
   isValidHashFragment(hashFragment: string): boolean {
     return this.evidenceTypes().some(
       (evidenceType) => this.generateAnchorId(evidenceType) === hashFragment,
@@ -189,7 +184,7 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
 
   scrollToSectionOnFirstRender() {
     if (typeof window !== 'undefined' && !this.isInitialScrollDone) {
-      const hashFragment = this.getHashFragment();
+      const hashFragment = this.helperService.getHashFragment();
       if (this.isValidHashFragment(hashFragment)) {
         this.isInitialScrollDone = this.scrollToSection(hashFragment, false);
       } else {
@@ -232,7 +227,7 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
     const queryString = params.toString();
     const queryStringFormatted = queryString ? `?${queryString}` : '';
 
-    const hashFragment = this.getHashFragment();
+    const hashFragment = this.helperService.getHashFragment();
     const hash = this.isValidHashFragment(hashFragment) ? `#${hashFragment}` : '';
 
     const newUrl = `${window.location.pathname}${queryStringFormatted}${hash}`;

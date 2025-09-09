@@ -68,6 +68,8 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
   activePanel = 'omics';
   activeParent = '';
 
+  scrollToPanelNavElementOnInitialLoad = false;
+
   ngOnInit() {
     this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params: ParamMap) => {
       this.isLoading = true;
@@ -114,9 +116,11 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
   }
 
   private setActivePanelAndParentFromUrl(params: ParamMap) {
+    const noHashFragment = this.helperService.getHashFragment() === '';
     if (params.get('subtab')) {
       this.activePanel = params.get('subtab') as string;
       this.activeParent = params.get('tab') as string;
+      this.scrollToPanelNavElementOnInitialLoad = noHashFragment; // selector will handle to scroll if hash fragment is present
     } else if (params.get('tab')) {
       const panel = this.panels.find((p: Panel) => p.name === params.get('tab'));
       if (panel) {
@@ -126,6 +130,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
         );
         this.activePanel = activePanel;
         this.activeParent = activeParent;
+        this.scrollToPanelNavElementOnInitialLoad = noHashFragment; // selector will handle scroll if hash fragment is present
       }
     }
   }
