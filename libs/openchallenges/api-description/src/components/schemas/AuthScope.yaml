@@ -16,10 +16,10 @@ enum:
 
   # Organization scopes
   # If these are admin/global on many orgs, prefer plural:
-  - 'read:orgs'
-  - 'create:orgs'
-  - 'update:orgs'
-  - 'delete:orgs'
+  - 'read:organizations'
+  - 'create:organizations'
+  - 'update:organizations'
+  - 'delete:organizations'
 
   # Challenge scopes
   # If these are admin/global on many orgs, prefer plural:

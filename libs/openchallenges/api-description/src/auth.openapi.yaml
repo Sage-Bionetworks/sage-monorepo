@@ -2,34 +2,7 @@ openapi: 3.0.3
 info:
   version: 1.0.0
   title: OpenChallenges Auth API
-  description: |
-    Authentication and authorization service for OpenChallenges.
-
-    This service provides:
-    - OAuth2 Authorization Server with Google/Synapse login
-    - API key management for programmatic access to OpenChallenges APIs
-    - JWT token validation for API access
-    - User profile management
-
-    **OAuth2 Endpoints** (Spring Authorization Server - not documented here):
-    - `GET /oauth2/authorize` - OAuth2 authorization endpoint
-    - `POST /oauth2/token` - Token exchange endpoint
-    - `GET /.well-known/oauth-authorization-server` - OAuth2 discovery
-
-    **Custom API Endpoints** (documented below):
-    - `/v1/auth/api-keys` - API key management
-    - `/v1/auth/profile` - User profile management
-
-    **Authentication Methods**:
-    - **OAuth2**: Use standard OAuth2 flows for user login via Google/Synapse
-    - **API Keys**: Use for programmatic access to OpenChallenges APIs. API keys inherit the scopes and permissions of the user who created them.
-    - **JWT**: Tokens issued by OAuth2 server for API access
-
-    **Scopes**:
-    - `openid`, `profile`, `email`: Standard OpenID Connect scopes
-    - `read:org`: Read access to organization resources
-    - `write:org`: Write access to organization resources
-    - `delete:org`: Delete access to organization resources
+  description: Authentication and authorization service for OpenChallenges.
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt

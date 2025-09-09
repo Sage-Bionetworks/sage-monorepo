@@ -8,7 +8,7 @@ get:
   x-anonymous-access: true
   security:
     - jwtBearer:
-        - read:orgs
+        - read:organizations
   parameters:
     - $ref: ../components/parameters/query/organizationSearchQuery.yaml
   responses:
@@ -31,7 +31,7 @@ post:
   x-audience: [public]
   security:
     - jwtBearer:
-        - create:orgs
+        - create:organizations
   requestBody:
     content:
       application/json:

@@ -9,7 +9,7 @@ post:
   x-audience: [internal]
   security:
     - jwtBearer:
-        - update:orgs
+        - update:organizations
   requestBody:
     required: true
     content:

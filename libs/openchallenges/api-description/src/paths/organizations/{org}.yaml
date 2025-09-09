@@ -10,7 +10,7 @@ get:
   x-anonymous-access: true
   security:
     - jwtBearer:
-        - read:orgs
+        - read:organizations
   responses:
     '200':
       description: Organization retrieved successfully
@@ -31,7 +31,7 @@ put:
   x-audience: [public]
   security:
     - jwtBearer:
-        - update:orgs
+        - update:organizations
   requestBody:
     required: true
     content:
@@ -66,7 +66,7 @@ delete:
   x-audience: [public]
   security:
     - jwtBearer:
-        - delete:orgs
+        - delete:organizations
   responses:
     '204':
       description: Organization successfully deleted

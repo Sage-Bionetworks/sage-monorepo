@@ -674,7 +674,7 @@ paths:
       x-anonymous-access: true
       security:
         - jwtBearer:
-            - read:orgs
+            - read:organizations
       parameters:
         - $ref: '#/components/parameters/organizationSearchQuery'
       responses:
@@ -698,7 +698,7 @@ paths:
         - public
       security:
         - jwtBearer:
-            - create:orgs
+            - create:organizations
       requestBody:
         content:
           application/json:
@@ -736,7 +736,7 @@ paths:
       x-anonymous-access: true
       security:
         - jwtBearer:
-            - read:orgs
+            - read:organizations
       responses:
         '200':
           description: Organization retrieved successfully
@@ -758,7 +758,7 @@ paths:
         - public
       security:
         - jwtBearer:
-            - update:orgs
+            - update:organizations
       requestBody:
         required: true
         content:
@@ -794,7 +794,7 @@ paths:
         - public
       security:
         - jwtBearer:
-            - delete:orgs
+            - delete:organizations
       responses:
         '204':
           description: Organization successfully deleted
@@ -843,10 +843,10 @@ components:
         - update:api-key
         - delete:api-key
         - rotate:api-key
-        - read:orgs
-        - create:orgs
-        - update:orgs
-        - delete:orgs
+        - read:organizations
+        - create:organizations
+        - update:organizations
+        - delete:organizations
         - read:challenges
         - create:challenges
         - update:challenges
