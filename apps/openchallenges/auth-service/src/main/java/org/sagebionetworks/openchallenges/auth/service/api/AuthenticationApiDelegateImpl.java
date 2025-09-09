@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +15,7 @@ import org.sagebionetworks.openchallenges.auth.service.model.dto.AuthScopeDto;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.service.UserService;
-import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
+import org.sagebionetworks.openchallenges.auth.service.util.AuthenticationUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,7 +36,7 @@ import org.springframework.stereotype.Component;
 public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate {
 
   private final UserService userService;
-  private final ApiKeyService apiKeyService;
+  private final AuthenticationUtil authenticationUtil;
 
   /**
    * Get the authenticated user's profile.
@@ -48,73 +47,29 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
     log.debug("Getting user profile for authenticated user");
 
     try {
-      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-      if (authentication == null || !authentication.isAuthenticated()) {
+      // Get authenticated user from security context
+      User user = authenticationUtil.getAuthenticatedUser();
+      if (user == null) {
         log.debug("No authenticated user found");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       }
 
-      // Handle both JWT and User principals
-      User user = null;
+      // Get scopes from authentication details
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       List<AuthScopeDto> scopes = Collections.emptyList();
       
       Object principal = authentication.getPrincipal();
-      
       if (principal instanceof User) {
-        // Direct User principal (from API key authentication filter)
-        log.debug("Authentication principal is a User entity");
-        user = (User) principal;
-        
-        // Get API key scopes from authentication details if available
+        // Direct User principal (from browser authentication filter)
         Object details = authentication.getDetails();
         if (details instanceof ApiKey) {
           ApiKey apiKey = (ApiKey) details;
           scopes = getScopesFromApiKey(apiKey);
         }
-        
       } else if (principal instanceof Jwt) {
         // JWT principal (from OAuth2 Resource Server)
-        log.debug("Authentication principal is a JWT token");
         Jwt jwt = (Jwt) principal;
-        
-        // Extract user information from JWT claims
-        String subject = jwt.getSubject(); // Can be user UUID or client_id
-        String preferredUsername = jwt.getClaimAsString("preferred_username"); // Display name
-        
-        log.debug("JWT subject: {}, preferred_username: {}", subject, preferredUsername);
-        
-        // Try to parse subject as UUID first (user ID)
-        try {
-          UUID userId = UUID.fromString(subject);
-          // Subject is a user UUID - this is a regular user authentication
-          Optional<User> userOpt = userService.findByUsername(preferredUsername != null ? preferredUsername : subject);
-          if (userOpt.isPresent()) {
-            user = userOpt.get();
-            scopes = getScopesFromJwt(jwt);
-            log.debug("Found user by preferred_username for UUID subject: {}", user.getUsername());
-          }
-        } catch (IllegalArgumentException e) {
-          // Subject is not a UUID, assume it's a client_id - find API key and user
-          Optional<ApiKey> apiKeyOpt = apiKeyService.findByClientId(subject);
-          if (apiKeyOpt.isPresent()) {
-            ApiKey apiKey = apiKeyOpt.get();
-            user = apiKey.getUser();
-            scopes = getScopesFromApiKey(apiKey);
-            log.debug("Found user {} for JWT client ID {}", user.getUsername(), subject);
-          } else {
-            log.debug("No API key found for JWT client ID: {}", subject);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-          }
-        }
-        
-      } else {
-        log.debug("Authentication principal is not a User or JWT: {}", principal.getClass());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-      }
-
-      if (user == null) {
-        log.debug("Could not resolve user from authentication");
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        scopes = getScopesFromJwt(jwt);
       }
       
       log.debug("Getting profile for user with ID: {} and username: {}", user.getId(), user.getUsername());

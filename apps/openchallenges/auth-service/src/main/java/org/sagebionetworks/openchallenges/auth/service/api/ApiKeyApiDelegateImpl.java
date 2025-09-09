@@ -2,22 +2,19 @@ package org.sagebionetworks.openchallenges.auth.service.api;
 
 import java.util.List;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.ApiKeyDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.CreateApiKeyRequestDto;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.CreateApiKeyResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
-import org.sagebionetworks.openchallenges.auth.service.repository.UserRepository;
 import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
+import org.sagebionetworks.openchallenges.auth.service.util.AuthenticationUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
@@ -25,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ApiKeyApiDelegateImpl implements ApiKeyApiDelegate {
 
   private final ApiKeyService apiKeyService;
-  private final UserRepository userRepository;
+  private final AuthenticationUtil authenticationUtil;
 
   @Override
   @PreAuthorize("hasAuthority('SCOPE_create:api-key')")
@@ -35,7 +32,7 @@ public class ApiKeyApiDelegateImpl implements ApiKeyApiDelegate {
     log.info("Creating new API key with name: {}", createApiKeyRequestDto.getName());
     try {
       // Get authenticated user from security context
-      User authenticatedUser = getAuthenticatedUser();
+      User authenticatedUser = authenticationUtil.getAuthenticatedUser();
       if (authenticatedUser == null) {
         log.warn("API key creation failed: no authenticated user");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -66,11 +63,7 @@ public class ApiKeyApiDelegateImpl implements ApiKeyApiDelegate {
         .header("Content-Type", "application/json")
         .body(response);
     } catch (Exception e) {
-      log.error(
-        "Unexpected error while creating API key: {}",
-        createApiKeyRequestDto.getName(),
-        e
-      );
+      log.error("Unexpected error while creating API key: {}", createApiKeyRequestDto.getName(), e);
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
   }
@@ -81,7 +74,7 @@ public class ApiKeyApiDelegateImpl implements ApiKeyApiDelegate {
     log.info("Deleting API key with ID: {}", keyId);
     try {
       // Get authenticated user from security context
-      User authenticatedUser = getAuthenticatedUser();
+      User authenticatedUser = authenticationUtil.getAuthenticatedUser();
       if (authenticatedUser == null) {
         log.warn("API key deletion failed: no authenticated user");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -117,7 +110,7 @@ public class ApiKeyApiDelegateImpl implements ApiKeyApiDelegate {
     log.info("Listing API keys");
     try {
       // Get authenticated user from security context
-      User authenticatedUser = getAuthenticatedUser();
+      User authenticatedUser = authenticationUtil.getAuthenticatedUser();
       if (authenticatedUser == null) {
         log.warn("API keys listing failed: no authenticated user");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -142,51 +135,6 @@ public class ApiKeyApiDelegateImpl implements ApiKeyApiDelegate {
       log.error("Unexpected error while listing API keys", e);
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
-  }
-
-  /**
-   * Get the authenticated user from the security context
-   */
-  private User getAuthenticatedUser() {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication == null) {
-      return null;
-    }
-
-    Object principal = authentication.getPrincipal();
-
-    // If principal is a User object (browser OAuth2 flow via web authentication filter)
-    // This happens when OAuth2WebAuthenticationFilter processes JWT from HTTP-only cookies
-    // and creates UsernamePasswordAuthenticationToken with User entity as principal
-    if (principal instanceof User) {
-      return (User) principal;
-    }
-
-    // If principal is a JWT (from API gateway or direct JWT authentication)
-    if (principal instanceof Jwt) {
-      Jwt jwt = (Jwt) principal;
-      
-      // Use the subject claim to identify the user
-      String subject = jwt.getSubject();
-      if (subject != null) {
-        // Try to parse as UUID first (user ID)
-        try {
-          UUID userId = UUID.fromString(subject);
-          return userRepository.findById(userId).orElse(null);
-        } catch (IllegalArgumentException e) {
-          // Not a UUID, assume it's a client_id - look up via API key
-          return apiKeyService.findByClientId(subject)
-              .map(ApiKey::getUser)
-              .orElse(null);
-        }
-      }
-      
-      return null;
-    }
-
-    // Unsupported principal type - log for debugging
-    log.warn("Unsupported principal type in security context: {}", principal.getClass().getName());
-    return null;
   }
 
   private ApiKeyDto convertToDto(ApiKey apiKey) {
