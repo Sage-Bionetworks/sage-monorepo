@@ -37,4 +37,7 @@ public interface ApiKeyRepository extends JpaRepository<ApiKey, UUID> {
   void deleteExpiredApiKeys(@Param("now") OffsetDateTime now);
 
   Optional<ApiKey> findByClientId(String clientId);
+
+  @Query("SELECT a FROM ApiKey a JOIN FETCH a.user WHERE a.clientId = :clientId")
+  Optional<ApiKey> findByClientIdWithUser(@Param("clientId") String clientId);
 }

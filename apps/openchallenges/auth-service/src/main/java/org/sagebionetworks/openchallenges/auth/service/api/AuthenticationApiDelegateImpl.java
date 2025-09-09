@@ -77,10 +77,10 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
         Jwt jwt = (Jwt) principal;
         
         // Extract user information from JWT claims
-        String clientId = jwt.getSubject(); // e.g., "oc_api_key_dev1"
-        String username = jwt.getClaimAsString("username"); // e.g., "oc_api_key_dev1"
+        String clientId = jwt.getSubject(); // e.g., "oc_api_key_dev1" or user UUID
+        String username = jwt.getClaimAsString("preferred_username"); // e.g., "developer"
         
-        log.debug("JWT subject: {}, username: {}", clientId, username);
+        log.debug("JWT subject: {}, preferred_username: {}", clientId, username);
         
         // Find the corresponding API key and user
         Optional<ApiKey> apiKeyOpt = apiKeyService.findByClientId(clientId);

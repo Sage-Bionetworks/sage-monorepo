@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.openchallenges.auth.service.repository.ApiKeyRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -100,9 +101,9 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
    * Configure OAuth2 token generator for access and refresh tokens.
    */
   @Bean
-  public OAuth2TokenGenerator<?> tokenGenerator(JwtEncoder jwtEncoder) {
+  public OAuth2TokenGenerator<?> tokenGenerator(JwtEncoder jwtEncoder, ApiKeyRepository apiKeyRepository) {
     JwtGenerator jwtGenerator = new JwtGenerator(jwtEncoder);
-    jwtGenerator.setJwtCustomizer(jwtTokenCustomizer());
+    jwtGenerator.setJwtCustomizer(jwtTokenCustomizer(apiKeyRepository));
 
     OAuth2AccessTokenGenerator accessTokenGenerator = new OAuth2AccessTokenGenerator();
     OAuth2RefreshTokenGenerator refreshTokenGenerator = new OAuth2RefreshTokenGenerator();
@@ -153,7 +154,7 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
    * Configure JWT token customizer to add OpenChallenges-specific claims.
    */
   @Bean
-  public OAuth2TokenCustomizer<JwtEncodingContext> jwtTokenCustomizer() {
+  public OAuth2TokenCustomizer<JwtEncodingContext> jwtTokenCustomizer(ApiKeyRepository apiKeyRepository) {
     return context -> {
       if (context.getPrincipal() != null && context.getPrincipal().getName() != null) {
         // Add OpenChallenges-specific claims
@@ -161,8 +162,57 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
         // Use the full issuer URL that matches the authorization server settings
         context.getClaims().claim("iss", "http://openchallenges-auth-service:8087");
 
-        // Add username claim
-        context.getClaims().claim("username", context.getPrincipal().getName());
+        // Add username claim - handle different authentication flows
+        String username = context.getPrincipal().getName();
+        String subjectId = username; // Default to principal name
+        
+        // For client credentials flow with API key clients, look up the actual user
+        if (AuthorizationGrantType.CLIENT_CREDENTIALS.equals(context.getAuthorizationGrantType()) 
+            && username.startsWith("oc_api_key_")) {
+          try {
+            // Look up the API key by client ID to get the actual user (with JOIN FETCH)
+            var apiKeyOpt = apiKeyRepository.findByClientIdWithUser(username);
+            if (apiKeyOpt.isPresent()) {
+              var apiKey = apiKeyOpt.get();
+              var user = apiKey.getUser();
+              username = user.getUsername();
+              
+              // Set subject based on user role
+              if (user.getRole() == org.sagebionetworks.openchallenges.auth.service.model.entity.User.Role.service) {
+                // For service accounts, use client_id as subject
+                subjectId = apiKey.getClientId();
+                log.info("🎯 JWT CUSTOMIZER: Service account - using client_id '{}' as subject for user '{}'", subjectId, username);
+              } else {
+                // For regular users, use user UUID as subject
+                subjectId = user.getId().toString();
+                log.info("🎯 JWT CUSTOMIZER: Regular user - using user ID '{}' as subject for user '{}'", subjectId, username);
+              }
+              
+              log.info("🎯 JWT CUSTOMIZER: Found username '{}' for API key client '{}'", username, context.getPrincipal().getName());
+            } else {
+              log.warn("🎯 JWT CUSTOMIZER: No API key found for client ID '{}'", username);
+            }
+          } catch (Exception e) {
+            log.error("🎯 JWT CUSTOMIZER: Error looking up API key for client '{}': {}", username, e.getMessage());
+          }
+        } else if (AuthorizationGrantType.AUTHORIZATION_CODE.equals(context.getAuthorizationGrantType())) {
+          // For authorization code flow (browser login), the principal is already the user
+          // We need to look up the user to get their UUID for the subject
+          try {
+            // Note: In authorization code flow, we'd need access to UserService here
+            // For now, we'll use the username as subject, but this should be improved
+            // to use the user's UUID
+            log.info("🎯 JWT CUSTOMIZER: Authorization code flow - using username '{}' as subject (should be improved to use UUID)", username);
+          } catch (Exception e) {
+            log.error("🎯 JWT CUSTOMIZER: Error in authorization code flow processing: {}", e.getMessage());
+          }
+        }
+        
+        // Set the subject claim
+        context.getClaims().claim("sub", subjectId);
+        
+        // Add OIDC standard preferred_username claim (for display purposes only)
+        context.getClaims().claim("preferred_username", username);
 
         // Add scopes for authorization code flow (browser login) - no resource parameter required
         if (AuthorizationGrantType.AUTHORIZATION_CODE.equals(context.getAuthorizationGrantType())) {

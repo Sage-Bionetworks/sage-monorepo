@@ -155,22 +155,31 @@ public class ApiKeyApiDelegateImpl implements ApiKeyApiDelegate {
 
     Object principal = authentication.getPrincipal();
 
-    // If principal is a User object (custom authentication)
+    // If principal is a User object (browser OAuth2 flow via web authentication filter)
+    // This happens when OAuth2WebAuthenticationFilter processes JWT from HTTP-only cookies
+    // and creates UsernamePasswordAuthenticationToken with User entity as principal
     if (principal instanceof User) {
       return (User) principal;
     }
 
-    // If principal is a JWT (from API gateway), extract client_id and find the user
+    // If principal is a JWT (from API gateway or direct JWT authentication)
     if (principal instanceof Jwt) {
       Jwt jwt = (Jwt) principal;
-      String clientId = jwt.getSubject(); // client_id is stored in 'sub' claim
       
+      // Try to get username from JWT claims (works for both OAuth flow and API key flow)
+      String username = jwt.getClaimAsString("preferred_username");
+      if (username != null) {
+        return userService.findByUsername(username).orElse(null);
+      }
+      
+      // Fallback: try to find user by OAuth2 client ID (legacy approach)
+      String clientId = jwt.getSubject();
       if (clientId != null) {
-        // Find the API key by client ID to get the associated user
         return apiKeyService.findByClientId(clientId)
             .map(ApiKey::getUser)
             .orElse(null);
       }
+      
       return null;
     }
 

@@ -87,9 +87,9 @@ public class OAuth2WebAuthenticationFilter extends OncePerRequestFilter {
             log.debug("Successfully decoded OAuth2 JWT token");
 
             // Extract username from JWT claims
-            String username = jwt.getClaimAsString("username");
+            String username = jwt.getClaimAsString("preferred_username");
             if (username == null) {
-                log.debug("No username claim found in JWT token");
+                log.debug("No preferred_username claim found in JWT token");
                 filterChain.doFilter(request, response);
                 return;
             }
