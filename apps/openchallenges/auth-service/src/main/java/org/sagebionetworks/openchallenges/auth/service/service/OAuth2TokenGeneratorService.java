@@ -57,18 +57,19 @@ public class OAuth2TokenGeneratorService {
         Authentication authentication = createUserAuthentication(user);
         log.debug("Created authentication for user: {}", authentication.getName());
 
-        // Build OAuth2 token context - use CLIENT_CREDENTIALS for service-to-service after external auth
+        // Build OAuth2 token context - use AUTHORIZATION_CODE for user browser logins
+        // This differs from client credentials flow which requires resource parameter
         OAuth2TokenContext tokenContext = DefaultOAuth2TokenContext.builder()
                 .registeredClient(registeredClient)
                 .principal(authentication)
                 .authorizationServerContext(authorizationServerContext)
-                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizedScopes(registeredClient.getScopes())
                 .tokenType(OAuth2TokenType.ACCESS_TOKEN)
                 .authorizationGrant(authentication)
                 .build();
 
-        log.debug("Built token context with grant type: {}", AuthorizationGrantType.CLIENT_CREDENTIALS);
+        log.debug("Built token context with grant type: {}", AuthorizationGrantType.AUTHORIZATION_CODE);
 
         // Generate the token
         OAuth2Token token = tokenGenerator.generate(tokenContext);

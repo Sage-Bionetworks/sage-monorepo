@@ -164,6 +164,19 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
         // Add username claim
         context.getClaims().claim("username", context.getPrincipal().getName());
 
+        // Add scopes for authorization code flow (browser login) - no resource parameter required
+        if (AuthorizationGrantType.AUTHORIZATION_CODE.equals(context.getAuthorizationGrantType())) {
+          Set<String> authorizedScopes = context.getAuthorizedScopes();
+          if (authorizedScopes != null && !authorizedScopes.isEmpty()) {
+            // Add scopes as both 'scp' (standard) and 'scope' (for Spring Security compatibility)
+            context.getClaims().claim("scp", authorizedScopes);
+            context.getClaims().claim("scope", String.join(" ", authorizedScopes));
+          }
+          // For browser login, set a default audience to the auth service itself
+          context.getClaims().claim("aud", "urn:openchallenges:auth-service");
+          log.info("🎯 JWT CUSTOMIZER: Set default audience for authorization code flow: urn:openchallenges:auth-service");
+        }
+
         // Add scopes for client credentials flow
         if (AuthorizationGrantType.CLIENT_CREDENTIALS.equals(context.getAuthorizationGrantType())) {
           Set<String> authorizedScopes = context.getAuthorizedScopes();
