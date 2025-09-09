@@ -7,6 +7,7 @@ import org.sagebionetworks.openchallenges.auth.service.model.dto.CreateApiKeyReq
 import org.sagebionetworks.openchallenges.auth.service.model.dto.CreateApiKeyResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
+import org.sagebionetworks.openchallenges.auth.service.repository.UserRepository;
 import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
 import org.sagebionetworks.openchallenges.auth.service.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ public class ApiKeyApiDelegateImpl implements ApiKeyApiDelegate {
 
   private final ApiKeyService apiKeyService;
   private final UserService userService;
+  private final UserRepository userRepository;
 
   @Override
   @PreAuthorize("hasAuthority('SCOPE_create:api-key')")
@@ -166,18 +168,19 @@ public class ApiKeyApiDelegateImpl implements ApiKeyApiDelegate {
     if (principal instanceof Jwt) {
       Jwt jwt = (Jwt) principal;
       
-      // Try to get username from JWT claims (works for both OAuth flow and API key flow)
-      String username = jwt.getClaimAsString("preferred_username");
-      if (username != null) {
-        return userService.findByUsername(username).orElse(null);
-      }
-      
-      // Fallback: try to find user by OAuth2 client ID (legacy approach)
-      String clientId = jwt.getSubject();
-      if (clientId != null) {
-        return apiKeyService.findByClientId(clientId)
-            .map(ApiKey::getUser)
-            .orElse(null);
+      // Use the subject claim to identify the user
+      String subject = jwt.getSubject();
+      if (subject != null) {
+        // Try to parse as UUID first (user ID)
+        try {
+          UUID userId = UUID.fromString(subject);
+          return userRepository.findById(userId).orElse(null);
+        } catch (IllegalArgumentException e) {
+          // Not a UUID, assume it's a client_id - look up via API key
+          return apiKeyService.findByClientId(subject)
+              .map(ApiKey::getUser)
+              .orElse(null);
+        }
       }
       
       return null;

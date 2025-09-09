@@ -5,6 +5,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
@@ -86,18 +89,30 @@ public class OAuth2WebAuthenticationFilter extends OncePerRequestFilter {
             Jwt jwt = jwtDecoder.decode(jwtToken);
             log.debug("Successfully decoded OAuth2 JWT token");
 
-            // Extract username from JWT claims
-            String username = jwt.getClaimAsString("preferred_username");
-            if (username == null) {
-                log.debug("No preferred_username claim found in JWT token");
+            // Extract subject from JWT claims (should be user UUID or client_id)
+            String subject = jwt.getSubject();
+            if (subject == null) {
+                log.debug("No subject claim found in JWT token");
                 filterChain.doFilter(request, response);
                 return;
             }
 
-            // Load user from database
-            Optional<User> userOptional = userRepository.findByUsernameIgnoreCase(username);
+            // Try to find user by UUID first, then by client_id (for service accounts)
+            Optional<User> userOptional = Optional.empty();
+            try {
+                UUID userId = UUID.fromString(subject);
+                userOptional = userRepository.findById(userId);
+                log.debug("Found user by UUID: {}", userId);
+            } catch (IllegalArgumentException e) {
+                // Not a UUID, could be a client_id for service account
+                // For now, we don't support service account authentication in web filter
+                log.debug("Subject is not a UUID, skipping authentication for: {}", subject);
+                filterChain.doFilter(request, response);
+                return;
+            }
+            
             if (userOptional.isEmpty()) {
-                log.warn("User not found for username: {}", username);
+                log.warn("User not found for UUID: {}", subject);
                 filterChain.doFilter(request, response);
                 return;
             }
@@ -106,7 +121,7 @@ public class OAuth2WebAuthenticationFilter extends OncePerRequestFilter {
             
             // Check if user account is enabled
             if (!user.getEnabled()) {
-                log.warn("User account is disabled: {}", username);
+                log.warn("User account is disabled: {}", user.getUsername());
                 filterChain.doFilter(request, response);
                 return;
             }
@@ -119,7 +134,7 @@ public class OAuth2WebAuthenticationFilter extends OncePerRequestFilter {
             );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            log.debug("Successfully authenticated user: {} with role: {}", username, user.getRole());
+            log.debug("Successfully authenticated user: {} with role: {}", user.getUsername(), user.getRole());
 
         } catch (JwtException e) {
             log.debug("JWT token validation failed: {}", e.getMessage());

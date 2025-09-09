@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -77,21 +78,33 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
         Jwt jwt = (Jwt) principal;
         
         // Extract user information from JWT claims
-        String clientId = jwt.getSubject(); // e.g., "oc_api_key_dev1" or user UUID
-        String username = jwt.getClaimAsString("preferred_username"); // e.g., "developer"
+        String subject = jwt.getSubject(); // Can be user UUID or client_id
+        String preferredUsername = jwt.getClaimAsString("preferred_username"); // Display name
         
-        log.debug("JWT subject: {}, preferred_username: {}", clientId, username);
+        log.debug("JWT subject: {}, preferred_username: {}", subject, preferredUsername);
         
-        // Find the corresponding API key and user
-        Optional<ApiKey> apiKeyOpt = apiKeyService.findByClientId(clientId);
-        if (apiKeyOpt.isPresent()) {
-          ApiKey apiKey = apiKeyOpt.get();
-          user = apiKey.getUser();
-          scopes = getScopesFromApiKey(apiKey);
-          log.debug("Found user {} for JWT client ID {}", user.getUsername(), clientId);
-        } else {
-          log.debug("No API key found for JWT client ID: {}", clientId);
-          return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        // Try to parse subject as UUID first (user ID)
+        try {
+          UUID userId = UUID.fromString(subject);
+          // Subject is a user UUID - this is a regular user authentication
+          Optional<User> userOpt = userService.findByUsername(preferredUsername != null ? preferredUsername : subject);
+          if (userOpt.isPresent()) {
+            user = userOpt.get();
+            scopes = getScopesFromJwt(jwt);
+            log.debug("Found user by preferred_username for UUID subject: {}", user.getUsername());
+          }
+        } catch (IllegalArgumentException e) {
+          // Subject is not a UUID, assume it's a client_id - find API key and user
+          Optional<ApiKey> apiKeyOpt = apiKeyService.findByClientId(subject);
+          if (apiKeyOpt.isPresent()) {
+            ApiKey apiKey = apiKeyOpt.get();
+            user = apiKey.getUser();
+            scopes = getScopesFromApiKey(apiKey);
+            log.debug("Found user {} for JWT client ID {}", user.getUsername(), subject);
+          } else {
+            log.debug("No API key found for JWT client ID: {}", subject);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+          }
         }
         
       } else {
@@ -142,6 +155,21 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
           .collect(Collectors.toList());
       log.debug("Retrieved {} scopes from API key: {}", scopes.size(), allowedScopes);
       return scopes;
+    }
+    return Collections.emptyList();
+  }
+
+  /**
+   * Extract scopes from JWT token.
+   */
+  private List<AuthScopeDto> getScopesFromJwt(Jwt jwt) {
+    List<String> scopes = jwt.getClaimAsStringList("scp");
+    if (scopes != null && !scopes.isEmpty()) {
+      List<AuthScopeDto> scopeDtos = scopes.stream()
+          .map(scope -> AuthScopeDto.fromValue(scope.trim()))
+          .collect(Collectors.toList());
+      log.debug("Retrieved {} scopes from JWT: {}", scopeDtos.size(), scopes);
+      return scopeDtos;
     }
     return Collections.emptyList();
   }
