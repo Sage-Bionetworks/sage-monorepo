@@ -26,6 +26,7 @@ import {
   of,
   switchMap,
 } from 'rxjs';
+import sanitizeHtml from 'sanitize-html';
 import { SvgImageComponent } from '../svg-image/svg-image.component';
 
 @Component({
@@ -168,14 +169,14 @@ export class SearchInputComponent implements AfterViewInit {
 
   highlightMatches(text: string, query: string): string {
     if (!text || !query || query.length < 1) {
-      return text;
+      return sanitizeHtml(text);
     }
 
     // Escape special regex characters in the query
     const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const regex = new RegExp(`(${escapedQuery})`, 'gi');
 
-    return text.replace(regex, '<mark>$1</mark>');
+    return sanitizeHtml(text).replace(regex, '<mark>$1</mark>');
   }
 
   formatAndHighlightResultsForDisplay(result: SearchResult): string {
