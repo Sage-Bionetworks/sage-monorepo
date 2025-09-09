@@ -31,6 +31,7 @@ describe('ModelDetailsResourcesComponent', () => {
     expect(sectionTitle).toBeInTheDocument();
 
     expect(screen.getByText(/human genes in ad/i)).toBeInTheDocument();
+    expect(screen.getByText(/allen brain atlas/i)).toBeInTheDocument();
     expect(screen.getByText(/model-ad program/i)).toBeInTheDocument();
     expect(screen.getByText(/mouse genome informatics/i)).toBeInTheDocument();
     expect(screen.getByText(/model-ad preclinical testing core/i)).toBeInTheDocument();
