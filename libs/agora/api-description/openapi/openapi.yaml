@@ -27,7 +27,7 @@ tags:
   - name: Team
     description: Operations about teams.
 paths:
-  /biodomains:
+  /bio-domains:
     get:
       tags:
         - Bio Domain
@@ -47,7 +47,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /biodomains/{ensg}:
+  /bio-domains/{ensg}:
     get:
       tags:
         - Bio Domain
@@ -202,7 +202,7 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /dataversion:
+  /data-version:
     get:
       tags:
         - Data Version
