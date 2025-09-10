@@ -14,8 +14,8 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - name: HealthCheck
+  - name: Health Check
     description: Operations about health checks
 paths:
-  /healthcheck:
-    $ref: paths/healthCheck.yaml
+  /health-check:
+    $ref: paths/health-check.yaml

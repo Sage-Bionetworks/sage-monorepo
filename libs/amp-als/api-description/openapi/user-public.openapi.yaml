@@ -14,13 +14,13 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - name: HealthCheck
+  - name: Health Check
     description: Operations about health checks
 paths:
-  /healthcheck:
+  /health-check:
     get:
       tags:
-        - HealthCheck
+        - Health Check
       summary: Get health check information
       description: Get information about the health of the service
       operationId: getHealthCheck
