@@ -186,7 +186,7 @@ export class TeamService {
       localVarTransferCache = true;
     }
 
-    let localVarPath = `/teamMembers/${this.configuration.encodeParam({ name: 'name', value: name, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}/image`;
+    let localVarPath = `/team-members/${this.configuration.encodeParam({ name: 'name', value: name, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}/image`;
     return this.httpClient.request('get', `${this.configuration.basePath}${localVarPath}`, {
       context: localVarHttpContext,
       responseType: 'blob',

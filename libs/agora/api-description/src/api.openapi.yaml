@@ -27,25 +27,25 @@ tags:
   - name: Team
     description: Operations about teams.
 paths:
-  /biodomains:
-    $ref: paths/biodomains.yaml
-  /biodomains/{ensg}:
-    $ref: paths/biodomains/@{ensg}.yaml
+  /bio-domains:
+    $ref: paths/bio-domains.yaml
+  /bio-domains/{ensg}:
+    $ref: paths/bio-domains/{ensg}.yaml
   /genes:
     $ref: paths/genes.yaml
   /genes/{ensg}:
-    $ref: paths/genes/@{ensg}.yaml
+    $ref: paths/genes/{ensg}.yaml
   /genes/search:
     $ref: paths/genes/search.yaml
   /genes/comparison:
     $ref: paths/genes/comparison.yaml
   /genes/nominated:
     $ref: paths/genes/nominated.yaml
-  /dataversion:
+  /data-version:
     $ref: paths/data-version.yaml
   /distribution:
     $ref: paths/distribution.yaml
   /teams:
     $ref: paths/teams.yaml
-  /teamMembers/{name}/image:
-    $ref: paths/teamMembers/@{name}/image.yaml
+  /team-members/{name}/image:
+    $ref: paths/team-members/{name}/image.yaml

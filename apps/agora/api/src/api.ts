@@ -56,9 +56,9 @@ mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection 
 
 const router = express.Router();
 mongoose.connection.once('open', async () => {
-  router.get('/biodomains', allBiodomainsRoute);
-  router.get('/biodomains/:id', biodomainsRoute);
-  router.get('/dataversion', dataVersionRoute);
+  router.get('/bio-domains', allBiodomainsRoute);
+  router.get('/bio-domains/:id', biodomainsRoute);
+  router.get('/data-version', dataVersionRoute);
   router.get('/distribution', distributionRoute);
   router.get('/genes/search', searchGeneRoute);
   router.get('/genes/comparison', comparisonGenesRoute);
@@ -66,7 +66,7 @@ mongoose.connection.once('open', async () => {
   router.get('/genes/:id', geneRoute);
   router.get('/genes', genesRoute);
   router.get('/teams', teamsRoute);
-  router.get('/teamMembers/:name/image', teamMemberImageRoute);
+  router.get('/team-members/:name/image', teamMemberImageRoute);
 });
 
 export default router;
