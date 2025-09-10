@@ -93,7 +93,11 @@ test.describe('search', () => {
   test('can search using home card input', async ({ page }) => {
     const model = 'APOE4';
     await page.goto('/');
-    const searchListItems = await searchAndGetSearchListItems(model, page, 'Find model by name...');
+    const searchListItems = await searchAndGetSearchListItems(
+      model,
+      page,
+      'Find model by name or ID...',
+    );
     await expect(searchListItems.first()).toHaveText(model);
   });
 
