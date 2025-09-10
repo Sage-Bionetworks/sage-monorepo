@@ -39,7 +39,7 @@ describe('SearchInputComponent', () => {
 
   it('should render with default placeholder', async () => {
     await setup();
-    const searchInput = screen.getByPlaceholderText('Find model by name...');
+    const searchInput = screen.getByPlaceholderText('Find model by name or ID...');
     expect(searchInput).toBeInTheDocument();
   });
 

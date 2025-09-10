@@ -16,7 +16,7 @@ export class SearchInputComponent {
   router = inject(Router);
   modelService = inject(ModelService);
 
-  searchPlaceholder = input<string>('Find model by name...');
+  searchPlaceholder = input<string>('Find model by name or ID...');
   searchImagePath = input<string | undefined>();
   searchImageAltText = input<string>('');
   hasThickBorder = input<boolean>(false);
