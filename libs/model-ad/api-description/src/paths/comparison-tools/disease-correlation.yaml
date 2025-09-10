@@ -1,0 +1,21 @@
+get:
+  tags:
+    - Disease Correlation
+  summary: Get disease correlation comparison data
+  description: Returns a list of disease correlation objects for use in comparison tools.
+  operationId: getDiseaseCorrelations
+  responses:
+    '200':
+      description: A list of disease correlation objects
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../components/schemas/DiseaseCorrelation.yaml'
+    '400':
+      $ref: ../../components/responses/BadRequest.yaml
+    '404':
+      $ref: ../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml
