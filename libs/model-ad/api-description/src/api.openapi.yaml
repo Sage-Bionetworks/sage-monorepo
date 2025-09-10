@@ -22,6 +22,8 @@ tags:
     description: Operations about Model Overview.
   - name: Comparison Tool Config
     description: Operations about Comparison Tool UI configuration.
+  - name: Disease Correlation
+    description: Operations about Disease Correlation results.
 paths:
   /data-version:
     $ref: paths/data-version.yaml
@@ -33,3 +35,5 @@ paths:
     $ref: paths/comparison-tool-config.yaml
   /comparison-tools/model-overview:
     $ref: paths/comparison-tools/model-overview.yaml
+  /comparison-tools/disease-correlation:
+    $ref: paths/comparison-tools/disease-correlation.yaml
