@@ -23,7 +23,7 @@ tags:
   - name: Comparison Tool Config
     description: Operations about Comparison Tool UI configuration.
 paths:
-  /dataversion:
+  /data-version:
     $ref: paths/data-version.yaml
   /models/search:
     $ref: paths/model-search.yaml
