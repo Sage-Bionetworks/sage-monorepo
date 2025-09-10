@@ -49,6 +49,28 @@ test.describe('model details', () => {
     await page.waitForURL(`${modelPath}/omics`);
     await expect(page.getByRole('heading', { level: 2, name: 'Available Data' })).toBeVisible();
   });
+
+  test('scrolls to panel content on initial load when tab specified in url and no hash fragment is present', async ({
+    page,
+  }) => {
+    const model = '3xTg-AD';
+    await page.goto(`/models/${model}/omics`);
+    await expect(page.getByRole('heading', { level: 2, name: 'Available Data' })).toBeInViewport();
+    await expect(page.getByRole('heading', { level: 1, name: model })).not.toBeInViewport();
+    await page.evaluate(() => window.pageYOffset !== 0);
+  });
+
+  test('does not scroll to panel content on initial load when tab not specified in url', async ({
+    page,
+  }) => {
+    const model = '3xTg-AD';
+    await page.goto(`/models/${model}`);
+    await expect(page.getByRole('heading', { level: 1, name: model })).toBeInViewport();
+    await expect(
+      page.getByRole('heading', { level: 2, name: 'Available Data' }),
+    ).not.toBeInViewport();
+    await page.evaluate(() => window.pageYOffset === 0);
+  });
 });
 
 test.describe('model details - omics', () => {

@@ -10,6 +10,7 @@
       (panelChange)="onPanelChange($event)"
       [activePanel]="activePanel"
       [activeParent]="activeParent"
+      [scrollToPanelNavElementOnInitialLoad]="scrollToPanelNavElementOnInitialLoad"
     />
     <div class="panel-content">
       @switch (activePanel) {

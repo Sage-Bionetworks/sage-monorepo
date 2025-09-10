@@ -82,6 +82,11 @@ export class HelperService {
     return urlParams.get(name);
   }
 
+  getHashFragment() {
+    // Extract hash fragment from URL (e.g. "nfl" from "#nfl")
+    return window.location.hash.slice(1);
+  }
+
   encodeParenthesesForwardSlashes(uri: string) {
     return (
       uri

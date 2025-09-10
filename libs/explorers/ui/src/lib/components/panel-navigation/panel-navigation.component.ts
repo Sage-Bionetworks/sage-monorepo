@@ -28,6 +28,7 @@ export class PanelNavigationComponent implements AfterViewInit, AfterViewChecked
   panels = input.required<Panel[]>();
   activePanel = input.required<string>();
   activeParent = input<string>('');
+  scrollToPanelNavElementOnInitialLoad = input<boolean>(false);
   panelChange = output<Panel>();
 
   faAngleRight = faAngleRight;
@@ -80,6 +81,10 @@ export class PanelNavigationComponent implements AfterViewInit, AfterViewChecked
     setTimeout(() => {
       this.onWindowResize();
     }, 100);
+
+    if (this.scrollToPanelNavElementOnInitialLoad()) {
+      this.scrollToPanelNavElement();
+    }
   }
 
   ngAfterViewChecked() {
@@ -88,13 +93,23 @@ export class PanelNavigationComponent implements AfterViewInit, AfterViewChecked
 
   activatePanel(panel: Panel) {
     if (isPlatformBrowser(this.platformId)) {
+      this.panelChange.emit(panel);
+      this.scrollToPanelNavElement();
+    }
+  }
+
+  scrollToPanelNavElement() {
+    // Add slight delay to allow panel to render before scrolling
+    setTimeout(() => {
       const nav = document.querySelector('.panel-navigation');
       if (nav) {
-        window.scrollTo(0, this.helperService.getOffset(nav).top);
+        window.scrollTo({
+          top: this.helperService.getOffset(nav).top,
+          left: 0,
+          behavior: 'smooth',
+        });
       }
-
-      this.panelChange.emit(panel);
-    }
+    }, 100);
   }
 
   getPanelCount() {
