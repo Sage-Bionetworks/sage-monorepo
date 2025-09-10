@@ -1,11 +1,11 @@
-import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, ViewEncapsulation } from '@angular/core';
 
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
 import { SynapseApiService } from '@sagebionetworks/explorers/services';
-import { MarkdownModule } from 'ngx-markdown';
 import { HeroComponent } from '@sagebionetworks/explorers/ui';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MarkdownModule } from 'ngx-markdown';
 import { finalize } from 'rxjs/operators';
 
 @Component({
@@ -13,10 +13,11 @@ import { finalize } from 'rxjs/operators';
   imports: [HeroComponent, MarkdownModule, LoadingIconComponent, RouterModule],
   templateUrl: './terms-of-service.component.html',
   styleUrls: ['./terms-of-service.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class TermsOfServiceComponent implements OnInit {
   synapseService = inject(SynapseApiService);
-  private destroyRef = inject(DestroyRef);
+  private readonly destroyRef = inject(DestroyRef);
 
   content = '';
   isLoading = true;

@@ -27,6 +27,26 @@
 
     .terms-of-service-content {
       width: min(vars.$main-content-desktop-width, 100%);
+
+      // Override global CSS reset that removes margin
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      p,
+      ol,
+      ul {
+        margin-bottom: revert;
+      }
+
+      // Override global CSS reset that removes list styles
+      ul,
+      ol {
+        list-style: revert;
+        padding: revert;
+      }
     }
   }
 }
