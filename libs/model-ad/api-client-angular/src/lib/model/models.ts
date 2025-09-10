@@ -13,3 +13,4 @@ export * from './model-data';
 export * from './model-overview';
 export * from './model-overview-link';
 export * from './search-result';
+export * from './sex';

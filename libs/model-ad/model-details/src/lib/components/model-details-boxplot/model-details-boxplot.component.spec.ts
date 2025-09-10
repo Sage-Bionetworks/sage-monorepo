@@ -1,4 +1,4 @@
-import { IndividualData, ModelData } from '@sagebionetworks/model-ad/api-client-angular';
+import { ModelData, Sex } from '@sagebionetworks/model-ad/api-client-angular';
 import { render, screen } from '@testing-library/angular';
 import { ModelDetailsBoxplotComponent } from './model-details-boxplot.component';
 
@@ -16,10 +16,7 @@ const mockModelData: ModelData = {
   ],
 };
 
-async function setup(
-  modelData = mockModelData,
-  sexes: IndividualData.SexEnum[] = ['Female', 'Male'],
-) {
+async function setup(modelData = mockModelData, sexes: Sex[] = ['Female', 'Male']) {
   const { fixture } = await render(ModelDetailsBoxplotComponent, {
     imports: [],
     componentInputs: {
