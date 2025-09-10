@@ -30,11 +30,11 @@ paths:
   /biodomains:
     $ref: paths/biodomains.yaml
   /biodomains/{ensg}:
-    $ref: paths/biodomains/ensg.yaml
+    $ref: paths/biodomains/{ensg}.yaml
   /genes:
     $ref: paths/genes.yaml
   /genes/{ensg}:
-    $ref: paths/genes/ensg.yaml
+    $ref: paths/genes/{ensg}.yaml
   /genes/search:
     $ref: paths/genes/search.yaml
   /genes/comparison:
@@ -48,4 +48,4 @@ paths:
   /teams:
     $ref: paths/teams.yaml
   /teamMembers/{name}/image:
-    $ref: paths/teamMembers/name/image.yaml
+    $ref: paths/teamMembers/{name}/image.yaml
