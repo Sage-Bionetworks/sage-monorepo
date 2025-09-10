@@ -19,26 +19,11 @@ CREATE TABLE external_account (
     provider_data JSONB,  -- additional provider-specific data
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
-    
+
     -- Ensure one account per provider per user
     UNIQUE(user_id, provider),
     -- Ensure external account uniqueness per provider
     UNIQUE(provider, external_id)
-);
-
--- Create refresh_token table for JWT refresh token management
-CREATE TABLE refresh_token (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL REFERENCES app_user(id) ON DELETE CASCADE,
-    token_hash VARCHAR(255) NOT NULL UNIQUE,  -- hashed refresh token
-    expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
-    revoked BOOLEAN NOT NULL DEFAULT FALSE,
-    issued_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
-    last_used_at TIMESTAMP WITH TIME ZONE,
-    user_agent VARCHAR(500),  -- browser/client info
-    ip_address INET,  -- client IP address
-    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
 );
 
 -- Add indexes for performance
@@ -46,11 +31,6 @@ CREATE INDEX idx_external_account_user_id ON external_account(user_id);
 CREATE INDEX idx_external_account_provider ON external_account(provider);
 CREATE INDEX idx_external_account_external_id ON external_account(provider, external_id);
 CREATE INDEX idx_external_account_external_email ON external_account(external_email);
-
-CREATE INDEX idx_refresh_token_user_id ON refresh_token(user_id);
-CREATE INDEX idx_refresh_token_token_hash ON refresh_token(token_hash);
-CREATE INDEX idx_refresh_token_expires_at ON refresh_token(expires_at);
-CREATE INDEX idx_refresh_token_revoked ON refresh_token(revoked);
 
 CREATE INDEX idx_app_user_email ON app_user(email);
 
@@ -66,4 +46,3 @@ $$ language 'plpgsql';
 -- Add triggers for updated_at columns
 CREATE TRIGGER update_app_user_updated_at BEFORE UPDATE ON app_user FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_external_account_updated_at BEFORE UPDATE ON external_account FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-CREATE TRIGGER update_refresh_token_updated_at BEFORE UPDATE ON refresh_token FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
