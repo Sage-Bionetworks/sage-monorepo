@@ -47,5 +47,5 @@ paths:
     $ref: paths/distribution.yaml
   /teams:
     $ref: paths/teams.yaml
-  /teamMembers/{name}/image:
-    $ref: paths/teamMembers/{name}/image.yaml
+  /team-members/{name}/image:
+    $ref: paths/team-members/{name}/image.yaml
