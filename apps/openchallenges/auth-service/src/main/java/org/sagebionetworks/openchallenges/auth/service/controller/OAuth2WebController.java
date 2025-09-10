@@ -2,13 +2,13 @@ package org.sagebionetworks.openchallenges.auth.service.controller;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.OAuth2CallbackResponseDto;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ExternalAccount;
 import org.sagebionetworks.openchallenges.auth.service.service.AuthenticationService;
 import org.sagebionetworks.openchallenges.auth.service.service.OAuth2ConfigurationService;
 import org.springframework.stereotype.Controller;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -74,7 +74,7 @@ public class OAuth2WebController {
     try {
       // Process OAuth2 callback through AuthenticationService
       log.debug("Processing OAuth2 callback through AuthenticationService");
-      
+
       OAuth2CallbackResponseDto authResponse = authenticationService.handleOAuth2Callback(
         "google", // Currently only supporting Google
         code,
@@ -82,14 +82,14 @@ public class OAuth2WebController {
       );
 
       log.debug("OAuth2 authentication successful, setting secure cookies");
-      
-            // Set secure HTTP-only cookies with appropriate expiration times
+
+      // Set secure HTTP-only cookies with appropriate expiration times
       setSecureCookie(response, "oc_access_token", authResponse.getAccessToken(), 3600); // 1 hour
       setSecureCookie(response, "oc_refresh_token", authResponse.getRefreshToken(), 604800); // 7 days
       setSecureCookie(response, "oc_username", authResponse.getUsername(), 604800); // 7 days - longer session
-      
+
       log.debug("Secure cookies set, redirecting to profile page");
-      
+
       // Redirect to clean profile URL without sensitive data
       return "redirect:/profile";
     } catch (Exception e) {
@@ -102,14 +102,19 @@ public class OAuth2WebController {
   /**
    * Set a secure HTTP-only cookie.
    */
-  private void setSecureCookie(HttpServletResponse response, String name, String value, int maxAge) {
+  private void setSecureCookie(
+    HttpServletResponse response,
+    String name,
+    String value,
+    int maxAge
+  ) {
     Cookie cookie = new Cookie(name, value);
     cookie.setHttpOnly(true); // Prevent XSS attacks
     cookie.setSecure(false); // Set to true in production with HTTPS
     cookie.setPath("/"); // Available for entire application
     cookie.setMaxAge(maxAge); // Cookie expiration in seconds
     response.addCookie(cookie);
-    
+
     log.debug("Set secure cookie: {} with maxAge: {} seconds", name, maxAge);
   }
 }
