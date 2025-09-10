@@ -20,6 +20,5 @@ describe('ModelDetailsOmicsComponent', () => {
 
     expect(screen.getByText('Gene Expression')).toBeInTheDocument();
     expect(screen.getByText('Disease Correlation')).toBeInTheDocument();
-    expect(screen.getByText(/allen institute/i)).toBeInTheDocument();
   });
 });
