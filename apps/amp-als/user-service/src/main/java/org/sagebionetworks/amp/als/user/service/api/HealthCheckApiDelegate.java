@@ -27,7 +27,7 @@ public interface HealthCheckApiDelegate {
     }
 
     /**
-     * GET /healthcheck : Get health check information
+     * GET /health-check : Get health check information
      * Get information about the health of the service
      *
      * @return Success (status code 200)

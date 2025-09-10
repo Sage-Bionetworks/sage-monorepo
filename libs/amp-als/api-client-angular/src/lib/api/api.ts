@@ -1,5 +1,5 @@
 export * from './dataset.service';
 import { DatasetService } from './dataset.service';
-export * from './healthCheck.service';
-import { HealthCheckService } from './healthCheck.service';
+export * from './health-check.service';
+import { HealthCheckService } from './health-check.service';
 export const APIS = [DatasetService, HealthCheckService];

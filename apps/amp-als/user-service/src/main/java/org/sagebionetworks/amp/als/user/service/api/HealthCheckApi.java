@@ -31,7 +31,7 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 @Validated
-@Tag(name = "HealthCheck", description = "Operations about health checks")
+@Tag(name = "Health Check", description = "Operations about health checks")
 public interface HealthCheckApi {
 
     default HealthCheckApiDelegate getDelegate() {
@@ -39,7 +39,7 @@ public interface HealthCheckApi {
     }
 
     /**
-     * GET /healthcheck : Get health check information
+     * GET /health-check : Get health check information
      * Get information about the health of the service
      *
      * @return Success (status code 200)
@@ -49,7 +49,7 @@ public interface HealthCheckApi {
         operationId = "getHealthCheck",
         summary = "Get health check information",
         description = "Get information about the health of the service",
-        tags = { "HealthCheck" },
+        tags = { "Health Check" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = HealthCheckDto.class)),
@@ -63,7 +63,7 @@ public interface HealthCheckApi {
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/healthcheck",
+        value = "/health-check",
         produces = { "application/json", "application/problem+json" }
     )
     
