@@ -192,7 +192,7 @@ export class BioDomainService {
       }
     }
 
-    let localVarPath = `/biodomains/${this.configuration.encodeParam({ name: 'ensg', value: ensg, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
+    let localVarPath = `/bio-domains/${this.configuration.encodeParam({ name: 'ensg', value: ensg, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
     return this.httpClient.request<Array<BioDomain>>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
@@ -283,7 +283,7 @@ export class BioDomainService {
       }
     }
 
-    let localVarPath = `/biodomains`;
+    let localVarPath = `/bio-domains`;
     return this.httpClient.request<Array<BioDomainInfo>>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,

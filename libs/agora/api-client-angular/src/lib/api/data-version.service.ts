@@ -181,7 +181,7 @@ export class DataVersionService {
       }
     }
 
-    let localVarPath = `/dataversion`;
+    let localVarPath = `/data-version`;
     return this.httpClient.request<DataVersion>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
