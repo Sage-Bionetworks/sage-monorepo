@@ -1,4 +1,4 @@
-export * from './comparisonToolConfig';
-export * from './dataVersion';
+export * from './comparison-tool-config';
+export * from './data-version';
 export * from './model';
-export * from './modelOverviewComparisonTool';
+export * from './model-overview-comparison-tool';

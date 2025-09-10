@@ -23,7 +23,7 @@ tags:
   - name: Comparison Tool Config
     description: Operations about Comparison Tool UI configuration.
 paths:
-  /dataversion:
+  /data-version:
     get:
       tags:
         - Data Version
