@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Sex } from './sex';
 import { CorrelationResult } from './correlation-result';
 
 /**
@@ -37,12 +38,10 @@ export interface DiseaseCorrelation {
    * Age of the model
    */
   age: string;
-  /**
-   * Sex of the model
-   */
-  sex: string;
+  sex: Sex;
   /**
    * List of correlation results
    */
   results: Array<CorrelationResult>;
 }
+export namespace DiseaseCorrelation {}

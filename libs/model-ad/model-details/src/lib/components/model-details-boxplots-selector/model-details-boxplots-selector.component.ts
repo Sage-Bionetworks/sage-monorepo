@@ -24,7 +24,7 @@ import {
   ModalLinkComponent,
   SvgIconComponent,
 } from '@sagebionetworks/explorers/util';
-import { IndividualData, ModelData } from '@sagebionetworks/model-ad/api-client-angular';
+import { ModelData, Sex } from '@sagebionetworks/model-ad/api-client-angular';
 import { SelectModule } from 'primeng/select';
 import { ModelDetailsBoxplotsGridComponent } from '../model-details-boxplots-grid/model-details-boxplots-grid.component';
 
@@ -56,7 +56,7 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
   modelDataList = input.required<ModelData[]>();
   wikiParams = input.required<SynapseWikiParams>();
 
-  sexOptions: { label: string; value: IndividualData.SexEnum[] }[] = [
+  sexOptions: { label: string; value: Sex[] }[] = [
     { label: 'Female & Male', value: ['Female', 'Male'] },
     { label: 'Female', value: ['Female'] },
     { label: 'Male', value: ['Male'] },

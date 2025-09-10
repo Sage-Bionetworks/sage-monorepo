@@ -249,6 +249,12 @@ components:
         - allele
         - allele_type
         - mgi_allele_id
+    Sex:
+      type: string
+      description: Sex
+      enum:
+        - Female
+        - Male
     IndividualData:
       type: object
       description: Data for an individual
@@ -257,11 +263,7 @@ components:
           type: string
           description: Genotype of the individual
         sex:
-          type: string
-          enum:
-            - Female
-            - Male
-          description: Sex of the individual
+          $ref: '#/components/schemas/Sex'
         individual_id:
           type: string
           description: Unique identifier for the individual
@@ -557,8 +559,7 @@ components:
           type: string
           description: Age of the model
         sex:
-          type: string
-          description: Sex of the model
+          $ref: '#/components/schemas/Sex'
         results:
           type: array
           description: List of correlation results

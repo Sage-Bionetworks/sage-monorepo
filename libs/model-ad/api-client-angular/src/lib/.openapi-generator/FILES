@@ -27,5 +27,6 @@ model/model-overview.ts
 model/model.ts
 model/models.ts
 model/search-result.ts
+model/sex.ts
 param.ts
 variables.ts

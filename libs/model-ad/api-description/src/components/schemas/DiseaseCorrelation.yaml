@@ -22,8 +22,7 @@ properties:
     type: string
     description: Age of the model
   sex:
-    type: string
-    description: Sex of the model
+    $ref: './Sex.yaml'
   results:
     type: array
     description: List of correlation results
