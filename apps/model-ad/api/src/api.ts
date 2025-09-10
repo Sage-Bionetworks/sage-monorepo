@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import {
   comparisonToolConfigRoute,
   dataVersionRoute,
+  diseaseCorrelationRoute,
   modelOverviewRoute,
   modelRoute,
   modelsSearchRoute,
@@ -55,6 +56,7 @@ mongoose.connection.once('open', async () => {
   router.get('/models/:name', modelRoute);
   router.get('/comparison-tool-config', comparisonToolConfigRoute);
   router.get('/comparison-tools/model-overview', modelOverviewRoute);
+  router.get('/comparison-tools/disease-correlation', diseaseCorrelationRoute);
 });
 
 export default router;
