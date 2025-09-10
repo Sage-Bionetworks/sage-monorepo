@@ -2,15 +2,14 @@
   "$schema": "../../../node_modules/@openapitools/openapi-generator-cli/config.schema.json",
   "spaces": 2,
   "generator-cli": {
-    "version": "6.1.0",
+    "version": "7.11.0",
     "generators": {
       "api-client-angular": {
-        "config": "templates/config.yaml",
         "generatorName": "typescript-angular",
         "inputSpec": "#{cwd}/../api-description/openapi/openapi.yaml",
         "output": "#{cwd}/src/lib/",
-        "templateDir": "templates",
         "additionalProperties": {
+          "fileNaming": "kebab-case",
           "ngVersion": "14.2.11"
         }
       }

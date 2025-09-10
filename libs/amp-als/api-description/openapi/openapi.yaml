@@ -15,9 +15,9 @@ tags:
   - name: Dataset
     description: Operations about datasets.
     x-displayName: Dataset
-  - name: HealthCheck
+  - name: Health Check
     description: Operations about health checks
-    x-displayName: HealthCheck
+    x-displayName: Health Check
 paths:
   /datasets:
     get:
@@ -59,10 +59,10 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /healthcheck:
+  /health-check:
     get:
       tags:
-        - HealthCheck
+        - Health Check
       summary: Get health check information
       description: Get information about the health of the service
       operationId: getHealthCheck
@@ -293,4 +293,4 @@ x-tagGroups:
       - Dataset
   - name: AMP-ALS User Service API
     tags:
-      - HealthCheck
+      - Health Check

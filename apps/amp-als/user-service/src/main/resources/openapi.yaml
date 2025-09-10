@@ -15,9 +15,9 @@ servers:
   - url: http://localhost/v1
 tags:
   - description: Operations about health checks
-    name: HealthCheck
+    name: Health Check
 paths:
-  /healthcheck:
+  /health-check:
     get:
       description: Get information about the health of the service
       operationId: getHealthCheck
@@ -37,12 +37,12 @@ paths:
             error
       summary: Get health check information
       tags:
-        - HealthCheck
+        - Health Check
       x-accepts:
         - application/json
         - application/problem+json
       x-tags:
-        - tag: HealthCheck
+        - tag: Health Check
 components:
   responses:
     InternalServerError:
