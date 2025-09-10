@@ -29,7 +29,7 @@ async function waitForSpinner() {
 
 async function setup() {
   const user = userEvent.setup();
-  const component = render(SearchInputComponent, {
+  const component = await render(SearchInputComponent, {
     providers: [
       provideHttpClient(),
       provideRouter([]),
@@ -45,7 +45,8 @@ async function setup() {
       checkQueryForErrors: mockCheckQueryForErrors,
     },
   });
-  return { user, component };
+  const { container } = component;
+  return { user, component, container };
 }
 
 describe('SearchInputComponent', () => {
@@ -88,6 +89,18 @@ describe('SearchInputComponent', () => {
     await screen.findByText('No results match your search string.');
   });
 
+  it('should highlight search query with mark', async () => {
+    const { container, user } = await setup();
+
+    const input = getInput();
+    await user.type(input, 'dummy');
+    await waitForSpinner();
+
+    const markedResults = container.querySelectorAll('mark');
+    expect(markedResults).toHaveLength(2);
+    expect(markedResults[1].textContent).toBe('dummy');
+  });
+
   it('should display results when search is successful', async () => {
     const { user } = await setup();
     const input = getInput();
@@ -96,8 +109,8 @@ describe('SearchInputComponent', () => {
     await waitForSpinner();
 
     expect(input).toHaveValue('dummy');
-    await screen.findByText('dummy_id');
-    await screen.findByText('dummy_id_2');
+    await screen.findByLabelText('dummy_id');
+    await screen.findByLabelText('dummy_id_2');
   });
 
   it('should navigate to result when clicked', async () => {
@@ -107,7 +120,7 @@ describe('SearchInputComponent', () => {
     await user.type(input, 'dummy');
     await waitForSpinner();
 
-    await user.click(screen.getByText('dummy_id'));
+    await user.click(screen.getByLabelText('dummy_id'));
     expect(mockNavigateToResult).toHaveBeenCalledWith('dummy_id');
 
     expect(getInput()).toHaveValue('');
@@ -120,7 +133,7 @@ describe('SearchInputComponent', () => {
     await user.type(input, 'dummy');
     await waitForSpinner();
 
-    const clearButton = screen.getByRole('button');
+    const clearButton = screen.getByRole('button', { name: 'Clear' });
     await user.click(clearButton);
 
     expect(getInput()).toHaveValue('');

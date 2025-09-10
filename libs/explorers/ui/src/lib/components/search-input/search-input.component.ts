@@ -3,12 +3,11 @@ import {
   Component,
   DestroyRef,
   ElementRef,
-  EventEmitter,
   HostListener,
   inject,
   input,
-  Output,
-  ViewChild,
+  output,
+  viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
@@ -27,6 +26,7 @@ import {
   of,
   switchMap,
 } from 'rxjs';
+import sanitizeHtml from 'sanitize-html';
 import { SvgImageComponent } from '../svg-image/svg-image.component';
 
 @Component({
@@ -40,7 +40,7 @@ export class SearchInputComponent implements AfterViewInit {
   router = inject(Router);
   destroyRef = inject(DestroyRef);
 
-  @Output() searchNavigated = new EventEmitter();
+  searchNavigated = output();
 
   searchPlaceholder = input.required<string>();
   searchImagePath = input<string | undefined>();
@@ -70,8 +70,8 @@ export class SearchInputComponent implements AfterViewInit {
     unknown: 'An unknown error occurred, please try again.',
   };
 
-  @ViewChild('root') root!: ElementRef;
-  @ViewChild('input') input!: ElementRef<HTMLInputElement>;
+  root = viewChild.required<ElementRef>('root');
+  input = viewChild.required<ElementRef<HTMLInputElement>>('input');
 
   @HostListener('document:click', ['$event'])
   onClick(event: Event) {
@@ -79,7 +79,7 @@ export class SearchInputComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    fromEvent(this.input.nativeElement, 'keyup')
+    fromEvent(this.input().nativeElement, 'keyup')
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         debounceTime(500),
@@ -138,7 +138,7 @@ export class SearchInputComponent implements AfterViewInit {
   }
 
   goToResult(id: string) {
-    this.input.nativeElement.blur();
+    this.input().nativeElement.blur();
     this.query = '';
     this.results = [];
     this.showResults = false;
@@ -153,7 +153,7 @@ export class SearchInputComponent implements AfterViewInit {
   }
 
   clearInput() {
-    this.input.nativeElement.focus();
+    this.input().nativeElement.focus();
     this.query = '';
     this.error = '';
     this.results = [];
@@ -162,8 +162,25 @@ export class SearchInputComponent implements AfterViewInit {
 
   checkClickIsInsideComponent(event: Event) {
     // if clicked element is not part of this component, hide results
-    if (!this.root.nativeElement.contains(event.target)) {
+    if (!this.root().nativeElement.contains(event.target)) {
       this.showResults = false;
     }
+  }
+
+  highlightMatches(text: string, query: string): string {
+    if (!text || !query || query.length < 1) {
+      return sanitizeHtml(text);
+    }
+
+    // Escape special regex characters in the query
+    const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`(${escapedQuery})`, 'gi');
+
+    return sanitizeHtml(text).replace(regex, '<mark>$1</mark>');
+  }
+
+  formatAndHighlightResultsForDisplay(result: SearchResult): string {
+    const formattedText = this.formatResultForDisplay()(result);
+    return this.highlightMatches(formattedText, this.query);
   }
 }

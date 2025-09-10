@@ -18,7 +18,8 @@ export async function searchModels(query: string) {
     return cachedResult;
   }
 
-  const queryTrimmed = escapeRegexChars(query.trim());
+  // Do not trim query - space is an allowed search character
+  const queryEscaped = escapeRegexChars(query);
   const result: SearchResult[] = await ModelCollection.aggregate([
     {
       $addFields: {
@@ -28,7 +29,7 @@ export async function searchModels(query: string) {
               filtered_aliases: {
                 $filter: {
                   input: '$aliases',
-                  cond: { $regexMatch: { input: '$$this', regex: queryTrimmed, options: 'i' } },
+                  cond: { $regexMatch: { input: '$$this', regex: queryEscaped, options: 'i' } },
                 },
               },
             },
@@ -36,7 +37,7 @@ export async function searchModels(query: string) {
               $switch: {
                 branches: [
                   {
-                    case: { $regexMatch: { input: '$name', regex: queryTrimmed, options: 'i' } },
+                    case: { $regexMatch: { input: '$name', regex: queryEscaped, options: 'i' } },
                     then: { precedence: 1, match_field: 'name', match_value: '$name' },
                   },
                   {
@@ -48,11 +49,11 @@ export async function searchModels(query: string) {
                     },
                   },
                   {
-                    case: { $regexMatch: { input: '$jax_id', regex: queryTrimmed, options: 'i' } },
+                    case: { $regexMatch: { input: '$jax_id', regex: queryEscaped, options: 'i' } },
                     then: { precedence: 3, match_field: 'jax_id', match_value: '$jax_id' },
                   },
                   {
-                    case: { $regexMatch: { input: '$rrid', regex: queryTrimmed, options: 'i' } },
+                    case: { $regexMatch: { input: '$rrid', regex: queryEscaped, options: 'i' } },
                     then: { precedence: 4, match_field: 'rrid', match_value: '$rrid' },
                   },
                 ],

@@ -1,4 +1,4 @@
-<div #root [class]="`search ${hasThickBorder() && 'search-thick-border'} `">
+<div #root [class]="`search ${hasThickBorder() ? 'search-thick-border' : ''}`">
   <div class="search-bar">
     <div class="search-bar-icon">
       @if (isLoading) {
@@ -25,7 +25,7 @@
     />
     @if (query) {
       <div class="search-bar-close">
-        <button (click)="clearInput()">
+        <button (click)="clearInput()" [attr.aria-label]="'Clear'">
           <fa-icon [icon]="faXmark" />
         </button>
       </div>
@@ -47,11 +47,14 @@
         @if (!error && results.length) {
           <ul class="search-results-list">
             @for (result of results; track result) {
-              <li (click)="goToResult(result.id)">
-                <span
-                  class="result-name"
-                  [innerHtml]="formatResultForDisplay()(result) | sanitizeHtml"
-                ></span>
+              <li>
+                <button type="button" (click)="goToResult(result.id)" class="result-button">
+                  <span
+                    class="result-name"
+                    [innerHtml]="formatAndHighlightResultsForDisplay(result) | sanitizeHtml"
+                    [attr.aria-label]="formatResultForDisplay()(result)"
+                  ></span>
+                </button>
               </li>
             }
           </ul>
