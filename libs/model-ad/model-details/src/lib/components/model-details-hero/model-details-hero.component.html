@@ -32,7 +32,14 @@
     </div>
 
     <h4>Matched Controls</h4>
-    <p>{{ model().matched_controls.join(', ') }}</p>
+    <p>
+      @for (matched_control of model().matched_controls; track matched_control; let last = $last) {
+        <a [href]="this.MATCHED_CONTROLS_URLS[matched_control]" target="_blank">{{
+          matched_control
+        }}</a
+        >{{ !last ? ', ' : '' }}
+      }
+    </p>
 
     <hr />
 
@@ -47,7 +54,7 @@
 
     <p>
       JAX Stock Number:
-      <a [href]="`https://www.jax.org/strain/${ model().jax_id }`" target="_blank">{{
+      <a [href]="`${this.JAX_STRAIN_URL}/${ model().jax_id }`" target="_blank">{{
         model().jax_id
       }}</a>
     </p>

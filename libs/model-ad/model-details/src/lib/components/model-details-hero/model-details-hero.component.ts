@@ -11,6 +11,14 @@ import sanitizeHtml from 'sanitize-html';
   styleUrls: ['./model-details-hero.component.scss'],
 })
 export class ModelDetailsHeroComponent {
+  readonly JAX_STRAIN_URL = 'https://www.jax.org/strain';
+
+  readonly MATCHED_CONTROLS_URLS: Record<string, string> = {
+    B6129: `${this.JAX_STRAIN_URL}/101045`,
+    '5xFAD': `${this.JAX_STRAIN_URL}/008730`,
+    'C57BL/6J': `${this.JAX_STRAIN_URL}/000664`,
+  };
+
   model = input.required<Model>();
 
   sanitizeHtml = sanitizeHtml;
