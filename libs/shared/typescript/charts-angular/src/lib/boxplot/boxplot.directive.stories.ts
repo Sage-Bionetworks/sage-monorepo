@@ -14,11 +14,12 @@ const meta: Meta<BoxplotDirective> = {
   title: 'directives/sageBoxplot',
   argTypes: {
     xAxisLabelFormatter: { control: false },
+    xAxisLabelTooltipFormatter: { control: false },
     pointTooltipFormatter: { control: false },
   },
   render: (args: BoxplotProps) => ({
     props: args,
-    template: `<div sageBoxplot [points]="points" [summaries]="summaries" [title]="title" [xAxisTitle]="xAxisTitle" [xAxisLabelFormatter]="xAxisLabelFormatter" [xAxisCategories]="xAxisCategories" [yAxisTitle]="yAxisTitle" [yAxisMin]="yAxisMin" [yAxisMax]="yAxisMax" [xAxisCategoryToTooltipText]="xAxisCategoryToTooltipText" [pointTooltipFormatter]="pointTooltipFormatter" [pointCategoryColors]="pointCategoryColors" [pointCategoryShapes]="pointCategoryShapes" [showLegend]="showLegend" [pointOpacity]="pointOpacity" [noDataStyle]="noDataStyle"></div>`,
+    template: `<div sageBoxplot [points]="points" [summaries]="summaries" [title]="title" [xAxisTitle]="xAxisTitle" [xAxisLabelFormatter]="xAxisLabelFormatter" [xAxisCategories]="xAxisCategories" [yAxisTitle]="yAxisTitle" [yAxisMin]="yAxisMin" [yAxisMax]="yAxisMax" [xAxisLabelTooltipFormatter]="xAxisLabelTooltipFormatter" [pointTooltipFormatter]="pointTooltipFormatter" [pointCategoryColors]="pointCategoryColors" [pointCategoryShapes]="pointCategoryShapes" [showLegend]="showLegend" [pointOpacity]="pointOpacity" [noDataStyle]="noDataStyle"></div>`,
   }),
 };
 export default meta;
@@ -34,11 +35,14 @@ export const StaticSummary: Story = {
   args: {
     points: staticBoxplotPoints,
     summaries: staticBoxplotSummaries,
-    xAxisCategoryToTooltipText: {
-      CAT1: 'Category 1',
-      CAT2: 'Category 2',
-      CAT3: 'Category 3',
-      CAT4: 'Category 4',
+    xAxisLabelTooltipFormatter: (params: CallbackDataParams) => {
+      const catMap: Record<string, string> = {
+        CAT1: 'Category 1',
+        CAT2: 'Category 2',
+        CAT3: 'Category 3',
+        CAT4: 'Category 4',
+      };
+      return catMap[params.name] || 'Label not found';
     },
     xAxisTitle: 'BRAIN REGION',
     yAxisTitle: 'LOG 2 FOLD CHANGE',
