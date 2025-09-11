@@ -1,4 +1,5 @@
 import { DatasetComponentOption, ECharts, EChartsOption, SeriesOption } from 'echarts';
+import { CallbackDataParams } from 'echarts/types/dist/shared';
 import { DEFAULT_POINT_SIZE } from '../constants';
 import { BoxplotProps, CategoryPoint } from '../models';
 import {
@@ -12,7 +13,6 @@ import {
   initChart,
   setNoDataOption,
 } from '../utils';
-import { XAxisLabelTooltips } from '../x-axis-label-tooltips';
 
 const titleTextStyle = {
   fontWeight: 700,
@@ -38,7 +38,6 @@ const SPACE_FOR_Y_AXIS_NAME = 40;
 
 export class BoxplotChart {
   chart: ECharts | undefined;
-  xAxisLabelTooltips: XAxisLabelTooltips | undefined;
 
   constructor(chartDom: HTMLDivElement | HTMLCanvasElement, boxplotProps: BoxplotProps) {
     this.chart = initChart(chartDom);
@@ -47,14 +46,6 @@ export class BoxplotChart {
 
   destroy() {
     this.chart?.dispose();
-  }
-
-  setXAxisLabelTooltips(xAxisCategoryToTooltipText?: Record<string, string>) {
-    if (!xAxisCategoryToTooltipText || !this.chart) return;
-    if (!this.xAxisLabelTooltips) {
-      this.xAxisLabelTooltips = new XAxisLabelTooltips(this.chart, xAxisCategoryToTooltipText);
-    }
-    this.xAxisLabelTooltips.setXAxisCategoryToTooltipText(xAxisCategoryToTooltipText);
   }
 
   private getTitleOptions(xAxisTitle?: string, title?: string) {
@@ -86,7 +77,7 @@ export class BoxplotChart {
   private getXAxisOptions(
     xAxisCategories: string[],
     xAxisLabelFormatter: BoxplotProps['xAxisLabelFormatter'],
-    xAxisCategoryToTooltipText: BoxplotProps['xAxisCategoryToTooltipText'],
+    xAxisLabelTooltipFormatter: BoxplotProps['xAxisLabelTooltipFormatter'],
   ) {
     // Use two xAxes:
     //  - value: used to jitter points with multiple pointCategories, where
@@ -137,7 +128,16 @@ export class BoxplotChart {
         axisLine: {
           onZero: false,
         },
-        triggerEvent: Boolean(xAxisCategoryToTooltipText),
+        tooltip: {
+          ...(xAxisLabelTooltipFormatter && {
+            formatter: (params: CallbackDataParams) => {
+              return xAxisLabelTooltipFormatter(params);
+            },
+            extraCssText: 'border: unset; opacity: 0.9; background-color: #63676c',
+          }),
+          show: Boolean(xAxisLabelTooltipFormatter),
+        },
+        triggerEvent: Boolean(xAxisLabelTooltipFormatter),
         position: 'bottom',
       },
     ];
@@ -185,7 +185,7 @@ export class BoxplotChart {
       yAxisTitle,
       yAxisMin,
       yAxisMax,
-      xAxisCategoryToTooltipText,
+      xAxisLabelTooltipFormatter,
       pointTooltipFormatter,
       pointCategoryColors,
       pointCategoryShapes,
@@ -373,7 +373,7 @@ export class BoxplotChart {
         enabled: true,
       },
       dataset: datasetOpts,
-      xAxis: this.getXAxisOptions(xAxisCategories, xAxisLabelFormatter, xAxisCategoryToTooltipText),
+      xAxis: this.getXAxisOptions(xAxisCategories, xAxisLabelFormatter, xAxisLabelTooltipFormatter),
       yAxis: this.getYAxisOptions(yAxisTitle, yAxisMin, yAxisMax),
       tooltip: {
         confine: true,
@@ -391,6 +391,5 @@ export class BoxplotChart {
 
     // notMerge must be set to true to override any existing options set on the chart
     this.chart.setOption(option, true);
-    this.setXAxisLabelTooltips(xAxisCategoryToTooltipText);
   }
 }

@@ -25,7 +25,7 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
   @Input() yAxisTitle = '';
   @Input() yAxisMin: number | undefined;
   @Input() yAxisMax: number | undefined;
-  @Input() xAxisCategoryToTooltipText: Record<string, string> | undefined;
+  @Input() xAxisLabelTooltipFormatter: ((params: CallbackDataParams) => string) | undefined;
   @Input() pointTooltipFormatter:
     | undefined
     | ((pt: CategoryPoint, params: CallbackDataParams) => string);
@@ -58,7 +58,7 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
       yAxisTitle: this.yAxisTitle,
       yAxisMin: this.yAxisMin,
       yAxisMax: this.yAxisMax,
-      xAxisCategoryToTooltipText: this.xAxisCategoryToTooltipText,
+      xAxisLabelTooltipFormatter: this.xAxisLabelTooltipFormatter,
       pointTooltipFormatter: this.pointTooltipFormatter,
       pointCategoryColors: this.pointCategoryColors,
       pointCategoryShapes: this.pointCategoryShapes,

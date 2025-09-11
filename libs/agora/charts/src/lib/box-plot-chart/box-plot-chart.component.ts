@@ -27,7 +27,7 @@ export class BoxPlotComponent {
   _data: BoxPlotChartItem[] = [];
   points: CategoryPoint[] = [];
   summaries: CategoryBoxplotSummary[] = [];
-  xAxisCategoryToTooltipText: Record<string, string> | undefined = {};
+  xAxisLabelTooltipFormatter: ((params: CallbackDataParams) => string) | undefined;
   isInitialized = false;
   pointTooltipFormatter: ((pt: CategoryPoint, params: CallbackDataParams) => string) | undefined;
 
@@ -49,7 +49,7 @@ export class BoxPlotComponent {
   reset() {
     this.points = [];
     this.summaries = [];
-    this.xAxisCategoryToTooltipText = {};
+    this.xAxisLabelTooltipFormatter = undefined;
     this.isInitialized = false;
     this.pointTooltipFormatter = undefined;
   }
@@ -88,12 +88,10 @@ export class BoxPlotComponent {
       };
       this.summaries.push(summary);
 
-      if (this.xAxisCategoryToTooltipText) {
-        const tooltipText = this.getXAxisTooltipText(xAxisCategory);
-        if (tooltipText !== '') {
-          this.xAxisCategoryToTooltipText[xAxisCategory] = tooltipText;
-        }
-      }
+      this.xAxisLabelTooltipFormatter = (params: CallbackDataParams) => {
+        const xAxisCategory = params.name;
+        return this.getXAxisTooltipText(xAxisCategory);
+      };
 
       this.pointTooltipFormatter = (pt: CategoryPoint, params: CallbackDataParams) => {
         return pt.text ?? pt.value.toString();
