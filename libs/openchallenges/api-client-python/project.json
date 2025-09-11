@@ -45,14 +45,6 @@
       },
       "cache": true
     },
-    // "format": {
-    //   "executor": "@nxlv/python:ruff-format",
-    //   "outputs": [],
-    //   "options": {
-    //     "filePatterns": ["openchallenges_api_client_python", "test"]
-    //   },
-    //   "cache": true
-    // },
     "test": {
       "executor": "@nxlv/python:run-commands",
       "outputs": [

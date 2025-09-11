@@ -1,55 +1,63 @@
-# Project
-site_name: 'Sage Monorepo'
-site_description: >-
-  A development environment for building robust apps faster.
-
-# Repository
+site_name: Sage Monorepo
+site_description: A development environment for building robust apps faster.
 repo_url: https://github.com/Sage-Bionetworks/sage-monorepo
 repo_name: sage-monorepo
-
-# Navigation
 nav:
-  - Home:
-      - Sage Monorepo: index.md
-      - What's new: news.md
-      - Contributing:
-          - Overview: contributions/overview.md
-          - Reporting a bug: contributions/bug-report.md
-          - Adding a feature: contributions/guidelines.md
-  - Getting Started:
-      - What is Angular Universal?: getting-started/what-is-angular.md
-      - What is a devcontainer?: getting-started/what-is-devcontainer.md
-      - What is Nx?: getting-started/what-is-nx.md
-      - Setup:
-          - Develop Locally: getting-started/local-dev.md
-          - Develop On a Remote Host: getting-started/remote-dev.md
-  - Tutorials:
-      - Angular:
-          - Create an Angular app: tutorials/angular/add-app.md
-          - Add an Angular API client: tutorials/angular/add-api-client.md
-          - Add an Angular component: tutorials/angular/add-component.md
-          - Add an Angular library: tutorials/angular/add-library.md
-      - Docker:
-          - Create a Docker-based project: tutorials/docker/new-project.md
-      - Java:
-          - Add a Java library: tutorials/java/add-library.md
-          - Add a Java REST API: tutorials/java/add-rest-api.md
-      - Python:
-          - Add a Python REST API: tutorials/python/add-rest-api.md
-      - R:
-          - Add an R project: tutorials/r/new-project.md
-  - Developers Guide:
-      - Developing on a remote host: developers-guide/developing-on-a-remote-host.md
-      - Creating a commit with multiple authors: developers-guide/creating-a-commit-with-multiple-authors.md
-      - Common Issues: developers-guide/faq.md
-  - Reference:
-      - Agora:
-          - API: reference/agora.md
-      - OpenChallenges:
-          - Microservices: reference/oc-microservices.md
-          - Schemas: reference/oc-schemas.md
-
-# Theme configuration
+  - Home: index.md
+  - Updates:
+      - Overview: updates/index.md
+      - June 2022: updates/june-2022.md
+      - May 2022: updates/may-2022.md
+      - April 2022: updates/april-2022.md
+      - March 2022: updates/march-2022.md
+      - February 2022: updates/february-2022.md
+  - Blog: blog/index.md
+  - Products:
+      - Service Catalog: products/services.md
+      - Agora: products/agora.md
+      - AMP-ALS: api/amp-als.md
+      - BixArena: api/bixarena.md
+      - Model-AD: api/model-ad.md
+      - OpenChallenges: products/openchallenges.md
+      - Synapse: api/synapse.md
+  - Develop:
+      - Quick Start: develop/quick-start.md
+      - Remote Development: develop/remote-dev.md
+      - Architecture:
+          - Nx Workspace: develop/architecture/what-is-nx.md
+          - Dev Containers: develop/architecture/what-is-devcontainer.md
+      - Tutorials:
+          - Angular:
+              - Create App: develop/tutorials/angular/add-app.md
+              - Add API Client: develop/tutorials/angular/add-api-client.md
+              - Add Component: develop/tutorials/angular/add-component.md
+              - Add Library: develop/tutorials/angular/add-library.md
+          - Java:
+              - Add Library: develop/tutorials/java/add-library.md
+              - Add REST API: develop/tutorials/java/add-rest-api.md
+          - Python:
+              - Add REST API: develop/tutorials/python/add-rest-api.md
+          - Docker:
+              - New Project: develop/tutorials/docker/new-project.md
+          - R:
+              - New Project: develop/tutorials/r/new-project.md
+      - Advanced:
+          - Remote Development: develop/advanced/developing-on-a-remote-host.md
+          - Multi-author Commits: develop/advanced/creating-a-commit-with-multiple-authors.md
+  - API:
+      - Overview: api/overview.md
+      - Agora: api/agora.md
+      - AMP-ALS: api/amp-als.md
+      - BixArena: api/bixarena.md
+      - Model-AD: api/model-ad.md
+      - OpenChallenges: api/openchallenges.md
+      - Synapse: api/synapse.md
+  - Resources:
+      - FAQ: resources/faq.md
+      - Bug Reports: resources/bug-report.md
+      - Feature Requests: resources/feature-requests.md
+      - Contributing: contributions/overview.md
+      - OpenChallenges Schemas: resources/oc-schemas.md
 theme:
   name: material
   palette:
@@ -79,12 +87,9 @@ theme:
     - search.share
     - search.suggest
     - toc.follow
-
 plugins:
   - autorefs
   - search
-  - termynal
-
 markdown_extensions:
   - admonition
   - pymdownx.details
