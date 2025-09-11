@@ -1,10 +1,10 @@
 import { TitleCasePipe } from '@angular/common';
 import { Component, computed, inject, input } from '@angular/core';
+import { CategoryPoint, getTextWidth } from '@sagebionetworks/explorers/charts';
+import { BoxplotDirective } from '@sagebionetworks/explorers/charts-angular';
 import { DecodeGreekEntityPipe } from '@sagebionetworks/explorers/util';
 import { IndividualData, ModelData } from '@sagebionetworks/model-ad/api-client-angular';
 import { MODEL_DETAILS_BOXPLOT_POINT_STYLES } from '@sagebionetworks/model-ad/config';
-import { CategoryPoint, getTextWidth } from '@sagebionetworks/shared/charts';
-import { BoxplotDirective } from '@sagebionetworks/shared/charts-angular';
 import { CallbackDataParams } from 'echarts/types/dist/shared';
 
 @Component({

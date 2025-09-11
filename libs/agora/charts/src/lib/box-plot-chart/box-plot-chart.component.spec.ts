@@ -1,5 +1,5 @@
 import { HelperService } from '@sagebionetworks/agora/services';
-import { BoxplotDirective } from '@sagebionetworks/shared/charts-angular';
+import { BoxplotDirective } from '@sagebionetworks/explorers/charts-angular';
 import { render, screen } from '@testing-library/angular';
 import { boxPlotChartItemsMock } from './box-plot-chart-data-mock';
 import { BoxPlotComponent } from './box-plot-chart.component';

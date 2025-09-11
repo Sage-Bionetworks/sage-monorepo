@@ -4,7 +4,7 @@ import {
   BoxplotProps,
   CategoryBoxplotSummary,
   CategoryPoint,
-} from '@sagebionetworks/shared/charts';
+} from '@sagebionetworks/explorers/charts';
 import { CallbackDataParams } from 'echarts/types/dist/shared';
 
 @Directive({

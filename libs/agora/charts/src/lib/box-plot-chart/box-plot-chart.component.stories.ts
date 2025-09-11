@@ -1,5 +1,5 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { BoxplotDirective } from '@sagebionetworks/shared/charts-angular';
+import { BoxplotDirective } from '@sagebionetworks/explorers/charts-angular';
 import { applicationConfig, moduleMetadata, type Meta, type StoryObj } from '@storybook/angular';
 import { boxPlotChartItemsMock } from './box-plot-chart-data-mock';
 import { BoxPlotComponent } from './box-plot-chart.component';

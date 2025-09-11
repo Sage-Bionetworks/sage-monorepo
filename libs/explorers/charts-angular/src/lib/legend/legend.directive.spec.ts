@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LegendProps, mockPointStyles } from '@sagebionetworks/shared/charts';
+import { LegendProps, mockPointStyles } from '@sagebionetworks/explorers/charts';
 import { render } from '@testing-library/angular';
 import { LegendDirective } from './legend.directive';
 

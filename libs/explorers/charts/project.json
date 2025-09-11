@@ -1,19 +1,19 @@
 {
-  "name": "shared-typescript-charts",
+  "name": "explorers-charts",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/shared/typescript/charts/src",
+  "sourceRoot": "libs/explorers/charts/src",
   "projectType": "library",
   "prefix": "sage",
-  "tags": ["type:util", "scope:shared", "language:typescript"],
+  "tags": ["type:util", "scope:explorers", "language:typescript"],
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/libs/shared/typescript/charts",
-        "main": "libs/shared/typescript/charts/src/index.ts",
-        "tsConfig": "libs/shared/typescript/charts/tsconfig.lib.json",
-        "assets": ["libs/shared/typescript/charts/*.md"]
+        "outputPath": "dist/libs/explorers/charts",
+        "main": "libs/explorers/charts/src/index.ts",
+        "tsConfig": "libs/explorers/charts/tsconfig.lib.json",
+        "assets": ["libs/explorers/charts/*.md"]
       }
     },
     "lint": {
@@ -29,7 +29,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/shared/typescript/charts/jest.config.ts"
+        "jestConfig": "libs/explorers/charts/jest.config.ts"
       }
     }
   }
