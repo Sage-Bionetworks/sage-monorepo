@@ -30,6 +30,7 @@
     "@fontsource-variable/dm-sans": "5.2.5",
     "@fortawesome/angular-fontawesome": "1.0.0",
     "@fortawesome/free-solid-svg-icons": "6.7.1",
+    "@octokit/rest": "^22.0.0",
     "@opentelemetry/context-zone-peer-dep": "2.0.1",
     "@opentelemetry/core": "2.0.1",
     "@opentelemetry/exporter-trace-otlp-http": "0.201.1",
@@ -79,10 +80,12 @@
     "rxjs": "7.8.1",
     "sanitize-html": "2.13.0",
     "screenfull": "5.2.0",
+    "simple-git": "^3.28.0",
     "tslib": "2.4.1",
     "type-guards": "0.15.0",
     "validator": "13.7.0",
     "winston": "3.8.2",
+    "yargs": "^18.0.0",
     "zone.js": "0.15.0"
   },
   "devDependencies": {
@@ -151,6 +154,7 @@
     "@types/sanitize-html": "2.13.0",
     "@types/supertest": "2.0.16",
     "@types/validator": "13.7.10",
+    "@types/yargs": "^17.0.33",
     "@typescript-eslint/eslint-plugin": "8.34.1",
     "@typescript-eslint/parser": "8.34.1",
     "@typescript-eslint/utils": "8.34.1",
