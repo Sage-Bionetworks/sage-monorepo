@@ -23,6 +23,10 @@ services:
         condition: service_healthy
       model-ad-app:
         condition: service_healthy
+      extra_hosts:
+        - 'model-ad-api-docs:host-gateway'
+        - 'model-ad-api:host-gateway'
+        - 'model-ad-app:host-gateway'
     deploy:
       resources:
         limits:
