@@ -1,3 +1,4 @@
+import { Clipboard } from '@angular/cdk/clipboard';
 import { Location } from '@angular/common';
 import {
   afterNextRender,
@@ -22,7 +23,7 @@ import {
 import {
   DecodeGreekEntityPipe,
   ModalLinkComponent,
-  SvgIconComponent,
+  TooltipButtonComponent,
 } from '@sagebionetworks/explorers/util';
 import { IndividualData, ModelData } from '@sagebionetworks/model-ad/api-client-angular';
 import { SelectModule } from 'primeng/select';
@@ -35,10 +36,10 @@ import { ModelDetailsBoxplotsGridComponent } from '../model-details-boxplots-gri
     SelectModule,
     ModelDetailsBoxplotsGridComponent,
     ModalLinkComponent,
-    SvgIconComponent,
     DecodeGreekEntityPipe,
     DownloadDomImageComponent,
     DownloadDomImagesZipComponent,
+    TooltipButtonComponent,
   ],
   templateUrl: './model-details-boxplots-selector.component.html',
   styleUrls: ['./model-details-boxplots-selector.component.scss'],
@@ -46,6 +47,7 @@ import { ModelDetailsBoxplotsGridComponent } from '../model-details-boxplots-gri
 export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
   private readonly helperService = inject(HelperService);
   private readonly location = inject(Location);
+  private readonly clipboard = inject(Clipboard);
 
   boxplotsContainer = viewChild('boxplotsContainer', { read: ElementRef });
   boxplotGrids = viewChildren(ModelDetailsBoxplotsGridComponent, { read: ElementRef });
@@ -75,6 +77,9 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
   private readonly SCROLL_PADDING = 15;
   isInitialScrollDone = false;
   hasInitializedOptions = false;
+
+  activeShareLink = signal('');
+  lastShareLinkCopied = signal('');
 
   constructor() {
     effect(() => {
@@ -255,6 +260,22 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
       }
     }
     return false;
+  }
+
+  getShareLinkTooltipText(evidenceType: string): string {
+    return this.lastShareLinkCopied() === evidenceType
+      ? 'URL copied to clipboard'
+      : 'Copy the URL to this section';
+  }
+
+  copyShareLink(evidenceType: string): void {
+    this.updateUrlFragment(this.generateAnchorId(evidenceType));
+    this.clipboard.copy(window.location.href);
+    this.lastShareLinkCopied.set(evidenceType);
+  }
+
+  copyShareLinkCallbackFn(evidenceType: string): () => void {
+    return () => this.copyShareLink(evidenceType);
   }
 
   decodeHtmlEntities(text: string): string {
