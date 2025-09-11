@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -30,11 +31,16 @@ public class SecurityConfiguration {
   }
 
   /**
-   * Configure security filter chain with OAuth2 web authentication only
-   * The auth service acts as both:
-   * 1. OAuth2 Authorization Server (issuing JWTs)
-   * 2. OAuth2 Resource Server (validating JWTs for its own API endpoints)
-   * 
+   * Configure security filter chain for OAuth2 Resource Server and web authentication.
+   *
+   * This filter chain handles:
+   * 1. OAuth2 Resource Server functionality (validating JWTs for API endpoints)
+   * 2. Web authentication for profile management pages
+   * 3. Public endpoints (health checks, documentation, etc.)
+   *
+   * Note: OAuth2 Authorization Server endpoints (token issuance, authorization)
+   * are handled by a separate SecurityFilterChain in OpenChallengesOAuth2AuthorizationServerConfiguration.
+   *
    * API key authentication is handled by the API Gateway, which converts
    * API keys to JWTs before forwarding requests to this service.
    */
@@ -45,15 +51,12 @@ public class SecurityConfiguration {
     OAuth2WebAuthenticationFilter oAuth2WebAuthenticationFilter,
     org.springframework.security.oauth2.jwt.JwtDecoder jwtDecoder
   ) throws Exception {
-
     http
       .csrf(csrf -> csrf.disable()) // Disable CSRF for API
       .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless for API
       .logout(logout -> logout.disable()) // Disable Spring Security's default logout
       // Configure OAuth2 Resource Server for JWT validation on API endpoints
-      .oauth2ResourceServer(oauth2 -> oauth2
-        .jwt(jwt -> jwt.decoder(jwtDecoder))
-      )
+      .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.decoder(jwtDecoder)))
       .authorizeHttpRequests(
         authz ->
           authz
@@ -66,9 +69,6 @@ public class SecurityConfiguration {
             .permitAll() // OpenID Connect discovery endpoint
             .requestMatchers("/.well-known/**")
             .permitAll() // Other well-known endpoints
-            // Internal API endpoints for the API Gateway
-            .requestMatchers("/v1/auth/api-keys/validate")
-            .permitAll() // API key validation (internal endpoint for API Gateway)
             // Protected API endpoints - require JWT authentication with scopes
             .requestMatchers("/v1/auth/profile")
             .authenticated() // Profile endpoints require JWT with proper scopes (handled by @PreAuthorize)
@@ -96,10 +96,10 @@ public class SecurityConfiguration {
             .authenticated() // All other endpoints require authentication
       )
       // Add OAuth2 web authentication filter only
-      .addFilterBefore(oAuth2WebAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // OAuth2 web filter
+      .addFilterBefore(oAuth2WebAuthenticationFilter, BearerTokenAuthenticationFilter.class) // OAuth2 web filter
       // Configure exception handling for web authentication
-      .exceptionHandling(exceptions -> exceptions
-        .authenticationEntryPoint((request, response, authException) -> {
+      .exceptionHandling(exceptions ->
+        exceptions.authenticationEntryPoint((request, response, authException) -> {
           String requestUri = request.getRequestURI();
           // For web interface endpoints, redirect to login page
           if (requestUri.startsWith("/profile") || requestUri.equals("/")) {
@@ -108,7 +108,9 @@ public class SecurityConfiguration {
             // For API endpoints, return 401
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
-            response.getWriter().write("{\"error\":\"Unauthorized\",\"message\":\"Authentication required\"}");
+            response
+              .getWriter()
+              .write("{\"error\":\"Unauthorized\",\"message\":\"Authentication required\"}");
           }
         })
       );
