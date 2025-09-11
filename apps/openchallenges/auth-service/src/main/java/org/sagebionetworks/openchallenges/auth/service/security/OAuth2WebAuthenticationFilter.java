@@ -8,12 +8,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Optional;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.auth.service.configuration.AuthServiceProperties;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
-import org.sagebionetworks.openchallenges.auth.service.repository.UserRepository;
+import org.sagebionetworks.openchallenges.auth.service.service.UserLookupService;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -41,7 +40,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class OAuth2WebAuthenticationFilter extends OncePerRequestFilter {
 
   private final JwtDecoder jwtDecoder;
-  private final UserRepository userRepository;
+  private final UserLookupService userLookupService;
   private final AuthServiceProperties authServiceProperties;
 
   @Override
@@ -162,50 +161,11 @@ public class OAuth2WebAuthenticationFilter extends OncePerRequestFilter {
   }
 
   /**
-   * Resolves a user from the JWT subject claim.
-   * Handles both UUID (regular users) and client_id (service accounts).
+   * Resolves a user from the JWT subject claim using the shared UserLookupService.
+   * This eliminates duplicate database query logic that was previously in this class.
    */
   private Optional<User> resolveUserFromSubject(String subject) {
-    if (subject == null || subject.trim().isEmpty()) {
-      log.warn("Subject claim is null or empty");
-      return Optional.empty();
-    }
-
-    try {
-      // Try parsing as UUID (standard user ID)
-      UUID userId = UUID.fromString(subject);
-      Optional<User> userOpt = userRepository.findById(userId);
-      if (userOpt.isPresent()) {
-        log.debug("Found user by UUID: {}", userId);
-        return userOpt;
-      } else {
-        log.debug("No user found for UUID: {}", userId);
-      }
-    } catch (IllegalArgumentException e) {
-      // Not a UUID, might be a client_id (service account) or username
-      log.debug("Subject '{}' is not a valid UUID, trying as username/client_id", subject);
-
-      try {
-        // Try to find by username as fallback
-        Optional<User> userOpt = userRepository.findByUsernameIgnoreCase(subject);
-        if (userOpt.isPresent()) {
-          log.debug("Found user by username: {}", subject);
-          return userOpt;
-        } else {
-          log.debug("No user found for username: {}", subject);
-        }
-      } catch (DataAccessException ex) {
-        log.error(
-          "Database error while looking up user by username '{}': {}",
-          subject,
-          ex.getMessage()
-        );
-      }
-    } catch (DataAccessException e) {
-      log.error("Database error while looking up user by UUID '{}': {}", subject, e.getMessage());
-    }
-
-    return Optional.empty();
+    return userLookupService.findUserBySubject(subject);
   }
 
   /**

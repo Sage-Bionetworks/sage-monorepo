@@ -13,8 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
-import org.sagebionetworks.openchallenges.auth.service.repository.UserRepository;
-import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
+import org.sagebionetworks.openchallenges.auth.service.service.UserLookupService;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,10 +27,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 class AuthenticationUtilTest {
 
   @Mock
-  private UserRepository userRepository;
-
-  @Mock
-  private ApiKeyService apiKeyService;
+  private UserLookupService userLookupService;
 
   @Mock
   private SecurityContext securityContext;
@@ -85,7 +81,7 @@ class AuthenticationUtilTest {
 
     when(securityContext.getAuthentication()).thenReturn(jwtAuthToken);
     when(jwt.getSubject()).thenReturn(userId);
-    when(userRepository.findById(testUser.getId())).thenReturn(Optional.of(testUser));
+    when(userLookupService.findUserBySubject(userId)).thenReturn(Optional.of(testUser));
 
     // Act
     User result = authenticationUtil.getAuthenticatedUser();
