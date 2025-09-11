@@ -9,12 +9,12 @@ import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import java.time.Duration;
-import java.util.Collection;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.openchallenges.auth.service.model.entity.User.Role;
 import org.sagebionetworks.openchallenges.auth.service.repository.ApiKeyRepository;
+import org.sagebionetworks.openchallenges.auth.service.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -22,13 +22,19 @@ import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtAudienceValidator;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtTimestampValidator;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
-import org.springframework.security.web.authentication.AuthenticationConverter;
-import org.springframework.security.web.util.matcher.RequestMatcher;
-import org.springframework.util.MultiValueMap;
 import org.springframework.security.oauth2.server.authorization.InMemoryOAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
+import org.springframework.security.oauth2.server.authorization.authentication.OAuth2ClientCredentialsAuthenticationToken;
 import org.springframework.security.oauth2.server.authorization.client.JdbcRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
@@ -42,9 +48,12 @@ import org.springframework.security.oauth2.server.authorization.token.OAuth2Acce
 import org.springframework.security.oauth2.server.authorization.token.OAuth2RefreshTokenGenerator;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenGenerator;
+import org.springframework.security.oauth2.server.authorization.web.authentication.OAuth2ClientCredentialsAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationConverter;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 /**
  * OAuth2 Authorization Server configuration for OpenChallenges.
@@ -57,7 +66,7 @@ import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
  */
 @Configuration
 @Slf4j
-public class OpenChallengesOAuth2AuthorizationServerConfiguration {
+public class OAuth2AuthorizationServerConfiguration {
 
   /**
    * Configure the OAuth2 Authorization Server security filter chain.
@@ -66,29 +75,31 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
   @Bean
   @Order(1)
   public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http)
-      throws Exception {
+    throws Exception {
     OAuth2AuthorizationServerConfigurer authorizationServerConfigurer =
-        new OAuth2AuthorizationServerConfigurer();
+      new OAuth2AuthorizationServerConfigurer();
     RequestMatcher endpointsMatcher = authorizationServerConfigurer.getEndpointsMatcher();
 
     http
-        .securityMatcher(endpointsMatcher)
-        .authorizeHttpRequests(authz -> authz.anyRequest().authenticated())
-        .csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher))
-        .exceptionHandling(exceptions -> exceptions
-            .defaultAuthenticationEntryPointFor(
-                new LoginUrlAuthenticationEntryPoint("/login"),
-                new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
-            )
+      .securityMatcher(endpointsMatcher)
+      .authorizeHttpRequests(authz -> authz.anyRequest().authenticated())
+      .csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher))
+      .exceptionHandling(exceptions ->
+        exceptions.defaultAuthenticationEntryPointFor(
+          new LoginUrlAuthenticationEntryPoint("/login"),
+          new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
         )
-        .with(authorizationServerConfigurer, configurer -> 
-            configurer.tokenEndpoint(token -> token
-                .accessTokenRequestConverter(clientCredentialsWithResourceConverter())
-            )
-        );
+      )
+      .with(authorizationServerConfigurer, configurer ->
+        configurer.tokenEndpoint(token ->
+          token.accessTokenRequestConverter(clientCredentialsWithResourceConverter())
+        )
+      );
 
     return http.build();
-  }  /**
+  }
+
+  /**
    * Configure registered OAuth2 clients using JDBC.
    * API keys are stored as RegisteredClients with client_credentials grant.
    */
@@ -101,8 +112,11 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
    * Configure OAuth2 token generator for access and refresh tokens.
    */
   @Bean
-  public OAuth2TokenGenerator<?> tokenGenerator(JwtEncoder jwtEncoder, ApiKeyRepository apiKeyRepository, 
-                                                 org.sagebionetworks.openchallenges.auth.service.repository.UserRepository userRepository) {
+  public OAuth2TokenGenerator<?> tokenGenerator(
+    JwtEncoder jwtEncoder,
+    ApiKeyRepository apiKeyRepository,
+    UserRepository userRepository
+  ) {
     JwtGenerator jwtGenerator = new JwtGenerator(jwtEncoder);
     jwtGenerator.setJwtCustomizer(jwtTokenCustomizer(apiKeyRepository, userRepository));
 
@@ -124,28 +138,29 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
   public AuthenticationConverter clientCredentialsWithResourceConverter() {
     return request -> {
       // Let the default converter do the heavy lifting
-      var delegate = new org.springframework.security.oauth2.server.authorization.web.authentication.OAuth2ClientCredentialsAuthenticationConverter();
-      var auth = (org.springframework.security.oauth2.server.authorization.authentication.OAuth2ClientCredentialsAuthenticationToken) delegate.convert(request);
+      var delegate = new OAuth2ClientCredentialsAuthenticationConverter();
+      var auth = (OAuth2ClientCredentialsAuthenticationToken) delegate.convert(request);
       if (auth == null) return null;
 
       // Grab raw params from the request
       String resourceParam = request.getParameter("resource");
-      
-      log.info("🎯 AUTH CONVERTER: Processing client credentials request");
-      log.info("🎯 AUTH CONVERTER: Resource parameter: {}", resourceParam);
-      
+
+      log.debug("Processing client credentials request");
+      log.debug("Resource parameter: {}", resourceParam);
+
       // Preserve the 'resource' param if present
       if (resourceParam != null && !resourceParam.trim().isEmpty()) {
-        log.info("🎯 AUTH CONVERTER: Found resource parameter: {}", resourceParam);
+        log.debug("Found resource parameter: {}", resourceParam);
         var extra = new java.util.LinkedHashMap<String, Object>(auth.getAdditionalParameters());
         extra.put("resource", resourceParam);
-        
-        return new org.springframework.security.oauth2.server.authorization.authentication.OAuth2ClientCredentialsAuthenticationToken(
-            (org.springframework.security.core.Authentication) auth.getPrincipal(), 
-            auth.getScopes(), 
-            extra);
+
+        return new OAuth2ClientCredentialsAuthenticationToken(
+          (org.springframework.security.core.Authentication) auth.getPrincipal(),
+          auth.getScopes(),
+          extra
+        );
       } else {
-        log.info("🎯 AUTH CONVERTER: No resource parameter found");
+        log.debug("No resource parameter found");
       }
       return auth;
     };
@@ -155,22 +170,30 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
    * Configure JWT token customizer to add OpenChallenges-specific claims.
    */
   @Bean
-  public OAuth2TokenCustomizer<JwtEncodingContext> jwtTokenCustomizer(ApiKeyRepository apiKeyRepository, 
-                                                                       org.sagebionetworks.openchallenges.auth.service.repository.UserRepository userRepository) {
+  public OAuth2TokenCustomizer<JwtEncodingContext> jwtTokenCustomizer(
+    ApiKeyRepository apiKeyRepository,
+    UserRepository userRepository
+  ) {
     return context -> {
       if (context.getPrincipal() != null && context.getPrincipal().getName() != null) {
         // Add OpenChallenges-specific claims
         context.getClaims().claim("tokenType", "ACCESS");
         // Use the full issuer URL that matches the authorization server settings
+        // TODO: Update to real external URL in production
         context.getClaims().claim("iss", "http://openchallenges-auth-service:8087");
 
         // Add username claim - handle different authentication flows
         String username = context.getPrincipal().getName();
         String subjectId = username; // Default to principal name
-        
+
+        log.debug("jwtTokenCustomizer: username: {}", username);
+        log.debug("jwtTokenCustomizer: subjectId: {}", subjectId);
+
         // For client credentials flow with API key clients, look up the actual user
-        if (AuthorizationGrantType.CLIENT_CREDENTIALS.equals(context.getAuthorizationGrantType()) 
-            && username.startsWith("oc_api_key_")) {
+        if (
+          AuthorizationGrantType.CLIENT_CREDENTIALS.equals(context.getAuthorizationGrantType()) &&
+          username.startsWith("oc_api_key_")
+        ) {
           try {
             // Look up the API key by client ID to get the actual user (with JOIN FETCH)
             var apiKeyOpt = apiKeyRepository.findByClientIdWithUser(username);
@@ -178,26 +201,40 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
               var apiKey = apiKeyOpt.get();
               var user = apiKey.getUser();
               username = user.getUsername();
-              
+
               // Set subject based on user role
-              if (user.getRole() == org.sagebionetworks.openchallenges.auth.service.model.entity.User.Role.service) {
+              if (user.getRole() == Role.service) {
                 // For service accounts, use client_id as subject
                 subjectId = apiKey.getClientId();
-                log.info("🎯 JWT CUSTOMIZER: Service account - using client_id '{}' as subject for user '{}'", subjectId, username);
+                log.debug(
+                  "jwtTokenCustomizer: Service account - using client_id '{}' as subject for user '{}'",
+                  subjectId,
+                  username
+                );
               } else {
                 // For regular users, use user UUID as subject
                 subjectId = user.getId().toString();
-                log.info("🎯 JWT CUSTOMIZER: Regular user - using user ID '{}' as subject for user '{}'", subjectId, username);
+                log.debug(
+                  "jwtTokenCustomizer: Regular user - using user ID '{}' as subject for user '{}'",
+                  subjectId,
+                  username
+                );
               }
-              
-              log.info("🎯 JWT CUSTOMIZER: Found username '{}' for API key client '{}'", username, context.getPrincipal().getName());
+
+              log.info(
+                "Found username '{}' for API key client '{}'",
+                username,
+                context.getPrincipal().getName()
+              );
             } else {
-              log.warn("🎯 JWT CUSTOMIZER: No API key found for client ID '{}'", username);
+              log.warn("No API key found for client ID '{}'", username);
             }
           } catch (Exception e) {
-            log.error("🎯 JWT CUSTOMIZER: Error looking up API key for client '{}': {}", username, e.getMessage());
+            log.error("Error looking up API key for client '{}': {}", username, e.getMessage());
           }
-        } else if (AuthorizationGrantType.AUTHORIZATION_CODE.equals(context.getAuthorizationGrantType())) {
+        } else if (
+          AuthorizationGrantType.AUTHORIZATION_CODE.equals(context.getAuthorizationGrantType())
+        ) {
           // For authorization code flow (browser login), look up the user to get their UUID for the subject
           try {
             // In authorization code flow, the principal name is the username
@@ -207,22 +244,30 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
               var user = userOpt.get();
               // For authorization code flow, always use User UUID as subject (no service accounts via browser)
               subjectId = user.getId().toString();
-              log.info("🎯 JWT CUSTOMIZER: Authorization code flow - using user UUID '{}' as subject for user '{}'", subjectId, username);
+              log.debug(
+                "jwtTokenCustomizer: Authorization code flow - using user UUID '{}' as subject for user '{}'",
+                subjectId,
+                username
+              );
             } else {
-              log.warn("🎯 JWT CUSTOMIZER: User not found for authorization code flow: '{}'", username);
+              log.warn("User not found for authorization code flow: '{}'", username);
               // Fall back to username if user not found (shouldn't normally happen)
               subjectId = username;
             }
           } catch (Exception e) {
-            log.error("🎯 JWT CUSTOMIZER: Error looking up user for authorization code flow '{}': {}", username, e.getMessage());
+            log.error(
+              "Error looking up user for authorization code flow '{}': {}",
+              username,
+              e.getMessage()
+            );
             // Fall back to username if lookup fails
             subjectId = username;
           }
         }
-        
+
         // Set the subject claim
         context.getClaims().claim("sub", subjectId);
-        
+
         // Add OIDC standard preferred_username claim (for display purposes only)
         context.getClaims().claim("preferred_username", username);
 
@@ -236,7 +281,9 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
           }
           // For browser login, set a default audience to the auth service itself
           context.getClaims().claim("aud", "urn:openchallenges:auth-service");
-          log.info("🎯 JWT CUSTOMIZER: Set default audience for authorization code flow: urn:openchallenges:auth-service");
+          log.debug(
+            "Set default audience for authorization code flow: urn:openchallenges:auth-service"
+          );
         }
 
         // Add scopes for client credentials flow
@@ -247,52 +294,66 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
             context.getClaims().claim("scp", authorizedScopes);
             context.getClaims().claim("scope", String.join(" ", authorizedScopes));
           }
-          
+
           // RFC 8707 style audience/resource binding - read from authorization grant
           String resourceParam = null;
-          
+
           // Get resource parameter from the authorization grant's additional parameters
-          if (context.getAuthorizationGrant() instanceof org.springframework.security.oauth2.server.authorization.authentication.OAuth2ClientCredentialsAuthenticationToken) {
-            var clientCredentialsToken = (org.springframework.security.oauth2.server.authorization.authentication.OAuth2ClientCredentialsAuthenticationToken) context.getAuthorizationGrant();
+          if (
+            context.getAuthorizationGrant() instanceof OAuth2ClientCredentialsAuthenticationToken
+          ) {
+            var clientCredentialsToken =
+              (OAuth2ClientCredentialsAuthenticationToken) context.getAuthorizationGrant();
             var additionalParams = clientCredentialsToken.getAdditionalParameters();
-            
-            log.info("🎯 JWT CUSTOMIZER: Additional parameters from grant = {}", additionalParams);
-            
+
+            log.debug(
+              "jwtTokenCustomizer: Additional parameters from grant = {}",
+              additionalParams
+            );
+
             if (additionalParams != null && additionalParams.containsKey("resource")) {
               Object resourceObj = additionalParams.get("resource");
               resourceParam = resourceObj != null ? resourceObj.toString() : null;
-              log.info("🎯 JWT CUSTOMIZER: Found resource in additional parameters = {}", resourceParam);
+              log.debug(
+                "jwtTokenCustomizer: Found resource in additional parameters = {}",
+                resourceParam
+              );
             }
           }
-          
-          log.info("🎯 JWT CUSTOMIZER: Final resource parameter = {}", resourceParam);
-          
+
+          log.debug("Final resource parameter = {}", resourceParam);
+
           // RFC 8707: resource parameter is required for all API key requests
           if (resourceParam != null && !resourceParam.trim().isEmpty()) {
             context.getClaims().claim("aud", resourceParam);
-            log.info("🎯 JWT CUSTOMIZER: Set audience claim to: {}", resourceParam);
+            log.debug("jwtTokenCustomizer: Set audience claim to: {}", resourceParam);
           } else {
             // RFC 8707: Missing resource parameter should result in invalid_target error
-            log.error("🎯 JWT CUSTOMIZER: Missing required resource parameter for client credentials flow");
-            throw new org.springframework.security.oauth2.core.OAuth2AuthenticationException(
-                new org.springframework.security.oauth2.core.OAuth2Error(
-                    "invalid_target", 
-                    "The resource parameter is required for client credentials requests", 
-                    "https://datatracker.ietf.org/doc/html/rfc8707#section-2.1"
-                )
+            log.error("Missing required resource parameter for client credentials flow");
+            throw new OAuth2AuthenticationException(
+              new OAuth2Error(
+                "invalid_target",
+                "The resource parameter is required for client credentials requests",
+                "https://datatracker.ietf.org/doc/html/rfc8707#section-2.1"
+              )
             );
           }
         }
-        
+
         // Add scopes for token exchange flow (RFC 8693)
-        if ("urn:ietf:params:oauth:grant-type:token-exchange".equals(context.getAuthorizationGrantType().getValue())) {
+        // TODO: The token exchange system is not complete yet.
+        if (
+          "urn:ietf:params:oauth:grant-type:token-exchange".equals(
+              context.getAuthorizationGrantType().getValue()
+            )
+        ) {
           Set<String> authorizedScopes = context.getAuthorizedScopes();
           if (authorizedScopes != null && !authorizedScopes.isEmpty()) {
             // Add scopes as both 'scp' (standard) and 'scope' (for Spring Security compatibility)
             context.getClaims().claim("scp", authorizedScopes);
             context.getClaims().claim("scope", String.join(" ", authorizedScopes));
           }
-          
+
           // For token exchange, we may want to add audience claim
           String resource = context.get("resource");
           if (resource != null) {
@@ -345,23 +406,20 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
    * Includes audience validation to ensure tokens are intended for this service.
    */
   @Bean
-  public org.springframework.security.oauth2.jwt.JwtDecoder jwtDecoder(
-    JWKSource<SecurityContext> jwkSource
-  ) {
-    // Create JWT decoder using HTTP JWK endpoint 
-    org.springframework.security.oauth2.jwt.NimbusJwtDecoder jwtDecoder = 
-      org.springframework.security.oauth2.jwt.NimbusJwtDecoder.withJwkSetUri(
-        "http://localhost:8087/oauth2/jwks"
-      ).build();
+  public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
+    // Create JWT decoder using HTTP JWK endpoint
+    // TODO: In production, use the actual service URL
+    NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withJwkSetUri(
+      "http://localhost:8087/oauth2/jwks"
+    ).build();
 
     // Add audience validation for this service
     String expectedAudience = "urn:openchallenges:auth-service";
-    org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator<org.springframework.security.oauth2.jwt.Jwt> validator =
-      new org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator<>(
-        new org.springframework.security.oauth2.jwt.JwtTimestampValidator(),
-        new org.springframework.security.oauth2.jwt.JwtAudienceValidator(expectedAudience)
-      );
-    
+    DelegatingOAuth2TokenValidator<Jwt> validator = new DelegatingOAuth2TokenValidator<>(
+      new JwtTimestampValidator(),
+      new JwtAudienceValidator(expectedAudience)
+    );
+
     jwtDecoder.setJwtValidator(validator);
     return jwtDecoder;
   }
@@ -372,6 +430,7 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
    */
   @Bean
   public OAuth2AuthorizationService authorizationService() {
+    // TODO: Store token in persistent database
     return new InMemoryOAuth2AuthorizationService();
   }
 
@@ -383,6 +442,7 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
     return new AuthorizationServerContext() {
       @Override
       public String getIssuer() {
+        // TODO: Update to real external URL in production
         return "http://openchallenges-auth-service:8087";
       }
 
@@ -411,6 +471,7 @@ public class OpenChallengesOAuth2AuthorizationServerConfiguration {
    */
   @Bean
   public AuthorizationServerSettings authorizationServerSettings() {
+    // TODO: Update issuer URL to real external URL in production
     return AuthorizationServerSettings.builder()
       .issuer("http://openchallenges-auth-service:8087") // Service name for container networking
       .authorizationEndpoint("/oauth2/authorize")
