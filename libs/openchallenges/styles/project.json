@@ -5,6 +5,5 @@
   "projectType": "library",
   "generators": {},
   "targets": {},
-  "tags": ["type:styles", "scope:openchallenges", "language:typescript"],
-  "implicitDependencies": []
+  "tags": ["type:styles", "scope:openchallenges", "language:typescript"]
 }

@@ -5,7 +5,6 @@
   "sourceRoot": "libs/model-ad/services/src",
   "prefix": "model-ad",
   "tags": ["type:services", "scope:model-ad", "language:typescript"],
-  "implicitDependencies": [],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",

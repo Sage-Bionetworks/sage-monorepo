@@ -25,6 +25,5 @@
       }
     }
   },
-  "tags": ["type:service", "scope:backend"],
-  "implicitDependencies": []
+  "tags": ["type:service", "scope:backend"]
 }

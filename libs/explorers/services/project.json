@@ -5,7 +5,6 @@
   "sourceRoot": "libs/explorers/services/src",
   "prefix": "explorers",
   "tags": ["type:services", "scope:explorers", "language:typescript"],
-  "implicitDependencies": [],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
