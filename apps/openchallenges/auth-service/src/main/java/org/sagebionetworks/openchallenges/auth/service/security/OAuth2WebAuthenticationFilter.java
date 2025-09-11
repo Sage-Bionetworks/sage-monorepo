@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
@@ -23,18 +24,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
 /**
  * OAuth2 Web Authentication Filter that validates OAuth2 JWT tokens from cookies.
- * 
+ *
  * This filter:
  * 1. Extracts OAuth2 JWT tokens from secure cookies
- * 2. Validates tokens using OAuth2 JwtDecoder 
+ * 2. Validates tokens using OAuth2 JwtDecoder
  * 3. Sets up Spring Security authentication context
  * 4. Skips authentication for public endpoints
  */
@@ -43,138 +38,111 @@ import java.util.Optional;
 @Slf4j
 public class OAuth2WebAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtDecoder jwtDecoder;
-    private final UserRepository userRepository;
+  private final JwtDecoder jwtDecoder;
+  private final UserRepository userRepository;
 
-    // Public endpoints that don't require authentication
-    private static final List<String> PUBLIC_ENDPOINTS = Arrays.asList(
-        "/login",
-        "/auth/oauth2/",
-        "/auth/callback",
-        "/oauth2/",
-        "/.well-known/",
-        "/actuator/",
-        "/favicon.ico",
-        "/error"
-    );
+  @Override
+  protected void doFilterInternal(
+    HttpServletRequest request,
+    HttpServletResponse response,
+    FilterChain filterChain
+  ) throws ServletException, IOException {
+    String requestUri = request.getRequestURI();
+    log.debug("Processing request: {}", requestUri);
 
-    @Override
-    protected void doFilterInternal(
-        HttpServletRequest request,
-        HttpServletResponse response,
-        FilterChain filterChain
-    ) throws ServletException, IOException {
-        
-        String requestUri = request.getRequestURI();
-        log.debug("Processing request: {}", requestUri);
+    // Extract JWT token from cookies
+    String jwtToken = extractJwtFromCookies(request);
 
-        // Skip authentication for public endpoints
-        if (isPublicEndpoint(requestUri)) {
-            log.debug("Skipping authentication for public endpoint: {}", requestUri);
-            filterChain.doFilter(request, response);
-            return;
-        }
+    if (jwtToken == null) {
+      log.debug("No JWT token found in cookies for: {}", requestUri);
+      filterChain.doFilter(request, response);
+      return;
+    }
 
-        // Extract JWT token from cookies
-        String jwtToken = extractJwtFromCookies(request);
-        
-        if (jwtToken == null) {
-            log.debug("No JWT token found in cookies for: {}", requestUri);
-            filterChain.doFilter(request, response);
-            return;
-        }
+    try {
+      // Validate and decode OAuth2 JWT token
+      Jwt jwt = jwtDecoder.decode(jwtToken);
+      log.debug("Successfully decoded OAuth2 JWT token");
 
-        try {
-            // Validate and decode OAuth2 JWT token
-            Jwt jwt = jwtDecoder.decode(jwtToken);
-            log.debug("Successfully decoded OAuth2 JWT token");
-
-            // Extract subject from JWT claims (should be user UUID or client_id)
-            String subject = jwt.getSubject();
-            if (subject == null) {
-                log.debug("No subject claim found in JWT token");
-                filterChain.doFilter(request, response);
-                return;
-            }
-
-            // Try to find user by UUID first, then by client_id (for service accounts)
-            Optional<User> userOptional = Optional.empty();
-            try {
-                UUID userId = UUID.fromString(subject);
-                userOptional = userRepository.findById(userId);
-                log.debug("Found user by UUID: {}", userId);
-            } catch (IllegalArgumentException e) {
-                // Not a UUID, could be a client_id for service account
-                // For now, we don't support service account authentication in web filter
-                log.debug("Subject is not a UUID, skipping authentication for: {}", subject);
-                filterChain.doFilter(request, response);
-                return;
-            }
-            
-            if (userOptional.isEmpty()) {
-                log.warn("User not found for UUID: {}", subject);
-                filterChain.doFilter(request, response);
-                return;
-            }
-
-            User user = userOptional.get();
-            
-            // Check if user account is enabled
-            if (!user.getEnabled()) {
-                log.warn("User account is disabled: {}", user.getUsername());
-                filterChain.doFilter(request, response);
-                return;
-            }
-
-            // Set up Spring Security authentication
-            Authentication authentication = new UsernamePasswordAuthenticationToken(
-                user,
-                null,
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().name().toUpperCase()))
-            );
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            log.debug("Successfully authenticated user: {} with role: {}", user.getUsername(), user.getRole());
-
-        } catch (JwtException e) {
-            log.debug("JWT token validation failed: {}", e.getMessage());
-        } catch (Exception e) {
-            log.error("Unexpected error during OAuth2 web authentication", e);
-        }
-
+      // Extract subject from JWT claims (should be user UUID or client_id)
+      String subject = jwt.getSubject();
+      if (subject == null) {
+        log.debug("No subject claim found in JWT token");
         filterChain.doFilter(request, response);
+        return;
+      }
+
+      // Try to find user by UUID first
+      Optional<User> userOptional = Optional.empty();
+      try {
+        UUID userId = UUID.fromString(subject);
+        userOptional = userRepository.findById(userId);
+        log.debug("Found user by UUID: {}", userId);
+      } catch (IllegalArgumentException e) {
+        // Not a UUID, could be a client_id for service account
+        // For now, we don't support service account authentication in web filter
+        log.debug("Subject is not a UUID, skipping authentication for: {}", subject);
+        filterChain.doFilter(request, response);
+        return;
+      }
+
+      if (userOptional.isEmpty()) {
+        log.warn("User not found for UUID: {}", subject);
+        filterChain.doFilter(request, response);
+        return;
+      }
+
+      User user = userOptional.get();
+
+      // Check if user account is enabled
+      if (!user.getEnabled()) {
+        log.warn("User account is disabled: {}", user.getUsername());
+        filterChain.doFilter(request, response);
+        return;
+      }
+
+      // Set up Spring Security authentication
+      Authentication authentication = new UsernamePasswordAuthenticationToken(
+        user,
+        null,
+        Collections.singletonList(
+          new SimpleGrantedAuthority("ROLE_" + user.getRole().name().toUpperCase())
+        )
+      );
+
+      SecurityContextHolder.getContext().setAuthentication(authentication);
+      log.debug(
+        "Successfully authenticated user: {} with role: {}",
+        user.getUsername(),
+        user.getRole()
+      );
+    } catch (JwtException e) {
+      log.debug("JWT token validation failed: {}", e.getMessage());
+    } catch (Exception e) {
+      log.error("Unexpected error during OAuth2 web authentication", e);
     }
 
-    /**
-     * Check if the request URI matches a public endpoint
-     */
-    private boolean isPublicEndpoint(String requestUri) {
-        if (requestUri == null) {
-            return false;
-        }
-        
-        return PUBLIC_ENDPOINTS.stream()
-                .anyMatch(endpoint -> requestUri.startsWith(endpoint));
+    filterChain.doFilter(request, response);
+  }
+
+  /**
+   * Extract OAuth2 JWT token from secure cookies
+   */
+  private String extractJwtFromCookies(HttpServletRequest request) {
+    Cookie[] cookies = request.getCookies();
+    if (cookies == null) {
+      return null;
     }
 
-    /**
-     * Extract OAuth2 JWT token from secure cookies
-     */
-    private String extractJwtFromCookies(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies == null) {
-            return null;
+    for (Cookie cookie : cookies) {
+      if ("oc_access_token".equals(cookie.getName())) {
+        String tokenValue = cookie.getValue();
+        if (StringUtils.hasText(tokenValue)) {
+          return tokenValue;
         }
-
-        for (Cookie cookie : cookies) {
-            if ("oc_access_token".equals(cookie.getName())) {
-                String tokenValue = cookie.getValue();
-                if (StringUtils.hasText(tokenValue)) {
-                    return tokenValue;
-                }
-            }
-        }
-        
-        return null;
+      }
     }
+
+    return null;
+  }
 }
