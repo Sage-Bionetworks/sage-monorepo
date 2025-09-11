@@ -64,3 +64,29 @@ openchallenges:
     api-key:
       length: 40
       # prefix is defined in profile-specific configuration files
+  auth-service:
+    oauth2:
+      issuer-url: http://openchallenges-auth-service:8087
+      jwk-set-url: http://localhost:8087/oauth2/jwks
+      default-audience: urn:openchallenges:auth-service
+      access-token-ttl-minutes: 60
+      refresh-token-ttl-hours: 24
+    web:
+      access-token-cookie-name: oc_access_token
+    api:
+      protected-endpoints:
+        - /v1/**
+      public-endpoints:
+        - /oauth2/**
+        - /.well-known/**
+        - /actuator/health
+        - /actuator/info
+        - /v3/api-docs/**
+        - /swagger-ui/**
+        - /swagger-ui.html
+        - /login
+        - /auth/oauth2/google
+        - /auth/callback
+        - /logout
+        - /logout/**
+        - /error

@@ -1,6 +1,7 @@
 package org.sagebionetworks.openchallenges.auth.service.configuration;
 
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.openchallenges.auth.service.security.OAuth2WebAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,12 +14,14 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
 public class SecurityConfiguration {
+
+  private final AuthServiceProperties authServiceProperties;
 
   /**
    * Default password encoder bean - supports both BCrypt and {noop} prefixes
@@ -60,38 +63,20 @@ public class SecurityConfiguration {
       .authorizeHttpRequests(
         authz ->
           authz
-            // OAuth2 Authorization Server endpoints
-            .requestMatchers("/oauth2/**")
-            .permitAll() // Standard OAuth2 endpoints (authorization, token, etc.)
-            .requestMatchers("/.well-known/oauth-authorization-server")
-            .permitAll() // OAuth2 Authorization Server discovery endpoint
-            .requestMatchers("/.well-known/openid_configuration")
-            .permitAll() // OpenID Connect discovery endpoint
-            .requestMatchers("/.well-known/**")
-            .permitAll() // Other well-known endpoints
+            // Public endpoints - no authentication required
+            .requestMatchers(authServiceProperties.getApi().getPublicEndpoints())
+            .permitAll()
             // Protected API endpoints - require JWT authentication with scopes
             .requestMatchers("/v1/auth/profile")
             .authenticated() // Profile endpoints require JWT with proper scopes (handled by @PreAuthorize)
             .requestMatchers("/v1/auth/api-keys", "/v1/auth/api-keys/**")
             .authenticated() // API key management requires JWT with proper scopes (handled by @PreAuthorize)
-            .requestMatchers("/v1/**")
-            .authenticated() // All other v1 API endpoints require authentication
-            // Web interface endpoints for OAuth2 login flow
-            .requestMatchers("/login", "/auth/oauth2/google", "/auth/callback")
-            .permitAll() // OAuth2 web interface endpoints and login page
-            .requestMatchers("/logout", "/logout/**")
-            .permitAll() // Logout web interface endpoints
-            .requestMatchers("/error")
-            .permitAll() // Error page
             // Web profile management - requires web authentication (not JWT)
             .requestMatchers("/profile", "/profile/**")
             .authenticated() // Profile web pages require authentication (handled by web auth filter)
-            // Actuator endpoints
-            .requestMatchers("/actuator/health", "/actuator/info")
-            .permitAll() // Health checks
-            // OpenAPI documentation
-            .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
-            .permitAll() // OpenAPI docs
+            // All protected API endpoints require authentication
+            .requestMatchers(authServiceProperties.getApi().getProtectedEndpoints())
+            .authenticated()
             .anyRequest()
             .authenticated() // All other endpoints require authentication
       )

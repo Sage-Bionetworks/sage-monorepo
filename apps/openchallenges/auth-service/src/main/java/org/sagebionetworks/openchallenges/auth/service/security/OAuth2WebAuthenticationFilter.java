@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.openchallenges.auth.service.configuration.AuthServiceProperties;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.repository.UserRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -40,6 +41,7 @@ public class OAuth2WebAuthenticationFilter extends OncePerRequestFilter {
 
   private final JwtDecoder jwtDecoder;
   private final UserRepository userRepository;
+  private final AuthServiceProperties authServiceProperties;
 
   @Override
   protected void doFilterInternal(
@@ -126,7 +128,7 @@ public class OAuth2WebAuthenticationFilter extends OncePerRequestFilter {
   }
 
   /**
-   * Extract OAuth2 JWT token from secure cookies
+   * Extract OAuth2 JWT token from secure cookies using configured cookie name
    */
   private String extractJwtFromCookies(HttpServletRequest request) {
     Cookie[] cookies = request.getCookies();
@@ -134,8 +136,9 @@ public class OAuth2WebAuthenticationFilter extends OncePerRequestFilter {
       return null;
     }
 
+    String cookieName = authServiceProperties.getWeb().getAccessTokenCookieName();
     for (Cookie cookie : cookies) {
-      if ("oc_access_token".equals(cookie.getName())) {
+      if (cookieName.equals(cookie.getName())) {
         String tokenValue = cookie.getValue();
         if (StringUtils.hasText(tokenValue)) {
           return tokenValue;

@@ -11,6 +11,7 @@ import com.nimbusds.jose.proc.SecurityContext;
 import java.time.Duration;
 import java.util.Set;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User.Role;
 import org.sagebionetworks.openchallenges.auth.service.repository.ApiKeyRepository;
@@ -65,8 +66,11 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
  * See: https://github.com/spring-projects/spring-security/issues/17098
  */
 @Configuration
+@RequiredArgsConstructor
 @Slf4j
 public class OAuth2AuthorizationServerConfiguration {
+
+  private final AuthServiceProperties authServiceProperties;
 
   /**
    * Configure the OAuth2 Authorization Server security filter chain.
@@ -178,9 +182,8 @@ public class OAuth2AuthorizationServerConfiguration {
       if (context.getPrincipal() != null && context.getPrincipal().getName() != null) {
         // Add OpenChallenges-specific claims
         context.getClaims().claim("tokenType", "ACCESS");
-        // Use the full issuer URL that matches the authorization server settings
-        // TODO: Update to real external URL in production
-        context.getClaims().claim("iss", "http://openchallenges-auth-service:8087");
+        // Use the configured issuer URL that matches the authorization server settings
+        context.getClaims().claim("iss", authServiceProperties.getOauth2().getIssuerUrl());
 
         // Add username claim - handle different authentication flows
         String username = context.getPrincipal().getName();
@@ -279,10 +282,11 @@ public class OAuth2AuthorizationServerConfiguration {
             context.getClaims().claim("scp", authorizedScopes);
             context.getClaims().claim("scope", String.join(" ", authorizedScopes));
           }
-          // For browser login, set a default audience to the auth service itself
-          context.getClaims().claim("aud", "urn:openchallenges:auth-service");
+          // For browser login, set the configured default audience
+          context.getClaims().claim("aud", authServiceProperties.getOauth2().getDefaultAudience());
           log.debug(
-            "Set default audience for authorization code flow: urn:openchallenges:auth-service"
+            "Set default audience for authorization code flow: {}",
+            authServiceProperties.getOauth2().getDefaultAudience()
           );
         }
 
@@ -407,14 +411,13 @@ public class OAuth2AuthorizationServerConfiguration {
    */
   @Bean
   public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
-    // Create JWT decoder using HTTP JWK endpoint
-    // TODO: In production, use the actual service URL
+    // Create JWT decoder using configured JWK endpoint
     NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withJwkSetUri(
-      "http://localhost:8087/oauth2/jwks"
+      authServiceProperties.getOauth2().getJwkSetUrl()
     ).build();
 
     // Add audience validation for this service
-    String expectedAudience = "urn:openchallenges:auth-service";
+    String expectedAudience = authServiceProperties.getOauth2().getDefaultAudience();
     DelegatingOAuth2TokenValidator<Jwt> validator = new DelegatingOAuth2TokenValidator<>(
       new JwtTimestampValidator(),
       new JwtAudienceValidator(expectedAudience)
@@ -442,8 +445,7 @@ public class OAuth2AuthorizationServerConfiguration {
     return new AuthorizationServerContext() {
       @Override
       public String getIssuer() {
-        // TODO: Update to real external URL in production
-        return "http://openchallenges-auth-service:8087";
+        return authServiceProperties.getOauth2().getIssuerUrl();
       }
 
       @Override
@@ -455,13 +457,13 @@ public class OAuth2AuthorizationServerConfiguration {
 
   /**
    * Token settings for access and refresh tokens.
-   * Using default signature algorithm (will be determined by JWK source).
+   * Using configured TTL values and default signature algorithm (determined by JWK source).
    */
   @Bean
   public TokenSettings tokenSettings() {
     return TokenSettings.builder()
-      .accessTokenTimeToLive(Duration.ofMinutes(60)) // 1 hour
-      .refreshTokenTimeToLive(Duration.ofHours(24)) // 24 hours
+      .accessTokenTimeToLive(Duration.ofMinutes(authServiceProperties.getOauth2().getAccessTokenTtlMinutes()))
+      .refreshTokenTimeToLive(Duration.ofHours(authServiceProperties.getOauth2().getRefreshTokenTtlHours()))
       .reuseRefreshTokens(false)
       .build();
   }
@@ -471,9 +473,8 @@ public class OAuth2AuthorizationServerConfiguration {
    */
   @Bean
   public AuthorizationServerSettings authorizationServerSettings() {
-    // TODO: Update issuer URL to real external URL in production
     return AuthorizationServerSettings.builder()
-      .issuer("http://openchallenges-auth-service:8087") // Service name for container networking
+      .issuer(authServiceProperties.getOauth2().getIssuerUrl())
       .authorizationEndpoint("/oauth2/authorize")
       .deviceAuthorizationEndpoint("/oauth2/device_authorization")
       .deviceVerificationEndpoint("/oauth2/device_verification")
