@@ -57,6 +57,122 @@ export class BoxplotChart {
     this.xAxisLabelTooltips.setXAxisCategoryToTooltipText(xAxisCategoryToTooltipText);
   }
 
+  private getTitleOptions(xAxisTitle?: string, title?: string) {
+    const titles: EChartsOption['title'] = [];
+    if (xAxisTitle) {
+      titles.push(
+        // Add x-axis title as a title rather than xAxis.name, because
+        // setting via xAxis.name causes cursor to change to pointer when
+        // x-axis label tooltips are used
+        {
+          text: xAxisTitle,
+          textStyle: titleTextStyle,
+          left: 'center',
+          top: 'bottom',
+        },
+      );
+    }
+    if (title) {
+      titles.push({
+        text: title,
+        left: 'center',
+        top: 'top',
+        textStyle: titleTextStyle,
+      });
+    }
+    return titles;
+  }
+
+  private getXAxisOptions(
+    xAxisCategories: string[],
+    xAxisLabelFormatter: BoxplotProps['xAxisLabelFormatter'],
+    xAxisCategoryToTooltipText: BoxplotProps['xAxisCategoryToTooltipText'],
+  ) {
+    // Use two xAxes:
+    //  - value: used to jitter points with multiple pointCategories, where
+    //           xAxisCategory is mapped to 1-based index values for both
+    //           boxplots and points. Axis is not displayed.
+    //  - category: used to display the xAxisCategory and allows xAxis tooltips
+    //           to be displayed, since the event will contain the xAxis label
+    //           value, not the displayed text.
+    const xAxisOptions: EChartsOption['xAxis'] = [
+      {
+        id: 'value-x-axis',
+        type: 'value',
+        axisLine: {
+          onZero: false,
+        },
+        // Specify min/max values so the value xAxis aligns with the category xAxis
+        min: 0.5,
+        max: function (value) {
+          return Math.round((value.max + 0.5) * 2) / 2;
+        },
+        axisTick: { show: false },
+        splitLine: { show: false },
+        axisLabel: {
+          showMinLabel: false,
+          showMaxLabel: false,
+          show: false,
+        },
+      },
+      {
+        id: 'category-x-axis',
+        type: 'category',
+        data: xAxisCategories,
+        axisLabel: {
+          color: 'black',
+          fontWeight: 'bold',
+          fontSize: '14px',
+          interval: 0, // ensure all labels are shown
+          formatter: (value) => {
+            if (xAxisLabelFormatter) {
+              return xAxisLabelFormatter(value);
+            }
+            return value;
+          },
+        },
+        axisTick: {
+          alignWithLabel: true,
+        },
+        axisLine: {
+          onZero: false,
+        },
+        triggerEvent: Boolean(xAxisCategoryToTooltipText),
+        position: 'bottom',
+      },
+    ];
+    return xAxisOptions;
+  }
+
+  private getYAxisOptions(
+    yAxisTitle: BoxplotProps['yAxisTitle'],
+    yAxisMin: BoxplotProps['yAxisMin'],
+    yAxisMax: BoxplotProps['yAxisMax'],
+  ) {
+    const yAxisOptions: EChartsOption['yAxis'] = {
+      type: 'value',
+      name: yAxisTitle,
+      nameLocation: 'middle',
+      nameGap: Y_AXIS_TICK_LABELS_MAX_WIDTH,
+      nameTextStyle: titleTextStyle,
+      axisLine: {
+        show: true,
+      },
+      axisLabel: {
+        width: Y_AXIS_TICK_LABELS_MAX_WIDTH,
+        hideOverlap: true,
+        showMinLabel: yAxisMin == null,
+        showMaxLabel: yAxisMax == null,
+      },
+      splitLine: {
+        show: false,
+      },
+      min: yAxisMin ? yAxisMin - yAxisPadding : undefined,
+      max: yAxisMax ? yAxisMax + yAxisPadding : undefined,
+    };
+    return yAxisOptions;
+  }
+
   setOptions(boxplotProps: BoxplotProps) {
     if (!this.chart) return;
 
@@ -235,29 +351,6 @@ export class BoxplotChart {
       });
     });
 
-    const titles = [];
-    if (xAxisTitle) {
-      titles.push(
-        // Add x-axis title as a title rather than xAxis.name, because
-        // setting via xAxis.name causes cursor to change to pointer when
-        // x-axis label tooltips are used
-        {
-          text: xAxisTitle,
-          textStyle: titleTextStyle,
-          left: 'center',
-          top: 'bottom',
-        },
-      );
-    }
-    if (title) {
-      titles.push({
-        text: title,
-        left: 'center',
-        top: 'top',
-        textStyle: titleTextStyle,
-      });
-    }
-
     const option: EChartsOption = {
       legend: {
         show: showLegend,
@@ -275,85 +368,13 @@ export class BoxplotChart {
         right: 20,
         containLabel: false,
       },
-      title: titles,
+      title: this.getTitleOptions(xAxisTitle, title),
       aria: {
         enabled: true,
       },
       dataset: datasetOpts,
-      // Use two xAxes:
-      //  - value: used to jitter points with multiple pointCategories, where
-      //           xAxisCategory is mapped to 1-based index values for both
-      //           boxplots and points. Axis is not displayed.
-      //  - category: used to display the xAxisCategory and allows xAxis tooltips
-      //           to be displayed, since the event will contain the xAxis label
-      //           value, not the displayed text.
-      xAxis: [
-        {
-          id: 'value-x-axis',
-          type: 'value',
-          axisLine: {
-            onZero: false,
-          },
-          // Specify min/max values so the value xAxis aligns with the category xAxis
-          min: 0.5,
-          max: function (value) {
-            return Math.round((value.max + 0.5) * 2) / 2;
-          },
-          axisTick: { show: false },
-          splitLine: { show: false },
-          axisLabel: {
-            showMinLabel: false,
-            showMaxLabel: false,
-            show: false,
-          },
-        },
-        {
-          id: 'category-x-axis',
-          type: 'category',
-          data: xAxisCategories,
-          axisLabel: {
-            color: 'black',
-            fontWeight: 'bold',
-            fontSize: '14px',
-            interval: 0, // ensure all labels are shown
-            formatter: (value) => {
-              if (xAxisLabelFormatter) {
-                return xAxisLabelFormatter(value);
-              }
-              return value;
-            },
-          },
-          axisTick: {
-            alignWithLabel: true,
-          },
-          axisLine: {
-            onZero: false,
-          },
-          triggerEvent: Boolean(xAxisCategoryToTooltipText),
-          position: 'bottom',
-        },
-      ],
-      yAxis: {
-        type: 'value',
-        name: yAxisTitle,
-        nameLocation: 'middle',
-        nameGap: Y_AXIS_TICK_LABELS_MAX_WIDTH,
-        nameTextStyle: titleTextStyle,
-        axisLine: {
-          show: true,
-        },
-        axisLabel: {
-          width: Y_AXIS_TICK_LABELS_MAX_WIDTH,
-          hideOverlap: true,
-          showMinLabel: yAxisMin == null,
-          showMaxLabel: yAxisMax == null,
-        },
-        splitLine: {
-          show: false,
-        },
-        min: yAxisMin ? yAxisMin - yAxisPadding : undefined,
-        max: yAxisMax ? yAxisMax + yAxisPadding : undefined,
-      },
+      xAxis: this.getXAxisOptions(xAxisCategories, xAxisLabelFormatter, xAxisCategoryToTooltipText),
+      yAxis: this.getYAxisOptions(yAxisTitle, yAxisMin, yAxisMax),
       tooltip: {
         confine: true,
         position: 'top',
