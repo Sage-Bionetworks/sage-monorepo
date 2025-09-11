@@ -179,194 +179,138 @@ public class OAuth2AuthorizationServerConfiguration {
     UserRepository userRepository
   ) {
     return context -> {
-      if (context.getPrincipal() != null && context.getPrincipal().getName() != null) {
-        // Add OpenChallenges-specific claims
-        context.getClaims().claim("tokenType", "ACCESS");
-        // Use the configured issuer URL that matches the authorization server settings
-        context.getClaims().claim("iss", authServiceProperties.getOauth2().getIssuerUrl());
-
-        // Add username claim - handle different authentication flows
-        String username = context.getPrincipal().getName();
-        String subjectId = username; // Default to principal name
-
-        log.debug("jwtTokenCustomizer: username: {}", username);
-        log.debug("jwtTokenCustomizer: subjectId: {}", subjectId);
-
-        // For client credentials flow with API key clients, look up the actual user
-        if (
-          AuthorizationGrantType.CLIENT_CREDENTIALS.equals(context.getAuthorizationGrantType()) &&
-          username.startsWith("oc_api_key_")
-        ) {
-          try {
-            // Look up the API key by client ID to get the actual user (with JOIN FETCH)
-            var apiKeyOpt = apiKeyRepository.findByClientIdWithUser(username);
-            if (apiKeyOpt.isPresent()) {
-              var apiKey = apiKeyOpt.get();
-              var user = apiKey.getUser();
-              username = user.getUsername();
-
-              // Set subject based on user role
-              if (user.getRole() == Role.service) {
-                // For service accounts, use client_id as subject
-                subjectId = apiKey.getClientId();
-                log.debug(
-                  "jwtTokenCustomizer: Service account - using client_id '{}' as subject for user '{}'",
-                  subjectId,
-                  username
-                );
-              } else {
-                // For regular users, use user UUID as subject
-                subjectId = user.getId().toString();
-                log.debug(
-                  "jwtTokenCustomizer: Regular user - using user ID '{}' as subject for user '{}'",
-                  subjectId,
-                  username
-                );
-              }
-
-              log.info(
-                "Found username '{}' for API key client '{}'",
-                username,
-                context.getPrincipal().getName()
-              );
-            } else {
-              log.warn("No API key found for client ID '{}'", username);
-            }
-          } catch (Exception e) {
-            log.error("Error looking up API key for client '{}': {}", username, e.getMessage());
-          }
-        } else if (
-          AuthorizationGrantType.AUTHORIZATION_CODE.equals(context.getAuthorizationGrantType())
-        ) {
-          // For authorization code flow (browser login), look up the user to get their UUID for the subject
-          try {
-            // In authorization code flow, the principal name is the username
-            // We need to look up the user by username to get their UUID
-            var userOpt = userRepository.findByUsernameIgnoreCase(username);
-            if (userOpt.isPresent()) {
-              var user = userOpt.get();
-              // For authorization code flow, always use User UUID as subject (no service accounts via browser)
-              subjectId = user.getId().toString();
-              log.debug(
-                "jwtTokenCustomizer: Authorization code flow - using user UUID '{}' as subject for user '{}'",
-                subjectId,
-                username
-              );
-            } else {
-              log.warn("User not found for authorization code flow: '{}'", username);
-              // Fall back to username if user not found (shouldn't normally happen)
-              subjectId = username;
-            }
-          } catch (Exception e) {
-            log.error(
-              "Error looking up user for authorization code flow '{}': {}",
-              username,
-              e.getMessage()
-            );
-            // Fall back to username if lookup fails
-            subjectId = username;
-          }
-        }
-
-        // Set the subject claim
-        context.getClaims().claim("sub", subjectId);
-
-        // Add OIDC standard preferred_username claim (for display purposes only)
-        context.getClaims().claim("preferred_username", username);
-
-        // Add scopes for authorization code flow (browser login) - no resource parameter required
-        if (AuthorizationGrantType.AUTHORIZATION_CODE.equals(context.getAuthorizationGrantType())) {
-          Set<String> authorizedScopes = context.getAuthorizedScopes();
-          if (authorizedScopes != null && !authorizedScopes.isEmpty()) {
-            // Add scopes as both 'scp' (standard) and 'scope' (for Spring Security compatibility)
-            context.getClaims().claim("scp", authorizedScopes);
-            context.getClaims().claim("scope", String.join(" ", authorizedScopes));
-          }
-          // For browser login, set the configured default audience
-          context.getClaims().claim("aud", authServiceProperties.getOauth2().getDefaultAudience());
-          log.debug(
-            "Set default audience for authorization code flow: {}",
-            authServiceProperties.getOauth2().getDefaultAudience()
-          );
-        }
-
-        // Add scopes for client credentials flow
-        if (AuthorizationGrantType.CLIENT_CREDENTIALS.equals(context.getAuthorizationGrantType())) {
-          Set<String> authorizedScopes = context.getAuthorizedScopes();
-          if (authorizedScopes != null && !authorizedScopes.isEmpty()) {
-            // Add scopes as both 'scp' (standard) and 'scope' (for Spring Security compatibility)
-            context.getClaims().claim("scp", authorizedScopes);
-            context.getClaims().claim("scope", String.join(" ", authorizedScopes));
-          }
-
-          // RFC 8707 style audience/resource binding - read from authorization grant
-          String resourceParam = null;
-
-          // Get resource parameter from the authorization grant's additional parameters
-          if (
-            context.getAuthorizationGrant() instanceof OAuth2ClientCredentialsAuthenticationToken
-          ) {
-            var clientCredentialsToken =
-              (OAuth2ClientCredentialsAuthenticationToken) context.getAuthorizationGrant();
-            var additionalParams = clientCredentialsToken.getAdditionalParameters();
-
-            log.debug(
-              "jwtTokenCustomizer: Additional parameters from grant = {}",
-              additionalParams
-            );
-
-            if (additionalParams != null && additionalParams.containsKey("resource")) {
-              Object resourceObj = additionalParams.get("resource");
-              resourceParam = resourceObj != null ? resourceObj.toString() : null;
-              log.debug(
-                "jwtTokenCustomizer: Found resource in additional parameters = {}",
-                resourceParam
-              );
-            }
-          }
-
-          log.debug("Final resource parameter = {}", resourceParam);
-
-          // RFC 8707: resource parameter is required for all API key requests
-          if (resourceParam != null && !resourceParam.trim().isEmpty()) {
-            context.getClaims().claim("aud", resourceParam);
-            log.debug("jwtTokenCustomizer: Set audience claim to: {}", resourceParam);
-          } else {
-            // RFC 8707: Missing resource parameter should result in invalid_target error
-            log.error("Missing required resource parameter for client credentials flow");
-            throw new OAuth2AuthenticationException(
-              new OAuth2Error(
-                "invalid_target",
-                "The resource parameter is required for client credentials requests",
-                "https://datatracker.ietf.org/doc/html/rfc8707#section-2.1"
-              )
-            );
-          }
-        }
-
-        // Add scopes for token exchange flow (RFC 8693)
-        // TODO: The token exchange system is not complete yet.
-        if (
-          "urn:ietf:params:oauth:grant-type:token-exchange".equals(
-              context.getAuthorizationGrantType().getValue()
-            )
-        ) {
-          Set<String> authorizedScopes = context.getAuthorizedScopes();
-          if (authorizedScopes != null && !authorizedScopes.isEmpty()) {
-            // Add scopes as both 'scp' (standard) and 'scope' (for Spring Security compatibility)
-            context.getClaims().claim("scp", authorizedScopes);
-            context.getClaims().claim("scope", String.join(" ", authorizedScopes));
-          }
-
-          // For token exchange, we may want to add audience claim
-          String resource = context.get("resource");
-          if (resource != null) {
-            context.getClaims().claim("aud", resource);
-          }
-        }
-        // You can add more custom claims here based on the user context
+      if (context.getPrincipal() == null || context.getPrincipal().getName() == null) {
+        return;
       }
+      // Add OpenChallenges-specific claims
+      context.getClaims().claim("tokenType", "ACCESS");
+      context.getClaims().claim("iss", authServiceProperties.getOauth2().getIssuerUrl());
+
+      // Resolve subject and username
+      SubjectInfo subjectInfo = resolveSubjectAndUsername(context, apiKeyRepository, userRepository);
+      context.getClaims().claim("sub", subjectInfo.subjectId());
+      context.getClaims().claim("preferred_username", subjectInfo.username());
+
+      // Add scopes and audience claims
+      addScopeClaims(context);
+      addAudienceClaim(context);
     };
+  }
+
+  /**
+   * Helper record for subject and username resolution.
+   */
+  private record SubjectInfo(String subjectId, String username) {}
+
+  /**
+   * Resolves the subject and username for the JWT based on the grant type and principal.
+   */
+  private SubjectInfo resolveSubjectAndUsername(
+    JwtEncodingContext context,
+    ApiKeyRepository apiKeyRepository,
+    UserRepository userRepository
+  ) {
+    String username = context.getPrincipal().getName();
+    String subjectId = username;
+    if (
+      AuthorizationGrantType.CLIENT_CREDENTIALS.equals(context.getAuthorizationGrantType()) &&
+      username.startsWith("oc_api_key_")
+    ) {
+      try {
+        var apiKeyOpt = apiKeyRepository.findByClientIdWithUser(username);
+        if (apiKeyOpt.isPresent()) {
+          var apiKey = apiKeyOpt.get();
+          var user = apiKey.getUser();
+          username = user.getUsername();
+          if (user.getRole() == Role.service) {
+            subjectId = apiKey.getClientId();
+            log.debug("jwtTokenCustomizer: Service account - using client_id '{}' as subject for user '{}'", subjectId, username);
+          } else {
+            subjectId = user.getId().toString();
+            log.debug("jwtTokenCustomizer: Regular user - using user ID '{}' as subject for user '{}'", subjectId, username);
+          }
+          log.info("Found username '{}' for API key client '{}'", username, context.getPrincipal().getName());
+        } else {
+          log.warn("No API key found for client ID '{}'", username);
+        }
+      } catch (Exception e) {
+        log.error("Error looking up API key for client '{}': {}", username, e.getMessage());
+      }
+    } else if (AuthorizationGrantType.AUTHORIZATION_CODE.equals(context.getAuthorizationGrantType())) {
+      try {
+        var userOpt = userRepository.findByUsernameIgnoreCase(username);
+        if (userOpt.isPresent()) {
+          var user = userOpt.get();
+          subjectId = user.getId().toString();
+          log.debug("jwtTokenCustomizer: Authorization code flow - using user UUID '{}' as subject for user '{}'", subjectId, username);
+        } else {
+          log.warn("User not found for authorization code flow: '{}'", username);
+          subjectId = username;
+        }
+      } catch (Exception e) {
+        log.error("Error looking up user for authorization code flow '{}': {}", username, e.getMessage());
+        subjectId = username;
+      }
+    }
+    return new SubjectInfo(subjectId, username);
+  }
+
+  /**
+   * Adds scope claims (scp, scope) to the JWT for supported grant types.
+   */
+  private void addScopeClaims(JwtEncodingContext context) {
+    Set<String> authorizedScopes = context.getAuthorizedScopes();
+    if (authorizedScopes != null && !authorizedScopes.isEmpty()) {
+      context.getClaims().claim("scp", authorizedScopes);
+      context.getClaims().claim("scope", String.join(" ", authorizedScopes));
+    }
+  }
+
+  /**
+   * Adds the audience claim to the JWT based on the grant type and parameters.
+   */
+  private void addAudienceClaim(JwtEncodingContext context) {
+    if (AuthorizationGrantType.AUTHORIZATION_CODE.equals(context.getAuthorizationGrantType())) {
+      context.getClaims().claim("aud", authServiceProperties.getOauth2().getDefaultAudience());
+      log.debug("Set default audience for authorization code flow: {}", authServiceProperties.getOauth2().getDefaultAudience());
+    } else if (AuthorizationGrantType.CLIENT_CREDENTIALS.equals(context.getAuthorizationGrantType())) {
+      String resourceParam = extractResourceParameter(context);
+      if (resourceParam != null && !resourceParam.trim().isEmpty()) {
+        context.getClaims().claim("aud", resourceParam);
+        log.debug("jwtTokenCustomizer: Set audience claim to: {}", resourceParam);
+      } else {
+        log.error("Missing required resource parameter for client credentials flow");
+        throw new OAuth2AuthenticationException(
+          new OAuth2Error(
+            "invalid_target",
+            "The resource parameter is required for client credentials requests",
+            "https://datatracker.ietf.org/doc/html/rfc8707#section-2.1"
+          )
+        );
+      }
+    } else if ("urn:ietf:params:oauth:grant-type:token-exchange".equals(context.getAuthorizationGrantType().getValue())) {
+      String resource = context.get("resource");
+      if (resource != null) {
+        context.getClaims().claim("aud", resource);
+      }
+    }
+  }
+
+  /**
+   * Extracts the resource parameter from the authorization grant for client credentials flow.
+   */
+  private String extractResourceParameter(JwtEncodingContext context) {
+    if (context.getAuthorizationGrant() instanceof OAuth2ClientCredentialsAuthenticationToken token) {
+      var additionalParams = token.getAdditionalParameters();
+      log.debug("jwtTokenCustomizer: Additional parameters from grant = {}", additionalParams);
+      if (additionalParams != null && additionalParams.containsKey("resource")) {
+        Object resourceObj = additionalParams.get("resource");
+        String resourceParam = resourceObj != null ? resourceObj.toString() : null;
+        log.debug("jwtTokenCustomizer: Found resource in additional parameters = {}", resourceParam);
+        return resourceParam;
+      }
+    }
+    return null;
   }
 
   /**
