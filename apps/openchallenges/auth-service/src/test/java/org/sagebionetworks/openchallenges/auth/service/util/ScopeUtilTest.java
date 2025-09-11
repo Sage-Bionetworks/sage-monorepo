@@ -2,6 +2,7 @@ package org.sagebionetworks.openchallenges.auth.service.util;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.sagebionetworks.openchallenges.auth.service.util.ScopeConstants.*;
 
 import java.util.List;
 import java.util.Set;
@@ -12,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.AuthScopeDto;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
-import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.springframework.security.oauth2.jwt.Jwt;
 
@@ -32,7 +32,7 @@ class ScopeUtilTest {
   @Test
   void extractScopesFromJwt_whenJwtHasScopes_returnsAuthScopeDtos() {
     Jwt jwt = mock(Jwt.class);
-    when(jwtClaimUtil.extractScopes(jwt)).thenReturn(List.of("read:profile", "update:profile"));
+    when(jwtClaimUtil.extractScopes(jwt)).thenReturn(List.of(READ_PROFILE, UPDATE_PROFILE));
 
     List<AuthScopeDto> scopes = scopeUtil.extractScopesFromJwt(jwt);
 
@@ -51,7 +51,7 @@ class ScopeUtilTest {
   void extractScopesFromApiKey_whenApiKeyHasScopes_returnsAuthScopeDtos() {
     ApiKey apiKey = new ApiKey();
     apiKey.setName("test-key");
-    apiKey.setAllowedScopes("read:profile,update:profile");
+    apiKey.setAllowedScopes(READ_PROFILE + "," + UPDATE_PROFILE);
 
     List<AuthScopeDto> scopes = scopeUtil.extractScopesFromApiKey(apiKey);
 
@@ -98,8 +98,8 @@ class ScopeUtilTest {
 
     Set<String> scopes = scopeUtil.getDefaultScopesForUser(user);
 
-    assertTrue(scopes.contains("read:profile"));
-    assertFalse(scopes.contains("delete:organizations")); // Not available for regular users
+    assertTrue(scopes.contains(READ_PROFILE));
+    assertFalse(scopes.contains(DELETE_ORGANIZATIONS)); // Not available for regular users
   }
 
   @Test
@@ -110,7 +110,7 @@ class ScopeUtilTest {
 
   @Test
   void convertToAuthScopeDtos_whenScopesAreValid_returnsAuthScopeDtos() {
-    List<String> scopes = List.of("read:profile", "update:profile");
+    List<String> scopes = List.of(READ_PROFILE, UPDATE_PROFILE);
 
     List<AuthScopeDto> scopeDtos = scopeUtil.convertToAuthScopeDtos(scopes);
 
@@ -127,12 +127,12 @@ class ScopeUtilTest {
 
   @Test
   void convertScopesToString_whenScopesExist_returnsCommaSeparatedString() {
-    Set<String> scopes = Set.of("read:profile", "write:profile");
+    Set<String> scopes = Set.of(READ_PROFILE, UPDATE_PROFILE);
 
     String scopeString = scopeUtil.convertScopesToString(scopes);
 
-    assertTrue(scopeString.contains("read:profile"));
-    assertTrue(scopeString.contains("write:profile"));
+    assertTrue(scopeString.contains(READ_PROFILE));
+    assertTrue(scopeString.contains(UPDATE_PROFILE));
     assertTrue(scopeString.contains(","));
   }
 
@@ -144,24 +144,24 @@ class ScopeUtilTest {
 
   @Test
   void parseScopeString_whenStringHasScopes_returnsList() {
-    String scopeString = "read:profile,write:profile";
+    String scopeString = READ_PROFILE + "," + UPDATE_PROFILE;
 
     List<String> scopes = scopeUtil.parseScopeString(scopeString);
 
     assertEquals(2, scopes.size());
-    assertTrue(scopes.contains("read:profile"));
-    assertTrue(scopes.contains("write:profile"));
+    assertTrue(scopes.contains(READ_PROFILE));
+    assertTrue(scopes.contains(UPDATE_PROFILE));
   }
 
   @Test
   void parseScopeString_whenStringHasWhitespace_returnsTrimmedList() {
-    String scopeString = " read:profile , write:profile ";
+    String scopeString = " " + READ_PROFILE + " , " + UPDATE_PROFILE + " ";
 
     List<String> scopes = scopeUtil.parseScopeString(scopeString);
 
     assertEquals(2, scopes.size());
-    assertTrue(scopes.contains("read:profile"));
-    assertTrue(scopes.contains("write:profile"));
+    assertTrue(scopes.contains(READ_PROFILE));
+    assertTrue(scopes.contains(UPDATE_PROFILE));
   }
 
   @Test
@@ -170,7 +170,7 @@ class ScopeUtilTest {
     user.setUsername("user");
     user.setRole(User.Role.user);
 
-    boolean hasScope = scopeUtil.userHasScope(user, "read:profile");
+    boolean hasScope = scopeUtil.userHasScope(user, READ_PROFILE);
 
     assertTrue(hasScope);
   }
@@ -181,7 +181,7 @@ class ScopeUtilTest {
     user.setUsername("user");
     user.setRole(User.Role.user);
 
-    boolean hasScope = scopeUtil.userHasScope(user, "delete:organizations");
+    boolean hasScope = scopeUtil.userHasScope(user, DELETE_ORGANIZATIONS);
 
     assertFalse(hasScope);
   }
@@ -192,7 +192,7 @@ class ScopeUtilTest {
     user.setUsername("user");
     user.setRole(User.Role.user);
 
-    boolean hasAnyScope = scopeUtil.userHasAnyScope(user, "read:profile", "delete:organizations");
+    boolean hasAnyScope = scopeUtil.userHasAnyScope(user, READ_PROFILE, DELETE_ORGANIZATIONS);
 
     assertTrue(hasAnyScope);
   }
@@ -203,7 +203,7 @@ class ScopeUtilTest {
     user.setUsername("user");
     user.setRole(User.Role.user);
 
-    boolean hasAnyScope = scopeUtil.userHasAnyScope(user, "delete:organizations", "admin:panel");
+    boolean hasAnyScope = scopeUtil.userHasAnyScope(user, DELETE_ORGANIZATIONS, ADMIN_PANEL);
 
     assertFalse(hasAnyScope);
   }

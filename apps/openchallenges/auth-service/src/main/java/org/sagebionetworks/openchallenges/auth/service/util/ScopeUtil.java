@@ -1,5 +1,7 @@
 package org.sagebionetworks.openchallenges.auth.service.util;
 
+import static org.sagebionetworks.openchallenges.auth.service.util.ScopeConstants.*;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -86,42 +88,42 @@ public class ScopeUtil {
 
     if (user.isAdmin()) {
       Set<String> adminScopes = Set.of(
-        "read:profile",
-        "update:profile",
-        "read:api-key",
-        "create:api-key",
-        "delete:api-key",
-        "read:organizations",
-        "create:organizations",
-        "update:organizations",
-        "delete:organizations",
-        "read:challenges",
-        "create:challenges",
-        "update:challenges",
-        "delete:challenges",
-        "read:challenges-analytics",
-        "read:challenge-platforms",
-        "create:challenge-platforms",
-        "update:challenge-platforms",
-        "delete:challenge-platforms",
-        "read:edam-concepts"
+        READ_PROFILE,
+        UPDATE_PROFILE,
+        READ_API_KEY,
+        CREATE_API_KEY,
+        DELETE_API_KEY,
+        READ_ORGANIZATIONS,
+        CREATE_ORGANIZATIONS,
+        UPDATE_ORGANIZATIONS,
+        DELETE_ORGANIZATIONS,
+        READ_CHALLENGES,
+        CREATE_CHALLENGES,
+        UPDATE_CHALLENGES,
+        DELETE_CHALLENGES,
+        READ_CHALLENGES_ANALYTICS,
+        READ_CHALLENGE_PLATFORMS,
+        CREATE_CHALLENGE_PLATFORMS,
+        UPDATE_CHALLENGE_PLATFORMS,
+        DELETE_CHALLENGE_PLATFORMS,
+        READ_EDAM_CONCEPTS
       );
 
       log.debug("Assigned {} admin scopes to user '{}'", adminScopes.size(), user.getUsername());
       return adminScopes;
     } else {
       Set<String> userScopes = Set.of(
-        "read:profile",
-        "update:profile",
-        "read:api-key",
-        "create:api-key",
-        "delete:api-key",
-        "read:organizations",
-        "create:organizations",
-        "update:organizations",
-        "read:challenges",
-        "read:challenge-platforms",
-        "read:edam-concepts"
+        READ_PROFILE,
+        UPDATE_PROFILE,
+        READ_API_KEY,
+        CREATE_API_KEY,
+        DELETE_API_KEY,
+        READ_ORGANIZATIONS,
+        CREATE_ORGANIZATIONS,
+        UPDATE_ORGANIZATIONS,
+        READ_CHALLENGES,
+        READ_CHALLENGE_PLATFORMS,
+        READ_EDAM_CONCEPTS
       );
 
       log.debug("Assigned {} user scopes to user '{}'", userScopes.size(), user.getUsername());
