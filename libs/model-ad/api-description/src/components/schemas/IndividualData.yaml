@@ -5,11 +5,7 @@ properties:
     type: string
     description: Genotype of the individual
   sex:
-    type: string
-    enum:
-      - Female
-      - Male
-    description: Sex of the individual
+    $ref: './Sex.yaml'
   individual_id:
     type: string
     description: Unique identifier for the individual
