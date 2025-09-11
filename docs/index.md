@@ -35,12 +35,12 @@ Ready to start building? Choose your path:
   <div style="border: 1px solid #ddd; border-radius: 8px; padding: 16px;">
     <h3>🚀 Quick Start</h3>
     <p>Jump right in with our local development setup</p>
-    <a href="develop/quick-start.md">Get Started →</a>
+    <a href="develop/quick-start">Get Started →</a>
   </div>
   <div style="border: 1px solid #ddd; border-radius: 8px; padding: 16px;">
     <h3>📚 Learn the Basics</h3>
     <p>Understand the architecture and concepts</p>
-    <a href="develop/architecture/what-is-nx.md">Learn More →</a>
+    <a href="develop/architecture/what-is-nx">Learn More →</a>
   </div>
 </div>
 

@@ -4,9 +4,9 @@ applyTo: 'docs/updates/**'
 
 # Monthly Updates Generation Instructions
 
-This file provides instructions for generating monthly update pages for the Sage Monorepo documentation s### Step 4: Add Context and Statistics
+This file provides instructions for generating monthly update pages for the Sage Monorepo documentation site. Each monthly update aggregates all pull requests (PRs) merged to the `main` branch during a specific month and presents them in a user-friendly format suitable for the Updates section of the documentation site.
 
-In### Step 6: Update Navigation
+### Step 6: Update Navigation
 
 Update `mkdocs.yml` to include the new monthly page:
 
@@ -332,20 +332,6 @@ Ensure the monthly update page includes:
 5. **Subsection header capitalization**: Verify subsection headers (###) and category headers use sentence case capitalization
 
 ## Example Git Commands for Specific Months
-
-## Quality Guidelines
-
-1. **User-Focused**: Write for end users, not just developers
-2. **Clear Categories**: Organize changes logically
-3. **Consistent Format**: Follow the template structure
-4. **Links**: Include links to PRs, issues, and relevant documentation
-5. **Completeness**: Don't skip minor but user-visible changes
-6. **Context**: Explain why changes matter to users
-7. **Forward-Looking**: Include preview of upcoming work when possible
-
-## Tips for Effective Updates
-
-- **Aggregate Related PRs**: Group small related changes together
 
 ## Quality Guidelines
 

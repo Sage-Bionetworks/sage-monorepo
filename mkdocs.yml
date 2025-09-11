@@ -45,6 +45,7 @@ nav:
           - Remote Development: develop/advanced/developing-on-a-remote-host.md
           - Multi-author Commits: develop/advanced/creating-a-commit-with-multiple-authors.md
   - API:
+      - Overview: api/overview.md
       - Agora: api/agora.md
       - AMP-ALS: api/amp-als.md
       - BixArena: api/bixarena.md
