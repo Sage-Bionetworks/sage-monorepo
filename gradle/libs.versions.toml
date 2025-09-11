@@ -1,4 +1,5 @@
 [versions]
+caffeine = "3.2.2"
 findbugs = "3.0.2"
 flyway = "11.11.2"
 graalvm = "0.11.0"
@@ -40,6 +41,7 @@ spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-depe
 spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools", version.ref = "spring-boot" }
 spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter", version.ref = "spring-boot" }
 spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "spring-boot" }
+spring-boot-starter-cache = { module = "org.springframework.boot:spring-boot-starter-cache", version.ref = "spring-boot" }
 spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "spring-boot" }
 spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc", version.ref = "spring-boot" }
 spring-boot-starter-oauth2-client = { module = "org.springframework.boot:spring-boot-starter-oauth2-client", version.ref = "spring-boot" }
@@ -60,6 +62,7 @@ spring-security-test = { module = "org.springframework.security:spring-security-
 spring-web = { module = "org.springframework:spring-web", version.ref = "spring" }
 
 # Other libraries
+caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version.ref = "caffeine" }
 findbugs-jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "findbugs" }
 flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
 flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }

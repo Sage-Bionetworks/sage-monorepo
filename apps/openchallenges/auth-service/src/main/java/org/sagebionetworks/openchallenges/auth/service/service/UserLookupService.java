@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.repository.UserRepository;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,7 @@ public class UserLookupService {
 
   private final UserRepository userRepository;
   private final ApiKeyService apiKeyService;
+  private final CacheManager cacheManager;
 
   /**
    * Find user by subject claim from JWT token.
@@ -167,7 +170,44 @@ public class UserLookupService {
    */
   public void clearUserCaches() {
     log.debug("Clearing user lookup caches");
-    // Note: In a full implementation, you would inject CacheManager and clear specific caches
-    // For now, this is a placeholder for explicit cache management
+    cacheManager
+      .getCacheNames()
+      .forEach(cacheName -> {
+        if (cacheName.startsWith("userBy")) {
+          var cache = cacheManager.getCache(cacheName);
+          if (cache != null) {
+            cache.clear();
+            log.debug("Cleared cache: {}", cacheName);
+          }
+        }
+      });
+  }
+
+  /**
+   * Clear cache entries for a specific user.
+   * This method should be called when a specific user's data is modified.
+   *
+   * @param userId the UUID of the user whose cache entries should be cleared
+   * @param username the username of the user (optional, can be null)
+   */
+  @CacheEvict(
+    value = { "userBySubject", "userById", "userByUsername", "userByClientId" },
+    allEntries = false
+  )
+  public void clearUserCache(UUID userId, String username) {
+    log.debug("Clearing cache entries for user: {} (username: {})", userId, username);
+
+    // Clear specific cache entries
+    var userByIdCache = cacheManager.getCache("userById");
+    if (userByIdCache != null) {
+      userByIdCache.evict(userId.toString());
+    }
+
+    if (username != null) {
+      var userByUsernameCache = cacheManager.getCache("userByUsername");
+      if (userByUsernameCache != null) {
+        userByUsernameCache.evict(username);
+      }
+    }
   }
 }

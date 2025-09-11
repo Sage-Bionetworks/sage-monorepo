@@ -12,12 +12,14 @@ plugins {
 }
 
 dependencies {
+  implementation(libs.caffeine)
   implementation(libs.findbugs.jsr305)
   implementation(libs.flyway.core)
   implementation(libs.jackson.databind)
   implementation(libs.jackson.dataformat.yaml)
   implementation(libs.jackson.datatype.jsr310)
   implementation(libs.spring.boot.starter.actuator)
+  implementation(libs.spring.boot.starter.cache)
   implementation(libs.spring.boot.starter.data.jpa)
   implementation(libs.spring.boot.starter.security)
   implementation(libs.spring.boot.starter.thymeleaf)
