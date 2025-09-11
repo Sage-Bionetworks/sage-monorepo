@@ -5,6 +5,7 @@
 # list of hostnames (defined in alphabetical order)
 declare -a hostnames=(
   "127.0.0.1 agora-api"
+  "127.0.0.1 agora-app"
   "127.0.0.1 agora-mongo"
   "127.0.0.1 amp-als-apex"
   "127.0.0.1 amp-als-dataset-service"
@@ -15,6 +16,7 @@ declare -a hostnames=(
   "127.0.0.1 iatlas-api"
   "127.0.0.1 iatlas-postgres"
   "127.0.0.1 model-ad-api"
+  "127.0.0.1 model-ad-app"
   "127.0.0.1 model-ad-mongo"
   "127.0.0.1 observability-apex"
   "127.0.0.1 observability-grafana"

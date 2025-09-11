@@ -18,6 +18,10 @@ services:
         condition: service_started
       openchallenges-mcp-server:
         condition: service_started
+    extra_hosts:
+      - 'openchallenges-api-gateway:host-gateway'
+      - 'openchallenges-app:host-gateway'
+      - 'openchallenges-mcp-server:host-gateway'
     deploy:
       resources:
         limits:
