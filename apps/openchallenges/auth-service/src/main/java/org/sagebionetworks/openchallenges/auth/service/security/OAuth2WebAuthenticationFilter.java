@@ -15,13 +15,13 @@ import org.sagebionetworks.openchallenges.auth.service.configuration.AuthService
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.repository.UserRepository;
 import org.springframework.dao.DataAccessException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -94,7 +94,7 @@ public class OAuth2WebAuthenticationFilter extends OncePerRequestFilter {
       }
 
       // Set up Spring Security authentication
-      Authentication authentication = createAuthentication(user);
+      Authentication authentication = createAuthentication(user, jwt);
       SecurityContextHolder.getContext().setAuthentication(authentication);
       log.debug(
         "Successfully authenticated user: {} with role: {} for request: {}",
@@ -106,14 +106,22 @@ public class OAuth2WebAuthenticationFilter extends OncePerRequestFilter {
       log.debug("JWT token validation failed for request {}: {}", requestUri, e.getMessage());
       // Don't expose JWT validation details to client - continue without authentication
     } catch (DataAccessException e) {
-      log.error("Database error during authentication for request {}: {}", requestUri, e.getMessage());
+      log.error(
+        "Database error during authentication for request {}: {}",
+        requestUri,
+        e.getMessage()
+      );
       // Continue without authentication - let downstream handle authorization
     } catch (IllegalArgumentException e) {
       log.warn("Invalid authentication data for request {}: {}", requestUri, e.getMessage());
       // Continue without authentication - let downstream handle authorization
     } catch (Exception e) {
-      log.error("Unexpected error during OAuth2 web authentication for request {}: {}", 
-        requestUri, e.getMessage(), e);
+      log.error(
+        "Unexpected error during OAuth2 web authentication for request {}: {}",
+        requestUri,
+        e.getMessage(),
+        e
+      );
       // Continue without authentication - let downstream handle authorization
     }
 
@@ -176,7 +184,7 @@ public class OAuth2WebAuthenticationFilter extends OncePerRequestFilter {
     } catch (IllegalArgumentException e) {
       // Not a UUID, might be a client_id (service account) or username
       log.debug("Subject '{}' is not a valid UUID, trying as username/client_id", subject);
-      
+
       try {
         // Try to find by username as fallback
         Optional<User> userOpt = userRepository.findByUsernameIgnoreCase(subject);
@@ -187,7 +195,11 @@ public class OAuth2WebAuthenticationFilter extends OncePerRequestFilter {
           log.debug("No user found for username: {}", subject);
         }
       } catch (DataAccessException ex) {
-        log.error("Database error while looking up user by username '{}': {}", subject, ex.getMessage());
+        log.error(
+          "Database error while looking up user by username '{}': {}",
+          subject,
+          ex.getMessage()
+        );
       }
     } catch (DataAccessException e) {
       log.error("Database error while looking up user by UUID '{}': {}", subject, e.getMessage());
@@ -197,29 +209,36 @@ public class OAuth2WebAuthenticationFilter extends OncePerRequestFilter {
   }
 
   /**
-   * Creates a Spring Security authentication token for the given user.
+   * Creates a Spring Security authentication token for the given user and JWT.
+   * Uses JwtAuthenticationToken which is appropriate for JWT-based authentication.
    * Includes validation of user properties.
    */
-  private Authentication createAuthentication(User user) {
+  private Authentication createAuthentication(User user, Jwt jwt) {
     if (user == null) {
       throw new IllegalArgumentException("User cannot be null");
+    }
+    if (jwt == null) {
+      throw new IllegalArgumentException("JWT cannot be null");
     }
 
     if (user.getRole() == null) {
       log.warn("User '{}' has null role, defaulting to USER", user.getUsername());
       // Create a minimal authority if role is null
-      return new UsernamePasswordAuthenticationToken(
-        user,
-        null,
+      return new JwtAuthenticationToken(
+        jwt,
         Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
       );
     }
 
     String roleName = "ROLE_" + user.getRole().name().toUpperCase();
-    return new UsernamePasswordAuthenticationToken(
-      user,
-      null,
+    JwtAuthenticationToken jwtAuthToken = new JwtAuthenticationToken(
+      jwt,
       Collections.singletonList(new SimpleGrantedAuthority(roleName))
     );
+
+    // Set the user as details so it can be accessed later
+    jwtAuthToken.setDetails(user);
+
+    return jwtAuthToken;
   }
 }
