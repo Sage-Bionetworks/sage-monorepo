@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sagebionetworks.openchallenges.auth.service.configuration.ApiKeyProperties;
+import org.sagebionetworks.openchallenges.auth.service.configuration.AuthServiceProperties;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.repository.ApiKeyRepository;
@@ -36,7 +36,7 @@ public class ApiKeyService {
 
   private final ApiKeyRepository apiKeyRepository;
   private final PasswordEncoder passwordEncoder;
-  private final ApiKeyProperties apiKeyProperties;
+  private final AuthServiceProperties authServiceProperties;
   private final RegisteredClientRepository registeredClientRepository;
   private final JdbcTemplate jdbcTemplate;
   private final SecureRandom secureRandom = new SecureRandom();
@@ -52,7 +52,7 @@ public class ApiKeyService {
     log.debug("Creating API key for user: {}", user.getUsername());
     log.debug(
       "Generated API key with prefix: {}",
-      plainApiKey.substring(0, apiKeyProperties.getPrefix().length())
+      plainApiKey.substring(0, authServiceProperties.getApiKey().getPrefix().length())
     );
 
     // Calculate expiration
@@ -69,7 +69,7 @@ public class ApiKeyService {
     ApiKey apiKeyEntity = ApiKey.builder()
       .user(user)
       .keyHash(keyHash)
-      .keyPrefix(apiKeyProperties.getPrefix())
+      .keyPrefix(authServiceProperties.getApiKey().getPrefix())
       .name(name)
       .clientId(clientId)
       .expiresAt(expiresAt)
@@ -126,13 +126,13 @@ public class ApiKeyService {
   public Optional<ApiKey> validateApiKey(String apiKey) {
     log.debug(
       "Validating API key with prefix: {}",
-      apiKey != null && apiKey.length() >= apiKeyProperties.getPrefix().length()
-        ? apiKey.substring(0, apiKeyProperties.getPrefix().length())
+      apiKey != null && apiKey.length() >= authServiceProperties.getApiKey().getPrefix().length()
+        ? apiKey.substring(0, authServiceProperties.getApiKey().getPrefix().length())
         : "null"
     );
 
-    if (apiKey == null || !apiKey.startsWith(apiKeyProperties.getPrefix())) {
-      log.debug("API key is null or doesn't have correct prefix: {}", apiKeyProperties.getPrefix());
+    if (apiKey == null || !apiKey.startsWith(authServiceProperties.getApiKey().getPrefix())) {
+      log.debug("API key is null or doesn't have correct prefix: {}", authServiceProperties.getApiKey().getPrefix());
       return Optional.empty();
     }
 
@@ -289,7 +289,7 @@ public class ApiKeyService {
     secureRandom.nextBytes(secretBytes);
     String secret = Base64.getUrlEncoder().withoutPadding().encodeToString(secretBytes);
 
-    return apiKeyProperties.getPrefix() + suffix + "." + secret;
+    return authServiceProperties.getApiKey().getPrefix() + suffix + "." + secret;
   }
 
   /**
@@ -383,7 +383,7 @@ public class ApiKeyService {
    * Extract suffix from API key (everything between prefix and last dot)
    */
   private String extractSuffix(String apiKey) {
-    String withoutPrefix = apiKey.substring(apiKeyProperties.getPrefix().length());
+    String withoutPrefix = apiKey.substring(authServiceProperties.getApiKey().getPrefix().length());
     int lastDot = withoutPrefix.lastIndexOf('.');
     if (lastDot == -1) {
       throw new IllegalArgumentException("Invalid API key format: missing secret separator");

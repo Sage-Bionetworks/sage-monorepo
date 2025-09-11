@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Configuration properties for OpenChallenges Auth Service.
- * 
+ *
  * All properties are prefixed with 'openchallenges.auth-service.'
  */
 @Component
@@ -29,12 +29,18 @@ public class AuthServiceProperties {
    */
   private ApiConfig api = new ApiConfig();
 
+  /**
+   * API key configuration
+   */
+  private ApiKeyConfig apiKey = new ApiKeyConfig();
+
   @Data
   public static class OAuth2Config {
+
     /**
      * The issuer URL for JWT tokens and OAuth2 authorization server.
      * Used in JWT 'iss' claim and authorization server settings.
-     * 
+     *
      * Example: http://localhost:8087 or https://auth.openchallenges.io
      */
     private String issuerUrl = "http://openchallenges-auth-service:8087";
@@ -42,7 +48,7 @@ public class AuthServiceProperties {
     /**
      * The JWK Set endpoint URL for JWT token validation.
      * Used by JWT decoder to fetch public keys for signature verification.
-     * 
+     *
      * Example: http://localhost:8087/oauth2/jwks
      */
     private String jwkSetUrl = "http://localhost:8087/oauth2/jwks";
@@ -66,6 +72,7 @@ public class AuthServiceProperties {
 
   @Data
   public static class WebConfig {
+
     /**
      * Cookie name for storing OAuth2 access tokens.
      * Used by the web authentication filter.
@@ -75,10 +82,11 @@ public class AuthServiceProperties {
 
   @Data
   public static class ApiConfig {
+
     /**
      * API endpoint patterns that require authentication.
      */
-    private String[] protectedEndpoints = {"/v1/**"};
+    private String[] protectedEndpoints = { "/v1/**" };
 
     /**
      * API endpoint patterns that are publicly accessible.
@@ -96,7 +104,21 @@ public class AuthServiceProperties {
       "/auth/callback",
       "/logout",
       "/logout/**",
-      "/error"
+      "/error",
     };
+  }
+
+  @Data
+  public static class ApiKeyConfig {
+
+    /**
+     * The prefix for API keys (e.g., oc_dev_, oc_stage_, oc_prod_)
+     */
+    private String prefix = "oc_dev_";
+
+    /**
+     * The length of the random part of the API key (characters after prefix)
+     */
+    private int length = 40;
   }
 }

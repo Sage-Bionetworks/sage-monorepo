@@ -24,7 +24,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.sagebionetworks.openchallenges.auth.service.configuration.ApiKeyProperties;
+import org.sagebionetworks.openchallenges.auth.service.configuration.AuthServiceProperties;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.repository.ApiKeyRepository;
@@ -43,7 +43,10 @@ class ApiKeyServiceTest {
   private PasswordEncoder passwordEncoder;
 
   @Mock
-  private ApiKeyProperties apiKeyProperties;
+  private AuthServiceProperties authServiceProperties;
+  
+  @Mock
+  private AuthServiceProperties.ApiKeyConfig apiKeyConfig;
 
   @Mock
   private RegisteredClientRepository registeredClientRepository;
@@ -59,15 +62,16 @@ class ApiKeyServiceTest {
   @BeforeEach
   void setUp() {
     // Setup lenient stubs for properties that are commonly used
-    lenient().when(apiKeyProperties.getPrefix()).thenReturn("oc_test_");
-    lenient().when(apiKeyProperties.getLength()).thenReturn(40);
+    lenient().when(authServiceProperties.getApiKey()).thenReturn(apiKeyConfig);
+    lenient().when(apiKeyConfig.getPrefix()).thenReturn("oc_test_");
+    lenient().when(apiKeyConfig.getLength()).thenReturn(40);
 
     // Setup lenient stubs for OAuth2 repository operations
     lenient().doNothing().when(registeredClientRepository).save(any());
     lenient().when(jdbcTemplate.queryForList(anyString(), (Object[]) any())).thenReturn(List.of());
     lenient().when(jdbcTemplate.update(anyString(), (Object[]) any())).thenReturn(0);
 
-    apiKeyService = new ApiKeyService(apiKeyRepository, passwordEncoder, apiKeyProperties, registeredClientRepository, jdbcTemplate);
+    apiKeyService = new ApiKeyService(apiKeyRepository, passwordEncoder, authServiceProperties, registeredClientRepository, jdbcTemplate);
 
     testUser = User.builder()
       .id(UUID.randomUUID())
@@ -98,7 +102,7 @@ class ApiKeyServiceTest {
       ApiKeyService service = new ApiKeyService(
         apiKeyRepository,
         passwordEncoder,
-        apiKeyProperties,
+        authServiceProperties,
         registeredClientRepository,
         jdbcTemplate
       );
@@ -704,7 +708,8 @@ class ApiKeyServiceTest {
     @DisplayName("should use custom prefix from properties")
     void shouldUseCustomPrefixFromProperties() {
       // Arrange
-      when(apiKeyProperties.getPrefix()).thenReturn("custom_prefix_");
+      when(authServiceProperties.getApiKey()).thenReturn(apiKeyConfig);
+      when(apiKeyConfig.getPrefix()).thenReturn("custom_prefix_");
       String hashedKey = "hashedkey";
       when(passwordEncoder.encode(anyString())).thenReturn(hashedKey);
       when(apiKeyRepository.save(any(ApiKey.class))).thenAnswer(invocation -> {

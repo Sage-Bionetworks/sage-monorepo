@@ -8,7 +8,7 @@ spring:
     enabled: false
 
 openchallenges:
-  auth:
+  auth-service:
     api-key:
       prefix: oc_prod_
       length: 40

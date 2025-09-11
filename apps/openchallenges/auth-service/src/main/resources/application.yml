@@ -60,10 +60,6 @@ info:
 
 # Common configuration for all profiles
 openchallenges:
-  auth:
-    api-key:
-      length: 40
-      # prefix is defined in profile-specific configuration files
   auth-service:
     oauth2:
       issuer-url: http://openchallenges-auth-service:8087
@@ -90,3 +86,6 @@ openchallenges:
         - /logout
         - /logout/**
         - /error
+    api-key:
+      length: 40
+      # prefix is defined in profile-specific configuration files

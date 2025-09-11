@@ -6,7 +6,7 @@ spring:
     url: jdbc:postgresql://openchallenges-postgres:8091/auth_service
 
 openchallenges:
-  auth:
+  auth-service:
     api-key:
       prefix: oc_dev_
       length: 40
