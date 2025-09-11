@@ -30,6 +30,9 @@ class AuthenticationUtilTest {
   private UserLookupService userLookupService;
 
   @Mock
+  private JwtClaimUtil jwtClaimUtil;
+
+  @Mock
   private SecurityContext securityContext;
 
   @Mock
@@ -80,7 +83,7 @@ class AuthenticationUtilTest {
     // No details set, should fallback to JWT subject
 
     when(securityContext.getAuthentication()).thenReturn(jwtAuthToken);
-    when(jwt.getSubject()).thenReturn(userId);
+    when(jwtClaimUtil.extractSubject(jwt)).thenReturn(userId);
     when(userLookupService.findUserBySubject(userId)).thenReturn(Optional.of(testUser));
 
     // Act

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 public class AuthenticationUtil {
 
   private final UserLookupService userLookupService;
+  private final JwtClaimUtil jwtClaimUtil;
 
   /**
    * Get the authenticated user from the current security context.
@@ -79,15 +80,20 @@ public class AuthenticationUtil {
 
   /**
    * Extract User entity from JWT token by resolving the subject claim.
-   * Uses the shared UserLookupService to eliminate duplicate database queries.
+   * Uses the shared UserLookupService and JwtClaimUtil to eliminate duplicate logic.
    */
   private User extractUserFromJwt(Jwt jwt) {
     if (jwt == null) {
       return null;
     }
 
-    // Use the subject claim to identify the user via UserLookupService
-    String subject = jwt.getSubject();
+    // Use JwtClaimUtil to extract the subject claim consistently
+    String subject = jwtClaimUtil.extractSubject(jwt);
+    if (subject == null) {
+      log.debug("No subject found in JWT");
+      return null;
+    }
+
     return userLookupService.findUserBySubject(subject).orElse(null);
   }
 }

@@ -15,6 +15,7 @@ import org.sagebionetworks.openchallenges.auth.service.configuration.AuthService
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.repository.ApiKeyRepository;
+import org.sagebionetworks.openchallenges.auth.service.util.ScopeUtil;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -39,6 +40,7 @@ public class ApiKeyService {
   private final AuthServiceProperties authServiceProperties;
   private final RegisteredClientRepository registeredClientRepository;
   private final JdbcTemplate jdbcTemplate;
+  private final ScopeUtil scopeUtil;
   private final SecureRandom secureRandom = new SecureRandom();
 
   /**
@@ -132,7 +134,10 @@ public class ApiKeyService {
     );
 
     if (apiKey == null || !apiKey.startsWith(authServiceProperties.getApiKey().getPrefix())) {
-      log.debug("API key is null or doesn't have correct prefix: {}", authServiceProperties.getApiKey().getPrefix());
+      log.debug(
+        "API key is null or doesn't have correct prefix: {}",
+        authServiceProperties.getApiKey().getPrefix()
+      );
       return Optional.empty();
     }
 
@@ -302,49 +307,8 @@ public class ApiKeyService {
 
     log.info("Creating OAuth2 client '{}' for API key: {}", clientId, apiKey.getName());
 
-    // Determine scopes based on user role
-    Set<String> scopes;
-    if (user.isAdmin()) {
-      scopes = Set.of(
-        "read:profile",
-        "update:profile",
-        "read:api-key",
-        "create:api-key",
-        "delete:api-key",
-        "read:organizations",
-        "create:organizations",
-        "update:organizations",
-        "delete:organizations",
-        "read:challenges",
-        "create:challenges",
-        "update:challenges",
-        "delete:challenges",
-        "read:challenges-analytics",
-        "read:challenge-platforms",
-        "create:challenge-platforms",
-        "update:challenge-platforms",
-        "delete:challenge-platforms",
-        "read:edam-concepts"
-      );
-    } else {
-      // Default scopes for regular users
-      scopes = Set.of(
-        "read:profile",
-        "update:profile",
-        "read:api-key",
-        "create:api-key",
-        "delete:api-key",
-        "read:organizations",
-        "create:organizations",
-        "update:organizations",
-        "read:challenges",
-        "create:challenges",
-        "update:challenges",
-        "read:challenges-analytics",
-        "read:challenge-platforms",
-        "read:edam-concepts"
-      );
-    }
+    // Determine scopes based on user role using ScopeUtil
+    Set<String> scopes = scopeUtil.getDefaultScopesForUser(user);
 
     // Create RegisteredClient for this API key
     RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
@@ -372,8 +336,9 @@ public class ApiKeyService {
     // Save the registered client
     registeredClientRepository.save(registeredClient);
 
-    // Update the API key with OAuth2 scopes (client_id is already set)
-    apiKey.setAllowedScopes(String.join(",", scopes));
+    // Update the API key with OAuth2 scopes using ScopeUtil (client_id is already set)
+    String scopeString = scopeUtil.convertScopesToString(scopes);
+    apiKey.setAllowedScopes(scopeString);
     apiKeyRepository.save(apiKey);
 
     log.info("Created OAuth2 client {} for API key: {}", clientId, apiKey.getName());
@@ -400,15 +365,5 @@ public class ApiKeyService {
       throw new IllegalArgumentException("Invalid API key format: missing secret separator");
     }
     return apiKey.substring(lastDot + 1);
-  }
-
-  /**
-   * Extract suffix from client_id (everything after the CLIENT_ID_PREFIX)
-   */
-  private String extractSuffixFromClientId(String clientId) {
-    if (clientId == null || !clientId.startsWith(CLIENT_ID_PREFIX)) {
-      throw new IllegalArgumentException("Invalid client ID format: " + clientId);
-    }
-    return clientId.substring(CLIENT_ID_PREFIX.length());
   }
 }

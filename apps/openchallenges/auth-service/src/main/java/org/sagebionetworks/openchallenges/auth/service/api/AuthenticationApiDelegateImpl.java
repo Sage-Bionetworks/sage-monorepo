@@ -1,11 +1,9 @@
 package org.sagebionetworks.openchallenges.auth.service.api;
 
 import java.net.URI;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.auth.service.model.dto.AuthScopeDto;
@@ -16,6 +14,7 @@ import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.service.UserService;
 import org.sagebionetworks.openchallenges.auth.service.util.AuthenticationUtil;
+import org.sagebionetworks.openchallenges.auth.service.util.ScopeUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,8 +34,9 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate {
 
-  private final UserService userService;
   private final AuthenticationUtil authenticationUtil;
+  private final UserService userService;
+  private final ScopeUtil scopeUtil;
 
   /**
    * Get the authenticated user's profile.
@@ -54,7 +54,7 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       }
 
-      // Get scopes from authentication details
+      // Get scopes from authentication details using ScopeUtil
       // TODO: Remove scopes from the profile and implement proper authorization policy (SMR-454)
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       List<AuthScopeDto> scopes = Collections.emptyList();
@@ -65,12 +65,12 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
         Object details = authentication.getDetails();
         if (details instanceof ApiKey) {
           ApiKey apiKey = (ApiKey) details;
-          scopes = getScopesFromApiKey(apiKey);
+          scopes = scopeUtil.extractScopesFromApiKey(apiKey);
         }
       } else if (principal instanceof Jwt) {
         // JWT principal (from OAuth2 Resource Server)
         Jwt jwt = (Jwt) principal;
-        scopes = getScopesFromJwt(jwt);
+        scopes = scopeUtil.extractScopesFromJwt(jwt);
       }
 
       log.debug(
@@ -100,38 +100,6 @@ public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate 
       log.error("Error getting user profile", e);
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
-  }
-
-  /**
-   * Extract scopes from an API key.
-   */
-  private List<AuthScopeDto> getScopesFromApiKey(ApiKey apiKey) {
-    String allowedScopes = apiKey.getAllowedScopes();
-    if (allowedScopes != null && !allowedScopes.trim().isEmpty()) {
-      String[] scopeArray = allowedScopes.split(",");
-      List<AuthScopeDto> scopes = Arrays.stream(scopeArray)
-        .map(scope -> AuthScopeDto.fromValue(scope.trim()))
-        .collect(Collectors.toList());
-      log.debug("Retrieved {} scopes from API key: {}", scopes.size(), allowedScopes);
-      return scopes;
-    }
-    return Collections.emptyList();
-  }
-
-  /**
-   * Extract scopes from JWT token.
-   */
-  private List<AuthScopeDto> getScopesFromJwt(Jwt jwt) {
-    List<String> scopes = jwt.getClaimAsStringList("scp");
-    if (scopes != null && !scopes.isEmpty()) {
-      List<AuthScopeDto> scopeDtos = scopes
-        .stream()
-        .map(scope -> AuthScopeDto.fromValue(scope.trim()))
-        .collect(Collectors.toList());
-      log.debug("Retrieved {} scopes from JWT: {}", scopeDtos.size(), scopes);
-      return scopeDtos;
-    }
-    return Collections.emptyList();
   }
 
   /**

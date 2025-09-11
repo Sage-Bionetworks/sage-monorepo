@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.auth.service.configuration.AuthServiceProperties;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.service.UserLookupService;
+import org.sagebionetworks.openchallenges.auth.service.util.JwtClaimUtil;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -41,6 +42,7 @@ public class OAuth2WebAuthenticationFilter extends OncePerRequestFilter {
 
   private final JwtDecoder jwtDecoder;
   private final UserLookupService userLookupService;
+  private final JwtClaimUtil jwtClaimUtil;
   private final AuthServiceProperties authServiceProperties;
 
   @Override
@@ -66,15 +68,15 @@ public class OAuth2WebAuthenticationFilter extends OncePerRequestFilter {
       Jwt jwt = jwtDecoder.decode(jwtToken);
       log.debug("Successfully decoded OAuth2 JWT token");
 
-      // Extract subject from JWT claims (should be user UUID or client_id)
-      String subject = jwt.getSubject();
+      // Extract subject from JWT claims using JwtClaimUtil for consistency
+      String subject = jwtClaimUtil.extractSubject(jwt);
       if (subject == null) {
         log.debug("No subject claim found in JWT token");
         filterChain.doFilter(request, response);
         return;
       }
 
-      // Try to find user by UUID first
+      // Try to find user by subject claim
       Optional<User> userOptional = resolveUserFromSubject(subject);
 
       if (userOptional.isEmpty()) {

@@ -28,9 +28,10 @@ import org.sagebionetworks.openchallenges.auth.service.configuration.AuthService
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.repository.ApiKeyRepository;
+import org.sagebionetworks.openchallenges.auth.service.util.ScopeUtil;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("ApiKeyService Tests")
@@ -44,7 +45,7 @@ class ApiKeyServiceTest {
 
   @Mock
   private AuthServiceProperties authServiceProperties;
-  
+
   @Mock
   private AuthServiceProperties.ApiKeyConfig apiKeyConfig;
 
@@ -53,6 +54,9 @@ class ApiKeyServiceTest {
 
   @Mock
   private JdbcTemplate jdbcTemplate;
+
+  @Mock
+  private ScopeUtil scopeUtil;
 
   private ApiKeyService apiKeyService;
 
@@ -71,7 +75,14 @@ class ApiKeyServiceTest {
     lenient().when(jdbcTemplate.queryForList(anyString(), (Object[]) any())).thenReturn(List.of());
     lenient().when(jdbcTemplate.update(anyString(), (Object[]) any())).thenReturn(0);
 
-    apiKeyService = new ApiKeyService(apiKeyRepository, passwordEncoder, authServiceProperties, registeredClientRepository, jdbcTemplate);
+    apiKeyService = new ApiKeyService(
+      apiKeyRepository,
+      passwordEncoder,
+      authServiceProperties,
+      registeredClientRepository,
+      jdbcTemplate,
+      scopeUtil
+    );
 
     testUser = User.builder()
       .id(UUID.randomUUID())
@@ -104,7 +115,8 @@ class ApiKeyServiceTest {
         passwordEncoder,
         authServiceProperties,
         registeredClientRepository,
-        jdbcTemplate
+        jdbcTemplate,
+        scopeUtil
       );
 
       // Then
@@ -572,14 +584,16 @@ class ApiKeyServiceTest {
       // Arrange
       UUID keyId = testApiKey.getId();
       Map<String, Object> deletedRow = Map.of(
-        "client_id", "oc_api_key_test123",
-        "name", "Test API Key"
+        "client_id",
+        "oc_api_key_test123",
+        "name",
+        "Test API Key"
       );
-      
-      when(jdbcTemplate.queryForList(anyString(), eq(keyId), eq(testUser.getId())))
-        .thenReturn(List.of(deletedRow));
-      when(jdbcTemplate.update(anyString(), eq("oc_api_key_test123")))
-        .thenReturn(1);
+
+      when(jdbcTemplate.queryForList(anyString(), eq(keyId), eq(testUser.getId()))).thenReturn(
+        List.of(deletedRow)
+      );
+      when(jdbcTemplate.update(anyString(), eq("oc_api_key_test123"))).thenReturn(1);
 
       // Act
       boolean result = apiKeyService.deleteApiKey(keyId, testUser);
@@ -598,8 +612,9 @@ class ApiKeyServiceTest {
       UUID keyId = testApiKey.getId();
       User differentUser = User.builder().id(UUID.randomUUID()).username("differentuser").build();
 
-      when(jdbcTemplate.queryForList(anyString(), eq(keyId), eq(differentUser.getId())))
-        .thenReturn(List.of()); // Empty list means no rows deleted
+      when(jdbcTemplate.queryForList(anyString(), eq(keyId), eq(differentUser.getId()))).thenReturn(
+        List.of()
+      ); // Empty list means no rows deleted
 
       // Act
       boolean result = apiKeyService.deleteApiKey(keyId, differentUser);
@@ -616,8 +631,9 @@ class ApiKeyServiceTest {
     void shouldNotDeleteApiKeyWhenItDoesNotExist() {
       // Arrange
       UUID nonExistentKeyId = UUID.randomUUID();
-      when(jdbcTemplate.queryForList(anyString(), eq(nonExistentKeyId), eq(testUser.getId())))
-        .thenReturn(List.of()); // Empty list means no rows deleted
+      when(
+        jdbcTemplate.queryForList(anyString(), eq(nonExistentKeyId), eq(testUser.getId()))
+      ).thenReturn(List.of()); // Empty list means no rows deleted
 
       // Act
       boolean result = apiKeyService.deleteApiKey(nonExistentKeyId, testUser);
