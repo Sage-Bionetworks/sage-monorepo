@@ -270,6 +270,9 @@ importers:
       '@nx/devkit':
         specifier: 21.4.1
         version: 21.4.1(nx@21.4.1(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.24)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(debug@4.3.7))
+      '@nx/esbuild':
+        specifier: 21.4.1
+        version: 21.4.1(@babel/traverse@7.28.3)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.24)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(debug@4.3.7)(esbuild@0.25.9)(nx@21.4.1(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.24)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(debug@4.3.7))
       '@nx/eslint':
         specifier: 21.4.1
         version: 21.4.1(@babel/traverse@7.28.3)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.24)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(@zkochan/js-yaml@0.0.7)(debug@4.3.7)(eslint@8.57.0)(nx@21.4.1(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.24)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(debug@4.3.7))
@@ -3350,6 +3353,14 @@ packages:
 
   '@nx/docker@21.4.1':
     resolution: {integrity: sha512-1wPjsxadE1Wy5QaXRX8rSWrp9fbm8STV2MYzLSkXbwlrusvYQETP/MKGsqT5fZZTrN9NrQ+HTLa/7vW5vU8fkA==}
+
+  '@nx/esbuild@21.4.1':
+    resolution: {integrity: sha512-XIQg7P3DJVPaCSR1qGR5dCai/bsXrUmfyORjAJMkrca9AgHiUXhgmED6UE+aiJlYPSI/SlH8j5Y5p1vsB+tsog==}
+    peerDependencies:
+      esbuild: '>=0.19.2 <1.0.0'
+    peerDependenciesMeta:
+      esbuild:
+        optional: true
 
   '@nx/eslint-plugin@21.4.1':
     resolution: {integrity: sha512-pXyu/YsJroKNL2855aKeDLG4foD+HuKUojuwv9kvuqyCdOcQaYoNQUhGuE/KhNHmW40R7rOLofoelhIhICZ45w==}
@@ -19826,6 +19837,25 @@ snapshots:
     transitivePeerDependencies:
       - nx
 
+  '@nx/esbuild@21.4.1(@babel/traverse@7.28.3)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.24)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(debug@4.3.7)(esbuild@0.25.9)(nx@21.4.1(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.24)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(debug@4.3.7))':
+    dependencies:
+      '@nx/devkit': 21.4.1(nx@21.4.1(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.24)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(debug@4.3.7))
+      '@nx/js': 21.4.1(@babel/traverse@7.28.3)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.24)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(debug@4.3.7)(nx@21.4.1(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.24)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(debug@4.3.7))
+      picocolors: 1.1.1
+      tinyglobby: 0.2.14
+      tsconfig-paths: 4.2.0
+      tslib: 2.4.1
+    optionalDependencies:
+      esbuild: 0.25.9
+    transitivePeerDependencies:
+      - '@babel/traverse'
+      - '@swc-node/register'
+      - '@swc/core'
+      - debug
+      - nx
+      - supports-color
+      - verdaccio
+
   '@nx/eslint-plugin@21.4.1(@babel/traverse@7.28.3)(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.24)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(@typescript-eslint/parser@8.34.1(eslint@8.57.0)(typescript@5.8.3))(debug@4.3.7)(eslint@8.57.0)(nx@21.4.1(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.24)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(debug@4.3.7))(typescript@5.8.3)':
     dependencies:
       '@nx/devkit': 21.4.1(nx@21.4.1(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.24)(typescript@5.8.3))(@swc/core@1.5.29(@swc/helpers@0.5.17))(debug@4.3.7))
@@ -26688,10 +26718,6 @@ snapshots:
   fd-slicer@1.1.0:
     dependencies:
       pend: 1.2.0
-
-  fdir@6.5.0(picomatch@4.0.2):
-    optionalDependencies:
-      picomatch: 4.0.2
 
   fdir@6.5.0(picomatch@4.0.3):
     optionalDependencies:
@@ -34077,8 +34103,8 @@ snapshots:
 
   tinyglobby@0.2.14:
     dependencies:
-      fdir: 6.5.0(picomatch@4.0.2)
-      picomatch: 4.0.2
+      fdir: 6.5.0(picomatch@4.0.3)
+      picomatch: 4.0.3
 
   tinypool@1.1.1: {}
 
