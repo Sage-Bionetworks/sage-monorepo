@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.auth.service.configuration.AuthServiceProperties;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.repository.UserRepository;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -75,21 +76,10 @@ public class OAuth2WebAuthenticationFilter extends OncePerRequestFilter {
       }
 
       // Try to find user by UUID first
-      Optional<User> userOptional = Optional.empty();
-      try {
-        UUID userId = UUID.fromString(subject);
-        userOptional = userRepository.findById(userId);
-        log.debug("Found user by UUID: {}", userId);
-      } catch (IllegalArgumentException e) {
-        // Not a UUID, could be a client_id for service account
-        // For now, we don't support service account authentication in web filter
-        log.debug("Subject is not a UUID, skipping authentication for: {}", subject);
-        filterChain.doFilter(request, response);
-        return;
-      }
+      Optional<User> userOptional = resolveUserFromSubject(subject);
 
       if (userOptional.isEmpty()) {
-        log.warn("User not found for UUID: {}", subject);
+        log.warn("No user found for JWT subject '{}' on request: {}", subject, requestUri);
         filterChain.doFilter(request, response);
         return;
       }
@@ -98,54 +88,138 @@ public class OAuth2WebAuthenticationFilter extends OncePerRequestFilter {
 
       // Check if user account is enabled
       if (!user.getEnabled()) {
-        log.warn("User account is disabled: {}", user.getUsername());
+        log.warn("User account is disabled: {} for request: {}", user.getUsername(), requestUri);
         filterChain.doFilter(request, response);
         return;
       }
 
       // Set up Spring Security authentication
-      Authentication authentication = new UsernamePasswordAuthenticationToken(
-        user,
-        null,
-        Collections.singletonList(
-          new SimpleGrantedAuthority("ROLE_" + user.getRole().name().toUpperCase())
-        )
-      );
-
+      Authentication authentication = createAuthentication(user);
       SecurityContextHolder.getContext().setAuthentication(authentication);
       log.debug(
-        "Successfully authenticated user: {} with role: {}",
+        "Successfully authenticated user: {} with role: {} for request: {}",
         user.getUsername(),
-        user.getRole()
+        user.getRole(),
+        requestUri
       );
     } catch (JwtException e) {
-      log.debug("JWT token validation failed: {}", e.getMessage());
+      log.debug("JWT token validation failed for request {}: {}", requestUri, e.getMessage());
+      // Don't expose JWT validation details to client - continue without authentication
+    } catch (DataAccessException e) {
+      log.error("Database error during authentication for request {}: {}", requestUri, e.getMessage());
+      // Continue without authentication - let downstream handle authorization
+    } catch (IllegalArgumentException e) {
+      log.warn("Invalid authentication data for request {}: {}", requestUri, e.getMessage());
+      // Continue without authentication - let downstream handle authorization
     } catch (Exception e) {
-      log.error("Unexpected error during OAuth2 web authentication", e);
+      log.error("Unexpected error during OAuth2 web authentication for request {}: {}", 
+        requestUri, e.getMessage(), e);
+      // Continue without authentication - let downstream handle authorization
     }
 
     filterChain.doFilter(request, response);
   }
 
   /**
-   * Extract OAuth2 JWT token from secure cookies using configured cookie name
+   * Extract OAuth2 JWT token from secure cookies using configured cookie name.
+   * Includes validation for cookie content.
    */
   private String extractJwtFromCookies(HttpServletRequest request) {
     Cookie[] cookies = request.getCookies();
     if (cookies == null) {
+      log.debug("No cookies found in request");
       return null;
     }
 
     String cookieName = authServiceProperties.getWeb().getAccessTokenCookieName();
+    if (cookieName == null || cookieName.trim().isEmpty()) {
+      log.error("Access token cookie name is not configured");
+      return null;
+    }
+
     for (Cookie cookie : cookies) {
       if (cookieName.equals(cookie.getName())) {
         String tokenValue = cookie.getValue();
         if (StringUtils.hasText(tokenValue)) {
+          log.debug("Found JWT token cookie: {}", cookieName);
           return tokenValue;
+        } else {
+          log.debug("JWT token cookie '{}' is empty", cookieName);
         }
       }
     }
 
+    log.debug("JWT token cookie '{}' not found in {} cookies", cookieName, cookies.length);
     return null;
+  }
+
+  /**
+   * Resolves a user from the JWT subject claim.
+   * Handles both UUID (regular users) and client_id (service accounts).
+   */
+  private Optional<User> resolveUserFromSubject(String subject) {
+    if (subject == null || subject.trim().isEmpty()) {
+      log.warn("Subject claim is null or empty");
+      return Optional.empty();
+    }
+
+    try {
+      // Try parsing as UUID (standard user ID)
+      UUID userId = UUID.fromString(subject);
+      Optional<User> userOpt = userRepository.findById(userId);
+      if (userOpt.isPresent()) {
+        log.debug("Found user by UUID: {}", userId);
+        return userOpt;
+      } else {
+        log.debug("No user found for UUID: {}", userId);
+      }
+    } catch (IllegalArgumentException e) {
+      // Not a UUID, might be a client_id (service account) or username
+      log.debug("Subject '{}' is not a valid UUID, trying as username/client_id", subject);
+      
+      try {
+        // Try to find by username as fallback
+        Optional<User> userOpt = userRepository.findByUsernameIgnoreCase(subject);
+        if (userOpt.isPresent()) {
+          log.debug("Found user by username: {}", subject);
+          return userOpt;
+        } else {
+          log.debug("No user found for username: {}", subject);
+        }
+      } catch (DataAccessException ex) {
+        log.error("Database error while looking up user by username '{}': {}", subject, ex.getMessage());
+      }
+    } catch (DataAccessException e) {
+      log.error("Database error while looking up user by UUID '{}': {}", subject, e.getMessage());
+    }
+
+    return Optional.empty();
+  }
+
+  /**
+   * Creates a Spring Security authentication token for the given user.
+   * Includes validation of user properties.
+   */
+  private Authentication createAuthentication(User user) {
+    if (user == null) {
+      throw new IllegalArgumentException("User cannot be null");
+    }
+
+    if (user.getRole() == null) {
+      log.warn("User '{}' has null role, defaulting to USER", user.getUsername());
+      // Create a minimal authority if role is null
+      return new UsernamePasswordAuthenticationToken(
+        user,
+        null,
+        Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
+      );
+    }
+
+    String roleName = "ROLE_" + user.getRole().name().toUpperCase();
+    return new UsernamePasswordAuthenticationToken(
+      user,
+      null,
+      Collections.singletonList(new SimpleGrantedAuthority(roleName))
+    );
   }
 }

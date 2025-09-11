@@ -23,6 +23,7 @@ import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
 import org.sagebionetworks.openchallenges.auth.service.service.UserService;
+import org.sagebionetworks.openchallenges.auth.service.util.AuthenticationUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -47,6 +48,9 @@ class ApiKeyApiDelegateImplTest {
 
   @Mock
   private UserService userService;
+
+  @Mock
+  private AuthenticationUtil authenticationUtil;
 
   @Mock
   private SecurityContext securityContext;
@@ -88,15 +92,14 @@ class ApiKeyApiDelegateImplTest {
   class AuthenticationPrincipalHandling {
 
     @Test
-    @DisplayName("should handle User principal directly")
-    void shouldHandleUserPrincipalDirectly() {
+    @DisplayName("should create API key with authenticated user")
+    void shouldCreateApiKeyWithAuthenticatedUser() {
       // Arrange
       CreateApiKeyRequestDto request = new CreateApiKeyRequestDto()
         .name("Test API Key")
         .expiresIn(30);
 
-      when(securityContext.getAuthentication()).thenReturn(authentication);
-      when(authentication.getPrincipal()).thenReturn(testUser);
+      when(authenticationUtil.getAuthenticatedUser()).thenReturn(testUser);
       when(apiKeyService.createApiKey(testUser, "Test API Key", 30)).thenReturn(testApiKey);
 
       // Act
@@ -105,52 +108,6 @@ class ApiKeyApiDelegateImplTest {
       // Assert
       assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
       verify(apiKeyService).createApiKey(testUser, "Test API Key", 30);
-      // Should NOT call userService when principal is already a User
-      verify(userService, org.mockito.Mockito.never()).findByUsername(anyString());
-    }
-
-    @Test
-    @DisplayName("should resolve UserDetails principal to User entity")
-    void shouldResolveUserDetailsPrincipalToUserEntity() {
-      // Arrange
-      CreateApiKeyRequestDto request = new CreateApiKeyRequestDto().name("Test");
-      
-      UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
-        .username("testuser")
-        .password("password")
-        .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")))
-        .build();
-
-      when(securityContext.getAuthentication()).thenReturn(authentication);
-      when(authentication.getPrincipal()).thenReturn(userDetails);
-      when(userService.findByUsername("testuser")).thenReturn(Optional.of(testUser));
-      when(apiKeyService.createApiKey(testUser, "Test", null)).thenReturn(testApiKey);
-
-      // Act
-      ResponseEntity<?> response = apiKeyApiDelegateImpl.createApiKey(request);
-
-      // Assert
-      assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-      verify(userService).findByUsername("testuser");
-      verify(apiKeyService).createApiKey(testUser, "Test", null);
-    }
-
-    @Test
-    @DisplayName("should reject unknown principal types")
-    void shouldRejectUnknownPrincipalTypes() {
-      // Arrange
-      CreateApiKeyRequestDto request = new CreateApiKeyRequestDto().name("Test");
-
-      when(securityContext.getAuthentication()).thenReturn(authentication);
-      when(authentication.getPrincipal()).thenReturn("invalid_principal_type");
-
-      // Act
-      ResponseEntity<?> response = apiKeyApiDelegateImpl.createApiKey(request);
-
-      // Assert
-      assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
-      verify(userService, org.mockito.Mockito.never()).findByUsername(anyString());
-      verify(apiKeyService, org.mockito.Mockito.never()).createApiKey(any(), anyString(), any());
     }
 
     @Test
@@ -158,7 +115,7 @@ class ApiKeyApiDelegateImplTest {
     void shouldHandleMissingAuthentication() {
       // Arrange
       CreateApiKeyRequestDto request = new CreateApiKeyRequestDto().name("Test");
-      when(securityContext.getAuthentication()).thenReturn(null);
+      when(authenticationUtil.getAuthenticatedUser()).thenReturn(null);
 
       // Act
       ResponseEntity<?> response = apiKeyApiDelegateImpl.createApiKey(request);
@@ -166,31 +123,7 @@ class ApiKeyApiDelegateImplTest {
       // Assert
       assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }
-
-    @Test
-    @DisplayName("should handle UserDetails principal when user not found in database")
-    void shouldHandleUserDetailsPrincipalWhenUserNotFoundInDatabase() {
-      // Arrange
-      CreateApiKeyRequestDto request = new CreateApiKeyRequestDto().name("Test");
-      
-      UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
-        .username("nonexistent")
-        .password("password")
-        .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")))
-        .build();
-
-      when(securityContext.getAuthentication()).thenReturn(authentication);
-      when(authentication.getPrincipal()).thenReturn(userDetails);
-      when(userService.findByUsername("nonexistent")).thenReturn(Optional.empty());
-
-      // Act
-      ResponseEntity<?> response = apiKeyApiDelegateImpl.createApiKey(request);
-
-      // Assert
-      assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
-      verify(userService).findByUsername("nonexistent");
-      verify(apiKeyService, org.mockito.Mockito.never()).createApiKey(any(), anyString(), any());
-    }
+  }
   }
 
   @Nested
