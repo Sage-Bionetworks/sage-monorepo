@@ -5,7 +5,6 @@
   "sourceRoot": "libs/openchallenges/ui/src",
   "prefix": "openchallenges",
   "tags": ["type:feature", "scope:openchallenges", "language:typescript"],
-  "implicitDependencies": [],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",

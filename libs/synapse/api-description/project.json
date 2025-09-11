@@ -28,6 +28,5 @@
       "dependsOn": ["build"]
     }
   },
-  "tags": ["language:openapi"],
-  "implicitDependencies": []
+  "tags": ["language:openapi"]
 }

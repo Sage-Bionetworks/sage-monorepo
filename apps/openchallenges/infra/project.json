@@ -4,7 +4,6 @@
   "sourceRoot": "apps/openchallenges/infra/src",
   "projectType": "application",
   "tags": ["type:app", "scope:admin"],
-  "implicitDependencies": [],
   "targets": {
     "build": {
       "executor": "@nx/js:tsc",

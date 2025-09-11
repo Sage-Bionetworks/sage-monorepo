@@ -5,7 +5,6 @@
   "sourceRoot": "libs/agora/util/src",
   "prefix": "agora",
   "tags": ["type:util", "scope:agora", "language:typescript"],
-  "implicitDependencies": [],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",

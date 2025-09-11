@@ -65,6 +65,5 @@
       }
     }
   },
-  "tags": ["type:app", "scope:backend", "language:python", "package-manager:uv"],
-  "implicitDependencies": []
+  "tags": ["type:app", "scope:backend", "language:python", "package-manager:uv"]
 }

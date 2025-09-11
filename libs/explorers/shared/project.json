@@ -5,7 +5,6 @@
   "sourceRoot": "libs/explorers/shared/src",
   "prefix": "explorers",
   "tags": ["type:feature", "scope:explorers", "language:typescript"],
-  "implicitDependencies": [],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",

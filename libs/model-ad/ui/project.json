@@ -22,6 +22,5 @@
       }
     }
   },
-  "tags": ["type:feature", "scope:model-ad", "language:typescript"],
-  "implicitDependencies": []
+  "tags": ["type:feature", "scope:model-ad", "language:typescript"]
 }
