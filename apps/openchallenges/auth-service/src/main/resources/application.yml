@@ -69,24 +69,6 @@ openchallenges:
       refresh-token-ttl-hours: 24
     web:
       access-token-cookie-name: oc_access_token
-    api:
-      protected-endpoints:
-        - /v1/**
-      public-endpoints:
-        - /oauth2/**
-        - /.well-known/**
-        - /actuator/health
-        - /actuator/info
-        - /v3/api-docs/**
-        - /swagger-ui/**
-        - /swagger-ui.html
-        - /login
-        - /auth/oauth2/google
-        - /auth/oauth2/synapse
-        - /auth/callback
-        - /logout
-        - /logout/**
-        - /error
     api-key:
       length: 40
       # prefix is defined in profile-specific configuration files

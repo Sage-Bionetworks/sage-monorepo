@@ -39,10 +39,15 @@ public class SecurityConfiguration {
    * This filter chain handles:
    * 1. OAuth2 Resource Server functionality (validating JWTs for API endpoints)
    * 2. Web authentication for profile management pages
-   * 3. Public endpoints (health checks, documentation, etc.)
+   * 3. Public endpoints (health checks, documentation, OAuth2 flows, etc.)
+   *
+   * Security approach:
+   * - Public endpoints are explicitly defined and allow anonymous access
+   * - All other endpoints require authentication (JWT for APIs, web auth for web pages)
+   * - Authentication type is determined by the OAuth2WebAuthenticationFilter and Spring Security filters
    *
    * Note: OAuth2 Authorization Server endpoints (token issuance, authorization)
-   * are handled by a separate SecurityFilterChain in OpenChallengesOAuth2AuthorizationServerConfiguration.
+   * are handled by a separate SecurityFilterChain in OAuth2AuthorizationServerConfiguration.
    *
    * API key authentication is handled by the API Gateway, which converts
    * API keys to JWTs before forwarding requests to this service.
@@ -60,25 +65,14 @@ public class SecurityConfiguration {
       .logout(logout -> logout.disable()) // Disable Spring Security's default logout
       // Configure OAuth2 Resource Server for JWT validation on API endpoints
       .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.decoder(jwtDecoder)))
-      .authorizeHttpRequests(
-        authz ->
-          authz
-            // Public endpoints - no authentication required
-            .requestMatchers(authServiceProperties.getApi().getPublicEndpoints())
-            .permitAll()
-            // Protected API endpoints - require JWT authentication with scopes
-            .requestMatchers("/v1/auth/profile")
-            .authenticated() // Profile endpoints require JWT with proper scopes (handled by @PreAuthorize)
-            .requestMatchers("/v1/auth/api-keys", "/v1/auth/api-keys/**")
-            .authenticated() // API key management requires JWT with proper scopes (handled by @PreAuthorize)
-            // Web profile management - requires web authentication (not JWT)
-            .requestMatchers("/profile", "/profile/**")
-            .authenticated() // Profile web pages require authentication (handled by web auth filter)
-            // All protected API endpoints require authentication
-            .requestMatchers(authServiceProperties.getApi().getProtectedEndpoints())
-            .authenticated()
-            .anyRequest()
-            .authenticated() // All other endpoints require authentication
+      .authorizeHttpRequests(authz ->
+        authz
+          // Public endpoints - no authentication required
+          .requestMatchers(authServiceProperties.getApi().getPublicEndpoints())
+          .permitAll()
+          // All other endpoints require authentication
+          .anyRequest()
+          .authenticated()
       )
       // Add OAuth2 web authentication filter only
       .addFilterBefore(oAuth2WebAuthenticationFilter, BearerTokenAuthenticationFilter.class) // OAuth2 web filter

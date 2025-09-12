@@ -111,16 +111,26 @@ public class AuthServiceProperties {
   public static class ApiConfig {
 
     /**
-     * API endpoint patterns that require authentication.
-     */
-    @NotEmpty(message = "Protected endpoints list must not be empty")
-    private String[] protectedEndpoints = { "/v1/**" };
-
-    /**
      * API endpoint patterns that are publicly accessible.
+     * All other endpoints require authentication.
      */
     @NotEmpty(message = "Public endpoints list must not be empty")
-    private String[] publicEndpoints = {};
+    private String[] publicEndpoints = {
+      "/.well-known/**",
+      "/actuator/health",
+      "/actuator/info",
+      "/auth/callback",
+      "/auth/oauth2/google",
+      "/auth/oauth2/synapse",
+      "/error",
+      "/login",
+      "/logout",
+      "/oauth2/**",
+      "/swagger-ui.html",
+      "/swagger-ui/**",
+      "/v3/api-docs",
+      "/v3/api-docs/**",
+    };
   }
 
   @Data
