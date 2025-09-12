@@ -8,8 +8,8 @@ import { HelperService } from '@sagebionetworks/agora/services';
 // Internal
 // -------------------------------------------------------------------------- //
 import { BoxPlotChartItem } from '@sagebionetworks/agora/models';
-import { CategoryBoxplotSummary, CategoryPoint } from '@sagebionetworks/shared/charts';
-import { BoxplotDirective } from '@sagebionetworks/shared/charts-angular';
+import { CategoryBoxplotSummary, CategoryPoint } from '@sagebionetworks/explorers/charts';
+import { BoxplotDirective } from '@sagebionetworks/explorers/charts-angular';
 import { CallbackDataParams } from 'echarts/types/dist/shared';
 
 // -------------------------------------------------------------------------- //

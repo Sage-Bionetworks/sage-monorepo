@@ -4,7 +4,7 @@ import {
   dynamicBoxplotPoints,
   staticBoxplotPoints,
   staticBoxplotSummaries,
-} from '@sagebionetworks/shared/charts';
+} from '@sagebionetworks/explorers/charts';
 import { render, screen } from '@testing-library/angular';
 import { BoxplotDirective } from './boxplot.directive';
 

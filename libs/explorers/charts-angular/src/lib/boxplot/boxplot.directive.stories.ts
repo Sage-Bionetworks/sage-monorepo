@@ -4,7 +4,7 @@ import {
   dynamicBoxplotPoints,
   staticBoxplotPoints,
   staticBoxplotSummaries,
-} from '@sagebionetworks/shared/charts';
+} from '@sagebionetworks/explorers/charts';
 import { Meta, StoryObj } from '@storybook/angular';
 import { CallbackDataParams } from 'echarts/types/dist/shared';
 import { BoxplotDirective } from './boxplot.directive';

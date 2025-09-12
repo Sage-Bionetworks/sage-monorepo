@@ -1,5 +1,5 @@
 import { Directive, ElementRef, inject, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
-import { LegendChart, LegendProps, PointStyle } from '@sagebionetworks/shared/charts';
+import { LegendChart, LegendProps, PointStyle } from '@sagebionetworks/explorers/charts';
 
 @Directive({
   selector: '[sageLegend]',

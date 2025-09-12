@@ -41,6 +41,8 @@
       "@sagebionetworks/amp-als/api-client-angular": [
         "libs/amp-als/api-client-angular/src/index.ts"
       ],
+      "@sagebionetworks/explorers/charts": ["libs/explorers/charts/src/index.ts"],
+      "@sagebionetworks/explorers/charts-angular": ["libs/explorers/charts-angular/src/index.ts"],
       "@sagebionetworks/explorers/comparison-tools": [
         "libs/explorers/comparison-tools/src/index.ts"
       ],
@@ -102,10 +104,6 @@
       ],
       "@sagebionetworks/sage-monorepo-nx-plugin": ["libs/sage-monorepo/nx-plugin/src/index.ts"],
       "@sagebionetworks/sandbox-angular-lib": ["libs/sandbox/angular-lib/src/index.ts"],
-      "@sagebionetworks/shared/charts": ["libs/shared/typescript/charts/src/index.ts"],
-      "@sagebionetworks/shared/charts-angular": [
-        "libs/shared/typescript/charts-angular/src/index.ts"
-      ],
       "@sagebionetworks/shared/google-tag-manager": [
         "libs/shared/typescript/google-tag-manager/src/index.ts"
       ],

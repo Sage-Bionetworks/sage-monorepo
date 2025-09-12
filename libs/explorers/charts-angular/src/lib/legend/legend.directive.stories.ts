@@ -1,4 +1,4 @@
-import { LegendProps, mockPointStyles } from '@sagebionetworks/shared/charts';
+import { LegendProps, mockPointStyles } from '@sagebionetworks/explorers/charts';
 import { Meta, StoryObj } from '@storybook/angular';
 import { LegendDirective } from './legend.directive';
 

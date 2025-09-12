@@ -1,7 +1,7 @@
 import { Component, computed, input } from '@angular/core';
+import { LegendDirective } from '@sagebionetworks/explorers/charts-angular';
 import { IndividualData, ModelData } from '@sagebionetworks/model-ad/api-client-angular';
 import { MODEL_DETAILS_BOXPLOT_POINT_STYLES } from '@sagebionetworks/model-ad/config';
-import { LegendDirective } from '@sagebionetworks/shared/charts-angular';
 import { ModelDetailsBoxplotComponent } from '../model-details-boxplot/model-details-boxplot.component';
 
 @Component({
