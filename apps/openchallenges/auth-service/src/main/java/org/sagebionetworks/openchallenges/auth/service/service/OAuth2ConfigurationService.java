@@ -209,10 +209,28 @@ public class OAuth2ConfigurationService {
   }
 
   /**
-   * Get provider configuration details
+   * Get provider configuration details using discovery document
    */
   public OAuth2ProviderConfig getProviderConfig(ExternalAccount.Provider provider) {
     if (!isProviderConfigured(provider)) {
+      return null;
+    }
+
+    Map<String, Object> discovery = getDiscoveryDocument(provider);
+    if (discovery == null) {
+      log.error(
+        "Cannot create provider config for {} - discovery document not available",
+        provider
+      );
+      return null;
+    }
+
+    String authorizationUri = (String) discovery.get("authorization_endpoint");
+    String tokenUri = (String) discovery.get("token_endpoint");
+    String userInfoUri = (String) discovery.get("userinfo_endpoint");
+
+    if (authorizationUri == null || tokenUri == null || userInfoUri == null) {
+      log.error("Missing required endpoints in discovery document for {}", provider);
       return null;
     }
 
@@ -220,18 +238,18 @@ public class OAuth2ConfigurationService {
       case google -> OAuth2ProviderConfig.builder()
         .provider(provider)
         .clientId(googleClientId)
-        .authorizationUri("https://accounts.google.com/o/oauth2/v2/auth")
-        .tokenUri("https://oauth2.googleapis.com/token")
-        .userInfoUri("https://www.googleapis.com/oauth2/v1/userinfo")
+        .authorizationUri(authorizationUri)
+        .tokenUri(tokenUri)
+        .userInfoUri(userInfoUri)
         .redirectUri(getRedirectUri(provider))
         .scopes(java.util.Set.of("openid", "email", "profile"))
         .build();
       case synapse -> OAuth2ProviderConfig.builder()
         .provider(provider)
         .clientId(synapseClientId)
-        .authorizationUri("https://signin.synapse.org/oauth2/authorize")
-        .tokenUri("https://signin.synapse.org/oauth2/token")
-        .userInfoUri("https://repo-prod.prod.sagebase.org/auth/v1/oauth2/userinfo")
+        .authorizationUri(authorizationUri)
+        .tokenUri(tokenUri)
+        .userInfoUri(userInfoUri)
         .redirectUri(getRedirectUri(provider))
         .scopes(java.util.Set.of("openid", "email", "profile"))
         .build();
@@ -274,13 +292,8 @@ public class OAuth2ConfigurationService {
       }
     }
 
-    // Fallback to hardcoded values if discovery fails
-    log.warn(
-      "Discovery document unavailable or missing userinfo_endpoint for {}, using fallback",
-      provider
-    );
-    OAuth2ProviderConfig config = getProviderConfig(provider);
-    return config != null ? config.getUserInfoUri() : null;
+    log.error("Discovery document unavailable or missing userinfo_endpoint for {}", provider);
+    return null;
   }
 
   /**
@@ -300,13 +313,8 @@ public class OAuth2ConfigurationService {
       }
     }
 
-    // Fallback to hardcoded values if discovery fails
-    log.warn(
-      "Discovery document unavailable or missing token_endpoint for {}, using fallback",
-      provider
-    );
-    OAuth2ProviderConfig config = getProviderConfig(provider);
-    return config != null ? config.getTokenUri() : null;
+    log.error("Discovery document unavailable or missing token_endpoint for {}", provider);
+    return null;
   }
 
   /**

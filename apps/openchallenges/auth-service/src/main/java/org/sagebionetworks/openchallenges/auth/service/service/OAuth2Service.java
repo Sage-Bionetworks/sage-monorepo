@@ -207,16 +207,8 @@ public class OAuth2Service {
       return tokenEndpoint;
     }
 
-    // Fallback to hardcoded URLs if discovery fails
-    log.warn("Discovery document unavailable for {}, using fallback token URL", provider);
-    switch (provider) {
-      case google:
-        return "https://oauth2.googleapis.com/token";
-      case synapse:
-        return "https://signin.synapse.org/oauth2/token";
-      default:
-        throw new IllegalArgumentException("Unsupported OAuth2 provider: " + provider);
-    }
+    log.error("Token endpoint not available for {} - discovery document failed", provider);
+    throw new RuntimeException("Token endpoint not available for provider: " + provider);
   }
 
   private String getUserInfoUrl(ExternalAccount.Provider provider) {
@@ -231,18 +223,8 @@ public class OAuth2Service {
       return userInfoEndpoint;
     }
 
-    // Fallback to hardcoded URLs if discovery fails
-    log.warn("Discovery document unavailable for {}, using fallback userinfo URL", provider);
-    switch (provider) {
-      case google:
-        log.debug("Using fallback Google userinfo URL");
-        return "https://www.googleapis.com/oauth2/v2/userinfo";
-      case synapse:
-        log.debug("Using fallback Synapse userinfo URL");
-        return "https://repo-prod.prod.sagebase.org/auth/v1/oauth2/userinfo";
-      default:
-        throw new IllegalArgumentException("Unsupported OAuth2 provider: " + provider);
-    }
+    log.error("Userinfo endpoint not available for {} - discovery document failed", provider);
+    throw new RuntimeException("Userinfo endpoint not available for provider: " + provider);
   }
 
   private MultiValueMap<String, String> createTokenRequestBody(
