@@ -1,10 +1,10 @@
 /* eslint-disable */
 export default {
   displayName: 'explorers-charts-angular',
-  preset: '../../../../jest.preset.js',
+  preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {},
-  coverageDirectory: '../../../../coverage/libs/explorers/charts-angular',
+  coverageDirectory: '../../../coverage/libs/explorers/charts-angular',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
