@@ -5,7 +5,11 @@ import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ExternalAccount;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 @Slf4j
@@ -16,6 +20,17 @@ public class OAuth2ConfigurationService {
   private final String synapseClientId;
   private final String synapseClientSecret;
   private final String baseUrl;
+  private final RestTemplate restTemplate;
+
+  // Discovery endpoint URLs
+  private static final String GOOGLE_DISCOVERY_URL =
+    "https://accounts.google.com/.well-known/openid-configuration";
+  private static final String SYNAPSE_DISCOVERY_URL =
+    "https://repo-prod.prod.sagebase.org/auth/v1/.well-known/openid-configuration";
+
+  // Cache for discovery documents to avoid repeated requests
+  private volatile Map<String, Object> googleDiscovery;
+  private volatile Map<String, Object> synapseDiscovery;
 
   public OAuth2ConfigurationService(
     @Value("${openchallenges.auth-service.oauth2.google.client-id:}") String googleClientId,
@@ -31,6 +46,7 @@ public class OAuth2ConfigurationService {
     this.synapseClientId = synapseClientId;
     this.synapseClientSecret = synapseClientSecret;
     this.baseUrl = baseUrl;
+    this.restTemplate = new RestTemplate();
 
     log.info("OAuth2 Configuration Service initialized for base URL: {}", baseUrl);
     log.info(
@@ -63,18 +79,34 @@ public class OAuth2ConfigurationService {
     String redirectUri = getRedirectUri(provider);
     log.debug("Using redirect URI: {}", redirectUri);
 
+    // Get authorization endpoint from discovery document
+    String authorizationEndpoint = getAuthorizationEndpoint(provider);
+    if (authorizationEndpoint == null) {
+      log.error("Unable to retrieve authorization endpoint for provider: {}", provider);
+      throw new RuntimeException("Authorization endpoint not available for provider: " + provider);
+    }
+
+    String clientId =
+      switch (provider) {
+        case google -> googleClientId;
+        case synapse -> synapseClientId;
+      };
+
+    // Build authorization URL with proper parameters
     String authUrl =
       switch (provider) {
         case google -> String.format(
-          "https://accounts.google.com/o/oauth2/v2/auth?client_id=%s&redirect_uri=%s&scope=%s&response_type=code&access_type=offline&prompt=select_account&state=%s",
-          googleClientId,
+          "%s?client_id=%s&redirect_uri=%s&scope=%s&response_type=code&access_type=offline&prompt=select_account&state=%s",
+          authorizationEndpoint,
+          clientId,
           redirectUri,
           "openid%20email%20profile",
           state
         );
         case synapse -> String.format(
-          "https://signin.synapse.org/oauth2/authorize?client_id=%s&redirect_uri=%s&scope=%s&response_type=code&state=%s",
-          synapseClientId,
+          "%s?client_id=%s&redirect_uri=%s&scope=%s&response_type=code&state=%s",
+          authorizationEndpoint,
+          clientId,
           redirectUri,
           "openid%20email%20profile",
           state
@@ -83,6 +115,55 @@ public class OAuth2ConfigurationService {
 
     log.debug("Generated authorization URL: {}", authUrl);
     return authUrl;
+  }
+
+  /**
+   * Get authorization endpoint from discovery document
+   */
+  private String getAuthorizationEndpoint(ExternalAccount.Provider provider) {
+    Map<String, Object> discovery = getDiscoveryDocument(provider);
+    return discovery != null ? (String) discovery.get("authorization_endpoint") : null;
+  }
+
+  /**
+   * Get discovery document for OAuth2 provider
+   */
+  private Map<String, Object> getDiscoveryDocument(ExternalAccount.Provider provider) {
+    try {
+      return switch (provider) {
+        case google -> {
+          if (googleDiscovery == null) {
+            log.debug("Fetching Google OAuth2 discovery document");
+            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
+              GOOGLE_DISCOVERY_URL,
+              HttpMethod.GET,
+              null,
+              new org.springframework.core.ParameterizedTypeReference<Map<String, Object>>() {}
+            );
+            googleDiscovery = response.getBody();
+            log.debug("Google discovery document cached successfully");
+          }
+          yield googleDiscovery;
+        }
+        case synapse -> {
+          if (synapseDiscovery == null) {
+            log.debug("Fetching Synapse OAuth2 discovery document");
+            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
+              SYNAPSE_DISCOVERY_URL,
+              HttpMethod.GET,
+              null,
+              new org.springframework.core.ParameterizedTypeReference<Map<String, Object>>() {}
+            );
+            synapseDiscovery = response.getBody();
+            log.debug("Synapse discovery document cached successfully");
+          }
+          yield synapseDiscovery;
+        }
+      };
+    } catch (RestClientException e) {
+      log.error("Failed to fetch discovery document for provider {}: {}", provider, e.getMessage());
+      return null;
+    }
   }
 
   /**
