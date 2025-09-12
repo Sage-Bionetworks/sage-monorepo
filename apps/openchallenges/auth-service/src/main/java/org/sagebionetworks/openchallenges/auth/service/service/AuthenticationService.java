@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * Authentication service for OpenChallenges.
- * 
+ *
  * Handles OAuth2 authentication flows with external providers (Google, Synapse)
  * and generates OpenChallenges JWT tokens for accessing OC resources.
  */
@@ -33,15 +33,19 @@ public class AuthenticationService {
   /**
    * Handle OAuth2 callback from external providers.
    * Exchanges authorization code for tokens, creates/finds user, and generates OC JWT tokens.
-   * 
+   *
    * @param provider The OAuth2 provider (google, synapse)
    * @param code Authorization code from OAuth2 provider
    * @param state State parameter for security
    * @return OAuth2CallbackResponseDto with OpenChallenges JWT tokens
    */
-  public OAuth2CallbackResponseDto handleOAuth2Callback(String provider, String code, String state) {
+  public OAuth2CallbackResponseDto handleOAuth2Callback(
+    String provider,
+    String code,
+    String state
+  ) {
     log.info("Handling OAuth2 callback for provider: {}", provider);
-    
+
     // Parse provider
     ExternalAccount.Provider providerEnum;
     try {
@@ -49,28 +53,35 @@ public class AuthenticationService {
     } catch (IllegalArgumentException e) {
       throw new RuntimeException("Unsupported OAuth2 provider: " + provider);
     }
-    
+
     // Exchange authorization code for tokens
     String redirectUri = oAuth2ConfigurationService.getRedirectUri(providerEnum);
-    OAuth2TokenResponse tokenResponse = oAuth2Service.exchangeCodeForToken(providerEnum, code, redirectUri);
-    
+    OAuth2TokenResponse tokenResponse = oAuth2Service.exchangeCodeForToken(
+      providerEnum,
+      code,
+      redirectUri
+    );
+
     // Get user info from OAuth2 provider
-    OAuth2UserInfo userInfo = oAuth2Service.getUserInfo(providerEnum, tokenResponse.getAccessToken());
-    
+    OAuth2UserInfo userInfo = oAuth2Service.getUserInfo(
+      providerEnum,
+      tokenResponse.getAccessToken()
+    );
+
     // Find or create user account
     User user = findOrCreateUser(providerEnum, userInfo);
-    
+
     // Check if user is enabled
     if (!user.getEnabled()) {
       throw new RuntimeException("User account is disabled");
     }
-    
+
     // Generate OpenChallenges JWT tokens using OAuth2 Authorization Server
     String accessToken = oAuth2TokenGeneratorService.generateAccessToken(user);
     String refreshToken = oAuth2TokenGeneratorService.generateRefreshToken(user);
-    
+
     log.info("Successfully generated OAuth2-compatible tokens for user: {}", user.getUsername());
-    
+
     // Return login response with OAuth2-compatible tokens
     return OAuth2CallbackResponseDto.builder()
       .accessToken(accessToken)
@@ -82,42 +93,45 @@ public class AuthenticationService {
       .role(OAuth2CallbackResponseDto.RoleEnum.fromValue(user.getRole().name().toLowerCase()))
       .build();
   }
-  
+
   /**
    * Find existing user by external account or email, or create new user.
    */
   private User findOrCreateUser(ExternalAccount.Provider provider, OAuth2UserInfo userInfo) {
     // First, try to find by external account
-    Optional<ExternalAccount> existingAccount = externalAccountRepository
-      .findByProviderAndExternalId(provider, userInfo.getId());
-      
+    Optional<ExternalAccount> existingAccount =
+      externalAccountRepository.findByProviderAndExternalId(provider, userInfo.getId());
+
     if (existingAccount.isPresent()) {
-      log.debug("Found existing external account for provider: {}, external ID: {}", 
-               provider, userInfo.getId());
-      
+      log.debug(
+        "Found existing external account for provider: {}, external ID: {}",
+        provider,
+        userInfo.getId()
+      );
+
       // Update external account with latest info
       ExternalAccount account = existingAccount.get();
       account.setExternalEmail(userInfo.getEmail());
       externalAccountRepository.save(account);
-      
+
       return account.getUser();
     }
-    
+
     // Try to find by email to link accounts
     Optional<User> existingUser = userRepository.findByEmail(userInfo.getEmail());
     if (existingUser.isPresent()) {
       log.debug("Found existing user by email, linking external account: {}", userInfo.getEmail());
-      
+
       User user = existingUser.get();
       createExternalAccount(provider, userInfo, user);
       return user;
     }
-    
+
     // Create new user
     log.debug("Creating new user from OAuth2 info: {}", userInfo.getEmail());
-    
+
     String username = generateUniqueUsername(userInfo);
-    
+
     User newUser = User.builder()
       .username(username)
       .email(userInfo.getEmail())
@@ -128,41 +142,53 @@ public class AuthenticationService {
       .createdAt(OffsetDateTime.now())
       .updatedAt(OffsetDateTime.now())
       .build();
-      
+
     User savedUser = userRepository.save(newUser);
     createExternalAccount(provider, userInfo, savedUser);
-    
+
     return savedUser;
   }
-  
+
   /**
    * Create external account linking.
    */
-  private void createExternalAccount(ExternalAccount.Provider provider, OAuth2UserInfo userInfo, User user) {
+  private void createExternalAccount(
+    ExternalAccount.Provider provider,
+    OAuth2UserInfo userInfo,
+    User user
+  ) {
+    log.debug("Creating external account for provider {}", provider);
+    log.debug(
+      "OAuth2UserInfo - providerId: {}, id: {}, email: {}",
+      userInfo.getProviderId(),
+      userInfo.getId(),
+      userInfo.getEmail()
+    );
+
     ExternalAccount externalAccount = ExternalAccount.builder()
       .provider(provider)
-      .externalId(userInfo.getId())
+      .externalId(userInfo.getProviderId()) // Use providerId instead of getId()
       .externalEmail(userInfo.getEmail())
       .user(user)
       .build();
-      
+
     externalAccountRepository.save(externalAccount);
   }
-  
+
   /**
    * Generate unique username from OAuth2 user info.
    */
   private String generateUniqueUsername(OAuth2UserInfo userInfo) {
     // Try email prefix first
     String baseUsername = userInfo.getEmail().split("@")[0];
-    
+
     // Clean username (remove dots, etc.)
     baseUsername = baseUsername.replaceAll("[^a-zA-Z0-9]", ".");
-    
+
     if (!userRepository.findByUsernameIgnoreCase(baseUsername).isPresent()) {
       return baseUsername;
     }
-    
+
     // If taken, add number suffix
     int counter = 1;
     String username;
@@ -170,7 +196,7 @@ public class AuthenticationService {
       username = baseUsername + counter;
       counter++;
     } while (userRepository.findByUsernameIgnoreCase(username).isPresent());
-    
+
     return username;
   }
 }

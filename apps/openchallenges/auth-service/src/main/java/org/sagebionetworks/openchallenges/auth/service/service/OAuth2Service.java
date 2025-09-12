@@ -55,6 +55,12 @@ public class OAuth2Service {
       OAuth2TokenResponse response = mapToOAuth2TokenResponse(tokenResponseMap);
 
       log.debug("Successfully exchanged code for token with provider: {}", provider);
+      log.debug(
+        "Token response - access_token length: {}, token_type: {}, expires_in: {}",
+        response.getAccessToken() != null ? response.getAccessToken().length() : 0,
+        response.getTokenType(),
+        response.getExpiresIn()
+      );
       return response;
     } catch (WebClientResponseException e) {
       log.error(
@@ -81,46 +87,128 @@ public class OAuth2Service {
     log.debug("Fetching user info from provider: {}", provider);
 
     String userInfoUrl = getUserInfoUrl(provider);
+    log.info("Using user info URL for {}: {}", provider, userInfoUrl);
 
     try {
-      // Deserialize to Map first to avoid Jackson security restrictions
-      Map<String, Object> userInfoMap = webClient
-        .get()
-        .uri(userInfoUrl)
-        .header("Authorization", "Bearer " + accessToken)
-        .retrieve()
-        .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
-        .timeout(Duration.ofSeconds(10))
-        .block();
+      // For Synapse, try a more explicit approach with detailed logging
+      if (provider == ExternalAccount.Provider.synapse) {
+        log.info("Making Synapse userinfo request to: {} with Bearer token", userInfoUrl);
 
-      // Manually map to OAuth2UserInfo to avoid deserialization issues
-      OAuth2UserInfo userInfo = mapToOAuth2UserInfo(provider, userInfoMap);
+        // Try to get response as String first for debugging
+        String responseString = webClient
+          .get()
+          .uri(userInfoUrl)
+          .header("Authorization", "Bearer " + accessToken)
+          .header("Accept", "application/json")
+          .header("User-Agent", "OpenChallenges-Auth-Service/1.0")
+          .retrieve()
+          .bodyToMono(String.class)
+          .timeout(Duration.ofSeconds(10))
+          .block();
 
-      log.debug(
-        "Successfully fetched user info from provider: {} for user: {}",
-        provider,
-        userInfo.getProviderId()
-      );
-      return userInfo;
+        log.debug("Synapse userinfo raw string response: '{}'", responseString);
+
+        if (responseString == null || responseString.trim().isEmpty()) {
+          throw new RuntimeException("Empty response from Synapse userinfo endpoint");
+        }
+
+        // Try to parse the JSON response manually
+        try {
+          Map<String, Object> userInfoMap = webClient
+            .get()
+            .uri(userInfoUrl)
+            .header("Authorization", "Bearer " + accessToken)
+            .header("Accept", "application/json")
+            .header("User-Agent", "OpenChallenges-Auth-Service/1.0")
+            .retrieve()
+            .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
+            .timeout(Duration.ofSeconds(10))
+            .block();
+
+          log.debug("Raw user info response from {}: {}", provider, userInfoMap);
+
+          // Check for empty response
+          if (userInfoMap == null || userInfoMap.isEmpty()) {
+            log.error("Empty response from userinfo endpoint for {}: {}", provider, userInfoUrl);
+            throw new RuntimeException("Empty response from userinfo endpoint");
+          }
+
+          // Manually map to OAuth2UserInfo to avoid deserialization issues
+          OAuth2UserInfo userInfo = mapToOAuth2UserInfo(provider, userInfoMap);
+
+          log.debug(
+            "Successfully fetched user info from provider: {} for user: {}",
+            provider,
+            userInfo.getProviderId()
+          );
+          return userInfo;
+        } catch (Exception parseException) {
+          log.error(
+            "Failed to parse Synapse userinfo response as JSON: {}",
+            parseException.getMessage()
+          );
+          throw new RuntimeException("Failed to parse userinfo response", parseException);
+        }
+      } else {
+        // Standard approach for other providers (Google)
+        Map<String, Object> userInfoMap = webClient
+          .get()
+          .uri(userInfoUrl)
+          .header("Authorization", "Bearer " + accessToken)
+          .retrieve()
+          .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
+          .timeout(Duration.ofSeconds(10))
+          .block();
+
+        log.debug("Raw user info response from {}: {}", provider, userInfoMap);
+
+        // Check for empty response
+        if (userInfoMap == null || userInfoMap.isEmpty()) {
+          log.error("Empty response from userinfo endpoint for {}: {}", provider, userInfoUrl);
+          throw new RuntimeException("Empty response from userinfo endpoint");
+        }
+
+        // Manually map to OAuth2UserInfo to avoid deserialization issues
+        OAuth2UserInfo userInfo = mapToOAuth2UserInfo(provider, userInfoMap);
+
+        log.debug(
+          "Successfully fetched user info from provider: {} for user: {}",
+          provider,
+          userInfo.getProviderId()
+        );
+        return userInfo;
+      }
     } catch (WebClientResponseException e) {
       log.error(
-        "Failed to fetch user info from provider {}: {} - {}",
+        "Failed to fetch user info from provider {}: {} - {} - Response: {}",
         provider,
         e.getStatusCode(),
+        e.getStatusText(),
         e.getResponseBodyAsString()
       );
       throw new RuntimeException("Failed to fetch user information", e);
     } catch (Exception e) {
       log.error(
-        "Unexpected error during user info fetch from provider {}: {}",
+        "Unexpected error during user info fetch from provider {}: {} - {}",
         provider,
-        e.getMessage()
+        e.getMessage(),
+        e.getClass().getSimpleName()
       );
+      log.debug("Full stack trace for user info fetch error:", e);
       throw new RuntimeException("User info fetch failed", e);
     }
   }
 
   private String getTokenUrl(ExternalAccount.Provider provider) {
+    // Get token endpoint from discovery document
+    String tokenEndpoint = oAuth2ConfigurationService.getTokenEndpoint(provider);
+    if (tokenEndpoint != null) {
+      log.debug("Using token endpoint from discovery document for {}: {}", provider, tokenEndpoint);
+      return tokenEndpoint;
+    }
+
+    // Fallback to hardcoded URLs if discovery fails
+    log.warn("Discovery document unavailable for {}, using fallback token URL", provider);
     switch (provider) {
       case google:
         return "https://oauth2.googleapis.com/token";
@@ -132,10 +220,25 @@ public class OAuth2Service {
   }
 
   private String getUserInfoUrl(ExternalAccount.Provider provider) {
+    // Get userinfo endpoint from discovery document
+    String userInfoEndpoint = oAuth2ConfigurationService.getUserInfoEndpoint(provider);
+    if (userInfoEndpoint != null) {
+      log.debug(
+        "Using userinfo endpoint from discovery document for {}: {}",
+        provider,
+        userInfoEndpoint
+      );
+      return userInfoEndpoint;
+    }
+
+    // Fallback to hardcoded URLs if discovery fails
+    log.warn("Discovery document unavailable for {}, using fallback userinfo URL", provider);
     switch (provider) {
       case google:
+        log.debug("Using fallback Google userinfo URL");
         return "https://www.googleapis.com/oauth2/v2/userinfo";
       case synapse:
+        log.debug("Using fallback Synapse userinfo URL");
         return "https://repo-prod.prod.sagebase.org/auth/v1/oauth2/userinfo";
       default:
         throw new IllegalArgumentException("Unsupported OAuth2 provider: " + provider);
@@ -190,6 +293,16 @@ public class OAuth2Service {
     ExternalAccount.Provider provider,
     Map<String, Object> userInfoMap
   ) {
+    log.debug(
+      "Mapping user info for provider {}: {}",
+      provider,
+      userInfoMap != null ? userInfoMap.keySet() : "null"
+    );
+
+    if (userInfoMap == null) {
+      throw new RuntimeException("User info response is null");
+    }
+
     OAuth2UserInfo.OAuth2UserInfoBuilder builder = OAuth2UserInfo.builder();
 
     // Common mappings for all providers
@@ -205,15 +318,39 @@ public class OAuth2Service {
     // Provider-specific mappings
     switch (provider) {
       case google:
+        String googleProviderId = getStringValue(userInfoMap, "sub");
+        log.debug("Google provider ID from 'sub': {}", googleProviderId);
         builder
-          .providerId(getStringValue(userInfoMap, "sub"))
+          .providerId(googleProviderId)
+          .id(googleProviderId) // Set id to the same value as providerId
           .givenName(getStringValue(userInfoMap, "given_name"))
           .familyName(getStringValue(userInfoMap, "family_name"))
           .displayName(getStringValue(userInfoMap, "name"));
         break;
       case synapse:
+        String synapseProviderId = getStringValue(userInfoMap, "ownerId");
+        log.debug("Synapse provider ID from 'ownerId': {}", synapseProviderId);
+
+        // If ownerId is null, try other common fields
+        if (synapseProviderId == null) {
+          synapseProviderId = getStringValue(userInfoMap, "sub");
+          log.debug("Fallback: Synapse provider ID from 'sub': {}", synapseProviderId);
+        }
+        if (synapseProviderId == null) {
+          synapseProviderId = getStringValue(userInfoMap, "userid");
+          log.debug("Fallback: Synapse provider ID from 'userid': {}", synapseProviderId);
+        }
+        if (synapseProviderId == null) {
+          synapseProviderId = getStringValue(userInfoMap, "user_id");
+          log.debug("Fallback: Synapse provider ID from 'user_id': {}", synapseProviderId);
+        }
+
+        log.debug("Final Synapse provider ID: {}", synapseProviderId);
+        log.debug("Available keys in Synapse userinfo: {}", userInfoMap.keySet());
+
         builder
-          .providerId(getStringValue(userInfoMap, "ownerId"))
+          .providerId(synapseProviderId)
+          .id(synapseProviderId) // Set id to the same value as providerId
           .username(getStringValue(userInfoMap, "userName"))
           .displayName(getStringValue(userInfoMap, "displayName"))
           .givenName(getStringValue(userInfoMap, "firstName"))
@@ -223,7 +360,13 @@ public class OAuth2Service {
         throw new IllegalArgumentException("Unsupported OAuth2 provider: " + provider);
     }
 
-    return builder.build();
+    OAuth2UserInfo userInfo = builder.build();
+    log.debug(
+      "Mapped user info - providerId: {}, email: {}",
+      userInfo.getProviderId(),
+      userInfo.getEmail()
+    );
+    return userInfo;
   }
 
   /**

@@ -64,7 +64,7 @@ public class OAuth2ConfigurationService {
       googleRedirectUri.isEmpty() ? "NOT_SET" : googleRedirectUri
     );
     log.info(
-      "Synapse OAuth2 enabled: {} (redirect URI: {})", 
+      "Synapse OAuth2 enabled: {} (redirect URI: {})",
       !synapseClientId.isEmpty(),
       synapseRedirectUri.isEmpty() ? "NOT_SET" : synapseRedirectUri
     );
@@ -181,11 +181,12 @@ public class OAuth2ConfigurationService {
    * Get redirect URI for provider
    */
   public String getRedirectUri(ExternalAccount.Provider provider) {
-    String redirectUri = switch (provider) {
-      case google -> googleRedirectUri;
-      case synapse -> synapseRedirectUri;
-    };
-    
+    String redirectUri =
+      switch (provider) {
+        case google -> googleRedirectUri;
+        case synapse -> synapseRedirectUri;
+      };
+
     // If provider-specific redirect URI is not configured, fall back to base URL + /auth/callback
     if (redirectUri == null || redirectUri.isEmpty()) {
       redirectUri = String.format("%s/auth/callback", baseUrl.replaceAll("/$", ""));
@@ -193,7 +194,7 @@ public class OAuth2ConfigurationService {
     } else {
       log.debug("Using configured redirect URI for {}: {}", provider, redirectUri);
     }
-    
+
     return redirectUri;
   }
 
@@ -257,17 +258,53 @@ public class OAuth2ConfigurationService {
   }
 
   /**
-   * Get user info endpoint for provider
+   * Get user info endpoint for provider using discovery document
    */
   public String getUserInfoEndpoint(ExternalAccount.Provider provider) {
+    Map<String, Object> discovery = getDiscoveryDocument(provider);
+    if (discovery != null) {
+      String userInfoEndpoint = (String) discovery.get("userinfo_endpoint");
+      if (userInfoEndpoint != null) {
+        log.debug(
+          "Using userinfo endpoint from discovery document for {}: {}",
+          provider,
+          userInfoEndpoint
+        );
+        return userInfoEndpoint;
+      }
+    }
+
+    // Fallback to hardcoded values if discovery fails
+    log.warn(
+      "Discovery document unavailable or missing userinfo_endpoint for {}, using fallback",
+      provider
+    );
     OAuth2ProviderConfig config = getProviderConfig(provider);
     return config != null ? config.getUserInfoUri() : null;
   }
 
   /**
-   * Get token endpoint for provider
+   * Get token endpoint for provider using discovery document
    */
   public String getTokenEndpoint(ExternalAccount.Provider provider) {
+    Map<String, Object> discovery = getDiscoveryDocument(provider);
+    if (discovery != null) {
+      String tokenEndpoint = (String) discovery.get("token_endpoint");
+      if (tokenEndpoint != null) {
+        log.debug(
+          "Using token endpoint from discovery document for {}: {}",
+          provider,
+          tokenEndpoint
+        );
+        return tokenEndpoint;
+      }
+    }
+
+    // Fallback to hardcoded values if discovery fails
+    log.warn(
+      "Discovery document unavailable or missing token_endpoint for {}, using fallback",
+      provider
+    );
     OAuth2ProviderConfig config = getProviderConfig(provider);
     return config != null ? config.getTokenUri() : null;
   }
