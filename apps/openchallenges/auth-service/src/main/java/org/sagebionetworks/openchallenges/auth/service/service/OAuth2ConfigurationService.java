@@ -17,8 +17,10 @@ public class OAuth2ConfigurationService {
 
   private final String googleClientId;
   private final String googleClientSecret;
+  private final String googleRedirectUri;
   private final String synapseClientId;
   private final String synapseClientSecret;
+  private final String synapseRedirectUri;
   private final String baseUrl;
   private final RestTemplate restTemplate;
 
@@ -35,28 +37,37 @@ public class OAuth2ConfigurationService {
   public OAuth2ConfigurationService(
     @Value("${openchallenges.auth-service.oauth2.google.client-id:}") String googleClientId,
     @Value("${openchallenges.auth-service.oauth2.google.client-secret:}") String googleClientSecret,
+    @Value("${openchallenges.oauth2.google.redirect-uri:}") String googleRedirectUri,
     @Value("${openchallenges.auth-service.oauth2.synapse.client-id:}") String synapseClientId,
     @Value(
       "${openchallenges.auth-service.oauth2.synapse.client-secret:}"
     ) String synapseClientSecret,
+    @Value("${openchallenges.oauth2.synapse.redirect-uri:}") String synapseRedirectUri,
     @Value("${openchallenges.auth-service.base-url:http://localhost:8087}") String baseUrl
   ) {
     this.googleClientId = googleClientId;
     this.googleClientSecret = googleClientSecret;
+    this.googleRedirectUri = googleRedirectUri;
     this.synapseClientId = synapseClientId;
     this.synapseClientSecret = synapseClientSecret;
+    this.synapseRedirectUri = synapseRedirectUri;
     this.baseUrl = baseUrl;
     this.restTemplate = new RestTemplate();
 
     log.info("OAuth2 Configuration Service initialized for base URL: {}", baseUrl);
     log.info(
-      "Google OAuth2 enabled: {} (client ID: {})",
+      "Google OAuth2 enabled: {} (client ID: {}, redirect URI: {})",
       !googleClientId.isEmpty(),
       googleClientId.isEmpty()
         ? "NOT_SET"
-        : googleClientId.substring(0, Math.min(10, googleClientId.length())) + "..."
+        : googleClientId.substring(0, Math.min(10, googleClientId.length())) + "...",
+      googleRedirectUri.isEmpty() ? "NOT_SET" : googleRedirectUri
     );
-    log.info("Synapse OAuth2 enabled: {}", !synapseClientId.isEmpty());
+    log.info(
+      "Synapse OAuth2 enabled: {} (redirect URI: {})", 
+      !synapseClientId.isEmpty(),
+      synapseRedirectUri.isEmpty() ? "NOT_SET" : synapseRedirectUri
+    );
   }
 
   /**
@@ -170,7 +181,20 @@ public class OAuth2ConfigurationService {
    * Get redirect URI for provider
    */
   public String getRedirectUri(ExternalAccount.Provider provider) {
-    return String.format("%s/auth/callback", baseUrl.replaceAll("/$", ""));
+    String redirectUri = switch (provider) {
+      case google -> googleRedirectUri;
+      case synapse -> synapseRedirectUri;
+    };
+    
+    // If provider-specific redirect URI is not configured, fall back to base URL + /auth/callback
+    if (redirectUri == null || redirectUri.isEmpty()) {
+      redirectUri = String.format("%s/auth/callback", baseUrl.replaceAll("/$", ""));
+      log.debug("Using fallback redirect URI for {}: {}", provider, redirectUri);
+    } else {
+      log.debug("Using configured redirect URI for {}: {}", provider, redirectUri);
+    }
+    
+    return redirectUri;
   }
 
   /**

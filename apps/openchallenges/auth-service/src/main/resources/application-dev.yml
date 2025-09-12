@@ -21,7 +21,7 @@ openchallenges:
     synapse:
       client-id: synapse-client-id
       client-secret: synapse-client-secret
-      redirect-uri: http://localhost:8087/auth/callback
+      redirect-uri: http://127.0.0.1:8087/auth/callback
       scope: openid,profile,email
   base-url: ${BASE_URL:http://localhost:8087}
 
