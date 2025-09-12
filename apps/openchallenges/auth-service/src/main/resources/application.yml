@@ -59,16 +59,15 @@ info:
     name: ${spring.application.name}
 
 # Common configuration for all profiles
-openchallenges:
-  auth-service:
-    oauth2:
-      issuer-url: http://openchallenges-auth-service:8087
-      jwk-set-url: http://localhost:8087/oauth2/jwks
-      default-audience: urn:openchallenges:auth-service
-      access-token-ttl-minutes: 60
-      refresh-token-ttl-hours: 24
-    web:
-      access-token-cookie-name: oc_access_token
-    api-key:
-      length: 40
-      # prefix is defined in profile-specific configuration files
+app:
+  oauth2:
+    issuer-url: http://openchallenges-auth-service:8087
+    jwk-set-url: http://localhost:8087/oauth2/jwks
+    default-audience: urn:openchallenges:auth-service
+    access-token-ttl-minutes: 60
+    refresh-token-ttl-hours: 24
+  web:
+    access-token-cookie-name: oc_access_token
+  api-key:
+    length: 40
+    # prefix is defined in profile-specific configuration files

@@ -5,13 +5,10 @@ spring:
   datasource:
     url: jdbc:postgresql://openchallenges-postgres:8091/auth_service
 
-openchallenges:
-  auth-service:
-    api-key:
-      prefix: oc_dev_
-      length: 40
-
-  # OAuth2 Configuration
+app:
+  api-key:
+    prefix: oc_dev_
+    length: 40
   oauth2:
     google:
       client-id: placeholder-will-be-overridden-by-env
@@ -23,6 +20,9 @@ openchallenges:
       client-secret: synapse-client-secret
       redirect-uri: http://127.0.0.1:8087/auth/callback
       scope: openid,profile,email
+
+# OAuth2 Configuration
+openchallenges:
   base-url: ${BASE_URL:http://localhost:8087}
 
 logging:

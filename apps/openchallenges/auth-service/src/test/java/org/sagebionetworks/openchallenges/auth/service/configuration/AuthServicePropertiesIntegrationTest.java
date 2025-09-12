@@ -23,8 +23,8 @@ class AuthServicePropertiesIntegrationTest {
   @TestPropertySource(
     properties = {
       "app.oauth2.authorization-server.enabled=false",
-      "openchallenges.auth-service.api-key.prefix=oc_dev_",
-      "openchallenges.auth-service.api-key.length=40"
+      "app.api-key.prefix=oc_dev_",
+      "app.api-key.length=40"
     }
   )
   @ActiveProfiles("dev")
@@ -48,8 +48,8 @@ class AuthServicePropertiesIntegrationTest {
   @TestPropertySource(
     properties = {
       "app.oauth2.authorization-server.enabled=false",
-      "openchallenges.auth-service.api-key.prefix=oc_stage_",
-      "openchallenges.auth-service.api-key.length=40"
+      "app.api-key.prefix=oc_stage_",
+      "app.api-key.length=40"
     }
   )
   @ActiveProfiles("stage")
@@ -73,8 +73,8 @@ class AuthServicePropertiesIntegrationTest {
   @TestPropertySource(
     properties = {
       "app.oauth2.authorization-server.enabled=false",
-      "openchallenges.auth-service.api-key.prefix=oc_prod_",
-      "openchallenges.auth-service.api-key.length=40"
+      "app.api-key.prefix=oc_prod_",
+      "app.api-key.length=40"
     }
   )
   @ActiveProfiles("prod")

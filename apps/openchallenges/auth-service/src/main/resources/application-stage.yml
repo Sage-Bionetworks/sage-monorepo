@@ -7,11 +7,10 @@ spring:
   flyway:
     enabled: false
 
-openchallenges:
-  auth-service:
-    api-key:
-      prefix: oc_stage_
-      length: 40
+app:
+  api-key:
+    prefix: oc_stage_
+    length: 40
 
 logging:
   level:

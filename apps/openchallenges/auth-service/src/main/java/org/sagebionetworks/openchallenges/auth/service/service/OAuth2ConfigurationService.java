@@ -35,15 +35,13 @@ public class OAuth2ConfigurationService {
   private volatile Map<String, Object> synapseDiscovery;
 
   public OAuth2ConfigurationService(
-    @Value("${openchallenges.auth-service.oauth2.google.client-id:}") String googleClientId,
-    @Value("${openchallenges.auth-service.oauth2.google.client-secret:}") String googleClientSecret,
-    @Value("${openchallenges.oauth2.google.redirect-uri:}") String googleRedirectUri,
-    @Value("${openchallenges.auth-service.oauth2.synapse.client-id:}") String synapseClientId,
-    @Value(
-      "${openchallenges.auth-service.oauth2.synapse.client-secret:}"
-    ) String synapseClientSecret,
-    @Value("${openchallenges.oauth2.synapse.redirect-uri:}") String synapseRedirectUri,
-    @Value("${openchallenges.auth-service.base-url:http://localhost:8087}") String baseUrl
+    @Value("${app.oauth2.google.client-id:}") String googleClientId,
+    @Value("${app.oauth2.google.client-secret:}") String googleClientSecret,
+    @Value("${app.oauth2.google.redirect-uri:}") String googleRedirectUri,
+    @Value("${app.oauth2.synapse.client-id:}") String synapseClientId,
+    @Value("${app.oauth2.synapse.client-secret:}") String synapseClientSecret,
+    @Value("${app.oauth2.synapse.redirect-uri:}") String synapseRedirectUri,
+    @Value("${app.base-url:http://localhost:8087}") String baseUrl
   ) {
     this.googleClientId = googleClientId;
     this.googleClientSecret = googleClientSecret;

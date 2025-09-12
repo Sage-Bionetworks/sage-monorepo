@@ -14,11 +14,11 @@ import org.springframework.validation.annotation.Validated;
 /**
  * Configuration properties for OpenChallenges Auth Service.
  *
- * All properties are prefixed with 'openchallenges.auth-service.'
+ * All properties are prefixed with 'app.'
  * Properties are validated on application startup.
  */
 @Component
-@ConfigurationProperties(prefix = "openchallenges.auth-service")
+@ConfigurationProperties(prefix = "app")
 @Data
 @Validated
 public class AuthServiceProperties {
