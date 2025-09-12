@@ -310,13 +310,13 @@ public class OAuth2Service {
           .displayName(getStringValue(userInfoMap, "name"));
         break;
       case synapse:
-        String synapseProviderId = getStringValue(userInfoMap, "ownerId");
-        log.debug("Synapse provider ID from 'ownerId': {}", synapseProviderId);
+        String synapseProviderId = getStringValue(userInfoMap, "sub");
+        log.debug("Synapse provider ID from 'sub': {}", synapseProviderId);
 
-        // If ownerId is null, try other common fields
+        // If sub is null, try other common fields as fallback
         if (synapseProviderId == null) {
-          synapseProviderId = getStringValue(userInfoMap, "sub");
-          log.debug("Fallback: Synapse provider ID from 'sub': {}", synapseProviderId);
+          synapseProviderId = getStringValue(userInfoMap, "ownerId");
+          log.debug("Fallback: Synapse provider ID from 'ownerId': {}", synapseProviderId);
         }
         if (synapseProviderId == null) {
           synapseProviderId = getStringValue(userInfoMap, "userid");
@@ -333,10 +333,10 @@ public class OAuth2Service {
         builder
           .providerId(synapseProviderId)
           .id(synapseProviderId) // Set id to the same value as providerId
-          .username(getStringValue(userInfoMap, "userName"))
-          .displayName(getStringValue(userInfoMap, "displayName"))
-          .givenName(getStringValue(userInfoMap, "firstName"))
-          .familyName(getStringValue(userInfoMap, "lastName"));
+          .username(getStringValue(userInfoMap, "user_name")) // Use snake_case field name
+          .displayName(getStringValue(userInfoMap, "user_name")) // Use user_name as display name
+          .givenName(getStringValue(userInfoMap, "given_name")) // Use snake_case field name
+          .familyName(getStringValue(userInfoMap, "family_name")); // Use snake_case field name
         break;
       default:
         throw new IllegalArgumentException("Unsupported OAuth2 provider: " + provider);

@@ -130,7 +130,7 @@ public class AuthenticationService {
     // Create new user
     log.debug("Creating new user from OAuth2 info: {}", userInfo.getEmail());
 
-    String username = generateUniqueUsername(userInfo);
+    String username = generateUniqueUsername(provider, userInfo);
 
     User newUser = User.builder()
       .username(username)
@@ -176,14 +176,40 @@ public class AuthenticationService {
   }
 
   /**
-   * Generate unique username from OAuth2 user info.
+   * Generate unique username from OAuth2 user info based on provider.
    */
-  private String generateUniqueUsername(OAuth2UserInfo userInfo) {
-    // Try email prefix first
-    String baseUsername = userInfo.getEmail().split("@")[0];
+  private String generateUniqueUsername(
+    ExternalAccount.Provider provider,
+    OAuth2UserInfo userInfo
+  ) {
+    String baseUsername;
 
-    // Clean username (remove dots, etc.)
-    baseUsername = baseUsername.replaceAll("[^a-zA-Z0-9]", ".");
+    // Use provider-specific logic for username generation
+    switch (provider) {
+      case synapse:
+        // For Synapse, use the provided username if available
+        if (userInfo.getUsername() != null && !userInfo.getUsername().trim().isEmpty()) {
+          baseUsername = userInfo.getUsername().trim();
+          log.debug("Using Synapse provided username: {}", baseUsername);
+        } else {
+          // Fallback to email prefix if no username provided
+          baseUsername = userInfo.getEmail().split("@")[0];
+          log.debug("Synapse username not available, using email prefix: {}", baseUsername);
+        }
+        break;
+      case google:
+      default:
+        // For Google and other providers, use email prefix
+        baseUsername = userInfo.getEmail().split("@")[0];
+        log.debug("Using email prefix for username: {}", baseUsername);
+        break;
+    }
+
+    // Clean username (remove special characters, keep only alphanumeric and dots)
+    baseUsername = baseUsername.replaceAll("[^a-zA-Z0-9.]", ".");
+
+    // Remove consecutive dots and leading/trailing dots
+    baseUsername = baseUsername.replaceAll("\\.+", ".").replaceAll("^\\.|\\.$", "");
 
     if (!userRepository.findByUsernameIgnoreCase(baseUsername).isPresent()) {
       return baseUsername;
