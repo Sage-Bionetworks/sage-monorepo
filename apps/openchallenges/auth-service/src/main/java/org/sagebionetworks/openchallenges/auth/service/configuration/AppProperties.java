@@ -112,6 +112,7 @@ public class AppProperties {
 
     @Data
     public static class ProviderConfig {
+
       /**
        * OAuth2 client ID for the provider
        */
@@ -127,6 +128,17 @@ public class AppProperties {
        * If not set, will default to baseUrl + /auth/callback
        */
       private String redirectUri = "";
+
+      /**
+       * OAuth2 discovery URL for the provider.
+       * Used for health checks and OAuth2 configuration discovery.
+       */
+      @NotBlank(message = "OAuth2 discovery URL must not be blank")
+      @Pattern(
+        regexp = "https?://.*",
+        message = "OAuth2 discovery URL must be a valid HTTP/HTTPS URL"
+      )
+      private String discoveryUrl = "";
     }
   }
 

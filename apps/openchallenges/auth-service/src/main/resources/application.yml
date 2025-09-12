@@ -66,6 +66,10 @@ app:
     default-audience: urn:openchallenges:auth-service
     access-token-ttl-minutes: 60
     refresh-token-ttl-hours: 24
+    google:
+      discovery-url: https://accounts.google.com/.well-known/openid-configuration
+    synapse:
+      discovery-url: https://repo-prod.prod.sagebase.org/auth/v1/.well-known/openid-configuration
   web:
     access-token-cookie-name: oc_access_token
   api-key:

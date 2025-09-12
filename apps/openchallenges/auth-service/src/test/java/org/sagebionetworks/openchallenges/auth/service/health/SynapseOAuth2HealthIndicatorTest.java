@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.sagebionetworks.openchallenges.auth.service.configuration.AppProperties;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.http.HttpStatus;
@@ -28,14 +29,32 @@ class SynapseOAuth2HealthIndicatorTest {
   @Mock
   private RestTemplate restTemplate;
 
+  @Mock
+  private AppProperties appProperties;
+
+  @Mock
+  private AppProperties.OAuth2Config oauth2Config;
+
+  @Mock
+  private AppProperties.OAuth2Config.ProviderConfig synapseConfig;
+
   private SynapseOAuth2HealthIndicator healthIndicator;
+
+  private static final String DISCOVERY_URL =
+    "https://repo-prod.prod.sagebase.org/auth/v1/.well-known/openid-configuration";
 
   @BeforeEach
   void setUp() {
-    healthIndicator = new SynapseOAuth2HealthIndicator();
+    // Configure mocks
+    when(appProperties.getOauth2()).thenReturn(oauth2Config);
+    when(oauth2Config.getSynapse()).thenReturn(synapseConfig);
+    when(synapseConfig.getDiscoveryUrl()).thenReturn(DISCOVERY_URL);
+
+    healthIndicator = new SynapseOAuth2HealthIndicator(appProperties);
+
     // Inject mock RestTemplate using reflection
     try {
-      var field = SynapseOAuth2HealthIndicator.class.getDeclaredField("restTemplate");
+      var field = AbstractOAuth2HealthIndicator.class.getDeclaredField("restTemplate");
       field.setAccessible(true);
       field.set(healthIndicator, restTemplate);
     } catch (Exception e) {
@@ -245,9 +264,6 @@ class SynapseOAuth2HealthIndicatorTest {
     healthIndicator.health();
 
     // Assert
-    verify(restTemplate).getForEntity(
-      "https://repo-prod.prod.sagebase.org/auth/v1/.well-known/openid-configuration",
-      Map.class
-    );
+    verify(restTemplate).getForEntity(DISCOVERY_URL, Map.class);
   }
 }
