@@ -63,7 +63,7 @@ test.describe('model details', () => {
     await page.waitForURL(`${initialModelPath}/pathology`);
     await expect(page.getByRole('heading', { level: 2, name: 'Pathology' })).toBeVisible();
 
-    const searchListItems = await searchAndGetSearchListItems(nextModel, page);
+    const { searchListItems } = await searchAndGetSearchListItems(nextModel, page);
     await searchListItems.first().click();
 
     await page.waitForURL(`/models/${nextModel}`);

@@ -158,7 +158,7 @@
         li {
           cursor: pointer;
 
-          &:hover {
+          &.selected {
             background-color: var(--color-action-primary);
             color: white;
           }

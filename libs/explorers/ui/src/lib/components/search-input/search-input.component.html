@@ -46,9 +46,18 @@
 
         @if (!error && results.length) {
           <ul class="search-results-list">
-            @for (result of results; track result) {
-              <li>
-                <button type="button" (click)="goToResult(result.id)" class="result-button">
+            @for (result of results; track result; let i = $index) {
+              <li
+                [class.selected]="selectedResultIndex === i"
+                (mouseenter)="onResultHover(i)"
+                (mouseleave)="onResultMouseLeave()"
+              >
+                <button
+                  type="button"
+                  (click)="goToResult(result.id)"
+                  class="result-button"
+                  [attr.aria-selected]="selectedResultIndex === i"
+                >
                   <span
                     class="result-name"
                     [innerHtml]="formatAndHighlightResultsForDisplay(result) | sanitizeHtml"

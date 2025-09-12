@@ -10,6 +10,12 @@ import { render, screen, waitFor } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { SearchInputComponent } from './search-input.component';
 
+// Mock scrollIntoView for JSDOM environment since it doesn't exist there
+Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', {
+  value: jest.fn(),
+  writable: true,
+});
+
 const mockNavigateToResult = jest.fn();
 const searchPlaceholder = 'Find Gene by Name...';
 
@@ -50,6 +56,10 @@ async function setup() {
 }
 
 describe('SearchInputComponent', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should display', async () => {
     await setup();
     expect(getInput()).toHaveValue('');
@@ -123,7 +133,7 @@ describe('SearchInputComponent', () => {
     await user.click(screen.getByLabelText('dummy_id'));
     expect(mockNavigateToResult).toHaveBeenCalledWith('dummy_id');
 
-    expect(getInput()).toHaveValue('');
+    expect(input).toHaveValue('');
   });
 
   it('should clear input when x is clicked', async () => {
@@ -136,6 +146,175 @@ describe('SearchInputComponent', () => {
     const clearButton = screen.getByRole('button', { name: 'Clear' });
     await user.click(clearButton);
 
-    expect(getInput()).toHaveValue('');
+    expect(input).toHaveValue('');
+  });
+
+  it('should highlight first result when pressing down arrow', async () => {
+    const { user } = await setup();
+    const input = getInput();
+
+    await user.type(input, 'dummy');
+    await waitForSpinner();
+
+    await user.keyboard('[ArrowDown]');
+
+    const firstResult = screen.getByLabelText('dummy_id').closest('li');
+    expect(firstResult).toHaveClass('selected');
+  });
+
+  it('should navigate through results with arrow keys', async () => {
+    const { user } = await setup();
+    const input = getInput();
+
+    await user.type(input, 'dummy');
+    await waitForSpinner();
+
+    await user.keyboard('[ArrowDown]');
+    const firstResult = screen.getByLabelText('dummy_id').closest('li');
+    expect(firstResult).toHaveClass('selected');
+
+    await user.keyboard('[ArrowDown]');
+    const secondResult = screen.getByLabelText('dummy_id_2').closest('li');
+    expect(secondResult).toHaveClass('selected');
+    expect(firstResult).not.toHaveClass('selected');
+
+    await user.keyboard('[ArrowUp]');
+    expect(firstResult).toHaveClass('selected');
+    expect(secondResult).not.toHaveClass('selected');
+  });
+
+  it('should select result with Enter key', async () => {
+    const { user } = await setup();
+    const input = getInput();
+
+    await user.type(input, 'dummy');
+    await waitForSpinner();
+
+    await user.keyboard('[ArrowDown]');
+    await user.keyboard('[Enter]');
+
+    expect(mockNavigateToResult).toHaveBeenCalledWith('dummy_id');
+    expect(input).toHaveValue('');
+  });
+
+  it('should clear input with Escape key', async () => {
+    const { user } = await setup();
+    const input = getInput();
+
+    await user.type(input, 'dummy');
+    await waitForSpinner();
+
+    await user.keyboard('[Escape]');
+
+    expect(input).toHaveValue('');
+  });
+
+  it('should handle arrow keys without results gracefully', async () => {
+    const { user } = await setup();
+
+    await user.keyboard('[ArrowDown]');
+    await user.keyboard('[ArrowUp]');
+    await user.keyboard('[Enter]');
+
+    expect(mockNavigateToResult).not.toHaveBeenCalled();
+  });
+
+  it('should sync selection with mouse hover', async () => {
+    const { user } = await setup();
+    const input = getInput();
+
+    await user.type(input, 'dummy');
+    await waitForSpinner();
+
+    await user.keyboard('[ArrowDown]');
+    const firstResult = screen.getByLabelText('dummy_id').closest('li');
+    expect(firstResult).toHaveClass('selected');
+
+    const secondResult = screen.getByLabelText('dummy_id_2').closest('li');
+    if (secondResult) {
+      await user.hover(secondResult);
+    }
+
+    expect(secondResult).toHaveClass('selected');
+    expect(firstResult).not.toHaveClass('selected');
+  });
+
+  it('should clear selection when mouse leaves results area', async () => {
+    const { user } = await setup();
+    const input = getInput();
+
+    await user.type(input, 'dummy');
+    await waitForSpinner();
+
+    const firstResult = screen.getByLabelText('dummy_id').closest('li');
+    if (firstResult) {
+      await user.hover(firstResult);
+    }
+    expect(firstResult).toHaveClass('selected');
+
+    if (firstResult) {
+      await user.unhover(firstResult);
+    }
+
+    expect(firstResult).not.toHaveClass('selected');
+  });
+
+  it('should not trigger search when using navigation keys', async () => {
+    const { user } = await setup();
+    const input = getInput();
+
+    await user.type(input, 'dummy');
+    await waitForSpinner();
+
+    await user.keyboard('[ArrowDown]');
+    await user.keyboard('[ArrowUp]');
+
+    expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+  });
+
+  it('should not navigate beyond bounds', async () => {
+    const { user } = await setup();
+    const input = getInput();
+
+    await user.type(input, 'dummy');
+    await waitForSpinner();
+
+    await user.keyboard('[ArrowUp]');
+    const results = screen.getAllByRole('button', { name: /dummy_id/ });
+    results.forEach((result) => {
+      expect(result.closest('li')).not.toHaveClass('selected');
+    });
+
+    await user.keyboard('[ArrowDown]');
+    await user.keyboard('[ArrowDown]');
+    await user.keyboard('[ArrowDown]'); // Try to go past last result
+
+    const secondResult = screen.getByLabelText('dummy_id_2').closest('li');
+    expect(secondResult).toHaveClass('selected');
+  });
+
+  it('should allow searching for the same query after clearing input', async () => {
+    const query = 'dummy';
+
+    const { user } = await setup();
+    const input = getInput();
+
+    await user.type(input, query);
+    await waitForSpinner();
+
+    expect(screen.getByLabelText('dummy_id')).toBeInTheDocument();
+    expect(screen.getByLabelText('dummy_id_2')).toBeInTheDocument();
+
+    const clearButton = screen.getByRole('button', { name: 'Clear' });
+    await user.click(clearButton);
+
+    expect(input).toHaveValue('');
+    expect(screen.queryByLabelText('dummy_id')).not.toBeInTheDocument();
+
+    await user.type(input, query);
+    await waitForSpinner();
+
+    expect(screen.getByLabelText('dummy_id')).toBeInTheDocument();
+    expect(screen.getByLabelText('dummy_id_2')).toBeInTheDocument();
   });
 });

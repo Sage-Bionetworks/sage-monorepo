@@ -19,8 +19,8 @@ import { SanitizeHtmlPipe } from '@sagebionetworks/explorers/util';
 import {
   catchError,
   debounceTime,
-  distinctUntilChanged,
   EMPTY,
+  filter,
   fromEvent,
   Observable,
   of,
@@ -38,6 +38,7 @@ import { SvgImageComponent } from '../svg-image/svg-image.component';
 })
 export class SearchInputComponent implements AfterViewInit {
   router = inject(Router);
+  elementRef = inject(ElementRef);
   destroyRef = inject(DestroyRef);
 
   searchNavigated = output();
@@ -62,6 +63,7 @@ export class SearchInputComponent implements AfterViewInit {
   query = '';
   error = '';
   results: SearchResult[] = [];
+  selectedResultIndex = -1; // -1 means no result is selected
 
   showResults = false;
   errorMessages: { [key: string]: string } = {
@@ -82,8 +84,12 @@ export class SearchInputComponent implements AfterViewInit {
     fromEvent(this.input().nativeElement, 'keyup')
       .pipe(
         takeUntilDestroyed(this.destroyRef),
+        // Filter out navigation keys to prevent triggering search
+        filter((event: Event) => {
+          const keyEvent = event as KeyboardEvent;
+          return !['ArrowDown', 'ArrowUp', 'Enter', 'Escape'].includes(keyEvent.key);
+        }),
         debounceTime(500),
-        distinctUntilChanged(),
         switchMap((event: Event) => {
           const target = event.target as HTMLInputElement;
           return this.search(target.value).pipe(
@@ -100,11 +106,19 @@ export class SearchInputComponent implements AfterViewInit {
         this.showResults = true;
         this.setResults(response);
       });
+
+    fromEvent(this.input().nativeElement, 'keydown')
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((event: Event) => {
+        this.handleKeyboardNavigation(event as KeyboardEvent);
+      });
   }
 
   search(query: string): Observable<SearchResult[]> {
     this.results = [];
     this.error = '';
+    this.selectedResultIndex = -1;
+
     // Allow model names with special characters - backend handles sanitization
     this.query = query = query.replace(/[^a-z0-9\-_()/*: ]/gi, '');
 
@@ -134,13 +148,48 @@ export class SearchInputComponent implements AfterViewInit {
       this.error = this.errorMessages['notFound'];
     }
     this.results = results;
+    this.selectedResultIndex = -1;
     this.isLoading = false;
+  }
+
+  handleKeyboardNavigation(event: KeyboardEvent) {
+    if (!this.showResults || this.results.length === 0) {
+      return;
+    }
+
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault();
+        this.selectedResultIndex = Math.min(this.selectedResultIndex + 1, this.results.length - 1);
+        this.scrollSelectedIntoView();
+        break;
+
+      case 'ArrowUp':
+        event.preventDefault();
+        this.selectedResultIndex = Math.max(this.selectedResultIndex - 1, -1);
+        this.scrollSelectedIntoView();
+        break;
+
+      case 'Enter':
+        event.preventDefault();
+        if (this.selectedResultIndex >= 0 && this.selectedResultIndex < this.results.length) {
+          const selectedResult = this.results[this.selectedResultIndex];
+          this.goToResult(selectedResult.id);
+        }
+        break;
+
+      case 'Escape':
+        event.preventDefault();
+        this.clearInput();
+        break;
+    }
   }
 
   goToResult(id: string) {
     this.input().nativeElement.blur();
     this.query = '';
     this.results = [];
+    this.selectedResultIndex = -1;
     this.showResults = false;
     this.searchNavigated.emit();
     this.navigateToResult()(id);
@@ -157,6 +206,7 @@ export class SearchInputComponent implements AfterViewInit {
     this.query = '';
     this.error = '';
     this.results = [];
+    this.selectedResultIndex = -1;
     this.showResults = false;
   }
 
@@ -182,5 +232,30 @@ export class SearchInputComponent implements AfterViewInit {
   formatAndHighlightResultsForDisplay(result: SearchResult): string {
     const formattedText = this.formatResultForDisplay()(result);
     return this.highlightMatches(formattedText, this.query);
+  }
+
+  onResultHover(index: number) {
+    this.selectedResultIndex = index;
+  }
+
+  onResultMouseLeave() {
+    this.selectedResultIndex = -1;
+  }
+
+  // Ensure selected item is visible when navigating long search result list with keyboard
+  private scrollSelectedIntoView(): void {
+    // Defer to next tick to ensure DOM updates from selectedResultIndex change are applied
+    setTimeout(() => {
+      const selectedElement = this.elementRef.nativeElement.querySelector(
+        'ul li.selected',
+      ) as HTMLElement;
+
+      if (selectedElement) {
+        selectedElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+        });
+      }
+    }, 0);
   }
 }
