@@ -24,7 +24,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.sagebionetworks.openchallenges.auth.service.configuration.AuthServiceProperties;
+import org.sagebionetworks.openchallenges.auth.service.configuration.AppProperties;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.repository.ApiKeyRepository;
@@ -44,10 +44,10 @@ class ApiKeyServiceTest {
   private PasswordEncoder passwordEncoder;
 
   @Mock
-  private AuthServiceProperties authServiceProperties;
+  private AppProperties authServiceProperties;
 
   @Mock
-  private AuthServiceProperties.ApiKeyConfig apiKeyConfig;
+  private AppProperties.ApiKeyConfig apiKeyConfig;
 
   @Mock
   private RegisteredClientRepository registeredClientRepository;

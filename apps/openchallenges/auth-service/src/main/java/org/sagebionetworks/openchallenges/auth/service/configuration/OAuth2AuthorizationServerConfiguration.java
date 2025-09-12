@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.openchallenges.auth.service.configuration.AppProperties;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User.Role;
 import org.sagebionetworks.openchallenges.auth.service.repository.ApiKeyRepository;
 import org.sagebionetworks.openchallenges.auth.service.repository.UserRepository;
@@ -72,7 +73,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 @Slf4j
 public class OAuth2AuthorizationServerConfiguration {
 
-  private final AuthServiceProperties authServiceProperties;
+  private final AppProperties authServiceProperties;
 
   /**
    * Validate configuration properties on startup.

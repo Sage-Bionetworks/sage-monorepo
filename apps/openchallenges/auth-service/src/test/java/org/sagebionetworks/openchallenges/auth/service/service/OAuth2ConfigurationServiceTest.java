@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.sagebionetworks.openchallenges.auth.service.configuration.AuthServiceProperties;
+import org.sagebionetworks.openchallenges.auth.service.configuration.AppProperties;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ExternalAccount;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,12 +22,12 @@ class OAuth2ConfigurationServiceTest {
   @Mock
   private RestTemplate restTemplate;
 
-  private AuthServiceProperties properties;
+  private AppProperties properties;
   private OAuth2ConfigurationService service;
 
   @BeforeEach
   void setUp() {
-    properties = new AuthServiceProperties();
+    properties = new AppProperties();
     
     // Configure Google provider
     properties.getOauth2().getGoogle().setClientId("google-client-id");

@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sagebionetworks.openchallenges.auth.service.configuration.AuthServiceProperties;
+import org.sagebionetworks.openchallenges.auth.service.configuration.AppProperties;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.service.UserLookupService;
 import org.sagebionetworks.openchallenges.auth.service.util.JwtClaimUtil;
@@ -43,7 +43,7 @@ public class OAuth2WebAuthenticationFilter extends OncePerRequestFilter {
   private final JwtDecoder jwtDecoder;
   private final UserLookupService userLookupService;
   private final JwtClaimUtil jwtClaimUtil;
-  private final AuthServiceProperties authServiceProperties;
+  private final AppProperties authServiceProperties;
 
   @Override
   protected void doFilterInternal(

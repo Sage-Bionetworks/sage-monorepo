@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 /**
- * Configuration properties for OpenChallenges Auth Service.
+ * Application configuration properties.
  *
  * All properties are prefixed with 'app.'
  * Properties are validated on application startup.
@@ -21,7 +21,7 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "app")
 @Data
 @Validated
-public class AuthServiceProperties {
+public class AppProperties {
 
   /**
    * OAuth2 and JWT configuration

@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sagebionetworks.openchallenges.auth.service.configuration.AuthServiceProperties;
+import org.sagebionetworks.openchallenges.auth.service.configuration.AppProperties;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
 import org.sagebionetworks.openchallenges.auth.service.repository.ApiKeyRepository;
@@ -37,7 +37,7 @@ public class ApiKeyService {
 
   private final ApiKeyRepository apiKeyRepository;
   private final PasswordEncoder passwordEncoder;
-  private final AuthServiceProperties authServiceProperties;
+  private final AppProperties authServiceProperties;
   private final RegisteredClientRepository registeredClientRepository;
   private final JdbcTemplate jdbcTemplate;
   private final ScopeUtil scopeUtil;

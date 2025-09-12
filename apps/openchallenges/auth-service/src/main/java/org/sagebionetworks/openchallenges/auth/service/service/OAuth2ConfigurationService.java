@@ -3,7 +3,7 @@ package org.sagebionetworks.openchallenges.auth.service.service;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.sagebionetworks.openchallenges.auth.service.configuration.AuthServiceProperties;
+import org.sagebionetworks.openchallenges.auth.service.configuration.AppProperties;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ExternalAccount;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 public class OAuth2ConfigurationService {
 
-  private final AuthServiceProperties properties;
+  private final AppProperties properties;
   private final RestTemplate restTemplate;
 
   // Discovery endpoint URLs
@@ -28,7 +28,7 @@ public class OAuth2ConfigurationService {
   private volatile Map<String, Object> googleDiscovery;
   private volatile Map<String, Object> synapseDiscovery;
 
-  public OAuth2ConfigurationService(AuthServiceProperties properties) {
+  public OAuth2ConfigurationService(AppProperties properties) {
     this.properties = properties;
     this.restTemplate = new RestTemplate();
 

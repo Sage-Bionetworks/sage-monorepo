@@ -21,7 +21,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-  private final AuthServiceProperties authServiceProperties;
+  private final AppProperties authServiceProperties;
 
   /**
    * Default password encoder bean - supports both BCrypt and {noop} prefixes
