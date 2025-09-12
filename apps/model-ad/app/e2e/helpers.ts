@@ -13,5 +13,6 @@ export const searchAndGetSearchListItems = async (
   await responsePromise;
 
   const searchList = page.getByRole('list').filter({ hasText: query });
-  return searchList.getByRole('listitem');
+  const searchListItems = searchList.getByRole('listitem');
+  return { input, searchListItems };
 };
