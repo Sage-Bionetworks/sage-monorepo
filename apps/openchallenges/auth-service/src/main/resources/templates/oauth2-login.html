@@ -54,6 +54,15 @@
       .oauth-btn.google:before {
         content: '🚀 ';
       }
+      .oauth-btn.synapse {
+        background: #4a90e2;
+      }
+      .oauth-btn.synapse:hover {
+        background: #357abd;
+      }
+      .oauth-btn.synapse:before {
+        content: '🔬 ';
+      }
       .error {
         background: #f8d7da;
         color: #721c24;
@@ -96,6 +105,10 @@
 
       <div>
         <a href="/auth/oauth2/google" class="oauth-btn google">Login with Google</a>
+      </div>
+
+      <div>
+        <a href="/auth/oauth2/synapse" class="oauth-btn synapse">Login with Synapse</a>
       </div>
 
       <div class="info">

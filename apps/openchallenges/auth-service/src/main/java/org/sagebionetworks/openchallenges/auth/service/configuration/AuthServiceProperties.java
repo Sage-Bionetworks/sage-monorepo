@@ -13,7 +13,7 @@ import org.springframework.validation.annotation.Validated;
 
 /**
  * Configuration properties for OpenChallenges Auth Service.
- * 
+ *
  * All properties are prefixed with 'openchallenges.auth-service.'
  * Properties are validated on application startup.
  */
@@ -45,7 +45,9 @@ public class AuthServiceProperties {
    * API key configuration
    */
   @Valid
-  private ApiKeyConfig apiKey = new ApiKeyConfig();  @Data
+  private ApiKeyConfig apiKey = new ApiKeyConfig();
+
+  @Data
   public static class OAuth2Config {
 
     /**
@@ -98,7 +100,10 @@ public class AuthServiceProperties {
      * Used by the web authentication filter.
      */
     @NotBlank(message = "Access token cookie name must not be blank")
-    @Pattern(regexp = "[a-zA-Z][a-zA-Z0-9_]*", message = "Cookie name must start with a letter and contain only alphanumeric characters and underscores")
+    @Pattern(
+      regexp = "[a-zA-Z][a-zA-Z0-9_]*",
+      message = "Cookie name must start with a letter and contain only alphanumeric characters and underscores"
+    )
     private String accessTokenCookieName = "oc_access_token";
   }
 
@@ -115,21 +120,7 @@ public class AuthServiceProperties {
      * API endpoint patterns that are publicly accessible.
      */
     @NotEmpty(message = "Public endpoints list must not be empty")
-    private String[] publicEndpoints = {
-      "/oauth2/**",
-      "/.well-known/**",
-      "/actuator/health",
-      "/actuator/info",
-      "/v3/api-docs/**",
-      "/swagger-ui/**",
-      "/swagger-ui.html",
-      "/login",
-      "/auth/oauth2/google",
-      "/auth/callback",
-      "/logout",
-      "/logout/**",
-      "/error",
-    };
+    private String[] publicEndpoints = {};
   }
 
   @Data
@@ -139,7 +130,10 @@ public class AuthServiceProperties {
      * The prefix for API keys (e.g., oc_dev_, oc_stage_, oc_prod_)
      */
     @NotBlank(message = "API key prefix must not be blank")
-    @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9_]*_$", message = "API key prefix must start with a letter, contain only alphanumeric characters and underscores, and end with an underscore")
+    @Pattern(
+      regexp = "^[a-zA-Z][a-zA-Z0-9_]*_$",
+      message = "API key prefix must start with a letter, contain only alphanumeric characters and underscores, and end with an underscore"
+    )
     private String prefix = "oc_dev_";
 
     /**

@@ -34,10 +34,27 @@ public class OAuth2WebController {
     // Generate authorization URL for Google
     String authUrl = oAuth2ConfigurationService.getAuthorizationUrl(
       ExternalAccount.Provider.google,
-      "state_" + System.currentTimeMillis() // Simple state parameter for security
+      "google_state_" + System.currentTimeMillis() // Provider-specific state for identification
     );
 
     log.debug("Redirecting to Google authorization URL");
+    return "redirect:" + authUrl;
+  }
+
+  /**
+   * Initiate Synapse OAuth2 login flow.
+   */
+  @GetMapping("/auth/oauth2/synapse")
+  public String loginWithSynapse() {
+    log.debug("Initiating Synapse OAuth2 authorization");
+
+    // Generate authorization URL for Synapse
+    String authUrl = oAuth2ConfigurationService.getAuthorizationUrl(
+      ExternalAccount.Provider.synapse,
+      "synapse_state_" + System.currentTimeMillis() // Provider-specific state for identification
+    );
+
+    log.debug("Redirecting to Synapse authorization URL");
     return "redirect:" + authUrl;
   }
 
@@ -75,8 +92,18 @@ public class OAuth2WebController {
       // Process OAuth2 callback through AuthenticationService
       log.debug("Processing OAuth2 callback through AuthenticationService");
 
+      // Extract provider from state parameter
+      String provider = extractProviderFromState(state);
+      if (provider == null) {
+        log.error("Unable to determine OAuth2 provider from state: {}", state);
+        model.addAttribute("error", "Invalid state parameter - unable to determine provider");
+        return "oauth2-error";
+      }
+
+      log.debug("Detected OAuth2 provider: {}", provider);
+
       OAuth2CallbackResponseDto authResponse = authenticationService.handleOAuth2Callback(
-        "google", // Currently only supporting Google
+        provider,
         code,
         state
       );
@@ -116,5 +143,29 @@ public class OAuth2WebController {
     response.addCookie(cookie);
 
     log.debug("Set secure cookie: {} with maxAge: {} seconds", name, maxAge);
+  }
+
+  /**
+   * Extract OAuth2 provider from state parameter.
+   * State format: "{provider}_state_{timestamp}"
+   */
+  private String extractProviderFromState(String state) {
+    if (state == null || state.isEmpty()) {
+      return null;
+    }
+
+    // Check for provider prefixes
+    if (state.startsWith("google_state_")) {
+      return "google";
+    } else if (state.startsWith("synapse_state_")) {
+      return "synapse";
+    }
+
+    // Fallback: assume it's an old-style state (defaults to Google for backwards compatibility)
+    log.warn(
+      "Unable to determine provider from state parameter: {}. Defaulting to Google for backwards compatibility.",
+      state
+    );
+    return "google";
   }
 }

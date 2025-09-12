@@ -125,7 +125,7 @@ public class OAuth2Service {
       case google:
         return "https://oauth2.googleapis.com/token";
       case synapse:
-        return "https://repo-prod.prod.sagebase.org/auth/v1/oauth2/token";
+        return "https://signin.synapse.org/oauth2/token";
       default:
         throw new IllegalArgumentException("Unsupported OAuth2 provider: " + provider);
     }
@@ -174,44 +174,50 @@ public class OAuth2Service {
    */
   private OAuth2TokenResponse mapToOAuth2TokenResponse(Map<String, Object> tokenResponseMap) {
     return OAuth2TokenResponse.builder()
-        .accessToken(getStringValue(tokenResponseMap, "access_token"))
-        .tokenType(getStringValue(tokenResponseMap, "token_type"))
-        .expiresIn(getLongValue(tokenResponseMap, "expires_in"))
-        .refreshToken(getStringValue(tokenResponseMap, "refresh_token"))
-        .scope(getStringValue(tokenResponseMap, "scope"))
-        .build();
+      .accessToken(getStringValue(tokenResponseMap, "access_token"))
+      .tokenType(getStringValue(tokenResponseMap, "token_type"))
+      .expiresIn(getLongValue(tokenResponseMap, "expires_in"))
+      .refreshToken(getStringValue(tokenResponseMap, "refresh_token"))
+      .scope(getStringValue(tokenResponseMap, "scope"))
+      .build();
   }
 
   /**
    * Maps OAuth2 provider response to OAuth2UserInfo object.
    * This avoids Jackson deserialization security issues with Map<String, Object>.
    */
-  private OAuth2UserInfo mapToOAuth2UserInfo(ExternalAccount.Provider provider, Map<String, Object> userInfoMap) {
+  private OAuth2UserInfo mapToOAuth2UserInfo(
+    ExternalAccount.Provider provider,
+    Map<String, Object> userInfoMap
+  ) {
     OAuth2UserInfo.OAuth2UserInfoBuilder builder = OAuth2UserInfo.builder();
 
     // Common mappings for all providers
-    builder.sub(getStringValue(userInfoMap, "sub"))
-           .id(getStringValue(userInfoMap, "id"))
-           .email(getStringValue(userInfoMap, "email"))
-           .emailVerified(getBooleanValue(userInfoMap, "email_verified"))
-           .name(getStringValue(userInfoMap, "name"))
-           .picture(getStringValue(userInfoMap, "picture"))
-           .locale(getStringValue(userInfoMap, "locale"));
+    builder
+      .sub(getStringValue(userInfoMap, "sub"))
+      .id(getStringValue(userInfoMap, "id"))
+      .email(getStringValue(userInfoMap, "email"))
+      .emailVerified(getBooleanValue(userInfoMap, "email_verified"))
+      .name(getStringValue(userInfoMap, "name"))
+      .picture(getStringValue(userInfoMap, "picture"))
+      .locale(getStringValue(userInfoMap, "locale"));
 
     // Provider-specific mappings
     switch (provider) {
       case google:
-        builder.providerId(getStringValue(userInfoMap, "sub"))
-               .givenName(getStringValue(userInfoMap, "given_name"))
-               .familyName(getStringValue(userInfoMap, "family_name"))
-               .displayName(getStringValue(userInfoMap, "name"));
+        builder
+          .providerId(getStringValue(userInfoMap, "sub"))
+          .givenName(getStringValue(userInfoMap, "given_name"))
+          .familyName(getStringValue(userInfoMap, "family_name"))
+          .displayName(getStringValue(userInfoMap, "name"));
         break;
       case synapse:
-        builder.providerId(getStringValue(userInfoMap, "ownerId"))
-               .username(getStringValue(userInfoMap, "userName"))
-               .displayName(getStringValue(userInfoMap, "displayName"))
-               .givenName(getStringValue(userInfoMap, "firstName"))
-               .familyName(getStringValue(userInfoMap, "lastName"));
+        builder
+          .providerId(getStringValue(userInfoMap, "ownerId"))
+          .username(getStringValue(userInfoMap, "userName"))
+          .displayName(getStringValue(userInfoMap, "displayName"))
+          .givenName(getStringValue(userInfoMap, "firstName"))
+          .familyName(getStringValue(userInfoMap, "lastName"));
         break;
       default:
         throw new IllegalArgumentException("Unsupported OAuth2 provider: " + provider);

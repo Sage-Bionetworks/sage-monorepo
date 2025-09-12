@@ -82,6 +82,7 @@ openchallenges:
         - /swagger-ui.html
         - /login
         - /auth/oauth2/google
+        - /auth/oauth2/synapse
         - /auth/callback
         - /logout
         - /logout/**
