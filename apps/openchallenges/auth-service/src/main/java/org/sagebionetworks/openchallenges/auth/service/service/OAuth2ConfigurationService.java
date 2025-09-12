@@ -3,8 +3,8 @@ package org.sagebionetworks.openchallenges.auth.service.service;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.openchallenges.auth.service.configuration.AuthServiceProperties;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ExternalAccount;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,13 +15,7 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 public class OAuth2ConfigurationService {
 
-  private final String googleClientId;
-  private final String googleClientSecret;
-  private final String googleRedirectUri;
-  private final String synapseClientId;
-  private final String synapseClientSecret;
-  private final String synapseRedirectUri;
-  private final String baseUrl;
+  private final AuthServiceProperties properties;
   private final RestTemplate restTemplate;
 
   // Discovery endpoint URLs
@@ -34,37 +28,23 @@ public class OAuth2ConfigurationService {
   private volatile Map<String, Object> googleDiscovery;
   private volatile Map<String, Object> synapseDiscovery;
 
-  public OAuth2ConfigurationService(
-    @Value("${app.oauth2.google.client-id:}") String googleClientId,
-    @Value("${app.oauth2.google.client-secret:}") String googleClientSecret,
-    @Value("${app.oauth2.google.redirect-uri:}") String googleRedirectUri,
-    @Value("${app.oauth2.synapse.client-id:}") String synapseClientId,
-    @Value("${app.oauth2.synapse.client-secret:}") String synapseClientSecret,
-    @Value("${app.oauth2.synapse.redirect-uri:}") String synapseRedirectUri,
-    @Value("${app.base-url:http://localhost:8087}") String baseUrl
-  ) {
-    this.googleClientId = googleClientId;
-    this.googleClientSecret = googleClientSecret;
-    this.googleRedirectUri = googleRedirectUri;
-    this.synapseClientId = synapseClientId;
-    this.synapseClientSecret = synapseClientSecret;
-    this.synapseRedirectUri = synapseRedirectUri;
-    this.baseUrl = baseUrl;
+  public OAuth2ConfigurationService(AuthServiceProperties properties) {
+    this.properties = properties;
     this.restTemplate = new RestTemplate();
 
-    log.info("OAuth2 Configuration Service initialized for base URL: {}", baseUrl);
+    log.info("OAuth2 Configuration Service initialized for base URL: {}", properties.getOauth2().getBaseUrl());
     log.info(
       "Google OAuth2 enabled: {} (client ID: {}, redirect URI: {})",
-      !googleClientId.isEmpty(),
-      googleClientId.isEmpty()
+      !properties.getOauth2().getGoogle().getClientId().isEmpty(),
+      properties.getOauth2().getGoogle().getClientId().isEmpty()
         ? "NOT_SET"
-        : googleClientId.substring(0, Math.min(10, googleClientId.length())) + "...",
-      googleRedirectUri.isEmpty() ? "NOT_SET" : googleRedirectUri
+        : properties.getOauth2().getGoogle().getClientId().substring(0, Math.min(10, properties.getOauth2().getGoogle().getClientId().length())) + "...",
+      properties.getOauth2().getGoogle().getRedirectUri().isEmpty() ? "NOT_SET" : properties.getOauth2().getGoogle().getRedirectUri()
     );
     log.info(
       "Synapse OAuth2 enabled: {} (redirect URI: {})",
-      !synapseClientId.isEmpty(),
-      synapseRedirectUri.isEmpty() ? "NOT_SET" : synapseRedirectUri
+      !properties.getOauth2().getSynapse().getClientId().isEmpty(),
+      properties.getOauth2().getSynapse().getRedirectUri().isEmpty() ? "NOT_SET" : properties.getOauth2().getSynapse().getRedirectUri()
     );
   }
 
@@ -79,8 +59,8 @@ public class OAuth2ConfigurationService {
         "OAuth2 provider not configured: {}. Client ID empty: {}",
         provider,
         provider == ExternalAccount.Provider.google
-          ? googleClientId.isEmpty()
-          : synapseClientId.isEmpty()
+          ? properties.getOauth2().getGoogle().getClientId().isEmpty()
+          : properties.getOauth2().getSynapse().getClientId().isEmpty()
       );
       throw new IllegalArgumentException("OAuth2 provider not configured: " + provider);
     }
@@ -97,8 +77,8 @@ public class OAuth2ConfigurationService {
 
     String clientId =
       switch (provider) {
-        case google -> googleClientId;
-        case synapse -> synapseClientId;
+        case google -> properties.getOauth2().getGoogle().getClientId();
+        case synapse -> properties.getOauth2().getSynapse().getClientId();
       };
 
     // Build authorization URL with proper parameters
@@ -181,13 +161,13 @@ public class OAuth2ConfigurationService {
   public String getRedirectUri(ExternalAccount.Provider provider) {
     String redirectUri =
       switch (provider) {
-        case google -> googleRedirectUri;
-        case synapse -> synapseRedirectUri;
+        case google -> properties.getOauth2().getGoogle().getRedirectUri();
+        case synapse -> properties.getOauth2().getSynapse().getRedirectUri();
       };
 
     // If provider-specific redirect URI is not configured, fall back to base URL + /auth/callback
     if (redirectUri == null || redirectUri.isEmpty()) {
-      redirectUri = String.format("%s/auth/callback", baseUrl.replaceAll("/$", ""));
+      redirectUri = String.format("%s/auth/callback", properties.getOauth2().getBaseUrl().replaceAll("/$", ""));
       log.debug("Using fallback redirect URI for {}: {}", provider, redirectUri);
     } else {
       log.debug("Using configured redirect URI for {}: {}", provider, redirectUri);
@@ -201,8 +181,8 @@ public class OAuth2ConfigurationService {
    */
   public boolean isProviderConfigured(ExternalAccount.Provider provider) {
     return switch (provider) {
-      case google -> !googleClientId.isEmpty() && !googleClientSecret.isEmpty();
-      case synapse -> !synapseClientId.isEmpty() && !synapseClientSecret.isEmpty();
+      case google -> !properties.getOauth2().getGoogle().getClientId().isEmpty() && !properties.getOauth2().getGoogle().getClientSecret().isEmpty();
+      case synapse -> !properties.getOauth2().getSynapse().getClientId().isEmpty() && !properties.getOauth2().getSynapse().getClientSecret().isEmpty();
     };
   }
 
@@ -235,7 +215,7 @@ public class OAuth2ConfigurationService {
     return switch (provider) {
       case google -> OAuth2ProviderConfig.builder()
         .provider(provider)
-        .clientId(googleClientId)
+        .clientId(properties.getOauth2().getGoogle().getClientId())
         .authorizationUri(authorizationUri)
         .tokenUri(tokenUri)
         .userInfoUri(userInfoUri)
@@ -244,7 +224,7 @@ public class OAuth2ConfigurationService {
         .build();
       case synapse -> OAuth2ProviderConfig.builder()
         .provider(provider)
-        .clientId(synapseClientId)
+        .clientId(properties.getOauth2().getSynapse().getClientId())
         .authorizationUri(authorizationUri)
         .tokenUri(tokenUri)
         .userInfoUri(userInfoUri)
@@ -320,8 +300,8 @@ public class OAuth2ConfigurationService {
    */
   public String getClientId(ExternalAccount.Provider provider) {
     return switch (provider) {
-      case google -> googleClientId;
-      case synapse -> synapseClientId;
+      case google -> properties.getOauth2().getGoogle().getClientId();
+      case synapse -> properties.getOauth2().getSynapse().getClientId();
     };
   }
 
@@ -330,8 +310,8 @@ public class OAuth2ConfigurationService {
    */
   public String getClientSecret(ExternalAccount.Provider provider) {
     return switch (provider) {
-      case google -> googleClientSecret;
-      case synapse -> synapseClientSecret;
+      case google -> properties.getOauth2().getGoogle().getClientSecret();
+      case synapse -> properties.getOauth2().getSynapse().getClientSecret();
     };
   }
 

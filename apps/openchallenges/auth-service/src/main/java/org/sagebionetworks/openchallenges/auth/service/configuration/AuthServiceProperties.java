@@ -90,6 +90,44 @@ public class AuthServiceProperties {
     @Min(value = 1, message = "Refresh token TTL must be at least 1 hour")
     @Max(value = 8760, message = "Refresh token TTL must not exceed 1 year (8760 hours)")
     private int refreshTokenTtlHours = 24;
+
+    /**
+     * Base URL for the auth service (used for redirect URIs when not explicitly configured).
+     */
+    @NotBlank(message = "Base URL must not be blank")
+    @Pattern(regexp = "https?://.*", message = "Base URL must be a valid HTTP/HTTPS URL")
+    private String baseUrl = "http://localhost:8087";
+
+    /**
+     * Google OAuth2 provider configuration
+     */
+    @Valid
+    private ProviderConfig google = new ProviderConfig();
+
+    /**
+     * Synapse OAuth2 provider configuration
+     */
+    @Valid
+    private ProviderConfig synapse = new ProviderConfig();
+
+    @Data
+    public static class ProviderConfig {
+      /**
+       * OAuth2 client ID for the provider
+       */
+      private String clientId = "";
+
+      /**
+       * OAuth2 client secret for the provider
+       */
+      private String clientSecret = "";
+
+      /**
+       * OAuth2 redirect URI for the provider.
+       * If not set, will default to baseUrl + /auth/callback
+       */
+      private String redirectUri = "";
+    }
   }
 
   @Data
