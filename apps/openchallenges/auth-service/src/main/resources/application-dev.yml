@@ -21,10 +21,6 @@ app:
       redirect-uri: http://127.0.0.1:8087/auth/callback
       scope: openid,profile,email
 
-# OAuth2 Configuration
-openchallenges:
-  base-url: ${BASE_URL:http://localhost:8087}
-
 logging:
   level:
     org.sagebionetworks.openchallenges: DEBUG

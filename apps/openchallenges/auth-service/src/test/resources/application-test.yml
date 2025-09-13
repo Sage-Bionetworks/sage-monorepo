@@ -19,4 +19,3 @@ app:
     synapse:
       client-id: test-synapse-client-id
       client-secret: test-synapse-client-secret
-  base-url: http://localhost:8087
