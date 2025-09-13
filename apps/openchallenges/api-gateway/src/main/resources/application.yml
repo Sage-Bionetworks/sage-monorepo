@@ -1,13 +1,8 @@
-openchallenges-api-gateway:
-  welcome-message: 'Welcome to OpenChallenges API Gateway.'
-
-# Auth Service configuration
-openchallenges:
+app:
+  welcome-message: 'Welcome to OpenChallenges API Gateway!'
   auth:
-    service-url: ${AUTH_SERVICE_URL:http://openchallenges-auth-service:8087/v1}
-    realm: ${AUTH_REALM:OpenChallenges}
-  # Route scope mappings are loaded from route-scopes.yml via RouteScopeProperties
-  # To regenerate: nx run openchallenges-api-gateway:generateRouteScopes
+    service-url: http://openchallenges-auth-service:8087/v1
+    realm: OpenChallenges
 
 server:
   port: 8082

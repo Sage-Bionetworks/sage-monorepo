@@ -1,6 +1,9 @@
 package org.sagebionetworks.openchallenges.api.gateway.security;
 
-import org.sagebionetworks.openchallenges.api.gateway.configuration.AuthConfiguration;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.openchallenges.api.gateway.configuration.AppProperties;
 import org.sagebionetworks.openchallenges.api.gateway.service.OAuth2JwtService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,10 +16,6 @@ import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
-import java.util.List;
 
 /**
  * WebFilter that handles JWT authentication using OAuth2 standards.
@@ -28,7 +27,7 @@ import java.util.List;
 public class JwtAuthenticationGatewayFilter implements WebFilter {
 
   private final OAuth2JwtService oAuth2JwtService;
-  private final AuthConfiguration authConfiguration;
+  private final AppProperties appProperties;
 
   @Override
   public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
@@ -49,49 +48,67 @@ public class JwtAuthenticationGatewayFilter implements WebFilter {
       // Empty JWT token - continue to API key authentication or Spring Security
       return chain.filter(exchange);
     }
-    
+
     log.debug("Validating JWT token for request to: {}", path);
 
     // Validate JWT token with OAuth2 JWT Service
-    return oAuth2JwtService.validateJwt(jwtToken)
-        .flatMap(validationResponse -> {
-          if (!validationResponse.isValid()) {
-            log.warn("Invalid JWT token for request to: {}", path);
-            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-            exchange.getResponse().getHeaders().add("WWW-Authenticate", 
-                String.format("Bearer realm=\"%s\"", authConfiguration.getRealm()));
-            return exchange.getResponse().setComplete();
-          }
-
-          // JWT Passthrough Mode: Pass the original JWT to resource servers
-          // Resource servers will validate JWT directly and extract scopes
-          // Note: Header stripping is handled by Spring Cloud Gateway default filters
-          ServerHttpRequest.Builder requestBuilder = request.mutate()
-              // Keep the original Authorization header with JWT
-              .header(HttpHeaders.AUTHORIZATION, authHeader);
-
-          ServerHttpRequest modifiedRequest = requestBuilder.build();
-
-          // Create Spring Security Authentication for authorization
-          var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + validationResponse.getRole()));
-          var authentication = new UsernamePasswordAuthenticationToken(
-              validationResponse.getUsername(), 
-              null, 
-              authorities
-          );
-
-          log.debug("JWT authentication successful for user: {} accessing: {}", 
-              validationResponse.getUsername(), path);
-
-          return chain.filter(exchange.mutate().request(modifiedRequest).build())
-              .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
-        })
-        .onErrorResume(Exception.class, ex -> {
-          log.warn("JWT authentication failed for request to {}: {}", path, ex.getMessage());
+    return oAuth2JwtService
+      .validateJwt(jwtToken)
+      .flatMap(validationResponse -> {
+        if (!validationResponse.isValid()) {
+          log.warn("Invalid JWT token for request to: {}", path);
           exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-          exchange.getResponse().getHeaders().add("WWW-Authenticate", 
-              String.format("Bearer realm=\"%s\"", authConfiguration.getRealm()));
+          exchange
+            .getResponse()
+            .getHeaders()
+            .add(
+              "WWW-Authenticate",
+              String.format("Bearer realm=\"%s\"", appProperties.getAuth().getRealm())
+            );
           return exchange.getResponse().setComplete();
-        });
+        }
+
+        // JWT Passthrough Mode: Pass the original JWT to resource servers
+        // Resource servers will validate JWT directly and extract scopes
+        // Note: Header stripping is handled by Spring Cloud Gateway default filters
+        ServerHttpRequest.Builder requestBuilder = request
+          .mutate()
+          // Keep the original Authorization header with JWT
+          .header(HttpHeaders.AUTHORIZATION, authHeader);
+
+        ServerHttpRequest modifiedRequest = requestBuilder.build();
+
+        // Create Spring Security Authentication for authorization
+        var authorities = List.of(
+          new SimpleGrantedAuthority("ROLE_" + validationResponse.getRole())
+        );
+        var authentication = new UsernamePasswordAuthenticationToken(
+          validationResponse.getUsername(),
+          null,
+          authorities
+        );
+
+        log.debug(
+          "JWT authentication successful for user: {} accessing: {}",
+          validationResponse.getUsername(),
+          path
+        );
+
+        return chain
+          .filter(exchange.mutate().request(modifiedRequest).build())
+          .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
+      })
+      .onErrorResume(Exception.class, ex -> {
+        log.warn("JWT authentication failed for request to {}: {}", path, ex.getMessage());
+        exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+        exchange
+          .getResponse()
+          .getHeaders()
+          .add(
+            "WWW-Authenticate",
+            String.format("Bearer realm=\"%s\"", appProperties.getAuth().getRealm())
+          );
+        return exchange.getResponse().setComplete();
+      });
   }
 }

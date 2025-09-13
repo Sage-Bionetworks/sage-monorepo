@@ -21,18 +21,16 @@ dependencies {
   implementation(libs.spring.boot.starter.actuator)
   implementation(libs.spring.boot.starter.cache)
   implementation(libs.spring.boot.starter.data.jpa)
+  implementation(libs.spring.boot.starter.oauth2.client)
+  implementation(libs.spring.boot.starter.oauth2.resource.server)
   implementation(libs.spring.boot.starter.security)
   implementation(libs.spring.boot.starter.thymeleaf)
   implementation(libs.spring.boot.starter.validation)
   implementation(libs.spring.boot.starter.web)
-  implementation(libs.springdoc.openapi.ui)
-
-  // OAuth2 and JWT dependencies
-  implementation(libs.spring.boot.starter.oauth2.client)
-  implementation(libs.spring.boot.starter.oauth2.resource.server)
+  implementation(libs.spring.boot.starter.webflux)
   implementation(libs.spring.security.oauth2.authorization.server)
   implementation(libs.spring.security.oauth2.jose)
-  implementation(libs.spring.boot.starter.webflux)
+  implementation(libs.springdoc.openapi.ui)
 
   runtimeOnly(libs.flyway.database.postgresql)
   runtimeOnly(libs.postgresql)
