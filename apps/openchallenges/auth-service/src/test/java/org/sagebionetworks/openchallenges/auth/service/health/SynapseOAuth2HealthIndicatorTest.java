@@ -16,8 +16,8 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * Test for SynapseOAuth2HealthIndicator to verify OAuth2 discovery endpoint health checking.
@@ -27,7 +27,16 @@ import org.springframework.web.client.RestTemplate;
 class SynapseOAuth2HealthIndicatorTest {
 
   @Mock
-  private RestTemplate restTemplate;
+  private RestClient restClient;
+
+  @Mock
+  private RestClient.RequestHeadersUriSpec requestHeadersUriSpec;
+
+  @Mock
+  private RestClient.RequestHeadersSpec requestHeadersSpec;
+
+  @Mock
+  private RestClient.ResponseSpec responseSpec;
 
   @Mock
   private AppProperties appProperties;
@@ -52,13 +61,13 @@ class SynapseOAuth2HealthIndicatorTest {
 
     healthIndicator = new SynapseOAuth2HealthIndicator(appProperties);
 
-    // Inject mock RestTemplate using reflection
+    // Inject mock RestClient using reflection
     try {
-      var field = AbstractOAuth2HealthIndicator.class.getDeclaredField("restTemplate");
+      var field = AbstractOAuth2HealthIndicator.class.getDeclaredField("restClient");
       field.setAccessible(true);
-      field.set(healthIndicator, restTemplate);
+      field.set(healthIndicator, restClient);
     } catch (Exception e) {
-      fail("Failed to inject mock RestTemplate: " + e.getMessage());
+      fail("Failed to inject mock RestClient: " + e.getMessage());
     }
   }
 
@@ -77,7 +86,11 @@ class SynapseOAuth2HealthIndicatorTest {
       "https://repo-prod.prod.sagebase.org/auth/v1/oauth2/userinfo"
     );
 
-    when(restTemplate.getForEntity(anyString(), eq(Map.class))).thenReturn(
+    // Mock RestClient chain
+    when(restClient.get()).thenReturn(requestHeadersUriSpec);
+    when(requestHeadersUriSpec.uri(anyString())).thenReturn(requestHeadersSpec);
+    when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
+    when(responseSpec.toEntity(Map.class)).thenReturn(
       new ResponseEntity<>(discoveryResponse, HttpStatus.OK)
     );
 
@@ -106,7 +119,11 @@ class SynapseOAuth2HealthIndicatorTest {
       // Missing authorization_endpoint and token_endpoint
     );
 
-    when(restTemplate.getForEntity(anyString(), eq(Map.class))).thenReturn(
+    // Mock RestClient chain
+    when(restClient.get()).thenReturn(requestHeadersUriSpec);
+    when(requestHeadersUriSpec.uri(anyString())).thenReturn(requestHeadersSpec);
+    when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
+    when(responseSpec.toEntity(Map.class)).thenReturn(
       new ResponseEntity<>(incompleteResponse, HttpStatus.OK)
     );
 
@@ -127,7 +144,10 @@ class SynapseOAuth2HealthIndicatorTest {
   @DisplayName("should return DOWN status when discovery endpoint returns non-success HTTP status")
   void shouldReturnDownStatusWhenNonSuccessHttpStatus() {
     // Arrange
-    when(restTemplate.getForEntity(anyString(), eq(Map.class))).thenReturn(
+    when(restClient.get()).thenReturn(requestHeadersUriSpec);
+    when(requestHeadersUriSpec.uri(anyString())).thenReturn(requestHeadersSpec);
+    when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
+    when(responseSpec.toEntity(Map.class)).thenReturn(
       new ResponseEntity<>(null, HttpStatus.SERVICE_UNAVAILABLE)
     );
 
@@ -145,9 +165,10 @@ class SynapseOAuth2HealthIndicatorTest {
   @DisplayName("should return DOWN status when discovery endpoint is unreachable")
   void shouldReturnDownStatusWhenEndpointUnreachable() {
     // Arrange
-    when(restTemplate.getForEntity(anyString(), eq(Map.class))).thenThrow(
-      new RestClientException("Connection refused")
-    );
+    when(restClient.get()).thenReturn(requestHeadersUriSpec);
+    when(requestHeadersUriSpec.uri(anyString())).thenReturn(requestHeadersSpec);
+    when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
+    when(responseSpec.toEntity(Map.class)).thenThrow(new RestClientException("Connection refused"));
 
     // Act
     Health health = healthIndicator.health();
@@ -173,7 +194,10 @@ class SynapseOAuth2HealthIndicatorTest {
       "https://repo-prod.prod.sagebase.org/auth/v1/oauth2/token"
     );
 
-    when(restTemplate.getForEntity(anyString(), eq(Map.class))).thenReturn(
+    when(restClient.get()).thenReturn(requestHeadersUriSpec);
+    when(requestHeadersUriSpec.uri(anyString())).thenReturn(requestHeadersSpec);
+    when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
+    when(responseSpec.toEntity(Map.class)).thenReturn(
       new ResponseEntity<>(discoveryResponse, HttpStatus.OK)
     );
 
@@ -186,16 +210,20 @@ class SynapseOAuth2HealthIndicatorTest {
     assertEquals(Status.UP, health2.getStatus());
 
     // Verify RestTemplate was only called once due to caching
-    verify(restTemplate, times(1)).getForEntity(anyString(), eq(Map.class));
+    verify(restClient, times(1)).get();
+    verify(requestHeadersUriSpec, times(1)).uri(anyString());
+    verify(requestHeadersSpec, times(1)).retrieve();
+    verify(responseSpec, times(1)).toEntity(Map.class);
   }
 
   @Test
   @DisplayName("should cache failed health check results")
   void shouldCacheFailedHealthCheckResults() {
     // Arrange
-    when(restTemplate.getForEntity(anyString(), eq(Map.class))).thenThrow(
-      new RestClientException("Network error")
-    );
+    when(restClient.get()).thenReturn(requestHeadersUriSpec);
+    when(requestHeadersUriSpec.uri(anyString())).thenReturn(requestHeadersSpec);
+    when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
+    when(responseSpec.toEntity(Map.class)).thenThrow(new RestClientException("Network error"));
 
     // Act - Call health check twice
     Health health1 = healthIndicator.health();
@@ -206,16 +234,20 @@ class SynapseOAuth2HealthIndicatorTest {
     assertEquals(Status.DOWN, health2.getStatus());
 
     // Verify RestTemplate was only called once due to caching
-    verify(restTemplate, times(1)).getForEntity(anyString(), eq(Map.class));
+    verify(restClient, times(1)).get();
+    verify(requestHeadersUriSpec, times(1)).uri(anyString());
+    verify(requestHeadersSpec, times(1)).retrieve();
+    verify(responseSpec, times(1)).toEntity(Map.class);
   }
 
   @Test
   @DisplayName("should handle null response body gracefully")
   void shouldHandleNullResponseBodyGracefully() {
     // Arrange
-    when(restTemplate.getForEntity(anyString(), eq(Map.class))).thenReturn(
-      new ResponseEntity<>(null, HttpStatus.OK)
-    );
+    when(restClient.get()).thenReturn(requestHeadersUriSpec);
+    when(requestHeadersUriSpec.uri(anyString())).thenReturn(requestHeadersSpec);
+    when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
+    when(responseSpec.toEntity(Map.class)).thenReturn(new ResponseEntity<>(null, HttpStatus.OK));
 
     // Act
     Health health = healthIndicator.health();
@@ -229,9 +261,10 @@ class SynapseOAuth2HealthIndicatorTest {
   @DisplayName("should handle unexpected exceptions during health check")
   void shouldHandleUnexpectedExceptionsDuringHealthCheck() {
     // Arrange
-    when(restTemplate.getForEntity(anyString(), eq(Map.class))).thenThrow(
-      new RuntimeException("Unexpected error")
-    );
+    when(restClient.get()).thenReturn(requestHeadersUriSpec);
+    when(requestHeadersUriSpec.uri(anyString())).thenReturn(requestHeadersSpec);
+    when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
+    when(responseSpec.toEntity(Map.class)).thenThrow(new RuntimeException("Unexpected error"));
 
     // Act
     Health health = healthIndicator.health();
@@ -256,7 +289,10 @@ class SynapseOAuth2HealthIndicatorTest {
       "https://repo-prod.prod.sagebase.org/auth/v1/oauth2/token"
     );
 
-    when(restTemplate.getForEntity(anyString(), eq(Map.class))).thenReturn(
+    when(restClient.get()).thenReturn(requestHeadersUriSpec);
+    when(requestHeadersUriSpec.uri(anyString())).thenReturn(requestHeadersSpec);
+    when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
+    when(responseSpec.toEntity(Map.class)).thenReturn(
       new ResponseEntity<>(discoveryResponse, HttpStatus.OK)
     );
 
@@ -264,6 +300,9 @@ class SynapseOAuth2HealthIndicatorTest {
     healthIndicator.health();
 
     // Assert
-    verify(restTemplate).getForEntity(DISCOVERY_URL, Map.class);
+    verify(restClient).get();
+    verify(requestHeadersUriSpec).uri(DISCOVERY_URL);
+    verify(requestHeadersSpec).retrieve();
+    verify(responseSpec).toEntity(Map.class);
   }
 }
