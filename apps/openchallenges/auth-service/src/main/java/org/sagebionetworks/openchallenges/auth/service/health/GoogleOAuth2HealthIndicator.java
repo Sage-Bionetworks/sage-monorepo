@@ -1,5 +1,6 @@
 package org.sagebionetworks.openchallenges.auth.service.health;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.auth.service.configuration.AppProperties;
 import org.springframework.stereotype.Component;
@@ -20,18 +21,10 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component("googleOAuth2")
+@RequiredArgsConstructor
 public class GoogleOAuth2HealthIndicator extends AbstractOAuth2HealthIndicator {
 
   private final AppProperties appProperties;
-
-  /**
-   * Creates a new Google OAuth2 health indicator.
-   *
-   * @param appProperties the application properties containing OAuth2 configuration
-   */
-  public GoogleOAuth2HealthIndicator(AppProperties appProperties) {
-    this.appProperties = appProperties;
-  }
 
   /**
    * Gets the provider name for logging and health details.

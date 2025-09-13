@@ -168,6 +168,7 @@ public class AppProperties {
     private String[] publicEndpoints = {
       "/.well-known/**",
       "/actuator/health",
+      "/actuator/health/**",
       "/actuator/info",
       "/auth/callback",
       "/auth/oauth2/google",
