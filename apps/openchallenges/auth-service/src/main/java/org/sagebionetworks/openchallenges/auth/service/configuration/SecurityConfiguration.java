@@ -67,8 +67,8 @@ public class SecurityConfiguration {
       .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.decoder(jwtDecoder)))
       .authorizeHttpRequests(authz ->
         authz
-          // Public endpoints - no authentication required
-          .requestMatchers(appProperties.getApi().getPublicEndpoints())
+          // Public endpoints - no authentication required (dynamically configured based on enabled providers)
+          .requestMatchers(appProperties.getApi().getPublicEndpoints(appProperties.getOauth2()))
           .permitAll()
           // All other endpoints require authentication
           .anyRequest()

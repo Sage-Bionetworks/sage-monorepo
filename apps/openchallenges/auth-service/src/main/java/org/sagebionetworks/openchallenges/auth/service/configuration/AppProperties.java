@@ -114,6 +114,12 @@ public class AppProperties {
     public static class ProviderConfig {
 
       /**
+       * Whether this OAuth2 provider is enabled.
+       * When false, the provider's health check, endpoints, and login button will be disabled.
+       */
+      private boolean enabled = false;
+
+      /**
        * OAuth2 client ID for the provider
        */
       private String clientId = "";
@@ -161,18 +167,15 @@ public class AppProperties {
   public static class ApiConfig {
 
     /**
-     * API endpoint patterns that are publicly accessible.
-     * All other endpoints require authentication.
+     * Base API endpoint patterns that are publicly accessible.
+     * Provider-specific endpoints are added dynamically based on provider configuration.
      */
-    @NotEmpty(message = "Public endpoints list must not be empty")
-    private String[] publicEndpoints = {
+    private String[] basePublicEndpoints = {
       "/.well-known/**",
       "/actuator/health",
       "/actuator/health/**",
       "/actuator/info",
       "/auth/callback",
-      "/auth/oauth2/google",
-      "/auth/oauth2/synapse",
       "/error",
       "/login",
       "/logout",
@@ -182,6 +185,28 @@ public class AppProperties {
       "/v3/api-docs",
       "/v3/api-docs/**",
     };
+
+    /**
+     * API endpoint patterns that are publicly accessible.
+     * This includes base endpoints plus provider-specific endpoints based on configuration.
+     * All other endpoints require authentication.
+     */
+    public String[] getPublicEndpoints(OAuth2Config oauth2Config) {
+      java.util.List<String> publicEndpoints = new java.util.ArrayList<>(
+        java.util.Arrays.asList(basePublicEndpoints)
+      );
+
+      // Add provider-specific endpoints only if they are enabled
+      if (oauth2Config.getGoogle().isEnabled()) {
+        publicEndpoints.add("/auth/oauth2/google");
+      }
+
+      if (oauth2Config.getSynapse().isEnabled()) {
+        publicEndpoints.add("/auth/oauth2/synapse");
+      }
+
+      return publicEndpoints.toArray(new String[0]);
+    }
   }
 
   @Data

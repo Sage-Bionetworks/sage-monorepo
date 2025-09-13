@@ -67,11 +67,13 @@ app:
     access-token-ttl-minutes: 60
     refresh-token-ttl-hours: 24
     google:
+      enabled: false
       discovery-url: https://accounts.google.com/.well-known/openid-configuration
     synapse:
+      enabled: true
       discovery-url: https://repo-prod.prod.sagebase.org/auth/v1/.well-known/openid-configuration
   web:
+    enabled: true
     access-token-cookie-name: oc_access_token
   api-key:
     length: 40
-    # prefix is defined in profile-specific configuration files

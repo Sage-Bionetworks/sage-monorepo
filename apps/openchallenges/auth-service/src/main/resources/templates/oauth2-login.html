@@ -103,15 +103,20 @@
         <span th:text="${param.error[0]}">Error message</span>
       </div>
 
-      <div>
+      <div th:if="${googleEnabled}">
         <a href="/auth/oauth2/google" class="oauth-btn google">Login with Google</a>
       </div>
 
-      <div>
+      <div th:if="${synapseEnabled}">
         <a href="/auth/oauth2/synapse" class="oauth-btn synapse">Login with Synapse</a>
       </div>
 
-      <div class="info">
+      <div th:if="${!googleEnabled and !synapseEnabled}" class="error">
+        <strong>No OAuth2 providers are currently enabled.</strong><br />
+        Please contact your administrator to enable authentication providers.
+      </div>
+
+      <div th:if="${synapseEnabled}" class="info">
         <strong>Testing Note:</strong><br />
         Only the email <code>thomas.schaffter@gmail.com</code> is authorized for testing.
       </div>

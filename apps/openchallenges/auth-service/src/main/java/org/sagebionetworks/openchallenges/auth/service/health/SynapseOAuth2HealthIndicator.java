@@ -3,6 +3,7 @@ package org.sagebionetworks.openchallenges.auth.service.health;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.auth.service.configuration.AppProperties;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 /**
@@ -18,9 +19,13 @@ import org.springframework.stereotype.Component;
  *   <li>Response contains expected OAuth2 configuration</li>
  *   <li>Network connectivity to Synapse services</li>
  * </ul>
+ *
+ * <p>This health indicator is only enabled when the Synapse OAuth2 provider is enabled
+ * via the {@code app.oauth2.synapse.enabled} property.
  */
 @Slf4j
 @Component("synapseOAuth2")
+@ConditionalOnProperty(name = "app.oauth2.synapse.enabled", havingValue = "true")
 @RequiredArgsConstructor
 public class SynapseOAuth2HealthIndicator extends AbstractOAuth2HealthIndicator {
 
