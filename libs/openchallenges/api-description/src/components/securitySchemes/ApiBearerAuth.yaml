@@ -1,4 +1,0 @@
-type: http
-scheme: bearer
-bearerFormat: api_key
-description: API key obtained from /auth/login endpoint

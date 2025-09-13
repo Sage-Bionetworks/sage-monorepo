@@ -4,6 +4,8 @@ import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengePlatformNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeCategoryDto;
@@ -34,8 +36,6 @@ import org.sagebionetworks.openchallenges.challenge.service.model.repository.Cha
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeStarRepository;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeSubmissionTypeRepository;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.EdamConceptRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,10 +43,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@RequiredArgsConstructor
 @Service
+@Slf4j
 public class ChallengeService {
-
-  private static final Logger logger = LoggerFactory.getLogger(ChallengeService.class);
 
   private final ChallengeRepository challengeRepository;
   private final ChallengePlatformRepository challengePlatformRepository;
@@ -58,30 +58,6 @@ public class ChallengeService {
   private final ChallengeInputDataTypeRepository challengeInputDataTypeRepository;
   private final EdamConceptRepository edamConceptRepository;
   private final EntityManager entityManager;
-
-  public ChallengeService(
-    ChallengeRepository challengeRepository,
-    ChallengePlatformRepository challengePlatformRepository,
-    ChallengeContributionRepository challengeContributionRepository,
-    ChallengeIncentiveRepository challengeIncentiveRepository,
-    ChallengeSubmissionTypeRepository challengeSubmissionTypeRepository,
-    ChallengeCategoryRepository challengeCategoryRepository,
-    ChallengeStarRepository challengeStarRepository,
-    ChallengeInputDataTypeRepository challengeInputDataTypeRepository,
-    EdamConceptRepository edamConceptRepository,
-    EntityManager entityManager
-  ) {
-    this.challengeRepository = challengeRepository;
-    this.challengePlatformRepository = challengePlatformRepository;
-    this.challengeContributionRepository = challengeContributionRepository;
-    this.challengeIncentiveRepository = challengeIncentiveRepository;
-    this.challengeSubmissionTypeRepository = challengeSubmissionTypeRepository;
-    this.challengeCategoryRepository = challengeCategoryRepository;
-    this.challengeStarRepository = challengeStarRepository;
-    this.challengeInputDataTypeRepository = challengeInputDataTypeRepository;
-    this.edamConceptRepository = edamConceptRepository;
-    this.entityManager = entityManager;
-  }
 
   private ChallengeMapper challengeMapper = new ChallengeMapper();
   private ChallengeJsonLdMapper challengeJsonLdMapper = new ChallengeJsonLdMapper();
@@ -98,7 +74,7 @@ public class ChallengeService {
 
   @Transactional(readOnly = true)
   public ChallengesPageDto listChallenges(ChallengeSearchQueryDto query) {
-    logger.debug("query {}", query);
+    log.debug("query {}", query);
 
     Pageable pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
 
@@ -108,7 +84,7 @@ public class ChallengeService {
       query,
       fieldsToSearchBy.toArray(new String[0])
     );
-    logger.debug("challengeEntitiesPage {}", challengeEntitiesPage);
+    log.debug("challengeEntitiesPage {}", challengeEntitiesPage);
 
     List<ChallengeDto> challenges = challengeMapper.convertToDtoList(
       challengeEntitiesPage.getContent()
@@ -172,32 +148,32 @@ public class ChallengeService {
     // Verify challenge exists before deletion
     getChallengeEntity(challengeId);
 
-    logger.info("Deleting challenge with ID: {}", challengeId);
+    log.info("Deleting challenge with ID: {}", challengeId);
 
     // Delete child entities first (order doesn't matter as they don't depend on each other)
-    logger.debug("Deleting challenge contributions for challenge ID: {}", challengeId);
+    log.debug("Deleting challenge contributions for challenge ID: {}", challengeId);
     challengeContributionRepository.deleteByChallengeId(challengeId);
 
-    logger.debug("Deleting challenge incentives for challenge ID: {}", challengeId);
+    log.debug("Deleting challenge incentives for challenge ID: {}", challengeId);
     challengeIncentiveRepository.deleteByChallengeId(challengeId);
 
-    logger.debug("Deleting challenge submission types for challenge ID: {}", challengeId);
+    log.debug("Deleting challenge submission types for challenge ID: {}", challengeId);
     challengeSubmissionTypeRepository.deleteByChallengeId(challengeId);
 
-    logger.debug("Deleting challenge categories for challenge ID: {}", challengeId);
+    log.debug("Deleting challenge categories for challenge ID: {}", challengeId);
     challengeCategoryRepository.deleteByChallengeId(challengeId);
 
-    logger.debug("Deleting challenge stars for challenge ID: {}", challengeId);
+    log.debug("Deleting challenge stars for challenge ID: {}", challengeId);
     challengeStarRepository.deleteByChallengeId(challengeId);
 
-    logger.debug("Deleting challenge input data types for challenge ID: {}", challengeId);
+    log.debug("Deleting challenge input data types for challenge ID: {}", challengeId);
     challengeInputDataTypeRepository.deleteAllByChallengeId(challengeId);
 
     // Delete the challenge entity last
-    logger.debug("Deleting challenge entity with ID: {}", challengeId);
+    log.debug("Deleting challenge entity with ID: {}", challengeId);
     challengeRepository.deleteById(challengeId);
 
-    logger.info("Successfully deleted challenge with ID: {}", challengeId);
+    log.info("Successfully deleted challenge with ID: {}", challengeId);
   }
 
   @Transactional
@@ -236,7 +212,7 @@ public class ChallengeService {
       // Refresh the entity to get the updated state
       ChallengeEntity refreshedEntity = refreshChallengeEntity(savedChallenge.getId());
 
-      logger.info("Successfully created challenge with ID: {}", savedChallenge.getId());
+      log.info("Successfully created challenge with ID: {}", savedChallenge.getId());
 
       // Return the created challenge as DTO
       return challengeMapper.convertToDto(refreshedEntity);
@@ -272,7 +248,7 @@ public class ChallengeService {
       // Refresh the entity to get the updated state
       ChallengeEntity refreshedEntity = refreshChallengeEntity(challengeId);
 
-      logger.info("Successfully updated challenge with ID: {}", challengeId);
+      log.info("Successfully updated challenge with ID: {}", challengeId);
 
       // Return the updated challenge as DTO
       return challengeMapper.convertToDto(refreshedEntity);

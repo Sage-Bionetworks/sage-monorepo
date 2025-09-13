@@ -5,6 +5,10 @@ get:
   description: List organizations
   operationId: listOrganizations
   x-audience: [public]
+  x-anonymous-access: true
+  security:
+    - jwtBearer:
+        - read:organizations
   parameters:
     - $ref: ../components/parameters/query/organizationSearchQuery.yaml
   responses:
@@ -26,7 +30,8 @@ post:
   operationId: createOrganization
   x-audience: [public]
   security:
-    - apiBearerAuth: []
+    - jwtBearer:
+        - create:organizations
   requestBody:
     content:
       application/json:

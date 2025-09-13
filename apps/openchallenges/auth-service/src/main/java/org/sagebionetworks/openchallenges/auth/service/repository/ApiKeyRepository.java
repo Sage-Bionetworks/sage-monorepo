@@ -15,21 +15,29 @@ import org.springframework.stereotype.Repository;
 public interface ApiKeyRepository extends JpaRepository<ApiKey, UUID> {
   List<ApiKey> findByUserOrderByCreatedAtDesc(User user);
 
-  Optional<ApiKey> findByKeyHash(String keyHash);
+  // Optional<ApiKey> findByKeyHash(String keyHash);
 
-  @Query(
-    "SELECT a FROM ApiKey a WHERE a.keyHash = :keyHash AND (a.expiresAt IS NULL OR a.expiresAt > :now)"
-  )
-  Optional<ApiKey> findValidApiKey(
-    @Param("keyHash") String keyHash,
-    @Param("now") OffsetDateTime now
-  );
+  // @Query(
+  //   "SELECT a FROM ApiKey a WHERE a.keyHash = :keyHash AND (a.expiresAt IS NULL OR a.expiresAt > :now)"
+  // )
+  // Optional<ApiKey> findValidApiKey(
+  //   @Param("keyHash") String keyHash,
+  //   @Param("now") OffsetDateTime now
+  // );
 
-  @Query("SELECT COUNT(a) FROM ApiKey a WHERE a.user = :user")
-  long countByUser(@Param("user") User user);
+  // @Query("SELECT COUNT(a) FROM ApiKey a WHERE a.user = :user")
+  // long countByUser(@Param("user") User user);
 
-  void deleteByUser(User user);
+  // void deleteByUser(User user);
+
+  @Query("SELECT a FROM ApiKey a WHERE a.expiresAt IS NOT NULL AND a.expiresAt < :now")
+  List<ApiKey> findExpiredApiKeys(@Param("now") OffsetDateTime now);
 
   @Query("DELETE FROM ApiKey a WHERE a.expiresAt IS NOT NULL AND a.expiresAt < :now")
   void deleteExpiredApiKeys(@Param("now") OffsetDateTime now);
+
+  Optional<ApiKey> findByClientId(String clientId);
+
+  @Query("SELECT a FROM ApiKey a JOIN FETCH a.user WHERE a.clientId = :clientId")
+  Optional<ApiKey> findByClientIdWithUser(@Param("clientId") String clientId);
 }

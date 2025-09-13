@@ -1,68 +1,102 @@
 package org.sagebionetworks.openchallenges.organization.service.configuration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.sagebionetworks.openchallenges.organization.service.client.AuthServiceClient;
-import org.sagebionetworks.openchallenges.organization.service.security.ApiKeyAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtAudienceValidator;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtTimestampValidator;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Security configuration for the Organization Service as an OAuth2 Resource Server.
+ * Validates JWTs directly and extracts scopes for authorization.
+ */
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(jsr250Enabled = true)
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 
-  private final AuthServiceClient authServiceClient;
-  private final ObjectMapper objectMapper;
-
-  public SecurityConfiguration(AuthServiceClient authServiceClient, ObjectMapper objectMapper) {
-    this.authServiceClient = authServiceClient;
-    this.objectMapper = objectMapper;
-  }
-
-  @Bean
-  public ApiKeyAuthenticationFilter apiKeyAuthenticationFilter() {
-    return new ApiKeyAuthenticationFilter(authServiceClient, objectMapper);
-  }
+  @Value("${openchallenges.auth.jwk-set-uri:http://openchallenges-auth-service:8087/oauth2/jwks}")
+  private String jwkSetUri;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http
+    return http
       .csrf(csrf -> csrf.disable())
-      .cors(cors -> cors.disable())
+      .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
       .authorizeHttpRequests(auth ->
         auth
-          // Public endpoints
+          // Health checks always public
           .requestMatchers("/actuator/**")
           .permitAll()
           .requestMatchers("/swagger-ui/**", "/v3/api-docs/**")
           .permitAll()
+          // Organization read operations - require read:organizations scope
           .requestMatchers(HttpMethod.GET, "/v1/organizations/**")
-          .permitAll()
+          .hasAuthority("SCOPE_read:organizations")
           .requestMatchers(HttpMethod.POST, "/v1/organizations/search")
-          .permitAll()
-          // Protected endpoints - require authentication and specific scopes
-          .requestMatchers(HttpMethod.DELETE, "/v1/organizations/**")
-          .authenticated()
+          .hasAuthority("SCOPE_read:organizations")
+          // Organization create operations - require create:organizations scope
           .requestMatchers(HttpMethod.POST, "/v1/organizations")
-          .authenticated()
+          .hasAuthority("SCOPE_create:organizations")
+          // Organization update operations - require update:organizations scope
           .requestMatchers(HttpMethod.PUT, "/v1/organizations/**")
-          .authenticated()
+          .hasAuthority("SCOPE_update:organizations")
+          // Organization delete operations - require delete:organizations scope
+          .requestMatchers(HttpMethod.DELETE, "/v1/organizations/**")
+          .hasAuthority("SCOPE_delete:organizations")
           .requestMatchers(HttpMethod.DELETE, "/v1/organizations/*/participations/*/role/*")
-          .authenticated()
-          .requestMatchers(HttpMethod.POST, "/v1/organizations/*/participations")
-          .authenticated()
+          .hasAuthority("SCOPE_delete:org")
+          // All other requests require authentication
           .anyRequest()
           .authenticated()
       )
-      .addFilterBefore(apiKeyAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-      .httpBasic(httpBasic -> {});
+      .oauth2ResourceServer(oauth2 ->
+        oauth2.jwt(jwt ->
+          jwt.decoder(jwtDecoder()).jwtAuthenticationConverter(jwtAuthenticationConverter())
+        )
+      )
+      .build();
+  }
 
-    return http.build();
+  @Bean
+  public JwtDecoder jwtDecoder() {
+    // Create JWT decoder with audience validation for organization service
+    NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
+
+    // Add audience validation to ensure JWTs are intended for this service
+    String expectedAudience = "urn:openchallenges:organization-service";
+    DelegatingOAuth2TokenValidator<Jwt> validator = new DelegatingOAuth2TokenValidator<>(
+      new JwtTimestampValidator(),
+      new JwtAudienceValidator(expectedAudience)
+    );
+
+    jwtDecoder.setJwtValidator(validator);
+    return jwtDecoder;
+  }
+
+  @Bean
+  public JwtAuthenticationConverter jwtAuthenticationConverter() {
+    JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
+
+    // Extract scopes from the "scp" claim (preferred) or "scope" claim (fallback)
+    authoritiesConverter.setAuthoritiesClaimName("scp");
+    authoritiesConverter.setAuthorityPrefix("SCOPE_");
+
+    JwtAuthenticationConverter authenticationConverter = new JwtAuthenticationConverter();
+    authenticationConverter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
+
+    return authenticationConverter;
   }
 }

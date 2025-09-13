@@ -1,180 +1,155 @@
 package org.sagebionetworks.openchallenges.auth.service.api;
 
-import java.time.OffsetDateTime;
-import java.util.Arrays;
+import java.net.URI;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginRequestDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginResponseDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyRequestDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyResponseDto;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.AuthScopeDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.UpdateUserProfileRequestDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.UserProfileDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.UserRoleDto;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.ApiKey;
 import org.sagebionetworks.openchallenges.auth.service.model.entity.User;
-import org.sagebionetworks.openchallenges.auth.service.service.ApiKeyService;
 import org.sagebionetworks.openchallenges.auth.service.service.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.sagebionetworks.openchallenges.auth.service.util.AuthenticationUtil;
+import org.sagebionetworks.openchallenges.auth.service.util.ScopeUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
+/**
+ * Implementation of the Authentication API delegate.
+ *
+ * This implementation focuses on user profile management and API key validation.
+ * OAuth2 authentication flows are handled by Spring Authorization Server.
+ */
 @Component
+@RequiredArgsConstructor
+@Slf4j
 public class AuthenticationApiDelegateImpl implements AuthenticationApiDelegate {
 
-  private static final Logger logger = LoggerFactory.getLogger(AuthenticationApiDelegateImpl.class);
-
+  private final AuthenticationUtil authenticationUtil;
   private final UserService userService;
-  private final ApiKeyService apiKeyService;
-  private final PasswordEncoder passwordEncoder;
+  private final ScopeUtil scopeUtil;
 
-  public AuthenticationApiDelegateImpl(
-    UserService userService,
-    ApiKeyService apiKeyService,
-    PasswordEncoder passwordEncoder
-  ) {
-    this.userService = userService;
-    this.apiKeyService = apiKeyService;
-    this.passwordEncoder = passwordEncoder;
-  }
-
+  /**
+   * Get the authenticated user's profile.
+   */
   @Override
-  public ResponseEntity<LoginResponseDto> login(LoginRequestDto loginRequestDto) {
-    logger.info("Login attempt for username: {}", loginRequestDto.getUsername());
+  @PreAuthorize("hasAuthority('SCOPE_read:profile')")
+  public ResponseEntity<UserProfileDto> getUserProfile() {
+    log.debug("Getting user profile for authenticated user");
+
     try {
-      // Find user by username
-      Optional<User> userOptional = userService.findByUsername(loginRequestDto.getUsername());
-
-      if (userOptional.isEmpty()) {
-        logger.warn("Login failed: user not found for username: {}", loginRequestDto.getUsername());
+      // Get authenticated user from security context
+      User user = authenticationUtil.getAuthenticatedUser();
+      if (user == null) {
+        log.debug("No authenticated user found");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       }
 
-      User user = userOptional.get();
+      // Get scopes from authentication details using ScopeUtil
+      // TODO: Remove scopes from the profile and implement proper authorization policy (SMR-454)
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      List<AuthScopeDto> scopes = Collections.emptyList();
 
-      // Verify password
-      if (!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPasswordHash())) {
-        logger.warn(
-          "Login failed: invalid password for username: {}",
-          loginRequestDto.getUsername()
-        );
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+      Object principal = authentication.getPrincipal();
+      if (principal instanceof User) {
+        // Direct User principal (from browser authentication filter)
+        Object details = authentication.getDetails();
+        if (details instanceof ApiKey) {
+          ApiKey apiKey = (ApiKey) details;
+          scopes = scopeUtil.extractScopesFromApiKey(apiKey);
+        }
+      } else if (principal instanceof Jwt) {
+        // JWT principal (from OAuth2 Resource Server)
+        Jwt jwt = (Jwt) principal;
+        scopes = scopeUtil.extractScopesFromJwt(jwt);
       }
 
-      // Generate a new API key for this login session
-      ApiKey apiKey = apiKeyService.generateApiKey(user, "Login Session");
-
-      logger.info("Login successful for username: {}", loginRequestDto.getUsername());
-
-      // Build response
-      LoginResponseDto response = new LoginResponseDto()
-        .userId(user.getId())
-        .username(user.getUsername())
-        .role(convertToRoleEnum(user.getRole()))
-        .apiKey(apiKey.getPlainKey()); // Use the transient field with the plain key
-
-      return ResponseEntity.ok(response);
-    } catch (Exception e) {
-      logger.error(
-        "Unexpected error during login for username: {}",
-        loginRequestDto.getUsername(),
-        e
+      log.debug(
+        "Getting profile for user with ID: {} and username: {}",
+        user.getId(),
+        user.getUsername()
       );
+
+      UserProfileDto profile = UserProfileDto.builder()
+        .id(user.getId().toString())
+        .username(user.getUsername())
+        .email(user.getEmail())
+        .firstName(user.getFirstName())
+        .lastName(user.getLastName())
+        .bio(user.getBio())
+        .website(user.getWebsite() != null ? URI.create(user.getWebsite()) : null)
+        .avatarUrl(user.getAvatarUrl() != null ? URI.create(user.getAvatarUrl()) : null)
+        .role(UserRoleDto.fromValue(user.getRole().name()))
+        .scopes(scopes)
+        .createdAt(user.getCreatedAt())
+        .updatedAt(user.getUpdatedAt())
+        .build();
+
+      log.debug("Returning profile for user: {}", user.getUsername());
+      return ResponseEntity.ok(profile);
+    } catch (Exception e) {
+      log.error("Error getting user profile", e);
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
   }
 
+  /**
+   * Update the authenticated user's profile.
+   */
   @Override
-  public ResponseEntity<ValidateApiKeyResponseDto> validateApiKey(
-    ValidateApiKeyRequestDto validateApiKeyRequestDto
+  @PreAuthorize("hasAuthority('SCOPE_update:profile')")
+  public ResponseEntity<UserProfileDto> updateUserProfile(
+    UpdateUserProfileRequestDto updateRequest
   ) {
-    logger.debug("API key validation request received");
-    try {
-      String apiKeyValue = validateApiKeyRequestDto.getApiKey();
+    log.debug("Updating user profile for authenticated user");
 
-      if (apiKeyValue == null || apiKeyValue.trim().isEmpty()) {
-        logger.warn("API key validation failed: empty or null API key");
+    try {
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      if (authentication == null || !authentication.isAuthenticated()) {
+        log.debug("No authenticated user found");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
       }
 
-      // Find and validate API key
-      Optional<ApiKey> apiKeyOptional = apiKeyService.findByKeyValue(apiKeyValue);
+      String username = authentication.getName();
+      log.debug("Updating profile for user: {}", username);
 
-      if (apiKeyOptional.isEmpty()) {
-        logger.warn("API key validation failed: API key not found");
-        // API key not found
-        ValidateApiKeyResponseDto response = new ValidateApiKeyResponseDto().valid(false);
-        return ResponseEntity.ok(response);
+      Optional<User> userOpt = userService.findByUsername(username);
+      if (userOpt.isEmpty()) {
+        log.debug("User not found for update: {}", username);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
       }
 
-      ApiKey apiKey = apiKeyOptional.get();
+      User updatedUser = userService.updateUserProfile(userOpt.get(), updateRequest);
+      UserProfileDto profile = UserProfileDto.builder()
+        .id(updatedUser.getId().toString())
+        .username(updatedUser.getUsername())
+        .email(updatedUser.getEmail())
+        .firstName(updatedUser.getFirstName())
+        .lastName(updatedUser.getLastName())
+        .bio(updatedUser.getBio())
+        .website(updatedUser.getWebsite() != null ? URI.create(updatedUser.getWebsite()) : null)
+        .avatarUrl(
+          updatedUser.getAvatarUrl() != null ? URI.create(updatedUser.getAvatarUrl()) : null
+        )
+        .role(UserRoleDto.fromValue(updatedUser.getRole().name()))
+        .createdAt(updatedUser.getCreatedAt())
+        .updatedAt(updatedUser.getUpdatedAt())
+        .build();
 
-      // Check if API key is expired
-      if (apiKey.getExpiresAt() != null && apiKey.getExpiresAt().isBefore(OffsetDateTime.now())) {
-        logger.warn(
-          "API key validation failed: API key expired for user: {}",
-          apiKey.getUser().getUsername()
-        );
-        ValidateApiKeyResponseDto response = new ValidateApiKeyResponseDto().valid(false);
-        return ResponseEntity.ok(response);
-      }
-
-      // Update last used timestamp
-      apiKeyService.updateLastUsed(apiKey);
-
-      User user = apiKey.getUser();
-      logger.info("API key validation successful for user: {}", user.getUsername());
-
-      // Define basic scopes based on user role
-      String[] scopes = getDefaultScopes(user.getRole().name());
-
-      // Build success response
-      ValidateApiKeyResponseDto response = new ValidateApiKeyResponseDto()
-        .valid(true)
-        .userId(user.getId())
-        .username(user.getUsername())
-        .role(convertToValidateRoleEnum(user.getRole()))
-        .scopes(Arrays.asList(scopes));
-
-      return ResponseEntity.ok(response);
+      log.debug("Profile updated for user: {}", username);
+      return ResponseEntity.ok(profile);
     } catch (Exception e) {
-      logger.error("Unexpected error during API key validation", e);
+      log.error("Error updating user profile", e);
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
-  }
-
-  private String[] getDefaultScopes(String role) {
-    return switch (role.toLowerCase()) {
-      case "admin" -> new String[] {
-        "organizations:read",
-        "organizations:write",
-        "organizations:delete",
-        "challenges:read",
-        "challenges:write",
-        "challenges:delete",
-        "users:read",
-        "users:write",
-      };
-      case "user" -> new String[] { "organizations:read", "challenges:read" };
-      case "service" -> new String[] { "organizations:write" };
-      default -> new String[] { "organizations:read" };
-    };
-  }
-
-  private LoginResponseDto.RoleEnum convertToRoleEnum(User.Role role) {
-    return switch (role) {
-      case admin -> LoginResponseDto.RoleEnum.ADMIN;
-      case user -> LoginResponseDto.RoleEnum.USER;
-      case readonly -> LoginResponseDto.RoleEnum.READONLY;
-      case service -> LoginResponseDto.RoleEnum.SERVICE;
-    };
-  }
-
-  private ValidateApiKeyResponseDto.RoleEnum convertToValidateRoleEnum(User.Role role) {
-    return switch (role) {
-      case admin -> ValidateApiKeyResponseDto.RoleEnum.ADMIN;
-      case user -> ValidateApiKeyResponseDto.RoleEnum.USER;
-      case readonly -> ValidateApiKeyResponseDto.RoleEnum.READONLY;
-      case service -> ValidateApiKeyResponseDto.RoleEnum.SERVICE;
-    };
   }
 }

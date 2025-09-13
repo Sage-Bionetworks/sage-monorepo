@@ -31,5 +31,8 @@ paths:
     $ref: paths/organizations/{org}/participations/{challengeId}/roles/{role}.yaml
 components:
   securitySchemes:
-    apiBearerAuth:
-      $ref: components/securitySchemes/ApiBearerAuth.yaml
+    jwtBearer:
+      $ref: components/securitySchemes/JwtBearer.yaml
+security:
+  # Endpoints require authentication by default. Scopes and overrides are specified per endpoint.
+  - jwtBearer: []

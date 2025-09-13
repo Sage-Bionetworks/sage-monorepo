@@ -81,7 +81,7 @@ public interface ChallengePlatformApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "apiBearerAuth")
+            @SecurityRequirement(name = "jwtBearer", scopes={ "create:challenge-platforms" })
         }
     )
     @RequestMapping(
@@ -130,7 +130,7 @@ public interface ChallengePlatformApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "apiBearerAuth")
+            @SecurityRequirement(name = "jwtBearer", scopes={ "delete:challenge-platforms" })
         }
     )
     @RequestMapping(
@@ -173,6 +173,9 @@ public interface ChallengePlatformApi {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer", scopes={ "read:challenge-platforms" })
         }
     )
     @RequestMapping(
@@ -215,6 +218,9 @@ public interface ChallengePlatformApi {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer", scopes={ "read:challenge-platforms" })
         }
     )
     @RequestMapping(
@@ -280,7 +286,7 @@ public interface ChallengePlatformApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "apiBearerAuth")
+            @SecurityRequirement(name = "jwtBearer", scopes={ "update:challenge-platforms" })
         }
     )
     @RequestMapping(

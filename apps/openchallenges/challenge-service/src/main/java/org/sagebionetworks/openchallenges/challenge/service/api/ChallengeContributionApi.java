@@ -86,7 +86,7 @@ public interface ChallengeContributionApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "apiBearerAuth")
+            @SecurityRequirement(name = "jwtBearer", scopes={ "update:challenges" })
         }
     )
     @RequestMapping(
@@ -138,7 +138,7 @@ public interface ChallengeContributionApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "apiBearerAuth")
+            @SecurityRequirement(name = "jwtBearer", scopes={ "update:challenges" })
         }
     )
     @RequestMapping(
@@ -188,7 +188,7 @@ public interface ChallengeContributionApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "apiBearerAuth")
+            @SecurityRequirement(name = "jwtBearer", scopes={ "update:challenges" })
         }
     )
     @RequestMapping(
@@ -231,6 +231,9 @@ public interface ChallengeContributionApi {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer", scopes={ "read:challenges" })
         }
     )
     @RequestMapping(

@@ -36,7 +36,7 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Validated
-@Tag(name = "API Key", description = "Operations about API key management")
+@Tag(name = "API Key", description = "API key management for programmatic access to OpenChallenges APIs")
 public interface ApiKeyApi {
 
     default ApiKeyApiDelegate getDelegate() {
@@ -77,7 +77,7 @@ public interface ApiKeyApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "apiBearerAuth")
+            @SecurityRequirement(name = "jwtBearer", scopes={ "create:api-key" })
         }
     )
     @RequestMapping(
@@ -122,7 +122,7 @@ public interface ApiKeyApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "apiBearerAuth")
+            @SecurityRequirement(name = "jwtBearer", scopes={ "delete:api-key" })
         }
     )
     @RequestMapping(
@@ -166,7 +166,7 @@ public interface ApiKeyApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "apiBearerAuth")
+            @SecurityRequirement(name = "jwtBearer", scopes={ "read:api-key" })
         }
     )
     @RequestMapping(

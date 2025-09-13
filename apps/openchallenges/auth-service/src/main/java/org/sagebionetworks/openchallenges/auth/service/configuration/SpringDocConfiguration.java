@@ -19,7 +19,7 @@ public class SpringDocConfiguration {
                 .info(
                         new Info()
                                 .title("OpenChallenges Auth API")
-                                .description("Discover, explore, and contribute to open biomedical challenges.")
+                                .description("Authentication and authorization service for OpenChallenges.")
                                 .contact(
                                         new Contact()
                                                 .name("Support")
@@ -34,10 +34,10 @@ public class SpringDocConfiguration {
                 )
                 .components(
                         new Components()
-                                .addSecuritySchemes("apiBearerAuth", new SecurityScheme()
+                                .addSecuritySchemes("jwtBearer", new SecurityScheme()
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer")
-                                        .bearerFormat("api_key")
+                                        .bearerFormat("JWT")
                                 )
                 )
         ;

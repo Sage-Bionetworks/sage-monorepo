@@ -5,6 +5,9 @@ get:
   description: List EDAM concepts
   operationId: listEdamConcepts
   x-audience: [public]
+  security:
+    - jwtBearer:
+        - read:edam-concepts
   parameters:
     - $ref: ../components/parameters/query/edamConceptSearchQuery.yaml
   responses:

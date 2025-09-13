@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   version: 1.0.0
   title: OpenChallenges Auth API
-  description: Discover, explore, and contribute to open biomedical challenges.
+  description: Authentication and authorization service for OpenChallenges.
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -13,23 +13,25 @@ info:
     url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
   - url: http://localhost/v1
+    description: Local/dev base
 tags:
   - name: Authentication
-    description: Operations about authentication
+    description: User profile and token validation operations
     x-audience: [public]
   - name: API Key
-    description: Operations about API key management
+    description: API key management for programmatic access to OpenChallenges APIs
     x-audience: [public]
 paths:
-  /auth/login:
-    $ref: paths/auth/login.yaml
+  /auth/profile:
+    $ref: paths/auth/profile.yaml
   /auth/api-keys:
     $ref: paths/auth/api-keys.yaml
   /auth/api-keys/{keyId}:
     $ref: paths/auth/api-keys/{keyId}.yaml
-  /auth/validate:
-    $ref: paths/auth/validate.yaml
 components:
   securitySchemes:
-    apiBearerAuth:
-      $ref: components/securitySchemes/ApiBearerAuth.yaml
+    jwtBearer:
+      $ref: components/securitySchemes/JwtBearer.yaml
+security:
+  # Endpoints require authentication by default. Scopes and overrides are specified per endpoint.
+  - jwtBearer: []

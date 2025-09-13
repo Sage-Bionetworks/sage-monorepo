@@ -4,6 +4,11 @@ openchallenges-organization-service:
     base-url: http://openchallenges-auth-service:8087
     timeout: 5000ms
 
+openchallenges:
+  security:
+    # Authentication mode: 'trusted-headers' (API Gateway) or 'direct' (standalone)
+    mode: trusted-headers
+
 server:
   port: 8084
 

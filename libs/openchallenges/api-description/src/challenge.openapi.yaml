@@ -50,5 +50,8 @@ paths:
     $ref: paths/edam-concepts.yaml
 components:
   securitySchemes:
-    apiBearerAuth:
-      $ref: components/securitySchemes/ApiBearerAuth.yaml
+    jwtBearer:
+      $ref: components/securitySchemes/JwtBearer.yaml
+security:
+  # Endpoints require authentication by default. Scopes and overrides are specified per endpoint.
+  - jwtBearer: []

@@ -13,14 +13,15 @@ info:
     url: https://openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
   - url: https://openchallenges.io/api/v1
+    description: Local/dev base
 tags:
   - name: Authentication
-    description: Operations about authentication
+    description: User profile and token validation operations
     x-audience:
       - public
     x-displayName: Authentication
   - name: API Key
-    description: Operations about API key management
+    description: API key management for programmatic access to OpenChallenges APIs
     x-audience:
       - public
     x-displayName: API Key
@@ -60,28 +61,55 @@ tags:
       - public
     x-displayName: Organization
 paths:
-  /auth/login:
-    post:
+  /auth/profile:
+    get:
       tags:
         - Authentication
-      summary: User login
-      description: Authenticate user and return JWT token
-      operationId: login
+      summary: Get user profile
+      description: Get the authenticated user's profile information
+      operationId: getUserProfile
       x-audience:
         - public
+      security:
+        - jwtBearer:
+            - read:profile
+      responses:
+        '200':
+          description: User profile information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+        - Authentication
+      summary: Update user profile
+      description: Update the authenticated user's profile information
+      operationId: updateUserProfile
+      x-audience:
+        - public
+      security:
+        - jwtBearer:
+            - update:profile
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginRequest'
+              $ref: '#/components/schemas/UpdateUserProfileRequest'
       responses:
         '200':
-          description: Login successful
+          description: User profile updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LoginResponse'
+                $ref: '#/components/schemas/UserProfile'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '500':
@@ -96,7 +124,8 @@ paths:
       x-audience:
         - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - read:api-key
       responses:
         '200':
           description: List of API keys
@@ -119,7 +148,8 @@ paths:
       x-audience:
         - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - create:api-key
       requestBody:
         required: true
         content:
@@ -149,7 +179,8 @@ paths:
       x-audience:
         - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - delete:api-key
       parameters:
         - name: keyId
           in: path
@@ -176,6 +207,9 @@ paths:
       operationId: listChallenges
       x-audience:
         - public
+      security:
+        - jwtBearer:
+            - read:challenges
       parameters:
         - $ref: '#/components/parameters/challengeSearchQuery'
       responses:
@@ -198,7 +232,8 @@ paths:
       x-audience:
         - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - create:challenges
       requestBody:
         content:
           application/json:
@@ -233,6 +268,9 @@ paths:
       operationId: getChallenge
       x-audience:
         - public
+      security:
+        - jwtBearer:
+            - read:challenges
       responses:
         '200':
           description: A challenge
@@ -253,7 +291,8 @@ paths:
       x-audience:
         - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - update:challenges
       requestBody:
         required: true
         content:
@@ -288,7 +327,8 @@ paths:
       x-audience:
         - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - delete:challenges
       responses:
         '204':
           description: Challenge successfully deleted
@@ -311,6 +351,9 @@ paths:
       operationId: getChallengeJsonLd
       x-audience:
         - public
+      security:
+        - jwtBearer:
+            - read:challenges
       responses:
         '200':
           description: A challenge
@@ -333,6 +376,9 @@ paths:
       operationId: listChallengeContributions
       x-audience:
         - public
+      security:
+        - jwtBearer:
+            - read:challenges
       responses:
         '200':
           content:
@@ -354,7 +400,8 @@ paths:
       x-audience:
         - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - update:challenges
       requestBody:
         required: true
         content:
@@ -392,7 +439,8 @@ paths:
       x-audience:
         - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - update:challenges
       responses:
         '204':
           description: Contribution deleted successfully
@@ -413,6 +461,9 @@ paths:
       operationId: getChallengesPerYear
       x-audience:
         - public
+      security:
+        - jwtBearer:
+            - read:challenges-analytics
       responses:
         '200':
           description: An object
@@ -431,6 +482,9 @@ paths:
       operationId: listChallengePlatforms
       x-audience:
         - public
+      security:
+        - jwtBearer:
+            - read:challenge-platforms
       parameters:
         - $ref: '#/components/parameters/challengePlatformSearchQuery'
       responses:
@@ -453,7 +507,8 @@ paths:
       x-audience:
         - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - create:challenge-platforms
       requestBody:
         content:
           application/json:
@@ -486,6 +541,9 @@ paths:
       operationId: getChallengePlatform
       x-audience:
         - public
+      security:
+        - jwtBearer:
+            - read:challenge-platforms
       responses:
         '200':
           description: Success
@@ -507,7 +565,8 @@ paths:
       x-audience:
         - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - update:challenge-platforms
       requestBody:
         required: true
         content:
@@ -543,7 +602,8 @@ paths:
       x-audience:
         - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - delete:challenge-platforms
       responses:
         '204':
           description: Deletion successful
@@ -564,6 +624,9 @@ paths:
       operationId: listEdamConcepts
       x-audience:
         - public
+      security:
+        - jwtBearer:
+            - read:edam-concepts
       parameters:
         - $ref: '#/components/parameters/edamConceptSearchQuery'
       responses:
@@ -608,6 +671,10 @@ paths:
       operationId: listOrganizations
       x-audience:
         - public
+      x-anonymous-access: true
+      security:
+        - jwtBearer:
+            - read:organizations
       parameters:
         - $ref: '#/components/parameters/organizationSearchQuery'
       responses:
@@ -630,7 +697,8 @@ paths:
       x-audience:
         - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - create:organizations
       requestBody:
         content:
           application/json:
@@ -665,6 +733,10 @@ paths:
       operationId: getOrganization
       x-audience:
         - public
+      x-anonymous-access: true
+      security:
+        - jwtBearer:
+            - read:organizations
       responses:
         '200':
           description: Organization retrieved successfully
@@ -685,7 +757,8 @@ paths:
       x-audience:
         - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - update:organizations
       requestBody:
         required: true
         content:
@@ -720,7 +793,8 @@ paths:
       x-audience:
         - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - delete:organizations
       responses:
         '204':
           description: Organization successfully deleted
@@ -742,52 +816,110 @@ paths:
       - $ref: '#/components/parameters/challengeParticipationRole'
 components:
   securitySchemes:
-    apiBearerAuth:
+    jwtBearer:
       type: http
       scheme: bearer
-      bearerFormat: api_key
-      description: API key obtained from /auth/login endpoint
+      bearerFormat: JWT
+      description: JWT access token obtained from OAuth2 authorization flow or API key exchange
   schemas:
-    LoginRequest:
+    UserRole:
+      type: string
+      enum:
+        - user
+        - moderator
+        - admin
+        - service
+      description: User role defining the level of access and permissions
+    AuthScope:
+      type: string
+      enum:
+        - openid
+        - profile
+        - email
+        - read:profile
+        - update:profile
+        - read:api-key
+        - create:api-key
+        - update:api-key
+        - delete:api-key
+        - rotate:api-key
+        - read:organizations
+        - create:organizations
+        - update:organizations
+        - delete:organizations
+        - read:challenges
+        - create:challenges
+        - update:challenges
+        - delete:challenges
+        - read:challenges-analytics
+        - read:challenge-platforms
+        - create:challenge-platforms
+        - update:challenge-platforms
+        - delete:challenge-platforms
+        - read:edam-concepts
+      description: Permission scope defining specific access rights
+    UserProfile:
       type: object
       required:
+        - id
         - username
-        - password
+        - email
+        - role
+        - createdAt
       properties:
+        id:
+          type: string
+          description: Unique user identifier
+          example: user_123456789
         username:
           type: string
-          description: Username or email
-          example: admin
-        password:
+          description: User's username
+          example: johndoe
+        email:
           type: string
-          format: password
-          description: User password
-          example: changeme
-    LoginResponse:
-      type: object
-      properties:
-        apiKey:
+          format: email
+          description: User's email address
+          example: john.doe@example.com
+        firstName:
           type: string
-          description: API key for authentication
-          example: oc_prod_abcd1234567890abcdef1234567890abcdef1234
-        userId:
+          description: User's first name
+          example: John
+        lastName:
           type: string
-          format: uuid
-          description: User ID
-          example: 123e4567-e89b-12d3-a456-426614174000
-        username:
-          type: string
-          description: Username
-          example: admin
+          description: User's last name
+          example: Doe
         role:
+          $ref: '#/components/schemas/UserRole'
+        scopes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuthScope'
+          description: User's authorized scopes/permissions
+        avatarUrl:
           type: string
-          description: User role
-          example: admin
-          enum:
-            - admin
-            - user
-            - readonly
-            - service
+          format: uri
+          description: URL to user's avatar image
+          example: https://example.com/avatars/johndoe.jpg
+        bio:
+          type: string
+          description: User's biography or description
+          maxLength: 500
+          example: Researcher in computational biology
+        website:
+          type: string
+          format: uri
+          description: User's website URL
+          example: https://johndoe.com
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the user account was created
+          example: '2024-01-15T10:30:00Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the user profile was last updated
+          example: '2024-02-01T14:20:00Z'
     BasicError:
       type: object
       description: Problem details (tools.ietf.org/html/rfc7807)
@@ -807,6 +939,34 @@ components:
       required:
         - title
         - status
+    UpdateUserProfileRequest:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: User's first name
+          example: John
+          maxLength: 50
+        lastName:
+          type: string
+          description: User's last name
+          example: Doe
+          maxLength: 50
+        bio:
+          type: string
+          description: User's biography or description
+          maxLength: 500
+          example: Researcher in computational biology
+        website:
+          type: string
+          format: uri
+          description: User's website URL
+          example: https://johndoe.com
+        avatarUrl:
+          type: string
+          format: uri
+          description: URL to user's avatar image
+          example: https://example.com/avatars/johndoe.jpg
     ApiKey:
       type: object
       properties:

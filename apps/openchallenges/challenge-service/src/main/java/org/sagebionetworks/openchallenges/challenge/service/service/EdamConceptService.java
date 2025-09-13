@@ -2,6 +2,7 @@ package org.sagebionetworks.openchallenges.challenge.service.service;
 
 import java.util.Arrays;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.EdamConceptDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.EdamConceptSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.EdamConceptsPageDto;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@RequiredArgsConstructor
 @Service
 public class EdamConceptService {
 
@@ -25,10 +27,6 @@ public class EdamConceptService {
     "class_id",
     "preferred_label"
   );
-
-  public EdamConceptService(EdamConceptRepository edamConceptRepository) {
-    this.edamConceptRepository = edamConceptRepository;
-  }
 
   @Transactional(readOnly = true)
   public EdamConceptsPageDto listEdamConcepts(EdamConceptSearchQueryDto query) {

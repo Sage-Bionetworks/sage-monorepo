@@ -1,0 +1,27 @@
+type: object
+properties:
+  firstName:
+    type: string
+    description: User's first name
+    example: 'John'
+    maxLength: 50
+  lastName:
+    type: string
+    description: User's last name
+    example: 'Doe'
+    maxLength: 50
+  bio:
+    type: string
+    description: User's biography or description
+    maxLength: 500
+    example: 'Researcher in computational biology'
+  website:
+    type: string
+    format: uri
+    description: User's website URL
+    example: 'https://johndoe.com'
+  avatarUrl:
+    type: string
+    format: uri
+    description: URL to user's avatar image
+    example: 'https://example.com/avatars/johndoe.jpg'

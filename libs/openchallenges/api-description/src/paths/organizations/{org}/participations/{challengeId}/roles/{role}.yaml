@@ -10,7 +10,8 @@ delete:
   operationId: deleteChallengeParticipation
   x-audience: [internal]
   security:
-    - apiBearerAuth: []
+    - jwtBearer:
+        - update:organizations
   responses:
     '204':
       description: Participation deleted successfully

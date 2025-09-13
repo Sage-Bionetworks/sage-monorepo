@@ -88,7 +88,7 @@ public interface OrganizationApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "apiBearerAuth")
+            @SecurityRequirement(name = "jwtBearer", scopes={ "create:organizations" })
         }
     )
     @RequestMapping(
@@ -137,7 +137,7 @@ public interface OrganizationApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "apiBearerAuth")
+            @SecurityRequirement(name = "jwtBearer", scopes={ "delete:organizations" })
         }
     )
     @RequestMapping(
@@ -180,6 +180,9 @@ public interface OrganizationApi {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer", scopes={ "read:organizations" })
         }
     )
     @RequestMapping(
@@ -222,6 +225,9 @@ public interface OrganizationApi {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer", scopes={ "read:organizations" })
         }
     )
     @RequestMapping(
@@ -287,7 +293,7 @@ public interface OrganizationApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "apiBearerAuth")
+            @SecurityRequirement(name = "jwtBearer", scopes={ "update:organizations" })
         }
     )
     @RequestMapping(

@@ -13,6 +13,8 @@ info:
     url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
   - url: http://localhost/v1
+security:
+  - jwtBearer: []
 tags:
   - name: Organization
     description: Operations about organizations
@@ -32,6 +34,10 @@ paths:
       operationId: listOrganizations
       x-audience:
         - public
+      x-anonymous-access: true
+      security:
+        - jwtBearer:
+            - read:organizations
       parameters:
         - $ref: '#/components/parameters/organizationSearchQuery'
       responses:
@@ -54,7 +60,8 @@ paths:
       x-audience:
         - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - create:organizations
       requestBody:
         content:
           application/json:
@@ -89,6 +96,10 @@ paths:
       operationId: getOrganization
       x-audience:
         - public
+      x-anonymous-access: true
+      security:
+        - jwtBearer:
+            - read:organizations
       responses:
         '200':
           description: Organization retrieved successfully
@@ -109,7 +120,8 @@ paths:
       x-audience:
         - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - update:organizations
       requestBody:
         required: true
         content:
@@ -144,7 +156,8 @@ paths:
       x-audience:
         - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - delete:organizations
       responses:
         '204':
           description: Organization successfully deleted
@@ -168,7 +181,8 @@ paths:
       x-audience:
         - internal
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - update:organizations
       requestBody:
         required: true
         content:
@@ -206,7 +220,8 @@ paths:
       x-audience:
         - internal
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - update:organizations
       responses:
         '204':
           description: Participation deleted successfully
@@ -220,11 +235,11 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
-    apiBearerAuth:
+    jwtBearer:
       type: http
       scheme: bearer
-      bearerFormat: api_key
-      description: API key obtained from /auth/login endpoint
+      bearerFormat: JWT
+      description: JWT access token obtained from OAuth2 authorization flow or API key exchange
   schemas:
     OrganizationCategory:
       description: The category of the organization.

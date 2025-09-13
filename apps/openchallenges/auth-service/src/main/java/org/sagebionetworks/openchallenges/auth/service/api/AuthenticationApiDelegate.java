@@ -1,10 +1,8 @@
 package org.sagebionetworks.openchallenges.auth.service.api;
 
 import org.sagebionetworks.openchallenges.auth.service.model.dto.BasicErrorDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginRequestDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginResponseDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyRequestDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyResponseDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.UpdateUserProfileRequestDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.UserProfileDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,20 +29,19 @@ public interface AuthenticationApiDelegate {
     }
 
     /**
-     * POST /auth/login : User login
-     * Authenticate user and return JWT token
+     * GET /auth/profile : Get user profile
+     * Get the authenticated user&#39;s profile information
      *
-     * @param loginRequestDto  (required)
-     * @return Login successful (status code 200)
+     * @return User profile information (status code 200)
      *         or Unauthorized (status code 401)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     * @see AuthenticationApi#login
+     * @see AuthenticationApi#getUserProfile
      */
-    default ResponseEntity<LoginResponseDto> login(LoginRequestDto loginRequestDto) {
+    default ResponseEntity<UserProfileDto> getUserProfile() {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"role\" : \"admin\", \"apiKey\" : \"oc_prod_abcd1234567890abcdef1234567890abcdef1234\", \"userId\" : \"123e4567-e89b-12d3-a456-426614174000\", \"username\" : \"admin\" }";
+                    String exampleString = "{ \"firstName\" : \"John\", \"lastName\" : \"Doe\", \"createdAt\" : \"2024-01-15T10:30:00Z\", \"website\" : \"https://johndoe.com\", \"role\" : \"user\", \"avatarUrl\" : \"https://example.com/avatars/johndoe.jpg\", \"bio\" : \"Researcher in computational biology\", \"id\" : \"user_123456789\", \"scopes\" : [ \"openid\", \"openid\" ], \"email\" : \"john.doe@example.com\", \"username\" : \"johndoe\", \"updatedAt\" : \"2024-02-01T14:20:00Z\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -65,21 +62,27 @@ public interface AuthenticationApiDelegate {
     }
 
     /**
-     * POST /auth/validate : Validate API key
-     * Internal endpoint to validate API keys (used by other services)
+     * PUT /auth/profile : Update user profile
+     * Update the authenticated user&#39;s profile information
      *
-     * @param validateApiKeyRequestDto  (required)
-     * @return API key is valid (status code 200)
+     * @param updateUserProfileRequestDto  (required)
+     * @return User profile updated successfully (status code 200)
+     *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     * @see AuthenticationApi#validateApiKey
+     * @see AuthenticationApi#updateUserProfile
      */
-    default ResponseEntity<ValidateApiKeyResponseDto> validateApiKey(ValidateApiKeyRequestDto validateApiKeyRequestDto) {
+    default ResponseEntity<UserProfileDto> updateUserProfile(UpdateUserProfileRequestDto updateUserProfileRequestDto) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"valid\" : true, \"role\" : \"admin\", \"scopes\" : [ \"organizations:read\", \"organizations:write\" ], \"userId\" : \"123e4567-e89b-12d3-a456-426614174000\", \"username\" : \"admin\" }";
+                    String exampleString = "{ \"firstName\" : \"John\", \"lastName\" : \"Doe\", \"createdAt\" : \"2024-01-15T10:30:00Z\", \"website\" : \"https://johndoe.com\", \"role\" : \"user\", \"avatarUrl\" : \"https://example.com/avatars/johndoe.jpg\", \"bio\" : \"Researcher in computational biology\", \"id\" : \"user_123456789\", \"scopes\" : [ \"openid\", \"openid\" ], \"email\" : \"john.doe@example.com\", \"username\" : \"johndoe\", \"updatedAt\" : \"2024-02-01T14:20:00Z\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+                    String exampleString = "Custom MIME type example not yet supported: application/problem+json";
+                    ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
                     break;
                 }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {

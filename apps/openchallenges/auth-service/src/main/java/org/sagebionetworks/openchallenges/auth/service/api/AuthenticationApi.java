@@ -6,10 +6,8 @@
 package org.sagebionetworks.openchallenges.auth.service.api;
 
 import org.sagebionetworks.openchallenges.auth.service.model.dto.BasicErrorDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginRequestDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.LoginResponseDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyRequestDto;
-import org.sagebionetworks.openchallenges.auth.service.model.dto.ValidateApiKeyResponseDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.UpdateUserProfileRequestDto;
+import org.sagebionetworks.openchallenges.auth.service.model.dto.UserProfileDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -36,7 +34,7 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Validated
-@Tag(name = "Authentication", description = "Operations about authentication")
+@Tag(name = "Authentication", description = "User profile and token validation operations")
 public interface AuthenticationApi {
 
     default AuthenticationApiDelegate getDelegate() {
@@ -44,23 +42,22 @@ public interface AuthenticationApi {
     }
 
     /**
-     * POST /auth/login : User login
-     * Authenticate user and return JWT token
+     * GET /auth/profile : Get user profile
+     * Get the authenticated user&#39;s profile information
      *
-     * @param loginRequestDto  (required)
-     * @return Login successful (status code 200)
+     * @return User profile information (status code 200)
      *         or Unauthorized (status code 401)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
-        operationId = "login",
-        summary = "User login",
-        description = "Authenticate user and return JWT token",
+        operationId = "getUserProfile",
+        summary = "Get user profile",
+        description = "Get the authenticated user's profile information",
         tags = { "Authentication" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "Login successful", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = LoginResponseDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = LoginResponseDto.class))
+            @ApiResponse(responseCode = "200", description = "User profile information", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = UserProfileDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = UserProfileDto.class))
             }),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
@@ -70,40 +67,47 @@ public interface AuthenticationApi {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer", scopes={ "read:profile" })
         }
     )
     @RequestMapping(
-        method = RequestMethod.POST,
-        value = "/auth/login",
-        produces = { "application/json", "application/problem+json" },
-        consumes = { "application/json" }
+        method = RequestMethod.GET,
+        value = "/auth/profile",
+        produces = { "application/json", "application/problem+json" }
     )
     
-    default ResponseEntity<LoginResponseDto> login(
-        @Parameter(name = "LoginRequestDto", description = "", required = true) @Valid @RequestBody LoginRequestDto loginRequestDto
+    default ResponseEntity<UserProfileDto> getUserProfile(
+        
     ) {
-        return getDelegate().login(loginRequestDto);
+        return getDelegate().getUserProfile();
     }
 
 
     /**
-     * POST /auth/validate : Validate API key
-     * Internal endpoint to validate API keys (used by other services)
+     * PUT /auth/profile : Update user profile
+     * Update the authenticated user&#39;s profile information
      *
-     * @param validateApiKeyRequestDto  (required)
-     * @return API key is valid (status code 200)
+     * @param updateUserProfileRequestDto  (required)
+     * @return User profile updated successfully (status code 200)
+     *         or Invalid request (status code 400)
      *         or Unauthorized (status code 401)
      *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
      */
     @Operation(
-        operationId = "validateApiKey",
-        summary = "Validate API key",
-        description = "Internal endpoint to validate API keys (used by other services)",
+        operationId = "updateUserProfile",
+        summary = "Update user profile",
+        description = "Update the authenticated user's profile information",
         tags = { "Authentication" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "API key is valid", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ValidateApiKeyResponseDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ValidateApiKeyResponseDto.class))
+            @ApiResponse(responseCode = "200", description = "User profile updated successfully", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = UserProfileDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = UserProfileDto.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
+                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             }),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
@@ -113,19 +117,22 @@ public interface AuthenticationApi {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer", scopes={ "update:profile" })
         }
     )
     @RequestMapping(
-        method = RequestMethod.POST,
-        value = "/auth/validate",
+        method = RequestMethod.PUT,
+        value = "/auth/profile",
         produces = { "application/json", "application/problem+json" },
         consumes = { "application/json" }
     )
     
-    default ResponseEntity<ValidateApiKeyResponseDto> validateApiKey(
-        @Parameter(name = "ValidateApiKeyRequestDto", description = "", required = true) @Valid @RequestBody ValidateApiKeyRequestDto validateApiKeyRequestDto
+    default ResponseEntity<UserProfileDto> updateUserProfile(
+        @Parameter(name = "UpdateUserProfileRequestDto", description = "", required = true) @Valid @RequestBody UpdateUserProfileRequestDto updateUserProfileRequestDto
     ) {
-        return getDelegate().validateApiKey(validateApiKeyRequestDto);
+        return getDelegate().updateUserProfile(updateUserProfileRequestDto);
     }
 
 }

@@ -1,44 +1,35 @@
 package org.sagebionetworks.openchallenges.challenge.service.api;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformUpdateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformsPageDto;
-import org.sagebionetworks.openchallenges.challenge.service.security.AuthenticatedUser;
 import org.sagebionetworks.openchallenges.challenge.service.service.ChallengePlatformService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
+@Slf4j
 public class ChallengePlatformApiDelegateImpl implements ChallengePlatformApiDelegate {
-
-  private static final Logger logger = LoggerFactory.getLogger(
-    ChallengePlatformApiDelegateImpl.class
-  );
 
   private final ChallengePlatformService challengePlatformService;
 
-  public ChallengePlatformApiDelegateImpl(ChallengePlatformService challengePlatformService) {
-    this.challengePlatformService = challengePlatformService;
-  }
-
   @Override
-  @PreAuthorize("authentication.principal.admin")
+  @PreAuthorize("hasAuthority('SCOPE_delete:challenge-platforms')")
   public ResponseEntity<Void> deleteChallengePlatform(Long challengePlatformId) {
     // Log the authenticated user for audit purposes
-    AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
-      .getAuthentication()
-      .getPrincipal();
-    logger.info(
-      "User {} (role: {}) is deleting challenge platform: {}",
-      user.getUsername(),
-      user.getRole(),
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    log.info(
+      "User {} is deleting challenge platform: {}",
+      authentication.getName(),
       challengePlatformId
     );
 
@@ -47,11 +38,13 @@ public class ChallengePlatformApiDelegateImpl implements ChallengePlatformApiDel
   }
 
   @Override
+  @PreAuthorize("hasAuthority('SCOPE_read:challenge-platforms')")
   public ResponseEntity<ChallengePlatformDto> getChallengePlatform(Long challengePlatformId) {
     return ResponseEntity.ok(challengePlatformService.getChallengePlatform(challengePlatformId));
   }
 
   @Override
+  @PreAuthorize("hasAuthority('SCOPE_read:challenge-platforms')")
   public ResponseEntity<ChallengePlatformsPageDto> listChallengePlatforms(
     ChallengePlatformSearchQueryDto query
   ) {
@@ -59,19 +52,13 @@ public class ChallengePlatformApiDelegateImpl implements ChallengePlatformApiDel
   }
 
   @Override
-  @PreAuthorize("authentication.principal.admin")
+  @PreAuthorize("hasAuthority('SCOPE_create:challenge-platforms')")
   public ResponseEntity<ChallengePlatformDto> createChallengePlatform(
     ChallengePlatformCreateRequestDto challengePlatformCreateRequestDto
   ) {
     // Log the authenticated user for audit purposes
-    AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
-      .getAuthentication()
-      .getPrincipal();
-    logger.info(
-      "User {} (role: {}) is creating a new challenge platform",
-      user.getUsername(),
-      user.getRole()
-    );
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    log.info("User {} is creating a new challenge platform", authentication.getName());
 
     ChallengePlatformDto createdPlatform = challengePlatformService.createChallengePlatform(
       challengePlatformCreateRequestDto
@@ -80,19 +67,16 @@ public class ChallengePlatformApiDelegateImpl implements ChallengePlatformApiDel
   }
 
   @Override
-  @PreAuthorize("authentication.principal.admin")
+  @PreAuthorize("hasAuthority('SCOPE_update:challenge-platforms')")
   public ResponseEntity<ChallengePlatformDto> updateChallengePlatform(
     Long challengePlatformId,
     ChallengePlatformUpdateRequestDto challengePlatformUpdateRequestDto
   ) {
     // Log the authenticated user for audit purposes
-    AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
-      .getAuthentication()
-      .getPrincipal();
-    logger.info(
-      "User {} (role: {}) is updating challenge platform {}",
-      user.getUsername(),
-      user.getRole(),
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    log.info(
+      "User {} is updating challenge platform {}",
+      authentication.getName(),
       challengePlatformId
     );
 
