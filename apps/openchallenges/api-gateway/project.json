@@ -44,6 +44,12 @@
         "command": "trivy image ghcr.io/sage-bionetworks/{projectName}:local --quiet",
         "color": true
       }
+    },
+    "generate-route-scopes": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./gradlew :{projectName}:generateRouteScopes"
+      }
     }
   },
   "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"]
