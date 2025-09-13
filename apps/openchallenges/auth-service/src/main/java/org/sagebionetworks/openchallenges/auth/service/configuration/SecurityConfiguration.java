@@ -21,7 +21,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-  private final AppProperties authServiceProperties;
+  private final AppProperties appProperties;
 
   /**
    * Default password encoder bean - supports both BCrypt and {noop} prefixes
@@ -68,7 +68,7 @@ public class SecurityConfiguration {
       .authorizeHttpRequests(authz ->
         authz
           // Public endpoints - no authentication required
-          .requestMatchers(authServiceProperties.getApi().getPublicEndpoints())
+          .requestMatchers(appProperties.getApi().getPublicEndpoints())
           .permitAll()
           // All other endpoints require authentication
           .anyRequest()

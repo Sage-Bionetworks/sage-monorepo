@@ -44,7 +44,7 @@ class ApiKeyServiceTest {
   private PasswordEncoder passwordEncoder;
 
   @Mock
-  private AppProperties authServiceProperties;
+  private AppProperties appProperties;
 
   @Mock
   private AppProperties.ApiKeyConfig apiKeyConfig;
@@ -66,7 +66,7 @@ class ApiKeyServiceTest {
   @BeforeEach
   void setUp() {
     // Setup lenient stubs for properties that are commonly used
-    lenient().when(authServiceProperties.getApiKey()).thenReturn(apiKeyConfig);
+    lenient().when(appProperties.getApiKey()).thenReturn(apiKeyConfig);
     lenient().when(apiKeyConfig.getPrefix()).thenReturn("oc_test_");
     lenient().when(apiKeyConfig.getLength()).thenReturn(40);
 
@@ -78,7 +78,7 @@ class ApiKeyServiceTest {
     apiKeyService = new ApiKeyService(
       apiKeyRepository,
       passwordEncoder,
-      authServiceProperties,
+      appProperties,
       registeredClientRepository,
       jdbcTemplate,
       scopeUtil
@@ -113,7 +113,7 @@ class ApiKeyServiceTest {
       ApiKeyService service = new ApiKeyService(
         apiKeyRepository,
         passwordEncoder,
-        authServiceProperties,
+        appProperties,
         registeredClientRepository,
         jdbcTemplate,
         scopeUtil
@@ -724,7 +724,7 @@ class ApiKeyServiceTest {
     @DisplayName("should use custom prefix from properties")
     void shouldUseCustomPrefixFromProperties() {
       // Arrange
-      when(authServiceProperties.getApiKey()).thenReturn(apiKeyConfig);
+      when(appProperties.getApiKey()).thenReturn(apiKeyConfig);
       when(apiKeyConfig.getPrefix()).thenReturn("custom_prefix_");
       String hashedKey = "hashedkey";
       when(passwordEncoder.encode(anyString())).thenReturn(hashedKey);

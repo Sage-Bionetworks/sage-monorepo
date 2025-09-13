@@ -73,7 +73,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 @Slf4j
 public class OAuth2AuthorizationServerConfiguration {
 
-  private final AppProperties authServiceProperties;
+  private final AppProperties appProperties;
 
   /**
    * Validate configuration properties on startup.
@@ -81,39 +81,41 @@ public class OAuth2AuthorizationServerConfiguration {
   @PostConstruct
   public void validateConfiguration() {
     log.info("Validating OAuth2 Authorization Server configuration...");
-    
+
     try {
       // Validate OAuth2 configuration
-      String issuerUrl = authServiceProperties.getOauth2().getIssuerUrl();
-      String jwkSetUrl = authServiceProperties.getOauth2().getJwkSetUrl();
-      String defaultAudience = authServiceProperties.getOauth2().getDefaultAudience();
-      
+      String issuerUrl = appProperties.getOauth2().getIssuerUrl();
+      String jwkSetUrl = appProperties.getOauth2().getJwkSetUrl();
+      String defaultAudience = appProperties.getOauth2().getDefaultAudience();
+
       if (issuerUrl == null || issuerUrl.trim().isEmpty()) {
         throw new IllegalStateException("OAuth2 issuer URL must be configured");
       }
-      
+
       if (jwkSetUrl == null || jwkSetUrl.trim().isEmpty()) {
         throw new IllegalStateException("JWK set URL must be configured");
       }
-      
+
       if (defaultAudience == null || defaultAudience.trim().isEmpty()) {
         throw new IllegalStateException("Default audience must be configured");
       }
-      
+
       // Validate token TTL values
-      if (authServiceProperties.getOauth2().getAccessTokenTtlMinutes() <= 0) {
+      if (appProperties.getOauth2().getAccessTokenTtlMinutes() <= 0) {
         throw new IllegalStateException("Access token TTL must be greater than 0");
       }
-      
-      if (authServiceProperties.getOauth2().getRefreshTokenTtlHours() <= 0) {
+
+      if (appProperties.getOauth2().getRefreshTokenTtlHours() <= 0) {
         throw new IllegalStateException("Refresh token TTL must be greater than 0");
       }
-      
+
       log.info("OAuth2 Authorization Server configuration is valid");
       log.info("Issuer URL: {}", issuerUrl);
-      log.info("Access token TTL: {} minutes", authServiceProperties.getOauth2().getAccessTokenTtlMinutes());
-      log.info("Refresh token TTL: {} hours", authServiceProperties.getOauth2().getRefreshTokenTtlHours());
-      
+      log.info(
+        "Access token TTL: {} minutes",
+        appProperties.getOauth2().getAccessTokenTtlMinutes()
+      );
+      log.info("Refresh token TTL: {} hours", appProperties.getOauth2().getRefreshTokenTtlHours());
     } catch (Exception e) {
       log.error("OAuth2 Authorization Server configuration validation failed", e);
       throw new IllegalStateException("Invalid OAuth2 configuration", e);
@@ -232,10 +234,14 @@ public class OAuth2AuthorizationServerConfiguration {
       }
       // Add OpenChallenges-specific claims
       context.getClaims().claim("tokenType", "ACCESS");
-      context.getClaims().claim("iss", authServiceProperties.getOauth2().getIssuerUrl());
+      context.getClaims().claim("iss", appProperties.getOauth2().getIssuerUrl());
 
       // Resolve subject and username
-      SubjectInfo subjectInfo = resolveSubjectAndUsername(context, apiKeyRepository, userRepository);
+      SubjectInfo subjectInfo = resolveSubjectAndUsername(
+        context,
+        apiKeyRepository,
+        userRepository
+      );
       context.getClaims().claim("sub", subjectInfo.subjectId());
       context.getClaims().claim("preferred_username", subjectInfo.username());
 
@@ -261,12 +267,12 @@ public class OAuth2AuthorizationServerConfiguration {
   ) {
     String username = context.getPrincipal().getName();
     String subjectId = username;
-    
+
     if (username == null || username.trim().isEmpty()) {
       log.warn("Principal name is null or empty, using fallback subject");
       return new SubjectInfo("unknown", "unknown");
     }
-    
+
     if (
       AuthorizationGrantType.CLIENT_CREDENTIALS.equals(context.getAuthorizationGrantType()) &&
       username.startsWith("oc_api_key_")
@@ -276,23 +282,35 @@ public class OAuth2AuthorizationServerConfiguration {
         if (apiKeyOpt.isPresent()) {
           var apiKey = apiKeyOpt.get();
           var user = apiKey.getUser();
-          
+
           if (user == null) {
             log.error("API key '{}' has no associated user", username);
             throw new OAuth2AuthenticationException(
               new OAuth2Error("invalid_client", "API key has no associated user", null)
             );
           }
-          
+
           username = user.getUsername();
           if (user.getRole() == Role.service) {
             subjectId = apiKey.getClientId();
-            log.debug("Service account - using client_id '{}' as subject for user '{}'", subjectId, username);
+            log.debug(
+              "Service account - using client_id '{}' as subject for user '{}'",
+              subjectId,
+              username
+            );
           } else {
             subjectId = user.getId().toString();
-            log.debug("Regular user - using user ID '{}' as subject for user '{}'", subjectId, username);
+            log.debug(
+              "Regular user - using user ID '{}' as subject for user '{}'",
+              subjectId,
+              username
+            );
           }
-          log.info("Found username '{}' for API key client '{}'", username, context.getPrincipal().getName());
+          log.info(
+            "Found username '{}' for API key client '{}'",
+            username,
+            context.getPrincipal().getName()
+          );
         } else {
           log.error("No API key found for client ID '{}'", username);
           throw new OAuth2AuthenticationException(
@@ -300,7 +318,11 @@ public class OAuth2AuthorizationServerConfiguration {
           );
         }
       } catch (DataAccessException e) {
-        log.error("Database error looking up API key for client '{}': {}", username, e.getMessage());
+        log.error(
+          "Database error looking up API key for client '{}': {}",
+          username,
+          e.getMessage()
+        );
         throw new OAuth2AuthenticationException(
           new OAuth2Error("server_error", "Database error during authentication", null)
         );
@@ -308,18 +330,29 @@ public class OAuth2AuthorizationServerConfiguration {
         // Re-throw OAuth2 authentication exceptions
         throw e;
       } catch (Exception e) {
-        log.error("Unexpected error looking up API key for client '{}': {}", username, e.getMessage(), e);
+        log.error(
+          "Unexpected error looking up API key for client '{}': {}",
+          username,
+          e.getMessage(),
+          e
+        );
         throw new OAuth2AuthenticationException(
           new OAuth2Error("server_error", "Unexpected error during authentication", null)
         );
       }
-    } else if (AuthorizationGrantType.AUTHORIZATION_CODE.equals(context.getAuthorizationGrantType())) {
+    } else if (
+      AuthorizationGrantType.AUTHORIZATION_CODE.equals(context.getAuthorizationGrantType())
+    ) {
       try {
         var userOpt = userRepository.findByUsernameIgnoreCase(username);
         if (userOpt.isPresent()) {
           var user = userOpt.get();
           subjectId = user.getId().toString();
-          log.debug("Authorization code flow - using user UUID '{}' as subject for user '{}'", subjectId, username);
+          log.debug(
+            "Authorization code flow - using user UUID '{}' as subject for user '{}'",
+            subjectId,
+            username
+          );
         } else {
           log.error("User not found for authorization code flow: '{}'", username);
           throw new OAuth2AuthenticationException(
@@ -327,7 +360,11 @@ public class OAuth2AuthorizationServerConfiguration {
           );
         }
       } catch (DataAccessException e) {
-        log.error("Database error looking up user for authorization code flow '{}': {}", username, e.getMessage());
+        log.error(
+          "Database error looking up user for authorization code flow '{}': {}",
+          username,
+          e.getMessage()
+        );
         throw new OAuth2AuthenticationException(
           new OAuth2Error("server_error", "Database error during authentication", null)
         );
@@ -335,7 +372,12 @@ public class OAuth2AuthorizationServerConfiguration {
         // Re-throw OAuth2 authentication exceptions
         throw e;
       } catch (Exception e) {
-        log.error("Unexpected error looking up user for authorization code flow '{}': {}", username, e.getMessage(), e);
+        log.error(
+          "Unexpected error looking up user for authorization code flow '{}': {}",
+          username,
+          e.getMessage(),
+          e
+        );
         throw new OAuth2AuthenticationException(
           new OAuth2Error("server_error", "Unexpected error during authentication", null)
         );
@@ -352,9 +394,10 @@ public class OAuth2AuthorizationServerConfiguration {
     Set<String> authorizedScopes = context.getAuthorizedScopes();
     if (authorizedScopes != null && !authorizedScopes.isEmpty()) {
       // Validate scopes are not empty strings
-      boolean hasValidScopes = authorizedScopes.stream()
+      boolean hasValidScopes = authorizedScopes
+        .stream()
         .anyMatch(scope -> scope != null && !scope.trim().isEmpty());
-      
+
       if (hasValidScopes) {
         context.getClaims().claim("scp", authorizedScopes);
         context.getClaims().claim("scope", String.join(" ", authorizedScopes));
@@ -372,9 +415,14 @@ public class OAuth2AuthorizationServerConfiguration {
    */
   private void addAudienceClaim(JwtEncodingContext context) {
     if (AuthorizationGrantType.AUTHORIZATION_CODE.equals(context.getAuthorizationGrantType())) {
-      context.getClaims().claim("aud", authServiceProperties.getOauth2().getDefaultAudience());
-      log.debug("Set default audience for authorization code flow: {}", authServiceProperties.getOauth2().getDefaultAudience());
-    } else if (AuthorizationGrantType.CLIENT_CREDENTIALS.equals(context.getAuthorizationGrantType())) {
+      context.getClaims().claim("aud", appProperties.getOauth2().getDefaultAudience());
+      log.debug(
+        "Set default audience for authorization code flow: {}",
+        appProperties.getOauth2().getDefaultAudience()
+      );
+    } else if (
+      AuthorizationGrantType.CLIENT_CREDENTIALS.equals(context.getAuthorizationGrantType())
+    ) {
       String resourceParam = extractResourceParameter(context);
       if (resourceParam != null && !resourceParam.trim().isEmpty()) {
         context.getClaims().claim("aud", resourceParam);
@@ -389,7 +437,11 @@ public class OAuth2AuthorizationServerConfiguration {
           )
         );
       }
-    } else if ("urn:ietf:params:oauth:grant-type:token-exchange".equals(context.getAuthorizationGrantType().getValue())) {
+    } else if (
+      "urn:ietf:params:oauth:grant-type:token-exchange".equals(
+          context.getAuthorizationGrantType().getValue()
+        )
+    ) {
       String resource = context.get("resource");
       if (resource != null) {
         context.getClaims().claim("aud", resource);
@@ -403,10 +455,12 @@ public class OAuth2AuthorizationServerConfiguration {
    */
   private String extractResourceParameter(JwtEncodingContext context) {
     try {
-      if (context.getAuthorizationGrant() instanceof OAuth2ClientCredentialsAuthenticationToken token) {
+      if (
+        context.getAuthorizationGrant() instanceof OAuth2ClientCredentialsAuthenticationToken token
+      ) {
         var additionalParams = token.getAdditionalParameters();
         log.debug("Additional parameters from grant = {}", additionalParams);
-        
+
         if (additionalParams != null && additionalParams.containsKey("resource")) {
           Object resourceObj = additionalParams.get("resource");
           if (resourceObj != null) {
@@ -421,15 +475,25 @@ public class OAuth2AuthorizationServerConfiguration {
             log.warn("Resource parameter is null");
           }
         } else {
-          log.debug("No resource parameter found in additional parameters: {}", 
-            additionalParams != null ? additionalParams.keySet() : "null");
+          log.debug(
+            "No resource parameter found in additional parameters: {}",
+            additionalParams != null ? additionalParams.keySet() : "null"
+          );
         }
       } else {
-        log.debug("Authorization grant is not a client credentials token: {}", 
-          context.getAuthorizationGrant() != null ? context.getAuthorizationGrant().getClass().getSimpleName() : "null");
+        log.debug(
+          "Authorization grant is not a client credentials token: {}",
+          context.getAuthorizationGrant() != null
+            ? context.getAuthorizationGrant().getClass().getSimpleName()
+            : "null"
+        );
       }
     } catch (Exception e) {
-      log.error("Error extracting resource parameter from authorization grant: {}", e.getMessage(), e);
+      log.error(
+        "Error extracting resource parameter from authorization grant: {}",
+        e.getMessage(),
+        e
+      );
     }
     return null;
   }
@@ -478,28 +542,31 @@ public class OAuth2AuthorizationServerConfiguration {
   public JwtDecoder jwtDecoder(JWKSource<SecurityContext> jwkSource) {
     try {
       // Create JWT decoder using configured JWK endpoint
-      String jwkSetUrl = authServiceProperties.getOauth2().getJwkSetUrl();
+      String jwkSetUrl = appProperties.getOauth2().getJwkSetUrl();
       if (jwkSetUrl == null || jwkSetUrl.trim().isEmpty()) {
         throw new IllegalStateException("JWK set URL is not configured");
       }
-      
+
       NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withJwkSetUri(jwkSetUrl).build();
 
       // Add audience validation for this service
-      String expectedAudience = authServiceProperties.getOauth2().getDefaultAudience();
+      String expectedAudience = appProperties.getOauth2().getDefaultAudience();
       if (expectedAudience == null || expectedAudience.trim().isEmpty()) {
         throw new IllegalStateException("Default audience is not configured");
       }
-      
+
       DelegatingOAuth2TokenValidator<Jwt> validator = new DelegatingOAuth2TokenValidator<>(
         new JwtTimestampValidator(),
         new JwtAudienceValidator(expectedAudience)
       );
-      
+
       jwtDecoder.setJwtValidator(validator);
-      log.info("JWT decoder configured with JWK set URL: {} and expected audience: {}", jwkSetUrl, expectedAudience);
+      log.info(
+        "JWT decoder configured with JWK set URL: {} and expected audience: {}",
+        jwkSetUrl,
+        expectedAudience
+      );
       return jwtDecoder;
-      
     } catch (Exception e) {
       log.error("Failed to configure JWT decoder: {}", e.getMessage(), e);
       throw new IllegalStateException("JWT decoder configuration failed", e);
@@ -524,7 +591,7 @@ public class OAuth2AuthorizationServerConfiguration {
     return new AuthorizationServerContext() {
       @Override
       public String getIssuer() {
-        return authServiceProperties.getOauth2().getIssuerUrl();
+        return appProperties.getOauth2().getIssuerUrl();
       }
 
       @Override
@@ -541,27 +608,29 @@ public class OAuth2AuthorizationServerConfiguration {
   @Bean
   public TokenSettings tokenSettings() {
     try {
-      int accessTokenTtlMinutes = authServiceProperties.getOauth2().getAccessTokenTtlMinutes();
-      int refreshTokenTtlHours = authServiceProperties.getOauth2().getRefreshTokenTtlHours();
-      
+      int accessTokenTtlMinutes = appProperties.getOauth2().getAccessTokenTtlMinutes();
+      int refreshTokenTtlHours = appProperties.getOauth2().getRefreshTokenTtlHours();
+
       if (accessTokenTtlMinutes <= 0) {
         throw new IllegalArgumentException("Access token TTL must be greater than 0 minutes");
       }
-      
+
       if (refreshTokenTtlHours <= 0) {
         throw new IllegalArgumentException("Refresh token TTL must be greater than 0 hours");
       }
-      
+
       TokenSettings settings = TokenSettings.builder()
         .accessTokenTimeToLive(Duration.ofMinutes(accessTokenTtlMinutes))
         .refreshTokenTimeToLive(Duration.ofHours(refreshTokenTtlHours))
         .reuseRefreshTokens(false)
         .build();
-        
-      log.info("Token settings configured - Access: {} minutes, Refresh: {} hours", 
-        accessTokenTtlMinutes, refreshTokenTtlHours);
+
+      log.info(
+        "Token settings configured - Access: {} minutes, Refresh: {} hours",
+        accessTokenTtlMinutes,
+        refreshTokenTtlHours
+      );
       return settings;
-      
     } catch (Exception e) {
       log.error("Failed to configure token settings: {}", e.getMessage(), e);
       throw new IllegalStateException("Token settings configuration failed", e);
@@ -574,7 +643,7 @@ public class OAuth2AuthorizationServerConfiguration {
   @Bean
   public AuthorizationServerSettings authorizationServerSettings() {
     return AuthorizationServerSettings.builder()
-      .issuer(authServiceProperties.getOauth2().getIssuerUrl())
+      .issuer(appProperties.getOauth2().getIssuerUrl())
       .authorizationEndpoint("/oauth2/authorize")
       .deviceAuthorizationEndpoint("/oauth2/device_authorization")
       .deviceVerificationEndpoint("/oauth2/device_verification")

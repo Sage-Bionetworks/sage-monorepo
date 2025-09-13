@@ -43,7 +43,7 @@ public class OAuth2WebAuthenticationFilter extends OncePerRequestFilter {
   private final JwtDecoder jwtDecoder;
   private final UserLookupService userLookupService;
   private final JwtClaimUtil jwtClaimUtil;
-  private final AppProperties authServiceProperties;
+  private final AppProperties appProperties;
 
   @Override
   protected void doFilterInternal(
@@ -140,7 +140,7 @@ public class OAuth2WebAuthenticationFilter extends OncePerRequestFilter {
       return null;
     }
 
-    String cookieName = authServiceProperties.getWeb().getAccessTokenCookieName();
+    String cookieName = appProperties.getWeb().getAccessTokenCookieName();
     if (cookieName == null || cookieName.trim().isEmpty()) {
       log.error("Access token cookie name is not configured");
       return null;

@@ -37,7 +37,7 @@ public class ApiKeyService {
 
   private final ApiKeyRepository apiKeyRepository;
   private final PasswordEncoder passwordEncoder;
-  private final AppProperties authServiceProperties;
+  private final AppProperties appProperties;
   private final RegisteredClientRepository registeredClientRepository;
   private final JdbcTemplate jdbcTemplate;
   private final ScopeUtil scopeUtil;
@@ -54,7 +54,7 @@ public class ApiKeyService {
     log.debug("Creating API key for user: {}", user.getUsername());
     log.debug(
       "Generated API key with prefix: {}",
-      plainApiKey.substring(0, authServiceProperties.getApiKey().getPrefix().length())
+      plainApiKey.substring(0, appProperties.getApiKey().getPrefix().length())
     );
 
     // Calculate expiration
@@ -71,7 +71,7 @@ public class ApiKeyService {
     ApiKey apiKeyEntity = ApiKey.builder()
       .user(user)
       .keyHash(keyHash)
-      .keyPrefix(authServiceProperties.getApiKey().getPrefix())
+      .keyPrefix(appProperties.getApiKey().getPrefix())
       .name(name)
       .clientId(clientId)
       .expiresAt(expiresAt)
@@ -128,15 +128,15 @@ public class ApiKeyService {
   public Optional<ApiKey> validateApiKey(String apiKey) {
     log.debug(
       "Validating API key with prefix: {}",
-      apiKey != null && apiKey.length() >= authServiceProperties.getApiKey().getPrefix().length()
-        ? apiKey.substring(0, authServiceProperties.getApiKey().getPrefix().length())
+      apiKey != null && apiKey.length() >= appProperties.getApiKey().getPrefix().length()
+        ? apiKey.substring(0, appProperties.getApiKey().getPrefix().length())
         : "null"
     );
 
-    if (apiKey == null || !apiKey.startsWith(authServiceProperties.getApiKey().getPrefix())) {
+    if (apiKey == null || !apiKey.startsWith(appProperties.getApiKey().getPrefix())) {
       log.debug(
         "API key is null or doesn't have correct prefix: {}",
-        authServiceProperties.getApiKey().getPrefix()
+        appProperties.getApiKey().getPrefix()
       );
       return Optional.empty();
     }
@@ -294,7 +294,7 @@ public class ApiKeyService {
     secureRandom.nextBytes(secretBytes);
     String secret = Base64.getUrlEncoder().withoutPadding().encodeToString(secretBytes);
 
-    return authServiceProperties.getApiKey().getPrefix() + suffix + "." + secret;
+    return appProperties.getApiKey().getPrefix() + suffix + "." + secret;
   }
 
   /**
@@ -348,7 +348,7 @@ public class ApiKeyService {
    * Extract suffix from API key (everything between prefix and last dot)
    */
   private String extractSuffix(String apiKey) {
-    String withoutPrefix = apiKey.substring(authServiceProperties.getApiKey().getPrefix().length());
+    String withoutPrefix = apiKey.substring(appProperties.getApiKey().getPrefix().length());
     int lastDot = withoutPrefix.lastIndexOf('.');
     if (lastDot == -1) {
       throw new IllegalArgumentException("Invalid API key format: missing secret separator");
