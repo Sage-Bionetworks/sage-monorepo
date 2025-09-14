@@ -1,9 +1,9 @@
 package org.sagebionetworks.openchallenges.api.gateway.service;
 
-import java.util.List;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
-import org.sagebionetworks.openchallenges.api.gateway.model.config.RouteConfigRegistry;
 import org.sagebionetworks.openchallenges.api.gateway.model.dto.OAuth2TokenResponseDto;
+import org.sagebionetworks.openchallenges.api.gateway.routing.RouteConfigRegistry;
 import org.sagebionetworks.openchallenges.api.gateway.util.ApiKeyParser;
 import org.sagebionetworks.openchallenges.api.gateway.util.ApiKeyParser.ParsedApiKey;
 import org.springframework.beans.factory.annotation.Value;
@@ -109,7 +109,7 @@ public class GatewayAuthenticationService {
     log.info("OAuth2 Client ID: {}", clientId);
 
     // Get required scopes for this route
-    List<String> requiredScopes = routeConfigRegistry.getScopesForRoute(method, path);
+    Set<String> requiredScopes = routeConfigRegistry.getScopesForRoute(method, path);
     String scopeParam = requiredScopes.isEmpty()
       ? ""
       : "&scope=" + String.join(" ", requiredScopes);
@@ -187,7 +187,7 @@ public class GatewayAuthenticationService {
     String anonymousClientSecret = "anonymous_secret_for_public_access";
 
     // Get required scopes for this route
-    List<String> requiredScopes = routeConfigRegistry.getScopesForRoute(method, path);
+    Set<String> requiredScopes = routeConfigRegistry.getScopesForRoute(method, path);
     String scopeParam = requiredScopes.isEmpty()
       ? ""
       : "&scope=" + String.join(" ", requiredScopes);

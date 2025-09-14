@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.sagebionetworks.openchallenges.api.gateway.model.config.RouteConfigRegistry;
+import org.sagebionetworks.openchallenges.api.gateway.routing.RouteConfigRegistry;
 
 @ExtendWith(MockitoExtension.class)
 class GatewayAuthenticationServiceTest {

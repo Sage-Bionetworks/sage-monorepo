@@ -1,102 +1,86 @@
 app:
   route-config:
-    GET /api/v1/auth/profile:
+    DELETE /api/v1/challenge-platforms/{challengePlatformId}:
       scopes:
-        - 'read:profile'
-      audience: 'urn:openchallenges:auth-service'
-    PUT /api/v1/auth/profile:
-      scopes:
-        - 'update:profile'
-      audience: 'urn:openchallenges:auth-service'
-    GET /api/v1/auth/api-keys:
-      scopes:
-        - 'read:api-key'
-      audience: 'urn:openchallenges:auth-service'
-    POST /api/v1/auth/api-keys:
-      scopes:
-        - 'create:api-key'
-      audience: 'urn:openchallenges:auth-service'
-    DELETE /api/v1/auth/api-keys/{keyId}:
-      scopes:
-        - 'delete:api-key'
-      audience: 'urn:openchallenges:auth-service'
-    GET /api/v1/challenges:
-      scopes:
-        - 'read:challenges'
-      audience: 'urn:openchallenges:challenge-service'
-    POST /api/v1/challenges:
-      scopes:
-        - 'create:challenges'
-      audience: 'urn:openchallenges:challenge-service'
-    GET /api/v1/challenges/{challengeId}:
-      scopes:
-        - 'read:challenges'
-      audience: 'urn:openchallenges:challenge-service'
-    PUT /api/v1/challenges/{challengeId}:
-      scopes:
-        - 'update:challenges'
-      audience: 'urn:openchallenges:challenge-service'
-    DELETE /api/v1/challenges/{challengeId}:
-      scopes:
-        - 'delete:challenges'
-      audience: 'urn:openchallenges:challenge-service'
-    GET /api/v1/challenges/{challengeId}/json-ld:
-      scopes:
-        - 'read:challenges'
-      audience: 'urn:openchallenges:challenge-service'
-    GET /api/v1/challenges/{challengeId}/contributions:
-      scopes:
-        - 'read:challenges'
-      audience: 'urn:openchallenges:challenge-service'
-    POST /api/v1/challenges/{challengeId}/contributions:
-      scopes:
-        - 'update:challenges'
-      audience: 'urn:openchallenges:challenge-service'
-    DELETE /api/v1/challenges/{challengeId}/contributions:
-      scopes:
-        - 'update:challenges'
-      audience: 'urn:openchallenges:challenge-service'
-    DELETE /api/v1/challenges/{challengeId}/contributions/{organizationId}/role/{role}:
-      scopes:
-        - 'update:challenges'
-      audience: 'urn:openchallenges:challenge-service'
-    GET /api/v1/challenge-analytics/challenges-per-year:
-      scopes:
-        - 'read:challenges-analytics'
+        - 'delete:challenge-platforms'
       audience: 'urn:openchallenges:challenge-service'
     GET /api/v1/challenge-platforms:
       scopes:
         - 'read:challenge-platforms'
       audience: 'urn:openchallenges:challenge-service'
-    POST /api/v1/challenge-platforms:
+    POST /api/v1/challenges:
       scopes:
-        - 'create:challenge-platforms'
+        - 'create:challenges'
+      audience: 'urn:openchallenges:challenge-service'
+    DELETE /api/v1/challenges/{challengeId}/contributions/{organizationId}/role/{role}:
+      scopes:
+        - 'update:challenges'
       audience: 'urn:openchallenges:challenge-service'
     GET /api/v1/challenge-platforms/{challengePlatformId}:
       scopes:
         - 'read:challenge-platforms'
       audience: 'urn:openchallenges:challenge-service'
+    GET /api/v1/auth/api-keys:
+      scopes:
+        - 'read:api-key'
+      audience: 'urn:openchallenges:auth-service'
+    GET /api/v1/challenge-analytics/challenges-per-year:
+      scopes:
+        - 'read:challenges-analytics'
+      audience: 'urn:openchallenges:challenge-service'
+    GET /api/v1/challenges/{challengeId}:
+      scopes:
+        - 'read:challenges'
+      audience: 'urn:openchallenges:challenge-service'
+    POST /api/v1/challenge-platforms:
+      scopes:
+        - 'create:challenge-platforms'
+      audience: 'urn:openchallenges:challenge-service'
     PUT /api/v1/challenge-platforms/{challengePlatformId}:
       scopes:
         - 'update:challenge-platforms'
       audience: 'urn:openchallenges:challenge-service'
-    DELETE /api/v1/challenge-platforms/{challengePlatformId}:
+    DELETE /api/v1/challenges/{challengeId}:
       scopes:
-        - 'delete:challenge-platforms'
+        - 'delete:challenges'
       audience: 'urn:openchallenges:challenge-service'
     GET /api/v1/edam-concepts:
       scopes:
         - 'read:edam-concepts'
+      audience: 'urn:openchallenges:challenge-service'
+    DELETE /api/v1/auth/api-keys/{keyId}:
+      scopes:
+        - 'delete:api-key'
+      audience: 'urn:openchallenges:auth-service'
+    GET /api/v1/auth/profile:
+      scopes:
+        - 'read:profile'
+      audience: 'urn:openchallenges:auth-service'
+    PUT /api/v1/challenges/{challengeId}:
+      scopes:
+        - 'update:challenges'
+      audience: 'urn:openchallenges:challenge-service'
+    POST /api/v1/auth/api-keys:
+      scopes:
+        - 'create:api-key'
+      audience: 'urn:openchallenges:auth-service'
+    GET /api/v1/challenges/{challengeId}/json-ld:
+      scopes:
+        - 'read:challenges'
+      audience: 'urn:openchallenges:challenge-service'
+    DELETE /api/v1/challenges/{challengeId}/contributions:
+      scopes:
+        - 'update:challenges'
+      audience: 'urn:openchallenges:challenge-service'
+    GET /api/v1/challenges/{challengeId}/contributions:
+      scopes:
+        - 'read:challenges'
       audience: 'urn:openchallenges:challenge-service'
     GET /api/v1/organizations:
       scopes:
         - 'read:organizations'
       audience: 'urn:openchallenges:organization-service'
       anonymousAccess: true
-    POST /api/v1/organizations:
-      scopes:
-        - 'create:organizations'
-      audience: 'urn:openchallenges:organization-service'
     GET /api/v1/organizations/{org}:
       scopes:
         - 'read:organizations'
@@ -106,15 +90,31 @@ app:
       scopes:
         - 'update:organizations'
       audience: 'urn:openchallenges:organization-service'
-    DELETE /api/v1/organizations/{org}:
-      scopes:
-        - 'delete:organizations'
-      audience: 'urn:openchallenges:organization-service'
-    POST /api/v1/organizations/{org}/participations:
-      scopes:
-        - 'update:organizations'
-      audience: 'urn:openchallenges:organization-service'
     DELETE /api/v1/organizations/{org}/participations/{challengeId}/roles/{role}:
       scopes:
         - 'update:organizations'
       audience: 'urn:openchallenges:organization-service'
+    GET /api/v1/challenges:
+      scopes:
+        - 'read:challenges'
+      audience: 'urn:openchallenges:challenge-service'
+    POST /api/v1/organizations/{org}/participations:
+      scopes:
+        - 'update:organizations'
+      audience: 'urn:openchallenges:organization-service'
+    POST /api/v1/organizations:
+      scopes:
+        - 'create:organizations'
+      audience: 'urn:openchallenges:organization-service'
+    DELETE /api/v1/organizations/{org}:
+      scopes:
+        - 'delete:organizations'
+      audience: 'urn:openchallenges:organization-service'
+    POST /api/v1/challenges/{challengeId}/contributions:
+      scopes:
+        - 'update:challenges'
+      audience: 'urn:openchallenges:challenge-service'
+    PUT /api/v1/auth/profile:
+      scopes:
+        - 'update:profile'
+      audience: 'urn:openchallenges:auth-service'

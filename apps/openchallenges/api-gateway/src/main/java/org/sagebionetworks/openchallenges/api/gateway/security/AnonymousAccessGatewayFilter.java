@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sagebionetworks.openchallenges.api.gateway.model.config.RouteConfigRegistry;
+import org.sagebionetworks.openchallenges.api.gateway.routing.RouteConfigRegistry;
 import org.sagebionetworks.openchallenges.api.gateway.service.GatewayAuthenticationService;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;

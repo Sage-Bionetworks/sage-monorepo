@@ -8,9 +8,10 @@ import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
-import org.sagebionetworks.openchallenges.api.gateway.model.config.RouteConfig;
-import org.sagebionetworks.openchallenges.api.gateway.model.config.RouteConfigRegistry;
+import org.sagebionetworks.openchallenges.api.gateway.model.RouteConfig;
+import org.sagebionetworks.openchallenges.api.gateway.routing.RouteConfigRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
@@ -115,6 +116,6 @@ public class RouteConfigurationLoader {
     String audience = (String) configMap.get("audience");
     Boolean anonymousAccess = (Boolean) configMap.getOrDefault("anonymousAccess", false);
 
-    return new RouteConfig(scopes, audience, anonymousAccess);
+    return new RouteConfig(Set.copyOf(scopes), audience, anonymousAccess);
   }
 }

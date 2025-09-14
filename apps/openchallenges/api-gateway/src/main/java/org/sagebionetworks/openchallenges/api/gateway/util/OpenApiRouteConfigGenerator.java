@@ -12,8 +12,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import org.sagebionetworks.openchallenges.api.gateway.model.config.RouteConfig;
-import org.sagebionetworks.openchallenges.api.gateway.model.config.RouteConfigRegistry;
+import org.sagebionetworks.openchallenges.api.gateway.model.RouteConfig;
+import org.sagebionetworks.openchallenges.api.gateway.routing.RouteConfigRegistry;
 
 /**
  * Utility class to parse OpenAPI specifications and generate route configurations.
@@ -56,15 +56,16 @@ public class OpenApiRouteConfigGenerator {
     }
 
     try {
-      RouteConfigRegistry registry = new RouteConfigRegistry();
+      Map<String, RouteConfig> allConfigs = new LinkedHashMap<>();
 
       for (String filePath : args) {
         System.err.println("Processing: " + filePath);
         Map<String, RouteConfig> fileConfigs = parseOpenApiFile(filePath);
-        for (Map.Entry<String, RouteConfig> entry : fileConfigs.entrySet()) {
-          registry.putRouteConfig(entry.getKey(), entry.getValue());
-        }
+        allConfigs.putAll(fileConfigs);
       }
+
+      // Create immutable registry with all configurations
+      RouteConfigRegistry registry = new RouteConfigRegistry(allConfigs);
 
       // Write the result to a YAML file in the resources folder
       String outputPath = DEFAULT_OUTPUT_PATH;
@@ -165,7 +166,11 @@ public class OpenApiRouteConfigGenerator {
                 anonymousAccess = anonymousAccessNode.asBoolean();
               }
 
-              RouteConfig routeConfig = new RouteConfig(scopes, globalAudience, anonymousAccess);
+              RouteConfig routeConfig = new RouteConfig(
+                Set.copyOf(scopes),
+                globalAudience,
+                anonymousAccess
+              );
               routeConfigs.put(routeKey, routeConfig);
             }
           });
@@ -238,14 +243,14 @@ public class OpenApiRouteConfigGenerator {
       Map<String, Object> configMap = new LinkedHashMap<>();
 
       if (routeConfig.hasScopes()) {
-        configMap.put("scopes", routeConfig.getScopes());
+        configMap.put("scopes", routeConfig.scopes());
       }
 
       if (routeConfig.hasAudience()) {
-        configMap.put("audience", routeConfig.getAudience());
+        configMap.put("audience", routeConfig.audience());
       }
 
-      if (routeConfig.isAnonymousAccess()) {
+      if (routeConfig.anonymousAccess()) {
         configMap.put("anonymousAccess", true);
       }
 
@@ -278,9 +283,9 @@ public class OpenApiRouteConfigGenerator {
           "  " +
           route +
           " -> scopes: " +
-          routeConfig.getScopes() +
-          (routeConfig.hasAudience() ? " audience: " + routeConfig.getAudience() : "") +
-          (routeConfig.isAnonymousAccess() ? " [anonymous]" : "")
+          routeConfig.scopes() +
+          (routeConfig.hasAudience() ? " audience: " + routeConfig.audience() : "") +
+          (routeConfig.anonymousAccess() ? " [anonymous]" : "")
         );
       }
     }

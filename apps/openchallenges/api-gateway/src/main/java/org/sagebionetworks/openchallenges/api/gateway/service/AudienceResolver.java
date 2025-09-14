@@ -2,7 +2,7 @@ package org.sagebionetworks.openchallenges.api.gateway.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sagebionetworks.openchallenges.api.gateway.model.config.RouteConfigRegistry;
+import org.sagebionetworks.openchallenges.api.gateway.routing.RouteConfigRegistry;
 import org.sagebionetworks.openchallenges.api.gateway.util.OpenApiConstants;
 import org.springframework.stereotype.Service;
 

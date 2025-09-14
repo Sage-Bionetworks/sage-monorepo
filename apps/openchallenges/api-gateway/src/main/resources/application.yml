@@ -83,6 +83,8 @@ spring:
                 - StripPrefix=1
   profiles:
     active: dev
+  config:
+    import: 'classpath:route-config.yml'
 
 logging:
   level:
