@@ -1,5 +1,5 @@
 app:
-  route-scopes:
+  route-config:
     GET /api/v1/auth/profile:
       scopes:
         - 'read:profile'

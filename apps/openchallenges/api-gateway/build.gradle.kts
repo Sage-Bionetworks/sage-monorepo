@@ -23,12 +23,12 @@ jacocoCoverage {
   forceClassIncludes = listOf<String>()
 }
 
-// Task to generate route-to-scope mappings from OpenAPI specifications
-tasks.register<JavaExec>("generateRouteScopes") {
+// Task to generate route configurations from OpenAPI specifications
+tasks.register<JavaExec>("generateRouteConfig") {
   group = "application"
-  description = "Generate route-to-scope mappings from OpenAPI specifications for API Gateway"
+  description = "Generate route configurations from OpenAPI specifications for API Gateway"
   classpath = sourceSets["main"].runtimeClasspath
-  mainClass.set("org.sagebionetworks.openchallenges.api.gateway.util.OpenApiScopeMapper")
+  mainClass.set("org.sagebionetworks.openchallenges.api.gateway.util.OpenApiRouteConfigGenerator")
 
   // Process all OpenAPI service files that have security requirements
   args =
@@ -39,11 +39,11 @@ tasks.register<JavaExec>("generateRouteScopes") {
     )
 
   doFirst {
-    println("Generating route-to-scope mappings...")
-    println("Output will be written to src/main/resources/route-scopes.yml")
+    println("Generating route configurations...")
+    println("Output will be written to src/main/resources/route-config.yml")
   }
 }
 
-tasks.named("generateRouteScopes") {
+tasks.named("generateRouteConfig") {
   dependsOn("compileJava")
 }

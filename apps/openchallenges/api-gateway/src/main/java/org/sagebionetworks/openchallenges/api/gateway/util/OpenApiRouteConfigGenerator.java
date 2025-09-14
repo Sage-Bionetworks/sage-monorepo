@@ -16,7 +16,7 @@ import java.util.*;
  * This tool reads OpenAPI YAML files and extracts security requirements for each endpoint,
  * generating a YAML configuration that can be used by the API Gateway.
  */
-public class OpenApiScopeMapper {
+public class OpenApiRouteConfigGenerator {
 
   private static final ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
 
@@ -45,7 +45,7 @@ public class OpenApiScopeMapper {
       }
 
       // Write the result to a YAML file in the resources folder
-      String outputPath = "src/main/resources/route-scopes.yml";
+      String outputPath = "src/main/resources/route-config.yml";
       writeYamlFile(routeScopes, outputPath);
       System.err.println("Route-to-scope mappings written to: " + outputPath);
     } catch (Exception e) {
@@ -155,7 +155,7 @@ public class OpenApiScopeMapper {
    * Write the route-to-scope mapping to a YAML file.
    */
   private static void writeYamlFile(
-    Map<String, Map<String, Object>> routeScopes,
+    Map<String, Map<String, Object>> routeConfig,
     String outputPath
   ) throws IOException {
     // Create the directory if it doesn't exist
@@ -166,10 +166,10 @@ public class OpenApiScopeMapper {
     Map<String, Object> config = new LinkedHashMap<>();
     Map<String, Object> app = new LinkedHashMap<>();
 
-    if (routeScopes.isEmpty()) {
-      app.put("route-scopes", new LinkedHashMap<>());
+    if (routeConfig.isEmpty()) {
+      app.put("route-config", new LinkedHashMap<>());
     } else {
-      app.put("route-scopes", routeScopes);
+      app.put("route-config", routeConfig);
     }
 
     config.put("app", app);
@@ -181,11 +181,11 @@ public class OpenApiScopeMapper {
     System.out.println("# Generated route-to-scope mapping for API Gateway");
     System.out.println("# File written to: " + outputPath);
     System.out.println();
-    if (routeScopes.isEmpty()) {
+    if (routeConfig.isEmpty()) {
       System.out.println("No routes with security requirements found");
     } else {
       System.out.println("Routes with security requirements:");
-      for (Map.Entry<String, Map<String, Object>> entry : routeScopes.entrySet()) {
+      for (Map.Entry<String, Map<String, Object>> entry : routeConfig.entrySet()) {
         String route = entry.getKey();
         @SuppressWarnings("unchecked")
         List<String> scopes = (List<String>) entry.getValue().get("scopes");
