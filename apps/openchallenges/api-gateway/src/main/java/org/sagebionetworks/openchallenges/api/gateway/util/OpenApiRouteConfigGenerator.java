@@ -12,20 +12,27 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import org.sagebionetworks.openchallenges.api.gateway.model.dto.RouteConfig;
-import org.sagebionetworks.openchallenges.api.gateway.routing.RouteKey;
 
 /**
- * Utility class to parse OpenAPI specifications and generate route configurations.
- * This tool reads OpenAPI YAML files and extracts security requirements and other
- * configuration properties for each endpoint, generating a YAML configuration
- * that can be used by the API Gateway.
+ * Reads one or more OpenAPI YAML files and generates a canonical route-config YAML:
+ *
+ * appKey:
+ *   routes:
+ *     - method: GET
+ *       path: /api/v1/foo
+ *       scopes: ["a:b"]
+ *       audience: "urn:..."
+ *       anonymousAccess: false
+ *
+ * Usage:
+ *   java ... OpenApiRouteConfigGenerator [--app-key=app2] [--out=src/main/resources/route-config.yml] <openapi1.yml> [openapi2.yml ...]
  */
-public class OpenApiRouteConfigGenerator {
+public final class OpenApiRouteConfigGenerator {
 
-  private static final ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
+  private OpenApiRouteConfigGenerator() {}
 
-  // Configuration constants
+  // ----- Config -----
+
   private static final Set<String> VALID_HTTP_METHODS = Set.of(
     "GET",
     "POST",
@@ -33,40 +40,77 @@ public class OpenApiRouteConfigGenerator {
     "DELETE",
     "PATCH",
     "HEAD",
-    "OPTIONS"
+    "OPTIONS",
+    "TRACE"
   );
-  private static final String DEFAULT_SECURITY_SCHEME = "jwtBearer";
-  private static final String DEFAULT_API_PREFIX = "/api/v1";
-  private static final String DEFAULT_OUTPUT_PATH = "src/main/resources/routes.yml";
-  private static final String DEFAULT_CONFIG_KEY = "routes";
 
-  static {
-    // Configure YAML mapper to not output document start marker (---)
-    ((YAMLFactory) yamlMapper.getFactory()).configure(
-        YAMLGenerator.Feature.WRITE_DOC_START_MARKER,
-        false
-      );
-  }
+  /** The security scheme name in OpenAPI "security" section whose scopes we extract. */
+  private static final String DEFAULT_SECURITY_SCHEME = "jwtBearer";
+
+  /** Path prefix to prepend to each OpenAPI path (if your gateway mounts services at a versioned prefix). */
+  private static final String DEFAULT_API_PREFIX = "/api/v1";
+
+  /** Default output location for the generated YAML. */
+  private static final String DEFAULT_OUTPUT_PATH = "src/main/resources/routes.yml";
+
+  /** Default top-level key under which routes are written. */
+  private static final String DEFAULT_APP_KEY = "app";
+
+  private static final ObjectMapper YAML = new ObjectMapper(
+    new YAMLFactory().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
+  ); // no '---' header
+
+  // ----- CLI -----
 
   public static void main(String[] args) {
     if (args.length == 0) {
-      System.err.println("Usage: OpenApiRouteConfigGenerator <openapi-file1> [openapi-file2] ...");
-      System.err.println("Example: OpenApiRouteConfigGenerator organization-service.openapi.yaml");
+      System.err.println(
+        "Usage: OpenApiRouteConfigGenerator [--app-key=app2] [--out=src/main/resources/route-config.yml] <openapi1.yml> [openapi2.yml ...]"
+      );
       System.exit(1);
     }
 
-    try {
-      Map<RouteKey, RouteConfig> allConfigs = new LinkedHashMap<>();
+    String appKey = DEFAULT_APP_KEY;
+    String outputPath = DEFAULT_OUTPUT_PATH;
+    List<String> openapiFiles = new ArrayList<>();
 
-      for (String filePath : args) {
-        System.err.println("Processing: " + filePath);
-        Map<RouteKey, RouteConfig> fileConfigs = parseOpenApiFile(filePath);
-        allConfigs.putAll(fileConfigs);
+    for (String a : args) {
+      if (a.startsWith("--app-key=")) {
+        appKey = a.substring("--app-key=".length()).trim();
+      } else if (a.startsWith("--out=")) {
+        outputPath = a.substring("--out=".length()).trim();
+      } else {
+        openapiFiles.add(a);
+      }
+    }
+
+    if (openapiFiles.isEmpty()) {
+      System.err.println("Error: no OpenAPI files provided.");
+      System.exit(2);
+    }
+
+    try {
+      List<RouteEntry> merged = new ArrayList<>();
+      Set<RouteKey> seen = new HashSet<>();
+
+      for (String file : openapiFiles) {
+        System.err.println("Processing: " + file);
+        List<RouteEntry> entries = parseOpenApiFile(file);
+        for (RouteEntry e : entries) {
+          RouteKey key = new RouteKey(e.method, e.path);
+          if (seen.add(key)) {
+            merged.add(e);
+          } else {
+            // If a duplicate shows up across files, last-one-wins behavior could be implemented here.
+            // For now, we keep the first and ignore duplicates to avoid accidental overrides.
+          }
+        }
       }
 
-      // Write the result to a YAML file in the resources folder
-      String outputPath = DEFAULT_OUTPUT_PATH;
-      writeYamlFile(allConfigs, outputPath);
+      // Stable sort by method then path for deterministic diffs
+      merged.sort(Comparator.comparing((RouteEntry r) -> r.method).thenComparing(r -> r.path));
+
+      writeYamlFile(appKey, merged, outputPath);
       System.err.println("Route configurations written to: " + outputPath);
     } catch (Exception e) {
       System.err.println("Error processing OpenAPI files: " + e.getMessage());
@@ -75,10 +119,9 @@ public class OpenApiRouteConfigGenerator {
     }
   }
 
-  /**
-   * Parse a single OpenAPI file and extract route configurations.
-   */
-  private static Map<RouteKey, RouteConfig> parseOpenApiFile(String filePath) throws IOException {
+  // ----- Parsing -----
+
+  private static List<RouteEntry> parseOpenApiFile(String filePath) throws IOException {
     Path path = Paths.get(filePath);
     if (!Files.exists(path)) {
       throw new IOException("File not found: " + filePath);
@@ -87,190 +130,189 @@ public class OpenApiRouteConfigGenerator {
       throw new IOException("File not readable: " + filePath);
     }
 
-    try {
-      JsonNode root = yamlMapper.readTree(path.toFile());
-      validateOpenApiStructure(root, filePath);
-      return extractRouteConfigurations(root, filePath);
-    } catch (Exception e) {
-      throw new IOException("Failed to parse OpenAPI file: " + filePath, e);
-    }
-  }
+    JsonNode root = YAML.readTree(path.toFile());
+    validateOpenApiStructure(root, filePath);
 
-  /**
-   * Validate basic OpenAPI structure.
-   */
-  private static void validateOpenApiStructure(JsonNode root, String filePath) throws IOException {
-    if (root == null || !root.isObject()) {
-      throw new IOException("Invalid OpenAPI structure in: " + filePath);
-    }
-
-    JsonNode openapi = root.get("openapi");
-    if (openapi == null) {
-      System.err.println("Warning: No OpenAPI version found in " + filePath);
-    }
-  }
-
-  /**
-   * Extract route configurations from OpenAPI paths.
-   */
-  private static Map<RouteKey, RouteConfig> extractRouteConfigurations(
-    JsonNode root,
-    String filePath
-  ) {
-    Map<RouteKey, RouteConfig> routeConfigs = new LinkedHashMap<>();
-
-    JsonNode paths = root.get("paths");
-    if (paths == null) {
-      System.err.println("Warning: No 'paths' section found in " + filePath);
-      return routeConfigs;
-    }
-
-    // Extract global audience from the OpenAPI spec
     String globalAudience = extractAudience(root);
-    if (globalAudience != null) {
-      System.err.println("Found global audience: " + globalAudience + " in " + filePath);
+
+    List<RouteEntry> out = new ArrayList<>();
+    JsonNode paths = root.get("paths");
+    if (paths == null || !paths.isObject()) {
+      System.err.println("Warning: No 'paths' section in " + filePath);
+      return out;
     }
 
-    // Iterate through each path
+    // Iterate path → method
     paths
       .properties()
       .forEach(pathEntry -> {
-        String path = pathEntry.getKey();
-        JsonNode pathObject = pathEntry.getValue();
+        String rawPath = pathEntry.getKey();
+        JsonNode pathObj = pathEntry.getValue();
 
-        // Iterate through each HTTP method for this path
-        pathObject
+        pathObj
           .properties()
           .forEach(methodEntry -> {
-            String method = methodEntry.getKey().toUpperCase();
+            String method = methodEntry.getKey().toUpperCase(Locale.ROOT);
             JsonNode operation = methodEntry.getValue();
 
-            // Skip if this is not an HTTP method (e.g., parameters, $ref)
-            if (!isHttpMethod(method)) {
-              return;
+            if (!VALID_HTTP_METHODS.contains(method)) {
+              return; // skip non-method keys like "parameters"
             }
 
-            // Extract security requirements for this operation
             List<String> scopes = extractScopes(operation);
+            boolean anonymousAccess = extractAnonymous(operation);
 
-            // Extract anonymous access flag
-            boolean anonymousAccess = false;
-            JsonNode anonymousAccessNode = operation.get(ANONYMOUS_ACCESS_EXTENSION);
-            if (anonymousAccessNode != null && anonymousAccessNode.isBoolean()) {
-              anonymousAccess = anonymousAccessNode.asBoolean();
-            }
-
-            // Include route if it has scopes, audience, or anonymous access configured
+            // We include a route if any of the fields matter to the gateway.
             if (!scopes.isEmpty() || globalAudience != null || anonymousAccess) {
-              // Create route configuration
-              RouteKey routeKey = RouteKey.of(method, DEFAULT_API_PREFIX + path);
-
-              RouteConfig routeConfig = new RouteConfig(
-                Set.copyOf(scopes),
+              String normalizedPath = normalizePath(DEFAULT_API_PREFIX + rawPath);
+              RouteEntry entry = new RouteEntry(
+                method,
+                normalizedPath,
+                new LinkedHashSet<>(scopes), // preserve order, dedupe
                 globalAudience,
                 anonymousAccess
               );
-              routeConfigs.put(routeKey, routeConfig);
+              out.add(entry);
             }
           });
       });
 
-    return routeConfigs;
+    return out;
   }
 
-  /**
-   * Check if the given string is a valid HTTP method.
-   */
-  private static boolean isHttpMethod(String method) {
-    return VALID_HTTP_METHODS.contains(method);
+  private static void validateOpenApiStructure(JsonNode root, String filePath) throws IOException {
+    if (root == null || !root.isObject()) {
+      throw new IOException("Invalid OpenAPI structure in: " + filePath);
+    }
+    // Optional: root.get("openapi") may be absent in some docs; not fatal for our extraction.
   }
 
-  /**
-   * Extract scopes from an OpenAPI operation's security requirements.
-   */
   private static List<String> extractScopes(JsonNode operation) {
     List<String> scopes = new ArrayList<>();
-
     JsonNode security = operation.get("security");
-    if (security == null || !security.isArray()) {
-      return scopes;
-    }
+    if (security == null || !security.isArray()) return scopes;
 
-    // Iterate through security requirements
-    for (JsonNode securityRequirement : security) {
-      // Look for jwtBearer security scheme
-      JsonNode jwtBearer = securityRequirement.get(DEFAULT_SECURITY_SCHEME);
-      if (jwtBearer != null && jwtBearer.isArray()) {
-        for (JsonNode scopeNode : jwtBearer) {
-          if (scopeNode.isTextual()) {
-            scopes.add(scopeNode.asText());
-          }
+    for (JsonNode req : security) {
+      JsonNode scheme = req.get(DEFAULT_SECURITY_SCHEME);
+      if (scheme != null && scheme.isArray()) {
+        for (JsonNode s : scheme) {
+          if (s.isTextual()) scopes.add(s.asText());
         }
       }
     }
-
     return scopes;
   }
 
-  /**
-   * Extract audience from OpenAPI specification.
-   */
-  private static String extractAudience(JsonNode root) {
-    JsonNode audienceNode = root.get(OAUTH2_AUDIENCE_EXTENSION);
-    return audienceNode != null && audienceNode.isTextual() ? audienceNode.asText() : null;
+  private static boolean extractAnonymous(JsonNode operation) {
+    JsonNode n = operation.get(ANONYMOUS_ACCESS_EXTENSION);
+    return n != null && n.isBoolean() && n.asBoolean();
   }
 
-  /**
-   * Write the route configurations to a YAML file.
-   */
-  private static void writeYamlFile(Map<RouteKey, RouteConfig> routeConfigs, String outputPath)
+  private static String extractAudience(JsonNode root) {
+    JsonNode n = root.get(OAUTH2_AUDIENCE_EXTENSION);
+    if (n != null && n.isTextual()) {
+      String a = n.asText().trim();
+      return a.isEmpty() ? null : a;
+    }
+    return null;
+  }
+
+  private static String normalizePath(String raw) {
+    String p = raw.trim().replaceAll("/{2,}", "/");
+    if (!p.startsWith("/")) p = "/" + p;
+    if (p.length() > 1 && p.endsWith("/")) p = p.substring(0, p.length() - 1);
+    return p;
+  }
+
+  // ----- Output -----
+
+  private static void writeYamlFile(String appKey, List<RouteEntry> routes, String outputPath)
     throws IOException {
-    // Create the directory if it doesn't exist
-    Path filePath = Paths.get(outputPath);
-    Files.createDirectories(filePath.getParent());
+    Path out = Paths.get(outputPath);
+    Files.createDirectories(out.getParent());
 
-    // Convert Map<RouteKey, RouteConfig> to Map<String, Map<String, Object>> for YAML serialization
-    Map<String, Object> config = new LinkedHashMap<>();
+    // Build YAML structure: appKey -> routes: [ { ... }, ... ]
+    Map<String, Object> root = new LinkedHashMap<>();
     Map<String, Object> app = new LinkedHashMap<>();
+    List<Map<String, Object>> list = new ArrayList<>();
 
-    Map<String, Map<String, Object>> routeConfigsForYaml = new LinkedHashMap<>();
-
-    for (Map.Entry<RouteKey, RouteConfig> entry : routeConfigs.entrySet()) {
-      RouteKey routeKey = entry.getKey();
-      RouteConfig routeConfig = entry.getValue();
-
-      // Convert RouteKey to string format expected by Spring Boot configuration
-      String keyStr = routeKey.method() + " " + routeKey.path();
-
-      Map<String, Object> configMap = new LinkedHashMap<>();
-
-      if (routeConfig.hasScopes()) {
-        configMap.put("scopes", routeConfig.scopes());
-      }
-
-      if (routeConfig.hasAudience()) {
-        configMap.put("audience", routeConfig.audience());
-      }
-
-      if (routeConfig.anonymousAccess()) {
-        configMap.put("anonymousAccess", true);
-      }
-
-      routeConfigsForYaml.put(keyStr, configMap);
+    for (RouteEntry r : routes) {
+      Map<String, Object> item = new LinkedHashMap<>();
+      item.put("method", r.method);
+      item.put("path", r.path);
+      if (!r.scopes.isEmpty()) item.put("scopes", new ArrayList<>(r.scopes));
+      if (r.audience != null) item.put("audience", r.audience);
+      if (r.anonymousAccess) item.put("anonymousAccess", true);
+      list.add(item);
     }
 
-    if (routeConfigsForYaml.isEmpty()) {
-      app.put(DEFAULT_CONFIG_KEY, new LinkedHashMap<>());
-    } else {
-      app.put(DEFAULT_CONFIG_KEY, routeConfigsForYaml);
+    app.put("routes", list);
+    root.put(appKey, app);
+
+    YAML.writeValue(out.toFile(), root);
+  }
+
+  // ----- Small types -----
+
+  /** Internal route entry for generation (equals/hashCode by method+path). */
+  private static final class RouteEntry {
+
+    final String method;
+    final String path;
+    final LinkedHashSet<String> scopes;
+    final String audience;
+    final boolean anonymousAccess;
+
+    RouteEntry(
+      String method,
+      String path,
+      LinkedHashSet<String> scopes,
+      String audience,
+      boolean anonymousAccess
+    ) {
+      this.method = Objects.requireNonNull(method);
+      this.path = Objects.requireNonNull(path);
+      this.scopes = (scopes == null) ? new LinkedHashSet<>() : scopes;
+      this.audience = (audience != null && !audience.isBlank()) ? audience : null;
+      this.anonymousAccess = anonymousAccess;
     }
 
-    config.put("app", app);
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof RouteEntry)) return false;
+      RouteEntry that = (RouteEntry) o;
+      return method.equals(that.method) && path.equals(that.path);
+    }
 
-    // Write to file
-    yamlMapper.writeValue(filePath.toFile(), config);
+    @Override
+    public int hashCode() {
+      return Objects.hash(method, path);
+    }
+  }
 
-    System.out.println("# Generated route configurations for API Gateway");
-    System.out.println("# File written to: " + outputPath);
+  /** Key used only for deduping across files. */
+  private static final class RouteKey {
+
+    final String method;
+    final String path;
+
+    RouteKey(String method, String path) {
+      this.method = method.toUpperCase(Locale.ROOT);
+      this.path = path;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof RouteKey)) return false;
+      RouteKey that = (RouteKey) o;
+      return method.equals(that.method) && path.equals(that.path);
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(method, path);
+    }
   }
 }
