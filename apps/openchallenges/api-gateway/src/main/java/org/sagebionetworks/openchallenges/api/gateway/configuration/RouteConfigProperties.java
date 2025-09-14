@@ -5,5 +5,5 @@ import org.sagebionetworks.openchallenges.api.gateway.model.RouteConfig;
 import org.sagebionetworks.openchallenges.api.gateway.routing.RouteKey;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "app.route-config")
+@ConfigurationProperties(prefix = "app")
 public record RouteConfigProperties(Map<RouteKey, RouteConfig> routes) {}

@@ -13,7 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import org.sagebionetworks.openchallenges.api.gateway.model.RouteConfig;
-import org.sagebionetworks.openchallenges.api.gateway.routing.RouteConfigRegistry;
+import org.sagebionetworks.openchallenges.api.gateway.routing.RouteKey;
 
 /**
  * Utility class to parse OpenAPI specifications and generate route configurations.
@@ -37,8 +37,8 @@ public class OpenApiRouteConfigGenerator {
   );
   private static final String DEFAULT_SECURITY_SCHEME = "jwtBearer";
   private static final String DEFAULT_API_PREFIX = "/api/v1";
-  private static final String DEFAULT_OUTPUT_PATH = "src/main/resources/route-config.yml";
-  private static final String DEFAULT_CONFIG_KEY = "route-config";
+  private static final String DEFAULT_OUTPUT_PATH = "src/main/resources/routes.yml";
+  private static final String DEFAULT_CONFIG_KEY = "routes";
 
   static {
     // Configure YAML mapper to not output document start marker (---)
@@ -56,20 +56,17 @@ public class OpenApiRouteConfigGenerator {
     }
 
     try {
-      Map<String, RouteConfig> allConfigs = new LinkedHashMap<>();
+      Map<RouteKey, RouteConfig> allConfigs = new LinkedHashMap<>();
 
       for (String filePath : args) {
         System.err.println("Processing: " + filePath);
-        Map<String, RouteConfig> fileConfigs = parseOpenApiFile(filePath);
+        Map<RouteKey, RouteConfig> fileConfigs = parseOpenApiFile(filePath);
         allConfigs.putAll(fileConfigs);
       }
 
-      // Create immutable registry with all configurations
-      RouteConfigRegistry registry = new RouteConfigRegistry(allConfigs);
-
       // Write the result to a YAML file in the resources folder
       String outputPath = DEFAULT_OUTPUT_PATH;
-      writeYamlFile(registry, outputPath);
+      writeYamlFile(allConfigs, outputPath);
       System.err.println("Route configurations written to: " + outputPath);
     } catch (Exception e) {
       System.err.println("Error processing OpenAPI files: " + e.getMessage());
@@ -81,7 +78,7 @@ public class OpenApiRouteConfigGenerator {
   /**
    * Parse a single OpenAPI file and extract route configurations.
    */
-  private static Map<String, RouteConfig> parseOpenApiFile(String filePath) throws IOException {
+  private static Map<RouteKey, RouteConfig> parseOpenApiFile(String filePath) throws IOException {
     Path path = Paths.get(filePath);
     if (!Files.exists(path)) {
       throw new IOException("File not found: " + filePath);
@@ -116,11 +113,11 @@ public class OpenApiRouteConfigGenerator {
   /**
    * Extract route configurations from OpenAPI paths.
    */
-  private static Map<String, RouteConfig> extractRouteConfigurations(
+  private static Map<RouteKey, RouteConfig> extractRouteConfigurations(
     JsonNode root,
     String filePath
   ) {
-    Map<String, RouteConfig> routeConfigs = new LinkedHashMap<>();
+    Map<RouteKey, RouteConfig> routeConfigs = new LinkedHashMap<>();
 
     JsonNode paths = root.get("paths");
     if (paths == null) {
@@ -155,16 +152,18 @@ public class OpenApiRouteConfigGenerator {
 
             // Extract security requirements for this operation
             List<String> scopes = extractScopes(operation);
-            if (!scopes.isEmpty() || globalAudience != null) {
-              // Create route configuration
-              String routeKey = method + " " + DEFAULT_API_PREFIX + path;
 
-              // Extract anonymous access flag
-              boolean anonymousAccess = false;
-              JsonNode anonymousAccessNode = operation.get(ANONYMOUS_ACCESS_EXTENSION);
-              if (anonymousAccessNode != null && anonymousAccessNode.isBoolean()) {
-                anonymousAccess = anonymousAccessNode.asBoolean();
-              }
+            // Extract anonymous access flag
+            boolean anonymousAccess = false;
+            JsonNode anonymousAccessNode = operation.get(ANONYMOUS_ACCESS_EXTENSION);
+            if (anonymousAccessNode != null && anonymousAccessNode.isBoolean()) {
+              anonymousAccess = anonymousAccessNode.asBoolean();
+            }
+
+            // Include route if it has scopes, audience, or anonymous access configured
+            if (!scopes.isEmpty() || globalAudience != null || anonymousAccess) {
+              // Create route configuration
+              RouteKey routeKey = RouteKey.of(method, DEFAULT_API_PREFIX + path);
 
               RouteConfig routeConfig = new RouteConfig(
                 Set.copyOf(scopes),
@@ -224,21 +223,24 @@ public class OpenApiRouteConfigGenerator {
   /**
    * Write the route configurations to a YAML file.
    */
-  private static void writeYamlFile(RouteConfigRegistry registry, String outputPath)
+  private static void writeYamlFile(Map<RouteKey, RouteConfig> routeConfigs, String outputPath)
     throws IOException {
     // Create the directory if it doesn't exist
     Path filePath = Paths.get(outputPath);
     Files.createDirectories(filePath.getParent());
 
-    // Convert RouteConfigRegistry to Map<String, Map<String, Object>> for YAML serialization
+    // Convert Map<RouteKey, RouteConfig> to Map<String, Map<String, Object>> for YAML serialization
     Map<String, Object> config = new LinkedHashMap<>();
     Map<String, Object> app = new LinkedHashMap<>();
 
     Map<String, Map<String, Object>> routeConfigsForYaml = new LinkedHashMap<>();
 
-    for (Map.Entry<String, RouteConfig> entry : registry.getAllRouteConfigs().entrySet()) {
-      String routeKey = entry.getKey();
+    for (Map.Entry<RouteKey, RouteConfig> entry : routeConfigs.entrySet()) {
+      RouteKey routeKey = entry.getKey();
       RouteConfig routeConfig = entry.getValue();
+
+      // Convert RouteKey to string format expected by Spring Boot configuration
+      String keyStr = routeKey.method() + " " + routeKey.path();
 
       Map<String, Object> configMap = new LinkedHashMap<>();
 
@@ -254,7 +256,7 @@ public class OpenApiRouteConfigGenerator {
         configMap.put("anonymousAccess", true);
       }
 
-      routeConfigsForYaml.put(routeKey, configMap);
+      routeConfigsForYaml.put(keyStr, configMap);
     }
 
     if (routeConfigsForYaml.isEmpty()) {
@@ -272,13 +274,14 @@ public class OpenApiRouteConfigGenerator {
     System.out.println("# Generated route configurations for API Gateway");
     System.out.println("# File written to: " + outputPath);
     System.out.println();
-    if (registry.isEmpty()) {
+    if (routeConfigs.isEmpty()) {
       System.out.println("No routes with security requirements found");
     } else {
       System.out.println("Routes with security requirements:");
-      for (Map.Entry<String, RouteConfig> entry : registry.getAllRouteConfigs().entrySet()) {
-        String route = entry.getKey();
+      for (Map.Entry<RouteKey, RouteConfig> entry : routeConfigs.entrySet()) {
+        RouteKey routeKey = entry.getKey();
         RouteConfig routeConfig = entry.getValue();
+        String route = routeKey.method() + " " + routeKey.path();
         System.out.println(
           "  " +
           route +
