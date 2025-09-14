@@ -4,7 +4,8 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.api.gateway.configuration.RouteScopeConfiguration;
 import org.sagebionetworks.openchallenges.api.gateway.model.dto.OAuth2TokenResponseDto;
-import org.sagebionetworks.openchallenges.api.gateway.service.ApiKeyParser.ParsedApiKey;
+import org.sagebionetworks.openchallenges.api.gateway.util.ApiKeyParser;
+import org.sagebionetworks.openchallenges.api.gateway.util.ApiKeyParser.ParsedApiKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -72,7 +73,7 @@ public class GatewayAuthenticationService {
    * Exchanges an API key for a JWT using OAuth2 client credentials flow.
    * The scopes requested are determined by the route being accessed.
    *
-   * @param apiKey The API key to exchange (format: oc_ak_<prefix>.<secret>)
+   * @param apiKey The API key to exchange (format: oc_dev_<suffix>.<secret>, oc_stage_<suffix>.<secret>, or oc_prod_<suffix>.<secret>)
    * @param method HTTP method (GET, POST, etc.)
    * @param path   URL path
    * @return A Mono containing the OAuth2 token response
@@ -88,20 +89,20 @@ public class GatewayAuthenticationService {
     // Parse API key to extract client_id and secret
     ParsedApiKey parsedKey;
     try {
-      parsedKey = ApiKeyParser.parseApiKey(apiKey);
+      parsedKey = ApiKeyParser.parse(apiKey);
       log.info(
         "Parsed API key - Environment: {}, Suffix: {}, Secret present: {}",
-        parsedKey.getEnvironmentPrefix(),
-        parsedKey.getSuffix(),
-        parsedKey.getSecret() != null && !parsedKey.getSecret().isEmpty()
+        parsedKey.environmentPrefix(),
+        parsedKey.suffix(),
+        parsedKey.secret() != null && !parsedKey.secret().isEmpty()
       );
     } catch (Exception e) {
       log.error("Failed to parse API key: {}", e.getMessage());
       throw e;
     }
 
-    String clientId = "oc_api_key_" + parsedKey.getSuffix(); // Use suffix for client_id - matches auth service format
-    String clientSecret = parsedKey.getSecret();
+    String clientId = "oc_api_key_" + parsedKey.suffix(); // Use suffix for client_id - matches auth service format
+    String clientSecret = parsedKey.secret();
     log.info("OAuth2 Client ID: {}", clientId);
 
     // Get required scopes for this route
@@ -161,7 +162,7 @@ public class GatewayAuthenticationService {
    * Exchanges an API key for a JWT using OAuth2 client credentials flow without specific route scopes.
    * This method is kept for backward compatibility.
    *
-   * @param apiKey The API key to exchange (format: oc_ak_<prefix>.<secret>)
+   * @param apiKey The API key to exchange (format: oc_dev_<suffix>.<secret>, oc_stage_<suffix>.<secret>, or oc_prod_<suffix>.<secret>)
    * @return A Mono containing the OAuth2 token response
    */
   public Mono<OAuth2TokenResponseDto> exchangeApiKeyForJwt(String apiKey) {
