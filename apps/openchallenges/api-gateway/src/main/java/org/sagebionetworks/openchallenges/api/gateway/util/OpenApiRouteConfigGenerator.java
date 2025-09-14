@@ -270,27 +270,7 @@ public class OpenApiRouteConfigGenerator {
     // Write to file
     yamlMapper.writeValue(filePath.toFile(), config);
 
-    // Also print to console for immediate reference
     System.out.println("# Generated route configurations for API Gateway");
     System.out.println("# File written to: " + outputPath);
-    System.out.println();
-    if (routeConfigs.isEmpty()) {
-      System.out.println("No routes with security requirements found");
-    } else {
-      System.out.println("Routes with security requirements:");
-      for (Map.Entry<RouteKey, RouteConfig> entry : routeConfigs.entrySet()) {
-        RouteKey routeKey = entry.getKey();
-        RouteConfig routeConfig = entry.getValue();
-        String route = routeKey.method() + " " + routeKey.path();
-        System.out.println(
-          "  " +
-          route +
-          " -> scopes: " +
-          routeConfig.scopes() +
-          (routeConfig.hasAudience() ? " audience: " + routeConfig.audience() : "") +
-          (routeConfig.anonymousAccess() ? " [anonymous]" : "")
-        );
-      }
-    }
   }
 }
