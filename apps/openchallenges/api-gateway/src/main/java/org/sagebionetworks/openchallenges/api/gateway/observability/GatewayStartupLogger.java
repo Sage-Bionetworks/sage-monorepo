@@ -3,7 +3,6 @@ package org.sagebionetworks.openchallenges.api.gateway.observability;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.api.gateway.routing.RouteConfigRegistry;
-import org.sagebionetworks.openchallenges.api.gateway.routing.RouteKey;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -17,34 +16,14 @@ public class GatewayStartupLogger {
 
   @EventListener(ApplicationReadyEvent.class)
   public void onReady() {
-    int total = registry.size();
-    log.info("API Gateway route registry loaded: {} routes", total);
+    // Single-line JSON summary for Grafana/Loki (INFO)
+    log.info(RouteConfigPrinter.jsonSummary(registry));
 
-    // Short method breakdown
-    var countsByMethod = registry
-      .getAllRouteConfigs()
-      .keySet()
-      .stream()
-      .map(RouteKey::method)
-      .collect(
-        java.util.stream.Collectors.groupingBy(m -> m, java.util.stream.Collectors.counting())
-      );
-    countsByMethod.forEach((m, c) -> log.info("  - {}: {}", m, c));
-
-    // Optional: detailed listing at DEBUG (avoid spamming INFO)
-    if (log.isDebugEnabled()) {
-      registry
-        .getAllRouteConfigs()
-        .forEach((key, cfg) -> {
-          log.debug(
-            "Route: {} {} | scopes={} | audience={} | anonymous={}",
-            key.method(),
-            key.path(),
-            cfg.scopes(),
-            cfg.audience(),
-            cfg.anonymousAccess()
-          );
-        });
-    }
+    // Optional: per-route JSON events (each a single line at INFO)
+    RouteConfigPrinter.jsonPerRoute(registry).forEach(log::info);
+    // Developer-friendly pretty dump at DEBUG
+    // if (log.isDebugEnabled()) {
+    //   log.debug(RouteConfigPrinter.detailed(registry));
+    // }
   }
 }
