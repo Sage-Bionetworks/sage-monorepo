@@ -1,4 +1,5 @@
 openapi: 3.0.3
+
 info:
   version: 1.0.0
   title: OpenChallenges Organization API
@@ -11,15 +12,25 @@ info:
     url: https://github.com/Sage-Bionetworks/sage-monorepo
   x-logo:
     url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
+
+# Vendor extensions at the top level
+x-oauth2-audience: 'urn:openchallenges:organization-service'
+
 servers:
   - url: http://localhost/v1
+  # - url: https://api.openchallenges.org/v1 # (add when ready)
+
+# Default security posture (scopes on operations)
+security:
+  - jwtBearer: []
+
 tags:
   - name: Organization
     description: Operations about organizations
-    x-audience: [public]
   - name: Challenge Participation
     description: Operations about a challenge participation
     x-audience: [internal]
+
 paths:
   /organizations:
     $ref: paths/organizations.yaml
@@ -29,10 +40,8 @@ paths:
     $ref: paths/organizations/{org}/participations.yaml
   /organizations/{org}/participations/{challengeId}/roles/{role}:
     $ref: paths/organizations/{org}/participations/{challengeId}/roles/{role}.yaml
+
 components:
   securitySchemes:
     jwtBearer:
       $ref: components/securitySchemes/JwtBearer.yaml
-security:
-  # Endpoints require authentication by default. Scopes and overrides are specified per endpoint.
-  - jwtBearer: []

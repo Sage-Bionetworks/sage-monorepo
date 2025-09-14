@@ -1,4 +1,5 @@
 openapi: 3.0.3
+
 info:
   version: 1.0.0
   title: OpenChallenges Auth API
@@ -11,16 +12,24 @@ info:
     url: https://github.com/Sage-Bionetworks/sage-monorepo
   x-logo:
     url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
+
+# Vendor extensions at the top level
+x-oauth2-audience: 'urn:openchallenges:auth-service'
+
 servers:
   - url: http://localhost/v1
-    description: Local/dev base
+  # - url: https://api.openchallenges.org/v1 # (add when ready)
+
+# Default security posture (scopes on operations)
+security:
+  - jwtBearer: []
+
 tags:
   - name: Authentication
     description: User profile and token validation operations
-    x-audience: [public]
   - name: API Key
     description: API key management for programmatic access to OpenChallenges APIs
-    x-audience: [public]
+
 paths:
   /auth/profile:
     $ref: paths/auth/profile.yaml
@@ -28,10 +37,8 @@ paths:
     $ref: paths/auth/api-keys.yaml
   /auth/api-keys/{keyId}:
     $ref: paths/auth/api-keys/{keyId}.yaml
+
 components:
   securitySchemes:
     jwtBearer:
       $ref: components/securitySchemes/JwtBearer.yaml
-security:
-  # Endpoints require authentication by default. Scopes and overrides are specified per endpoint.
-  - jwtBearer: []

@@ -1,4 +1,5 @@
 openapi: 3.0.3
+
 info:
   version: 1.0.0
   title: OpenChallenges Image API
@@ -11,12 +12,21 @@ info:
     url: https://github.com/Sage-Bionetworks/sage-monorepo
   x-logo:
     url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
+
+# Vendor extensions at the top level
+x-oauth2-audience: 'urn:openchallenges:image-service'
+
 servers:
   - url: http://localhost/v1
+  # - url: https://api.openchallenges.org/v1 # (add when ready)
+
+# Default security posture (scopes on operations)
+security: [] # No authentication
+
 tags:
   - name: Image
     description: Operations about images
-    x-audience: [public]
+
 paths:
   /images:
     $ref: paths/images.yaml

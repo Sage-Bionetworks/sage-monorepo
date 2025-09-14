@@ -13,11 +13,10 @@ info:
     url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
   - url: http://localhost/v1
+security: []
 tags:
   - name: Image
     description: Operations about images
-    x-audience:
-      - public
 paths:
   /images:
     get:
@@ -131,3 +130,4 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
+x-oauth2-audience: urn:openchallenges:image-service

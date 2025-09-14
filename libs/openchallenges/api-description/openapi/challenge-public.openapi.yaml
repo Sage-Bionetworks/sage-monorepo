@@ -18,24 +18,14 @@ security:
 tags:
   - name: Challenge
     description: Operations about challenges.
-    x-audience:
-      - public
   - name: Challenge Contribution
     description: Operations about challenge contributions.
-    x-audience:
-      - public
   - name: Challenge Analytics
     description: Operations about challenge analytics.
-    x-audience:
-      - public
   - name: Challenge Platform
     description: Operations about challenge platforms.
-    x-audience:
-      - public
   - name: Edam Concept
     description: Operations about EDAM concepts.
-    x-audience:
-      - public
 paths:
   /challenges:
     get:
@@ -1375,3 +1365,4 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
+x-oauth2-audience: urn:openchallenges:challenge-service

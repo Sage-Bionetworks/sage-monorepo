@@ -13,18 +13,13 @@ info:
     url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
   - url: http://localhost/v1
-    description: Local/dev base
 security:
   - jwtBearer: []
 tags:
   - name: Authentication
     description: User profile and token validation operations
-    x-audience:
-      - public
   - name: API Key
     description: API key management for programmatic access to OpenChallenges APIs
-    x-audience:
-      - public
 paths:
   /auth/profile:
     get:
@@ -422,3 +417,4 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
+x-oauth2-audience: urn:openchallenges:auth-service

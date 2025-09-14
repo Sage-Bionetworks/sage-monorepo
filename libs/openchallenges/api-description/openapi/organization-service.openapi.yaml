@@ -18,8 +18,6 @@ security:
 tags:
   - name: Organization
     description: Operations about organizations
-    x-audience:
-      - public
   - name: Challenge Participation
     description: Operations about a challenge participation
     x-audience:
@@ -629,3 +627,4 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
+x-oauth2-audience: urn:openchallenges:organization-service

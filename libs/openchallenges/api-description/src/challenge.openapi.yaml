@@ -1,4 +1,5 @@
 openapi: 3.0.3
+
 info:
   version: 1.0.0
   title: OpenChallenges Challenge API
@@ -11,24 +12,30 @@ info:
     url: https://github.com/Sage-Bionetworks/sage-monorepo
   x-logo:
     url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
+
+# Vendor extensions at the top level
+x-oauth2-audience: 'urn:openchallenges:challenge-service'
+
 servers:
   - url: http://localhost/v1
+  # - url: https://api.openchallenges.org/v1 # (add when ready)
+
+# Default security posture (scopes on operations)
+security:
+  - jwtBearer: []
+
 tags:
   - name: Challenge
     description: Operations about challenges.
-    x-audience: [public]
   - name: Challenge Contribution
     description: Operations about challenge contributions.
-    x-audience: [public]
   - name: Challenge Analytics
     description: Operations about challenge analytics.
-    x-audience: [public]
   - name: Challenge Platform
     description: Operations about challenge platforms.
-    x-audience: [public]
   - name: Edam Concept
     description: Operations about EDAM concepts.
-    x-audience: [public]
+
 paths:
   /challenges:
     $ref: paths/challenges.yaml
@@ -48,10 +55,8 @@ paths:
     $ref: paths/challenge-platforms/{challengePlatformId}.yaml
   /edam-concepts:
     $ref: paths/edam-concepts.yaml
+
 components:
   securitySchemes:
     jwtBearer:
       $ref: components/securitySchemes/JwtBearer.yaml
-security:
-  # Endpoints require authentication by default. Scopes and overrides are specified per endpoint.
-  - jwtBearer: []

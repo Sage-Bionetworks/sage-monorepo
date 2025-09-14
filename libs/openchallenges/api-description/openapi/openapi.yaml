@@ -13,52 +13,33 @@ info:
     url: https://openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
   - url: https://openchallenges.io/api/v1
-    description: Local/dev base
 tags:
   - name: Authentication
     description: User profile and token validation operations
-    x-audience:
-      - public
     x-displayName: Authentication
   - name: API Key
     description: API key management for programmatic access to OpenChallenges APIs
-    x-audience:
-      - public
     x-displayName: API Key
   - name: Challenge
     description: Operations about challenges.
-    x-audience:
-      - public
     x-displayName: Challenge
   - name: Challenge Contribution
     description: Operations about challenge contributions.
-    x-audience:
-      - public
     x-displayName: Challenge Contribution
   - name: Challenge Analytics
     description: Operations about challenge analytics.
-    x-audience:
-      - public
     x-displayName: Challenge Analytics
   - name: Challenge Platform
     description: Operations about challenge platforms.
-    x-audience:
-      - public
     x-displayName: Challenge Platform
   - name: Edam Concept
     description: Operations about EDAM concepts.
-    x-audience:
-      - public
     x-displayName: Edam Concept
   - name: Image
     description: Operations about images
-    x-audience:
-      - public
     x-displayName: Image
   - name: Organization
     description: Operations about organizations
-    x-audience:
-      - public
     x-displayName: Organization
 paths:
   /auth/profile:
@@ -662,6 +643,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+      security: []
   /organizations:
     get:
       tags:
