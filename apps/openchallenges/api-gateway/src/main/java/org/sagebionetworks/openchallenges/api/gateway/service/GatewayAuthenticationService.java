@@ -2,7 +2,7 @@ package org.sagebionetworks.openchallenges.api.gateway.service;
 
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.sagebionetworks.openchallenges.api.gateway.configuration.RouteScopeConfiguration;
+import org.sagebionetworks.openchallenges.api.gateway.model.config.RouteConfigRegistry;
 import org.sagebionetworks.openchallenges.api.gateway.model.dto.OAuth2TokenResponseDto;
 import org.sagebionetworks.openchallenges.api.gateway.util.ApiKeyParser;
 import org.sagebionetworks.openchallenges.api.gateway.util.ApiKeyParser.ParsedApiKey;
@@ -22,13 +22,15 @@ public class GatewayAuthenticationService {
 
   private final WebClient authServiceClient;
   private final WebClient oauth2ServiceClient;
-  private final RouteScopeConfiguration routeScopeConfiguration;
+  private final RouteConfigRegistry routeConfigRegistry;
+  private final AudienceResolver audienceResolver;
 
   public GatewayAuthenticationService(
     @Value(
       "${openchallenges.auth.service-url:http://openchallenges-auth-service:8080/v1}"
     ) String authServiceUrl,
-    RouteScopeConfiguration routeScopeConfiguration
+    RouteConfigRegistry routeConfigRegistry,
+    AudienceResolver audienceResolver
   ) {
     this.authServiceClient = WebClient.builder().baseUrl(authServiceUrl).build();
 
@@ -36,7 +38,8 @@ public class GatewayAuthenticationService {
     String oauth2ServiceUrl = authServiceUrl.replace("/v1", "");
     this.oauth2ServiceClient = WebClient.builder().baseUrl(oauth2ServiceUrl).build();
 
-    this.routeScopeConfiguration = routeScopeConfiguration;
+    this.routeConfigRegistry = routeConfigRegistry;
+    this.audienceResolver = audienceResolver;
   }
 
   /**
@@ -106,13 +109,13 @@ public class GatewayAuthenticationService {
     log.info("OAuth2 Client ID: {}", clientId);
 
     // Get required scopes for this route
-    List<String> requiredScopes = routeScopeConfiguration.getScopesForRoute(method, path);
+    List<String> requiredScopes = routeConfigRegistry.getScopesForRoute(method, path);
     String scopeParam = requiredScopes.isEmpty()
       ? ""
       : "&scope=" + String.join(" ", requiredScopes);
 
     // Get RFC 8707 resource identifier for audience/resource parameter
-    String resourceIdentifier = routeScopeConfiguration.getResourceIdentifierForRoute(method, path);
+    String resourceIdentifier = audienceResolver.getResourceIdentifierForRoute(method, path);
     String resourceParam = resourceIdentifier != null ? "&resource=" + resourceIdentifier : "";
 
     log.info("Required scopes for route: {}", requiredScopes);
@@ -184,7 +187,7 @@ public class GatewayAuthenticationService {
     String anonymousClientSecret = "anonymous_secret_for_public_access";
 
     // Get required scopes for this route
-    List<String> requiredScopes = routeScopeConfiguration.getScopesForRoute(method, path);
+    List<String> requiredScopes = routeConfigRegistry.getScopesForRoute(method, path);
     String scopeParam = requiredScopes.isEmpty()
       ? ""
       : "&scope=" + String.join(" ", requiredScopes);

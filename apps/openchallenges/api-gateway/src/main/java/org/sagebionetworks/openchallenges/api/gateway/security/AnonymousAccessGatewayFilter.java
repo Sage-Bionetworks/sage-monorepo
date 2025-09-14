@@ -1,6 +1,10 @@
 package org.sagebionetworks.openchallenges.api.gateway.security;
 
-import org.sagebionetworks.openchallenges.api.gateway.configuration.RouteScopeConfiguration;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.openchallenges.api.gateway.model.config.RouteConfigRegistry;
 import org.sagebionetworks.openchallenges.api.gateway.service.GatewayAuthenticationService;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -13,20 +17,15 @@ import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 /**
  * WebFilter that handles anonymous access for public endpoints.
  * Runs BEFORE API key authentication to provide JWT tokens for anonymous access.
- * 
+ *
  * This filter checks if a route allows anonymous access (x-anonymous-access: true in OpenAPI)
  * and generates JWT tokens using the anonymous OAuth2 client when:
  * 1. No Authorization header is present
- * 2. No API key header is present  
+ * 2. No API key header is present
  * 3. The route is configured for anonymous access
  */
 @Slf4j
@@ -34,11 +33,11 @@ import java.util.stream.Collectors;
 @Order(Ordered.HIGHEST_PRECEDENCE + 1) // Run before API key filter
 @RequiredArgsConstructor
 public class AnonymousAccessGatewayFilter implements WebFilter {
-  
+
   private static final String API_KEY_HEADER = "X-API-Key";
 
   private final GatewayAuthenticationService authenticationService;
-  private final RouteScopeConfiguration routeScopeConfiguration;
+  private final RouteConfigRegistry routeConfigRegistry;
 
   @Override
   public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
@@ -53,7 +52,7 @@ public class AnonymousAccessGatewayFilter implements WebFilter {
     }
 
     // Check if this route allows anonymous access
-    if (!routeScopeConfiguration.isAnonymousAccessAllowed(method, path)) {
+    if (!routeConfigRegistry.isAnonymousAccessAllowed(method, path)) {
       log.debug("Route does not allow anonymous access: {} {}", method, path);
       return chain.filter(exchange);
     }
@@ -61,54 +60,68 @@ public class AnonymousAccessGatewayFilter implements WebFilter {
     log.debug("Generating anonymous JWT for public endpoint: {} {}", method, path);
 
     // Generate anonymous JWT token using OAuth2 client credentials flow
-    return authenticationService.generateAnonymousJwt(method, path)
-        .flatMap(tokenResponse -> {
-          // Add the JWT to the Authorization header for backend services
-          ServerHttpRequest modifiedRequest = request.mutate()
-              .header("Authorization", "Bearer " + tokenResponse.getAccessToken())
-              .build();
+    return authenticationService
+      .generateAnonymousJwt(method, path)
+      .flatMap(tokenResponse -> {
+        // Add the JWT to the Authorization header for backend services
+        ServerHttpRequest modifiedRequest = request
+          .mutate()
+          .header("Authorization", "Bearer " + tokenResponse.getAccessToken())
+          .build();
 
-          // Extract scopes from token response for Spring Security
-          String[] scopes = tokenResponse.getScope() != null ? 
-              tokenResponse.getScope().split(" ") : new String[0];
-          
-          var authorities = Arrays.stream(scopes)
-              .map(scope -> new SimpleGrantedAuthority("SCOPE_" + scope))
-              .collect(Collectors.toList());
-          
-          // Create authentication for anonymous access
-          var authentication = new UsernamePasswordAuthenticationToken(
-              "anonymous", // principal name for anonymous access
-              null, 
-              authorities
-          );
+        // Extract scopes from token response for Spring Security
+        String[] scopes = tokenResponse.getScope() != null
+          ? tokenResponse.getScope().split(" ")
+          : new String[0];
 
-          log.debug("Anonymous JWT generated successfully: {} scopes for: {} {}", 
-              tokenResponse.getScope(), method, path);
+        var authorities = Arrays.stream(scopes)
+          .map(scope -> new SimpleGrantedAuthority("SCOPE_" + scope))
+          .collect(Collectors.toList());
 
-          return chain.filter(exchange.mutate().request(modifiedRequest).build())
-              .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
-        })
-        .onErrorResume(GatewayAuthenticationService.AuthenticationException.class, ex -> {
-          log.warn("Anonymous JWT generation failed for {}: {}", path, ex.getMessage());
-          // For anonymous access failures, continue without authentication
-          // The backend service will decide if the endpoint truly requires auth
-          log.debug("Continuing without authentication for potentially public endpoint: {}", path);
-          return chain.filter(exchange);
-        })
-        .onErrorResume(Exception.class, ex -> {
-          log.error("Unexpected error during anonymous JWT generation for {}: {}", path, ex.getMessage());
-          // For anonymous access, don't fail the request - let it continue without auth
-          return chain.filter(exchange);
-        });
+        // Create authentication for anonymous access
+        var authentication = new UsernamePasswordAuthenticationToken(
+          "anonymous", // principal name for anonymous access
+          null,
+          authorities
+        );
+
+        log.debug(
+          "Anonymous JWT generated successfully: {} scopes for: {} {}",
+          tokenResponse.getScope(),
+          method,
+          path
+        );
+
+        return chain
+          .filter(exchange.mutate().request(modifiedRequest).build())
+          .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
+      })
+      .onErrorResume(GatewayAuthenticationService.AuthenticationException.class, ex -> {
+        log.warn("Anonymous JWT generation failed for {}: {}", path, ex.getMessage());
+        // For anonymous access failures, continue without authentication
+        // The backend service will decide if the endpoint truly requires auth
+        log.debug("Continuing without authentication for potentially public endpoint: {}", path);
+        return chain.filter(exchange);
+      })
+      .onErrorResume(Exception.class, ex -> {
+        log.error(
+          "Unexpected error during anonymous JWT generation for {}: {}",
+          path,
+          ex.getMessage()
+        );
+        // For anonymous access, don't fail the request - let it continue without auth
+        return chain.filter(exchange);
+      });
   }
 
   /**
    * Check if the request already has authentication (Authorization header or API key).
    */
   private boolean hasExistingAuthentication(ServerHttpRequest request) {
-    return request.getHeaders().containsKey("Authorization") ||
-           (request.getHeaders().containsKey(API_KEY_HEADER) && 
-            !request.getHeaders().getFirst(API_KEY_HEADER).trim().isEmpty());
+    return (
+      request.getHeaders().containsKey("Authorization") ||
+      (request.getHeaders().containsKey(API_KEY_HEADER) &&
+        !request.getHeaders().getFirst(API_KEY_HEADER).trim().isEmpty())
+    );
   }
 }

@@ -1,5 +1,8 @@
 package org.sagebionetworks.openchallenges.api.gateway.util;
 
+import static org.sagebionetworks.openchallenges.api.gateway.util.OpenApiConstants.ANONYMOUS_ACCESS_EXTENSION;
+import static org.sagebionetworks.openchallenges.api.gateway.util.OpenApiConstants.OAUTH2_AUDIENCE_EXTENSION;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -9,6 +12,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import org.sagebionetworks.openchallenges.api.gateway.model.config.RouteConfig;
+import org.sagebionetworks.openchallenges.api.gateway.model.config.RouteConfigRegistry;
 
 /**
  * Utility class to parse OpenAPI specifications and generate route configurations.
@@ -31,7 +36,6 @@ public class OpenApiRouteConfigGenerator {
     "OPTIONS"
   );
   private static final String DEFAULT_SECURITY_SCHEME = "jwtBearer";
-  private static final String ANONYMOUS_ACCESS_EXTENSION = "x-anonymous-access";
   private static final String DEFAULT_API_PREFIX = "/api/v1";
   private static final String DEFAULT_OUTPUT_PATH = "src/main/resources/route-config.yml";
   private static final String DEFAULT_CONFIG_KEY = "route-config";
@@ -52,17 +56,19 @@ public class OpenApiRouteConfigGenerator {
     }
 
     try {
-      Map<String, Map<String, Object>> routeConfigs = new LinkedHashMap<>();
+      RouteConfigRegistry registry = new RouteConfigRegistry();
 
       for (String filePath : args) {
         System.err.println("Processing: " + filePath);
-        Map<String, Map<String, Object>> fileConfigs = parseOpenApiFile(filePath);
-        routeConfigs.putAll(fileConfigs);
+        Map<String, RouteConfig> fileConfigs = parseOpenApiFile(filePath);
+        for (Map.Entry<String, RouteConfig> entry : fileConfigs.entrySet()) {
+          registry.putRouteConfig(entry.getKey(), entry.getValue());
+        }
       }
 
       // Write the result to a YAML file in the resources folder
       String outputPath = DEFAULT_OUTPUT_PATH;
-      writeYamlFile(routeConfigs, outputPath);
+      writeYamlFile(registry, outputPath);
       System.err.println("Route configurations written to: " + outputPath);
     } catch (Exception e) {
       System.err.println("Error processing OpenAPI files: " + e.getMessage());
@@ -74,8 +80,7 @@ public class OpenApiRouteConfigGenerator {
   /**
    * Parse a single OpenAPI file and extract route configurations.
    */
-  private static Map<String, Map<String, Object>> parseOpenApiFile(String filePath)
-    throws IOException {
+  private static Map<String, RouteConfig> parseOpenApiFile(String filePath) throws IOException {
     Path path = Paths.get(filePath);
     if (!Files.exists(path)) {
       throw new IOException("File not found: " + filePath);
@@ -110,16 +115,22 @@ public class OpenApiRouteConfigGenerator {
   /**
    * Extract route configurations from OpenAPI paths.
    */
-  private static Map<String, Map<String, Object>> extractRouteConfigurations(
+  private static Map<String, RouteConfig> extractRouteConfigurations(
     JsonNode root,
     String filePath
   ) {
-    Map<String, Map<String, Object>> routeConfigs = new LinkedHashMap<>();
+    Map<String, RouteConfig> routeConfigs = new LinkedHashMap<>();
 
     JsonNode paths = root.get("paths");
     if (paths == null) {
       System.err.println("Warning: No 'paths' section found in " + filePath);
       return routeConfigs;
+    }
+
+    // Extract global audience from the OpenAPI spec
+    String globalAudience = extractAudience(root);
+    if (globalAudience != null) {
+      System.err.println("Found global audience: " + globalAudience + " in " + filePath);
     }
 
     // Iterate through each path
@@ -143,19 +154,19 @@ public class OpenApiRouteConfigGenerator {
 
             // Extract security requirements for this operation
             List<String> scopes = extractScopes(operation);
-            if (!scopes.isEmpty()) {
-              // Prepend /api/v1 to match the gateway's incoming request paths
+            if (!scopes.isEmpty() || globalAudience != null) {
+              // Create route configuration
               String routeKey = method + " " + DEFAULT_API_PREFIX + path;
-              Map<String, Object> routeConfig = routeConfigs.computeIfAbsent(routeKey, k ->
-                new LinkedHashMap<>()
-              );
-              routeConfig.put("scopes", scopes);
 
               // Extract anonymous access flag
-              JsonNode anonymousAccess = operation.get(ANONYMOUS_ACCESS_EXTENSION);
-              if (anonymousAccess != null && anonymousAccess.isBoolean()) {
-                routeConfig.put("anonymousAccess", anonymousAccess.asBoolean());
+              boolean anonymousAccess = false;
+              JsonNode anonymousAccessNode = operation.get(ANONYMOUS_ACCESS_EXTENSION);
+              if (anonymousAccessNode != null && anonymousAccessNode.isBoolean()) {
+                anonymousAccess = anonymousAccessNode.asBoolean();
               }
+
+              RouteConfig routeConfig = new RouteConfig(scopes, globalAudience, anonymousAccess);
+              routeConfigs.put(routeKey, routeConfig);
             }
           });
       });
@@ -198,24 +209,53 @@ public class OpenApiRouteConfigGenerator {
   }
 
   /**
+   * Extract audience from OpenAPI specification.
+   */
+  private static String extractAudience(JsonNode root) {
+    JsonNode audienceNode = root.get(OAUTH2_AUDIENCE_EXTENSION);
+    return audienceNode != null && audienceNode.isTextual() ? audienceNode.asText() : null;
+  }
+
+  /**
    * Write the route configurations to a YAML file.
    */
-  private static void writeYamlFile(
-    Map<String, Map<String, Object>> routeConfigs,
-    String outputPath
-  ) throws IOException {
+  private static void writeYamlFile(RouteConfigRegistry registry, String outputPath)
+    throws IOException {
     // Create the directory if it doesn't exist
     Path filePath = Paths.get(outputPath);
     Files.createDirectories(filePath.getParent());
 
-    // Create the YAML structure for Spring Boot configuration
+    // Convert RouteConfigRegistry to Map<String, Map<String, Object>> for YAML serialization
     Map<String, Object> config = new LinkedHashMap<>();
     Map<String, Object> app = new LinkedHashMap<>();
 
-    if (routeConfigs.isEmpty()) {
+    Map<String, Map<String, Object>> routeConfigsForYaml = new LinkedHashMap<>();
+
+    for (Map.Entry<String, RouteConfig> entry : registry.getAllRouteConfigs().entrySet()) {
+      String routeKey = entry.getKey();
+      RouteConfig routeConfig = entry.getValue();
+
+      Map<String, Object> configMap = new LinkedHashMap<>();
+
+      if (routeConfig.hasScopes()) {
+        configMap.put("scopes", routeConfig.getScopes());
+      }
+
+      if (routeConfig.hasAudience()) {
+        configMap.put("audience", routeConfig.getAudience());
+      }
+
+      if (routeConfig.isAnonymousAccess()) {
+        configMap.put("anonymousAccess", true);
+      }
+
+      routeConfigsForYaml.put(routeKey, configMap);
+    }
+
+    if (routeConfigsForYaml.isEmpty()) {
       app.put(DEFAULT_CONFIG_KEY, new LinkedHashMap<>());
     } else {
-      app.put(DEFAULT_CONFIG_KEY, routeConfigs);
+      app.put(DEFAULT_CONFIG_KEY, routeConfigsForYaml);
     }
 
     config.put("app", app);
@@ -227,21 +267,20 @@ public class OpenApiRouteConfigGenerator {
     System.out.println("# Generated route configurations for API Gateway");
     System.out.println("# File written to: " + outputPath);
     System.out.println();
-    if (routeConfigs.isEmpty()) {
+    if (registry.isEmpty()) {
       System.out.println("No routes with security requirements found");
     } else {
       System.out.println("Routes with security requirements:");
-      for (Map.Entry<String, Map<String, Object>> entry : routeConfigs.entrySet()) {
+      for (Map.Entry<String, RouteConfig> entry : registry.getAllRouteConfigs().entrySet()) {
         String route = entry.getKey();
-        @SuppressWarnings("unchecked")
-        List<String> scopes = (List<String>) entry.getValue().get("scopes");
-        Boolean anonymousAccess = (Boolean) entry.getValue().get("anonymousAccess");
+        RouteConfig routeConfig = entry.getValue();
         System.out.println(
           "  " +
           route +
           " -> scopes: " +
-          scopes +
-          (anonymousAccess != null && anonymousAccess ? " [anonymous]" : "")
+          routeConfig.getScopes() +
+          (routeConfig.hasAudience() ? " audience: " + routeConfig.getAudience() : "") +
+          (routeConfig.isAnonymousAccess() ? " [anonymous]" : "")
         );
       }
     }
