@@ -2,7 +2,7 @@ package org.sagebionetworks.openchallenges.api.gateway.service;
 
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
-import org.sagebionetworks.openchallenges.api.gateway.model.dto.OAuth2TokenResponseDto;
+import org.sagebionetworks.openchallenges.api.gateway.model.dto.OAuth2TokenResponse;
 import org.sagebionetworks.openchallenges.api.gateway.routing.RouteConfigRegistry;
 import org.sagebionetworks.openchallenges.api.gateway.util.ApiKeyParser;
 import org.sagebionetworks.openchallenges.api.gateway.util.ApiKeyParser.ParsedApiKey;
@@ -81,11 +81,7 @@ public class GatewayAuthenticationService {
    * @param path   URL path
    * @return A Mono containing the OAuth2 token response
    */
-  public Mono<OAuth2TokenResponseDto> exchangeApiKeyForJwt(
-    String apiKey,
-    String method,
-    String path
-  ) {
+  public Mono<OAuth2TokenResponse> exchangeApiKeyForJwt(String apiKey, String method, String path) {
     log.info("=== API GATEWAY: Starting API key exchange for JWT ===");
     log.info("Route: {} {}", method, path);
 
@@ -130,7 +126,7 @@ public class GatewayAuthenticationService {
       .header("Content-Type", "application/x-www-form-urlencoded")
       .bodyValue("grant_type=client_credentials" + scopeParam + resourceParam)
       .retrieve()
-      .bodyToMono(OAuth2TokenResponseDto.class)
+      .bodyToMono(OAuth2TokenResponse.class)
       .doOnNext(response -> {
         log.info("=== API GATEWAY: OAuth2 token exchange SUCCESSFUL ===");
         log.info(
@@ -168,7 +164,7 @@ public class GatewayAuthenticationService {
    * @param apiKey The API key to exchange (format: oc_dev_<suffix>.<secret>, oc_stage_<suffix>.<secret>, or oc_prod_<suffix>.<secret>)
    * @return A Mono containing the OAuth2 token response
    */
-  public Mono<OAuth2TokenResponseDto> exchangeApiKeyForJwt(String apiKey) {
+  public Mono<OAuth2TokenResponse> exchangeApiKeyForJwt(String apiKey) {
     return exchangeApiKeyForJwt(apiKey, "", "");
   }
 
@@ -179,7 +175,7 @@ public class GatewayAuthenticationService {
    * @param path URL path
    * @return A Mono containing the OAuth2 token response
    */
-  public Mono<OAuth2TokenResponseDto> generateAnonymousJwt(String method, String path) {
+  public Mono<OAuth2TokenResponse> generateAnonymousJwt(String method, String path) {
     log.debug("Generating anonymous JWT for route: {} {}", method, path);
 
     // Use a predefined anonymous client for public access
@@ -201,7 +197,7 @@ public class GatewayAuthenticationService {
       .header("Content-Type", "application/x-www-form-urlencoded")
       .bodyValue("grant_type=client_credentials" + scopeParam)
       .retrieve()
-      .bodyToMono(OAuth2TokenResponseDto.class)
+      .bodyToMono(OAuth2TokenResponse.class)
       .doOnNext(response ->
         log.debug("Anonymous OAuth2 token generated successfully with scopes: {}", requiredScopes)
       )

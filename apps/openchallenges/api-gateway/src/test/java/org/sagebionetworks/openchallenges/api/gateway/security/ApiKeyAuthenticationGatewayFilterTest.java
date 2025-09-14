@@ -14,7 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.openchallenges.api.gateway.configuration.AppProperties;
-import org.sagebionetworks.openchallenges.api.gateway.model.dto.OAuth2TokenResponseDto;
+import org.sagebionetworks.openchallenges.api.gateway.model.dto.OAuth2TokenResponse;
 import org.sagebionetworks.openchallenges.api.gateway.service.GatewayAuthenticationService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -149,7 +149,7 @@ class ApiKeyAuthenticationGatewayFilterTest {
     MockServerWebExchange exchange = MockServerWebExchange.from(request);
 
     // Mock successful OAuth2 token exchange
-    OAuth2TokenResponseDto tokenResponse = OAuth2TokenResponseDto.builder()
+    OAuth2TokenResponse tokenResponse = OAuth2TokenResponse.builder()
       .accessToken("jwt-access-token")
       .tokenType("Bearer")
       .expiresIn(3600)

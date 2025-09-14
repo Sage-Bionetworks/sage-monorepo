@@ -12,7 +12,7 @@ import lombok.extern.jackson.Jacksonized;
 @Value
 @Builder
 @Jacksonized
-public class OAuth2TokenResponseDto {
+public class OAuth2TokenResponse {
 
   @JsonProperty("access_token")
   private String accessToken;
