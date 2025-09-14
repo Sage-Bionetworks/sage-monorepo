@@ -1,4 +1,4 @@
-package org.sagebionetworks.openchallenges.api.gateway.model;
+package org.sagebionetworks.openchallenges.api.gateway.model.dto;
 
 import java.util.Collection;
 import java.util.Set;
@@ -58,14 +58,5 @@ public record RouteConfig(Set<String> scopes, String audience, boolean anonymous
 
   public RouteConfig withAnonymousAccess(boolean newAnonymousAccess) {
     return new RouteConfig(scopes, audience, newAnonymousAccess);
-  }
-
-  // Optional convenience factories
-  public static RouteConfig anonymousAllowed() {
-    return new RouteConfig(Set.of(), null, true);
-  }
-
-  public static RouteConfig secured(Set<String> scopes, String audience) {
-    return new RouteConfig(scopes, audience, false);
   }
 }

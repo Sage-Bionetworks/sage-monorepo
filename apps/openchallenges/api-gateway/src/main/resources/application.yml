@@ -4,6 +4,21 @@ app:
     service-url: http://openchallenges-auth-service:8087/v1
     realm: OpenChallenges
 
+app2:
+  routes:
+    - method: GET
+      path: /api/v1/auth/profile
+      scopes: ['read:profile']
+      audience: 'urn:openchallenges:auth-service'
+    - method: POST
+      path: /api/v1/auth/profile
+      scopes: ['write:profile']
+      audience: 'urn:openchallenges:auth-service'
+    # 'GET /api/v1/auth/profile':
+    #   scopes:
+    #     - 'read:profile'
+    #   audience: 'urn:openchallenges:auth-service'
+
 server:
   port: 8082
 
@@ -83,8 +98,8 @@ spring:
                 - StripPrefix=1
   profiles:
     active: dev
-  config:
-    import: 'classpath:route-config.yml'
+  # config:
+  #   import: 'classpath:routes.yml'
 
 logging:
   level:

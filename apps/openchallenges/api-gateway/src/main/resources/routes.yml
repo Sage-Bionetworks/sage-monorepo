@@ -1,4 +1,4 @@
-app:
+apps:
   routes:
     GET /api/v1/auth/profile:
       scopes:
