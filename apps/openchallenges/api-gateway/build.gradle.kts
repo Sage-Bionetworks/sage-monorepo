@@ -40,7 +40,6 @@ tasks.register<JavaExec>("generateRouteConfig") {
 
   doFirst {
     println("Generating route configurations...")
-    println("Output will be written to src/main/resources/route-config.yml")
   }
 }
 
