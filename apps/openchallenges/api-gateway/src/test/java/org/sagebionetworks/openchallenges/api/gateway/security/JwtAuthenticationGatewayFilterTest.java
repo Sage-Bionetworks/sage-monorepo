@@ -1,12 +1,19 @@
 package org.sagebionetworks.openchallenges.api.gateway.security;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.sagebionetworks.openchallenges.api.gateway.configuration.AuthConfiguration;
+import org.sagebionetworks.openchallenges.api.gateway.configuration.AppProperties;
 import org.sagebionetworks.openchallenges.api.gateway.service.OAuth2JwtService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,13 +21,6 @@ import org.springframework.mock.http.server.reactive.MockServerHttpRequest;
 import org.springframework.mock.web.server.MockServerWebExchange;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.never;
 
 /**
  * Unit tests for JwtAuthenticationGatewayFilter.
@@ -32,7 +32,7 @@ class JwtAuthenticationGatewayFilterTest {
   private OAuth2JwtService oAuth2JwtService;
 
   @Mock
-  private AuthConfiguration authConfiguration;
+  private AppProperties apiProperties;
 
   @Mock
   private WebFilterChain chain;
@@ -45,10 +45,8 @@ class JwtAuthenticationGatewayFilterTest {
   void shouldContinueChainWhenNoAuthorizationHeaderIsPresent() {
     // given
     when(chain.filter(any())).thenReturn(Mono.empty());
-    
-    MockServerHttpRequest request = MockServerHttpRequest
-        .post("/api/v1/organizations")
-        .build();
+
+    MockServerHttpRequest request = MockServerHttpRequest.post("/api/v1/organizations").build();
     MockServerWebExchange exchange = MockServerWebExchange.from(request);
 
     // when
@@ -64,11 +62,10 @@ class JwtAuthenticationGatewayFilterTest {
   void shouldContinueChainWhenAuthorizationHeaderIsNotBearer() {
     // given
     when(chain.filter(any())).thenReturn(Mono.empty());
-    
-    MockServerHttpRequest request = MockServerHttpRequest
-        .post("/api/v1/organizations")
-        .header("Authorization", "Basic dXNlcjpwYXNz")
-        .build();
+
+    MockServerHttpRequest request = MockServerHttpRequest.post("/api/v1/organizations")
+      .header("Authorization", "Basic dXNlcjpwYXNz")
+      .build();
     MockServerWebExchange exchange = MockServerWebExchange.from(request);
 
     // when
@@ -84,11 +81,10 @@ class JwtAuthenticationGatewayFilterTest {
   void shouldContinueChainWhenBearerTokenIsEmpty() {
     // given
     when(chain.filter(any())).thenReturn(Mono.empty());
-    
-    MockServerHttpRequest request = MockServerHttpRequest
-        .post("/api/v1/organizations")
-        .header("Authorization", "Bearer ")
-        .build();
+
+    MockServerHttpRequest request = MockServerHttpRequest.post("/api/v1/organizations")
+      .header("Authorization", "Bearer ")
+      .build();
     MockServerWebExchange exchange = MockServerWebExchange.from(request);
 
     // when
@@ -103,28 +99,27 @@ class JwtAuthenticationGatewayFilterTest {
   @DisplayName("should return unauthorized with realm when jwt token is invalid")
   void shouldReturnUnauthorizedWithRealmWhenJwtTokenIsInvalid() {
     // given
-    when(authConfiguration.getRealm()).thenReturn("OpenChallenges");
-    
+    when(apiProperties.getAuth().getRealm()).thenReturn("OpenChallenges");
+
     String invalidToken = "invalid.jwt.token";
-    MockServerHttpRequest request = MockServerHttpRequest
-        .post("/api/v1/organizations")
-        .header("Authorization", "Bearer " + invalidToken)
-        .build();
+    MockServerHttpRequest request = MockServerHttpRequest.post("/api/v1/organizations")
+      .header("Authorization", "Bearer " + invalidToken)
+      .build();
     MockServerWebExchange exchange = MockServerWebExchange.from(request);
-    
-    OAuth2JwtService.JwtValidationResponse invalidResponse = 
-        OAuth2JwtService.JwtValidationResponse.invalid("Invalid token");
-    
-    when(oAuth2JwtService.validateJwt(invalidToken))
-        .thenReturn(Mono.just(invalidResponse));
+
+    OAuth2JwtService.JwtValidationResponse invalidResponse =
+      OAuth2JwtService.JwtValidationResponse.invalid("Invalid token");
+
+    when(oAuth2JwtService.validateJwt(invalidToken)).thenReturn(Mono.just(invalidResponse));
 
     // when
     filter.filter(exchange, chain).block();
 
     // then
     assertThat(exchange.getResponse().getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
-    assertThat(exchange.getResponse().getHeaders().getFirst(HttpHeaders.WWW_AUTHENTICATE))
-        .isEqualTo("Bearer realm=\"OpenChallenges\"");
+    assertThat(
+      exchange.getResponse().getHeaders().getFirst(HttpHeaders.WWW_AUTHENTICATE)
+    ).isEqualTo("Bearer realm=\"OpenChallenges\"");
     verify(chain, never()).filter(exchange);
   }
 
@@ -133,25 +128,23 @@ class JwtAuthenticationGatewayFilterTest {
   void shouldAddAuthenticationHeadersWhenJwtTokenIsValid() {
     // given
     when(chain.filter(any())).thenReturn(Mono.empty());
-    
+
     String validToken = "valid.jwt.token";
-    MockServerHttpRequest request = MockServerHttpRequest
-        .post("/api/v1/organizations")
-        .header("Authorization", "Bearer " + validToken)
-        .build();
+    MockServerHttpRequest request = MockServerHttpRequest.post("/api/v1/organizations")
+      .header("Authorization", "Bearer " + validToken)
+      .build();
     MockServerWebExchange exchange = MockServerWebExchange.from(request);
-    
-    OAuth2JwtService.JwtValidationResponse validResponse = 
-        OAuth2JwtService.JwtValidationResponse.builder()
-            .valid(true)
-            .userId("user123")
-            .username("testuser")
-            .role("USER")
-            .expiresAt("2024-12-31T23:59:59Z")
-            .build();
-    
-    when(oAuth2JwtService.validateJwt(validToken))
-        .thenReturn(Mono.just(validResponse));
+
+    OAuth2JwtService.JwtValidationResponse validResponse =
+      OAuth2JwtService.JwtValidationResponse.builder()
+        .valid(true)
+        .userId("user123")
+        .username("testuser")
+        .role("USER")
+        .expiresAt("2024-12-31T23:59:59Z")
+        .build();
+
+    when(oAuth2JwtService.validateJwt(validToken)).thenReturn(Mono.just(validResponse));
 
     // when
     filter.filter(exchange, chain).block();
@@ -159,7 +152,6 @@ class JwtAuthenticationGatewayFilterTest {
     // then
     verify(chain).filter(any());
     assertThat(exchange.getResponse().getStatusCode()).isNull(); // No error status set
-    
     // Verify headers were added to the request that was passed to the next filter
     // Note: We can't easily verify the modified request headers in this test setup
     // as MockServerWebExchange doesn't provide access to the mutated request
