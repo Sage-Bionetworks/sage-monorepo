@@ -12,6 +12,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import org.sagebionetworks.openchallenges.api.gateway.model.dto.RouteSpec;
+import org.sagebionetworks.openchallenges.api.gateway.routing.RouteKey;
 
 /**
  * Reads one or more OpenAPI YAML files and generates a canonical route-config YAML:
@@ -90,14 +92,14 @@ public final class OpenApiRouteConfigGenerator {
     }
 
     try {
-      List<RouteEntry> merged = new ArrayList<>();
+      List<RouteSpec> merged = new ArrayList<>();
       Set<RouteKey> seen = new HashSet<>();
 
       for (String file : openapiFiles) {
         System.err.println("Processing: " + file);
-        List<RouteEntry> entries = parseOpenApiFile(file);
-        for (RouteEntry e : entries) {
-          RouteKey key = new RouteKey(e.method, e.path);
+        List<RouteSpec> entries = parseOpenApiFile(file);
+        for (RouteSpec e : entries) {
+          RouteKey key = new RouteKey(e.method(), e.path());
           if (seen.add(key)) {
             merged.add(e);
           } else {
@@ -108,7 +110,7 @@ public final class OpenApiRouteConfigGenerator {
       }
 
       // Stable sort by method then path for deterministic diffs
-      merged.sort(Comparator.comparing((RouteEntry r) -> r.method).thenComparing(r -> r.path));
+      merged.sort(Comparator.comparing((RouteSpec r) -> r.method()).thenComparing(r -> r.path()));
 
       writeYamlFile(appKey, merged, outputPath);
       System.err.println("Route configurations written to: " + outputPath);
@@ -121,7 +123,7 @@ public final class OpenApiRouteConfigGenerator {
 
   // ----- Parsing -----
 
-  private static List<RouteEntry> parseOpenApiFile(String filePath) throws IOException {
+  private static List<RouteSpec> parseOpenApiFile(String filePath) throws IOException {
     Path path = Paths.get(filePath);
     if (!Files.exists(path)) {
       throw new IOException("File not found: " + filePath);
@@ -135,7 +137,7 @@ public final class OpenApiRouteConfigGenerator {
 
     String globalAudience = extractAudience(root);
 
-    List<RouteEntry> out = new ArrayList<>();
+    List<RouteSpec> out = new ArrayList<>();
     JsonNode paths = root.get("paths");
     if (paths == null || !paths.isObject()) {
       System.err.println("Warning: No 'paths' section in " + filePath);
@@ -165,7 +167,7 @@ public final class OpenApiRouteConfigGenerator {
             // We include a route if any of the fields matter to the gateway.
             if (!scopes.isEmpty() || globalAudience != null || anonymousAccess) {
               String normalizedPath = normalizePath(DEFAULT_API_PREFIX + rawPath);
-              RouteEntry entry = new RouteEntry(
+              RouteSpec entry = new RouteSpec(
                 method,
                 normalizedPath,
                 new LinkedHashSet<>(scopes), // preserve order, dedupe
@@ -226,7 +228,7 @@ public final class OpenApiRouteConfigGenerator {
 
   // ----- Output -----
 
-  private static void writeYamlFile(String appKey, List<RouteEntry> routes, String outputPath)
+  private static void writeYamlFile(String appKey, List<RouteSpec> routes, String outputPath)
     throws IOException {
     Path out = Paths.get(outputPath);
     Files.createDirectories(out.getParent());
@@ -236,13 +238,13 @@ public final class OpenApiRouteConfigGenerator {
     Map<String, Object> app = new LinkedHashMap<>();
     List<Map<String, Object>> list = new ArrayList<>();
 
-    for (RouteEntry r : routes) {
+    for (RouteSpec r : routes) {
       Map<String, Object> item = new LinkedHashMap<>();
-      item.put("method", r.method);
-      item.put("path", r.path);
-      if (!r.scopes.isEmpty()) item.put("scopes", new ArrayList<>(r.scopes));
-      if (r.audience != null) item.put("audience", r.audience);
-      if (r.anonymousAccess) item.put("anonymousAccess", true);
+      item.put("method", r.method());
+      item.put("path", r.path());
+      if (!r.scopes().isEmpty()) item.put("scopes", new ArrayList<>(r.scopes()));
+      if (r.audience() != null) item.put("audience", r.audience());
+      if (r.anonymousAccess()) item.put("anonymousAccess", true);
       list.add(item);
     }
 
@@ -250,69 +252,5 @@ public final class OpenApiRouteConfigGenerator {
     root.put(appKey, app);
 
     YAML.writeValue(out.toFile(), root);
-  }
-
-  // ----- Small types -----
-
-  /** Internal route entry for generation (equals/hashCode by method+path). */
-  private static final class RouteEntry {
-
-    final String method;
-    final String path;
-    final LinkedHashSet<String> scopes;
-    final String audience;
-    final boolean anonymousAccess;
-
-    RouteEntry(
-      String method,
-      String path,
-      LinkedHashSet<String> scopes,
-      String audience,
-      boolean anonymousAccess
-    ) {
-      this.method = Objects.requireNonNull(method);
-      this.path = Objects.requireNonNull(path);
-      this.scopes = (scopes == null) ? new LinkedHashSet<>() : scopes;
-      this.audience = (audience != null && !audience.isBlank()) ? audience : null;
-      this.anonymousAccess = anonymousAccess;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-      if (this == o) return true;
-      if (!(o instanceof RouteEntry)) return false;
-      RouteEntry that = (RouteEntry) o;
-      return method.equals(that.method) && path.equals(that.path);
-    }
-
-    @Override
-    public int hashCode() {
-      return Objects.hash(method, path);
-    }
-  }
-
-  /** Key used only for deduping across files. */
-  private static final class RouteKey {
-
-    final String method;
-    final String path;
-
-    RouteKey(String method, String path) {
-      this.method = method.toUpperCase(Locale.ROOT);
-      this.path = path;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-      if (this == o) return true;
-      if (!(o instanceof RouteKey)) return false;
-      RouteKey that = (RouteKey) o;
-      return method.equals(that.method) && path.equals(that.path);
-    }
-
-    @Override
-    public int hashCode() {
-      return Objects.hash(method, path);
-    }
   }
 }
