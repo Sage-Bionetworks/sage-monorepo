@@ -1,93 +1,91 @@
----
-openchallenges:
-  gateway:
-    route-scopes:
-      GET /api/v1/auth/profile:
-        scopes:
-          - 'read:profile'
-      PUT /api/v1/auth/profile:
-        scopes:
-          - 'update:profile'
-      GET /api/v1/auth/api-keys:
-        scopes:
-          - 'read:api-key'
-      POST /api/v1/auth/api-keys:
-        scopes:
-          - 'create:api-key'
-      DELETE /api/v1/auth/api-keys/{keyId}:
-        scopes:
-          - 'delete:api-key'
-      GET /api/v1/challenges:
-        scopes:
-          - 'read:challenges'
-      POST /api/v1/challenges:
-        scopes:
-          - 'create:challenges'
-      GET /api/v1/challenges/{challengeId}:
-        scopes:
-          - 'read:challenges'
-      PUT /api/v1/challenges/{challengeId}:
-        scopes:
-          - 'update:challenges'
-      DELETE /api/v1/challenges/{challengeId}:
-        scopes:
-          - 'delete:challenges'
-      GET /api/v1/challenges/{challengeId}/json-ld:
-        scopes:
-          - 'read:challenges'
-      GET /api/v1/challenges/{challengeId}/contributions:
-        scopes:
-          - 'read:challenges'
-      POST /api/v1/challenges/{challengeId}/contributions:
-        scopes:
-          - 'update:challenges'
-      DELETE /api/v1/challenges/{challengeId}/contributions:
-        scopes:
-          - 'update:challenges'
-      DELETE /api/v1/challenges/{challengeId}/contributions/{organizationId}/role/{role}:
-        scopes:
-          - 'update:challenges'
-      GET /api/v1/challenge-analytics/challenges-per-year:
-        scopes:
-          - 'read:challenges-analytics'
-      GET /api/v1/challenge-platforms:
-        scopes:
-          - 'read:challenge-platforms'
-      POST /api/v1/challenge-platforms:
-        scopes:
-          - 'create:challenge-platforms'
-      GET /api/v1/challenge-platforms/{challengePlatformId}:
-        scopes:
-          - 'read:challenge-platforms'
-      PUT /api/v1/challenge-platforms/{challengePlatformId}:
-        scopes:
-          - 'update:challenge-platforms'
-      DELETE /api/v1/challenge-platforms/{challengePlatformId}:
-        scopes:
-          - 'delete:challenge-platforms'
-      GET /api/v1/edam-concepts:
-        scopes:
-          - 'read:edam-concepts'
-      GET /api/v1/organizations:
-        scopes:
-          - 'read:organizations'
-        anonymousAccess: true
-      POST /api/v1/organizations:
-        scopes:
-          - 'create:organizations'
-      GET /api/v1/organizations/{org}:
-        scopes:
-          - 'read:organizations'
-        anonymousAccess: true
-      PUT /api/v1/organizations/{org}:
-        scopes:
-          - 'update:organizations'
-      DELETE /api/v1/organizations/{org}:
-        scopes:
-          - 'delete:organizations'
-      POST /api/v1/organizations/{org}/participations:
-        scopes:
-          - 'update:organizations'
-      DELETE /api/v1/organizations/{org}/participations/{challengeId}/roles/{role}:
-        scopes:
-          - 'update:organizations'
+app:
+  route-scopes:
+    GET /api/v1/auth/profile:
+      scopes:
+        - 'read:profile'
+    PUT /api/v1/auth/profile:
+      scopes:
+        - 'update:profile'
+    GET /api/v1/auth/api-keys:
+      scopes:
+        - 'read:api-key'
+    POST /api/v1/auth/api-keys:
+      scopes:
+        - 'create:api-key'
+    DELETE /api/v1/auth/api-keys/{keyId}:
+      scopes:
+        - 'delete:api-key'
+    GET /api/v1/challenges:
+      scopes:
+        - 'read:challenges'
+    POST /api/v1/challenges:
+      scopes:
+        - 'create:challenges'
+    GET /api/v1/challenges/{challengeId}:
+      scopes:
+        - 'read:challenges'
+    PUT /api/v1/challenges/{challengeId}:
+      scopes:
+        - 'update:challenges'
+    DELETE /api/v1/challenges/{challengeId}:
+      scopes:
+        - 'delete:challenges'
+    GET /api/v1/challenges/{challengeId}/json-ld:
+      scopes:
+        - 'read:challenges'
+    GET /api/v1/challenges/{challengeId}/contributions:
+      scopes:
+        - 'read:challenges'
+    POST /api/v1/challenges/{challengeId}/contributions:
+      scopes:
+        - 'update:challenges'
+    DELETE /api/v1/challenges/{challengeId}/contributions:
+      scopes:
+        - 'update:challenges'
+    DELETE /api/v1/challenges/{challengeId}/contributions/{organizationId}/role/{role}:
+      scopes:
+        - 'update:challenges'
+    GET /api/v1/challenge-analytics/challenges-per-year:
+      scopes:
+        - 'read:challenges-analytics'
+    GET /api/v1/challenge-platforms:
+      scopes:
+        - 'read:challenge-platforms'
+    POST /api/v1/challenge-platforms:
+      scopes:
+        - 'create:challenge-platforms'
+    GET /api/v1/challenge-platforms/{challengePlatformId}:
+      scopes:
+        - 'read:challenge-platforms'
+    PUT /api/v1/challenge-platforms/{challengePlatformId}:
+      scopes:
+        - 'update:challenge-platforms'
+    DELETE /api/v1/challenge-platforms/{challengePlatformId}:
+      scopes:
+        - 'delete:challenge-platforms'
+    GET /api/v1/edam-concepts:
+      scopes:
+        - 'read:edam-concepts'
+    GET /api/v1/organizations:
+      scopes:
+        - 'read:organizations'
+      anonymousAccess: true
+    POST /api/v1/organizations:
+      scopes:
+        - 'create:organizations'
+    GET /api/v1/organizations/{org}:
+      scopes:
+        - 'read:organizations'
+      anonymousAccess: true
+    PUT /api/v1/organizations/{org}:
+      scopes:
+        - 'update:organizations'
+    DELETE /api/v1/organizations/{org}:
+      scopes:
+        - 'delete:organizations'
+    POST /api/v1/organizations/{org}/participations:
+      scopes:
+        - 'update:organizations'
+    DELETE /api/v1/organizations/{org}/participations/{challengeId}/roles/{role}:
+      scopes:
+        - 'update:organizations'
