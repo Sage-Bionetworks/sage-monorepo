@@ -11,5 +11,5 @@ import org.springframework.validation.annotation.Validated;
  * Binds app2.routes from route-config.yml (imported via spring.config.import).
  */
 @Validated
-@ConfigurationProperties(prefix = "app2")
+@ConfigurationProperties(prefix = "app")
 public record RouteConfigProperties(@NotNull @Valid List<RouteSpec> routes) {}
