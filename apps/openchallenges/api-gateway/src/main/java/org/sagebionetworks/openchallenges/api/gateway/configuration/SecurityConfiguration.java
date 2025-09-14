@@ -14,12 +14,12 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * Spring Security configuration for the API Gateway.
- * 
+ *
  * All API endpoints now require JWT authentication, which is provided by:
  * 1. AnonymousAccessGatewayFilter - generates JWTs for public endpoints
  * 2. ApiKeyAuthenticationGatewayFilter - exchanges API keys for JWTs
  * 3. JwtAuthenticationGatewayFilter - validates existing JWTs
- * 
+ *
  * Backend services use method-level authorization (@PreAuthorize) based on JWT scopes.
  */
 @Configuration
@@ -38,7 +38,7 @@ public class SecurityConfiguration {
       .csrf(ServerHttpSecurity.CsrfSpec::disable)
       // Add our custom authentication filters in order:
       // 1. Anonymous access (generates JWTs for public endpoints)
-      // 2. API key authentication (exchanges API keys for JWTs)  
+      // 2. API key authentication (exchanges API keys for JWTs)
       // 3. JWT validation (validates existing JWTs)
       .addFilterBefore(anonymousAccessFilter, SecurityWebFiltersOrder.AUTHORIZATION)
       .addFilterBefore(apiKeyAuthenticationFilter, SecurityWebFiltersOrder.AUTHORIZATION)
@@ -46,18 +46,10 @@ public class SecurityConfiguration {
       .authorizeExchange(ex -> ex
         // Actuator endpoints for health checks
         .pathMatchers("/actuator/health", "/actuator/metrics").permitAll()
-        
+
         // OAuth2 endpoints (served by auth service)
         .pathMatchers("/oauth2/**", "/.well-known/**").permitAll()
-        
-        // All API endpoints require JWT authentication
-        // Authentication is provided by our custom filters:
-        // - Anonymous access filter generates JWTs for public endpoints  
-        // - API key filter exchanges API keys for JWTs
-        // - JWT filter validates existing JWTs
-        // Backend services handle authorization via @PreAuthorize with JWT scopes
-        .pathMatchers("/api/**").authenticated()
-        
+
         // Everything else requires authentication
         .anyExchange().authenticated()
       )

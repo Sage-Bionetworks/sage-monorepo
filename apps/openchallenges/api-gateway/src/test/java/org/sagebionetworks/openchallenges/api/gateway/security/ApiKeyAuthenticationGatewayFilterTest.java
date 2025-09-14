@@ -13,9 +13,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.sagebionetworks.openchallenges.api.gateway.configuration.AuthConfiguration;
+import org.sagebionetworks.openchallenges.api.gateway.configuration.AppProperties;
+import org.sagebionetworks.openchallenges.api.gateway.model.dto.OAuth2TokenResponseDto;
 import org.sagebionetworks.openchallenges.api.gateway.service.GatewayAuthenticationService;
-import org.sagebionetworks.openchallenges.api.gateway.service.OAuth2TokenResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.http.server.reactive.MockServerHttpRequest;
@@ -33,7 +33,7 @@ class ApiKeyAuthenticationGatewayFilterTest {
   private GatewayAuthenticationService authenticationService;
 
   @Mock
-  private AuthConfiguration authConfiguration;
+  private AppProperties appProperties;
 
   @Mock
   private WebFilterChain chain;
@@ -105,7 +105,7 @@ class ApiKeyAuthenticationGatewayFilterTest {
   @DisplayName("should return unauthorized with realm when api key is invalid")
   void shouldReturnUnauthorizedWithRealmWhenApiKeyIsInvalid() {
     // given
-    when(authConfiguration.getRealm()).thenReturn("OpenChallenges");
+    when(appProperties.getAuth().getRealm()).thenReturn("OpenChallenges");
 
     String invalidApiKey = "invalid-key";
     MockServerHttpRequest request = MockServerHttpRequest.post("/api/v1/organizations")
@@ -149,12 +149,14 @@ class ApiKeyAuthenticationGatewayFilterTest {
     MockServerWebExchange exchange = MockServerWebExchange.from(request);
 
     // Mock successful OAuth2 token exchange
-    OAuth2TokenResponse tokenResponse = new OAuth2TokenResponse(
-      "jwt-access-token",
-      "Bearer",
-      3600,
-      "read:organizations create:organizations update:organizations read:profile update:profile"
-    );
+    OAuth2TokenResponseDto tokenResponse = OAuth2TokenResponseDto.builder()
+      .accessToken("jwt-access-token")
+      .tokenType("Bearer")
+      .expiresIn(3600)
+      .scope(
+        "read:organizations create:organizations update:organizations read:profile update:profile"
+      )
+      .build();
 
     when(
       authenticationService.exchangeApiKeyForJwt(validApiKey, "POST", "/api/v1/organizations")

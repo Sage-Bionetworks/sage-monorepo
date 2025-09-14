@@ -1,14 +1,15 @@
 package org.sagebionetworks.openchallenges.api.gateway.service;
 
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.api.gateway.configuration.RouteScopeConfiguration;
+import org.sagebionetworks.openchallenges.api.gateway.model.dto.OAuth2TokenResponseDto;
 import org.sagebionetworks.openchallenges.api.gateway.service.ApiKeyParser.ParsedApiKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * Service for validating authentication tokens via the Auth Service internal endpoints.
@@ -33,7 +34,7 @@ public class GatewayAuthenticationService {
     // OAuth2 endpoints are at the root level, not under /v1
     String oauth2ServiceUrl = authServiceUrl.replace("/v1", "");
     this.oauth2ServiceClient = WebClient.builder().baseUrl(oauth2ServiceUrl).build();
-    
+
     this.routeScopeConfiguration = routeScopeConfiguration;
   }
 
@@ -76,7 +77,11 @@ public class GatewayAuthenticationService {
    * @param path   URL path
    * @return A Mono containing the OAuth2 token response
    */
-  public Mono<OAuth2TokenResponse> exchangeApiKeyForJwt(String apiKey, String method, String path) {
+  public Mono<OAuth2TokenResponseDto> exchangeApiKeyForJwt(
+    String apiKey,
+    String method,
+    String path
+  ) {
     log.info("=== API GATEWAY: Starting API key exchange for JWT ===");
     log.info("Route: {} {}", method, path);
 
@@ -84,27 +89,31 @@ public class GatewayAuthenticationService {
     ParsedApiKey parsedKey;
     try {
       parsedKey = ApiKeyParser.parseApiKey(apiKey);
-      log.info("Parsed API key - Environment: {}, Suffix: {}, Secret present: {}", 
-               parsedKey.getEnvironmentPrefix(), 
-               parsedKey.getSuffix(), 
-               parsedKey.getSecret() != null && !parsedKey.getSecret().isEmpty());
+      log.info(
+        "Parsed API key - Environment: {}, Suffix: {}, Secret present: {}",
+        parsedKey.getEnvironmentPrefix(),
+        parsedKey.getSuffix(),
+        parsedKey.getSecret() != null && !parsedKey.getSecret().isEmpty()
+      );
     } catch (Exception e) {
       log.error("Failed to parse API key: {}", e.getMessage());
       throw e;
     }
-    
+
     String clientId = "oc_api_key_" + parsedKey.getSuffix(); // Use suffix for client_id - matches auth service format
     String clientSecret = parsedKey.getSecret();
     log.info("OAuth2 Client ID: {}", clientId);
 
     // Get required scopes for this route
     List<String> requiredScopes = routeScopeConfiguration.getScopesForRoute(method, path);
-    String scopeParam = requiredScopes.isEmpty() ? "" : "&scope=" + String.join(" ", requiredScopes);
-    
+    String scopeParam = requiredScopes.isEmpty()
+      ? ""
+      : "&scope=" + String.join(" ", requiredScopes);
+
     // Get RFC 8707 resource identifier for audience/resource parameter
     String resourceIdentifier = routeScopeConfiguration.getResourceIdentifierForRoute(method, path);
     String resourceParam = resourceIdentifier != null ? "&resource=" + resourceIdentifier : "";
-    
+
     log.info("Required scopes for route: {}", requiredScopes);
     log.info("RFC 8707 resource identifier for route: {}", resourceIdentifier);
     log.info("OAuth2 request URL: /oauth2/token");
@@ -117,16 +126,28 @@ public class GatewayAuthenticationService {
       .header("Content-Type", "application/x-www-form-urlencoded")
       .bodyValue("grant_type=client_credentials" + scopeParam + resourceParam)
       .retrieve()
-      .bodyToMono(OAuth2TokenResponse.class)
+      .bodyToMono(OAuth2TokenResponseDto.class)
       .doOnNext(response -> {
         log.info("=== API GATEWAY: OAuth2 token exchange SUCCESSFUL ===");
-        log.info("Client: {}, Scopes: {}, Resource: {}", clientId, requiredScopes, resourceIdentifier);
-        log.info("Access token received (length: {})", 
-                 response.getAccessToken() != null ? response.getAccessToken().length() : 0);
+        log.info(
+          "Client: {}, Scopes: {}, Resource: {}",
+          clientId,
+          requiredScopes,
+          resourceIdentifier
+        );
+        log.info(
+          "Access token received (length: {})",
+          response.getAccessToken() != null ? response.getAccessToken().length() : 0
+        );
       })
       .onErrorResume(WebClientResponseException.class, ex -> {
         log.error("=== API GATEWAY: OAuth2 token exchange FAILED ===");
-        log.error("Client: {}, Status: {}, Response: {}", clientId, ex.getStatusCode(), ex.getResponseBodyAsString());
+        log.error(
+          "Client: {}, Status: {}, Response: {}",
+          clientId,
+          ex.getStatusCode(),
+          ex.getResponseBodyAsString()
+        );
         return Mono.error(new AuthenticationException("API key authentication failed", ex));
       })
       .onErrorResume(Exception.class, ex -> {
@@ -143,7 +164,7 @@ public class GatewayAuthenticationService {
    * @param apiKey The API key to exchange (format: oc_ak_<prefix>.<secret>)
    * @return A Mono containing the OAuth2 token response
    */
-  public Mono<OAuth2TokenResponse> exchangeApiKeyForJwt(String apiKey) {
+  public Mono<OAuth2TokenResponseDto> exchangeApiKeyForJwt(String apiKey) {
     return exchangeApiKeyForJwt(apiKey, "", "");
   }
 
@@ -151,10 +172,10 @@ public class GatewayAuthenticationService {
    * Generates an anonymous JWT token for public endpoints using a pre-configured anonymous client.
    *
    * @param method HTTP method
-   * @param path URL path  
+   * @param path URL path
    * @return A Mono containing the OAuth2 token response
    */
-  public Mono<OAuth2TokenResponse> generateAnonymousJwt(String method, String path) {
+  public Mono<OAuth2TokenResponseDto> generateAnonymousJwt(String method, String path) {
     log.debug("Generating anonymous JWT for route: {} {}", method, path);
 
     // Use a predefined anonymous client for public access
@@ -163,7 +184,9 @@ public class GatewayAuthenticationService {
 
     // Get required scopes for this route
     List<String> requiredScopes = routeScopeConfiguration.getScopesForRoute(method, path);
-    String scopeParam = requiredScopes.isEmpty() ? "" : "&scope=" + String.join(" ", requiredScopes);
+    String scopeParam = requiredScopes.isEmpty()
+      ? ""
+      : "&scope=" + String.join(" ", requiredScopes);
 
     log.debug("Requesting anonymous OAuth2 token with scopes: {}", requiredScopes);
 
@@ -174,7 +197,7 @@ public class GatewayAuthenticationService {
       .header("Content-Type", "application/x-www-form-urlencoded")
       .bodyValue("grant_type=client_credentials" + scopeParam)
       .retrieve()
-      .bodyToMono(OAuth2TokenResponse.class)
+      .bodyToMono(OAuth2TokenResponseDto.class)
       .doOnNext(response ->
         log.debug("Anonymous OAuth2 token generated successfully with scopes: {}", requiredScopes)
       )
