@@ -54,7 +54,7 @@ export class ModelDetailsBoxplotComponent {
   }
 
   pointTooltipFormatter = (pt: CategoryPoint, params: CallbackDataParams) => {
-    return `${params.marker} ${pt.text ?? pt.value.toString()}`;
+    return `<div style="text-align: left;">${params.marker} ${pt.text ?? pt.value.toString()}</div>`;
   };
 
   xAxisLabelFormatter = (value: string) => {
