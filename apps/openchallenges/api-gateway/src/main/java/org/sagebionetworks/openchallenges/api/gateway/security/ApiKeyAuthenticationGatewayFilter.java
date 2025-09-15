@@ -114,7 +114,7 @@ public class ApiKeyAuthenticationGatewayFilter implements WebFilter {
           .getHeaders()
           .add(
             "WWW-Authenticate",
-            String.format("ApiKey realm=\"%s\"", appProperties.getAuth().getRealm())
+            String.format("ApiKey realm=\"%s\"", appProperties.auth().realm())
           );
         return exchange.getResponse().setComplete();
       })

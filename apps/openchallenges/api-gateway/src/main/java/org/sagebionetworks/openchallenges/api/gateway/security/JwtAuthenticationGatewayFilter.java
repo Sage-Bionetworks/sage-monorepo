@@ -63,7 +63,7 @@ public class JwtAuthenticationGatewayFilter implements WebFilter {
             .getHeaders()
             .add(
               "WWW-Authenticate",
-              String.format("Bearer realm=\"%s\"", appProperties.getAuth().getRealm())
+              String.format("Bearer realm=\"%s\"", appProperties.auth().realm())
             );
           return exchange.getResponse().setComplete();
         }
@@ -106,7 +106,7 @@ public class JwtAuthenticationGatewayFilter implements WebFilter {
           .getHeaders()
           .add(
             "WWW-Authenticate",
-            String.format("Bearer realm=\"%s\"", appProperties.getAuth().getRealm())
+            String.format("Bearer realm=\"%s\"", appProperties.auth().realm())
           );
         return exchange.getResponse().setComplete();
       });

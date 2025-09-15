@@ -6,11 +6,11 @@ import org.sagebionetworks.openchallenges.api.gateway.configuration.AppPropertie
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 @Slf4j
 @SpringBootApplication
-@ComponentScan(basePackages = "org.sagebionetworks.openchallenges")
+@ConfigurationPropertiesScan
 @RequiredArgsConstructor
 public class ApiGatewayApplication implements CommandLineRunner {
 
@@ -22,6 +22,6 @@ public class ApiGatewayApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    log.info(appProperties.getWelcomeMessage());
+    log.info(appProperties.welcomeMessage());
   }
 }
