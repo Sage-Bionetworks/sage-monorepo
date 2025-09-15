@@ -50,41 +50,49 @@ app:
       scopes:
         - 'read:challenges-analytics'
       audience: 'urn:openchallenges:challenge-service'
+      anonymousAccess: true
     - method: 'GET'
       path: '/api/v1/challenge-platforms'
       scopes:
         - 'read:challenge-platforms'
       audience: 'urn:openchallenges:challenge-service'
+      anonymousAccess: true
     - method: 'GET'
       path: '/api/v1/challenge-platforms/{challengePlatformId}'
       scopes:
         - 'read:challenge-platforms'
       audience: 'urn:openchallenges:challenge-service'
+      anonymousAccess: true
     - method: 'GET'
       path: '/api/v1/challenges'
       scopes:
         - 'read:challenges'
       audience: 'urn:openchallenges:challenge-service'
+      anonymousAccess: true
     - method: 'GET'
       path: '/api/v1/challenges/{challengeId}'
       scopes:
         - 'read:challenges'
       audience: 'urn:openchallenges:challenge-service'
+      anonymousAccess: true
     - method: 'GET'
       path: '/api/v1/challenges/{challengeId}/contributions'
       scopes:
         - 'read:challenges'
       audience: 'urn:openchallenges:challenge-service'
+      anonymousAccess: true
     - method: 'GET'
       path: '/api/v1/challenges/{challengeId}/json-ld'
       scopes:
         - 'read:challenges'
       audience: 'urn:openchallenges:challenge-service'
+      anonymousAccess: true
     - method: 'GET'
       path: '/api/v1/edam-concepts'
       scopes:
         - 'read:edam-concepts'
       audience: 'urn:openchallenges:challenge-service'
+      anonymousAccess: true
     - method: 'GET'
       path: '/api/v1/organizations'
       scopes:
