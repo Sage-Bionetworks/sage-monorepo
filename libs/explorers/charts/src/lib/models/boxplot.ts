@@ -65,4 +65,5 @@ export interface BoxplotProps {
   showLegend?: boolean;
   pointOpacity?: number;
   noDataStyle?: 'textOnly' | 'grayBackground';
+  chartStyle?: 'minimal' | 'grayGrid';
 }

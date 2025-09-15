@@ -34,6 +34,7 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
   @Input() showLegend: undefined | boolean;
   @Input() pointOpacity: undefined | number;
   @Input() noDataStyle: undefined | 'textOnly' | 'grayBackground';
+  @Input() chartStyle: undefined | 'minimal' | 'grayGrid';
 
   ngOnInit() {
     this.boxplot = new BoxplotChart(this.el.nativeElement, this.getBoxplotProps());
@@ -65,6 +66,7 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
       showLegend: this.showLegend,
       pointOpacity: this.pointOpacity,
       noDataStyle: this.noDataStyle,
+      chartStyle: this.chartStyle,
     };
   }
 }

@@ -23,6 +23,7 @@ const titleTextStyle = {
 const boxplotStyle = {
   borderColor: '#bcc0ca',
   borderWidth: 2,
+  color: 'transparent',
 };
 
 const yAxisPadding = 0.2;
@@ -148,6 +149,7 @@ export class BoxplotChart {
     yAxisTitle: BoxplotProps['yAxisTitle'],
     yAxisMin: BoxplotProps['yAxisMin'],
     yAxisMax: BoxplotProps['yAxisMax'],
+    chartStyle: BoxplotProps['chartStyle'],
   ) {
     const yAxisOptions: EChartsOption['yAxis'] = {
       type: 'value',
@@ -165,7 +167,7 @@ export class BoxplotChart {
         showMaxLabel: yAxisMax == null,
       },
       splitLine: {
-        show: false,
+        show: chartStyle === 'grayGrid',
       },
       min: yAxisMin ? yAxisMin - yAxisPadding : undefined,
       max: yAxisMax ? yAxisMax + yAxisPadding : undefined,
@@ -194,6 +196,7 @@ export class BoxplotChart {
 
     const showLegend = boxplotProps.showLegend || false;
     const noDataStyle = boxplotProps.noDataStyle || 'textOnly';
+    const chartStyle = boxplotProps.chartStyle || 'minimal';
 
     const noPoints = points.length === 0;
     const noSummaries = summaries == null || summaries.length === 0;
@@ -283,6 +286,20 @@ export class BoxplotChart {
       tooltip: {
         show: false,
       },
+      markArea:
+        chartStyle === 'grayGrid'
+          ? {
+              itemStyle: {
+                color: '#AEB5BC',
+                opacity: 0.1,
+              },
+              data: xAxisCategories.map((pc, idx) => {
+                const spacing = 0.4;
+                const pcIndex = idx + 1;
+                return [{ xAxis: pcIndex - spacing }, { xAxis: pcIndex + spacing }];
+              }),
+            }
+          : undefined,
     };
     if (summaries) {
       seriesOpts.push({
@@ -374,7 +391,7 @@ export class BoxplotChart {
       },
       dataset: datasetOpts,
       xAxis: this.getXAxisOptions(xAxisCategories, xAxisLabelFormatter, xAxisLabelTooltipFormatter),
-      yAxis: this.getYAxisOptions(yAxisTitle, yAxisMin, yAxisMax),
+      yAxis: this.getYAxisOptions(yAxisTitle, yAxisMin, yAxisMax, chartStyle),
       tooltip: {
         confine: true,
         position: 'top',
