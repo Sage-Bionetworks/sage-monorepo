@@ -137,7 +137,7 @@ public class GatewayAuthenticationService {
         );
         log.info(
           "Access token received (length: {})",
-          response.getAccessToken() != null ? response.getAccessToken().length() : 0
+          response.accessToken() != null ? response.accessToken().length() : 0
         );
       })
       .onErrorResume(WebClientResponseException.class, ex -> {

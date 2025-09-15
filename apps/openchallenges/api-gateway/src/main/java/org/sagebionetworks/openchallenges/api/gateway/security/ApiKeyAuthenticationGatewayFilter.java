@@ -73,17 +73,17 @@ public class ApiKeyAuthenticationGatewayFilter implements WebFilter {
       .exchangeApiKeyForJwt(apiKey, method, path)
       .flatMap(tokenResponse -> {
         log.info("=== API KEY FILTER: JWT exchange successful ===");
-        log.info("Token scope: {}", tokenResponse.getScope());
+        log.info("Token scope: {}", tokenResponse.scope());
 
         // Replace the API key with the JWT in the Authorization header
         ServerHttpRequest modifiedRequest = request
           .mutate()
-          .header("Authorization", "Bearer " + tokenResponse.getAccessToken())
+          .header("Authorization", "Bearer " + tokenResponse.accessToken())
           .build();
 
         // Extract scopes from token response for Spring Security
-        String[] scopes = tokenResponse.getScope() != null
-          ? tokenResponse.getScope().split(" ")
+        String[] scopes = tokenResponse.scope() != null
+          ? tokenResponse.scope().split(" ")
           : new String[0];
 
         var authorities = Arrays.stream(scopes)

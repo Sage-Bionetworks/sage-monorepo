@@ -66,12 +66,12 @@ public class AnonymousAccessGatewayFilter implements WebFilter {
         // Add the JWT to the Authorization header for backend services
         ServerHttpRequest modifiedRequest = request
           .mutate()
-          .header("Authorization", "Bearer " + tokenResponse.getAccessToken())
+          .header("Authorization", "Bearer " + tokenResponse.accessToken())
           .build();
 
         // Extract scopes from token response for Spring Security
-        String[] scopes = tokenResponse.getScope() != null
-          ? tokenResponse.getScope().split(" ")
+        String[] scopes = tokenResponse.scope() != null
+          ? tokenResponse.scope().split(" ")
           : new String[0];
 
         var authorities = Arrays.stream(scopes)
@@ -87,7 +87,7 @@ public class AnonymousAccessGatewayFilter implements WebFilter {
 
         log.debug(
           "Anonymous JWT generated successfully: {} scopes for: {} {}",
-          tokenResponse.getScope(),
+          tokenResponse.scope(),
           method,
           path
         );
