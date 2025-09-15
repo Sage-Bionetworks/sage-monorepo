@@ -53,7 +53,7 @@ test.describe('model details', () => {
 
   test('correct tab is loaded when navigating to new model via search', async ({ page }) => {
     const initialModelPath = '/models/3xTg-AD';
-    const nextModel = 'LOAD2';
+    const nextModel = 'LOAD1';
 
     await page.goto('/models/3xTg-AD');
     await expect(page.getByRole('heading', { level: 2, name: 'Available Data' })).toBeVisible();
