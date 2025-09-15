@@ -104,14 +104,18 @@
     }
   }
 
-  model-ad-model-details-boxplots-grid {
+  .boxplots-grid-wrapper {
     width: 100vw;
     max-width: 2500px;
-    display: block;
     position: relative;
     left: 50%;
     transform: translateX(-50%);
     padding: 0 15%;
+
+    model-ad-model-details-boxplots-grid {
+      display: block;
+      width: 100%;
+    }
   }
 
   .boxplots-separator {

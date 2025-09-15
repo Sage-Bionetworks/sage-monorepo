@@ -106,11 +106,15 @@
           />
         </div>
 
-        <model-ad-model-details-boxplots-grid
-          [modelDataList]="getSelectedModelDataForEvidenceType(evidenceType)"
-          [genotypeOrder]="genotypeOrder()"
-          [sexes]="selectedSexOption().value"
-        />
+        <!-- Wrapper handles full-width positioning while keeping grid in normal document flow 
+         so the full grid is captured in the download image -->
+        <div class="boxplots-grid-wrapper">
+          <model-ad-model-details-boxplots-grid
+            [modelDataList]="getSelectedModelDataForEvidenceType(evidenceType)"
+            [genotypeOrder]="genotypeOrder()"
+            [sexes]="selectedSexOption().value"
+          />
+        </div>
         @if (!last) {
           <hr class="boxplots-separator" />
         }
