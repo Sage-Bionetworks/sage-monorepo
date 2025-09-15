@@ -105,7 +105,7 @@ class ApiKeyAuthenticationGatewayFilterTest {
   @DisplayName("should return unauthorized with realm when api key is invalid")
   void shouldReturnUnauthorizedWithRealmWhenApiKeyIsInvalid() {
     // given
-    when(appProperties.getAuth().getRealm()).thenReturn("OpenChallenges");
+    when(appProperties.auth().realm()).thenReturn("OpenChallenges");
 
     String invalidApiKey = "invalid-key";
     MockServerHttpRequest request = MockServerHttpRequest.post("/api/v1/organizations")

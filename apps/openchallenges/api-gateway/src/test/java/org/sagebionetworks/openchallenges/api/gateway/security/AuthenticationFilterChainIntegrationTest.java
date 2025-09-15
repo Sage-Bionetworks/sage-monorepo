@@ -42,7 +42,7 @@ class AuthenticationFilterChainIntegrationTest {
   void shouldAuthenticateWithJwtWhenBothJwtAndApiKeyArePresent() {
     // given
     when(chain.filter(any())).thenReturn(Mono.empty());
-    when(appProperties.getAuth().getRealm()).thenReturn("OpenChallenges");
+    when(appProperties.auth().realm()).thenReturn("OpenChallenges");
 
     JwtAuthenticationGatewayFilter jwtFilter = new JwtAuthenticationGatewayFilter(
       oAuth2JwtService,
@@ -87,7 +87,7 @@ class AuthenticationFilterChainIntegrationTest {
   void shouldFallBackToApiKeyAuthenticationWhenNoJwtToken() {
     // given
     when(chain.filter(any())).thenReturn(Mono.empty());
-    when(appProperties.getAuth().getRealm()).thenReturn("OpenChallenges");
+    when(appProperties.auth().realm()).thenReturn("OpenChallenges");
 
     JwtAuthenticationGatewayFilter jwtFilter = new JwtAuthenticationGatewayFilter(
       oAuth2JwtService,
@@ -143,7 +143,7 @@ class AuthenticationFilterChainIntegrationTest {
   @DisplayName("should fail authentication when both JWT and API key are invalid")
   void shouldFailAuthenticationWhenBothJwtAndApiKeyAreInvalid() {
     // given
-    when(appProperties.getAuth().getRealm()).thenReturn("OpenChallenges");
+    when(appProperties.auth().realm()).thenReturn("OpenChallenges");
 
     JwtAuthenticationGatewayFilter jwtFilter = new JwtAuthenticationGatewayFilter(
       oAuth2JwtService,

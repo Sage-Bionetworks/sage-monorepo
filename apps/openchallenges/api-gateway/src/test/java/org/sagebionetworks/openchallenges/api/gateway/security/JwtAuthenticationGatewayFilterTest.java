@@ -32,7 +32,7 @@ class JwtAuthenticationGatewayFilterTest {
   private OAuth2JwtService oAuth2JwtService;
 
   @Mock
-  private AppProperties apiProperties;
+  private AppProperties appProperties;
 
   @Mock
   private WebFilterChain chain;
@@ -99,7 +99,7 @@ class JwtAuthenticationGatewayFilterTest {
   @DisplayName("should return unauthorized with realm when jwt token is invalid")
   void shouldReturnUnauthorizedWithRealmWhenJwtTokenIsInvalid() {
     // given
-    when(apiProperties.getAuth().getRealm()).thenReturn("OpenChallenges");
+    when(appProperties.auth().realm()).thenReturn("OpenChallenges");
 
     String invalidToken = "invalid.jwt.token";
     MockServerHttpRequest request = MockServerHttpRequest.post("/api/v1/organizations")
