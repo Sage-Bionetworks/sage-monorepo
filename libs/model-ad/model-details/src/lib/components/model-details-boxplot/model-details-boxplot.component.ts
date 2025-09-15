@@ -50,11 +50,13 @@ export class ModelDetailsBoxplotComponent {
   yAxisTitle = computed(() => this.modelData().units);
 
   createTooltipText(individual: IndividualData, units: string): string {
-    return `${individual.sex}\n${individual.value} ${units}\nIndividual ID: ${individual.individual_id}`;
+    const color = this.pointCategoryColors[individual.sex] || 'black';
+    const tooltipMarker = `<span style="display: inline-block; width: 10px; height: 10px; background-color: ${color}; margin-right: 4px;"></span>`;
+    return `${tooltipMarker}${individual.sex}\n${individual.value} ${units}\nIndividual ID: ${individual.individual_id}`;
   }
 
   pointTooltipFormatter = (pt: CategoryPoint, params: CallbackDataParams) => {
-    return `<div style="text-align: left;">${params.marker} ${pt.text ?? pt.value.toString()}</div>`;
+    return `<div style="text-align: left;">${pt.text ?? pt.value.toString()}</div>`;
   };
 
   xAxisLabelFormatter = (value: string) => {
