@@ -73,6 +73,12 @@ configuration = openchallenges_api_client_python.Configuration(
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
 
+# Configure API key authorization: apiKey
+configuration.api_key['apiKey'] = os.environ["API_KEY"]
+
+# Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+# configuration.api_key_prefix['apiKey'] = 'Bearer'
+
 # Configure Bearer authorization (JWT): jwtBearer
 configuration = openchallenges_api_client_python.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
@@ -195,5 +201,13 @@ Authentication schemes defined for the API:
 ### jwtBearer
 
 - **Type**: Bearer authentication (JWT)
+
+<a id="apiKey"></a>
+
+### apiKey
+
+- **Type**: API key
+- **API key parameter name**: X-API-Key
+- **Location**: HTTP header
 
 ## Author

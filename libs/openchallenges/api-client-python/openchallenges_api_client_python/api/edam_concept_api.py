@@ -281,7 +281,7 @@ class EdamConceptApi:
             )
 
         # authentication setting
-        _auth_settings: List[str] = ["jwtBearer"]
+        _auth_settings: List[str] = ["apiKey", "jwtBearer"]
 
         return self.api_client.param_serialize(
             method="GET",

@@ -296,7 +296,7 @@ class ChallengePlatformApi:
                 _header_params["Content-Type"] = _default_content_type
 
         # authentication setting
-        _auth_settings: List[str] = ["jwtBearer"]
+        _auth_settings: List[str] = ["apiKey", "jwtBearer"]
 
         return self.api_client.param_serialize(
             method="POST",
@@ -558,7 +558,7 @@ class ChallengePlatformApi:
             )
 
         # authentication setting
-        _auth_settings: List[str] = ["jwtBearer"]
+        _auth_settings: List[str] = ["apiKey", "jwtBearer"]
 
         return self.api_client.param_serialize(
             method="DELETE",
@@ -814,7 +814,7 @@ class ChallengePlatformApi:
             )
 
         # authentication setting
-        _auth_settings: List[str] = ["jwtBearer"]
+        _auth_settings: List[str] = ["apiKey", "jwtBearer"]
 
         return self.api_client.param_serialize(
             method="GET",
@@ -1079,7 +1079,7 @@ class ChallengePlatformApi:
             )
 
         # authentication setting
-        _auth_settings: List[str] = ["jwtBearer"]
+        _auth_settings: List[str] = ["apiKey", "jwtBearer"]
 
         return self.api_client.param_serialize(
             method="GET",
@@ -1372,7 +1372,7 @@ class ChallengePlatformApi:
                 _header_params["Content-Type"] = _default_content_type
 
         # authentication setting
-        _auth_settings: List[str] = ["jwtBearer"]
+        _auth_settings: List[str] = ["apiKey", "jwtBearer"]
 
         return self.api_client.param_serialize(
             method="PUT",

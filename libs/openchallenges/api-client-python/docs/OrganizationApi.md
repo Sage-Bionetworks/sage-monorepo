@@ -20,6 +20,7 @@ Create an organization with the specified account name
 
 ### Example
 
+- Api Key Authentication (apiKey):
 - Bearer (JWT) Authentication (jwtBearer):
 
 ```python
@@ -39,6 +40,12 @@ configuration = openchallenges_api_client_python.Configuration(
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+# Configure API key authorization: apiKey
+configuration.api_key['apiKey'] = os.environ["API_KEY"]
+
+# Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+# configuration.api_key_prefix['apiKey'] = 'Bearer'
 
 # Configure Bearer authorization (JWT): jwtBearer
 configuration = openchallenges_api_client_python.Configuration(
@@ -72,7 +79,7 @@ with openchallenges_api_client_python.ApiClient(configuration) as api_client:
 
 ### Authorization
 
-[jwtBearer](../README.md#jwtBearer)
+[apiKey](../README.md#apiKey), [jwtBearer](../README.md#jwtBearer)
 
 ### HTTP request headers
 
@@ -102,6 +109,7 @@ Deletes the organization specified by its login or ID.
 
 ### Example
 
+- Api Key Authentication (apiKey):
 - Bearer (JWT) Authentication (jwtBearer):
 
 ```python
@@ -119,6 +127,12 @@ configuration = openchallenges_api_client_python.Configuration(
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+# Configure API key authorization: apiKey
+configuration.api_key['apiKey'] = os.environ["API_KEY"]
+
+# Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+# configuration.api_key_prefix['apiKey'] = 'Bearer'
 
 # Configure Bearer authorization (JWT): jwtBearer
 configuration = openchallenges_api_client_python.Configuration(
@@ -150,7 +164,7 @@ void (empty response body)
 
 ### Authorization
 
-[jwtBearer](../README.md#jwtBearer)
+[apiKey](../README.md#apiKey), [jwtBearer](../README.md#jwtBearer)
 
 ### HTTP request headers
 
@@ -179,6 +193,7 @@ Returns the organization identified by its login or ID.
 
 ### Example
 
+- Api Key Authentication (apiKey):
 - Bearer (JWT) Authentication (jwtBearer):
 
 ```python
@@ -197,6 +212,12 @@ configuration = openchallenges_api_client_python.Configuration(
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+# Configure API key authorization: apiKey
+configuration.api_key['apiKey'] = os.environ["API_KEY"]
+
+# Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+# configuration.api_key_prefix['apiKey'] = 'Bearer'
 
 # Configure Bearer authorization (JWT): jwtBearer
 configuration = openchallenges_api_client_python.Configuration(
@@ -230,7 +251,7 @@ with openchallenges_api_client_python.ApiClient(configuration) as api_client:
 
 ### Authorization
 
-[jwtBearer](../README.md#jwtBearer)
+[apiKey](../README.md#apiKey), [jwtBearer](../README.md#jwtBearer)
 
 ### HTTP request headers
 
@@ -257,6 +278,7 @@ List organizations
 
 ### Example
 
+- Api Key Authentication (apiKey):
 - Bearer (JWT) Authentication (jwtBearer):
 
 ```python
@@ -276,6 +298,12 @@ configuration = openchallenges_api_client_python.Configuration(
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+# Configure API key authorization: apiKey
+configuration.api_key['apiKey'] = os.environ["API_KEY"]
+
+# Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+# configuration.api_key_prefix['apiKey'] = 'Bearer'
 
 # Configure Bearer authorization (JWT): jwtBearer
 configuration = openchallenges_api_client_python.Configuration(
@@ -309,7 +337,7 @@ with openchallenges_api_client_python.ApiClient(configuration) as api_client:
 
 ### Authorization
 
-[jwtBearer](../README.md#jwtBearer)
+[apiKey](../README.md#apiKey), [jwtBearer](../README.md#jwtBearer)
 
 ### HTTP request headers
 
@@ -336,6 +364,7 @@ Updates an existing organization.
 
 ### Example
 
+- Api Key Authentication (apiKey):
 - Bearer (JWT) Authentication (jwtBearer):
 
 ```python
@@ -355,6 +384,12 @@ configuration = openchallenges_api_client_python.Configuration(
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+# Configure API key authorization: apiKey
+configuration.api_key['apiKey'] = os.environ["API_KEY"]
+
+# Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+# configuration.api_key_prefix['apiKey'] = 'Bearer'
 
 # Configure Bearer authorization (JWT): jwtBearer
 configuration = openchallenges_api_client_python.Configuration(
@@ -390,7 +425,7 @@ with openchallenges_api_client_python.ApiClient(configuration) as api_client:
 
 ### Authorization
 
-[jwtBearer](../README.md#jwtBearer)
+[apiKey](../README.md#apiKey), [jwtBearer](../README.md#jwtBearer)
 
 ### HTTP request headers
 

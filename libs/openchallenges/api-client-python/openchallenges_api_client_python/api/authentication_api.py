@@ -253,7 +253,7 @@ class AuthenticationApi:
             )
 
         # authentication setting
-        _auth_settings: List[str] = ["jwtBearer"]
+        _auth_settings: List[str] = ["apiKey", "jwtBearer"]
 
         return self.api_client.param_serialize(
             method="GET",
@@ -513,7 +513,7 @@ class AuthenticationApi:
                 _header_params["Content-Type"] = _default_content_type
 
         # authentication setting
-        _auth_settings: List[str] = ["jwtBearer"]
+        _auth_settings: List[str] = ["apiKey", "jwtBearer"]
 
         return self.api_client.param_serialize(
             method="PUT",

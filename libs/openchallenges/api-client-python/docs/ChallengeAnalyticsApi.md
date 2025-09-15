@@ -16,6 +16,7 @@ Returns the number of challenges tracked per year
 
 ### Example
 
+- Api Key Authentication (apiKey):
 - Bearer (JWT) Authentication (jwtBearer):
 
 ```python
@@ -34,6 +35,12 @@ configuration = openchallenges_api_client_python.Configuration(
 # in accordance with the API server security policy.
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
+
+# Configure API key authorization: apiKey
+configuration.api_key['apiKey'] = os.environ["API_KEY"]
+
+# Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+# configuration.api_key_prefix['apiKey'] = 'Bearer'
 
 # Configure Bearer authorization (JWT): jwtBearer
 configuration = openchallenges_api_client_python.Configuration(
@@ -64,7 +71,7 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-[jwtBearer](../README.md#jwtBearer)
+[apiKey](../README.md#apiKey), [jwtBearer](../README.md#jwtBearer)
 
 ### HTTP request headers
 
