@@ -29,6 +29,7 @@ const renderTestComponent = async (props: BoxplotProps) => {
       [showLegend]="showLegend"
       [pointOpacity]="pointOpacity"
       [noDataStyle]="noDataStyle"
+      [chartStyle]="chartStyle"
     ></div>`,
   })
   class TestComponent {
@@ -48,6 +49,7 @@ const renderTestComponent = async (props: BoxplotProps) => {
     showLegend = props.showLegend;
     pointOpacity = props.pointOpacity;
     noDataStyle = props.noDataStyle;
+    chartStyle = props.chartStyle;
   }
 
   return await render(TestComponent, {
