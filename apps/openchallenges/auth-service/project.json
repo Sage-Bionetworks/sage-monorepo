@@ -53,13 +53,6 @@
         "parallel": false
       },
       "dependsOn": ["^build"]
-    },
-    "demo": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": ["bash tools/demo.sh"],
-        "cwd": "{projectRoot}"
-      }
     }
   },
   "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],
