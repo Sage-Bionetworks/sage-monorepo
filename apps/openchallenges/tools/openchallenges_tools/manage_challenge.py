@@ -40,18 +40,22 @@ from openchallenges_api_client_python.models.challenge_update_request import (
 )
 from openchallenges_api_client_python.rest import ApiException
 
-DEFAULT_API_URL = os.getenv("OPENCHALLENGES_API_URL", "http://localhost:8000/api/v1")
-DEFAULT_API_KEY = os.getenv(
+OC_API_URL = os.getenv("OPENCHALLENGES_API_URL", "http://localhost:8000/api/v1")
+OC_API_KEY = os.getenv(
     "OPENCHALLENGES_API_KEY", "oc_dev_dev1.dev_secret_9876543210fedcba"
 )
 
 
 def build_configuration() -> openchallenges_api_client_python.Configuration:
-    """Create a configured client instance with Bearer token auth using API key."""
-    cfg = openchallenges_api_client_python.Configuration(host=DEFAULT_API_URL)
-    # The generated client only exposes a bearer (jwtBearer) scheme via access_token
-    # We reuse it for API key based auth accepted by the gateway.
-    cfg.access_token = DEFAULT_API_KEY
+    """Create a configured client using the apiKey security scheme.
+
+    Prefer apiKey over jwtBearer when an API key is provided; caller can still
+    set OPENCHALLENGES_JWT if we later add support for direct JWT usage.
+    """
+    cfg = openchallenges_api_client_python.Configuration(host=OC_API_URL)
+    if OC_API_KEY:
+        # The Python client expects configuration.api_key['apiKey']
+        cfg.api_key["apiKey"] = OC_API_KEY
     return cfg
 
 
@@ -96,8 +100,8 @@ def create_challenge(api_client) -> Challenge:
         websiteUrl="https://example.org/challenge",  # required (alias websiteUrl)
         status=ChallengeStatus.UPCOMING,
         platformId=platform_id,
-        incentives=[ChallengeIncentive.OTHER],
-        submissionTypes=[ChallengeSubmissionType.OTHER],
+        incentives=[ChallengeIncentive.MONETARY],
+        submissionTypes=[ChallengeSubmissionType.CONTAINER_IMAGE],
         categories=[ChallengeCategory.BENCHMARK],
         inputDataTypes=[],  # keep empty; update will still satisfy schema
         operation=1,
@@ -162,6 +166,18 @@ def update_challenge(api_client, challenge: Challenge) -> Challenge:
     try:
         updated = challenge_api.update_challenge(challenge.id, update_req)
     except ApiException as e:
+        # Gracefully handle common validation failure when placeholder
+        # fields (e.g. operation) are invalid in the demo environment.
+        if getattr(e, "status", None) == 400:
+            print(
+                "Warning: update failed with 400 Bad Request (likely placeholder "
+                "field such as 'operation'). Skipping update step. Payload was:"
+            )
+            try:
+                print(update_req.to_json())
+            except Exception:  # noqa: BLE001
+                print(repr(update_req))
+            return challenge
         raise SystemExit(f"Failed to update challenge {challenge.id}: {e}") from e
     pretty("Updated challenge", updated)
     return updated
@@ -172,6 +188,12 @@ def delete_challenge(api_client, challenge_id: int) -> None:
     try:
         challenge_api.delete_challenge(challenge_id)
     except ApiException as e:
+        if getattr(e, "status", None) == 401:
+            print(
+                f"Warning: unauthorized to delete challenge {challenge_id} "
+                "with current API key. Skipping delete."
+            )
+            return
         raise SystemExit(f"Failed to delete challenge {challenge_id}: {e}") from e
     pretty("Deleted challenge", f"Challenge {challenge_id} deleted.")
 
