@@ -13,6 +13,9 @@ info:
     url: https://openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
   - url: https://openchallenges.io/api/v1
+security:
+  - jwtBearer: []
+  - apiKey: []
 tags:
   - name: Authentication
     description: User profile and token validation operations
@@ -52,6 +55,7 @@ paths:
       security:
         - jwtBearer:
             - read:profile
+        - apiKey: []
       responses:
         '200':
           description: User profile information
@@ -72,6 +76,7 @@ paths:
       security:
         - jwtBearer:
             - update:profile
+        - apiKey: []
       requestBody:
         required: true
         content:
@@ -101,6 +106,7 @@ paths:
       security:
         - jwtBearer:
             - read:api-key
+        - apiKey: []
       responses:
         '200':
           description: List of API keys
@@ -123,6 +129,7 @@ paths:
       security:
         - jwtBearer:
             - create:api-key
+        - apiKey: []
       requestBody:
         required: true
         content:
@@ -152,6 +159,7 @@ paths:
       security:
         - jwtBearer:
             - delete:api-key
+        - apiKey: []
       parameters:
         - name: keyId
           in: path
@@ -180,6 +188,7 @@ paths:
       security:
         - jwtBearer:
             - read:challenges
+        - apiKey: []
       parameters:
         - $ref: '#/components/parameters/challengeSearchQuery'
       responses:
@@ -202,6 +211,7 @@ paths:
       security:
         - jwtBearer:
             - create:challenges
+        - apiKey: []
       requestBody:
         content:
           application/json:
@@ -238,6 +248,7 @@ paths:
       security:
         - jwtBearer:
             - read:challenges
+        - apiKey: []
       responses:
         '200':
           description: A challenge
@@ -258,6 +269,7 @@ paths:
       security:
         - jwtBearer:
             - update:challenges
+        - apiKey: []
       requestBody:
         required: true
         content:
@@ -292,6 +304,7 @@ paths:
       security:
         - jwtBearer:
             - delete:challenges
+        - apiKey: []
       responses:
         '204':
           description: Challenge successfully deleted
@@ -316,6 +329,7 @@ paths:
       security:
         - jwtBearer:
             - read:challenges
+        - apiKey: []
       responses:
         '200':
           description: A challenge
@@ -340,6 +354,7 @@ paths:
       security:
         - jwtBearer:
             - read:challenges
+        - apiKey: []
       responses:
         '200':
           content:
@@ -361,6 +376,7 @@ paths:
       security:
         - jwtBearer:
             - update:challenges
+        - apiKey: []
       requestBody:
         required: true
         content:
@@ -398,6 +414,7 @@ paths:
       security:
         - jwtBearer:
             - update:challenges
+        - apiKey: []
       responses:
         '204':
           description: Contribution deleted successfully
@@ -420,6 +437,7 @@ paths:
       security:
         - jwtBearer:
             - read:challenges-analytics
+        - apiKey: []
       responses:
         '200':
           description: An object
@@ -444,6 +462,7 @@ paths:
       security:
         - jwtBearer:
             - read:challenge-platforms
+        - apiKey: []
       parameters:
         - $ref: '#/components/parameters/challengePlatformSearchQuery'
       responses:
@@ -470,6 +489,7 @@ paths:
       security:
         - jwtBearer:
             - create:challenge-platforms
+        - apiKey: []
       requestBody:
         content:
           application/json:
@@ -504,6 +524,7 @@ paths:
       security:
         - jwtBearer:
             - read:challenge-platforms
+        - apiKey: []
       responses:
         '200':
           description: Success
@@ -525,6 +546,7 @@ paths:
       security:
         - jwtBearer:
             - update:challenge-platforms
+        - apiKey: []
       requestBody:
         required: true
         content:
@@ -560,6 +582,7 @@ paths:
       security:
         - jwtBearer:
             - delete:challenge-platforms
+        - apiKey: []
       responses:
         '204':
           description: Deletion successful
@@ -582,6 +605,7 @@ paths:
       security:
         - jwtBearer:
             - read:edam-concepts
+        - apiKey: []
       parameters:
         - $ref: '#/components/parameters/edamConceptSearchQuery'
       responses:
@@ -628,6 +652,7 @@ paths:
       security:
         - jwtBearer:
             - read:organizations
+        - apiKey: []
       parameters:
         - $ref: '#/components/parameters/organizationSearchQuery'
       responses:
@@ -650,6 +675,7 @@ paths:
       security:
         - jwtBearer:
             - create:organizations
+        - apiKey: []
       requestBody:
         content:
           application/json:
@@ -686,6 +712,7 @@ paths:
       security:
         - jwtBearer:
             - read:organizations
+        - apiKey: []
       responses:
         '200':
           description: Organization retrieved successfully
@@ -706,6 +733,7 @@ paths:
       security:
         - jwtBearer:
             - update:organizations
+        - apiKey: []
       requestBody:
         required: true
         content:
@@ -740,6 +768,7 @@ paths:
       security:
         - jwtBearer:
             - delete:organizations
+        - apiKey: []
       responses:
         '204':
           description: Organization successfully deleted
@@ -766,6 +795,11 @@ components:
       scheme: bearer
       bearerFormat: JWT
       description: JWT access token obtained from OAuth2 authorization flow or API key exchange
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key issued by OpenChallenges. Send via the X-API-Key header. The API Gateway exchanges it for a short-lived JWT internally; you may also authenticate directly with an OAuth2-issued Bearer JWT.
   schemas:
     UserRole:
       type: string
