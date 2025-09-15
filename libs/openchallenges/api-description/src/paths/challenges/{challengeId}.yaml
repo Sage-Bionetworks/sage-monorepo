@@ -2,6 +2,7 @@ parameters:
   - $ref: ../../components/parameters/path/challengeId.yaml
 
 get:
+  x-anonymous-access: true
   tags:
     - Challenge
   summary: Get a challenge

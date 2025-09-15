@@ -1,10 +1,10 @@
 get:
+  x-anonymous-access: true
   tags:
     - Organization
   summary: List organizations
   description: List organizations
   operationId: listOrganizations
-  x-anonymous-access: true
   security:
     - jwtBearer:
         - read:organizations

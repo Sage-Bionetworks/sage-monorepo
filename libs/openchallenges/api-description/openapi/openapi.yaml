@@ -171,6 +171,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /challenges:
     get:
+      x-anonymous-access: true
       tags:
         - Challenge
       summary: List challenges
@@ -228,6 +229,7 @@ paths:
     parameters:
       - $ref: '#/components/parameters/challengeId'
     get:
+      x-anonymous-access: true
       tags:
         - Challenge
       summary: Get a challenge
@@ -305,6 +307,7 @@ paths:
     parameters:
       - $ref: '#/components/parameters/challengeId'
     get:
+      x-anonymous-access: true
       tags:
         - Challenge
       summary: Get a challenge in JSON-LD format
@@ -328,6 +331,7 @@ paths:
     parameters:
       - $ref: '#/components/parameters/challengeId'
     get:
+      x-anonymous-access: true
       tags:
         - Challenge Contribution
       summary: List challenge contributions
@@ -407,6 +411,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /challenge-analytics/challenges-per-year:
     get:
+      x-anonymous-access: true
       tags:
         - Challenge Analytics
       summary: Get the number of challenges tracked per year
@@ -430,6 +435,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /challenge-platforms:
     get:
+      x-anonymous-access: true
       tags:
         - Challenge Platform
       summary: List challenge platforms
@@ -489,6 +495,7 @@ paths:
     parameters:
       - $ref: '#/components/parameters/challengePlatformId'
     get:
+      x-anonymous-access: true
       tags:
         - Challenge Platform
       summary: Get a challenge platform
@@ -566,6 +573,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /edam-concepts:
     get:
+      x-anonymous-access: true
       tags:
         - Edam Concept
       summary: List EDAM concepts
@@ -610,12 +618,12 @@ paths:
       security: []
   /organizations:
     get:
+      x-anonymous-access: true
       tags:
         - Organization
       summary: List organizations
       description: List organizations
       operationId: listOrganizations
-      x-anonymous-access: true
       security:
         - jwtBearer:
             - read:organizations
@@ -668,12 +676,12 @@ paths:
     parameters:
       - $ref: '#/components/parameters/org'
     get:
+      x-anonymous-access: true
       tags:
         - Organization
       summary: Get an organization
       description: Returns the organization identified by its login or ID.
       operationId: getOrganization
-      x-anonymous-access: true
       security:
         - jwtBearer:
             - read:organizations

@@ -2,6 +2,7 @@ parameters:
   - $ref: ../../components/parameters/path/challengePlatformId.yaml
 
 get:
+  x-anonymous-access: true
   tags:
     - Challenge Platform
   summary: Get a challenge platform

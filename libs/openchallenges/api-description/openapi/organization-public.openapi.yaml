@@ -21,12 +21,12 @@ tags:
 paths:
   /organizations:
     get:
+      x-anonymous-access: true
       tags:
         - Organization
       summary: List organizations
       description: List organizations
       operationId: listOrganizations
-      x-anonymous-access: true
       security:
         - jwtBearer:
             - read:organizations
@@ -79,12 +79,12 @@ paths:
     parameters:
       - $ref: '#/components/parameters/org'
     get:
+      x-anonymous-access: true
       tags:
         - Organization
       summary: Get an organization
       description: Returns the organization identified by its login or ID.
       operationId: getOrganization
-      x-anonymous-access: true
       security:
         - jwtBearer:
             - read:organizations

@@ -29,6 +29,7 @@ tags:
 paths:
   /challenges:
     get:
+      x-anonymous-access: true
       tags:
         - Challenge
       summary: List challenges
@@ -86,6 +87,7 @@ paths:
     parameters:
       - $ref: '#/components/parameters/challengeId'
     get:
+      x-anonymous-access: true
       tags:
         - Challenge
       summary: Get a challenge
@@ -163,6 +165,7 @@ paths:
     parameters:
       - $ref: '#/components/parameters/challengeId'
     get:
+      x-anonymous-access: true
       tags:
         - Challenge
       summary: Get a challenge in JSON-LD format
@@ -186,6 +189,7 @@ paths:
     parameters:
       - $ref: '#/components/parameters/challengeId'
     get:
+      x-anonymous-access: true
       tags:
         - Challenge Contribution
       summary: List challenge contributions
@@ -286,6 +290,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /challenge-analytics/challenges-per-year:
     get:
+      x-anonymous-access: true
       tags:
         - Challenge Analytics
       summary: Get the number of challenges tracked per year
@@ -309,6 +314,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /challenge-platforms:
     get:
+      x-anonymous-access: true
       tags:
         - Challenge Platform
       summary: List challenge platforms
@@ -368,6 +374,7 @@ paths:
     parameters:
       - $ref: '#/components/parameters/challengePlatformId'
     get:
+      x-anonymous-access: true
       tags:
         - Challenge Platform
       summary: Get a challenge platform
@@ -445,6 +452,7 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /edam-concepts:
     get:
+      x-anonymous-access: true
       tags:
         - Edam Concept
       summary: List EDAM concepts
