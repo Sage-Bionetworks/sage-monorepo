@@ -5,7 +5,6 @@ import {
 import { Schema, model } from 'mongoose';
 
 const CorrelationResultSchema = new Schema<CorrelationResult>({
-  module: { type: String, required: true },
   correlation: { type: Number, required: true },
   adj_p_value: { type: Number, required: true },
 });
@@ -19,7 +18,13 @@ const DiseaseCorrelationSchema = new Schema<DiseaseCorrelation>(
     cluster: { type: String, required: true },
     age: { type: String, required: true },
     sex: { type: String, required: true },
-    results: { type: [CorrelationResultSchema], required: true },
+    IFG: { type: CorrelationResultSchema, required: false },
+    PHG: { type: CorrelationResultSchema, required: false },
+    TCX: { type: CorrelationResultSchema, required: false },
+    CBE: { type: CorrelationResultSchema, required: false },
+    DLPFC: { type: CorrelationResultSchema, required: false },
+    FP: { type: CorrelationResultSchema, required: false },
+    STG: { type: CorrelationResultSchema, required: false },
   },
   {
     collection: 'disease_correlation',

@@ -39,9 +39,12 @@ export interface DiseaseCorrelation {
    */
   age: string;
   sex: Sex;
-  /**
-   * List of correlation results
-   */
-  results: Array<CorrelationResult>;
+  IFG?: CorrelationResult;
+  PHG?: CorrelationResult;
+  TCX?: CorrelationResult;
+  CBE?: CorrelationResult;
+  DLPFC?: CorrelationResult;
+  FP?: CorrelationResult;
+  STG?: CorrelationResult;
 }
 export namespace DiseaseCorrelation {}

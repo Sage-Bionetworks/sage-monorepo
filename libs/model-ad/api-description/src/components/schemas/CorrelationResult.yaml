@@ -1,9 +1,6 @@
 type: object
-description: Correlation results
+description: Correlation result
 properties:
-  module:
-    type: string
-    description: Module type
   correlation:
     type: number
     description: Correlation value
@@ -11,6 +8,5 @@ properties:
     type: number
     description: Adjusted p-value
 required:
-  - module
   - correlation
   - adj_p_value

@@ -23,11 +23,20 @@ properties:
     description: Age of the model
   sex:
     $ref: './Sex.yaml'
-  results:
-    type: array
-    description: List of correlation results
-    items:
-      $ref: './CorrelationResult.yaml'
+  IFG:
+    $ref: './CorrelationResult.yaml'
+  PHG:
+    $ref: './CorrelationResult.yaml'
+  TCX:
+    $ref: './CorrelationResult.yaml'
+  CBE:
+    $ref: './CorrelationResult.yaml'
+  DLPFC:
+    $ref: './CorrelationResult.yaml'
+  FP:
+    $ref: './CorrelationResult.yaml'
+  STG:
+    $ref: './CorrelationResult.yaml'
 required:
   - name
   - matched_control
@@ -36,4 +45,3 @@ required:
   - cluster
   - age
   - sex
-  - results

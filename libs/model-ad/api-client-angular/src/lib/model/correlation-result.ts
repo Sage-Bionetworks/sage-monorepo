@@ -9,13 +9,9 @@
  */
 
 /**
- * Correlation results
+ * Correlation result
  */
 export interface CorrelationResult {
-  /**
-   * Module type
-   */
-  module: string;
   /**
    * Correlation value
    */

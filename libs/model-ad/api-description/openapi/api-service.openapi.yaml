@@ -519,11 +519,8 @@ components:
         - available_data
     CorrelationResult:
       type: object
-      description: Correlation results
+      description: Correlation result
       properties:
-        module:
-          type: string
-          description: Module type
         correlation:
           type: number
           description: Correlation value
@@ -531,7 +528,6 @@ components:
           type: number
           description: Adjusted p-value
       required:
-        - module
         - correlation
         - adj_p_value
     DiseaseCorrelation:
@@ -560,11 +556,20 @@ components:
           description: Age of the model
         sex:
           $ref: '#/components/schemas/Sex'
-        results:
-          type: array
-          description: List of correlation results
-          items:
-            $ref: '#/components/schemas/CorrelationResult'
+        IFG:
+          $ref: '#/components/schemas/CorrelationResult'
+        PHG:
+          $ref: '#/components/schemas/CorrelationResult'
+        TCX:
+          $ref: '#/components/schemas/CorrelationResult'
+        CBE:
+          $ref: '#/components/schemas/CorrelationResult'
+        DLPFC:
+          $ref: '#/components/schemas/CorrelationResult'
+        FP:
+          $ref: '#/components/schemas/CorrelationResult'
+        STG:
+          $ref: '#/components/schemas/CorrelationResult'
       required:
         - name
         - matched_control
@@ -573,7 +578,6 @@ components:
         - cluster
         - age
         - sex
-        - results
   responses:
     BadRequest:
       description: Invalid request
