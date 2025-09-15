@@ -21,7 +21,8 @@ servers:
   # - url: https://api.openchallenges.org/v1 # (add when ready)
 
 # Default security posture (scopes on operations)
-security: [] # No authentication
+security:
+  - jwtBearer: []
 
 tags:
   - name: Image

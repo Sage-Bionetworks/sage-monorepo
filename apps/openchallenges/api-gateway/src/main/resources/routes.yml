@@ -94,6 +94,10 @@ app:
       audience: 'urn:openchallenges:challenge-service'
       anonymousAccess: true
     - method: 'GET'
+      path: '/api/v1/images'
+      audience: 'urn:openchallenges:image-service'
+      anonymousAccess: true
+    - method: 'GET'
       path: '/api/v1/organizations'
       scopes:
         - 'read:organizations'

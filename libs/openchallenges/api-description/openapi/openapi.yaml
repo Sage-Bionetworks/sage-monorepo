@@ -597,11 +597,13 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /images:
     get:
+      x-anonymous-access: true
       tags:
         - Image
       summary: Get an image
       description: Returns the image specified.
       operationId: getImage
+      security: []
       parameters:
         - $ref: '#/components/parameters/imageQuery'
       responses:
@@ -615,7 +617,6 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-      security: []
   /organizations:
     get:
       x-anonymous-access: true

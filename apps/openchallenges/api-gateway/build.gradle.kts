@@ -35,6 +35,7 @@ tasks.register<JavaExec>("generateRouteConfig") {
     listOf(
       "../../../libs/openchallenges/api-description/openapi/auth-service.openapi.yaml",
       "../../../libs/openchallenges/api-description/openapi/challenge-service.openapi.yaml",
+      "../../../libs/openchallenges/api-description/openapi/image-service.openapi.yaml",
       "../../../libs/openchallenges/api-description/openapi/organization-service.openapi.yaml",
     )
 

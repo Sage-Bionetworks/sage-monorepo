@@ -13,18 +13,21 @@ info:
     url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
   - url: http://localhost/v1
-security: []
+security:
+  - jwtBearer: []
 tags:
   - name: Image
     description: Operations about images
 paths:
   /images:
     get:
+      x-anonymous-access: true
       tags:
         - Image
       summary: Get an image
       description: Returns the image specified.
       operationId: getImage
+      security: []
       parameters:
         - $ref: '#/components/parameters/imageQuery'
       responses:
