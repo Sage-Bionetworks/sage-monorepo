@@ -26,8 +26,6 @@ paths:
       summary: List organizations
       description: List organizations
       operationId: listOrganizations
-      x-audience:
-        - public
       x-anonymous-access: true
       security:
         - jwtBearer:
@@ -51,8 +49,6 @@ paths:
       summary: Create an organization
       description: Create an organization with the specified account name
       operationId: createOrganization
-      x-audience:
-        - public
       security:
         - jwtBearer:
             - create:organizations
@@ -88,8 +84,6 @@ paths:
       summary: Get an organization
       description: Returns the organization identified by its login or ID.
       operationId: getOrganization
-      x-audience:
-        - public
       x-anonymous-access: true
       security:
         - jwtBearer:
@@ -111,8 +105,6 @@ paths:
       summary: Update an existing organization
       description: Updates an existing organization.
       operationId: updateOrganization
-      x-audience:
-        - public
       security:
         - jwtBearer:
             - update:organizations
@@ -147,8 +139,6 @@ paths:
       summary: Delete an organization
       description: Deletes the organization specified by its login or ID.
       operationId: deleteOrganization
-      x-audience:
-        - public
       security:
         - jwtBearer:
             - delete:organizations

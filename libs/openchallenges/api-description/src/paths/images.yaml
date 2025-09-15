@@ -4,7 +4,6 @@ get:
   summary: Get an image
   description: Returns the image specified.
   operationId: getImage
-  x-audience: [public]
   parameters:
     - $ref: ../components/parameters/query/imageQuery.yaml
   responses:

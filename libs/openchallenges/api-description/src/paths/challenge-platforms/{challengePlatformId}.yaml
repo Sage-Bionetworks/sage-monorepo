@@ -1,12 +1,12 @@
 parameters:
   - $ref: ../../components/parameters/path/challengePlatformId.yaml
+
 get:
   tags:
     - Challenge Platform
   summary: Get a challenge platform
   description: Returns the challenge platform identified by its unique ID
   operationId: getChallengePlatform
-  x-audience: [public]
   security:
     - jwtBearer:
         - read:challenge-platforms
@@ -21,6 +21,7 @@ get:
       $ref: ../../components/responses/NotFound.yaml
     '500':
       $ref: ../../components/responses/InternalServerError.yaml
+
 put:
   tags:
     - Challenge Platform
@@ -28,7 +29,6 @@ put:
   description: |
     Updates an existing challenge platform.
   operationId: updateChallengePlatform
-  x-audience: [public]
   security:
     - jwtBearer:
         - update:challenge-platforms
@@ -57,6 +57,7 @@ put:
       $ref: ../../components/responses/Conflict.yaml
     '500':
       $ref: ../../components/responses/InternalServerError.yaml
+
 delete:
   tags:
     - Challenge Platform
@@ -64,7 +65,6 @@ delete:
   description: |
     Deletes a challenge platform by its unique ID. This action is irreversible.
   operationId: deleteChallengePlatform
-  x-audience: [public]
   security:
     - jwtBearer:
         - delete:challenge-platforms

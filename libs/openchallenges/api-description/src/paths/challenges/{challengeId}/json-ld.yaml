@@ -1,12 +1,12 @@
 parameters:
   - $ref: ../../../components/parameters/path/challengeId.yaml
+
 get:
   tags:
     - Challenge
   summary: Get a challenge in JSON-LD format
   description: Returns the challenge specified in JSON-LD format
   operationId: getChallengeJsonLd
-  x-audience: [public]
   security:
     - jwtBearer:
         - read:challenges

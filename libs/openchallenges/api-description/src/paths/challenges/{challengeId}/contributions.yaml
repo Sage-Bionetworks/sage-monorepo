@@ -1,12 +1,12 @@
 parameters:
   - $ref: ../../../components/parameters/path/challengeId.yaml
+
 get:
   tags:
     - Challenge Contribution
   summary: List challenge contributions
   description: List challenge contributions
   operationId: listChallengeContributions
-  x-audience: [public]
   security:
     - jwtBearer:
         - read:challenges
@@ -21,6 +21,7 @@ get:
       $ref: ../../../components/responses/BadRequest.yaml
     '500':
       $ref: ../../../components/responses/InternalServerError.yaml
+
 post:
   tags:
     - Challenge Contribution
@@ -28,7 +29,6 @@ post:
   description: |
     Creates a new contribution record associated with a challenge ID.
   operationId: createChallengeContribution
-  x-audience: [public]
   security:
     - jwtBearer:
         - update:challenges
@@ -55,13 +55,14 @@ post:
       $ref: ../../../components/responses/Conflict.yaml
     '500':
       $ref: ../../../components/responses/InternalServerError.yaml
+
 delete:
+  x-internal: true
   tags:
     - Challenge Contribution
   summary: Delete the contributions for a specific challenge
   description: Deletes the associated contributions for a given challenge, identified by its ID.
   operationId: deleteChallengeContributions
-  x-audience: [internal]
   security:
     - jwtBearer:
         - update:challenges

@@ -28,8 +28,6 @@ paths:
       summary: Get user profile
       description: Get the authenticated user's profile information
       operationId: getUserProfile
-      x-audience:
-        - public
       security:
         - jwtBearer:
             - read:profile
@@ -50,8 +48,6 @@ paths:
       summary: Update user profile
       description: Update the authenticated user's profile information
       operationId: updateUserProfile
-      x-audience:
-        - public
       security:
         - jwtBearer:
             - update:profile
@@ -81,8 +77,6 @@ paths:
       summary: List API keys
       description: Get all API keys for the authenticated user
       operationId: listApiKeys
-      x-audience:
-        - public
       security:
         - jwtBearer:
             - read:api-key
@@ -105,8 +99,6 @@ paths:
       summary: Create API key
       description: Generate a new API key for the authenticated user
       operationId: createApiKey
-      x-audience:
-        - public
       security:
         - jwtBearer:
             - create:api-key
@@ -136,8 +128,6 @@ paths:
       summary: Delete API key
       description: Revoke an API key
       operationId: deleteApiKey
-      x-audience:
-        - public
       security:
         - jwtBearer:
             - delete:api-key

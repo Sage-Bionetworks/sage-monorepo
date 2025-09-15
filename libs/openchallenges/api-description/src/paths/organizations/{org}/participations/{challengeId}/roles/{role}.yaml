@@ -2,13 +2,14 @@ parameters:
   - $ref: ../../../../../../components/parameters/path/org.yaml
   - $ref: ../../../../../../components/parameters/path/challengeId.yaml
   - $ref: ../../../../../../components/parameters/path/challengeParticipationRole.yaml
+
 delete:
+  x-internal: true
   tags:
     - Challenge Participation
   summary: Delete a specific challenge participation
   description: Delete a specific challenge participation.
   operationId: deleteChallengeParticipation
-  x-audience: [internal]
   security:
     - jwtBearer:
         - update:organizations

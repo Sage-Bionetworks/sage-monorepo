@@ -38,58 +38,30 @@ apis:
   auth-public:
     root: ./src/auth.openapi.yaml
     decorators:
-      filter-in:
-        property: x-audience
-        value: [public]
+      remove-x-internal: on
   auth-service:
     root: ./src/auth.openapi.yaml
-    decorators:
-      filter-in:
-        property: x-audience
-        value: [public, internal]
-        matchStrategy: any
 
   # Challenge API
   challenge-public:
     root: ./src/challenge.openapi.yaml
     decorators:
-      filter-in:
-        property: x-audience
-        value: [public]
+      remove-x-internal: on
   challenge-service:
     root: ./src/challenge.openapi.yaml
-    decorators:
-      filter-in:
-        property: x-audience
-        value: [public, internal]
-        matchStrategy: any
 
   # Image API
   image-public:
     root: ./src/image.openapi.yaml
     decorators:
-      filter-in:
-        property: x-audience
-        value: [public]
+      remove-x-internal: on
   image-service:
     root: ./src/image.openapi.yaml
-    decorators:
-      filter-in:
-        property: x-audience
-        value: [public, internal]
-        matchStrategy: any
 
   # Organization API
   organization-public:
     root: ./src/organization.openapi.yaml
     decorators:
-      filter-in:
-        property: x-audience
-        value: [public]
+      remove-x-internal: on
   organization-service:
     root: ./src/organization.openapi.yaml
-    decorators:
-      filter-in:
-        property: x-audience
-        value: [public, internal]
-        matchStrategy: any

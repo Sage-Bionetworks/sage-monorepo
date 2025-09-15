@@ -4,7 +4,6 @@ get:
   summary: List EDAM concepts
   description: List EDAM concepts
   operationId: listEdamConcepts
-  x-audience: [public]
   security:
     - jwtBearer:
         - read:edam-concepts

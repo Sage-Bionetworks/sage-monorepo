@@ -2,13 +2,13 @@ parameters:
   - $ref: ../../../../../../components/parameters/path/challengeId.yaml
   - $ref: ../../../../../../components/parameters/path/organizationId.yaml
   - $ref: ../../../../../../components/parameters/path/challengeContributionRole.yaml
+
 delete:
   tags:
     - Challenge Contribution
   summary: Delete a specific challenge contribution
   description: Delete a specific challenge contribution.
   operationId: deleteChallengeContribution
-  x-audience: [public]
   security:
     - jwtBearer:
         - update:challenges

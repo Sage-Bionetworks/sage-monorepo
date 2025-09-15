@@ -34,8 +34,6 @@ paths:
       summary: List challenges
       description: List challenges
       operationId: listChallenges
-      x-audience:
-        - public
       security:
         - jwtBearer:
             - read:challenges
@@ -58,8 +56,6 @@ paths:
       summary: Create a challenge
       description: Create a challenge with the specified details
       operationId: createChallenge
-      x-audience:
-        - public
       security:
         - jwtBearer:
             - create:challenges
@@ -95,8 +91,6 @@ paths:
       summary: Get a challenge
       description: Returns the challenge specified
       operationId: getChallenge
-      x-audience:
-        - public
       security:
         - jwtBearer:
             - read:challenges
@@ -117,8 +111,6 @@ paths:
       summary: Update an existing challenge
       description: Updates an existing challenge.
       operationId: updateChallenge
-      x-audience:
-        - public
       security:
         - jwtBearer:
             - update:challenges
@@ -153,8 +145,6 @@ paths:
       summary: Delete a challenge
       description: Deletes a challenge by its unique ID.
       operationId: deleteChallenge
-      x-audience:
-        - public
       security:
         - jwtBearer:
             - delete:challenges
@@ -178,8 +168,6 @@ paths:
       summary: Get a challenge in JSON-LD format
       description: Returns the challenge specified in JSON-LD format
       operationId: getChallengeJsonLd
-      x-audience:
-        - public
       security:
         - jwtBearer:
             - read:challenges
@@ -203,8 +191,6 @@ paths:
       summary: List challenge contributions
       description: List challenge contributions
       operationId: listChallengeContributions
-      x-audience:
-        - public
       security:
         - jwtBearer:
             - read:challenges
@@ -226,8 +212,6 @@ paths:
       description: |
         Creates a new contribution record associated with a challenge ID.
       operationId: createChallengeContribution
-      x-audience:
-        - public
       security:
         - jwtBearer:
             - update:challenges
@@ -265,8 +249,6 @@ paths:
       summary: Delete a specific challenge contribution
       description: Delete a specific challenge contribution.
       operationId: deleteChallengeContribution
-      x-audience:
-        - public
       security:
         - jwtBearer:
             - update:challenges
@@ -288,8 +270,6 @@ paths:
       summary: Get the number of challenges tracked per year
       description: Returns the number of challenges tracked per year
       operationId: getChallengesPerYear
-      x-audience:
-        - public
       security:
         - jwtBearer:
             - read:challenges-analytics
@@ -300,6 +280,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ChallengesPerYear'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /challenge-platforms:
@@ -309,8 +293,6 @@ paths:
       summary: List challenge platforms
       description: List challenge platforms
       operationId: listChallengePlatforms
-      x-audience:
-        - public
       security:
         - jwtBearer:
             - read:challenge-platforms
@@ -325,6 +307,10 @@ paths:
           description: Success
         '400':
           $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/InternalServerError'
     post:
@@ -333,8 +319,6 @@ paths:
       summary: Create a challenge platform
       description: Create a challenge platform with the specified ID
       operationId: createChallengePlatform
-      x-audience:
-        - public
       security:
         - jwtBearer:
             - create:challenge-platforms
@@ -368,8 +352,6 @@ paths:
       summary: Get a challenge platform
       description: Returns the challenge platform identified by its unique ID
       operationId: getChallengePlatform
-      x-audience:
-        - public
       security:
         - jwtBearer:
             - read:challenge-platforms
@@ -391,8 +373,6 @@ paths:
       description: |
         Updates an existing challenge platform.
       operationId: updateChallengePlatform
-      x-audience:
-        - public
       security:
         - jwtBearer:
             - update:challenge-platforms
@@ -428,8 +408,6 @@ paths:
       description: |
         Deletes a challenge platform by its unique ID. This action is irreversible.
       operationId: deleteChallengePlatform
-      x-audience:
-        - public
       security:
         - jwtBearer:
             - delete:challenge-platforms
@@ -451,8 +429,6 @@ paths:
       summary: List EDAM concepts
       description: List EDAM concepts
       operationId: listEdamConcepts
-      x-audience:
-        - public
       security:
         - jwtBearer:
             - read:edam-concepts

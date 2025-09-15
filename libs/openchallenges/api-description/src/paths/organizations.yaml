@@ -4,7 +4,6 @@ get:
   summary: List organizations
   description: List organizations
   operationId: listOrganizations
-  x-audience: [public]
   x-anonymous-access: true
   security:
     - jwtBearer:
@@ -22,13 +21,13 @@ get:
       $ref: ../components/responses/BadRequest.yaml
     '500':
       $ref: ../components/responses/InternalServerError.yaml
+
 post:
   tags:
     - Organization
   summary: Create an organization
   description: Create an organization with the specified account name
   operationId: createOrganization
-  x-audience: [public]
   security:
     - jwtBearer:
         - create:organizations
