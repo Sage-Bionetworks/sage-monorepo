@@ -16,6 +16,7 @@ encoder.ts
 git_push.sh
 index.ts
 model/api-key.ts
+model/auth-scope.ts
 model/basic-error.ts
 model/challenge-category.ts
 model/challenge-contribution-create-request.ts
@@ -54,8 +55,6 @@ model/image-aspect-ratio.ts
 model/image-height.ts
 model/image-query.ts
 model/image.ts
-model/login-request.ts
-model/login-response.ts
 model/models.ts
 model/organization-category.ts
 model/organization-create-request.ts
@@ -67,5 +66,8 @@ model/organization.ts
 model/organizations-page.ts
 model/page-metadata.ts
 model/simple-challenge-platform.ts
+model/update-user-profile-request.ts
+model/user-profile.ts
+model/user-role.ts
 param.ts
 variables.ts

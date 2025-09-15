@@ -25,9 +25,9 @@ import { Observable } from 'rxjs';
 // @ts-ignore
 import { BasicError } from '../model/basic-error';
 // @ts-ignore
-import { LoginRequest } from '../model/login-request';
+import { UpdateUserProfileRequest } from '../model/update-user-profile-request';
 // @ts-ignore
-import { LoginResponse } from '../model/login-response';
+import { UserProfile } from '../model/user-profile';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -109,14 +109,12 @@ export class AuthenticationService {
   }
 
   /**
-   * User login
-   * Authenticate user and return JWT token
-   * @param loginRequest
+   * Get user profile
+   * Get the authenticated user\&#39;s profile information
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public login(
-    loginRequest: LoginRequest,
+  public getUserProfile(
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -124,9 +122,8 @@ export class AuthenticationService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<LoginResponse>;
-  public login(
-    loginRequest: LoginRequest,
+  ): Observable<UserProfile>;
+  public getUserProfile(
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -134,9 +131,8 @@ export class AuthenticationService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<LoginResponse>>;
-  public login(
-    loginRequest: LoginRequest,
+  ): Observable<HttpResponse<UserProfile>>;
+  public getUserProfile(
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -144,9 +140,8 @@ export class AuthenticationService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<LoginResponse>>;
-  public login(
-    loginRequest: LoginRequest,
+  ): Observable<HttpEvent<UserProfile>>;
+  public getUserProfile(
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -155,11 +150,123 @@ export class AuthenticationService {
       transferCache?: boolean;
     },
   ): Observable<any> {
-    if (loginRequest === null || loginRequest === undefined) {
-      throw new Error('Required parameter loginRequest was null or undefined when calling login.');
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (jwtBearer) required
+    localVarCredential = this.configuration.lookupCredential('jwtBearer');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json', 'application/problem+json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/auth/profile`;
+    return this.httpClient.request<UserProfile>(
+      'get',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * Update user profile
+   * Update the authenticated user\&#39;s profile information
+   * @param updateUserProfileRequest
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public updateUserProfile(
+    updateUserProfileRequest: UpdateUserProfileRequest,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<UserProfile>;
+  public updateUserProfile(
+    updateUserProfileRequest: UpdateUserProfileRequest,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<UserProfile>>;
+  public updateUserProfile(
+    updateUserProfileRequest: UpdateUserProfileRequest,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<UserProfile>>;
+  public updateUserProfile(
+    updateUserProfileRequest: UpdateUserProfileRequest,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (updateUserProfileRequest === null || updateUserProfileRequest === undefined) {
+      throw new Error(
+        'Required parameter updateUserProfileRequest was null or undefined when calling updateUserProfile.',
+      );
     }
 
     let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (jwtBearer) required
+    localVarCredential = this.configuration.lookupCredential('jwtBearer');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
 
     let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
     if (localVarHttpHeaderAcceptSelected === undefined) {
@@ -200,13 +307,13 @@ export class AuthenticationService {
       }
     }
 
-    let localVarPath = `/auth/login`;
-    return this.httpClient.request<LoginResponse>(
-      'post',
+    let localVarPath = `/auth/profile`;
+    return this.httpClient.request<UserProfile>(
+      'put',
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
-        body: loginRequest,
+        body: updateUserProfileRequest,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,
