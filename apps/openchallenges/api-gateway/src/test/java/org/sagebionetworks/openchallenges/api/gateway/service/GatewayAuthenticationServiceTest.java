@@ -1,18 +1,27 @@
 package org.sagebionetworks.openchallenges.api.gateway.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
+import java.net.URI;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.sagebionetworks.openchallenges.api.gateway.configuration.AppProperties;
 import org.sagebionetworks.openchallenges.api.gateway.routing.RouteConfigRegistry;
 
 @ExtendWith(MockitoExtension.class)
 class GatewayAuthenticationServiceTest {
 
   private GatewayAuthenticationService gatewayAuthenticationService;
+
+  @Mock
+  private AppProperties appProperties;
+
+  @Mock
+  private AppProperties.Auth auth;
 
   @Mock
   private RouteConfigRegistry routeConfigRegistry;
@@ -22,8 +31,11 @@ class GatewayAuthenticationServiceTest {
 
   @BeforeEach
   void setUp() {
+    when(appProperties.auth()).thenReturn(auth);
+    when(auth.serviceUrl()).thenReturn(URI.create("http://test-auth-service:8080/v1"));
+
     gatewayAuthenticationService = new GatewayAuthenticationService(
-      "http://test-auth-service:8080/v1",
+      appProperties,
       routeConfigRegistry,
       audienceResolver
     );

@@ -1,3 +1,14 @@
+app:
+  welcome-message: 'Welcome to OpenChallenges API Gateway (test)'
+  auth:
+    service-url: http://test-auth-service:8087/v1
+    realm: OpenChallenges
+  routes:
+    - method: 'GET'
+      path: '/api/v1/test'
+      scopes: []
+      audience: 'test'
+
 openchallenges-organization-service:
   welcome-message: 'Welcome to OpenChallenges API Gateway (test)'
 

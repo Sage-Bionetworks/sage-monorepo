@@ -35,6 +35,7 @@ class AuthenticationFilterChainIntegrationTest {
     GatewayAuthenticationService.class
   );
   private final AppProperties appProperties = mock(AppProperties.class);
+  private final AppProperties.Auth auth = mock(AppProperties.Auth.class);
   private final WebFilterChain chain = mock(WebFilterChain.class);
 
   @Test
@@ -42,7 +43,8 @@ class AuthenticationFilterChainIntegrationTest {
   void shouldAuthenticateWithJwtWhenBothJwtAndApiKeyArePresent() {
     // given
     when(chain.filter(any())).thenReturn(Mono.empty());
-    when(appProperties.auth().realm()).thenReturn("OpenChallenges");
+    when(appProperties.auth()).thenReturn(auth);
+    when(auth.realm()).thenReturn("OpenChallenges");
 
     JwtAuthenticationGatewayFilter jwtFilter = new JwtAuthenticationGatewayFilter(
       oAuth2JwtService,
@@ -87,7 +89,8 @@ class AuthenticationFilterChainIntegrationTest {
   void shouldFallBackToApiKeyAuthenticationWhenNoJwtToken() {
     // given
     when(chain.filter(any())).thenReturn(Mono.empty());
-    when(appProperties.auth().realm()).thenReturn("OpenChallenges");
+    when(appProperties.auth()).thenReturn(auth);
+    when(auth.realm()).thenReturn("OpenChallenges");
 
     JwtAuthenticationGatewayFilter jwtFilter = new JwtAuthenticationGatewayFilter(
       oAuth2JwtService,
@@ -143,7 +146,8 @@ class AuthenticationFilterChainIntegrationTest {
   @DisplayName("should fail authentication when both JWT and API key are invalid")
   void shouldFailAuthenticationWhenBothJwtAndApiKeyAreInvalid() {
     // given
-    when(appProperties.auth().realm()).thenReturn("OpenChallenges");
+    when(appProperties.auth()).thenReturn(auth);
+    when(auth.realm()).thenReturn("OpenChallenges");
 
     JwtAuthenticationGatewayFilter jwtFilter = new JwtAuthenticationGatewayFilter(
       oAuth2JwtService,
@@ -196,7 +200,8 @@ class AuthenticationFilterChainIntegrationTest {
       appProperties
     );
 
-    MockServerHttpRequest request = MockServerHttpRequest.post("/api/v1/organizations").build(); // No authentication headers
+    MockServerHttpRequest request = MockServerHttpRequest.post("/api/v1/organizations")
+      .build(); // No authentication headers
     MockServerWebExchange exchange = MockServerWebExchange.from(request);
 
     // Simulate filter chain: JWT filter -> API key filter -> downstream
