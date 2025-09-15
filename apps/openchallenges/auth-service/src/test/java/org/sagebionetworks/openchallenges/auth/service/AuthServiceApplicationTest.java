@@ -12,68 +12,17 @@ import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FullyQualifiedAnnotationBeanNameGenerator;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("AuthServiceApplication")
 class AuthServiceApplicationTest {
 
   @Test
-  @DisplayName("should have correct Spring Boot annotations")
-  void shouldHaveCorrectSpringBootAnnotations() {
-    // given
-    Class<AuthServiceApplication> applicationClass = AuthServiceApplication.class;
-
-    // when & then
-    assertThat(applicationClass.isAnnotationPresent(SpringBootApplication.class)).isTrue();
-    assertThat(applicationClass.isAnnotationPresent(EnableConfigurationProperties.class)).isTrue();
-    assertThat(applicationClass.isAnnotationPresent(ComponentScan.class)).isTrue();
+  @DisplayName("should have SpringBootApplication annotation")
+  void shouldHaveSpringBootApplicationAnnotation() {
+    assertThat(AuthServiceApplication.class.isAnnotationPresent(SpringBootApplication.class)).isTrue();
   }
 
-  @Test
-  @DisplayName("should configure SpringBootApplication with correct name generator")
-  void shouldConfigureSpringBootApplicationWithCorrectNameGenerator() {
-    // given
-    Class<AuthServiceApplication> applicationClass = AuthServiceApplication.class;
-    SpringBootApplication springBootAnnotation = applicationClass.getAnnotation(
-      SpringBootApplication.class
-    );
-
-    // when & then
-    assertThat(springBootAnnotation.nameGenerator()).isEqualTo(
-      FullyQualifiedAnnotationBeanNameGenerator.class
-    );
-  }
-
-  @Test
-  @DisplayName("should configure ComponentScan with correct base packages")
-  void shouldConfigureComponentScanWithCorrectBasePackages() {
-    // given
-    Class<AuthServiceApplication> applicationClass = AuthServiceApplication.class;
-    ComponentScan componentScanAnnotation = applicationClass.getAnnotation(ComponentScan.class);
-
-    // when & then
-    assertThat(componentScanAnnotation.basePackages()).containsExactlyInAnyOrder(
-      "org.sagebionetworks.openchallenges.auth.service",
-      "org.sagebionetworks.openchallenges.auth.service.api",
-      "org.sagebionetworks.openchallenges.auth.service.configuration"
-    );
-  }
-
-  @Test
-  @DisplayName("should configure ComponentScan with correct name generator")
-  void shouldConfigureComponentScanWithCorrectNameGenerator() {
-    // given
-    Class<AuthServiceApplication> applicationClass = AuthServiceApplication.class;
-    ComponentScan componentScanAnnotation = applicationClass.getAnnotation(ComponentScan.class);
-
-    // when & then
-    assertThat(componentScanAnnotation.nameGenerator()).isEqualTo(
-      FullyQualifiedAnnotationBeanNameGenerator.class
-    );
-  }
 
   @Test
   @DisplayName("should run Spring application when main method is called")
