@@ -10,7 +10,7 @@ test.describe('search', () => {
 
     await page.goto('/');
 
-    const searchListItems = await searchAndGetSearchListItems(modelQuery, page);
+    const { searchListItems } = await searchAndGetSearchListItems(modelQuery, page);
     await expect(searchListItems).toHaveCount(2);
 
     const searchListItem = searchListItems.first();
@@ -29,7 +29,7 @@ test.describe('search', () => {
     await page.goto(`/models/${initialModel}`);
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(initialModel);
 
-    const searchListItems = await searchAndGetSearchListItems(nextModel, page);
+    const { searchListItems } = await searchAndGetSearchListItems(nextModel, page);
     const firstResult = searchListItems.first();
     await expect(firstResult).toHaveText(nextModel);
     await firstResult.click();
@@ -43,7 +43,7 @@ test.describe('search', () => {
     const modelQuery = '306';
 
     await page.goto('/');
-    const searchListItems = await searchAndGetSearchListItems(modelQuery, page);
+    const { searchListItems } = await searchAndGetSearchListItems(modelQuery, page);
 
     await expect(searchListItems).toHaveCount(expectedResultsCount);
 
@@ -56,7 +56,7 @@ test.describe('search', () => {
     const modelQuery = '348';
 
     await page.goto('/');
-    const searchListItems = await searchAndGetSearchListItems(modelQuery, page);
+    const { searchListItems } = await searchAndGetSearchListItems(modelQuery, page);
 
     expect(await searchListItems.count()).toBe(3);
     await expect(searchListItems.first()).toHaveText(/3xtg-ad \(rrid:/i);
@@ -66,7 +66,7 @@ test.describe('search', () => {
     const modelQuery = 'trem2';
 
     await page.goto('/');
-    const searchListItems = await searchAndGetSearchListItems(modelQuery, page);
+    const { searchListItems } = await searchAndGetSearchListItems(modelQuery, page);
 
     await expect(searchListItems.first()).toHaveText(/trem2 ko/i);
     await expect(searchListItems.nth(1)).toHaveText(/trem2-r47h_nss/i);
@@ -78,7 +78,7 @@ test.describe('search', () => {
   test('can search using home card input', async ({ page }) => {
     const model = 'APOE4';
     await page.goto('/');
-    const searchListItems = await searchAndGetSearchListItems(
+    const { searchListItems } = await searchAndGetSearchListItems(
       model,
       page,
       'Find model by name or ID...',
@@ -92,7 +92,7 @@ test.describe('search', () => {
 
     await page.goto('/');
 
-    const searchListItems = await searchAndGetSearchListItems(modelQuery, page);
+    const { searchListItems } = await searchAndGetSearchListItems(modelQuery, page);
     expect(await searchListItems.count()).toBe(1);
     const firstResult = searchListItems.first();
     await expect(firstResult).toHaveText(modelName);
@@ -140,5 +140,71 @@ test.describe('search', () => {
     await expect(
       page.getByRole('listitem').filter({ hasText: /no results match your search string/i }),
     ).toBeVisible();
+  });
+
+  test('can navigate search results with arrow keys and select with enter', async ({ page }) => {
+    const modelQuery = 'trem2';
+    const expectedFirstResult = 'Trem2 KO';
+
+    await page.goto('/');
+
+    const { input } = await searchAndGetSearchListItems(modelQuery, page);
+
+    await input.press('ArrowDown');
+    await input.press('ArrowDown');
+    await input.press('ArrowUp');
+    await input.press('Enter');
+
+    await page.waitForURL(/trem2/i);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(expectedFirstResult);
+  });
+
+  test('can clear search results with escape key', async ({ page }) => {
+    const modelQuery = 'apoe4';
+
+    await page.goto('/');
+
+    const { input, searchListItems } = await searchAndGetSearchListItems(modelQuery, page);
+    await expect(searchListItems.first()).toBeVisible();
+
+    await input.press('Escape');
+    await expect(input).toHaveValue('');
+    await expect(searchListItems.first()).toBeHidden();
+  });
+
+  test('can search for the same query twice', async ({ page }) => {
+    const modelQuery = 'abc';
+
+    await page.goto('/');
+
+    const { input, searchListItems } = await searchAndGetSearchListItems(modelQuery, page);
+    await expect(searchListItems.first()).toBeVisible();
+
+    await input.press('Escape');
+    await expect(input).toHaveValue('');
+    await expect(searchListItems.first()).toBeHidden();
+
+    await searchAndGetSearchListItems(modelQuery, page);
+    await expect(searchListItems.first()).toBeVisible();
+  });
+
+  test('can navigate long search result list with arrow keys', async ({ page }) => {
+    const modelQuery = 'trem';
+
+    await page.goto('/');
+
+    const { input, searchListItems } = await searchAndGetSearchListItems(modelQuery, page);
+    const resultCount = await searchListItems.count();
+    expect(resultCount).toBeGreaterThanOrEqual(5);
+
+    for (let i = 0; i < resultCount; i++) {
+      await input.press('ArrowDown');
+      await expect(searchListItems.nth(i)).toBeInViewport();
+    }
+
+    for (let i = resultCount - 1; i >= 0; i--) {
+      await input.press('ArrowUp');
+      await expect(searchListItems.nth(i)).toBeInViewport();
+    }
   });
 });
