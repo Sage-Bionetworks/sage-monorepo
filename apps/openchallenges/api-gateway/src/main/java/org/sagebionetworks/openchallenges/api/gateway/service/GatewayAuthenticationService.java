@@ -2,11 +2,11 @@ package org.sagebionetworks.openchallenges.api.gateway.service;
 
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.openchallenges.api.gateway.configuration.AppProperties;
 import org.sagebionetworks.openchallenges.api.gateway.model.dto.OAuth2TokenResponse;
 import org.sagebionetworks.openchallenges.api.gateway.routing.RouteConfigRegistry;
 import org.sagebionetworks.openchallenges.api.gateway.util.ApiKeyParser;
 import org.sagebionetworks.openchallenges.api.gateway.util.ApiKeyParser.ParsedApiKey;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -26,17 +26,19 @@ public class GatewayAuthenticationService {
   private final AudienceResolver audienceResolver;
 
   public GatewayAuthenticationService(
-    @Value(
-      "${openchallenges.auth.service-url:http://openchallenges-auth-service:8080/v1}"
-    ) String authServiceUrl,
+    AppProperties appProperties,
     RouteConfigRegistry routeConfigRegistry,
     AudienceResolver audienceResolver
   ) {
+    // Use the validated service URL from AppProperties (e.g., http://openchallenges-auth-service:8087/v1)
+    String authServiceUrl = appProperties.auth().serviceUrl().toString();
     this.authServiceClient = WebClient.builder().baseUrl(authServiceUrl).build();
 
     // OAuth2 endpoints are at the root level, not under /v1
     String oauth2ServiceUrl = authServiceUrl.replace("/v1", "");
     this.oauth2ServiceClient = WebClient.builder().baseUrl(oauth2ServiceUrl).build();
+
+    log.info("Configured Auth Service URL: {} (OAuth2 root: {})", authServiceUrl, oauth2ServiceUrl);
 
     this.routeConfigRegistry = routeConfigRegistry;
     this.audienceResolver = audienceResolver;
@@ -188,18 +190,31 @@ public class GatewayAuthenticationService {
       ? ""
       : "&scope=" + String.join(" ", requiredScopes);
 
-    log.debug("Requesting anonymous OAuth2 token with scopes: {}", requiredScopes);
+    // Resolve RFC 8707 resource identifier (audience) for this route so the issued token
+    // contains the correct 'aud' claim expected by downstream resource servers.
+    String resourceIdentifier = audienceResolver.getResourceIdentifierForRoute(method, path);
+    String resourceParam = resourceIdentifier != null ? "&resource=" + resourceIdentifier : "";
+
+    log.debug(
+      "Requesting anonymous OAuth2 token with scopes: {} and resource: {}",
+      requiredScopes,
+      resourceIdentifier
+    );
 
     return oauth2ServiceClient
       .post()
       .uri("/oauth2/token")
       .headers(headers -> headers.setBasicAuth(anonymousClientId, anonymousClientSecret))
       .header("Content-Type", "application/x-www-form-urlencoded")
-      .bodyValue("grant_type=client_credentials" + scopeParam)
+      .bodyValue("grant_type=client_credentials" + scopeParam + resourceParam)
       .retrieve()
       .bodyToMono(OAuth2TokenResponse.class)
       .doOnNext(response ->
-        log.debug("Anonymous OAuth2 token generated successfully with scopes: {}", requiredScopes)
+        log.debug(
+          "Anonymous OAuth2 token generated successfully with scopes: {} and resource: {}",
+          requiredScopes,
+          resourceIdentifier
+        )
       )
       .onErrorResume(WebClientResponseException.class, ex -> {
         log.warn(

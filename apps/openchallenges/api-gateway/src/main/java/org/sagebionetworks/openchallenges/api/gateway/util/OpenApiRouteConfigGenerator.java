@@ -16,7 +16,7 @@ import org.sagebionetworks.openchallenges.api.gateway.model.dto.RouteSpec;
 import org.sagebionetworks.openchallenges.api.gateway.routing.RouteKey;
 
 /**
- * Reads one or more OpenAPI YAML files and generates a canonical route-config YAML:
+ * Reads one or more OpenAPI YAML files and generates a canonical routes YAML:
  *
  * appKey:
  *   routes:
@@ -27,7 +27,7 @@ import org.sagebionetworks.openchallenges.api.gateway.routing.RouteKey;
  *       anonymousAccess: false
  *
  * Usage:
- *   java ... OpenApiRouteConfigGenerator [--app-key=app2] [--out=src/main/resources/route-config.yml] <openapi1.yml> [openapi2.yml ...]
+ *   java ... OpenApiRouteConfigGenerator [--app-key=app2] [--out=src/main/resources/routes.yml] <openapi1.yml> [openapi2.yml ...]
  */
 public final class OpenApiRouteConfigGenerator {
 
@@ -67,7 +67,7 @@ public final class OpenApiRouteConfigGenerator {
   public static void main(String[] args) {
     if (args.length == 0) {
       System.err.println(
-        "Usage: OpenApiRouteConfigGenerator [--app-key=app2] [--out=src/main/resources/route-config.yml] <openapi1.yml> [openapi2.yml ...]"
+        "Usage: OpenApiRouteConfigGenerator [--app-key=app2] [--out=src/main/resources/routes.yml] <openapi1.yml> [openapi2.yml ...]"
       );
       System.exit(1);
     }

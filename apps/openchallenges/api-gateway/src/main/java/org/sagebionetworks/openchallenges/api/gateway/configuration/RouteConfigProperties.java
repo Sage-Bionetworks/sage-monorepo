@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
 /**
- * Binds app2.routes from route-config.yml (imported via spring.config.import).
+ * Binds app2.routes from routes.yml (imported via spring.config.import).
  */
 @Validated
 @ConfigurationProperties(prefix = "app")
