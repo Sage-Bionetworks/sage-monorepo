@@ -2,12 +2,12 @@
 
 All URIs are relative to *https://openchallenges.io/api/v1*
 
-Method | HTTP request | Description
-------------- | ------------- | -------------
-[**list_edam_concepts**](EdamConceptApi.md#list_edam_concepts) | **GET** /edam-concepts | List EDAM concepts
-
+| Method                                                         | HTTP request           | Description        |
+| -------------------------------------------------------------- | ---------------------- | ------------------ |
+| [**list_edam_concepts**](EdamConceptApi.md#list_edam_concepts) | **GET** /edam-concepts | List EDAM concepts |
 
 # **list_edam_concepts**
+
 > EdamConceptsPage list_edam_concepts(edam_concept_search_query=edam_concept_search_query)
 
 List EDAM concepts
@@ -16,6 +16,7 @@ List EDAM concepts
 
 ### Example
 
+- Bearer (JWT) Authentication (jwtBearer):
 
 ```python
 import openchallenges_api_client_python
@@ -30,6 +31,15 @@ configuration = openchallenges_api_client_python.Configuration(
     host = "https://openchallenges.io/api/v1"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwtBearer
+configuration = openchallenges_api_client_python.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
 
 # Enter a context with an instance of the API client
 with openchallenges_api_client_python.ApiClient(configuration) as api_client:
@@ -46,14 +56,11 @@ with openchallenges_api_client_python.ApiClient(configuration) as api_client:
         print("Exception when calling EdamConceptApi->list_edam_concepts: %s\n" % e)
 ```
 
-
-
 ### Parameters
 
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **edam_concept_search_query** | [**EdamConceptSearchQuery**](.md)| The search query used to find EDAM concepts. | [optional] 
+| Name                          | Type                              | Description                                  | Notes      |
+| ----------------------------- | --------------------------------- | -------------------------------------------- | ---------- |
+| **edam_concept_search_query** | [**EdamConceptSearchQuery**](.md) | The search query used to find EDAM concepts. | [optional] |
 
 ### Return type
 
@@ -61,20 +68,19 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[jwtBearer](../README.md#jwtBearer)
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Success |  -  |
-**400** | Invalid request |  -  |
-**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | Success                                                           | -                |
+| **400**     | Invalid request                                                   | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-

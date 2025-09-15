@@ -2,16 +2,16 @@
 
 All URIs are relative to *https://openchallenges.io/api/v1*
 
-Method | HTTP request | Description
-------------- | ------------- | -------------
-[**create_challenge_platform**](ChallengePlatformApi.md#create_challenge_platform) | **POST** /challenge-platforms | Create a challenge platform
-[**delete_challenge_platform**](ChallengePlatformApi.md#delete_challenge_platform) | **DELETE** /challenge-platforms/{challengePlatformId} | Delete a challenge platform
-[**get_challenge_platform**](ChallengePlatformApi.md#get_challenge_platform) | **GET** /challenge-platforms/{challengePlatformId} | Get a challenge platform
-[**list_challenge_platforms**](ChallengePlatformApi.md#list_challenge_platforms) | **GET** /challenge-platforms | List challenge platforms
-[**update_challenge_platform**](ChallengePlatformApi.md#update_challenge_platform) | **PUT** /challenge-platforms/{challengePlatformId} | Update an existing challenge platform
-
+| Method                                                                             | HTTP request                                          | Description                           |
+| ---------------------------------------------------------------------------------- | ----------------------------------------------------- | ------------------------------------- |
+| [**create_challenge_platform**](ChallengePlatformApi.md#create_challenge_platform) | **POST** /challenge-platforms                         | Create a challenge platform           |
+| [**delete_challenge_platform**](ChallengePlatformApi.md#delete_challenge_platform) | **DELETE** /challenge-platforms/{challengePlatformId} | Delete a challenge platform           |
+| [**get_challenge_platform**](ChallengePlatformApi.md#get_challenge_platform)       | **GET** /challenge-platforms/{challengePlatformId}    | Get a challenge platform              |
+| [**list_challenge_platforms**](ChallengePlatformApi.md#list_challenge_platforms)   | **GET** /challenge-platforms                          | List challenge platforms              |
+| [**update_challenge_platform**](ChallengePlatformApi.md#update_challenge_platform) | **PUT** /challenge-platforms/{challengePlatformId}    | Update an existing challenge platform |
 
 # **create_challenge_platform**
+
 > ChallengePlatform create_challenge_platform(challenge_platform_create_request)
 
 Create a challenge platform
@@ -20,7 +20,7 @@ Create a challenge platform with the specified ID
 
 ### Example
 
-* Bearer (api_key) Authentication (apiBearerAuth):
+- Bearer (JWT) Authentication (jwtBearer):
 
 ```python
 import openchallenges_api_client_python
@@ -40,7 +40,7 @@ configuration = openchallenges_api_client_python.Configuration(
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
 
-# Configure Bearer authorization (api_key): apiBearerAuth
+# Configure Bearer authorization (JWT): jwtBearer
 configuration = openchallenges_api_client_python.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
@@ -49,7 +49,7 @@ configuration = openchallenges_api_client_python.Configuration(
 with openchallenges_api_client_python.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = openchallenges_api_client_python.ChallengePlatformApi(api_client)
-    challenge_platform_create_request = openchallenges_api_client_python.ChallengePlatformCreateRequest() # ChallengePlatformCreateRequest | 
+    challenge_platform_create_request = openchallenges_api_client_python.ChallengePlatformCreateRequest() # ChallengePlatformCreateRequest |
 
     try:
         # Create a challenge platform
@@ -60,14 +60,11 @@ with openchallenges_api_client_python.ApiClient(configuration) as api_client:
         print("Exception when calling ChallengePlatformApi->create_challenge_platform: %s\n" % e)
 ```
 
-
-
 ### Parameters
 
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **challenge_platform_create_request** | [**ChallengePlatformCreateRequest**](ChallengePlatformCreateRequest.md)|  | 
+| Name                                  | Type                                                                    | Description | Notes |
+| ------------------------------------- | ----------------------------------------------------------------------- | ----------- | ----- |
+| **challenge_platform_create_request** | [**ChallengePlatformCreateRequest**](ChallengePlatformCreateRequest.md) |             |
 
 ### Return type
 
@@ -75,36 +72,36 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[apiBearerAuth](../README.md#apiBearerAuth)
+[jwtBearer](../README.md#jwtBearer)
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: application/json
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**201** | Success |  -  |
-**401** | Unauthorized |  -  |
-**403** | The user does not have the permission to perform this action |  -  |
-**409** | The request conflicts with current state of the target resource |  -  |
-**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **201**     | Success                                                           | -                |
+| **401**     | Unauthorized                                                      | -                |
+| **403**     | The user does not have the permission to perform this action      | -                |
+| **409**     | The request conflicts with current state of the target resource   | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **delete_challenge_platform**
+
 > delete_challenge_platform(challenge_platform_id)
 
 Delete a challenge platform
 
 Deletes a challenge platform by its unique ID. This action is irreversible.
 
-
 ### Example
 
-* Bearer (api_key) Authentication (apiBearerAuth):
+- Bearer (JWT) Authentication (jwtBearer):
 
 ```python
 import openchallenges_api_client_python
@@ -122,7 +119,7 @@ configuration = openchallenges_api_client_python.Configuration(
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
 
-# Configure Bearer authorization (api_key): apiBearerAuth
+# Configure Bearer authorization (JWT): jwtBearer
 configuration = openchallenges_api_client_python.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
@@ -140,14 +137,11 @@ with openchallenges_api_client_python.ApiClient(configuration) as api_client:
         print("Exception when calling ChallengePlatformApi->delete_challenge_platform: %s\n" % e)
 ```
 
-
-
 ### Parameters
 
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **challenge_platform_id** | **int**| The unique identifier of the challenge platform. | 
+| Name                      | Type    | Description                                      | Notes |
+| ------------------------- | ------- | ------------------------------------------------ | ----- |
+| **challenge_platform_id** | **int** | The unique identifier of the challenge platform. |
 
 ### Return type
 
@@ -155,26 +149,27 @@ void (empty response body)
 
 ### Authorization
 
-[apiBearerAuth](../README.md#apiBearerAuth)
+[jwtBearer](../README.md#jwtBearer)
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/problem+json
 
 ### HTTP response details
 
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**204** | Deletion successful |  -  |
-**401** | Unauthorized |  -  |
-**403** | The user does not have the permission to perform this action |  -  |
-**404** | The specified resource was not found |  -  |
-**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **204**     | Deletion successful                                               | -                |
+| **401**     | Unauthorized                                                      | -                |
+| **403**     | The user does not have the permission to perform this action      | -                |
+| **404**     | The specified resource was not found                              | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_challenge_platform**
+
 > ChallengePlatform get_challenge_platform(challenge_platform_id)
 
 Get a challenge platform
@@ -183,6 +178,7 @@ Returns the challenge platform identified by its unique ID
 
 ### Example
 
+- Bearer (JWT) Authentication (jwtBearer):
 
 ```python
 import openchallenges_api_client_python
@@ -196,6 +192,15 @@ configuration = openchallenges_api_client_python.Configuration(
     host = "https://openchallenges.io/api/v1"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwtBearer
+configuration = openchallenges_api_client_python.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
 
 # Enter a context with an instance of the API client
 with openchallenges_api_client_python.ApiClient(configuration) as api_client:
@@ -212,14 +217,11 @@ with openchallenges_api_client_python.ApiClient(configuration) as api_client:
         print("Exception when calling ChallengePlatformApi->get_challenge_platform: %s\n" % e)
 ```
 
-
-
 ### Parameters
 
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **challenge_platform_id** | **int**| The unique identifier of the challenge platform. | 
+| Name                      | Type    | Description                                      | Notes |
+| ------------------------- | ------- | ------------------------------------------------ | ----- |
+| **challenge_platform_id** | **int** | The unique identifier of the challenge platform. |
 
 ### Return type
 
@@ -227,24 +229,25 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[jwtBearer](../README.md#jwtBearer)
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Success |  -  |
-**404** | The specified resource was not found |  -  |
-**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | Success                                                           | -                |
+| **404**     | The specified resource was not found                              | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **list_challenge_platforms**
+
 > ChallengePlatformsPage list_challenge_platforms(challenge_platform_search_query=challenge_platform_search_query)
 
 List challenge platforms
@@ -253,6 +256,7 @@ List challenge platforms
 
 ### Example
 
+- Bearer (JWT) Authentication (jwtBearer):
 
 ```python
 import openchallenges_api_client_python
@@ -267,6 +271,15 @@ configuration = openchallenges_api_client_python.Configuration(
     host = "https://openchallenges.io/api/v1"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwtBearer
+configuration = openchallenges_api_client_python.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
 
 # Enter a context with an instance of the API client
 with openchallenges_api_client_python.ApiClient(configuration) as api_client:
@@ -283,14 +296,11 @@ with openchallenges_api_client_python.ApiClient(configuration) as api_client:
         print("Exception when calling ChallengePlatformApi->list_challenge_platforms: %s\n" % e)
 ```
 
-
-
 ### Parameters
 
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **challenge_platform_search_query** | [**ChallengePlatformSearchQuery**](.md)| The search query used to find challenge platforms. | [optional] 
+| Name                                | Type                                    | Description                                        | Notes      |
+| ----------------------------------- | --------------------------------------- | -------------------------------------------------- | ---------- |
+| **challenge_platform_search_query** | [**ChallengePlatformSearchQuery**](.md) | The search query used to find challenge platforms. | [optional] |
 
 ### Return type
 
@@ -298,34 +308,36 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[jwtBearer](../README.md#jwtBearer)
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Success |  -  |
-**400** | Invalid request |  -  |
-**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | Success                                                           | -                |
+| **400**     | Invalid request                                                   | -                |
+| **401**     | Unauthorized                                                      | -                |
+| **403**     | The user does not have the permission to perform this action      | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_challenge_platform**
+
 > ChallengePlatform update_challenge_platform(challenge_platform_id, challenge_platform_update_request)
 
 Update an existing challenge platform
 
 Updates an existing challenge platform.
 
-
 ### Example
 
-* Bearer (api_key) Authentication (apiBearerAuth):
+- Bearer (JWT) Authentication (jwtBearer):
 
 ```python
 import openchallenges_api_client_python
@@ -345,7 +357,7 @@ configuration = openchallenges_api_client_python.Configuration(
 # Examples for each auth method are provided below, use the example that
 # satisfies your auth use case.
 
-# Configure Bearer authorization (api_key): apiBearerAuth
+# Configure Bearer authorization (JWT): jwtBearer
 configuration = openchallenges_api_client_python.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
@@ -355,7 +367,7 @@ with openchallenges_api_client_python.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = openchallenges_api_client_python.ChallengePlatformApi(api_client)
     challenge_platform_id = 56 # int | The unique identifier of the challenge platform.
-    challenge_platform_update_request = openchallenges_api_client_python.ChallengePlatformUpdateRequest() # ChallengePlatformUpdateRequest | 
+    challenge_platform_update_request = openchallenges_api_client_python.ChallengePlatformUpdateRequest() # ChallengePlatformUpdateRequest |
 
     try:
         # Update an existing challenge platform
@@ -366,15 +378,12 @@ with openchallenges_api_client_python.ApiClient(configuration) as api_client:
         print("Exception when calling ChallengePlatformApi->update_challenge_platform: %s\n" % e)
 ```
 
-
-
 ### Parameters
 
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **challenge_platform_id** | **int**| The unique identifier of the challenge platform. | 
- **challenge_platform_update_request** | [**ChallengePlatformUpdateRequest**](ChallengePlatformUpdateRequest.md)|  | 
+| Name                                  | Type                                                                    | Description                                      | Notes |
+| ------------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------ | ----- |
+| **challenge_platform_id**             | **int**                                                                 | The unique identifier of the challenge platform. |
+| **challenge_platform_update_request** | [**ChallengePlatformUpdateRequest**](ChallengePlatformUpdateRequest.md) |                                                  |
 
 ### Return type
 
@@ -382,24 +391,23 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[apiBearerAuth](../README.md#apiBearerAuth)
+[jwtBearer](../README.md#jwtBearer)
 
 ### HTTP request headers
 
- - **Content-Type**: application/json
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: application/json
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Challange platform updated successfully |  -  |
-**400** | Invalid request |  -  |
-**401** | Unauthorized |  -  |
-**403** | The user does not have the permission to perform this action |  -  |
-**404** | The specified resource was not found |  -  |
-**409** | The request conflicts with current state of the target resource |  -  |
-**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | Challange platform updated successfully                           | -                |
+| **400**     | Invalid request                                                   | -                |
+| **401**     | Unauthorized                                                      | -                |
+| **403**     | The user does not have the permission to perform this action      | -                |
+| **404**     | The specified resource was not found                              | -                |
+| **409**     | The request conflicts with current state of the target resource   | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
