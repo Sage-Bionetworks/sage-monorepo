@@ -39,7 +39,7 @@ test.describe('search', () => {
   });
 
   test('can search for jax id', async ({ page }) => {
-    const expectedResultsCount = 3;
+    const expectedResultsCount = 2;
     const modelQuery = '306';
 
     await page.goto('/');
@@ -68,11 +68,10 @@ test.describe('search', () => {
     await page.goto('/');
     const { searchListItems } = await searchAndGetSearchListItems(modelQuery, page);
 
-    await expect(searchListItems.first()).toHaveText(/trem2 ko/i);
-    await expect(searchListItems.nth(1)).toHaveText(/trem2-r47h_nss/i);
-    await expect(searchListItems.nth(2)).toHaveText(/trem2r47h/i);
-    await expect(searchListItems.nth(3)).toHaveText(/load1 \(alias apoe4\/trem2\*r47h\)/i);
-    await expect(searchListItems.last()).toHaveText(/load2 \(alias habeta\/apoe4\/trem2\*r47h\)/i);
+    await expect(searchListItems.first()).toHaveText(/trem2-r47h_nss/i);
+    await expect(searchListItems.nth(1)).toHaveText(/trem2r47h/i);
+    await expect(searchListItems.nth(2)).toHaveText(/load1 \(alias apoe4\/trem2\*r47h\)/i);
+    await expect(searchListItems.last()).toHaveText(/load1.snx1d465n/i);
   });
 
   test('can search using home card input', async ({ page }) => {
@@ -143,8 +142,8 @@ test.describe('search', () => {
   });
 
   test('can navigate search results with arrow keys and select with enter', async ({ page }) => {
-    const modelQuery = 'trem2';
-    const expectedFirstResult = 'Trem2 KO';
+    const modelQuery = 'load1';
+    const expectedFirstResult = 'LOAD1';
 
     await page.goto('/');
 
@@ -155,7 +154,7 @@ test.describe('search', () => {
     await input.press('ArrowUp');
     await input.press('Enter');
 
-    await page.waitForURL(/trem2/i);
+    await page.waitForURL(/load1/i);
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(expectedFirstResult);
   });
 
