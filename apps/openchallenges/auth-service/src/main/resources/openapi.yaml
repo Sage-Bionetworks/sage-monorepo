@@ -12,19 +12,14 @@ info:
   x-logo:
     url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
-  - description: Local/dev base
-    url: http://localhost/v1
+  - url: http://localhost/v1
 security:
   - jwtBearer: []
 tags:
   - description: User profile and token validation operations
     name: Authentication
-    x-audience:
-      - public
   - description: API key management for programmatic access to OpenChallenges APIs
     name: API Key
-    x-audience:
-      - public
 paths:
   /auth/profile:
     get:
@@ -47,8 +42,6 @@ paths:
       summary: Get user profile
       tags:
         - Authentication
-      x-audience:
-        - public
       x-accepts:
         - application/json
         - application/problem+json
@@ -82,8 +75,6 @@ paths:
       summary: Update user profile
       tags:
         - Authentication
-      x-audience:
-        - public
       x-content-type: application/json
       x-accepts:
         - application/json
@@ -113,8 +104,6 @@ paths:
       summary: List API keys
       tags:
         - API Key
-      x-audience:
-        - public
       x-accepts:
         - application/json
         - application/problem+json
@@ -148,8 +137,6 @@ paths:
       summary: Create API key
       tags:
         - API Key
-      x-audience:
-        - public
       x-content-type: application/json
       x-accepts:
         - application/json
@@ -185,8 +172,6 @@ paths:
       summary: Delete API key
       tags:
         - API Key
-      x-audience:
-        - public
       x-accepts:
         - application/problem+json
       x-tags:
@@ -482,3 +467,4 @@ components:
         key exchange
       scheme: bearer
       type: http
+x-oauth2-audience: urn:openchallenges:auth-service
