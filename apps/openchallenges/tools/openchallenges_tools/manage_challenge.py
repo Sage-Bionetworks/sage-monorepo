@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import os
 import time
+from datetime import date, timedelta
 
 import openchallenges_api_client_python
 from openchallenges_api_client_python.api.challenge_platform_api import (
@@ -40,9 +41,9 @@ from openchallenges_api_client_python.models.challenge_update_request import (
 )
 from openchallenges_api_client_python.rest import ApiException
 
-OC_API_URL = os.getenv("OPENCHALLENGES_API_URL", "http://localhost:8000/api/v1")
+OC_API_URL = os.getenv("OPENCHALLENGES_API_URL", "http://localhost:8082/api/v1")
 OC_API_KEY = os.getenv(
-    "OPENCHALLENGES_API_KEY", "oc_dev_dev1.dev_secret_9876543210fedcba"
+    "OPENCHALLENGES_API_KEY", "oc_dev_admin1.admin_secret_abcd1234efgh5678"
 )
 
 
@@ -62,17 +63,28 @@ def build_configuration() -> openchallenges_api_client_python.Configuration:
 def pretty(title: str, obj) -> None:
     print(f"\n=== {title} ===")
     if isinstance(obj, Challenge):
-        print(
-            f"ID: {obj.id}\n"
-            f"Slug: {obj.slug}\n"
-            f"Name: {obj.name}\n"
-            f"Status: {obj.status}\n"
-            f"Platform: {getattr(obj.platform, 'id', None)}\n"
-            f"Incentives: {obj.incentives}\n"
-            f"Submission types: {obj.submission_types}\n"
-            f"Categories: {obj.categories}\n"
-            f"Created: {obj.created_at} Updated: {obj.updated_at}"
-        )
+        operation_id = getattr(getattr(obj, "operation", None), "id", None)
+        input_data_type_ids = [
+            getattr(dt, "id", None) for dt in (obj.input_data_types or [])
+        ]
+        print(f"ID: {obj.id}")
+        print(f"Slug: {obj.slug}")
+        print(f"Name: {obj.name}")
+        print(f"Headline: {obj.headline}")
+        print(f"Description: {obj.description}")
+        print(f"Status: {obj.status}")
+        print(f"Platform: {getattr(obj.platform, 'id', None)}")
+        print(f"Website URL: {obj.website_url}")
+        print(f"Avatar URL: {obj.avatar_url}")
+        print(f"DOI: {obj.doi}")
+        print(f"Operation ID: {operation_id}")
+        print(f"Start Date: {obj.start_date}  End Date: {obj.end_date}")
+        print(f"Incentives: {obj.incentives}")
+        print(f"Submission types: {obj.submission_types}")
+        print(f"Categories: {obj.categories}")
+        print(f"Input Data Type IDs: {input_data_type_ids}")
+        print(f"Created: {obj.created_at}")
+        print(f"Updated: {obj.updated_at}")
     else:
         print(obj)
 
@@ -84,7 +96,7 @@ def get_first_platform_id(api_client) -> int | None:
         if page.challenge_platforms:
             return page.challenge_platforms[0].id
     except ApiException as e:
-        print(f"Warning: could not list challenge platforms: {e}")
+        raise SystemExit(f"Failed to list challenge platforms: {e}") from e
     return None
 
 
@@ -144,40 +156,83 @@ def update_challenge(api_client, challenge: Challenge) -> Challenge:
         if getattr(c, "id", None) is not None
     ]
 
+    # Supply required fields if they were omitted on create.
+    placeholder_start = challenge.start_date or date.today()
+    placeholder_end = challenge.end_date or (placeholder_start + timedelta(days=30))
+    placeholder_doi = challenge.doi or f"10.1234/demo-challenge-{challenge.id}"
+    placeholder_avatar = (
+        challenge.avatar_url or "https://example.org/static/demo-avatar.png"
+    )
+
+    new_status = ChallengeStatus.ACTIVE
+    new_headline = challenge.headline or "Updated headline"
+    new_description = challenge.description or "Updated description"
+    # Name intentionally unchanged (user requested no synthetic name suffix)
+    new_name = challenge.name
+
+    # Build a diff summary before performing the update
+    diffs: list[tuple[str, object, object]] = []
+
+    def record(label: str, old, new):
+        if old != new:
+            diffs.append((label, old, new))
+
+    record("status", challenge.status, new_status)
+    record("headline", challenge.headline, new_headline)
+    record("description", challenge.description, new_description)
+    record("doi", challenge.doi, placeholder_doi)
+    record("avatarUrl", challenge.avatar_url, placeholder_avatar)
+    record("startDate", challenge.start_date, placeholder_start)
+    record("endDate", challenge.end_date, placeholder_end)
+
+    if diffs:
+        print("\nPlanned update changes:")
+        for label, old, new in diffs:
+            print(f"  - {label}: {old!r} -> {new!r}")
+    else:
+        print(
+            "\nNo field changes detected (sending update to populate newly required "
+            "fields)."
+        )
+
     update_req = ChallengeUpdateRequest(
         slug=challenge.slug,
-        name=challenge.name + " (Updated)",
-        headline=(challenge.headline or "Updated headline"),
-        description=challenge.description or "Updated description",
-        doi=challenge.doi,
-        status=ChallengeStatus.ACTIVE,
+        name=new_name,
+        headline=new_headline,
+        description=new_description,
+        doi=placeholder_doi,
+        status=new_status,
         platformId=platform_id,
         websiteUrl=challenge.website_url,
-        avatarUrl=challenge.avatar_url,
+        avatarUrl=placeholder_avatar,
         incentives=challenge.incentives or [ChallengeIncentive.OTHER],
         submissionTypes=challenge.submission_types or [ChallengeSubmissionType.OTHER],
         categories=challenge.categories or [ChallengeCategory.BENCHMARK],
         inputDataTypes=input_data_type_ids,
         operation=operation_id,
-        startDate=challenge.start_date,
-        endDate=challenge.end_date,
+        startDate=placeholder_start,
+        endDate=placeholder_end,
     )
 
     try:
         updated = challenge_api.update_challenge(challenge.id, update_req)
     except ApiException as e:
-        # Gracefully handle common validation failure when placeholder
-        # fields (e.g. operation) are invalid in the demo environment.
-        if getattr(e, "status", None) == 400:
-            print(
-                "Warning: update failed with 400 Bad Request (likely placeholder "
-                "field such as 'operation'). Skipping update step. Payload was:"
-            )
-            try:
-                print(update_req.to_json())
-            except Exception:  # noqa: BLE001
-                print(repr(update_req))
-            return challenge
+        # Print rich error context then terminate execution immediately
+        print("\n--- Update Error Details ---")
+        print(f"Status: {getattr(e, 'status', None)}")
+        print(f"Reason: {getattr(e, 'reason', None)}")
+        if getattr(e, "headers", None):
+            print(f"Headers: {e.headers}")
+        if getattr(e, "body", None):
+            print(f"Body: {e.body}")
+        if getattr(e, "data", None):
+            print(f"Data: {e.data}")
+        try:
+            print("Update payload:")
+            print(update_req.to_json())
+        except Exception:  # noqa: BLE001
+            print(repr(update_req))
+        print("--- End Update Error Details ---\n")
         raise SystemExit(f"Failed to update challenge {challenge.id}: {e}") from e
     pretty("Updated challenge", updated)
     return updated
@@ -188,13 +243,7 @@ def delete_challenge(api_client, challenge_id: int) -> None:
     try:
         challenge_api.delete_challenge(challenge_id)
     except ApiException as e:
-        if getattr(e, "status", None) == 401:
-            print(
-                f"Warning: unauthorized to delete challenge {challenge_id} "
-                "with current API key. Skipping delete."
-            )
-            return
-        raise SystemExit(f"Failed to delete challenge {challenge_id}: {e}") from e
+        raise SystemExit(f"\nFailed to delete challenge {challenge_id}: {e}") from e
     pretty("Deleted challenge", f"Challenge {challenge_id} deleted.")
 
 
