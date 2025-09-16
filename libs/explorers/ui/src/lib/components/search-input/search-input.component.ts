@@ -67,7 +67,7 @@ export class SearchInputComponent implements AfterViewInit {
 
   showResults = false;
   errorMessages: { [key: string]: string } = {
-    notFound: 'No results match your search string.',
+    notFound: 'No results match your search term.',
     notValidSearch: 'Please enter at least three characters.',
     unknown: 'An unknown error occurred, please try again.',
   };

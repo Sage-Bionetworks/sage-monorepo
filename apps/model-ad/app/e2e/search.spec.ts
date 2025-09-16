@@ -117,7 +117,7 @@ test.describe('search', () => {
     const input = page.getByPlaceholder(headerSearchPlaceholder);
     await input.pressSequentially('this-model-does-not-exist');
     await expect(
-      page.getByRole('listitem').filter({ hasText: /no results match your search string/i }),
+      page.getByRole('listitem').filter({ hasText: /no results match your search term/i }),
     ).toBeVisible();
   });
 
@@ -137,7 +137,7 @@ test.describe('search', () => {
     await input.press('Backspace');
 
     await expect(
-      page.getByRole('listitem').filter({ hasText: /no results match your search string/i }),
+      page.getByRole('listitem').filter({ hasText: /no results match your search term/i }),
     ).toBeVisible();
   });
 
