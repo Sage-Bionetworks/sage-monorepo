@@ -29,6 +29,7 @@ jobs:
             bixarena
             bridge2ai
             common
+            deps
             explorers
             iatlas
             model-ad
