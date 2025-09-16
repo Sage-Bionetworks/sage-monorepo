@@ -17,7 +17,7 @@
 		reverse_proxy {env.THUMBOR_HOST}:{env.THUMBOR_PORT}
 	}
 
-	handle /mcp-server* {
+	handle /mcp* {
     reverse_proxy {env.MCP_SERVER_HOST}:{env.MCP_SERVER_PORT}
 	}
 
