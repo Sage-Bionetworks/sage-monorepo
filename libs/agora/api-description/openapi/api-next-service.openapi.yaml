@@ -16,8 +16,7 @@ servers:
 tags:
   - name: Health Check
     description: Operations about health checks.
-    x-audience:
-      - internal
+    x-internal: true
 paths:
   /next/health-check:
     get:

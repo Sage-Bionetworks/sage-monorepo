@@ -4,7 +4,6 @@ get:
   summary: Get leaderboard snapshots
   description: Get a paginated list of available snapshots for a leaderboard
   operationId: getLeaderboardSnapshots
-  x-audience: [public]
   parameters:
     - $ref: ../../../components/parameters/path/leaderboardId.yaml
     - $ref: ../../../components/parameters/query/leaderboardSnapshotQuery.yaml

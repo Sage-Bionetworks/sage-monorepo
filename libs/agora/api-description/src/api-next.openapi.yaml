@@ -16,7 +16,7 @@ servers:
 tags:
   - name: Health Check
     description: Operations about health checks.
-    x-audience: [internal]
+    x-internal: true
 paths:
   # We prefix all the paths with the segment "next/" to prevent conflicts with the primary API
   /next/health-check:
