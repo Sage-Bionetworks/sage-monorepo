@@ -3,10 +3,10 @@
 Run:
     uv run python openchallenges_tools/manage_challenge.py
 
-Auth: Set OPENCHALLENGES_API_KEY (Bearer token). Falls back to a demo key.
+Auth: Set OC_API_KEY (Bearer token). Falls back to a demo key.
 Config vars:
-    OPENCHALLENGES_API_URL  (default http://localhost:8000/api/v1)
-    OPENCHALLENGES_API_KEY
+    OC_API_URL  (default http://localhost:8000/api/v1)
+    OC_API_KEY
 
 Update requires some fields that are optional on create, so we populate simple
 placeholder values (e.g. operation=1). Adjust as needed for your backend data.
@@ -41,17 +41,15 @@ from openchallenges_api_client_python.models.challenge_update_request import (
 )
 from openchallenges_api_client_python.rest import ApiException
 
-OC_API_URL = os.getenv("OPENCHALLENGES_API_URL", "http://localhost:8082/api/v1")
-OC_API_KEY = os.getenv(
-    "OPENCHALLENGES_API_KEY", "oc_dev_admin1.admin_secret_abcd1234efgh5678"
-)
+OC_API_URL = os.getenv("OC_API_URL", "http://localhost:8082/api/v1")
+OC_API_KEY = os.getenv("OC_API_KEY", "oc_dev_admin1.admin_secret_abcd1234efgh5678")
 
 
 def build_configuration() -> openchallenges_api_client_python.Configuration:
     """Create a configured client using the apiKey security scheme.
 
     Prefer apiKey over jwtBearer when an API key is provided; caller can still
-    set OPENCHALLENGES_JWT if we later add support for direct JWT usage.
+    set OC_JWT if we later add support for direct JWT usage.
     """
     cfg = openchallenges_api_client_python.Configuration(host=OC_API_URL)
     if OC_API_KEY:
