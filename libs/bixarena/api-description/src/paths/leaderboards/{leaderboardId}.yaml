@@ -4,7 +4,6 @@ get:
   summary: Get leaderboard entries
   description: Get paginated leaderboard entries for a specific leaderboard
   operationId: getLeaderboard
-  x-audience: [public]
   parameters:
     - $ref: ../../components/parameters/path/leaderboardId.yaml
     - $ref: ../../components/parameters/query/leaderboardSearchQuery.yaml

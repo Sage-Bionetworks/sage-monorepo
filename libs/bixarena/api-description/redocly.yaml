@@ -32,13 +32,6 @@ apis:
   api-public:
     root: ./src/api.openapi.yaml
     decorators:
-      filter-in:
-        property: x-audience
-        value: [public]
+      remove-x-internal: on
   api-service:
     root: ./src/api.openapi.yaml
-    decorators:
-      filter-in:
-        property: x-audience
-        value: [public, internal]
-        matchStrategy: any
