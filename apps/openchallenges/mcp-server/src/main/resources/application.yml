@@ -14,5 +14,4 @@ spring:
       server:
         name: openchallenges-mcp-server
         version: 1.0.0
-        sse-endpoint: /mcp-server/sse
-        sse-message-endpoint: /mcp-server/message
+        protocol: STREAMABLE
