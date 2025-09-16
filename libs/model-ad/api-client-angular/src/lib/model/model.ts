@@ -55,6 +55,18 @@ export interface Model {
    */
   aliases: Array<string>;
   /**
+   * Link to gene expression comparison tool data
+   */
+  gene_expression: string | null;
+  /**
+   * Link to disease correlation comparison tool data
+   */
+  disease_correlation: string | null;
+  /**
+   * Deprecated field for link to spatial transcriptomics data
+   */
+  spatial_transcriptomics: string | null;
+  /**
    * Genetic information related to the Model
    */
   genetic_info: Array<GeneticInfo>;

@@ -318,6 +318,18 @@ components:
           description: List of aliases for the model
           items:
             type: string
+        gene_expression:
+          type: string
+          description: Link to gene expression comparison tool data
+          nullable: true
+        disease_correlation:
+          type: string
+          description: Link to disease correlation comparison tool data
+          nullable: true
+        spatial_transcriptomics:
+          type: string
+          description: Deprecated field for link to spatial transcriptomics data
+          nullable: true
         genetic_info:
           type: array
           description: Genetic information related to the Model
@@ -344,6 +356,9 @@ components:
         - alzforum_id
         - genotype
         - aliases
+        - gene_expression
+        - disease_correlation
+        - spatial_transcriptomics
         - genetic_info
         - biomarkers
         - pathology
