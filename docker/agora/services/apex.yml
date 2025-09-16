@@ -23,6 +23,10 @@ services:
         condition: service_healthy
       agora-app:
         condition: service_healthy
+    extra_hosts:
+      - 'agora-api-docs:host-gateway'
+      - 'agora-api:host-gateway'
+      - 'agora-app:host-gateway'
     deploy:
       resources:
         limits:
