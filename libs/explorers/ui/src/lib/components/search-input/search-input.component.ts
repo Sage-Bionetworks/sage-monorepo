@@ -119,16 +119,14 @@ export class SearchInputComponent implements AfterViewInit {
     this.error = '';
     this.selectedResultIndex = -1;
 
-    // Allow model names with special characters - backend handles sanitization
-    this.query = query = query.replace(/[^a-z0-9\-_()/*: ]/gi, '');
-
-    // If query is empty after sanitization, hide results and return
+    // If query is empty, hide results and return
     if (query.length === 0) {
       this.showResults = false;
       this.isLoading = false;
       return EMPTY;
     }
 
+    // No frontend sanitization - backend handles all input escaping and security validation
     if (query.length > 0 && query.length < 3) {
       this.error = this.errorMessages['notValidSearch'];
     } else {

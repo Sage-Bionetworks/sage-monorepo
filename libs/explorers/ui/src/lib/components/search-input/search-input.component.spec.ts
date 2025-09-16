@@ -317,4 +317,15 @@ describe('SearchInputComponent', () => {
     expect(screen.getByLabelText('dummy_id')).toBeInTheDocument();
     expect(screen.getByLabelText('dummy_id_2')).toBeInTheDocument();
   });
+
+  it('should not trim search with special characters', async () => {
+    const { user } = await setup();
+    const input = getInput();
+
+    const specialCharQuery = 'gene-name_1234:();,.\'*&"@#=!$';
+    await user.type(input, specialCharQuery);
+
+    await waitForSpinner();
+    expect(input).toHaveValue(specialCharQuery);
+  });
 });
