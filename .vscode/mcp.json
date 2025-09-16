@@ -9,8 +9,8 @@
       "url": "https://api.githubcopilot.com/mcp/"
     },
     "openchallenges-mcp-server": {
-      "type": "sse",
-      "url": "http://localhost:8000/mcp-server/sse"
+      "type": "http",
+      "url": "http://localhost:8000/mcp"
     }
   }
 }
