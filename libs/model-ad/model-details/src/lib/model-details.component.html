@@ -15,7 +15,7 @@
     <div class="panel-content">
       @switch (activePanel) {
         @case ('omics') {
-          <model-ad-model-details-omics [modelName]="model.name" />
+          <model-ad-model-details-omics [model]="model" />
         }
         @case ('biomarkers') {
           <model-ad-model-details-boxplots-selector
