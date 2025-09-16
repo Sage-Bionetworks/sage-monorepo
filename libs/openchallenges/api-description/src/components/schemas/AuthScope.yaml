@@ -1,0 +1,36 @@
+type: string
+enum:
+  # OIDC scopes (identity/claims)
+  - 'openid'
+  - 'profile'
+  - 'email'
+
+  # Self scopes (acts only on caller's resources)
+  - 'read:profile'
+  - 'update:profile'
+  - 'read:api-key'
+  - 'create:api-key'
+  - 'update:api-key'
+  - 'delete:api-key'
+  - 'rotate:api-key'
+
+  # Organization scopes
+  # If these are admin/global on many orgs, prefer plural:
+  - 'read:organizations'
+  - 'create:organizations'
+  - 'update:organizations'
+  - 'delete:organizations'
+
+  # Challenge scopes
+  # If these are admin/global on many orgs, prefer plural:
+  - 'read:challenges'
+  - 'create:challenges'
+  - 'update:challenges'
+  - 'delete:challenges'
+  - 'read:challenges-analytics'
+  - 'read:challenge-platforms'
+  - 'create:challenge-platforms'
+  - 'update:challenge-platforms'
+  - 'delete:challenge-platforms'
+  - 'read:edam-concepts'
+description: Permission scope defining specific access rights

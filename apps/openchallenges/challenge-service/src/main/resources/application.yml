@@ -5,8 +5,11 @@ openchallenges-challenge-service:
     timeout: 5000ms
   organization-service:
     base-url: http://openchallenges-organization-service:8084
-    api-key: 'oc_dev_H52Ph_J9EE8PxvOdCHn4tCrQwu5IpyPfYCfIO8Os'
     timeout: 5000ms
+  oauth2:
+    client:
+      client-id: challenge-service
+      client-secret: challenge-service-secret
 
 server:
   port: 8085

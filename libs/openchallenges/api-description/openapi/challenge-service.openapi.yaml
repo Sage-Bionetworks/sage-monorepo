@@ -13,37 +13,31 @@ info:
     url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
   - url: http://localhost/v1
+security:
+  - jwtBearer: []
 tags:
   - name: Challenge
     description: Operations about challenges.
-    x-audience:
-      - public
   - name: Challenge Contribution
     description: Operations about challenge contributions.
-    x-audience:
-      - public
   - name: Challenge Analytics
     description: Operations about challenge analytics.
-    x-audience:
-      - public
   - name: Challenge Platform
     description: Operations about challenge platforms.
-    x-audience:
-      - public
   - name: Edam Concept
     description: Operations about EDAM concepts.
-    x-audience:
-      - public
 paths:
   /challenges:
     get:
+      x-anonymous-access: true
       tags:
         - Challenge
       summary: List challenges
       description: List challenges
       operationId: listChallenges
-      x-audience:
-        - public
+      security:
+        - jwtBearer:
+            - read:challenges
       parameters:
         - $ref: '#/components/parameters/challengeSearchQuery'
       responses:
@@ -63,10 +57,9 @@ paths:
       summary: Create a challenge
       description: Create a challenge with the specified details
       operationId: createChallenge
-      x-audience:
-        - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - create:challenges
       requestBody:
         content:
           application/json:
@@ -94,13 +87,15 @@ paths:
     parameters:
       - $ref: '#/components/parameters/challengeId'
     get:
+      x-anonymous-access: true
       tags:
         - Challenge
       summary: Get a challenge
       description: Returns the challenge specified
       operationId: getChallenge
-      x-audience:
-        - public
+      security:
+        - jwtBearer:
+            - read:challenges
       responses:
         '200':
           description: A challenge
@@ -118,10 +113,9 @@ paths:
       summary: Update an existing challenge
       description: Updates an existing challenge.
       operationId: updateChallenge
-      x-audience:
-        - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - update:challenges
       requestBody:
         required: true
         content:
@@ -153,10 +147,9 @@ paths:
       summary: Delete a challenge
       description: Deletes a challenge by its unique ID.
       operationId: deleteChallenge
-      x-audience:
-        - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - delete:challenges
       responses:
         '204':
           description: Challenge successfully deleted
@@ -172,13 +165,15 @@ paths:
     parameters:
       - $ref: '#/components/parameters/challengeId'
     get:
+      x-anonymous-access: true
       tags:
         - Challenge
       summary: Get a challenge in JSON-LD format
       description: Returns the challenge specified in JSON-LD format
       operationId: getChallengeJsonLd
-      x-audience:
-        - public
+      security:
+        - jwtBearer:
+            - read:challenges
       responses:
         '200':
           description: A challenge
@@ -194,13 +189,15 @@ paths:
     parameters:
       - $ref: '#/components/parameters/challengeId'
     get:
+      x-anonymous-access: true
       tags:
         - Challenge Contribution
       summary: List challenge contributions
       description: List challenge contributions
       operationId: listChallengeContributions
-      x-audience:
-        - public
+      security:
+        - jwtBearer:
+            - read:challenges
       responses:
         '200':
           content:
@@ -219,10 +216,9 @@ paths:
       description: |
         Creates a new contribution record associated with a challenge ID.
       operationId: createChallengeContribution
-      x-audience:
-        - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - update:challenges
       requestBody:
         required: true
         content:
@@ -247,15 +243,15 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
+      x-internal: true
       tags:
         - Challenge Contribution
       summary: Delete the contributions for a specific challenge
       description: Deletes the associated contributions for a given challenge, identified by its ID.
       operationId: deleteChallengeContributions
-      x-audience:
-        - internal
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - update:challenges
       responses:
         '204':
           description: Deletion successful
@@ -278,10 +274,9 @@ paths:
       summary: Delete a specific challenge contribution
       description: Delete a specific challenge contribution.
       operationId: deleteChallengeContribution
-      x-audience:
-        - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - update:challenges
       responses:
         '204':
           description: Contribution deleted successfully
@@ -295,13 +290,15 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /challenge-analytics/challenges-per-year:
     get:
+      x-anonymous-access: true
       tags:
         - Challenge Analytics
       summary: Get the number of challenges tracked per year
       description: Returns the number of challenges tracked per year
       operationId: getChallengesPerYear
-      x-audience:
-        - public
+      security:
+        - jwtBearer:
+            - read:challenges-analytics
       responses:
         '200':
           description: An object
@@ -309,17 +306,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ChallengesPerYear'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /challenge-platforms:
     get:
+      x-anonymous-access: true
       tags:
         - Challenge Platform
       summary: List challenge platforms
       description: List challenge platforms
       operationId: listChallengePlatforms
-      x-audience:
-        - public
+      security:
+        - jwtBearer:
+            - read:challenge-platforms
       parameters:
         - $ref: '#/components/parameters/challengePlatformSearchQuery'
       responses:
@@ -331,6 +334,10 @@ paths:
           description: Success
         '400':
           $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/InternalServerError'
     post:
@@ -339,10 +346,9 @@ paths:
       summary: Create a challenge platform
       description: Create a challenge platform with the specified ID
       operationId: createChallengePlatform
-      x-audience:
-        - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - create:challenge-platforms
       requestBody:
         content:
           application/json:
@@ -368,13 +374,15 @@ paths:
     parameters:
       - $ref: '#/components/parameters/challengePlatformId'
     get:
+      x-anonymous-access: true
       tags:
         - Challenge Platform
       summary: Get a challenge platform
       description: Returns the challenge platform identified by its unique ID
       operationId: getChallengePlatform
-      x-audience:
-        - public
+      security:
+        - jwtBearer:
+            - read:challenge-platforms
       responses:
         '200':
           description: Success
@@ -393,10 +401,9 @@ paths:
       description: |
         Updates an existing challenge platform.
       operationId: updateChallengePlatform
-      x-audience:
-        - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - update:challenge-platforms
       requestBody:
         required: true
         content:
@@ -429,10 +436,9 @@ paths:
       description: |
         Deletes a challenge platform by its unique ID. This action is irreversible.
       operationId: deleteChallengePlatform
-      x-audience:
-        - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - delete:challenge-platforms
       responses:
         '204':
           description: Deletion successful
@@ -446,13 +452,15 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /edam-concepts:
     get:
+      x-anonymous-access: true
       tags:
         - Edam Concept
       summary: List EDAM concepts
       description: List EDAM concepts
       operationId: listEdamConcepts
-      x-audience:
-        - public
+      security:
+        - jwtBearer:
+            - read:edam-concepts
       parameters:
         - $ref: '#/components/parameters/edamConceptSearchQuery'
       responses:
@@ -468,11 +476,11 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
-    apiBearerAuth:
+    jwtBearer:
       type: http
       scheme: bearer
-      bearerFormat: api_key
-      description: API key obtained from /auth/login endpoint
+      bearerFormat: JWT
+      description: JWT access token obtained from OAuth2 authorization flow or API key exchange
   schemas:
     ChallengeSort:
       description: What to sort results by.
@@ -1362,3 +1370,4 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
+x-oauth2-audience: urn:openchallenges:challenge-service

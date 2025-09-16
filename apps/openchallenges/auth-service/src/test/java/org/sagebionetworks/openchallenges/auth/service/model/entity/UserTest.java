@@ -149,6 +149,13 @@ class UserTest {
         id,
         username,
         passwordHash,
+        "test@example.com", // email field
+        "John", // firstName
+        "Doe", // lastName
+        "https://example.com/avatar.jpg", // avatarUrl
+        "Test bio", // bio
+        "https://example.com", // website
+        true, // emailVerified
         role,
         enabled,
         createdAt,

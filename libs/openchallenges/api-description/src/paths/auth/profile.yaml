@@ -1,0 +1,49 @@
+get:
+  tags:
+    - Authentication
+  summary: Get user profile
+  description: Get the authenticated user's profile information
+  operationId: getUserProfile
+  security:
+    - jwtBearer:
+        - read:profile
+  responses:
+    '200':
+      description: User profile information
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/UserProfile.yaml
+    '401':
+      $ref: ../../components/responses/Unauthorized.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml
+
+put:
+  tags:
+    - Authentication
+  summary: Update user profile
+  description: Update the authenticated user's profile information
+  operationId: updateUserProfile
+  security:
+    - jwtBearer:
+        - update:profile
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/UpdateUserProfileRequest.yaml
+  responses:
+    '200':
+      description: User profile updated successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/UserProfile.yaml
+    '400':
+      $ref: ../../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../components/responses/Unauthorized.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml

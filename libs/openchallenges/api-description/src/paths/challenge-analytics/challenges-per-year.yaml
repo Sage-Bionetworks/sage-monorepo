@@ -1,10 +1,13 @@
 get:
+  x-anonymous-access: true
   tags:
     - Challenge Analytics
   summary: Get the number of challenges tracked per year
   description: Returns the number of challenges tracked per year
   operationId: getChallengesPerYear
-  x-audience: [public]
+  security:
+    - jwtBearer:
+        - read:challenges-analytics
   responses:
     '200':
       description: An object
@@ -12,5 +15,9 @@ get:
         application/json:
           schema:
             $ref: ../../components/schemas/ChallengesPerYear.yaml
+    '401':
+      $ref: ../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../components/responses/Forbidden.yaml
     '500':
       $ref: ../../components/responses/InternalServerError.yaml

@@ -7,13 +7,9 @@ import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeS
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSubmissionTypeDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeEntity;
 import org.sagebionetworks.util.model.mapper.BaseMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 
 public class ChallengeJsonLdMapper extends BaseMapper<ChallengeEntity, ChallengeJsonLdDto> {
-
-  private static final Logger logger = LoggerFactory.getLogger(ChallengeJsonLdMapper.class);
 
   private SimpleChallengePlatformMapper platformMapper = new SimpleChallengePlatformMapper();
   private EdamConceptMapper edamConceptMapper = new EdamConceptMapper();

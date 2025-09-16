@@ -1,14 +1,16 @@
 parameters:
   - $ref: ../../../components/parameters/path/org.yaml
+
 post:
+  x-internal: true
   tags:
     - Challenge Participation
   summary: Create a new challenge participation
   description: Creates a new challenge participation.
   operationId: createChallengeParticipation
-  x-audience: [internal]
   security:
-    - apiBearerAuth: []
+    - jwtBearer:
+        - update:organizations
   requestBody:
     required: true
     content:

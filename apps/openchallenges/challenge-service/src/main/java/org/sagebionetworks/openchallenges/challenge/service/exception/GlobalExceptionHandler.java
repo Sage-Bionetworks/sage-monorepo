@@ -1,12 +1,18 @@
 package org.sagebionetworks.openchallenges.challenge.service.exception;
 
 import java.util.Locale;
+import java.util.stream.Collectors;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.BasicErrorDto;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
@@ -67,5 +73,32 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
           .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
           .build()
       );
+  }
+
+  @Override
+  protected ResponseEntity<Object> handleMethodArgumentNotValid(
+    MethodArgumentNotValidException ex,
+    HttpHeaders headers,
+    HttpStatusCode status,
+    WebRequest request
+  ) {
+    String detail = ex
+      .getBindingResult()
+      .getFieldErrors()
+      .stream()
+      .map(this::formatFieldError)
+      .distinct()
+      .collect(Collectors.joining("; "));
+    BasicErrorDto body = BasicErrorDto.builder()
+      .title("Validation Failed")
+      .status(HttpStatus.BAD_REQUEST.value())
+      .detail(detail)
+      .type("https://openchallenges.io/problems/validation-error")
+      .build();
+    return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+  }
+
+  private String formatFieldError(FieldError fe) {
+    return fe.getField() + ": " + fe.getDefaultMessage();
   }
 }

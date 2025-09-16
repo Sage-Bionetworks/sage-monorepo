@@ -5,11 +5,21 @@ spring:
   datasource:
     url: jdbc:postgresql://openchallenges-postgres:8091/auth_service
 
-openchallenges:
-  auth:
-    api-key:
-      prefix: oc_dev_
-      length: 40
+app:
+  api-key:
+    prefix: oc_dev_
+    length: 40
+  oauth2:
+    google:
+      client-id: placeholder-will-be-overridden-by-env
+      client-secret: placeholder-will-be-overridden-by-env
+      redirect-uri: http://localhost:8087/auth/callback
+      scope: openid,profile,email
+    synapse:
+      client-id: synapse-client-id
+      client-secret: synapse-client-secret
+      redirect-uri: http://127.0.0.1:8087/auth/callback
+      scope: openid,profile,email
 
 logging:
   level:

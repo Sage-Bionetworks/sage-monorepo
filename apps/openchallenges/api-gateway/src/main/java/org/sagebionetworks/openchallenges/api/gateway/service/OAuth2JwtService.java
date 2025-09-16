@@ -1,0 +1,292 @@
+package org.sagebionetworks.openchallenges.api.gateway.service;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
+import lombok.extern.slf4j.Slf4j;
+
+/**
+ * Service for validating JWT tokens by calling the auth service validation endpoint.
+ * 
+ * This service validates JWT tokens by making HTTP requests to the auth service
+ * instead of doing local validation, which ensures consistency with the auth service's
+ * token generation and validation logic.
+ */
+@Slf4j
+@Service
+public class OAuth2JwtService {
+
+  private final WebClient webClient;
+  @SuppressWarnings("unused") // Keep for potential future API key validation
+  private final String authServiceBaseUrl;
+  private final String authServiceOAuth2BaseUrl;
+
+  public OAuth2JwtService(
+      @Value("${openchallenges.auth.service-url:http://openchallenges-auth-service:8087/v1}") String authServiceUrl,
+      WebClient.Builder webClientBuilder) {
+    this.authServiceBaseUrl = authServiceUrl;
+    // OAuth2 endpoints are at the root level, not under /v1
+    this.authServiceOAuth2BaseUrl = authServiceUrl.replace("/v1", "");
+    this.webClient = webClientBuilder.build();
+    
+    log.info("OAuth2JwtService initialized with auth service URL: {}", authServiceUrl);
+  }
+
+  /**
+   * Validate JWT token using OAuth2 introspection endpoint.
+   * 
+   * @param token The JWT token to validate
+   * @return Mono<JwtValidationResponse> with validation result
+   */
+  public Mono<JwtValidationResponse> validateJwt(String token) {
+    log.debug("Validating JWT token via OAuth2 introspection endpoint");
+
+    // OAuth2 introspection requires client authentication
+    String clientCredentials = java.util.Base64.getEncoder()
+        .encodeToString("openchallenges-client:secret".getBytes());
+
+    return webClient
+        .post()
+        .uri(authServiceOAuth2BaseUrl + "/oauth2/introspect")
+        .header("Content-Type", "application/x-www-form-urlencoded")
+        .header("Authorization", "Basic " + clientCredentials)
+        .bodyValue("token=" + token)
+        .retrieve()
+        .bodyToMono(IntrospectionResponse.class)
+        .map(this::mapToJwtValidationResponse)
+        .doOnSuccess(response -> {
+          if (response.isValid()) {
+            log.debug("JWT validation successful for user: {}", response.getUsername());
+          } else {
+            log.debug("JWT validation failed: {}", response.getErrorMessage());
+          }
+        })
+        .onErrorResume(ex -> {
+          log.error("Error during JWT validation", ex);
+          return Mono.just(JwtValidationResponse.invalid("Authentication service unavailable"));
+        });
+  }
+
+  /**
+   * Map OAuth2 introspection response to our internal validation response.
+   */
+  private JwtValidationResponse mapToJwtValidationResponse(IntrospectionResponse introspection) {
+    if (!introspection.isActive()) {
+      return JwtValidationResponse.invalid("Token is not active");
+    }
+
+    return JwtValidationResponse.builder()
+        .valid(true)
+        .userId(introspection.getSub())
+        .username(introspection.getUsername())
+        .role(introspection.getScope()) // Legacy role mapping
+        .scopes(introspection.getScopes()) // Modern scope list
+        .expiresAt(String.valueOf(introspection.getExp()))
+        .build();
+  }
+
+  /**
+   * Type-safe wrapper for OAuth2 audience field that can be either a string or list of strings.
+   */
+  public static class OAuth2Audience {
+    private final List<String> audiences;
+
+    @JsonCreator
+    public OAuth2Audience(Object value) {
+      if (value instanceof String) {
+        this.audiences = List.of((String) value);
+      } else if (value instanceof List) {
+        @SuppressWarnings("unchecked")
+        List<String> audList = (List<String>) value;
+        this.audiences = List.copyOf(audList);
+      } else {
+        this.audiences = List.of();
+      }
+    }
+
+    /**
+     * Get the primary (first) audience.
+     */
+    public String getPrimary() {
+      return audiences.isEmpty() ? null : audiences.get(0);
+    }
+
+    /**
+     * Get all audiences.
+     */
+    public List<String> getAll() {
+      return audiences;
+    }
+
+    /**
+     * Check if the given audience is present.
+     */
+    public boolean contains(String audience) {
+      return audiences.contains(audience);
+    }
+
+    @JsonValue
+    public Object toJson() {
+      if (audiences.size() == 1) {
+        return audiences.get(0);
+      }
+      return audiences;
+    }
+
+    @Override
+    public String toString() {
+      return "OAuth2Audience{audiences=" + audiences + "}";
+    }
+  }
+
+  /**
+   * OAuth2 introspection response DTO.
+   */
+  public static class IntrospectionResponse {
+    private boolean active;
+    private String sub;
+    private String username;
+    private String scope; // Space-separated scopes or deprecated role field
+    private List<String> scp; // Modern "scp" claim for scopes
+    private long exp;
+    private OAuth2Audience aud;
+    private String iss;
+
+    // Getters and setters
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; }
+    
+    public String getSub() { return sub; }
+    public void setSub(String sub) { this.sub = sub; }
+    
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
+    
+    public String getScope() { return scope; }
+    public void setScope(String scope) { this.scope = scope; }
+    
+    public List<String> getScp() { return scp; }
+    public void setScp(List<String> scp) { this.scp = scp; }
+    
+    /**
+     * Get all scopes, preferring the modern "scp" claim over the legacy "scope" field.
+     */
+    public List<String> getScopes() {
+      if (scp != null && !scp.isEmpty()) {
+        return scp;
+      }
+      if (scope != null && !scope.trim().isEmpty()) {
+        return List.of(scope.split("\\s+"));
+      }
+      return List.of();
+    }
+    
+    public long getExp() { return exp; }
+    public void setExp(long exp) { this.exp = exp; }
+    
+    public OAuth2Audience getAud() { return aud; }
+    public void setAud(OAuth2Audience aud) { this.aud = aud; }
+    
+    /**
+     * Get the primary audience as a string for backward compatibility.
+     */
+    public String getAudAsString() {
+      return aud != null ? aud.getPrimary() : null;
+    }
+    
+    public String getIss() { return iss; }
+    public void setIss(String iss) { this.iss = iss; }
+  }
+
+  /**
+   * JWT validation response DTO.
+   */
+  public static class JwtValidationResponse {
+    private boolean valid;
+    private String userId;
+    private String username;
+    private String role;
+    private List<String> scopes;
+    private String expiresAt;
+    private String errorMessage;
+
+    // Default constructor for JSON deserialization
+    public JwtValidationResponse() {}
+
+    public static JwtValidationResponse invalid(String errorMessage) {
+      JwtValidationResponse response = new JwtValidationResponse();
+      response.valid = false;
+      response.errorMessage = errorMessage;
+      return response;
+    }
+
+    public static JwtValidationResponseBuilder builder() {
+      return new JwtValidationResponseBuilder();
+    }
+
+    // Getters and setters for JSON serialization/deserialization
+    public boolean isValid() { return valid; }
+    public void setValid(boolean valid) { this.valid = valid; }
+    
+    public String getUserId() { return userId; }
+    public void setUserId(String userId) { this.userId = userId; }
+    
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
+    
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
+    
+    public List<String> getScopes() { return scopes; }
+    public void setScopes(List<String> scopes) { this.scopes = scopes; }
+    
+    public String getExpiresAt() { return expiresAt; }
+    public void setExpiresAt(String expiresAt) { this.expiresAt = expiresAt; }
+    
+    public String getErrorMessage() { return errorMessage; }
+    public void setErrorMessage(String errorMessage) { this.errorMessage = errorMessage; }
+
+    // Builder class
+    public static class JwtValidationResponseBuilder {
+      private JwtValidationResponse response = new JwtValidationResponse();
+
+      public JwtValidationResponseBuilder valid(boolean valid) {
+        response.valid = valid;
+        return this;
+      }
+
+      public JwtValidationResponseBuilder userId(String userId) {
+        response.userId = userId;
+        return this;
+      }
+
+      public JwtValidationResponseBuilder username(String username) {
+        response.username = username;
+        return this;
+      }
+
+      public JwtValidationResponseBuilder role(String role) {
+        response.role = role;
+        return this;
+      }
+
+      public JwtValidationResponseBuilder scopes(List<String> scopes) {
+        response.scopes = scopes;
+        return this;
+      }
+
+      public JwtValidationResponseBuilder expiresAt(String expiresAt) {
+        response.expiresAt = expiresAt;
+        return this;
+      }
+
+      public JwtValidationResponse build() {
+        return response;
+      }
+    }
+  }
+}

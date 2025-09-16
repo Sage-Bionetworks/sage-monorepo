@@ -2,31 +2,21 @@ package org.sagebionetworks.openchallenges.image.service.service;
 
 import com.squareup.pollexor.Thumbor;
 import com.squareup.pollexor.ThumborUrlBuilder;
-import org.sagebionetworks.openchallenges.app.config.data.ImageServiceConfigData;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.image.service.exception.ImageHeightNotSpecifiedException;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageAspectRatioDto;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageDto;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageHeightDto;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageQueryDto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
+@Slf4j
 public class ImageService {
 
-  private static final Logger logger = LoggerFactory.getLogger(ImageService.class);
-
-  private final ImageServiceConfigData imageServiceConfigData;
-
   private final Thumbor thumbor;
-
-  public ImageService(ImageServiceConfigData imageServiceConfigData, Thumbor thumbor) {
-    this.imageServiceConfigData = imageServiceConfigData;
-    this.thumbor = thumbor;
-
-    logger.debug("Thumbor host: {}", this.imageServiceConfigData.getThumborHost());
-  }
 
   public ImageDto getImage(ImageQueryDto query) {
     String imageUrl = generateImageUrl(query);
@@ -40,7 +30,7 @@ public class ImageService {
       );
     }
 
-    logger.info("Requesting an image url for the objectId: {}", query.getObjectKey());
+    log.info("Requesting an image url for the objectId: {}", query.getObjectKey());
 
     ThumborUrlBuilder builder = thumbor.buildImage(query.getObjectKey());
     Integer height = getImageHeightInPx(query.getHeight());

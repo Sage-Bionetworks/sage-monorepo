@@ -1,0 +1,978 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OpenChallenges - User Profile</title>
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .profile-container {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        max-width: 600px;
+        width: 90%;
+        text-align: center;
+      }
+
+      .profile-header {
+        margin-bottom: 30px;
+      }
+
+      .profile-title {
+        color: #333;
+        font-size: 28px;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+
+      .profile-subtitle {
+        color: #666;
+        font-size: 16px;
+        margin-bottom: 20px;
+      }
+
+      .welcome-message {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 30px;
+      }
+
+      .user-info {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 25px;
+        margin: 20px 0;
+        text-align: left;
+      }
+
+      .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid #e9ecef;
+      }
+
+      .info-row:last-child {
+        border-bottom: none;
+      }
+
+      .info-label {
+        font-weight: 600;
+        color: #495057;
+        flex: 1;
+      }
+
+      .info-value {
+        color: #333;
+        flex: 2;
+        text-align: right;
+        word-break: break-all;
+      }
+
+      .token-section {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 15px;
+        padding: 20px;
+        margin: 20px 0;
+      }
+
+      .token-title {
+        color: #856404;
+        font-weight: 600;
+        margin-bottom: 15px;
+        font-size: 18px;
+      }
+
+      .token-warning {
+        color: #856404;
+        font-size: 14px;
+        margin-bottom: 15px;
+        font-style: italic;
+      }
+
+      .token-display {
+        background: white;
+        border: 1px solid #ffd93d;
+        border-radius: 10px;
+        padding: 15px;
+        font-family: 'Courier New', monospace;
+        font-size: 12px;
+        word-break: break-all;
+        margin: 10px 0;
+        max-height: 100px;
+        overflow-y: auto;
+        min-height: 20px;
+        transition: all 0.3s ease;
+      }
+
+      /* Secure token display styles */
+      .token-item {
+        margin-bottom: 20px;
+        border: 1px solid #ffd93d;
+        border-radius: 10px;
+        padding: 15px;
+        background: white;
+      }
+
+      .token-label {
+        margin-bottom: 10px;
+      }
+
+      .token-info {
+        font-size: 12px;
+        color: #856404;
+        font-style: italic;
+        margin-left: 8px;
+      }
+
+      .token-controls {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .token-display-container {
+        flex: 1;
+      }
+
+      .token-display.masked {
+        background: #f8f9fa;
+        color: #6c757d;
+        font-size: 14px;
+        letter-spacing: 2px;
+        text-align: center;
+        border: 1px solid #e0e0e0;
+      }
+
+      .token-display.revealed {
+        background: white;
+        color: #333;
+        border: 1px solid #ffd93d;
+      }
+
+      .token-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .token-btn {
+        padding: 10px 12px;
+        border: none;
+        border-radius: 6px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        line-height: 1;
+      }
+
+      .reveal-btn {
+        background: #17a2b8;
+        color: white;
+      }
+
+      .reveal-btn:hover {
+        background: #138496;
+      }
+
+      .reveal-btn.hide {
+        background: #dc3545;
+      }
+
+      .reveal-btn.hide:hover {
+        background: #c82333;
+      }
+
+      /* Token copy button - adapted for light background */
+      .token-btn.copy-btn {
+        background: #28a745;
+        border: 1px solid #1e7e34;
+        color: white;
+        transition: all 0.3s ease;
+      }
+
+      .token-btn.copy-btn:hover {
+        background: #218838;
+        border-color: #1c7430;
+      }
+
+      .button-group {
+        margin-top: 30px;
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 50px;
+        font-size: 16px;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-block;
+        min-width: 120px;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+      }
+
+      .btn-secondary {
+        background: #6c757d;
+        color: white;
+      }
+
+      .btn-secondary:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(108, 117, 125, 0.3);
+      }
+
+      .logout-btn {
+        background: #dc3545;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+
+      .logout-btn:hover {
+        background: #c82333;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(220, 53, 69, 0.3);
+      }
+
+      /* API Key Management Styles */
+      .api-keys-section {
+        margin-top: 30px;
+        padding: 20px 0;
+        border-top: 2px solid #f0f0f0;
+      }
+
+      .section-title {
+        color: #333;
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+
+      .section-description {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 20px;
+      }
+
+      /* Alert Styles */
+      .alert {
+        padding: 12px 16px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 14px;
+      }
+
+      .alert-error {
+        background: #fee;
+        border-left: 4px solid #dc3545;
+        color: #721c24;
+      }
+
+      .alert-success {
+        background: #eff;
+        border-left: 4px solid #28a745;
+        color: #155724;
+      }
+
+      /* New API Key Display */
+      .new-api-key-display {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        position: relative;
+      }
+
+      .new-key-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+
+      .new-key-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      .close-btn {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+      }
+
+      .close-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(1.1);
+      }
+
+      .new-key-warning {
+        font-size: 14px;
+        margin-bottom: 15px;
+        opacity: 0.9;
+      }
+
+      .new-key-container {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 15px;
+        border-radius: 8px;
+      }
+
+      .new-key-name {
+        font-size: 14px;
+        margin-bottom: 10px;
+        opacity: 0.9;
+      }
+
+      .new-key-value-container {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .new-key-value {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        border-radius: 6px;
+        font-family: 'Courier New', monospace;
+        font-size: 13px;
+        background: rgba(255, 255, 255, 0.9);
+        color: #333;
+      }
+
+      .copy-btn {
+        padding: 10px 15px;
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+        transition: all 0.3s ease;
+      }
+
+      .copy-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+      }
+
+      /* Create API Key Form */
+      .create-api-key-form {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+      }
+
+      .form-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 15px;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+        color: #555;
+        font-size: 14px;
+      }
+
+      .form-group input,
+      .form-group select {
+        width: 100%;
+        padding: 10px 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: border-color 0.3s ease;
+        box-sizing: border-box; /* Include padding and border in width calculation */
+      }
+
+      .form-group input:focus,
+      .form-group select:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      /* Hide password manager buttons/icons */
+      .form-group input[data-lpignore='true']::-webkit-contacts-auto-fill-button,
+      .form-group input[data-lpignore='true']::-webkit-credentials-auto-fill-button {
+        display: none !important;
+      }
+
+      /* Hide LastPass, 1Password, Bitwarden icons */
+      input[data-lpignore='true'] + div[id*='lp'],
+      input[data-1p-ignore='true'] + div[class*='onepassword'],
+      input[data-bwignore='true'] + div[class*='bitwarden'],
+      input[name='name'] + div[style*='z-index'],
+      .form-group div[data-lastpass-icon-root],
+      .form-group span[data-suffix] {
+        display: none !important;
+        visibility: hidden !important;
+      }
+
+      /* Existing API Keys */
+      .existing-api-keys {
+        margin-top: 25px;
+      }
+
+      .existing-keys-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 15px;
+      }
+
+      .no-keys-message {
+        text-align: center;
+        color: #666;
+        font-style: italic;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 8px;
+      }
+
+      .api-keys-list {
+        space-y: 10px;
+      }
+
+      .api-key-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        transition: border-color 0.3s ease;
+      }
+
+      .api-key-item:hover {
+        border-color: #667eea;
+      }
+
+      .api-key-info {
+        flex: 1;
+      }
+
+      .api-key-name {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 5px;
+      }
+
+      .api-key-details {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        font-size: 13px;
+        color: #666;
+      }
+
+      .api-key-prefix {
+        font-family: 'Courier New', monospace;
+        background: #f0f0f0;
+        padding: 2px 6px;
+        border-radius: 4px;
+      }
+
+      .btn-danger {
+        background: #dc3545;
+        color: white;
+      }
+
+      .btn-danger:hover {
+        background: #c82333;
+      }
+
+      .btn-small {
+        padding: 6px 12px;
+        font-size: 12px;
+      }
+
+      @media (max-width: 768px) {
+        .profile-container {
+          padding: 30px 20px;
+          margin: 20px;
+        }
+
+        .profile-title {
+          font-size: 24px;
+        }
+
+        .welcome-message {
+          font-size: 20px;
+        }
+
+        .info-row {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 5px;
+        }
+
+        .info-value {
+          text-align: left;
+        }
+
+        /* Mobile API Key Styles */
+        .api-key-item {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+        }
+
+        .api-key-details {
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .new-key-value-container {
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .new-key-value {
+          font-size: 12px;
+        }
+
+        .copy-btn {
+          width: 100%;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="profile-container">
+      <div class="profile-header">
+        <h1 class="profile-title">OpenChallenges Authentication</h1>
+        <p class="profile-subtitle">User Profile</p>
+        <div class="welcome-message" th:text="'Welcome, ' + ${displayName} + '!'">
+          Welcome, User!
+        </div>
+      </div>
+
+      <div class="user-info">
+        <div class="info-row">
+          <span class="info-label">Username:</span>
+          <span class="info-value" th:text="${username}">username</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Email:</span>
+          <span class="info-value" th:text="${email}">email@example.com</span>
+        </div>
+        <div class="info-row" th:if="${firstName}">
+          <span class="info-label">First Name:</span>
+          <span class="info-value" th:text="${firstName}">First</span>
+        </div>
+        <div class="info-row" th:if="${lastName}">
+          <span class="info-label">Last Name:</span>
+          <span class="info-value" th:text="${lastName}">Last</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">Role:</span>
+          <span class="info-value" th:text="${role}">user</span>
+        </div>
+        <div class="info-row">
+          <span class="info-label">User ID:</span>
+          <span class="info-value" th:text="${user.id}">user-id</span>
+        </div>
+      </div>
+
+      <!-- API Key Management Section -->
+      <div class="api-keys-section">
+        <div class="section-title">🔑 API Key Management</div>
+        <div class="section-description">
+          Manage your API keys for programmatic access to OpenChallenges services.
+        </div>
+
+        <!-- Flash Messages -->
+        <div th:if="${error}" class="alert alert-error">
+          <span th:text="${error}">Error message</span>
+        </div>
+        <div th:if="${success}" class="alert alert-success">
+          <span th:text="${success}">Success message</span>
+        </div>
+
+        <!-- New API Key Display (only shown after creation) -->
+        <div th:if="${newApiKey}" class="new-api-key-display" id="newApiKeyDisplay">
+          <div class="new-key-header">
+            <div class="new-key-title">🎉 Your New API Key</div>
+            <button class="close-btn" onclick="closeApiKeyDisplay()" title="Close and hide API key">
+              ✕
+            </button>
+          </div>
+          <div class="new-key-warning">
+            ⚠️ This is the only time you'll see this key. Copy it now and store it securely!
+          </div>
+          <div class="new-key-container">
+            <div class="new-key-name" th:text="'Name: ' + ${newApiKey.name}">
+              Name: API Key Name
+            </div>
+            <div class="new-key-value-container">
+              <input type="text" class="new-key-value" th:value="${newApiKey.plainKey}" readonly />
+              <button class="copy-btn" onclick="copyApiKeyAndHide(this)">📋 Copy Key</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Create New API Key Form -->
+        <div class="create-api-key-form">
+          <div class="form-title">Create New API Key</div>
+          <form method="post" action="/profile/api-keys/create">
+            <div class="form-group">
+              <label for="apiKeyName">API Key Name:</label>
+              <input
+                type="text"
+                id="apiKeyName"
+                name="name"
+                placeholder="e.g., My Production Key"
+                autocomplete="off"
+                autocapitalize="off"
+                spellcheck="false"
+                data-lpignore="true"
+                data-1p-ignore="true"
+                data-bwignore="true"
+                data-form-type="other"
+                role="textbox"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="expiresInDays">Expires In (Days):</label>
+              <select id="expiresInDays" name="expiresInDays">
+                <option value="">Never expires</option>
+                <option value="30">30 days</option>
+                <option value="90">90 days</option>
+                <option value="365">1 year</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Create API Key</button>
+          </form>
+        </div>
+
+        <!-- Existing API Keys -->
+        <div class="existing-api-keys">
+          <div class="existing-keys-title">Your API Keys</div>
+          <div th:if="${#lists.isEmpty(apiKeys)}" class="no-keys-message">
+            You don't have any API keys yet. Create one above to get started.
+          </div>
+          <div th:if="${!#lists.isEmpty(apiKeys)}" class="api-keys-list">
+            <div th:each="apiKey : ${apiKeys}" class="api-key-item">
+              <div class="api-key-info">
+                <div class="api-key-name" th:text="${apiKey.name}">API Key Name</div>
+                <div class="api-key-details">
+                  <span class="api-key-prefix" th:text="'Prefix: ' + ${apiKey.keyPrefix} + '***'"
+                    >Prefix: oc_***</span
+                  >
+                  <span
+                    class="api-key-created"
+                    th:text="'Created: ' + ${#temporals.format(apiKey.createdAt, 'MMM dd, yyyy')}"
+                    >Created: Jan 01, 2024</span
+                  >
+                  <span
+                    th:if="${apiKey.expiresAt}"
+                    class="api-key-expires"
+                    th:text="'Expires: ' + ${#temporals.format(apiKey.expiresAt, 'MMM dd, yyyy')}"
+                    >Expires: Dec 31, 2024</span
+                  >
+                  <span
+                    th:if="${apiKey.lastUsedAt}"
+                    class="api-key-last-used"
+                    th:text="'Last used: ' + ${#temporals.format(apiKey.lastUsedAt, 'MMM dd, yyyy HH:mm')}"
+                    >Last used: Jan 15, 2024 10:30</span
+                  >
+                  <span th:unless="${apiKey.lastUsedAt}" class="api-key-never-used"
+                    >Never used</span
+                  >
+                </div>
+              </div>
+              <div class="api-key-actions">
+                <form
+                  method="post"
+                  action="/profile/api-keys/delete"
+                  style="display: inline"
+                  onsubmit="return confirm('Are you sure you want to delete this API key? This action cannot be undone.')"
+                >
+                  <input type="hidden" name="keyId" th:value="${apiKey.id}" />
+                  <button type="submit" class="btn btn-danger btn-small">Delete</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- API Key Usage Example Section -->
+      <div class="api-keys-section" th:if="${not #lists.isEmpty(apiKeys)}">
+        <div class="section-title">📖 How to Use Your API Key</div>
+        <div class="section-description">
+          Use your API key to authenticate API requests. Include it in the
+          <code>X-API-Key</code> header.
+        </div>
+
+        <div style="background: #f8f9fa; border-radius: 10px; padding: 20px; margin: 15px 0">
+          <h4 style="margin-top: 0; color: #495057; font-size: 16px">Example using curl:</h4>
+          <div style="position: relative">
+            <pre
+              id="curlExample"
+              style="
+                background: #2d3748;
+                color: #e2e8f0;
+                padding: 15px;
+                border-radius: 8px;
+                font-family: 'Courier New', monospace;
+                font-size: 13px;
+                line-height: 1.4;
+                margin: 10px 0;
+                overflow-x: auto;
+                white-space: pre-wrap;
+              "
+            >
+curl -X GET "http://localhost:8000/api/v1/auth/profile" \
+  -H "X-API-Key: your-api-key-here" \
+  -H "Content-Type: application/json"</pre
+            >
+            <button
+              onclick="copyCurlExample()"
+              style="
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                color: white;
+                padding: 6px 12px;
+                border-radius: 6px;
+                font-size: 12px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+              "
+              onmouseover="this.style.background='rgba(255, 255, 255, 0.2)'"
+              onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'"
+              id="copyCurlBtn"
+            >
+              📋 Copy
+            </button>
+          </div>
+
+          <div
+            style="
+              margin-top: 15px;
+              padding: 12px;
+              background: #d1ecf1;
+              border-left: 4px solid #17a2b8;
+              border-radius: 4px;
+            "
+          >
+            <strong style="color: #0c5460">💡 Tip:</strong>
+            <span style="color: #0c5460; font-size: 14px"
+              >Replace <code>your-api-key-here</code> with one of your actual API keys from the list
+              above.</span
+            >
+          </div>
+
+          <div
+            style="
+              margin-top: 10px;
+              padding: 12px;
+              background: #f8d7da;
+              border-left: 4px solid #dc3545;
+              border-radius: 4px;
+            "
+          >
+            <strong style="color: #721c24">🔒 Security:</strong>
+            <span style="color: #721c24; font-size: 14px"
+              >Never share your API keys or commit them to version control. Treat them like
+              passwords.</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="button-group">
+        <form method="post" action="/logout" style="display: inline">
+          <button type="submit" class="btn logout-btn">Logout</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      function copyApiKey(button) {
+        const input = button.previousElementSibling;
+        input.select();
+        input.setSelectionRange(0, 99999); // For mobile devices
+
+        try {
+          document.execCommand('copy');
+          const originalText = button.textContent;
+          button.textContent = '✅ Copied!';
+          button.style.background = 'rgba(40, 167, 69, 0.3)';
+
+          setTimeout(() => {
+            button.textContent = originalText;
+            button.style.background = 'rgba(255, 255, 255, 0.2)';
+          }, 2000);
+        } catch (err) {
+          console.error('Failed to copy: ', err);
+          alert('Failed to copy API key. Please copy it manually.');
+        }
+      }
+
+      function copyCurlExample() {
+        const curlExample = document.getElementById('curlExample');
+        const button = document.getElementById('copyCurlBtn');
+
+        try {
+          // Create a temporary textarea to copy the text
+          const textarea = document.createElement('textarea');
+          textarea.value = curlExample.textContent;
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textarea);
+
+          const originalText = button.textContent;
+          button.textContent = '✅ Copied!';
+          button.style.background = 'rgba(40, 167, 69, 0.3)';
+
+          setTimeout(() => {
+            button.textContent = originalText;
+            button.style.background = 'rgba(255, 255, 255, 0.1)';
+          }, 2000);
+        } catch (err) {
+          console.error('Failed to copy curl example: ', err);
+          alert('Failed to copy curl example. Please copy it manually.');
+        }
+      }
+
+      function copyApiKeyAndHide(button) {
+        const input = button.previousElementSibling;
+        input.select();
+        input.setSelectionRange(0, 99999); // For mobile devices
+
+        try {
+          document.execCommand('copy');
+          button.textContent = '✅ Copied!';
+          button.style.background = 'rgba(40, 167, 69, 0.3)';
+
+          // Show success message for 1 second, then hide the entire API key display
+          setTimeout(() => {
+            closeApiKeyDisplay();
+          }, 1000);
+        } catch (err) {
+          console.error('Failed to copy: ', err);
+          alert('Failed to copy API key. Please copy it manually.');
+        }
+      }
+
+      function closeApiKeyDisplay() {
+        const apiKeyDisplay = document.getElementById('newApiKeyDisplay');
+        if (apiKeyDisplay) {
+          // Add a fade-out animation
+          apiKeyDisplay.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+          apiKeyDisplay.style.opacity = '0';
+          apiKeyDisplay.style.transform = 'translateY(-20px)';
+
+          // Remove the element after animation completes
+          setTimeout(() => {
+            apiKeyDisplay.remove();
+          }, 500);
+        }
+      }
+
+      // Token visibility management
+      const visibleTokens = new Set();
+
+      function copyCommand(commandId) {
+        const commandElement = document.getElementById(commandId);
+        const commandText = commandElement.textContent;
+        const button = event.target;
+
+        try {
+          // Create temporary textarea to copy command
+          const textarea = document.createElement('textarea');
+          textarea.value = commandText;
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textarea);
+
+          // Visual feedback
+          const originalText = button.textContent;
+          button.textContent = '✅ Copied!';
+          button.style.background = '#218838';
+
+          setTimeout(() => {
+            button.textContent = originalText;
+            button.style.background = '#28a745';
+          }, 2000);
+        } catch (err) {
+          console.error('Failed to copy command: ', err);
+          alert('Failed to copy command. Please copy it manually.');
+        }
+      }
+    </script>
+  </body>
+</html>

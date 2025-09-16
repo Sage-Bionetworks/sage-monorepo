@@ -1,10 +1,13 @@
 get:
+  x-anonymous-access: true
   tags:
     - Challenge
   summary: List challenges
   description: List challenges
   operationId: listChallenges
-  x-audience: [public]
+  security:
+    - jwtBearer:
+        - read:challenges
   parameters:
     - $ref: ../components/parameters/query/challengeSearchQuery.yaml
   responses:
@@ -18,15 +21,16 @@ get:
       $ref: ../components/responses/BadRequest.yaml
     '500':
       $ref: ../components/responses/InternalServerError.yaml
+
 post:
   tags:
     - Challenge
   summary: Create a challenge
   description: Create a challenge with the specified details
   operationId: createChallenge
-  x-audience: [public]
   security:
-    - apiBearerAuth: []
+    - jwtBearer:
+        - create:challenges
   requestBody:
     content:
       application/json:

@@ -31,8 +31,30 @@ public class User {
   @Column(unique = true, nullable = false)
   private String username;
 
-  @Column(name = "password_hash", nullable = false)
+  @Column(name = "password_hash")
   private String passwordHash;
+
+  @Column(unique = true)
+  private String email;
+
+  @Column(name = "first_name")
+  private String firstName;
+
+  @Column(name = "last_name")
+  private String lastName;
+
+  @Column(name = "avatar_url")
+  private String avatarUrl;
+
+  @Column(name = "bio")
+  private String bio;
+
+  @Column(name = "website")
+  private String website;
+
+  @Column(name = "email_verified")
+  @Builder.Default
+  private Boolean emailVerified = false;
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
@@ -94,5 +116,21 @@ public class User {
    */
   public boolean hasApiKeys() {
     return this.apiKeys != null && !this.apiKeys.isEmpty();
+  }
+
+  /**
+   * Gets the display name for the user.
+   * @return display name combining first and last names, or username if names are not available
+   */
+  public String getDisplayName() {
+    if (firstName != null && lastName != null) {
+      return firstName + " " + lastName;
+    } else if (firstName != null) {
+      return firstName;
+    } else if (lastName != null) {
+      return lastName;
+    } else {
+      return username;
+    }
   }
 }

@@ -1,10 +1,11 @@
 get:
+  x-anonymous-access: true
   tags:
     - Image
   summary: Get an image
   description: Returns the image specified.
   operationId: getImage
-  x-audience: [public]
+  security: []
   parameters:
     - $ref: ../components/parameters/query/imageQuery.yaml
   responses:

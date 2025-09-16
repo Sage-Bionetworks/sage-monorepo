@@ -1,12 +1,16 @@
 parameters:
   - $ref: ../../components/parameters/path/org.yaml
+
 get:
+  x-anonymous-access: true
   tags:
     - Organization
   summary: Get an organization
   description: Returns the organization identified by its login or ID.
   operationId: getOrganization
-  x-audience: [public]
+  security:
+    - jwtBearer:
+        - read:organizations
   responses:
     '200':
       description: Organization retrieved successfully
@@ -18,15 +22,16 @@ get:
       $ref: ../../components/responses/NotFound.yaml
     '500':
       $ref: ../../components/responses/InternalServerError.yaml
+
 put:
   tags:
     - Organization
   summary: Update an existing organization
   description: Updates an existing organization.
   operationId: updateOrganization
-  x-audience: [public]
   security:
-    - apiBearerAuth: []
+    - jwtBearer:
+        - update:organizations
   requestBody:
     required: true
     content:
@@ -52,15 +57,16 @@ put:
       $ref: ../../components/responses/Conflict.yaml
     '500':
       $ref: ../../components/responses/InternalServerError.yaml
+
 delete:
   tags:
     - Organization
   summary: Delete an organization
   description: Deletes the organization specified by its login or ID.
   operationId: deleteOrganization
-  x-audience: [public]
   security:
-    - apiBearerAuth: []
+    - jwtBearer:
+        - delete:organizations
   responses:
     '204':
       description: Organization successfully deleted

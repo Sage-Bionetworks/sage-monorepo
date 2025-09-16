@@ -85,9 +85,9 @@ export class Configuration {
       this.credentials = {};
     }
 
-    // init default apiBearerAuth credential
-    if (!this.credentials['apiBearerAuth']) {
-      this.credentials['apiBearerAuth'] = () => {
+    // init default jwtBearer credential
+    if (!this.credentials['jwtBearer']) {
+      this.credentials['jwtBearer'] = () => {
         return typeof this.accessToken === 'function' ? this.accessToken() : this.accessToken;
       };
     }

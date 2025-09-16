@@ -49,6 +49,13 @@ public class ApiKey {
   @Column(name = "updated_at", nullable = false)
   private OffsetDateTime updatedAt;
 
+  // OAuth2 service principal fields
+  @Column(name = "client_id")
+  private String clientId;
+
+  @Column(name = "allowed_scopes")
+  private String allowedScopes;
+
   // Transient field to temporarily store the plain key for API responses
   // This is NOT persisted to the database
   @Transient

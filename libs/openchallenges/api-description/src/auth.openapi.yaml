@@ -1,8 +1,9 @@
 openapi: 3.0.3
+
 info:
   version: 1.0.0
   title: OpenChallenges Auth API
-  description: Discover, explore, and contribute to open biomedical challenges.
+  description: Authentication and authorization service for OpenChallenges.
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -11,25 +12,33 @@ info:
     url: https://github.com/Sage-Bionetworks/sage-monorepo
   x-logo:
     url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
+
+# Vendor extensions at the top level
+x-oauth2-audience: 'urn:openchallenges:auth-service'
+
 servers:
   - url: http://localhost/v1
+  # - url: https://api.openchallenges.org/v1 # (add when ready)
+
+# Default security posture (scopes on operations)
+security:
+  - jwtBearer: []
+
 tags:
   - name: Authentication
-    description: Operations about authentication
-    x-audience: [public]
+    description: User profile and token validation operations
   - name: API Key
-    description: Operations about API key management
-    x-audience: [public]
+    description: API key management for programmatic access to OpenChallenges APIs
+
 paths:
-  /auth/login:
-    $ref: paths/auth/login.yaml
+  /auth/profile:
+    $ref: paths/auth/profile.yaml
   /auth/api-keys:
     $ref: paths/auth/api-keys.yaml
   /auth/api-keys/{keyId}:
     $ref: paths/auth/api-keys/{keyId}.yaml
-  /auth/validate:
-    $ref: paths/auth/validate.yaml
+
 components:
   securitySchemes:
-    apiBearerAuth:
-      $ref: components/securitySchemes/ApiBearerAuth.yaml
+    jwtBearer:
+      $ref: components/securitySchemes/JwtBearer.yaml

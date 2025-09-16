@@ -1,10 +1,13 @@
 get:
+  x-anonymous-access: true
   tags:
     - Challenge Platform
   summary: List challenge platforms
   description: List challenge platforms
   operationId: listChallengePlatforms
-  x-audience: [public]
+  security:
+    - jwtBearer:
+        - read:challenge-platforms
   parameters:
     - $ref: ../components/parameters/query/challengePlatformSearchQuery.yaml
   responses:
@@ -16,17 +19,22 @@ get:
       description: Success
     '400':
       $ref: ../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../components/responses/Forbidden.yaml
     '500':
       $ref: ../components/responses/InternalServerError.yaml
+
 post:
   tags:
     - Challenge Platform
   summary: Create a challenge platform
   description: Create a challenge platform with the specified ID
   operationId: createChallengePlatform
-  x-audience: [public]
   security:
-    - apiBearerAuth: []
+    - jwtBearer:
+        - create:challenge-platforms
   requestBody:
     content:
       application/json:

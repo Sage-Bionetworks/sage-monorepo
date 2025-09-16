@@ -13,21 +13,23 @@ info:
     url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
   - url: http://localhost/v1
+security:
+  - jwtBearer: []
 tags:
   - name: Organization
     description: Operations about organizations
-    x-audience:
-      - public
 paths:
   /organizations:
     get:
+      x-anonymous-access: true
       tags:
         - Organization
       summary: List organizations
       description: List organizations
       operationId: listOrganizations
-      x-audience:
-        - public
+      security:
+        - jwtBearer:
+            - read:organizations
       parameters:
         - $ref: '#/components/parameters/organizationSearchQuery'
       responses:
@@ -47,10 +49,9 @@ paths:
       summary: Create an organization
       description: Create an organization with the specified account name
       operationId: createOrganization
-      x-audience:
-        - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - create:organizations
       requestBody:
         content:
           application/json:
@@ -78,13 +79,15 @@ paths:
     parameters:
       - $ref: '#/components/parameters/org'
     get:
+      x-anonymous-access: true
       tags:
         - Organization
       summary: Get an organization
       description: Returns the organization identified by its login or ID.
       operationId: getOrganization
-      x-audience:
-        - public
+      security:
+        - jwtBearer:
+            - read:organizations
       responses:
         '200':
           description: Organization retrieved successfully
@@ -102,10 +105,9 @@ paths:
       summary: Update an existing organization
       description: Updates an existing organization.
       operationId: updateOrganization
-      x-audience:
-        - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - update:organizations
       requestBody:
         required: true
         content:
@@ -137,10 +139,9 @@ paths:
       summary: Delete an organization
       description: Deletes the organization specified by its login or ID.
       operationId: deleteOrganization
-      x-audience:
-        - public
       security:
-        - apiBearerAuth: []
+        - jwtBearer:
+            - delete:organizations
       responses:
         '204':
           description: Organization successfully deleted
@@ -162,11 +163,11 @@ paths:
       - $ref: '#/components/parameters/challengeParticipationRole'
 components:
   securitySchemes:
-    apiBearerAuth:
+    jwtBearer:
       type: http
       scheme: bearer
-      bearerFormat: api_key
-      description: API key obtained from /auth/login endpoint
+      bearerFormat: JWT
+      description: JWT access token obtained from OAuth2 authorization flow or API key exchange
   schemas:
     OrganizationCategory:
       description: The category of the organization.
@@ -521,3 +522,4 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
+x-oauth2-audience: urn:openchallenges:organization-service

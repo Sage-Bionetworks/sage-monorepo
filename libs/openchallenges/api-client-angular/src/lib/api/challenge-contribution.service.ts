@@ -181,8 +181,8 @@ export class ChallengeContributionService {
     let localVarHeaders = this.defaultHeaders;
 
     let localVarCredential: string | undefined;
-    // authentication (apiBearerAuth) required
-    localVarCredential = this.configuration.lookupCredential('apiBearerAuth');
+    // authentication (jwtBearer) required
+    localVarCredential = this.configuration.lookupCredential('jwtBearer');
     if (localVarCredential) {
       localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
     }
@@ -319,8 +319,8 @@ export class ChallengeContributionService {
     let localVarHeaders = this.defaultHeaders;
 
     let localVarCredential: string | undefined;
-    // authentication (apiBearerAuth) required
-    localVarCredential = this.configuration.lookupCredential('apiBearerAuth');
+    // authentication (jwtBearer) required
+    localVarCredential = this.configuration.lookupCredential('jwtBearer');
     if (localVarCredential) {
       localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
     }
@@ -422,6 +422,13 @@ export class ChallengeContributionService {
     }
 
     let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (jwtBearer) required
+    localVarCredential = this.configuration.lookupCredential('jwtBearer');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
 
     let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
     if (localVarHttpHeaderAcceptSelected === undefined) {

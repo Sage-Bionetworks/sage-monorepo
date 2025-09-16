@@ -33,63 +33,42 @@ apis:
           url: https://openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
       plugin/replace-servers-url:
         serverUrl: 'https://openchallenges.io/api/v1'
+      plugin/inject-api-key-security:
+        schemeName: apiKey
+        headerName: X-API-Key
+        description: >-
+          API key issued by OpenChallenges. Send via the X-API-Key header. The API
+          Gateway exchanges it for a short-lived JWT internally; you may also
+          authenticate directly with an OAuth2-issued Bearer JWT.
 
   # Auth API
   auth-public:
     root: ./src/auth.openapi.yaml
     decorators:
-      filter-in:
-        property: x-audience
-        value: [public]
+      remove-x-internal: on
   auth-service:
     root: ./src/auth.openapi.yaml
-    decorators:
-      filter-in:
-        property: x-audience
-        value: [public, internal]
-        matchStrategy: any
 
   # Challenge API
   challenge-public:
     root: ./src/challenge.openapi.yaml
     decorators:
-      filter-in:
-        property: x-audience
-        value: [public]
+      remove-x-internal: on
   challenge-service:
     root: ./src/challenge.openapi.yaml
-    decorators:
-      filter-in:
-        property: x-audience
-        value: [public, internal]
-        matchStrategy: any
 
   # Image API
   image-public:
     root: ./src/image.openapi.yaml
     decorators:
-      filter-in:
-        property: x-audience
-        value: [public]
+      remove-x-internal: on
   image-service:
     root: ./src/image.openapi.yaml
-    decorators:
-      filter-in:
-        property: x-audience
-        value: [public, internal]
-        matchStrategy: any
 
   # Organization API
   organization-public:
     root: ./src/organization.openapi.yaml
     decorators:
-      filter-in:
-        property: x-audience
-        value: [public]
+      remove-x-internal: on
   organization-service:
     root: ./src/organization.openapi.yaml
-    decorators:
-      filter-in:
-        property: x-audience
-        value: [public, internal]
-        matchStrategy: any

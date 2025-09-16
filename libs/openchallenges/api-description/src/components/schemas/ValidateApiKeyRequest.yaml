@@ -1,8 +1,0 @@
-type: object
-required:
-  - apiKey
-properties:
-  apiKey:
-    type: string
-    description: The API key to validate
-    example: oc_prod_abcd1234567890abcdef1234567890abcdef1234

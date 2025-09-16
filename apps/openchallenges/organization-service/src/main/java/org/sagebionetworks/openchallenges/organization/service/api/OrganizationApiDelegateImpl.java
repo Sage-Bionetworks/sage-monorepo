@@ -1,45 +1,36 @@
 package org.sagebionetworks.openchallenges.organization.service.api;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationCreateRequestDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationSearchQueryDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationUpdateRequestDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationsPageDto;
-import org.sagebionetworks.openchallenges.organization.service.security.AuthenticatedUser;
 import org.sagebionetworks.openchallenges.organization.service.service.OrganizationService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
+@RequiredArgsConstructor
 public class OrganizationApiDelegateImpl implements OrganizationApiDelegate {
-
-  private static final Logger logger = LoggerFactory.getLogger(OrganizationApiDelegateImpl.class);
 
   private final OrganizationService organizationService;
 
-  public OrganizationApiDelegateImpl(OrganizationService organizationService) {
-    this.organizationService = organizationService;
-  }
-
   @Override
-  @PreAuthorize("authentication.principal.admin")
+  @PreAuthorize("hasAuthority('SCOPE_create:organizations')")
   public ResponseEntity<OrganizationDto> createOrganization(
     OrganizationCreateRequestDto organizationCreateRequestDto
   ) {
-    // Log the authenticated user for audit purposes
-    AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
-      .getAuthentication()
-      .getPrincipal();
-    logger.info(
-      "User {} (role: {}) is creating an organization",
-      user.getUsername(),
-      user.getRole()
-    );
+    // Log the authenticated user for audit purposes (from JWT)
+    var authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication != null) {
+      log.info("User {} is creating an organization", authentication.getName());
+    }
 
     OrganizationDto createdOrganization = organizationService.createOrganization(
       organizationCreateRequestDto
@@ -48,39 +39,29 @@ public class OrganizationApiDelegateImpl implements OrganizationApiDelegate {
   }
 
   @Override
-  @PreAuthorize("authentication.principal.admin")
-  public ResponseEntity<Void> deleteOrganization(String identifier) {
+  @PreAuthorize("hasAuthority('SCOPE_delete:organizations')")
+  public ResponseEntity<Void> deleteOrganization(String organizationId) {
     // Log the authenticated user for audit purposes
-    AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
-      .getAuthentication()
-      .getPrincipal();
-    logger.info(
-      "User {} (role: {}) is deleting organization: {}",
-      user.getUsername(),
-      user.getRole(),
-      identifier
-    );
+    var authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication != null) {
+      log.info("User {} is deleting organization: {}", authentication.getName(), organizationId);
+    }
 
-    organizationService.deleteOrganization(identifier);
+    organizationService.deleteOrganization(organizationId);
     return ResponseEntity.noContent().build();
   }
 
   @Override
-  @PreAuthorize("authentication.principal.admin")
+  @PreAuthorize("hasAuthority('SCOPE_update:organizations')")
   public ResponseEntity<OrganizationDto> updateOrganization(
     String org,
     OrganizationUpdateRequestDto organizationUpdateRequestDto
   ) {
     // Log the authenticated user for audit purposes
-    AuthenticatedUser user = (AuthenticatedUser) SecurityContextHolder.getContext()
-      .getAuthentication()
-      .getPrincipal();
-    logger.info(
-      "User {} (role: {}) is updating organization: {}",
-      user.getUsername(),
-      user.getRole(),
-      org
-    );
+    var authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication != null) {
+      log.info("User {} is updating organization: {}", authentication.getName(), org);
+    }
 
     OrganizationDto updatedOrganization = organizationService.updateOrganization(
       org,
@@ -90,11 +71,13 @@ public class OrganizationApiDelegateImpl implements OrganizationApiDelegate {
   }
 
   @Override
+  @PreAuthorize("hasAuthority('SCOPE_read:organizations')")
   public ResponseEntity<OrganizationsPageDto> listOrganizations(OrganizationSearchQueryDto query) {
     return ResponseEntity.ok(organizationService.listOrganizations(query));
   }
 
   @Override
+  @PreAuthorize("hasAuthority('SCOPE_read:organizations')")
   public ResponseEntity<OrganizationDto> getOrganization(String identifier) {
     return ResponseEntity.ok(organizationService.getOrganization(identifier));
   }

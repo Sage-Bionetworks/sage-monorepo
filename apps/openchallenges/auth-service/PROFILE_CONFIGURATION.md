@@ -124,7 +124,7 @@ SPRING_PROFILES_ACTIVE=prod ./gradlew bootRun
 
 ## Configuration Properties
 
-The API key configuration is centralized in the `openchallenges.auth.api-key` properties:
+The API key configuration is centralized in the `openchallenges.auth-service.api-key` properties:
 
 ```yaml
 openchallenges:

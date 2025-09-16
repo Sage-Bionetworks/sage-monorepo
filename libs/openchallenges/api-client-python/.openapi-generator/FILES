@@ -1,6 +1,7 @@
 README.md
 docs/APIKeyApi.md
 docs/ApiKey.md
+docs/AuthScope.md
 docs/AuthenticationApi.md
 docs/BasicError.md
 docs/Challenge.md
@@ -46,8 +47,6 @@ docs/ImageApi.md
 docs/ImageAspectRatio.md
 docs/ImageHeight.md
 docs/ImageQuery.md
-docs/LoginRequest.md
-docs/LoginResponse.md
 docs/Organization.md
 docs/OrganizationApi.md
 docs/OrganizationCategory.md
@@ -59,6 +58,9 @@ docs/OrganizationUpdateRequest.md
 docs/OrganizationsPage.md
 docs/PageMetadata.md
 docs/SimpleChallengePlatform.md
+docs/UpdateUserProfileRequest.md
+docs/UserProfile.md
+docs/UserRole.md
 openchallenges_api_client_python/__init__.py
 openchallenges_api_client_python/api/__init__.py
 openchallenges_api_client_python/api/api_key_api.py
@@ -76,6 +78,7 @@ openchallenges_api_client_python/configuration.py
 openchallenges_api_client_python/exceptions.py
 openchallenges_api_client_python/models/__init__.py
 openchallenges_api_client_python/models/api_key.py
+openchallenges_api_client_python/models/auth_scope.py
 openchallenges_api_client_python/models/basic_error.py
 openchallenges_api_client_python/models/challenge.py
 openchallenges_api_client_python/models/challenge_category.py
@@ -114,8 +117,6 @@ openchallenges_api_client_python/models/image.py
 openchallenges_api_client_python/models/image_aspect_ratio.py
 openchallenges_api_client_python/models/image_height.py
 openchallenges_api_client_python/models/image_query.py
-openchallenges_api_client_python/models/login_request.py
-openchallenges_api_client_python/models/login_response.py
 openchallenges_api_client_python/models/organization.py
 openchallenges_api_client_python/models/organization_category.py
 openchallenges_api_client_python/models/organization_create_request.py
@@ -126,11 +127,15 @@ openchallenges_api_client_python/models/organization_update_request.py
 openchallenges_api_client_python/models/organizations_page.py
 openchallenges_api_client_python/models/page_metadata.py
 openchallenges_api_client_python/models/simple_challenge_platform.py
+openchallenges_api_client_python/models/update_user_profile_request.py
+openchallenges_api_client_python/models/user_profile.py
+openchallenges_api_client_python/models/user_role.py
 openchallenges_api_client_python/py.typed
 openchallenges_api_client_python/rest.py
 test/__init__.py
 test/test_api_key.py
 test/test_api_key_api.py
+test/test_auth_scope.py
 test/test_authentication_api.py
 test/test_basic_error.py
 test/test_challenge.py
@@ -176,8 +181,6 @@ test/test_image_api.py
 test/test_image_aspect_ratio.py
 test/test_image_height.py
 test/test_image_query.py
-test/test_login_request.py
-test/test_login_response.py
 test/test_organization.py
 test/test_organization_api.py
 test/test_organization_category.py
@@ -189,3 +192,6 @@ test/test_organization_update_request.py
 test/test_organizations_page.py
 test/test_page_metadata.py
 test/test_simple_challenge_platform.py
+test/test_update_user_profile_request.py
+test/test_user_profile.py
+test/test_user_role.py

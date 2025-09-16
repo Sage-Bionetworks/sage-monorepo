@@ -4,9 +4,9 @@ get:
   summary: List API keys
   description: Get all API keys for the authenticated user
   operationId: listApiKeys
-  x-audience: [public]
   security:
-    - apiBearerAuth: []
+    - jwtBearer:
+        - read:api-key
   responses:
     '200':
       description: List of API keys
@@ -27,9 +27,9 @@ post:
   summary: Create API key
   description: Generate a new API key for the authenticated user
   operationId: createApiKey
-  x-audience: [public]
   security:
-    - apiBearerAuth: []
+    - jwtBearer:
+        - create:api-key
   requestBody:
     required: true
     content:

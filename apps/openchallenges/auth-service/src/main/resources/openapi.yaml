@@ -3,7 +3,7 @@ info:
   contact:
     name: Support
     url: https://github.com/Sage-Bionetworks/sage-monorepo
-  description: "Discover, explore, and contribute to open biomedical challenges."
+  description: Authentication and authorization service for OpenChallenges.
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -12,78 +12,103 @@ info:
   x-logo:
     url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
-- url: http://localhost/v1
+  - url: http://localhost/v1
+security:
+  - jwtBearer: []
 tags:
-- description: Operations about authentication
-  name: Authentication
-  x-audience:
-  - public
-- description: Operations about API key management
-  name: API Key
-  x-audience:
-  - public
+  - description: User profile and token validation operations
+    name: Authentication
+  - description: API key management for programmatic access to OpenChallenges APIs
+    name: API Key
 paths:
-  /auth/login:
-    post:
-      description: Authenticate user and return JWT token
-      operationId: login
+  /auth/profile:
+    get:
+      description: Get the authenticated user's profile information
+      operationId: getUserProfile
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: User profile information
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer:
+            - read:profile
+      summary: Get user profile
+      tags:
+        - Authentication
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Authentication
+    put:
+      description: Update the authenticated user's profile information
+      operationId: updateUserProfile
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/LoginRequest"
+              $ref: '#/components/schemas/UpdateUserProfileRequest'
         required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/LoginResponse"
-          description: Login successful
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-      summary: User login
+                $ref: '#/components/schemas/UserProfile'
+          description: User profile updated successfully
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer:
+            - update:profile
+      summary: Update user profile
       tags:
-      - Authentication
-      x-audience:
-      - public
+        - Authentication
       x-content-type: application/json
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Authentication
+        - tag: Authentication
   /auth/api-keys:
     get:
       description: Get all API keys for the authenticated user
       operationId: listApiKeys
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 items:
-                  $ref: "#/components/schemas/ApiKey"
+                  $ref: '#/components/schemas/ApiKey'
                 type: array
           description: List of API keys
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       security:
-      - apiBearerAuth: []
+        - jwtBearer:
+            - read:api-key
       summary: List API keys
       tags:
-      - API Key
-      x-audience:
-      - public
+        - API Key
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: API Key
+        - tag: API Key
     post:
       description: Generate a new API key for the authenticated user
       operationId: createApiKey
@@ -91,171 +116,205 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateApiKeyRequest"
+              $ref: '#/components/schemas/CreateApiKeyRequest'
         required: true
       responses:
-        "201":
+        '201':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CreateApiKeyResponse"
+                $ref: '#/components/schemas/CreateApiKeyResponse'
           description: API key created successfully
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       security:
-      - apiBearerAuth: []
+        - jwtBearer:
+            - create:api-key
       summary: Create API key
       tags:
-      - API Key
-      x-audience:
-      - public
+        - API Key
       x-content-type: application/json
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: API Key
+        - tag: API Key
   /auth/api-keys/{keyId}:
     delete:
       description: Revoke an API key
       operationId: deleteApiKey
       parameters:
-      - description: The API key ID to delete
-        explode: false
-        in: path
-        name: keyId
-        required: true
-        schema:
-          format: uuid
-          type: string
-        style: simple
+        - description: The API key ID to delete
+          explode: false
+          in: path
+          name: keyId
+          required: true
+          schema:
+            format: uuid
+            type: string
+          style: simple
       responses:
-        "204":
+        '204':
           description: API key deleted successfully
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
       security:
-      - apiBearerAuth: []
+        - jwtBearer:
+            - delete:api-key
       summary: Delete API key
       tags:
-      - API Key
-      x-audience:
-      - public
+        - API Key
       x-accepts:
-      - application/problem+json
+        - application/problem+json
       x-tags:
-      - tag: API Key
-  /auth/validate:
-    post:
-      description: Internal endpoint to validate API keys (used by other services)
-      operationId: validateApiKey
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ValidateApiKeyRequest"
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ValidateApiKeyResponse"
-          description: API key is valid
-        "401":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
-      summary: Validate API key
-      tags:
-      - Authentication
-      x-audience:
-      - internal
-      x-content-type: application/json
-      x-accepts:
-      - application/json
-      - application/problem+json
-      x-tags:
-      - tag: Authentication
+        - tag: API Key
 components:
   responses:
     Unauthorized:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/BasicError"
+            $ref: '#/components/schemas/BasicError'
       description: Unauthorized
     InternalServerError:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/BasicError"
+            $ref: '#/components/schemas/BasicError'
       description: The request cannot be fulfilled due to an unexpected server error
     BadRequest:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/BasicError"
+            $ref: '#/components/schemas/BasicError'
       description: Invalid request
     NotFound:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/BasicError"
+            $ref: '#/components/schemas/BasicError'
       description: The specified resource was not found
   schemas:
-    LoginRequest:
-      properties:
-        username:
-          description: Username or email
-          example: admin
-          type: string
-        password:
-          description: User password
-          example: changeme
-          format: password
-          type: string
-      required:
-      - password
-      - username
-      type: object
-    LoginResponse:
+    UserRole:
+      description: User role defining the level of access and permissions
+      enum:
+        - user
+        - moderator
+        - admin
+        - service
+      type: string
+    AuthScope:
+      description: Permission scope defining specific access rights
+      enum:
+        - openid
+        - profile
+        - email
+        - read:profile
+        - update:profile
+        - read:api-key
+        - create:api-key
+        - update:api-key
+        - delete:api-key
+        - rotate:api-key
+        - read:organizations
+        - create:organizations
+        - update:organizations
+        - delete:organizations
+        - read:challenges
+        - create:challenges
+        - update:challenges
+        - delete:challenges
+        - read:challenges-analytics
+        - read:challenge-platforms
+        - create:challenge-platforms
+        - update:challenge-platforms
+        - delete:challenge-platforms
+        - read:edam-concepts
+      type: string
+    UserProfile:
       example:
-        role: admin
-        apiKey: oc_prod_abcd1234567890abcdef1234567890abcdef1234
-        userId: 123e4567-e89b-12d3-a456-426614174000
-        username: admin
+        firstName: John
+        lastName: Doe
+        createdAt: 2024-01-15T10:30:00Z
+        website: https://johndoe.com
+        role: user
+        avatarUrl: https://example.com/avatars/johndoe.jpg
+        bio: Researcher in computational biology
+        id: user_123456789
+        scopes:
+          - openid
+          - openid
+        email: john.doe@example.com
+        username: johndoe
+        updatedAt: 2024-02-01T14:20:00Z
       properties:
-        apiKey:
-          description: API key for authentication
-          example: oc_prod_abcd1234567890abcdef1234567890abcdef1234
-          type: string
-        userId:
-          description: User ID
-          example: 123e4567-e89b-12d3-a456-426614174000
-          format: uuid
+        id:
+          description: Unique user identifier
+          example: user_123456789
           type: string
         username:
-          description: Username
-          example: admin
+          description: User's username
+          example: johndoe
+          type: string
+        email:
+          description: User's email address
+          example: john.doe@example.com
+          format: email
+          type: string
+        firstName:
+          description: User's first name
+          example: John
+          type: string
+        lastName:
+          description: User's last name
+          example: Doe
           type: string
         role:
-          description: User role
-          enum:
-          - admin
-          - user
-          - readonly
-          - service
-          example: admin
+          $ref: '#/components/schemas/UserRole'
+        scopes:
+          description: User's authorized scopes/permissions
+          items:
+            $ref: '#/components/schemas/AuthScope'
+          type: array
+        avatarUrl:
+          description: URL to user's avatar image
+          example: https://example.com/avatars/johndoe.jpg
+          format: uri
           type: string
+        bio:
+          description: User's biography or description
+          example: Researcher in computational biology
+          maxLength: 500
+          type: string
+        website:
+          description: User's website URL
+          example: https://johndoe.com
+          format: uri
+          type: string
+        createdAt:
+          description: Timestamp when the user account was created
+          example: 2024-01-15T10:30:00Z
+          format: date-time
+          type: string
+        updatedAt:
+          description: Timestamp when the user profile was last updated
+          example: 2024-02-01T14:20:00Z
+          format: date-time
+          type: string
+      required:
+        - createdAt
+        - email
+        - id
+        - role
+        - username
       type: object
     BasicError:
       description: Problem details (tools.ietf.org/html/rfc7807)
@@ -274,8 +333,36 @@ components:
           description: An absolute URI that identifies the problem type
           type: string
       required:
-      - status
-      - title
+        - status
+        - title
+      type: object
+    UpdateUserProfileRequest:
+      properties:
+        firstName:
+          description: User's first name
+          example: John
+          maxLength: 50
+          type: string
+        lastName:
+          description: User's last name
+          example: Doe
+          maxLength: 50
+          type: string
+        bio:
+          description: User's biography or description
+          example: Researcher in computational biology
+          maxLength: 500
+          type: string
+        website:
+          description: User's website URL
+          example: https://johndoe.com
+          format: uri
+          type: string
+        avatarUrl:
+          description: URL to user's avatar image
+          example: https://example.com/avatars/johndoe.jpg
+          format: uri
+          type: string
       type: object
     ApiKey:
       example:
@@ -333,7 +420,7 @@ components:
           minimum: 1
           type: integer
       required:
-      - name
+        - name
       type: object
     CreateApiKeyResponse:
       example:
@@ -373,59 +460,11 @@ components:
           nullable: true
           type: string
       type: object
-    ValidateApiKeyRequest:
-      properties:
-        apiKey:
-          description: The API key to validate
-          example: oc_prod_abcd1234567890abcdef1234567890abcdef1234
-          type: string
-      required:
-      - apiKey
-      type: object
-    ValidateApiKeyResponse:
-      example:
-        valid: true
-        role: admin
-        scopes:
-        - organizations:read
-        - organizations:write
-        userId: 123e4567-e89b-12d3-a456-426614174000
-        username: admin
-      properties:
-        valid:
-          description: Whether the API key is valid
-          example: true
-          type: boolean
-        userId:
-          description: ID of the user who owns this API key (only if valid)
-          example: 123e4567-e89b-12d3-a456-426614174000
-          format: uuid
-          type: string
-        username:
-          description: Username of the API key owner (only if valid)
-          example: admin
-          type: string
-        role:
-          description: Role of the API key owner (only if valid)
-          enum:
-          - admin
-          - user
-          - readonly
-          - service
-          example: admin
-          type: string
-        scopes:
-          description: Permissions granted to this API key (only if valid)
-          example:
-          - organizations:read
-          - organizations:write
-          items:
-            type: string
-          type: array
-      type: object
   securitySchemes:
-    apiBearerAuth:
-      bearerFormat: api_key
-      description: API key obtained from /auth/login endpoint
+    jwtBearer:
+      bearerFormat: JWT
+      description: JWT access token obtained from OAuth2 authorization flow or API
+        key exchange
       scheme: bearer
       type: http
+x-oauth2-audience: urn:openchallenges:auth-service

@@ -16,19 +16,19 @@ import org.sagebionetworks.openchallenges.organization.service.model.mapper.Orga
 import org.sagebionetworks.openchallenges.organization.service.model.repository.ChallengeParticipationRepository;
 import org.sagebionetworks.openchallenges.organization.service.model.repository.OrganizationCategoryRepository;
 import org.sagebionetworks.openchallenges.organization.service.model.repository.OrganizationRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class OrganizationService {
-
-  private static final Logger logger = LoggerFactory.getLogger(OrganizationService.class);
 
   private final OrganizationRepository organizationRepository;
   private final ChallengeParticipationRepository challengeParticipationRepository;
@@ -36,16 +36,6 @@ public class OrganizationService {
 
   @PersistenceContext
   private EntityManager entityManager;
-
-  public OrganizationService(
-    OrganizationRepository organizationRepository,
-    ChallengeParticipationRepository challengeParticipationRepository,
-    OrganizationCategoryRepository organizationCategoryRepository
-  ) {
-    this.organizationRepository = organizationRepository;
-    this.challengeParticipationRepository = challengeParticipationRepository;
-    this.organizationCategoryRepository = organizationCategoryRepository;
-  }
 
   private OrganizationMapper organizationMapper = new OrganizationMapper();
 
@@ -70,16 +60,16 @@ public class OrganizationService {
       );
 
     // First delete all challenge participations that reference this organization
-    logger.info("Deleting challenge participations for organization: {}", orgEntity.getId());
+    log.info("Deleting challenge participations for organization: {}", orgEntity.getId());
     challengeParticipationRepository.deleteByOrganization(orgEntity);
 
     // Delete all organization categories that reference this organization
-    logger.info("Deleting organization categories for organization: {}", orgEntity.getId());
+    log.info("Deleting organization categories for organization: {}", orgEntity.getId());
     organizationCategoryRepository.deleteByOrganization(orgEntity);
 
     // Now delete the organization
     organizationRepository.delete(orgEntity);
-    logger.info(
+    log.info(
       "Successfully deleted organization with ID: {} and login: {}",
       orgEntity.getId(),
       orgEntity.getLogin()
@@ -88,7 +78,7 @@ public class OrganizationService {
 
   @Transactional(readOnly = true)
   public OrganizationsPageDto listOrganizations(OrganizationSearchQueryDto query) {
-    logger.info("query {}", query);
+    log.info("query {}", query);
 
     Pageable pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
 
@@ -102,7 +92,7 @@ public class OrganizationService {
     List<OrganizationDto> organizations = organizationMapper.convertToDtoList(
       organizationEntitiesPage.getContent()
     );
-    logger.debug("Organizations {}", organizations);
+    log.debug("Organizations {}", organizations);
 
     return OrganizationsPageDto.builder()
       .organizations(organizations)

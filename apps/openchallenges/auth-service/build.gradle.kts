@@ -12,17 +12,26 @@ plugins {
 }
 
 dependencies {
+  implementation(libs.caffeine)
   implementation(libs.findbugs.jsr305)
   implementation(libs.flyway.core)
   implementation(libs.jackson.databind)
   implementation(libs.jackson.dataformat.yaml)
   implementation(libs.jackson.datatype.jsr310)
   implementation(libs.spring.boot.starter.actuator)
+  implementation(libs.spring.boot.starter.cache)
   implementation(libs.spring.boot.starter.data.jpa)
+  implementation(libs.spring.boot.starter.oauth2.client)
+  implementation(libs.spring.boot.starter.oauth2.resource.server)
   implementation(libs.spring.boot.starter.security)
+  implementation(libs.spring.boot.starter.thymeleaf)
   implementation(libs.spring.boot.starter.validation)
   implementation(libs.spring.boot.starter.web)
+  implementation(libs.spring.boot.starter.webflux)
+  implementation(libs.spring.security.oauth2.authorization.server)
+  implementation(libs.spring.security.oauth2.jose)
   implementation(libs.springdoc.openapi.ui)
+
   runtimeOnly(libs.flyway.database.postgresql)
   runtimeOnly(libs.postgresql)
   runtimeOnly(libs.spring.boot.devtools)
@@ -69,5 +78,17 @@ tasks.register<JavaExec>("generatePasswordHashes") {
 }
 
 tasks.named("generatePasswordHashes") {
+  dependsOn("compileJava")
+}
+
+// Task to generate API key hashes
+tasks.register<JavaExec>("generateApiKeyHashes") {
+  group = "application"
+  description = "Generate BCrypt API key hashes"
+  classpath = sourceSets["main"].runtimeClasspath
+  mainClass.set("org.sagebionetworks.openchallenges.auth.service.util.ApiKeyHashGenerator")
+}
+
+tasks.named("generateApiKeyHashes") {
   dependsOn("compileJava")
 }
