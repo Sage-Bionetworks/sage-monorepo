@@ -206,4 +206,21 @@ test.describe('search', () => {
       await expect(searchListItems.nth(i)).toBeInViewport();
     }
   });
+
+  test('can search for model with special characters', async ({ page }) => {
+    const modelQuery = 'load1.';
+    const modelName = 'LOAD1.Abca7A1527G';
+
+    await page.goto('/');
+
+    const { searchListItems } = await searchAndGetSearchListItems(modelQuery, page);
+
+    const searchListItem = searchListItems.first();
+    await expect(searchListItem).toHaveText(modelName);
+
+    await searchListItem.click();
+
+    await page.waitForURL(`/models/${modelName}`);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(modelName);
+  });
 });
