@@ -96,7 +96,7 @@ describe('SearchInputComponent', () => {
 
     await waitForSpinner();
 
-    await screen.findByText('No results match your search string.');
+    await screen.findByText('No results match your search term.');
   });
 
   it('should highlight search query with mark', async () => {
