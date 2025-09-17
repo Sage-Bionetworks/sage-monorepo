@@ -10,7 +10,5 @@ services:
     env_file:
       - ../../../apps/bixarena/app/.env
     depends_on:
-      bixarena-postgres:
-        condition: service_healthy
       bixarena-api:
         condition: service_started
