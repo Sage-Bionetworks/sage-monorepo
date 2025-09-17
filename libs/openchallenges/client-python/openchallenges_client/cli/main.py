@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
-from typing import Any, Optional
+from typing import Any
 
 import typer
 
@@ -11,10 +11,12 @@ from ..core.client import OpenChallengesClient
 from ..core import errors as oc_errors
 from ..output.formatters import to_table, to_json
 
-# Module-level option objects to satisfy lint rule against function calls in defaults
-# Typer typing quirk: declare the type for a multi option where None means not provided
+# Module-level option object to satisfy lint rule against function calls in defaults.
+# Typer infers repeatable option from list[str] annotation (no 'multiple' kw in >=0.12).
 STATUS_OPTION: list[str] | None = typer.Option(  # type: ignore[assignment]
-    None, "--status", help="Filter by status (repeatable)", multiple=True
+    None,
+    "--status",
+    help="Filter by status (repeatable)",
 )
 ORG_SEARCH_OPTION = typer.Option(
     None, "--search", help="Search terms for organizations"
