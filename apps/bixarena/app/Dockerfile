@@ -1,7 +1,7 @@
 FROM ghcr.io/astral-sh/uv:0.5.14 AS uv
 
 # First, bundle the dependencies into the task root.
-FROM mirror.gcr.io/python:3.11.9-slim AS builder
+FROM mirror.gcr.io/python:3.13.3-slim AS builder
 
 # Enable bytecode compilation, to improve cold-start performance.
 ENV UV_COMPILE_BYTECODE=1
@@ -28,7 +28,7 @@ RUN uv export --frozen --no-emit-workspace --no-dev --no-editable \
     uv pip install . --target "/app/deps"
 
 
-FROM mirror.gcr.io/python:3.11.9-slim
+FROM mirror.gcr.io/python:3.13.3-slim
 
 ARG USERNAME=app
 ARG USER_UID=1000
