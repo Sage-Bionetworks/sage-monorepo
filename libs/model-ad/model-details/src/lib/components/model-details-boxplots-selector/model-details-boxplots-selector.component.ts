@@ -202,7 +202,8 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
   generateAnchorId(evidenceType: string): string {
     return evidenceType
       .toLowerCase()
-      .replace(/[^a-z0-9]/g, '-')
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
       .replace(/-+/g, '-');
   }
 

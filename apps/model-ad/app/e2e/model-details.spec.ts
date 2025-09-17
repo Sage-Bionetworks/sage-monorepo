@@ -283,7 +283,7 @@ test.describe('model details - boxplots selector - table of contents', () => {
     page,
   }) => {
     const model = 'Abca7*V1599M';
-    const fragment = 'soluble-a-beta-40';
+    const fragment = 'soluble-abeta40';
     const section = 'Soluble Aβ40';
     await page.goto(`/models/${model}/biomarkers#${fragment}`);
     await expect(page.getByRole('heading', { level: 1, name: model })).toBeVisible();
@@ -314,7 +314,7 @@ test.describe('model details - boxplots selector - table of contents', () => {
     const section = 'NfL';
     const fragment = 'nfl';
 
-    await page.goto(`${basePath}#soluble-a-beta-40`);
+    await page.goto(`${basePath}#soluble-abeta40`);
     await expect(page.getByRole('heading', { level: 1, name: model })).toBeVisible();
 
     const nflButton = page.getByRole('button', { name: section, exact: true });
@@ -363,7 +363,7 @@ test.describe('model details - boxplots selector - share links - initial load', 
   }) => {
     const tissueFilter = 'Hippocampus';
     const sexFilter = 'Male';
-    await page.goto(`${basePath}?tissue=${tissueFilter}&sex=${sexFilter}#soluble-a-beta-42`);
+    await page.goto(`${basePath}?tissue=${tissueFilter}&sex=${sexFilter}#soluble-abeta42`);
     await expect(page.getByRole('combobox', { name: tissueFilter })).toBeVisible();
     await expect(page.getByRole('combobox', { name: sexFilter })).toBeVisible();
     await expect(
@@ -374,7 +374,7 @@ test.describe('model details - boxplots selector - share links - initial load', 
   test('falls back to default filters when query parameters are invalid', async ({ page }) => {
     const invalidTissue = 'InvalidTissue';
     const invalidSex = 'InvalidSex';
-    const fragment = '#soluble-a-beta-42';
+    const fragment = '#soluble-abeta42';
     await page.goto(`${basePath}?tissue=${invalidTissue}&sex=${invalidSex}${fragment}`);
     await expect(page.getByRole('combobox', { name: tissueDefault })).toBeVisible();
     await expect(page.getByRole('combobox', { name: sexDefault })).toBeVisible();
@@ -416,14 +416,14 @@ test.describe('model details - boxplots selector - share links - updates', () =>
     const pathWithParams = `${basePath}?tissue=Hippocampus&sex=Male`;
     await page.goto(pathWithParams);
     await page.getByRole('button', { name: 'Soluble Aβ42', exact: true }).click();
-    await page.waitForURL(`${pathWithParams}#soluble-a-beta-42`);
+    await page.waitForURL(`${pathWithParams}#soluble-abeta42`);
   });
 
   test('preserves fragment that remains valid when query parameters are updated', async ({
     page,
   }) => {
     const tissueChosen = 'Hippocampus';
-    const fragment = '#soluble-a-beta-42';
+    const fragment = '#soluble-abeta42';
     await page.goto(`${basePath}${fragment}`);
     await page.getByRole('combobox', { name: tissueDefault }).click();
     await page.getByRole('option', { name: tissueChosen }).click();
@@ -448,7 +448,7 @@ test.describe('model details - boxplots selector - share links - link button', (
     page,
     context,
   }) => {
-    const path = `${basePath}#soluble-a-beta-42`;
+    const path = `${basePath}#soluble-abeta42`;
     await context.grantPermissions(['clipboard-read']);
 
     await page.goto(path);
