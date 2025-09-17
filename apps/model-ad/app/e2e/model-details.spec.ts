@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { baseURL } from '../playwright.config';
 import { searchAndGetSearchListItems } from './helpers';
 
 test.describe('model details', () => {
@@ -443,13 +444,14 @@ test.describe('model details - boxplots selector - share links - updates', () =>
 
 test.describe('model details - boxplots selector - share links - link button', () => {
   const basePath = '/models/Abca7*V1599M/biomarkers';
-  test('clicking share link button updates fragment and copies link to clipboard', async ({
+  test('clicking share link button copies link to clipboard and does not update fragment in URL', async ({
     page,
     context,
   }) => {
+    const path = `${basePath}#soluble-a-beta-42`;
     await context.grantPermissions(['clipboard-read']);
 
-    await page.goto(`${basePath}#soluble-a-beta-42`);
+    await page.goto(path);
 
     // hover on heading, so share link appears
     const heading = page.getByRole('heading', { level: 2, name: 'Nfl' });
@@ -458,9 +460,9 @@ test.describe('model details - boxplots selector - share links - link button', (
     const button = page.getByRole('button', { name: 'Copy link to Nfl' });
     await button.click();
 
-    await page.waitForURL(`${basePath}#nfl`);
-
     const clipboardContent = await page.evaluate(() => navigator.clipboard.readText());
-    expect(clipboardContent).toEqual(page.url());
+    expect(clipboardContent).toEqual(`${baseURL}${basePath}#nfl`);
+
+    await page.waitForURL(path);
   });
 });
