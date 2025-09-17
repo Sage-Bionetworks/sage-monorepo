@@ -1,6 +1,6 @@
 services:
   bixarena-apex:
-    image: ghcr.io/sage-bionetworks/bixarena-apex:${bixarena_VERSION:-local}
+    image: ghcr.io/sage-bionetworks/bixarena-apex:${BIXARENA_VERSION:-local}
     container_name: bixarena-apex
     restart: always
     env_file:
@@ -12,5 +12,9 @@ services:
     ports:
       - '8111:8111'
     depends_on:
-      bixarena-app:
+      bixarena-api:
         condition: service_started
+    #   bixarena-app:
+    #     condition: service_started
+    extra_hosts:
+      - 'bixarena-app:host-gateway'

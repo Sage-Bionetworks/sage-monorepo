@@ -41,7 +41,7 @@ def fetch_competitions_for_term(search_term: str) -> tuple[str, list[Any]]:
         return search_term, []
 
 
-def get_competition_id(competition: Any) -> Optional[str]:
+def get_competition_id(competition: Any) -> Optional[str]:  # noqa: UP045
     """
     Extract a unique identifier from a competition object.
 
