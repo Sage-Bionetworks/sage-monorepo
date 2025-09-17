@@ -4,7 +4,7 @@ plugins {
 
 // Extension to allow projects to customize Lombok version
 open class LombokExtension {
-  var version: String = "1.18.38" // Default version from gradle/libs.versions.toml
+  var version: String = "1.18.40" // Default version from gradle/libs.versions.toml
 }
 
 // Add the extension to the project

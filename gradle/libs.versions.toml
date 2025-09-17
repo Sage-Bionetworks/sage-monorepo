@@ -1,27 +1,28 @@
 [versions]
 caffeine = "3.2.2"
 findbugs = "3.0.2"
-flyway = "11.11.2"
+flyway = "11.13.0"
 graalvm = "0.11.0"
 gradle-versions = "0.52.0"
 h2database = "2.3.232"
-hibernate-search = "7.2.4.Final"
-jackson = "2.19.2"
+hibernate-search = "7.2.4.Final" # v8 targets Hibernate ORM 7, which is expected with Spring Boot 4; stick to v7 on Boot 3.x
+jackson = "2.19.2" # Some packages have been published with 2.20, others with 2.20.0, leading to issues.
+jackson-nullable = "0.2.7"
 jacoco = "0.8.13"
 jakarta-annotation = "3.0.0"
 java = "21"
 junit = "5.13.4"
 junit-platform = "1.13.4"
-lombok = "1.18.38"
-nx-gradle = "0.1.5"
+lombok = "1.18.40"
+nx-gradle = "0.1.7"
 postgresql = "42.7.7"
-spring = "6.2.10"
+spring = "6.2.11"
 spring-ai = "1.1.0-M1"
 spring-boot = "3.5.5"
-spring-cloud = "4.3.0"
-spring-data = "3.5.3"
-spring-security = "6.5.3"
-springdoc = "2.8.11"
+spring-cloud = "4.3.0" # Using Spring Cloud OpenFeign 4.3.0 because 4.3.1 is not yet released
+spring-data = "3.5.4"
+spring-security = "6.5.4"
+springdoc = "2.8.13"
 squareup = "3.0.0"
 testcontainers = "1.21.3"
 
@@ -30,7 +31,7 @@ testcontainers = "1.21.3"
 jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jackson" }
 jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
-jackson-databind-nullable = { module = "org.openapitools:jackson-databind-nullable", version = "0.2.7" }
+jackson-databind-nullable = { module = "org.openapitools:jackson-databind-nullable", version.ref = "jackson-nullable" }
 jackson-dataformat-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref = "jackson" }
 jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
 jackson-jaxrs-json-provider = { module = "com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider", version.ref = "jackson" }

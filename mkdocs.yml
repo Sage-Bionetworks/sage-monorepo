@@ -41,9 +41,27 @@ nav:
               - New Project: develop/tutorials/docker/new-project.md
           - R:
               - New Project: develop/tutorials/r/new-project.md
+      - Maintenance:
+          - Overview: develop/maintenance/index.md
+          - Java: develop/maintenance/java.md
+          - Node / TypeScript: develop/maintenance/node.md
+          - Python: develop/maintenance/python.md
+          - R: develop/maintenance/r.md
+          - Docker Base Images: develop/maintenance/docker-images.md
+          - Security & Compliance: develop/maintenance/security.md
+          - Troubleshooting & FAQ: develop/maintenance/troubleshooting.md
       - Advanced:
           - Remote Development: develop/advanced/developing-on-a-remote-host.md
           - Multi-author Commits: develop/advanced/creating-a-commit-with-multiple-authors.md
+      - Maintenance:
+          - Overview: develop/maintenance/index.md
+          - Java: develop/maintenance/java.md
+          - Node / TypeScript: develop/maintenance/node.md
+          - Python: develop/maintenance/python.md
+          - R: develop/maintenance/r.md
+          - Docker Base Images: develop/maintenance/docker-images.md
+          - Security & Compliance: develop/maintenance/security.md
+          - Troubleshooting & FAQ: develop/maintenance/troubleshooting.md
   - API:
       - Overview: api/overview.md
       - Agora: api/agora.md
