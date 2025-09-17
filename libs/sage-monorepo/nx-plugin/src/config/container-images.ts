@@ -18,13 +18,13 @@ export const CONTAINER_IMAGES: ContainerImagesRegistry = {
   },
   caddy: {
     name: 'caddy',
-    version: '2.9.1', // Using the newer version from amp-als
+    version: '2.10.2',
     registry: 'mirror.gcr.io',
   },
 };
 
 /**
- * Get the full container image string (registry/name:version) for a given image type
+ * Get the full base container image string (registry/name:version) for a given image type
  */
 export function getContainerImageString(imageKey: keyof ContainerImagesRegistry): string {
   const config = CONTAINER_IMAGES[imageKey];

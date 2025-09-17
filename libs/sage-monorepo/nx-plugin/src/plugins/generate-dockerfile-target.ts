@@ -19,7 +19,7 @@ export function generateDockerfileTarget(
     options: {
       commands: [
         {
-          command: `echo "Generating Dockerfile with container image: ${baseImage}"`,
+          command: `echo "Generating Dockerfile with base image: ${baseImage}"`,
         },
         {
           command: `sed 's|{{baseImage}}|${baseImage}|g' ${templatePath} > ${projectRoot}/Dockerfile.generated`,
