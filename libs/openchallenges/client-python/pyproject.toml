@@ -1,0 +1,71 @@
+[tool.coverage.run]
+branch = true
+source = [ "openchallenges_client" ]
+
+[tool.coverage.report]
+exclude_lines = ['if TYPE_CHECKING:']
+show_missing = true
+
+[tool.pytest.ini_options]
+addopts = """
+ --cov
+ --cov-report html:'../../../coverage/libs/openchallenges/client-python/html'
+ --cov-report xml:'../../../coverage/libs/openchallenges/client-python/coverage.xml'
+ --html='../../../reports/libs/openchallenges/client-python/unittests/html/index.html'
+ --junitxml='../../../reports/libs/openchallenges/client-python/unittests/junit.xml'
+"""
+
+[project]
+name = "openchallenges-client"
+version = "1.0.0"
+description = "Discover, explore, and contribute to open biomedical challenges"
+requires-python = ">=3.10,<4"
+readme = 'README.md'
+dependencies = [
+  "openchallenges-api-client-python",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["openchallenges_client"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+exclude = [
+  ".ruff_cache",
+  ".svn",
+  ".tox",
+  ".venv",
+  "dist",
+]
+
+line-length = 88
+indent-width = 4
+
+[tool.ruff.lint]
+select = [
+  # pycodestyle
+  "E",
+  # Pyflakes
+  "F",
+  # pyupgrade
+  "UP",
+  # flake8-bugbear
+  "B",
+  # flake8-simplify
+  "SIM",
+  # isort
+  "I",
+]
+ignore = []
+
+fixable = ["ALL"]
+unfixable = []
+
+[tool.uv.sources]
+openchallenges-client-python = { workspace = true }
