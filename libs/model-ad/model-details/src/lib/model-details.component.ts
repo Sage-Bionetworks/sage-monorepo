@@ -65,14 +65,15 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
     },
   ];
 
-  activePanel = 'omics';
+  activePanel = '';
   activeParent = '';
 
+  maybeScrollToPanelNavElementOnInitialLoad = false;
   scrollToPanelNavElementOnInitialLoad = false;
 
   reset() {
     this.model = undefined;
-    this.activePanel = 'omics';
+    this.activePanel = '';
     this.activeParent = '';
     this.isLoading = true;
   }
@@ -84,7 +85,6 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
       // only fetch data during client hydration
       if (this.platformService.isBrowser) {
         this.loadPanelData(params);
-        this.setActivePanelAndParentFromUrl(params);
       }
     });
   }
@@ -98,7 +98,11 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
         .subscribe({
           next: (model: Model) => {
             this.model = model;
+            this.setActivePanelAndParentFromUrl(params);
             this.updatePanelDisabledState();
+            this.changePanelAndUrlIfInitialActivePanelIsInvalid();
+            this.scrollToPanelNavElementOnInitialLoad =
+              this.maybeScrollToPanelNavElementOnInitialLoad;
             this.isLoading = false;
           },
           error: (error) => {
@@ -116,6 +120,12 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
         p.disabled = true;
       } else if (p.name === 'pathology' && this.model?.pathology.length === 0) {
         p.disabled = true;
+      } else if (
+        p.name === 'omics' &&
+        this.model?.gene_expression === null &&
+        this.model?.disease_correlation === null
+      ) {
+        p.disabled = true;
       } else {
         p.disabled = false;
       }
@@ -127,7 +137,7 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
     if (params.get('subtab')) {
       this.activePanel = params.get('subtab') as string;
       this.activeParent = params.get('tab') as string;
-      this.scrollToPanelNavElementOnInitialLoad = noHashFragment; // selector will handle to scroll if hash fragment is present
+      this.maybeScrollToPanelNavElementOnInitialLoad = noHashFragment; // selector will handle to scroll if hash fragment is present
     } else if (params.get('tab')) {
       const panel = this.panels.find((p: Panel) => p.name === params.get('tab'));
       if (panel) {
@@ -137,7 +147,20 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
         );
         this.activePanel = activePanel;
         this.activeParent = activeParent;
-        this.scrollToPanelNavElementOnInitialLoad = noHashFragment; // selector will handle scroll if hash fragment is present
+        this.maybeScrollToPanelNavElementOnInitialLoad = noHashFragment; // selector will handle scroll if hash fragment is present
+      }
+    }
+  }
+
+  // Initial active panel is invalid if it doesn't exist or is disabled
+  private changePanelAndUrlIfInitialActivePanelIsInvalid() {
+    const currentPanel = this.helperService.findPanelByName(this.panels, this.activePanel);
+    if (!currentPanel || currentPanel.disabled) {
+      const fallbackPanel = this.panels.find((panel) => panel.disabled === false);
+      if (fallbackPanel) {
+        this.updateActivePanel(fallbackPanel);
+        this.location.replaceState(this.getUrlBasePath());
+        this.maybeScrollToPanelNavElementOnInitialLoad = false; // don't scroll if we fell back to default panel
       }
     }
   }
@@ -148,6 +171,22 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
     }
   }
 
+  updateActivePanel(panel: Panel) {
+    const { activePanel, activeParent } = this.helperService.getActivePanelAndParent(
+      this.panels,
+      panel,
+    );
+    this.activePanel = activePanel;
+    this.activeParent = activeParent;
+  }
+
+  getUrlBasePath() {
+    const encodedModel = this.helperService.encodeParenthesesForwardSlashes(
+      encodeURIComponent(this.model?.name || ''),
+    );
+    return `/${ROUTE_PATHS.MODELS}/${encodedModel}`;
+  }
+
   onPanelChange(event: Panel) {
     const panel = event;
 
@@ -155,18 +194,13 @@ export class ModelDetailsComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    const { activePanel, activeParent } = this.helperService.getActivePanelAndParent(
-      this.panels,
-      panel,
-    );
-    this.activePanel = activePanel;
-    this.activeParent = activeParent;
+    this.updateActivePanel(panel);
 
-    const encodedModel = this.helperService.encodeParenthesesForwardSlashes(
-      encodeURIComponent(this.model?.name || ''),
+    const fullPath = this.helperService.getPanelUrl(
+      this.getUrlBasePath(),
+      this.activePanel,
+      this.activeParent,
     );
-    const basePath = `/${ROUTE_PATHS.MODELS}/${encodedModel}`;
-    const fullPath = this.helperService.getPanelUrl(basePath, this.activePanel, this.activeParent);
     this.location.replaceState(fullPath);
   }
 }

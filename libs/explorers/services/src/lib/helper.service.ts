@@ -74,6 +74,24 @@ export class HelperService {
     }
   }
 
+  findPanelByName(panels: Panel[], panelName: string): Panel | undefined {
+    const topLevelPanel = panels.find((p) => p.name === panelName);
+    if (topLevelPanel) {
+      return topLevelPanel;
+    }
+
+    for (const panel of panels) {
+      if (panel.children) {
+        const childPanel = panel.children.find((child) => child.name === panelName);
+        if (childPanel) {
+          return childPanel;
+        }
+      }
+    }
+
+    return undefined;
+  }
+
   getUrlParam(name: string) {
     if (typeof window === 'undefined') return null;
 

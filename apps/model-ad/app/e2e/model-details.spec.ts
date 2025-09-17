@@ -14,7 +14,7 @@ test.describe('model details', () => {
     await expect(page.getByRole('heading', { level: 1, name: 'APOE4' })).toBeVisible();
   });
 
-  test('default tab is omics', async ({ page }) => {
+  test('default tab is omics for model with omics data', async ({ page }) => {
     await page.goto('/models/APOE4');
     await expect(page.getByRole('heading', { level: 2, name: 'Available Data' })).toBeVisible();
   });
@@ -92,6 +92,47 @@ test.describe('model details', () => {
     ).not.toBeInViewport();
     await page.evaluate(() => window.pageYOffset === 0);
   });
+
+  test('disabled tab in url defaults to first available tab and does not scroll', async ({
+    page,
+  }) => {
+    const model = 'LOAD1';
+    await page.goto(`/models/${model}/pathology`);
+    await expect(page.getByRole('heading', { level: 1, name: model })).toBeInViewport();
+    await page.evaluate(() => window.pageYOffset === 0);
+    await page.waitForURL(`/models/${model}`);
+    await expect(page.getByRole('heading', { level: 2, name: 'Available Data' })).toBeVisible();
+  });
+
+  test('invalid tab in url defaults to first available tab and does not scroll', async ({
+    page,
+  }) => {
+    const model = '3xTg-AD';
+    await page.goto(`/models/${model}/does-not-exist`);
+    await expect(page.getByRole('heading', { level: 1, name: model })).toBeInViewport();
+    await page.evaluate(() => window.pageYOffset === 0);
+    await page.waitForURL(`/models/${model}`);
+    await expect(page.getByRole('heading', { level: 2, name: 'Available Data' })).toBeVisible();
+  });
+
+  test.skip(
+    'omics tab is not shown when omics data is unavailable',
+    {
+      annotation: {
+        type: 'skip',
+        description: 'enable when model without omics data is available',
+      },
+    },
+    async ({ page }) => {
+      const modelWithoutOmics = 'APOECh';
+      await page.goto(`/models/${modelWithoutOmics}`);
+      await expect(page.getByRole('heading', { level: 1, name: modelWithoutOmics })).toBeVisible();
+      await expect(page.getByRole('button', { name: 'Omics' })).toHaveCount(0);
+      await expect(
+        page.getByRole('heading', { level: 2, name: 'Model-Specific Resources' }),
+      ).toBeVisible();
+    },
+  );
 });
 
 test.describe('model details - omics', () => {
