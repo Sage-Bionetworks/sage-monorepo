@@ -1322,10 +1322,16 @@ version = "1.0.0"
 source = { editable = "libs/openchallenges/client-python" }
 dependencies = [
     { name = "openchallenges-api-client-python" },
+    { name = "rich" },
+    { name = "typer" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "openchallenges-api-client-python", editable = "libs/openchallenges/api-client-python" }]
+requires-dist = [
+    { name = "openchallenges-api-client-python", editable = "libs/openchallenges/api-client-python" },
+    { name = "rich", specifier = ">=13.7.0" },
+    { name = "typer", specifier = ">=0.12.3" },
+]
 
 [[package]]
 name = "openchallenges-tools"

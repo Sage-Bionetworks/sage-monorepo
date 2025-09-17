@@ -41,7 +41,7 @@
       "executor": "@nxlv/python:ruff-check",
       "outputs": [],
       "options": {
-        "lintFilePatterns": ["openchallenges_client", "test"]
+        "lintFilePatterns": ["openchallenges_client", "tests"]
       },
       "cache": true
     },
@@ -52,7 +52,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "command": "uv run pytest test/",
+        "command": "uv run pytest tests/",
         "cwd": "{projectRoot}"
       },
       "cache": true

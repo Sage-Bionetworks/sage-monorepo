@@ -23,7 +23,12 @@ requires-python = ">=3.10,<4"
 readme = 'README.md'
 dependencies = [
   "openchallenges-api-client-python",
+  "typer>=0.12.3",
+  "rich>=13.7.0",
 ]
+
+[project.scripts]
+openchallenges = "openchallenges_client.cli.main:app"
 
 [tool.hatch.build.targets.wheel]
 packages = ["openchallenges_client"]
