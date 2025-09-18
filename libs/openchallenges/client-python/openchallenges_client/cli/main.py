@@ -7,6 +7,7 @@ from typing import Any
 
 import typer
 
+from ..config.loader import DEFAULT_LIMIT, load_config
 from ..core.client import OpenChallengesClient
 from ..core import errors as oc_errors
 from ..output.formatters import to_table, to_json
@@ -47,8 +48,11 @@ def global_options(
 
 challenges_app = typer.Typer(help="Challenge-related operations")
 orgs_app = typer.Typer(help="Organization-related operations")
+config_app = typer.Typer(help="Configuration & diagnostics")
+
 app.add_typer(challenges_app, name="challenges")
 app.add_typer(orgs_app, name="orgs")
+app.add_typer(config_app, name="config")
 
 
 @challenges_app.command("list")
@@ -102,6 +106,52 @@ def list_orgs(
         _emit(rows, output, title="Organizations")
     except oc_errors.OpenChallengesError as e:  # pragma: no cover
         _handle_error(e)
+
+
+@config_app.command("show")
+def show_config(ctx: typer.Context):
+    """Show the resolved configuration values and their precedence sources."""
+    # Re-run load_config with source tracking using current global overrides.
+    # client instance not required for diagnostics; retained context ensures
+    # global options parsed.
+    # The facade stores the config internally; to show sources we must reload.
+    # We cannot introspect sources from existing client (kept simple), so we
+    # reconstruct using the same override args captured in ctx.params earlier.
+    # Retrieve potential overrides from the Typer context parameters if present.
+    params = ctx.parent.params if ctx.parent else {}
+    api_url = params.get("api_url")  # type: ignore[assignment]
+    api_key = params.get("api_key")  # type: ignore[assignment]
+    limit = params.get("limit", DEFAULT_LIMIT)  # type: ignore[assignment]
+    resolved = load_config(
+        override_api_key=api_key,
+        override_api_url=api_url,
+        default_limit=limit,
+        with_sources=True,
+    )
+    src = resolved.sources or {}
+    rows = [
+        {
+            "key": "api_url",
+            "value": resolved.api_url,
+            "source": src.get("api_url", "unknown"),
+        },
+        {
+            "key": "api_key",
+            "value": "***" if resolved.api_key else None,
+            "source": src.get("api_key", "unknown"),
+        },
+        {
+            "key": "default_limit",
+            "value": resolved.default_limit,
+            "source": src.get("default_limit", "unknown"),
+        },
+        {
+            "key": "retries",
+            "value": resolved.retries,
+            "source": src.get("retries", "unknown"),
+        },
+    ]
+    _emit(rows, ctx.obj["output"], title="Configuration")
 
 
 # ---------------------------------------------------------------------------

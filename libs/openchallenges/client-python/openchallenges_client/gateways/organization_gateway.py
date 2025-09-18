@@ -3,6 +3,9 @@
 from __future__ import annotations
 
 from collections.abc import Iterator
+import random
+import time
+
 import openchallenges_api_client_python
 from openchallenges_api_client_python.api.organization_api import OrganizationApi
 from openchallenges_api_client_python.models.organization_search_query import (
@@ -31,18 +34,30 @@ class OrganizationGateway:
                 openchallenges_api_client_python.Configuration(host=self._cfg.api_url)
             ) as api_client:
                 api = OrganizationApi(api_client)
+                attempt = 0
                 while remaining > 0:
                     search = OrganizationSearchQuery(
                         pageNumber=page_number,
                         pageSize=min(page_size, remaining),
                         searchTerms=search_terms if search_terms else None,
                     )
-                    page = api.list_organizations(organization_search_query=search)
+                    try:
+                        page = api.list_organizations(organization_search_query=search)
+                    except ApiException as e:
+                        if (
+                            getattr(e, "status", None) in {429, 500, 502, 503, 504}
+                            and attempt < self._cfg.retries
+                        ):
+                            sleep_for = (2**attempt) + random.random()
+                            time.sleep(min(sleep_for, 30))
+                            attempt += 1
+                            continue
+                        raise
+                    attempt = 0
                     items = list(page.organizations or [])
                     if not items:
                         break
-                    for item in items[:remaining]:
-                        yield item
+                    yield from items[:remaining]
                     remaining -= len(items)
                     if len(items) < page_size:
                         break

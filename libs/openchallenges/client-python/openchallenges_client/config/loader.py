@@ -19,6 +19,8 @@ class ClientConfig:
     api_key: str | None
     default_limit: int = DEFAULT_LIMIT
     retries: int = 0
+    # Optional metadata describing where each value came from for diagnostics.
+    sources: dict[str, str] | None = None
 
 
 def _load_file_config() -> dict[str, Any]:  # pragma: no cover (IO)
@@ -63,21 +65,65 @@ def load_config(
     override_api_key: str | None,
     override_api_url: str | None,
     default_limit: int,
+    with_sources: bool = False,
 ) -> ClientConfig:
     file_cfg = _load_file_config()
-    # Precedence: explicit overrides > env vars > file > defaults
-    api_url = (
-        override_api_url
-        or os.getenv("OC_API_URL")
-        or file_cfg.get("api_url")
-        or DEFAULT_API_URL
-    )
-    api_key = override_api_key or os.getenv("OC_API_KEY") or file_cfg.get("api_key")
-    limit_val = default_limit or file_cfg.get("default_limit") or DEFAULT_LIMIT
-    retries_val = os.getenv("OC_RETRIES") or file_cfg.get("retries") or 0
+    sources: dict[str, str] = {}
+
+    # api_url resolution
+    if override_api_url is not None:
+        api_url = override_api_url
+        sources["api_url"] = "override"
+    elif os.getenv("OC_API_URL"):
+        api_url = os.getenv("OC_API_URL")  # type: ignore[assignment]
+        sources["api_url"] = "env:OC_API_URL"
+    elif file_cfg.get("api_url"):
+        api_url = file_cfg.get("api_url")  # type: ignore[assignment]
+        sources["api_url"] = "file"
+    else:
+        api_url = DEFAULT_API_URL
+        sources["api_url"] = "default"
+
+    # api_key resolution
+    if override_api_key is not None:
+        api_key = override_api_key
+        sources["api_key"] = "override"
+    elif os.getenv("OC_API_KEY"):
+        api_key = os.getenv("OC_API_KEY")
+        sources["api_key"] = "env:OC_API_KEY"
+    elif file_cfg.get("api_key"):
+        api_key = file_cfg.get("api_key")
+        sources["api_key"] = "file"
+    else:
+        api_key = None
+        sources["api_key"] = "unset"
+
+    # default_limit resolution
+    if default_limit != DEFAULT_LIMIT:
+        limit_val: int | str = default_limit
+        sources["default_limit"] = "override"
+    elif file_cfg.get("default_limit"):
+        limit_val = file_cfg.get("default_limit")  # type: ignore[assignment]
+        sources["default_limit"] = "file"
+    else:
+        limit_val = DEFAULT_LIMIT
+        sources["default_limit"] = "default"
+
+    # retries resolution
+    if os.getenv("OC_RETRIES") is not None:
+        retries_val: int | str = os.getenv("OC_RETRIES")  # type: ignore[assignment]
+        sources["retries"] = "env:OC_RETRIES"
+    elif file_cfg.get("retries") is not None:
+        retries_val = file_cfg.get("retries")  # type: ignore[assignment]
+        sources["retries"] = "file"
+    else:
+        retries_val = 0
+        sources["retries"] = "default"
+
     return ClientConfig(
-        api_url=api_url,
+        api_url=str(api_url),
         api_key=api_key,
         default_limit=int(limit_val),
         retries=int(retries_val),
+        sources=sources if with_sources else None,
     )
