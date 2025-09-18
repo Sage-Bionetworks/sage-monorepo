@@ -2,8 +2,6 @@
   "apiDocsUrl": "http://localhost:8000/api-docs",
   "appVersion": "1.0.0-beta",
   "csrApiUrl": "http://localhost:8000/api/v1",
-  "dataUpdatedOn": "yyyy-mm-dd",
-  "environment": "development",
   "googleTagManagerId": "",
   "ssrApiUrl": "http://model-ad-api:3333/v1"
 }
