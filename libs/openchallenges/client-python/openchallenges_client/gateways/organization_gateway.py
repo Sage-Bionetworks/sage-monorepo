@@ -1,4 +1,5 @@
 """Gateway wrapping SDK OrganizationApi (with simple pagination)."""
+# ruff: noqa: I001
 
 from __future__ import annotations
 
@@ -36,17 +37,25 @@ class OrganizationGateway:
     def __init__(self, config: ClientConfig) -> None:
         self._cfg = config
         self._anomalies: list[OrganizationAnomaly] = []
+        self._skipped_invalid_total: int = 0
 
     @property
     def anomalies(self) -> list[OrganizationAnomaly]:
         """Return anomalies detected during the last listing call."""
         return list(self._anomalies)
 
+    @property
+    def skipped_invalid_total(self) -> int:
+        """Total invalid organization items skipped in the last call (tolerant mode)."""
+        return self._skipped_invalid_total
+
     def list_organizations(
-        self, limit: int, search_terms: str | None = None
+        self, limit: int, search_terms: str | None = None, *, strict: bool = False
     ) -> Iterator[openchallenges_api_client_python.Organization]:
         if limit <= 0:
             return iter(())
+        # Reset per-call counters
+        self._skipped_invalid_total = 0
         remaining = limit
         page_number = 0
         page_size = min(limit, 100)
@@ -63,7 +72,16 @@ class OrganizationGateway:
                         searchTerms=search_terms if search_terms else None,
                     )
                     try:
-                        page = api.list_organizations(organization_search_query=search)
+                        page = api.list_organizations(
+                            organization_search_query=search,
+                            # Tolerant by default; strict mode disables skipping
+                            skip_invalid_items=not strict,
+                        )
+                        # Accumulate skipped count if present (tolerant mode only)
+                        if page and not strict:
+                            skipped = getattr(page, "_skipped_invalid_organizations", 0)
+                            if skipped:
+                                self._skipped_invalid_total += int(skipped)
                     except ApiException as e:
                         if (
                             getattr(e, "status", None) in {429, 500, 502, 503, 504}
@@ -78,25 +96,8 @@ class OrganizationGateway:
                     items = list(page.organizations or [])
                     if not items:
                         break
-                    for raw in items[:remaining]:
-                        # Defensive validation: ensure login within spec; if not, sanitize.
-                        try:
-                            login_val = getattr(raw, "login", None)
-                            if isinstance(login_val, str) and len(login_val) > 64:
-                                # Record anomaly and truncate login in-place for downstream consumers.
-                                self._anomalies.append(
-                                    OrganizationAnomaly(
-                                        org_id=getattr(raw, "id", -1),
-                                        field="login",
-                                        issue="over_length_truncated",
-                                        original_value=login_val,
-                                    )
-                                )
-                                # Truncate without suffix to stay within limit.
-                                raw.login = login_val[:64]  # type: ignore[attr-defined]
-                        except Exception:  # pragma: no cover - defensive guard
-                            pass
-                        yield raw
+                    # Yield only up to remaining
+                    yield from items[:remaining]
                     remaining -= len(items)
                     if len(items) < page_size:
                         break

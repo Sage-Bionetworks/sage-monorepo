@@ -12,6 +12,7 @@ Do not edit the class manually.
 """  # noqa: E501
 
 import warnings
+import json  # added for raw response decoding
 from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
@@ -869,6 +870,7 @@ class OrganizationApi:
             Optional[OrganizationSearchQuery],
             Field(description="The search query used to find organizations."),
         ] = None,
+        skip_invalid_items: bool = False,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -926,6 +928,21 @@ class OrganizationApi:
             *_param, _request_timeout=_request_timeout
         )
         response_data.read()
+        if skip_invalid_items:
+            # Custom tolerant path
+            raw_bytes = getattr(response_data, "data", None)
+            if raw_bytes:
+                try:
+                    import json as _json
+
+                    payload = _json.loads(raw_bytes.decode("utf-8"))
+                    from openchallenges_api_client_python.models.organizations_page import (
+                        OrganizationsPage,
+                    )
+
+                    return OrganizationsPage.from_dict_skip_invalid(payload)  # type: ignore[return-value]
+                except Exception:  # pragma: no cover - fallback to strict path
+                    pass
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -1064,6 +1081,59 @@ class OrganizationApi:
             *_param, _request_timeout=_request_timeout
         )
         return response_data.response
+
+    # ------------------------------------------------------------------
+    # Custom helper (manual addition – NOT generated):
+    # Provides raw JSON access to the organizations listing endpoint
+    # without deserializing into OrganizationsPage / Organization models.
+    # This allows callers to implement item-level tolerant validation.
+    # ------------------------------------------------------------------
+    def list_organizations_raw(
+        self,
+        organization_search_query: Optional[OrganizationSearchQuery] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)],
+            ],
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> Dict[str, Any]:
+        """List organizations (raw JSON)
+
+        Minimal, non-breaking extension to the generated SDK that returns the
+        decoded JSON payload directly, bypassing Pydantic validation for the
+        page and item models. Use this when you need to perform per-item
+        tolerant validation or filtering without the entire page failing.
+
+        Parameters mirror `list_organizations` except the return type.
+
+        :return: Decoded JSON dictionary as returned by the API.
+        """
+        _param = self._list_organizations_serialize(
+            organization_search_query=organization_search_query,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index,
+        )
+        response_data = self.api_client.call_api(
+            *_param, _request_timeout=_request_timeout
+        )
+        # Consume the streaming response (consistent with generated pattern)
+        response_data.read()
+        raw_bytes = getattr(response_data, "data", None)
+        if not raw_bytes:
+            return {}
+        try:
+            return json.loads(raw_bytes.decode("utf-8"))
+        except (ValueError, AttributeError):  # pragma: no cover - defensive
+            return {}
 
     def _list_organizations_serialize(
         self,

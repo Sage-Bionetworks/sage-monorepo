@@ -129,11 +129,21 @@ def list_orgs(
     output: str | None = typer.Option(
         None, help="Override output format for this command"
     ),
+    strict: bool = typer.Option(
+        False,
+        "--strict/--no-strict",
+        help=(
+            "Enable strict validation (fail on any invalid organization item). "
+            "Default is tolerant mode."
+        ),
+    ),
 ):
     client: OpenChallengesClient = ctx.obj["client"]
     base_output = ctx.obj["output"]
     try:
-        items = list(client.list_organizations(limit=limit, search=search))
+        items = list(
+            client.list_organizations(limit=limit, search=search, strict=strict)
+        )
         rows = [
             {
                 "id": o.id,
@@ -144,6 +154,18 @@ def list_orgs(
             for o in items
         ]
         _emit(rows, output or base_output, title="Organizations")
+        # Post-output diagnostic note for skipped invalid items in tolerant mode
+        if not strict:
+            gw = client._org_gateway  # internal but acceptable for CLI diagnostic
+            skipped = getattr(gw, "skipped_invalid_total", 0)
+            if skipped:
+                typer.echo(
+                    (
+                        f"[note] Skipped {skipped} invalid organization item(s) "
+                        "during tolerant parsing."
+                    ),
+                    err=False,
+                )
     except oc_errors.OpenChallengesError as e:  # pragma: no cover
         _handle_error(e)
 
@@ -154,6 +176,14 @@ def stream_orgs(
     search: str | None = ORG_SEARCH_OPTION,
     limit: int = typer.Option(0, help="Optional cap on streamed items (0 = all)"),
     output: str = typer.Option(None, help="Override output format for this command"),
+    strict: bool = typer.Option(
+        False,
+        "--strict/--no-strict",
+        help=(
+            "Enable strict validation (fail on any invalid organization item). "
+            "Default is tolerant mode."
+        ),
+    ),
 ):
     """Stream all organizations (or until optional cap)."""
     client: OpenChallengesClient = ctx.obj["client"]
@@ -161,7 +191,7 @@ def stream_orgs(
     try:
         rows = []
         for count, o in enumerate(
-            client.iter_all_organizations(search=search), start=1
+            client.iter_all_organizations(search=search, strict=strict), start=1
         ):
             rows.append(
                 {
@@ -174,6 +204,17 @@ def stream_orgs(
             if limit and count >= limit:
                 break
         _emit(rows, output or base_output, title="Organizations (stream)")
+        if not strict:
+            gw = client._org_gateway
+            skipped = getattr(gw, "skipped_invalid_total", 0)
+            if skipped:
+                typer.echo(
+                    (
+                        f"[note] Skipped {skipped} invalid organization item(s) "
+                        "during tolerant parsing."
+                    ),
+                    err=False,
+                )
     except oc_errors.OpenChallengesError as e:  # pragma: no cover
         _handle_error(e)
 
