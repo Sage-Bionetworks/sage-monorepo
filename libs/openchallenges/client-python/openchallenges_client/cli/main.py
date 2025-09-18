@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from collections.abc import Iterable
 from typing import Any
 
@@ -137,6 +138,14 @@ def list_orgs(
             "Default is tolerant mode."
         ),
     ),
+    include_meta: bool = typer.Option(
+        False,
+        "--include-meta/--no-include-meta",
+        help=(
+            "When using json|yaml output, wrap items with metadata including "
+            "skipped_invalid count."
+        ),
+    ),
 ):
     client: OpenChallengesClient = ctx.obj["client"]
     base_output = ctx.obj["output"]
@@ -153,19 +162,37 @@ def list_orgs(
             }
             for o in items
         ]
-        _emit(rows, output or base_output, title="Organizations")
+        fmt = output or base_output
+        gw = client._org_gateway  # internal access (diagnostic/meta)
+        skipped = getattr(gw, "skipped_invalid_total", 0)
+        if fmt in {"json", "yaml"} and include_meta:
+            meta = {"skipped_invalid": int(skipped), "strict": strict}
+            payload = {"items": rows, "meta": meta}
+            if fmt == "json":
+                typer.echo(json.dumps(payload, indent=2, default=str))
+            else:
+                try:
+                    import yaml  # type: ignore
+
+                    typer.echo(
+                        yaml.safe_dump(payload, sort_keys=False)  # type: ignore
+                    )
+                except Exception:  # pragma: no cover
+                    typer.echo(
+                        "YAML support not installed. Run: pip install pyyaml",
+                        err=True,
+                    )
+        else:
+            _emit(rows, fmt, title="Organizations")
         # Post-output diagnostic note for skipped invalid items in tolerant mode
-        if not strict:
-            gw = client._org_gateway  # internal but acceptable for CLI diagnostic
-            skipped = getattr(gw, "skipped_invalid_total", 0)
-            if skipped:
-                typer.echo(
-                    (
-                        f"[note] Skipped {skipped} invalid organization item(s) "
-                        "during tolerant parsing."
-                    ),
-                    err=False,
-                )
+        if not strict and skipped and not (include_meta and fmt in {"json", "yaml"}):
+            typer.echo(
+                (
+                    f"[note] Skipped {skipped} invalid organization item(s) "
+                    "during tolerant parsing."
+                ),
+                err=False,
+            )
     except oc_errors.OpenChallengesError as e:  # pragma: no cover
         _handle_error(e)
 
@@ -182,6 +209,14 @@ def stream_orgs(
         help=(
             "Enable strict validation (fail on any invalid organization item). "
             "Default is tolerant mode."
+        ),
+    ),
+    include_meta: bool = typer.Option(
+        False,
+        "--include-meta/--no-include-meta",
+        help=(
+            "When using json|yaml output, wrap items with metadata including "
+            "skipped_invalid count."
         ),
     ),
 ):
@@ -203,18 +238,36 @@ def stream_orgs(
             )
             if limit and count >= limit:
                 break
-        _emit(rows, output or base_output, title="Organizations (stream)")
-        if not strict:
-            gw = client._org_gateway
-            skipped = getattr(gw, "skipped_invalid_total", 0)
-            if skipped:
-                typer.echo(
-                    (
-                        f"[note] Skipped {skipped} invalid organization item(s) "
-                        "during tolerant parsing."
-                    ),
-                    err=False,
-                )
+        fmt = output or base_output
+        gw = client._org_gateway
+        skipped = getattr(gw, "skipped_invalid_total", 0)
+        if fmt in {"json", "yaml"} and include_meta:
+            meta = {"skipped_invalid": int(skipped), "strict": strict}
+            payload = {"items": rows, "meta": meta}
+            if fmt == "json":
+                typer.echo(json.dumps(payload, indent=2, default=str))
+            else:
+                try:
+                    import yaml  # type: ignore
+
+                    typer.echo(
+                        yaml.safe_dump(payload, sort_keys=False)  # type: ignore
+                    )
+                except Exception:  # pragma: no cover
+                    typer.echo(
+                        "YAML support not installed. Run: pip install pyyaml",
+                        err=True,
+                    )
+        else:
+            _emit(rows, fmt, title="Organizations (stream)")
+        if not strict and skipped and not (include_meta and fmt in {"json", "yaml"}):
+            typer.echo(
+                (
+                    f"[note] Skipped {skipped} invalid organization item(s) "
+                    "during tolerant parsing."
+                ),
+                err=False,
+            )
     except oc_errors.OpenChallengesError as e:  # pragma: no cover
         _handle_error(e)
 
