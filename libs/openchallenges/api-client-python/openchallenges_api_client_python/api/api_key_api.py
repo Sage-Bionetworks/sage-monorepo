@@ -16,9 +16,10 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from pydantic import Field, StrictStr
+from pydantic import Field
 from typing import List
 from typing_extensions import Annotated
+from uuid import UUID
 from openchallenges_api_client_python.models.api_key import ApiKey
 from openchallenges_api_client_python.models.create_api_key_request import (
     CreateApiKeyRequest,
@@ -307,7 +308,7 @@ class APIKeyApi:
     @validate_call
     def delete_api_key(
         self,
-        key_id: Annotated[StrictStr, Field(description="The API key ID to delete")],
+        key_id: Annotated[UUID, Field(description="The API key ID to delete")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -374,7 +375,7 @@ class APIKeyApi:
     @validate_call
     def delete_api_key_with_http_info(
         self,
-        key_id: Annotated[StrictStr, Field(description="The API key ID to delete")],
+        key_id: Annotated[UUID, Field(description="The API key ID to delete")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -441,7 +442,7 @@ class APIKeyApi:
     @validate_call
     def delete_api_key_without_preload_content(
         self,
-        key_id: Annotated[StrictStr, Field(description="The API key ID to delete")],
+        key_id: Annotated[UUID, Field(description="The API key ID to delete")],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],

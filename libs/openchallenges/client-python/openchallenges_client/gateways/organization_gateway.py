@@ -72,14 +72,21 @@ class OrganizationGateway:
                         searchTerms=search_terms if search_terms else None,
                     )
                     try:
+                        # Use custom tolerant flag routed through _request_auth to avoid
+                        # altering generated method signatures. The templates look for
+                        # _request_auth['skip_invalid_items'].
                         page = api.list_organizations(
                             organization_search_query=search,
-                            # Tolerant by default; strict mode disables skipping
-                            skip_invalid_items=not strict,
+                            _request_auth=(
+                                {"skip_invalid_items": True} if not strict else None
+                            ),
                         )
-                        # Accumulate skipped count if present (tolerant mode only)
+                        # Accumulate skipped count (tolerant mode). Support legacy and
+                        # generic attribute names.
                         if page and not strict:
-                            skipped = getattr(page, "_skipped_invalid_organizations", 0)
+                            skipped = getattr(
+                                page, "_skipped_invalid_organizations", 0
+                            ) or getattr(page, "_skipped_invalid_items", 0)
                             if skipped:
                                 self._skipped_invalid_total += int(skipped)
                     except ApiException as e:

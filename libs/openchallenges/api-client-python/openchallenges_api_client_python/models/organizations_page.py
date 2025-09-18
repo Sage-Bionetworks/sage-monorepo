@@ -1,5 +1,4 @@
 # coding: utf-8
-# ruff: noqa
 
 """
 OpenChallenges API
@@ -125,39 +124,3 @@ class OrganizationsPage(BaseModel):
             }
         )
         return _obj
-
-    # --- BEGIN CUSTOM: tolerant page construction (manual addition) ---
-    @classmethod
-    def from_dict_skip_invalid(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create instance skipping invalid organization items.
-
-        Leaves page-level numeric fields untouched but attempts to parse each
-        organization individually. Invalid ones are skipped, and a count is
-        attached via attribute `_skipped_invalid_organizations` for optional
-        downstream diagnostics.
-        """
-        if obj is None:
-            return None
-        if not isinstance(obj, dict):
-            return cls.model_validate(obj)
-        raw_items = obj.get("organizations") or []
-        cleaned: List[Organization] = []
-        skipped = 0
-        for it in raw_items:
-            try:
-                org_obj = Organization.from_dict(it)
-                if org_obj is not None:
-                    cleaned.append(org_obj)
-                else:  # pragma: no cover - unlikely
-                    skipped += 1
-            except Exception:  # pragma: no cover - defensive
-                skipped += 1
-                continue
-        tmp = dict(obj)
-        tmp["organizations"] = [c.to_dict() for c in cleaned]
-        page = cls.from_dict(tmp)
-        if page is not None and skipped:
-            setattr(page, "_skipped_invalid_organizations", skipped)
-        return page
-
-    # --- END CUSTOM ---
