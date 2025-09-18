@@ -15,7 +15,7 @@ from openchallenges_api_client_python.models.challenge_status import ChallengeSt
 from openchallenges_api_client_python.rest import ApiException
 
 from ..config.loader import ClientConfig
-from ..core.errors import map_status, OpenChallengesError
+from ..core.errors import map_status, OpenChallengesError, AuthError
 
 
 class ChallengeGateway:
@@ -83,7 +83,16 @@ class ChallengeGateway:
                         break
                     page_number += 1
         except ApiException as e:  # pragma: no cover (network path)
-            err_cls = map_status(getattr(e, "status", None))
+            http_status = getattr(e, "status", None)
+            err_cls = map_status(http_status)
+            if err_cls is AuthError and not self._cfg.api_key:
+                raise AuthError(
+                    str(e),
+                    hint=(
+                        "Provide an API key via --api-key flag, OC_API_KEY env var, "
+                        "or .openchallenges.toml"
+                    ),
+                ) from e
             raise err_cls(str(e)) from e
         except Exception as e:  # pragma: no cover
             raise OpenChallengesError(str(e)) from e

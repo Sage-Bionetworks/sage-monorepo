@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Iterable
+from collections.abc import Iterable, Iterator
 
 from ..config.loader import ClientConfig, load_config
 from ..domain.models import ChallengeSummary, OrganizationSummary
@@ -35,8 +35,33 @@ class OpenChallengesClient:
         svc = ListChallengesService(self._challenge_gateway, self._cfg)
         return svc.execute(limit=limit, status=status)
 
+    def iter_all_challenges(
+        self, *, status: list[str] | None = None
+    ) -> Iterator[ChallengeSummary]:
+        """Stream all challenges lazily (no implicit limit).
+
+        Still pages under the hood; caller controls termination.
+        """
+        svc = ListChallengesService(self._challenge_gateway, self._cfg)
+
+        def _gen():
+            yield from svc.execute(limit=2**31 - 1, status=status)
+
+        return _gen()
+
     def list_organizations(
         self, *, limit: int | None = None, search: str | None = None
     ) -> Iterable[OrganizationSummary]:
         svc = ListOrganizationsService(self._org_gateway, self._cfg)
         return svc.execute(limit=limit, search=search)
+
+    def iter_all_organizations(
+        self, *, search: str | None = None
+    ) -> Iterator[OrganizationSummary]:
+        """Stream all organizations lazily (no implicit limit)."""
+        svc = ListOrganizationsService(self._org_gateway, self._cfg)
+
+        def _gen():
+            yield from svc.execute(limit=2**31 - 1, search=search)
+
+        return _gen()

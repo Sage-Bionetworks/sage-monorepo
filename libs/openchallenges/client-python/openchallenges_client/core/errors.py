@@ -8,7 +8,15 @@ class OpenChallengesError(Exception):
 
 
 class AuthError(OpenChallengesError):
-    pass
+    def __init__(
+        self,
+        message: str = "Authentication failed",
+        *,
+        hint: str | None = None,
+    ):
+        if hint:
+            message = f"{message}. Hint: {hint}"
+        super().__init__(message)
 
 
 class NotFoundError(OpenChallengesError):
