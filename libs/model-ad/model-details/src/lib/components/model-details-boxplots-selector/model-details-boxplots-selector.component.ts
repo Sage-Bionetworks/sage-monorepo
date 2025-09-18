@@ -206,10 +206,13 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
       .replace(/-+/g, '-');
   }
 
-  updateUrlFragment(fragment: string | undefined): void {
+  getUpdatedUrlFragment(fragment: string | undefined): string {
     const fragmentPart = fragment ? `#${fragment}` : '';
-    const newUrl = `${window.location.pathname}${window.location.search}${fragmentPart}`;
-    this.location.replaceState(newUrl);
+    return `${window.location.pathname}${window.location.search}${fragmentPart}`;
+  }
+
+  updateUrlFragment(fragment: string | undefined): void {
+    this.location.replaceState(this.getUpdatedUrlFragment(fragment));
   }
 
   updateQueryParams(sex: string, tissue: string) {
@@ -269,8 +272,8 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
   }
 
   copyShareLink(evidenceType: string): void {
-    this.updateUrlFragment(this.generateAnchorId(evidenceType));
-    this.clipboard.copy(window.location.href);
+    const urlFragment = this.getUpdatedUrlFragment(this.generateAnchorId(evidenceType));
+    this.clipboard.copy(`${window.location.origin}${urlFragment}`);
     this.lastShareLinkCopied.set(evidenceType);
   }
 
