@@ -95,6 +95,45 @@ class ChallengeAnalyticsApi:
             *_param, _request_timeout=_request_timeout
         )
         response_data.read()
+        # Custom tolerant deserialization (opt-in via env var OC_CLIENT_SKIP_INVALID=1)
+        _tolerant_flag = False
+        try:  # environment flag avoids altering public API or auth flows
+            import os as _os  # local import to avoid global side-effects
+
+            _env_val = _os.getenv("OC_CLIENT_SKIP_INVALID", "")
+            _tolerant_flag = _env_val.lower() in ("1", "true", "yes", "on")
+        except Exception:  # pragma: no cover
+            _tolerant_flag = False
+        if _tolerant_flag:
+            try:
+                raw_bytes = response_data.data  # type: ignore[attr-defined]
+                import json as _json
+
+                if isinstance(raw_bytes, (bytes, bytearray)):
+                    raw_dict = _json.loads(raw_bytes)
+                else:
+                    raw_dict = raw_bytes
+                # Identify return model class
+                _model_cls = None
+                # Dynamic import to avoid syntax errors for generic return types like "List[Foo]"
+                try:  # pragma: no cover - best effort
+                    import importlib as _importlib
+
+                    _rt = "ChallengesPerYear"
+                    # Attempt tolerant path only for Page models (endswith 'Page' & not generic)
+                    if _rt.endswith("Page") and "[" not in _rt:
+                        _module = _importlib.import_module(
+                            "openchallenges_api_client_python.models"
+                        )
+                        _model_cls = getattr(_module, _rt, None)
+                except Exception:  # pragma: no cover
+                    _model_cls = None
+                if _model_cls is not None and hasattr(
+                    _model_cls, "from_dict_skip_invalid"
+                ):
+                    return _model_cls.from_dict_skip_invalid(raw_dict)  # type: ignore
+            except Exception:  # pragma: no cover - fallback to normal path
+                pass
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
@@ -158,6 +197,7 @@ class ChallengeAnalyticsApi:
             *_param, _request_timeout=_request_timeout
         )
         response_data.read()
+        # NOTE: http_info variant returns ApiResponse; tolerant path not applied here (consumer can deserialize manually)
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,

@@ -40,28 +40,35 @@ class {{classname}}:
             _request_timeout=_request_timeout
         )
         {{#asyncio}}await {{/asyncio}}response_data.read()
-        # Custom tolerant deserialization (opt-in via _request_auth['skip_invalid_items']=True)
+        # Custom tolerant deserialization (opt-in via env var OC_CLIENT_SKIP_INVALID=1)
         _tolerant_flag = False
-        try:
-            _tolerant_flag = bool((_request_auth or {}).get('skip_invalid_items'))
+        try:  # environment flag avoids altering public API or auth flows
+            import os as _os  # local import to avoid global side-effects
+            _env_val = _os.getenv('OC_CLIENT_SKIP_INVALID', '')
+            _tolerant_flag = _env_val.lower() in ('1', 'true', 'yes', 'on')
         except Exception:  # pragma: no cover
             _tolerant_flag = False
         if _tolerant_flag:
             try:
                 raw_bytes = response_data.data  # type: ignore[attr-defined]
                 import json as _json
-                raw_dict = _json.loads(raw_bytes) if isinstance(raw_bytes, (bytes, bytearray)) else raw_bytes
+                if isinstance(raw_bytes, (bytes, bytearray)):
+                    raw_dict = _json.loads(raw_bytes)
+                else:
+                    raw_dict = raw_bytes
                 # Identify return model class
                 _model_cls = None
-                {{#returnType}}
-                try:
-                    from {{packageName}}.models import {{returnType}}
-                    _model_cls = {{returnType}}
+                # Dynamic import to avoid syntax errors for generic return types like "List[Foo]"
+                try:  # pragma: no cover - best effort
+                    import importlib as _importlib
+                    _rt = "{{returnType}}"
+                    # Attempt tolerant path only for Page models (endswith 'Page' & not generic)
+                    if _rt.endswith('Page') and '[' not in _rt:
+                        _module = _importlib.import_module("{{packageName}}.models")
+                        _model_cls = getattr(_module, _rt, None)
                 except Exception:  # pragma: no cover
                     _model_cls = None
-                {{/returnType}}
-                # Heuristic: only attempt tolerant path for Page-like models
-                if _model_cls is not None and hasattr(_model_cls, 'from_dict_skip_invalid') and getattr(_model_cls, '__name__', '').endswith('Page'):
+                if _model_cls is not None and hasattr(_model_cls, 'from_dict_skip_invalid'):
                     return _model_cls.from_dict_skip_invalid(raw_dict)  # type: ignore
             except Exception:  # pragma: no cover - fallback to normal path
                 pass

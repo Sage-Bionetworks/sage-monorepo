@@ -75,11 +75,17 @@ class OrganizationGateway:
                         # Use custom tolerant flag routed through _request_auth to avoid
                         # altering generated method signatures. The templates look for
                         # _request_auth['skip_invalid_items'].
+                        # Activate tolerant mode via env var (read by generated API)
+                        import os
+
+                        if not strict:
+                            os.environ["OC_CLIENT_SKIP_INVALID"] = "1"
+                        else:
+                            # Ensure strict mode disables flag
+                            if "OC_CLIENT_SKIP_INVALID" in os.environ:
+                                os.environ.pop("OC_CLIENT_SKIP_INVALID", None)
                         page = api.list_organizations(
                             organization_search_query=search,
-                            _request_auth=(
-                                {"skip_invalid_items": True} if not strict else None
-                            ),
                         )
                         # Accumulate skipped count (tolerant mode). Support legacy and
                         # generic attribute names.
