@@ -1,10 +1,21 @@
+"""
+main.py - Clean OAuth integration using file-based redirect (like oauth_test.py)
+"""
+
 import argparse
+import urllib.parse
 import gradio as gr
-from page.bixarena_header import build_header
+import webbrowser
+import os
+from page.bixarena_header import build_header, update_user_session
 from page.bixarena_battle import build_battle_page
 from page.bixarena_leaderboard import build_leaderboard_page
 from page.bixarena_home import build_home_page
-from page.login import build_login_page
+from config.oauth_handler import (
+    handle_synapse_callback,
+    get_synapse_login_url,
+    get_current_user,
+)
 
 
 class PageNavigator:
@@ -16,6 +27,71 @@ class PageNavigator:
     def show_page(self, page_index):
         """Show only the specified page, hide others"""
         return [gr.Column(visible=(i == page_index)) for i in range(len(self.sections))]
+
+
+def handle_login_redirect():
+    """Handle login button click - pure server-side redirect"""
+    # Check if already logged in
+    current_user = get_current_user()
+    if current_user:
+        # Already logged in, no action needed
+        return ""
+
+    # Generate login URL and perform server-side redirect
+    login_url, state = get_synapse_login_url()
+    print(f"🔗 Redirecting to Synapse: {login_url}")
+
+    # Use meta refresh for server-side redirect (no JavaScript)
+    redirect_html = f'<meta http-equiv="refresh" content="0;url={login_url}">'
+    return redirect_html
+
+
+def check_oauth_callback(request: gr.Request):
+    """Check for OAuth callback in URL and process it"""
+    if request is None:
+        return "", get_login_button_state()
+
+    # Extract URL parameters
+    try:
+        # Get the full URL from request
+        if hasattr(request, "url"):
+            parsed_url = urllib.parse.urlparse(str(request.url))
+            url_params = urllib.parse.parse_qs(parsed_url.query)
+
+            # Check for OAuth code
+            if "code" in url_params:
+                oauth_code = url_params["code"][0]
+                print(f"🔍 Processing OAuth code: {oauth_code[:20]}...")
+
+                # Process the OAuth callback
+                user_profile = handle_synapse_callback(oauth_code)
+                if user_profile:
+                    # Update header state
+                    update_user_session(user_profile)
+                    username = user_profile.get(
+                        "firstName", user_profile.get("userName", "User")
+                    )
+                    print(f"✅ Login successful for: {username}")
+
+                    # Return updated button state
+                    return "", gr.Button(username, variant="primary")
+                else:
+                    print("❌ Login failed")
+    except Exception as e:
+        print(f"Error processing OAuth callback: {e}")
+
+    # Return current button state
+    return "", get_login_button_state()
+
+
+def get_login_button_state():
+    """Get the current login button state based on user authentication"""
+    current_user = get_current_user()
+    if current_user:
+        username = current_user.get("firstName", current_user.get("userName", "User"))
+        return gr.Button(username, variant="primary")
+    else:
+        return gr.Button("Login", variant="primary")
 
 
 def parse_args():
@@ -45,9 +121,7 @@ def parse_args():
         help="Enable content moderation to block unsafe inputs",
     )
     parser.add_argument(
-        "--gradio-root-path",
-        type=str,
-        help="Sets the gradio root path, eg /abc/def. Useful when running behind a reverse-proxy or at a custom URL path prefix",
+        "--gradio-root-path", type=str, help="Sets the gradio root path"
     )
     return parser.parse_args()
 
@@ -55,12 +129,15 @@ def parse_args():
 def build_app(register_api_endpoint_file=None, moderate=False):
     """Create the main application"""
 
-    with gr.Blocks(title="BixArena - Biomedical LLM Evaluation") as app:
+    with gr.Blocks(title="BixArena - Biomedical LLM Evaluation") as demo:
+        # OAuth status - only visible when needed
+        oauth_status = gr.HTML("")
+
         # Header
         header, battle_btn, leaderboard_btn, login_btn = build_header()
 
         # Pages
-        with gr.Column(visible=True) as home_page:  # Home visible by default
+        with gr.Column(visible=True) as home_page:
             home_content, cta_btn = build_home_page()
 
         with gr.Column(visible=False) as battle_page:
@@ -69,32 +146,27 @@ def build_app(register_api_endpoint_file=None, moderate=False):
         with gr.Column(visible=False) as leaderboard_page:
             leaderboard_content = build_leaderboard_page()
 
-        with gr.Column(visible=False) as login_page:
-            login_content = build_login_page()
-
         # Initialize navigator
-        all_pages = [
-            home_page,
-            battle_page,
-            leaderboard_page,
-            login_page,
-        ]
+        all_pages = [home_page, battle_page, leaderboard_page]
         navigator = PageNavigator(all_pages)
 
         # Page navigation
-        battle_btn.click(lambda: navigator.show_page(1), outputs=all_pages)  # Battle
-        leaderboard_btn.click(
-            lambda: navigator.show_page(2), outputs=all_pages
-        )  # Leaderboard
-        login_btn.click(lambda: navigator.show_page(3), outputs=all_pages)  # Login
-        cta_btn.click(
-            lambda: navigator.show_page(1), outputs=all_pages
-        )  # Home -> Battle
+        battle_btn.click(lambda: navigator.show_page(1), outputs=all_pages)
+        leaderboard_btn.click(lambda: navigator.show_page(2), outputs=all_pages)
+        cta_btn.click(lambda: navigator.show_page(1), outputs=all_pages)
 
-    return app
+        # OAuth handling - only for non-logged in users
+        current_user = get_current_user()
+        if current_user is None:
+            # Only add click handler if user is not logged in
+            login_btn.click(fn=handle_login_redirect, outputs=oauth_status)
+
+        # Check for OAuth callback on page load and update button
+        demo.load(fn=check_oauth_callback, outputs=[oauth_status, login_btn])
+
+    return demo
 
 
-# Launch the app
 if __name__ == "__main__":
     args = parse_args()
 
