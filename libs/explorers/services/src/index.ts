@@ -9,3 +9,4 @@ export * from './lib/notification.service';
 export * from './lib/platform.service';
 export * from './lib/svg-icon.service';
 export * from './lib/synapse-api.service';
+export * from './lib/version.service';
