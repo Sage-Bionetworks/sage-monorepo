@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.net.URI;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageAspectRatioDto;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageHeightDto;
 import org.springframework.lang.Nullable;
@@ -19,32 +20,23 @@ import java.util.*;
 import jakarta.annotation.Generated;
 
 /**
- * An image query.
+ * An image query that identifies an image either by an object storage key or by a direct URL. Exactly one of &#x60;objectKey&#x60; or &#x60;imageUrl&#x60; must be provided. 
  */
 
-@Schema(name = "ImageQuery", description = "An image query.")
+@Schema(name = "ImageQuery", description = "An image query that identifies an image either by an object storage key or by a direct URL. Exactly one of `objectKey` or `imageUrl` must be provided. ")
 @JsonTypeName("ImageQuery")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class ImageQueryDto {
 
-  private String objectKey;
+  private @Nullable String objectKey;
+
+  private @Nullable URI imageUrl;
 
   private ImageHeightDto height = ImageHeightDto.ORIGINAL;
 
   private ImageAspectRatioDto aspectRatio = ImageAspectRatioDto.ORIGINAL;
 
-  public ImageQueryDto() {
-    super();
-  }
-
-  /**
-   * Constructor with only required parameters
-   */
-  public ImageQueryDto(String objectKey) {
-    this.objectKey = objectKey;
-  }
-
-  public ImageQueryDto objectKey(String objectKey) {
+  public ImageQueryDto objectKey(@Nullable String objectKey) {
     this.objectKey = objectKey;
     return this;
   }
@@ -53,15 +45,35 @@ public class ImageQueryDto {
    * The unique identifier of the image.
    * @return objectKey
    */
-  @NotNull @Pattern(regexp = "^[a-zA-Z0-9/_-]+.[a-zA-Z0-9/_-]+") 
-  @Schema(name = "objectKey", example = "logo/dream.png", description = "The unique identifier of the image.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Pattern(regexp = "^[a-zA-Z0-9/_-]+.[a-zA-Z0-9/_-]+") 
+  @Schema(name = "objectKey", example = "logo/dream.png", description = "The unique identifier of the image.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("objectKey")
-  public String getObjectKey() {
+  public @Nullable String getObjectKey() {
     return objectKey;
   }
 
-  public void setObjectKey(String objectKey) {
+  public void setObjectKey(@Nullable String objectKey) {
     this.objectKey = objectKey;
+  }
+
+  public ImageQueryDto imageUrl(@Nullable URI imageUrl) {
+    this.imageUrl = imageUrl;
+    return this;
+  }
+
+  /**
+   * The HTTPS URL of the image. Use this as an alternative to `objectKey`. 
+   * @return imageUrl
+   */
+  @Valid @Pattern(regexp = "^https?://") @Size(min = 1, max = 2048) 
+  @Schema(name = "imageUrl", description = "The HTTPS URL of the image. Use this as an alternative to `objectKey`. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("imageUrl")
+  public @Nullable URI getImageUrl() {
+    return imageUrl;
+  }
+
+  public void setImageUrl(@Nullable URI imageUrl) {
+    this.imageUrl = imageUrl;
   }
 
   public ImageQueryDto height(ImageHeightDto height) {
@@ -114,13 +126,14 @@ public class ImageQueryDto {
     }
     ImageQueryDto imageQuery = (ImageQueryDto) o;
     return Objects.equals(this.objectKey, imageQuery.objectKey) &&
+        Objects.equals(this.imageUrl, imageQuery.imageUrl) &&
         Objects.equals(this.height, imageQuery.height) &&
         Objects.equals(this.aspectRatio, imageQuery.aspectRatio);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(objectKey, height, aspectRatio);
+    return Objects.hash(objectKey, imageUrl, height, aspectRatio);
   }
 
   @Override
@@ -128,6 +141,7 @@ public class ImageQueryDto {
     StringBuilder sb = new StringBuilder();
     sb.append("class ImageQueryDto {\n");
     sb.append("    objectKey: ").append(toIndentedString(objectKey)).append("\n");
+    sb.append("    imageUrl: ").append(toIndentedString(imageUrl)).append("\n");
     sb.append("    height: ").append(toIndentedString(height)).append("\n");
     sb.append("    aspectRatio: ").append(toIndentedString(aspectRatio)).append("\n");
     sb.append("}");
@@ -159,6 +173,7 @@ public class ImageQueryDto {
 
     protected Builder copyOf(ImageQueryDto value) { 
       this.instance.setObjectKey(value.objectKey);
+      this.instance.setImageUrl(value.imageUrl);
       this.instance.setHeight(value.height);
       this.instance.setAspectRatio(value.aspectRatio);
       return this;
@@ -166,6 +181,11 @@ public class ImageQueryDto {
 
     public ImageQueryDto.Builder objectKey(String objectKey) {
       this.instance.objectKey(objectKey);
+      return this;
+    }
+    
+    public ImageQueryDto.Builder imageUrl(URI imageUrl) {
+      this.instance.imageUrl(imageUrl);
       return this;
     }
     

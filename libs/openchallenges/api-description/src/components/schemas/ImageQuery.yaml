@@ -1,11 +1,21 @@
+title: ImageQuery
 type: object
-description: An image query.
+description: >
+  An image query that identifies an image either by an object storage key
+  or by a direct URL. Exactly one of `objectKey` or `imageUrl` must be provided.
+additionalProperties: false
 properties:
   objectKey:
     $ref: ImageKey.yaml
+  imageUrl:
+    type: string
+    format: uri
+    description: >
+      The HTTPS URL of the image. Use this as an alternative to `objectKey`.
+    minLength: 1
+    maxLength: 2048
+    pattern: '^https?://'
   height:
     $ref: ImageHeight.yaml
   aspectRatio:
     $ref: ImageAspectRatio.yaml
-required:
-  - objectKey

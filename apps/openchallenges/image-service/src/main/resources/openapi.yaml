@@ -3,7 +3,7 @@ info:
   contact:
     name: Support
     url: https://github.com/Sage-Bionetworks/sage-monorepo
-  description: "Discover, explore, and contribute to open biomedical challenges."
+  description: 'Discover, explore, and contribute to open biomedical challenges.'
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -12,47 +12,47 @@ info:
   x-logo:
     url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
-- url: http://localhost/v1
+  - url: http://localhost/v1
+security:
+  - jwtBearer: []
 tags:
-- description: Operations about images
-  name: Image
-  x-audience:
-  - public
+  - description: Operations about images
+    name: Image
 paths:
   /images:
     get:
       description: Returns the image specified.
       operationId: getImage
       parameters:
-      - description: The query used to get an image.
-        explode: true
-        in: query
-        name: imageQuery
-        required: false
-        schema:
-          $ref: "#/components/schemas/ImageQuery"
-        style: deepObject
+        - description: The query used to get an image.
+          explode: true
+          in: query
+          name: imageQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/ImageQuery'
+          style: deepObject
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Image"
+                $ref: '#/components/schemas/Image'
           description: An image
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServerError"
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security: []
       summary: Get an image
       tags:
-      - Image
-      x-audience:
-      - public
+        - Image
+      x-anonymous-access: true
       x-accepts:
-      - application/json
-      - application/problem+json
+        - application/json
+        - application/problem+json
       x-tags:
-      - tag: Image
+        - tag: Image
 components:
   parameters:
     imageQuery:
@@ -62,20 +62,20 @@ components:
       name: imageQuery
       required: false
       schema:
-        $ref: "#/components/schemas/ImageQuery"
+        $ref: '#/components/schemas/ImageQuery'
       style: deepObject
   responses:
     NotFound:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/BasicError"
+            $ref: '#/components/schemas/BasicError'
       description: The specified resource was not found
     InternalServerError:
       content:
         application/problem+json:
           schema:
-            $ref: "#/components/schemas/BasicError"
+            $ref: '#/components/schemas/BasicError'
       description: The request cannot be fulfilled due to an unexpected server error
   schemas:
     ImageKey:
@@ -87,38 +87,47 @@ components:
       default: original
       description: The height of the image.
       enum:
-      - original
-      - 32px
-      - 100px
-      - 140px
-      - 250px
-      - 500px
+        - original
+        - 32px
+        - 100px
+        - 140px
+        - 250px
+        - 500px
       type: string
     ImageAspectRatio:
       default: original
       description: The aspect ratio of the image (the height of the image must be
         specified).
       enum:
-      - original
-      - 16_9
-      - 1_1
-      - 3_2
-      - 2_3
+        - original
+        - 16_9
+        - 1_1
+        - 3_2
+        - 2_3
       type: string
     ImageQuery:
-      description: An image query.
+      additionalProperties: false
+      description: |
+        An image query that identifies an image either by an object storage key or by a direct URL. Exactly one of `objectKey` or `imageUrl` must be provided.
       properties:
         objectKey:
           description: The unique identifier of the image.
           example: logo/dream.png
           pattern: "^[a-zA-Z0-9\\/_-]+.[a-zA-Z0-9\\/_-]+"
           type: string
+        imageUrl:
+          description: |
+            The HTTPS URL of the image. Use this as an alternative to `objectKey`.
+          format: uri
+          maxLength: 2048
+          minLength: 1
+          pattern: ^https?://
+          type: string
         height:
-          $ref: "#/components/schemas/ImageHeight"
+          $ref: '#/components/schemas/ImageHeight'
         aspectRatio:
-          $ref: "#/components/schemas/ImageAspectRatio"
-      required:
-      - objectKey
+          $ref: '#/components/schemas/ImageAspectRatio'
+      title: ImageQuery
       type: object
     Image:
       description: An image
@@ -129,7 +138,7 @@ components:
           example: http://example.com/an-image.png
           type: string
       required:
-      - url
+        - url
       type: object
     BasicError:
       description: Problem details (tools.ietf.org/html/rfc7807)
@@ -148,6 +157,7 @@ components:
           description: An absolute URI that identifies the problem type
           type: string
       required:
-      - status
-      - title
+        - status
+        - title
       type: object
+x-oauth2-audience: urn:openchallenges:image-service
