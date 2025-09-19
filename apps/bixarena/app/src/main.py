@@ -12,7 +12,7 @@ from config.auth_service import get_auth_service
 class PageNavigator:
     """Clean navigation class for managing page visibility"""
 
-    def init(self, sections):
+    def __init__(self, sections):
         self.sections = sections
 
     def show_page(self, page_index):
@@ -29,12 +29,10 @@ def check_oauth_callback(request: gr.Request):
             parsed_url = urllib.parse.urlparse(str(request.url))
             url_params = urllib.parse.parse_qs(parsed_url.query)
 
-            # Check for OAuth callback parameters
             if "code" in url_params:
                 oauth_code = url_params["code"][0]
                 oauth_state = url_params.get("state", [None])[0]
 
-                # Process OAuth callback through auth service
                 success = auth_service.handle_oauth_callback(oauth_code, oauth_state)
 
                 if success:
@@ -44,22 +42,10 @@ def check_oauth_callback(request: gr.Request):
                 else:
                     print("❌ Login failed")
 
-            # Check for OAuth error parameters
-            elif "error" in url_params:
-                error = url_params["error"][0]
-                error_description = url_params.get(
-                    "error_description", ["Unknown error"]
-                )[0]
-                auth_service.session.set_error(
-                    f"OAuth error: {error} - {error_description}"
-                )
-                print(f"❌ Login failed: {error}")
-
         except Exception as e:
             auth_service.session.set_error(f"Callback processing error: {str(e)}")
             print(f"❌ Login failed: {str(e)}")
 
-    # Return updated states for both header and user page
     return (update_login_button(), *update_user_page())
 
 
@@ -68,7 +54,6 @@ def handle_user_logout_and_navigate(navigator):
     auth_service = get_auth_service()
     auth_service.logout_user()
 
-    # Return home page visibility and updated states
     return navigator.show_page(0) + [update_login_button()]
 
 
@@ -105,22 +90,19 @@ def parse_args():
 
 
 def build_app(register_api_endpoint_file=None, moderate=False):
-    """Create the main application with clean separation of concerns"""
+    """Create the main application with clean header positioning"""
 
-    # JavaScript code to clean OAuth parameters from URL (runs after Python processing)
+    # JavaScript code to clean OAuth parameters from URL
     cleanup_js = """
     function() {
         setTimeout(function() {
             if (window.location.search.includes('code=') || 
-                window.location.search.includes('state=') || 
-                window.location.search.includes('error=')) {
-
+                window.location.search.includes('state=') {
+                
                 const url = new URL(window.location);
                 url.searchParams.delete('code');
                 url.searchParams.delete('state'); 
-                url.searchParams.delete('error');
-                url.searchParams.delete('error_description');
-
+                
                 window.history.replaceState({}, document.title, url.pathname + url.hash);
             }
         }, 100);
@@ -128,10 +110,8 @@ def build_app(register_api_endpoint_file=None, moderate=False):
     """
 
     with gr.Blocks(title="BixArena - Biomedical LLM Evaluation") as demo:
-        # Header with reactive login button
         header, battle_btn, leaderboard_btn, login_btn = build_header()
 
-        # Pages
         with gr.Column(visible=True) as home_page:
             home_content, cta_btn = build_home_page()
 
@@ -142,26 +122,23 @@ def build_app(register_api_endpoint_file=None, moderate=False):
             leaderboard_content = build_leaderboard_page()
 
         with gr.Column(visible=False) as user_page:
-            # User page components managed by user page script
             user_container, welcome_display, logout_btn = build_user_page()
 
         # Initialize navigator
         all_pages = [home_page, battle_page, leaderboard_page, user_page]
         navigator = PageNavigator(all_pages)
 
-        # Page navigation handlers
+        # Navigation event handlers
         battle_btn.click(lambda: navigator.show_page(1), outputs=all_pages)
         leaderboard_btn.click(lambda: navigator.show_page(2), outputs=all_pages)
         cta_btn.click(lambda: navigator.show_page(1), outputs=all_pages)
 
-        # Login button handler - when user is logged in, show user page
+        # Login button handler
         def handle_login_click():
             auth_service = get_auth_service()
             if auth_service.is_user_authenticated():
-                # Show user page and update its content
                 return *navigator.show_page(3), *update_user_page()
             else:
-                # Stay on current page (OAuth redirect happens via button link)
                 return *navigator.show_page(0), *update_user_page()
 
         login_btn.click(
@@ -172,7 +149,6 @@ def build_app(register_api_endpoint_file=None, moderate=False):
         # Logout button handler
         def handle_logout_click():
             handle_logout()
-            # Return to home page and update both header and user page
             return (*navigator.show_page(0), update_login_button(), *update_user_page())
 
         logout_btn.click(
@@ -180,7 +156,7 @@ def build_app(register_api_endpoint_file=None, moderate=False):
             outputs=all_pages + [login_btn, welcome_display, logout_btn],
         )
 
-        # Handle OAuth callback and clean URL with JavaScript
+        # Handle OAuth callback and clean URL
         demo.load(
             fn=check_oauth_callback,
             outputs=[login_btn, welcome_display, logout_btn],
@@ -190,7 +166,7 @@ def build_app(register_api_endpoint_file=None, moderate=False):
     return demo
 
 
-if name == "main":
+if __name__ == "__main__":
     args = parse_args()
 
     app = build_app(

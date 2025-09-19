@@ -84,7 +84,7 @@ class AuthService:
             self.session.set_current_user(user_profile)
 
             username = self.session.get_user_display_name()
-            print(f"✅ Login successful for: {username}")
+            print(f"✅ Login successful: {username}")
             return True
 
         except Exception as e:
