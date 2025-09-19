@@ -1,6 +1,18 @@
-import { expect, test } from '@playwright/test';
+import { expect, Page, test } from '@playwright/test';
 import { baseURL } from '../playwright.config';
 import { searchAndGetSearchListItems } from './helpers';
+
+async function isPageAtTop(page: Page) {
+  return await page.evaluate(() => window.pageYOffset === 0);
+}
+
+async function expectPageAtTop(page: Page) {
+  expect(await isPageAtTop(page)).toBe(true);
+}
+
+async function expectPageNotAtTop(page: Page) {
+  expect(await isPageAtTop(page)).toBe(false);
+}
 
 test.describe('model details', () => {
   test('invalid model results in a 404 redirect', async ({ page }) => {
@@ -79,7 +91,7 @@ test.describe('model details', () => {
     await page.goto(`/models/${model}/omics`);
     await expect(page.getByRole('heading', { level: 2, name: 'Available Data' })).toBeInViewport();
     await expect(page.getByRole('heading', { level: 1, name: model })).not.toBeInViewport();
-    await page.evaluate(() => window.pageYOffset !== 0);
+    await expectPageNotAtTop(page);
   });
 
   test('does not scroll to panel content on initial load when tab not specified in url', async ({
@@ -91,7 +103,7 @@ test.describe('model details', () => {
     await expect(
       page.getByRole('heading', { level: 2, name: 'Available Data' }),
     ).not.toBeInViewport();
-    await page.evaluate(() => window.pageYOffset === 0);
+    await expectPageAtTop(page);
   });
 
   test('disabled tab in url defaults to first available tab and does not scroll', async ({
@@ -100,7 +112,7 @@ test.describe('model details', () => {
     const model = 'LOAD1';
     await page.goto(`/models/${model}/pathology`);
     await expect(page.getByRole('heading', { level: 1, name: model })).toBeInViewport();
-    await page.evaluate(() => window.pageYOffset === 0);
+    await expectPageAtTop(page);
     await page.waitForURL(`/models/${model}`);
     await expect(page.getByRole('heading', { level: 2, name: 'Available Data' })).toBeVisible();
   });
@@ -111,7 +123,7 @@ test.describe('model details', () => {
     const model = '3xTg-AD';
     await page.goto(`/models/${model}/does-not-exist`);
     await expect(page.getByRole('heading', { level: 1, name: model })).toBeInViewport();
-    await page.evaluate(() => window.pageYOffset === 0);
+    await expectPageAtTop(page);
     await page.waitForURL(`/models/${model}`);
     await expect(page.getByRole('heading', { level: 2, name: 'Available Data' })).toBeVisible();
   });
@@ -387,6 +399,58 @@ test.describe('model details - boxplots selector - share links - initial load', 
     await page.goto(`${basePath}${queryParam}#${invalidFragment}`);
     await expect(page.getByRole('heading', { level: 1, name: 'Abca7*V1599M' })).toBeInViewport();
     await page.waitForURL(`${basePath}${queryParam}`);
+  });
+});
+
+test.describe('model details - boxplots selector - share links - same-document navigation', () => {
+  const modelName = 'Abca7*V1599M';
+  const basePath = `/models/${modelName}/biomarkers?sex=Male`;
+  const validFragment = 'nfl';
+
+  test('scrolls to section during same-document navigation with same fragment', async ({
+    page,
+  }) => {
+    const path = `${basePath}#${validFragment}`;
+    await page.goto(path);
+    await expect(page.getByRole('heading', { level: 2, name: 'NfL' })).toBeInViewport();
+    await expectPageNotAtTop(page);
+
+    await page.goto(path);
+
+    await expect(page).toHaveURL(`${baseURL}${path}`);
+    await expect(page.getByRole('heading', { level: 2, name: 'NfL' })).toBeInViewport();
+    await expectPageNotAtTop(page);
+  });
+
+  test('scrolls to section during same-document navigation with different fragment', async ({
+    page,
+  }) => {
+    const anotherFragment = 'insoluble-abeta42';
+    await page.goto(`${basePath}#${validFragment}`);
+    await expect(page.getByRole('heading', { level: 2, name: 'NfL' })).toBeInViewport();
+    await expectPageNotAtTop(page);
+
+    await page.goto(`${basePath}#${anotherFragment}`);
+
+    await expect(page).toHaveURL(`${baseURL}${basePath}#${anotherFragment}`);
+    await expect(page.getByRole('heading', { level: 2, name: 'Insoluble Aβ42' })).toBeInViewport();
+    await expectPageNotAtTop(page);
+  });
+
+  test('does not scroll and removes invalid fragment from url during same-document navigation', async ({
+    page,
+  }) => {
+    await page.goto(`${basePath}#${validFragment}`);
+    await expect(page.getByRole('heading', { level: 2, name: 'NfL' })).toBeInViewport();
+
+    const invalidFragment = 'does-not-exist';
+    await page.evaluate((fragment) => {
+      window.location.hash = fragment;
+    }, invalidFragment);
+
+    await expect(page).toHaveURL(`${baseURL}${basePath}`);
+    await expectPageAtTop(page);
+    await expect(page.getByRole('heading', { level: 1, name: modelName })).toBeInViewport();
   });
 });
 

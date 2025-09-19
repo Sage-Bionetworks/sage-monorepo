@@ -1,3 +1,3 @@
-volumes:
-  openchallenges-thumbor-data:
-    name: openchallenges-thumbor-data
+# volumes:
+#   openchallenges-thumbor-data:
+#     name: openchallenges-thumbor-data

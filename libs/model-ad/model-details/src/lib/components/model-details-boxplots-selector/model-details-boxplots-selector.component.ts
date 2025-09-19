@@ -8,6 +8,7 @@ import {
   ElementRef,
   inject,
   input,
+  OnDestroy,
   OnInit,
   signal,
   viewChild,
@@ -44,7 +45,7 @@ import { ModelDetailsBoxplotsGridComponent } from '../model-details-boxplots-gri
   templateUrl: './model-details-boxplots-selector.component.html',
   styleUrls: ['./model-details-boxplots-selector.component.scss'],
 })
-export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
+export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy {
   private readonly helperService = inject(HelperService);
   private readonly location = inject(Location);
   private readonly clipboard = inject(Clipboard);
@@ -98,8 +99,31 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
     });
   }
 
+  // Handle scrolling after same-document navigation
+  // Use popstate because NavigationEnd does not fire on
+  // same-document navigation with the same fragment
+  onPopState = () => {
+    const hashFragment = this.helperService.getHashFragment();
+    if (this.isValidHashFragment(hashFragment)) {
+      // Wait for the DOM to be settled
+      setTimeout(() => {
+        this.scrollToSection(hashFragment, false);
+      }, 100);
+    } else {
+      // Defer URL update until after popstate event completes
+      setTimeout(() => {
+        this.updateUrlFragment(undefined);
+      }, 0);
+    }
+  };
+
   ngOnInit(): void {
     this.initializeOptionsFromUrlParams();
+    window.addEventListener('popstate', this.onPopState);
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('popstate', this.onPopState);
   }
 
   selectedModelDataList = computed(() => {

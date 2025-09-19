@@ -19,7 +19,7 @@ args=(
   --file docker/"$product_name"/services/thumbor.yml
 
   --file docker/"$product_name"/networks.yml
-  --file docker/"$product_name"/volumes.yml
+  # --file docker/"$product_name"/volumes.yml
 
   --project-name "$product_name"
 
