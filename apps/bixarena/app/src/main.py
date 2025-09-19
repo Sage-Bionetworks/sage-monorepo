@@ -7,10 +7,11 @@ import urllib.parse
 import gradio as gr
 import webbrowser
 import os
-from page.bixarena_header import build_header, update_user_session
+from page.bixarena_header import build_header, update_user_session, clear_user_session
 from page.bixarena_battle import build_battle_page
 from page.bixarena_leaderboard import build_leaderboard_page
 from page.bixarena_home import build_home_page
+from page.bixarena_user import build_user_page, handle_logout
 from config.oauth_handler import (
     handle_synapse_callback,
     get_synapse_login_url,
@@ -94,6 +95,14 @@ def get_login_button_state():
         return gr.Button("Login", variant="primary")
 
 
+def handle_user_logout_and_navigate(navigator):
+    """Handle logout and navigate to home page"""
+    handle_logout()
+    clear_user_session()
+    # Return home page visibility and updated login button
+    return navigator.show_page(0) + [gr.Button("Login", variant="primary")]
+
+
 def parse_args():
     """Parse command line arguments"""
     parser = argparse.ArgumentParser()
@@ -146,8 +155,15 @@ def build_app(register_api_endpoint_file=None, moderate=False):
         with gr.Column(visible=False) as leaderboard_page:
             leaderboard_content = build_leaderboard_page()
 
+        with gr.Column(visible=False) as user_page:
+            # Build a placeholder user page that will be updated
+            with gr.Row():
+                user_welcome = gr.HTML("")
+            with gr.Row():
+                logout_btn = gr.Button("Logout", variant="primary", size="lg")
+
         # Initialize navigator
-        all_pages = [home_page, battle_page, leaderboard_page]
+        all_pages = [home_page, battle_page, leaderboard_page, user_page]
         navigator = PageNavigator(all_pages)
 
         # Page navigation
@@ -155,11 +171,47 @@ def build_app(register_api_endpoint_file=None, moderate=False):
         leaderboard_btn.click(lambda: navigator.show_page(2), outputs=all_pages)
         cta_btn.click(lambda: navigator.show_page(1), outputs=all_pages)
 
-        # OAuth handling - only for non-logged in users
-        current_user = get_current_user()
-        if current_user is None:
-            # Only add click handler if user is not logged in
-            login_btn.click(fn=handle_login_redirect, outputs=oauth_status)
+        # Login button handling - need to handle both states dynamically
+        def handle_login_button_click():
+            """Handle login button click - check user state dynamically"""
+            current_user = get_current_user()
+            if current_user is None:
+                # Not logged in - redirect to login
+                return handle_login_redirect(), *navigator.show_page(0), ""
+            else:
+                # Logged in - show user page and update welcome message
+                if current_user:
+                    username = current_user.get(
+                        "firstName", current_user.get("userName", "User")
+                    )
+                else:
+                    username = "Guest"
+
+                welcome_html = f"""
+                    <div style="text-align: center; padding: 40px;">
+                        <h2>Welcome, {username}!</h2>
+                    </div>
+                """
+
+                return "", *navigator.show_page(3), welcome_html
+
+        login_btn.click(
+            fn=handle_login_button_click,
+            outputs=[oauth_status] + all_pages + [user_welcome],
+        )
+
+        def handle_user_logout_and_navigate(navigator):
+            """Handle logout and navigate to home page"""
+            handle_logout()
+            clear_user_session()
+            # Return home page visibility and updated login button
+            return navigator.show_page(0) + [gr.Button("Login", variant="primary")]
+
+        # Logout button handling
+        logout_btn.click(
+            fn=lambda: handle_user_logout_and_navigate(navigator),
+            outputs=all_pages + [login_btn],
+        )
 
         # Check for OAuth callback on page load and update button
         demo.load(fn=check_oauth_callback, outputs=[oauth_status, login_btn])
