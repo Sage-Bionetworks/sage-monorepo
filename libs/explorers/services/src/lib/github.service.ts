@@ -1,5 +1,5 @@
-import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -16,7 +16,7 @@ export interface GitHubTag {
 export class GitHubService {
   http = inject(HttpClient);
 
-  private apiUrl = 'https://api.github.com/repos/Sage-Bionetworks/sage-monorepo/tags';
+  private readonly apiUrl = 'https://api.github.com/repos/Sage-Bionetworks/sage-monorepo/tags';
 
   getCommitSHA(tagName: string): Observable<string> {
     return this.http.get<GitHubTag[]>(this.apiUrl).pipe(

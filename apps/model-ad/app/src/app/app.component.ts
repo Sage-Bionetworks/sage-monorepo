@@ -1,10 +1,13 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
 import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/constants';
-import { MetaTagService, PlatformService } from '@sagebionetworks/explorers/services';
+import {
+  MetaTagService,
+  PlatformService,
+  VersionService,
+} from '@sagebionetworks/explorers/services';
 import { FooterComponent, HeaderComponent } from '@sagebionetworks/explorers/ui';
-import { DataVersion, DataVersionService } from '@sagebionetworks/model-ad/api-client-angular';
+import { DataVersionService } from '@sagebionetworks/model-ad/api-client-angular';
 import { ConfigService, MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
 import { SearchInputComponent } from '@sagebionetworks/model-ad/ui';
 import { footerLinks, headerLinks } from '@sagebionetworks/model-ad/util';
@@ -41,15 +44,18 @@ import { ToastModule } from 'primeng/toast';
   ],
 })
 export class AppComponent implements OnInit {
-  private platformService = inject(PlatformService);
-  private destroyRef = inject(DestroyRef);
+  private readonly platformService = inject(PlatformService);
+  private readonly destroyRef = inject(DestroyRef);
+
   configService = inject(ConfigService);
   dataVersionService = inject(DataVersionService);
   metaTagService = inject(MetaTagService);
+  versionService = inject(VersionService);
 
   readonly useGoogleTagManager: boolean;
 
   dataVersion = '';
+  siteVersion = '';
 
   headerLinks = headerLinks;
   footerLinks = footerLinks;
@@ -64,23 +70,18 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.getDataVersion();
+    this.getSiteVersion();
   }
 
   getDataVersion() {
-    if (this.platformService.isBrowser) {
-      this.dataVersionService
-        .getDataVersion()
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          next: (data) => {
-            this.dataVersion = this.formatDataVersion(data);
-          },
-          error: (error) => console.error('Error loading data version:', error),
-        });
-    }
+    this.versionService.getDataVersion(this.dataVersionService, (dataVersion) => {
+      this.dataVersion = dataVersion;
+    });
   }
 
-  formatDataVersion(dataVersion: DataVersion) {
-    return `${dataVersion.data_file}-v${dataVersion.data_version}`;
+  getSiteVersion() {
+    this.versionService.getSiteVersion(this.configService.config, (siteVersion) => {
+      this.siteVersion = siteVersion;
+    });
   }
 }
