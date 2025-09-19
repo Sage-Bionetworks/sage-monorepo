@@ -428,7 +428,7 @@ test.describe('model details - boxplots selector - share links - same-document n
   test('scrolls to section during same-document navigation with different fragment', async ({
     page,
   }) => {
-    const anotherFragment = 'insoluble-a-beta-42';
+    const anotherFragment = 'insoluble-abeta42';
     await page.goto(`${basePath}#${validFragment}`);
     await expect(page.getByRole('heading', { level: 2, name: 'NfL' })).toBeInViewport();
     await expectPageNotAtTop(page);
