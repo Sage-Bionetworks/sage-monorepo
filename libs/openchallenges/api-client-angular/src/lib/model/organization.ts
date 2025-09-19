@@ -38,9 +38,9 @@ export interface Organization {
    */
   challengeCount: number;
   /**
-   * An acronym of the organization.
+   * The abbreviation, which may be an acronym, initialism, or other short form (e.g., \"AI\", \"WashU\", \"etc.\")
    */
-  acronym?: string | null;
+  shortName?: string | null;
   /**
    * Datetime when the object was added to the database.
    */

@@ -31,7 +31,7 @@ import java.util.Objects;
     OrganizationUpdateRequest.JSON_PROPERTY_DESCRIPTION,
     OrganizationUpdateRequest.JSON_PROPERTY_AVATAR_KEY,
     OrganizationUpdateRequest.JSON_PROPERTY_WEBSITE_URL,
-    OrganizationUpdateRequest.JSON_PROPERTY_ACRONYM,
+    OrganizationUpdateRequest.JSON_PROPERTY_SHORT_NAME,
   }
 )
 @jakarta.annotation.Generated(
@@ -60,10 +60,10 @@ public class OrganizationUpdateRequest {
   @jakarta.annotation.Nullable
   private String websiteUrl;
 
-  public static final String JSON_PROPERTY_ACRONYM = "acronym";
+  public static final String JSON_PROPERTY_SHORT_NAME = "shortName";
 
   @jakarta.annotation.Nullable
-  private String acronym;
+  private String shortName;
 
   public OrganizationUpdateRequest() {}
 
@@ -155,26 +155,26 @@ public class OrganizationUpdateRequest {
     this.websiteUrl = websiteUrl;
   }
 
-  public OrganizationUpdateRequest acronym(@jakarta.annotation.Nullable String acronym) {
-    this.acronym = acronym;
+  public OrganizationUpdateRequest shortName(@jakarta.annotation.Nullable String shortName) {
+    this.shortName = shortName;
     return this;
   }
 
   /**
-   * An acronym of the organization.
-   * @return acronym
+   * The abbreviation, which may be an acronym, initialism, or other short form (e.g., \&quot;AI\&quot;, \&quot;WashU\&quot;, \&quot;etc.\&quot;)
+   * @return shortName
    */
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ACRONYM)
+  @JsonProperty(JSON_PROPERTY_SHORT_NAME)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public String getAcronym() {
-    return acronym;
+  public String getShortName() {
+    return shortName;
   }
 
-  @JsonProperty(JSON_PROPERTY_ACRONYM)
+  @JsonProperty(JSON_PROPERTY_SHORT_NAME)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAcronym(@jakarta.annotation.Nullable String acronym) {
-    this.acronym = acronym;
+  public void setShortName(@jakarta.annotation.Nullable String shortName) {
+    this.shortName = shortName;
   }
 
   @Override
@@ -191,13 +191,13 @@ public class OrganizationUpdateRequest {
       Objects.equals(this.description, organizationUpdateRequest.description) &&
       Objects.equals(this.avatarKey, organizationUpdateRequest.avatarKey) &&
       Objects.equals(this.websiteUrl, organizationUpdateRequest.websiteUrl) &&
-      Objects.equals(this.acronym, organizationUpdateRequest.acronym)
+      Objects.equals(this.shortName, organizationUpdateRequest.shortName)
     );
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, description, avatarKey, websiteUrl, acronym);
+    return Objects.hash(name, description, avatarKey, websiteUrl, shortName);
   }
 
   @Override
@@ -208,7 +208,7 @@ public class OrganizationUpdateRequest {
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    avatarKey: ").append(toIndentedString(avatarKey)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
-    sb.append("    acronym: ").append(toIndentedString(acronym)).append("\n");
+    sb.append("    shortName: ").append(toIndentedString(shortName)).append("\n");
     sb.append("}");
     return sb.toString();
   }

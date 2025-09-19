@@ -17,55 +17,63 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.util.UUID;
+import java.net.URI;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
- * Model tests for LoginResponse
+ * Model tests for UpdateUserProfileRequest
  */
-class LoginResponseTest {
+class UpdateUserProfileRequestTest {
 
-  private final LoginResponse model = new LoginResponse();
+  private final UpdateUserProfileRequest model = new UpdateUserProfileRequest();
 
   /**
-   * Model tests for LoginResponse
+   * Model tests for UpdateUserProfileRequest
    */
   @Test
-  void testLoginResponse() {
-    // TODO: test LoginResponse
+  void testUpdateUserProfileRequest() {
+    // TODO: test UpdateUserProfileRequest
   }
 
   /**
-   * Test the property 'apiKey'
+   * Test the property 'firstName'
    */
   @Test
-  void apiKeyTest() {
-    // TODO: test apiKey
+  void firstNameTest() {
+    // TODO: test firstName
   }
 
   /**
-   * Test the property 'userId'
+   * Test the property 'lastName'
    */
   @Test
-  void userIdTest() {
-    // TODO: test userId
+  void lastNameTest() {
+    // TODO: test lastName
   }
 
   /**
-   * Test the property 'username'
+   * Test the property 'bio'
    */
   @Test
-  void usernameTest() {
-    // TODO: test username
+  void bioTest() {
+    // TODO: test bio
   }
 
   /**
-   * Test the property 'role'
+   * Test the property 'website'
    */
   @Test
-  void roleTest() {
-    // TODO: test role
+  void websiteTest() {
+    // TODO: test website
+  }
+
+  /**
+   * Test the property 'avatarUrl'
+   */
+  @Test
+  void avatarUrlTest() {
+    // TODO: test avatarUrl
   }
 }
