@@ -1,6 +1,6 @@
 {
   "apiDocsUrl": "http://localhost:8000/api-docs",
-  "appVersion": "1.0.0-beta",
+  "appVersion": "edge",
   "csrApiUrl": "http://localhost:8000/api/v1",
   "googleTagManagerId": "",
   "ssrApiUrl": "http://model-ad-api:3333/v1",
