@@ -153,6 +153,12 @@ export class AuthenticationService {
     let localVarHeaders = this.defaultHeaders;
 
     let localVarCredential: string | undefined;
+    // authentication (apiKey) required
+    localVarCredential = this.configuration.lookupCredential('apiKey');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('X-API-Key', localVarCredential);
+    }
+
     // authentication (jwtBearer) required
     localVarCredential = this.configuration.lookupCredential('jwtBearer');
     if (localVarCredential) {
@@ -262,6 +268,12 @@ export class AuthenticationService {
     let localVarHeaders = this.defaultHeaders;
 
     let localVarCredential: string | undefined;
+    // authentication (apiKey) required
+    localVarCredential = this.configuration.lookupCredential('apiKey');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('X-API-Key', localVarCredential);
+    }
+
     // authentication (jwtBearer) required
     localVarCredential = this.configuration.lookupCredential('jwtBearer');
     if (localVarCredential) {

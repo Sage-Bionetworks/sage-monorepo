@@ -32,7 +32,7 @@ public class OrganizationUpdateRequestDto {
 
   private String websiteUrl = null;
 
-  private String acronym = null;
+  private String shortName = null;
 
   public OrganizationUpdateRequestDto() {
     super();
@@ -41,12 +41,12 @@ public class OrganizationUpdateRequestDto {
   /**
    * Constructor with only required parameters
    */
-  public OrganizationUpdateRequestDto(String name, String description, String avatarKey, String websiteUrl, String acronym) {
+  public OrganizationUpdateRequestDto(String name, String description, String avatarKey, String websiteUrl, String shortName) {
     this.name = name;
     this.description = description;
     this.avatarKey = avatarKey;
     this.websiteUrl = websiteUrl;
-    this.acronym = acronym;
+    this.shortName = shortName;
   }
 
   public OrganizationUpdateRequestDto name(String name) {
@@ -129,24 +129,24 @@ public class OrganizationUpdateRequestDto {
     this.websiteUrl = websiteUrl;
   }
 
-  public OrganizationUpdateRequestDto acronym(String acronym) {
-    this.acronym = acronym;
+  public OrganizationUpdateRequestDto shortName(String shortName) {
+    this.shortName = shortName;
     return this;
   }
 
   /**
-   * An acronym of the organization.
-   * @return acronym
+   * The abbreviation, which may be an acronym, initialism, or other short form (e.g., \"AI\", \"WashU\", \"etc.\") 
+   * @return shortName
    */
-  @NotNull @Size(max = 10) 
-  @Schema(name = "acronym", example = "OC", description = "An acronym of the organization.", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("acronym")
-  public String getAcronym() {
-    return acronym;
+  @NotNull @Size(max = 32) 
+  @Schema(name = "shortName", example = "OC", description = "The abbreviation, which may be an acronym, initialism, or other short form (e.g., \"AI\", \"WashU\", \"etc.\") ", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("shortName")
+  public String getShortName() {
+    return shortName;
   }
 
-  public void setAcronym(String acronym) {
-    this.acronym = acronym;
+  public void setShortName(String shortName) {
+    this.shortName = shortName;
   }
 
   @Override
@@ -162,12 +162,12 @@ public class OrganizationUpdateRequestDto {
         Objects.equals(this.description, organizationUpdateRequest.description) &&
         Objects.equals(this.avatarKey, organizationUpdateRequest.avatarKey) &&
         Objects.equals(this.websiteUrl, organizationUpdateRequest.websiteUrl) &&
-        Objects.equals(this.acronym, organizationUpdateRequest.acronym);
+        Objects.equals(this.shortName, organizationUpdateRequest.shortName);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, description, avatarKey, websiteUrl, acronym);
+    return Objects.hash(name, description, avatarKey, websiteUrl, shortName);
   }
 
   @Override
@@ -178,7 +178,7 @@ public class OrganizationUpdateRequestDto {
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    avatarKey: ").append(toIndentedString(avatarKey)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
-    sb.append("    acronym: ").append(toIndentedString(acronym)).append("\n");
+    sb.append("    shortName: ").append(toIndentedString(shortName)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -211,7 +211,7 @@ public class OrganizationUpdateRequestDto {
       this.instance.setDescription(value.description);
       this.instance.setAvatarKey(value.avatarKey);
       this.instance.setWebsiteUrl(value.websiteUrl);
-      this.instance.setAcronym(value.acronym);
+      this.instance.setShortName(value.shortName);
       return this;
     }
 
@@ -235,8 +235,8 @@ public class OrganizationUpdateRequestDto {
       return this;
     }
     
-    public OrganizationUpdateRequestDto.Builder acronym(String acronym) {
-      this.instance.acronym(acronym);
+    public OrganizationUpdateRequestDto.Builder shortName(String shortName) {
+      this.instance.shortName(shortName);
       return this;
     }
     

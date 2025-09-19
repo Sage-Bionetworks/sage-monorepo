@@ -39,7 +39,7 @@ import org.openapitools.jackson.nullable.JsonNullable;
     Organization.JSON_PROPERTY_AVATAR_KEY,
     Organization.JSON_PROPERTY_WEBSITE_URL,
     Organization.JSON_PROPERTY_CHALLENGE_COUNT,
-    Organization.JSON_PROPERTY_ACRONYM,
+    Organization.JSON_PROPERTY_SHORT_NAME,
     Organization.JSON_PROPERTY_CREATED_AT,
     Organization.JSON_PROPERTY_UPDATED_AT,
   }
@@ -85,10 +85,10 @@ public class Organization {
   @jakarta.annotation.Nonnull
   private Integer challengeCount = 0;
 
-  public static final String JSON_PROPERTY_ACRONYM = "acronym";
+  public static final String JSON_PROPERTY_SHORT_NAME = "shortName";
 
   @jakarta.annotation.Nullable
-  private JsonNullable<String> acronym = JsonNullable.<String>undefined();
+  private JsonNullable<String> shortName = JsonNullable.<String>undefined();
 
   public static final String JSON_PROPERTY_CREATED_AT = "createdAt";
 
@@ -275,35 +275,35 @@ public class Organization {
     this.challengeCount = challengeCount;
   }
 
-  public Organization acronym(@jakarta.annotation.Nullable String acronym) {
-    this.acronym = JsonNullable.<String>of(acronym);
+  public Organization shortName(@jakarta.annotation.Nullable String shortName) {
+    this.shortName = JsonNullable.<String>of(shortName);
 
     return this;
   }
 
   /**
-   * An acronym of the organization.
-   * @return acronym
+   * The abbreviation, which may be an acronym, initialism, or other short form (e.g., \&quot;AI\&quot;, \&quot;WashU\&quot;, \&quot;etc.\&quot;)
+   * @return shortName
    */
   @jakarta.annotation.Nullable
   @JsonIgnore
-  public String getAcronym() {
-    return acronym.orElse(null);
+  public String getShortName() {
+    return shortName.orElse(null);
   }
 
-  @JsonProperty(JSON_PROPERTY_ACRONYM)
+  @JsonProperty(JSON_PROPERTY_SHORT_NAME)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public JsonNullable<String> getAcronym_JsonNullable() {
-    return acronym;
+  public JsonNullable<String> getShortName_JsonNullable() {
+    return shortName;
   }
 
-  @JsonProperty(JSON_PROPERTY_ACRONYM)
-  public void setAcronym_JsonNullable(JsonNullable<String> acronym) {
-    this.acronym = acronym;
+  @JsonProperty(JSON_PROPERTY_SHORT_NAME)
+  public void setShortName_JsonNullable(JsonNullable<String> shortName) {
+    this.shortName = shortName;
   }
 
-  public void setAcronym(@jakarta.annotation.Nullable String acronym) {
-    this.acronym = JsonNullable.<String>of(acronym);
+  public void setShortName(@jakarta.annotation.Nullable String shortName) {
+    this.shortName = JsonNullable.<String>of(shortName);
   }
 
   public Organization createdAt(@jakarta.annotation.Nonnull OffsetDateTime createdAt) {
@@ -367,7 +367,7 @@ public class Organization {
       equalsNullable(this.avatarKey, organization.avatarKey) &&
       Objects.equals(this.websiteUrl, organization.websiteUrl) &&
       Objects.equals(this.challengeCount, organization.challengeCount) &&
-      equalsNullable(this.acronym, organization.acronym) &&
+      equalsNullable(this.shortName, organization.shortName) &&
       Objects.equals(this.createdAt, organization.createdAt) &&
       Objects.equals(this.updatedAt, organization.updatedAt)
     );
@@ -394,7 +394,7 @@ public class Organization {
       hashCodeNullable(avatarKey),
       websiteUrl,
       challengeCount,
-      hashCodeNullable(acronym),
+      hashCodeNullable(shortName),
       createdAt,
       updatedAt
     );
@@ -418,7 +418,7 @@ public class Organization {
     sb.append("    avatarKey: ").append(toIndentedString(avatarKey)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("    challengeCount: ").append(toIndentedString(challengeCount)).append("\n");
-    sb.append("    acronym: ").append(toIndentedString(acronym)).append("\n");
+    sb.append("    shortName: ").append(toIndentedString(shortName)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");

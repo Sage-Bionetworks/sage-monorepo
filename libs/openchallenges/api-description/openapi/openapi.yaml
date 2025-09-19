@@ -1964,10 +1964,11 @@ components:
           minimum: 0
           default: 0
           example: 10
-        acronym:
-          description: An acronym of the organization.
+        shortName:
+          description: |
+            The abbreviation, which may be an acronym, initialism, or other short form (e.g., "AI", "WashU", "etc.")
           type: string
-          maxLength: 10
+          maxLength: 32
           example: OC
           nullable: true
         createdAt:
@@ -2015,10 +2016,11 @@ components:
           nullable: true
         websiteUrl:
           $ref: '#/components/schemas/Url'
-        acronym:
-          description: An acronym of the organization.
+        shortName:
+          description: |
+            The abbreviation, which may be an acronym, initialism, or other short form (e.g., "AI", "WashU", "etc.")
           type: string
-          maxLength: 10
+          maxLength: 32
           example: OC
           nullable: true
       required:
@@ -2043,10 +2045,11 @@ components:
           nullable: true
         websiteUrl:
           $ref: '#/components/schemas/Url'
-        acronym:
-          description: An acronym of the organization.
+        shortName:
+          description: |
+            The abbreviation, which may be an acronym, initialism, or other short form (e.g., "AI", "WashU", "etc.")
           type: string
-          maxLength: 10
+          maxLength: 32
           example: OC
           nullable: true
       required:
@@ -2054,7 +2057,7 @@ components:
         - description
         - avatarKey
         - websiteUrl
-        - acronym
+        - shortName
   responses:
     Unauthorized:
       description: Unauthorized

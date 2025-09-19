@@ -40,7 +40,7 @@ public class OrganizationDto {
 
   private Integer challengeCount = 0;
 
-  private @Nullable String acronym = null;
+  private @Nullable String shortName = null;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
@@ -206,24 +206,24 @@ public class OrganizationDto {
     this.challengeCount = challengeCount;
   }
 
-  public OrganizationDto acronym(@Nullable String acronym) {
-    this.acronym = acronym;
+  public OrganizationDto shortName(@Nullable String shortName) {
+    this.shortName = shortName;
     return this;
   }
 
   /**
-   * An acronym of the organization.
-   * @return acronym
+   * The abbreviation, which may be an acronym, initialism, or other short form (e.g., \"AI\", \"WashU\", \"etc.\") 
+   * @return shortName
    */
-  @Size(max = 10) 
-  @Schema(name = "acronym", example = "OC", description = "An acronym of the organization.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("acronym")
-  public @Nullable String getAcronym() {
-    return acronym;
+  @Size(max = 32) 
+  @Schema(name = "shortName", example = "OC", description = "The abbreviation, which may be an acronym, initialism, or other short form (e.g., \"AI\", \"WashU\", \"etc.\") ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("shortName")
+  public @Nullable String getShortName() {
+    return shortName;
   }
 
-  public void setAcronym(@Nullable String acronym) {
-    this.acronym = acronym;
+  public void setShortName(@Nullable String shortName) {
+    this.shortName = shortName;
   }
 
   public OrganizationDto createdAt(OffsetDateTime createdAt) {
@@ -282,14 +282,14 @@ public class OrganizationDto {
         Objects.equals(this.avatarKey, organization.avatarKey) &&
         Objects.equals(this.websiteUrl, organization.websiteUrl) &&
         Objects.equals(this.challengeCount, organization.challengeCount) &&
-        Objects.equals(this.acronym, organization.acronym) &&
+        Objects.equals(this.shortName, organization.shortName) &&
         Objects.equals(this.createdAt, organization.createdAt) &&
         Objects.equals(this.updatedAt, organization.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, login, description, avatarKey, websiteUrl, challengeCount, acronym, createdAt, updatedAt);
+    return Objects.hash(id, name, login, description, avatarKey, websiteUrl, challengeCount, shortName, createdAt, updatedAt);
   }
 
   @Override
@@ -303,7 +303,7 @@ public class OrganizationDto {
     sb.append("    avatarKey: ").append(toIndentedString(avatarKey)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("    challengeCount: ").append(toIndentedString(challengeCount)).append("\n");
-    sb.append("    acronym: ").append(toIndentedString(acronym)).append("\n");
+    sb.append("    shortName: ").append(toIndentedString(shortName)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");
@@ -341,7 +341,7 @@ public class OrganizationDto {
       this.instance.setAvatarKey(value.avatarKey);
       this.instance.setWebsiteUrl(value.websiteUrl);
       this.instance.setChallengeCount(value.challengeCount);
-      this.instance.setAcronym(value.acronym);
+      this.instance.setShortName(value.shortName);
       this.instance.setCreatedAt(value.createdAt);
       this.instance.setUpdatedAt(value.updatedAt);
       return this;
@@ -382,8 +382,8 @@ public class OrganizationDto {
       return this;
     }
     
-    public OrganizationDto.Builder acronym(String acronym) {
-      this.instance.acronym(acronym);
+    public OrganizationDto.Builder shortName(String shortName) {
+      this.instance.shortName(shortName);
       return this;
     }
     

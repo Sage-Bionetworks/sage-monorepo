@@ -20,8 +20,8 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.sagebionetworks.openchallenges.api.client.model.BasicError;
-import org.sagebionetworks.openchallenges.api.client.model.LoginRequest;
-import org.sagebionetworks.openchallenges.api.client.model.LoginResponse;
+import org.sagebionetworks.openchallenges.api.client.model.UpdateUserProfileRequest;
+import org.sagebionetworks.openchallenges.api.client.model.UserProfile;
 
 /**
  * API tests for AuthenticationApi
@@ -32,14 +32,25 @@ public class AuthenticationApiTest {
   private final AuthenticationApi api = new AuthenticationApi();
 
   /**
-   * User login
+   * Get user profile
    *
-   * Authenticate user and return JWT token
+   * Get the authenticated user&#39;s profile information
    */
   @Test
-  public void loginTest() {
-    LoginRequest loginRequest = null;
-    LoginResponse response = api.login(loginRequest);
+  public void getUserProfileTest() {
+    UserProfile response = api.getUserProfile();
+    // TODO: test validations
+  }
+
+  /**
+   * Update user profile
+   *
+   * Update the authenticated user&#39;s profile information
+   */
+  @Test
+  public void updateUserProfileTest() {
+    UpdateUserProfileRequest updateUserProfileRequest = null;
+    UserProfile response = api.updateUserProfile(updateUserProfileRequest);
     // TODO: test validations
   }
 }

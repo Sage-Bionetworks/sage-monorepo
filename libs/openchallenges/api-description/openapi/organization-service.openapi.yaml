@@ -20,7 +20,7 @@ tags:
     description: Operations about organizations
   - name: Challenge Participation
     description: Operations about a challenge participation
-    x-internal: true
+    x-sage-internal: true
 paths:
   /organizations:
     get:
@@ -160,7 +160,7 @@ paths:
     parameters:
       - $ref: '#/components/parameters/org'
     post:
-      x-internal: true
+      x-sage-internal: true
       tags:
         - Challenge Participation
       summary: Create a new challenge participation
@@ -198,7 +198,7 @@ paths:
       - $ref: '#/components/parameters/challengeId'
       - $ref: '#/components/parameters/challengeParticipationRole'
     delete:
-      x-internal: true
+      x-sage-internal: true
       tags:
         - Challenge Participation
       summary: Delete a specific challenge participation
@@ -392,10 +392,11 @@ components:
           minimum: 0
           default: 0
           example: 10
-        acronym:
-          description: An acronym of the organization.
+        shortName:
+          description: |
+            The abbreviation, which may be an acronym, initialism, or other short form (e.g., "AI", "WashU", "etc.")
           type: string
-          maxLength: 10
+          maxLength: 32
           example: OC
           nullable: true
         createdAt:
@@ -462,10 +463,11 @@ components:
           nullable: true
         websiteUrl:
           $ref: '#/components/schemas/Url'
-        acronym:
-          description: An acronym of the organization.
+        shortName:
+          description: |
+            The abbreviation, which may be an acronym, initialism, or other short form (e.g., "AI", "WashU", "etc.")
           type: string
-          maxLength: 10
+          maxLength: 32
           example: OC
           nullable: true
       required:
@@ -490,10 +492,11 @@ components:
           nullable: true
         websiteUrl:
           $ref: '#/components/schemas/Url'
-        acronym:
-          description: An acronym of the organization.
+        shortName:
+          description: |
+            The abbreviation, which may be an acronym, initialism, or other short form (e.g., "AI", "WashU", "etc.")
           type: string
-          maxLength: 10
+          maxLength: 32
           example: OC
           nullable: true
       required:
@@ -501,7 +504,7 @@ components:
         - description
         - avatarKey
         - websiteUrl
-        - acronym
+        - shortName
     ChallengeId:
       description: The unique identifier of the challenge.
       type: integer

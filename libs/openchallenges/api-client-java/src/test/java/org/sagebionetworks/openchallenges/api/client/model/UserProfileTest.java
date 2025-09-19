@@ -13,32 +13,34 @@
 package org.sagebionetworks.openchallenges.api.client.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.net.URI;
 import java.time.OffsetDateTime;
-import java.util.NoSuchElementException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.openapitools.jackson.nullable.JsonNullable;
-import org.openapitools.jackson.nullable.JsonNullable;
+import org.sagebionetworks.openchallenges.api.client.model.AuthScope;
+import org.sagebionetworks.openchallenges.api.client.model.UserRole;
 
 /**
- * Model tests for Organization
+ * Model tests for UserProfile
  */
-class OrganizationTest {
+class UserProfileTest {
 
-  private final Organization model = new Organization();
+  private final UserProfile model = new UserProfile();
 
   /**
-   * Model tests for Organization
+   * Model tests for UserProfile
    */
   @Test
-  void testOrganization() {
-    // TODO: test Organization
+  void testUserProfile() {
+    // TODO: test UserProfile
   }
 
   /**
@@ -50,59 +52,75 @@ class OrganizationTest {
   }
 
   /**
-   * Test the property 'name'
+   * Test the property 'username'
    */
   @Test
-  void nameTest() {
-    // TODO: test name
+  void usernameTest() {
+    // TODO: test username
   }
 
   /**
-   * Test the property 'login'
+   * Test the property 'email'
    */
   @Test
-  void loginTest() {
-    // TODO: test login
+  void emailTest() {
+    // TODO: test email
   }
 
   /**
-   * Test the property 'description'
+   * Test the property 'firstName'
    */
   @Test
-  void descriptionTest() {
-    // TODO: test description
+  void firstNameTest() {
+    // TODO: test firstName
   }
 
   /**
-   * Test the property 'avatarKey'
+   * Test the property 'lastName'
    */
   @Test
-  void avatarKeyTest() {
-    // TODO: test avatarKey
+  void lastNameTest() {
+    // TODO: test lastName
   }
 
   /**
-   * Test the property 'websiteUrl'
+   * Test the property 'role'
    */
   @Test
-  void websiteUrlTest() {
-    // TODO: test websiteUrl
+  void roleTest() {
+    // TODO: test role
   }
 
   /**
-   * Test the property 'challengeCount'
+   * Test the property 'scopes'
    */
   @Test
-  void challengeCountTest() {
-    // TODO: test challengeCount
+  void scopesTest() {
+    // TODO: test scopes
   }
 
   /**
-   * Test the property 'shortName'
+   * Test the property 'avatarUrl'
    */
   @Test
-  void shortNameTest() {
-    // TODO: test shortName
+  void avatarUrlTest() {
+    // TODO: test avatarUrl
+  }
+
+  /**
+   * Test the property 'bio'
+   */
+  @Test
+  void bioTest() {
+    // TODO: test bio
+  }
+
+  /**
+   * Test the property 'website'
+   */
+  @Test
+  void websiteTest() {
+    // TODO: test website
   }
 
   /**

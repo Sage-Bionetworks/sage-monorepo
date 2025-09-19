@@ -18,12 +18,9 @@ security:
 tags:
   - description: Operations about organizations
     name: Organization
-    x-audience:
-      - public
   - description: Operations about a challenge participation
     name: Challenge Participation
-    x-audience:
-      - internal
+    x-sage-internal: true
 paths:
   /organizations:
     get:
@@ -55,8 +52,6 @@ paths:
       summary: List organizations
       tags:
         - Organization
-      x-audience:
-        - public
       x-anonymous-access: true
       x-accepts:
         - application/json
@@ -95,8 +90,6 @@ paths:
       summary: Create an organization
       tags:
         - Organization
-      x-audience:
-        - public
       x-content-type: application/json
       x-accepts:
         - application/json
@@ -140,8 +133,6 @@ paths:
       summary: Delete an organization
       tags:
         - Organization
-      x-audience:
-        - public
       x-accepts:
         - application/problem+json
       x-tags:
@@ -182,8 +173,6 @@ paths:
       summary: Get an organization
       tags:
         - Organization
-      x-audience:
-        - public
       x-anonymous-access: true
       x-accepts:
         - application/json
@@ -240,8 +229,6 @@ paths:
       summary: Update an existing organization
       tags:
         - Organization
-      x-audience:
-        - public
       x-content-type: application/json
       x-accepts:
         - application/json
@@ -297,8 +284,7 @@ paths:
       summary: Create a new challenge participation
       tags:
         - Challenge Participation
-      x-audience:
-        - internal
+      x-sage-internal: true
       x-content-type: application/json
       x-accepts:
         - application/json
@@ -358,8 +344,7 @@ paths:
       summary: Delete a specific challenge participation
       tags:
         - Challenge Participation
-      x-audience:
-        - internal
+      x-sage-internal: true
       x-accepts:
         - application/problem+json
       x-tags:
@@ -591,12 +576,12 @@ components:
         createdAt: 2022-07-04T22:19:11Z
         avatarKey: logo/dream.png
         websiteUrl: https://openchallenges.io
-        acronym: OC
         name: Example organization
         description: A description of the organization.
         id: 1
         challengeCount: 10
         login: example-org
+        shortName: OC
         updatedAt: 2022-07-04T22:19:11Z
       properties:
         id:
@@ -637,10 +622,11 @@ components:
           example: 10
           minimum: 0
           type: integer
-        acronym:
-          description: An acronym of the organization.
+        shortName:
+          description: |
+            The abbreviation, which may be an acronym, initialism, or other short form (e.g., "AI", "WashU", "etc.")
           example: OC
-          maxLength: 10
+          maxLength: 32
           nullable: true
           type: string
         createdAt:
@@ -683,22 +669,22 @@ components:
           - createdAt: 2022-07-04T22:19:11Z
             avatarKey: logo/dream.png
             websiteUrl: https://openchallenges.io
-            acronym: OC
             name: Example organization
             description: A description of the organization.
             id: 1
             challengeCount: 10
             login: example-org
+            shortName: OC
             updatedAt: 2022-07-04T22:19:11Z
           - createdAt: 2022-07-04T22:19:11Z
             avatarKey: logo/dream.png
             websiteUrl: https://openchallenges.io
-            acronym: OC
             name: Example organization
             description: A description of the organization.
             id: 1
             challengeCount: 10
             login: example-org
+            shortName: OC
             updatedAt: 2022-07-04T22:19:11Z
         hasPrevious: true
         hasNext: true
@@ -752,10 +738,11 @@ components:
           maxLength: 500
           nullable: true
           type: string
-        acronym:
-          description: An acronym of the organization.
+        shortName:
+          description: |
+            The abbreviation, which may be an acronym, initialism, or other short form (e.g., "AI", "WashU", "etc.")
           example: OC
-          maxLength: 10
+          maxLength: 32
           nullable: true
           type: string
       required:
@@ -785,17 +772,18 @@ components:
           maxLength: 500
           nullable: true
           type: string
-        acronym:
-          description: An acronym of the organization.
+        shortName:
+          description: |
+            The abbreviation, which may be an acronym, initialism, or other short form (e.g., "AI", "WashU", "etc.")
           example: OC
-          maxLength: 10
+          maxLength: 32
           nullable: true
           type: string
       required:
-        - acronym
         - avatarKey
         - description
         - name
+        - shortName
         - websiteUrl
       type: object
     ChallengeId:
@@ -862,3 +850,4 @@ components:
         key exchange
       scheme: bearer
       type: http
+x-oauth2-audience: urn:openchallenges:organization-service

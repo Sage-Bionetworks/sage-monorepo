@@ -91,6 +91,17 @@ export class Configuration {
         return typeof this.accessToken === 'function' ? this.accessToken() : this.accessToken;
       };
     }
+
+    // init default apiKey credential
+    if (!this.credentials['apiKey']) {
+      this.credentials['apiKey'] = () => {
+        if (this.apiKeys === null || this.apiKeys === undefined) {
+          return undefined;
+        } else {
+          return this.apiKeys['apiKey'] || this.apiKeys['X-API-Key'];
+        }
+      };
+    }
   }
 
   /**

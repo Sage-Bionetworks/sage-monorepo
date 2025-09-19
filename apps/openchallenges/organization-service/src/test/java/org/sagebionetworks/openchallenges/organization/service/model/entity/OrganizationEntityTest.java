@@ -15,7 +15,7 @@ public class OrganizationEntityTest {
   private String description = "Test description";
   private OffsetDateTime createdAt = OffsetDateTime.now();
   private OffsetDateTime updatedAt = OffsetDateTime.now();
-  private String acronym = "TO";
+  private String shortName = "TO";
   private OrganizationEntity entityFromConstructor;
   private OrganizationEntity entityFromConstructor2;
   private OrganizationEntity entityFromConstructor3;
@@ -31,7 +31,7 @@ public class OrganizationEntityTest {
     entityFromConstructor.setWebsiteUrl(websiteUrl);
     entityFromConstructor.setCreatedAt(createdAt);
     entityFromConstructor.setUpdatedAt(updatedAt);
-    entityFromConstructor.setAcronym(acronym);
+    entityFromConstructor.setShortName(shortName);
     entityFromConstructor.setCategories(Collections.emptyList());
     entityFromConstructor.setChallengeParticipations(Collections.emptyList());
 
@@ -44,7 +44,7 @@ public class OrganizationEntityTest {
     entityFromConstructor2.setWebsiteUrl(websiteUrl);
     entityFromConstructor2.setCreatedAt(createdAt);
     entityFromConstructor2.setUpdatedAt(updatedAt);
-    entityFromConstructor2.setAcronym(acronym);
+    entityFromConstructor2.setShortName(shortName);
     entityFromConstructor2.setCategories(Collections.emptyList());
     entityFromConstructor2.setChallengeParticipations(Collections.emptyList());
 
@@ -57,7 +57,7 @@ public class OrganizationEntityTest {
     entityFromConstructor3.setWebsiteUrl("https://another-example.com");
     entityFromConstructor3.setCreatedAt(createdAt);
     entityFromConstructor3.setUpdatedAt(updatedAt);
-    entityFromConstructor3.setAcronym("AO");
+    entityFromConstructor3.setShortName("AO");
     entityFromConstructor3.setCategories(Collections.emptyList());
     entityFromConstructor3.setChallengeParticipations(Collections.emptyList());
   }
@@ -74,7 +74,7 @@ public class OrganizationEntityTest {
       .description(description)
       .createdAt(createdAt)
       .updatedAt(updatedAt)
-      .acronym(acronym)
+      .shortName(shortName)
       .build();
 
     Assertions.assertEquals(id, entity.getId());
@@ -86,7 +86,7 @@ public class OrganizationEntityTest {
     Assertions.assertEquals(description, entity.getDescription());
     Assertions.assertEquals(createdAt, entity.getCreatedAt());
     Assertions.assertEquals(updatedAt, entity.getUpdatedAt());
-    Assertions.assertEquals(acronym, entity.getAcronym());
+    Assertions.assertEquals(shortName, entity.getShortName());
   }
 
   @Test
@@ -103,7 +103,7 @@ public class OrganizationEntityTest {
     Assertions.assertEquals(description, entityFromConstructor.getDescription());
     Assertions.assertEquals(createdAt, entityFromConstructor.getCreatedAt());
     Assertions.assertEquals(updatedAt, entityFromConstructor.getUpdatedAt());
-    Assertions.assertEquals(acronym, entityFromConstructor.getAcronym());
+    Assertions.assertEquals(shortName, entityFromConstructor.getShortName());
   }
 
   @Test

@@ -45,7 +45,8 @@ apis:
   auth-public:
     root: ./src/auth.openapi.yaml
     decorators:
-      remove-x-internal: on
+      remove-x-internal:
+        internalFlagProperty: 'x-sage-internal'
   auth-service:
     root: ./src/auth.openapi.yaml
 
@@ -53,7 +54,8 @@ apis:
   challenge-public:
     root: ./src/challenge.openapi.yaml
     decorators:
-      remove-x-internal: on
+      remove-x-internal:
+        internalFlagProperty: 'x-sage-internal'
   challenge-service:
     root: ./src/challenge.openapi.yaml
 
@@ -61,7 +63,8 @@ apis:
   image-public:
     root: ./src/image.openapi.yaml
     decorators:
-      remove-x-internal: on
+      remove-x-internal:
+        internalFlagProperty: 'x-sage-internal'
   image-service:
     root: ./src/image.openapi.yaml
 
@@ -69,6 +72,7 @@ apis:
   organization-public:
     root: ./src/organization.openapi.yaml
     decorators:
-      remove-x-internal: on
+      remove-x-internal:
+        internalFlagProperty: 'x-sage-internal'
   organization-service:
     root: ./src/organization.openapi.yaml

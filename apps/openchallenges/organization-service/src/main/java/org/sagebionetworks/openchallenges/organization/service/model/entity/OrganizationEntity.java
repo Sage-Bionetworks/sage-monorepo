@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 import java.time.OffsetDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -54,7 +55,8 @@ public class OrganizationEntity {
   private String name;
 
   @NaturalId(mutable = true)
-  @Column(nullable = false, unique = true)
+  @Size(min = 2, max = 64)
+  @Column(nullable = false, unique = true, length = 64)
   private String login;
 
   @Column(name = "avatar_key", nullable = true)
@@ -90,8 +92,8 @@ public class OrganizationEntity {
   @UpdateTimestamp
   private OffsetDateTime updatedAt;
 
-  @Column(name = "acronym", nullable = true)
-  private String acronym;
+  @Column(name = "short_name", nullable = true)
+  private String shortName;
 
   /**
    * Returns the unique number of challenges this organization has participated in.
