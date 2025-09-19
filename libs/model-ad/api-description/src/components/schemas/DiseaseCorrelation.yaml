@@ -1,0 +1,47 @@
+type: object
+description: Disease Correlation
+properties:
+  name:
+    type: string
+    description: Model name
+  matched_control:
+    type: string
+    description: Matched control for the model
+  model_type:
+    type: string
+    description: Type of model
+  modified_genes:
+    type: array
+    items:
+      type: string
+    description: List of modified genes
+  cluster:
+    type: string
+    description: Cluster information
+  age:
+    type: string
+    description: Age of the model
+  sex:
+    $ref: './Sex.yaml'
+  IFG:
+    $ref: './CorrelationResult.yaml'
+  PHG:
+    $ref: './CorrelationResult.yaml'
+  TCX:
+    $ref: './CorrelationResult.yaml'
+  CBE:
+    $ref: './CorrelationResult.yaml'
+  DLPFC:
+    $ref: './CorrelationResult.yaml'
+  FP:
+    $ref: './CorrelationResult.yaml'
+  STG:
+    $ref: './CorrelationResult.yaml'
+required:
+  - name
+  - matched_control
+  - model_type
+  - modified_genes
+  - cluster
+  - age
+  - sex

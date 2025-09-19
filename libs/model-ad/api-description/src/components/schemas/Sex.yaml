@@ -1,0 +1,5 @@
+type: string
+description: Sex
+enum:
+  - Female
+  - Male
