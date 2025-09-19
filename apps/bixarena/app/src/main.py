@@ -1,22 +1,12 @@
-"""
-main.py - Clean OAuth integration using file-based redirect (like oauth_test.py)
-"""
-
 import argparse
 import urllib.parse
 import gradio as gr
-import webbrowser
-import os
-from page.bixarena_header import build_header, update_user_session, clear_user_session
+from page.bixarena_header import build_header, get_error_display, update_login_button
 from page.bixarena_battle import build_battle_page
 from page.bixarena_leaderboard import build_leaderboard_page
 from page.bixarena_home import build_home_page
-from page.bixarena_user import build_user_page, handle_logout
-from config.oauth_handler import (
-    handle_synapse_callback,
-    get_synapse_login_url,
-    get_current_user,
-)
+from page.bixarena_user import build_user_page, handle_logout, update_user_page
+from config.auth_service import get_auth_service
 
 
 class PageNavigator:
@@ -30,77 +20,54 @@ class PageNavigator:
         return [gr.Column(visible=(i == page_index)) for i in range(len(self.sections))]
 
 
-def handle_login_redirect():
-    """Handle login button click - pure server-side redirect"""
-    # Check if already logged in
-    current_user = get_current_user()
-    if current_user:
-        # Already logged in, no action needed
-        return ""
-
-    # Generate login URL and perform server-side redirect
-    login_url, state = get_synapse_login_url()
-    print(f"🔗 Redirecting to Synapse: {login_url}")
-
-    # Use meta refresh for server-side redirect (no JavaScript)
-    redirect_html = f'<meta http-equiv="refresh" content="0;url={login_url}">'
-    return redirect_html
-
-
 def check_oauth_callback(request: gr.Request):
-    """Check for OAuth callback in URL and process it"""
-    if request is None:
-        return "", get_login_button_state()
+    """Process OAuth callback and return updated states"""
+    auth_service = get_auth_service()
 
-    # Extract URL parameters
-    try:
-        # Get the full URL from request
-        if hasattr(request, "url"):
+    if request and hasattr(request, "url"):
+        try:
             parsed_url = urllib.parse.urlparse(str(request.url))
             url_params = urllib.parse.parse_qs(parsed_url.query)
 
-            # Check for OAuth code
+            # Check for OAuth callback parameters
             if "code" in url_params:
                 oauth_code = url_params["code"][0]
-                print(f"🔍 Processing OAuth code: {oauth_code[:20]}...")
+                oauth_state = url_params.get("state", [None])[0]
 
-                # Process the OAuth callback
-                user_profile = handle_synapse_callback(oauth_code)
-                if user_profile:
-                    # Update header state
-                    update_user_session(user_profile)
-                    username = user_profile.get(
-                        "firstName", user_profile.get("userName", "User")
-                    )
-                    print(f"✅ Login successful for: {username}")
+                print(f"🔍 Processing OAuth callback with code: {oauth_code[:20]}...")
 
-                    # Return updated button state
-                    return "", gr.Button(username, variant="primary")
-                else:
-                    print("❌ Login failed")
-    except Exception as e:
-        print(f"Error processing OAuth callback: {e}")
+                # Process OAuth callback through auth service
+                success = auth_service.handle_oauth_callback(oauth_code, oauth_state)
 
-    # Return current button state
-    return "", get_login_button_state()
+                if not success:
+                    print("❌ OAuth callback processing failed")
 
+            # Check for OAuth error parameters
+            elif "error" in url_params:
+                error = url_params["error"][0]
+                error_description = url_params.get(
+                    "error_description", ["Unknown error"]
+                )[0]
+                auth_service.session.set_error(
+                    f"OAuth error: {error} - {error_description}"
+                )
+                print(f"❌ OAuth error: {error}")
 
-def get_login_button_state():
-    """Get the current login button state based on user authentication"""
-    current_user = get_current_user()
-    if current_user:
-        username = current_user.get("firstName", current_user.get("userName", "User"))
-        return gr.Button(username, variant="primary")
-    else:
-        return gr.Button("Login", variant="primary")
+        except Exception as e:
+            auth_service.session.set_error(f"Callback processing error: {str(e)}")
+            print(f"❌ Error processing OAuth callback: {e}")
+
+    # Return updated states for both header and user page
+    return (get_error_display(), update_login_button(), *update_user_page())
 
 
 def handle_user_logout_and_navigate(navigator):
     """Handle logout and navigate to home page"""
-    handle_logout()
-    clear_user_session()
-    # Return home page visibility and updated login button
-    return navigator.show_page(0) + [gr.Button("Login", variant="primary")]
+    auth_service = get_auth_service()
+    auth_service.logout_user()
+
+    # Return home page visibility and updated states
+    return navigator.show_page(0) + [update_login_button()]
 
 
 def parse_args():
@@ -136,13 +103,13 @@ def parse_args():
 
 
 def build_app(register_api_endpoint_file=None, moderate=False):
-    """Create the main application"""
+    """Create the main application with clean separation of concerns"""
 
     with gr.Blocks(title="BixArena - Biomedical LLM Evaluation") as demo:
-        # OAuth status - only visible when needed
-        oauth_status = gr.HTML("")
+        # Error display
+        error_display = gr.HTML("")
 
-        # Header
+        # Header with reactive login button
         header, battle_btn, leaderboard_btn, login_btn = build_header()
 
         # Pages
@@ -156,65 +123,49 @@ def build_app(register_api_endpoint_file=None, moderate=False):
             leaderboard_content = build_leaderboard_page()
 
         with gr.Column(visible=False) as user_page:
-            # Build a placeholder user page that will be updated
-            with gr.Row():
-                user_welcome = gr.HTML("")
-            with gr.Row():
-                logout_btn = gr.Button("Logout", variant="primary", size="lg")
+            # User page components managed by user page script
+            user_container, welcome_display, logout_btn = build_user_page()
 
         # Initialize navigator
         all_pages = [home_page, battle_page, leaderboard_page, user_page]
         navigator = PageNavigator(all_pages)
 
-        # Page navigation
+        # Page navigation handlers
         battle_btn.click(lambda: navigator.show_page(1), outputs=all_pages)
         leaderboard_btn.click(lambda: navigator.show_page(2), outputs=all_pages)
         cta_btn.click(lambda: navigator.show_page(1), outputs=all_pages)
 
-        # Login button handling - need to handle both states dynamically
-        def handle_login_button_click():
-            """Handle login button click - check user state dynamically"""
-            current_user = get_current_user()
-            if current_user is None:
-                # Not logged in - redirect to login
-                return handle_login_redirect(), *navigator.show_page(0), ""
+        # Login button handler - when user is logged in, show user page
+        def handle_login_click():
+            auth_service = get_auth_service()
+            if auth_service.is_user_authenticated():
+                # Show user page and update its content
+                return *navigator.show_page(3), *update_user_page()
             else:
-                # Logged in - show user page and update welcome message
-                if current_user:
-                    username = current_user.get(
-                        "firstName", current_user.get("userName", "User")
-                    )
-                else:
-                    username = "Guest"
-
-                welcome_html = f"""
-                    <div style="text-align: center; padding: 40px;">
-                        <h2>Welcome, {username}!</h2>
-                    </div>
-                """
-
-                return "", *navigator.show_page(3), welcome_html
+                # Stay on current page (OAuth redirect happens via button link)
+                return *navigator.show_page(0), *update_user_page()
 
         login_btn.click(
-            fn=handle_login_button_click,
-            outputs=[oauth_status] + all_pages + [user_welcome],
+            fn=handle_login_click,
+            outputs=all_pages + [welcome_display, logout_btn],
         )
 
-        def handle_user_logout_and_navigate(navigator):
-            """Handle logout and navigate to home page"""
+        # Logout button handler
+        def handle_logout_click():
             handle_logout()
-            clear_user_session()
-            # Return home page visibility and updated login button
-            return navigator.show_page(0) + [gr.Button("Login", variant="primary")]
+            # Return to home page and update both header and user page
+            return (*navigator.show_page(0), update_login_button(), *update_user_page())
 
-        # Logout button handling
         logout_btn.click(
-            fn=lambda: handle_user_logout_and_navigate(navigator),
-            outputs=all_pages + [login_btn],
+            fn=handle_logout_click,
+            outputs=all_pages + [login_btn, welcome_display, logout_btn],
         )
 
-        # Check for OAuth callback on page load and update button
-        demo.load(fn=check_oauth_callback, outputs=[oauth_status, login_btn])
+        # Handle OAuth callback and update all reactive components on page load
+        demo.load(
+            fn=check_oauth_callback,
+            outputs=[error_display, login_btn, welcome_display, logout_btn],
+        )
 
     return demo
 

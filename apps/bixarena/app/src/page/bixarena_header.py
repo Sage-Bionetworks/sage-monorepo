@@ -1,21 +1,9 @@
-"""
-page/bixarena_header.py - Clean header component with dynamic login URL
-"""
-
 import gradio as gr
-from config.oauth_handler import get_current_user, get_synapse_login_url
-
-# Simple global state for current user
-current_user = None
+from config.auth_service import get_auth_service
 
 
 def build_header():
-    """Build header with dynamic login state"""
-    global current_user
-
-    # Check current login status
-    current_user = get_current_user()
-
+    """Build header - login button will be managed reactively"""
     with gr.Row(elem_id="header-row") as header:
         with gr.Column(scale=4):
             gr.HTML("""
@@ -35,16 +23,8 @@ def build_header():
             leaderboard_btn = gr.Button("Leaderboard", variant="secondary")
 
         with gr.Column(scale=1):
-            # Always create login button, but handle differently based on auth state
-            if current_user is None:
-                # For non-logged in users
-                login_btn = gr.Button("Login", variant="primary")
-            else:
-                # Show username if logged in
-                username = current_user.get(
-                    "firstName", current_user.get("userName", "User")
-                )
-                login_btn = gr.Button(username, variant="primary")
+            # Create reactive login button - will be updated by update_login_button
+            login_btn = gr.Button("Login", variant="primary", link="")
 
     # CSS to align header items
     gr.HTML("""
@@ -61,27 +41,37 @@ def build_header():
     return header, battle_btn, leaderboard_btn, login_btn
 
 
-def get_user_display_name():
-    """Get current user's display name"""
-    global current_user
-    if current_user:
-        return current_user.get("firstName", current_user.get("userName", "User"))
-    return None
+def update_login_button():
+    """Update login button state and link based on authentication"""
+    auth_service = get_auth_service()
+
+    if auth_service.is_user_authenticated():
+        # User is logged in - show username, no external link
+        username = auth_service.session.get_user_display_name()
+        return gr.Button(username, variant="primary", link=None)
+    else:
+        # User not logged in - show login button with OAuth link
+        login_url = auth_service.initiate_login()
+        return gr.Button("Login", variant="primary", link=login_url)
 
 
-def is_user_logged_in():
-    """Check if user is currently logged in"""
-    global current_user
-    return current_user is not None
+def get_error_display():
+    """Get error message display HTML"""
+    auth_service = get_auth_service()
+    error = auth_service.get_current_error()
+
+    if error:
+        return f"""
+            <div style="background-color: #fee; border: 1px solid #fcc; 
+                        color: #c00; padding: 10px; border-radius: 4px; margin: 10px 0;">
+                ⚠️ {error}
+            </div>
+        """
+    return ""
 
 
-def update_user_session(user_info):
-    """Update the current user session"""
-    global current_user
-    current_user = user_info
-
-
-def clear_user_session():
-    """Clear the current user session"""
-    global current_user
-    current_user = None
+def get_login_button_state():
+    """Get current login button state for updates"""
+    auth_service = get_auth_service()
+    button_config = auth_service.get_login_button_config()
+    return gr.Button(button_config["value"], variant=button_config["variant"])
