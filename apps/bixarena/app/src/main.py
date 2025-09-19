@@ -12,7 +12,7 @@ from config.auth_service import get_auth_service
 class PageNavigator:
     """Clean navigation class for managing page visibility"""
 
-    def __init__(self, sections):
+    def init(self, sections):
         self.sections = sections
 
     def show_page(self, page_index):
@@ -34,13 +34,15 @@ def check_oauth_callback(request: gr.Request):
                 oauth_code = url_params["code"][0]
                 oauth_state = url_params.get("state", [None])[0]
 
-                print(f"🔍 Processing OAuth callback with code: {oauth_code[:20]}...")
-
                 # Process OAuth callback through auth service
                 success = auth_service.handle_oauth_callback(oauth_code, oauth_state)
 
-                if not success:
-                    print("❌ OAuth callback processing failed")
+                if success:
+                    print(
+                        f"✅ Login successful: {auth_service.session.get_user_display_name()}"
+                    )
+                else:
+                    print("❌ Login failed")
 
             # Check for OAuth error parameters
             elif "error" in url_params:
@@ -51,11 +53,11 @@ def check_oauth_callback(request: gr.Request):
                 auth_service.session.set_error(
                     f"OAuth error: {error} - {error_description}"
                 )
-                print(f"❌ OAuth error: {error}")
+                print(f"❌ Login failed: {error}")
 
         except Exception as e:
             auth_service.session.set_error(f"Callback processing error: {str(e)}")
-            print(f"❌ Error processing OAuth callback: {e}")
+            print(f"❌ Login failed: {str(e)}")
 
     # Return updated states for both header and user page
     return (get_error_display(), update_login_button(), *update_user_page())
@@ -104,6 +106,26 @@ def parse_args():
 
 def build_app(register_api_endpoint_file=None, moderate=False):
     """Create the main application with clean separation of concerns"""
+
+    # JavaScript code to clean OAuth parameters from URL (runs after Python processing)
+    cleanup_js = """
+    function() {
+        setTimeout(function() {
+            if (window.location.search.includes('code=') || 
+                window.location.search.includes('state=') || 
+                window.location.search.includes('error=')) {
+
+                const url = new URL(window.location);
+                url.searchParams.delete('code');
+                url.searchParams.delete('state'); 
+                url.searchParams.delete('error');
+                url.searchParams.delete('error_description');
+
+                window.history.replaceState({}, document.title, url.pathname + url.hash);
+            }
+        }, 100);
+    }
+    """
 
     with gr.Blocks(title="BixArena - Biomedical LLM Evaluation") as demo:
         # Error display
@@ -161,16 +183,17 @@ def build_app(register_api_endpoint_file=None, moderate=False):
             outputs=all_pages + [login_btn, welcome_display, logout_btn],
         )
 
-        # Handle OAuth callback and update all reactive components on page load
+        # Handle OAuth callback and clean URL with JavaScript
         demo.load(
             fn=check_oauth_callback,
             outputs=[error_display, login_btn, welcome_display, logout_btn],
+            js=cleanup_js,
         )
 
     return demo
 
 
-if __name__ == "__main__":
+if name == "main":
     args = parse_args()
 
     app = build_app(

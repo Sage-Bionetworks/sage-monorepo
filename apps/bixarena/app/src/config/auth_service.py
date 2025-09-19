@@ -1,10 +1,11 @@
 """
 Authentication service - handles OAuth business logic and integrates with session management
+Separates authentication logic from UI components
 """
 
 from typing import Optional, Dict, Any, Tuple
-from config.oauth_client import SynapseOAuthClient
-from config.session_manager import get_session
+from .oauth_client import SynapseOAuthClient
+from .session_manager import get_session
 
 
 class AuthService:
@@ -48,6 +49,14 @@ class AuthService:
             True if login successful, False otherwise
         """
         try:
+            # Check if this code has already been processed
+            if self.session.is_code_processed(code):
+                print("⚠️ OAuth code already processed, skipping")
+                return self.session.is_authenticated()  # Return current auth state
+
+            # Mark code as processed immediately to prevent reuse
+            self.session.mark_code_processed(code)
+
             # Verify OAuth state if provided
             if state and not self.session.verify_oauth_state(state):
                 self.session.set_error("Invalid OAuth state - possible security issue")
