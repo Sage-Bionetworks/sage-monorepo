@@ -22,6 +22,6 @@ public record AppProperties(
 ) {
   public record ThumborProperties(
     @NotBlank(message = "Thumbor host must not be blank") String host,
-    @NotNull(message = "Thumbor security key must not be blank") URI securityKey
+    @NotNull(message = "Thumbor security key must not be blank") String securityKey
   ) {}
 }
