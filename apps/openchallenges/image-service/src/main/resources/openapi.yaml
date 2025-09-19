@@ -119,9 +119,6 @@ components:
           description: |
             The HTTPS URL of the image. Use this as an alternative to `objectKey`.
           format: uri
-          maxLength: 2048
-          minLength: 1
-          pattern: ^https?://
           type: string
         height:
           $ref: '#/components/schemas/ImageHeight'

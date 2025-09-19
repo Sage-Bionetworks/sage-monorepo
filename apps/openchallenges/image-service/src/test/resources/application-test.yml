@@ -5,11 +5,13 @@ spring:
 server:
   port: 8086
 
-openchallenges-image-service:
+app:
   welcome-message: 'Welcome to the image service test.'
-  thumbor-host: http://localhost:8000/img/
-  thumbor-security-key: changeme
-  is-deployed-on-aws: false
+  thumbor:
+    host: http://localhost:8000/img/
+    security-key: changeme
+    use-placeholder-images: false
+    placeholder-url-template: https://images.placeholders.dev/{width}x{height}
 
 logging:
   level:

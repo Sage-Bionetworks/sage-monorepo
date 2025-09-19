@@ -4,6 +4,7 @@ import com.squareup.pollexor.Thumbor;
 import com.squareup.pollexor.ThumborUrlBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.openchallenges.image.service.configuration.AppProperties;
 import org.sagebionetworks.openchallenges.image.service.exception.ImageHeightNotSpecifiedException;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageAspectRatioDto;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageDto;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class ImageService {
 
   private final Thumbor thumbor;
+  private final AppProperties appProperties;
 
   public ImageDto getImage(ImageQueryDto query) {
     String imageUrl = generateImageUrl(query);
@@ -32,14 +34,31 @@ public class ImageService {
 
     log.info("Requesting an image url for the objectId: {}", query.getObjectKey());
 
-    ThumborUrlBuilder builder = thumbor.buildImage(query.getObjectKey());
     Integer height = getImageHeightInPx(query.getHeight());
+    Integer width = (height != null) ? getImageWidthInPixel(height, query.getAspectRatio()) : null; // width only matters if we have a height
 
-    if (height != null) {
-      Integer width = getImageWidthInPixel(height, query.getAspectRatio());
-      builder = builder.resize(width, height);
+    // Placeholder logic (dev convenience when using Thumbor's HTTP loader)
+    AppProperties.ThumborProperties thumborProps = appProperties.thumbor();
+    if (thumborProps.usePlaceholderImages()) {
+      String template = thumborProps.placeholderUrlTemplate();
+      if (template == null || template.isBlank()) {
+        template = "https://images.placeholders.dev/{width}x{height}";
+      }
+      // If no height was requested, use a default (e.g. 250) so we can still return something
+      int effectiveHeight = (height != null) ? height : 250;
+      int effectiveWidth = (width != null && width > 0) ? width : effectiveHeight; // square fallback
+      String placeholderUrl = template
+        .replace("{width}", String.valueOf(effectiveWidth))
+        .replace("{height}", String.valueOf(effectiveHeight));
+      log.debug("Returning placeholder image URL: {}", placeholderUrl);
+      return placeholderUrl;
     }
 
+    // Normal Thumbor flow
+    ThumborUrlBuilder builder = thumbor.buildImage(query.getObjectKey());
+    if (height != null) {
+      builder = builder.resize(width, height);
+    }
     return builder.toUrl();
   }
 

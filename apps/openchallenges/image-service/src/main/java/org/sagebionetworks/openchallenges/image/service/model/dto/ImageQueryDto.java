@@ -65,7 +65,7 @@ public class ImageQueryDto {
    * The HTTPS URL of the image. Use this as an alternative to `objectKey`. 
    * @return imageUrl
    */
-  @Valid @Pattern(regexp = "^https?://") @Size(min = 1, max = 2048) 
+  @Valid 
   @Schema(name = "imageUrl", description = "The HTTPS URL of the image. Use this as an alternative to `objectKey`. ", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("imageUrl")
   public @Nullable URI getImageUrl() {

@@ -12,9 +12,6 @@ properties:
     format: uri
     description: >
       The HTTPS URL of the image. Use this as an alternative to `objectKey`.
-    minLength: 1
-    maxLength: 2048
-    pattern: '^https?://'
   height:
     $ref: ImageHeight.yaml
   aspectRatio:

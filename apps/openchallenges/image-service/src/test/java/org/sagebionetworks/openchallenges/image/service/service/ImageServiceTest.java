@@ -12,20 +12,19 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.sagebionetworks.openchallenges.app.config.data.ImageServiceConfigData;
+import org.sagebionetworks.openchallenges.image.service.configuration.AppProperties;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageDto;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageQueryDto;
 
 @ExtendWith(MockitoExtension.class)
 class ImageServiceTest {
 
-  @Mock
-  private ImageServiceConfigData imageServiceConfigData;
-
   private Thumbor thumbor = Mockito.mock(Thumbor.class, Mockito.RETURNS_DEEP_STUBS);
 
-  @InjectMocks
-  private ImageService imageService;
+  @Mock
+  private AppProperties appProperties;
+
+  @InjectMocks private ImageService imageService;
 
   @Test
   void GetImage_ShouldReturnImage_WhenObjectKeyIsPassed() {
@@ -34,6 +33,13 @@ class ImageServiceTest {
     // given
     ImageQueryDto query = new ImageQueryDto();
     query.setObjectKey("image.png");
+    AppProperties.ThumborProperties thumborProps = new AppProperties.ThumborProperties(
+      "http://localhost:8000/img/",
+      "changeme",
+      false,
+      null
+    );
+    when(appProperties.thumbor()).thenReturn(thumborProps);
 
     // when an image is requested from the image service
     ThumborUrlBuilder builder = mock(ThumborUrlBuilder.class);
@@ -44,5 +50,28 @@ class ImageServiceTest {
 
     // then
     assertThat(actual.getUrl()).isEqualTo(expectedUrl);
+  }
+
+  @Test
+  void GetImage_ShouldReturnPlaceholder_WhenPlaceholderEnabled() {
+    // given
+    ImageQueryDto query = new ImageQueryDto();
+    query.setObjectKey("image.png");
+    // request 100px height, square aspect ratio implicitly (null -> width fallback logic)
+    query.setHeight(org.sagebionetworks.openchallenges.image.service.model.dto.ImageHeightDto._100PX);
+
+    AppProperties.ThumborProperties thumborProps = new AppProperties.ThumborProperties(
+      "http://localhost:8000/img/",
+      "changeme",
+      true,
+      "https://images.placeholders.dev/{width}x{height}"
+    );
+    when(appProperties.thumbor()).thenReturn(thumborProps);
+
+    // when
+    ImageDto actual = imageService.getImage(query);
+
+    // then
+    assertThat(actual.getUrl()).isEqualTo("https://images.placeholders.dev/100x100");
   }
 }

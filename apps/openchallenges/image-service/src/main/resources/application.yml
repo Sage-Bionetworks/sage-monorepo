@@ -4,6 +4,12 @@ app:
     # The Thumbor host must be accessible from the web client.
     host: http://localhost:8000/img/
     security-key: changeme
+    # When true, ignore requested object key and return a placeholder image URL sized from the
+    # requested height & aspect ratio (dev convenience when using HTTP loader).
+    use-placeholder-images: true
+    # Placeholder URL template. Supported tokens: {width}, {height}
+    # The domain name must be included in Thumbor's allowed sources (ALLOWED_SOURCES).
+    placeholder-url-template: https://images.placeholders.dev/{width}x{height}
 
 server:
   port: 8086
