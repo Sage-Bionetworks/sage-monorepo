@@ -4,12 +4,18 @@ app:
     # The Thumbor host must be accessible from the web client.
     host: http://localhost:8000/img/
     security-key: changeme
-    # When true, ignore requested object key and return a placeholder image URL sized from the
-    # requested height & aspect ratio (dev convenience when using HTTP loader).
-    use-placeholder-images: true
-    # Placeholder URL template. Supported tokens: {width}, {height}
-    # The domain name must be included in Thumbor's allowed sources (ALLOWED_SOURCES).
-    placeholder-url-template: https://images.placeholders.dev/{width}x{height}
+    placeholder:
+      # When true, ignore requested object key and return a placeholder image URL sized from the
+      # requested height & aspect ratio (dev convenience).
+      enabled: true
+      # URL template. Supported tokens: {width}, {height}. If query params are needed, append them.
+      url-template: https://images.placeholders.dev/{width}x{height}
+      # Optional font customizations passed as query parameters if set (omit when blank):
+      font-family: sans-serif
+      # Font weight to use for the text. Defaults to bold.
+      font-weight: bold
+      # Font size in pixels; if omitted, remote service defaults (20% of shortest side).
+      # font-size: 14
 
 server:
   port: 8086

@@ -3,7 +3,7 @@ package org.sagebionetworks.openchallenges.image.service.configuration;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import java.net.URI;
+import jakarta.validation.constraints.Min;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
@@ -23,18 +23,26 @@ public record AppProperties(
   public record ThumborProperties(
     @NotBlank(message = "Thumbor host must not be blank") String host,
     @NotNull(message = "Thumbor security key must not be blank") String securityKey,
+    @Valid PlaceholderProperties placeholder
+  ) {
     /**
-     * When true (intended for local development when using the Thumbor HTTP loader), the image
-     * service will ignore the requested object key / image URL and instead return a placeholder
-     * image URL sized according to the requested height and aspect ratio. This avoids having to
-     * first upload images to S3.
+     * Placeholder image configuration (dev convenience when using HTTP loader)
      */
-    boolean usePlaceholderImages,
-    /**
-     * Template of the placeholder image service. Supported tokens: {width}, {height}.
-     * Example: https://images.placeholders.dev/{width}x{height}
-     * If null or blank while usePlaceholderImages is true, a built-in default template will be used.
-     */
-    String placeholderUrlTemplate
-  ) {}
+    public record PlaceholderProperties(
+      /** When true, the service returns a placeholder image URL instead of the real image. */
+      boolean enabled,
+      /**
+       * Base template or URL pattern. Supported tokens: {width}, {height}. If the URL already
+       * contains query parameters, tokens can still be used anywhere.
+       * Example: https://images.placeholders.dev/{width}x{height}
+       */
+      String urlTemplate,
+      /** Optional font family to pass as query param (e.g., sans-serif). */
+      String fontFamily,
+      /** Optional font weight (e.g., bold, 400). */
+      String fontWeight,
+      /** Optional fixed font size (px). If null, service leaves it unspecified so remote service picks default. */
+      @Min(value = 1, message = "Font size must be positive") Integer fontSize
+    ) {}
+  }
 }

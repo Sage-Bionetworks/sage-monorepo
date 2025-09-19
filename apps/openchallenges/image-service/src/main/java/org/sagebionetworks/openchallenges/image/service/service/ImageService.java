@@ -39,19 +39,35 @@ public class ImageService {
 
     // Placeholder logic (dev convenience when using Thumbor's HTTP loader)
     AppProperties.ThumborProperties thumborProps = appProperties.thumbor();
-    if (thumborProps.usePlaceholderImages()) {
-      String template = thumborProps.placeholderUrlTemplate();
+    AppProperties.ThumborProperties.PlaceholderProperties ph = thumborProps.placeholder();
+    if (ph != null && ph.enabled()) {
+      String template = ph.urlTemplate();
       if (template == null || template.isBlank()) {
         template = "https://images.placeholders.dev/{width}x{height}";
       }
-      // If no height was requested, use a default (e.g. 250) so we can still return something
-      int effectiveHeight = (height != null) ? height : 250;
+      int effectiveHeight = (height != null) ? height : 250; // default height if none requested
       int effectiveWidth = (width != null && width > 0) ? width : effectiveHeight; // square fallback
       String placeholderUrl = template
         .replace("{width}", String.valueOf(effectiveWidth))
         .replace("{height}", String.valueOf(effectiveHeight));
-      log.debug("Returning placeholder image URL: {}", placeholderUrl);
-      return placeholderUrl;
+
+      // Append optional font params if present and not already included
+      StringBuilder urlBuilder = new StringBuilder(placeholderUrl);
+      boolean hasQuery = placeholderUrl.contains("?");
+      if (ph.fontFamily() != null && !ph.fontFamily().isBlank()) {
+        urlBuilder.append(hasQuery ? '&' : '?').append("fontFamily=").append(encode(ph.fontFamily()));
+        hasQuery = true;
+      }
+      if (ph.fontWeight() != null && !ph.fontWeight().isBlank()) {
+        urlBuilder.append(hasQuery ? '&' : '?').append("fontWeight=").append(encode(ph.fontWeight()));
+        hasQuery = true;
+      }
+      if (ph.fontSize() != null && ph.fontSize() > 0) {
+        urlBuilder.append(hasQuery ? '&' : '?').append("fontSize=").append(ph.fontSize());
+      }
+      String finalUrl = urlBuilder.toString();
+      log.debug("Returning placeholder image URL: {}", finalUrl);
+      return finalUrl;
     }
 
     // Normal Thumbor flow
@@ -94,5 +110,8 @@ public class ImageService {
       return Math.round((height * 2f) / 3);
     }
     return 0; // Thumbor will use the original width
+  }
+  private String encode(String value) {
+    return java.net.URLEncoder.encode(value, java.nio.charset.StandardCharsets.UTF_8);
   }
 }

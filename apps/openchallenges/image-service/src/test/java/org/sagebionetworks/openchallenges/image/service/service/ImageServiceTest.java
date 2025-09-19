@@ -36,8 +36,7 @@ class ImageServiceTest {
     AppProperties.ThumborProperties thumborProps = new AppProperties.ThumborProperties(
       "http://localhost:8000/img/",
       "changeme",
-      false,
-      null
+      new AppProperties.ThumborProperties.PlaceholderProperties(false, null, null, null, null)
     );
     when(appProperties.thumbor()).thenReturn(thumborProps);
 
@@ -63,8 +62,13 @@ class ImageServiceTest {
     AppProperties.ThumborProperties thumborProps = new AppProperties.ThumborProperties(
       "http://localhost:8000/img/",
       "changeme",
-      true,
-      "https://images.placeholders.dev/{width}x{height}"
+      new AppProperties.ThumborProperties.PlaceholderProperties(
+        true,
+        "https://images.placeholders.dev/{width}x{height}",
+        null,
+        null,
+        null
+      )
     );
     when(appProperties.thumbor()).thenReturn(thumborProps);
 
