@@ -463,10 +463,11 @@ components:
           nullable: true
         websiteUrl:
           $ref: '#/components/schemas/Url'
-        acronym:
-          description: An acronym of the organization.
+        shortName:
+          description: |
+            The abbreviation, which may be an acronym, initialism, or other short form (e.g., "AI", "WashU", "etc.")
           type: string
-          maxLength: 10
+          maxLength: 32
           example: OC
           nullable: true
       required:
@@ -491,10 +492,11 @@ components:
           nullable: true
         websiteUrl:
           $ref: '#/components/schemas/Url'
-        acronym:
-          description: An acronym of the organization.
+        shortName:
+          description: |
+            The abbreviation, which may be an acronym, initialism, or other short form (e.g., "AI", "WashU", "etc.")
           type: string
-          maxLength: 10
+          maxLength: 32
           example: OC
           nullable: true
       required:
