@@ -3,5 +3,6 @@
   "appVersion": "${APP_VERSION}",
   "csrApiUrl": "${CSR_API_URL}",
   "googleTagManagerId": "${GOOGLE_TAG_MANAGER_ID}",
-  "ssrApiUrl": "${SSR_API_URL}"
+  "ssrApiUrl": "${SSR_API_URL}",
+  "tagName": "${TAG_NAME}"
 }
