@@ -1,8 +1,9 @@
-openchallenges-image-service:
+app:
   welcome-message: 'Welcome to the image service.'
-  # The Thumbor host must be accessible from the web client.
-  thumbor-host: http://localhost:8000/img/
-  thumbor-security-key: changeme
+  thumbor:
+    # The Thumbor host must be accessible from the web client.
+    host: http://localhost:8000/img/
+    security-key: changeme
 
 server:
   port: 8086
