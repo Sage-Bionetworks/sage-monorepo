@@ -3,10 +3,7 @@ import { baseURL } from '../playwright.config';
 import { searchAndGetSearchListItems } from './helpers';
 
 async function isPageAtTop(page: Page) {
-  return await page.evaluate(() => {
-    console.log(window.pageYOffset);
-    return window.pageYOffset === 0;
-  });
+  return await page.evaluate(() => window.pageYOffset === 0);
 }
 
 async function expectPageAtTop(page: Page) {
