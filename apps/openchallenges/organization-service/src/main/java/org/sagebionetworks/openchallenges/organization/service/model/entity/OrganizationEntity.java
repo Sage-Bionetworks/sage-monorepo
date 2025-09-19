@@ -92,8 +92,8 @@ public class OrganizationEntity {
   @UpdateTimestamp
   private OffsetDateTime updatedAt;
 
-  @Column(name = "acronym", nullable = true)
-  private String acronym;
+  @Column(name = "short_name", nullable = true)
+  private String shortName;
 
   /**
    * Returns the unique number of challenges this organization has participated in.

@@ -9,7 +9,7 @@ CREATE TABLE organization (
   description           VARCHAR(1000),
   created_at            TIMESTAMP WITH TIME ZONE NOT NULL,
   updated_at            TIMESTAMP WITH TIME ZONE NOT NULL,
-  acronym               VARCHAR(20),
+  short_name            VARCHAR(32),
   CONSTRAINT login_check CHECK (
     char_length(login) >= 2 AND login ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$'
   )

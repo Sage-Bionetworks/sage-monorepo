@@ -4,6 +4,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.Arrays;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.organization.service.exception.OrganizationAlreadyExistsException;
 import org.sagebionetworks.openchallenges.organization.service.exception.OrganizationNotFoundException;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationCreateRequestDto;
@@ -22,8 +24,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -121,7 +121,7 @@ public class OrganizationService {
       .description(request.getDescription())
       .avatarKey(request.getAvatarKey())
       .websiteUrl(request.getWebsiteUrl())
-      .acronym(request.getAcronym())
+      .shortName(request.getShortName())
       .build();
 
     try {
@@ -159,7 +159,7 @@ public class OrganizationService {
     existingOrg.setDescription(request.getDescription());
     existingOrg.setAvatarKey(request.getAvatarKey());
     existingOrg.setWebsiteUrl(request.getWebsiteUrl());
-    existingOrg.setAcronym(request.getAcronym());
+    existingOrg.setShortName(request.getShortName());
 
     try {
       // Save the updated entity
