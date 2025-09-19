@@ -55,21 +55,6 @@ def update_login_button():
         return gr.Button("Login", variant="primary", link=login_url)
 
 
-def get_error_display():
-    """Get error message display HTML"""
-    auth_service = get_auth_service()
-    error = auth_service.get_current_error()
-
-    if error:
-        return f"""
-            <div style="background-color: #fee; border: 1px solid #fcc; 
-                        color: #c00; padding: 10px; border-radius: 4px; margin: 10px 0;">
-                ⚠️ {error}
-            </div>
-        """
-    return ""
-
-
 def get_login_button_state():
     """Get current login button state for updates"""
     auth_service = get_auth_service()

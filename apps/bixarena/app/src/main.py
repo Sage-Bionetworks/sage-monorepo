@@ -1,7 +1,7 @@
 import argparse
 import urllib.parse
 import gradio as gr
-from page.bixarena_header import build_header, get_error_display, update_login_button
+from page.bixarena_header import build_header, update_login_button
 from page.bixarena_battle import build_battle_page
 from page.bixarena_leaderboard import build_leaderboard_page
 from page.bixarena_home import build_home_page
@@ -60,7 +60,7 @@ def check_oauth_callback(request: gr.Request):
             print(f"❌ Login failed: {str(e)}")
 
     # Return updated states for both header and user page
-    return (get_error_display(), update_login_button(), *update_user_page())
+    return (update_login_button(), *update_user_page())
 
 
 def handle_user_logout_and_navigate(navigator):
@@ -128,9 +128,6 @@ def build_app(register_api_endpoint_file=None, moderate=False):
     """
 
     with gr.Blocks(title="BixArena - Biomedical LLM Evaluation") as demo:
-        # Error display
-        error_display = gr.HTML("")
-
         # Header with reactive login button
         header, battle_btn, leaderboard_btn, login_btn = build_header()
 
@@ -186,7 +183,7 @@ def build_app(register_api_endpoint_file=None, moderate=False):
         # Handle OAuth callback and clean URL with JavaScript
         demo.load(
             fn=check_oauth_callback,
-            outputs=[error_display, login_btn, welcome_display, logout_btn],
+            outputs=[login_btn, welcome_display, logout_btn],
             js=cleanup_js,
         )
 
