@@ -4,7 +4,7 @@ parameters:
   - $ref: ../../../../../../components/parameters/path/challengeParticipationRole.yaml
 
 delete:
-  x-internal: true
+  x-sage-internal: true
   tags:
     - Challenge Participation
   summary: Delete a specific challenge participation

@@ -243,7 +243,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
-      x-internal: true
+      x-sage-internal: true
       tags:
         - Challenge Contribution
       summary: Delete the contributions for a specific challenge

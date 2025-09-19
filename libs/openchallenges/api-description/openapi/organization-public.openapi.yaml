@@ -447,7 +447,7 @@ components:
         - description
         - avatarKey
         - websiteUrl
-        - acronym
+        - shortName
     ChallengeId:
       description: The unique identifier of the challenge.
       type: integer

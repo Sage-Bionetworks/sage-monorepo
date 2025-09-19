@@ -29,7 +29,7 @@ tags:
     description: Operations about organizations
   - name: Challenge Participation
     description: Operations about a challenge participation
-    x-internal: true
+    x-sage-internal: true
 
 paths:
   /organizations:

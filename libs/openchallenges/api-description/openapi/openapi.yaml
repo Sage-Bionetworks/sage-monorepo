@@ -2057,7 +2057,7 @@ components:
         - description
         - avatarKey
         - websiteUrl
-        - acronym
+        - shortName
   responses:
     Unauthorized:
       description: Unauthorized

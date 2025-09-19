@@ -28,4 +28,4 @@ required:
   - description
   - avatarKey
   - websiteUrl
-  - acronym
+  - shortName
