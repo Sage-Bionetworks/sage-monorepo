@@ -7,6 +7,7 @@ export interface AppConfig {
   isPlatformServer: boolean;
   privacyPolicyUrl: string;
   ssrApiUrl: string;
+  tagName: string;
   termsOfUseUrl: string;
   apiDocsUrl: string;
 }
