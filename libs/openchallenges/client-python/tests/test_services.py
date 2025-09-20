@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import date
 from typing import Any, cast
 
 from openchallenges_client.config.loader import ClientConfig
@@ -15,9 +16,38 @@ class _FakeChallenge:
     name: str
     status: str | None = None
     platform: object | None = None
-    start_date = None
-    end_date = None
+    start_date: date | None = None
+    end_date: date | None = None
     # platform may be an object with id/name or None
+
+
+def test_list_challenges_enrichment_duration_and_active():
+    cfg = ClientConfig(api_url="x", api_key=None, default_limit=5)
+    # ACTIVE challenge with valid date range
+    active = _FakeChallenge(
+        1,
+        "s1",
+        "Active Challenge",
+        status="ACTIVE",
+    )
+    active.start_date = date(2024, 1, 1)
+    active.end_date = date(2024, 1, 11)  # 10 days
+    # COMPLETED challenge with invalid (reversed) date range -> duration None
+    completed = _FakeChallenge(
+        2,
+        "s2",
+        "Completed Challenge",
+        status="COMPLETED",
+    )
+    completed.start_date = date(2024, 2, 10)
+    completed.end_date = date(2024, 2, 1)
+    gw = _ChallengeGatewayStub([active, completed])
+    svc = ListChallengesService(cast(Any, gw), cfg)  # type: ignore[arg-type]
+    results = list(svc.execute(limit=10, status=None))
+    assert results[0].duration_days == 10
+    assert results[0].is_active is True
+    assert results[1].duration_days is None  # reversed dates guard
+    assert results[1].is_active is False
 
 
 @dataclass

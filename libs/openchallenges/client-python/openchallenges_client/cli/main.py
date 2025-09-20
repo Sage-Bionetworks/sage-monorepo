@@ -65,6 +65,11 @@ def list_challenges(
     output: str | None = typer.Option(
         None, help="Override output format for this command"
     ),
+    wide: bool = typer.Option(
+        False,
+        "--wide",
+        help="Include start/end dates and enrichment fields (duration_days,is_active)",
+    ),
 ):
     client: OpenChallengesClient = ctx.obj["client"]
     base_output = ctx.obj["output"]
@@ -74,15 +79,24 @@ def list_challenges(
         status_list = [s.upper().strip() for s in status_list if s.strip()]
     try:
         items = list(client.list_challenges(limit=limit, status=status_list))
-        rows = [
-            {
+        rows = []
+        for c in items:
+            base = {
                 "id": c.id,
                 "name": c.name,
                 "status": c.status,  # enum converted later in formatter
                 "platform": c.platform_name,
             }
-            for c in items
-        ]
+            if wide:
+                base.update(
+                    {
+                        "start_date": c.start_date,
+                        "end_date": c.end_date,
+                        "duration_days": c.duration_days,
+                        "is_active": c.is_active,
+                    }
+                )
+            rows.append(base)
         _emit(rows, output or base_output, title="Challenges")
     except oc_errors.OpenChallengesError as e:  # pragma: no cover (CLI path)
         _handle_error(e)
@@ -94,6 +108,11 @@ def stream_challenges(
     status: list[str] | None = STATUS_OPTION,
     limit: int = typer.Option(0, help="Optional cap on streamed items (0 = all)"),
     output: str = typer.Option(None, help="Override output format for this command"),
+    wide: bool = typer.Option(
+        False,
+        "--wide",
+        help="Include start/end dates and enrichment fields (duration_days,is_active)",
+    ),
 ):
     """Stream all challenges (or until optional cap)."""
     client: OpenChallengesClient = ctx.obj["client"]
@@ -104,14 +123,22 @@ def stream_challenges(
         for count, c in enumerate(
             client.iter_all_challenges(status=status_list), start=1
         ):
-            rows.append(
-                {
-                    "id": c.id,
-                    "name": c.name,
-                    "status": c.status,  # enum converted later in formatter
-                    "platform": c.platform_name,
-                }
-            )
+            base = {
+                "id": c.id,
+                "name": c.name,
+                "status": c.status,  # enum converted later in formatter
+                "platform": c.platform_name,
+            }
+            if wide:
+                base.update(
+                    {
+                        "start_date": c.start_date,
+                        "end_date": c.end_date,
+                        "duration_days": c.duration_days,
+                        "is_active": c.is_active,
+                    }
+                )
+            rows.append(base)
             if limit and count >= limit:
                 break
         _emit(rows, output or base_output, title="Challenges (stream)")
