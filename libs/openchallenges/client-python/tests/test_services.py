@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any, Protocol, cast
 
+from openchallenges_client.config.loader import ClientConfig
 from openchallenges_client.services.list_challenges import ListChallengesService
 from openchallenges_client.services.list_organizations import ListOrganizationsService
-from openchallenges_client.config.loader import ClientConfig
 
 
 @dataclass
@@ -16,6 +17,13 @@ class _FakeChallenge:
     platform: object | None = None
     start_date = None
     end_date = None
+    # platform may be an object with id/name or None
+
+
+@dataclass
+class _FakePlatform:
+    id: int | None
+    name: str | None
 
 
 @dataclass
@@ -26,20 +34,29 @@ class _FakeOrg:
     website_url: str | None = None
 
 
+class _ChallengeGatewayProto(Protocol):  # minimal structural typing
+    def list_challenges(self, limit: int, status: list[str] | None = None) -> Any: ...
+
+
 class _ChallengeGatewayStub:
     def __init__(self, items):
         self._items = items
 
-    # updated to accept status for compatibility with service call
-    def list_challenges(self, limit: int, status=None):
+    def list_challenges(self, limit: int, status: list[str] | None = None):  # noqa: D401
         return self._items[:limit]
+
+
+class _OrgGatewayProto(Protocol):
+    def list_organizations(
+        self, limit: int, search_terms: str | None = None
+    ) -> Any: ...
 
 
 class _OrgGatewayStub:
     def __init__(self, items):
         self._items = items
 
-    def list_organizations(self, limit: int, search_terms=None):
+    def list_organizations(self, limit: int, search_terms: str | None = None):  # noqa: D401
         return self._items[:limit]
 
 
@@ -51,10 +68,33 @@ def test_list_challenges_service_basic():
             _FakeChallenge(2, "s2", "Challenge 2"),
         ]
     )
-    svc = ListChallengesService(gw, cfg)
+    svc = ListChallengesService(cast(Any, gw), cfg)  # type: ignore[arg-type]
     results = list(svc.execute(limit=1, status=None))
     assert len(results) == 1
     assert results[0].slug == "s1"
+
+
+def test_list_challenges_platform_null_and_present():
+    cfg = ClientConfig(api_url="x", api_key=None, default_limit=5)
+    gw = _ChallengeGatewayStub(
+        [
+            _FakeChallenge(1, "s1", "No Platform", platform=None),
+            _FakeChallenge(
+                2,
+                "s2",
+                "With Platform",
+                platform=_FakePlatform(10, "CodaBench"),
+            ),
+        ]
+    )
+    svc = ListChallengesService(cast(Any, gw), cfg)  # type: ignore[arg-type]
+    results = list(svc.execute(limit=5, status=None))
+    # first challenge: platform fields None
+    assert results[0].platform_id is None
+    assert results[0].platform_name is None
+    # second challenge: platform fields extracted
+    assert results[1].platform_id == 10
+    assert results[1].platform_name == "CodaBench"
 
 
 def test_list_orgs_service_basic():
@@ -65,7 +105,7 @@ def test_list_orgs_service_basic():
             _FakeOrg(2, "Org B"),
         ]
     )
-    svc = ListOrganizationsService(gw, cfg)
+    svc = ListOrganizationsService(cast(Any, gw), cfg)  # type: ignore[arg-type]
     results = list(svc.execute(limit=2, search=None))
     assert len(results) == 2
     assert results[1].name == "Org B"
