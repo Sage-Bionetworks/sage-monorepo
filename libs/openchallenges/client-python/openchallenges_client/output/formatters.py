@@ -29,7 +29,13 @@ def to_table(rows: Iterable[dict[str, Any]], *, title: str | None = None) -> Non
     if Table and Console:
         table = Table(title=title)
         for col in first:
-            table.add_column(col)
+            # Allow long slug values to wrap across lines instead of being truncated
+            # Rich defaults to an ellipsis overflow for some wide values; explicit
+            # overflow='fold' ensures multi-line display similar to the challenge name.
+            if col == "slug":
+                table.add_column(col, overflow="fold")
+            else:
+                table.add_column(col)
         for r in rows:
             table.add_row(*[str(r.get(k, "")) for k in first])
         Console().print(table)
