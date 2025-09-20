@@ -54,7 +54,7 @@ def pretty(title: str, org: Organization | str) -> None:
         print(f"Description: {org.description}")
         print(f"Website URL: {org.website_url}")
         print(f"Avatar Key: {org.avatar_key}")
-        print(f"Acronym: {org.acronym}")
+        print(f"Acronym: {org.short_name}")
         print(f"Created: {org.created_at}")
         print(f"Updated: {org.updated_at}")
     else:
@@ -75,7 +75,7 @@ def create_org(api_client) -> Organization:
         name=f"Demo Organization {suffix}",
         description="Demo organization created by manage_organization.py.",
         websiteUrl="https://example.org/org",
-        acronym="DEMO",
+        shortName="DEMO",
     )
     try:
         org = api.create_organization(req)
@@ -103,7 +103,7 @@ def update_org(api_client, org: Organization) -> Organization:
     if skip_mods:
         new_description = org.description
         new_website = org.website_url
-        new_acronym = org.acronym
+        new_short_name = org.short_name
         new_avatar = org.avatar_key
     else:
         base_desc = org.description or "Demo organization description"
@@ -114,9 +114,11 @@ def update_org(api_client, org: Organization) -> Organization:
             if org.website_url
             else "https://example.org/org-updated"
         )
-        # update acronym (ensure <=10 chars)
-        new_acronym = (
-            (org.acronym + "U") if (org.acronym and len(org.acronym) < 9) else "DMOUPD"
+        # update short anem (ensure <=10 chars)
+        new_short_name = (
+            (org.short_name + "U")
+            if (org.short_name and len(org.short_name) < 31)
+            else "DMOUPD"
         )
         new_avatar = org.avatar_key or "demo-avatar-key"
 
@@ -128,7 +130,7 @@ def update_org(api_client, org: Organization) -> Organization:
 
     record("description", org.description, new_description)
     record("websiteUrl", org.website_url, new_website)
-    record("acronym", org.acronym, new_acronym)
+    record("shortName", org.short_name, new_short_name)
     record("avatarKey", org.avatar_key, new_avatar)
 
     if diffs:
@@ -142,7 +144,7 @@ def update_org(api_client, org: Organization) -> Organization:
         name=new_name,
         description=new_description,
         websiteUrl=new_website,
-        acronym=new_acronym,
+        shortName=new_short_name,
         avatarKey=new_avatar,
     )
 
