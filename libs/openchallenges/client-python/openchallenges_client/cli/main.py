@@ -79,7 +79,7 @@ def list_challenges(
                 "id": c.id,
                 "name": c.name,
                 "status": c.status,  # enum converted later in formatter
-                "platform_id": c.platform_id,
+                "platform": c.platform_name,
             }
             for c in items
         ]
@@ -109,7 +109,7 @@ def stream_challenges(
                     "id": c.id,
                     "name": c.name,
                     "status": c.status,  # enum converted later in formatter
-                    "platform_id": c.platform_id,
+                    "platform": c.platform_name,
                 }
             )
             if limit and count >= limit:

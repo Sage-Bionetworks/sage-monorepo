@@ -26,6 +26,7 @@ class ListChallengesService:
                 name=ch.name,
                 status=getattr(ch, "status", None),
                 platform_id=getattr(getattr(ch, "platform", None), "id", None),
+                platform_name=getattr(getattr(ch, "platform", None), "name", None),
                 start_date=getattr(ch, "start_date", None),
                 end_date=getattr(ch, "end_date", None),
             )

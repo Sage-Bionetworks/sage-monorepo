@@ -13,6 +13,7 @@ class ChallengeSummary:
     name: str
     status: str | None
     platform_id: int | None
+    platform_name: str | None
     start_date: date | None
     end_date: date | None
 
