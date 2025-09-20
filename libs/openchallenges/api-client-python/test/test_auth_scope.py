@@ -1,3 +1,5 @@
+# coding: utf-8
+
 """
 OpenChallenges API
 
@@ -10,6 +12,8 @@ Do not edit the class manually.
 """  # noqa: E501
 
 import unittest
+
+from openchallenges_api_client.models.auth_scope import AuthScope
 
 
 class TestAuthScope(unittest.TestCase):

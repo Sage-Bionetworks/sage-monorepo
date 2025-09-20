@@ -1,3 +1,5 @@
+# coding: utf-8
+
 """
 OpenChallenges API
 
@@ -10,16 +12,17 @@ Do not edit the class manually.
 """  # noqa: E501
 
 from __future__ import annotations
-
-import json
 import pprint
 import re  # noqa: F401
-from typing import Annotated, Any, ClassVar, Self
+import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
-
+from typing import Any, ClassVar, Dict, List, Optional
+from typing_extensions import Annotated
 from openchallenges_api_client.models.image_aspect_ratio import ImageAspectRatio
 from openchallenges_api_client.models.image_height import ImageHeight
+from typing import Optional, Set
+from typing_extensions import Self
 
 
 class ImageQuery(BaseModel):
@@ -27,21 +30,21 @@ class ImageQuery(BaseModel):
     An image query that identifies an image either by an object storage key or by a direct URL. Exactly one of `objectKey` or `imageUrl` must be provided.
     """  # noqa: E501
 
-    object_key: Annotated[str, Field(strict=True)] | None = Field(
+    object_key: Optional[Annotated[str, Field(strict=True)]] = Field(
         default=None,
         description="The unique identifier of the image.",
         alias="objectKey",
     )
-    image_url: StrictStr | None = Field(
+    image_url: Optional[StrictStr] = Field(
         default=None,
         description="The HTTPS URL of the image. Use this as an alternative to `objectKey`. ",
         alias="imageUrl",
     )
-    height: ImageHeight | None = ImageHeight.ORIGINAL
-    aspect_ratio: ImageAspectRatio | None = Field(
+    height: Optional[ImageHeight] = ImageHeight.ORIGINAL
+    aspect_ratio: Optional[ImageAspectRatio] = Field(
         default=ImageAspectRatio.ORIGINAL, alias="aspectRatio"
     )
-    __properties: ClassVar[list[str]] = [
+    __properties: ClassVar[List[str]] = [
         "objectKey",
         "imageUrl",
         "height",
@@ -76,11 +79,11 @@ class ImageQuery(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self | None:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of ImageQuery from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         """Return the dictionary representation of the model using alias.
 
         This has the following differences from calling pydantic's
@@ -90,7 +93,7 @@ class ImageQuery(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: set[str] = set([])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -100,7 +103,7 @@ class ImageQuery(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict[str, Any] | None) -> Self | None:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of ImageQuery from a dict"""
         if obj is None:
             return None

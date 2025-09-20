@@ -1,3 +1,5 @@
+# coding: utf-8
+
 """
 OpenChallenges API
 
@@ -10,17 +12,18 @@ Do not edit the class manually.
 """  # noqa: E501
 
 from __future__ import annotations
-
-import json
 import pprint
 import re  # noqa: F401
+import json
+
 from datetime import datetime
-from typing import Annotated, Any, ClassVar, Self
-
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
-
+from typing import Any, ClassVar, Dict, List, Optional
+from typing_extensions import Annotated
 from openchallenges_api_client.models.auth_scope import AuthScope
 from openchallenges_api_client.models.user_role import UserRole
+from typing import Optional, Set
+from typing_extensions import Self
 
 
 class UserProfile(BaseModel):
@@ -31,32 +34,32 @@ class UserProfile(BaseModel):
     id: StrictStr = Field(description="Unique user identifier")
     username: StrictStr = Field(description="User's username")
     email: StrictStr = Field(description="User's email address")
-    first_name: StrictStr | None = Field(
+    first_name: Optional[StrictStr] = Field(
         default=None, description="User's first name", alias="firstName"
     )
-    last_name: StrictStr | None = Field(
+    last_name: Optional[StrictStr] = Field(
         default=None, description="User's last name", alias="lastName"
     )
     role: UserRole
-    scopes: list[AuthScope] | None = Field(
+    scopes: Optional[List[AuthScope]] = Field(
         default=None, description="User's authorized scopes/permissions"
     )
-    avatar_url: StrictStr | None = Field(
+    avatar_url: Optional[StrictStr] = Field(
         default=None, description="URL to user's avatar image", alias="avatarUrl"
     )
-    bio: Annotated[str, Field(strict=True, max_length=500)] | None = Field(
+    bio: Optional[Annotated[str, Field(strict=True, max_length=500)]] = Field(
         default=None, description="User's biography or description"
     )
-    website: StrictStr | None = Field(default=None, description="User's website URL")
+    website: Optional[StrictStr] = Field(default=None, description="User's website URL")
     created_at: datetime = Field(
         description="Timestamp when the user account was created", alias="createdAt"
     )
-    updated_at: datetime | None = Field(
+    updated_at: Optional[datetime] = Field(
         default=None,
         description="Timestamp when the user profile was last updated",
         alias="updatedAt",
     )
-    __properties: ClassVar[list[str]] = [
+    __properties: ClassVar[List[str]] = [
         "id",
         "username",
         "email",
@@ -87,11 +90,11 @@ class UserProfile(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self | None:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of UserProfile from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         """Return the dictionary representation of the model using alias.
 
         This has the following differences from calling pydantic's
@@ -101,7 +104,7 @@ class UserProfile(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: set[str] = set([])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -111,7 +114,7 @@ class UserProfile(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict[str, Any] | None) -> Self | None:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of UserProfile from a dict"""
         if obj is None:
             return None

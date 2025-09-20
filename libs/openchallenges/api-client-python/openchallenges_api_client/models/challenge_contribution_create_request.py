@@ -1,3 +1,5 @@
+# coding: utf-8
+
 """
 OpenChallenges API
 
@@ -10,17 +12,17 @@ Do not edit the class manually.
 """  # noqa: E501
 
 from __future__ import annotations
-
-import json
 import pprint
 import re  # noqa: F401
-from typing import Any, ClassVar, Self
+import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictInt
-
+from typing import Any, ClassVar, Dict, List
 from openchallenges_api_client.models.challenge_contribution_role import (
     ChallengeContributionRole,
 )
+from typing import Optional, Set
+from typing_extensions import Self
 
 
 class ChallengeContributionCreateRequest(BaseModel):
@@ -32,7 +34,7 @@ class ChallengeContributionCreateRequest(BaseModel):
         description="The unique identifier of an organization", alias="organizationId"
     )
     role: ChallengeContributionRole
-    __properties: ClassVar[list[str]] = ["organizationId", "role"]
+    __properties: ClassVar[List[str]] = ["organizationId", "role"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -50,11 +52,11 @@ class ChallengeContributionCreateRequest(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self | None:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of ChallengeContributionCreateRequest from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         """Return the dictionary representation of the model using alias.
 
         This has the following differences from calling pydantic's
@@ -64,7 +66,7 @@ class ChallengeContributionCreateRequest(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: set[str] = set([])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -74,7 +76,7 @@ class ChallengeContributionCreateRequest(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict[str, Any] | None) -> Self | None:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of ChallengeContributionCreateRequest from a dict"""
         if obj is None:
             return None

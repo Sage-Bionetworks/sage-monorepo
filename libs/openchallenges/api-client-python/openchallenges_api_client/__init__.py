@@ -96,9 +96,7 @@ if __import__("typing").TYPE_CHECKING:
     from openchallenges_api_client.api.authentication_api import (
         AuthenticationApi as AuthenticationApi,
     )
-    from openchallenges_api_client.api.challenge_api import (
-        ChallengeApi as ChallengeApi,
-    )
+    from openchallenges_api_client.api.challenge_api import ChallengeApi as ChallengeApi
     from openchallenges_api_client.api.challenge_analytics_api import (
         ChallengeAnalyticsApi as ChallengeAnalyticsApi,
     )
@@ -119,16 +117,12 @@ if __import__("typing").TYPE_CHECKING:
     # import ApiClient
     from openchallenges_api_client.api_response import ApiResponse as ApiResponse
     from openchallenges_api_client.api_client import ApiClient as ApiClient
-    from openchallenges_api_client.configuration import (
-        Configuration as Configuration,
-    )
+    from openchallenges_api_client.configuration import Configuration as Configuration
     from openchallenges_api_client.exceptions import (
         OpenApiException as OpenApiException,
     )
     from openchallenges_api_client.exceptions import ApiTypeError as ApiTypeError
-    from openchallenges_api_client.exceptions import (
-        ApiValueError as ApiValueError,
-    )
+    from openchallenges_api_client.exceptions import ApiValueError as ApiValueError
     from openchallenges_api_client.exceptions import ApiKeyError as ApiKeyError
     from openchallenges_api_client.exceptions import (
         ApiAttributeError as ApiAttributeError,
@@ -137,12 +131,8 @@ if __import__("typing").TYPE_CHECKING:
 
     # import models into sdk package
     from openchallenges_api_client.models.api_key import ApiKey as ApiKey
-    from openchallenges_api_client.models.auth_scope import (
-        AuthScope as AuthScope,
-    )
-    from openchallenges_api_client.models.basic_error import (
-        BasicError as BasicError,
-    )
+    from openchallenges_api_client.models.auth_scope import AuthScope as AuthScope
+    from openchallenges_api_client.models.basic_error import BasicError as BasicError
     from openchallenges_api_client.models.challenge import Challenge as Challenge
     from openchallenges_api_client.models.challenge_category import (
         ChallengeCategory as ChallengeCategory,
@@ -222,9 +212,7 @@ if __import__("typing").TYPE_CHECKING:
     from openchallenges_api_client.models.create_api_key_response import (
         CreateApiKeyResponse as CreateApiKeyResponse,
     )
-    from openchallenges_api_client.models.edam_concept import (
-        EdamConcept as EdamConcept,
-    )
+    from openchallenges_api_client.models.edam_concept import EdamConcept as EdamConcept
     from openchallenges_api_client.models.edam_concept_direction import (
         EdamConceptDirection as EdamConceptDirection,
     )
@@ -237,19 +225,13 @@ if __import__("typing").TYPE_CHECKING:
     from openchallenges_api_client.models.edam_concepts_page import (
         EdamConceptsPage as EdamConceptsPage,
     )
-    from openchallenges_api_client.models.edam_section import (
-        EdamSection as EdamSection,
-    )
+    from openchallenges_api_client.models.edam_section import EdamSection as EdamSection
     from openchallenges_api_client.models.image import Image as Image
     from openchallenges_api_client.models.image_aspect_ratio import (
         ImageAspectRatio as ImageAspectRatio,
     )
-    from openchallenges_api_client.models.image_height import (
-        ImageHeight as ImageHeight,
-    )
-    from openchallenges_api_client.models.image_query import (
-        ImageQuery as ImageQuery,
-    )
+    from openchallenges_api_client.models.image_height import ImageHeight as ImageHeight
+    from openchallenges_api_client.models.image_query import ImageQuery as ImageQuery
     from openchallenges_api_client.models.organization import (
         Organization as Organization,
     )
@@ -283,9 +265,7 @@ if __import__("typing").TYPE_CHECKING:
     from openchallenges_api_client.models.update_user_profile_request import (
         UpdateUserProfileRequest as UpdateUserProfileRequest,
     )
-    from openchallenges_api_client.models.user_profile import (
-        UserProfile as UserProfile,
-    )
+    from openchallenges_api_client.models.user_profile import UserProfile as UserProfile
     from openchallenges_api_client.models.user_role import UserRole as UserRole
 
 else:
@@ -297,81 +277,81 @@ else:
             ("__version__", __version__),
             ("__all__", __all__),
             """# import apis into sdk package
-from openchallenges_api_client_python.api.api_key_api import APIKeyApi as APIKeyApi
-from openchallenges_api_client_python.api.authentication_api import AuthenticationApi as AuthenticationApi
-from openchallenges_api_client_python.api.challenge_api import ChallengeApi as ChallengeApi
-from openchallenges_api_client_python.api.challenge_analytics_api import ChallengeAnalyticsApi as ChallengeAnalyticsApi
-from openchallenges_api_client_python.api.challenge_contribution_api import ChallengeContributionApi as ChallengeContributionApi
-from openchallenges_api_client_python.api.challenge_platform_api import ChallengePlatformApi as ChallengePlatformApi
-from openchallenges_api_client_python.api.edam_concept_api import EdamConceptApi as EdamConceptApi
-from openchallenges_api_client_python.api.image_api import ImageApi as ImageApi
-from openchallenges_api_client_python.api.organization_api import OrganizationApi as OrganizationApi
+from openchallenges_api_client.api.api_key_api import APIKeyApi as APIKeyApi
+from openchallenges_api_client.api.authentication_api import AuthenticationApi as AuthenticationApi
+from openchallenges_api_client.api.challenge_api import ChallengeApi as ChallengeApi
+from openchallenges_api_client.api.challenge_analytics_api import ChallengeAnalyticsApi as ChallengeAnalyticsApi
+from openchallenges_api_client.api.challenge_contribution_api import ChallengeContributionApi as ChallengeContributionApi
+from openchallenges_api_client.api.challenge_platform_api import ChallengePlatformApi as ChallengePlatformApi
+from openchallenges_api_client.api.edam_concept_api import EdamConceptApi as EdamConceptApi
+from openchallenges_api_client.api.image_api import ImageApi as ImageApi
+from openchallenges_api_client.api.organization_api import OrganizationApi as OrganizationApi
 
 # import ApiClient
-from openchallenges_api_client_python.api_response import ApiResponse as ApiResponse
-from openchallenges_api_client_python.api_client import ApiClient as ApiClient
-from openchallenges_api_client_python.configuration import Configuration as Configuration
-from openchallenges_api_client_python.exceptions import OpenApiException as OpenApiException
-from openchallenges_api_client_python.exceptions import ApiTypeError as ApiTypeError
-from openchallenges_api_client_python.exceptions import ApiValueError as ApiValueError
-from openchallenges_api_client_python.exceptions import ApiKeyError as ApiKeyError
-from openchallenges_api_client_python.exceptions import ApiAttributeError as ApiAttributeError
-from openchallenges_api_client_python.exceptions import ApiException as ApiException
+from openchallenges_api_client.api_response import ApiResponse as ApiResponse
+from openchallenges_api_client.api_client import ApiClient as ApiClient
+from openchallenges_api_client.configuration import Configuration as Configuration
+from openchallenges_api_client.exceptions import OpenApiException as OpenApiException
+from openchallenges_api_client.exceptions import ApiTypeError as ApiTypeError
+from openchallenges_api_client.exceptions import ApiValueError as ApiValueError
+from openchallenges_api_client.exceptions import ApiKeyError as ApiKeyError
+from openchallenges_api_client.exceptions import ApiAttributeError as ApiAttributeError
+from openchallenges_api_client.exceptions import ApiException as ApiException
 
 # import models into sdk package
-from openchallenges_api_client_python.models.api_key import ApiKey as ApiKey
-from openchallenges_api_client_python.models.auth_scope import AuthScope as AuthScope
-from openchallenges_api_client_python.models.basic_error import BasicError as BasicError
-from openchallenges_api_client_python.models.challenge import Challenge as Challenge
-from openchallenges_api_client_python.models.challenge_category import ChallengeCategory as ChallengeCategory
-from openchallenges_api_client_python.models.challenge_contribution import ChallengeContribution as ChallengeContribution
-from openchallenges_api_client_python.models.challenge_contribution_create_request import ChallengeContributionCreateRequest as ChallengeContributionCreateRequest
-from openchallenges_api_client_python.models.challenge_contribution_role import ChallengeContributionRole as ChallengeContributionRole
-from openchallenges_api_client_python.models.challenge_contributions_page import ChallengeContributionsPage as ChallengeContributionsPage
-from openchallenges_api_client_python.models.challenge_create_request import ChallengeCreateRequest as ChallengeCreateRequest
-from openchallenges_api_client_python.models.challenge_direction import ChallengeDirection as ChallengeDirection
-from openchallenges_api_client_python.models.challenge_incentive import ChallengeIncentive as ChallengeIncentive
-from openchallenges_api_client_python.models.challenge_json_ld import ChallengeJsonLd as ChallengeJsonLd
-from openchallenges_api_client_python.models.challenge_participation_role import ChallengeParticipationRole as ChallengeParticipationRole
-from openchallenges_api_client_python.models.challenge_platform import ChallengePlatform as ChallengePlatform
-from openchallenges_api_client_python.models.challenge_platform_create_request import ChallengePlatformCreateRequest as ChallengePlatformCreateRequest
-from openchallenges_api_client_python.models.challenge_platform_direction import ChallengePlatformDirection as ChallengePlatformDirection
-from openchallenges_api_client_python.models.challenge_platform_search_query import ChallengePlatformSearchQuery as ChallengePlatformSearchQuery
-from openchallenges_api_client_python.models.challenge_platform_sort import ChallengePlatformSort as ChallengePlatformSort
-from openchallenges_api_client_python.models.challenge_platform_update_request import ChallengePlatformUpdateRequest as ChallengePlatformUpdateRequest
-from openchallenges_api_client_python.models.challenge_platforms_page import ChallengePlatformsPage as ChallengePlatformsPage
-from openchallenges_api_client_python.models.challenge_search_query import ChallengeSearchQuery as ChallengeSearchQuery
-from openchallenges_api_client_python.models.challenge_sort import ChallengeSort as ChallengeSort
-from openchallenges_api_client_python.models.challenge_status import ChallengeStatus as ChallengeStatus
-from openchallenges_api_client_python.models.challenge_submission_type import ChallengeSubmissionType as ChallengeSubmissionType
-from openchallenges_api_client_python.models.challenge_update_request import ChallengeUpdateRequest as ChallengeUpdateRequest
-from openchallenges_api_client_python.models.challenges_page import ChallengesPage as ChallengesPage
-from openchallenges_api_client_python.models.challenges_per_year import ChallengesPerYear as ChallengesPerYear
-from openchallenges_api_client_python.models.create_api_key_request import CreateApiKeyRequest as CreateApiKeyRequest
-from openchallenges_api_client_python.models.create_api_key_response import CreateApiKeyResponse as CreateApiKeyResponse
-from openchallenges_api_client_python.models.edam_concept import EdamConcept as EdamConcept
-from openchallenges_api_client_python.models.edam_concept_direction import EdamConceptDirection as EdamConceptDirection
-from openchallenges_api_client_python.models.edam_concept_search_query import EdamConceptSearchQuery as EdamConceptSearchQuery
-from openchallenges_api_client_python.models.edam_concept_sort import EdamConceptSort as EdamConceptSort
-from openchallenges_api_client_python.models.edam_concepts_page import EdamConceptsPage as EdamConceptsPage
-from openchallenges_api_client_python.models.edam_section import EdamSection as EdamSection
-from openchallenges_api_client_python.models.image import Image as Image
-from openchallenges_api_client_python.models.image_aspect_ratio import ImageAspectRatio as ImageAspectRatio
-from openchallenges_api_client_python.models.image_height import ImageHeight as ImageHeight
-from openchallenges_api_client_python.models.image_query import ImageQuery as ImageQuery
-from openchallenges_api_client_python.models.organization import Organization as Organization
-from openchallenges_api_client_python.models.organization_category import OrganizationCategory as OrganizationCategory
-from openchallenges_api_client_python.models.organization_create_request import OrganizationCreateRequest as OrganizationCreateRequest
-from openchallenges_api_client_python.models.organization_direction import OrganizationDirection as OrganizationDirection
-from openchallenges_api_client_python.models.organization_search_query import OrganizationSearchQuery as OrganizationSearchQuery
-from openchallenges_api_client_python.models.organization_sort import OrganizationSort as OrganizationSort
-from openchallenges_api_client_python.models.organization_update_request import OrganizationUpdateRequest as OrganizationUpdateRequest
-from openchallenges_api_client_python.models.organizations_page import OrganizationsPage as OrganizationsPage
-from openchallenges_api_client_python.models.page_metadata import PageMetadata as PageMetadata
-from openchallenges_api_client_python.models.simple_challenge_platform import SimpleChallengePlatform as SimpleChallengePlatform
-from openchallenges_api_client_python.models.update_user_profile_request import UpdateUserProfileRequest as UpdateUserProfileRequest
-from openchallenges_api_client_python.models.user_profile import UserProfile as UserProfile
-from openchallenges_api_client_python.models.user_role import UserRole as UserRole
+from openchallenges_api_client.models.api_key import ApiKey as ApiKey
+from openchallenges_api_client.models.auth_scope import AuthScope as AuthScope
+from openchallenges_api_client.models.basic_error import BasicError as BasicError
+from openchallenges_api_client.models.challenge import Challenge as Challenge
+from openchallenges_api_client.models.challenge_category import ChallengeCategory as ChallengeCategory
+from openchallenges_api_client.models.challenge_contribution import ChallengeContribution as ChallengeContribution
+from openchallenges_api_client.models.challenge_contribution_create_request import ChallengeContributionCreateRequest as ChallengeContributionCreateRequest
+from openchallenges_api_client.models.challenge_contribution_role import ChallengeContributionRole as ChallengeContributionRole
+from openchallenges_api_client.models.challenge_contributions_page import ChallengeContributionsPage as ChallengeContributionsPage
+from openchallenges_api_client.models.challenge_create_request import ChallengeCreateRequest as ChallengeCreateRequest
+from openchallenges_api_client.models.challenge_direction import ChallengeDirection as ChallengeDirection
+from openchallenges_api_client.models.challenge_incentive import ChallengeIncentive as ChallengeIncentive
+from openchallenges_api_client.models.challenge_json_ld import ChallengeJsonLd as ChallengeJsonLd
+from openchallenges_api_client.models.challenge_participation_role import ChallengeParticipationRole as ChallengeParticipationRole
+from openchallenges_api_client.models.challenge_platform import ChallengePlatform as ChallengePlatform
+from openchallenges_api_client.models.challenge_platform_create_request import ChallengePlatformCreateRequest as ChallengePlatformCreateRequest
+from openchallenges_api_client.models.challenge_platform_direction import ChallengePlatformDirection as ChallengePlatformDirection
+from openchallenges_api_client.models.challenge_platform_search_query import ChallengePlatformSearchQuery as ChallengePlatformSearchQuery
+from openchallenges_api_client.models.challenge_platform_sort import ChallengePlatformSort as ChallengePlatformSort
+from openchallenges_api_client.models.challenge_platform_update_request import ChallengePlatformUpdateRequest as ChallengePlatformUpdateRequest
+from openchallenges_api_client.models.challenge_platforms_page import ChallengePlatformsPage as ChallengePlatformsPage
+from openchallenges_api_client.models.challenge_search_query import ChallengeSearchQuery as ChallengeSearchQuery
+from openchallenges_api_client.models.challenge_sort import ChallengeSort as ChallengeSort
+from openchallenges_api_client.models.challenge_status import ChallengeStatus as ChallengeStatus
+from openchallenges_api_client.models.challenge_submission_type import ChallengeSubmissionType as ChallengeSubmissionType
+from openchallenges_api_client.models.challenge_update_request import ChallengeUpdateRequest as ChallengeUpdateRequest
+from openchallenges_api_client.models.challenges_page import ChallengesPage as ChallengesPage
+from openchallenges_api_client.models.challenges_per_year import ChallengesPerYear as ChallengesPerYear
+from openchallenges_api_client.models.create_api_key_request import CreateApiKeyRequest as CreateApiKeyRequest
+from openchallenges_api_client.models.create_api_key_response import CreateApiKeyResponse as CreateApiKeyResponse
+from openchallenges_api_client.models.edam_concept import EdamConcept as EdamConcept
+from openchallenges_api_client.models.edam_concept_direction import EdamConceptDirection as EdamConceptDirection
+from openchallenges_api_client.models.edam_concept_search_query import EdamConceptSearchQuery as EdamConceptSearchQuery
+from openchallenges_api_client.models.edam_concept_sort import EdamConceptSort as EdamConceptSort
+from openchallenges_api_client.models.edam_concepts_page import EdamConceptsPage as EdamConceptsPage
+from openchallenges_api_client.models.edam_section import EdamSection as EdamSection
+from openchallenges_api_client.models.image import Image as Image
+from openchallenges_api_client.models.image_aspect_ratio import ImageAspectRatio as ImageAspectRatio
+from openchallenges_api_client.models.image_height import ImageHeight as ImageHeight
+from openchallenges_api_client.models.image_query import ImageQuery as ImageQuery
+from openchallenges_api_client.models.organization import Organization as Organization
+from openchallenges_api_client.models.organization_category import OrganizationCategory as OrganizationCategory
+from openchallenges_api_client.models.organization_create_request import OrganizationCreateRequest as OrganizationCreateRequest
+from openchallenges_api_client.models.organization_direction import OrganizationDirection as OrganizationDirection
+from openchallenges_api_client.models.organization_search_query import OrganizationSearchQuery as OrganizationSearchQuery
+from openchallenges_api_client.models.organization_sort import OrganizationSort as OrganizationSort
+from openchallenges_api_client.models.organization_update_request import OrganizationUpdateRequest as OrganizationUpdateRequest
+from openchallenges_api_client.models.organizations_page import OrganizationsPage as OrganizationsPage
+from openchallenges_api_client.models.page_metadata import PageMetadata as PageMetadata
+from openchallenges_api_client.models.simple_challenge_platform import SimpleChallengePlatform as SimpleChallengePlatform
+from openchallenges_api_client.models.update_user_profile_request import UpdateUserProfileRequest as UpdateUserProfileRequest
+from openchallenges_api_client.models.user_profile import UserProfile as UserProfile
+from openchallenges_api_client.models.user_role import UserRole as UserRole
 
 """,
             name=__name__,

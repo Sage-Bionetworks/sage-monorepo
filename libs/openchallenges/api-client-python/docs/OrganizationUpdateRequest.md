@@ -15,7 +15,7 @@ The information required to update an org account
 ## Example
 
 ```python
-from openchallenges_api_client_python.models.organization_update_request import OrganizationUpdateRequest
+from openchallenges_api_client.models.organization_update_request import OrganizationUpdateRequest
 
 # TODO update the JSON string below
 json = "{}"

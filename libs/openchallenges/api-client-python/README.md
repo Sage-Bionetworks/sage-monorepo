@@ -1,4 +1,4 @@
-# openchallenges-api-client-python
+# openchallenges-api-client
 
 Discover, explore, and contribute to open biomedical challenges.
 
@@ -29,7 +29,7 @@ pip install git+https://github.com/GIT_USER_ID/GIT_REPO_ID.git
 Then import the package:
 
 ```python
-import openchallenges_api_client_python
+import openchallenges_api_client
 ```
 
 ### Setuptools
@@ -45,7 +45,7 @@ python setup.py install --user
 Then import the package:
 
 ```python
-import openchallenges_api_client_python
+import openchallenges_api_client
 ```
 
 ### Tests
@@ -58,13 +58,13 @@ Please follow the [installation procedure](#installation--usage) and then run th
 
 ```python
 
-import openchallenges_api_client_python
-from openchallenges_api_client_python.rest import ApiException
+import openchallenges_api_client
+from openchallenges_api_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://openchallenges.io/api/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     host = "https://openchallenges.io/api/v1"
 )
 
@@ -80,16 +80,16 @@ configuration.api_key['apiKey'] = os.environ["API_KEY"]
 # configuration.api_key_prefix['apiKey'] = 'Bearer'
 
 # Configure Bearer authorization (JWT): jwtBearer
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 
 # Enter a context with an instance of the API client
-with openchallenges_api_client_python.ApiClient(configuration) as api_client:
+with openchallenges_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openchallenges_api_client_python.APIKeyApi(api_client)
-    create_api_key_request = openchallenges_api_client_python.CreateApiKeyRequest() # CreateApiKeyRequest |
+    api_instance = openchallenges_api_client.APIKeyApi(api_client)
+    create_api_key_request = openchallenges_api_client.CreateApiKeyRequest() # CreateApiKeyRequest |
 
     try:
         # Create API key

@@ -14,7 +14,7 @@ An image query that identifies an image either by an object storage key or by a 
 ## Example
 
 ```python
-from openchallenges_api_client_python.models.image_query import ImageQuery
+from openchallenges_api_client.models.image_query import ImageQuery
 
 # TODO update the JSON string below
 json = "{}"

@@ -1,3 +1,5 @@
+# coding: utf-8
+
 """
 OpenChallenges API
 
@@ -10,19 +12,18 @@ Do not edit the class manually.
 """  # noqa: E501
 
 from __future__ import annotations
-
-import json
 import pprint
 import re  # noqa: F401
-from typing import Annotated, Any, ClassVar, Self
+import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictStr
-
-from openchallenges_api_client.models.edam_concept_direction import (
-    EdamConceptDirection,
-)
+from typing import Any, ClassVar, Dict, List, Optional
+from typing_extensions import Annotated
+from openchallenges_api_client.models.edam_concept_direction import EdamConceptDirection
 from openchallenges_api_client.models.edam_concept_sort import EdamConceptSort
 from openchallenges_api_client.models.edam_section import EdamSection
+from typing import Optional, Set
+from typing_extensions import Self
 
 
 class EdamConceptSearchQuery(BaseModel):
@@ -30,30 +31,30 @@ class EdamConceptSearchQuery(BaseModel):
     An EDAM concept search query.
     """  # noqa: E501
 
-    page_number: Annotated[int, Field(strict=True, ge=0)] | None = Field(
+    page_number: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(
         default=0, description="The page number.", alias="pageNumber"
     )
-    page_size: Annotated[int, Field(strict=True, ge=1)] | None = Field(
+    page_size: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(
         default=100,
         description="The number of items in a single page.",
         alias="pageSize",
     )
-    sort: EdamConceptSort | None = EdamConceptSort.RELEVANCE
-    direction: EdamConceptDirection | None = None
-    ids: list[Annotated[int, Field(strict=True, ge=1)]] | None = Field(
+    sort: Optional[EdamConceptSort] = EdamConceptSort.RELEVANCE
+    direction: Optional[EdamConceptDirection] = None
+    ids: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(
         default=None,
         description="An array of EDAM concept ids used to filter the results.",
     )
-    search_terms: StrictStr | None = Field(
+    search_terms: Optional[StrictStr] = Field(
         default=None,
         description="A string of search terms used to filter the results.",
         alias="searchTerms",
     )
-    sections: list[EdamSection] | None = Field(
+    sections: Optional[List[EdamSection]] = Field(
         default=None,
         description="An array of EDAM sections (sub-ontologies) used to filter the results.",
     )
-    __properties: ClassVar[list[str]] = [
+    __properties: ClassVar[List[str]] = [
         "pageNumber",
         "pageSize",
         "sort",
@@ -79,11 +80,11 @@ class EdamConceptSearchQuery(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self | None:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of EdamConceptSearchQuery from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         """Return the dictionary representation of the model using alias.
 
         This has the following differences from calling pydantic's
@@ -93,7 +94,7 @@ class EdamConceptSearchQuery(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: set[str] = set([])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -108,7 +109,7 @@ class EdamConceptSearchQuery(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict[str, Any] | None) -> Self | None:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of EdamConceptSearchQuery from a dict"""
         if obj is None:
             return None

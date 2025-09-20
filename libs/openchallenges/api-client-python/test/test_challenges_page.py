@@ -1,3 +1,5 @@
+# coding: utf-8
+
 """
 OpenChallenges API
 
@@ -40,43 +42,43 @@ class TestChallengesPage(unittest.TestCase):
                 has_next = True,
                 has_previous = True,
                 challenges = [
-                    openchallenges_api_client_python.models.challenge.Challenge(
-                        id = 1,
-                        slug = 'awesome-challenge',
-                        name = 'Awesome Challenge',
-                        headline = 'Example challenge headline',
-                        description = 'This is an example description of the challenge.',
-                        doi = 'https://doi.org/123/abc',
-                        status = 'active',
-                        platform = openchallenges_api_client_python.models.simple_challenge_platform.SimpleChallengePlatform(
-                            id = 1,
-                            slug = 'example-challenge-platform',
-                            name = 'Example Challenge Platform', ),
-                        website_url = 'https://openchallenges.io',
-                        avatar_url = 'https://openchallenges.io',
+                    openchallenges_api_client.models.challenge.Challenge(
+                        id = 1, 
+                        slug = 'awesome-challenge', 
+                        name = 'Awesome Challenge', 
+                        headline = 'Example challenge headline', 
+                        description = 'This is an example description of the challenge.', 
+                        doi = 'https://doi.org/123/abc', 
+                        status = 'active', 
+                        platform = openchallenges_api_client.models.simple_challenge_platform.SimpleChallengePlatform(
+                            id = 1, 
+                            slug = 'example-challenge-platform', 
+                            name = 'Example Challenge Platform', ), 
+                        website_url = 'https://openchallenges.io', 
+                        avatar_url = 'https://openchallenges.io', 
                         incentives = [
                             'publication'
-                            ],
+                            ], 
                         submission_types = [
                             'container_image'
-                            ],
+                            ], 
                         input_data_types = [
-                            openchallenges_api_client_python.models.edam_concept.EdamConcept(
-                                id = 1,
-                                class_id = 'http://edamontology.org/data_0850',
+                            openchallenges_api_client.models.edam_concept.EdamConcept(
+                                id = 1, 
+                                class_id = 'http://edamontology.org/data_0850', 
                                 preferred_label = 'Sequence set', )
-                            ],
+                            ], 
                         categories = [
                             'featured'
-                            ],
-                        start_date = 'Fri Jul 21 00:00:00 UTC 2017',
-                        end_date = 'Fri Jul 21 00:00:00 UTC 2017',
-                        starred_count = 100,
-                        operation = openchallenges_api_client_python.models.edam_concept.EdamConcept(
-                            id = 1,
-                            class_id = 'http://edamontology.org/data_0850',
-                            preferred_label = 'Sequence set', ),
-                        created_at = '2022-07-04T22:19:11Z',
+                            ], 
+                        start_date = 'Fri Jul 21 00:00:00 UTC 2017', 
+                        end_date = 'Fri Jul 21 00:00:00 UTC 2017', 
+                        starred_count = 100, 
+                        operation = openchallenges_api_client.models.edam_concept.EdamConcept(
+                            id = 1, 
+                            class_id = 'http://edamontology.org/data_0850', 
+                            preferred_label = 'Sequence set', ), 
+                        created_at = '2022-07-04T22:19:11Z', 
                         updated_at = '2022-07-04T22:19:11Z', )
                     ]
             )
@@ -89,43 +91,43 @@ class TestChallengesPage(unittest.TestCase):
                 has_next = True,
                 has_previous = True,
                 challenges = [
-                    openchallenges_api_client_python.models.challenge.Challenge(
-                        id = 1,
-                        slug = 'awesome-challenge',
-                        name = 'Awesome Challenge',
-                        headline = 'Example challenge headline',
-                        description = 'This is an example description of the challenge.',
-                        doi = 'https://doi.org/123/abc',
-                        status = 'active',
-                        platform = openchallenges_api_client_python.models.simple_challenge_platform.SimpleChallengePlatform(
-                            id = 1,
-                            slug = 'example-challenge-platform',
-                            name = 'Example Challenge Platform', ),
-                        website_url = 'https://openchallenges.io',
-                        avatar_url = 'https://openchallenges.io',
+                    openchallenges_api_client.models.challenge.Challenge(
+                        id = 1, 
+                        slug = 'awesome-challenge', 
+                        name = 'Awesome Challenge', 
+                        headline = 'Example challenge headline', 
+                        description = 'This is an example description of the challenge.', 
+                        doi = 'https://doi.org/123/abc', 
+                        status = 'active', 
+                        platform = openchallenges_api_client.models.simple_challenge_platform.SimpleChallengePlatform(
+                            id = 1, 
+                            slug = 'example-challenge-platform', 
+                            name = 'Example Challenge Platform', ), 
+                        website_url = 'https://openchallenges.io', 
+                        avatar_url = 'https://openchallenges.io', 
                         incentives = [
                             'publication'
-                            ],
+                            ], 
                         submission_types = [
                             'container_image'
-                            ],
+                            ], 
                         input_data_types = [
-                            openchallenges_api_client_python.models.edam_concept.EdamConcept(
-                                id = 1,
-                                class_id = 'http://edamontology.org/data_0850',
+                            openchallenges_api_client.models.edam_concept.EdamConcept(
+                                id = 1, 
+                                class_id = 'http://edamontology.org/data_0850', 
                                 preferred_label = 'Sequence set', )
-                            ],
+                            ], 
                         categories = [
                             'featured'
-                            ],
-                        start_date = 'Fri Jul 21 00:00:00 UTC 2017',
-                        end_date = 'Fri Jul 21 00:00:00 UTC 2017',
-                        starred_count = 100,
-                        operation = openchallenges_api_client_python.models.edam_concept.EdamConcept(
-                            id = 1,
-                            class_id = 'http://edamontology.org/data_0850',
-                            preferred_label = 'Sequence set', ),
-                        created_at = '2022-07-04T22:19:11Z',
+                            ], 
+                        start_date = 'Fri Jul 21 00:00:00 UTC 2017', 
+                        end_date = 'Fri Jul 21 00:00:00 UTC 2017', 
+                        starred_count = 100, 
+                        operation = openchallenges_api_client.models.edam_concept.EdamConcept(
+                            id = 1, 
+                            class_id = 'http://edamontology.org/data_0850', 
+                            preferred_label = 'Sequence set', ), 
+                        created_at = '2022-07-04T22:19:11Z', 
                         updated_at = '2022-07-04T22:19:11Z', )
                     ],
         )

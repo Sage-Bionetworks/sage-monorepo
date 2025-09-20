@@ -1,3 +1,5 @@
+# coding: utf-8
+
 """
 OpenChallenges API
 
@@ -42,10 +44,10 @@ class TestChallengeContributionsPage(unittest.TestCase):
                 has_next = True,
                 has_previous = True,
                 challenge_contributions = [
-                    openchallenges_api_client_python.models.challenge_contribution.ChallengeContribution(
-                        id = 1,
-                        challenge_id = 1,
-                        organization_id = 1,
+                    openchallenges_api_client.models.challenge_contribution.ChallengeContribution(
+                        id = 1, 
+                        challenge_id = 1, 
+                        organization_id = 1, 
                         role = 'challenge_organizer', )
                     ]
             )
@@ -58,10 +60,10 @@ class TestChallengeContributionsPage(unittest.TestCase):
                 has_next = True,
                 has_previous = True,
                 challenge_contributions = [
-                    openchallenges_api_client_python.models.challenge_contribution.ChallengeContribution(
-                        id = 1,
-                        challenge_id = 1,
-                        organization_id = 1,
+                    openchallenges_api_client.models.challenge_contribution.ChallengeContribution(
+                        id = 1, 
+                        challenge_id = 1, 
+                        organization_id = 1, 
                         role = 'challenge_organizer', )
                     ],
         )

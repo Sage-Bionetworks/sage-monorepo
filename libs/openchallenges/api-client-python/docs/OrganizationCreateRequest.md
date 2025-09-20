@@ -16,7 +16,7 @@ The information required to create an org account
 ## Example
 
 ```python
-from openchallenges_api_client_python.models.organization_create_request import OrganizationCreateRequest
+from openchallenges_api_client.models.organization_create_request import OrganizationCreateRequest
 
 # TODO update the JSON string below
 json = "{}"

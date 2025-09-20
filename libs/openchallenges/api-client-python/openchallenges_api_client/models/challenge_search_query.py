@@ -1,3 +1,5 @@
+# coding: utf-8
+
 """
 OpenChallenges API
 
@@ -10,27 +12,24 @@ Do not edit the class manually.
 """  # noqa: E501
 
 from __future__ import annotations
-
-import json
 import pprint
 import re  # noqa: F401
+import json
+
 from datetime import date
-from typing import Annotated, Any, ClassVar, Self
-
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
-
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr, field_validator
+from typing import Any, ClassVar, Dict, List, Optional
+from typing_extensions import Annotated
 from openchallenges_api_client.models.challenge_category import ChallengeCategory
-from openchallenges_api_client.models.challenge_direction import (
-    ChallengeDirection,
-)
-from openchallenges_api_client.models.challenge_incentive import (
-    ChallengeIncentive,
-)
+from openchallenges_api_client.models.challenge_direction import ChallengeDirection
+from openchallenges_api_client.models.challenge_incentive import ChallengeIncentive
 from openchallenges_api_client.models.challenge_sort import ChallengeSort
 from openchallenges_api_client.models.challenge_status import ChallengeStatus
 from openchallenges_api_client.models.challenge_submission_type import (
     ChallengeSubmissionType,
 )
+from typing import Optional, Set
+from typing_extensions import Self
 
 
 class ChallengeSearchQuery(BaseModel):
@@ -38,73 +37,75 @@ class ChallengeSearchQuery(BaseModel):
     A challenge search query.
     """  # noqa: E501
 
-    page_number: Annotated[int, Field(strict=True, ge=0)] | None = Field(
+    page_number: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(
         default=0, description="The page number.", alias="pageNumber"
     )
-    page_size: Annotated[int, Field(strict=True, ge=1)] | None = Field(
+    page_size: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(
         default=100,
         description="The number of items in a single page.",
         alias="pageSize",
     )
-    sort: ChallengeSort | None = ChallengeSort.RELEVANCE
-    sort_seed: Annotated[int, Field(le=2147483647, strict=True, ge=0)] | None = Field(
-        default=None,
-        description="The seed that initializes the random sorter.",
-        alias="sortSeed",
+    sort: Optional[ChallengeSort] = ChallengeSort.RELEVANCE
+    sort_seed: Optional[Annotated[int, Field(le=2147483647, strict=True, ge=0)]] = (
+        Field(
+            default=None,
+            description="The seed that initializes the random sorter.",
+            alias="sortSeed",
+        )
     )
-    direction: ChallengeDirection | None = None
-    incentives: list[ChallengeIncentive] | None = Field(
+    direction: Optional[ChallengeDirection] = None
+    incentives: Optional[List[ChallengeIncentive]] = Field(
         default=None,
         description="An array of challenge incentive types used to filter the results.",
     )
-    min_start_date: date | None = Field(
+    min_start_date: Optional[date] = Field(
         default=None,
         description="Keep the challenges that start at this date or later.",
         alias="minStartDate",
     )
-    max_start_date: date | None = Field(
+    max_start_date: Optional[date] = Field(
         default=None,
         description="Keep the challenges that start at this date or sooner.",
         alias="maxStartDate",
     )
-    platforms: (
-        list[Annotated[str, Field(min_length=3, strict=True, max_length=30)]] | None
-    ) = Field(
+    platforms: Optional[
+        List[Annotated[str, Field(min_length=3, strict=True, max_length=30)]]
+    ] = Field(
         default=None,
         description="An array of challenge platform ids used to filter the results.",
     )
-    organizations: list[StrictInt] | None = Field(
+    organizations: Optional[List[StrictInt]] = Field(
         default=None,
         description="An array of organization ids used to filter the results.",
     )
-    status: list[ChallengeStatus] | None = Field(
+    status: Optional[List[ChallengeStatus]] = Field(
         default=None,
         description="An array of challenge status used to filter the results.",
     )
-    submission_types: list[ChallengeSubmissionType] | None = Field(
+    submission_types: Optional[List[ChallengeSubmissionType]] = Field(
         default=None,
         description="An array of challenge submission types used to filter the results.",
         alias="submissionTypes",
     )
-    input_data_types: list[Annotated[int, Field(strict=True, ge=1)]] | None = Field(
+    input_data_types: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(
         default=None,
         description="An array of EDAM concept ID used to filter the results.",
         alias="inputDataTypes",
     )
-    operations: list[Annotated[int, Field(strict=True, ge=1)]] | None = Field(
+    operations: Optional[List[Annotated[int, Field(strict=True, ge=1)]]] = Field(
         default=None,
         description="An array of EDAM concept ID used to filter the results.",
     )
-    categories: list[ChallengeCategory] | None = Field(
+    categories: Optional[List[ChallengeCategory]] = Field(
         default=None,
         description="The array of challenge categories used to filter the results.",
     )
-    search_terms: StrictStr | None = Field(
+    search_terms: Optional[StrictStr] = Field(
         default=None,
         description="A string of search terms used to filter the results.",
         alias="searchTerms",
     )
-    __properties: ClassVar[list[str]] = [
+    __properties: ClassVar[List[str]] = [
         "pageNumber",
         "pageSize",
         "sort",
@@ -139,11 +140,11 @@ class ChallengeSearchQuery(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self | None:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of ChallengeSearchQuery from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         """Return the dictionary representation of the model using alias.
 
         This has the following differences from calling pydantic's
@@ -153,7 +154,7 @@ class ChallengeSearchQuery(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: set[str] = set([])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -183,7 +184,7 @@ class ChallengeSearchQuery(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict[str, Any] | None) -> Self | None:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of ChallengeSearchQuery from a dict"""
         if obj is None:
             return None

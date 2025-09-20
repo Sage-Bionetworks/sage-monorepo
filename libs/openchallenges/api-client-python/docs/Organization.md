@@ -20,7 +20,7 @@ An organization
 ## Example
 
 ```python
-from openchallenges_api_client_python.models.organization import Organization
+from openchallenges_api_client.models.organization import Organization
 
 # TODO update the JSON string below
 json = "{}"

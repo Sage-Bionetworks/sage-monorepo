@@ -1,4 +1,4 @@
-# openchallenges_api_client_python.ChallengeApi
+# openchallenges_api_client.ChallengeApi
 
 All URIs are relative to *https://openchallenges.io/api/v1*
 
@@ -25,15 +25,15 @@ Create a challenge with the specified details
 - Bearer (JWT) Authentication (jwtBearer):
 
 ```python
-import openchallenges_api_client_python
-from openchallenges_api_client_python.models.challenge import Challenge
-from openchallenges_api_client_python.models.challenge_create_request import ChallengeCreateRequest
-from openchallenges_api_client_python.rest import ApiException
+import openchallenges_api_client
+from openchallenges_api_client.models.challenge import Challenge
+from openchallenges_api_client.models.challenge_create_request import ChallengeCreateRequest
+from openchallenges_api_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://openchallenges.io/api/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     host = "https://openchallenges.io/api/v1"
 )
 
@@ -49,15 +49,15 @@ configuration.api_key['apiKey'] = os.environ["API_KEY"]
 # configuration.api_key_prefix['apiKey'] = 'Bearer'
 
 # Configure Bearer authorization (JWT): jwtBearer
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
-with openchallenges_api_client_python.ApiClient(configuration) as api_client:
+with openchallenges_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openchallenges_api_client_python.ChallengeApi(api_client)
-    challenge_create_request = openchallenges_api_client_python.ChallengeCreateRequest() # ChallengeCreateRequest |
+    api_instance = openchallenges_api_client.ChallengeApi(api_client)
+    challenge_create_request = openchallenges_api_client.ChallengeCreateRequest() # ChallengeCreateRequest |
 
     try:
         # Create a challenge
@@ -114,13 +114,13 @@ Deletes a challenge by its unique ID.
 - Bearer (JWT) Authentication (jwtBearer):
 
 ```python
-import openchallenges_api_client_python
-from openchallenges_api_client_python.rest import ApiException
+import openchallenges_api_client
+from openchallenges_api_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://openchallenges.io/api/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     host = "https://openchallenges.io/api/v1"
 )
 
@@ -136,14 +136,14 @@ configuration.api_key['apiKey'] = os.environ["API_KEY"]
 # configuration.api_key_prefix['apiKey'] = 'Bearer'
 
 # Configure Bearer authorization (JWT): jwtBearer
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
-with openchallenges_api_client_python.ApiClient(configuration) as api_client:
+with openchallenges_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openchallenges_api_client_python.ChallengeApi(api_client)
+    api_instance = openchallenges_api_client.ChallengeApi(api_client)
     challenge_id = 56 # int | The unique identifier of the challenge.
 
     try:
@@ -198,14 +198,14 @@ Returns the challenge specified
 - Bearer (JWT) Authentication (jwtBearer):
 
 ```python
-import openchallenges_api_client_python
-from openchallenges_api_client_python.models.challenge import Challenge
-from openchallenges_api_client_python.rest import ApiException
+import openchallenges_api_client
+from openchallenges_api_client.models.challenge import Challenge
+from openchallenges_api_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://openchallenges.io/api/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     host = "https://openchallenges.io/api/v1"
 )
 
@@ -221,14 +221,14 @@ configuration.api_key['apiKey'] = os.environ["API_KEY"]
 # configuration.api_key_prefix['apiKey'] = 'Bearer'
 
 # Configure Bearer authorization (JWT): jwtBearer
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
-with openchallenges_api_client_python.ApiClient(configuration) as api_client:
+with openchallenges_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openchallenges_api_client_python.ChallengeApi(api_client)
+    api_instance = openchallenges_api_client.ChallengeApi(api_client)
     challenge_id = 56 # int | The unique identifier of the challenge.
 
     try:
@@ -283,14 +283,14 @@ Returns the challenge specified in JSON-LD format
 - Bearer (JWT) Authentication (jwtBearer):
 
 ```python
-import openchallenges_api_client_python
-from openchallenges_api_client_python.models.challenge_json_ld import ChallengeJsonLd
-from openchallenges_api_client_python.rest import ApiException
+import openchallenges_api_client
+from openchallenges_api_client.models.challenge_json_ld import ChallengeJsonLd
+from openchallenges_api_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://openchallenges.io/api/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     host = "https://openchallenges.io/api/v1"
 )
 
@@ -306,14 +306,14 @@ configuration.api_key['apiKey'] = os.environ["API_KEY"]
 # configuration.api_key_prefix['apiKey'] = 'Bearer'
 
 # Configure Bearer authorization (JWT): jwtBearer
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
-with openchallenges_api_client_python.ApiClient(configuration) as api_client:
+with openchallenges_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openchallenges_api_client_python.ChallengeApi(api_client)
+    api_instance = openchallenges_api_client.ChallengeApi(api_client)
     challenge_id = 56 # int | The unique identifier of the challenge.
 
     try:
@@ -368,15 +368,15 @@ List challenges
 - Bearer (JWT) Authentication (jwtBearer):
 
 ```python
-import openchallenges_api_client_python
-from openchallenges_api_client_python.models.challenge_search_query import ChallengeSearchQuery
-from openchallenges_api_client_python.models.challenges_page import ChallengesPage
-from openchallenges_api_client_python.rest import ApiException
+import openchallenges_api_client
+from openchallenges_api_client.models.challenge_search_query import ChallengeSearchQuery
+from openchallenges_api_client.models.challenges_page import ChallengesPage
+from openchallenges_api_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://openchallenges.io/api/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     host = "https://openchallenges.io/api/v1"
 )
 
@@ -392,15 +392,15 @@ configuration.api_key['apiKey'] = os.environ["API_KEY"]
 # configuration.api_key_prefix['apiKey'] = 'Bearer'
 
 # Configure Bearer authorization (JWT): jwtBearer
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
-with openchallenges_api_client_python.ApiClient(configuration) as api_client:
+with openchallenges_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openchallenges_api_client_python.ChallengeApi(api_client)
-    challenge_search_query = openchallenges_api_client_python.ChallengeSearchQuery() # ChallengeSearchQuery | The search query used to find challenges. (optional)
+    api_instance = openchallenges_api_client.ChallengeApi(api_client)
+    challenge_search_query = openchallenges_api_client.ChallengeSearchQuery() # ChallengeSearchQuery | The search query used to find challenges. (optional)
 
     try:
         # List challenges
@@ -454,15 +454,15 @@ Updates an existing challenge.
 - Bearer (JWT) Authentication (jwtBearer):
 
 ```python
-import openchallenges_api_client_python
-from openchallenges_api_client_python.models.challenge import Challenge
-from openchallenges_api_client_python.models.challenge_update_request import ChallengeUpdateRequest
-from openchallenges_api_client_python.rest import ApiException
+import openchallenges_api_client
+from openchallenges_api_client.models.challenge import Challenge
+from openchallenges_api_client.models.challenge_update_request import ChallengeUpdateRequest
+from openchallenges_api_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://openchallenges.io/api/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     host = "https://openchallenges.io/api/v1"
 )
 
@@ -478,16 +478,16 @@ configuration.api_key['apiKey'] = os.environ["API_KEY"]
 # configuration.api_key_prefix['apiKey'] = 'Bearer'
 
 # Configure Bearer authorization (JWT): jwtBearer
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
-with openchallenges_api_client_python.ApiClient(configuration) as api_client:
+with openchallenges_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openchallenges_api_client_python.ChallengeApi(api_client)
+    api_instance = openchallenges_api_client.ChallengeApi(api_client)
     challenge_id = 56 # int | The unique identifier of the challenge.
-    challenge_update_request = openchallenges_api_client_python.ChallengeUpdateRequest() # ChallengeUpdateRequest |
+    challenge_update_request = openchallenges_api_client.ChallengeUpdateRequest() # ChallengeUpdateRequest |
 
     try:
         # Update an existing challenge

@@ -1,3 +1,5 @@
+# coding: utf-8
+
 """
 OpenChallenges API
 
@@ -42,11 +44,11 @@ class TestChallengePlatformsPage(unittest.TestCase):
                 has_next = True,
                 has_previous = True,
                 challenge_platforms = [
-                    openchallenges_api_client_python.models.challenge_platform.ChallengePlatform(
-                        id = 1,
-                        slug = 'example-challenge-platform',
-                        name = 'Example Challenge Platform',
-                        avatar_key = 'logo/dream.png',
+                    openchallenges_api_client.models.challenge_platform.ChallengePlatform(
+                        id = 1, 
+                        slug = 'example-challenge-platform', 
+                        name = 'Example Challenge Platform', 
+                        avatar_key = 'logo/dream.png', 
                         website_url = 'https://openchallenges.io', )
                     ]
             )
@@ -59,11 +61,11 @@ class TestChallengePlatformsPage(unittest.TestCase):
                 has_next = True,
                 has_previous = True,
                 challenge_platforms = [
-                    openchallenges_api_client_python.models.challenge_platform.ChallengePlatform(
-                        id = 1,
-                        slug = 'example-challenge-platform',
-                        name = 'Example Challenge Platform',
-                        avatar_key = 'logo/dream.png',
+                    openchallenges_api_client.models.challenge_platform.ChallengePlatform(
+                        id = 1, 
+                        slug = 'example-challenge-platform', 
+                        name = 'Example Challenge Platform', 
+                        avatar_key = 'logo/dream.png', 
                         website_url = 'https://openchallenges.io', )
                     ],
         )

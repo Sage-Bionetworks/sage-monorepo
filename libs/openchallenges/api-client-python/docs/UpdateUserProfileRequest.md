@@ -13,7 +13,7 @@
 ## Example
 
 ```python
-from openchallenges_api_client_python.models.update_user_profile_request import UpdateUserProfileRequest
+from openchallenges_api_client.models.update_user_profile_request import UpdateUserProfileRequest
 
 # TODO update the JSON string below
 json = "{}"

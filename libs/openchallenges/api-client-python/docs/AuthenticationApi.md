@@ -1,4 +1,4 @@
-# openchallenges_api_client_python.AuthenticationApi
+# openchallenges_api_client.AuthenticationApi
 
 All URIs are relative to *https://openchallenges.io/api/v1*
 
@@ -21,14 +21,14 @@ Get the authenticated user's profile information
 - Bearer (JWT) Authentication (jwtBearer):
 
 ```python
-import openchallenges_api_client_python
-from openchallenges_api_client_python.models.user_profile import UserProfile
-from openchallenges_api_client_python.rest import ApiException
+import openchallenges_api_client
+from openchallenges_api_client.models.user_profile import UserProfile
+from openchallenges_api_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://openchallenges.io/api/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     host = "https://openchallenges.io/api/v1"
 )
 
@@ -44,14 +44,14 @@ configuration.api_key['apiKey'] = os.environ["API_KEY"]
 # configuration.api_key_prefix['apiKey'] = 'Bearer'
 
 # Configure Bearer authorization (JWT): jwtBearer
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
-with openchallenges_api_client_python.ApiClient(configuration) as api_client:
+with openchallenges_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openchallenges_api_client_python.AuthenticationApi(api_client)
+    api_instance = openchallenges_api_client.AuthenticationApi(api_client)
 
     try:
         # Get user profile
@@ -103,15 +103,15 @@ Update the authenticated user's profile information
 - Bearer (JWT) Authentication (jwtBearer):
 
 ```python
-import openchallenges_api_client_python
-from openchallenges_api_client_python.models.update_user_profile_request import UpdateUserProfileRequest
-from openchallenges_api_client_python.models.user_profile import UserProfile
-from openchallenges_api_client_python.rest import ApiException
+import openchallenges_api_client
+from openchallenges_api_client.models.update_user_profile_request import UpdateUserProfileRequest
+from openchallenges_api_client.models.user_profile import UserProfile
+from openchallenges_api_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://openchallenges.io/api/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     host = "https://openchallenges.io/api/v1"
 )
 
@@ -127,15 +127,15 @@ configuration.api_key['apiKey'] = os.environ["API_KEY"]
 # configuration.api_key_prefix['apiKey'] = 'Bearer'
 
 # Configure Bearer authorization (JWT): jwtBearer
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
-with openchallenges_api_client_python.ApiClient(configuration) as api_client:
+with openchallenges_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openchallenges_api_client_python.AuthenticationApi(api_client)
-    update_user_profile_request = openchallenges_api_client_python.UpdateUserProfileRequest() # UpdateUserProfileRequest |
+    api_instance = openchallenges_api_client.AuthenticationApi(api_client)
+    update_user_profile_request = openchallenges_api_client.UpdateUserProfileRequest() # UpdateUserProfileRequest |
 
     try:
         # Update user profile

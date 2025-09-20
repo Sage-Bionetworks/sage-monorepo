@@ -1,3 +1,5 @@
+# coding: utf-8
+
 """
 OpenChallenges API
 
@@ -40,16 +42,16 @@ class TestOrganizationsPage(unittest.TestCase):
                 has_next = True,
                 has_previous = True,
                 organizations = [
-                    openchallenges_api_client_python.models.organization.Organization(
-                        id = 1,
-                        name = 'Example organization',
-                        login = 'example-org',
-                        description = 'A description of the organization.',
-                        avatar_key = 'logo/dream.png',
-                        website_url = 'https://openchallenges.io',
-                        challenge_count = 10,
-                        short_name = 'OC',
-                        created_at = '2022-07-04T22:19:11Z',
+                    openchallenges_api_client.models.organization.Organization(
+                        id = 1, 
+                        name = 'Example organization', 
+                        login = 'example-org', 
+                        description = 'A description of the organization.', 
+                        avatar_key = 'logo/dream.png', 
+                        website_url = 'https://openchallenges.io', 
+                        challenge_count = 10, 
+                        short_name = 'OC', 
+                        created_at = '2022-07-04T22:19:11Z', 
                         updated_at = '2022-07-04T22:19:11Z', )
                     ]
             )
@@ -62,16 +64,16 @@ class TestOrganizationsPage(unittest.TestCase):
                 has_next = True,
                 has_previous = True,
                 organizations = [
-                    openchallenges_api_client_python.models.organization.Organization(
-                        id = 1,
-                        name = 'Example organization',
-                        login = 'example-org',
-                        description = 'A description of the organization.',
-                        avatar_key = 'logo/dream.png',
-                        website_url = 'https://openchallenges.io',
-                        challenge_count = 10,
-                        short_name = 'OC',
-                        created_at = '2022-07-04T22:19:11Z',
+                    openchallenges_api_client.models.organization.Organization(
+                        id = 1, 
+                        name = 'Example organization', 
+                        login = 'example-org', 
+                        description = 'A description of the organization.', 
+                        avatar_key = 'logo/dream.png', 
+                        website_url = 'https://openchallenges.io', 
+                        challenge_count = 10, 
+                        short_name = 'OC', 
+                        created_at = '2022-07-04T22:19:11Z', 
                         updated_at = '2022-07-04T22:19:11Z', )
                     ],
         )

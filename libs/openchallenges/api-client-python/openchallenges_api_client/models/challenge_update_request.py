@@ -1,3 +1,5 @@
+# coding: utf-8
+
 """
 OpenChallenges API
 
@@ -10,23 +12,22 @@ Do not edit the class manually.
 """  # noqa: E501
 
 from __future__ import annotations
-
-import json
 import pprint
 import re  # noqa: F401
+import json
+
 from datetime import date
-from typing import Annotated, Any, ClassVar, Self
-
 from pydantic import BaseModel, ConfigDict, Field, StrictInt, field_validator
-
+from typing import Any, ClassVar, Dict, List, Optional
+from typing_extensions import Annotated
 from openchallenges_api_client.models.challenge_category import ChallengeCategory
-from openchallenges_api_client.models.challenge_incentive import (
-    ChallengeIncentive,
-)
+from openchallenges_api_client.models.challenge_incentive import ChallengeIncentive
 from openchallenges_api_client.models.challenge_status import ChallengeStatus
 from openchallenges_api_client.models.challenge_submission_type import (
     ChallengeSubmissionType,
 )
+from typing import Optional, Set
+from typing_extensions import Self
 
 
 class ChallengeUpdateRequest(BaseModel):
@@ -40,41 +41,41 @@ class ChallengeUpdateRequest(BaseModel):
     name: Annotated[str, Field(min_length=3, strict=True, max_length=255)] = Field(
         description="The name of the challenge."
     )
-    headline: Annotated[str, Field(min_length=0, strict=True, max_length=80)] | None = (
-        Field(description="The headline of the challenge.")
-    )
+    headline: Optional[
+        Annotated[str, Field(min_length=0, strict=True, max_length=80)]
+    ] = Field(description="The headline of the challenge.")
     description: Annotated[str, Field(min_length=0, strict=True, max_length=1000)] = (
         Field(description="The description of the challenge.")
     )
-    doi: Annotated[str, Field(strict=True, max_length=120)] | None = Field(
+    doi: Optional[Annotated[str, Field(strict=True, max_length=120)]] = Field(
         description="The DOI of the challenge."
     )
     status: ChallengeStatus
     platform_id: StrictInt = Field(
         description="The unique identifier of a challenge platform.", alias="platformId"
     )
-    website_url: Annotated[str, Field(strict=True, max_length=500)] | None = Field(
+    website_url: Optional[Annotated[str, Field(strict=True, max_length=500)]] = Field(
         description="A URL to the website or image.", alias="websiteUrl"
     )
-    avatar_url: Annotated[str, Field(strict=True, max_length=500)] | None = Field(
+    avatar_url: Optional[Annotated[str, Field(strict=True, max_length=500)]] = Field(
         description="A URL to the website or image.", alias="avatarUrl"
     )
-    incentives: list[ChallengeIncentive]
-    submission_types: list[ChallengeSubmissionType] = Field(alias="submissionTypes")
-    categories: list[ChallengeCategory]
-    input_data_types: list[Annotated[int, Field(strict=True, ge=1)]] = Field(
+    incentives: List[ChallengeIncentive]
+    submission_types: List[ChallengeSubmissionType] = Field(alias="submissionTypes")
+    categories: List[ChallengeCategory]
+    input_data_types: List[Annotated[int, Field(strict=True, ge=1)]] = Field(
         alias="inputDataTypes"
     )
     operation: Annotated[int, Field(strict=True, ge=1)] = Field(
         description="The unique identifier of the EDAM concept."
     )
-    start_date: date | None = Field(
+    start_date: Optional[date] = Field(
         description="The start date of the challenge.", alias="startDate"
     )
-    end_date: date | None = Field(
+    end_date: Optional[date] = Field(
         description="The end date of the challenge.", alias="endDate"
     )
-    __properties: ClassVar[list[str]] = [
+    __properties: ClassVar[List[str]] = [
         "slug",
         "name",
         "headline",
@@ -118,11 +119,11 @@ class ChallengeUpdateRequest(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> Self | None:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of ChallengeUpdateRequest from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         """Return the dictionary representation of the model using alias.
 
         This has the following differences from calling pydantic's
@@ -132,7 +133,7 @@ class ChallengeUpdateRequest(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: set[str] = set([])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -172,7 +173,7 @@ class ChallengeUpdateRequest(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict[str, Any] | None) -> Self | None:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of ChallengeUpdateRequest from a dict"""
         if obj is None:
             return None
