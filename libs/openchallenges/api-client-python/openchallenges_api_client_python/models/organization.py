@@ -45,8 +45,10 @@ class Organization(BaseModel):
         description="The number of challenges involving this organization.",
         alias="challengeCount",
     )
-    acronym: Optional[Annotated[str, Field(strict=True, max_length=10)]] = Field(
-        default=None, description="An acronym of the organization."
+    short_name: Optional[Annotated[str, Field(strict=True, max_length=32)]] = Field(
+        default=None,
+        description='The abbreviation, which may be an acronym, initialism, or other short form (e.g., "AI", "WashU", "etc.") ',
+        alias="shortName",
     )
     created_at: datetime = Field(
         description="Datetime when the object was added to the database.",
@@ -64,7 +66,7 @@ class Organization(BaseModel):
         "avatarKey",
         "websiteUrl",
         "challengeCount",
-        "acronym",
+        "shortName",
         "createdAt",
         "updatedAt",
     ]
@@ -130,103 +132,12 @@ class Organization(BaseModel):
         if self.website_url is None and "website_url" in self.model_fields_set:
             _dict["websiteUrl"] = None
 
-        # set to None if acronym (nullable) is None
+        # set to None if short_name (nullable) is None
         # and model_fields_set contains the field
-        if self.acronym is None and "acronym" in self.model_fields_set:
-            _dict["acronym"] = None
+        if self.short_name is None and "short_name" in self.model_fields_set:
+            _dict["shortName"] = None
 
         return _dict
-
-    # --- BEGIN CUSTOM: tolerant construction helper for page-like list models ---
-    @classmethod
-    def from_dict_skip_invalid(cls, obj: Optional[Dict[str, Any]]):  # type: ignore[override]
-        """Create instance skipping invalid nested items (Page models only).
-
-        Heuristics:
-        - Applies only when the class name ends with 'Page'.
-        - Identifies the primary list field ("organizations", "items", or the only list field).
-        - Attempts per-item validation; invalid items (including those with additional fields
-          or field constraint violations) are skipped.
-        - Attaches counts via `_skipped_invalid_items` and `_skipped_invalid_organizations` (legacy).
-        Fallbacks to strict parsing if structure is unexpected to avoid masking systemic issues.
-        """
-        if not getattr(cls, "__name__", "").endswith("Page"):
-            return cls.from_dict(obj)  # type: ignore
-        if obj is None or not isinstance(obj, dict):
-            return cls.from_dict(obj)  # type: ignore
-
-        # Detect candidate list fields.
-        candidate_keys = [k for k, v in obj.items() if isinstance(v, list)]
-        target_key = None
-        for preferred in ("organizations", "items"):
-            if preferred in candidate_keys:
-                target_key = preferred
-                break
-        if target_key is None and len(candidate_keys) == 1:
-            target_key = candidate_keys[0]
-        if target_key is None:
-            return cls.from_dict(obj)  # type: ignore
-
-        raw_list = obj.get(target_key) or []
-        # Infer element model class from pydantic field annotation if possible.
-        element_model = None
-        try:  # best-effort; failures fall back to dict passthrough
-            from typing import get_args  # Python 3.11+ stdlib
-
-            field_info = getattr(cls, "model_fields", {}).get(target_key)
-            if field_info is not None:
-                ann = getattr(field_info, "annotation", None)
-                if ann is not None:
-                    args = get_args(ann)
-                    if args:
-                        element_model = args[0]
-        except Exception:  # pragma: no cover
-            element_model = None
-
-        parsed_models = []
-        skipped = 0
-        for entry in raw_list:
-            # Normalize to dict for validation if possible
-            candidate = entry
-            if isinstance(entry, tuple):  # unlikely but defensively handle
-                # Convert tuples to list/dict only if element model expects mapping; else keep
-                candidate = entry
-            try:
-                if (
-                    element_model is not None
-                    and hasattr(element_model, "from_dict")
-                    and isinstance(candidate, dict)
-                ):
-                    model_obj = element_model.from_dict(candidate)
-                elif element_model is not None and hasattr(
-                    element_model, "model_validate"
-                ):  # pydantic BaseModel subclass
-                    model_obj = element_model.model_validate(candidate)
-                else:
-                    # No element model – accept as-is (will validate later or be skipped if invalid)
-                    model_obj = candidate
-                if model_obj is None:
-                    skipped += 1
-                else:
-                    parsed_models.append(model_obj)
-            except Exception:  # validation error – skip
-                skipped += 1
-
-        # Rebuild object dict with validated subset
-        tmp = dict(obj)
-        tmp[target_key] = parsed_models
-        try:
-            inst = cls.from_dict(tmp)  # type: ignore
-        except Exception:
-            # As a last resort fall back to strict path (may raise), to avoid silent data loss at page level
-            return cls.from_dict(obj)  # type: ignore
-
-        if inst is not None and skipped:
-            setattr(inst, "_skipped_invalid_items", skipped)
-            setattr(inst, "_skipped_invalid_organizations", skipped)
-        return inst
-
-    # --- END CUSTOM ---
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
@@ -248,7 +159,7 @@ class Organization(BaseModel):
                 "challengeCount": obj.get("challengeCount")
                 if obj.get("challengeCount") is not None
                 else 0,
-                "acronym": obj.get("acronym"),
+                "shortName": obj.get("shortName"),
                 "createdAt": obj.get("createdAt"),
                 "updatedAt": obj.get("updatedAt"),
             }

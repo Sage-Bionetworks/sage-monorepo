@@ -16,7 +16,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from openchallenges_api_client_python.models.image_aspect_ratio import ImageAspectRatio
@@ -27,21 +27,36 @@ from typing_extensions import Self
 
 class ImageQuery(BaseModel):
     """
-    An image query.
+    An image query that identifies an image either by an object storage key or by a direct URL. Exactly one of `objectKey` or `imageUrl` must be provided.
     """  # noqa: E501
 
-    object_key: Annotated[str, Field(strict=True)] = Field(
-        description="The unique identifier of the image.", alias="objectKey"
+    object_key: Optional[Annotated[str, Field(strict=True)]] = Field(
+        default=None,
+        description="The unique identifier of the image.",
+        alias="objectKey",
+    )
+    image_url: Optional[StrictStr] = Field(
+        default=None,
+        description="The HTTPS URL of the image. Use this as an alternative to `objectKey`. ",
+        alias="imageUrl",
     )
     height: Optional[ImageHeight] = ImageHeight.ORIGINAL
     aspect_ratio: Optional[ImageAspectRatio] = Field(
         default=ImageAspectRatio.ORIGINAL, alias="aspectRatio"
     )
-    __properties: ClassVar[List[str]] = ["objectKey", "height", "aspectRatio"]
+    __properties: ClassVar[List[str]] = [
+        "objectKey",
+        "imageUrl",
+        "height",
+        "aspectRatio",
+    ]
 
     @field_validator("object_key")
     def object_key_validate_regular_expression(cls, value):
         """Validates the regular expression"""
+        if value is None:
+            return value
+
         if not re.match(r"^[a-zA-Z0-9\/_-]+.[a-zA-Z0-9\/_-]+", value):
             raise ValueError(
                 r"must validate the regular expression /^[a-zA-Z0-9\/_-]+.[a-zA-Z0-9\/_-]+/"
@@ -87,97 +102,6 @@ class ImageQuery(BaseModel):
         )
         return _dict
 
-    # --- BEGIN CUSTOM: tolerant construction helper for page-like list models ---
-    @classmethod
-    def from_dict_skip_invalid(cls, obj: Optional[Dict[str, Any]]):  # type: ignore[override]
-        """Create instance skipping invalid nested items (Page models only).
-
-        Heuristics:
-        - Applies only when the class name ends with 'Page'.
-        - Identifies the primary list field ("organizations", "items", or the only list field).
-        - Attempts per-item validation; invalid items (including those with additional fields
-          or field constraint violations) are skipped.
-        - Attaches counts via `_skipped_invalid_items` and `_skipped_invalid_organizations` (legacy).
-        Fallbacks to strict parsing if structure is unexpected to avoid masking systemic issues.
-        """
-        if not getattr(cls, "__name__", "").endswith("Page"):
-            return cls.from_dict(obj)  # type: ignore
-        if obj is None or not isinstance(obj, dict):
-            return cls.from_dict(obj)  # type: ignore
-
-        # Detect candidate list fields.
-        candidate_keys = [k for k, v in obj.items() if isinstance(v, list)]
-        target_key = None
-        for preferred in ("organizations", "items"):
-            if preferred in candidate_keys:
-                target_key = preferred
-                break
-        if target_key is None and len(candidate_keys) == 1:
-            target_key = candidate_keys[0]
-        if target_key is None:
-            return cls.from_dict(obj)  # type: ignore
-
-        raw_list = obj.get(target_key) or []
-        # Infer element model class from pydantic field annotation if possible.
-        element_model = None
-        try:  # best-effort; failures fall back to dict passthrough
-            from typing import get_args  # Python 3.11+ stdlib
-
-            field_info = getattr(cls, "model_fields", {}).get(target_key)
-            if field_info is not None:
-                ann = getattr(field_info, "annotation", None)
-                if ann is not None:
-                    args = get_args(ann)
-                    if args:
-                        element_model = args[0]
-        except Exception:  # pragma: no cover
-            element_model = None
-
-        parsed_models = []
-        skipped = 0
-        for entry in raw_list:
-            # Normalize to dict for validation if possible
-            candidate = entry
-            if isinstance(entry, tuple):  # unlikely but defensively handle
-                # Convert tuples to list/dict only if element model expects mapping; else keep
-                candidate = entry
-            try:
-                if (
-                    element_model is not None
-                    and hasattr(element_model, "from_dict")
-                    and isinstance(candidate, dict)
-                ):
-                    model_obj = element_model.from_dict(candidate)
-                elif element_model is not None and hasattr(
-                    element_model, "model_validate"
-                ):  # pydantic BaseModel subclass
-                    model_obj = element_model.model_validate(candidate)
-                else:
-                    # No element model – accept as-is (will validate later or be skipped if invalid)
-                    model_obj = candidate
-                if model_obj is None:
-                    skipped += 1
-                else:
-                    parsed_models.append(model_obj)
-            except Exception:  # validation error – skip
-                skipped += 1
-
-        # Rebuild object dict with validated subset
-        tmp = dict(obj)
-        tmp[target_key] = parsed_models
-        try:
-            inst = cls.from_dict(tmp)  # type: ignore
-        except Exception:
-            # As a last resort fall back to strict path (may raise), to avoid silent data loss at page level
-            return cls.from_dict(obj)  # type: ignore
-
-        if inst is not None and skipped:
-            setattr(inst, "_skipped_invalid_items", skipped)
-            setattr(inst, "_skipped_invalid_organizations", skipped)
-        return inst
-
-    # --- END CUSTOM ---
-
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of ImageQuery from a dict"""
@@ -190,6 +114,7 @@ class ImageQuery(BaseModel):
         _obj = cls.model_validate(
             {
                 "objectKey": obj.get("objectKey"),
+                "imageUrl": obj.get("imageUrl"),
                 "height": obj.get("height")
                 if obj.get("height") is not None
                 else ImageHeight.ORIGINAL,

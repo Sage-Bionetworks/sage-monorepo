@@ -4,13 +4,13 @@ The information required to update an org account
 
 ## Properties
 
-Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
-**name** | **str** |  | 
-**description** | **str** |  | 
-**avatar_key** | **str** |  | 
-**website_url** | **str** | A URL to the website or image. | 
-**acronym** | **str** | An acronym of the organization. | 
+| Name            | Type    | Description                                                                                                                                  | Notes |
+| --------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **name**        | **str** |                                                                                                                                              |
+| **description** | **str** |                                                                                                                                              |
+| **avatar_key**  | **str** |                                                                                                                                              |
+| **website_url** | **str** | A URL to the website or image.                                                                                                               |
+| **short_name**  | **str** | The abbreviation, which may be an acronym, initialism, or other short form (e.g., \&quot;AI\&quot;, \&quot;WashU\&quot;, \&quot;etc.\&quot;) |
 
 ## Example
 
@@ -29,6 +29,5 @@ organization_update_request_dict = organization_update_request_instance.to_dict(
 # create an instance of OrganizationUpdateRequest from a dict
 organization_update_request_from_dict = OrganizationUpdateRequest.from_dict(organization_update_request_dict)
 ```
+
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
-
-
