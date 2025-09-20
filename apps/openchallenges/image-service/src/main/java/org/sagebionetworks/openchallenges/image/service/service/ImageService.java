@@ -37,9 +37,8 @@ public class ImageService {
     Integer height = getImageHeightInPx(query.getHeight());
     Integer width = (height != null) ? getImageWidthInPixel(height, query.getAspectRatio()) : null; // width only matters if we have a height
 
-    // Placeholder logic (dev convenience when using Thumbor's HTTP loader)
-    AppProperties.ThumborProperties thumborProps = appProperties.thumbor();
-    AppProperties.ThumborProperties.PlaceholderProperties ph = thumborProps.placeholder();
+    // Placeholder logic (direct remote placeholder usage, independent of Thumbor)
+    AppProperties.PlaceholderProperties ph = appProperties.placeholder();
     if (ph != null && ph.enabled()) {
       String template = ph.urlTemplate();
       if (template == null || template.isBlank()) {
@@ -50,28 +49,12 @@ public class ImageService {
       String placeholderUrl = template
         .replace("{width}", String.valueOf(effectiveWidth))
         .replace("{height}", String.valueOf(effectiveHeight));
-
-      // Append optional font params if present and not already included
-      StringBuilder urlBuilder = new StringBuilder(placeholderUrl);
-      boolean hasQuery = placeholderUrl.contains("?");
-      if (ph.fontFamily() != null && !ph.fontFamily().isBlank()) {
-        urlBuilder.append(hasQuery ? '&' : '?').append("fontFamily=").append(encode(ph.fontFamily()));
-        hasQuery = true;
-      }
-      if (ph.fontWeight() != null && !ph.fontWeight().isBlank()) {
-        urlBuilder.append(hasQuery ? '&' : '?').append("fontWeight=").append(encode(ph.fontWeight()));
-        hasQuery = true;
-      }
-      if (ph.fontSize() != null && ph.fontSize() > 0) {
-        urlBuilder.append(hasQuery ? '&' : '?').append("fontSize=").append(ph.fontSize());
-      }
-      String finalUrl = urlBuilder.toString();
-      log.debug("Returning placeholder image URL: {}", finalUrl);
-      return finalUrl;
+      log.debug("Returning direct placeholder image URL: {}", placeholderUrl);
+      return placeholderUrl;
     }
 
     // Normal Thumbor flow
-    ThumborUrlBuilder builder = thumbor.buildImage(query.getObjectKey());
+  ThumborUrlBuilder builder = thumbor.buildImage(query.getObjectKey());
     if (height != null) {
       builder = builder.resize(width, height);
     }
@@ -111,7 +94,5 @@ public class ImageService {
     }
     return 0; // Thumbor will use the original width
   }
-  private String encode(String value) {
-    return java.net.URLEncoder.encode(value, java.nio.charset.StandardCharsets.UTF_8);
-  }
+  // encoding helper removed (no longer needed once font params are template-based)
 }
