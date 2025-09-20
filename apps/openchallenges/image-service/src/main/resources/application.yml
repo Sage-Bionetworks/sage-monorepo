@@ -1,19 +1,9 @@
 app:
-  welcome-message: 'Welcome to the image service.'
+  welcome-message: 'Welcome to the image service!'
   thumbor:
     # The Thumbor host must be accessible from the web client.
-    # host: http://localhost:8000/img/
-    host: http://localhost:8889/
+    host: http://localhost:8000/img/
     security-key: changeme
-  placeholder:
-    # When true, ignore requested object key / imageUrl and return a direct placeholder image URL
-    # sized from the requested height & aspect ratio (dev convenience).
-    enabled: true
-    # Template tokens: {width}, {height}. Add any static query params directly here.
-    # Example with embedded font params:
-    # url-template: https://images.placeholders.dev/{width}x{height}?fontFamily=sans-serif&fontWeight=bold
-    # See https://placeholders.dev/docs for all supported query params.
-    url-template: https://images.placeholders.dev/{width}x{height}?fontWeight=400
 
 server:
   port: 8086
