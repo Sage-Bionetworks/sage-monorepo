@@ -85,7 +85,8 @@ def list_challenges(
                 "id": c.id,
                 "name": c.name,
                 "status": c.status,  # enum converted later in formatter
-                "platform": c.platform_name,
+                # Display blank instead of None when platform absent
+                "platform": c.platform_name or "",
             }
             if wide:
                 base.update(
@@ -126,7 +127,8 @@ def stream_challenges(
                 "id": c.id,
                 "name": c.name,
                 "status": c.status,  # enum converted later in formatter
-                "platform": c.platform_name,
+                # Display blank instead of None when platform absent
+                "platform": c.platform_name or "",
             }
             if wide:
                 base.update(

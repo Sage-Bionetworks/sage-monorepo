@@ -136,3 +136,51 @@ def test_cli_orgs_blank_short_name(monkeypatch):
     # Second organization keeps its short name
     org_two = next(o for o in data if o["name"] == "Org Two")
     assert org_two["short_name"] == "O2"
+
+
+def test_cli_challenges_blank_platform(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    class _ChallengeStub:
+        def list_challenges(self, *, limit=None, status=None):
+            return [
+                ChallengeSummary(
+                    id=1,
+                    slug="c1",
+                    name="C1",
+                    status="ACTIVE",
+                    platform_id=None,
+                    platform_name=None,  # should blank
+                    start_date=None,
+                    end_date=None,
+                    duration_days=None,
+                ),
+                ChallengeSummary(
+                    id=2,
+                    slug="c2",
+                    name="C2",
+                    status="ACTIVE",
+                    platform_id=5,
+                    platform_name="SomePlatform",
+                    start_date=None,
+                    end_date=None,
+                    duration_days=None,
+                ),
+            ]
+
+    monkeypatch.setattr(
+        cli_main,
+        "_client",
+        lambda api_url, api_key, limit: _ChallengeStub(),
+    )
+    result = runner.invoke(
+        app, ["challenges", "list", "--limit", "10", "--output", "json"]
+    )
+    assert result.exit_code == 0, result.output
+    import json as _json
+
+    data = _json.loads(result.output)
+    c1 = next(c for c in data if c["id"] == 1)
+    c2 = next(c for c in data if c["id"] == 2)
+    assert c1["platform"] == ""
+    assert c2["platform"] == "SomePlatform"
