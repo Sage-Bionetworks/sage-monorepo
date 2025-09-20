@@ -29,7 +29,10 @@ public class ChallengeJsonLdMapper extends BaseMapper<ChallengeEntity, Challenge
     if (entity != null) {
       BeanUtils.copyProperties(entity, dto, "stars", "inputDataTypes", "platform", "operation");
       dto.setStatus(ChallengeStatusDto.fromValue(entity.getStatus()));
-      dto.setPlatform(platformMapper.convertToDto(entity.getPlatform()));
+      var platformDto = platformMapper.convertToDto(entity.getPlatform());
+      if (platformDto != null) {
+        dto.setPlatform(platformDto);
+      }
       if (entity.getOperation() != null) {
         dto.setOperation(edamConceptMapper.convertToDto(entity.getOperation()));
       }
