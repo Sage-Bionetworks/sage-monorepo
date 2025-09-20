@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from typer.testing import CliRunner
 
 from openchallenges_client.cli.main import app
-from openchallenges_client.domain.models import ChallengeSummary
+from openchallenges_client.domain.models import ChallengeSummary, OrganizationSummary
 
 runner = CliRunner()
 
@@ -99,3 +99,40 @@ def test_cli_challenges_list_json(monkeypatch):
     assert "slug" not in first
     # Status plain
     assert first["status"] == "ACTIVE"
+
+
+def test_cli_orgs_blank_short_name(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    class _OrgStub:
+        def list_organizations(self, *, limit=None, search=None):
+            return [
+                OrganizationSummary(
+                    id=1,
+                    name="Org One",
+                    short_name=None,  # should render as blank
+                    website_url="https://example.org",
+                ),
+                OrganizationSummary(
+                    id=2,
+                    name="Org Two",
+                    short_name="O2",
+                    website_url=None,
+                ),
+            ]
+
+    monkeypatch.setattr(
+        cli_main,
+        "_client",
+        lambda api_url, api_key, limit: _OrgStub(),
+    )
+    result = runner.invoke(app, ["orgs", "list", "--limit", "5", "--output", "json"])
+    assert result.exit_code == 0, result.output
+    import json as _json
+
+    data = _json.loads(result.output)
+    org_one = next(o for o in data if o["name"] == "Org One")
+    assert org_one["short_name"] == ""  # blanked out
+    # Second organization keeps its short name
+    org_two = next(o for o in data if o["name"] == "Org Two")
+    assert org_two["short_name"] == "O2"

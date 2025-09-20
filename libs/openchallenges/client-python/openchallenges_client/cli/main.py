@@ -161,7 +161,8 @@ def list_orgs(
             {
                 "id": o.id,
                 "name": o.name,
-                "short_name": o.short_name,
+                # Display blank instead of None for short name
+                "short_name": o.short_name or "",
                 "website_url": o.website_url,
             }
             for o in items
@@ -191,7 +192,8 @@ def stream_orgs(
                 {
                     "id": o.id,
                     "name": o.name,
-                    "short_name": o.short_name,
+                    # Display blank instead of None for short name
+                    "short_name": o.short_name or "",
                     "website_url": o.website_url,
                 }
             )
