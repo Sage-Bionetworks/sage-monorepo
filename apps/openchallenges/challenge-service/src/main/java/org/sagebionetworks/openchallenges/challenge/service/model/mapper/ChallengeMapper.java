@@ -33,7 +33,11 @@ public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {
       BeanUtils.copyProperties(entity, dto, "stars", "inputDataTypes", "platform", "operation");
       log.trace("challenge dto before set: {}", dto);
       dto.setStatus(ChallengeStatusDto.fromValue(entity.getStatus()));
-      dto.setPlatform(platformMapper.convertToDto(entity.getPlatform()));
+      // Only set the platform when it exists. Avoid serializing an empty object with null fields.
+      var platformDto = platformMapper.convertToDto(entity.getPlatform());
+      if (platformDto != null) {
+        dto.setPlatform(platformDto);
+      }
       if (entity.getOperation() != null) {
         dto.setOperation(edamConceptMapper.convertToDto(entity.getOperation()));
       }
