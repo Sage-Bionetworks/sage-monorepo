@@ -15,12 +15,10 @@ class ListOrganizationsService:
         self._cfg = config
 
     def execute(
-        self, *, limit: int | None, search: str | None, strict: bool = False
+        self, *, limit: int | None, search: str | None
     ) -> Iterable[OrganizationSummary]:  # search unused MVP
         effective_limit = limit or self._cfg.default_limit
-        orgs = self._gw.list_organizations(
-            effective_limit, search_terms=search, strict=strict
-        )
+        orgs = self._gw.list_organizations(effective_limit, search_terms=search)
         for org in orgs:
             yield OrganizationSummary(
                 id=org.id,

@@ -54,18 +54,17 @@ class OpenChallengesClient:
         *,
         limit: int | None = None,
         search: str | None = None,
-        strict: bool = False,
     ) -> Iterable[OrganizationSummary]:
         svc = ListOrganizationsService(self._org_gateway, self._cfg)
-        return svc.execute(limit=limit, search=search, strict=strict)
+        return svc.execute(limit=limit, search=search)
 
     def iter_all_organizations(
-        self, *, search: str | None = None, strict: bool = False
+        self, *, search: str | None = None
     ) -> Iterator[OrganizationSummary]:
         """Stream all organizations lazily (no implicit limit)."""
         svc = ListOrganizationsService(self._org_gateway, self._cfg)
 
         def _gen():
-            yield from svc.execute(limit=2**31 - 1, search=search, strict=strict)
+            yield from svc.execute(limit=2**31 - 1, search=search)
 
         return _gen()

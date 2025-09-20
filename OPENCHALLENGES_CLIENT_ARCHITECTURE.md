@@ -209,13 +209,13 @@ Global flags supply config fallback; output uses Rich tables or JSON. Planned: Y
 
 ## 12. Risks & Mitigations
 
-| Risk                              | Impact             | Mitigation                                                              |
-| --------------------------------- | ------------------ | ----------------------------------------------------------------------- |
-| SDK regeneration breaks patch     | Runtime errors     | Keep a minimal, clearly marked patch block; add regeneration checklist. |
-| Expanding model surface too early | Maintenance load   | Enforce story-driven enrichment.                                        |
-| Silent status filter mismatches   | Confusing results  | (Planned) warn when all provided statuses are invalid.                  |
-| Hidden retries cause latency      | Perceived slowness | Add verbose flag & retry summary lines.                                 |
-| Data anomalies (invalid field lengths) | Partial failures / user confusion | Gateway-level soft sanitation with optional strict mode & warnings. |
+| Risk                                   | Impact                            | Mitigation                                                              |
+| -------------------------------------- | --------------------------------- | ----------------------------------------------------------------------- |
+| SDK regeneration breaks patch          | Runtime errors                    | Keep a minimal, clearly marked patch block; add regeneration checklist. |
+| Expanding model surface too early      | Maintenance load                  | Enforce story-driven enrichment.                                        |
+| Silent status filter mismatches        | Confusing results                 | (Planned) warn when all provided statuses are invalid.                  |
+| Hidden retries cause latency           | Perceived slowness                | Add verbose flag & retry summary lines.                                 |
+| Data anomalies (invalid field lengths) | Partial failures / user confusion | Gateway-level soft sanitation with optional strict mode & warnings.     |
 
 ---
 
@@ -271,60 +271,30 @@ Core discovery flows working. Reliability parity achieved (retries in both gatew
 
 ---
 
-## 20. Data Anomaly Handling Strategy (Read Path)
+## 20. Data Anomaly Handling Strategy (Historical & Current Policy)
 
-### Context
-Occasionally backend data may drift outside the published OpenAPI contract (e.g., an organization `login` exceeding the 64 character max). Failing the entire listing due to a single malformed row harms usability; silently relaxing the model hides real data quality issues.
+### Historical (Removed)
 
-### Goals
-1. Preserve strict schema validation (contract integrity).
-2. Avoid breaking bulk read operations when a minority of rows are invalid.
-3. Provide visibility so anomalies are corrected upstream.
-4. Allow callers to opt into strict failure for CI / data quality enforcement.
+Earlier iterations introduced a tolerant parsing layer for organization listings: invalid items (e.g., over-length fields) could be skipped or truncated, with a `--strict` CLI flag controlling failure vs. skip behaviour and an environment variable (`OC_CLIENT_SKIP_INVALID`) toggling template logic. This added complexity (custom template code, counters, meta output) and obscured upstream data quality responsibilities.
 
-### Approach
-Layer a defensive parsing step in the `OrganizationGateway`:
+### Current Policy (Strict-Only)
 
-1. Fetch page via generated SDK (raw dicts before model instantiation).
-2. For each raw org:
-   - Attempt normal model validation.
-   - If validation passes → yield.
-   - If it fails ONLY due to an over-length `login`:
-     - Produce a sanitized clone with `login` truncated to 64 chars (no suffix to avoid new overflow risk).
-     - Record anomaly metadata (org id and original length) in a per-call warning accumulator.
-     - Yield the sanitized model to keep iteration flowing.
-   - If validation fails for any other reason → raise mapped domain error (fail fast: indicates broader schema drift).
-3. After yielding all rows for the call, expose accumulated anomalies:
-   - Library: attach a lightweight `context` object or expose via a method (e.g., `gateway.last_warnings`).
-   - CLI: if any anomalies and not in quiet mode, emit: `Warning: 1 organization had an over-length login truncated to 64 chars (IDs: 12345).` Multiple IDs comma-separated.
+The client now relies exclusively on the generated OpenAPI models for validation. Any invalid item causes the operation to fail fast, surfacing the underlying issue promptly. No skip, truncate, or anomaly accumulation remains in the read path.
 
-### CLI Flags (Planned)
-| Flag | Behavior |
-|------|----------|
-| `--strict` | Abort on first anomaly (non-zero exit). |
-| `--quiet-anomalies` | Suppress warning emission (default is to show once). |
+### Rationale for Reversion
 
-### Domain Model Metadata (Optional Future)
-Introduce a lightweight `meta` dict on summaries when sanitized: `summary.meta = {"sanitized_login": True, "original_login_length": 87}`. Omitted when pristine.
+1. Simplicity: Eliminates bespoke template logic and environment toggles.
+2. Performance: Removes per-item branching and bookkeeping.
+3. Contract Clarity: Keeps server schema as the single source of truth.
+4. Maintenance: Avoids drift between generated code and custom tolerant branches.
 
-### Rationale
-This preserves user scripts (they still see almost all data), highlights quality issues early, and keeps the spec authoritative. Users needing exact raw values can lobby for spec evolution or server-side correction—client does not silently expand the contract.
+### Operational Guidance
 
-### Upstream Remediation Workflow
-1. Detect warning in CLI / logs.
-2. Query backend for offending org id(s).
-3. Decide: shorten login in DB vs. adopt spec change (increase max_length) and regenerate SDK + bump version.
+If validation errors arise, they indicate server-side data divergence. Remediate upstream (fix data or update the OpenAPI spec and regenerate). Client code should not compensate silently.
 
-### Testing Plan
-Add a unit test with a fake gateway returning one valid and one over-length login to ensure:
-* Sanitized record is truncated.
-* Warning accumulator records anomaly.
-* Strict mode raises.
+### Future Considerations
 
-### Non-Goals
-* Bulk normalization beyond truncation.
-* Automatic server update / mutation.
-* Handling of unrelated validation errors (these remain hard failures).
+If partial-read resilience is ever required again, prefer an opt-in, layered adapter (separate package or gateway decorator) rather than modifying generated templates.
 
 ---
 

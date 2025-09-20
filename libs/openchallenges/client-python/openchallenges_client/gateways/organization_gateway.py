@@ -1,4 +1,4 @@
-"""Gateway wrapping SDK OrganizationApi (with simple pagination)."""
+"""Gateway wrapping SDK OrganizationApi (with simple pagination, strict-only)."""
 # ruff: noqa: I001
 
 from __future__ import annotations
@@ -18,44 +18,21 @@ from ..config.loader import ClientConfig
 from ..core.errors import map_status, OpenChallengesError, AuthError
 
 
-class OrganizationAnomaly:
-    def __init__(self, org_id: int, field: str, issue: str, original_value: str):
-        self.org_id = org_id
-        self.field = field
-        self.issue = issue
-        self.original_value = original_value
-
-    def to_dict(self) -> dict[str, str | int]:
-        return {
-            "org_id": self.org_id,
-            "field": self.field,
-            "issue": self.issue,
-        }
-
-
 class OrganizationGateway:
+    """Thin pagination layer over generated OrganizationApi.
+
+    All responses are validated strictly by the generated models. Previous tolerant
+    skip-invalid behaviour has been removed (data is expected to be contract-valid).
+    """
+
     def __init__(self, config: ClientConfig) -> None:
         self._cfg = config
-        self._anomalies: list[OrganizationAnomaly] = []
-        self._skipped_invalid_total: int = 0
-
-    @property
-    def anomalies(self) -> list[OrganizationAnomaly]:
-        """Return anomalies detected during the last listing call."""
-        return list(self._anomalies)
-
-    @property
-    def skipped_invalid_total(self) -> int:
-        """Total invalid organization items skipped in the last call (tolerant mode)."""
-        return self._skipped_invalid_total
 
     def list_organizations(
-        self, limit: int, search_terms: str | None = None, *, strict: bool = False
+        self, limit: int, search_terms: str | None = None
     ) -> Iterator[openchallenges_api_client_python.Organization]:
         if limit <= 0:
             return iter(())
-        # Reset per-call counters
-        self._skipped_invalid_total = 0
         remaining = limit
         page_number = 0
         page_size = min(limit, 100)
@@ -72,29 +49,9 @@ class OrganizationGateway:
                         searchTerms=search_terms if search_terms else None,
                     )
                     try:
-                        # Use custom tolerant flag routed through _request_auth to avoid
-                        # altering generated method signatures. The templates look for
-                        # _request_auth['skip_invalid_items'].
-                        # Activate tolerant mode via env var (read by generated API)
-                        import os
-
-                        if not strict:
-                            os.environ["OC_CLIENT_SKIP_INVALID"] = "1"
-                        else:
-                            # Ensure strict mode disables flag
-                            if "OC_CLIENT_SKIP_INVALID" in os.environ:
-                                os.environ.pop("OC_CLIENT_SKIP_INVALID", None)
                         page = api.list_organizations(
                             organization_search_query=search,
                         )
-                        # Accumulate skipped count (tolerant mode). Support legacy and
-                        # generic attribute names.
-                        if page and not strict:
-                            skipped = getattr(
-                                page, "_skipped_invalid_organizations", 0
-                            ) or getattr(page, "_skipped_invalid_items", 0)
-                            if skipped:
-                                self._skipped_invalid_total += int(skipped)
                     except ApiException as e:
                         if (
                             getattr(e, "status", None) in {429, 500, 502, 503, 504}
@@ -109,7 +66,6 @@ class OrganizationGateway:
                     items = list(page.organizations or [])
                     if not items:
                         break
-                    # Yield only up to remaining
                     yield from items[:remaining]
                     remaining -= len(items)
                     if len(items) < page_size:
