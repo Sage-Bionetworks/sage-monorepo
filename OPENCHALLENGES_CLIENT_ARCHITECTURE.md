@@ -1,6 +1,6 @@
 # OpenChallenges Python Client & CLI Architecture
 
-> Revision: 2025-09-18  
+> Revision: 2025-09-18
 > Scope: `libs/openchallenges/client-python` – high‑level experiential client & CLI over the generated OpenAPI SDK (`libs/openchallenges/api-client-python`).
 
 ---
@@ -73,7 +73,7 @@ Precedence (highest → lowest):
 
 1. CLI flags (`--api-url`, `--api-key`, `--limit`)
 2. Environment variables (`OC_API_URL`, `OC_API_KEY`, `OC_RETRIES`)
-3. Nearest `.openchallenges.toml` (walk upward from CWD) then `$HOME/.openchallenges.toml`  
+3. Nearest `.openchallenges.toml` (walk upward from CWD) then `$HOME/.openchallenges.toml`
    Section `[openchallenges]` or flat root keys accepted.
 4. Built‑in defaults (URL, limit=5, retries=0)
 
