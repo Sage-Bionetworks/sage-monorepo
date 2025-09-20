@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class ImageService {
 
-  private static final int DEFAULT_HEIGHT = 250;
+  private static final int DEFAULT_HEIGHT = 50;
 
   private final Thumbor thumbor;
   private final AppProperties appProperties;
