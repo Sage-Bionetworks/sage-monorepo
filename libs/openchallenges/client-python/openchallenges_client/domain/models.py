@@ -24,5 +24,5 @@ class ChallengeSummary:
 class OrganizationSummary:
     id: int
     name: str
-    acronym: str | None
+    short_name: str | None
     website_url: str | None

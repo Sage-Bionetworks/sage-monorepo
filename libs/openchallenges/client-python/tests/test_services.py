@@ -60,7 +60,7 @@ class _FakePlatform:
 class _FakeOrg:
     id: int
     name: str
-    acronym: str | None = None
+    short_name: str | None = None
     website_url: str | None = None
 
 

@@ -23,6 +23,6 @@ class ListOrganizationsService:
             yield OrganizationSummary(
                 id=org.id,
                 name=org.name,
-                acronym=getattr(org, "acronym", None),
+                short_name=getattr(org, "short_name", None),
                 website_url=getattr(org, "website_url", None),
             )

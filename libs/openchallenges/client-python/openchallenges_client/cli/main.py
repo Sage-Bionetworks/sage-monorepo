@@ -161,7 +161,7 @@ def list_orgs(
             {
                 "id": o.id,
                 "name": o.name,
-                "acronym": o.acronym,
+                "short_name": o.short_name,
                 "website_url": o.website_url,
             }
             for o in items
@@ -191,7 +191,7 @@ def stream_orgs(
                 {
                     "id": o.id,
                     "name": o.name,
-                    "acronym": o.acronym,
+                    "short_name": o.short_name,
                     "website_url": o.website_url,
                 }
             )
