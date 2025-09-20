@@ -5,7 +5,6 @@ import com.squareup.pollexor.ThumborUrlBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.image.service.configuration.AppProperties;
-import org.sagebionetworks.openchallenges.image.service.exception.ImageHeightNotSpecifiedException;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageAspectRatioDto;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageDto;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageHeightDto;
@@ -17,6 +16,8 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class ImageService {
 
+  private static final int DEFAULT_HEIGHT = 250;
+
   private final Thumbor thumbor;
   private final AppProperties appProperties;
 
@@ -26,73 +27,91 @@ public class ImageService {
   }
 
   private String generateImageUrl(ImageQueryDto query) {
-    if (query.getAspectRatio() != null && query.getHeight() == null) {
-      throw new ImageHeightNotSpecifiedException(
-        "Image height must also be specified when specifying the aspect ratio."
-      );
-    }
+    // Query has already been validated externally:
+    // - height and aspectRatio are non-null with defaults of ORIGINAL
 
-    log.info("Requesting an image url for the objectId: {}", query.getObjectKey());
+    final String source = (query.getObjectKey() != null)
+      ? query.getObjectKey()
+      : query.getImageUrl().toString();
 
-    Integer height = getImageHeightInPx(query.getHeight());
-    Integer width = (height != null) ? getImageWidthInPixel(height, query.getAspectRatio()) : null; // width only matters if we have a height
+    log.debug(
+      "Requesting image for source='{}', height={}, ratio={}",
+      source,
+      query.getHeight(),
+      query.getAspectRatio()
+    );
 
-    // Placeholder logic (direct remote placeholder usage, independent of Thumbor)
+    Dimensions dims = computeDimensions(query.getHeight(), query.getAspectRatio());
+
+    // Placeholder short-circuit (independent of Thumbor)
     AppProperties.PlaceholderProperties ph = appProperties.placeholder();
     if (ph != null && ph.enabled()) {
-      String template = ph.urlTemplate();
-      if (template == null || template.isBlank()) {
-        template = "https://images.placeholders.dev/{width}x{height}";
-      }
-      int effectiveHeight = (height != null) ? height : 250; // default height if none requested
-      int effectiveWidth = (width != null && width > 0) ? width : effectiveHeight; // square fallback
-      String placeholderUrl = template
-        .replace("{width}", String.valueOf(effectiveWidth))
-        .replace("{height}", String.valueOf(effectiveHeight));
-      log.debug("Returning direct placeholder image URL: {}", placeholderUrl);
-      return placeholderUrl;
+      String url = buildPlaceholderUrl(ph, dims);
+      log.debug("Returning placeholder image for source='{}': {}", source, url);
+      return url;
     }
 
-    // Normal Thumbor flow
-  ThumborUrlBuilder builder = thumbor.buildImage(query.getObjectKey());
-    if (height != null) {
-      builder = builder.resize(width, height);
+    // Normal Thumbor flow; pass objectKey or direct URL depending on query
+    String url = buildThumborUrl(source, dims);
+    log.debug("Returning thumbor image for source='{}': {}", source, url);
+    return url;
+  }
+
+  /** Compute width/height from enums; width=0 indicates “preserve aspect by height” for Thumbor. */
+  private Dimensions computeDimensions(ImageHeightDto heightDto, ImageAspectRatioDto ratioDto) {
+    Integer heightPx = toHeightPx(heightDto); // null means ORIGINAL (no resize)
+    if (heightPx == null) {
+      // No resize: width=0, height=null → return original image from Thumbor
+      return new Dimensions(0, null);
+    }
+    int widthPx = toWidthPx(heightPx, ratioDto);
+    return new Dimensions(widthPx, heightPx);
+  }
+
+  private Integer toHeightPx(ImageHeightDto height) {
+    return switch (height) {
+      case ORIGINAL -> null;
+      case _32PX -> 32;
+      case _100PX -> 100;
+      case _140PX -> 140;
+      case _250PX -> 250;
+      case _500PX -> 500;
+    };
+  }
+
+  /**
+   * If ratio is ORIGINAL, let Thumbor keep source aspect by passing width=0 with a fixed height.
+   */
+  private int toWidthPx(int height, ImageAspectRatioDto ratio) {
+    return switch (ratio) {
+      case ORIGINAL -> 0; // let Thumbor derive width from source aspect ratio
+      case _1_1 -> height;
+      case _16_9 -> Math.round((height * 16f) / 9f);
+      case _3_2 -> Math.round((height * 3f) / 2f);
+      case _2_3 -> Math.round((height * 2f) / 3f);
+    };
+  }
+
+  private String buildPlaceholderUrl(AppProperties.PlaceholderProperties ph, Dimensions dims) {
+    String template = (ph.urlTemplate() == null || ph.urlTemplate().isBlank())
+      ? "https://images.placeholders.dev/{width}x{height}"
+      : ph.urlTemplate();
+
+    // Placeholders need concrete positive numbers
+    int h = (dims.height() != null && dims.height() > 0) ? dims.height() : DEFAULT_HEIGHT;
+    int w = (dims.width() > 0) ? dims.width() : h; // square fallback if width==0
+
+    return template.replace("{width}", String.valueOf(w)).replace("{height}", String.valueOf(h));
+  }
+
+  private String buildThumborUrl(String source, Dimensions dims) {
+    ThumborUrlBuilder builder = thumbor.buildImage(source);
+    if (dims.height() != null) {
+      // width may be 0 (preserve aspect); this is intentional for Thumbor
+      builder = builder.resize(dims.width(), dims.height());
     }
     return builder.toUrl();
   }
 
-  private Integer getImageHeightInPx(ImageHeightDto height) {
-    // we can't use switch here because height may be null
-    if (height == ImageHeightDto.ORIGINAL) {
-      return null;
-    } else if (height == ImageHeightDto._32PX) {
-      return 32;
-    } else if (height == ImageHeightDto._100PX) {
-      return 100;
-    } else if (height == ImageHeightDto._140PX) {
-      return 140;
-    } else if (height == ImageHeightDto._250PX) {
-      return 250;
-    } else if (height == ImageHeightDto._500PX) {
-      return 500;
-    }
-    return null;
-  }
-
-  private Integer getImageWidthInPixel(Integer height, ImageAspectRatioDto aspectRatio) {
-    // we can't use switch here because height may be null
-    if (aspectRatio == ImageAspectRatioDto.ORIGINAL) {
-      return 0; // Thumbor will use the original width
-    } else if (aspectRatio == ImageAspectRatioDto._16_9) {
-      return Math.round((height * 16f) / 9);
-    } else if (aspectRatio == ImageAspectRatioDto._1_1) {
-      return height;
-    } else if (aspectRatio == ImageAspectRatioDto._3_2) {
-      return Math.round((height * 3f) / 2);
-    } else if (aspectRatio == ImageAspectRatioDto._2_3) {
-      return Math.round((height * 2f) / 3);
-    }
-    return 0; // Thumbor will use the original width
-  }
-  // encoding helper removed (no longer needed once font params are template-based)
+  private record Dimensions(int width, Integer height) {}
 }
