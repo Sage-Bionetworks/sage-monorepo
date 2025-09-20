@@ -1,9 +1,9 @@
 import gradio as gr
+from config.auth_service import get_auth_service
 
 
 def build_header():
-    """Build the header with proper alignment - clean solution"""
-
+    """Build header - login button will be managed reactively"""
     with gr.Row(elem_id="header-row") as header:
         with gr.Column(scale=4):
             gr.HTML("""
@@ -18,18 +18,45 @@ def build_header():
 
         with gr.Column(scale=1):
             battle_btn = gr.Button("Battle", variant="secondary")
+
         with gr.Column(scale=1):
             leaderboard_btn = gr.Button("Leaderboard", variant="secondary")
-        with gr.Column(scale=1):
-            login_btn = gr.Button("Login", variant="primary")
 
-    # CSS to align the row items
+        with gr.Column(scale=1):
+            # Create reactive login button - will be updated by update_login_button
+            login_btn = gr.Button("Login", variant="primary", link="")
+
+    # CSS to align header items
     gr.HTML("""
         <style>
         #header-row {
             align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 20px;
         }
         </style>
     """)
 
     return header, battle_btn, leaderboard_btn, login_btn
+
+
+def update_login_button():
+    """Update login button state and link based on authentication"""
+    auth_service = get_auth_service()
+
+    if auth_service.is_user_authenticated():
+        # User is logged in - show username, no external link
+        username = auth_service.session.get_user_display_name()
+        return gr.Button(username, variant="primary", link=None)
+    else:
+        # User not logged in - show login button with OAuth link
+        login_url = auth_service.initiate_login()
+        return gr.Button("Login", variant="primary", link=login_url)
+
+
+def get_login_button_state():
+    """Get current login button state for updates"""
+    auth_service = get_auth_service()
+    button_config = auth_service.get_login_button_config()
+    return gr.Button(button_config["value"], variant=button_config["variant"])
