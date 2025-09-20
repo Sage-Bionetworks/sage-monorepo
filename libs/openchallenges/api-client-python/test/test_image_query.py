@@ -1,5 +1,3 @@
-# coding: utf-8
-
 """
 OpenChallenges API
 
@@ -13,7 +11,7 @@ Do not edit the class manually.
 
 import unittest
 
-from openchallenges_api_client_python.models.image_query import ImageQuery
+from openchallenges_api_client.models.image_query import ImageQuery
 
 
 class TestImageQuery(unittest.TestCase):

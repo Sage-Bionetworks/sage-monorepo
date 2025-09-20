@@ -9,7 +9,7 @@
         "inputSpec": "#{cwd}/../api-description/openapi/openapi.yaml",
         "output": "#{cwd}/",
         "additionalProperties": {
-          "packageName": "openchallenges_api_client_python"
+          "packageName": "openchallenges_api_client"
         }
       }
     }

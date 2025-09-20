@@ -22,7 +22,7 @@ description = "Discover, explore, and contribute to open biomedical challenges"
 requires-python = ">=3.10,<4"
 readme = 'README.md'
 dependencies = [
-  "openchallenges-api-client-python",
+  "openchallenges-api-client",
   "typer>=0.12.3",
   "rich>=13.7.0",
 ]
@@ -73,4 +73,4 @@ fixable = ["ALL"]
 unfixable = []
 
 [tool.uv.sources]
-openchallenges-client-python = { workspace = true }
+openchallenges-client = { workspace = true }

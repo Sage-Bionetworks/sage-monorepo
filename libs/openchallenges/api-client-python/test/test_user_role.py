@@ -1,5 +1,3 @@
-# coding: utf-8
-
 """
 OpenChallenges API
 
@@ -12,8 +10,6 @@ Do not edit the class manually.
 """  # noqa: E501
 
 import unittest
-
-from openchallenges_api_client_python.models.user_role import UserRole
 
 
 class TestUserRole(unittest.TestCase):

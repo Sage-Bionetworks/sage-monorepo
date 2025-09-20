@@ -1,5 +1,3 @@
-# coding: utf-8
-
 """
 OpenChallenges API
 
@@ -13,7 +11,7 @@ Do not edit the class manually.
 
 import unittest
 
-from openchallenges_api_client_python.models.user_profile import UserProfile
+from openchallenges_api_client.models.user_profile import UserProfile
 
 
 class TestUserProfile(unittest.TestCase):

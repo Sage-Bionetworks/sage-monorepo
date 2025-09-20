@@ -13,7 +13,7 @@ from collections.abc import Callable, Iterable, Iterator
 from dataclasses import dataclass
 from typing import Protocol, TypeVar
 
-from openchallenges_api_client_python.rest import ApiException
+from openchallenges_api_client.rest import ApiException
 
 from ..config.loader import ClientConfig
 from ..core.errors import OpenChallengesError

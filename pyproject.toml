@@ -31,7 +31,7 @@ sql_file_exts = ".sql"
 [tool.uv.sources.openchallenges_tools]
 workspace = true
 
-[tool.uv.sources.openchallenges-api-client-python]
+[tool.uv.sources.openchallenges-api-client]
 workspace = true
 
 [tool.uv.sources.openchallenges-client]
@@ -64,7 +64,7 @@ dependencies = [
   "bixarena-api-client-python",
   "bixarena-tools",
   "openchallenges_tools",
-  "openchallenges-api-client-python",
+  "openchallenges-api-client",
   "openchallenges-client"
 ]
 name = "sage-monorepo"

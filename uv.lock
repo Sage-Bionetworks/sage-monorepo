@@ -7,7 +7,7 @@ members = [
     "bixarena-api-client-python",
     "bixarena-app",
     "bixarena-tools",
-    "openchallenges-api-client-python",
+    "openchallenges-api-client",
     "openchallenges-client",
     "openchallenges-tools",
     "sage-monorepo",
@@ -1307,7 +1307,7 @@ wheels = [
 ]
 
 [[package]]
-name = "openchallenges-api-client-python"
+name = "openchallenges-api-client"
 version = "1.0.0"
 source = { editable = "libs/openchallenges/api-client-python" }
 dependencies = [
@@ -1332,14 +1332,14 @@ name = "openchallenges-client"
 version = "1.0.0"
 source = { editable = "libs/openchallenges/client-python" }
 dependencies = [
-    { name = "openchallenges-api-client-python" },
+    { name = "openchallenges-api-client" },
     { name = "rich" },
     { name = "typer" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "openchallenges-api-client-python", editable = "libs/openchallenges/api-client-python" },
+    { name = "openchallenges-api-client", editable = "libs/openchallenges/api-client-python" },
     { name = "rich", specifier = ">=13.7.0" },
     { name = "typer", specifier = ">=0.12.3" },
 ]
@@ -1350,14 +1350,14 @@ version = "1.0.0"
 source = { editable = "apps/openchallenges/tools" }
 dependencies = [
     { name = "kaggle" },
-    { name = "openchallenges-api-client-python" },
+    { name = "openchallenges-api-client" },
     { name = "opensearch-py" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "kaggle", specifier = "==1.7.4.5" },
-    { name = "openchallenges-api-client-python", editable = "libs/openchallenges/api-client-python" },
+    { name = "openchallenges-api-client", editable = "libs/openchallenges/api-client-python" },
     { name = "opensearch-py", specifier = "==3.0.0" },
 ]
 
@@ -1978,7 +1978,7 @@ source = { editable = "." }
 dependencies = [
     { name = "bixarena-api-client-python" },
     { name = "bixarena-tools" },
-    { name = "openchallenges-api-client-python" },
+    { name = "openchallenges-api-client" },
     { name = "openchallenges-client" },
     { name = "openchallenges-tools" },
 ]
@@ -2001,7 +2001,7 @@ dev = [
 requires-dist = [
     { name = "bixarena-api-client-python", editable = "libs/bixarena/api-client-python" },
     { name = "bixarena-tools", editable = "apps/bixarena/tools" },
-    { name = "openchallenges-api-client-python", editable = "libs/openchallenges/api-client-python" },
+    { name = "openchallenges-api-client", editable = "libs/openchallenges/api-client-python" },
     { name = "openchallenges-client", editable = "libs/openchallenges/client-python" },
     { name = "openchallenges-tools", editable = "apps/openchallenges/tools" },
 ]

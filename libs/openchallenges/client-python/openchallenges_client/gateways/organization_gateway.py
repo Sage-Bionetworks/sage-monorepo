@@ -19,9 +19,9 @@ import sys
 import time
 from collections.abc import Iterator
 
-import openchallenges_api_client_python
-from openchallenges_api_client_python.api.organization_api import OrganizationApi
-from openchallenges_api_client_python.rest import ApiException
+import openchallenges_api_client
+from openchallenges_api_client.api.organization_api import OrganizationApi
+from openchallenges_api_client.rest import ApiException
 
 from ..config.loader import ClientConfig
 from ..core.errors import AuthError, OpenChallengesError, map_status
@@ -39,7 +39,7 @@ class OrganizationGateway:
 
     def list_organizations(
         self, limit: int, search_terms: str | None = None
-    ) -> Iterator[openchallenges_api_client_python.Organization]:
+    ) -> Iterator[openchallenges_api_client.Organization]:
         if limit <= 0:
             return iter(())
         remaining = limit
@@ -47,8 +47,8 @@ class OrganizationGateway:
         MAX_PAGE_SIZE = 100
         page_size = min(limit, MAX_PAGE_SIZE)
         try:
-            with openchallenges_api_client_python.ApiClient(
-                openchallenges_api_client_python.Configuration(host=self._cfg.api_url)
+            with openchallenges_api_client.ApiClient(
+                openchallenges_api_client.Configuration(host=self._cfg.api_url)
             ) as api_client:
                 api = OrganizationApi(api_client)
                 attempt = 0
@@ -101,7 +101,7 @@ class OrganizationGateway:
                     if not isinstance(raw_items, list) or not raw_items:
                         break
 
-                    from openchallenges_api_client_python.models.organization import (  # type: ignore
+                    from openchallenges_api_client.models.organization import (  # type: ignore
                         Organization,
                     )
 

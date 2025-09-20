@@ -13,10 +13,10 @@ import json
 import sys
 from collections.abc import Iterator
 
-import openchallenges_api_client_python
-from openchallenges_api_client_python.api.challenge_api import ChallengeApi
-from openchallenges_api_client_python.models.challenge_status import ChallengeStatus
-from openchallenges_api_client_python.rest import ApiException
+import openchallenges_api_client
+from openchallenges_api_client.api.challenge_api import ChallengeApi
+from openchallenges_api_client.models.challenge_status import ChallengeStatus
+from openchallenges_api_client.rest import ApiException
 from pydantic import ValidationError
 
 from ..config.loader import ClientConfig
@@ -39,8 +39,8 @@ class ChallengeGateway:
             return iter(())
 
         def fetch_page(spec: PageSpec):  # returns raw JSON dict
-            with openchallenges_api_client_python.ApiClient(
-                openchallenges_api_client_python.Configuration(host=self._cfg.api_url)
+            with openchallenges_api_client.ApiClient(
+                openchallenges_api_client.Configuration(host=self._cfg.api_url)
             ) as api_client:
                 api = ChallengeApi(api_client)
 
@@ -82,7 +82,7 @@ class ChallengeGateway:
                 return json.loads(resp.data.decode("utf-8"))  # type: ignore[attr-defined]
 
         def extract_items(raw: object):
-            from openchallenges_api_client_python.models.challenge import (  # type: ignore
+            from openchallenges_api_client.models.challenge import (  # type: ignore
                 Challenge,
             )
 
@@ -91,7 +91,7 @@ class ChallengeGateway:
             raw_items = raw.get("challenges")
             if not isinstance(raw_items, list):
                 return None
-            out: list[openchallenges_api_client_python.Challenge] = []
+            out: list[openchallenges_api_client.Challenge] = []
             for ch in raw_items:
                 if not isinstance(ch, dict):
                     continue

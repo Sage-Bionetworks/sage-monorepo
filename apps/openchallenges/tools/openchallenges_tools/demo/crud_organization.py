@@ -24,23 +24,23 @@ import os
 import time
 from typing import Any
 
-import openchallenges_api_client_python
-from openchallenges_api_client_python.api.organization_api import OrganizationApi
-from openchallenges_api_client_python.models.organization import Organization
-from openchallenges_api_client_python.models.organization_create_request import (
+import openchallenges_api_client
+from openchallenges_api_client.api.organization_api import OrganizationApi
+from openchallenges_api_client.models.organization import Organization
+from openchallenges_api_client.models.organization_create_request import (
     OrganizationCreateRequest,
 )
-from openchallenges_api_client_python.models.organization_update_request import (
+from openchallenges_api_client.models.organization_update_request import (
     OrganizationUpdateRequest,
 )
-from openchallenges_api_client_python.rest import ApiException
+from openchallenges_api_client.rest import ApiException
 
 OC_API_URL = os.getenv("OC_API_URL", "http://localhost:8082/api/v1")
 OC_API_KEY = os.getenv("OC_API_KEY", "oc_dev_admin1.admin_secret_abcd1234efgh5678")
 
 
-def build_configuration() -> openchallenges_api_client_python.Configuration:
-    cfg = openchallenges_api_client_python.Configuration(host=OC_API_URL)
+def build_configuration() -> openchallenges_api_client.Configuration:
+    cfg = openchallenges_api_client.Configuration(host=OC_API_URL)
     if OC_API_KEY:
         cfg.api_key["apiKey"] = OC_API_KEY
     return cfg
@@ -180,7 +180,7 @@ def delete_org(api_client, login: str):
 
 def demo_crud_flow():
     cfg = build_configuration()
-    with openchallenges_api_client_python.ApiClient(cfg) as api_client:
+    with openchallenges_api_client.ApiClient(cfg) as api_client:
         org = create_org(api_client)
         fetched = get_org(api_client, org.login)
         updated = update_org(api_client, fetched)

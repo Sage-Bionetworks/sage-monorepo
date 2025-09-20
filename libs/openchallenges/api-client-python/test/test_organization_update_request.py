@@ -1,5 +1,3 @@
-# coding: utf-8
-
 """
 OpenChallenges API
 
@@ -13,7 +11,7 @@ Do not edit the class manually.
 
 import unittest
 
-from openchallenges_api_client_python.models.organization_update_request import (
+from openchallenges_api_client.models.organization_update_request import (
     OrganizationUpdateRequest,
 )
 
