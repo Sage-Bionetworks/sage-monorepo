@@ -135,9 +135,9 @@ Global flags supply config fallback; output uses Rich tables or JSON. Planned: Y
 
 ---
 
-## 10. Generated Model Patch Note
+## 10. Generated Model Patch Note (Historical)
 
-`Challenge.from_dict` patched to tolerate _empty_ `platform` objects (all fields null) to prevent Pydantic validation errors. Regeneration of the SDK should re‑apply this patch (search for `CUSTOM PATCH`).
+Historical: An interim patch once adjusted `Challenge.from_dict` to tolerate an empty `platform` object whose required fields were all null. As of the backend fix (platforms now emitted as `null` when absent), this patch has been removed. No re-application is needed after regeneration.
 
 ---
 
@@ -163,7 +163,7 @@ Global flags supply config fallback; output uses Rich tables or JSON. Planned: Y
 - [x] Config file support (.openchallenges.toml, directory ascent)
 - [x] Status enum normalization (challenge gateway)
 - [x] Retry/backoff (challenge gateway)
-- [x] Tolerate empty platform objects
+- [x] Tolerate empty platform objects (retired – backend now returns platform: null)
 - [x] Retry/backoff (organization gateway)
 - [x] CLI: `config show` / diagnostics
 - [x] Enhanced auth error hint (missing key guidance)
@@ -209,24 +209,23 @@ Global flags supply config fallback; output uses Rich tables or JSON. Planned: Y
 
 ## 12. Risks & Mitigations
 
-| Risk                                   | Impact                            | Mitigation                                                              |
-| -------------------------------------- | --------------------------------- | ----------------------------------------------------------------------- |
-| SDK regeneration breaks patch          | Runtime errors                    | Keep a minimal, clearly marked patch block; add regeneration checklist. |
-| Expanding model surface too early      | Maintenance load                  | Enforce story-driven enrichment.                                        |
-| Silent status filter mismatches        | Confusing results                 | (Planned) warn when all provided statuses are invalid.                  |
-| Hidden retries cause latency           | Perceived slowness                | Add verbose flag & retry summary lines.                                 |
-| Data anomalies (invalid field lengths) | Partial failures / user confusion | Gateway-level soft sanitation with optional strict mode & warnings.     |
+| Risk                                   | Impact                            | Mitigation                                                             |
+| -------------------------------------- | --------------------------------- | ---------------------------------------------------------------------- |
+| SDK regeneration breaks removed patch  | None now (patch retired)          | Document retirement; reintroduce only if new custom patches are added. |
+| Expanding model surface too early      | Maintenance load                  | Enforce story-driven enrichment.                                       |
+| Silent status filter mismatches        | Confusing results                 | (Planned) warn when all provided statuses are invalid.                 |
+| Hidden retries cause latency           | Perceived slowness                | Add verbose flag & retry summary lines.                                |
+| Data anomalies (invalid field lengths) | Partial failures / user confusion | Gateway-level soft sanitation with optional strict mode & warnings.    |
 
 ---
 
 ## 13. Regeneration Checklist (Generated Client)
 
 1. Regenerate via OpenAPI Generator (matching current schema).
-2. Re-apply platform tolerance patch in `challenge.py` (search `CUSTOM PATCH`).
-3. Run unit tests and smoke CLI command.
-4. Verify status enum names unchanged (adjust gateway mapping if needed).
-5. Update version & changelog if external surface affected.
-6. Scan for over-length organization logins; decide: fix data vs. evolve spec. (Do not silently relax model.)
+2. Run unit tests and smoke CLI command.
+3. Verify status enum names unchanged (adjust gateway mapping if needed).
+4. Update version & changelog if external surface affected.
+5. Scan for over-length organization logins; decide: fix data vs. evolve spec. (Do not silently relax model.)
 
 ---
 
