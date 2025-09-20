@@ -31,11 +31,6 @@ class ListChallengesService:
                         duration_days = None  # guard against inverted dates
                 except Exception:  # pragma: no cover
                     duration_days = None
-            is_active = None
-            if status_val is not None:
-                # If backend uses enum object, convert to string name
-                status_str = getattr(status_val, "name", str(status_val))
-                is_active = status_str == "ACTIVE"
             yield ChallengeSummary(
                 id=ch.id,
                 slug=ch.slug,
@@ -46,5 +41,4 @@ class ListChallengesService:
                 start_date=start_date,
                 end_date=end_date,
                 duration_days=duration_days,
-                is_active=is_active,
             )

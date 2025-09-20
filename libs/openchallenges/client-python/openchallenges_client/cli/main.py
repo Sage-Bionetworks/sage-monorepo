@@ -68,7 +68,7 @@ def list_challenges(
     wide: bool = typer.Option(
         False,
         "--wide",
-        help="Include start/end dates and enrichment fields (duration_days,is_active)",
+        help="Include start/end dates and duration_days",
     ),
 ):
     client: OpenChallengesClient = ctx.obj["client"]
@@ -93,7 +93,6 @@ def list_challenges(
                         "start_date": c.start_date,
                         "end_date": c.end_date,
                         "duration_days": c.duration_days,
-                        "is_active": c.is_active,
                     }
                 )
             rows.append(base)
@@ -111,7 +110,7 @@ def stream_challenges(
     wide: bool = typer.Option(
         False,
         "--wide",
-        help="Include start/end dates and enrichment fields (duration_days,is_active)",
+        help="Include start/end dates and duration_days",
     ),
 ):
     """Stream all challenges (or until optional cap)."""
@@ -135,7 +134,6 @@ def stream_challenges(
                         "start_date": c.start_date,
                         "end_date": c.end_date,
                         "duration_days": c.duration_days,
-                        "is_active": c.is_active,
                     }
                 )
             rows.append(base)

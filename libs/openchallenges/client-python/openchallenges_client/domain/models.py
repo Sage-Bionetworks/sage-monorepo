@@ -18,7 +18,6 @@ class ChallengeSummary:
     end_date: date | None
     # Derived / enrichment fields (computed post-construction in service)
     duration_days: int | None = None
-    is_active: bool | None = None
 
 
 @dataclass(frozen=True)

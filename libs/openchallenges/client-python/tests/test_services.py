@@ -45,9 +45,9 @@ def test_list_challenges_enrichment_duration_and_active():
     svc = ListChallengesService(cast(Any, gw), cfg)  # type: ignore[arg-type]
     results = list(svc.execute(limit=10, status=None))
     assert results[0].duration_days == 10
-    assert results[0].is_active is True
+    # is_active removed; ACTIVE status still present
     assert results[1].duration_days is None  # reversed dates guard
-    assert results[1].is_active is False
+    # is_active removed; COMPLETED status still present
 
 
 @dataclass

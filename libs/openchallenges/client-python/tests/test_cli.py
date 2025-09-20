@@ -33,7 +33,6 @@ def _sample_items():
             start_date=None,
             end_date=None,
             duration_days=None,
-            is_active=True,
         ),
         ChallengeSummary(
             id=2,
@@ -45,7 +44,6 @@ def _sample_items():
             start_date=None,
             end_date=None,
             duration_days=None,
-            is_active=False,
         ),
     ]
 
