@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Protocol, cast
+from typing import Any, cast
 
 from openchallenges_client.config.loader import ClientConfig
 from openchallenges_client.services.list_challenges import ListChallengesService
@@ -34,22 +34,12 @@ class _FakeOrg:
     website_url: str | None = None
 
 
-class _ChallengeGatewayProto(Protocol):  # minimal structural typing
-    def list_challenges(self, limit: int, status: list[str] | None = None) -> Any: ...
-
-
 class _ChallengeGatewayStub:
     def __init__(self, items):
         self._items = items
 
     def list_challenges(self, limit: int, status: list[str] | None = None):  # noqa: D401
         return self._items[:limit]
-
-
-class _OrgGatewayProto(Protocol):
-    def list_organizations(
-        self, limit: int, search_terms: str | None = None
-    ) -> Any: ...
 
 
 class _OrgGatewayStub:
