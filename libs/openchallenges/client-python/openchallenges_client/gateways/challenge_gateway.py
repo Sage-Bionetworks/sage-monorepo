@@ -17,9 +17,6 @@ from collections.abc import Iterator
 
 import openchallenges_api_client_python
 from openchallenges_api_client_python.api.challenge_api import ChallengeApi
-from openchallenges_api_client_python.models.challenge_search_query import (
-    ChallengeSearchQuery,
-)
 from openchallenges_api_client_python.models.challenge_status import ChallengeStatus
 from openchallenges_api_client_python.rest import ApiException
 from pydantic import ValidationError
@@ -44,7 +41,8 @@ class ChallengeGateway:
 
         remaining = limit
         page_number = 0
-        page_size = min(limit, 100)
+        MAX_PAGE_SIZE = 100  # server page size cap (adjust if backend changes)
+        page_size = min(limit, MAX_PAGE_SIZE)
 
         try:
             with openchallenges_api_client_python.ApiClient(
@@ -66,25 +64,34 @@ class ChallengeGateway:
                         if not converted_status:
                             converted_status = None
 
-                    search = ChallengeSearchQuery(
-                        pageNumber=page_number,
-                        pageSize=requested,
-                        status=converted_status,
-                    )
+                    # Build flat query params instead of sending the full
+                    # ChallengeSearchQuery object (server expects discrete params).
+                    query_params: list[tuple[str, str]] = [
+                        ("pageNumber", str(page_number)),
+                        ("pageSize", str(requested)),
+                    ]
+                    if converted_status:
+                        for st in converted_status:
+                            query_params.append(("status", st.value))
 
                     try:
-                        param = api._list_challenges_serialize(  # type: ignore[attr-defined]
-                            challenge_search_query=search,
+                        param = api.api_client.param_serialize(
+                            method="GET",
+                            resource_path="/challenges",
+                            path_params={},
+                            query_params=query_params,
+                            header_params={"Accept": "application/json"},
+                            body=None,
+                            post_params=[],
+                            files={},
+                            auth_settings=["apiKey", "jwtBearer"],
+                            collection_formats={},
+                            _host=None,
                             _request_auth=None,
-                            _content_type=None,
-                            _headers=None,
-                            _host_index=0,
                         )
                         resp = api.api_client.call_api(*param)
                         resp.read()
-                        raw_dict = json.loads(
-                            resp.data.decode("utf-8")  # type: ignore[attr-defined]
-                        )
+                        raw_dict = json.loads(resp.data.decode("utf-8"))  # type: ignore[attr-defined]
                     except ApiException as e:
                         if (
                             getattr(e, "status", None) in {429, 500, 502, 503, 504}
