@@ -70,17 +70,23 @@ components:
         - '3_2'
         - '2_3'
     ImageQuery:
+      title: ImageQuery
       type: object
-      description: An image query.
+      description: |
+        An image query that identifies an image either by an object storage key or by a direct URL. Exactly one of `objectKey` or `imageUrl` must be provided.
+      additionalProperties: false
       properties:
         objectKey:
           $ref: '#/components/schemas/ImageKey'
+        imageUrl:
+          type: string
+          format: uri
+          description: |
+            The HTTPS URL of the image. Use this as an alternative to `objectKey`.
         height:
           $ref: '#/components/schemas/ImageHeight'
         aspectRatio:
           $ref: '#/components/schemas/ImageAspectRatio'
-      required:
-        - objectKey
     Image:
       type: object
       description: An image

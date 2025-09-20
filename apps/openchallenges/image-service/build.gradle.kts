@@ -15,7 +15,6 @@ dependencies {
   implementation(libs.spring.boot.starter.web)
   implementation(libs.springdoc.openapi.ui)
   implementation(libs.squareup.pollexor)
-  implementation(project(":openchallenges-app-config-data"))
   implementation(project(":sagebionetworks-util"))
   runtimeOnly(libs.spring.boot.devtools)
   testImplementation(libs.spring.boot.starter.test)

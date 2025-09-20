@@ -9,8 +9,8 @@ services:
       - openchallenges
     ports:
       - '8889:8889'
-    # volumes:
-    #   - openchallenges-thumbor-data:/data
+    volumes:
+      - openchallenges-thumbor-data:/data
     deploy:
       resources:
         limits:
