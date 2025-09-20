@@ -19,40 +19,56 @@ except ImportError:  # pragma: no cover
     Console = None  # type: ignore
 
 
+def _enum_to_name(value: Any) -> Any:
+    """Return enum name (ACTIVE) instead of repr (ChallengeStatus.ACTIVE)."""
+    try:
+        from enum import Enum  # local import to avoid unconditional dependency
+
+        if isinstance(value, Enum):
+            return value.name
+    except Exception:  # pragma: no cover
+        pass
+    return value
+
+
+def _normalize_row(row: dict[str, Any]) -> dict[str, Any]:
+    """Return a display-friendly row (drop slug, simplify enums)."""
+    return {k: _enum_to_name(v) for k, v in row.items() if k != "slug"}
+
+
 def to_table(rows: Iterable[dict[str, Any]], *, title: str | None = None) -> None:
-    first = None
     rows = list(rows)
     if not rows:
         print("(no results)")
         return
-    first = rows[0]
+    norm_rows = [_normalize_row(r) for r in rows]
+    first = norm_rows[0]
     if Table and Console:
         table = Table(title=title)
         for col in first:
-            # Allow long slug values to wrap across lines instead of being truncated
-            # Rich defaults to an ellipsis overflow for some wide values; explicit
-            # overflow='fold' ensures multi-line display similar to the challenge name.
-            if col == "slug":
+            if col == "name":
                 table.add_column(col, overflow="fold")
             else:
                 table.add_column(col)
-        for r in rows:
+        for r in norm_rows:
             table.add_row(*[str(r.get(k, "")) for k in first])
         Console().print(table)
     else:  # fallback
         headers = list(first.keys())
         print(" | ".join(headers))
         print("-+-".join("-" * len(h) for h in headers))
-        for r in rows:
+        for r in norm_rows:
             print(" | ".join(str(r.get(h, "")) for h in headers))
 
 
 def to_json(rows: Sequence[dict[str, Any]]) -> None:
-    print(json.dumps(list(rows), indent=2, default=str))
+    norm = [_normalize_row(r) for r in rows]
+    print(json.dumps(norm, indent=2, default=str))
 
 
 def to_yaml(rows: Sequence[dict[str, Any]]) -> None:
     if not yaml:  # pragma: no cover
         print("YAML support not installed. Run: pip install pyyaml")
         return
-    print(yaml.safe_dump(list(rows), sort_keys=False))
+    norm = [_normalize_row(r) for r in rows]
+    print(yaml.safe_dump(norm, sort_keys=False))

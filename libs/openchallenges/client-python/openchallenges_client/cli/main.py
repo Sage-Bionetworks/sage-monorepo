@@ -77,9 +77,8 @@ def list_challenges(
         rows = [
             {
                 "id": c.id,
-                "slug": c.slug,
                 "name": c.name,
-                "status": c.status,
+                "status": c.status,  # enum converted later in formatter
                 "platform_id": c.platform_id,
             }
             for c in items
@@ -108,9 +107,8 @@ def stream_challenges(
             rows.append(
                 {
                     "id": c.id,
-                    "slug": c.slug,
                     "name": c.name,
-                    "status": c.status,
+                    "status": c.status,  # enum converted later in formatter
                     "platform_id": c.platform_id,
                 }
             )
