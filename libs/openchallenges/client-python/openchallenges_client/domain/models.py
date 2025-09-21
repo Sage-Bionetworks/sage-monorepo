@@ -26,3 +26,12 @@ class OrganizationSummary:
     name: str
     short_name: str | None
     website_url: str | None
+
+
+@dataclass(frozen=True)
+class PlatformSummary:
+    id: int
+    slug: str
+    name: str
+    avatar_key: str | None
+    website_url: str | None

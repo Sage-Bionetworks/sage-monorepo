@@ -7,12 +7,16 @@ an external support library.
 """
 
 from __future__ import annotations
+
 from typing import Any
+
 import typer
 
 _CHALLENGE_BASE_COLS = ["id", "name", "status", "platform"]
 _CHALLENGE_WIDE_EXTRA = ["start_date", "end_date", "duration_days"]
 _ORG_COLS = ["id", "name", "short_name", "website_url"]
+_PLATFORM_BASE_COLS = ["id", "name", "website_url"]
+_PLATFORM_WIDE_EXTRA = ["slug", "avatar_key"]
 
 
 def available_challenge_columns(wide: bool) -> list[str]:
@@ -37,6 +41,18 @@ def print_org_columns() -> None:
         typer.echo(f"  - {c}")
 
 
+def available_platform_columns(wide: bool) -> list[str]:
+    return _PLATFORM_BASE_COLS + (_PLATFORM_WIDE_EXTRA if wide else [])
+
+
+def print_platform_columns(wide: bool) -> None:
+    typer.echo("Available platform columns:")
+    for c in available_platform_columns(True):  # show full set for discoverability
+        typer.echo(f"  - {c}")
+    if not wide:
+        typer.echo("(Use --wide to access: slug, avatar_key)")
+
+
 def filter_columns(
     rows: list[dict[str, Any]],
     columns: str | None,
@@ -49,7 +65,7 @@ def filter_columns(
     Args:
         rows: list of homogeneous row dictionaries.
         columns: user-specified comma list or None.
-        kind: "challenge" or "org" (controls available sets & hints).
+    kind: "challenge" | "org" | "platform" (controls available sets & hints).
         wide: whether wide mode is active for challenge rows.
     """
     if not columns:
@@ -68,6 +84,9 @@ def filter_columns(
     elif kind == "org":
         avail = set(_ORG_COLS)
         wide_only = set()
+    elif kind == "platform":
+        avail = set(available_platform_columns(wide))
+        wide_only = set(_PLATFORM_WIDE_EXTRA)
     else:  # pragma: no cover (defensive)
         raise ValueError(f"Unknown kind: {kind}")
 

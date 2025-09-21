@@ -32,8 +32,13 @@ def _enum_to_name(value: Any) -> Any:
 
 
 def _normalize_row(row: dict[str, Any]) -> dict[str, Any]:
-    """Return a display-friendly row (drop slug, simplify enums)."""
-    return {k: _enum_to_name(v) for k, v in row.items() if k != "slug"}
+    """Return a display-friendly row (simplify enums).
+
+    Previously we dropped the 'slug' field globally. This prevented showing the
+    platform slug in wide mode for the `platforms list` command. We now retain
+    all keys so callers can explicitly control which columns are emitted.
+    """
+    return {k: _enum_to_name(v) for k, v in row.items()}
 
 
 def to_table(rows: Iterable[dict[str, Any]], *, title: str | None = None) -> None:

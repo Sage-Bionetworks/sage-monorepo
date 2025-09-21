@@ -6,11 +6,17 @@ from collections.abc import Iterable, Iterator
 
 from ..config.loader import ClientConfig, load_config
 from ..core.metrics import MetricsCollector
-from ..domain.models import ChallengeSummary, OrganizationSummary
+from ..domain.models import (
+    ChallengeSummary,
+    OrganizationSummary,
+    PlatformSummary,
+)
 from ..gateways.challenge_gateway import ChallengeGateway
 from ..gateways.organization_gateway import OrganizationGateway
+from ..gateways.platform_gateway import PlatformGateway
 from ..services.list_challenges import ListChallengesService
 from ..services.list_organizations import ListOrganizationsService
+from ..services.list_platforms import ListPlatformsService
 
 
 class OpenChallengesClient:
@@ -28,6 +34,7 @@ class OpenChallengesClient:
         )
         self._challenge_gateway = ChallengeGateway(self._cfg)
         self._org_gateway = OrganizationGateway(self._cfg)
+        self._platform_gateway = PlatformGateway(self._cfg)
 
     # Public API ---------------------------------------------------------
     def list_challenges(
@@ -79,6 +86,30 @@ class OpenChallengesClient:
     ) -> Iterator[OrganizationSummary]:
         """Stream all organizations lazily (no implicit limit)."""
         svc = ListOrganizationsService(self._org_gateway, self._cfg)
+
+        def _gen():
+            yield from svc.execute(limit=2**31 - 1, search=search, metrics=metrics)
+
+        return _gen()
+
+    # Platforms -----------------------------------------------------------
+    def list_platforms(
+        self,
+        *,
+        limit: int | None = None,
+        search: str | None = None,
+        metrics: MetricsCollector | None = None,
+    ) -> Iterable[PlatformSummary]:
+        svc = ListPlatformsService(self._platform_gateway, self._cfg)
+        return svc.execute(limit=limit, search=search, metrics=metrics)
+
+    def iter_all_platforms(
+        self,
+        *,
+        search: str | None = None,
+        metrics: MetricsCollector | None = None,
+    ) -> Iterator[PlatformSummary]:
+        svc = ListPlatformsService(self._platform_gateway, self._cfg)
 
         def _gen():
             yield from svc.execute(limit=2**31 - 1, search=search, metrics=metrics)

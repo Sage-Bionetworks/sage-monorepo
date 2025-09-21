@@ -19,6 +19,7 @@ from ._shared_columns import (
     filter_columns,
     print_challenge_columns,
     print_org_columns,
+    print_platform_columns,
 )
 
 # Module-level option object to satisfy lint rule against function calls in defaults.
@@ -89,10 +90,12 @@ def global_options(
 
 challenges_app = typer.Typer(help="Challenge-related operations")
 orgs_app = typer.Typer(help="Organization-related operations")
+platforms_app = typer.Typer(help="Challenge platform-related operations")
 config_app = typer.Typer(help="Configuration & diagnostics")
 
 app.add_typer(challenges_app, name="challenges")
 app.add_typer(orgs_app, name="orgs")
+app.add_typer(platforms_app, name="platforms")
 app.add_typer(config_app, name="config")
 
 
@@ -143,7 +146,16 @@ def list_challenges(
             invoke_kwargs["search"] = search
         items = list(_invoke_with_backcompat(client.list_challenges, **invoke_kwargs))
         rows = [_challenge_row(c, wide=wide) for c in items]
-        rows = filter_columns(rows, columns, kind="challenge", wide=wide)
+        # Align behavior with platforms: if user does not specify --columns we
+        # still apply an explicit ordered default (base or wide) instead of
+        # relying purely on construction order. This future‑proofs against new
+        # keys being added to the row helper.
+        if columns:
+            rows = filter_columns(rows, columns, kind="challenge", wide=wide)
+        else:
+            base_cols = available_challenge_columns(False)
+            default_cols = available_challenge_columns(True) if wide else base_cols
+            rows = [{k: r.get(k, "") for k in default_cols} for r in rows]
         _emit(rows, output or base_output, title="Challenges")
         if verbose:
             typer.echo(
@@ -257,7 +269,12 @@ def list_orgs(
                 client.list_organizations(limit=limit, search=search)  # type: ignore[arg-type]
             )
         rows = [_org_row(o) for o in items]
-        rows = filter_columns(rows, columns, kind="org", wide=False)
+        # Apply explicit default column ordering (mirrors platforms/challenges)
+        if columns:
+            rows = filter_columns(rows, columns, kind="org", wide=False)
+        else:
+            default_cols = available_org_columns()
+            rows = [{k: r.get(k, "") for k in default_cols} for r in rows]
         fmt = output or base_output
         _emit(rows, fmt, title="Organizations")
         if verbose:
@@ -316,6 +333,79 @@ def stream_orgs(
             typer.echo(
                 (
                     f"[stats] orgs emitted={metrics.emitted} "
+                    f"skipped={metrics.skipped} retries={metrics.retries}"
+                ),
+                err=True,
+            )
+    except oc_errors.OpenChallengesError as e:  # pragma: no cover
+        _handle_error(e)
+
+
+@platforms_app.command("list")
+def list_platforms(
+    ctx: typer.Context,
+    limit: int | None = typer.Option(None, help="Override limit for this command"),
+    search: str | None = typer.Option(None, "--search", help="Search terms"),
+    output: str | None = typer.Option(
+        None, help="Override output format for this command"
+    ),
+    wide: bool = typer.Option(
+        False,
+        "--wide",
+        help="Include slug and avatar_key columns",
+    ),
+    columns: str | None = typer.Option(
+        None,
+        "--columns",
+        help=(
+            "Comma-separated list of columns to include (order preserved). "
+            "Use 'help' to list available columns. Example: --columns id,name"
+        ),
+    ),
+):
+    client: OpenChallengesClient = ctx.obj["client"]
+    base_output = ctx.obj["output"]
+    verbose: bool = ctx.obj.get("verbose", False)
+    metrics = MetricsCollector()
+    try:
+        if columns == "help":
+            print_platform_columns(wide)
+            raise typer.Exit(0)
+        invoke_kwargs = {"limit": limit, "metrics": metrics}
+        if search is not None:
+            invoke_kwargs["search"] = search
+        items = list(
+            _invoke_with_backcompat(
+                client.list_platforms,
+                **invoke_kwargs,  # type: ignore[arg-type]
+            )
+        )
+        rows = [
+            {
+                "id": p.id,
+                "slug": getattr(p, "slug", None),
+                "name": p.name,
+                "website_url": p.website_url,
+                "avatar_key": p.avatar_key,
+            }
+            for p in items
+        ]
+        if columns:
+            rows = filter_columns(rows, columns, kind="platform", wide=wide)
+        else:
+            # Apply default column set (base or wide). For wide mode we enforce a
+            # user-friendly order ensuring 'slug' appears immediately after 'id'.
+            if wide:
+                default_cols = ["id", "slug", "name", "website_url", "avatar_key"]
+            else:
+                default_cols = ["id", "name", "website_url"]
+            rows = [{k: r.get(k, "") for k in default_cols} for r in rows]
+        _emit(rows, output or base_output, title="Platforms")
+        if verbose:
+            typer.echo(
+                (
+                    "[stats] platforms "
+                    f"emitted={metrics.emitted} "
                     f"skipped={metrics.skipped} retries={metrics.retries}"
                 ),
                 err=True,
