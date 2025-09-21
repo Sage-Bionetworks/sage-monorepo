@@ -33,6 +33,7 @@ class ChallengeGateway:
         self,
         limit: int,
         status: list[str] | None = None,
+        search_terms: str | None = None,
         *,
         metrics: MetricsCollector | None = None,
     ) -> Iterator:
@@ -66,6 +67,8 @@ class ChallengeGateway:
                     ("pageNumber", str(spec.page_number)),
                     ("pageSize", str(spec.page_size)),
                 ]
+                if search_terms:
+                    query_params.append(("searchTerms", search_terms))
                 if converted_status:
                     for st in converted_status:
                         query_params.append(("status", st.value))

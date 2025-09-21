@@ -36,6 +36,31 @@ app = typer.Typer(help="OpenChallenges unified Python client & CLI")
 register_default_formatters()
 
 
+def _invoke_with_backcompat(func, **kwargs):
+    """Invoke a callable, dropping unsupported keyword-only params for legacy stubs.
+
+    We progressively remove 'metrics' and then 'search' (in that order) if the
+    target raises a TypeError indicating an unexpected keyword argument. This
+    preserves backward compatibility with older / test stub client objects
+    that have not yet adopted the new signature.
+    """
+    attempt = dict(kwargs)
+    while True:
+        try:
+            return func(**attempt)
+        except TypeError as e:  # pragma: no cover - exercised via tests
+            msg = str(e)
+            removed = False
+            if "metrics" in msg and "metrics" in attempt:
+                attempt.pop("metrics")
+                removed = True
+            elif "search" in msg and "search" in attempt:
+                attempt.pop("search")
+                removed = True
+            if not removed:
+                raise
+
+
 def _client(
     api_url: str | None, api_key: str | None, limit: int
 ) -> OpenChallengesClient:
@@ -76,6 +101,9 @@ def list_challenges(
     ctx: typer.Context,
     limit: int | None = typer.Option(None, help="Override limit for this command"),
     status: list[str] | None = STATUS_OPTION,
+    search: str | None = typer.Option(
+        None, "--search", help="Search terms for challenges"
+    ),
     output: str | None = typer.Option(
         None, help="Override output format for this command"
     ),
@@ -106,17 +134,14 @@ def list_challenges(
             print_challenge_columns(wide=wide)
             raise typer.Exit(0)
         # Collect items; wrap iteration to count emitted.
-        try:
-            items = list(
-                client.list_challenges(limit=limit, status=status_list, metrics=metrics)
-            )
-        except TypeError as e:
-            if "metrics" not in str(e):
-                raise
-            # Fallback for legacy/stub clients without metrics support
-            items = list(
-                client.list_challenges(limit=limit, status=status_list)  # type: ignore[arg-type]
-            )
+        invoke_kwargs = {
+            "limit": limit,
+            "status": status_list,
+            "metrics": metrics,
+        }
+        if search is not None:
+            invoke_kwargs["search"] = search
+        items = list(_invoke_with_backcompat(client.list_challenges, **invoke_kwargs))
         rows = [_challenge_row(c, wide=wide) for c in items]
         rows = filter_columns(rows, columns, kind="challenge", wide=wide)
         _emit(rows, output or base_output, title="Challenges")
@@ -138,6 +163,9 @@ def stream_challenges(
     ctx: typer.Context,
     status: list[str] | None = STATUS_OPTION,
     limit: int = typer.Option(0, help="Optional cap on streamed items (0 = all)"),
+    search: str | None = typer.Option(
+        None, "--search", help="Search terms for challenges"
+    ),
     output: str = typer.Option(None, help="Override output format for this command"),
     wide: bool = typer.Option(
         False,
@@ -164,14 +192,16 @@ def stream_challenges(
             print_challenge_columns(wide=wide)
             raise typer.Exit(0)
         rows = []
-        try:
-            iterator = client.iter_all_challenges(status=status_list, metrics=metrics)
-        except TypeError as e:
-            if "metrics" not in str(e):
-                raise
-            iterator = client.iter_all_challenges(  # type: ignore[arg-type]
-                status=status_list
-            )
+        invoke_kwargs = {
+            "status": status_list,
+            "metrics": metrics,
+        }
+        if search is not None:
+            invoke_kwargs["search"] = search
+        iterator = _invoke_with_backcompat(
+            client.iter_all_challenges,
+            **invoke_kwargs,
+        )
         for count, c in enumerate(iterator, start=1):
             rows.append(_challenge_row(c, wide=wide))
             if limit and count >= limit:

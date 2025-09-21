@@ -20,19 +20,32 @@ class ListChallengesService:
         *,
         limit: int | None,
         status: list[str] | None,
+        search: str | None = None,
         metrics: MetricsCollector | None = None,
-    ) -> Iterable[ChallengeSummary]:  # status unused MVP
+    ) -> Iterable[ChallengeSummary]:
         effective_limit = limit or self._cfg.default_limit
+        # Attempt full signature first (with search_terms & metrics)
         try:
             challenges = self._gw.list_challenges(
-                effective_limit, status=status, metrics=metrics
+                effective_limit,
+                status=status,
+                search_terms=search,
+                metrics=metrics,
             )
         except TypeError:
-            # Backward compatibility: gateway stub (tests) without metrics param
-            challenges = self._gw.list_challenges(
-                effective_limit,
-                status=status,  # type: ignore[call-arg]
-            )
+            # Fallback to legacy signature without metrics
+            try:
+                challenges = self._gw.list_challenges(
+                    effective_limit,
+                    status=status,  # type: ignore[call-arg]
+                )
+            except TypeError:
+                # Last resort: gateway without search_terms but supports metrics
+                challenges = self._gw.list_challenges(
+                    effective_limit,
+                    status=status,
+                    metrics=metrics,  # type: ignore[call-arg]
+                )
         for ch in challenges:
             start_date = getattr(ch, "start_date", None)
             end_date = getattr(ch, "end_date", None)
@@ -42,7 +55,7 @@ class ListChallengesService:
                 try:
                     duration_days = (end_date - start_date).days
                     if duration_days < 0:
-                        duration_days = None  # guard against inverted dates
+                        duration_days = None
                 except Exception:  # pragma: no cover
                     duration_days = None
             yield ChallengeSummary(

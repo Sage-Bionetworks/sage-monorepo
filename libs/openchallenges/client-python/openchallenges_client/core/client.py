@@ -35,16 +35,18 @@ class OpenChallengesClient:
         *,
         limit: int | None = None,
         status: list[str] | None = None,
+        search: str | None = None,
         metrics: MetricsCollector | None = None,
     ) -> Iterable[ChallengeSummary]:
         svc = ListChallengesService(self._challenge_gateway, self._cfg)
-        return svc.execute(limit=limit, status=status, metrics=metrics)
+        return svc.execute(limit=limit, status=status, search=search, metrics=metrics)
 
     def iter_all_challenges(
         self,
         *,
         status: list[str] | None = None,
         metrics: MetricsCollector | None = None,
+        search: str | None = None,
     ) -> Iterator[ChallengeSummary]:
         """Stream all challenges lazily (no implicit limit).
 
@@ -53,7 +55,9 @@ class OpenChallengesClient:
         svc = ListChallengesService(self._challenge_gateway, self._cfg)
 
         def _gen():
-            yield from svc.execute(limit=2**31 - 1, status=status, metrics=metrics)
+            yield from svc.execute(
+                limit=2**31 - 1, status=status, search=search, metrics=metrics
+            )
 
         return _gen()
 
