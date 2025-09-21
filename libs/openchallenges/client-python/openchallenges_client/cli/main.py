@@ -14,7 +14,6 @@ from ..core.metrics import MetricsCollector
 from ..output.formatters import to_ndjson, to_table
 from ..output.registry import get_format, list_formats, register_default_formatters
 from ._shared_columns import (
-    apply_column_selection,
     available_challenge_columns,
     available_org_columns,
     filter_columns,
@@ -149,7 +148,7 @@ def list_challenges(
         rows = [_challenge_row(c, wide=wide) for c in items]
         # Default ordering defined by _challenge_row + wide flag. Apply custom
         # selection if provided.
-        rows = apply_column_selection(rows, columns)
+        rows = filter_columns(rows, columns, kind="challenge", wide=wide)
         _emit(rows, output or base_output, title="Challenges")
         if verbose:
             typer.echo(
@@ -263,7 +262,7 @@ def list_orgs(
                 client.list_organizations(limit=limit, search=search)  # type: ignore[arg-type]
             )
         rows = [_org_row(o) for o in items]
-        rows = apply_column_selection(rows, columns)
+        rows = filter_columns(rows, columns, kind="org", wide=False)
         fmt = output or base_output
         _emit(rows, fmt, title="Organizations")
         if verbose:
@@ -381,7 +380,7 @@ def list_platforms(
         ]
         # Row construction already encodes desired base/wide ordering (slug
         # placed after id in wide mode).
-        rows = apply_column_selection(rows, columns)
+        rows = filter_columns(rows, columns, kind="platform", wide=wide)
         _emit(rows, output or base_output, title="Platforms")
         if verbose:
             typer.echo(
@@ -498,6 +497,33 @@ def create_platform(
         _emit([row], output, title="Created Platform")
     else:
         _emit([row], base_output, title="Created Platform")
+
+
+@platforms_app.command("delete")
+def delete_platform(
+    ctx: typer.Context,
+    platform_id: int = typer.Argument(..., help="Numeric platform id to delete"),
+    yes: bool = typer.Option(
+        False,
+        "-y",
+        "--yes",
+        help="Skip confirmation prompt",
+    ),
+):
+    """Delete a platform by id (irreversible)."""
+    client: OpenChallengesClient = ctx.obj["client"]
+    if not yes:
+        confirm = typer.confirm(
+            f"Delete platform id {platform_id}? This action cannot be undone.",
+            abort=True,
+        )
+        if not confirm:  # pragma: no cover - typer.confirm abort handles
+            raise typer.Exit(1)
+    try:
+        client.delete_platform(platform_id=platform_id)
+        typer.echo(f"Deleted platform {platform_id}")
+    except oc_errors.OpenChallengesError as e:  # pragma: no cover
+        _handle_error(e)
 
 
 @config_app.command("show")

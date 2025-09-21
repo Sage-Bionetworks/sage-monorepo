@@ -166,3 +166,32 @@ class PlatformGateway:
             raise err_cls(str(e)) from e
         except Exception as e:  # pragma: no cover
             raise OpenChallengesError(str(e)) from e
+
+    # ------------------------------------------------------------------
+    # Delete
+    def delete_platform(self, *, platform_id: int) -> None:
+        """Delete a challenge platform by numeric id.
+
+        Raises mapped domain errors on HTTP failures. Returns None on success.
+        """
+        try:
+            cfg = openchallenges_api_client.Configuration(host=self._cfg.api_url)
+            if self._cfg.api_key:
+                cfg.api_key["apiKey"] = self._cfg.api_key
+            with openchallenges_api_client.ApiClient(cfg) as api_client:
+                api = ChallengePlatformApi(api_client)
+                api.delete_challenge_platform(platform_id)
+        except ApiException as e:  # pragma: no cover
+            http_status = getattr(e, "status", None)
+            err_cls = map_status(http_status)
+            if err_cls is AuthError and not self._cfg.api_key:
+                raise AuthError(
+                    str(e),
+                    hint=(
+                        "Provide an API key via --api-key flag, OC_API_KEY env var, "
+                        ".openchallenges.toml"
+                    ),
+                ) from e
+            raise err_cls(str(e)) from e
+        except Exception as e:  # pragma: no cover
+            raise OpenChallengesError(str(e)) from e

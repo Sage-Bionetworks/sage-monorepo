@@ -1,17 +1,17 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 import json as _json
-from tests.utils.assertions import (
-    assert_columns_exact,
-    assert_unknown_column_error,
-)
-from tests.utils.parsing import parse_ndjson
+from dataclasses import dataclass
 
 from typer.testing import CliRunner
 
 from openchallenges_client.cli.main import app
 from openchallenges_client.domain.models import ChallengeSummary, OrganizationSummary
+from tests.utils.assertions import (
+    assert_columns_exact,
+    assert_unknown_column_error,
+)
+from tests.utils.parsing import parse_ndjson
 
 runner = CliRunner()
 
@@ -620,3 +620,56 @@ def test_cli_orgs_list_verbose_metrics(monkeypatch):
     assert "emitted=2" in result.stderr
     assert "skipped=0" in result.stderr
     assert "retries=3" in result.stderr
+
+
+# ---------------- Platform Delete Tests -----------------
+
+
+def test_cli_platforms_delete_confirmation(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    class _PlatformStub:
+        def __init__(self):
+            self.deleted: list[int] = []
+
+        # Provide required factory-used attributes/methods
+        def delete_platform(self, platform_id: int):  # facade method signature
+            self.deleted.append(platform_id)
+
+        # Unused in this test but Typer callback creates facade via _client
+        def list_challenges(self, *a, **k):  # pragma: no cover - safety
+            return []
+
+    stub = _PlatformStub()
+    monkeypatch.setattr(
+        cli_main,
+        "_client",
+        lambda api_url, api_key, limit: stub,
+    )
+    # Provide 'y' to confirmation prompt
+    result = runner.invoke(app, ["platforms", "delete", "42"], input="y\n")
+    assert result.exit_code == 0, result.output
+    assert "Deleted platform 42" in result.output
+    assert stub.deleted == [42]
+
+
+def test_cli_platforms_delete_skip_confirm(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    class _PlatformStub:
+        def __init__(self):
+            self.deleted: list[int] = []
+
+        def delete_platform(self, platform_id: int):
+            self.deleted.append(platform_id)
+
+    stub = _PlatformStub()
+    monkeypatch.setattr(
+        cli_main,
+        "_client",
+        lambda api_url, api_key, limit: stub,
+    )
+    result = runner.invoke(app, ["platforms", "delete", "7", "--yes"])
+    assert result.exit_code == 0, result.output
+    assert "Deleted platform 7" in result.output
+    assert stub.deleted == [7]

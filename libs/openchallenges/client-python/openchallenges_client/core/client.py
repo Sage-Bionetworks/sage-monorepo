@@ -128,3 +128,11 @@ class OpenChallengesClient:
         return self._platform_gateway.create_platform(
             slug=slug, name=name, avatar_key=avatar_key, website_url=website_url
         )
+
+    def delete_platform(self, *, platform_id: int) -> None:
+        """Delete a challenge platform by id.
+
+        Returns None on success (204 from server). Raises mapped domain
+        errors on failure.
+        """
+        self._platform_gateway.delete_platform(platform_id=platform_id)
