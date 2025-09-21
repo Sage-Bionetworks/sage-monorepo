@@ -120,3 +120,49 @@ class PlatformGateway:
             raise err_cls(str(e)) from e
         except Exception as e:  # pragma: no cover
             raise OpenChallengesError(str(e)) from e
+
+    # ------------------------------------------------------------------
+    # Create
+    def create_platform(
+        self, *, slug: str, name: str, avatar_key: str, website_url: str
+    ):
+        """Create a challenge platform via generated API.
+
+        Raises mapped domain errors on HTTP failures. Returns the created
+        generated `ChallengePlatform` model instance.
+        """
+        try:
+            # Build configuration and inject API key (X-API-Key) if present in
+            # higher-level client config so authenticated routes (create) work.
+            cfg = openchallenges_api_client.Configuration(host=self._cfg.api_url)
+            if self._cfg.api_key:
+                # Generated SDK expects mapping entry under logical name 'apiKey'
+                cfg.api_key["apiKey"] = self._cfg.api_key
+            with openchallenges_api_client.ApiClient(cfg) as api_client:
+                api = ChallengePlatformApi(api_client)
+                from openchallenges_api_client.models import (  # type: ignore
+                    challenge_platform_create_request,
+                )
+
+                # Provide alias field names expected by the API spec
+                req = challenge_platform_create_request.ChallengePlatformCreateRequest(
+                    slug=slug,
+                    name=name,
+                    avatarKey=avatar_key,  # type: ignore[arg-type]
+                    websiteUrl=website_url,  # type: ignore[arg-type]
+                )
+                return api.create_challenge_platform(req)
+        except ApiException as e:  # pragma: no cover
+            http_status = getattr(e, "status", None)
+            err_cls = map_status(http_status)
+            if err_cls is AuthError and not self._cfg.api_key:
+                raise AuthError(
+                    str(e),
+                    hint=(
+                        "Provide an API key via --api-key flag, OC_API_KEY env var, "
+                        ".openchallenges.toml"
+                    ),
+                ) from e
+            raise err_cls(str(e)) from e
+        except Exception as e:  # pragma: no cover
+            raise OpenChallengesError(str(e)) from e

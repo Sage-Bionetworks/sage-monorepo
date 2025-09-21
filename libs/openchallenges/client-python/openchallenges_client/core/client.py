@@ -115,3 +115,16 @@ class OpenChallengesClient:
             yield from svc.execute(limit=2**31 - 1, search=search, metrics=metrics)
 
         return _gen()
+
+    def create_platform(
+        self, *, slug: str, name: str, avatar_key: str, website_url: str
+    ):
+        """Create a challenge platform and return the underlying SDK model.
+
+        Write operations intentionally bypass the service abstraction for now
+        (no additional orchestration required). If we later add validation or
+        conflict handling, we can introduce a dedicated service.
+        """
+        return self._platform_gateway.create_platform(
+            slug=slug, name=name, avatar_key=avatar_key, website_url=website_url
+        )

@@ -396,6 +396,110 @@ def list_platforms(
         _handle_error(e)
 
 
+@platforms_app.command("create")
+def create_platform(
+    ctx: typer.Context,
+    slug: str | None = typer.Option(
+        None,
+        "--slug",
+        help=(
+            "Platform slug (lowercase, hyphen separated). If omitted and "
+            "--interactive is set you'll be prompted."
+        ),
+    ),
+    name: str | None = typer.Option(
+        None,
+        "--name",
+        help="Display name. If omitted with --interactive you'll be prompted.",
+    ),
+    avatar_key: str | None = typer.Option(
+        None,
+        "--avatar-key",
+        help=(
+            "Avatar key (e.g., logo/codalab.jpg). If omitted with --interactive "
+            "you'll be prompted."
+        ),
+    ),
+    website_url: str | None = typer.Option(
+        None,
+        "--website-url",
+        help="Website URL. If omitted with --interactive you'll be prompted.",
+    ),
+    interactive: bool = typer.Option(
+        False,
+        "--interactive",
+        help="Enable interactive prompts for any missing fields.",
+    ),
+    output: str = typer.Option(
+        "table",
+        help="Output format for created resource (table|json|yaml|ndjson)",
+    ),
+):
+    """Create a challenge platform.
+
+    Non-interactive: supply all required options.
+    Interactive: add --interactive; any missing values will be prompted.
+    """
+    client: OpenChallengesClient = ctx.obj["client"]
+    base_output = ctx.obj["output"] if ctx.obj.get("output") else output
+
+    def _prompt_if_missing(label: str, current: str | None) -> str | None:
+        if current or not interactive:
+            return current
+        return typer.prompt(label)
+
+    slug = _prompt_if_missing("Slug", slug)
+    name = _prompt_if_missing("Name", name)
+    avatar_key = _prompt_if_missing("Avatar key", avatar_key)
+    website_url = _prompt_if_missing("Website URL", website_url)
+
+    missing = [
+        k
+        for k, v in {
+            "slug": slug,
+            "name": name,
+            "avatar_key": avatar_key,
+            "website_url": website_url,
+        }.items()
+        if not v
+    ]
+    if missing:
+        typer.echo(
+            "Missing required fields: "
+            + ", ".join(missing)
+            + " (provide options or use --interactive)",
+            err=True,
+        )
+        raise typer.Exit(1)
+    try:
+        created = client.create_platform(
+            slug=str(slug),
+            name=str(name),
+            avatar_key=str(avatar_key),
+            website_url=str(website_url),
+        )
+    except oc_errors.OpenChallengesError as e:  # pragma: no cover
+        _handle_error(e)
+        return
+
+    row = {
+        "id": getattr(created, "id", None),
+        "slug": getattr(created, "slug", None),
+        "name": getattr(created, "name", None),
+        "avatar_key": getattr(created, "avatar_key", None),
+        "website_url": getattr(created, "website_url", None),
+    }
+    # Reuse existing emit path
+    if output == "ndjson":
+        to_ndjson([row])
+    elif output == "table":
+        to_table([row], title="Created Platform")
+    elif output in ("json", "yaml"):
+        _emit([row], output, title="Created Platform")
+    else:
+        _emit([row], base_output, title="Created Platform")
+
+
 @config_app.command("show")
 def show_config(
     ctx: typer.Context,
