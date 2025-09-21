@@ -42,7 +42,25 @@ def print_org_columns() -> None:
 
 
 def available_platform_columns(wide: bool) -> list[str]:
-    return _PLATFORM_BASE_COLS + (_PLATFORM_WIDE_EXTRA if wide else [])
+    if not wide:
+        return list(_PLATFORM_BASE_COLS)
+    # Derive wide ordering from base + extras without a third constant:
+    # place 'slug' (if present) immediately after 'id', then keep remaining
+    # base columns, then remaining extras.
+    base = list(_PLATFORM_BASE_COLS)
+    extras = list(_PLATFORM_WIDE_EXTRA)
+    wide_order: list[str] = []
+    if base:
+        # Always start with first base column (expected 'id')
+        wide_order.append(base[0])
+    if "slug" in extras:
+        wide_order.append("slug")
+        extras.remove("slug")
+    # Append remaining base (excluding first already added)
+    wide_order.extend(base[1:])
+    # Finally append any remaining extras (e.g., avatar_key)
+    wide_order.extend(extras)
+    return wide_order
 
 
 def print_platform_columns(wide: bool) -> None:
@@ -111,3 +129,34 @@ def filter_columns(
     for r in rows:
         filtered.append({k: r.get(k, "") for k in ordered})
     return filtered
+
+
+def apply_column_selection(
+    rows: list[dict[str, Any]], columns: str | None
+) -> list[dict[str, Any]]:
+    """Return rows limited to user-specified columns while preserving order.
+
+    Design goals:
+    - Only two parameters (rows + columns spec) for reuse across future CLI
+      clients without knowledge of resource kinds or wide/base semantics.
+    - If ``columns`` is None we trust the input row ordering (callers ensure
+      they construct rows with the desired default ordering / width).
+    - If ``columns`` is provided we keep the user's order and drop unknown
+      columns silently (robust across version drift). This is intentionally
+      more forgiving than ``filter_columns`` which validates & errors; callers
+      wanting strict validation can still invoke ``filter_columns`` first.
+    """
+    if not columns:
+        return rows
+    desired: list[str] = []
+    seen: set[str] = set()
+    for part in columns.split(","):
+        name = part.strip()
+        if not name or name in seen:
+            continue
+        seen.add(name)
+        desired.append(name)
+    trimmed: list[dict[str, Any]] = []
+    for r in rows:
+        trimmed.append({k: r.get(k, "") for k in desired if k in r})
+    return trimmed

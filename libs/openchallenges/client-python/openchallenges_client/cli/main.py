@@ -14,6 +14,7 @@ from ..core.metrics import MetricsCollector
 from ..output.formatters import to_ndjson, to_table
 from ..output.registry import get_format, list_formats, register_default_formatters
 from ._shared_columns import (
+    apply_column_selection,
     available_challenge_columns,
     available_org_columns,
     filter_columns,
@@ -146,16 +147,9 @@ def list_challenges(
             invoke_kwargs["search"] = search
         items = list(_invoke_with_backcompat(client.list_challenges, **invoke_kwargs))
         rows = [_challenge_row(c, wide=wide) for c in items]
-        # Align behavior with platforms: if user does not specify --columns we
-        # still apply an explicit ordered default (base or wide) instead of
-        # relying purely on construction order. This future‑proofs against new
-        # keys being added to the row helper.
-        if columns:
-            rows = filter_columns(rows, columns, kind="challenge", wide=wide)
-        else:
-            base_cols = available_challenge_columns(False)
-            default_cols = available_challenge_columns(True) if wide else base_cols
-            rows = [{k: r.get(k, "") for k in default_cols} for r in rows]
+        # Default ordering defined by _challenge_row + wide flag. Apply custom
+        # selection if provided.
+        rows = apply_column_selection(rows, columns)
         _emit(rows, output or base_output, title="Challenges")
         if verbose:
             typer.echo(
@@ -269,12 +263,7 @@ def list_orgs(
                 client.list_organizations(limit=limit, search=search)  # type: ignore[arg-type]
             )
         rows = [_org_row(o) for o in items]
-        # Apply explicit default column ordering (mirrors platforms/challenges)
-        if columns:
-            rows = filter_columns(rows, columns, kind="org", wide=False)
-        else:
-            default_cols = available_org_columns()
-            rows = [{k: r.get(k, "") for k in default_cols} for r in rows]
+        rows = apply_column_selection(rows, columns)
         fmt = output or base_output
         _emit(rows, fmt, title="Organizations")
         if verbose:
@@ -390,16 +379,9 @@ def list_platforms(
             }
             for p in items
         ]
-        if columns:
-            rows = filter_columns(rows, columns, kind="platform", wide=wide)
-        else:
-            # Apply default column set (base or wide). For wide mode we enforce a
-            # user-friendly order ensuring 'slug' appears immediately after 'id'.
-            if wide:
-                default_cols = ["id", "slug", "name", "website_url", "avatar_key"]
-            else:
-                default_cols = ["id", "name", "website_url"]
-            rows = [{k: r.get(k, "") for k in default_cols} for r in rows]
+        # Row construction already encodes desired base/wide ordering (slug
+        # placed after id in wide mode).
+        rows = apply_column_selection(rows, columns)
         _emit(rows, output or base_output, title="Platforms")
         if verbose:
             typer.echo(
