@@ -11,14 +11,14 @@ from ..config.loader import DEFAULT_LIMIT, load_config
 from ..core import errors as oc_errors
 from ..core.client import OpenChallengesClient
 from ..core.metrics import MetricsCollector
-from ..output.formatters import to_table, to_ndjson
-from ..output.registry import get_format, register_default_formatters
+from ..output.formatters import to_ndjson, to_table
+from ..output.registry import get_format, list_formats, register_default_formatters
 from ._shared_columns import (
     available_challenge_columns,
     available_org_columns,
+    filter_columns,
     print_challenge_columns,
     print_org_columns,
-    filter_columns,
 )
 
 # Module-level option object to satisfy lint rule against function calls in defaults.
@@ -393,8 +393,9 @@ def _emit(rows: Iterable[dict[str, Any]], fmt: str, *, title: str) -> None:
         return
     formatter = get_format(fmt)
     if not formatter:
+        available = ",".join(list_formats() + ["ndjson"])
         typer.echo(
-            f"Unknown output format '{fmt}'. Available: table,json,yaml,ndjson",
+            f"Unknown output format '{fmt}'. Available: {available}",
             err=True,
         )
         raise typer.Exit(1)
