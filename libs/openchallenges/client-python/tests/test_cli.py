@@ -1,6 +1,12 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import json as _json
+from tests.utils.assertions import (
+    assert_columns_exact,
+    assert_unknown_column_error,
+)
+from tests.utils.parsing import parse_ndjson
 
 from typer.testing import CliRunner
 
@@ -93,12 +99,15 @@ def test_cli_challenges_list_json(monkeypatch):
 
     data = _json.loads(result.output)
     assert isinstance(data, list) and len(data) == 1
+    # Validate required columns present (order not enforced for JSON output)
+    assert_columns_exact(
+        data,
+        ["id", "name", "status", "platform"],
+        enforce_order=False,
+    )
     first = data[0]
-    # Expected keys (subset) and absence of slug
-    assert {"id", "name", "status", "platform"}.issubset(first.keys())
     assert "slug" not in first
-    # Status plain
-    assert first["status"] == "ACTIVE"
+    assert first["status"] == "ACTIVE"  # plain status
 
 
 def test_cli_orgs_blank_short_name(monkeypatch):
@@ -131,9 +140,14 @@ def test_cli_orgs_blank_short_name(monkeypatch):
     import json as _json
 
     data = _json.loads(result.output)
+    # All rows have the expected org columns
+    assert_columns_exact(
+        data,
+        ["id", "name", "short_name", "website_url"],
+        enforce_order=False,
+    )
     org_one = next(o for o in data if o["name"] == "Org One")
     assert org_one["short_name"] == ""  # blanked out
-    # Second organization keeps its short name
     org_two = next(o for o in data if o["name"] == "Org Two")
     assert org_two["short_name"] == "O2"
 
@@ -180,7 +194,330 @@ def test_cli_challenges_blank_platform(monkeypatch):
     import json as _json
 
     data = _json.loads(result.output)
+    assert_columns_exact(
+        data,
+        ["id", "name", "status", "platform"],
+        enforce_order=False,
+    )
     c1 = next(c for c in data if c["id"] == 1)
     c2 = next(c for c in data if c["id"] == 2)
     assert c1["platform"] == ""
     assert c2["platform"] == "SomePlatform"
+
+
+# ---------------- NDJSON & Column Selection Tests -----------------
+
+
+def _make_stream_items(n: int, wide: bool = False) -> list[ChallengeSummary]:
+    items: list[ChallengeSummary] = []
+    for i in range(1, n + 1):
+        items.append(
+            ChallengeSummary(
+                id=i,
+                slug=f"c{i}",
+                name=f"Challenge {i}",
+                status="ACTIVE" if i % 2 else "COMPLETED",
+                platform_id=None if i % 3 else 10,
+                platform_name=None if i % 3 else "CodaBench",
+                start_date=None,
+                end_date=None,
+                duration_days=42 if wide else None,
+            )
+        )
+    return items
+
+
+def test_cli_challenges_stream_ndjson_count(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    class _StreamStub:
+        def iter_all_challenges(self, *, status=None):
+            yield from _make_stream_items(5)
+
+    monkeypatch.setattr(cli_main, "_client", lambda *a, **k: _StreamStub())
+    result = runner.invoke(
+        app,
+        [
+            "challenges",
+            "stream",
+            "--limit",
+            "5",
+            "--output",
+            "ndjson",
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    rows = parse_ndjson(
+        result.output,
+        expect_count=5,
+        required_keys={"id", "name", "status"},
+    )
+    assert_columns_exact(
+        rows,
+        ["id", "name", "status", "platform"],
+        enforce_order=False,
+    )
+
+
+def test_cli_challenges_stream_ndjson_wide(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    class _StreamStub:
+        def iter_all_challenges(self, *, status=None):
+            yield from _make_stream_items(3, wide=True)
+
+    monkeypatch.setattr(cli_main, "_client", lambda *a, **k: _StreamStub())
+    result = runner.invoke(
+        app,
+        [
+            "challenges",
+            "stream",
+            "--limit",
+            "3",
+            "--output",
+            "ndjson",
+            "--wide",
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    rows = parse_ndjson(result.output, expect_count=3)
+    for obj in rows:
+        assert {"start_date", "end_date", "duration_days"}.issubset(obj.keys())
+
+
+def test_cli_challenges_list_columns_subset_json(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    monkeypatch.setattr(
+        cli_main,
+        "_client",
+        lambda *a, **k: _StubClient(_sample_items()),
+    )
+    result = runner.invoke(
+        app,
+        [
+            "challenges",
+            "list",
+            "--limit",
+            "2",
+            "--output",
+            "json",
+            "--columns",
+            "id,name",
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    data = _json.loads(result.output)
+    assert_columns_exact(data, ["id", "name"], enforce_order=True)
+
+
+def test_cli_challenges_stream_ndjson_columns_subset(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    class _StreamStub:
+        def iter_all_challenges(self, *, status=None):
+            yield from _make_stream_items(2)
+
+    monkeypatch.setattr(cli_main, "_client", lambda *a, **k: _StreamStub())
+    result = runner.invoke(
+        app,
+        [
+            "challenges",
+            "stream",
+            "--limit",
+            "2",
+            "--output",
+            "ndjson",
+            "--columns",
+            "id,status",
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    rows = parse_ndjson(result.output, expect_count=2, required_keys={"id", "status"})
+    assert_columns_exact(rows, ["id", "status"], enforce_order=True)
+
+
+def test_cli_challenges_list_unknown_column_error(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    monkeypatch.setattr(
+        cli_main,
+        "_client",
+        lambda *a, **k: _StubClient(_sample_items()),
+    )
+    result = runner.invoke(
+        app,
+        [
+            "challenges",
+            "list",
+            "--columns",
+            "id,notacolumn",
+        ],
+    )
+    assert result.exit_code != 0
+    assert_unknown_column_error(result.output, "notacolumn")
+
+
+def test_cli_challenges_list_wide_only_column_without_wide(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    monkeypatch.setattr(
+        cli_main,
+        "_client",
+        lambda *a, **k: _StubClient(_sample_items()),
+    )
+    result = runner.invoke(
+        app,
+        [
+            "challenges",
+            "list",
+            "--columns",
+            "id,duration_days",
+        ],
+    )
+    assert result.exit_code != 0
+    assert_unknown_column_error(result.output, "duration_days", expect_wide_hint=True)
+
+
+# ---------------- Organization NDJSON & Column Selection Parity Tests -----------------
+
+
+def _sample_org_items(n: int) -> list[OrganizationSummary]:
+    return [
+        OrganizationSummary(
+            id=i,
+            name=f"Org {i}",
+            short_name=None if i % 2 else f"O{i}",
+            website_url=f"https://org{i}.example.com" if i % 3 else None,
+        )
+        for i in range(1, n + 1)
+    ]
+
+
+def test_cli_orgs_stream_ndjson_count(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    class _OrgStreamStub:
+        def iter_all_organizations(self, *, search=None):
+            yield from _sample_org_items(4)
+
+    monkeypatch.setattr(cli_main, "_client", lambda *a, **k: _OrgStreamStub())
+    result = runner.invoke(
+        app,
+        [
+            "orgs",
+            "stream",
+            "--limit",
+            "4",
+            "--output",
+            "ndjson",
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    lines = [ln for ln in result.output.strip().splitlines() if ln.strip()]
+    assert len(lines) == 4
+    for ln in lines:
+        obj = _json.loads(ln)
+        assert set(obj.keys()) == {"id", "name", "short_name", "website_url"}
+
+
+def test_cli_orgs_list_columns_subset_json(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    class _OrgStub:
+        def list_organizations(self, *, limit=None, search=None):
+            return _sample_org_items(3)
+
+    monkeypatch.setattr(cli_main, "_client", lambda *a, **k: _OrgStub())
+    result = runner.invoke(
+        app,
+        [
+            "orgs",
+            "list",
+            "--limit",
+            "3",
+            "--output",
+            "json",
+            "--columns",
+            "id,name",
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    data = _json.loads(result.output)
+    assert all(set(d.keys()) == {"id", "name"} for d in data)
+
+
+def test_cli_orgs_stream_ndjson_columns_subset(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    class _OrgStreamStub:
+        def iter_all_organizations(self, *, search=None):
+            yield from _sample_org_items(2)
+
+    monkeypatch.setattr(cli_main, "_client", lambda *a, **k: _OrgStreamStub())
+    result = runner.invoke(
+        app,
+        [
+            "orgs",
+            "stream",
+            "--limit",
+            "2",
+            "--output",
+            "ndjson",
+            "--columns",
+            "name,id",
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    lines = result.output.strip().splitlines()
+    for ln in lines:
+        obj = _json.loads(ln)
+        # Order preserved in insertion order of dict (Python 3.7+)
+        assert list(obj.keys()) == ["name", "id"]
+
+
+def test_cli_orgs_list_unknown_column_error(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    class _OrgStub:
+        def list_organizations(self, *, limit=None, search=None):
+            return _sample_org_items(1)
+
+    monkeypatch.setattr(cli_main, "_client", lambda *a, **k: _OrgStub())
+    result = runner.invoke(
+        app,
+        [
+            "orgs",
+            "list",
+            "--columns",
+            "id,notacolumn",
+        ],
+    )
+    assert result.exit_code != 0
+    assert "Unknown column" in result.output
+
+
+def test_cli_orgs_list_duplicate_columns_dedup(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    class _OrgStub:
+        def list_organizations(self, *, limit=None, search=None):
+            return _sample_org_items(1)
+
+    monkeypatch.setattr(cli_main, "_client", lambda *a, **k: _OrgStub())
+    result = runner.invoke(
+        app,
+        [
+            "orgs",
+            "list",
+            "--limit",
+            "1",
+            "--output",
+            "json",
+            "--columns",
+            "name,id,name",
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    data = _json.loads(result.output)
+    assert list(data[0].keys()) == ["name", "id"]  # dedup preserved order

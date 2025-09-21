@@ -12,6 +12,13 @@ from ..core import errors as oc_errors
 from ..core.client import OpenChallengesClient
 from ..output.formatters import to_table, to_ndjson
 from ..output.registry import get_format, register_default_formatters
+from ._shared_columns import (
+    available_challenge_columns,
+    available_org_columns,
+    print_challenge_columns,
+    print_org_columns,
+    filter_columns,
+)
 
 # Module-level option object to satisfy lint rule against function calls in defaults.
 # Typer infers repeatable option from list[str] annotation (no 'multiple' kw in >=0.12).
@@ -70,6 +77,14 @@ def list_challenges(
         "--wide",
         help="Include start/end dates and duration_days",
     ),
+    columns: str | None = typer.Option(
+        None,
+        "--columns",
+        help=(
+            "Comma-separated list of columns to include (order preserved). "
+            "Use 'help' to list available columns. Example: --columns id,name,status"
+        ),
+    ),
 ):
     client: OpenChallengesClient = ctx.obj["client"]
     base_output = ctx.obj["output"]
@@ -78,8 +93,12 @@ def list_challenges(
     if status_list:
         status_list = [s.upper().strip() for s in status_list if s.strip()]
     try:
+        if columns == "help":
+            print_challenge_columns(wide=wide)
+            raise typer.Exit(0)
         items = list(client.list_challenges(limit=limit, status=status_list))
         rows = [_challenge_row(c, wide=wide) for c in items]
+        rows = filter_columns(rows, columns, kind="challenge", wide=wide)
         _emit(rows, output or base_output, title="Challenges")
     except oc_errors.OpenChallengesError as e:  # pragma: no cover (CLI path)
         _handle_error(e)
@@ -96,12 +115,23 @@ def stream_challenges(
         "--wide",
         help="Include start/end dates and duration_days",
     ),
+    columns: str | None = typer.Option(
+        None,
+        "--columns",
+        help=(
+            "Comma-separated list of columns to include (order preserved). "
+            "Use 'help' to list available columns. Example: --columns id,name,status"
+        ),
+    ),
 ):
     """Stream all challenges (or until optional cap)."""
     client: OpenChallengesClient = ctx.obj["client"]
     base_output = ctx.obj["output"]
     status_list = [s.upper().strip() for s in status] if status else None
     try:
+        if columns == "help":
+            print_challenge_columns(wide=wide)
+            raise typer.Exit(0)
         rows = []
         for count, c in enumerate(
             client.iter_all_challenges(status=status_list), start=1
@@ -109,6 +139,7 @@ def stream_challenges(
             rows.append(_challenge_row(c, wide=wide))
             if limit and count >= limit:
                 break
+        rows = filter_columns(rows, columns, kind="challenge", wide=wide)
         _emit(rows, output or base_output, title="Challenges (stream)")
     except oc_errors.OpenChallengesError as e:  # pragma: no cover
         _handle_error(e)
@@ -122,12 +153,24 @@ def list_orgs(
     output: str | None = typer.Option(
         None, help="Override output format for this command"
     ),
+    columns: str | None = typer.Option(
+        None,
+        "--columns",
+        help=(
+            "Comma-separated list of columns to include (order preserved). "
+            "Use 'help' to list available columns. Example: --columns id,name"
+        ),
+    ),
 ):
     client: OpenChallengesClient = ctx.obj["client"]
     base_output = ctx.obj["output"]
     try:
+        if columns == "help":
+            print_org_columns()
+            raise typer.Exit(0)
         items = list(client.list_organizations(limit=limit, search=search))
         rows = [_org_row(o) for o in items]
+        rows = filter_columns(rows, columns, kind="org", wide=False)
         fmt = output or base_output
         _emit(rows, fmt, title="Organizations")
     except oc_errors.OpenChallengesError as e:  # pragma: no cover
@@ -140,11 +183,22 @@ def stream_orgs(
     search: str | None = ORG_SEARCH_OPTION,
     limit: int = typer.Option(0, help="Optional cap on streamed items (0 = all)"),
     output: str = typer.Option(None, help="Override output format for this command"),
+    columns: str | None = typer.Option(
+        None,
+        "--columns",
+        help=(
+            "Comma-separated list of columns to include (order preserved). "
+            "Use 'help' to list available columns. Example: --columns id,name"
+        ),
+    ),
 ):
     """Stream all organizations (or until optional cap)."""
     client: OpenChallengesClient = ctx.obj["client"]
     base_output = ctx.obj["output"]
     try:
+        if columns == "help":
+            print_org_columns()
+            raise typer.Exit(0)
         rows = []
         for count, o in enumerate(
             client.iter_all_organizations(search=search), start=1
@@ -152,6 +206,7 @@ def stream_orgs(
             rows.append(_org_row(o))
             if limit and count >= limit:
                 break
+        rows = filter_columns(rows, columns, kind="org", wide=False)
         fmt = output or base_output
         _emit(rows, fmt, title="Organizations (stream)")
     except oc_errors.OpenChallengesError as e:  # pragma: no cover
@@ -237,6 +292,13 @@ def _org_row(o) -> dict[str, Any]:
         "short_name": o.short_name or "",
         "website_url": o.website_url,
     }
+
+
+_CHALLENGE_BASE_COLS = available_challenge_columns(False)
+_CHALLENGE_WIDE_EXTRA = [
+    c for c in available_challenge_columns(True) if c not in _CHALLENGE_BASE_COLS
+]
+_ORG_COLS = available_org_columns()
 
 
 def _emit(rows: Iterable[dict[str, Any]], fmt: str, *, title: str) -> None:
