@@ -22,12 +22,13 @@ from pydantic import ValidationError
 from ..config.loader import ClientConfig
 from ..core.errors import AuthError, OpenChallengesError, map_status
 from ..core.metrics import MetricsCollector
+from ._base import BaseGateway
 from ._shared_paging import PageSpec, iter_paginated
 
 
-class ChallengeGateway:
-    def __init__(self, config: ClientConfig) -> None:
-        self._cfg = config
+class ChallengeGateway(BaseGateway):
+    def __init__(self, config: ClientConfig) -> None:  # pragma: no cover - init
+        super().__init__(config)
 
     def list_challenges(
         self,
@@ -47,9 +48,7 @@ class ChallengeGateway:
             return iter(())
 
         def fetch_page(spec: PageSpec):  # returns raw JSON dict
-            with openchallenges_api_client.ApiClient(
-                openchallenges_api_client.Configuration(host=self._cfg.api_url)
-            ) as api_client:
+            with self._api_client() as api_client:
                 api = ChallengeApi(api_client)
 
                 converted_status = None

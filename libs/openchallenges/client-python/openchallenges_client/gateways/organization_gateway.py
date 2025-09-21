@@ -24,6 +24,7 @@ from openchallenges_api_client.rest import ApiException
 from ..config.loader import ClientConfig
 from ..core.errors import AuthError, OpenChallengesError, map_status
 from ..core.metrics import MetricsCollector
+from ._base import BaseGateway
 from ._shared_paging import PageSpec, iter_paginated
 
 
@@ -33,9 +34,9 @@ def _emit_validation_warning(kind: str, ident: object, error: Exception) -> None
     print(f"[warn] {kind} {label} validation failed:\n{error}\n", file=sys.stderr)
 
 
-class OrganizationGateway:
-    def __init__(self, config: ClientConfig) -> None:
-        self._cfg = config
+class OrganizationGateway(BaseGateway):
+    def __init__(self, config: ClientConfig) -> None:  # pragma: no cover - init
+        super().__init__(config)
 
     def list_organizations(
         self,
@@ -48,9 +49,7 @@ class OrganizationGateway:
             return iter(())
 
         def fetch_page(spec: PageSpec):
-            with openchallenges_api_client.ApiClient(
-                openchallenges_api_client.Configuration(host=self._cfg.api_url)
-            ) as api_client:
+            with self._api_client() as api_client:
                 api = OrganizationApi(api_client)
                 query_params: list[tuple[str, str]] = [
                     ("pageNumber", str(spec.page_number)),

@@ -22,12 +22,13 @@ from pydantic import ValidationError
 from ..config.loader import ClientConfig
 from ..core.errors import AuthError, OpenChallengesError, map_status
 from ..core.metrics import MetricsCollector
+from ._base import BaseGateway
 from ._shared_paging import PageSpec, iter_paginated
 
 
-class PlatformGateway:
-    def __init__(self, config: ClientConfig) -> None:
-        self._cfg = config
+class PlatformGateway(BaseGateway):
+    def __init__(self, config: ClientConfig) -> None:  # pragma: no cover - init
+        super().__init__(config)
 
     def list_platforms(
         self,
@@ -40,9 +41,7 @@ class PlatformGateway:
             return iter(())
 
         def fetch_page(spec: PageSpec):
-            with openchallenges_api_client.ApiClient(
-                openchallenges_api_client.Configuration(host=self._cfg.api_url)
-            ) as api_client:
+            with self._api_client() as api_client:
                 api = ChallengePlatformApi(api_client)
                 query_params: list[tuple[str, str]] = [
                     ("pageNumber", str(spec.page_number)),
@@ -134,11 +133,7 @@ class PlatformGateway:
         try:
             # Build configuration and inject API key (X-API-Key) if present in
             # higher-level client config so authenticated routes (create) work.
-            cfg = openchallenges_api_client.Configuration(host=self._cfg.api_url)
-            if self._cfg.api_key:
-                # Generated SDK expects mapping entry under logical name 'apiKey'
-                cfg.api_key["apiKey"] = self._cfg.api_key
-            with openchallenges_api_client.ApiClient(cfg) as api_client:
+            with self._api_client() as api_client:
                 api = ChallengePlatformApi(api_client)
                 from openchallenges_api_client.models import (  # type: ignore
                     challenge_platform_create_request,
@@ -175,10 +170,7 @@ class PlatformGateway:
         Raises mapped domain errors on HTTP failures. Returns None on success.
         """
         try:
-            cfg = openchallenges_api_client.Configuration(host=self._cfg.api_url)
-            if self._cfg.api_key:
-                cfg.api_key["apiKey"] = self._cfg.api_key
-            with openchallenges_api_client.ApiClient(cfg) as api_client:
+            with self._api_client() as api_client:
                 api = ChallengePlatformApi(api_client)
                 api.delete_challenge_platform(platform_id)
         except ApiException as e:  # pragma: no cover
