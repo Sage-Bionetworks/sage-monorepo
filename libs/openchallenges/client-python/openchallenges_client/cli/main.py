@@ -10,7 +10,7 @@ import typer
 from ..config.loader import DEFAULT_LIMIT, load_config
 from ..core import errors as oc_errors
 from ..core.client import OpenChallengesClient
-from ..output.formatters import to_table
+from ..output.formatters import to_table, to_ndjson
 from ..output.registry import get_format, register_default_formatters
 
 # Module-level option object to satisfy lint rule against function calls in defaults.
@@ -79,24 +79,7 @@ def list_challenges(
         status_list = [s.upper().strip() for s in status_list if s.strip()]
     try:
         items = list(client.list_challenges(limit=limit, status=status_list))
-        rows = []
-        for c in items:
-            base = {
-                "id": c.id,
-                "name": c.name,
-                "status": c.status,  # enum converted later in formatter
-                # Display blank instead of None when platform absent
-                "platform": c.platform_name or "",
-            }
-            if wide:
-                base.update(
-                    {
-                        "start_date": c.start_date,
-                        "end_date": c.end_date,
-                        "duration_days": c.duration_days,
-                    }
-                )
-            rows.append(base)
+        rows = [_challenge_row(c, wide=wide) for c in items]
         _emit(rows, output or base_output, title="Challenges")
     except oc_errors.OpenChallengesError as e:  # pragma: no cover (CLI path)
         _handle_error(e)
@@ -123,22 +106,7 @@ def stream_challenges(
         for count, c in enumerate(
             client.iter_all_challenges(status=status_list), start=1
         ):
-            base = {
-                "id": c.id,
-                "name": c.name,
-                "status": c.status,  # enum converted later in formatter
-                # Display blank instead of None when platform absent
-                "platform": c.platform_name or "",
-            }
-            if wide:
-                base.update(
-                    {
-                        "start_date": c.start_date,
-                        "end_date": c.end_date,
-                        "duration_days": c.duration_days,
-                    }
-                )
-            rows.append(base)
+            rows.append(_challenge_row(c, wide=wide))
             if limit and count >= limit:
                 break
         _emit(rows, output or base_output, title="Challenges (stream)")
@@ -159,16 +127,7 @@ def list_orgs(
     base_output = ctx.obj["output"]
     try:
         items = list(client.list_organizations(limit=limit, search=search))
-        rows = [
-            {
-                "id": o.id,
-                "name": o.name,
-                # Display blank instead of None for short name
-                "short_name": o.short_name or "",
-                "website_url": o.website_url,
-            }
-            for o in items
-        ]
+        rows = [_org_row(o) for o in items]
         fmt = output or base_output
         _emit(rows, fmt, title="Organizations")
     except oc_errors.OpenChallengesError as e:  # pragma: no cover
@@ -190,15 +149,7 @@ def stream_orgs(
         for count, o in enumerate(
             client.iter_all_organizations(search=search), start=1
         ):
-            rows.append(
-                {
-                    "id": o.id,
-                    "name": o.name,
-                    # Display blank instead of None for short name
-                    "short_name": o.short_name or "",
-                    "website_url": o.website_url,
-                }
-            )
+            rows.append(_org_row(o))
             if limit and count >= limit:
                 break
         fmt = output or base_output
@@ -261,16 +212,46 @@ def show_config(
 # Helpers
 
 
+def _challenge_row(c, *, wide: bool) -> dict[str, Any]:
+    row: dict[str, Any] = {
+        "id": c.id,
+        "name": c.name,
+        "status": c.status,
+        "platform": c.platform_name or "",
+    }
+    if wide:
+        row.update(
+            {
+                "start_date": c.start_date,
+                "end_date": c.end_date,
+                "duration_days": c.duration_days,
+            }
+        )
+    return row
+
+
+def _org_row(o) -> dict[str, Any]:
+    return {
+        "id": o.id,
+        "name": o.name,
+        "short_name": o.short_name or "",
+        "website_url": o.website_url,
+    }
+
+
 def _emit(rows: Iterable[dict[str, Any]], fmt: str, *, title: str) -> None:
+    if fmt == "ndjson":
+        # Streaming-friendly; do not materialize unnecessarily
+        to_ndjson(rows)
+        return
     seq = list(rows)
-    # Table needs title; registry funcs ignore unknown extras, so handle here.
     if fmt == "table":
         to_table(seq, title=title)
         return
     formatter = get_format(fmt)
     if not formatter:
         typer.echo(
-            f"Unknown output format '{fmt}'. Available: table,json,yaml",
+            f"Unknown output format '{fmt}'. Available: table,json,yaml,ndjson",
             err=True,
         )
         raise typer.Exit(1)

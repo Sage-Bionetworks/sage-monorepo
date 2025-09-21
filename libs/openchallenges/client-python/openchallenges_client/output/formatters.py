@@ -72,3 +72,14 @@ def to_yaml(rows: Sequence[dict[str, Any]]) -> None:
         return
     norm = [_normalize_row(r) for r in rows]
     print(yaml.safe_dump(norm, sort_keys=False))
+
+
+def to_ndjson(rows: Iterable[dict[str, Any]]) -> None:
+    """Emit one normalized JSON object per line (incremental-friendly)."""
+    for r in rows:
+        norm = _normalize_row(r)
+        # Compact form; flush for progressive processing
+        print(
+            json.dumps(norm, separators=(",", ":"), default=str),
+            flush=True,
+        )
