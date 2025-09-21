@@ -16,6 +16,7 @@ from typing import Protocol, TypeVar
 from openchallenges_api_client.rest import ApiException
 
 from ..config.loader import ClientConfig
+from ..core.metrics import MetricsCollector
 from ..core.errors import OpenChallengesError
 
 T = TypeVar("T")  # Raw SDK model
@@ -51,6 +52,7 @@ def iter_paginated(
     fetch_page: Callable[[PageSpec], object],
     extract_items: Callable[[object], Iterable[object] | None],
     transient_statuses: set[int] | None = None,
+    metrics: MetricsCollector | None = None,
 ) -> Iterator[object]:
     """Generic pagination loop with retry on transient statuses.
 
@@ -81,6 +83,8 @@ def iter_paginated(
             status = getattr(e, "status", None)
             if status in transient_statuses and attempt < config.retries:
                 exponential_backoff_retry(attempt=attempt)
+                if metrics is not None:
+                    metrics.inc_retries()
                 attempt += 1
                 continue
             raise
@@ -98,6 +102,8 @@ def iter_paginated(
             yield obj
             remaining -= 1
             emitted_this_page += 1
+        if metrics is not None and emitted_this_page:
+            metrics.inc_emitted(emitted_this_page)
         if emitted_this_page == 0:
             break
         if remaining <= 0:

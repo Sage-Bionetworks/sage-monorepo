@@ -14,9 +14,7 @@ reduces surprise for users relying on validation transparency.
 from __future__ import annotations
 
 import json
-import random
 import sys
-import time
 from collections.abc import Iterator
 
 import openchallenges_api_client
@@ -25,6 +23,8 @@ from openchallenges_api_client.rest import ApiException
 
 from ..config.loader import ClientConfig
 from ..core.errors import AuthError, OpenChallengesError, map_status
+from ..core.metrics import MetricsCollector
+from ._shared_paging import PageSpec, iter_paginated
 
 
 def _emit_validation_warning(kind: str, ident: object, error: Exception) -> None:
@@ -38,99 +38,81 @@ class OrganizationGateway:
         self._cfg = config
 
     def list_organizations(
-        self, limit: int, search_terms: str | None = None
+        self,
+        limit: int,
+        search_terms: str | None = None,
+        *,
+        metrics: MetricsCollector | None = None,
     ) -> Iterator[openchallenges_api_client.Organization]:
         if limit <= 0:
             return iter(())
-        remaining = limit
-        page_number = 0
-        MAX_PAGE_SIZE = 100
-        page_size = min(limit, MAX_PAGE_SIZE)
-        try:
+
+        def fetch_page(spec: PageSpec):
             with openchallenges_api_client.ApiClient(
                 openchallenges_api_client.Configuration(host=self._cfg.api_url)
             ) as api_client:
                 api = OrganizationApi(api_client)
-                attempt = 0
-                while remaining > 0:
-                    requested = min(page_size, remaining)
-                    # Build flat query params
-                    query_params: list[tuple[str, str]] = [
-                        ("pageNumber", str(page_number)),
-                        ("pageSize", str(requested)),
-                    ]
-                    if search_terms:
-                        query_params.append(("searchTerms", search_terms))
-                    try:
-                        param = api.api_client.param_serialize(
-                            method="GET",
-                            resource_path="/organizations",
-                            path_params={},
-                            query_params=query_params,
-                            header_params={"Accept": "application/json"},
-                            body=None,
-                            post_params=[],
-                            files={},
-                            auth_settings=["apiKey", "jwtBearer"],
-                            collection_formats={},
-                            _host=None,
-                            _request_auth=None,
-                        )
-                        resp = api.api_client.call_api(*param)
-                        resp.read()
-                        raw_dict = json.loads(resp.data.decode("utf-8"))  # type: ignore[attr-defined]
-                    except ApiException as e:
-                        if (
-                            getattr(e, "status", None) in {429, 500, 502, 503, 504}
-                            and attempt < self._cfg.retries
-                        ):
-                            sleep_for = (2**attempt) + random.random()
-                            time.sleep(min(sleep_for, 30))
-                            attempt += 1
-                            continue
-                        raise
-                    except Exception as e:  # pragma: no cover
-                        raise OpenChallengesError(f"Fetch failure: {e}") from e
+                query_params: list[tuple[str, str]] = [
+                    ("pageNumber", str(spec.page_number)),
+                    ("pageSize", str(spec.page_size)),
+                ]
+                if search_terms:
+                    query_params.append(("searchTerms", search_terms))
+                param = api.api_client.param_serialize(
+                    method="GET",
+                    resource_path="/organizations",
+                    path_params={},
+                    query_params=query_params,
+                    header_params={"Accept": "application/json"},
+                    body=None,
+                    post_params=[],
+                    files={},
+                    auth_settings=["apiKey", "jwtBearer"],
+                    collection_formats={},
+                    _host=None,
+                    _request_auth=None,
+                )
+                resp = api.api_client.call_api(*param)
+                resp.read()
+                return json.loads(resp.data.decode("utf-8"))  # type: ignore[attr-defined]
 
-                    # Expect key 'organizations'
-                    raw_items = (
-                        raw_dict.get("organizations")
-                        if isinstance(raw_dict, dict)
-                        else None
+        def extract_items(raw: object):
+            from openchallenges_api_client.models.organization import (  # type: ignore
+                Organization,
+            )
+
+            if not isinstance(raw, dict):
+                return None
+            raw_items = raw.get("organizations")
+            if not isinstance(raw_items, list):
+                return None
+            out: list[openchallenges_api_client.Organization] = []
+            for org in raw_items:
+                if not isinstance(org, dict):
+                    continue
+                try:
+                    model = Organization.from_dict(org)
+                except Exception as e:  # TODO: narrow once SDK exposes ValidationError
+                    _emit_validation_warning(
+                        "Organization",
+                        org.get("id", "?"),
+                        e,
                     )
-                    if not isinstance(raw_items, list) or not raw_items:
-                        break
+                    if metrics is not None:
+                        metrics.inc_skipped()
+                    continue
+                if model is not None:
+                    out.append(model)
+            return out
 
-                    from openchallenges_api_client.models.organization import (  # type: ignore
-                        Organization,
-                    )
-
-                    emitted_this_page = 0
-                    for org in raw_items:
-                        if not isinstance(org, dict):  # defensive
-                            continue
-                        try:
-                            model = Organization.from_dict(org)
-                        except Exception as e:  # ValidationError not explicitly exposed
-                            # Warn & skip (mirrors challenge style)
-                            _emit_validation_warning(
-                                "Organization",
-                                org.get("id", "?"),
-                                e,
-                            )
-                            continue
-                        if remaining > 0 and model is not None:  # defensive
-                            yield model  # type: ignore[misc]
-                            emitted_this_page += 1
-                            remaining -= 1
-                    if emitted_this_page == 0:
-                        break
-                    attempt = 0
-                    page_number += 1
-                    if remaining <= 0:
-                        break
-                    if emitted_this_page < requested:
-                        break
+        try:
+            yield from iter_paginated(  # type: ignore[misc]
+                config=self._cfg,
+                limit=limit,
+                fetch_page=fetch_page,
+                extract_items=extract_items,
+                metrics=metrics,
+            )
         except ApiException as e:  # pragma: no cover
             http_status = getattr(e, "status", None)
             err_cls = map_status(http_status)

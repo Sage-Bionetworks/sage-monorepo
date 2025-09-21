@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections.abc import Iterable, Iterator
 
 from ..config.loader import ClientConfig, load_config
+from ..core.metrics import MetricsCollector
 from ..domain.models import ChallengeSummary, OrganizationSummary
 from ..gateways.challenge_gateway import ChallengeGateway
 from ..gateways.organization_gateway import OrganizationGateway
@@ -30,13 +31,20 @@ class OpenChallengesClient:
 
     # Public API ---------------------------------------------------------
     def list_challenges(
-        self, *, limit: int | None = None, status: list[str] | None = None
+        self,
+        *,
+        limit: int | None = None,
+        status: list[str] | None = None,
+        metrics: MetricsCollector | None = None,
     ) -> Iterable[ChallengeSummary]:
         svc = ListChallengesService(self._challenge_gateway, self._cfg)
-        return svc.execute(limit=limit, status=status)
+        return svc.execute(limit=limit, status=status, metrics=metrics)
 
     def iter_all_challenges(
-        self, *, status: list[str] | None = None
+        self,
+        *,
+        status: list[str] | None = None,
+        metrics: MetricsCollector | None = None,
     ) -> Iterator[ChallengeSummary]:
         """Stream all challenges lazily (no implicit limit).
 
@@ -45,7 +53,7 @@ class OpenChallengesClient:
         svc = ListChallengesService(self._challenge_gateway, self._cfg)
 
         def _gen():
-            yield from svc.execute(limit=2**31 - 1, status=status)
+            yield from svc.execute(limit=2**31 - 1, status=status, metrics=metrics)
 
         return _gen()
 
@@ -54,17 +62,21 @@ class OpenChallengesClient:
         *,
         limit: int | None = None,
         search: str | None = None,
+        metrics: MetricsCollector | None = None,
     ) -> Iterable[OrganizationSummary]:
         svc = ListOrganizationsService(self._org_gateway, self._cfg)
-        return svc.execute(limit=limit, search=search)
+        return svc.execute(limit=limit, search=search, metrics=metrics)
 
     def iter_all_organizations(
-        self, *, search: str | None = None
+        self,
+        *,
+        search: str | None = None,
+        metrics: MetricsCollector | None = None,
     ) -> Iterator[OrganizationSummary]:
         """Stream all organizations lazily (no implicit limit)."""
         svc = ListOrganizationsService(self._org_gateway, self._cfg)
 
         def _gen():
-            yield from svc.execute(limit=2**31 - 1, search=search)
+            yield from svc.execute(limit=2**31 - 1, search=search, metrics=metrics)
 
         return _gen()

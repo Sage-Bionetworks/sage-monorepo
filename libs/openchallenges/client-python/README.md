@@ -2,7 +2,7 @@
 
 Unified Python client & CLI for discovering challenges and organizations on the OpenChallenges platform.
 
-Status: Core feature set implemented (challenge & org listing, validation, pagination, retries, NDJSON streaming, column selection).
+Status: Core feature set implemented (challenge & org listing, validation, pagination, retries, NDJSON streaming, column selection, verbose metrics).
 
 Install (development, inside monorepo):
 
@@ -53,7 +53,7 @@ Output & Formatting:
 CLI UX & Diagnostics:
 ✅ Status normalization (case-insensitive)  
 ✅ Early column help short-circuit (no API call)  
-🔜 Verbose summary / metrics (retries, skipped, emitted counts)  
+✅ Verbose summary / metrics (retries, skipped, emitted counts)  
 🔜 Paging controls (--page / --page-size) if required
 
 Architecture & Reuse:
@@ -67,9 +67,9 @@ Quality:
 ✅ NDJSON streaming tests (count, wide mode, column filtering)  
 ✅ Column selection tests (subset, ordering, unknown & wide-only errors)  
 ✅ Organization parity tests for NDJSON and columns  
-🔜 Coverage for verbose metrics once implemented
+✅ Coverage for verbose metrics (unit tests for emitted / skipped / retries)
 
-Roadmap Focus (near-term): human-friendly formatting, verbose metrics, potential pagination flag exposure.
+Roadmap Focus (near-term): human-friendly formatting, potential pagination flag exposure.
 
 Architecture Notes:
 
@@ -94,5 +94,25 @@ Development Tips:
 - Use `--columns help` before expensive operations to explore available projection fields.
 - Use `--output ndjson` with `--wide` for large result sets to optimize downstream processing.
 - Combine shell tools: `openchallenges challenges stream --output ndjson | jq -r '.id'`.
+- Use `--verbose` to emit a metrics summary to stderr, e.g.:
+
+```
+$ openchallenges challenges list --limit 20 --verbose 2>metrics.log
+[stats] challenges emitted=20 skipped=0 retries=1
+```
+
+Metrics Semantics:
+
+| Counter | Meaning                                                                 |
+| ------- | ----------------------------------------------------------------------- |
+| emitted | Successfully yielded & validated items (after skips).                   |
+| skipped | Items dropped due to per-item validation errors.                        |
+| retries | Number of transient page fetch retry attempts (excludes initial tries). |
+
+Notes:
+
+- `retries` increments only for transient HTTP statuses (429, 5xx in configured set) actually retried.
+- `skipped` increments when the gateway catches a model validation error and discards that item.
+- In streaming modes the final metrics line reflects all pages processed up to termination (limit or exhaustion).
 
 License: Apache 2.0 (see repository root LICENSE).

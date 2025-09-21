@@ -21,6 +21,7 @@ from pydantic import ValidationError
 
 from ..config.loader import ClientConfig
 from ..core.errors import AuthError, OpenChallengesError, map_status
+from ..core.metrics import MetricsCollector
 from ._shared_paging import PageSpec, iter_paginated
 
 
@@ -28,7 +29,13 @@ class ChallengeGateway:
     def __init__(self, config: ClientConfig) -> None:
         self._cfg = config
 
-    def list_challenges(self, limit: int, status: list[str] | None = None) -> Iterator:
+    def list_challenges(
+        self,
+        limit: int,
+        status: list[str] | None = None,
+        *,
+        metrics: MetricsCollector | None = None,
+    ) -> Iterator:
         """Yield up to ``limit`` challenges.
 
         Any challenge that fails individual validation is skipped with a warning.
@@ -104,6 +111,8 @@ class ChallengeGateway:
                         f"[warn] Challenge {ident} validation failed:\n{e}\n",
                         file=sys.stderr,
                     )
+                    if metrics is not None:
+                        metrics.inc_skipped()
                     continue
                 if model is not None:
                     out.append(model)
@@ -115,6 +124,7 @@ class ChallengeGateway:
                 limit=limit,
                 fetch_page=fetch_page,
                 extract_items=extract_items,
+                metrics=metrics,
             )
         except ApiException as e:  # pragma: no cover
             http_status = getattr(e, "status", None)

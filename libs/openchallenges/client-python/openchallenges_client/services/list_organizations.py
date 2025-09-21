@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections.abc import Iterable
 
 from ..config.loader import ClientConfig
+from ..core.metrics import MetricsCollector
 from ..domain.models import OrganizationSummary
 from ..gateways.organization_gateway import OrganizationGateway
 
@@ -15,10 +16,22 @@ class ListOrganizationsService:
         self._cfg = config
 
     def execute(
-        self, *, limit: int | None, search: str | None
+        self,
+        *,
+        limit: int | None,
+        search: str | None,
+        metrics: MetricsCollector | None = None,
     ) -> Iterable[OrganizationSummary]:  # search unused MVP
         effective_limit = limit or self._cfg.default_limit
-        orgs = self._gw.list_organizations(effective_limit, search_terms=search)
+        try:
+            orgs = self._gw.list_organizations(
+                effective_limit, search_terms=search, metrics=metrics
+            )
+        except TypeError:
+            orgs = self._gw.list_organizations(
+                effective_limit,
+                search_terms=search,  # type: ignore[call-arg]
+            )
         for org in orgs:
             yield OrganizationSummary(
                 id=org.id,

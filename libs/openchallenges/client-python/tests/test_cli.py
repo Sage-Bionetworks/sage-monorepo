@@ -20,7 +20,9 @@ runner = CliRunner()
 class _StubClient:
     items: list[ChallengeSummary]
 
-    def list_challenges(self, *, limit=None, status=None):  # mimic facade signature
+    def list_challenges(
+        self, *, limit=None, status=None, metrics=None
+    ):  # mimic facade signature
         # Respect limit if provided
         if limit is not None:
             return self.items[:limit]
@@ -114,7 +116,7 @@ def test_cli_orgs_blank_short_name(monkeypatch):
     from openchallenges_client.cli import main as cli_main
 
     class _OrgStub:
-        def list_organizations(self, *, limit=None, search=None):
+        def list_organizations(self, *, limit=None, search=None, metrics=None):
             return [
                 OrganizationSummary(
                     id=1,
@@ -231,7 +233,7 @@ def test_cli_challenges_stream_ndjson_count(monkeypatch):
     from openchallenges_client.cli import main as cli_main
 
     class _StreamStub:
-        def iter_all_challenges(self, *, status=None):
+        def iter_all_challenges(self, *, status=None, metrics=None):
             yield from _make_stream_items(5)
 
     monkeypatch.setattr(cli_main, "_client", lambda *a, **k: _StreamStub())
@@ -263,7 +265,7 @@ def test_cli_challenges_stream_ndjson_wide(monkeypatch):
     from openchallenges_client.cli import main as cli_main
 
     class _StreamStub:
-        def iter_all_challenges(self, *, status=None):
+        def iter_all_challenges(self, *, status=None, metrics=None):
             yield from _make_stream_items(3, wide=True)
 
     monkeypatch.setattr(cli_main, "_client", lambda *a, **k: _StreamStub())
@@ -315,7 +317,7 @@ def test_cli_challenges_stream_ndjson_columns_subset(monkeypatch):
     from openchallenges_client.cli import main as cli_main
 
     class _StreamStub:
-        def iter_all_challenges(self, *, status=None):
+        def iter_all_challenges(self, *, status=None, metrics=None):
             yield from _make_stream_items(2)
 
     monkeypatch.setattr(cli_main, "_client", lambda *a, **k: _StreamStub())
@@ -425,7 +427,7 @@ def test_cli_orgs_list_columns_subset_json(monkeypatch):
     from openchallenges_client.cli import main as cli_main
 
     class _OrgStub:
-        def list_organizations(self, *, limit=None, search=None):
+        def list_organizations(self, *, limit=None, search=None, metrics=None):
             return _sample_org_items(3)
 
     monkeypatch.setattr(cli_main, "_client", lambda *a, **k: _OrgStub())
@@ -480,7 +482,7 @@ def test_cli_orgs_list_unknown_column_error(monkeypatch):
     from openchallenges_client.cli import main as cli_main
 
     class _OrgStub:
-        def list_organizations(self, *, limit=None, search=None):
+        def list_organizations(self, *, limit=None, search=None, metrics=None):
             return _sample_org_items(1)
 
     monkeypatch.setattr(cli_main, "_client", lambda *a, **k: _OrgStub())
@@ -501,7 +503,7 @@ def test_cli_orgs_list_duplicate_columns_dedup(monkeypatch):
     from openchallenges_client.cli import main as cli_main
 
     class _OrgStub:
-        def list_organizations(self, *, limit=None, search=None):
+        def list_organizations(self, *, limit=None, search=None, metrics=None):
             return _sample_org_items(1)
 
     monkeypatch.setattr(cli_main, "_client", lambda *a, **k: _OrgStub())
@@ -521,3 +523,100 @@ def test_cli_orgs_list_duplicate_columns_dedup(monkeypatch):
     assert result.exit_code == 0, result.output
     data = _json.loads(result.output)
     assert list(data[0].keys()) == ["name", "id"]  # dedup preserved order
+
+
+# ---------------- Verbose Metrics Tests -----------------
+
+
+def test_cli_challenges_list_verbose_metrics(monkeypatch):
+    """Verbose mode should emit metrics reflecting emitted & skipped."""
+    from openchallenges_client.cli import main as cli_main
+
+    # One valid, one invalid challenge (invalid due to missing required 'id')
+    class _ChallengeStub:
+        def list_challenges(self, *, limit=None, status=None, metrics=None):
+            # Simulate gateway per-item validation behavior:
+            # increment skipped for invalid
+            if metrics is not None:
+                metrics.inc_emitted()
+                metrics.inc_skipped()
+            return [
+                ChallengeSummary(
+                    id=123,
+                    slug="good",
+                    name="Good",
+                    status="ACTIVE",
+                    platform_id=None,
+                    platform_name=None,
+                    start_date=None,
+                    end_date=None,
+                    duration_days=None,
+                )
+            ]
+
+    monkeypatch.setattr(
+        cli_main,
+        "_client",
+        lambda api_url, api_key, limit: _ChallengeStub(),
+    )
+    result = runner.invoke(
+        app,
+        [
+            "--verbose",
+            "challenges",
+            "list",
+            "--limit",
+            "5",
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    # Metrics line should show emitted=1 skipped=1
+    assert "[stats] challenges" in result.stderr
+    assert "emitted=1" in result.stderr
+    assert "skipped=1" in result.stderr
+    assert "retries=0" in result.stderr
+
+
+def test_cli_orgs_list_verbose_metrics(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    class _OrgStub:
+        def list_organizations(self, *, limit=None, search=None, metrics=None):
+            if metrics is not None:
+                metrics.inc_emitted(2)
+                metrics.inc_retries(3)
+            return [
+                OrganizationSummary(
+                    id=1,
+                    name="Org A",
+                    short_name=None,
+                    website_url=None,
+                ),
+                OrganizationSummary(
+                    id=2,
+                    name="Org B",
+                    short_name=None,
+                    website_url=None,
+                ),
+            ]
+
+    monkeypatch.setattr(
+        cli_main,
+        "_client",
+        lambda api_url, api_key, limit: _OrgStub(),
+    )
+    result = runner.invoke(
+        app,
+        [
+            "--verbose",
+            "orgs",
+            "list",
+            "--limit",
+            "2",
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    assert "[stats] orgs" in result.stderr
+    assert "emitted=2" in result.stderr
+    assert "skipped=0" in result.stderr
+    assert "retries=3" in result.stderr

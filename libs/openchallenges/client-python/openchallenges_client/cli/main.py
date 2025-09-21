@@ -10,6 +10,7 @@ import typer
 from ..config.loader import DEFAULT_LIMIT, load_config
 from ..core import errors as oc_errors
 from ..core.client import OpenChallengesClient
+from ..core.metrics import MetricsCollector
 from ..output.formatters import to_table, to_ndjson
 from ..output.registry import get_format, register_default_formatters
 from ._shared_columns import (
@@ -48,10 +49,16 @@ def global_options(
     api_key: str = typer.Option(None, help="API key (env OC_API_KEY)"),
     limit: int = typer.Option(5, help="Default max items"),
     output: str = typer.Option("table", help="Output format: table|json|yaml"),
+    verbose: bool = typer.Option(
+        False,
+        "--verbose",
+        help="Emit summary metrics (emitted / skipped / retries) to stderr",
+    ),
 ):
     ctx.obj = {
         "client": _client(api_url, api_key, limit),
         "output": output,
+        "verbose": verbose,
     }
 
 
@@ -88,6 +95,8 @@ def list_challenges(
 ):
     client: OpenChallengesClient = ctx.obj["client"]
     base_output = ctx.obj["output"]
+    verbose: bool = ctx.obj.get("verbose", False)
+    metrics = MetricsCollector()
     status_list = list(status) if status else None
     # Normalize statuses (case-insensitive) if provided
     if status_list:
@@ -96,10 +105,30 @@ def list_challenges(
         if columns == "help":
             print_challenge_columns(wide=wide)
             raise typer.Exit(0)
-        items = list(client.list_challenges(limit=limit, status=status_list))
+        # Collect items; wrap iteration to count emitted.
+        try:
+            items = list(
+                client.list_challenges(limit=limit, status=status_list, metrics=metrics)
+            )
+        except TypeError as e:
+            if "metrics" not in str(e):
+                raise
+            # Fallback for legacy/stub clients without metrics support
+            items = list(
+                client.list_challenges(limit=limit, status=status_list)  # type: ignore[arg-type]
+            )
         rows = [_challenge_row(c, wide=wide) for c in items]
         rows = filter_columns(rows, columns, kind="challenge", wide=wide)
         _emit(rows, output or base_output, title="Challenges")
+        if verbose:
+            typer.echo(
+                (
+                    "[stats] challenges "
+                    f"emitted={metrics.emitted} "
+                    f"skipped={metrics.skipped} retries={metrics.retries}"
+                ),
+                err=True,
+            )
     except oc_errors.OpenChallengesError as e:  # pragma: no cover (CLI path)
         _handle_error(e)
 
@@ -127,20 +156,37 @@ def stream_challenges(
     """Stream all challenges (or until optional cap)."""
     client: OpenChallengesClient = ctx.obj["client"]
     base_output = ctx.obj["output"]
+    verbose: bool = ctx.obj.get("verbose", False)
+    metrics = MetricsCollector()
     status_list = [s.upper().strip() for s in status] if status else None
     try:
         if columns == "help":
             print_challenge_columns(wide=wide)
             raise typer.Exit(0)
         rows = []
-        for count, c in enumerate(
-            client.iter_all_challenges(status=status_list), start=1
-        ):
+        try:
+            iterator = client.iter_all_challenges(status=status_list, metrics=metrics)
+        except TypeError as e:
+            if "metrics" not in str(e):
+                raise
+            iterator = client.iter_all_challenges(  # type: ignore[arg-type]
+                status=status_list
+            )
+        for count, c in enumerate(iterator, start=1):
             rows.append(_challenge_row(c, wide=wide))
             if limit and count >= limit:
                 break
         rows = filter_columns(rows, columns, kind="challenge", wide=wide)
         _emit(rows, output or base_output, title="Challenges (stream)")
+        if verbose:
+            typer.echo(
+                (
+                    "[stats] challenges "
+                    f"emitted={metrics.emitted} "
+                    f"skipped={metrics.skipped} retries={metrics.retries}"
+                ),
+                err=True,
+            )
     except oc_errors.OpenChallengesError as e:  # pragma: no cover
         _handle_error(e)
 
@@ -164,15 +210,34 @@ def list_orgs(
 ):
     client: OpenChallengesClient = ctx.obj["client"]
     base_output = ctx.obj["output"]
+    verbose: bool = ctx.obj.get("verbose", False)
+    metrics = MetricsCollector()
     try:
         if columns == "help":
             print_org_columns()
             raise typer.Exit(0)
-        items = list(client.list_organizations(limit=limit, search=search))
+        try:
+            items = list(
+                client.list_organizations(limit=limit, search=search, metrics=metrics)
+            )
+        except TypeError as e:
+            if "metrics" not in str(e):
+                raise
+            items = list(
+                client.list_organizations(limit=limit, search=search)  # type: ignore[arg-type]
+            )
         rows = [_org_row(o) for o in items]
         rows = filter_columns(rows, columns, kind="org", wide=False)
         fmt = output or base_output
         _emit(rows, fmt, title="Organizations")
+        if verbose:
+            typer.echo(
+                (
+                    f"[stats] orgs emitted={metrics.emitted} "
+                    f"skipped={metrics.skipped} retries={metrics.retries}"
+                ),
+                err=True,
+            )
     except oc_errors.OpenChallengesError as e:  # pragma: no cover
         _handle_error(e)
 
@@ -195,20 +260,36 @@ def stream_orgs(
     """Stream all organizations (or until optional cap)."""
     client: OpenChallengesClient = ctx.obj["client"]
     base_output = ctx.obj["output"]
+    verbose: bool = ctx.obj.get("verbose", False)
+    metrics = MetricsCollector()
     try:
         if columns == "help":
             print_org_columns()
             raise typer.Exit(0)
         rows = []
-        for count, o in enumerate(
-            client.iter_all_organizations(search=search), start=1
-        ):
+        try:
+            iterator = client.iter_all_organizations(search=search, metrics=metrics)
+        except TypeError as e:
+            if "metrics" not in str(e):
+                raise
+            iterator = client.iter_all_organizations(  # type: ignore[arg-type]
+                search=search
+            )
+        for count, o in enumerate(iterator, start=1):
             rows.append(_org_row(o))
             if limit and count >= limit:
                 break
         rows = filter_columns(rows, columns, kind="org", wide=False)
         fmt = output or base_output
         _emit(rows, fmt, title="Organizations (stream)")
+        if verbose:
+            typer.echo(
+                (
+                    f"[stats] orgs emitted={metrics.emitted} "
+                    f"skipped={metrics.skipped} retries={metrics.retries}"
+                ),
+                err=True,
+            )
     except oc_errors.OpenChallengesError as e:  # pragma: no cover
         _handle_error(e)
 

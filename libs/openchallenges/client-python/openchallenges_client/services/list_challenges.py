@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections.abc import Iterable
 
 from ..config.loader import ClientConfig
+from ..core.metrics import MetricsCollector
 from ..domain.models import ChallengeSummary
 from ..gateways.challenge_gateway import ChallengeGateway
 
@@ -15,10 +16,23 @@ class ListChallengesService:
         self._cfg = config
 
     def execute(
-        self, *, limit: int | None, status: list[str] | None
+        self,
+        *,
+        limit: int | None,
+        status: list[str] | None,
+        metrics: MetricsCollector | None = None,
     ) -> Iterable[ChallengeSummary]:  # status unused MVP
         effective_limit = limit or self._cfg.default_limit
-        challenges = self._gw.list_challenges(effective_limit, status=status)
+        try:
+            challenges = self._gw.list_challenges(
+                effective_limit, status=status, metrics=metrics
+            )
+        except TypeError:
+            # Backward compatibility: gateway stub (tests) without metrics param
+            challenges = self._gw.list_challenges(
+                effective_limit,
+                status=status,  # type: ignore[call-arg]
+            )
         for ch in challenges:
             start_date = getattr(ch, "start_date", None)
             end_date = getattr(ch, "end_date", None)
