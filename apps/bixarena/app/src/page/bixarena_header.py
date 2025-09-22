@@ -23,10 +23,8 @@ def build_header():
             leaderboard_btn = gr.Button("Leaderboard", variant="secondary")
 
         with gr.Column(scale=1):
-            # Create reactive login button - will be updated by update_login_button
             login_btn = gr.Button("Login", variant="primary", link="")
 
-    # CSS to align header items
     gr.HTML("""
         <style>
         #header-row {
@@ -46,17 +44,18 @@ def update_login_button():
     auth_service = get_auth_service()
 
     if auth_service.is_user_authenticated():
-        # User is logged in - show username, no external link
         username = auth_service.session.get_user_display_name()
         return gr.Button(username, variant="primary", link=None)
     else:
-        # User not logged in - show login button with OAuth link
         login_url = auth_service.initiate_login()
         return gr.Button("Login", variant="primary", link=login_url)
 
 
-def get_login_button_state():
-    """Get current login button state for updates"""
+def handle_login_click(navigator, update_user_page):
+    """Handle login button click - navigate to user page if authenticated"""
     auth_service = get_auth_service()
-    button_config = auth_service.get_login_button_config()
-    return gr.Button(button_config["value"], variant=button_config["variant"])
+    user_info = update_user_page()
+    if auth_service.is_user_authenticated():
+        return *navigator.show_page(3), *user_info
+    else:
+        return *navigator.show_page(0), *user_info

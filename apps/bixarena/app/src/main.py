@@ -1,11 +1,11 @@
 import argparse
 import urllib.parse
 import gradio as gr
-from page.bixarena_header import build_header, update_login_button
+from page.bixarena_header import build_header, update_login_button, handle_login_click
 from page.bixarena_battle import build_battle_page
 from page.bixarena_leaderboard import build_leaderboard_page
 from page.bixarena_home import build_home_page
-from page.bixarena_user import build_user_page, update_user_page
+from page.bixarena_user import build_user_page, update_user_page, handle_logout_click
 from config.auth_service import get_auth_service
 
 
@@ -35,10 +35,7 @@ def check_oauth_callback(request: gr.Request):
 
                 success = auth_service.handle_oauth_callback(oauth_code, oauth_state)
 
-                if success:
-                    # Don't log here since auth_service already logs success
-                    pass
-                else:
+                if not success:
                     print("❌ Login failed")
 
         except Exception as e:
@@ -83,7 +80,6 @@ def parse_args():
 def build_app(register_api_endpoint_file=None, moderate=False):
     """Create the main application with clean header positioning"""
 
-    # JavaScript code to clean OAuth parameters from URL
     cleanup_js = """
     function() {
         setTimeout(function() {
@@ -113,66 +109,29 @@ def build_app(register_api_endpoint_file=None, moderate=False):
             leaderboard_content = build_leaderboard_page()
 
         with gr.Column(visible=False) as user_page:
-            # User page returns the update function along with components
             user_container, welcome_display, logout_btn, update_user_display = (
                 build_user_page()
             )
 
-        # Initialize navigator
         all_pages = [home_page, battle_page, leaderboard_page, user_page]
         navigator = PageNavigator(all_pages)
 
-        # Navigation event handlers
         battle_btn.click(lambda: navigator.show_page(1), outputs=all_pages)
         leaderboard_btn.click(lambda: navigator.show_page(2), outputs=all_pages)
         cta_btn.click(lambda: navigator.show_page(1), outputs=all_pages)
 
-        # Login button handler - simplified
-        def handle_login_click():
-            auth_service = get_auth_service()
-            user_info = update_user_page()
-            if auth_service.is_user_authenticated():
-                # User is logged in - show user page
-                return *navigator.show_page(3), *user_info
-            else:
-                # User not logged in - stay on current page (OAuth redirect via button link)
-                return *navigator.show_page(0), *user_info
-
         login_btn.click(
-            fn=handle_login_click,
+            fn=lambda: handle_login_click(navigator, update_user_page),
             outputs=all_pages + [welcome_display, logout_btn],
         )
 
-        # Logout handler that redirects to home page
-        def handle_logout_and_redirect():
-            """Handle logout and redirect to home page"""
-            auth_service = get_auth_service()
-
-            # Only logout if user is actually authenticated
-            if not auth_service.is_user_authenticated():
-                # User already logged out, just redirect to home
-                updated_login_btn = update_login_button()
-                user_info = update_user_page()
-                home_pages = navigator.show_page(0)
-                return home_pages + [updated_login_btn] + list(user_info)
-
-            # Clear user session - this will handle the logout logging
-            auth_service.logout_user()
-
-            # Redirect to home page and update all components
-            updated_login_btn = update_login_button()
-            user_info = update_user_page()
-            home_pages = navigator.show_page(0)  # Show home page
-
-            return home_pages + [updated_login_btn] + list(user_info)
-
-        # Wire up the logout button to redirect to home
         logout_btn.click(
-            fn=handle_logout_and_redirect,
+            fn=lambda: handle_logout_click(
+                navigator, update_login_button, update_user_page
+            ),
             outputs=all_pages + [login_btn, welcome_display, logout_btn],
         )
 
-        # Handle OAuth callback and clean URL - simplified
         demo.load(
             fn=check_oauth_callback,
             outputs=[login_btn, welcome_display, logout_btn],
