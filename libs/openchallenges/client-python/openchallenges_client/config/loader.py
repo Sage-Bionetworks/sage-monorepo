@@ -144,6 +144,14 @@ def load_config(
         output_val = DEFAULT_OUTPUT
         sources["output"] = "default"
 
+    # Validate output format early (restrict to supported formats)
+    allowed_outputs = {"table", "json", "yaml", "ndjson"}
+    if output_val not in allowed_outputs:  # pragma: no cover (covered via CLI tests)
+        raise ConfigParseError(
+            "Invalid output format: '"
+            f"{output_val}' (allowed: {', '.join(sorted(allowed_outputs))})"
+        )
+
     # retries resolution
     if os.getenv("OC_RETRIES") is not None:
         retries_val: int | str = os.getenv("OC_RETRIES")  # type: ignore[assignment]

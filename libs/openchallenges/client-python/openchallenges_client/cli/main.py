@@ -71,6 +71,10 @@ def global_options(
     except ConfigParseError as e:  # pragma: no cover (covered via integration test)
         typer.echo(str(e), err=True)
         raise typer.Exit(1) from None
+    if output is not None and output not in {"table", "json", "yaml", "ndjson"}:
+        typer.echo("Invalid --output value. Allowed: table|json|yaml|ndjson", err=True)
+        raise typer.Exit(2)
+
     if output is None:
         from ..config.loader import load_config as _lc
 
