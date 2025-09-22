@@ -1,5 +1,5 @@
 """
-Pure OAuth client for Synapse API calls
+OAuth client for Synapse API calls
 """
 
 import os

@@ -1,9 +1,7 @@
 """
-Centralized session and state management for BixArena
-Handles user session, OAuth state, and error management with persistence
+Handles user session, OAuth state, and error management
 """
 
-import secrets
 import time
 from typing import Optional, Dict, Any
 
@@ -126,14 +124,6 @@ class SessionManager:
     def has_error(self) -> bool:
         """Check if there's a current error"""
         return self._error_message is not None
-
-    # Utility methods
-    def get_login_button_config(self) -> Dict[str, Any]:
-        """Get login button configuration based on current state"""
-        if self.is_authenticated():
-            return {"value": self.get_user_display_name(), "variant": "primary"}
-        else:
-            return {"value": "Login", "variant": "primary"}
 
     def reset_session(self) -> None:
         """Reset entire session state (for testing/debugging)"""

@@ -1,6 +1,5 @@
 """
 Authentication service - handles OAuth business logic and integrates with session management
-Separates authentication logic from UI components
 """
 
 from typing import Optional, Dict, Any, Tuple
@@ -145,13 +144,15 @@ class AuthService:
         return True
 
     def get_login_button_config(self) -> Dict[str, Any]:
-        """
-        Get configuration for login button based on authentication state
+        """Get configuration for login button based on authentication state
 
         Returns:
             Dictionary with button value and variant
         """
-        return self.session.get_login_button_config()
+        if self.is_user_authenticated():
+            return {"value": self.session.get_user_display_name(), "variant": "primary"}
+        else:
+            return {"value": "Login", "variant": "primary"}
 
     def get_current_error(self) -> Optional[str]:
         """
