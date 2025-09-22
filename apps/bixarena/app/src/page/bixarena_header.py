@@ -1,15 +1,15 @@
 import gradio as gr
-from config.auth_service import get_auth_service
+from auth.auth_service import get_auth_service
 
 
 def build_header():
-    """Build header - login button will be managed reactively"""
+    """Build header with navigation and login button"""
     with gr.Row(elem_id="header-row") as header:
         with gr.Column(scale=4):
             gr.HTML("""
                 <div style="display: flex; align-items: center; height: 40px;">
                     <h1 style="margin: 0; padding: 0; font-size: 1.5rem;">
-                        <a href="/" style="text-decoration: none; color: inherit; cursor: pointer;">
+                        <a href="/" style="text-decoration: none; color: inherit;">
                             🧬 BixArena
                         </a>
                     </h1>
@@ -40,22 +40,24 @@ def build_header():
 
 
 def update_login_button():
-    """Update login button state and link based on authentication"""
+    """Update login button based on authentication state"""
     auth_service = get_auth_service()
 
-    if auth_service.is_user_authenticated():
-        username = auth_service.session.get_user_display_name()
-        return gr.Button(username, variant="primary", link=None)
+    if auth_service.is_authenticated():
+        return gr.Button(auth_service.get_display_name(), variant="primary", link=None)
     else:
-        login_url = auth_service.initiate_login()
+        login_url = auth_service.generate_login_url()
         return gr.Button("Login", variant="primary", link=login_url)
 
 
 def handle_login_click(navigator, update_user_page):
-    """Handle login button click - navigate to user page if authenticated"""
+    """Handle login button click - must return all expected outputs"""
     auth_service = get_auth_service()
     user_info = update_user_page()
-    if auth_service.is_user_authenticated():
+
+    if auth_service.is_authenticated():
+        # Show user page
         return *navigator.show_page(3), *user_info
     else:
+        # Show home page
         return *navigator.show_page(0), *user_info

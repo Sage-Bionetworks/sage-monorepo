@@ -5,44 +5,38 @@ from page.bixarena_header import build_header, update_login_button, handle_login
 from page.bixarena_battle import build_battle_page
 from page.bixarena_leaderboard import build_leaderboard_page
 from page.bixarena_home import build_home_page
-from page.bixarena_user import build_user_page, update_user_page, handle_logout_click
-from config.auth_service import get_auth_service
+from page.bixarena_user import build_user_page, update_user_page, handle_logout
+from auth.auth_service import get_auth_service
 
 
 class PageNavigator:
-    """Clean navigation class for managing page visibility"""
+    """Page navigation"""
 
-    def __init__(self, sections):
-        self.sections = sections
+    def __init__(self, pages):
+        self.pages = pages
 
-    def show_page(self, page_index):
-        """Show only the specified page, hide others"""
-        return [gr.Column(visible=(i == page_index)) for i in range(len(self.sections))]
+    def show_page(self, index):
+        return [gr.Column(visible=(i == index)) for i in range(len(self.pages))]
 
 
 def check_oauth_callback(request: gr.Request):
-    """Process OAuth callback and return updated states"""
+    """Process OAuth callback"""
     auth_service = get_auth_service()
 
     if request and hasattr(request, "url"):
         try:
             parsed_url = urllib.parse.urlparse(str(request.url))
-            url_params = urllib.parse.parse_qs(parsed_url.query)
+            params = urllib.parse.parse_qs(parsed_url.query)
 
-            if "code" in url_params:
-                oauth_code = url_params["code"][0]
-                oauth_state = url_params.get("state", [None])[0]
-
-                success = auth_service.handle_oauth_callback(oauth_code, oauth_state)
-
-                if not success:
-                    print("❌ Login failed")
+            if "code" in params:
+                code = params["code"][0]
+                state = params.get("state", [None])[0]
+                auth_service.handle_oauth_callback(code, state)
 
         except Exception as e:
-            auth_service.session.set_error(f"Callback processing error: {str(e)}")
-            print(f"❌ Login failed: {str(e)}")
+            print(f"❌ OAuth callback failed: {e}")
 
-    return (update_login_button(), *update_user_page())
+    return update_login_button(), *update_user_page()
 
 
 def parse_args():
@@ -50,47 +44,25 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--host", type=str, default="127.0.0.1")
     parser.add_argument("--port", type=int)
-    parser.add_argument(
-        "--share",
-        action="store_true",
-        help="Whether to generate a public, shareable link",
-    )
-    parser.add_argument(
-        "--concurrency-count",
-        type=int,
-        default=10,
-        help="The concurrency count of the gradio queue",
-    )
-    parser.add_argument(
-        "--register-api-endpoint-file",
-        type=str,
-        help="Register API-based model endpoints from a JSON file",
-    )
-    parser.add_argument(
-        "--moderate",
-        action="store_true",
-        help="Enable content moderation to block unsafe inputs",
-    )
-    parser.add_argument(
-        "--gradio-root-path", type=str, help="Sets the gradio root path"
-    )
+    parser.add_argument("--share", action="store_true")
+    parser.add_argument("--concurrency-count", type=int, default=10)
+    parser.add_argument("--register-api-endpoint-file", type=str)
+    parser.add_argument("--moderate", action="store_true")
+    parser.add_argument("--gradio-root-path", type=str)
     return parser.parse_args()
 
 
 def build_app(register_api_endpoint_file=None, moderate=False):
-    """Create the main application with clean header positioning"""
+    """Create the main application"""
 
     cleanup_js = """
     function() {
         setTimeout(function() {
-            if (window.location.search.includes('code=') || 
-                window.location.search.includes('state=')) {
-                
+            if (window.location.search.includes('code=')) {
                 const url = new URL(window.location);
                 url.searchParams.delete('code');
-                url.searchParams.delete('state'); 
-                
-                window.history.replaceState({}, document.title, url.pathname + url.hash);
+                url.searchParams.delete('state');
+                window.history.replaceState({}, document.title, url.pathname);
             }
         }, 100);
     }
@@ -103,37 +75,37 @@ def build_app(register_api_endpoint_file=None, moderate=False):
             home_content, cta_btn = build_home_page()
 
         with gr.Column(visible=False) as battle_page:
-            battle_content = build_battle_page(register_api_endpoint_file, moderate)
+            build_battle_page(register_api_endpoint_file, moderate)
 
         with gr.Column(visible=False) as leaderboard_page:
-            leaderboard_content = build_leaderboard_page()
+            build_leaderboard_page()
 
         with gr.Column(visible=False) as user_page:
-            user_container, welcome_display, logout_btn, update_user_display = (
-                build_user_page()
-            )
+            user_container, welcome_display, logout_btn = build_user_page()
 
-        all_pages = [home_page, battle_page, leaderboard_page, user_page]
-        navigator = PageNavigator(all_pages)
+        pages = [home_page, battle_page, leaderboard_page, user_page]
+        navigator = PageNavigator(pages)
 
-        battle_btn.click(lambda: navigator.show_page(1), outputs=all_pages)
-        leaderboard_btn.click(lambda: navigator.show_page(2), outputs=all_pages)
-        cta_btn.click(lambda: navigator.show_page(1), outputs=all_pages)
+        # Navigation
+        battle_btn.click(lambda: navigator.show_page(1), outputs=pages)
+        leaderboard_btn.click(lambda: navigator.show_page(2), outputs=pages)
+        cta_btn.click(lambda: navigator.show_page(1), outputs=pages)
 
+        # Login - now passes update_user_page function
         login_btn.click(
-            fn=lambda: handle_login_click(navigator, update_user_page),
-            outputs=all_pages + [welcome_display, logout_btn],
+            lambda: handle_login_click(navigator, update_user_page),
+            outputs=pages + [welcome_display, logout_btn],
         )
 
+        # Logout - now passes all required functions
         logout_btn.click(
-            fn=lambda: handle_logout_click(
-                navigator, update_login_button, update_user_page
-            ),
-            outputs=all_pages + [login_btn, welcome_display, logout_btn],
+            lambda: handle_logout(navigator, update_login_button, update_user_page),
+            outputs=pages + [login_btn, welcome_display, logout_btn],
         )
 
+        # OAuth callback
         demo.load(
-            fn=check_oauth_callback,
+            check_oauth_callback,
             outputs=[login_btn, welcome_display, logout_btn],
             js=cleanup_js,
         )
@@ -143,17 +115,8 @@ def build_app(register_api_endpoint_file=None, moderate=False):
 
 if __name__ == "__main__":
     args = parse_args()
-
-    app = build_app(
-        register_api_endpoint_file=args.register_api_endpoint_file,
-        moderate=args.moderate,
-    )
-
-    app.queue(
-        default_concurrency_limit=args.concurrency_count,
-        status_update_rate=10,
-        api_open=False,
-    ).launch(
+    app = build_app(args.register_api_endpoint_file, args.moderate)
+    app.queue(default_concurrency_limit=args.concurrency_count).launch(
         server_name=args.host,
         server_port=args.port,
         share=args.share,
