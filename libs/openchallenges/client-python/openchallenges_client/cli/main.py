@@ -23,9 +23,7 @@ from ._shared_columns import (
     print_platform_columns,
 )
 from .interactive import (
-    has_questionary,
     prompt_confirm,
-    prompt_select,
     prompt_text,
 )
 
@@ -779,16 +777,7 @@ def update_platform(
 
     # Show diff unless suppressed
     if not yes:
-        # Offer optional section preview before diff if questionary present.
-        if has_questionary():  # pragma: no branch
-            # Simple grouping for potential future expansion (placeholder)
-            section = prompt_select(
-                "Review section before applying?",
-                ["summary (diff)", "proceed"],
-                default="summary (diff)",
-            )
-            if section.startswith("summary"):
-                pass  # fall through to diff display
+        # Always display a diff preview before confirmation.
         # Local imports keep optional rich dependency impact minimal.
         from rich.console import Console
         from rich.table import Table
