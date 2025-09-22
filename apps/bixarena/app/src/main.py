@@ -5,7 +5,7 @@ from page.bixarena_header import build_header, update_login_button
 from page.bixarena_battle import build_battle_page
 from page.bixarena_leaderboard import build_leaderboard_page
 from page.bixarena_home import build_home_page
-from page.bixarena_user import build_user_page, handle_logout, update_user_page
+from page.bixarena_user import build_user_page, update_user_page
 from config.auth_service import get_auth_service
 
 
@@ -49,14 +49,6 @@ def check_oauth_callback(request: gr.Request):
     return (update_login_button(), *update_user_page())
 
 
-def handle_user_logout_and_navigate(navigator):
-    """Handle logout and navigate to home page"""
-    auth_service = get_auth_service()
-    auth_service.logout_user()
-
-    return navigator.show_page(0) + [update_login_button()]
-
-
 def parse_args():
     """Parse command line arguments"""
     parser = argparse.ArgumentParser()
@@ -97,7 +89,7 @@ def build_app(register_api_endpoint_file=None, moderate=False):
     function() {
         setTimeout(function() {
             if (window.location.search.includes('code=') || 
-                window.location.search.includes('state=') {
+                window.location.search.includes('state=')) {
                 
                 const url = new URL(window.location);
                 url.searchParams.delete('code');
@@ -122,7 +114,10 @@ def build_app(register_api_endpoint_file=None, moderate=False):
             leaderboard_content = build_leaderboard_page()
 
         with gr.Column(visible=False) as user_page:
-            user_container, welcome_display, logout_btn = build_user_page()
+            # User page now returns the update function along with components
+            user_container, welcome_display, logout_btn, update_user_display = (
+                build_user_page()
+            )
 
         # Initialize navigator
         all_pages = [home_page, battle_page, leaderboard_page, user_page]
@@ -133,30 +128,23 @@ def build_app(register_api_endpoint_file=None, moderate=False):
         leaderboard_btn.click(lambda: navigator.show_page(2), outputs=all_pages)
         cta_btn.click(lambda: navigator.show_page(1), outputs=all_pages)
 
-        # Login button handler
+        # Login button handler - simplified
         def handle_login_click():
             auth_service = get_auth_service()
+            user_info = update_user_page()
             if auth_service.is_user_authenticated():
-                return *navigator.show_page(3), *update_user_page()
+                # User is logged in - show user page
+                return *navigator.show_page(3), *user_info
             else:
-                return *navigator.show_page(0), *update_user_page()
+                # User not logged in - stay on current page (OAuth redirect via button link)
+                return *navigator.show_page(0), *user_info
 
         login_btn.click(
             fn=handle_login_click,
             outputs=all_pages + [welcome_display, logout_btn],
         )
 
-        # Logout button handler
-        def handle_logout_click():
-            handle_logout()
-            return (*navigator.show_page(0), update_login_button(), *update_user_page())
-
-        logout_btn.click(
-            fn=handle_logout_click,
-            outputs=all_pages + [login_btn, welcome_display, logout_btn],
-        )
-
-        # Handle OAuth callback and clean URL
+        # Handle OAuth callback and clean URL - simplified
         demo.load(
             fn=check_oauth_callback,
             outputs=[login_btn, welcome_display, logout_btn],
