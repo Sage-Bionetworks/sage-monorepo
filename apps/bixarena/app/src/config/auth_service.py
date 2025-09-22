@@ -28,7 +28,6 @@ class AuthService:
             # Store OAuth state for later verification
             self.session.set_oauth_state(state, login_url)
 
-            print(f"🔗 Generated login URL: {login_url}")
             return login_url
 
         except Exception as e:

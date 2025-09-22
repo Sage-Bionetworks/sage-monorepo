@@ -47,7 +47,6 @@ class SessionManager:
         if self._current_user and self._session_timestamp:
             # Session expires after 24 hours
             if time.time() - self._session_timestamp > 86400:
-                print("🕐 Session expired due to timeout")
                 self.clear_current_user()
                 return None
         return self._current_user
@@ -57,12 +56,9 @@ class SessionManager:
         self._current_user = user_data
         self._session_timestamp = time.time()
         self.clear_error()  # Clear any previous errors
-        print(f"💾 User session established: {self.get_user_display_name()}")
 
     def clear_current_user(self) -> None:
         """Clear user session (logout)"""
-        if self._current_user:
-            print(f"🧹 Clearing session for: {self.get_user_display_name()}")
         self._current_user = None
         self._session_timestamp = None
         self._oauth_state = None
@@ -125,8 +121,6 @@ class SessionManager:
 
     def clear_error(self) -> None:
         """Clear current error message"""
-        if self._error_message:
-            print("✅ Error cleared")
         self._error_message = None
 
     def has_error(self) -> bool:
@@ -143,7 +137,6 @@ class SessionManager:
 
     def reset_session(self) -> None:
         """Reset entire session state (for testing/debugging)"""
-        print("🔄 Resetting session state")
         self._current_user = None
         self._session_timestamp = None
         self._oauth_state = None

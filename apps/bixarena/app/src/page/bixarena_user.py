@@ -10,25 +10,15 @@ def build_user_page():
         welcome_display = gr.HTML("")
         logout_btn = gr.Button("Logout", visible=False, variant="secondary")
 
-        # Internal logout handler
+        # Internal logout handler - this is not used directly anymore
         def handle_internal_logout():
-            """Handle logout within user page and navigate to home"""
-            auth_service = get_auth_service()
-
-            # Get username before clearing session
-            username = "User"
-            if auth_service.is_user_authenticated():
-                user = auth_service.get_current_user()
-                if user:
-                    username = user.get("displayName") or user.get("userName", "User")
-
-            # Clear user session
-            auth_service.logout_user()
-            print(f"👋 User logged out: {username}")
-
-            # Update UI to logged out state
-            user_info = get_current_user_info()
-            return update_user_display_internal(user_info)
+            """Handle logout within user page - simplified version"""
+            # This function is no longer used since logout is handled in main.py
+            # Keeping it for backward compatibility but it doesn't need to do anything
+            return (
+                gr.HTML(""),  # Clear welcome display
+                gr.Button("Logout", visible=False),  # Hide logout button
+            )
 
         # Wire up logout button to internal handler
         logout_btn.click(
@@ -40,7 +30,7 @@ def build_user_page():
             """Internal function to update welcome message and logout button"""
             if user_info and user_info.get("authenticated", False):
                 # User is authenticated - show simple welcome message and logout button
-                username = user_info.get("displayName") or user_info.get(
+                username = user_info.get("firstName") or user_info.get(
                     "userName", "User"
                 )
                 welcome_html = f"<h2>Welcome, {username}!</h2>"
@@ -77,7 +67,7 @@ def update_user_page():
 
     if user_info and user_info.get("authenticated", False):
         # User is authenticated - return welcome message and visible logout button
-        username = user_info.get("displayName") or user_info.get("userName", "User")
+        username = user_info.get("firstName") or user_info.get("userName", "User")
         welcome_html = f"<h2>Welcome, {username}!</h2>"
         return (
             gr.HTML(welcome_html),

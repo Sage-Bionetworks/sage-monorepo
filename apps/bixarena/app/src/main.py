@@ -36,9 +36,8 @@ def check_oauth_callback(request: gr.Request):
                 success = auth_service.handle_oauth_callback(oauth_code, oauth_state)
 
                 if success:
-                    print(
-                        f"✅ Login successful: {auth_service.session.get_user_display_name()}"
-                    )
+                    # Don't log here since auth_service already logs success
+                    pass
                 else:
                     print("❌ Login failed")
 
@@ -114,7 +113,7 @@ def build_app(register_api_endpoint_file=None, moderate=False):
             leaderboard_content = build_leaderboard_page()
 
         with gr.Column(visible=False) as user_page:
-            # User page now returns the update function along with components
+            # User page returns the update function along with components
             user_container, welcome_display, logout_btn, update_user_display = (
                 build_user_page()
             )
@@ -142,6 +141,35 @@ def build_app(register_api_endpoint_file=None, moderate=False):
         login_btn.click(
             fn=handle_login_click,
             outputs=all_pages + [welcome_display, logout_btn],
+        )
+
+        # Logout handler that redirects to home page
+        def handle_logout_and_redirect():
+            """Handle logout and redirect to home page"""
+            auth_service = get_auth_service()
+
+            # Only logout if user is actually authenticated
+            if not auth_service.is_user_authenticated():
+                # User already logged out, just redirect to home
+                updated_login_btn = update_login_button()
+                user_info = update_user_page()
+                home_pages = navigator.show_page(0)
+                return home_pages + [updated_login_btn] + list(user_info)
+
+            # Clear user session - this will handle the logout logging
+            auth_service.logout_user()
+
+            # Redirect to home page and update all components
+            updated_login_btn = update_login_button()
+            user_info = update_user_page()
+            home_pages = navigator.show_page(0)  # Show home page
+
+            return home_pages + [updated_login_btn] + list(user_info)
+
+        # Wire up the logout button to redirect to home
+        logout_btn.click(
+            fn=handle_logout_and_redirect,
+            outputs=all_pages + [login_btn, welcome_display, logout_btn],
         )
 
         # Handle OAuth callback and clean URL - simplified
