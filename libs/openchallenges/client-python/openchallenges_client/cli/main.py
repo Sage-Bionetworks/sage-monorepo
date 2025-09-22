@@ -56,10 +56,7 @@ def global_options(
     limit: int = typer.Option(5, help="Default max items"),
     output: str = typer.Option(
         "table",
-        help=(
-            "Output format: table|json|yaml|ndjson "
-            "(ndjson = line-delimited incremental)"
-        ),
+        help=("Output format: table|json|yaml|ndjson"),
     ),
     verbose: bool = typer.Option(
         False,

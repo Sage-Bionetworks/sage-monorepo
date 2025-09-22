@@ -112,6 +112,17 @@ def load_config(
     if limit is not None and limit != DEFAULT_LIMIT:
         limit_val: int | str = limit
         sources["limit"] = "override"
+    elif os.getenv("OC_LIMIT") is not None:
+        env_limit_raw = os.getenv("OC_LIMIT")
+        assert env_limit_raw is not None  # for type checker
+        try:
+            int(env_limit_raw)
+        except ValueError as e:  # pragma: no cover - add test if desired
+            raise ConfigParseError(
+                f"Invalid integer for OC_LIMIT: {env_limit_raw}"
+            ) from e
+        limit_val = env_limit_raw  # type: ignore[assignment]
+        sources["limit"] = "env:OC_LIMIT"
     elif file_cfg.get("limit") is not None:
         limit_val = file_cfg.get("limit")  # type: ignore[assignment]
         sources["limit"] = "file"
