@@ -673,3 +673,218 @@ def test_cli_platforms_delete_skip_confirm(monkeypatch):
     assert result.exit_code == 0, result.output
     assert "Deleted platform 7" in result.output
     assert stub.deleted == [7]
+
+
+# ---------------- Platform Update Tests -----------------
+
+
+def test_cli_platforms_update_change(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    class _FacadeStub:
+        def __init__(self):
+            self.updated: list[dict] = []
+
+        def get_platform(self, platform_id: int):
+            class _Obj:
+                id = platform_id
+                slug = "alpha-platform"
+                name = "Alpha"
+                avatar_key = "logos/alpha.png"
+                website_url = "https://alpha.example"
+
+            return _Obj()
+
+        def update_platform(
+            self,
+            *,
+            platform_id: int,
+            slug: str,
+            name: str,
+            avatar_key: str,
+            website_url: str | None,
+        ):
+            self.updated.append(
+                {
+                    "id": platform_id,
+                    "slug": slug,
+                    "name": name,
+                    "avatar_key": avatar_key,
+                    "website_url": website_url,
+                }
+            )
+
+            class _Obj:
+                def __init__(
+                    self,
+                    platform_id: int,
+                    slug: str,
+                    name: str,
+                    avatar_key: str,
+                    website_url: str | None,
+                ):
+                    self.id = platform_id
+                    self.slug = slug
+                    self.name = name
+                    self.avatar_key = avatar_key
+                    self.website_url = website_url
+
+            return _Obj(platform_id, slug, name, avatar_key, website_url)
+
+    stub = _FacadeStub()
+    monkeypatch.setattr(
+        cli_main,
+        "_client",
+        lambda api_url, api_key, limit: stub,
+    )
+    # Update just the name; auto-confirm diff with --yes
+    result = runner.invoke(
+        app,
+        [
+            "platforms",
+            "update",
+            "5",
+            "--name",
+            "Alpha Renamed",
+            "--yes",
+            "--output",
+            "json",
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    assert stub.updated and stub.updated[0]["name"] == "Alpha Renamed"
+    assert "Alpha Renamed" in result.output
+
+
+def test_cli_platforms_update_no_change(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    class _FacadeStub:
+        def get_platform(self, platform_id: int):
+            class _Obj:
+                id = platform_id
+                slug = "beta-platform"
+                name = "Beta"
+                avatar_key = "logos/beta.png"
+                website_url = None
+
+            return _Obj()
+
+    stub = _FacadeStub()
+    monkeypatch.setattr(
+        cli_main,
+        "_client",
+        lambda api_url, api_key, limit: stub,
+    )
+    result = runner.invoke(app, ["platforms", "update", "9", "--yes"])
+    assert result.exit_code == 0, result.output
+    assert "No changes to apply" in result.output
+
+
+def test_cli_platforms_update_invalid_slug(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    class _FacadeStub:
+        def get_platform(self, platform_id: int):
+            class _Obj:
+                id = platform_id
+                slug = "gamma-platform"
+                name = "Gamma"
+                avatar_key = "logos/gamma.png"
+                website_url = "https://gamma.example"
+
+            return _Obj()
+
+    stub = _FacadeStub()
+    monkeypatch.setattr(
+        cli_main,
+        "_client",
+        lambda api_url, api_key, limit: stub,
+    )
+    result = runner.invoke(
+        app,
+        [
+            "platforms",
+            "update",
+            "11",
+            "--slug",
+            "BadSlug",  # invalid (uppercase)
+            "--yes",
+        ],
+    )
+    assert result.exit_code == 1
+    assert "Invalid slug format" in result.output
+
+
+def test_cli_platforms_update_clear_website(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    class _FacadeStub:
+        def __init__(self):
+            self.updated: list[dict] = []
+
+        def get_platform(self, platform_id: int):
+            class _Obj:
+                id = platform_id
+                slug = "delta-platform"
+                name = "Delta"
+                avatar_key = "logos/delta.png"
+                website_url = "https://delta.example"
+
+            return _Obj()
+
+        def update_platform(
+            self,
+            *,
+            platform_id: int,
+            slug: str,
+            name: str,
+            avatar_key: str,
+            website_url: str | None,
+        ):
+            self.updated.append(
+                {
+                    "id": platform_id,
+                    "slug": slug,
+                    "name": name,
+                    "avatar_key": avatar_key,
+                    "website_url": website_url,
+                }
+            )
+
+            class _Obj:
+                def __init__(
+                    self,
+                    platform_id: int,
+                    slug: str,
+                    name: str,
+                    avatar_key: str,
+                    website_url: str | None,
+                ):
+                    self.id = platform_id
+                    self.slug = slug
+                    self.name = name
+                    self.avatar_key = avatar_key
+                    self.website_url = website_url
+
+            return _Obj(platform_id, slug, name, avatar_key, website_url)
+
+    stub = _FacadeStub()
+    monkeypatch.setattr(
+        cli_main,
+        "_client",
+        lambda api_url, api_key, limit: stub,
+    )
+    result = runner.invoke(
+        app,
+        [
+            "platforms",
+            "update",
+            "13",
+            "--website-url",
+            "",
+            "--yes",
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    assert stub.updated and stub.updated[0]["website_url"] is None

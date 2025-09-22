@@ -187,3 +187,74 @@ class PlatformGateway(BaseGateway):
             raise err_cls(str(e)) from e
         except Exception as e:  # pragma: no cover
             raise OpenChallengesError(str(e)) from e
+
+    # ------------------------------------------------------------------
+    # Get (single)
+    def get_platform(self, *, platform_id: int):
+        """Retrieve a single platform by id.
+
+        Returns the generated SDK `ChallengePlatform` model instance.
+        """
+        try:
+            with self._api_client() as api_client:
+                api = ChallengePlatformApi(api_client)
+                return api.get_challenge_platform(platform_id)
+        except ApiException as e:  # pragma: no cover
+            http_status = getattr(e, "status", None)
+            err_cls = map_status(http_status)
+            if err_cls is AuthError and not self._cfg.api_key:
+                raise AuthError(
+                    str(e),
+                    hint=(
+                        "Provide an API key via --api-key flag, OC_API_KEY env var, "
+                        ".openchallenges.toml"
+                    ),
+                ) from e
+            raise err_cls(str(e)) from e
+        except Exception as e:  # pragma: no cover
+            raise OpenChallengesError(str(e)) from e
+
+    # ------------------------------------------------------------------
+    # Update
+    def update_platform(
+        self,
+        *,
+        platform_id: int,
+        slug: str,
+        name: str,
+        avatar_key: str,
+        website_url: str | None,
+    ):
+        """Update an existing platform and return updated model.
+
+        The API's PUT endpoint expects the full set of fields, so callers must
+        merge any unchanged values before invoking this method.
+        """
+        try:
+            with self._api_client() as api_client:
+                api = ChallengePlatformApi(api_client)
+                from openchallenges_api_client.models import (  # type: ignore
+                    challenge_platform_update_request,
+                )
+
+                req = challenge_platform_update_request.ChallengePlatformUpdateRequest(
+                    slug=slug,
+                    name=name,
+                    avatarKey=avatar_key,  # type: ignore[arg-type]
+                    websiteUrl=website_url,  # type: ignore[arg-type]
+                )
+                return api.update_challenge_platform(platform_id, req)
+        except ApiException as e:  # pragma: no cover
+            http_status = getattr(e, "status", None)
+            err_cls = map_status(http_status)
+            if err_cls is AuthError and not self._cfg.api_key:
+                raise AuthError(
+                    str(e),
+                    hint=(
+                        "Provide an API key via --api-key flag, OC_API_KEY env var, "
+                        ".openchallenges.toml"
+                    ),
+                ) from e
+            raise err_cls(str(e)) from e
+        except Exception as e:  # pragma: no cover
+            raise OpenChallengesError(str(e)) from e

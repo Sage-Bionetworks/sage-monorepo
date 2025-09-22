@@ -25,6 +25,7 @@ dependencies = [
   "openchallenges-api-client",
   "typer>=0.12.3",
   "rich>=13.7.0",
+  "prompt_toolkit>=3.0.43",
 ]
 
 [project.scripts]

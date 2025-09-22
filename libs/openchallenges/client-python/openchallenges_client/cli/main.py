@@ -526,6 +526,214 @@ def delete_platform(
         _handle_error(e)
 
 
+@platforms_app.command("update")
+def update_platform(
+    ctx: typer.Context,
+    platform_id: int = typer.Argument(..., help="Numeric platform id to update"),
+    slug: str | None = typer.Option(
+        None,
+        "--slug",
+        help=(
+            "New slug (must match ^[a-z0-9]+(?:-[a-z0-9]+)*$). If omitted it is kept"
+            " unless --interactive prompts it."
+        ),
+    ),
+    name: str | None = typer.Option(
+        None,
+        "--name",
+        help="New display name.",
+    ),
+    avatar_key: str | None = typer.Option(
+        None,
+        "--avatar-key",
+        help="New avatar key (e.g., logo/codalab.jpg).",
+    ),
+    website_url: str | None = typer.Option(
+        None,
+        "--website-url",
+        help="New website URL. Provide an empty string to clear.",
+    ),
+    interactive: bool = typer.Option(
+        False,
+        "--interactive",
+        help="Prompt for any missing fields using current values as defaults.",
+    ),
+    yes: bool = typer.Option(
+        False,
+        "-y",
+        "--yes",
+        help="Skip diff confirmation before applying update.",
+    ),
+    output: str = typer.Option(
+        "table",
+        help="Output format for updated resource (table|json|yaml|ndjson)",
+    ),
+):
+    """Update a challenge platform by id.
+
+    Fetches current values, applies flag / interactive overrides, shows a diff,
+    then submits a full PUT request if changes exist.
+    """
+    client: OpenChallengesClient = ctx.obj["client"]
+    base_output = ctx.obj["output"] if ctx.obj.get("output") else output
+    try:
+        current = client.get_platform(platform_id=platform_id)
+    except oc_errors.OpenChallengesError as e:  # pragma: no cover
+        _handle_error(e)
+        return
+
+    def _extract(obj, *names):
+        for n in names:
+            if hasattr(obj, n):
+                val = getattr(obj, n)
+                if val is not None:
+                    return val
+        if isinstance(obj, dict):  # pragma: no cover - safety
+            for n in names:
+                if n in obj and obj[n] is not None:
+                    return obj[n]
+        return None
+
+    # Extract current field values with fallbacks (some generated models or
+    # API variants may omit slug in certain responses; attempt aliases).
+    current_data = {
+        "slug": _extract(current, "slug", "slug_", "slugValue"),
+        "name": _extract(current, "name", "display_name"),
+        "avatar_key": _extract(current, "avatar_key", "avatarKey"),
+        "website_url": _extract(current, "website_url", "websiteUrl"),
+    }
+
+    # Fallback: some single-resource responses may omit slug; attempt to
+    # derive from the platform summaries list (iter_all_platforms) if needed.
+    if current_data["slug"] is None:
+        try:  # pragma: no cover - network variability
+            pid_str = str(platform_id)
+            for p in client.iter_all_platforms():  # type: ignore[attr-defined]
+                pid_candidate = getattr(p, "id", None)
+                if pid_candidate is None:
+                    continue
+                if str(pid_candidate) == pid_str:
+                    current_data["slug"] = getattr(p, "slug", None) or getattr(
+                        p, "slug_", None
+                    )
+                    break
+        except Exception:  # pragma: no cover - non-fatal
+            pass
+    # Note: if slug remains None it will prompt empty and user may supply new slug.
+
+    def _prompt(label: str, key: str, existing: str | None) -> str | None:
+        if not interactive:
+            return None
+        provided_map = {
+            "slug": slug,
+            "name": name,
+            "avatar_key": avatar_key,
+            "website_url": website_url,
+        }
+        if provided_map[key] is not None:
+            return provided_map[key]
+
+        existing_val = existing or ""
+
+        # Prefer prompt_toolkit for true editable default buffer.
+        try:  # pragma: no cover - library may not be installed in CI
+            from prompt_toolkit import prompt as pt_prompt
+
+            return pt_prompt(f"{label}: ", default=existing_val)
+        except Exception:
+            # Fallback: typer.prompt (user must edit default manually)
+            return typer.prompt(label, default=existing_val)
+
+    if interactive:
+        slug = _prompt("Slug", "slug", current_data["slug"])  # type: ignore[assignment]
+        name = _prompt("Name", "name", current_data["name"])  # type: ignore[assignment]
+        avatar_key = _prompt("Avatar key", "avatar_key", current_data["avatar_key"])  # type: ignore[assignment]
+        website_url = _prompt("Website URL", "website_url", current_data["website_url"])  # type: ignore[assignment]
+        if website_url == "-":
+            website_url = None  # type: ignore[assignment]
+    # Blank responses are now considered explicit blanks (they will
+    # overwrite existing values if supplied).
+
+    # Merge logic
+    new_data = dict(current_data)
+    if slug is not None:
+        new_data["slug"] = slug
+    if name is not None:
+        new_data["name"] = name
+    if avatar_key is not None:
+        new_data["avatar_key"] = avatar_key
+    if website_url is not None:
+        # Treat explicit empty string as a request to clear (set None)
+        new_data["website_url"] = website_url or None
+
+    # Validate slug format if changed
+    import re as _re
+
+    if new_data["slug"] != current_data["slug"]:
+        pat = _re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+        if not pat.match(str(new_data["slug"])):
+            typer.echo(
+                "Invalid slug format. Must match ^[a-z0-9]+(?:-[a-z0-9]+)*$",
+                err=True,
+            )
+            raise typer.Exit(1)
+
+    # Determine changed fields
+    changed = {
+        k: (current_data[k], new_data[k])
+        for k in ["slug", "name", "avatar_key", "website_url"]
+        if current_data[k] != new_data[k]
+    }
+    if not changed:
+        typer.echo("No changes to apply.")
+        raise typer.Exit(0)
+
+    # Show diff unless suppressed
+    if not yes:
+        # Local imports keep optional rich dependency impact minimal when
+        # command run with non-table output and --yes.
+        from rich.console import Console
+        from rich.table import Table
+
+        table = Table(title=f"Platform {platform_id} changes")
+        table.add_column("Field")
+        table.add_column("Current", style="dim")
+        table.add_column("New", style="green")
+        for field, (old, new) in changed.items():
+            table.add_row(field, str(old), str(new))
+        Console().print(table)
+        if not typer.confirm("Apply these changes?", abort=True):  # pragma: no cover
+            raise typer.Exit(1)
+
+    try:
+        updated = client.update_platform(
+            platform_id=platform_id,
+            slug=str(new_data["slug"]),
+            name=str(new_data["name"]),
+            avatar_key=str(new_data["avatar_key"]),
+            website_url=new_data["website_url"],
+        )
+    except oc_errors.OpenChallengesError as e:  # pragma: no cover
+        _handle_error(e)
+        return
+
+    row = {
+        "id": getattr(updated, "id", None),
+        "slug": getattr(updated, "slug", None),
+        "name": getattr(updated, "name", None),
+        "avatar_key": getattr(updated, "avatar_key", None),
+        "website_url": getattr(updated, "website_url", None),
+    }
+    if output == "ndjson":
+        to_ndjson([row])
+    elif output == "table":
+        to_table([row], title="Updated Platform")
+    elif output in ("json", "yaml"):
+        _emit([row], output, title="Updated Platform")
+    else:
+        _emit([row], base_output, title="Updated Platform")
+
+
 @config_app.command("show")
 def show_config(
     ctx: typer.Context,

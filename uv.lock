@@ -1333,6 +1333,7 @@ version = "1.0.0"
 source = { editable = "libs/openchallenges/client-python" }
 dependencies = [
     { name = "openchallenges-api-client" },
+    { name = "prompt-toolkit" },
     { name = "rich" },
     { name = "typer" },
 ]
@@ -1340,6 +1341,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "openchallenges-api-client", editable = "libs/openchallenges/api-client-python" },
+    { name = "prompt-toolkit", specifier = ">=3.0.43" },
     { name = "rich", specifier = ">=13.7.0" },
     { name = "typer", specifier = ">=0.12.3" },
 ]

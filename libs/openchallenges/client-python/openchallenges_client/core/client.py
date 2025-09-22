@@ -136,3 +136,29 @@ class OpenChallengesClient:
         errors on failure.
         """
         self._platform_gateway.delete_platform(platform_id=platform_id)
+
+    def get_platform(self, *, platform_id: int):
+        """Get a single platform by id (returns generated SDK model)."""
+        return self._platform_gateway.get_platform(platform_id=platform_id)
+
+    def update_platform(
+        self,
+        *,
+        platform_id: int,
+        slug: str,
+        name: str,
+        avatar_key: str,
+        website_url: str | None,
+    ):
+        """Update a challenge platform.
+
+        Callers should provide the merged full set of fields; partial updates
+        are not supported by the current API (PUT semantics).
+        """
+        return self._platform_gateway.update_platform(
+            platform_id=platform_id,
+            slug=slug,
+            name=name,
+            avatar_key=avatar_key,
+            website_url=website_url,
+        )
