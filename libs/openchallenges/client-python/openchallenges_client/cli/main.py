@@ -782,12 +782,35 @@ def update_platform(
         from rich.console import Console
         from rich.table import Table
 
+        def _classify(old_val, new_val):
+            if (old_val or "") == (new_val or ""):
+                return "unchanged"  # should not occur (filtered earlier)
+            if (old_val is None or old_val == "") and (new_val not in (None, "")):
+                return "added"
+            if (new_val is None or new_val == "") and (old_val not in (None, "")):
+                return "removed"
+            return "modified"
+
         table = Table(title=f"Platform {platform_id} changes")
         table.add_column("Field")
+        table.add_column("Change", style="bold")
         table.add_column("Current", style="dim")
-        table.add_column("New", style="green")
+        table.add_column("New")
         for field, (old, new) in changed.items():
-            table.add_row(field, str(old), str(new))
+            kind = _classify(old, new)
+            if kind == "added":
+                indicator = "Added"
+                new_render = f"[green]{new}[/green]"
+                old_render = "" if old is None else str(old)
+            elif kind == "removed":
+                indicator = "Removed"
+                old_render = f"[red]{old}[/red]" if old is not None else ""
+                new_render = ""  # cleared
+            else:  # modified
+                indicator = "Modified"
+                old_render = f"[yellow]{old}[/yellow]"
+                new_render = f"[green]{new}[/green]"
+            table.add_row(field, indicator, old_render, new_render)
         Console().print(table)
         if not prompt_confirm("Apply these changes?", default=True):  # pragma: no cover
             raise typer.Exit(1)
