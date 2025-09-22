@@ -54,9 +54,11 @@ def global_options(
     api_url: str = typer.Option(None, help="API base URL (env OC_API_URL)"),
     api_key: str = typer.Option(None, help="API key (env OC_API_KEY)"),
     limit: int = typer.Option(5, help="Default max items"),
-    output: str = typer.Option(
-        "table",
-        help=("Output format: table|json|yaml|ndjson"),
+    output: str | None = typer.Option(
+        None,
+        help=(
+            "Output format: table|json|yaml|ndjson (defaults to config/env or 'table')"
+        ),
     ),
     verbose: bool = typer.Option(
         False,
@@ -69,7 +71,24 @@ def global_options(
     except ConfigParseError as e:  # pragma: no cover (covered via integration test)
         typer.echo(str(e), err=True)
         raise typer.Exit(1) from None
-    ctx.obj = {"client": client, "output": output, "verbose": verbose}
+    if output is None:
+        from ..config.loader import load_config as _lc
+
+        eff_limit_override = None if limit == DEFAULT_LIMIT else limit
+        try:
+            resolved_cfg = _lc(
+                override_api_key=api_key,
+                override_api_url=api_url,
+                limit=eff_limit_override,
+                override_output=None,
+            )
+            resolved_output = resolved_cfg.output
+        except ConfigParseError as e:  # pragma: no cover
+            typer.echo(str(e), err=True)
+            raise typer.Exit(1) from None
+    else:
+        resolved_output = output
+    ctx.obj = {"client": client, "output": resolved_output, "verbose": verbose}
     # Typer callback only; no command output here.
 
 
