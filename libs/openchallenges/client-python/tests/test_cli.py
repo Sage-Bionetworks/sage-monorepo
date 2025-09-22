@@ -529,6 +529,207 @@ def test_cli_orgs_list_columns_subset_json(monkeypatch):
     assert all(set(d.keys()) == {"id", "name"} for d in data)
 
 
+def test_cli_challenges_stream_reject_non_ndjson(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    class _StreamStub:
+        def iter_all_challenges(self, *, status=None, search=None, metrics=None):
+            yield from _make_stream_items(1)
+
+    monkeypatch.setattr(cli_main, "_client", lambda *a, **k: _StreamStub())
+    result = runner.invoke(
+        app,
+        [
+            "challenges",
+            "stream",
+            "--limit",
+            "1",
+            "--output",
+            "table",
+        ],
+    )
+    assert result.exit_code != 0
+    assert "stream supports only ndjson" in result.output.lower()
+
+
+def test_cli_orgs_stream_reject_non_ndjson(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    class _OrgStreamStub:
+        def iter_all_organizations(self, *, search=None, metrics=None):
+            yield from _sample_org_items(1)
+
+    monkeypatch.setattr(cli_main, "_client", lambda *a, **k: _OrgStreamStub())
+    result = runner.invoke(
+        app,
+        [
+            "orgs",
+            "stream",
+            "--limit",
+            "1",
+            "--output",
+            "yaml",
+        ],
+    )
+    assert result.exit_code != 0
+    assert "stream supports only ndjson" in result.output.lower()
+
+
+def test_cli_platforms_stream_ndjson_count(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    class _PlatformSummary:
+        def __init__(self, id, slug, name, website_url, avatar_key):
+            self.id = id
+            self.slug = slug
+            self.name = name
+            self.website_url = website_url
+            self.avatar_key = avatar_key
+
+    class _PlatformStreamStub:
+        def iter_all_platforms(self, *, search=None, metrics=None):
+            yield _PlatformSummary(
+                1,
+                "codabench",
+                "CodaBench",
+                "https://cb.org",
+                "logo/cb.png",
+            )
+            yield _PlatformSummary(2, "synapse", "Synapse", None, None)
+
+    monkeypatch.setattr(cli_main, "_client", lambda *a, **k: _PlatformStreamStub())
+    result = runner.invoke(
+        app,
+        [
+            "platforms",
+            "stream",
+            "--limit",
+            "2",
+            "--output",
+            "ndjson",
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    lines = [ln for ln in result.output.strip().splitlines() if ln.strip()]
+    assert len(lines) == 2
+    # Ensure required keys present
+    for ln in lines:
+        obj = _json.loads(ln)
+        assert {"id", "name", "website_url"}.issubset(obj.keys())
+
+
+def test_cli_platforms_stream_reject_non_ndjson(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    class _PlatformStreamStub:
+        def iter_all_platforms(self, *, search=None, metrics=None):
+            yield from []
+
+    monkeypatch.setattr(cli_main, "_client", lambda *a, **k: _PlatformStreamStub())
+    result = runner.invoke(
+        app,
+        [
+            "platforms",
+            "stream",
+            "--limit",
+            "1",
+            "--output",
+            "json",
+        ],
+    )
+    assert result.exit_code != 0
+    assert "stream supports only ndjson" in result.output.lower()
+
+
+def test_cli_challenges_list_all_overrides_limit(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    class _ListAllStub:
+        def list_challenges(
+            self, *, limit=None, status=None, search=None, metrics=None
+        ):
+            # Should not be used when --all provided (limit path)
+            return [
+                ChallengeSummary(
+                    id=999,
+                    slug="ignored",
+                    name="Ignored",
+                    status="ACTIVE",
+                    platform_id=None,
+                    platform_name=None,
+                    start_date=None,
+                    end_date=None,
+                    duration_days=None,
+                )
+            ]
+
+        def iter_all_challenges(self, *, status=None, search=None, metrics=None):
+            for i in range(1, 6):  # 5 items > limit we will specify
+                yield ChallengeSummary(
+                    id=i,
+                    slug=f"c{i}",
+                    name=f"Challenge {i}",
+                    status="ACTIVE",
+                    platform_id=None,
+                    platform_name=None,
+                    start_date=None,
+                    end_date=None,
+                    duration_days=None,
+                )
+
+    monkeypatch.setattr(cli_main, "_client", lambda *a, **k: _ListAllStub())
+    result = runner.invoke(
+        app,
+        [
+            "challenges",
+            "list",
+            "--limit",
+            "2",
+            "--all",
+            "--output",
+            "json",
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    # First line contains the override notice; strip it if present
+    lines = result.output.strip().splitlines()
+    if lines and lines[0].startswith("--all overrides --limit"):
+        json_text = "\n".join(lines[1:])
+    else:  # pragma: no cover - safety
+        json_text = result.output
+    data = _json.loads(json_text)
+    # Expect 5 items from iterator despite limit=2
+    assert len(data) == 5
+
+
+def test_cli_challenges_list_ndjson_output(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    monkeypatch.setattr(
+        cli_main,
+        "_client",
+        lambda *a, **k: _StubClient(_sample_items()),
+    )
+    result = runner.invoke(
+        app,
+        [
+            "challenges",
+            "list",
+            "--limit",
+            "2",
+            "--output",
+            "ndjson",
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    lines = [ln for ln in result.output.strip().splitlines() if ln.strip()]
+    assert len(lines) == 2
+    # Each line should be valid JSON with required keys
+    for ln in lines:
+        obj = _json.loads(ln)
+        assert {"id", "name", "status", "platform"}.issubset(obj.keys())
+
+
 def test_cli_orgs_stream_ndjson_columns_subset(monkeypatch):
     from openchallenges_client.cli import main as cli_main
 

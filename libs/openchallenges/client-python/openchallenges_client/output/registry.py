@@ -1,7 +1,14 @@
 """Pluggable output format registry.
 
 Allows registering simple format functions that accept a sequence of
-``dict[str, Any]`` and emit to stdout. Built-in: table, json, yaml (optional).
+``dict[str, Any]`` and emit to stdout.
+
+Built-in formats:
+
+* table  – human friendly columnar view (Rich if available, fallback ascii)
+* json   – buffered JSON array
+* yaml   – buffered YAML list (optional dependency: PyYAML)
+* ndjson – line-delimited JSON objects (incremental friendly)
 """
 
 from __future__ import annotations
@@ -28,8 +35,10 @@ def list_formats() -> list[str]:  # pragma: no cover (trivial)
 
 def register_default_formatters() -> None:
     # Late import to avoid circulars.
-    from .formatters import to_json, to_table, to_yaml  # type: ignore
+    from .formatters import to_json, to_ndjson, to_table, to_yaml  # type: ignore
 
+    # Order here only affects list_formats() sorting indirectly.
     register_format("table", to_table)
     register_format("json", to_json)
     register_format("yaml", to_yaml)
+    register_format("ndjson", to_ndjson)

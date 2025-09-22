@@ -24,7 +24,6 @@ from ._shared_columns import (
 )
 
 # Module-level option object to satisfy lint rule against function calls in defaults.
-# Typer infers repeatable option from list[str] annotation (no 'multiple' kw in >=0.12).
 STATUS_OPTION: list[str] | None = typer.Option(  # type: ignore[assignment]
     None,
     "--status",
@@ -36,9 +35,6 @@ ORG_SEARCH_OPTION = typer.Option(
 
 app = typer.Typer(help="OpenChallenges unified Python client & CLI")
 register_default_formatters()
-
-
-## Legacy backcompat helper removed (pre-release cleanup).
 
 
 def _client(
@@ -53,7 +49,13 @@ def global_options(
     api_url: str = typer.Option(None, help="API base URL (env OC_API_URL)"),
     api_key: str = typer.Option(None, help="API key (env OC_API_KEY)"),
     limit: int = typer.Option(5, help="Default max items"),
-    output: str = typer.Option("table", help="Output format: table|json|yaml"),
+    output: str = typer.Option(
+        "table",
+        help=(
+            "Output format: table|json|yaml|ndjson "
+            "(ndjson = line-delimited incremental)"
+        ),
+    ),
     verbose: bool = typer.Option(
         False,
         "--verbose",
@@ -65,6 +67,7 @@ def global_options(
         "output": output,
         "verbose": verbose,
     }
+    # Typer callback only; no command output here.
 
 
 challenges_app = typer.Typer(help="Challenge-related operations")
@@ -82,12 +85,23 @@ app.add_typer(config_app, name="config")
 def list_challenges(
     ctx: typer.Context,
     limit: int | None = typer.Option(None, help="Override limit for this command"),
+    all: bool = typer.Option(
+        False,
+        "--all",
+        help=(
+            "Fetch all pages (overrides --limit). Use with care for large result sets."
+        ),
+    ),
     status: list[str] | None = STATUS_OPTION,
     search: str | None = typer.Option(
         None, "--search", help="Search terms for challenges"
     ),
     output: str | None = typer.Option(
-        None, help="Override output format for this command"
+        None,
+        help=(
+            "Output format for this command (table|json|yaml|ndjson). "
+            "Defaults to global --output if omitted."
+        ),
     ),
     wide: bool = typer.Option(
         False,
@@ -108,21 +122,22 @@ def list_challenges(
     verbose: bool = ctx.obj.get("verbose", False)
     metrics = MetricsCollector()
     status_list = list(status) if status else None
-    # Normalize statuses (case-insensitive) if provided
     if status_list:
         status_list = [s.upper().strip() for s in status_list if s.strip()]
     try:
         if columns == "help":
             print_challenge_columns(wide=wide)
             raise typer.Exit(0)
-        invoke_kwargs = {
-            "limit": limit,
-            "status": status_list,
-            "metrics": metrics,
-        }
+        invoke_kwargs = {"status": status_list, "metrics": metrics}
         if search is not None:
             invoke_kwargs["search"] = search
-        items = list(client.list_challenges(**invoke_kwargs))
+        if all and limit:
+            typer.echo("--all overrides --limit; ignoring provided limit.", err=True)
+        if all:
+            items = list(client.iter_all_challenges(**invoke_kwargs))
+        else:
+            invoke_kwargs["limit"] = limit
+            items = list(client.list_challenges(**invoke_kwargs))
         rows = [_challenge_row(c, wide=wide) for c in items]
         rows = filter_columns(rows, columns, kind="challenge", wide=wide)
         _emit(rows, output or base_output, title="Challenges")
@@ -147,7 +162,10 @@ def stream_challenges(
     search: str | None = typer.Option(
         None, "--search", help="Search terms for challenges"
     ),
-    output: str = typer.Option(None, help="Override output format for this command"),
+    output: str = typer.Option(
+        None,
+        help="Streaming output format (ndjson only). If omitted defaults to ndjson.",
+    ),
     wide: bool = typer.Option(
         False,
         "--wide",
@@ -162,9 +180,8 @@ def stream_challenges(
         ),
     ),
 ):
-    """Stream all challenges (or until optional cap)."""
+    """Stream challenges (incremental ndjson only)."""
     client: OpenChallengesClient = ctx.obj["client"]
-    base_output = ctx.obj["output"]
     verbose: bool = ctx.obj.get("verbose", False)
     metrics = MetricsCollector()
     status_list = [s.upper().strip() for s in status] if status else None
@@ -172,11 +189,18 @@ def stream_challenges(
         if columns == "help":
             print_challenge_columns(wide=wide)
             raise typer.Exit(0)
-        rows = []
-        invoke_kwargs = {
-            "status": status_list,
-            "metrics": metrics,
-        }
+        fmt = output or "ndjson"
+        if fmt != "ndjson":
+            typer.echo(
+                (
+                    "Error: stream supports only ndjson (incremental). Use 'list' "
+                    "for other formats."
+                ),
+                err=True,
+            )
+            raise typer.Exit(1)
+        rows: list[dict[str, Any]] = []
+        invoke_kwargs = {"status": status_list, "metrics": metrics}
         if search is not None:
             invoke_kwargs["search"] = search
         iterator = client.iter_all_challenges(**invoke_kwargs)
@@ -185,7 +209,7 @@ def stream_challenges(
             if limit and count >= limit:
                 break
         rows = filter_columns(rows, columns, kind="challenge", wide=wide)
-        _emit(rows, output or base_output, title="Challenges (stream)")
+        _emit(rows, fmt, title="Challenges (stream)")
         if verbose:
             typer.echo(
                 (
@@ -205,7 +229,18 @@ def list_orgs(
     limit: int | None = typer.Option(None, help="Override limit for this command"),
     search: str | None = ORG_SEARCH_OPTION,
     output: str | None = typer.Option(
-        None, help="Override output format for this command"
+        None,
+        help=(
+            "Output format for this command (table|json|yaml|ndjson). "
+            "Defaults to global --output if omitted."
+        ),
+    ),
+    all: bool = typer.Option(
+        False,
+        "--all",
+        help=(
+            "Fetch all pages (overrides --limit). Use with care for large result sets."
+        ),
     ),
     columns: str | None = typer.Option(
         None,
@@ -224,15 +259,13 @@ def list_orgs(
         if columns == "help":
             print_org_columns()
             raise typer.Exit(0)
-        try:
+        if all and limit:
+            typer.echo("--all overrides --limit; ignoring provided limit.", err=True)
+        if all:
+            items = list(client.iter_all_organizations(search=search, metrics=metrics))
+        else:
             items = list(
                 client.list_organizations(limit=limit, search=search, metrics=metrics)
-            )
-        except TypeError as e:
-            if "metrics" not in str(e):
-                raise
-            items = list(
-                client.list_organizations(limit=limit, search=search)  # type: ignore[arg-type]
             )
         rows = [_org_row(o) for o in items]
         rows = filter_columns(rows, columns, kind="org", wide=False)
@@ -255,7 +288,10 @@ def stream_orgs(
     ctx: typer.Context,
     search: str | None = ORG_SEARCH_OPTION,
     limit: int = typer.Option(0, help="Optional cap on streamed items (0 = all)"),
-    output: str = typer.Option(None, help="Override output format for this command"),
+    output: str = typer.Option(
+        None,
+        help=("Streaming output format (ndjson only). If omitted defaults to ndjson."),
+    ),
     columns: str | None = typer.Option(
         None,
         "--columns",
@@ -265,23 +301,31 @@ def stream_orgs(
         ),
     ),
 ):
-    """Stream all organizations (or until optional cap)."""
+    """Stream organizations as ndjson (incremental)."""
     client: OpenChallengesClient = ctx.obj["client"]
-    base_output = ctx.obj["output"]
     verbose: bool = ctx.obj.get("verbose", False)
     metrics = MetricsCollector()
     try:
         if columns == "help":
             print_org_columns()
             raise typer.Exit(0)
-        rows = []
+        fmt = output or "ndjson"
+        if fmt != "ndjson":
+            typer.echo(
+                (
+                    "Error: stream supports only ndjson (incremental). Use 'list' "
+                    "for other formats."
+                ),
+                err=True,
+            )
+            raise typer.Exit(1)
+        rows: list[dict[str, Any]] = []
         iterator = client.iter_all_organizations(search=search, metrics=metrics)
         for count, o in enumerate(iterator, start=1):
             rows.append(_org_row(o))
             if limit and count >= limit:
                 break
         rows = filter_columns(rows, columns, kind="org", wide=False)
-        fmt = output or base_output
         _emit(rows, fmt, title="Organizations (stream)")
         if verbose:
             typer.echo(
@@ -301,7 +345,18 @@ def list_platforms(
     limit: int | None = typer.Option(None, help="Override limit for this command"),
     search: str | None = typer.Option(None, "--search", help="Search terms"),
     output: str | None = typer.Option(
-        None, help="Override output format for this command"
+        None,
+        help=(
+            "Output format for this command (table|json|yaml|ndjson). "
+            "Defaults to global --output if omitted."
+        ),
+    ),
+    all: bool = typer.Option(
+        False,
+        "--all",
+        help=(
+            "Fetch all pages (overrides --limit). Use with care for large result sets."
+        ),
     ),
     wide: bool = typer.Option(
         False,
@@ -325,28 +380,90 @@ def list_platforms(
         if columns == "help":
             print_platform_columns(wide)
             raise typer.Exit(0)
-        invoke_kwargs = {"limit": limit, "metrics": metrics}
+        invoke_kwargs: dict[str, Any] = {"metrics": metrics}
         if search is not None:
             invoke_kwargs["search"] = search
-        items = list(client.list_platforms(**invoke_kwargs))
-        rows = [
-            {
-                "id": p.id,
-                "slug": getattr(p, "slug", None),
-                "name": p.name,
-                "website_url": p.website_url,
-                "avatar_key": p.avatar_key,
-            }
-            for p in items
-        ]
-        # Trim/reorder to default visible columns when user did not request an
-        # explicit column subset. Default (non-wide) => id,name,website_url.
-        # Wide => id,slug,name,website_url,avatar_key (ordering from helper).
+        if all and limit:
+            typer.echo("--all overrides --limit; ignoring provided limit.", err=True)
+        if all:
+            items = list(
+                client.iter_all_platforms(**invoke_kwargs)  # type: ignore[attr-defined]
+            )
+        else:
+            invoke_kwargs["limit"] = limit
+            items = list(client.list_platforms(**invoke_kwargs))
+        rows = [_platform_row(p) for p in items]
+        # Apply default ordering if user did not specify explicit columns.
         if columns is None:
             order = available_platform_columns(wide)
             rows = [{k: r.get(k) for k in order} for r in rows]
         rows = filter_columns(rows, columns, kind="platform", wide=wide)
         _emit(rows, output or base_output, title="Platforms")
+        if verbose:
+            typer.echo(
+                (
+                    "[stats] platforms "
+                    f"emitted={metrics.emitted} "
+                    f"skipped={metrics.skipped} retries={metrics.retries}"
+                ),
+                err=True,
+            )
+    except oc_errors.OpenChallengesError as e:  # pragma: no cover
+        _handle_error(e)
+
+
+@platforms_app.command("stream")
+def stream_platforms(
+    ctx: typer.Context,
+    search: str | None = typer.Option(None, "--search", help="Search terms"),
+    limit: int = typer.Option(0, help="Optional cap on streamed items (0 = all)"),
+    output: str = typer.Option(
+        None,
+        help=("Streaming output format (ndjson only). If omitted defaults to ndjson."),
+    ),
+    wide: bool = typer.Option(
+        False,
+        "--wide",
+        help="Include slug and avatar_key columns",
+    ),
+    columns: str | None = typer.Option(
+        None,
+        "--columns",
+        help=(
+            "Comma-separated list of columns to include (order preserved). "
+            "Use 'help' to list available columns. Example: --columns id,name"
+        ),
+    ),
+):
+    """Stream platforms as ndjson (incremental)."""
+    client: OpenChallengesClient = ctx.obj["client"]
+    verbose: bool = ctx.obj.get("verbose", False)
+    metrics = MetricsCollector()
+    try:
+        if columns == "help":
+            print_platform_columns(wide)
+            raise typer.Exit(0)
+        fmt = output or "ndjson"
+        if fmt != "ndjson":
+            typer.echo(
+                (
+                    "Error: stream supports only ndjson (incremental). Use 'list' "
+                    "for other formats."
+                ),
+                err=True,
+            )
+            raise typer.Exit(1)
+        rows: list[dict[str, Any]] = []
+        iterator = client.iter_all_platforms(search=search, metrics=metrics)  # type: ignore[attr-defined]
+        for count, p in enumerate(iterator, start=1):
+            rows.append(_platform_row(p))
+            if limit and count >= limit:
+                break
+        if columns is None:
+            order = available_platform_columns(wide)
+            rows = [{k: r.get(k) for k in order} for r in rows]
+        rows = filter_columns(rows, columns, kind="platform", wide=wide)
+        _emit(rows, fmt, title="Platforms (stream)")
         if verbose:
             typer.echo(
                 (
@@ -780,6 +897,16 @@ def _org_row(o) -> dict[str, Any]:
     }
 
 
+def _platform_row(p) -> dict[str, Any]:
+    return {
+        "id": getattr(p, "id", None),
+        "slug": getattr(p, "slug", None),
+        "name": getattr(p, "name", None),
+        "website_url": getattr(p, "website_url", None),
+        "avatar_key": getattr(p, "avatar_key", None),
+    }
+
+
 _CHALLENGE_BASE_COLS = available_challenge_columns(False)
 _CHALLENGE_WIDE_EXTRA = [
     c for c in available_challenge_columns(True) if c not in _CHALLENGE_BASE_COLS
@@ -798,7 +925,7 @@ def _emit(rows: Iterable[dict[str, Any]], fmt: str, *, title: str) -> None:
         return
     formatter = get_format(fmt)
     if not formatter:
-        available = ",".join(list_formats() + ["ndjson"])
+        available = ",".join(list_formats())
         typer.echo(
             f"Unknown output format '{fmt}'. Available: {available}",
             err=True,
