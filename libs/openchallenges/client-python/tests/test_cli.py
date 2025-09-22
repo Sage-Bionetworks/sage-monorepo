@@ -915,9 +915,24 @@ def test_cli_platforms_delete_confirmation(monkeypatch):
         def __init__(self):
             self.deleted: list[int] = []
 
+            # Provide a simple fixed platform object to preview
+            class _Obj:
+                def __init__(self):
+                    self.id = 42
+                    self.slug = "stub-platform"
+                    self.name = "Stub Platform"
+                    self.avatar_key = "logo/stub.png"
+                    self.website_url = "https://example.org/platform"
+
+            self._obj = _Obj()
+
         # Provide required factory-used attributes/methods
         def delete_platform(self, platform_id: int):  # facade method signature
             self.deleted.append(platform_id)
+
+        def get_platform(self, platform_id: int):  # new for preview
+            assert platform_id == 42
+            return self._obj
 
         # Unused in this test but Typer callback creates facade via _client
         def list_challenges(self, *a, **k):  # pragma: no cover - safety
@@ -945,6 +960,9 @@ def test_cli_platforms_delete_skip_confirm(monkeypatch):
 
         def delete_platform(self, platform_id: int):
             self.deleted.append(platform_id)
+
+        def get_platform(self, platform_id: int):  # should not be called when --yes
+            raise AssertionError("get_platform should not be invoked with --yes")
 
     stub = _PlatformStub()
     monkeypatch.setattr(

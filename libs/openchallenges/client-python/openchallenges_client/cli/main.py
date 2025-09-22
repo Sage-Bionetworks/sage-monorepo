@@ -629,9 +629,32 @@ def delete_platform(
         help="Skip confirmation prompt",
     ),
 ):
-    """Delete a platform by id (irreversible)."""
+    """Delete a platform by id (irreversible).
+
+    If confirmation is not skipped, a brief preview of the platform's current
+    details (id, slug, name, avatar_key, website_url) is shown before asking
+    for confirmation. Use -y / --yes to suppress both the preview and prompt.
+    """
     client: OpenChallengesClient = ctx.obj["client"]
     if not yes:
+        # Attempt to fetch current platform details for preview; non-fatal if it fails.
+        details = None
+        try:  # pragma: no cover - network errors / API issues exercised elsewhere
+            details = client.get_platform(platform_id=platform_id)
+        except Exception:  # broad catch to avoid blocking delete flow
+            details = None
+        if details is not None:
+            from rich.console import Console
+            from rich.table import Table
+
+            table = Table(title=f"Platform {platform_id} (pending delete)")
+            table.add_column("Field")
+            table.add_column("Value")
+            for field_name in ["id", "slug", "name", "avatar_key", "website_url"]:
+                value = getattr(details, field_name, None)
+                colored = f"[red]{value}[/red]" if value is not None else ""
+                table.add_row(field_name, colored)
+            Console().print(table)
         confirm = typer.confirm(
             f"Delete platform id {platform_id}? This action cannot be undone.",
             abort=True,
