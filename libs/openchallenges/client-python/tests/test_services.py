@@ -68,7 +68,13 @@ class _ChallengeGatewayStub:
     def __init__(self, items):
         self._items = items
 
-    def list_challenges(self, limit: int, status: list[str] | None = None):  # noqa: D401
+    def list_challenges(
+        self,
+        limit: int,
+        status: list[str] | None = None,
+        search_terms: str | None = None,
+        metrics=None,
+    ):  # noqa: D401
         return self._items[:limit]
 
 
@@ -76,7 +82,12 @@ class _OrgGatewayStub:
     def __init__(self, items):
         self._items = items
 
-    def list_organizations(self, limit: int, search_terms: str | None = None):  # noqa: D401
+    def list_organizations(
+        self,
+        limit: int,
+        search_terms: str | None = None,
+        metrics=None,
+    ):  # noqa: D401
         return self._items[:limit]
 
 

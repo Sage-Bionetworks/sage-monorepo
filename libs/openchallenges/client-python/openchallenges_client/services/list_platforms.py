@@ -23,20 +23,9 @@ class ListPlatformsService:
         metrics: MetricsCollector | None = None,
     ) -> Iterable[PlatformSummary]:
         effective_limit = limit or self._cfg.default_limit
-        try:
-            platforms = self._gw.list_platforms(
-                effective_limit, search_terms=search, metrics=metrics
-            )
-        except TypeError:
-            # Backward compatibility if gateway missing metrics/search_terms
-            try:
-                platforms = self._gw.list_platforms(  # type: ignore[call-arg]
-                    effective_limit
-                )
-            except TypeError:
-                platforms = self._gw.list_platforms(  # type: ignore[call-arg]
-                    effective_limit, search_terms=search
-                )
+        platforms = self._gw.list_platforms(
+            effective_limit, search_terms=search, metrics=metrics
+        )
         for p in platforms:
             yield PlatformSummary(
                 id=p.id,

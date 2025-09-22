@@ -24,28 +24,12 @@ class ListChallengesService:
         metrics: MetricsCollector | None = None,
     ) -> Iterable[ChallengeSummary]:
         effective_limit = limit or self._cfg.default_limit
-        # Attempt full signature first (with search_terms & metrics)
-        try:
-            challenges = self._gw.list_challenges(
-                effective_limit,
-                status=status,
-                search_terms=search,
-                metrics=metrics,
-            )
-        except TypeError:
-            # Fallback to legacy signature without metrics
-            try:
-                challenges = self._gw.list_challenges(
-                    effective_limit,
-                    status=status,  # type: ignore[call-arg]
-                )
-            except TypeError:
-                # Last resort: gateway without search_terms but supports metrics
-                challenges = self._gw.list_challenges(
-                    effective_limit,
-                    status=status,
-                    metrics=metrics,  # type: ignore[call-arg]
-                )
+        challenges = self._gw.list_challenges(
+            effective_limit,
+            status=status,
+            search_terms=search,
+            metrics=metrics,
+        )
         for ch in challenges:
             start_date = getattr(ch, "start_date", None)
             end_date = getattr(ch, "end_date", None)

@@ -23,15 +23,9 @@ class ListOrganizationsService:
         metrics: MetricsCollector | None = None,
     ) -> Iterable[OrganizationSummary]:  # search unused MVP
         effective_limit = limit or self._cfg.default_limit
-        try:
-            orgs = self._gw.list_organizations(
-                effective_limit, search_terms=search, metrics=metrics
-            )
-        except TypeError:
-            orgs = self._gw.list_organizations(
-                effective_limit,
-                search_terms=search,  # type: ignore[call-arg]
-            )
+        orgs = self._gw.list_organizations(
+            effective_limit, search_terms=search, metrics=metrics
+        )
         for org in orgs:
             yield OrganizationSummary(
                 id=org.id,

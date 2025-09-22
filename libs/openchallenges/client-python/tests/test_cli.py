@@ -21,8 +21,8 @@ class _StubClient:
     items: list[ChallengeSummary]
 
     def list_challenges(
-        self, *, limit=None, status=None, metrics=None
-    ):  # mimic facade signature
+        self, *, limit=None, status=None, search=None, metrics=None
+    ):  # mimic current facade signature
         # Respect limit if provided
         if limit is not None:
             return self.items[:limit]
@@ -236,7 +236,9 @@ def test_cli_challenges_blank_platform(monkeypatch):
     from openchallenges_client.cli import main as cli_main
 
     class _ChallengeStub:
-        def list_challenges(self, *, limit=None, status=None):
+        def list_challenges(
+            self, *, limit=None, status=None, search=None, metrics=None
+        ):
             return [
                 ChallengeSummary(
                     id=1,
@@ -311,7 +313,7 @@ def test_cli_challenges_stream_ndjson_count(monkeypatch):
     from openchallenges_client.cli import main as cli_main
 
     class _StreamStub:
-        def iter_all_challenges(self, *, status=None, metrics=None):
+        def iter_all_challenges(self, *, status=None, search=None, metrics=None):
             yield from _make_stream_items(5)
 
     monkeypatch.setattr(cli_main, "_client", lambda *a, **k: _StreamStub())
@@ -343,7 +345,7 @@ def test_cli_challenges_stream_ndjson_wide(monkeypatch):
     from openchallenges_client.cli import main as cli_main
 
     class _StreamStub:
-        def iter_all_challenges(self, *, status=None, metrics=None):
+        def iter_all_challenges(self, *, status=None, search=None, metrics=None):
             yield from _make_stream_items(3, wide=True)
 
     monkeypatch.setattr(cli_main, "_client", lambda *a, **k: _StreamStub())
@@ -395,7 +397,7 @@ def test_cli_challenges_stream_ndjson_columns_subset(monkeypatch):
     from openchallenges_client.cli import main as cli_main
 
     class _StreamStub:
-        def iter_all_challenges(self, *, status=None, metrics=None):
+        def iter_all_challenges(self, *, status=None, search=None, metrics=None):
             yield from _make_stream_items(2)
 
     monkeypatch.setattr(cli_main, "_client", lambda *a, **k: _StreamStub())
@@ -478,7 +480,7 @@ def test_cli_orgs_stream_ndjson_count(monkeypatch):
     from openchallenges_client.cli import main as cli_main
 
     class _OrgStreamStub:
-        def iter_all_organizations(self, *, search=None):
+        def iter_all_organizations(self, *, search=None, metrics=None):
             yield from _sample_org_items(4)
 
     monkeypatch.setattr(cli_main, "_client", lambda *a, **k: _OrgStreamStub())
@@ -531,7 +533,7 @@ def test_cli_orgs_stream_ndjson_columns_subset(monkeypatch):
     from openchallenges_client.cli import main as cli_main
 
     class _OrgStreamStub:
-        def iter_all_organizations(self, *, search=None):
+        def iter_all_organizations(self, *, search=None, metrics=None):
             yield from _sample_org_items(2)
 
     monkeypatch.setattr(cli_main, "_client", lambda *a, **k: _OrgStreamStub())
@@ -612,7 +614,9 @@ def test_cli_challenges_list_verbose_metrics(monkeypatch):
 
     # One valid, one invalid challenge (invalid due to missing required 'id')
     class _ChallengeStub:
-        def list_challenges(self, *, limit=None, status=None, metrics=None):
+        def list_challenges(
+            self, *, limit=None, status=None, search=None, metrics=None
+        ):
             # Simulate gateway per-item validation behavior:
             # increment skipped for invalid
             if metrics is not None:

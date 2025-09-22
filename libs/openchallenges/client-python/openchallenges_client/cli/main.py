@@ -38,29 +38,7 @@ app = typer.Typer(help="OpenChallenges unified Python client & CLI")
 register_default_formatters()
 
 
-def _invoke_with_backcompat(func, **kwargs):
-    """Invoke a callable, dropping unsupported keyword-only params for legacy stubs.
-
-    We progressively remove 'metrics' and then 'search' (in that order) if the
-    target raises a TypeError indicating an unexpected keyword argument. This
-    preserves backward compatibility with older / test stub client objects
-    that have not yet adopted the new signature.
-    """
-    attempt = dict(kwargs)
-    while True:
-        try:
-            return func(**attempt)
-        except TypeError as e:  # pragma: no cover - exercised via tests
-            msg = str(e)
-            removed = False
-            if "metrics" in msg and "metrics" in attempt:
-                attempt.pop("metrics")
-                removed = True
-            elif "search" in msg and "search" in attempt:
-                attempt.pop("search")
-                removed = True
-            if not removed:
-                raise
+## Legacy backcompat helper removed (pre-release cleanup).
 
 
 def _client(
@@ -137,7 +115,6 @@ def list_challenges(
         if columns == "help":
             print_challenge_columns(wide=wide)
             raise typer.Exit(0)
-        # Collect items; wrap iteration to count emitted.
         invoke_kwargs = {
             "limit": limit,
             "status": status_list,
@@ -145,10 +122,8 @@ def list_challenges(
         }
         if search is not None:
             invoke_kwargs["search"] = search
-        items = list(_invoke_with_backcompat(client.list_challenges, **invoke_kwargs))
+        items = list(client.list_challenges(**invoke_kwargs))
         rows = [_challenge_row(c, wide=wide) for c in items]
-        # Default ordering defined by _challenge_row + wide flag. Apply custom
-        # selection if provided.
         rows = filter_columns(rows, columns, kind="challenge", wide=wide)
         _emit(rows, output or base_output, title="Challenges")
         if verbose:
@@ -160,7 +135,7 @@ def list_challenges(
                 ),
                 err=True,
             )
-    except oc_errors.OpenChallengesError as e:  # pragma: no cover (CLI path)
+    except oc_errors.OpenChallengesError as e:  # pragma: no cover
         _handle_error(e)
 
 
@@ -204,10 +179,7 @@ def stream_challenges(
         }
         if search is not None:
             invoke_kwargs["search"] = search
-        iterator = _invoke_with_backcompat(
-            client.iter_all_challenges,
-            **invoke_kwargs,
-        )
+        iterator = client.iter_all_challenges(**invoke_kwargs)
         for count, c in enumerate(iterator, start=1):
             rows.append(_challenge_row(c, wide=wide))
             if limit and count >= limit:
@@ -303,14 +275,7 @@ def stream_orgs(
             print_org_columns()
             raise typer.Exit(0)
         rows = []
-        try:
-            iterator = client.iter_all_organizations(search=search, metrics=metrics)
-        except TypeError as e:
-            if "metrics" not in str(e):
-                raise
-            iterator = client.iter_all_organizations(  # type: ignore[arg-type]
-                search=search
-            )
+        iterator = client.iter_all_organizations(search=search, metrics=metrics)
         for count, o in enumerate(iterator, start=1):
             rows.append(_org_row(o))
             if limit and count >= limit:
@@ -363,12 +328,7 @@ def list_platforms(
         invoke_kwargs = {"limit": limit, "metrics": metrics}
         if search is not None:
             invoke_kwargs["search"] = search
-        items = list(
-            _invoke_with_backcompat(
-                client.list_platforms,
-                **invoke_kwargs,  # type: ignore[arg-type]
-            )
-        )
+        items = list(client.list_platforms(**invoke_kwargs))
         rows = [
             {
                 "id": p.id,
