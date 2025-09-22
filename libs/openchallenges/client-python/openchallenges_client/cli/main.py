@@ -528,8 +528,13 @@ def create_platform(
 ):
     """Create a challenge platform.
 
-    Non-interactive: supply all required options.
-    Interactive: add --interactive; any missing values will be prompted.
+    Preview & confirmation:
+      Shows a colorized table of the new platform values and asks for
+      confirmation. Pass -y / --yes to skip the preview (useful in scripts).
+
+    Modes:
+      Non-interactive: supply all required options.
+      Interactive (--interactive): prompts for any missing fields.
     """
     client: OpenChallengesClient = ctx.obj["client"]
     base_output = ctx.obj["output"] if ctx.obj.get("output") else output
@@ -537,7 +542,6 @@ def create_platform(
     def _prompt_if_missing(label: str, current: str | None) -> str | None:
         if current or not interactive:
             return current
-        # Use enhanced prompt if questionary exists; fallback handled inside helper.
         return prompt_text(label, default=current or "")
 
     slug = _prompt_if_missing("Slug", slug)
@@ -686,8 +690,10 @@ def update_platform(
 ):
     """Update a challenge platform by id.
 
-    Fetches current values, applies flag / interactive overrides, shows a diff,
-    then submits a full PUT request if changes exist.
+    Behavior:
+      Fetches current values, applies flag / interactive overrides, then shows a
+      colorized diff (Added / Removed / Modified) and requests confirmation.
+      Use -y / --yes to skip the diff preview and apply changes directly.
     """
     client: OpenChallengesClient = ctx.obj["client"]
     base_output = ctx.obj["output"] if ctx.obj.get("output") else output
