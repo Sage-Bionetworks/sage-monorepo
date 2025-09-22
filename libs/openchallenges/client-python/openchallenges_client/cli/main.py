@@ -628,6 +628,13 @@ def delete_platform(
         "--yes",
         help="Skip confirmation prompt",
     ),
+    output: str = typer.Option(
+        "table",
+        help=(
+            "Preview output format when confirming delete (table|json|yaml|ndjson). "
+            "Ignored if --yes is used."
+        ),
+    ),
 ):
     """Delete a platform by id (irreversible).
 
@@ -644,17 +651,44 @@ def delete_platform(
         except Exception:  # broad catch to avoid blocking delete flow
             details = None
         if details is not None:
-            from rich.console import Console
-            from rich.table import Table
+            # Build a row dict consistent with other emitters
+            preview_row = {
+                "id": getattr(details, "id", None),
+                "slug": getattr(details, "slug", None),
+                "name": getattr(details, "name", None),
+                "avatar_key": getattr(details, "avatar_key", None),
+                "website_url": getattr(details, "website_url", None),
+            }
+            if output == "table":
+                from rich.console import Console
+                from rich.table import Table
 
-            table = Table(title=f"Platform {platform_id} (pending delete)")
-            table.add_column("Field")
-            table.add_column("Value")
-            for field_name in ["id", "slug", "name", "avatar_key", "website_url"]:
-                value = getattr(details, field_name, None)
-                colored = f"[red]{value}[/red]" if value is not None else ""
-                table.add_row(field_name, colored)
-            Console().print(table)
+                table = Table(title=f"Platform {platform_id} (pending delete)")
+                table.add_column("Field")
+                table.add_column("Value")
+                for k, v in preview_row.items():
+                    colored = f"[red]{v}[/red]" if v is not None else ""
+                    table.add_row(k, colored)
+                Console().print(table)
+            elif output == "ndjson":
+                to_ndjson([preview_row])
+            elif output in ("json", "yaml"):
+                _emit(
+                    [preview_row],
+                    output,
+                    title=f"Platform {platform_id} (pending delete)",
+                )
+            else:  # Fallback to table if unknown value
+                from rich.console import Console
+                from rich.table import Table
+
+                table = Table(title=f"Platform {platform_id} (pending delete)")
+                table.add_column("Field")
+                table.add_column("Value")
+                for k, v in preview_row.items():
+                    colored = f"[red]{v}[/red]" if v is not None else ""
+                    table.add_row(k, colored)
+                Console().print(table)
         confirm = typer.confirm(
             f"Delete platform id {platform_id}? This action cannot be undone.",
             abort=True,
