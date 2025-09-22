@@ -1,22 +1,17 @@
-package org.sagebionetworks.openchallenges.mcp.server;
+package org.sagebionetworks.openchallenges.mcp.server.service;
 
-import io.micrometer.common.lang.Nullable;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.openchallenges.api.client.api.ChallengeContributionApi;
-import org.sagebionetworks.openchallenges.api.client.model.ChallengeContributionRole;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengeContributionsPage;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ChallengeContributionService {
 
   private final ChallengeContributionApi challengeContributionApi;
-
-  public ChallengeContributionService(ChallengeContributionApi challengeContributionApi) {
-    this.challengeContributionApi = challengeContributionApi;
-  }
 
   @Tool(
     name = "list_challenge_contributions",

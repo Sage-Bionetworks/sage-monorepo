@@ -1,8 +1,9 @@
-package org.sagebionetworks.openchallenges.mcp.server;
+package org.sagebionetworks.openchallenges.mcp.server.service;
 
 import io.micrometer.common.lang.Nullable;
 import java.time.LocalDate;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.openchallenges.api.client.api.ChallengeApi;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengeCategory;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengeDirection;
@@ -17,13 +18,10 @@ import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ChallengeService {
 
   private final ChallengeApi challengeApi;
-
-  public ChallengeService(ChallengeApi challengeApi) {
-    this.challengeApi = challengeApi;
-  }
 
   @Tool(
     name = "list_challenges",

@@ -6,10 +6,12 @@ plugins {
 
 dependencies {
   implementation(libs.spring.ai.starter.mcp.server.webflux)
-  testImplementation(libs.spring.boot.starter.test)
-  testRuntimeOnly(libs.junit.platform.launcher)
+  implementation(libs.spring.boot.starter.validation)
   implementation(platform(libs.spring.boot.dependencies))
   implementation(project(":openchallenges-api-client-java"))
+
+  testImplementation(libs.spring.boot.starter.test)
+  testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 graalvmNative {

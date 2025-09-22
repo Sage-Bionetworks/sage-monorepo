@@ -1,4 +1,4 @@
-package org.sagebionetworks.openchallenges.mcp.server.config;
+package org.sagebionetworks.openchallenges.mcp.server.configuration;
 
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.context.annotation.Configuration;

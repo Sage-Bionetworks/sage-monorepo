@@ -1,7 +1,8 @@
-package org.sagebionetworks.openchallenges.mcp.server;
+package org.sagebionetworks.openchallenges.mcp.server.service;
 
 import io.micrometer.common.lang.Nullable;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.openchallenges.api.client.api.OrganizationApi;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengeParticipationRole;
 import org.sagebionetworks.openchallenges.api.client.model.OrganizationCategory;
@@ -14,13 +15,10 @@ import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class OrganizationService {
 
   private final OrganizationApi organizationApi;
-
-  public OrganizationService(OrganizationApi organizationApi) {
-    this.organizationApi = organizationApi;
-  }
 
   @Tool(
     name = "list_organizations",

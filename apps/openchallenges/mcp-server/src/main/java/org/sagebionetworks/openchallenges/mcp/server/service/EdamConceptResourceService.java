@@ -1,10 +1,10 @@
-package org.sagebionetworks.openchallenges.mcp.server;
+package org.sagebionetworks.openchallenges.mcp.server.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.modelcontextprotocol.server.McpServerFeatures;
-import io.modelcontextprotocol.server.McpServerFeatures.SyncResourceSpecification;
 import io.modelcontextprotocol.spec.McpSchema;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.openchallenges.api.client.api.EdamConceptApi;
 import org.sagebionetworks.openchallenges.api.client.model.EdamConceptSearchQuery;
 import org.sagebionetworks.openchallenges.api.client.model.EdamConceptsPage;
@@ -14,15 +14,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Configuration
+@RequiredArgsConstructor
 public class EdamConceptResourceService {
 
   private final EdamConceptApi edamConceptApi;
   private final ObjectMapper objectMapper;
-
-  public EdamConceptResourceService(EdamConceptApi edamConceptApi, ObjectMapper objectMapper) {
-    this.edamConceptApi = edamConceptApi;
-    this.objectMapper = objectMapper;
-  }
 
   @Bean
   public List<McpServerFeatures.SyncResourceSpecification> edamConceptResources() {
