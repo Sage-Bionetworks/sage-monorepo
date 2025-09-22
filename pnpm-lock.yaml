@@ -63,7 +63,7 @@ importers:
         specifier: 6.7.1
         version: 6.7.1
       '@octokit/rest':
-        specifier: ^22.0.0
+        specifier: 22.0.0
         version: 22.0.0
       '@opentelemetry/context-zone-peer-dep':
         specifier: 2.0.1
@@ -99,7 +99,7 @@ importers:
         specifier: 19.0.9
         version: 19.0.9
       '@swc/helpers':
-        specifier: ~0.5.11
+        specifier: 0.5.17
         version: 0.5.17
       angular-google-tag-manager:
         specifier: 1.11.0
@@ -213,7 +213,7 @@ importers:
         specifier: 5.2.0
         version: 5.2.0
       simple-git:
-        specifier: ^3.28.0
+        specifier: 3.28.0
         version: 3.28.0(supports-color@8.1.1)
       tslib:
         specifier: 2.4.1
@@ -228,7 +228,7 @@ importers:
         specifier: 3.8.2
         version: 3.8.2
       yargs:
-        specifier: ^18.0.0
+        specifier: 18.0.0
         version: 18.0.0
       zone.js:
         specifier: 0.15.0
@@ -253,7 +253,7 @@ importers:
         specifier: 20.1.1
         version: 20.1.1(eslint@8.57.0)(typescript@5.8.3)
       '@angular/cli':
-        specifier: ~20.1.0
+        specifier: 20.1.6
         version: 20.1.6(@types/node@22.5.1)(chokidar@4.0.3)
       '@angular/compiler-cli':
         specifier: 20.1.8
@@ -355,13 +355,13 @@ importers:
         specifier: 4.4.1
         version: 4.4.1(eslint@8.57.0)(typescript@5.8.3)
       '@swc-node/register':
-        specifier: ~1.9.1
+        specifier: 1.9.2
         version: 1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.17))(@swc/types@0.1.24)(typescript@5.8.3)
       '@swc/cli':
         specifier: 0.6.0
         version: 0.6.0(@swc/core@1.5.29(@swc/helpers@0.5.17))(chokidar@4.0.3)
       '@swc/core':
-        specifier: ~1.5.7
+        specifier: 1.5.29
         version: 1.5.29(@swc/helpers@0.5.17)
       '@testing-library/angular':
         specifier: 16.0.0
@@ -424,7 +424,7 @@ importers:
         specifier: 13.7.10
         version: 13.7.10
       '@types/yargs':
-        specifier: ^17.0.33
+        specifier: 17.0.33
         version: 17.0.33
       '@typescript-eslint/eslint-plugin':
         specifier: 8.34.1
@@ -523,7 +523,7 @@ importers:
         specifier: 2.4.2
         version: 2.4.2
       jsdom:
-        specifier: ~22.1.0
+        specifier: 22.1.0
         version: 22.1.0(canvas@3.1.0)
       lint-staged:
         specifier: 15.2.10
@@ -19220,8 +19220,8 @@ snapshots:
       express-rate-limit: 7.5.1(express@5.1.0)
       pkce-challenge: 5.0.0
       raw-body: 3.0.0
-      zod: 3.25.75
-      zod-to-json-schema: 3.24.6(zod@3.25.75)
+      zod: 3.25.76
+      zod-to-json-schema: 3.24.6(zod@3.25.76)
     transitivePeerDependencies:
       - supports-color
 
@@ -35504,10 +35504,6 @@ snapshots:
       archiver-utils: 3.0.4
       compress-commons: 4.1.2
       readable-stream: 3.6.2
-
-  zod-to-json-schema@3.24.6(zod@3.25.75):
-    dependencies:
-      zod: 3.25.75
 
   zod-to-json-schema@3.24.6(zod@3.25.76):
     dependencies:
