@@ -1,21 +1,22 @@
+"""
+Simplified OAuth client for Synapse API calls
+"""
+
 import os
 import base64
 import secrets
 import urllib.parse
 import requests
 from typing import Optional, Dict, Any, Tuple
-from dotenv import load_dotenv
-
-load_dotenv()
 
 
 class SynapseOAuthClient:
-    """OAuth client for Synapse"""
+    """Simplified OAuth client for Synapse"""
 
     def __init__(self):
-        self.client_id = os.getenv("SYNAPSE_CLIENT_ID")
-        self.client_secret = os.getenv("SYNAPSE_CLIENT_SECRET")
-        self.redirect_uri = f"http://127.0.0.1:{os.getenv('APP_PORT', '8100')}"
+        self.client_id = os.environ.get("SYNAPSE_CLIENT_ID")
+        self.client_secret = os.environ.get("SYNAPSE_CLIENT_SECRET")
+        self.redirect_uri = f"http://127.0.0.1:{os.environ.get('APP_PORT', '8100')}"
 
         self.auth_url = "https://signin.synapse.org"
         self.token_url = "https://repo-prod.prod.sagebase.org/auth/v1/oauth2/token"
@@ -25,7 +26,7 @@ class SynapseOAuthClient:
 
         if not all([self.client_id, self.client_secret]):
             raise ValueError(
-                "Missing SYNAPSE_CLIENT_ID or SYNAPSE_CLIENT_SECRET in .env file"
+                "Missing SYNAPSE_CLIENT_ID or SYNAPSE_CLIENT_SECRET environment variables"
             )
 
     def generate_login_url(self) -> Tuple[str, str]:
