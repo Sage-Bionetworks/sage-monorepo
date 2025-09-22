@@ -112,6 +112,84 @@ def test_cli_challenges_list_json(monkeypatch):
     assert first["status"] == "ACTIVE"  # plain status
 
 
+def test_cli_platforms_list_default_columns(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    class _PlatformSummary:
+        def __init__(self, id, slug, name, website_url, avatar_key):
+            self.id = id
+            self.slug = slug
+            self.name = name
+            self.website_url = website_url
+            self.avatar_key = avatar_key
+
+    class _PlatformStub:
+        def list_platforms(self, *, limit=None, search=None, metrics=None):
+            return [
+                _PlatformSummary(
+                    1,
+                    "codabench",
+                    "CodaBench",
+                    "https://cb.org",
+                    "logo/cb.png",
+                ),
+                _PlatformSummary(2, "synapse", "Synapse", None, None),
+            ]
+
+    monkeypatch.setattr(
+        cli_main,
+        "_client",
+        lambda api_url, api_key, limit: _PlatformStub(),
+    )
+    result = runner.invoke(app, ["platforms", "list", "--limit", "2"])
+    assert result.exit_code == 0, result.output
+    out = result.output
+    # Only id, name, website_url should be present in headers; slug/avatar_key absent
+    assert "id" in out and "name" in out and "website_url" in out
+    assert "slug" not in out and "avatar_key" not in out
+
+
+def test_cli_platforms_list_wide(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    class _PlatformSummary:
+        def __init__(self, id, slug, name, website_url, avatar_key):
+            self.id = id
+            self.slug = slug
+            self.name = name
+            self.website_url = website_url
+            self.avatar_key = avatar_key
+
+    class _PlatformStub:
+        def list_platforms(self, *, limit=None, search=None, metrics=None):
+            return [
+                _PlatformSummary(
+                    1,
+                    "codabench",
+                    "CodaBench",
+                    "https://cb.org",
+                    "logo/cb.png",
+                ),
+            ]
+
+    monkeypatch.setattr(
+        cli_main,
+        "_client",
+        lambda api_url, api_key, limit: _PlatformStub(),
+    )
+    result = runner.invoke(app, ["platforms", "list", "--limit", "1", "--wide"])
+    assert result.exit_code == 0, result.output
+    out = result.output
+    # All wide columns should appear
+    assert (
+        "id" in out
+        and "slug" in out
+        and "name" in out
+        and "website_url" in out
+        and "avatar_key" in out
+    )
+
+
 def test_cli_orgs_blank_short_name(monkeypatch):
     from openchallenges_client.cli import main as cli_main
 

@@ -16,6 +16,7 @@ from ..output.registry import get_format, list_formats, register_default_formatt
 from ._shared_columns import (
     available_challenge_columns,
     available_org_columns,
+    available_platform_columns,
     filter_columns,
     print_challenge_columns,
     print_org_columns,
@@ -378,8 +379,12 @@ def list_platforms(
             }
             for p in items
         ]
-        # Row construction already encodes desired base/wide ordering (slug
-        # placed after id in wide mode).
+        # Trim/reorder to default visible columns when user did not request an
+        # explicit column subset. Default (non-wide) => id,name,website_url.
+        # Wide => id,slug,name,website_url,avatar_key (ordering from helper).
+        if columns is None:
+            order = available_platform_columns(wide)
+            rows = [{k: r.get(k) for k in order} for r in rows]
         rows = filter_columns(rows, columns, kind="platform", wide=wide)
         _emit(rows, output or base_output, title="Platforms")
         if verbose:
