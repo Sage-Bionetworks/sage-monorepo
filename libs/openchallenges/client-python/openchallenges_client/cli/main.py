@@ -22,6 +22,12 @@ from ._shared_columns import (
     print_org_columns,
     print_platform_columns,
 )
+from .interactive import (
+    has_questionary,
+    prompt_confirm,
+    prompt_select,
+    prompt_text,
+)
 
 # Module-level option object to satisfy lint rule against function calls in defaults.
 STATUS_OPTION: list[str] | None = typer.Option(  # type: ignore[assignment]
@@ -527,7 +533,8 @@ def create_platform(
     def _prompt_if_missing(label: str, current: str | None) -> str | None:
         if current or not interactive:
             return current
-        return typer.prompt(label)
+        # Use enhanced prompt if questionary exists; fallback handled inside helper.
+        return prompt_text(label, default=current or "")
 
     slug = _prompt_if_missing("Slug", slug)
     name = _prompt_if_missing("Name", name)
@@ -772,8 +779,17 @@ def update_platform(
 
     # Show diff unless suppressed
     if not yes:
-        # Local imports keep optional rich dependency impact minimal when
-        # command run with non-table output and --yes.
+        # Offer optional section preview before diff if questionary present.
+        if has_questionary():  # pragma: no branch
+            # Simple grouping for potential future expansion (placeholder)
+            section = prompt_select(
+                "Review section before applying?",
+                ["summary (diff)", "proceed"],
+                default="summary (diff)",
+            )
+            if section.startswith("summary"):
+                pass  # fall through to diff display
+        # Local imports keep optional rich dependency impact minimal.
         from rich.console import Console
         from rich.table import Table
 
@@ -784,7 +800,7 @@ def update_platform(
         for field, (old, new) in changed.items():
             table.add_row(field, str(old), str(new))
         Console().print(table)
-        if not typer.confirm("Apply these changes?", abort=True):  # pragma: no cover
+        if not prompt_confirm("Apply these changes?", default=True):  # pragma: no cover
             raise typer.Exit(1)
 
     try:
