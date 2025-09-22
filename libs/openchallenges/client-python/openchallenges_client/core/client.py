@@ -27,10 +27,11 @@ class OpenChallengesClient:
         api_url: str | None = None,
         limit: int = 5,
     ) -> None:
+        effective_limit_override = limit if limit != 5 else None
         self._cfg: ClientConfig = load_config(
             override_api_key=api_key,
             override_api_url=api_url,
-            limit=limit,
+            limit=effective_limit_override,
         )
         self._challenge_gateway = ChallengeGateway(self._cfg)
         self._org_gateway = OrganizationGateway(self._cfg)

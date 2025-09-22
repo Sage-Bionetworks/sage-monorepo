@@ -10,7 +10,12 @@ from typing import Any
 import tomllib
 
 DEFAULT_API_URL = "http://localhost:8082/api/v1"
-DEFAULT_LIMIT = 10
+DEFAULT_LIMIT = 5
+DEFAULT_OUTPUT = "table"
+
+
+class ConfigParseError(RuntimeError):
+    """Raised when a configuration file is found but cannot be parsed."""
 
 
 @dataclass(frozen=True)
@@ -18,6 +23,7 @@ class ClientConfig:
     api_url: str
     api_key: str | None
     limit: int = DEFAULT_LIMIT
+    output: str = DEFAULT_OUTPUT
     retries: int = 0
     # Optional metadata describing where each value came from for diagnostics.
     sources: dict[str, str] | None = None
@@ -55,8 +61,11 @@ def _load_file_config() -> dict[str, Any]:  # pragma: no cover (IO)
                 section = data.get("openchallenges", data)
                 if isinstance(section, dict):
                     return {k.lower(): v for k, v in section.items()}
-            except Exception:
-                return {}
+            except Exception as e:  # pragma: no cover - exercised via CLI test
+                raise ConfigParseError(
+                    f"Failed to parse config file '{path}': {e}. "
+                    'Ensure string values are quoted, e.g. output = "table"'
+                ) from e
     return {}
 
 
@@ -64,7 +73,8 @@ def load_config(
     *,
     override_api_key: str | None,
     override_api_url: str | None,
-    limit: int,
+    limit: int | None,
+    override_output: str | None = None,
     with_sources: bool = False,
 ) -> ClientConfig:
     file_cfg = _load_file_config()
@@ -99,7 +109,7 @@ def load_config(
         sources["api_key"] = "unset"
 
     # limit resolution
-    if limit != DEFAULT_LIMIT:
+    if limit is not None and limit != DEFAULT_LIMIT:
         limit_val: int | str = limit
         sources["limit"] = "override"
     elif file_cfg.get("limit") is not None:
@@ -108,6 +118,20 @@ def load_config(
     else:
         limit_val = DEFAULT_LIMIT
         sources["limit"] = "default"
+
+    # output resolution
+    if override_output is not None:
+        output_val: str = override_output
+        sources["output"] = "override"
+    elif os.getenv("OC_OUTPUT"):
+        output_val = os.getenv("OC_OUTPUT")  # type: ignore[assignment]
+        sources["output"] = "env:OC_OUTPUT"
+    elif file_cfg.get("output"):
+        output_val = file_cfg.get("output")  # type: ignore[assignment]
+        sources["output"] = "file"
+    else:
+        output_val = DEFAULT_OUTPUT
+        sources["output"] = "default"
 
     # retries resolution
     if os.getenv("OC_RETRIES") is not None:
@@ -124,6 +148,7 @@ def load_config(
         api_url=str(api_url),
         api_key=api_key,
         limit=int(limit_val),
+        output=str(output_val),
         retries=int(retries_val),
         sources=sources if with_sources else None,
     )

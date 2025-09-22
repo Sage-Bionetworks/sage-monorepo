@@ -7,7 +7,7 @@ from typing import Any
 
 import typer
 
-from ..config.loader import DEFAULT_LIMIT, load_config
+from ..config.loader import DEFAULT_LIMIT, ConfigParseError, load_config
 from ..core import errors as oc_errors
 from ..core.client import OpenChallengesClient
 from ..core.metrics import MetricsCollector
@@ -44,6 +44,7 @@ register_default_formatters()
 def _client(
     api_url: str | None, api_key: str | None, limit: int
 ) -> OpenChallengesClient:
+    # Keep 'limit' as given; OpenChallengesClient converts default to None override.
     return OpenChallengesClient(api_key=api_key, api_url=api_url, limit=limit)
 
 
@@ -66,11 +67,12 @@ def global_options(
         help="Emit summary metrics (emitted / skipped / retries) to stderr",
     ),
 ):
-    ctx.obj = {
-        "client": _client(api_url, api_key, limit),
-        "output": output,
-        "verbose": verbose,
-    }
+    try:
+        client = _client(api_url, api_key, limit)
+    except ConfigParseError as e:  # pragma: no cover (covered via integration test)
+        typer.echo(str(e), err=True)
+        raise typer.Exit(1) from None
+    ctx.obj = {"client": client, "output": output, "verbose": verbose}
     # Typer callback only; no command output here.
 
 
@@ -952,10 +954,12 @@ def show_config(
     api_url = params.get("api_url")  # type: ignore[assignment]
     api_key = params.get("api_key")  # type: ignore[assignment]
     limit = params.get("limit", DEFAULT_LIMIT)  # type: ignore[assignment]
+    limit_override = None if limit == DEFAULT_LIMIT else limit
     resolved = load_config(
         override_api_key=api_key,
         override_api_url=api_url,
-        limit=limit,
+        limit=limit_override,
+        override_output=params.get("output"),
         with_sources=True,
     )
     src = resolved.sources or {}
@@ -974,6 +978,11 @@ def show_config(
             "key": "limit",
             "value": resolved.limit,
             "source": src.get("limit", "unknown"),
+        },
+        {
+            "key": "output",
+            "value": resolved.output,
+            "source": src.get("output", "unknown"),
         },
         {
             "key": "retries",
