@@ -958,6 +958,108 @@ def test_cli_platforms_delete_skip_confirm(monkeypatch):
     assert stub.deleted == [7]
 
 
+def test_cli_platforms_create_preview_and_confirm(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    class _PlatformStub:
+        def __init__(self):
+            self.created: list[dict] = []
+
+        def create_platform(self, *, slug, name, avatar_key, website_url):
+            self.created.append(
+                {
+                    "slug": slug,
+                    "name": name,
+                    "avatar_key": avatar_key,
+                    "website_url": website_url,
+                }
+            )
+
+            class _Obj:
+                def __init__(self, slug, name, avatar_key, website_url):
+                    self.id = 101
+                    self.slug = slug
+                    self.name = name
+                    self.avatar_key = avatar_key
+                    self.website_url = website_url
+
+            return _Obj(slug, name, avatar_key, website_url)
+
+    stub = _PlatformStub()
+    monkeypatch.setattr(cli_main, "_client", lambda *a, **k: stub)
+    # Provide 'y' to confirmation after preview
+    result = runner.invoke(
+        app,
+        [
+            "platforms",
+            "create",
+            "--slug",
+            "new-platform",
+            "--name",
+            "New Platform",
+            "--avatar-key",
+            "logo/new.png",
+            "--website-url",
+            "https://new.example",
+        ],
+        input="\n",  # accept default 'Yes'
+    )
+    assert result.exit_code == 0, result.output
+    assert stub.created and stub.created[0]["slug"] == "new-platform"
+    # Preview table title should appear
+    assert "New Platform (preview)" in result.output
+
+
+def test_cli_platforms_create_skip_preview(monkeypatch):
+    from openchallenges_client.cli import main as cli_main
+
+    class _PlatformStub:
+        def __init__(self):
+            self.created: list[dict] = []
+
+        def create_platform(self, *, slug, name, avatar_key, website_url):
+            self.created.append(
+                {
+                    "slug": slug,
+                    "name": name,
+                    "avatar_key": avatar_key,
+                    "website_url": website_url,
+                }
+            )
+
+            class _Obj:
+                def __init__(self, slug, name, avatar_key, website_url):
+                    self.id = 202
+                    self.slug = slug
+                    self.name = name
+                    self.avatar_key = avatar_key
+                    self.website_url = website_url
+
+            return _Obj(slug, name, avatar_key, website_url)
+
+    stub = _PlatformStub()
+    monkeypatch.setattr(cli_main, "_client", lambda *a, **k: stub)
+    result = runner.invoke(
+        app,
+        [
+            "platforms",
+            "create",
+            "--slug",
+            "quick-platform",
+            "--name",
+            "Quick Platform",
+            "--avatar-key",
+            "logo/quick.png",
+            "--website-url",
+            "https://quick.example",
+            "--yes",
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    assert stub.created and stub.created[0]["slug"] == "quick-platform"
+    assert "New Platform (preview)" not in result.output
+
+
 # ---------------- Platform Update Tests -----------------
 
 

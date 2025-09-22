@@ -91,6 +91,11 @@ def prompt_select(
 
 
 def prompt_confirm(label: str, *, default: bool = True) -> bool:
+    import sys
+
+    # In non-interactive (no TTY) contexts auto-return default to avoid aborts.
+    if not sys.stdin.isatty() or not sys.stdout.isatty():  # pragma: no cover
+        return default
     if _HAS_Q:  # pragma: no branch
         return questionary.confirm(  # type: ignore[attr-defined]
             label, default=default

@@ -515,6 +515,12 @@ def create_platform(
         "--interactive",
         help="Enable interactive prompts for any missing fields.",
     ),
+    yes: bool = typer.Option(
+        False,
+        "-y",
+        "--yes",
+        help="Skip pre-create preview confirmation.",
+    ),
     output: str = typer.Option(
         "table",
         help="Output format for created resource (table|json|yaml|ndjson)",
@@ -557,6 +563,28 @@ def create_platform(
             err=True,
         )
         raise typer.Exit(1)
+    # Preview (colorized) unless suppressed with --yes
+    if not yes:
+        from rich.console import Console
+        from rich.table import Table
+
+        table = Table(title="New Platform (preview)")
+        table.add_column("Field")
+        table.add_column("Value")
+        for field_name, value in [
+            ("slug", slug),
+            ("name", name),
+            ("avatar_key", avatar_key),
+            ("website_url", website_url),
+        ]:
+            colored = f"[green]{value}[/green]" if value else ""
+            table.add_row(field_name, colored)
+        Console().print(table)
+        if not prompt_confirm(
+            "Create this platform?", default=True
+        ):  # pragma: no cover
+            raise typer.Exit(1)
+
     try:
         created = client.create_platform(
             slug=str(slug),
