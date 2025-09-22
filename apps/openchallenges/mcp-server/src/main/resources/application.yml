@@ -1,5 +1,5 @@
-openchallenges-mcp-server:
-  welcome-message: 'Welcome to the OpenChallenges MCP Server - dev mode'
+app:
+  welcome-message: 'Welcome to the OpenChallenges MCP Server!'
   api-base-url: http://openchallenges-api-gateway:8082/api/v1
 
 server:
@@ -12,6 +12,13 @@ spring:
   ai:
     mcp:
       server:
-        name: openchallenges-mcp-server
+        name: ${spring.application.name}
         version: 1.0.0
         protocol: STREAMABLE
+  profiles:
+    active: dev
+
+logging:
+  level:
+    org.sagebionetworks.openchallenges.api.gateway: DEBUG
+    org.springframework.security: DEBUG
