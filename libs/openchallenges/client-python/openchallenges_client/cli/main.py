@@ -79,9 +79,9 @@ orgs_app = typer.Typer(help="Organization-related operations")
 platforms_app = typer.Typer(help="Challenge platform-related operations")
 config_app = typer.Typer(help="Configuration & diagnostics")
 
-app.add_typer(challenges_app, name="challenges")
-app.add_typer(orgs_app, name="orgs")
-app.add_typer(platforms_app, name="platforms")
+app.add_typer(challenges_app, name="challenge")
+app.add_typer(orgs_app, name="org")
+app.add_typer(platforms_app, name="platform")
 app.add_typer(config_app, name="config")
 
 
@@ -278,7 +278,7 @@ def list_orgs(
         if verbose:
             typer.echo(
                 (
-                    f"[stats] orgs emitted={metrics.emitted} "
+                    f"[stats] org emitted={metrics.emitted} "
                     f"skipped={metrics.skipped} retries={metrics.retries}"
                 ),
                 err=True,
@@ -334,7 +334,7 @@ def stream_orgs(
         if verbose:
             typer.echo(
                 (
-                    f"[stats] orgs emitted={metrics.emitted} "
+                    f"[stats] org emitted={metrics.emitted} "
                     f"skipped={metrics.skipped} retries={metrics.retries}"
                 ),
                 err=True,
@@ -406,7 +406,7 @@ def list_platforms(
         if verbose:
             typer.echo(
                 (
-                    "[stats] platforms "
+                    "[stats] platform "
                     f"emitted={metrics.emitted} "
                     f"skipped={metrics.skipped} retries={metrics.retries}"
                 ),
@@ -471,7 +471,7 @@ def stream_platforms(
         if verbose:
             typer.echo(
                 (
-                    "[stats] platforms "
+                    "[stats] platform "
                     f"emitted={metrics.emitted} "
                     f"skipped={metrics.skipped} retries={metrics.retries}"
                 ),

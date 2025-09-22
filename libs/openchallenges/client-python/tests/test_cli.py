@@ -65,7 +65,7 @@ def test_cli_challenges_list_table(monkeypatch):
         "_client",
         lambda api_url, api_key, limit: _StubClient(_sample_items()),
     )
-    result = runner.invoke(app, ["challenges", "list", "--limit", "2"])
+    result = runner.invoke(app, ["challenge", "list", "--limit", "2"])
     assert result.exit_code == 0, result.output
     out = result.output
     # Headers present
@@ -88,7 +88,7 @@ def test_cli_challenges_list_json(monkeypatch):
     result = runner.invoke(
         app,
         [
-            "challenges",
+            "challenge",
             "list",
             "--limit",
             "1",
@@ -141,7 +141,7 @@ def test_cli_platforms_list_default_columns(monkeypatch):
         "_client",
         lambda api_url, api_key, limit: _PlatformStub(),
     )
-    result = runner.invoke(app, ["platforms", "list", "--limit", "2"])
+    result = runner.invoke(app, ["platform", "list", "--limit", "2"])
     assert result.exit_code == 0, result.output
     out = result.output
     # Only id, name, website_url should be present in headers; slug/avatar_key absent
@@ -177,7 +177,7 @@ def test_cli_platforms_list_wide(monkeypatch):
         "_client",
         lambda api_url, api_key, limit: _PlatformStub(),
     )
-    result = runner.invoke(app, ["platforms", "list", "--limit", "1", "--wide"])
+    result = runner.invoke(app, ["platform", "list", "--limit", "1", "--wide"])
     assert result.exit_code == 0, result.output
     out = result.output
     # All wide columns should appear
@@ -215,7 +215,7 @@ def test_cli_orgs_blank_short_name(monkeypatch):
         "_client",
         lambda api_url, api_key, limit: _OrgStub(),
     )
-    result = runner.invoke(app, ["orgs", "list", "--limit", "5", "--output", "json"])
+    result = runner.invoke(app, ["org", "list", "--limit", "5", "--output", "json"])
     assert result.exit_code == 0, result.output
     import json as _json
 
@@ -270,7 +270,7 @@ def test_cli_challenges_blank_platform(monkeypatch):
         lambda api_url, api_key, limit: _ChallengeStub(),
     )
     result = runner.invoke(
-        app, ["challenges", "list", "--limit", "10", "--output", "json"]
+        app, ["challenge", "list", "--limit", "10", "--output", "json"]
     )
     assert result.exit_code == 0, result.output
     import json as _json
@@ -320,7 +320,7 @@ def test_cli_challenges_stream_ndjson_count(monkeypatch):
     result = runner.invoke(
         app,
         [
-            "challenges",
+            "challenge",
             "stream",
             "--limit",
             "5",
@@ -352,7 +352,7 @@ def test_cli_challenges_stream_ndjson_wide(monkeypatch):
     result = runner.invoke(
         app,
         [
-            "challenges",
+            "challenge",
             "stream",
             "--limit",
             "3",
@@ -378,7 +378,7 @@ def test_cli_challenges_list_columns_subset_json(monkeypatch):
     result = runner.invoke(
         app,
         [
-            "challenges",
+            "challenge",
             "list",
             "--limit",
             "2",
@@ -404,7 +404,7 @@ def test_cli_challenges_stream_ndjson_columns_subset(monkeypatch):
     result = runner.invoke(
         app,
         [
-            "challenges",
+            "challenge",
             "stream",
             "--limit",
             "2",
@@ -430,7 +430,7 @@ def test_cli_challenges_list_unknown_column_error(monkeypatch):
     result = runner.invoke(
         app,
         [
-            "challenges",
+            "challenge",
             "list",
             "--columns",
             "id,notacolumn",
@@ -451,7 +451,7 @@ def test_cli_challenges_list_wide_only_column_without_wide(monkeypatch):
     result = runner.invoke(
         app,
         [
-            "challenges",
+            "challenge",
             "list",
             "--columns",
             "id,duration_days",
@@ -487,7 +487,7 @@ def test_cli_orgs_stream_ndjson_count(monkeypatch):
     result = runner.invoke(
         app,
         [
-            "orgs",
+            "org",
             "stream",
             "--limit",
             "4",
@@ -514,7 +514,7 @@ def test_cli_orgs_list_columns_subset_json(monkeypatch):
     result = runner.invoke(
         app,
         [
-            "orgs",
+            "org",
             "list",
             "--limit",
             "3",
@@ -540,7 +540,7 @@ def test_cli_challenges_stream_reject_non_ndjson(monkeypatch):
     result = runner.invoke(
         app,
         [
-            "challenges",
+            "challenge",
             "stream",
             "--limit",
             "1",
@@ -563,7 +563,7 @@ def test_cli_orgs_stream_reject_non_ndjson(monkeypatch):
     result = runner.invoke(
         app,
         [
-            "orgs",
+            "org",
             "stream",
             "--limit",
             "1",
@@ -601,7 +601,7 @@ def test_cli_platforms_stream_ndjson_count(monkeypatch):
     result = runner.invoke(
         app,
         [
-            "platforms",
+            "platform",
             "stream",
             "--limit",
             "2",
@@ -629,7 +629,7 @@ def test_cli_platforms_stream_reject_non_ndjson(monkeypatch):
     result = runner.invoke(
         app,
         [
-            "platforms",
+            "platform",
             "stream",
             "--limit",
             "1",
@@ -681,7 +681,7 @@ def test_cli_challenges_list_all_overrides_limit(monkeypatch):
     result = runner.invoke(
         app,
         [
-            "challenges",
+            "challenge",
             "list",
             "--limit",
             "2",
@@ -713,7 +713,7 @@ def test_cli_challenges_list_ndjson_output(monkeypatch):
     result = runner.invoke(
         app,
         [
-            "challenges",
+            "challenge",
             "list",
             "--limit",
             "2",
@@ -741,7 +741,7 @@ def test_cli_orgs_stream_ndjson_columns_subset(monkeypatch):
     result = runner.invoke(
         app,
         [
-            "orgs",
+            "org",
             "stream",
             "--limit",
             "2",
@@ -770,7 +770,7 @@ def test_cli_orgs_list_unknown_column_error(monkeypatch):
     result = runner.invoke(
         app,
         [
-            "orgs",
+            "org",
             "list",
             "--columns",
             "id,notacolumn",
@@ -791,7 +791,7 @@ def test_cli_orgs_list_duplicate_columns_dedup(monkeypatch):
     result = runner.invoke(
         app,
         [
-            "orgs",
+            "org",
             "list",
             "--limit",
             "1",
@@ -846,7 +846,7 @@ def test_cli_challenges_list_verbose_metrics(monkeypatch):
         app,
         [
             "--verbose",
-            "challenges",
+            "challenge",
             "list",
             "--limit",
             "5",
@@ -892,14 +892,14 @@ def test_cli_orgs_list_verbose_metrics(monkeypatch):
         app,
         [
             "--verbose",
-            "orgs",
+            "org",
             "list",
             "--limit",
             "2",
         ],
     )
     assert result.exit_code == 0, result.output
-    assert "[stats] orgs" in result.stderr
+    assert "[stats] org" in result.stderr
     assert "emitted=2" in result.stderr
     assert "skipped=0" in result.stderr
     assert "retries=3" in result.stderr
@@ -945,7 +945,7 @@ def test_cli_platforms_delete_confirmation(monkeypatch):
         lambda api_url, api_key, limit: stub,
     )
     # Provide 'y' to confirmation prompt
-    result = runner.invoke(app, ["platforms", "delete", "42"], input="y\n")
+    result = runner.invoke(app, ["platform", "delete", "42"], input="y\n")
     assert result.exit_code == 0, result.output
     assert "Deleted platform 42" in result.output
     assert stub.deleted == [42]
@@ -970,7 +970,7 @@ def test_cli_platforms_delete_skip_confirm(monkeypatch):
         "_client",
         lambda api_url, api_key, limit: stub,
     )
-    result = runner.invoke(app, ["platforms", "delete", "7", "--yes"])
+    result = runner.invoke(app, ["platform", "delete", "7", "--yes"])
     assert result.exit_code == 0, result.output
     assert "Deleted platform 7" in result.output
     assert stub.deleted == [7]
@@ -1009,7 +1009,7 @@ def test_cli_platforms_create_preview_and_confirm(monkeypatch):
     result = runner.invoke(
         app,
         [
-            "platforms",
+            "platform",
             "create",
             "--slug",
             "new-platform",
@@ -1060,7 +1060,7 @@ def test_cli_platforms_create_skip_preview(monkeypatch):
     result = runner.invoke(
         app,
         [
-            "platforms",
+            "platform",
             "create",
             "--slug",
             "quick-platform",
@@ -1144,7 +1144,7 @@ def test_cli_platforms_update_change(monkeypatch):
     result = runner.invoke(
         app,
         [
-            "platforms",
+            "platform",
             "update",
             "5",
             "--name",
@@ -1179,7 +1179,7 @@ def test_cli_platforms_update_no_change(monkeypatch):
         "_client",
         lambda api_url, api_key, limit: stub,
     )
-    result = runner.invoke(app, ["platforms", "update", "9", "--yes"])
+    result = runner.invoke(app, ["platform", "update", "9", "--yes"])
     assert result.exit_code == 0, result.output
     assert "No changes to apply" in result.output
 
@@ -1207,7 +1207,7 @@ def test_cli_platforms_update_invalid_slug(monkeypatch):
     result = runner.invoke(
         app,
         [
-            "platforms",
+            "platform",
             "update",
             "11",
             "--slug",
@@ -1281,7 +1281,7 @@ def test_cli_platforms_update_clear_website(monkeypatch):
     result = runner.invoke(
         app,
         [
-            "platforms",
+            "platform",
             "update",
             "13",
             "--website-url",
