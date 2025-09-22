@@ -22,7 +22,7 @@ class ListOrganizationsService:
         search: str | None,
         metrics: MetricsCollector | None = None,
     ) -> Iterable[OrganizationSummary]:  # search unused MVP
-        effective_limit = limit or self._cfg.default_limit
+        effective_limit = limit or self._cfg.limit
         orgs = self._gw.list_organizations(
             effective_limit, search_terms=search, metrics=metrics
         )

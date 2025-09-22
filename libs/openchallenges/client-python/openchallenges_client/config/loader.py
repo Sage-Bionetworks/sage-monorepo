@@ -10,14 +10,14 @@ from typing import Any
 import tomllib
 
 DEFAULT_API_URL = "http://localhost:8082/api/v1"
-DEFAULT_LIMIT = 5
+DEFAULT_LIMIT = 10
 
 
 @dataclass(frozen=True)
 class ClientConfig:
     api_url: str
     api_key: str | None
-    default_limit: int = DEFAULT_LIMIT
+    limit: int = DEFAULT_LIMIT
     retries: int = 0
     # Optional metadata describing where each value came from for diagnostics.
     sources: dict[str, str] | None = None
@@ -64,7 +64,7 @@ def load_config(
     *,
     override_api_key: str | None,
     override_api_url: str | None,
-    default_limit: int,
+    limit: int,
     with_sources: bool = False,
 ) -> ClientConfig:
     file_cfg = _load_file_config()
@@ -98,16 +98,16 @@ def load_config(
         api_key = None
         sources["api_key"] = "unset"
 
-    # default_limit resolution
-    if default_limit != DEFAULT_LIMIT:
-        limit_val: int | str = default_limit
-        sources["default_limit"] = "override"
-    elif file_cfg.get("default_limit"):
-        limit_val = file_cfg.get("default_limit")  # type: ignore[assignment]
-        sources["default_limit"] = "file"
+    # limit resolution
+    if limit != DEFAULT_LIMIT:
+        limit_val: int | str = limit
+        sources["limit"] = "override"
+    elif file_cfg.get("limit") is not None:
+        limit_val = file_cfg.get("limit")  # type: ignore[assignment]
+        sources["limit"] = "file"
     else:
         limit_val = DEFAULT_LIMIT
-        sources["default_limit"] = "default"
+        sources["limit"] = "default"
 
     # retries resolution
     if os.getenv("OC_RETRIES") is not None:
@@ -123,7 +123,7 @@ def load_config(
     return ClientConfig(
         api_url=str(api_url),
         api_key=api_key,
-        default_limit=int(limit_val),
+        limit=int(limit_val),
         retries=int(retries_val),
         sources=sources if with_sources else None,
     )

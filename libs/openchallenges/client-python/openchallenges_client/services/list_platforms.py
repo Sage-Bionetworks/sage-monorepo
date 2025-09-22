@@ -22,7 +22,7 @@ class ListPlatformsService:
         search: str | None = None,
         metrics: MetricsCollector | None = None,
     ) -> Iterable[PlatformSummary]:
-        effective_limit = limit or self._cfg.default_limit
+        effective_limit = limit or self._cfg.limit
         platforms = self._gw.list_platforms(
             effective_limit, search_terms=search, metrics=metrics
         )

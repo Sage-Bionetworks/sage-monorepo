@@ -44,7 +44,7 @@ register_default_formatters()
 def _client(
     api_url: str | None, api_key: str | None, limit: int
 ) -> OpenChallengesClient:
-    return OpenChallengesClient(api_key=api_key, api_url=api_url, default_limit=limit)
+    return OpenChallengesClient(api_key=api_key, api_url=api_url, limit=limit)
 
 
 @app.callback()
@@ -955,7 +955,7 @@ def show_config(
     resolved = load_config(
         override_api_key=api_key,
         override_api_url=api_url,
-        default_limit=limit,
+        limit=limit,
         with_sources=True,
     )
     src = resolved.sources or {}
@@ -971,9 +971,9 @@ def show_config(
             "source": src.get("api_key", "unknown"),
         },
         {
-            "key": "default_limit",
-            "value": resolved.default_limit,
-            "source": src.get("default_limit", "unknown"),
+            "key": "limit",
+            "value": resolved.limit,
+            "source": src.get("limit", "unknown"),
         },
         {
             "key": "retries",

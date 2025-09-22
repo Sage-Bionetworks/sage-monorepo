@@ -25,12 +25,12 @@ class OpenChallengesClient:
         *,
         api_key: str | None = None,
         api_url: str | None = None,
-        default_limit: int = 5,
+        limit: int = 5,
     ) -> None:
         self._cfg: ClientConfig = load_config(
             override_api_key=api_key,
             override_api_url=api_url,
-            default_limit=default_limit,
+            limit=limit,
         )
         self._challenge_gateway = ChallengeGateway(self._cfg)
         self._org_gateway = OrganizationGateway(self._cfg)

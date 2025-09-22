@@ -35,7 +35,7 @@ def test_iter_paginated_retries_transient(monkeypatch):
     # Monkeypatch backoff to skip real sleeping
     monkeypatch.setattr(paging, "exponential_backoff_retry", lambda **_: None)
 
-    cfg = ClientConfig(api_url="x", api_key=None, default_limit=5, retries=3)
+    cfg = ClientConfig(api_url="x", api_key=None, limit=5, retries=3)
     out = list(
         paging.iter_paginated(
             config=cfg,
@@ -62,7 +62,7 @@ def test_iter_paginated_exceeds_retries(monkeypatch):
 
     monkeypatch.setattr(paging, "exponential_backoff_retry", lambda **_: None)
 
-    cfg = ClientConfig(api_url="x", api_key=None, default_limit=5, retries=1)
+    cfg = ClientConfig(api_url="x", api_key=None, limit=5, retries=1)
 
     with pytest.raises(paging.ApiException):
         list(
@@ -95,7 +95,7 @@ def test_iter_paginated_retries_metrics(monkeypatch):
 
     monkeypatch.setattr(paging, "exponential_backoff_retry", lambda **_: None)
 
-    cfg = ClientConfig(api_url="x", api_key=None, default_limit=10, retries=5)
+    cfg = ClientConfig(api_url="x", api_key=None, limit=10, retries=5)
     metrics = MetricsCollector()
     out = list(
         paging.iter_paginated(

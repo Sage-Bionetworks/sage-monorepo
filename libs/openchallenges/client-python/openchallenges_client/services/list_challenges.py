@@ -23,7 +23,7 @@ class ListChallengesService:
         search: str | None = None,
         metrics: MetricsCollector | None = None,
     ) -> Iterable[ChallengeSummary]:
-        effective_limit = limit or self._cfg.default_limit
+        effective_limit = limit or self._cfg.limit
         challenges = self._gw.list_challenges(
             effective_limit,
             status=status,

@@ -22,7 +22,7 @@ class _FakeChallenge:
 
 
 def test_list_challenges_enrichment_duration_and_active():
-    cfg = ClientConfig(api_url="x", api_key=None, default_limit=5)
+    cfg = ClientConfig(api_url="x", api_key=None, limit=5)
     # ACTIVE challenge with valid date range
     active = _FakeChallenge(
         1,
@@ -92,7 +92,7 @@ class _OrgGatewayStub:
 
 
 def test_list_challenges_service_basic():
-    cfg = ClientConfig(api_url="x", api_key=None, default_limit=5)
+    cfg = ClientConfig(api_url="x", api_key=None, limit=5)
     gw = _ChallengeGatewayStub(
         [
             _FakeChallenge(1, "s1", "Challenge 1"),
@@ -106,7 +106,7 @@ def test_list_challenges_service_basic():
 
 
 def test_list_challenges_platform_null_and_present():
-    cfg = ClientConfig(api_url="x", api_key=None, default_limit=5)
+    cfg = ClientConfig(api_url="x", api_key=None, limit=5)
     gw = _ChallengeGatewayStub(
         [
             _FakeChallenge(1, "s1", "No Platform", platform=None),
@@ -129,7 +129,7 @@ def test_list_challenges_platform_null_and_present():
 
 
 def test_list_orgs_service_basic():
-    cfg = ClientConfig(api_url="x", api_key=None, default_limit=5)
+    cfg = ClientConfig(api_url="x", api_key=None, limit=5)
     gw = _OrgGatewayStub(
         [
             _FakeOrg(1, "Org A"),
