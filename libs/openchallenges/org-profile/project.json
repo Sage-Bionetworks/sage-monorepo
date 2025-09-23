@@ -10,7 +10,8 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/openchallenges/org-profile"],
       "options": {
-        "jestConfig": "libs/openchallenges/org-profile/jest.config.ts"
+        "jestConfig": "libs/openchallenges/org-profile/jest.config.ts",
+        "tsConfig": "libs/openchallenges/org-profile/tsconfig.spec.json"
       }
     },
     "lint": {

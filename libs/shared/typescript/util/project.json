@@ -10,7 +10,8 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/shared/typescript/util"],
       "options": {
-        "jestConfig": "libs/shared/typescript/util/jest.config.ts"
+        "jestConfig": "libs/shared/typescript/util/jest.config.ts",
+        "tsConfig": "libs/shared/typescript/util/tsconfig.spec.json"
       }
     },
     "lint": {

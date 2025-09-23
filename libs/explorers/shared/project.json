@@ -10,7 +10,8 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/explorers/shared"],
       "options": {
-        "jestConfig": "libs/explorers/shared/jest.config.ts"
+        "jestConfig": "libs/explorers/shared/jest.config.ts",
+        "tsConfig": "libs/explorers/shared/tsconfig.spec.json"
       }
     },
     "lint": {

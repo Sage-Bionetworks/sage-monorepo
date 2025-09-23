@@ -10,7 +10,8 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/results-visualization-framework/ui"],
       "options": {
-        "jestConfig": "libs/results-visualization-framework/ui/jest.config.ts"
+        "jestConfig": "libs/results-visualization-framework/ui/jest.config.ts",
+        "tsConfig": "libs/results-visualization-framework/ui/tsconfig.spec.json"
       }
     },
     "lint": {

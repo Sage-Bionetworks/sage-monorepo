@@ -10,7 +10,8 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/agora/nominated-targets"],
       "options": {
-        "jestConfig": "libs/agora/nominated-targets/jest.config.ts"
+        "jestConfig": "libs/agora/nominated-targets/jest.config.ts",
+        "tsConfig": "libs/agora/nominated-targets/tsconfig.spec.json"
       }
     },
     "lint": {

@@ -10,7 +10,8 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/openchallenges/challenge-search"],
       "options": {
-        "jestConfig": "libs/openchallenges/challenge-search/jest.config.ts"
+        "jestConfig": "libs/openchallenges/challenge-search/jest.config.ts",
+        "tsConfig": "libs/openchallenges/challenge-search/tsconfig.spec.json"
       }
     },
     "lint": {

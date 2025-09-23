@@ -10,7 +10,8 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/model-ad/config"],
       "options": {
-        "jestConfig": "libs/model-ad/config/jest.config.ts"
+        "jestConfig": "libs/model-ad/config/jest.config.ts",
+        "tsConfig": "libs/model-ad/config/tsconfig.spec.json"
       }
     },
     "lint": {

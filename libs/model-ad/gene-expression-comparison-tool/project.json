@@ -10,7 +10,8 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/model-ad/gene-expression-comparison-tool"],
       "options": {
-        "jestConfig": "libs/model-ad/gene-expression-comparison-tool/jest.config.ts"
+        "jestConfig": "libs/model-ad/gene-expression-comparison-tool/jest.config.ts",
+        "tsConfig": "libs/model-ad/gene-expression-comparison-tool/tsconfig.spec.json"
       }
     },
     "lint": {

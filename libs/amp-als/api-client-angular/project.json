@@ -10,15 +10,14 @@
       "executor": "@nx/angular:ng-packagr-lite",
       "outputs": ["{workspaceRoot}/dist/libs/amp-als/api-client-angular"],
       "options": {
-        "project": "libs/amp-als/api-client-angular/ng-package.json"
+        "project": "libs/amp-als/api-client-angular/ng-package.json",
+        "tsConfig": "libs/amp-als/api-client-angular/tsconfig.lib.json"
       },
       "configurations": {
         "production": {
           "tsConfig": "libs/amp-als/api-client-angular/tsconfig.lib.prod.json"
         },
-        "development": {
-          "tsConfig": "libs/amp-als/api-client-angular/tsconfig.lib.json"
-        }
+        "development": {}
       },
       "defaultConfiguration": "production"
     },
@@ -26,7 +25,8 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/amp-als/api-client-angular"],
       "options": {
-        "jestConfig": "libs/amp-als/api-client-angular/jest.config.ts"
+        "jestConfig": "libs/amp-als/api-client-angular/jest.config.ts",
+        "tsConfig": "libs/amp-als/api-client-angular/tsconfig.spec.json"
       }
     },
     "lint-fix": {

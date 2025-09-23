@@ -10,7 +10,8 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/explorers/testing"],
       "options": {
-        "jestConfig": "libs/explorers/testing/jest.config.ts"
+        "jestConfig": "libs/explorers/testing/jest.config.ts",
+        "tsConfig": "libs/explorers/testing/tsconfig.spec.json"
       }
     },
     "lint": {
