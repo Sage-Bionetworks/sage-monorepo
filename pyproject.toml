@@ -80,13 +80,13 @@ description = ""
 readme = "README.md"
 package-mode = false
 
-  [[project.authors]]
-  name = "Thomas Schaffter"
-  email = "thomas.schaffter@gmail.com"
+[[project.authors]]
+name = "Thomas Schaffter"
+email = "thomas.schaffter@gmail.com"
 
-  [[project.authors]]
-  name = "Rong Chai"
-  email = "rchai@sagebionetworks.org"
+[[project.authors]]
+name = "Rong Chai"
+email = "rongrong.chai1@gmail.com"
 
 [dependency-groups]
 dev = [
