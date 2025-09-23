@@ -1,6 +1,6 @@
 [tool.coverage.run]
 branch = true
-source = [ "bixarena_api_client_python" ]
+source = [ "bixarena_api_client" ]
 
 [tool.coverage.report]
 exclude_lines = ['if TYPE_CHECKING:']
