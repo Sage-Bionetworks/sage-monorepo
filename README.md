@@ -1,8 +1,16 @@
 <h1 align="center">Sage Monorepo</h1>
 
 <p align="center">
-  <em>A unified workspace for building biomedical research products.</em>
+  <br>
+  <img src="docs/images/angular-cli-logo.png" alt="Angular CLI logo" width="100px" height="108px"/>
   <br><br>
+  <h3 align="center">
+    A development environment for building robust apps faster.
+  </h3>
+  <br>
+</p>
+
+<p align="center">
   <a href="https://sage-bionetworks.github.io/sage-monorepo/">Docs Site</a> ·
   <a href="CONTRIBUTING.md">Contributing</a> ·
   <a href="https://github.com/Sage-Bionetworks/sage-monorepo/issues/new/choose">Issues</a>
@@ -11,15 +19,11 @@
   <img src="https://img.shields.io/github/license/Sage-Bionetworks/sage-monorepo.svg?color=007acc&labelColor=555555&style=for-the-badge&logo=github" alt="License"/>
 </p>
 
----
-
 ## About the Monorepo
 
-The **Sage Monorepo** is a polyglot workspace where we design, build, and ship multiple biomedical products. It hosts **web apps, REST APIs, microservices, and databases** across TypeScript, Java, Python, and R.
+The Sage Monorepo is a polyglot workspace where we design, build, and ship multiple biomedical products. It hosts web apps, REST APIs, microservices, and databases across TypeScript, Java, Python, and R.
 
-It is intentionally **language-agnostic**, with reusable components and shared infrastructure that allow teams to focus on **creative solutions** instead of boilerplate setup.
-
----
+It is designed to be language-agnostic, with reusable components and shared infrastructure that allow teams to focus on creative solutions instead of boilerplate setup.
 
 ## Architecture & Stack
 
@@ -29,14 +33,12 @@ It is intentionally **language-agnostic**, with reusable components and shared i
 - **Monorepo tooling:** Nx for orchestration and task graph caching
 - **Automation:** GitHub Actions for CI/CD, code quality, and security checks
 
----
-
 ## OpenAPI-First Workflow
 
-We follow an **API contract-first approach**:
+We follow an API contract-first approach:
 
-1. Define the product API with **OpenAPI specifications**.
-2. Generate **server stubs** and **client SDKs** (Angular, Java, Python, TypeScript).
+1. Define the product API with OpenAPI specifications.
+2. Generate server stubs and client SDKs (Angular, Java, Python, TypeScript).
 3. Implement product logic inside generated skeletons.
 
 **Benefits:**
@@ -44,8 +46,6 @@ We follow an **API contract-first approach**:
 - Shared, consistent contracts across products
 - Fewer breaking changes & faster alignment
 - Multi-language clients and documentation out of the box
-
----
 
 ## Products
 
@@ -57,27 +57,21 @@ We follow an **API contract-first approach**:
 
 ➡ More services and details: see the [Docs Site](https://sage-bionetworks.github.io/sage-monorepo/).
 
----
-
 ## Guiding Values
 
 - **Developer Experience:** Shared tooling, cached builds, reproducible workflows
 - **Reuse over Rebuild:** Shared UI, API clients, configs, infra scripts
 - **Focus on Science:** More time on creative problem-solving, less on setup
 
----
-
 ## Dev Environment
 
 The monorepo ships with a [Dev Container](https://containers.dev/) configuration including Node.js, Java, Python, R, and database tooling.
 
-- Works locally with **VS Code Dev Containers** or in **GitHub Codespaces**
+- Works locally with VS Code Dev Containers or in GitHub Codespaces
 - Provides a reproducible setup for contributors and CI/CD
 - Makes onboarding and remote development seamless
 
 [![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Container&message=Open&color=blue&logo=visualstudiocode&style=for-the-badge)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/Sage-Bionetworks/sage-monorepo)
-
----
 
 ## ⭐ Support & Contribute
 
