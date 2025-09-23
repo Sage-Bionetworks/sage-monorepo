@@ -2,14 +2,14 @@
   "$schema": "../../../node_modules/@openapitools/openapi-generator-cli/config.schema.json",
   "spaces": 2,
   "generator-cli": {
-    "version": "7.14.0",
+    "version": "7.15.0",
     "generators": {
       "api-client-python": {
         "generatorName": "python",
         "inputSpec": "#{cwd}/../api-description/openapi/openapi.yaml",
         "output": "#{cwd}/",
         "additionalProperties": {
-          "packageName": "openchallenges_api_client_python"
+          "packageName": "openchallenges_api_client"
         }
       }
     }

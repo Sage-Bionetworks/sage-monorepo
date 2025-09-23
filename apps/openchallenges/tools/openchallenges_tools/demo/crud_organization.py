@@ -24,23 +24,23 @@ import os
 import time
 from typing import Any
 
-import openchallenges_api_client_python
-from openchallenges_api_client_python.api.organization_api import OrganizationApi
-from openchallenges_api_client_python.models.organization import Organization
-from openchallenges_api_client_python.models.organization_create_request import (
+import openchallenges_api_client
+from openchallenges_api_client.api.organization_api import OrganizationApi
+from openchallenges_api_client.models.organization import Organization
+from openchallenges_api_client.models.organization_create_request import (
     OrganizationCreateRequest,
 )
-from openchallenges_api_client_python.models.organization_update_request import (
+from openchallenges_api_client.models.organization_update_request import (
     OrganizationUpdateRequest,
 )
-from openchallenges_api_client_python.rest import ApiException
+from openchallenges_api_client.rest import ApiException
 
 OC_API_URL = os.getenv("OC_API_URL", "http://localhost:8082/api/v1")
 OC_API_KEY = os.getenv("OC_API_KEY", "oc_dev_admin1.admin_secret_abcd1234efgh5678")
 
 
-def build_configuration() -> openchallenges_api_client_python.Configuration:
-    cfg = openchallenges_api_client_python.Configuration(host=OC_API_URL)
+def build_configuration() -> openchallenges_api_client.Configuration:
+    cfg = openchallenges_api_client.Configuration(host=OC_API_URL)
     if OC_API_KEY:
         cfg.api_key["apiKey"] = OC_API_KEY
     return cfg
@@ -54,7 +54,7 @@ def pretty(title: str, org: Organization | str) -> None:
         print(f"Description: {org.description}")
         print(f"Website URL: {org.website_url}")
         print(f"Avatar Key: {org.avatar_key}")
-        print(f"Acronym: {org.acronym}")
+        print(f"Acronym: {org.short_name}")
         print(f"Created: {org.created_at}")
         print(f"Updated: {org.updated_at}")
     else:
@@ -75,7 +75,7 @@ def create_org(api_client) -> Organization:
         name=f"Demo Organization {suffix}",
         description="Demo organization created by manage_organization.py.",
         websiteUrl="https://example.org/org",
-        acronym="DEMO",
+        shortName="DEMO",
     )
     try:
         org = api.create_organization(req)
@@ -103,7 +103,7 @@ def update_org(api_client, org: Organization) -> Organization:
     if skip_mods:
         new_description = org.description
         new_website = org.website_url
-        new_acronym = org.acronym
+        new_short_name = org.short_name
         new_avatar = org.avatar_key
     else:
         base_desc = org.description or "Demo organization description"
@@ -114,9 +114,11 @@ def update_org(api_client, org: Organization) -> Organization:
             if org.website_url
             else "https://example.org/org-updated"
         )
-        # update acronym (ensure <=10 chars)
-        new_acronym = (
-            (org.acronym + "U") if (org.acronym and len(org.acronym) < 9) else "DMOUPD"
+        # update short anem (ensure <=10 chars)
+        new_short_name = (
+            (org.short_name + "U")
+            if (org.short_name and len(org.short_name) < 31)
+            else "DMOUPD"
         )
         new_avatar = org.avatar_key or "demo-avatar-key"
 
@@ -128,7 +130,7 @@ def update_org(api_client, org: Organization) -> Organization:
 
     record("description", org.description, new_description)
     record("websiteUrl", org.website_url, new_website)
-    record("acronym", org.acronym, new_acronym)
+    record("shortName", org.short_name, new_short_name)
     record("avatarKey", org.avatar_key, new_avatar)
 
     if diffs:
@@ -142,7 +144,7 @@ def update_org(api_client, org: Organization) -> Organization:
         name=new_name,
         description=new_description,
         websiteUrl=new_website,
-        acronym=new_acronym,
+        shortName=new_short_name,
         avatarKey=new_avatar,
     )
 
@@ -180,7 +182,7 @@ def delete_org(api_client, login: str):
 
 def demo_crud_flow():
     cfg = build_configuration()
-    with openchallenges_api_client_python.ApiClient(cfg) as api_client:
+    with openchallenges_api_client.ApiClient(cfg) as api_client:
         org = create_org(api_client)
         fetched = get_org(api_client, org.login)
         updated = update_org(api_client, fetched)

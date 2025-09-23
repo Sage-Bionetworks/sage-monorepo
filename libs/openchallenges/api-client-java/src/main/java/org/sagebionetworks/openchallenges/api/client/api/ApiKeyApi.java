@@ -88,7 +88,7 @@ public class ApiKeyApi {
     final String[] localVarContentTypes = { "application/json" };
     final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
 
-    String[] localVarAuthNames = new String[] { "apiBearerAuth" };
+    String[] localVarAuthNames = new String[] { "apiKey", "jwtBearer" };
 
     ParameterizedTypeReference<CreateApiKeyResponse> localVarReturnType =
       new ParameterizedTypeReference<>() {};
@@ -202,7 +202,7 @@ public class ApiKeyApi {
     final String[] localVarContentTypes = {};
     final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
 
-    String[] localVarAuthNames = new String[] { "apiBearerAuth" };
+    String[] localVarAuthNames = new String[] { "apiKey", "jwtBearer" };
 
     ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
     return apiClient.invokeAPI(
@@ -293,7 +293,7 @@ public class ApiKeyApi {
     final String[] localVarContentTypes = {};
     final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
 
-    String[] localVarAuthNames = new String[] { "apiBearerAuth" };
+    String[] localVarAuthNames = new String[] { "apiKey", "jwtBearer" };
 
     ParameterizedTypeReference<List<ApiKey>> localVarReturnType =
       new ParameterizedTypeReference<>() {};

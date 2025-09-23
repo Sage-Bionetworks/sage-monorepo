@@ -8,6 +8,7 @@ import {
   ElementRef,
   inject,
   input,
+  OnDestroy,
   OnInit,
   signal,
   viewChild,
@@ -44,7 +45,7 @@ import { ModelDetailsBoxplotsGridComponent } from '../model-details-boxplots-gri
   templateUrl: './model-details-boxplots-selector.component.html',
   styleUrls: ['./model-details-boxplots-selector.component.scss'],
 })
-export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
+export class ModelDetailsBoxplotsSelectorComponent implements OnInit, OnDestroy {
   private readonly helperService = inject(HelperService);
   private readonly location = inject(Location);
   private readonly clipboard = inject(Clipboard);
@@ -98,8 +99,31 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
     });
   }
 
+  // Handle scrolling after same-document navigation
+  // Use popstate because NavigationEnd does not fire on
+  // same-document navigation with the same fragment
+  onPopState = () => {
+    const hashFragment = this.helperService.getHashFragment();
+    if (this.isValidHashFragment(hashFragment)) {
+      // Wait for the DOM to be settled
+      setTimeout(() => {
+        this.scrollToSection(hashFragment, false);
+      }, 100);
+    } else {
+      // Defer URL update until after popstate event completes
+      setTimeout(() => {
+        this.updateUrlFragment(undefined);
+      }, 0);
+    }
+  };
+
   ngOnInit(): void {
     this.initializeOptionsFromUrlParams();
+    window.addEventListener('popstate', this.onPopState);
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('popstate', this.onPopState);
   }
 
   selectedModelDataList = computed(() => {
@@ -202,14 +226,18 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
   generateAnchorId(evidenceType: string): string {
     return evidenceType
       .toLowerCase()
-      .replace(/[^a-z0-9]/g, '-')
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
       .replace(/-+/g, '-');
   }
 
-  updateUrlFragment(fragment: string | undefined): void {
+  getUpdatedUrlFragment(fragment: string | undefined): string {
     const fragmentPart = fragment ? `#${fragment}` : '';
-    const newUrl = `${window.location.pathname}${window.location.search}${fragmentPart}`;
-    this.location.replaceState(newUrl);
+    return `${window.location.pathname}${window.location.search}${fragmentPart}`;
+  }
+
+  updateUrlFragment(fragment: string | undefined): void {
+    this.location.replaceState(this.getUpdatedUrlFragment(fragment));
   }
 
   updateQueryParams(sex: string, tissue: string) {
@@ -269,8 +297,8 @@ export class ModelDetailsBoxplotsSelectorComponent implements OnInit {
   }
 
   copyShareLink(evidenceType: string): void {
-    this.updateUrlFragment(this.generateAnchorId(evidenceType));
-    this.clipboard.copy(window.location.href);
+    const urlFragment = this.getUpdatedUrlFragment(this.generateAnchorId(evidenceType));
+    this.clipboard.copy(`${window.location.origin}${urlFragment}`);
     this.lastShareLinkCopied.set(evidenceType);
   }
 

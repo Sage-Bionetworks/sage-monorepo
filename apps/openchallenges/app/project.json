@@ -11,6 +11,13 @@
     "shared-typescript-assets"
   ],
   "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
     "build": {
       "executor": "@nx/angular:application",
       "outputs": ["{options.outputPath}"],

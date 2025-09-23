@@ -1,5 +1,18 @@
-import { expect, test } from '@playwright/test';
+import { expect, Page, test } from '@playwright/test';
+import { baseURL } from '../playwright.config';
 import { searchAndGetSearchListItems } from './helpers';
+
+async function isPageAtTop(page: Page) {
+  return await page.evaluate(() => window.pageYOffset === 0);
+}
+
+async function expectPageAtTop(page: Page) {
+  expect(await isPageAtTop(page)).toBe(true);
+}
+
+async function expectPageNotAtTop(page: Page) {
+  expect(await isPageAtTop(page)).toBe(false);
+}
 
 test.describe('model details', () => {
   test('invalid model results in a 404 redirect', async ({ page }) => {
@@ -14,7 +27,7 @@ test.describe('model details', () => {
     await expect(page.getByRole('heading', { level: 1, name: 'APOE4' })).toBeVisible();
   });
 
-  test('default tab is omics', async ({ page }) => {
+  test('default tab is omics for model with omics data', async ({ page }) => {
     await page.goto('/models/APOE4');
     await expect(page.getByRole('heading', { level: 2, name: 'Available Data' })).toBeVisible();
   });
@@ -78,7 +91,7 @@ test.describe('model details', () => {
     await page.goto(`/models/${model}/omics`);
     await expect(page.getByRole('heading', { level: 2, name: 'Available Data' })).toBeInViewport();
     await expect(page.getByRole('heading', { level: 1, name: model })).not.toBeInViewport();
-    await page.evaluate(() => window.pageYOffset !== 0);
+    await expectPageNotAtTop(page);
   });
 
   test('does not scroll to panel content on initial load when tab not specified in url', async ({
@@ -90,8 +103,49 @@ test.describe('model details', () => {
     await expect(
       page.getByRole('heading', { level: 2, name: 'Available Data' }),
     ).not.toBeInViewport();
-    await page.evaluate(() => window.pageYOffset === 0);
+    await expectPageAtTop(page);
   });
+
+  test('disabled tab in url defaults to first available tab and does not scroll', async ({
+    page,
+  }) => {
+    const model = 'LOAD1';
+    await page.goto(`/models/${model}/pathology`);
+    await expect(page.getByRole('heading', { level: 1, name: model })).toBeInViewport();
+    await expectPageAtTop(page);
+    await page.waitForURL(`/models/${model}`);
+    await expect(page.getByRole('heading', { level: 2, name: 'Available Data' })).toBeVisible();
+  });
+
+  test('invalid tab in url defaults to first available tab and does not scroll', async ({
+    page,
+  }) => {
+    const model = '3xTg-AD';
+    await page.goto(`/models/${model}/does-not-exist`);
+    await expect(page.getByRole('heading', { level: 1, name: model })).toBeInViewport();
+    await expectPageAtTop(page);
+    await page.waitForURL(`/models/${model}`);
+    await expect(page.getByRole('heading', { level: 2, name: 'Available Data' })).toBeVisible();
+  });
+
+  test.skip(
+    'omics tab is not shown when omics data is unavailable',
+    {
+      annotation: {
+        type: 'skip',
+        description: 'enable when model without omics data is available',
+      },
+    },
+    async ({ page }) => {
+      const modelWithoutOmics = 'APOECh';
+      await page.goto(`/models/${modelWithoutOmics}`);
+      await expect(page.getByRole('heading', { level: 1, name: modelWithoutOmics })).toBeVisible();
+      await expect(page.getByRole('button', { name: 'Omics' })).toHaveCount(0);
+      await expect(
+        page.getByRole('heading', { level: 2, name: 'Model-Specific Resources' }),
+      ).toBeVisible();
+    },
+  );
 });
 
 test.describe('model details - omics', () => {
@@ -241,7 +295,7 @@ test.describe('model details - boxplots selector - table of contents', () => {
     page,
   }) => {
     const model = 'Abca7*V1599M';
-    const fragment = 'soluble-a-beta-40';
+    const fragment = 'soluble-abeta40';
     const section = 'Soluble Aβ40';
     await page.goto(`/models/${model}/biomarkers#${fragment}`);
     await expect(page.getByRole('heading', { level: 1, name: model })).toBeVisible();
@@ -272,7 +326,7 @@ test.describe('model details - boxplots selector - table of contents', () => {
     const section = 'NfL';
     const fragment = 'nfl';
 
-    await page.goto(`${basePath}#soluble-a-beta-40`);
+    await page.goto(`${basePath}#soluble-abeta40`);
     await expect(page.getByRole('heading', { level: 1, name: model })).toBeVisible();
 
     const nflButton = page.getByRole('button', { name: section, exact: true });
@@ -321,7 +375,7 @@ test.describe('model details - boxplots selector - share links - initial load', 
   }) => {
     const tissueFilter = 'Hippocampus';
     const sexFilter = 'Male';
-    await page.goto(`${basePath}?tissue=${tissueFilter}&sex=${sexFilter}#soluble-a-beta-42`);
+    await page.goto(`${basePath}?tissue=${tissueFilter}&sex=${sexFilter}#soluble-abeta42`);
     await expect(page.getByRole('combobox', { name: tissueFilter })).toBeVisible();
     await expect(page.getByRole('combobox', { name: sexFilter })).toBeVisible();
     await expect(
@@ -332,7 +386,7 @@ test.describe('model details - boxplots selector - share links - initial load', 
   test('falls back to default filters when query parameters are invalid', async ({ page }) => {
     const invalidTissue = 'InvalidTissue';
     const invalidSex = 'InvalidSex';
-    const fragment = '#soluble-a-beta-42';
+    const fragment = '#soluble-abeta42';
     await page.goto(`${basePath}?tissue=${invalidTissue}&sex=${invalidSex}${fragment}`);
     await expect(page.getByRole('combobox', { name: tissueDefault })).toBeVisible();
     await expect(page.getByRole('combobox', { name: sexDefault })).toBeVisible();
@@ -345,6 +399,58 @@ test.describe('model details - boxplots selector - share links - initial load', 
     await page.goto(`${basePath}${queryParam}#${invalidFragment}`);
     await expect(page.getByRole('heading', { level: 1, name: 'Abca7*V1599M' })).toBeInViewport();
     await page.waitForURL(`${basePath}${queryParam}`);
+  });
+});
+
+test.describe('model details - boxplots selector - share links - same-document navigation', () => {
+  const modelName = 'Abca7*V1599M';
+  const basePath = `/models/${modelName}/biomarkers?sex=Male`;
+  const validFragment = 'nfl';
+
+  test('scrolls to section during same-document navigation with same fragment', async ({
+    page,
+  }) => {
+    const path = `${basePath}#${validFragment}`;
+    await page.goto(path);
+    await expect(page.getByRole('heading', { level: 2, name: 'NfL' })).toBeInViewport();
+    await expectPageNotAtTop(page);
+
+    await page.goto(path);
+
+    await expect(page).toHaveURL(`${baseURL}${path}`);
+    await expect(page.getByRole('heading', { level: 2, name: 'NfL' })).toBeInViewport();
+    await expectPageNotAtTop(page);
+  });
+
+  test('scrolls to section during same-document navigation with different fragment', async ({
+    page,
+  }) => {
+    const anotherFragment = 'insoluble-abeta42';
+    await page.goto(`${basePath}#${validFragment}`);
+    await expect(page.getByRole('heading', { level: 2, name: 'NfL' })).toBeInViewport();
+    await expectPageNotAtTop(page);
+
+    await page.goto(`${basePath}#${anotherFragment}`);
+
+    await expect(page).toHaveURL(`${baseURL}${basePath}#${anotherFragment}`);
+    await expect(page.getByRole('heading', { level: 2, name: 'Insoluble Aβ42' })).toBeInViewport();
+    await expectPageNotAtTop(page);
+  });
+
+  test('does not scroll and removes invalid fragment from url during same-document navigation', async ({
+    page,
+  }) => {
+    await page.goto(`${basePath}#${validFragment}`);
+    await expect(page.getByRole('heading', { level: 2, name: 'NfL' })).toBeInViewport();
+
+    const invalidFragment = 'does-not-exist';
+    await page.evaluate((fragment) => {
+      window.location.hash = fragment;
+    }, invalidFragment);
+
+    await expect(page).toHaveURL(`${baseURL}${basePath}`);
+    await expectPageAtTop(page);
+    await expect(page.getByRole('heading', { level: 1, name: modelName })).toBeInViewport();
   });
 });
 
@@ -374,14 +480,14 @@ test.describe('model details - boxplots selector - share links - updates', () =>
     const pathWithParams = `${basePath}?tissue=Hippocampus&sex=Male`;
     await page.goto(pathWithParams);
     await page.getByRole('button', { name: 'Soluble Aβ42', exact: true }).click();
-    await page.waitForURL(`${pathWithParams}#soluble-a-beta-42`);
+    await page.waitForURL(`${pathWithParams}#soluble-abeta42`);
   });
 
   test('preserves fragment that remains valid when query parameters are updated', async ({
     page,
   }) => {
     const tissueChosen = 'Hippocampus';
-    const fragment = '#soluble-a-beta-42';
+    const fragment = '#soluble-abeta42';
     await page.goto(`${basePath}${fragment}`);
     await page.getByRole('combobox', { name: tissueDefault }).click();
     await page.getByRole('option', { name: tissueChosen }).click();
@@ -402,13 +508,14 @@ test.describe('model details - boxplots selector - share links - updates', () =>
 
 test.describe('model details - boxplots selector - share links - link button', () => {
   const basePath = '/models/Abca7*V1599M/biomarkers';
-  test('clicking share link button updates fragment and copies link to clipboard', async ({
+  test('clicking share link button copies link to clipboard and does not update fragment in URL', async ({
     page,
     context,
   }) => {
+    const path = `${basePath}#soluble-abeta42`;
     await context.grantPermissions(['clipboard-read']);
 
-    await page.goto(`${basePath}#soluble-a-beta-42`);
+    await page.goto(path);
 
     // hover on heading, so share link appears
     const heading = page.getByRole('heading', { level: 2, name: 'Nfl' });
@@ -417,9 +524,9 @@ test.describe('model details - boxplots selector - share links - link button', (
     const button = page.getByRole('button', { name: 'Copy link to Nfl' });
     await button.click();
 
-    await page.waitForURL(`${basePath}#nfl`);
-
     const clipboardContent = await page.evaluate(() => navigator.clipboard.readText());
-    expect(clipboardContent).toEqual(page.url());
+    expect(clipboardContent).toEqual(`${baseURL}${basePath}#nfl`);
+
+    await page.waitForURL(path);
   });
 });

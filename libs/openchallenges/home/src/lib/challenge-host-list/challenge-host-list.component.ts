@@ -84,7 +84,7 @@ export class ChallengeHostListComponent implements OnInit {
   // TODO Avoid duplicated code (see org search component)
   private getOrganizationCard(org: Organization, avatarUrl: Image): OrganizationCard {
     return {
-      acronym: org.acronym,
+      shortName: org.shortName,
       avatarUrl: avatarUrl?.url,
       challengeCount: org.challengeCount,
       login: org.login,

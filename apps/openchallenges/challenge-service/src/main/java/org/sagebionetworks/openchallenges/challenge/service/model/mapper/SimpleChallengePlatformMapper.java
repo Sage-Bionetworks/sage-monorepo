@@ -25,10 +25,12 @@ public class SimpleChallengePlatformMapper
     SimpleChallengePlatformEntity entity,
     Object... args
   ) {
-    SimpleChallengePlatformDto dto = new SimpleChallengePlatformDto();
-    if (entity != null) {
-      BeanUtils.copyProperties(entity, dto);
+    if (entity == null) {
+      // Preserve null instead of returning an empty object with all fields null.
+      return null;
     }
+    SimpleChallengePlatformDto dto = new SimpleChallengePlatformDto();
+    BeanUtils.copyProperties(entity, dto);
     return dto;
   }
 }

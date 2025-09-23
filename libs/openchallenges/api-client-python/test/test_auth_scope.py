@@ -13,7 +13,7 @@ Do not edit the class manually.
 
 import unittest
 
-from openchallenges_api_client_python.models.auth_scope import AuthScope
+from openchallenges_api_client.models.auth_scope import AuthScope
 
 
 class TestAuthScope(unittest.TestCase):

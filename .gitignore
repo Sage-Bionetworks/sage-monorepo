@@ -5,6 +5,9 @@
 playwright-report/
 test-results/
 
+# Config files
+.openchallenges.toml
+
 # Generated Dockerfiles from centralized container image system
 **/Dockerfile.generated
 

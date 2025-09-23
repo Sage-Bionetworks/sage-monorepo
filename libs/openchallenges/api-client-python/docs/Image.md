@@ -4,14 +4,14 @@ An image
 
 ## Properties
 
-Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
-**url** | **str** |  | 
+| Name    | Type    | Description | Notes |
+| ------- | ------- | ----------- | ----- |
+| **url** | **str** |             |
 
 ## Example
 
 ```python
-from openchallenges_api_client_python.models.image import Image
+from openchallenges_api_client.models.image import Image
 
 # TODO update the JSON string below
 json = "{}"
@@ -25,6 +25,5 @@ image_dict = image_instance.to_dict()
 # create an instance of Image from a dict
 image_from_dict = Image.from_dict(image_dict)
 ```
+
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
-
-

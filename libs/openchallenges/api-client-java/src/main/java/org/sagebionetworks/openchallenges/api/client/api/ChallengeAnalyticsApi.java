@@ -50,6 +50,8 @@ public class ChallengeAnalyticsApi {
    * Get the number of challenges tracked per year
    * Returns the number of challenges tracked per year
    * <p><b>200</b> - An object
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
    * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
    * @return ChallengesPerYear
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
@@ -69,7 +71,7 @@ public class ChallengeAnalyticsApi {
     final String[] localVarContentTypes = {};
     final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
 
-    String[] localVarAuthNames = new String[] {};
+    String[] localVarAuthNames = new String[] { "apiKey", "jwtBearer" };
 
     ParameterizedTypeReference<ChallengesPerYear> localVarReturnType =
       new ParameterizedTypeReference<>() {};
@@ -93,6 +95,8 @@ public class ChallengeAnalyticsApi {
    * Get the number of challenges tracked per year
    * Returns the number of challenges tracked per year
    * <p><b>200</b> - An object
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
    * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
    * @return ChallengesPerYear
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
@@ -107,6 +111,8 @@ public class ChallengeAnalyticsApi {
    * Get the number of challenges tracked per year
    * Returns the number of challenges tracked per year
    * <p><b>200</b> - An object
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
    * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
    * @return ResponseEntity&lt;ChallengesPerYear&gt;
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
@@ -122,6 +128,8 @@ public class ChallengeAnalyticsApi {
    * Get the number of challenges tracked per year
    * Returns the number of challenges tracked per year
    * <p><b>200</b> - An object
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
    * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
    * @return ResponseSpec
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API

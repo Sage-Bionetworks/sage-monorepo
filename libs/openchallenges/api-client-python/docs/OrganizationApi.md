@@ -1,4 +1,4 @@
-# openchallenges_api_client_python.OrganizationApi
+# openchallenges_api_client.OrganizationApi
 
 All URIs are relative to *https://openchallenges.io/api/v1*
 
@@ -24,15 +24,15 @@ Create an organization with the specified account name
 - Bearer (JWT) Authentication (jwtBearer):
 
 ```python
-import openchallenges_api_client_python
-from openchallenges_api_client_python.models.organization import Organization
-from openchallenges_api_client_python.models.organization_create_request import OrganizationCreateRequest
-from openchallenges_api_client_python.rest import ApiException
+import openchallenges_api_client
+from openchallenges_api_client.models.organization import Organization
+from openchallenges_api_client.models.organization_create_request import OrganizationCreateRequest
+from openchallenges_api_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://openchallenges.io/api/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     host = "https://openchallenges.io/api/v1"
 )
 
@@ -48,15 +48,15 @@ configuration.api_key['apiKey'] = os.environ["API_KEY"]
 # configuration.api_key_prefix['apiKey'] = 'Bearer'
 
 # Configure Bearer authorization (JWT): jwtBearer
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
-with openchallenges_api_client_python.ApiClient(configuration) as api_client:
+with openchallenges_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openchallenges_api_client_python.OrganizationApi(api_client)
-    organization_create_request = openchallenges_api_client_python.OrganizationCreateRequest() # OrganizationCreateRequest |
+    api_instance = openchallenges_api_client.OrganizationApi(api_client)
+    organization_create_request = openchallenges_api_client.OrganizationCreateRequest() # OrganizationCreateRequest |
 
     try:
         # Create an organization
@@ -113,13 +113,13 @@ Deletes the organization specified by its login or ID.
 - Bearer (JWT) Authentication (jwtBearer):
 
 ```python
-import openchallenges_api_client_python
-from openchallenges_api_client_python.rest import ApiException
+import openchallenges_api_client
+from openchallenges_api_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://openchallenges.io/api/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     host = "https://openchallenges.io/api/v1"
 )
 
@@ -135,14 +135,14 @@ configuration.api_key['apiKey'] = os.environ["API_KEY"]
 # configuration.api_key_prefix['apiKey'] = 'Bearer'
 
 # Configure Bearer authorization (JWT): jwtBearer
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
-with openchallenges_api_client_python.ApiClient(configuration) as api_client:
+with openchallenges_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openchallenges_api_client_python.OrganizationApi(api_client)
+    api_instance = openchallenges_api_client.OrganizationApi(api_client)
     org = 'dream' # str | The id or login of the organization.
 
     try:
@@ -197,14 +197,14 @@ Returns the organization identified by its login or ID.
 - Bearer (JWT) Authentication (jwtBearer):
 
 ```python
-import openchallenges_api_client_python
-from openchallenges_api_client_python.models.organization import Organization
-from openchallenges_api_client_python.rest import ApiException
+import openchallenges_api_client
+from openchallenges_api_client.models.organization import Organization
+from openchallenges_api_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://openchallenges.io/api/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     host = "https://openchallenges.io/api/v1"
 )
 
@@ -220,14 +220,14 @@ configuration.api_key['apiKey'] = os.environ["API_KEY"]
 # configuration.api_key_prefix['apiKey'] = 'Bearer'
 
 # Configure Bearer authorization (JWT): jwtBearer
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
-with openchallenges_api_client_python.ApiClient(configuration) as api_client:
+with openchallenges_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openchallenges_api_client_python.OrganizationApi(api_client)
+    api_instance = openchallenges_api_client.OrganizationApi(api_client)
     org = 'dream' # str | The id or login of the organization.
 
     try:
@@ -282,15 +282,15 @@ List organizations
 - Bearer (JWT) Authentication (jwtBearer):
 
 ```python
-import openchallenges_api_client_python
-from openchallenges_api_client_python.models.organization_search_query import OrganizationSearchQuery
-from openchallenges_api_client_python.models.organizations_page import OrganizationsPage
-from openchallenges_api_client_python.rest import ApiException
+import openchallenges_api_client
+from openchallenges_api_client.models.organization_search_query import OrganizationSearchQuery
+from openchallenges_api_client.models.organizations_page import OrganizationsPage
+from openchallenges_api_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://openchallenges.io/api/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     host = "https://openchallenges.io/api/v1"
 )
 
@@ -306,15 +306,15 @@ configuration.api_key['apiKey'] = os.environ["API_KEY"]
 # configuration.api_key_prefix['apiKey'] = 'Bearer'
 
 # Configure Bearer authorization (JWT): jwtBearer
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
-with openchallenges_api_client_python.ApiClient(configuration) as api_client:
+with openchallenges_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openchallenges_api_client_python.OrganizationApi(api_client)
-    organization_search_query = openchallenges_api_client_python.OrganizationSearchQuery() # OrganizationSearchQuery | The search query used to find organizations. (optional)
+    api_instance = openchallenges_api_client.OrganizationApi(api_client)
+    organization_search_query = openchallenges_api_client.OrganizationSearchQuery() # OrganizationSearchQuery | The search query used to find organizations. (optional)
 
     try:
         # List organizations
@@ -368,15 +368,15 @@ Updates an existing organization.
 - Bearer (JWT) Authentication (jwtBearer):
 
 ```python
-import openchallenges_api_client_python
-from openchallenges_api_client_python.models.organization import Organization
-from openchallenges_api_client_python.models.organization_update_request import OrganizationUpdateRequest
-from openchallenges_api_client_python.rest import ApiException
+import openchallenges_api_client
+from openchallenges_api_client.models.organization import Organization
+from openchallenges_api_client.models.organization_update_request import OrganizationUpdateRequest
+from openchallenges_api_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://openchallenges.io/api/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     host = "https://openchallenges.io/api/v1"
 )
 
@@ -392,16 +392,16 @@ configuration.api_key['apiKey'] = os.environ["API_KEY"]
 # configuration.api_key_prefix['apiKey'] = 'Bearer'
 
 # Configure Bearer authorization (JWT): jwtBearer
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
-with openchallenges_api_client_python.ApiClient(configuration) as api_client:
+with openchallenges_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openchallenges_api_client_python.OrganizationApi(api_client)
+    api_instance = openchallenges_api_client.OrganizationApi(api_client)
     org = 'dream' # str | The id or login of the organization.
-    organization_update_request = openchallenges_api_client_python.OrganizationUpdateRequest() # OrganizationUpdateRequest |
+    organization_update_request = openchallenges_api_client.OrganizationUpdateRequest() # OrganizationUpdateRequest |
 
     try:
         # Update an existing organization

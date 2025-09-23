@@ -92,7 +92,7 @@ public class ChallengeApi {
     final String[] localVarContentTypes = { "application/json" };
     final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
 
-    String[] localVarAuthNames = new String[] { "apiBearerAuth" };
+    String[] localVarAuthNames = new String[] { "apiKey", "jwtBearer" };
 
     ParameterizedTypeReference<Challenge> localVarReturnType =
       new ParameterizedTypeReference<>() {};
@@ -213,7 +213,7 @@ public class ChallengeApi {
     final String[] localVarContentTypes = {};
     final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
 
-    String[] localVarAuthNames = new String[] { "apiBearerAuth" };
+    String[] localVarAuthNames = new String[] { "apiKey", "jwtBearer" };
 
     ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
     return apiClient.invokeAPI(
@@ -323,7 +323,7 @@ public class ChallengeApi {
     final String[] localVarContentTypes = {};
     final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
 
-    String[] localVarAuthNames = new String[] {};
+    String[] localVarAuthNames = new String[] { "apiKey", "jwtBearer" };
 
     ParameterizedTypeReference<Challenge> localVarReturnType =
       new ParameterizedTypeReference<>() {};
@@ -433,7 +433,7 @@ public class ChallengeApi {
     final String[] localVarContentTypes = {};
     final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
 
-    String[] localVarAuthNames = new String[] {};
+    String[] localVarAuthNames = new String[] { "apiKey", "jwtBearer" };
 
     ParameterizedTypeReference<ChallengeJsonLd> localVarReturnType =
       new ParameterizedTypeReference<>() {};
@@ -600,7 +600,7 @@ public class ChallengeApi {
     final String[] localVarContentTypes = {};
     final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
 
-    String[] localVarAuthNames = new String[] {};
+    String[] localVarAuthNames = new String[] { "apiKey", "jwtBearer" };
 
     ParameterizedTypeReference<ChallengesPage> localVarReturnType =
       new ParameterizedTypeReference<>() {};
@@ -729,7 +729,7 @@ public class ChallengeApi {
     final String[] localVarContentTypes = { "application/json" };
     final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
 
-    String[] localVarAuthNames = new String[] { "apiBearerAuth" };
+    String[] localVarAuthNames = new String[] { "apiKey", "jwtBearer" };
 
     ParameterizedTypeReference<Challenge> localVarReturnType =
       new ParameterizedTypeReference<>() {};

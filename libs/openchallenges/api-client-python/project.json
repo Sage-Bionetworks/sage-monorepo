@@ -2,7 +2,7 @@
   "name": "openchallenges-api-client-python",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "sourceRoot": "libs/openchallenges/api-client-python/openchallenges_api_client_python",
+  "sourceRoot": "libs/openchallenges/api-client-python/openchallenges_api_client",
   "targets": {
     "lock": {
       "executor": "@nxlv/python:lock",
@@ -41,7 +41,7 @@
       "executor": "@nxlv/python:ruff-check",
       "outputs": [],
       "options": {
-        "lintFilePatterns": ["openchallenges_api_client_python", "test"]
+        "lintFilePatterns": ["openchallenges_api_client", "test"]
       },
       "cache": true
     },

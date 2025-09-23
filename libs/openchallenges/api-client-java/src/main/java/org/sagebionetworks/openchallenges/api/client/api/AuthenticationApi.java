@@ -9,8 +9,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import org.sagebionetworks.openchallenges.api.client.ApiClient;
 import org.sagebionetworks.openchallenges.api.client.model.BasicError;
-import org.sagebionetworks.openchallenges.api.client.model.LoginRequest;
-import org.sagebionetworks.openchallenges.api.client.model.LoginResponse;
+import org.sagebionetworks.openchallenges.api.client.model.UpdateUserProfileRequest;
+import org.sagebionetworks.openchallenges.api.client.model.UserProfile;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
@@ -48,22 +48,112 @@ public class AuthenticationApi {
   }
 
   /**
-   * User login
-   * Authenticate user and return JWT token
-   * <p><b>200</b> - Login successful
+   * Get user profile
+   * Get the authenticated user&#39;s profile information
+   * <p><b>200</b> - User profile information
    * <p><b>401</b> - Unauthorized
    * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
-   * @param loginRequest The loginRequest parameter
-   * @return LoginResponse
+   * @return UserProfile
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
    */
-  private ResponseSpec loginRequestCreation(@jakarta.annotation.Nonnull LoginRequest loginRequest)
+  private ResponseSpec getUserProfileRequestCreation() throws RestClientResponseException {
+    Object postBody = null;
+    // create path and map variables
+    final Map<String, Object> pathParams = new HashMap<>();
+
+    final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+    final HttpHeaders headerParams = new HttpHeaders();
+    final MultiValueMap<String, String> cookieParams = new LinkedMultiValueMap<>();
+    final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<>();
+
+    final String[] localVarAccepts = { "application/json", "application/problem+json" };
+    final List<MediaType> localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+    final String[] localVarContentTypes = {};
+    final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+
+    String[] localVarAuthNames = new String[] { "apiKey", "jwtBearer" };
+
+    ParameterizedTypeReference<UserProfile> localVarReturnType =
+      new ParameterizedTypeReference<>() {};
+    return apiClient.invokeAPI(
+      "/auth/profile",
+      HttpMethod.GET,
+      pathParams,
+      queryParams,
+      postBody,
+      headerParams,
+      cookieParams,
+      formParams,
+      localVarAccept,
+      localVarContentType,
+      localVarAuthNames,
+      localVarReturnType
+    );
+  }
+
+  /**
+   * Get user profile
+   * Get the authenticated user&#39;s profile information
+   * <p><b>200</b> - User profile information
+   * <p><b>401</b> - Unauthorized
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @return UserProfile
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public UserProfile getUserProfile() throws RestClientResponseException {
+    ParameterizedTypeReference<UserProfile> localVarReturnType =
+      new ParameterizedTypeReference<>() {};
+    return getUserProfileRequestCreation().body(localVarReturnType);
+  }
+
+  /**
+   * Get user profile
+   * Get the authenticated user&#39;s profile information
+   * <p><b>200</b> - User profile information
+   * <p><b>401</b> - Unauthorized
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @return ResponseEntity&lt;UserProfile&gt;
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public ResponseEntity<UserProfile> getUserProfileWithHttpInfo()
     throws RestClientResponseException {
-    Object postBody = loginRequest;
-    // verify the required parameter 'loginRequest' is set
-    if (loginRequest == null) {
+    ParameterizedTypeReference<UserProfile> localVarReturnType =
+      new ParameterizedTypeReference<>() {};
+    return getUserProfileRequestCreation().toEntity(localVarReturnType);
+  }
+
+  /**
+   * Get user profile
+   * Get the authenticated user&#39;s profile information
+   * <p><b>200</b> - User profile information
+   * <p><b>401</b> - Unauthorized
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @return ResponseSpec
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public ResponseSpec getUserProfileWithResponseSpec() throws RestClientResponseException {
+    return getUserProfileRequestCreation();
+  }
+
+  /**
+   * Update user profile
+   * Update the authenticated user&#39;s profile information
+   * <p><b>200</b> - User profile updated successfully
+   * <p><b>400</b> - Invalid request
+   * <p><b>401</b> - Unauthorized
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param updateUserProfileRequest The updateUserProfileRequest parameter
+   * @return UserProfile
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  private ResponseSpec updateUserProfileRequestCreation(
+    @jakarta.annotation.Nonnull UpdateUserProfileRequest updateUserProfileRequest
+  ) throws RestClientResponseException {
+    Object postBody = updateUserProfileRequest;
+    // verify the required parameter 'updateUserProfileRequest' is set
+    if (updateUserProfileRequest == null) {
       throw new RestClientResponseException(
-        "Missing the required parameter 'loginRequest' when calling login",
+        "Missing the required parameter 'updateUserProfileRequest' when calling updateUserProfile",
         HttpStatus.BAD_REQUEST.value(),
         HttpStatus.BAD_REQUEST.getReasonPhrase(),
         null,
@@ -84,13 +174,13 @@ public class AuthenticationApi {
     final String[] localVarContentTypes = { "application/json" };
     final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
 
-    String[] localVarAuthNames = new String[] {};
+    String[] localVarAuthNames = new String[] { "apiKey", "jwtBearer" };
 
-    ParameterizedTypeReference<LoginResponse> localVarReturnType =
+    ParameterizedTypeReference<UserProfile> localVarReturnType =
       new ParameterizedTypeReference<>() {};
     return apiClient.invokeAPI(
-      "/auth/login",
-      HttpMethod.POST,
+      "/auth/profile",
+      HttpMethod.PUT,
       pathParams,
       queryParams,
       postBody,
@@ -105,52 +195,57 @@ public class AuthenticationApi {
   }
 
   /**
-   * User login
-   * Authenticate user and return JWT token
-   * <p><b>200</b> - Login successful
+   * Update user profile
+   * Update the authenticated user&#39;s profile information
+   * <p><b>200</b> - User profile updated successfully
+   * <p><b>400</b> - Invalid request
    * <p><b>401</b> - Unauthorized
    * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
-   * @param loginRequest The loginRequest parameter
-   * @return LoginResponse
+   * @param updateUserProfileRequest The updateUserProfileRequest parameter
+   * @return UserProfile
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
    */
-  public LoginResponse login(@jakarta.annotation.Nonnull LoginRequest loginRequest)
-    throws RestClientResponseException {
-    ParameterizedTypeReference<LoginResponse> localVarReturnType =
-      new ParameterizedTypeReference<>() {};
-    return loginRequestCreation(loginRequest).body(localVarReturnType);
-  }
-
-  /**
-   * User login
-   * Authenticate user and return JWT token
-   * <p><b>200</b> - Login successful
-   * <p><b>401</b> - Unauthorized
-   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
-   * @param loginRequest The loginRequest parameter
-   * @return ResponseEntity&lt;LoginResponse&gt;
-   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
-   */
-  public ResponseEntity<LoginResponse> loginWithHttpInfo(
-    @jakarta.annotation.Nonnull LoginRequest loginRequest
+  public UserProfile updateUserProfile(
+    @jakarta.annotation.Nonnull UpdateUserProfileRequest updateUserProfileRequest
   ) throws RestClientResponseException {
-    ParameterizedTypeReference<LoginResponse> localVarReturnType =
+    ParameterizedTypeReference<UserProfile> localVarReturnType =
       new ParameterizedTypeReference<>() {};
-    return loginRequestCreation(loginRequest).toEntity(localVarReturnType);
+    return updateUserProfileRequestCreation(updateUserProfileRequest).body(localVarReturnType);
   }
 
   /**
-   * User login
-   * Authenticate user and return JWT token
-   * <p><b>200</b> - Login successful
+   * Update user profile
+   * Update the authenticated user&#39;s profile information
+   * <p><b>200</b> - User profile updated successfully
+   * <p><b>400</b> - Invalid request
    * <p><b>401</b> - Unauthorized
    * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
-   * @param loginRequest The loginRequest parameter
+   * @param updateUserProfileRequest The updateUserProfileRequest parameter
+   * @return ResponseEntity&lt;UserProfile&gt;
+   * @throws RestClientResponseException if an error occurs while attempting to invoke the API
+   */
+  public ResponseEntity<UserProfile> updateUserProfileWithHttpInfo(
+    @jakarta.annotation.Nonnull UpdateUserProfileRequest updateUserProfileRequest
+  ) throws RestClientResponseException {
+    ParameterizedTypeReference<UserProfile> localVarReturnType =
+      new ParameterizedTypeReference<>() {};
+    return updateUserProfileRequestCreation(updateUserProfileRequest).toEntity(localVarReturnType);
+  }
+
+  /**
+   * Update user profile
+   * Update the authenticated user&#39;s profile information
+   * <p><b>200</b> - User profile updated successfully
+   * <p><b>400</b> - Invalid request
+   * <p><b>401</b> - Unauthorized
+   * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
+   * @param updateUserProfileRequest The updateUserProfileRequest parameter
    * @return ResponseSpec
    * @throws RestClientResponseException if an error occurs while attempting to invoke the API
    */
-  public ResponseSpec loginWithResponseSpec(@jakarta.annotation.Nonnull LoginRequest loginRequest)
-    throws RestClientResponseException {
-    return loginRequestCreation(loginRequest);
+  public ResponseSpec updateUserProfileWithResponseSpec(
+    @jakarta.annotation.Nonnull UpdateUserProfileRequest updateUserProfileRequest
+  ) throws RestClientResponseException {
+    return updateUserProfileRequestCreation(updateUserProfileRequest);
   }
 }

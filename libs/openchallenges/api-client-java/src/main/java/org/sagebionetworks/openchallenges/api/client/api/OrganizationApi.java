@@ -91,7 +91,7 @@ public class OrganizationApi {
     final String[] localVarContentTypes = { "application/json" };
     final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
 
-    String[] localVarAuthNames = new String[] { "apiBearerAuth" };
+    String[] localVarAuthNames = new String[] { "apiKey", "jwtBearer" };
 
     ParameterizedTypeReference<Organization> localVarReturnType =
       new ParameterizedTypeReference<>() {};
@@ -214,7 +214,7 @@ public class OrganizationApi {
     final String[] localVarContentTypes = {};
     final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
 
-    String[] localVarAuthNames = new String[] { "apiBearerAuth" };
+    String[] localVarAuthNames = new String[] { "apiKey", "jwtBearer" };
 
     ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
     return apiClient.invokeAPI(
@@ -324,7 +324,7 @@ public class OrganizationApi {
     final String[] localVarContentTypes = {};
     final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
 
-    String[] localVarAuthNames = new String[] {};
+    String[] localVarAuthNames = new String[] { "apiKey", "jwtBearer" };
 
     ParameterizedTypeReference<Organization> localVarReturnType =
       new ParameterizedTypeReference<>() {};
@@ -462,7 +462,7 @@ public class OrganizationApi {
     final String[] localVarContentTypes = {};
     final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
 
-    String[] localVarAuthNames = new String[] {};
+    String[] localVarAuthNames = new String[] { "apiKey", "jwtBearer" };
 
     ParameterizedTypeReference<OrganizationsPage> localVarReturnType =
       new ParameterizedTypeReference<>() {};
@@ -591,7 +591,7 @@ public class OrganizationApi {
     final String[] localVarContentTypes = { "application/json" };
     final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
 
-    String[] localVarAuthNames = new String[] { "apiBearerAuth" };
+    String[] localVarAuthNames = new String[] { "apiKey", "jwtBearer" };
 
     ParameterizedTypeReference<Organization> localVarReturnType =
       new ParameterizedTypeReference<>() {};

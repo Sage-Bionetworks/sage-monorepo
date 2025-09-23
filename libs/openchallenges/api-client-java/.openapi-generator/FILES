@@ -23,6 +23,7 @@ src/main/java/org/sagebionetworks/openchallenges/api/client/auth/Authentication.
 src/main/java/org/sagebionetworks/openchallenges/api/client/auth/HttpBasicAuth.java
 src/main/java/org/sagebionetworks/openchallenges/api/client/auth/HttpBearerAuth.java
 src/main/java/org/sagebionetworks/openchallenges/api/client/model/ApiKey.java
+src/main/java/org/sagebionetworks/openchallenges/api/client/model/AuthScope.java
 src/main/java/org/sagebionetworks/openchallenges/api/client/model/BasicError.java
 src/main/java/org/sagebionetworks/openchallenges/api/client/model/Challenge.java
 src/main/java/org/sagebionetworks/openchallenges/api/client/model/ChallengeCategory.java
@@ -61,8 +62,6 @@ src/main/java/org/sagebionetworks/openchallenges/api/client/model/Image.java
 src/main/java/org/sagebionetworks/openchallenges/api/client/model/ImageAspectRatio.java
 src/main/java/org/sagebionetworks/openchallenges/api/client/model/ImageHeight.java
 src/main/java/org/sagebionetworks/openchallenges/api/client/model/ImageQuery.java
-src/main/java/org/sagebionetworks/openchallenges/api/client/model/LoginRequest.java
-src/main/java/org/sagebionetworks/openchallenges/api/client/model/LoginResponse.java
 src/main/java/org/sagebionetworks/openchallenges/api/client/model/Organization.java
 src/main/java/org/sagebionetworks/openchallenges/api/client/model/OrganizationCategory.java
 src/main/java/org/sagebionetworks/openchallenges/api/client/model/OrganizationCreateRequest.java
@@ -73,6 +72,9 @@ src/main/java/org/sagebionetworks/openchallenges/api/client/model/OrganizationUp
 src/main/java/org/sagebionetworks/openchallenges/api/client/model/OrganizationsPage.java
 src/main/java/org/sagebionetworks/openchallenges/api/client/model/PageMetadata.java
 src/main/java/org/sagebionetworks/openchallenges/api/client/model/SimpleChallengePlatform.java
+src/main/java/org/sagebionetworks/openchallenges/api/client/model/UpdateUserProfileRequest.java
+src/main/java/org/sagebionetworks/openchallenges/api/client/model/UserProfile.java
+src/main/java/org/sagebionetworks/openchallenges/api/client/model/UserRole.java
 src/test/java/org/sagebionetworks/openchallenges/api/client/api/ApiKeyApiTest.java
 src/test/java/org/sagebionetworks/openchallenges/api/client/api/AuthenticationApiTest.java
 src/test/java/org/sagebionetworks/openchallenges/api/client/api/ChallengeAnalyticsApiTest.java
@@ -83,6 +85,7 @@ src/test/java/org/sagebionetworks/openchallenges/api/client/api/EdamConceptApiTe
 src/test/java/org/sagebionetworks/openchallenges/api/client/api/ImageApiTest.java
 src/test/java/org/sagebionetworks/openchallenges/api/client/api/OrganizationApiTest.java
 src/test/java/org/sagebionetworks/openchallenges/api/client/model/ApiKeyTest.java
+src/test/java/org/sagebionetworks/openchallenges/api/client/model/AuthScopeTest.java
 src/test/java/org/sagebionetworks/openchallenges/api/client/model/BasicErrorTest.java
 src/test/java/org/sagebionetworks/openchallenges/api/client/model/ChallengeCategoryTest.java
 src/test/java/org/sagebionetworks/openchallenges/api/client/model/ChallengeContributionCreateRequestTest.java
@@ -121,8 +124,6 @@ src/test/java/org/sagebionetworks/openchallenges/api/client/model/ImageAspectRat
 src/test/java/org/sagebionetworks/openchallenges/api/client/model/ImageHeightTest.java
 src/test/java/org/sagebionetworks/openchallenges/api/client/model/ImageQueryTest.java
 src/test/java/org/sagebionetworks/openchallenges/api/client/model/ImageTest.java
-src/test/java/org/sagebionetworks/openchallenges/api/client/model/LoginRequestTest.java
-src/test/java/org/sagebionetworks/openchallenges/api/client/model/LoginResponseTest.java
 src/test/java/org/sagebionetworks/openchallenges/api/client/model/OrganizationCategoryTest.java
 src/test/java/org/sagebionetworks/openchallenges/api/client/model/OrganizationCreateRequestTest.java
 src/test/java/org/sagebionetworks/openchallenges/api/client/model/OrganizationDirectionTest.java
@@ -133,3 +134,6 @@ src/test/java/org/sagebionetworks/openchallenges/api/client/model/OrganizationUp
 src/test/java/org/sagebionetworks/openchallenges/api/client/model/OrganizationsPageTest.java
 src/test/java/org/sagebionetworks/openchallenges/api/client/model/PageMetadataTest.java
 src/test/java/org/sagebionetworks/openchallenges/api/client/model/SimpleChallengePlatformTest.java
+src/test/java/org/sagebionetworks/openchallenges/api/client/model/UpdateUserProfileRequestTest.java
+src/test/java/org/sagebionetworks/openchallenges/api/client/model/UserProfileTest.java
+src/test/java/org/sagebionetworks/openchallenges/api/client/model/UserRoleTest.java

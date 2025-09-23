@@ -13,7 +13,7 @@ Do not edit the class manually.
 
 import unittest
 
-from openchallenges_api_client_python.models.update_user_profile_request import (
+from openchallenges_api_client.models.update_user_profile_request import (
     UpdateUserProfileRequest,
 )
 

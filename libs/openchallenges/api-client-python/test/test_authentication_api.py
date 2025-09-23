@@ -13,7 +13,7 @@ Do not edit the class manually.
 
 import unittest
 
-from openchallenges_api_client_python.api.authentication_api import AuthenticationApi
+from openchallenges_api_client.api.authentication_api import AuthenticationApi
 
 
 class TestAuthenticationApi(unittest.TestCase):

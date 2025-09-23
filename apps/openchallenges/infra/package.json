@@ -1,6 +1,0 @@
-{
-  "name": "@sagebionetworks/openchallenges-infra",
-  "version": "0.0.1",
-  "type": "commonjs",
-  "description": "CLI for managing OpenChallenges infrastructure."
-}

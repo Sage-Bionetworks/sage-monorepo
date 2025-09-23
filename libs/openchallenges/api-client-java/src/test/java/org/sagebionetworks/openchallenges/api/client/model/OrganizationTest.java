@@ -98,11 +98,11 @@ class OrganizationTest {
   }
 
   /**
-   * Test the property 'acronym'
+   * Test the property 'shortName'
    */
   @Test
-  void acronymTest() {
-    // TODO: test acronym
+  void shortNameTest() {
+    // TODO: test shortName
   }
 
   /**

@@ -20,7 +20,7 @@ export interface OrganizationUpdateRequest {
    */
   websiteUrl: string | null;
   /**
-   * An acronym of the organization.
+   * The abbreviation, which may be an acronym, initialism, or other short form (e.g., \"AI\", \"WashU\", \"etc.\")
    */
-  acronym: string | null;
+  shortName: string | null;
 }

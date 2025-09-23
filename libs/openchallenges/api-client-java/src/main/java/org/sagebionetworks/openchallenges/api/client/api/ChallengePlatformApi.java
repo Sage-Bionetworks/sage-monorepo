@@ -90,7 +90,7 @@ public class ChallengePlatformApi {
     final String[] localVarContentTypes = { "application/json" };
     final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
 
-    String[] localVarAuthNames = new String[] { "apiBearerAuth" };
+    String[] localVarAuthNames = new String[] { "apiKey", "jwtBearer" };
 
     ParameterizedTypeReference<ChallengePlatform> localVarReturnType =
       new ParameterizedTypeReference<>() {};
@@ -213,7 +213,7 @@ public class ChallengePlatformApi {
     final String[] localVarContentTypes = {};
     final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
 
-    String[] localVarAuthNames = new String[] { "apiBearerAuth" };
+    String[] localVarAuthNames = new String[] { "apiKey", "jwtBearer" };
 
     ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
     return apiClient.invokeAPI(
@@ -325,7 +325,7 @@ public class ChallengePlatformApi {
     final String[] localVarContentTypes = {};
     final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
 
-    String[] localVarAuthNames = new String[] {};
+    String[] localVarAuthNames = new String[] { "apiKey", "jwtBearer" };
 
     ParameterizedTypeReference<ChallengePlatform> localVarReturnType =
       new ParameterizedTypeReference<>() {};
@@ -402,6 +402,8 @@ public class ChallengePlatformApi {
    * List challenge platforms
    * <p><b>200</b> - Success
    * <p><b>400</b> - Invalid request
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
    * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
    * @param challengePlatformSearchQuery The search query used to find challenge platforms.
    * @return ChallengePlatformsPage
@@ -459,7 +461,7 @@ public class ChallengePlatformApi {
     final String[] localVarContentTypes = {};
     final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
 
-    String[] localVarAuthNames = new String[] {};
+    String[] localVarAuthNames = new String[] { "apiKey", "jwtBearer" };
 
     ParameterizedTypeReference<ChallengePlatformsPage> localVarReturnType =
       new ParameterizedTypeReference<>() {};
@@ -484,6 +486,8 @@ public class ChallengePlatformApi {
    * List challenge platforms
    * <p><b>200</b> - Success
    * <p><b>400</b> - Invalid request
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
    * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
    * @param challengePlatformSearchQuery The search query used to find challenge platforms.
    * @return ChallengePlatformsPage
@@ -504,6 +508,8 @@ public class ChallengePlatformApi {
    * List challenge platforms
    * <p><b>200</b> - Success
    * <p><b>400</b> - Invalid request
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
    * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
    * @param challengePlatformSearchQuery The search query used to find challenge platforms.
    * @return ResponseEntity&lt;ChallengePlatformsPage&gt;
@@ -524,6 +530,8 @@ public class ChallengePlatformApi {
    * List challenge platforms
    * <p><b>200</b> - Success
    * <p><b>400</b> - Invalid request
+   * <p><b>401</b> - Unauthorized
+   * <p><b>403</b> - The user does not have the permission to perform this action
    * <p><b>500</b> - The request cannot be fulfilled due to an unexpected server error
    * @param challengePlatformSearchQuery The search query used to find challenge platforms.
    * @return ResponseSpec
@@ -592,7 +600,7 @@ public class ChallengePlatformApi {
     final String[] localVarContentTypes = { "application/json" };
     final MediaType localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
 
-    String[] localVarAuthNames = new String[] { "apiBearerAuth" };
+    String[] localVarAuthNames = new String[] { "apiKey", "jwtBearer" };
 
     ParameterizedTypeReference<ChallengePlatform> localVarReturnType =
       new ParameterizedTypeReference<>() {};

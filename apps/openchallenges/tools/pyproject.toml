@@ -23,7 +23,7 @@ requires-python = "==3.13.3"
 readme = 'README.md'
 dependencies = [
     "kaggle==1.7.4.5",
-    "openchallenges-api-client-python",
+    "openchallenges-api-client",
     "opensearch-py==3.0.0",
 ]
 
@@ -70,4 +70,4 @@ fixable = ["ALL"]
 unfixable = []
 
 [tool.uv.sources]
-openchallenges-api-client-python = { workspace = true }
+openchallenges-api-client = { workspace = true }
