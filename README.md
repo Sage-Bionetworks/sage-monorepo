@@ -73,6 +73,9 @@ The monorepo ships with a [Dev Container](https://containers.dev/) configuration
 - Provides a reproducible setup for contributors and CI/CD
 - Makes onboarding and remote development seamless
 
+Clicking the button below will open the Sage Monorepo in VS Code inside its preconfigured
+development container, giving you a ready-to-use environment with all required tools installed:
+
 [![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Container&message=Open&color=blue&logo=visualstudiocode&style=for-the-badge)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/Sage-Bionetworks/sage-monorepo)
 
 ## Contributing
