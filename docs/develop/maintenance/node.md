@@ -167,6 +167,9 @@ For framework updates that may include breaking changes, automated migrations ca
 # Migrate all Nx and Angular packages together
 nx migrate latest
 
+# Review the changes to package.json then install
+pnpm install
+
 # This creates migrations.json with pending migrations
 # Review migrations.json to understand what will change
 cat migrations.json
@@ -214,8 +217,9 @@ Use manual updates for:
 2. **Try automated migration** for Nx and Angular updates:
    ```bash
    nx migrate latest
+   pnpm install
    nx migrate --run-migrations
-   # Skip to step 7 if migration succeeds
+   # Skip to step 6 if migration succeeds
    ```
 3. **Review upstream changes** (if migration unavailable/fails):
       - Read migration guides and breaking changes
