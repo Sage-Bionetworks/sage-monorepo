@@ -15,7 +15,7 @@ Problem details (tools.ietf.org/html/rfc7807)
 ## Example
 
 ```python
-from bixarena_api_client_python.models.basic_error import BasicError
+from bixarena_api_client.models.basic_error import BasicError
 
 # TODO update the JSON string below
 json = "{}"

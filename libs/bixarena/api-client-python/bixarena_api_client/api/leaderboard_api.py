@@ -19,31 +19,23 @@ from typing_extensions import Annotated
 from pydantic import Field, StrictStr
 from typing import List, Optional
 from typing_extensions import Annotated
-from bixarena_api_client_python.models.leaderboard_entry_page import (
-    LeaderboardEntryPage,
-)
-from bixarena_api_client_python.models.leaderboard_list_inner import (
-    LeaderboardListInner,
-)
-from bixarena_api_client_python.models.leaderboard_model_history_page import (
+from bixarena_api_client.models.leaderboard_entry_page import LeaderboardEntryPage
+from bixarena_api_client.models.leaderboard_list_inner import LeaderboardListInner
+from bixarena_api_client.models.leaderboard_model_history_page import (
     LeaderboardModelHistoryPage,
 )
-from bixarena_api_client_python.models.leaderboard_model_history_query import (
+from bixarena_api_client.models.leaderboard_model_history_query import (
     LeaderboardModelHistoryQuery,
 )
-from bixarena_api_client_python.models.leaderboard_search_query import (
-    LeaderboardSearchQuery,
-)
-from bixarena_api_client_python.models.leaderboard_snapshot_page import (
-    LeaderboardSnapshotPage,
-)
-from bixarena_api_client_python.models.leaderboard_snapshot_query import (
+from bixarena_api_client.models.leaderboard_search_query import LeaderboardSearchQuery
+from bixarena_api_client.models.leaderboard_snapshot_page import LeaderboardSnapshotPage
+from bixarena_api_client.models.leaderboard_snapshot_query import (
     LeaderboardSnapshotQuery,
 )
 
-from bixarena_api_client_python.api_client import ApiClient, RequestSerialized
-from bixarena_api_client_python.api_response import ApiResponse
-from bixarena_api_client_python.rest import RESTResponseType
+from bixarena_api_client.api_client import ApiClient, RequestSerialized
+from bixarena_api_client.api_response import ApiResponse
+from bixarena_api_client.rest import RESTResponseType
 
 
 class LeaderboardApi:

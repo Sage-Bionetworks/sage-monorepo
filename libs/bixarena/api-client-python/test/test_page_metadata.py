@@ -13,7 +13,7 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client_python.models.page_metadata import PageMetadata
+from bixarena_api_client.models.page_metadata import PageMetadata
 
 
 class TestPageMetadata(unittest.TestCase):

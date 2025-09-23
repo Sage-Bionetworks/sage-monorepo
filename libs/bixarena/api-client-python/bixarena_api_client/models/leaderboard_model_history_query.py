@@ -20,10 +20,8 @@ from datetime import date
 from pydantic import BaseModel, ConfigDict, Field
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
-from bixarena_api_client_python.models.leaderboard_history_sort import (
-    LeaderboardHistorySort,
-)
-from bixarena_api_client_python.models.sort_direction import SortDirection
+from bixarena_api_client.models.leaderboard_history_sort import LeaderboardHistorySort
+from bixarena_api_client.models.sort_direction import SortDirection
 from typing import Optional, Set
 from typing_extensions import Self
 

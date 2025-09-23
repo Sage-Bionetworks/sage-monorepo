@@ -17,7 +17,7 @@ A page of leaderboard snapshots.
 ## Example
 
 ```python
-from bixarena_api_client_python.models.leaderboard_snapshot_page import LeaderboardSnapshotPage
+from bixarena_api_client.models.leaderboard_snapshot_page import LeaderboardSnapshotPage
 
 # TODO update the JSON string below
 json = "{}"

@@ -13,9 +13,7 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client_python.models.leaderboard_entry_page import (
-    LeaderboardEntryPage,
-)
+from bixarena_api_client.models.leaderboard_entry_page import LeaderboardEntryPage
 
 
 class TestLeaderboardEntryPage(unittest.TestCase):
@@ -46,7 +44,7 @@ class TestLeaderboardEntryPage(unittest.TestCase):
                 updated_at = '2025-08-16T14:30Z',
                 snapshot_id = 'snapshot_2025-08-16_14-30',
                 entries = [
-                    bixarena_api_client_python.models.leaderboard_entry.LeaderboardEntry(
+                    bixarena_api_client.models.leaderboard_entry.LeaderboardEntry(
                         id = 'entry_123', 
                         model_id = 'model_456', 
                         model_name = 'GPT-4o', 
@@ -68,7 +66,7 @@ class TestLeaderboardEntryPage(unittest.TestCase):
                 updated_at = '2025-08-16T14:30Z',
                 snapshot_id = 'snapshot_2025-08-16_14-30',
                 entries = [
-                    bixarena_api_client_python.models.leaderboard_entry.LeaderboardEntry(
+                    bixarena_api_client.models.leaderboard_entry.LeaderboardEntry(
                         id = 'entry_123', 
                         model_id = 'model_456', 
                         model_name = 'GPT-4o', 

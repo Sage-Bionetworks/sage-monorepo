@@ -13,9 +13,7 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client_python.models.leaderboard_history_sort import (
-    LeaderboardHistorySort,
-)
+from bixarena_api_client.models.leaderboard_history_sort import LeaderboardHistorySort
 
 
 class TestLeaderboardHistorySort(unittest.TestCase):

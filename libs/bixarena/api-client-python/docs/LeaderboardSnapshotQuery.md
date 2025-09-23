@@ -14,7 +14,7 @@ A query for retrieving leaderboard snapshots.
 ## Example
 
 ```python
-from bixarena_api_client_python.models.leaderboard_snapshot_query import LeaderboardSnapshotQuery
+from bixarena_api_client.models.leaderboard_snapshot_query import LeaderboardSnapshotQuery
 
 # TODO update the JSON string below
 json = "{}"

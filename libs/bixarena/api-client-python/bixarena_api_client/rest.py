@@ -18,7 +18,7 @@ import ssl
 
 import urllib3
 
-from bixarena_api_client_python.exceptions import ApiException, ApiValueError
+from bixarena_api_client.exceptions import ApiException, ApiValueError
 
 SUPPORTED_SOCKS_PROXIES = {"socks5", "socks5h", "socks4", "socks4a"}
 RESTResponseType = urllib3.HTTPResponse

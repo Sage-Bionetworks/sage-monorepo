@@ -15,7 +15,7 @@ A historical entry representing a model's performance at a specific point in tim
 ## Example
 
 ```python
-from bixarena_api_client_python.models.historical_leaderboard_entry import HistoricalLeaderboardEntry
+from bixarena_api_client.models.historical_leaderboard_entry import HistoricalLeaderboardEntry
 
 # TODO update the JSON string below
 json = "{}"

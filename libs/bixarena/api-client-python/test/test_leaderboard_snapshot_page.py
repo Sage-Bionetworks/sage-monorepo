@@ -13,9 +13,7 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client_python.models.leaderboard_snapshot_page import (
-    LeaderboardSnapshotPage,
-)
+from bixarena_api_client.models.leaderboard_snapshot_page import LeaderboardSnapshotPage
 
 
 class TestLeaderboardSnapshotPage(unittest.TestCase):
@@ -44,7 +42,7 @@ class TestLeaderboardSnapshotPage(unittest.TestCase):
                 has_next = True,
                 has_previous = True,
                 snapshots = [
-                    bixarena_api_client_python.models.leaderboard_snapshot.LeaderboardSnapshot(
+                    bixarena_api_client.models.leaderboard_snapshot.LeaderboardSnapshot(
                         id = 'snapshot_2025-08-16_14-30', 
                         created_at = '2025-08-16T14:30Z', 
                         entry_count = 50, 
@@ -60,7 +58,7 @@ class TestLeaderboardSnapshotPage(unittest.TestCase):
                 has_next = True,
                 has_previous = True,
                 snapshots = [
-                    bixarena_api_client_python.models.leaderboard_snapshot.LeaderboardSnapshot(
+                    bixarena_api_client.models.leaderboard_snapshot.LeaderboardSnapshot(
                         id = 'snapshot_2025-08-16_14-30', 
                         created_at = '2025-08-16T14:30Z', 
                         entry_count = 50, 

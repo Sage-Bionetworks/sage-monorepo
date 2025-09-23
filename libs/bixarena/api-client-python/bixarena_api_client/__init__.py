@@ -46,63 +46,59 @@ __all__ = [
 ]
 
 # import apis into sdk package
-from bixarena_api_client_python.api.leaderboard_api import (
-    LeaderboardApi as LeaderboardApi,
-)
+from bixarena_api_client.api.leaderboard_api import LeaderboardApi as LeaderboardApi
 
 # import ApiClient
-from bixarena_api_client_python.api_response import ApiResponse as ApiResponse
-from bixarena_api_client_python.api_client import ApiClient as ApiClient
-from bixarena_api_client_python.configuration import Configuration as Configuration
-from bixarena_api_client_python.exceptions import OpenApiException as OpenApiException
-from bixarena_api_client_python.exceptions import ApiTypeError as ApiTypeError
-from bixarena_api_client_python.exceptions import ApiValueError as ApiValueError
-from bixarena_api_client_python.exceptions import ApiKeyError as ApiKeyError
-from bixarena_api_client_python.exceptions import ApiAttributeError as ApiAttributeError
-from bixarena_api_client_python.exceptions import ApiException as ApiException
+from bixarena_api_client.api_response import ApiResponse as ApiResponse
+from bixarena_api_client.api_client import ApiClient as ApiClient
+from bixarena_api_client.configuration import Configuration as Configuration
+from bixarena_api_client.exceptions import OpenApiException as OpenApiException
+from bixarena_api_client.exceptions import ApiTypeError as ApiTypeError
+from bixarena_api_client.exceptions import ApiValueError as ApiValueError
+from bixarena_api_client.exceptions import ApiKeyError as ApiKeyError
+from bixarena_api_client.exceptions import ApiAttributeError as ApiAttributeError
+from bixarena_api_client.exceptions import ApiException as ApiException
 
 # import models into sdk package
-from bixarena_api_client_python.models.basic_error import BasicError as BasicError
-from bixarena_api_client_python.models.historical_leaderboard_entry import (
+from bixarena_api_client.models.basic_error import BasicError as BasicError
+from bixarena_api_client.models.historical_leaderboard_entry import (
     HistoricalLeaderboardEntry as HistoricalLeaderboardEntry,
 )
-from bixarena_api_client_python.models.leaderboard_entry import (
+from bixarena_api_client.models.leaderboard_entry import (
     LeaderboardEntry as LeaderboardEntry,
 )
-from bixarena_api_client_python.models.leaderboard_entry_page import (
+from bixarena_api_client.models.leaderboard_entry_page import (
     LeaderboardEntryPage as LeaderboardEntryPage,
 )
-from bixarena_api_client_python.models.leaderboard_history_sort import (
+from bixarena_api_client.models.leaderboard_history_sort import (
     LeaderboardHistorySort as LeaderboardHistorySort,
 )
-from bixarena_api_client_python.models.leaderboard_list_inner import (
+from bixarena_api_client.models.leaderboard_list_inner import (
     LeaderboardListInner as LeaderboardListInner,
 )
-from bixarena_api_client_python.models.leaderboard_model_history_page import (
+from bixarena_api_client.models.leaderboard_model_history_page import (
     LeaderboardModelHistoryPage as LeaderboardModelHistoryPage,
 )
-from bixarena_api_client_python.models.leaderboard_model_history_query import (
+from bixarena_api_client.models.leaderboard_model_history_query import (
     LeaderboardModelHistoryQuery as LeaderboardModelHistoryQuery,
 )
-from bixarena_api_client_python.models.leaderboard_search_query import (
+from bixarena_api_client.models.leaderboard_search_query import (
     LeaderboardSearchQuery as LeaderboardSearchQuery,
 )
-from bixarena_api_client_python.models.leaderboard_snapshot import (
+from bixarena_api_client.models.leaderboard_snapshot import (
     LeaderboardSnapshot as LeaderboardSnapshot,
 )
-from bixarena_api_client_python.models.leaderboard_snapshot_page import (
+from bixarena_api_client.models.leaderboard_snapshot_page import (
     LeaderboardSnapshotPage as LeaderboardSnapshotPage,
 )
-from bixarena_api_client_python.models.leaderboard_snapshot_query import (
+from bixarena_api_client.models.leaderboard_snapshot_query import (
     LeaderboardSnapshotQuery as LeaderboardSnapshotQuery,
 )
-from bixarena_api_client_python.models.leaderboard_snapshot_sort import (
+from bixarena_api_client.models.leaderboard_snapshot_sort import (
     LeaderboardSnapshotSort as LeaderboardSnapshotSort,
 )
-from bixarena_api_client_python.models.leaderboard_sort import (
+from bixarena_api_client.models.leaderboard_sort import (
     LeaderboardSort as LeaderboardSort,
 )
-from bixarena_api_client_python.models.page_metadata import PageMetadata as PageMetadata
-from bixarena_api_client_python.models.sort_direction import (
-    SortDirection as SortDirection,
-)
+from bixarena_api_client.models.page_metadata import PageMetadata as PageMetadata
+from bixarena_api_client.models.sort_direction import SortDirection as SortDirection

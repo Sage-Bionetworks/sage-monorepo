@@ -1,4 +1,4 @@
-# bixarena-api-client-python
+# bixarena-api-client
 
 Advance bioinformatics by evaluating and ranking AI agents.
 
@@ -29,7 +29,7 @@ pip install git+https://github.com/GIT_USER_ID/GIT_REPO_ID.git
 Then import the package:
 
 ```python
-import bixarena_api_client_python
+import bixarena_api_client
 ```
 
 ### Setuptools
@@ -45,7 +45,7 @@ python setup.py install --user
 Then import the package:
 
 ```python
-import bixarena_api_client_python
+import bixarena_api_client
 ```
 
 ### Tests
@@ -58,24 +58,24 @@ Please follow the [installation procedure](#installation--usage) and then run th
 
 ```python
 
-import bixarena_api_client_python
-from bixarena_api_client_python.rest import ApiException
+import bixarena_api_client
+from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to http://localhost/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = bixarena_api_client_python.Configuration(
+configuration = bixarena_api_client.Configuration(
     host = "http://localhost/v1"
 )
 
 
 
 # Enter a context with an instance of the API client
-with bixarena_api_client_python.ApiClient(configuration) as api_client:
+with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = bixarena_api_client_python.LeaderboardApi(api_client)
+    api_instance = bixarena_api_client.LeaderboardApi(api_client)
     leaderboard_id = 'open-source' # str | The unique identifier of a leaderboard
-    leaderboard_search_query = bixarena_api_client_python.LeaderboardSearchQuery() # LeaderboardSearchQuery | The search query used to find and filter leaderboard entries. (optional)
+    leaderboard_search_query = bixarena_api_client.LeaderboardSearchQuery() # LeaderboardSearchQuery | The search query used to find and filter leaderboard entries. (optional)
 
     try:
         # Get leaderboard entries

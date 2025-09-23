@@ -13,7 +13,7 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client_python.models.historical_leaderboard_entry import (
+from bixarena_api_client.models.historical_leaderboard_entry import (
     HistoricalLeaderboardEntry,
 )
 

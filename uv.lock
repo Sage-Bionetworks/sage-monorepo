@@ -4,7 +4,7 @@ requires-python = "==3.13.3"
 
 [manifest]
 members = [
-    "bixarena-api-client-python",
+    "bixarena-api-client",
     "bixarena-app",
     "bixarena-tools",
     "openchallenges-api-client",
@@ -224,7 +224,7 @@ wheels = [
 ]
 
 [[package]]
-name = "bixarena-api-client-python"
+name = "bixarena-api-client"
 version = "1.0.0"
 source = { editable = "libs/bixarena/api-client-python" }
 dependencies = [
@@ -249,7 +249,7 @@ source = { editable = "apps/bixarena/app" }
 dependencies = [
     { name = "accelerate" },
     { name = "aiohttp" },
-    { name = "bixarena-api-client-python" },
+    { name = "bixarena-api-client" },
     { name = "fastapi" },
     { name = "gradio" },
     { name = "httpx" },
@@ -282,7 +282,7 @@ dev = [
 requires-dist = [
     { name = "accelerate", specifier = ">=0.21" },
     { name = "aiohttp" },
-    { name = "bixarena-api-client-python", editable = "libs/bixarena/api-client-python" },
+    { name = "bixarena-api-client", editable = "libs/bixarena/api-client-python" },
     { name = "black", marker = "extra == 'dev'", specifier = "==23.3.0" },
     { name = "fastapi" },
     { name = "gradio", specifier = ">=4.10" },
@@ -1990,7 +1990,7 @@ name = "sage-monorepo"
 version = "1.0.0"
 source = { editable = "." }
 dependencies = [
-    { name = "bixarena-api-client-python" },
+    { name = "bixarena-api-client" },
     { name = "bixarena-tools" },
     { name = "openchallenges-api-client" },
     { name = "openchallenges-client" },
@@ -2013,7 +2013,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "bixarena-api-client-python", editable = "libs/bixarena/api-client-python" },
+    { name = "bixarena-api-client", editable = "libs/bixarena/api-client-python" },
     { name = "bixarena-tools", editable = "apps/bixarena/tools" },
     { name = "openchallenges-api-client", editable = "libs/openchallenges/api-client-python" },
     { name = "openchallenges-client", editable = "libs/openchallenges/client-python" },

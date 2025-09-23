@@ -13,39 +13,27 @@ Do not edit the class manually.
 """  # noqa: E501
 
 # import models into model package
-from bixarena_api_client_python.models.basic_error import BasicError
-from bixarena_api_client_python.models.historical_leaderboard_entry import (
+from bixarena_api_client.models.basic_error import BasicError
+from bixarena_api_client.models.historical_leaderboard_entry import (
     HistoricalLeaderboardEntry,
 )
-from bixarena_api_client_python.models.leaderboard_entry import LeaderboardEntry
-from bixarena_api_client_python.models.leaderboard_entry_page import (
-    LeaderboardEntryPage,
-)
-from bixarena_api_client_python.models.leaderboard_history_sort import (
-    LeaderboardHistorySort,
-)
-from bixarena_api_client_python.models.leaderboard_list_inner import (
-    LeaderboardListInner,
-)
-from bixarena_api_client_python.models.leaderboard_model_history_page import (
+from bixarena_api_client.models.leaderboard_entry import LeaderboardEntry
+from bixarena_api_client.models.leaderboard_entry_page import LeaderboardEntryPage
+from bixarena_api_client.models.leaderboard_history_sort import LeaderboardHistorySort
+from bixarena_api_client.models.leaderboard_list_inner import LeaderboardListInner
+from bixarena_api_client.models.leaderboard_model_history_page import (
     LeaderboardModelHistoryPage,
 )
-from bixarena_api_client_python.models.leaderboard_model_history_query import (
+from bixarena_api_client.models.leaderboard_model_history_query import (
     LeaderboardModelHistoryQuery,
 )
-from bixarena_api_client_python.models.leaderboard_search_query import (
-    LeaderboardSearchQuery,
-)
-from bixarena_api_client_python.models.leaderboard_snapshot import LeaderboardSnapshot
-from bixarena_api_client_python.models.leaderboard_snapshot_page import (
-    LeaderboardSnapshotPage,
-)
-from bixarena_api_client_python.models.leaderboard_snapshot_query import (
+from bixarena_api_client.models.leaderboard_search_query import LeaderboardSearchQuery
+from bixarena_api_client.models.leaderboard_snapshot import LeaderboardSnapshot
+from bixarena_api_client.models.leaderboard_snapshot_page import LeaderboardSnapshotPage
+from bixarena_api_client.models.leaderboard_snapshot_query import (
     LeaderboardSnapshotQuery,
 )
-from bixarena_api_client_python.models.leaderboard_snapshot_sort import (
-    LeaderboardSnapshotSort,
-)
-from bixarena_api_client_python.models.leaderboard_sort import LeaderboardSort
-from bixarena_api_client_python.models.page_metadata import PageMetadata
-from bixarena_api_client_python.models.sort_direction import SortDirection
+from bixarena_api_client.models.leaderboard_snapshot_sort import LeaderboardSnapshotSort
+from bixarena_api_client.models.leaderboard_sort import LeaderboardSort
+from bixarena_api_client.models.page_metadata import PageMetadata
+from bixarena_api_client.models.sort_direction import SortDirection
