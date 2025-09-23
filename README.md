@@ -12,12 +12,14 @@
 
 <p align="center">
   <a href="https://sage-bionetworks.github.io/sage-monorepo/">Docs Site</a> ·
-  <a href="CONTRIBUTING.md">Contributing</a> ·
-  <a href="https://github.com/Sage-Bionetworks/sage-monorepo/issues/new/choose">Issues</a>
+  <a href="https://sage-bionetworks.github.io/sage-monorepo/contributions/overview/">Contributing Guidelines</a> ·
+  <a href="https://github.com/Sage-Bionetworks/sage-monorepo/issues/new/choose">Submit an Issue</a>
   <br><br>
   <img src="https://img.shields.io/github/actions/workflow/status/Sage-Bionetworks/sage-monorepo/ci.yml?branch=main&color=007acc&labelColor=555555&style=for-the-badge&logo=github&label=CI/CD" alt="CI/CD"/>
   <img src="https://img.shields.io/github/license/Sage-Bionetworks/sage-monorepo.svg?color=007acc&labelColor=555555&style=for-the-badge&logo=github" alt="License"/>
 </p>
+
+---
 
 ## About the Monorepo
 
@@ -41,7 +43,7 @@ We follow an API contract-first approach:
 2. Generate server stubs and client SDKs (Angular, Java, Python, TypeScript).
 3. Implement product logic inside generated skeletons.
 
-**Benefits:**
+Benefits:
 
 - Shared, consistent contracts across products
 - Fewer breaking changes & faster alignment
@@ -73,6 +75,8 @@ The monorepo ships with a [Dev Container](https://containers.dev/) configuration
 
 [![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Container&message=Open&color=blue&logo=visualstudiocode&style=for-the-badge)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/Sage-Bionetworks/sage-monorepo)
 
-## ⭐ Support & Contribute
+## Contributing
 
-If you find the Sage Monorepo or its projects useful, please **give us a star ⭐** and check out the [contributing guide](CONTRIBUTING.md) to get involved.
+If you like the Sage Monorepo, its architecture, approach, or the projects it brings together (such
+as Agora, OpenChallenges, and MODEL-AD), please consider giving it a star ⭐ and check out the
+[contributing guide](CONTRIBUTING.md) to get involved.
