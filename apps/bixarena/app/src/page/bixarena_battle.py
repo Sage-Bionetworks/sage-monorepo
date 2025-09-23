@@ -8,9 +8,10 @@ simplified to a single function for a single-page LLM comparison arena.
 import json
 import logging
 import time
+import threading
+from typing import List, Dict, Any
 
 import gradio as gr
-
 
 from config.constants import (
     MODERATION_MSG,
@@ -21,7 +22,6 @@ from config.constants import (
 )
 
 from model.model_selection import get_battle_pair, moderation_filter
-
 
 from model.model_response import (
     State,
@@ -34,6 +34,9 @@ from model.model_response import (
     invisible_btn,
 )
 
+# Import our prompt examples manager
+from config.prompt_examples import get_prompt_manager
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -41,6 +44,11 @@ logger = logging.getLogger(__name__)
 num_sides = 2
 anony_names = ["", ""]
 models = []
+
+# Global state for prompt examples
+prompt_manager = get_prompt_manager()
+search_active = False
+rolling_paused = False
 
 
 def load_demo_side_by_side_anony(models_, url_params):
@@ -211,6 +219,78 @@ def add_text(
     )
 
 
+# New functions for prompt examples functionality
+def handle_search_change(search_query: str):
+    """Handle search input changes"""
+    global search_active, rolling_paused
+
+    if search_query.strip():
+        search_active = True
+        rolling_paused = True
+        # Return search results
+        results = prompt_manager.search_prompts(search_query)
+        if results:
+            # Create HTML for search results with unique IDs for each result
+            html_results = "<div style='max-height: 200px; overflow-y: auto;'>"
+            for i, result in enumerate(results[:5]):  # Show max 5 results
+                # Escape quotes properly for JavaScript
+                escaped_text = (
+                    result["text"]
+                    .replace("'", "\\'")
+                    .replace('"', '\\"')
+                    .replace("`", "\\`")
+                )
+                html_results += f"""
+                <div style='padding: 8px; margin: 4px 0; background: rgba(56, 189, 248, 0.1); 
+                           border-radius: 6px; cursor: pointer; border: 1px solid rgba(56, 189, 248, 0.3);
+                           transition: all 0.2s ease;'
+                     onmouseover='this.style.background="rgba(56, 189, 248, 0.2)"'
+                     onmouseout='this.style.background="rgba(56, 189, 248, 0.1)"'
+                     onclick='
+                        var inputBox = document.querySelector("#input_box textarea") || document.querySelector("#input_box input") || document.getElementById("input_box");
+                        if (inputBox) {{
+                            inputBox.value = "{escaped_text}";
+                            inputBox.focus();
+                            // Trigger change event to update Gradio state
+                            inputBox.dispatchEvent(new Event("input", {{ bubbles: true }}));
+                        }}
+                     '>
+                    <small style='color: #38bdf8; font-weight: 500;'>{result["category"]}</small><br>
+                    <span style='color: #e2e8f0; font-size: 14px; line-height: 1.4;'>{result["text"][:100]}{"..." if len(result["text"]) > 100 else ""}</span>
+                </div>
+                """
+            html_results += "</div>"
+            return gr.HTML(value=html_results, visible=True), gr.Button(visible=False)
+        else:
+            return gr.HTML(
+                value="<p style='color: #94a3b8; text-align: center; padding: 16px;'>No matching prompts found.</p>",
+                visible=True,
+            ), gr.Button(visible=False)
+    else:
+        search_active = False
+        rolling_paused = False
+        return gr.HTML(visible=False), gr.Button(visible=True)
+
+
+def update_rolling_prompt():
+    """Update the rolling prompt - called periodically"""
+    global search_active, rolling_paused
+
+    if not rolling_paused and not search_active:
+        new_prompt = prompt_manager.get_rolling_prompt()
+        return gr.Button(value=f"💫 Try this: {new_prompt}", visible=True)
+    return gr.Button.update()  # No change if paused
+
+
+def click_rolling_prompt(button_value):
+    """Handle clicking on the rolling prompt"""
+    # Extract the prompt text from the button value (remove "💫 Try this: " prefix)
+    if button_value.startswith("💫 Try this: "):
+        prompt_text = button_value[len("💫 Try this: ") :]
+        return prompt_text
+    return button_value
+
+
 def build_side_by_side_ui_anony():
     notice_markdown = """
 # ⚔️  BixArena: Benchmarking LLMs for Biomedical Breakthroughs
@@ -227,6 +307,30 @@ def build_side_by_side_ui_anony():
     chatbots = []
 
     gr.Markdown(notice_markdown, elem_id="notice_markdown")
+
+    # Prompt Examples Section
+    with gr.Group():
+        gr.Markdown("### 💡 Example Biomedical Prompts")
+
+        # Search box
+        search_box = gr.Textbox(
+            placeholder="Search example prompts...",
+            show_label=False,
+            container=False,
+            elem_id="prompt_search",
+        )
+
+        # Rolling prompt display as clickable button (visible when not searching)
+        rolling_prompt_button = gr.Button(
+            value=f"💫 Try this: {prompt_manager.get_rolling_prompt()}",
+            elem_id="rolling_prompt",
+            visible=True,
+            variant="secondary",
+            size="sm",
+        )
+
+        # Search results display (hidden by default)
+        search_results_display = gr.HTML(visible=False, elem_id="search_results")
 
     with gr.Group(elem_id="share-region-anony"):
         with gr.Row():
@@ -276,7 +380,22 @@ def build_side_by_side_ui_anony():
         with gr.Column(scale=2):
             pass
 
-    # Register listeners
+    # Event handlers for prompt examples
+    search_box.change(
+        handle_search_change,
+        inputs=[search_box],
+        outputs=[search_results_display, rolling_prompt_button],
+    )
+
+    rolling_prompt_button.click(
+        click_rolling_prompt, inputs=[rolling_prompt_button], outputs=[textbox]
+    )
+
+    # Add timer for rolling prompts (updates every 4 seconds)
+    timer = gr.Timer(4.0)  # 4 second interval
+    timer.tick(update_rolling_prompt, outputs=[rolling_prompt_button])
+
+    # Register listeners (keep all existing functionality)
     btn_list = [
         leftvote_btn,
         rightvote_btn,
