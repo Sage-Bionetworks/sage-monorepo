@@ -2,26 +2,30 @@ package org.sagebionetworks.openchallenges.mcp.server;
 
 import java.util.Arrays;
 import java.util.List;
-import org.sagebionetworks.openchallenges.mcp.server.config.McpServerConfigData;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.openchallenges.mcp.server.configuration.AppProperties;
+import org.sagebionetworks.openchallenges.mcp.server.service.ChallengeAnalyticsService;
+import org.sagebionetworks.openchallenges.mcp.server.service.ChallengeContributionService;
+import org.sagebionetworks.openchallenges.mcp.server.service.ChallengePlatformService;
+import org.sagebionetworks.openchallenges.mcp.server.service.ChallengeService;
+import org.sagebionetworks.openchallenges.mcp.server.service.EdamConceptService;
+import org.sagebionetworks.openchallenges.mcp.server.service.OrganizationService;
 import org.springframework.ai.support.ToolCallbacks;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.Bean;
 
+@Slf4j
 @SpringBootApplication
+@ConfigurationPropertiesScan
+@RequiredArgsConstructor
 public class McpServerApplication implements CommandLineRunner {
 
-  private static final Logger logger = LoggerFactory.getLogger(McpServerApplication.class);
-
-  private final McpServerConfigData mcpServerConfigData;
-
-  public McpServerApplication(McpServerConfigData mcpServerConfigData) {
-    this.mcpServerConfigData = mcpServerConfigData;
-  }
+  private final AppProperties appProperties;
 
   public static void main(String[] args) {
     SpringApplication.run(McpServerApplication.class, args);
@@ -29,7 +33,7 @@ public class McpServerApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    logger.info(mcpServerConfigData.getWelcomeMessage());
+    log.info(appProperties.welcomeMessage());
   }
 
   @Bean

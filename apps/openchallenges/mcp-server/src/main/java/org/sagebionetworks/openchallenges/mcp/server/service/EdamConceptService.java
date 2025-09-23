@@ -1,7 +1,8 @@
-package org.sagebionetworks.openchallenges.mcp.server;
+package org.sagebionetworks.openchallenges.mcp.server.service;
 
 import io.micrometer.common.lang.Nullable;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.openchallenges.api.client.api.EdamConceptApi;
 import org.sagebionetworks.openchallenges.api.client.model.EdamConceptDirection;
 import org.sagebionetworks.openchallenges.api.client.model.EdamConceptSearchQuery;
@@ -13,13 +14,10 @@ import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class EdamConceptService {
 
   private final EdamConceptApi edamConceptApi;
-
-  public EdamConceptService(EdamConceptApi edamConceptApi) {
-    this.edamConceptApi = edamConceptApi;
-  }
 
   @Tool(
     name = "list_edam_concepts",

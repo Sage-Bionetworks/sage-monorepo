@@ -1,18 +1,16 @@
-package org.sagebionetworks.openchallenges.mcp.server;
+package org.sagebionetworks.openchallenges.mcp.server.service;
 
+import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.openchallenges.api.client.api.ChallengeAnalyticsApi;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengesPerYear;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ChallengeAnalyticsService {
 
   private final ChallengeAnalyticsApi challengeAnalyticsApi;
-
-  public ChallengeAnalyticsService(ChallengeAnalyticsApi challengeAnalyticsApi) {
-    this.challengeAnalyticsApi = challengeAnalyticsApi;
-  }
 
   @Tool(
     name = "get_challenges_per_year",

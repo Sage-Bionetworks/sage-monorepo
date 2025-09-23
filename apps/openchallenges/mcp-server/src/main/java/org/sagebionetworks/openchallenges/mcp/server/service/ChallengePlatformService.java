@@ -1,7 +1,8 @@
-package org.sagebionetworks.openchallenges.mcp.server;
+package org.sagebionetworks.openchallenges.mcp.server.service;
 
 import io.micrometer.common.lang.Nullable;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.openchallenges.api.client.api.ChallengePlatformApi;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengePlatformDirection;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengePlatformSearchQuery;
@@ -12,13 +13,10 @@ import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ChallengePlatformService {
 
   private final ChallengePlatformApi challengePlatformApi;
-
-  public ChallengePlatformService(ChallengePlatformApi challengePlatformApi) {
-    this.challengePlatformApi = challengePlatformApi;
-  }
 
   @Tool(name = "list_challenge_platforms", description = "List challenge platforms")
   public ChallengePlatformsPage listChallengePlatforms(

@@ -1,4 +1,4 @@
-package org.sagebionetworks.openchallenges.mcp.server.config;
+package org.sagebionetworks.openchallenges.mcp.server.configuration;
 
 import org.sagebionetworks.openchallenges.api.client.ApiClient;
 import org.sagebionetworks.openchallenges.api.client.api.ChallengeAnalyticsApi;
@@ -15,9 +15,9 @@ public class OpenChallengesApiClientConfig {
 
   private final ApiClient apiClient;
 
-  public OpenChallengesApiClientConfig(McpServerConfigData mcpServerConfigData) {
+  public OpenChallengesApiClientConfig(AppProperties appProperties) {
     this.apiClient = new ApiClient();
-    this.apiClient.setBasePath(mcpServerConfigData.getApiBaseUrl());
+    this.apiClient.setBasePath(appProperties.apiBaseUrl());
   }
 
   @Bean

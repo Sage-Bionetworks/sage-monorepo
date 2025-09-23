@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sagebionetworks.openchallenges.api.client.api.ChallengeAnalyticsApi;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengesPerYear;
+import org.sagebionetworks.openchallenges.mcp.server.service.ChallengeAnalyticsService;
 
 class ChallengeAnalyticsServiceTests {
 
