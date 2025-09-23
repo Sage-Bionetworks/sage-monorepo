@@ -29,7 +29,7 @@ class SynapseOAuthClient:
 
         if not all([self.client_id, self.client_secret]):
             raise ValueError(
-                "Missing SYNAPSE_CLIENT_ID or SYNAPSE_CLIENT_SECRET environment variables"
+                "Missing required environment variables for OAuth configuration."
             )
 
     def generate_login_url(self) -> Tuple[str, str]:

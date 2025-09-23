@@ -61,6 +61,7 @@ class AuthService:
 
         except Exception as e:
             self.session.set_error(f"OAuth callback failed: {e}")
+            print(f"Error during OAuth callback: {e}")
             return False
 
     def logout(self) -> None:
