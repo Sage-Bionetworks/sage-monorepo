@@ -6,3 +6,5 @@ packages:
   # that break the apps and tests
   - '!libs/**/api-client-angular'
 minimumReleaseAge: 4320 # 3 days
+minimumReleaseAgeExclude:
+  - '@typescript-eslint/types'
