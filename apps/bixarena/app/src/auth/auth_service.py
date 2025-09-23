@@ -12,6 +12,17 @@ class AuthService:
 
     def generate_login_url(self) -> str:
         """Generate OAuth login URL"""
+        # Development bypass
+        if self.oauth_client.skip_auth:
+            # Set mock user immediately
+            mock_user = {
+                "firstName": "Developer",
+                "userName": "developer",
+                "authenticated": True,
+            }
+            self.session.set_current_user(mock_user)
+            return ""
+
         try:
             login_url, state = self.oauth_client.generate_login_url()
             self.session.set_oauth_state(state)

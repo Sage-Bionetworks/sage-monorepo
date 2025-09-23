@@ -5,7 +5,7 @@ from page.bixarena_header import build_header, update_login_button, handle_login
 from page.bixarena_battle import build_battle_page
 from page.bixarena_leaderboard import build_leaderboard_page
 from page.bixarena_home import build_home_page
-from page.bixarena_user import build_user_page, update_user_page, handle_logout
+from page.bixarena_user import build_user_page, update_user_page, handle_logout_click
 from auth.auth_service import get_auth_service
 
 
@@ -91,15 +91,19 @@ def build_app(register_api_endpoint_file=None, moderate=False):
         leaderboard_btn.click(lambda: navigator.show_page(2), outputs=pages)
         cta_btn.click(lambda: navigator.show_page(1), outputs=pages)
 
-        # Login - now passes update_user_page function
+        # Login
         login_btn.click(
-            lambda: handle_login_click(navigator, update_user_page),
-            outputs=pages + [welcome_display, logout_btn],
+            lambda: handle_login_click(
+                navigator, update_login_button, update_user_page
+            ),
+            outputs=pages + [login_btn, welcome_display, logout_btn],
         )
 
-        # Logout - now passes all required functions
+        # Logout
         logout_btn.click(
-            lambda: handle_logout(navigator, update_login_button, update_user_page),
+            lambda: handle_logout_click(
+                navigator, update_login_button, update_user_page
+            ),
             outputs=pages + [login_btn, welcome_display, logout_btn],
         )
 

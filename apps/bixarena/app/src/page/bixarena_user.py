@@ -35,7 +35,7 @@ def update_user_page():
         return gr.HTML(login_prompt), gr.Button("Logout", visible=False)
 
 
-def handle_logout(navigator, update_login_button, update_user_page):
+def handle_logout_click(navigator, update_login_button, update_user_page):
     """Handle logout and redirect to home - must return all expected outputs"""
     auth_service = get_auth_service()
 

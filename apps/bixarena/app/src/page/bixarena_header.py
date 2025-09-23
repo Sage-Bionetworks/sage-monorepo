@@ -50,14 +50,16 @@ def update_login_button():
         return gr.Button("Login", variant="primary", link=login_url)
 
 
-def handle_login_click(navigator, update_user_page):
+def handle_login_click(navigator, update_login_button, update_user_page):
     """Handle login button click - must return all expected outputs"""
     auth_service = get_auth_service()
     user_info = update_user_page()
 
+    updated_login_btn = update_login_button()
+
     if auth_service.is_authenticated():
         # Show user page
-        return *navigator.show_page(3), *user_info
+        return *navigator.show_page(3), updated_login_btn, *user_info
     else:
         # Show home page
-        return *navigator.show_page(0), *user_info
+        return *navigator.show_page(0), updated_login_btn, *user_info

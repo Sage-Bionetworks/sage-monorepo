@@ -18,6 +18,9 @@ class SynapseOAuthClient:
         self.client_secret = os.environ.get("SYNAPSE_CLIENT_SECRET")
         self.redirect_uri = f"http://127.0.0.1:{os.environ.get('APP_PORT', '8100')}"
 
+        # Development bypass flag
+        self.skip_auth = os.environ.get("SKIP_AUTH", "").lower() == "true"
+
         self.auth_url = "https://signin.synapse.org"
         self.token_url = "https://repo-prod.prod.sagebase.org/auth/v1/oauth2/token"
         self.user_profile_url = (
