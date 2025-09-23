@@ -13,7 +13,7 @@ Do not edit the class manually.
 
 import unittest
 
-from openchallenges_api_client_python.models.user_role import UserRole
+from openchallenges_api_client.models.user_role import UserRole
 
 
 class TestUserRole(unittest.TestCase):

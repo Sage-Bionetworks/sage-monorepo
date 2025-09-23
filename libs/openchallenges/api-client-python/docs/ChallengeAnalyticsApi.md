@@ -1,4 +1,4 @@
-# openchallenges_api_client_python.ChallengeAnalyticsApi
+# openchallenges_api_client.ChallengeAnalyticsApi
 
 All URIs are relative to *https://openchallenges.io/api/v1*
 
@@ -20,14 +20,14 @@ Returns the number of challenges tracked per year
 - Bearer (JWT) Authentication (jwtBearer):
 
 ```python
-import openchallenges_api_client_python
-from openchallenges_api_client_python.models.challenges_per_year import ChallengesPerYear
-from openchallenges_api_client_python.rest import ApiException
+import openchallenges_api_client
+from openchallenges_api_client.models.challenges_per_year import ChallengesPerYear
+from openchallenges_api_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://openchallenges.io/api/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     host = "https://openchallenges.io/api/v1"
 )
 
@@ -43,14 +43,14 @@ configuration.api_key['apiKey'] = os.environ["API_KEY"]
 # configuration.api_key_prefix['apiKey'] = 'Bearer'
 
 # Configure Bearer authorization (JWT): jwtBearer
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
-with openchallenges_api_client_python.ApiClient(configuration) as api_client:
+with openchallenges_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openchallenges_api_client_python.ChallengeAnalyticsApi(api_client)
+    api_instance = openchallenges_api_client.ChallengeAnalyticsApi(api_client)
 
     try:
         # Get the number of challenges tracked per year

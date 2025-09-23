@@ -1,4 +1,4 @@
-# openchallenges_api_client_python.APIKeyApi
+# openchallenges_api_client.APIKeyApi
 
 All URIs are relative to *https://openchallenges.io/api/v1*
 
@@ -22,15 +22,15 @@ Generate a new API key for the authenticated user
 - Bearer (JWT) Authentication (jwtBearer):
 
 ```python
-import openchallenges_api_client_python
-from openchallenges_api_client_python.models.create_api_key_request import CreateApiKeyRequest
-from openchallenges_api_client_python.models.create_api_key_response import CreateApiKeyResponse
-from openchallenges_api_client_python.rest import ApiException
+import openchallenges_api_client
+from openchallenges_api_client.models.create_api_key_request import CreateApiKeyRequest
+from openchallenges_api_client.models.create_api_key_response import CreateApiKeyResponse
+from openchallenges_api_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://openchallenges.io/api/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     host = "https://openchallenges.io/api/v1"
 )
 
@@ -46,15 +46,15 @@ configuration.api_key['apiKey'] = os.environ["API_KEY"]
 # configuration.api_key_prefix['apiKey'] = 'Bearer'
 
 # Configure Bearer authorization (JWT): jwtBearer
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
-with openchallenges_api_client_python.ApiClient(configuration) as api_client:
+with openchallenges_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openchallenges_api_client_python.APIKeyApi(api_client)
-    create_api_key_request = openchallenges_api_client_python.CreateApiKeyRequest() # CreateApiKeyRequest |
+    api_instance = openchallenges_api_client.APIKeyApi(api_client)
+    create_api_key_request = openchallenges_api_client.CreateApiKeyRequest() # CreateApiKeyRequest |
 
     try:
         # Create API key
@@ -109,13 +109,13 @@ Revoke an API key
 - Bearer (JWT) Authentication (jwtBearer):
 
 ```python
-import openchallenges_api_client_python
-from openchallenges_api_client_python.rest import ApiException
+import openchallenges_api_client
+from openchallenges_api_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://openchallenges.io/api/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     host = "https://openchallenges.io/api/v1"
 )
 
@@ -131,14 +131,14 @@ configuration.api_key['apiKey'] = os.environ["API_KEY"]
 # configuration.api_key_prefix['apiKey'] = 'Bearer'
 
 # Configure Bearer authorization (JWT): jwtBearer
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
-with openchallenges_api_client_python.ApiClient(configuration) as api_client:
+with openchallenges_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openchallenges_api_client_python.APIKeyApi(api_client)
+    api_instance = openchallenges_api_client.APIKeyApi(api_client)
     key_id = 'key_id_example' # str | The API key ID to delete
 
     try:
@@ -192,14 +192,14 @@ Get all API keys for the authenticated user
 - Bearer (JWT) Authentication (jwtBearer):
 
 ```python
-import openchallenges_api_client_python
-from openchallenges_api_client_python.models.api_key import ApiKey
-from openchallenges_api_client_python.rest import ApiException
+import openchallenges_api_client
+from openchallenges_api_client.models.api_key import ApiKey
+from openchallenges_api_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://openchallenges.io/api/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     host = "https://openchallenges.io/api/v1"
 )
 
@@ -215,14 +215,14 @@ configuration.api_key['apiKey'] = os.environ["API_KEY"]
 # configuration.api_key_prefix['apiKey'] = 'Bearer'
 
 # Configure Bearer authorization (JWT): jwtBearer
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
-with openchallenges_api_client_python.ApiClient(configuration) as api_client:
+with openchallenges_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openchallenges_api_client_python.APIKeyApi(api_client)
+    api_instance = openchallenges_api_client.APIKeyApi(api_client)
 
     try:
         # List API keys

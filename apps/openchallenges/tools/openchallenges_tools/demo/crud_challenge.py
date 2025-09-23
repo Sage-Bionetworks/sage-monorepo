@@ -18,40 +18,40 @@ import os
 import time
 from datetime import date, timedelta
 
-import openchallenges_api_client_python
-from openchallenges_api_client_python.api.challenge_platform_api import (
+import openchallenges_api_client
+from openchallenges_api_client.api.challenge_platform_api import (
     ChallengePlatformApi,
 )
-from openchallenges_api_client_python.models.challenge import Challenge
-from openchallenges_api_client_python.models.challenge_category import (
+from openchallenges_api_client.models.challenge import Challenge
+from openchallenges_api_client.models.challenge_category import (
     ChallengeCategory,
 )
-from openchallenges_api_client_python.models.challenge_create_request import (
+from openchallenges_api_client.models.challenge_create_request import (
     ChallengeCreateRequest,
 )
-from openchallenges_api_client_python.models.challenge_incentive import (
+from openchallenges_api_client.models.challenge_incentive import (
     ChallengeIncentive,
 )
-from openchallenges_api_client_python.models.challenge_status import ChallengeStatus
-from openchallenges_api_client_python.models.challenge_submission_type import (
+from openchallenges_api_client.models.challenge_status import ChallengeStatus
+from openchallenges_api_client.models.challenge_submission_type import (
     ChallengeSubmissionType,
 )
-from openchallenges_api_client_python.models.challenge_update_request import (
+from openchallenges_api_client.models.challenge_update_request import (
     ChallengeUpdateRequest,
 )
-from openchallenges_api_client_python.rest import ApiException
+from openchallenges_api_client.rest import ApiException
 
 OC_API_URL = os.getenv("OC_API_URL", "http://localhost:8082/api/v1")
 OC_API_KEY = os.getenv("OC_API_KEY", "oc_dev_admin1.admin_secret_abcd1234efgh5678")
 
 
-def build_configuration() -> openchallenges_api_client_python.Configuration:
+def build_configuration() -> openchallenges_api_client.Configuration:
     """Create a configured client using the apiKey security scheme.
 
     Prefer apiKey over jwtBearer when an API key is provided; caller can still
     set OC_JWT if we later add support for direct JWT usage.
     """
-    cfg = openchallenges_api_client_python.Configuration(host=OC_API_URL)
+    cfg = openchallenges_api_client.Configuration(host=OC_API_URL)
     if OC_API_KEY:
         # The Python client expects configuration.api_key['apiKey']
         cfg.api_key["apiKey"] = OC_API_KEY
@@ -99,7 +99,7 @@ def get_first_platform_id(api_client) -> int | None:
 
 
 def create_challenge(api_client) -> Challenge:
-    challenge_api = openchallenges_api_client_python.ChallengeApi(api_client)
+    challenge_api = openchallenges_api_client.ChallengeApi(api_client)
     platform_id = get_first_platform_id(api_client)
     unique_suffix = int(time.time())
     slug = f"demo-challenge-{unique_suffix}"
@@ -125,7 +125,7 @@ def create_challenge(api_client) -> Challenge:
 
 
 def get_challenge(api_client, challenge_id: int) -> Challenge:
-    challenge_api = openchallenges_api_client_python.ChallengeApi(api_client)
+    challenge_api = openchallenges_api_client.ChallengeApi(api_client)
     try:
         challenge = challenge_api.get_challenge(challenge_id)
     except ApiException as e:
@@ -135,7 +135,7 @@ def get_challenge(api_client, challenge_id: int) -> Challenge:
 
 
 def update_challenge(api_client, challenge: Challenge) -> Challenge:
-    challenge_api = openchallenges_api_client_python.ChallengeApi(api_client)
+    challenge_api = openchallenges_api_client.ChallengeApi(api_client)
 
     # Build a full update request (all required fields of ChallengeUpdateRequest).
     platform_id = getattr(challenge.platform, "id", None)
@@ -237,7 +237,7 @@ def update_challenge(api_client, challenge: Challenge) -> Challenge:
 
 
 def delete_challenge(api_client, challenge_id: int) -> None:
-    challenge_api = openchallenges_api_client_python.ChallengeApi(api_client)
+    challenge_api = openchallenges_api_client.ChallengeApi(api_client)
     try:
         challenge_api.delete_challenge(challenge_id)
     except ApiException as e:
@@ -247,7 +247,7 @@ def delete_challenge(api_client, challenge_id: int) -> None:
 
 def demo_crud_flow():
     cfg = build_configuration()
-    with openchallenges_api_client_python.ApiClient(cfg) as api_client:
+    with openchallenges_api_client.ApiClient(cfg) as api_client:
         created = create_challenge(api_client)
         retrieved = get_challenge(api_client, created.id)
         updated = update_challenge(api_client, retrieved)

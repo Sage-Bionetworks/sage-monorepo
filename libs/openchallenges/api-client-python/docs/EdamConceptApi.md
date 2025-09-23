@@ -1,4 +1,4 @@
-# openchallenges_api_client_python.EdamConceptApi
+# openchallenges_api_client.EdamConceptApi
 
 All URIs are relative to *https://openchallenges.io/api/v1*
 
@@ -20,15 +20,15 @@ List EDAM concepts
 - Bearer (JWT) Authentication (jwtBearer):
 
 ```python
-import openchallenges_api_client_python
-from openchallenges_api_client_python.models.edam_concept_search_query import EdamConceptSearchQuery
-from openchallenges_api_client_python.models.edam_concepts_page import EdamConceptsPage
-from openchallenges_api_client_python.rest import ApiException
+import openchallenges_api_client
+from openchallenges_api_client.models.edam_concept_search_query import EdamConceptSearchQuery
+from openchallenges_api_client.models.edam_concepts_page import EdamConceptsPage
+from openchallenges_api_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to https://openchallenges.io/api/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     host = "https://openchallenges.io/api/v1"
 )
 
@@ -44,15 +44,15 @@ configuration.api_key['apiKey'] = os.environ["API_KEY"]
 # configuration.api_key_prefix['apiKey'] = 'Bearer'
 
 # Configure Bearer authorization (JWT): jwtBearer
-configuration = openchallenges_api_client_python.Configuration(
+configuration = openchallenges_api_client.Configuration(
     access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
-with openchallenges_api_client_python.ApiClient(configuration) as api_client:
+with openchallenges_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = openchallenges_api_client_python.EdamConceptApi(api_client)
-    edam_concept_search_query = openchallenges_api_client_python.EdamConceptSearchQuery() # EdamConceptSearchQuery | The search query used to find EDAM concepts. (optional)
+    api_instance = openchallenges_api_client.EdamConceptApi(api_client)
+    edam_concept_search_query = openchallenges_api_client.EdamConceptSearchQuery() # EdamConceptSearchQuery | The search query used to find EDAM concepts. (optional)
 
     try:
         # List EDAM concepts

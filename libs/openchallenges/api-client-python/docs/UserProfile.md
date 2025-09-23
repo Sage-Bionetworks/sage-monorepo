@@ -20,7 +20,7 @@
 ## Example
 
 ```python
-from openchallenges_api_client_python.models.user_profile import UserProfile
+from openchallenges_api_client.models.user_profile import UserProfile
 
 # TODO update the JSON string below
 json = "{}"
