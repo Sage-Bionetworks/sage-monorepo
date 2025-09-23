@@ -16,7 +16,7 @@ addopts = """
 """
 
 [project]
-name = "bixarena-api-client-python"
+name = "bixarena-api-client"
 version = "1.0.0"
 description = "Discover, explore, and contribute to open biomedical challenges"
 requires-python = "==3.13.3"
@@ -29,7 +29,7 @@ dependencies = [
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["bixarena_api_client_python"]
+packages = ["bixarena_api_client"]
 
 [tool.hatch.metadata]
 allow-direct-references = true

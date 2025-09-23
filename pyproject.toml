@@ -28,7 +28,16 @@ templater = "jinja"
 dialect = "mysql"
 sql_file_exts = ".sql"
 
-[tool.uv.sources.openchallenges_tools]
+[tool.uv.sources.bixarena-app]
+workspace = true
+
+[tool.uv.sources.bixarena-tools]
+workspace = true
+
+[tool.uv.sources.openchallenges-tools]
+workspace = true
+
+[tool.uv.sources.bixarena-api-client]
 workspace = true
 
 [tool.uv.sources.openchallenges-api-client]
@@ -36,13 +45,6 @@ workspace = true
 
 [tool.uv.sources.openchallenges-client]
 workspace = true
-
-[tool.uv.sources.bixarena-tools]
-workspace = true
-
-[tool.uv.sources.bixarena-api-client-python]
-workspace = true
-
 
 [tool.uv.workspace]
 members = [
@@ -61,7 +63,7 @@ build-backend = "pdm.backend"
 [project]
 requires-python = "==3.13.3"
 dependencies = [
-  "bixarena-api-client-python",
+  "bixarena-api-client",
   "bixarena-tools",
   "openchallenges_tools",
   "openchallenges-api-client",
