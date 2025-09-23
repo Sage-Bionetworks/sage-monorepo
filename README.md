@@ -1,134 +1,83 @@
 <h1 align="center">Sage Monorepo</h1>
-
+<p align="center"><em>Build biomedical research products faster with a shared, language‑agnostic platform.</em></p>
 <p align="center">
-  <br>
-  <img src="docs/images/angular-cli-logo.png" alt="Angular CLI logo" width="100px" height="108px"/>
-  <br><br>
-  <h3 align="center">
-    A development environment for building robust apps faster.
-  </h3>
-  <br>
+  <a href="https://sage-bionetworks.github.io/sage-monorepo/">Documentation Site</a> ·
+  <a href="CONTRIBUTING.md">Contributing</a> ·
+  <a href="https://github.com/Sage-Bionetworks/sage-monorepo/issues/new/choose">Issues</a>
 </p>
-
 <p align="center">
-  <a href="https://docs.google.com/document/d/12oA-Uol_NsWUtC9LHlAlpcgZXXY9jkxFXqK2EMF96XM">Overview</a>
-  ·
-  <a href="CONTRIBUTING.md">Contributing Guidelines</a>
-  ·
-  <a href="https://github.com/Sage-Bionetworks/sage-monorepo/issues/new/choose">Submit an Issue</a>
-  <br>
-  <br>
+  <img src="https://img.shields.io/github/actions/workflow/status/Sage-Bionetworks/sage-monorepo/ci.yml?branch=main&label=CI/CD&logo=github&style=for-the-badge" alt="CI Status" />
+  <img src="https://img.shields.io/github/license/Sage-Bionetworks/sage-monorepo.svg?style=for-the-badge&label=License" alt="License" />
 </p>
-
-<p align="center">
-  <img src="https://img.shields.io/github/actions/workflow/status/Sage-Bionetworks/sage-monorepo/ci.yml?branch=main&color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github&label=CI/CD" alt="Sage Monorepo CI/CD" />
-  <img src="https://img.shields.io/github/license/Sage-Bionetworks/sage-monorepo.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE" alt="Sage Monorepo License" />
-</p>
-
-<p align="center">
-  <h4 align="center">
-    Love Sage Monorepo and its projects? Give our repo a star ⭐.
-  </h4>
-  <br>
-</p>
+<p align="center"><strong>If this repo helps your work, please ⭐ it!</strong></p>
 
 ---
 
-## Documentation
+## What Is This?
 
-Get started with Sage Monorepo, learn the fundamentals and explore advanced topics.
+The Sage Monorepo is a unified Nx + polyglot workspace where we design, build, test, document, and ship multiple biomedical research products. It hosts web applications, REST & GraphQL APIs, microservices, data / ETL jobs, and infrastructure assets across TypeScript, Java, Python, and R.
 
-- [Overview of Sage Monorepo]
-- Cheat Sheet (coming soon)
-- [Docs](docs)
+## Architecture & Stack (High‑Level)
 
-## Development Setup
+- **Monorepo Orchestration:** Nx (task graph, caching, consistent tooling)
+- **Frontend:** Angular (standalone components, signals), some React utilities
+- **Backend / Services:** Spring Boot (Java), Python services (Flask / scripts), R components, Node.js utilities
+- **Data & Storage:** PostgreSQL, OpenSearch, MongoDB (select services), object storage (S3-compatible), static assets
+- **Edge & Networking:** Caddy as reverse proxy, containerized local stacks via Docker & devcontainers
+- **API Contract First:** OpenAPI specifications drive server stubs & client SDKs (Angular, Java, Python, TypeScript)
+- **Automation:** GitHub Actions CI/CD, code generation, quality & security checks
 
-### Requirements
+The workspace is intentionally language agnostic: teams pick the best tool for a service while sharing conventions (naming, project tags, testing, documentation, release flows).
 
-- [Docker Engine] OR [GitHub Codespace]
-- [Visual Studio Code]
+## OpenAPI‑First Workflow
 
-### Open Sage Monorepo in VS Code
+1. Author or refine the product OpenAPI spec (lives under `libs/*/api-description` or app-specific folders).
+2. Validate & lint specs (Redocly rules + CI).
+3. Generate server stubs (e.g. Spring Boot) and typed client libraries (Angular, Java, Python) via OpenAPI Generator.
+4. Implement business logic inside generated skeletons; keep contracts authoritative in the spec.
+5. Publish API docs (GitHub Pages) & SDKs for reuse across products.
 
-**Option 1**: Click on the button shown below to open Sage Monorepo in its [development container]
-with VS Code. This option is suitable if you want to explore the content of Sage Monorepo.
+Benefits: earlier alignment, fewer breaking changes, instant multi-language clients, consistent error & auth models, and searchable, navigable API surfaces.
 
-[![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode&style=for-the-badge)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/Sage-Bionetworks/sage-monorepo 'Open in VS Code Dev Containers')
+## Product Portfolio
 
-**Option 2**: If you plan to contribute to this project, please [create a fork] and use its URL for
-cloning. For more information on contributing and/or our Forking Workflow, see
-[CONTRIBUTING.md](CONTRIBUTING.md).
+| Product                  | Description                                                              | Production                                | Docs / API                                                                                                                                                      |
+| ------------------------ | ------------------------------------------------------------------------ | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Agora**                | Multi-omics evidence explorer for Alzheimer’s disease target discovery   | https://agora.adknowledgeportal.org/genes | [Docs](https://sage-bionetworks.github.io/sage-monorepo/products/agora/) · [API](https://sage-bionetworks.github.io/sage-monorepo/api/agora/)                   |
+| **AMP-ALS**              | Collaboration platform for the Accelerating Medicines Partnership in ALS | https://www.amp-als.org/                  | [API](https://sage-bionetworks.github.io/sage-monorepo/api/amp-als/)                                                                                            |
+| **BixArena**             | Biomedical data analysis & challenge competition platform                | https://bixarena.synapse.org/             | [API](https://sage-bionetworks.github.io/sage-monorepo/api/bixarena/)                                                                                           |
+| **Model-AD**             | Resources & comparative tools for Alzheimer’s disease models             | https://www.model-ad.org/                 | [API](https://sage-bionetworks.github.io/sage-monorepo/api/model-ad/)                                                                                           |
+| **OpenChallenges**       | Cloud-native platform for scientific & citizen science challenges        | https://openchallenges.io/home            | [Docs](https://sage-bionetworks.github.io/sage-monorepo/products/openchallenges/) · [API](https://sage-bionetworks.github.io/sage-monorepo/api/openchallenges/) |
+| **Synapse (evaluation)** | Data sharing & analysis platform integration / client work               | https://www.synapse.org/                  | [API](https://sage-bionetworks.github.io/sage-monorepo/api/synapse/)                                                                                            |
 
-```console
-git clone --filter=blob:none <fork url>
-```
+➡ More services & internal components: see the [Service Catalog](https://sage-bionetworks.github.io/sage-monorepo/products/services/).
 
-Then open your fork repo inside our dev container using these instructions:
+## Guiding Values
 
-- [Developing inside a Container](./docs/devcontainer.md)
-- [Develop on a remote host](./docs/develop-on-a-remote-host.md) (optional)
+We invest in developer experience so contributors spend more time on creative scientific solutions and less time on boilerplate:
 
-### Open Sage Monorepo in GitHub Codespace
+- **Reuse over Rebuild:** Shared UI, styles, API clients, config, and infra scripts
+- **Consistency:** Standard project tags, linting, formatting, test harnesses
+- **Traceability:** Specs + generated clients keep contracts transparent
+- **Velocity with Safety:** Cached builds, typed APIs, automated checks
+- **Onboarding Simplicity:** One dev environment spins up everything you need
 
-TODO
+## Dev Environment (Dev Containers)
 
-## Quick Start
+The repository ships a reproducible [Dev Container](https://containers.dev/) configuration including Node.js, Java toolchains, Python/R environments, Docker CLI, database tooling, and language servers. Open locally in VS Code or in a remote environment (Codespaces / cloud VM) for identical behavior.
 
-Please refer to the Quick Start section of the [Overview of Sage Monorepo].
+Open directly in a dev container:
 
-## Ecosystem
-
-- Java
-- Node.js
-- Python
-- R
-
-## Changelog
-
-TODO
+[![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Container&message=Open&color=blue&logo=visualstudiocode&style=for-the-badge)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/Sage-Bionetworks/sage-monorepo)
 
 ## Contributing
 
-### Contributing Guidelines
+Read the [Contributing Guide](CONTRIBUTING.md) and browse issues tagged [help wanted](https://github.com/Sage-Bionetworks/sage-monorepo/labels/help%20wanted) or [good first issue](https://github.com/Sage-Bionetworks/sage-monorepo/labels/good%20first%20issue). Please follow our [Code of Conduct](CODE_OF_CONDUCT.md).
 
-Read through our [contributing guidelines][contributing] to learn about our submission process,
-coding rules and more.
+## License
 
-### Want to Help?
+Released under the [Apache License 2.0](LICENSE.txt).
 
-Want to report a bug, contribute some code, or improve documentation? Excellent! Read up on our
-guidelines for [contributing][contributing] and then check out one of our issues labeled as
-<kbd>[help wanted](https://github.com/Sage-Bionetworks/sage-monorepo/labels/help%20wanted)</kbd> or
-<kbd>[good first
-issue](https://github.com/Sage-Bionetworks/sage-monorepo/labels/good%20first%20issue)</kbd>.
+---
 
-### Code of Conduct
-
-Help us keep Sage Monorepo open and inclusive. Please read and follow our [Code of Conduct].
-
-## Community
-
-Join the conversation and help the community.
-
-- TODO: Add Slack or Discord
-
-## Products
-
-- Agora
-- iAtlas
-- MODEL-AD
-- OpenChallenge
-- Synapse (evaluation)
-
-<!-- Links -->
-
-[docker engine]: https://docs.docker.com/get-docker/
-[visual studio code]: https://code.visualstudio.com/
-[apache license 2.0]: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
-[GitHub Codespace]: https://github.com/features/codespaces
-[Overview of Sage Monorepo]: https://docs.google.com/document/d/12oA-Uol_NsWUtC9LHlAlpcgZXXY9jkxFXqK2EMF96XM
-[Code of Conduct]: CODE_OF_CONDUCT.md
-[contributing]: CONTRIBUTING.md
-[development container]: https://containers.dev/
-[create a fork]: https://github.com/Sage-Bionetworks/sage-monorepo/fork
+Enjoying the approach? Share feedback, open issues, or star the repo ⭐
