@@ -15,7 +15,7 @@ module.exports = {
     ],
   },
   maxWorkers: '50%',
-  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
+  transformIgnorePatterns: ['node_modules/(?!(.pnpm/.*/node_modules/)?(.*\\.mjs$|until-async))'],
   snapshotSerializers: [
     'jest-preset-angular/build/serializers/no-ng-attributes',
     'jest-preset-angular/build/serializers/ng-snapshot',
