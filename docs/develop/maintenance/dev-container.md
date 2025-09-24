@@ -70,12 +70,27 @@ ARG nodeVersionMajor="22"            # Check: https://nodejs.org/en/about/previo
 ARG pnpmVersion="10.13.1"            # Check: https://github.com/pnpm/pnpm/releases
 ```
 
+**Version Selection Criteria:**
+
+- **LTS Only**: For tools that offer LTS versions (especially Node.js), always use LTS releases for stability
+- **Release Age**: Only use releases that are at least 1 day old for security reasons
+- **Stable Releases**: Avoid pre-release, beta, or release candidate versions
+- **Security Updates**: Prioritize versions that include security fixes
+
 **Update Process:**
 
-1. Check each tool's release page (links provided in comments)
-2. Update version numbers to latest stable releases
-3. Pay attention to major version changes that might require additional modifications
-4. Test critical tools after updates
+1. **Check release pages**: Follow the links provided in comments for each tool
+2. **Verify release date**: Visit the tool's GitHub repository to confirm the release is at least 1 day old
+3. **LTS preference**: For Node.js and similar tools, ensure you're using LTS versions only
+4. **Version validation**: Update to latest stable releases, avoiding pre-release versions
+5. **Breaking changes**: Pay attention to major version changes that might require additional modifications
+6. **Test critical tools**: Verify functionality after updates, especially for frequently used tools
+
+**Node.js LTS Requirements:**
+
+- ✅ **Use**: Even-numbered versions (18, 20, 22) - these are LTS
+- ❌ **Avoid**: Odd-numbered versions (17, 19, 21) - these are current/non-LTS
+- **Check**: [Node.js Release Schedule](https://nodejs.org/en/about/previous-releases) for LTS status and EOL dates
 
 ### 1.3 System Package Updates
 
@@ -94,6 +109,40 @@ RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
 - Most packages will automatically use latest versions from Ubuntu repositories
 - Major Ubuntu version changes may affect package availability
 - Test package installations if changing base Ubuntu version
+
+### 1.4 Tool Management and Removal
+
+To maintain security and reduce the attack surface, the dev container tool set should be periodically reviewed and pruned.
+
+**Tool Removal Guidelines:**
+
+- **Security First**: Remove rarely used tools to reduce potential attack vectors
+- **Usage Analysis**: Regularly assess which tools are actively used by the development team
+- **Team Consensus**: Tool removal requires consensus among team members before implementation
+- **Impact Assessment**: Evaluate potential workflow disruption before removing any tool
+
+**Review Process:**
+
+1. **Quarterly Reviews**: Conduct tool usage reviews every 3-4 months
+2. **Usage Tracking**: Monitor which tools are being used in CI/CD pipelines and development workflows
+3. **Team Survey**: Poll team members about tool usage and necessity
+4. **Deprecation Notice**: Provide advance notice before removing tools to allow workflow adjustments
+5. **Documentation**: Update documentation when tools are removed
+
+**Tools to Monitor for Removal:**
+
+- Development utilities with overlapping functionality
+- Language-specific tools for unused programming languages
+- CLI tools that haven't been used in recent projects
+- Legacy tools that have modern replacements
+
+**Before Removing a Tool:**
+
+- [ ] Confirm tool is not used in any CI/CD pipelines
+- [ ] Check if tool is referenced in documentation
+- [ ] Verify no active projects depend on the tool
+- [ ] Get explicit approval from team leads
+- [ ] Plan migration path if tool replacement is needed
 
 ## Step 2: Update Dev Container Features
 
@@ -209,13 +258,18 @@ Before committing changes:
 - [ ] Document current versions for rollback reference
 - [ ] Check changelogs for breaking changes in tools being updated
 - [ ] Coordinate with team on timing of updates
+- [ ] Review tool usage and identify candidates for removal
+- [ ] Get team consensus on any tool removals
 
 ### During Update
 
-- [ ] Update base Ubuntu image tag
-- [ ] Update all tool versions in Dockerfile build args
+- [ ] Update base Ubuntu image tag (LTS with date-specific tag only)
+- [ ] Verify all tool releases are at least 1 day old
+- [ ] Ensure Node.js uses LTS version (even-numbered major versions)
+- [ ] Update all tool versions in Dockerfile build args to latest stable releases
 - [ ] Update dev container features and their versions
 - [ ] Update any hardcoded version references in scripts
+- [ ] Remove approved unused tools to reduce attack surface
 
 ### Testing
 

@@ -11,19 +11,19 @@ ARG uvVersion="0.8.22"
 # https://docs.posit.co/resources/install-r/#specify-r-version
 ARG rVersion="4.5.1"
 # https://aquasecurity.github.io/trivy
-ARG trivyVersion="0.64.1"
+ARG trivyVersion="0.66.0"
 # https://github.com/rstudio/renv
-ARG renvVersion="1.1.4"
+ARG renvVersion="1.1.5"
 # https://nodejs.org/en/about/previous-releases
 ARG nodeVersionMajor="22"
 # https://github.com/pnpm/pnpm/releases
-ARG pnpmVersion="10.13.1"
+ARG pnpmVersion="10.17.1"
 # https://github.com/SonarSource/sonar-scanner-cli/releases
-ARG sonarScannerVersion="7.1.0.4889"
+ARG sonarScannerVersion="7.2.0.5079"
 # https://github.com/hadolint/hadolint
-ARG hadolintVersion="2.12.0"
+ARG hadolintVersion="2.14.0"
 # https://pinterest.github.io/ktlint/latest/install/cli/#download-and-verification
-ARG ktlintVersion="1.7.0"
+ARG ktlintVersion="1.7.1"
 # https://zlib.net/fossils
 ARG zlibVersion="1.3.1"
 # The version of this dev container image.
