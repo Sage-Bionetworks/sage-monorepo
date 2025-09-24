@@ -23,18 +23,37 @@ The dev container uses Ubuntu as its base image. To update:
 
 ```dockerfile
 # Current example:
-FROM ubuntu:noble-20250714
+FROM ubuntu:noble-20250910
 
-# To update, change to newer tag:
-FROM ubuntu:noble-20250901  # Use latest available tag
+# To update, change to newer tag with release date:
+FROM ubuntu:noble-20251015  # Use date-specific tag
 ```
+
+**Ubuntu Version Requirements:**
+
+- **LTS Only**: Always use Ubuntu LTS (Long Term Support) versions for stability and extended support
+- **Non-moving tags**: Use tags that include the release date (e.g., `noble-20250910`) instead of moving tags like `noble` or `latest`
+- **Current LTS versions**:
+  - Ubuntu 24.04 LTS (Noble Numbat) - Supported until April 2029
+  - Ubuntu 22.04 LTS (Jammy Jellyfish) - Supported until April 2027
+  - Ubuntu 20.04 LTS (Focal Fossa) - Supported until April 2025
+
+**Tag Format:**
+
+- ✅ **Correct**: `ubuntu:noble-20250910` (LTS version with date)
+- ✅ **Correct**: `ubuntu:jammy-20250910` (LTS version with date)
+- ❌ **Avoid**: `ubuntu:noble` (moving tag)
+- ❌ **Avoid**: `ubuntu:latest` (moving tag)
+- ❌ **Avoid**: `ubuntu:24.10` (non-LTS version)
 
 **Best Practices:**
 
-- Use specific tags rather than `latest` for reproducibility
-- Check [Ubuntu Docker Hub](https://hub.docker.com/_/ubuntu) for available tags
-- Prefer LTS versions for stability
-- Test locally before committing changes
+- **LTS versions only**: Ensures 5-year support lifecycle and stability
+- **Date-specific tags**: Provides reproducible builds across environments
+- **Regular updates**: Update to newer date tags monthly or as security updates are released
+- **Check Ubuntu Hub**: Visit [Ubuntu Docker Hub](https://hub.docker.com/_/ubuntu/tags) for available date-tagged LTS images
+- **Test locally**: Always test container builds locally before committing changes
+- **Monitor EOL dates**: Plan migration to newer LTS versions well before end-of-life
 
 ### 1.2 Tool Version Updates
 

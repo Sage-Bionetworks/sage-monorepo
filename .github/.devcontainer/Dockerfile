@@ -4,8 +4,6 @@ FROM ubuntu:noble-20250910
 SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
 
 # List of build arguments.
-# https://github.com/sharkdp/hyperfine
-ARG hyperfineVersion="1.19.0"
 # https://www.npmjs.com/package/@devcontainers/cli
 ARG devcontainerCliVersion="0.80.0"
 # https://github.com/astral-sh/uv
@@ -124,12 +122,6 @@ RUN npm install -g "@devcontainers/cli@${devcontainerCliVersion}"
 RUN curl -fsSL https://github.com/hadolint/hadolint/releases/download/v${hadolintVersion}/hadolint-Linux-x86_64 -o hadolint \
   && mv hadolint /usr/local/bin/. \
   && chmod +x /usr/local/bin/hadolint
-
-# Install hyperfine.
-RUN curl -fsSL "https://github.com/sharkdp/hyperfine/releases/download/v${hyperfineVersion}/hyperfine_${hyperfineVersion}_amd64.deb" \
-    -o /tmp/hyperfine.deb \
-  && apt-get install --no-install-recommends -qq -y /tmp/hyperfine.deb \
-  && rm -fr /tmp/hyperfine.deb
 
 # Install SonarScanner CLI.
 ARG SONAR_SCANNER_HOME=/opt/sonar-scanner
