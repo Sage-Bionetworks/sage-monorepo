@@ -43,7 +43,7 @@ RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
     ca-certificates curl git bash-completion gnupg2 lsb-release ssh sudo \
     python3-pip python3-dev python-is-python3 pipx openjdk-17-jdk \
     htop unzip vim wget lsof iproute2 build-essential \
-    kafkacat jq ca-certificates-java gdebi-core \
+    jq ca-certificates-java gdebi-core \
     # Required by AWS CLI.
     mandoc \
     # Required for setting up locales.
