@@ -1,7 +1,7 @@
 import gradio as gr
 import pandas as pd
-from bixarena_api_client_python import ApiClient, Configuration, LeaderboardApi
-from bixarena_api_client_python.exceptions import ApiException
+from bixarena_api_client import ApiClient, Configuration, LeaderboardApi
+from bixarena_api_client.exceptions import ApiException
 
 print("🚀 bixarena_leaderboard.py module loaded successfully!")
 

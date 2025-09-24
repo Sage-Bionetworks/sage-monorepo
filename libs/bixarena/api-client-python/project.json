@@ -2,7 +2,7 @@
   "name": "bixarena-api-client-python",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "sourceRoot": "libs/bixarena/api-client-python/bixarena_api_client_python",
+  "sourceRoot": "libs/bixarena/api-client-python/bixarena_api_client",
   "targets": {
     "lock": {
       "executor": "@nxlv/python:lock",
@@ -41,7 +41,7 @@
       "executor": "@nxlv/python:ruff-check",
       "outputs": [],
       "options": {
-        "lintFilePatterns": ["bixarena_api_client_python", "test"]
+        "lintFilePatterns": ["bixarena_api_client", "test"]
       },
       "cache": true
     },

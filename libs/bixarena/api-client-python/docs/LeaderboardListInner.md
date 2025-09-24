@@ -12,7 +12,7 @@
 ## Example
 
 ```python
-from bixarena_api_client_python.models.leaderboard_list_inner import LeaderboardListInner
+from bixarena_api_client.models.leaderboard_list_inner import LeaderboardListInner
 
 # TODO update the JSON string below
 json = "{}"

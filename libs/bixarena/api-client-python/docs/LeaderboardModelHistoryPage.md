@@ -19,7 +19,7 @@ A page of historical leaderboard entries for a specific model.
 ## Example
 
 ```python
-from bixarena_api_client_python.models.leaderboard_model_history_page import LeaderboardModelHistoryPage
+from bixarena_api_client.models.leaderboard_model_history_page import LeaderboardModelHistoryPage
 
 # TODO update the JSON string below
 json = "{}"

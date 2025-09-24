@@ -18,7 +18,7 @@ dependencies = [
     "shortuuid", "tiktoken", "uvicorn",
     "accelerate>=0.21", "peft", "sentencepiece", "torch", "transformers>=4.31.0", "protobuf", "openai>=1.0",
     "gradio>=4.10", "plotly",
-    "bixarena-api-client-python"
+    "bixarena-api-client"
 ]
 
 [project.optional-dependencies]
@@ -35,4 +35,4 @@ py-modules = ["main"]
 exclude = ["assets*", "benchmark*", "docs", "dist*", "playground*", "scripts*", "tests*"]
 
 [tool.uv.sources]
-bixarena-api-client-python = { workspace = true }
+bixarena-api-client = { workspace = true }

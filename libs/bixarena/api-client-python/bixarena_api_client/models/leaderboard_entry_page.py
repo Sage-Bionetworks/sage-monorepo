@@ -19,7 +19,7 @@ import json
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List
-from bixarena_api_client_python.models.leaderboard_entry import LeaderboardEntry
+from bixarena_api_client.models.leaderboard_entry import LeaderboardEntry
 from typing import Optional, Set
 from typing_extensions import Self
 

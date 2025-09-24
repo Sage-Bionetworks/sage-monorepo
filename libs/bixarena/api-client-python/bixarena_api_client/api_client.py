@@ -25,11 +25,11 @@ from urllib.parse import quote
 from typing import Tuple, Optional, List, Dict, Union
 from pydantic import SecretStr
 
-from bixarena_api_client_python.configuration import Configuration
-from bixarena_api_client_python.api_response import ApiResponse, T as ApiResponseT
-import bixarena_api_client_python.models
-from bixarena_api_client_python import rest
-from bixarena_api_client_python.exceptions import (
+from bixarena_api_client.configuration import Configuration
+from bixarena_api_client.api_response import ApiResponse, T as ApiResponseT
+import bixarena_api_client.models
+from bixarena_api_client import rest
+from bixarena_api_client.exceptions import (
     ApiValueError,
     ApiException,
     BadRequestException,
@@ -445,7 +445,7 @@ class ApiClient:
             if klass in self.NATIVE_TYPES_MAPPING:
                 klass = self.NATIVE_TYPES_MAPPING[klass]
             else:
-                klass = getattr(bixarena_api_client_python.models, klass)
+                klass = getattr(bixarena_api_client.models, klass)
 
         if klass in self.PRIMITIVE_TYPES:
             return self.__deserialize_primitive(data, klass)

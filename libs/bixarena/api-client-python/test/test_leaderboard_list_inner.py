@@ -13,9 +13,7 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client_python.models.leaderboard_list_inner import (
-    LeaderboardListInner,
-)
+from bixarena_api_client.models.leaderboard_list_inner import LeaderboardListInner
 
 
 class TestLeaderboardListInner(unittest.TestCase):

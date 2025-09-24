@@ -14,7 +14,7 @@ A snapshot representing the state of a leaderboard at a specific point in time.
 ## Example
 
 ```python
-from bixarena_api_client_python.models.leaderboard_snapshot import LeaderboardSnapshot
+from bixarena_api_client.models.leaderboard_snapshot import LeaderboardSnapshot
 
 # TODO update the JSON string below
 json = "{}"

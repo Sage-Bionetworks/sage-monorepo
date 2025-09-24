@@ -1,4 +1,4 @@
-# bixarena_api_client_python.LeaderboardApi
+# bixarena_api_client.LeaderboardApi
 
 All URIs are relative to _http://localhost/v1_
 
@@ -20,25 +20,25 @@ Get paginated leaderboard entries for a specific leaderboard
 ### Example
 
 ```python
-import bixarena_api_client_python
-from bixarena_api_client_python.models.leaderboard_entry_page import LeaderboardEntryPage
-from bixarena_api_client_python.models.leaderboard_search_query import LeaderboardSearchQuery
-from bixarena_api_client_python.rest import ApiException
+import bixarena_api_client
+from bixarena_api_client.models.leaderboard_entry_page import LeaderboardEntryPage
+from bixarena_api_client.models.leaderboard_search_query import LeaderboardSearchQuery
+from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to http://localhost/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = bixarena_api_client_python.Configuration(
+configuration = bixarena_api_client.Configuration(
     host = "http://localhost/v1"
 )
 
 
 # Enter a context with an instance of the API client
-with bixarena_api_client_python.ApiClient(configuration) as api_client:
+with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = bixarena_api_client_python.LeaderboardApi(api_client)
+    api_instance = bixarena_api_client.LeaderboardApi(api_client)
     leaderboard_id = 'open-source' # str | The unique identifier of a leaderboard
-    leaderboard_search_query = bixarena_api_client_python.LeaderboardSearchQuery() # LeaderboardSearchQuery | The search query used to find and filter leaderboard entries. (optional)
+    leaderboard_search_query = bixarena_api_client.LeaderboardSearchQuery() # LeaderboardSearchQuery | The search query used to find and filter leaderboard entries. (optional)
 
     try:
         # Get leaderboard entries
@@ -91,25 +91,25 @@ Get a paginated list of available snapshots for a leaderboard
 ### Example
 
 ```python
-import bixarena_api_client_python
-from bixarena_api_client_python.models.leaderboard_snapshot_page import LeaderboardSnapshotPage
-from bixarena_api_client_python.models.leaderboard_snapshot_query import LeaderboardSnapshotQuery
-from bixarena_api_client_python.rest import ApiException
+import bixarena_api_client
+from bixarena_api_client.models.leaderboard_snapshot_page import LeaderboardSnapshotPage
+from bixarena_api_client.models.leaderboard_snapshot_query import LeaderboardSnapshotQuery
+from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to http://localhost/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = bixarena_api_client_python.Configuration(
+configuration = bixarena_api_client.Configuration(
     host = "http://localhost/v1"
 )
 
 
 # Enter a context with an instance of the API client
-with bixarena_api_client_python.ApiClient(configuration) as api_client:
+with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = bixarena_api_client_python.LeaderboardApi(api_client)
+    api_instance = bixarena_api_client.LeaderboardApi(api_client)
     leaderboard_id = 'open-source' # str | The unique identifier of a leaderboard
-    leaderboard_snapshot_query = bixarena_api_client_python.LeaderboardSnapshotQuery() # LeaderboardSnapshotQuery | The query used to filter and paginate leaderboard snapshots. (optional)
+    leaderboard_snapshot_query = bixarena_api_client.LeaderboardSnapshotQuery() # LeaderboardSnapshotQuery | The query used to filter and paginate leaderboard snapshots. (optional)
 
     try:
         # Get leaderboard snapshots
@@ -162,26 +162,26 @@ Get historical performance data for a specific model in a leaderboard
 ### Example
 
 ```python
-import bixarena_api_client_python
-from bixarena_api_client_python.models.leaderboard_model_history_page import LeaderboardModelHistoryPage
-from bixarena_api_client_python.models.leaderboard_model_history_query import LeaderboardModelHistoryQuery
-from bixarena_api_client_python.rest import ApiException
+import bixarena_api_client
+from bixarena_api_client.models.leaderboard_model_history_page import LeaderboardModelHistoryPage
+from bixarena_api_client.models.leaderboard_model_history_query import LeaderboardModelHistoryQuery
+from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to http://localhost/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = bixarena_api_client_python.Configuration(
+configuration = bixarena_api_client.Configuration(
     host = "http://localhost/v1"
 )
 
 
 # Enter a context with an instance of the API client
-with bixarena_api_client_python.ApiClient(configuration) as api_client:
+with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = bixarena_api_client_python.LeaderboardApi(api_client)
+    api_instance = bixarena_api_client.LeaderboardApi(api_client)
     leaderboard_id = 'open-source' # str | The unique identifier of a leaderboard
     model_id = 'model_456' # str | The unique identifier of a model
-    leaderboard_model_history_query = bixarena_api_client_python.LeaderboardModelHistoryQuery() # LeaderboardModelHistoryQuery | The query used to filter and paginate historical model performance data. (optional)
+    leaderboard_model_history_query = bixarena_api_client.LeaderboardModelHistoryQuery() # LeaderboardModelHistoryQuery | The query used to filter and paginate historical model performance data. (optional)
 
     try:
         # Get model performance history
@@ -235,22 +235,22 @@ Get a list of all available leaderboards with their metadata
 ### Example
 
 ```python
-import bixarena_api_client_python
-from bixarena_api_client_python.models.leaderboard_list_inner import LeaderboardListInner
-from bixarena_api_client_python.rest import ApiException
+import bixarena_api_client
+from bixarena_api_client.models.leaderboard_list_inner import LeaderboardListInner
+from bixarena_api_client.rest import ApiException
 from pprint import pprint
 
 # Defining the host is optional and defaults to http://localhost/v1
 # See configuration.py for a list of all supported configuration parameters.
-configuration = bixarena_api_client_python.Configuration(
+configuration = bixarena_api_client.Configuration(
     host = "http://localhost/v1"
 )
 
 
 # Enter a context with an instance of the API client
-with bixarena_api_client_python.ApiClient(configuration) as api_client:
+with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = bixarena_api_client_python.LeaderboardApi(api_client)
+    api_instance = bixarena_api_client.LeaderboardApi(api_client)
 
     try:
         # List all available leaderboards

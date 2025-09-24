@@ -18,7 +18,7 @@ A single entry in a leaderboard representing a model's performance.
 ## Example
 
 ```python
-from bixarena_api_client_python.models.leaderboard_entry import LeaderboardEntry
+from bixarena_api_client.models.leaderboard_entry import LeaderboardEntry
 
 # TODO update the JSON string below
 json = "{}"
