@@ -10,7 +10,7 @@ import logging
 import time
 import threading
 from typing import List, Dict, Any
-
+import html
 import gradio as gr
 
 from config.constants import (
@@ -47,11 +47,12 @@ models = []
 
 # Global state for prompt examples
 prompt_manager = get_prompt_manager()
+_state_lock = threading.Lock()
 search_active = False
 rolling_paused = False
 
 
-def load_demo_side_by_side_anony(models_, url_params):
+def load_demo_side_by_side_anony(models_, _):
     global models
     models = models_
 
@@ -64,18 +65,18 @@ def load_demo_side_by_side_anony(models_, url_params):
     return states + selector_updates
 
 
-def vote_last_response(states, vote_type, model_selectors, request: gr.Request):
+def vote_last_response(states, vote_type, model_selectors, _: gr.Request):
     # Log the exact same data to console instead of file
     data = {
         "tstamp": round(time.time(), 4),
         "type": vote_type,
-        "models": [x for x in model_selectors],
+        "models": list(model_selectors),
         "states": [x.dict() for x in states],
     }
     logger.info(f"Vote data: {json.dumps(data)}")
 
     if ":" not in model_selectors[0]:
-        for i in range(5):
+        for _ in range(5):
             names = (
                 "### Model A: " + states[0].model_name,
                 "### Model B: " + states[1].model_name,
@@ -148,7 +149,6 @@ def add_text(
 ):
     logger.info(f"add_text (anony). len: {len(text)}")
     states = [state0, state1]
-    model_selectors = [model_selector0, model_selector1]
 
     # Init states if necessary
     if states[0] is None:
@@ -222,41 +222,51 @@ def add_text(
 # New functions for prompt examples functionality
 def handle_search_change(search_query: str):
     """Handle search input changes"""
-    global search_active, rolling_paused
+    global search_active, rolling_paused, _state_lock
 
     if search_query.strip():
-        search_active = True
-        rolling_paused = True
+        with _state_lock:
+            search_active = True
+            rolling_paused = True
         # Return search results
         results = prompt_manager.search_prompts(search_query)
         if results:
-            # Create HTML for search results with unique IDs for each result
+            # Create HTML for search results with proper escaping
             html_results = "<div style='max-height: 200px; overflow-y: auto;'>"
             for i, result in enumerate(results[:5]):  # Show max 5 results
-                # Escape quotes properly for JavaScript
-                escaped_text = (
-                    result["text"]
-                    .replace("'", "\\'")
-                    .replace('"', '\\"')
-                    .replace("`", "\\`")
+                # Properly escape HTML content
+                escaped_text = html.escape(result["text"], quote=True)
+                escaped_category = html.escape(result["category"], quote=True)
+                truncated_text = result["text"][:100] + (
+                    "..." if len(result["text"]) > 100 else ""
                 )
+                escaped_truncated = html.escape(truncated_text, quote=True)
+
+                # Use data attributes instead of inline JavaScript
                 html_results += f"""
-                <div style='padding: 8px; margin: 4px 0; background: rgba(56, 189, 248, 0.1); 
+                <div class='prompt-result' 
+                     data-prompt-text='{escaped_text}'
+                     style='padding: 8px; margin: 4px 0; background: rgba(56, 189, 248, 0.1);
                            border-radius: 6px; cursor: pointer; border: 1px solid rgba(56, 189, 248, 0.3);
                            transition: all 0.2s ease;'
                      onmouseover='this.style.background="rgba(56, 189, 248, 0.2)"'
                      onmouseout='this.style.background="rgba(56, 189, 248, 0.1)"'
                      onclick='
-                        var inputBox = document.querySelector("#input_box textarea") || document.querySelector("#input_box input") || document.getElementById("input_box");
-                        if (inputBox) {{
-                            inputBox.value = "{escaped_text}";
-                            inputBox.focus();
-                            // Trigger change event to update Gradio state
-                            inputBox.dispatchEvent(new Event("input", {{ bubbles: true }}));
+                        try {{
+                            var inputBox = document.querySelector("#input_box textarea") || 
+                                         document.querySelector("#input_box input") || 
+                                         document.getElementById("input_box");
+                            if (inputBox) {{
+                                inputBox.value = this.getAttribute("data-prompt-text");
+                                inputBox.focus();
+                                inputBox.dispatchEvent(new Event("input", {{ bubbles: true }}));
+                            }}
+                        }} catch(e) {{
+                            console.error("Error setting prompt:", e);
                         }}
                      '>
-                    <small style='color: #38bdf8; font-weight: 500;'>{result["category"]}</small><br>
-                    <span style='color: #e2e8f0; font-size: 14px; line-height: 1.4;'>{result["text"][:100]}{"..." if len(result["text"]) > 100 else ""}</span>
+                    <small style='color: #38bdf8; font-weight: 500;'>{escaped_category}</small><br>
+                    <span style='color: #e2e8f0; font-size: 14px; line-height: 1.4;'>{escaped_truncated}</span>
                 </div>
                 """
             html_results += "</div>"
@@ -267,19 +277,25 @@ def handle_search_change(search_query: str):
                 visible=True,
             ), gr.Button(visible=False)
     else:
-        search_active = False
-        rolling_paused = False
+        with _state_lock:
+            search_active = False
+            rolling_paused = False
         return gr.HTML(visible=False), gr.Button(visible=True)
 
 
 def update_rolling_prompt():
     """Update the rolling prompt - called periodically"""
-    global search_active, rolling_paused
+    global search_active, rolling_paused, _state_lock
 
-    if not rolling_paused and not search_active:
+    with _state_lock:
+        should_update = not rolling_paused and not search_active
+
+    if should_update:
         new_prompt = prompt_manager.get_rolling_prompt()
         return gr.Button(value=f"💫 Try this: {new_prompt}", visible=True)
-    return gr.Button.update()  # No change if paused
+    # Return no change if paused - just return the current prompt
+    current_prompt = prompt_manager.get_rolling_prompt()
+    return gr.Button(value=f"💫 Try this: {current_prompt}", visible=True)
 
 
 def click_rolling_prompt(button_value):
@@ -293,14 +309,14 @@ def click_rolling_prompt(button_value):
 
 def build_side_by_side_ui_anony():
     notice_markdown = """
-# ⚔️  BixArena: Benchmarking LLMs for Biomedical Breakthroughs
+    # ⚔️  BixArena: Benchmarking LLMs for Biomedical Breakthroughs
 
-## 📜 Rules
-- Ask biomedical questions to two anonymous models and vote for the better one!
-- You can continue chatting until you identify a winner.
+    ## 📜 Rules
+    - Ask biomedical questions to two anonymous models and vote for the better one!
+    - You can continue chatting until you identify a winner.
 
-## 👇 Chat now!
-"""
+    ## 👇 Chat now!
+    """
 
     states = [gr.State() for _ in range(num_sides)]
     model_selectors = []
@@ -374,11 +390,11 @@ def build_side_by_side_ui_anony():
         send_btn = gr.Button(value="Send", variant="primary", scale=0)
     with gr.Row():
         with gr.Column(scale=2):
-            pass
+            gr.HTML("")
         with gr.Column(scale=1):
             clear_btn = gr.Button(value="🎯 Next Battle", interactive=False)
         with gr.Column(scale=2):
-            pass
+            gr.HTML("")
 
     # Event handlers for prompt examples
     search_box.change(
@@ -458,9 +474,9 @@ def build_battle_page(
     set_global_vars_anony(moderate)
 
     # Load models once and only for text-only models
-    models, all_models = get_model_list(
+    models, _ = get_model_list(
         register_api_endpoint_file,
-        False,
+        False,  # Disable multimodal models for now
     )
 
     # Initialize the demo (this sets up global variables in the original module)

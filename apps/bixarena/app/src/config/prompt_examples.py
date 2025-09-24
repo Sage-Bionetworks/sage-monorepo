@@ -2,6 +2,7 @@
 Biomedical Prompt Examples Manager for BixArena
 """
 
+import re
 import random
 import time
 from typing import List, Dict, Any
@@ -84,9 +85,17 @@ class BiomedicalPrompts:
         return self.PROMPTS[self.current_rolling_index]["text"]
 
     def search_prompts(self, query: str) -> List[Dict[str, Any]]:
-        """Search prompts by text content"""
-        if not query.strip():
+        """Search prompts by text content with input validation"""
+        if not query or not query.strip():
             return []
+
+        # Input validation
+        query = query.strip()
+        if len(query) > 200:  # Reasonable limit for search queries
+            query = query[:200]
+
+        # Basic sanitization - remove potentially harmful characters
+        query = re.sub(r'[<>"\']', "", query)
 
         query_lower = query.lower()
         results = []
@@ -106,7 +115,7 @@ class BiomedicalPrompts:
 
     def get_categories(self) -> List[str]:
         """Get unique categories"""
-        return list(set(prompt["category"] for prompt in self.PROMPTS))
+        return list({prompt["category"] for prompt in self.PROMPTS})
 
 
 # Global instance
