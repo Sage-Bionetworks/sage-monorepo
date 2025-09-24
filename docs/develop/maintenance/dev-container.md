@@ -363,7 +363,87 @@ devcontainer build \
    docker rm -f sage-monorepo-devcontainer-prebuild
    ```
 
-### 3.2 Alternative Docker Build Testing
+### 3.2 Full Monorepo Integration Testing
+
+After basic functionality testing, perform comprehensive testing with the full monorepo codebase:
+
+#### Verify Local Image Availability
+
+Confirm the dev container image was built successfully:
+
+```bash
+docker images | grep devcontainer
+# Expected output:
+# ghcr.io/sage-bionetworks/sage-monorepo-devcontainer   local   <image-id>   <time>   ~5GB
+```
+
+#### Update Dev Container Definition
+
+Update the main dev container configuration file (`.devcontainer/devcontainer.json`) to reference the new local image if needed for testing.
+
+#### Deploy with Monorepo Codebase
+
+1. **Start dev container with monorepo mounted:**
+
+   ```bash
+   # From the root of the monorepo
+   devcontainer up --workspace-folder .
+   ```
+
+2. **Connect to the running container:**
+
+   ```bash
+   docker exec -it sage-monorepo-devcontainer bash
+   ```
+
+3. **Navigate to monorepo workspace:**
+
+   ```bash
+   cd /workspaces/sage-monorepo
+   ```
+
+4. **Source development environment:**
+
+   ```bash
+   . ./dev-env.sh
+   ```
+
+5. **Install workspace dependencies:**
+   ```bash
+   workspace-install
+   ```
+
+#### Comprehensive Build and Test
+
+Verify all projects can build and test successfully:
+
+```bash
+nx run-many --target create-config,build,test
+```
+
+**Expected outcomes:**
+
+- All configuration generation tasks complete successfully
+- All builds complete without errors
+- All tests pass
+- No dependency resolution issues
+- No tool compatibility problems
+
+#### Clean Up Test Environment
+
+1. **Exit the container:**
+
+   ```bash
+   # Use Ctrl+C to exit the container session
+   exit
+   ```
+
+2. **Remove the test container:**
+   ```bash
+   docker rm -f sage-monorepo-devcontainer
+   ```
+
+### 3.3 Alternative Docker Build Testing
 
 For quick Dockerfile-only testing:
 
@@ -392,11 +472,90 @@ For quick Dockerfile-only testing:
    - Ensure GitHub Actions continue to work
    - Verify any external integrations still function
 
-### 3.3 Performance Testing
+### 3.4 Performance Testing
 
 - Compare container build times before/after changes
 - Test startup time and resource usage
 - Ensure development experience remains smooth
+
+## Deployment Process
+
+### 4.1 Creating the Pull Request
+
+After successful local testing:
+
+1. **Revert local testing changes:**
+
+   - **Critical**: Revert any image tag changes in `.devcontainer/devcontainer.json` made for local testing
+   - Ensure the file references the current production image tag, not "local" or test configurations
+   - Example: Change from `"image": "ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:local"` back to the current SHA-based tag
+
+2. **Create feature branch PR:**
+
+   - Create a pull request with all dev container changes
+   - Include comprehensive description of updates made
+   - Document any breaking changes or new requirements
+   - Verify `.devcontainer/devcontainer.json` uses production image reference
+
+3. **PR triggers automated build:**
+   - GitHub workflow will build the new dev container image
+   - Automated tests will validate the container functionality
+   - Review any build failures or test issues
+
+### 4.2 Publishing the New Image
+
+Upon merging the PR to the main branch:
+
+1. **Automated image build and publish:**
+
+   - Docker image is built automatically via GitHub Actions
+   - Image is published to GitHub Container Registry (GHCR)
+   - New image receives a unique tag based on commit SHA
+
+2. **Image availability:**
+   - Published image becomes available at `ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:<tag>`
+   - Tag format typically includes commit SHA or version identifier
+
+### 4.3 Activating the New Dev Container
+
+**Important**: Using the new dev container requires a second PR:
+
+1. **Update image reference:**
+
+   - Create a new PR updating `.devcontainer/devcontainer.json`
+   - Change the image tag to reference the newly published image
+   - Example: Update from previous tag to new GHCR tag
+
+2. **Two-step deployment rationale:**
+
+   - **Safety**: Separates image building from activation
+   - **Validation**: Allows testing of published image before activation
+   - **Rollback**: Easy to revert to previous working image if issues arise
+
+3. **Activation process:**
+   ```jsonc
+   // In .devcontainer/devcontainer.json
+   {
+     "name": "Sage Monorepo Dev Container",
+     "image": "ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:<new-tag>",
+     // ... rest of configuration
+   }
+   ```
+
+### 4.4 Post-Deployment Verification
+
+After the activation PR is merged:
+
+1. **Team notification:**
+
+   - Notify team members of the new dev container availability
+   - Provide any migration notes or new requirements
+   - Document any workflow changes
+
+2. **Monitor for issues:**
+   - Watch for team reports of container problems
+   - Check CI/CD pipeline functionality
+   - Be prepared to quickly rollback if critical issues arise
 
 ## Update Checklist
 
@@ -422,6 +581,8 @@ For quick Dockerfile-only testing:
 
 ### Testing
 
+#### Basic Functionality Testing
+
 - [ ] Build dev container using devcontainer CLI (`devcontainer build`)
 - [ ] Troubleshoot Docker version issues if build fails
 - [ ] Start dev container (`devcontainer up --workspace-folder .github`)
@@ -429,15 +590,44 @@ For quick Dockerfile-only testing:
 - [ ] Verify all development tools work correctly (node, python, java, go, etc.)
 - [ ] Test development workflows (npm, pnpm, gradle, mvn, docker, kubectl)
 - [ ] Exit container and clean up (`docker rm -f sage-monorepo-devcontainer-prebuild`)
+
+#### Full Monorepo Integration Testing
+
+- [ ] Verify local dev container image is available (`docker images | grep devcontainer`)
+- [ ] Update `.devcontainer/devcontainer.json` if needed for testing
+- [ ] Start dev container with monorepo (`devcontainer up --workspace-folder .`)
+- [ ] Connect to container (`docker exec -it sage-monorepo-devcontainer bash`)
+- [ ] Navigate to workspace (`cd /workspaces/sage-monorepo`)
+- [ ] Source development environment (`. ./dev-env.sh`)
+- [ ] Install workspace dependencies (`workspace-install`)
+- [ ] Run comprehensive build and test (`nx run-many --target create-config,build,test`)
+- [ ] Verify all projects build and test successfully
+- [ ] Exit container and clean up (`docker rm -f sage-monorepo-devcontainer`)
+
+#### VS Code Integration Testing
+
 - [ ] Test in VS Code dev container environment ("Rebuild and Reopen in Container")
-- [ ] Run sample builds/tests to ensure compatibility
+- [ ] Verify all extensions load correctly and development workflows function
 
 ### Post-Update
 
+#### First PR - Dev Container Changes
+
+- [ ] **Revert local testing changes**: Ensure `.devcontainer/devcontainer.json` uses production image tag, not "local"
 - [ ] Update documentation if new tools added/removed
-- [ ] Create PR with clear description of changes
-- [ ] Monitor CI/CD pipelines after merge
-- [ ] Update team on any workflow changes
+- [ ] Create PR with clear description of changes (Dockerfile, devcontainer.json, etc.)
+- [ ] Verify PR includes only production-ready configurations
+- [ ] Ensure PR includes comprehensive changelog of all updates
+- [ ] Monitor GitHub Actions build of new dev container image
+- [ ] Verify successful image publication to GHCR after merge
+
+#### Second PR - Activate New Container
+
+- [ ] Create second PR updating `.devcontainer/devcontainer.json` image reference
+- [ ] Update image tag to newly published GHCR image
+- [ ] Test the published image before merging activation PR
+- [ ] Monitor CI/CD pipelines after activation merge
+- [ ] Notify team of new dev container availability and any workflow changes
 
 ## Troubleshooting
 
