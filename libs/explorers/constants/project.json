@@ -10,7 +10,8 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/explorers/constants"],
       "options": {
-        "jestConfig": "libs/explorers/constants/jest.config.ts"
+        "jestConfig": "libs/explorers/constants/jest.config.ts",
+        "tsConfig": "libs/explorers/constants/tsconfig.spec.json"
       }
     },
     "lint": {

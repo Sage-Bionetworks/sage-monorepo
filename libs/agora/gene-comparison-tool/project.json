@@ -10,7 +10,8 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/agora/gene-comparison-tool"],
       "options": {
-        "jestConfig": "libs/agora/gene-comparison-tool/jest.config.ts"
+        "jestConfig": "libs/agora/gene-comparison-tool/jest.config.ts",
+        "tsConfig": "libs/agora/gene-comparison-tool/tsconfig.spec.json"
       }
     },
     "lint": {

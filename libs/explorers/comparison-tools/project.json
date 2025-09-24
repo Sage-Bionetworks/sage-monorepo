@@ -10,7 +10,8 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/explorers/comparison-tools"],
       "options": {
-        "jestConfig": "libs/explorers/comparison-tools/jest.config.ts"
+        "jestConfig": "libs/explorers/comparison-tools/jest.config.ts",
+        "tsConfig": "libs/explorers/comparison-tools/tsconfig.spec.json"
       }
     },
     "lint": {
