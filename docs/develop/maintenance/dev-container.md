@@ -63,27 +63,20 @@ The remainder of this guide details how to update the Docker base image, tool ve
 
 ### Key Files
 
-| File / Path                                  | Role / Purpose                                                                                                                                                           | Maintenance Notes                                                                                                                                          |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `.github/.devcontainer/Dockerfile`           | Base layer (Ubuntu LTS date tag + apt + direct installs of some tools).                                                                                                  | Step 1 only. Pin ARG versions; prefer removing rather than leaving unused tooling. Keep image reproducible (no moving tags).                               |
-| `.github/.devcontainer/devcontainer.json`    | BUILD Definition: aggregates the Dockerfile + Dev Container Features to bake the final image that will be published to GHCR. Not used directly by developers in VS Code. | Edit in Step 1 only. Use explicit feature versions. Treat as build recipe; never reference a production image tag here—always `build` from the Dockerfile. |
-| `.devcontainer/devcontainer.json`            | ACTIVE Definition: points to the published image tag developers consume locally and in CI.                                                                               | Edit in Step 2 only. Single-line diff (image tag) ideally. Keep clean—should not contain build-time Feature composition once image is published.           |
-| `.github/.devcontainer/docker-compose.yml`\* | Optional additional services for image build/testing (DBs, queues). Often absent.                                                                                        | If present, keep service versions explicit and minimal. Remove unused services to speed builds.                                                            |
-| `dev-env.sh`                                 | Workspace initialization (env vars, helper functions, wrappers).                                                                                                         | Review after major tool/runtime bumps. Sync deprecated tool names or paths.                                                                                |
-| `tools/prepare-*-envs.js`                    | Language ecosystem setup (Node, Python, Java, R, etc.).                                                                                                                  | Validate they still succeed after base image & feature updates (Node majors, Python minors, JDK changes). Update literals referencing versions/paths.      |
-| `.github/workflows/*devcontainer*.yml`\*\*   | CI workflows that build & push the Step 1 image.                                                                                                                         | Ensure cache key changes when ARGs change. Confirm push includes immutable tag (SHA) and optional semantic tag.                                            |
+| File / Path                               | Role / Purpose                                                                                                                                                           | Maintenance Notes                                                                                                                                          |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `.github/.devcontainer/Dockerfile`        | Base layer (Ubuntu LTS date tag + apt + direct installs of some tools).                                                                                                  | Step 1 only. Pin ARG versions; prefer removing rather than leaving unused tooling. Keep image reproducible (no moving tags).                               |
+| `.github/.devcontainer/devcontainer.json` | BUILD Definition: aggregates the Dockerfile + Dev Container Features to bake the final image that will be published to GHCR. Not used directly by developers in VS Code. | Edit in Step 1 only. Use explicit feature versions. Treat as build recipe; never reference a production image tag here—always `build` from the Dockerfile. |
+| `.devcontainer/devcontainer.json`         | ACTIVE Definition: points to the published image tag developers consume locally and in CI.                                                                               | Edit in Step 2 only. Single-line diff (image tag) ideally. Keep clean—should not contain build-time Feature composition once image is published.           |
+| `dev-env.sh`                              | Workspace initialization (env vars, helper functions, wrappers).                                                                                                         | Review after major tool/runtime bumps. Sync deprecated tool names or paths.                                                                                |
+| `tools/prepare-*-envs.js`                 | Language ecosystem setup (Node, Python, Java, R, etc.).                                                                                                                  | Validate they still succeed after base image & feature updates (Node majors, Python minors, JDK changes). Update literals referencing versions/paths.      |
+| `.github/workflows/*devcontainer*.yml`\*  | CI workflows that build & push the Step 1 image.                                                                                                                         | Ensure cache key changes when ARGs change. Confirm push includes immutable tag (SHA) and optional semantic tag.                                            |
 
-_File may not exist if not required._
-**Actual workflow filenames may vary; search for `devcontainer` in `.github/workflows` when adjusting build logic.**
+\* Actual workflow filenames may vary; search for `devcontainer` in `.github/workflows` when adjusting build logic.
 
-!!! note "Scope"
+!!! note "Maintenance Guide Scope"
 
-This table lists only the surfaces that influence constructing or activating the dev container. Application service Dockerfiles are out of scope.
-
-!!! note "Scope"
-
-Only files directly influencing the container build, configuration, or activation workflow are
-listed. Application/service Dockerfiles are out of scope for this maintenance guide.
+    Only files directly influencing the container build, configuration, or activation workflow are listed. Application/service Dockerfiles are out of scope for this maintenance guide.
 
 ## Step 1: Update the Docker Base Image
 
