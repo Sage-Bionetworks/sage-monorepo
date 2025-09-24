@@ -1,6 +1,7 @@
 import argparse
 import urllib.parse
 import gradio as gr
+from typing import Optional, Tuple, Any
 from page.bixarena_header import build_header, update_login_button, handle_login_click
 from page.bixarena_battle import build_battle_page
 from page.bixarena_leaderboard import build_leaderboard_page
@@ -19,34 +20,92 @@ class PageNavigator:
         return [gr.Column(visible=(i == index)) for i in range(len(self.pages))]
 
 
+def _extract_session_cookie(request: gr.Request) -> Optional[str]:
+    """Extract session cookie from request"""
+    if not request or not hasattr(request, "headers"):
+        return None
+
+    cookie_header = request.headers.get("cookie", "")
+    for cookie in cookie_header.split(";"):
+        if "bixarena_session=" in cookie:
+            return cookie.split("bixarena_session=")[1].strip()
+    return None
+
+
+def _validate_oauth_params(code: str, state: str) -> bool:
+    """Validate OAuth parameters"""
+    if not code or len(code) > 500:
+        print("❌ Invalid OAuth code parameter")
+        return False
+    if state and len(state) > 100:
+        print("❌ Invalid OAuth state parameter")
+        return False
+    return True
+
+
+def _process_oauth_callback(
+    request: gr.Request, auth_service
+) -> Optional[Tuple[Any, ...]]:
+    """Process OAuth callback parameters"""
+    try:
+        parsed_url = urllib.parse.urlparse(str(request.url))
+        params = urllib.parse.parse_qs(parsed_url.query)
+
+        if "code" not in params:
+            return None
+
+        code = params["code"][0]
+        state = params.get("state", [None])[0]
+
+        if not _validate_oauth_params(code, state):
+            return update_login_button(), *update_user_page(), gr.HTML("")
+
+        success, session_id = auth_service.handle_oauth_callback(code, state)
+        if success and session_id:
+            # Set cookie with appropriate security for environment
+            secure_flag = "secure" if str(request.url).startswith("https") else ""
+            cookie_script = f"""
+            <script>
+            document.cookie = "bixarena_session={session_id}; path=/; max-age=15552000; samesite=strict; {secure_flag}";
+            </script>
+            """
+            return update_login_button(), *update_user_page(), gr.HTML(cookie_script)
+
+    except Exception as e:
+        print(f"❌ OAuth callback failed: {e}")
+
+    return None
+
+
 def check_oauth_callback(request: gr.Request):
-    """Process OAuth callback with input validation"""
+    """Process OAuth callback with input validation and cookie management"""
     auth_service = get_auth_service()
 
+    # Load session from cookie (for both callback and normal page loads)
+    session_cookie = _extract_session_cookie(request)
+    if session_cookie:
+        success = auth_service.load_session_from_cookie(session_cookie)
+        if not success:
+            # Invalid session, clear cookie
+            # Clear cookie (no need for secure flag when clearing)
+            clear_cookie_script = """
+            <script>
+            document.cookie = "bixarena_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; samesite=strict;";
+            </script>
+            """
+            return (
+                update_login_button(),
+                *update_user_page(),
+                gr.HTML(clear_cookie_script),
+            )
+
+    # Process OAuth callback if present
     if request and hasattr(request, "url"):
-        try:
-            parsed_url = urllib.parse.urlparse(str(request.url))
-            params = urllib.parse.parse_qs(parsed_url.query)
+        result = _process_oauth_callback(request, auth_service)
+        if result:
+            return result
 
-            if "code" in params:
-                code = params["code"][0]
-                state = params.get("state", [None])[0]
-
-                # Basic input validation
-                if not code or len(code) > 500:  # Reasonable code length limit
-                    print("❌ Invalid OAuth code parameter")
-                    return update_login_button(), *update_user_page()
-
-                if state and len(state) > 100:  # Reasonable state length limit
-                    print("❌ Invalid OAuth state parameter")
-                    return update_login_button(), *update_user_page()
-
-                auth_service.handle_oauth_callback(code, state)
-
-        except Exception as e:
-            print(f"❌ OAuth callback failed: {e}")
-
-    return update_login_button(), *update_user_page()
+    return update_login_button(), *update_user_page(), gr.HTML("")
 
 
 def parse_args():
@@ -93,6 +152,9 @@ def build_app(register_api_endpoint_file=None, moderate=False):
         with gr.Column(visible=False) as user_page:
             _, welcome_display, logout_btn = build_user_page()
 
+        # Hidden HTML component for cookie scripts
+        cookie_html = gr.HTML("", visible=False)
+
         pages = [home_page, battle_page, leaderboard_page, user_page]
         navigator = PageNavigator(pages)
 
@@ -114,13 +176,13 @@ def build_app(register_api_endpoint_file=None, moderate=False):
             lambda: handle_logout_click(
                 navigator, update_login_button, update_user_page
             ),
-            outputs=pages + [login_btn, welcome_display, logout_btn],
+            outputs=pages + [login_btn, welcome_display, logout_btn, cookie_html],
         )
 
         # OAuth callback
         demo.load(
             check_oauth_callback,
-            outputs=[login_btn, welcome_display, logout_btn],
+            outputs=[login_btn, welcome_display, logout_btn, cookie_html],
             js=cleanup_js,
         )
 

@@ -46,4 +46,12 @@ def handle_logout_click(navigator, update_login_button, update_user_page):
     user_info = update_user_page()
     home_pages = navigator.show_page(0)
 
-    return *home_pages, updated_login_btn, *user_info
+    # Clear session cookie
+    # Clear session cookie
+    clear_cookie_script = """
+    <script>
+    document.cookie = "bixarena_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; samesite=strict;";
+    </script>
+    """
+
+    return *home_pages, updated_login_btn, *user_info, gr.HTML(clear_cookie_script)

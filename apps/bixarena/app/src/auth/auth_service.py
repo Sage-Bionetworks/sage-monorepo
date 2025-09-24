@@ -39,45 +39,66 @@ class AuthService:
             self.session.set_error(f"Failed to generate login URL: {e}")
             return ""
 
-    def handle_oauth_callback(self, code: str, state: str = None) -> bool:
+    def handle_oauth_callback(
+        self, code: str, state: str = None
+    ) -> tuple[bool, Optional[str]]:
         """Handle OAuth callback from Synapse"""
         try:
             if self.session.is_code_processed(code):
-                return self.session.is_authenticated()
+                return self.session.is_authenticated(), self.session.get_session_id()
 
             self.session.mark_code_processed(code)
 
             if state and not self.session.verify_oauth_state(state):
                 self.session.set_error("Invalid OAuth state")
-                return False
+                return False, None
 
-            access_token = self.oauth_client.exchange_code_for_token(code)
-            if not access_token:
+            tokens = self.oauth_client.exchange_code_for_token(code)
+            if not tokens or not tokens.get("access_token"):
                 self.session.set_error("Failed to obtain access token")
-                return False
+                return False, None
 
-            user_profile = self.oauth_client.get_user_profile(access_token)
+            user_profile = self.oauth_client.get_user_profile(tokens["access_token"])
             if not user_profile:
                 self.session.set_error("Failed to get user profile")
-                return False
+                return False, None
 
-            # Store access token securely (separate from user profile)
-            self.session.set_access_token(access_token)
-            self.session.set_current_user(user_profile)
+            # Create server-side session
+            session_id = self.session.create_session(user_profile, tokens)
 
             print(f"✅ Login successful: {self.session.get_display_name()}")
-            return True
+            return True, session_id
 
         except Exception as e:
             self.session.set_error(f"OAuth callback failed: {e}")
             print(f"Error during OAuth callback: {e}")
-            return False
+            return False, None
 
     def logout(self) -> None:
         """Logout current user"""
         username = self.session.get_display_name()
         self.session.clear_session()
         print(f"👋 User logged out: {username}")
+
+    def load_session_from_cookie(self, session_id: str) -> bool:
+        """Load session from cookie"""
+        if not session_id:
+            return False
+
+        success = self.session.load_session(session_id)
+        if success and self.session.needs_token_refresh():
+            # Attempt to refresh token automatically
+            refresh_token = self.session.get_refresh_token()
+            if refresh_token:
+                new_tokens = self.oauth_client.refresh_access_token(refresh_token)
+                if new_tokens:
+                    self.session.refresh_tokens(new_tokens)
+                    print("🔄 Access token refreshed automatically")
+                else:
+                    print("❌ Failed to refresh token, session expired")
+                    self.session.clear_session()
+                    return False
+        return success
 
     def is_authenticated(self) -> bool:
         """Check if user is authenticated"""
@@ -90,6 +111,10 @@ class AuthService:
     def get_display_name(self) -> str:
         """Get current user display name"""
         return self.session.get_display_name()
+
+    def get_session_id(self) -> Optional[str]:
+        """Get session ID for cookie storage"""
+        return self.session.get_session_id()
 
 
 _auth_service = None

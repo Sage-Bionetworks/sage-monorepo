@@ -43,14 +43,14 @@ class SynapseOAuthClient:
             "client_id": self.client_id,
             "redirect_uri": self.redirect_uri,
             "response_type": "code",
-            "scope": "openid view",
+            "scope": "openid view offline_access",  # Added offline_access for refresh tokens
             "state": state,
         }
         login_url = f"{self.auth_url}?{urllib.parse.urlencode(params)}"
         return login_url, state
 
-    def exchange_code_for_token(self, code: str) -> Optional[str]:
-        """Exchange authorization code for access token"""
+    def exchange_code_for_token(self, code: str) -> Optional[Dict[str, Any]]:
+        """Exchange authorization code for access token and refresh token"""
         auth_header = base64.b64encode(
             f"{self.client_id}:{self.client_secret}".encode()
         ).decode()
@@ -69,7 +69,14 @@ class SynapseOAuthClient:
         try:
             response = requests.post(self.token_url, headers=headers, data=data)
             if response.status_code == 200:
-                return response.json().get("access_token")
+                token_data = response.json()
+                return {
+                    "access_token": token_data.get("access_token"),
+                    "refresh_token": token_data.get("refresh_token"),
+                    "expires_in": token_data.get(
+                        "expires_in", 86400
+                    ),  # Default 24 hours
+                }
             else:
                 print(
                     f"Token exchange failed: {response.status_code} - {response.text}"
@@ -77,6 +84,40 @@ class SynapseOAuthClient:
             return None
         except Exception as e:
             print(f"Token exchange error: {e}")
+            return None
+
+    def refresh_access_token(self, refresh_token: str) -> Optional[Dict[str, Any]]:
+        """Refresh access token using refresh token"""
+        auth_header = base64.b64encode(
+            f"{self.client_id}:{self.client_secret}".encode()
+        ).decode()
+
+        headers = {
+            "Authorization": f"Basic {auth_header}",
+            "Content-Type": "application/x-www-form-urlencoded",
+        }
+
+        data = {
+            "grant_type": "refresh_token",
+            "refresh_token": refresh_token,
+        }
+
+        try:
+            response = requests.post(self.token_url, headers=headers, data=data)
+            if response.status_code == 200:
+                token_data = response.json()
+                return {
+                    "access_token": token_data.get("access_token"),
+                    "refresh_token": token_data.get("refresh_token"),
+                    "expires_in": token_data.get(
+                        "expires_in", 86400
+                    ),  # Default 24 hours
+                }
+            else:
+                print(f"Token refresh failed: {response.status_code} - {response.text}")
+            return None
+        except Exception as e:
+            print(f"Token refresh error: {e}")
             return None
 
     def get_user_profile(self, access_token: str) -> Optional[Dict[str, Any]]:
