@@ -97,9 +97,7 @@ FROM ubuntu:noble-20251015  # Use date-specific tag
 - **LTS Only**: Always use Ubuntu LTS (Long Term Support) versions for stability and extended support
 - **Non-moving tags**: Use tags that include the release date (e.g., `noble-20250910`) instead of moving tags like `noble` or `latest`
 - **Current LTS versions**:
-  - Ubuntu 24.04 LTS (Noble Numbat) - Supported until April 2029
-  - Ubuntu 22.04 LTS (Jammy Jellyfish) - Supported until April 2027
-  - Ubuntu 20.04 LTS (Focal Fossa) - Supported until April 2025
+  - See the official list of Ubuntu LTS releases at [https://releases.ubuntu.com](https://releases.ubuntu.com)
 
 **Tag Format:**
 
