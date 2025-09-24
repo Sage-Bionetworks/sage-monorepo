@@ -185,7 +185,7 @@ To maintain security and reduce the attack surface, the dev container tool set s
 **Review Process:**
 
 1. **Quarterly Reviews**: Conduct tool usage reviews every 3-4 months
-2. **Usage Tracking**: Monitor which tools are being used in CI/CD pipelines and development workflows
+2. **Usage Tracking**: Monitor which tools are being used in CI/CD pipelines and development workflows (future work)
 3. **Team Survey**: Poll team members about tool usage and necessity
 4. **Deprecation Notice**: Provide advance notice before removing tools to allow workflow adjustments
 5. **Documentation**: Update documentation when tools are removed
