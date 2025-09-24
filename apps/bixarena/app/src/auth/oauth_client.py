@@ -1,7 +1,3 @@
-"""
-Simplified OAuth client for Synapse API calls
-"""
-
 import os
 import base64
 import secrets
@@ -11,7 +7,7 @@ from typing import Optional, Dict, Any, Tuple
 
 
 class SynapseOAuthClient:
-    """Simplified OAuth client for Synapse"""
+    """OAuth client for Synapse"""
 
     def __init__(self):
         self.client_id = os.environ.get("SYNAPSE_CLIENT_ID")

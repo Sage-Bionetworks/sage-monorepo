@@ -1,12 +1,13 @@
 """
-Server-side session storage with cleanup and Redis support
+Server-side session storage with cleanup
 """
 
-import time
-import threading
+import json
 import os
-from typing import Dict, Any, Optional
+import threading
+import time
 from abc import ABC, abstractmethod
+from typing import Dict, Any, Optional
 
 
 class SessionStore(ABC):
@@ -63,8 +64,8 @@ class MemorySessionStore(SessionStore):
 
         with self._lock:
             for session_id, data in self._sessions.items():
-                # Remove sessions older than 24 hours (cookie expiry)
-                if current_time - data.get("created_at", 0) > 24 * 3600:
+                # Remove sessions older than 2 hours (cookie expiry)
+                if current_time - data.get("first_login_at", 0) > 2 * 3600:
                     expired_sessions.append(session_id)
 
             for session_id in expired_sessions:
@@ -88,65 +89,6 @@ class MemorySessionStore(SessionStore):
         cleanup_thread.start()
 
 
-class RedisSessionStore(SessionStore):
-    """Redis-based session store for production"""
-
-    def __init__(self, redis_url: str = None):
-        try:
-            import redis
-
-            self.redis = redis.from_url(redis_url or "redis://localhost:6379")
-            self.redis.ping()  # Test connection
-            print("✅ Connected to Redis for session storage")
-        except ImportError:
-            raise ImportError("Redis package not installed. Run: pip install redis")
-        except Exception as e:
-            raise ConnectionError(f"Failed to connect to Redis: {e}")
-
-    def get(self, session_id: str) -> Optional[Dict[str, Any]]:
-        """Get session data by ID"""
-        try:
-            import json
-
-            data = self.redis.get(f"session:{session_id}")
-            return json.loads(data) if data else None
-        except Exception as e:
-            print(f"Redis get error: {e}")
-            return None
-
-    def set(self, session_id: str, data: Dict[str, Any]) -> None:
-        """Set session data with TTL"""
-        try:
-            import json
-
-            self.redis.setex(
-                f"session:{session_id}",
-                24 * 3600,  # 24 hours TTL (matches cookie expiry)
-                json.dumps(data, default=str),
-            )
-        except Exception as e:
-            print(f"Redis set error: {e}")
-
-    def delete(self, session_id: str) -> None:
-        """Delete session by ID"""
-        try:
-            self.redis.delete(f"session:{session_id}")
-        except Exception as e:
-            print(f"Redis delete error: {e}")
-
-    def cleanup_expired(self) -> None:
-        """Redis handles TTL automatically, no manual cleanup needed"""
-        pass
-
-
 def create_session_store() -> SessionStore:
-    """Create appropriate session store based on environment"""
-    redis_url = os.environ.get("REDIS_URL")
-
-    if redis_url and os.environ.get("ENVIRONMENT") == "production":
-        try:
-            return RedisSessionStore(redis_url)
-        except Exception as e:
-            print(f"⚠️  Failed to create Redis store, falling back to memory: {e}")
-
+    """Create session store"""
     return MemorySessionStore()

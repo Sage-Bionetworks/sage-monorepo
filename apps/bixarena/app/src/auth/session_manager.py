@@ -1,6 +1,7 @@
-import time
 import secrets
-from typing import Optional, Dict, Any
+import time
+from typing import Any, Dict, Optional
+
 from .session_store import create_session_store
 
 
@@ -36,8 +37,8 @@ class SessionManager:
         session_data = {
             "user": user_data,
             "access_token": access_token,
-            "created_at": time.time(),
-            "last_accessed": time.time(),
+            "first_login_at": time.time(),
+            "last_login_at": time.time(),
         }
 
         self._store.set(session_id, session_data)
@@ -59,14 +60,14 @@ class SessionManager:
             return False
 
         # Update last accessed time
-        session_data["last_accessed"] = time.time()
+        session_data["last_login_at"] = time.time()
         self._store.set(session_id, session_data)
 
         # Load session data
         self._session_id = session_id
         self._current_user = session_data["user"]
         self._access_token = session_data["access_token"]
-        self._session_timestamp = session_data["last_accessed"]
+        self._session_timestamp = session_data["last_login_at"]
 
         return True
 
