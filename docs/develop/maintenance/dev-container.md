@@ -146,9 +146,11 @@ To maintain security and reduce the attack surface, the dev container tool set s
 
 ## Step 2: Update Dev Container Features
 
+After updating the Dockerfile (Step 1), the dev container definition file (`.github/.devcontainer/devcontainer.json`) must be updated. This file references the updated Dockerfile and defines additional features and configuration for the development environment.
+
 ### 2.1 Dev Container Features
 
-The `devcontainer.json` file uses pre-built features from the Dev Containers specification:
+The `devcontainer.json` file references the updated Dockerfile and uses pre-built features from the Dev Containers specification:
 
 ```jsonc
 "features": {
@@ -172,14 +174,91 @@ The `devcontainer.json` file uses pre-built features from the Dev Containers spe
 }
 ```
 
+**Feature Trust and Selection Criteria:**
+
+- **Trusted Organizations**: Prefer features from established organizations like:
+
+  - `ghcr.io/devcontainers/features/*` (Official Dev Containers team)
+  - `ghcr.io/microsoft/*` (Microsoft)
+  - `ghcr.io/docker/*` (Docker)
+  - Other major cloud providers and established open-source organizations
+
+- **Community Feature Evaluation**: For features from smaller communities, conduct thorough review:
+  - **GitHub Stars**: Minimum 50+ stars for community trust
+  - **Release Frequency**: Regular releases (at least quarterly) in the past year
+  - **Active Contributors**: Multiple contributors (not single-maintainer projects)
+  - **Issue Response**: Active issue triage and community engagement
+  - **Documentation Quality**: Comprehensive README and usage examples
+  - **Source Code Review**: Review the feature's source code for security practices
+
+**Version Requirements:**
+
+- **Non-moving Tags**: Always use specific version numbers (e.g., `1.6.3`) instead of `latest` or branch names
+- **Reproducibility**: Ensures consistent builds across environments and time
+- **Audit Trail**: Enables tracking of exactly which versions are deployed
+- **Security**: Prevents automatic updates that might introduce vulnerabilities
+
 **Update Process:**
 
-1. Check [Dev Containers Features](https://containers.dev/features) for latest versions
-2. Update feature versions in the format `name:version`
-3. Update tool versions within each feature configuration
-4. Test feature functionality after updates
+1. **Check official registry**: Visit [Dev Containers Features](https://containers.dev/features) for latest versions
+2. **Verify trust criteria**: Ensure features meet organizational or community trust standards
+3. **Version validation**: Use specific, non-moving version tags only
+4. **Feature compatibility**: Verify feature versions work together
+5. **Tool version updates**: Update tool versions within each feature configuration
+6. **Security review**: For new community features, conduct security assessment
+7. **Test functionality**: Verify all features work correctly after updates
 
-### 2.2 Feature-Specific Updates
+### 2.2 Community Feature Evaluation Process
+
+When considering features from smaller communities, use this evaluation checklist:
+
+**Repository Assessment:**
+
+- [ ] GitHub repository has 50+ stars
+- [ ] Repository is actively maintained (commits within last 3 months)
+- [ ] Issues are actively triaged and responded to
+- [ ] Multiple contributors (not single-person projects)
+- [ ] Clear contribution guidelines and code of conduct
+
+**Release Management:**
+
+- [ ] Regular release cadence (at least quarterly)
+- [ ] Semantic versioning is used
+- [ ] Release notes document changes clearly
+- [ ] No breaking changes without major version bumps
+
+**Code Quality:**
+
+- [ ] Comprehensive README with usage examples
+- [ ] Automated testing (CI/CD pipelines)
+- [ ] Security scanning in place
+- [ ] Code follows security best practices
+- [ ] Dependencies are up-to-date and secure
+
+**Community Health:**
+
+- [ ] Active maintainer response to issues
+- [ ] Community discussions and engagement
+- [ ] Clear project roadmap or vision
+- [ ] Responsive to security vulnerability reports
+
+**Feature-Specific Review:**
+
+- [ ] Source code review for security vulnerabilities
+- [ ] Feature functionality aligns with monorepo needs
+- [ ] No unnecessary privileges or access requirements
+- [ ] Compatible with existing features and tools
+- [ ] Performance impact is acceptable
+
+**Approval Process:**
+
+1. Complete evaluation checklist
+2. Document findings and recommendation
+3. Get approval from security team (if applicable)
+4. Test feature in isolated environment
+5. Get team consensus before adding to production
+
+### 2.3 Feature-Specific Updates
 
 #### Docker-in-Docker
 
@@ -205,9 +284,88 @@ The `devcontainer.json` file uses pre-built features from the Dev Containers spe
 
 ## Testing Process
 
-### 3.1 Local Testing
+### 3.1 Manual Dev Container Testing
 
-Before committing changes:
+After updating both the Dockerfile and devcontainer.json, perform comprehensive testing using the devcontainer CLI:
+
+#### Build the Dev Container Image
+
+From the root workspace directory:
+
+```bash
+devcontainer build \
+  --workspace-folder .github \
+  --image-name ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:local
+```
+
+**Build Troubleshooting:**
+
+- **Docker Version Issues**: If build fails, the Docker engine version in `devcontainer.json` might be too recent
+
+  - Try specifying an older Docker version in the `docker-in-docker` feature
+  - Example: Change from `"version": "28.3.2"` to `"version": "27.3.2"` or earlier
+  - Check [Docker releases](https://docs.docker.com/engine/release-notes/) for stable versions
+
+- **Build Inside Dev Container**: The dev container includes the devcontainer CLI, so you can build the new container from within an existing dev container
+
+#### Test Container Startup and Functionality
+
+1. **Start the dev container:**
+
+   ```bash
+   devcontainer up --workspace-folder .github
+   ```
+
+2. **Connect to the running container:**
+
+   ```bash
+   docker exec -it sage-monorepo-devcontainer-prebuild bash
+   ```
+
+3. **Verify tool installations:**
+
+   ```bash
+   # Test key tools are available and working
+   node --version
+   python --version
+   java --version
+   go version
+   kubectl version --client
+   uv --version
+   trivy --version
+   ```
+
+4. **Test development workflows:**
+
+   ```bash
+   # Test package managers
+   npm --version
+   pnpm --version
+
+   # Test build tools
+   gradle --version
+   mvn --version
+
+   # Test container tools
+   docker --version
+   kubectl version --client
+   ```
+
+5. **Exit the container:**
+
+   ```bash
+   # Use Ctrl+C to exit the container session
+   exit
+   ```
+
+6. **Clean up the test container:**
+   ```bash
+   docker rm -f sage-monorepo-devcontainer-prebuild
+   ```
+
+### 3.2 Alternative Docker Build Testing
+
+For quick Dockerfile-only testing:
 
 1. **Build the container locally:**
 
@@ -217,19 +375,8 @@ Before committing changes:
    ```
 
 2. **Test container startup:**
-
    ```bash
    docker run -it --rm sage-monorepo-dev-test bash
-   ```
-
-3. **Verify tool installations:**
-   ```bash
-   # Test key tools are available and working
-   node --version
-   python --version
-   java --version
-   go version
-   kubectl version --client
    ```
 
 ### 3.2 Integration Testing
@@ -267,16 +414,22 @@ Before committing changes:
 - [ ] Verify all tool releases are at least 1 day old
 - [ ] Ensure Node.js uses LTS version (even-numbered major versions)
 - [ ] Update all tool versions in Dockerfile build args to latest stable releases
-- [ ] Update dev container features and their versions
+- [ ] Update dev container features using non-moving version tags only
+- [ ] Verify all features are from trusted organizations or approved community sources
+- [ ] Complete community feature evaluation for any new features
 - [ ] Update any hardcoded version references in scripts
 - [ ] Remove approved unused tools to reduce attack surface
 
 ### Testing
 
-- [ ] Build container locally without errors
-- [ ] Test container startup and basic functionality
-- [ ] Verify all development tools work correctly
-- [ ] Test in VS Code dev container environment
+- [ ] Build dev container using devcontainer CLI (`devcontainer build`)
+- [ ] Troubleshoot Docker version issues if build fails
+- [ ] Start dev container (`devcontainer up --workspace-folder .github`)
+- [ ] Connect to running container (`docker exec -it sage-monorepo-devcontainer-prebuild bash`)
+- [ ] Verify all development tools work correctly (node, python, java, go, etc.)
+- [ ] Test development workflows (npm, pnpm, gradle, mvn, docker, kubectl)
+- [ ] Exit container and clean up (`docker rm -f sage-monorepo-devcontainer-prebuild`)
+- [ ] Test in VS Code dev container environment ("Rebuild and Reopen in Container")
 - [ ] Run sample builds/tests to ensure compatibility
 
 ### Post-Update
@@ -295,6 +448,46 @@ Before committing changes:
 - **Package not found**: Check if package names changed in new Ubuntu version
 - **Version conflicts**: Ensure all pinned versions are still available
 - **Architecture issues**: Verify all tools support the target architecture
+
+#### Dev Container Build Failures
+
+- **Docker version compatibility**: Latest Docker versions in `docker-in-docker` feature may cause build failures
+  - **Solution**: Specify an older, stable Docker version (e.g., `"version": "27.3.2"` instead of `"28.3.2"`)
+  - **Check logs**: Look for Docker daemon startup errors or compatibility issues
+- **Feature conflicts**: Multiple features trying to install the same tools
+
+  - **Solution**: Remove duplicate installations or use feature-specific configurations
+  - **Review**: Check feature documentation for known conflicts
+
+- **Memory/disk space**: Large feature installations may exceed available resources
+
+  - **Solution**: Increase Docker desktop memory/disk limits or use smaller base images
+  - **Monitor**: Check Docker system resource usage during build
+
+- **Network issues**: Features downloading from external sources may fail
+
+  - **Solution**: Retry build or check network connectivity
+  - **Alternative**: Use cached or mirror sources when available
+
+- **Permission errors**: Features may fail to install due to user permission issues
+  - **Solution**: Ensure proper user configuration in devcontainer.json
+  - **Check**: Verify the `remoteUser` setting matches the Dockerfile user
+
+#### Dev Container Runtime Issues
+
+- **Container won't start**: Check `devcontainer up` logs for startup errors
+
+  - **Solution**: Verify all required ports are available and not in use
+  - **Check**: Ensure Docker daemon is running and accessible
+
+- **Tools not available**: Installed tools not found in PATH
+
+  - **Solution**: Check if feature installation completed successfully
+  - **Debug**: Connect to container and manually verify tool locations
+
+- **VS Code integration fails**: Container starts but VS Code can't connect
+  - **Solution**: Rebuild container with "Rebuild and Reopen in Container"
+  - **Check**: Verify VS Code Dev Containers extension is updated
 
 #### Runtime Issues
 

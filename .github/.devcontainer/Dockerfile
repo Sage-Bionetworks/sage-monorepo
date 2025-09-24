@@ -26,7 +26,7 @@ ARG hadolintVersion="2.14.0"
 ARG ktlintVersion="1.7.1"
 # https://zlib.net/fossils
 ARG zlibVersion="1.3.1"
-# The version of this dev container image.
+# The version of this dev container image (specified in devcontainer.json).
 ARG devcontainerVersion=""
 # The username of the non-root user.
 # The user `ubuntu` is available since Ubuntu 24.04.
