@@ -78,7 +78,7 @@ The remainder of this guide details how to update the Docker base image, tool ve
 
     Only files directly influencing the container build, configuration, or activation workflow are listed. Application/service Dockerfiles are out of scope for this maintenance guide.
 
-## Step 1: Update the Docker Base Image
+## Step 1a: Update the Docker Base Image
 
 ### 1.1 Base Image Update
 
@@ -205,9 +205,9 @@ To maintain security and reduce the attack surface, the dev container tool set s
 - [ ] Get explicit approval from team leads
 - [ ] Plan migration path if tool replacement is needed
 
-## Step 2: Update Dev Container Features
+## Step 1b: Update Dev Container Features
 
-After updating the Dockerfile (Step 1), the dev container definition file (`.github/.devcontainer/devcontainer.json`) must be updated. This file references the updated Dockerfile and defines additional features and configuration for the development environment.
+After updating the Dockerfile (Step 1a), update the dev container definition file (`.github/.devcontainer/devcontainer.json`). This file references the updated Dockerfile and defines additional features and configuration for the development environment. This is still part of the Step 1 (BUILD & PUBLISH) process in the two-step workflow described above.
 
 ### 2.1 Dev Container Features
 
