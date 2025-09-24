@@ -443,6 +443,38 @@ nx run-many --target create-config,build,test
    docker rm -f sage-monorepo-devcontainer
    ```
 
+### 3.2.1 Alternative: Streamlined Testing from Active Container
+
+Instead of manually stepping into the test container, you can run the comprehensive test from your current dev container:
+
+1. **Start dev container with monorepo:**
+
+   ```bash
+   # From the root of the monorepo
+   devcontainer up --workspace-folder .
+   ```
+
+2. **Execute comprehensive test directly:**
+
+   ```bash
+   devcontainer exec --workspace-folder . bash -c ". ./dev-env.sh \
+     && workspace-install \
+     && nx run-many --target=create-config,build,test --skip-nx-cache"
+   ```
+
+3. **Clean up test container:**
+   ```bash
+   # After the command completes, remove the test container
+   docker rm -f sage-monorepo-devcontainer
+   ```
+
+**Benefits of this approach:**
+
+- **Streamlined**: No need to manually connect and navigate inside the test container
+- **Automated**: Single command runs the entire test suite
+- **Clean**: Remains in your active development environment throughout
+- **Efficient**: Uses `--skip-nx-cache` to ensure fresh builds and tests
+
 ### 3.3 Alternative Docker Build Testing
 
 For quick Dockerfile-only testing:
@@ -593,6 +625,8 @@ After the activation PR is merged:
 
 #### Full Monorepo Integration Testing
 
+**Option A: Manual Testing (step-by-step)**
+
 - [ ] Verify local dev container image is available (`docker images | grep devcontainer`)
 - [ ] Update `.devcontainer/devcontainer.json` if needed for testing
 - [ ] Start dev container with monorepo (`devcontainer up --workspace-folder .`)
@@ -603,6 +637,14 @@ After the activation PR is merged:
 - [ ] Run comprehensive build and test (`nx run-many --target create-config,build,test`)
 - [ ] Verify all projects build and test successfully
 - [ ] Exit container and clean up (`docker rm -f sage-monorepo-devcontainer`)
+
+**Option B: Streamlined Testing (automated)**
+
+- [ ] Verify local dev container image is available (`docker images | grep devcontainer`)
+- [ ] Start dev container with monorepo (`devcontainer up --workspace-folder .`)
+- [ ] Execute comprehensive test: `devcontainer exec --workspace-folder . bash -c ". ./dev-env.sh && workspace-install && nx run-many --target=create-config,build,test --skip-nx-cache"`
+- [ ] Verify all projects build and test successfully (check command output)
+- [ ] Clean up test container (`docker rm -f sage-monorepo-devcontainer`)
 
 #### VS Code Integration Testing
 
