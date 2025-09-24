@@ -13,7 +13,7 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client_python.models.leaderboard_entry import LeaderboardEntry
+from bixarena_api_client.models.leaderboard_entry import LeaderboardEntry
 
 
 class TestLeaderboardEntry(unittest.TestCase):

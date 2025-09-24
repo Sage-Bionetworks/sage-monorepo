@@ -13,7 +13,7 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client_python.models.leaderboard_model_history_query import (
+from bixarena_api_client.models.leaderboard_model_history_query import (
     LeaderboardModelHistoryQuery,
 )
 

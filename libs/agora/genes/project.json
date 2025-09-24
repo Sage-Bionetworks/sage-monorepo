@@ -10,7 +10,8 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/agora/genes"],
       "options": {
-        "jestConfig": "libs/agora/genes/jest.config.ts"
+        "jestConfig": "libs/agora/genes/jest.config.ts",
+        "tsConfig": "libs/agora/genes/tsconfig.spec.json"
       }
     },
     "lint": {

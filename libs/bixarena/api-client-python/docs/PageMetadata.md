@@ -16,7 +16,7 @@ The metadata of a page.
 ## Example
 
 ```python
-from bixarena_api_client_python.models.page_metadata import PageMetadata
+from bixarena_api_client.models.page_metadata import PageMetadata
 
 # TODO update the JSON string below
 json = "{}"

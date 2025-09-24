@@ -32,3 +32,6 @@ apps/openchallenges/postgres/docker-entrypoint-initdb.d/init-db.sql
 
 # Prompt files with YAML front matter
 .github/prompts/*.md
+
+# Docs
+docs/develop/maintenance/node.md

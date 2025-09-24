@@ -16,7 +16,7 @@ A query for retrieving historical leaderboard data for a model.
 ## Example
 
 ```python
-from bixarena_api_client_python.models.leaderboard_model_history_query import LeaderboardModelHistoryQuery
+from bixarena_api_client.models.leaderboard_model_history_query import LeaderboardModelHistoryQuery
 
 # TODO update the JSON string below
 json = "{}"

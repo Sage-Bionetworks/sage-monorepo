@@ -10,7 +10,8 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/openchallenges/ui"],
       "options": {
-        "jestConfig": "libs/openchallenges/ui/jest.config.ts"
+        "jestConfig": "libs/openchallenges/ui/jest.config.ts",
+        "tsConfig": "libs/openchallenges/ui/tsconfig.spec.json"
       }
     },
     "lint": {

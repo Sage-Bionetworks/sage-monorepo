@@ -10,7 +10,8 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/model-ad/disease-correlation-comparison-tool"],
       "options": {
-        "jestConfig": "libs/model-ad/disease-correlation-comparison-tool/jest.config.ts"
+        "jestConfig": "libs/model-ad/disease-correlation-comparison-tool/jest.config.ts",
+        "tsConfig": "libs/model-ad/disease-correlation-comparison-tool/tsconfig.spec.json"
       }
     },
     "lint": {

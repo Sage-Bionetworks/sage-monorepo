@@ -4,12 +4,12 @@
   "generator-cli": {
     "version": "7.14.0",
     "generators": {
-      "api-client-python": {
+      "bixarena-api-client-python": {
         "generatorName": "python",
         "inputSpec": "#{cwd}/../api-description/openapi/openapi.yaml",
         "output": "#{cwd}/",
         "additionalProperties": {
-          "packageName": "bixarena_api_client_python"
+          "packageName": "bixarena_api_client"
         }
       }
     }

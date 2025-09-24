@@ -13,7 +13,7 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client_python.models.sort_direction import SortDirection
+from bixarena_api_client.models.sort_direction import SortDirection
 
 
 class TestSortDirection(unittest.TestCase):

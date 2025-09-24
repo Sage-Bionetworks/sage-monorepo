@@ -19,7 +19,7 @@ A page of leaderboard entries.
 ## Example
 
 ```python
-from bixarena_api_client_python.models.leaderboard_entry_page import LeaderboardEntryPage
+from bixarena_api_client.models.leaderboard_entry_page import LeaderboardEntryPage
 
 # TODO update the JSON string below
 json = "{}"

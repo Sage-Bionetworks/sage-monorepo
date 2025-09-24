@@ -13,9 +13,7 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client_python.models.leaderboard_snapshot_sort import (
-    LeaderboardSnapshotSort,
-)
+from bixarena_api_client.models.leaderboard_snapshot_sort import LeaderboardSnapshotSort
 
 
 class TestLeaderboardSnapshotSort(unittest.TestCase):

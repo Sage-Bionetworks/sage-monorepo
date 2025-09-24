@@ -13,7 +13,7 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client_python.models.leaderboard_sort import LeaderboardSort
+from bixarena_api_client.models.leaderboard_sort import LeaderboardSort
 
 
 class TestLeaderboardSort(unittest.TestCase):

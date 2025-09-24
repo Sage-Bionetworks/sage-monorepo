@@ -16,18 +16,19 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from datetime import date
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
-from bixarena_api_client_python.models.leaderboard_sort import LeaderboardSort
-from bixarena_api_client_python.models.sort_direction import SortDirection
+from bixarena_api_client.models.leaderboard_history_sort import LeaderboardHistorySort
+from bixarena_api_client.models.sort_direction import SortDirection
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class LeaderboardSearchQuery(BaseModel):
+class LeaderboardModelHistoryQuery(BaseModel):
     """
-    A leaderboard search query with pagination and filtering options.
+    A query for retrieving historical leaderboard data for a model.
     """  # noqa: E501
 
     page_number: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(
@@ -38,24 +39,25 @@ class LeaderboardSearchQuery(BaseModel):
         description="The number of items in a single page.",
         alias="pageSize",
     )
-    sort: Optional[LeaderboardSort] = LeaderboardSort.RANK
+    sort: Optional[LeaderboardHistorySort] = LeaderboardHistorySort.CREATED_AT
     direction: Optional[SortDirection] = SortDirection.ASC
-    search: Optional[StrictStr] = Field(
+    from_date: Optional[date] = Field(
         default=None,
-        description="Search by model name (case-insensitive partial match).",
+        description="Include only entries created on or after this date.",
+        alias="fromDate",
     )
-    snapshot_id: Optional[StrictStr] = Field(
+    to_date: Optional[date] = Field(
         default=None,
-        description="Get a specific historical snapshot instead of latest.",
-        alias="snapshotId",
+        description="Include only entries created on or before this date.",
+        alias="toDate",
     )
     __properties: ClassVar[List[str]] = [
         "pageNumber",
         "pageSize",
         "sort",
         "direction",
-        "search",
-        "snapshotId",
+        "fromDate",
+        "toDate",
     ]
 
     model_config = ConfigDict(
@@ -75,7 +77,7 @@ class LeaderboardSearchQuery(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of LeaderboardSearchQuery from a JSON string"""
+        """Create an instance of LeaderboardModelHistoryQuery from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -95,21 +97,21 @@ class LeaderboardSearchQuery(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # set to None if search (nullable) is None
+        # set to None if from_date (nullable) is None
         # and model_fields_set contains the field
-        if self.search is None and "search" in self.model_fields_set:
-            _dict["search"] = None
+        if self.from_date is None and "from_date" in self.model_fields_set:
+            _dict["fromDate"] = None
 
-        # set to None if snapshot_id (nullable) is None
+        # set to None if to_date (nullable) is None
         # and model_fields_set contains the field
-        if self.snapshot_id is None and "snapshot_id" in self.model_fields_set:
-            _dict["snapshotId"] = None
+        if self.to_date is None and "to_date" in self.model_fields_set:
+            _dict["toDate"] = None
 
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of LeaderboardSearchQuery from a dict"""
+        """Create an instance of LeaderboardModelHistoryQuery from a dict"""
         if obj is None:
             return None
 
@@ -126,12 +128,12 @@ class LeaderboardSearchQuery(BaseModel):
                 else 100,
                 "sort": obj.get("sort")
                 if obj.get("sort") is not None
-                else LeaderboardSort.RANK,
+                else LeaderboardHistorySort.CREATED_AT,
                 "direction": obj.get("direction")
                 if obj.get("direction") is not None
                 else SortDirection.ASC,
-                "search": obj.get("search"),
-                "snapshotId": obj.get("snapshotId"),
+                "fromDate": obj.get("fromDate"),
+                "toDate": obj.get("toDate"),
             }
         )
         return _obj

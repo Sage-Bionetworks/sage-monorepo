@@ -10,7 +10,8 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/agora/teams"],
       "options": {
-        "jestConfig": "libs/agora/teams/jest.config.ts"
+        "jestConfig": "libs/agora/teams/jest.config.ts",
+        "tsConfig": "libs/agora/teams/tsconfig.spec.json"
       }
     },
     "lint": {
