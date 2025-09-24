@@ -10,6 +10,8 @@ ARG devcontainerCliVersion="0.80.1"
 ARG uvVersion="0.8.22"
 # https://docs.posit.co/resources/install-r/#specify-r-version
 ARG rVersion="4.5.1"
+# https://github.com/gruntwork-io/terragrunt
+ARG terragruntVersion="0.87.5"
 # https://aquasecurity.github.io/trivy
 ARG trivyVersion="0.66.0"
 # https://github.com/rstudio/renv
@@ -64,15 +66,20 @@ RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
     gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg \
   && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | \
     tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
-  # Add ngrok repository.
-  && curl -fsSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null \
-  && echo "deb https://ngrok-agent.s3.amazonaws.com bullseye main" | tee /etc/apt/sources.list.d/ngrok.list \
-  # Add hashicorp repository.
-  && curl -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg \
-  && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list \
+  # Add OpenTofu repository.
+  && install -m 0755 -d /etc/apt/keyrings \
+  && curl -fsSL https://get.opentofu.org/opentofu.gpg | tee /etc/apt/keyrings/opentofu.gpg >/dev/null \
+  && curl -fsSL https://packages.opentofu.org/opentofu/tofu/gpgkey | gpg --no-tty --batch --dearmor -o /etc/apt/keyrings/opentofu-repo.gpg >/dev/null \
+  && chmod a+r /etc/apt/keyrings/opentofu.gpg \
+  && echo \
+    "deb [signed-by=/etc/apt/keyrings/opentofu.gpg,/etc/apt/keyrings/opentofu-repo.gpg] https://packages.opentofu.org/opentofu/tofu/any/ any main \
+    deb-src [signed-by=/etc/apt/keyrings/opentofu.gpg,/etc/apt/keyrings/opentofu-repo.gpg] https://packages.opentofu.org/opentofu/tofu/any/ any main" | \
+    tee /etc/apt/sources.list.d/opentofu.list > /dev/null \
   # Install additional packages.
   && apt-get update -qq -y \
-  && apt-get install --no-install-recommends -qq -y nodejs gh ngrok terraform \
+  && apt-get install --no-install-recommends -qq -y nodejs gh \
+  # Install OpenTofu
+  tofu \
   # Enable corepack.
   && corepack enable \
   # Set up UTF-8 locale.
@@ -135,6 +142,10 @@ RUN curl -fsSL https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/s
 # Install ktlint.
 RUN curl -sSLO https://github.com/pinterest/ktlint/releases/download/${ktlintVersion}/ktlint \
   && chmod a+x ktlint && mv ktlint /usr/local/bin/
+
+# Install Terragrunt.
+RUN curl -fsSL https://github.com/gruntwork-io/terragrunt/releases/download/v${terragruntVersion}/terragrunt_linux_amd64 -o /usr/bin/terragrunt \
+  && chmod +x /usr/bin/terragrunt
 
 # Set the user's password.
 RUN echo "$user:$user" | chpasswd \

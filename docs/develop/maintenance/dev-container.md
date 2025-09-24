@@ -1,6 +1,8 @@
 # Dev Container Updates
 
-This guide provides comprehensive instructions for updating the development container used in the Sage Monorepo. The dev container provides a consistent development environment across all contributors and includes all necessary tools and dependencies.
+This guide provides comprehensive instructions for updating the development container used in the
+Sage Monorepo. The dev container provides a consistent development environment across all
+contributors and includes all necessary tools and dependencies.
 
 ## Overview
 
@@ -9,11 +11,20 @@ The dev container update process consists of two main steps:
 1. **Update the Docker base image** - Modify the `Dockerfile` to use updated base images and tool versions
 2. **Update the dev container definition** - Update the `devcontainer.json` configuration to enable new features or change settings
 
-## File Locations
+### Key Files
 
-- **Dockerfile**: `.github/.devcontainer/Dockerfile`
-- **Dev Container Configuration**: `.github/.devcontainer/devcontainer.json`
-- **Docker Compose (if used)**: `.github/.devcontainer/docker-compose.yml`
+| File / Path                                  | Role / Purpose                                                                | Maintenance Notes                                                                                                                                                               |
+| -------------------------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `.github/.devcontainer/Dockerfile`           | Base build image; installs OS packages, languages, CLIs, pinned tool versions | Primary surface for monthly / security updates. Keep ARG versions pinned & date‑tagged Ubuntu LTS base. Remove unused tools periodically to reduce image size & attack surface. |
+| `.github/.devcontainer/devcontainer.json`    | Dev Container definition (features, settings, mounts, post\* commands)        | Use non‑moving, explicit feature versions. Two‑step rollout: (1) build/publish image PR, (2) activation PR updating image tag. Avoid local test tags (`:local`) in merged code. |
+| `.github/.devcontainer/docker-compose.yml`\* | Optional service orchestration (databases, queues)                            | Only create/use when multi‑service workflows need local infra. Keep service versions explicit; prune unused services. _(File may not exist if not currently required.)_         |
+| `dev-env.sh`                                 | Repository helper script to initialize language & tooling environment         | Update if adding/removing global tools or environment variables. Ensure compatibility with new tool versions introduced in the Dockerfile/features.                             |
+| `tools/prepare-*-envs.js`                    | Scripts invoked to prepare language ecosystems (Node, Python, Java, R, etc.)  | Rare edits; verify they still succeed after base image or feature upgrades (e.g., new Node major, Python minor). Align any hardcoded versions or paths with Dockerfile args.    |
+| `.github/workflows/*devcontainer*.yml`\*\*   | GitHub Actions workflows building & publishing the dev container image        | Ensure cache keys updated when changing base image tag or build args. Confirm workflow references correct image name & pushes SHA tag. **(Actual file name may vary.)**         |
+
+!!! note "Scope"
+
+Only files directly influencing the container build, configuration, or activation workflow are listed. Application/service Dockerfiles are out of scope for this maintenance guide.
 
 ## Step 1: Update the Docker Base Image
 
