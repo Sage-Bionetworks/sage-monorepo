@@ -231,26 +231,56 @@ def handle_search_change(search_query: str):
         # Return search results
         results = prompt_manager.search_prompts(search_query)
         if results:
-            # Create HTML for search results with proper escaping
-            html_results = "<div style='max-height: 200px; overflow-y: auto;'>"
+            # Create modern HTML for search results with proper escaping
+            html_results = """
+            <div style='
+                max-height: 280px; 
+                overflow-y: auto; 
+                background: linear-gradient(135deg, rgba(79, 70, 229, 0.15), rgba(124, 58, 237, 0.12));
+                border-radius: 0 0 12px 12px;
+                padding: 16px;
+                margin-top: 0;
+                border: 1px solid rgba(79, 70, 229, 0.3);
+                border-top: none;
+                box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+            '>
+            """
             for i, result in enumerate(results[:5]):  # Show max 5 results
                 # Properly escape HTML content
                 escaped_text = html.escape(result["text"], quote=True)
                 escaped_category = html.escape(result["category"], quote=True)
-                truncated_text = result["text"][:100] + (
-                    "..." if len(result["text"]) > 100 else ""
+                truncated_text = result["text"][:120] + (
+                    "..." if len(result["text"]) > 120 else ""
                 )
                 escaped_truncated = html.escape(truncated_text, quote=True)
 
-                # Use data attributes instead of inline JavaScript
+                # Modern card-style result with enhanced styling
                 html_results += f"""
                 <div class='prompt-result' 
                      data-prompt-text='{escaped_text}'
-                     style='padding: 8px; margin: 4px 0; background: rgba(56, 189, 248, 0.1);
-                           border-radius: 6px; cursor: pointer; border: 1px solid rgba(56, 189, 248, 0.3);
-                           transition: all 0.2s ease;'
-                     onmouseover='this.style.background="rgba(56, 189, 248, 0.2)"'
-                     onmouseout='this.style.background="rgba(56, 189, 248, 0.1)"'
+                     style='
+                        padding: 12px; 
+                        margin: 8px 0; 
+                        background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(99, 102, 241, 0.06));
+                        border-radius: 10px; 
+                        cursor: pointer; 
+                        border: 1px solid rgba(56, 189, 248, 0.2);
+                        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                        position: relative;
+                        overflow: hidden;
+                     '
+                     onmouseover='
+                        this.style.background="linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(99, 102, 241, 0.12))";
+                        this.style.transform="translateY(-2px)";
+                        this.style.boxShadow="0 8px 25px rgba(56, 189, 248, 0.15)";
+                        this.style.borderColor="rgba(56, 189, 248, 0.4)";
+                     '
+                     onmouseout='
+                        this.style.background="linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(99, 102, 241, 0.06))";
+                        this.style.transform="translateY(0)";
+                        this.style.boxShadow="none";
+                        this.style.borderColor="rgba(56, 189, 248, 0.2)";
+                     '
                      onclick='
                         try {{
                             var inputBox = document.querySelector("#input_box textarea") || 
@@ -265,17 +295,67 @@ def handle_search_change(search_query: str):
                             console.error("Error setting prompt:", e);
                         }}
                      '>
-                    <small style='color: #38bdf8; font-weight: 500;'>{escaped_category}</small><br>
-                    <span style='color: #e2e8f0; font-size: 14px; line-height: 1.4;'>{escaped_truncated}</span>
+                    <div style='
+                        display: flex; 
+                        align-items: center; 
+                        justify-content: space-between; 
+                        margin-bottom: 8px;
+                    '>
+                        <span style='
+                            color: #38bdf8; 
+                            font-weight: 600; 
+                            font-size: 12px; 
+                            text-transform: uppercase; 
+                            letter-spacing: 0.5px;
+                            background: rgba(56, 189, 248, 0.1);
+                            padding: 4px 8px;
+                            border-radius: 20px;
+                            border: 1px solid rgba(56, 189, 248, 0.3);
+                        '>{escaped_category}</span>
+                        <span style='
+                            color: #64748b; 
+                            font-size: 11px;
+                        '>Click to use</span>
+                    </div>
+                    <p style='
+                        color: #e2e8f0; 
+                        font-size: 14px; 
+                        line-height: 1.5; 
+                        margin: 0;
+                        font-weight: 400;
+                    '>{escaped_truncated}</p>
                 </div>
                 """
             html_results += "</div>"
-            return gr.HTML(value=html_results, visible=True), gr.Button(visible=False)
+            return gr.HTML(value=html_results, visible=True), gr.Button(visible=True)
         else:
             return gr.HTML(
-                value="<p style='color: #94a3b8; text-align: center; padding: 16px;'>No matching prompts found.</p>",
+                value="""
+                <div style='
+                    background: linear-gradient(135deg, rgba(79, 70, 229, 0.15), rgba(124, 58, 237, 0.12));
+                    border-radius: 0 0 12px 12px;
+                    padding: 32px;
+                    margin-top: 0;
+                    border: 1px solid rgba(79, 70, 229, 0.3);
+                    border-top: none;
+                    text-align: center;
+                '>
+                    <div style='font-size: 24px; margin-bottom: 8px;'>🔍</div>
+                    <p style='
+                        color: #94a3b8; 
+                        font-size: 16px; 
+                        margin: 0;
+                        font-weight: 500;
+                    '>No matching prompts found</p>
+                    <p style='
+                        color: #64748b; 
+                        font-size: 14px; 
+                        margin: 8px 0 0 0;
+                    '>Try a different search term or browse our examples</p>
+                </div>
+                """,
                 visible=True,
-            ), gr.Button(visible=False)
+            ), gr.Button(visible=True)
     else:
         with _state_lock:
             search_active = False
@@ -287,20 +367,74 @@ def update_rolling_prompt():
     """Update the rolling prompt - called periodically"""
     global search_active, rolling_paused, _state_lock
 
-    with _state_lock:
-        should_update = not rolling_paused and not search_active
+    # Get current prompt regardless of state for HTML display
+    new_prompt = prompt_manager.get_rolling_prompt()
 
-    if should_update:
-        new_prompt = prompt_manager.get_rolling_prompt()
-        return gr.Button(value=f"💫 Try this: {new_prompt}", visible=True)
-    # Return no change if paused - just return the current prompt
-    current_prompt = prompt_manager.get_rolling_prompt()
-    return gr.Button(value=f"💫 Try this: {current_prompt}", visible=True)
+    return gr.HTML(
+        value=f"""
+        <div id="rolling_prompt" style="
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            border: none;
+            border-radius: 12px;
+            padding: 16px 24px;
+            font-weight: 500;
+            font-size: 16px;
+            color: white;
+            min-height: 60px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.3);
+            width: 100%;
+            margin-bottom: 4px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1.4;
+        " onclick="
+            try {{
+                var inputBox = document.querySelector('#input_box textarea') || 
+                             document.querySelector('#input_box input') || 
+                             document.getElementById('input_box');
+                if (inputBox) {{
+                    inputBox.value = '{new_prompt.replace("'", "\\'")}';
+                    inputBox.focus();
+                    inputBox.dispatchEvent(new Event('input', {{ bubbles: true }}));
+                }}
+            }} catch(e) {{
+                console.error('Error setting prompt:', e);
+            }}
+        " onmouseover="
+            this.style.transform='translateY(-2px)';
+            this.style.boxShadow='0 8px 30px rgba(79, 70, 229, 0.4)';
+            this.style.background='linear-gradient(135deg, #5b51f0, #8b47f7)';
+        " onmouseout="
+            this.style.transform='translateY(0)';
+            this.style.boxShadow='0 4px 20px rgba(79, 70, 229, 0.3)';
+            this.style.background='linear-gradient(135deg, #4f46e5, #7c3aed)';
+        ">
+            <div style="font-size: 14px; opacity: 0.9; margin-bottom: 8px;">
+                💡 Don't know what to ask? Try this example:
+            </div>
+            <div style="font-size: 16px; font-weight: 400; font-style: italic; opacity: 0.95;">
+                "{new_prompt}"
+            </div>
+        </div>
+        """,
+        visible=True,
+    )
 
 
 def click_rolling_prompt(button_value):
     """Handle clicking on the rolling prompt"""
-    # Extract the prompt text from the button value (remove "💫 Try this: " prefix)
+    # Extract the prompt text from within the quotes
+    if "💡 Don't know what to ask? Try this example:" in button_value:
+        # Find the text between quotes
+        start_quote = button_value.find('"')
+        end_quote = button_value.rfind('"')
+        if start_quote != -1 and end_quote != -1 and start_quote < end_quote:
+            prompt_text = button_value[start_quote + 1 : end_quote]
+        return prompt_text
+    # Fallback for old format
     if button_value.startswith("💫 Try this: "):
         prompt_text = button_value[len("💫 Try this: ") :]
         return prompt_text
@@ -316,6 +450,94 @@ def build_side_by_side_ui_anony():
     - You can continue chatting until you identify a winner.
 
     ## 👇 Chat now!
+    
+    <style>
+        /* Styling for rolling prompt */
+        #rolling_prompt {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed) !important;
+            border: none !important;
+            border-radius: 12px !important;
+            padding: 16px 24px !important;
+            font-weight: 500 !important;
+            font-size: 16px !important;
+            color: white !important;
+            min-height: 60px !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.3) !important;
+            width: 100% !important;
+            margin-bottom: 4px !important;
+            text-align: left !important;
+            position: relative !important;
+        }
+        
+        /* Style the rolling prompt to make quoted text distinct */
+        #rolling_prompt {
+            line-height: 1.4 !important;
+            white-space: normal !important;
+            word-wrap: break-word !important;
+        }
+        
+        /* Use CSS to style the quoted portion differently */
+        #rolling_prompt::after {
+            content: "💬" !important;
+            position: absolute !important;
+            top: 12px !important;
+            right: 16px !important;
+            font-size: 16px !important;
+            opacity: 0.6 !important;
+        }
+        
+        #rolling_prompt:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 30px rgba(79, 70, 229, 0.4) !important;
+            background: linear-gradient(135deg, #5b51f0, #8b47f7) !important;
+        }
+        
+        /* Remove spacing from search components */
+        #prompt_search {
+            margin: 0 !important;
+        }
+        
+        #search_results {
+            margin: 0 !important;
+        }
+        
+        /* Force purple background for search results container */
+        #search_results .gradio-html,
+        #search_results > div,
+        #search_results > div > div,
+        [id*="component-"] div[style*="max-height: 280px"],
+        div[style*="overflow-y: auto"][style*="max-height: 280px"] {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.15), rgba(124, 58, 237, 0.12)) !important;
+            border: 1px solid rgba(79, 70, 229, 0.3) !important;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2) !important;
+        }
+        
+        /* Target any element that looks like our search results container */
+        div[style*="background: linear-gradient(135deg, rgba(30, 41, 59"],
+        div[style*="background: linear-gradient(135deg, rgba(51, 65, 85"] {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.15), rgba(124, 58, 237, 0.12)) !important;
+            border: 1px solid rgba(79, 70, 229, 0.3) !important;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2) !important;
+        }
+        
+        /* Remove background and borders from the group container */
+        #component-46,
+        #component-46 .gr-group,
+        #component-46 .styler {
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            border-width: 0px !important;
+            --block-border-width: 0px !important;
+        }
+        
+        /* Ensure the group container blends with the app */
+        .gr-group.svelte-1nguped {
+            background: transparent !important;
+            border: none !important;
+        }
+    </style>
     """
 
     states = [gr.State() for _ in range(num_sides)]
@@ -324,25 +546,66 @@ def build_side_by_side_ui_anony():
 
     gr.Markdown(notice_markdown, elem_id="notice_markdown")
 
-    # Prompt Examples Section
+    # Group rolling prompt and search box to eliminate spacing
     with gr.Group():
-        gr.Markdown("### 💡 Example Biomedical Prompts")
+        rolling_prompt_button = gr.HTML(
+            value=f"""
+            <div id="rolling_prompt" style="
+                background: linear-gradient(135deg, #4f46e5, #7c3aed);
+                border: none;
+                border-radius: 12px;
+                padding: 16px 24px;
+                font-weight: 500;
+                font-size: 16px;
+                color: white;
+                min-height: 60px;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: 0 4px 20px rgba(79, 70, 229, 0.3);
+                width: 100%;
+                margin-bottom: 4px;
+                cursor: pointer;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                line-height: 1.4;
+            " onclick="
+                try {{
+                    var inputBox = document.querySelector('#input_box textarea') || 
+                                 document.querySelector('#input_box input') || 
+                                 document.getElementById('input_box');
+                    if (inputBox) {{
+                        inputBox.value = '{prompt_manager.get_rolling_prompt().replace("'", "\\'")}';
+                        inputBox.focus();
+                        inputBox.dispatchEvent(new Event('input', {{ bubbles: true }}));
+                    }}
+                }} catch(e) {{
+                    console.error('Error setting prompt:', e);
+                }}
+            " onmouseover="
+                this.style.transform='translateY(-2px)';
+                this.style.boxShadow='0 8px 30px rgba(79, 70, 229, 0.4)';
+                this.style.background='linear-gradient(135deg, #5b51f0, #8b47f7)';
+            " onmouseout="
+                this.style.transform='translateY(0)';
+                this.style.boxShadow='0 4px 20px rgba(79, 70, 229, 0.3)';
+                this.style.background='linear-gradient(135deg, #4f46e5, #7c3aed)';
+            ">
+                <div style="font-size: 14px; opacity: 0.9; margin-bottom: 8px;">
+                    💡 Don't know what to ask? Try this example:
+                </div>
+                <div style="font-size: 16px; font-weight: 400; font-style: italic; opacity: 0.95;">
+                    "{prompt_manager.get_rolling_prompt()}"
+                </div>
+            </div>
+            """,
+            visible=True,
+        )
 
-        # Search box
         search_box = gr.Textbox(
-            placeholder="Search example prompts...",
+            placeholder="Search biomedical examples: cancer, drug discovery...",
             show_label=False,
             container=False,
             elem_id="prompt_search",
-        )
-
-        # Rolling prompt display as clickable button (visible when not searching)
-        rolling_prompt_button = gr.Button(
-            value=f"💫 Try this: {prompt_manager.get_rolling_prompt()}",
-            elem_id="rolling_prompt",
-            visible=True,
-            variant="secondary",
-            size="sm",
         )
 
         # Search results display (hidden by default)
@@ -403,9 +666,7 @@ def build_side_by_side_ui_anony():
         outputs=[search_results_display, rolling_prompt_button],
     )
 
-    rolling_prompt_button.click(
-        click_rolling_prompt, inputs=[rolling_prompt_button], outputs=[textbox]
-    )
+    # HTML component handles click via inline onclick
 
     # Add timer for rolling prompts (updates every 4 seconds)
     timer = gr.Timer(4.0)  # 4 second interval
