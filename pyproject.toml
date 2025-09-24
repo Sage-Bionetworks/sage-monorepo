@@ -28,7 +28,12 @@ templater = "jinja"
 dialect = "mysql"
 sql_file_exts = ".sql"
 
-[tool.uv.sources.openchallenges_tools]
+# Add a [tool.uv.sources.<name>] entry when:
+# - The project is listed in [project].dependencies here or in any subproject, AND
+# - That project is also a member of this workspace (see [tool.uv.workspace]).
+# This tells uv to resolve the dependency from the local workspace instead of PyPI.
+# Do NOT add entries for projects that are never depended on by name.
+[tool.uv.sources.bixarena-api-client]
 workspace = true
 
 [tool.uv.sources.openchallenges-api-client]
@@ -37,14 +42,12 @@ workspace = true
 [tool.uv.sources.openchallenges-client]
 workspace = true
 
-[tool.uv.sources.bixarena-tools]
-workspace = true
-
-[tool.uv.sources.bixarena-api-client-python]
-workspace = true
-
-
 [tool.uv.workspace]
+# List here every subproject directory that belongs to this monorepo and should be
+# managed by uv (apps, tools, libraries, etc.).
+# Always include the path of each local project, regardless of whether it is
+# depended on by others or included in root dependencies.
+# This is the authoritative list of workspace members.
 members = [
   "apps/bixarena/app",
   "apps/bixarena/tools",
@@ -60,11 +63,15 @@ build-backend = "pdm.backend"
 
 [project]
 requires-python = "==3.13.3"
+
+# List here only the distribution names you want installed in the root environment
+# when running `uv sync` at the repo root.
+# Include:
+# - Projects you want to import directly from the root (e.g. in notebooks/scripts).
+# - Projects that define CLI entry points you want to run from the root venv.
+# Do NOT include libraries that are only needed by other workspace projects;
+# they will be installed transitively.
 dependencies = [
-  "bixarena-api-client-python",
-  "bixarena-tools",
-  "openchallenges_tools",
-  "openchallenges-api-client",
   "openchallenges-client"
 ]
 name = "sage-monorepo"
@@ -73,9 +80,13 @@ description = ""
 readme = "README.md"
 package-mode = false
 
-  [[project.authors]]
-  name = "Thomas Schaffter"
-  email = "thomas.schaffter@gmail.com"
+[[project.authors]]
+name = "Thomas Schaffter"
+email = "thomas.schaffter@gmail.com"
+
+[[project.authors]]
+name = "Rong Chai"
+email = "rongrong.chai1@gmail.com"
 
 [dependency-groups]
 dev = [

@@ -13,9 +13,7 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client_python.models.leaderboard_search_query import (
-    LeaderboardSearchQuery,
-)
+from bixarena_api_client.models.leaderboard_search_query import LeaderboardSearchQuery
 
 
 class TestLeaderboardSearchQuery(unittest.TestCase):

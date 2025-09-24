@@ -16,7 +16,7 @@ A leaderboard search query with pagination and filtering options.
 ## Example
 
 ```python
-from bixarena_api_client_python.models.leaderboard_search_query import LeaderboardSearchQuery
+from bixarena_api_client.models.leaderboard_search_query import LeaderboardSearchQuery
 
 # TODO update the JSON string below
 json = "{}"

@@ -18,7 +18,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt
 from typing import Any, ClassVar, Dict, List
-from bixarena_api_client_python.models.leaderboard_snapshot import LeaderboardSnapshot
+from bixarena_api_client.models.leaderboard_snapshot import LeaderboardSnapshot
 from typing import Optional, Set
 from typing_extensions import Self
 

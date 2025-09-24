@@ -13,7 +13,7 @@ Do not edit the class manually.
 
 import unittest
 
-from bixarena_api_client_python.models.basic_error import BasicError
+from bixarena_api_client.models.basic_error import BasicError
 
 
 class TestBasicError(unittest.TestCase):
