@@ -13,9 +13,10 @@ class SynapseOAuthClient:
         self.client_id = os.environ.get("SYNAPSE_CLIENT_ID")
         self.client_secret = os.environ.get("SYNAPSE_CLIENT_SECRET")
 
-        # Use APP_REDIRECT_URI with fallback to constructed URL
+        # Use AUTH_REDIRECT_URI with fallback to constructed URL
         self.redirect_uri = os.environ.get(
-            "APP_REDIRECT_URI", f"http://127.0.0.1:{os.environ.get('APP_PORT', '8100')}"
+            "AUTH_REDIRECT_URI",
+            f"http://127.0.0.1:{os.environ.get('APP_PORT', '8100')}",
         )
 
         # Development bypass flag
