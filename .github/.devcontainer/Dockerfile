@@ -5,9 +5,9 @@ SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
 
 # List of build arguments.
 # https://www.npmjs.com/package/@devcontainers/cli
-ARG devcontainerCliVersion="0.80.0"
+ARG devcontainerCliVersion="0.80.1"
 # https://github.com/astral-sh/uv
-ARG uvVersion="0.7.21"
+ARG uvVersion="0.8.22"
 # https://docs.posit.co/resources/install-r/#specify-r-version
 ARG rVersion="4.5.1"
 # https://aquasecurity.github.io/trivy
