@@ -51,11 +51,11 @@ Benefits:
 
 ## Products
 
-| Product            | Description                                          | Link                                          |
-| ------------------ | ---------------------------------------------------- | --------------------------------------------- |
-| **Agora**          | Evidence explorer for Alzheimer’s research           | [Visit](https://agora.adknowledgeportal.org/) |
-| **OpenChallenges** | Platform for scientific & citizen science challenges | [Visit](https://openchallenges.io/)           |
-| **MODEL-AD**       | Resources for Alzheimer’s disease model data         | [Visit](https://model-ad.org/)                |
+| Product            | Description                                             | Link                                          |
+| ------------------ | ------------------------------------------------------- | --------------------------------------------- |
+| **Agora**          | Evidence explorer for Alzheimer’s research              | [Visit](https://agora.adknowledgeportal.org/) |
+| **OpenChallenges** | Platform for scientific & citizen science challenges    | [Visit](https://openchallenges.io/)           |
+| **Model-AD**       | Resources for Alzheimer’s disease model data (upcoming) |                                               |
 
 ➡ More services and details: see the [Docs Site](https://sage-bionetworks.github.io/sage-monorepo/).
 
