@@ -20,7 +20,7 @@ class PageNavigator:
 
 
 def check_oauth_callback(request: gr.Request):
-    """Process OAuth callback"""
+    """Process OAuth callback with input validation"""
     auth_service = get_auth_service()
 
     if request and hasattr(request, "url"):
@@ -31,6 +31,16 @@ def check_oauth_callback(request: gr.Request):
             if "code" in params:
                 code = params["code"][0]
                 state = params.get("state", [None])[0]
+
+                # Basic input validation
+                if not code or len(code) > 500:  # Reasonable code length limit
+                    print("❌ Invalid OAuth code parameter")
+                    return update_login_button(), *update_user_page()
+
+                if state and len(state) > 100:  # Reasonable state length limit
+                    print("❌ Invalid OAuth state parameter")
+                    return update_login_button(), *update_user_page()
+
                 auth_service.handle_oauth_callback(code, state)
 
         except Exception as e:
@@ -69,10 +79,10 @@ def build_app(register_api_endpoint_file=None, moderate=False):
     """
 
     with gr.Blocks(title="BixArena - Biomedical LLM Evaluation") as demo:
-        header, battle_btn, leaderboard_btn, login_btn = build_header()
+        _, battle_btn, leaderboard_btn, login_btn = build_header()
 
         with gr.Column(visible=True) as home_page:
-            home_content, cta_btn = build_home_page()
+            _, cta_btn = build_home_page()
 
         with gr.Column(visible=False) as battle_page:
             build_battle_page(register_api_endpoint_file, moderate)
@@ -81,7 +91,7 @@ def build_app(register_api_endpoint_file=None, moderate=False):
             build_leaderboard_page()
 
         with gr.Column(visible=False) as user_page:
-            user_container, welcome_display, logout_btn = build_user_page()
+            _, welcome_display, logout_btn = build_user_page()
 
         pages = [home_page, battle_page, leaderboard_page, user_page]
         navigator = PageNavigator(pages)

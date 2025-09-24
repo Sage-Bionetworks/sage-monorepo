@@ -12,8 +12,16 @@ class AuthService:
 
     def generate_login_url(self) -> str:
         """Generate OAuth login URL"""
-        # Development bypass
+        # Development bypass - only allow in development environment
         if self.oauth_client.skip_auth:
+            import os
+
+            # Add safety check for development environment
+            if os.environ.get("ENVIRONMENT", "production").lower() == "production":
+                raise ValueError(
+                    "SKIP_AUTH can only be used in development environment"
+                )
+
             # Set mock user immediately
             mock_user = {
                 "firstName": "Developer",
@@ -53,7 +61,8 @@ class AuthService:
                 self.session.set_error("Failed to get user profile")
                 return False
 
-            user_profile["access_token"] = access_token
+            # Store access token securely (separate from user profile)
+            self.session.set_access_token(access_token)
             self.session.set_current_user(user_profile)
 
             print(f"✅ Login successful: {self.session.get_display_name()}")

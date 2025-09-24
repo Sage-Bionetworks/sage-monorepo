@@ -16,7 +16,11 @@ class SynapseOAuthClient:
     def __init__(self):
         self.client_id = os.environ.get("SYNAPSE_CLIENT_ID")
         self.client_secret = os.environ.get("SYNAPSE_CLIENT_SECRET")
-        self.redirect_uri = f"http://127.0.0.1:{os.environ.get('APP_PORT', '8100')}"
+
+        # Use APP_REDIRECT_URI with fallback to constructed URL
+        self.redirect_uri = os.environ.get(
+            "APP_REDIRECT_URI", f"http://127.0.0.1:{os.environ.get('APP_PORT', '8100')}"
+        )
 
         # Development bypass flag
         self.skip_auth = os.environ.get("SKIP_AUTH", "").lower() == "true"
@@ -66,8 +70,13 @@ class SynapseOAuthClient:
             response = requests.post(self.token_url, headers=headers, data=data)
             if response.status_code == 200:
                 return response.json().get("access_token")
+            else:
+                print(
+                    f"Token exchange failed: {response.status_code} - {response.text}"
+                )
             return None
-        except Exception:
+        except Exception as e:
+            print(f"Token exchange error: {e}")
             return None
 
     def get_user_profile(self, access_token: str) -> Optional[Dict[str, Any]]:
@@ -75,6 +84,13 @@ class SynapseOAuthClient:
         headers = {"Authorization": f"Bearer {access_token}"}
         try:
             response = requests.get(self.user_profile_url, headers=headers)
-            return response.json() if response.status_code == 200 else None
-        except Exception:
+            if response.status_code == 200:
+                return response.json()
+            else:
+                print(
+                    f"User profile fetch failed: {response.status_code} - {response.text}"
+                )
+            return None
+        except Exception as e:
+            print(f"User profile fetch error: {e}")
             return None

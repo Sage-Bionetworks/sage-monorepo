@@ -22,6 +22,7 @@ class SessionManager:
         self._oauth_state = None
         self._processed_codes = set()
         self._error_message = None
+        self._access_token = None
         self._initialized = True
 
     def get_current_user(self) -> Optional[Dict[str, Any]]:
@@ -44,6 +45,15 @@ class SessionManager:
         self._session_timestamp = None
         self._oauth_state = None
         self._error_message = None
+        self._access_token = None  # Clear access token
+
+    def set_access_token(self, token: str) -> None:
+        """Set access token securely"""
+        self._access_token = token
+
+    def get_access_token(self) -> Optional[str]:
+        """Get access token"""
+        return self._access_token
 
     def is_authenticated(self) -> bool:
         """Check if user is currently authenticated"""
