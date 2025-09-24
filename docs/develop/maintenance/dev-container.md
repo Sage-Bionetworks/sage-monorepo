@@ -273,6 +273,10 @@ The `devcontainer.json` file references the updated Dockerfile and uses pre-buil
 
 When considering features from smaller communities, use this evaluation checklist:
 
+!!! tip
+
+    The checkboxes below are clickable—check them as you evaluate a community feature for inclusion in the dev container to track your review progress.
+
 **Repository Assessment:**
 
 - [ ] GitHub repository has 50+ stars
