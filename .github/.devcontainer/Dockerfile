@@ -72,12 +72,9 @@ RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list \
   # Install additional packages.
   && apt-get update -qq -y \
-  && apt-get install --no-install-recommends -qq -y nodejs gh ngrok terraform vault \
+  && apt-get install --no-install-recommends -qq -y nodejs gh ngrok terraform \
   # Enable corepack.
   && corepack enable \
-  # Fix Vault CLI.
-  # See https://github.com/hashicorp/vault/issues/10924
-  && setcap -r /usr/bin/vault \
   # Set up UTF-8 locale.
   && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen \
   # Install R (must be done before clearing the apt cache)
