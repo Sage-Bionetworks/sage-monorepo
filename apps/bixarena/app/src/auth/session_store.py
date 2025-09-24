@@ -63,8 +63,8 @@ class MemorySessionStore(SessionStore):
 
         with self._lock:
             for session_id, data in self._sessions.items():
-                # Remove sessions older than 180 days (refresh token expiry)
-                if current_time - data.get("created_at", 0) > 180 * 24 * 3600:
+                # Remove sessions older than 24 hours (cookie expiry)
+                if current_time - data.get("created_at", 0) > 24 * 3600:
                     expired_sessions.append(session_id)
 
             for session_id in expired_sessions:
@@ -121,7 +121,7 @@ class RedisSessionStore(SessionStore):
 
             self.redis.setex(
                 f"session:{session_id}",
-                180 * 24 * 3600,  # 180 days TTL
+                24 * 3600,  # 24 hours TTL (matches cookie expiry)
                 json.dumps(data, default=str),
             )
         except Exception as e:

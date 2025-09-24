@@ -2,20 +2,27 @@
 
 ## Overview
 
-The BixArena application now implements persistent login state using a session-based authentication system with secure cookies. Users no longer need to re-authenticate when refreshing the page, addressing the previous limitation of token-only authentication.
+The BixArena application now imp```javascript
+// Secure cookie settings
+document.cookie = "bixarena_session=SESSION_ID; path=/; max-age=86400; samesite=strict; secure";
+
+````
+
+- **Name**: `bixarena_session`
+- **Max-Age**: 86,400 seconds (24 hours)
+- **SameSite**: Strict (CSRF protection)
+- **Secure**: Only for HTTPS (omitted in development)
+- **Path**: `/` (application-wide)rsistent login state using a session-based authentication system with secure cookies. Users no longer need to re-authenticate when refreshing the page, addressing the previous limitation of token-only authentication.
 
 ## Key Features
 
 ### 1. Persistent Login State
-
 - **Server-side sessions**: Session data is stored server-side with unique session IDs
 - **Secure cookies**: Session IDs are stored in HttpOnly, SameSite=Strict cookies
-- **Automatic token refresh**: Access tokens are refreshed automatically using refresh tokens
+- **Session-based expiry**: Sessions expire when cookies expire (24 hours)
 
 ### 2. Enhanced Security
-
-- **Short-lived access tokens**: 24-hour expiry with automatic refresh
-- **Long-lived refresh tokens**: 180-day expiry for persistent authentication
+- **Cookie-based expiry**: 24-hour session lifetime tied to cookie expiry
 - **Session validation**: Automatic cleanup of expired sessions
 - **Cookie security**: Secure flag for HTTPS, SameSite=Strict for CSRF protection
 
@@ -31,9 +38,9 @@ The BixArena application now implements persistent login state using a session-b
 
 1. **SessionManager** (`src/auth/session_manager.py`)
 
-   - Manages user sessions and token lifecycle
-   - Handles automatic token refresh
+   - Manages user sessions with 24-hour expiry
    - Provides session validation and cleanup
+   - Simple cookie-based session management
 
 2. **SessionStore** (`src/auth/session_store.py`)
 
@@ -43,9 +50,9 @@ The BixArena application now implements persistent login state using a session-b
 
 3. **SynapseOAuthClient** (`src/auth/oauth_client.py`)
 
-   - Enhanced with refresh token support
-   - Includes `offline_access` scope for Synapse OAuth
-   - Handles token exchange and refresh operations
+   - Simplified OAuth client for Synapse integration
+   - Handles authorization code exchange for access tokens
+   - No refresh token complexity
 
 4. **AuthService** (`src/auth/auth_service.py`)
    - Updated for session-based authentication
@@ -72,13 +79,11 @@ The BixArena application now implements persistent login state using a session-b
 4. Token expiry checked (refreshes if needed)
 5. User authenticated without login prompt
 
-#### Token Refresh
+#### Session Expiry
 
-1. Access token checked before API calls
-2. If expired (or within 5 minutes of expiry):
-   - Refresh token used to get new access token
-   - New tokens stored in session
-   - User remains authenticated seamlessly
+1. Sessions expire after 24 hours (tied to cookie expiry)
+2. Users need to re-authenticate after session expires
+3. No automatic token refresh - keeps implementation simple
 
 #### Logout
 
@@ -92,7 +97,7 @@ The BixArena application now implements persistent login state using a session-b
 ```javascript
 // Secure cookie settings
 document.cookie = 'bixarena_session=SESSION_ID; path=/; max-age=15552000; samesite=strict; secure';
-```
+````
 
 - **Name**: `bixarena_session`
 - **Max-Age**: 15,552,000 seconds (180 days)
@@ -127,7 +132,6 @@ APP_REDIRECT_URI=https://your-domain.com
 
 - `openid`: For user identity information
 - `view`: For accessing user profile data
-- `offline_access`: **New** - For refresh token support
 
 ### Client Registration
 

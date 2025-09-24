@@ -62,11 +62,11 @@ def _process_oauth_callback(
 
         success, session_id = auth_service.handle_oauth_callback(code, state)
         if success and session_id:
-            # Set cookie with appropriate security for environment
+            # Set cookie with appropriate security for environment (24 hours)
             secure_flag = "secure" if str(request.url).startswith("https") else ""
             cookie_script = f"""
             <script>
-            document.cookie = "bixarena_session={session_id}; path=/; max-age=15552000; samesite=strict; {secure_flag}";
+            document.cookie = "bixarena_session={session_id}; path=/; max-age=86400; samesite=strict; {secure_flag}";
             </script>
             """
             return update_login_button(), *update_user_page(), gr.HTML(cookie_script)

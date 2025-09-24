@@ -53,18 +53,18 @@ class AuthService:
                 self.session.set_error("Invalid OAuth state")
                 return False, None
 
-            tokens = self.oauth_client.exchange_code_for_token(code)
-            if not tokens or not tokens.get("access_token"):
+            access_token = self.oauth_client.exchange_code_for_token(code)
+            if not access_token:
                 self.session.set_error("Failed to obtain access token")
                 return False, None
 
-            user_profile = self.oauth_client.get_user_profile(tokens["access_token"])
+            user_profile = self.oauth_client.get_user_profile(access_token)
             if not user_profile:
                 self.session.set_error("Failed to get user profile")
                 return False, None
 
             # Create server-side session
-            session_id = self.session.create_session(user_profile, tokens)
+            session_id = self.session.create_session(user_profile, access_token)
 
             print(f"✅ Login successful: {self.session.get_display_name()}")
             return True, session_id
@@ -85,20 +85,7 @@ class AuthService:
         if not session_id:
             return False
 
-        success = self.session.load_session(session_id)
-        if success and self.session.needs_token_refresh():
-            # Attempt to refresh token automatically
-            refresh_token = self.session.get_refresh_token()
-            if refresh_token:
-                new_tokens = self.oauth_client.refresh_access_token(refresh_token)
-                if new_tokens:
-                    self.session.refresh_tokens(new_tokens)
-                    print("🔄 Access token refreshed automatically")
-                else:
-                    print("❌ Failed to refresh token, session expired")
-                    self.session.clear_session()
-                    return False
-        return success
+        return self.session.load_session(session_id)
 
     def is_authenticated(self) -> bool:
         """Check if user is authenticated"""

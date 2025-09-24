@@ -27,15 +27,11 @@ def test_session_management():
     # Test user data
     user_data = {"firstName": "Test", "userName": "testuser", "authenticated": True}
 
-    # Test tokens
-    tokens = {
-        "access_token": "test_access_token",
-        "refresh_token": "test_refresh_token",
-        "expires_in": 3600,
-    }
+    # Test access token
+    access_token = "test_access_token"
 
     # Create session
-    session_id = session.create_session(user_data, tokens)
+    session_id = session.create_session(user_data, access_token)
     print(f"✅ Created session: {session_id}")
 
     # Clear current session state
@@ -67,15 +63,15 @@ def test_oauth_client():
         print(f"✅ Generated login URL: {login_url[:100]}...")
         print(f"✅ OAuth state: {state}")
 
-        # Check that offline_access scope is included
+        # Check that required scopes are included
         parsed_url = urlparse(login_url)
         params = parse_qs(parsed_url.query)
         scope = params.get("scope", [""])[0]
 
-        if "offline_access" in scope:
-            print("✅ offline_access scope included for refresh tokens")
+        if "openid" in scope and "view" in scope:
+            print("✅ Required scopes (openid, view) included")
         else:
-            print("❌ offline_access scope missing")
+            print("❌ Required scopes missing")
 
         print("✅ OAuth client test completed")
 
