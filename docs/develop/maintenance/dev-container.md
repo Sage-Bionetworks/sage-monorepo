@@ -324,7 +324,6 @@ When considering features from smaller communities, use this evaluation checklis
 #### Docker-in-Docker
 
 - Update Docker version to latest stable
-- Consider security implications of Docker-in-Docker
 
 #### Java
 
