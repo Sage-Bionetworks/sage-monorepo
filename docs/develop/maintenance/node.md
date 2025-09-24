@@ -9,7 +9,7 @@ Node.js dependencies are managed primarily via the root `package.json` file in c
 - Version alignment across all applications and libraries
 - Simplified upgrades and security remediation
 - Reduced dependency drift and bundle duplication
-- Efficient disk usage through symlinked node_modules
+- Efficient disk usage through symlinked `node_modules`
 
 ### Key Files
 
@@ -20,13 +20,14 @@ Node.js dependencies are managed primarily via the root `package.json` file in c
 | `tsconfig.base.json`                         | TypeScript path mapping and compiler configuration                | Update path mappings when adding/removing libraries               |
 | `nx.json`                                    | Nx workspace configuration and task execution                     | Configure build, test, and lint tasks                             |
 | `apps/*/project.json`, `libs/*/project.json` | Individual project configurations                                 | Should reference root dependencies via Nx or workspace resolution |
+| `apps/*/package.json`, `libs/*/package.json` | Local package configurations for publishable libraries or deployable artifacts | Used for publishable libraries or deployment artifacts (e.g., Lambda functions); must be excluded from pnpm workspace in `pnpm-workspace.yaml` if using shared `node_modules` |
 | `pnpm-lock.yaml`                             | Lock file ensuring reproducible installations                     | Automatically updated; commit changes                             |
 | `jest.config.ts`, `jest.preset.js`           | Testing framework configuration                                   | Align with testing library versions                               |
 | `stylelint.config.mjs`, `tsconfig.base.json` | Linting and TypeScript configuration                              | Keep linter versions synchronized                                 |
 
 !!! note "Workspace dependency resolution"
 
-    Individual projects within the workspace automatically inherit dependencies from the root `package.json`. Generally, project-specific `package.json` files should not be used.
+    Individual projects within the workspace automatically inherit dependencies from the root `package.json`. Local `package.json` files are used in a minority of projects, usually when a library is [publishable](https://nx.dev/concepts/buildable-and-publishable-libraries) or when the `package.json` is an artifact that can be deployed (e.g., as part of an AWS Lambda function). If a project has a local `package.json` but still uses the shared (root) `node_modules`, then the project must be excluded from the pnpm workspace in `pnpm-workspace.yaml`. There is a risk of package definition drift if local `package.json` files are not regularly reviewed and updated to align with the root dependencies and the libraries actually used by the project.
 
 ## Dependency Management Strategy
 
@@ -168,7 +169,7 @@ For framework updates that may include breaking changes, automated migrations ca
 nx migrate latest
 
 # Review the changes to package.json then install
-pnpm install
+pnpm install --no-frozen-lockfile
 
 # This creates migrations.json with pending migrations
 # Review migrations.json to understand what will change
@@ -177,7 +178,15 @@ cat migrations.json
 # Run the migrations (this modifies code)
 nx migrate --run-migrations
 
+# Copy and paste the content of migrations.json into the PR description
+
+# Commit the migrations file for posterity
+git add --force migrations.json
+git commit -m "chore(deps): add migrations.json for posterity"
+
 # Clean up after successful migration
+git rm --cached migrations.json
+git commit -m "chore(deps): remove migrations.json from tracking"
 rm migrations.json
 ```
 
@@ -186,7 +195,7 @@ rm migrations.json
 | Issue                          | Solution                                                                  |
 | ------------------------------ | ------------------------------------------------------------------------- |
 | Migration fails with conflicts | Reset branch, update packages manually, then run specific migrations      |
-| Migrations.json not generated  | Ensure you're in workspace root, check package versions compatibility     |
+| `migrations.json` not generated  | Ensure you're in workspace root, check package versions compatibility     |
 | Partial migration completion   | Check git status, commit successful changes, manually handle remaining    |
 | Build failures after migration | Review migration logs, check for custom code that needs manual updates    |
 | Peer dependency warnings       | Install missing peers or use `pnpm install --ignore-peerDeps` temporarily |
@@ -195,15 +204,15 @@ rm migrations.json
 
 Use migrations for:
 
-   - Major version jumps (Angular 17 → 18 → 19)
-   - Cross-cutting changes (workspace structure, build configs)
-   - Breaking API changes
+- Major version jumps (Angular 17 → 18 → 19)
+- Cross-cutting changes (workspace structure, build configs)
+- Breaking API changes
 
 Use manual updates for:
 
-   - Patch versions (20.1.8 → 20.1.9)
-   - Simple dependency version bumps
-   - Packages without migration support
+- Patch versions (20.1.8 → 20.1.9)
+- Simple dependency version bumps
+- Packages without migration support
 
 ## Workflow: Major Upgrade
 
@@ -214,13 +223,7 @@ Use manual updates for:
    ```bash
    git checkout -b chore/deps/node-<package>-<major>-upgrade
    ```
-2. **Try automated migration** for Nx and Angular updates:
-   ```bash
-   nx migrate latest
-   pnpm install
-   nx migrate --run-migrations
-   # Skip to step 6 if migration succeeds
-   ```
+2. **Try automated migration** for Nx and Angular updates. Follow the steps in [Migration Workflows](#framework-migration-workflows). If the migration succeeds, skip to step 6.
 3. **Review upstream changes** (if migration unavailable/fails):
       - Read migration guides and breaking changes
       - Check compatibility with other dependencies
@@ -284,7 +287,7 @@ Use manual updates for:
 | Action                   | Command                                     | Notes                            |
 | ------------------------ | ------------------------------------------- | -------------------------------- |
 | Check outdated packages  | `pnpm outdated`                             | Shows available updates          |
-| Interactive updates      | `npx npm-check-updates -i`                  | Select updates interactively     |
+| Interactive updates      | `pnpm dlx npm-check-updates -i`             | Select updates interactively     |
 | Install dependencies     | `pnpm install`                              | Updates lockfile                 |
 | Security audit           | `pnpm audit`                                | Check for vulnerabilities        |
 | **Framework Migrations** |                                             |                                  |
