@@ -407,6 +407,8 @@ When updating versions (e.g., via `./gradlew dependencyUpdates`):
 - [ ] JUnit / Jacoco / Lombok versions aligned
 - [ ] Inline comment added if intentional divergence
 
+---
+
 ## Build Tool & JDK Upgrades
 
 This section covers upgrading the Gradle build tool itself and the Java toolchain used by the monorepo. Perform these upgrades separately from routine library dependency batches for clearer review and rollback.
