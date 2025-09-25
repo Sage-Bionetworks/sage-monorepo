@@ -269,17 +269,19 @@ def handle_search_change(search_query: str):
 
 
 def build_side_by_side_ui_anony():
-    notice_markdown = """
-    # ⚔️  BixArena: Benchmarking LLMs for Biomedical Breakthroughs
-
-    ## 👇 Chat now!
+    # Centered title and subtitle
+    title_markdown = """
+    <div style="text-align: center; margin: 2rem 0;">
+        <h1 style="font-size: 3rem; margin-bottom: 0.5rem;">BixArena</h1>
+        <p style="font-size: 1.2rem; color: #666; margin: 0;">Benchmarking LLMs for Biomedical Breakthroughs</p>
+    </div>
     """
 
     states = [gr.State() for _ in range(num_sides)]
     model_selectors = []
     chatbots = []
 
-    gr.Markdown(notice_markdown, elem_id="notice_markdown")
+    gr.HTML(title_markdown, elem_id="title_section")
 
     # Simple search for biomedical prompt examples
     search_box = gr.Textbox(
