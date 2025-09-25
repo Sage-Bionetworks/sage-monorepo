@@ -283,17 +283,6 @@ def build_side_by_side_ui_anony():
 
     gr.HTML(title_markdown, elem_id="title_section")
 
-    # Simple search for biomedical prompt examples
-    search_box = gr.Textbox(
-        placeholder="Search biomedical examples: cancer, drug discovery...",
-        show_label=False,
-        container=False,
-        elem_id="prompt_search",
-    )
-
-    # Search results display (hidden by default)
-    search_results_display = gr.HTML(visible=False, elem_id="search_results")
-
     with gr.Group(elem_id="share-region-anony"):
         with gr.Row():
             for i in range(num_sides):
@@ -341,13 +330,6 @@ def build_side_by_side_ui_anony():
             clear_btn = gr.Button(value="🎯 Next Battle", interactive=False)
         with gr.Column(scale=2):
             gr.HTML("")
-
-    # Event handlers for prompt examples
-    search_box.change(
-        handle_search_change,
-        inputs=[search_box],
-        outputs=[search_results_display],
-    )
 
     # HTML component handles click via inline onclick
 
