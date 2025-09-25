@@ -1,8 +1,10 @@
 # Java Build & Dependency Maintenance
 
-This guide describes the process for updating and validating Java dependencies in the monorepo. It focuses on using a centralized version catalog and ensuring consistent, reproducible builds.
+This guide covers governance of Java dependencies and maintenance of the Java build toolchain (Gradle wrapper and JDK) for the monorepo. It emphasizes a centralized version catalog for consistency plus clearly isolated procedures for upgrading Gradle and the JDK.
 
-## Overview
+The dependency model is described below; build tool & JDK upgrade procedures live at the end under "Build Tool & JDK Upgrades".
+
+## Dependency Model
 
 Java dependencies are managed primarily via the Gradle Version Catalog located at `gradle/libs.versions.toml`. Individual `build.gradle.kts` files reference aliases defined there. Centralizing versions:
 
