@@ -1,8 +1,10 @@
-# Java Dependency Maintenance
+# Java Build & Dependency Maintenance
 
-This guide describes the process for updating and validating Java dependencies in the monorepo. It focuses on using a centralized version catalog and ensuring consistent, reproducible builds.
+This guide covers governance of Java dependencies and maintenance of the Java build toolchain (Gradle wrapper and JDK) for the monorepo. It emphasizes a centralized version catalog for consistency plus clearly isolated procedures for upgrading Gradle and the JDK.
 
-## Overview
+The dependency model is described below; build tool & JDK upgrade procedures live at the end under "Build Tool & JDK Upgrades".
+
+## Dependency Model
 
 Java dependencies are managed primarily via the Gradle Version Catalog located at `gradle/libs.versions.toml`. Individual `build.gradle.kts` files reference aliases defined there. Centralizing versions:
 
@@ -406,3 +408,116 @@ When updating versions (e.g., via `./gradlew dependencyUpdates`):
 - [ ] `buildSrc` scripts updated for any dependency bumped in catalog
 - [ ] JUnit / Jacoco / Lombok versions aligned
 - [ ] Inline comment added if intentional divergence
+
+---
+
+## Build Tool & JDK Upgrades
+
+This section covers upgrading the Gradle build tool itself and the Java toolchain used by the monorepo. Perform these upgrades separately from routine library dependency batches for clearer review and rollback.
+
+### Upgrading Gradle
+
+Upgrading Gradle keeps build performance, security, and deprecation coverage current. Wrapper‑based upgrades are low risk when validated systematically.
+
+#### When to Upgrade
+
+- New major or minor with performance improvements or important bug fixes
+- Deprecation warnings appearing in current builds that will become errors next release
+- Plugin ecosystem (e.g., Spring Boot plugin) now officially supports a newer Gradle baseline
+- Security advisory in an older Gradle distribution
+
+#### Pre‑Flight Checklist
+
+- [ ] Review [latest Gradle release](https://gradle.org/releases) and its release notes
+- [ ] Verify core & third‑party plugins declare compatibility
+- [ ] Ensure CI images / dev container already have a compatible JDK (Gradle 9 requires Java 21+)
+- [ ] No custom init scripts or build logic relying on removed APIs
+
+#### Upgrade Procedure (Example: 9.1.0)
+
+1. Baseline build:
+   ```bash
+   ./gradlew clean build
+   ```
+2. Regenerate wrapper:
+   ```bash
+   ./gradlew wrapper --gradle-version 9.1.0 --distribution-type bin
+   ```
+3. Inspect changes:
+   - `gradle/wrapper/gradle-wrapper.properties` updated (distributionUrl points to `gradle-9.1.0-bin.zip`)
+   - `gradlew` / `gradlew.bat` updated (commit them)
+   - Do not manually edit wrapper JAR/scripts; regenerate if unexpected
+4. Verify version:
+
+   ```bash
+   ./gradlew --version
+   ```
+
+   Expected style of output:
+
+   ```console
+   ------------------------------------------------------------
+   Gradle 9.1.0
+   ------------------------------------------------------------
+
+   Build time:    2025-09-18 13:05:56 UTC
+   Revision:      e45a8dbf2470c2e2474ccc25be9f49331406a07e
+
+   Kotlin:        2.2.0
+   Groovy:        4.0.28
+   Ant:           Apache Ant(TM) version 1.10.15 compiled on August 25 2024
+   Launcher JVM:  21.0.7 (Microsoft 21.0.7+6-LTS)
+   Daemon JVM:    /usr/local/sdkman/candidates/java/21.0.7-ms
+   OS:            Linux 6.1.148-173.267.amzn2023.x86_64 amd64
+   ```
+
+5. Full rebuild to surface deprecations:
+   ```bash
+   ./gradlew clean build
+   ```
+6. Validate multi‑project & Docker image builds:
+   ```bash
+   nx run-many --target=build,build-image --projects=tag:language:java
+   ```
+7. Remove the Gradle wrapper for Windows:
+   ```bash
+   rm -fr gradlew.bat
+   ```
+8. Commit:
+   ```bash
+   git add gradle/wrapper/gradle-wrapper.properties gradlew
+   git commit -m "build: upgrade to Gradle 9.1.0"
+   ```
+9. PR description should include:
+   - Release notes link
+   - Summary of any new deprecation warnings (or none)
+   - Confirmation of successful full + Docker image builds
+
+#### Post‑Upgrade Validation
+
+- [ ] CI pipelines green
+- [ ] No new flaky tests introduced
+- [ ] (If using scans) No major regression in configuration time
+- [ ] Team notified to clear local caches only if necessary
+
+#### Rollback
+
+If a blocking issue appears:
+
+```bash
+./gradlew wrapper --gradle-version <previous-version> --distribution-type bin
+git add gradle/wrapper/gradle-wrapper.properties gradlew gradlew.bat
+git commit -m "revert: downgrade Gradle to <previous-version> (regression)"
+```
+
+!!! warning "Plugin Compatibility"
+
+    Confirm critical plugins (Spring Boot, Spotless, Jacoco, Testcontainers, publishing) list the new Gradle version in their matrix. Upgrade lagging plugins first.
+
+!!! tip "Wrapper Integrity"
+
+    Always regenerate rather than manually editing wrapper files to ensure checksum authenticity.
+
+### Updating Java (Placeholder)
+
+<!-- To be documented in a future PR: JDK toolchain strategy, supported majors, upgrade cadence, testing matrix, rollback guidance. -->
