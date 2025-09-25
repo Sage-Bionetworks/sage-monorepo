@@ -24,6 +24,7 @@ export * from './protein-differential-expression';
 export * from './proteomics-distribution';
 export * from './rna-differential-expression';
 export * from './rna-distribution';
+export * from './search-result';
 export * from './similar-genes-network';
 export * from './similar-genes-network-link';
 export * from './similar-genes-network-node';

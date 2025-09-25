@@ -1,0 +1,16 @@
+type: object
+description: Search result
+properties:
+  id:
+    type: string
+    description: ID of result
+  match_field:
+    type: string
+    description: Field that matched the query
+  match_value:
+    type: string
+    description: Value that matched the query
+required:
+  - id
+  - match_field
+  - match_value

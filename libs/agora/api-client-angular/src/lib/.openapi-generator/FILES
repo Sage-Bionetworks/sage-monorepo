@@ -38,6 +38,7 @@ model/protein-differential-expression.ts
 model/proteomics-distribution.ts
 model/rna-differential-expression.ts
 model/rna-distribution.ts
+model/search-result.ts
 model/similar-genes-network-link.ts
 model/similar-genes-network-node.ts
 model/similar-genes-network.ts
