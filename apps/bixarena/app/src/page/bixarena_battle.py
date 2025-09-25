@@ -261,7 +261,7 @@ def build_side_by_side_ui_anony():
         <p style="font-size: 1.2rem; color: #666; margin: 0;">Benchmarking LLMs for Biomedical Breakthroughs</p>
     </div>
     <style>
-    .gradio-container button.suggested-prompt-card {
+    .gradio-container .suggested-prompt-card {
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 8px;
@@ -272,10 +272,23 @@ def build_side_by_side_ui_anony():
         white-space: normal;
     }
     
-    .gradio-container button.suggested-prompt-card:hover {
+    .gradio-container .suggested-prompt-card:hover {
         background: rgba(255, 255, 255, 0.08);
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    #component-63 .form {
+        border: none;
+        box-shadow: none;
+    }
+    
+    #input_box {
+        background: var(--background-fill-primary);
+    }
+    
+    #input_box textarea {
+        border-radius: 12px;
     }
     </style>
     """
