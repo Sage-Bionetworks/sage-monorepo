@@ -63,6 +63,9 @@ export class SearchInputComponent implements AfterViewInit {
 
   navigateToResult = input.required<(id: string) => void>();
   getSearchResults = input.required<(query: string) => Observable<SearchResult[]>>();
+  getNoSearchResultsMessage = input<(query: string) => string>(
+    (query: string) => 'No results match your search term.',
+  );
   checkQueryForErrors = input.required<(query: string) => string>(); // empty string if no error
   formatResultForDisplay = input<(result: SearchResult) => string>(
     (result: SearchResult) => result.id,
@@ -82,11 +85,6 @@ export class SearchInputComponent implements AfterViewInit {
   selectedResultIndex = -1; // -1 means no result is selected
 
   showResults = false;
-  errorMessages: { [key: string]: string } = {
-    notFound: 'No results match your search term.',
-    notValidSearch: 'Please enter at least three characters.',
-    unknown: 'An unknown error occurred, please try again.',
-  };
 
   root = viewChild.required<ElementRef>('root');
   input = viewChild.required<ElementRef<HTMLInputElement>>('input');
@@ -110,7 +108,7 @@ export class SearchInputComponent implements AfterViewInit {
           const target = event.target as HTMLInputElement;
           return this.search(target.value).pipe(
             catchError(() => {
-              this.error = this.errorMessages['unknown'];
+              this.error = 'An unknown error occurred, please try again.';
               this.isLoading = false;
               this.showResults = true;
               return of([]);
@@ -164,7 +162,7 @@ export class SearchInputComponent implements AfterViewInit {
 
   setResults(results: SearchResult[]) {
     if (results.length < 1 && !this.error) {
-      this.error = this.errorMessages['notFound'];
+      this.error = this.getNoSearchResultsMessage()(this.query);
     }
     this.results = results;
     this.selectedResultIndex = -1;

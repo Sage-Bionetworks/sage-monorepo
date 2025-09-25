@@ -21,10 +21,17 @@ export function mockNavigateToResult(id: string): void {
 }
 
 export function mockGetSearchResults(query: string): Observable<SearchResult[]> {
-  if (query === 'notfound') {
+  if (query === 'notfound' || query === 'ensg00000000000') {
     return of(dummyEmptySearchResults).pipe(delay(2000));
   }
   return of(dummySearchResults).pipe(delay(1000));
+}
+
+export function mockGetNoSearchResultsMessage(query: string): string {
+  if (isEnsemblId(query) && query.length === 15) {
+    return 'Unable to find a matching gene. Try searching by gene symbol.';
+  }
+  return 'No results found. Try searching by the Ensembl Gene ID.';
 }
 
 function isEnsemblId(query: string): boolean {
