@@ -333,7 +333,7 @@ def build_side_by_side_ui_anony():
     with gr.Row():
         textbox = gr.Textbox(
             show_label=False,
-            placeholder="👉 Enter your biomedical prompt and press ENTER",
+            placeholder="Ask anything biomedical",
             elem_id="input_box",
         )
         send_btn = gr.Button(value="Send", variant="primary", scale=0)
