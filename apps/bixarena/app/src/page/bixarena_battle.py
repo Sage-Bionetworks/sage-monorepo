@@ -20,6 +20,7 @@ from config.constants import (
     INPUT_CHAR_LEN_LIMIT,
     CONVERSATION_TURN_LIMIT,
 )
+from config.prompt_examples import get_prompt_manager
 
 from model.model_selection import get_battle_pair, moderation_filter
 
@@ -34,10 +35,6 @@ from model.model_response import (
     invisible_btn,
 )
 
-# Import our prompt examples manager
-from config.prompt_examples import get_prompt_manager
-
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -50,10 +47,10 @@ prompt_manager = get_prompt_manager()
 
 
 def create_suggested_prompts_ui():
-    """Create suggested prompts"""
+    """Create suggested prompts with ChatGPT-style cards"""
     prompts = random.sample(prompt_manager.get_all_prompts(), 3)
 
-    # Create prompt buttons
+    # Create prompt buttons with custom styling
     prompt_buttons = []
 
     for i, prompt in enumerate(prompts):
@@ -62,10 +59,10 @@ def create_suggested_prompts_ui():
 
         btn = gr.Button(
             value=display_text,
-            elem_id=f"prompt_btn_{i}",
             variant="secondary",
             size="lg",
             scale=1,
+            elem_classes=["suggested-prompt-card"],
         )
 
         prompt_buttons.append((btn, prompt))  # Store button and full prompt text
@@ -257,27 +254,45 @@ def add_text(
 
 
 def build_side_by_side_ui_anony():
-    # Centered title and subtitle
-    title_markdown = """
-    <div style="text-align: center; margin: 2rem 0;">
+    # Page header with title and custom styles
+    page_header_html = """
+    <div style="text-align: center;">
         <h1 style="font-size: 3rem; margin-bottom: 0.5rem;">BixArena</h1>
         <p style="font-size: 1.2rem; color: #666; margin: 0;">Benchmarking LLMs for Biomedical Breakthroughs</p>
     </div>
+    <style>
+    .gradio-container button.suggested-prompt-card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 12px 16px;
+        text-align: left;
+        font-size: 14px;
+        transition: all 0.2s ease;
+        white-space: normal;
+    }
+    
+    .gradio-container button.suggested-prompt-card:hover {
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    </style>
     """
 
     states = [gr.State() for _ in range(num_sides)]
     model_selectors = []
     chatbots = []
 
-    gr.HTML(title_markdown, elem_id="title_section")
+    gr.HTML(page_header_html, elem_id="title_section")
 
-    # Suggested prompts - initially visible
+    # Suggested prompts
     with gr.Column(
         elem_id="suggested_prompts_section", visible=True
     ) as suggested_prompts_group:
         prompt_buttons_data = create_suggested_prompts_ui()
 
-    # Battle chat windows - initially hidden, will appear above prompt input when shown
+    # Battle interface - will appear once a prompt is submitted
     with gr.Group(elem_id="share-region-anony", visible=False) as battle_interface:
         with gr.Row():
             for i in range(num_sides):
@@ -301,6 +316,15 @@ def build_side_by_side_ui_anony():
         with gr.Row():
             slow_warning = gr.Markdown("", elem_id="notice_markdown")
 
+    # Prompt input - always visible
+    with gr.Row():
+        textbox = gr.Textbox(
+            show_label=False,
+            placeholder="👉 Enter your biomedical prompt and press ENTER",
+            elem_id="input_box",
+        )
+        send_btn = gr.Button(value="Send", variant="primary", scale=0)
+
     # Voting button
     with gr.Row(visible=False) as voting_row:
         leftvote_btn = gr.Button(
@@ -312,18 +336,6 @@ def build_side_by_side_ui_anony():
             value="👉  B is better", visible=False, interactive=False
         )
 
-    # Prompt input - always visible
-    with gr.Row():
-        textbox = gr.Textbox(
-            show_label=False,
-            placeholder="👉 Enter your biomedical prompt and press ENTER",
-            elem_id="input_box",
-            visible=True,
-        )
-        send_btn = gr.Button(
-            value="Send", variant="primary", scale=0, visible=True
-        )  # Always visible
-
     # Next Round button
     with gr.Row(visible=False) as next_battle_row:
         with gr.Column(scale=2):
@@ -332,8 +344,6 @@ def build_side_by_side_ui_anony():
             clear_btn = gr.Button(value="🎯 Next Battle", interactive=False)
         with gr.Column(scale=2):
             gr.HTML("")
-
-    # HTML component handles click via inline onclick
 
     # Register listeners (keep all existing functionality)
     btn_list = [
