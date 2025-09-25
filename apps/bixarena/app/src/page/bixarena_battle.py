@@ -127,6 +127,9 @@ def clear_history(request: gr.Request):
         + [invisible_btn] * 3
         + [disable_btn] * 1
         + [""]
+        + [gr.Group(visible=False)]  # hide battle_interface
+        + [gr.Row(visible=False)]  # hide voting_row
+        + [gr.Row(visible=False)]  # hide next_battle_row
     )
 
 
@@ -168,6 +171,9 @@ def add_text(
             ]
             * 4
             + [""]
+            + [gr.Group(visible=False)]  # keep battle_interface hidden
+            + [gr.Row(visible=False)]  # keep voting_row hidden
+            + [gr.Row(visible=False)]  # keep next_battle_row hidden
         )
 
     model_list = [states[i].model_name for i in range(num_sides)]
@@ -191,6 +197,9 @@ def add_text(
             ]
             * 4
             + [""]
+            + [gr.Group(visible=True)]  # show battle_interface (conversation exists)
+            + [gr.Row(visible=True)]  # show voting_row
+            + [gr.Row(visible=True)]  # show next_battle_row
         )
 
     text = text[:INPUT_CHAR_LEN_LIMIT]  # Hard cut-off
@@ -212,60 +221,10 @@ def add_text(
         ]
         * 4
         + [hint_msg]
+        + [gr.Group(visible=True)]  # show battle_interface
+        + [gr.Row(visible=True)]  # show voting_row
+        + [gr.Row(visible=True)]  # show next_battle_row
     )
-
-
-# New functions for prompt examples functionality
-def handle_search_change(search_query: str):
-    """Handle search input changes"""
-    if search_query.strip():
-        # Return search results
-        results = prompt_manager.search_prompts(search_query)
-        if results:
-            # Create simple HTML for search results using gradio builtin styles
-            html_results = '<div style="border: 1px solid #ccc; border-radius: 4px; padding: 8px; background: white;">'
-            for result in results[:10]:  # Show max 10 results
-                # Properly escape HTML content
-                escaped_text = html.escape(result["text"], quote=True)
-
-                # Simple result item with basic styling (no categories)
-                html_results += f"""
-                <div style='
-                    padding: 8px; 
-                    margin: 4px 0; 
-                    border: 1px solid #ddd;
-                    border-radius: 4px;
-                    cursor: pointer; 
-                    background: #f9f9f9;
-                '
-                onclick='
-                    try {{
-                        var inputBox = document.querySelector("#input_box textarea") || 
-                                     document.querySelector("#input_box input") || 
-                                     document.getElementById("input_box");
-                        if (inputBox) {{
-                            inputBox.value = "{escaped_text}";
-                            inputBox.focus();
-                            inputBox.dispatchEvent(new Event("input", {{ bubbles: true }}));
-                        }}
-                    }} catch(e) {{
-                        console.error("Error setting prompt:", e);
-                    }}
-                '
-                onmouseover='this.style.background="#f0f0f0"'
-                onmouseout='this.style.background="#f9f9f9"'>
-                    {result["text"]}
-                </div>
-                """
-            html_results += "</div>"
-            return gr.HTML(value=html_results, visible=True)
-        else:
-            return gr.HTML(
-                value='<div style="padding: 16px; text-align: center; color: #666;">No matching prompts found</div>',
-                visible=True,
-            )
-    else:
-        return gr.HTML(visible=False)
 
 
 def build_side_by_side_ui_anony():
@@ -283,7 +242,8 @@ def build_side_by_side_ui_anony():
 
     gr.HTML(title_markdown, elem_id="title_section")
 
-    with gr.Group(elem_id="share-region-anony"):
+    # Battle chat windows
+    with gr.Group(elem_id="share-region-anony", visible=False) as battle_interface:
         with gr.Row():
             for i in range(num_sides):
                 label = "Model A" if i == 0 else "Model B"
@@ -306,7 +266,8 @@ def build_side_by_side_ui_anony():
         with gr.Row():
             slow_warning = gr.Markdown("", elem_id="notice_markdown")
 
-    with gr.Row():
+    # Voting button
+    with gr.Row(visible=False) as voting_row:
         leftvote_btn = gr.Button(
             value="👈  A is better", visible=False, interactive=False
         )
@@ -316,6 +277,7 @@ def build_side_by_side_ui_anony():
             value="👉  B is better", visible=False, interactive=False
         )
 
+    # Prompt input - always visible
     with gr.Row():
         textbox = gr.Textbox(
             show_label=False,
@@ -323,7 +285,9 @@ def build_side_by_side_ui_anony():
             elem_id="input_box",
         )
         send_btn = gr.Button(value="Send", variant="primary", scale=0)
-    with gr.Row():
+
+    # Next Round button
+    with gr.Row(visible=False) as next_battle_row:
         with gr.Column(scale=2):
             gr.HTML("")
         with gr.Column(scale=1):
@@ -358,13 +322,24 @@ def build_side_by_side_ui_anony():
     clear_btn.click(
         clear_history,
         None,
-        states + chatbots + model_selectors + [textbox] + btn_list + [slow_warning],
+        states
+        + chatbots
+        + model_selectors
+        + [textbox]
+        + btn_list
+        + [slow_warning]
+        + [battle_interface, voting_row, next_battle_row],
     )
 
     textbox.submit(
         add_text,
         states + model_selectors + [textbox],
-        states + chatbots + [textbox] + btn_list + [slow_warning],
+        states
+        + chatbots
+        + [textbox]
+        + btn_list
+        + [slow_warning]
+        + [battle_interface, voting_row, next_battle_row],
     ).then(
         bot_response_multi,
         states,
@@ -378,7 +353,11 @@ def build_side_by_side_ui_anony():
     send_btn.click(
         add_text,
         states + model_selectors + [textbox],
-        states + chatbots + [textbox] + btn_list,
+        states
+        + chatbots
+        + [textbox]
+        + btn_list
+        + [battle_interface, voting_row, next_battle_row],
     ).then(
         bot_response_multi,
         states,
