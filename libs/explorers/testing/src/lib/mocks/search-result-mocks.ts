@@ -40,3 +40,7 @@ export function mockCheckQueryForErrors(query: string): string {
   }
   return '';
 }
+
+export function mockFormatResultSubtextForDisplay(result: SearchResult): string | undefined {
+  return result.match_value;
+}

@@ -57,12 +57,19 @@
                   (click)="goToResult(result.id)"
                   class="result-button"
                   [attr.aria-selected]="selectedResultIndex === i"
+                  [attr.aria-label]="formatResultForDisplay()(result)"
                 >
                   <span
                     class="result-name"
                     [innerHtml]="formatAndHighlightResultsForDisplay(result) | sanitizeHtml"
-                    [attr.aria-label]="formatResultForDisplay()(result)"
                   ></span>
+                  @if (formatResultSubtextForDisplay()(result)) {
+                    <br />
+                    <span
+                      class="result-subtext"
+                      [innerHtml]="`&nbsp;${formatAndHighlightResultsSubtextForDisplay(result)}` | sanitizeHtml"
+                    ></span>
+                  }
                 </button>
               </li>
             }

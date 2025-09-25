@@ -172,6 +172,10 @@
             &:hover {
               cursor: pointer;
             }
+
+            .result-subtext {
+              color: var(--color-gray-500);
+            }
           }
         }
       }
