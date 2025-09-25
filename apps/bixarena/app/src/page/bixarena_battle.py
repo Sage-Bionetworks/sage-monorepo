@@ -7,6 +7,7 @@ simplified to a single function for a single-page LLM comparison arena.
 
 import json
 import logging
+import random
 import time
 from typing import List, Dict, Any
 import html
@@ -46,6 +47,30 @@ models = []
 
 # Global state for prompt examples
 prompt_manager = get_prompt_manager()
+
+
+def create_suggested_prompts_ui():
+    """Create suggested prompts"""
+    prompts = random.sample(prompt_manager.get_all_prompts(), 3)
+
+    # Create prompt buttons
+    prompt_buttons = []
+
+    for i, prompt in enumerate(prompts):
+        # Truncate very long prompts for display
+        display_text = prompt if len(prompt) <= 120 else prompt[:120] + "..."
+
+        btn = gr.Button(
+            value=display_text,
+            elem_id=f"prompt_btn_{i}",
+            variant="secondary",
+            size="lg",
+            scale=1,
+        )
+
+        prompt_buttons.append((btn, prompt))  # Store button and full prompt text
+
+    return prompt_buttons
 
 
 def load_demo_side_by_side_anony(models_, _):
@@ -120,16 +145,17 @@ def tievote_last_response(
 def clear_history(request: gr.Request):
     logger.info("clear_history (anony).")
     return (
-        [None] * num_sides
-        + [None] * num_sides
-        + anony_names
-        + [""]
+        [None] * num_sides  # states
+        + [None] * num_sides  # chatbots
+        + anony_names  # model_selectors
+        + [""]  # textbox
         + [invisible_btn] * 3
-        + [disable_btn] * 1
-        + [""]
+        + [disable_btn] * 1  # btn_list
+        + [""]  # slow_warning
         + [gr.Group(visible=False)]  # hide battle_interface
         + [gr.Row(visible=False)]  # hide voting_row
         + [gr.Row(visible=False)]  # hide next_battle_row
+        + [gr.Column(visible=True)]  # show suggested_prompts_group
     )
 
 
@@ -170,10 +196,11 @@ def add_text(
                 no_change_btn,
             ]
             * 4
-            + [""]
+            + [""]  # slow_warning
             + [gr.Group(visible=False)]  # keep battle_interface hidden
             + [gr.Row(visible=False)]  # keep voting_row hidden
             + [gr.Row(visible=False)]  # keep next_battle_row hidden
+            + [gr.Column(visible=True)]  # keep suggested_prompts_group visible
         )
 
     model_list = [states[i].model_name for i in range(num_sides)]
@@ -196,10 +223,11 @@ def add_text(
                 no_change_btn,
             ]
             * 4
-            + [""]
+            + [""]  # slow_warning
             + [gr.Group(visible=True)]  # show battle_interface (conversation exists)
             + [gr.Row(visible=True)]  # show voting_row
             + [gr.Row(visible=True)]  # show next_battle_row
+            + [gr.Column(visible=False)]  # hide suggested_prompts_group
         )
 
     text = text[:INPUT_CHAR_LEN_LIMIT]  # Hard cut-off
@@ -224,6 +252,7 @@ def add_text(
         + [gr.Group(visible=True)]  # show battle_interface
         + [gr.Row(visible=True)]  # show voting_row
         + [gr.Row(visible=True)]  # show next_battle_row
+        + [gr.Column(visible=False)]  # hide suggested_prompts_group
     )
 
 
@@ -242,7 +271,13 @@ def build_side_by_side_ui_anony():
 
     gr.HTML(title_markdown, elem_id="title_section")
 
-    # Battle chat windows
+    # Suggested prompts - initially visible
+    with gr.Column(
+        elem_id="suggested_prompts_section", visible=True
+    ) as suggested_prompts_group:
+        prompt_buttons_data = create_suggested_prompts_ui()
+
+    # Battle chat windows - initially hidden, will appear above prompt input when shown
     with gr.Group(elem_id="share-region-anony", visible=False) as battle_interface:
         with gr.Row():
             for i in range(num_sides):
@@ -283,8 +318,11 @@ def build_side_by_side_ui_anony():
             show_label=False,
             placeholder="👉 Enter your biomedical prompt and press ENTER",
             elem_id="input_box",
+            visible=True,
         )
-        send_btn = gr.Button(value="Send", variant="primary", scale=0)
+        send_btn = gr.Button(
+            value="Send", variant="primary", scale=0, visible=True
+        )  # Always visible
 
     # Next Round button
     with gr.Row(visible=False) as next_battle_row:
@@ -328,7 +366,7 @@ def build_side_by_side_ui_anony():
         + [textbox]
         + btn_list
         + [slow_warning]
-        + [battle_interface, voting_row, next_battle_row],
+        + [battle_interface, voting_row, next_battle_row, suggested_prompts_group],
     )
 
     textbox.submit(
@@ -339,7 +377,7 @@ def build_side_by_side_ui_anony():
         + [textbox]
         + btn_list
         + [slow_warning]
-        + [battle_interface, voting_row, next_battle_row],
+        + [battle_interface, voting_row, next_battle_row, suggested_prompts_group],
     ).then(
         bot_response_multi,
         states,
@@ -357,12 +395,41 @@ def build_side_by_side_ui_anony():
         + chatbots
         + [textbox]
         + btn_list
-        + [battle_interface, voting_row, next_battle_row],
+        + [slow_warning]
+        + [battle_interface, voting_row, next_battle_row, suggested_prompts_group],
     ).then(
         bot_response_multi,
         states,
         states + chatbots + btn_list,
     ).then(flash_buttons, [], btn_list)
+
+    # Set up suggested prompt click handlers to automatically submit
+    for btn, prompt_text in prompt_buttons_data:
+
+        def create_handler(text):
+            def handler():
+                return text
+
+            return handler
+
+        btn.click(create_handler(prompt_text), outputs=[textbox]).then(
+            add_text,
+            states + model_selectors + [textbox],
+            states
+            + chatbots
+            + [textbox]
+            + btn_list
+            + [slow_warning]
+            + [battle_interface, voting_row, next_battle_row, suggested_prompts_group],
+        ).then(
+            bot_response_multi,
+            states,
+            states + chatbots + btn_list,
+        ).then(
+            flash_buttons,
+            [],
+            btn_list,
+        )
 
     return states + model_selectors
 
