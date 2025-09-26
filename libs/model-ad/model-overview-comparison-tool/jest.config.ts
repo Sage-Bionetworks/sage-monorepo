@@ -14,7 +14,9 @@ export default {
       },
     ],
   },
-  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
+  transformIgnorePatterns: [
+    'node_modules/(?!(.pnpm/.*/node_modules/)?(.*\\.mjs$|@octokit/.*|universal-user-agent|before-after-hook))',
+  ],
   snapshotSerializers: [
     'jest-preset-angular/build/serializers/no-ng-attributes',
     'jest-preset-angular/build/serializers/ng-snapshot',

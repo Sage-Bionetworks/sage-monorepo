@@ -14,7 +14,9 @@ export default {
       },
     ],
   },
-  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
+  transformIgnorePatterns: [
+    'node_modules/(?!(.pnpm/.*/node_modules/)?(.*\\.mjs$|@octokit/.*|universal-user-agent|before-after-hook))',
+  ],
   moduleNameMapper: {
     d3: '<rootDir>/../../../node_modules/d3/dist/d3.min.js',
     '^d3-(.*)$': '<rootDir>/../../../node_modules/d3-$1/dist/d3-$1.min.js',
