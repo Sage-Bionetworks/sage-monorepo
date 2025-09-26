@@ -1,11 +1,8 @@
 app:
   welcome-message: 'Welcome to BixArena API Gateway!'
-  auth:
-    service-url: http://bixarena-auth-service:8087/v1
-    realm: OpenChallenges
 
 server:
-  port: 8082
+  port: 8113
 
 spring:
   application:
@@ -51,40 +48,14 @@ spring:
                 allowedheaders: '*'
                 maxAge: 3600
           routes:
-            - id: bixarena-auth-service-oauth2
-              uri: http://bixarena-auth-service:8087
+            - id: bixarena-api
+              uri: http://bixarena-api:8112
               predicates:
-                - Path=/oauth2/**,/.well-known/**
-              filters:
-                # No StripPrefix for OAuth2 standard endpoints
-            - id: bixarena-auth-service
-              uri: http://bixarena-auth-service:8087
-              predicates:
-                - Path=/api/v1/auth/**
-              filters:
-                - StripPrefix=1
-            - id: bixarena-organization-service
-              uri: http://bixarena-organization-service:8084
-              predicates:
-                - Path=/api/v1/organizations/**
-              filters:
-                - StripPrefix=1
-            - id: bixarena-challenge-service
-              uri: http://bixarena-challenge-service:8085
-              predicates:
-                - Path=/api/v1/challenges/**,/api/v1/challenge-analytics/**,/api/v1/challenge-platforms/**,/api/v1/edam-concepts/**
-              filters:
-                - StripPrefix=1
-            - id: bixarena-image-service
-              uri: http://bixarena-image-service:8086
-              predicates:
-                - Path=/api/v1/images/**
+                - Path=/api/v1/leaderboards/**
               filters:
                 - StripPrefix=1
   profiles:
     active: dev
-  config:
-    import: 'classpath:routes.yml'
 
 logging:
   level:

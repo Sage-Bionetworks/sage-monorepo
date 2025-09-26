@@ -1,16 +1,8 @@
 app:
-  welcome-message: 'Welcome to OpenChallenges API Gateway'
-  auth:
-    service-url: http://test-auth-service:8087/v1
-    realm: OpenChallenges
-  routes:
-    - method: 'GET'
-      path: '/api/v1/test'
-      scopes: []
-      audience: 'test'
+  welcome-message: 'Welcome to BixArena API Gateway!'
 
 server:
-  port: 8082
+  port: 8113
 
 spring:
   application:

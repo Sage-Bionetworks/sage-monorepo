@@ -45,8 +45,8 @@ public class SecurityConfiguration {
           // Actuator endpoints for health checks
           .pathMatchers("/actuator/health", "/actuator/metrics")
           .permitAll()
-          // OAuth2 endpoints (served by auth service)
-          .pathMatchers("/oauth2/**", "/.well-known/**")
+          // Leaderboard endpoints are public
+          .pathMatchers("/api/v1/leaderboard/**")
           .permitAll()
           // Everything else requires authentication
           .anyExchange()
