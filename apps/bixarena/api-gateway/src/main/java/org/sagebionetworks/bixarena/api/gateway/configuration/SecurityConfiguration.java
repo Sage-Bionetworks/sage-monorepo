@@ -46,7 +46,7 @@ public class SecurityConfiguration {
           .pathMatchers("/actuator/health", "/actuator/metrics")
           .permitAll()
           // Leaderboard endpoints are public
-          .pathMatchers("/api/v1/leaderboard/**")
+          .pathMatchers("/api/v1/leaderboards/**")
           .permitAll()
           // Everything else requires authentication
           .anyExchange()

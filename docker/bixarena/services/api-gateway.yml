@@ -1,0 +1,20 @@
+services:
+  bixarena-api-gateway:
+    image: ghcr.io/sage-bionetworks/bixarena-api-gateway:${BIXARENA_VERSION:-local}
+    container_name: bixarena-api-gateway
+    restart: always
+    env_file:
+      - ../../../apps/bixarena/api-gateway/.env
+    networks:
+      - bixarena
+    ports:
+      - '8113:8113'
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+    depends_on:
+      bixarena-api:
+        condition: service_started
+    extra_hosts:
+      - 'bixarena-api:host-gateway'
