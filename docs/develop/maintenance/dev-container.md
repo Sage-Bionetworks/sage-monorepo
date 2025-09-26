@@ -39,8 +39,10 @@ multiple branches before the whole team is switched over.
 ### Typical Flow
 
 1. Create branch `chore/devcontainer/build-<date>` and update:
-   - Dockerfile (Ubuntu date tag + tool ARG bumps + removals)
-   - Build Definition devcontainer file (feature version bumps, add/remove Features)
+
+    - Dockerfile (Ubuntu date tag + tool ARG bumps + removals)
+    - Build Definition devcontainer file (feature version bumps, add/remove Features)
+
 2. Open PR (BUILD). CI builds & publishes image → GHCR tag.
 3. (Optional) Test in other branches by temporarily overriding the active file locally (do NOT commit those overrides) or using `devcontainer build/up/exec` commands referencing the new image.
 4. Once validated, create branch `chore/devcontainer/activate-<tag>` updating only `.devcontainer/devcontainer.json` to the new image tag.
@@ -286,7 +288,9 @@ When considering features from smaller communities, use this evaluation checklis
 
 ## Testing Process
 
-> Quick reference: all actions here are summarized in the "Update Checklist" (Testing section).
+!!! tip Quick reference
+
+    All actions here are summarized in the "Update Checklist".
 
 ### Manual Dev Container Testing
 
@@ -315,19 +319,16 @@ devcontainer build \
 #### Test Container Startup and Functionality
 
 1. Start the dev container:
-
    ```bash
    devcontainer up --workspace-folder .github
    ```
 
 2. Connect to the running container:
-
    ```bash
    docker exec -it sage-monorepo-devcontainer-prebuild bash
    ```
 
 3. Verify tool installations, especially new and updates tools:
-
    ```bash
    # Test key tools are available and working
    docker --version
@@ -341,21 +342,29 @@ devcontainer build \
    ```
 
 4. Exit the container:
-
    ```bash
    # Use Ctrl+C to exit the container session or enter:
    exit
    ```
 
 5. Clean up the test container:
-
    ```bash
    docker rm -f sage-monorepo-devcontainer-prebuild
    ```
 
-### Full Monorepo Integration Testing
+### Headless Monorepo Runtime Testing
 
-After basic functionality testing, perform comprehensive testing with the full monorepo codebase mounted inside the dev container:
+After basic functionality testing, run a comprehensive, CLI‑driven test pass with the entire monorepo mounted into the container using the devcontainer CLI **without opening the workspace in VS Code** (i.e. VS Code is not attached to this container yet). This validates the baked image + features + toolchain against real workspace code (builds, tests, scripts) but does **not** exercise:
+
+- VS Code extension set / settings sync
+- Editor‑integrated language servers started via the active `devcontainer.json`
+- Any VS Code tasks, launch configs, or UI workflows
+
+For those editor integration aspects, see the later section "IDE & CI Integration Testing" which performs an actual VS Code rebuild using the active dev container definition.
+
+!!! note "Why 'Headless'?"
+
+    "Headless" here means the container is running and the repo is mounted, but VS Code has not been reopened against it, so no editor extensions, language servers, tasks, or settings from the active devcontainer definition have initialized. It’s a fast runtime/tooling validation step before paying the cost of a full VS Code rebuild & attachment.
 
 #### Verify Local Image Availability
 
@@ -462,9 +471,9 @@ Instead of manually stepping into the test container, you can run the comprehens
     - Ensure GitHub Actions continue to work
     - Verify any external integrations still function
 
-## Deployment Process
+## Step 1c: Build & Publish Image (PR 1)
 
-> The checklist later includes abbreviated activation and rollback steps.
+> The checklist later includes an abbreviated version of these PR 1 steps.
 
 ### Creating the Build PR
 
@@ -504,7 +513,11 @@ Upon merging the PR to the main branch:
     - Published image becomes available at `ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:<tag>`
     - Tag format typically includes commit SHA or version identifier
 
-### Activating the New Dev Container
+## Step 2: Activate Published Image (PR 2)
+
+> See the checklist for a condensed activation + verification summary.
+
+### Activation Overview
 
 !!! info "Activation PR"
 
@@ -598,11 +611,11 @@ After the activation PR is merged:
 - [ ] Exercise representative workflows (package install, Gradle tasks, Docker, kubectl) — no errors
 - [ ] Remove prebuild container (see cleanup step 5)
 
-#### Full Monorepo Integration Testing
+#### Headless Monorepo Runtime Testing
+Headless = dev container started via CLI (devcontainer up / exec) with the monorepo mounted, but VS Code not reopened inside that container yet. Editor extensions/settings activation is validated later under "VS Code Integration Testing".
 
 **Option A: Manual Testing (step-by-step)**
 
-- [ ] Confirm local image built (see "Verify Local Image Availability")
 - [ ] (Optional) Temporarily point `.devcontainer/devcontainer.json` to `:local` for this session (see "Update Dev Container Definition") — do NOT commit
 - [ ] Start dev container with monorepo (refer to "Deploy with Monorepo Codebase" – startup step)
 - [ ] (If using interactive flow) Attach a shell to the running container (see steps in "3.1 Manual Dev Container Testing")
