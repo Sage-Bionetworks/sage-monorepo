@@ -1,0 +1,117 @@
+app:
+  welcome-message: 'Welcome to BixArena API Gateway!'
+  auth:
+    service-url: http://bixarena-auth-service:8087/v1
+    realm: OpenChallenges
+
+server:
+  port: 8082
+
+spring:
+  application:
+    name: bixarena-api-gateway
+  cloud:
+    gateway:
+      default-filters:
+        # SECURITY: Strip ALL potentially spoofed identity headers from incoming requests
+        # These headers are considered "trusted" and may ONLY be set by the gateway after authentication
+
+        # Standard authentication headers
+        - RemoveRequestHeader=X-Authenticated-User
+        - RemoveRequestHeader=X-Authenticated-User-Id
+        - RemoveRequestHeader=X-Authenticated-Roles
+        - RemoveRequestHeader=X-Scopes
+
+        # Additional standard security headers
+        - RemoveRequestHeader=X-Subject
+        - RemoveRequestHeader=X-Principal
+        - RemoveRequestHeader=X-User-Email
+        - RemoveRequestHeader=X-User-Groups
+
+        # OAuth2/JWT related headers that could be spoofed
+        - RemoveRequestHeader=X-Token-Subject
+        - RemoveRequestHeader=X-Token-Issuer
+        - RemoveRequestHeader=X-JWT-Claims
+
+        # Service-to-service authentication headers
+        - RemoveRequestHeader=X-Service-Token
+        - RemoveRequestHeader=X-Internal-Auth
+        - RemoveRequestHeader=X-Gateway-Auth
+      server:
+        webflux:
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedorigins: '*'
+                allowedmethods:
+                  - GET
+                  - POST
+                  - DELETE
+                  - PUT
+                allowedheaders: '*'
+                maxAge: 3600
+          routes:
+            - id: bixarena-auth-service-oauth2
+              uri: http://bixarena-auth-service:8087
+              predicates:
+                - Path=/oauth2/**,/.well-known/**
+              filters:
+                # No StripPrefix for OAuth2 standard endpoints
+            - id: bixarena-auth-service
+              uri: http://bixarena-auth-service:8087
+              predicates:
+                - Path=/api/v1/auth/**
+              filters:
+                - StripPrefix=1
+            - id: bixarena-organization-service
+              uri: http://bixarena-organization-service:8084
+              predicates:
+                - Path=/api/v1/organizations/**
+              filters:
+                - StripPrefix=1
+            - id: bixarena-challenge-service
+              uri: http://bixarena-challenge-service:8085
+              predicates:
+                - Path=/api/v1/challenges/**,/api/v1/challenge-analytics/**,/api/v1/challenge-platforms/**,/api/v1/edam-concepts/**
+              filters:
+                - StripPrefix=1
+            - id: bixarena-image-service
+              uri: http://bixarena-image-service:8086
+              predicates:
+                - Path=/api/v1/images/**
+              filters:
+                - StripPrefix=1
+  profiles:
+    active: dev
+  config:
+    import: 'classpath:routes.yml'
+
+logging:
+  level:
+    org.sagebionetworks.bixarena.api.gateway: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: health, prometheus, refresh
+      path-mapping:
+        prometheus: metrics
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    health:
+      probes:
+        enabled: true
+    prometheus:
+      cache.time-to-live: 1ms
+
+info:
+  application:
+    name: ${spring.application.name}

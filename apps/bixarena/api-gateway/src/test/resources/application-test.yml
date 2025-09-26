@@ -1,0 +1,18 @@
+app:
+  welcome-message: 'Welcome to BixArena API Gateway (test)!'
+  auth:
+    service-url: http://test-auth-service:8087/v1
+    realm: OpenChallenges
+  routes:
+    - method: 'GET'
+      path: '/api/v1/test'
+      scopes: []
+      audience: 'test'
+
+spring:
+  application:
+    name: bixarena-api-gateway-test
+
+logging:
+  level:
+    org.sagebionetworks.bixarena: DEBUG

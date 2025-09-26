@@ -1,0 +1,4 @@
+# Development profile configuration
+logging:
+  level:
+    org.sagebionetworks.bixarena: DEBUG
