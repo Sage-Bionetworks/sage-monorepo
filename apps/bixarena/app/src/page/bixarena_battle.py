@@ -348,16 +348,16 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
             with gr.Row():
                 slow_warning = gr.Markdown("", elem_id="notice_markdown")
 
-            # Voting buttons
-            with gr.Row(visible=False) as voting_row:
-                leftvote_btn = gr.Button(
-                    value="👈  A is better", visible=False, interactive=False
-                )
-                tie_btn = gr.Button(value="🤝  Tie", visible=False, interactive=False)
+        # Voting buttons
+        with gr.Row(visible=False) as voting_row:
+            leftvote_btn = gr.Button(
+                value="A is better 👈 ", visible=False, interactive=False
+            )
+            tie_btn = gr.Button(value="🤝 Tie", visible=False, interactive=False)
 
-                rightvote_btn = gr.Button(
-                    value="👉  B is better", visible=False, interactive=False
-                )
+            rightvote_btn = gr.Button(
+                value="👉 B is better", visible=False, interactive=False
+            )
 
         # Prompt input - always visible
         with gr.Row():
