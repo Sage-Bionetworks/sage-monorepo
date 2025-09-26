@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { BioDomains, BioDomain, BioDomainInfo } from '@sagebionetworks/agora/api-client-angular';
+import { BioDomains, BioDomain, BioDomainInfo } from '@sagebionetworks/agora/api-client';
 
 const BioDomainSchema = new Schema<BioDomain>({
   biodomain: { type: String, required: true },

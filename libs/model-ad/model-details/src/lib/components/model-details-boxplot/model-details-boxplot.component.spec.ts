@@ -1,4 +1,4 @@
-import { ModelData, Sex } from '@sagebionetworks/model-ad/api-client-angular';
+import { ModelData, Sex } from '@sagebionetworks/model-ad/api-client';
 import { render, screen } from '@testing-library/angular';
 import { ModelDetailsBoxplotComponent } from './model-details-boxplot.component';
 

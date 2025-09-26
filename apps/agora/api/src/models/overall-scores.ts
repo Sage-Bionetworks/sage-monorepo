@@ -6,7 +6,7 @@ import { Schema, model } from 'mongoose';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { OverallScores } from '@sagebionetworks/agora/api-client-angular';
+import { OverallScores } from '@sagebionetworks/agora/api-client';
 
 // -------------------------------------------------------------------------- //
 // Schemas

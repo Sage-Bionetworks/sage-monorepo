@@ -1,6 +1,5 @@
-
 import { Component, Input } from '@angular/core';
-import { Gene } from '@sagebionetworks/agora/api-client-angular';
+import { Gene } from '@sagebionetworks/agora/api-client';
 import { ascending } from 'd3';
 
 @Component({

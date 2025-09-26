@@ -14,7 +14,7 @@ import {
 } from '@angular/core';
 import * as d3 from 'd3';
 
-import { MedianExpression } from '@sagebionetworks/agora/api-client-angular';
+import { MedianExpression } from '@sagebionetworks/agora/api-client';
 import { HelperService } from '@sagebionetworks/agora/services';
 
 @Component({

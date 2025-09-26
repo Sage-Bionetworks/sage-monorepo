@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import { GCTGene, Gene, TargetNomination } from '@sagebionetworks/agora/api-client-angular';
+import { GCTGene, Gene, TargetNomination } from '@sagebionetworks/agora/api-client';
 
 export const targetNominationMock1: TargetNomination = {
   source: 'Treat-AD',

@@ -12,7 +12,7 @@ import {
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
-import { Gene, GeneService } from '@sagebionetworks/agora/api-client-angular';
+import { Gene, GeneService } from '@sagebionetworks/agora/api-client';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { GeneEvidenceMetabolomicsComponent } from '../gene-evidence-metabolomics/gene-evidence-metabolomics.component';
 import { GeneEvidenceProteomicsComponent } from '../gene-evidence-proteomics/gene-evidence-proteomics.component';

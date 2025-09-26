@@ -6,7 +6,7 @@ import {
   ComparisonToolConfig,
   ComparisonToolConfigService,
   ComparisonToolPage,
-} from '@sagebionetworks/model-ad/api-client-angular';
+} from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 
 @Injectable({ providedIn: 'root' })

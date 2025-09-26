@@ -10,7 +10,7 @@ import {
   RnaDistribution,
   OverallScoresDistribution,
   ProteomicsDistribution,
-} from '@sagebionetworks/agora/api-client-angular';
+} from '@sagebionetworks/agora/api-client';
 
 // -------------------------------------------------------------------------- //
 // Schemas

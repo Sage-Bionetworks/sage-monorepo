@@ -1,6 +1,6 @@
 import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { GeneService, OverallScoresDistribution } from '@sagebionetworks/agora/api-client-angular';
+import { GeneService, OverallScoresDistribution } from '@sagebionetworks/agora/api-client';
 import {
   geneMock1,
   geneMock2,

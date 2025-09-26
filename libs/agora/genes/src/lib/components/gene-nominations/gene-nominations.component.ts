@@ -1,6 +1,6 @@
 import { Component, inject, Input } from '@angular/core';
 
-import { Gene, Team, TeamService } from '@sagebionetworks/agora/api-client-angular';
+import { Gene, Team, TeamService } from '@sagebionetworks/agora/api-client';
 import { TargetNominationWithTeamData } from '../../models/TargetNominationWithTeamData';
 
 @Component({

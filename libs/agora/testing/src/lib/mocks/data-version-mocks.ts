@@ -1,4 +1,4 @@
-import { DataVersion } from '@sagebionetworks/agora/api-client-angular';
+import { DataVersion } from '@sagebionetworks/agora/api-client';
 
 export const dataVersionMock: DataVersion = {
   data_file: 'syn13363290',

@@ -1,6 +1,5 @@
-
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { BioDomain, Gene } from '@sagebionetworks/agora/api-client-angular';
+import { BioDomain, Gene } from '@sagebionetworks/agora/api-client';
 import { BiodomainsChartComponent } from '@sagebionetworks/agora/charts';
 import { HelperService } from '@sagebionetworks/agora/services';
 

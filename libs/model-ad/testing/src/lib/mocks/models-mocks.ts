@@ -1,4 +1,4 @@
-import { Model } from '@sagebionetworks/model-ad/api-client-angular';
+import { Model } from '@sagebionetworks/model-ad/api-client';
 
 export const modelMock: Model = {
   name: '3xTg-AD',

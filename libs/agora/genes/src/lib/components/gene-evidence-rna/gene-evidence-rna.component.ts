@@ -6,7 +6,7 @@ import {
   Gene,
   MedianExpression,
   RnaDifferentialExpression,
-} from '@sagebionetworks/agora/api-client-angular';
+} from '@sagebionetworks/agora/api-client';
 import {
   BoxPlotComponent,
   CandlestickChartComponent,

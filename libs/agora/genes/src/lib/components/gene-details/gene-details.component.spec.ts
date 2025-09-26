@@ -3,7 +3,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
-import { GeneService } from '@sagebionetworks/agora/api-client-angular';
+import { GeneService } from '@sagebionetworks/agora/api-client';
 import { HelperService, SvgIconService } from '@sagebionetworks/agora/services';
 import {
   ActivatedRouteStub,

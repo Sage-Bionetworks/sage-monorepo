@@ -1,8 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { Gene } from '@sagebionetworks/agora/api-client-angular';
+import { Gene } from '@sagebionetworks/agora/api-client';
 import { ResourceCard } from '@sagebionetworks/agora/models';
-
 
 @Component({
   selector: 'agora-gene-resources',

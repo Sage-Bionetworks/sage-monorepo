@@ -2,7 +2,7 @@ import {
   ComparisonToolConfig,
   ComparisonToolConfigColumn,
   ComparisonToolConfigFilter,
-} from '@sagebionetworks/model-ad/api-client-angular';
+} from '@sagebionetworks/model-ad/api-client';
 import { Schema, model } from 'mongoose';
 
 const ComparisonToolConfigFilterSchema = new Schema<ComparisonToolConfigFilter>({

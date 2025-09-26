@@ -1,4 +1,4 @@
-import { GCTGene, OverallScoresDistribution } from '@sagebionetworks/agora/api-client-angular';
+import { GCTGene, OverallScoresDistribution } from '@sagebionetworks/agora/api-client';
 import { SelectItem } from 'primeng/api';
 
 export interface GCTGeneResponse {

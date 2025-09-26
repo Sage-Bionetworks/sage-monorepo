@@ -7,7 +7,7 @@ import {
   VersionService,
 } from '@sagebionetworks/explorers/services';
 import { FooterComponent, HeaderComponent } from '@sagebionetworks/explorers/ui';
-import { DataVersionService } from '@sagebionetworks/model-ad/api-client-angular';
+import { DataVersionService } from '@sagebionetworks/model-ad/api-client';
 import { ConfigService, MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
 import { SearchInputComponent } from '@sagebionetworks/model-ad/ui';
 import { footerLinks, headerLinks } from '@sagebionetworks/model-ad/util';

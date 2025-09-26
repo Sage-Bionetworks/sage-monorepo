@@ -1,4 +1,4 @@
-import { ModelOverview, ModelOverviewLink } from '@sagebionetworks/model-ad/api-client-angular';
+import { ModelOverview, ModelOverviewLink } from '@sagebionetworks/model-ad/api-client';
 import { Schema, model } from 'mongoose';
 
 const ModelOverviewLinkSchema = new Schema<ModelOverviewLink>({

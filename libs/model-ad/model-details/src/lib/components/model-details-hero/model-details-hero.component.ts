@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, input } from '@angular/core';
 import { SanitizeHtmlPipe } from '@sagebionetworks/explorers/util';
-import { Model } from '@sagebionetworks/model-ad/api-client-angular';
+import { Model } from '@sagebionetworks/model-ad/api-client';
 import sanitizeHtml from 'sanitize-html';
 
 @Component({

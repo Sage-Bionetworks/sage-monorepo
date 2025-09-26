@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Gene } from '@sagebionetworks/agora/api-client-angular';
+import { Gene } from '@sagebionetworks/agora/api-client';
 import { GeneBioDomainsComponent } from '../gene-biodomains/gene-biodomains.component';
 import { GeneSoeChartsComponent } from '../gene-soe-charts/gene-soe-charts.component';
 import { GeneSoeListComponent } from '../gene-soe-list/gene-soe-list.component';

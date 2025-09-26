@@ -18,7 +18,7 @@
     "baseUrl": ".",
     "paths": {
       "@sagebionetworks/agora/about": ["libs/agora/about/src/index.ts"],
-      "@sagebionetworks/agora/api-client-angular": ["libs/agora/api-client-angular/src/index.ts"],
+      "@sagebionetworks/agora/api-client": ["libs/agora/api-client-angular/src/index.ts"],
       "@sagebionetworks/agora/charts": ["libs/agora/charts/src/index.ts"],
       "@sagebionetworks/agora/config": ["libs/agora/config/src/index.ts"],
       "@sagebionetworks/agora/gene-comparison-tool": [
@@ -38,9 +38,7 @@
       "@sagebionetworks/agora/ui": ["libs/agora/ui/src/index.ts"],
       "@sagebionetworks/agora/util": ["libs/agora/util/src/index.ts"],
       "@sagebionetworks/agora/wiki": ["libs/agora/wiki/src/index.ts"],
-      "@sagebionetworks/amp-als/api-client-angular": [
-        "libs/amp-als/api-client-angular/src/index.ts"
-      ],
+      "@sagebionetworks/amp-als/api-client": ["libs/amp-als/api-client-angular/src/index.ts"],
       "@sagebionetworks/explorers/charts": ["libs/explorers/charts/src/index.ts"],
       "@sagebionetworks/explorers/charts-angular": ["libs/explorers/charts-angular/src/index.ts"],
       "@sagebionetworks/explorers/comparison-tools": [
@@ -56,9 +54,7 @@
       "@sagebionetworks/explorers/themes": ["libs/explorers/themes/src/index.ts"],
       "@sagebionetworks/explorers/ui": ["libs/explorers/ui/src/index.ts"],
       "@sagebionetworks/explorers/util": ["libs/explorers/util/src/index.ts"],
-      "@sagebionetworks/model-ad/api-client-angular": [
-        "libs/model-ad/api-client-angular/src/index.ts"
-      ],
+      "@sagebionetworks/model-ad/api-client": ["libs/model-ad/api-client-angular/src/index.ts"],
       "@sagebionetworks/model-ad/config": ["libs/model-ad/config/src/index.ts"],
       "@sagebionetworks/model-ad/disease-correlation-comparison-tool": [
         "libs/model-ad/disease-correlation-comparison-tool/src/index.ts"

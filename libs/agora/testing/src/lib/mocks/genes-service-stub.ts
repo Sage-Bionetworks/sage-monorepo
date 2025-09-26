@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Distribution, Gene } from '@sagebionetworks/agora/api-client-angular';
+import { Distribution, Gene } from '@sagebionetworks/agora/api-client';
 import { Observable } from 'rxjs';
 import { ApiServiceStub } from '.';
 

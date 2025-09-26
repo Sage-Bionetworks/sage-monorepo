@@ -12,7 +12,7 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { BioDomain } from '@sagebionetworks/agora/api-client-angular';
+import { BioDomain } from '@sagebionetworks/agora/api-client';
 import { HelperService } from '@sagebionetworks/agora/services';
 import * as d3 from 'd3';
 

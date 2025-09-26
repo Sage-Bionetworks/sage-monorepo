@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { NeuropathologicCorrelation } from '@sagebionetworks/agora/api-client-angular';
+import { NeuropathologicCorrelation } from '@sagebionetworks/agora/api-client';
 import { cache } from '../helpers';
 import { NeuropathologicCorrelationCollection } from '../models';
 

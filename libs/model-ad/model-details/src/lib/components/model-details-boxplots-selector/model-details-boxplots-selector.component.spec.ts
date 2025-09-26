@@ -5,7 +5,7 @@ import {
   SvgIconServiceStub,
   validWikiParams,
 } from '@sagebionetworks/explorers/testing';
-import { Sex } from '@sagebionetworks/model-ad/api-client-angular';
+import { Sex } from '@sagebionetworks/model-ad/api-client';
 import { modelMock } from '@sagebionetworks/model-ad/testing';
 import { render, screen, waitFor } from '@testing-library/angular';
 import { ModelDetailsBoxplotsSelectorComponent } from './model-details-boxplots-selector.component';

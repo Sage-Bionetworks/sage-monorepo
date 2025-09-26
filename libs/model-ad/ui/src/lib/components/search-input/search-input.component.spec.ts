@@ -1,7 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { SearchResult } from '@sagebionetworks/explorers/models';
-import { ModelService } from '@sagebionetworks/model-ad/api-client-angular';
+import { ModelService } from '@sagebionetworks/model-ad/api-client';
 import { render, screen } from '@testing-library/angular';
 import { of } from 'rxjs';
 import { SearchInputComponent } from './search-input.component';

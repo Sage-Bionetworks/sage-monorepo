@@ -6,7 +6,7 @@ import { Schema, model } from 'mongoose';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { Metabolomics } from '@sagebionetworks/agora/api-client-angular';
+import { Metabolomics } from '@sagebionetworks/agora/api-client';
 
 // -------------------------------------------------------------------------- //
 // Schemas

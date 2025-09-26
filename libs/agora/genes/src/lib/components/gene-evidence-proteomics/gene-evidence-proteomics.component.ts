@@ -5,7 +5,7 @@ import {
   Gene,
   ProteinDifferentialExpression,
   ProteomicsDistribution,
-} from '@sagebionetworks/agora/api-client-angular';
+} from '@sagebionetworks/agora/api-client';
 import { BoxPlotComponent } from '@sagebionetworks/agora/charts';
 import { BoxPlotChartItem, ChartRange } from '@sagebionetworks/agora/models';
 import { HelperService } from '@sagebionetworks/agora/services';

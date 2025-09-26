@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { cache, setHeaders } from '../helpers';
 import { ModelOverviewCollection } from '../models';
-import { ModelOverview } from '@sagebionetworks/model-ad/api-client-angular';
+import { ModelOverview } from '@sagebionetworks/model-ad/api-client';
 
 export async function getModelOverviews() {
   const cacheKey = 'modelOverview';

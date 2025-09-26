@@ -1,5 +1,5 @@
 import { Component, inject, Input } from '@angular/core';
-import { Gene } from '@sagebionetworks/agora/api-client-angular';
+import { Gene } from '@sagebionetworks/agora/api-client';
 import { BoxPlotComponent } from '@sagebionetworks/agora/charts';
 import { BoxPlotChartItem } from '@sagebionetworks/agora/models';
 import { HelperService } from '@sagebionetworks/agora/services';

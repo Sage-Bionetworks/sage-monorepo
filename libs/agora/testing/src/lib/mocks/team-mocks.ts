@@ -1,10 +1,6 @@
 /* eslint quotes: off */
 
-import {
-  Team,
-  TeamMember,
-  TeamsList as TeamsResponse,
-} from '@sagebionetworks/agora/api-client-angular';
+import { Team, TeamMember, TeamsList as TeamsResponse } from '@sagebionetworks/agora/api-client';
 
 export const mockTeamMember: TeamMember = {
   isprimaryinvestigator: true,

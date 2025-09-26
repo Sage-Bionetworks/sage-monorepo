@@ -1,4 +1,4 @@
-import { DataVersion } from '@sagebionetworks/model-ad/api-client-angular';
+import { DataVersion } from '@sagebionetworks/model-ad/api-client';
 import { Schema, model } from 'mongoose';
 
 const DataVersionSchema = new Schema<DataVersion>(

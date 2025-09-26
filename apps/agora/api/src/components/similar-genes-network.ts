@@ -3,7 +3,7 @@ import {
   SimilarGenesNetwork,
   SimilarGenesNetworkLink,
   SimilarGenesNetworkNode,
-} from '@sagebionetworks/agora/api-client-angular';
+} from '@sagebionetworks/agora/api-client';
 
 export function getSimilarGenesNetwork(gene: Gene): SimilarGenesNetwork {
   const nodes: { [key: string]: SimilarGenesNetworkNode } = {};

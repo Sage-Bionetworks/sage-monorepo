@@ -1,4 +1,3 @@
-
 import { Component, inject, Input } from '@angular/core';
 
 import {
@@ -6,7 +5,7 @@ import {
   DistributionService,
   Gene,
   OverallScoresDistribution,
-} from '@sagebionetworks/agora/api-client-angular';
+} from '@sagebionetworks/agora/api-client';
 import { ScoreBarChartComponent } from '@sagebionetworks/agora/charts';
 import { PopoverLinkComponent } from '../popover-link/popover-link.component';
 

@@ -15,7 +15,7 @@ import {
   GCTGeneTissue,
   GeneService,
   OverallScoresDistribution,
-} from '@sagebionetworks/agora/api-client-angular';
+} from '@sagebionetworks/agora/api-client';
 import {
   GCTColumn,
   GCTDetailsPanelData,
