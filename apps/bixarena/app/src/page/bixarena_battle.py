@@ -172,6 +172,36 @@ def clear_history(request: gr.Request):
     )
 
 
+def mock_bot_response_multi(state0, state1):
+    """Mock bot response that simulates 5 second delay"""
+    logger.info("Starting mock bot response - 5 second delay")
+
+    # Simulate streaming response over 5 seconds
+    for i in range(50):  # 50 iterations * 0.1 seconds = 5 seconds
+        if state0:
+            # Add some mock text progressively
+            mock_response = f"Mock response part {i + 1}/50..."
+            if i == 49:  # Final response
+                mock_response = "This is a mock response to test Enter key disabling during generation."
+
+            # Update the conversation
+            state0.conv.messages[-1] = ("assistant", mock_response)
+            state1.conv.messages[-1] = (
+                "assistant",
+                f"Different mock response: {mock_response}",
+            )
+
+        yield (
+            [state0, state1]
+            + [
+                state0.to_gradio_chatbot() if state0 else None,
+                state1.to_gradio_chatbot() if state1 else None,
+            ]
+            + [disable_btn] * 4
+        )
+        time.sleep(0.1)
+
+
 def flash_buttons():
     btn_updates = [
         [disable_btn] * 3 + [enable_btn] * 1,
@@ -309,6 +339,8 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
         box-shadow: none;
     }
     </style>
+    
+
     """
 
     states = [gr.State() for _ in range(num_sides)]
@@ -411,6 +443,44 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
         + [battle_interface, voting_row, next_battle_row, suggested_prompts_group],
     )
 
+    # Direct JavaScript functions for enter key control
+    disable_enter_js = """
+    () => {
+        console.log('Disabling Enter key');
+        const textbox = document.querySelector('#input_box textarea');
+        if (textbox) {
+            textbox._enterDisabled = true;
+            textbox.placeholder = 'Type your next message... (Enter disabled while generating)';
+            
+            if (!textbox._enterHandler) {
+                textbox._enterHandler = function(event) {
+                    if (event.key === 'Enter' && !event.shiftKey && textbox._enterDisabled) {
+                        console.log('Enter key blocked!');
+                        event.preventDefault();
+                        event.stopPropagation();
+                        event.stopImmediatePropagation();
+                        return false;
+                    }
+                };
+                textbox.addEventListener('keydown', textbox._enterHandler, true);
+            }
+        }
+        return [];
+    }
+    """
+
+    enable_enter_js = """
+    () => {
+        console.log('Enabling Enter key');
+        const textbox = document.querySelector('#input_box textarea');
+        if (textbox) {
+            textbox._enterDisabled = false;
+            textbox.placeholder = 'Ask anything biomedical...';
+        }
+        return [];
+    }
+    """
+
     textbox.submit(
         add_text,
         states + model_selectors + [textbox],
@@ -421,13 +491,23 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
         + [slow_warning]
         + [battle_interface, voting_row, next_battle_row, suggested_prompts_group],
     ).then(
-        bot_response_multi,
+        lambda: None,  # Disable enter key
+        [],
+        [],
+        js=disable_enter_js,
+    ).then(
+        mock_bot_response_multi,  # Use mock instead of real bot_response_multi
         states,
         states + chatbots + btn_list,
     ).then(
         flash_buttons,
         [],
         btn_list,
+    ).then(
+        lambda: None,  # Enable enter key
+        [],
+        [],
+        js=enable_enter_js,
     )
 
     # Set up suggested prompt click handlers to automatically submit
@@ -449,13 +529,23 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
             + [slow_warning]
             + [battle_interface, voting_row, next_battle_row, suggested_prompts_group],
         ).then(
-            bot_response_multi,
+            lambda: None,  # Disable enter key
+            [],
+            [],
+            js=disable_enter_js,
+        ).then(
+            mock_bot_response_multi,  # Use mock instead of real bot_response_multi
             states,
             states + chatbots + btn_list,
         ).then(
             flash_buttons,
             [],
             btn_list,
+        ).then(
+            lambda: None,  # Enable enter key
+            [],
+            [],
+            js=enable_enter_js,
         )
 
     return states + model_selectors
