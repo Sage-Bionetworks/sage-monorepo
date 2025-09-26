@@ -46,9 +46,11 @@ models = []
 prompt_manager = get_prompt_manager()
 
 
-def create_suggested_prompts():
+def create_suggested_prompts(num_prompts=3):
     """Create suggested prompts cards"""
-    prompts = random.sample(prompt_manager.get_all_prompts(), 3)
+    available_prompts = prompt_manager.get_all_prompts()
+    num_to_sample = min(num_prompts, len(available_prompts))
+    prompts = random.sample(available_prompts, num_to_sample)
 
     prompt_cards = []
 
@@ -267,7 +269,7 @@ def add_text(
     )
 
 
-def build_side_by_side_ui_anony():
+def build_side_by_side_ui_anony(num_example_prompts=3):
     # Page header with title and custom styles
     page_header_html = """
     <div style="text-align: center; padding: 0px;">
@@ -320,7 +322,7 @@ def build_side_by_side_ui_anony():
         with gr.Column(
             elem_id="suggested_prompts_section", visible=True
         ) as suggested_prompts_group:
-            prompt_buttons_data = create_suggested_prompts()
+            prompt_buttons_data = create_suggested_prompts(num_example_prompts)
 
         # Battle interface - will appear once a prompt is submitted
         with gr.Group(elem_id="share-region-anony", visible=False) as battle_interface:
@@ -462,7 +464,15 @@ def build_side_by_side_ui_anony():
 def build_battle_page(
     register_api_endpoint_file=None,
     moderate=False,
+    num_example_prompts=3,
 ):
+    """Build the battle page with configurable number of example prompts
+
+    Args:
+        register_api_endpoint_file: File for API endpoint registration
+        moderate (bool): Enable content moderation
+        num_example_prompts (int): Number of suggested prompts to display (default: 3)
+    """
     # Set global variables
     set_global_vars_anony(moderate)
 
@@ -476,6 +486,6 @@ def build_battle_page(
     load_demo_side_by_side_anony(models, {})
 
     with gr.Blocks(title="BixArena - Biomedical LLM Battle") as battle_page:
-        build_side_by_side_ui_anony()
+        build_side_by_side_ui_anony(num_example_prompts)
 
     return battle_page
