@@ -80,7 +80,9 @@ The remainder of this guide details how to update the Docker base image, tool ve
 
 ## Step 1a: Update the Docker Base Image
 
-### 1.1 Base Image Update
+> See the "Update Checklist" at the end of this document for an actionable summary of this section.
+
+### Base Image Update
 
 The dev container uses Ubuntu as its base image. To update:
 
@@ -92,31 +94,11 @@ FROM ubuntu:noble-20250910
 FROM ubuntu:noble-20251015  # Use date-specific tag
 ```
 
-**Ubuntu Version Requirements:**
+**Ubuntu Version Requirements & Tagging:**
 
-- **LTS Only**: Always use Ubuntu LTS (Long Term Support) versions for stability and extended support
-- **Non-moving tags**: Use tags that include the release date (e.g., `noble-20250910`) instead of moving tags like `noble` or `latest`
-- **Current LTS versions**:
-  - See the official list of Ubuntu LTS releases at [https://releases.ubuntu.com](https://releases.ubuntu.com)
+Use only Ubuntu LTS date-specific tags for reproducibility (e.g. `ubuntu:noble-20250910`). Avoid moving tags (`noble`, `latest`) and non‑LTS releases. Update periodically (e.g. monthly or when security fixes land). Reference: official LTS list at https://releases.ubuntu.com and available date tags at Docker Hub. Always test locally before committing and track EOL to plan major migrations.
 
-**Tag Format:**
-
-- ✅ **Correct**: `ubuntu:noble-20250910` (LTS version with date)
-- ✅ **Correct**: `ubuntu:jammy-20250910` (LTS version with date)
-- ❌ **Avoid**: `ubuntu:noble` (moving tag)
-- ❌ **Avoid**: `ubuntu:latest` (moving tag)
-- ❌ **Avoid**: `ubuntu:24.10` (non-LTS version)
-
-**Best Practices:**
-
-- **LTS versions only**: Ensures 5-year support lifecycle and stability
-- **Date-specific tags**: Provides reproducible builds across environments
-- **Regular updates**: Update to newer date tags monthly or as security updates are released
-- **Check Ubuntu Hub**: Visit [Ubuntu Docker Hub](https://hub.docker.com/_/ubuntu/tags) for available date-tagged LTS images
-- **Test locally**: Always test container builds locally before committing changes
-- **Monitor EOL dates**: Plan migration to newer LTS versions well before end-of-life
-
-### 1.2 Tool Version Updates
+### Tool Version Updates
 
 The Dockerfile includes numerous tools with pinned versions. Update the build arguments at the top of the file:
 
@@ -131,29 +113,13 @@ ARG nodeVersionMajor="22"            # Check: https://nodejs.org/en/about/previo
 ARG pnpmVersion="10.13.1"            # Check: https://github.com/pnpm/pnpm/releases
 ```
 
-**Version Selection Criteria:**
+**Selection Criteria (condensed):** Prefer LTS where applicable, skip anything <24h old, avoid pre-releases, prefer versions with security fixes, and note breaking changes on major bumps.
 
-- **LTS Only**: For tools that offer LTS versions (especially Node.js), always use LTS releases for stability
-- **Release Age**: Only use releases that are at least 1 day old for security reasons
-- **Stable Releases**: Avoid pre-release, beta, or release candidate versions
-- **Security Updates**: Prioritize versions that include security fixes
+**Process:** Check release page → confirm age ≥1 day → confirm LTS (when relevant) → update ARG → build & smoke test critical tooling.
 
-**Update Process:**
+**Node.js:** Use even-numbered LTS majors (18/20/22). Avoid odd majors. Check the Node.js release schedule for current LTS + EOL.
 
-1. **Check release pages**: Follow the links provided in comments for each tool
-2. **Verify release date**: Visit the tool's GitHub repository to confirm the release is at least 1 day old
-3. **LTS preference**: For Node.js and similar tools, ensure you're using LTS versions only
-4. **Version validation**: Update to latest stable releases, avoiding pre-release versions
-5. **Breaking changes**: Pay attention to major version changes that might require additional modifications
-6. **Test critical tools**: Verify functionality after updates, especially for frequently used tools
-
-**Node.js LTS Requirements:**
-
-- ✅ **Use**: Even-numbered versions (18, 20, 22) - these are LTS
-- ❌ **Avoid**: Odd-numbered versions (17, 19, 21) - these are current/non-LTS
-- **Check**: [Node.js Release Schedule](https://nodejs.org/en/about/previous-releases) for LTS status and EOL dates
-
-### 1.3 System Package Updates
+### System Package Updates
 
 System packages are installed via apt. While most use latest available versions, some may be pinned:
 
@@ -171,7 +137,7 @@ RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
 - Major Ubuntu version changes may affect package availability
 - Test package installations if changing base Ubuntu version
 
-### 1.4 Tool Management and Removal
+### Tool Management and Removal
 
 To maintain security and reduce the attack surface, the dev container tool set should be periodically reviewed and pruned.
 
@@ -207,9 +173,11 @@ To maintain security and reduce the attack surface, the dev container tool set s
 
 ## Step 1b: Update Dev Container Features
 
-After updating the Dockerfile (Step 1a), update the dev container definition file (`.github/.devcontainer/devcontainer.json`). This file references the updated Dockerfile and defines additional features and configuration for the development environment. This is still part of the Step 1 (BUILD & PUBLISH) process in the two-step workflow described above.
+> Refer to the "Update Checklist" for a summarized set of required review items.
 
-### 2.1 Dev Container Features
+After updating the Dockerfile (Step 1a), update `.github/.devcontainer/devcontainer.json` (feature set & runtime configuration). This remains part of Step 1 (BUILD & PUBLISH).
+
+### Feature Set
 
 The `devcontainer.json` file references the updated Dockerfile and uses pre-built features from the Dev Containers specification:
 
@@ -235,41 +203,11 @@ The `devcontainer.json` file references the updated Dockerfile and uses pre-buil
 }
 ```
 
-**Feature Trust and Selection Criteria:**
+**Selection & Trust (condensed):** Prefer official sources (`devcontainers`, `microsoft`, `docker`, major vendors). For community features: ≥50 stars, active in last 3 months, multi-contributor, semantic releases, documented, responsive issues, passes source/security skim. Always pin immutable version tags.
 
-- **Trusted Organizations**: Prefer features from established organizations like:
+**Mini Process:** Look up latest → validate trust → pin explicit version → ensure cross-feature compatibility → test build.
 
-  - `ghcr.io/devcontainers/features/*` (Official Dev Containers team)
-  - `ghcr.io/microsoft/*` (Microsoft)
-  - `ghcr.io/docker/*` (Docker)
-  - Other major cloud providers and established open-source organizations
-
-- **Community Feature Evaluation**: For features from smaller communities, conduct thorough review:
-  - **GitHub Stars**: Minimum 50+ stars for community trust
-  - **Release Frequency**: Regular releases (at least quarterly) in the past year
-  - **Active Contributors**: Multiple contributors (not single-maintainer projects)
-  - **Issue Response**: Active issue triage and community engagement
-  - **Documentation Quality**: Comprehensive README and usage examples
-  - **Source Code Review**: Review the feature's source code for security practices
-
-**Version Requirements:**
-
-- **Non-moving Tags**: Always use specific version numbers (e.g., `1.6.3`) instead of `latest` or branch names
-- **Reproducibility**: Ensures consistent builds across environments and time
-- **Audit Trail**: Enables tracking of exactly which versions are deployed
-- **Security**: Prevents automatic updates that might introduce vulnerabilities
-
-**Update Process:**
-
-1. **Check official registry**: Visit [Dev Containers Features](https://containers.dev/features) for latest versions
-2. **Verify trust criteria**: Ensure features meet organizational or community trust standards
-3. **Version validation**: Use specific, non-moving version tags only
-4. **Feature compatibility**: Verify feature versions work together
-5. **Tool version updates**: Update tool versions within each feature configuration
-6. **Security review**: For new community features, conduct security assessment
-7. **Test functionality**: Verify all features work correctly after updates
-
-### 2.2 Community Feature Evaluation Process
+### Community Feature Evaluation Checklist
 
 When considering features from smaller communities, use this evaluation checklist:
 
@@ -323,7 +261,7 @@ When considering features from smaller communities, use this evaluation checklis
 4. Test feature in isolated environment
 5. Get team consensus before adding to production
 
-### 2.3 Feature-Specific Updates
+### Feature-Specific Notes
 
 #### Docker-in-Docker
 
@@ -348,7 +286,9 @@ When considering features from smaller communities, use this evaluation checklis
 
 ## Testing Process
 
-### 3.1 Manual Dev Container Testing
+> Quick reference: all actions here are summarized in the "Update Checklist" (Testing section).
+
+### Manual Dev Container Testing
 
 After updating both the Dockerfile and `devcontainer.json`, perform comprehensive testing using the devcontainer CLI.
 
@@ -413,7 +353,7 @@ devcontainer build \
    docker rm -f sage-monorepo-devcontainer-prebuild
    ```
 
-### 3.2 Full Monorepo Integration Testing
+### Full Monorepo Integration Testing
 
 After basic functionality testing, perform comprehensive testing with the full monorepo codebase mounted inside the dev container:
 
@@ -508,7 +448,7 @@ Instead of manually stepping into the test container, you can run the comprehens
 - **Clean**: Remains in your active development environment throughout
 - **Efficient**: Uses `--skip-nx-cache` to ensure fresh builds and tests
 
-### 3.2 Integration Testing
+### IDE & CI Integration Testing
 
 1. **Test in VS Code:**
 
@@ -524,7 +464,9 @@ Instead of manually stepping into the test container, you can run the comprehens
 
 ## Deployment Process
 
-### 4.1 Creating the Pull Request
+> The checklist later includes abbreviated activation and rollback steps.
+
+### Creating the Build PR
 
 After successful local testing:
 
@@ -547,7 +489,7 @@ After successful local testing:
     - Automated tests will validate the container functionality
     - Review any build failures or test issues
 
-### 4.2 Publishing the New Image
+### Publishing the New Image
 
 Upon merging the PR to the main branch:
 
@@ -562,7 +504,7 @@ Upon merging the PR to the main branch:
     - Published image becomes available at `ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:<tag>`
     - Tag format typically includes commit SHA or version identifier
 
-### 4.3 Activating the New Dev Container
+### Activating the New Dev Container
 
 !!! info "Activation PR"
 
@@ -606,7 +548,7 @@ Upon merging the PR to the main branch:
    }
    ```
 
-### 4.4 Post-Deployment Verification
+### Post-Deployment Verification
 
 After the activation PR is merged:
 
