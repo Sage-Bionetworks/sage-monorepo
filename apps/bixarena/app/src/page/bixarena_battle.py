@@ -95,14 +95,28 @@ def vote_last_response(states, vote_type, model_selectors, _: gr.Request):
                 "### Model A: " + states[0].model_name,
                 "### Model B: " + states[1].model_name,
             )
-            yield names + ("",) + (disable_btn,) * 3
+            yield (
+                names
+                + (
+                    gr.update(
+                        interactive=False, placeholder="Ready for the next battle?"
+                    ),
+                )
+                + (disable_btn,) * 3
+                + (enable_btn,)
+            )
             time.sleep(0.1)
     else:
         names = (
             "### Model A: " + states[0].model_name,
             "### Model B: " + states[1].model_name,
         )
-        yield names + ("",) + (disable_btn,) * 3
+        yield (
+            names
+            + (gr.update(interactive=False, placeholder="Ready for the next battle?"),)
+            + (disable_btn,) * 3
+            + (enable_btn,)
+        )
 
 
 def leftvote_last_response(
@@ -141,9 +155,13 @@ def clear_history(request: gr.Request):
         [None] * num_sides  # states
         + [None] * num_sides  # chatbots
         + anony_names  # model_selectors
-        + [""]  # textbox
-        + [invisible_btn] * 3
-        + [disable_btn] * 1  # btn_list
+        + [
+            gr.update(
+                value="", interactive=True, placeholder="Ask anything biomedical..."
+            )
+        ]  # re-enable textbox
+        + [invisible_btn] * 3  # voting buttons (leftvote, rightvote, tie)
+        + [disable_btn] * 1  # clear button
         + [""]  # slow_warning
         + [gr.Group(visible=False)]  # hide battle_interface
         + [gr.Row(visible=False)]  # hide voting_row
@@ -236,7 +254,7 @@ def add_text(
     return (
         states
         + [x.to_gradio_chatbot() for x in states]
-        + [""]
+        + [gr.update(value="", placeholder="Ask followups...")]
         + [
             disable_btn,
         ]
@@ -367,17 +385,17 @@ def build_side_by_side_ui_anony():
     leftvote_btn.click(
         leftvote_last_response,
         states + model_selectors,
-        model_selectors + [textbox, leftvote_btn, rightvote_btn, tie_btn],
+        model_selectors + [textbox] + btn_list,
     )
     rightvote_btn.click(
         rightvote_last_response,
         states + model_selectors,
-        model_selectors + [textbox, leftvote_btn, rightvote_btn, tie_btn],
+        model_selectors + [textbox] + btn_list,
     )
     tie_btn.click(
         tievote_last_response,
         states + model_selectors,
-        model_selectors + [textbox, leftvote_btn, rightvote_btn, tie_btn],
+        model_selectors + [textbox] + btn_list,
     )
     clear_btn.click(
         clear_history,
