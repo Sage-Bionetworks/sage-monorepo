@@ -4,7 +4,7 @@ import {
   ChallengeSearchQuery,
   ChallengeService,
   Organization,
-} from '@sagebionetworks/openchallenges/api-client-angular';
+} from '@sagebionetworks/openchallenges/api-client';
 import { BehaviorSubject, switchMap } from 'rxjs';
 import { assign } from 'lodash';
 

@@ -2,7 +2,7 @@ import { AsyncPipe, NgClass, TitleCasePipe } from '@angular/common';
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
-import { Challenge, Image, ImageService } from '@sagebionetworks/openchallenges/api-client-angular';
+import { Challenge, Image, ImageService } from '@sagebionetworks/openchallenges/api-client';
 import { ChallengeIncentiveLabelPipe } from '@sagebionetworks/openchallenges/util';
 import { Observable } from 'rxjs';
 

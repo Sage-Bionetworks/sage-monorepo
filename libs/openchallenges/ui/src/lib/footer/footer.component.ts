@@ -1,6 +1,6 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
-import { Image, ImageService } from '@sagebionetworks/openchallenges/api-client-angular';
+import { Image, ImageService } from '@sagebionetworks/openchallenges/api-client';
 import { Observable } from 'rxjs';
 import { RouterModule } from '@angular/router';
 

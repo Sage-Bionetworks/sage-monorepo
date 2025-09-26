@@ -1,6 +1,6 @@
 import { NgClass } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { Organization } from '@sagebionetworks/openchallenges/api-client-angular';
+import { Organization } from '@sagebionetworks/openchallenges/api-client';
 import { MOCK_ORGANIZATION_CARDS, OrganizationCard } from '@sagebionetworks/openchallenges/ui';
 import { MatIconModule } from '@angular/material/icon';
 

@@ -6,7 +6,7 @@ import {
   ImageHeight,
   ImageService,
   OrganizationService,
-} from '@sagebionetworks/openchallenges/api-client-angular';
+} from '@sagebionetworks/openchallenges/api-client';
 import { Observable, map } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';
 import { AsyncPipe, isPlatformServer } from '@angular/common';

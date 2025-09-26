@@ -77,7 +77,7 @@
       "@sagebionetworks/model-ad/ui": ["libs/model-ad/ui/src/index.ts"],
       "@sagebionetworks/model-ad/util": ["libs/model-ad/util/src/index.ts"],
       "@sagebionetworks/openchallenges/about": ["libs/openchallenges/about/src/index.ts"],
-      "@sagebionetworks/openchallenges/api-client-angular": [
+      "@sagebionetworks/openchallenges/api-client": [
         "libs/openchallenges/api-client-angular/src/index.ts"
       ],
       "@sagebionetworks/openchallenges/assets": ["libs/openchallenges/assets/src/index.ts"],
@@ -103,7 +103,6 @@
         "libs/results-visualization-framework/ui/src/index.ts"
       ],
       "@sagebionetworks/sage-monorepo-nx-plugin": ["libs/sage-monorepo/nx-plugin/src/index.ts"],
-      "@sagebionetworks/sandbox-angular-lib": ["libs/sandbox/angular-lib/src/index.ts"],
       "@sagebionetworks/shared/google-tag-manager": [
         "libs/shared/typescript/google-tag-manager/src/index.ts"
       ],
@@ -111,9 +110,7 @@
       "@sagebionetworks/shared/web-components": [
         "libs/shared/typescript/web-components/src/index.ts"
       ],
-      "@sagebionetworks/synapse/api-client-angular": [
-        "libs/synapse/api-client-angular/src/index.ts"
-      ]
+      "@sagebionetworks/synapse/api-client": ["libs/synapse/api-client-angular/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

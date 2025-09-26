@@ -4,7 +4,7 @@ import {
   ChallengeSort,
   ChallengeStatus,
   ChallengeSubmissionType,
-} from '@sagebionetworks/openchallenges/api-client-angular';
+} from '@sagebionetworks/openchallenges/api-client';
 
 type ChallengePropertyOption = {
   value:

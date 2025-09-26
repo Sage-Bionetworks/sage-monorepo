@@ -18,7 +18,7 @@ import {
   ChallengeStatus,
   ChallengeSubmissionType,
   EdamSection,
-} from '@sagebionetworks/openchallenges/api-client-angular';
+} from '@sagebionetworks/openchallenges/api-client';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
   ChallengeCardComponent,

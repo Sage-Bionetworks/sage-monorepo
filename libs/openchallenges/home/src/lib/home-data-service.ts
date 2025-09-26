@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import {
   ChallengeAnalyticsService,
   ChallengesPerYear,
-} from '@sagebionetworks/openchallenges/api-client-angular';
+} from '@sagebionetworks/openchallenges/api-client';
 import { Observable, filter, of } from 'rxjs';
 import { isNotNull } from 'type-guards';
 

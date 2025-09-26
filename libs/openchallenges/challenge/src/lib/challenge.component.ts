@@ -1,9 +1,6 @@
 import { Component, inject, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import {
-  ChallengeJsonLd,
-  ChallengeService,
-} from '@sagebionetworks/openchallenges/api-client-angular';
+import { ChallengeJsonLd, ChallengeService } from '@sagebionetworks/openchallenges/api-client';
 import {
   catchError,
   combineLatest,

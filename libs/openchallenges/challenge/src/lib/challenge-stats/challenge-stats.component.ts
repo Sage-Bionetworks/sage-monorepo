@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { MatIconModule } from '@angular/material/icon';
-import { Challenge } from '@sagebionetworks/openchallenges/api-client-angular';
+import { Challenge } from '@sagebionetworks/openchallenges/api-client';
 
 @Component({
   selector: 'openchallenges-challenge-stats',

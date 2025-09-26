@@ -1,6 +1,5 @@
-
 import { Component, Input } from '@angular/core';
-import { Organization } from '@sagebionetworks/openchallenges/api-client-angular';
+import { Organization } from '@sagebionetworks/openchallenges/api-client';
 import { MOCK_ORG_MEMBERS, PersonCardComponent } from '@sagebionetworks/openchallenges/ui';
 
 @Component({

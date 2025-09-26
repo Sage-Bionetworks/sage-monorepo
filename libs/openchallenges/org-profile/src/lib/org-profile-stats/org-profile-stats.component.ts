@@ -1,9 +1,6 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  Organization,
-  OrganizationService,
-} from '@sagebionetworks/openchallenges/api-client-angular';
+import { Organization, OrganizationService } from '@sagebionetworks/openchallenges/api-client';
 import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { HttpStatusRedirect, handleHttpError } from '@sagebionetworks/openchallenges/util';
 import { NgPlural, NgPluralCase, AsyncPipe } from '@angular/common';

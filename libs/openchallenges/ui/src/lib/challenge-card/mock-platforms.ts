@@ -1,4 +1,4 @@
-import { ChallengePlatform } from '@sagebionetworks/openchallenges/api-client-angular';
+import { ChallengePlatform } from '@sagebionetworks/openchallenges/api-client';
 
 export const MOCK_PLATFORMS: ChallengePlatform[] = [
   {

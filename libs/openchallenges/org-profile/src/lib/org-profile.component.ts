@@ -25,7 +25,7 @@ import {
   Organization,
   OrganizationService,
   Image,
-} from '@sagebionetworks/openchallenges/api-client-angular';
+} from '@sagebionetworks/openchallenges/api-client';
 import { HttpStatusRedirect, handleHttpError } from '@sagebionetworks/openchallenges/util';
 import { AsyncPipe, Location, NgClass } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';

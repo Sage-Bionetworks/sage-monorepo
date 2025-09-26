@@ -20,7 +20,7 @@ import {
   OrganizationSort,
   ChallengeParticipationRole,
   OrganizationCategory,
-} from '@sagebionetworks/openchallenges/api-client-angular';
+} from '@sagebionetworks/openchallenges/api-client';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
   CheckboxFilterComponent,

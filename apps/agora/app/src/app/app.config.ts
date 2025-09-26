@@ -15,7 +15,7 @@ import {
 } from '@angular/router';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/agora/api-client-angular';
 import { configFactory, ConfigService } from '@sagebionetworks/agora/config';
-import { BASE_PATH as SYNAPSE_API_CLIENT_BASE_PATH } from '@sagebionetworks/synapse/api-client-angular';
+import { BASE_PATH as SYNAPSE_API_CLIENT_BASE_PATH } from '@sagebionetworks/synapse/api-client';
 import { providePrimeNG } from 'primeng/config';
 import { AgoraPreset } from './primeNGPreset';
 
