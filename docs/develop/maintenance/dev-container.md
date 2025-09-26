@@ -510,23 +510,17 @@ Instead of manually stepping into the test container, you can run the comprehens
 
 ### 3.2 Integration Testing
 
-**Test in VS Code:**
+1. **Test in VS Code:**
 
-- Open the project in VS Code
-- Select "Rebuild and Reopen in Container"
-- Verify all extensions load correctly
-- Test basic development workflows
+    - Open the project in VS Code
+    - Select "Rebuild and Reopen in Container"
+    - Verify all extensions load correctly
+    - Test basic development workflows
 
-**Test CI/CD compatibility:**
+2. **Test CI/CD compatibility:**
 
-- Ensure GitHub Actions continue to work
-- Verify any external integrations still function
-
-### 3.4 Performance Testing
-
-- Compare container build times before/after changes
-- Test startup time and resource usage
-- Ensure development experience remains smooth
+    - Ensure GitHub Actions continue to work
+    - Verify any external integrations still function
 
 ## Deployment Process
 
@@ -536,21 +530,22 @@ After successful local testing:
 
 1. **Revert local testing changes:**
 
-   - **Critical**: Revert any image tag changes in `.devcontainer/devcontainer.json` made for local testing
-   - Ensure the file references the current production image tag, not "local" or test configurations
-   - Example: Change from `"image": "ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:local"` back to the current SHA-based tag
+    - **Critical**: Revert any image tag changes in `.devcontainer/devcontainer.json` made for local testing
+    - Ensure the file references the current production image tag, not "local" or test configurations
+    - Example: Change from `"image": "ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:local"` back to the current SHA-based tag
 
 2. **Create feature branch PR:**
 
-   - Create a pull request with all dev container changes
-   - Include comprehensive description of updates made
-   - Document any breaking changes or new requirements
-   - Verify `.devcontainer/devcontainer.json` uses production image reference
+    - Create a pull request with all dev container changes
+    - Include comprehensive description of updates made
+    - Document any breaking changes or new requirements
+    - Verify `.devcontainer/devcontainer.json` uses production image reference
 
 3. **PR triggers automated build:**
-   - GitHub workflow will build the new dev container image
-   - Automated tests will validate the container functionality
-   - Review any build failures or test issues
+
+    - GitHub workflow will build the new dev container image
+    - Automated tests will validate the container functionality
+    - Review any build failures or test issues
 
 ### 4.2 Publishing the New Image
 
@@ -558,29 +553,48 @@ Upon merging the PR to the main branch:
 
 1. **Automated image build and publish:**
 
-   - Docker image is built automatically via GitHub Actions
-   - Image is published to GitHub Container Registry (GHCR)
-   - New image receives a unique tag based on commit SHA
+    - Docker image is built automatically via GitHub Actions
+    - Image is published to GitHub Container Registry (GHCR)
+    - New image receives a unique tag based on commit SHA
 
 2. **Image availability:**
-   - Published image becomes available at `ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:<tag>`
-   - Tag format typically includes commit SHA or version identifier
+
+    - Published image becomes available at `ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:<tag>`
+    - Tag format typically includes commit SHA or version identifier
 
 ### 4.3 Activating the New Dev Container
 
-**Important**: Using the new dev container requires a second PR:
+!!! info "Activation PR"
+
+    **Important**: Using the new dev container requires a second PR. This *activation* PR is what
+    actually enables the new image for **all contributors**. Until it merges, only users who
+    temporarily point their local `.devcontainer/devcontainer.json` at the new image (or use a
+    local `:local` tag) will experience the changes.
+
+    After the activation PR is merged into `main`:
+
+    - When contributors pull the updated `main` branch, VS Code detects the changed dev container
+      image reference and pops a notification prompting them to "Rebuild" / "Reopen in Container".
+    - A reminder line is also printed in their terminal the next time the workspace starts inside
+      the prior container, advising a rebuild to pick up the new environment.
+    - Rebuilding pulls the published GHCR image directly (does not re-run the full Docker build
+      locally unless the layer cache is cold).
+
+    If a developer dismisses the prompt, they can manually trigger it later via the command palette
+    ("Dev Containers: Rebuild and Reopen in Container"). They remain on the previous environment
+    until they rebuild, which can explain version skew in support questions.
 
 1. **Update image reference:**
 
-   - Create a new PR updating `.devcontainer/devcontainer.json`
-   - Change the image tag to reference the newly published image
-   - Example: Update from previous tag to new GHCR tag
+    - Create a new PR updating `.devcontainer/devcontainer.json`
+    - Change the image tag to reference the newly published image
+    - Example: Update from previous tag to new GHCR tag
 
 2. **Two-step deployment rationale:**
 
-   - **Safety**: Separates image building from activation
-   - **Validation**: Allows testing of published image before activation
-   - **Rollback**: Easy to revert to previous working image if issues arise
+    - **Safety**: Separates image building from activation
+    - **Validation**: Allows testing of published image before activation
+    - **Rollback**: Easy to revert to previous working image if issues arise
 
 3. **Activation process:**
    ```jsonc
@@ -598,14 +612,15 @@ After the activation PR is merged:
 
 1. **Team notification:**
 
-   - Notify team members of the new dev container availability
-   - Provide any migration notes or new requirements
-   - Document any workflow changes
+    - (Auto) Notify team members of the new dev container availability
+    - Provide any migration notes or new requirements
+    - Document any workflow changes
 
 2. **Monitor for issues:**
-   - Watch for team reports of container problems
-   - Check CI/CD pipeline functionality
-   - Be prepared to quickly rollback if critical issues arise
+
+    - Watch for team reports of container problems
+    - Check CI/CD pipeline functionality
+    - Be prepared to quickly rollback if critical issues arise
 
 ## Update Checklist
 
@@ -633,36 +648,33 @@ After the activation PR is merged:
 
 #### Basic Functionality Testing
 
-- [ ] Build dev container using devcontainer CLI (`devcontainer build`)
-- [ ] Troubleshoot Docker version issues if build fails
-- [ ] Start dev container (`devcontainer up --workspace-folder .github`)
-- [ ] Connect to running container (`docker exec -it sage-monorepo-devcontainer-prebuild bash`)
-- [ ] Verify all development tools work correctly (node, python, java, go, etc.)
-- [ ] Test development workflows (npm, pnpm, gradle, mvn, docker, kubectl)
-- [ ] Exit container and clean up (`docker rm -f sage-monorepo-devcontainer-prebuild`)
+- [ ] Build prebuild image (see "Build the Dev Container Image")
+- [ ] If build fails, consult "Build Troubleshooting" (adjust Docker version if needed)
+- [ ] Start container (see step 1 in "Test Container Startup and Functionality")
+- [ ] Attach shell (see step 2 in same section)
+- [ ] Spot‑check core tools (see step 3 list — all versions print successfully)
+- [ ] Exercise representative workflows (package install, Gradle tasks, Docker, kubectl) — no errors
+- [ ] Remove prebuild container (see cleanup step 5)
 
 #### Full Monorepo Integration Testing
 
 **Option A: Manual Testing (step-by-step)**
 
-- [ ] Verify local dev container image is available (`docker images | grep devcontainer`)
-- [ ] Update `.devcontainer/devcontainer.json` if needed for testing
-- [ ] Start dev container with monorepo (`devcontainer up --workspace-folder .`)
-- [ ] Connect to container (`docker exec -it sage-monorepo-devcontainer bash`)
-- [ ] Navigate to workspace (`cd /workspaces/sage-monorepo`)
-- [ ] Source development environment (`. ./dev-env.sh`)
-- [ ] Install workspace dependencies (`workspace-install`)
-- [ ] Run comprehensive build and test (`nx run-many --target create-config,build,test`)
-- [ ] Verify all projects build and test successfully
-- [ ] Exit container and clean up (`docker rm -f sage-monorepo-devcontainer`)
+- [ ] Confirm local image built (see "Verify Local Image Availability")
+- [ ] (Optional) Temporarily point `.devcontainer/devcontainer.json` to `:local` for this session (see "Update Dev Container Definition") — do NOT commit
+- [ ] Start dev container with monorepo (refer to "Deploy with Monorepo Codebase" – startup step)
+- [ ] (If using interactive flow) Attach a shell to the running container (see steps in "3.1 Manual Dev Container Testing")
+- [ ] Initialize environment & install dependencies (source `dev-env.sh`, then install; see prior section for details)
+- [ ] Run full create-config / build / test targets (refer to combined Nx targets described earlier)
+- [ ] Verify all projects succeed (review output; no failures reported)
+- [ ] Remove the throwaway test container (see cleanup note in "Deploy with Monorepo Codebase")
 
 **Option B: Streamlined Testing (automated)**
 
-- [ ] Verify local dev container image is available (`docker images | grep devcontainer`)
-- [ ] Start dev container with monorepo (`devcontainer up --workspace-folder .`)
-- [ ] Execute comprehensive test: `devcontainer exec --workspace-folder . bash -c ". ./dev-env.sh && workspace-install && nx run-many --target=create-config,build,test --skip-nx-cache"`
-- [ ] Verify all projects build and test successfully (check command output)
-- [ ] Clean up test container (`docker rm -f sage-monorepo-devcontainer`)
+- [ ] Confirm local image built (see "Verify Local Image Availability")
+- [ ] Run the single exec-based end‑to‑end test flow (see command in "Deploy with Monorepo Codebase" step 2)
+- [ ] Review output for failures (all targets should pass)
+- [ ] Remove test container (see cleanup step referenced above)
 
 #### VS Code Integration Testing
 
@@ -702,42 +714,46 @@ After the activation PR is merged:
 #### Dev Container Build Failures
 
 - **Docker version compatibility**: Latest Docker versions in `docker-in-docker` feature may cause build failures
-  - **Solution**: Specify an older, stable Docker version (e.g., `"version": "27.3.2"` instead of `"28.3.2"`)
-  - **Check logs**: Look for Docker daemon startup errors or compatibility issues
+
+    - **Solution**: Specify an older, stable Docker version (e.g., `"version": "27.3.2"` instead of `"28.3.2"`)
+    - **Check logs**: Look for Docker daemon startup errors or compatibility issues
+
 - **Feature conflicts**: Multiple features trying to install the same tools
 
-  - **Solution**: Remove duplicate installations or use feature-specific configurations
-  - **Review**: Check feature documentation for known conflicts
+    - **Solution**: Remove duplicate installations or use feature-specific configurations
+    - **Review**: Check feature documentation for known conflicts
 
 - **Memory/disk space**: Large feature installations may exceed available resources
 
-  - **Solution**: Increase Docker desktop memory/disk limits or use smaller base images
-  - **Monitor**: Check Docker system resource usage during build
+    - **Solution**: Increase Docker desktop memory/disk limits or use smaller base images
+    - **Monitor**: Check Docker system resource usage during build
 
 - **Network issues**: Features downloading from external sources may fail
 
-  - **Solution**: Retry build or check network connectivity
-  - **Alternative**: Use cached or mirror sources when available
+    - **Solution**: Retry build or check network connectivity
+    - **Alternative**: Use cached or mirror sources when available
 
 - **Permission errors**: Features may fail to install due to user permission issues
-  - **Solution**: Ensure proper user configuration in devcontainer.json
-  - **Check**: Verify the `remoteUser` setting matches the Dockerfile user
+
+    - **Solution**: Ensure proper user configuration in devcontainer.json
+    - **Check**: Verify the `remoteUser` setting matches the Dockerfile user
 
 #### Dev Container Runtime Issues
 
 - **Container won't start**: Check `devcontainer up` logs for startup errors
 
-  - **Solution**: Verify all required ports are available and not in use
-  - **Check**: Ensure Docker daemon is running and accessible
+    - **Solution**: Verify all required ports are available and not in use
+    - **Check**: Ensure Docker daemon is running and accessible
 
 - **Tools not available**: Installed tools not found in PATH
 
-  - **Solution**: Check if feature installation completed successfully
-  - **Debug**: Connect to container and manually verify tool locations
+    - **Solution**: Check if feature installation completed successfully
+    - **Debug**: Connect to container and manually verify tool locations
 
 - **VS Code integration fails**: Container starts but VS Code can't connect
-  - **Solution**: Rebuild container with "Rebuild and Reopen in Container"
-  - **Check**: Verify VS Code Dev Containers extension is updated
+
+    - **Solution**: Rebuild container with "Rebuild and Reopen in Container"
+    - **Check**: Verify VS Code Dev Containers extension is updated
 
 #### Runtime Issues
 
