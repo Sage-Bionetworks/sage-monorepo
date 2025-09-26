@@ -2,6 +2,7 @@ import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { provideRouter } from '@angular/router';
 import {
   mockCheckQueryForErrors,
+  mockFormatResultSubtextForDisplay,
   mockGetSearchResults,
   mockNavigateToResult,
 } from '@sagebionetworks/explorers/testing';
@@ -21,6 +22,7 @@ const meta: Meta<SearchInputComponent> = {
     navigateToResult: { control: false },
     getSearchResults: { control: false },
     checkQueryForErrors: { control: false },
+    formatResultSubtextForDisplay: { control: false },
   },
 };
 export default meta;
@@ -41,6 +43,7 @@ export const HomeSearchInput: Story = {
     searchImagePath: '/explorers-assets/images/gene-search-icon.svg',
     searchImageAltText: 'gene search icon',
     hasThickBorder: true,
+    formatResultSubtextForDisplay: mockFormatResultSubtextForDisplay,
     navigateToResult: mockNavigateToResult,
     getSearchResults: mockGetSearchResults,
     checkQueryForErrors: mockCheckQueryForErrors,

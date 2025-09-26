@@ -1,4 +1,5 @@
 import { provideHttpClient } from '@angular/common/http';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { SvgIconService, SynapseApiService } from '@sagebionetworks/agora/services';
 import { mockSvgTestId, SvgIconServiceStub, synapseWikiMock } from '@sagebionetworks/agora/testing';
 import { render, screen, waitFor } from '@testing-library/angular';
@@ -16,7 +17,11 @@ mockSynapseApiService.renderHtml.mockReturnValue(mockRenderedHtml);
 async function setup(wikiId = '618276') {
   const user = userEvent.setup();
   const component = await render(PopoverLinkComponent, {
-    providers: [provideHttpClient(), { provide: SvgIconService, useClass: SvgIconServiceStub }],
+    providers: [
+      provideHttpClient(),
+      { provide: SvgIconService, useClass: SvgIconServiceStub },
+      provideNoopAnimations(),
+    ],
     componentProperties: {
       wikiId: wikiId,
     },

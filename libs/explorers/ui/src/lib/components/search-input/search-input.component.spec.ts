@@ -1,8 +1,10 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
+import { SearchResult } from '@sagebionetworks/explorers/models';
 import { SvgIconService } from '@sagebionetworks/explorers/services';
 import {
   mockCheckQueryForErrors,
+  mockFormatResultSubtextForDisplay,
   mockGetSearchResults,
   SvgIconServiceStub,
 } from '@sagebionetworks/explorers/testing';
@@ -33,7 +35,9 @@ async function waitForSpinner() {
   );
 }
 
-async function setup() {
+async function setup(formatResultSubtextForDisplay?: (result: SearchResult) => string | undefined) {
+  const optionalInputs = formatResultSubtextForDisplay ? { formatResultSubtextForDisplay } : {};
+
   const user = userEvent.setup();
   const component = await render(SearchInputComponent, {
     providers: [
@@ -42,6 +46,7 @@ async function setup() {
       { provide: SvgIconService, useClass: SvgIconServiceStub },
     ],
     componentInputs: {
+      ...optionalInputs,
       searchPlaceholder: searchPlaceholder,
       searchImagePath: '/explorers-assets/icons/gene-search-icon.svg',
       searchImageAltText: 'gene search icon',
@@ -327,5 +332,31 @@ describe('SearchInputComponent', () => {
 
     await waitForSpinner();
     expect(input).toHaveValue(specialCharQuery);
+  });
+
+  it('should only display results text when subtext format function is not provided', async () => {
+    const { user } = await setup();
+    const input = getInput();
+
+    await user.type(input, '123');
+    await waitForSpinner();
+
+    const firstResult = screen.getByRole('button', { name: 'dummy_id' });
+    expect(firstResult).toHaveTextContent(/dummy_id/);
+    expect(firstResult).not.toHaveTextContent(/dummy name/i);
+  });
+
+  it('should display results text and subtext when subtext format function is provided', async () => {
+    const { user } = await setup(mockFormatResultSubtextForDisplay);
+    const input = getInput();
+
+    await user.type(input, '123');
+    await waitForSpinner();
+
+    const firstResult = screen.getByRole('button', { name: 'dummy_id' });
+    expect(firstResult).toHaveTextContent(/dummy name/i);
+
+    const secondResult = screen.getByRole('button', { name: 'dummy_id_2' });
+    expect(secondResult).toHaveTextContent(/alternate name/i);
   });
 });

@@ -54,6 +54,9 @@ export class SearchInputComponent implements AfterViewInit {
   formatResultForDisplay = input<(result: SearchResult) => string>(
     (result: SearchResult) => result.id,
   );
+  formatResultSubtextForDisplay = input<(result: SearchResult) => string | undefined>(
+    (result: SearchResult) => undefined,
+  );
 
   faMagnifyingGlass = faMagnifyingGlass;
   faSpinner = faSpinner;
@@ -230,6 +233,11 @@ export class SearchInputComponent implements AfterViewInit {
   formatAndHighlightResultsForDisplay(result: SearchResult): string {
     const formattedText = this.formatResultForDisplay()(result);
     return this.highlightMatches(formattedText, this.query);
+  }
+
+  formatAndHighlightResultsSubtextForDisplay(result: SearchResult): string | undefined {
+    const subtext = this.formatResultSubtextForDisplay()(result);
+    return subtext ? this.highlightMatches(subtext, this.query) : undefined;
   }
 
   onResultHover(index: number) {
