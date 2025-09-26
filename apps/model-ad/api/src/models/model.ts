@@ -3,12 +3,8 @@ import {
   IndividualData,
   Model,
   ModelData,
-<<<<<<< HEAD
   Sex,
-} from '@sagebionetworks/model-ad/api-client-angular';
-=======
 } from '@sagebionetworks/model-ad/api-client';
->>>>>>> 89c7977e (chore: update more products)
 import { Schema, model } from 'mongoose';
 export { Model } from '@sagebionetworks/model-ad/api-client';
 
