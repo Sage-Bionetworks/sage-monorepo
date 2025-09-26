@@ -5,7 +5,7 @@ import {
   SvgIconServiceStub,
   validWikiParams,
 } from '@sagebionetworks/explorers/testing';
-import { IndividualData } from '@sagebionetworks/model-ad/api-client-angular';
+import { Sex } from '@sagebionetworks/model-ad/api-client-angular';
 import { modelMock } from '@sagebionetworks/model-ad/testing';
 import { render, screen, waitFor } from '@testing-library/angular';
 import { ModelDetailsBoxplotsSelectorComponent } from './model-details-boxplots-selector.component';
@@ -58,7 +58,7 @@ describe('ModelDetailsBoxplotsSelectorComponent', () => {
   });
 
   it('should return the expected genotype order', async () => {
-    const basePt = { sex: IndividualData.SexEnum.Male, individual_id: '1', value: 100 };
+    const basePt = { sex: Sex.Male, individual_id: '1', value: 100 };
     const mockModelDataList = [
       {
         name: 'ModelName',

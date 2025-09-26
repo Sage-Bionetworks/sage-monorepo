@@ -1,0 +1,12 @@
+type: object
+description: Correlation result
+properties:
+  correlation:
+    type: number
+    description: Correlation value
+  adj_p_value:
+    type: number
+    description: Adjusted p-value
+required:
+  - correlation
+  - adj_p_value

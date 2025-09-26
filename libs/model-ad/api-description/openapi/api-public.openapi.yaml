@@ -22,6 +22,8 @@ tags:
     description: Operations about Model Overview.
   - name: Comparison Tool Config
     description: Operations about Comparison Tool UI configuration.
+  - name: Disease Correlation
+    description: Operations about Disease Correlation results.
 paths:
   /data-version:
     get:
@@ -148,6 +150,28 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /comparison-tools/disease-correlation:
+    get:
+      tags:
+        - Disease Correlation
+      summary: Get disease correlation comparison data
+      description: Returns a list of disease correlation objects for use in comparison tools.
+      operationId: getDiseaseCorrelations
+      responses:
+        '200':
+          description: A list of disease correlation objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DiseaseCorrelation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
     DataVersion:
@@ -225,6 +249,12 @@ components:
         - allele
         - allele_type
         - mgi_allele_id
+    Sex:
+      type: string
+      description: Sex
+      enum:
+        - Female
+        - Male
     IndividualData:
       type: object
       description: Data for an individual
@@ -233,11 +263,7 @@ components:
           type: string
           description: Genotype of the individual
         sex:
-          type: string
-          enum:
-            - Female
-            - Male
-          description: Sex of the individual
+          $ref: '#/components/schemas/Sex'
         individual_id:
           type: string
           description: Unique identifier for the individual
@@ -506,6 +532,67 @@ components:
         - center
         - modified_genes
         - available_data
+    CorrelationResult:
+      type: object
+      description: Correlation result
+      properties:
+        correlation:
+          type: number
+          description: Correlation value
+        adj_p_value:
+          type: number
+          description: Adjusted p-value
+      required:
+        - correlation
+        - adj_p_value
+    DiseaseCorrelation:
+      type: object
+      description: Disease Correlation
+      properties:
+        name:
+          type: string
+          description: Model name
+        matched_control:
+          type: string
+          description: Matched control for the model
+        model_type:
+          type: string
+          description: Type of model
+        modified_genes:
+          type: array
+          items:
+            type: string
+          description: List of modified genes
+        cluster:
+          type: string
+          description: Cluster information
+        age:
+          type: string
+          description: Age of the model
+        sex:
+          $ref: '#/components/schemas/Sex'
+        IFG:
+          $ref: '#/components/schemas/CorrelationResult'
+        PHG:
+          $ref: '#/components/schemas/CorrelationResult'
+        TCX:
+          $ref: '#/components/schemas/CorrelationResult'
+        CBE:
+          $ref: '#/components/schemas/CorrelationResult'
+        DLPFC:
+          $ref: '#/components/schemas/CorrelationResult'
+        FP:
+          $ref: '#/components/schemas/CorrelationResult'
+        STG:
+          $ref: '#/components/schemas/CorrelationResult'
+      required:
+        - name
+        - matched_control
+        - model_type
+        - modified_genes
+        - cluster
+        - age
+        - sex
   responses:
     BadRequest:
       description: Invalid request

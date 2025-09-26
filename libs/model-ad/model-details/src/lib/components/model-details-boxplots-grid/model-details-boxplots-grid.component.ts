@@ -1,6 +1,6 @@
 import { Component, computed, input } from '@angular/core';
 import { LegendDirective } from '@sagebionetworks/explorers/charts-angular';
-import { IndividualData, ModelData } from '@sagebionetworks/model-ad/api-client-angular';
+import { ModelData, Sex } from '@sagebionetworks/model-ad/api-client-angular';
 import { MODEL_DETAILS_BOXPLOT_POINT_STYLES } from '@sagebionetworks/model-ad/config';
 import { ModelDetailsBoxplotComponent } from '../model-details-boxplot/model-details-boxplot.component';
 
@@ -13,11 +13,11 @@ import { ModelDetailsBoxplotComponent } from '../model-details-boxplot/model-det
 export class ModelDetailsBoxplotsGridComponent {
   modelDataList = input.required<ModelData[]>();
   genotypeOrder = input<string[] | undefined>();
-  sexes = input.required<IndividualData.SexEnum[]>();
+  sexes = input.required<Sex[]>();
 
   pointStyles = computed(() => {
     return MODEL_DETAILS_BOXPLOT_POINT_STYLES.filter((pointStyle) =>
-      this.sexes().includes(pointStyle.label as IndividualData.SexEnum),
+      this.sexes().includes(pointStyle.label as Sex),
     );
   });
 }

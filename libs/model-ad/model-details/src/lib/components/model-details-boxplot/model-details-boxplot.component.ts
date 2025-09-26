@@ -3,7 +3,7 @@ import { Component, computed, inject, input } from '@angular/core';
 import { CategoryPoint, getTextWidth } from '@sagebionetworks/explorers/charts';
 import { BoxplotDirective } from '@sagebionetworks/explorers/charts-angular';
 import { DecodeGreekEntityPipe } from '@sagebionetworks/explorers/util';
-import { IndividualData, ModelData } from '@sagebionetworks/model-ad/api-client-angular';
+import { IndividualData, ModelData, Sex } from '@sagebionetworks/model-ad/api-client-angular';
 import { MODEL_DETAILS_BOXPLOT_POINT_STYLES } from '@sagebionetworks/model-ad/config';
 import { CallbackDataParams } from 'echarts/types/dist/shared';
 
@@ -30,7 +30,7 @@ export class ModelDetailsBoxplotComponent {
   );
 
   modelData = input.required<ModelData>();
-  sexes = input.required<IndividualData.SexEnum[]>();
+  sexes = input.required<Sex[]>();
   showLegend = input<boolean>(false);
   genotypeOrder = input<string[] | undefined>();
 

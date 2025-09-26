@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Sex } from './sex';
 
 /**
  * Data for an individual
@@ -16,10 +17,7 @@ export interface IndividualData {
    * Genotype of the individual
    */
   genotype: string;
-  /**
-   * Sex of the individual
-   */
-  sex: IndividualData.SexEnum;
+  sex: Sex;
   /**
    * Unique identifier for the individual
    */
@@ -29,10 +27,4 @@ export interface IndividualData {
    */
   value: number;
 }
-export namespace IndividualData {
-  export type SexEnum = 'Female' | 'Male';
-  export const SexEnum = {
-    Female: 'Female' as SexEnum,
-    Male: 'Male' as SexEnum,
-  };
-}
+export namespace IndividualData {}
