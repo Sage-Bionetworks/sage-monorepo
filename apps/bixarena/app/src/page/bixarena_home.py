@@ -95,16 +95,14 @@ def build_home_page():
     """Create the complete home page layout"""
 
     with gr.Column() as home_page:
-        # Add some spacing after header
-        gr.HTML("<br>")
+        with gr.Column(elem_classes=["content-wrapper"]):
+            # Intro Section
+            create_intro_section()
 
-        # Intro Section
-        create_intro_section()
+            # Stats Section
+            build_stats_section()
 
-        # Stats Section
-        build_stats_section()
-
-        # Call to Action Section
-        start_btn = build_cta_section()
+            # Call to Action Section
+            start_btn = build_cta_section()
 
     return home_page, start_btn

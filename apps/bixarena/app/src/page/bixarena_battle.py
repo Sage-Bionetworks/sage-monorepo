@@ -7,10 +7,11 @@ simplified to a single function for a single-page LLM comparison arena.
 
 import json
 import logging
+import random
 import time
-
+from typing import List, Dict, Any
+import html
 import gradio as gr
-
 
 from config.constants import (
     MODERATION_MSG,
@@ -19,9 +20,9 @@ from config.constants import (
     INPUT_CHAR_LEN_LIMIT,
     CONVERSATION_TURN_LIMIT,
 )
+from config.prompt_examples import get_prompt_manager
 
 from model.model_selection import get_battle_pair, moderation_filter
-
 
 from model.model_response import (
     State,
@@ -34,7 +35,6 @@ from model.model_response import (
     invisible_btn,
 )
 
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -42,8 +42,31 @@ num_sides = 2
 anony_names = ["", ""]
 models = []
 
+# Global state for prompt examples
+prompt_manager = get_prompt_manager()
 
-def load_demo_side_by_side_anony(models_, url_params):
+
+def create_suggested_prompts():
+    """Create suggested prompts cards"""
+    prompts = random.sample(prompt_manager.get_all_prompts(), 3)
+
+    prompt_cards = []
+
+    for i, prompt in enumerate(prompts):
+        # Truncate very long prompts for display
+        display_text = prompt if len(prompt) <= 120 else prompt[:120] + "..."
+
+        btn = gr.Button(
+            value=display_text,
+            elem_classes=["suggested-prompt-card"],
+        )
+
+        prompt_cards.append((btn, prompt))
+
+    return prompt_cards
+
+
+def load_demo_side_by_side_anony(models_, _):
     global models
     models = models_
 
@@ -56,30 +79,44 @@ def load_demo_side_by_side_anony(models_, url_params):
     return states + selector_updates
 
 
-def vote_last_response(states, vote_type, model_selectors, request: gr.Request):
+def vote_last_response(states, vote_type, model_selectors, _: gr.Request):
     # Log the exact same data to console instead of file
     data = {
         "tstamp": round(time.time(), 4),
         "type": vote_type,
-        "models": [x for x in model_selectors],
+        "models": list(model_selectors),
         "states": [x.dict() for x in states],
     }
     logger.info(f"Vote data: {json.dumps(data)}")
 
     if ":" not in model_selectors[0]:
-        for i in range(5):
+        for _ in range(5):
             names = (
                 "### Model A: " + states[0].model_name,
                 "### Model B: " + states[1].model_name,
             )
-            yield names + ("",) + (disable_btn,) * 3
+            yield (
+                names
+                + (
+                    gr.update(
+                        interactive=False, placeholder="Ready for the next battle?"
+                    ),
+                )
+                + (disable_btn,) * 3
+                + (enable_btn,)
+            )
             time.sleep(0.1)
     else:
         names = (
             "### Model A: " + states[0].model_name,
             "### Model B: " + states[1].model_name,
         )
-        yield names + ("",) + (disable_btn,) * 3
+        yield (
+            names
+            + (gr.update(interactive=False, placeholder="Ready for the next battle?"),)
+            + (disable_btn,) * 3
+            + (enable_btn,)
+        )
 
 
 def leftvote_last_response(
@@ -115,13 +152,21 @@ def tievote_last_response(
 def clear_history(request: gr.Request):
     logger.info("clear_history (anony).")
     return (
-        [None] * num_sides
-        + [None] * num_sides
-        + anony_names
-        + [""]
-        + [invisible_btn] * 3
-        + [disable_btn] * 1
-        + [""]
+        [None] * num_sides  # states
+        + [None] * num_sides  # chatbots
+        + anony_names  # model_selectors
+        + [
+            gr.update(
+                value="", interactive=True, placeholder="Ask anything biomedical..."
+            )
+        ]  # re-enable textbox
+        + [invisible_btn] * 3  # voting buttons (leftvote, rightvote, tie)
+        + [disable_btn] * 1  # clear button
+        + [""]  # slow_warning
+        + [gr.Group(visible=False)]  # hide battle_interface
+        + [gr.Row(visible=False)]  # hide voting_row
+        + [gr.Row(visible=False)]  # hide next_battle_row
+        + [gr.Column(visible=True)]  # show suggested_prompts_group
     )
 
 
@@ -140,7 +185,6 @@ def add_text(
 ):
     logger.info(f"add_text (anony). len: {len(text)}")
     states = [state0, state1]
-    model_selectors = [model_selector0, model_selector1]
 
     # Init states if necessary
     if states[0] is None:
@@ -163,7 +207,11 @@ def add_text(
                 no_change_btn,
             ]
             * 4
-            + [""]
+            + [""]  # slow_warning
+            + [gr.Group(visible=False)]  # keep battle_interface hidden
+            + [gr.Row(visible=False)]  # keep voting_row hidden
+            + [gr.Row(visible=False)]  # keep next_battle_row hidden
+            + [gr.Column(visible=True)]  # keep suggested_prompts_group visible
         )
 
     model_list = [states[i].model_name for i in range(num_sides)]
@@ -186,7 +234,11 @@ def add_text(
                 no_change_btn,
             ]
             * 4
-            + [""]
+            + [""]  # slow_warning
+            + [gr.Group(visible=True)]  # show battle_interface (conversation exists)
+            + [gr.Row(visible=True)]  # show voting_row
+            + [gr.Row(visible=True)]  # show next_battle_row
+            + [gr.Column(visible=False)]  # hide suggested_prompts_group
         )
 
     text = text[:INPUT_CHAR_LEN_LIMIT]  # Hard cut-off
@@ -202,81 +254,128 @@ def add_text(
     return (
         states
         + [x.to_gradio_chatbot() for x in states]
-        + [""]
+        + [gr.update(value="", placeholder="Ask followups...")]
         + [
             disable_btn,
         ]
         * 4
         + [hint_msg]
+        + [gr.Group(visible=True)]  # show battle_interface
+        + [gr.Row(visible=True)]  # show voting_row
+        + [gr.Row(visible=True)]  # show next_battle_row
+        + [gr.Column(visible=False)]  # hide suggested_prompts_group
     )
 
 
 def build_side_by_side_ui_anony():
-    notice_markdown = """
-# ⚔️  BixArena: Benchmarking LLMs for Biomedical Breakthroughs
+    # Page header with title and custom styles
+    page_header_html = """
+    <div style="text-align: center; padding: 0px;">
+        <h1 style="font-size: 3rem; margin-bottom: 0.5rem;">BixArena</h1>
+        <p style="font-size: 1.2rem; color: #666; margin: 0;">Benchmarking LLMs for Biomedical Breakthroughs</p>
+    </div>
+    <style>
+    .gradio-container .suggested-prompt-card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 12px 16px;
+        text-align: left;
+        font-size: 14px;
+        transition: all 0.2s ease;
+        white-space: normal;
+        width: 80%;
+        margin: 0 auto;
+    }
 
-## 📜 Rules
-- Ask biomedical questions to two anonymous models and vote for the better one!
-- You can continue chatting until you identify a winner.
-
-## 👇 Chat now!
-"""
+    .gradio-container .suggested-prompt-card:hover {
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    #input_box.prompt_input {
+        background: var(--background-fill-primary);
+    }
+    
+    #input_box.prompt_input textarea {
+        border-radius: 12px;
+    }
+    
+    .form:has(.prompt_input) {
+        border: none;
+        box-shadow: none;
+    }
+    </style>
+    """
 
     states = [gr.State() for _ in range(num_sides)]
     model_selectors = []
     chatbots = []
 
-    gr.Markdown(notice_markdown, elem_id="notice_markdown")
+    # Page content
+    with gr.Column(elem_classes=["content-wrapper"]):
+        gr.HTML(page_header_html, elem_id="title_section")
+        # Suggested prompts
+        with gr.Column(
+            elem_id="suggested_prompts_section", visible=True
+        ) as suggested_prompts_group:
+            prompt_buttons_data = create_suggested_prompts()
 
-    with gr.Group(elem_id="share-region-anony"):
+        # Battle interface - will appear once a prompt is submitted
+        with gr.Group(elem_id="share-region-anony", visible=False) as battle_interface:
+            with gr.Row():
+                for i in range(num_sides):
+                    label = "Model A" if i == 0 else "Model B"
+                    with gr.Column():
+                        chatbot = gr.Chatbot(
+                            label=label,
+                            elem_id="chatbot",
+                            height=550,
+                            show_copy_button=True,
+                        )
+                        chatbots.append(chatbot)
+
+            with gr.Row():
+                for i in range(num_sides):
+                    with gr.Column():
+                        model_selector = gr.Markdown(
+                            anony_names[i], elem_id="model_selector_md"
+                        )
+                        model_selectors.append(model_selector)
+            with gr.Row():
+                slow_warning = gr.Markdown("", elem_id="notice_markdown")
+
+            # Voting buttons
+            with gr.Row(visible=False) as voting_row:
+                leftvote_btn = gr.Button(
+                    value="👈  A is better", visible=False, interactive=False
+                )
+                tie_btn = gr.Button(value="🤝  Tie", visible=False, interactive=False)
+
+                rightvote_btn = gr.Button(
+                    value="👉  B is better", visible=False, interactive=False
+                )
+
+        # Prompt input - always visible
         with gr.Row():
-            for i in range(num_sides):
-                label = "Model A" if i == 0 else "Model B"
-                with gr.Column():
-                    chatbot = gr.Chatbot(
-                        label=label,
-                        elem_id="chatbot",
-                        height=550,
-                        show_copy_button=True,
-                    )
-                    chatbots.append(chatbot)
+            textbox = gr.Textbox(
+                show_label=False,
+                placeholder="Ask anything biomedical...",
+                elem_id="input_box",
+                elem_classes=["prompt_input"],
+            )
 
-        with gr.Row():
-            for i in range(num_sides):
-                with gr.Column():
-                    model_selector = gr.Markdown(
-                        anony_names[i], elem_id="model_selector_md"
-                    )
-                    model_selectors.append(model_selector)
-        with gr.Row():
-            slow_warning = gr.Markdown("", elem_id="notice_markdown")
+        # Next Round button
+        with gr.Row(visible=False) as next_battle_row:
+            with gr.Column(scale=2):
+                gr.HTML("")
+            with gr.Column(scale=1):
+                clear_btn = gr.Button(value="🎯 Next Battle", interactive=False)
+            with gr.Column(scale=2):
+                gr.HTML("")
 
-    with gr.Row():
-        leftvote_btn = gr.Button(
-            value="👈  A is better", visible=False, interactive=False
-        )
-        tie_btn = gr.Button(value="🤝  Tie", visible=False, interactive=False)
-
-        rightvote_btn = gr.Button(
-            value="👉  B is better", visible=False, interactive=False
-        )
-
-    with gr.Row():
-        textbox = gr.Textbox(
-            show_label=False,
-            placeholder="👉 Enter your biomedical prompt and press ENTER",
-            elem_id="input_box",
-        )
-        send_btn = gr.Button(value="Send", variant="primary", scale=0)
-    with gr.Row():
-        with gr.Column(scale=2):
-            pass
-        with gr.Column(scale=1):
-            clear_btn = gr.Button(value="🎯 Next Battle", interactive=False)
-        with gr.Column(scale=2):
-            pass
-
-    # Register listeners
+    # Register listeners (keep all existing functionality)
     btn_list = [
         leftvote_btn,
         rightvote_btn,
@@ -286,28 +385,39 @@ def build_side_by_side_ui_anony():
     leftvote_btn.click(
         leftvote_last_response,
         states + model_selectors,
-        model_selectors + [textbox, leftvote_btn, rightvote_btn, tie_btn],
+        model_selectors + [textbox] + btn_list,
     )
     rightvote_btn.click(
         rightvote_last_response,
         states + model_selectors,
-        model_selectors + [textbox, leftvote_btn, rightvote_btn, tie_btn],
+        model_selectors + [textbox] + btn_list,
     )
     tie_btn.click(
         tievote_last_response,
         states + model_selectors,
-        model_selectors + [textbox, leftvote_btn, rightvote_btn, tie_btn],
+        model_selectors + [textbox] + btn_list,
     )
     clear_btn.click(
         clear_history,
         None,
-        states + chatbots + model_selectors + [textbox] + btn_list + [slow_warning],
+        states
+        + chatbots
+        + model_selectors
+        + [textbox]
+        + btn_list
+        + [slow_warning]
+        + [battle_interface, voting_row, next_battle_row, suggested_prompts_group],
     )
 
     textbox.submit(
         add_text,
         states + model_selectors + [textbox],
-        states + chatbots + [textbox] + btn_list + [slow_warning],
+        states
+        + chatbots
+        + [textbox]
+        + btn_list
+        + [slow_warning]
+        + [battle_interface, voting_row, next_battle_row, suggested_prompts_group],
     ).then(
         bot_response_multi,
         states,
@@ -318,15 +428,33 @@ def build_side_by_side_ui_anony():
         btn_list,
     )
 
-    send_btn.click(
-        add_text,
-        states + model_selectors + [textbox],
-        states + chatbots + [textbox] + btn_list,
-    ).then(
-        bot_response_multi,
-        states,
-        states + chatbots + btn_list,
-    ).then(flash_buttons, [], btn_list)
+    # Set up suggested prompt click handlers to automatically submit
+    for btn, prompt_text in prompt_buttons_data:
+
+        def create_handler(text):
+            def handler():
+                return text
+
+            return handler
+
+        btn.click(create_handler(prompt_text), outputs=[textbox]).then(
+            add_text,
+            states + model_selectors + [textbox],
+            states
+            + chatbots
+            + [textbox]
+            + btn_list
+            + [slow_warning]
+            + [battle_interface, voting_row, next_battle_row, suggested_prompts_group],
+        ).then(
+            bot_response_multi,
+            states,
+            states + chatbots + btn_list,
+        ).then(
+            flash_buttons,
+            [],
+            btn_list,
+        )
 
     return states + model_selectors
 
@@ -339,9 +467,9 @@ def build_battle_page(
     set_global_vars_anony(moderate)
 
     # Load models once and only for text-only models
-    models, all_models = get_model_list(
+    models, _ = get_model_list(
         register_api_endpoint_file,
-        False,
+        False,  # Disable multimodal models for now
     )
 
     # Initialize the demo (this sets up global variables in the original module)
