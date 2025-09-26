@@ -4,10 +4,10 @@
 		header Content-Type application/json
 	}
 
-	# Serve the API, stripping the /api prefix
-  handle_path /api/* {
-    reverse_proxy {env.API_HOST}:{env.API_PORT}
-  }
+	handle_path /api* {
+		rewrite * /api{uri}
+		reverse_proxy {env.API_GATEWAY_HOST}:{env.API_GATEWAY_PORT}
+	}
 
 	handle {
 		reverse_proxy {env.APP_HOST}:{env.APP_PORT}
