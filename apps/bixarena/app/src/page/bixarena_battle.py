@@ -333,10 +333,9 @@ def build_side_by_side_ui_anony():
     with gr.Row():
         textbox = gr.Textbox(
             show_label=False,
-            placeholder="Ask anything biomedical",
+            placeholder="Ask anything biomedical (press Enter to send)",
             elem_id="input_box",
         )
-        send_btn = gr.Button(value="Send", variant="primary", scale=0)
 
     # Voting button
     with gr.Row(visible=False) as voting_row:
@@ -410,21 +409,6 @@ def build_side_by_side_ui_anony():
         [],
         btn_list,
     )
-
-    send_btn.click(
-        add_text,
-        states + model_selectors + [textbox],
-        states
-        + chatbots
-        + [textbox]
-        + btn_list
-        + [slow_warning]
-        + [battle_interface, voting_row, next_battle_row, suggested_prompts_group],
-    ).then(
-        bot_response_multi,
-        states,
-        states + chatbots + btn_list,
-    ).then(flash_buttons, [], btn_list)
 
     # Set up suggested prompt click handlers to automatically submit
     for btn, prompt_text in prompt_buttons_data:
