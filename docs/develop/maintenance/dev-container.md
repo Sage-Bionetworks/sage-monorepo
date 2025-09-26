@@ -419,7 +419,17 @@ Instead of manually stepping into the test container, you can run the comprehens
         - `git worktree add ../sage-devcontainer-test <branch>`
         - Run all container tests from that directory
         - Remove when done: `git worktree remove ../sage-devcontainer-test`
-      2. Copy the repo (`rsync -a --exclude .git ./ ../sage-devcontainer-test-copy/`) and test there.
+      2. Copy the repo for testing (choose one):
+         - Tar stream (preserves permissions, excludes .git):
+           ```bash
+           mkdir -p ../sage-devcontainer-test-copy
+           tar --exclude .git -cf - . | tar -C ../sage-devcontainer-test-copy -xf -
+           ```
+         - Simple cp fallback (copies .git then removes it):
+           ```bash
+           cp -a . ../sage-devcontainer-test-copy
+           rm -rf ../sage-devcontainer-test-copy/.git
+           ```
       3. If testing in-place, plan cleanup:
         - Remove build caches: `rm -rf .nx/cache` (and any `dist/` or `build/` dirs)
         - Recreate dependencies fresh: `rm -rf node_modules && workspace-install`
@@ -579,6 +589,10 @@ After the activation PR is merged:
 
 ## Update Checklist
 
+!!! tip "Interactive Checklist"
+
+    The checkboxes below are clickable in rendered docs. Use them to track your progress while performing an update; you can clear them to rehearse or review the process later. Their state lives only in your browser and is not persisted or shared. Opening the page in another browser or device, or after clearing site data, resets all boxes.
+
 ### Pre-Update
 
 - [ ] Document current versions for rollback reference
@@ -612,6 +626,7 @@ After the activation PR is merged:
 - [ ] Remove prebuild container (see cleanup step 5)
 
 #### Headless Monorepo Runtime Testing
+
 Headless = dev container started via CLI (devcontainer up / exec) with the monorepo mounted, but VS Code not reopened inside that container yet. Editor extensions/settings activation is validated later under "VS Code Integration Testing".
 
 **Option A: Manual Testing (step-by-step)**
