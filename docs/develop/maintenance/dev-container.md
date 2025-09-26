@@ -510,16 +510,17 @@ Instead of manually stepping into the test container, you can run the comprehens
 
 ### 3.2 Integration Testing
 
-1. **Test in VS Code:**
+**Test in VS Code:**
 
-   - Open the project in VS Code
-   - Select "Rebuild and Reopen in Container"
-   - Verify all extensions load correctly
-   - Test basic development workflows
+- Open the project in VS Code
+- Select "Rebuild and Reopen in Container"
+- Verify all extensions load correctly
+- Test basic development workflows
 
-2. **Test CI/CD compatibility:**
-   - Ensure GitHub Actions continue to work
-   - Verify any external integrations still function
+**Test CI/CD compatibility:**
+
+- Ensure GitHub Actions continue to work
+- Verify any external integrations still function
 
 ### 3.4 Performance Testing
 
