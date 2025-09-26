@@ -46,12 +46,11 @@ models = []
 prompt_manager = get_prompt_manager()
 
 
-def create_suggested_prompts_ui():
-    """Create suggested prompts with ChatGPT-style cards"""
+def create_suggested_prompts():
+    """Create suggested prompts cards"""
     prompts = random.sample(prompt_manager.get_all_prompts(), 3)
 
-    # Create prompt buttons with custom styling
-    prompt_buttons = []
+    prompt_cards = []
 
     for i, prompt in enumerate(prompts):
         # Truncate very long prompts for display
@@ -59,15 +58,12 @@ def create_suggested_prompts_ui():
 
         btn = gr.Button(
             value=display_text,
-            variant="secondary",
-            size="lg",
-            scale=1,
             elem_classes=["suggested-prompt-card"],
         )
 
-        prompt_buttons.append((btn, prompt))  # Store button and full prompt text
+        prompt_cards.append((btn, prompt))
 
-    return prompt_buttons
+    return prompt_cards
 
 
 def load_demo_side_by_side_anony(models_, _):
@@ -256,7 +252,7 @@ def add_text(
 def build_side_by_side_ui_anony():
     # Page header with title and custom styles
     page_header_html = """
-    <div style="text-align: center;">
+    <div style="text-align: center; padding: 0px;">
         <h1 style="font-size: 3rem; margin-bottom: 0.5rem;">BixArena</h1>
         <p style="font-size: 1.2rem; color: #666; margin: 0;">Benchmarking LLMs for Biomedical Breakthroughs</p>
     </div>
@@ -270,25 +266,27 @@ def build_side_by_side_ui_anony():
         font-size: 14px;
         transition: all 0.2s ease;
         white-space: normal;
+        width: 80%;
+        margin: 0 auto;
     }
-    
+
     .gradio-container .suggested-prompt-card:hover {
         background: rgba(255, 255, 255, 0.08);
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
     
-    #component-63 .form {
-        border: none;
-        box-shadow: none;
-    }
-    
-    #input_box {
+    #input_box.prompt_input {
         background: var(--background-fill-primary);
     }
     
-    #input_box textarea {
+    #input_box.prompt_input textarea {
         border-radius: 12px;
+    }
+    
+    .form:has(.prompt_input) {
+        border: none;
+        box-shadow: none;
     }
     </style>
     """
@@ -297,65 +295,67 @@ def build_side_by_side_ui_anony():
     model_selectors = []
     chatbots = []
 
-    gr.HTML(page_header_html, elem_id="title_section")
+    # Page content
+    with gr.Column(elem_classes=["content-wrapper"]):
+        gr.HTML(page_header_html, elem_id="title_section")
+        # Suggested prompts
+        with gr.Column(
+            elem_id="suggested_prompts_section", visible=True
+        ) as suggested_prompts_group:
+            prompt_buttons_data = create_suggested_prompts()
 
-    # Suggested prompts
-    with gr.Column(
-        elem_id="suggested_prompts_section", visible=True
-    ) as suggested_prompts_group:
-        prompt_buttons_data = create_suggested_prompts_ui()
+        # Battle interface - will appear once a prompt is submitted
+        with gr.Group(elem_id="share-region-anony", visible=False) as battle_interface:
+            with gr.Row():
+                for i in range(num_sides):
+                    label = "Model A" if i == 0 else "Model B"
+                    with gr.Column():
+                        chatbot = gr.Chatbot(
+                            label=label,
+                            elem_id="chatbot",
+                            height=550,
+                            show_copy_button=True,
+                        )
+                        chatbots.append(chatbot)
 
-    # Battle interface - will appear once a prompt is submitted
-    with gr.Group(elem_id="share-region-anony", visible=False) as battle_interface:
+            with gr.Row():
+                for i in range(num_sides):
+                    with gr.Column():
+                        model_selector = gr.Markdown(
+                            anony_names[i], elem_id="model_selector_md"
+                        )
+                        model_selectors.append(model_selector)
+            with gr.Row():
+                slow_warning = gr.Markdown("", elem_id="notice_markdown")
+
+        # Prompt input - always visible
         with gr.Row():
-            for i in range(num_sides):
-                label = "Model A" if i == 0 else "Model B"
-                with gr.Column():
-                    chatbot = gr.Chatbot(
-                        label=label,
-                        elem_id="chatbot",
-                        height=550,
-                        show_copy_button=True,
-                    )
-                    chatbots.append(chatbot)
+            textbox = gr.Textbox(
+                show_label=False,
+                placeholder="Ask anything biomedical...",
+                elem_id="input_box",
+                elem_classes=["prompt_input"],
+            )
 
-        with gr.Row():
-            for i in range(num_sides):
-                with gr.Column():
-                    model_selector = gr.Markdown(
-                        anony_names[i], elem_id="model_selector_md"
-                    )
-                    model_selectors.append(model_selector)
-        with gr.Row():
-            slow_warning = gr.Markdown("", elem_id="notice_markdown")
+        # Voting button
+        with gr.Row(visible=False) as voting_row:
+            leftvote_btn = gr.Button(
+                value="👈  A is better", visible=False, interactive=False
+            )
+            tie_btn = gr.Button(value="🤝  Tie", visible=False, interactive=False)
 
-    # Prompt input - always visible
-    with gr.Row():
-        textbox = gr.Textbox(
-            show_label=False,
-            placeholder="Ask anything biomedical (press Enter to send)",
-            elem_id="input_box",
-        )
+            rightvote_btn = gr.Button(
+                value="👉  B is better", visible=False, interactive=False
+            )
 
-    # Voting button
-    with gr.Row(visible=False) as voting_row:
-        leftvote_btn = gr.Button(
-            value="👈  A is better", visible=False, interactive=False
-        )
-        tie_btn = gr.Button(value="🤝  Tie", visible=False, interactive=False)
-
-        rightvote_btn = gr.Button(
-            value="👉  B is better", visible=False, interactive=False
-        )
-
-    # Next Round button
-    with gr.Row(visible=False) as next_battle_row:
-        with gr.Column(scale=2):
-            gr.HTML("")
-        with gr.Column(scale=1):
-            clear_btn = gr.Button(value="🎯 Next Battle", interactive=False)
-        with gr.Column(scale=2):
-            gr.HTML("")
+        # Next Round button
+        with gr.Row(visible=False) as next_battle_row:
+            with gr.Column(scale=2):
+                gr.HTML("")
+            with gr.Column(scale=1):
+                clear_btn = gr.Button(value="🎯 Next Battle", interactive=False)
+            with gr.Column(scale=2):
+                gr.HTML("")
 
     # Register listeners (keep all existing functionality)
     btn_list = [
