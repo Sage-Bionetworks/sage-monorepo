@@ -47,5 +47,6 @@ export const HomeSearchInput: Story = {
     navigateToResult: mockNavigateToResult,
     getSearchResults: mockGetSearchResults,
     checkQueryForErrors: mockCheckQueryForErrors,
+    minimumSearchLength: 2,
   },
 };

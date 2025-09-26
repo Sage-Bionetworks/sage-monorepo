@@ -334,6 +334,28 @@ describe('SearchInputComponent', () => {
     expect(input).toHaveValue(specialCharQuery);
   });
 
+  it('should construct expected not valid search message for different minimumSearchLength values', async () => {
+    const { component } = await setup();
+    const { fixture } = component;
+    const instance = fixture.componentInstance;
+
+    const testCases = [
+      { minLength: 1, expectedMessage: 'Please enter at least one character.' },
+      { minLength: 2, expectedMessage: 'Please enter at least two characters.' },
+      { minLength: 3, expectedMessage: 'Please enter at least three characters.' },
+      { minLength: 4, expectedMessage: 'Please enter at least four characters.' },
+      { minLength: 5, expectedMessage: 'Please enter at least five characters.' },
+      { minLength: 6, expectedMessage: 'Please enter at least six characters.' },
+      { minLength: 7, expectedMessage: 'Please enter at least seven characters.' },
+      { minLength: 8, expectedMessage: 'Please enter at least eight characters.' },
+      { minLength: 9, expectedMessage: 'Please enter at least nine characters.' },
+    ];
+
+    for (const { minLength, expectedMessage } of testCases) {
+      expect(instance.getNotValidSearchMessage(minLength)).toBe(expectedMessage);
+    }
+  });
+
   it('should only display results text when subtext format function is not provided', async () => {
     const { user } = await setup();
     const input = getInput();
