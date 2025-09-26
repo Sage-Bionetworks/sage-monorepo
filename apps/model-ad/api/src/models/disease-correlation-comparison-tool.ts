@@ -1,7 +1,4 @@
-import {
-  CorrelationResult,
-  DiseaseCorrelation,
-} from '@sagebionetworks/model-ad/api-client-angular';
+import { CorrelationResult, DiseaseCorrelation } from '@sagebionetworks/model-ad/api-client';
 import { Schema, model } from 'mongoose';
 
 const CorrelationResultSchema = new Schema<CorrelationResult>({

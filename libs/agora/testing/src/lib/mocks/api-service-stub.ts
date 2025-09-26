@@ -1,13 +1,9 @@
 /* eslint-disable */
-
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-
-import { Distribution, Gene } from '@sagebionetworks/agora/api-client';
+import { Distribution, Gene, TeamsList } from '@sagebionetworks/agora/api-client';
 import { GCTGeneResponse, GenesResponse } from '@sagebionetworks/agora/models';
+import { Observable, of } from 'rxjs';
 import { gctGeneMock1, geneMock1, geneMock2, nominatedGeneMock1, teamsResponseMock } from './';
-
-import { TeamsList } from '@sagebionetworks/agora/api-client';
 
 @Injectable()
 export class ApiServiceStub {

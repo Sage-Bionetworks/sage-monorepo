@@ -6,7 +6,6 @@ import {
   Sex,
 } from '@sagebionetworks/model-ad/api-client';
 import { Schema, model } from 'mongoose';
-export { Model } from '@sagebionetworks/model-ad/api-client';
 
 const IndividualDataSchema = new Schema<IndividualData>({
   genotype: { type: String, required: true },
