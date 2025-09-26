@@ -165,7 +165,7 @@
     "babel-jest": "30.1.2",
     "browser-sync": "3.0.2",
     "canvas": "3.1.0",
-    "cdktf-cli": "0.16.1",
+    "cdktf-cli": "0.21.0",
     "colors": "1.4.0",
     "coveralls": "3.1.1",
     "eslint": "8.57.0",
