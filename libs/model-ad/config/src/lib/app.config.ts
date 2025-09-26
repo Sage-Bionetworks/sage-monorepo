@@ -7,6 +7,8 @@ export interface AppConfig {
   isPlatformServer: boolean;
   privacyPolicyUrl: string;
   ssrApiUrl: string;
+  // Git tag name used to fetch the corresponding commit SHA from GitHub API for site version display
+  // Example: "model-ad/v1.2.3" or "local" for development
   tagName: string;
   termsOfUseUrl: string;
   apiDocsUrl: string;
