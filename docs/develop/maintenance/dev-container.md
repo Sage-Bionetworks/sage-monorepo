@@ -333,7 +333,7 @@ When considering features from smaller communities, use this evaluation checklis
 
 - Coordinate with project Java version requirements
 - Update both primary and additional JDK versions
-- Ensure compatibility with Gradle/Maven configurations
+- Ensure compatibility with Gradle configurations
 
 #### Go
 
@@ -350,9 +350,11 @@ When considering features from smaller communities, use this evaluation checklis
 
 ### 3.1 Manual Dev Container Testing
 
-After updating both the Dockerfile and devcontainer.json, perform comprehensive testing using the devcontainer CLI:
+After updating both the Dockerfile and `devcontainer.json`, perform comprehensive testing using the devcontainer CLI.
 
 #### Build the Dev Container Image
+
+The dev container includes the devcontainer CLI, so you can build the new container from within an existing dev container.
 
 From the root workspace directory:
 
@@ -366,70 +368,54 @@ devcontainer build \
 
 - **Docker Version Issues**: If build fails, the Docker engine version in `devcontainer.json` might be too recent
 
-  - Try specifying an older Docker version in the `docker-in-docker` feature
-  - Example: Change from `"version": "28.3.2"` to `"version": "27.3.2"` or earlier
-  - Check [Docker releases](https://docs.docker.com/engine/release-notes/) for stable versions
-
-- **Build Inside Dev Container**: The dev container includes the devcontainer CLI, so you can build the new container from within an existing dev container
+      - Try specifying an older Docker version in the `docker-in-docker` feature
+      - Example: Change from `"version": "28.3.2"` to `"version": "27.3.2"` or earlier
+      - Check [Docker releases](https://docs.docker.com/engine/release-notes/) for stable versions
 
 #### Test Container Startup and Functionality
 
-1. **Start the dev container:**
+1. Start the dev container:
 
    ```bash
    devcontainer up --workspace-folder .github
    ```
 
-2. **Connect to the running container:**
+2. Connect to the running container:
 
    ```bash
    docker exec -it sage-monorepo-devcontainer-prebuild bash
    ```
 
-3. **Verify tool installations:**
+3. Verify tool installations, especially new and updates tools:
 
    ```bash
    # Test key tools are available and working
+   docker --version
+   go version
+   java --version
+   kubectl version --client
    node --version
    python --version
-   java --version
-   go version
-   kubectl version --client
-   uv --version
    trivy --version
+   uv --version
    ```
 
-4. **Test development workflows:**
+4. Exit the container:
 
    ```bash
-   # Test package managers
-   npm --version
-   pnpm --version
-
-   # Test build tools
-   gradle --version
-   mvn --version
-
-   # Test container tools
-   docker --version
-   kubectl version --client
-   ```
-
-5. **Exit the container:**
-
-   ```bash
-   # Use Ctrl+C to exit the container session
+   # Use Ctrl+C to exit the container session or enter:
    exit
    ```
 
-6. **Clean up the test container:**
+5. Clean up the test container:
+
    ```bash
    docker rm -f sage-monorepo-devcontainer-prebuild
    ```
 
 ### 3.2 Full Monorepo Integration Testing
 
-After basic functionality testing, perform comprehensive testing with the full monorepo codebase:
+After basic functionality testing, perform comprehensive testing with the full monorepo codebase mounted inside the dev container:
 
 #### Verify Local Image Availability
 
@@ -445,80 +431,62 @@ docker images | grep devcontainer
 
 Update the main dev container configuration file (`.devcontainer/devcontainer.json`) to reference the new local image if needed for testing.
 
-#### Deploy with Monorepo Codebase
+Example diff (do NOT commit this change; for local testing only):
 
-1. **Start dev container with monorepo mounted:**
-
-   ```bash
-   # From the root of the monorepo
-   devcontainer up --workspace-folder .
-   ```
-
-2. **Connect to the running container:**
-
-   ```bash
-   docker exec -it sage-monorepo-devcontainer bash
-   ```
-
-3. **Navigate to monorepo workspace:**
-
-   ```bash
-   cd /workspaces/sage-monorepo
-   ```
-
-4. **Source development environment:**
-
-   ```bash
-   . ./dev-env.sh
-   ```
-
-5. **Install workspace dependencies:**
-   ```bash
-   workspace-install
-   ```
-
-#### Comprehensive Build and Test
-
-Verify all projects can build and test successfully:
-
-```bash
-nx run-many --target create-config,build,test
+```diff
+ // .devcontainer/devcontainer.json
+ {
+    "name": "Sage Monorepo Dev Container",
+-  "image": "ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:sha-6269b9b3d863831c296f843edd84b2c7e1d4733d",
++  "image": "ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:local",
+    // ... rest of configuration
+ }
 ```
 
-**Expected outcomes:**
+After testing, revert the image line back to the published SHA tag before opening or updating any PRs.
 
-- All configuration generation tasks complete successfully
-- All builds complete without errors
-- All tests pass
-- No dependency resolution issues
-- No tool compatibility problems
-
-#### Clean Up Test Environment
-
-1. **Exit the container:**
-
-   ```bash
-   # Use Ctrl+C to exit the container session
-   exit
-   ```
-
-2. **Remove the test container:**
-   ```bash
-   docker rm -f sage-monorepo-devcontainer
-   ```
-
-### 3.2.1 Alternative: Streamlined Testing from Active Container
+#### Deploy with Monorepo Codebase
 
 Instead of manually stepping into the test container, you can run the comprehensive test from your current dev container:
 
-1. **Start dev container with monorepo:**
+!!! warning "Workspace Side Effects"
+
+    The steps below mount your *current* monorepo working copy into a throwaway dev container. Any
+    tasks you run (e.g. `workspace-install`, Nx builds, tests) will mutate files **on your host**, not
+    inside an isolated scratch layer. Typical side effects include updates to:
+
+    - `node_modules/`
+    - Nx / build caches (e.g. `.nx/cache`)
+    - Generated artifacts (dist / build folders)
+    - Potential lockfile adjustments if dependency resolution differs
+
+    These changes persist after you remove the test container. To avoid unexpected diffs or
+    performance regressions when you return to other feature work, choose one of the following
+    strategies:
+
+    **Safer Approaches**
+
+      1. Use a temporary clone or worktree:
+        - `git worktree add ../sage-devcontainer-test <branch>`
+        - Run all container tests from that directory
+        - Remove when done: `git worktree remove ../sage-devcontainer-test`
+      2. Copy the repo (`rsync -a --exclude .git ./ ../sage-devcontainer-test-copy/`) and test there.
+      3. If testing in-place, plan cleanup:
+        - Remove build caches: `rm -rf .nx/cache` (and any `dist/` or `build/` dirs)
+        - Recreate dependencies fresh: `rm -rf node_modules && workspace-install`
+        - Discard unintended changes: `git restore .` / `git clean -fdX` (review before running)
+
+    If you notice unexplained build speed regressions after testing, clear caches as above before
+    investigating further.
+
+1. Start dev container with monorepo:
 
    ```bash
    # From the root of the monorepo
    devcontainer up --workspace-folder .
    ```
 
-2. **Execute comprehensive test directly:**
+2. Execute comprehensive test directly:
 
    ```bash
    devcontainer exec --workspace-folder . bash -c ". ./dev-env.sh \
@@ -526,7 +494,8 @@ Instead of manually stepping into the test container, you can run the comprehens
      && nx run-many --target=create-config,build,test --skip-nx-cache"
    ```
 
-3. **Clean up test container:**
+3. Clean up test container:
+
    ```bash
    # After the command completes, remove the test container
    docker rm -f sage-monorepo-devcontainer
@@ -538,22 +507,6 @@ Instead of manually stepping into the test container, you can run the comprehens
 - **Automated**: Single command runs the entire test suite
 - **Clean**: Remains in your active development environment throughout
 - **Efficient**: Uses `--skip-nx-cache` to ensure fresh builds and tests
-
-### 3.3 Alternative Docker Build Testing
-
-For quick Dockerfile-only testing:
-
-1. **Build the container locally:**
-
-   ```bash
-   cd .github/.devcontainer
-   docker build -t sage-monorepo-dev-test .
-   ```
-
-2. **Test container startup:**
-   ```bash
-   docker run -it --rm sage-monorepo-dev-test bash
-   ```
 
 ### 3.2 Integration Testing
 
