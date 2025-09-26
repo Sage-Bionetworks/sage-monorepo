@@ -101,7 +101,7 @@
     "@chromatic-com/storybook": "4.1.1",
     "@fortawesome/angular-fontawesome": "0.15.0",
     "@fortawesome/free-solid-svg-icons": "6.6.0",
-    "@modelcontextprotocol/inspector": "0.14.1",
+    "@modelcontextprotocol/inspector": "0.16.8",
     "@nx-tools/container-metadata": "6.8.0",
     "@nx-tools/nx-container": "6.8.0",
     "@nx/angular": "21.5.3",
