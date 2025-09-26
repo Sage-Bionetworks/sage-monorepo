@@ -51,33 +51,28 @@ export class VersionService {
     }
   }
 
-  getSiteVersion(
+  async getSiteVersion(
     config: VersionConfig,
     onSuccess: (siteVersion: string) => void,
     onError?: (error: any) => void,
-  ): void {
+  ): Promise<void> {
     if (this.platformService.isBrowser) {
-      this.gitHubService
-        .getCommitSHA(config.tagName)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          next: (sha) => {
-            const siteVersion = this.formatSiteVersion(sha, config);
-            onSuccess(siteVersion);
-          },
-          error: (error) => {
-            console.error('Error loading commit SHA:', error);
-            const fallbackVersion = this.formatSiteVersion('', config);
-            if (fallbackVersion) {
-              onSuccess(fallbackVersion);
-            } else {
-              console.error('Error loading appVersion');
-              if (onError) {
-                onError(error);
-              }
-            }
-          },
-        });
+      try {
+        const sha = await this.gitHubService.getCommitSHA(config.tagName);
+        const siteVersion = this.formatSiteVersion(sha, config);
+        onSuccess(siteVersion);
+      } catch (error) {
+        console.error('Error loading commit SHA:', error);
+        const fallbackVersion = this.formatSiteVersion('', config);
+        if (fallbackVersion) {
+          onSuccess(fallbackVersion);
+        } else {
+          console.error('Error loading appVersion');
+          if (onError) {
+            onError(error);
+          }
+        }
+      }
     }
   }
 
