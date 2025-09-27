@@ -112,7 +112,7 @@ jobs:
           This is an automated update triggered by changes detected in the Synapse OpenAPI specification.
 
           Updated components:
-          - libs/synapse/api-description/openapi/openapi.json (source specification)
+          - libs/synapse/api-description/src/openapi.json (source specification)
           - libs/synapse/api-description/openapi/openapi.yaml (bundled specification)
           - Regenerated synapse-* client libraries
 
