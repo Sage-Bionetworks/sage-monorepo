@@ -2,8 +2,7 @@ package org.sagebionetworks.openchallenges.challenge.service.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sagebionetworks.openchallenges.challenge.service.configuration.OAuth2Properties;
-import org.springframework.beans.factory.annotation.Value;
+import org.sagebionetworks.openchallenges.challenge.service.configuration.AppProperties;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -27,10 +26,7 @@ import java.util.Base64;
 public class TokenExchangeService {
 
   private final RestClient restClient;
-  private final OAuth2Properties oauth2Properties;
-
-  @Value("${openchallenges-challenge-service.auth-service.base-url}")
-  private String authServiceUrl;
+  private final AppProperties appProperties;
 
   /**
    * Exchange the current user's JWT token for a new token scoped for the target service.
@@ -50,11 +46,14 @@ public class TokenExchangeService {
     );
 
     try {
+      String authServiceUrl = appProperties.authService().baseUrl();
+      var oauthClient = appProperties.oauth2().client();
+
       TokenResponse response = restClient
         .post()
         .uri(authServiceUrl + "/oauth2/token")
         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-        .header("Authorization", "Basic " + createBasicAuthHeader(oauth2Properties.getClientId(), oauth2Properties.getClientSecret()))
+        .header("Authorization", "Basic " + createBasicAuthHeader(oauthClient.clientId(), oauthClient.clientSecret()))
         .body(requestBody)
         .retrieve()
         .body(TokenResponse.class);
@@ -78,6 +77,7 @@ public class TokenExchangeService {
   /**
    * Get the current user's JWT token from the security context.
    */
+  @SuppressWarnings("unused")
   private String getCurrentUserToken() {
     var authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication != null && authentication.getPrincipal() instanceof Jwt jwt) {
