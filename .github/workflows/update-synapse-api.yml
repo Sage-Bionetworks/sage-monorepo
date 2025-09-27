@@ -183,6 +183,7 @@ jobs:
 
             echo "✅ Pull request created successfully"
             echo "🔗 View at: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/pull/$(gh pr view --json number --jq .number)"
+          '
 
       - name: Summary
         if: always()
