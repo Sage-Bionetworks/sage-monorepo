@@ -1,0 +1,10 @@
+app:
+  welcome-message: 'Welcome to BixArena API Gateway (test)!'
+
+spring:
+  application:
+    name: bixarena-api-gateway-test
+
+logging:
+  level:
+    org.sagebionetworks.bixarena: DEBUG

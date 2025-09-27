@@ -12,9 +12,10 @@ services:
     ports:
       - '8111:8111'
     depends_on:
-      bixarena-api:
+      bixarena-api-gateway:
         condition: service_started
     #   bixarena-app:
     #     condition: service_started
     extra_hosts:
+      - 'bixarena-api-gateway:host-gateway'
       - 'bixarena-app:host-gateway'

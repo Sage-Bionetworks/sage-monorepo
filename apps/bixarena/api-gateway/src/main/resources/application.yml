@@ -1,0 +1,88 @@
+app:
+  welcome-message: 'Welcome to BixArena API Gateway!'
+
+server:
+  port: 8113
+
+spring:
+  application:
+    name: bixarena-api-gateway
+  cloud:
+    gateway:
+      default-filters:
+        # SECURITY: Strip ALL potentially spoofed identity headers from incoming requests
+        # These headers are considered "trusted" and may ONLY be set by the gateway after authentication
+
+        # Standard authentication headers
+        - RemoveRequestHeader=X-Authenticated-User
+        - RemoveRequestHeader=X-Authenticated-User-Id
+        - RemoveRequestHeader=X-Authenticated-Roles
+        - RemoveRequestHeader=X-Scopes
+
+        # Additional standard security headers
+        - RemoveRequestHeader=X-Subject
+        - RemoveRequestHeader=X-Principal
+        - RemoveRequestHeader=X-User-Email
+        - RemoveRequestHeader=X-User-Groups
+
+        # OAuth2/JWT related headers that could be spoofed
+        - RemoveRequestHeader=X-Token-Subject
+        - RemoveRequestHeader=X-Token-Issuer
+        - RemoveRequestHeader=X-JWT-Claims
+
+        # Service-to-service authentication headers
+        - RemoveRequestHeader=X-Service-Token
+        - RemoveRequestHeader=X-Internal-Auth
+        - RemoveRequestHeader=X-Gateway-Auth
+      server:
+        webflux:
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedorigins: '*'
+                allowedmethods:
+                  - GET
+                  - POST
+                  - DELETE
+                  - PUT
+                allowedheaders: '*'
+                maxAge: 3600
+          routes:
+            - id: bixarena-api
+              uri: http://bixarena-api:8112
+              predicates:
+                - Path=/api/v1/leaderboards/**
+              filters:
+                - StripPrefix=1
+  profiles:
+    active: dev
+
+logging:
+  level:
+    org.sagebionetworks.bixarena.api.gateway: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.cloud.gateway: DEBUG
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: health, prometheus, refresh
+      path-mapping:
+        prometheus: metrics
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    health:
+      probes:
+        enabled: true
+    prometheus:
+      cache.time-to-live: 1ms
+
+info:
+  application:
+    name: ${spring.application.name}

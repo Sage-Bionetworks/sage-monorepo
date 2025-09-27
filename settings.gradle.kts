@@ -9,6 +9,7 @@ include(":amp-als-dataset-service")
 include(":amp-als-user-service")
 
 // Include the BixArena projects as submodules
+include(":bixarena-api-gateway")
 include(":bixarena-api")
 
 // Include the OpenChallenges projects as submodules
@@ -29,6 +30,7 @@ project(":agora-api-next").projectDir = file("apps/agora/api-next")
 project(":amp-als-app-config-data").projectDir = file("libs/amp-als/app-config-data")
 project(":amp-als-dataset-service").projectDir = file("apps/amp-als/dataset-service")
 project(":amp-als-user-service").projectDir = file("apps/amp-als/user-service")
+project(":bixarena-api-gateway").projectDir = file("apps/bixarena/api-gateway")
 project(":bixarena-api").projectDir = file("apps/bixarena/api")
 project(":openchallenges-api-client-java").projectDir = file("libs/openchallenges/api-client-java")
 project(":openchallenges-api-gateway").projectDir = file("apps/openchallenges/api-gateway")

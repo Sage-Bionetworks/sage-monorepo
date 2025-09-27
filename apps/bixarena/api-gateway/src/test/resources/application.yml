@@ -1,0 +1,16 @@
+app:
+  welcome-message: 'Welcome to BixArena API Gateway!'
+
+server:
+  port: 8113
+
+spring:
+  application:
+    name: bixarena-api-gateway
+  profiles:
+    active: test
+  cloud:
+    config:
+      enabled: false
+    discovery:
+      enabled: false

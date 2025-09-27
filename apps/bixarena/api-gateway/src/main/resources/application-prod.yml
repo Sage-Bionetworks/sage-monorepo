@@ -1,0 +1,5 @@
+# Production profile configuration
+logging:
+  level:
+    org.sagebionetworks.bixarena: WARN
+    org.springframework.security: WARN
