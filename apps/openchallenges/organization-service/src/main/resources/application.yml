@@ -1,4 +1,4 @@
-openchallenges-organization-service:
+app:
   welcome-message: 'Welcome to the organization service.'
   auth-service:
     base-url: http://openchallenges-auth-service:8087

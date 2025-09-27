@@ -1,6 +1,6 @@
 package org.sagebionetworks.openchallenges.organization.service.configuration;
 
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -25,10 +25,10 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
 public class SecurityConfiguration {
 
-  @Value("${openchallenges.auth.jwk-set-uri:http://openchallenges-auth-service:8087/oauth2/jwks}")
-  private String jwkSetUri;
+  private final AppProperties appProperties;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -63,16 +63,16 @@ public class SecurityConfiguration {
           .authenticated()
       )
       .oauth2ResourceServer(oauth2 ->
-        oauth2.jwt(jwt ->
-          jwt.decoder(jwtDecoder()).jwtAuthenticationConverter(jwtAuthenticationConverter())
-        )
+        oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
       )
       .build();
   }
 
   @Bean
   public JwtDecoder jwtDecoder() {
-    // Create JWT decoder with audience validation for organization service
+    // Build JWK Set URI from auth service base URL
+    String base = appProperties.authService().baseUrl();
+    String jwkSetUri = base.endsWith("/") ? base + "oauth2/jwks" : base + "/oauth2/jwks";
     NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
 
     // Add audience validation to ensure JWTs are intended for this service

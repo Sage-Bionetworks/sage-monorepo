@@ -9,11 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 /**
  * Feign client for communicating with the OpenChallenges Auth Service
  */
-@FeignClient(
-  name = "auth-service",
-  url = "${openchallenges-organization-service.auth-service.base-url}",
-  path = "/v1"
-)
+@FeignClient(name = "auth-service", url = "${app.auth-service.base-url}", path = "/v1")
 public interface AuthServiceClient {
   /**
    * Validates an API key with the auth service

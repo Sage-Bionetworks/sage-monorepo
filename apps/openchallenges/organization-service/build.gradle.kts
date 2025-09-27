@@ -30,7 +30,6 @@ dependencies {
   implementation(libs.spring.data.commons)
   implementation(libs.springdoc.openapi.ui)
   implementation(platform(libs.spring.boot.dependencies))
-  implementation(project(":openchallenges-app-config-data"))
   implementation(project(":sagebionetworks-util"))
   runtimeOnly(libs.flyway.database.postgresql)
   runtimeOnly(libs.postgresql)

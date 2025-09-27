@@ -9,13 +9,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.sagebionetworks.openchallenges.app.config.data.ChallengeServiceConfigData;
+import org.sagebionetworks.openchallenges.challenge.service.configuration.AppProperties;
 
 @ExtendWith(MockitoExtension.class)
 class ChallengeServiceApplicationTest {
 
   @Mock
-  private ChallengeServiceConfigData challengeServiceConfigData;
+  private AppProperties appProperties;
 
   @InjectMocks
   private ChallengeServiceApplication application;
@@ -25,12 +25,12 @@ class ChallengeServiceApplicationTest {
   void shouldLogWelcomeMessageWhenApplicationRuns() throws Exception {
     // given
     String expectedMessage = "Welcome to the challenge service.";
-    when(challengeServiceConfigData.getWelcomeMessage()).thenReturn(expectedMessage);
+    when(appProperties.welcomeMessage()).thenReturn(expectedMessage);
 
     // when
     application.run();
 
     // then
-    verify(challengeServiceConfigData).getWelcomeMessage();
+    verify(appProperties).welcomeMessage();
   }
 }

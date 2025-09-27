@@ -2,11 +2,11 @@ package org.sagebionetworks.openchallenges.challenge.service.client;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.openchallenges.challenge.service.configuration.AppProperties;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.organization.ChallengeParticipationCreateRequestDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.organization.ChallengeParticipationDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.organization.OrganizationDto;
 import org.sagebionetworks.openchallenges.challenge.service.service.TokenExchangeService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
@@ -25,9 +25,7 @@ public class OrganizationServiceClient {
 
   private final RestClient restClient;
   private final TokenExchangeService tokenExchangeService;
-
-  @Value("${openchallenges-challenge-service.organization-service.base-url}")
-  private String organizationServiceBaseUrl;
+  private final AppProperties appProperties;
 
   private static final String ORGANIZATION_SERVICE_AUDIENCE = "organization-service";
 
@@ -47,7 +45,7 @@ public class OrganizationServiceClient {
     try {
       return restClient
         .get()
-        .uri(organizationServiceBaseUrl + "/v1/organizations/{org}", orgId)
+        .uri(appProperties.organizationService().baseUrl() + "/v1/organizations/{org}", orgId)
         .header("Authorization", "Bearer " + token)
         .retrieve()
         .body(OrganizationDto.class);
@@ -77,7 +75,10 @@ public class OrganizationServiceClient {
     try {
       return restClient
         .post()
-        .uri(organizationServiceBaseUrl + "/v1/organizations/{org}/participations", org)
+        .uri(
+          appProperties.organizationService().baseUrl() + "/v1/organizations/{org}/participations",
+          org
+        )
         .header("Authorization", "Bearer " + token)
         .contentType(MediaType.APPLICATION_JSON)
         .body(request)
@@ -111,7 +112,7 @@ public class OrganizationServiceClient {
       restClient
         .delete()
         .uri(
-          organizationServiceBaseUrl +
+          appProperties.organizationService().baseUrl() +
           "/v1/organizations/{org}/participations/{challengeId}/role/{role}",
           org,
           challengeId,
