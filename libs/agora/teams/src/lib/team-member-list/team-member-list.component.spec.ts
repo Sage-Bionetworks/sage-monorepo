@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Team, TeamMember } from '@sagebionetworks/agora/api-client-angular';
+import { Team, TeamMember } from '@sagebionetworks/agora/api-client';
 import { TeamMemberListComponent } from './team-member-list.component';
 import { provideHttpClient } from '@angular/common/http';
 

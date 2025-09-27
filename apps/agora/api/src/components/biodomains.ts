@@ -4,7 +4,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { cache, setHeaders } from '../helpers';
 import { AllBioDomainsCollection, BioDomainsCollection } from '../models';
-import { BioDomains, BioDomainInfo } from '@sagebionetworks/agora/api-client-angular';
+import { BioDomains, BioDomainInfo } from '@sagebionetworks/agora/api-client';
 
 // -------------------------------------------------------------------------- //
 // Functions

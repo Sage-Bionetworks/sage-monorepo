@@ -7,7 +7,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 // Internal
 // -------------------------------------------------------------------------- //
 import { provideHttpClient } from '@angular/common/http';
-import { GeneService } from '@sagebionetworks/agora/api-client-angular';
+import { GeneService } from '@sagebionetworks/agora/api-client';
 import { HelperService, SvgIconService } from '@sagebionetworks/agora/services';
 import { SvgIconServiceStub } from '@sagebionetworks/agora/testing';
 import { GeneEvidenceMetabolomicsComponent } from './gene-evidence-metabolomics.component';

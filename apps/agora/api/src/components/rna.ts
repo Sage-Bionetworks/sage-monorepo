@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { RnaDifferentialExpression } from '@sagebionetworks/agora/api-client-angular';
+import { RnaDifferentialExpression } from '@sagebionetworks/agora/api-client';
 import { cache } from '../helpers';
 import { RnaDifferentialExpressionCollection } from '../models';
 // -------------------------------------------------------------------------- //

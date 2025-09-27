@@ -17,7 +17,7 @@ import {
   Distribution,
   OverallScoresDistribution,
   ProteomicsDistribution,
-} from '@sagebionetworks/agora/api-client-angular';
+} from '@sagebionetworks/agora/api-client';
 
 // -------------------------------------------------------------------------- //
 // Functions

@@ -1,4 +1,4 @@
-import { Organization } from '@sagebionetworks/openchallenges/api-client-angular';
+import { Organization } from '@sagebionetworks/openchallenges/api-client';
 import { SeoData } from '@sagebionetworks/shared/util';
 import { getDefaultSeoData, optimizeImageUrlForSeo } from '@sagebionetworks/openchallenges/util';
 

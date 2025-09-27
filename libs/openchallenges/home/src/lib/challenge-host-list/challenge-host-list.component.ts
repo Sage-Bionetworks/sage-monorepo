@@ -13,7 +13,7 @@ import {
   Image,
   OrganizationCategory,
   OrganizationSort,
-} from '@sagebionetworks/openchallenges/api-client-angular';
+} from '@sagebionetworks/openchallenges/api-client';
 import { OrganizationCard, OrganizationCardComponent } from '@sagebionetworks/openchallenges/ui';
 import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
 import { forkJoin, iif, Observable, of, throwError } from 'rxjs';

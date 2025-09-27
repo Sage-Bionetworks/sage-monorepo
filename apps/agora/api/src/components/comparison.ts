@@ -12,7 +12,7 @@ import {
   RnaDifferentialExpression,
   TargetNomination,
   Team,
-} from '@sagebionetworks/agora/api-client-angular';
+} from '@sagebionetworks/agora/api-client';
 import { Scores } from '@sagebionetworks/agora/models';
 import { altCache, setHeaders } from '../helpers';
 import {

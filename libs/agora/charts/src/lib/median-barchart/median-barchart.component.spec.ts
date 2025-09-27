@@ -6,7 +6,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { MedianExpression } from '@sagebionetworks/agora/api-client-angular';
+import { MedianExpression } from '@sagebionetworks/agora/api-client';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { geneMock1 } from '@sagebionetworks/agora/testing';
 import { MedianBarChartComponent } from './median-barchart.component';

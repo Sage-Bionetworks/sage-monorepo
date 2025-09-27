@@ -9,7 +9,7 @@ import {
   GeneService,
   SimilarGenesNetworkLink,
   SimilarGenesNetworkNode,
-} from '@sagebionetworks/agora/api-client-angular';
+} from '@sagebionetworks/agora/api-client';
 import { NetworkChartComponent } from '@sagebionetworks/agora/charts';
 import {
   NetworkChartData,

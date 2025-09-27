@@ -1,4 +1,4 @@
-import { DataVersion } from '@sagebionetworks/model-ad/api-client-angular';
+import { DataVersion } from '@sagebionetworks/model-ad/api-client';
 import { NextFunction, Request, Response } from 'express';
 import { cache, setHeaders } from '../helpers';
 import { DataVersionCollection } from '../models';

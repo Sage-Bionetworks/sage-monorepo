@@ -1,4 +1,4 @@
-import { SearchResult } from '@sagebionetworks/model-ad/api-client-angular';
+import { SearchResult } from '@sagebionetworks/model-ad/api-client';
 import { NextFunction, Request, Response } from 'express';
 import { cache, setHeaders } from '../helpers';
 import { ModelCollection } from '../models';

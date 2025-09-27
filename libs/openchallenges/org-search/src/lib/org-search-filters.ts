@@ -2,7 +2,7 @@ import {
   ChallengeParticipationRole,
   OrganizationCategory,
   OrganizationSort,
-} from '@sagebionetworks/openchallenges/api-client-angular';
+} from '@sagebionetworks/openchallenges/api-client';
 import { Filter } from '@sagebionetworks/openchallenges/ui';
 
 export const challengeParticipationRolesFilter: Filter[] = [

@@ -4,9 +4,8 @@ import {
   Model,
   ModelData,
   Sex,
-} from '@sagebionetworks/model-ad/api-client-angular';
+} from '@sagebionetworks/model-ad/api-client';
 import { Schema, model } from 'mongoose';
-export { Model } from '@sagebionetworks/model-ad/api-client-angular';
 
 const IndividualDataSchema = new Schema<IndividualData>({
   genotype: { type: String, required: true },

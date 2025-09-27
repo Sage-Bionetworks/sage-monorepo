@@ -13,8 +13,7 @@ import {
 } from '@angular/core';
 import * as d3 from 'd3';
 
-
-import { OverallScoresDistribution } from '@sagebionetworks/agora/api-client-angular';
+import { OverallScoresDistribution } from '@sagebionetworks/agora/api-client';
 import { ScoreData } from '@sagebionetworks/agora/models';
 import { HelperService } from '@sagebionetworks/agora/services';
 

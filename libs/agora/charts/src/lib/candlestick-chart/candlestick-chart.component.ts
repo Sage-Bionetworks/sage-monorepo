@@ -2,7 +2,7 @@
 import { Component, inject, Input } from '@angular/core';
 import * as d3 from 'd3';
 
-import { Gene } from '@sagebionetworks/agora/api-client-angular';
+import { Gene } from '@sagebionetworks/agora/api-client';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { BaseChartComponent } from '../base-chart/base-chart.component';
 

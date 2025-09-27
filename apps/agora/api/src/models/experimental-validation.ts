@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { ExperimentalValidation } from '@sagebionetworks/agora/api-client-angular';
+import { ExperimentalValidation } from '@sagebionetworks/agora/api-client';
 
 const ExperimentalValidationSchema = new Schema<ExperimentalValidation>(
   {

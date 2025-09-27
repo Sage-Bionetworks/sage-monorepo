@@ -7,7 +7,7 @@ import {
   ChallengeService,
   ChallengeSearchQuery,
   ChallengeSort,
-} from '@sagebionetworks/openchallenges/api-client-angular';
+} from '@sagebionetworks/openchallenges/api-client';
 import { ChallengeCardComponent } from '@sagebionetworks/openchallenges/ui';
 import { RouterModule } from '@angular/router';
 

@@ -1,7 +1,7 @@
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { Metabolomics } from '@sagebionetworks/agora/api-client-angular';
+import { Metabolomics } from '@sagebionetworks/agora/api-client';
 import { cache } from '../helpers';
 import { MetabolomicsCollection } from '../models';
 

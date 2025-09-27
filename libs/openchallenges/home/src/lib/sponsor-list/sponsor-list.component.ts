@@ -1,10 +1,6 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import {
-  Image,
-  ImageHeight,
-  ImageService,
-} from '@sagebionetworks/openchallenges/api-client-angular';
+import { Image, ImageHeight, ImageService } from '@sagebionetworks/openchallenges/api-client';
 import { Observable } from 'rxjs';
 
 @Component({

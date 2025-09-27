@@ -7,7 +7,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 // Internal
 // -------------------------------------------------------------------------- //
 import { provideHttpClient } from '@angular/common/http';
-import { TeamService } from '@sagebionetworks/agora/api-client-angular';
+import { TeamService } from '@sagebionetworks/agora/api-client';
 import { geneMock1, teamsResponseMock } from '@sagebionetworks/agora/testing';
 import { of } from 'rxjs';
 import { GeneNominationsComponent } from './gene-nominations.component';

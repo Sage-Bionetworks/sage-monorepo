@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { cache, setHeaders } from '../helpers';
 import { ComparisonToolConfigCollection } from '../models';
-import { ComparisonToolConfig } from '@sagebionetworks/model-ad/api-client-angular';
+import { ComparisonToolConfig } from '@sagebionetworks/model-ad/api-client';
 
 export async function getComparisonToolConfig(page: string) {
   const cacheKey = 'comparisonToolConfig-' + page;

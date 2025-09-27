@@ -1,5 +1,5 @@
 import { Component, inject, Input } from '@angular/core';
-import { Team, TeamMember, TeamService } from '@sagebionetworks/agora/api-client-angular';
+import { Team, TeamMember, TeamService } from '@sagebionetworks/agora/api-client';
 import { map, Observable } from 'rxjs';
 
 @Component({

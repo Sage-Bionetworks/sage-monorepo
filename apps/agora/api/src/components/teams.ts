@@ -9,7 +9,7 @@ import { Request, Response, NextFunction } from 'express';
 // -------------------------------------------------------------------------- //
 import { setHeaders, cache } from '../helpers';
 import { TeamCollection } from '../models';
-import { Team } from '@sagebionetworks/agora/api-client-angular';
+import { Team } from '@sagebionetworks/agora/api-client';
 
 // -------------------------------------------------------------------------- //
 // GridFs

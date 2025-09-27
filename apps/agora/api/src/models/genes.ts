@@ -12,8 +12,8 @@ import {
   TargetNomination,
   Druggability,
   EnsemblInfo,
-} from '@sagebionetworks/agora/api-client-angular';
-export { Gene } from '@sagebionetworks/agora/api-client-angular';
+} from '@sagebionetworks/agora/api-client';
+export { Gene } from '@sagebionetworks/agora/api-client';
 
 // -------------------------------------------------------------------------- //
 // Schemas

@@ -1,4 +1,4 @@
-import { DiseaseCorrelation } from '@sagebionetworks/model-ad/api-client-angular';
+import { DiseaseCorrelation } from '@sagebionetworks/model-ad/api-client';
 import { NextFunction, Request, Response } from 'express';
 import { cache, setHeaders } from '../helpers';
 import { DiseaseCorrelationCollection } from '../models';

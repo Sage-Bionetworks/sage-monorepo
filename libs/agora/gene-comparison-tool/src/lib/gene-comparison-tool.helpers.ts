@@ -2,7 +2,7 @@ import {
   GCTGene,
   GCTGeneTissue,
   OverallScoresDistribution,
-} from '@sagebionetworks/agora/api-client-angular';
+} from '@sagebionetworks/agora/api-client';
 import { GCTScorePanelData } from '@sagebionetworks/agora/models';
 
 export const filterOptionLabel = function (value: string | number | string[] | number[]) {

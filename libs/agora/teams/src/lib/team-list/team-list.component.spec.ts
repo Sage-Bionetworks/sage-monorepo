@@ -1,5 +1,5 @@
 import { TeamListComponent } from './team-list.component';
-import { Team } from '@sagebionetworks/agora/api-client-angular';
+import { Team } from '@sagebionetworks/agora/api-client';
 
 describe('TeamListComponent', () => {
   let component: TeamListComponent;

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Challenge } from '@sagebionetworks/openchallenges/api-client-angular';
+import { Challenge } from '@sagebionetworks/openchallenges/api-client';
 import {
   MOCK_PERSONS,
   MOCK_ORGANIZATION_CARDS,

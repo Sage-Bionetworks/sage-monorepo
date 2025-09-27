@@ -1,6 +1,6 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { DataVersionService } from '@sagebionetworks/agora/api-client-angular';
+import { DataVersionService } from '@sagebionetworks/agora/api-client';
 import { AGORA_LOADING_ICON_COLORS, ConfigService } from '@sagebionetworks/agora/config';
 import { HeaderComponent } from '@sagebionetworks/agora/ui';
 import { footerLinks } from '@sagebionetworks/agora/util';

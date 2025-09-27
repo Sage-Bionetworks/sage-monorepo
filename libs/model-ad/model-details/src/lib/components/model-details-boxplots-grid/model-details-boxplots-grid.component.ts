@@ -1,6 +1,6 @@
 import { Component, computed, input } from '@angular/core';
 import { LegendDirective } from '@sagebionetworks/explorers/charts-angular';
-import { ModelData, Sex } from '@sagebionetworks/model-ad/api-client-angular';
+import { ModelData, Sex } from '@sagebionetworks/model-ad/api-client';
 import { MODEL_DETAILS_BOXPLOT_POINT_STYLES } from '@sagebionetworks/model-ad/config';
 import { ModelDetailsBoxplotComponent } from '../model-details-boxplot/model-details-boxplot.component';
 

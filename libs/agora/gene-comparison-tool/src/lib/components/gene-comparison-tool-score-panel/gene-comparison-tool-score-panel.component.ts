@@ -6,7 +6,7 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { OverallScoresDistribution } from '@sagebionetworks/agora/api-client-angular';
+import { OverallScoresDistribution } from '@sagebionetworks/agora/api-client';
 import { ScoreBarChartComponent } from '@sagebionetworks/agora/charts';
 import { GCTScorePanelData } from '@sagebionetworks/agora/models';
 import { WikiComponent } from '@sagebionetworks/agora/shared';

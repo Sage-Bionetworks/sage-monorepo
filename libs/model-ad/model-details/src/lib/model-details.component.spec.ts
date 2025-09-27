@@ -2,7 +2,7 @@ import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { PlatformService } from '@sagebionetworks/explorers/services';
 import { provideLoadingIconColors } from '@sagebionetworks/explorers/testing';
 import { LoadingIconComponent } from '@sagebionetworks/explorers/util';
-import { ModelService } from '@sagebionetworks/model-ad/api-client-angular';
+import { ModelService } from '@sagebionetworks/model-ad/api-client';
 import { MODEL_AD_LOADING_ICON_COLORS } from '@sagebionetworks/model-ad/config';
 import { modelMock } from '@sagebionetworks/model-ad/testing';
 import { render, screen } from '@testing-library/angular';

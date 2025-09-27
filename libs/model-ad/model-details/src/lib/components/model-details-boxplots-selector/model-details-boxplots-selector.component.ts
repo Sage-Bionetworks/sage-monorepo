@@ -26,7 +26,7 @@ import {
   ModalLinkComponent,
   TooltipButtonComponent,
 } from '@sagebionetworks/explorers/util';
-import { ModelData, Sex } from '@sagebionetworks/model-ad/api-client-angular';
+import { ModelData, Sex } from '@sagebionetworks/model-ad/api-client';
 import { SelectModule } from 'primeng/select';
 import { ModelDetailsBoxplotsGridComponent } from '../model-details-boxplots-grid/model-details-boxplots-grid.component';
 

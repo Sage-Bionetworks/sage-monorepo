@@ -2,8 +2,4 @@
 // Internal
 // -------------------------------------------------------------------------- //
 
-export {
-  GCTGene,
-  GCTGeneTissue,
-  GCTGeneNominations,
-} from '@sagebionetworks/agora/api-client-angular';
+export { GCTGene, GCTGeneTissue, GCTGeneNominations } from '@sagebionetworks/agora/api-client';

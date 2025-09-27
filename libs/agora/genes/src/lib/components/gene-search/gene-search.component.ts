@@ -15,7 +15,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faMagnifyingGlass, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { Gene, GeneService, GenesList } from '@sagebionetworks/agora/api-client-angular';
+import { Gene, GeneService, GenesList } from '@sagebionetworks/agora/api-client';
 import {
   catchError,
   debounceTime,

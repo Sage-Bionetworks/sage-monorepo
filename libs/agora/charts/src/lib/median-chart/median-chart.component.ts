@@ -10,7 +10,7 @@ import * as dc from 'dc';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { MedianExpression } from '@sagebionetworks/agora/api-client-angular';
+import { MedianExpression } from '@sagebionetworks/agora/api-client';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { BaseChartComponent } from '../base-chart/base-chart.component';
 

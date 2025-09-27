@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faArrowRightArrowLeft, faDownload } from '@fortawesome/free-solid-svg-icons';
-import { Gene } from '@sagebionetworks/agora/api-client-angular';
+import { Gene } from '@sagebionetworks/agora/api-client';
 import { GeneTableColumn } from '@sagebionetworks/agora/models';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { CapitalizeBooleanPipe } from '@sagebionetworks/explorers/util';

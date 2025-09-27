@@ -1,7 +1,6 @@
-
 import { Component, Input } from '@angular/core';
 import { TeamMemberListComponent } from '../team-member-list/team-member-list.component';
-import { Team } from '@sagebionetworks/agora/api-client-angular';
+import { Team } from '@sagebionetworks/agora/api-client';
 
 @Component({
   selector: 'agora-team-list',

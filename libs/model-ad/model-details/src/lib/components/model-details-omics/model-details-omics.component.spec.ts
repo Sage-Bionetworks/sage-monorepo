@@ -1,5 +1,5 @@
 import { ResourceCardsComponent } from '@sagebionetworks/explorers/ui';
-import { Model } from '@sagebionetworks/model-ad/api-client-angular';
+import { Model } from '@sagebionetworks/model-ad/api-client';
 import { modelMock } from '@sagebionetworks/model-ad/testing';
 import { render, screen } from '@testing-library/angular';
 import { ModelDetailsOmicsComponent } from './model-details-omics.component';

@@ -17,7 +17,7 @@ import {
   OrganizationSearchQuery,
   OrganizationService,
   OrganizationSort,
-} from '@sagebionetworks/openchallenges/api-client-angular';
+} from '@sagebionetworks/openchallenges/api-client';
 import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
 import { Filter } from '@sagebionetworks/openchallenges/ui';
 import { ChallengeSearchDropdown } from './challenge-search-dropdown';

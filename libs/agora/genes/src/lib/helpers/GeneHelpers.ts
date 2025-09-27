@@ -1,4 +1,4 @@
-import { Gene } from '@sagebionetworks/agora/api-client-angular';
+import { Gene } from '@sagebionetworks/agora/api-client';
 
 export function getStatisticalModels(gene: Gene) {
   const models: string[] = [];

@@ -1,4 +1,4 @@
-import { GCTGene } from '@sagebionetworks/agora/api-client-angular';
+import { GCTGene } from '@sagebionetworks/agora/api-client';
 import { GCTDetailsPanelData, GCTFilter, GCTScorePanelData } from '@sagebionetworks/agora/models';
 import { distributionMock } from './distribution-mocks';
 

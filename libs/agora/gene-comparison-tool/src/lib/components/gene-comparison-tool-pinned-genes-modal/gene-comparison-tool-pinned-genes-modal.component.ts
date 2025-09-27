@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter, ViewEncapsulation, Input } from '@angular/core';
-import { GCTGene } from '@sagebionetworks/agora/api-client-angular';
+import { GCTGene } from '@sagebionetworks/agora/api-client';
 import { DialogModule } from 'primeng/dialog';
 
 @Component({

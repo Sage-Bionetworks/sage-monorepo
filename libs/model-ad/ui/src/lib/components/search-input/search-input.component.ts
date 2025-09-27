@@ -2,7 +2,7 @@ import { Component, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
 import { SearchResult } from '@sagebionetworks/explorers/models';
 import { SearchInputComponent as ExplorersSearchInputComponent } from '@sagebionetworks/explorers/ui';
-import { ModelService } from '@sagebionetworks/model-ad/api-client-angular';
+import { ModelService } from '@sagebionetworks/model-ad/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/model-ad/config';
 import { Observable } from 'rxjs';
 

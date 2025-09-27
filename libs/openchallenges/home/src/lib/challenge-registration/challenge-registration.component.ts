@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { Image, ImageService } from '@sagebionetworks/openchallenges/api-client-angular';
+import { Image, ImageService } from '@sagebionetworks/openchallenges/api-client';
 import { Observable } from 'rxjs';
 
 @Component({

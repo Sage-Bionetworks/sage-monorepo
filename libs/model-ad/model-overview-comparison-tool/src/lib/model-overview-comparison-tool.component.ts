@@ -10,7 +10,7 @@ import {
   ComparisonToolConfig,
   ModelOverview,
   ModelOverviewService,
-} from '@sagebionetworks/model-ad/api-client-angular';
+} from '@sagebionetworks/model-ad/api-client';
 import { ActivatedRoute } from '@angular/router';
 import { ComparisonToolService, PlatformService } from '@sagebionetworks/explorers/services';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';

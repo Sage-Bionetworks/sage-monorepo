@@ -1,6 +1,6 @@
 import { Component, inject, Input } from '@angular/core';
 
-import { Gene, TeamService } from '@sagebionetworks/agora/api-client-angular';
+import { Gene, TeamService } from '@sagebionetworks/agora/api-client';
 import { ExperimentalValidationWithTeamData } from '../../models';
 
 @Component({

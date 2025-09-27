@@ -12,7 +12,7 @@ import {
   ImageService,
   Organization,
   OrganizationService,
-} from '@sagebionetworks/openchallenges/api-client-angular';
+} from '@sagebionetworks/openchallenges/api-client';
 import { OrganizationCard, OrganizationCardComponent } from '@sagebionetworks/openchallenges/ui';
 import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
 import { orderBy } from 'lodash';

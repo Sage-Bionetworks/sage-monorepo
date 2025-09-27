@@ -1,4 +1,4 @@
-import { BasicError as ApiClientError } from '@sagebionetworks/openchallenges/api-client-angular';
+import { BasicError as ApiClientError } from '@sagebionetworks/openchallenges/api-client';
 import { isNotNullOrUndefined } from 'type-guards';
 // Type guard for ApiClientError
 export function isApiClientError(error: any): error is ApiClientError {

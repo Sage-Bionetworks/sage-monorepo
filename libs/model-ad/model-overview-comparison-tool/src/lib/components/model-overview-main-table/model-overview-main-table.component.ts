@@ -2,7 +2,7 @@ import { Component, ViewChild, inject, input } from '@angular/core';
 import { ComparisonToolTableLinkComponent } from '@sagebionetworks/explorers/comparison-tools';
 import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import { CommaSeparatePipe } from '@sagebionetworks/explorers/util';
-import { ModelOverview } from '@sagebionetworks/model-ad/api-client-angular';
+import { ModelOverview } from '@sagebionetworks/model-ad/api-client';
 import { Table, TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 
