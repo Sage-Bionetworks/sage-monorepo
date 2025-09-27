@@ -1,4 +1,4 @@
-openchallenges-organization-service:
+app:
   welcome-message: 'Welcome to the organization service (test)'
 
 spring:

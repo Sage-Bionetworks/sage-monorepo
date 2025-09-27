@@ -18,10 +18,7 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "app")
 public record AppProperties(
   @NotBlank(message = "Welcome message must not be blank") String welcomeMessage,
-
-  @NotNull @Valid ServiceProperties authService,
-  @NotNull @Valid ServiceProperties organizationService,
-  @NotNull @Valid OAuth2Properties oauth2
+  @NotNull @Valid ServiceProperties authService
 ) {
   /** Generic downstream service configuration (base URL + timeout). */
   public record ServiceProperties(
@@ -29,12 +26,5 @@ public record AppProperties(
     /** Timeout in milliseconds. */
     @Positive(message = "Timeout must be positive (milliseconds)") long timeout
   ) {}
-
-  /** OAuth2 client configuration. */
-  public record OAuth2Properties(@NotNull @Valid Client client) {
-    public record Client(
-      @NotBlank(message = "OAuth2 client id must not be blank") String clientId,
-      @NotBlank(message = "OAuth2 client secret must not be blank") String clientSecret
-    ) {}
-  }
+  // OAuth2 client properties removed for now (not present in application.yml). Reintroduce when needed.
 }
