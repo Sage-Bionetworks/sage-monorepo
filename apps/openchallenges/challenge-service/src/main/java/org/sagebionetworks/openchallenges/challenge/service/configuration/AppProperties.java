@@ -23,7 +23,6 @@ public record AppProperties(
   @NotNull @Valid ServiceProperties organizationService,
   @NotNull @Valid OAuth2Properties oauth2
 ) {
-
   /** Generic downstream service configuration (base URL + timeout). */
   public record ServiceProperties(
     @NotBlank(message = "Base URL must not be blank") @URL String baseUrl,
@@ -32,9 +31,7 @@ public record AppProperties(
   ) {}
 
   /** OAuth2 client configuration. */
-  public record OAuth2Properties(
-    @NotNull @Valid Client client
-  ) {
+  public record OAuth2Properties(@NotNull @Valid Client client) {
     public record Client(
       @NotBlank(message = "OAuth2 client id must not be blank") String clientId,
       @NotBlank(message = "OAuth2 client secret must not be blank") String clientSecret
