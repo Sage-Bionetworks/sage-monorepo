@@ -1,22 +1,22 @@
 package org.sagebionetworks.openchallenges.organization.service;
 
-import org.sagebionetworks.openchallenges.app.config.data.OrganizationServiceConfigData;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.openchallenges.organization.service.configuration.AppProperties;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.cloud.openfeign.EnableFeignClients;
-import org.springframework.context.annotation.ComponentScan;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
-@ComponentScan(basePackages = { "org.sagebionetworks.openchallenges" })
+@ConfigurationPropertiesScan
 @EnableFeignClients
-@SpringBootApplication
 @RequiredArgsConstructor
+@Slf4j
+@SpringBootApplication
 public class OrganizationServiceApplication implements CommandLineRunner {
 
-  private final OrganizationServiceConfigData organizationServiceConfigData;
+  private final AppProperties appProperties;
 
   public static void main(String[] args) {
     SpringApplication.run(OrganizationServiceApplication.class, args);
@@ -24,6 +24,6 @@ public class OrganizationServiceApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    log.info(organizationServiceConfigData.getWelcomeMessage());
+    log.info(appProperties.welcomeMessage());
   }
 }
