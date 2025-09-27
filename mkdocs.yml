@@ -48,20 +48,12 @@ nav:
           - Python: develop/maintenance/python.md
           - R: develop/maintenance/r.md
           - Docker Base Images: develop/maintenance/docker-images.md
+          - Dev Container: develop/maintenance/dev-container.md
           - Security & Compliance: develop/maintenance/security.md
           - Troubleshooting & FAQ: develop/maintenance/troubleshooting.md
       - Advanced:
           - Remote Development: develop/advanced/developing-on-a-remote-host.md
           - Multi-author Commits: develop/advanced/creating-a-commit-with-multiple-authors.md
-      - Maintenance:
-          - Overview: develop/maintenance/index.md
-          - Java: develop/maintenance/java.md
-          - Node / TypeScript: develop/maintenance/node.md
-          - Python: develop/maintenance/python.md
-          - R: develop/maintenance/r.md
-          - Docker Base Images: develop/maintenance/docker-images.md
-          - Security & Compliance: develop/maintenance/security.md
-          - Troubleshooting & FAQ: develop/maintenance/troubleshooting.md
   - API:
       - Overview: api/overview.md
       - Agora: api/agora.md
@@ -112,5 +104,8 @@ markdown_extensions:
   - admonition
   - pymdownx.details
   - pymdownx.superfences
+  - pymdownx.tasklist:
+      clickable_checkbox: true
+      custom_checkbox: true
   - toc:
       permalink: true

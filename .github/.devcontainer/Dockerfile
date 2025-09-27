@@ -1,34 +1,34 @@
-FROM ubuntu:noble-20250714
+FROM ubuntu:noble-20250910
 
 # Set safer bash scripts.
 SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
 
 # List of build arguments.
-# https://github.com/sharkdp/hyperfine
-ARG hyperfineVersion="1.19.0"
 # https://www.npmjs.com/package/@devcontainers/cli
-ARG devcontainerCliVersion="0.80.0"
+ARG devcontainerCliVersion="0.80.1"
 # https://github.com/astral-sh/uv
-ARG uvVersion="0.7.21"
+ARG uvVersion="0.8.22"
 # https://docs.posit.co/resources/install-r/#specify-r-version
 ARG rVersion="4.5.1"
+# https://github.com/gruntwork-io/terragrunt
+ARG terragruntVersion="0.87.5"
 # https://aquasecurity.github.io/trivy
-ARG trivyVersion="0.64.1"
+ARG trivyVersion="0.66.0"
 # https://github.com/rstudio/renv
-ARG renvVersion="1.1.4"
+ARG renvVersion="1.1.5"
 # https://nodejs.org/en/about/previous-releases
 ARG nodeVersionMajor="22"
 # https://github.com/pnpm/pnpm/releases
-ARG pnpmVersion="10.13.1"
+ARG pnpmVersion="10.17.1"
 # https://github.com/SonarSource/sonar-scanner-cli/releases
-ARG sonarScannerVersion="7.1.0.4889"
+ARG sonarScannerVersion="7.2.0.5079"
 # https://github.com/hadolint/hadolint
-ARG hadolintVersion="2.12.0"
+ARG hadolintVersion="2.14.0"
 # https://pinterest.github.io/ktlint/latest/install/cli/#download-and-verification
-ARG ktlintVersion="1.7.0"
+ARG ktlintVersion="1.7.1"
 # https://zlib.net/fossils
 ARG zlibVersion="1.3.1"
-# The version of this dev container image.
+# The version of this dev container image (specified in devcontainer.json).
 ARG devcontainerVersion=""
 # The username of the non-root user.
 # The user `ubuntu` is available since Ubuntu 24.04.
@@ -45,7 +45,7 @@ RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
     ca-certificates curl git bash-completion gnupg2 lsb-release ssh sudo \
     python3-pip python3-dev python-is-python3 pipx openjdk-17-jdk \
     htop unzip vim wget lsof iproute2 build-essential \
-    kafkacat jq ca-certificates-java gdebi-core \
+    jq ca-certificates-java gdebi-core \
     # Required by AWS CLI.
     mandoc \
     # Required for setting up locales.
@@ -66,20 +66,22 @@ RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
     gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg \
   && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | \
     tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
-  # Add ngrok repository.
-  && curl -fsSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null \
-  && echo "deb https://ngrok-agent.s3.amazonaws.com bullseye main" | tee /etc/apt/sources.list.d/ngrok.list \
-  # Add hashicorp repository.
-  && curl -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg \
-  && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list \
+  # Add OpenTofu repository.
+  && install -m 0755 -d /etc/apt/keyrings \
+  && curl -fsSL https://get.opentofu.org/opentofu.gpg | tee /etc/apt/keyrings/opentofu.gpg >/dev/null \
+  && curl -fsSL https://packages.opentofu.org/opentofu/tofu/gpgkey | gpg --no-tty --batch --dearmor -o /etc/apt/keyrings/opentofu-repo.gpg >/dev/null \
+  && chmod a+r /etc/apt/keyrings/opentofu.gpg \
+  && echo \
+    "deb [signed-by=/etc/apt/keyrings/opentofu.gpg,/etc/apt/keyrings/opentofu-repo.gpg] https://packages.opentofu.org/opentofu/tofu/any/ any main \
+    deb-src [signed-by=/etc/apt/keyrings/opentofu.gpg,/etc/apt/keyrings/opentofu-repo.gpg] https://packages.opentofu.org/opentofu/tofu/any/ any main" | \
+    tee /etc/apt/sources.list.d/opentofu.list > /dev/null \
   # Install additional packages.
   && apt-get update -qq -y \
-  && apt-get install --no-install-recommends -qq -y nodejs gh ngrok terraform vault \
+  && apt-get install --no-install-recommends -qq -y nodejs gh \
+  # Install OpenTofu
+  tofu \
   # Enable corepack.
   && corepack enable \
-  # Fix Vault CLI.
-  # See https://github.com/hashicorp/vault/issues/10924
-  && setcap -r /usr/bin/vault \
   # Set up UTF-8 locale.
   && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen \
   # Install R (must be done before clearing the apt cache)
@@ -125,12 +127,6 @@ RUN curl -fsSL https://github.com/hadolint/hadolint/releases/download/v${hadolin
   && mv hadolint /usr/local/bin/. \
   && chmod +x /usr/local/bin/hadolint
 
-# Install hyperfine.
-RUN curl -fsSL "https://github.com/sharkdp/hyperfine/releases/download/v${hyperfineVersion}/hyperfine_${hyperfineVersion}_amd64.deb" \
-    -o /tmp/hyperfine.deb \
-  && apt-get install --no-install-recommends -qq -y /tmp/hyperfine.deb \
-  && rm -fr /tmp/hyperfine.deb
-
 # Install SonarScanner CLI.
 ARG SONAR_SCANNER_HOME=/opt/sonar-scanner
 ENV SONAR_SCANNER_HOME=${SONAR_SCANNER_HOME} \
@@ -146,6 +142,10 @@ RUN curl -fsSL https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/s
 # Install ktlint.
 RUN curl -sSLO https://github.com/pinterest/ktlint/releases/download/${ktlintVersion}/ktlint \
   && chmod a+x ktlint && mv ktlint /usr/local/bin/
+
+# Install Terragrunt.
+RUN curl -fsSL https://github.com/gruntwork-io/terragrunt/releases/download/v${terragruntVersion}/terragrunt_linux_amd64 -o /usr/bin/terragrunt \
+  && chmod +x /usr/bin/terragrunt
 
 # Set the user's password.
 RUN echo "$user:$user" | chpasswd \

@@ -35,3 +35,4 @@ apps/openchallenges/postgres/docker-entrypoint-initdb.d/init-db.sql
 
 # Docs
 docs/develop/maintenance/node.md
+docs/develop/maintenance/dev-container.md

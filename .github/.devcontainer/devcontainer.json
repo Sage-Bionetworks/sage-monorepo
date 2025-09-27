@@ -9,22 +9,22 @@
     }
   },
   "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2.12.2": {
-      "version": "28.3.2",
+    "ghcr.io/devcontainers/features/docker-in-docker:2.12.4": {
+      "version": "28.3.3",
       "installDockerComposeSwitch": false
     },
     "ghcr.io/devcontainers/features/java:1.6.3": {
-      "version": "21.0.7-ms",
-      "additionalVersions": ["21.0.7-graal"]
+      "version": "21.0.8-ms",
+      "additionalVersions": ["21.0.8-graal"]
     },
     "ghcr.io/devcontainers/features/go:1.3.2": {
-      "version": "1.24.5",
-      "golangciLintVersion": "2.2.2"
+      "version": "1.25.1",
+      "golangciLintVersion": "2.5.0"
     },
     "ghcr.io/devcontainers/features/kubectl-helm-minikube:1.2.2": {
-      "version": "1.33.3",
-      "helm": "3.17.0",
-      "minikube": "1.36.0"
+      "version": "1.34.1",
+      "helm": "3.19.0",
+      "minikube": "1.37.0"
     }
   },
   "remoteUser": "ubuntu",
