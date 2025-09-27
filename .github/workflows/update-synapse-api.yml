@@ -95,84 +95,94 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Configure git
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          # Run all git operations inside the dev container so git hooks execute
+          devcontainer exec --workspace-folder ../sage-monorepo bash -lc '
+            set -euo pipefail
+            . ./dev-env.sh
 
-          # Create a new branch with timestamp
-          BRANCH_NAME="synapse/update-synapse-api"
-          git checkout -b "$BRANCH_NAME"
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Add all changes
-          git add .
+            BRANCH_NAME="synapse/update-synapse-api"
 
-          # Create commit message
-          COMMIT_MSG="chore(synapse): update Synapse API description and regenerate clients
+            # If branch exists from a prior run, delete locally
+            if git rev-parse --verify "$BRANCH_NAME" >/dev/null 2>&1; then
+              git branch -D "$BRANCH_NAME"
+            fi
 
-          This is an automated update triggered by changes detected in the Synapse OpenAPI specification.
+            git checkout -b "$BRANCH_NAME"
+            git add .
 
-          Updated components:
-          - libs/synapse/api-description/openapi/openapi.json (source specification)
-          - libs/synapse/api-description/openapi/openapi.yaml (bundled specification)
-          - Regenerated synapse-* client libraries
+            # Commit (git hooks will run here inside container)
+            printf '%s\n' \
+              'This is an automated update triggered by changes detected in the Synapse OpenAPI' \
+              'specification.' \
+              '' \
+              'Updated components:' \
+              '- libs/synapse/api-description/src/openapi.json (source specification)' \
+              '- libs/synapse/api-description/openapi/openapi.yaml (bundled specification)' \
+              '- Regenerated synapse-* client libraries' \
+              '' \
+              'Source: https://rest-docs.synapse.org/rest/openapi/openapispecification.json' \
+              > COMMIT_BODY.md
 
-          Source: https://rest-docs.synapse.org/rest/openapi/openapispecification.json"
+            git commit -m "chore(synapse): update Synapse API description and regenerate clients" \
+              -F COMMIT_BODY.md
 
-          git commit -m "$COMMIT_MSG"
+            git push origin "$BRANCH_NAME"
 
-          # Push the branch
-          git push origin "$BRANCH_NAME"
+            CHANGED_FILES="$(git diff --name-only HEAD~1)"
 
-          # Create pull request body
-          PR_BODY="## Description
+            # Build PR body file (variable expansion allowed for changed files)
+            printf '%s\n' \
+              '## Description' \
+              '' \
+              'This is an automated update triggered by changes detected in the Synapse OpenAPI specification.' \
+              '' \
+              'The workflow downloads the latest OpenAPI specification from Synapse, compares it with the' \
+              'current version, and regenerates all dependent client libraries to ensure they stay in sync' \
+              'with the API.' \
+              '' \
+              '## Related Issue' \
+              '' \
+              'Automated maintenance task (no linked issue).' \
+              '' \
+              '## Changelog' \
+              '- Update `libs/synapse/api-description/openapi/openapi.json` with latest specification' \
+              '- Update `libs/synapse/api-description/openapi/openapi.yaml` with bundled specification' \
+              '- Regenerate Angular API client (`synapse-api-client-angular`)' \
+              '- Update any other synapse-* projects with generate tasks' \
+              '' \
+              '## Preview' \
+              '### Files changed:' \
+              '```' \
+              "$CHANGED_FILES" \
+              '```' \
+              '' \
+              '### ⚠️ Review checklist:' \
+              '- [ ] Verify that the API changes are expected' \
+              '- [ ] Check that generated clients compile successfully' \
+              '- [ ] Run tests to ensure compatibility' \
+              '- [ ] Review any breaking changes in the API' \
+              '' \
+              '---' \
+              "Workflow: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" \
+              'Source: https://rest-docs.synapse.org/rest/openapi/openapispecification.json' \
+              '' \
+              'This PR was automatically created by the `update-synapse-api.yml` workflow.' \
+              > PR_BODY.md
 
-          This is an automated update triggered by changes detected in the [Synapse OpenAPI specification](https://rest-docs.synapse.org/rest/openapi/openapispecification.json).
+            gh pr create \
+              --title "chore(synapse): update Synapse API description and regenerate clients" \
+              --body-file PR_BODY.md \
+              --label "automated" \
+              --label "synapse" \
+              --label "api-update" \
+              --base main \
+              --head "$BRANCH_NAME"
 
-          The workflow downloads the latest OpenAPI specification from Synapse, compares it with the current version, and regenerates all dependent client libraries to ensure they stay in sync with the API.
-
-          ## Related Issue
-
-          This is an automated maintenance task to keep Synapse API clients up-to-date. No specific issue is associated with this update.
-
-          ## Changelog
-
-          - Update \`libs/synapse/api-description/openapi/openapi.json\` with latest specification
-          - Update \`libs/synapse/api-description/openapi/openapi.yaml\` with bundled specification
-          - Regenerate Angular API client (\`synapse-api-client-angular\`)
-          - Update any other synapse-* projects with generate tasks
-
-          ## Preview
-
-          ### Files changed:
-          \`\`\`
-          $(git diff --name-only HEAD~1)
-          \`\`\`
-
-          ### ⚠️ Review checklist:
-          - [ ] Verify that the API changes are expected
-          - [ ] Check that generated clients compile successfully
-          - [ ] Run tests to ensure compatibility
-          - [ ] Review any breaking changes in the API
-
-          ---
-
-          **Workflow:** [Update Synapse API Description](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-          **Source:** https://rest-docs.synapse.org/rest/openapi/openapispecification.json
-
-          This PR was automatically created by the \`update-synapse-api.yml\` workflow."
-
-          # Create the pull request
-          gh pr create \
-            --title "chore(synapse): update Synapse API description and regenerate clients" \
-            --body "$PR_BODY" \
-            --label "automated" \
-            --label "synapse" \
-            --label "api-update" \
-            --base main \
-            --head "$BRANCH_NAME"
-
-          echo "✅ Pull request created successfully"
-          echo "🔗 View at: ${{ github.server_url }}/${{ github.repository }}/pull/$(gh pr view --json number --jq .number)"
+            echo "✅ Pull request created successfully"
+            echo "🔗 View at: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/pull/$(gh pr view --json number --jq .number)"
 
       - name: Summary
         if: always()
