@@ -122,41 +122,41 @@ jobs:
 
             # Build PR body file (variable expansion allowed for changed files)
             : > PR_BODY.md
-            printf '%s\n' '## Description' >> PR_BODY.md
-            printf '%s\n' '' >> PR_BODY.md
-            printf '%s\n' 'This is an automated update triggered by changes detected in the Synapse OpenAPI specification.' >> PR_BODY.md
-            printf '%s\n' '' >> PR_BODY.md
-            printf '%s\n' 'The workflow downloads the latest OpenAPI specification from Synapse, compares it with the' >> PR_BODY.md
-            printf '%s\n' 'current version, and regenerates all dependent client libraries to ensure they stay in sync' >> PR_BODY.md
-            printf '%s\n' 'with the API.' >> PR_BODY.md
-            printf '%s\n' '' >> PR_BODY.md
-            printf '%s\n' '## Related Issue' >> PR_BODY.md
-            printf '%s\n' '' >> PR_BODY.md
-            printf '%s\n' 'Automated maintenance task (no linked issue).' >> PR_BODY.md
-            printf '%s\n' '' >> PR_BODY.md
-            printf '%s\n' '## Changelog' >> PR_BODY.md
-            printf '%s\n' '- Update `libs/synapse/api-description/openapi/openapi.json` with latest specification' >> PR_BODY.md
-            printf '%s\n' '- Update `libs/synapse/api-description/openapi/openapi.yaml` with bundled specification' >> PR_BODY.md
-            printf '%s\n' '- Regenerate Angular API client (`synapse-api-client-angular`)' >> PR_BODY.md
-            printf '%s\n' '- Update any other synapse-* projects with generate tasks' >> PR_BODY.md
-            printf '%s\n' '' >> PR_BODY.md
-            printf '%s\n' '## Preview' >> PR_BODY.md
-            printf '%s\n' '### Files changed:' >> PR_BODY.md
-            printf '%s\n' '```' >> PR_BODY.md
-            printf '%s\n' "$CHANGED_FILES" >> PR_BODY.md
-            printf '%s\n' '```' >> PR_BODY.md
-            printf '%s\n' '' >> PR_BODY.md
-            printf '%s\n' '### ⚠️ Review checklist:' >> PR_BODY.md
-            printf '%s\n' '- [ ] Verify that the API changes are expected' >> PR_BODY.md
-            printf '%s\n' '- [ ] Check that generated clients compile successfully' >> PR_BODY.md
-            printf '%s\n' '- [ ] Run tests to ensure compatibility' >> PR_BODY.md
-            printf '%s\n' '- [ ] Review any breaking changes in the API' >> PR_BODY.md
-            printf '%s\n' '' >> PR_BODY.md
-            printf '%s\n' '---' >> PR_BODY.md
-            printf '%s\n' "Workflow: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" >> PR_BODY.md
-            printf '%s\n' 'Source: https://rest-docs.synapse.org/rest/openapi/openapispecification.json' >> PR_BODY.md
-            printf '%s\n' '' >> PR_BODY.md
-            printf '%s\n' 'This PR was automatically created by the `update-synapse-api.yml` workflow.' >> PR_BODY.md
+            printf "%s\n" "## Description" >> PR_BODY.md
+            printf "%s\n" "" >> PR_BODY.md
+            printf "%s\n" "This is an automated update triggered by changes detected in the Synapse OpenAPI specification." >> PR_BODY.md
+            printf "%s\n" "" >> PR_BODY.md
+            printf "%s\n" "The workflow downloads the latest OpenAPI specification from Synapse, compares it with the" >> PR_BODY.md
+            printf "%s\n" "current version, and regenerates all dependent client libraries to ensure they stay in sync" >> PR_BODY.md
+            printf "%s\n" "with the API." >> PR_BODY.md
+            printf "%s\n" "" >> PR_BODY.md
+            printf "%s\n" "## Related Issue" >> PR_BODY.md
+            printf "%s\n" "" >> PR_BODY.md
+            printf "%s\n" "Automated maintenance task (no linked issue)." >> PR_BODY.md
+            printf "%s\n" "" >> PR_BODY.md
+            printf "%s\n" "## Changelog" >> PR_BODY.md
+            printf "%s\n" "- Update \`libs/synapse/api-description/openapi/openapi.json\` with latest specification" >> PR_BODY.md
+            printf "%s\n" "- Update \`libs/synapse/api-description/openapi/openapi.yaml\` with bundled specification" >> PR_BODY.md
+            printf "%s\n" "- Regenerate Angular API client (\`synapse-api-client-angular\`)" >> PR_BODY.md
+            printf "%s\n" "- Update any other synapse-* projects with generate tasks" >> PR_BODY.md
+            printf "%s\n" "" >> PR_BODY.md
+            printf "%s\n" "## Preview" >> PR_BODY.md
+            printf "%s\n" "### Files changed:" >> PR_BODY.md
+            printf "%s\n" "\`\`\`" >> PR_BODY.md
+            printf "%s\n" "$CHANGED_FILES" >> PR_BODY.md
+            printf "%s\n" "\`\`\`" >> PR_BODY.md
+            printf "%s\n" "" >> PR_BODY.md
+            printf "%s\n" "### ⚠️ Review checklist:" >> PR_BODY.md
+            printf "%s\n" "- [ ] Verify that the API changes are expected" >> PR_BODY.md
+            printf "%s\n" "- [ ] Check that generated clients compile successfully" >> PR_BODY.md
+            printf "%s\n" "- [ ] Run tests to ensure compatibility" >> PR_BODY.md
+            printf "%s\n" "- [ ] Review any breaking changes in the API" >> PR_BODY.md
+            printf "%s\n" "" >> PR_BODY.md
+            printf "%s\n" "---" >> PR_BODY.md
+            printf "%s\n" "Workflow: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" >> PR_BODY.md
+            printf "%s\n" "Source: https://rest-docs.synapse.org/rest/openapi/openapispecification.json" >> PR_BODY.md
+            printf "%s\n" "" >> PR_BODY.md
+            printf "%s\n" "This PR was automatically created by the \`update-synapse-api.yml\` workflow." >> PR_BODY.md
 
             gh pr create \
               --title "chore(synapse): update Synapse API description and regenerate clients" \
