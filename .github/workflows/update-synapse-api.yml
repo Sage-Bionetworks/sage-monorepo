@@ -44,7 +44,6 @@ jobs:
             set -Eeuo pipefail
             . ./dev-env.sh
 
-            git config --global --add safe.directory "$PWD"
             git config user.name  "${GITHUB_ACTOR:-github-actions[bot]}"
             git config user.email "${GIT_AUTHOR_EMAIL:-github-actions[bot]@users.noreply.github.com}"
 
