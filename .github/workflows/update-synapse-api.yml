@@ -5,6 +5,9 @@ on:
     # Run daily at 9 AM UTC (4 AM EST, 1 AM PST)
     - cron: '0 9 * * *'
   workflow_dispatch:
+  push:
+    branches:
+      - 'synapse/update-synapse-api-test'
 
 permissions:
   contents: write
