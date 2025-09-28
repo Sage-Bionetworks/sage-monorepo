@@ -96,7 +96,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Run all git operations inside the dev container so git hooks execute
-          devcontainer exec --workspace-folder ../sage-monorepo bash -lc '
+          devcontainer exec \
+            --workspace-folder ../sage-monorepo \
+            --env GITHUB_TOKEN="$GITHUB_TOKEN" \
+            bash -lc '
             set -euo pipefail
             . ./dev-env.sh
 
@@ -104,17 +107,34 @@ jobs:
             git config user.email "github-actions[bot]@users.noreply.github.com"
 
             BRANCH_NAME="synapse/update-synapse-api"
+            PR_TITLE="chore(synapse): update Synapse API description and regenerate clients"
 
-            # If branch exists from a prior run, delete locally
-            if git rev-parse --verify "$BRANCH_NAME" >/dev/null 2>&1; then
-              git branch -D "$BRANCH_NAME"
+            git fetch --quiet origin
+
+            if git ls-remote --exit-code origin "$BRANCH_NAME" >/dev/null 2>&1; then
+              echo "🔁 Reusing existing branch $BRANCH_NAME from remote"
+              # Create/overwrite local branch to match remote state
+              git checkout -B "$BRANCH_NAME" "origin/$BRANCH_NAME"
+              # Try to fast-forward with latest main (no merge commit if possible)
+              if git merge-base --is-ancestor "$BRANCH_NAME" origin/main; then
+                if git merge --ff-only origin/main 2>/dev/null; then
+                  echo "✅ Fast-forwarded branch onto latest main"
+                else
+                  echo "ℹ️ Branch diverged; leaving existing base (no rebase to avoid force push)"
+                fi
+              fi
+            else
+              echo "🆕 Creating new branch $BRANCH_NAME from origin/main"
+              git checkout -b "$BRANCH_NAME" origin/main
             fi
-
-            git checkout -b "$BRANCH_NAME"
             git add .
 
             # Commit (git hooks will run here inside container) using only a concise subject
-            git commit -m "chore(synapse): update Synapse API description and regenerate clients"
+            if git diff --cached --quiet && git diff --quiet; then
+              echo "ℹ️ No file changes to commit after regeneration; exiting early"
+              exit 0
+            fi
+            git commit -m "$PR_TITLE"
 
             git push origin "$BRANCH_NAME"
 
@@ -138,30 +158,30 @@ jobs:
             printf "%s\n" "- Update \`libs/synapse/api-description/openapi/openapi.json\` with latest specification" >> PR_BODY.md
             printf "%s\n" "- Update \`libs/synapse/api-description/openapi/openapi.yaml\` with bundled specification" >> PR_BODY.md
             printf "%s\n" "- Regenerate Angular API client (\`synapse-api-client-angular\`)" >> PR_BODY.md
-            printf "%s\n" "- Update any other synapse-* projects with generate tasks" >> PR_BODY.md
+            printf "%s\n" "- Update any other synapse-* projects with \`generate\` tasks" >> PR_BODY.md
             printf "%s\n" "" >> PR_BODY.md
-            printf "%s\n" "## Preview" >> PR_BODY.md
-            printf "%s\n" "### Files changed:" >> PR_BODY.md
-            printf "%s\n" "\`\`\`" >> PR_BODY.md
-            printf "%s\n" "$CHANGED_FILES" >> PR_BODY.md
-            printf "%s\n" "\`\`\`" >> PR_BODY.md
-            printf "%s\n" "" >> PR_BODY.md
-            printf "%s\n" "### ⚠️ Review checklist:" >> PR_BODY.md
+            printf "%s\n" "## Review checklist" >> PR_BODY.md
             printf "%s\n" "- [ ] Verify that the API changes are expected" >> PR_BODY.md
             printf "%s\n" "- [ ] Check that generated clients compile successfully" >> PR_BODY.md
             printf "%s\n" "- [ ] Run tests to ensure compatibility" >> PR_BODY.md
             printf "%s\n" "- [ ] Review any breaking changes in the API" >> PR_BODY.md
 
-            gh pr create \
-              --title "chore(synapse): update Synapse API description and regenerate clients" \
-              --body-file PR_BODY.md \
-              --label "automated" \
-              --label "synapse" \
-              --label "api-update" \
-              --base main \
-              --head "$BRANCH_NAME"
-
-            echo "✅ Pull request created successfully"
+            # Create PR if none exists, otherwise update body
+            if gh pr view "$BRANCH_NAME" >/dev/null 2>&1; then
+              echo "🔄 PR already exists for $BRANCH_NAME - updating body & title"
+              gh pr edit "$BRANCH_NAME" --title "$PR_TITLE" --body-file PR_BODY.md
+              echo "✅ Pull request updated successfully"
+            else
+              gh pr create \
+                --title "$PR_TITLE" \
+                --body-file PR_BODY.md \
+                --label "automated" \
+                --label "synapse" \
+                --label "api-update" \
+                --base main \
+                --head "$BRANCH_NAME"
+              echo "✅ Pull request created successfully"
+            fi
           '
 
       - name: Summary
