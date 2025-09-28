@@ -87,6 +87,7 @@ jobs:
           branch: synapse/update-synapse-api
           title: 'chore(synapse): update Synapse API description and its clients'
           commit-message: 'chore(synapse): update Synapse API description and its clients'
+          base: 'main'
           body: |
             ## Description
 
