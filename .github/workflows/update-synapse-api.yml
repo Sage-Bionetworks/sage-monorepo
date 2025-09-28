@@ -75,7 +75,7 @@ jobs:
 
             # Commit if there is anything staged; skip otherwise
             if ! git diff --staged --quiet; then
-              git commit -m "chore(synapse): update Synapse API description and regenerate clients"
+              git commit -m "chore(synapse): update Synapse API description and its clients"
             else
               echo "No changes to commit."
             fi
