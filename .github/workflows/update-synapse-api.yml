@@ -1,17 +1,18 @@
-name: Update Synapse API description and regenerate clients
+name: Update Synapse API description and its clients
 
 on:
   schedule:
     # Run daily at 9 AM UTC (4 AM EST, 1 AM PST)
     - cron: '0 9 * * *'
   workflow_dispatch:
-    # Allow manual trigger
-    inputs:
-      force_update:
-        description: 'Force update even if no changes detected'
-        required: false
-        default: false
-        type: boolean
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: synapse-update-synapse-api
+  cancel-in-progress: false
 
 env:
   NX_BRANCH: ${{ github.ref_name }}
@@ -37,12 +38,56 @@ jobs:
             && echo '🔄 Regenerating synapse-* clients...' \
             && nx run-many --target=generate --projects='synapse-*'"
 
+      - name: Create commit inside dev container (no push)
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -lc '
+            set -Eeuo pipefail
+            . ./dev-env.sh
+
+            git config --global --add safe.directory "$PWD"
+            git config user.name  "${GITHUB_ACTOR:-github-actions[bot]}"
+            git config user.email "${GIT_AUTHOR_EMAIL:-github-actions[bot]@users.noreply.github.com}"
+
+            BASE_BRANCH="main"
+            BRANCH_NAME="synapse/update-synapse-api"
+
+            # Fetch base & target
+            git fetch --no-tags --prune origin "+refs/heads/$BASE_BRANCH:refs/remotes/origin/$BASE_BRANCH" || true
+            git fetch --no-tags --prune origin "+refs/heads/$BRANCH_NAME:refs/remotes/origin/$BRANCH_NAME" || true
+
+            # Switch/create branch (local > remote > base)
+            if git rev-parse --verify --quiet "refs/heads/$BRANCH_NAME"; then
+              git switch "$BRANCH_NAME"
+              if git show-ref --verify --quiet "refs/remotes/origin/$BRANCH_NAME"; then
+                git merge --ff-only "origin/$BRANCH_NAME" || true
+              fi
+            elif git show-ref --verify --quiet "refs/remotes/origin/$BRANCH_NAME"; then
+              git switch -c "$BRANCH_NAME" --track "origin/$BRANCH_NAME"
+            else
+              if git show-ref --verify --quiet "refs/remotes/origin/$BASE_BRANCH"; then
+                git switch -c "$BRANCH_NAME" "origin/$BASE_BRANCH"
+              else
+                git switch -c "$BRANCH_NAME"
+              fi
+            fi
+
+            # Stage (consider scoping paths instead of -A)
+            git add -A
+
+            # Commit if there is anything staged; skip otherwise
+            if ! git diff --staged --quiet; then
+              git commit -m "chore(synapse): update Synapse API description and regenerate clients"
+            else
+              echo "No changes to commit."
+            fi
+          '
+
       - name: Create or update Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
           branch: synapse/update-synapse-api
-          title: 'chore(synapse): update Synapse API description and regenerate clients'
-          commit-message: 'chore(synapse): update Synapse API description and regenerate clients'
+          title: 'chore(synapse): update Synapse API description and its clients'
+          commit-message: 'chore(synapse): update Synapse API description and its clients'
           body: |
             ## Description
 
