@@ -25,177 +25,33 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          # Fetch full history for proper comparison
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up the dev container
         uses: ./.github/actions/setup-dev-container
 
-      - name: Build API description and check for changes
-        id: check_changes
+      - name: Build API description & regenerate clients
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && echo '🔄 Building API description (includes downloading latest OpenAPI specification)...' \
-            && nx build synapse-api-description"
-
-          # Check if there are any changes in the repository
-          if git diff --quiet; then
-            echo "has_changes=false" >> $GITHUB_OUTPUT
-            echo "🔍 No changes detected in OpenAPI specification"
-          else
-            echo "has_changes=true" >> $GITHUB_OUTPUT
-            echo "📝 Changes detected in OpenAPI specification"
-
-            # Show a summary of changes for logging
-            echo "## Changes Summary:" >> $GITHUB_STEP_SUMMARY
-            echo "The OpenAPI specification has been updated on the Synapse server." >> $GITHUB_STEP_SUMMARY
-            echo "" >> $GITHUB_STEP_SUMMARY
-            echo "### Changed files:" >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-            git diff --name-only >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          fi
-
-          # Check if force update is requested
-          if [ "${{ github.event.inputs.force_update }}" = "true" ]; then
-            echo "has_changes=true" >> $GITHUB_OUTPUT
-            echo "🔄 Force update requested, proceeding regardless of changes"
-          fi
-
-      - name: Regenerate dependent clients
-        if: steps.check_changes.outputs.has_changes == 'true'
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && nx build synapse-api-description \
             && echo '🔄 Regenerating synapse-* clients...' \
-            && nx run-many --target=generate --projects='synapse-*' --skip-nx-cache"
+            && nx run-many --target=generate --projects='synapse-*'"
 
-      - name: Check for generated changes
-        if: steps.check_changes.outputs.has_changes == 'true'
-        id: check_generated_changes
-        run: |
-          # Check if there are any changes to commit
-          if git diff --quiet && git diff --cached --quiet; then
-            echo "has_generated_changes=false" >> $GITHUB_OUTPUT
-            echo "ℹ️ No changes were generated during the update process"
-          else
-            echo "has_generated_changes=true" >> $GITHUB_OUTPUT
-            echo "📝 Changes were generated and are ready to commit"
+      - name: Create or update Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: synapse/update-synapse-api
+          title: 'chore(synapse): update Synapse API description and regenerate clients'
+          commit-message: 'chore(synapse): update Synapse API description and regenerate clients'
+          body: |
+            ## Description
 
-            # Show what files changed
-            echo "## Generated Changes:" >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-            git diff --name-only >> $GITHUB_STEP_SUMMARY
-            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          fi
+            This is an automated update triggered by changes detected in the Synapse OpenAPI specification.
+            The workflow downloads the latest specification and regenerates dependent client libraries to keep them in sync.
 
-      - name: Create Pull Request
-        if: steps.check_changes.outputs.has_changes == 'true' && steps.check_generated_changes.outputs.has_generated_changes == 'true'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # Run all git operations inside the dev container so git hooks execute
-          devcontainer exec \
-            --workspace-folder ../sage-monorepo \
-            --env GITHUB_TOKEN="$GITHUB_TOKEN" \
-            bash -lc '
-            set -euo pipefail
-            . ./dev-env.sh
+            ## Review checklist
 
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-
-            BRANCH_NAME="synapse/update-synapse-api"
-            PR_TITLE="chore(synapse): update Synapse API description and regenerate clients"
-
-            git fetch --quiet origin
-
-            if git ls-remote --exit-code origin "$BRANCH_NAME" >/dev/null 2>&1; then
-              echo "🔁 Reusing existing branch $BRANCH_NAME from remote"
-              # Create/overwrite local branch to match remote state
-              git checkout -B "$BRANCH_NAME" "origin/$BRANCH_NAME"
-              # Try to fast-forward with latest main (no merge commit if possible)
-              if git merge-base --is-ancestor "$BRANCH_NAME" origin/main; then
-                if git merge --ff-only origin/main 2>/dev/null; then
-                  echo "✅ Fast-forwarded branch onto latest main"
-                else
-                  echo "ℹ️ Branch diverged; leaving existing base (no rebase to avoid force push)"
-                fi
-              fi
-            else
-              echo "🆕 Creating new branch $BRANCH_NAME from origin/main"
-              git checkout -b "$BRANCH_NAME" origin/main
-            fi
-            git add .
-
-            # Commit (git hooks will run here inside container) using only a concise subject
-            if git diff --cached --quiet && git diff --quiet; then
-              echo "ℹ️ No file changes to commit after regeneration; exiting early"
-              exit 0
-            fi
-            git commit -m "$PR_TITLE"
-
-            git push origin "$BRANCH_NAME"
-
-            CHANGED_FILES="$(git diff --name-only HEAD~1)"
-
-            # Build PR body file (variable expansion allowed for changed files)
-            : > PR_BODY.md
-            printf "%s\n" "## Description" >> PR_BODY.md
-            printf "%s\n" "" >> PR_BODY.md
-            printf "%s\n" "This is an automated update triggered by changes detected in the Synapse OpenAPI specification." >> PR_BODY.md
-            printf "%s\n" "" >> PR_BODY.md
-            printf "%s\n" "The workflow downloads the latest OpenAPI specification from Synapse, compares it with the" >> PR_BODY.md
-            printf "%s\n" "current version, and regenerates all dependent client libraries to ensure they stay in sync" >> PR_BODY.md
-            printf "%s\n" "with the API." >> PR_BODY.md
-            printf "%s\n" "" >> PR_BODY.md
-            printf "%s\n" "## Related Issue" >> PR_BODY.md
-            printf "%s\n" "" >> PR_BODY.md
-            printf "%s\n" "Automated maintenance task (no linked issue)." >> PR_BODY.md
-            printf "%s\n" "" >> PR_BODY.md
-            printf "%s\n" "## Changelog" >> PR_BODY.md
-            printf "%s\n" "- Update \`libs/synapse/api-description/openapi/openapi.json\` with latest specification" >> PR_BODY.md
-            printf "%s\n" "- Update \`libs/synapse/api-description/openapi/openapi.yaml\` with bundled specification" >> PR_BODY.md
-            printf "%s\n" "- Regenerate Angular API client (\`synapse-api-client-angular\`)" >> PR_BODY.md
-            printf "%s\n" "- Update any other synapse-* projects with \`generate\` tasks" >> PR_BODY.md
-            printf "%s\n" "" >> PR_BODY.md
-            printf "%s\n" "## Review checklist" >> PR_BODY.md
-            printf "%s\n" "- [ ] Verify that the API changes are expected" >> PR_BODY.md
-            printf "%s\n" "- [ ] Check that generated clients compile successfully" >> PR_BODY.md
-            printf "%s\n" "- [ ] Run tests to ensure compatibility" >> PR_BODY.md
-            printf "%s\n" "- [ ] Review any breaking changes in the API" >> PR_BODY.md
-
-            # Create PR if none exists, otherwise update body
-            if gh pr view "$BRANCH_NAME" >/dev/null 2>&1; then
-              echo "🔄 PR already exists for $BRANCH_NAME - updating body & title"
-              gh pr edit "$BRANCH_NAME" --title "$PR_TITLE" --body-file PR_BODY.md
-              echo "✅ Pull request updated successfully"
-            else
-              gh pr create \
-                --title "$PR_TITLE" \
-                --body-file PR_BODY.md \
-                --label "automated" \
-                --label "synapse" \
-                --label "api-update" \
-                --base main \
-                --head "$BRANCH_NAME"
-              echo "✅ Pull request created successfully"
-            fi
-          '
-
-      - name: Summary
-        if: always()
-        run: |
-          echo "## 📊 Workflow Summary" >> $GITHUB_STEP_SUMMARY
-          echo "- **OpenAPI changes detected:** ${{ steps.check_changes.outputs.has_changes }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Generated changes:** ${{ steps.check_generated_changes.outputs.has_generated_changes || 'N/A' }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Workflow run:** [View details](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
-
-          if [ "${{ steps.check_changes.outputs.has_changes }}" = "false" ]; then
-            echo "- **Result:** ✅ No update needed - API specification unchanged" >> $GITHUB_STEP_SUMMARY
-          elif [ "${{ steps.check_generated_changes.outputs.has_generated_changes }}" = "true" ]; then
-            echo "- **Result:** ✅ Pull request created with updates" >> $GITHUB_STEP_SUMMARY
-          elif [ "${{ steps.check_changes.outputs.has_changes }}" = "true" ]; then
-            echo "- **Result:** ⚠️ API changes detected but no files were modified" >> $GITHUB_STEP_SUMMARY
-          fi
+            - [ ] Verify that the API changes are expected
+            - [ ] Check that generated clients compile successfully
+            - [ ] Run tests to ensure compatibility
+            - [ ] Review any breaking changes in the API
