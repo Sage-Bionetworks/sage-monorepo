@@ -1,4 +1,4 @@
-name: Update Synapse API description and its clients
+name: Update Synapse API description and generated artifacts
 
 on:
   schedule:
@@ -11,7 +11,7 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: synapse-update-synapse-api
+  group: update-synapse-api
   cancel-in-progress: false
 
 env:
@@ -19,84 +19,78 @@ env:
   NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
 
 jobs:
-  update-synapse-api:
+  extract-devcontainer-image:
     runs-on: ubuntu-latest
-    env:
-      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN_READ_WRITE }}
+    outputs:
+      image: ${{ steps.devcontainer.outputs.image }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up the dev container
-        uses: ./.github/actions/setup-dev-container
+      - id: devcontainer
+        name: Read .devcontainer/devcontainer.json
+        run: echo "image=$(jq -r '.image' .devcontainer/devcontainer.json)" >> $GITHUB_OUTPUT
 
-      - name: Build API description & regenerate clients
+  update-synapse-api:
+    runs-on: ubuntu-latest
+    needs: extract-devcontainer-image
+    defaults:
+      run:
+        # Use a login Bash shell so profile scripts (/etc/profile, /etc/bash.bashrc, and user profile)
+        # populate PATH with user-local bin directories (e.g. /home/ubuntu/.local/bin) where the devcontainer
+        # installs tools like `uv`. Without `-l`, a non-login, non-interactive shell would often miss those
+        # PATH entries and `uv` (and similar user-scoped tools) could be reported as "command not found".
+        # NOTE: The devcontainer's ~/.bashrc sources dev-env.sh only AFTER a non-interactive guard
+        # (e.g. a pattern like: [ -z "$PS1" ] && return). GitHub Actions steps run in a non-interactive
+        # shell, so that guard causes an early return and dev-env.sh is NOT sourced automatically.
+        # Therefore we still explicitly source dev-env.sh in a step to obtain functions like
+        # workspace-install. The login shell here is strictly for PATH hydration, not for loading
+        # those functions. This keeps PATH setup minimal and avoids manual PATH surgery.
+        shell: bash -l {0}
+    env:
+      # # Disable Nx Cloud usage for this workflow to avoid consuming tokens / network calls when
+      # # simply regenerating artifacts. If later we want hashing/distributed features, remove this.
+      # NX_NO_CLOUD: 'true'
+      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN_READ_WRITE }}
+
+    container:
+      image: ${{ needs.extract-devcontainer-image.outputs.image }}
+      options: --user ubuntu
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepare the workspace
         run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && echo '🔄 Building API description (includes downloading latest OpenAPI specification)...' \
-            && nx build synapse-api-description \
-            && echo '🔄 Regenerating synapse-* clients...' \
-            && nx run-many --target=generate --projects='synapse-*'"
+          . ./dev-env.sh
+          workspace-install
 
-      - name: Create commit inside dev container (no push)
+      - name: Build API description & regenerate generated projects
         run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -lc '
-            set -Eeuo pipefail
-            . ./dev-env.sh
-
-            git config user.name  "${GITHUB_ACTOR:-github-actions[bot]}"
-            git config user.email "${GIT_AUTHOR_EMAIL:-github-actions[bot]@users.noreply.github.com}"
-
-            BASE_BRANCH="main"
-            BRANCH_NAME="synapse/update-synapse-api"
-
-            # Fetch base & target
-            git fetch --no-tags --prune origin "+refs/heads/$BASE_BRANCH:refs/remotes/origin/$BASE_BRANCH" || true
-            git fetch --no-tags --prune origin "+refs/heads/$BRANCH_NAME:refs/remotes/origin/$BRANCH_NAME" || true
-
-            # Switch/create branch (local > remote > base)
-            if git rev-parse --verify --quiet "refs/heads/$BRANCH_NAME"; then
-              git switch "$BRANCH_NAME"
-              if git show-ref --verify --quiet "refs/remotes/origin/$BRANCH_NAME"; then
-                git merge --ff-only "origin/$BRANCH_NAME" || true
-              fi
-            elif git show-ref --verify --quiet "refs/remotes/origin/$BRANCH_NAME"; then
-              git switch -c "$BRANCH_NAME" --track "origin/$BRANCH_NAME"
-            else
-              if git show-ref --verify --quiet "refs/remotes/origin/$BASE_BRANCH"; then
-                git switch -c "$BRANCH_NAME" "origin/$BASE_BRANCH"
-              else
-                git switch -c "$BRANCH_NAME"
-              fi
-            fi
-
-            # Stage (consider scoping paths instead of -A)
-            git add -A
-
-            # Commit if there is anything staged; skip otherwise
-            if ! git diff --staged --quiet; then
-              git commit -m "chore(synapse): update Synapse API description and its clients"
-            else
-              echo "No changes to commit."
-            fi
-          '
+          . ./dev-env.sh
+          set -euo pipefail
+          echo '🔄 Building API description (includes downloading latest OpenAPI specification)...'
+          nx build synapse-api-description
+          echo '🔄 Regenerating synapse-* generated projects (clients, docs, etc.)...'
+          nx run-many --target=generate --projects='synapse-*'
 
       - name: Create or update Pull Request
         uses: peter-evans/create-pull-request@v7
         with:
           branch: synapse/update-synapse-api
-          title: 'chore(synapse): update Synapse API description and its clients'
-          commit-message: 'chore(synapse): update Synapse API description and its clients'
-          base: 'main'
+          delete-branch: true
+          title: 'chore(synapse): update Synapse API description and generated artifacts'
+          commit-message: 'chore(synapse): update Synapse API description and generated artifacts'
           body: |
             ## Description
 
             This is an automated update triggered by changes detected in the Synapse OpenAPI specification.
-            The workflow downloads the latest specification and regenerates dependent client libraries to keep them in sync.
+            The workflow downloads the latest specification and regenerates dependent generated projects (clients, docs, etc.) to keep them in sync.
 
             ## Review checklist
 
             - [ ] Verify that the API changes are expected
-            - [ ] Check that generated clients compile successfully
+            - [ ] Check that generated artifacts build/compile successfully
             - [ ] Run tests to ensure compatibility
             - [ ] Review any breaking changes in the API
