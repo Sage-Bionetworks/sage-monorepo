@@ -9,8 +9,6 @@ import json
 import logging
 import random
 import time
-from typing import List, Dict, Any
-import html
 import gradio as gr
 
 from config.constants import (
@@ -55,14 +53,17 @@ def create_suggested_prompts(num_prompts=3):
     prompt_cards = []
 
     for i, prompt in enumerate(prompts):
-        # Truncate very long prompts for display
-        display_text = prompt if len(prompt) <= 120 else prompt[:120] + "..."
+        # Truncate long prompts for display (approximately 5 lines worth)
+        max_chars = 200  # Roughly 5 lines of 40 chars each
+        if len(prompt) <= max_chars:
+            display_text = prompt
+        else:
+            display_text = prompt[:max_chars].rsplit(" ", 1)[0] + "..."
 
         btn = gr.Button(
             value=display_text,
             elem_classes=["suggested-prompt-card"],
         )
-
         prompt_cards.append((btn, prompt))
 
     return prompt_cards
@@ -285,15 +286,30 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
         text-align: left;
         font-size: 14px;
         transition: all 0.2s ease;
+        width: 30%;
+        margin: 0 1.5%;
+        flex: 1;
+        min-width: 200px;
+        line-height: 1.4;
+        word-wrap: break-word;
         white-space: normal;
-        width: 80%;
-        margin: 0 auto;
     }
 
     .gradio-container .suggested-prompt-card:hover {
         background: rgba(255, 255, 255, 0.08);
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    #suggested_prompts_section {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 12px;
+        max-width: 1200px;
+        margin: 0 auto;
     }
     
     #input_box.prompt_input {
