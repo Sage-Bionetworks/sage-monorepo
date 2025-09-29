@@ -97,14 +97,13 @@ jobs:
           '
 
       - name: Create or update Pull Request
-        # NOTE: This action executes as root because the job's container user was set to root and
-        # only the build/generation commands were explicitly downgraded via 'sudo -u ubuntu'. We do
-        # not wrap third-party composite/actions steps with sudo. The workspace files (already
-        # chowned to ubuntu) remain ubuntu-owned; only the git operations (commit, branch ref
-        # updates) are initiated by root which is acceptable here. If we later prefer this to run
-        # unprivileged, we could replace the action with explicit git commands invoked via
-        # 'sudo -u ubuntu bash -lc ...' or experiment with a wrapper script that preserves the
-        # required environment variables.
+        # NOTE: This step still runs as root. We start the container as root for early runner
+        # internals (checkout, file command state). Only build / generation phases are dropped to
+        # the unprivileged 'ubuntu' user via 'sudo -u ubuntu'; we do not wrap third‑party actions.
+        # The workspace files are already owned by ubuntu (we chown'd $GITHUB_WORKSPACE), so the
+        # only root-originated effects here are git commits / ref updates, which is acceptable.
+        # To make this unprivileged in future, replace the action with explicit git commands run
+        # under 'sudo -u ubuntu bash -lc ...', or add a thin wrapper that exports required env vars.
         uses: peter-evans/create-pull-request@v7
         with:
           branch: synapse/update-synapse-api
