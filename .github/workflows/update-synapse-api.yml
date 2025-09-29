@@ -62,6 +62,7 @@ jobs:
 
     container:
       image: ${{ needs.extract-devcontainer-image.outputs.image }}
+      options: --user root
       # NOTE: We intentionally run with the image's default user (likely root) here.
       # Setting --user ubuntu caused actions/checkout to fail writing state files under $RUNNER_TEMP
       # (EACCES opening /__w/_temp/_runner_file_commands/save_state_*). GitHub mounts /__w with
