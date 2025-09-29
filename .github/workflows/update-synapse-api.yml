@@ -1,6 +1,9 @@
 name: Update Synapse API description and generated artifacts
 
 on:
+  push:
+    branches:
+      - synapse/update-synapse-api-workflow-dev # trigger workflow when changes are pushed to this maintenance branch
   schedule:
     # Run daily at 9 AM UTC (4 AM EST, 1 AM PST)
     - cron: '0 9 * * *'
@@ -15,6 +18,9 @@ concurrency:
   cancel-in-progress: false
 
 env:
+  # NOTE: The following secrets must be defined in the repository or organization settings.
+  # Some static analyzers may flag them as "Context access might be invalid" even though this
+  # is valid GitHub Actions syntax. Leave as-is unless the secret names change.
   NX_BRANCH: ${{ github.ref_name }}
   NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
 
@@ -34,20 +40,8 @@ jobs:
   update-synapse-api:
     runs-on: ubuntu-latest
     needs: extract-devcontainer-image
-    defaults:
-      run:
-        # Use a login Bash shell so profile scripts (/etc/profile, /etc/bash.bashrc, and user profile)
-        # populate PATH with user-local bin directories (e.g. /home/ubuntu/.local/bin) where the devcontainer
-        # installs tools like `uv`. Without `-l`, a non-login, non-interactive shell would often miss those
-        # PATH entries and `uv` (and similar user-scoped tools) could be reported as "command not found".
-        # NOTE: The devcontainer's ~/.bashrc sources dev-env.sh only AFTER a non-interactive guard
-        # (e.g. a pattern like: [ -z "$PS1" ] && return). GitHub Actions steps run in a non-interactive
-        # shell, so that guard causes an early return and dev-env.sh is NOT sourced automatically.
-        # Therefore we still explicitly source dev-env.sh in a step to obtain functions like
-        # workspace-install. The login shell here is strictly for PATH hydration, not for loading
-        # those functions. This keeps PATH setup minimal and avoids manual PATH surgery.
-        shell: bash -l {0}
     env:
+      # NOTE: See comment above about secret name validation.
       # # Disable Nx Cloud usage for this workflow to avoid consuming tokens / network calls when
       # # simply regenerating artifacts. If later we want hashing/distributed features, remove this.
       # NX_NO_CLOUD: 'true'
@@ -55,27 +49,61 @@ jobs:
 
     container:
       image: ${{ needs.extract-devcontainer-image.outputs.image }}
-      options: --user ubuntu
+      # NOTE: The devcontainer image sets its default USER to 'ubuntu'. We override to root here
+      # (via --user root) so early framework mechanics (actions/checkout writing state files under
+      # $RUNNER_TEMP, file command APIs, etc.) are guaranteed to have write permission to the mounted
+      # runner directories without pre-adjusting ownership. After checkout we immediately drop
+      # privileges for build / generation by chowning only $GITHUB_WORKSPACE and invoking commands
+      # with 'sudo -u ubuntu'.
+      #
+      # Why not stay ubuntu from the start? When the workspace and temp mounts arrive owned by root
+      # (common when the host bind mounts into the container), starting as ubuntu can cause EACCES
+      # on state files (e.g. /__w/_temp/_runner_file_commands/save_state_*). Forcing root avoids the
+      # race/permission edge cases and lets us perform a controlled, minimal privilege drop.
+      #
+      # Principles followed:
+      #  * Do NOT chown $RUNNER_TEMP or $RUNNER_TOOL_CACHE (runner-managed, can break file commands)
+      #  * Only chown the repository workspace before running unprivileged steps
+      #  * Use 'sudo -u ubuntu' for generation so artifacts are not root-owned
+      #  * Keep the privileged window as small as possible
+      options: --user root
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - name: Prepare the workspace
+      - name: Adjust ownership & prepare workspace (unprivileged)
         run: |
-          . ./dev-env.sh
-          workspace-install
+          # Change ownership of only the GitHub workspace to ubuntu so dependency installs and
+          # generated artifacts are written with non-root permissions. We deliberately do NOT
+          # touch $RUNNER_TEMP or $RUNNER_TOOL_CACHE (runner-managed bind mounts) to avoid EPERM.
+          chown -R ubuntu:ubuntu "$GITHUB_WORKSPACE"
+          sudo -u ubuntu bash -lc '
+            set -euo pipefail
+            . ./dev-env.sh
+            workspace-install
+          '
 
-      - name: Build API description & regenerate generated projects
+      - name: Build API description & regenerate generated projects (unprivileged)
         run: |
-          . ./dev-env.sh
-          set -euo pipefail
-          echo '🔄 Building API description (includes downloading latest OpenAPI specification)...'
-          nx build synapse-api-description
-          echo '🔄 Regenerating synapse-* generated projects (clients, docs, etc.)...'
-          nx run-many --target=generate --projects='synapse-*'
+          # Execute build/generation as ubuntu (non-root) to avoid root-owned artifacts.
+          sudo -u ubuntu bash -lc '
+            set -euo pipefail
+            . ./dev-env.sh
+            echo "🔄 Building API description (includes downloading latest OpenAPI specification)..."
+            nx build synapse-api-description
+            echo "🔄 Regenerating synapse-* generated projects (clients, docs, etc.)..."
+            nx run-many --target=generate --projects="synapse-*"
+          '
 
       - name: Create or update Pull Request
+        # NOTE: This step still runs as root. We start the container as root for early runner
+        # internals (checkout, file command state). Only build / generation phases are dropped to
+        # the unprivileged 'ubuntu' user via 'sudo -u ubuntu'; we do not wrap third‑party actions.
+        # The workspace files are already owned by ubuntu (we chown'd $GITHUB_WORKSPACE), so the
+        # only root-originated effects here are git commits / ref updates, which is acceptable.
+        # To make this unprivileged in future, replace the action with explicit git commands run
+        # under 'sudo -u ubuntu bash -lc ...', or add a thin wrapper that exports required env vars.
         uses: peter-evans/create-pull-request@v7
         with:
           branch: synapse/update-synapse-api
@@ -86,6 +114,7 @@ jobs:
             ## Description
 
             This is an automated update triggered by changes detected in the Synapse OpenAPI specification.
+
             The workflow downloads the latest specification and regenerates dependent generated projects (clients, docs, etc.) to keep them in sync.
 
             ## Review checklist
