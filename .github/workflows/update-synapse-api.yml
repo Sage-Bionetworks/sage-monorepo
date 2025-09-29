@@ -1,6 +1,9 @@
 name: Update Synapse API description and generated artifacts
 
 on:
+  push:
+    branches:
+      - synapse/workflow-container-root # trigger workflow when changes are pushed to this maintenance branch
   schedule:
     # Run daily at 9 AM UTC (4 AM EST, 1 AM PST)
     - cron: '0 9 * * *'
@@ -55,42 +58,57 @@ jobs:
 
     container:
       image: ${{ needs.extract-devcontainer-image.outputs.image }}
-      options: --user ubuntu
+      # NOTE: We intentionally run with the image's default user (likely root) here.
+      # Setting --user ubuntu caused actions/checkout to fail writing state files under $RUNNER_TEMP
+      # (EACCES opening /__w/_temp/_runner_file_commands/save_state_*). GitHub mounts /__w with
+      # ownership that assumes the container user can write. Overriding to a non-root user without
+      # adjusting ownership (chown) breaks any action that uses file command APIs. If we later need
+      # to run generation as a non-root user, prefer either:
+      #  1. A step wrapper: sudo -u ubuntu bash -lc '...'; or
+      #  2. A custom image whose default USER already matches the desired UID and has correct perms.
+      # Leaving off --user restores normal permissions and resolves the checkout EACCES error.
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Give ubuntu ownership of the workspace and temp dirs
+        run: |
+          chown -R ubuntu:ubuntu "$RUNNER_TEMP" "$RUNNER_TOOL_CACHE" 2>/dev/null || true
+          chmod -R u+w "$RUNNER_TEMP"
+
       - name: Prepare the workspace
         run: |
-          . ./dev-env.sh
-          workspace-install
+          su -l ubuntu -c 'bash -lc "
+            . ./dev-env.sh
+            workspace-install
+          "'
 
-      - name: Build API description & regenerate generated projects
-        run: |
-          . ./dev-env.sh
-          set -euo pipefail
-          echo '🔄 Building API description (includes downloading latest OpenAPI specification)...'
-          nx build synapse-api-description
-          echo '🔄 Regenerating synapse-* generated projects (clients, docs, etc.)...'
-          nx run-many --target=generate --projects='synapse-*'
+      # - name: Build API description & regenerate generated projects
+      #   run: |
+      #     . ./dev-env.sh
+      #     set -euo pipefail
+      #     echo '🔄 Building API description (includes downloading latest OpenAPI specification)...'
+      #     nx build synapse-api-description
+      #     echo '🔄 Regenerating synapse-* generated projects (clients, docs, etc.)...'
+      #     nx run-many --target=generate --projects='synapse-*'
 
-      - name: Create or update Pull Request
-        uses: peter-evans/create-pull-request@v7
-        with:
-          branch: synapse/update-synapse-api
-          delete-branch: true
-          title: 'chore(synapse): update Synapse API description and generated artifacts'
-          commit-message: 'chore(synapse): update Synapse API description and generated artifacts'
-          body: |
-            ## Description
+      # - name: Create or update Pull Request
+      #   uses: peter-evans/create-pull-request@v7
+      #   with:
+      #     branch: synapse/update-synapse-api
+      #     delete-branch: true
+      #     title: 'chore(synapse): update Synapse API description and generated artifacts'
+      #     commit-message: 'chore(synapse): update Synapse API description and generated artifacts'
+      #     body: |
+      #       ## Description
 
-            This is an automated update triggered by changes detected in the Synapse OpenAPI specification.
-            The workflow downloads the latest specification and regenerates dependent generated projects (clients, docs, etc.) to keep them in sync.
+      #       This is an automated update triggered by changes detected in the Synapse OpenAPI specification.
+      #       The workflow downloads the latest specification and regenerates dependent generated projects (clients, docs, etc.) to keep them in sync.
 
-            ## Review checklist
+      #       ## Review checklist
 
-            - [ ] Verify that the API changes are expected
-            - [ ] Check that generated artifacts build/compile successfully
-            - [ ] Run tests to ensure compatibility
-            - [ ] Review any breaking changes in the API
+      #       - [ ] Verify that the API changes are expected
+      #       - [ ] Check that generated artifacts build/compile successfully
+      #       - [ ] Run tests to ensure compatibility
+      #       - [ ] Review any breaking changes in the API
