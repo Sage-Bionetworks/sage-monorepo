@@ -89,17 +89,17 @@ jobs:
             workspace-install
           '
 
-      # - name: Build API description & regenerate generated projects (unprivileged)
-      #   run: |
-      #     # Execute build/generation as ubuntu (non-root) to avoid root-owned artifacts.
-      #     sudo -u ubuntu bash -lc '
-      #       set -euo pipefail
-      #       . ./dev-env.sh
-      #       echo "🔄 Building API description (includes downloading latest OpenAPI specification)..."
-      #       nx build synapse-api-description
-      #       echo "🔄 Regenerating synapse-* generated projects (clients, docs, etc.)..."
-      #       nx run-many --target=generate --projects="synapse-*"
-      #     '
+      - name: Build API description & regenerate generated projects (unprivileged)
+        run: |
+          # Execute build/generation as ubuntu (non-root) to avoid root-owned artifacts.
+          sudo -u ubuntu bash -lc '
+            set -euo pipefail
+            . ./dev-env.sh
+            echo "🔄 Building API description (includes downloading latest OpenAPI specification)..."
+            nx build synapse-api-description
+            echo "🔄 Regenerating synapse-* generated projects (clients, docs, etc.)..."
+            nx run-many --target=generate --projects="synapse-*"
+          '
 
       # - name: Create or update Pull Request
       #   uses: peter-evans/create-pull-request@v7
