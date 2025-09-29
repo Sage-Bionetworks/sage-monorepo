@@ -365,7 +365,7 @@ After basic functionality testing, run a comprehensive, CLI‑driven test pass w
 - Editor‑integrated language servers started via the active `devcontainer.json`
 - Any VS Code tasks, launch configs, or UI workflows
 
-For those editor integration aspects, see the later section "IDE & CI Integration Testing" which performs an actual VS Code rebuild using the active dev container definition.
+For those editor integration aspects, see the later section [IDE & CI Integration Testing](#ide-ci-integration-testing) which performs an actual VS Code rebuild using the active dev container definition.
 
 !!! note "Why 'Headless'?"
 
