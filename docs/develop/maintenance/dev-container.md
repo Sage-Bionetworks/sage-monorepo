@@ -631,8 +631,7 @@ Headless = dev container started via CLI (devcontainer up / exec) with the monor
 
 **Option A: Manual Testing (step-by-step)**
 
-- [ ] (Optional) Temporarily point `.devcontainer/devcontainer.json` to `:local` for this session (see "Update Dev Container Definition") — do NOT commit
-- [ ] Start dev container with monorepo (refer to "Deploy with Monorepo Codebase" – startup step)
+- [ ] (Optional) Temporarily point `.devcontainer/devcontainer.json` to `:local` for this session (see "[Update Dev Container Definition](#update-dev-container-definition)") — do NOT commit
 - [ ] (If using interactive flow) Attach a shell to the running container (see steps in "3.1 Manual Dev Container Testing")
 - [ ] Initialize environment & install dependencies (source `dev-env.sh`, then install; see prior section for details)
 - [ ] Run full create-config / build / test targets (refer to combined Nx targets described earlier)
