@@ -6,6 +6,7 @@ playwright-report/
 test-results/
 
 # Config files
+.act.secrets
 .openchallenges.toml
 
 # Generated Dockerfiles from centralized container image system

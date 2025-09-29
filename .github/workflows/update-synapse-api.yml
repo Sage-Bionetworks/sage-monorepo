@@ -54,8 +54,7 @@ jobs:
       NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN_READ_WRITE }}
 
     container:
-      # image: ${{ needs.extract-devcontainer-image.outputs.image }}
-      image: ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:sha-6269b9b3d863831c296f843edd84b2c7e1d4733d
+      image: ${{ needs.extract-devcontainer-image.outputs.image }}
       options: --user ubuntu
 
     steps:
@@ -76,22 +75,21 @@ jobs:
           echo '🔄 Regenerating synapse-* generated projects (clients, docs, etc.)...'
           nx run-many --target=generate --projects='synapse-*'
 
-  # - name: Create or update Pull Request
-  #   uses: peter-evans/create-pull-request@v7
-  #   with:
-  #     branch: synapse/update-synapse-api
-  #     title: 'chore(synapse): update Synapse API description and generated artifacts'
-  #     commit-message: 'chore(synapse): update Synapse API description and generated artifacts'
-  #     base: 'main'
-  #     body: |
-  #       ## Description
+      - name: Create or update Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: synapse/update-synapse-api
+          title: 'chore(synapse): update Synapse API description and generated artifacts'
+          commit-message: 'chore(synapse): update Synapse API description and generated artifacts'
+          body: |
+            ## Description
 
-  #       This is an automated update triggered by changes detected in the Synapse OpenAPI specification.
-  #       The workflow downloads the latest specification and regenerates dependent generated projects (clients, docs, etc.) to keep them in sync.
+            This is an automated update triggered by changes detected in the Synapse OpenAPI specification.
+            The workflow downloads the latest specification and regenerates dependent generated projects (clients, docs, etc.) to keep them in sync.
 
-  #       ## Review checklist
+            ## Review checklist
 
-  #       - [ ] Verify that the API changes are expected
-  #       - [ ] Check that generated artifacts build/compile successfully
-  #       - [ ] Run tests to ensure compatibility
-  #       - [ ] Review any breaking changes in the API
+            - [ ] Verify that the API changes are expected
+            - [ ] Check that generated artifacts build/compile successfully
+            - [ ] Run tests to ensure compatibility
+            - [ ] Review any breaking changes in the API
