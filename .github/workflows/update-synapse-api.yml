@@ -73,13 +73,13 @@ jobs:
       # Leaving off --user restores normal permissions and resolves the checkout EACCES error.
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
       - name: Give ubuntu ownership of the workspace and temp dirs
         run: |
           chown -R ubuntu:ubuntu "$RUNNER_TEMP" "$RUNNER_TOOL_CACHE" 2>/dev/null || true
           chmod -R u+w "$RUNNER_TEMP"
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Prepare the workspace
         run: |
