@@ -1,30 +1,32 @@
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-
-export interface GitHubTag {
-  name: string;
-  commit: {
-    sha: string;
-  };
-}
+import { Injectable } from '@angular/core';
+import { Octokit } from '@octokit/rest';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GitHubService {
-  http = inject(HttpClient);
+  private readonly octokit = new Octokit();
 
-  private readonly apiUrl = 'https://api.github.com/repos/Sage-Bionetworks/sage-monorepo/tags';
+  async getCommitSHA(tagName: string): Promise<string> {
+    try {
+      const iterator = this.octokit.paginate.iterator(this.octokit.rest.repos.listTags, {
+        owner: 'Sage-Bionetworks',
+        repo: 'sage-monorepo',
+        per_page: 100,
+      });
 
-  getCommitSHA(tagName: string): Observable<string> {
-    return this.http.get<GitHubTag[]>(this.apiUrl).pipe(
-      map((tags) => {
+      for await (const { data: tags } of iterator) {
         const tag = tags.find((t) => t.name === tagName);
-        return tag ? this.getShortSHA(tag.commit.sha) : '';
-      }),
-    );
+        if (tag) {
+          return this.getShortSHA(tag.commit.sha);
+        }
+      }
+
+      return '';
+    } catch (error) {
+      console.error('Error fetching tags:', error);
+      return '';
+    }
   }
 
   getShortSHA(fullSHA: string) {
