@@ -43,10 +43,11 @@ multiple branches before the whole team is switched over.
     - Dockerfile (Ubuntu date tag + tool ARG bumps + removals)
     - Build Definition devcontainer file (feature version bumps, add/remove Features)
 
-2. Open PR (BUILD). CI builds & publishes image → GHCR tag.
-3. (Optional) Test in other branches by temporarily overriding the active file locally (do NOT commit those overrides) or using `devcontainer build/up/exec` commands referencing the new image.
-4. Once validated, create branch `chore/devcontainer/activate-<tag>` updating only `.devcontainer/devcontainer.json` to the new image tag.
-5. Open PR (ACTIVATE). After merge, developers rebuild / reopen in container and begin using the new environment.
+2. Open PR (BUILD). Opening and updating the PR triggers a build of the Docker images.
+3. Merge PR (PUBLISH). Builds & publishes image → GHCR tag.
+4. (Optional) Test in other branches by temporarily overriding the active file locally (do NOT commit those overrides) or using `devcontainer build/up/exec` commands referencing the new image.
+5. Once validated, create branch `chore/devcontainer/activate-<tag>` updating only `.devcontainer/devcontainer.json` to the new image tag.
+6. Open PR (ACTIVATE). After merge, developers rebuild / reopen in container and begin using the new environment.
 
 !!! note
 
