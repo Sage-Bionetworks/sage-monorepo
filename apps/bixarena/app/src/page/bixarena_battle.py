@@ -172,36 +172,6 @@ def clear_history(request: gr.Request):
     )
 
 
-def mock_bot_response_multi(state0, state1):
-    """Mock bot response that simulates 5 second delay"""
-    logger.info("Starting mock bot response - 5 second delay")
-
-    # Simulate streaming response over 5 seconds
-    for i in range(50):  # 50 iterations * 0.1 seconds = 5 seconds
-        if state0:
-            # Add some mock text progressively
-            mock_response = f"Mock response part {i + 1}/50..."
-            if i == 49:  # Final response
-                mock_response = "This is a mock response to test Enter key disabling during generation."
-
-            # Update the conversation
-            state0.conv.messages[-1] = ("assistant", mock_response)
-            state1.conv.messages[-1] = (
-                "assistant",
-                f"Different mock response: {mock_response}",
-            )
-
-        yield (
-            [state0, state1]
-            + [
-                state0.to_gradio_chatbot() if state0 else None,
-                state1.to_gradio_chatbot() if state1 else None,
-            ]
-            + [disable_btn] * 4
-        )
-        time.sleep(0.1)
-
-
 def flash_buttons():
     btn_updates = [
         [disable_btn] * 3 + [enable_btn] * 1,
@@ -496,7 +466,7 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
         [],
         js=disable_enter_js,
     ).then(
-        mock_bot_response_multi,  # Use mock instead of real bot_response_multi
+        bot_response_multi,
         states,
         states + chatbots + btn_list,
     ).then(
@@ -534,7 +504,7 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
             [],
             js=disable_enter_js,
         ).then(
-            mock_bot_response_multi,  # Use mock instead of real bot_response_multi
+            bot_response_multi,
             states,
             states + chatbots + btn_list,
         ).then(
