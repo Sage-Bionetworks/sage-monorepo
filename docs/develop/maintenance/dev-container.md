@@ -83,7 +83,9 @@ The remainder of this guide details how to update the Docker base image, tool ve
 
 ## Step 1a: Update the Docker Base Image
 
-> See the "Update Checklist" at the end of this document for an actionable summary of this section.
+!!! tip Quick reference
+
+    See the "Update Checklist" at the end of this document for an actionable summary of this section.
 
 ### Base Image Update
 
@@ -176,7 +178,9 @@ To maintain security and reduce the attack surface, the dev container tool set s
 
 ## Step 1b: Update Dev Container Features
 
-> Refer to the "Update Checklist" for a summarized set of required review items.
+!!! tip Quick reference
+
+    See the "Update Checklist" at the end of this document for an actionable summary of this section.
 
 After updating the Dockerfile (Step 1a), update `.github/.devcontainer/devcontainer.json` (feature set & runtime configuration). This remains part of Step 1 (BUILD & PUBLISH).
 
@@ -291,7 +295,7 @@ When considering features from smaller communities, use this evaluation checklis
 
 !!! tip Quick reference
 
-    All actions here are summarized in the "Update Checklist".
+    See the "Update Checklist" at the end of this document for an actionable summary of this section.
 
 ### Manual Dev Container Testing
 
