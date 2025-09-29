@@ -6,6 +6,12 @@ on:
       - opened
       - edited
       - synchronize
+  pull_request:
+    types:
+      - edited
+      - opened
+      - ready_for_review
+      - synchronize
   merge_group:
 
 permissions:
