@@ -13,6 +13,9 @@
  */
 export interface OrgSagebionetworksRepoModelMigrationAsyncMigrationTypeCountRequest {
   concreteType: OrgSagebionetworksRepoModelMigrationAsyncMigrationTypeCountRequest.ConcreteTypeEnum;
+  /**
+   * The migration type
+   */
   type?: string;
 }
 export namespace OrgSagebionetworksRepoModelMigrationAsyncMigrationTypeCountRequest {

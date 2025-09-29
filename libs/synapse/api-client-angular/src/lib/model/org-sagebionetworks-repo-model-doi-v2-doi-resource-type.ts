@@ -12,5 +12,43 @@
  * Required. Describes the type of media that the DOI Metadata refers to.
  */
 export interface OrgSagebionetworksRepoModelDoiV2DoiResourceType {
-  resourceTypeGeneral?: string;
+  /**
+   * Describes the general type of media that DOI Metadata refers to.
+   */
+  resourceTypeGeneral?: OrgSagebionetworksRepoModelDoiV2DoiResourceType.ResourceTypeGeneralEnum;
+}
+export namespace OrgSagebionetworksRepoModelDoiV2DoiResourceType {
+  export type ResourceTypeGeneralEnum =
+    | 'Audiovisual'
+    | 'Collection'
+    | 'DataPaper'
+    | 'Dataset'
+    | 'Event'
+    | 'Image'
+    | 'InteractiveResource'
+    | 'Model'
+    | 'PhysicalObject'
+    | 'Service'
+    | 'Software'
+    | 'Sound'
+    | 'Text'
+    | 'Workflow'
+    | 'Other';
+  export const ResourceTypeGeneralEnum = {
+    Audiovisual: 'Audiovisual' as ResourceTypeGeneralEnum,
+    Collection: 'Collection' as ResourceTypeGeneralEnum,
+    DataPaper: 'DataPaper' as ResourceTypeGeneralEnum,
+    Dataset: 'Dataset' as ResourceTypeGeneralEnum,
+    Event: 'Event' as ResourceTypeGeneralEnum,
+    Image: 'Image' as ResourceTypeGeneralEnum,
+    InteractiveResource: 'InteractiveResource' as ResourceTypeGeneralEnum,
+    Model: 'Model' as ResourceTypeGeneralEnum,
+    PhysicalObject: 'PhysicalObject' as ResourceTypeGeneralEnum,
+    Service: 'Service' as ResourceTypeGeneralEnum,
+    Software: 'Software' as ResourceTypeGeneralEnum,
+    Sound: 'Sound' as ResourceTypeGeneralEnum,
+    Text: 'Text' as ResourceTypeGeneralEnum,
+    Workflow: 'Workflow' as ResourceTypeGeneralEnum,
+    Other: 'Other' as ResourceTypeGeneralEnum,
+  };
 }

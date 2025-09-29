@@ -13,7 +13,13 @@
  */
 export interface OrgSagebionetworksRepoModelTableUploadToTableResult {
   concreteType: OrgSagebionetworksRepoModelTableUploadToTableResult.ConcreteTypeEnum;
+  /**
+   * The number of rows that were read from the provided file and applied to the table.
+   */
   rowsProcessed?: number;
+  /**
+   * The new etag of the version applied to the table.
+   */
   etag?: string;
 }
 export namespace OrgSagebionetworksRepoModelTableUploadToTableResult {

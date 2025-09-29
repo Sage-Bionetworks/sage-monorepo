@@ -13,6 +13,9 @@ import { OrgSagebionetworksRepoModelDoiV2DoiNameIdentifier } from './org-sagebio
  * JSON schema for DOI Metadata Creator.
  */
 export interface OrgSagebionetworksRepoModelDoiV2DoiCreator {
+  /**
+   * Required. May be a corporate/institutional or personal name (\"Family, Given\").
+   */
   creatorName?: string;
   /**
    * Optional. Uniquely identifies an individual or legal entity, according to various schemas.

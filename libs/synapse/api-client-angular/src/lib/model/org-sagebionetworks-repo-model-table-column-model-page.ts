@@ -17,5 +17,8 @@ export interface OrgSagebionetworksRepoModelTableColumnModelPage {
    * A single page of ColumnModels
    */
   results?: Array<OrgSagebionetworksRepoModelTableColumnModel>;
+  /**
+   * If there are more pages of results this token can be used to get the next page.  Null if this is the last page.
+   */
   nextPageToken?: string;
 }

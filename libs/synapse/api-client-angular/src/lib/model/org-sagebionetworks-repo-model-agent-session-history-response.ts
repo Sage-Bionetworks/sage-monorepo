@@ -13,10 +13,16 @@ import { OrgSagebionetworksRepoModelAgentInteraction } from './org-sagebionetwor
  * A single page of an agent session history
  */
 export interface OrgSagebionetworksRepoModelAgentSessionHistoryResponse {
+  /**
+   * The session ID of this conversation\'s history
+   */
   sessionId?: string;
   /**
    * A single page of a session\'s history.  The history is ordered by the interaction time stamp descending.
    */
   page?: Array<OrgSagebionetworksRepoModelAgentInteraction>;
+  /**
+   * Forward this token to get the next page of results.
+   */
   nextPageToken?: string;
 }

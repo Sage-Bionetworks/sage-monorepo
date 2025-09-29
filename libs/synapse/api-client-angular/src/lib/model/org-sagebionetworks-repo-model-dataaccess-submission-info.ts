@@ -13,10 +13,25 @@ import { OrgSagebionetworksRepoModelDataaccessAccessorChange } from './org-sageb
  * Information about a request to access controlled data and its related Research Project
  */
 export interface OrgSagebionetworksRepoModelDataaccessSubmissionInfo {
+  /**
+   * The institution that the research project belongs to.
+   */
   institution?: string;
+  /**
+   * The person who is leading the research project.
+   */
   projectLead?: string;
+  /**
+   * A few short paragraph that explains how the controlled data will be used.
+   */
   intendedDataUseStatement?: string;
+  /**
+   * The date the request submission was last modified.
+   */
   modifiedOn?: string;
+  /**
+   * The ID of the user that submitted this submission.
+   */
   submittedBy?: string;
   /**
    * List of user changes. A user can gain access, renew access or have access revoked.

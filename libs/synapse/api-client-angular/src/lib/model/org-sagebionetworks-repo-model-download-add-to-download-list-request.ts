@@ -15,8 +15,17 @@ import { OrgSagebionetworksRepoModelTableQuery } from './org-sagebionetworks-rep
 export interface OrgSagebionetworksRepoModelDownloadAddToDownloadListRequest {
   concreteType: OrgSagebionetworksRepoModelDownloadAddToDownloadListRequest.ConcreteTypeEnum;
   query?: OrgSagebionetworksRepoModelTableQuery;
+  /**
+   * The synID of a folder, project, or dataset to add all of the children files to the user\'s download list.  This parameter should be excluded when adding files from a query. Note: This is not recursive, unless the recursive property is set to true.
+   */
   parentId?: string;
+  /**
+   * When the parentId is specified and this property is set to true all the files in a folder or project will be added to the user\'s download list, including files contained in sub-folders. When set to false (default) only the direct children of the provided parentId will be added to the download list. Note: the property cannot be true when a query is specified or when the parentId is a dataset.
+   */
   recursive?: boolean;
+  /**
+   * When true (default), the version number will be included for each file added to the user\'s download list.  When set to false, the version number will be excluded, indicating that the \'current\' version should always be downloaded.
+   */
   useVersionNumber?: boolean;
 }
 export namespace OrgSagebionetworksRepoModelDownloadAddToDownloadListRequest {

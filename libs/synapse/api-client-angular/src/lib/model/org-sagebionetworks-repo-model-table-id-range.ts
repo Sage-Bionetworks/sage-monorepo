@@ -12,9 +12,24 @@
  * Represents a range of IDs
  */
 export interface OrgSagebionetworksRepoModelTableIdRange {
+  /**
+   * The first ID of the range (inclusive).
+   */
   minimumId?: number;
+  /**
+   * The last ID of the range (inclusive).
+   */
   maximumId?: number;
+  /**
+   * The versionNumber for this range
+   */
   versionNumber?: number;
+  /**
+   * This the the current maximum ID issued to this table. All row updates must have IDs less than or equal to this number.
+   */
   maximumUpdateId?: number;
+  /**
+   * The etag for this range
+   */
   etag?: string;
 }

@@ -17,5 +17,8 @@ export interface OrgSagebionetworksRepoModelPortalsListPortalsResponse {
    * A page of portals that match the request filters.
    */
   page?: Array<OrgSagebionetworksRepoModelPortalsPortal>;
+  /**
+   * Forward this token to get the next page of results.
+   */
   nextPageToken?: string;
 }

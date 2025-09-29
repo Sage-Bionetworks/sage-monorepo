@@ -13,6 +13,9 @@ import { OrgSagebionetworksRepoModelFileFileHandleAssociation } from './org-sage
  * Describes an association of a FileHandle with another object.
  */
 export interface OrgSagebionetworksRepoModelFileFileDownloadRecord {
+  /**
+   * The ID of the user that downloaded the file.
+   */
   userId?: string;
   downloadedFile?: OrgSagebionetworksRepoModelFileFileHandleAssociation;
 }

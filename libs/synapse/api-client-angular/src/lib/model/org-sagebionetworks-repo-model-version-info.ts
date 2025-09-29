@@ -12,15 +12,48 @@
  * JSON schema for VersionInfo POJO
  */
 export interface OrgSagebionetworksRepoModelVersionInfo {
+  /**
+   * The id of the entity
+   */
   id?: string;
+  /**
+   * The version number of the entity
+   */
   versionNumber?: number;
+  /**
+   * The user defined version label of the entity
+   */
   versionLabel?: string;
+  /**
+   * The user defined version label of the entity
+   */
   versionComment?: string;
+  /**
+   * If this version is the latest version of the entity
+   */
   isLatestVersion?: boolean;
+  /**
+   * The display name of the user that last modified this entity.
+   */
   modifiedBy?: string;
+  /**
+   * The size of the associated file (when applicable and available).
+   */
   contentSize?: string;
+  /**
+   * Calculated md5 of the associated file (when applicable and available).
+   */
   contentMd5?: string;
+  /**
+   * The file handle id of the associated file (when applicable and available).
+   */
   fileHandleId?: string;
+  /**
+   * The user that last modified this entity.
+   */
   modifiedByPrincipalId?: string;
+  /**
+   * The date this entity was last modified.
+   */
   modifiedOn?: string;
 }

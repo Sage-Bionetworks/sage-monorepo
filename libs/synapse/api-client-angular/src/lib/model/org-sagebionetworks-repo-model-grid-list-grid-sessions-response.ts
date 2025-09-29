@@ -17,5 +17,8 @@ export interface OrgSagebionetworksRepoModelGridListGridSessionsResponse {
    * A single page of results that match the request parameters.
    */
   page?: Array<OrgSagebionetworksRepoModelGridGridSession>;
+  /**
+   * Forward this token to get the next page of results.
+   */
   nextPageToken?: string;
 }

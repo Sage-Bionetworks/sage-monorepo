@@ -14,5 +14,8 @@ import { OrgSagebionetworksRepoModelSchemaJsonSchemaVersionInfo } from './org-sa
  */
 export interface OrgSagebionetworksRepoModelSchemaListJsonSchemaVersionInfoResponse {
   page?: Array<OrgSagebionetworksRepoModelSchemaJsonSchemaVersionInfo>;
+  /**
+   * Forward this token to get the next page of results.
+   */
   nextPageToken?: string;
 }

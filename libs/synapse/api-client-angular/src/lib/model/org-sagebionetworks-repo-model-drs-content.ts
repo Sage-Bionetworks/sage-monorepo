@@ -12,7 +12,16 @@
  * For blob there is no contents and for bundle its list of object inside the bundle.
  */
 export interface OrgSagebionetworksRepoModelDrsContent {
+  /**
+   * A name declared by the bundle author that must be used when materializing this object, overriding any name directly associated with the object itself. The name must be unique with the containing bundle.synID is used as name as its unique e.g syn123.1
+   */
   name?: string;
+  /**
+   * A DRS-identifier of a DrsObject i.e synId e.g syn123.1
+   */
   id?: string;
+  /**
+   * A list of full DRS identifier URI paths that may be used to obtain the object. These URIs may be external to this DRS instance. e.g drs://<host-name>/syn123.1
+   */
   drs_uri?: string;
 }

@@ -12,9 +12,24 @@
  * JSON schema for ProjectHeader
  */
 export interface OrgSagebionetworksRepoModelProjectHeader {
+  /**
+   * The  name of the project
+   */
   name?: string;
+  /**
+   * The id of the project
+   */
   id?: string;
+  /**
+   * The optional last recorded activity for this project and the current user.
+   */
   lastActivity?: string;
+  /**
+   * The date this project was last modified.
+   */
   modifiedOn?: string;
+  /**
+   * The ID of the user that last modified this project.
+   */
   modifiedBy?: number;
 }

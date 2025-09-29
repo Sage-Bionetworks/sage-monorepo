@@ -12,9 +12,22 @@
  * Contains a AnnotationV2\'s value and its type
  */
 export interface OrgSagebionetworksRepoModelAnnotationV2AnnotationsValue {
-  type?: string;
+  /**
+   * describes the type of a AnnotationV2\'s value
+   */
+  type?: OrgSagebionetworksRepoModelAnnotationV2AnnotationsValue.TypeEnum;
   /**
    * List of values as strings. Clients should use the \"type\" field to determine how to interpret the strings. Single values Annotations are represented as a list of size 1, and multiple values size > 1. Empty list or null is not allowed
    */
   value: Array<string>;
+}
+export namespace OrgSagebionetworksRepoModelAnnotationV2AnnotationsValue {
+  export type TypeEnum = 'STRING' | 'DOUBLE' | 'LONG' | 'TIMESTAMP_MS' | 'BOOLEAN';
+  export const TypeEnum = {
+    String: 'STRING' as TypeEnum,
+    Double: 'DOUBLE' as TypeEnum,
+    Long: 'LONG' as TypeEnum,
+    TimestampMs: 'TIMESTAMP_MS' as TypeEnum,
+    Boolean: 'BOOLEAN' as TypeEnum,
+  };
 }

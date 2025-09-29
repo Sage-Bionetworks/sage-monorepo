@@ -13,9 +13,21 @@ import { OrgSagebionetworksRepoModelQuizQuestionResponse } from './org-sagebione
  * The set of responses to a Quiz
  */
 export interface OrgSagebionetworksRepoModelQuizQuizResponse {
+  /**
+   * The unique ID for this response
+   */
   id?: number;
+  /**
+   * The ID of the Quiz to which this is a response
+   */
   quizId?: number;
+  /**
+   * The unique identifier of the one creating the response
+   */
   createdBy?: string;
+  /**
+   * When this response was created
+   */
   createdOn?: string;
   /**
    * The list of responses to the questions in the Quiz

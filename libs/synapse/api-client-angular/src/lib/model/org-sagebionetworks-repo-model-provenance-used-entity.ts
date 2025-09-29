@@ -13,6 +13,9 @@ import { OrgSagebionetworksRepoModelReference } from './org-sagebionetworks-repo
  * Interface for JSON schema for UsedEntity POJO
  */
 export interface OrgSagebionetworksRepoModelProvenanceUsedEntity {
+  /**
+   * The enclosed entity was used and also executed in the Activity
+   */
   wasExecuted?: boolean;
   concreteType: OrgSagebionetworksRepoModelProvenanceUsedEntity.ConcreteTypeEnum;
   reference?: OrgSagebionetworksRepoModelReference;

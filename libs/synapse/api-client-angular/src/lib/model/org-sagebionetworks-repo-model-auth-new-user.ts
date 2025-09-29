@@ -12,11 +12,39 @@
  * Fields required to create a new user account
  */
 export interface OrgSagebionetworksRepoModelAuthNewUser {
+  /**
+   * User\'s email
+   */
   email?: string;
+  /**
+   * User\'s first name
+   */
   firstName?: string;
+  /**
+   * User\'s last name
+   */
   lastName?: string;
+  /**
+   * A is a unique alias that will identify a user. A userName can only contain letters, numbers, dot (.), dash (-) and underscore (_) and must be at least 3 characters long.
+   */
   userName?: string;
-  oauthProvider?: string;
+  /**
+   * Supported OAuth providers
+   */
+  oauthProvider?: OrgSagebionetworksRepoModelAuthNewUser.OauthProviderEnum;
+  /**
+   * When the user is created through an oauth provider, this value identifies the user in the provider.
+   */
   subject?: string;
+  /**
+   * Encoded signed token containing the information needed to retrieve a membership invitation.
+   */
   encodedMembershipInvtnSignedToken?: string;
+}
+export namespace OrgSagebionetworksRepoModelAuthNewUser {
+  export type OauthProviderEnum = 'GOOGLE_OAUTH_2_0' | 'ORCID';
+  export const OauthProviderEnum = {
+    GoogleOauth20: 'GOOGLE_OAUTH_2_0' as OauthProviderEnum,
+    Orcid: 'ORCID' as OauthProviderEnum,
+  };
 }

@@ -12,8 +12,20 @@
  * Provides information about a restriction fulfillment for a user in the context of a restrictable object and access requirement
  */
 export interface OrgSagebionetworksRepoModelRestrictionFulfillment {
+  /**
+   * The id of the access requirement that applies
+   */
   accessRequirementId?: number;
+  /**
+   * True if the user has an approval for the access requirement or if they are the owner of the data. Note that this property does not take into account an access requirement exemption.
+   */
   isApproved?: boolean;
+  /**
+   * True if the user meets the access requirement. Note that this property takes into account the access requirement exemption.
+   */
   isMet?: boolean;
+  /**
+   * True if the user is both a data contributor and eligible for exemption on the access requirement.
+   */
   isExempt?: boolean;
 }

@@ -12,7 +12,13 @@
  * Represents a single partial row of a TableEntity.
  */
 export interface OrgSagebionetworksRepoModelTablePartialRow {
+  /**
+   * The current etag of this object.
+   */
   etag?: string;
+  /**
+   * The immutable ID of a row.
+   */
   rowId?: number;
   /**
    * The values for columns of this row as a map. The key is the columnId and value is the cell value. To perform updates on a row inside of Views, a pair of {\"key\":\"etag\", \"value\":\"REPLACE-WITH-ETAG-OF-ENTITY-BEING-UPDATED\"} must be also included.

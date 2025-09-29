@@ -14,5 +14,8 @@ import { OrgSagebionetworksRepoModelDataaccessAccessorGroup } from './org-sagebi
  */
 export interface OrgSagebionetworksRepoModelDataaccessAccessorGroupResponse {
   results?: Array<OrgSagebionetworksRepoModelDataaccessAccessorGroup>;
+  /**
+   * The token to get the next page result.
+   */
   nextPageToken?: string;
 }

@@ -14,5 +14,8 @@ import { OrgSagebionetworksRepoModelProjectHeader } from './org-sagebionetworks-
  */
 export interface OrgSagebionetworksRepoModelProjectHeaderList {
   results?: Array<OrgSagebionetworksRepoModelProjectHeader>;
+  /**
+   * The token to get the next page of results.
+   */
   nextPageToken?: string;
 }

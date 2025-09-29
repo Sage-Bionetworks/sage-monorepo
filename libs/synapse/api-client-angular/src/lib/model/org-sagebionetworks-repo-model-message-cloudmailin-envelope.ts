@@ -12,13 +12,28 @@
  * Message Envelope
  */
 export interface OrgSagebionetworksRepoModelMessageCloudmailinEnvelope {
+  /**
+   * The email address the server is sending to. Note this might not always be the address within the message headers. For that reason you should also look at the headers parameter.
+   */
   to?: string;
   /**
    * The full list of recipients that the remote server is attempting to send to in this transaction.
    */
   recipients?: Array<string>;
+  /**
+   * The email address that the server was sending from. Note this might not always be the address within the message headers. For that reason you should also look at the headers parameter.
+   */
   from?: string;
+  /**
+   * The domain reported by the sending server as it sends the helo or ehlo command.
+   */
   helo_domain?: string;
+  /**
+   * The remote IP address of the sending server if available.
+   */
   remote_ip?: string;
+  /**
+   * The SPF result for the given IP address and Domain.
+   */
   spf?: string;
 }

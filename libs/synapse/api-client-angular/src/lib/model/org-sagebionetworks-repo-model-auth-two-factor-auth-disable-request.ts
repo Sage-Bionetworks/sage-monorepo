@@ -13,7 +13,13 @@ import { OrgSagebionetworksRepoModelAuthTwoFactorAuthResetToken } from './org-sa
  * Allows to disable two-factor authentication for the user account
  */
 export interface OrgSagebionetworksRepoModelAuthTwoFactorAuthDisableRequest {
+  /**
+   * The token that was included in the error response when authenticating.
+   */
   twoFaToken?: string;
+  /**
+   * The current user password that can be used in place of the twoFaToken (e.g. when authenticating with user/password or during a change password workflow).
+   */
   password?: string;
   twoFaResetToken?: OrgSagebionetworksRepoModelAuthTwoFactorAuthResetToken;
 }

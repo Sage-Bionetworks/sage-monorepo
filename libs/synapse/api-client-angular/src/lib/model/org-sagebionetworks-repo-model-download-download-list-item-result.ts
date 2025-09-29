@@ -12,15 +12,48 @@
  * The results of a single item on a user\'s download list.
  */
 export interface OrgSagebionetworksRepoModelDownloadDownloadListItemResult {
+  /**
+   * The name of the file.
+   */
   fileName?: string;
+  /**
+   * The date-time when this file was added to the user\'s download list.
+   */
   addedOn?: string;
+  /**
+   * The ID of the project that contains this file.
+   */
   projectId?: string;
+  /**
+   * The name of the project that contains this file.
+   */
   projectName?: string;
+  /**
+   * The ID of the user that created this file.
+   */
   createdBy?: string;
+  /**
+   * The date-time when this file was created.
+   */
   createdOn?: string;
+  /**
+   * The size of the file in bytes.
+   */
   fileSizeBytes?: number;
+  /**
+   * Only files that are managed by Synapse storage are eligible for packaging into a zip file.  If true, then the file is eligible for packaging into a zip file.
+   */
   isEligibleForPackaging?: boolean;
+  /**
+   * The ID of the file handle associated with this file.
+   */
   fileHandleId?: string;
+  /**
+   * The \'syn\' identifier of a file entity.
+   */
   fileEntityId?: string;
+  /**
+   * When included, indicates that a specific version of a files was added to the user\'s download list.  When excluded, the current version was added.
+   */
   versionNumber?: number;
 }

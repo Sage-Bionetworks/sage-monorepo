@@ -17,5 +17,8 @@ export interface OrgSagebionetworksRepoModelDataaccessAccessRequirementSearchRes
    * The results of an access requirement search
    */
   results?: Array<OrgSagebionetworksRepoModelDataaccessAccessRequirementSearchResult>;
+  /**
+   * A token used to get the next page of a particular search query.
+   */
   nextPageToken?: string;
 }

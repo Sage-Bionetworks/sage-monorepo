@@ -12,5 +12,12 @@
  * Status of 2FA for the user
  */
 export interface OrgSagebionetworksRepoModelAuthTwoFactorAuthStatus {
-  status?: string;
+  status?: OrgSagebionetworksRepoModelAuthTwoFactorAuthStatus.StatusEnum;
+}
+export namespace OrgSagebionetworksRepoModelAuthTwoFactorAuthStatus {
+  export type StatusEnum = 'ENABLED' | 'DISABLED';
+  export const StatusEnum = {
+    Enabled: 'ENABLED' as StatusEnum,
+    Disabled: 'DISABLED' as StatusEnum,
+  };
 }

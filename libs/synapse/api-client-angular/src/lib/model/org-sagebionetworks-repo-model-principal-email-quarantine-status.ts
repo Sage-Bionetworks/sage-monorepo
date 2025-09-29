@@ -12,7 +12,25 @@
  * Information about the quarantine status of a notification email
  */
 export interface OrgSagebionetworksRepoModelPrincipalEmailQuarantineStatus {
-  reason?: string;
+  /**
+   * The enumeration of the possible reason for a notification email quarantine
+   */
+  reason?: OrgSagebionetworksRepoModelPrincipalEmailQuarantineStatus.ReasonEnum;
+  /**
+   * Additional detaul about the reason for the quarantine
+   */
   reasonDetails?: string;
+  /**
+   * If an expiration is set for the quarantine will hold the date till which the user will not receive messages
+   */
   expiration?: string;
+}
+export namespace OrgSagebionetworksRepoModelPrincipalEmailQuarantineStatus {
+  export type ReasonEnum = 'PERMANENT_BOUNCE' | 'TRANSIENT_BOUNCE' | 'COMPLAINT' | 'OTHER';
+  export const ReasonEnum = {
+    PermanentBounce: 'PERMANENT_BOUNCE' as ReasonEnum,
+    TransientBounce: 'TRANSIENT_BOUNCE' as ReasonEnum,
+    Complaint: 'COMPLAINT' as ReasonEnum,
+    Other: 'OTHER' as ReasonEnum,
+  };
 }

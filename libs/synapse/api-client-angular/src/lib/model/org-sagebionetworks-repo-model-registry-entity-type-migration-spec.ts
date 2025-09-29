@@ -13,6 +13,9 @@ import { OrgSagebionetworksRepoModelRegistryFieldMigrationSpec } from './org-sag
  * Metadata to describe the migration of an entity type
  */
 export interface OrgSagebionetworksRepoModelRegistryEntityTypeMigrationSpec {
+  /**
+   * The type of entity
+   */
   entityType?: string;
   fields?: Array<OrgSagebionetworksRepoModelRegistryFieldMigrationSpec>;
 }

@@ -12,6 +12,9 @@
  * The response to a multiple choice question
  */
 export interface OrgSagebionetworksRepoModelQuizMultichoiceResponse {
+  /**
+   * an index unique in the Quiz, used to refer to the question being answered
+   */
   questionIndex?: number;
   concreteType: OrgSagebionetworksRepoModelQuizMultichoiceResponse.ConcreteTypeEnum;
   answerIndex?: Set<number>;

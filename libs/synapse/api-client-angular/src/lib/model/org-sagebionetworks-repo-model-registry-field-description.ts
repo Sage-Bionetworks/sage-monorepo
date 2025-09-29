@@ -9,7 +9,16 @@
  */
 
 export interface OrgSagebionetworksRepoModelRegistryFieldDescription {
+  /**
+   * Name of field
+   */
   name?: string;
+  /**
+   * Type of field
+   */
   type?: string;
+  /**
+   * Bucket where the field resides
+   */
   bucket?: string;
 }

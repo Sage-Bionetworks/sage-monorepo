@@ -17,5 +17,8 @@ export interface OrgSagebionetworksRepoModelTableTableBundle {
    * The list of ColumnModels currently used by this table.
    */
   columnModels?: Array<OrgSagebionetworksRepoModelTableColumnModel>;
+  /**
+   * The maximum number of rows that can be requested or posted for this table in a single call.  This is a function of the columns that are currently assigned to this table.
+   */
   maxRowsPerPage?: number;
 }

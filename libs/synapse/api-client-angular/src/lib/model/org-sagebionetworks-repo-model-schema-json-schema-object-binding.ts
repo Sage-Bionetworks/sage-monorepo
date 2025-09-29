@@ -14,9 +14,30 @@ import { OrgSagebionetworksRepoModelSchemaJsonSchemaVersionInfo } from './org-sa
  */
 export interface OrgSagebionetworksRepoModelSchemaJsonSchemaObjectBinding {
   jsonSchemaVersionInfo?: OrgSagebionetworksRepoModelSchemaJsonSchemaVersionInfo;
+  /**
+   * The numeric identifier of the object bound to a JSON schema
+   */
   objectId?: number;
-  objectType?: string;
+  /**
+   * Object types that can be bound to a JSON schema.
+   */
+  objectType?: OrgSagebionetworksRepoModelSchemaJsonSchemaObjectBinding.ObjectTypeEnum;
+  /**
+   * The date this binding was created.
+   */
   createdOn?: string;
+  /**
+   * The ID of the user that bound this object to the schema.
+   */
   createdBy?: string;
+  /**
+   * When \'true\', Synapse will automatically, calculate the derived annotations for the Entities bound to this schema
+   */
   enableDerivedAnnotations?: boolean;
+}
+export namespace OrgSagebionetworksRepoModelSchemaJsonSchemaObjectBinding {
+  export type ObjectTypeEnum = 'entity';
+  export const ObjectTypeEnum = {
+    Entity: 'entity' as ObjectTypeEnum,
+  };
 }

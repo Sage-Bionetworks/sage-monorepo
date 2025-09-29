@@ -14,5 +14,8 @@ import { OrgSagebionetworksRepoModelOauthOAuthClient } from './org-sagebionetwor
  */
 export interface OrgSagebionetworksRepoModelOauthOAuthClientList {
   results?: Array<OrgSagebionetworksRepoModelOauthOAuthClient>;
+  /**
+   * The token to get the next page of results.
+   */
   nextPageToken?: string;
 }

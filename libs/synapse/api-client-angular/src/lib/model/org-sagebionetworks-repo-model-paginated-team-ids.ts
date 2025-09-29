@@ -16,5 +16,8 @@ export interface OrgSagebionetworksRepoModelPaginatedTeamIds {
    * The requested team IDs.
    */
   teamIds?: Array<string>;
+  /**
+   * Token that can be used to get the next page.  Null if there are no more results.
+   */
   nextPageToken?: string;
 }

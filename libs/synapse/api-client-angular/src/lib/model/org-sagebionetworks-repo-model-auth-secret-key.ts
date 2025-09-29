@@ -12,5 +12,8 @@
  * Data transfer object for a secret key
  */
 export interface OrgSagebionetworksRepoModelAuthSecretKey {
+  /**
+   * The user\'s secret key
+   */
   secretKey?: string;
 }

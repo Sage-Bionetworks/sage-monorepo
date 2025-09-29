@@ -12,11 +12,81 @@
  * Summary of a requested file download.
  */
 export interface OrgSagebionetworksRepoModelFileFileDownloadSummary {
+  /**
+   * The file handle id of a requested file.
+   */
   fileHandleId?: string;
+  /**
+   * The ID of the object associated with the file
+   */
   associateObjectId?: string;
-  associateObjectType?: string;
+  /**
+   * Enumeration of all possible objects types that can be associated with a file.
+   */
+  associateObjectType?: OrgSagebionetworksRepoModelFileFileDownloadSummary.AssociateObjectTypeEnum;
+  /**
+   * The zip entry name used for this file.  This entry includes both the path and file name.  The value will only be set if the status is set to \'SUCCESS\'
+   */
   zipEntryName?: string;
-  status?: string;
+  /**
+   * The download status of this file.
+   */
+  status?: OrgSagebionetworksRepoModelFileFileDownloadSummary.StatusEnum;
+  /**
+   * If the download status of this file is set to \'FAILURE\', then this will be the failure message. Null for \'SUCCESS\'.
+   */
   failureMessage?: string;
-  failureCode?: string;
+  /**
+   * If the download status of this file is set to \'FAILURE\', then this will be the failure code. Null for \'SUCCESS\'.
+   */
+  failureCode?: OrgSagebionetworksRepoModelFileFileDownloadSummary.FailureCodeEnum;
+}
+export namespace OrgSagebionetworksRepoModelFileFileDownloadSummary {
+  export type AssociateObjectTypeEnum =
+    | 'FileEntity'
+    | 'TableEntity'
+    | 'WikiAttachment'
+    | 'WikiMarkdown'
+    | 'UserProfileAttachment'
+    | 'MessageAttachment'
+    | 'TeamAttachment'
+    | 'SubmissionAttachment'
+    | 'VerificationSubmission'
+    | 'AccessRequirementAttachment'
+    | 'DataAccessRequestAttachment'
+    | 'DataAccessSubmissionAttachment'
+    | 'FormData';
+  export const AssociateObjectTypeEnum = {
+    FileEntity: 'FileEntity' as AssociateObjectTypeEnum,
+    TableEntity: 'TableEntity' as AssociateObjectTypeEnum,
+    WikiAttachment: 'WikiAttachment' as AssociateObjectTypeEnum,
+    WikiMarkdown: 'WikiMarkdown' as AssociateObjectTypeEnum,
+    UserProfileAttachment: 'UserProfileAttachment' as AssociateObjectTypeEnum,
+    MessageAttachment: 'MessageAttachment' as AssociateObjectTypeEnum,
+    TeamAttachment: 'TeamAttachment' as AssociateObjectTypeEnum,
+    SubmissionAttachment: 'SubmissionAttachment' as AssociateObjectTypeEnum,
+    VerificationSubmission: 'VerificationSubmission' as AssociateObjectTypeEnum,
+    AccessRequirementAttachment: 'AccessRequirementAttachment' as AssociateObjectTypeEnum,
+    DataAccessRequestAttachment: 'DataAccessRequestAttachment' as AssociateObjectTypeEnum,
+    DataAccessSubmissionAttachment: 'DataAccessSubmissionAttachment' as AssociateObjectTypeEnum,
+    FormData: 'FormData' as AssociateObjectTypeEnum,
+  };
+  export type StatusEnum = 'SUCCESS' | 'FAILURE';
+  export const StatusEnum = {
+    Success: 'SUCCESS' as StatusEnum,
+    Failure: 'FAILURE' as StatusEnum,
+  };
+  export type FailureCodeEnum =
+    | 'NOT_FOUND'
+    | 'UNAUTHORIZED'
+    | 'DUPLICATE'
+    | 'EXCEEDS_SIZE_LIMIT'
+    | 'UNKNOWN_ERROR';
+  export const FailureCodeEnum = {
+    NotFound: 'NOT_FOUND' as FailureCodeEnum,
+    Unauthorized: 'UNAUTHORIZED' as FailureCodeEnum,
+    Duplicate: 'DUPLICATE' as FailureCodeEnum,
+    ExceedsSizeLimit: 'EXCEEDS_SIZE_LIMIT' as FailureCodeEnum,
+    UnknownError: 'UNKNOWN_ERROR' as FailureCodeEnum,
+  };
 }

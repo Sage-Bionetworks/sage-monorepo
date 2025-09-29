@@ -10,9 +10,15 @@
 import { OrgSagebionetworksRepoModelGridSqlSqlExpression } from './org-sagebionetworks-repo-model-grid-sql-sql-expression';
 
 export interface OrgSagebionetworksRepoModelGridSqlBinaryExpression {
+  /**
+   * Required. Full name of the exact type used.
+   */
   concreteType: OrgSagebionetworksRepoModelGridSqlBinaryExpression.ConcreteTypeEnum;
   left?: OrgSagebionetworksRepoModelGridSqlSqlExpression;
-  operator?: string;
+  /**
+   * The comparison operator.
+   */
+  operator?: OrgSagebionetworksRepoModelGridSqlBinaryExpression.OperatorEnum;
   right?: OrgSagebionetworksRepoModelGridSqlSqlExpression;
 }
 export namespace OrgSagebionetworksRepoModelGridSqlBinaryExpression {
@@ -20,5 +26,24 @@ export namespace OrgSagebionetworksRepoModelGridSqlBinaryExpression {
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelGridSqlBinaryExpression:
       'org.sagebionetworks.repo.model.grid.sql.BinaryExpression' as ConcreteTypeEnum,
+  };
+  export type OperatorEnum =
+    | 'EQUALS'
+    | 'NOT_EQUALS'
+    | 'GREATER_THAN'
+    | 'LESS_THAN'
+    | 'GREATER_THAN_OR_EQUALS'
+    | 'LESS_THAN_OR_EQUALS'
+    | 'AND'
+    | 'OR';
+  export const OperatorEnum = {
+    Equals: 'EQUALS' as OperatorEnum,
+    NotEquals: 'NOT_EQUALS' as OperatorEnum,
+    GreaterThan: 'GREATER_THAN' as OperatorEnum,
+    LessThan: 'LESS_THAN' as OperatorEnum,
+    GreaterThanOrEquals: 'GREATER_THAN_OR_EQUALS' as OperatorEnum,
+    LessThanOrEquals: 'LESS_THAN_OR_EQUALS' as OperatorEnum,
+    And: 'AND' as OperatorEnum,
+    Or: 'OR' as OperatorEnum,
   };
 }

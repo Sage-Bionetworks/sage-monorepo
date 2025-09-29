@@ -23,7 +23,10 @@ export interface OrgSagebionetworksRepoModelNode {
   createdOn?: string;
   modifiedByPrincipalId?: number;
   modifiedOn?: string;
-  nodeType?: string;
+  /**
+   * Type of the Entity
+   */
+  nodeType?: OrgSagebionetworksRepoModelNode.NodeTypeEnum;
   eTag?: string;
   versionNumber?: number;
   versionComment?: string;
@@ -47,6 +50,43 @@ export interface OrgSagebionetworksRepoModelNode {
   csvDescriptor?: OrgSagebionetworksRepoModelTableCsvTableDescriptor;
   reference?: OrgSagebionetworksRepoModelReference;
   alias?: string;
+  /**
+   * For table entities, specifies if the full text search index is enabled or not.
+   */
   isSearchEnabled?: boolean;
+  /**
+   * For materialized views and virtual tables, specifies the SQL defining the content of the table.
+   */
   definingSQL?: string;
+}
+export namespace OrgSagebionetworksRepoModelNode {
+  export type NodeTypeEnum =
+    | 'project'
+    | 'folder'
+    | 'file'
+    | 'table'
+    | 'link'
+    | 'entityview'
+    | 'dockerrepo'
+    | 'submissionview'
+    | 'dataset'
+    | 'datasetcollection'
+    | 'materializedview'
+    | 'virtualtable'
+    | 'recordset';
+  export const NodeTypeEnum = {
+    Project: 'project' as NodeTypeEnum,
+    Folder: 'folder' as NodeTypeEnum,
+    File: 'file' as NodeTypeEnum,
+    Table: 'table' as NodeTypeEnum,
+    Link: 'link' as NodeTypeEnum,
+    Entityview: 'entityview' as NodeTypeEnum,
+    Dockerrepo: 'dockerrepo' as NodeTypeEnum,
+    Submissionview: 'submissionview' as NodeTypeEnum,
+    Dataset: 'dataset' as NodeTypeEnum,
+    Datasetcollection: 'datasetcollection' as NodeTypeEnum,
+    Materializedview: 'materializedview' as NodeTypeEnum,
+    Virtualtable: 'virtualtable' as NodeTypeEnum,
+    Recordset: 'recordset' as NodeTypeEnum,
+  };
 }

@@ -12,7 +12,61 @@
  * A column model contains the metadata of a single column of a TableEntity
  */
 export interface OrgSagebionetworksRepoModelTableSelectColumn {
+  /**
+   * The required display name of the column
+   */
   name?: string;
-  columnType?: string;
+  /**
+   * The column type determines the type of data that can be stored in a column. Switching between types (using <a href=\"${POST.entity.id.table.transaction.async.start}\">a transaction</a> with <a href=\"${org.sagebionetworks.repo.model.table.TableUpdateTransactionRequest}\">TableUpdateTransactionRequest</a> in the \"changes\" list) is generally allowed except for switching to \"_LIST\" suffixed types. In such cases, a new column must be created and data must be copied over manually
+   */
+  columnType?: OrgSagebionetworksRepoModelTableSelectColumn.ColumnTypeEnum;
+  /**
+   * The optional ID of the select column, if this is a direct column selected
+   */
   id?: string;
+}
+export namespace OrgSagebionetworksRepoModelTableSelectColumn {
+  export type ColumnTypeEnum =
+    | 'STRING'
+    | 'DOUBLE'
+    | 'INTEGER'
+    | 'BOOLEAN'
+    | 'DATE'
+    | 'FILEHANDLEID'
+    | 'ENTITYID'
+    | 'SUBMISSIONID'
+    | 'EVALUATIONID'
+    | 'LINK'
+    | 'MEDIUMTEXT'
+    | 'LARGETEXT'
+    | 'USERID'
+    | 'STRING_LIST'
+    | 'INTEGER_LIST'
+    | 'BOOLEAN_LIST'
+    | 'DATE_LIST'
+    | 'ENTITYID_LIST'
+    | 'USERID_LIST'
+    | 'JSON';
+  export const ColumnTypeEnum = {
+    String: 'STRING' as ColumnTypeEnum,
+    Double: 'DOUBLE' as ColumnTypeEnum,
+    Integer: 'INTEGER' as ColumnTypeEnum,
+    Boolean: 'BOOLEAN' as ColumnTypeEnum,
+    Date: 'DATE' as ColumnTypeEnum,
+    Filehandleid: 'FILEHANDLEID' as ColumnTypeEnum,
+    Entityid: 'ENTITYID' as ColumnTypeEnum,
+    Submissionid: 'SUBMISSIONID' as ColumnTypeEnum,
+    Evaluationid: 'EVALUATIONID' as ColumnTypeEnum,
+    Link: 'LINK' as ColumnTypeEnum,
+    Mediumtext: 'MEDIUMTEXT' as ColumnTypeEnum,
+    Largetext: 'LARGETEXT' as ColumnTypeEnum,
+    Userid: 'USERID' as ColumnTypeEnum,
+    StringList: 'STRING_LIST' as ColumnTypeEnum,
+    IntegerList: 'INTEGER_LIST' as ColumnTypeEnum,
+    BooleanList: 'BOOLEAN_LIST' as ColumnTypeEnum,
+    DateList: 'DATE_LIST' as ColumnTypeEnum,
+    EntityidList: 'ENTITYID_LIST' as ColumnTypeEnum,
+    UseridList: 'USERID_LIST' as ColumnTypeEnum,
+    Json: 'JSON' as ColumnTypeEnum,
+  };
 }

@@ -13,13 +13,34 @@ import { OrgSagebionetworksRepoModelLimitsProjectStorageLocationUsage } from './
  * This upload destination contains information to start an upload to an external Google Cloud Storage bucket connected with synapse. The destination is mapped from an <a href=\"${org.sagebionetworks.repo.model.project.ExternalGoogleCloudStorageLocationSetting}\">ExternalGoogleCloudStorageLocationSetting</a>.
  */
 export interface OrgSagebionetworksRepoModelFileExternalGoogleCloudUploadDestination {
+  /**
+   * Indicates which implementation this object represents.
+   */
   concreteType: OrgSagebionetworksRepoModelFileExternalGoogleCloudUploadDestination.ConcreteTypeEnum;
+  /**
+   * the unique id for the storage location, that points to the <a href=\"${org.sagebionetworks.repo.model.project.StorageLocationSetting}\">StorageLocationSetting</a>
+   */
   storageLocationId?: number;
-  uploadType?: string;
+  /**
+   * The enumeration of possible upload types.
+   */
+  uploadType?: OrgSagebionetworksRepoModelFileExternalGoogleCloudUploadDestination.UploadTypeEnum;
+  /**
+   * If set, the client should show this banner every time an upload is initiated
+   */
   banner?: string;
+  /**
+   * The ID of the project where this file will be uploaded.
+   */
   destinationProjectId?: string;
   projectStorageLocationUsage?: OrgSagebionetworksRepoModelLimitsProjectStorageLocationUsage;
+  /**
+   * the optional base key, which acts as a prefix or a base folder
+   */
   baseKey?: string;
+  /**
+   * the bucket to use
+   */
   bucket?: string;
 }
 export namespace OrgSagebionetworksRepoModelFileExternalGoogleCloudUploadDestination {
@@ -28,5 +49,20 @@ export namespace OrgSagebionetworksRepoModelFileExternalGoogleCloudUploadDestina
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelFileExternalGoogleCloudUploadDestination:
       'org.sagebionetworks.repo.model.file.ExternalGoogleCloudUploadDestination' as ConcreteTypeEnum,
+  };
+  export type UploadTypeEnum =
+    | 'S3'
+    | 'GOOGLECLOUDSTORAGE'
+    | 'SFTP'
+    | 'HTTPS'
+    | 'PROXYLOCAL'
+    | 'NONE';
+  export const UploadTypeEnum = {
+    S3: 'S3' as UploadTypeEnum,
+    Googlecloudstorage: 'GOOGLECLOUDSTORAGE' as UploadTypeEnum,
+    Sftp: 'SFTP' as UploadTypeEnum,
+    Https: 'HTTPS' as UploadTypeEnum,
+    Proxylocal: 'PROXYLOCAL' as UploadTypeEnum,
+    None: 'NONE' as UploadTypeEnum,
   };
 }

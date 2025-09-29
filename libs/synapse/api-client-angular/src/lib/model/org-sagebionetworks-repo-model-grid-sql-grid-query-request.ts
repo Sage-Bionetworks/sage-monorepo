@@ -12,7 +12,14 @@ import { OrgSagebionetworksRepoModelGridSqlQuery } from './org-sagebionetworks-r
 /**
  * Request to query the grid.
  */
-export interface OrgSagebionetworksRepoModelGridGridQueryRequest {
+export interface OrgSagebionetworksRepoModelGridSqlGridQueryRequest {
+  /**
+   * The grid session ID.
+   */
   gridSessionId?: string;
+  /**
+   * The identifier of the replica to query.
+   */
+  replicaId?: number;
   query?: OrgSagebionetworksRepoModelGridSqlQuery;
 }

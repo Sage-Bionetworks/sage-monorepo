@@ -12,7 +12,23 @@
  * This object is deprecated and will be removed in future versions of Synapse.
  */
 export interface OrgSagebionetworksRepoModelAttachmentPresignedUrl {
+  /**
+   * The token ID for this url
+   */
   tokenID?: string;
+  /**
+   * A presigned url for downloading.
+   */
   presignedUrl?: string;
-  status?: string;
+  /**
+   * The status of this URL
+   */
+  status?: OrgSagebionetworksRepoModelAttachmentPresignedUrl.StatusEnum;
+}
+export namespace OrgSagebionetworksRepoModelAttachmentPresignedUrl {
+  export type StatusEnum = 'DOES_NOT_EXIST' | 'READ_FOR_DOWNLOAD';
+  export const StatusEnum = {
+    DoesNotExist: 'DOES_NOT_EXIST' as StatusEnum,
+    ReadForDownload: 'READ_FOR_DOWNLOAD' as StatusEnum,
+  };
 }

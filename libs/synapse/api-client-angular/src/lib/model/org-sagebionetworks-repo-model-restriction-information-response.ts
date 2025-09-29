@@ -14,12 +14,26 @@ import { OrgSagebionetworksRepoModelAuthUserEntityPermissions } from './org-sage
  * The information about restriction level on a restrict-able object.
  */
 export interface OrgSagebionetworksRepoModelRestrictionInformationResponse {
+  /**
+   * The id of the restrictable object
+   */
   objectId?: number;
-  restrictionLevel?: string;
+  restrictionLevel?: OrgSagebionetworksRepoModelRestrictionInformationResponse.RestrictionLevelEnum;
+  /**
+   * True if user has at least one unmet access requirement on this restrict-able object; false otherwise.
+   */
   hasUnmetAccessRequirement?: boolean;
   userEntityPermissions?: OrgSagebionetworksRepoModelAuthUserEntityPermissions;
   /**
    * The list of restriction fulfillment information for each access requirement that applies to the restrictable object.
    */
   restrictionDetails?: Array<OrgSagebionetworksRepoModelRestrictionFulfillment>;
+}
+export namespace OrgSagebionetworksRepoModelRestrictionInformationResponse {
+  export type RestrictionLevelEnum = 'OPEN' | 'RESTRICTED_BY_TERMS_OF_USE' | 'CONTROLLED_BY_ACT';
+  export const RestrictionLevelEnum = {
+    Open: 'OPEN' as RestrictionLevelEnum,
+    RestrictedByTermsOfUse: 'RESTRICTED_BY_TERMS_OF_USE' as RestrictionLevelEnum,
+    ControlledByAct: 'CONTROLLED_BY_ACT' as RestrictionLevelEnum,
+  };
 }

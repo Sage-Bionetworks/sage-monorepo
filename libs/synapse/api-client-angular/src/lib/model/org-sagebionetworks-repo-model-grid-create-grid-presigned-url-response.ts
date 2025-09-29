@@ -12,5 +12,8 @@
  * Response to create a grid presigned URL.
  */
 export interface OrgSagebionetworksRepoModelGridCreateGridPresignedUrlResponse {
+  /**
+   * A presigned URL used to establish a websocket connection to the grid session.
+   */
   presignedUrl?: string;
 }

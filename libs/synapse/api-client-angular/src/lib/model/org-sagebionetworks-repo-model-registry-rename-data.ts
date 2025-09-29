@@ -12,7 +12,16 @@
  * Rename datat
  */
 export interface OrgSagebionetworksRepoModelRegistryRenameData {
+  /**
+   * The name of the entity with a field to rename.
+   */
   entityTypeName?: string;
+  /**
+   * The old name of the field that is being renamed.
+   */
   oldFieldName?: string;
+  /**
+   * The new name of the field.
+   */
   newFieldName?: string;
 }

@@ -12,6 +12,12 @@
  * JSON schema for a request to create or update a Portal.
  */
 export interface OrgSagebionetworksRepoModelPortalsCreateOrUpdatePortalRequest {
+  /**
+   * The name of the portal, must be unique.
+   */
   name?: string;
+  /**
+   * The base URL of the portal, must be unique.
+   */
   url?: string;
 }

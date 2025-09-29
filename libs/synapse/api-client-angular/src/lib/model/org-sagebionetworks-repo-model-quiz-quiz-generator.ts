@@ -13,8 +13,17 @@ import { OrgSagebionetworksRepoModelQuizQuestionVariety } from './org-sagebionet
  * Schema for a quiz and, optionally, its answer key
  */
 export interface OrgSagebionetworksRepoModelQuizQuizGenerator {
+  /**
+   * the ID of this Quiz
+   */
   id?: number;
+  /**
+   * Content preceding the series of questions
+   */
   header?: string;
+  /**
+   * Minimum number of questions to answer correctly to pass
+   */
   minimumScore?: number;
   /**
    * The questions in the Quiz

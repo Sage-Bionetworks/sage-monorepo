@@ -12,7 +12,13 @@
  * Represents a selection of rows of a TableEntity
  */
 export interface OrgSagebionetworksRepoModelTableRowSelection {
+  /**
+   * The ID of the TableEntity than owns these rows (optional if supplied by the REST command)
+   */
   tableId?: string;
+  /**
+   * This should be set to the current etag or this selection (the etag returned by a query, or the current etag of the table).
+   */
   etag?: string;
   /**
    * Each row id of this list refers to a single row of a TableEntity.

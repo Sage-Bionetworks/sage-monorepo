@@ -12,9 +12,24 @@
  * Describes the eligibility of an indivdiual to submit to an Evaluation queue, reflecting the queue\'s submission quotas and current submissions.
  */
 export interface OrgSagebionetworksEvaluationModelMemberSubmissionEligibility {
+  /**
+   * true if all criteria are met
+   */
   isEligible?: boolean;
+  /**
+   * true if team/individual is registered for challenge
+   */
   isRegistered?: boolean;
+  /**
+   * true if team/individual has reached the submission quota (for the given submission round)
+   */
   isQuotaFilled?: boolean;
+  /**
+   *
+   */
   principalId?: number;
+  /**
+   * true if the individual has submitted alone or with another team
+   */
   hasConflictingSubmission?: boolean;
 }

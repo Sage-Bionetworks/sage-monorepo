@@ -12,5 +12,8 @@
  * The date/time on which the user was authenticated
  */
 export interface OrgSagebionetworksRepoModelAuthAuthenticatedOn {
+  /**
+   * The date/time on which the user was authenticated
+   */
   authenticatedOn?: string;
 }

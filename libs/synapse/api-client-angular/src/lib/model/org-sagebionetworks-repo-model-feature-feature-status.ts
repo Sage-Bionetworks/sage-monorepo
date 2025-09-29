@@ -12,6 +12,35 @@
  * The status of a particular feature
  */
 export interface OrgSagebionetworksRepoModelFeatureFeatureStatus {
-  feature?: string;
+  /**
+   * The name of the feature that can be enabled or disabled globally
+   */
+  feature?: OrgSagebionetworksRepoModelFeatureFeatureStatus.FeatureEnum;
+  /**
+   * True if the feature is enabled, false otherwise
+   */
   enabled?: boolean;
+}
+export namespace OrgSagebionetworksRepoModelFeatureFeatureStatus {
+  export type FeatureEnum =
+    | 'DATA_ACCESS_NOTIFICATIONS'
+    | 'DATA_ACCESS_AUTO_REVOCATION'
+    | 'MULTIPART_AUTO_CLEANUP'
+    | 'DATA_DOWNLOAD_THROUGH_CLOUDFRONT'
+    | 'CHANGE_PASSWORD_2FA_CHECK_BYPASS'
+    | 'USE_NEW_ASYNC_GOOGLE_MULTIPART_UPLOAD'
+    | 'ENFORCE_PROJECT_STORAGE_LIMITS'
+    | 'ALLOW_AGENT_WRITES'
+    | 'DISABLE_2FA_REQUIREMENT';
+  export const FeatureEnum = {
+    DataAccessNotifications: 'DATA_ACCESS_NOTIFICATIONS' as FeatureEnum,
+    DataAccessAutoRevocation: 'DATA_ACCESS_AUTO_REVOCATION' as FeatureEnum,
+    MultipartAutoCleanup: 'MULTIPART_AUTO_CLEANUP' as FeatureEnum,
+    DataDownloadThroughCloudfront: 'DATA_DOWNLOAD_THROUGH_CLOUDFRONT' as FeatureEnum,
+    ChangePassword2FaCheckBypass: 'CHANGE_PASSWORD_2FA_CHECK_BYPASS' as FeatureEnum,
+    UseNewAsyncGoogleMultipartUpload: 'USE_NEW_ASYNC_GOOGLE_MULTIPART_UPLOAD' as FeatureEnum,
+    EnforceProjectStorageLimits: 'ENFORCE_PROJECT_STORAGE_LIMITS' as FeatureEnum,
+    AllowAgentWrites: 'ALLOW_AGENT_WRITES' as FeatureEnum,
+    Disable2FaRequirement: 'DISABLE_2FA_REQUIREMENT' as FeatureEnum,
+  };
 }

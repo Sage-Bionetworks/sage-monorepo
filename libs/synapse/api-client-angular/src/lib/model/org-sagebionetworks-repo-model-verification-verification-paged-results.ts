@@ -17,5 +17,8 @@ export interface OrgSagebionetworksRepoModelVerificationVerificationPagedResults
    * The list of results for this page
    */
   results?: Array<OrgSagebionetworksRepoModelVerificationVerificationSubmission>;
+  /**
+   * The total number of results
+   */
   totalNumberOfResults?: number;
 }

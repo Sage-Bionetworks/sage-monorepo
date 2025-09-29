@@ -12,6 +12,12 @@
  * Information about the global ToS Synapse requirements that all users must agree to.
  */
 export interface OrgSagebionetworksRepoModelAuthTermsOfServiceRequirements {
+  /**
+   * The date/time when the new ToS requirement will go into effect.
+   */
   requirementDate?: string;
+  /**
+   * The minimum semantic version of the ToS that all users must agree to by the provided date.  Any user that has agreed to this version, or higher, will be required to agree to the latest version of the ToS after the provided date.
+   */
   minimumTermsOfServiceVersion?: string;
 }

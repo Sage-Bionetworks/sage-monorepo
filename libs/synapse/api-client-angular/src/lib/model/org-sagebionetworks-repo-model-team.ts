@@ -12,15 +12,48 @@
  * JSON schema for Team POJO
  */
 export interface OrgSagebionetworksRepoModelTeam {
+  /**
+   * The id of the Team.
+   */
   id?: string;
+  /**
+   * The name of the Team.
+   */
   name?: string;
+  /**
+   * A short description of this Team.
+   */
   description?: string;
+  /**
+   * fileHandleId for icon image of the Team
+   */
   icon?: string;
+  /**
+   * true for teams which members can join without an invitation or approval. When this is true, canRequestMembership must be false or empty.
+   */
   canPublicJoin?: boolean;
+  /**
+   * true for teams where users can create a membership request to join. When this is true, canPublicJoin must be false or empty.
+   */
   canRequestMembership?: boolean;
+  /**
+   * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time a Team is updated it is used to detect when a client\'s current representation of a Team is out-of-date.
+   */
   etag?: string;
+  /**
+   * The date this Team was created.
+   */
   createdOn?: string;
+  /**
+   * The date this Team was last modified.
+   */
   modifiedOn?: string;
+  /**
+   * The ID of the user that created this Team.
+   */
   createdBy?: string;
+  /**
+   * The ID of the user that last modified this Team.
+   */
   modifiedBy?: string;
 }

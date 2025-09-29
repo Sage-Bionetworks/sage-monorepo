@@ -12,16 +12,34 @@
  * The JSON schema is defined by: <a href=\"https://json-schema.org/\">json-schema.org</a>, specifically draft-07.  Only features listed here are currently supported.
  */
 export interface OrgSagebionetworksRepoModelSchemaJsonSchema {
+  /**
+   * See: <a href=\"https://json-schema.org/draft/2019-09/json-schema-core.html#rfc.section.8.1.1\">The \"$schema\" Keyword</a>
+   */
   $schema?: string;
+  /**
+   * See: <a href=\"https://json-schema.org/draft/2019-09/json-schema-core.html#rfc.section.8.2.2\">The \"$id\" Keyword</a>
+   */
   $id?: string;
+  /**
+   * See: <a href=\"https://json-schema.org/draft/2019-09/json-schema-core.html#rfc.section.8.2.4.1\">Direct References with \"$ref\"</a>
+   */
   $ref?: string;
-  type?: string;
+  /**
+   * See: <a href=\"https://json-schema.org/draft/2019-09/json-schema-core.html#rfc.section.4.2.1\">Instance Data Model</a>
+   */
+  type?: OrgSagebionetworksRepoModelSchemaJsonSchema.TypeEnum;
   items?: OrgSagebionetworksRepoModelSchemaJsonSchema;
   /**
    * See: <a href=\"https://json-schema.org/draft/2019-09/json-schema-core.html#rfc.section.9.3.2.1\">properties</a>
    */
   properties?: { [key: string]: OrgSagebionetworksRepoModelSchemaJsonSchema };
+  /**
+   * See: <a href=\"https://json-schema.org/draft/2019-09/json-schema-hypermedia.html#rfc.section.6.5.1\">title</a>
+   */
   title?: string;
+  /**
+   * See: <a href=\"https://json-schema.org/draft/2019-09/json-schema-hypermedia.html#rfc.section.6.5.2\">description</a>
+   */
   description?: string;
   /**
    * Use allOf to \'extend\' or \'implement\' one or more schemas.  See: <a href=\"https://json-schema.org/draft/2019-09/json-schema-core.html#rfc.section.9.2.1.1\">allOf</a>
@@ -36,6 +54,9 @@ export interface OrgSagebionetworksRepoModelSchemaJsonSchema {
    */
   oneOf?: Array<OrgSagebionetworksRepoModelSchemaJsonSchema>;
   not?: OrgSagebionetworksRepoModelSchemaJsonSchema;
+  /**
+   * See: <a href=\"https://json-schema.org/draft/2019-09/json-schema-validation.html#rfc.section.7.3\">Defined Formats</a>
+   */
   format?: string;
   /**
    * In an effor to support draft-07 implementations, we are using \'definitions\' instead of \'$defs\'.  See: <a href=\"https://json-schema.org/draft/2019-09/json-schema-validation.html#rfc.appendix.A\">Appendix A</a>
@@ -49,19 +70,40 @@ export interface OrgSagebionetworksRepoModelSchemaJsonSchema {
    * See: <a href=\"https://json-schema.org/draft/2019-09/json-schema-validation.html#rfc.section.6.1.3\">const</a>
    */
   const?: any | null;
+  /**
+   * Used to indicate that this schema is derived from another object/schema.  The value should be a URL reference to the original work.  The \'source\' is solely descriptive and should have no impact on validation.
+   */
   source?: string;
   /**
    * See: <a href=\"https://json-schema.org/draft/2019-09/json-schema-validation.html#rfc.section.6.5.3\">required</a>
    */
   required?: Array<string>;
+  /**
+   * See: <a href=\"https://tools.ietf.org/html/draft-handrews-json-schema-validation-02#section-6.3.1\">maxLength</a>
+   */
   maxLength?: number;
+  /**
+   * See: <a href=\"https://tools.ietf.org/html/draft-handrews-json-schema-validation-02#section-6.3.2\">minLength</a>
+   */
   minLength?: number;
+  /**
+   * See: <a href=\"https://tools.ietf.org/html/draft-handrews-json-schema-validation-02#section-6.4.3\">uniqueItems</a>
+   */
   uniqueItems?: boolean;
+  /**
+   * See: <a href=\"https://tools.ietf.org/html/draft-handrews-json-schema-validation-02#section-6.3.3\">pattern</a>
+   */
   pattern?: string;
   if?: OrgSagebionetworksRepoModelSchemaJsonSchema;
   then?: OrgSagebionetworksRepoModelSchemaJsonSchema;
   else?: OrgSagebionetworksRepoModelSchemaJsonSchema;
+  /**
+   * See: <a href=\"https://tools.ietf.org/html/draft-handrews-json-schema-validation-02#section-6.2.2\">maximum</a>
+   */
   maximum?: number;
+  /**
+   * See: <a href=\"https://tools.ietf.org/html/draft-handrews-json-schema-validation-02#section-6.2.4\">minimum</a>
+   */
   minimum?: number;
   /**
    * See: <a href=\"https://json-schema.org/draft/2019-09/json-schema-validation.html#rfc.section.9.2\">default</a>
@@ -69,4 +111,16 @@ export interface OrgSagebionetworksRepoModelSchemaJsonSchema {
   default?: any | null;
   contains?: OrgSagebionetworksRepoModelSchemaJsonSchema;
   additionalProperties?: OrgSagebionetworksRepoModelSchemaJsonSchema;
+}
+export namespace OrgSagebionetworksRepoModelSchemaJsonSchema {
+  export type TypeEnum = 'null' | 'boolean' | 'object' | 'array' | 'number' | 'string' | 'integer';
+  export const TypeEnum = {
+    Null: 'null' as TypeEnum,
+    Boolean: 'boolean' as TypeEnum,
+    Object: 'object' as TypeEnum,
+    Array: 'array' as TypeEnum,
+    Number: 'number' as TypeEnum,
+    String: 'string' as TypeEnum,
+    Integer: 'integer' as TypeEnum,
+  };
 }

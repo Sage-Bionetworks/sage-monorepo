@@ -13,12 +13,30 @@ import { OrgSagebionetworksRepoModelLimitsProjectStorageLocationUsage } from './
  * This upload destination contains information to start an upload to an SFTP or HTTPS destination. The destination is mapped from an <a href=\"${org.sagebionetworks.repo.model.project.ExternalStorageLocationSetting}\">ExternalStorageLocationSetting</a>.
  */
 export interface OrgSagebionetworksRepoModelFileExternalUploadDestination {
+  /**
+   * Indicates which implementation this object represents.
+   */
   concreteType: OrgSagebionetworksRepoModelFileExternalUploadDestination.ConcreteTypeEnum;
+  /**
+   * the unique id for the storage location, that points to the <a href=\"${org.sagebionetworks.repo.model.project.StorageLocationSetting}\">StorageLocationSetting</a>
+   */
   storageLocationId?: number;
-  uploadType?: string;
+  /**
+   * The enumeration of possible upload types.
+   */
+  uploadType?: OrgSagebionetworksRepoModelFileExternalUploadDestination.UploadTypeEnum;
+  /**
+   * If set, the client should show this banner every time an upload is initiated
+   */
   banner?: string;
+  /**
+   * The ID of the project where this file will be uploaded.
+   */
   destinationProjectId?: string;
   projectStorageLocationUsage?: OrgSagebionetworksRepoModelLimitsProjectStorageLocationUsage;
+  /**
+   * the generated file URL for uploading to the external destination
+   */
   url?: string;
 }
 export namespace OrgSagebionetworksRepoModelFileExternalUploadDestination {
@@ -26,5 +44,20 @@ export namespace OrgSagebionetworksRepoModelFileExternalUploadDestination {
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelFileExternalUploadDestination:
       'org.sagebionetworks.repo.model.file.ExternalUploadDestination' as ConcreteTypeEnum,
+  };
+  export type UploadTypeEnum =
+    | 'S3'
+    | 'GOOGLECLOUDSTORAGE'
+    | 'SFTP'
+    | 'HTTPS'
+    | 'PROXYLOCAL'
+    | 'NONE';
+  export const UploadTypeEnum = {
+    S3: 'S3' as UploadTypeEnum,
+    Googlecloudstorage: 'GOOGLECLOUDSTORAGE' as UploadTypeEnum,
+    Sftp: 'SFTP' as UploadTypeEnum,
+    Https: 'HTTPS' as UploadTypeEnum,
+    Proxylocal: 'PROXYLOCAL' as UploadTypeEnum,
+    None: 'NONE' as UploadTypeEnum,
   };
 }

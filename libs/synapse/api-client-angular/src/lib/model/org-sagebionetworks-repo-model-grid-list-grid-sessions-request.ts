@@ -12,6 +12,12 @@
  * Request to list a user\'s active grid sessions.
  */
 export interface OrgSagebionetworksRepoModelGridListGridSessionsRequest {
+  /**
+   * Optional. When provided, only sessions with this synId will be returned.
+   */
   sourceId?: string;
+  /**
+   * Forward the returned \'nextPageToken\' to get the next page of results.
+   */
   nextPageToken?: string;
 }

@@ -12,5 +12,8 @@
  * Contains the user\'s email
  */
 export interface OrgSagebionetworksRepoModelAuthUsername {
+  /**
+   * The user\'s email
+   */
   email?: string;
 }

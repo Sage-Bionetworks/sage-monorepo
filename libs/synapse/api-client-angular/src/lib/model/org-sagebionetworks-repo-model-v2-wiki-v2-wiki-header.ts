@@ -12,7 +12,16 @@
  * A WikiHeader contains basic metadata about a WikiPage.
  */
 export interface OrgSagebionetworksRepoModelV2WikiV2WikiHeader {
+  /**
+   * The ID of this wiki page.
+   */
   id?: string;
+  /**
+   * The title to of this page.
+   */
   title?: string;
+  /**
+   * The parentID to of this page.
+   */
   parentId?: string;
 }

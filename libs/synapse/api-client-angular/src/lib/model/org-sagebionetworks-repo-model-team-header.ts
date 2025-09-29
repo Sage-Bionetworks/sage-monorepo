@@ -12,6 +12,12 @@
  * JSON schema for TeamHeader POJO
  */
 export interface OrgSagebionetworksRepoModelTeamHeader {
+  /**
+   * The id of the Team.
+   */
   id?: string;
+  /**
+   * The name of the Team.
+   */
   name?: string;
 }

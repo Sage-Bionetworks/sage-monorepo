@@ -17,5 +17,8 @@ export interface OrgSagebionetworksRepoModelDataaccessSubmissionSearchResponse {
    * The matching submissions information corresponding to the search parameters
    */
   results?: Array<OrgSagebionetworksRepoModelDataaccessSubmissionSearchResult>;
+  /**
+   * A token used to get the next page of a particular search query.
+   */
   nextPageToken?: string;
 }

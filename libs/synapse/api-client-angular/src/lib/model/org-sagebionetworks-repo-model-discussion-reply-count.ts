@@ -9,5 +9,8 @@
  */
 
 export interface OrgSagebionetworksRepoModelDiscussionReplyCount {
+  /**
+   * The total number of replies.
+   */
   count?: number;
 }

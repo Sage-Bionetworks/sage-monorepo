@@ -12,6 +12,12 @@
  * A request to perform a full text search in a discussion forum
  */
 export interface OrgSagebionetworksRepoModelDiscussionDiscussionSearchRequest {
+  /**
+   * The search query to match against thread and replies in a forum
+   */
   searchString?: string;
+  /**
+   * If a previous search result included a non-null nextPageToken, then there are more results available.  Forward the provided nextPageToken to get the next page of results.
+   */
   nextPageToken?: string;
 }

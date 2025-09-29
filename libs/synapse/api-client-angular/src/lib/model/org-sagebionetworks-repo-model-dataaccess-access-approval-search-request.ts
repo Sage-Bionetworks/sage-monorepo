@@ -13,8 +13,17 @@ import { OrgSagebionetworksRepoModelDataaccessAccessApprovalSearchSort } from '.
  * A request to search through the access approval history
  */
 export interface OrgSagebionetworksRepoModelDataaccessAccessApprovalSearchRequest {
+  /**
+   * Filter by the id of the principal that is an accessor in the approval. Note that the submitter is always part of the accessors. This field is required.
+   */
   accessorId: string;
+  /**
+   * Filter by the id of the access requirement of the approvals.
+   */
   accessRequirementId?: string;
   sort?: Array<OrgSagebionetworksRepoModelDataaccessAccessApprovalSearchSort>;
+  /**
+   * A token used to get the next page of a request.
+   */
   nextPageToken?: string;
 }

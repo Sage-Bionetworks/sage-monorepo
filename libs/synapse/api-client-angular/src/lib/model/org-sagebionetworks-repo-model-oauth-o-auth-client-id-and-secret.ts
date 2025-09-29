@@ -12,6 +12,12 @@
  * OAuth 2.0 Client ID and secret, generated when a new client is created
  */
 export interface OrgSagebionetworksRepoModelOauthOAuthClientIdAndSecret {
+  /**
+   * The unique ID for the OAuth client, created by Synapse
+   */
   client_id?: string;
+  /**
+   * The shared secret used to exchange an access code for an access token.  Returned only during initial client creation.
+   */
   client_secret?: string;
 }

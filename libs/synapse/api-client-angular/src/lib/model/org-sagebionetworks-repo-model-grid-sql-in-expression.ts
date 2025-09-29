@@ -14,12 +14,18 @@ import { OrgSagebionetworksRepoModelGridSqlLiteral } from './org-sagebionetworks
  * In expression is used for a where condition using the \'in\' opperator.
  */
 export interface OrgSagebionetworksRepoModelGridSqlInExpression {
+  /**
+   * Required. Full name of the exact type used.
+   */
   concreteType: OrgSagebionetworksRepoModelGridSqlInExpression.ConcreteTypeEnum;
   left?: OrgSagebionetworksRepoModelGridSqlColumnReference;
   /**
    * An array of literal values for the \'IN\' operator.
    */
   values?: Array<OrgSagebionetworksRepoModelGridSqlLiteral>;
+  /**
+   * Optional (default to false). Indicates if it\'s a \'NOT IN\' expression.
+   */
   not?: boolean;
 }
 export namespace OrgSagebionetworksRepoModelGridSqlInExpression {

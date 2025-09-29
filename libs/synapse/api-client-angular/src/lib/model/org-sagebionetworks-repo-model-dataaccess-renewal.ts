@@ -13,14 +13,41 @@ import { OrgSagebionetworksRepoModelDataaccessAccessorChange } from './org-sageb
  * A Renewal contains information required by an AccessRequirement and additional information about renewing a request.
  */
 export interface OrgSagebionetworksRepoModelDataaccessRenewal {
+  /**
+   * The unique immutable ID for this request. A new ID will be generated for new Request. Once issued, this ID is guaranteed to never change or be re-issued.
+   */
   id?: string;
+  /**
+   * The ID of the Access Requirement which requires a request to be submitted to gain access to a dataset. This request contains information that satisfies those requirements.
+   */
   accessRequirementId?: string;
+  /**
+   * The ID of the research project associated with this request.
+   */
   researchProjectId?: string;
+  /**
+   * The date this request was created.
+   */
   createdOn?: string;
+  /**
+   * The date this request was last modified.
+   */
   modifiedOn?: string;
+  /**
+   * The ID of the user that created this request.
+   */
   createdBy?: string;
+  /**
+   * The ID of the user that last modified this request.
+   */
   modifiedBy?: string;
+  /**
+   * The Data Use Certificate uploaded by user.
+   */
   ducFileHandleId?: string;
+  /**
+   * The Institutional Review Board Approval document uploaded by user.
+   */
   irbFileHandleId?: string;
   /**
    * The set of file handle ID of attached files to this request.
@@ -30,9 +57,21 @@ export interface OrgSagebionetworksRepoModelDataaccessRenewal {
    * List of user changes. A user can gain access, renew access or have access revoked.
    */
   accessorChanges?: Array<OrgSagebionetworksRepoModelDataaccessAccessorChange>;
+  /**
+   * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time a request is updated it is used to detect when a client\'s current representation of a request is out-of-date.
+   */
   etag?: string;
+  /**
+   * Indicates which implementation of RequestInterface this object represents.
+   */
   concreteType: OrgSagebionetworksRepoModelDataaccessRenewal.ConcreteTypeEnum;
+  /**
+   * Link(s) to publication that used the controlled data.
+   */
   publication?: string;
+  /**
+   * Summary of how the data has been used.
+   */
   summaryOfUse?: string;
 }
 export namespace OrgSagebionetworksRepoModelDataaccessRenewal {

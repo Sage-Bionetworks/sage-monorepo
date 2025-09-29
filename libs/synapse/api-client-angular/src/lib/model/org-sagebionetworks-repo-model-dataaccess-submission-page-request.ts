@@ -12,10 +12,39 @@
  * A request to retrieve a page of a Submission.
  */
 export interface OrgSagebionetworksRepoModelDataaccessSubmissionPageRequest {
+  /**
+   * The ID of an AccessRequirement.
+   */
   accessRequirementId?: string;
+  /**
+   * The token to get the next page result.
+   */
   nextPageToken?: string;
-  filterBy?: string;
+  /**
+   * The state of a Submission.
+   */
+  filterBy?: OrgSagebionetworksRepoModelDataaccessSubmissionPageRequest.FilterByEnum;
+  /**
+   * Optional filter by the id of an accessor in the submission. Note that the submitter is an accessor.
+   */
   accessorId?: string;
-  orderBy?: string;
+  orderBy?: OrgSagebionetworksRepoModelDataaccessSubmissionPageRequest.OrderByEnum;
+  /**
+   * If true, order the returned result in ascending order. Otherwise, order the returned result in descending order.
+   */
   isAscending?: boolean;
+}
+export namespace OrgSagebionetworksRepoModelDataaccessSubmissionPageRequest {
+  export type FilterByEnum = 'SUBMITTED' | 'APPROVED' | 'REJECTED' | 'CANCELLED';
+  export const FilterByEnum = {
+    Submitted: 'SUBMITTED' as FilterByEnum,
+    Approved: 'APPROVED' as FilterByEnum,
+    Rejected: 'REJECTED' as FilterByEnum,
+    Cancelled: 'CANCELLED' as FilterByEnum,
+  };
+  export type OrderByEnum = 'CREATED_ON' | 'MODIFIED_ON';
+  export const OrderByEnum = {
+    CreatedOn: 'CREATED_ON' as OrderByEnum,
+    ModifiedOn: 'MODIFIED_ON' as OrderByEnum,
+  };
 }

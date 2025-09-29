@@ -11,9 +11,18 @@
 export interface OrgSagebionetworksRepoModelDockerRegistryEventTarget {
   mediaType?: string;
   size?: number;
+  /**
+   * The digest of the image being pushed or pulled.
+   */
   digest?: string;
   length?: number;
+  /**
+   * The path of the repository which is the subject of the event.
+   */
   repository?: string;
+  /**
+   * The user supplied tag for the commit of the repository being pushed or pulled.
+   */
   tag?: string;
   url?: string;
 }

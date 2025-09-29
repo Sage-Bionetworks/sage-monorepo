@@ -24,6 +24,7 @@ import { OrgSagebionetworksRepoModelTableCsvTableDescriptor } from './org-sagebi
 import { OrgSagebionetworksRepoModelACTAccessRequirement } from './org-sagebionetworks-repo-model-act-access-requirement';
 import { OrgSagebionetworksRepoModelRestrictableObjectDescriptor } from './org-sagebionetworks-repo-model-restrictable-object-descriptor';
 import { OrgSagebionetworksRepoModelTermsOfUseAccessRequirement } from './org-sagebionetworks-repo-model-terms-of-use-access-requirement';
+import { OrgSagebionetworksRepoModelSchemaValidationSummaryStatistics } from './org-sagebionetworks-repo-model-schema-validation-summary-statistics';
 import { OrgSagebionetworksRepoModelPostMessageContentAccessRequirement } from './org-sagebionetworks-repo-model-post-message-content-access-requirement';
 
 /**

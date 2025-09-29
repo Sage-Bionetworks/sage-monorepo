@@ -15,6 +15,9 @@ import { OrgSagebionetworksRepoModelSchemaJsonSchema } from './org-sagebionetwor
 export interface OrgSagebionetworksRepoModelSchemaCreateSchemaRequest {
   concreteType: OrgSagebionetworksRepoModelSchemaCreateSchemaRequest.ConcreteTypeEnum;
   schema?: OrgSagebionetworksRepoModelSchemaJsonSchema;
+  /**
+   * When true, an attempt will be made to create the schema normally, but the resulting schema will not be retained.  This can be used to validate a schema without actually registering it.  The default value is false.
+   */
   dryRun?: boolean;
 }
 export namespace OrgSagebionetworksRepoModelSchemaCreateSchemaRequest {

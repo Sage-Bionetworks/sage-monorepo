@@ -12,7 +12,16 @@
  * Data record for call performance.
  */
 export interface OrgSagebionetworksRepoModelPerformancePerformanceRecord {
+  /**
+   * The java bean method
+   */
   method?: string;
+  /**
+   * The total number of calls
+   */
   totalCount?: number;
+  /**
+   * The total time taken in ns
+   */
   totalTime?: number;
 }

@@ -13,7 +13,13 @@ import { OrgSagebionetworksRepoModelTableSparseRowDto } from './org-sagebionetwo
  * Data Transfer Object (DTO) for a SparseChangeSet
  */
 export interface OrgSagebionetworksRepoModelTableSparseChangeSetDto {
+  /**
+   * The ID of the table.
+   */
   tableId?: string;
+  /**
+   * Etag identifies the version of this change set.
+   */
   etag?: string;
   /**
    * The column IDs that define the schema of this change set.

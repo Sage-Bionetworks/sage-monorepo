@@ -12,5 +12,8 @@
  * JSON schema for a user-readable message describing the response to a request.
  */
 export interface OrgSagebionetworksRepoModelResponseMessage {
+  /**
+   * a user-readable message describing the response to a request
+   */
   message?: string;
 }
