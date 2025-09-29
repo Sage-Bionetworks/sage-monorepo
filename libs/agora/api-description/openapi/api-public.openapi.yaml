@@ -1027,6 +1027,9 @@ components:
         match_value:
           type: string
           description: Value that matched the query
+        hgnc_symbol:
+          type: string
+          description: HGNC symbol of the gene
       required:
         - id
         - match_field

@@ -24,4 +24,8 @@ export interface SearchResult {
    * Value that matched the query
    */
   match_value: string;
+  /**
+   * HGNC symbol of the gene
+   */
+  hgnc_symbol?: string;
 }
