@@ -384,7 +384,7 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
             with gr.Column(scale=2):
                 gr.HTML("")
 
-    # Register listeners (keep all existing functionality)
+    # Register listeners
     btn_list = [
         leftvote_btn,
         rightvote_btn,
@@ -421,16 +421,13 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
     # Direct JavaScript functions for enter key control
     disable_enter_js = """
     () => {
-        console.log('Disabling Enter key');
         const textbox = document.querySelector('#input_box textarea');
         if (textbox) {
             textbox._enterDisabled = true;
-            textbox.placeholder = 'Type your next message... (Enter disabled while generating)';
             
             if (!textbox._enterHandler) {
                 textbox._enterHandler = function(event) {
                     if (event.key === 'Enter' && !event.shiftKey && textbox._enterDisabled) {
-                        console.log('Enter key blocked!');
                         event.preventDefault();
                         event.stopPropagation();
                         event.stopImmediatePropagation();
@@ -446,11 +443,9 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
 
     enable_enter_js = """
     () => {
-        console.log('Enabling Enter key');
         const textbox = document.querySelector('#input_box textarea');
         if (textbox) {
             textbox._enterDisabled = false;
-            textbox.placeholder = 'Ask anything biomedical...';
         }
         return [];
     }
@@ -504,7 +499,7 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
             + [slow_warning]
             + [battle_interface, voting_row, next_battle_row, suggested_prompts_group],
         ).then(
-            lambda: None,  # Disable enter key
+            lambda: None,
             [],
             [],
             js=disable_enter_js,
@@ -517,7 +512,7 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
             [],
             btn_list,
         ).then(
-            lambda: None,  # Enable enter key
+            lambda: None,
             [],
             [],
             js=enable_enter_js,
@@ -544,7 +539,7 @@ def build_battle_page(
     # Load models once and only for text-only models
     models, _ = get_model_list(
         register_api_endpoint_file,
-        False,  # Disable multimodal models for now
+        False,
     )
 
     # Initialize the demo (this sets up global variables in the original module)
