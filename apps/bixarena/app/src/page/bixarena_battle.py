@@ -380,7 +380,7 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
             with gr.Column(scale=2):
                 gr.HTML("")
             with gr.Column(scale=1):
-                clear_btn = gr.Button(value="🎯 Next Battle", interactive=False)
+                clear_btn = gr.Button(value="🧪 Next Battle", interactive=False)
             with gr.Column(scale=2):
                 gr.HTML("")
 
