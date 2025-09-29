@@ -73,29 +73,32 @@ jobs:
       # Leaving off --user restores normal permissions and resolves the checkout EACCES error.
 
     steps:
-      - name: Give ubuntu ownership of the workspace and temp dirs
-        run: |
-          chown -R ubuntu:ubuntu "$RUNNER_TEMP" "$RUNNER_TOOL_CACHE" 2>/dev/null || true
-          chmod -R u+w "$RUNNER_TEMP"
-
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Prepare the workspace
+      - name: Adjust ownership & prepare workspace (unprivileged)
         run: |
-          su -l ubuntu -c 'bash -lc "
+          # Change ownership of only the GitHub workspace to ubuntu so dependency installs and
+          # generated artifacts are written with non-root permissions. We deliberately do NOT
+          # touch $RUNNER_TEMP or $RUNNER_TOOL_CACHE (runner-managed bind mounts) to avoid EPERM.
+          chown -R ubuntu:ubuntu "$GITHUB_WORKSPACE"
+          sudo -u ubuntu bash -lc '
+            set -euo pipefail
             . ./dev-env.sh
             workspace-install
-          "'
+          '
 
-      # - name: Build API description & regenerate generated projects
+      # - name: Build API description & regenerate generated projects (unprivileged)
       #   run: |
-      #     . ./dev-env.sh
-      #     set -euo pipefail
-      #     echo '🔄 Building API description (includes downloading latest OpenAPI specification)...'
-      #     nx build synapse-api-description
-      #     echo '🔄 Regenerating synapse-* generated projects (clients, docs, etc.)...'
-      #     nx run-many --target=generate --projects='synapse-*'
+      #     # Execute build/generation as ubuntu (non-root) to avoid root-owned artifacts.
+      #     sudo -u ubuntu bash -lc '
+      #       set -euo pipefail
+      #       . ./dev-env.sh
+      #       echo "🔄 Building API description (includes downloading latest OpenAPI specification)..."
+      #       nx build synapse-api-description
+      #       echo "🔄 Regenerating synapse-* generated projects (clients, docs, etc.)..."
+      #       nx run-many --target=generate --projects="synapse-*"
+      #     '
 
       # - name: Create or update Pull Request
       #   uses: peter-evans/create-pull-request@v7
