@@ -3,7 +3,7 @@ name: Update Synapse API description and generated artifacts
 on:
   push:
     branches:
-      - synapse/update-synapse-api-test # trigger workflow when changes are pushed to this maintenance branch
+      - synapse/update-synapse-api-workflow-test # trigger workflow when changes are pushed to this maintenance branch
   schedule:
     # Run daily at 9 AM UTC (4 AM EST, 1 AM PST)
     - cron: '0 9 * * *'
