@@ -62,20 +62,28 @@ jobs:
 
     container:
       image: ${{ needs.extract-devcontainer-image.outputs.image }}
+      # NOTE: The devcontainer image sets its default USER to 'ubuntu'. We override to root here
+      # (via --user root) so early framework mechanics (actions/checkout writing state files under
+      # $RUNNER_TEMP, file command APIs, etc.) are guaranteed to have write permission to the mounted
+      # runner directories without pre-adjusting ownership. After checkout we immediately drop
+      # privileges for build / generation by chowning only $GITHUB_WORKSPACE and invoking commands
+      # with 'sudo -u ubuntu'.
+      #
+      # Why not stay ubuntu from the start? When the workspace and temp mounts arrive owned by root
+      # (common when the host bind mounts into the container), starting as ubuntu can cause EACCES
+      # on state files (e.g. /__w/_temp/_runner_file_commands/save_state_*). Forcing root avoids the
+      # race/permission edge cases and lets us perform a controlled, minimal privilege drop.
+      #
+      # Principles followed:
+      #  * Do NOT chown $RUNNER_TEMP or $RUNNER_TOOL_CACHE (runner-managed, can break file commands)
+      #  * Only chown the repository workspace before running unprivileged steps
+      #  * Use 'sudo -u ubuntu' for generation so artifacts are not root-owned
+      #  * Keep the privileged window as small as possible
       options: --user root
-      # NOTE: We intentionally run with the image's default user (likely root) here.
-      # Setting --user ubuntu caused actions/checkout to fail writing state files under $RUNNER_TEMP
-      # (EACCES opening /__w/_temp/_runner_file_commands/save_state_*). GitHub mounts /__w with
-      # ownership that assumes the container user can write. Overriding to a non-root user without
-      # adjusting ownership (chown) breaks any action that uses file command APIs. If we later need
-      # to run generation as a non-root user, prefer either:
-      #  1. A step wrapper: sudo -u ubuntu bash -lc '...'; or
-      #  2. A custom image whose default USER already matches the desired UID and has correct perms.
-      # Leaving off --user restores normal permissions and resolves the checkout EACCES error.
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Adjust ownership & prepare workspace (unprivileged)
         run: |
@@ -101,22 +109,22 @@ jobs:
             nx run-many --target=generate --projects="synapse-*"
           '
 
-      # - name: Create or update Pull Request
-      #   uses: peter-evans/create-pull-request@v7
-      #   with:
-      #     branch: synapse/update-synapse-api
-      #     delete-branch: true
-      #     title: 'chore(synapse): update Synapse API description and generated artifacts'
-      #     commit-message: 'chore(synapse): update Synapse API description and generated artifacts'
-      #     body: |
-      #       ## Description
+      - name: Create or update Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: synapse/update-synapse-api
+          delete-branch: true
+          title: 'chore(synapse): update Synapse API description and generated artifacts'
+          commit-message: 'chore(synapse): update Synapse API description and generated artifacts'
+          body: |
+            ## Description
 
-      #       This is an automated update triggered by changes detected in the Synapse OpenAPI specification.
-      #       The workflow downloads the latest specification and regenerates dependent generated projects (clients, docs, etc.) to keep them in sync.
+            This is an automated update triggered by changes detected in the Synapse OpenAPI specification.
+            The workflow downloads the latest specification and regenerates dependent generated projects (clients, docs, etc.) to keep them in sync.
 
-      #       ## Review checklist
+            ## Review checklist
 
-      #       - [ ] Verify that the API changes are expected
-      #       - [ ] Check that generated artifacts build/compile successfully
-      #       - [ ] Run tests to ensure compatibility
-      #       - [ ] Review any breaking changes in the API
+            - [ ] Verify that the API changes are expected
+            - [ ] Check that generated artifacts build/compile successfully
+            - [ ] Run tests to ensure compatibility
+            - [ ] Review any breaking changes in the API
