@@ -7,7 +7,6 @@ simplified to a single function for a single-page LLM comparison arena.
 
 import json
 import logging
-import random
 import time
 import gradio as gr
 
@@ -46,24 +45,15 @@ prompt_manager = get_prompt_manager()
 
 def create_suggested_prompts(num_prompts=3, max_chars=240):
     """Create suggested prompts cards"""
-    available_prompts = prompt_manager.get_all_prompts()
-    num_to_sample = min(num_prompts, len(available_prompts))
-    prompts = random.sample(available_prompts, num_to_sample)
+    display_prompts = prompt_manager.get_display_prompts(num_prompts, max_chars)
 
     prompt_cards = []
-
-    for prompt in prompts:
-        # Truncate long prompts for display
-        if len(prompt) <= max_chars:
-            display_text = prompt
-        else:
-            display_text = prompt[:max_chars].rsplit(" ", 1)[0] + "..."
-
+    for display_text, full_prompt in display_prompts:
         btn = gr.Button(
             value=display_text,
             elem_classes=["suggested-prompt-card"],
         )
-        prompt_cards.append((btn, prompt))
+        prompt_cards.append((btn, full_prompt))
 
     return prompt_cards
 
