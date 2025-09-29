@@ -137,7 +137,16 @@ def build_app(register_api_endpoint_file=None, moderate=False):
     }
     """
 
-    with gr.Blocks(title="BixArena - Biomedical LLM Evaluation") as demo:
+    with gr.Blocks(
+        title="BixArena - Biomedical LLM Evaluation",
+        css="""
+        .content-wrapper {
+            padding: 0 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        """,
+    ) as demo:
         _, battle_btn, leaderboard_btn, login_btn = build_header()
 
         with gr.Column(visible=True) as home_page:
