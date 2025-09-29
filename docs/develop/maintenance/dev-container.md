@@ -686,48 +686,20 @@ Headless = dev container started via CLI (devcontainer up / exec) with the monor
 - **Architecture issues**: Verify all tools support the target architecture
 
 #### Dev Container Build Failures
-
-- **Docker version compatibility**: Latest Docker versions in `docker-in-docker` feature may cause build failures
-
-    - **Solution**: Specify an older, stable Docker version (e.g., `"version": "27.3.2"` instead of `"28.3.2"`)
-    - **Check logs**: Look for Docker daemon startup errors or compatibility issues
-
-- **Feature conflicts**: Multiple features trying to install the same tools
-
-    - **Solution**: Remove duplicate installations or use feature-specific configurations
-    - **Review**: Check feature documentation for known conflicts
-
-- **Memory/disk space**: Large feature installations may exceed available resources
-
-    - **Solution**: Increase Docker desktop memory/disk limits or use smaller base images
-    - **Monitor**: Check Docker system resource usage during build
-
-- **Network issues**: Features downloading from external sources may fail
-
-    - **Solution**: Retry build or check network connectivity
-    - **Alternative**: Use cached or mirror sources when available
-
-- **Permission errors**: Features may fail to install due to user permission issues
-
-    - **Solution**: Ensure proper user configuration in devcontainer.json
-    - **Check**: Verify the `remoteUser` setting matches the Dockerfile user
+| Issue | Description | Solution | Additional Checks / Notes |
+|-------|-------------|----------|---------------------------|
+| Docker version compatibility | Latest Docker versions in `docker-in-docker` feature may cause build failures | Specify an older, stable Docker version (e.g. `"version": "27.3.2"` instead of `"28.3.2"`) | Check logs for Docker daemon startup errors or compatibility issues |
+| Feature conflicts | Multiple features trying to install the same tools | Remove duplicate installations or use feature-specific configurations | Review feature documentation for known conflicts |
+| Memory / disk space | Large feature installations may exceed available resources | Increase Docker Desktop memory/disk limits or use smaller base images | Monitor Docker system resource usage during build |
+| Network issues | Features downloading from external sources may fail | Retry build or check network connectivity | Use cached or mirror sources when available |
+| Permission errors | Features may fail to install due to user permission issues | Ensure proper user configuration in `devcontainer.json` | Verify the `remoteUser` setting matches the Dockerfile user |
 
 #### Dev Container Runtime Issues
-
-- **Container won't start**: Check `devcontainer up` logs for startup errors
-
-    - **Solution**: Verify all required ports are available and not in use
-    - **Check**: Ensure Docker daemon is running and accessible
-
-- **Tools not available**: Installed tools not found in PATH
-
-    - **Solution**: Check if feature installation completed successfully
-    - **Debug**: Connect to container and manually verify tool locations
-
-- **VS Code integration fails**: Container starts but VS Code can't connect
-
-    - **Solution**: Rebuild container with "Rebuild and Reopen in Container"
-    - **Check**: Verify VS Code Dev Containers extension is updated
+| Issue | Description | Solution | Additional Checks / Notes |
+|-------|-------------|----------|---------------------------|
+| Container won't start | `devcontainer up` fails to start container | Verify all required ports are available and not in use | Ensure Docker daemon is running and accessible |
+| Tools not available | Installed tools not found in PATH | Check if feature installation completed successfully | Connect to container and manually verify tool locations |
+| VS Code integration fails | Container starts but VS Code can't connect | Rebuild container with "Rebuild and Reopen in Container" | Verify VS Code Dev Containers extension is updated |
 
 #### Runtime Issues
 
