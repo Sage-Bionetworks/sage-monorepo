@@ -18,6 +18,9 @@ concurrency:
   cancel-in-progress: false
 
 env:
+  # NOTE: The following secrets must be defined in the repository or organization settings.
+  # Some static analyzers may flag them as "Context access might be invalid" even though this
+  # is valid GitHub Actions syntax. Leave as-is unless the secret names change.
   NX_BRANCH: ${{ github.ref_name }}
   NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
 
@@ -51,6 +54,7 @@ jobs:
         # those functions. This keeps PATH setup minimal and avoids manual PATH surgery.
         shell: bash -l {0}
     env:
+      # NOTE: See comment above about secret name validation.
       # # Disable Nx Cloud usage for this workflow to avoid consuming tokens / network calls when
       # # simply regenerating artifacts. If later we want hashing/distributed features, remove this.
       # NX_NO_CLOUD: 'true'
