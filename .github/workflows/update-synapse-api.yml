@@ -108,6 +108,7 @@ jobs:
         with:
           branch: synapse/update-synapse-api
           delete-branch: true
+          draft: always-true
           title: 'chore(synapse): update Synapse API description and generated artifacts'
           commit-message: 'chore(synapse): update Synapse API description and generated artifacts'
           body: |

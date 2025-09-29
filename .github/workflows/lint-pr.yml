@@ -6,10 +6,23 @@ on:
       - opened
       - edited
       - synchronize
+  pull_request:
+    types:
+      - edited
+      - opened
+      - ready_for_review
+      - synchronize
   merge_group:
 
 permissions:
   pull-requests: read
+
+concurrency:
+  # Ensures only one lint run per PR is active at a time; new pushes cancel the prior run.
+  # For pull_request / pull_request_target events we have github.event.pull_request.number.
+  # Fallback to github.ref (e.g., non-PR events like manual dispatch, if ever added).
+  group: lint-pr-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   main:
