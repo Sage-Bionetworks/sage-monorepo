@@ -287,7 +287,7 @@ When considering features from smaller communities, use this evaluation checklis
 - Update Helm for latest chart compatibility
 - Update Minikube for local development
 
-## Testing Process
+## Step 1c: Test the Dev Container Locally
 
 !!! tip Quick reference
 
@@ -482,7 +482,7 @@ Instead of manually stepping into the test container, you can run the comprehens
     - Ensure GitHub Actions continue to work
     - Verify any external integrations still function
 
-## Step 1c: Build & Publish Image (PR 1)
+## Step 1d: Build & Publish Image (PR 1)
 
 > The checklist later includes an abbreviated version of these PR 1 steps.
 
