@@ -12,6 +12,12 @@
  * The response body from validateDefiningSql
  */
 export interface OrgSagebionetworksRepoModelTableValidateDefiningSqlResponse {
+  /**
+   * True if the provided SQL is valid, false otherwise.
+   */
   isValid?: boolean;
+  /**
+   * If the definingSQL is invalid, this will contain a string describing why it is invalid. Otherwise, this will be null.
+   */
   invalidReason?: string;
 }

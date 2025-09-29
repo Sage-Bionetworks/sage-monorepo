@@ -14,18 +14,45 @@ import { OrgSagebionetworksRepoModelVerificationVerificationState } from './org-
  * User info submitted for verification by Synapse ACT
  */
 export interface OrgSagebionetworksRepoModelVerificationVerificationSubmission {
+  /**
+   * The ID of this object
+   */
   id?: string;
+  /**
+   * The date and time this object was created
+   */
   createdOn?: string;
+  /**
+   * The principal ID of the user requesting verification
+   */
   createdBy?: string;
+  /**
+   * This person\'s given name (forename)
+   */
   firstName?: string;
+  /**
+   * This person\'s family name (surname)
+   */
   lastName?: string;
   /**
    * The list of user email addresses registered to this user.
    */
   emails?: Array<string>;
+  /**
+   * The primary (notification) email address registered to this user.
+   */
   notificationEmail?: string;
+  /**
+   * This person\'s location
+   */
   location?: string;
+  /**
+   * This person\'s current affiliation
+   */
   company?: string;
+  /**
+   * The user\'s ORCID URI
+   */
   orcid?: string;
   /**
    * List of state changes the submission has passed through, ordered by time.  The last in the list contains the current state of the submission.

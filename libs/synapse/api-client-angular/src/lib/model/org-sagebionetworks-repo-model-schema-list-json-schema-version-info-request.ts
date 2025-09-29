@@ -12,7 +12,16 @@
  * Request to get a single page of schema version metadata for the given organization and schema name.
  */
 export interface OrgSagebionetworksRepoModelSchemaListJsonSchemaVersionInfoRequest {
+  /**
+   * The name of the Organization.
+   */
   organizationName?: string;
+  /**
+   * The name of the JsonSchema to list versions to list schemas for.
+   */
   schemaName?: string;
+  /**
+   * Forward the returned \'nextPageToken\' to get the next page of results.
+   */
   nextPageToken?: string;
 }

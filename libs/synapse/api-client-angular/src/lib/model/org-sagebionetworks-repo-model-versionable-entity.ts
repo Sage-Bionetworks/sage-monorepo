@@ -15,6 +15,7 @@ import { OrgSagebionetworksRepoModelTableEntityView } from './org-sagebionetwork
 import { OrgSagebionetworksRepoModelTableCsvTableDescriptor } from './org-sagebionetworks-repo-model-table-csv-table-descriptor';
 import { OrgSagebionetworksRepoModelTableMaterializedView } from './org-sagebionetworks-repo-model-table-materialized-view';
 import { OrgSagebionetworksRepoModelTableVirtualTable } from './org-sagebionetworks-repo-model-table-virtual-table';
+import { OrgSagebionetworksRepoModelSchemaValidationSummaryStatistics } from './org-sagebionetworks-repo-model-schema-validation-summary-statistics';
 import { OrgSagebionetworksRepoModelTableTableEntity } from './org-sagebionetworks-repo-model-table-table-entity';
 import { OrgSagebionetworksRepoModelTableDataset } from './org-sagebionetworks-repo-model-table-dataset';
 import { OrgSagebionetworksRepoModelTableSubmissionView } from './org-sagebionetworks-repo-model-table-submission-view';

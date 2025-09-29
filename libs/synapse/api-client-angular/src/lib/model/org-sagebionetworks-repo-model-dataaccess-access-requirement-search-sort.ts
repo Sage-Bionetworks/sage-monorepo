@@ -12,6 +12,25 @@
  * Identifies both the field and direction for a single sort operation
  */
 export interface OrgSagebionetworksRepoModelDataaccessAccessRequirementSearchSort {
-  field?: string;
-  direction?: string;
+  /**
+   * Field to sort on.
+   */
+  field?: OrgSagebionetworksRepoModelDataaccessAccessRequirementSearchSort.FieldEnum;
+  /**
+   * Direction of a sort.
+   */
+  direction?: OrgSagebionetworksRepoModelDataaccessAccessRequirementSearchSort.DirectionEnum;
+}
+export namespace OrgSagebionetworksRepoModelDataaccessAccessRequirementSearchSort {
+  export type FieldEnum = 'CREATED_ON' | 'NAME' | 'CONCRETE_TYPE';
+  export const FieldEnum = {
+    CreatedOn: 'CREATED_ON' as FieldEnum,
+    Name: 'NAME' as FieldEnum,
+    ConcreteType: 'CONCRETE_TYPE' as FieldEnum,
+  };
+  export type DirectionEnum = 'ASC' | 'DESC';
+  export const DirectionEnum = {
+    Asc: 'ASC' as DirectionEnum,
+    Desc: 'DESC' as DirectionEnum,
+  };
 }

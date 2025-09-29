@@ -14,5 +14,8 @@ export interface OrgSagebionetworksRepoModelRestrictableObjectDescriptorResponse
    * a page of subjects
    */
   subjects?: Array<OrgSagebionetworksRepoModelRestrictableObjectDescriptor>;
+  /**
+   * Token that can be used to get the next page. Null if there are no more results.
+   */
   nextPageToken?: string;
 }

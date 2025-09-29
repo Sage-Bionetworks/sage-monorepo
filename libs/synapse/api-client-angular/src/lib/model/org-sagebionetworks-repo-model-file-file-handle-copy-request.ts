@@ -14,6 +14,12 @@ import { OrgSagebionetworksRepoModelFileFileHandleAssociation } from './org-sage
  */
 export interface OrgSagebionetworksRepoModelFileFileHandleCopyRequest {
   originalFile?: OrgSagebionetworksRepoModelFileFileHandleAssociation;
+  /**
+   * Set to override the original file name.
+   */
   newFileName?: string;
+  /**
+   * Set to override the original content type.
+   */
   newContentType?: string;
 }

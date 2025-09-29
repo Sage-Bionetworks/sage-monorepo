@@ -12,14 +12,74 @@
  * Request for EntityHeaders of the children of a given parent Entity
  */
 export interface OrgSagebionetworksRepoModelEntityChildrenRequest {
+  /**
+   * The ID of the parent.  Set to null to list projects.
+   */
   parentId?: string;
+  /**
+   * Optional parameter used to fetch the next page of results.  When NULL, the first page will be returned.  The nextPageToken is provided with the results if there is another page of results.
+   */
   nextPageToken?: string;
   /**
    * The types of children to be include. Must include at least one type.
    */
-  includeTypes?: Array<string>;
-  sortBy?: string;
-  sortDirection?: string;
+  includeTypes?: Array<OrgSagebionetworksRepoModelEntityChildrenRequest.IncludeTypesEnum>;
+  /**
+   * How results should be sorted.
+   */
+  sortBy?: OrgSagebionetworksRepoModelEntityChildrenRequest.SortByEnum;
+  /**
+   * The direction of the result sort.
+   */
+  sortDirection?: OrgSagebionetworksRepoModelEntityChildrenRequest.SortDirectionEnum;
+  /**
+   * When true, the total number of children with the given parentId and types will be included.  False by default
+   */
   includeTotalChildCount?: boolean;
+  /**
+   * When true, the sum of the files sizes (bytes) with the given parentId and types will be included.  False by default
+   */
   includeSumFileSizes?: boolean;
+}
+export namespace OrgSagebionetworksRepoModelEntityChildrenRequest {
+  export type IncludeTypesEnum =
+    | 'project'
+    | 'folder'
+    | 'file'
+    | 'table'
+    | 'link'
+    | 'entityview'
+    | 'dockerrepo'
+    | 'submissionview'
+    | 'dataset'
+    | 'datasetcollection'
+    | 'materializedview'
+    | 'virtualtable'
+    | 'recordset';
+  export const IncludeTypesEnum = {
+    Project: 'project' as IncludeTypesEnum,
+    Folder: 'folder' as IncludeTypesEnum,
+    File: 'file' as IncludeTypesEnum,
+    Table: 'table' as IncludeTypesEnum,
+    Link: 'link' as IncludeTypesEnum,
+    Entityview: 'entityview' as IncludeTypesEnum,
+    Dockerrepo: 'dockerrepo' as IncludeTypesEnum,
+    Submissionview: 'submissionview' as IncludeTypesEnum,
+    Dataset: 'dataset' as IncludeTypesEnum,
+    Datasetcollection: 'datasetcollection' as IncludeTypesEnum,
+    Materializedview: 'materializedview' as IncludeTypesEnum,
+    Virtualtable: 'virtualtable' as IncludeTypesEnum,
+    Recordset: 'recordset' as IncludeTypesEnum,
+  };
+  export type SortByEnum = 'NAME' | 'CREATED_ON' | 'MODIFIED_ON';
+  export const SortByEnum = {
+    Name: 'NAME' as SortByEnum,
+    CreatedOn: 'CREATED_ON' as SortByEnum,
+    ModifiedOn: 'MODIFIED_ON' as SortByEnum,
+  };
+  export type SortDirectionEnum = 'ASC' | 'DESC';
+  export const SortDirectionEnum = {
+    Asc: 'ASC' as SortDirectionEnum,
+    Desc: 'DESC' as SortDirectionEnum,
+  };
 }

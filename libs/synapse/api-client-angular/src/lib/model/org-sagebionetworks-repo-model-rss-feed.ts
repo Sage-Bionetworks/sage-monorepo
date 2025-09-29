@@ -13,9 +13,21 @@ import { OrgSagebionetworksRepoModelRSSEntry } from './org-sagebionetworks-repo-
  * This contains items from an rss feed, and meta data about the rss feed itself
  */
 export interface OrgSagebionetworksRepoModelRSSFeed {
+  /**
+   * The title of this feed
+   */
   title?: string;
+  /**
+   * The uri of this feed
+   */
   uri?: string;
+  /**
+   * The author of this feed
+   */
   author?: string;
+  /**
+   * The description of this feed.
+   */
   description?: string;
   /**
    * The list of rss entries.

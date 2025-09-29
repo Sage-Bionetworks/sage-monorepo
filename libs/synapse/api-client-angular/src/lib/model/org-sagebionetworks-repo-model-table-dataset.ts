@@ -13,31 +13,85 @@ import { OrgSagebionetworksRepoModelEntityRef } from './org-sagebionetworks-repo
  * A dataset is a type of view defined by a flat list of entities.
  */
 export interface OrgSagebionetworksRepoModelTableDataset {
+  /**
+   * The name of this entity.  Must be 256 characters or less. Names may only contain: letters, numbers, spaces, underscores, hyphens, periods, plus signs, apostrophes, and parentheses
+   */
   name?: string;
+  /**
+   * The description of this entity.  Must be 1000 characters or less.
+   */
   description?: string;
+  /**
+   * The unique immutable ID for this entity.  A new ID will be generated for new Entities.  Once issued, this ID is guaranteed to never change or be re-issued
+   */
   id?: string;
+  /**
+   * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client\'s current representation of an entity is out-of-date.
+   */
   etag?: string;
+  /**
+   * The date this entity was created.
+   */
   createdOn?: string;
+  /**
+   * The date this entity was last modified.
+   */
   modifiedOn?: string;
+  /**
+   * The ID of the user that created this entity.
+   */
   createdBy?: string;
+  /**
+   * The ID of the user that last modified this entity.
+   */
   modifiedBy?: string;
+  /**
+   * The ID of the Entity that is the parent of this Entity.
+   */
   parentId?: string;
+  /**
+   * Indicates which implementation of Entity this object represents.  The value is the fully qualified class name, e.g. org.sagebionetworks.repo.model.FileEntity.
+   */
   concreteType: OrgSagebionetworksRepoModelTableDataset.ConcreteTypeEnum;
+  /**
+   * The version number issued to this version on the object.
+   */
   versionNumber?: number;
+  /**
+   * The version label for this entity
+   */
   versionLabel?: string;
+  /**
+   * The version comment for this entity
+   */
   versionComment?: string;
+  /**
+   * If this is the latest version of the object.
+   */
   isLatestVersion?: boolean;
   /**
    * The list of ColumnModel IDs that define the schema of the object.
    */
   columnIds?: Array<string>;
+  /**
+   * When creating or updating a table or view specifies if full text search should be enabled.  Note that enabling full text search might slow down the indexing of the table or view.
+   */
   isSearchEnabled?: boolean;
   /**
    * The flat list of file entity references that define this dataset.  Limit: 30K items.
    */
   items?: Array<OrgSagebionetworksRepoModelEntityRef>;
+  /**
+   * The cumulative size, in bytes, of all items(files) in the dataset. This will be automatically computed by the service.
+   */
   size?: number;
+  /**
+   * The checksum is computed over a sorted concatenation of the checksums of all items in the dataset. For example, if a dataset contains two files with the following checksums: file1.md5 = 72794b6d and file2.md5 = 5e089d29. Then the checksum of the dataset is: md5(\'5e089d2972794b6d\') = f7a29a04.  This will be automatically computed by the service.
+   */
   checksum?: string;
+  /**
+   * The number of items/files in the dataset. This will be automatically computed by the service.
+   */
   count?: number;
 }
 export namespace OrgSagebionetworksRepoModelTableDataset {

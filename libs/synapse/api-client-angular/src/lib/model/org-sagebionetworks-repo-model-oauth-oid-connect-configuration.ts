@@ -12,37 +12,58 @@
  * OpenID Provider Configuration, described by <a href=\"https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderConfig\">OpenID Connect Core 1.0</a>. Fields are defined by the <a href=\"https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata\">OpenID Provider Metadata</a>.
  */
 export interface OrgSagebionetworksRepoModelOauthOIDConnectConfiguration {
+  /**
+   * The issuer of OIDC tokens and claims.
+   */
   issuer?: string;
+  /**
+   * URL of the Synapse OAuth 2.0 Authorization Endpoint
+   */
   authorization_endpoint?: string;
+  /**
+   * URL of the Synapse OAuth 2.0 Token Endpoint
+   */
   token_endpoint?: string;
+  /**
+   * URL of the Synapse OAuth 2.0 Revocation Endpoint
+   */
   revocation_endpoint?: string;
+  /**
+   * URL of the Synapse UserInfo Endpoint
+   */
   userinfo_endpoint?: string;
+  /**
+   * URL of the Synapse JSON Web Key Set [JWK] document.
+   */
   jwks_uri?: string;
+  /**
+   * URL of the Synapse Dynamic Client Registration Endpoint
+   */
   registration_endpoint?: string;
   /**
    * List of the OAuth 2.0 scope values that Synapse supports.
    */
-  scopes_supported?: Array<string>;
+  scopes_supported?: Array<OrgSagebionetworksRepoModelOauthOIDConnectConfiguration.ScopesSupportedEnum>;
   /**
    * List of the OAuth 2.0 response types that Synapse supports.
    */
-  response_types_supported?: Array<string>;
+  response_types_supported?: Array<OrgSagebionetworksRepoModelOauthOIDConnectConfiguration.ResponseTypesSupportedEnum>;
   /**
    * List of the OAuth 2.0 grant types that Synapse supports.
    */
-  grant_types_supported?: Array<string>;
+  grant_types_supported?: Array<OrgSagebionetworksRepoModelOauthOIDConnectConfiguration.GrantTypesSupportedEnum>;
   /**
    * List of the subject identified types that Synapse supports.
    */
-  subject_types_supported?: Array<string>;
+  subject_types_supported?: Array<OrgSagebionetworksRepoModelOauthOIDConnectConfiguration.SubjectTypesSupportedEnum>;
   /**
    * List of the JWS signing algorithms (alg values) supported by Synapse for the ID Token to encode the Claims in a JWT
    */
-  id_token_signing_alg_values_supported?: Array<string>;
+  id_token_signing_alg_values_supported?: Array<OrgSagebionetworksRepoModelOauthOIDConnectConfiguration.IdTokenSigningAlgValuesSupportedEnum>;
   /**
    * List of the JWS signing algorithms (alg values) supported by the UserInfo Endpoint to encode the Claims in a JWT
    */
-  userinfo_signing_alg_values_supported?: Array<string>;
+  userinfo_signing_alg_values_supported?: Array<OrgSagebionetworksRepoModelOauthOIDConnectConfiguration.UserinfoSigningAlgValuesSupportedEnum>;
   /**
    * List of signing algorithms supported for signing request objects, or \'[\"none\"]\' if passing by \'request\' parameter is unsupported.  See <a href=\"https://openid.net/specs/openid-connect-core-1_0.html#RequestObject\">OpenID Connect Core 1.0</a>
    */
@@ -50,11 +71,120 @@ export interface OrgSagebionetworksRepoModelOauthOIDConnectConfiguration {
   /**
    * List of the Claim Names of the Claims that the Synapse MAY be able to supply values for.
    */
-  claims_supported?: Array<string>;
+  claims_supported?: Array<OrgSagebionetworksRepoModelOauthOIDConnectConfiguration.ClaimsSupportedEnum>;
+  /**
+   * URL of a page containing human-readable information that developers might want or need to know when using Synapse.
+   */
   service_documentation?: string;
+  /**
+   * Boolean value specifying whether Synapse supports use of the claims parameter, with true indicating support.
+   */
   claims_parameter_supported?: boolean;
   /**
    * a list of Client Authentication methods supported by Synapse\'s Token Endpoint.  See <a href=\"https://openid.net/specs/openid-connect-core-1_0.html#ClientAuthentication\">OpenID Connect Core 1.0 Client Authentication</a>
    */
   token_endpoint_auth_methods_supported?: Array<string>;
+}
+export namespace OrgSagebionetworksRepoModelOauthOIDConnectConfiguration {
+  export type ScopesSupportedEnum =
+    | 'openid'
+    | 'email'
+    | 'profile'
+    | 'ga4gh_passport_v1'
+    | 'view'
+    | 'download'
+    | 'modify'
+    | 'authorize'
+    | 'offline_access';
+  export const ScopesSupportedEnum = {
+    Openid: 'openid' as ScopesSupportedEnum,
+    Email: 'email' as ScopesSupportedEnum,
+    Profile: 'profile' as ScopesSupportedEnum,
+    Ga4ghPassportV1: 'ga4gh_passport_v1' as ScopesSupportedEnum,
+    View: 'view' as ScopesSupportedEnum,
+    Download: 'download' as ScopesSupportedEnum,
+    Modify: 'modify' as ScopesSupportedEnum,
+    Authorize: 'authorize' as ScopesSupportedEnum,
+    OfflineAccess: 'offline_access' as ScopesSupportedEnum,
+  };
+  export type ResponseTypesSupportedEnum = 'code';
+  export const ResponseTypesSupportedEnum = {
+    Code: 'code' as ResponseTypesSupportedEnum,
+  };
+  export type GrantTypesSupportedEnum = 'authorization_code' | 'refresh_token';
+  export const GrantTypesSupportedEnum = {
+    AuthorizationCode: 'authorization_code' as GrantTypesSupportedEnum,
+    RefreshToken: 'refresh_token' as GrantTypesSupportedEnum,
+  };
+  export type SubjectTypesSupportedEnum = 'pairwise';
+  export const SubjectTypesSupportedEnum = {
+    Pairwise: 'pairwise' as SubjectTypesSupportedEnum,
+  };
+  export type IdTokenSigningAlgValuesSupportedEnum = 'RS256';
+  export const IdTokenSigningAlgValuesSupportedEnum = {
+    Rs256: 'RS256' as IdTokenSigningAlgValuesSupportedEnum,
+  };
+  export type UserinfoSigningAlgValuesSupportedEnum = 'RS256';
+  export const UserinfoSigningAlgValuesSupportedEnum = {
+    Rs256: 'RS256' as UserinfoSigningAlgValuesSupportedEnum,
+  };
+  export type ClaimsSupportedEnum =
+    | 'iss'
+    | 'sub'
+    | 'aud'
+    | 'iat'
+    | 'nbf'
+    | 'exp'
+    | 'auth_time'
+    | 'email'
+    | 'email_verified'
+    | 'given_name'
+    | 'family_name'
+    | 'company'
+    | 'team'
+    | 'userid'
+    | 'user_name'
+    | 'orcid'
+    | 'is_certified'
+    | 'is_validated'
+    | 'validated_given_name'
+    | 'validated_family_name'
+    | 'validated_location'
+    | 'validated_email'
+    | 'validated_company'
+    | 'validated_orcid'
+    | 'validated_at'
+    | 'refresh_token_id'
+    | 'token_type'
+    | 'ga4gh_passport_v1';
+  export const ClaimsSupportedEnum = {
+    Iss: 'iss' as ClaimsSupportedEnum,
+    Sub: 'sub' as ClaimsSupportedEnum,
+    Aud: 'aud' as ClaimsSupportedEnum,
+    Iat: 'iat' as ClaimsSupportedEnum,
+    Nbf: 'nbf' as ClaimsSupportedEnum,
+    Exp: 'exp' as ClaimsSupportedEnum,
+    AuthTime: 'auth_time' as ClaimsSupportedEnum,
+    Email: 'email' as ClaimsSupportedEnum,
+    EmailVerified: 'email_verified' as ClaimsSupportedEnum,
+    GivenName: 'given_name' as ClaimsSupportedEnum,
+    FamilyName: 'family_name' as ClaimsSupportedEnum,
+    Company: 'company' as ClaimsSupportedEnum,
+    Team: 'team' as ClaimsSupportedEnum,
+    Userid: 'userid' as ClaimsSupportedEnum,
+    UserName: 'user_name' as ClaimsSupportedEnum,
+    Orcid: 'orcid' as ClaimsSupportedEnum,
+    IsCertified: 'is_certified' as ClaimsSupportedEnum,
+    IsValidated: 'is_validated' as ClaimsSupportedEnum,
+    ValidatedGivenName: 'validated_given_name' as ClaimsSupportedEnum,
+    ValidatedFamilyName: 'validated_family_name' as ClaimsSupportedEnum,
+    ValidatedLocation: 'validated_location' as ClaimsSupportedEnum,
+    ValidatedEmail: 'validated_email' as ClaimsSupportedEnum,
+    ValidatedCompany: 'validated_company' as ClaimsSupportedEnum,
+    ValidatedOrcid: 'validated_orcid' as ClaimsSupportedEnum,
+    ValidatedAt: 'validated_at' as ClaimsSupportedEnum,
+    RefreshTokenId: 'refresh_token_id' as ClaimsSupportedEnum,
+    TokenType: 'token_type' as ClaimsSupportedEnum,
+    Ga4ghPassportV1: 'ga4gh_passport_v1' as ClaimsSupportedEnum,
+  };
 }

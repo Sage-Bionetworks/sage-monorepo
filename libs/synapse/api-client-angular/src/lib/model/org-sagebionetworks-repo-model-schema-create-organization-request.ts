@@ -12,5 +12,8 @@
  * Request to create a new Organization.
  */
 export interface OrgSagebionetworksRepoModelSchemaCreateOrganizationRequest {
+  /**
+   * An organization name must be one or more alphanumeric strings each separated by a dot [ <alpha_num>(\'.\'<alpha_num>)]. An alphanumeric string must start with a letter followed by one or more letters or digits a-z. The name must be at least 6 characters and no more than 250 characters. Names are case insensitive. Names cannot contain the reserved word \'sagebionetworks\'
+   */
   organizationName?: string;
 }

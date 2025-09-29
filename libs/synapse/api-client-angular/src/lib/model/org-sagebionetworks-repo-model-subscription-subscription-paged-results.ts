@@ -17,5 +17,8 @@ export interface OrgSagebionetworksRepoModelSubscriptionSubscriptionPagedResults
    * The list of results for this page
    */
   results?: Array<OrgSagebionetworksRepoModelSubscriptionSubscription>;
+  /**
+   * The total number of results
+   */
   totalNumberOfResults?: number;
 }

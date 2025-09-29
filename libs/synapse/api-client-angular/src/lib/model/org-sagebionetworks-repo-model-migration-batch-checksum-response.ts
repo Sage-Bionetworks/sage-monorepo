@@ -14,7 +14,10 @@ import { OrgSagebionetworksRepoModelMigrationRangeChecksum } from './org-sagebio
  */
 export interface OrgSagebionetworksRepoModelMigrationBatchChecksumResponse {
   concreteType: OrgSagebionetworksRepoModelMigrationBatchChecksumResponse.ConcreteTypeEnum;
-  migrationType?: string;
+  /**
+   * JSON enum for the types of objects which can be migrated. NOTE: The order of this enumeration determines the migration order.
+   */
+  migrationType?: OrgSagebionetworksRepoModelMigrationBatchChecksumResponse.MigrationTypeEnum;
   cheksums?: Array<OrgSagebionetworksRepoModelMigrationRangeChecksum>;
 }
 export namespace OrgSagebionetworksRepoModelMigrationBatchChecksumResponse {
@@ -22,5 +25,263 @@ export namespace OrgSagebionetworksRepoModelMigrationBatchChecksumResponse {
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelMigrationBatchChecksumResponse:
       'org.sagebionetworks.repo.model.migration.BatchChecksumResponse' as ConcreteTypeEnum,
+  };
+  export type MigrationTypeEnum =
+    | 'PRINCIPAL'
+    | 'GROUP_MEMBERS'
+    | 'CREDENTIAL'
+    | 'AUTHENTICATED_ON'
+    | 'PRINCIPAL_ALIAS'
+    | 'NOTIFICATION_EMAIL'
+    | 'USER_PROFILE'
+    | 'STORAGE_LOCATION'
+    | 'FILE_HANDLE'
+    | 'MULTIPART_UPLOAD'
+    | 'MULTIPART_UPLOAD_PART_STATE'
+    | 'MULTIPART_UPLOAD_COMPOSER_PART_STATE'
+    | 'MESSAGE_CONTENT'
+    | 'MESSAGE_TO_USER'
+    | 'MESSAGE_RECIPIENT'
+    | 'MESSAGE_STATUS'
+    | 'COMMENT'
+    | 'V2_WIKI_PAGE'
+    | 'V2_WIKI_ATTACHMENT_RESERVATION'
+    | 'V2_WIKI_MARKDOWN'
+    | 'V2_WIKI_OWNERS'
+    | 'ACTIVITY'
+    | 'NODE'
+    | 'NODE_REVISION'
+    | 'NODE_ACCESS_REQUIRMENT'
+    | 'DOCKER_REPOSITORY_NAME'
+    | 'DOCKER_COMMIT'
+    | 'TEAM'
+    | 'MEMBERSHIP_INVITATION_SUBMISSION'
+    | 'MEMBERSHIP_REQUEST_SUBMISSION'
+    | 'EVALUATION'
+    | 'EVALUATION_ROUND'
+    | 'EVALUATION_SUBMISSIONS'
+    | 'SUBMISSION'
+    | 'SUBMISSION_CONTRIBUTOR'
+    | 'SUBMISSION_FILE'
+    | 'SUBMISSION_STATUS'
+    | 'PROJECT_SETTINGS'
+    | 'PROJECT_STATS'
+    | 'ACCESS_REQUIREMENT'
+    | 'ACCESS_REQUIREMENT_REVISION'
+    | 'ACCESS_APPROVAL'
+    | 'ACL'
+    | 'ACL_ACCESS'
+    | 'ACL_ACCESS_TYPE'
+    | 'FAVORITE'
+    | 'TRASH_CAN'
+    | 'PORTAL'
+    | 'DOI'
+    | 'CHALLENGE'
+    | 'CHALLENGE_TEAM'
+    | 'COLUMN_MODEL'
+    | 'BOUND_COLUMN_OWNER'
+    | 'BOUND_COLUMN_ORDINAL'
+    | 'TABLE_TRANSACTION'
+    | 'TABLE_TRANSACTION_TO_VERSION'
+    | 'TABLE_SEQUENCE'
+    | 'TABLE_CHANGE'
+    | 'QUIZ_RESPONSE'
+    | 'VERIFICATION_SUBMISSION'
+    | 'VERIFICATION_STATE'
+    | 'VERIFICATION_FILE'
+    | 'FORUM'
+    | 'DISCUSSION_THREAD'
+    | 'DISCUSSION_THREAD_VIEW'
+    | 'DISCUSSION_THREAD_ENTITY_REFERENCE'
+    | 'DISCUSSION_REPLY'
+    | 'SUBSCRIPTION'
+    | 'BROADCAST_MESSAGE'
+    | 'VIEW_TYPE'
+    | 'VIEW_SCOPE'
+    | 'VIEW_SNAPSHOT'
+    | 'THROTTLE_RULE'
+    | 'RESEARCH_PROJECT'
+    | 'DATA_ACCESS_REQUEST'
+    | 'DATA_ACCESS_SUBMISSION'
+    | 'DATA_ACCESS_SUBMISSION_SUBMITTER'
+    | 'DATA_ACCESS_SUBMISSION_STATUS'
+    | 'DATA_ACCESS_SUBMISSION_ACCESSOR_CHANGE'
+    | 'DATA_ACCESS_NOTIFICATIONS'
+    | 'FORM_GROUP'
+    | 'FORM_DATA'
+    | 'ORGANIZATION'
+    | 'JSON_SCHEMA'
+    | 'JSON_SCHEMA_BLOB'
+    | 'JSON_SCHEMA_VERSION'
+    | 'JSON_SCHEMA_LATEST_VERSION'
+    | 'JSON_SCHEMA_DEPENDENCY'
+    | 'JSON_SCHEMA_OBJECT_BINDING'
+    | 'DOWNLOAD_LIST'
+    | 'DOWNLOAD_LIST_ITEM'
+    | 'DOWNLOAD_ORDER'
+    | 'DOWNLOAD_LIST_2'
+    | 'DOWNLOAD_LIST_ITEM_2'
+    | 'DATA_TYPE'
+    | 'OAUTH_SECTOR_IDENTIFIER'
+    | 'OAUTH_CLIENT'
+    | 'OAUTH_REFRESH_TOKEN'
+    | 'OAUTH_ACCESS_TOKEN'
+    | 'PERSONAL_ACCESS_TOKEN'
+    | 'AUTHORIZATION_GRANT'
+    | 'SES_NOTIFICATIONS'
+    | 'QUARANTINED_EMAILS'
+    | 'FEATURE_STATUS'
+    | 'MATERIALIZED_VIEW_ID'
+    | 'MATERIALIZED_VIEW_SOURCE_TABLE'
+    | 'PRINCIPAL_OIDC_BINDING'
+    | 'OTP_SECRET'
+    | 'OTP_RECOVERY_CODE'
+    | 'TWO_FA_STATUS'
+    | 'WEBHOOK'
+    | 'WEBHOOK_VERIFICATION'
+    | 'WEBHOOK_ALLOWED_DOMAIN'
+    | 'AGENT_REGISTRATION'
+    | 'AGENT_SESSION'
+    | 'TOS_REQUIREMENTS'
+    | 'TOS_AGREEMENT'
+    | 'PROJECT_STORAGE_DATA'
+    | 'PROJECT_STORAGE_LIMIT'
+    | 'GRID_SESSION'
+    | 'GRID_REPLICA'
+    | 'GRID_CONNECTION'
+    | 'GRID_PATCH'
+    | 'CURATION_TASK'
+    | 'USER_STATUS'
+    | 'RECORDSET_VALIDATION_STATS'
+    | 'CHANGE';
+  export const MigrationTypeEnum = {
+    Principal: 'PRINCIPAL' as MigrationTypeEnum,
+    GroupMembers: 'GROUP_MEMBERS' as MigrationTypeEnum,
+    Credential: 'CREDENTIAL' as MigrationTypeEnum,
+    AuthenticatedOn: 'AUTHENTICATED_ON' as MigrationTypeEnum,
+    PrincipalAlias: 'PRINCIPAL_ALIAS' as MigrationTypeEnum,
+    NotificationEmail: 'NOTIFICATION_EMAIL' as MigrationTypeEnum,
+    UserProfile: 'USER_PROFILE' as MigrationTypeEnum,
+    StorageLocation: 'STORAGE_LOCATION' as MigrationTypeEnum,
+    FileHandle: 'FILE_HANDLE' as MigrationTypeEnum,
+    MultipartUpload: 'MULTIPART_UPLOAD' as MigrationTypeEnum,
+    MultipartUploadPartState: 'MULTIPART_UPLOAD_PART_STATE' as MigrationTypeEnum,
+    MultipartUploadComposerPartState: 'MULTIPART_UPLOAD_COMPOSER_PART_STATE' as MigrationTypeEnum,
+    MessageContent: 'MESSAGE_CONTENT' as MigrationTypeEnum,
+    MessageToUser: 'MESSAGE_TO_USER' as MigrationTypeEnum,
+    MessageRecipient: 'MESSAGE_RECIPIENT' as MigrationTypeEnum,
+    MessageStatus: 'MESSAGE_STATUS' as MigrationTypeEnum,
+    Comment: 'COMMENT' as MigrationTypeEnum,
+    V2WikiPage: 'V2_WIKI_PAGE' as MigrationTypeEnum,
+    V2WikiAttachmentReservation: 'V2_WIKI_ATTACHMENT_RESERVATION' as MigrationTypeEnum,
+    V2WikiMarkdown: 'V2_WIKI_MARKDOWN' as MigrationTypeEnum,
+    V2WikiOwners: 'V2_WIKI_OWNERS' as MigrationTypeEnum,
+    Activity: 'ACTIVITY' as MigrationTypeEnum,
+    Node: 'NODE' as MigrationTypeEnum,
+    NodeRevision: 'NODE_REVISION' as MigrationTypeEnum,
+    NodeAccessRequirment: 'NODE_ACCESS_REQUIRMENT' as MigrationTypeEnum,
+    DockerRepositoryName: 'DOCKER_REPOSITORY_NAME' as MigrationTypeEnum,
+    DockerCommit: 'DOCKER_COMMIT' as MigrationTypeEnum,
+    Team: 'TEAM' as MigrationTypeEnum,
+    MembershipInvitationSubmission: 'MEMBERSHIP_INVITATION_SUBMISSION' as MigrationTypeEnum,
+    MembershipRequestSubmission: 'MEMBERSHIP_REQUEST_SUBMISSION' as MigrationTypeEnum,
+    Evaluation: 'EVALUATION' as MigrationTypeEnum,
+    EvaluationRound: 'EVALUATION_ROUND' as MigrationTypeEnum,
+    EvaluationSubmissions: 'EVALUATION_SUBMISSIONS' as MigrationTypeEnum,
+    Submission: 'SUBMISSION' as MigrationTypeEnum,
+    SubmissionContributor: 'SUBMISSION_CONTRIBUTOR' as MigrationTypeEnum,
+    SubmissionFile: 'SUBMISSION_FILE' as MigrationTypeEnum,
+    SubmissionStatus: 'SUBMISSION_STATUS' as MigrationTypeEnum,
+    ProjectSettings: 'PROJECT_SETTINGS' as MigrationTypeEnum,
+    ProjectStats: 'PROJECT_STATS' as MigrationTypeEnum,
+    AccessRequirement: 'ACCESS_REQUIREMENT' as MigrationTypeEnum,
+    AccessRequirementRevision: 'ACCESS_REQUIREMENT_REVISION' as MigrationTypeEnum,
+    AccessApproval: 'ACCESS_APPROVAL' as MigrationTypeEnum,
+    Acl: 'ACL' as MigrationTypeEnum,
+    AclAccess: 'ACL_ACCESS' as MigrationTypeEnum,
+    AclAccessType: 'ACL_ACCESS_TYPE' as MigrationTypeEnum,
+    Favorite: 'FAVORITE' as MigrationTypeEnum,
+    TrashCan: 'TRASH_CAN' as MigrationTypeEnum,
+    Portal: 'PORTAL' as MigrationTypeEnum,
+    Doi: 'DOI' as MigrationTypeEnum,
+    Challenge: 'CHALLENGE' as MigrationTypeEnum,
+    ChallengeTeam: 'CHALLENGE_TEAM' as MigrationTypeEnum,
+    ColumnModel: 'COLUMN_MODEL' as MigrationTypeEnum,
+    BoundColumnOwner: 'BOUND_COLUMN_OWNER' as MigrationTypeEnum,
+    BoundColumnOrdinal: 'BOUND_COLUMN_ORDINAL' as MigrationTypeEnum,
+    TableTransaction: 'TABLE_TRANSACTION' as MigrationTypeEnum,
+    TableTransactionToVersion: 'TABLE_TRANSACTION_TO_VERSION' as MigrationTypeEnum,
+    TableSequence: 'TABLE_SEQUENCE' as MigrationTypeEnum,
+    TableChange: 'TABLE_CHANGE' as MigrationTypeEnum,
+    QuizResponse: 'QUIZ_RESPONSE' as MigrationTypeEnum,
+    VerificationSubmission: 'VERIFICATION_SUBMISSION' as MigrationTypeEnum,
+    VerificationState: 'VERIFICATION_STATE' as MigrationTypeEnum,
+    VerificationFile: 'VERIFICATION_FILE' as MigrationTypeEnum,
+    Forum: 'FORUM' as MigrationTypeEnum,
+    DiscussionThread: 'DISCUSSION_THREAD' as MigrationTypeEnum,
+    DiscussionThreadView: 'DISCUSSION_THREAD_VIEW' as MigrationTypeEnum,
+    DiscussionThreadEntityReference: 'DISCUSSION_THREAD_ENTITY_REFERENCE' as MigrationTypeEnum,
+    DiscussionReply: 'DISCUSSION_REPLY' as MigrationTypeEnum,
+    Subscription: 'SUBSCRIPTION' as MigrationTypeEnum,
+    BroadcastMessage: 'BROADCAST_MESSAGE' as MigrationTypeEnum,
+    ViewType: 'VIEW_TYPE' as MigrationTypeEnum,
+    ViewScope: 'VIEW_SCOPE' as MigrationTypeEnum,
+    ViewSnapshot: 'VIEW_SNAPSHOT' as MigrationTypeEnum,
+    ThrottleRule: 'THROTTLE_RULE' as MigrationTypeEnum,
+    ResearchProject: 'RESEARCH_PROJECT' as MigrationTypeEnum,
+    DataAccessRequest: 'DATA_ACCESS_REQUEST' as MigrationTypeEnum,
+    DataAccessSubmission: 'DATA_ACCESS_SUBMISSION' as MigrationTypeEnum,
+    DataAccessSubmissionSubmitter: 'DATA_ACCESS_SUBMISSION_SUBMITTER' as MigrationTypeEnum,
+    DataAccessSubmissionStatus: 'DATA_ACCESS_SUBMISSION_STATUS' as MigrationTypeEnum,
+    DataAccessSubmissionAccessorChange:
+      'DATA_ACCESS_SUBMISSION_ACCESSOR_CHANGE' as MigrationTypeEnum,
+    DataAccessNotifications: 'DATA_ACCESS_NOTIFICATIONS' as MigrationTypeEnum,
+    FormGroup: 'FORM_GROUP' as MigrationTypeEnum,
+    FormData: 'FORM_DATA' as MigrationTypeEnum,
+    Organization: 'ORGANIZATION' as MigrationTypeEnum,
+    JsonSchema: 'JSON_SCHEMA' as MigrationTypeEnum,
+    JsonSchemaBlob: 'JSON_SCHEMA_BLOB' as MigrationTypeEnum,
+    JsonSchemaVersion: 'JSON_SCHEMA_VERSION' as MigrationTypeEnum,
+    JsonSchemaLatestVersion: 'JSON_SCHEMA_LATEST_VERSION' as MigrationTypeEnum,
+    JsonSchemaDependency: 'JSON_SCHEMA_DEPENDENCY' as MigrationTypeEnum,
+    JsonSchemaObjectBinding: 'JSON_SCHEMA_OBJECT_BINDING' as MigrationTypeEnum,
+    DownloadList: 'DOWNLOAD_LIST' as MigrationTypeEnum,
+    DownloadListItem: 'DOWNLOAD_LIST_ITEM' as MigrationTypeEnum,
+    DownloadOrder: 'DOWNLOAD_ORDER' as MigrationTypeEnum,
+    DownloadList2: 'DOWNLOAD_LIST_2' as MigrationTypeEnum,
+    DownloadListItem2: 'DOWNLOAD_LIST_ITEM_2' as MigrationTypeEnum,
+    DataType: 'DATA_TYPE' as MigrationTypeEnum,
+    OauthSectorIdentifier: 'OAUTH_SECTOR_IDENTIFIER' as MigrationTypeEnum,
+    OauthClient: 'OAUTH_CLIENT' as MigrationTypeEnum,
+    OauthRefreshToken: 'OAUTH_REFRESH_TOKEN' as MigrationTypeEnum,
+    OauthAccessToken: 'OAUTH_ACCESS_TOKEN' as MigrationTypeEnum,
+    PersonalAccessToken: 'PERSONAL_ACCESS_TOKEN' as MigrationTypeEnum,
+    AuthorizationGrant: 'AUTHORIZATION_GRANT' as MigrationTypeEnum,
+    SesNotifications: 'SES_NOTIFICATIONS' as MigrationTypeEnum,
+    QuarantinedEmails: 'QUARANTINED_EMAILS' as MigrationTypeEnum,
+    FeatureStatus: 'FEATURE_STATUS' as MigrationTypeEnum,
+    MaterializedViewId: 'MATERIALIZED_VIEW_ID' as MigrationTypeEnum,
+    MaterializedViewSourceTable: 'MATERIALIZED_VIEW_SOURCE_TABLE' as MigrationTypeEnum,
+    PrincipalOidcBinding: 'PRINCIPAL_OIDC_BINDING' as MigrationTypeEnum,
+    OtpSecret: 'OTP_SECRET' as MigrationTypeEnum,
+    OtpRecoveryCode: 'OTP_RECOVERY_CODE' as MigrationTypeEnum,
+    TwoFaStatus: 'TWO_FA_STATUS' as MigrationTypeEnum,
+    Webhook: 'WEBHOOK' as MigrationTypeEnum,
+    WebhookVerification: 'WEBHOOK_VERIFICATION' as MigrationTypeEnum,
+    WebhookAllowedDomain: 'WEBHOOK_ALLOWED_DOMAIN' as MigrationTypeEnum,
+    AgentRegistration: 'AGENT_REGISTRATION' as MigrationTypeEnum,
+    AgentSession: 'AGENT_SESSION' as MigrationTypeEnum,
+    TosRequirements: 'TOS_REQUIREMENTS' as MigrationTypeEnum,
+    TosAgreement: 'TOS_AGREEMENT' as MigrationTypeEnum,
+    ProjectStorageData: 'PROJECT_STORAGE_DATA' as MigrationTypeEnum,
+    ProjectStorageLimit: 'PROJECT_STORAGE_LIMIT' as MigrationTypeEnum,
+    GridSession: 'GRID_SESSION' as MigrationTypeEnum,
+    GridReplica: 'GRID_REPLICA' as MigrationTypeEnum,
+    GridConnection: 'GRID_CONNECTION' as MigrationTypeEnum,
+    GridPatch: 'GRID_PATCH' as MigrationTypeEnum,
+    CurationTask: 'CURATION_TASK' as MigrationTypeEnum,
+    UserStatus: 'USER_STATUS' as MigrationTypeEnum,
+    RecordsetValidationStats: 'RECORDSET_VALIDATION_STATS' as MigrationTypeEnum,
+    Change: 'CHANGE' as MigrationTypeEnum,
   };
 }

@@ -12,6 +12,22 @@
  * Request to check if an alias is available.
  */
 export interface OrgSagebionetworksRepoModelPrincipalAliasCheckRequest {
+  /**
+   * The alias to check
+   */
   alias?: string;
-  type?: string;
+  /**
+   * The enumeration of the possible alias types that can be bound to a principal.  Note, these names must match those in AliasEnum. For an OAuthProvider type the matching alias is prefixed with USER_
+   */
+  type?: OrgSagebionetworksRepoModelPrincipalAliasCheckRequest.TypeEnum;
+}
+export namespace OrgSagebionetworksRepoModelPrincipalAliasCheckRequest {
+  export type TypeEnum = 'USER_NAME' | 'TEAM_NAME' | 'USER_EMAIL' | 'USER_OPEN_ID' | 'USER_ORCID';
+  export const TypeEnum = {
+    UserName: 'USER_NAME' as TypeEnum,
+    TeamName: 'TEAM_NAME' as TypeEnum,
+    UserEmail: 'USER_EMAIL' as TypeEnum,
+    UserOpenId: 'USER_OPEN_ID' as TypeEnum,
+    UserOrcid: 'USER_ORCID' as TypeEnum,
+  };
 }

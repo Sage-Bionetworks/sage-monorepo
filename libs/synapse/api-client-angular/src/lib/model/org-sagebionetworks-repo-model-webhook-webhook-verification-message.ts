@@ -13,8 +13,17 @@
  */
 export interface OrgSagebionetworksRepoModelWebhookWebhookVerificationMessage {
   concreteType: OrgSagebionetworksRepoModelWebhookWebhookVerificationMessage.ConcreteTypeEnum;
+  /**
+   * Unique message identifier.
+   */
   messageId: string;
+  /**
+   * The timestamp when the event occurred, in ISO 8601 format.
+   */
   eventTimestamp: string;
+  /**
+   * The verification code that shall be used to verify the webhook. Expires after 10 minutes.
+   */
   verificationCode?: string;
 }
 export namespace OrgSagebionetworksRepoModelWebhookWebhookVerificationMessage {

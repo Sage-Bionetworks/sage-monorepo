@@ -12,24 +12,69 @@
  * A TableEntity represents the metadata of a table.
  */
 export interface OrgSagebionetworksRepoModelTableTableEntity {
+  /**
+   * The name of this entity.  Must be 256 characters or less. Names may only contain: letters, numbers, spaces, underscores, hyphens, periods, plus signs, apostrophes, and parentheses
+   */
   name?: string;
+  /**
+   * The description of this entity.  Must be 1000 characters or less.
+   */
   description?: string;
+  /**
+   * The unique immutable ID for this entity.  A new ID will be generated for new Entities.  Once issued, this ID is guaranteed to never change or be re-issued
+   */
   id?: string;
+  /**
+   * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client\'s current representation of an entity is out-of-date.
+   */
   etag?: string;
+  /**
+   * The date this entity was created.
+   */
   createdOn?: string;
+  /**
+   * The date this entity was last modified.
+   */
   modifiedOn?: string;
+  /**
+   * The ID of the user that created this entity.
+   */
   createdBy?: string;
+  /**
+   * The ID of the user that last modified this entity.
+   */
   modifiedBy?: string;
+  /**
+   * The ID of the Entity that is the parent of this Entity.
+   */
   parentId?: string;
+  /**
+   * Indicates which implementation of Entity this object represents.  The value is the fully qualified class name, e.g. org.sagebionetworks.repo.model.FileEntity.
+   */
   concreteType: OrgSagebionetworksRepoModelTableTableEntity.ConcreteTypeEnum;
+  /**
+   * The version number issued to this version on the object.
+   */
   versionNumber?: number;
+  /**
+   * The version label for this entity
+   */
   versionLabel?: string;
+  /**
+   * The version comment for this entity
+   */
   versionComment?: string;
+  /**
+   * If this is the latest version of the object.
+   */
   isLatestVersion?: boolean;
   /**
    * The list of ColumnModel IDs that define the schema of the object.
    */
   columnIds?: Array<string>;
+  /**
+   * When creating or updating a table or view specifies if full text search should be enabled.  Note that enabling full text search might slow down the indexing of the table or view.
+   */
   isSearchEnabled?: boolean;
 }
 export namespace OrgSagebionetworksRepoModelTableTableEntity {

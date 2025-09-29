@@ -12,7 +12,16 @@
  * Set the limit on the number of files bytes for a single project storage location
  */
 export interface OrgSagebionetworksRepoModelLimitsProjectStorageLocationLimit {
+  /**
+   * The ID of the project
+   */
   projectId: string;
+  /**
+   * The ID of the storage location
+   */
   storageLocationId: number;
+  /**
+   * Sets the limit on the number of file bytes that can be associated with this project storage location. The value can be null if there is no limit for the storage location.
+   */
   maxAllowedFileBytes?: number;
 }

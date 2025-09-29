@@ -15,7 +15,13 @@ import { OrgSagebionetworksRepoModelTableSelectColumn } from './org-sagebionetwo
  */
 export interface OrgSagebionetworksRepoModelTableRowSet {
   concreteType: OrgSagebionetworksRepoModelTableRowSet.ConcreteTypeEnum;
+  /**
+   * The ID of the TableEntity than owns these rows
+   */
   tableId?: string;
+  /**
+   * Any RowSet returned from Synapse will contain the current etag of the change set.  To update any rows from a RowSet the etag must be provided with the POST.
+   */
   etag?: string;
   /**
    * The list of SelectColumns that describes the rows of this set.

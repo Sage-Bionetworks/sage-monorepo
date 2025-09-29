@@ -12,6 +12,12 @@
  * Request to list a single page of JsonSchemaInfo for the given organization name.
  */
 export interface OrgSagebionetworksRepoModelSchemaListJsonSchemaInfoRequest {
+  /**
+   * The name of the Organization to list schemas for.
+   */
   organizationName?: string;
+  /**
+   * Forward the returned \'nextPageToken\' to get the next page of results.
+   */
   nextPageToken?: string;
 }

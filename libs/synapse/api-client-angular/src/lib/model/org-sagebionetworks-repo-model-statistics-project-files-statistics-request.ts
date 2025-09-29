@@ -12,9 +12,21 @@
  * Request body for retrieving the statistics relative to files for a specific project. Allows to retrieve the monthly count of files downloaded and/or uploaded as well as the (unique) number of users that performed a download/upload for the past 12 months (excluding the current month). The response type for this request is <a href=\"${org.sagebionetworks.repo.model.statistics.ProjectFilesStatisticsResponse}\">ProjectFilesStatisticsResponse</a>
  */
 export interface OrgSagebionetworksRepoModelStatisticsProjectFilesStatisticsRequest {
+  /**
+   * The type identifying the concrete request
+   */
   concreteType: OrgSagebionetworksRepoModelStatisticsProjectFilesStatisticsRequest.ConcreteTypeEnum;
+  /**
+   * The id of the object for which this request is targeted on
+   */
   objectId?: string;
+  /**
+   * Specifies if the statistics about file downloads should be included in the response, defaults to true
+   */
   fileDownloads?: boolean;
+  /**
+   * Specifies if the statistics about file uploads should be included in the response, defaults to true
+   */
   fileUploads?: boolean;
 }
 export namespace OrgSagebionetworksRepoModelStatisticsProjectFilesStatisticsRequest {

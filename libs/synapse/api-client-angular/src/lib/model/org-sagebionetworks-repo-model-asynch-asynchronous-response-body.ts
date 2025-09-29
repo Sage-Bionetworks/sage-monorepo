@@ -7,53 +7,55 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { OrgSagebionetworksRepoModelDownloadActionRequiredCount } from './org-sagebionetworks-repo-model-download-action-required-count';
 import { OrgSagebionetworksRepoModelTableEntityUpdateResult } from './org-sagebionetworks-repo-model-table-entity-update-result';
 import { OrgSagebionetworksRepoModelTableDownloadFromTableResult } from './org-sagebionetworks-repo-model-table-download-from-table-result';
-import { OrgSagebionetworksRepoModelFileFileHandleRestoreResponse } from './org-sagebionetworks-repo-model-file-file-handle-restore-response';
-import { OrgSagebionetworksRepoModelTableQueryResultBundle } from './org-sagebionetworks-repo-model-table-query-result-bundle';
 import { OrgSagebionetworksRepoModelTableViewColumnModelResponse } from './org-sagebionetworks-repo-model-table-view-column-model-response';
-import { OrgSagebionetworksRepoModelReportDownloadStorageReportResponse } from './org-sagebionetworks-repo-model-report-download-storage-report-response';
-import { OrgSagebionetworksRepoModelTableRowReferenceSet } from './org-sagebionetworks-repo-model-table-row-reference-set';
 import { OrgSagebionetworksRepoModelFileFileHandleArchivalResponse } from './org-sagebionetworks-repo-model-file-file-handle-archival-response';
 import { OrgSagebionetworksRepoModelSchemaGetValidationSchemaResponse } from './org-sagebionetworks-repo-model-schema-get-validation-schema-response';
+import { OrgSagebionetworksRepoModelDoiV2DoiResponse } from './org-sagebionetworks-repo-model-doi-v2-doi-response';
+import { OrgSagebionetworksRepoModelTableDownloadPFBResult } from './org-sagebionetworks-repo-model-table-download-pfb-result';
+import { OrgSagebionetworksRepoModelTableQueryNextPageToken } from './org-sagebionetworks-repo-model-table-query-next-page-token';
+import { OrgSagebionetworksRepoModelFileBulkFileDownloadResponse } from './org-sagebionetworks-repo-model-file-bulk-file-download-response';
+import { OrgSagebionetworksRepoModelDownloadAddToDownloadListResponse } from './org-sagebionetworks-repo-model-download-add-to-download-list-response';
+import { OrgSagebionetworksRepoModelSchemaValidationSummaryStatistics } from './org-sagebionetworks-repo-model-schema-validation-summary-statistics';
+import { OrgSagebionetworksRepoModelTableEntityUpdateResults } from './org-sagebionetworks-repo-model-table-entity-update-results';
+import { OrgSagebionetworksRepoModelTableFacetColumnResult } from './org-sagebionetworks-repo-model-table-facet-column-result';
+import { OrgSagebionetworksRepoModelGridGridRecordSetExportResponse } from './org-sagebionetworks-repo-model-grid-grid-record-set-export-response';
+import { OrgSagebionetworksRepoModelTableTableUpdateTransactionResponse } from './org-sagebionetworks-repo-model-table-table-update-transaction-response';
+import { OrgSagebionetworksRepoModelTableRow } from './org-sagebionetworks-repo-model-table-row';
+import { OrgSagebionetworksRepoModelTableRowSet } from './org-sagebionetworks-repo-model-table-row-set';
+import { OrgSagebionetworksRepoModelSchemaJsonSchemaVersionInfo } from './org-sagebionetworks-repo-model-schema-json-schema-version-info';
+import { OrgSagebionetworksRepoModelSchemaJsonSchema } from './org-sagebionetworks-repo-model-schema-json-schema';
+import { OrgSagebionetworksRepoModelGridDownloadFromGridResult } from './org-sagebionetworks-repo-model-grid-download-from-grid-result';
+import { OrgSagebionetworksRepoModelFileFileHandleRestoreResult } from './org-sagebionetworks-repo-model-file-file-handle-restore-result';
+import { OrgSagebionetworksRepoModelTableSumFileSizes } from './org-sagebionetworks-repo-model-table-sum-file-sizes';
+import { OrgSagebionetworksRepoModelDownloadActionRequiredCount } from './org-sagebionetworks-repo-model-download-action-required-count';
+import { OrgSagebionetworksRepoModelFileFileHandleRestoreResponse } from './org-sagebionetworks-repo-model-file-file-handle-restore-response';
+import { OrgSagebionetworksRepoModelTableQueryResultBundle } from './org-sagebionetworks-repo-model-table-query-result-bundle';
+import { OrgSagebionetworksRepoModelReportDownloadStorageReportResponse } from './org-sagebionetworks-repo-model-report-download-storage-report-response';
+import { OrgSagebionetworksRepoModelTableRowReferenceSet } from './org-sagebionetworks-repo-model-table-row-reference-set';
 import { OrgSagebionetworksRepoModelAgentAgentChatResponse } from './org-sagebionetworks-repo-model-agent-agent-chat-response';
 import { OrgSagebionetworksRepoModelTableColumnModel } from './org-sagebionetworks-repo-model-table-column-model';
-import { OrgSagebionetworksRepoModelDoiV2DoiResponse } from './org-sagebionetworks-repo-model-doi-v2-doi-response';
 import { OrgSagebionetworksRepoModelDownloadDownloadListManifestResponse } from './org-sagebionetworks-repo-model-download-download-list-manifest-response';
 import { OrgSagebionetworksRepoModelFileDownloadList } from './org-sagebionetworks-repo-model-file-download-list';
 import { OrgSagebionetworksRepoModelDoiV2Doi } from './org-sagebionetworks-repo-model-doi-v2-doi';
 import { OrgSagebionetworksRepoModelDownloadDownloadListQueryResponse } from './org-sagebionetworks-repo-model-download-download-list-query-response';
 import { OrgSagebionetworksRepoModelFileFileDownloadSummary } from './org-sagebionetworks-repo-model-file-file-download-summary';
 import { OrgSagebionetworksRepoModelGridCreateGridResponse } from './org-sagebionetworks-repo-model-grid-create-grid-response';
-import { OrgSagebionetworksRepoModelTableDownloadPFBResult } from './org-sagebionetworks-repo-model-table-download-pfb-result';
-import { OrgSagebionetworksRepoModelTableQueryNextPageToken } from './org-sagebionetworks-repo-model-table-query-next-page-token';
 import { OrgSagebionetworksRepoModelTableTableSchemaChangeResponse } from './org-sagebionetworks-repo-model-table-table-schema-change-response';
 import { OrgSagebionetworksRepoModelTableQueryResult } from './org-sagebionetworks-repo-model-table-query-result';
-import { OrgSagebionetworksRepoModelFileBulkFileDownloadResponse } from './org-sagebionetworks-repo-model-file-bulk-file-download-response';
 import { OrgSagebionetworksRepoModelMigrationAdminResponse } from './org-sagebionetworks-repo-model-migration-admin-response';
-import { OrgSagebionetworksRepoModelDownloadAddToDownloadListResponse } from './org-sagebionetworks-repo-model-download-add-to-download-list-response';
 import { OrgSagebionetworksRepoModelFileAddFileToDownloadListResponse } from './org-sagebionetworks-repo-model-file-add-file-to-download-list-response';
-import { OrgSagebionetworksRepoModelTableEntityUpdateResults } from './org-sagebionetworks-repo-model-table-entity-update-results';
-import { OrgSagebionetworksRepoModelTableFacetColumnResult } from './org-sagebionetworks-repo-model-table-facet-column-result';
 import { OrgSagebionetworksRepoModelSchemaCreateSchemaResponse } from './org-sagebionetworks-repo-model-schema-create-schema-response';
 import { OrgSagebionetworksRepoModelTableUploadToTablePreviewResult } from './org-sagebionetworks-repo-model-table-upload-to-table-preview-result';
 import { OrgSagebionetworksRepoModelDownloadDownloadListPackageResponse } from './org-sagebionetworks-repo-model-download-download-list-package-response';
-import { OrgSagebionetworksRepoModelTableTableUpdateTransactionResponse } from './org-sagebionetworks-repo-model-table-table-update-transaction-response';
 import { OrgSagebionetworksRepoModelDownloadQueryResponseDetails } from './org-sagebionetworks-repo-model-download-query-response-details';
 import { OrgSagebionetworksRepoModelTableUploadToTableResult } from './org-sagebionetworks-repo-model-table-upload-to-table-result';
 import { OrgSagebionetworksRepoModelMigrationAsyncMigrationResponse } from './org-sagebionetworks-repo-model-migration-async-migration-response';
-import { OrgSagebionetworksRepoModelTableRow } from './org-sagebionetworks-repo-model-table-row';
-import { OrgSagebionetworksRepoModelTableRowSet } from './org-sagebionetworks-repo-model-table-row-set';
 import { OrgSagebionetworksRepoModelTableSelectColumn } from './org-sagebionetworks-repo-model-table-select-column';
 import { OrgSagebionetworksRepoModelTableTableSearchChangeResponse } from './org-sagebionetworks-repo-model-table-table-search-change-response';
-import { OrgSagebionetworksRepoModelSchemaJsonSchemaVersionInfo } from './org-sagebionetworks-repo-model-schema-json-schema-version-info';
 import { OrgSagebionetworksRepoModelGridGridSession } from './org-sagebionetworks-repo-model-grid-grid-session';
-import { OrgSagebionetworksRepoModelSchemaJsonSchema } from './org-sagebionetworks-repo-model-schema-json-schema';
 import { OrgSagebionetworksRepoModelTableRowReferenceSetResults } from './org-sagebionetworks-repo-model-table-row-reference-set-results';
-import { OrgSagebionetworksRepoModelGridDownloadFromGridResult } from './org-sagebionetworks-repo-model-grid-download-from-grid-result';
-import { OrgSagebionetworksRepoModelFileFileHandleRestoreResult } from './org-sagebionetworks-repo-model-file-file-handle-restore-result';
-import { OrgSagebionetworksRepoModelTableSumFileSizes } from './org-sagebionetworks-repo-model-table-sum-file-sizes';
 
 /**
  * The body of an Asynchronous job response.
@@ -76,6 +78,7 @@ export type OrgSagebionetworksRepoModelAsynchAsynchronousResponseBody =
   | OrgSagebionetworksRepoModelFileFileHandleRestoreResponse
   | OrgSagebionetworksRepoModelGridCreateGridResponse
   | OrgSagebionetworksRepoModelGridDownloadFromGridResult
+  | OrgSagebionetworksRepoModelGridGridRecordSetExportResponse
   | OrgSagebionetworksRepoModelMigrationAsyncMigrationResponse
   | OrgSagebionetworksRepoModelReportDownloadStorageReportResponse
   | OrgSagebionetworksRepoModelSchemaCreateSchemaResponse

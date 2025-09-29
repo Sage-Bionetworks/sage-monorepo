@@ -12,14 +12,30 @@
  * Literal is a single value of a given type.
  */
 export interface OrgSagebionetworksRepoModelGridSqlLiteral {
+  /**
+   * Required. Full name of the exact type used.
+   */
   concreteType: OrgSagebionetworksRepoModelGridSqlLiteral.ConcreteTypeEnum;
+  /**
+   * The literal value.
+   */
   value?: string;
-  dataType?: string;
+  /**
+   * The data type of the literal.
+   */
+  dataType?: OrgSagebionetworksRepoModelGridSqlLiteral.DataTypeEnum;
 }
 export namespace OrgSagebionetworksRepoModelGridSqlLiteral {
   export type ConcreteTypeEnum = 'org.sagebionetworks.repo.model.grid.sql.Literal';
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelGridSqlLiteral:
       'org.sagebionetworks.repo.model.grid.sql.Literal' as ConcreteTypeEnum,
+  };
+  export type DataTypeEnum = 'string' | 'integner' | 'float' | 'boolean';
+  export const DataTypeEnum = {
+    String: 'string' as DataTypeEnum,
+    Integner: 'integner' as DataTypeEnum,
+    Float: 'float' as DataTypeEnum,
+    Boolean: 'boolean' as DataTypeEnum,
   };
 }

@@ -14,12 +14,31 @@ import { OrgSagebionetworksRepoModelMigrationTypeData } from './org-sagebionetwo
  */
 export interface OrgSagebionetworksRepoModelMigrationBackupManifest {
   primaryType?: OrgSagebionetworksRepoModelMigrationTypeData;
-  aliasType?: string;
+  /**
+   * The value to use as the alias in the XML migration backup file
+   */
+  aliasType?: OrgSagebionetworksRepoModelMigrationBackupManifest.AliasTypeEnum;
+  /**
+   * The batch size determines the maximum number of rows that will be loaded into memory at one time.
+   */
   batchSize?: number;
+  /**
+   * The first ID in the range of IDs (inclusive)
+   */
   minimumId?: number;
+  /**
+   * The last ID in the range of IDs (inclusive)
+   */
   maximumId?: number;
   /**
    * The secondary types according to the source of the backup.
    */
   secondaryTypes?: Array<OrgSagebionetworksRepoModelMigrationTypeData>;
+}
+export namespace OrgSagebionetworksRepoModelMigrationBackupManifest {
+  export type AliasTypeEnum = 'TABLE_NAME' | 'MIGRATION_TYPE_NAME';
+  export const AliasTypeEnum = {
+    TableName: 'TABLE_NAME' as AliasTypeEnum,
+    MigrationTypeName: 'MIGRATION_TYPE_NAME' as AliasTypeEnum,
+  };
 }

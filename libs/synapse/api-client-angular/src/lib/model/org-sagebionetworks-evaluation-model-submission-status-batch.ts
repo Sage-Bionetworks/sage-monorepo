@@ -17,7 +17,16 @@ export interface OrgSagebionetworksEvaluationModelSubmissionStatusBatch {
    * A collection of Submission Statuses
    */
   statuses?: Array<OrgSagebionetworksEvaluationModelSubmissionStatus>;
+  /**
+   * A token required to accept a batch submission for all but the first batch.
+   */
   batchToken?: string;
+  /**
+   * true if and only if this is the first batch to upload
+   */
   isFirstBatch?: boolean;
+  /**
+   * true if and only if this is the last batch to upload
+   */
   isLastBatch?: boolean;
 }

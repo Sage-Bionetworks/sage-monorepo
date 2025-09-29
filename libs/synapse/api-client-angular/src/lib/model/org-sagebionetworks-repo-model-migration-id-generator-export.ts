@@ -12,5 +12,8 @@
  * Export script for the ID generator.
  */
 export interface OrgSagebionetworksRepoModelMigrationIdGeneratorExport {
+  /**
+   * The SQL statement to be used to re-create the ID generator database.
+   */
   exportScript?: string;
 }

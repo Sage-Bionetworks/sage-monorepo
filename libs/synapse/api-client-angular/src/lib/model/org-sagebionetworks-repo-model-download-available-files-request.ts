@@ -13,18 +13,32 @@ import { OrgSagebionetworksRepoModelDownloadSort } from './org-sagebionetworks-r
  * Request to get a single page of files from the user\'s download list for files that are currently available for download.
  */
 export interface OrgSagebionetworksRepoModelDownloadAvailableFilesRequest {
+  /**
+   * Required. For this type the value should be: \'org.sagebionetworks.repo.model.download.AvailableFilesRequest\'
+   */
   concreteType: OrgSagebionetworksRepoModelDownloadAvailableFilesRequest.ConcreteTypeEnum;
+  /**
+   * Forward the resulting nextPageToken from a previous request to get the next page of results.
+   */
   nextPageToken?: string;
   /**
    * Optional. Defines how the query results should be sorted. If excluded a default sort will be used.
    */
   sort?: Array<OrgSagebionetworksRepoModelDownloadSort>;
-  filter?: string;
+  /**
+   * Optional. Defines how the query results should be filtered. If excluded all available files will be returned.
+   */
+  filter?: OrgSagebionetworksRepoModelDownloadAvailableFilesRequest.FilterEnum;
 }
 export namespace OrgSagebionetworksRepoModelDownloadAvailableFilesRequest {
   export type ConcreteTypeEnum = 'org.sagebionetworks.repo.model.download.AvailableFilesRequest';
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelDownloadAvailableFilesRequest:
       'org.sagebionetworks.repo.model.download.AvailableFilesRequest' as ConcreteTypeEnum,
+  };
+  export type FilterEnum = 'eligibleForPackaging' | 'ineligibleForPackaging';
+  export const FilterEnum = {
+    EligibleForPackaging: 'eligibleForPackaging' as FilterEnum,
+    IneligibleForPackaging: 'ineligibleForPackaging' as FilterEnum,
   };
 }

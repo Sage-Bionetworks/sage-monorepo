@@ -13,14 +13,41 @@ import { OrgSagebionetworksEvaluationModelSubmissionQuota } from './org-sagebion
  * An Evaluation is the core object of the Evaluation API, used to support collaborative data analysis challenges in Synapse.
  */
 export interface OrgSagebionetworksEvaluationModelEvaluation {
+  /**
+   * The unique immutable ID for this Evaluation.
+   */
   id?: string;
+  /**
+   * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. The eTag changes every time an Evaluation is updated; it is used to detect when a client\'s copy of an Evaluation is out-of-date.
+   */
   etag?: string;
+  /**
+   * The name of this Evaluation
+   */
   name?: string;
+  /**
+   * A text description of this Evaluation.
+   */
   description?: string;
+  /**
+   * The ID of the Synapse user who created this Evaluation.
+   */
   ownerId?: string;
+  /**
+   * The date on which Evaluation was created.
+   */
   createdOn?: string;
+  /**
+   * The Synapse ID of the Entity to which this Evaluation belongs, e.g. a reference to a Synapse project.
+   */
   contentSource?: string;
+  /**
+   * Message to display to users detailing acceptable formatting for Submissions to this Evaluation.
+   */
   submissionInstructionsMessage?: string;
+  /**
+   * Message to display to users upon successful submission to this Evaluation.
+   */
   submissionReceiptMessage?: string;
   quota?: OrgSagebionetworksEvaluationModelSubmissionQuota;
 }

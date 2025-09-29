@@ -12,8 +12,17 @@
  * Represents a single row of a TableEntity
  */
 export interface OrgSagebionetworksRepoModelTableRow {
+  /**
+   * The immutable ID issued to a new row.
+   */
   rowId?: number;
+  /**
+   * The version number of this row. Each row version is immutable, so when a row is updated a new version is created.
+   */
   versionNumber?: number;
+  /**
+   * For queries against EntityViews with query.includeEntityEtag=true, this field will contain the etag of the entity.  Will be null for all other cases.
+   */
   etag?: string;
   /**
    * The values for each column of this row. To delete a row, set this to an empty list: []

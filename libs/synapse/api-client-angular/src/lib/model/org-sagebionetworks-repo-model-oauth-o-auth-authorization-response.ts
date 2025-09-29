@@ -12,5 +12,8 @@
  * OAuth 2.0 Authorization Response
  */
 export interface OrgSagebionetworksRepoModelOauthOAuthAuthorizationResponse {
+  /**
+   * The authorization code returned to an OAuth client as part of the OAuth 2.0 \'code flow\'
+   */
   access_code?: string;
 }

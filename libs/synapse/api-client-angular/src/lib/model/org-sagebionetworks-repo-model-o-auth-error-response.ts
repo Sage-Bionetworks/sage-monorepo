@@ -12,8 +12,42 @@
  * JSON schema for an error returned by Synapse OAuth 2.0 Services. Used to align error messages with <a href=\"https://tools.ietf.org/html/rfc6749#section-5.2\">RFC 6749 Section 5.2</a>
  */
 export interface OrgSagebionetworksRepoModelOAuthErrorResponse {
+  /**
+   * A short code for the error encountered, typically defined by OAuth 2 specifications
+   */
   error?: string;
+  /**
+   * A human-readable description of the error that occurred.
+   */
   error_description?: string;
-  errorCode?: string;
+  /**
+   * A code to be used by clients to handle the error.
+   */
+  errorCode?: OrgSagebionetworksRepoModelOAuthErrorResponse.ErrorCodeEnum;
+  /**
+   * The reason for the error
+   */
   reason?: string;
+}
+export namespace OrgSagebionetworksRepoModelOAuthErrorResponse {
+  export type ErrorCodeEnum =
+    | 'PASSWORD_RESET_VIA_EMAIL_REQUIRED'
+    | 'USER_CERTIFICATION_REQUIRED'
+    | 'INVALID_TABLE_QUERY_FACET_COLUMN_REQUEST'
+    | 'OAUTH_CLIENT_NOT_VERIFIED'
+    | 'TWO_FA_REQUIRED'
+    | 'UNSUPPORTED_WEBHOOK_DOMAIN'
+    | 'PROJECT_STORAGE_LIMIT_EXCEEDED'
+    | 'TWO_FA_ENABLED_REQUIRED';
+  export const ErrorCodeEnum = {
+    PasswordResetViaEmailRequired: 'PASSWORD_RESET_VIA_EMAIL_REQUIRED' as ErrorCodeEnum,
+    UserCertificationRequired: 'USER_CERTIFICATION_REQUIRED' as ErrorCodeEnum,
+    InvalidTableQueryFacetColumnRequest:
+      'INVALID_TABLE_QUERY_FACET_COLUMN_REQUEST' as ErrorCodeEnum,
+    OauthClientNotVerified: 'OAUTH_CLIENT_NOT_VERIFIED' as ErrorCodeEnum,
+    TwoFaRequired: 'TWO_FA_REQUIRED' as ErrorCodeEnum,
+    UnsupportedWebhookDomain: 'UNSUPPORTED_WEBHOOK_DOMAIN' as ErrorCodeEnum,
+    ProjectStorageLimitExceeded: 'PROJECT_STORAGE_LIMIT_EXCEEDED' as ErrorCodeEnum,
+    TwoFaEnabledRequired: 'TWO_FA_ENABLED_REQUIRED' as ErrorCodeEnum,
+  };
 }

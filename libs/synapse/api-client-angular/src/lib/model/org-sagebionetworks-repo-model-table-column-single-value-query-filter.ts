@@ -13,13 +13,22 @@
  */
 export interface OrgSagebionetworksRepoModelTableColumnSingleValueQueryFilter {
   concreteType: OrgSagebionetworksRepoModelTableColumnSingleValueQueryFilter.ConcreteTypeEnum;
+  /**
+   * When null (default) or false, this condition will be applied to WHERE clause of table/view query.  When set to true, for a query against a VirtualTable, this condition will be applied to the WHERE clause of the VirtualTable\'s definingSQL.
+   */
   isDefiningCondition?: boolean;
   /**
    * Values to be used with the filter.
    */
   values?: Array<string>;
+  /**
+   * name of the column to filter
+   */
   columnName?: string;
-  operator?: string;
+  /**
+   * Determines the filter operation to perform
+   */
+  operator?: OrgSagebionetworksRepoModelTableColumnSingleValueQueryFilter.OperatorEnum;
 }
 export namespace OrgSagebionetworksRepoModelTableColumnSingleValueQueryFilter {
   export type ConcreteTypeEnum =
@@ -27,5 +36,11 @@ export namespace OrgSagebionetworksRepoModelTableColumnSingleValueQueryFilter {
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelTableColumnSingleValueQueryFilter:
       'org.sagebionetworks.repo.model.table.ColumnSingleValueQueryFilter' as ConcreteTypeEnum,
+  };
+  export type OperatorEnum = 'LIKE' | 'EQUAL' | 'IN';
+  export const OperatorEnum = {
+    Like: 'LIKE' as OperatorEnum,
+    Equal: 'EQUAL' as OperatorEnum,
+    In: 'IN' as OperatorEnum,
   };
 }

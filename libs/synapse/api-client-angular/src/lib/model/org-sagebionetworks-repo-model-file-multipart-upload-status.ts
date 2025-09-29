@@ -12,11 +12,39 @@
  * Describes the status of a multi-part file upload.
  */
 export interface OrgSagebionetworksRepoModelFileMultipartUploadStatus {
+  /**
+   * The unique identifier of a multi-part file upload.
+   */
   uploadId?: string;
+  /**
+   * The id of the user that started this multi-part file upload.
+   */
   startedBy?: string;
+  /**
+   * The date and time this upload was first initiated.
+   */
   startedOn?: string;
+  /**
+   * The date and time this upload was last updated.
+   */
   updatedOn?: string;
+  /**
+   * A binary representation of the upload status of all parts comprising the file to be uploaded.  A part that has been \'added\' will have a state of \'1\', while a part that is \'missing\' will have a state = \'0\'.  For example, a two part file for which the first part has been added but the second part is missing would have a partState=\'10\'.
+   */
   partsState?: string;
-  state?: string;
+  /**
+   * The state of this file upload.
+   */
+  state?: OrgSagebionetworksRepoModelFileMultipartUploadStatus.StateEnum;
+  /**
+   * After a multi-part file upload is completed, a file handle will be created to represent the resulting file with this ID.  This value will be null until the multi-part file upload state transitions to COMPLETED
+   */
   resultFileHandleId?: string;
+}
+export namespace OrgSagebionetworksRepoModelFileMultipartUploadStatus {
+  export type StateEnum = 'UPLOADING' | 'COMPLETED';
+  export const StateEnum = {
+    Uploading: 'UPLOADING' as StateEnum,
+    Completed: 'COMPLETED' as StateEnum,
+  };
 }

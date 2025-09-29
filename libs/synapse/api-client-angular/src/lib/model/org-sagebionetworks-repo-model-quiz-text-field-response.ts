@@ -12,8 +12,14 @@
  * The text response to a TextFieldQuestion
  */
 export interface OrgSagebionetworksRepoModelQuizTextFieldResponse {
+  /**
+   * an index unique in the Quiz, used to refer to the question being answered
+   */
   questionIndex?: number;
   concreteType: OrgSagebionetworksRepoModelQuizTextFieldResponse.ConcreteTypeEnum;
+  /**
+   * The response to the text-field question
+   */
   response?: string;
 }
 export namespace OrgSagebionetworksRepoModelQuizTextFieldResponse {

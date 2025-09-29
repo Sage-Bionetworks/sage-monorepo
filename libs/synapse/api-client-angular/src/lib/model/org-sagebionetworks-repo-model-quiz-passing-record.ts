@@ -13,15 +13,45 @@ import { OrgSagebionetworksRepoModelQuizResponseCorrectness } from './org-sagebi
  * A record of whether a given user passed a given test
  */
 export interface OrgSagebionetworksRepoModelQuizPassingRecord {
+  /**
+   * The principal id of the user
+   */
   userId?: string;
+  /**
+   * The id of the quiz
+   */
   quizId?: number;
+  /**
+   * The id of the user\'s response
+   */
   responseId?: number;
+  /**
+   * The score the user received on the test
+   */
   score?: number;
+  /**
+   * Whether the user passed the given test
+   */
   passed?: boolean;
+  /**
+   * DEPRECATED: Same as createdOn. Date/time when the user submitted the response for this passing record. Note that this DOES NOT indicate when the user passed the certification quiz.
+   */
   passedOn?: string;
+  /**
+   * Date/time when this record was generated on a response submission (this will match the createdOn of a QuizResponse).
+   */
   createdOn?: string;
+  /**
+   * Date/time when the passing record was revoked (omitted if the record was not revoked)
+   */
   revokedOn?: string;
+  /**
+   * True if the record is revoked, false otherwise
+   */
   revoked?: boolean;
+  /**
+   * True if the record is not revoked and passed is true, false otherwise
+   */
   certified?: boolean;
   /**
    * For each response, whether it was correct

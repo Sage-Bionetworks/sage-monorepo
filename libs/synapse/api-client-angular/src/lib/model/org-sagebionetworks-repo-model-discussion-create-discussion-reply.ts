@@ -12,6 +12,12 @@
  * The model object represents a single Reply creation.
  */
 export interface OrgSagebionetworksRepoModelDiscussionCreateDiscussionReply {
+  /**
+   * The ID of the thread this Reply belongs to
+   */
   threadId?: string;
+  /**
+   * The markdown of the Reply\'s message
+   */
   messageMarkdown?: string;
 }

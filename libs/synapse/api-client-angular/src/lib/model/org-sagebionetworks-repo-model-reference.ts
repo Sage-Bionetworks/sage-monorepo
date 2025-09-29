@@ -12,6 +12,12 @@
  * JSON schema for Reference POJO
  */
 export interface OrgSagebionetworksRepoModelReference {
+  /**
+   * The the id of the entity to which this reference refers
+   */
   targetId?: string;
+  /**
+   * The version number of the entity to which this reference refers
+   */
   targetVersionNumber?: number;
 }

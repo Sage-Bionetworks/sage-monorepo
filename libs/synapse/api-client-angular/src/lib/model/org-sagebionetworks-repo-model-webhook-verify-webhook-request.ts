@@ -12,5 +12,8 @@
  * Request body used to verify a webhook, the verification code is sent to the webhook endpoint when the webhook is created or when its endpoint is modified.
  */
 export interface OrgSagebionetworksRepoModelWebhookVerifyWebhookRequest {
+  /**
+   * The verification code received by the webhook endpoint.
+   */
   verificationCode?: string;
 }

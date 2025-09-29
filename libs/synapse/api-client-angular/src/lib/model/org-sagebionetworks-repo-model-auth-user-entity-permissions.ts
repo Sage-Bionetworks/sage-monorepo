@@ -12,23 +12,80 @@
  * The permission a User has for a given Entity
  */
 export interface OrgSagebionetworksRepoModelAuthUserEntityPermissions {
+  /**
+   * Can the user view this entity?
+   */
   canView?: boolean;
+  /**
+   * Can the user edit this entity?
+   */
   canEdit?: boolean;
+  /**
+   * Can the user move this entity by changing its parentId?
+   */
   canMove?: boolean;
+  /**
+   * Can the user add a child entity to this entity?
+   */
   canAddChild?: boolean;
+  /**
+   * Can the user edit this entity once they become a Certified User?
+   */
   canCertifiedUserEdit?: boolean;
+  /**
+   * Can the user add a child entity to this entity once they become a Certified User?
+   */
   canCertifiedUserAddChild?: boolean;
+  /**
+   * True, if the user has passed the user certification quiz.
+   */
   isCertifiedUser?: boolean;
+  /**
+   * Can the user change the permissions of this entity?
+   */
   canChangePermissions?: boolean;
+  /**
+   * Can the user change the settings of this entity?
+   */
   canChangeSettings?: boolean;
+  /**
+   * Can the user delete this entity?
+   */
   canDelete?: boolean;
+  /**
+   * Are there any access requirements precluding the user from downloading this entity?
+   */
   canDownload?: boolean;
+  /**
+   * Did the user sign the current terms of service?
+   */
   canUpload?: boolean;
+  /**
+   * Can the user delete the entity\'s access control list (so it inherits settings from an ancestor)?
+   */
   canEnableInheritance?: boolean;
+  /**
+   * The principal ID of the entity\'s owner (i.e. the entity\'s \'createdBy\')
+   */
   ownerPrincipalId?: number;
+  /**
+   * Is this entity considered public?
+   */
   canPublicRead?: boolean;
+  /**
+   * Can the user moderate the forum associated with this entity? Note that only project entity has forum.
+   */
   canModerate?: boolean;
+  /**
+   * Is the certification requirement enabled for the project of the entity?
+   */
   isCertificationRequired?: boolean;
+  /**
+   * Returns true if the Entity\'s DateType equals \'OPEN_DATA\', indicating that the data is safe to be released to the public.
+   */
   isEntityOpenData?: boolean;
+  /**
+   * True if the user is considered a data contributor, e.g. has update and delete permissions on the data.
+   */
   isDataContributor?: boolean;
 }

@@ -12,7 +12,16 @@
  * The model object represents a single Thread creation.
  */
 export interface OrgSagebionetworksRepoModelDiscussionCreateDiscussionThread {
+  /**
+   * The ID of the forum this CreateThread belongs to
+   */
   forumId?: string;
+  /**
+   * The title of the Thread
+   */
   title?: string;
+  /**
+   * The markdown of the Thread\'s message
+   */
   messageMarkdown?: string;
 }

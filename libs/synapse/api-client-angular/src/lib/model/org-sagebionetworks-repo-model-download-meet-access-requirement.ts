@@ -13,6 +13,9 @@
  */
 export interface OrgSagebionetworksRepoModelDownloadMeetAccessRequirement {
   concreteType: OrgSagebionetworksRepoModelDownloadMeetAccessRequirement.ConcreteTypeEnum;
+  /**
+   * The ID of the access requirement that the user needs to meet in order to download a file.
+   */
   accessRequirementId?: number;
 }
 export namespace OrgSagebionetworksRepoModelDownloadMeetAccessRequirement {

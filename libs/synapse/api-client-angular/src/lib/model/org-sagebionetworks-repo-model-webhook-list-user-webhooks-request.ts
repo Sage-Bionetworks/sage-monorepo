@@ -12,5 +12,8 @@
  * Request body for listing the user webhooks.
  */
 export interface OrgSagebionetworksRepoModelWebhookListUserWebhooksRequest {
+  /**
+   * Forward this token to get the next page of results.
+   */
   nextPageToken?: string;
 }

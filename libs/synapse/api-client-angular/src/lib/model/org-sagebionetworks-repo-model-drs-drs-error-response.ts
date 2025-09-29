@@ -12,8 +12,17 @@
  * JSON schema for an error returned by Drs Services. Used to align error messages with <a href=\"https://ga4gh.github.io/data-repository-service-schemas/preview/release/drs-1.2.0/docs/#tag/ErrorModel\">Error</a>
  */
 export interface OrgSagebionetworksRepoModelDrsDrsErrorResponse {
+  /**
+   * Indicates which implementation of BaseError this object represents.  The value is the fully qualified class name, e.g. org.sagebionetworks.repo.model.ErrorResponse.
+   */
   concreteType: OrgSagebionetworksRepoModelDrsDrsErrorResponse.ConcreteTypeEnum;
+  /**
+   * A detailed error message.
+   */
   msg?: string;
+  /**
+   * The integer representing the HTTP status code (e.g. 200, 404).
+   */
   status_code?: number;
 }
 export namespace OrgSagebionetworksRepoModelDrsDrsErrorResponse {

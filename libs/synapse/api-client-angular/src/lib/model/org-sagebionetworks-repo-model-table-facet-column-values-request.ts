@@ -13,7 +13,13 @@
  */
 export interface OrgSagebionetworksRepoModelTableFacetColumnValuesRequest {
   concreteType: OrgSagebionetworksRepoModelTableFacetColumnValuesRequest.ConcreteTypeEnum;
+  /**
+   * The name of the faceted column
+   */
   columnName?: string;
+  /**
+   * To filter on a jsonSubColumn of a JSON column, provide the jsonPath of the sub-column
+   */
   jsonPath?: string;
   /**
    * The set of facet values that were selected

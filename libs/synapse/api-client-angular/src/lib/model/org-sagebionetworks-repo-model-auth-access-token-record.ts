@@ -13,18 +13,64 @@ import { OrgSagebionetworksRepoModelOauthOIDCClaimsRequestDetails } from './org-
  * Metadata related to an issued personal access token. After the token has been generated, it cannot be retrieved.
  */
 export interface OrgSagebionetworksRepoModelAuthAccessTokenRecord {
+  /**
+   * The unique ID of the access token
+   */
   id?: string;
+  /**
+   * The ID of the user that the token belongs to.
+   */
   userId?: string;
   /**
    * The scopes that have been granted to this token
    */
-  scopes?: Array<string>;
+  scopes?: Array<OrgSagebionetworksRepoModelAuthAccessTokenRecord.ScopesEnum>;
   /**
    * The OIDC claims that can be accessed using this token.
    */
   userInfoClaims?: { [key: string]: OrgSagebionetworksRepoModelOauthOIDCClaimsRequestDetails };
+  /**
+   * A unique, typically human-readable name for the token
+   */
   name?: string;
+  /**
+   * The date this personal access token was initially issued.
+   */
   createdOn?: string;
+  /**
+   * The date this personal access token was last used.
+   */
   lastUsed?: string;
-  state?: string;
+  /**
+   * The enumeration of possible personal access token states.
+   */
+  state?: OrgSagebionetworksRepoModelAuthAccessTokenRecord.StateEnum;
+}
+export namespace OrgSagebionetworksRepoModelAuthAccessTokenRecord {
+  export type ScopesEnum =
+    | 'openid'
+    | 'email'
+    | 'profile'
+    | 'ga4gh_passport_v1'
+    | 'view'
+    | 'download'
+    | 'modify'
+    | 'authorize'
+    | 'offline_access';
+  export const ScopesEnum = {
+    Openid: 'openid' as ScopesEnum,
+    Email: 'email' as ScopesEnum,
+    Profile: 'profile' as ScopesEnum,
+    Ga4ghPassportV1: 'ga4gh_passport_v1' as ScopesEnum,
+    View: 'view' as ScopesEnum,
+    Download: 'download' as ScopesEnum,
+    Modify: 'modify' as ScopesEnum,
+    Authorize: 'authorize' as ScopesEnum,
+    OfflineAccess: 'offline_access' as ScopesEnum,
+  };
+  export type StateEnum = 'ACTIVE' | 'EXPIRED';
+  export const StateEnum = {
+    Active: 'ACTIVE' as StateEnum,
+    Expired: 'EXPIRED' as StateEnum,
+  };
 }

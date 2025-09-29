@@ -10,6 +10,9 @@
 import { OrgSagebionetworksRepoModelGridSqlIdentifier } from './org-sagebionetworks-repo-model-grid-sql-identifier';
 
 export interface OrgSagebionetworksRepoModelGridSqlColumnReference {
+  /**
+   * Required. Full name of the exact type used.
+   */
   concreteType: OrgSagebionetworksRepoModelGridSqlColumnReference.ConcreteTypeEnum;
   column?: OrgSagebionetworksRepoModelGridSqlIdentifier;
 }

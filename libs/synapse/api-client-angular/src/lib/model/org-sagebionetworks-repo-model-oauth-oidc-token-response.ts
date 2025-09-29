@@ -12,9 +12,24 @@
  * Oauth 2.0 Token Response
  */
 export interface OrgSagebionetworksRepoModelOauthOIDCTokenResponse {
+  /**
+   * The OAuth 2.0 access token
+   */
   access_token?: string;
+  /**
+   * The Oauth 2.0 refresh token
+   */
   refresh_token?: string;
+  /**
+   * The Open ID Connect ID token
+   */
   id_token?: string;
+  /**
+   * The type of token returned
+   */
   token_type?: string;
+  /**
+   * The lifetime in seconds of the access token. See RFC6749.
+   */
   expires_in?: number;
 }

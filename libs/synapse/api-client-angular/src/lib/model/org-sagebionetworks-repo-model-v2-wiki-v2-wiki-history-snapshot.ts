@@ -12,7 +12,16 @@
  * A WikiHistorySnapshot contains basic information about an update to a WikiPage.
  */
 export interface OrgSagebionetworksRepoModelV2WikiV2WikiHistorySnapshot {
+  /**
+   * The version of this snapshot in the wiki\'s history.
+   */
   version?: string;
+  /**
+   * The timestamp when this modification/snapshot took place.
+   */
   modifiedOn?: string;
+  /**
+   * The id of the user that made this modification.
+   */
   modifiedBy?: string;
 }

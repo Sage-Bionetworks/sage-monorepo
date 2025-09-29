@@ -13,7 +13,13 @@ import { OrgSagebionetworksRepoModelMessageMultipartAttachment } from './org-sag
  * JSON schema for a multipart message body
  */
 export interface OrgSagebionetworksRepoModelMessageMultipartMessageBody {
+  /**
+   * Message body, as plain text.
+   */
   plain?: string;
+  /**
+   * Message body, as html.
+   */
   html?: string;
   /**
    * Attachments to the message.

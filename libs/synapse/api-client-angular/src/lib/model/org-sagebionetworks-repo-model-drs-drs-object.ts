@@ -15,13 +15,37 @@ import { OrgSagebionetworksRepoModelDrsContent } from './org-sagebionetworks-rep
  * The drs object metadata, Currently supported type is blob(DrsObject without contents array) and bundle(DrsObject with contents array).
  */
 export interface OrgSagebionetworksRepoModelDrsDrsObject {
+  /**
+   * An identifier unique to this DrsObject.A drs object id should be Synapse id with version which makes it immutable e.g syn32132536.1
+   */
   id?: string;
+  /**
+   * A string that can be used to name a DrsObject. This string is made up of uppercase and lowercase letters, decimal digits, hypen, period, and underscore [A-Za-z0-9.-_].
+   */
   name?: string;
+  /**
+   * Drs self uri is drs://<hostname>/<id> and can be used by clients to store and pass around.
+   */
   self_uri?: string;
+  /**
+   * For blobs, the blob size in bytes. For bundles, the cumulative size, in bytes, of items in the contents field.
+   */
   size?: number;
+  /**
+   * Timestamp of object creation in RFC3339.
+   */
   created_time?: string;
+  /**
+   * Timestamp of object updated in RFC3339.
+   */
   updated_time?: string;
+  /**
+   * Version of drs object.
+   */
   version?: string;
+  /**
+   * The mime-type of the drs object. Must be: <a href=\"http://en.wikipedia.org/wiki/Internet_media_type\"> Internet_media_type </a>
+   */
   mime_type?: string;
   /**
    * The hex-string encoded checksum for the drs object. At least one checksum must be provided. For blobs, the checksum is computed over the bytes in the blob that is md5. For bundles, the checksum is computed over a sorted concatenation of the checksums of its top-level contained objects.
@@ -35,5 +59,8 @@ export interface OrgSagebionetworksRepoModelDrsDrsObject {
    * The list of access methods that can be used to fetch the DrsObject. Required for single blobs and bundles have no access method.
    */
   access_methods?: Array<OrgSagebionetworksRepoModelDrsAccessMethod>;
+  /**
+   * A readable description of the DrsObject.
+   */
   description?: string;
 }

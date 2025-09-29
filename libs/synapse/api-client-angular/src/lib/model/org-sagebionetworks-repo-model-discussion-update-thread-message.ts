@@ -9,5 +9,8 @@
  */
 
 export interface OrgSagebionetworksRepoModelDiscussionUpdateThreadMessage {
+  /**
+   * The new message markdown
+   */
   messageMarkdown?: string;
 }

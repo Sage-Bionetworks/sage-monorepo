@@ -12,7 +12,16 @@
  * A pair containing the value of a column and the number of times that value appears
  */
 export interface OrgSagebionetworksRepoModelTableFacetColumnResultValueCount {
+  /**
+   * the value that is in a column
+   */
   value?: string;
+  /**
+   * the number of times the value appears in the column
+   */
   count?: number;
+  /**
+   * whether this facet was selected by the user
+   */
   isSelected?: boolean;
 }

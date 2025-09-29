@@ -12,6 +12,12 @@
  * The immutable (stable) identifier for a cell.
  */
 export interface OrgSagebionetworksRepoModelGridCellId {
+  /**
+   * The unique identifier for this cell\'s row
+   */
   rowId?: string;
+  /**
+   * The unique name for this cell\'s column
+   */
   columnName?: string;
 }

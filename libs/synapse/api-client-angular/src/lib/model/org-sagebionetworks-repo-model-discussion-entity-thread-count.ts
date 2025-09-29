@@ -13,5 +13,8 @@
  */
 export interface OrgSagebionetworksRepoModelDiscussionEntityThreadCount {
   entityId?: string;
+  /**
+   * The number of threads that the current user can view.
+   */
   count?: number;
 }

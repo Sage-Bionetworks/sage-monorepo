@@ -20,6 +20,9 @@ export interface OrgSagebionetworksRepoModelTableTableUpdateTransactionRequest {
    * List of changes that describes schema and/or row changes to a table. For a view the changes are eventually consistent.
    */
   changes?: Array<OrgSagebionetworksRepoModelTableTableUpdateRequest>;
+  /**
+   * When set to \'true\', a snapshot of the table or view will be created and a new version of the entity will be persisted. For a table the snapshot is created after any change from this transaction request are applied to the table. Views do not support changes in the request when a snapshot is created.
+   */
   createSnapshot?: boolean;
   snapshotOptions?: OrgSagebionetworksRepoModelTableSnapshotRequest;
 }

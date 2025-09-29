@@ -13,6 +13,9 @@ import { OrgSagebionetworksRepoModelAgentTraceEvent } from './org-sagebionetwork
  * A single page of an agent trace events for an asynchronous agent chat job. The events are sorted by timestamp ascending.
  */
 export interface OrgSagebionetworksRepoModelAgentTraceEventsResponse {
+  /**
+   * The job ID issued when the agent chat request job was started.
+   */
   jobId?: string;
   /**
    * A single page of trace events.

@@ -18,6 +18,9 @@ export interface OrgSagebionetworksRepoModelTableViewColumnModelResponse {
    * A page of <a href=\"${org.sagebionetworks.repo.model.table.ColumnModel}\">ColumnModels</a>
    */
   results?: Array<OrgSagebionetworksRepoModelTableColumnModel>;
+  /**
+   * If there are more pages of results this token can be used to get the next page.  Null if this is the last page.
+   */
   nextPageToken?: string;
 }
 export namespace OrgSagebionetworksRepoModelTableViewColumnModelResponse {

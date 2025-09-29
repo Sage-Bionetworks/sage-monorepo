@@ -12,14 +12,41 @@
  * JSON schema for the fields of a search document.  Note that awesome search does not support camel case so we have to deviate from the usual naming scheme for properties.
  */
 export interface OrgSagebionetworksRepoModelSearchDocumentFields {
+  /**
+   * The name of this entity
+   */
   name?: string;
+  /**
+   * The description of this entity.
+   */
   description?: string;
+  /**
+   * The ID of the parent of this entity
+   */
   parent_id?: string;
+  /**
+   * The type of this entity.
+   */
   node_type?: string;
+  /**
+   * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client\'s current representation of an entity is out-of-date.
+   */
   etag?: string;
+  /**
+   * The seconds since epoch date this entity was created.
+   */
   created_on?: number;
+  /**
+   * The seconds since epoch date this entity was last modified.
+   */
   modified_on?: number;
+  /**
+   * The user that created this entity.
+   */
   created_by?: string;
+  /**
+   * The user that last modified this entity.
+   */
   modified_by?: string;
   /**
    * All group names with READ access to this entity
@@ -29,8 +56,20 @@ export interface OrgSagebionetworksRepoModelSearchDocumentFields {
    * All group names with UPDATE access to this entity
    */
   update_acl?: Array<string>;
+  /**
+   * The result of a medical investigation to identify a disorder from its signs and symptoms.
+   */
   diagnosis?: string;
+  /**
+   * Type of tissue for the samples in this entity.
+   */
   tissue?: string;
+  /**
+   * The name of the consortium
+   */
   consortium?: string;
+  /**
+   * A unique macroscopic (gross) anatomic structure that performs specific functions. It is composed of various tissues. An organ is part of an anatomic system or a body region.
+   */
   organ?: string;
 }

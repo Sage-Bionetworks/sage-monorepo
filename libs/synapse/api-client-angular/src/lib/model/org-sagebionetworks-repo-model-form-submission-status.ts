@@ -12,9 +12,37 @@
  * The status of a a submitted FormData object.
  */
 export interface OrgSagebionetworksRepoModelFormSubmissionStatus {
+  /**
+   * The date when the object was submitted.
+   */
   submittedOn?: string;
+  /**
+   * The date when this submission was reviewed.
+   */
   reviewedOn?: string;
+  /**
+   * The id of the service user that reviewed the submission.
+   */
   reviewedBy?: string;
-  state?: string;
+  /**
+   * The enumeration of possible FormData submission states.
+   */
+  state?: OrgSagebionetworksRepoModelFormSubmissionStatus.StateEnum;
+  /**
+   * The message provided by the reviewer when a submission is rejected.
+   */
   rejectionMessage?: string;
+}
+export namespace OrgSagebionetworksRepoModelFormSubmissionStatus {
+  export type StateEnum =
+    | 'WAITING_FOR_SUBMISSION'
+    | 'SUBMITTED_WAITING_FOR_REVIEW'
+    | 'ACCEPTED'
+    | 'REJECTED';
+  export const StateEnum = {
+    WaitingForSubmission: 'WAITING_FOR_SUBMISSION' as StateEnum,
+    SubmittedWaitingForReview: 'SUBMITTED_WAITING_FOR_REVIEW' as StateEnum,
+    Accepted: 'ACCEPTED' as StateEnum,
+    Rejected: 'REJECTED' as StateEnum,
+  };
 }

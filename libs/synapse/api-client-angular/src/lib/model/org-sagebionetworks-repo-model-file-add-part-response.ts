@@ -12,8 +12,27 @@
  * Response from adding a part to multi-part upload or copy.
  */
 export interface OrgSagebionetworksRepoModelFileAddPartResponse {
+  /**
+   * The unique identifier of a multi-part request.
+   */
   uploadId?: string;
+  /**
+   * The part number of the add.
+   */
   partNumber?: number;
-  addPartState?: string;
+  /**
+   * The state of this add.
+   */
+  addPartState?: OrgSagebionetworksRepoModelFileAddPartResponse.AddPartStateEnum;
+  /**
+   * If the added failed, this will contain the error message of the cause.  Will be null when the add is successful.
+   */
   errorMessage?: string;
+}
+export namespace OrgSagebionetworksRepoModelFileAddPartResponse {
+  export type AddPartStateEnum = 'ADD_SUCCESS' | 'ADD_FAILED';
+  export const AddPartStateEnum = {
+    AddSuccess: 'ADD_SUCCESS' as AddPartStateEnum,
+    AddFailed: 'ADD_FAILED' as AddPartStateEnum,
+  };
 }

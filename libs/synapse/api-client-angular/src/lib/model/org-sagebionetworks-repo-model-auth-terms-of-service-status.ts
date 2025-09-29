@@ -12,8 +12,31 @@
  * The status of a user\'s ToS agreement
  */
 export interface OrgSagebionetworksRepoModelAuthTermsOfServiceStatus {
+  /**
+   * The ID of the user.
+   */
   userId?: string;
-  userCurrentTermsOfServiceState?: string;
+  /**
+   * The user\'s current ToS state defines what action if any they will need to take to meet ToS requirements.
+   */
+  userCurrentTermsOfServiceState?: OrgSagebionetworksRepoModelAuthTermsOfServiceStatus.UserCurrentTermsOfServiceStateEnum;
+  /**
+   * The date/time when the user last agreed to the ToS. Will be null if the user has never agreed to the ToS.
+   */
   lastAgreementDate?: string;
+  /**
+   * The version of ToS that the user last agreed to.  Will be null if the user has never agreed to the ToS.
+   */
   lastAgreementVersion?: string;
+}
+export namespace OrgSagebionetworksRepoModelAuthTermsOfServiceStatus {
+  export type UserCurrentTermsOfServiceStateEnum =
+    | 'MUST_AGREE_NOW'
+    | 'MUST_AGREE_SOON'
+    | 'UP_TO_DATE';
+  export const UserCurrentTermsOfServiceStateEnum = {
+    MustAgreeNow: 'MUST_AGREE_NOW' as UserCurrentTermsOfServiceStateEnum,
+    MustAgreeSoon: 'MUST_AGREE_SOON' as UserCurrentTermsOfServiceStateEnum,
+    UpToDate: 'UP_TO_DATE' as UserCurrentTermsOfServiceStateEnum,
+  };
 }

@@ -14,8 +14,17 @@ import { OrgSagebionetworksRepoModelSearchFacet } from './org-sagebionetworks-re
  * JSON schema for a the result of a search.
  */
 export interface OrgSagebionetworksRepoModelSearchSearchResults {
+  /**
+   * The total number of hits found for this search.
+   */
   found?: number;
+  /**
+   * The zero-based number of the first hit returned in this page of search results.
+   */
   start?: number;
+  /**
+   * DEPRECATED: The search match expression parsed from the search request parameters.  This is useful for debugging purposes.
+   */
   matchExpression?: string;
   /**
    * The hits in this page of search results

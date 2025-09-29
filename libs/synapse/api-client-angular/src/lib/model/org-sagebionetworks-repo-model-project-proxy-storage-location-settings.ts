@@ -12,16 +12,49 @@
  * A storage location that uses a HTTPS proxy for all upload and download operations.
  */
 export interface OrgSagebionetworksRepoModelProjectProxyStorageLocationSettings {
+  /**
+   * Indicates which implementation this object represents.
+   */
   concreteType: OrgSagebionetworksRepoModelProjectProxyStorageLocationSettings.ConcreteTypeEnum;
+  /**
+   * The unique ID for this storage location
+   */
   storageLocationId?: number;
-  uploadType?: string;
+  /**
+   * The enumeration of possible upload types.
+   */
+  uploadType?: OrgSagebionetworksRepoModelProjectProxyStorageLocationSettings.UploadTypeEnum;
+  /**
+   * The banner text to display to a user every time a file is uploaded. This field is optional.
+   */
   banner?: string;
+  /**
+   * A description of the storage location. This description is shown when a user has to choose which upload destination to use.
+   */
   description?: string;
+  /**
+   * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time a Project Setting is updated it is used to detect when a client\'s current representation of a Project Setting is out-of-date.
+   */
   etag?: string;
+  /**
+   * The date this storage location setting was created.
+   */
   createdOn?: string;
+  /**
+   * The ID of the user that created this storage location setting.
+   */
   createdBy?: number;
+  /**
+   * The HTTPS URL of the proxy used for upload and download.
+   */
   proxyUrl?: string;
+  /**
+   * The encryption key used to sign all pre-signed URLs used to communicate with the proxy.
+   */
   secretKey?: string;
+  /**
+   * By default, only the creator of a ProxyStorageLocationSettings can use its storage location ID to create ProxyFileHandles. When this field is set with an Entity ID (such as a Project ID), any user with the \'create\' permission on the given benefactorId will be allowed to create ProxyFileHandle using its storage location ID.
+   */
   benefactorId?: string;
 }
 export namespace OrgSagebionetworksRepoModelProjectProxyStorageLocationSettings {
@@ -30,5 +63,20 @@ export namespace OrgSagebionetworksRepoModelProjectProxyStorageLocationSettings 
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelProjectProxyStorageLocationSettings:
       'org.sagebionetworks.repo.model.project.ProxyStorageLocationSettings' as ConcreteTypeEnum,
+  };
+  export type UploadTypeEnum =
+    | 'S3'
+    | 'GOOGLECLOUDSTORAGE'
+    | 'SFTP'
+    | 'HTTPS'
+    | 'PROXYLOCAL'
+    | 'NONE';
+  export const UploadTypeEnum = {
+    S3: 'S3' as UploadTypeEnum,
+    Googlecloudstorage: 'GOOGLECLOUDSTORAGE' as UploadTypeEnum,
+    Sftp: 'SFTP' as UploadTypeEnum,
+    Https: 'HTTPS' as UploadTypeEnum,
+    Proxylocal: 'PROXYLOCAL' as UploadTypeEnum,
+    None: 'NONE' as UploadTypeEnum,
   };
 }

@@ -7,11 +7,30 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OrgSagebionetworksRepoModelAgentSessionContext } from './org-sagebionetworks-repo-model-agent-session-context';
 
 /**
- * Information about a specific session (conversation) with an agent.  Only the acess level can be changed on an existing session.  You will need to start a new session if you wish to use a different agentId.
+ * Information about a specific session (conversation) with an agent.  Only the access level can be changed on an existing session.  You will need to start a new session if you wish to use a different agentId.
  */
 export interface OrgSagebionetworksRepoModelAgentCreateAgentSessionRequest {
-  agentAccessLevel?: string;
+  /**
+   * Defines the level of data access that the agent will be given during a session.
+   */
+  agentAccessLevel?: OrgSagebionetworksRepoModelAgentCreateAgentSessionRequest.AgentAccessLevelEnum;
+  /**
+   * Optional. When provided, the registered agent will be used for this session.  When excluded the default \'baseline\' agent will be used.
+   */
   agentRegistrationId?: string;
+  sessionContext?: OrgSagebionetworksRepoModelAgentSessionContext;
+}
+export namespace OrgSagebionetworksRepoModelAgentCreateAgentSessionRequest {
+  export type AgentAccessLevelEnum =
+    | 'PUBLICLY_ACCESSIBLE'
+    | 'READ_YOUR_PRIVATE_DATA'
+    | 'WRITE_YOUR_PRIVATE_DATA';
+  export const AgentAccessLevelEnum = {
+    PubliclyAccessible: 'PUBLICLY_ACCESSIBLE' as AgentAccessLevelEnum,
+    ReadYourPrivateData: 'READ_YOUR_PRIVATE_DATA' as AgentAccessLevelEnum,
+    WriteYourPrivateData: 'WRITE_YOUR_PRIVATE_DATA' as AgentAccessLevelEnum,
+  };
 }

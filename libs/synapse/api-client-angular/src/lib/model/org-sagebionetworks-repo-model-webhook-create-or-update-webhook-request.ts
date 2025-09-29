@@ -12,12 +12,36 @@
  * Request used to create or update a webhook
  */
 export interface OrgSagebionetworksRepoModelWebhookCreateOrUpdateWebhookRequest {
+  /**
+   * The id of the Synapse object to receive events of.
+   */
   objectId?: string;
-  objectType?: string;
+  /**
+   * The supported synapse object types for a Webhook
+   */
+  objectType?: OrgSagebionetworksRepoModelWebhookCreateOrUpdateWebhookRequest.ObjectTypeEnum;
   /**
    * The list of event types to subscribe to.
    */
-  eventTypes?: Set<string>;
+  eventTypes?: Set<OrgSagebionetworksRepoModelWebhookCreateOrUpdateWebhookRequest.EventTypesEnum>;
+  /**
+   * The webhook endpoint where the events will be sent to. Must be 255 Characters or less.
+   */
   invokeEndpoint?: string;
+  /**
+   * True if the webhook should be enabled. If false no events will be sent to the endpoint.
+   */
   isEnabled?: boolean;
+}
+export namespace OrgSagebionetworksRepoModelWebhookCreateOrUpdateWebhookRequest {
+  export type ObjectTypeEnum = 'ENTITY';
+  export const ObjectTypeEnum = {
+    Entity: 'ENTITY' as ObjectTypeEnum,
+  };
+  export type EventTypesEnum = 'CREATE' | 'UPDATE' | 'DELETE';
+  export const EventTypesEnum = {
+    Create: 'CREATE' as EventTypesEnum,
+    Update: 'UPDATE' as EventTypesEnum,
+    Delete: 'DELETE' as EventTypesEnum,
+  };
 }

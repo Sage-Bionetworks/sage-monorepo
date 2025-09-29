@@ -12,7 +12,115 @@
  * Reference to a WikiPage
  */
 export interface OrgSagebionetworksRepoModelDaoWikiPageKey {
+  /**
+   * The ID of the wiki page.
+   */
   wikiPageId?: string;
+  /**
+   * The owner of this page.
+   */
   ownerObjectId?: string;
-  ownerObjectType?: string;
+  /**
+   * JSON enum for the types of objects in Synapse.
+   */
+  ownerObjectType?: OrgSagebionetworksRepoModelDaoWikiPageKey.OwnerObjectTypeEnum;
+}
+export namespace OrgSagebionetworksRepoModelDaoWikiPageKey {
+  export type OwnerObjectTypeEnum =
+    | 'ENTITY'
+    | 'ENTITY_CONTAINER'
+    | 'PRINCIPAL'
+    | 'ACTIVITY'
+    | 'EVALUATION'
+    | 'EVALUATION_ROUND'
+    | 'SUBMISSION'
+    | 'EVALUATION_SUBMISSIONS'
+    | 'FILE'
+    | 'MESSAGE'
+    | 'WIKI'
+    | 'FAVORITE'
+    | 'ACCESS_REQUIREMENT'
+    | 'ACCESS_APPROVAL'
+    | 'TEAM'
+    | 'TABLE'
+    | 'ACCESS_CONTROL_LIST'
+    | 'PROJECT_SETTING'
+    | 'VERIFICATION_SUBMISSION'
+    | 'CERTIFIED_USER_PASSING_RECORD'
+    | 'FORUM'
+    | 'THREAD'
+    | 'REPLY'
+    | 'FORM_GROUP'
+    | 'ORGANIZATION'
+    | 'FORM_DATA'
+    | 'ENTITY_VIEW'
+    | 'USER_PROFILE'
+    | 'DATA_ACCESS_REQUEST'
+    | 'DATA_ACCESS_SUBMISSION'
+    | 'DATA_ACCESS_SUBMISSION_STATUS'
+    | 'MEMBERSHIP_INVITATION'
+    | 'JSON_SCHEMA'
+    | 'JSON_SCHEMA_DEPENDANT'
+    | 'DATASET'
+    | 'DATASET_COLLECTION'
+    | 'THREAD_VIEW'
+    | 'MATERIALIZED_VIEW'
+    | 'VIRTUAL_TABLE'
+    | 'TABLE_STATUS_EVENT'
+    | 'DATA_ACCESS_SUBMISSION_EVENT'
+    | 'FILE_EVENT'
+    | 'QUERY_CACHE_HIT'
+    | 'PROJECT_STORAGE_EVENT'
+    | 'REPLICATED_EVENT'
+    | 'PORTAL'
+    | 'OAUTH_CLIENT';
+  export const OwnerObjectTypeEnum = {
+    Entity: 'ENTITY' as OwnerObjectTypeEnum,
+    EntityContainer: 'ENTITY_CONTAINER' as OwnerObjectTypeEnum,
+    Principal: 'PRINCIPAL' as OwnerObjectTypeEnum,
+    Activity: 'ACTIVITY' as OwnerObjectTypeEnum,
+    Evaluation: 'EVALUATION' as OwnerObjectTypeEnum,
+    EvaluationRound: 'EVALUATION_ROUND' as OwnerObjectTypeEnum,
+    Submission: 'SUBMISSION' as OwnerObjectTypeEnum,
+    EvaluationSubmissions: 'EVALUATION_SUBMISSIONS' as OwnerObjectTypeEnum,
+    File: 'FILE' as OwnerObjectTypeEnum,
+    Message: 'MESSAGE' as OwnerObjectTypeEnum,
+    Wiki: 'WIKI' as OwnerObjectTypeEnum,
+    Favorite: 'FAVORITE' as OwnerObjectTypeEnum,
+    AccessRequirement: 'ACCESS_REQUIREMENT' as OwnerObjectTypeEnum,
+    AccessApproval: 'ACCESS_APPROVAL' as OwnerObjectTypeEnum,
+    Team: 'TEAM' as OwnerObjectTypeEnum,
+    Table: 'TABLE' as OwnerObjectTypeEnum,
+    AccessControlList: 'ACCESS_CONTROL_LIST' as OwnerObjectTypeEnum,
+    ProjectSetting: 'PROJECT_SETTING' as OwnerObjectTypeEnum,
+    VerificationSubmission: 'VERIFICATION_SUBMISSION' as OwnerObjectTypeEnum,
+    CertifiedUserPassingRecord: 'CERTIFIED_USER_PASSING_RECORD' as OwnerObjectTypeEnum,
+    Forum: 'FORUM' as OwnerObjectTypeEnum,
+    Thread: 'THREAD' as OwnerObjectTypeEnum,
+    Reply: 'REPLY' as OwnerObjectTypeEnum,
+    FormGroup: 'FORM_GROUP' as OwnerObjectTypeEnum,
+    Organization: 'ORGANIZATION' as OwnerObjectTypeEnum,
+    FormData: 'FORM_DATA' as OwnerObjectTypeEnum,
+    EntityView: 'ENTITY_VIEW' as OwnerObjectTypeEnum,
+    UserProfile: 'USER_PROFILE' as OwnerObjectTypeEnum,
+    DataAccessRequest: 'DATA_ACCESS_REQUEST' as OwnerObjectTypeEnum,
+    DataAccessSubmission: 'DATA_ACCESS_SUBMISSION' as OwnerObjectTypeEnum,
+    DataAccessSubmissionStatus: 'DATA_ACCESS_SUBMISSION_STATUS' as OwnerObjectTypeEnum,
+    MembershipInvitation: 'MEMBERSHIP_INVITATION' as OwnerObjectTypeEnum,
+    JsonSchema: 'JSON_SCHEMA' as OwnerObjectTypeEnum,
+    JsonSchemaDependant: 'JSON_SCHEMA_DEPENDANT' as OwnerObjectTypeEnum,
+    Dataset: 'DATASET' as OwnerObjectTypeEnum,
+    DatasetCollection: 'DATASET_COLLECTION' as OwnerObjectTypeEnum,
+    ThreadView: 'THREAD_VIEW' as OwnerObjectTypeEnum,
+    MaterializedView: 'MATERIALIZED_VIEW' as OwnerObjectTypeEnum,
+    VirtualTable: 'VIRTUAL_TABLE' as OwnerObjectTypeEnum,
+    TableStatusEvent: 'TABLE_STATUS_EVENT' as OwnerObjectTypeEnum,
+    DataAccessSubmissionEvent: 'DATA_ACCESS_SUBMISSION_EVENT' as OwnerObjectTypeEnum,
+    FileEvent: 'FILE_EVENT' as OwnerObjectTypeEnum,
+    QueryCacheHit: 'QUERY_CACHE_HIT' as OwnerObjectTypeEnum,
+    ProjectStorageEvent: 'PROJECT_STORAGE_EVENT' as OwnerObjectTypeEnum,
+    ReplicatedEvent: 'REPLICATED_EVENT' as OwnerObjectTypeEnum,
+    Portal: 'PORTAL' as OwnerObjectTypeEnum,
+    OauthClient: 'OAUTH_CLIENT' as OwnerObjectTypeEnum,
+  };
 }

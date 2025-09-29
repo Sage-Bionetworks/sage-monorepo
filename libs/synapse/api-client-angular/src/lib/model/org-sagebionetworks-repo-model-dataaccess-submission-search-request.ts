@@ -13,11 +13,41 @@ import { OrgSagebionetworksRepoModelDataaccessSubmissionSearchSort } from './org
  * A request to search through the data access submissions
  */
 export interface OrgSagebionetworksRepoModelDataaccessSubmissionSearchRequest {
+  /**
+   * Filter by the id of the principal that is an accessor in the submissions.
+   */
   accessorId?: string;
+  /**
+   * Filter by the id of the access requirement of the submissions.
+   */
   accessRequirementId?: string;
-  submissionState?: string;
+  /**
+   * The state of a Submission.
+   */
+  submissionState?: OrgSagebionetworksRepoModelDataaccessSubmissionSearchRequest.SubmissionStateEnum;
+  /**
+   * A principal ID used to filter submissions whose access requirements can be reviewed by the specific reviewer.
+   */
   reviewerId?: string;
-  reviewerFilterType?: string;
+  reviewerFilterType?: OrgSagebionetworksRepoModelDataaccessSubmissionSearchRequest.ReviewerFilterTypeEnum;
   sort?: Array<OrgSagebionetworksRepoModelDataaccessSubmissionSearchSort>;
+  /**
+   * A token used to get the next page of a request.
+   */
   nextPageToken?: string;
+}
+export namespace OrgSagebionetworksRepoModelDataaccessSubmissionSearchRequest {
+  export type SubmissionStateEnum = 'SUBMITTED' | 'APPROVED' | 'REJECTED' | 'CANCELLED';
+  export const SubmissionStateEnum = {
+    Submitted: 'SUBMITTED' as SubmissionStateEnum,
+    Approved: 'APPROVED' as SubmissionStateEnum,
+    Rejected: 'REJECTED' as SubmissionStateEnum,
+    Cancelled: 'CANCELLED' as SubmissionStateEnum,
+  };
+  export type ReviewerFilterTypeEnum = 'ALL' | 'ACT_ONLY' | 'DELEGATED_ONLY';
+  export const ReviewerFilterTypeEnum = {
+    All: 'ALL' as ReviewerFilterTypeEnum,
+    ActOnly: 'ACT_ONLY' as ReviewerFilterTypeEnum,
+    DelegatedOnly: 'DELEGATED_ONLY' as ReviewerFilterTypeEnum,
+  };
 }

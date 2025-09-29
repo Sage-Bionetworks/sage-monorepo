@@ -13,7 +13,13 @@ import { OrgSagebionetworksRepoModelStatisticsMonthlyFilesStatistics } from './o
  * Container for statistics related to project files. Exposes the monthly aggregates of files and (unique) users that downloaded/uploaded for the past 12 months (excluding the current month).
  */
 export interface OrgSagebionetworksRepoModelStatisticsProjectFilesStatisticsResponse {
+  /**
+   * The id of the object for which this statistics were computed
+   */
   objectId?: string;
+  /**
+   * The type of response mapped to the statistics request
+   */
   concreteType: OrgSagebionetworksRepoModelStatisticsProjectFilesStatisticsResponse.ConcreteTypeEnum;
   fileDownloads?: OrgSagebionetworksRepoModelStatisticsMonthlyFilesStatistics;
   fileUploads?: OrgSagebionetworksRepoModelStatisticsMonthlyFilesStatistics;

@@ -10,6 +10,9 @@
 import { OrgSagebionetworksRepoModelEntityHeader } from './org-sagebionetworks-repo-model-entity-header';
 
 export interface PaginatedResultsOfEntityHeader {
+  /**
+   * Calculating the actual totalNumberOfResults is not longer supported. Therefore, for each page, the totalNumberOfResults is estimated using the current page, limit, and offset. When the page size equals the limit, the totalNumberOfResults will be offset+pageSize+ 1. Otherwise, the totalNumberOfResults will be offset+pageSize.
+   */
   totalNumberOfResults?: number;
   results?: Array<OrgSagebionetworksRepoModelEntityHeader>;
 }

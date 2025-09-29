@@ -13,12 +13,33 @@
  */
 export interface OrgSagebionetworksRepoModelTableFacetColumnResultRange {
   concreteType: OrgSagebionetworksRepoModelTableFacetColumnResultRange.ConcreteTypeEnum;
+  /**
+   * The name of the faceted column
+   */
   columnName?: string;
-  facetType?: string;
+  /**
+   * Set to one of the enumerated values to indicate a column should be treated as a facet
+   */
+  facetType?: OrgSagebionetworksRepoModelTableFacetColumnResultRange.FacetTypeEnum;
+  /**
+   * When present, these results represent a sub-column identified by its jsonPath.  Note: The ColumnName will be the name of the root JSON column.
+   */
   jsonPath?: string;
+  /**
+   * the smallest value in the column
+   */
   columnMin?: string;
+  /**
+   * the largest value in the column
+   */
   columnMax?: string;
+  /**
+   * the lower bound of the selected range
+   */
   selectedMin?: string;
+  /**
+   * the upper bound of the selected range
+   */
   selectedMax?: string;
 }
 export namespace OrgSagebionetworksRepoModelTableFacetColumnResultRange {
@@ -26,5 +47,10 @@ export namespace OrgSagebionetworksRepoModelTableFacetColumnResultRange {
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelTableFacetColumnResultRange:
       'org.sagebionetworks.repo.model.table.FacetColumnResultRange' as ConcreteTypeEnum,
+  };
+  export type FacetTypeEnum = 'enumeration' | 'range';
+  export const FacetTypeEnum = {
+    Enumeration: 'enumeration' as FacetTypeEnum,
+    Range: 'range' as FacetTypeEnum,
   };
 }

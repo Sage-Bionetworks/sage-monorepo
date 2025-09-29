@@ -12,10 +12,28 @@
  * Temporary AWS credentials vended by STS (Security Token Service).
  */
 export interface OrgSagebionetworksRepoModelStsStsCredentials {
+  /**
+   * The bucket that these credentials have access to.
+   */
   bucket?: string;
+  /**
+   * The S3 key prefix that these credentials have access to.
+   */
   baseKey?: string;
+  /**
+   * AWS access key ID.
+   */
   accessKeyId?: string;
+  /**
+   * AWS secret access key.
+   */
   secretAccessKey?: string;
+  /**
+   * AWS temporary session token.
+   */
   sessionToken?: string;
+  /**
+   * The date-time that these credentials expire.
+   */
   expiration?: string;
 }

@@ -12,7 +12,16 @@
  * Represents a match for a search request in a forum, will include the forum and thread ids and if present the reply id matching a serch string
  */
 export interface OrgSagebionetworksRepoModelDiscussionMatch {
+  /**
+   * The ID of the matching forum
+   */
   forumId?: string;
+  /**
+   * The ID of the matching thread
+   */
   threadId?: string;
+  /**
+   * The optional ID of the matching reply
+   */
   replyId?: string;
 }

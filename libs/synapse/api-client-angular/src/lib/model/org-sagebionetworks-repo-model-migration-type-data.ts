@@ -13,5 +13,8 @@
  */
 export interface OrgSagebionetworksRepoModelMigrationTypeData {
   migrationType?: string;
+  /**
+   * The database column name of the backupId for this type.
+   */
   backupIdColumnName?: string;
 }

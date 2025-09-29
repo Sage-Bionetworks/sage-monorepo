@@ -13,6 +13,9 @@ import { OrgSagebionetworksRepoModelDataaccessAccessApprovalNotification } from 
  * Contains the response for an <a href=\"${org.sagebionetworks.repo.model.dataaccess.AccessApprovalNotificationRequest}\">AccessApprovalNotificationRequest</a>.
  */
 export interface OrgSagebionetworksRepoModelDataaccessAccessApprovalNotificationResponse {
+  /**
+   * The id of the requested access requirement.
+   */
   requirementId?: number;
   /**
    * The list of notifications, sorted by the recipient and the sentOn date.

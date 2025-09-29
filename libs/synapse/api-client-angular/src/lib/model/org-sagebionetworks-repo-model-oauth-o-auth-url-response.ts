@@ -12,5 +12,8 @@
  * Response for an OAuth2 authorization url.
  */
 export interface OrgSagebionetworksRepoModelOauthOAuthUrlResponse {
+  /**
+   * The URL used to send the user the requested OAuth provider for authentication.
+   */
   authorizationUrl?: string;
 }

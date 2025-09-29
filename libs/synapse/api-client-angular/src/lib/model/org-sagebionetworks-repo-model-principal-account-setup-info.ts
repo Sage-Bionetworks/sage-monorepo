@@ -13,9 +13,21 @@ import { OrgSagebionetworksRepoModelPrincipalEmailValidationSignedToken } from '
  * Information needed to establish a new user account, following email validation.
  */
 export interface OrgSagebionetworksRepoModelPrincipalAccountSetupInfo {
+  /**
+   * The user\'s first name
+   */
   firstName?: string;
+  /**
+   * The user\'s last name
+   */
   lastName?: string;
+  /**
+   * The requested account user name.
+   */
   username?: string;
+  /**
+   * The password to be applied to the new account.
+   */
   password?: string;
   emailValidationSignedToken?: OrgSagebionetworksRepoModelPrincipalEmailValidationSignedToken;
 }

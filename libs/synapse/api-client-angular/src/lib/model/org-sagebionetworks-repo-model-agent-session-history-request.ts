@@ -12,5 +12,8 @@
  * Request a single page of a session\'s history.  The history is ordered by the interaction time stamp descending.
  */
 export interface OrgSagebionetworksRepoModelAgentSessionHistoryRequest {
+  /**
+   * Forward the returned \'nextPageToken\' to get the next page of results.
+   */
   nextPageToken?: string;
 }

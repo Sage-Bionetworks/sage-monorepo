@@ -17,5 +17,8 @@ export interface OrgSagebionetworksRepoModelTablePaginatedColumnModels {
    * The list of ColumnModels for this page
    */
   results?: Array<OrgSagebionetworksRepoModelTableColumnModel>;
+  /**
+   * The total number of results
+   */
   totalNumberOfResults?: number;
 }

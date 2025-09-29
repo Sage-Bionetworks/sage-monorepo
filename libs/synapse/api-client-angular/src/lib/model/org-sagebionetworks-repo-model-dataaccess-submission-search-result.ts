@@ -13,20 +13,47 @@ import { OrgSagebionetworksRepoModelDataaccessAccessorChange } from './org-sageb
  *
  */
 export interface OrgSagebionetworksRepoModelDataaccessSubmissionSearchResult {
+  /**
+   * The id of the submission
+   */
   id?: string;
   createdOn?: string;
   modifiedOn?: string;
+  /**
+   * The id of the access requirement the submission is for
+   */
   accessRequirementId?: string;
+  /**
+   * The version of the requirement that the submission refers to
+   */
   accessRequirementVersion?: string;
+  /**
+   * The name of the access requirement
+   */
   accessRequirementName?: string;
   /**
    * The list of principal ids that are allowed to review the submission
    */
   accessRequirementReviewerIds?: Array<string>;
+  /**
+   * The principal ID of the person who created the submission
+   */
   submitterId?: string;
   /**
    * List of user changes. A user can gain access, renew access or have access revoked.
    */
   accessorChanges?: Array<OrgSagebionetworksRepoModelDataaccessAccessorChange>;
-  state?: string;
+  /**
+   * The state of a Submission.
+   */
+  state?: OrgSagebionetworksRepoModelDataaccessSubmissionSearchResult.StateEnum;
+}
+export namespace OrgSagebionetworksRepoModelDataaccessSubmissionSearchResult {
+  export type StateEnum = 'SUBMITTED' | 'APPROVED' | 'REJECTED' | 'CANCELLED';
+  export const StateEnum = {
+    Submitted: 'SUBMITTED' as StateEnum,
+    Approved: 'APPROVED' as StateEnum,
+    Rejected: 'REJECTED' as StateEnum,
+    Cancelled: 'CANCELLED' as StateEnum,
+  };
 }

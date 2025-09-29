@@ -12,7 +12,16 @@
  * One of the multiple choices in a multiple choice question
  */
 export interface OrgSagebionetworksRepoModelQuizMultichoiceAnswer {
+  /**
+   * An index unique within the scope the multiple choice question
+   */
   answerIndex?: number;
+  /**
+   * The user-readable prompt or label for this answer
+   */
   prompt?: string;
+  /**
+   * True if and only if this is a correct response
+   */
   isCorrect?: boolean;
 }

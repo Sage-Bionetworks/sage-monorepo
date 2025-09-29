@@ -10,5 +10,16 @@
 
 export interface OrgSagebionetworksRepoModelRestrictableObjectDescriptor {
   id?: string;
-  type?: string;
+  /**
+   * JSON enum for the types of objects which can be restricted by an AccessRequirement.
+   */
+  type?: OrgSagebionetworksRepoModelRestrictableObjectDescriptor.TypeEnum;
+}
+export namespace OrgSagebionetworksRepoModelRestrictableObjectDescriptor {
+  export type TypeEnum = 'ENTITY' | 'EVALUATION' | 'TEAM';
+  export const TypeEnum = {
+    Entity: 'ENTITY' as TypeEnum,
+    Evaluation: 'EVALUATION' as TypeEnum,
+    Team: 'TEAM' as TypeEnum,
+  };
 }

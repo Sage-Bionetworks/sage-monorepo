@@ -13,6 +13,9 @@
  */
 export interface OrgSagebionetworksRepoModelMigrationBackupTypeResponse {
   concreteType: OrgSagebionetworksRepoModelMigrationBackupTypeResponse.ConcreteTypeEnum;
+  /**
+   * The key of the resulting backup file.
+   */
   backupFileKey?: string;
 }
 export namespace OrgSagebionetworksRepoModelMigrationBackupTypeResponse {

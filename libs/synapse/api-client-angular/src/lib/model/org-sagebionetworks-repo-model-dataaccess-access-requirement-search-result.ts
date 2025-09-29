@@ -12,11 +12,29 @@
  * Result item of an Access Requirement search
  */
 export interface OrgSagebionetworksRepoModelDataaccessAccessRequirementSearchResult {
+  /**
+   * The id of the AR
+   */
   id?: string;
+  /**
+   * The concrete type of the AR
+   */
   type?: string;
+  /**
+   * The creation date of the AR
+   */
   createdOn?: string;
+  /**
+   * The last modification date of the AR
+   */
   modifiedOn?: string;
+  /**
+   * The name of the AR
+   */
   name?: string;
+  /**
+   * The current revision of the AR
+   */
   version?: string;
   /**
    * List of project ids which the AR is direclty or indirectly applied to

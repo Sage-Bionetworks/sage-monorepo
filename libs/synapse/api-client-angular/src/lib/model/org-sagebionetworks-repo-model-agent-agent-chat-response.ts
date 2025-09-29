@@ -13,7 +13,13 @@
  */
 export interface OrgSagebionetworksRepoModelAgentAgentChatResponse {
   concreteType: OrgSagebionetworksRepoModelAgentAgentChatResponse.ConcreteTypeEnum;
+  /**
+   * The sessionId that identifies the conversation with the agent.
+   */
   sessionId?: string;
+  /**
+   * The agent\'s text response to the user\'s request
+   */
   responseText?: string;
 }
 export namespace OrgSagebionetworksRepoModelAgentAgentChatResponse {

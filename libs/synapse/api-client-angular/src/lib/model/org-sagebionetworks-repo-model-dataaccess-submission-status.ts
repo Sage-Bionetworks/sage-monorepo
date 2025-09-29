@@ -12,9 +12,33 @@
  * The status of a Submission.
  */
 export interface OrgSagebionetworksRepoModelDataaccessSubmissionStatus {
+  /**
+   * The ID of the Submission submitted for the given AccessRequirement.
+   */
   submissionId?: string;
+  /**
+   * The user who submitted the Submission for the given AccessRequirement.
+   */
   submittedBy?: string;
+  /**
+   * The reason the submission is rejected, if it\'s rejected.
+   */
   rejectedReason?: string;
-  state?: string;
+  /**
+   * The state of a Submission.
+   */
+  state?: OrgSagebionetworksRepoModelDataaccessSubmissionStatus.StateEnum;
+  /**
+   * The date the Submission\' status was last modified.
+   */
   modifiedOn?: string;
+}
+export namespace OrgSagebionetworksRepoModelDataaccessSubmissionStatus {
+  export type StateEnum = 'SUBMITTED' | 'APPROVED' | 'REJECTED' | 'CANCELLED';
+  export const StateEnum = {
+    Submitted: 'SUBMITTED' as StateEnum,
+    Approved: 'APPROVED' as StateEnum,
+    Rejected: 'REJECTED' as StateEnum,
+    Cancelled: 'CANCELLED' as StateEnum,
+  };
 }

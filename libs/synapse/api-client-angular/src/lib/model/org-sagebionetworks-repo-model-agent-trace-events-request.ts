@@ -12,6 +12,12 @@
  * A request to get a single page of trace events for a specified asynchronous job.
  */
 export interface OrgSagebionetworksRepoModelAgentTraceEventsRequest {
+  /**
+   * The job ID issued when the agent chat request job was started.
+   */
   jobId?: string;
+  /**
+   * When a timestamp value is provided, only trace events that occurred after the provided timestamp will be included in the results.
+   */
   newerThanTimestamp?: number;
 }

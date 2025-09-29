@@ -12,17 +12,61 @@
  * Metadata about Table row change set.
  */
 export interface OrgSagebionetworksRepoModelTableTableRowChange {
+  /**
+   * Unique id assigned to the change
+   */
   id?: number;
+  /**
+   * The ID of the table that this change is for.
+   */
   tableId?: string;
+  /**
+   * The version number of the table row change
+   */
   rowVersion?: number;
+  /**
+   * The etag of this change
+   */
   etag?: string;
+  /**
+   * The date this change was created.
+   */
   createdOn?: string;
+  /**
+   * The ID of the user that created this change.
+   */
   createdBy?: string;
+  /**
+   * The name of the S3 bucket where this change is stored
+   */
   bucket?: string;
+  /**
+   * The name of the S3 key where this change is stored.
+   */
   keyNew?: string;
+  /**
+   * The number of rows in this change.
+   */
   rowCount?: number;
-  changeType?: string;
+  changeType?: OrgSagebionetworksRepoModelTableTableRowChange.ChangeTypeEnum;
+  /**
+   * The ID of the transaction that this change belongs to.
+   */
   transactionId?: number;
+  /**
+   * Indicates if the change contains references to file handles. Always false for a COLUMN change.
+   */
   hasFileRefs?: boolean;
+  /**
+   * Indicates if the for this change the search is enabled
+   */
   isSearchEnabled?: boolean;
+}
+export namespace OrgSagebionetworksRepoModelTableTableRowChange {
+  export type ChangeTypeEnum = 'ROW' | 'COLUMN' | 'SEARCH';
+  export const ChangeTypeEnum = {
+    Row: 'ROW' as ChangeTypeEnum,
+    Column: 'COLUMN' as ChangeTypeEnum,
+    Search: 'SEARCH' as ChangeTypeEnum,
+  };
 }

@@ -12,7 +12,24 @@
  * The Status of the stack
  */
 export interface OrgSagebionetworksRepoModelStatusStackStatus {
-  status?: string;
+  /**
+   * The status of this stack can be one of the following enumerations
+   */
+  status?: OrgSagebionetworksRepoModelStatusStackStatus.StatusEnum;
+  /**
+   * This message applies to the current state of the stack.
+   */
   currentMessage?: string;
+  /**
+   * This message is used to notify users of pending maintenance
+   */
   pendingMaintenanceMessage?: string;
+}
+export namespace OrgSagebionetworksRepoModelStatusStackStatus {
+  export type StatusEnum = 'READ_WRITE' | 'READ_ONLY' | 'DOWN';
+  export const StatusEnum = {
+    ReadWrite: 'READ_WRITE' as StatusEnum,
+    ReadOnly: 'READ_ONLY' as StatusEnum,
+    Down: 'DOWN' as StatusEnum,
+  };
 }

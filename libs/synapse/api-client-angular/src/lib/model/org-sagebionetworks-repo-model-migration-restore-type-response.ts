@@ -13,6 +13,9 @@
  */
 export interface OrgSagebionetworksRepoModelMigrationRestoreTypeResponse {
   concreteType: OrgSagebionetworksRepoModelMigrationRestoreTypeResponse.ConcreteTypeEnum;
+  /**
+   * The number of rows restored with this request.
+   */
   restoredRowCount?: number;
 }
 export namespace OrgSagebionetworksRepoModelMigrationRestoreTypeResponse {

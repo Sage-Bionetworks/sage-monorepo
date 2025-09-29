@@ -18,7 +18,7 @@ export interface OrgSagebionetworksRepoModelGridSqlQueryResult {
    */
   columnNames?: Array<string>;
   /**
-   * The page of rows.
+   * A single page of rows.
    */
   rows?: Array<OrgSagebionetworksRepoModelGridSqlRow>;
 }
