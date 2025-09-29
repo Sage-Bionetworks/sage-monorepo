@@ -3,7 +3,7 @@ name: Update Synapse API description and generated artifacts
 on:
   push:
     branches:
-      - synapse/workflow-container-root # trigger workflow when changes are pushed to this maintenance branch
+      - synapse/update-synapse-api-test # trigger workflow when changes are pushed to this maintenance branch
   schedule:
     # Run daily at 9 AM UTC (4 AM EST, 1 AM PST)
     - cron: '0 9 * * *'
@@ -40,19 +40,6 @@ jobs:
   update-synapse-api:
     runs-on: ubuntu-latest
     needs: extract-devcontainer-image
-    defaults:
-      run:
-        # Use a login Bash shell so profile scripts (/etc/profile, /etc/bash.bashrc, and user profile)
-        # populate PATH with user-local bin directories (e.g. /home/ubuntu/.local/bin) where the devcontainer
-        # installs tools like `uv`. Without `-l`, a non-login, non-interactive shell would often miss those
-        # PATH entries and `uv` (and similar user-scoped tools) could be reported as "command not found".
-        # NOTE: The devcontainer's ~/.bashrc sources dev-env.sh only AFTER a non-interactive guard
-        # (e.g. a pattern like: [ -z "$PS1" ] && return). GitHub Actions steps run in a non-interactive
-        # shell, so that guard causes an early return and dev-env.sh is NOT sourced automatically.
-        # Therefore we still explicitly source dev-env.sh in a step to obtain functions like
-        # workspace-install. The login shell here is strictly for PATH hydration, not for loading
-        # those functions. This keeps PATH setup minimal and avoids manual PATH surgery.
-        shell: bash -l {0}
     env:
       # NOTE: See comment above about secret name validation.
       # # Disable Nx Cloud usage for this workflow to avoid consuming tokens / network calls when
@@ -110,6 +97,14 @@ jobs:
           '
 
       - name: Create or update Pull Request
+        # NOTE: This action executes as root because the job's container user was set to root and
+        # only the build/generation commands were explicitly downgraded via 'sudo -u ubuntu'. We do
+        # not wrap third-party composite/actions steps with sudo. The workspace files (already
+        # chowned to ubuntu) remain ubuntu-owned; only the git operations (commit, branch ref
+        # updates) are initiated by root which is acceptable here. If we later prefer this to run
+        # unprivileged, we could replace the action with explicit git commands invoked via
+        # 'sudo -u ubuntu bash -lc ...' or experiment with a wrapper script that preserves the
+        # required environment variables.
         uses: peter-evans/create-pull-request@v7
         with:
           branch: synapse/update-synapse-api
@@ -120,6 +115,7 @@ jobs:
             ## Description
 
             This is an automated update triggered by changes detected in the Synapse OpenAPI specification.
+
             The workflow downloads the latest specification and regenerates dependent generated projects (clients, docs, etc.) to keep them in sync.
 
             ## Review checklist
