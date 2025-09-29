@@ -44,7 +44,7 @@ models = []
 prompt_manager = get_prompt_manager()
 
 
-def create_suggested_prompts(num_prompts=3):
+def create_suggested_prompts(num_prompts=3, max_chars=240):
     """Create suggested prompts cards"""
     available_prompts = prompt_manager.get_all_prompts()
     num_to_sample = min(num_prompts, len(available_prompts))
@@ -52,9 +52,8 @@ def create_suggested_prompts(num_prompts=3):
 
     prompt_cards = []
 
-    for i, prompt in enumerate(prompts):
-        # Truncate long prompts for display (approximately 5 lines worth)
-        max_chars = 200  # Roughly 5 lines of 40 chars each
+    for prompt in prompts:
+        # Truncate long prompts for display
         if len(prompt) <= max_chars:
             display_text = prompt
         else:
@@ -306,7 +305,7 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
-        align-items: flex-start;
+        align-items: center;
         gap: 12px;
         max-width: 1200px;
         margin: 0 auto;
