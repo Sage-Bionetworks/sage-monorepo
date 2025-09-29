@@ -320,38 +320,38 @@ devcontainer build \
 #### Test Container Startup and Functionality
 
 1. Start the dev container:
-   ```bash
-   devcontainer up --workspace-folder .github
-   ```
+    ```bash
+    devcontainer up --workspace-folder .github
+    ```
 
 2. Connect to the running container:
-   ```bash
-   docker exec -it sage-monorepo-devcontainer-prebuild bash
-   ```
+    ```bash
+    docker exec -it sage-monorepo-devcontainer-prebuild bash
+    ```
 
 3. Verify tool installations, especially new and updates tools:
-   ```bash
-   # Test key tools are available and working
-   docker --version
-   go version
-   java --version
-   kubectl version --client
-   node --version
-   python --version
-   trivy --version
-   uv --version
-   ```
+    ```bash
+    # Test key tools are available and working
+    docker --version
+    go version
+    java --version
+    kubectl version --client
+    node --version
+    python --version
+    trivy --version
+    uv --version
+    ```
 
 4. Exit the container:
-   ```bash
-   # Use Ctrl+C to exit the container session or enter:
-   exit
-   ```
+    ```bash
+    # Use Ctrl+C to exit the container session or enter:
+    exit
+    ```
 
 5. Clean up the test container:
-   ```bash
-   docker rm -f sage-monorepo-devcontainer-prebuild
-   ```
+    ```bash
+    docker rm -f sage-monorepo-devcontainer-prebuild
+    ```
 
 ### Headless Monorepo Runtime Testing
 
