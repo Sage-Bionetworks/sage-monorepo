@@ -24,7 +24,7 @@ spring:
             connect-timeout: 5000
             read-timeout: 5000
 
-openchallenges-organization-service:
+app:
   auth-service:
     base-url: http://localhost:8087
     timeout: 5000ms

@@ -1,8 +1,0 @@
-{
-  "name": "openchallenges-app-config-data",
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/openchallenges/app-config-data/src",
-  "projectType": "library",
-  "targets": {},
-  "tags": ["type:library", "scope:openchallenges", "language:java", "package-manager:gradle"]
-}

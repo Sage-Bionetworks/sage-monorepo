@@ -1,6 +1,5 @@
 package org.sagebionetworks.openchallenges.challenge.service.configuration;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,8 +17,6 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Security configuration for the Challenge Service as an OAuth2 Resource Server.
@@ -29,9 +26,6 @@ import java.util.List;
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
-
-  @Value("${openchallenges.auth.jwk-set-uri:http://openchallenges-auth-service:8087/oauth2/jwks}")
-  private String jwkSetUri;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -88,25 +82,26 @@ public class SecurityConfiguration {
           .authenticated()
       )
       .oauth2ResourceServer(oauth2 ->
-        oauth2.jwt(jwt ->
-          jwt.decoder(jwtDecoder()).jwtAuthenticationConverter(jwtAuthenticationConverter())
-        )
+        oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
       )
       .build();
   }
 
   @Bean
-  public JwtDecoder jwtDecoder() {
-    // Create JWT decoder with audience validation for challenge service
+  public JwtDecoder jwtDecoder(AppProperties appProperties) {
+    // Derive JWK Set URI from auth service base URL in application properties
+    String base = appProperties.authService().baseUrl();
+    String jwkSetUri = base.endsWith("/") ? base + "oauth2/jwks" : base + "/oauth2/jwks";
+
     NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
-    
+
     // Add audience validation to ensure JWTs are intended for this service
     String expectedAudience = "urn:openchallenges:challenge-service";
     OAuth2TokenValidator<Jwt> compositeValidator = new DelegatingOAuth2TokenValidator<>(
-        new JwtTimestampValidator(),
-        new JwtAudienceValidator(expectedAudience)
+      new JwtTimestampValidator(),
+      new JwtAudienceValidator(expectedAudience)
     );
-    
+
     jwtDecoder.setJwtValidator(compositeValidator);
     return jwtDecoder;
   }
