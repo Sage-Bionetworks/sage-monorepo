@@ -530,7 +530,9 @@ Upon merging the PR to the main branch:
 
 ## Step 2: Activate Published Image (PR 2)
 
-> See the checklist for a condensed activation + verification summary.
+!!! tip Quick reference
+
+    See the "Update Checklist" at the end of this document for an actionable summary of this section.
 
 ### Activation Overview
 
@@ -622,13 +624,13 @@ After the activation PR is merged:
 
 #### Basic Functionality Testing
 
-- [ ] Build prebuild image (see "Build the Dev Container Image")
+- [ ] Build prebuild image
 - [ ] If build fails, consult "Build Troubleshooting" (adjust Docker version if needed)
-- [ ] Start container (see step 1 in "Test Container Startup and Functionality")
-- [ ] Attach shell (see step 2 in same section)
-- [ ] Spot‑check core tools (see step 3 list — all versions print successfully)
+- [ ] Start container
+- [ ] Attach shell
+- [ ] Spot‑check core tools (all versions print successfully)
 - [ ] Exercise representative workflows (package install, Gradle tasks, Docker, kubectl) — no errors
-- [ ] Remove prebuild container (see cleanup step 5)
+- [ ] Remove prebuild container
 
 #### Headless Monorepo Runtime Testing
 
@@ -636,19 +638,19 @@ Headless = dev container started via CLI (devcontainer up / exec) with the monor
 
 **Option A: Manual Testing (step-by-step)**
 
-- [ ] (Optional) Temporarily point `.devcontainer/devcontainer.json` to `:local` for this session (see "[Update Dev Container Definition](#update-dev-container-definition)") — do NOT commit
-- [ ] (If using interactive flow) Attach a shell to the running container (see steps in "3.1 Manual Dev Container Testing")
+- [ ] (Optional) Temporarily point `.devcontainer/devcontainer.json` to `:local` for this session — do NOT commit
+- [ ] (If using interactive flow) Attach a shell to the running container
 - [ ] Initialize environment & install dependencies (source `dev-env.sh`, then install; see prior section for details)
 - [ ] Run full create-config / build / test targets (refer to combined Nx targets described earlier)
 - [ ] Verify all projects succeed (review output; no failures reported)
-- [ ] Remove the throwaway test container (see cleanup note in "Deploy with Monorepo Codebase")
+- [ ] Remove the throwaway test container
 
 **Option B: Streamlined Testing (automated)**
 
-- [ ] Confirm local image built (see "Verify Local Image Availability")
-- [ ] Run the single exec-based end‑to‑end test flow (see command in "Deploy with Monorepo Codebase" step 2)
+- [ ] Confirm local image built
+- [ ] Run the single exec-based end‑to‑end test flow
 - [ ] Review output for failures (all targets should pass)
-- [ ] Remove test container (see cleanup step referenced above)
+- [ ] Remove test container
 
 #### VS Code Integration Testing
 
