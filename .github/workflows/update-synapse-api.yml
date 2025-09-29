@@ -79,6 +79,7 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           branch: synapse/update-synapse-api
+          delete-branch: true
           title: 'chore(synapse): update Synapse API description and generated artifacts'
           commit-message: 'chore(synapse): update Synapse API description and generated artifacts'
           body: |
