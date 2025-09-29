@@ -85,7 +85,7 @@ The remainder of this guide details how to update the Docker base image, tool ve
 
 !!! tip Quick reference
 
-    See the "Update Checklist" at the end of this document for an actionable summary of this section.
+    See the [Update Checklist](#update-checklist) at the end of this document for an actionable summary of this section.
 
 ### Base Image Update
 
@@ -180,7 +180,7 @@ To maintain security and reduce the attack surface, the dev container tool set s
 
 !!! tip Quick reference
 
-    See the "Update Checklist" at the end of this document for an actionable summary of this section.
+    See the [Update Checklist](#update-checklist) at the end of this document for an actionable summary of this section.
 
 After updating the Dockerfile (Step 1a), update `.github/.devcontainer/devcontainer.json` (feature set & runtime configuration). This remains part of Step 1 (BUILD & PUBLISH).
 
@@ -295,7 +295,7 @@ When considering features from smaller communities, use this evaluation checklis
 
 !!! tip Quick reference
 
-    See the "Update Checklist" at the end of this document for an actionable summary of this section.
+    See the [Update Checklist](#update-checklist) at the end of this document for an actionable summary of this section.
 
 ### Manual Dev Container Testing
 
@@ -532,7 +532,7 @@ Upon merging the PR to the main branch:
 
 !!! tip Quick reference
 
-    See the "Update Checklist" at the end of this document for an actionable summary of this section.
+    See the [Update Checklist](#update-checklist) at the end of this document for an actionable summary of this section.
 
 ### Activation Overview
 
