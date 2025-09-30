@@ -14,6 +14,7 @@ export const ROUTE_PATHS = {
   TERMS_OF_SERVICE: 'terms-of-service',
   NOT_FOUND: 'not-found',
   ERROR: 'error',
+  DETAILS: 'genes',
 } as const;
 
 // Use color-secondary to match agora-loading-icon
