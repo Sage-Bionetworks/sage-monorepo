@@ -14,6 +14,12 @@ CREATE TABLE model (
   slug VARCHAR(200) UNIQUE NOT NULL,
   name VARCHAR(300) NOT NULL,
   license VARCHAR(100),
+  organization VARCHAR(255),
+  description TEXT,
+  external_link VARCHAR(500),
+  api_model_name VARCHAR(255) NOT NULL DEFAULT '',
+  api_base VARCHAR(500) NOT NULL DEFAULT 'https://openrouter.ai/api/v1',
+  api_type VARCHAR(50) NOT NULL DEFAULT 'openai',
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
@@ -50,6 +56,11 @@ CREATE INDEX idx_leaderboard_entry_rank ON leaderboard_entry(rank);
 CREATE INDEX idx_leaderboard_entry_bt_score ON leaderboard_entry(bt_score DESC);
 CREATE INDEX idx_leaderboard_snapshot_leaderboard_id ON leaderboard_snapshot(leaderboard_id);
 CREATE INDEX idx_leaderboard_snapshot_created_at ON leaderboard_snapshot(created_at DESC);
+
+-- Arena model indexes
+CREATE INDEX idx_model_slug ON model(slug);
+CREATE INDEX idx_model_organization ON model(organization);
+CREATE INDEX idx_model_api_model_name ON model(api_model_name);
 
 -- Sessions (existing table - keeping it)
 CREATE TABLE conversation (
