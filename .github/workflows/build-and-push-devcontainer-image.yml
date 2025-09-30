@@ -90,13 +90,13 @@ jobs:
           tags: |
             type=sha,format=long
 
-      - name: Securely pull the base image with Docker Content Trust
-        # DOCKER_CONTENT_TRUST=1 ensures image signatures are verified, but it
-        # only works for images that have been signed using Docker Content Trust.
-        # Unsigned images will fail to pull.
-        run: |
-          base_image=$(grep '^FROM' "${{ env.DOCKERFILE }}" | tail -n 1 | awk '{print $2}')
-          DOCKER_CONTENT_TRUST=1 docker pull "${base_image}"
+      # - name: Securely pull the base image with Docker Content Trust
+      #   # DOCKER_CONTENT_TRUST=1 has been deprecated in Docker CLI. "You should start planning to
+      #   # transition to a different image signing and verification solution (like Sigstore or
+      #   # Notation)."
+      #   run: |
+      #     base_image=$(grep '^FROM' "${{ env.DOCKERFILE }}" | tail -n 1 | awk '{print $2}')
+      #     docker pull "${base_image}"
 
       - name: Build the dev container image
         id: build

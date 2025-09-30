@@ -85,6 +85,7 @@ Covers version management, update cadence, validation steps, and security consid
 - [Python Dependencies](python.md)
 - [R Dependencies](r.md)
 - [Docker Base Images](docker-images.md)
+- [Dev Container Updates](dev-container.md)
 - [Security & Compliance](security.md)
 - [Troubleshooting & FAQ](troubleshooting.md)
 

@@ -22,7 +22,9 @@ env:
   # Some static analyzers may flag them as "Context access might be invalid" even though this
   # is valid GitHub Actions syntax. Leave as-is unless the secret names change.
   NX_BRANCH: ${{ github.ref_name }}
-  NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
+  # Disable Nx Cloud for this workflow to mitigate security risks, since we are automatically
+  # processing an external API specification.
+  NX_NO_CLOUD: 'true'
 
 jobs:
   extract-devcontainer-image:
@@ -41,11 +43,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: extract-devcontainer-image
     env:
-      # NOTE: See comment above about secret name validation.
-      # # Disable Nx Cloud usage for this workflow to avoid consuming tokens / network calls when
-      # # simply regenerating artifacts. If later we want hashing/distributed features, remove this.
-      # NX_NO_CLOUD: 'true'
-      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN_READ_WRITE }}
+      # By default, Corepack prompts for a confirmation before downloading and enabling
+      # a package manager. We disable the prompt here to ensure non-interactive execution.
+      COREPACK_ENABLE_DOWNLOAD_PROMPT: '0'
 
     container:
       image: ${{ needs.extract-devcontainer-image.outputs.image }}
