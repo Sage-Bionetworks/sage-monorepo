@@ -13,14 +13,7 @@
     },
     "prepare": {
       "executor": "nx:run-commands",
-      "options": {
-        "commands": [
-          "sudo apt-get update -qq -y",
-          "sudo apt-get install --no-install-recommends -qq -y gettext-base"
-        ],
-        "cwd": "{projectRoot}",
-        "parallel": false
-      }
+      "options": {}
     },
     "show-packages": {
       "executor": "nx:run-commands",
@@ -32,12 +25,8 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "envsubst < model_config.template.json > model_config.json",
-          "uv run python -m main --port ${APP_PORT} --register-api-endpoint-file model_config.json"
-        ],
-        "cwd": "{projectRoot}",
-        "parallel": false
+        "command": "uv run python -m main --port ${APP_PORT}",
+        "cwd": "{projectRoot}"
       }
     },
     "serve-detach": {
@@ -46,15 +35,32 @@
         "command": "docker/bixarena/serve-detach.sh {projectName}"
       }
     },
-    "serve-legacy": {
+    "serve-models-api": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "uv run python run_models_api.py",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "serve-with-models-api": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "envsubst < model_config.template.json > model_config.json",
-          "uv run python -m fastchat.serve.gradio_web_server_multi --port ${APP_PORT} --controller-url '' --register-api-endpoint-file model_config.json"
+          "echo '🚀 Starting Models API on port 8000...'",
+          "uv run python run_models_api.py &",
+          "sleep 2",
+          "echo '🌐 Starting BixArena App on port ${APP_PORT}...'",
+          "uv run python -m main --port ${APP_PORT}"
         ],
         "cwd": "{projectRoot}",
         "parallel": false
+      }
+    },
+    "serve-legacy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "uv run python -m fastchat.serve.gradio_web_server_multi --port ${APP_PORT} --controller-url ''",
+        "cwd": "{projectRoot}"
       }
     },
     "scan-image": {

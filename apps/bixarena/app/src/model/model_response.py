@@ -4,9 +4,15 @@ import json
 import requests
 import time
 import uuid
+import os
+import sys
+
+# Add src to path for imports
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from fastchat.model.model_adapter import get_conversation_template
 from fastchat.serve.api_provider import get_api_provider_stream_iter
+from model.model_data import get_all_models, ModelDataAccess
 
 from config.constants import ErrorCode, SERVER_ERROR_MSG
 
@@ -53,25 +59,49 @@ def set_global_vars_anony(enable_moderation_):
 def get_model_list(register_api_endpoint_file, multimodal):
     global api_endpoint_info
     models = []  # Initiate models list
-    # Load models from API providers only
-    if register_api_endpoint_file:
-        api_endpoint_info = json.load(open(register_api_endpoint_file))
-        for mdl, mdl_dict in api_endpoint_info.items():
-            mdl_multimodal = mdl_dict.get("multimodal", False)
-            if multimodal and mdl_multimodal:
-                models += [mdl]
-            elif not multimodal and not mdl_multimodal:
-                models += [mdl]
 
-    # Remove anonymous models
-    models = list(set(models))
+    # Load models from database
+    try:
+        if ModelDataAccess.is_available():
+            db_models = get_all_models()
+            api_endpoint_info = {}
+
+            # Convert database models to FastChat format
+            for model in db_models:
+                model_name = model["name"]
+                models.append(model_name)
+
+                # Create API endpoint info for each model
+                api_endpoint_info[model_name] = {
+                    "api_type": "openai",
+                    "api_base": "https://openrouter.ai/api/v1",
+                    "api_key": os.getenv("OPENAI_API_KEY", ""),
+                    "model_name": model.get(
+                        "api_model_name", model_name
+                    ),  # Required by api_provider.py
+                    "anony_only": False,
+                    "multimodal": False,
+                }
+
+            logger.info(f"Loaded {len(models)} models from database")
+            logger.info(f"API endpoint info keys: {list(api_endpoint_info.keys())}")
+
+            # Log a sample model config for debugging
+            if api_endpoint_info:
+                sample_model = list(api_endpoint_info.keys())[0]
+                logger.info(
+                    f"Sample model config for '{sample_model}': {api_endpoint_info[sample_model]}"
+                )
+        else:
+            logger.warning("Database not available, no models loaded")
+
+    except Exception as e:
+        logger.error(f"Error loading models from database: {e}")
+        models = []
+        api_endpoint_info = {}
+
+    # All models are visible (no anonymous-only models)
     visible_models = models.copy()
-    for mdl in visible_models:
-        if mdl not in api_endpoint_info:
-            continue
-        mdl_dict = api_endpoint_info[mdl]
-        if mdl_dict["anony_only"]:
-            visible_models.remove(mdl)
 
     # Sort models and add descriptions
     models.sort()  # Simple A-Z sorting
@@ -109,9 +139,14 @@ def bot_response(
     # Only use API endpoints - no controller/worker logic
     if model_api_dict is None:
         logger.error(f"UNEXPECTED: Model {model_name} not in api_endpoint_info.")
+        logger.error(f"Available models: {list(api_endpoint_info.keys())}")
         conv.update_last_message(f"Configuration error: Model {model_name} not found")
         yield (state, state.to_gradio_chatbot()) + (enable_btn,) * 4
         return
+
+    logger.info(f"Making API call for model: {model_name}")
+    logger.info(f"Model API dict keys: {list(model_api_dict.keys())}")
+    logger.info(f"API model name: {model_api_dict.get('model_name', 'NOT_SET')}")
 
     # Use API provider stream
     stream_iter = get_api_provider_stream_iter(

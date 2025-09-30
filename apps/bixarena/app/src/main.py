@@ -115,13 +115,12 @@ def parse_args():
     parser.add_argument("--port", type=int)
     parser.add_argument("--share", action="store_true")
     parser.add_argument("--concurrency-count", type=int, default=10)
-    parser.add_argument("--register-api-endpoint-file", type=str)
     parser.add_argument("--moderate", action="store_true")
     parser.add_argument("--gradio-root-path", type=str)
     return parser.parse_args()
 
 
-def build_app(register_api_endpoint_file=None, moderate=False):
+def build_app(moderate=False):
     """Create the main application"""
 
     cleanup_js = """
@@ -153,7 +152,7 @@ def build_app(register_api_endpoint_file=None, moderate=False):
             _, cta_btn = build_home_page()
 
         with gr.Column(visible=False) as battle_page:
-            build_battle_page(register_api_endpoint_file, moderate)
+            build_battle_page(moderate)
 
         with gr.Column(visible=False) as leaderboard_page:
             build_leaderboard_page()
@@ -200,7 +199,7 @@ def build_app(register_api_endpoint_file=None, moderate=False):
 
 if __name__ == "__main__":
     args = parse_args()
-    app = build_app(args.register_api_endpoint_file, args.moderate)
+    app = build_app(args.moderate)
     app.queue(default_concurrency_limit=args.concurrency_count).launch(
         server_name=args.host,
         server_port=args.port,
