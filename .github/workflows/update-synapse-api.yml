@@ -46,6 +46,9 @@ jobs:
       # # simply regenerating artifacts. If later we want hashing/distributed features, remove this.
       # NX_NO_CLOUD: 'true'
       NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN_READ_WRITE }}
+      # By default, Corepack prompts for a confirmation before downloading and enabling
+      # a package manager. We disable the prompt here to ensure non-interactive execution.
+      COREPACK_ENABLE_DOWNLOAD_PROMPT: '0'
 
     container:
       image: ${{ needs.extract-devcontainer-image.outputs.image }}
