@@ -16,11 +16,25 @@ import { OrgSagebionetworksRepoModelDockerRegistryEventActor } from './org-sageb
  * https://godoc.org/github.com/docker/distribution/notifications#Event
  */
 export interface OrgSagebionetworksRepoModelDockerDockerRegistryEvent {
+  /**
+   * ID provides a unique identifier for the event.
+   */
   id?: string;
+  /**
+   * Timestamp is the time at which the event occurred.
+   */
   timestamp?: string;
-  action?: string;
+  action?: OrgSagebionetworksRepoModelDockerDockerRegistryEvent.ActionEnum;
   target?: OrgSagebionetworksRepoModelDockerRegistryEventTarget;
   request?: OrgSagebionetworksRepoModelDockerRegistryEventRequest;
   actor?: OrgSagebionetworksRepoModelDockerRegistryEventActor;
   source?: OrgSagebionetworksRepoModelDockerRegistryEventSource;
+}
+export namespace OrgSagebionetworksRepoModelDockerDockerRegistryEvent {
+  export type ActionEnum = 'push' | 'pull' | 'mount';
+  export const ActionEnum = {
+    Push: 'push' as ActionEnum,
+    Pull: 'pull' as ActionEnum,
+    Mount: 'mount' as ActionEnum,
+  };
 }

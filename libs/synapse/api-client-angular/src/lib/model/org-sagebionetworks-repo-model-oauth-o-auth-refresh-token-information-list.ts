@@ -14,5 +14,8 @@ import { OrgSagebionetworksRepoModelOauthOAuthRefreshTokenInformation } from './
  */
 export interface OrgSagebionetworksRepoModelOauthOAuthRefreshTokenInformationList {
   results?: Array<OrgSagebionetworksRepoModelOauthOAuthRefreshTokenInformation>;
+  /**
+   * The token to get the next page of results.
+   */
   nextPageToken?: string;
 }

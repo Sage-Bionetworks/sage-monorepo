@@ -12,6 +12,12 @@
  * A request to look up an entity given parentId and the entity name.
  */
 export interface OrgSagebionetworksRepoModelEntityEntityLookupRequest {
+  /**
+   * The parentID
+   */
   parentId?: string;
+  /**
+   * The entity name
+   */
   entityName?: string;
 }

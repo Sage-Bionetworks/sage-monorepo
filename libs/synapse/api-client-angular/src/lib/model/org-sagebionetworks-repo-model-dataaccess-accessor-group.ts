@@ -12,8 +12,17 @@
  * A group of accessors who gained access by the same submitter.
  */
 export interface OrgSagebionetworksRepoModelDataaccessAccessorGroup {
+  /**
+   * The ID of an AccessRequirement.
+   */
   accessRequirementId?: string;
   accessorIds?: Array<string>;
+  /**
+   * The ID of the submitter.
+   */
   submitterId?: string;
+  /**
+   * The date this group will be expired.
+   */
   expiredOn?: string;
 }

@@ -15,10 +15,25 @@ import { OrgSagebionetworksRepoModelAuthTermsOfServiceAgreement } from './org-sa
  * JSON schema for UserProfile POJO
  */
 export interface OrgSagebionetworksRepoModelUserProfile {
+  /**
+   * A foreign key to the ID of the \'principal\' object for the user.
+   */
   ownerId?: string;
+  /**
+   * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client\'s current representation of an entity is out-of-date.
+   */
   etag?: string;
+  /**
+   * This person\'s given name (forename)
+   */
   firstName?: string;
+  /**
+   * This person\'s family name (surname)
+   */
   lastName?: string;
+  /**
+   * This is deprecated as users can have more than one email. See emails
+   */
   email?: string;
   /**
    * The list of user email addresses registered to this user.
@@ -28,20 +43,59 @@ export interface OrgSagebionetworksRepoModelUserProfile {
    * The list of OpenIds bound to this user\'s account.
    */
   openIds?: Array<string>;
+  /**
+   * A name chosen by the user that uniquely identifies them.
+   */
   userName?: string;
+  /**
+   * This field is deprecated and will always be null.
+   */
   displayName?: string;
+  /**
+   * URL for RStudio server assigned to the user
+   */
   rStudioUrl?: string;
+  /**
+   * A summary description about this person
+   */
   summary?: string;
+  /**
+   * This person\'s current position title
+   */
   position?: string;
+  /**
+   * This person\'s location
+   */
   location?: string;
+  /**
+   * The industry/discipline that this person is associated with
+   */
   industry?: string;
+  /**
+   * This person\'s current affiliation
+   */
   company?: string;
+  /**
+   * The File Handle id of the user\'s profile picture
+   */
   profilePicureFileHandleId?: string;
+  /**
+   * A link to more information about this person
+   */
   url?: string;
+  /**
+   * This person\'s default team name
+   */
   teamName?: string;
   notificationSettings?: OrgSagebionetworksRepoModelMessageSettings;
   preferences?: Set<OrgSagebionetworksRepoModelUserPreference>;
+  /**
+   * The date this profile was created.
+   */
   createdOn?: string;
+  /**
+   * Flag that indicates if the user has two factor authentication enabled.
+   */
   twoFactorAuthEnabled?: boolean;
   /**
    * The list of term of service versions that the user agreed to

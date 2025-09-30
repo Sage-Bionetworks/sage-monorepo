@@ -12,5 +12,8 @@
  * Request body used to remove an email address from quarantine
  */
 export interface OrgSagebionetworksRepoModelAdminExpireQuarantinedEmailRequest {
+  /**
+   * The email address to be removed from the quarantine list
+   */
   email?: string;
 }

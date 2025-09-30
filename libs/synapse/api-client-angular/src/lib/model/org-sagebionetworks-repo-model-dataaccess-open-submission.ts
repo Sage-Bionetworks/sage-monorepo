@@ -12,6 +12,12 @@
  * This object stores information about the number of submitted Submissions for a single ACTAccessRequirement.
  */
 export interface OrgSagebionetworksRepoModelDataaccessOpenSubmission {
+  /**
+   * The number of submitted Submission.
+   */
   numberOfSubmittedSubmission?: number;
+  /**
+   * The ID of the ACTAccessRequirement.
+   */
   accessRequirementId?: string;
 }

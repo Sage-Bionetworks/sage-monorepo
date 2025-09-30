@@ -13,6 +13,9 @@ import { OrgSagebionetworksRepoModelLimitsProjectStorageLocationUsage } from './
  * Provides information about file allocations and limits for each storage location associated with a single project.
  */
 export interface OrgSagebionetworksRepoModelLimitsProjectStorageUsage {
+  /**
+   * The ID of the project
+   */
   projectId?: string;
   locations?: Array<OrgSagebionetworksRepoModelLimitsProjectStorageLocationUsage>;
 }

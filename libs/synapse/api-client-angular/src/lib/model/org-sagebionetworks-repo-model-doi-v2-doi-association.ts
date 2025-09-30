@@ -12,16 +12,59 @@
  * All fields that associate a Synapse object with a DOI. The objectId and objectType are required to create or mint a DOI in all circumstances.
  */
 export interface OrgSagebionetworksRepoModelDoiV2DoiAssociation {
+  /**
+   * The unique ID of this DOI stored in Synapse. Provided by Synapse.
+   */
   associationId?: string;
+  /**
+   * For Optimistic Concurrency Control (OCC). Required to successfully update a DOI.
+   */
   etag?: string;
+  /**
+   * The unique URI of this DOI to which the resource can be resolved. Provided by Synapse.
+   */
   doiUri?: string;
+  /**
+   * The DOI URL that will point to the Synapse object.  Provided by Synapse.
+   */
   doiUrl?: string;
+  /**
+   * The id of the portal that this DOI is associated with.
+   */
   portalId?: string;
+  /**
+   * Required. The ID of the digital object in Synapse for which this DOI is created.
+   */
   objectId?: string;
-  objectType?: string;
+  /**
+   * The type of objects that support DOI minting
+   */
+  objectType?: OrgSagebionetworksRepoModelDoiV2DoiAssociation.ObjectTypeEnum;
+  /**
+   * Optional. The version of the digital object. When null, the DOI is associated with the current version of the object.
+   */
   objectVersion?: number;
+  /**
+   * The ID of the user that creates this DOI. Provided by Synapse.
+   */
   associatedBy?: string;
+  /**
+   * The date time this DOI is first created. Provided by Synapse.
+   */
   associatedOn?: string;
+  /**
+   * The ID of the user that last updated this DOI. Provided by Synapse.
+   */
   updatedBy?: string;
+  /**
+   * The date time this DOI is last updated. Provided by Synapse.
+   */
   updatedOn?: string;
+}
+export namespace OrgSagebionetworksRepoModelDoiV2DoiAssociation {
+  export type ObjectTypeEnum = 'ENTITY' | 'PORTAL_RESOURCE';
+  export const ObjectTypeEnum = {
+    Entity: 'ENTITY' as ObjectTypeEnum,
+    PortalResource: 'PORTAL_RESOURCE' as ObjectTypeEnum,
+  };
 }

@@ -12,7 +12,25 @@
  * A request to change the state of a Submission.
  */
 export interface OrgSagebionetworksRepoModelDataaccessSubmissionStateChangeRequest {
+  /**
+   * The ID of the requested Submission.
+   */
   submissionId?: string;
-  newState?: string;
+  /**
+   * The state of a Submission.
+   */
+  newState?: OrgSagebionetworksRepoModelDataaccessSubmissionStateChangeRequest.NewStateEnum;
+  /**
+   * The reason that the Submission is rejected if newState is REJECTED.
+   */
   rejectedReason?: string;
+}
+export namespace OrgSagebionetworksRepoModelDataaccessSubmissionStateChangeRequest {
+  export type NewStateEnum = 'SUBMITTED' | 'APPROVED' | 'REJECTED' | 'CANCELLED';
+  export const NewStateEnum = {
+    Submitted: 'SUBMITTED' as NewStateEnum,
+    Approved: 'APPROVED' as NewStateEnum,
+    Rejected: 'REJECTED' as NewStateEnum,
+    Cancelled: 'CANCELLED' as NewStateEnum,
+  };
 }

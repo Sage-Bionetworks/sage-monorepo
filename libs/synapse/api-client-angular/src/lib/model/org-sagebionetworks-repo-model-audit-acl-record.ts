@@ -13,15 +13,129 @@ import { OrgSagebionetworksRepoModelResourceAccess } from './org-sagebionetworks
  * Data record from an access control list.
  */
 export interface OrgSagebionetworksRepoModelAuditAclRecord {
-  ownerType?: string;
+  /**
+   * JSON enum for the types of objects in Synapse.
+   */
+  ownerType?: OrgSagebionetworksRepoModelAuditAclRecord.OwnerTypeEnum;
+  /**
+   * The entity id
+   */
   id?: string;
+  /**
+   * UNUSED -- maintained only for backwards compatibility with archived objects
+   */
   createdBy?: string;
   creationDate?: string;
+  /**
+   * UNUSED -- maintained only for backwards compatibility with archived objects
+   */
   modifiedBy?: string;
+  /**
+   * UNUSED -- maintained only for backwards compatibility with archived objects
+   */
   modifiedOn?: string;
   etag?: string;
   /**
    * The list of principals who can access the data with the allowed types of access for each.
    */
   resourceAccess?: Set<OrgSagebionetworksRepoModelResourceAccess>;
+}
+export namespace OrgSagebionetworksRepoModelAuditAclRecord {
+  export type OwnerTypeEnum =
+    | 'ENTITY'
+    | 'ENTITY_CONTAINER'
+    | 'PRINCIPAL'
+    | 'ACTIVITY'
+    | 'EVALUATION'
+    | 'EVALUATION_ROUND'
+    | 'SUBMISSION'
+    | 'EVALUATION_SUBMISSIONS'
+    | 'FILE'
+    | 'MESSAGE'
+    | 'WIKI'
+    | 'FAVORITE'
+    | 'ACCESS_REQUIREMENT'
+    | 'ACCESS_APPROVAL'
+    | 'TEAM'
+    | 'TABLE'
+    | 'ACCESS_CONTROL_LIST'
+    | 'PROJECT_SETTING'
+    | 'VERIFICATION_SUBMISSION'
+    | 'CERTIFIED_USER_PASSING_RECORD'
+    | 'FORUM'
+    | 'THREAD'
+    | 'REPLY'
+    | 'FORM_GROUP'
+    | 'ORGANIZATION'
+    | 'FORM_DATA'
+    | 'ENTITY_VIEW'
+    | 'USER_PROFILE'
+    | 'DATA_ACCESS_REQUEST'
+    | 'DATA_ACCESS_SUBMISSION'
+    | 'DATA_ACCESS_SUBMISSION_STATUS'
+    | 'MEMBERSHIP_INVITATION'
+    | 'JSON_SCHEMA'
+    | 'JSON_SCHEMA_DEPENDANT'
+    | 'DATASET'
+    | 'DATASET_COLLECTION'
+    | 'THREAD_VIEW'
+    | 'MATERIALIZED_VIEW'
+    | 'VIRTUAL_TABLE'
+    | 'TABLE_STATUS_EVENT'
+    | 'DATA_ACCESS_SUBMISSION_EVENT'
+    | 'FILE_EVENT'
+    | 'QUERY_CACHE_HIT'
+    | 'PROJECT_STORAGE_EVENT'
+    | 'REPLICATED_EVENT'
+    | 'PORTAL'
+    | 'OAUTH_CLIENT';
+  export const OwnerTypeEnum = {
+    Entity: 'ENTITY' as OwnerTypeEnum,
+    EntityContainer: 'ENTITY_CONTAINER' as OwnerTypeEnum,
+    Principal: 'PRINCIPAL' as OwnerTypeEnum,
+    Activity: 'ACTIVITY' as OwnerTypeEnum,
+    Evaluation: 'EVALUATION' as OwnerTypeEnum,
+    EvaluationRound: 'EVALUATION_ROUND' as OwnerTypeEnum,
+    Submission: 'SUBMISSION' as OwnerTypeEnum,
+    EvaluationSubmissions: 'EVALUATION_SUBMISSIONS' as OwnerTypeEnum,
+    File: 'FILE' as OwnerTypeEnum,
+    Message: 'MESSAGE' as OwnerTypeEnum,
+    Wiki: 'WIKI' as OwnerTypeEnum,
+    Favorite: 'FAVORITE' as OwnerTypeEnum,
+    AccessRequirement: 'ACCESS_REQUIREMENT' as OwnerTypeEnum,
+    AccessApproval: 'ACCESS_APPROVAL' as OwnerTypeEnum,
+    Team: 'TEAM' as OwnerTypeEnum,
+    Table: 'TABLE' as OwnerTypeEnum,
+    AccessControlList: 'ACCESS_CONTROL_LIST' as OwnerTypeEnum,
+    ProjectSetting: 'PROJECT_SETTING' as OwnerTypeEnum,
+    VerificationSubmission: 'VERIFICATION_SUBMISSION' as OwnerTypeEnum,
+    CertifiedUserPassingRecord: 'CERTIFIED_USER_PASSING_RECORD' as OwnerTypeEnum,
+    Forum: 'FORUM' as OwnerTypeEnum,
+    Thread: 'THREAD' as OwnerTypeEnum,
+    Reply: 'REPLY' as OwnerTypeEnum,
+    FormGroup: 'FORM_GROUP' as OwnerTypeEnum,
+    Organization: 'ORGANIZATION' as OwnerTypeEnum,
+    FormData: 'FORM_DATA' as OwnerTypeEnum,
+    EntityView: 'ENTITY_VIEW' as OwnerTypeEnum,
+    UserProfile: 'USER_PROFILE' as OwnerTypeEnum,
+    DataAccessRequest: 'DATA_ACCESS_REQUEST' as OwnerTypeEnum,
+    DataAccessSubmission: 'DATA_ACCESS_SUBMISSION' as OwnerTypeEnum,
+    DataAccessSubmissionStatus: 'DATA_ACCESS_SUBMISSION_STATUS' as OwnerTypeEnum,
+    MembershipInvitation: 'MEMBERSHIP_INVITATION' as OwnerTypeEnum,
+    JsonSchema: 'JSON_SCHEMA' as OwnerTypeEnum,
+    JsonSchemaDependant: 'JSON_SCHEMA_DEPENDANT' as OwnerTypeEnum,
+    Dataset: 'DATASET' as OwnerTypeEnum,
+    DatasetCollection: 'DATASET_COLLECTION' as OwnerTypeEnum,
+    ThreadView: 'THREAD_VIEW' as OwnerTypeEnum,
+    MaterializedView: 'MATERIALIZED_VIEW' as OwnerTypeEnum,
+    VirtualTable: 'VIRTUAL_TABLE' as OwnerTypeEnum,
+    TableStatusEvent: 'TABLE_STATUS_EVENT' as OwnerTypeEnum,
+    DataAccessSubmissionEvent: 'DATA_ACCESS_SUBMISSION_EVENT' as OwnerTypeEnum,
+    FileEvent: 'FILE_EVENT' as OwnerTypeEnum,
+    QueryCacheHit: 'QUERY_CACHE_HIT' as OwnerTypeEnum,
+    ProjectStorageEvent: 'PROJECT_STORAGE_EVENT' as OwnerTypeEnum,
+    ReplicatedEvent: 'REPLICATED_EVENT' as OwnerTypeEnum,
+    Portal: 'PORTAL' as OwnerTypeEnum,
+    OauthClient: 'OAUTH_CLIENT' as OwnerTypeEnum,
+  };
 }

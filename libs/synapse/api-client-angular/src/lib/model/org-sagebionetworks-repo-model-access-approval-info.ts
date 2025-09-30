@@ -12,7 +12,16 @@
  * Information about whether or not a user has an AccessApproval for an AccessRequirement.
  */
 export interface OrgSagebionetworksRepoModelAccessApprovalInfo {
+  /**
+   * The ID of the user.
+   */
   userId?: string;
+  /**
+   * The ID of the access requirement.
+   */
   accessRequirementId?: string;
+  /**
+   * True if userId has an AccessApproval for the specified accessRequirementId; false otherwise.
+   */
   hasAccessApproval?: boolean;
 }

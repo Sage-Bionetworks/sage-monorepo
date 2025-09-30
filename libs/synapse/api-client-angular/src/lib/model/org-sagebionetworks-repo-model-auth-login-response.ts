@@ -12,8 +12,20 @@
  * Holds a session token used for short-term authentication with Synapse
  */
 export interface OrgSagebionetworksRepoModelAuthLoginResponse {
+  /**
+   * (deprecated) A token that identifies the user
+   */
   sessionToken?: string;
+  /**
+   * A token that authorizes subsequent requests
+   */
   accessToken?: string;
+  /**
+   * Does the user accept the terms of use?
+   */
   acceptsTermsOfUse?: boolean;
+  /**
+   * A valid receipt allows the user to skip extra security checks.
+   */
   authenticationReceipt?: string;
 }

@@ -12,15 +12,45 @@
  * This class refers only to the default Synapse storage location(s) that exist on Amazon S3. To create a storage location that refers to a private S3 bucket, see <a href=\"${org.sagebionetworks.repo.model.project.ExternalS3StorageLocationSetting}\">ExternalS3StorageLocationSetting</a>.
  */
 export interface OrgSagebionetworksRepoModelProjectS3StorageLocationSetting {
+  /**
+   * Indicates which implementation this object represents.
+   */
   concreteType: OrgSagebionetworksRepoModelProjectS3StorageLocationSetting.ConcreteTypeEnum;
+  /**
+   * The unique ID for this storage location
+   */
   storageLocationId?: number;
-  uploadType?: string;
+  /**
+   * The enumeration of possible upload types.
+   */
+  uploadType?: OrgSagebionetworksRepoModelProjectS3StorageLocationSetting.UploadTypeEnum;
+  /**
+   * The banner text to display to a user every time a file is uploaded. This field is optional.
+   */
   banner?: string;
+  /**
+   * A description of the storage location. This description is shown when a user has to choose which upload destination to use.
+   */
   description?: string;
+  /**
+   * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time a Project Setting is updated it is used to detect when a client\'s current representation of a Project Setting is out-of-date.
+   */
   etag?: string;
+  /**
+   * The date this storage location setting was created.
+   */
   createdOn?: string;
+  /**
+   * The ID of the user that created this storage location setting.
+   */
   createdBy?: number;
+  /**
+   * the optional base key, which acts as a prefix or a base folder
+   */
   baseKey?: string;
+  /**
+   * Enables STS on this Storage Location
+   */
   stsEnabled?: boolean;
 }
 export namespace OrgSagebionetworksRepoModelProjectS3StorageLocationSetting {
@@ -28,5 +58,20 @@ export namespace OrgSagebionetworksRepoModelProjectS3StorageLocationSetting {
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelProjectS3StorageLocationSetting:
       'org.sagebionetworks.repo.model.project.S3StorageLocationSetting' as ConcreteTypeEnum,
+  };
+  export type UploadTypeEnum =
+    | 'S3'
+    | 'GOOGLECLOUDSTORAGE'
+    | 'SFTP'
+    | 'HTTPS'
+    | 'PROXYLOCAL'
+    | 'NONE';
+  export const UploadTypeEnum = {
+    S3: 'S3' as UploadTypeEnum,
+    Googlecloudstorage: 'GOOGLECLOUDSTORAGE' as UploadTypeEnum,
+    Sftp: 'SFTP' as UploadTypeEnum,
+    Https: 'HTTPS' as UploadTypeEnum,
+    Proxylocal: 'PROXYLOCAL' as UploadTypeEnum,
+    None: 'NONE' as UploadTypeEnum,
   };
 }

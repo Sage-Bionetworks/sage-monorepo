@@ -15,7 +15,26 @@ export interface OrgSagebionetworksRepoModelFormListRequest {
   /**
    * Only return results with a state that matches elements from this set.  Required. Must include at least one element.
    */
-  filterByState?: Set<string>;
+  filterByState?: Set<OrgSagebionetworksRepoModelFormListRequest.FilterByStateEnum>;
+  /**
+   * The group identifier. Required.
+   */
   groupId?: string;
+  /**
+   * The results are automatically paginated.  To get the next page, forward the nextPageToken returned from the last request.
+   */
   nextPageToken?: string;
+}
+export namespace OrgSagebionetworksRepoModelFormListRequest {
+  export type FilterByStateEnum =
+    | 'WAITING_FOR_SUBMISSION'
+    | 'SUBMITTED_WAITING_FOR_REVIEW'
+    | 'ACCEPTED'
+    | 'REJECTED';
+  export const FilterByStateEnum = {
+    WaitingForSubmission: 'WAITING_FOR_SUBMISSION' as FilterByStateEnum,
+    SubmittedWaitingForReview: 'SUBMITTED_WAITING_FOR_REVIEW' as FilterByStateEnum,
+    Accepted: 'ACCEPTED' as FilterByStateEnum,
+    Rejected: 'REJECTED' as FilterByStateEnum,
+  };
 }

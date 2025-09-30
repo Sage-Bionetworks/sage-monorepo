@@ -12,6 +12,12 @@
  * Holds a session token used for short-term authentication with Synapse
  */
 export interface OrgSagebionetworksRepoModelAuthSession {
+  /**
+   * A token that identifies the user
+   */
   sessionToken?: string;
+  /**
+   * Does the user accept the terms of use?
+   */
   acceptsTermsOfUse?: boolean;
 }

@@ -15,8 +15,17 @@ import { OrgSagebionetworksRepoModelAnnotationDoubleAnnotation } from './org-sag
  * Primary container object for Annotations on a Synapse object
  */
 export interface OrgSagebionetworksRepoModelAnnotationAnnotations {
+  /**
+   * The Synapse ID of the object with which these Annotations are associated
+   */
   objectId?: string;
+  /**
+   * The Synapse ID of the umbrella object above the object with which these Annotations are associated
+   */
   scopeId?: string;
+  /**
+   * The system controlled version of this collection of annotations
+   */
   version?: number;
   /**
    * A list of StringAnnnotations

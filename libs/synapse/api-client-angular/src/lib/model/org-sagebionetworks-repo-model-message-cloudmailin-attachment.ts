@@ -12,11 +12,32 @@
  * Message Attachment
  */
 export interface OrgSagebionetworksRepoModelMessageCloudmailinAttachment {
+  /**
+   * The content of the attachment in base-64 encoding, if the message isn\'t using an attachment store.
+   */
   content?: string;
+  /**
+   * The ID used to reference the content elsewhere in the multipart message.
+   */
   content_id?: string;
+  /**
+   * A URL to the attachment if the attachment is within an attachment store.
+   */
   url?: string;
+  /**
+   * The original file name of the attachment.
+   */
   file_name?: string;
+  /**
+   * The content type of the attachment.
+   */
   content_type?: string;
+  /**
+   * The size of the attachment.
+   */
   size?: string;
+  /**
+   * The disposition of the attachment either attachment or inline.
+   */
   disposition?: string;
 }

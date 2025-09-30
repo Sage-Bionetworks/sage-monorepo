@@ -12,17 +12,64 @@
  * Object used to track the status of a Table.
  */
 export interface OrgSagebionetworksRepoModelTableTableStatus {
-  state?: string;
+  /**
+   * The Table\'s state can be one of the following enumerations
+   */
+  state?: OrgSagebionetworksRepoModelTableTableStatus.StateEnum;
+  /**
+   * The ID of the table.
+   */
   tableId?: string;
+  /**
+   * For cases where a query is run against a particualr version of a table, this will be that version.  This field is exclueded for all other cases.
+   */
   version?: number;
+  /**
+   * The date-time when the status of this table last changed to PROCESSING.
+   */
   startedOn?: string;
+  /**
+   * The date-time when the status of this table last changed.
+   */
   changedOn?: string;
+  /**
+   * Whenever the status of a table is rest to PROCESSING, a new reset-token will be issued.  The table status can only be set to AVAILABLE by providing the current reset-token.
+   */
   resetToken?: string;
+  /**
+   * Whenever the status of a table is set to AVAILABLE, this will be set to the etag of the last table change applied to the index.
+   */
   lastTableChangeEtag?: string;
+  /**
+   * The current message of the progress tracker.
+   */
   progressMessage?: string;
+  /**
+   * The progress current value indicates how much progress has been made. For example: If progressTotal = 100; and progressCurrent = 50; then the work is 50% complete.
+   */
   progressCurrent?: number;
+  /**
+   * The progress total indicates the total amount of work to complete. For example: If progressTotal = 100; and progressCurrent = 50; then the work is 50% complete.
+   */
   progressTotal?: number;
+  /**
+   * When processing fails, this is a one line error message.
+   */
   errorMessage?: string;
+  /**
+   * When processing fails, this is the full stack trace of the error.
+   */
   errorDetails?: string;
+  /**
+   * The total run time (MS) of the last processing job.
+   */
   totalTimeMS?: number;
+}
+export namespace OrgSagebionetworksRepoModelTableTableStatus {
+  export type StateEnum = 'AVAILABLE' | 'PROCESSING' | 'PROCESSING_FAILED';
+  export const StateEnum = {
+    Available: 'AVAILABLE' as StateEnum,
+    Processing: 'PROCESSING' as StateEnum,
+    ProcessingFailed: 'PROCESSING_FAILED' as StateEnum,
+  };
 }

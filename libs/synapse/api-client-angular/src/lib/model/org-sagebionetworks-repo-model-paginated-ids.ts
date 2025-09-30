@@ -16,5 +16,8 @@ export interface OrgSagebionetworksRepoModelPaginatedIds {
    * The list of Object Ids for this page
    */
   results?: Array<string>;
+  /**
+   * The total number of results
+   */
   totalNumberOfResults?: number;
 }

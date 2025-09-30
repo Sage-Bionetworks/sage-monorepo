@@ -13,7 +13,13 @@
  */
 export interface OrgSagebionetworksRepoModelTableDownloadPFBResult {
   concreteType: OrgSagebionetworksRepoModelTableDownloadPFBResult.ConcreteTypeEnum;
+  /**
+   * The resulting file handle ID can be used to download the PFB file created by this job.
+   */
   resultsFileHandleId?: string;
+  /**
+   * The ID of the table identified in the from clause of the table query.
+   */
   tableId?: string;
 }
 export namespace OrgSagebionetworksRepoModelTableDownloadPFBResult {

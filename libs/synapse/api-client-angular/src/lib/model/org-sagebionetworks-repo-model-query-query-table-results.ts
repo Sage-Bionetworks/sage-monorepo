@@ -21,5 +21,8 @@ export interface OrgSagebionetworksRepoModelQueryQueryTableResults {
    * The ordered list of row data. Each row corresponds to one object.
    */
   rows?: Array<OrgSagebionetworksRepoModelQueryRow>;
+  /**
+   * The total number of objects in the system which match the submitted query.
+   */
   totalNumberOfResults?: number;
 }

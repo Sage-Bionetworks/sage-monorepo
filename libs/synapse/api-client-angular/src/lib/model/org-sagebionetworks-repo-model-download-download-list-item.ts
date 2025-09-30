@@ -12,6 +12,12 @@
  * A single item for a user\'s download list.
  */
 export interface OrgSagebionetworksRepoModelDownloadDownloadListItem {
+  /**
+   * The \'syn\' identifier of a file entity.
+   */
   fileEntityId?: string;
+  /**
+   * When included, indicates that a specific version of a files was added to the user\'s download list.  When excluded, the current version was added.
+   */
   versionNumber?: number;
 }

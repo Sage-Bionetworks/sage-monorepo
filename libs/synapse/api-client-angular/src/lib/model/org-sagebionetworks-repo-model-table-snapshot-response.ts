@@ -12,5 +12,8 @@
  * Response to creating a snapshot of a table of view.
  */
 export interface OrgSagebionetworksRepoModelTableSnapshotResponse {
+  /**
+   * The version number of the resulting snapshot.
+   */
   snapshotVersionNumber?: number;
 }

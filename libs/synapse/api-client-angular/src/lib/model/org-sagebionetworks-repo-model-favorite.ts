@@ -13,6 +13,12 @@
  */
 export interface OrgSagebionetworksRepoModelFavorite {
   entityId?: string;
+  /**
+   * The id of the principal who is granted access
+   */
   principalId?: string;
+  /**
+   * The date this entity was created.
+   */
   createdOn?: string;
 }

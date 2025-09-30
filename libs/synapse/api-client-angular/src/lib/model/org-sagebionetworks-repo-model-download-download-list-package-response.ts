@@ -13,6 +13,9 @@
  */
 export interface OrgSagebionetworksRepoModelDownloadDownloadListPackageResponse {
   concreteType: OrgSagebionetworksRepoModelDownloadDownloadListPackageResponse.ConcreteTypeEnum;
+  /**
+   * The identifier of a FileHandle that contains the resulting package zip file.
+   */
   resultFileHandleId?: string;
 }
 export namespace OrgSagebionetworksRepoModelDownloadDownloadListPackageResponse {

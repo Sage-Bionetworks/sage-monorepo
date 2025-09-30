@@ -13,18 +13,57 @@
  */
 export interface OrgSagebionetworksRepoModelFileFileEvent {
   concreteType: OrgSagebionetworksRepoModelFileFileEvent.ConcreteTypeEnum;
+  /**
+   * The unique identifier of the object that changed.
+   */
   objectId?: string;
+  /**
+   * Identifier for a specific version of an object.
+   */
   objectVersion?: number;
-  objectType?: string;
+  /**
+   * JSON enum for the types of objects in Synapse.
+   */
+  objectType?: OrgSagebionetworksRepoModelFileFileEvent.ObjectTypeEnum;
+  /**
+   * The timestamp when this change was originally committed.
+   */
   timestamp?: string;
-  fileEventType?: string;
+  /**
+   * The file event can be one of the following enumerations
+   */
+  fileEventType?: OrgSagebionetworksRepoModelFileFileEvent.FileEventTypeEnum;
+  /**
+   * The Id of user who initiated the file event.
+   */
   userId?: number;
+  /**
+   * The filehandle Id of file.
+   */
   fileHandleId?: string;
+  /**
+   * The zipped filehandle Id, If the file download is requested in zip file otherwise not applicable.
+   */
   downloadedFileHandleId?: string;
-  associateType?: string;
+  /**
+   * Enumeration of all possible objects types that can be associated with a file.
+   */
+  associateType?: OrgSagebionetworksRepoModelFileFileEvent.AssociateTypeEnum;
+  /**
+   * The association Id of filehandle.
+   */
   associateId?: string;
+  /**
+   * The stack number.
+   */
   stack?: string;
+  /**
+   * The instance number.
+   */
   instance?: string;
+  /**
+   * The session ID from the access record associated with this event.  When present, can be used to join access records with download records.
+   */
   sessionId?: string;
 }
 export namespace OrgSagebionetworksRepoModelFileFileEvent {
@@ -32,5 +71,136 @@ export namespace OrgSagebionetworksRepoModelFileFileEvent {
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelFileFileEvent:
       'org.sagebionetworks.repo.model.file.FileEvent' as ConcreteTypeEnum,
+  };
+  export type ObjectTypeEnum =
+    | 'ENTITY'
+    | 'ENTITY_CONTAINER'
+    | 'PRINCIPAL'
+    | 'ACTIVITY'
+    | 'EVALUATION'
+    | 'EVALUATION_ROUND'
+    | 'SUBMISSION'
+    | 'EVALUATION_SUBMISSIONS'
+    | 'FILE'
+    | 'MESSAGE'
+    | 'WIKI'
+    | 'FAVORITE'
+    | 'ACCESS_REQUIREMENT'
+    | 'ACCESS_APPROVAL'
+    | 'TEAM'
+    | 'TABLE'
+    | 'ACCESS_CONTROL_LIST'
+    | 'PROJECT_SETTING'
+    | 'VERIFICATION_SUBMISSION'
+    | 'CERTIFIED_USER_PASSING_RECORD'
+    | 'FORUM'
+    | 'THREAD'
+    | 'REPLY'
+    | 'FORM_GROUP'
+    | 'ORGANIZATION'
+    | 'FORM_DATA'
+    | 'ENTITY_VIEW'
+    | 'USER_PROFILE'
+    | 'DATA_ACCESS_REQUEST'
+    | 'DATA_ACCESS_SUBMISSION'
+    | 'DATA_ACCESS_SUBMISSION_STATUS'
+    | 'MEMBERSHIP_INVITATION'
+    | 'JSON_SCHEMA'
+    | 'JSON_SCHEMA_DEPENDANT'
+    | 'DATASET'
+    | 'DATASET_COLLECTION'
+    | 'THREAD_VIEW'
+    | 'MATERIALIZED_VIEW'
+    | 'VIRTUAL_TABLE'
+    | 'TABLE_STATUS_EVENT'
+    | 'DATA_ACCESS_SUBMISSION_EVENT'
+    | 'FILE_EVENT'
+    | 'QUERY_CACHE_HIT'
+    | 'PROJECT_STORAGE_EVENT'
+    | 'REPLICATED_EVENT'
+    | 'PORTAL'
+    | 'OAUTH_CLIENT';
+  export const ObjectTypeEnum = {
+    Entity: 'ENTITY' as ObjectTypeEnum,
+    EntityContainer: 'ENTITY_CONTAINER' as ObjectTypeEnum,
+    Principal: 'PRINCIPAL' as ObjectTypeEnum,
+    Activity: 'ACTIVITY' as ObjectTypeEnum,
+    Evaluation: 'EVALUATION' as ObjectTypeEnum,
+    EvaluationRound: 'EVALUATION_ROUND' as ObjectTypeEnum,
+    Submission: 'SUBMISSION' as ObjectTypeEnum,
+    EvaluationSubmissions: 'EVALUATION_SUBMISSIONS' as ObjectTypeEnum,
+    File: 'FILE' as ObjectTypeEnum,
+    Message: 'MESSAGE' as ObjectTypeEnum,
+    Wiki: 'WIKI' as ObjectTypeEnum,
+    Favorite: 'FAVORITE' as ObjectTypeEnum,
+    AccessRequirement: 'ACCESS_REQUIREMENT' as ObjectTypeEnum,
+    AccessApproval: 'ACCESS_APPROVAL' as ObjectTypeEnum,
+    Team: 'TEAM' as ObjectTypeEnum,
+    Table: 'TABLE' as ObjectTypeEnum,
+    AccessControlList: 'ACCESS_CONTROL_LIST' as ObjectTypeEnum,
+    ProjectSetting: 'PROJECT_SETTING' as ObjectTypeEnum,
+    VerificationSubmission: 'VERIFICATION_SUBMISSION' as ObjectTypeEnum,
+    CertifiedUserPassingRecord: 'CERTIFIED_USER_PASSING_RECORD' as ObjectTypeEnum,
+    Forum: 'FORUM' as ObjectTypeEnum,
+    Thread: 'THREAD' as ObjectTypeEnum,
+    Reply: 'REPLY' as ObjectTypeEnum,
+    FormGroup: 'FORM_GROUP' as ObjectTypeEnum,
+    Organization: 'ORGANIZATION' as ObjectTypeEnum,
+    FormData: 'FORM_DATA' as ObjectTypeEnum,
+    EntityView: 'ENTITY_VIEW' as ObjectTypeEnum,
+    UserProfile: 'USER_PROFILE' as ObjectTypeEnum,
+    DataAccessRequest: 'DATA_ACCESS_REQUEST' as ObjectTypeEnum,
+    DataAccessSubmission: 'DATA_ACCESS_SUBMISSION' as ObjectTypeEnum,
+    DataAccessSubmissionStatus: 'DATA_ACCESS_SUBMISSION_STATUS' as ObjectTypeEnum,
+    MembershipInvitation: 'MEMBERSHIP_INVITATION' as ObjectTypeEnum,
+    JsonSchema: 'JSON_SCHEMA' as ObjectTypeEnum,
+    JsonSchemaDependant: 'JSON_SCHEMA_DEPENDANT' as ObjectTypeEnum,
+    Dataset: 'DATASET' as ObjectTypeEnum,
+    DatasetCollection: 'DATASET_COLLECTION' as ObjectTypeEnum,
+    ThreadView: 'THREAD_VIEW' as ObjectTypeEnum,
+    MaterializedView: 'MATERIALIZED_VIEW' as ObjectTypeEnum,
+    VirtualTable: 'VIRTUAL_TABLE' as ObjectTypeEnum,
+    TableStatusEvent: 'TABLE_STATUS_EVENT' as ObjectTypeEnum,
+    DataAccessSubmissionEvent: 'DATA_ACCESS_SUBMISSION_EVENT' as ObjectTypeEnum,
+    FileEvent: 'FILE_EVENT' as ObjectTypeEnum,
+    QueryCacheHit: 'QUERY_CACHE_HIT' as ObjectTypeEnum,
+    ProjectStorageEvent: 'PROJECT_STORAGE_EVENT' as ObjectTypeEnum,
+    ReplicatedEvent: 'REPLICATED_EVENT' as ObjectTypeEnum,
+    Portal: 'PORTAL' as ObjectTypeEnum,
+    OauthClient: 'OAUTH_CLIENT' as ObjectTypeEnum,
+  };
+  export type FileEventTypeEnum = 'FILE_DOWNLOAD' | 'FILE_UPLOAD';
+  export const FileEventTypeEnum = {
+    FileDownload: 'FILE_DOWNLOAD' as FileEventTypeEnum,
+    FileUpload: 'FILE_UPLOAD' as FileEventTypeEnum,
+  };
+  export type AssociateTypeEnum =
+    | 'FileEntity'
+    | 'TableEntity'
+    | 'WikiAttachment'
+    | 'WikiMarkdown'
+    | 'UserProfileAttachment'
+    | 'MessageAttachment'
+    | 'TeamAttachment'
+    | 'SubmissionAttachment'
+    | 'VerificationSubmission'
+    | 'AccessRequirementAttachment'
+    | 'DataAccessRequestAttachment'
+    | 'DataAccessSubmissionAttachment'
+    | 'FormData';
+  export const AssociateTypeEnum = {
+    FileEntity: 'FileEntity' as AssociateTypeEnum,
+    TableEntity: 'TableEntity' as AssociateTypeEnum,
+    WikiAttachment: 'WikiAttachment' as AssociateTypeEnum,
+    WikiMarkdown: 'WikiMarkdown' as AssociateTypeEnum,
+    UserProfileAttachment: 'UserProfileAttachment' as AssociateTypeEnum,
+    MessageAttachment: 'MessageAttachment' as AssociateTypeEnum,
+    TeamAttachment: 'TeamAttachment' as AssociateTypeEnum,
+    SubmissionAttachment: 'SubmissionAttachment' as AssociateTypeEnum,
+    VerificationSubmission: 'VerificationSubmission' as AssociateTypeEnum,
+    AccessRequirementAttachment: 'AccessRequirementAttachment' as AssociateTypeEnum,
+    DataAccessRequestAttachment: 'DataAccessRequestAttachment' as AssociateTypeEnum,
+    DataAccessSubmissionAttachment: 'DataAccessSubmissionAttachment' as AssociateTypeEnum,
+    FormData: 'FormData' as AssociateTypeEnum,
   };
 }

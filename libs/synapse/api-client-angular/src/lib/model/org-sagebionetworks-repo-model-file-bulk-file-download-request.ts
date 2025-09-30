@@ -18,13 +18,24 @@ export interface OrgSagebionetworksRepoModelFileBulkFileDownloadRequest {
    * The files to be included in the download.
    */
   requestedFiles?: Array<OrgSagebionetworksRepoModelFileFileHandleAssociation>;
+  /**
+   * Optional parameter to set the name of the resulting zip file.
+   */
   zipFileName?: string;
-  zipFileFormat?: string;
+  /**
+   * Enumeration of all possible zip file formats produced by bulk file download worker.
+   */
+  zipFileFormat?: OrgSagebionetworksRepoModelFileBulkFileDownloadRequest.ZipFileFormatEnum;
 }
 export namespace OrgSagebionetworksRepoModelFileBulkFileDownloadRequest {
   export type ConcreteTypeEnum = 'org.sagebionetworks.repo.model.file.BulkFileDownloadRequest';
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelFileBulkFileDownloadRequest:
       'org.sagebionetworks.repo.model.file.BulkFileDownloadRequest' as ConcreteTypeEnum,
+  };
+  export type ZipFileFormatEnum = 'CommandLineCache' | 'Flat';
+  export const ZipFileFormatEnum = {
+    CommandLineCache: 'CommandLineCache' as ZipFileFormatEnum,
+    Flat: 'Flat' as ZipFileFormatEnum,
   };
 }

@@ -14,8 +14,17 @@ import { OrgSagebionetworksRepoModelTableFacetColumnResultValueCount } from './o
  */
 export interface OrgSagebionetworksRepoModelTableFacetColumnResultValues {
   concreteType: OrgSagebionetworksRepoModelTableFacetColumnResultValues.ConcreteTypeEnum;
+  /**
+   * The name of the faceted column
+   */
   columnName?: string;
-  facetType?: string;
+  /**
+   * Set to one of the enumerated values to indicate a column should be treated as a facet
+   */
+  facetType?: OrgSagebionetworksRepoModelTableFacetColumnResultValues.FacetTypeEnum;
+  /**
+   * When present, these results represent a sub-column identified by its jsonPath.  Note: The ColumnName will be the name of the root JSON column.
+   */
   jsonPath?: string;
   /**
    * The list of QueryFacetResultValue that contain frequency counts for its most frequent values
@@ -27,5 +36,10 @@ export namespace OrgSagebionetworksRepoModelTableFacetColumnResultValues {
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelTableFacetColumnResultValues:
       'org.sagebionetworks.repo.model.table.FacetColumnResultValues' as ConcreteTypeEnum,
+  };
+  export type FacetTypeEnum = 'enumeration' | 'range';
+  export const FacetTypeEnum = {
+    Enumeration: 'enumeration' as FacetTypeEnum,
+    Range: 'range' as FacetTypeEnum,
   };
 }

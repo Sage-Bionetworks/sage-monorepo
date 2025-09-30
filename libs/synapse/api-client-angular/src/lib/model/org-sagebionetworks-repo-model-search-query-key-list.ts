@@ -12,6 +12,9 @@
  * JSON schema for a faceted key-to-string list pair.
  */
 export interface OrgSagebionetworksRepoModelSearchQueryKeyList {
+  /**
+   * The facet name
+   */
   key?: string;
   /**
    * The value list

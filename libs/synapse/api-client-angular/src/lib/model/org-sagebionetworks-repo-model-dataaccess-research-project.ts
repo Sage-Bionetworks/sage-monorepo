@@ -12,14 +12,44 @@
  * A research project describes a project at an institution that used a controlled data set for the purposes that are stated in the Intended Data Use Statement.
  */
 export interface OrgSagebionetworksRepoModelDataaccessResearchProject {
+  /**
+   * The unique immutable ID for this research project.
+   */
   id?: string;
+  /**
+   * The ID of the Access Requirement which this research project needs to meet to gain access to the data.
+   */
   accessRequirementId?: string;
+  /**
+   * The institution that this research project belongs to.
+   */
   institution?: string;
+  /**
+   * The person who is leading the project.
+   */
   projectLead?: string;
+  /**
+   * A few short paragraph that explains how the controlled data will be used.
+   */
   intendedDataUseStatement?: string;
+  /**
+   * The date this research project was created.
+   */
   createdOn?: string;
+  /**
+   * The date this research project was last modified.
+   */
   modifiedOn?: string;
+  /**
+   * The ID of the user that created this research project.
+   */
   createdBy?: string;
+  /**
+   * The ID of the user that last modified this research project.
+   */
   modifiedBy?: string;
+  /**
+   * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time a research project is updated it is used to detect when a client\'s current representation of a research project is out-of-date.
+   */
   etag?: string;
 }

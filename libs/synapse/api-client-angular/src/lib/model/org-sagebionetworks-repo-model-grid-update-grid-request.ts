@@ -13,7 +13,13 @@ import { OrgSagebionetworksRepoModelGridSqlUpdate } from './org-sagebionetworks-
  * Request to update the grid by executing a SQL update command.
  */
 export interface OrgSagebionetworksRepoModelGridUpdateGridRequest {
+  /**
+   * The grid session ID.
+   */
   gridSessionId?: string;
+  /**
+   * Identifies the replica that will be establishing the websocket connection.
+   */
   replicaId?: number;
   update?: OrgSagebionetworksRepoModelGridSqlUpdate;
 }

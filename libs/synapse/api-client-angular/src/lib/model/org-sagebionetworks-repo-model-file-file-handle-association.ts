@@ -12,7 +12,47 @@
  * Describes an association of a FileHandle with another object.
  */
 export interface OrgSagebionetworksRepoModelFileFileHandleAssociation {
+  /**
+   * The ID of the FileHandle.
+   */
   fileHandleId?: string;
+  /**
+   * The ID of the object associated with the file
+   */
   associateObjectId?: string;
-  associateObjectType?: string;
+  /**
+   * Enumeration of all possible objects types that can be associated with a file.
+   */
+  associateObjectType?: OrgSagebionetworksRepoModelFileFileHandleAssociation.AssociateObjectTypeEnum;
+}
+export namespace OrgSagebionetworksRepoModelFileFileHandleAssociation {
+  export type AssociateObjectTypeEnum =
+    | 'FileEntity'
+    | 'TableEntity'
+    | 'WikiAttachment'
+    | 'WikiMarkdown'
+    | 'UserProfileAttachment'
+    | 'MessageAttachment'
+    | 'TeamAttachment'
+    | 'SubmissionAttachment'
+    | 'VerificationSubmission'
+    | 'AccessRequirementAttachment'
+    | 'DataAccessRequestAttachment'
+    | 'DataAccessSubmissionAttachment'
+    | 'FormData';
+  export const AssociateObjectTypeEnum = {
+    FileEntity: 'FileEntity' as AssociateObjectTypeEnum,
+    TableEntity: 'TableEntity' as AssociateObjectTypeEnum,
+    WikiAttachment: 'WikiAttachment' as AssociateObjectTypeEnum,
+    WikiMarkdown: 'WikiMarkdown' as AssociateObjectTypeEnum,
+    UserProfileAttachment: 'UserProfileAttachment' as AssociateObjectTypeEnum,
+    MessageAttachment: 'MessageAttachment' as AssociateObjectTypeEnum,
+    TeamAttachment: 'TeamAttachment' as AssociateObjectTypeEnum,
+    SubmissionAttachment: 'SubmissionAttachment' as AssociateObjectTypeEnum,
+    VerificationSubmission: 'VerificationSubmission' as AssociateObjectTypeEnum,
+    AccessRequirementAttachment: 'AccessRequirementAttachment' as AssociateObjectTypeEnum,
+    DataAccessRequestAttachment: 'DataAccessRequestAttachment' as AssociateObjectTypeEnum,
+    DataAccessSubmissionAttachment: 'DataAccessSubmissionAttachment' as AssociateObjectTypeEnum,
+    FormData: 'FormData' as AssociateObjectTypeEnum,
+  };
 }

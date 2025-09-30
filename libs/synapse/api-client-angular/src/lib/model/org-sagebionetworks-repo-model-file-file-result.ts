@@ -13,9 +13,28 @@ import { OrgSagebionetworksRepoModelFileFileHandle } from './org-sagebionetworks
  * Result of a single File request.
  */
 export interface OrgSagebionetworksRepoModelFileFileResult {
+  /**
+   * The ID of the requested FileHandle.
+   */
   fileHandleId?: string;
   fileHandle?: OrgSagebionetworksRepoModelFileFileHandle;
+  /**
+   * A pre-signed URL to download the requested file. Null if the request.includePreSignedURLs=false.
+   */
   preSignedURL?: string;
+  /**
+   * A pre-signed URL to download the preview of requested file. Null if the request.includePreviewPreSignedURLs=false.
+   */
   previewPreSignedURL?: string;
-  failureCode?: string;
+  /**
+   * Failure code for a files that cannot be downloaded.
+   */
+  failureCode?: OrgSagebionetworksRepoModelFileFileResult.FailureCodeEnum;
+}
+export namespace OrgSagebionetworksRepoModelFileFileResult {
+  export type FailureCodeEnum = 'NOT_FOUND' | 'UNAUTHORIZED';
+  export const FailureCodeEnum = {
+    NotFound: 'NOT_FOUND' as FailureCodeEnum,
+    Unauthorized: 'UNAUTHORIZED' as FailureCodeEnum,
+  };
 }

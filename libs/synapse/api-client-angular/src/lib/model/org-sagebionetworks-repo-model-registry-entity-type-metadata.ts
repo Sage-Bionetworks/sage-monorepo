@@ -12,10 +12,25 @@
  * Metadata about entities
  */
 export interface OrgSagebionetworksRepoModelRegistryEntityTypeMetadata {
+  /**
+   * The Name of this entity.
+   */
   name: string;
+  /**
+   * The display name of this entity.
+   */
   displayName?: string;
+  /**
+   * The class name of this entity.
+   */
   className?: string;
-  entityType?: string;
+  /**
+   * Type of the Entity
+   */
+  entityType?: OrgSagebionetworksRepoModelRegistryEntityTypeMetadata.EntityTypeEnum;
+  /**
+   * The full path of the entity schema.
+   */
   defaultParentPath?: string;
   /**
    * The full path of the entity schema.
@@ -25,4 +40,35 @@ export interface OrgSagebionetworksRepoModelRegistryEntityTypeMetadata {
    * The list of aliases that can be used to look an entity type with a query.
    */
   aliases?: Array<string>;
+}
+export namespace OrgSagebionetworksRepoModelRegistryEntityTypeMetadata {
+  export type EntityTypeEnum =
+    | 'project'
+    | 'folder'
+    | 'file'
+    | 'table'
+    | 'link'
+    | 'entityview'
+    | 'dockerrepo'
+    | 'submissionview'
+    | 'dataset'
+    | 'datasetcollection'
+    | 'materializedview'
+    | 'virtualtable'
+    | 'recordset';
+  export const EntityTypeEnum = {
+    Project: 'project' as EntityTypeEnum,
+    Folder: 'folder' as EntityTypeEnum,
+    File: 'file' as EntityTypeEnum,
+    Table: 'table' as EntityTypeEnum,
+    Link: 'link' as EntityTypeEnum,
+    Entityview: 'entityview' as EntityTypeEnum,
+    Dockerrepo: 'dockerrepo' as EntityTypeEnum,
+    Submissionview: 'submissionview' as EntityTypeEnum,
+    Dataset: 'dataset' as EntityTypeEnum,
+    Datasetcollection: 'datasetcollection' as EntityTypeEnum,
+    Materializedview: 'materializedview' as EntityTypeEnum,
+    Virtualtable: 'virtualtable' as EntityTypeEnum,
+    Recordset: 'recordset' as EntityTypeEnum,
+  };
 }

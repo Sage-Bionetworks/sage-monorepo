@@ -12,15 +12,48 @@
  * The permission a User has for a given Evaluation
  */
 export interface OrgSagebionetworksEvaluationModelUserEvaluationPermissions {
+  /**
+   * Can the user change the permissions of this evaluation?
+   */
   canChangePermissions?: boolean;
+  /**
+   * Can the user view this evaluation?
+   */
   canView?: boolean;
+  /**
+   * Is this evaluation considered public?
+   */
   canPublicRead?: boolean;
+  /**
+   * Can the user edit this evaluation?
+   */
   canEdit?: boolean;
+  /**
+   * Can the user delete this evaluation?
+   */
   canDelete?: boolean;
+  /**
+   * This field is deprecated and should not being used.
+   */
   canParticipate?: boolean;
+  /**
+   * Can the user submit to this evaluation?
+   */
   canSubmit?: boolean;
+  /**
+   * Can the user view private Annotations on SubmissionStatuses for this evaluation?
+   */
   canViewPrivateSubmissionStatusAnnotations?: boolean;
+  /**
+   * Can the user update SubmissionStatuses for this evaluation?
+   */
   canEditSubmissionStatuses?: boolean;
+  /**
+   * Can the user view delete Submissions from this evaluation?
+   */
   canDeleteSubmissions?: boolean;
+  /**
+   * The principal ID of the evaluation\'s owner (i.e. the evaluation\'s \'createdBy\')
+   */
   ownerPrincipalId?: number;
 }

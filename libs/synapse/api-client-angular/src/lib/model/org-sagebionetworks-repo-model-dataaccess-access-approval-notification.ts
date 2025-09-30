@@ -12,8 +12,28 @@
  * Information about the a notification for an access approval.
  */
 export interface OrgSagebionetworksRepoModelDataaccessAccessApprovalNotification {
-  notificationType?: string;
+  notificationType?: OrgSagebionetworksRepoModelDataaccessAccessApprovalNotification.NotificationTypeEnum;
+  /**
+   * The id of the access requirement.
+   */
   requirementId?: number;
+  /**
+   * The id of the recipient.
+   */
   recipientId?: number;
+  /**
+   * When the notification was sent.
+   */
   sentOn?: string;
+}
+export namespace OrgSagebionetworksRepoModelDataaccessAccessApprovalNotification {
+  export type NotificationTypeEnum =
+    | 'REVOCATION'
+    | 'FIRST_RENEWAL_REMINDER'
+    | 'SECOND_RENEWAL_REMINDER';
+  export const NotificationTypeEnum = {
+    Revocation: 'REVOCATION' as NotificationTypeEnum,
+    FirstRenewalReminder: 'FIRST_RENEWAL_REMINDER' as NotificationTypeEnum,
+    SecondRenewalReminder: 'SECOND_RENEWAL_REMINDER' as NotificationTypeEnum,
+  };
 }

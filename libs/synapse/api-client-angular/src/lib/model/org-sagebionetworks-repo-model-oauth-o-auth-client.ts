@@ -12,21 +12,66 @@
  * OAuth 2.0 Client metadata described in <a href=\"https://openid.net/specs/openid-connect-registration-1_0.html#ClientMetadata\">OpenID Connect Core 1.0 Client Metadata</a>
  */
 export interface OrgSagebionetworksRepoModelOauthOAuthClient {
+  /**
+   * The unique ID for the OAuth client, created by Synapse
+   */
   client_id?: string;
+  /**
+   * Name of the Client to be presented to the End-User.
+   */
   client_name?: string;
   /**
    * Array of Redirection URI values used by the Client. One of these registered Redirection URI values MUST exactly match the redirect_uri parameter value used in each Authorization Request. If the \'sector_identifier_uri\' is provided then the URIs in this list must be in the list of URIs in the JSON document referenced by the sector_identifier_uri.
    */
   redirect_uris?: Array<string>;
+  /**
+   * Initially false, to verify your client please see the <a href=\"https://help.synapse.org/docs/Using-Synapse-as-an-OAuth-Server.2048327904.html\">Synapse OAuth Server Documentation</a>
+   */
   verified?: boolean;
+  /**
+   * URL of the home page of the Client. The value of this field MUST point to a valid Web page.
+   */
   client_uri?: string;
+  /**
+   * URL that the Relying Party Client provides to the End-User to read about the how the profile data will be used. The value of this field MUST point to a valid web page.
+   */
   policy_uri?: string;
+  /**
+   * URL that the Relying Party Client provides to the End-User to read about the Relying Party\'s terms of service. The value of this field MUST point to a valid web page.
+   */
   tos_uri?: string;
+  /**
+   * URL using the https scheme to be used in calculating Pseudonymous Identifiers by Synapse. The URL must reference a file with a single JSON array of redirect_uri values. Synapse will utilize the sector_identifier_uri value provided in the Subject Identifier calculation for pairwise identifiers.
+   */
   sector_identifier_uri?: string;
+  /**
+   * The sector identified, computed by the server from the redirect_uris and sector_identifier_uri fields as described in <a href=\"https://openid.net/specs/openid-connect-core-1_0.html#PairwiseAlg\">OpenID Connect Core 1.0 Pairwise Identifier Algorithm</a>
+   */
   sector_identifier?: string;
-  userinfo_signed_response_alg?: string;
+  /**
+   * The JWT signing algorithms supported by Synapse
+   */
+  userinfo_signed_response_alg?: OrgSagebionetworksRepoModelOauthOAuthClient.UserinfoSignedResponseAlgEnum;
+  /**
+   * The date this client was created.
+   */
   createdOn?: string;
+  /**
+   * The date this client was last modified.
+   */
   modifiedOn?: string;
+  /**
+   * The ID of the user that created this client.
+   */
   createdBy?: string;
+  /**
+   * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time a client is updated it is used to detect when a client\'s current representation of an entity is out-of-date.
+   */
   etag?: string;
+}
+export namespace OrgSagebionetworksRepoModelOauthOAuthClient {
+  export type UserinfoSignedResponseAlgEnum = 'RS256';
+  export const UserinfoSignedResponseAlgEnum = {
+    Rs256: 'RS256' as UserinfoSignedResponseAlgEnum,
+  };
 }

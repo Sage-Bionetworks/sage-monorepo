@@ -12,6 +12,12 @@
  * The metadata of a file attached to a Verification Submission
  */
 export interface OrgSagebionetworksRepoModelVerificationAttachmentMetadata {
+  /**
+   * The name of a file
+   */
   fileName?: string;
+  /**
+   * The identifier of a file
+   */
   id?: string;
 }

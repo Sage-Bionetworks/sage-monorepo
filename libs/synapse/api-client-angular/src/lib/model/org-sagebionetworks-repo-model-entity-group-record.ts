@@ -14,5 +14,8 @@ import { OrgSagebionetworksRepoModelReference } from './org-sagebionetworks-repo
  */
 export interface OrgSagebionetworksRepoModelEntityGroupRecord {
   entityReference?: OrgSagebionetworksRepoModelReference;
+  /**
+   * A note for this record
+   */
   note?: string;
 }

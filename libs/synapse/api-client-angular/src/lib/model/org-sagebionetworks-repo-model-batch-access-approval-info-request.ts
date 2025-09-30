@@ -12,6 +12,9 @@
  * Request for a batch of AccessApprovalInfo.
  */
 export interface OrgSagebionetworksRepoModelBatchAccessApprovalInfoRequest {
+  /**
+   * The ID of the user.
+   */
   userId?: string;
   /**
    * The ID of the access requirements.

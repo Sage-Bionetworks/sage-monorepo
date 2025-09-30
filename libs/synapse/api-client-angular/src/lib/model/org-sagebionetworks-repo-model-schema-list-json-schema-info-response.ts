@@ -14,5 +14,8 @@ import { OrgSagebionetworksRepoModelSchemaJsonSchemaInfo } from './org-sagebione
  */
 export interface OrgSagebionetworksRepoModelSchemaListJsonSchemaInfoResponse {
   page?: Array<OrgSagebionetworksRepoModelSchemaJsonSchemaInfo>;
+  /**
+   * Forward this token to get the next page of results.
+   */
   nextPageToken?: string;
 }

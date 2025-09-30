@@ -17,5 +17,8 @@ export interface OrgSagebionetworksRepoModelWebhookListUserWebhooksResponse {
    * The Webhooks belonging to a given user.
    */
   page?: Array<OrgSagebionetworksRepoModelWebhookWebhook>;
+  /**
+   * Forward this token to get the next page of results.
+   */
   nextPageToken?: string;
 }

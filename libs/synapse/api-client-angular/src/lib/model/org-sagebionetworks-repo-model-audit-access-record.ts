@@ -12,27 +12,96 @@
  * Data recored from a single web-services methods.
  */
 export interface OrgSagebionetworksRepoModelAuditAccessRecord {
+  /**
+   * The distinct ID assigned to this call.
+   */
   sessionId?: string;
+  /**
+   * The timestamp of the request, in UTC milliseconds
+   */
   timestamp?: number;
+  /**
+   * The ID of the user making the calls
+   */
   userId?: number;
+  /**
+   * The HTTP method
+   */
   method?: string;
+  /**
+   * The URL of the request
+   */
   requestURL?: string;
+  /**
+   * Identifies the software agent that made the call. Extracted from the User-Agent header
+   */
   userAgent?: string;
+  /**
+   * The domain name of the server (for virtual hosting), and the TCP port number on which the server is listening
+   */
   host?: string;
+  /**
+   * Initiates a request for cross-origin resource sharing (asks server for an \'Access-Control-Allow-Origin\' response header)
+   */
   origin?: string;
+  /**
+   * The X-Forwarded-For (XFF) HTTP header field is a de facto standard for identifying the originating IP address of a client connecting to a web server through an HTTP proxy or load balancer.
+   */
   xForwardedFor?: string;
+  /**
+   * Informs the server of proxies through which the request was sent
+   */
   via?: string;
+  /**
+   * The ID of the thread that accepted this call
+   */
   threadId?: number;
+  /**
+   * The elapse time in MS for the call
+   */
   elapseMS?: number;
+  /**
+   * Did the call complete without an error?
+   */
   success?: boolean;
+  /**
+   * This string identifies the stack where the request originated
+   */
   stack?: string;
+  /**
+   * This string identifies the stack instance where the request originated.  This is used for partitioning.
+   */
   instance?: string;
+  /**
+   * This string identifies the stack instance where the request originated. This is used for partitioning.
+   */
   date?: string;
+  /**
+   * The VMID of the JVM that processed this request. A VMID is a identifier that is unique across all Java virtual machines.
+   */
   vmId?: string;
+  /**
+   * The ID of the returned object when it exits.
+   */
   returnObjectId?: string;
+  /**
+   * The query string of the request.
+   */
   queryString?: string;
+  /**
+   * The resulting HTTP response code.
+   */
   responseStatus?: number;
+  /**
+   * The ID of the OAuth Client making the request
+   */
   oauthClientId?: string;
+  /**
+   * The username used in the authorization header of the request, if the request used basic authentication.
+   */
   basicAuthUsername?: string;
+  /**
+   * The authentication method
+   */
   authenticationMethod?: string;
 }

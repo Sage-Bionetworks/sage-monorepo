@@ -12,6 +12,12 @@
  * Request to register a custom AWS agent with Synapse.  Currently, only internal users are authorized to register custom agents.
  */
 export interface OrgSagebionetworksRepoModelAgentAgentRegistrationRequest {
+  /**
+   * The AWS issued agent ID of the agent to be registered.
+   */
   awsAgentId?: string;
+  /**
+   * The AWS issued agent alias ID of the agent alias to be used. Optional. If an alias is not provided then \'TSTALIASID\' will be used.
+   */
   awsAliasId?: string;
 }

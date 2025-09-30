@@ -13,12 +13,32 @@ import { OrgSagebionetworksRepoModelSearchFacetConstraint } from './org-sagebion
  * JSON schema for a continuous or literal value Facet found in the search results.
  */
 export interface OrgSagebionetworksRepoModelSearchFacet {
+  /**
+   * The name of this facet
+   */
   name?: string;
-  type?: string;
+  /**
+   * The type of this facet
+   */
+  type?: OrgSagebionetworksRepoModelSearchFacet.TypeEnum;
+  /**
+   * The minimum value of the facet values found, if continuous
+   */
   min?: number;
+  /**
+   * The maximum value of the facet values found, if continuous
+   */
   max?: number;
   /**
    * The list of constraints for this facet
    */
   constraints?: Array<OrgSagebionetworksRepoModelSearchFacetConstraint>;
+}
+export namespace OrgSagebionetworksRepoModelSearchFacet {
+  export type TypeEnum = 'LITERAL' | 'DATE' | 'CONTINUOUS';
+  export const TypeEnum = {
+    Literal: 'LITERAL' as TypeEnum,
+    Date: 'DATE' as TypeEnum,
+    Continuous: 'CONTINUOUS' as TypeEnum,
+  };
 }

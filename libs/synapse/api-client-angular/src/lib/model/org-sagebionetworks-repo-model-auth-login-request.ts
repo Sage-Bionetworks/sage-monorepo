@@ -12,7 +12,16 @@
  * Used to login via username, password, and previous authentication receipt.
  */
 export interface OrgSagebionetworksRepoModelAuthLoginRequest {
+  /**
+   * The user\'s username
+   */
   username?: string;
+  /**
+   * The user\'s password
+   */
   password?: string;
+  /**
+   * Optional, but highly recommended. The most recent authentication receipt given to the last success login from this machine, using this client. Having this allows you to bypass throttling on consecutive authentication attempts with a wrong password.
+   */
   authenticationReceipt?: string;
 }

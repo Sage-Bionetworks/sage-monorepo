@@ -12,9 +12,33 @@
  * The state of a verification submission
  */
 export interface OrgSagebionetworksRepoModelVerificationVerificationState {
+  /**
+   * The date and time this object was created
+   */
   createdOn?: string;
+  /**
+   * The principal ID of the user who created this object
+   */
   createdBy?: string;
-  state?: string;
+  /**
+   * The enumeration of possible verification states.
+   */
+  state?: OrgSagebionetworksRepoModelVerificationVerificationState.StateEnum;
+  /**
+   * The reason for putting the verification submission in this state.
+   */
   reason?: string;
+  /**
+   * Additional notes that can be set by the ACT team and that is not exposed to the end user.
+   */
   notes?: string;
+}
+export namespace OrgSagebionetworksRepoModelVerificationVerificationState {
+  export type StateEnum = 'SUBMITTED' | 'APPROVED' | 'REJECTED' | 'SUSPENDED';
+  export const StateEnum = {
+    Submitted: 'SUBMITTED' as StateEnum,
+    Approved: 'APPROVED' as StateEnum,
+    Rejected: 'REJECTED' as StateEnum,
+    Suspended: 'SUSPENDED' as StateEnum,
+  };
 }

@@ -12,7 +12,16 @@
  * JSON schema for a log entry
  */
 export interface OrgSagebionetworksRepoModelLogEntry {
+  /**
+   * The label for the message to log, which determines grouping in cloudwatch.
+   */
   label?: string;
+  /**
+   * The message to log.
+   */
   message?: string;
+  /**
+   * The optional stacktrace to log.
+   */
   stacktrace?: string;
 }

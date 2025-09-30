@@ -12,25 +12,73 @@
  * A materialized view is a type of table that is automatically built from a Synapse SQL query. Its content is persisted. The SQL of the materialized view may contain JOIN clauses on multiple tables.
  */
 export interface OrgSagebionetworksRepoModelTableMaterializedView {
+  /**
+   * The name of this entity.  Must be 256 characters or less. Names may only contain: letters, numbers, spaces, underscores, hyphens, periods, plus signs, apostrophes, and parentheses
+   */
   name?: string;
+  /**
+   * The description of this entity.  Must be 1000 characters or less.
+   */
   description?: string;
+  /**
+   * The unique immutable ID for this entity.  A new ID will be generated for new Entities.  Once issued, this ID is guaranteed to never change or be re-issued
+   */
   id?: string;
+  /**
+   * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client\'s current representation of an entity is out-of-date.
+   */
   etag?: string;
+  /**
+   * The date this entity was created.
+   */
   createdOn?: string;
+  /**
+   * The date this entity was last modified.
+   */
   modifiedOn?: string;
+  /**
+   * The ID of the user that created this entity.
+   */
   createdBy?: string;
+  /**
+   * The ID of the user that last modified this entity.
+   */
   modifiedBy?: string;
+  /**
+   * The ID of the Entity that is the parent of this Entity.
+   */
   parentId?: string;
+  /**
+   * Indicates which implementation of Entity this object represents.  The value is the fully qualified class name, e.g. org.sagebionetworks.repo.model.FileEntity.
+   */
   concreteType: OrgSagebionetworksRepoModelTableMaterializedView.ConcreteTypeEnum;
+  /**
+   * The version number issued to this version on the object.
+   */
   versionNumber?: number;
+  /**
+   * The version label for this entity
+   */
   versionLabel?: string;
+  /**
+   * The version comment for this entity
+   */
   versionComment?: string;
+  /**
+   * If this is the latest version of the object.
+   */
   isLatestVersion?: boolean;
   /**
    * The columns of a materialized view are dynamic based on the select statement of the definingSQL. This list of columnIds is for read only, and will be ignored for create and update operations.
    */
   columnIds?: Array<string>;
+  /**
+   * When creating or updating a table or view specifies if full text search should be enabled.  Note that enabling full text search might slow down the indexing of the table or view.
+   */
   isSearchEnabled?: boolean;
+  /**
+   * The synapse SQL statement that defines the data in the materialized view. The SQL may contain JOIN/UNION clauses on multiple tables.
+   */
   definingSQL?: string;
 }
 export namespace OrgSagebionetworksRepoModelTableMaterializedView {

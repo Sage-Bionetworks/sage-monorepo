@@ -12,6 +12,12 @@
  * Used to login via username and password
  */
 export interface OrgSagebionetworksRepoModelAuthLoginCredentials {
+  /**
+   * The user\'s email
+   */
   email?: string;
+  /**
+   * The user\'s password
+   */
   password?: string;
 }

@@ -13,10 +13,25 @@ import { OrgSagebionetworksEvaluationModelEvaluationRoundLimit } from './org-sag
  * Defines the duration of a round and sets limits for maximum submissions per round
  */
 export interface OrgSagebionetworksEvaluationModelEvaluationRound {
+  /**
+   * The id of the EvaluationRound
+   */
   id?: string;
+  /**
+   * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. The eTag changes every time an EvaluationRound is updated; it is used to detect when a client\'s copy of an Evaluation is out-of-date.
+   */
   etag?: string;
+  /**
+   * The Evaluation to which this EvaluationRound belongs
+   */
   evaluationId: string;
+  /**
+   * The date/time at which the first round begins.
+   */
   roundStart: string;
+  /**
+   * The date/time at which the round ends.
+   */
   roundEnd: string;
   /**
    * Optional. Sets limits for maximum submissions in this round.

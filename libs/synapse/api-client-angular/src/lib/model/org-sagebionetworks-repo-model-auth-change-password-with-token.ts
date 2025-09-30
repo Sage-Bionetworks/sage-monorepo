@@ -13,7 +13,13 @@ import { OrgSagebionetworksRepoModelAuthPasswordResetSignedToken } from './org-s
  * Change user account\'s password by providing a token issued by the server
  */
 export interface OrgSagebionetworksRepoModelAuthChangePasswordWithToken {
+  /**
+   * The new password
+   */
   newPassword?: string;
+  /**
+   * Indicates which implementation of PasswordChangeInterface this object represents. Valid Values: org.sagebionetworks.repo.model.auth.ChangePasswordWithToken org.sagebionetworks.repo.model.auth.ChangePasswordWithCurrentPassword
+   */
   concreteType: OrgSagebionetworksRepoModelAuthChangePasswordWithToken.ConcreteTypeEnum;
   passwordChangeToken?: OrgSagebionetworksRepoModelAuthPasswordResetSignedToken;
 }

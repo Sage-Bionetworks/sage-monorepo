@@ -12,6 +12,12 @@
  * A request to revoke access of an accessor group. Accessors will be group by submitter and access requirement.
  */
 export interface OrgSagebionetworksRepoModelDataaccessAccessorGroupRevokeRequest {
+  /**
+   * The ID of an AccessRequirement.
+   */
   accessRequirementId?: string;
+  /**
+   * The ID of the submitter.
+   */
   submitterId?: string;
 }

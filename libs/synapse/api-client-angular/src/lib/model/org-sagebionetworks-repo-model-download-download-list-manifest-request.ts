@@ -13,6 +13,9 @@ import { OrgSagebionetworksRepoModelTableCsvTableDescriptor } from './org-sagebi
  * Start an asynchronous job to generate a metadata manifest CSV of the available files on the user\'s download list.
  */
 export interface OrgSagebionetworksRepoModelDownloadDownloadListManifestRequest {
+  /**
+   * Required. For this type the value should be: \'org.sagebionetworks.repo.model.download.DownloadListManifestRequest\'
+   */
   concreteType: OrgSagebionetworksRepoModelDownloadDownloadListManifestRequest.ConcreteTypeEnum;
   csvTableDescriptor?: OrgSagebionetworksRepoModelTableCsvTableDescriptor;
 }

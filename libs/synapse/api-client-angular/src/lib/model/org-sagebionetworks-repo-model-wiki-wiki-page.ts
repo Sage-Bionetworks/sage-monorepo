@@ -12,14 +12,41 @@
  * The WikiPage model object represent a single user managed wiki page.
  */
 export interface OrgSagebionetworksRepoModelWikiWikiPage {
+  /**
+   * The ID of this wiki page.
+   */
   id?: string;
+  /**
+   * The etag of this object
+   */
   etag?: string;
+  /**
+   * The timestamp when this page was created.
+   */
   createdOn?: string;
+  /**
+   * The id of the user that created this page.
+   */
   createdBy?: string;
+  /**
+   * The timestamp when this page was last modified.
+   */
   modifiedOn?: string;
+  /**
+   * The id of the user that last modified this page.
+   */
   modifiedBy?: string;
+  /**
+   * When set, the WikiPage is a sub-page of the indicated parent WikiPage.
+   */
   parentWikiId?: string;
+  /**
+   * The title of this page.
+   */
   title?: string;
+  /**
+   * The markdown for this wiki page.
+   */
   markdown?: string;
   /**
    * The list of attachment file handle ids of this page.

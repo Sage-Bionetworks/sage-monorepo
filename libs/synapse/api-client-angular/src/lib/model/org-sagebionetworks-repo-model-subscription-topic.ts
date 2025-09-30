@@ -12,6 +12,25 @@
  * The model object represents a topic of subscription.
  */
 export interface OrgSagebionetworksRepoModelSubscriptionTopic {
+  /**
+   * The ID of the object that could be subscribed
+   */
   objectId?: string;
-  objectType?: string;
+  /**
+   * The types of object that can be subscribed.
+   */
+  objectType?: OrgSagebionetworksRepoModelSubscriptionTopic.ObjectTypeEnum;
+}
+export namespace OrgSagebionetworksRepoModelSubscriptionTopic {
+  export type ObjectTypeEnum =
+    | 'FORUM'
+    | 'THREAD'
+    | 'DATA_ACCESS_SUBMISSION'
+    | 'DATA_ACCESS_SUBMISSION_STATUS';
+  export const ObjectTypeEnum = {
+    Forum: 'FORUM' as ObjectTypeEnum,
+    Thread: 'THREAD' as ObjectTypeEnum,
+    DataAccessSubmission: 'DATA_ACCESS_SUBMISSION' as ObjectTypeEnum,
+    DataAccessSubmissionStatus: 'DATA_ACCESS_SUBMISSION_STATUS' as ObjectTypeEnum,
+  };
 }

@@ -12,13 +12,47 @@
  * The result item in an Access Approval search
  */
 export interface OrgSagebionetworksRepoModelDataaccessAccessApprovalSearchResult {
+  /**
+   * The ID of the access approval
+   */
   id?: string;
+  /**
+   * The ID of the access requirement
+   */
   accessRequirementId?: string;
+  /**
+   * The version of the access requirement under which this approval was created
+   */
   accessRequirementVersion?: string;
+  /**
+   * The name of the access requirement
+   */
   accessRequirementName?: string;
+  /**
+   * The principal ID of the person who created the submission.
+   */
   submitterId?: string;
+  /**
+   * The principal ID of the user that last modified the approval
+   */
   reviewerId?: string;
-  state?: string;
+  /**
+   * JSON enum for the state of AccessApproval
+   */
+  state?: OrgSagebionetworksRepoModelDataaccessAccessApprovalSearchResult.StateEnum;
+  /**
+   * The modification date of the approval
+   */
   modifiedOn?: string;
+  /**
+   * The date this object will be expired.
+   */
   expiredOn?: string;
+}
+export namespace OrgSagebionetworksRepoModelDataaccessAccessApprovalSearchResult {
+  export type StateEnum = 'APPROVED' | 'REVOKED';
+  export const StateEnum = {
+    Approved: 'APPROVED' as StateEnum,
+    Revoked: 'REVOKED' as StateEnum,
+  };
 }

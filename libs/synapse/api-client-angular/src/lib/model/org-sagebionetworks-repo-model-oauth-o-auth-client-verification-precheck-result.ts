@@ -12,5 +12,8 @@
  * boolean value indicating whether proposed changes to the OAuth client will require reverification
  */
 export interface OrgSagebionetworksRepoModelOauthOAuthClientVerificationPrecheckResult {
+  /**
+   * True iff the proposed changes to the OAuth client will require reverification
+   */
   reverificationRequired?: boolean;
 }

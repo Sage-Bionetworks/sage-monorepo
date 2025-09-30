@@ -13,8 +13,26 @@ import { OrgSagebionetworksRepoModelDataaccessSubmissionSearchSort } from './org
  * A request to search through the user data access submissions
  */
 export interface OrgSagebionetworksRepoModelDataaccessUserSubmissionSearchRequest {
+  /**
+   * Filter by the id of the access requirement of the submissions.
+   */
   accessRequirementId?: string;
-  submissionState?: string;
+  /**
+   * The state of a Submission.
+   */
+  submissionState?: OrgSagebionetworksRepoModelDataaccessUserSubmissionSearchRequest.SubmissionStateEnum;
   sort?: Array<OrgSagebionetworksRepoModelDataaccessSubmissionSearchSort>;
+  /**
+   * A token used to get the next page of a request.
+   */
   nextPageToken?: string;
+}
+export namespace OrgSagebionetworksRepoModelDataaccessUserSubmissionSearchRequest {
+  export type SubmissionStateEnum = 'SUBMITTED' | 'APPROVED' | 'REJECTED' | 'CANCELLED';
+  export const SubmissionStateEnum = {
+    Submitted: 'SUBMITTED' as SubmissionStateEnum,
+    Approved: 'APPROVED' as SubmissionStateEnum,
+    Rejected: 'REJECTED' as SubmissionStateEnum,
+    Cancelled: 'CANCELLED' as SubmissionStateEnum,
+  };
 }

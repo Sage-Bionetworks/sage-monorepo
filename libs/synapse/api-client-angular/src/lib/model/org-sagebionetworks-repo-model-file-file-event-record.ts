@@ -12,11 +12,63 @@
  * File record for file upload and download events
  */
 export interface OrgSagebionetworksRepoModelFileFileEventRecord {
+  /**
+   * The Id of user who initiated the file event.
+   */
   userId: number;
+  /**
+   * The project Id of file.
+   */
   projectId?: number;
+  /**
+   * The filehandle Id of file.
+   */
   fileHandleId: string;
+  /**
+   * The zipped filehandle Id, If the file download is requested in zip file otherwise not applicable.
+   */
   downloadedFileHandleId?: string;
-  associateType?: string;
+  /**
+   * Enumeration of all possible objects types that can be associated with a file.
+   */
+  associateType?: OrgSagebionetworksRepoModelFileFileEventRecord.AssociateTypeEnum;
+  /**
+   * The association Id of filehandle.
+   */
   associateId: string;
+  /**
+   * The session ID from the access record associated with this event.  When present, can be used to join access records with download records.
+   */
   sessionId?: string;
+}
+export namespace OrgSagebionetworksRepoModelFileFileEventRecord {
+  export type AssociateTypeEnum =
+    | 'FileEntity'
+    | 'TableEntity'
+    | 'WikiAttachment'
+    | 'WikiMarkdown'
+    | 'UserProfileAttachment'
+    | 'MessageAttachment'
+    | 'TeamAttachment'
+    | 'SubmissionAttachment'
+    | 'VerificationSubmission'
+    | 'AccessRequirementAttachment'
+    | 'DataAccessRequestAttachment'
+    | 'DataAccessSubmissionAttachment'
+    | 'FormData';
+  export const AssociateTypeEnum = {
+    FileEntity: 'FileEntity' as AssociateTypeEnum,
+    TableEntity: 'TableEntity' as AssociateTypeEnum,
+    WikiAttachment: 'WikiAttachment' as AssociateTypeEnum,
+    WikiMarkdown: 'WikiMarkdown' as AssociateTypeEnum,
+    UserProfileAttachment: 'UserProfileAttachment' as AssociateTypeEnum,
+    MessageAttachment: 'MessageAttachment' as AssociateTypeEnum,
+    TeamAttachment: 'TeamAttachment' as AssociateTypeEnum,
+    SubmissionAttachment: 'SubmissionAttachment' as AssociateTypeEnum,
+    VerificationSubmission: 'VerificationSubmission' as AssociateTypeEnum,
+    AccessRequirementAttachment: 'AccessRequirementAttachment' as AssociateTypeEnum,
+    DataAccessRequestAttachment: 'DataAccessRequestAttachment' as AssociateTypeEnum,
+    DataAccessSubmissionAttachment: 'DataAccessSubmissionAttachment' as AssociateTypeEnum,
+    FormData: 'FormData' as AssociateTypeEnum,
+  };
 }

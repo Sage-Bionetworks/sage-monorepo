@@ -12,9 +12,6 @@ import { OrgSagebionetworksRepoModelGridSqlQueryResult } from './org-sagebionetw
 /**
  *
  */
-export interface OrgSagebionetworksRepoModelGridGridQueryResponse {
-  /**
-   *
-   */
-  results?: Array<OrgSagebionetworksRepoModelGridSqlQueryResult>;
+export interface OrgSagebionetworksRepoModelGridSqlGridQueryResponse {
+  results?: OrgSagebionetworksRepoModelGridSqlQueryResult;
 }

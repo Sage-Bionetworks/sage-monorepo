@@ -14,17 +14,73 @@ import { OrgSagebionetworksRepoModelAnnotationV2Annotations } from './org-sagebi
  * A SubmissionStatus is a secondary, mutable object associated with a Submission. This object should be used to contain scoring data about the Submission.
  */
 export interface OrgSagebionetworksEvaluationModelSubmissionStatus {
+  /**
+   * The unique, immutable Synapse ID of the Submission.
+   */
   id?: string;
+  /**
+   * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. The eTag changes every time an SubmissionStatus is updated; it is used to detect when a client\'s copy of an SubmissionStatus is out-of-date.
+   */
   etag?: string;
+  /**
+   * The date on which this SubmissionStatus was last modified.
+   */
   modifiedOn?: string;
-  status?: string;
+  /**
+   * The possible states of a Synapse Submission.
+   */
+  status?: OrgSagebionetworksEvaluationModelSubmissionStatus.StatusEnum;
+  /**
+   * This field is deprecated and should not be used. Use the \'submissionAnnotations\' field instead.
+   */
   score?: number;
+  /**
+   * This field is deprecated and should not be used. Use the \'submissionAnnotations\' field instead.
+   */
   report?: string;
   annotations?: OrgSagebionetworksRepoModelAnnotationAnnotations;
   submissionAnnotations?: OrgSagebionetworksRepoModelAnnotationV2Annotations;
+  /**
+   * The Synapse ID of the Entity in this Submission.
+   */
   entityId?: string;
+  /**
+   * The version number of the Entity in this Submission.
+   */
   versionNumber?: number;
+  /**
+   * A version of the status, auto-generated and auto-incremented by the system and read-only to the client.
+   */
   statusVersion?: number;
+  /**
+   * Can this submission be cancelled? By default, this will be set to False. Users can read this value. Only the queue\'s scoring application can change this value.
+   */
   canCancel?: boolean;
+  /**
+   * Has user requested to cancel this submission? By default, this will be set to False. Submission owner can read and request to change this value.
+   */
   cancelRequested?: boolean;
+}
+export namespace OrgSagebionetworksEvaluationModelSubmissionStatus {
+  export type StatusEnum =
+    | 'OPEN'
+    | 'CLOSED'
+    | 'SCORED'
+    | 'INVALID'
+    | 'VALIDATED'
+    | 'EVALUATION_IN_PROGRESS'
+    | 'RECEIVED'
+    | 'REJECTED'
+    | 'ACCEPTED';
+  export const StatusEnum = {
+    Open: 'OPEN' as StatusEnum,
+    Closed: 'CLOSED' as StatusEnum,
+    Scored: 'SCORED' as StatusEnum,
+    Invalid: 'INVALID' as StatusEnum,
+    Validated: 'VALIDATED' as StatusEnum,
+    EvaluationInProgress: 'EVALUATION_IN_PROGRESS' as StatusEnum,
+    Received: 'RECEIVED' as StatusEnum,
+    Rejected: 'REJECTED' as StatusEnum,
+    Accepted: 'ACCEPTED' as StatusEnum,
+  };
 }

@@ -12,9 +12,24 @@
  * Message Envelope
  */
 export interface OrgSagebionetworksRepoModelMessageCloudmailinAuthorizationCheckHeader {
+  /**
+   * The message recipient, this could be your CloudMailin email address or custom domain email.
+   */
   to?: string;
+  /**
+   * The message sender\'s email address.
+   */
   from?: string;
+  /**
+   * The size of the message the user is trying to send. This isn\'t always available as it relies on SIZE being sent to our servers with the message sender.
+   */
   size?: number;
+  /**
+   * The domain that the remote server authenticated with when it connected to the CloudMailin email Servers
+   */
   helo_domain?: string;
+  /**
+   * The IP address of the server that is sending this message to the CloudMailin servers
+   */
   remote_ip?: string;
 }

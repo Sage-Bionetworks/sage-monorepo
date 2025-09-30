@@ -12,7 +12,13 @@
  * Request to get a single page of actions that the user must take to download one or more files from their download list.
  */
 export interface OrgSagebionetworksRepoModelDownloadActionRequiredRequest {
+  /**
+   * Required. For this type the value should be: \'org.sagebionetworks.repo.model.download.ActionRequiredRequest\'
+   */
   concreteType: OrgSagebionetworksRepoModelDownloadActionRequiredRequest.ConcreteTypeEnum;
+  /**
+   * Forward the resulting nextPageToken from a previous request to get the next page of results.
+   */
   nextPageToken?: string;
 }
 export namespace OrgSagebionetworksRepoModelDownloadActionRequiredRequest {

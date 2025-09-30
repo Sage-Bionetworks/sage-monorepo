@@ -9,5 +9,8 @@
  */
 
 export interface OrgSagebionetworksRepoModelDockerRegistryEventActor {
+  /**
+   * The name of the user who initiated the event.
+   */
   name?: string;
 }

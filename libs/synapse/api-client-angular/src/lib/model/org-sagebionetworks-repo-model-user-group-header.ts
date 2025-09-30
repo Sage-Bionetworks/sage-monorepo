@@ -12,11 +12,32 @@
  * JSON schema for UserHeader POJO
  */
 export interface OrgSagebionetworksRepoModelUserGroupHeader {
+  /**
+   * A foreign key to the ID of the \'principal\' object for the user.
+   */
   ownerId?: string;
+  /**
+   * First Name
+   */
   firstName?: string;
+  /**
+   * Last Name
+   */
   lastName?: string;
+  /**
+   * A name chosen by the user that uniquely identifies them.
+   */
   userName?: string;
+  /**
+   * User\'s current email address
+   */
   email?: string;
+  /**
+   * This is deprecated and will always be null
+   */
   displayName?: string;
+  /**
+   * True if this is a user, false if it is a group
+   */
   isIndividual?: boolean;
 }

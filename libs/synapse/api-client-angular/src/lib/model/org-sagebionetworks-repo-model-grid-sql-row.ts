@@ -7,14 +7,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OrgSagebionetworksRepoModelGridSqlValidationResults } from './org-sagebionetworks-repo-model-grid-sql-validation-results';
 
 /**
- *
+ * A single row of a grid query result.
  */
 export interface OrgSagebionetworksRepoModelGridSqlRow {
-  rowId?: string;
   /**
-   * Cell values for a single row of a query result.
+   * Cell values for a single row of a query result. The first column is at index zero, the second at 1 and so on.
    */
-  values?: Array<string>;
+  cellValues?: Array<any>;
+  validationResults?: OrgSagebionetworksRepoModelGridSqlValidationResults;
 }

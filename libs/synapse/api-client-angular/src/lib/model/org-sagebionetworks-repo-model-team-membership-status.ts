@@ -12,13 +12,40 @@
  * JSON schema for the possible status of a User with respect to Team membership.
  */
 export interface OrgSagebionetworksRepoModelTeamMembershipStatus {
+  /**
+   * The id of the Team.
+   */
   teamId?: string;
+  /**
+   * The principal id of the user.
+   */
   userId?: string;
+  /**
+   * true if and only if the user is a member of the team
+   */
   isMember?: boolean;
+  /**
+   * true if and only if  the user has an open invitation to join the team
+   */
   hasOpenInvitation?: boolean;
+  /**
+   * true if and only if  the user has an open request to join the team
+   */
   hasOpenRequest?: boolean;
+  /**
+   * true if and only if the user requesting this status information can join the user to the team
+   */
   canJoin?: boolean;
+  /**
+   * true if and only if  team admin approval is required for the user to join the team
+   */
   membershipApprovalRequired?: boolean;
+  /**
+   * true if and only if  there is at least one unmet access requirement for the user on the team
+   */
   hasUnmetAccessRequirement?: boolean;
+  /**
+   * true if and only if the user can send an email to the team
+   */
   canSendEmail?: boolean;
 }

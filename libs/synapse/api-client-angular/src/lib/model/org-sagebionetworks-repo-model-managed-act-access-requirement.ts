@@ -13,34 +13,139 @@ import { OrgSagebionetworksRepoModelRestrictableObjectDescriptor } from './org-s
  * JSON schema for in-Synapse \'Access Control Team\' controlled Access Requirement, a \'tier 3\' Access Requirement. This access requirement allows the ACT managing the detail requirements, and submissions within Synapse.
  */
 export interface OrgSagebionetworksRepoModelManagedACTAccessRequirement {
+  /**
+   * The version number issued to this version on the object.
+   */
   versionNumber?: number;
+  /**
+   * The unique immutable ID.  Provided by the system, the user may not set this field.
+   */
   id?: number;
+  /**
+   * Depricated. Replaced by name.
+   */
   description?: string;
+  /**
+   * Name of the AR. Limited to 50 characters and must be unique. Required.
+   */
   name?: string;
+  /**
+   * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client\'s current representation of an object is out-of-date.
+   */
   etag?: string;
+  /**
+   * The date this object was created. Provided by the system, the user may not set this field.
+   */
   createdOn?: string;
+  /**
+   * The date this object was last modified. Provided by the system, the user may not set this field.
+   */
   modifiedOn?: string;
+  /**
+   * The user that created this object.  Provided by the system, the user may not set this field.
+   */
   createdBy?: string;
+  /**
+   * The user that last modified this object.  Provided by the system, the user may not set this field.
+   */
   modifiedBy?: string;
+  /**
+   * Defaults to \'false\'.  When \'true\', the subjects controlled by this AR are defined by the the\'_accessRequirementIds\' annotations on individual entities.  This property is mutually exclusive with \'subjectIds\'.  If this is set to \'true\' then \'subjectIds\' must be excluded or empty.
+   */
   subjectsDefinedByAnnotations?: boolean;
   /**
    * The IDs of the items controlled by this Access Requirement when \'subjectsDefinedByAnnotations=false\'. This property is mutually exclusive with \'subjectsDefinedByAnnotations\'.  When \'subjectsDefinedByAnnotations=true\' then this property must be empty or excluded.  Required when creating or updating and \'subjectsDefinedByAnnotations=false\' or \'subjectsDefinedByAnnotations\' is excluded.
    */
   subjectIds?: Array<OrgSagebionetworksRepoModelRestrictableObjectDescriptor>;
-  accessType?: string;
+  /**
+   * The enumeration of possible permission.
+   */
+  accessType?: OrgSagebionetworksRepoModelManagedACTAccessRequirement.AccessTypeEnum;
+  /**
+   * Indicates which type of AccessRequirement this object represents.  Provided by the system, the user may not set this field.
+   */
   concreteType: OrgSagebionetworksRepoModelManagedACTAccessRequirement.ConcreteTypeEnum;
+  /**
+   * If true, then accessor needs to be a Synapse Certified User to gain access.
+   */
   isCertifiedUserRequired?: boolean;
+  /**
+   * If true, then accessor needs to have their Synapse Profile validated to gain access.
+   */
   isValidatedProfileRequired?: boolean;
+  /**
+   * If true, then accessor needs to fill, sign, and submit a Data Use Certificate (DUC) to gain access to the data.
+   */
   isDUCRequired?: boolean;
+  /**
+   * If the Data Use Certificate (DUC) is required, creator of this requirement needs to upload a Data Use Certificate (DUC) template. Users have to download this template, fill out, sign and submit it.
+   */
   ducTemplateFileHandleId?: string;
+  /**
+   * If true, then accessor needs to submit an Institutional Review Board (IRB) Approval document to gain access to the data.
+   */
   isIRBApprovalRequired?: boolean;
+  /**
+   * If true, then accessor needs to upload attachment(s) other than Data Use Certificate (DUC) and Institutional Review Board (IRB) Approval document to gain access to the data.
+   */
   areOtherAttachmentsRequired?: boolean;
+  /**
+   * After an AccessApproval is granted for this AccessRequirement, it will be expired after expirationPeriod miliseconds. Set this value to 0 to indicate that AccessApproval will never be expired.
+   */
   expirationPeriod?: number;
+  /**
+   * If true, the Intended Data Use Statements submitted to gain access to the data will be presented to public.
+   */
   isIDUPublic?: boolean;
+  /**
+   * If true (default), the Intended Data Use Statement for a research project is required.
+   */
   isIDURequired?: boolean;
+  /**
+   * If true, then accessor needs to enable two factor authentication before gaining access to the data.
+   */
   isTwoFaRequired?: boolean;
 }
 export namespace OrgSagebionetworksRepoModelManagedACTAccessRequirement {
+  export type AccessTypeEnum =
+    | 'CREATE'
+    | 'READ'
+    | 'UPDATE'
+    | 'DELETE'
+    | 'CHANGE_PERMISSIONS'
+    | 'DOWNLOAD'
+    | 'UPLOAD'
+    | 'PARTICIPATE'
+    | 'SUBMIT'
+    | 'READ_PRIVATE_SUBMISSION'
+    | 'UPDATE_SUBMISSION'
+    | 'DELETE_SUBMISSION'
+    | 'TEAM_MEMBERSHIP_UPDATE'
+    | 'SEND_MESSAGE'
+    | 'CHANGE_SETTINGS'
+    | 'MODERATE'
+    | 'REVIEW_SUBMISSIONS'
+    | 'EXEMPTION_ELIGIBLE';
+  export const AccessTypeEnum = {
+    Create: 'CREATE' as AccessTypeEnum,
+    Read: 'READ' as AccessTypeEnum,
+    Update: 'UPDATE' as AccessTypeEnum,
+    Delete: 'DELETE' as AccessTypeEnum,
+    ChangePermissions: 'CHANGE_PERMISSIONS' as AccessTypeEnum,
+    Download: 'DOWNLOAD' as AccessTypeEnum,
+    Upload: 'UPLOAD' as AccessTypeEnum,
+    Participate: 'PARTICIPATE' as AccessTypeEnum,
+    Submit: 'SUBMIT' as AccessTypeEnum,
+    ReadPrivateSubmission: 'READ_PRIVATE_SUBMISSION' as AccessTypeEnum,
+    UpdateSubmission: 'UPDATE_SUBMISSION' as AccessTypeEnum,
+    DeleteSubmission: 'DELETE_SUBMISSION' as AccessTypeEnum,
+    TeamMembershipUpdate: 'TEAM_MEMBERSHIP_UPDATE' as AccessTypeEnum,
+    SendMessage: 'SEND_MESSAGE' as AccessTypeEnum,
+    ChangeSettings: 'CHANGE_SETTINGS' as AccessTypeEnum,
+    Moderate: 'MODERATE' as AccessTypeEnum,
+    ReviewSubmissions: 'REVIEW_SUBMISSIONS' as AccessTypeEnum,
+    ExemptionEligible: 'EXEMPTION_ELIGIBLE' as AccessTypeEnum,
+  };
   export type ConcreteTypeEnum = 'org.sagebionetworks.repo.model.ManagedACTAccessRequirement';
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelManagedActAccessRequirement:

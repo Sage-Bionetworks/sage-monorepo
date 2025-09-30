@@ -13,7 +13,20 @@ import { OrgSagebionetworksRepoModelSearchDocumentFields } from './org-sagebione
  * JSON schema for a search document.
  */
 export interface OrgSagebionetworksRepoModelSearchDocument {
-  type: string;
+  /**
+   * Type of the search document. These must be lower case per the search spec.
+   */
+  type: OrgSagebionetworksRepoModelSearchDocument.TypeEnum;
+  /**
+   * The id of the search document.  Currently we are using the Synapse entity id for this.
+   */
   id: string;
   fields?: OrgSagebionetworksRepoModelSearchDocumentFields;
+}
+export namespace OrgSagebionetworksRepoModelSearchDocument {
+  export type TypeEnum = 'add' | 'delete';
+  export const TypeEnum = {
+    Add: 'add' as TypeEnum,
+    Delete: 'delete' as TypeEnum,
+  };
 }

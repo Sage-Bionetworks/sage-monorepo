@@ -27,6 +27,7 @@ import { OrgSagebionetworksRepoModelFolder } from './org-sagebionetworks-repo-mo
 import { OrgSagebionetworksRepoModelPreview } from './org-sagebionetworks-repo-model-preview';
 import { OrgSagebionetworksRepoModelDockerDockerRepository } from './org-sagebionetworks-repo-model-docker-docker-repository';
 import { OrgSagebionetworksRepoModelExampleEntity } from './org-sagebionetworks-repo-model-example-entity';
+import { OrgSagebionetworksRepoModelSchemaValidationSummaryStatistics } from './org-sagebionetworks-repo-model-schema-validation-summary-statistics';
 
 /**
  * This is the base interface that all Entities implement.

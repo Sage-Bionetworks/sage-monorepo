@@ -13,12 +13,33 @@
  */
 export interface OrgSagebionetworksRepoModelAuthNewUserSignedToken {
   concreteType: OrgSagebionetworksRepoModelAuthNewUserSignedToken.ConcreteTypeEnum;
+  /**
+   * The hash message authentication code for the message.
+   */
   hmac?: string;
+  /**
+   * The version of the key used to generate the HMAC.
+   */
   version?: number;
+  /**
+   * The date-time when this token expires.
+   */
   expiresOn?: string;
+  /**
+   * The date-time the token was generated.
+   */
   createdOn?: string;
+  /**
+   * User\'s email
+   */
   email?: string;
+  /**
+   * User\'s first name
+   */
   firstName?: string;
+  /**
+   * User\'s last name
+   */
   lastName?: string;
 }
 export namespace OrgSagebionetworksRepoModelAuthNewUserSignedToken {

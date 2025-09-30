@@ -12,8 +12,20 @@
  * Represent the current size and limits for a single project storage location.
  */
 export interface OrgSagebionetworksRepoModelLimitsProjectStorageLocationUsage {
+  /**
+   * The ID of the storage location
+   */
   storageLocationId?: number;
+  /**
+   * The total number of bytes, of files, currently associated with this project storage location.
+   */
   sumFileBytes?: number;
+  /**
+   * When missing, there is not limit for this project storage location.  When set, this number represent to the total number of allowed bytes for this project storage location.  If the sumFileSizesBytes is greater than this value, then this project storage location is over its limit all new uploads to this project storage location will be blocked.
+   */
   maxAllowedFileBytes?: number;
+  /**
+   * When true, sumFileSizesBytes is greater than maxAllowedFileSizeBytes and all new uploads to this project storage location will be blocked.
+   */
   isOverLimit?: boolean;
 }

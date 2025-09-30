@@ -12,6 +12,12 @@
  * DEPRECATED. Please use an implementation of ChangePasswordInterface instead. Contains fields required to change a user\'s password
  */
 export interface OrgSagebionetworksRepoModelAuthChangePasswordRequest {
+  /**
+   * A token that identifies the user
+   */
   sessionToken?: string;
+  /**
+   * The new password
+   */
   password?: string;
 }

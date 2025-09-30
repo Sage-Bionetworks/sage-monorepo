@@ -16,10 +16,36 @@ export interface OrgSagebionetworksRepoModelAuthAccessTokenGenerationRequest {
   /**
    * The scopes that have been granted to this token
    */
-  scope?: Array<string>;
+  scope?: Array<OrgSagebionetworksRepoModelAuthAccessTokenGenerationRequest.ScopeEnum>;
   /**
    * The OIDC claims that can be accessed using this token.
    */
   userInfoClaims?: { [key: string]: OrgSagebionetworksRepoModelOauthOIDCClaimsRequestDetails };
+  /**
+   * A unique, typically human-readable name for the token
+   */
   name?: string;
+}
+export namespace OrgSagebionetworksRepoModelAuthAccessTokenGenerationRequest {
+  export type ScopeEnum =
+    | 'openid'
+    | 'email'
+    | 'profile'
+    | 'ga4gh_passport_v1'
+    | 'view'
+    | 'download'
+    | 'modify'
+    | 'authorize'
+    | 'offline_access';
+  export const ScopeEnum = {
+    Openid: 'openid' as ScopeEnum,
+    Email: 'email' as ScopeEnum,
+    Profile: 'profile' as ScopeEnum,
+    Ga4ghPassportV1: 'ga4gh_passport_v1' as ScopeEnum,
+    View: 'view' as ScopeEnum,
+    Download: 'download' as ScopeEnum,
+    Modify: 'modify' as ScopeEnum,
+    Authorize: 'authorize' as ScopeEnum,
+    OfflineAccess: 'offline_access' as ScopeEnum,
+  };
 }

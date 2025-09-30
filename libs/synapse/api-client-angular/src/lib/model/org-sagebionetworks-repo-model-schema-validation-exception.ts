@@ -12,9 +12,21 @@
  * A recursive ValidationException that describes all schema violations for an entire schema tree.
  */
 export interface OrgSagebionetworksRepoModelSchemaValidationException {
+  /**
+   * The JSON schema keyword which was violated.
+   */
   keyword?: string;
+  /**
+   * A JSON Pointer denoting the path from the input document root to its fragment which caused the validation failure.
+   */
   pointerToViolation?: string;
+  /**
+   * The description of the validation failure.
+   */
   message?: string;
+  /**
+   * A JSON Pointer denoting the path from the schema JSON root to the violated keyword.
+   */
   schemaLocation?: string;
   /**
    * An array of sub-exceptions.

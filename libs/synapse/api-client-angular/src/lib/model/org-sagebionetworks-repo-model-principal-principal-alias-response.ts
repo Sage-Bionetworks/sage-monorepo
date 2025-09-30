@@ -12,5 +12,8 @@
  * The response of a principal alias lookup request
  */
 export interface OrgSagebionetworksRepoModelPrincipalPrincipalAliasResponse {
+  /**
+   * The ID of the principal to bind the alias too.
+   */
   principalId?: number;
 }

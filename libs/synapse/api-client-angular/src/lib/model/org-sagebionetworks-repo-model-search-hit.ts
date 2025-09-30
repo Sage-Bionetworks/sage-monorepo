@@ -13,19 +13,61 @@ import { OrgSagebionetworksRepoModelEntityPath } from './org-sagebionetworks-rep
  * JSON schema for a Hit in the search results.  Each Hit contains a subset of entity data.
  */
 export interface OrgSagebionetworksRepoModelSearchHit {
+  /**
+   * The unique immutable ID for this entity.  A new ID will be generated for new Entities.  Once issued, this ID is guaranteed to never change or be re-issued
+   */
   id?: string;
+  /**
+   * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client\'s current representation of an entity is out-of-date.
+   */
   etag?: string;
+  /**
+   * The name of this entity
+   */
   name?: string;
+  /**
+   * The alias of this entity
+   */
   alias?: string;
   path?: OrgSagebionetworksRepoModelEntityPath;
+  /**
+   * The description of this entity.
+   */
   description?: string;
+  /**
+   * The type of this entity. Corresponds to an (<a href=\"${org.sagebionetworks.repo.model.EntityType}\">EntityType</a>) value.
+   */
   node_type?: string;
+  /**
+   * The seconds since epoch date this entity was created.
+   */
   created_on?: number;
+  /**
+   * The seconds since epoch date this entity was last modified.
+   */
   modified_on?: number;
+  /**
+   * The user that created this entity.
+   */
   created_by?: string;
+  /**
+   * The user that last modified this entity.
+   */
   modified_by?: string;
+  /**
+   * The result of a medical investigation to identify a disorder from its signs and symptoms.
+   */
   diagnosis?: string;
+  /**
+   * Type of tissue for the samples in this entity.
+   */
   tissue?: string;
+  /**
+   * The name of the consortium
+   */
   consortium?: string;
+  /**
+   * A unique macroscopic (gross) anatomic structure that performs specific functions. It is composed of various tissues. An organ is part of an anatomic system or a body region.
+   */
   organ?: string;
 }

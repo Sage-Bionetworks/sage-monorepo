@@ -13,6 +13,9 @@
  */
 export interface OrgSagebionetworksRepoModelTableTableSearchChangeResponse {
   concreteType: OrgSagebionetworksRepoModelTableTableSearchChangeResponse.ConcreteTypeEnum;
+  /**
+   * The resulting status of the search after the change.
+   */
   searchEnabled?: boolean;
 }
 export namespace OrgSagebionetworksRepoModelTableTableSearchChangeResponse {

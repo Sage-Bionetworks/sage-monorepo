@@ -12,10 +12,127 @@
  * JSON schema for a comment on a Synapse object
  */
 export interface OrgSagebionetworksRepoModelMessageComment {
+  /**
+   * The unique identifier of the message or comment
+   */
   id?: string;
+  /**
+   * The unique identifier of the sender of this message
+   */
   createdBy?: string;
+  /**
+   * The S3 file handle storing the body of this message.  Note: The file\'s mime type should be \'text/plain\' or \'text/html\'.  If no character encoding is specified, then UTF-8 is assumed.
+   */
   fileHandleId?: string;
+  /**
+   * When this message was created
+   */
   createdOn?: string;
-  targetType?: string;
+  /**
+   * JSON enum for the types of objects in Synapse.
+   */
+  targetType?: OrgSagebionetworksRepoModelMessageComment.TargetTypeEnum;
+  /**
+   * The unique identifier of the target object
+   */
   targetId?: string;
+}
+export namespace OrgSagebionetworksRepoModelMessageComment {
+  export type TargetTypeEnum =
+    | 'ENTITY'
+    | 'ENTITY_CONTAINER'
+    | 'PRINCIPAL'
+    | 'ACTIVITY'
+    | 'EVALUATION'
+    | 'EVALUATION_ROUND'
+    | 'SUBMISSION'
+    | 'EVALUATION_SUBMISSIONS'
+    | 'FILE'
+    | 'MESSAGE'
+    | 'WIKI'
+    | 'FAVORITE'
+    | 'ACCESS_REQUIREMENT'
+    | 'ACCESS_APPROVAL'
+    | 'TEAM'
+    | 'TABLE'
+    | 'ACCESS_CONTROL_LIST'
+    | 'PROJECT_SETTING'
+    | 'VERIFICATION_SUBMISSION'
+    | 'CERTIFIED_USER_PASSING_RECORD'
+    | 'FORUM'
+    | 'THREAD'
+    | 'REPLY'
+    | 'FORM_GROUP'
+    | 'ORGANIZATION'
+    | 'FORM_DATA'
+    | 'ENTITY_VIEW'
+    | 'USER_PROFILE'
+    | 'DATA_ACCESS_REQUEST'
+    | 'DATA_ACCESS_SUBMISSION'
+    | 'DATA_ACCESS_SUBMISSION_STATUS'
+    | 'MEMBERSHIP_INVITATION'
+    | 'JSON_SCHEMA'
+    | 'JSON_SCHEMA_DEPENDANT'
+    | 'DATASET'
+    | 'DATASET_COLLECTION'
+    | 'THREAD_VIEW'
+    | 'MATERIALIZED_VIEW'
+    | 'VIRTUAL_TABLE'
+    | 'TABLE_STATUS_EVENT'
+    | 'DATA_ACCESS_SUBMISSION_EVENT'
+    | 'FILE_EVENT'
+    | 'QUERY_CACHE_HIT'
+    | 'PROJECT_STORAGE_EVENT'
+    | 'REPLICATED_EVENT'
+    | 'PORTAL'
+    | 'OAUTH_CLIENT';
+  export const TargetTypeEnum = {
+    Entity: 'ENTITY' as TargetTypeEnum,
+    EntityContainer: 'ENTITY_CONTAINER' as TargetTypeEnum,
+    Principal: 'PRINCIPAL' as TargetTypeEnum,
+    Activity: 'ACTIVITY' as TargetTypeEnum,
+    Evaluation: 'EVALUATION' as TargetTypeEnum,
+    EvaluationRound: 'EVALUATION_ROUND' as TargetTypeEnum,
+    Submission: 'SUBMISSION' as TargetTypeEnum,
+    EvaluationSubmissions: 'EVALUATION_SUBMISSIONS' as TargetTypeEnum,
+    File: 'FILE' as TargetTypeEnum,
+    Message: 'MESSAGE' as TargetTypeEnum,
+    Wiki: 'WIKI' as TargetTypeEnum,
+    Favorite: 'FAVORITE' as TargetTypeEnum,
+    AccessRequirement: 'ACCESS_REQUIREMENT' as TargetTypeEnum,
+    AccessApproval: 'ACCESS_APPROVAL' as TargetTypeEnum,
+    Team: 'TEAM' as TargetTypeEnum,
+    Table: 'TABLE' as TargetTypeEnum,
+    AccessControlList: 'ACCESS_CONTROL_LIST' as TargetTypeEnum,
+    ProjectSetting: 'PROJECT_SETTING' as TargetTypeEnum,
+    VerificationSubmission: 'VERIFICATION_SUBMISSION' as TargetTypeEnum,
+    CertifiedUserPassingRecord: 'CERTIFIED_USER_PASSING_RECORD' as TargetTypeEnum,
+    Forum: 'FORUM' as TargetTypeEnum,
+    Thread: 'THREAD' as TargetTypeEnum,
+    Reply: 'REPLY' as TargetTypeEnum,
+    FormGroup: 'FORM_GROUP' as TargetTypeEnum,
+    Organization: 'ORGANIZATION' as TargetTypeEnum,
+    FormData: 'FORM_DATA' as TargetTypeEnum,
+    EntityView: 'ENTITY_VIEW' as TargetTypeEnum,
+    UserProfile: 'USER_PROFILE' as TargetTypeEnum,
+    DataAccessRequest: 'DATA_ACCESS_REQUEST' as TargetTypeEnum,
+    DataAccessSubmission: 'DATA_ACCESS_SUBMISSION' as TargetTypeEnum,
+    DataAccessSubmissionStatus: 'DATA_ACCESS_SUBMISSION_STATUS' as TargetTypeEnum,
+    MembershipInvitation: 'MEMBERSHIP_INVITATION' as TargetTypeEnum,
+    JsonSchema: 'JSON_SCHEMA' as TargetTypeEnum,
+    JsonSchemaDependant: 'JSON_SCHEMA_DEPENDANT' as TargetTypeEnum,
+    Dataset: 'DATASET' as TargetTypeEnum,
+    DatasetCollection: 'DATASET_COLLECTION' as TargetTypeEnum,
+    ThreadView: 'THREAD_VIEW' as TargetTypeEnum,
+    MaterializedView: 'MATERIALIZED_VIEW' as TargetTypeEnum,
+    VirtualTable: 'VIRTUAL_TABLE' as TargetTypeEnum,
+    TableStatusEvent: 'TABLE_STATUS_EVENT' as TargetTypeEnum,
+    DataAccessSubmissionEvent: 'DATA_ACCESS_SUBMISSION_EVENT' as TargetTypeEnum,
+    FileEvent: 'FILE_EVENT' as TargetTypeEnum,
+    QueryCacheHit: 'QUERY_CACHE_HIT' as TargetTypeEnum,
+    ProjectStorageEvent: 'PROJECT_STORAGE_EVENT' as TargetTypeEnum,
+    ReplicatedEvent: 'REPLICATED_EVENT' as TargetTypeEnum,
+    Portal: 'PORTAL' as TargetTypeEnum,
+    OauthClient: 'OAUTH_CLIENT' as TargetTypeEnum,
+  };
 }

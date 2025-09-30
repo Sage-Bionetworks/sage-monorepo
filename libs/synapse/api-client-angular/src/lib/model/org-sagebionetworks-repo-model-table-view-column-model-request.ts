@@ -15,7 +15,13 @@ import { OrgSagebionetworksRepoModelTableViewScope } from './org-sagebionetworks
 export interface OrgSagebionetworksRepoModelTableViewColumnModelRequest {
   concreteType: OrgSagebionetworksRepoModelTableViewColumnModelRequest.ConcreteTypeEnum;
   viewScope?: OrgSagebionetworksRepoModelTableViewScope;
+  /**
+   * If true will include colum models that map to annotations that are derived from the schemas of the entities in the scope
+   */
   includeDerivedAnnotations?: boolean;
+  /**
+   * Optional token used to retrieve subsequent pages, returned as part of the <a href=\"${org.sagebionetworks.repo.model.table.ViewColumnModelResponse}\">ViewColumnModelResponse</a>
+   */
   nextPageToken?: string;
 }
 export namespace OrgSagebionetworksRepoModelTableViewColumnModelRequest {

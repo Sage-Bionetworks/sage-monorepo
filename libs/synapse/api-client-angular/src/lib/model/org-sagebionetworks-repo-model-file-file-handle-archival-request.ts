@@ -13,6 +13,9 @@
  */
 export interface OrgSagebionetworksRepoModelFileFileHandleArchivalRequest {
   concreteType: OrgSagebionetworksRepoModelFileFileHandleArchivalRequest.ConcreteTypeEnum;
+  /**
+   * The maximum number of file handles to tag for archival in a single job, defaults to 100000 if not supplied and can be at most 100000
+   */
   limit?: number;
 }
 export namespace OrgSagebionetworksRepoModelFileFileHandleArchivalRequest {

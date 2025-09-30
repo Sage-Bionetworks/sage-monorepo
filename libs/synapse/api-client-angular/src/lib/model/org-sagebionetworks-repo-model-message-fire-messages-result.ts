@@ -12,5 +12,8 @@
  * JSON schema for a change message
  */
 export interface OrgSagebionetworksRepoModelMessageFireMessagesResult {
+  /**
+   * The next change number to fire.
+   */
   nextChangeNumber?: number;
 }
