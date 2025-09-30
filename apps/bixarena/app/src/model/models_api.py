@@ -41,14 +41,27 @@ def _run_query(query):
         return None
 
 
-def get_all_models():
-    """Get all models from database"""
-    query = """
-    SELECT id, slug, name, organization, license, description,
-           api_model_name, api_base, api_type, external_link
-    FROM model 
-    ORDER BY name;
+def get_all_models(visible_only=True):
+    """Get all models from database
+
+    Args:
+        visible_only (bool): If True, only return visible models. If False, return all models.
     """
+    if visible_only:
+        query = """
+        SELECT id, slug, name, organization, license, description,
+               api_model_name, api_base, api_type, external_link, visible
+        FROM model 
+        WHERE visible = true
+        ORDER BY name;
+        """
+    else:
+        query = """
+        SELECT id, slug, name, organization, license, description,
+               api_model_name, api_base, api_type, external_link, visible
+        FROM model 
+        ORDER BY name;
+        """
 
     result = _run_query(query)
     if not result:
@@ -58,7 +71,7 @@ def get_all_models():
     for line in result.split("\n"):
         if line.strip():
             parts = line.split("|")
-            if len(parts) >= 10:
+            if len(parts) >= 11:
                 models.append(
                     {
                         "id": parts[0],
@@ -71,6 +84,7 @@ def get_all_models():
                         "api_base": parts[7],
                         "api_type": parts[8],
                         "external_link": parts[9] or "",
+                        "visible": parts[10].lower() == "t",
                     }
                 )
 
@@ -84,13 +98,17 @@ def is_database_available():
 
 
 @app.get("/models", response_model=list[dict[str, Any]])
-async def get_models():
-    """Get all models from database"""
+async def get_models(visible_only: bool = True):
+    """Get models from database
+
+    Args:
+        visible_only: If True, only return visible models. If False, return all models.
+    """
     try:
         if not is_database_available():
             raise HTTPException(status_code=503, detail="Database not available")
 
-        models = get_all_models()
+        models = get_all_models(visible_only=visible_only)
         return models
 
     except Exception as e:

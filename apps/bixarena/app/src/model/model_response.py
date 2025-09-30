@@ -54,11 +54,31 @@ def get_model_list():
     global api_endpoint_info
     models = []  # Initiate models list
     model_api_base = "http://localhost:8000"
-    # Load models from the /models API endpoint
+    # Load models from the /models API endpoint (visible models only)
     try:
-        response = requests.get(f"{model_api_base}/models", timeout=5)
-        if response.status_code == 200:
-            db_models = response.json()
+        # Fetch all models for development logging
+        all_response = requests.get(
+            f"{model_api_base}/models?visible_only=false", timeout=5
+        )
+        visible_response = requests.get(f"{model_api_base}/models", timeout=5)
+
+        if all_response.status_code == 200 and visible_response.status_code == 200:
+            all_models_data = all_response.json()
+            db_models = visible_response.json()
+
+            # Development logging: show all vs visible models
+            all_model_names = [m["name"] for m in all_models_data]
+            visible_model_names = [m["name"] for m in db_models]
+            hidden_model_names = [
+                name for name in all_model_names if name not in visible_model_names
+            ]
+
+            logger.info(
+                f"📊 Total models in database: {len(all_model_names)} | Visible: {len(visible_model_names)} ✅ | Hidden: {len(hidden_model_names)} 🔒"
+            )
+            if hidden_model_names:
+                logger.info(f"🔒 Hidden models: {hidden_model_names}")
+
             api_endpoint_info = {}
 
             for model in db_models:
@@ -90,20 +110,18 @@ def get_model_list():
                 # Add model's display name to the model list
                 models.append(model_name)
 
-                # Convert to FastChat API-based format (simplified)
+                # Convert to FastChat API-based format (text-only models)
                 api_endpoint_info[model_name] = {
                     "api_type": api_type,
                     "api_base": api_base,
                     "api_key": api_key,
                     "model_name": api_model_name,
-                    "anony_only": False,  # Battle-only models
-                    "multimodal": False,  # Text-only models
+                    "anony_only": False,
+                    "multimodal": False,
                 }
-
-            logger.info(f"Loaded {len(models)} models from /models endpoint")
         else:
             logger.warning(
-                f"Models service not available (status: {response.status_code})"
+                f"❌ Models service not available (status: {visible_response.status_code})"
             )
 
     except Exception as e:
@@ -111,15 +129,19 @@ def get_model_list():
         models = []
         api_endpoint_info = {}
 
-    # All models are visible (no anonymous-only models)
-    visible_models = models.copy()
+    # Sort models alphabetically
+    models.sort()
 
-    # Sort models and add descriptions
-    models.sort()  # Simple A-Z sorting
-    visible_models.sort()
-    logger.info(f"All models: {models}")
-    logger.info(f"Visible models: {visible_models}")
-    return visible_models, models
+    if models:
+        logger.info(
+            f"🔗 Configured API-based models: {len(api_endpoint_info)}/{len(models)} models"
+        )
+        logger.info(f"🚀 Available models: {models}")
+    else:
+        logger.warning("⚠️ No visible models found")
+
+    # Return models twice for compatibility with FastChat interface expectations
+    return models, models
 
 
 def bot_response(

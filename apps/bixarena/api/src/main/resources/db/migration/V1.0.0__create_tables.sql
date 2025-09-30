@@ -20,6 +20,7 @@ CREATE TABLE model (
   api_model_name VARCHAR(255) NOT NULL DEFAULT '',
   api_base VARCHAR(500) NOT NULL DEFAULT 'https://openrouter.ai/api/v1',
   api_type VARCHAR(50) NOT NULL DEFAULT 'openai',
+  visible BOOLEAN NOT NULL DEFAULT true,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
@@ -61,6 +62,7 @@ CREATE INDEX idx_leaderboard_snapshot_created_at ON leaderboard_snapshot(created
 CREATE INDEX idx_model_slug ON model(slug);
 CREATE INDEX idx_model_organization ON model(organization);
 CREATE INDEX idx_model_api_model_name ON model(api_model_name);
+CREATE INDEX idx_model_visible ON model(visible);
 
 -- Sessions (existing table - keeping it)
 CREATE TABLE conversation (
