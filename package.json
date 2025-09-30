@@ -224,7 +224,6 @@
     "vitest": "3.2.4",
     "yaml": "2.8.1"
   },
-  "packageManager": "pnpm@10.17.1",
   "pnpm": {
     "onlyBuiltDependencies": [
       "canvas"
