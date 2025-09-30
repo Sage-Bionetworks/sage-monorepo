@@ -534,11 +534,8 @@ def build_battle_page(
     # Set global variables
     set_global_vars_anony(moderate)
 
-    # Load models once and only for text-only models
-    models, _ = get_model_list(
-        None,  # No longer using register_api_endpoint_file
-        False,
-    )
+    # Load models once (text-only models)
+    models, _ = get_model_list()
 
     # Initialize the demo (this sets up global variables in the original module)
     load_demo_side_by_side_anony(models, {})

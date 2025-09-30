@@ -35,25 +35,11 @@
         "command": "docker/bixarena/serve-detach.sh {projectName}"
       }
     },
-    "serve-models-api": {
+    "serve-model-api": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "uv run python run_models_api.py",
+        "command": "uv run uvicorn src.model.models_api:app --host 0.0.0.0 --port 8000",
         "cwd": "{projectRoot}"
-      }
-    },
-    "serve-with-models-api": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": [
-          "echo '🚀 Starting Models API on port 8000...'",
-          "uv run python run_models_api.py &",
-          "sleep 2",
-          "echo '🌐 Starting BixArena App on port ${APP_PORT}...'",
-          "uv run python -m main --port ${APP_PORT}"
-        ],
-        "cwd": "{projectRoot}",
-        "parallel": false
       }
     },
     "serve-legacy": {

@@ -5,15 +5,9 @@ import requests
 import time
 import uuid
 import os
-import sys
-
-# Add src to path for imports
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from fastchat.model.model_adapter import get_conversation_template
 from fastchat.serve.api_provider import get_api_provider_stream_iter
-from model.model_data import get_all_models, ModelDataAccess
-
 from config.constants import ErrorCode, SERVER_ERROR_MSG
 
 logging.basicConfig(level=logging.INFO)
@@ -56,44 +50,61 @@ def set_global_vars_anony(enable_moderation_):
     enable_moderation = enable_moderation_
 
 
-def get_model_list(register_api_endpoint_file, multimodal):
+def get_model_list():
     global api_endpoint_info
     models = []  # Initiate models list
-
-    # Load models from database
+    model_api_base = "http://localhost:8000"
+    # Load models from the /models API endpoint
     try:
-        if ModelDataAccess.is_available():
-            db_models = get_all_models()
+        response = requests.get(f"{model_api_base}/models", timeout=5)
+        if response.status_code == 200:
+            db_models = response.json()
             api_endpoint_info = {}
 
-            # Convert database models to FastChat format
             for model in db_models:
                 model_name = model["name"]
+
+                # Check required fields for API configuration
+                api_model_name = model.get("api_model_name")
+                api_type = model.get("api_type", "openai")
+                api_base = model.get("api_base", "https://openrouter.ai/api/v1")
+                api_key = os.getenv("OPENAI_API_KEY", "")
+
+                if not api_model_name:
+                    logger.warning(
+                        f"Skipping model '{model_name}' - missing api_model_name"
+                    )
+                    continue
+                if not api_key:
+                    logger.warning(
+                        f"Skipping model '{model_name}' - missing OPENAI_API_KEY"
+                    )
+                    continue
+                if not api_type:
+                    logger.warning(f"Skipping model '{model_name}' - missing api_type")
+                    continue
+                if not api_base:
+                    logger.warning(f"Skipping model '{model_name}' - missing api_base")
+                    continue
+
+                # Add model's display name to the model list
                 models.append(model_name)
 
-                # Create API endpoint info for each model
+                # Convert to FastChat API-based format (simplified)
                 api_endpoint_info[model_name] = {
-                    "api_type": "openai",
-                    "api_base": "https://openrouter.ai/api/v1",
-                    "api_key": os.getenv("OPENAI_API_KEY", ""),
-                    "model_name": model.get(
-                        "api_model_name", model_name
-                    ),  # Required by api_provider.py
-                    "anony_only": False,
-                    "multimodal": False,
+                    "api_type": api_type,
+                    "api_base": api_base,
+                    "api_key": api_key,
+                    "model_name": api_model_name,
+                    "anony_only": False,  # Battle-only models
+                    "multimodal": False,  # Text-only models
                 }
 
-            logger.info(f"Loaded {len(models)} models from database")
-            logger.info(f"API endpoint info keys: {list(api_endpoint_info.keys())}")
-
-            # Log a sample model config for debugging
-            if api_endpoint_info:
-                sample_model = list(api_endpoint_info.keys())[0]
-                logger.info(
-                    f"Sample model config for '{sample_model}': {api_endpoint_info[sample_model]}"
-                )
+            logger.info(f"Loaded {len(models)} models from /models endpoint")
         else:
-            logger.warning("Database not available, no models loaded")
+            logger.warning(
+                f"Models service not available (status: {response.status_code})"
+            )
 
     except Exception as e:
         logger.error(f"Error loading models from database: {e}")
@@ -139,14 +150,9 @@ def bot_response(
     # Only use API endpoints - no controller/worker logic
     if model_api_dict is None:
         logger.error(f"UNEXPECTED: Model {model_name} not in api_endpoint_info.")
-        logger.error(f"Available models: {list(api_endpoint_info.keys())}")
         conv.update_last_message(f"Configuration error: Model {model_name} not found")
         yield (state, state.to_gradio_chatbot()) + (enable_btn,) * 4
         return
-
-    logger.info(f"Making API call for model: {model_name}")
-    logger.info(f"Model API dict keys: {list(model_api_dict.keys())}")
-    logger.info(f"API model name: {model_api_dict.get('model_name', 'NOT_SET')}")
 
     # Use API provider stream
     stream_iter = get_api_provider_stream_iter(
