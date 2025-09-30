@@ -13,7 +13,14 @@
     },
     "prepare": {
       "executor": "nx:run-commands",
-      "options": {}
+      "options": {
+        "commands": [
+          "sudo apt-get update -qq -y",
+          "sudo apt-get install --no-install-recommends -qq -y gettext-base"
+        ],
+        "cwd": "{projectRoot}",
+        "parallel": false
+      }
     },
     "show-packages": {
       "executor": "nx:run-commands",
