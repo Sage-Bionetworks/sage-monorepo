@@ -13,18 +13,57 @@ import { OrgSagebionetworksEvaluationModelSubmissionContributor } from './org-sa
  * A Submission to a Synapse Evaluation is a pointer to a versioned Entity. Submissions are immutable, so we archive a copy of the EntityBundle at the time of submission.
  */
 export interface OrgSagebionetworksEvaluationModelSubmission {
+  /**
+   * The unique, immutable Synapse ID of this Submission.
+   */
   id?: string;
+  /**
+   * The Synapse ID of the user who created this Submission.
+   */
   userId?: string;
+  /**
+   * The alias for the user or team creating the submission.
+   */
   submitterAlias?: string;
+  /**
+   * The Synapse ID of the Evaluation this Submission is for.
+   */
   evaluationId?: string;
+  /**
+   * The Synapse ID of the EvaluationRound to which this was submitted. DO NOT specify a value for this. It will be filled in automatically upon creation of the Submission if the Evaluation is configured with an EvaluationRound.
+   */
   evaluationRoundId?: string;
+  /**
+   * The Synapse ID of the Entity in this Submission.
+   */
   entityId?: string;
+  /**
+   * The Bundled Entity and Annotations JSON at the time of submission.
+   */
   entityBundleJSON?: string;
+  /**
+   * The submitted version number of the Entity.
+   */
   versionNumber?: number;
+  /**
+   * For Docker repositories, the name of the submitted repository.  Null for other entity types.
+   */
   dockerRepositoryName?: string;
+  /**
+   * For Docker repositories, the digest from the commit.  Null for other entity types.
+   */
   dockerDigest?: string;
+  /**
+   * The title of this Submission.
+   */
   name?: string;
+  /**
+   * The date on which Submission was created.
+   */
   createdOn?: string;
+  /**
+   * optional Team which collaborated on the submission
+   */
   teamId?: string;
   /**
    * User ids of the submitter and (if a team submission) the team members involved in creating the submission.

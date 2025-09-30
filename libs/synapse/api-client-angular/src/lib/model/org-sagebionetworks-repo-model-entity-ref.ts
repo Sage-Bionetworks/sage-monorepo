@@ -12,6 +12,12 @@
  * Represents a reference to the id and version of an entity to be used in collections.
  */
 export interface OrgSagebionetworksRepoModelEntityRef {
+  /**
+   * The \'syn\' identifier of the entity. Required.
+   */
   entityId?: string;
+  /**
+   * Indicates a specific version of a the entity. Required.
+   */
   versionNumber?: number;
 }

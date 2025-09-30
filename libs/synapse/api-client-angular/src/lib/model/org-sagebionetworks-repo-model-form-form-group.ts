@@ -12,8 +12,20 @@
  * All form data belongs to a form group.  Access to the group is managed via the ACL of the group.
  */
 export interface OrgSagebionetworksRepoModelFormFormGroup {
+  /**
+   * Unique identifier provided by the system.
+   */
   groupId?: string;
+  /**
+   * Unique name for the group provided by the caller.
+   */
   name?: string;
+  /**
+   * Id of the user that created this group
+   */
   createdBy?: string;
+  /**
+   * The date this object was originally created.
+   */
   createdOn?: string;
 }

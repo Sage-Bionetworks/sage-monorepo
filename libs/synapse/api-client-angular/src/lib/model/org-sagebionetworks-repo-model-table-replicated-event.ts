@@ -13,11 +13,26 @@
  */
 export interface OrgSagebionetworksRepoModelTableReplicatedEvent {
   concreteType: OrgSagebionetworksRepoModelTableReplicatedEvent.ConcreteTypeEnum;
+  /**
+   * The unique identifier of the object that changed.
+   */
   objectId?: string;
+  /**
+   * Identifier for a specific version of an object.
+   */
   objectVersion?: number;
-  objectType?: string;
+  /**
+   * JSON enum for the types of objects in Synapse.
+   */
+  objectType?: OrgSagebionetworksRepoModelTableReplicatedEvent.ObjectTypeEnum;
+  /**
+   * The timestamp when this change was originally committed.
+   */
   timestamp?: string;
-  replicatedObjectType?: string;
+  /**
+   * JSON enum for the types of objects in Synapse.
+   */
+  replicatedObjectType?: OrgSagebionetworksRepoModelTableReplicatedEvent.ReplicatedObjectTypeEnum;
   /**
    * The distinct set of pathIs associated a batch of objects that were replciated.
    */
@@ -28,5 +43,199 @@ export namespace OrgSagebionetworksRepoModelTableReplicatedEvent {
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelTableReplicatedEvent:
       'org.sagebionetworks.repo.model.table.ReplicatedEvent' as ConcreteTypeEnum,
+  };
+  export type ObjectTypeEnum =
+    | 'ENTITY'
+    | 'ENTITY_CONTAINER'
+    | 'PRINCIPAL'
+    | 'ACTIVITY'
+    | 'EVALUATION'
+    | 'EVALUATION_ROUND'
+    | 'SUBMISSION'
+    | 'EVALUATION_SUBMISSIONS'
+    | 'FILE'
+    | 'MESSAGE'
+    | 'WIKI'
+    | 'FAVORITE'
+    | 'ACCESS_REQUIREMENT'
+    | 'ACCESS_APPROVAL'
+    | 'TEAM'
+    | 'TABLE'
+    | 'ACCESS_CONTROL_LIST'
+    | 'PROJECT_SETTING'
+    | 'VERIFICATION_SUBMISSION'
+    | 'CERTIFIED_USER_PASSING_RECORD'
+    | 'FORUM'
+    | 'THREAD'
+    | 'REPLY'
+    | 'FORM_GROUP'
+    | 'ORGANIZATION'
+    | 'FORM_DATA'
+    | 'ENTITY_VIEW'
+    | 'USER_PROFILE'
+    | 'DATA_ACCESS_REQUEST'
+    | 'DATA_ACCESS_SUBMISSION'
+    | 'DATA_ACCESS_SUBMISSION_STATUS'
+    | 'MEMBERSHIP_INVITATION'
+    | 'JSON_SCHEMA'
+    | 'JSON_SCHEMA_DEPENDANT'
+    | 'DATASET'
+    | 'DATASET_COLLECTION'
+    | 'THREAD_VIEW'
+    | 'MATERIALIZED_VIEW'
+    | 'VIRTUAL_TABLE'
+    | 'TABLE_STATUS_EVENT'
+    | 'DATA_ACCESS_SUBMISSION_EVENT'
+    | 'FILE_EVENT'
+    | 'QUERY_CACHE_HIT'
+    | 'PROJECT_STORAGE_EVENT'
+    | 'REPLICATED_EVENT'
+    | 'PORTAL'
+    | 'OAUTH_CLIENT';
+  export const ObjectTypeEnum = {
+    Entity: 'ENTITY' as ObjectTypeEnum,
+    EntityContainer: 'ENTITY_CONTAINER' as ObjectTypeEnum,
+    Principal: 'PRINCIPAL' as ObjectTypeEnum,
+    Activity: 'ACTIVITY' as ObjectTypeEnum,
+    Evaluation: 'EVALUATION' as ObjectTypeEnum,
+    EvaluationRound: 'EVALUATION_ROUND' as ObjectTypeEnum,
+    Submission: 'SUBMISSION' as ObjectTypeEnum,
+    EvaluationSubmissions: 'EVALUATION_SUBMISSIONS' as ObjectTypeEnum,
+    File: 'FILE' as ObjectTypeEnum,
+    Message: 'MESSAGE' as ObjectTypeEnum,
+    Wiki: 'WIKI' as ObjectTypeEnum,
+    Favorite: 'FAVORITE' as ObjectTypeEnum,
+    AccessRequirement: 'ACCESS_REQUIREMENT' as ObjectTypeEnum,
+    AccessApproval: 'ACCESS_APPROVAL' as ObjectTypeEnum,
+    Team: 'TEAM' as ObjectTypeEnum,
+    Table: 'TABLE' as ObjectTypeEnum,
+    AccessControlList: 'ACCESS_CONTROL_LIST' as ObjectTypeEnum,
+    ProjectSetting: 'PROJECT_SETTING' as ObjectTypeEnum,
+    VerificationSubmission: 'VERIFICATION_SUBMISSION' as ObjectTypeEnum,
+    CertifiedUserPassingRecord: 'CERTIFIED_USER_PASSING_RECORD' as ObjectTypeEnum,
+    Forum: 'FORUM' as ObjectTypeEnum,
+    Thread: 'THREAD' as ObjectTypeEnum,
+    Reply: 'REPLY' as ObjectTypeEnum,
+    FormGroup: 'FORM_GROUP' as ObjectTypeEnum,
+    Organization: 'ORGANIZATION' as ObjectTypeEnum,
+    FormData: 'FORM_DATA' as ObjectTypeEnum,
+    EntityView: 'ENTITY_VIEW' as ObjectTypeEnum,
+    UserProfile: 'USER_PROFILE' as ObjectTypeEnum,
+    DataAccessRequest: 'DATA_ACCESS_REQUEST' as ObjectTypeEnum,
+    DataAccessSubmission: 'DATA_ACCESS_SUBMISSION' as ObjectTypeEnum,
+    DataAccessSubmissionStatus: 'DATA_ACCESS_SUBMISSION_STATUS' as ObjectTypeEnum,
+    MembershipInvitation: 'MEMBERSHIP_INVITATION' as ObjectTypeEnum,
+    JsonSchema: 'JSON_SCHEMA' as ObjectTypeEnum,
+    JsonSchemaDependant: 'JSON_SCHEMA_DEPENDANT' as ObjectTypeEnum,
+    Dataset: 'DATASET' as ObjectTypeEnum,
+    DatasetCollection: 'DATASET_COLLECTION' as ObjectTypeEnum,
+    ThreadView: 'THREAD_VIEW' as ObjectTypeEnum,
+    MaterializedView: 'MATERIALIZED_VIEW' as ObjectTypeEnum,
+    VirtualTable: 'VIRTUAL_TABLE' as ObjectTypeEnum,
+    TableStatusEvent: 'TABLE_STATUS_EVENT' as ObjectTypeEnum,
+    DataAccessSubmissionEvent: 'DATA_ACCESS_SUBMISSION_EVENT' as ObjectTypeEnum,
+    FileEvent: 'FILE_EVENT' as ObjectTypeEnum,
+    QueryCacheHit: 'QUERY_CACHE_HIT' as ObjectTypeEnum,
+    ProjectStorageEvent: 'PROJECT_STORAGE_EVENT' as ObjectTypeEnum,
+    ReplicatedEvent: 'REPLICATED_EVENT' as ObjectTypeEnum,
+    Portal: 'PORTAL' as ObjectTypeEnum,
+    OauthClient: 'OAUTH_CLIENT' as ObjectTypeEnum,
+  };
+  export type ReplicatedObjectTypeEnum =
+    | 'ENTITY'
+    | 'ENTITY_CONTAINER'
+    | 'PRINCIPAL'
+    | 'ACTIVITY'
+    | 'EVALUATION'
+    | 'EVALUATION_ROUND'
+    | 'SUBMISSION'
+    | 'EVALUATION_SUBMISSIONS'
+    | 'FILE'
+    | 'MESSAGE'
+    | 'WIKI'
+    | 'FAVORITE'
+    | 'ACCESS_REQUIREMENT'
+    | 'ACCESS_APPROVAL'
+    | 'TEAM'
+    | 'TABLE'
+    | 'ACCESS_CONTROL_LIST'
+    | 'PROJECT_SETTING'
+    | 'VERIFICATION_SUBMISSION'
+    | 'CERTIFIED_USER_PASSING_RECORD'
+    | 'FORUM'
+    | 'THREAD'
+    | 'REPLY'
+    | 'FORM_GROUP'
+    | 'ORGANIZATION'
+    | 'FORM_DATA'
+    | 'ENTITY_VIEW'
+    | 'USER_PROFILE'
+    | 'DATA_ACCESS_REQUEST'
+    | 'DATA_ACCESS_SUBMISSION'
+    | 'DATA_ACCESS_SUBMISSION_STATUS'
+    | 'MEMBERSHIP_INVITATION'
+    | 'JSON_SCHEMA'
+    | 'JSON_SCHEMA_DEPENDANT'
+    | 'DATASET'
+    | 'DATASET_COLLECTION'
+    | 'THREAD_VIEW'
+    | 'MATERIALIZED_VIEW'
+    | 'VIRTUAL_TABLE'
+    | 'TABLE_STATUS_EVENT'
+    | 'DATA_ACCESS_SUBMISSION_EVENT'
+    | 'FILE_EVENT'
+    | 'QUERY_CACHE_HIT'
+    | 'PROJECT_STORAGE_EVENT'
+    | 'REPLICATED_EVENT'
+    | 'PORTAL'
+    | 'OAUTH_CLIENT';
+  export const ReplicatedObjectTypeEnum = {
+    Entity: 'ENTITY' as ReplicatedObjectTypeEnum,
+    EntityContainer: 'ENTITY_CONTAINER' as ReplicatedObjectTypeEnum,
+    Principal: 'PRINCIPAL' as ReplicatedObjectTypeEnum,
+    Activity: 'ACTIVITY' as ReplicatedObjectTypeEnum,
+    Evaluation: 'EVALUATION' as ReplicatedObjectTypeEnum,
+    EvaluationRound: 'EVALUATION_ROUND' as ReplicatedObjectTypeEnum,
+    Submission: 'SUBMISSION' as ReplicatedObjectTypeEnum,
+    EvaluationSubmissions: 'EVALUATION_SUBMISSIONS' as ReplicatedObjectTypeEnum,
+    File: 'FILE' as ReplicatedObjectTypeEnum,
+    Message: 'MESSAGE' as ReplicatedObjectTypeEnum,
+    Wiki: 'WIKI' as ReplicatedObjectTypeEnum,
+    Favorite: 'FAVORITE' as ReplicatedObjectTypeEnum,
+    AccessRequirement: 'ACCESS_REQUIREMENT' as ReplicatedObjectTypeEnum,
+    AccessApproval: 'ACCESS_APPROVAL' as ReplicatedObjectTypeEnum,
+    Team: 'TEAM' as ReplicatedObjectTypeEnum,
+    Table: 'TABLE' as ReplicatedObjectTypeEnum,
+    AccessControlList: 'ACCESS_CONTROL_LIST' as ReplicatedObjectTypeEnum,
+    ProjectSetting: 'PROJECT_SETTING' as ReplicatedObjectTypeEnum,
+    VerificationSubmission: 'VERIFICATION_SUBMISSION' as ReplicatedObjectTypeEnum,
+    CertifiedUserPassingRecord: 'CERTIFIED_USER_PASSING_RECORD' as ReplicatedObjectTypeEnum,
+    Forum: 'FORUM' as ReplicatedObjectTypeEnum,
+    Thread: 'THREAD' as ReplicatedObjectTypeEnum,
+    Reply: 'REPLY' as ReplicatedObjectTypeEnum,
+    FormGroup: 'FORM_GROUP' as ReplicatedObjectTypeEnum,
+    Organization: 'ORGANIZATION' as ReplicatedObjectTypeEnum,
+    FormData: 'FORM_DATA' as ReplicatedObjectTypeEnum,
+    EntityView: 'ENTITY_VIEW' as ReplicatedObjectTypeEnum,
+    UserProfile: 'USER_PROFILE' as ReplicatedObjectTypeEnum,
+    DataAccessRequest: 'DATA_ACCESS_REQUEST' as ReplicatedObjectTypeEnum,
+    DataAccessSubmission: 'DATA_ACCESS_SUBMISSION' as ReplicatedObjectTypeEnum,
+    DataAccessSubmissionStatus: 'DATA_ACCESS_SUBMISSION_STATUS' as ReplicatedObjectTypeEnum,
+    MembershipInvitation: 'MEMBERSHIP_INVITATION' as ReplicatedObjectTypeEnum,
+    JsonSchema: 'JSON_SCHEMA' as ReplicatedObjectTypeEnum,
+    JsonSchemaDependant: 'JSON_SCHEMA_DEPENDANT' as ReplicatedObjectTypeEnum,
+    Dataset: 'DATASET' as ReplicatedObjectTypeEnum,
+    DatasetCollection: 'DATASET_COLLECTION' as ReplicatedObjectTypeEnum,
+    ThreadView: 'THREAD_VIEW' as ReplicatedObjectTypeEnum,
+    MaterializedView: 'MATERIALIZED_VIEW' as ReplicatedObjectTypeEnum,
+    VirtualTable: 'VIRTUAL_TABLE' as ReplicatedObjectTypeEnum,
+    TableStatusEvent: 'TABLE_STATUS_EVENT' as ReplicatedObjectTypeEnum,
+    DataAccessSubmissionEvent: 'DATA_ACCESS_SUBMISSION_EVENT' as ReplicatedObjectTypeEnum,
+    FileEvent: 'FILE_EVENT' as ReplicatedObjectTypeEnum,
+    QueryCacheHit: 'QUERY_CACHE_HIT' as ReplicatedObjectTypeEnum,
+    ProjectStorageEvent: 'PROJECT_STORAGE_EVENT' as ReplicatedObjectTypeEnum,
+    ReplicatedEvent: 'REPLICATED_EVENT' as ReplicatedObjectTypeEnum,
+    Portal: 'PORTAL' as ReplicatedObjectTypeEnum,
+    OauthClient: 'OAUTH_CLIENT' as ReplicatedObjectTypeEnum,
   };
 }

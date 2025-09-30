@@ -14,5 +14,8 @@ import { OrgSagebionetworksRepoModelPrincipalEmailValidationSignedToken } from '
  */
 export interface OrgSagebionetworksRepoModelPrincipalAccountCreationToken {
   emailValidationSignedToken?: OrgSagebionetworksRepoModelPrincipalEmailValidationSignedToken;
+  /**
+   * Encoded signed token containing the information needed to retrieve a membership invitation.
+   */
   encodedMembershipInvtnSignedToken?: string;
 }

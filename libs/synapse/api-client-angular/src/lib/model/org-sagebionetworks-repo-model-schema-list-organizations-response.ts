@@ -14,5 +14,8 @@ import { OrgSagebionetworksRepoModelSchemaOrganization } from './org-sagebionetw
  */
 export interface OrgSagebionetworksRepoModelSchemaListOrganizationsResponse {
   page?: Array<OrgSagebionetworksRepoModelSchemaOrganization>;
+  /**
+   * Forward this token to get the next page of results.
+   */
   nextPageToken?: string;
 }

@@ -12,7 +12,16 @@
  * Record for a Team that can be used to submit to a challenge, including whether said Team is already registered.
  */
 export interface OrgSagebionetworksRepoModelSubmissionTeam {
+  /**
+   * Team ID
+   */
   teamId?: string;
+  /**
+   * Challenge ID
+   */
   challengeId?: string;
+  /**
+   * true if and only if the given team is registered for the given challenge.
+   */
   isRegistered?: boolean;
 }

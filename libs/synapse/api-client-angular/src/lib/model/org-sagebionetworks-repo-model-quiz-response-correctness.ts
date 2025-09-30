@@ -16,5 +16,8 @@ import { OrgSagebionetworksRepoModelQuizQuestion } from './org-sagebionetworks-r
 export interface OrgSagebionetworksRepoModelQuizResponseCorrectness {
   question?: OrgSagebionetworksRepoModelQuizQuestion;
   response?: OrgSagebionetworksRepoModelQuizQuestionResponse;
+  /**
+   * Is the response correct?
+   */
   isCorrect?: boolean;
 }

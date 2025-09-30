@@ -12,10 +12,59 @@
  * JSON schema for the TrashEntity POJO. A trashed entity is an entity in the trash can.
  */
 export interface OrgSagebionetworksRepoModelTrashedEntity {
+  /**
+   * The id of the entity.
+   */
   entityId?: string;
+  /**
+   * The name of this entity
+   */
   entityName?: string;
-  entityType?: string;
+  /**
+   * Type of the Entity
+   */
+  entityType?: OrgSagebionetworksRepoModelTrashedEntity.EntityTypeEnum;
+  /**
+   * The ID of the user who deleted the entity.
+   */
   deletedByPrincipalId?: string;
+  /**
+   * The date and time when the deletion occurred.
+   */
   deletedOn?: string;
+  /**
+   * The ID of the original parent before deletion.
+   */
   originalParentId?: string;
+}
+export namespace OrgSagebionetworksRepoModelTrashedEntity {
+  export type EntityTypeEnum =
+    | 'project'
+    | 'folder'
+    | 'file'
+    | 'table'
+    | 'link'
+    | 'entityview'
+    | 'dockerrepo'
+    | 'submissionview'
+    | 'dataset'
+    | 'datasetcollection'
+    | 'materializedview'
+    | 'virtualtable'
+    | 'recordset';
+  export const EntityTypeEnum = {
+    Project: 'project' as EntityTypeEnum,
+    Folder: 'folder' as EntityTypeEnum,
+    File: 'file' as EntityTypeEnum,
+    Table: 'table' as EntityTypeEnum,
+    Link: 'link' as EntityTypeEnum,
+    Entityview: 'entityview' as EntityTypeEnum,
+    Dockerrepo: 'dockerrepo' as EntityTypeEnum,
+    Submissionview: 'submissionview' as EntityTypeEnum,
+    Dataset: 'dataset' as EntityTypeEnum,
+    Datasetcollection: 'datasetcollection' as EntityTypeEnum,
+    Materializedview: 'materializedview' as EntityTypeEnum,
+    Virtualtable: 'virtualtable' as EntityTypeEnum,
+    Recordset: 'recordset' as EntityTypeEnum,
+  };
 }

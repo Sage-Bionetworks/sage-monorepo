@@ -12,6 +12,18 @@
  * Sets limits for maximum submissions in a SubmissionRound. Each limitType may only appear once in an EvaluationRound\'s list of limits
  */
 export interface OrgSagebionetworksEvaluationModelEvaluationRoundLimit {
-  limitType: string;
+  limitType: OrgSagebionetworksEvaluationModelEvaluationRoundLimit.LimitTypeEnum;
+  /**
+   * maximum number of submissions allowed within the time period defined by the the limitType
+   */
   maximumSubmissions: number;
+}
+export namespace OrgSagebionetworksEvaluationModelEvaluationRoundLimit {
+  export type LimitTypeEnum = 'TOTAL' | 'DAILY' | 'WEEKLY' | 'MONTHLY';
+  export const LimitTypeEnum = {
+    Total: 'TOTAL' as LimitTypeEnum,
+    Daily: 'DAILY' as LimitTypeEnum,
+    Weekly: 'WEEKLY' as LimitTypeEnum,
+    Monthly: 'MONTHLY' as LimitTypeEnum,
+  };
 }

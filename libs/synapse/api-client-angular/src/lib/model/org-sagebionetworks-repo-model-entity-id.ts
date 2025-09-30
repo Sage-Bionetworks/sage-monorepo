@@ -12,5 +12,8 @@
  * JSON schema for EntityId POJO
  */
 export interface OrgSagebionetworksRepoModelEntityId {
+  /**
+   * The id of an entity.
+   */
   id?: string;
 }

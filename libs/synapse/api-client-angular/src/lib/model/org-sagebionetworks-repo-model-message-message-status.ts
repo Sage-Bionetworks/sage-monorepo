@@ -12,7 +12,24 @@
  * JSON schema for message status from the RECIPIENT\'S standpoint
  */
 export interface OrgSagebionetworksRepoModelMessageMessageStatus {
+  /**
+   * The unique identifier of the message.
+   */
   messageId?: string;
+  /**
+   * The unique identifier of the recipient of this message.
+   */
   recipientId?: string;
-  status?: string;
+  /**
+   * The status of the message, from the RECIPIENT\'S standpoint
+   */
+  status?: OrgSagebionetworksRepoModelMessageMessageStatus.StatusEnum;
+}
+export namespace OrgSagebionetworksRepoModelMessageMessageStatus {
+  export type StatusEnum = 'READ' | 'UNREAD' | 'ARCHIVED';
+  export const StatusEnum = {
+    Read: 'READ' as StatusEnum,
+    Unread: 'UNREAD' as StatusEnum,
+    Archived: 'ARCHIVED' as StatusEnum,
+  };
 }

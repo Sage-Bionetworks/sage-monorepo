@@ -13,13 +13,37 @@ import { OrgSagebionetworksRepoModelProvenanceUsed } from './org-sagebionetworks
  * Interface for JSON schema for Activity POJO.
  */
 export interface OrgSagebionetworksRepoModelProvenanceActivity {
+  /**
+   * The unique immutable ID
+   */
   id?: string;
+  /**
+   * A name for this Activity.
+   */
   name?: string;
+  /**
+   * A description of this Activity.
+   */
   description?: string;
+  /**
+   * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client\'s current representation of an object is out-of-date.
+   */
   etag?: string;
+  /**
+   * The date this object was created.
+   */
   createdOn?: string;
+  /**
+   * The date this object was last modified.
+   */
   modifiedOn?: string;
+  /**
+   * The user that created this object.
+   */
   createdBy?: string;
+  /**
+   * The user that last modified this object.
+   */
   modifiedBy?: string;
   /**
    * The entities used by this Activity.

@@ -13,13 +13,37 @@ import { OrgSagebionetworksRepoModelFormSubmissionStatus } from './org-sagebione
  * User\'s data gathered from a form template. All FormData belongs to a single FormGroup.
  */
 export interface OrgSagebionetworksRepoModelFormFormData {
+  /**
+   * The system issued identifier that uniquely identifies this object.
+   */
   formDataId?: string;
+  /**
+   * Will change whenever there is a change to the this data or its status.
+   */
   etag?: string;
+  /**
+   * The identifier of the group that manages this data. Required.
+   */
   groupId?: string;
+  /**
+   * User provided name for this submission. Required.
+   */
   name?: string;
+  /**
+   * Id of the user that created this object
+   */
   createdBy?: string;
+  /**
+   * The date this object was originally created.
+   */
   createdOn?: string;
+  /**
+   * The date this object was last modified.
+   */
   modifiedOn?: string;
+  /**
+   * The identifier of the data FileHandle for this object.
+   */
   dataFileHandleId?: string;
   submissionStatus?: OrgSagebionetworksRepoModelFormSubmissionStatus;
 }

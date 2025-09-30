@@ -12,5 +12,8 @@
  * The permissions that a user has for a specific Synapse portal.
  */
 export interface OrgSagebionetworksRepoModelAuthUserPortalPermissions {
+  /**
+   * Can the user mint a DOI on a resource in this portal? True if the user has the UPDATE permission on the portal or if the user is part of the Synapse Portal Administrators group.
+   */
   canMintDoi?: boolean;
 }

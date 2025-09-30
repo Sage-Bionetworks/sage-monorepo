@@ -12,11 +12,29 @@
  * JSON Web Key for the RSA algorithm
  */
 export interface OrgSagebionetworksRepoModelOauthJsonWebKeyRSA {
+  /**
+   * The unique identifier for the JSON Web Token, described in <a href=\"https://tools.ietf.org/html/rfc7517#section-4.5\">RFC 7517 Section 4.5</a>
+   */
   kid?: string;
+  /**
+   * The key type, described in <a href=\"https://tools.ietf.org/html/rfc7517#section-4.1\">RFC 7517 Section 4.1</a>
+   */
   kty?: string;
+  /**
+   * The public key use, described in <a href=\"https://tools.ietf.org/html/rfc7517#section-4.2\">RFC 7517 Section 4.2</a>
+   */
   use?: string;
+  /**
+   * Indicates which kind of JSON Web Key the object is, following the Synapse standard.
+   */
   concreteType: OrgSagebionetworksRepoModelOauthJsonWebKeyRSA.ConcreteTypeEnum;
+  /**
+   * Exponent of RSA Public Key
+   */
   e?: string;
+  /**
+   * Modulus of RSA Public Key
+   */
   n?: string;
 }
 export namespace OrgSagebionetworksRepoModelOauthJsonWebKeyRSA {

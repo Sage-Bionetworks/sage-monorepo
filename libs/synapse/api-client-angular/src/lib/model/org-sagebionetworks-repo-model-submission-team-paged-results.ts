@@ -17,5 +17,8 @@ export interface OrgSagebionetworksRepoModelSubmissionTeamPagedResults {
    * The list of results for this page
    */
   results?: Array<OrgSagebionetworksRepoModelSubmissionTeam>;
+  /**
+   * The total number of results
+   */
   totalNumberOfResults?: number;
 }

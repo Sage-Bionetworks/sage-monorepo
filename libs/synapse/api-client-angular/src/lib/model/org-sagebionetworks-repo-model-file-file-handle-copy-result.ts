@@ -14,6 +14,19 @@ import { OrgSagebionetworksRepoModelFileFileHandle } from './org-sagebionetworks
  */
 export interface OrgSagebionetworksRepoModelFileFileHandleCopyResult {
   newFileHandle?: OrgSagebionetworksRepoModelFileFileHandle;
+  /**
+   * The Id of the original FileHandle.
+   */
   originalFileHandleId?: string;
-  failureCode?: string;
+  /**
+   * Failure code for a files that cannot be copied.
+   */
+  failureCode?: OrgSagebionetworksRepoModelFileFileHandleCopyResult.FailureCodeEnum;
+}
+export namespace OrgSagebionetworksRepoModelFileFileHandleCopyResult {
+  export type FailureCodeEnum = 'NOT_FOUND' | 'UNAUTHORIZED';
+  export const FailureCodeEnum = {
+    NotFound: 'NOT_FOUND' as FailureCodeEnum,
+    Unauthorized: 'UNAUTHORIZED' as FailureCodeEnum,
+  };
 }

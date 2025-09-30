@@ -12,15 +12,45 @@
  * The external upload destination setting contains information to generate an SFTP or HTTPS upload destination.
  */
 export interface OrgSagebionetworksRepoModelProjectExternalStorageLocationSetting {
+  /**
+   * Indicates which implementation this object represents.
+   */
   concreteType: OrgSagebionetworksRepoModelProjectExternalStorageLocationSetting.ConcreteTypeEnum;
+  /**
+   * The unique ID for this storage location
+   */
   storageLocationId?: number;
-  uploadType?: string;
+  /**
+   * The enumeration of possible upload types.
+   */
+  uploadType?: OrgSagebionetworksRepoModelProjectExternalStorageLocationSetting.UploadTypeEnum;
+  /**
+   * The banner text to display to a user every time a file is uploaded. This field is optional.
+   */
   banner?: string;
+  /**
+   * A description of the storage location. This description is shown when a user has to choose which upload destination to use.
+   */
   description?: string;
+  /**
+   * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time a Project Setting is updated it is used to detect when a client\'s current representation of a Project Setting is out-of-date.
+   */
   etag?: string;
+  /**
+   * The date this storage location setting was created.
+   */
   createdOn?: string;
+  /**
+   * The ID of the user that created this storage location setting.
+   */
   createdBy?: number;
+  /**
+   * the base URL for uploading to the external destination
+   */
   url?: string;
+  /**
+   * does the destination support creating subfolders under the base url (default: false)
+   */
   supportsSubfolders?: boolean;
 }
 export namespace OrgSagebionetworksRepoModelProjectExternalStorageLocationSetting {
@@ -29,5 +59,20 @@ export namespace OrgSagebionetworksRepoModelProjectExternalStorageLocationSettin
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelProjectExternalStorageLocationSetting:
       'org.sagebionetworks.repo.model.project.ExternalStorageLocationSetting' as ConcreteTypeEnum,
+  };
+  export type UploadTypeEnum =
+    | 'S3'
+    | 'GOOGLECLOUDSTORAGE'
+    | 'SFTP'
+    | 'HTTPS'
+    | 'PROXYLOCAL'
+    | 'NONE';
+  export const UploadTypeEnum = {
+    S3: 'S3' as UploadTypeEnum,
+    Googlecloudstorage: 'GOOGLECLOUDSTORAGE' as UploadTypeEnum,
+    Sftp: 'SFTP' as UploadTypeEnum,
+    Https: 'HTTPS' as UploadTypeEnum,
+    Proxylocal: 'PROXYLOCAL' as UploadTypeEnum,
+    None: 'NONE' as UploadTypeEnum,
   };
 }

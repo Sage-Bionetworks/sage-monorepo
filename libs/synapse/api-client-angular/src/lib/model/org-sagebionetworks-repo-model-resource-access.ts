@@ -12,9 +12,53 @@
  * JSON schema for a ResourceAccess POJO
  */
 export interface OrgSagebionetworksRepoModelResourceAccess {
+  /**
+   * The id of the principal who is granted access
+   */
   principalId?: number;
   /**
    * A list of types of access granted to the given principal
    */
-  accessType?: Set<string>;
+  accessType?: Set<OrgSagebionetworksRepoModelResourceAccess.AccessTypeEnum>;
+}
+export namespace OrgSagebionetworksRepoModelResourceAccess {
+  export type AccessTypeEnum =
+    | 'CREATE'
+    | 'READ'
+    | 'UPDATE'
+    | 'DELETE'
+    | 'CHANGE_PERMISSIONS'
+    | 'DOWNLOAD'
+    | 'UPLOAD'
+    | 'PARTICIPATE'
+    | 'SUBMIT'
+    | 'READ_PRIVATE_SUBMISSION'
+    | 'UPDATE_SUBMISSION'
+    | 'DELETE_SUBMISSION'
+    | 'TEAM_MEMBERSHIP_UPDATE'
+    | 'SEND_MESSAGE'
+    | 'CHANGE_SETTINGS'
+    | 'MODERATE'
+    | 'REVIEW_SUBMISSIONS'
+    | 'EXEMPTION_ELIGIBLE';
+  export const AccessTypeEnum = {
+    Create: 'CREATE' as AccessTypeEnum,
+    Read: 'READ' as AccessTypeEnum,
+    Update: 'UPDATE' as AccessTypeEnum,
+    Delete: 'DELETE' as AccessTypeEnum,
+    ChangePermissions: 'CHANGE_PERMISSIONS' as AccessTypeEnum,
+    Download: 'DOWNLOAD' as AccessTypeEnum,
+    Upload: 'UPLOAD' as AccessTypeEnum,
+    Participate: 'PARTICIPATE' as AccessTypeEnum,
+    Submit: 'SUBMIT' as AccessTypeEnum,
+    ReadPrivateSubmission: 'READ_PRIVATE_SUBMISSION' as AccessTypeEnum,
+    UpdateSubmission: 'UPDATE_SUBMISSION' as AccessTypeEnum,
+    DeleteSubmission: 'DELETE_SUBMISSION' as AccessTypeEnum,
+    TeamMembershipUpdate: 'TEAM_MEMBERSHIP_UPDATE' as AccessTypeEnum,
+    SendMessage: 'SEND_MESSAGE' as AccessTypeEnum,
+    ChangeSettings: 'CHANGE_SETTINGS' as AccessTypeEnum,
+    Moderate: 'MODERATE' as AccessTypeEnum,
+    ReviewSubmissions: 'REVIEW_SUBMISSIONS' as AccessTypeEnum,
+    ExemptionEligible: 'EXEMPTION_ELIGIBLE' as AccessTypeEnum,
+  };
 }

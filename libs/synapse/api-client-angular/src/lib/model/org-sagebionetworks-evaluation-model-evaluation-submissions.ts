@@ -12,7 +12,16 @@
  * This object holds the metadata for a collection of Submissions belonging to an Evaluation.
  */
 export interface OrgSagebionetworksEvaluationModelEvaluationSubmissions {
+  /**
+   * The unique immutable ID for this object.
+   */
   id?: number;
+  /**
+   * a etag that changes whenever any SubmissionStatus under the parent Evaluation does
+   */
   etag?: string;
+  /**
+   * The ID of the Evaluation.
+   */
   evaluationId?: number;
 }

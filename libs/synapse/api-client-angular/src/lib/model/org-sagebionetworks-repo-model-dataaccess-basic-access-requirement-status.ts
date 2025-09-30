@@ -12,9 +12,21 @@
  * The status of a user meeting a TermsOfUseAccessRequirement.
  */
 export interface OrgSagebionetworksRepoModelDataaccessBasicAccessRequirementStatus {
+  /**
+   * The ID of the requested AccessRequirement.
+   */
   accessRequirementId?: string;
+  /**
+   * Indicates which implementation of AccessRequirementStatus this object represents.
+   */
   concreteType: OrgSagebionetworksRepoModelDataaccessBasicAccessRequirementStatus.ConcreteTypeEnum;
+  /**
+   * True if there is an AccessApproval for the user for the given AccessRequirement.
+   */
   isApproved?: boolean;
+  /**
+   * The date that the user no longer have access to the data.
+   */
   expiredOn?: string;
 }
 export namespace OrgSagebionetworksRepoModelDataaccessBasicAccessRequirementStatus {

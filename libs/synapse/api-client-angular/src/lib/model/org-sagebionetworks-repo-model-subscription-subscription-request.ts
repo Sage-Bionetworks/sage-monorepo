@@ -12,11 +12,51 @@
  * A object that is used to request a list of Subscription
  */
 export interface OrgSagebionetworksRepoModelSubscriptionSubscriptionRequest {
-  objectType?: string;
+  /**
+   * The types of object that can be subscribed.
+   */
+  objectType?: OrgSagebionetworksRepoModelSubscriptionSubscriptionRequest.ObjectTypeEnum;
   /**
    * The list of objectId
    */
   idList?: Array<string>;
-  sortByType?: string;
-  sortDirection?: string;
+  /**
+   * Subscription sort by types.
+   */
+  sortByType?: OrgSagebionetworksRepoModelSubscriptionSubscriptionRequest.SortByTypeEnum;
+  /**
+   * Subscription sort directions.
+   */
+  sortDirection?: OrgSagebionetworksRepoModelSubscriptionSubscriptionRequest.SortDirectionEnum;
+}
+export namespace OrgSagebionetworksRepoModelSubscriptionSubscriptionRequest {
+  export type ObjectTypeEnum =
+    | 'FORUM'
+    | 'THREAD'
+    | 'DATA_ACCESS_SUBMISSION'
+    | 'DATA_ACCESS_SUBMISSION_STATUS';
+  export const ObjectTypeEnum = {
+    Forum: 'FORUM' as ObjectTypeEnum,
+    Thread: 'THREAD' as ObjectTypeEnum,
+    DataAccessSubmission: 'DATA_ACCESS_SUBMISSION' as ObjectTypeEnum,
+    DataAccessSubmissionStatus: 'DATA_ACCESS_SUBMISSION_STATUS' as ObjectTypeEnum,
+  };
+  export type SortByTypeEnum =
+    | 'SUBSCRIPTION_ID'
+    | 'SUBSCRIBER_ID'
+    | 'OBJECT_ID'
+    | 'OBJECT_TYPE'
+    | 'CREATED_ON';
+  export const SortByTypeEnum = {
+    SubscriptionId: 'SUBSCRIPTION_ID' as SortByTypeEnum,
+    SubscriberId: 'SUBSCRIBER_ID' as SortByTypeEnum,
+    ObjectId: 'OBJECT_ID' as SortByTypeEnum,
+    ObjectType: 'OBJECT_TYPE' as SortByTypeEnum,
+    CreatedOn: 'CREATED_ON' as SortByTypeEnum,
+  };
+  export type SortDirectionEnum = 'ASC' | 'DESC';
+  export const SortDirectionEnum = {
+    Asc: 'ASC' as SortDirectionEnum,
+    Desc: 'DESC' as SortDirectionEnum,
+  };
 }

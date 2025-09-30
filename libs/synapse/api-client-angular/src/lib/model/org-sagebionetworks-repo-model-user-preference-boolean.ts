@@ -12,8 +12,14 @@
  * A user preference of type boolean
  */
 export interface OrgSagebionetworksRepoModelUserPreferenceBoolean {
+  /**
+   * The name of the user preference.
+   */
   name?: string;
   concreteType: OrgSagebionetworksRepoModelUserPreferenceBoolean.ConcreteTypeEnum;
+  /**
+   * the value of the user preference
+   */
   value?: boolean;
 }
 export namespace OrgSagebionetworksRepoModelUserPreferenceBoolean {

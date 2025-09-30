@@ -15,21 +15,71 @@ import { OrgSagebionetworksRepoModelAuthCallersContext } from './org-sagebionetw
  * Object used to track the status of an Asynchronous Job.
  */
 export interface OrgSagebionetworksRepoModelAsynchAsynchronousJobStatus {
-  jobState?: string;
+  /**
+   * The job\'s state can be one of the following enumerations
+   */
+  jobState?: OrgSagebionetworksRepoModelAsynchAsynchronousJobStatus.JobStateEnum;
+  /**
+   * Was the job being asked to cancel.
+   */
   jobCanceling?: boolean;
   requestBody?: OrgSagebionetworksRepoModelAsynchAsynchronousRequestBody;
   responseBody?: OrgSagebionetworksRepoModelAsynchAsynchronousResponseBody;
+  /**
+   * The etag of the status will change whenever the status changes.
+   */
   etag?: string;
+  /**
+   * The ID if the job issued when this job request was issued.
+   */
   jobId?: string;
+  /**
+   * The ID of the user that started the job
+   */
   startedByUserId?: number;
+  /**
+   * The date-time when the status of this table last changed to PROCESSING.
+   */
   startedOn?: string;
+  /**
+   * The date-time when the status of this table last changed.
+   */
   changedOn?: string;
+  /**
+   * The current message of the progress tracker.
+   */
   progressMessage?: string;
+  /**
+   * The progress current value indicates how much progress has been made. For example: If progressTotal = 100; and progressCurrent = 50; then the work is 50% complete.
+   */
   progressCurrent?: number;
+  /**
+   * The progress total indicates the total amount of work to complete. For example: If progressTotal = 100; and progressCurrent = 50; then the work is 50% complete.
+   */
   progressTotal?: number;
+  /**
+   * The exception that needs to be thrown
+   */
   exception?: string;
+  /**
+   * When processing fails, this is a one line error message.
+   */
   errorMessage?: string;
+  /**
+   * When processing fails, this is the full stack trace of the error.
+   */
   errorDetails?: string;
+  /**
+   * The number of milliseconds from the start to completion of this job.
+   */
   runtimeMS?: number;
   callersContext?: OrgSagebionetworksRepoModelAuthCallersContext;
+}
+export namespace OrgSagebionetworksRepoModelAsynchAsynchronousJobStatus {
+  export type JobStateEnum = 'PROCESSING' | 'FAILED' | 'COMPLETE';
+  export const JobStateEnum = {
+    Processing: 'PROCESSING' as JobStateEnum,
+    Failed: 'FAILED' as JobStateEnum,
+    Complete: 'COMPLETE' as JobStateEnum,
+  };
 }

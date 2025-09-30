@@ -12,8 +12,17 @@
  * A V2WikiMarkdownVersion contains the markdown file handle id and title of a specific version of a V2WikiPage
  */
 export interface OrgSagebionetworksRepoModelV2WikiV2WikiMarkdownVersion {
+  /**
+   * The version of this snapshot in the wiki\'s history.
+   */
   version?: string;
+  /**
+   * The title of the wiki.
+   */
   title?: string;
+  /**
+   * The id of the S3FileHandle that helps locate the markdown file in S3.
+   */
   markdownFileHandleId?: string;
   /**
    * The list of attachment file handle ids of this page for this version.

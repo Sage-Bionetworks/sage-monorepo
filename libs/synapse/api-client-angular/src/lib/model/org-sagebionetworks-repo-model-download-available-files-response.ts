@@ -13,11 +13,17 @@ import { OrgSagebionetworksRepoModelDownloadDownloadListItemResult } from './org
  * Represents a single page of files that are available for download from the user\'s download list.
  */
 export interface OrgSagebionetworksRepoModelDownloadAvailableFilesResponse {
+  /**
+   * Will indicate the full package name of the response type.
+   */
   concreteType: OrgSagebionetworksRepoModelDownloadAvailableFilesResponse.ConcreteTypeEnum;
   /**
    * The page of download list items
    */
   page?: Array<OrgSagebionetworksRepoModelDownloadDownloadListItemResult>;
+  /**
+   * When provided, the nextPageToken indicates that there are more results.  Forward this token to the next request to get the next page.
+   */
   nextPageToken?: string;
 }
 export namespace OrgSagebionetworksRepoModelDownloadAvailableFilesResponse {

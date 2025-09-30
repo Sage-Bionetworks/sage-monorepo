@@ -12,6 +12,12 @@
  * Information about the version of the stack
  */
 export interface OrgSagebionetworksRepoModelVersionInfoSynapseVersionInfo {
+  /**
+   * The version of this stack
+   */
   version?: string;
+  /**
+   * The current stack instance number assigned to the stack
+   */
   stackInstance?: string;
 }

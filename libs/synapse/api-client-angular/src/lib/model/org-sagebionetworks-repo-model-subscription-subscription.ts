@@ -12,9 +12,37 @@
  * The model object represents a single Subscription.
  */
 export interface OrgSagebionetworksRepoModelSubscriptionSubscription {
+  /**
+   * The ID of this subscription
+   */
   subscriptionId?: string;
+  /**
+   * The ID of the user who created this subscription
+   */
   subscriberId?: string;
+  /**
+   * The ID of the object that being subscribed
+   */
   objectId?: string;
-  objectType?: string;
+  /**
+   * The types of object that can be subscribed.
+   */
+  objectType?: OrgSagebionetworksRepoModelSubscriptionSubscription.ObjectTypeEnum;
+  /**
+   * The timestamp when this subscription was created
+   */
   createdOn?: string;
+}
+export namespace OrgSagebionetworksRepoModelSubscriptionSubscription {
+  export type ObjectTypeEnum =
+    | 'FORUM'
+    | 'THREAD'
+    | 'DATA_ACCESS_SUBMISSION'
+    | 'DATA_ACCESS_SUBMISSION_STATUS';
+  export const ObjectTypeEnum = {
+    Forum: 'FORUM' as ObjectTypeEnum,
+    Thread: 'THREAD' as ObjectTypeEnum,
+    DataAccessSubmission: 'DATA_ACCESS_SUBMISSION' as ObjectTypeEnum,
+    DataAccessSubmissionStatus: 'DATA_ACCESS_SUBMISSION_STATUS' as ObjectTypeEnum,
+  };
 }

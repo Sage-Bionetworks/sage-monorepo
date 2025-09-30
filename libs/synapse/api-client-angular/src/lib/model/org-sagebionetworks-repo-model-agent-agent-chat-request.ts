@@ -13,8 +13,17 @@
  */
 export interface OrgSagebionetworksRepoModelAgentAgentChatRequest {
   concreteType: OrgSagebionetworksRepoModelAgentAgentChatRequest.ConcreteTypeEnum;
+  /**
+   * The sessionId that identifies the conversation with the agent.
+   */
   sessionId?: string;
+  /**
+   * The user\'s text message to send to the agent.
+   */
   chatText?: string;
+  /**
+   * Optional. When trace is enabled, the agent will include information about its decision process and the functions/tools it will use to process this request. Default value is false.
+   */
   enableTrace?: boolean;
 }
 export namespace OrgSagebionetworksRepoModelAgentAgentChatRequest {

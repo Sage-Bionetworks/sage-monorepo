@@ -12,5 +12,8 @@
  * Request a single page agent sessions for the current user.  The session are ordered by \'startedOn\' descending.
  */
 export interface OrgSagebionetworksRepoModelAgentListAgentSessionsRequest {
+  /**
+   * Forward the returned \'nextPageToken\' to get the next page of results.
+   */
   nextPageToken?: string;
 }

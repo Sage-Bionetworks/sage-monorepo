@@ -12,5 +12,8 @@
  * Request to create a new replica. A replica represents an \'in-memory\' grid document identifed by a unique replicaId.
  */
 export interface OrgSagebionetworksRepoModelGridCreateReplicaRequest {
+  /**
+   * The ID of the grid seesion.
+   */
   gridSessionId?: string;
 }

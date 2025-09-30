@@ -13,13 +13,40 @@ import { OrgSagebionetworksRepoModelAccessApproval } from './org-sagebionetworks
  * The result item in a User Data Access Submission Search
  */
 export interface OrgSagebionetworksRepoModelDataaccessUserSubmissionSearchResult {
+  /**
+   * The id of the submission
+   */
   id?: string;
   createdOn?: string;
   modifiedOn?: string;
+  /**
+   * The id of the access requirement the submission is for
+   */
   accessRequirementId?: string;
+  /**
+   * The version of the requirement that the submission refers to
+   */
   accessRequirementVersion?: string;
+  /**
+   * The name of the access requirement
+   */
   accessRequirementName?: string;
+  /**
+   * The principal ID of the person who created the submission
+   */
   submitterId?: string;
-  state?: string;
+  /**
+   * The state of a Submission.
+   */
+  state?: OrgSagebionetworksRepoModelDataaccessUserSubmissionSearchResult.StateEnum;
   userAccessApproval?: OrgSagebionetworksRepoModelAccessApproval;
+}
+export namespace OrgSagebionetworksRepoModelDataaccessUserSubmissionSearchResult {
+  export type StateEnum = 'SUBMITTED' | 'APPROVED' | 'REJECTED' | 'CANCELLED';
+  export const StateEnum = {
+    Submitted: 'SUBMITTED' as StateEnum,
+    Approved: 'APPROVED' as StateEnum,
+    Rejected: 'REJECTED' as StateEnum,
+    Cancelled: 'CANCELLED' as StateEnum,
+  };
 }

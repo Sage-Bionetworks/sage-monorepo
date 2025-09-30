@@ -12,7 +12,16 @@
  * JSON schema for a faceted key-value-range. This filter will match for values where min<=value<=max. At least one of either \'min\' or \'max\' must be set for this range to be valid
  */
 export interface OrgSagebionetworksRepoModelSearchQueryKeyRange {
+  /**
+   * The facet\'s name
+   */
   key: string;
+  /**
+   * The minimum value in the facet\'s range. The min value is included in the range. At least one of either \'min\' or \'max\' must be set for this range to be valid
+   */
   min?: string;
+  /**
+   * The maximum value in the facet\'s range. The max value is included in the range. At least one of either \'min\' or \'max\' must be set for this range to be valid
+   */
   max?: string;
 }

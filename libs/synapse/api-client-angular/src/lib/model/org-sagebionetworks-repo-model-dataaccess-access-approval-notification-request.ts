@@ -12,6 +12,9 @@
  * A request to retrieve the notifications for an access requirement and a list of recipients.
  */
 export interface OrgSagebionetworksRepoModelDataaccessAccessApprovalNotificationRequest {
+  /**
+   * The id of the access requirement.
+   */
   requirementId?: number;
   /**
    * The list of recipient ids, max of 25 recipients allowed.

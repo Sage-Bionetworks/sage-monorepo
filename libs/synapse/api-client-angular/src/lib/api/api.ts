@@ -16,6 +16,8 @@ export * from './certified-user-services.service';
 import { CertifiedUserServicesService } from './certified-user-services.service';
 export * from './challenge-services.service';
 import { ChallengeServicesService } from './challenge-services.service';
+export * from './curation-task-services.service';
+import { CurationTaskServicesService } from './curation-task-services.service';
 export * from './doi-services.service';
 import { DOIServicesService } from './doi-services.service';
 export * from './data-access-services.service';
@@ -100,6 +102,7 @@ export const APIS = [
   AuthenticationServices2FAService,
   CertifiedUserServicesService,
   ChallengeServicesService,
+  CurationTaskServicesService,
   DOIServicesService,
   DataAccessServicesService,
   DiscussionServicesService,

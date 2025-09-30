@@ -14,12 +14,30 @@ import { OrgSagebionetworksRepoModelVerificationVerificationSubmission } from '.
  * JSON schema for UserProfile POJO
  */
 export interface OrgSagebionetworksRepoModelUserBundle {
+  /**
+   * The ID of the user described by this bundle
+   */
   userId?: string;
   userProfile?: OrgSagebionetworksRepoModelUserProfile;
+  /**
+   * The ORCID ID for the user, if any
+   */
   ORCID?: string;
   verificationSubmission?: OrgSagebionetworksRepoModelVerificationVerificationSubmission;
+  /**
+   * true iff the user is Certified
+   */
   isCertified?: boolean;
+  /**
+   * true iff the user is Verified
+   */
   isVerified?: boolean;
+  /**
+   * true iff the user is an ACT member
+   */
   isACTMember?: boolean;
+  /**
+   * true iff the user has permissions to review data access submissions on at least one access requirement (This is always true for an ACT member)
+   */
   isARReviewer?: boolean;
 }

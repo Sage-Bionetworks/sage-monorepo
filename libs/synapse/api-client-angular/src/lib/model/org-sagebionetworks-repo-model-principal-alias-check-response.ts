@@ -12,6 +12,12 @@
  * Response to an alias check request.
  */
 export interface OrgSagebionetworksRepoModelPrincipalAliasCheckResponse {
+  /**
+   * True is the alias is available.
+   */
   available?: boolean;
+  /**
+   * True if the alias is valid for the passed type.
+   */
   valid?: boolean;
 }

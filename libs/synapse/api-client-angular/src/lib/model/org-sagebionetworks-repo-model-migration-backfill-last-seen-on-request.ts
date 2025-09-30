@@ -13,6 +13,9 @@
  */
 export interface OrgSagebionetworksRepoModelMigrationBackfillLastSeenOnRequest {
   concreteType: OrgSagebionetworksRepoModelMigrationBackfillLastSeenOnRequest.ConcreteTypeEnum;
+  /**
+   * The maximum number of users to process in the request, at least 500;
+   */
   maxUsersCount?: number;
 }
 export namespace OrgSagebionetworksRepoModelMigrationBackfillLastSeenOnRequest {

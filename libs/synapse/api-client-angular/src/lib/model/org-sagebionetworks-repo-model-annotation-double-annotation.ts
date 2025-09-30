@@ -12,7 +12,16 @@
  * An Annotation containing a Double value
  */
 export interface OrgSagebionetworksRepoModelAnnotationDoubleAnnotation {
+  /**
+   * The key of this Annotation
+   */
   key?: string;
+  /**
+   * Flag denoting whether this Annotation should be private.
+   */
   isPrivate?: boolean;
+  /**
+   * The value of this Annotation
+   */
   value?: number;
 }

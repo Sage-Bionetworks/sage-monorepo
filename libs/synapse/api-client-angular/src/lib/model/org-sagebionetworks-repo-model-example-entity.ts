@@ -14,38 +14,86 @@ import { OrgSagebionetworksRepoModelEnvironmentDescriptor } from './org-sagebion
  * This object is deprecated and will be removed in future versions of Synapse.
  */
 export interface OrgSagebionetworksRepoModelExampleEntity {
+  /**
+   * The name of this entity.  Must be 256 characters or less. Names may only contain: letters, numbers, spaces, underscores, hyphens, periods, plus signs, apostrophes, and parentheses
+   */
   name?: string;
+  /**
+   * The description of this entity.  Must be 1000 characters or less.
+   */
   description?: string;
+  /**
+   * The unique immutable ID for this entity.  A new ID will be generated for new Entities.  Once issued, this ID is guaranteed to never change or be re-issued
+   */
   id?: string;
+  /**
+   * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client\'s current representation of an entity is out-of-date.
+   */
   etag?: string;
+  /**
+   * The date this entity was created.
+   */
   createdOn?: string;
+  /**
+   * The date this entity was last modified.
+   */
   modifiedOn?: string;
+  /**
+   * The ID of the user that created this entity.
+   */
   createdBy?: string;
+  /**
+   * The ID of the user that last modified this entity.
+   */
   modifiedBy?: string;
+  /**
+   * The ID of the Entity that is the parent of this Entity.
+   */
   parentId?: string;
+  /**
+   * Indicates which implementation of Entity this object represents.  The value is the fully qualified class name, e.g. org.sagebionetworks.repo.model.FileEntity.
+   */
   concreteType: OrgSagebionetworksRepoModelExampleEntity.ConcreteTypeEnum;
+  /**
+   * This is an example of a single string
+   */
   singleString?: string;
   /**
    * This is an example of a list of strings
    */
   stringList?: Array<string>;
+  /**
+   * This is an example of a single date
+   */
   singleDate?: string;
   /**
    * This is an example of a list of dates
    */
   dateList?: Array<string>;
+  /**
+   * This is an example of a single Double
+   */
   singleDouble?: number;
   /**
    * This is an example of a double list
    */
   doubleList?: Array<number>;
+  /**
+   * This is an example of a single Integer
+   */
   singleInteger?: number;
   /**
    * This is an example of an Integer List.
    */
   integerList?: Array<number>;
+  /**
+   * Type of tissue for the samples in this layer. <skos:altLabel>Tissue Types</skos:altLabel> Tissue is described by the Synapse ontology concept: http://synapse.sagebase.org/ontology#6501
+   */
   concept?: string;
-  someEnum?: string;
+  /**
+   * The property is constrained by an enumeration
+   */
+  someEnum?: OrgSagebionetworksRepoModelExampleEntity.SomeEnumEnum;
   /**
    * References
    */
@@ -60,5 +108,11 @@ export namespace OrgSagebionetworksRepoModelExampleEntity {
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelExampleEntity:
       'org.sagebionetworks.repo.model.ExampleEntity' as ConcreteTypeEnum,
+  };
+  export type SomeEnumEnum = 'CAT' | 'DOG' | 'FISH';
+  export const SomeEnumEnum = {
+    Cat: 'CAT' as SomeEnumEnum,
+    Dog: 'DOG' as SomeEnumEnum,
+    Fish: 'FISH' as SomeEnumEnum,
   };
 }

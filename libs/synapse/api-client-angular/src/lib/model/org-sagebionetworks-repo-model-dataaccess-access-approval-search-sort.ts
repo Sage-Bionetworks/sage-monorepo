@@ -12,6 +12,24 @@
  * Identifies both the field and direction for a single sort operation
  */
 export interface OrgSagebionetworksRepoModelDataaccessAccessApprovalSearchSort {
-  field?: string;
-  direction?: string;
+  /**
+   * Field to sort on.
+   */
+  field?: OrgSagebionetworksRepoModelDataaccessAccessApprovalSearchSort.FieldEnum;
+  /**
+   * Direction of a sort.
+   */
+  direction?: OrgSagebionetworksRepoModelDataaccessAccessApprovalSearchSort.DirectionEnum;
+}
+export namespace OrgSagebionetworksRepoModelDataaccessAccessApprovalSearchSort {
+  export type FieldEnum = 'MODIFIED_ON' | 'EXPIRED_ON';
+  export const FieldEnum = {
+    ModifiedOn: 'MODIFIED_ON' as FieldEnum,
+    ExpiredOn: 'EXPIRED_ON' as FieldEnum,
+  };
+  export type DirectionEnum = 'ASC' | 'DESC';
+  export const DirectionEnum = {
+    Asc: 'ASC' as DirectionEnum,
+    Desc: 'DESC' as DirectionEnum,
+  };
 }

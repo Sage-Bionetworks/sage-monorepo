@@ -13,6 +13,9 @@
  */
 export interface OrgSagebionetworksRepoModelDownloadRequestDownload {
   concreteType: OrgSagebionetworksRepoModelDownloadRequestDownload.ConcreteTypeEnum;
+  /**
+   * The benefactor is the ID of the Entity with the ACL that controls access to one or more files.
+   */
   benefactorId?: number;
 }
 export namespace OrgSagebionetworksRepoModelDownloadRequestDownload {

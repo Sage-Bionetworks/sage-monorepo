@@ -12,6 +12,12 @@
  * A range of IDs
  */
 export interface OrgSagebionetworksRepoModelMigrationIdRange {
+  /**
+   * The first ID in the range.
+   */
   minimumId?: number;
+  /**
+   * The last ID in the range plus one.
+   */
   maximumId?: number;
 }

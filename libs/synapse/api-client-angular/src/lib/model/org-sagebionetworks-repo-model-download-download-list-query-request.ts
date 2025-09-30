@@ -13,6 +13,9 @@ import { OrgSagebionetworksRepoModelDownloadQueryRequestDetails } from './org-sa
  * A request to start an asynchronous job to query a user\'s download list.  The type of query is defined by provided requestDetails.
  */
 export interface OrgSagebionetworksRepoModelDownloadDownloadListQueryRequest {
+  /**
+   * Required. For this type the value should be: \'org.sagebionetworks.repo.model.download.DownloadListQueryRequest\'
+   */
   concreteType: OrgSagebionetworksRepoModelDownloadDownloadListQueryRequest.ConcreteTypeEnum;
   requestDetails?: OrgSagebionetworksRepoModelDownloadQueryRequestDetails;
 }

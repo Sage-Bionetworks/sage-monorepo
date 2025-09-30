@@ -12,6 +12,12 @@
  * Request to agree to the terms of service.
  */
 export interface OrgSagebionetworksRepoModelAuthTermsOfServiceSignRequest {
+  /**
+   * An access token of the user that is agreeing to the ToS.
+   */
   accessToken?: string;
+  /**
+   * The semantic version of the ToS that the user read and agreed to.  If a client does not provide this value, then a default value of \'0.0.0\' will be used indicating that the original (and deprecated) ToS was used.
+   */
   termsOfServiceVersion?: string;
 }

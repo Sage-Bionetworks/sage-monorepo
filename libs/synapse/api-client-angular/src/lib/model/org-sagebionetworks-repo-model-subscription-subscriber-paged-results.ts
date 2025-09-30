@@ -16,5 +16,8 @@ export interface OrgSagebionetworksRepoModelSubscriptionSubscriberPagedResults {
    * The list of subscriberId for this page
    */
   subscribers?: Array<string>;
+  /**
+   * The token to get the next page result.
+   */
   nextPageToken?: string;
 }

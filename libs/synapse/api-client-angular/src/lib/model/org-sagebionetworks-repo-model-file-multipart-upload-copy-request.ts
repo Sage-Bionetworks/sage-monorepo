@@ -13,10 +13,25 @@ import { OrgSagebionetworksRepoModelFileFileHandleAssociation } from './org-sage
  * A multi-part upload that performs a copy of an existing file handle without data transfer from the client. Currently supports only copy from and to S3 buckets that live in the same region.
  */
 export interface OrgSagebionetworksRepoModelFileMultipartUploadCopyRequest {
+  /**
+   * Indicates which type of multi-part request to initiate. Currently supports <a href=\"${org.sagebionetworks.repo.model.file.MultipartUploadRequest}\">MultipartUploadRequest</a> and <a href=\"${org.sagebionetworks.repo.model.file.MultipartUploadCopyRequest}\">MultipartUploadCopyRequest</a>
+   */
   concreteType: OrgSagebionetworksRepoModelFileMultipartUploadCopyRequest.ConcreteTypeEnum;
+  /**
+   * In order to copy a file, the client must split the process into \'parts\' and copy each part separately. This indicates the clients intended part size in bytes. Part size must be at least 5,242,880 bytes (5MB) with a max of 5,368,709,120 bytes (5GB). Also the maximum number of parts for a single file is 10K. The recommended part size for a single file copy should be: MAX(104857600, (originalFileSizeBytes/10000)).
+   */
   partSizeBytes?: number;
+  /**
+   * The name of the file to be uploaded.
+   */
   fileName?: string;
+  /**
+   * The identifier of the storage location where this file should be copied to. The user must be the owner of the storage location.
+   */
   storageLocationId?: number;
+  /**
+   * Optional parameter.  When set to \'false\' a preview will not be generated for the resulting file.
+   */
   generatePreview?: boolean;
   sourceFileHandleAssociation?: OrgSagebionetworksRepoModelFileFileHandleAssociation;
 }

@@ -14,12 +14,27 @@ import { OrgSagebionetworksRepoModelQuizMultichoiceAnswer } from './org-sagebion
  * A multiple choice question
  */
 export interface OrgSagebionetworksRepoModelQuizMultichoiceQuestion {
+  /**
+   * an index unique in the Quiz, used to refer to this question
+   */
   questionIndex?: number;
+  /**
+   * the user-readable prompt for this question
+   */
   prompt?: string;
   reference?: OrgSagebionetworksRepoModelDaoWikiPageKey;
+  /**
+   * Link to the document that contains information for background reading related to the question.
+   */
   docLink?: string;
+  /**
+   * A short text that provides a snippet of help to answer the question.
+   */
   helpText?: string;
   concreteType: OrgSagebionetworksRepoModelQuizMultichoiceQuestion.ConcreteTypeEnum;
+  /**
+   * If true then only one response is correct
+   */
   exclusive?: boolean;
   /**
    * The possible answers for this question

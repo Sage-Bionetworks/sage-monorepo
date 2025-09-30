@@ -12,6 +12,9 @@
  * Request to get statistics about the files currently on the user\'s download list.
  */
 export interface OrgSagebionetworksRepoModelDownloadFilesStatisticsRequest {
+  /**
+   * Required. For this type the value should be: \'org.sagebionetworks.repo.model.download.FilesStatisticsRequest\'
+   */
   concreteType: OrgSagebionetworksRepoModelDownloadFilesStatisticsRequest.ConcreteTypeEnum;
 }
 export namespace OrgSagebionetworksRepoModelDownloadFilesStatisticsRequest {

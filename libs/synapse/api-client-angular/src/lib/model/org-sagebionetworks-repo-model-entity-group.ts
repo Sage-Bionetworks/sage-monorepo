@@ -13,7 +13,13 @@ import { OrgSagebionetworksRepoModelEntityGroupRecord } from './org-sagebionetwo
  * JSON schema for an Entity Group POJO
  */
 export interface OrgSagebionetworksRepoModelEntityGroup {
+  /**
+   * The name of this entity
+   */
   name?: string;
+  /**
+   * The description of this entity.
+   */
   description?: string;
   /**
    * The set of EntityGroupRecords for this group.

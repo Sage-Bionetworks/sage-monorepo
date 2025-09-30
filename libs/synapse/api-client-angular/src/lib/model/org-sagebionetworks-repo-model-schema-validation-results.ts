@@ -13,16 +13,43 @@ import { OrgSagebionetworksRepoModelSchemaValidationException } from './org-sage
  * Results of validating an object against a schema
  */
 export interface OrgSagebionetworksRepoModelSchemaValidationResults {
+  /**
+   * The identifier of the object that was validated.
+   */
   objectId?: string;
-  objectType?: string;
+  /**
+   * Type types of Synapse objects that can have a JSON schema.
+   */
+  objectType?: OrgSagebionetworksRepoModelSchemaValidationResults.ObjectTypeEnum;
+  /**
+   * The etag of the object at the time of validation.  Note: If this etag does not match the current etag of the object then these validation results should be considered out of date.
+   */
   objectEtag?: string;
+  /**
+   * The $id of the schema that the object was validated against.
+   */
   schema$id?: string;
+  /**
+   * True if the object is currently valid according to the schema.
+   */
   isValid?: boolean;
+  /**
+   * The date-time this object was validated
+   */
   validatedOn?: string;
+  /**
+   * If the object is not valid according to the schema, a simple one line error message will be provided.
+   */
   validationErrorMessage?: string;
   /**
    * If the object is not valid according to the schema, a the flat list of error messages will be provided with one error message per sub-schema.
    */
   allValidationMessages?: Array<string>;
   validationException?: OrgSagebionetworksRepoModelSchemaValidationException;
+}
+export namespace OrgSagebionetworksRepoModelSchemaValidationResults {
+  export type ObjectTypeEnum = 'entity';
+  export const ObjectTypeEnum = {
+    Entity: 'entity' as ObjectTypeEnum,
+  };
 }

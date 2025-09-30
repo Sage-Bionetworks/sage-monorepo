@@ -12,7 +12,33 @@
  * An upload destination location contains the id of the StorageLocation where a file can be uploaded.
  */
 export interface OrgSagebionetworksRepoModelFileUploadDestinationLocation {
+  /**
+   * the unique id for the storage location
+   */
   storageLocationId?: number;
+  /**
+   * The description to show the user when the user has to choose which upload destination to use
+   */
   description?: string;
-  uploadType?: string;
+  /**
+   * The enumeration of possible upload types.
+   */
+  uploadType?: OrgSagebionetworksRepoModelFileUploadDestinationLocation.UploadTypeEnum;
+}
+export namespace OrgSagebionetworksRepoModelFileUploadDestinationLocation {
+  export type UploadTypeEnum =
+    | 'S3'
+    | 'GOOGLECLOUDSTORAGE'
+    | 'SFTP'
+    | 'HTTPS'
+    | 'PROXYLOCAL'
+    | 'NONE';
+  export const UploadTypeEnum = {
+    S3: 'S3' as UploadTypeEnum,
+    Googlecloudstorage: 'GOOGLECLOUDSTORAGE' as UploadTypeEnum,
+    Sftp: 'SFTP' as UploadTypeEnum,
+    Https: 'HTTPS' as UploadTypeEnum,
+    Proxylocal: 'PROXYLOCAL' as UploadTypeEnum,
+    None: 'NONE' as UploadTypeEnum,
+  };
 }

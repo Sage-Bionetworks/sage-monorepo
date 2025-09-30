@@ -14,15 +14,42 @@ import { OrgSagebionetworksRepoModelDrsOrganizationInformation } from './org-sag
  * Drs service information
  */
 export interface OrgSagebionetworksRepoModelDrsServiceInformation {
+  /**
+   * The globally unique identifier of the service. Reverse domain name notation is used as id.
+   */
   id?: string;
+  /**
+   * The name of the service.
+   */
   name?: string;
   type?: OrgSagebionetworksRepoModelDrsPackageInformation;
+  /**
+   * The description of the service.
+   */
   description?: string;
   organization?: OrgSagebionetworksRepoModelDrsOrganizationInformation;
+  /**
+   * The contact url of the organization.
+   */
   contactUrl?: string;
+  /**
+   * The url of supporting document for the service.
+   */
   documentationUrl?: string;
+  /**
+   * The creation date of the Drs services.
+   */
   createdAt?: string;
+  /**
+   * The update date of the Drs services.
+   */
   updatedAt?: string;
+  /**
+   * The environment of the service in which its up and running.
+   */
   environment?: string;
+  /**
+   * The version of software in which Drs services released.
+   */
   version?: string;
 }

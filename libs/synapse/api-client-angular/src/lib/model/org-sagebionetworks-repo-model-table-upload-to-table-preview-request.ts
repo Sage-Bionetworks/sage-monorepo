@@ -14,9 +14,18 @@ import { OrgSagebionetworksRepoModelTableCsvTableDescriptor } from './org-sagebi
  */
 export interface OrgSagebionetworksRepoModelTableUploadToTablePreviewRequest {
   concreteType: OrgSagebionetworksRepoModelTableUploadToTablePreviewRequest.ConcreteTypeEnum;
+  /**
+   * The ID of the file handle for a type of UPLOAD
+   */
   uploadFileHandleId?: string;
+  /**
+   * The number of lines to skip from the start of the file.  The default value of 0 will be used if this is not provided by the caller.
+   */
   linesToSkip?: number;
   csvTableDescriptor?: OrgSagebionetworksRepoModelTableCsvTableDescriptor;
+  /**
+   * When set to true the full file will be scanned for a schema suggestions.  A full scan is more accurate but can take more time.  When set to false only a sub-set of the first rows will be scanned, which can be faster but is less accurate. The default value is false.
+   */
   doFullFileScan?: boolean;
 }
 export namespace OrgSagebionetworksRepoModelTableUploadToTablePreviewRequest {

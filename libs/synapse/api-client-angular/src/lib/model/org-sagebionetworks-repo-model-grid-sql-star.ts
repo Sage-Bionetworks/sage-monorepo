@@ -12,6 +12,9 @@
  * Indicates an asterisk (*).
  */
 export interface OrgSagebionetworksRepoModelGridSqlStar {
+  /**
+   * Required. Full name of the exact type used.
+   */
   concreteType: OrgSagebionetworksRepoModelGridSqlStar.ConcreteTypeEnum;
 }
 export namespace OrgSagebionetworksRepoModelGridSqlStar {

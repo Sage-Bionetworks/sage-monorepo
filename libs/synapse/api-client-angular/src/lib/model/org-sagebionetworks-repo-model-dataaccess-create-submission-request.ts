@@ -12,8 +12,28 @@
  * A request to create a Submission.
  */
 export interface OrgSagebionetworksRepoModelDataaccessCreateSubmissionRequest {
+  /**
+   * The ID of a Request to create the Submission from.
+   */
   requestId?: string;
+  /**
+   * The current etag of the request.
+   */
   requestEtag?: string;
+  /**
+   * The ID of the subject user interested in. This information will be used to help user navigate back to where they were to continue their work.
+   */
   subjectId?: string;
-  subjectType?: string;
+  /**
+   * JSON enum for the types of objects which can be restricted by an AccessRequirement.
+   */
+  subjectType?: OrgSagebionetworksRepoModelDataaccessCreateSubmissionRequest.SubjectTypeEnum;
+}
+export namespace OrgSagebionetworksRepoModelDataaccessCreateSubmissionRequest {
+  export type SubjectTypeEnum = 'ENTITY' | 'EVALUATION' | 'TEAM';
+  export const SubjectTypeEnum = {
+    Entity: 'ENTITY' as SubjectTypeEnum,
+    Evaluation: 'EVALUATION' as SubjectTypeEnum,
+    Team: 'TEAM' as SubjectTypeEnum,
+  };
 }

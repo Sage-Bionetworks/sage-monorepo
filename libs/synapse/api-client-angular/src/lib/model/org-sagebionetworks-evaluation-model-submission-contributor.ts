@@ -12,6 +12,12 @@
  * A contributor to an evaluation Submission
  */
 export interface OrgSagebionetworksEvaluationModelSubmissionContributor {
+  /**
+   * ID of the contributor
+   */
   principalId?: string;
+  /**
+   * date when contributor was added to Submission.  Normally this will match the creation date of the Submission, but administrative override is allowed.
+   */
   createdOn?: string;
 }

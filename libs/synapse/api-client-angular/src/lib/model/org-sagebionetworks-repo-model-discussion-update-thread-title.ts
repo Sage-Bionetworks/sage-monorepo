@@ -9,5 +9,8 @@
  */
 
 export interface OrgSagebionetworksRepoModelDiscussionUpdateThreadTitle {
+  /**
+   * The new title
+   */
   title?: string;
 }

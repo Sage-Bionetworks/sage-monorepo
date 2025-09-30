@@ -12,13 +12,40 @@
  * Basic information about a grid session.
  */
 export interface OrgSagebionetworksRepoModelGridGridSession {
+  /**
+   * The unique sessionId that identifies the grid session.
+   */
   sessionId?: string;
+  /**
+   * The user that started this session.
+   */
   startedBy?: string;
+  /**
+   * The date-time when the session was started.
+   */
   startedOn?: string;
+  /**
+   * Changes when the session chagnes.
+   */
   etag?: string;
+  /**
+   * The date-time when the session was last changed.
+   */
   modifiedOn?: string;
+  /**
+   * The last replica ID issued to a client. Client replica IDs are incremented.
+   */
   lastReplicaIdClient?: number;
+  /**
+   * The last replica ID issued to a service. Service replica IDs are decremented.
+   */
   lastReplicaIdService?: number;
+  /**
+   * The $id of the JSON schema that will be used for model validation in this grid session.
+   */
   gridJsonSchema$Id?: string;
+  /**
+   * The synId of the table/view/csv that this grid was cloned from.
+   */
   sourceEntityId?: string;
 }

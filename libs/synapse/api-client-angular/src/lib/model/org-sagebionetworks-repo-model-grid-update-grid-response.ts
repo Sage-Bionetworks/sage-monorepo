@@ -12,5 +12,8 @@
  * Response to an Update grid SQL request.
  */
 export interface OrgSagebionetworksRepoModelGridUpdateGridResponse {
+  /**
+   * The number of rows updated with this request.
+   */
   updatedRowCount?: number;
 }

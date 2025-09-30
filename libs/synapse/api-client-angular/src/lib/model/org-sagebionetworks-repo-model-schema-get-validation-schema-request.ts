@@ -13,6 +13,9 @@
  */
 export interface OrgSagebionetworksRepoModelSchemaGetValidationSchemaRequest {
   concreteType: OrgSagebionetworksRepoModelSchemaGetValidationSchemaRequest.ConcreteTypeEnum;
+  /**
+   * The $id of the JSON schema to get the validation schema for.
+   */
   $id?: string;
 }
 export namespace OrgSagebionetworksRepoModelSchemaGetValidationSchemaRequest {

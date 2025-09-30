@@ -20,11 +20,17 @@ import { OrgSagebionetworksRepoModelTableSelectColumn } from './org-sagebionetwo
 export interface OrgSagebionetworksRepoModelTableQueryResultBundle {
   concreteType: OrgSagebionetworksRepoModelTableQueryResultBundle.ConcreteTypeEnum;
   queryResult?: OrgSagebionetworksRepoModelTableQueryResult;
+  /**
+   * The total number of rows that match the query. Use mask = 0x2 to include in the bundle.
+   */
   queryCount?: number;
   /**
    * The list of SelectColumns from the select clause. Use mask = 0x4 to include in the bundle.
    */
   selectColumns?: Array<OrgSagebionetworksRepoModelTableSelectColumn>;
+  /**
+   * The maximum number of rows that can be retrieved in a single call.  This is a function of the columns that are selected in the query. Use mask = 0x8 to include in the bundle.
+   */
   maxRowsPerPage?: number;
   /**
    * The list of ColumnModels for the table. Use mask = 0x10 to include in the bundle.
@@ -35,7 +41,13 @@ export interface OrgSagebionetworksRepoModelTableQueryResultBundle {
    */
   facets?: Array<OrgSagebionetworksRepoModelTableFacetColumnResult>;
   sumFileSizes?: OrgSagebionetworksRepoModelTableSumFileSizes;
+  /**
+   * The date-time when this table/view was last updated. Note: Since views are eventually consistent a view might still be out-of-date even if it was recently updated. Use mask = 0x80 to include in the bundle.
+   */
   lastUpdatedOn?: string;
+  /**
+   * The SQL that is combination of a the input SQL, FacetRequests, AdditionalFilters, Sorting, and Pagination. Use mask = 0x100 to include in the bundle.
+   */
   combinedSql?: string;
   /**
    * The first 50 actions required to download the files that are part of the query. Use mask = 0x200 to include them in the bundle.

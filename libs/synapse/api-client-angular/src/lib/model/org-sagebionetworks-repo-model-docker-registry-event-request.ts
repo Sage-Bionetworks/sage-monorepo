@@ -11,6 +11,9 @@
 export interface OrgSagebionetworksRepoModelDockerRegistryEventRequest {
   id?: string;
   addr?: string;
+  /**
+   * The host name (CNAME or IP with optional :port) of the registry where the event occurred.
+   */
   host?: string;
   method?: string;
   useragent?: string;

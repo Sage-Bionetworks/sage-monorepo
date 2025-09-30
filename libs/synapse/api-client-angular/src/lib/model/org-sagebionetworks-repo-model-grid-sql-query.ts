@@ -28,6 +28,12 @@ export interface OrgSagebionetworksRepoModelGridSqlQuery {
    * Optional ORDER BY clause.
    */
   orderBy?: Array<OrgSagebionetworksRepoModelGridSqlOrderByItem>;
+  /**
+   * Optional limit of the number of rows.
+   */
   limit?: number;
+  /**
+   * Optional specifies the offset of the first row to return.
+   */
   offset?: number;
 }

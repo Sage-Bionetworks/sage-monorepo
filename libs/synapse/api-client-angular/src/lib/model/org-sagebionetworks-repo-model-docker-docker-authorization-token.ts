@@ -12,5 +12,8 @@
  * Authorization Token for Docker Registry Access
  */
 export interface OrgSagebionetworksRepoModelDockerDockerAuthorizationToken {
+  /**
+   * authorization Token for Docker Registry Access
+   */
   token?: string;
 }

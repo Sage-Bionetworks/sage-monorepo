@@ -12,10 +12,25 @@
  * This setting type contains the list of upload locations for files in a project. Each id in the locations attribute points to an existing <a href=\"${org.sagebionetworks.repo.model.project.StorageLocationSetting}\">StorageLocationSetting</a>. The maximum number of storage locations that can be stored for a project is 10.
  */
 export interface OrgSagebionetworksRepoModelProjectUploadDestinationListSetting {
+  /**
+   * Indicates which implementation this object represents.
+   */
   concreteType: OrgSagebionetworksRepoModelProjectUploadDestinationListSetting.ConcreteTypeEnum;
+  /**
+   * The unique ID assigned to this setting
+   */
   id?: string;
+  /**
+   * The ID for the project this setting applies to
+   */
   projectId?: string;
-  settingsType?: string;
+  /**
+   * The enumeration of project setting types.
+   */
+  settingsType?: OrgSagebionetworksRepoModelProjectUploadDestinationListSetting.SettingsTypeEnum;
+  /**
+   * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time a Project Setting is updated it is used to detect when a client\'s current representation of a Project Setting is out-of-date.
+   */
   etag?: string;
   /**
    * List of ids pointing to <a href=\"${org.sagebionetworks.repo.model.project.StorageLocationSetting}\">StorageLocationSetting</a>. The first one in the list is the default location; The maximum number of storage locations for a project is limited to 10.
@@ -28,5 +43,9 @@ export namespace OrgSagebionetworksRepoModelProjectUploadDestinationListSetting 
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelProjectUploadDestinationListSetting:
       'org.sagebionetworks.repo.model.project.UploadDestinationListSetting' as ConcreteTypeEnum,
+  };
+  export type SettingsTypeEnum = 'upload';
+  export const SettingsTypeEnum = {
+    Upload: 'upload' as SettingsTypeEnum,
   };
 }

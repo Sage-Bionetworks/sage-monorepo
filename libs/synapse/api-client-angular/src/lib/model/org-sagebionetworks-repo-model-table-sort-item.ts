@@ -9,6 +9,19 @@
  */
 
 export interface OrgSagebionetworksRepoModelTableSortItem {
+  /**
+   * The column to sort on.
+   */
   column?: string;
-  direction?: string;
+  /**
+   * Optional sort direction. Default is the default mysql sort direction for that type.
+   */
+  direction?: OrgSagebionetworksRepoModelTableSortItem.DirectionEnum;
+}
+export namespace OrgSagebionetworksRepoModelTableSortItem {
+  export type DirectionEnum = 'ASC' | 'DESC';
+  export const DirectionEnum = {
+    Asc: 'ASC' as DirectionEnum,
+    Desc: 'DESC' as DirectionEnum,
+  };
 }

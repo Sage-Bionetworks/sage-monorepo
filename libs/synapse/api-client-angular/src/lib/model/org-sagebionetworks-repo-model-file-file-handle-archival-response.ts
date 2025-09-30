@@ -13,6 +13,9 @@
  */
 export interface OrgSagebionetworksRepoModelFileFileHandleArchivalResponse {
   concreteType: OrgSagebionetworksRepoModelFileFileHandleArchivalResponse.ConcreteTypeEnum;
+  /**
+   * The count of file handles that were queued for archival.
+   */
   count?: number;
 }
 export namespace OrgSagebionetworksRepoModelFileFileHandleArchivalResponse {
