@@ -12,6 +12,12 @@
  * A request to retrieve a page of Submission Information
  */
 export interface OrgSagebionetworksRepoModelDataaccessSubmissionInfoPageRequest {
+  /**
+   * The ID of an AccessRequirement.
+   */
   accessRequirementId?: string;
+  /**
+   * The token to get the next page result.
+   */
   nextPageToken?: string;
 }

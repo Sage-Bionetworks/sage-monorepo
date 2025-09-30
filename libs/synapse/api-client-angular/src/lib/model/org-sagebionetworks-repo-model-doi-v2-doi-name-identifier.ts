@@ -12,6 +12,19 @@
  * Uniquely identifies an individual or legal entity, according to various schemas.
  */
 export interface OrgSagebionetworksRepoModelDoiV2DoiNameIdentifier {
+  /**
+   * Required. The identifier belonging to the creator.
+   */
   identifier?: string;
-  nameIdentifierScheme?: string;
+  /**
+   * Required. Describes the scheme of the nameIdentifier. Required if nameIdentifier is used.
+   */
+  nameIdentifierScheme?: OrgSagebionetworksRepoModelDoiV2DoiNameIdentifier.NameIdentifierSchemeEnum;
+}
+export namespace OrgSagebionetworksRepoModelDoiV2DoiNameIdentifier {
+  export type NameIdentifierSchemeEnum = 'ORCID' | 'ISNI';
+  export const NameIdentifierSchemeEnum = {
+    Orcid: 'ORCID' as NameIdentifierSchemeEnum,
+    Isni: 'ISNI' as NameIdentifierSchemeEnum,
+  };
 }

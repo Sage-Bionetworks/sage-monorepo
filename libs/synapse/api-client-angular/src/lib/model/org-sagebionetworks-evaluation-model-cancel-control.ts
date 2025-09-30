@@ -12,8 +12,20 @@
  * This object contains information that is used to control if a submission could be cancelled.
  */
 export interface OrgSagebionetworksEvaluationModelCancelControl {
+  /**
+   * The unique, immutable Synapse ID of the Submission.
+   */
   submissionId?: string;
+  /**
+   * The ID of the user who submitted this Submission.
+   */
   userId?: string;
+  /**
+   * Can this submission be cancelled? By default, this will be set to False. Users can read this value. Only the queue\'s scoring application can change this value.
+   */
   canCancel?: boolean;
+  /**
+   * Has user requested to cancel this submission? By default, this will be set to False. Submission owner can read and request to change this value.
+   */
   cancelRequested?: boolean;
 }

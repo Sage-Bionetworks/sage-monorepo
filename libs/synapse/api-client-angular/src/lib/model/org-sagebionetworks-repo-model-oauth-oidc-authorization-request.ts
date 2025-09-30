@@ -13,13 +13,43 @@ import { OrgSagebionetworksRepoModelOauthOIDCClaimsRequest } from './org-sagebio
  * Content of an authorization request
  */
 export interface OrgSagebionetworksRepoModelOauthOIDCAuthorizationRequest {
+  /**
+   * ID of the client requesting authorization
+   */
   clientId?: string;
+  /**
+   * space-separated list of scopes
+   */
   scope?: string;
   claims?: OrgSagebionetworksRepoModelOauthOIDCClaimsRequest;
-  responseType?: string;
+  /**
+   * The OAuth 2.0 response types supported by Synapse
+   */
+  responseType?: OrgSagebionetworksRepoModelOauthOIDCAuthorizationRequest.ResponseTypeEnum;
+  /**
+   * URI to which the user agent is to be redirected
+   */
   redirectUri?: string;
+  /**
+   * Optional value used to associate a Client session with an ID Token, and to mitigate replay attacks. The value is passed through unmodified from the Authorization Request to the ID Token.
+   */
   nonce?: string;
+  /**
+   * ID of the user approving this request (set by server)
+   */
   userId?: string;
+  /**
+   * Timestamp marking when approving user was authenticated (set by server)
+   */
   authenticatedAt?: string;
+  /**
+   * Timestamp marking when authorization was approved (set by server)
+   */
   authorizedAt?: string;
+}
+export namespace OrgSagebionetworksRepoModelOauthOIDCAuthorizationRequest {
+  export type ResponseTypeEnum = 'code';
+  export const ResponseTypeEnum = {
+    Code: 'code' as ResponseTypeEnum,
+  };
 }

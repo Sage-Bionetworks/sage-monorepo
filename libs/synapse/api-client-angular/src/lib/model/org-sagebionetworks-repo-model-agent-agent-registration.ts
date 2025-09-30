@@ -12,9 +12,31 @@
  * The registration of a custom AWS agent.
  */
 export interface OrgSagebionetworksRepoModelAgentAgentRegistration {
+  /**
+   * The unique ID issued by Synapse when this agent was registered. Provide this ID when starting a session to use the registered agent for a session.
+   */
   agentRegistrationId?: string;
+  /**
+   * The AWS issued agent ID of the agent.
+   */
   awsAgentId?: string;
+  /**
+   * The AWS issued agent alias ID. If an alias ID was not provided, a default value of \'TSTALIASID\' will be used.
+   */
   awsAliasId?: string;
+  /**
+   * The date this agent was registered.
+   */
   registeredOn?: string;
-  type?: string;
+  /**
+   * ...
+   */
+  type?: OrgSagebionetworksRepoModelAgentAgentRegistration.TypeEnum;
+}
+export namespace OrgSagebionetworksRepoModelAgentAgentRegistration {
+  export type TypeEnum = 'BASELINE' | 'CUSTOM';
+  export const TypeEnum = {
+    Baseline: 'BASELINE' as TypeEnum,
+    Custom: 'CUSTOM' as TypeEnum,
+  };
 }

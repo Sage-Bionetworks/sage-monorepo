@@ -12,7 +12,50 @@
  * Specify which field should be returned as facets and the format of the results for each field
  */
 export interface OrgSagebionetworksRepoModelSearchQuerySearchFacetOption {
-  name?: string;
+  /**
+   * Names of search fields that can be faceted/returned
+   */
+  name?: OrgSagebionetworksRepoModelSearchQuerySearchFacetOption.NameEnum;
+  /**
+   * Specify the maximum number of results to be returned for this facet. Defaults to 10
+   */
   maxResultCount?: number;
-  sortType?: string;
+  /**
+   * Specify how results should be sorted. Defaults to COUNT
+   */
+  sortType?: OrgSagebionetworksRepoModelSearchQuerySearchFacetOption.SortTypeEnum;
+}
+export namespace OrgSagebionetworksRepoModelSearchQuerySearchFacetOption {
+  export type NameEnum =
+    | 'Id'
+    | 'Name'
+    | 'Description'
+    | 'EntityType'
+    | 'ModifiedBy'
+    | 'ModifiedOn'
+    | 'CreatedBy'
+    | 'CreatedOn'
+    | 'Consortium'
+    | 'Diagnosis'
+    | 'Organ'
+    | 'Tissue';
+  export const NameEnum = {
+    Id: 'Id' as NameEnum,
+    Name: 'Name' as NameEnum,
+    Description: 'Description' as NameEnum,
+    EntityType: 'EntityType' as NameEnum,
+    ModifiedBy: 'ModifiedBy' as NameEnum,
+    ModifiedOn: 'ModifiedOn' as NameEnum,
+    CreatedBy: 'CreatedBy' as NameEnum,
+    CreatedOn: 'CreatedOn' as NameEnum,
+    Consortium: 'Consortium' as NameEnum,
+    Diagnosis: 'Diagnosis' as NameEnum,
+    Organ: 'Organ' as NameEnum,
+    Tissue: 'Tissue' as NameEnum,
+  };
+  export type SortTypeEnum = 'ALPHA' | 'COUNT';
+  export const SortTypeEnum = {
+    Alpha: 'ALPHA' as SortTypeEnum,
+    Count: 'COUNT' as SortTypeEnum,
+  };
 }

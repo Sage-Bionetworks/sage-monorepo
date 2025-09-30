@@ -13,15 +13,47 @@
  */
 export interface OrgSagebionetworksRepoModelAuthTwoFactorAuthErrorResponse {
   concreteType: OrgSagebionetworksRepoModelAuthTwoFactorAuthErrorResponse.ConcreteTypeEnum;
+  /**
+   * The id of the user that attempted to authenticate.
+   */
   userId?: number;
+  /**
+   * Token included when two factor authentication is required. If present the client will need to include this token as part of the TwoFactorAuthLoginRequest.
+   */
   twoFaToken?: string;
+  /**
+   * The reason for the error
+   */
   reason?: string;
-  errorCode?: string;
+  /**
+   * A code to be used by clients to handle the error.
+   */
+  errorCode?: OrgSagebionetworksRepoModelAuthTwoFactorAuthErrorResponse.ErrorCodeEnum;
 }
 export namespace OrgSagebionetworksRepoModelAuthTwoFactorAuthErrorResponse {
   export type ConcreteTypeEnum = 'org.sagebionetworks.repo.model.auth.TwoFactorAuthErrorResponse';
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelAuthTwoFactorAuthErrorResponse:
       'org.sagebionetworks.repo.model.auth.TwoFactorAuthErrorResponse' as ConcreteTypeEnum,
+  };
+  export type ErrorCodeEnum =
+    | 'PASSWORD_RESET_VIA_EMAIL_REQUIRED'
+    | 'USER_CERTIFICATION_REQUIRED'
+    | 'INVALID_TABLE_QUERY_FACET_COLUMN_REQUEST'
+    | 'OAUTH_CLIENT_NOT_VERIFIED'
+    | 'TWO_FA_REQUIRED'
+    | 'UNSUPPORTED_WEBHOOK_DOMAIN'
+    | 'PROJECT_STORAGE_LIMIT_EXCEEDED'
+    | 'TWO_FA_ENABLED_REQUIRED';
+  export const ErrorCodeEnum = {
+    PasswordResetViaEmailRequired: 'PASSWORD_RESET_VIA_EMAIL_REQUIRED' as ErrorCodeEnum,
+    UserCertificationRequired: 'USER_CERTIFICATION_REQUIRED' as ErrorCodeEnum,
+    InvalidTableQueryFacetColumnRequest:
+      'INVALID_TABLE_QUERY_FACET_COLUMN_REQUEST' as ErrorCodeEnum,
+    OauthClientNotVerified: 'OAUTH_CLIENT_NOT_VERIFIED' as ErrorCodeEnum,
+    TwoFaRequired: 'TWO_FA_REQUIRED' as ErrorCodeEnum,
+    UnsupportedWebhookDomain: 'UNSUPPORTED_WEBHOOK_DOMAIN' as ErrorCodeEnum,
+    ProjectStorageLimitExceeded: 'PROJECT_STORAGE_LIMIT_EXCEEDED' as ErrorCodeEnum,
+    TwoFaEnabledRequired: 'TWO_FA_ENABLED_REQUIRED' as ErrorCodeEnum,
   };
 }

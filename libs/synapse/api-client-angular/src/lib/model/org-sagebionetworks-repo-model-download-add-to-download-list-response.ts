@@ -13,6 +13,9 @@
  */
 export interface OrgSagebionetworksRepoModelDownloadAddToDownloadListResponse {
   concreteType: OrgSagebionetworksRepoModelDownloadAddToDownloadListResponse.ConcreteTypeEnum;
+  /**
+   * The number of files that were added to the user\'s download list.
+   */
   numberOfFilesAdded?: number;
 }
 export namespace OrgSagebionetworksRepoModelDownloadAddToDownloadListResponse {

@@ -12,6 +12,12 @@
  * The sum of the file size for all files in the given view query. Use mask = 0x40 to include in the bundle.
  */
 export interface OrgSagebionetworksRepoModelTableSumFileSizes {
+  /**
+   * The sum of the file size in bytes.
+   */
   sumFileSizesBytes?: number;
+  /**
+   * When true, the actual sum of the files sizes is greater than the value provided with \'sumFileSizesBytes\'.  When false, the actual sum of the files sizes is equlas the value provided with \'sumFileSizesBytes\'
+   */
   greaterThan?: boolean;
 }

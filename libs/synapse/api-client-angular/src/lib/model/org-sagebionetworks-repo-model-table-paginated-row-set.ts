@@ -14,5 +14,8 @@ import { OrgSagebionetworksRepoModelTableRowSet } from './org-sagebionetworks-re
  */
 export interface OrgSagebionetworksRepoModelTablePaginatedRowSet {
   results?: OrgSagebionetworksRepoModelTableRowSet;
+  /**
+   * The total number of results
+   */
   totalNumberOfResults?: number;
 }

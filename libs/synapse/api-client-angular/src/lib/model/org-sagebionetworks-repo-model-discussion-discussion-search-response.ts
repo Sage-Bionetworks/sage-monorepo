@@ -17,5 +17,8 @@ export interface OrgSagebionetworksRepoModelDiscussionDiscussionSearchResponse {
    * A single page of results matching the original <a href=\"${org.sagebionetworks.repo.model.discussion.DiscussionSearchRequest}\">DiscussionSearchRequest</a>.
    */
   matches?: Array<OrgSagebionetworksRepoModelDiscussionMatch>;
+  /**
+   * When present, then another page of results exists. Forward this token in another request to fetch the next page of results.
+   */
   nextPageToken?: string;
 }

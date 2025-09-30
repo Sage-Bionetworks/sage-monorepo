@@ -12,6 +12,12 @@
  * Contains a user\'s notification settings
  */
 export interface OrgSagebionetworksRepoModelMessageSettings {
+  /**
+   * Should the user receive email notifications?  Default true.
+   */
   sendEmailNotifications?: boolean;
+  /**
+   * Should messages that are emailed to the user be marked as READ in Synapse?  Default false.
+   */
   markEmailedMessagesAsRead?: boolean;
 }

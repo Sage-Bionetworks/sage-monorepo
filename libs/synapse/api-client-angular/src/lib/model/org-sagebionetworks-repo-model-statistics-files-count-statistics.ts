@@ -12,8 +12,20 @@
  * Describes an aggregate of file actions (e.g. downloads/uploads) and (unique) users count for a specific time frame
  */
 export interface OrgSagebionetworksRepoModelStatisticsFilesCountStatistics {
+  /**
+   * The start timestamp of the time frame this bucket represents (inclusive)
+   */
   rangeStart?: string;
+  /**
+   * The end timestamp of the time frame this bucket represents (exclusive)
+   */
   rangeEnd?: string;
+  /**
+   * The number of files uploaded or downloaded in this time frame
+   */
   filesCount?: number;
+  /**
+   * The number of distinct users that performed a download or upload in this time frame
+   */
   usersCount?: number;
 }

@@ -7,16 +7,50 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { OrgSagebionetworksRepoModelAgentSessionContext } from './org-sagebionetworks-repo-model-agent-session-context';
 
 /**
  * Information about a specific session (conversation) with an agent.  Only the acess level can be changed on an existing session.  You will need to start a new session if you wish to use a different agentId.
  */
 export interface OrgSagebionetworksRepoModelAgentAgentSession {
+  /**
+   * The unique identifier for a conversation with an agent.  The sessionId issued by Synapse when the session is started.  The caller must provided this sessionId with each chat request to identify a specific conversation with an agent.  A sessionId can only be used by the user that created it.
+   */
   sessionId?: string;
-  agentAccessLevel?: string;
+  /**
+   * Defines the level of data access that the agent will be given during a session.
+   */
+  agentAccessLevel?: OrgSagebionetworksRepoModelAgentAgentSession.AgentAccessLevelEnum;
+  /**
+   * The date this session was started.
+   */
   startedOn?: string;
+  /**
+   * The id of the user that started this session
+   */
   startedBy?: number;
+  /**
+   * The date this session was last modified.
+   */
   modifiedOn?: string;
+  /**
+   * Identifies that agent that will be used for this session.  The default value is null, which indicates that the default agent will be used.
+   */
   agentRegistrationId?: string;
+  /**
+   * Will change whenever the session changes.
+   */
   etag?: string;
+  sessionContext?: OrgSagebionetworksRepoModelAgentSessionContext;
+}
+export namespace OrgSagebionetworksRepoModelAgentAgentSession {
+  export type AgentAccessLevelEnum =
+    | 'PUBLICLY_ACCESSIBLE'
+    | 'READ_YOUR_PRIVATE_DATA'
+    | 'WRITE_YOUR_PRIVATE_DATA';
+  export const AgentAccessLevelEnum = {
+    PubliclyAccessible: 'PUBLICLY_ACCESSIBLE' as AgentAccessLevelEnum,
+    ReadYourPrivateData: 'READ_YOUR_PRIVATE_DATA' as AgentAccessLevelEnum,
+    WriteYourPrivateData: 'WRITE_YOUR_PRIVATE_DATA' as AgentAccessLevelEnum,
+  };
 }

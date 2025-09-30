@@ -13,7 +13,13 @@
  */
 export interface OrgSagebionetworksRepoModelGridDownloadFromGridResult {
   concreteType: OrgSagebionetworksRepoModelGridDownloadFromGridResult.ConcreteTypeEnum;
+  /**
+   * The session ID of the grid from which this CSV was derived.
+   */
   sessionId?: string;
+  /**
+   * The resulting file handle ID can be used to download the CSV file created by this job.  The file will contain all of the data in the grid session when the job was started.
+   */
   resultsFileHandleId?: string;
 }
 export namespace OrgSagebionetworksRepoModelGridDownloadFromGridResult {

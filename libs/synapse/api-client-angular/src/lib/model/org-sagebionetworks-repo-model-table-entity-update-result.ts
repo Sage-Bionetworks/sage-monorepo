@@ -12,7 +12,31 @@
  * Result of a single Entity Update.
  */
 export interface OrgSagebionetworksRepoModelTableEntityUpdateResult {
+  /**
+   * The ID of the updated entity.
+   */
   entityId?: string;
+  /**
+   * Failure message for unknown and illegal errors.
+   */
   failureMessage?: string;
-  failureCode?: string;
+  /**
+   * If the Entity update failed, a failure code will be included.  Null if the update was successful
+   */
+  failureCode?: OrgSagebionetworksRepoModelTableEntityUpdateResult.FailureCodeEnum;
+}
+export namespace OrgSagebionetworksRepoModelTableEntityUpdateResult {
+  export type FailureCodeEnum =
+    | 'NOT_FOUND'
+    | 'UNAUTHORIZED'
+    | 'CONCURRENT_UPDATE'
+    | 'ILLEGAL_ARGUMENT'
+    | 'UNKNOWN';
+  export const FailureCodeEnum = {
+    NotFound: 'NOT_FOUND' as FailureCodeEnum,
+    Unauthorized: 'UNAUTHORIZED' as FailureCodeEnum,
+    ConcurrentUpdate: 'CONCURRENT_UPDATE' as FailureCodeEnum,
+    IllegalArgument: 'ILLEGAL_ARGUMENT' as FailureCodeEnum,
+    Unknown: 'UNKNOWN' as FailureCodeEnum,
+  };
 }

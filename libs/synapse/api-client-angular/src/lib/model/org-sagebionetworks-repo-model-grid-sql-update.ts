@@ -22,5 +22,8 @@ export interface OrgSagebionetworksRepoModelGridSqlUpdate {
    * Optional WHERE clause.
    */
   where?: Array<OrgSagebionetworksRepoModelGridSqlSqlExpression>;
+  /**
+   * The number of rows to limit.
+   */
   limit?: number;
 }

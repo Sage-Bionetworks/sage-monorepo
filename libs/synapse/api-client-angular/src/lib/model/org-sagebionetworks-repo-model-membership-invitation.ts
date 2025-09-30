@@ -12,12 +12,36 @@
  * JSON schema for MembershipInvitation POJO. \\nNote: certain fields may be omitted when returned if the field value is null.
  */
 export interface OrgSagebionetworksRepoModelMembershipInvitation {
+  /**
+   * The id of the MembershipInvitation.
+   */
   id?: string;
+  /**
+   * The id of the Team which the user is invited to join.
+   */
   teamId?: string;
+  /**
+   * The principal ID of the user being invited to join the Team.
+   */
   inviteeId?: string;
+  /**
+   * The email address of the user being invited to join the Team.
+   */
   inviteeEmail?: string;
+  /**
+   * The invitation message (optional).
+   */
   message?: string;
+  /**
+   * The date this invitation expires (optional).
+   */
   expiresOn?: string;
+  /**
+   * The date this MembershipInvitation was created.
+   */
   createdOn?: string;
+  /**
+   * The ID of the user that created this MembershipInvitation.
+   */
   createdBy?: string;
 }

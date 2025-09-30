@@ -12,7 +12,16 @@
  * JSON schema for environment descriptor POJO
  */
 export interface OrgSagebionetworksRepoModelEnvironmentDescriptor {
+  /**
+   * type the type to set
+   */
   type?: string;
+  /**
+   * name the name to set
+   */
   name?: string;
+  /**
+   * quantifier the quantifier to set
+   */
   quantifier?: string;
 }

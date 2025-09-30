@@ -12,8 +12,20 @@
  * DEPRECATED: use EvaluationRound APIs instead. No SubmissionQuota will be returned with the Evaluation. Any SubmissionQuotas submitted will be instead be converted into similar EvaluationRounds.
  */
 export interface OrgSagebionetworksEvaluationModelSubmissionQuota {
+  /**
+   * The date/time at which the first round begins.
+   */
   firstRoundStart?: string;
+  /**
+   * The duration of each round.
+   */
   roundDurationMillis?: number;
+  /**
+   * The number of rounds.
+   */
   numberOfRounds?: number;
+  /**
+   * the maximum number of submissions per team/participant per round.
+   */
   submissionLimit?: number;
 }

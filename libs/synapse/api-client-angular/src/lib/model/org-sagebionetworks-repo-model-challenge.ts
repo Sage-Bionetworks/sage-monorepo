@@ -12,8 +12,20 @@
  * Settings for a Challenge Project.
  */
 export interface OrgSagebionetworksRepoModelChallenge {
+  /**
+   * The ID of this Challenge object
+   */
   id?: string;
+  /**
+   * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client\'s current representation of an entity is out-of-date.
+   */
   etag?: string;
+  /**
+   * The ID of the Project the challenge is used with.
+   */
   projectId?: string;
+  /**
+   * The ID of the Team which users join to participate in the Challenge
+   */
   participantTeamId?: string;
 }

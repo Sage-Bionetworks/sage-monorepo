@@ -13,10 +13,25 @@
  */
 export interface OrgSagebionetworksRepoModelMembershipInvtnSignedToken {
   concreteType: OrgSagebionetworksRepoModelMembershipInvtnSignedToken.ConcreteTypeEnum;
+  /**
+   * The hash message authentication code for the message.
+   */
   hmac?: string;
+  /**
+   * The version of the key used to generate the HMAC.
+   */
   version?: number;
+  /**
+   * The date-time when this token expires.
+   */
   expiresOn?: string;
+  /**
+   * The date-time the token was generated.
+   */
   createdOn?: string;
+  /**
+   * The ID of the membership invitation.
+   */
   membershipInvitationId?: string;
 }
 export namespace OrgSagebionetworksRepoModelMembershipInvtnSignedToken {

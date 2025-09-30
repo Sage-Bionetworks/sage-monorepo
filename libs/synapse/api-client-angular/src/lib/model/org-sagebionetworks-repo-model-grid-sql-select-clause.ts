@@ -13,9 +13,18 @@ import { OrgSagebionetworksRepoModelGridSqlSelectItem } from './org-sagebionetwo
  * Object model describing the SELECT statment of a SQL query.
  */
 export interface OrgSagebionetworksRepoModelGridSqlSelectClause {
-  setQuantifier?: string;
+  /**
+   * Optional.
+   */
+  setQuantifier?: OrgSagebionetworksRepoModelGridSqlSelectClause.SetQuantifierEnum;
   /**
    * One ore more select items.
    */
   selectList?: Array<OrgSagebionetworksRepoModelGridSqlSelectItem>;
+}
+export namespace OrgSagebionetworksRepoModelGridSqlSelectClause {
+  export type SetQuantifierEnum = 'DISTINCT';
+  export const SetQuantifierEnum = {
+    Distinct: 'DISTINCT' as SetQuantifierEnum,
+  };
 }

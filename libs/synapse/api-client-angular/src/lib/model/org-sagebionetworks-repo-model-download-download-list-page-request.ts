@@ -13,10 +13,16 @@ import { OrgSagebionetworksRepoModelDownloadSort } from './org-sagebionetworks-r
  * Request to get a single page of files from the user\'s download list for files that are currently available for download.
  */
 export interface OrgSagebionetworksRepoModelDownloadDownloadListPageRequest {
+  /**
+   * Forward the resulting nextPageToken from a previous request to get the next page of results. Note: Exclude the token if the previously fetch items where removed from the download list.
+   */
   nextPageToken?: string;
   /**
    * Optional: Defines how the results should be sorted. Up to three fields can be sorted at a time.  The order of this array determines the sort priority.
    */
   sort?: Array<OrgSagebionetworksRepoModelDownloadSort>;
+  /**
+   * Optional: Case insensitive part of the name to filter by name.
+   */
   nameContains?: string;
 }

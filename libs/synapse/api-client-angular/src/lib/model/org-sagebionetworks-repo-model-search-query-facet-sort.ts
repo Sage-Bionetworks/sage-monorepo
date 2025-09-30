@@ -12,11 +12,29 @@
  * JSON schema for a facet field sort key-value pair.
  */
 export interface OrgSagebionetworksRepoModelSearchQueryFacetSort {
+  /**
+   * The facet name
+   */
   facetName?: string;
-  sortType?: string;
+  /**
+   * The type of sort option for a facet
+   */
+  sortType?: OrgSagebionetworksRepoModelSearchQueryFacetSort.SortTypeEnum;
   /**
    * Sort the facet values by the sum of the values in two or more fields. This is a list of names of the fields to sum.
    */
   sumFields?: Array<string>;
+  /**
+   * The facet name
+   */
   maxfield?: string;
+}
+export namespace OrgSagebionetworksRepoModelSearchQueryFacetSort {
+  export type SortTypeEnum = 'ALPHA' | 'COUNT' | 'MAX' | 'SUM';
+  export const SortTypeEnum = {
+    Alpha: 'ALPHA' as SortTypeEnum,
+    Count: 'COUNT' as SortTypeEnum,
+    Max: 'MAX' as SortTypeEnum,
+    Sum: 'SUM' as SortTypeEnum,
+  };
 }

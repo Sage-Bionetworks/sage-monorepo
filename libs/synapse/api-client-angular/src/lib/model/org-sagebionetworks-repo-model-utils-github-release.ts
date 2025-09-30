@@ -15,5 +15,8 @@ export interface OrgSagebionetworksRepoModelUtilsGithubRelease {
   id?: number;
   name?: string;
   url?: string;
+  /**
+   * The name of the tag.
+   */
   tag_name?: string;
 }

@@ -13,6 +13,9 @@
  */
 export interface OrgSagebionetworksRepoModelDownloadEnableTwoFa {
   concreteType: OrgSagebionetworksRepoModelDownloadEnableTwoFa.ConcreteTypeEnum;
+  /**
+   * The ID of the first access requirement that requires two factor authentication.
+   */
   accessRequirementId?: number;
 }
 export namespace OrgSagebionetworksRepoModelDownloadEnableTwoFa {

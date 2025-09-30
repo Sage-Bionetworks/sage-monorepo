@@ -14,5 +14,8 @@ import { OrgSagebionetworksRepoModelAuthAccessTokenRecord } from './org-sagebion
  */
 export interface OrgSagebionetworksRepoModelAuthAccessTokenRecordList {
   results?: Array<OrgSagebionetworksRepoModelAuthAccessTokenRecord>;
+  /**
+   * The token to get the next page of results.
+   */
   nextPageToken?: string;
 }

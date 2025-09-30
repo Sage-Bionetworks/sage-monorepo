@@ -12,7 +12,23 @@
  * Request for an OAuth2 authorization url.
  */
 export interface OrgSagebionetworksRepoModelOauthOAuthUrlRequest {
-  provider?: string;
+  /**
+   * Supported OAuth providers
+   */
+  provider?: OrgSagebionetworksRepoModelOauthOAuthUrlRequest.ProviderEnum;
+  /**
+   * The URL that the OAuth provider is expected to redirect to after authenticating the user.
+   */
   redirectUrl?: string;
+  /**
+   * State to be echoed in the redirect URL as a request parameter named \'state\'. Supported by some OAuth providers.
+   */
   state?: string;
+}
+export namespace OrgSagebionetworksRepoModelOauthOAuthUrlRequest {
+  export type ProviderEnum = 'GOOGLE_OAUTH_2_0' | 'ORCID';
+  export const ProviderEnum = {
+    GoogleOauth20: 'GOOGLE_OAUTH_2_0' as ProviderEnum,
+    Orcid: 'ORCID' as ProviderEnum,
+  };
 }

@@ -9,7 +9,13 @@
  */
 
 export interface OrgSagebionetworksRepoModelGridSqlIdentifier {
+  /**
+   * Required. Full name of the exact type used.
+   */
   concreteType: OrgSagebionetworksRepoModelGridSqlIdentifier.ConcreteTypeEnum;
+  /**
+   * The identifier value (e.g., table name, column name).
+   */
   value?: string;
 }
 export namespace OrgSagebionetworksRepoModelGridSqlIdentifier {

@@ -13,8 +13,17 @@ import { OrgSagebionetworksRepoModelFileFileHandleAssociation } from './org-sage
  * User\'s list of files they wish to download.
  */
 export interface OrgSagebionetworksRepoModelFileDownloadList {
+  /**
+   * The ID of the user that owns this download list.
+   */
   ownerId?: string;
+  /**
+   * The date-time when the list was last updated.
+   */
   updatedOn?: string;
+  /**
+   * The UUID assigned to a user\'s download list upon each change to the list.
+   */
   etag?: string;
   /**
    * The list of files to download.

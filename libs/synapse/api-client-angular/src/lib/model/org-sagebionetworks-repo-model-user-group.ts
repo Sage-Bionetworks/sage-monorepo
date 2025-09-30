@@ -12,9 +12,21 @@
  * JSON schema for UserGroup POJO
  */
 export interface OrgSagebionetworksRepoModelUserGroup {
+  /**
+   * The id of either the user or group.
+   */
   id?: string;
+  /**
+   * True if this is a user, false if it is a group
+   */
   isIndividual?: boolean;
+  /**
+   * Used to detect when a client\'s current representation of a user or group is out-of-date.
+   */
   etag?: string;
+  /**
+   * The date this user or group was created.
+   */
   creationDate?: string;
   uri?: string;
 }

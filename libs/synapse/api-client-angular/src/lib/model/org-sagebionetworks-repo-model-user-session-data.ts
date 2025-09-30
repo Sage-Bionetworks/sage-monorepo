@@ -15,6 +15,9 @@ import { OrgSagebionetworksRepoModelUserProfile } from './org-sagebionetworks-re
  */
 export interface OrgSagebionetworksRepoModelUserSessionData {
   session?: OrgSagebionetworksRepoModelAuthSession;
+  /**
+   * Is this a SSO session?
+   */
   isSSO?: boolean;
   profile?: OrgSagebionetworksRepoModelUserProfile;
 }

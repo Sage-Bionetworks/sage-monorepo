@@ -12,5 +12,8 @@
  * Request to list a single page of the currently registered Organizations
  */
 export interface OrgSagebionetworksRepoModelSchemaListOrganizationsRequest {
+  /**
+   * Forward the returned \'nextPageToken\' to get the next page of results.
+   */
   nextPageToken?: string;
 }

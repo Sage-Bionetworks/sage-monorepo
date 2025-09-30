@@ -12,6 +12,12 @@
  * Reference for a single Row of a TableEntity
  */
 export interface OrgSagebionetworksRepoModelTableRowReference {
+  /**
+   * The immutable ID issued to a new row.
+   */
   rowId?: number;
+  /**
+   * The version number of this row. Each row version is immutable, so when a row is updated a new version is created.
+   */
   versionNumber?: number;
 }

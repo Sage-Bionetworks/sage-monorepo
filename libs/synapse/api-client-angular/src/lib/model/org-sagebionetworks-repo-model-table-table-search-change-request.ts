@@ -14,6 +14,9 @@
 export interface OrgSagebionetworksRepoModelTableTableSearchChangeRequest {
   concreteType: OrgSagebionetworksRepoModelTableTableSearchChangeRequest.ConcreteTypeEnum;
   entityId?: string;
+  /**
+   * Specifies if the search should be enabled or disabled on the table
+   */
   searchEnabled?: boolean;
 }
 export namespace OrgSagebionetworksRepoModelTableTableSearchChangeRequest {

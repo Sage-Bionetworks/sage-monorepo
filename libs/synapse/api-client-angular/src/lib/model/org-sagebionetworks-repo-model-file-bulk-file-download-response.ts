@@ -14,11 +14,17 @@ import { OrgSagebionetworksRepoModelFileFileDownloadSummary } from './org-sagebi
  */
 export interface OrgSagebionetworksRepoModelFileBulkFileDownloadResponse {
   concreteType: OrgSagebionetworksRepoModelFileBulkFileDownloadResponse.ConcreteTypeEnum;
+  /**
+   * The FileHandle.id of the resulting zip file. This zip file will contain all of the requested files that the caller was authorized to download.
+   */
   resultZipFileHandleId?: string;
   /**
    * The summary of each requested file.
    */
   fileSummary?: Array<OrgSagebionetworksRepoModelFileFileDownloadSummary>;
+  /**
+   * The ID of the user that made this request.
+   */
   userId?: string;
 }
 export namespace OrgSagebionetworksRepoModelFileBulkFileDownloadResponse {

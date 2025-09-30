@@ -12,7 +12,16 @@
  * Request to create a new snapshot of a table or view.  The provided comment, label, and activity ID will be applied to the current version thereby creating a snapshot and locking the current version.  After the snapshot is created a new version will be started with an \'in-progress\' label.
  */
 export interface OrgSagebionetworksRepoModelTableSnapshotRequest {
+  /**
+   * Optional. If createNewSnapshot=true, the comment to be applied to the snapshot version.  Null by default
+   */
   snapshotComment?: string;
+  /**
+   * Optional. If createNewSnapshot=true, the label to be applied to the snapshot version.  Null by default
+   */
   snapshotLabel?: string;
+  /**
+   * Optional. If createNewSnapshot=true, the Activity ID to be applied to the snapshot version.  Null by default
+   */
   snapshotActivityId?: string;
 }

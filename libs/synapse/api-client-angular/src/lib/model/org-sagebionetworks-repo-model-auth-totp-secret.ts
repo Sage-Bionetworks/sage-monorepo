@@ -12,10 +12,28 @@
  * The generated shared secret to enable two factor authentication with TOTP compatible authenticator app. The secret is not active.
  */
 export interface OrgSagebionetworksRepoModelAuthTotpSecret {
+  /**
+   * The id of the generated secret
+   */
   secretId?: string;
+  /**
+   * The base32 encoded secret
+   */
   secret?: string;
+  /**
+   * The algorithm used for the TOTP
+   */
   alg?: string;
+  /**
+   * Number of digits for the TOTP
+   */
   digits?: number;
+  /**
+   * The validity period for the TOTP
+   */
   period?: number;
+  /**
+   * The username of the calling user. Can be used to display a friendly name in an authenticator app.
+   */
   username?: string;
 }

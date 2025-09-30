@@ -12,5 +12,8 @@
  * JSON schema for DOI Metadata Title.
  */
 export interface OrgSagebionetworksRepoModelDoiV2DoiTitle {
+  /**
+   * Required. A name or title by which a resource is known
+   */
   title?: string;
 }

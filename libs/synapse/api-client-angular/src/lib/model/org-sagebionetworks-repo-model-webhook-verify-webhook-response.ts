@@ -12,6 +12,12 @@
  * Response body containg the result of a webhook verification reqeust.
  */
 export interface OrgSagebionetworksRepoModelWebhookVerifyWebhookResponse {
+  /**
+   * True if the webhook was successfully verified.
+   */
   isValid?: boolean;
+  /**
+   * If the Webhook is invalid, this will contain a string describing why it is invalid.
+   */
   invalidReason?: string;
 }

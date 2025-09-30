@@ -12,6 +12,12 @@
  * JSON schema for a Facet Constraint for a particular facet in the search results.
  */
 export interface OrgSagebionetworksRepoModelSearchFacetConstraint {
+  /**
+   * The value of the facet constraint
+   */
   value?: string;
+  /**
+   * The number of search results that are in this particular facet constraint
+   */
   count?: number;
 }

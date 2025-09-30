@@ -12,5 +12,8 @@
  * Response to remove a single batch of files from the user\'s download list.
  */
 export interface OrgSagebionetworksRepoModelDownloadRemoveBatchOfFilesFromDownloadListResponse {
+  /**
+   * The number of files that were removed.
+   */
   numberOfFilesRemoved?: number;
 }

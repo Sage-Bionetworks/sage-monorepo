@@ -12,10 +12,28 @@
  * Summary statistics for the JSON schema validation results for the children of an Entity container (Project or Folder)
  */
 export interface OrgSagebionetworksRepoModelSchemaValidationSummaryStatistics {
+  /**
+   * The ID of the container Entity.
+   */
   containerId?: string;
+  /**
+   * The total number of children in the container.
+   */
   totalNumberOfChildren?: number;
+  /**
+   * The total number of children that are valid according to their bound JSON schema.
+   */
   numberOfValidChildren?: number;
+  /**
+   * The total number of children that are invalid according to their bound JSON schema.
+   */
   numberOfInvalidChildren?: number;
+  /**
+   * The total number of children that do not have validation results.  This can occur when a child does not have a bound JSON schema or when a child has not been validated yet.
+   */
   numberOfUnknownChildren?: number;
+  /**
+   * The date-time when the statistics were calculated.
+   */
   generatedOn?: string;
 }

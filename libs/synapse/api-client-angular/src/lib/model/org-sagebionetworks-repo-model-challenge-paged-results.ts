@@ -17,5 +17,8 @@ export interface OrgSagebionetworksRepoModelChallengePagedResults {
    * The list of results for this page
    */
   results?: Array<OrgSagebionetworksRepoModelChallenge>;
+  /**
+   * The total number of results
+   */
   totalNumberOfResults?: number;
 }

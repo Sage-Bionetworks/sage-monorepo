@@ -12,9 +12,24 @@
  * Administrative object.  Used to create users for integration tests.  All fields besides username can be null
  */
 export interface OrgSagebionetworksRepoModelAuthNewIntegrationTestUser {
+  /**
+   * User\'s unique name
+   */
   username?: string;
+  /**
+   * User\'s email
+   */
   email?: string;
+  /**
+   * User\'s password
+   */
   password?: string;
+  /**
+   * True if user agrees to Synapse terms of use
+   */
   tou?: boolean;
+  /**
+   * True if a verification approved states should be added for the user
+   */
   validatedUser?: boolean;
 }

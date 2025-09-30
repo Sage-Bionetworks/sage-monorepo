@@ -11,6 +11,9 @@
 export interface OrgSagebionetworksRepoModelTableQueryNextPageToken {
   concreteType: OrgSagebionetworksRepoModelTableQueryNextPageToken.ConcreteTypeEnum;
   entityId?: string;
+  /**
+   * The token for the next page.
+   */
   token?: string;
 }
 export namespace OrgSagebionetworksRepoModelTableQueryNextPageToken {

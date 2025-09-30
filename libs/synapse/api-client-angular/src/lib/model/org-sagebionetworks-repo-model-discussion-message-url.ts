@@ -9,5 +9,8 @@
  */
 
 export interface OrgSagebionetworksRepoModelDiscussionMessageURL {
+  /**
+   * The URL to download the file which contains the message.
+   */
   messageUrl?: string;
 }

@@ -13,25 +13,103 @@ import { OrgSagebionetworksRepoModelRestrictableObjectDescriptor } from './org-s
  * JSON schema for Lock Access Requirement, used to lock down the entity while waiting for ACT to review.
  */
 export interface OrgSagebionetworksRepoModelLockAccessRequirement {
+  /**
+   * The version number issued to this version on the object.
+   */
   versionNumber?: number;
+  /**
+   * The unique immutable ID.  Provided by the system, the user may not set this field.
+   */
   id?: number;
+  /**
+   * Depricated. Replaced by name.
+   */
   description?: string;
+  /**
+   * Name of the AR. Limited to 50 characters and must be unique. Required.
+   */
   name?: string;
+  /**
+   * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client\'s current representation of an object is out-of-date.
+   */
   etag?: string;
+  /**
+   * The date this object was created. Provided by the system, the user may not set this field.
+   */
   createdOn?: string;
+  /**
+   * The date this object was last modified. Provided by the system, the user may not set this field.
+   */
   modifiedOn?: string;
+  /**
+   * The user that created this object.  Provided by the system, the user may not set this field.
+   */
   createdBy?: string;
+  /**
+   * The user that last modified this object.  Provided by the system, the user may not set this field.
+   */
   modifiedBy?: string;
+  /**
+   * Defaults to \'false\'.  When \'true\', the subjects controlled by this AR are defined by the the\'_accessRequirementIds\' annotations on individual entities.  This property is mutually exclusive with \'subjectIds\'.  If this is set to \'true\' then \'subjectIds\' must be excluded or empty.
+   */
   subjectsDefinedByAnnotations?: boolean;
   /**
    * The IDs of the items controlled by this Access Requirement when \'subjectsDefinedByAnnotations=false\'. This property is mutually exclusive with \'subjectsDefinedByAnnotations\'.  When \'subjectsDefinedByAnnotations=true\' then this property must be empty or excluded.  Required when creating or updating and \'subjectsDefinedByAnnotations=false\' or \'subjectsDefinedByAnnotations\' is excluded.
    */
   subjectIds?: Array<OrgSagebionetworksRepoModelRestrictableObjectDescriptor>;
-  accessType?: string;
+  /**
+   * The enumeration of possible permission.
+   */
+  accessType?: OrgSagebionetworksRepoModelLockAccessRequirement.AccessTypeEnum;
+  /**
+   * Indicates which type of AccessRequirement this object represents.  Provided by the system, the user may not set this field.
+   */
   concreteType: OrgSagebionetworksRepoModelLockAccessRequirement.ConcreteTypeEnum;
+  /**
+   * The key of the jira issue created for this Access Requirement.
+   */
   jiraKey?: string;
 }
 export namespace OrgSagebionetworksRepoModelLockAccessRequirement {
+  export type AccessTypeEnum =
+    | 'CREATE'
+    | 'READ'
+    | 'UPDATE'
+    | 'DELETE'
+    | 'CHANGE_PERMISSIONS'
+    | 'DOWNLOAD'
+    | 'UPLOAD'
+    | 'PARTICIPATE'
+    | 'SUBMIT'
+    | 'READ_PRIVATE_SUBMISSION'
+    | 'UPDATE_SUBMISSION'
+    | 'DELETE_SUBMISSION'
+    | 'TEAM_MEMBERSHIP_UPDATE'
+    | 'SEND_MESSAGE'
+    | 'CHANGE_SETTINGS'
+    | 'MODERATE'
+    | 'REVIEW_SUBMISSIONS'
+    | 'EXEMPTION_ELIGIBLE';
+  export const AccessTypeEnum = {
+    Create: 'CREATE' as AccessTypeEnum,
+    Read: 'READ' as AccessTypeEnum,
+    Update: 'UPDATE' as AccessTypeEnum,
+    Delete: 'DELETE' as AccessTypeEnum,
+    ChangePermissions: 'CHANGE_PERMISSIONS' as AccessTypeEnum,
+    Download: 'DOWNLOAD' as AccessTypeEnum,
+    Upload: 'UPLOAD' as AccessTypeEnum,
+    Participate: 'PARTICIPATE' as AccessTypeEnum,
+    Submit: 'SUBMIT' as AccessTypeEnum,
+    ReadPrivateSubmission: 'READ_PRIVATE_SUBMISSION' as AccessTypeEnum,
+    UpdateSubmission: 'UPDATE_SUBMISSION' as AccessTypeEnum,
+    DeleteSubmission: 'DELETE_SUBMISSION' as AccessTypeEnum,
+    TeamMembershipUpdate: 'TEAM_MEMBERSHIP_UPDATE' as AccessTypeEnum,
+    SendMessage: 'SEND_MESSAGE' as AccessTypeEnum,
+    ChangeSettings: 'CHANGE_SETTINGS' as AccessTypeEnum,
+    Moderate: 'MODERATE' as AccessTypeEnum,
+    ReviewSubmissions: 'REVIEW_SUBMISSIONS' as AccessTypeEnum,
+    ExemptionEligible: 'EXEMPTION_ELIGIBLE' as AccessTypeEnum,
+  };
   export type ConcreteTypeEnum = 'org.sagebionetworks.repo.model.LockAccessRequirement';
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelLockAccessRequirement:

@@ -12,6 +12,19 @@
  * Defines an entity query sort.
  */
 export interface OrgSagebionetworksRepoModelEntityQuerySort {
+  /**
+   * The name of the column to sort by. The value can either be an annotation name or an EntityFieldName
+   */
   columnName?: string;
-  direction?: string;
+  /**
+   * Direction of the sort
+   */
+  direction?: OrgSagebionetworksRepoModelEntityQuerySort.DirectionEnum;
+}
+export namespace OrgSagebionetworksRepoModelEntityQuerySort {
+  export type DirectionEnum = 'ASC' | 'DESC';
+  export const DirectionEnum = {
+    Asc: 'ASC' as DirectionEnum,
+    Desc: 'DESC' as DirectionEnum,
+  };
 }

@@ -13,6 +13,9 @@
  */
 export interface OrgSagebionetworksRepoModelDownloadDownloadListManifestResponse {
   concreteType: OrgSagebionetworksRepoModelDownloadDownloadListManifestResponse.ConcreteTypeEnum;
+  /**
+   * The identifier of a FileHandle that contains the resulting files manifest.
+   */
   resultFileHandleId?: string;
 }
 export namespace OrgSagebionetworksRepoModelDownloadDownloadListManifestResponse {

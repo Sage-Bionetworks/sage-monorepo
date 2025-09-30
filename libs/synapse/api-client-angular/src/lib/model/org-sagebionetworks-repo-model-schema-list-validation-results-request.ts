@@ -12,6 +12,12 @@
  * Request to get a single page of JSON schema validation results for a given Entity container.
  */
 export interface OrgSagebionetworksRepoModelSchemaListValidationResultsRequest {
+  /**
+   * The ID of the Entity container to get.
+   */
   containerId?: string;
+  /**
+   * Forward the returned \'nextPageToken\' to get the next page of results.
+   */
   nextPageToken?: string;
 }

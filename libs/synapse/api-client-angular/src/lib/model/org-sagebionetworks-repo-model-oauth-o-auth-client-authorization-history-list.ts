@@ -14,5 +14,8 @@ import { OrgSagebionetworksRepoModelOauthOAuthClientAuthorizationHistory } from 
  */
 export interface OrgSagebionetworksRepoModelOauthOAuthClientAuthorizationHistoryList {
   results?: Array<OrgSagebionetworksRepoModelOauthOAuthClientAuthorizationHistory>;
+  /**
+   * The token to get the next page of results.
+   */
   nextPageToken?: string;
 }

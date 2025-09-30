@@ -13,7 +13,10 @@
  */
 export interface OrgSagebionetworksRepoModelMigrationMigrationRangeChecksum {
   concreteType: OrgSagebionetworksRepoModelMigrationMigrationRangeChecksum.ConcreteTypeEnum;
-  type?: string;
+  /**
+   * JSON enum for the types of objects which can be migrated. NOTE: The order of this enumeration determines the migration order.
+   */
+  type?: OrgSagebionetworksRepoModelMigrationMigrationRangeChecksum.TypeEnum;
   checksum?: string;
   minid?: number;
   maxid?: number;
@@ -23,5 +26,262 @@ export namespace OrgSagebionetworksRepoModelMigrationMigrationRangeChecksum {
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelMigrationMigrationRangeChecksum:
       'org.sagebionetworks.repo.model.migration.MigrationRangeChecksum' as ConcreteTypeEnum,
+  };
+  export type TypeEnum =
+    | 'PRINCIPAL'
+    | 'GROUP_MEMBERS'
+    | 'CREDENTIAL'
+    | 'AUTHENTICATED_ON'
+    | 'PRINCIPAL_ALIAS'
+    | 'NOTIFICATION_EMAIL'
+    | 'USER_PROFILE'
+    | 'STORAGE_LOCATION'
+    | 'FILE_HANDLE'
+    | 'MULTIPART_UPLOAD'
+    | 'MULTIPART_UPLOAD_PART_STATE'
+    | 'MULTIPART_UPLOAD_COMPOSER_PART_STATE'
+    | 'MESSAGE_CONTENT'
+    | 'MESSAGE_TO_USER'
+    | 'MESSAGE_RECIPIENT'
+    | 'MESSAGE_STATUS'
+    | 'COMMENT'
+    | 'V2_WIKI_PAGE'
+    | 'V2_WIKI_ATTACHMENT_RESERVATION'
+    | 'V2_WIKI_MARKDOWN'
+    | 'V2_WIKI_OWNERS'
+    | 'ACTIVITY'
+    | 'NODE'
+    | 'NODE_REVISION'
+    | 'NODE_ACCESS_REQUIRMENT'
+    | 'DOCKER_REPOSITORY_NAME'
+    | 'DOCKER_COMMIT'
+    | 'TEAM'
+    | 'MEMBERSHIP_INVITATION_SUBMISSION'
+    | 'MEMBERSHIP_REQUEST_SUBMISSION'
+    | 'EVALUATION'
+    | 'EVALUATION_ROUND'
+    | 'EVALUATION_SUBMISSIONS'
+    | 'SUBMISSION'
+    | 'SUBMISSION_CONTRIBUTOR'
+    | 'SUBMISSION_FILE'
+    | 'SUBMISSION_STATUS'
+    | 'PROJECT_SETTINGS'
+    | 'PROJECT_STATS'
+    | 'ACCESS_REQUIREMENT'
+    | 'ACCESS_REQUIREMENT_REVISION'
+    | 'ACCESS_APPROVAL'
+    | 'ACL'
+    | 'ACL_ACCESS'
+    | 'ACL_ACCESS_TYPE'
+    | 'FAVORITE'
+    | 'TRASH_CAN'
+    | 'PORTAL'
+    | 'DOI'
+    | 'CHALLENGE'
+    | 'CHALLENGE_TEAM'
+    | 'COLUMN_MODEL'
+    | 'BOUND_COLUMN_OWNER'
+    | 'BOUND_COLUMN_ORDINAL'
+    | 'TABLE_TRANSACTION'
+    | 'TABLE_TRANSACTION_TO_VERSION'
+    | 'TABLE_SEQUENCE'
+    | 'TABLE_CHANGE'
+    | 'QUIZ_RESPONSE'
+    | 'VERIFICATION_SUBMISSION'
+    | 'VERIFICATION_STATE'
+    | 'VERIFICATION_FILE'
+    | 'FORUM'
+    | 'DISCUSSION_THREAD'
+    | 'DISCUSSION_THREAD_VIEW'
+    | 'DISCUSSION_THREAD_ENTITY_REFERENCE'
+    | 'DISCUSSION_REPLY'
+    | 'SUBSCRIPTION'
+    | 'BROADCAST_MESSAGE'
+    | 'VIEW_TYPE'
+    | 'VIEW_SCOPE'
+    | 'VIEW_SNAPSHOT'
+    | 'THROTTLE_RULE'
+    | 'RESEARCH_PROJECT'
+    | 'DATA_ACCESS_REQUEST'
+    | 'DATA_ACCESS_SUBMISSION'
+    | 'DATA_ACCESS_SUBMISSION_SUBMITTER'
+    | 'DATA_ACCESS_SUBMISSION_STATUS'
+    | 'DATA_ACCESS_SUBMISSION_ACCESSOR_CHANGE'
+    | 'DATA_ACCESS_NOTIFICATIONS'
+    | 'FORM_GROUP'
+    | 'FORM_DATA'
+    | 'ORGANIZATION'
+    | 'JSON_SCHEMA'
+    | 'JSON_SCHEMA_BLOB'
+    | 'JSON_SCHEMA_VERSION'
+    | 'JSON_SCHEMA_LATEST_VERSION'
+    | 'JSON_SCHEMA_DEPENDENCY'
+    | 'JSON_SCHEMA_OBJECT_BINDING'
+    | 'DOWNLOAD_LIST'
+    | 'DOWNLOAD_LIST_ITEM'
+    | 'DOWNLOAD_ORDER'
+    | 'DOWNLOAD_LIST_2'
+    | 'DOWNLOAD_LIST_ITEM_2'
+    | 'DATA_TYPE'
+    | 'OAUTH_SECTOR_IDENTIFIER'
+    | 'OAUTH_CLIENT'
+    | 'OAUTH_REFRESH_TOKEN'
+    | 'OAUTH_ACCESS_TOKEN'
+    | 'PERSONAL_ACCESS_TOKEN'
+    | 'AUTHORIZATION_GRANT'
+    | 'SES_NOTIFICATIONS'
+    | 'QUARANTINED_EMAILS'
+    | 'FEATURE_STATUS'
+    | 'MATERIALIZED_VIEW_ID'
+    | 'MATERIALIZED_VIEW_SOURCE_TABLE'
+    | 'PRINCIPAL_OIDC_BINDING'
+    | 'OTP_SECRET'
+    | 'OTP_RECOVERY_CODE'
+    | 'TWO_FA_STATUS'
+    | 'WEBHOOK'
+    | 'WEBHOOK_VERIFICATION'
+    | 'WEBHOOK_ALLOWED_DOMAIN'
+    | 'AGENT_REGISTRATION'
+    | 'AGENT_SESSION'
+    | 'TOS_REQUIREMENTS'
+    | 'TOS_AGREEMENT'
+    | 'PROJECT_STORAGE_DATA'
+    | 'PROJECT_STORAGE_LIMIT'
+    | 'GRID_SESSION'
+    | 'GRID_REPLICA'
+    | 'GRID_CONNECTION'
+    | 'GRID_PATCH'
+    | 'CURATION_TASK'
+    | 'USER_STATUS'
+    | 'RECORDSET_VALIDATION_STATS'
+    | 'CHANGE';
+  export const TypeEnum = {
+    Principal: 'PRINCIPAL' as TypeEnum,
+    GroupMembers: 'GROUP_MEMBERS' as TypeEnum,
+    Credential: 'CREDENTIAL' as TypeEnum,
+    AuthenticatedOn: 'AUTHENTICATED_ON' as TypeEnum,
+    PrincipalAlias: 'PRINCIPAL_ALIAS' as TypeEnum,
+    NotificationEmail: 'NOTIFICATION_EMAIL' as TypeEnum,
+    UserProfile: 'USER_PROFILE' as TypeEnum,
+    StorageLocation: 'STORAGE_LOCATION' as TypeEnum,
+    FileHandle: 'FILE_HANDLE' as TypeEnum,
+    MultipartUpload: 'MULTIPART_UPLOAD' as TypeEnum,
+    MultipartUploadPartState: 'MULTIPART_UPLOAD_PART_STATE' as TypeEnum,
+    MultipartUploadComposerPartState: 'MULTIPART_UPLOAD_COMPOSER_PART_STATE' as TypeEnum,
+    MessageContent: 'MESSAGE_CONTENT' as TypeEnum,
+    MessageToUser: 'MESSAGE_TO_USER' as TypeEnum,
+    MessageRecipient: 'MESSAGE_RECIPIENT' as TypeEnum,
+    MessageStatus: 'MESSAGE_STATUS' as TypeEnum,
+    Comment: 'COMMENT' as TypeEnum,
+    V2WikiPage: 'V2_WIKI_PAGE' as TypeEnum,
+    V2WikiAttachmentReservation: 'V2_WIKI_ATTACHMENT_RESERVATION' as TypeEnum,
+    V2WikiMarkdown: 'V2_WIKI_MARKDOWN' as TypeEnum,
+    V2WikiOwners: 'V2_WIKI_OWNERS' as TypeEnum,
+    Activity: 'ACTIVITY' as TypeEnum,
+    Node: 'NODE' as TypeEnum,
+    NodeRevision: 'NODE_REVISION' as TypeEnum,
+    NodeAccessRequirment: 'NODE_ACCESS_REQUIRMENT' as TypeEnum,
+    DockerRepositoryName: 'DOCKER_REPOSITORY_NAME' as TypeEnum,
+    DockerCommit: 'DOCKER_COMMIT' as TypeEnum,
+    Team: 'TEAM' as TypeEnum,
+    MembershipInvitationSubmission: 'MEMBERSHIP_INVITATION_SUBMISSION' as TypeEnum,
+    MembershipRequestSubmission: 'MEMBERSHIP_REQUEST_SUBMISSION' as TypeEnum,
+    Evaluation: 'EVALUATION' as TypeEnum,
+    EvaluationRound: 'EVALUATION_ROUND' as TypeEnum,
+    EvaluationSubmissions: 'EVALUATION_SUBMISSIONS' as TypeEnum,
+    Submission: 'SUBMISSION' as TypeEnum,
+    SubmissionContributor: 'SUBMISSION_CONTRIBUTOR' as TypeEnum,
+    SubmissionFile: 'SUBMISSION_FILE' as TypeEnum,
+    SubmissionStatus: 'SUBMISSION_STATUS' as TypeEnum,
+    ProjectSettings: 'PROJECT_SETTINGS' as TypeEnum,
+    ProjectStats: 'PROJECT_STATS' as TypeEnum,
+    AccessRequirement: 'ACCESS_REQUIREMENT' as TypeEnum,
+    AccessRequirementRevision: 'ACCESS_REQUIREMENT_REVISION' as TypeEnum,
+    AccessApproval: 'ACCESS_APPROVAL' as TypeEnum,
+    Acl: 'ACL' as TypeEnum,
+    AclAccess: 'ACL_ACCESS' as TypeEnum,
+    AclAccessType: 'ACL_ACCESS_TYPE' as TypeEnum,
+    Favorite: 'FAVORITE' as TypeEnum,
+    TrashCan: 'TRASH_CAN' as TypeEnum,
+    Portal: 'PORTAL' as TypeEnum,
+    Doi: 'DOI' as TypeEnum,
+    Challenge: 'CHALLENGE' as TypeEnum,
+    ChallengeTeam: 'CHALLENGE_TEAM' as TypeEnum,
+    ColumnModel: 'COLUMN_MODEL' as TypeEnum,
+    BoundColumnOwner: 'BOUND_COLUMN_OWNER' as TypeEnum,
+    BoundColumnOrdinal: 'BOUND_COLUMN_ORDINAL' as TypeEnum,
+    TableTransaction: 'TABLE_TRANSACTION' as TypeEnum,
+    TableTransactionToVersion: 'TABLE_TRANSACTION_TO_VERSION' as TypeEnum,
+    TableSequence: 'TABLE_SEQUENCE' as TypeEnum,
+    TableChange: 'TABLE_CHANGE' as TypeEnum,
+    QuizResponse: 'QUIZ_RESPONSE' as TypeEnum,
+    VerificationSubmission: 'VERIFICATION_SUBMISSION' as TypeEnum,
+    VerificationState: 'VERIFICATION_STATE' as TypeEnum,
+    VerificationFile: 'VERIFICATION_FILE' as TypeEnum,
+    Forum: 'FORUM' as TypeEnum,
+    DiscussionThread: 'DISCUSSION_THREAD' as TypeEnum,
+    DiscussionThreadView: 'DISCUSSION_THREAD_VIEW' as TypeEnum,
+    DiscussionThreadEntityReference: 'DISCUSSION_THREAD_ENTITY_REFERENCE' as TypeEnum,
+    DiscussionReply: 'DISCUSSION_REPLY' as TypeEnum,
+    Subscription: 'SUBSCRIPTION' as TypeEnum,
+    BroadcastMessage: 'BROADCAST_MESSAGE' as TypeEnum,
+    ViewType: 'VIEW_TYPE' as TypeEnum,
+    ViewScope: 'VIEW_SCOPE' as TypeEnum,
+    ViewSnapshot: 'VIEW_SNAPSHOT' as TypeEnum,
+    ThrottleRule: 'THROTTLE_RULE' as TypeEnum,
+    ResearchProject: 'RESEARCH_PROJECT' as TypeEnum,
+    DataAccessRequest: 'DATA_ACCESS_REQUEST' as TypeEnum,
+    DataAccessSubmission: 'DATA_ACCESS_SUBMISSION' as TypeEnum,
+    DataAccessSubmissionSubmitter: 'DATA_ACCESS_SUBMISSION_SUBMITTER' as TypeEnum,
+    DataAccessSubmissionStatus: 'DATA_ACCESS_SUBMISSION_STATUS' as TypeEnum,
+    DataAccessSubmissionAccessorChange: 'DATA_ACCESS_SUBMISSION_ACCESSOR_CHANGE' as TypeEnum,
+    DataAccessNotifications: 'DATA_ACCESS_NOTIFICATIONS' as TypeEnum,
+    FormGroup: 'FORM_GROUP' as TypeEnum,
+    FormData: 'FORM_DATA' as TypeEnum,
+    Organization: 'ORGANIZATION' as TypeEnum,
+    JsonSchema: 'JSON_SCHEMA' as TypeEnum,
+    JsonSchemaBlob: 'JSON_SCHEMA_BLOB' as TypeEnum,
+    JsonSchemaVersion: 'JSON_SCHEMA_VERSION' as TypeEnum,
+    JsonSchemaLatestVersion: 'JSON_SCHEMA_LATEST_VERSION' as TypeEnum,
+    JsonSchemaDependency: 'JSON_SCHEMA_DEPENDENCY' as TypeEnum,
+    JsonSchemaObjectBinding: 'JSON_SCHEMA_OBJECT_BINDING' as TypeEnum,
+    DownloadList: 'DOWNLOAD_LIST' as TypeEnum,
+    DownloadListItem: 'DOWNLOAD_LIST_ITEM' as TypeEnum,
+    DownloadOrder: 'DOWNLOAD_ORDER' as TypeEnum,
+    DownloadList2: 'DOWNLOAD_LIST_2' as TypeEnum,
+    DownloadListItem2: 'DOWNLOAD_LIST_ITEM_2' as TypeEnum,
+    DataType: 'DATA_TYPE' as TypeEnum,
+    OauthSectorIdentifier: 'OAUTH_SECTOR_IDENTIFIER' as TypeEnum,
+    OauthClient: 'OAUTH_CLIENT' as TypeEnum,
+    OauthRefreshToken: 'OAUTH_REFRESH_TOKEN' as TypeEnum,
+    OauthAccessToken: 'OAUTH_ACCESS_TOKEN' as TypeEnum,
+    PersonalAccessToken: 'PERSONAL_ACCESS_TOKEN' as TypeEnum,
+    AuthorizationGrant: 'AUTHORIZATION_GRANT' as TypeEnum,
+    SesNotifications: 'SES_NOTIFICATIONS' as TypeEnum,
+    QuarantinedEmails: 'QUARANTINED_EMAILS' as TypeEnum,
+    FeatureStatus: 'FEATURE_STATUS' as TypeEnum,
+    MaterializedViewId: 'MATERIALIZED_VIEW_ID' as TypeEnum,
+    MaterializedViewSourceTable: 'MATERIALIZED_VIEW_SOURCE_TABLE' as TypeEnum,
+    PrincipalOidcBinding: 'PRINCIPAL_OIDC_BINDING' as TypeEnum,
+    OtpSecret: 'OTP_SECRET' as TypeEnum,
+    OtpRecoveryCode: 'OTP_RECOVERY_CODE' as TypeEnum,
+    TwoFaStatus: 'TWO_FA_STATUS' as TypeEnum,
+    Webhook: 'WEBHOOK' as TypeEnum,
+    WebhookVerification: 'WEBHOOK_VERIFICATION' as TypeEnum,
+    WebhookAllowedDomain: 'WEBHOOK_ALLOWED_DOMAIN' as TypeEnum,
+    AgentRegistration: 'AGENT_REGISTRATION' as TypeEnum,
+    AgentSession: 'AGENT_SESSION' as TypeEnum,
+    TosRequirements: 'TOS_REQUIREMENTS' as TypeEnum,
+    TosAgreement: 'TOS_AGREEMENT' as TypeEnum,
+    ProjectStorageData: 'PROJECT_STORAGE_DATA' as TypeEnum,
+    ProjectStorageLimit: 'PROJECT_STORAGE_LIMIT' as TypeEnum,
+    GridSession: 'GRID_SESSION' as TypeEnum,
+    GridReplica: 'GRID_REPLICA' as TypeEnum,
+    GridConnection: 'GRID_CONNECTION' as TypeEnum,
+    GridPatch: 'GRID_PATCH' as TypeEnum,
+    CurationTask: 'CURATION_TASK' as TypeEnum,
+    UserStatus: 'USER_STATUS' as TypeEnum,
+    RecordsetValidationStats: 'RECORDSET_VALIDATION_STATS' as TypeEnum,
+    Change: 'CHANGE' as TypeEnum,
   };
 }

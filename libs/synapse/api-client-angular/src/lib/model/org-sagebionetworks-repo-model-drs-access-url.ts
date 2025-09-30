@@ -12,5 +12,8 @@
  * A fully resolvable presigned URL that can be used to download the object bytes without any authentication.As presigned url has tokens included, which expires with time
  */
 export interface OrgSagebionetworksRepoModelDrsAccessUrl {
+  /**
+   * A fully resolvable URL that can be used to fetch the actual object bytes
+   */
   url?: string;
 }

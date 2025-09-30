@@ -13,9 +13,21 @@ import { OrgSagebionetworksRepoModelDataaccessSubmissionStatus } from './org-sag
  * The status of a user meeting an ACTAccessRequirement.
  */
 export interface OrgSagebionetworksRepoModelDataaccessManagedACTAccessRequirementStatus {
+  /**
+   * The ID of the requested AccessRequirement.
+   */
   accessRequirementId?: string;
+  /**
+   * Indicates which implementation of AccessRequirementStatus this object represents.
+   */
   concreteType: OrgSagebionetworksRepoModelDataaccessManagedACTAccessRequirementStatus.ConcreteTypeEnum;
+  /**
+   * True if there is an AccessApproval for the user for the given AccessRequirement.
+   */
   isApproved?: boolean;
+  /**
+   * The date that the user no longer have access to the data.
+   */
   expiredOn?: string;
   currentSubmissionStatus?: OrgSagebionetworksRepoModelDataaccessSubmissionStatus;
 }

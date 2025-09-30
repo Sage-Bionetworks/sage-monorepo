@@ -17,8 +17,17 @@ import { OrgSagebionetworksRepoModelMessageCloudmailinEnvelope } from './org-sag
 export interface OrgSagebionetworksRepoModelMessageCloudmailinMessage {
   envelope?: OrgSagebionetworksRepoModelMessageCloudmailinEnvelope;
   headers?: OrgSagebionetworksRepoModelMessageCloudmailinHeaders;
+  /**
+   * Message body, as plain text.
+   */
   plain?: string;
+  /**
+   * Message body, as html.
+   */
   html?: string;
+  /**
+   * Message reply if found.
+   */
   reply_plain?: string;
   /**
    * Attachments to the message.

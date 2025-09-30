@@ -10,6 +10,9 @@
 import { OrgSagebionetworksRepoModelV2WikiV2WikiHistorySnapshot } from './org-sagebionetworks-repo-model-v2-wiki-v2-wiki-history-snapshot';
 
 export interface PaginatedResultsOfV2WikiHistorySnapshot {
+  /**
+   * Calculating the actual totalNumberOfResults is not longer supported. Therefore, for each page, the totalNumberOfResults is estimated using the current page, limit, and offset. When the page size equals the limit, the totalNumberOfResults will be offset+pageSize+ 1. Otherwise, the totalNumberOfResults will be offset+pageSize.
+   */
   totalNumberOfResults?: number;
   results?: Array<OrgSagebionetworksRepoModelV2WikiV2WikiHistorySnapshot>;
 }

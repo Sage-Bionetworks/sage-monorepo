@@ -17,7 +17,16 @@ export interface OrgSagebionetworksRepoModelEntityChildrenResponse {
    * The headers of each child.
    */
   page?: Array<OrgSagebionetworksRepoModelEntityHeader>;
+  /**
+   * Token that can be used to get the next page.  Null if there are no more results.
+   */
   nextPageToken?: string;
+  /**
+   * The total number of children with the requested parentId and types.  Only returned if requested.
+   */
   totalChildCount?: number;
+  /**
+   * The sum of the file sizes (bytes) with the requested parentId and types. Only returned if requested.
+   */
   sumFileSizesBytes?: number;
 }

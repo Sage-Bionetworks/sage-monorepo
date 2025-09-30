@@ -12,5 +12,8 @@
  * Response to the check of whether consent was already granted.
  */
 export interface OrgSagebionetworksRepoModelOauthOAuthConsentGrantedResponse {
+  /**
+   * True if consent for the given authorization request was already given.
+   */
   granted?: boolean;
 }

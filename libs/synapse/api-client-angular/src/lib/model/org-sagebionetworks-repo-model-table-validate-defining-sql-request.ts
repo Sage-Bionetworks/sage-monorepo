@@ -12,6 +12,19 @@
  * The request body for validateDefiningSql
  */
 export interface OrgSagebionetworksRepoModelTableValidateDefiningSqlRequest {
+  /**
+   * The Synapse SQL statement that defines the data in the table.
+   */
   definingSql?: string;
-  entityType?: string;
+  /**
+   * Type of the entity containing definingSql
+   */
+  entityType?: OrgSagebionetworksRepoModelTableValidateDefiningSqlRequest.EntityTypeEnum;
+}
+export namespace OrgSagebionetworksRepoModelTableValidateDefiningSqlRequest {
+  export type EntityTypeEnum = 'materializedview' | 'virtualtable';
+  export const EntityTypeEnum = {
+    Materializedview: 'materializedview' as EntityTypeEnum,
+    Virtualtable: 'virtualtable' as EntityTypeEnum,
+  };
 }

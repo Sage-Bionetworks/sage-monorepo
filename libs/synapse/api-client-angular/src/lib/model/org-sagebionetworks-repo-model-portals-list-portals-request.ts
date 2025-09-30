@@ -12,5 +12,8 @@
  * JSON schema for a request to list a page of Portals, the list will be ordered by name.
  */
 export interface OrgSagebionetworksRepoModelPortalsListPortalsRequest {
+  /**
+   * Forward this token to get the next page of results.
+   */
   nextPageToken?: string;
 }

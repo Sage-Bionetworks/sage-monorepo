@@ -15,7 +15,10 @@ import { OrgSagebionetworksRepoModelTableQuery } from './org-sagebionetworks-rep
 export interface OrgSagebionetworksRepoModelGridCreateGridRequest {
   concreteType: OrgSagebionetworksRepoModelGridCreateGridRequest.ConcreteTypeEnum;
   initialQuery?: OrgSagebionetworksRepoModelTableQuery;
-  schema$id?: string;
+  /**
+   * When provided, the grid will be initialized using the CSV file stored for the given record set id. The grid columns will match the header of the CSV. Optional, if present the initialQuery cannot be included.
+   */
+  recordSetId?: string;
 }
 export namespace OrgSagebionetworksRepoModelGridCreateGridRequest {
   export type ConcreteTypeEnum = 'org.sagebionetworks.repo.model.grid.CreateGridRequest';

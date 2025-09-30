@@ -12,5 +12,8 @@
  * Request for a single page of DownloadOrderSummary objects.
  */
 export interface OrgSagebionetworksRepoModelFileDownloadOrderSummaryRequest {
+  /**
+   * To recieve the next page, forward the nextPageToken returned with the pevious reponse.
+   */
   nextPageToken?: string;
 }

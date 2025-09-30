@@ -14,7 +14,13 @@ import { OrgSagebionetworksRepoModelTableCsvTableDescriptor } from './org-sagebi
  */
 export interface OrgSagebionetworksRepoModelDownloadDownloadListPackageRequest {
   concreteType: OrgSagebionetworksRepoModelDownloadDownloadListPackageRequest.ConcreteTypeEnum;
+  /**
+   * Optional parameter to set the name of the resulting zip file.
+   */
   zipFileName?: string;
+  /**
+   * Optional with a default value of false.  When set to true, a metadata manifest file will be included in the package. The manifest will include all the metadata for each file in the package.
+   */
   includeManifest?: boolean;
   csvTableDescriptor?: OrgSagebionetworksRepoModelTableCsvTableDescriptor;
 }

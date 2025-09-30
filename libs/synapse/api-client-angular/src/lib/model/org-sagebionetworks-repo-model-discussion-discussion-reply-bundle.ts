@@ -12,15 +12,48 @@
  * The Reply model object represents a single reply in a thread.
  */
 export interface OrgSagebionetworksRepoModelDiscussionDiscussionReplyBundle {
+  /**
+   * The ID of the reply
+   */
   id?: string;
+  /**
+   * The ID of the thread this Reply belongs to
+   */
   threadId?: string;
+  /**
+   * The ID of the forum this Reply belongs to
+   */
   forumId?: string;
+  /**
+   * The ID of the project this Reply belongs to
+   */
   projectId?: string;
+  /**
+   * The timestamp when this Reply was created
+   */
   createdOn?: string;
+  /**
+   * The id of the user that created this Reply
+   */
   createdBy?: string;
+  /**
+   * The timestamp when this Reply was last modified
+   */
   modifiedOn?: string;
+  /**
+   * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client\'s current representation of an entity is out-of-date.
+   */
   etag?: string;
+  /**
+   * The S3 key where the actual message stored
+   */
   messageKey?: string;
+  /**
+   * Has the author edited this Reply?
+   */
   isEdited?: boolean;
+  /**
+   * Has this Reply been deleted?
+   */
   isDeleted?: boolean;
 }

@@ -13,10 +13,24 @@ import { OrgSagebionetworksRepoModelStatusHistoryRecord } from './org-sagebionet
  * JSON schema for CurationTrackingData
  */
 export interface OrgSagebionetworksRepoModelCurationTrackingData {
-  status?: string;
+  /**
+   * The status of data curation process
+   */
+  status?: OrgSagebionetworksRepoModelCurationTrackingData.StatusEnum;
+  /**
+   * Contact id of person who curated the data
+   */
   curator?: string;
   /**
    * Status history
    */
   history?: Array<OrgSagebionetworksRepoModelStatusHistoryRecord>;
+}
+export namespace OrgSagebionetworksRepoModelCurationTrackingData {
+  export type StatusEnum = 'loaded' | 'processed' | 'published';
+  export const StatusEnum = {
+    Loaded: 'loaded' as StatusEnum,
+    Processed: 'processed' as StatusEnum,
+    Published: 'published' as StatusEnum,
+  };
 }

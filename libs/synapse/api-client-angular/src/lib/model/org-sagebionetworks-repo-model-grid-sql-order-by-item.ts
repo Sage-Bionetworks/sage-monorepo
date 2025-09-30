@@ -11,5 +11,15 @@ import { OrgSagebionetworksRepoModelGridSqlSqlExpression } from './org-sagebione
 
 export interface OrgSagebionetworksRepoModelGridSqlOrderByItem {
   expression?: OrgSagebionetworksRepoModelGridSqlSqlExpression;
-  direction?: string;
+  /**
+   * The ordering direction (default is ASC).
+   */
+  direction?: OrgSagebionetworksRepoModelGridSqlOrderByItem.DirectionEnum;
+}
+export namespace OrgSagebionetworksRepoModelGridSqlOrderByItem {
+  export type DirectionEnum = 'ASC' | 'DESC';
+  export const DirectionEnum = {
+    Asc: 'ASC' as DirectionEnum,
+    Desc: 'DESC' as DirectionEnum,
+  };
 }

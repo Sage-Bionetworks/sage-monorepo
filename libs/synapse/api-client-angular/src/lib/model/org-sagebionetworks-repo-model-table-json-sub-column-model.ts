@@ -12,8 +12,70 @@
  * Defines a single sub-column of a column of type JSON.  This can be used to enable the faceting of the sub-columns.
  */
 export interface OrgSagebionetworksRepoModelTableJsonSubColumnModel {
+  /**
+   * The display name of the column
+   */
   name?: string;
-  columnType?: string;
-  facetType?: string;
+  /**
+   * The column type determines the type of data that can be stored in a column. Switching between types (using <a href=\"${POST.entity.id.table.transaction.async.start}\">a transaction</a> with <a href=\"${org.sagebionetworks.repo.model.table.TableUpdateTransactionRequest}\">TableUpdateTransactionRequest</a> in the \"changes\" list) is generally allowed except for switching to \"_LIST\" suffixed types. In such cases, a new column must be created and data must be copied over manually
+   */
+  columnType?: OrgSagebionetworksRepoModelTableJsonSubColumnModel.ColumnTypeEnum;
+  /**
+   * Set to one of the enumerated values to indicate a column should be treated as a facet
+   */
+  facetType?: OrgSagebionetworksRepoModelTableJsonSubColumnModel.FacetTypeEnum;
+  /**
+   * Defines the JSON path of the sub column. Use the \'$\' char to represent the root of JSON object. If the JSON key of a sub column is \'a\', then the jsonPath for that column would be: \'$.a\'.
+   */
   jsonPath?: string;
+}
+export namespace OrgSagebionetworksRepoModelTableJsonSubColumnModel {
+  export type ColumnTypeEnum =
+    | 'STRING'
+    | 'DOUBLE'
+    | 'INTEGER'
+    | 'BOOLEAN'
+    | 'DATE'
+    | 'FILEHANDLEID'
+    | 'ENTITYID'
+    | 'SUBMISSIONID'
+    | 'EVALUATIONID'
+    | 'LINK'
+    | 'MEDIUMTEXT'
+    | 'LARGETEXT'
+    | 'USERID'
+    | 'STRING_LIST'
+    | 'INTEGER_LIST'
+    | 'BOOLEAN_LIST'
+    | 'DATE_LIST'
+    | 'ENTITYID_LIST'
+    | 'USERID_LIST'
+    | 'JSON';
+  export const ColumnTypeEnum = {
+    String: 'STRING' as ColumnTypeEnum,
+    Double: 'DOUBLE' as ColumnTypeEnum,
+    Integer: 'INTEGER' as ColumnTypeEnum,
+    Boolean: 'BOOLEAN' as ColumnTypeEnum,
+    Date: 'DATE' as ColumnTypeEnum,
+    Filehandleid: 'FILEHANDLEID' as ColumnTypeEnum,
+    Entityid: 'ENTITYID' as ColumnTypeEnum,
+    Submissionid: 'SUBMISSIONID' as ColumnTypeEnum,
+    Evaluationid: 'EVALUATIONID' as ColumnTypeEnum,
+    Link: 'LINK' as ColumnTypeEnum,
+    Mediumtext: 'MEDIUMTEXT' as ColumnTypeEnum,
+    Largetext: 'LARGETEXT' as ColumnTypeEnum,
+    Userid: 'USERID' as ColumnTypeEnum,
+    StringList: 'STRING_LIST' as ColumnTypeEnum,
+    IntegerList: 'INTEGER_LIST' as ColumnTypeEnum,
+    BooleanList: 'BOOLEAN_LIST' as ColumnTypeEnum,
+    DateList: 'DATE_LIST' as ColumnTypeEnum,
+    EntityidList: 'ENTITYID_LIST' as ColumnTypeEnum,
+    UseridList: 'USERID_LIST' as ColumnTypeEnum,
+    Json: 'JSON' as ColumnTypeEnum,
+  };
+  export type FacetTypeEnum = 'enumeration' | 'range';
+  export const FacetTypeEnum = {
+    Enumeration: 'enumeration' as FacetTypeEnum,
+    Range: 'range' as FacetTypeEnum,
+  };
 }

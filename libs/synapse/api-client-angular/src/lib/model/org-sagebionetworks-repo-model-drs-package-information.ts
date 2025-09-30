@@ -12,7 +12,16 @@
  * The DRS package information follows GA4GH specification.
  */
 export interface OrgSagebionetworksRepoModelDrsPackageInformation {
+  /**
+   * The group information of DRS, eg GA4GH.
+   */
   group?: string;
+  /**
+   * The artifact information of DRS.
+   */
   artifact?: string;
+  /**
+   * The version of DRS specification.
+   */
   version?: string;
 }

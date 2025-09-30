@@ -12,8 +12,27 @@
  * Request to create an account, validated via OAuth
  */
 export interface OrgSagebionetworksRepoModelOauthOAuthAccountCreationRequest {
-  provider?: string;
+  /**
+   * Supported OAuth providers
+   */
+  provider?: OrgSagebionetworksRepoModelOauthOAuthAccountCreationRequest.ProviderEnum;
+  /**
+   * The authorization code passed with the redirectUrl after successful user authentication from a 3rd party OAuth provider.  This code is used by Synapse to lookup the user\'s information from the OAuthProvider.
+   */
   authenticationCode?: string;
+  /**
+   * This must be the same redirect URL used to in the first step.  This parameter is required by Google but not by all oauth providers.
+   */
   redirectUrl?: string;
+  /**
+   * The requested user name for the new account.
+   */
   userName?: string;
+}
+export namespace OrgSagebionetworksRepoModelOauthOAuthAccountCreationRequest {
+  export type ProviderEnum = 'GOOGLE_OAUTH_2_0' | 'ORCID';
+  export const ProviderEnum = {
+    GoogleOauth20: 'GOOGLE_OAUTH_2_0' as ProviderEnum,
+    Orcid: 'ORCID' as ProviderEnum,
+  };
 }

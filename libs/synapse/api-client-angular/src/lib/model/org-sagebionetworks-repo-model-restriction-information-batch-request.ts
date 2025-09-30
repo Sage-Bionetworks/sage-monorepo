@@ -12,9 +12,20 @@
  * A batch request to retrieve the information about restriction level on a list of restrict-able objects.
  */
 export interface OrgSagebionetworksRepoModelRestrictionInformationBatchRequest {
-  restrictableObjectType?: string;
+  /**
+   * JSON enum for the types of objects which can be restricted by an AccessRequirement.
+   */
+  restrictableObjectType?: OrgSagebionetworksRepoModelRestrictionInformationBatchRequest.RestrictableObjectTypeEnum;
   /**
    * The list of IDs to request restriction information about. Limited to a max of 50 object ids.
    */
   objectIds?: Array<string>;
+}
+export namespace OrgSagebionetworksRepoModelRestrictionInformationBatchRequest {
+  export type RestrictableObjectTypeEnum = 'ENTITY' | 'EVALUATION' | 'TEAM';
+  export const RestrictableObjectTypeEnum = {
+    Entity: 'ENTITY' as RestrictableObjectTypeEnum,
+    Evaluation: 'EVALUATION' as RestrictableObjectTypeEnum,
+    Team: 'TEAM' as RestrictableObjectTypeEnum,
+  };
 }

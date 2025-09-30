@@ -17,6 +17,12 @@ export interface OrgSagebionetworksRepoModelUserGroupHeaderResponsePage {
    * The list of children that match the requested concept.
    */
   children?: Array<OrgSagebionetworksRepoModelUserGroupHeader>;
+  /**
+   * The prefix filter used to generate this result.
+   */
   prefixFilter?: string;
+  /**
+   * This field is deprecated.
+   */
   totalNumberOfResults?: number;
 }

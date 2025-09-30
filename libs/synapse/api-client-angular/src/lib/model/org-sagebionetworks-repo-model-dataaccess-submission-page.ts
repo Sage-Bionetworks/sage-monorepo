@@ -14,5 +14,8 @@ import { OrgSagebionetworksRepoModelDataaccessSubmission } from './org-sagebione
  */
 export interface OrgSagebionetworksRepoModelDataaccessSubmissionPage {
   results?: Array<OrgSagebionetworksRepoModelDataaccessSubmission>;
+  /**
+   * The token to get the next page result.
+   */
   nextPageToken?: string;
 }

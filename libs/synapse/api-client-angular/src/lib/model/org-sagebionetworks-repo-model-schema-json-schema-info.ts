@@ -12,10 +12,28 @@
  * Information about a single JSON schema.
  */
 export interface OrgSagebionetworksRepoModelSchemaJsonSchemaInfo {
+  /**
+   * The Synapse identifier issued to the Organization to which this JsonSchema belongs.
+   */
   organizationId?: string;
+  /**
+   * The name of the Organization to which this JsonSchema belongs.
+   */
   organizationName?: string;
+  /**
+   * The Synapse identifier issued to the JsonSchema.
+   */
   schemaId?: string;
+  /**
+   * The name of the JsonSchema.
+   */
   schemaName?: string;
+  /**
+   * The date this JsonSchema was created.
+   */
   createdOn?: string;
+  /**
+   * The ID of the user that created this JsonSchema.
+   */
   createdBy?: string;
 }

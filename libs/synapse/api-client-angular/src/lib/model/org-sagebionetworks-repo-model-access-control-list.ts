@@ -13,10 +13,22 @@ import { OrgSagebionetworksRepoModelResourceAccess } from './org-sagebionetworks
  * Contains list of principals who can access the data with the allowed types of access for each.
  */
 export interface OrgSagebionetworksRepoModelAccessControlList {
+  /**
+   * The entity id
+   */
   id?: string;
+  /**
+   * UNUSED -- maintained only for backwards compatibility with archived objects
+   */
   createdBy?: string;
   creationDate?: string;
+  /**
+   * UNUSED -- maintained only for backwards compatibility with archived objects
+   */
   modifiedBy?: string;
+  /**
+   * UNUSED -- maintained only for backwards compatibility with archived objects
+   */
   modifiedOn?: string;
   etag?: string;
   /**

@@ -12,14 +12,44 @@
  * Information about a single version of a JSON schema.
  */
 export interface OrgSagebionetworksRepoModelSchemaJsonSchemaVersionInfo {
+  /**
+   * The Synapse issued numeric identifier for the organization.
+   */
   organizationId?: string;
+  /**
+   * The name of the organization to which this schema belongs.
+   */
   organizationName?: string;
+  /**
+   * The Synapse issued numeric identifier for the schema.
+   */
   schemaId?: string;
+  /**
+   * The name of the this schema.
+   */
   schemaName?: string;
+  /**
+   * The Synapse issued numeric identifier for this version.
+   */
   versionId?: string;
+  /**
+   * The full \'$id\' of this schema version
+   */
   $id?: string;
+  /**
+   * The semantic version label provided when this version was created.  Can be null if a semantic version was not provided when this version was created.
+   */
   semanticVersion?: string;
+  /**
+   * The SHA-256 hexadecimal hash of the UTF-8 encoded JSON schema.
+   */
   jsonSHA256Hex?: string;
+  /**
+   * The date this JSON schema version was created.
+   */
   createdOn?: string;
+  /**
+   * The ID of the user that created this JSON schema version.
+   */
   createdBy?: string;
 }

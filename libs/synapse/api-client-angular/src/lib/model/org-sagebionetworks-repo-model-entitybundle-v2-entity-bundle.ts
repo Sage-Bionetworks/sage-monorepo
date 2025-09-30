@@ -23,10 +23,16 @@ import { OrgSagebionetworksRepoModelFileFileHandle } from './org-sagebionetworks
  */
 export interface OrgSagebionetworksRepoModelEntitybundleV2EntityBundle {
   entity?: OrgSagebionetworksRepoModelEntity;
-  entityType?: string;
+  /**
+   * Type of the Entity
+   */
+  entityType?: OrgSagebionetworksRepoModelEntitybundleV2EntityBundle.EntityTypeEnum;
   annotations?: OrgSagebionetworksRepoModelAnnotationV2Annotations;
   permissions?: OrgSagebionetworksRepoModelAuthUserEntityPermissions;
   path?: OrgSagebionetworksRepoModelEntityPath;
+  /**
+   * Whether or not this Entity has children
+   */
   hasChildren?: boolean;
   accessControlList?: OrgSagebionetworksRepoModelAccessControlList;
   /**
@@ -34,11 +40,51 @@ export interface OrgSagebionetworksRepoModelEntitybundleV2EntityBundle {
    */
   fileHandles?: Array<OrgSagebionetworksRepoModelFileFileHandle>;
   tableBundle?: OrgSagebionetworksRepoModelTableTableBundle;
+  /**
+   * Id of the root Wiki associated with this Entity
+   */
   rootWikiId?: string;
   benefactorAcl?: OrgSagebionetworksRepoModelAccessControlList;
   doiAssociation?: OrgSagebionetworksRepoModelDoiV2DoiAssociation;
+  /**
+   * If this Entity is a FileEntity, this is its filename
+   */
   fileName?: string;
+  /**
+   * Number of disucssion threads that reference this Entity
+   */
   threadCount?: number;
   restrictionInformation?: OrgSagebionetworksRepoModelRestrictionInformationResponse;
   activity?: OrgSagebionetworksRepoModelProvenanceActivity;
+}
+export namespace OrgSagebionetworksRepoModelEntitybundleV2EntityBundle {
+  export type EntityTypeEnum =
+    | 'project'
+    | 'folder'
+    | 'file'
+    | 'table'
+    | 'link'
+    | 'entityview'
+    | 'dockerrepo'
+    | 'submissionview'
+    | 'dataset'
+    | 'datasetcollection'
+    | 'materializedview'
+    | 'virtualtable'
+    | 'recordset';
+  export const EntityTypeEnum = {
+    Project: 'project' as EntityTypeEnum,
+    Folder: 'folder' as EntityTypeEnum,
+    File: 'file' as EntityTypeEnum,
+    Table: 'table' as EntityTypeEnum,
+    Link: 'link' as EntityTypeEnum,
+    Entityview: 'entityview' as EntityTypeEnum,
+    Dockerrepo: 'dockerrepo' as EntityTypeEnum,
+    Submissionview: 'submissionview' as EntityTypeEnum,
+    Dataset: 'dataset' as EntityTypeEnum,
+    Datasetcollection: 'datasetcollection' as EntityTypeEnum,
+    Materializedview: 'materializedview' as EntityTypeEnum,
+    Virtualtable: 'virtualtable' as EntityTypeEnum,
+    Recordset: 'recordset' as EntityTypeEnum,
+  };
 }

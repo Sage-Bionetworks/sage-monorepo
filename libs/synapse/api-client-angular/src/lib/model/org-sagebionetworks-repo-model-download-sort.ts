@@ -12,6 +12,40 @@
  * Identifies both the field and direction for a single sort operation
  */
 export interface OrgSagebionetworksRepoModelDownloadSort {
-  field?: string;
-  direction?: string;
+  /**
+   * Enumeration of the fields of a user\'s download list that can be used for sorting.
+   */
+  field?: OrgSagebionetworksRepoModelDownloadSort.FieldEnum;
+  /**
+   * Direction of a sort.
+   */
+  direction?: OrgSagebionetworksRepoModelDownloadSort.DirectionEnum;
+}
+export namespace OrgSagebionetworksRepoModelDownloadSort {
+  export type FieldEnum =
+    | 'fileName'
+    | 'projectName'
+    | 'synId'
+    | 'versionNumber'
+    | 'addedOn'
+    | 'createdBy'
+    | 'createdOn'
+    | 'fileSize'
+    | 'isEligibleForPackaging';
+  export const FieldEnum = {
+    FileName: 'fileName' as FieldEnum,
+    ProjectName: 'projectName' as FieldEnum,
+    SynId: 'synId' as FieldEnum,
+    VersionNumber: 'versionNumber' as FieldEnum,
+    AddedOn: 'addedOn' as FieldEnum,
+    CreatedBy: 'createdBy' as FieldEnum,
+    CreatedOn: 'createdOn' as FieldEnum,
+    FileSize: 'fileSize' as FieldEnum,
+    IsEligibleForPackaging: 'isEligibleForPackaging' as FieldEnum,
+  };
+  export type DirectionEnum = 'ASC' | 'DESC';
+  export const DirectionEnum = {
+    Asc: 'ASC' as DirectionEnum,
+    Desc: 'DESC' as DirectionEnum,
+  };
 }

@@ -12,6 +12,12 @@
  * Request to create a new presigned URL that is used to establish a grid websocket connection.
  */
 export interface OrgSagebionetworksRepoModelGridCreateGridPresignedUrlRequest {
+  /**
+   * Identifies the grid session to establish a websocket connection with.
+   */
   gridSessionId?: string;
+  /**
+   * Identifies the replica that will be establishing the websocket connection.
+   */
   replicaId?: number;
 }

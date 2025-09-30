@@ -12,8 +12,17 @@
  * Represents a single partial row of a TableEntity
  */
 export interface OrgSagebionetworksRepoModelTableSparseRowDto {
+  /**
+   * The current etag of this object.
+   */
   etag?: string;
+  /**
+   * The immutable ID of a row.
+   */
   rowId?: number;
+  /**
+   * The the version number of this row.
+   */
   versionNumber?: number;
   /**
    * The values for columns of this row as a map. The key is the columnId and value is the cell value

@@ -18,6 +18,9 @@ export interface OrgSagebionetworksRepoModelTableTableUpdateTransactionResponse 
    * List of responses. There will be one response for each request in the transaction.
    */
   results?: Array<OrgSagebionetworksRepoModelTableTableUpdateResponse>;
+  /**
+   * The version number of the snapshot.  Returned only, if a new snapshot was requested.
+   */
   snapshotVersionNumber?: number;
 }
 export namespace OrgSagebionetworksRepoModelTableTableUpdateTransactionResponse {

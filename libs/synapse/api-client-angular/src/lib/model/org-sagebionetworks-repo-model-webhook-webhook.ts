@@ -12,18 +12,68 @@
  * An object that serves as registration for a Synapse user to receive events for the specified event.
  */
 export interface OrgSagebionetworksRepoModelWebhookWebhook {
+  /**
+   * The ID associated with the Webhook. This field is issued by Synapse and cannot be changed by the user.
+   */
   id?: string;
+  /**
+   * The ID of the user that created this webhook.
+   */
   createdBy?: string;
+  /**
+   * The date this webhook was created.
+   */
   createdOn?: string;
+  /**
+   * The date this webhook was last modified.
+   */
   modifiedOn?: string;
+  /**
+   * The ID of the Synapse object to receive events of.
+   */
   objectId?: string;
-  objectType?: string;
+  /**
+   * The supported synapse object types for a Webhook
+   */
+  objectType?: OrgSagebionetworksRepoModelWebhookWebhook.ObjectTypeEnum;
   /**
    * The set of event types to subscribe to.
    */
-  eventTypes?: Set<string>;
+  eventTypes?: Set<OrgSagebionetworksRepoModelWebhookWebhook.EventTypesEnum>;
+  /**
+   * The endpoint the Synapse user would like the webhook events sent to on invocation. Must be 255 Characters or less.
+   */
   invokeEndpoint?: string;
+  /**
+   * True if the Synapse user has selected to receive events. If the user sets to false, events will be temporalily paused.
+   */
   isEnabled?: boolean;
-  verificationStatus?: string;
+  /**
+   * JSON enum for the verification status of a Webhook.
+   */
+  verificationStatus?: OrgSagebionetworksRepoModelWebhookWebhook.VerificationStatusEnum;
+  /**
+   * A message describing the reason of the verification status
+   */
   verificationMsg?: string;
+}
+export namespace OrgSagebionetworksRepoModelWebhookWebhook {
+  export type ObjectTypeEnum = 'ENTITY';
+  export const ObjectTypeEnum = {
+    Entity: 'ENTITY' as ObjectTypeEnum,
+  };
+  export type EventTypesEnum = 'CREATE' | 'UPDATE' | 'DELETE';
+  export const EventTypesEnum = {
+    Create: 'CREATE' as EventTypesEnum,
+    Update: 'UPDATE' as EventTypesEnum,
+    Delete: 'DELETE' as EventTypesEnum,
+  };
+  export type VerificationStatusEnum = 'PENDING' | 'CODE_SENT' | 'FAILED' | 'REVOKED' | 'VERIFIED';
+  export const VerificationStatusEnum = {
+    Pending: 'PENDING' as VerificationStatusEnum,
+    CodeSent: 'CODE_SENT' as VerificationStatusEnum,
+    Failed: 'FAILED' as VerificationStatusEnum,
+    Revoked: 'REVOKED' as VerificationStatusEnum,
+    Verified: 'VERIFIED' as VerificationStatusEnum,
+  };
 }
