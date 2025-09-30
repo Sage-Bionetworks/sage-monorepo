@@ -43,6 +43,7 @@ jobs:
             bridge2ai
             common
             deps
+            devcontainer
             explorers
             iatlas
             model-ad
