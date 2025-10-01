@@ -13,7 +13,7 @@ CREATE TABLE model (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   slug VARCHAR(200) UNIQUE NOT NULL,
   name VARCHAR(300) NOT NULL,
-  license VARCHAR(100) NOT NULL,
+  license VARCHAR(20) NOT NULL CHECK (license IN ('open-source', 'commercial')),
   active BOOLEAN NOT NULL DEFAULT FALSE,
   alias VARCHAR(200),
   external_link VARCHAR(300) NOT NULL,
