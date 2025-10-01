@@ -1,4 +1,5 @@
 import { SearchResult } from '@sagebionetworks/agora/api-client';
+import { isEnsemblId, sanitizeSearchQuery } from '@sagebionetworks/agora/util';
 import { escapeRegexChars } from '@sagebionetworks/shared/util';
 import { NextFunction, Request, Response } from 'express';
 import { cache, setHeaders } from '../helpers';
@@ -16,6 +17,7 @@ async function searchEnsemblGene(queryEscaped: string): Promise<SearchResult[]> 
         id: '$ensembl_gene_id',
         match_field: { $literal: 'ensembl_gene_id' },
         match_value: '$ensembl_gene_id',
+        hgnc_symbol: '$hgnc_symbol',
         _id: 0,
       },
     },
@@ -164,7 +166,7 @@ export async function searchGeneEnhanced(query: string) {
     return cachedResult;
   }
 
-  const isEnsemblSearch = query.length === 15 && query.toLowerCase().startsWith('ensg');
+  const isEnsemblSearch = query.length === 15 && isEnsemblId(query);
   let result: SearchResult[];
 
   if (isEnsemblSearch) {
@@ -200,13 +202,23 @@ export async function searchGeneEnhancedRoute(req: Request, res: Response, next:
     return;
   }
 
-  const query = rawQuery.trim().replace(/[^a-z0-9-_]/gi, '');
+  const query = sanitizeSearchQuery(rawQuery);
   if (query.length < 2) {
     res.status(400).contentType('application/problem+json').json({
       title: 'Bad Request',
       status: 400,
       detail:
         'Query must contain at least 2 valid characters (letters, numbers, hyphens, or underscores)',
+      instance: req.path,
+    });
+    return;
+  }
+
+  if (isEnsemblId(query) && query.length !== 15) {
+    res.status(400).contentType('application/problem+json').json({
+      title: 'Bad Request',
+      status: 400,
+      detail: 'Ensembl Gene IDs must be exactly 15 characters long',
       instance: req.path,
     });
     return;
