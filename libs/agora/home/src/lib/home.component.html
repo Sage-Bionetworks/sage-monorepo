@@ -1,18 +1,21 @@
 <div id="home-page">
   <div class="section">
     <div class="background">
-      <agora-svg-image
+      <explorers-svg-image
         imagePath="/agora-assets/images/background1.svg"
         altText=""
-      ></agora-svg-image>
-      <agora-svg-image
+        sizeMode="original"
+      />
+      <explorers-svg-image
         imagePath="/agora-assets/images/background2.svg"
         altText=""
-      ></agora-svg-image>
-      <agora-svg-image
+        sizeMode="original"
+      />
+      <explorers-svg-image
         imagePath="/agora-assets/images/background3.svg"
         altText=""
-      ></agora-svg-image>
+        sizeMode="original"
+      />
     </div>
     <div class="content">
       <div class="text-marquee">
@@ -37,58 +40,37 @@
         </p>
       </div>
       <div class="card-container">
-        <button routerLink="/genes/comparison" class="card-link">
-          <div class="card">
-            <div>
-              <h2>Gene Comparison</h2>
-              <p>
-                Compare differential RNA and protein expression results for 20k+ human genes in AD.
-                Build custom result sets by sorting, filtering, and searching for genes of interest.
-              </p>
-            </div>
-            <div class="icon-container">
-              <agora-svg-image
-                imagePath="/agora-assets/images/gene-comparison-icon.svg"
-                altText="gene comparison icon"
-              ></agora-svg-image>
-              <agora-svg-image
-                imagePath="/agora-assets/images/card-arrow.svg"
-                altText="arrow"
-              ></agora-svg-image>
-            </div>
-          </div>
-        </button>
-        <div class="card">
-          <div>
-            <h2>Gene Search</h2>
-            <p>
-              Search for a gene by name or Ensembl gene ID to view related experimental evidence,
-              find detailed information about nominations, and explore its association with AD.
-            </p>
-          </div>
-          <agora-gene-search [location]="'home'"></agora-gene-search>
-        </div>
-        <button routerLink="/genes/nominated-targets" class="card-link">
-          <div class="card">
-            <div>
-              <h2>Nominated Targets</h2>
-              <p>
-                Browse the list of over 900 genes that research teams have nominated as potential
-                new therapeutic targets for AD treatment or prevention.
-              </p>
-            </div>
-            <div class="icon-container">
-              <agora-svg-image
-                imagePath="/agora-assets/images/nominated-targets-icon.svg"
-                altText="nominated targets icon"
-              ></agora-svg-image>
-              <agora-svg-image
-                imagePath="/agora-assets/images/card-arrow.svg"
-                altText="arrow"
-              ></agora-svg-image>
-            </div>
-          </div>
-        </button>
+        <explorers-home-card
+          [title]="'Gene Comparison'"
+          [description]="
+            'Compare differential RNA and protein expression results for 20k+ human genes in AD. Build custom result sets by sorting, filtering, and searching for genes of interest.'
+          "
+          [routerLink]="`/${ROUTE_PATHS.GENE_COMPARISON}`"
+          [imagePath]="'/agora-assets/images/gene-comparison-icon.svg'"
+          [imageAltText]="'gene comparison icon'"
+        />
+        <explorers-home-card
+          [title]="'Gene Search'"
+          [description]="
+            'Search for a gene by name or Ensembl gene ID to view related experimental evidence, find detailed information about nominations, and explore its association with AD.'
+          "
+        >
+          <agora-search-input
+            [searchPlaceholder]="'Find Gene by Name...'"
+            [searchImagePath]="'/agora-assets/images/gene-search-icon.svg'"
+            [searchImageAltText]="'gene search icon'"
+            [hasThickBorder]="true"
+          />
+        </explorers-home-card>
+        <explorers-home-card
+          [title]="'Nominated Targets'"
+          [description]="
+            'Browse the list of over 900 genes that research teams have nominated as potential new therapeutic targets for AD treatment or prevention.'
+          "
+          [routerLink]="`/${ROUTE_PATHS.NOMINATED_TARGETS}`"
+          [imagePath]="'/agora-assets/images/nominated-targets-icon.svg'"
+          [imageAltText]="'nominated targets icon'"
+        />
       </div>
     </div>
   </div>
