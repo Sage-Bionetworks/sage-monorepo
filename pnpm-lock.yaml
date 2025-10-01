@@ -136,6 +136,9 @@ importers:
       lodash:
         specifier: 4.17.21
         version: 4.17.21
+      marked:
+        specifier: 15.0.11
+        version: 15.0.11
       mongoose:
         specifier: 8.9.5
         version: 8.9.5(socks@2.8.7)
@@ -153,7 +156,7 @@ importers:
         version: 20.0.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(echarts@5.6.0)
       ngx-markdown:
         specifier: 19.1.1
-        version: 19.1.1(@angular/common@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(@angular/platform-browser@20.3.1(@angular/animations@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0)))(@angular/common@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0)))(marked@16.2.1)(rxjs@7.8.1)(zone.js@0.15.0)
+        version: 19.1.1(@angular/common@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(@angular/platform-browser@20.3.1(@angular/animations@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0)))(@angular/common@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0)))(marked@15.0.11)(rxjs@7.8.1)(zone.js@0.15.0)
       ngx-typed-js:
         specifier: 2.1.1
         version: 2.1.1(@angular/common@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))
@@ -9300,6 +9303,11 @@ packages:
 
   mark.js@8.11.1:
     resolution: {integrity: sha512-1I+1qpDt4idfgLQG+BNWmrqku+7/2bi5nLf4YwF8y8zXvmfiTBY3PV3ZibfrjBueCByROpuBjLLFCajqkgYoLQ==}
+
+  marked@15.0.11:
+    resolution: {integrity: sha512-1BEXAU2euRCG3xwgLVT1y0xbJEld1XOrmRJpUwRCcy7rxhSCwMrmEu9LXoPhHSCJG41V7YcQ2mjKRr5BA3ITIA==}
+    engines: {node: '>= 18'}
+    hasBin: true
 
   marked@16.2.1:
     resolution: {integrity: sha512-r3UrXED9lMlHF97jJByry90cwrZBBvZmjG1L68oYfuPMW+uDTnuMbyJDymCWwbTE+f+3LhpNDKfpR3a3saFyjA==}
@@ -24182,7 +24190,10 @@ snapshots:
 
   mark.js@8.11.1: {}
 
-  marked@16.2.1: {}
+  marked@15.0.11: {}
+
+  marked@16.2.1:
+    optional: true
 
   marked@4.3.0: {}
 
@@ -24649,12 +24660,12 @@ snapshots:
       echarts: 5.6.0
       tslib: 2.4.1
 
-  ngx-markdown@19.1.1(@angular/common@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(@angular/platform-browser@20.3.1(@angular/animations@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0)))(@angular/common@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0)))(marked@16.2.1)(rxjs@7.8.1)(zone.js@0.15.0):
+  ngx-markdown@19.1.1(@angular/common@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(@angular/platform-browser@20.3.1(@angular/animations@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0)))(@angular/common@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0)))(marked@15.0.11)(rxjs@7.8.1)(zone.js@0.15.0):
     dependencies:
       '@angular/common': 20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1)
       '@angular/core': 20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0)
       '@angular/platform-browser': 20.3.1(@angular/animations@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0)))(@angular/common@20.3.1(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@20.3.1(@angular/compiler@20.3.1)(rxjs@7.8.1)(zone.js@0.15.0))
-      marked: 16.2.1
+      marked: 15.0.11
       rxjs: 7.8.1
       tslib: 2.4.1
       zone.js: 0.15.0
