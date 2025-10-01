@@ -13,8 +13,14 @@ CREATE TABLE model (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   slug VARCHAR(200) UNIQUE NOT NULL,
   name VARCHAR(300) NOT NULL,
-  license VARCHAR(100),
+  license VARCHAR(100) NOT NULL,
   active BOOLEAN NOT NULL DEFAULT FALSE,
+  alias VARCHAR(200),
+  external_link VARCHAR(300) NOT NULL,
+  organization VARCHAR(200),
+  description TEXT,
+  api_model_name VARCHAR(300) NOT NULL,
+  api_base VARCHAR(300) NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
