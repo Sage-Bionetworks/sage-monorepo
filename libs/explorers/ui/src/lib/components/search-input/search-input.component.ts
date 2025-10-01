@@ -67,6 +67,7 @@ export class SearchInputComponent implements AfterViewInit {
     (query: string) => 'No results match your search term.',
   );
   checkQueryForErrors = input.required<(query: string) => string>(); // empty string if no error
+  sanitizeQuery = input<(query: string) => string>((query: string) => query); // default is no-op
   formatResultForDisplay = input<(result: SearchResult) => string>(
     (result: SearchResult) => result.id,
   );
@@ -145,19 +146,21 @@ export class SearchInputComponent implements AfterViewInit {
       return EMPTY;
     }
 
-    // No frontend sanitization - backend handles all input escaping and security validation
-    if (query.length > 0 && query.length < this.minimumSearchLength()) {
+    // Optional frontend sanitization - expect backend to handle input escaping and security validation
+    const sanitizedQuery = this.sanitizeQuery()(query);
+    this.query = sanitizedQuery;
+    if (sanitizedQuery.length > 0 && sanitizedQuery.length < this.minimumSearchLength()) {
       this.error = this.getNotValidSearchMessage(this.minimumSearchLength());
     } else {
-      this.error = this.checkQueryForErrors()(query);
+      this.error = this.checkQueryForErrors()(sanitizedQuery);
     }
 
     if (this.error) {
       this.showResults = true;
     }
 
-    this.isLoading = !!(query && !this.error);
-    return this.isLoading ? this.getSearchResults()(query) : EMPTY;
+    this.isLoading = !!(sanitizedQuery && !this.error);
+    return this.isLoading ? this.getSearchResults()(sanitizedQuery) : EMPTY;
   }
 
   setResults(results: SearchResult[]) {

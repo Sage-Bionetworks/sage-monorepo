@@ -3,11 +3,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { GeneService, SearchResult } from '@sagebionetworks/agora/api-client';
 import { ROUTE_PATHS } from '@sagebionetworks/agora/config';
-import { isEnsemblId } from '@sagebionetworks/agora/util';
+import { isEnsemblId, sanitizeSearchQuery } from '@sagebionetworks/agora/util';
 import { SearchInputComponent as ExplorersSearchInputComponent } from '@sagebionetworks/explorers/ui';
 import { Observable, tap } from 'rxjs';
 
-// TODO: add frontend search validation to shared search-input, then use sanitizeSearchQuery here
 @Component({
   selector: 'agora-search-input',
   imports: [ExplorersSearchInputComponent],
@@ -23,6 +22,8 @@ export class SearchInputComponent {
   searchImagePath = input<string | undefined>();
   searchImageAltText = input<string>('');
   hasThickBorder = input<boolean>(false);
+
+  sanitizeSearchQuery = sanitizeSearchQuery;
 
   hgncSymbolCounts: { [key: string]: number } = {};
 
