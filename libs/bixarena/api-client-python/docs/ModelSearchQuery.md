@@ -4,14 +4,16 @@ A model search query with pagination and filtering options.
 
 ## Properties
 
-| Name            | Type                                  | Description                                                                                   | Notes                                     |
-| --------------- | ------------------------------------- | --------------------------------------------------------------------------------------------- | ----------------------------------------- |
-| **page_number** | **int**                               | The page number.                                                                              | [optional] [default to 0]                 |
-| **page_size**   | **int**                               | The number of items in a single page.                                                         | [optional] [default to 25]                |
-| **sort**        | [**ModelSort**](ModelSort.md)         |                                                                                               | [optional] [default to ModelSort.NAME]    |
-| **direction**   | [**SortDirection**](SortDirection.md) |                                                                                               | [optional] [default to SortDirection.ASC] |
-| **search**      | **str**                               | Search by model name or slug (case-insensitive partial match).                                | [optional]                                |
-| **active**      | **bool**                              | Filter by active status (true returns only active models; false only inactive; omit for all). | [optional]                                |
+| Name             | Type                                  | Description                                                                                   | Notes                                     |
+| ---------------- | ------------------------------------- | --------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| **page_number**  | **int**                               | The page number.                                                                              | [optional] [default to 0]                 |
+| **page_size**    | **int**                               | The number of items in a single page.                                                         | [optional] [default to 25]                |
+| **sort**         | [**ModelSort**](ModelSort.md)         |                                                                                               | [optional] [default to ModelSort.NAME]    |
+| **direction**    | [**SortDirection**](SortDirection.md) |                                                                                               | [optional] [default to SortDirection.ASC] |
+| **search**       | **str**                               | Search by model name or slug (case-insensitive partial match).                                | [optional]                                |
+| **active**       | **bool**                              | Filter by active status (true returns only active models; false only inactive; omit for all). | [optional]                                |
+| **license**      | **str**                               | Filter by license type.                                                                       | [optional]                                |
+| **organization** | **str**                               | Filter by organization name (case-insensitive partial match).                                 | [optional]                                |
 
 ## Example
 
