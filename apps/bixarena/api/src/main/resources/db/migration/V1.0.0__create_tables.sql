@@ -57,6 +57,8 @@ CREATE INDEX idx_leaderboard_entry_rank ON leaderboard_entry(rank);
 CREATE INDEX idx_leaderboard_entry_bt_score ON leaderboard_entry(bt_score DESC);
 CREATE INDEX idx_leaderboard_snapshot_leaderboard_id ON leaderboard_snapshot(leaderboard_id);
 CREATE INDEX idx_leaderboard_snapshot_created_at ON leaderboard_snapshot(created_at DESC);
+CREATE INDEX idx_model_license ON model(license);
+CREATE INDEX idx_model_active ON model(active);
 
 -- Sessions (existing table - keeping it)
 CREATE TABLE conversation (
