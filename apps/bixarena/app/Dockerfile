@@ -24,18 +24,13 @@ RUN groupadd --gid "$USER_GID" "$USERNAME" \
 
 WORKDIR ${APP_DIR}
 
-# WORKAROUND: API client should be bundled but isn't due to build configuration issue
-# TODO: Fix the build process to properly bundle bixarena-api-client-python code
-# COPY libs/bixarena/api-client-python/ /tmp/api-client/
-# RUN cd /tmp/api-client && uv build && uv pip install dist/*.whl --system
-
 # Install the built sdist - this will install all other dependencies
-COPY apps/bixarena/app/dist/*.tar.gz /tmp/
+COPY dist/*.tar.gz /tmp/
 RUN uv pip install /tmp/*.tar.gz --system
 
 # Copy configuration files
-COPY apps/bixarena/app/model_config.template.json ${APP_DIR}/
-COPY apps/bixarena/app/docker-entrypoint.sh /docker-entrypoint.sh
+COPY model_config.template.json ${APP_DIR}/
+COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 RUN chown -R ${APP_USERNAME}:${APP_USERNAME} ${APP_DIR} && \
     chmod +x /docker-entrypoint.sh
