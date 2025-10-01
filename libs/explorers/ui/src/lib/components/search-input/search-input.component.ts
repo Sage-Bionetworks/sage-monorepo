@@ -48,6 +48,19 @@ export class SearchInputComponent implements AfterViewInit {
   searchImageAltText = input<string>('');
   hasThickBorder = input<boolean>(false);
 
+  private readonly MINIMUM_SEARCH_LENGTH_DEFAULT = 3;
+  minimumSearchLength = input<number, number>(this.MINIMUM_SEARCH_LENGTH_DEFAULT, {
+    transform: (value: number) => {
+      if (value >= 10) {
+        console.warn(
+          `minimumSearchLength must be less than 10, received ${value}. Using default value of ${this.MINIMUM_SEARCH_LENGTH_DEFAULT}.`,
+        );
+        return this.MINIMUM_SEARCH_LENGTH_DEFAULT;
+      }
+      return Math.max(1, Math.floor(value)); // Ensure it's at least 1 and is an integer
+    },
+  });
+
   navigateToResult = input.required<(id: string) => void>();
   getSearchResults = input.required<(query: string) => Observable<SearchResult[]>>();
   checkQueryForErrors = input.required<(query: string) => string>(); // empty string if no error
@@ -117,6 +130,11 @@ export class SearchInputComponent implements AfterViewInit {
       });
   }
 
+  getNotValidSearchMessage(minimumSearchLength: number): string {
+    const numWords = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+    return `Please enter at least ${numWords[minimumSearchLength - 1]} character${minimumSearchLength > 1 ? 's' : ''}.`;
+  }
+
   search(query: string): Observable<SearchResult[]> {
     this.results = [];
     this.error = '';
@@ -130,8 +148,8 @@ export class SearchInputComponent implements AfterViewInit {
     }
 
     // No frontend sanitization - backend handles all input escaping and security validation
-    if (query.length > 0 && query.length < 3) {
-      this.error = this.errorMessages['notValidSearch'];
+    if (query.length > 0 && query.length < this.minimumSearchLength()) {
+      this.error = this.getNotValidSearchMessage(this.minimumSearchLength());
     } else {
       this.error = this.checkQueryForErrors()(query);
     }
