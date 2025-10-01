@@ -1,6 +1,6 @@
 [tool.coverage.run]
 branch = true
-source = [ "src" ]
+source = [ "bixarena_app" ]
 
 [tool.coverage.report]
 exclude_lines = ['if TYPE_CHECKING:']
@@ -27,29 +27,37 @@ classifiers = [
     "License :: OSI Approved :: Apache Software License",
 ]
 dependencies = [
-    "aiohttp", "fastapi", "httpx", "markdown2[all]", "nh3", "numpy",
-    "prompt_toolkit>=3.0.0", "pydantic", "requests", "rich>=10.0.0",
-    "shortuuid", "tiktoken", "uvicorn",
-    "accelerate>=0.21", "peft", "sentencepiece", "torch", "transformers>=4.31.0", "protobuf", "openai>=1.0",
-    "gradio>=4.10", "plotly",
-    "bixarena-api-client"
+    "accelerate>=0.21",
+    "aiohttp",
+    "bixarena-api-client",
+    "fastapi",
+    "gradio>=4.10",
+    "httpx",
+    "markdown2[all]",
+    "nh3",
+    "numpy",
+    "openai>=1.0",
+    "peft",
+    "plotly",
+    "prompt_toolkit>=3.0.0",
+    "protobuf",
+    "pydantic",
+    "requests",
+    "rich>=10.0.0",
+    "sentencepiece",
+    "shortuuid",
+    "tiktoken",
+    "torch",
+    "transformers>=4.31.0",
+    "uvicorn"
 ]
 
-# Provide a console script for the single-module app
+# Transitional console script now points to wrapper package
 [project.scripts]
-bixarena-app = "main:main"
+bixarena-app = "bixarena_app.__main__:main"
 
 [tool.hatch.build.targets.wheel]
-# No packages directory; include the single module from src
-packages = []
-
-[tool.hatch.build.targets.wheel.force-include]
-"src/main.py" = "main.py"
-"src/page" = "page"
-"src/auth" = "auth"
-"src/model" = "model"
-"src/fastchat" = "fastchat"
-"src/config" = "config"
+packages = ["bixarena_app"]
 
 [tool.hatch.metadata]
 allow-direct-references = true
