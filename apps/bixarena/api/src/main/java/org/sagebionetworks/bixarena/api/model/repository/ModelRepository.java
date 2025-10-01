@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ModelRepository extends JpaRepository<ModelEntity, UUID>, JpaSpecificationExecutor<ModelEntity> {
+public interface ModelRepository
+  extends JpaRepository<ModelEntity, UUID>, JpaSpecificationExecutor<ModelEntity> {
   Optional<ModelEntity> findBySlug(String slug);
 }
