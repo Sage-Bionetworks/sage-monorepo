@@ -37,6 +37,9 @@ public class ModelEntity {
   @Column(name = "license", length = 100)
   private String license;
 
+  @Column(name = "active", nullable = false)
+  private boolean active;
+
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)
   private OffsetDateTime createdAt;
