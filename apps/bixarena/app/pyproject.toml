@@ -35,8 +35,16 @@ dependencies = [
     "bixarena-api-client"
 ]
 
+# Provide a console script for the single-module app
+[project.scripts]
+bixarena-app = "main:main"
+
 [tool.hatch.build.targets.wheel]
-packages = ["bixarena_app"]
+# No packages directory; include the single module from src
+packages = []
+
+[tool.hatch.build.targets.wheel.force-include]
+"src/main.py" = "main.py"
 
 [tool.hatch.metadata]
 allow-direct-references = true
