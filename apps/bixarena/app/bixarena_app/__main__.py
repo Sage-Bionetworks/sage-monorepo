@@ -5,16 +5,7 @@ This defers to logic defined in the existing flat-layout `main.py` module.
 
 from __future__ import annotations
 
-try:  # Import from the packaged layout after rename
-    from bixarena_app.main import build_app, parse_args  # type: ignore
-except ImportError:
-    # Fallback: attempt legacy flat import name (should not normally occur now)
-    try:  # pragma: no cover - legacy safeguard
-        from main import build_app, parse_args  # type: ignore
-    except ImportError as exc:  # pragma: no cover - defensive
-        raise SystemExit(
-            f"Failed to import application modules (packaged + legacy fallback): {exc}"
-        ) from exc
+from bixarena_app.main import build_app, parse_args  # type: ignore
 
 
 def main() -> None:  # noqa: D401
