@@ -126,30 +126,6 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /genes/search:
-    get:
-      tags:
-        - Gene
-      summary: Search Genes
-      description: Search Genes
-      operationId: searchGene
-      parameters:
-        - name: id
-          in: query
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GenesList'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
   /genes/search/enhanced:
     get:
       tags:
@@ -1006,14 +982,6 @@ components:
         - druggability
         - total_nominations
         - ensembl_info
-    GenesList:
-      type: object
-      description: List of Genes
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/Gene'
     SearchResult:
       type: object
       description: Search result

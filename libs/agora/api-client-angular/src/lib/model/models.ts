@@ -13,7 +13,6 @@ export * from './gct-gene-tissue';
 export * from './gct-genes-list';
 export * from './gene';
 export * from './gene-network-links';
-export * from './genes-list';
 export * from './median-expression';
 export * from './metabolomics';
 export * from './neuropathologic-correlation';

@@ -26,7 +26,6 @@ model/gct-gene.ts
 model/gct-genes-list.ts
 model/gene-network-links.ts
 model/gene.ts
-model/genes-list.ts
 model/median-expression.ts
 model/metabolomics.ts
 model/models.ts

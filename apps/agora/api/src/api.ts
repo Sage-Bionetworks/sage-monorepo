@@ -10,7 +10,6 @@ import {
   genesRoute,
   nominatedGenesRoute,
   searchGeneEnhancedRoute,
-  searchGeneRoute,
   teamMemberImageRoute,
   teamsRoute,
 } from './components';
@@ -61,7 +60,6 @@ mongoose.connection.once('open', async () => {
   router.get('/bio-domains/:id', biodomainsRoute);
   router.get('/data-version', dataVersionRoute);
   router.get('/distribution', distributionRoute);
-  router.get('/genes/search', searchGeneRoute);
   router.get('/genes/search/enhanced', searchGeneEnhancedRoute);
   router.get('/genes/comparison', comparisonGenesRoute);
   router.get('/genes/nominated', nominatedGenesRoute);
