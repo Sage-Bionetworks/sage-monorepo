@@ -2,6 +2,7 @@ README.md
 bixarena_api_client/__init__.py
 bixarena_api_client/api/__init__.py
 bixarena_api_client/api/leaderboard_api.py
+bixarena_api_client/api/model_api.py
 bixarena_api_client/api_client.py
 bixarena_api_client/api_response.py
 bixarena_api_client/configuration.py
@@ -21,6 +22,10 @@ bixarena_api_client/models/leaderboard_snapshot_page.py
 bixarena_api_client/models/leaderboard_snapshot_query.py
 bixarena_api_client/models/leaderboard_snapshot_sort.py
 bixarena_api_client/models/leaderboard_sort.py
+bixarena_api_client/models/model.py
+bixarena_api_client/models/model_page.py
+bixarena_api_client/models/model_search_query.py
+bixarena_api_client/models/model_sort.py
 bixarena_api_client/models/page_metadata.py
 bixarena_api_client/models/sort_direction.py
 bixarena_api_client/py.typed
@@ -40,6 +45,11 @@ docs/LeaderboardSnapshotPage.md
 docs/LeaderboardSnapshotQuery.md
 docs/LeaderboardSnapshotSort.md
 docs/LeaderboardSort.md
+docs/Model.md
+docs/ModelApi.md
+docs/ModelPage.md
+docs/ModelSearchQuery.md
+docs/ModelSort.md
 docs/PageMetadata.md
 docs/SortDirection.md
 test/__init__.py
@@ -58,5 +68,10 @@ test/test_leaderboard_snapshot_page.py
 test/test_leaderboard_snapshot_query.py
 test/test_leaderboard_snapshot_sort.py
 test/test_leaderboard_sort.py
+test/test_model.py
+test/test_model_api.py
+test/test_model_page.py
+test/test_model_search_query.py
+test/test_model_sort.py
 test/test_page_metadata.py
 test/test_sort_direction.py
