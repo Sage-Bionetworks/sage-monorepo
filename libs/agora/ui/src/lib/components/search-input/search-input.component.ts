@@ -7,7 +7,6 @@ import { isEnsemblId } from '@sagebionetworks/agora/util';
 import { SearchInputComponent as ExplorersSearchInputComponent } from '@sagebionetworks/explorers/ui';
 import { Observable, tap } from 'rxjs';
 
-// TODO: customize "no results found" error: pending AG-1879
 // TODO: add frontend search validation to shared search-input, then use sanitizeSearchQuery here
 @Component({
   selector: 'agora-search-input',
@@ -26,6 +25,13 @@ export class SearchInputComponent {
   hasThickBorder = input<boolean>(false);
 
   hgncSymbolCounts: { [key: string]: number } = {};
+
+  getNoSearchResultsMessage(query: string): string {
+    if (isEnsemblId(query) && query.length === 15) {
+      return 'Unable to find a matching gene. Try searching by gene symbol.';
+    }
+    return 'No results found. Try searching by the Ensembl Gene ID.';
+  }
 
   navigateToResult = (id: string): void => {
     this.router.navigate([ROUTE_PATHS.DETAILS, id]);
@@ -54,11 +60,8 @@ export class SearchInputComponent {
   };
 
   checkQueryForErrors = (query: string): string => {
-    if (isEnsemblId(query)) {
-      const digits = query.toLowerCase().substring(4, query.length);
-      if (digits.length !== 11 || !/^\d+$/.test(digits)) {
-        return 'You must enter a full 15-character value to search for a gene by Ensembl identifier.';
-      }
+    if (isEnsemblId(query) && query.length !== 15) {
+      return 'You must enter a full 15-character value to search for a gene by Ensembl identifier.';
     }
     return ''; // empty string if no error
   };

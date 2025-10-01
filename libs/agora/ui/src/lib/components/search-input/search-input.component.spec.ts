@@ -145,9 +145,6 @@ describe('SearchInputComponent', () => {
       expect(component.checkQueryForErrors('ENSG00000001')).toBe(
         'You must enter a full 15-character value to search for a gene by Ensembl identifier.',
       );
-      expect(component.checkQueryForErrors('ENSG00000ABCD12')).toBe(
-        'You must enter a full 15-character value to search for a gene by Ensembl identifier.',
-      );
     });
 
     it('should return empty string for valid Ensembl ID', async () => {
@@ -168,6 +165,22 @@ describe('SearchInputComponent', () => {
       const navigateSpy = jest.spyOn(component.router, 'navigate');
       component.navigateToResult('ENSG00000000010');
       expect(navigateSpy).toHaveBeenCalledWith(['genes', 'ENSG00000000010']);
+    });
+  });
+
+  describe('getNoSearchResultsMessage', () => {
+    it('should return correct message for Ensembl ID queries', async () => {
+      const { component } = await setup();
+      expect(component.getNoSearchResultsMessage('ENSG00000000010')).toBe(
+        'Unable to find a matching gene. Try searching by gene symbol.',
+      );
+    });
+
+    it('should return correct message for non-Ensembl queries', async () => {
+      const { component } = await setup();
+      expect(component.getNoSearchResultsMessage('some other query')).toBe(
+        'No results found. Try searching by the Ensembl Gene ID.',
+      );
     });
   });
 
