@@ -8,7 +8,6 @@ import { SearchInputComponent as ExplorersSearchInputComponent } from '@sagebion
 import { Observable, tap } from 'rxjs';
 
 // TODO: customize "no results found" error: pending AG-1879
-// TODO: customize minimum characters in search query: pending: AG-1877
 // TODO: add frontend search validation to shared search-input, then use sanitizeSearchQuery here
 @Component({
   selector: 'agora-search-input',
