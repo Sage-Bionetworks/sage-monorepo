@@ -150,6 +150,33 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /genes/search/enhanced:
+    get:
+      tags:
+        - Gene
+      summary: Search Genes
+      description: Search for a particular gene
+      operationId: searchGeneEnhanced
+      parameters:
+        - name: q
+          in: query
+          description: Search query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SearchResult'
+          description: Successfully retrieved search results
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /genes/comparison:
     get:
       tags:
@@ -987,6 +1014,26 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Gene'
+    SearchResult:
+      type: object
+      description: Search result
+      properties:
+        id:
+          type: string
+          description: ID of result
+        match_field:
+          type: string
+          description: Field that matched the query
+        match_value:
+          type: string
+          description: Value that matched the query
+        hgnc_symbol:
+          type: string
+          description: HGNC symbol of the gene
+      required:
+        - id
+        - match_field
+        - match_value
     GCTGeneTissue:
       type: object
       description: GCTGeneTissue

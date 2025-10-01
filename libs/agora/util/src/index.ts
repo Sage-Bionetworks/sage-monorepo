@@ -1,3 +1,4 @@
 export * from './lib/default-seo-data';
 export * from './lib/navigation-links';
 export * from './lib/path-sanitizer';
+export * from './lib/search';

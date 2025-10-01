@@ -27,6 +27,15 @@ export function getRandomInt(minInclusive: number, maxExclusive: number): number
 }
 
 /**
+ * Escapes regex special characters to prevent injection attacks
+ * @param input - The string to escape
+ * @returns String with regex characters escaped
+ */
+export function escapeRegexChars(input: string): string {
+  return input.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+}
+
+/**
  * Removes parentheses from a string
  * @param s - The string to process
  * @returns String with parentheses removed
