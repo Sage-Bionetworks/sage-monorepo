@@ -18,6 +18,7 @@ __version__ = "1.0.0"
 # Define package exports
 __all__ = [
     "LeaderboardApi",
+    "ModelApi",
     "ApiResponse",
     "ApiClient",
     "Configuration",
@@ -41,12 +42,17 @@ __all__ = [
     "LeaderboardSnapshotQuery",
     "LeaderboardSnapshotSort",
     "LeaderboardSort",
+    "Model",
+    "ModelPage",
+    "ModelSearchQuery",
+    "ModelSort",
     "PageMetadata",
     "SortDirection",
 ]
 
 # import apis into sdk package
 from bixarena_api_client.api.leaderboard_api import LeaderboardApi as LeaderboardApi
+from bixarena_api_client.api.model_api import ModelApi as ModelApi
 
 # import ApiClient
 from bixarena_api_client.api_response import ApiResponse as ApiResponse
@@ -100,5 +106,11 @@ from bixarena_api_client.models.leaderboard_snapshot_sort import (
 from bixarena_api_client.models.leaderboard_sort import (
     LeaderboardSort as LeaderboardSort,
 )
+from bixarena_api_client.models.model import Model as Model
+from bixarena_api_client.models.model_page import ModelPage as ModelPage
+from bixarena_api_client.models.model_search_query import (
+    ModelSearchQuery as ModelSearchQuery,
+)
+from bixarena_api_client.models.model_sort import ModelSort as ModelSort
 from bixarena_api_client.models.page_metadata import PageMetadata as PageMetadata
 from bixarena_api_client.models.sort_direction import SortDirection as SortDirection

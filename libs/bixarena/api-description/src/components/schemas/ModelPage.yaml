@@ -1,0 +1,13 @@
+type: object
+description: A page of models.
+allOf:
+  - $ref: PageMetadata.yaml
+  - type: object
+    properties:
+      models:
+        type: array
+        description: A list of models.
+        items:
+          $ref: Model.yaml
+    required:
+      - models

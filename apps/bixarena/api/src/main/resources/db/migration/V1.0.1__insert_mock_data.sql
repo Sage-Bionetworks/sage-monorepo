@@ -4,12 +4,12 @@ INSERT INTO leaderboard (id, slug, name, description, created_at, updated_at) VA
   ('22222222-2222-2222-2222-222222222222', 'commercial', 'Commercial Models', 'Performance ranking of commercial AI models', '2025-08-01 10:00:00+00', '2025-08-16 14:30:00+00');
 
 -- Insert sample models
-INSERT INTO model (id, slug, name, license, created_at, updated_at) VALUES
-  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'gpt-4-turbo', 'GPT-4 Turbo', 'Commercial', '2025-07-15 09:00:00+00', '2025-08-10 12:00:00+00'),
-  ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'claude-3-opus', 'Claude 3 Opus', 'Commercial', '2025-07-20 10:30:00+00', '2025-08-12 15:30:00+00'),
-  ('cccccccc-cccc-cccc-cccc-cccccccccccc', 'llama-2-70b', 'Llama 2 70B', 'MIT', '2025-07-10 08:15:00+00', '2025-08-14 11:45:00+00'),
-  ('dddddddd-dddd-dddd-dddd-dddddddddddd', 'mixtral-8x7b', 'Mixtral 8x7B', 'Apache 2.0', '2025-07-25 14:20:00+00', '2025-08-15 16:10:00+00'),
-  ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', 'gemini-pro', 'Gemini Pro', 'Commercial', '2025-08-05 11:00:00+00', '2025-08-16 13:20:00+00');
+INSERT INTO model (id, slug, name, license, active, created_at, updated_at) VALUES
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'gpt-4-turbo', 'GPT-4 Turbo', 'Commercial', true, '2025-07-15 09:00:00+00', '2025-08-10 12:00:00+00'),
+  ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'claude-3-opus', 'Claude 3 Opus', 'Commercial', true, '2025-07-20 10:30:00+00', '2025-08-12 15:30:00+00'),
+  ('cccccccc-cccc-cccc-cccc-cccccccccccc', 'llama-2-70b', 'Llama 2 70B', 'MIT', true, '2025-07-10 08:15:00+00', '2025-08-14 11:45:00+00'),
+  ('dddddddd-dddd-dddd-dddd-dddddddddddd', 'mixtral-8x7b', 'Mixtral 8x7B', 'Apache 2.0', true, '2025-07-25 14:20:00+00', '2025-08-15 16:10:00+00'),
+  ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee', 'gemini-pro', 'Gemini Pro', 'Commercial', true, '2025-08-05 11:00:00+00', '2025-08-16 13:20:00+00');
 
 -- Insert current snapshots
 INSERT INTO leaderboard_snapshot (id, leaderboard_id, snapshot_identifier, description, created_at) VALUES
