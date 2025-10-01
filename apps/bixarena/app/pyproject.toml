@@ -1,13 +1,27 @@
-[build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
+[tool.coverage.run]
+branch = true
+source = [ "src" ]
+
+[tool.coverage.report]
+exclude_lines = ['if TYPE_CHECKING:']
+show_missing = true
+
+[tool.pytest.ini_options]
+addopts = """
+ --cov
+ --cov-fail-under=50
+ --cov-report html:'../../../coverage/apps/bixarena/app/html'
+ --cov-report xml:'../../../coverage/apps/bixarena/app/coverage.xml'
+ --html='../../../reports/apps/bixarena/app/unittests/html/index.html'
+ --junitxml='../../../reports/apps/bixarena/app/unittests/junit.xml'
+"""
 
 [project]
 name = "bixarena-app"
-version = "0.2.36"
+version = "1.0.0"
 description = "Bixarena application for serving and evaluating large language models"
-readme = "README.md"
 requires-python = "==3.13.3"
+readme = "README.md"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: Apache Software License",
@@ -21,18 +35,47 @@ dependencies = [
     "bixarena-api-client"
 ]
 
-[project.optional-dependencies]
-dev = ["black==23.3.0", "pylint==2.8.2"]
+[tool.hatch.build.targets.wheel]
+packages = ["bixarena_app"]
 
-[tool.setuptools.packages.find]
-where = ["src"]
-exclude = ["assets*", "benchmark*", "docs", "dist*", "playground*", "scripts*", "tests*"]
+[tool.hatch.metadata]
+allow-direct-references = true
 
-[tool.setuptools]
-py-modules = ["main"]
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
-[tool.wheel]
-exclude = ["assets*", "benchmark*", "docs", "dist*", "playground*", "scripts*", "tests*"]
+[tool.ruff]
+exclude = [
+  ".ruff_cache",
+  ".svn",
+  ".tox",
+  ".venv",
+  "dist",
+]
+
+line-length = 88
+indent-width = 4
+
+[tool.ruff.lint]
+select = [
+  # pycodestyle
+  "E",
+  # Pyflakes
+  "F",
+  # pyupgrade
+  "UP",
+  # flake8-bugbear
+  "B",
+  # flake8-simplify
+  "SIM",
+  # isort
+  "I",
+]
+ignore = []
+
+fixable = ["ALL"]
+unfixable = []
 
 [tool.uv.sources]
 bixarena-api-client = { workspace = true }

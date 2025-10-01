@@ -74,6 +74,14 @@
         "bundleLocalDependencies": true
       },
       "cache": true
+    },
+    "lint": {
+      "executor": "@nxlv/python:ruff-check",
+      "outputs": [],
+      "options": {
+        "lintFilePatterns": ["src"]
+      },
+      "cache": true
     }
   },
   "tags": ["type:app", "scope:backend", "language:python", "package-manager:uv"]
