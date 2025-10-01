@@ -1,3 +1,7 @@
+:host {
+  --color-arrow: var(--color-secondary);
+}
+
 .home-card {
   display: flex;
   flex-direction: column;

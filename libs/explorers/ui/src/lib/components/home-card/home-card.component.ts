@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { SvgImageComponent } from '../svg-image/svg-image.component';
@@ -18,13 +18,5 @@ export class HomeCardComponent {
   imageAltText = input<string>('Warning');
   routerLink = input<string | undefined>();
 
-  secondaryColor = 'inherit';
-
-  constructor() {
-    if (typeof document !== 'undefined') {
-      this.secondaryColor = getComputedStyle(document.documentElement).getPropertyValue(
-        '--color-secondary',
-      );
-    }
-  }
+  arrowColor = computed(() => 'var(--color-arrow)');
 }
