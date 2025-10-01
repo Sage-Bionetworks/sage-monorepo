@@ -39,6 +39,45 @@ public class ModelSearchQueryDto {
 
   private @Nullable Boolean active = null;
 
+  /**
+   * Filter by license type.
+   */
+  public enum LicenseEnum {
+    OPEN_SOURCE("open-source"),
+    
+    COMMERCIAL("commercial");
+
+    private final String value;
+
+    LicenseEnum(String value) {
+      this.value = value;
+    }
+
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static LicenseEnum fromValue(String value) {
+      for (LicenseEnum b : LicenseEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      return null;
+    }
+  }
+
+  private @Nullable LicenseEnum license = null;
+
+  private @Nullable String organization = null;
+
   public ModelSearchQueryDto pageNumber(Integer pageNumber) {
     this.pageNumber = pageNumber;
     return this;
@@ -162,6 +201,46 @@ public class ModelSearchQueryDto {
     this.active = active;
   }
 
+  public ModelSearchQueryDto license(@Nullable LicenseEnum license) {
+    this.license = license;
+    return this;
+  }
+
+  /**
+   * Filter by license type.
+   * @return license
+   */
+  
+  @Schema(name = "license", example = "open-source", description = "Filter by license type.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("license")
+  public @Nullable LicenseEnum getLicense() {
+    return license;
+  }
+
+  public void setLicense(@Nullable LicenseEnum license) {
+    this.license = license;
+  }
+
+  public ModelSearchQueryDto organization(@Nullable String organization) {
+    this.organization = organization;
+    return this;
+  }
+
+  /**
+   * Filter by organization name (case-insensitive partial match).
+   * @return organization
+   */
+  
+  @Schema(name = "organization", example = "OpenAI", description = "Filter by organization name (case-insensitive partial match).", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("organization")
+  public @Nullable String getOrganization() {
+    return organization;
+  }
+
+  public void setOrganization(@Nullable String organization) {
+    this.organization = organization;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -176,12 +255,14 @@ public class ModelSearchQueryDto {
         Objects.equals(this.sort, modelSearchQuery.sort) &&
         Objects.equals(this.direction, modelSearchQuery.direction) &&
         Objects.equals(this.search, modelSearchQuery.search) &&
-        Objects.equals(this.active, modelSearchQuery.active);
+        Objects.equals(this.active, modelSearchQuery.active) &&
+        Objects.equals(this.license, modelSearchQuery.license) &&
+        Objects.equals(this.organization, modelSearchQuery.organization);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, sort, direction, search, active);
+    return Objects.hash(pageNumber, pageSize, sort, direction, search, active, license, organization);
   }
 
   @Override
@@ -194,6 +275,8 @@ public class ModelSearchQueryDto {
     sb.append("    direction: ").append(toIndentedString(direction)).append("\n");
     sb.append("    search: ").append(toIndentedString(search)).append("\n");
     sb.append("    active: ").append(toIndentedString(active)).append("\n");
+    sb.append("    license: ").append(toIndentedString(license)).append("\n");
+    sb.append("    organization: ").append(toIndentedString(organization)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -228,6 +311,8 @@ public class ModelSearchQueryDto {
       this.instance.setDirection(value.direction);
       this.instance.setSearch(value.search);
       this.instance.setActive(value.active);
+      this.instance.setLicense(value.license);
+      this.instance.setOrganization(value.organization);
       return this;
     }
 
@@ -258,6 +343,16 @@ public class ModelSearchQueryDto {
     
     public ModelSearchQueryDto.Builder active(Boolean active) {
       this.instance.active(active);
+      return this;
+    }
+    
+    public ModelSearchQueryDto.Builder license(LicenseEnum license) {
+      this.instance.license(license);
+      return this;
+    }
+    
+    public ModelSearchQueryDto.Builder organization(String organization) {
+      this.instance.organization(organization);
       return this;
     }
     

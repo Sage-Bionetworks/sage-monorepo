@@ -555,6 +555,19 @@ components:
           type: boolean
           nullable: true
           example: true
+        license:
+          description: Filter by license type.
+          type: string
+          nullable: true
+          enum:
+            - open-source
+            - commercial
+          example: open-source
+        organization:
+          description: Filter by organization name (case-insensitive partial match).
+          type: string
+          nullable: true
+          example: OpenAI
       required: []
     Model:
       type: object
