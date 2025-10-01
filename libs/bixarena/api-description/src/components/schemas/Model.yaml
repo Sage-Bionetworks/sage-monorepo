@@ -1,0 +1,41 @@
+type: object
+description: A model entity.
+properties:
+  id:
+    type: string
+    description: Unique identifier (UUID) of the model.
+    example: '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f'
+  slug:
+    type: string
+    description: URL-friendly unique slug for the model.
+    example: 'my-awesome-model'
+  name:
+    type: string
+    description: Human-readable name of the model.
+    example: 'My Awesome Model'
+  license:
+    type: string
+    nullable: true
+    description: License under which the model is released.
+    example: 'Apache-2.0'
+  active:
+    type: boolean
+    description: Whether the model is active/visible.
+    example: true
+  createdAt:
+    type: string
+    format: date-time
+    description: When the model was created.
+    example: '2025-09-15T12:00:00Z'
+  updatedAt:
+    type: string
+    format: date-time
+    description: When the model was last updated.
+    example: '2025-09-20T08:30:00Z'
+required:
+  - id
+  - slug
+  - name
+  - active
+  - createdAt
+  - updatedAt

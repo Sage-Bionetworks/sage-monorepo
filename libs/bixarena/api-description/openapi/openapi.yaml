@@ -14,6 +14,8 @@ servers:
 tags:
   - name: Leaderboard
     description: Operations about leaderboards.
+  - name: Model
+    description: Operations about models.
 paths:
   /leaderboards:
     get:
@@ -101,6 +103,26 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '404':
           $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /models:
+    get:
+      tags:
+        - Model
+      summary: List models
+      description: Get a paginated list of models with optional filters (e.g., active)
+      operationId: listModels
+      parameters:
+        - $ref: '#/components/parameters/modelSearchQuery'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
@@ -488,6 +510,108 @@ components:
                 $ref: '#/components/schemas/LeaderboardSnapshot'
           required:
             - snapshots
+    ModelSort:
+      type: string
+      description: The field to sort models by.
+      enum:
+        - name
+        - created_at
+        - updated_at
+        - slug
+        - license
+        - active
+      default: name
+      example: created_at
+    ModelSearchQuery:
+      type: object
+      description: A model search query with pagination and filtering options.
+      properties:
+        pageNumber:
+          description: The page number.
+          type: integer
+          format: int32
+          default: 0
+          minimum: 0
+          example: 0
+        pageSize:
+          description: The number of items in a single page.
+          type: integer
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 100
+          example: 25
+        sort:
+          $ref: '#/components/schemas/ModelSort'
+        direction:
+          $ref: '#/components/schemas/SortDirection'
+        search:
+          description: Search by model name or slug (case-insensitive partial match).
+          type: string
+          nullable: true
+          example: vision
+        active:
+          description: Filter by active status (true returns only active models; false only inactive; omit for all).
+          type: boolean
+          nullable: true
+          example: true
+      required: []
+    Model:
+      type: object
+      description: A model entity.
+      properties:
+        id:
+          type: string
+          description: Unique identifier (UUID) of the model.
+          example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+        slug:
+          type: string
+          description: URL-friendly unique slug for the model.
+          example: my-awesome-model
+        name:
+          type: string
+          description: Human-readable name of the model.
+          example: My Awesome Model
+        license:
+          type: string
+          nullable: true
+          description: License under which the model is released.
+          example: Apache-2.0
+        active:
+          type: boolean
+          description: Whether the model is active/visible.
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          description: When the model was created.
+          example: '2025-09-15T12:00:00Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: When the model was last updated.
+          example: '2025-09-20T08:30:00Z'
+      required:
+        - id
+        - slug
+        - name
+        - active
+        - createdAt
+        - updatedAt
+    ModelPage:
+      type: object
+      description: A page of models.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            models:
+              type: array
+              description: A list of models.
+              items:
+                $ref: '#/components/schemas/Model'
+          required:
+            - models
   responses:
     BadRequest:
       description: Invalid request parameters
@@ -548,3 +672,11 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/LeaderboardSnapshotQuery'
+    modelSearchQuery:
+      name: modelSearchQuery
+      description: The search query used to find and filter models.
+      in: query
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/ModelSearchQuery'
