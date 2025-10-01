@@ -2,7 +2,7 @@
   "name": "bixarena-app",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "sourceRoot": "apps/bixarena/app",
+  "sourceRoot": "apps/bixarena/app/bixarena_app",
   "targets": {
     "create-config": {
       "executor": "nx:run-commands",
@@ -34,7 +34,7 @@
       "options": {
         "commands": [
           "envsubst < model_config.template.json > model_config.json",
-          "uv run python -m main --port ${APP_PORT} --register-api-endpoint-file model_config.json"
+          "uv run python -m bixarena_app --host 0.0.0.0 --port ${APP_PORT} --register-api-endpoint-file model_config.json"
         ],
         "cwd": "{projectRoot}",
         "parallel": false
