@@ -10,8 +10,17 @@
         "command": "cp -n .env.example .env",
         "cwd": "{projectRoot}"
       }
+    },
+    "generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["xargs rm -fr <.openapi-generator/FILES", "openapi-generator-cli generate"],
+        "cwd": "{projectRoot}",
+        "parallel": false
+      },
+      "dependsOn": ["^build"]
     }
   },
   "tags": ["type:service", "scope:backend", "language:python", "package-manager:uv"],
-  "implicitDependencies": ["bixarena-ai-service-description"]
+  "implicitDependencies": ["bixarena-api-description"]
 }
