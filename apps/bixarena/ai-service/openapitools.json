@@ -10,8 +10,7 @@
         "output": "#{cwd}",
         "additionalProperties": {
           "packageName": "bixarena_ai_service",
-          "serverPort": "8114",
-          "sourceFolder": "bixarena_ai_service"
+          "serverPort": "8114"
         }
       }
     }
