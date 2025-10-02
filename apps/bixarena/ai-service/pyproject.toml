@@ -2,6 +2,53 @@
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
+[project]
+name = "bixarena-ai-service"
+version = "0.1.0"
+description = "BixArena AI API"
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+license = { text = "Apache-2.0" }
+authors = [ { name = "Sage Bionetworks" } ]
+dependencies = [
+  "aiofiles==23.1.0",
+  "aniso8601==7.0.0",
+  "async-exit-stack==1.0.1",
+  "async-generator==1.10",
+  "certifi==2024.7.4",
+  "chardet==4.0.0",
+  "click==8.1.7",
+  "dnspython==2.6.1",
+  "email-validator==2.0.0",
+  "fastapi==0.115.2",
+  "graphene==2.1.8",
+  "graphql-core==2.3.2",
+  "graphql-relay==2.0.1",
+  "h11==0.16.0",
+  "httptools>=0.3.0,<0.7.0",
+  "httpx==0.28.1",
+  "idna==3.7",
+  "itsdangerous==1.1.0",
+  "Jinja2==3.1.4",
+  "MarkupSafe==2.0.1",
+  "orjson==3.9.15",
+  "promise==2.3",
+  "pydantic>=2",
+  "python-dotenv==0.17.1",
+  "python-multipart==0.0.18",
+  "PyYAML>=5.4.1,<6.1.0",
+  "requests==2.32.4",
+  "Rx==1.6.1",
+  "starlette==0.40.0",
+  "typing-extensions==4.13.2",
+  "ujson==4.0.2",
+  "urllib3==2.5.0",
+  "uvicorn==0.30.6",
+  "uvloop==0.21.0",
+  "watchgod==0.7",
+  "websockets==10.0",
+]
+
 [tool.black]
 line-length = 88
 exclude = '''
@@ -28,3 +75,9 @@ skip = [
     '.venv', '_build', 'buck-out', 'build', 'dist', 'node_modules', 'venv',
 ]
 skip_gitignore = true
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
