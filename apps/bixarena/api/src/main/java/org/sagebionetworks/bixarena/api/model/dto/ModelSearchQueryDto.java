@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import org.sagebionetworks.bixarena.api.model.dto.LicenseDto;
 import org.sagebionetworks.bixarena.api.model.dto.ModelSortDto;
 import org.sagebionetworks.bixarena.api.model.dto.SortDirectionDto;
 import org.springframework.lang.Nullable;
@@ -38,6 +39,10 @@ public class ModelSearchQueryDto {
   private @Nullable String search = null;
 
   private @Nullable Boolean active = null;
+
+  private @Nullable LicenseDto license;
+
+  private @Nullable String organization = null;
 
   public ModelSearchQueryDto pageNumber(Integer pageNumber) {
     this.pageNumber = pageNumber;
@@ -162,6 +167,46 @@ public class ModelSearchQueryDto {
     this.active = active;
   }
 
+  public ModelSearchQueryDto license(@Nullable LicenseDto license) {
+    this.license = license;
+    return this;
+  }
+
+  /**
+   * Get license
+   * @return license
+   */
+  @Valid 
+  @Schema(name = "license", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("license")
+  public @Nullable LicenseDto getLicense() {
+    return license;
+  }
+
+  public void setLicense(@Nullable LicenseDto license) {
+    this.license = license;
+  }
+
+  public ModelSearchQueryDto organization(@Nullable String organization) {
+    this.organization = organization;
+    return this;
+  }
+
+  /**
+   * Filter by organization name (case-insensitive partial match).
+   * @return organization
+   */
+  
+  @Schema(name = "organization", example = "OpenAI", description = "Filter by organization name (case-insensitive partial match).", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("organization")
+  public @Nullable String getOrganization() {
+    return organization;
+  }
+
+  public void setOrganization(@Nullable String organization) {
+    this.organization = organization;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -176,12 +221,14 @@ public class ModelSearchQueryDto {
         Objects.equals(this.sort, modelSearchQuery.sort) &&
         Objects.equals(this.direction, modelSearchQuery.direction) &&
         Objects.equals(this.search, modelSearchQuery.search) &&
-        Objects.equals(this.active, modelSearchQuery.active);
+        Objects.equals(this.active, modelSearchQuery.active) &&
+        Objects.equals(this.license, modelSearchQuery.license) &&
+        Objects.equals(this.organization, modelSearchQuery.organization);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, sort, direction, search, active);
+    return Objects.hash(pageNumber, pageSize, sort, direction, search, active, license, organization);
   }
 
   @Override
@@ -194,6 +241,8 @@ public class ModelSearchQueryDto {
     sb.append("    direction: ").append(toIndentedString(direction)).append("\n");
     sb.append("    search: ").append(toIndentedString(search)).append("\n");
     sb.append("    active: ").append(toIndentedString(active)).append("\n");
+    sb.append("    license: ").append(toIndentedString(license)).append("\n");
+    sb.append("    organization: ").append(toIndentedString(organization)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -228,6 +277,8 @@ public class ModelSearchQueryDto {
       this.instance.setDirection(value.direction);
       this.instance.setSearch(value.search);
       this.instance.setActive(value.active);
+      this.instance.setLicense(value.license);
+      this.instance.setOrganization(value.organization);
       return this;
     }
 
@@ -258,6 +309,16 @@ public class ModelSearchQueryDto {
     
     public ModelSearchQueryDto.Builder active(Boolean active) {
       this.instance.active(active);
+      return this;
+    }
+    
+    public ModelSearchQueryDto.Builder license(LicenseDto license) {
+      this.instance.license(license);
+      return this;
+    }
+    
+    public ModelSearchQueryDto.Builder organization(String organization) {
+      this.instance.organization(organization);
       return this;
     }
     

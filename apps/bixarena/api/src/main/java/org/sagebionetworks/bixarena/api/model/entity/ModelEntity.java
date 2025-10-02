@@ -34,11 +34,29 @@ public class ModelEntity {
   @Column(name = "name", nullable = false, length = 300)
   private String name;
 
-  @Column(name = "license", length = 100)
+  @Column(name = "license", nullable = false, length = 20)
   private String license;
 
   @Column(name = "active", nullable = false)
   private boolean active;
+
+  @Column(name = "alias", length = 200)
+  private String alias;
+
+  @Column(name = "external_link", nullable = false, length = 300)
+  private String externalLink;
+
+  @Column(name = "organization", length = 200)
+  private String organization;
+
+  @Column(name = "description", length = 300)
+  private String description;
+
+  @Column(name = "api_model_name", nullable = false, length = 300)
+  private String apiModelName;
+
+  @Column(name = "api_base", nullable = false, length = 300)
+  private String apiBase;
 
   @CreationTimestamp
   @Column(name = "created_at", nullable = false)

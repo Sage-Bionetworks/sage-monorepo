@@ -75,7 +75,10 @@ public class ModelService {
   }
 
   private Specification<ModelEntity> buildSpecification(ModelSearchQueryDto query) {
-    return Specification.where(activeFilter(query)).and(searchFilter(query));
+    return Specification.where(activeFilter(query))
+        .and(searchFilter(query))
+        .and(licenseFilter(query))
+        .and(organizationFilter(query));
   }
 
   private Specification<ModelEntity> activeFilter(ModelSearchQueryDto query) {
@@ -96,5 +99,21 @@ public class ModelService {
         cb.like(cb.lower(root.get("name")), pattern),
         cb.like(cb.lower(root.get("slug")), pattern)
       );
+  }
+
+  private Specification<ModelEntity> licenseFilter(ModelSearchQueryDto query) {
+    if (query.getLicense() == null) {
+      return null; // no filtering
+    }
+    String licenseValue = query.getLicense().getValue();
+    return (root, cq, cb) -> cb.equal(root.get("license"), licenseValue);
+  }
+
+  private Specification<ModelEntity> organizationFilter(ModelSearchQueryDto query) {
+    if (query.getOrganization() == null || query.getOrganization().trim().isEmpty()) {
+      return null; // no filtering
+    }
+    String pattern = "%" + query.getOrganization().trim().toLowerCase() + "%";
+    return (root, cq, cb) -> cb.like(cb.lower(root.get("organization")), pattern);
   }
 }

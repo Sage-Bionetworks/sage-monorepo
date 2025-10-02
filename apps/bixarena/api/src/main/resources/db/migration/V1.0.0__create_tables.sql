@@ -13,8 +13,14 @@ CREATE TABLE model (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   slug VARCHAR(200) UNIQUE NOT NULL,
   name VARCHAR(300) NOT NULL,
-  license VARCHAR(100),
+  license VARCHAR(20) NOT NULL CHECK (license IN ('open-source', 'commercial')),
   active BOOLEAN NOT NULL DEFAULT FALSE,
+  alias VARCHAR(200),
+  external_link VARCHAR(300) NOT NULL,
+  organization VARCHAR(200),
+  description VARCHAR(300),
+  api_model_name VARCHAR(300) NOT NULL,
+  api_base VARCHAR(300) NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
@@ -51,6 +57,8 @@ CREATE INDEX idx_leaderboard_entry_rank ON leaderboard_entry(rank);
 CREATE INDEX idx_leaderboard_entry_bt_score ON leaderboard_entry(bt_score DESC);
 CREATE INDEX idx_leaderboard_snapshot_leaderboard_id ON leaderboard_snapshot(leaderboard_id);
 CREATE INDEX idx_leaderboard_snapshot_created_at ON leaderboard_snapshot(created_at DESC);
+CREATE INDEX idx_model_license ON model(license);
+CREATE INDEX idx_model_active ON model(active);
 
 -- Sessions (existing table - keeping it)
 CREATE TABLE conversation (

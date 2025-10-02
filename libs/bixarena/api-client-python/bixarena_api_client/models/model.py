@@ -17,7 +17,14 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    StrictBool,
+    StrictStr,
+    field_validator,
+)
 from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
@@ -30,11 +37,30 @@ class Model(BaseModel):
 
     id: StrictStr = Field(description="Unique identifier (UUID) of the model.")
     slug: StrictStr = Field(description="URL-friendly unique slug for the model.")
+    alias: Optional[StrictStr] = Field(
+        default=None, description="Alternative name or alias for the model."
+    )
     name: StrictStr = Field(description="Human-readable name of the model.")
-    license: Optional[StrictStr] = Field(
-        default=None, description="License under which the model is released."
+    organization: Optional[StrictStr] = Field(
+        default=None, description="Organization that developed or maintains the model."
+    )
+    license: StrictStr = Field(
+        description="Whether the model is open-source or commercial."
     )
     active: StrictBool = Field(description="Whether the model is active/visible.")
+    external_link: StrictStr = Field(
+        description="External URL with more information about the model.",
+        alias="externalLink",
+    )
+    description: Optional[StrictStr] = Field(
+        default=None, description="Detailed description of the model."
+    )
+    api_model_name: StrictStr = Field(
+        description="The model name used for API calls.", alias="apiModelName"
+    )
+    api_base: StrictStr = Field(
+        description="Base URL for the model API.", alias="apiBase"
+    )
     created_at: datetime = Field(
         description="When the model was created.", alias="createdAt"
     )
@@ -44,12 +70,25 @@ class Model(BaseModel):
     __properties: ClassVar[List[str]] = [
         "id",
         "slug",
+        "alias",
         "name",
+        "organization",
         "license",
         "active",
+        "externalLink",
+        "description",
+        "apiModelName",
+        "apiBase",
         "createdAt",
         "updatedAt",
     ]
+
+    @field_validator("license")
+    def license_validate_enum(cls, value):
+        """Validates the enum"""
+        if value not in set(["open-source", "commercial"]):
+            raise ValueError("must be one of enum values ('open-source', 'commercial')")
+        return value
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -88,10 +127,20 @@ class Model(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # set to None if license (nullable) is None
+        # set to None if alias (nullable) is None
         # and model_fields_set contains the field
-        if self.license is None and "license" in self.model_fields_set:
-            _dict["license"] = None
+        if self.alias is None and "alias" in self.model_fields_set:
+            _dict["alias"] = None
+
+        # set to None if organization (nullable) is None
+        # and model_fields_set contains the field
+        if self.organization is None and "organization" in self.model_fields_set:
+            _dict["organization"] = None
+
+        # set to None if description (nullable) is None
+        # and model_fields_set contains the field
+        if self.description is None and "description" in self.model_fields_set:
+            _dict["description"] = None
 
         return _dict
 
@@ -108,9 +157,15 @@ class Model(BaseModel):
             {
                 "id": obj.get("id"),
                 "slug": obj.get("slug"),
+                "alias": obj.get("alias"),
                 "name": obj.get("name"),
+                "organization": obj.get("organization"),
                 "license": obj.get("license"),
                 "active": obj.get("active"),
+                "externalLink": obj.get("externalLink"),
+                "description": obj.get("description"),
+                "apiModelName": obj.get("apiModelName"),
+                "apiBase": obj.get("apiBase"),
                 "createdAt": obj.get("createdAt"),
                 "updatedAt": obj.get("updatedAt"),
             }

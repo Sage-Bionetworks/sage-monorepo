@@ -5,7 +5,9 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonValue;
 import java.time.OffsetDateTime;
+import org.sagebionetworks.bixarena.api.model.dto.LicenseDto;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
@@ -30,11 +32,23 @@ public class ModelDto {
 
   private String slug;
 
+  private @Nullable String alias = null;
+
   private String name;
 
-  private @Nullable String license = null;
+  private @Nullable String organization = null;
+
+  private LicenseDto license;
 
   private Boolean active;
+
+  private String externalLink;
+
+  private @Nullable String description = null;
+
+  private String apiModelName;
+
+  private String apiBase;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
@@ -49,11 +63,15 @@ public class ModelDto {
   /**
    * Constructor with only required parameters
    */
-  public ModelDto(String id, String slug, String name, Boolean active, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
+  public ModelDto(String id, String slug, String name, LicenseDto license, Boolean active, String externalLink, String apiModelName, String apiBase, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
     this.id = id;
     this.slug = slug;
     this.name = name;
+    this.license = license;
     this.active = active;
+    this.externalLink = externalLink;
+    this.apiModelName = apiModelName;
+    this.apiBase = apiBase;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
@@ -98,6 +116,26 @@ public class ModelDto {
     this.slug = slug;
   }
 
+  public ModelDto alias(@Nullable String alias) {
+    this.alias = alias;
+    return this;
+  }
+
+  /**
+   * Alternative name or alias for the model.
+   * @return alias
+   */
+  
+  @Schema(name = "alias", example = "awesome-model-v2", description = "Alternative name or alias for the model.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("alias")
+  public @Nullable String getAlias() {
+    return alias;
+  }
+
+  public void setAlias(@Nullable String alias) {
+    this.alias = alias;
+  }
+
   public ModelDto name(String name) {
     this.name = name;
     return this;
@@ -118,23 +156,43 @@ public class ModelDto {
     this.name = name;
   }
 
-  public ModelDto license(@Nullable String license) {
+  public ModelDto organization(@Nullable String organization) {
+    this.organization = organization;
+    return this;
+  }
+
+  /**
+   * Organization that developed or maintains the model.
+   * @return organization
+   */
+  
+  @Schema(name = "organization", example = "OpenAI", description = "Organization that developed or maintains the model.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("organization")
+  public @Nullable String getOrganization() {
+    return organization;
+  }
+
+  public void setOrganization(@Nullable String organization) {
+    this.organization = organization;
+  }
+
+  public ModelDto license(LicenseDto license) {
     this.license = license;
     return this;
   }
 
   /**
-   * License under which the model is released.
+   * Get license
    * @return license
    */
-  
-  @Schema(name = "license", example = "Apache-2.0", description = "License under which the model is released.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid 
+  @Schema(name = "license", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("license")
-  public @Nullable String getLicense() {
+  public LicenseDto getLicense() {
     return license;
   }
 
-  public void setLicense(@Nullable String license) {
+  public void setLicense(LicenseDto license) {
     this.license = license;
   }
 
@@ -156,6 +214,86 @@ public class ModelDto {
 
   public void setActive(Boolean active) {
     this.active = active;
+  }
+
+  public ModelDto externalLink(String externalLink) {
+    this.externalLink = externalLink;
+    return this;
+  }
+
+  /**
+   * External URL with more information about the model.
+   * @return externalLink
+   */
+  @NotNull 
+  @Schema(name = "externalLink", example = "https://openrouter.ai/models/openai/gpt-4", description = "External URL with more information about the model.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("externalLink")
+  public String getExternalLink() {
+    return externalLink;
+  }
+
+  public void setExternalLink(String externalLink) {
+    this.externalLink = externalLink;
+  }
+
+  public ModelDto description(@Nullable String description) {
+    this.description = description;
+    return this;
+  }
+
+  /**
+   * Detailed description of the model.
+   * @return description
+   */
+  @Size(min = 1, max = 300) 
+  @Schema(name = "description", example = "A large multimodal model that can process text and images.", description = "Detailed description of the model.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("description")
+  public @Nullable String getDescription() {
+    return description;
+  }
+
+  public void setDescription(@Nullable String description) {
+    this.description = description;
+  }
+
+  public ModelDto apiModelName(String apiModelName) {
+    this.apiModelName = apiModelName;
+    return this;
+  }
+
+  /**
+   * The model name used for API calls.
+   * @return apiModelName
+   */
+  @NotNull 
+  @Schema(name = "apiModelName", example = "anthropic/claude-sonnet-4.5", description = "The model name used for API calls.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("apiModelName")
+  public String getApiModelName() {
+    return apiModelName;
+  }
+
+  public void setApiModelName(String apiModelName) {
+    this.apiModelName = apiModelName;
+  }
+
+  public ModelDto apiBase(String apiBase) {
+    this.apiBase = apiBase;
+    return this;
+  }
+
+  /**
+   * Base URL for the model API.
+   * @return apiBase
+   */
+  @NotNull 
+  @Schema(name = "apiBase", example = "https://openrouter.ai/api/v1", description = "Base URL for the model API.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("apiBase")
+  public String getApiBase() {
+    return apiBase;
+  }
+
+  public void setApiBase(String apiBase) {
+    this.apiBase = apiBase;
   }
 
   public ModelDto createdAt(OffsetDateTime createdAt) {
@@ -209,16 +347,22 @@ public class ModelDto {
     ModelDto model = (ModelDto) o;
     return Objects.equals(this.id, model.id) &&
         Objects.equals(this.slug, model.slug) &&
+        Objects.equals(this.alias, model.alias) &&
         Objects.equals(this.name, model.name) &&
+        Objects.equals(this.organization, model.organization) &&
         Objects.equals(this.license, model.license) &&
         Objects.equals(this.active, model.active) &&
+        Objects.equals(this.externalLink, model.externalLink) &&
+        Objects.equals(this.description, model.description) &&
+        Objects.equals(this.apiModelName, model.apiModelName) &&
+        Objects.equals(this.apiBase, model.apiBase) &&
         Objects.equals(this.createdAt, model.createdAt) &&
         Objects.equals(this.updatedAt, model.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, slug, name, license, active, createdAt, updatedAt);
+    return Objects.hash(id, slug, alias, name, organization, license, active, externalLink, description, apiModelName, apiBase, createdAt, updatedAt);
   }
 
   @Override
@@ -227,9 +371,15 @@ public class ModelDto {
     sb.append("class ModelDto {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    slug: ").append(toIndentedString(slug)).append("\n");
+    sb.append("    alias: ").append(toIndentedString(alias)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    organization: ").append(toIndentedString(organization)).append("\n");
     sb.append("    license: ").append(toIndentedString(license)).append("\n");
     sb.append("    active: ").append(toIndentedString(active)).append("\n");
+    sb.append("    externalLink: ").append(toIndentedString(externalLink)).append("\n");
+    sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    apiModelName: ").append(toIndentedString(apiModelName)).append("\n");
+    sb.append("    apiBase: ").append(toIndentedString(apiBase)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");
@@ -262,9 +412,15 @@ public class ModelDto {
     protected Builder copyOf(ModelDto value) { 
       this.instance.setId(value.id);
       this.instance.setSlug(value.slug);
+      this.instance.setAlias(value.alias);
       this.instance.setName(value.name);
+      this.instance.setOrganization(value.organization);
       this.instance.setLicense(value.license);
       this.instance.setActive(value.active);
+      this.instance.setExternalLink(value.externalLink);
+      this.instance.setDescription(value.description);
+      this.instance.setApiModelName(value.apiModelName);
+      this.instance.setApiBase(value.apiBase);
       this.instance.setCreatedAt(value.createdAt);
       this.instance.setUpdatedAt(value.updatedAt);
       return this;
@@ -280,18 +436,48 @@ public class ModelDto {
       return this;
     }
     
+    public ModelDto.Builder alias(String alias) {
+      this.instance.alias(alias);
+      return this;
+    }
+    
     public ModelDto.Builder name(String name) {
       this.instance.name(name);
       return this;
     }
     
-    public ModelDto.Builder license(String license) {
+    public ModelDto.Builder organization(String organization) {
+      this.instance.organization(organization);
+      return this;
+    }
+    
+    public ModelDto.Builder license(LicenseDto license) {
       this.instance.license(license);
       return this;
     }
     
     public ModelDto.Builder active(Boolean active) {
       this.instance.active(active);
+      return this;
+    }
+    
+    public ModelDto.Builder externalLink(String externalLink) {
+      this.instance.externalLink(externalLink);
+      return this;
+    }
+    
+    public ModelDto.Builder description(String description) {
+      this.instance.description(description);
+      return this;
+    }
+    
+    public ModelDto.Builder apiModelName(String apiModelName) {
+      this.instance.apiModelName(apiModelName);
+      return this;
+    }
+    
+    public ModelDto.Builder apiBase(String apiBase) {
+      this.instance.apiBase(apiBase);
       return this;
     }
     

@@ -748,6 +748,13 @@ components:
         - active
       example: created_at
       type: string
+    License:
+      description: The license of the model
+      enum:
+        - open-source
+        - commercial
+      example: open-source
+      type: string
     ModelSearchQuery:
       description: A model search query with pagination and filtering options.
       properties:
@@ -781,14 +788,27 @@ components:
           example: true
           nullable: true
           type: boolean
+        license:
+          $ref: '#/components/schemas/License'
+        organization:
+          description: Filter by organization name (case-insensitive partial match).
+          example: OpenAI
+          nullable: true
+          type: string
       type: object
     Model:
       description: A model entity.
       example:
-        license: Apache-2.0
-        createdAt: 2025-09-15T12:00:00Z
-        name: My Awesome Model
+        externalLink: https://openrouter.ai/models/openai/gpt-4
         active: true
+        description: A large multimodal model that can process text and images.
+        apiBase: https://openrouter.ai/api/v1
+        apiModelName: anthropic/claude-sonnet-4.5
+        license: open-source
+        createdAt: 2025-09-15T12:00:00Z
+        organization: OpenAI
+        name: My Awesome Model
+        alias: awesome-model-v2
         id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
         slug: my-awesome-model
         updatedAt: 2025-09-20T08:30:00Z
@@ -801,19 +821,45 @@ components:
           description: URL-friendly unique slug for the model.
           example: my-awesome-model
           type: string
+        alias:
+          description: Alternative name or alias for the model.
+          example: awesome-model-v2
+          nullable: true
+          type: string
         name:
           description: Human-readable name of the model.
           example: My Awesome Model
           type: string
-        license:
-          description: License under which the model is released.
-          example: Apache-2.0
+        organization:
+          description: Organization that developed or maintains the model.
+          example: OpenAI
           nullable: true
           type: string
+        license:
+          $ref: '#/components/schemas/License'
         active:
           description: Whether the model is active/visible.
           example: true
           type: boolean
+        externalLink:
+          description: External URL with more information about the model.
+          example: https://openrouter.ai/models/openai/gpt-4
+          type: string
+        description:
+          description: Detailed description of the model.
+          example: A large multimodal model that can process text and images.
+          maxLength: 300
+          minLength: 1
+          nullable: true
+          type: string
+        apiModelName:
+          description: The model name used for API calls.
+          example: anthropic/claude-sonnet-4.5
+          type: string
+        apiBase:
+          description: Base URL for the model API.
+          example: https://openrouter.ai/api/v1
+          type: string
         createdAt:
           description: When the model was created.
           example: 2025-09-15T12:00:00Z
@@ -826,8 +872,12 @@ components:
           type: string
       required:
         - active
+        - apiBase
+        - apiModelName
         - createdAt
+        - externalLink
         - id
+        - license
         - name
         - slug
         - updatedAt
@@ -848,17 +898,29 @@ components:
       example:
         number: 99
         models:
-          - license: Apache-2.0
-            createdAt: 2025-09-15T12:00:00Z
-            name: My Awesome Model
+          - externalLink: https://openrouter.ai/models/openai/gpt-4
             active: true
+            description: A large multimodal model that can process text and images.
+            apiBase: https://openrouter.ai/api/v1
+            apiModelName: anthropic/claude-sonnet-4.5
+            license: open-source
+            createdAt: 2025-09-15T12:00:00Z
+            organization: OpenAI
+            name: My Awesome Model
+            alias: awesome-model-v2
             id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
             slug: my-awesome-model
             updatedAt: 2025-09-20T08:30:00Z
-          - license: Apache-2.0
-            createdAt: 2025-09-15T12:00:00Z
-            name: My Awesome Model
+          - externalLink: https://openrouter.ai/models/openai/gpt-4
             active: true
+            description: A large multimodal model that can process text and images.
+            apiBase: https://openrouter.ai/api/v1
+            apiModelName: anthropic/claude-sonnet-4.5
+            license: open-source
+            createdAt: 2025-09-15T12:00:00Z
+            organization: OpenAI
+            name: My Awesome Model
+            alias: awesome-model-v2
             id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
             slug: my-awesome-model
             updatedAt: 2025-09-20T08:30:00Z

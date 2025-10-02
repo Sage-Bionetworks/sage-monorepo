@@ -30,4 +30,12 @@ properties:
     type: boolean
     nullable: true
     example: true
+  license:
+    description: Filter by license type.
+    $ref: 'License.yaml'
+  organization:
+    description: Filter by organization name (case-insensitive partial match).
+    type: string
+    nullable: true
+    example: 'OpenAI'
 required: []

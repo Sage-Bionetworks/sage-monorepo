@@ -524,6 +524,13 @@ components:
         - active
       default: name
       example: created_at
+    License:
+      type: string
+      description: The license of the model
+      enum:
+        - open-source
+        - commercial
+      example: open-source
     ModelSearchQuery:
       type: object
       description: A model search query with pagination and filtering options.
@@ -557,6 +564,14 @@ components:
           type: boolean
           nullable: true
           example: true
+        license:
+          description: Filter by license type.
+          $ref: '#/components/schemas/License'
+        organization:
+          description: Filter by organization name (case-insensitive partial match).
+          type: string
+          nullable: true
+          example: OpenAI
       required: []
     Model:
       type: object
@@ -570,19 +585,45 @@ components:
           type: string
           description: URL-friendly unique slug for the model.
           example: my-awesome-model
+        alias:
+          type: string
+          nullable: true
+          description: Alternative name or alias for the model.
+          example: awesome-model-v2
         name:
           type: string
           description: Human-readable name of the model.
           example: My Awesome Model
-        license:
+        organization:
           type: string
           nullable: true
-          description: License under which the model is released.
-          example: Apache-2.0
+          description: Organization that developed or maintains the model.
+          example: OpenAI
+        license:
+          $ref: '#/components/schemas/License'
         active:
           type: boolean
           description: Whether the model is active/visible.
           example: true
+        externalLink:
+          type: string
+          description: External URL with more information about the model.
+          example: https://openrouter.ai/models/openai/gpt-4
+        description:
+          type: string
+          nullable: true
+          minLength: 1
+          maxLength: 300
+          description: Detailed description of the model.
+          example: A large multimodal model that can process text and images.
+        apiModelName:
+          type: string
+          description: The model name used for API calls.
+          example: anthropic/claude-sonnet-4.5
+        apiBase:
+          type: string
+          description: Base URL for the model API.
+          example: https://openrouter.ai/api/v1
         createdAt:
           type: string
           format: date-time
@@ -597,7 +638,11 @@ components:
         - id
         - slug
         - name
+        - license
         - active
+        - externalLink
+        - apiModelName
+        - apiBase
         - createdAt
         - updatedAt
     ModelPage:

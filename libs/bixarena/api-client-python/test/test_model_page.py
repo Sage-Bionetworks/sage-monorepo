@@ -45,9 +45,15 @@ class TestModelPage(unittest.TestCase):
                     bixarena_api_client.models.model.Model(
                         id = '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f', 
                         slug = 'my-awesome-model', 
+                        alias = 'awesome-model-v2', 
                         name = 'My Awesome Model', 
-                        license = 'Apache-2.0', 
+                        organization = 'OpenAI', 
+                        license = 'open-source', 
                         active = True, 
+                        external_link = 'https://openrouter.ai/models/openai/gpt-4', 
+                        description = 'A large multimodal model that can process text and images.', 
+                        api_model_name = 'anthropic/claude-sonnet-4.5', 
+                        api_base = 'https://openrouter.ai/api/v1', 
                         created_at = '2025-09-15T12:00Z', 
                         updated_at = '2025-09-20T08:30Z', )
                     ]
@@ -64,9 +70,15 @@ class TestModelPage(unittest.TestCase):
                     bixarena_api_client.models.model.Model(
                         id = '5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f', 
                         slug = 'my-awesome-model', 
+                        alias = 'awesome-model-v2', 
                         name = 'My Awesome Model', 
-                        license = 'Apache-2.0', 
+                        organization = 'OpenAI', 
+                        license = 'open-source', 
                         active = True, 
+                        external_link = 'https://openrouter.ai/models/openai/gpt-4', 
+                        description = 'A large multimodal model that can process text and images.', 
+                        api_model_name = 'anthropic/claude-sonnet-4.5', 
+                        api_base = 'https://openrouter.ai/api/v1', 
                         created_at = '2025-09-15T12:00Z', 
                         updated_at = '2025-09-20T08:30Z', )
                     ],

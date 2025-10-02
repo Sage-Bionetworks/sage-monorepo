@@ -9,19 +9,45 @@ properties:
     type: string
     description: URL-friendly unique slug for the model.
     example: 'my-awesome-model'
+  alias:
+    type: string
+    nullable: true
+    description: Alternative name or alias for the model.
+    example: 'awesome-model-v2'
   name:
     type: string
     description: Human-readable name of the model.
     example: 'My Awesome Model'
-  license:
+  organization:
     type: string
     nullable: true
-    description: License under which the model is released.
-    example: 'Apache-2.0'
+    description: Organization that developed or maintains the model.
+    example: 'OpenAI'
+  license:
+    $ref: '../schemas/License.yaml'
   active:
     type: boolean
     description: Whether the model is active/visible.
     example: true
+  externalLink:
+    type: string
+    description: External URL with more information about the model.
+    example: 'https://openrouter.ai/models/openai/gpt-4'
+  description:
+    type: string
+    nullable: true
+    minLength: 1
+    maxLength: 300
+    description: Detailed description of the model.
+    example: 'A large multimodal model that can process text and images.'
+  apiModelName:
+    type: string
+    description: The model name used for API calls.
+    example: 'anthropic/claude-sonnet-4.5'
+  apiBase:
+    type: string
+    description: Base URL for the model API.
+    example: 'https://openrouter.ai/api/v1'
   createdAt:
     type: string
     format: date-time
@@ -36,6 +62,10 @@ required:
   - id
   - slug
   - name
+  - license
   - active
+  - externalLink
+  - apiModelName
+  - apiBase
   - createdAt
   - updatedAt

@@ -40,7 +40,9 @@ class TestModelSearchQuery(unittest.TestCase):
                 sort = 'name',
                 direction = 'asc',
                 search = 'vision',
-                active = True
+                active = True,
+                license = 'open-source',
+                organization = 'OpenAI'
             )
         else:
             return ModelSearchQuery(
