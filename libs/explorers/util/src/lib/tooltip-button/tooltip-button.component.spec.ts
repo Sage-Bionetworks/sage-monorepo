@@ -33,18 +33,18 @@ describe('TooltipButtonComponent', () => {
   });
 
   it('should pass through aria label', async () => {
-    await setup({ buttonAriaLabel: 'Custom label' });
+    await setup({ buttonProps: { ariaLabel: 'Custom label' } });
     expect(screen.getByRole('button', { name: /custom label/i })).toBeInTheDocument();
   });
 
   it('should call onClick when clicked', async () => {
-    const { user } = await setup({ buttonAriaLabel: 'Do action' });
+    const { user } = await setup({ buttonProps: { ariaLabel: 'Do action' } });
     await user.click(screen.getByRole('button', { name: /do action/i }));
     expect(onClickSpy).toHaveBeenCalled();
   });
 
   it('should show tooltip text on hover', async () => {
-    const { user } = await setup({ buttonAriaLabel: 'Has tooltip' });
+    const { user } = await setup({ buttonProps: { ariaLabel: 'Has tooltip' } });
     const btn = screen.getByRole('button', { name: /has tooltip/i });
     await user.hover(btn);
     expect(await screen.findByText(defaultTooltipText)).toBeInTheDocument();

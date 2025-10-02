@@ -1,13 +1,14 @@
-<button
+<p-button
   type="button"
   (click)="onClick()()"
   [attr.aria-describedby]="buttonAriaDescribedBy()"
-  [attr.aria-label]="buttonAriaLabel()"
   [pTooltip]="tooltipText()"
   (mouseenter)="showTooltip()"
   (mouseleave)="hideTooltip()"
   [autoHide]="false"
   [tooltipEvent]="'focus'"
+  [tooltipPosition]="tooltipPosition()"
+  [buttonProps]="buttonProps()"
 >
   @if (buttonSvgIconConfig()?.imagePath) {
     @let cfg = buttonSvgIconConfig()!;
@@ -23,4 +24,4 @@
   @if (buttonLabel()) {
     {{ buttonLabel() }}
   }
-</button>
+</p-button>

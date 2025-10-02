@@ -32,7 +32,7 @@ export const IconButton: Story = {
       height: 12,
       width: 24,
     },
-    buttonAriaLabel: 'Icon button',
+    buttonProps: { ariaLabel: 'Icon button', link: true },
     tooltipText: 'This is an icon button',
     onClick: mockOnClick,
   },

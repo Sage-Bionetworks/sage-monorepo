@@ -1,31 +1,35 @@
-import { Component, inject, input } from '@angular/core';
-import { MessageService } from 'primeng/api';
-import { ButtonModule } from 'primeng/button';
-import { TooltipModule } from 'primeng/tooltip';
-import { ToastModule } from 'primeng/toast';
+import { Clipboard } from '@angular/cdk/clipboard';
+import { Component, inject } from '@angular/core';
+import { TooltipButtonComponent } from '@sagebionetworks/explorers/util';
 
 @Component({
   selector: 'explorers-comparison-tool-share-url-button',
-  imports: [ButtonModule, TooltipModule, ToastModule],
+  imports: [TooltipButtonComponent],
   templateUrl: './comparison-tool-share-url-button.component.html',
   styleUrls: ['./comparison-tool-share-url-button.component.scss'],
 })
 export class ComparisonToolShareURLButtonComponent {
-  messageService = inject(MessageService);
+  private readonly clipboard = inject(Clipboard);
 
-  tooltip = input('');
+  private hasCopied = false;
+  private timeoutId?: ReturnType<typeof setTimeout>;
 
-  toastDuration = 5000;
+  copyUrl = () => {
+    this.clipboard.copy(window.location.href);
+    this.hasCopied = true;
 
-  copyUrl() {
-    navigator.clipboard.writeText(window.location.href);
-    this.messageService.clear();
-    this.messageService.add({
-      key: 'share-url-button-toast',
-      severity: 'info',
-      summary: 'URL Copied',
-      detail:
-        'URL copied to clipboard! Use this URL to share or bookmark the current table configuration.',
-    });
+    if (this.timeoutId) {
+      clearTimeout(this.timeoutId);
+    }
+
+    this.timeoutId = setTimeout(() => {
+      this.hasCopied = false;
+    }, 5000);
+  };
+
+  getTooltipText(): string {
+    return this.hasCopied
+      ? 'URL copied to clipboard'
+      : "Copy the URL to capture the table's current filtering, sorting, and pinned results";
   }
 }
