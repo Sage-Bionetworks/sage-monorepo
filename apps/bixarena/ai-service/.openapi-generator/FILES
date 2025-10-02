@@ -1,7 +1,5 @@
 .flake8
 .gitignore
-.openapi-generator-ignore
-Dockerfile
 README.md
 docker-compose.yaml
 openapi.yaml
