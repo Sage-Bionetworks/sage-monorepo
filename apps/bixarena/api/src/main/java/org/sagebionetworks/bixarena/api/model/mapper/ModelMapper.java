@@ -1,7 +1,7 @@
 package org.sagebionetworks.bixarena.api.model.mapper;
 
 import java.util.List;
-import org.sagebionetworks.bixarena.api.model.dto.LicenseTypeDto;
+import org.sagebionetworks.bixarena.api.model.dto.LicenseDto;
 import org.sagebionetworks.bixarena.api.model.dto.ModelDto;
 import org.sagebionetworks.bixarena.api.model.entity.ModelEntity;
 import org.springframework.beans.BeanUtils;
@@ -16,7 +16,7 @@ public class ModelMapper {
 
       // Handle type conversions
       dto.setId(entity.getId().toString());
-      dto.setLicense(LicenseTypeDto.fromValue(entity.getLicense()));
+      dto.setLicense(LicenseDto.fromValue(entity.getLicense()));
     }
     return dto;
   }

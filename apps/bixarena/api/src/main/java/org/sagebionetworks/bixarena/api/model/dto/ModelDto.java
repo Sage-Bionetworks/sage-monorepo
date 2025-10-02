@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.time.OffsetDateTime;
-import org.sagebionetworks.bixarena.api.model.dto.LicenseTypeDto;
+import org.sagebionetworks.bixarena.api.model.dto.LicenseDto;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
@@ -38,7 +38,7 @@ public class ModelDto {
 
   private @Nullable String organization = null;
 
-  private LicenseTypeDto license;
+  private LicenseDto license;
 
   private Boolean active;
 
@@ -63,7 +63,7 @@ public class ModelDto {
   /**
    * Constructor with only required parameters
    */
-  public ModelDto(String id, String slug, String name, LicenseTypeDto license, Boolean active, String externalLink, String apiModelName, String apiBase, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
+  public ModelDto(String id, String slug, String name, LicenseDto license, Boolean active, String externalLink, String apiModelName, String apiBase, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
     this.id = id;
     this.slug = slug;
     this.name = name;
@@ -176,7 +176,7 @@ public class ModelDto {
     this.organization = organization;
   }
 
-  public ModelDto license(LicenseTypeDto license) {
+  public ModelDto license(LicenseDto license) {
     this.license = license;
     return this;
   }
@@ -188,11 +188,11 @@ public class ModelDto {
   @NotNull @Valid 
   @Schema(name = "license", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("license")
-  public LicenseTypeDto getLicense() {
+  public LicenseDto getLicense() {
     return license;
   }
 
-  public void setLicense(LicenseTypeDto license) {
+  public void setLicense(LicenseDto license) {
     this.license = license;
   }
 
@@ -451,7 +451,7 @@ public class ModelDto {
       return this;
     }
     
-    public ModelDto.Builder license(LicenseTypeDto license) {
+    public ModelDto.Builder license(LicenseDto license) {
       this.instance.license(license);
       return this;
     }

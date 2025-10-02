@@ -1,5 +1,5 @@
 type: string
-description: The license type of the model
+description: The license of the model
 enum:
   - 'open-source'
   - 'commercial'

@@ -24,7 +24,7 @@ properties:
     description: Organization that developed or maintains the model.
     example: 'OpenAI'
   license:
-    $ref: '../schemas/LicenseType.yaml'
+    $ref: '../schemas/License.yaml'
   active:
     type: boolean
     description: Whether the model is active/visible.

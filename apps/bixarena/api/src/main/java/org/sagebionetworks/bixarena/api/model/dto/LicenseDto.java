@@ -16,11 +16,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * The license type of the model
+ * The license of the model
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
-public enum LicenseTypeDto {
+public enum LicenseDto {
   
   OPEN_SOURCE("open-source"),
   
@@ -28,7 +28,7 @@ public enum LicenseTypeDto {
 
   private final String value;
 
-  LicenseTypeDto(String value) {
+  LicenseDto(String value) {
     this.value = value;
   }
 
@@ -43,8 +43,8 @@ public enum LicenseTypeDto {
   }
 
   @JsonCreator
-  public static LicenseTypeDto fromValue(String value) {
-    for (LicenseTypeDto b : LicenseTypeDto.values()) {
+  public static LicenseDto fromValue(String value) {
+    for (LicenseDto b : LicenseDto.values()) {
       if (b.value.equals(value)) {
         return b;
       }

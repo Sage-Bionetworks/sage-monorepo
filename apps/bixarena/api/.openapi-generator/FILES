@@ -23,7 +23,7 @@ src/main/java/org/sagebionetworks/bixarena/api/model/dto/LeaderboardSnapshotPage
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/LeaderboardSnapshotQueryDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/LeaderboardSnapshotSortDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/LeaderboardSortDto.java
-src/main/java/org/sagebionetworks/bixarena/api/model/dto/LicenseTypeDto.java
+src/main/java/org/sagebionetworks/bixarena/api/model/dto/LicenseDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/ModelDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/ModelPageDto.java
 src/main/java/org/sagebionetworks/bixarena/api/model/dto/ModelSearchQueryDto.java

@@ -32,7 +32,7 @@ properties:
     example: true
   license:
     description: Filter by license type.
-    $ref: 'LicenseType.yaml'
+    $ref: 'License.yaml'
   organization:
     description: Filter by organization name (case-insensitive partial match).
     type: string

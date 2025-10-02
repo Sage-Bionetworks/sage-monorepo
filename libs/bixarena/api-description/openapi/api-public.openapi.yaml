@@ -522,9 +522,9 @@ components:
         - active
       default: name
       example: created_at
-    LicenseType:
+    License:
       type: string
-      description: The license type of the model
+      description: The license of the model
       enum:
         - open-source
         - commercial
@@ -564,7 +564,7 @@ components:
           example: true
         license:
           description: Filter by license type.
-          $ref: '#/components/schemas/LicenseType'
+          $ref: '#/components/schemas/License'
         organization:
           description: Filter by organization name (case-insensitive partial match).
           type: string
@@ -598,7 +598,7 @@ components:
           description: Organization that developed or maintains the model.
           example: OpenAI
         license:
-          $ref: '#/components/schemas/LicenseType'
+          $ref: '#/components/schemas/License'
         active:
           type: boolean
           description: Whether the model is active/visible.
