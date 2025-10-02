@@ -8,7 +8,11 @@
         "generatorName": "python-fastapi",
         "inputSpec": "#{cwd}/../../../libs/bixarena/api-description/openapi/ai-service.openapi.yaml",
         "output": "#{cwd}",
-        "additionalProperties": {}
+        "additionalProperties": {
+          "packageName": "bixarena_ai_service",
+          "serverPort": "8114",
+          "sourceFolder": "bixarena_ai_service"
+        }
       }
     }
   }
