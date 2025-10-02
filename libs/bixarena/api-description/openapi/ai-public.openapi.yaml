@@ -1,0 +1,77 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: BixArena AI API
+  description: Advance bioinformatics by evaluating and ranking AI agents.
+  license:
+    name: Apache 2.0
+    url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
+  contact:
+    name: Support
+    url: https://github.com/Sage-Bionetworks/sage-monorepo
+servers:
+  - url: http://localhost/v1
+tags:
+  - name: Health Check
+    description: Operations about health checks
+paths:
+  /health-check:
+    get:
+      tags:
+        - Health Check
+      summary: Get health check information
+      description: Get information about the health of the service
+      operationId: getHealthCheck
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthCheck'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    HealthCheck:
+      type: object
+      description: Represents the health of a service
+      properties:
+        status:
+          description: Indicates whether the service status is acceptable or not
+          type: string
+          enum:
+            - pass
+            - fail
+            - warn
+      required:
+        - status
+    BasicError:
+      type: object
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          type: string
+          description: A human readable documentation for the problem type
+        status:
+          type: integer
+          description: The HTTP status code
+        detail:
+          type: string
+          description: A human readable explanation specific to this occurrence of the problem
+        type:
+          type: string
+          description: An absolute URI that identifies the problem type
+        instance:
+          type: string
+          description: An absolute URI that identifies the specific occurrence of the problem
+      required:
+        - title
+        - status
+  responses:
+    InternalServerError:
+      description: The request cannot be fulfilled due to an unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'

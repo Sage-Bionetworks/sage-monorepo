@@ -14,11 +14,12 @@
 apis:
   # BixArena API
   bixarena-public:
-    root: ./openapi/api-public.openapi.yaml
+    root: ./openapi/openapi.yaml
     decorators:
       info-override:
         version: 1.0.0
         title: BixArena API
+        description: Advance bioinformatics by evaluating and ranking AI agents.
         license:
           name: Apache 2.0
           url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
@@ -32,6 +33,16 @@ apis:
   api-public:
     root: ./src/api.openapi.yaml
     decorators:
-      remove-x-internal: on
+      remove-x-internal:
+        internalFlagProperty: 'x-sage-internal'
   api-service:
     root: ./src/api.openapi.yaml
+
+  # AI API
+  ai-public:
+    root: ./src/ai.openapi.yaml
+    decorators:
+      remove-x-internal:
+        internalFlagProperty: 'x-sage-internal'
+  ai-service:
+    root: ./src/ai.openapi.yaml

@@ -1,0 +1,22 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: BixArena AI API
+  description: Advance bioinformatics by evaluating and ranking AI agents.
+  license:
+    name: Apache 2.0
+    url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
+  contact:
+    name: Support
+    url: https://github.com/Sage-Bionetworks/sage-monorepo
+
+servers:
+  - url: http://localhost/v1
+
+tags:
+  - name: Health Check
+    description: Operations about health checks
+
+paths:
+  /health-check:
+    $ref: paths/health-check.yaml
