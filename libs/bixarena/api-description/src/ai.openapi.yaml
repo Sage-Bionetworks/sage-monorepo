@@ -16,6 +16,7 @@ servers:
 tags:
   - name: Health Check
     description: Operations about health checks
+    x-sage-internal: true
 
 paths:
   /health-check:

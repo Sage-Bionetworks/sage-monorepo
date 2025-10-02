@@ -12,9 +12,6 @@ info:
 servers:
   - url: http://localhost/v1
 tags:
-  - name: Health Check
-    description: Operations about health checks
-    x-displayName: Health Check
   - name: Leaderboard
     description: Operations about leaderboards.
     x-displayName: Leaderboard
@@ -22,22 +19,6 @@ tags:
     description: Operations about models.
     x-displayName: Model
 paths:
-  /health-check:
-    get:
-      tags:
-        - Health Check
-      summary: Get health check information
-      description: Get information about the health of the service
-      operationId: getHealthCheck
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HealthCheck'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
   /leaderboards:
     get:
       tags:
@@ -148,41 +129,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    HealthCheck:
-      type: object
-      description: Represents the health of a service
-      properties:
-        status:
-          description: Indicates whether the service status is acceptable or not
-          type: string
-          enum:
-            - pass
-            - fail
-            - warn
-      required:
-        - status
-    BasicError:
-      type: object
-      description: Problem details (tools.ietf.org/html/rfc7807)
-      properties:
-        title:
-          type: string
-          description: A human readable documentation for the problem type
-        status:
-          type: integer
-          description: The HTTP status code
-        detail:
-          type: string
-          description: A human readable explanation specific to this occurrence of the problem
-        type:
-          type: string
-          description: An absolute URI that identifies the problem type
-        instance:
-          type: string
-          description: An absolute URI that identifies the specific occurrence of the problem
-      required:
-        - title
-        - status
     LeaderboardList:
       type: array
       description: A list of leaderboards.
@@ -211,6 +157,28 @@ components:
           - name
           - description
           - updatedAt
+    BasicError:
+      type: object
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          type: string
+          description: A human readable documentation for the problem type
+        status:
+          type: integer
+          description: The HTTP status code
+        detail:
+          type: string
+          description: A human readable explanation specific to this occurrence of the problem
+        type:
+          type: string
+          description: An absolute URI that identifies the problem type
+        instance:
+          type: string
+          description: An absolute URI that identifies the specific occurrence of the problem
+      required:
+        - title
+        - status
     LeaderboardSort:
       type: string
       description: The field to sort leaderboard entries by.
@@ -647,14 +615,14 @@ components:
           required:
             - models
   responses:
-    InternalServerError:
-      description: The request cannot be fulfilled due to an unexpected server error
+    BadRequest:
+      description: Invalid request parameters
       content:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-    BadRequest:
-      description: Invalid request parameters
+    InternalServerError:
+      description: The request cannot be fulfilled due to an unexpected server error
       content:
         application/problem+json:
           schema:
@@ -715,9 +683,6 @@ components:
       schema:
         $ref: '#/components/schemas/ModelSearchQuery'
 x-tagGroups:
-  - name: BixArena AI API
-    tags:
-      - Health Check
   - name: BixArena API
     tags:
       - Leaderboard

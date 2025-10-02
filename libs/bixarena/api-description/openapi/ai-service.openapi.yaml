@@ -14,9 +14,11 @@ servers:
 tags:
   - name: Health Check
     description: Operations about health checks
+    x-sage-internal: true
 paths:
   /health-check:
     get:
+      x-sage-internal: true
       tags:
         - Health Check
       summary: Get health check information
@@ -29,6 +31,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HealthCheck'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
@@ -69,6 +73,12 @@ components:
         - title
         - status
   responses:
+    NotFound:
+      description: The requested resource was not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
     InternalServerError:
       description: The request cannot be fulfilled due to an unexpected server error
       content:
