@@ -60,14 +60,14 @@ export class SearchInputComponent {
     );
   };
 
-  checkQueryForErrors = (query: string): string => {
+  checkQueryForErrors(query: string): string {
     if (isEnsemblId(query) && query.length !== 15) {
       return 'You must enter a full 15-character value to search for a gene by Ensembl identifier.';
     }
     return ''; // empty string if no error
-  };
+  }
 
-  formatResultForDisplay = (result: SearchResult): string => {
+  formatResultForDisplay(result: SearchResult): string {
     switch (result.match_field) {
       case 'ensembl_gene_id':
         return result.hgnc_symbol || result.id;
@@ -78,7 +78,7 @@ export class SearchInputComponent {
       default:
         return result.id;
     }
-  };
+  }
 
   formatResultSubtextForDisplay = (result: SearchResult): string | undefined => {
     if (

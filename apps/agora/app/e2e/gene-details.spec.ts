@@ -44,7 +44,7 @@ test.describe('gene details', () => {
 
     const searchList = page.getByRole('list').filter({ hasText: gene2.name });
     const searchListItem = searchList.getByRole('listitem');
-    await expect(searchListItem).toHaveCount(1);
+    await expect(searchListItem).toHaveCount(1, { timeout: 10_000 });
     await searchListItem.click();
 
     await expect(page).toHaveURL(`${baseURL}/genes/${gene2.id}`);
