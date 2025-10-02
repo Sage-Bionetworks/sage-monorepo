@@ -1,6 +1,7 @@
 package org.sagebionetworks.bixarena.api.model.mapper;
 
 import java.util.List;
+import org.sagebionetworks.bixarena.api.model.dto.LicenseTypeDto;
 import org.sagebionetworks.bixarena.api.model.dto.ModelDto;
 import org.sagebionetworks.bixarena.api.model.entity.ModelEntity;
 import org.springframework.beans.BeanUtils;
@@ -13,9 +14,9 @@ public class ModelMapper {
       // Copy properties automatically, excluding fields that need special handling
       BeanUtils.copyProperties(entity, dto, "id", "license");
 
-      // Handle type conversions and enum conversion manually
+      // Handle type conversions
       dto.setId(entity.getId().toString());
-      dto.setLicense(ModelDto.LicenseEnum.fromValue(entity.getLicense()));
+      dto.setLicense(LicenseTypeDto.fromValue(entity.getLicense()));
     }
     return dto;
   }

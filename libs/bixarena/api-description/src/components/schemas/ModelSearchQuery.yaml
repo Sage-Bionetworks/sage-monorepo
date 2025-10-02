@@ -32,12 +32,7 @@ properties:
     example: true
   license:
     description: Filter by license type.
-    type: string
-    nullable: true
-    enum:
-      - 'open-source'
-      - 'commercial'
-    example: 'open-source'
+    $ref: 'LicenseType.yaml'
   organization:
     description: Filter by organization name (case-insensitive partial match).
     type: string

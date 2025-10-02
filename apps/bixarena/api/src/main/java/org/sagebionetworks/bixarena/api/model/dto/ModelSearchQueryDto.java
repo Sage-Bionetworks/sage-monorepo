@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import org.sagebionetworks.bixarena.api.model.dto.LicenseTypeDto;
 import org.sagebionetworks.bixarena.api.model.dto.ModelSortDto;
 import org.sagebionetworks.bixarena.api.model.dto.SortDirectionDto;
 import org.springframework.lang.Nullable;
@@ -39,42 +40,7 @@ public class ModelSearchQueryDto {
 
   private @Nullable Boolean active = null;
 
-  /**
-   * Filter by license type.
-   */
-  public enum LicenseEnum {
-    OPEN_SOURCE("open-source"),
-    
-    COMMERCIAL("commercial");
-
-    private final String value;
-
-    LicenseEnum(String value) {
-      this.value = value;
-    }
-
-    @JsonValue
-    public String getValue() {
-      return value;
-    }
-
-    @Override
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static LicenseEnum fromValue(String value) {
-      for (LicenseEnum b : LicenseEnum.values()) {
-        if (b.value.equals(value)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
-
-  private @Nullable LicenseEnum license = null;
+  private @Nullable LicenseTypeDto license;
 
   private @Nullable String organization = null;
 
@@ -201,23 +167,23 @@ public class ModelSearchQueryDto {
     this.active = active;
   }
 
-  public ModelSearchQueryDto license(@Nullable LicenseEnum license) {
+  public ModelSearchQueryDto license(@Nullable LicenseTypeDto license) {
     this.license = license;
     return this;
   }
 
   /**
-   * Filter by license type.
+   * Get license
    * @return license
    */
-  
-  @Schema(name = "license", example = "open-source", description = "Filter by license type.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @Valid 
+  @Schema(name = "license", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("license")
-  public @Nullable LicenseEnum getLicense() {
+  public @Nullable LicenseTypeDto getLicense() {
     return license;
   }
 
-  public void setLicense(@Nullable LicenseEnum license) {
+  public void setLicense(@Nullable LicenseTypeDto license) {
     this.license = license;
   }
 
@@ -346,7 +312,7 @@ public class ModelSearchQueryDto {
       return this;
     }
     
-    public ModelSearchQueryDto.Builder license(LicenseEnum license) {
+    public ModelSearchQueryDto.Builder license(LicenseTypeDto license) {
       this.instance.license(license);
       return this;
     }

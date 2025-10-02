@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.time.OffsetDateTime;
+import org.sagebionetworks.bixarena.api.model.dto.LicenseTypeDto;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
@@ -37,42 +38,7 @@ public class ModelDto {
 
   private @Nullable String organization = null;
 
-  /**
-   * Whether the model is open-source or commercial.
-   */
-  public enum LicenseEnum {
-    OPEN_SOURCE("open-source"),
-    
-    COMMERCIAL("commercial");
-
-    private final String value;
-
-    LicenseEnum(String value) {
-      this.value = value;
-    }
-
-    @JsonValue
-    public String getValue() {
-      return value;
-    }
-
-    @Override
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static LicenseEnum fromValue(String value) {
-      for (LicenseEnum b : LicenseEnum.values()) {
-        if (b.value.equals(value)) {
-          return b;
-        }
-      }
-      throw new IllegalArgumentException("Unexpected value '" + value + "'");
-    }
-  }
-
-  private LicenseEnum license;
+  private LicenseTypeDto license;
 
   private Boolean active;
 
@@ -97,7 +63,7 @@ public class ModelDto {
   /**
    * Constructor with only required parameters
    */
-  public ModelDto(String id, String slug, String name, LicenseEnum license, Boolean active, String externalLink, String apiModelName, String apiBase, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
+  public ModelDto(String id, String slug, String name, LicenseTypeDto license, Boolean active, String externalLink, String apiModelName, String apiBase, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
     this.id = id;
     this.slug = slug;
     this.name = name;
@@ -210,23 +176,23 @@ public class ModelDto {
     this.organization = organization;
   }
 
-  public ModelDto license(LicenseEnum license) {
+  public ModelDto license(LicenseTypeDto license) {
     this.license = license;
     return this;
   }
 
   /**
-   * Whether the model is open-source or commercial.
+   * Get license
    * @return license
    */
-  @NotNull 
-  @Schema(name = "license", example = "open-source", description = "Whether the model is open-source or commercial.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @NotNull @Valid 
+  @Schema(name = "license", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("license")
-  public LicenseEnum getLicense() {
+  public LicenseTypeDto getLicense() {
     return license;
   }
 
-  public void setLicense(LicenseEnum license) {
+  public void setLicense(LicenseTypeDto license) {
     this.license = license;
   }
 
@@ -485,7 +451,7 @@ public class ModelDto {
       return this;
     }
     
-    public ModelDto.Builder license(LicenseEnum license) {
+    public ModelDto.Builder license(LicenseTypeDto license) {
       this.instance.license(license);
       return this;
     }

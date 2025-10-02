@@ -24,12 +24,7 @@ properties:
     description: Organization that developed or maintains the model.
     example: 'OpenAI'
   license:
-    type: string
-    enum:
-      - 'open-source'
-      - 'commercial'
-    description: Whether the model is open-source or commercial.
-    example: 'open-source'
+    $ref: '../schemas/LicenseType.yaml'
   active:
     type: boolean
     description: Whether the model is active/visible.

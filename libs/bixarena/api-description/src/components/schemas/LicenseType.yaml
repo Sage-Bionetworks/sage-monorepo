@@ -1,0 +1,6 @@
+type: string
+description: The license type of the model
+enum:
+  - 'open-source'
+  - 'commercial'
+example: 'open-source'
