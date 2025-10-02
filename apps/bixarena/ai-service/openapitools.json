@@ -4,13 +4,12 @@
   "generator-cli": {
     "version": "7.15.0",
     "generators": {
-      "bixarena-api": {
+      "bixarena-ai-service": {
         "generatorName": "python-fastapi",
         "inputSpec": "#{cwd}/../../../libs/bixarena/api-description/openapi/ai-service.openapi.yaml",
         "output": "#{cwd}",
         "additionalProperties": {
-          "packageName": "bixarena_ai_service",
-          "serverPort": "8114"
+          "packageName": "bixarena_ai_service"
         }
       }
     }

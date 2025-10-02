@@ -5,8 +5,6 @@ Dockerfile
 README.md
 docker-compose.yaml
 openapi.yaml
-pyproject.toml
-requirements.txt
 setup.cfg
 src/bixarena_ai_service/apis/__init__.py
 src/bixarena_ai_service/apis/health_check_api.py

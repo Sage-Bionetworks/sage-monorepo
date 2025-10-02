@@ -16,10 +16,10 @@ To run the server, please execute the following from the root directory:
 
 ```bash
 pip3 install -r requirements.txt
-PYTHONPATH=src uvicorn bixarena_ai_service.main:app --host 0.0.0.0 --port 8114
+PYTHONPATH=src uvicorn bixarena_ai_service.main:app --host 0.0.0.0 --port 8080
 ```
 
-and open your browser at `http://localhost:8114/docs/` to see the docs.
+and open your browser at `http://localhost:8080/docs/` to see the docs.
 
 ## Running with Docker
 
