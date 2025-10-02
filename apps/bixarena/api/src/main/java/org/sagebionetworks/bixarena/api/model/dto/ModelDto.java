@@ -279,7 +279,7 @@ public class ModelDto {
    * Detailed description of the model.
    * @return description
    */
-  
+  @Size(min = 1, max = 300) 
   @Schema(name = "description", example = "A large multimodal model that can process text and images.", description = "Detailed description of the model.", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("description")
   public @Nullable String getDescription() {

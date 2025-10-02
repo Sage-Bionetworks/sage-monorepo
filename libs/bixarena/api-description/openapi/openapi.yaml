@@ -613,6 +613,8 @@ components:
         description:
           type: string
           nullable: true
+          minLength: 1
+          maxLength: 300
           description: Detailed description of the model.
           example: A large multimodal model that can process text and images.
         apiModelName:

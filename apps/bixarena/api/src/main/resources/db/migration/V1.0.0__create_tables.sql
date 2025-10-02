@@ -18,7 +18,7 @@ CREATE TABLE model (
   alias VARCHAR(200),
   external_link VARCHAR(300) NOT NULL,
   organization VARCHAR(200),
-  description TEXT,
+  description VARCHAR(300),
   api_model_name VARCHAR(300) NOT NULL,
   api_base VARCHAR(300) NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),

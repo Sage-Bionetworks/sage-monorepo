@@ -49,7 +49,7 @@ public class ModelEntity {
   @Column(name = "organization", length = 200)
   private String organization;
 
-  @Column(name = "description")
+  @Column(name = "description", length = 300)
   private String description;
 
   @Column(name = "api_model_name", nullable = false, length = 300)
