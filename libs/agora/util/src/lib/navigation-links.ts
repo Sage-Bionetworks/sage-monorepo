@@ -1,5 +1,29 @@
-import { NavigationLink } from '@sagebionetworks/explorers/models';
 import { HELP_URL, ROUTE_PATHS } from '@sagebionetworks/agora/config';
+import { NavigationLink } from '@sagebionetworks/explorers/models';
+
+export const headerLinks: NavigationLink[] = [
+  {
+    label: 'Home',
+    routerLink: [ROUTE_PATHS.HOME],
+    activeOptions: { exact: true },
+  },
+  {
+    label: 'Gene Comparison',
+    routerLink: [ROUTE_PATHS.GENE_COMPARISON],
+  },
+  {
+    label: 'Nominated Targets',
+    routerLink: [ROUTE_PATHS.NOMINATED_TARGETS],
+  },
+  {
+    label: 'Teams',
+    routerLink: [ROUTE_PATHS.TEAMS],
+  },
+  {
+    label: 'News',
+    routerLink: [ROUTE_PATHS.NEWS],
+  },
+];
 
 export const footerLinks: NavigationLink[] = [
   {

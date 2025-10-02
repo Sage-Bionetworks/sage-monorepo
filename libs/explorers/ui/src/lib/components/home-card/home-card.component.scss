@@ -1,3 +1,9 @@
+:host {
+  --color-arrow: var(--color-secondary);
+  --description-font-size: 16px;
+  --description-line-height: 20px;
+}
+
 .home-card {
   display: flex;
   flex-direction: column;
@@ -18,8 +24,8 @@
   }
 
   p {
-    font-size: 16px;
-    line-height: 20px;
+    font-size: var(--description-font-size);
+    line-height: var(--description-line-height);
   }
 
   .icon-container {

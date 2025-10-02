@@ -1,13 +1,15 @@
-
 import { Component } from '@angular/core';
-import { GeneSearchComponent } from '@sagebionetworks/agora/genes';
-import { SvgImageComponent } from '@sagebionetworks/agora/ui';
 import { RouterLink } from '@angular/router';
+import { ROUTE_PATHS } from '@sagebionetworks/agora/config';
+import { SearchInputComponent } from '@sagebionetworks/agora/ui';
+import { HomeCardComponent, SvgImageComponent } from '@sagebionetworks/explorers/ui';
 
 @Component({
   selector: 'agora-home',
-  imports: [GeneSearchComponent, SvgImageComponent, RouterLink],
+  imports: [SvgImageComponent, RouterLink, HomeCardComponent, SearchInputComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent {}
+export class HomeComponent {
+  ROUTE_PATHS = ROUTE_PATHS;
+}

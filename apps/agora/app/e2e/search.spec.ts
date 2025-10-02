@@ -1,30 +1,27 @@
 import { expect, test } from '@playwright/test';
 
 test('can search for gene', async ({ page }) => {
-  const geneName = 'PTEN';
-  const geneHgnc = 'ENSG00000171862';
+  const geneHgnc = 'PTEN';
+  const geneEnsembl = 'ENSG00000171862';
 
   await page.goto('/');
 
   expect(await page.locator('h1').innerText()).toContain("Discover Alzheimer's Disease Genes");
 
-  // open hamburger menu
-  await page.locator('#header').getByRole('button').click();
-
-  const responsePromise = page.waitForResponse(`**/genes/search?id=${geneName}`);
+  const responsePromise = page.waitForResponse(`**/genes/search/enhanced?q=${geneHgnc}`);
   const input = page.getByPlaceholder('Search genes');
-  await input.pressSequentially(geneName);
+  await input.pressSequentially(geneHgnc);
   await responsePromise;
 
-  const searchList = page.getByRole('list').filter({ hasText: geneName });
+  const searchList = page.getByRole('list').filter({ hasText: geneHgnc });
   const searchListItems = searchList.getByRole('listitem');
   await expect(searchListItems).toHaveCount(3);
 
   const searchListItem = searchListItems.first();
-  await expect(searchListItem).toHaveText(geneName);
+  await expect(searchListItem).toHaveText(geneHgnc);
 
   await searchListItem.click();
 
-  await page.waitForURL(`/genes/${geneHgnc}`);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(geneName);
+  await page.waitForURL(`/genes/${geneEnsembl}`);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(geneHgnc);
 });

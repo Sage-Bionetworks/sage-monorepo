@@ -35,8 +35,6 @@ paths:
     $ref: paths/genes.yaml
   /genes/{ensg}:
     $ref: paths/genes/{ensg}.yaml
-  /genes/search:
-    $ref: paths/genes/search.yaml
   /genes/search/enhanced:
     $ref: paths/genes/search-enhanced.yaml
   /genes/comparison:

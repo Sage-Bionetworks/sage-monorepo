@@ -88,35 +88,6 @@ export async function getGene(ensg: string) {
   return result;
 }
 
-export async function searchGene(id: string) {
-  id = id.trim();
-  const isEnsembl = id.startsWith('ENSG');
-  let query: { [key: string]: any } | null = null;
-
-  if (isEnsembl) {
-    if (id.length == 15) {
-      query = { ensembl_gene_id: id };
-    } else {
-      query = { ensembl_gene_id: { $regex: id, $options: 'i' } };
-    }
-  } else {
-    query = {
-      $or: [
-        {
-          hgnc_symbol: { $regex: id, $options: 'i' },
-        },
-        {
-          alias: new RegExp('^' + id + '$', 'i'),
-        },
-      ],
-    };
-  }
-
-  const result = await GeneCollection.find(query).lean().exec();
-
-  return result;
-}
-
 export async function getNominatedGenes() {
   const cacheKey = 'nominated-genes';
   let result: Gene[] | undefined = cache.get(cacheKey);
@@ -182,21 +153,6 @@ export async function geneRoute(req: Request, res: Response, next: NextFunction)
     const result = await getGene(<string>req.params.id);
     setHeaders(res);
     res.json(result);
-  } catch (err) {
-    next(err);
-  }
-}
-
-export async function searchGeneRoute(req: Request, res: Response, next: NextFunction) {
-  if (!req.query || !req.query.id) {
-    res.status(404).send('Not found');
-    return;
-  }
-
-  try {
-    const result = await searchGene(<string>req.query.id);
-    setHeaders(res);
-    res.json({ items: result });
   } catch (err) {
     next(err);
   }
