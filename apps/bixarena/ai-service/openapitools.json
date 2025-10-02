@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "7.15.0",
+    "generators": {
+      "bixarena-api": {
+        "generatorName": "python-fastapi",
+        "inputSpec": "#{cwd}/../../../libs/bixarena/api-description/openapi/ai-service.openapi.yaml",
+        "output": "#{cwd}",
+        "additionalProperties": {}
+      }
+    }
+  }
+}

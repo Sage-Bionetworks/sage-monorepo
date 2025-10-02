@@ -1,0 +1,17 @@
+{
+  "name": "bixarena-ai-service",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/bixarena/ai-service/bixarena_ai_service",
+  "projectType": "application",
+  "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    }
+  },
+  "tags": ["type:service", "scope:backend", "language:python", "package-manager:uv"],
+  "implicitDependencies": ["bixarena-ai-service-description"]
+}
