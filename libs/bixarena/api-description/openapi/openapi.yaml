@@ -14,8 +14,10 @@ servers:
 tags:
   - name: Leaderboard
     description: Operations about leaderboards.
+    x-displayName: Leaderboard
   - name: Model
     description: Operations about models.
+    x-displayName: Model
 paths:
   /leaderboards:
     get:
@@ -680,3 +682,8 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/ModelSearchQuery'
+x-tagGroups:
+  - name: BixArena API
+    tags:
+      - Leaderboard
+      - Model
