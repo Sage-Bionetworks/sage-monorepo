@@ -35,7 +35,7 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "uv run python -m bixarena_ai_service --reload --host 0.0.0.0 --port ${APP_PORT}"
+          "uv run uvicorn bixarena_ai_service.main:app --reload --host 0.0.0.0 --port ${APP_PORT}"
         ],
         "cwd": "{projectRoot}",
         "parallel": false
