@@ -1,4 +1,4 @@
-import { Component, input, viewChild } from '@angular/core';
+import { Component, input, model } from '@angular/core';
 import {
   ComparisonToolFilter,
   ComparisonToolFilterConfig,
@@ -23,9 +23,9 @@ export class ComparisonToolHeaderComponent {
   filterConfigs = input.required<ComparisonToolFilterConfig[]>();
   onFiltersChange = input.required<(filters: ComparisonToolFilter[]) => void>();
 
-  filterPanel = viewChild<ComparisonToolFilterPanelComponent>('filterPanel');
+  isFilterPanelOpen = model(false);
 
   toggleFilterPanel() {
-    this.filterPanel()?.toggle();
+    this.isFilterPanelOpen.update((isOpen) => !isOpen);
   }
 }

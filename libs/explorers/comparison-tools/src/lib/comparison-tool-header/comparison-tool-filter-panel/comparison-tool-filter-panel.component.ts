@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, input, output } from '@angular/core';
+import { Component, computed, input, model, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   ComparisonToolFilter,
@@ -18,6 +18,7 @@ import { TooltipModule } from 'primeng/tooltip';
 export class ComparisonToolFilterPanelComponent {
   filterConfigs = input<ComparisonToolFilterConfig[]>([]);
   filtersChanged = output<ComparisonToolFilter[]>();
+  isOpen = model<boolean>(false);
 
   filters = computed(() => {
     return this.filterConfigs().map((config) => {
@@ -34,7 +35,6 @@ export class ComparisonToolFilterPanelComponent {
     });
   });
 
-  isOpen = false;
   activePane = -1;
 
   handleChange() {
@@ -50,16 +50,16 @@ export class ComparisonToolFilterPanelComponent {
   }
 
   open() {
-    this.isOpen = true;
+    this.isOpen.set(true);
   }
 
   close() {
     this.closePanes();
-    this.isOpen = false;
+    this.isOpen.set(false);
   }
 
   toggle() {
-    if (this.isOpen) {
+    if (this.isOpen()) {
       this.close();
     } else {
       this.open();
