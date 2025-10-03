@@ -1,3 +1,20 @@
+[tool.coverage.run]
+branch = true
+source = [ "bixarena_ai_service" ]
+
+[tool.coverage.report]
+exclude_lines = ['if TYPE_CHECKING:']
+show_missing = true
+
+[tool.pytest.ini_options]
+addopts = """
+ --cov
+ --cov-report html:'../../../coverage/apps/bixarena/ai-service/html'
+ --cov-report xml:'../../../coverage/apps/bixarena/ai-service/coverage.xml'
+ --html='../../../reports/apps/bixarena/ai-service/unittests/html/index.html'
+ --junitxml='../../../reports/apps/bixarena/ai-service/unittests/junit.xml'
+"""
+
 [project]
 name = "bixarena-ai-service"
 version = "1.0.0"
