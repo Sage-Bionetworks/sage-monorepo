@@ -32,7 +32,7 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "uv run python -m main --port ${APP_PORT}",
+        "command": "uv run python -m bixarena_app --port ${APP_PORT}",
         "cwd": "{projectRoot}"
       }
     },

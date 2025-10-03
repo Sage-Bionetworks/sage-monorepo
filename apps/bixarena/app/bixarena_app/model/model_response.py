@@ -6,6 +6,8 @@ import uuid
 
 import gradio as gr
 import requests
+from bixarena_api_client import ApiClient, Configuration, ModelApi, ModelSearchQuery
+from bixarena_api_client.exceptions import ApiException
 
 from bixarena_app.config.constants import SERVER_ERROR_MSG, ErrorCode
 from bixarena_app.fastchat.model.model_adapter import get_conversation_template
@@ -52,60 +54,42 @@ def set_global_vars_anony(enable_moderation_):
 
 
 def get_model_list():
+    """Fetch models from the BixArena API using the proper API client"""
     global api_endpoint_info
     models = []  # Initiate models list
-    model_api_base = "http://localhost:8000"
-    # Load models from the /models API endpoint (visible models only)
+
     try:
-        # Fetch all models for development logging
-        all_response = requests.get(
-            f"{model_api_base}/models?visible_only=false", timeout=5
-        )
-        visible_response = requests.get(f"{model_api_base}/models", timeout=5)
+        # Configure the API client
+        configuration = Configuration(host="http://bixarena-api:8112/v1")
 
-        if all_response.status_code == 200 and visible_response.status_code == 200:
-            all_models_data = all_response.json()
-            db_models = visible_response.json()
+        # Create API client and model API instance
+        with ApiClient(configuration) as api_client:
+            api_instance = ModelApi(api_client)
 
-            # Development logging: show all vs visible models
-            all_model_names = [m["name"] for m in all_models_data]
-            visible_model_names = [m["name"] for m in db_models]
-            hidden_model_names = [
-                name for name in all_model_names if name not in visible_model_names
-            ]
-
-            logger.info(
-                f"📊 Total models in database: {len(all_model_names)} | Visible: {len(visible_model_names)} ✅ | Hidden: {len(hidden_model_names)} 🔒"
+            # Fetch only visible models (100 for now)
+            visible_models_search_query = ModelSearchQuery(
+                page_size=100,
+                active=True,
             )
-            if hidden_model_names:
-                logger.info(f"🔒 Hidden models: {hidden_model_names}")
+            visible_models_response = api_instance.list_models(
+                model_search_query=visible_models_search_query
+            )
 
             api_endpoint_info = {}
 
-            for model in db_models:
-                model_name = model["name"]
+            for model in visible_models_response.models:
+                model_name = model.name
 
                 # Check required fields for API configuration
-                api_model_name = model.get("api_model_name")
-                api_type = model.get("api_type", "openai")
-                api_base = model.get("api_base", "https://openrouter.ai/api/v1")
+                api_model_name = model.api_model_name
+                api_base = model.api_base
+                api_type = "openai"
                 api_key = os.getenv("OPENAI_API_KEY", "")
 
-                if not api_model_name:
-                    logger.warning(
-                        f"Skipping model '{model_name}' - missing api_model_name"
-                    )
-                    continue
                 if not api_key:
                     logger.warning(
                         f"Skipping model '{model_name}' - missing OPENAI_API_KEY"
                     )
-                    continue
-                if not api_type:
-                    logger.warning(f"Skipping model '{model_name}' - missing api_type")
-                    continue
-                if not api_base:
-                    logger.warning(f"Skipping model '{model_name}' - missing api_base")
                     continue
 
                 # Add model's display name to the model list
@@ -120,13 +104,13 @@ def get_model_list():
                     "anony_only": False,
                     "multimodal": False,
                 }
-        else:
-            logger.warning(
-                f"❌ Models service not available (status: {visible_response.status_code})"
-            )
 
+    except ApiException as e:
+        logger.error(f"❌ API Exception when calling ModelApi->list_models: {e}")
+        models = []
+        api_endpoint_info = {}
     except Exception as e:
-        logger.error(f"Error loading models from database: {e}")
+        logger.error(f"❌ Unexpected error fetching models: {e}")
         models = []
         api_endpoint_info = {}
 
@@ -134,10 +118,7 @@ def get_model_list():
     models.sort()
 
     if models:
-        logger.info(
-            f"🔗 Configured API-based models: {len(api_endpoint_info)}/{len(models)} models"
-        )
-        logger.info(f"🚀 Available models: {models}")
+        logger.info(f"\n🚀 Available models: {models}")
     else:
         logger.warning("⚠️ No visible models found")
 
@@ -166,9 +147,7 @@ def bot_response(
         return
 
     conv, model_name = state.conv, state.model_name
-    model_api_dict = (
-        api_endpoint_info[model_name] if model_name in api_endpoint_info else None
-    )
+    model_api_dict = api_endpoint_info.get(model_name)
 
     # Only use API endpoints - no controller/worker logic
     if model_api_dict is None:
@@ -191,7 +170,7 @@ def bot_response(
     yield (state, state.to_gradio_chatbot()) + (disable_btn,) * 4
 
     try:
-        for i, data in enumerate(stream_iter):
+        for _i, data in enumerate(stream_iter):
             if data["error_code"] == 0:
                 output = data["text"].strip()
                 conv.update_last_message(output + "▌")
