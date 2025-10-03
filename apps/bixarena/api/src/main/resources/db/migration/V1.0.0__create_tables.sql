@@ -60,12 +60,6 @@ CREATE INDEX idx_leaderboard_snapshot_created_at ON leaderboard_snapshot(created
 CREATE INDEX idx_model_license ON model(license);
 CREATE INDEX idx_model_active ON model(active);
 
--- Arena model indexes
-CREATE INDEX idx_model_slug ON model(slug);
-CREATE INDEX idx_model_organization ON model(organization);
-CREATE INDEX idx_model_api_model_name ON model(api_model_name);
-CREATE INDEX idx_model_visible ON model(visible);
-
 -- Sessions (existing table - keeping it)
 CREATE TABLE conversation (
   id UUID PRIMARY KEY,
