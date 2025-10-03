@@ -63,7 +63,7 @@
   top: 0;
   left: 100%;
   bottom: 0;
-  z-index: 50;
+  z-index: 150;
 }
 
 .filter-panel-pane {
@@ -76,15 +76,12 @@
   background-color: #fff;
   opacity: 0;
   visibility: hidden;
-  transform: translateX(-100%);
-  transition: vars.$transition-duration;
   overflow: auto;
-  box-shadow: 0 0 10px 0 rgb(0 0 0 / 15%);
+  box-shadow: 0 8px 24px 0 rgb(53 58 63 / 15%);
 
   &.open {
     opacity: 1;
     visibility: visible;
-    transform: translateX(0%);
   }
 
   .filter-panel-pane-inner {
