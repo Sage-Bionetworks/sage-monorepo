@@ -12,8 +12,20 @@
  * Represents a single interaction between the user and an agent.
  */
 export interface OrgSagebionetworksRepoModelAgentInteraction {
+  /**
+   * The text of the user\'s request
+   */
   requestText?: string;
+  /**
+   * The time stamp when the user made the request
+   */
   requestTimestamp?: string;
+  /**
+   * The text of the agent\'s response
+   */
   responseText?: string;
+  /**
+   * The time stamp when the agent produced the response.
+   */
   responseTimestamp?: string;
 }

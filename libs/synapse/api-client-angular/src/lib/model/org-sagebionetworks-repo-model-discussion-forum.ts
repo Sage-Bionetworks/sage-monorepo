@@ -9,7 +9,16 @@
  */
 
 export interface OrgSagebionetworksRepoModelDiscussionForum {
+  /**
+   * The ID of this object
+   */
   id?: string;
+  /**
+   * The ID of the project to which this forum belongs. This ID may or may not start with prefix \'syn\'.
+   */
   projectId?: string;
+  /**
+   * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client\'s current representation of an entity is out-of-date.
+   */
   etag?: string;
 }

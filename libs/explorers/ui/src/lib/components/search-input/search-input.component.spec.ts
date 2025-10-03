@@ -5,6 +5,7 @@ import { SvgIconService } from '@sagebionetworks/explorers/services';
 import {
   mockCheckQueryForErrors,
   mockFormatResultSubtextForDisplay,
+  mockGetNoSearchResultsMessage,
   mockGetSearchResults,
   SvgIconServiceStub,
 } from '@sagebionetworks/explorers/testing';
@@ -35,8 +36,19 @@ async function waitForSpinner() {
   );
 }
 
-async function setup(formatResultSubtextForDisplay?: (result: SearchResult) => string | undefined) {
-  const optionalInputs = formatResultSubtextForDisplay ? { formatResultSubtextForDisplay } : {};
+async function setup(
+  formatResultSubtextForDisplay?: (result: SearchResult) => string | undefined,
+  getNoSearchResultsMessage?: (query: string) => string,
+) {
+  const optionalInputs: Record<string, any> = {};
+
+  if (formatResultSubtextForDisplay) {
+    optionalInputs['formatResultSubtextForDisplay'] = formatResultSubtextForDisplay;
+  }
+
+  if (getNoSearchResultsMessage) {
+    optionalInputs['getNoSearchResultsMessage'] = getNoSearchResultsMessage;
+  }
 
   const user = userEvent.setup();
   const component = await render(SearchInputComponent, {
@@ -332,6 +344,52 @@ describe('SearchInputComponent', () => {
 
     await waitForSpinner();
     expect(input).toHaveValue(specialCharQuery);
+  });
+
+  it('should display default no results message when no custom function provided', async () => {
+    const { user } = await setup();
+
+    const input = getInput();
+    await user.type(input, 'ensg00000000000');
+    expect(input).toHaveValue('ensg00000000000');
+
+    await waitForSpinner();
+
+    screen.getByText('No results match your search term.');
+  });
+
+  it('should display custom no results message when provided', async () => {
+    const { user } = await setup(mockFormatResultSubtextForDisplay, mockGetNoSearchResultsMessage);
+
+    const input = getInput();
+    await user.type(input, 'ensg00000000000');
+    expect(input).toHaveValue('ensg00000000000');
+
+    await waitForSpinner();
+
+    screen.getByText('Unable to find a matching gene. Try searching by gene symbol.');
+  });
+
+  it('should construct expected not valid search message for different minimumSearchLength values', async () => {
+    const { component } = await setup();
+    const { fixture } = component;
+    const instance = fixture.componentInstance;
+
+    const testCases = [
+      { minLength: 1, expectedMessage: 'Please enter at least one character.' },
+      { minLength: 2, expectedMessage: 'Please enter at least two characters.' },
+      { minLength: 3, expectedMessage: 'Please enter at least three characters.' },
+      { minLength: 4, expectedMessage: 'Please enter at least four characters.' },
+      { minLength: 5, expectedMessage: 'Please enter at least five characters.' },
+      { minLength: 6, expectedMessage: 'Please enter at least six characters.' },
+      { minLength: 7, expectedMessage: 'Please enter at least seven characters.' },
+      { minLength: 8, expectedMessage: 'Please enter at least eight characters.' },
+      { minLength: 9, expectedMessage: 'Please enter at least nine characters.' },
+    ];
+
+    for (const { minLength, expectedMessage } of testCases) {
+      expect(instance.getNotValidSearchMessage(minLength)).toBe(expectedMessage);
+    }
   });
 
   it('should only display results text when subtext format function is not provided', async () => {

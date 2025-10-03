@@ -12,6 +12,7 @@ declare -a hostnames=(
   "127.0.0.1 amp-als-opensearch"
   "127.0.0.1 amp-als-postgres"
   "127.0.0.1 amp-als-user-service"
+  "127.0.0.1 bixarena-ai-service"
   "127.0.0.1 bixarena-apex"
   "127.0.0.1 bixarena-api-gateway"
   "127.0.0.1 bixarena-api"

@@ -14,12 +14,21 @@ import { OrgSagebionetworksEvaluationModelMemberSubmissionEligibility } from './
  * Describes the eligibility of a Challenge Team to submit to an Evalution queue, reflecting the queue\'s submission quotas and current submissions.
  */
 export interface OrgSagebionetworksEvaluationModelTeamSubmissionEligibility {
+  /**
+   * The ID of the Team of interest
+   */
   teamId?: string;
+  /**
+   * The ID of the Evaluation of interest
+   */
   evaluationId?: string;
   teamEligibility?: OrgSagebionetworksEvaluationModelSubmissionEligibility;
   /**
    * Describes the submission eligibility of the contributors to the Submission.
    */
   membersEligibility?: Array<OrgSagebionetworksEvaluationModelMemberSubmissionEligibility>;
+  /**
+   * A hash of this object, used for optimistic concurrency.
+   */
   eligibilityStateHash?: number;
 }

@@ -12,6 +12,12 @@
  * Describes a change from one column to another.
  */
 export interface OrgSagebionetworksRepoModelTableColumnChange {
+  /**
+   * The ID of the old ColumnModel to be replaced with the new.  Set to null to indicate a new column should be added without replacing an old column.
+   */
   oldColumnId?: string;
+  /**
+   * The ID of the new ColumnModel to replace the old. Set to null to indicate the old column should be removed without being replaced.
+   */
   newColumnId?: string;
 }

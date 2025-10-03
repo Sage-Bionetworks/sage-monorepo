@@ -13,6 +13,9 @@ import { OrgSagebionetworksRepoModelPrincipalEmailQuarantineStatus } from './org
  * Information about the notification email of the user, including its quarantined status if the email address is currently in quarantine
  */
 export interface OrgSagebionetworksRepoModelPrincipalNotificationEmail {
+  /**
+   * The user\'s email
+   */
   email?: string;
   quarantineStatus?: OrgSagebionetworksRepoModelPrincipalEmailQuarantineStatus;
 }

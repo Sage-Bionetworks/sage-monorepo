@@ -12,7 +12,16 @@
  * JSON schema for a faceted key-value pair.
  */
 export interface OrgSagebionetworksRepoModelSearchQueryKeyValue {
+  /**
+   * The facet name
+   */
   key?: string;
+  /**
+   * The facet value
+   */
   value?: string;
+  /**
+   * True when this key value should be negated
+   */
   not?: boolean;
 }

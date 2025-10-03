@@ -13,12 +13,27 @@ import { OrgSagebionetworksRepoModelDaoWikiPageKey } from './org-sagebionetworks
  * A question whose response is an (unconstrained) text string
  */
 export interface OrgSagebionetworksRepoModelQuizTextFieldQuestion {
+  /**
+   * an index unique in the Quiz, used to refer to this question
+   */
   questionIndex?: number;
+  /**
+   * An optional, user-readable prompt
+   */
   prompt?: string;
   reference?: OrgSagebionetworksRepoModelDaoWikiPageKey;
+  /**
+   * Link to the document that contains information for background reading related to the question.
+   */
   docLink?: string;
+  /**
+   * A short text that provides a snippet of help to answer the question.
+   */
   helpText?: string;
   concreteType: OrgSagebionetworksRepoModelQuizTextFieldQuestion.ConcreteTypeEnum;
+  /**
+   * The correct answer for this question
+   */
   answer?: string;
 }
 export namespace OrgSagebionetworksRepoModelQuizTextFieldQuestion {

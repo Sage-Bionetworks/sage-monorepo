@@ -1,0 +1,18 @@
+get:
+  x-sage-internal: true
+  tags:
+    - Health Check
+  summary: Get health check information
+  description: Get information about the health of the service
+  operationId: getHealthCheck
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/HealthCheck.yaml
+    '404':
+      $ref: ../components/responses/NotFound.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

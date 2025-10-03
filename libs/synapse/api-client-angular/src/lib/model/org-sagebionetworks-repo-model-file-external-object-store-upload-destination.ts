@@ -13,14 +13,38 @@ import { OrgSagebionetworksRepoModelLimitsProjectStorageLocationUsage } from './
  * The upload destination contains information necessary to start an upload to an S3 bucket not managed by Synapse. This destination is mapped from an <a href=\"${org.sagebionetworks.repo.model.project.ExternalObjectStorageLocationSetting}\">ExternalObjectStorageLocationSetting</a>.
  */
 export interface OrgSagebionetworksRepoModelFileExternalObjectStoreUploadDestination {
+  /**
+   * Indicates which implementation this object represents.
+   */
   concreteType: OrgSagebionetworksRepoModelFileExternalObjectStoreUploadDestination.ConcreteTypeEnum;
+  /**
+   * the unique id for the storage location, that points to the <a href=\"${org.sagebionetworks.repo.model.project.StorageLocationSetting}\">StorageLocationSetting</a>
+   */
   storageLocationId?: number;
-  uploadType?: string;
+  /**
+   * The enumeration of possible upload types.
+   */
+  uploadType?: OrgSagebionetworksRepoModelFileExternalObjectStoreUploadDestination.UploadTypeEnum;
+  /**
+   * If set, the client should show this banner every time an upload is initiated
+   */
   banner?: string;
+  /**
+   * The ID of the project where this file will be uploaded.
+   */
   destinationProjectId?: string;
   projectStorageLocationUsage?: OrgSagebionetworksRepoModelLimitsProjectStorageLocationUsage;
+  /**
+   * endpoint URL of the S3 service (for example: \'https://s3.amazonaws.com\')
+   */
   endpointUrl?: string;
+  /**
+   * the bucket to use
+   */
   bucket?: string;
+  /**
+   * A UUID prefix used to identify the file to be uploaded. This field will have a new, unique value every time a new UploadDestination is retrieved.
+   */
   keyPrefixUUID?: string;
 }
 export namespace OrgSagebionetworksRepoModelFileExternalObjectStoreUploadDestination {
@@ -29,5 +53,20 @@ export namespace OrgSagebionetworksRepoModelFileExternalObjectStoreUploadDestina
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelFileExternalObjectStoreUploadDestination:
       'org.sagebionetworks.repo.model.file.ExternalObjectStoreUploadDestination' as ConcreteTypeEnum,
+  };
+  export type UploadTypeEnum =
+    | 'S3'
+    | 'GOOGLECLOUDSTORAGE'
+    | 'SFTP'
+    | 'HTTPS'
+    | 'PROXYLOCAL'
+    | 'NONE';
+  export const UploadTypeEnum = {
+    S3: 'S3' as UploadTypeEnum,
+    Googlecloudstorage: 'GOOGLECLOUDSTORAGE' as UploadTypeEnum,
+    Sftp: 'SFTP' as UploadTypeEnum,
+    Https: 'HTTPS' as UploadTypeEnum,
+    Proxylocal: 'PROXYLOCAL' as UploadTypeEnum,
+    None: 'NONE' as UploadTypeEnum,
   };
 }

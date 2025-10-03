@@ -1,0 +1,19 @@
+get:
+  tags:
+    - Model
+  summary: List models
+  description: Get a paginated list of models with optional filters (e.g., active)
+  operationId: listModels
+  parameters:
+    - $ref: ../components/parameters/query/modelSearchQuery.yaml
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ModelPage.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

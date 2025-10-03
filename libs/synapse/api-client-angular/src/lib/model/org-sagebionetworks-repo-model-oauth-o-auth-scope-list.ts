@@ -9,5 +9,28 @@
  */
 
 export interface OrgSagebionetworksRepoModelOauthOAuthScopeList {
-  list?: Array<string>;
+  list?: Array<OrgSagebionetworksRepoModelOauthOAuthScopeList.ListEnum>;
+}
+export namespace OrgSagebionetworksRepoModelOauthOAuthScopeList {
+  export type ListEnum =
+    | 'openid'
+    | 'email'
+    | 'profile'
+    | 'ga4gh_passport_v1'
+    | 'view'
+    | 'download'
+    | 'modify'
+    | 'authorize'
+    | 'offline_access';
+  export const ListEnum = {
+    Openid: 'openid' as ListEnum,
+    Email: 'email' as ListEnum,
+    Profile: 'profile' as ListEnum,
+    Ga4ghPassportV1: 'ga4gh_passport_v1' as ListEnum,
+    View: 'view' as ListEnum,
+    Download: 'download' as ListEnum,
+    Modify: 'modify' as ListEnum,
+    Authorize: 'authorize' as ListEnum,
+    OfflineAccess: 'offline_access' as ListEnum,
+  };
 }

@@ -12,7 +12,16 @@
  * Connection information from a presigned URL.
  */
 export interface OrgSagebionetworksRepoModelGridInternalConnection {
+  /**
+   * The unique sessionId that identifies the grid session.
+   */
   gridSessionId?: number;
+  /**
+   * The replica ID of the client connection.
+   */
   replicaId?: number;
+  /**
+   * The ID of the user that establilshed this connection.
+   */
   userId?: number;
 }

@@ -9,5 +9,8 @@
  */
 
 export interface OrgSagebionetworksRepoModelDiscussionThreadCount {
+  /**
+   * The total number of threads.
+   */
   count?: number;
 }

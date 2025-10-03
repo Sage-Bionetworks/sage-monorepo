@@ -12,6 +12,12 @@
  * JSON schema for a range of change message numbers to recheck
  */
 export interface OrgSagebionetworksRepoModelMessageUnsentMessageRange {
+  /**
+   * The lower bound (inclusive) of the range of application change numbers to check.
+   */
   lowerBound?: number;
+  /**
+   * The upper bound (inclusive) of the range of application change numbers to check.
+   */
   upperBound?: number;
 }

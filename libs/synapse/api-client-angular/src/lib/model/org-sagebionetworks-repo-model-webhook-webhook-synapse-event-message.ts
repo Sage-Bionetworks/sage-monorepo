@@ -13,11 +13,26 @@
  */
 export interface OrgSagebionetworksRepoModelWebhookWebhookSynapseEventMessage {
   concreteType: OrgSagebionetworksRepoModelWebhookWebhookSynapseEventMessage.ConcreteTypeEnum;
+  /**
+   * Unique message identifier.
+   */
   messageId: string;
+  /**
+   * The timestamp when the event occurred, in ISO 8601 format.
+   */
   eventTimestamp: string;
+  /**
+   * The ID of the object affected by a change.
+   */
   objectId?: string;
-  objectType?: string;
-  eventType?: string;
+  /**
+   * The supported synapse object types for a Webhook
+   */
+  objectType?: OrgSagebionetworksRepoModelWebhookWebhookSynapseEventMessage.ObjectTypeEnum;
+  /**
+   * The type of the WebhookEvent.
+   */
+  eventType?: OrgSagebionetworksRepoModelWebhookWebhookSynapseEventMessage.EventTypeEnum;
 }
 export namespace OrgSagebionetworksRepoModelWebhookWebhookSynapseEventMessage {
   export type ConcreteTypeEnum =
@@ -25,5 +40,15 @@ export namespace OrgSagebionetworksRepoModelWebhookWebhookSynapseEventMessage {
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelWebhookWebhookSynapseEventMessage:
       'org.sagebionetworks.repo.model.webhook.WebhookSynapseEventMessage' as ConcreteTypeEnum,
+  };
+  export type ObjectTypeEnum = 'ENTITY';
+  export const ObjectTypeEnum = {
+    Entity: 'ENTITY' as ObjectTypeEnum,
+  };
+  export type EventTypeEnum = 'CREATE' | 'UPDATE' | 'DELETE';
+  export const EventTypeEnum = {
+    Create: 'CREATE' as EventTypeEnum,
+    Update: 'UPDATE' as EventTypeEnum,
+    Delete: 'DELETE' as EventTypeEnum,
   };
 }

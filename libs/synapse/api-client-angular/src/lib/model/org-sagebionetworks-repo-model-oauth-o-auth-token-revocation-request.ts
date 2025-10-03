@@ -12,6 +12,19 @@
  * Request body used by OAuth 2.0 clients to revoke an OAuth 2.0 token. Defined by <a href=\"https://tools.ietf.org/html/rfc7009#section-2.1\">RFC 7009 Section 2.1</a>
  */
 export interface OrgSagebionetworksRepoModelOauthOAuthTokenRevocationRequest {
+  /**
+   * The token to revoke
+   */
   token?: string;
-  token_type_hint?: string;
+  /**
+   * The type of the token to revoke.
+   */
+  token_type_hint?: OrgSagebionetworksRepoModelOauthOAuthTokenRevocationRequest.TokenTypeHintEnum;
+}
+export namespace OrgSagebionetworksRepoModelOauthOAuthTokenRevocationRequest {
+  export type TokenTypeHintEnum = 'access_token' | 'refresh_token';
+  export const TokenTypeHintEnum = {
+    AccessToken: 'access_token' as TokenTypeHintEnum,
+    RefreshToken: 'refresh_token' as TokenTypeHintEnum,
+  };
 }

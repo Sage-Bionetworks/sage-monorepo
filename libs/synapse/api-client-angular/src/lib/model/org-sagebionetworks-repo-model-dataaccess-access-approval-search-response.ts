@@ -17,5 +17,8 @@ export interface OrgSagebionetworksRepoModelDataaccessAccessApprovalSearchRespon
    * The matching Access Approval information corresponding to the search parameters
    */
   results?: Array<OrgSagebionetworksRepoModelDataaccessAccessApprovalSearchResult>;
+  /**
+   * A token used to get the next page of a particular search query.
+   */
   nextPageToken?: string;
 }

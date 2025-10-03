@@ -1,0 +1,11 @@
+type: string
+description: The field to sort models by.
+enum:
+  - name
+  - created_at
+  - updated_at
+  - slug
+  - license
+  - active
+default: name
+example: created_at

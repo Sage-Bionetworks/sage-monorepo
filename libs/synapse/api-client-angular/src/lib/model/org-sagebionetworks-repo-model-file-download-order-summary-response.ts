@@ -17,5 +17,8 @@ export interface OrgSagebionetworksRepoModelFileDownloadOrderSummaryResponse {
    * A single page of DownloadOrderSummary objects.
    */
   page?: Array<OrgSagebionetworksRepoModelFileDownloadOrderSummary>;
+  /**
+   * Forward this token in the next request to recieve the next page.
+   */
   nextPageToken?: string;
 }

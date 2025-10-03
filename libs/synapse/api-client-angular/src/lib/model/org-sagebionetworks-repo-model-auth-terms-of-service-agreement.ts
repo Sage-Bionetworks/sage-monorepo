@@ -12,6 +12,12 @@
  * Information about the user agreement for a specific version of the TOS
  */
 export interface OrgSagebionetworksRepoModelAuthTermsOfServiceAgreement {
+  /**
+   * The date/time when the user signed the version of the TOS.
+   */
   agreedOn?: string;
+  /**
+   * The version that the user agreed on.
+   */
   version?: string;
 }

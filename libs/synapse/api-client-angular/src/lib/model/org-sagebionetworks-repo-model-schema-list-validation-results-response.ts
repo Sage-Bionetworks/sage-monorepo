@@ -14,5 +14,8 @@ import { OrgSagebionetworksRepoModelSchemaValidationResults } from './org-sagebi
  */
 export interface OrgSagebionetworksRepoModelSchemaListValidationResultsResponse {
   page?: Array<OrgSagebionetworksRepoModelSchemaValidationResults>;
+  /**
+   * Forward this token to get the next page of results.
+   */
   nextPageToken?: string;
 }

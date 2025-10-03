@@ -12,6 +12,20 @@
  * A request to retrieve the information about restriction level on a restrict-able object.
  */
 export interface OrgSagebionetworksRepoModelRestrictionInformationRequest {
-  restrictableObjectType?: string;
+  /**
+   * JSON enum for the types of objects which can be restricted by an AccessRequirement.
+   */
+  restrictableObjectType?: OrgSagebionetworksRepoModelRestrictionInformationRequest.RestrictableObjectTypeEnum;
+  /**
+   * The ID of the requested object.
+   */
   objectId?: string;
+}
+export namespace OrgSagebionetworksRepoModelRestrictionInformationRequest {
+  export type RestrictableObjectTypeEnum = 'ENTITY' | 'EVALUATION' | 'TEAM';
+  export const RestrictableObjectTypeEnum = {
+    Entity: 'ENTITY' as RestrictableObjectTypeEnum,
+    Evaluation: 'EVALUATION' as RestrictableObjectTypeEnum,
+    Team: 'TEAM' as RestrictableObjectTypeEnum,
+  };
 }

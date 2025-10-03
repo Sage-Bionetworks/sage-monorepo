@@ -17,5 +17,8 @@ export interface OrgSagebionetworksRepoModelFormListResponse {
    * A single page of results matching the request.
    */
   page?: Array<OrgSagebionetworksRepoModelFormFormData>;
+  /**
+   * The results are automatically paginated.  If another page of results exists then a nextPageToken will be provided.  Forward the provided nextPageTokens in a subsequent list request to get the next page.
+   */
   nextPageToken?: string;
 }

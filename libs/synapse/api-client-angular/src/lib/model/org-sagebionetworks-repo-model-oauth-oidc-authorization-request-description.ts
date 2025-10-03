@@ -12,7 +12,13 @@
  * Human readable description / details about an authorization request
  */
 export interface OrgSagebionetworksRepoModelOauthOIDCAuthorizationRequestDescription {
+  /**
+   * ID of the client requesting authorization
+   */
   clientId?: string;
+  /**
+   * URL to which the user-agent is to be redirected after consent is given.
+   */
   redirect_uri?: string;
   /**
    * Scopes and claims requested by client

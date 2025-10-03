@@ -26,6 +26,7 @@ import { OrgSagebionetworksRepoModelAgentAgentChatRequest } from './org-sagebion
 import { OrgSagebionetworksRepoModelFileAddFileToDownloadListRequest } from './org-sagebionetworks-repo-model-file-add-file-to-download-list-request';
 import { OrgSagebionetworksRepoModelTableQuery } from './org-sagebionetworks-repo-model-table-query';
 import { OrgSagebionetworksRepoModelDownloadDownloadListManifestRequest } from './org-sagebionetworks-repo-model-download-download-list-manifest-request';
+import { OrgSagebionetworksRepoModelGridGridRecordSetExportRequest } from './org-sagebionetworks-repo-model-grid-grid-record-set-export-request';
 import { OrgSagebionetworksRepoModelMigrationAsyncMigrationRequest } from './org-sagebionetworks-repo-model-migration-async-migration-request';
 import { OrgSagebionetworksRepoModelSchemaCreateSchemaRequest } from './org-sagebionetworks-repo-model-schema-create-schema-request';
 import { OrgSagebionetworksRepoModelTableFacetColumnRequest } from './org-sagebionetworks-repo-model-table-facet-column-request';
@@ -70,6 +71,7 @@ export type OrgSagebionetworksRepoModelAsynchAsynchronousRequestBody =
   | OrgSagebionetworksRepoModelFileFileHandleRestoreRequest
   | OrgSagebionetworksRepoModelGridCreateGridRequest
   | OrgSagebionetworksRepoModelGridDownloadFromGridRequest
+  | OrgSagebionetworksRepoModelGridGridRecordSetExportRequest
   | OrgSagebionetworksRepoModelMigrationAsyncMigrationRequest
   | OrgSagebionetworksRepoModelReportDownloadStorageReportRequest
   | OrgSagebionetworksRepoModelSchemaCreateSchemaRequest

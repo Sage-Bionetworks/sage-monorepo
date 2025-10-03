@@ -9,6 +9,8 @@
       "outputs": ["{projectRoot}/openapi"],
       "options": {
         "commands": [
+          "redocly bundle ai-public --output openapi/ai-public.openapi.yaml",
+          "redocly bundle ai-service --output openapi/ai-service.openapi.yaml",
           "redocly bundle api-public --output openapi/api-public.openapi.yaml",
           "redocly bundle api-service --output openapi/api-service.openapi.yaml"
         ],
@@ -19,7 +21,10 @@
       "executor": "nx:run-commands",
       "outputs": ["{projectRoot}/openapi"],
       "options": {
-        "commands": ["redocly bundle bixarena-public --output openapi/openapi.yaml"],
+        "commands": [
+          "redocly join openapi/*-public.openapi.yaml --output openapi/openapi.yaml",
+          "redocly bundle bixarena-public --output openapi/openapi.yaml"
+        ],
         "cwd": "{projectRoot}",
         "parallel": false
       },

@@ -12,10 +12,25 @@
  * Change user account\'s password by verifying the current password
  */
 export interface OrgSagebionetworksRepoModelAuthChangePasswordWithCurrentPassword {
+  /**
+   * The new password
+   */
   newPassword?: string;
+  /**
+   * Indicates which implementation of PasswordChangeInterface this object represents. Valid Values: org.sagebionetworks.repo.model.auth.ChangePasswordWithToken org.sagebionetworks.repo.model.auth.ChangePasswordWithCurrentPassword
+   */
   concreteType: OrgSagebionetworksRepoModelAuthChangePasswordWithCurrentPassword.ConcreteTypeEnum;
+  /**
+   * The user\'s username
+   */
   username?: string;
+  /**
+   * The user\'s current password
+   */
   currentPassword?: string;
+  /**
+   * Optional, but highly recommended. The most recent authentication receipt given to the last success login from this machine, using this client. Having this allows you to bypass throttling on consecutive authentication attempts with a wrong password.
+   */
   authenticationReceipt?: string;
 }
 export namespace OrgSagebionetworksRepoModelAuthChangePasswordWithCurrentPassword {

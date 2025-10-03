@@ -61,22 +61,22 @@ export const routes: Route[] = [
     pathMatch: 'full',
   },
   {
-    path: 'genes/:id/similar',
+    path: `${ROUTE_PATHS.DETAILS}/:id/similar`,
     loadChildren: () =>
       import('@sagebionetworks/agora/genes').then((routes) => routes.similarRoute),
   },
   {
-    path: 'genes/:id/:tab/:subtab',
+    path: `${ROUTE_PATHS.DETAILS}/:id/:tab/:subtab`,
     loadChildren: () =>
       import('@sagebionetworks/agora/genes').then((routes) => routes.detailsRoute),
   },
   {
-    path: 'genes/:id/:tab',
+    path: `${ROUTE_PATHS.DETAILS}/:id/:tab`,
     loadChildren: () =>
       import('@sagebionetworks/agora/genes').then((routes) => routes.detailsRoute),
   },
   {
-    path: 'genes/:id',
+    path: `${ROUTE_PATHS.DETAILS}/:id`,
     loadChildren: () =>
       import('@sagebionetworks/agora/genes').then((routes) => routes.detailsRoute),
     data: {
@@ -85,7 +85,7 @@ export const routes: Route[] = [
     },
   },
   {
-    path: 'genes',
+    path: ROUTE_PATHS.DETAILS,
     redirectTo: '',
     pathMatch: 'full',
   },

@@ -13,6 +13,9 @@
  */
 export interface OrgSagebionetworksRepoModelMigrationBackfillLastSeenOnResponse {
   concreteType: OrgSagebionetworksRepoModelMigrationBackfillLastSeenOnResponse.ConcreteTypeEnum;
+  /**
+   * The count of users processed in the request.
+   */
   count?: number;
 }
 export namespace OrgSagebionetworksRepoModelMigrationBackfillLastSeenOnResponse {

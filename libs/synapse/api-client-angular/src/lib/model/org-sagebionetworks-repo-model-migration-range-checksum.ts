@@ -12,9 +12,24 @@
  * The calculated checksum for a single batch of rows.
  */
 export interface OrgSagebionetworksRepoModelMigrationRangeChecksum {
+  /**
+   * The bin number for this batch.
+   */
   binNumber?: number;
+  /**
+   * The total number of rows included in this range checksum.
+   */
   count?: number;
+  /**
+   * The checksum result for this range.
+   */
   checksum?: string;
+  /**
+   * The ID of the minimum row in this checksum range.
+   */
   minimumId?: number;
+  /**
+   * The ID of the maximum row in this checksum range.
+   */
   maximumId?: number;
 }

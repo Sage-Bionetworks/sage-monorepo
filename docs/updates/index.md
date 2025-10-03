@@ -6,6 +6,7 @@ Welcome to the Sage Monorepo updates! This section contains release notes, featu
 
 Browse our latest updates to stay informed about new features, improvements, and platform changes:
 
+- **[September 2025](september-2025.md)** - Synapse automation, Model-AD UX, OpenChallenges gateway
 - **[June 2022](june-2022.md)** - Backend Microservices & UI Modernization
 - **[May 2022](may-2022.md)** - Microservices Architecture & Authentication Infrastructure
 - **[April 2022](april-2022.md)** - Development Environment Standardization & UI Enhancements

@@ -12,19 +12,64 @@
  * Specifies what fields to include in an EntityBundle
  */
 export interface OrgSagebionetworksRepoModelEntitybundleV2EntityBundleRequest {
+  /**
+   * Include the Entity in the response.
+   */
   includeEntity?: boolean;
+  /**
+   * Include Annotations associated with the Entity in the response.
+   */
   includeAnnotations?: boolean;
+  /**
+   * Include permissions of the current user on the entity.
+   */
   includePermissions?: boolean;
+  /**
+   * Include EntityHeaders for all Entities in this Entity\'s path
+   */
   includeEntityPath?: boolean;
+  /**
+   * Include boolean indicating whether this Entity has children
+   */
   includeHasChildren?: boolean;
+  /**
+   * Include the AccessControlList for this Entity
+   */
   includeAccessControlList?: boolean;
+  /**
+   * Include all FileHandles associated with this Entity.
+   */
   includeFileHandles?: boolean;
+  /**
+   * If the Entity is a TableEntity, include Table specific metadata.
+   */
   includeTableBundle?: boolean;
+  /**
+   * Include the id of the root Wiki associated with this Entity
+   */
   includeRootWikiId?: boolean;
+  /**
+   * Include the ACL of the Entity from which this Entity inherits its AccessControlList
+   */
   includeBenefactorACL?: boolean;
+  /**
+   * Include DOIs associated with this Entity
+   */
   includeDOIAssociation?: boolean;
+  /**
+   * If this Entity is a FileEntity, include its filename
+   */
   includeFileName?: boolean;
+  /**
+   * Include the number of discussion threads that mention this Entity
+   */
   includeThreadCount?: boolean;
+  /**
+   * Include the RestrictionLevel of this Entity
+   */
   includeRestrictionInformation?: boolean;
+  /**
+   * Include the Activity of this Entity
+   */
   includeActivity?: boolean;
 }

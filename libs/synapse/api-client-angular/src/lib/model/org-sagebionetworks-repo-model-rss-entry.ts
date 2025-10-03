@@ -12,9 +12,24 @@
  * This contains items from an rss feed, and meta data about the rss feed itself
  */
 export interface OrgSagebionetworksRepoModelRSSEntry {
+  /**
+   * The title of this entry
+   */
   title?: string;
+  /**
+   * The date this entry was published
+   */
   date?: string;
+  /**
+   * The author of this entry
+   */
   author?: string;
+  /**
+   * The content of this entry.
+   */
   content?: string;
+  /**
+   * The link to this entry.
+   */
   link?: string;
 }

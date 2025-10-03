@@ -12,9 +12,24 @@
  * Information about a replica.
  */
 export interface OrgSagebionetworksRepoModelGridGridReplica {
+  /**
+   * The ID of the grid seesion.
+   */
   gridSessionId?: string;
+  /**
+   * The unique identifier for the new replica.
+   */
   replicaId?: number;
+  /**
+   * The user that created this replica.
+   */
   createdBy?: string;
+  /**
+   * When true, this replica belongs to the createdBy user\'s agent.
+   */
   isAgentReplica?: boolean;
+  /**
+   * The date-time when the user created this replica.
+   */
   createdOn?: string;
 }

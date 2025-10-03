@@ -12,5 +12,8 @@
  * Response body generated when creating a personal access token.
  */
 export interface OrgSagebionetworksRepoModelAuthAccessTokenGenerationResponse {
+  /**
+   * The generated token. The token cannot be retrieved again after the time of creation.
+   */
   token?: string;
 }

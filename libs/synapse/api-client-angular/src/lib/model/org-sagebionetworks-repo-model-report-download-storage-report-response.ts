@@ -13,6 +13,9 @@
  */
 export interface OrgSagebionetworksRepoModelReportDownloadStorageReportResponse {
   concreteType: OrgSagebionetworksRepoModelReportDownloadStorageReportResponse.ConcreteTypeEnum;
+  /**
+   * The resulting file handle ID can be used to download the CSV file created by this job.
+   */
   resultsFileHandleId?: string;
 }
 export namespace OrgSagebionetworksRepoModelReportDownloadStorageReportResponse {

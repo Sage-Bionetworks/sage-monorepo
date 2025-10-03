@@ -23,6 +23,9 @@ export interface OrgSagebionetworksRepoModelTableUploadToTablePreviewResult {
    * A sampling of the first few rows from the CSV as they would be applied with the provided parameters.
    */
   sampleRows?: Array<OrgSagebionetworksRepoModelTableRow>;
+  /**
+   * The total number of rows scanned to generate the preview.
+   */
   rowsScanned?: number;
 }
 export namespace OrgSagebionetworksRepoModelTableUploadToTablePreviewResult {

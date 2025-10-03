@@ -13,11 +13,17 @@ import { OrgSagebionetworksRepoModelDownloadActionRequiredCount } from './org-sa
  * Represents a single page of actions that the user will need to take in order to gain access to one or more files on their download list.
  */
 export interface OrgSagebionetworksRepoModelDownloadActionRequiredResponse {
+  /**
+   * Will indicate the full package name of the response type.
+   */
   concreteType: OrgSagebionetworksRepoModelDownloadActionRequiredResponse.ConcreteTypeEnum;
   /**
    * The page of ActionRequiredCount
    */
   page?: Array<OrgSagebionetworksRepoModelDownloadActionRequiredCount>;
+  /**
+   * When provided, the nextPageToken indicates that there are more results.  Forward this token to the next request to get the next page.
+   */
   nextPageToken?: string;
 }
 export namespace OrgSagebionetworksRepoModelDownloadActionRequiredResponse {

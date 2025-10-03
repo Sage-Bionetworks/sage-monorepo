@@ -13,11 +13,29 @@
  */
 export interface OrgSagebionetworksRepoModelAuthPasswordResetSignedToken {
   concreteType: OrgSagebionetworksRepoModelAuthPasswordResetSignedToken.ConcreteTypeEnum;
+  /**
+   * The hash message authentication code for the message.
+   */
   hmac?: string;
+  /**
+   * The version of the key used to generate the HMAC.
+   */
   version?: number;
+  /**
+   * The date-time when this token expires.
+   */
   expiresOn?: string;
+  /**
+   * The date-time the token was generated.
+   */
   createdOn?: string;
+  /**
+   * The ID of the user account.
+   */
   userId?: string;
+  /**
+   * Used to check if this token is valid
+   */
   validity?: string;
 }
 export namespace OrgSagebionetworksRepoModelAuthPasswordResetSignedToken {

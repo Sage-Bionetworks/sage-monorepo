@@ -12,5 +12,8 @@
  * Form reviewer rejection data
  */
 export interface OrgSagebionetworksRepoModelFormFormRejection {
+  /**
+   * The reason for the rejection. Limit 500 characters or less.
+   */
   reason?: string;
 }

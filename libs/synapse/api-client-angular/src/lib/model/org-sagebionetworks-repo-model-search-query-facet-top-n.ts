@@ -12,6 +12,12 @@
  * JSON schema for a faceted key-value pair.
  */
 export interface OrgSagebionetworksRepoModelSearchQueryFacetTopN {
+  /**
+   * The facet name
+   */
   key?: string;
+  /**
+   * The maximum number of facet constraints to be included.
+   */
   value?: number;
 }

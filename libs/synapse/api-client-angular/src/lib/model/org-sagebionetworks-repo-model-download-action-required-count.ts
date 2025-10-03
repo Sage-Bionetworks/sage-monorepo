@@ -14,5 +14,8 @@ import { OrgSagebionetworksRepoModelDownloadAction } from './org-sagebionetworks
  */
 export interface OrgSagebionetworksRepoModelDownloadActionRequiredCount {
   action?: OrgSagebionetworksRepoModelDownloadAction;
+  /**
+   * The number of files that require this action.
+   */
   count?: number;
 }

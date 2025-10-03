@@ -9,5 +9,8 @@
  */
 
 export interface OrgSagebionetworksRepoModelSubscriptionSubscriberCount {
+  /**
+   * The total number of subscribers for a given topic.
+   */
   count?: number;
 }

@@ -12,6 +12,20 @@
  * Request for a single user change access to a resource.
  */
 export interface OrgSagebionetworksRepoModelDataaccessAccessorChange {
+  /**
+   * The ID of the user.
+   */
   userId?: string;
-  type?: string;
+  /**
+   * The type of access change for this user. Users can gain access, renew access, or have access revoked.
+   */
+  type?: OrgSagebionetworksRepoModelDataaccessAccessorChange.TypeEnum;
+}
+export namespace OrgSagebionetworksRepoModelDataaccessAccessorChange {
+  export type TypeEnum = 'GAIN_ACCESS' | 'RENEW_ACCESS' | 'REVOKE_ACCESS';
+  export const TypeEnum = {
+    GainAccess: 'GAIN_ACCESS' as TypeEnum,
+    RenewAccess: 'RENEW_ACCESS' as TypeEnum,
+    RevokeAccess: 'REVOKE_ACCESS' as TypeEnum,
+  };
 }

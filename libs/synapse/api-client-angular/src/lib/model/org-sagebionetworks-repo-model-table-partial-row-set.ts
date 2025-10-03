@@ -14,6 +14,9 @@ import { OrgSagebionetworksRepoModelTablePartialRow } from './org-sagebionetwork
  */
 export interface OrgSagebionetworksRepoModelTablePartialRowSet {
   concreteType: OrgSagebionetworksRepoModelTablePartialRowSet.ConcreteTypeEnum;
+  /**
+   * The ID of the TableEntity than owns these rows
+   */
   tableId?: string;
   /**
    * The partial rows of this set.

@@ -14,6 +14,8 @@ servers:
 tags:
   - description: Operations about leaderboards.
     name: Leaderboard
+  - description: Operations about models.
+    name: Model
 paths:
   /leaderboards:
     get:
@@ -76,8 +78,6 @@ paths:
       summary: Get leaderboard entries
       tags:
         - Leaderboard
-      x-audience:
-        - public
       x-accepts:
         - application/json
         - application/problem+json
@@ -131,8 +131,6 @@ paths:
       summary: Get model performance history
       tags:
         - Leaderboard
-      x-audience:
-        - public
       x-accepts:
         - application/json
         - application/problem+json
@@ -176,13 +174,43 @@ paths:
       summary: Get leaderboard snapshots
       tags:
         - Leaderboard
-      x-audience:
-        - public
       x-accepts:
         - application/json
         - application/problem+json
       x-tags:
         - tag: Leaderboard
+  /models:
+    get:
+      description: 'Get a paginated list of models with optional filters (e.g., active)'
+      operationId: listModels
+      parameters:
+        - description: The search query used to find and filter models.
+          explode: true
+          in: query
+          name: modelSearchQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/ModelSearchQuery'
+          style: deepObject
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelPage'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: List models
+      tags:
+        - Model
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: Model
 components:
   parameters:
     leaderboardId:
@@ -232,6 +260,15 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/LeaderboardSnapshotQuery'
+      style: deepObject
+    modelSearchQuery:
+      description: The search query used to find and filter models.
+      explode: true
+      in: query
+      name: modelSearchQuery
+      required: false
+      schema:
+        $ref: '#/components/schemas/ModelSearchQuery'
       style: deepObject
   responses:
     BadRequest:
@@ -693,6 +730,200 @@ components:
             description: Weekly evaluation run
             id: snapshot_2025-08-16_14-30
         number: 99
+        size: 99
+        totalPages: 99
+        hasPrevious: true
+        hasNext: true
+        totalElements: 99
+      type: object
+    ModelSort:
+      default: name
+      description: The field to sort models by.
+      enum:
+        - name
+        - created_at
+        - updated_at
+        - slug
+        - license
+        - active
+      example: created_at
+      type: string
+    License:
+      description: The license of the model
+      enum:
+        - open-source
+        - commercial
+      example: open-source
+      type: string
+    ModelSearchQuery:
+      description: A model search query with pagination and filtering options.
+      properties:
+        pageNumber:
+          default: 0
+          description: The page number.
+          example: 0
+          format: int32
+          minimum: 0
+          type: integer
+        pageSize:
+          default: 25
+          description: The number of items in a single page.
+          example: 25
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        sort:
+          $ref: '#/components/schemas/ModelSort'
+        direction:
+          $ref: '#/components/schemas/SortDirection'
+        search:
+          description: Search by model name or slug (case-insensitive partial match).
+          example: vision
+          nullable: true
+          type: string
+        active:
+          description: Filter by active status (true returns only active models; false
+            only inactive; omit for all).
+          example: true
+          nullable: true
+          type: boolean
+        license:
+          $ref: '#/components/schemas/License'
+        organization:
+          description: Filter by organization name (case-insensitive partial match).
+          example: OpenAI
+          nullable: true
+          type: string
+      type: object
+    Model:
+      description: A model entity.
+      example:
+        externalLink: https://openrouter.ai/models/openai/gpt-4
+        active: true
+        description: A large multimodal model that can process text and images.
+        apiBase: https://openrouter.ai/api/v1
+        apiModelName: anthropic/claude-sonnet-4.5
+        license: open-source
+        createdAt: 2025-09-15T12:00:00Z
+        organization: OpenAI
+        name: My Awesome Model
+        alias: awesome-model-v2
+        id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+        slug: my-awesome-model
+        updatedAt: 2025-09-20T08:30:00Z
+      properties:
+        id:
+          description: Unique identifier (UUID) of the model.
+          example: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+          type: string
+        slug:
+          description: URL-friendly unique slug for the model.
+          example: my-awesome-model
+          type: string
+        alias:
+          description: Alternative name or alias for the model.
+          example: awesome-model-v2
+          nullable: true
+          type: string
+        name:
+          description: Human-readable name of the model.
+          example: My Awesome Model
+          type: string
+        organization:
+          description: Organization that developed or maintains the model.
+          example: OpenAI
+          nullable: true
+          type: string
+        license:
+          $ref: '#/components/schemas/License'
+        active:
+          description: Whether the model is active/visible.
+          example: true
+          type: boolean
+        externalLink:
+          description: External URL with more information about the model.
+          example: https://openrouter.ai/models/openai/gpt-4
+          type: string
+        description:
+          description: Detailed description of the model.
+          example: A large multimodal model that can process text and images.
+          maxLength: 300
+          minLength: 1
+          nullable: true
+          type: string
+        apiModelName:
+          description: The model name used for API calls.
+          example: anthropic/claude-sonnet-4.5
+          type: string
+        apiBase:
+          description: Base URL for the model API.
+          example: https://openrouter.ai/api/v1
+          type: string
+        createdAt:
+          description: When the model was created.
+          example: 2025-09-15T12:00:00Z
+          format: date-time
+          type: string
+        updatedAt:
+          description: When the model was last updated.
+          example: 2025-09-20T08:30:00Z
+          format: date-time
+          type: string
+      required:
+        - active
+        - apiBase
+        - apiModelName
+        - createdAt
+        - externalLink
+        - id
+        - license
+        - name
+        - slug
+        - updatedAt
+      type: object
+    ModelPage:
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - properties:
+            models:
+              description: A list of models.
+              items:
+                $ref: '#/components/schemas/Model'
+              type: array
+          required:
+            - models
+          type: object
+      description: A page of models.
+      example:
+        number: 99
+        models:
+          - externalLink: https://openrouter.ai/models/openai/gpt-4
+            active: true
+            description: A large multimodal model that can process text and images.
+            apiBase: https://openrouter.ai/api/v1
+            apiModelName: anthropic/claude-sonnet-4.5
+            license: open-source
+            createdAt: 2025-09-15T12:00:00Z
+            organization: OpenAI
+            name: My Awesome Model
+            alias: awesome-model-v2
+            id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+            slug: my-awesome-model
+            updatedAt: 2025-09-20T08:30:00Z
+          - externalLink: https://openrouter.ai/models/openai/gpt-4
+            active: true
+            description: A large multimodal model that can process text and images.
+            apiBase: https://openrouter.ai/api/v1
+            apiModelName: anthropic/claude-sonnet-4.5
+            license: open-source
+            createdAt: 2025-09-15T12:00:00Z
+            organization: OpenAI
+            name: My Awesome Model
+            alias: awesome-model-v2
+            id: 5f6c2d84-5c1a-4b2e-b3d7-0c2a1f9e8a6f
+            slug: my-awesome-model
+            updatedAt: 2025-09-20T08:30:00Z
         size: 99
         totalPages: 99
         hasPrevious: true

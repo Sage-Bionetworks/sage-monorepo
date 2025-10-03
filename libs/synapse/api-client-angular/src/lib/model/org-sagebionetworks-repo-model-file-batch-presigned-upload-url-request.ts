@@ -12,10 +12,16 @@
  * Request a batch of multi-part upload or copy pre-signed URLs.
  */
 export interface OrgSagebionetworksRepoModelFileBatchPresignedUploadUrlRequest {
+  /**
+   * The unique identifier of a multi-part request.
+   */
   uploadId?: string;
   /**
    * The part numbers to get pre-signed URLs for.
    */
   partNumbers?: Array<number>;
+  /**
+   * Optional parameter.  When included each pre-signed URL will be signed with the given Content-Type.  This is necessary for clients that must include the header \'Content-Type\' with all HTTP GET calls.
+   */
   contentType?: string;
 }

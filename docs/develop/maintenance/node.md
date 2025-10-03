@@ -63,7 +63,7 @@ All shared dependencies are defined in the root `package.json`, including:
 | **Testing**            | `jest`, `@playwright/test`, `@testing-library/*` | Regular updates, ensure test compatibility         |
 | **Build Tools**        | `typescript`, `vite`, `webpack`                  | Test thoroughly, may require configuration changes |
 | **Linting/Formatting** | `eslint`, `prettier`, `stylelint`                | Regular updates, check for breaking rule changes   |
-| **Development**        | `husky`, `lint-staged`, `nodemon`                | Low-risk updates, test development workflows       |
+| **Development**        | `husky`, `lint-staged`                           | Low-risk updates, test development workflows       |
 
 ### Version Alignment Examples
 

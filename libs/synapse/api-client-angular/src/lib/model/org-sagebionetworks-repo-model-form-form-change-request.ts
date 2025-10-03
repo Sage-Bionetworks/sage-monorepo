@@ -12,6 +12,12 @@
  * Request changes to a FormData object.
  */
 export interface OrgSagebionetworksRepoModelFormFormChangeRequest {
+  /**
+   * The name of the form. Required for FormData create.  Optional for FormData update. Between 3 and 256 characters
+   */
   name?: string;
+  /**
+   * The fileHandleId for the data of the form.
+   */
   fileHandleId?: string;
 }

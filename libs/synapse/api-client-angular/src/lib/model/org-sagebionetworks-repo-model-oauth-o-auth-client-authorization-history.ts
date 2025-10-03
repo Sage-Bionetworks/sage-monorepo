@@ -14,6 +14,12 @@ import { OrgSagebionetworksRepoModelOauthOAuthClient } from './org-sagebionetwor
  */
 export interface OrgSagebionetworksRepoModelOauthOAuthClientAuthorizationHistory {
   client?: OrgSagebionetworksRepoModelOauthOAuthClient;
+  /**
+   * The date that authorization was granted to the OAuth client, i.e. the oldest timestamp for an active refresh token for the given client and user.
+   */
   authorizedOn?: string;
+  /**
+   * The most recent time the OAuth client has utilized its authorization by requesting an access token.
+   */
   lastUsed?: string;
 }

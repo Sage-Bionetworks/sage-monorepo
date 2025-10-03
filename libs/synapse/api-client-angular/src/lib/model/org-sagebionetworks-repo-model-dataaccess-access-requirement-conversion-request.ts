@@ -12,7 +12,16 @@
  * A request to convert an ACTAccessRequirement to a ManagedACTAccessRequirement.
  */
 export interface OrgSagebionetworksRepoModelDataaccessAccessRequirementConversionRequest {
+  /**
+   * The ID of an ACTAccessRequirement.
+   */
   accessRequirementId?: string;
+  /**
+   * The etag of the AccessRequirement. This field is used for concurrency check.
+   */
   etag?: string;
+  /**
+   * The current version of the AccessRequirement. This field is used for concurrency check.
+   */
   currentVersion?: number;
 }

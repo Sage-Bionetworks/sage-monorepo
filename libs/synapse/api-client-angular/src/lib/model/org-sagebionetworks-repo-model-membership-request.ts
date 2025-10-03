@@ -12,11 +12,32 @@
  * JSON schema for MembershipRequest POJO
  */
 export interface OrgSagebionetworksRepoModelMembershipRequest {
+  /**
+   * The id of the MembershipRequest.
+   */
   id?: string;
+  /**
+   * The id of the Team to which the request is sent.
+   */
   teamId?: string;
+  /**
+   * The id of the user for whom membership is requested.
+   */
   userId?: string;
+  /**
+   * The request message (optional).
+   */
   message?: string;
+  /**
+   * The date this MembershipRequest expires (optional).
+   */
   expiresOn?: string;
+  /**
+   * The date this MembershipRequest was created.
+   */
   createdOn?: string;
+  /**
+   * The ID of the user that created this MembershipRequest.
+   */
   createdBy?: string;
 }

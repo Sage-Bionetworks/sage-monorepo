@@ -97,6 +97,7 @@ All URIs are relative to _http://localhost/v1_
 | _LeaderboardApi_ | [**get_leaderboard_snapshots**](docs/LeaderboardApi.md#get_leaderboard_snapshots) | **GET** /leaderboards/{leaderboardId}/snapshots         | Get leaderboard snapshots       |
 | _LeaderboardApi_ | [**get_model_history**](docs/LeaderboardApi.md#get_model_history)                 | **GET** /leaderboards/{leaderboardId}/history/{modelId} | Get model performance history   |
 | _LeaderboardApi_ | [**list_leaderboards**](docs/LeaderboardApi.md#list_leaderboards)                 | **GET** /leaderboards                                   | List all available leaderboards |
+| _ModelApi_       | [**list_models**](docs/ModelApi.md#list_models)                                   | **GET** /models                                         | List models                     |
 
 ## Documentation For Models
 
@@ -114,6 +115,10 @@ All URIs are relative to _http://localhost/v1_
 - [LeaderboardSnapshotQuery](docs/LeaderboardSnapshotQuery.md)
 - [LeaderboardSnapshotSort](docs/LeaderboardSnapshotSort.md)
 - [LeaderboardSort](docs/LeaderboardSort.md)
+- [Model](docs/Model.md)
+- [ModelPage](docs/ModelPage.md)
+- [ModelSearchQuery](docs/ModelSearchQuery.md)
+- [ModelSort](docs/ModelSort.md)
 - [PageMetadata](docs/PageMetadata.md)
 - [SortDirection](docs/SortDirection.md)
 

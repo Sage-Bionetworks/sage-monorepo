@@ -12,23 +12,68 @@
  * The Thread model object represents a single Thread.
  */
 export interface OrgSagebionetworksRepoModelDiscussionDiscussionThreadBundle {
+  /**
+   * The ID of the Thread
+   */
   id?: string;
+  /**
+   * The ID of the forum this Thread belongs to
+   */
   forumId?: string;
+  /**
+   * The ID of the project this Thread belongs to
+   */
   projectId?: string;
+  /**
+   * The title of the Thread
+   */
   title?: string;
+  /**
+   * The timestamp when this Thread was created
+   */
   createdOn?: string;
+  /**
+   * The id of the user that created this Thread
+   */
   createdBy?: string;
+  /**
+   * The timestamp when this Thread was last modified
+   */
   modifiedOn?: string;
+  /**
+   * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client\'s current representation of an entity is out-of-date.
+   */
   etag?: string;
+  /**
+   * The S3 key where the actual message stored
+   */
   messageKey?: string;
+  /**
+   * The number of unique users who has viewed this thread
+   */
   numberOfViews?: number;
+  /**
+   * The number of replies to this thread
+   */
   numberOfReplies?: number;
+  /**
+   * The timestamp when the last activity occurs on this Thread
+   */
   lastActivity?: string;
   /**
    * The list of userId whose most active on this Thread
    */
   activeAuthors?: Array<string>;
+  /**
+   * Has the author edited this Thread?
+   */
   isEdited?: boolean;
+  /**
+   * Has this Thread been deleted?
+   */
   isDeleted?: boolean;
+  /**
+   * Has this Thread been pinned?
+   */
   isPinned?: boolean;
 }

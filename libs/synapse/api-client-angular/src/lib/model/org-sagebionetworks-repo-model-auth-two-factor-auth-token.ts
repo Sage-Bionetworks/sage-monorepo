@@ -13,17 +13,40 @@
  */
 export interface OrgSagebionetworksRepoModelAuthTwoFactorAuthToken {
   concreteType: OrgSagebionetworksRepoModelAuthTwoFactorAuthToken.ConcreteTypeEnum;
+  /**
+   * The hash message authentication code for the message.
+   */
   hmac?: string;
+  /**
+   * The version of the key used to generate the HMAC.
+   */
   version?: number;
+  /**
+   * The date-time when this token expires.
+   */
   expiresOn?: string;
+  /**
+   * The date-time the token was generated.
+   */
   createdOn?: string;
+  /**
+   * The id of the user.
+   */
   userId?: number;
-  context?: string;
+  /**
+   * The context within which a twoFaToken for two factor authentication is generated.
+   */
+  context?: OrgSagebionetworksRepoModelAuthTwoFactorAuthToken.ContextEnum;
 }
 export namespace OrgSagebionetworksRepoModelAuthTwoFactorAuthToken {
   export type ConcreteTypeEnum = 'org.sagebionetworks.repo.model.auth.TwoFactorAuthToken';
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelAuthTwoFactorAuthToken:
       'org.sagebionetworks.repo.model.auth.TwoFactorAuthToken' as ConcreteTypeEnum,
+  };
+  export type ContextEnum = 'AUTHENTICATION' | 'PASSWORD_CHANGE';
+  export const ContextEnum = {
+    Authentication: 'AUTHENTICATION' as ContextEnum,
+    PasswordChange: 'PASSWORD_CHANGE' as ContextEnum,
   };
 }

@@ -12,13 +12,37 @@
  * Request to start or continue a multi-part file upload.
  */
 export interface OrgSagebionetworksRepoModelFileMultipartUploadRequest {
+  /**
+   * Indicates which type of multi-part request to initiate. Currently supports <a href=\"${org.sagebionetworks.repo.model.file.MultipartUploadRequest}\">MultipartUploadRequest</a> and <a href=\"${org.sagebionetworks.repo.model.file.MultipartUploadCopyRequest}\">MultipartUploadCopyRequest</a>
+   */
   concreteType: OrgSagebionetworksRepoModelFileMultipartUploadRequest.ConcreteTypeEnum;
+  /**
+   * In order to upload a file, the client must split the process into \'parts\' and upload each part separately. This indicates the clients intended part size in bytes. Part size must be at least 5,242,880 bytes (5MB) with a max of 5,368,709,120 bytes (5GB). Also the maximum number of parts for a single file is 10K. The recommended part size for a single file upload should be: MAX(5242880, (fileSizeBytes/10000)).
+   */
   partSizeBytes?: number;
+  /**
+   * The name of the file to be uploaded.
+   */
   fileName?: string;
+  /**
+   * The identifier of the storage location where this file should be stored.  A value of null indicates the default synapse storage.
+   */
   storageLocationId?: number;
+  /**
+   * Optional parameter.  When set to \'false\' a preview will not be generated for the resulting file.
+   */
   generatePreview?: boolean;
+  /**
+   * The MD5 of the entire file to be uploaded represented as a HEX string.
+   */
   contentMD5Hex?: string;
+  /**
+   * The content type of the file.
+   */
   contentType?: string;
+  /**
+   * The size of the entire file in bytes.
+   */
   fileSizeBytes?: number;
 }
 export namespace OrgSagebionetworksRepoModelFileMultipartUploadRequest {

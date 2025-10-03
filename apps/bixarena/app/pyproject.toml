@@ -1,38 +1,102 @@
-[build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
+[tool.coverage.run]
+branch = true
+source = [ "bixarena_app" ]
+
+[tool.coverage.report]
+exclude_lines = ['if TYPE_CHECKING:']
+show_missing = true
+
+[tool.pytest.ini_options]
+addopts = """
+ --cov
+ --cov-fail-under=50
+ --cov-report html:'../../../coverage/apps/bixarena/app/html'
+ --cov-report xml:'../../../coverage/apps/bixarena/app/coverage.xml'
+ --html='../../../reports/apps/bixarena/app/unittests/html/index.html'
+ --junitxml='../../../reports/apps/bixarena/app/unittests/junit.xml'
+"""
 
 [project]
 name = "bixarena-app"
-version = "0.2.36"
+version = "1.0.0"
 description = "Bixarena application for serving and evaluating large language models"
-readme = "README.md"
 requires-python = "==3.13.3"
+readme = "README.md"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: Apache Software License",
 ]
 dependencies = [
-    "aiohttp", "fastapi", "httpx", "markdown2[all]", "nh3", "numpy",
-    "prompt_toolkit>=3.0.0", "pydantic", "requests", "rich>=10.0.0",
-    "shortuuid", "tiktoken", "uvicorn",
-    "accelerate>=0.21", "peft", "sentencepiece", "torch", "transformers>=4.31.0", "protobuf", "openai>=1.0",
-    "gradio>=4.10", "plotly",
-    "bixarena-api-client"
+    "accelerate>=0.21",
+    "aiohttp",
+    "bixarena-api-client",
+    "fastapi",
+    "gradio>=4.10",
+    "httpx",
+    "markdown2[all]",
+    "nh3",
+    "numpy",
+    "openai>=1.0",
+    "peft",
+    "plotly",
+    "prompt_toolkit>=3.0.0",
+    "protobuf",
+    "pydantic",
+    "requests",
+    "rich>=10.0.0",
+    "sentencepiece",
+    "shortuuid",
+    "tiktoken",
+    "torch",
+    "transformers>=4.31.0",
+    "uvicorn"
 ]
 
-[project.optional-dependencies]
-dev = ["black==23.3.0", "pylint==2.8.2"]
+# Transitional console script now points to wrapper package
+[project.scripts]
+bixarena-app = "bixarena_app.__main__:main"
 
-[tool.setuptools.packages.find]
-where = ["src"]
-exclude = ["assets*", "benchmark*", "docs", "dist*", "playground*", "scripts*", "tests*"]
+[tool.hatch.build.targets.wheel]
+packages = ["bixarena_app"]
 
-[tool.setuptools]
-py-modules = ["main"]
+[tool.hatch.metadata]
+allow-direct-references = true
 
-[tool.wheel]
-exclude = ["assets*", "benchmark*", "docs", "dist*", "playground*", "scripts*", "tests*"]
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+exclude = [
+  ".ruff_cache",
+  ".svn",
+  ".tox",
+  ".venv",
+  "dist",
+]
+
+line-length = 88
+indent-width = 4
+
+[tool.ruff.lint]
+select = [
+  # pycodestyle
+  "E",
+  # Pyflakes
+  "F",
+  # pyupgrade
+  "UP",
+  # flake8-bugbear
+  "B",
+  # flake8-simplify
+  "SIM",
+  # isort
+  "I",
+]
+ignore = []
+
+fixable = ["ALL"]
+unfixable = []
 
 [tool.uv.sources]
 bixarena-api-client = { workspace = true }

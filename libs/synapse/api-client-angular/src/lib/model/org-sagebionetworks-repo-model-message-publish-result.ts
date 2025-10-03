@@ -12,6 +12,12 @@
  * JSON schema for a change message
  */
 export interface OrgSagebionetworksRepoModelMessagePublishResult {
+  /**
+   * The application change number created as a result of this change.
+   */
   changeNumber?: number;
+  /**
+   * True when published successfully.
+   */
   success?: boolean;
 }

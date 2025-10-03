@@ -12,9 +12,24 @@
  * A request to retrieve a page of accessor groups. Accessors will be group by submitter and access requirement.
  */
 export interface OrgSagebionetworksRepoModelDataaccessAccessorGroupRequest {
+  /**
+   * The condition to filter by AccessRequirement. Use NULL to ignore this filter.
+   */
   accessRequirementId?: string;
+  /**
+   * The condition to filter by submitter. Use NULL to ignore this filter.
+   */
   submitterId?: string;
+  /**
+   * The condition to filter by accessor. Use NULL to ignore this filter.
+   */
   accessorId?: string;
+  /**
+   * The condition to filter by expiration. Use NULL to ignore this filter.
+   */
   expireBefore?: string;
+  /**
+   * The token to get the next page result. Use NULL to get the first page.
+   */
   nextPageToken?: string;
 }

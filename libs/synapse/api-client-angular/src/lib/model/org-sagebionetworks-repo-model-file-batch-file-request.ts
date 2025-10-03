@@ -17,7 +17,16 @@ export interface OrgSagebionetworksRepoModelFileBatchFileRequest {
    * Defines the files to get.
    */
   requestedFiles?: Array<OrgSagebionetworksRepoModelFileFileHandleAssociation>;
+  /**
+   * Set to true to request a pre-signed URL for each file.
+   */
   includePreSignedURLs?: boolean;
+  /**
+   * Set to true to request a FileHandle for each file.
+   */
   includeFileHandles?: boolean;
+  /**
+   * Set to true to request a preview\'s pre-signed URL for each file.
+   */
   includePreviewPreSignedURLs?: boolean;
 }

@@ -13,17 +13,64 @@ import { OrgSagebionetworksRepoModelOauthOIDCClaimsRequest } from './org-sagebio
  * OAuth 2.0 refresh token metadata. Note that the token itself may not be retrieved after it is issued to a client.
  */
 export interface OrgSagebionetworksRepoModelOauthOAuthRefreshTokenInformation {
+  /**
+   * The unique ID for this refresh token.
+   */
   tokenId?: string;
+  /**
+   * The unique ID for the OAuth client that may utilize this token.
+   */
   clientId?: string;
+  /**
+   * The unique ID for the user whose resources can be accessed with this token.
+   */
   principalId?: string;
+  /**
+   * A human-readable identifier for the token.
+   */
   name?: string;
   /**
    * An array containing each scope that this refresh token grants access to.
    */
-  scopes?: Array<string>;
+  scopes?: Array<OrgSagebionetworksRepoModelOauthOAuthRefreshTokenInformation.ScopesEnum>;
   claims?: OrgSagebionetworksRepoModelOauthOIDCClaimsRequest;
+  /**
+   * The date this refresh token was initially issued.
+   */
   authorizedOn?: string;
+  /**
+   * The date this refresh token was last used by the client to issue a new access token.
+   */
   lastUsed?: string;
+  /**
+   * The date this refresh token metadata was last modified.
+   */
   modifiedOn?: string;
+  /**
+   * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time a client is updated it is used to detect when a client\'s current representation of an entity is out-of-date.
+   */
   etag?: string;
+}
+export namespace OrgSagebionetworksRepoModelOauthOAuthRefreshTokenInformation {
+  export type ScopesEnum =
+    | 'openid'
+    | 'email'
+    | 'profile'
+    | 'ga4gh_passport_v1'
+    | 'view'
+    | 'download'
+    | 'modify'
+    | 'authorize'
+    | 'offline_access';
+  export const ScopesEnum = {
+    Openid: 'openid' as ScopesEnum,
+    Email: 'email' as ScopesEnum,
+    Profile: 'profile' as ScopesEnum,
+    Ga4ghPassportV1: 'ga4gh_passport_v1' as ScopesEnum,
+    View: 'view' as ScopesEnum,
+    Download: 'download' as ScopesEnum,
+    Modify: 'modify' as ScopesEnum,
+    Authorize: 'authorize' as ScopesEnum,
+    OfflineAccess: 'offline_access' as ScopesEnum,
+  };
 }

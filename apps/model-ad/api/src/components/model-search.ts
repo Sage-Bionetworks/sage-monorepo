@@ -1,8 +1,8 @@
 import { SearchResult } from '@sagebionetworks/model-ad/api-client';
+import { escapeRegexChars } from '@sagebionetworks/shared/util';
 import { NextFunction, Request, Response } from 'express';
 import { cache, setHeaders } from '../helpers';
 import { ModelCollection } from '../models';
-import { escapeRegexChars } from '../utils/regex';
 
 export async function searchModels(query: string) {
   // Validate input is a primitive string and not an object

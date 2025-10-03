@@ -12,6 +12,23 @@
  * Update the access level of an existing session.
  */
 export interface OrgSagebionetworksRepoModelAgentUpdateAgentSessionRequest {
+  /**
+   * The sessionId issued by Synapse when the session was started.
+   */
   sessionId?: string;
-  agentAccessLevel?: string;
+  /**
+   * Defines the level of data access that the agent will be given during a session.
+   */
+  agentAccessLevel?: OrgSagebionetworksRepoModelAgentUpdateAgentSessionRequest.AgentAccessLevelEnum;
+}
+export namespace OrgSagebionetworksRepoModelAgentUpdateAgentSessionRequest {
+  export type AgentAccessLevelEnum =
+    | 'PUBLICLY_ACCESSIBLE'
+    | 'READ_YOUR_PRIVATE_DATA'
+    | 'WRITE_YOUR_PRIVATE_DATA';
+  export const AgentAccessLevelEnum = {
+    PubliclyAccessible: 'PUBLICLY_ACCESSIBLE' as AgentAccessLevelEnum,
+    ReadYourPrivateData: 'READ_YOUR_PRIVATE_DATA' as AgentAccessLevelEnum,
+    WriteYourPrivateData: 'WRITE_YOUR_PRIVATE_DATA' as AgentAccessLevelEnum,
+  };
 }

@@ -12,16 +12,59 @@
  * JSON schema for AccessApproval POJO
  */
 export interface OrgSagebionetworksRepoModelAccessApproval {
+  /**
+   * The unique immutable ID
+   */
   id?: number;
+  /**
+   * Synapse employs an Optimistic Concurrency Control (OCC) scheme to handle concurrent updates. Since the E-Tag changes every time an entity is updated it is used to detect when a client\'s current representation of an object is out-of-date.
+   */
   etag?: string;
+  /**
+   * The date this object was created.
+   */
   createdOn?: string;
+  /**
+   * The date this object was last modified.
+   */
   modifiedOn?: string;
+  /**
+   * The user that created this object.
+   */
   createdBy?: string;
+  /**
+   * The user that last modified this object.
+   */
   modifiedBy?: string;
+  /**
+   * The ID of the Access Requirement that this object approves.
+   */
   requirementId?: number;
+  /**
+   * The version of the Access Requirement that this object approves.
+   */
   requirementVersion?: number;
+  /**
+   * The user who performed the necessary action(s) to gain this approval.
+   */
   submitterId?: string;
+  /**
+   * The ID of the principal (user or group) approved for access
+   */
   accessorId?: string;
+  /**
+   * The date this object will be expired.
+   */
   expiredOn?: string;
-  state?: string;
+  /**
+   * JSON enum for the state of AccessApproval
+   */
+  state?: OrgSagebionetworksRepoModelAccessApproval.StateEnum;
+}
+export namespace OrgSagebionetworksRepoModelAccessApproval {
+  export type StateEnum = 'APPROVED' | 'REVOKED';
+  export const StateEnum = {
+    Approved: 'APPROVED' as StateEnum,
+    Revoked: 'REVOKED' as StateEnum,
+  };
 }

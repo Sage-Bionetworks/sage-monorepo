@@ -12,7 +12,33 @@
  * Result of a single file handle restore operation.
  */
 export interface OrgSagebionetworksRepoModelFileFileHandleRestoreResult {
+  /**
+   * The id of the file handle in the original restore request.
+   */
   fileHandleId?: string;
-  status?: string;
+  /**
+   * The status of the restore operation on the file handle.
+   */
+  status?: OrgSagebionetworksRepoModelFileFileHandleRestoreResult.StatusEnum;
+  /**
+   * A descriptive message for the status
+   */
   statusMessage?: string;
+}
+export namespace OrgSagebionetworksRepoModelFileFileHandleRestoreResult {
+  export type StatusEnum =
+    | 'NOT_FOUND'
+    | 'UNAUTHORIZED'
+    | 'FAILED'
+    | 'NO_ACTION'
+    | 'RESTORED'
+    | 'RESTORING';
+  export const StatusEnum = {
+    NotFound: 'NOT_FOUND' as StatusEnum,
+    Unauthorized: 'UNAUTHORIZED' as StatusEnum,
+    Failed: 'FAILED' as StatusEnum,
+    NoAction: 'NO_ACTION' as StatusEnum,
+    Restored: 'RESTORED' as StatusEnum,
+    Restoring: 'RESTORING' as StatusEnum,
+  };
 }

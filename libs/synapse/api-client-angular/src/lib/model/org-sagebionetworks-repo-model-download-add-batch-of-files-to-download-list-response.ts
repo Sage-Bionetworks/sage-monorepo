@@ -12,5 +12,8 @@
  * Response to add a single batch of files to a user\'s download list.
  */
 export interface OrgSagebionetworksRepoModelDownloadAddBatchOfFilesToDownloadListResponse {
+  /**
+   * The number of files that were added.
+   */
   numberOfFilesAdded?: number;
 }

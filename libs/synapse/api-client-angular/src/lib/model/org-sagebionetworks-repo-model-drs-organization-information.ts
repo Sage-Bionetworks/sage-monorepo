@@ -12,6 +12,12 @@
  * The information of the organization, which provides DRS API implementation.
  */
 export interface OrgSagebionetworksRepoModelDrsOrganizationInformation {
+  /**
+   * The name of the organization.
+   */
   name?: string;
+  /**
+   * The url of organization.
+   */
   url?: string;
 }

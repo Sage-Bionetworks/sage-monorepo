@@ -3,8 +3,10 @@ import { provideRouter } from '@angular/router';
 import {
   mockCheckQueryForErrors,
   mockFormatResultSubtextForDisplay,
+  mockGetNoSearchResultsMessage,
   mockGetSearchResults,
   mockNavigateToResult,
+  mockSanitizeQuery,
 } from '@sagebionetworks/explorers/testing';
 import type { Meta, StoryObj } from '@storybook/angular';
 import { applicationConfig } from '@storybook/angular';
@@ -21,7 +23,9 @@ const meta: Meta<SearchInputComponent> = {
   argTypes: {
     navigateToResult: { control: false },
     getSearchResults: { control: false },
+    getNoSearchResultsMessage: { control: false },
     checkQueryForErrors: { control: false },
+    sanitizeQuery: { control: false },
     formatResultSubtextForDisplay: { control: false },
   },
 };
@@ -46,6 +50,9 @@ export const HomeSearchInput: Story = {
     formatResultSubtextForDisplay: mockFormatResultSubtextForDisplay,
     navigateToResult: mockNavigateToResult,
     getSearchResults: mockGetSearchResults,
+    getNoSearchResultsMessage: mockGetNoSearchResultsMessage,
     checkQueryForErrors: mockCheckQueryForErrors,
+    sanitizeQuery: mockSanitizeQuery,
+    minimumSearchLength: 2,
   },
 };

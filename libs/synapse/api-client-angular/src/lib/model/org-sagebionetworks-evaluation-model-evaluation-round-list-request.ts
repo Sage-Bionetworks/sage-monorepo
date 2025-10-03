@@ -12,5 +12,8 @@
  * Request to list a single page of EvaluationRounds associated with an Evaluation
  */
 export interface OrgSagebionetworksEvaluationModelEvaluationRoundListRequest {
+  /**
+   * Forward the returned \'nextPageToken\' to get the next page of results.
+   */
   nextPageToken?: string;
 }

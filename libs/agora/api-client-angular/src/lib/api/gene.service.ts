@@ -29,9 +29,9 @@ import { GCTGenesList } from '../model/gct-genes-list';
 // @ts-ignore
 import { Gene } from '../model/gene';
 // @ts-ignore
-import { GenesList } from '../model/genes-list';
-// @ts-ignore
 import { NominatedGenesList } from '../model/nominated-genes-list';
+// @ts-ignore
+import { SearchResult } from '../model/search-result';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -531,13 +531,13 @@ export class GeneService {
 
   /**
    * Search Genes
-   * Search Genes
-   * @param id
+   * Search for a particular gene
+   * @param q Search query
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public searchGene(
-    id: string,
+  public searchGeneEnhanced(
+    q: string,
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -545,9 +545,9 @@ export class GeneService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<GenesList>;
-  public searchGene(
-    id: string,
+  ): Observable<Array<SearchResult>>;
+  public searchGeneEnhanced(
+    q: string,
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -555,9 +555,9 @@ export class GeneService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpResponse<GenesList>>;
-  public searchGene(
-    id: string,
+  ): Observable<HttpResponse<Array<SearchResult>>>;
+  public searchGeneEnhanced(
+    q: string,
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -565,9 +565,9 @@ export class GeneService {
       context?: HttpContext;
       transferCache?: boolean;
     },
-  ): Observable<HttpEvent<GenesList>>;
-  public searchGene(
-    id: string,
+  ): Observable<HttpEvent<Array<SearchResult>>>;
+  public searchGeneEnhanced(
+    q: string,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -576,13 +576,15 @@ export class GeneService {
       transferCache?: boolean;
     },
   ): Observable<any> {
-    if (id === null || id === undefined) {
-      throw new Error('Required parameter id was null or undefined when calling searchGene.');
+    if (q === null || q === undefined) {
+      throw new Error(
+        'Required parameter q was null or undefined when calling searchGeneEnhanced.',
+      );
     }
 
     let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
-    if (id !== undefined && id !== null) {
-      localVarQueryParameters = this.addToHttpParams(localVarQueryParameters, <any>id, 'id');
+    if (q !== undefined && q !== null) {
+      localVarQueryParameters = this.addToHttpParams(localVarQueryParameters, <any>q, 'q');
     }
 
     let localVarHeaders = this.defaultHeaders;
@@ -618,8 +620,8 @@ export class GeneService {
       }
     }
 
-    let localVarPath = `/genes/search`;
-    return this.httpClient.request<GenesList>(
+    let localVarPath = `/genes/search/enhanced`;
+    return this.httpClient.request<Array<SearchResult>>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {

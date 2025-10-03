@@ -15,9 +15,21 @@ import { OrgSagebionetworksRepoModelTableCsvTableDescriptor } from './org-sagebi
 export interface OrgSagebionetworksRepoModelTableUploadToTableRequest {
   concreteType: OrgSagebionetworksRepoModelTableUploadToTableRequest.ConcreteTypeEnum;
   entityId?: string;
+  /**
+   * The ID of the table.
+   */
   tableId?: string;
+  /**
+   * The ID of the file handle for a type of UPLOAD
+   */
   uploadFileHandleId?: string;
+  /**
+   * Any RowSet returned from Synapse will contain the current etag of the change set.  To update any rows from a RowSet the etag must be provided with the POST.
+   */
   updateEtag?: string;
+  /**
+   * The number of lines to skip from the start of the file.  The default value of 0 will be used if this is not provided by the caller.
+   */
   linesToSkip?: number;
   csvTableDescriptor?: OrgSagebionetworksRepoModelTableCsvTableDescriptor;
   /**

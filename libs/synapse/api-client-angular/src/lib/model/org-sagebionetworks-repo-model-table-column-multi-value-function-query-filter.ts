@@ -13,13 +13,22 @@
  */
 export interface OrgSagebionetworksRepoModelTableColumnMultiValueFunctionQueryFilter {
   concreteType: OrgSagebionetworksRepoModelTableColumnMultiValueFunctionQueryFilter.ConcreteTypeEnum;
+  /**
+   * When null (default) or false, this condition will be applied to WHERE clause of table/view query.  When set to true, for a query against a VirtualTable, this condition will be applied to the WHERE clause of the VirtualTable\'s definingSQL.
+   */
   isDefiningCondition?: boolean;
   /**
    * Values to be used with the filter.
    */
   values?: Array<string>;
+  /**
+   * name of the column to filter
+   */
   columnName?: string;
-  function?: string;
+  /**
+   * Determines the filter operation to perform
+   */
+  function?: OrgSagebionetworksRepoModelTableColumnMultiValueFunctionQueryFilter.FunctionEnum;
 }
 export namespace OrgSagebionetworksRepoModelTableColumnMultiValueFunctionQueryFilter {
   export type ConcreteTypeEnum =
@@ -27,5 +36,10 @@ export namespace OrgSagebionetworksRepoModelTableColumnMultiValueFunctionQueryFi
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelTableColumnMultiValueFunctionQueryFilter:
       'org.sagebionetworks.repo.model.table.ColumnMultiValueFunctionQueryFilter' as ConcreteTypeEnum,
+  };
+  export type FunctionEnum = 'HAS' | 'HAS_LIKE';
+  export const FunctionEnum = {
+    Has: 'HAS' as FunctionEnum,
+    HasLike: 'HAS_LIKE' as FunctionEnum,
   };
 }

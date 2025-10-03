@@ -17,14 +17,4 @@ export class HomeCardComponent {
   imagePath = input<string>('/explorers-assets/images/warning-circle.svg');
   imageAltText = input<string>('Warning');
   routerLink = input<string | undefined>();
-
-  secondaryColor = 'inherit';
-
-  constructor() {
-    if (typeof document !== 'undefined') {
-      this.secondaryColor = getComputedStyle(document.documentElement).getPropertyValue(
-        '--color-secondary',
-      );
-    }
-  }
 }

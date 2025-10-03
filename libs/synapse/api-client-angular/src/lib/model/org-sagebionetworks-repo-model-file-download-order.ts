@@ -17,10 +17,28 @@ export interface OrgSagebionetworksRepoModelFileDownloadOrder {
    * The list of files included in this order.
    */
   files?: Array<OrgSagebionetworksRepoModelFileFileHandleAssociation>;
+  /**
+   * The ID of this order.
+   */
   orderId?: string;
+  /**
+   * The ID of the user that created this order.
+   */
   createdBy?: string;
+  /**
+   * The date-time when the order was created.
+   */
   createdOn?: string;
+  /**
+   * The name of the file containing this order.
+   */
   zipFileName?: string;
+  /**
+   * The total size of all files in this order in bytes (uncompressed).
+   */
   totalSizeBytes?: number;
+  /**
+   * The total number of files in this download order.
+   */
   totalNumberOfFiles?: number;
 }

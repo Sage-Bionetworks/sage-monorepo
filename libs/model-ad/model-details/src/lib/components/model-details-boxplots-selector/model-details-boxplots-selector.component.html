@@ -80,7 +80,11 @@
               <explorers-tooltip-button
                 [onClick]="copyShareLinkCallbackFn(evidenceType)"
                 [buttonAriaDescribedBy]="generateAnchorId(evidenceType)"
-                [buttonAriaLabel]="`Copy link to ${evidenceType | decodeGreekEntity }`"
+                [buttonProps]="{
+                  ariaLabel: `Copy link to ${evidenceType | decodeGreekEntity }`,
+                  link: true,
+                  style: { 'padding': '0' }
+                }"
                 [tooltipText]="getShareLinkTooltipText(evidenceType)"
                 [buttonSvgIconConfig]="{
                   imagePath: '/explorers-assets/icons/link.svg',

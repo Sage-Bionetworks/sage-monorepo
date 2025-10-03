@@ -12,9 +12,18 @@
  * Interface for JSON schema for UsedEntity POJO
  */
 export interface OrgSagebionetworksRepoModelProvenanceUsedURL {
+  /**
+   * The enclosed entity was used and also executed in the Activity
+   */
   wasExecuted?: boolean;
   concreteType: OrgSagebionetworksRepoModelProvenanceUsedURL.ConcreteTypeEnum;
+  /**
+   * The external URL of the file that was used.
+   */
   name?: string;
+  /**
+   * The external URL of the file that was used.
+   */
   url?: string;
 }
 export namespace OrgSagebionetworksRepoModelProvenanceUsedURL {

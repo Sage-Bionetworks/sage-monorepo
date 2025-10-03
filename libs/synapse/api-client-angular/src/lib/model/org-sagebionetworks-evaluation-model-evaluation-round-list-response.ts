@@ -14,5 +14,8 @@ import { OrgSagebionetworksEvaluationModelEvaluationRound } from './org-sagebion
  */
 export interface OrgSagebionetworksEvaluationModelEvaluationRoundListResponse {
   page?: Array<OrgSagebionetworksEvaluationModelEvaluationRound>;
+  /**
+   * Forward this token to get the next page of results.
+   */
   nextPageToken?: string;
 }

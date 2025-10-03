@@ -13,13 +13,38 @@ import { OrgSagebionetworksRepoModelStatusHistoryRecord } from './org-sagebionet
  * JSON schema for AcquisitionTrackingData
  */
 export interface OrgSagebionetworksRepoModelAcquisitionTrackingData {
-  status?: string;
+  /**
+   * The status of data acquisition process
+   */
+  status?: OrgSagebionetworksRepoModelAcquisitionTrackingData.StatusEnum;
+  /**
+   * Reference id of data acquisition
+   */
   dataAcquisitionReference?: string;
+  /**
+   * Contact id of person who requested the data
+   */
   requestor?: string;
+  /**
+   * Short description of followup requirements
+   */
   followupRequirements?: string;
+  /**
+   * Comments on acquisition process
+   */
   comments?: string;
   /**
    * Status history
    */
   history?: Array<OrgSagebionetworksRepoModelStatusHistoryRecord>;
+}
+export namespace OrgSagebionetworksRepoModelAcquisitionTrackingData {
+  export type StatusEnum = 'requested' | 'approved' | 'denied' | 'pending' | 'acquired';
+  export const StatusEnum = {
+    Requested: 'requested' as StatusEnum,
+    Approved: 'approved' as StatusEnum,
+    Denied: 'denied' as StatusEnum,
+    Pending: 'pending' as StatusEnum,
+    Acquired: 'acquired' as StatusEnum,
+  };
 }

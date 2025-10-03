@@ -12,6 +12,19 @@
  * This object is deprecated and will be removed in future versions of Synapse.
  */
 export interface OrgSagebionetworksRepoModelAttachmentUploadResult {
+  /**
+   * The uplaod message
+   */
   message?: string;
-  uploadStatus?: string;
+  /**
+   * The status of the upload.
+   */
+  uploadStatus?: OrgSagebionetworksRepoModelAttachmentUploadResult.UploadStatusEnum;
+}
+export namespace OrgSagebionetworksRepoModelAttachmentUploadResult {
+  export type UploadStatusEnum = 'FAILED' | 'SUCCESS';
+  export const UploadStatusEnum = {
+    Failed: 'FAILED' as UploadStatusEnum,
+    Success: 'SUCCESS' as UploadStatusEnum,
+  };
 }

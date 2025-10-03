@@ -12,23 +12,68 @@
  * JSON schema for a message to another user
  */
 export interface OrgSagebionetworksRepoModelMessageMessageToUser {
+  /**
+   * The unique identifier of the message or comment
+   */
   id?: string;
+  /**
+   * The unique identifier of the sender of this message
+   */
   createdBy?: string;
+  /**
+   * The S3 file handle storing the body of this message.  Note: The file\'s mime type should be \'text/plain\' or \'text/html\'.  If no character encoding is specified, then UTF-8 is assumed.
+   */
   fileHandleId?: string;
+  /**
+   * When this message was created
+   */
   createdOn?: string;
   /**
    * The unique identifiers of the intended recipients of a message
    */
   recipients?: Set<string>;
+  /**
+   * Topic of this message.  Optional
+   */
   subject?: string;
+  /**
+   * The unique identifier of the message being replied to.  Can be null
+   */
   inReplyTo?: string;
+  /**
+   * The unique identifier of the root message being replied to
+   */
   inReplyToRoot?: string;
+  /**
+   * the portal prefix for one-click email unsubscription.  A signed, serialized token is appended to create the complete URL.  If omitted, the default endpoint will be used.
+   */
   notificationUnsubscribeEndpoint?: string;
+  /**
+   * the portal link to user profile setting page. If omitted, the default endpoint will be used.
+   */
   userProfileSettingEndpoint?: string;
+  /**
+   * should the unsubscribe link be included in the email?
+   */
   withUnsubscribeLink?: boolean;
+  /**
+   * should the user profile setting link be included in the email?
+   */
   withProfileSettingLink?: boolean;
+  /**
+   * A notification message is sent from a noreply email address, delivery failures are not sent back to the sender
+   */
   isNotificationMessage?: boolean;
+  /**
+   * The email addresses in the \'to\' field of the email message
+   */
   to?: string;
+  /**
+   * The email addresses in the \'cc\' field of the email message
+   */
   cc?: string;
+  /**
+   * The email addresses in the \'bcc\' field of the email message
+   */
   bcc?: string;
 }

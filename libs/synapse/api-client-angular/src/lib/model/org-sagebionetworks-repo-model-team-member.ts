@@ -13,7 +13,13 @@ import { OrgSagebionetworksRepoModelUserGroupHeader } from './org-sagebionetwork
  * JSON schema for Team Member, which bundles UserGroupHeader and isAdmin
  */
 export interface OrgSagebionetworksRepoModelTeamMember {
+  /**
+   * The id of the Team.
+   */
   teamId?: string;
   member?: OrgSagebionetworksRepoModelUserGroupHeader;
+  /**
+   * True iff the user is an administrator in the Team.
+   */
   isAdmin?: boolean;
 }

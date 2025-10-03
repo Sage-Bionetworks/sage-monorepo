@@ -12,6 +12,18 @@
  * The hex-string encoded checksum for the drs object. At least one checksum must be provided. For blobs, the checksum is computed over the bytes in the blob that is md5. For bundles, the checksum is computed over a sorted concatenation of the checksums of its top-level contained objects.
  */
 export interface OrgSagebionetworksRepoModelDrsChecksum {
+  /**
+   * The hex-encoded md5 string.
+   */
   checksum?: string;
-  type?: string;
+  /**
+   * The digest method used to create the checksum eg md5.
+   */
+  type?: OrgSagebionetworksRepoModelDrsChecksum.TypeEnum;
+}
+export namespace OrgSagebionetworksRepoModelDrsChecksum {
+  export type TypeEnum = 'md5';
+  export const TypeEnum = {
+    Md5: 'md5' as TypeEnum,
+  };
 }

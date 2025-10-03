@@ -13,6 +13,9 @@ import { OrgSagebionetworksRepoModelStatisticsFilesCountStatistics } from './org
  * Container for the statistics relative to file downloads or uploads for the past 12 months (Excluding the current month).
  */
 export interface OrgSagebionetworksRepoModelStatisticsMonthlyFilesStatistics {
+  /**
+   * The approximate time the files statistics were refreshed. If the statistics were not yet computed the value will not be set
+   */
   lastUpdatedOn?: string;
   /**
    * The file count buckets ordered by month, always contains the past 12 months (No matter if statistics are computed or not)

@@ -1,10 +1,11 @@
-<p-button
-  label="Share URL"
-  (click)="copyUrl()"
-  [rounded]="true"
-  variant="outlined"
-  size="small"
-  [pTooltip]="tooltip()"
+<explorers-tooltip-button
+  [onClick]="copyUrl"
+  [tooltipText]="getTooltipText()"
   tooltipPosition="left"
-></p-button>
-<p-toast key="share-url-button-toast" [life]="toastDuration"></p-toast>
+  buttonLabel="Share URL"
+  [buttonProps]="{
+    outlined: true,
+    rounded: true,
+    size: 'small',
+  }"
+/>

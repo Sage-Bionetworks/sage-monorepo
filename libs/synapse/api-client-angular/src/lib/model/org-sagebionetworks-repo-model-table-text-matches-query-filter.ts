@@ -13,14 +13,28 @@
  */
 export interface OrgSagebionetworksRepoModelTableTextMatchesQueryFilter {
   concreteType: OrgSagebionetworksRepoModelTableTextMatchesQueryFilter.ConcreteTypeEnum;
+  /**
+   * When null (default) or false, this condition will be applied to WHERE clause of table/view query.  When set to true, for a query against a VirtualTable, this condition will be applied to the WHERE clause of the VirtualTable\'s definingSQL.
+   */
   isDefiningCondition?: boolean;
+  /**
+   * The search expression to match against the table rows.
+   */
   searchExpression?: string;
-  searchMode?: string;
+  /**
+   * The search mode for the filter
+   */
+  searchMode?: OrgSagebionetworksRepoModelTableTextMatchesQueryFilter.SearchModeEnum;
 }
 export namespace OrgSagebionetworksRepoModelTableTextMatchesQueryFilter {
   export type ConcreteTypeEnum = 'org.sagebionetworks.repo.model.table.TextMatchesQueryFilter';
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelTableTextMatchesQueryFilter:
       'org.sagebionetworks.repo.model.table.TextMatchesQueryFilter' as ConcreteTypeEnum,
+  };
+  export type SearchModeEnum = 'NATURAL_LANGUAGE' | 'BOOLEAN';
+  export const SearchModeEnum = {
+    NaturalLanguage: 'NATURAL_LANGUAGE' as SearchModeEnum,
+    Boolean: 'BOOLEAN' as SearchModeEnum,
   };
 }

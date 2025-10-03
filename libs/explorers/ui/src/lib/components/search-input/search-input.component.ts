@@ -48,9 +48,26 @@ export class SearchInputComponent implements AfterViewInit {
   searchImageAltText = input<string>('');
   hasThickBorder = input<boolean>(false);
 
+  private readonly MINIMUM_SEARCH_LENGTH_DEFAULT = 3;
+  minimumSearchLength = input<number, number>(this.MINIMUM_SEARCH_LENGTH_DEFAULT, {
+    transform: (value: number) => {
+      if (value >= 10) {
+        console.warn(
+          `minimumSearchLength must be less than 10, received ${value}. Using default value of ${this.MINIMUM_SEARCH_LENGTH_DEFAULT}.`,
+        );
+        return this.MINIMUM_SEARCH_LENGTH_DEFAULT;
+      }
+      return Math.max(1, Math.floor(value)); // Ensure it's at least 1 and is an integer
+    },
+  });
+
   navigateToResult = input.required<(id: string) => void>();
   getSearchResults = input.required<(query: string) => Observable<SearchResult[]>>();
+  getNoSearchResultsMessage = input<(query: string) => string>(
+    (query: string) => 'No results match your search term.',
+  );
   checkQueryForErrors = input.required<(query: string) => string>(); // empty string if no error
+  sanitizeQuery = input<(query: string) => string>((query: string) => query); // default is no-op
   formatResultForDisplay = input<(result: SearchResult) => string>(
     (result: SearchResult) => result.id,
   );
@@ -69,11 +86,6 @@ export class SearchInputComponent implements AfterViewInit {
   selectedResultIndex = -1; // -1 means no result is selected
 
   showResults = false;
-  errorMessages: { [key: string]: string } = {
-    notFound: 'No results match your search term.',
-    notValidSearch: 'Please enter at least three characters.',
-    unknown: 'An unknown error occurred, please try again.',
-  };
 
   root = viewChild.required<ElementRef>('root');
   input = viewChild.required<ElementRef<HTMLInputElement>>('input');
@@ -97,7 +109,7 @@ export class SearchInputComponent implements AfterViewInit {
           const target = event.target as HTMLInputElement;
           return this.search(target.value).pipe(
             catchError(() => {
-              this.error = this.errorMessages['unknown'];
+              this.error = 'An unknown error occurred, please try again.';
               this.isLoading = false;
               this.showResults = true;
               return of([]);
@@ -117,6 +129,11 @@ export class SearchInputComponent implements AfterViewInit {
       });
   }
 
+  getNotValidSearchMessage(minimumSearchLength: number): string {
+    const numWords = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+    return `Please enter at least ${numWords[minimumSearchLength - 1]} character${minimumSearchLength > 1 ? 's' : ''}.`;
+  }
+
   search(query: string): Observable<SearchResult[]> {
     this.results = [];
     this.error = '';
@@ -129,24 +146,26 @@ export class SearchInputComponent implements AfterViewInit {
       return EMPTY;
     }
 
-    // No frontend sanitization - backend handles all input escaping and security validation
-    if (query.length > 0 && query.length < 3) {
-      this.error = this.errorMessages['notValidSearch'];
+    // Optional frontend sanitization - expect backend to handle input escaping and security validation
+    const sanitizedQuery = this.sanitizeQuery()(query);
+    this.query = sanitizedQuery;
+    if (sanitizedQuery.length > 0 && sanitizedQuery.length < this.minimumSearchLength()) {
+      this.error = this.getNotValidSearchMessage(this.minimumSearchLength());
     } else {
-      this.error = this.checkQueryForErrors()(query);
+      this.error = this.checkQueryForErrors()(sanitizedQuery);
     }
 
     if (this.error) {
       this.showResults = true;
     }
 
-    this.isLoading = !!(query && !this.error);
-    return this.isLoading ? this.getSearchResults()(query) : EMPTY;
+    this.isLoading = !!(sanitizedQuery && !this.error);
+    return this.isLoading ? this.getSearchResults()(sanitizedQuery) : EMPTY;
   }
 
   setResults(results: SearchResult[]) {
     if (results.length < 1 && !this.error) {
-      this.error = this.errorMessages['notFound'];
+      this.error = this.getNoSearchResultsMessage()(this.query);
     }
     this.results = results;
     this.selectedResultIndex = -1;

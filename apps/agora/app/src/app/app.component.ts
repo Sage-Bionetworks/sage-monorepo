@@ -2,8 +2,8 @@ import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { DataVersionService } from '@sagebionetworks/agora/api-client';
 import { AGORA_LOADING_ICON_COLORS, ConfigService } from '@sagebionetworks/agora/config';
-import { HeaderComponent } from '@sagebionetworks/agora/ui';
-import { footerLinks } from '@sagebionetworks/agora/util';
+import { SearchInputComponent } from '@sagebionetworks/agora/ui';
+import { footerLinks, headerLinks } from '@sagebionetworks/agora/util';
 import { LOADING_ICON_COLORS } from '@sagebionetworks/explorers/constants';
 import {
   GitHubService,
@@ -11,7 +11,7 @@ import {
   PlatformService,
   VersionService,
 } from '@sagebionetworks/explorers/services';
-import { FooterComponent } from '@sagebionetworks/explorers/ui';
+import { FooterComponent, HeaderComponent } from '@sagebionetworks/explorers/ui';
 import {
   CONFIG_SERVICE_TOKEN,
   createGoogleTagManagerIdProvider,
@@ -21,7 +21,14 @@ import {
 import { ToastModule } from 'primeng/toast';
 
 @Component({
-  imports: [RouterModule, HeaderComponent, FooterComponent, ToastModule, GoogleTagManagerComponent],
+  imports: [
+    RouterModule,
+    HeaderComponent,
+    FooterComponent,
+    ToastModule,
+    GoogleTagManagerComponent,
+    SearchInputComponent,
+  ],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -52,6 +59,7 @@ export class AppComponent implements OnInit {
   siteVersion = '';
   dataVersion = '';
 
+  headerLinks = headerLinks;
   footerLinks = footerLinks;
 
   constructor() {

@@ -2,7 +2,13 @@
   <sage-google-tag-manager />
 }
 <div id="container">
-  <agora-header></agora-header>
+  <explorers-header
+    headerLogoPath="/agora-assets/images/header-logo.svg"
+    [headerLinks]="headerLinks"
+    [footerLinks]="footerLinks"
+  >
+    <agora-search-input [searchPlaceholder]="'Search genes'" />
+  </explorers-header>
   <div id="main-content">
     <router-outlet></router-outlet>
   </div>
@@ -11,6 +17,6 @@
     [footerLinks]="footerLinks"
     [siteVersion]="siteVersion"
     [dataVersion]="dataVersion"
-  ></explorers-footer>
+  />
 </div>
 <p-toast class="global-toast" position="bottom-center"></p-toast>

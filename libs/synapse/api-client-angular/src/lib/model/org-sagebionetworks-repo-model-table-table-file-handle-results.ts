@@ -14,6 +14,9 @@ import { OrgSagebionetworksRepoModelTableSelectColumn } from './org-sagebionetwo
  * JSON schema for TableFileHandleResults.
  */
 export interface OrgSagebionetworksRepoModelTableTableFileHandleResults {
+  /**
+   * The ID of the TableEntity than owns these rows
+   */
   tableId?: string;
   /**
    * The list of ColumnModels ID that describes the rows of this set.

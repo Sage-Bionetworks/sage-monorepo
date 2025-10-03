@@ -14,11 +14,26 @@ import { OrgSagebionetworksRepoModelTableCsvTableDescriptor } from './org-sagebi
  */
 export interface OrgSagebionetworksRepoModelGridDownloadFromGridRequest {
   concreteType: OrgSagebionetworksRepoModelGridDownloadFromGridRequest.ConcreteTypeEnum;
+  /**
+   * The grid session ID.
+   */
   sessionId?: string;
+  /**
+   * Should the first line contain the columns names as a header in the resulting file?  Set to \'true\' to include the headers else, \'false\'.  The default value is \'true\'.
+   */
   writeHeader?: boolean;
+  /**
+   * Should the first two columns contain the row ID and row version?  The default value is \'true\'.
+   */
   includeRowIdAndRowVersion?: boolean;
+  /**
+   * Should the first (or third if includeRowIdAndRowVersion is true) column contain the row etag? The default value is \'true\'.
+   */
   includeEtag?: boolean;
   csvTableDescriptor?: OrgSagebionetworksRepoModelTableCsvTableDescriptor;
+  /**
+   * The optional name for the downloaded table.
+   */
   fileName?: string;
 }
 export namespace OrgSagebionetworksRepoModelGridDownloadFromGridRequest {

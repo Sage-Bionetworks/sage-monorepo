@@ -23,19 +23,68 @@ export interface OrgSagebionetworksRepoModelDoiV2Doi {
    * Required. A name or title by which a resource is known.
    */
   titles?: Array<OrgSagebionetworksRepoModelDoiV2DoiTitle>;
+  /**
+   * Required. The year that this resource became publicly accessible. Must be in YYYY format.
+   */
   publicationYear?: number;
   resourceType?: OrgSagebionetworksRepoModelDoiV2DoiResourceType;
+  /**
+   * The publisher of the DOI, for a portal DOI matches the Portal name
+   */
   publisher?: string;
+  /**
+   * The unique ID of this DOI stored in Synapse. Provided by Synapse.
+   */
   associationId?: string;
+  /**
+   * For Optimistic Concurrency Control (OCC). Required to successfully update a DOI.
+   */
   etag?: string;
+  /**
+   * The unique URI of this DOI to which the resource can be resolved. Provided by Synapse.
+   */
   doiUri?: string;
+  /**
+   * The DOI URL that will point to the Synapse object.  Provided by Synapse.
+   */
   doiUrl?: string;
+  /**
+   * The id of the portal that this DOI is associated with.
+   */
   portalId?: string;
+  /**
+   * Required. The ID of the digital object in Synapse for which this DOI is created.
+   */
   objectId?: string;
-  objectType?: string;
+  /**
+   * The type of objects that support DOI minting
+   */
+  objectType?: OrgSagebionetworksRepoModelDoiV2Doi.ObjectTypeEnum;
+  /**
+   * Optional. The version of the digital object. When null, the DOI is associated with the current version of the object.
+   */
   objectVersion?: number;
+  /**
+   * The ID of the user that creates this DOI. Provided by Synapse.
+   */
   associatedBy?: string;
+  /**
+   * The date time this DOI is first created. Provided by Synapse.
+   */
   associatedOn?: string;
+  /**
+   * The ID of the user that last updated this DOI. Provided by Synapse.
+   */
   updatedBy?: string;
+  /**
+   * The date time this DOI is last updated. Provided by Synapse.
+   */
   updatedOn?: string;
+}
+export namespace OrgSagebionetworksRepoModelDoiV2Doi {
+  export type ObjectTypeEnum = 'ENTITY' | 'PORTAL_RESOURCE';
+  export const ObjectTypeEnum = {
+    Entity: 'ENTITY' as ObjectTypeEnum,
+    PortalResource: 'PORTAL_RESOURCE' as ObjectTypeEnum,
+  };
 }

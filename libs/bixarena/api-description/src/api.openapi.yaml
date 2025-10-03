@@ -14,6 +14,8 @@ servers:
 tags:
   - name: Leaderboard
     description: Operations about leaderboards.
+  - name: Model
+    description: Operations about models.
 paths:
   /leaderboards:
     $ref: paths/leaderboards.yaml
@@ -23,3 +25,5 @@ paths:
     $ref: paths/leaderboards/{leaderboardId}/history/{modelId}.yaml
   /leaderboards/{leaderboardId}/snapshots:
     $ref: paths/leaderboards/{leaderboardId}/snapshots.yaml
+  /models:
+    $ref: paths/models.yaml

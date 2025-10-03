@@ -13,7 +13,10 @@
  */
 export interface OrgSagebionetworksRepoModelReportDownloadStorageReportRequest {
   concreteType: OrgSagebionetworksRepoModelReportDownloadStorageReportRequest.ConcreteTypeEnum;
-  reportType?: string;
+  /**
+   * The type of storage report to generate. The default is \"all_projects\"
+   */
+  reportType?: OrgSagebionetworksRepoModelReportDownloadStorageReportRequest.ReportTypeEnum;
 }
 export namespace OrgSagebionetworksRepoModelReportDownloadStorageReportRequest {
   export type ConcreteTypeEnum =
@@ -21,5 +24,9 @@ export namespace OrgSagebionetworksRepoModelReportDownloadStorageReportRequest {
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelReportDownloadStorageReportRequest:
       'org.sagebionetworks.repo.model.report.DownloadStorageReportRequest' as ConcreteTypeEnum,
+  };
+  export type ReportTypeEnum = 'ALL_PROJECTS';
+  export const ReportTypeEnum = {
+    AllProjects: 'ALL_PROJECTS' as ReportTypeEnum,
   };
 }

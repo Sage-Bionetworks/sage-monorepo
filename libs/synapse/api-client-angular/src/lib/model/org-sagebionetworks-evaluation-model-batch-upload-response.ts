@@ -12,5 +12,8 @@
  * The response for a batch SubmissionStatus upload.
  */
 export interface OrgSagebionetworksEvaluationModelBatchUploadResponse {
+  /**
+   * The token required to be sent with the subsequent batch.
+   */
   nextUploadToken?: string;
 }

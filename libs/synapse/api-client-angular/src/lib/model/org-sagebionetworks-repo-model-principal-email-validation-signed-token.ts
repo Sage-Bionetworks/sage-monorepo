@@ -13,11 +13,29 @@
  */
 export interface OrgSagebionetworksRepoModelPrincipalEmailValidationSignedToken {
   concreteType: OrgSagebionetworksRepoModelPrincipalEmailValidationSignedToken.ConcreteTypeEnum;
+  /**
+   * The hash message authentication code for the message.
+   */
   hmac?: string;
+  /**
+   * The version of the key used to generate the HMAC.
+   */
   version?: number;
+  /**
+   * The date-time when this token expires.
+   */
   expiresOn?: string;
+  /**
+   * The date-time the token was generated.
+   */
   createdOn?: string;
+  /**
+   * The email address.
+   */
   email?: string;
+  /**
+   * The ID of the user account to which the email address will be added. Null if creating a new account.
+   */
   userId?: string;
 }
 export namespace OrgSagebionetworksRepoModelPrincipalEmailValidationSignedToken {

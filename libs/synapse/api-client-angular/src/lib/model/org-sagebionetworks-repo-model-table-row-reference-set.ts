@@ -14,7 +14,13 @@ import { OrgSagebionetworksRepoModelTableSelectColumn } from './org-sagebionetwo
  * Represents a set of RowReferences of a TableEntity
  */
 export interface OrgSagebionetworksRepoModelTableRowReferenceSet {
+  /**
+   * The ID of the TableEntity than owns these rows
+   */
   tableId?: string;
+  /**
+   * When a RowReferenceSet is returned from a table update, this will be set to the current etag of the table.
+   */
   etag?: string;
   /**
    * The list of ColumnModels ID that describes the rows of this set.

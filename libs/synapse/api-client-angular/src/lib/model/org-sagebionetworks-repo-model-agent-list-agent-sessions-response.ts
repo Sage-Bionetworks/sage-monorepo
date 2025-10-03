@@ -14,5 +14,8 @@ import { OrgSagebionetworksRepoModelAgentAgentSession } from './org-sagebionetwo
  */
 export interface OrgSagebionetworksRepoModelAgentListAgentSessionsResponse {
   page?: Array<OrgSagebionetworksRepoModelAgentAgentSession>;
+  /**
+   * Forward this token to get the next page of results.
+   */
   nextPageToken?: string;
 }

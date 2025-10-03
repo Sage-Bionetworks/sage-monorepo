@@ -2,7 +2,7 @@
   "name": "bixarena-app",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "sourceRoot": "apps/bixarena/app",
+  "sourceRoot": "apps/bixarena/app/bixarena_app",
   "targets": {
     "create-config": {
       "executor": "nx:run-commands",

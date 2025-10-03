@@ -12,5 +12,264 @@
  * List of Migration types.
  */
 export interface OrgSagebionetworksRepoModelMigrationMigrationTypeList {
-  list?: Array<string>;
+  list?: Array<OrgSagebionetworksRepoModelMigrationMigrationTypeList.ListEnum>;
+}
+export namespace OrgSagebionetworksRepoModelMigrationMigrationTypeList {
+  export type ListEnum =
+    | 'PRINCIPAL'
+    | 'GROUP_MEMBERS'
+    | 'CREDENTIAL'
+    | 'AUTHENTICATED_ON'
+    | 'PRINCIPAL_ALIAS'
+    | 'NOTIFICATION_EMAIL'
+    | 'USER_PROFILE'
+    | 'STORAGE_LOCATION'
+    | 'FILE_HANDLE'
+    | 'MULTIPART_UPLOAD'
+    | 'MULTIPART_UPLOAD_PART_STATE'
+    | 'MULTIPART_UPLOAD_COMPOSER_PART_STATE'
+    | 'MESSAGE_CONTENT'
+    | 'MESSAGE_TO_USER'
+    | 'MESSAGE_RECIPIENT'
+    | 'MESSAGE_STATUS'
+    | 'COMMENT'
+    | 'V2_WIKI_PAGE'
+    | 'V2_WIKI_ATTACHMENT_RESERVATION'
+    | 'V2_WIKI_MARKDOWN'
+    | 'V2_WIKI_OWNERS'
+    | 'ACTIVITY'
+    | 'NODE'
+    | 'NODE_REVISION'
+    | 'NODE_ACCESS_REQUIRMENT'
+    | 'DOCKER_REPOSITORY_NAME'
+    | 'DOCKER_COMMIT'
+    | 'TEAM'
+    | 'MEMBERSHIP_INVITATION_SUBMISSION'
+    | 'MEMBERSHIP_REQUEST_SUBMISSION'
+    | 'EVALUATION'
+    | 'EVALUATION_ROUND'
+    | 'EVALUATION_SUBMISSIONS'
+    | 'SUBMISSION'
+    | 'SUBMISSION_CONTRIBUTOR'
+    | 'SUBMISSION_FILE'
+    | 'SUBMISSION_STATUS'
+    | 'PROJECT_SETTINGS'
+    | 'PROJECT_STATS'
+    | 'ACCESS_REQUIREMENT'
+    | 'ACCESS_REQUIREMENT_REVISION'
+    | 'ACCESS_APPROVAL'
+    | 'ACL'
+    | 'ACL_ACCESS'
+    | 'ACL_ACCESS_TYPE'
+    | 'FAVORITE'
+    | 'TRASH_CAN'
+    | 'PORTAL'
+    | 'DOI'
+    | 'CHALLENGE'
+    | 'CHALLENGE_TEAM'
+    | 'COLUMN_MODEL'
+    | 'BOUND_COLUMN_OWNER'
+    | 'BOUND_COLUMN_ORDINAL'
+    | 'TABLE_TRANSACTION'
+    | 'TABLE_TRANSACTION_TO_VERSION'
+    | 'TABLE_SEQUENCE'
+    | 'TABLE_CHANGE'
+    | 'QUIZ_RESPONSE'
+    | 'VERIFICATION_SUBMISSION'
+    | 'VERIFICATION_STATE'
+    | 'VERIFICATION_FILE'
+    | 'FORUM'
+    | 'DISCUSSION_THREAD'
+    | 'DISCUSSION_THREAD_VIEW'
+    | 'DISCUSSION_THREAD_ENTITY_REFERENCE'
+    | 'DISCUSSION_REPLY'
+    | 'SUBSCRIPTION'
+    | 'BROADCAST_MESSAGE'
+    | 'VIEW_TYPE'
+    | 'VIEW_SCOPE'
+    | 'VIEW_SNAPSHOT'
+    | 'THROTTLE_RULE'
+    | 'RESEARCH_PROJECT'
+    | 'DATA_ACCESS_REQUEST'
+    | 'DATA_ACCESS_SUBMISSION'
+    | 'DATA_ACCESS_SUBMISSION_SUBMITTER'
+    | 'DATA_ACCESS_SUBMISSION_STATUS'
+    | 'DATA_ACCESS_SUBMISSION_ACCESSOR_CHANGE'
+    | 'DATA_ACCESS_NOTIFICATIONS'
+    | 'FORM_GROUP'
+    | 'FORM_DATA'
+    | 'ORGANIZATION'
+    | 'JSON_SCHEMA'
+    | 'JSON_SCHEMA_BLOB'
+    | 'JSON_SCHEMA_VERSION'
+    | 'JSON_SCHEMA_LATEST_VERSION'
+    | 'JSON_SCHEMA_DEPENDENCY'
+    | 'JSON_SCHEMA_OBJECT_BINDING'
+    | 'DOWNLOAD_LIST'
+    | 'DOWNLOAD_LIST_ITEM'
+    | 'DOWNLOAD_ORDER'
+    | 'DOWNLOAD_LIST_2'
+    | 'DOWNLOAD_LIST_ITEM_2'
+    | 'DATA_TYPE'
+    | 'OAUTH_SECTOR_IDENTIFIER'
+    | 'OAUTH_CLIENT'
+    | 'OAUTH_REFRESH_TOKEN'
+    | 'OAUTH_ACCESS_TOKEN'
+    | 'PERSONAL_ACCESS_TOKEN'
+    | 'AUTHORIZATION_GRANT'
+    | 'SES_NOTIFICATIONS'
+    | 'QUARANTINED_EMAILS'
+    | 'FEATURE_STATUS'
+    | 'MATERIALIZED_VIEW_ID'
+    | 'MATERIALIZED_VIEW_SOURCE_TABLE'
+    | 'PRINCIPAL_OIDC_BINDING'
+    | 'OTP_SECRET'
+    | 'OTP_RECOVERY_CODE'
+    | 'TWO_FA_STATUS'
+    | 'WEBHOOK'
+    | 'WEBHOOK_VERIFICATION'
+    | 'WEBHOOK_ALLOWED_DOMAIN'
+    | 'AGENT_REGISTRATION'
+    | 'AGENT_SESSION'
+    | 'TOS_REQUIREMENTS'
+    | 'TOS_AGREEMENT'
+    | 'PROJECT_STORAGE_DATA'
+    | 'PROJECT_STORAGE_LIMIT'
+    | 'GRID_SESSION'
+    | 'GRID_REPLICA'
+    | 'GRID_CONNECTION'
+    | 'GRID_PATCH'
+    | 'CURATION_TASK'
+    | 'USER_STATUS'
+    | 'RECORDSET_VALIDATION_STATS'
+    | 'CHANGE';
+  export const ListEnum = {
+    Principal: 'PRINCIPAL' as ListEnum,
+    GroupMembers: 'GROUP_MEMBERS' as ListEnum,
+    Credential: 'CREDENTIAL' as ListEnum,
+    AuthenticatedOn: 'AUTHENTICATED_ON' as ListEnum,
+    PrincipalAlias: 'PRINCIPAL_ALIAS' as ListEnum,
+    NotificationEmail: 'NOTIFICATION_EMAIL' as ListEnum,
+    UserProfile: 'USER_PROFILE' as ListEnum,
+    StorageLocation: 'STORAGE_LOCATION' as ListEnum,
+    FileHandle: 'FILE_HANDLE' as ListEnum,
+    MultipartUpload: 'MULTIPART_UPLOAD' as ListEnum,
+    MultipartUploadPartState: 'MULTIPART_UPLOAD_PART_STATE' as ListEnum,
+    MultipartUploadComposerPartState: 'MULTIPART_UPLOAD_COMPOSER_PART_STATE' as ListEnum,
+    MessageContent: 'MESSAGE_CONTENT' as ListEnum,
+    MessageToUser: 'MESSAGE_TO_USER' as ListEnum,
+    MessageRecipient: 'MESSAGE_RECIPIENT' as ListEnum,
+    MessageStatus: 'MESSAGE_STATUS' as ListEnum,
+    Comment: 'COMMENT' as ListEnum,
+    V2WikiPage: 'V2_WIKI_PAGE' as ListEnum,
+    V2WikiAttachmentReservation: 'V2_WIKI_ATTACHMENT_RESERVATION' as ListEnum,
+    V2WikiMarkdown: 'V2_WIKI_MARKDOWN' as ListEnum,
+    V2WikiOwners: 'V2_WIKI_OWNERS' as ListEnum,
+    Activity: 'ACTIVITY' as ListEnum,
+    Node: 'NODE' as ListEnum,
+    NodeRevision: 'NODE_REVISION' as ListEnum,
+    NodeAccessRequirment: 'NODE_ACCESS_REQUIRMENT' as ListEnum,
+    DockerRepositoryName: 'DOCKER_REPOSITORY_NAME' as ListEnum,
+    DockerCommit: 'DOCKER_COMMIT' as ListEnum,
+    Team: 'TEAM' as ListEnum,
+    MembershipInvitationSubmission: 'MEMBERSHIP_INVITATION_SUBMISSION' as ListEnum,
+    MembershipRequestSubmission: 'MEMBERSHIP_REQUEST_SUBMISSION' as ListEnum,
+    Evaluation: 'EVALUATION' as ListEnum,
+    EvaluationRound: 'EVALUATION_ROUND' as ListEnum,
+    EvaluationSubmissions: 'EVALUATION_SUBMISSIONS' as ListEnum,
+    Submission: 'SUBMISSION' as ListEnum,
+    SubmissionContributor: 'SUBMISSION_CONTRIBUTOR' as ListEnum,
+    SubmissionFile: 'SUBMISSION_FILE' as ListEnum,
+    SubmissionStatus: 'SUBMISSION_STATUS' as ListEnum,
+    ProjectSettings: 'PROJECT_SETTINGS' as ListEnum,
+    ProjectStats: 'PROJECT_STATS' as ListEnum,
+    AccessRequirement: 'ACCESS_REQUIREMENT' as ListEnum,
+    AccessRequirementRevision: 'ACCESS_REQUIREMENT_REVISION' as ListEnum,
+    AccessApproval: 'ACCESS_APPROVAL' as ListEnum,
+    Acl: 'ACL' as ListEnum,
+    AclAccess: 'ACL_ACCESS' as ListEnum,
+    AclAccessType: 'ACL_ACCESS_TYPE' as ListEnum,
+    Favorite: 'FAVORITE' as ListEnum,
+    TrashCan: 'TRASH_CAN' as ListEnum,
+    Portal: 'PORTAL' as ListEnum,
+    Doi: 'DOI' as ListEnum,
+    Challenge: 'CHALLENGE' as ListEnum,
+    ChallengeTeam: 'CHALLENGE_TEAM' as ListEnum,
+    ColumnModel: 'COLUMN_MODEL' as ListEnum,
+    BoundColumnOwner: 'BOUND_COLUMN_OWNER' as ListEnum,
+    BoundColumnOrdinal: 'BOUND_COLUMN_ORDINAL' as ListEnum,
+    TableTransaction: 'TABLE_TRANSACTION' as ListEnum,
+    TableTransactionToVersion: 'TABLE_TRANSACTION_TO_VERSION' as ListEnum,
+    TableSequence: 'TABLE_SEQUENCE' as ListEnum,
+    TableChange: 'TABLE_CHANGE' as ListEnum,
+    QuizResponse: 'QUIZ_RESPONSE' as ListEnum,
+    VerificationSubmission: 'VERIFICATION_SUBMISSION' as ListEnum,
+    VerificationState: 'VERIFICATION_STATE' as ListEnum,
+    VerificationFile: 'VERIFICATION_FILE' as ListEnum,
+    Forum: 'FORUM' as ListEnum,
+    DiscussionThread: 'DISCUSSION_THREAD' as ListEnum,
+    DiscussionThreadView: 'DISCUSSION_THREAD_VIEW' as ListEnum,
+    DiscussionThreadEntityReference: 'DISCUSSION_THREAD_ENTITY_REFERENCE' as ListEnum,
+    DiscussionReply: 'DISCUSSION_REPLY' as ListEnum,
+    Subscription: 'SUBSCRIPTION' as ListEnum,
+    BroadcastMessage: 'BROADCAST_MESSAGE' as ListEnum,
+    ViewType: 'VIEW_TYPE' as ListEnum,
+    ViewScope: 'VIEW_SCOPE' as ListEnum,
+    ViewSnapshot: 'VIEW_SNAPSHOT' as ListEnum,
+    ThrottleRule: 'THROTTLE_RULE' as ListEnum,
+    ResearchProject: 'RESEARCH_PROJECT' as ListEnum,
+    DataAccessRequest: 'DATA_ACCESS_REQUEST' as ListEnum,
+    DataAccessSubmission: 'DATA_ACCESS_SUBMISSION' as ListEnum,
+    DataAccessSubmissionSubmitter: 'DATA_ACCESS_SUBMISSION_SUBMITTER' as ListEnum,
+    DataAccessSubmissionStatus: 'DATA_ACCESS_SUBMISSION_STATUS' as ListEnum,
+    DataAccessSubmissionAccessorChange: 'DATA_ACCESS_SUBMISSION_ACCESSOR_CHANGE' as ListEnum,
+    DataAccessNotifications: 'DATA_ACCESS_NOTIFICATIONS' as ListEnum,
+    FormGroup: 'FORM_GROUP' as ListEnum,
+    FormData: 'FORM_DATA' as ListEnum,
+    Organization: 'ORGANIZATION' as ListEnum,
+    JsonSchema: 'JSON_SCHEMA' as ListEnum,
+    JsonSchemaBlob: 'JSON_SCHEMA_BLOB' as ListEnum,
+    JsonSchemaVersion: 'JSON_SCHEMA_VERSION' as ListEnum,
+    JsonSchemaLatestVersion: 'JSON_SCHEMA_LATEST_VERSION' as ListEnum,
+    JsonSchemaDependency: 'JSON_SCHEMA_DEPENDENCY' as ListEnum,
+    JsonSchemaObjectBinding: 'JSON_SCHEMA_OBJECT_BINDING' as ListEnum,
+    DownloadList: 'DOWNLOAD_LIST' as ListEnum,
+    DownloadListItem: 'DOWNLOAD_LIST_ITEM' as ListEnum,
+    DownloadOrder: 'DOWNLOAD_ORDER' as ListEnum,
+    DownloadList2: 'DOWNLOAD_LIST_2' as ListEnum,
+    DownloadListItem2: 'DOWNLOAD_LIST_ITEM_2' as ListEnum,
+    DataType: 'DATA_TYPE' as ListEnum,
+    OauthSectorIdentifier: 'OAUTH_SECTOR_IDENTIFIER' as ListEnum,
+    OauthClient: 'OAUTH_CLIENT' as ListEnum,
+    OauthRefreshToken: 'OAUTH_REFRESH_TOKEN' as ListEnum,
+    OauthAccessToken: 'OAUTH_ACCESS_TOKEN' as ListEnum,
+    PersonalAccessToken: 'PERSONAL_ACCESS_TOKEN' as ListEnum,
+    AuthorizationGrant: 'AUTHORIZATION_GRANT' as ListEnum,
+    SesNotifications: 'SES_NOTIFICATIONS' as ListEnum,
+    QuarantinedEmails: 'QUARANTINED_EMAILS' as ListEnum,
+    FeatureStatus: 'FEATURE_STATUS' as ListEnum,
+    MaterializedViewId: 'MATERIALIZED_VIEW_ID' as ListEnum,
+    MaterializedViewSourceTable: 'MATERIALIZED_VIEW_SOURCE_TABLE' as ListEnum,
+    PrincipalOidcBinding: 'PRINCIPAL_OIDC_BINDING' as ListEnum,
+    OtpSecret: 'OTP_SECRET' as ListEnum,
+    OtpRecoveryCode: 'OTP_RECOVERY_CODE' as ListEnum,
+    TwoFaStatus: 'TWO_FA_STATUS' as ListEnum,
+    Webhook: 'WEBHOOK' as ListEnum,
+    WebhookVerification: 'WEBHOOK_VERIFICATION' as ListEnum,
+    WebhookAllowedDomain: 'WEBHOOK_ALLOWED_DOMAIN' as ListEnum,
+    AgentRegistration: 'AGENT_REGISTRATION' as ListEnum,
+    AgentSession: 'AGENT_SESSION' as ListEnum,
+    TosRequirements: 'TOS_REQUIREMENTS' as ListEnum,
+    TosAgreement: 'TOS_AGREEMENT' as ListEnum,
+    ProjectStorageData: 'PROJECT_STORAGE_DATA' as ListEnum,
+    ProjectStorageLimit: 'PROJECT_STORAGE_LIMIT' as ListEnum,
+    GridSession: 'GRID_SESSION' as ListEnum,
+    GridReplica: 'GRID_REPLICA' as ListEnum,
+    GridConnection: 'GRID_CONNECTION' as ListEnum,
+    GridPatch: 'GRID_PATCH' as ListEnum,
+    CurationTask: 'CURATION_TASK' as ListEnum,
+    UserStatus: 'USER_STATUS' as ListEnum,
+    RecordsetValidationStats: 'RECORDSET_VALIDATION_STATS' as ListEnum,
+    Change: 'CHANGE' as ListEnum,
+  };
 }

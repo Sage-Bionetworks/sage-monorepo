@@ -3,6 +3,8 @@ package org.sagebionetworks.bixarena.api.configuration;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardHistorySortDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSnapshotSortDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSortDto;
+import org.sagebionetworks.bixarena.api.model.dto.LicenseDto;
+import org.sagebionetworks.bixarena.api.model.dto.ModelSortDto;
 import org.sagebionetworks.bixarena.api.model.dto.SortDirectionDto;
 
 import org.springframework.context.annotation.Bean;
@@ -36,6 +38,24 @@ public class EnumConverterConfiguration {
             @Override
             public LeaderboardSortDto convert(String source) {
                 return LeaderboardSortDto.fromValue(source);
+            }
+        };
+    }
+    @Bean(name = "org.sagebionetworks.bixarena.api.configuration.EnumConverterConfiguration.licenseConverter")
+    Converter<String, LicenseDto> licenseConverter() {
+        return new Converter<String, LicenseDto>() {
+            @Override
+            public LicenseDto convert(String source) {
+                return LicenseDto.fromValue(source);
+            }
+        };
+    }
+    @Bean(name = "org.sagebionetworks.bixarena.api.configuration.EnumConverterConfiguration.modelSortConverter")
+    Converter<String, ModelSortDto> modelSortConverter() {
+        return new Converter<String, ModelSortDto>() {
+            @Override
+            public ModelSortDto convert(String source) {
+                return ModelSortDto.fromValue(source);
             }
         };
     }

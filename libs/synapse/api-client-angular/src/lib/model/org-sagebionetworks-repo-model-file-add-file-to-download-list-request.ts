@@ -14,6 +14,9 @@ import { OrgSagebionetworksRepoModelTableQuery } from './org-sagebionetworks-rep
  */
 export interface OrgSagebionetworksRepoModelFileAddFileToDownloadListRequest {
   concreteType: OrgSagebionetworksRepoModelFileAddFileToDownloadListRequest.ConcreteTypeEnum;
+  /**
+   * The ID of the folder containing the files to add to the user\'s download list. Note: Only the files in this folder will be added to the download list, files in sub-folders will not be added. Should be null if setting a \'query\'.
+   */
   folderId?: string;
   query?: OrgSagebionetworksRepoModelTableQuery;
 }

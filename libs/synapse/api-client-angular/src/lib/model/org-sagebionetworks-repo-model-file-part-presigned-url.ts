@@ -12,7 +12,13 @@
  * A single pre-signed URL for uploading or coping a part of a multi-part request. Note that the headers in the signedHeaders property must be included in the PUT request that is sent to the pre-signed URL. In the case of a multipart copy, when sending the PUT request to the pre-signed URL the body of the request needs to be empty.
  */
 export interface OrgSagebionetworksRepoModelFilePartPresignedUrl {
+  /**
+   * The part number matching this pre-signed URL.
+   */
   partNumber?: number;
+  /**
+   * A pre-signed URL to upload or copy a part of a multi-part request. The part should be uploaded or copied (using an empty request body) as an HTTP PUT using this URL. Each URL will expire after 15 minutes. Any header in the returned signedHeaders map must be included in the request.
+   */
   uploadPresignedUrl?: string;
   /**
    * A key/value pair map of additional headers that must be included in the PUT request for the request to succeed.

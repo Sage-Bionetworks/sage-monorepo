@@ -35,6 +35,12 @@ export interface OrgSagebionetworksRepoModelSearchQuerySearchQuery {
    * Specifies the document fields to include in the response. By default, only the document ids of the hits are returned.
    */
   returnFields?: Array<string>;
+  /**
+   * The zero-based number of the first hit returned in this page of search results.
+   */
   start?: number;
+  /**
+   * The maximum rumber of search hits to return. The default is 10
+   */
   size?: number;
 }

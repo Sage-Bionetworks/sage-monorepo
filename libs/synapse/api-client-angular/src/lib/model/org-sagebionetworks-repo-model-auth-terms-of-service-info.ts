@@ -13,7 +13,13 @@ import { OrgSagebionetworksRepoModelAuthTermsOfServiceRequirements } from './org
  * Information about the current Synapse Terms of Service (ToS).
  */
 export interface OrgSagebionetworksRepoModelAuthTermsOfServiceInfo {
+  /**
+   * The URL that can be used to fetch the latest ToS using an HTTPS GET.
+   */
   termsOfServiceUrl?: string;
+  /**
+   * The semantic version of the latest ToS in the provided URL.  Callers will need to provide this version when submitting a request to agree to shown ToS.
+   */
   latestTermsOfServiceVersion?: string;
   currentRequirements?: OrgSagebionetworksRepoModelAuthTermsOfServiceRequirements;
 }

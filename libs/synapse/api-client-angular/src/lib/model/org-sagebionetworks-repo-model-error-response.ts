@@ -12,14 +12,43 @@
  * JSON schema for an error
  */
 export interface OrgSagebionetworksRepoModelErrorResponse {
+  /**
+   * Indicates which implementation of BaseError this object represents.  The value is the fully qualified class name, e.g. org.sagebionetworks.repo.model.ErrorResponse.
+   */
   concreteType: OrgSagebionetworksRepoModelErrorResponse.ConcreteTypeEnum;
+  /**
+   * The reason for the error
+   */
   reason?: string;
-  errorCode?: string;
+  /**
+   * A code to be used by clients to handle the error.
+   */
+  errorCode?: OrgSagebionetworksRepoModelErrorResponse.ErrorCodeEnum;
 }
 export namespace OrgSagebionetworksRepoModelErrorResponse {
   export type ConcreteTypeEnum = 'org.sagebionetworks.repo.model.ErrorResponse';
   export const ConcreteTypeEnum = {
     OrgSagebionetworksRepoModelErrorResponse:
       'org.sagebionetworks.repo.model.ErrorResponse' as ConcreteTypeEnum,
+  };
+  export type ErrorCodeEnum =
+    | 'PASSWORD_RESET_VIA_EMAIL_REQUIRED'
+    | 'USER_CERTIFICATION_REQUIRED'
+    | 'INVALID_TABLE_QUERY_FACET_COLUMN_REQUEST'
+    | 'OAUTH_CLIENT_NOT_VERIFIED'
+    | 'TWO_FA_REQUIRED'
+    | 'UNSUPPORTED_WEBHOOK_DOMAIN'
+    | 'PROJECT_STORAGE_LIMIT_EXCEEDED'
+    | 'TWO_FA_ENABLED_REQUIRED';
+  export const ErrorCodeEnum = {
+    PasswordResetViaEmailRequired: 'PASSWORD_RESET_VIA_EMAIL_REQUIRED' as ErrorCodeEnum,
+    UserCertificationRequired: 'USER_CERTIFICATION_REQUIRED' as ErrorCodeEnum,
+    InvalidTableQueryFacetColumnRequest:
+      'INVALID_TABLE_QUERY_FACET_COLUMN_REQUEST' as ErrorCodeEnum,
+    OauthClientNotVerified: 'OAUTH_CLIENT_NOT_VERIFIED' as ErrorCodeEnum,
+    TwoFaRequired: 'TWO_FA_REQUIRED' as ErrorCodeEnum,
+    UnsupportedWebhookDomain: 'UNSUPPORTED_WEBHOOK_DOMAIN' as ErrorCodeEnum,
+    ProjectStorageLimitExceeded: 'PROJECT_STORAGE_LIMIT_EXCEEDED' as ErrorCodeEnum,
+    TwoFaEnabledRequired: 'TWO_FA_ENABLED_REQUIRED' as ErrorCodeEnum,
   };
 }

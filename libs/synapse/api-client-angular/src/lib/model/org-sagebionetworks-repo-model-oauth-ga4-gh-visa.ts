@@ -12,9 +12,47 @@
  * GA4GH Visa
  */
 export interface OrgSagebionetworksRepoModelOauthGA4GHVisa {
-  type?: string;
+  /**
+   * The visa type.  Note: Custom types are not supported.
+   */
+  type?: OrgSagebionetworksRepoModelOauthGA4GHVisa.TypeEnum;
+  /**
+   * Seconds since unix epoch that represents when the Visa Assertion Source made the claim.
+   */
   asserted?: number;
+  /**
+   * A string that represents any of the scope, process, identifier and version of the assertion.
+   */
   value?: string;
+  /**
+   * A URL Claim that provides at a minimum the organization that made the assertion.
+   */
   source?: string;
-  by?: string;
+  /**
+   * The level or type of authority within the \'source\' organization of the assertion.
+   */
+  by?: OrgSagebionetworksRepoModelOauthGA4GHVisa.ByEnum;
+}
+export namespace OrgSagebionetworksRepoModelOauthGA4GHVisa {
+  export type TypeEnum =
+    | 'AffiliationAndRole'
+    | 'AcceptedTermsAndPolicies'
+    | 'ResearcherStatus'
+    | 'ControlledAccessGrants'
+    | 'LinkedIdentities';
+  export const TypeEnum = {
+    AffiliationAndRole: 'AffiliationAndRole' as TypeEnum,
+    AcceptedTermsAndPolicies: 'AcceptedTermsAndPolicies' as TypeEnum,
+    ResearcherStatus: 'ResearcherStatus' as TypeEnum,
+    ControlledAccessGrants: 'ControlledAccessGrants' as TypeEnum,
+    LinkedIdentities: 'LinkedIdentities' as TypeEnum,
+  };
+  export type ByEnum = 'self' | 'peer' | 'system' | 'so' | 'dac';
+  export const ByEnum = {
+    Self: 'self' as ByEnum,
+    Peer: 'peer' as ByEnum,
+    System: 'system' as ByEnum,
+    So: 'so' as ByEnum,
+    Dac: 'dac' as ByEnum,
+  };
 }
