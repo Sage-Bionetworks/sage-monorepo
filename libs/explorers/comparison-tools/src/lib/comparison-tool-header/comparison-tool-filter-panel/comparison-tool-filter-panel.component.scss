@@ -43,9 +43,7 @@ button {
     cursor: pointer;
 
     &:hover {
-      svg path {
-        stroke: var(--color-action-primary);
-      }
+      color: var(--color-action-primary);
     }
   }
 }
@@ -101,7 +99,7 @@ button {
           }
         }
 
-        svg {
+        explorers-svg-icon {
           margin-top: 4px;
           color: var(--color-gray-500);
         }
@@ -111,7 +109,7 @@ button {
           background-color: var(--color-action-primary);
 
           &,
-          svg {
+          explorers-svg-icon {
             color: #fff;
           }
         }

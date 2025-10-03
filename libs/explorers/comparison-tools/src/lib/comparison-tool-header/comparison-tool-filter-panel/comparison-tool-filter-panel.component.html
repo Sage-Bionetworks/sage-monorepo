@@ -4,19 +4,12 @@
       <div class="filter-panel-main-inner">
         <div class="filter-panel-main-top">
           <button class="filter-panel-close" (click)="close()">
-            <svg
-              width="21"
-              height="21"
-              viewBox="0 0 21 21"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M19.9999 1L1.3999 19.6M1.3999 1L19.9999 19.6"
-                stroke="#C4C4C4"
-                stroke-width="2"
-              />
-            </svg>
+            <explorers-svg-icon
+              imagePath="/explorers-assets/icons/close.svg"
+              altText="close"
+              [width]="21"
+              [height]="21"
+            />
           </button>
         </div>
         <div class="filter-panel-main-heading">Filter Genes By</div>
@@ -32,19 +25,12 @@
                     {{ filter.name }}
                   </div>
                   <div>
-                    <svg
-                      width="9"
-                      height="15"
-                      viewBox="0 0 9 15"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M0.999999 1.59998L7 7.59998L1 13.6"
-                        stroke="currentColor"
-                        stroke-width="2"
-                      />
-                    </svg>
+                    <explorers-svg-icon
+                      imagePath="/explorers-assets/icons/caret-right-outline.svg"
+                      altText="open {{ filter.name }} filter options"
+                      [width]="9"
+                      [height]="15"
+                    />
                   </div>
                 </button>
               </li>
