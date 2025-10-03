@@ -1,0 +1,15 @@
+{
+  "name": "bixarena-infra-bootstrap",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "tags": ["language:terraform", "product:bixarena", "type:infra"],
+  "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp --update=none .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    }
+  }
+}
