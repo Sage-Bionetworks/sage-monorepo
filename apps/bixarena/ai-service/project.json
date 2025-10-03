@@ -28,8 +28,7 @@
         "publish": false,
         "lockedVersions": true,
         "bundleLocalDependencies": true
-      },
-      "cache": true
+      }
     },
     "serve": {
       "executor": "nx:run-commands",
@@ -39,6 +38,13 @@
         ],
         "cwd": "{projectRoot}",
         "parallel": false
+      }
+    },
+    "lint": {
+      "executor": "@nxlv/python:ruff-check",
+      "outputs": [],
+      "options": {
+        "lintFilePatterns": ["bixarena_ai_service/impl"]
       }
     }
   },
