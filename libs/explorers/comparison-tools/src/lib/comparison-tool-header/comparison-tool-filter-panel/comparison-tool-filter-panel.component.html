@@ -1,4 +1,4 @@
-<div class="filter-panel" [ngClass]="{ open: isOpen(), active: activePane > -1 }">
+<div class="filter-panel" [class.open]="isOpen()" [class.active]="activePane > -1">
   <div class="filter-panel-inner">
     <div class="filter-panel-main">
       <div class="filter-panel-main-inner">
@@ -18,7 +18,7 @@
             @for (filter of filters(); track filter; let i = $index) {
               <li
                 class="filter-panel-main-menu-item-{{ filter.name }}"
-                [ngClass]="{ active: activePane === i }"
+                [class.active]="activePane === i"
               >
                 <button (click)="openPane(i)">
                   <div>
@@ -44,7 +44,7 @@
       @for (filter of filters(); track filter; let i = $index) {
         <div
           class="filter-panel-pane filter-panel-pane-{{ filter.name }}"
-          [ngClass]="{ open: activePane === i }"
+          [class.open]="activePane === i"
         >
           <div class="filter-panel-pane-inner">
             <div class="filter-panel-pane-top">
