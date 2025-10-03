@@ -4,21 +4,29 @@ import java.util.List;
 import org.sagebionetworks.bixarena.api.model.dto.LicenseDto;
 import org.sagebionetworks.bixarena.api.model.dto.ModelDto;
 import org.sagebionetworks.bixarena.api.model.entity.ModelEntity;
-import org.springframework.beans.BeanUtils;
 
 public class ModelMapper {
 
   public ModelDto convertToDto(ModelEntity entity) {
-    ModelDto dto = new ModelDto();
-    if (entity != null) {
-      // Copy properties automatically, excluding fields that need special handling
-      BeanUtils.copyProperties(entity, dto, "id", "license");
-
-      // Handle type conversions
-      dto.setId(entity.getId().toString());
-      dto.setLicense(LicenseDto.fromValue(entity.getLicense()));
+    if (entity == null) {
+      return null;
     }
-    return dto;
+
+    return ModelDto.builder()
+      .id(entity.getId().toString())
+      .slug(entity.getSlug())
+      .name(entity.getName())
+      .license(LicenseDto.fromValue(entity.getLicense()))
+      .active(entity.isActive())
+      .alias(entity.getAlias())
+      .externalLink(entity.getExternalLink())
+      .organization(entity.getOrganization())
+      .description(entity.getDescription())
+      .apiModelName(entity.getApiModelName())
+      .apiBase(entity.getApiBase())
+      .createdAt(entity.getCreatedAt())
+      .updatedAt(entity.getUpdatedAt())
+      .build();
   }
 
   public List<ModelDto> convertToDtoList(List<ModelEntity> entities) {
