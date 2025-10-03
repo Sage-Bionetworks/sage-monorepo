@@ -448,8 +448,8 @@ test.describe('model details - boxplots selector - share links - same-document n
       window.location.hash = fragment;
     }, invalidFragment);
 
-    await expect(page).toHaveURL(`${baseURL}${basePath}`);
     await expectPageAtTop(page);
+    await expect(page).toHaveURL(`${baseURL}${basePath}`);
     await expect(page.getByRole('heading', { level: 1, name: modelName })).toBeInViewport();
   });
 });
