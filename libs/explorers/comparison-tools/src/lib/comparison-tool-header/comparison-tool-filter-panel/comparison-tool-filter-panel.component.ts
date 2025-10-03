@@ -7,7 +7,7 @@ import {
 } from '@sagebionetworks/explorers/models';
 import { CheckboxModule } from 'primeng/checkbox';
 import { TooltipModule } from 'primeng/tooltip';
-import { FilterPanelCloseButtonComponent } from './filter-panel-close-button/filter-panel-close-button.component';
+import { FilterPanelHeaderComponent } from './filter-panel-header/filter-panel-header.component';
 import { FilterPanelMainMenuItemButtonComponent } from './filter-panel-main-menu-item-button/filter-panel-main-menu-item-button.component';
 
 @Component({
@@ -17,7 +17,7 @@ import { FilterPanelMainMenuItemButtonComponent } from './filter-panel-main-menu
     FormsModule,
     TooltipModule,
     CheckboxModule,
-    FilterPanelCloseButtonComponent,
+    FilterPanelHeaderComponent,
     FilterPanelMainMenuItemButtonComponent,
   ],
   templateUrl: './comparison-tool-filter-panel.component.html',

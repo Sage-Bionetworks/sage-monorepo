@@ -2,10 +2,11 @@
   <div class="filter-panel-inner">
     <div class="filter-panel-main">
       <div class="filter-panel-main-inner">
-        <div class="filter-panel-main-top">
-          <explorers-filter-panel-close-button (closeClick)="close()" />
-        </div>
-        <div class="filter-panel-main-heading">Filter Genes By</div>
+        <explorers-filter-panel-header
+          heading="Filter By"
+          [hideCloseButton]="activePane > -1"
+          (closeClick)="close()"
+        />
         <div class="filter-panel-main-menu">
           <ul>
             @for (filter of filters(); track filter; let i = $index) {
@@ -31,12 +32,7 @@
           [class.open]="activePane === i"
         >
           <div class="filter-panel-pane-inner">
-            <div class="filter-panel-pane-top">
-              <explorers-filter-panel-close-button (closeClick)="close()" />
-            </div>
-            <div class="filter-panel-pane-heading">
-              {{ filter.name }}
-            </div>
+            <explorers-filter-panel-header [heading]="filter.name" (closeClick)="close()" />
             <ul>
               @for (option of filter.options; track option; let j = $index) {
                 <li>

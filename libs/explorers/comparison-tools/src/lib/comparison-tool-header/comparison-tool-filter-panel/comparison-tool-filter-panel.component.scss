@@ -46,19 +46,6 @@
     padding: 30px 30px 30px 44px;
   }
 
-  .filter-panel-main-top {
-    height: 60px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-end;
-  }
-
-  .filter-panel-main-heading {
-    height: 80px;
-    font-size: 24px;
-    font-weight: 700;
-  }
-
   ul {
     list-style: none;
     padding: 0;
@@ -69,10 +56,6 @@
       margin-right: 0;
     }
   }
-}
-
-.active .filter-panel-main explorers-filter-panel-close-button {
-  display: none;
 }
 
 .filter-panel-panes {
@@ -106,19 +89,6 @@
 
   .filter-panel-pane-inner {
     padding: 30px;
-  }
-
-  .filter-panel-pane-top {
-    height: 60px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-end;
-  }
-
-  .filter-panel-pane-heading {
-    height: 80px;
-    font-size: 24px;
-    font-weight: 700;
   }
 
   ul {
