@@ -458,7 +458,10 @@ components:
           items:
             $ref: '#/components/schemas/ComparisonToolConfigColumn'
         filters:
-          $ref: '#/components/schemas/ComparisonToolConfigFilter'
+          type: array
+          description: List of filter configurations
+          items:
+            $ref: '#/components/schemas/ComparisonToolConfigFilter'
       required:
         - page
         - dropdowns
