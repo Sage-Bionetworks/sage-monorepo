@@ -35,7 +35,6 @@ export class ComparisonToolFilterPanelComponent {
         field: config.field,
         options: config.values.map((value) => ({
           label: value,
-          value,
           selected: false,
         })),
       };
