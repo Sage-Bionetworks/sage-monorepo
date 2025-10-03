@@ -18,6 +18,9 @@ tags:
   - name: Model
     description: Operations about models.
     x-displayName: Model
+  - name: ExamplePrompt
+    description: Operations about example prompts for biomedical relevance detection.
+    x-displayName: ExamplePrompt
 paths:
   /leaderboards:
     get:
@@ -123,6 +126,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ModelPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /example-prompts:
+    get:
+      tags:
+        - ExamplePrompt
+      summary: List example prompts
+      description: Get a list of example prompts with comprehensive filtering options
+      operationId: listExamplePrompts
+      parameters:
+        - $ref: '#/components/parameters/examplePromptSearchQuery'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamplePromptPage'
         '400':
           $ref: '#/components/responses/BadRequest'
         '500':
@@ -659,6 +682,107 @@ components:
                 $ref: '#/components/schemas/Model'
           required:
             - models
+    ExamplePromptSort:
+      type: string
+      description: The field to sort example prompts by.
+      enum:
+        - question
+        - created_at
+        - source
+        - active
+      default: created_at
+      example: question
+    ExamplePromptSource:
+      description: The source dataset or origin of the example prompt.
+      type: string
+      enum:
+        - pubmedqa
+        - bixbench
+        - bixarena
+      example: pubmedqa
+    ExamplePromptSearchQuery:
+      type: object
+      description: An example prompt search query with pagination and filtering options.
+      properties:
+        pageNumber:
+          description: The page number.
+          type: integer
+          format: int32
+          default: 0
+          minimum: 0
+          example: 0
+        pageSize:
+          description: The number of items in a single page.
+          type: integer
+          format: int32
+          default: 25
+          minimum: 1
+          maximum: 100
+          example: 25
+        sort:
+          $ref: '#/components/schemas/ExamplePromptSort'
+        direction:
+          $ref: '#/components/schemas/SortDirection'
+        source:
+          $ref: '#/components/schemas/ExamplePromptSource'
+          nullable: true
+        active:
+          description: Filter by active status (true returns only active prompts; false only inactive; omit for all).
+          type: boolean
+          nullable: true
+          example: true
+        search:
+          description: Search by question content (case-insensitive partial match).
+          type: string
+          nullable: true
+          example: diabetes
+      required: []
+    ExamplePrompt:
+      type: object
+      description: A self-contained example prompt for biomedical question answering.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique identifier of the example prompt.
+          example: 123e4567-e89b-12d3-a456-426614174000
+        question:
+          type: string
+          description: The biomedical question text.
+          minLength: 1
+          maxLength: 1000
+          example: What are the main symptoms of Type 2 diabetes?
+        source:
+          $ref: '#/components/schemas/ExamplePromptSource'
+        active:
+          type: boolean
+          description: Whether this example prompt is currently active/visible for use.
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          description: When the example prompt was created.
+          example: '2025-08-01T09:00:00Z'
+      required:
+        - id
+        - question
+        - source
+        - active
+        - createdAt
+    ExamplePromptPage:
+      type: object
+      description: A page of example prompts.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            examplePrompts:
+              type: array
+              description: A list of example prompts.
+              items:
+                $ref: '#/components/schemas/ExamplePrompt'
+          required:
+            - examplePrompts
   responses:
     BadRequest:
       description: Invalid request parameters
@@ -727,8 +851,17 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/ModelSearchQuery'
+    examplePromptSearchQuery:
+      name: examplePromptSearchQuery
+      description: The search query used to find and filter example prompts.
+      in: query
+      style: deepObject
+      explode: true
+      schema:
+        $ref: '#/components/schemas/ExamplePromptSearchQuery'
 x-tagGroups:
   - name: BixArena API
     tags:
       - Leaderboard
       - Model
+      - ExamplePrompt
