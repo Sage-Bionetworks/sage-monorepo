@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, input, model, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
+  ComparisonToolConfigFilter,
   ComparisonToolFilter,
-  ComparisonToolFilterConfig,
 } from '@sagebionetworks/explorers/models';
 import { CheckboxModule } from 'primeng/checkbox';
 import { TooltipModule } from 'primeng/tooltip';
@@ -24,7 +24,7 @@ import { FilterPanelMainMenuItemButtonComponent } from './filter-panel-main-menu
   styleUrls: ['./comparison-tool-filter-panel.component.scss'],
 })
 export class ComparisonToolFilterPanelComponent {
-  filterConfigs = input<ComparisonToolFilterConfig[]>([]);
+  filterConfigs = input<ComparisonToolConfigFilter[]>([]);
   filtersChanged = output<ComparisonToolFilter[]>();
   isOpen = model<boolean>(false);
 

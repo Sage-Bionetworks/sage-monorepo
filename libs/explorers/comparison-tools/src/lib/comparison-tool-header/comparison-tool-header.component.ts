@@ -1,7 +1,7 @@
 import { Component, input, model } from '@angular/core';
 import {
+  ComparisonToolConfigFilter,
   ComparisonToolFilter,
-  ComparisonToolFilterConfig,
 } from '@sagebionetworks/explorers/models';
 import { ComparisonToolFilterPanelComponent } from './comparison-tool-filter-panel/comparison-tool-filter-panel.component';
 import { ComparisonToolFilterResultsButtonComponent } from './comparison-tool-filter-results-button/comparison-tool-filter-results-button.component';
@@ -20,7 +20,7 @@ import { ComparisonToolShareURLButtonComponent } from './comparison-tool-share-u
 export class ComparisonToolHeaderComponent {
   filterResultsButtonTooltip = input.required<string>();
   headerTitle = input.required<string>();
-  filterConfigs = input.required<ComparisonToolFilterConfig[]>();
+  filterConfigs = input.required<ComparisonToolConfigFilter[]>();
   onFiltersChange = input.required<(filters: ComparisonToolFilter[]) => void>();
 
   isFilterPanelOpen = model(false);

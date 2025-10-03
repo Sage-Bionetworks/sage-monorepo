@@ -1,9 +1,9 @@
 import {
+  ComparisonToolConfigFilter,
   ComparisonToolFilter,
-  ComparisonToolFilterConfig,
 } from '@sagebionetworks/explorers/models';
 
-export const mockComparisonToolFilterConfigs: ComparisonToolFilterConfig[] = [
+export const mockComparisonToolConfigFilters: ComparisonToolConfigFilter[] = [
   {
     name: 'Age',
     field: 'age',

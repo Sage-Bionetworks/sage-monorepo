@@ -9,7 +9,7 @@ export interface ComparisonToolFilter {
   options: ComparisonToolFilterOption[];
 }
 
-export interface ComparisonToolFilterConfig {
+export interface ComparisonToolConfigFilter {
   name: string;
   field: string;
   values: string[];
