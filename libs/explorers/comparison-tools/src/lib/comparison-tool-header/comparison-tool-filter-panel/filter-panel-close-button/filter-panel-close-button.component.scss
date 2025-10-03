@@ -1,0 +1,10 @@
+.filter-panel-close {
+  background-color: transparent;
+  border: none;
+  color: var(--color-gray-600);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--color-action-primary);
+  }
+}

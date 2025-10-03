@@ -3,14 +3,7 @@
     <div class="filter-panel-main">
       <div class="filter-panel-main-inner">
         <div class="filter-panel-main-top">
-          <button class="filter-panel-close" (click)="close()">
-            <explorers-svg-icon
-              imagePath="/explorers-assets/icons/close.svg"
-              altText="close"
-              [width]="21"
-              [height]="21"
-            />
-          </button>
+          <explorers-filter-panel-close-button (closeClick)="close()" />
         </div>
         <div class="filter-panel-main-heading">Filter Genes By</div>
         <div class="filter-panel-main-menu">
@@ -48,14 +41,7 @@
         >
           <div class="filter-panel-pane-inner">
             <div class="filter-panel-pane-top">
-              <button class="filter-panel-close" (click)="close()">
-                <explorers-svg-icon
-                  imagePath="/agora-assets/icons/close.svg"
-                  [width]="21"
-                  [height]="21"
-                  altText="close"
-                />
-              </button>
+              <explorers-filter-panel-close-button (closeClick)="close()" />
             </div>
             <div class="filter-panel-pane-heading">
               {{ filter.name }}

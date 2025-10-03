@@ -8,10 +8,18 @@ import {
 import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { CheckboxModule } from 'primeng/checkbox';
 import { TooltipModule } from 'primeng/tooltip';
+import { FilterPanelCloseButtonComponent } from './filter-panel-close-button/filter-panel-close-button.component';
 
 @Component({
   selector: 'explorers-comparison-tool-filter-panel',
-  imports: [CommonModule, FormsModule, TooltipModule, CheckboxModule, SvgIconComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    TooltipModule,
+    CheckboxModule,
+    SvgIconComponent,
+    FilterPanelCloseButtonComponent,
+  ],
   templateUrl: './comparison-tool-filter-panel.component.html',
   styleUrls: ['./comparison-tool-filter-panel.component.scss'],
 })

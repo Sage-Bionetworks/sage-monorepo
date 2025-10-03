@@ -37,15 +37,6 @@ button {
     visibility: visible;
     transform: translateX(0);
   }
-
-  .filter-panel-close {
-    color: var(--color-gray-600);
-    cursor: pointer;
-
-    &:hover {
-      color: var(--color-action-primary);
-    }
-  }
 }
 
 .filter-panel-main {
@@ -125,7 +116,7 @@ button {
   }
 }
 
-.active .filter-panel-main .filter-panel-close {
+.active .filter-panel-main explorers-filter-panel-close-button {
   display: none;
 }
 
