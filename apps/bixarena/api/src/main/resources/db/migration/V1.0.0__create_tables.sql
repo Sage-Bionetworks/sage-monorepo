@@ -81,4 +81,4 @@ CREATE TABLE example_prompt (
 
 -- Indexes for performance
 CREATE INDEX idx_example_prompt_source ON example_prompt(source);
-CREATE INDEX idx_model_active ON model(active);
+CREATE INDEX idx_example_prompt_active ON example_prompt(active);
