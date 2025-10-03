@@ -49,6 +49,7 @@ workspace = true
 # depended on by others or included in root dependencies.
 # This is the authoritative list of workspace members.
 members = [
+  "apps/bixarena/ai-service",
   "apps/bixarena/app",
   "apps/bixarena/tools",
   "apps/openchallenges/tools",

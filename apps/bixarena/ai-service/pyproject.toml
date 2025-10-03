@@ -1,13 +1,9 @@
-[build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "bixarena-ai-service"
-version = "0.1.0"
+version = "1.0.0"
 description = "BixArena AI API"
+requires-python = "==3.13.3"
 readme = "README.md"
-requires-python = ">=3.11,<3.13"
 license = { text = "Apache-2.0" }
 authors = [ { name = "Sage Bionetworks" } ]
 dependencies = [
@@ -49,35 +45,48 @@ dependencies = [
   "websockets==10.0",
 ]
 
-[tool.black]
-line-length = 88
-exclude = '''
-(
-  /(
-      \.eggs         # exclude a few common directories in the
-    | \.git          # root of the project
-    | \.hg
-    | \.mypy_cache
-    | \.tox
-    | \.venv
-    | _build
-    | buck-out
-    | build
-    | dist
-  )/
-)
-'''
+# Transitional console script now points to wrapper package
+#[project.scripts]
+#bixarena-app = "src.bixarena_ai_service.__main__:main"
 
-[tool.isort]
-profile = "black"
-skip = [
-    '.eggs', '.git', '.hg', '.mypy_cache', '.nox', '.pants.d', '.tox',
-    '.venv', '_build', 'buck-out', 'build', 'dist', 'node_modules', 'venv',
+[tool.hatch.build.targets.wheel]
+packages = ["bixarena_ai_service"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+exclude = [
+  ".ruff_cache",
+  ".svn",
+  ".tox",
+  ".venv",
+  "dist",
 ]
-skip_gitignore = true
 
-[tool.setuptools]
-package-dir = {"" = "src"}
+line-length = 88
+indent-width = 4
 
-[tool.setuptools.packages.find]
-where = ["src"]
+[tool.ruff.lint]
+select = [
+  # pycodestyle
+  "E",
+  # Pyflakes
+  "F",
+  # pyupgrade
+  "UP",
+  # flake8-bugbear
+  "B",
+  # flake8-simplify
+  "SIM",
+  # isort
+  "I",
+]
+ignore = []
+
+fixable = ["ALL"]
+unfixable = []

@@ -1,9 +1,3 @@
-.flake8
-.gitignore
-README.md
-docker-compose.yaml
-openapi.yaml
-setup.cfg
 src/bixarena_ai_service/apis/__init__.py
 src/bixarena_ai_service/apis/health_check_api.py
 src/bixarena_ai_service/apis/health_check_api_base.py

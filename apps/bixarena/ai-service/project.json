@@ -19,6 +19,17 @@
         "parallel": false
       },
       "dependsOn": ["^build"]
+    },
+    "build": {
+      "executor": "@nxlv/python:build",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "outputPath": "{projectRoot}/dist",
+        "publish": false,
+        "lockedVersions": true,
+        "bundleLocalDependencies": true
+      },
+      "cache": true
     }
   },
   "tags": ["type:service", "scope:backend", "language:python", "package-manager:uv"],
