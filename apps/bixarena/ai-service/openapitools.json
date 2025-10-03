@@ -9,7 +9,8 @@
         "inputSpec": "#{cwd}/../../../libs/bixarena/api-description/openapi/ai-service.openapi.yaml",
         "output": "#{cwd}",
         "additionalProperties": {
-          "packageName": "bixarena_ai_service"
+          "packageName": "bixarena_ai_service",
+          "sourceFolder": ""
         }
       }
     }
