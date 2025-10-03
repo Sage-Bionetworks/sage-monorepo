@@ -1,4 +1,4 @@
--- Insert example prompt records with questions directly embedded
+-- Insert example prompt records
 INSERT INTO example_prompt (id, question, source, active, created_at) VALUES
   ('01111111-1111-1111-1111-111111111111', 'Do mitochondria play a role in remodelling lace plant leaves during programmed cell death?', 'pubmedqa', TRUE, '2025-08-01 09:00:00+00'),
   ('02222222-2222-2222-2222-222222222222', 'Do mutations causing low HDL-C promote increased carotid intima-media thickness?', 'pubmedqa', TRUE, '2025-08-01 09:15:00+00'),
