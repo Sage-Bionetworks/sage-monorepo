@@ -17,15 +17,10 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from pydantic import (
-    BaseModel,
-    ConfigDict,
-    Field,
-    StrictBool,
-    StrictStr,
-    field_validator,
-)
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from typing_extensions import Annotated
+from bixarena_api_client.models.license import License
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -44,17 +39,15 @@ class Model(BaseModel):
     organization: Optional[StrictStr] = Field(
         default=None, description="Organization that developed or maintains the model."
     )
-    license: StrictStr = Field(
-        description="Whether the model is open-source or commercial."
-    )
+    license: License
     active: StrictBool = Field(description="Whether the model is active/visible.")
     external_link: StrictStr = Field(
         description="External URL with more information about the model.",
         alias="externalLink",
     )
-    description: Optional[StrictStr] = Field(
-        default=None, description="Detailed description of the model."
-    )
+    description: Optional[
+        Annotated[str, Field(min_length=1, strict=True, max_length=300)]
+    ] = Field(default=None, description="Detailed description of the model.")
     api_model_name: StrictStr = Field(
         description="The model name used for API calls.", alias="apiModelName"
     )
@@ -82,13 +75,6 @@ class Model(BaseModel):
         "createdAt",
         "updatedAt",
     ]
-
-    @field_validator("license")
-    def license_validate_enum(cls, value):
-        """Validates the enum"""
-        if value not in set(["open-source", "commercial"]):
-            raise ValueError("must be one of enum values ('open-source', 'commercial')")
-        return value
 
     model_config = ConfigDict(
         populate_by_name=True,

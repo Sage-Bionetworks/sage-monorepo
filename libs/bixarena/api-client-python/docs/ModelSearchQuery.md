@@ -12,7 +12,7 @@ A model search query with pagination and filtering options.
 | **direction**    | [**SortDirection**](SortDirection.md) |                                                                                               | [optional] [default to SortDirection.ASC] |
 | **search**       | **str**                               | Search by model name or slug (case-insensitive partial match).                                | [optional]                                |
 | **active**       | **bool**                              | Filter by active status (true returns only active models; false only inactive; omit for all). | [optional]                                |
-| **license**      | **str**                               | Filter by license type.                                                                       | [optional]                                |
+| **license**      | [**License**](License.md)             |                                                                                               | [optional]                                |
 | **organization** | **str**                               | Filter by organization name (case-insensitive partial match).                                 | [optional]                                |
 
 ## Example

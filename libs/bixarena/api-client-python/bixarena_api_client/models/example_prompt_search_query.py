@@ -19,16 +19,16 @@ import json
 from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
-from bixarena_api_client.models.license import License
-from bixarena_api_client.models.model_sort import ModelSort
+from bixarena_api_client.models.example_prompt_sort import ExamplePromptSort
+from bixarena_api_client.models.example_prompt_source import ExamplePromptSource
 from bixarena_api_client.models.sort_direction import SortDirection
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class ModelSearchQuery(BaseModel):
+class ExamplePromptSearchQuery(BaseModel):
     """
-    A model search query with pagination and filtering options.
+    An example prompt search query with pagination and filtering options.
     """  # noqa: E501
 
     page_number: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(
@@ -39,30 +39,25 @@ class ModelSearchQuery(BaseModel):
         description="The number of items in a single page.",
         alias="pageSize",
     )
-    sort: Optional[ModelSort] = ModelSort.NAME
+    sort: Optional[ExamplePromptSort] = ExamplePromptSort.CREATED_AT
     direction: Optional[SortDirection] = SortDirection.ASC
-    search: Optional[StrictStr] = Field(
-        default=None,
-        description="Search by model name or slug (case-insensitive partial match).",
-    )
+    source: Optional[ExamplePromptSource] = None
     active: Optional[StrictBool] = Field(
         default=None,
-        description="Filter by active status (true returns only active models; false only inactive; omit for all).",
+        description="Filter by active status (true returns only active prompts; false only inactive; omit for all).",
     )
-    license: Optional[License] = None
-    organization: Optional[StrictStr] = Field(
+    search: Optional[StrictStr] = Field(
         default=None,
-        description="Filter by organization name (case-insensitive partial match).",
+        description="Search by question content (case-insensitive partial match).",
     )
     __properties: ClassVar[List[str]] = [
         "pageNumber",
         "pageSize",
         "sort",
         "direction",
-        "search",
+        "source",
         "active",
-        "license",
-        "organization",
+        "search",
     ]
 
     model_config = ConfigDict(
@@ -82,7 +77,7 @@ class ModelSearchQuery(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of ModelSearchQuery from a JSON string"""
+        """Create an instance of ExamplePromptSearchQuery from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -102,26 +97,21 @@ class ModelSearchQuery(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # set to None if search (nullable) is None
-        # and model_fields_set contains the field
-        if self.search is None and "search" in self.model_fields_set:
-            _dict["search"] = None
-
         # set to None if active (nullable) is None
         # and model_fields_set contains the field
         if self.active is None and "active" in self.model_fields_set:
             _dict["active"] = None
 
-        # set to None if organization (nullable) is None
+        # set to None if search (nullable) is None
         # and model_fields_set contains the field
-        if self.organization is None and "organization" in self.model_fields_set:
-            _dict["organization"] = None
+        if self.search is None and "search" in self.model_fields_set:
+            _dict["search"] = None
 
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of ModelSearchQuery from a dict"""
+        """Create an instance of ExamplePromptSearchQuery from a dict"""
         if obj is None:
             return None
 
@@ -138,14 +128,13 @@ class ModelSearchQuery(BaseModel):
                 else 25,
                 "sort": obj.get("sort")
                 if obj.get("sort") is not None
-                else ModelSort.NAME,
+                else ExamplePromptSort.CREATED_AT,
                 "direction": obj.get("direction")
                 if obj.get("direction") is not None
                 else SortDirection.ASC,
-                "search": obj.get("search"),
+                "source": obj.get("source"),
                 "active": obj.get("active"),
-                "license": obj.get("license"),
-                "organization": obj.get("organization"),
+                "search": obj.get("search"),
             }
         )
         return _obj
