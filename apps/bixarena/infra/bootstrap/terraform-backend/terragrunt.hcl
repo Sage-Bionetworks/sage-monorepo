@@ -8,7 +8,7 @@ locals {
 }
 
 terraform {
-  source = "${include.project.inputs.project_paths.shared_terraform}//modules/terraform-s3-backend"
+  source = "${include.project.inputs.project_paths.infra}//modules/terraform-s3-backend"
 }
 
 # The inputs passed to the Terraform module include the inputs defined in the

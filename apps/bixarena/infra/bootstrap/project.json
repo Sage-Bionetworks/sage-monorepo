@@ -10,6 +10,25 @@
         "command": "cp --update=none .env.example .env",
         "cwd": "{projectRoot}"
       }
+    },
+    "init": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "terragrunt run-all init --queue-exclude-dir terraform-backend",
+        "cwd": "{projectRoot}"
+      },
+      "configurations": {
+        "terraform-backend": {
+          "command": "terragrunt init --working-dir terraform-backend"
+        }
+      }
+    },
+    "validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "terragrunt run-all validate",
+        "cwd": "{projectRoot}"
+      }
     }
   }
 }
