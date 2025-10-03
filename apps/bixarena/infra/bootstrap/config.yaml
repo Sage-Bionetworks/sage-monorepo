@@ -3,11 +3,11 @@ terraform_backend:
   bucket_name: 'sage-bixarena-bootstrap-terraform-backend-use1-prod'
   bucket_region: 'us-east-1'
   dynamodb_table: 'sage-bixarena-bootstrap-terraform-backend-lock-use1-prod'
-  role_arn: 'arn:aws:iam::xxx:role/OrganizationAccountAccessRole'
+  role_arn: 'arn:aws:iam::045984464920:role/AWSReservedSSO_Administrator_7761ba939b218c1a'
 
 # Module-specific configuration
 modules:
   terraform_backend:
     aws_provider:
-      role_arn: 'arn:aws:iam::xxx:role/OrganizationAccountAccessRole'
+      role_arn: 'arn:aws:iam::045984464920:role/AWSReservedSSO_Administrator_7761ba939b218c1a'
       region: 'us-east-1'
