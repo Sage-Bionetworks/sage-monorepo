@@ -62,21 +62,15 @@ CREATE INDEX idx_leaderboard_entry_bt_score ON leaderboard_entry(bt_score DESC);
 CREATE INDEX idx_leaderboard_snapshot_leaderboard_id ON leaderboard_snapshot(leaderboard_id);
 CREATE INDEX idx_leaderboard_snapshot_created_at ON leaderboard_snapshot(created_at DESC);
 
--- Sessions (existing table - keeping it)
-CREATE TABLE conversation (
-  id UUID PRIMARY KEY,
-  -- user_id INT NOT NULL REFERENCES "user"(id),
-  title TEXT,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
-);
-
 -- Example prompts table (self-contained biomedical example prompts)
 CREATE TABLE example_prompt (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  question TEXT NOT NULL CHECK (char_length(question) BETWEEN 1 AND 1000),
-  source VARCHAR(100) NOT NULL CHECK (source IN ('pubmedqa', 'bixbench', 'bixarena')),
+  question VARCHAR(1000) NOT NULL,
+  source VARCHAR(100) NOT NULL,
   active BOOLEAN NOT NULL DEFAULT FALSE,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  -- Table constraints
+  CONSTRAINT chk_example_prompt_source CHECK (source IN ('pubmedqa', 'bixbench', 'bixarena'))
 );
 
 -- Indexes for performance
