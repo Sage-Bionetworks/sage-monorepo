@@ -2,6 +2,8 @@
   <button
     class="filter-panel-close"
     [class.hidden]="hideCloseButton()"
+    [attr.aria-hidden]="hideCloseButton()"
+    [attr.tabindex]="hideCloseButton() ? -1 : 0"
     (click)="closeClick.emit()"
     aria-label="close"
   >

@@ -32,7 +32,11 @@
           [class.open]="activePane === i"
         >
           <div class="filter-panel-pane-inner">
-            <explorers-filter-panel-header [heading]="filter.name" (closeClick)="close()" />
+            <explorers-filter-panel-header
+              [heading]="filter.name"
+              [hideCloseButton]="activePane !== i"
+              (closeClick)="close()"
+            />
             <ul>
               @for (option of filter.options; track option; let j = $index) {
                 <li>
