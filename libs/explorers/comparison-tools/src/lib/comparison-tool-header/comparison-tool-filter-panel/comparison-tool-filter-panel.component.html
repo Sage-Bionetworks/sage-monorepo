@@ -13,19 +13,10 @@
                 class="filter-panel-main-menu-item-{{ filter.name }}"
                 [class.active]="activePane === i"
               >
-                <button (click)="openPane(i)">
-                  <div>
-                    {{ filter.name }}
-                  </div>
-                  <div>
-                    <explorers-svg-icon
-                      imagePath="/explorers-assets/icons/caret-right-outline.svg"
-                      altText="open {{ filter.name }} filter options"
-                      [width]="9"
-                      [height]="15"
-                    />
-                  </div>
-                </button>
+                <explorers-filter-panel-main-menu-item-button
+                  [filter]="filter"
+                  (buttonClick)="openPane(i)"
+                />
               </li>
             }
           </ul>

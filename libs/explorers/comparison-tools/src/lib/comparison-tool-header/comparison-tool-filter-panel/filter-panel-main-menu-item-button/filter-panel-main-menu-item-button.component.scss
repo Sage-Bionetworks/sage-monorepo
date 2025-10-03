@@ -1,0 +1,35 @@
+@use 'explorers/styles/src/lib/variables' as vars;
+
+button {
+  display: flex;
+  width: 100%;
+  padding: 10px 15px;
+  transition: vars.$transition-duration;
+  cursor: pointer;
+  font-size: 18px;
+  background-color: transparent;
+  border: none;
+
+  > div {
+    display: flex;
+    align-items: center;
+
+    &:first-child {
+      flex-grow: 1;
+    }
+  }
+
+  explorers-svg-icon {
+    margin-top: 4px;
+    color: var(--color-gray-500);
+  }
+
+  &:hover {
+    background-color: var(--color-action-primary);
+    color: #fff;
+
+    explorers-svg-icon {
+      color: #fff;
+    }
+  }
+}

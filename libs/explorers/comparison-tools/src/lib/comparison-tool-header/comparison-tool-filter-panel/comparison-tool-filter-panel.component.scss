@@ -2,11 +2,6 @@
 @use 'explorers/styles/src/lib/mixins';
 @use 'explorers/styles/src/lib/variables' as vars;
 
-button {
-  background-color: transparent;
-  border: none;
-}
-
 .filter-panel {
   position: absolute;
   top: 0;
@@ -72,46 +67,6 @@ button {
     li {
       margin-left: -15px;
       margin-right: 0;
-
-      button {
-        display: flex;
-        width: 100%;
-        padding: 10px 15px;
-        transition: vars.$transition-duration;
-        cursor: pointer;
-        font-size: 18px;
-
-        > div {
-          display: flex;
-          align-items: center;
-
-          &:first-child {
-            flex-grow: 1;
-          }
-        }
-
-        explorers-svg-icon {
-          margin-top: 4px;
-          color: var(--color-gray-500);
-        }
-
-        &.active,
-        &:hover {
-          background-color: var(--color-action-primary);
-
-          &,
-          explorers-svg-icon {
-            color: #fff;
-          }
-        }
-      }
-
-      &.active {
-        button {
-          background-color: var(--color-action-primary);
-          color: #fff;
-        }
-      }
     }
   }
 }

@@ -1,30 +1,13 @@
-import { ComparisonToolFilterConfig } from '@sagebionetworks/explorers/models';
+import {
+  ComparisonToolFilter,
+  ComparisonToolFilterConfig,
+} from '@sagebionetworks/explorers/models';
 
 export const mockComparisonToolFilterConfigs: ComparisonToolFilterConfig[] = [
   {
-    name: 'Biological Domain',
-    field: 'biodomains',
-    values: [
-      'Apoptosis',
-      'APP Metabolism',
-      'Autophagy',
-      'Cell Cycle',
-      'DNA Repair',
-      'Endolysosome',
-      'Epigenetic',
-      'Immune Response',
-      'Lipid Metabolism',
-      'Metal Binding and Homeostasis',
-      'Mitochondrial Metabolism',
-      'Myelination',
-      'Oxidative Stress',
-      'Proteostasis',
-      'RNA Spliceosome',
-      'Structural Stabilization',
-      'Synapse',
-      'Tau Homeostasis',
-      'Vasculature',
-    ],
+    name: 'Age',
+    field: 'age',
+    values: ['4 months', '8 months', '12 months'],
   },
   {
     name: 'Model Type',
@@ -32,25 +15,36 @@ export const mockComparisonToolFilterConfigs: ComparisonToolFilterConfig[] = [
     values: ['Familial AD', 'Late Onset AD'],
   },
   {
-    name: 'Mouse Model',
-    field: 'name',
-    values: [
-      '3xTg-AD',
-      '5xFAD (IU/Jax/Pitt)',
-      '5xFAD (UCI)',
-      'Abca7*V1599M',
-      'APOE4',
-      'LOAD1',
-      'LOAD1.Abca7A1527G',
-      'LOAD1.Ceacam1KO',
-      'LOAD1.Clasp2L163P',
-      'LOAD1.CR1long',
-      'LOAD1.Il1rapExon2KO',
-      'LOAD1.MthfrC677T',
-      'LOAD1.Plcg2M28L',
-      'LOAD1.Snx1D465N',
-      'Trem2-R47H_NSS',
-      'Trem2R47H',
+    name: 'Sex',
+    field: 'sex',
+    values: ['Female', 'Male'],
+  },
+];
+
+export const mockComparisonToolFilters: ComparisonToolFilter[] = [
+  {
+    name: 'Age',
+    field: 'age',
+    options: [
+      { label: '4 months', selected: false },
+      { label: '8 months', selected: false },
+      { label: '12 months', selected: false },
+    ],
+  },
+  {
+    name: 'Model Type',
+    field: 'model_type',
+    options: [
+      { label: 'Familial AD', selected: false },
+      { label: 'Late Onset AD', selected: false },
+    ],
+  },
+  {
+    name: 'Sex',
+    field: 'sex',
+    options: [
+      { label: 'Female', selected: false },
+      { label: 'Male', selected: false },
     ],
   },
 ];

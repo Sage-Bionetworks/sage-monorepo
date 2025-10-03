@@ -5,10 +5,10 @@ import {
   ComparisonToolFilter,
   ComparisonToolFilterConfig,
 } from '@sagebionetworks/explorers/models';
-import { SvgIconComponent } from '@sagebionetworks/explorers/util';
 import { CheckboxModule } from 'primeng/checkbox';
 import { TooltipModule } from 'primeng/tooltip';
 import { FilterPanelCloseButtonComponent } from './filter-panel-close-button/filter-panel-close-button.component';
+import { FilterPanelMainMenuItemButtonComponent } from './filter-panel-main-menu-item-button/filter-panel-main-menu-item-button.component';
 
 @Component({
   selector: 'explorers-comparison-tool-filter-panel',
@@ -17,8 +17,8 @@ import { FilterPanelCloseButtonComponent } from './filter-panel-close-button/fil
     FormsModule,
     TooltipModule,
     CheckboxModule,
-    SvgIconComponent,
     FilterPanelCloseButtonComponent,
+    FilterPanelMainMenuItemButtonComponent,
   ],
   templateUrl: './comparison-tool-filter-panel.component.html',
   styleUrls: ['./comparison-tool-filter-panel.component.scss'],
