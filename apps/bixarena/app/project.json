@@ -42,20 +42,6 @@
         "command": "docker/bixarena/serve-detach.sh {projectName}"
       }
     },
-    "serve-model-api": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "uv run uvicorn src.model.models_api:app --host 0.0.0.0 --port 8000",
-        "cwd": "{projectRoot}"
-      }
-    },
-    "serve-legacy": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "uv run python -m fastchat.serve.gradio_web_server_multi --port ${APP_PORT} --controller-url ''",
-        "cwd": "{projectRoot}"
-      }
-    },
     "scan-image": {
       "executor": "nx:run-commands",
       "options": {
