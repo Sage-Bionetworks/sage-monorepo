@@ -1,0 +1,259 @@
+/* stylelint-disable no-descending-specificity */
+@use 'explorers/styles/src/lib/mixins';
+@use 'explorers/styles/src/lib/variables' as vars;
+
+.filter-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-200px);
+  transition: vars.$transition-duration;
+  z-index: 500;
+
+  .p-popover {
+    background-color: #fff;
+    border-radius: 0;
+    box-shadow: 0 0 10px 3px rgb(0 0 0 / 15%);
+  }
+
+  .p-popover-content {
+    padding: 30px;
+  }
+
+  .filter-panel-inner {
+    height: 100%;
+  }
+
+  &.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+  }
+
+  .filter-panel-close {
+    color: var(--color-gray-600);
+    cursor: pointer;
+
+    &:hover {
+      svg path {
+        stroke: var(--color-action-primary);
+      }
+    }
+  }
+}
+
+.filter-panel-main {
+  position: relative;
+  width: 344px;
+  height: 100%;
+  background-color: #fff;
+  border-right: 1px solid var(--color-border);
+  z-index: 100;
+
+  .filter-panel-main-inner {
+    padding: 30px 30px 30px 44px;
+  }
+
+  .filter-panel-main-top {
+    height: 60px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+  }
+
+  .filter-panel-main-heading {
+    height: 80px;
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin-left: -15px;
+      margin-right: 0;
+
+      button {
+        display: flex;
+        width: 100%;
+        padding: 10px 15px;
+        transition: vars.$transition-duration;
+        cursor: pointer;
+        font-size: 18px;
+
+        > div {
+          display: flex;
+          align-items: center;
+
+          &:first-child {
+            flex-grow: 1;
+          }
+        }
+
+        svg {
+          margin-top: 4px;
+          color: var(--color-gray-500);
+        }
+
+        &.active,
+        &:hover {
+          background-color: var(--color-action-primary);
+
+          &,
+          svg {
+            color: #fff;
+          }
+        }
+      }
+
+      &.active {
+        button {
+          background-color: var(--color-action-primary);
+          color: #fff;
+        }
+      }
+    }
+  }
+
+  .filter-panel-main-menu-item-presets {
+    position: relative;
+    margin-bottom: 60px;
+
+    &::after {
+      content: ' ';
+      display: block;
+      position: absolute;
+      left: 15px;
+      right: 15px;
+      bottom: -35px;
+      border-bottom: 1px solid var(--color-gray-300);
+    }
+  }
+}
+
+.active .filter-panel-main .filter-panel-close {
+  display: none;
+}
+
+.filter-panel-panes {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  bottom: 0;
+  z-index: 50;
+}
+
+.filter-panel-pane {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  min-width: 380px;
+  border-right: 1px solid var(--color-border);
+  background-color: #fff;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-100%);
+  transition: vars.$transition-duration;
+  overflow: auto;
+  box-shadow: 0 0 10px 0 rgb(0 0 0 / 15%);
+
+  &.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0%);
+  }
+
+  .filter-panel-pane-inner {
+    padding: 30px;
+  }
+
+  .filter-panel-pane-top {
+    height: 60px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+  }
+
+  .filter-panel-pane-heading {
+    height: 80px;
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  .filter-panel-pane-heading-info {
+    color: var(--color-gray-600);
+    display: inline-block;
+    margin-left: 6px;
+    transform: translateY(1px);
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      padding: 9px 0;
+
+      .checkbox {
+        display: flex;
+        align-items: center;
+        column-gap: 0.5rem;
+
+        &:hover {
+          color: var(--color-action-primary);
+
+          .p-checkbox-box {
+            border-color: var(--color-action-primary);
+          }
+        }
+      }
+    }
+  }
+
+  &.filter-panel-pane-presets {
+    ul li {
+      padding: 0;
+      margin-left: -15px;
+      margin-right: -15px;
+      transition: var(--transition-duration);
+
+      .checkbox {
+        padding: 11px 15px;
+
+        > p-checkbox {
+          display: none;
+        }
+      }
+
+      &:hover {
+        background-color: var(--color-action-primary);
+
+        &,
+        label {
+          color: #fff;
+        }
+      }
+    }
+  }
+
+  .filter-panel-pane-controls {
+    display: flex;
+    border-top: 1px solid var(--color-gray-300);
+    padding: 15px;
+
+    button {
+      background-color: var(--color-primary);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 30px;
+    }
+  }
+}

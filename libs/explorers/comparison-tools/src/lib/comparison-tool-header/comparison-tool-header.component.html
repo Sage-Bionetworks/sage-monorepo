@@ -6,5 +6,10 @@
     />
     <h1>{{ headerTitle() }}</h1>
     <explorers-comparison-tool-share-url-button />
+    <explorers-comparison-tool-filter-panel
+      #filterPanel
+      [filterConfigs]="filterConfigs()"
+      (filtersChanged)="onFiltersChange()($event)"
+    />
   </div>
 </div>
