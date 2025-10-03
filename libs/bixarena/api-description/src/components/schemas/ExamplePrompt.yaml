@@ -3,7 +3,6 @@ description: A self-contained example prompt for biomedical question answering.
 properties:
   id:
     type: string
-    format: uuid
     description: The unique identifier of the example prompt.
     example: '123e4567-e89b-12d3-a456-426614174000'
   question:

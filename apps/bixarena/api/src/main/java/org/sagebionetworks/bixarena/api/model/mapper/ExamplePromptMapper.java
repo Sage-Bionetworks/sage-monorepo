@@ -15,7 +15,7 @@ public class ExamplePromptMapper {
       BeanUtils.copyProperties(entity, dto, "id", "source");
 
       // Handle type conversions
-      dto.setId(entity.getId());
+      dto.setId(entity.getId().toString());
       dto.setSource(ExamplePromptSourceDto.fromValue(entity.getSource()));
     }
     return dto;

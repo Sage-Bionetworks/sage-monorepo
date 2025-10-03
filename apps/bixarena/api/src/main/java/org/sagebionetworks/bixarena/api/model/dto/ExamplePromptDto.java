@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.time.OffsetDateTime;
-import java.util.UUID;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptSourceDto;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
@@ -29,7 +28,7 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public class ExamplePromptDto {
 
-  private UUID id;
+  private String id;
 
   private String question;
 
@@ -47,7 +46,7 @@ public class ExamplePromptDto {
   /**
    * Constructor with only required parameters
    */
-  public ExamplePromptDto(UUID id, String question, ExamplePromptSourceDto source, Boolean active, OffsetDateTime createdAt) {
+  public ExamplePromptDto(String id, String question, ExamplePromptSourceDto source, Boolean active, OffsetDateTime createdAt) {
     this.id = id;
     this.question = question;
     this.source = source;
@@ -55,7 +54,7 @@ public class ExamplePromptDto {
     this.createdAt = createdAt;
   }
 
-  public ExamplePromptDto id(UUID id) {
+  public ExamplePromptDto id(String id) {
     this.id = id;
     return this;
   }
@@ -64,14 +63,14 @@ public class ExamplePromptDto {
    * The unique identifier of the example prompt.
    * @return id
    */
-  @NotNull @Valid 
+  @NotNull 
   @Schema(name = "id", example = "123e4567-e89b-12d3-a456-426614174000", description = "The unique identifier of the example prompt.", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("id")
-  public UUID getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(UUID id) {
+  public void setId(String id) {
     this.id = id;
   }
 
@@ -221,7 +220,7 @@ public class ExamplePromptDto {
       return this;
     }
 
-    public ExamplePromptDto.Builder id(UUID id) {
+    public ExamplePromptDto.Builder id(String id) {
       this.instance.id(id);
       return this;
     }
