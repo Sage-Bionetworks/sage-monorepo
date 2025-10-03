@@ -19,6 +19,44 @@
         "parallel": false
       },
       "dependsOn": ["^build"]
+    },
+    "build": {
+      "executor": "@nxlv/python:build",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "outputPath": "{projectRoot}/dist",
+        "publish": false,
+        "lockedVersions": true,
+        "bundleLocalDependencies": true
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "uv run uvicorn bixarena_ai_service.main:app --reload --host 0.0.0.0 --port ${APP_PORT}"
+        ],
+        "cwd": "{projectRoot}",
+        "parallel": false
+      }
+    },
+    "lint": {
+      "executor": "@nxlv/python:ruff-check",
+      "outputs": [],
+      "options": {
+        "lintFilePatterns": ["bixarena_ai_service/impl"]
+      }
+    },
+    "test": {
+      "executor": "@nxlv/python:run-commands",
+      "outputs": [
+        "{workspaceRoot}/reports/{projectRoot}/unittests",
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "command": "uv run pytest tests/",
+        "cwd": "{projectRoot}"
+      }
     }
   },
   "tags": ["type:service", "scope:backend", "language:python", "package-manager:uv"],
