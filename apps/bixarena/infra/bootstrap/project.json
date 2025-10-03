@@ -29,6 +29,30 @@
         "command": "terragrunt run-all validate",
         "cwd": "{projectRoot}"
       }
+    },
+    "plan": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "terragrunt run-all plan --queue-exclude-dir terraform-backend",
+        "cwd": "{projectRoot}"
+      },
+      "configurations": {
+        "terraform-backend": {
+          "command": "terragrunt plan --working-dir terraform-backend"
+        }
+      }
+    },
+    "apply": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "terragrunt run-all apply --queue-exclude-dir terraform-backend",
+        "cwd": "{projectRoot}"
+      },
+      "configurations": {
+        "terraform-backend": {
+          "command": "terragrunt apply --working-dir terraform-backend"
+        }
+      }
     }
   }
 }
