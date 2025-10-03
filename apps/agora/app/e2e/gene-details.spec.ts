@@ -39,8 +39,10 @@ test.describe('gene details', () => {
 
     await expect(page.getByRole('heading', { name: gene1.name, exact: true })).toBeVisible();
 
+    const responsePromise = page.waitForResponse(`**/genes/search/enhanced?q=${gene2.id}`);
     const searchInput = page.getByRole('textbox', { name: 'Search genes' });
     await searchInput.pressSequentially(gene2.id);
+    await responsePromise;
 
     const searchList = page.getByRole('list').filter({ hasText: gene2.name });
     const searchListItem = searchList.getByRole('listitem');
