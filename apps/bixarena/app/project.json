@@ -11,10 +11,6 @@
         "cwd": "{projectRoot}"
       }
     },
-    "prepare": {
-      "executor": "nx:run-commands",
-      "options": {}
-    },
     "show-packages": {
       "executor": "nx:run-commands",
       "options": {
