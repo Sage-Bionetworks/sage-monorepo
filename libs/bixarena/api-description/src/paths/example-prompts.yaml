@@ -1,0 +1,19 @@
+get:
+  tags:
+    - ExamplePrompt
+  summary: List example prompts
+  description: Get a list of example prompts with comprehensive filtering options
+  operationId: listExamplePrompts
+  parameters:
+    - $ref: ../components/parameters/query/examplePromptSearchQuery.yaml
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ExamplePromptPage.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

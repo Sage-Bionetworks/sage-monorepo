@@ -1,0 +1,36 @@
+type: object
+description: An example prompt search query with pagination and filtering options.
+properties:
+  pageNumber:
+    description: The page number.
+    type: integer
+    format: int32
+    default: 0
+    minimum: 0
+    example: 0
+  pageSize:
+    description: The number of items in a single page.
+    type: integer
+    format: int32
+    default: 25
+    minimum: 1
+    maximum: 100
+    example: 25
+  sort:
+    $ref: ExamplePromptSort.yaml
+  direction:
+    $ref: SortDirection.yaml
+  source:
+    $ref: ExamplePromptSource.yaml
+    nullable: true
+  active:
+    description: Filter by active status (true returns only active prompts; false only inactive; omit for all).
+    type: boolean
+    nullable: true
+    example: true
+  search:
+    description: Search by question content (case-insensitive partial match).
+    type: string
+    nullable: true
+    example: 'diabetes'
+required: []

@@ -73,17 +73,16 @@ configuration = bixarena_api_client.Configuration(
 # Enter a context with an instance of the API client
 with bixarena_api_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = bixarena_api_client.LeaderboardApi(api_client)
-    leaderboard_id = 'open-source' # str | The unique identifier of a leaderboard
-    leaderboard_search_query = bixarena_api_client.LeaderboardSearchQuery() # LeaderboardSearchQuery | The search query used to find and filter leaderboard entries. (optional)
+    api_instance = bixarena_api_client.ExamplePromptApi(api_client)
+    example_prompt_search_query = bixarena_api_client.ExamplePromptSearchQuery() # ExamplePromptSearchQuery | The search query used to find and filter example prompts. (optional)
 
     try:
-        # Get leaderboard entries
-        api_response = api_instance.get_leaderboard(leaderboard_id, leaderboard_search_query=leaderboard_search_query)
-        print("The response of LeaderboardApi->get_leaderboard:\n")
+        # List example prompts
+        api_response = api_instance.list_example_prompts(example_prompt_search_query=example_prompt_search_query)
+        print("The response of ExamplePromptApi->list_example_prompts:\n")
         pprint(api_response)
     except ApiException as e:
-        print("Exception when calling LeaderboardApi->get_leaderboard: %s\n" % e)
+        print("Exception when calling ExamplePromptApi->list_example_prompts: %s\n" % e)
 
 ```
 
@@ -91,17 +90,23 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 All URIs are relative to _http://localhost/v1_
 
-| Class            | Method                                                                            | HTTP request                                            | Description                     |
-| ---------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------- |
-| _LeaderboardApi_ | [**get_leaderboard**](docs/LeaderboardApi.md#get_leaderboard)                     | **GET** /leaderboards/{leaderboardId}                   | Get leaderboard entries         |
-| _LeaderboardApi_ | [**get_leaderboard_snapshots**](docs/LeaderboardApi.md#get_leaderboard_snapshots) | **GET** /leaderboards/{leaderboardId}/snapshots         | Get leaderboard snapshots       |
-| _LeaderboardApi_ | [**get_model_history**](docs/LeaderboardApi.md#get_model_history)                 | **GET** /leaderboards/{leaderboardId}/history/{modelId} | Get model performance history   |
-| _LeaderboardApi_ | [**list_leaderboards**](docs/LeaderboardApi.md#list_leaderboards)                 | **GET** /leaderboards                                   | List all available leaderboards |
-| _ModelApi_       | [**list_models**](docs/ModelApi.md#list_models)                                   | **GET** /models                                         | List models                     |
+| Class              | Method                                                                            | HTTP request                                            | Description                     |
+| ------------------ | --------------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------- |
+| _ExamplePromptApi_ | [**list_example_prompts**](docs/ExamplePromptApi.md#list_example_prompts)         | **GET** /example-prompts                                | List example prompts            |
+| _LeaderboardApi_   | [**get_leaderboard**](docs/LeaderboardApi.md#get_leaderboard)                     | **GET** /leaderboards/{leaderboardId}                   | Get leaderboard entries         |
+| _LeaderboardApi_   | [**get_leaderboard_snapshots**](docs/LeaderboardApi.md#get_leaderboard_snapshots) | **GET** /leaderboards/{leaderboardId}/snapshots         | Get leaderboard snapshots       |
+| _LeaderboardApi_   | [**get_model_history**](docs/LeaderboardApi.md#get_model_history)                 | **GET** /leaderboards/{leaderboardId}/history/{modelId} | Get model performance history   |
+| _LeaderboardApi_   | [**list_leaderboards**](docs/LeaderboardApi.md#list_leaderboards)                 | **GET** /leaderboards                                   | List all available leaderboards |
+| _ModelApi_         | [**list_models**](docs/ModelApi.md#list_models)                                   | **GET** /models                                         | List models                     |
 
 ## Documentation For Models
 
 - [BasicError](docs/BasicError.md)
+- [ExamplePrompt](docs/ExamplePrompt.md)
+- [ExamplePromptPage](docs/ExamplePromptPage.md)
+- [ExamplePromptSearchQuery](docs/ExamplePromptSearchQuery.md)
+- [ExamplePromptSort](docs/ExamplePromptSort.md)
+- [ExamplePromptSource](docs/ExamplePromptSource.md)
 - [HistoricalLeaderboardEntry](docs/HistoricalLeaderboardEntry.md)
 - [LeaderboardEntry](docs/LeaderboardEntry.md)
 - [LeaderboardEntryPage](docs/LeaderboardEntryPage.md)
@@ -115,6 +120,7 @@ All URIs are relative to _http://localhost/v1_
 - [LeaderboardSnapshotQuery](docs/LeaderboardSnapshotQuery.md)
 - [LeaderboardSnapshotSort](docs/LeaderboardSnapshotSort.md)
 - [LeaderboardSort](docs/LeaderboardSort.md)
+- [License](docs/License.md)
 - [Model](docs/Model.md)
 - [ModelPage](docs/ModelPage.md)
 - [ModelSearchQuery](docs/ModelSearchQuery.md)

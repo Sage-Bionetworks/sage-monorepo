@@ -1,5 +1,7 @@
 package org.sagebionetworks.bixarena.api.configuration;
 
+import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptSortDto;
+import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptSourceDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardHistorySortDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSnapshotSortDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSortDto;
@@ -14,6 +16,24 @@ import org.springframework.core.convert.converter.Converter;
 @Configuration(value = "org.sagebionetworks.bixarena.api.configuration.enumConverterConfiguration")
 public class EnumConverterConfiguration {
 
+    @Bean(name = "org.sagebionetworks.bixarena.api.configuration.EnumConverterConfiguration.examplePromptSortConverter")
+    Converter<String, ExamplePromptSortDto> examplePromptSortConverter() {
+        return new Converter<String, ExamplePromptSortDto>() {
+            @Override
+            public ExamplePromptSortDto convert(String source) {
+                return ExamplePromptSortDto.fromValue(source);
+            }
+        };
+    }
+    @Bean(name = "org.sagebionetworks.bixarena.api.configuration.EnumConverterConfiguration.examplePromptSourceConverter")
+    Converter<String, ExamplePromptSourceDto> examplePromptSourceConverter() {
+        return new Converter<String, ExamplePromptSourceDto>() {
+            @Override
+            public ExamplePromptSourceDto convert(String source) {
+                return ExamplePromptSourceDto.fromValue(source);
+            }
+        };
+    }
     @Bean(name = "org.sagebionetworks.bixarena.api.configuration.EnumConverterConfiguration.leaderboardHistorySortConverter")
     Converter<String, LeaderboardHistorySortDto> leaderboardHistorySortConverter() {
         return new Converter<String, LeaderboardHistorySortDto>() {

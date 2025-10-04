@@ -17,6 +17,7 @@ __version__ = "1.0.0"
 
 # Define package exports
 __all__ = [
+    "ExamplePromptApi",
     "LeaderboardApi",
     "ModelApi",
     "ApiResponse",
@@ -29,6 +30,11 @@ __all__ = [
     "ApiAttributeError",
     "ApiException",
     "BasicError",
+    "ExamplePrompt",
+    "ExamplePromptPage",
+    "ExamplePromptSearchQuery",
+    "ExamplePromptSort",
+    "ExamplePromptSource",
     "HistoricalLeaderboardEntry",
     "LeaderboardEntry",
     "LeaderboardEntryPage",
@@ -42,6 +48,7 @@ __all__ = [
     "LeaderboardSnapshotQuery",
     "LeaderboardSnapshotSort",
     "LeaderboardSort",
+    "License",
     "Model",
     "ModelPage",
     "ModelSearchQuery",
@@ -51,6 +58,9 @@ __all__ = [
 ]
 
 # import apis into sdk package
+from bixarena_api_client.api.example_prompt_api import (
+    ExamplePromptApi as ExamplePromptApi,
+)
 from bixarena_api_client.api.leaderboard_api import LeaderboardApi as LeaderboardApi
 from bixarena_api_client.api.model_api import ModelApi as ModelApi
 
@@ -67,6 +77,19 @@ from bixarena_api_client.exceptions import ApiException as ApiException
 
 # import models into sdk package
 from bixarena_api_client.models.basic_error import BasicError as BasicError
+from bixarena_api_client.models.example_prompt import ExamplePrompt as ExamplePrompt
+from bixarena_api_client.models.example_prompt_page import (
+    ExamplePromptPage as ExamplePromptPage,
+)
+from bixarena_api_client.models.example_prompt_search_query import (
+    ExamplePromptSearchQuery as ExamplePromptSearchQuery,
+)
+from bixarena_api_client.models.example_prompt_sort import (
+    ExamplePromptSort as ExamplePromptSort,
+)
+from bixarena_api_client.models.example_prompt_source import (
+    ExamplePromptSource as ExamplePromptSource,
+)
 from bixarena_api_client.models.historical_leaderboard_entry import (
     HistoricalLeaderboardEntry as HistoricalLeaderboardEntry,
 )
@@ -106,6 +129,7 @@ from bixarena_api_client.models.leaderboard_snapshot_sort import (
 from bixarena_api_client.models.leaderboard_sort import (
     LeaderboardSort as LeaderboardSort,
 )
+from bixarena_api_client.models.license import License as License
 from bixarena_api_client.models.model import Model as Model
 from bixarena_api_client.models.model_page import ModelPage as ModelPage
 from bixarena_api_client.models.model_search_query import (
