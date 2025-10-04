@@ -1,8 +1,5 @@
 ---
-applyTo:
-  - '**/*.tf'
-  - '**/*.tfvars'
-  - '**/*.hcl'
+applyTo: '**/*.tf,**/*.tfvars,**/*.hcl'
 ---
 
 # Terraform & Terragrunt Monorepo Conventions (BixArena Focus)
