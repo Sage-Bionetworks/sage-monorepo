@@ -212,7 +212,13 @@
       "!{projectRoot}/.storybook/**/*",
       "!{projectRoot}/tsconfig.storybook.json",
       "!{projectRoot}/src/test/**/*"
-    ]
+    ],
+    "defaultPython": [
+      "{projectRoot}/**/*",
+      "{workspaceRoot}/pyproject.toml",
+      "{workspaceRoot}/uv.lock"
+    ],
+    "production-python": ["defaultPython"]
   },
   "useInferencePlugins": false,
   "defaultBase": "main",
