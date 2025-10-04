@@ -15,8 +15,10 @@ handler = None
 visited_loggers = set()
 
 
-class StreamToLogger:
-    """Stream object that redirects writes to a logger instance."""
+class StreamToLogger(object):
+    """
+    Fake file-like stream object that redirects writes to a logger instance.
+    """
 
     def __init__(self, logger, log_level=logging.INFO):
         self.logger = logger
@@ -33,7 +35,8 @@ class StreamToLogger:
             # By default sys.stdout.write() expects '\n' newlines and then
             # translates them so this is still cross platform.
             if line[-1] == "\n":
-                self.logger.log(self.log_level, line.rstrip())
+                encoded_message = line.encode("utf-8", "ignore").decode("utf-8")
+                self.logger.log(self.log_level, encoded_message.rstrip())
             else:
                 self.linebuf += line
 
@@ -42,9 +45,12 @@ class StreamToLogger:
             self.logger.log(self.log_level, self.linebuf.rstrip())
         self.linebuf = ""
 
+    def isatty(self):
+        """Return False since this is not a TTY."""
+        return False
 
-def build_logger(logger_name: str, logger_filename: str) -> logging.Logger:
-    """Build a logger with the given name and filename."""
+
+def build_logger(logger_name, logger_filename):
     global handler
 
     formatter = logging.Formatter(
@@ -61,8 +67,7 @@ def build_logger(logger_name: str, logger_filename: str) -> logging.Logger:
             if platform.system() == "Windows":
                 warnings.warn(
                     "If you are running on Windows, "
-                    "we recommend you use Python >= 3.9 for UTF-8 encoding.",
-                    stacklevel=2,
+                    "we recommend you use Python >= 3.9 for UTF-8 encoding."
                 )
             logging.basicConfig(level=logging.INFO)
     logging.getLogger().handlers[0].setFormatter(formatter)
@@ -85,8 +90,7 @@ def build_logger(logger_name: str, logger_filename: str) -> logging.Logger:
     # Avoid httpx flooding POST logs
     logging.getLogger("httpx").setLevel(logging.WARNING)
 
-    # Only create file logging if LOGDIR is set (not empty)
-    # When LOGDIR is empty, logs will only go to console
+    # if LOGDIR is empty, then don't try output log to local file
     if LOGDIR != "":
         os.makedirs(LOGDIR, exist_ok=True)
         filename = os.path.join(LOGDIR, logger_filename)
@@ -95,10 +99,10 @@ def build_logger(logger_name: str, logger_filename: str) -> logging.Logger:
         )
         handler.setFormatter(formatter)
 
-        for logger_item in [stdout_logger, stderr_logger, logger]:
-            if logger_item in visited_loggers:
+        for l in [stdout_logger, stderr_logger, logger]:
+            if l in visited_loggers:
                 continue
-            visited_loggers.add(logger_item)
-            logger_item.addHandler(handler)
+            visited_loggers.add(l)
+            l.addHandler(handler)
 
     return logger
