@@ -84,8 +84,6 @@ def bot_response(
     temperature,
     top_p,
     max_new_tokens,
-    request: gr.Request,
-    apply_rate_limit=True,
 ):
     logger.info("bot_response. ")
     start_tstamp = time.time()
@@ -193,7 +191,6 @@ def bot_response(
 def bot_response_multi(
     state0,
     state1,
-    request: gr.Request,
     temperature=0.7,
     top_p=1.0,
     max_new_tokens=1024,
@@ -219,8 +216,6 @@ def bot_response_multi(
                 temperature,
                 top_p,
                 max_new_tokens,
-                request,
-                apply_rate_limit=False,
             )
         )
 

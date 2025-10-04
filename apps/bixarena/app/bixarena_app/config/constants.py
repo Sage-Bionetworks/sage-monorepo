@@ -13,7 +13,6 @@ MODERATION_MSG = "$MODERATION$ YOUR INPUT VIOLATES OUR CONTENT MODERATION GUIDEL
 CONVERSATION_LIMIT_MSG = "YOU HAVE REACHED THE CONVERSATION LENGTH LIMIT. PLEASE CLEAR HISTORY AND START A NEW CONVERSATION."
 INACTIVE_MSG = "THIS SESSION HAS BEEN INACTIVE FOR TOO LONG. PLEASE REFRESH THIS PAGE."
 SLOW_MODEL_MSG = "⚠️  Both models will show the responses all at once. Please stay patient as it may take over 30 seconds."
-RATE_LIMIT_MSG = "**RATE LIMIT OF THIS MODEL IS REACHED. PLEASE COME BACK LATER OR TRY OTHER MODELS.**"
 # Maximum input length
 INPUT_CHAR_LEN_LIMIT = int(os.getenv("FASTCHAT_INPUT_CHAR_LEN_LIMIT", 12000))
 # Maximum conversation turns
@@ -22,8 +21,6 @@ CONVERSATION_TURN_LIMIT = 50
 SESSION_EXPIRATION_TIME = 3600
 # The output dir of log files (default to print console logging only)
 LOGDIR = os.getenv("LOGDIR", "")
-# CPU Instruction Set Architecture
-CPU_ISA = os.getenv("CPU_ISA")
 
 
 class ErrorCode(IntEnum):
