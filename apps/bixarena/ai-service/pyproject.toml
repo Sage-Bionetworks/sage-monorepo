@@ -62,6 +62,9 @@ dependencies = [
   "websockets==10.0",
 ]
 
+# Transitional console script now points to wrapper package
+[project.scripts]
+bixarena-ai-service = "bixarena_ai_service.__main__:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["bixarena_ai_service"]
