@@ -4,6 +4,7 @@ product_name="bixarena"
 
 args=(
   # List of services in alphanumeric order
+  --file docker/"$product_name"/services/ai-service.yml
   --file docker/"$product_name"/services/apex.yml
   --file docker/"$product_name"/services/api-gateway.yml
   --file docker/"$product_name"/services/api.yml
