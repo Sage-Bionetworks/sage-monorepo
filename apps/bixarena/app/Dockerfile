@@ -16,7 +16,8 @@ COPY --from=uv /uv /bin/uv
 RUN groupadd --gid "$USER_GID" "$USERNAME" \
   && useradd --uid "$USER_UID" --gid "$USER_GID" -m "$USERNAME" \
   && apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
-  && apt-get install --no-install-recommends -qq -y gosu \
+  && apt-get install --no-install-recommends -qq -y \
+    gosu \
   && apt-get -y clean \
   && apt-get -y autoremove \
   && rm -rf /var/lib/apt/lists/*
