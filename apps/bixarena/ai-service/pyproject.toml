@@ -44,7 +44,7 @@ dependencies = [
   "itsdangerous==1.1.0",
   "Jinja2==3.1.4",
   "MarkupSafe==2.0.1",
-  "orjson==3.9.15",
+  "orjson~=3.0",
   "promise==2.3",
   "pydantic>=2",
   "python-dotenv==0.17.1",
