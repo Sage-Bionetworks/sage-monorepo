@@ -11,25 +11,22 @@ SERVER_ERROR_MSG = (
 )
 MODERATION_MSG = "$MODERATION$ YOUR INPUT VIOLATES OUR CONTENT MODERATION GUIDELINES."
 CONVERSATION_LIMIT_MSG = "YOU HAVE REACHED THE CONVERSATION LENGTH LIMIT. PLEASE CLEAR HISTORY AND START A NEW CONVERSATION."
-INACTIVE_MSG = "THIS SESSION HAS BEEN INACTIVE FOR TOO LONG. PLEASE REFRESH THIS PAGE."
 SLOW_MODEL_MSG = "⚠️  Both models will show the responses all at once. Please stay patient as it may take over 30 seconds."
-RATE_LIMIT_MSG = "**RATE LIMIT OF THIS MODEL IS REACHED. PLEASE COME BACK LATER OR TRY OTHER MODELS.**"
 # Maximum input length
-INPUT_CHAR_LEN_LIMIT = int(os.getenv("FASTCHAT_INPUT_CHAR_LEN_LIMIT", 12000))
+INPUT_CHAR_LEN_LIMIT = int(os.getenv("INPUT_CHAR_LEN_LIMIT", 1000))
 # Maximum conversation turns
 CONVERSATION_TURN_LIMIT = 50
-# The output dir of log files
-LOGDIR = os.getenv("LOGDIR", "src/logs")
-WORKER_API_TIMEOUT = int(os.getenv("FASTCHAT_WORKER_API_TIMEOUT", 100))
+# The output dir of log files (default to print console logging only)
+LOGDIR = os.getenv("LOGDIR", "")
 
 
 class ErrorCode(IntEnum):
     """
+    Error codes based on OpenAI API error codes:
     https://platform.openai.com/docs/guides/error-codes/api-errors
     """
 
-    VALIDATION_TYPE_ERROR = 40001
-
+    # Standard OpenAI API error codes
     INVALID_AUTH_KEY = 40101
     INCORRECT_AUTH_KEY = 40102
     NO_PERMISSION = 40103
@@ -43,8 +40,7 @@ class ErrorCode(IntEnum):
     ENGINE_OVERLOADED = 42903
 
     INTERNAL_ERROR = 50001
-    CUDA_OUT_OF_MEMORY = 50002
+
+    # Custom error codes
     GRADIO_REQUEST_ERROR = 50003
     GRADIO_STREAM_UNKNOWN_ERROR = 50004
-    CONTROLLER_NO_WORKER = 50005
-    CONTROLLER_WORKER_TIMEOUT = 50006

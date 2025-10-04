@@ -1,15 +1,11 @@
 """
-Conversation prompt templates.
-
-We kindly request that you import fastchat instead of copying this file if you wish to use it.
-If you have any changes in mind, please contribute back so the community can benefit collectively and continue to maintain these valuable templates.
+Conversation prompt templates extracted from FastChat.
 """
 
 import base64
 import dataclasses
-from enum import auto, IntEnum
+from enum import IntEnum, auto
 from io import BytesIO
-from typing import List, Any, Dict, Union, Tuple
 
 
 class SeparatorStyle(IntEnum):
@@ -50,10 +46,10 @@ class Conversation:
     # The system message
     system_message: str = ""
     # The names of two roles
-    roles: Tuple[str] = ("USER", "ASSISTANT")
+    roles: tuple[str] = ("USER", "ASSISTANT")
     # All messages. Each item is (role, message).
     # Each message is either a string or a tuple of (string, List[image_url]).
-    messages: List[List[str]] = ()
+    messages: list[list[str]] = ()
     # The number of few shot examples
     offset: int = 0
     # The separator style and configurations
@@ -61,9 +57,9 @@ class Conversation:
     sep: str = "\n"
     sep2: str = None
     # Stop criteria (the default one is EOS token)
-    stop_str: Union[str, List[str]] = None
+    stop_str: str | list[str] = None
     # Stops generation if meeting any token in this list
-    stop_token_ids: List[int] = None
+    stop_token_ids: list[int] = None
 
     def get_prompt(self) -> str:
         """Get the prompt for generation."""
@@ -298,8 +294,8 @@ class Conversation:
 
     def convert_image_to_base64(self, image):
         """Given an image, return the base64 encoded image string."""
-        from PIL import Image
         import requests
+        from PIL import Image
 
         # Load image if it has not been loaded in yet
         if type(image) == str:
@@ -394,7 +390,7 @@ class Conversation:
 
 
 # A global registry for all conversation templates
-conv_templates: Dict[str, Conversation] = {}
+conv_templates: dict[str, Conversation] = {}
 
 
 def register_conv_template(template: Conversation, override: bool = False):
@@ -1563,8 +1559,6 @@ register_conv_template(
 )
 
 if __name__ == "__main__":
-    from bixarena_app.fastchat.conversation import get_conv_template
-
     print("-- Vicuna template --")
     conv = get_conv_template("vicuna_v1.1")
     conv.append_message(conv.roles[0], "Hello!")
