@@ -2,7 +2,7 @@
 
 import os
 
-from bixarena_app.model.conversation import Conversation, get_conv_template
+from bixarena_app.config.conversation import Conversation, get_conv_template
 
 
 class BaseModelAdapter:

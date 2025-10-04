@@ -1,7 +1,5 @@
 """
 Conversation prompt templates extracted from FastChat.
-
-This is a minimal version containing only the essential templates needed for bixarena_app.
 """
 
 import base64
