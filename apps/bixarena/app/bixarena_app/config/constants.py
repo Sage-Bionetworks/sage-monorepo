@@ -25,24 +25,14 @@ LOGDIR = os.getenv("LOGDIR", "")
 # CPU Instruction Set Architecture
 CPU_ISA = os.getenv("CPU_ISA")
 
-##### For the controller and workers (could be overwritten through ENV variables.)
-CONTROLLER_HEART_BEAT_EXPIRATION = int(
-    os.getenv("FASTCHAT_CONTROLLER_HEART_BEAT_EXPIRATION", 90)
-)
-WORKER_HEART_BEAT_INTERVAL = int(os.getenv("FASTCHAT_WORKER_HEART_BEAT_INTERVAL", 45))
-WORKER_API_TIMEOUT = int(os.getenv("FASTCHAT_WORKER_API_TIMEOUT", 100))
-WORKER_API_EMBEDDING_BATCH_SIZE = int(
-    os.getenv("FASTCHAT_WORKER_API_EMBEDDING_BATCH_SIZE", 4)
-)
-
 
 class ErrorCode(IntEnum):
     """
+    Error codes based on OpenAI API error codes:
     https://platform.openai.com/docs/guides/error-codes/api-errors
     """
 
-    VALIDATION_TYPE_ERROR = 40001
-
+    # Standard OpenAI API error codes
     INVALID_AUTH_KEY = 40101
     INCORRECT_AUTH_KEY = 40102
     NO_PERMISSION = 40103
@@ -56,8 +46,7 @@ class ErrorCode(IntEnum):
     ENGINE_OVERLOADED = 42903
 
     INTERNAL_ERROR = 50001
-    CUDA_OUT_OF_MEMORY = 50002
+
+    # Custom error codes
     GRADIO_REQUEST_ERROR = 50003
     GRADIO_STREAM_UNKNOWN_ERROR = 50004
-    CONTROLLER_NO_WORKER = 50005
-    CONTROLLER_WORKER_TIMEOUT = 50006
