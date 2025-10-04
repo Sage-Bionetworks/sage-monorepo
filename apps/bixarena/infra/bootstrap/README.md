@@ -4,6 +4,12 @@
 
 This project bootstrap the AWS resources needed to deploy BixArena with Terraform.
 
+## Login with AWS SSO
+
+```bash
+aws sso login --profile bixarena-Administrator
+```
+
 ## Deploy the Terraform Backend
 
 Ensure the `modules.terraform_backend` section is configured in `config.yaml`.
