@@ -17,7 +17,7 @@ RUN groupadd --gid "$USER_GID" "$USERNAME" \
   && useradd --uid "$USER_UID" --gid "$USER_GID" -m "$USERNAME" \
   && apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install --no-install-recommends -qq -y \
-    gettext-base gosu \
+    gosu \
   && apt-get -y clean \
   && apt-get -y autoremove \
   && rm -rf /var/lib/apt/lists/*
@@ -29,7 +29,6 @@ COPY dist/*.tar.gz /tmp/
 RUN uv pip install /tmp/*.tar.gz --system
 
 # Copy configuration files
-COPY model_config.template.json ${APP_DIR}/
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 RUN chown -R ${APP_USERNAME}:${APP_USERNAME} ${APP_DIR} && \
