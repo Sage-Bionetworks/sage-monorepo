@@ -39,11 +39,6 @@ generate "provider" {
   if_exists = "overwrite"
   contents  = <<EOF
 provider "aws" {
-  # This module assumes that we are already logged in as the SSO Administrator role.
-  # assume_role {
-  #   role_arn = "${local.component_vars.aws_provider.role_arn}"
-  # }
-
   region = "${local.component_vars.aws_provider.region}"
 }
 EOF
