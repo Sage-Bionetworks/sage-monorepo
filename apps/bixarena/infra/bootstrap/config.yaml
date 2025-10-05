@@ -1,4 +1,4 @@
-# Terraform backend configuration
+# Terraform backend configuration (output of the local "terraform-backend" module)
 terraform_backend:
   bucket_name: 'sage-bixarena-bootstrap-terraform-backend-use1-prod'
   bucket_region: 'us-east-1'
