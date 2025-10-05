@@ -1,6 +1,11 @@
 locals {
   workspace_vars = read_terragrunt_config(find_in_parent_folders("workspace.hcl"))
 
+  # Static context
+  product     = "bixarena"
+  application = "bootstrap"
+  environment = "prod"
+
   # Default configuration.
   _default_config = {
     terraform_backend = {
@@ -25,15 +30,14 @@ locals {
     }
   }
 
-  _config_file   = find_in_parent_folders("config.yaml")
-  # Assume config.yaml exists (may be empty); guard decode for robustness.
-  _config_raw    = try(file(local._config_file), "")
-  _merged_config = merge(local._default_config, try(yamldecode(local._config_raw), {}))
-
-  # Static context
-  product     = "bixarena"
-  application = "bootstrap"
-  environment = "prod"
+  # Load optional config.yaml. If not found or invalid YAML, fall back to empty object.
+  _config_yaml = try(
+    yamldecode(
+      file(try(find_in_parent_folders("config.yaml"), ""))
+    ),
+    {}
+  )
+  _merged_config = merge(local._default_config, local._config_yaml)
 
   # Backend locals (env > file > base) used by remote_state and exposed in project_vars
   # Project vars exposed for module terragrunt files (direct inline env overrides, env > file > base)
