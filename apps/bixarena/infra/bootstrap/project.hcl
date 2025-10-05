@@ -4,22 +4,22 @@ locals {
   # Base shape guarantees consistent object structure to avoid conditional type issues.
   _base_config = {
     terraform_backend = {
-      bucket_name    = null
-      bucket_region  = null
-      dynamodb_table = null
+      bucket_name    = ""
+      bucket_region  = ""
+      dynamodb_table = ""
     }
     modules = {
       terraform_backend = {
         aws_provider = {
-          region = null
+          region = ""
         }
       }
       github_oidc_provider = {
-        repository            = null
+        repository            = ""
         allowed_subs          = []
-        existing_provider_arn = null
+        existing_provider_arn = ""
         managed_policy_arns   = []
-        deploy_role_name      = null
+        deploy_role_name      = ""
         create_deploy_role    = true
       }
     }
@@ -35,32 +35,56 @@ locals {
   application = "bootstrap"
   environment = "prod"
 
-  # Backend env overrides (env > file > base)
-  terraform_backend_bucket    = get_env("TERRAFORM_BACKEND_BUCKET", local._merged_config.terraform_backend.bucket_name)
-  terraform_backend_region    = get_env("TERRAFORM_BACKEND_REGION", local._merged_config.terraform_backend.bucket_region)
-  terraform_backend_ddb_table = get_env("TERRAFORM_BACKEND_DDB_TABLE", local._merged_config.terraform_backend.dynamodb_table)
+  # Backend locals (env > file > base) used by remote_state and exposed in project_vars
+  backend_bucket_name    = get_env("TERRAFORM_BACKEND_BUCKET_NAME", local._merged_config.terraform_backend.bucket_name)
+  backend_bucket_region  = get_env("TERRAFORM_BACKEND_BUCKET_REGION", local._merged_config.terraform_backend.bucket_region)
+  backend_dynamodb_table = get_env("TERRAFORM_BACKEND_DYNAMODB_TABLE", local._merged_config.terraform_backend.dynamodb_table)
 
-  # Project vars exposed for module terragrunt files.
-  # Mirrors the structure of config.yaml.
+  # Project vars exposed for module terragrunt files (direct inline env overrides, env > file > base)
   project_vars = {
     terraform_backend = {
-      bucket_name    = local.terraform_backend_bucket
-      bucket_region  = local.terraform_backend_region
-      dynamodb_table = local.terraform_backend_ddb_table
+      bucket_name    = local.backend_bucket_name
+      bucket_region  = local.backend_bucket_region
+      dynamodb_table = local.backend_dynamodb_table
     }
     modules = {
       terraform_backend = {
         aws_provider = {
-          region = local._merged_config.modules.terraform_backend.aws_provider.region
+          region = get_env(
+            "MODULES_TERRAFORM_BACKEND_AWS_PROVIDER_REGION",
+            local._merged_config.modules.terraform_backend.aws_provider.region == null ? "" : local._merged_config.modules.terraform_backend.aws_provider.region
+          )
         }
       }
       github_oidc_provider = {
-        repository            = local._merged_config.modules.github_oidc_provider.repository
-        allowed_subs          = local._merged_config.modules.github_oidc_provider.allowed_subs
-        existing_provider_arn = get_env("GITHUB_OIDC_PROVIDER_ARN", local._merged_config.modules.github_oidc_provider.existing_provider_arn)
-        managed_policy_arns   = local._merged_config.modules.github_oidc_provider.managed_policy_arns
-        deploy_role_name      = local._merged_config.modules.github_oidc_provider.deploy_role_name
-        create_deploy_role    = local._merged_config.modules.github_oidc_provider.create_deploy_role
+        repository = get_env(
+          "MODULES_GITHUB_OIDC_PROVIDER_REPOSITORY",
+          local._merged_config.modules.github_oidc_provider.repository == null ? "" : local._merged_config.modules.github_oidc_provider.repository
+        )
+        existing_provider_arn = get_env(
+          "MODULES_GITHUB_OIDC_PROVIDER_EXISTING_PROVIDER_ARN",
+            local._merged_config.modules.github_oidc_provider.existing_provider_arn == null ? "" : local._merged_config.modules.github_oidc_provider.existing_provider_arn
+        )
+        allowed_subs = (
+          length(trimspace(get_env("MODULES_GITHUB_OIDC_PROVIDER_ALLOWED_SUBS", ""))) > 0 ? [
+            for s in split(",", get_env("MODULES_GITHUB_OIDC_PROVIDER_ALLOWED_SUBS", "")) : trimspace(s) if trimspace(s) != ""
+          ] : (local._merged_config.modules.github_oidc_provider.allowed_subs == null ? [] : local._merged_config.modules.github_oidc_provider.allowed_subs)
+        )
+        managed_policy_arns = (
+          length(trimspace(get_env("MODULES_GITHUB_OIDC_PROVIDER_MANAGED_POLICY_ARNS", ""))) > 0 ? [
+            for s in split(",", get_env("MODULES_GITHUB_OIDC_PROVIDER_MANAGED_POLICY_ARNS", "")) : trimspace(s) if trimspace(s) != ""
+          ] : (local._merged_config.modules.github_oidc_provider.managed_policy_arns == null ? [] : local._merged_config.modules.github_oidc_provider.managed_policy_arns)
+        )
+        deploy_role_name = get_env(
+          "MODULES_GITHUB_OIDC_PROVIDER_DEPLOY_ROLE_NAME",
+          local._merged_config.modules.github_oidc_provider.deploy_role_name == null ? "" : local._merged_config.modules.github_oidc_provider.deploy_role_name
+        )
+        create_deploy_role = (
+          length(trimspace(get_env("MODULES_GITHUB_OIDC_PROVIDER_CREATE_DEPLOY_ROLE", ""))) > 0 ? try(
+            tobool(lower(trimspace(get_env("MODULES_GITHUB_OIDC_PROVIDER_CREATE_DEPLOY_ROLE", "")))),
+            local._merged_config.modules.github_oidc_provider.create_deploy_role
+          ) : local._merged_config.modules.github_oidc_provider.create_deploy_role
+        )
       }
     }
   }
@@ -69,11 +93,11 @@ locals {
 remote_state {
   backend = "s3"
   config = {
-    bucket         = local.terraform_backend_bucket
+    bucket         = local.backend_bucket_name
     key            = "${path_relative_to_include()}/terraform.tfstate"
-    region         = local.terraform_backend_region
+    region         = local.backend_bucket_region
     encrypt        = true
-    dynamodb_table = local.terraform_backend_ddb_table
+    dynamodb_table = local.backend_dynamodb_table
   }
   generate = {
     path      = "backend.tf"
