@@ -25,12 +25,10 @@ locals {
     }
   }
 
-  _config_file      = find_in_parent_folders("config.yaml")
-  # Load file contents as a string (empty string if absent) so the conditional returns a consistent type (string),
-  # then decode with try() to fall back to {} without triggering inconsistent object attribute errors.
-  _user_config_raw  = fileexists(local._config_file) ? file(local._config_file) : ""
-  _user_config      = try(yamldecode(local._user_config_raw), {})
-  _merged_config    = merge(local._base_config, local._user_config)
+  _config_file   = find_in_parent_folders("config.yaml")
+  # Assume config.yaml exists (may be empty); guard decode for robustness.
+  _config_raw    = try(file(local._config_file), "")
+  _merged_config = merge(local._base_config, try(yamldecode(local._config_raw), {}))
 
   # Static context
   product     = "bixarena"
