@@ -40,17 +40,18 @@ locals {
   terraform_backend_region    = get_env("TERRAFORM_BACKEND_REGION", local._merged_config.terraform_backend.bucket_region)
   terraform_backend_ddb_table = get_env("TERRAFORM_BACKEND_DDB_TABLE", local._merged_config.terraform_backend.dynamodb_table)
 
-  # Project vars exposed for module terragrunt files (github-oidc-provider expects this path)
+  # Project vars exposed for module terragrunt files.
+  # Mirrors the structure of config.yaml.
   project_vars = {
+    terraform_backend = {
+      bucket_name    = local.terraform_backend_bucket
+      bucket_region  = local.terraform_backend_region
+      dynamodb_table = local.terraform_backend_ddb_table
+    }
     modules = {
       terraform_backend = {
         aws_provider = {
-          # Use the provider region specified in config.yaml; do not conflate with backend bucket region.
-          # If absent, fall back to the backend region env var for convenience.
-          region = coalesce(
-            local._merged_config.modules.terraform_backend.aws_provider.region,
-            local.terraform_backend_region
-          )
+          region = local._merged_config.modules.terraform_backend.aws_provider.region
         }
       }
       github_oidc_provider = {
