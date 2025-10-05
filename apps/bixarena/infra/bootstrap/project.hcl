@@ -1,10 +1,9 @@
 locals {
   workspace_vars = read_terragrunt_config(find_in_parent_folders("workspace.hcl"))
 
-  # Always attempt to read config.yaml; if absent or partially defined we normalize to a stable shape so
-  # downstream references never cause type inconsistencies. This eliminates the earlier conditional that
-  # produced "Inconsistent conditional result types" when optional keys (e.g. allowed_subs) existed only
-  # in one branch.
+  # Read config.yaml if present and normalize into a stable, predictable object shape. Ensures
+  # optional maps/keys always exist so downstream locals and module inputs can rely on them without
+  # conditional logic.
   _project_config_file = find_in_parent_folders("config.yaml")
   _raw_config          = fileexists(local._project_config_file) ? try(yamldecode(file(local._project_config_file)), {}) : {
     terraform_backend = {}
@@ -51,20 +50,19 @@ locals {
   project_vars = merge(local.project_vars_defaults, local.project_vars_raw)
 
   # Environment variable overrides (prefer env; fallback to config.yaml -> defaults)
-  # Updated variable names (removed BIXARENA_ prefix) to use neutral names defined in .env.example
-  backend_bucket    = get_env("TERRAFORM_BACKEND_BUCKET", local.project_vars.terraform_backend.bucket_name)
-  backend_region    = get_env("TERRAFORM_BACKEND_REGION", local.project_vars.terraform_backend.bucket_region)
-  backend_ddb_table = get_env("TERRAFORM_BACKEND_DDB_TABLE", local.project_vars.terraform_backend.dynamodb_table)
+  terraform_backend_bucket    = get_env("TERRAFORM_BACKEND_BUCKET", local.project_vars.terraform_backend.bucket_name)
+  terraform_backend_region    = get_env("TERRAFORM_BACKEND_REGION", local.project_vars.terraform_backend.bucket_region)
+  terraform_backend_ddb_table = get_env("TERRAFORM_BACKEND_DDB_TABLE", local.project_vars.terraform_backend.dynamodb_table)
 }
 
 remote_state {
   backend = "s3"
   config = {
-    bucket         = local.backend_bucket
+    bucket         = local.terraform_backend_bucket
     key            = "${path_relative_to_include()}/terraform.tfstate"
-    region         = local.backend_region
+    region         = local.terraform_backend_region
     encrypt        = true
-    dynamodb_table = local.backend_ddb_table
+    dynamodb_table = local.terraform_backend_ddb_table
   }
   generate = {
     path      = "backend.tf"
