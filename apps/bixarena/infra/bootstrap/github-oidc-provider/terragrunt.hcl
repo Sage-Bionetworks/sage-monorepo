@@ -4,14 +4,19 @@ include "project" {
 }
 
 locals {
-  component       = "github-oidc-provider"
-  component_vars  = include.project.locals.project_vars.modules.github_oidc_provider
-  repo            = local.component_vars.repository
-  allowed_subs    = local.component_vars.allowed_subs
+  component        = "github-oidc-provider"
+  component_vars   = include.project.locals.project_vars.modules.github_oidc_provider
+  repo             = local.component_vars.repository
+  allowed_subs     = local.component_vars.allowed_subs
   managed_policies = try(local.component_vars.managed_policy_arns, [])
   deploy_role_name = try(local.component_vars.deploy_role_name, null)
   create_deploy_role = try(local.component_vars.create_deploy_role, true)
-  existing_provider_arn = try(local.component_vars.existing_provider_arn, null)
+
+  existing_provider_arn_raw = coalesce(
+    get_env("GITHUB_OIDC_PROVIDER_ARN", ""),
+    try(local.component_vars.existing_provider_arn, "")
+  )
+  existing_provider_arn = length(trimspace(local.existing_provider_arn_raw)) == 0 ? null : trimspace(local.existing_provider_arn_raw)
 }
 
 terraform {
@@ -26,8 +31,4 @@ inputs = {
   deploy_role_name    = local.deploy_role_name
   create_deploy_role  = local.create_deploy_role
   existing_provider_arn = local.existing_provider_arn
-  tags = merge(
-    include.project.inputs.tags,
-    { Component = local.component }
-  )
 }
