@@ -41,6 +41,22 @@ locals {
 
   # Backend locals (env > file > base) used by remote_state and exposed in project_vars
   # Project vars exposed for module terragrunt files (direct inline env overrides, env > file > base)
+  # -----------------------------------------------------------------------------
+  # project_vars precedence model
+  # For every value we expose to module terragrunt files we follow:
+  #   1. Environment variable (if set)            <-- highest precedence
+  #   2. config.yaml value (if present / non-null)
+  #   3. _default_config fallback (stable shape: empty string / [] / true)
+  # Notes:
+  # - We avoid nulls in defaults so get_env() always has a non-null fallback.
+  # - YAML may still use explicit null (e.g., deploy_role_name: null); we guard only
+  #   where Terragrunt requires a non-null default (deploy_role_name).
+  # - Lists: a comma-separated env var overrides YAML list completely; empty / unset
+  #   env var leaves YAML list (or default empty list) intact.
+  # - Module terragrunt.hcl files consume these values via include.project.locals.project_vars
+  #   AND also inherit the merged 'inputs' block defined below (workspace + product/application/environment).
+  #   Use project_vars for structured, non-variable configuration; use inputs for Terraform variable inputs.
+  # -----------------------------------------------------------------------------
   project_vars = {
     terraform_backend = {
       bucket_name    = get_env("TERRAFORM_BACKEND_BUCKET_NAME", local._merged_config.terraform_backend.bucket_name)
