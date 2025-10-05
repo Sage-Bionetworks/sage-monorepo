@@ -52,7 +52,7 @@ locals {
         aws_provider = {
           region = get_env(
             "MODULES_TERRAFORM_BACKEND_AWS_PROVIDER_REGION",
-            local._merged_config.modules.terraform_backend.aws_provider.region == null ? "" : local._merged_config.modules.terraform_backend.aws_provider.region
+            try(local._merged_config.modules.terraform_backend.aws_provider.region, "")
           )
         }
       }
