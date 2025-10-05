@@ -45,11 +45,11 @@ locals {
     modules = {
       terraform_backend = {
         aws_provider = {
+          # Use the provider region specified in config.yaml; do not conflate with backend bucket region.
+          # If absent, fall back to the backend region env var for convenience.
           region = coalesce(
-            # Prefer explicit backend region, then terraform_backend bucket region, else module-provided region
-            local.terraform_backend_region,
-            local._merged_config.terraform_backend.bucket_region,
-            local._merged_config.modules.terraform_backend.aws_provider.region
+            local._merged_config.modules.terraform_backend.aws_provider.region,
+            local.terraform_backend_region
           )
         }
       }
