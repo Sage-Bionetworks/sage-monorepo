@@ -1,58 +1,70 @@
 locals {
   workspace_vars = read_terragrunt_config(find_in_parent_folders("workspace.hcl"))
 
-  # Read config.yaml if present and normalize into a stable, predictable object shape. Ensures
-  # optional maps/keys always exist so downstream locals and module inputs can rely on them without
-  # conditional logic.
-  _project_config_file = find_in_parent_folders("config.yaml")
-  _raw_config          = fileexists(local._project_config_file) ? try(yamldecode(file(local._project_config_file)), {}) : {
-    terraform_backend = {}
-    modules = {
-      terraform_backend    = {}
-      github_oidc_provider = {
-        aws_provider         = {}
-        repository           = null
-        existing_provider_arn = null
-        allowed_subs         = []
-        managed_policy_arns  = []
-        deploy_role_name     = null
-        create_deploy_role   = null
-      }
-    }
-  }
-
-  # Normalize raw config into a predictable object shape (add missing maps/keys as empty objects)
-  project_vars_raw = {
-    terraform_backend = try(local._raw_config.terraform_backend, {})
-    modules = {
-      terraform_backend    = try(local._raw_config.modules.terraform_backend, {})
-      github_oidc_provider = try(local._raw_config.modules.github_oidc_provider, {})
-    }
-  }
-
-  # Static context
-  product     = "bixarena"
-  application = "bootstrap"
-  environment = "prod"
-
-  project_vars_defaults = {
+  # Base shape guarantees consistent object structure to avoid conditional type issues.
+  _base_config = {
     terraform_backend = {
       bucket_name    = null
       bucket_region  = null
       dynamodb_table = null
     }
     modules = {
-      terraform_backend    = {}
-      github_oidc_provider = {}
+      terraform_backend = {
+        aws_provider = {
+          region = null
+        }
+      }
+      github_oidc_provider = {
+        repository            = null
+        allowed_subs          = []
+        existing_provider_arn = null
+        managed_policy_arns   = []
+        deploy_role_name      = null
+        create_deploy_role    = true
+      }
     }
   }
 
-  project_vars = merge(local.project_vars_defaults, local.project_vars_raw)
+  _config_file      = find_in_parent_folders("config.yaml")
+  # Load file contents as a string (empty string if absent) so the conditional returns a consistent type (string),
+  # then decode with try() to fall back to {} without triggering inconsistent object attribute errors.
+  _user_config_raw  = fileexists(local._config_file) ? file(local._config_file) : ""
+  _user_config      = try(yamldecode(local._user_config_raw), {})
+  _merged_config    = merge(local._base_config, local._user_config)
 
-  # Environment variable overrides (prefer env; fallback to config.yaml -> defaults)
-  terraform_backend_bucket    = get_env("TERRAFORM_BACKEND_BUCKET", local.project_vars.terraform_backend.bucket_name)
-  terraform_backend_region    = get_env("TERRAFORM_BACKEND_REGION", local.project_vars.terraform_backend.bucket_region)
-  terraform_backend_ddb_table = get_env("TERRAFORM_BACKEND_DDB_TABLE", local.project_vars.terraform_backend.dynamodb_table)
+  # Static context
+  product     = "bixarena"
+  application = "bootstrap"
+  environment = "prod"
+
+  # Backend env overrides (env > file > base)
+  terraform_backend_bucket    = get_env("TERRAFORM_BACKEND_BUCKET", local._merged_config.terraform_backend.bucket_name)
+  terraform_backend_region    = get_env("TERRAFORM_BACKEND_REGION", local._merged_config.terraform_backend.bucket_region)
+  terraform_backend_ddb_table = get_env("TERRAFORM_BACKEND_DDB_TABLE", local._merged_config.terraform_backend.dynamodb_table)
+
+  # Project vars exposed for module terragrunt files (github-oidc-provider expects this path)
+  project_vars = {
+    modules = {
+      terraform_backend = {
+        aws_provider = {
+          region = coalesce(
+            # Prefer explicit backend region, then terraform_backend bucket region, else module-provided region
+            local.terraform_backend_region,
+            local._merged_config.terraform_backend.bucket_region,
+            local._merged_config.modules.terraform_backend.aws_provider.region
+          )
+        }
+      }
+      github_oidc_provider = {
+        repository            = local._merged_config.modules.github_oidc_provider.repository
+        allowed_subs          = local._merged_config.modules.github_oidc_provider.allowed_subs
+        existing_provider_arn = get_env("GITHUB_OIDC_PROVIDER_ARN", local._merged_config.modules.github_oidc_provider.existing_provider_arn)
+        managed_policy_arns   = local._merged_config.modules.github_oidc_provider.managed_policy_arns
+        deploy_role_name      = local._merged_config.modules.github_oidc_provider.deploy_role_name
+        create_deploy_role    = local._merged_config.modules.github_oidc_provider.create_deploy_role
+      }
+    }
+  }
 }
 
 remote_state {
