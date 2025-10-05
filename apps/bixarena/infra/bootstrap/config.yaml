@@ -3,7 +3,6 @@ terraform_backend:
   bucket_name: 'sage-bixarena-bootstrap-terraform-backend-use1-prod'
   bucket_region: 'us-east-1'
   dynamodb_table: 'sage-bixarena-bootstrap-terraform-backend-lock-use1-prod'
-  role_arn: 'arn:aws:iam::xxx:role/AdministratorAccess'
 
 # Module-specific configuration
 modules:
@@ -18,6 +17,8 @@ modules:
       region: 'us-east-1'
     # GitHub repository (owner/repo) allowed to assume deploy roles via OIDC
     repository: 'Sage-Bionetworks/sage-monorepo'
+    # If an organization-wide GitHub OIDC provider already exists, set its ARN here to reuse instead of creating a new one.
+    existing_provider_arn: 'arn:aws:iam::045984464920:oidc-provider/token.actions.githubusercontent.com'
     # List of GitHub OIDC sub suffixes (portion after `repo:owner/repo:`) allowed.
     # Common patterns:
     #   ref:refs/heads/main            (branch builds)

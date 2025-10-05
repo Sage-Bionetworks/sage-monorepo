@@ -14,7 +14,6 @@ remote_state {
     bucket         = local.project_vars.terraform_backend.bucket_name
     key            = "${path_relative_to_include()}/terraform.tfstate"
     region         = local.project_vars.terraform_backend.bucket_region
-    role_arn       = local.project_vars.terraform_backend.role_arn
     encrypt        = true
     dynamodb_table = local.project_vars.terraform_backend.dynamodb_table
   }

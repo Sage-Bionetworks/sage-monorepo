@@ -37,3 +37,13 @@ nx run bixarena-infra-bootstrap:plan --configuration=terraform-backend
 ```bash
 nx run bixarena-infra-bootstrap:apply --configuration=terraform-backend
 ```
+
+## Deploy the modules
+
+```bash
+nx run bixarena-infra-bootstrap:init
+```
+
+```bash
+nx run bixarena-infra-bootstrap:plan
+```
