@@ -1,8 +1,8 @@
 locals {
   workspace_vars = read_terragrunt_config(find_in_parent_folders("workspace.hcl"))
 
-  # Base shape guarantees consistent object structure to avoid conditional type issues.
-  _base_config = {
+  # Default configuration.
+  _default_config = {
     terraform_backend = {
       bucket_name    = ""
       bucket_region  = ""
@@ -28,7 +28,7 @@ locals {
   _config_file   = find_in_parent_folders("config.yaml")
   # Assume config.yaml exists (may be empty); guard decode for robustness.
   _config_raw    = try(file(local._config_file), "")
-  _merged_config = merge(local._base_config, try(yamldecode(local._config_raw), {}))
+  _merged_config = merge(local._default_config, try(yamldecode(local._config_raw), {}))
 
   # Static context
   product     = "bixarena"
@@ -36,16 +36,12 @@ locals {
   environment = "prod"
 
   # Backend locals (env > file > base) used by remote_state and exposed in project_vars
-  backend_bucket_name    = get_env("TERRAFORM_BACKEND_BUCKET_NAME", local._merged_config.terraform_backend.bucket_name)
-  backend_bucket_region  = get_env("TERRAFORM_BACKEND_BUCKET_REGION", local._merged_config.terraform_backend.bucket_region)
-  backend_dynamodb_table = get_env("TERRAFORM_BACKEND_DYNAMODB_TABLE", local._merged_config.terraform_backend.dynamodb_table)
-
   # Project vars exposed for module terragrunt files (direct inline env overrides, env > file > base)
   project_vars = {
     terraform_backend = {
-      bucket_name    = local.backend_bucket_name
-      bucket_region  = local.backend_bucket_region
-      dynamodb_table = local.backend_dynamodb_table
+      bucket_name    = get_env("TERRAFORM_BACKEND_BUCKET_NAME", local._merged_config.terraform_backend.bucket_name)
+      bucket_region  = get_env("TERRAFORM_BACKEND_BUCKET_REGION", local._merged_config.terraform_backend.bucket_region)
+      dynamodb_table = get_env("TERRAFORM_BACKEND_DYNAMODB_TABLE", local._merged_config.terraform_backend.dynamodb_table)
     }
     modules = {
       terraform_backend = {
@@ -93,11 +89,11 @@ locals {
 remote_state {
   backend = "s3"
   config = {
-    bucket         = local.backend_bucket_name
+    bucket         = local.project_vars.terraform_backend.bucket_name
     key            = "${path_relative_to_include()}/terraform.tfstate"
-    region         = local.backend_bucket_region
+    region         = local.project_vars.terraform_backend.bucket_region
     encrypt        = true
-    dynamodb_table = local.backend_dynamodb_table
+    dynamodb_table = local.project_vars.terraform_backend.dynamodb_table
   }
   generate = {
     path      = "backend.tf"
