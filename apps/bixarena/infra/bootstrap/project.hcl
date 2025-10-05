@@ -59,21 +59,27 @@ locals {
       github_oidc_provider = {
         repository = get_env(
           "MODULES_GITHUB_OIDC_PROVIDER_REPOSITORY",
-          local._merged_config.modules.github_oidc_provider.repository == null ? "" : local._merged_config.modules.github_oidc_provider.repository
+          try(local._merged_config.modules.github_oidc_provider.repository, "")
         )
         existing_provider_arn = get_env(
           "MODULES_GITHUB_OIDC_PROVIDER_EXISTING_PROVIDER_ARN",
-            local._merged_config.modules.github_oidc_provider.existing_provider_arn == null ? "" : local._merged_config.modules.github_oidc_provider.existing_provider_arn
+          try(local._merged_config.modules.github_oidc_provider.existing_provider_arn, "")
         )
         allowed_subs = (
           length(trimspace(get_env("MODULES_GITHUB_OIDC_PROVIDER_ALLOWED_SUBS", ""))) > 0 ? [
-            for s in split(",", get_env("MODULES_GITHUB_OIDC_PROVIDER_ALLOWED_SUBS", "")) : trimspace(s) if trimspace(s) != ""
-          ] : (local._merged_config.modules.github_oidc_provider.allowed_subs == null ? [] : local._merged_config.modules.github_oidc_provider.allowed_subs)
+            for s in split(
+              ",",
+              get_env("MODULES_GITHUB_OIDC_PROVIDER_ALLOWED_SUBS", "")
+            ) : trimspace(s) if trimspace(s) != ""
+          ] : try(local._merged_config.modules.github_oidc_provider.allowed_subs, [])
         )
         managed_policy_arns = (
           length(trimspace(get_env("MODULES_GITHUB_OIDC_PROVIDER_MANAGED_POLICY_ARNS", ""))) > 0 ? [
-            for s in split(",", get_env("MODULES_GITHUB_OIDC_PROVIDER_MANAGED_POLICY_ARNS", "")) : trimspace(s) if trimspace(s) != ""
-          ] : (local._merged_config.modules.github_oidc_provider.managed_policy_arns == null ? [] : local._merged_config.modules.github_oidc_provider.managed_policy_arns)
+            for s in split(
+              ",",
+              get_env("MODULES_GITHUB_OIDC_PROVIDER_MANAGED_POLICY_ARNS", "")
+            ) : trimspace(s) if trimspace(s) != ""
+          ] : try(local._merged_config.modules.github_oidc_provider.managed_policy_arns, [])
         )
         deploy_role_name = get_env(
           "MODULES_GITHUB_OIDC_PROVIDER_DEPLOY_ROLE_NAME",
@@ -82,8 +88,8 @@ locals {
         create_deploy_role = (
           length(trimspace(get_env("MODULES_GITHUB_OIDC_PROVIDER_CREATE_DEPLOY_ROLE", ""))) > 0 ? try(
             tobool(lower(trimspace(get_env("MODULES_GITHUB_OIDC_PROVIDER_CREATE_DEPLOY_ROLE", "")))),
-            local._merged_config.modules.github_oidc_provider.create_deploy_role
-          ) : local._merged_config.modules.github_oidc_provider.create_deploy_role
+            try(local._merged_config.modules.github_oidc_provider.create_deploy_role, true)
+          ) : try(local._merged_config.modules.github_oidc_provider.create_deploy_role, true)
         )
       }
     }
