@@ -8,8 +8,6 @@ terraform_backend:
 modules:
   terraform_backend:
     aws_provider:
-      # This module assumes that we are already logged in as the SSO Administrator role.
-      # role_arn: 'arn:aws:iam::xxx:role/AdministratorAccess'
       region: 'us-east-1'
 
   github_oidc_provider:
