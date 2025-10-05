@@ -4,7 +4,7 @@ include "project" {
 }
 
 locals {
-  component_vars = include.project.locals.project_vars.modules.terraform_backend
+  module_vars = include.project.locals.project_vars.modules.terraform_backend
 }
 
 terraform {
@@ -15,7 +15,7 @@ terraform {
 # project Terragrunt file.
 inputs = {
   component = "terraform-backend"
-  region    = local.component_vars.aws_provider.region
+  region    = local.module_vars.aws_provider.region
 
   enabled                           = true
   bucket_ownership_enforced_enabled = false
@@ -39,7 +39,7 @@ generate "provider" {
   if_exists = "overwrite"
   contents  = <<EOF
 provider "aws" {
-  region = "${local.component_vars.aws_provider.region}"
+  region = "${local.module_vars.aws_provider.region}"
 }
 EOF
 }

@@ -4,19 +4,18 @@ include "project" {
 }
 
 locals {
-  component        = "github-oidc-provider"
-  component_vars   = include.project.locals.project_vars.modules.github_oidc_provider
-  repo             = local.component_vars.repository
-  allowed_subs     = local.component_vars.allowed_subs
-  managed_policies = try(local.component_vars.managed_policy_arns, [])
-  deploy_role_name = try(local.component_vars.deploy_role_name, null)
-  create_deploy_role = try(local.component_vars.create_deploy_role, true)
+  component      = "github-oidc-provider"
+  module_vars    = include.project.locals.project_vars.modules.github_oidc_provider
+  repo           = local.module_vars.repository
+  allowed_subs   = local.module_vars.allowed_subs
+  managed_policies = try(local.module_vars.managed_policy_arns, [])
+  deploy_role_name  = try(local.module_vars.deploy_role_name, null)
+  create_deploy_role = try(local.module_vars.create_deploy_role, true)
 
-  existing_provider_arn_raw = coalesce(
-    get_env("GITHUB_OIDC_PROVIDER_ARN", ""),
-    try(local.component_vars.existing_provider_arn, "")
-  )
-  existing_provider_arn = length(trimspace(local.existing_provider_arn_raw)) == 0 ? null : trimspace(local.existing_provider_arn_raw)
+  # Allow an alternate ad-hoc env var override for existing provider ARN while still honoring project_vars
+  existing_provider_arn_env = trimspace(get_env("GITHUB_OIDC_PROVIDER_ARN", ""))
+  existing_provider_arn_base = try(local.module_vars.existing_provider_arn, "")
+  existing_provider_arn = length(local.existing_provider_arn_env) > 0 ? local.existing_provider_arn_env : (length(trimspace(local.existing_provider_arn_base)) > 0 ? trimspace(local.existing_provider_arn_base) : null)
 }
 
 terraform {
