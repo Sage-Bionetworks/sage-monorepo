@@ -7,8 +7,7 @@ import time
 
 import requests
 
-from bixarena_app.fastchat.utils import build_logger
-
+from bixarena_app.config.utils import build_logger
 
 logger = build_logger("gradio_web_server", "gradio_web_server.log")
 
