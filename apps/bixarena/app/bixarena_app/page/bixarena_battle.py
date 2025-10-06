@@ -66,7 +66,7 @@ def example_prompt_cards(num_prompts=3):
                 [prompt.question for prompt in response.example_prompts],
                 min(num_prompts, response.total_elements),
             )
-
+        logger.info("✅ Successfully fetched example prompts")
     except Exception as e:
         # Fallback to dummy prompts if API fails
         logger.error(f"Error fetching example prompts: {e}")
