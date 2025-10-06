@@ -8,29 +8,28 @@ simplified to a single function for a single-page LLM comparison arena.
 import json
 import logging
 import time
+
 import gradio as gr
 
 from bixarena_app.config.constants import (
-    MODERATION_MSG,
     CONVERSATION_LIMIT_MSG,
-    SLOW_MODEL_MSG,
-    INPUT_CHAR_LEN_LIMIT,
     CONVERSATION_TURN_LIMIT,
+    INPUT_CHAR_LEN_LIMIT,
+    MODERATION_MSG,
+    SLOW_MODEL_MSG,
 )
-from bixarena_app.config.prompt_examples import get_prompt_manager
-
-from bixarena_app.model.model_selection import get_battle_pair, moderation_filter
-
+from bixarena_app.config.example_prompts import get_display_example_prompts
 from bixarena_app.model.model_response import (
     State,
-    get_model_list,
-    set_global_vars_anony,
     bot_response_multi,
-    no_change_btn,
-    enable_btn,
     disable_btn,
+    enable_btn,
+    get_model_list,
     invisible_btn,
+    no_change_btn,
+    set_global_vars_anony,
 )
+from bixarena_app.model.model_selection import get_battle_pair, moderation_filter
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -39,13 +38,10 @@ num_sides = 2
 anony_names = ["", ""]
 models = []
 
-# Global state for prompt examples
-prompt_manager = get_prompt_manager()
 
-
-def create_suggested_prompts(num_prompts=3, max_chars=240):
-    """Create suggested prompts cards"""
-    display_prompts = prompt_manager.get_display_prompts(num_prompts, max_chars)
+def create_suggested_prompts(num_prompts=3):
+    """Create suggested prompts cards (CSS handles visual truncation)."""
+    display_prompts = get_display_example_prompts(num_prompts)
 
     prompt_cards = []
     for display_text, full_prompt in display_prompts:
@@ -282,6 +278,10 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
         line-height: 1.4;
         word-wrap: break-word;
         white-space: normal;
+        display: -webkit-box;               /* multi-line clamp */
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;               /* show only 3 lines */
+        overflow: hidden;                    /* hide overflowed text */
     }
 
     .gradio-container .suggested-prompt-card:hover {
@@ -329,8 +329,13 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
         with gr.Column(
             elem_id="suggested_prompts_section", visible=True
         ) as suggested_prompts_group:
-            prompt_buttons_data = create_suggested_prompts(num_example_prompts)
-
+            prompt_buttons_data = [
+                [
+                    "Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?",
+                    "Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?",
+                    "Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?",
+                ]
+            ]
         # Battle interface - will appear once a prompt is submitted
         with gr.Group(elem_id="share-region-anony", visible=False) as battle_interface:
             with gr.Row():
