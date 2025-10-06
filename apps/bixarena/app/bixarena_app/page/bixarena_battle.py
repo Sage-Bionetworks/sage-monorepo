@@ -7,9 +7,14 @@ simplified to a single function for a single-page LLM comparison arena.
 
 import json
 import logging
+import random
 import time
 
 import gradio as gr
+from bixarena_api_client import ApiClient, Configuration, ExamplePromptApi
+from bixarena_api_client.models.example_prompt_search_query import (
+    ExamplePromptSearchQuery,
+)
 
 from bixarena_app.config.constants import (
     CONVERSATION_LIMIT_MSG,
@@ -18,7 +23,6 @@ from bixarena_app.config.constants import (
     MODERATION_MSG,
     SLOW_MODEL_MSG,
 )
-from bixarena_app.config.example_prompts import get_display_example_prompts
 from bixarena_app.model.model_response import (
     State,
     bot_response_multi,
@@ -39,18 +43,47 @@ anony_names = ["", ""]
 models = []
 
 
-def create_suggested_prompts(num_prompts=3):
-    """Create suggested prompts cards (CSS handles visual truncation)."""
-    display_prompts = get_display_example_prompts(num_prompts)
+def example_prompt_cards(num_prompts=3):
+    """Create prompt example cards"""
+    try:
+        # Configure the API client
+        configuration = Configuration(host="http://bixarena-api:8112/v1")
+
+        # Create API client and example prompt API instance
+        with ApiClient(configuration) as api_client:
+            api_instance = ExamplePromptApi(api_client)
+
+            # Create search query to get active prompts only
+            search_query = ExamplePromptSearchQuery(active=True)
+
+            # Fetch example prompts
+            response = api_instance.list_example_prompts(
+                example_prompt_search_query=search_query
+            )
+
+            # Extract questions and sample randomly
+            display_prompts = random.sample(
+                [prompt.question for prompt in response.example_prompts],
+                min(num_prompts, response.total_elements),
+            )
+
+    except Exception as e:
+        # Fallback to dummy prompts if API fails
+        logger.error(f"Error fetching example prompts: {e}")
+        display_prompts = [
+            "What are the main symptoms of Type 2 diabetes?",
+            "How does chemotherapy affect cancer cells?",
+            "What is the role of genetics in heart disease?",
+        ]
 
     prompt_cards = []
-    for display_text, full_prompt in display_prompts:
-        btn = gr.Button(
-            value=display_text,
-            elem_classes=["suggested-prompt-card"],
-        )
-        prompt_cards.append((btn, full_prompt))
-
+    for question in display_prompts[:num_prompts]:
+        with gr.Column(elem_classes=["prompt-card-container"]):
+            btn = gr.Button(
+                value=question,
+                elem_classes=["prompt-card"],
+            )
+        prompt_cards.append((btn, question))
     return prompt_cards
 
 
@@ -255,7 +288,7 @@ def add_text(
     )
 
 
-def build_side_by_side_ui_anony(num_example_prompts=3):
+def build_side_by_side_ui_anony():
     # Page header with title and custom styles
     page_header_html = """
     <div style="text-align: center; padding: 0px;">
@@ -263,34 +296,8 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
         <p style="font-size: 1.2rem; color: #666; margin: 0;">Benchmarking LLMs for Biomedical Breakthroughs</p>
     </div>
     <style>
-    .gradio-container .suggested-prompt-card {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 8px;
-        padding: 12px 16px;
-        text-align: left;
-        font-size: 14px;
-        transition: all 0.2s ease;
-        width: 30%;
-        margin: 0 1.5%;
-        flex: 1;
-        min-width: 200px;
-        line-height: 1.4;
-        word-wrap: break-word;
-        white-space: normal;
-        display: -webkit-box;               /* multi-line clamp */
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 3;               /* show only 3 lines */
-        overflow: hidden;                    /* hide overflowed text */
-    }
 
-    .gradio-container .suggested-prompt-card:hover {
-        background: rgba(255, 255, 255, 0.08);
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    #suggested_prompts_section {
+    #prompt-card-section {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
@@ -301,6 +308,35 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
         margin: 0 auto;
     }
     
+    .prompt-card-container {
+        padding: 12px 16px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.2s ease;
+        width: 30%;
+        margin: 0 16px;
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .gradio-container .prompt-card-container:hover {
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .gradio-container button.prompt-card {
+        background: transparent !important;
+        padding: 0px;
+        text-align: left;
+        font-size: 14px;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+    }
+
     #input_box.prompt_input {
         background: var(--background-fill-primary);
     }
@@ -324,18 +360,13 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
 
     # Page content
     with gr.Column(elem_classes=["content-wrapper"]):
-        gr.HTML(page_header_html, elem_id="title_section")
-        # Suggested prompts
+        gr.HTML(page_header_html)
+        # Example prompt
         with gr.Column(
-            elem_id="suggested_prompts_section", visible=True
+            elem_id="prompt-card-section", visible=True
         ) as suggested_prompts_group:
-            prompt_buttons_data = [
-                [
-                    "Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?",
-                    "Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?",
-                    "Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?Differentiation of nonalcoholic from alcoholic steatohepatitis: are routine laboratory markers useful?",
-                ]
-            ]
+            prompt_buttons_data = example_prompt_cards()
+
         # Battle interface - will appear once a prompt is submitted
         with gr.Group(elem_id="share-region-anony", visible=False) as battle_interface:
             with gr.Row():
@@ -529,14 +560,12 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
 def build_battle_page(
     register_api_endpoint_file=None,
     moderate=False,
-    num_example_prompts=3,
 ):
-    """Build the battle page with configurable number of example prompts
+    """Build the battle page
 
     Args:
         register_api_endpoint_file: File for API endpoint registration
         moderate (bool): Enable content moderation
-        num_example_prompts (int): Number of suggested prompts to display (default: 3)
     """
     # Set global variables
     set_global_vars_anony(moderate)
@@ -551,6 +580,6 @@ def build_battle_page(
     load_demo_side_by_side_anony(models, {})
 
     with gr.Blocks(title="BixArena - Biomedical LLM Battle") as battle_page:
-        build_side_by_side_ui_anony(num_example_prompts)
+        build_side_by_side_ui_anony()
 
     return battle_page
