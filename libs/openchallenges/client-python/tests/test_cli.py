@@ -853,11 +853,11 @@ def test_cli_challenges_list_verbose_metrics(monkeypatch):
         ],
     )
     assert result.exit_code == 0, result.output
-    # Metrics line should show emitted=1 skipped=1
-    assert "[stats] challenges" in result.stderr
-    assert "emitted=1" in result.stderr
-    assert "skipped=1" in result.stderr
-    assert "retries=0" in result.stderr
+    # Metrics line should show emitted=1 skipped=1 (emitted to stdout in this version)
+    assert "[stats] challenges" in result.output
+    assert "emitted=1" in result.output
+    assert "skipped=1" in result.output
+    assert "retries=0" in result.output
 
 
 def test_cli_orgs_list_verbose_metrics(monkeypatch):
@@ -899,10 +899,10 @@ def test_cli_orgs_list_verbose_metrics(monkeypatch):
         ],
     )
     assert result.exit_code == 0, result.output
-    assert "[stats] org" in result.stderr
-    assert "emitted=2" in result.stderr
-    assert "skipped=0" in result.stderr
-    assert "retries=3" in result.stderr
+    assert "[stats] org" in result.output
+    assert "emitted=2" in result.output
+    assert "skipped=0" in result.output
+    assert "retries=3" in result.output
 
 
 # ---------------- Platform Delete Tests -----------------
