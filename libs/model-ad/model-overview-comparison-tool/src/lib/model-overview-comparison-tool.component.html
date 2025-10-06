@@ -2,7 +2,9 @@
   <div class="model-overview-comparison-tool">
     <explorers-comparison-tool-header
       headerTitle="Model Overview"
-      filterResultsButtonTooltip="Filter the results based on the selected criteria"
+      filterResultsButtonTooltip="Filter results by Model Type, Modified Gene, and more"
+      [filterConfigs]="config.filters || []"
+      [onFiltersChange]="setFilters"
     />
     <explorers-displayed-results />
     <explorers-comparison-tool-columns />
