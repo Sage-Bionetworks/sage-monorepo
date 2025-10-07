@@ -22,6 +22,7 @@ bixarena_api_client/models/leaderboard_snapshot_page.py
 bixarena_api_client/models/leaderboard_snapshot_query.py
 bixarena_api_client/models/leaderboard_snapshot_sort.py
 bixarena_api_client/models/leaderboard_sort.py
+bixarena_api_client/models/license.py
 bixarena_api_client/models/model.py
 bixarena_api_client/models/model_page.py
 bixarena_api_client/models/model_search_query.py
@@ -45,6 +46,7 @@ docs/LeaderboardSnapshotPage.md
 docs/LeaderboardSnapshotQuery.md
 docs/LeaderboardSnapshotSort.md
 docs/LeaderboardSort.md
+docs/License.md
 docs/Model.md
 docs/ModelApi.md
 docs/ModelPage.md
@@ -68,6 +70,7 @@ test/test_leaderboard_snapshot_page.py
 test/test_leaderboard_snapshot_query.py
 test/test_leaderboard_snapshot_sort.py
 test/test_leaderboard_sort.py
+test/test_license.py
 test/test_model.py
 test/test_model_api.py
 test/test_model_page.py

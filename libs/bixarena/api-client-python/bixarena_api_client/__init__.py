@@ -42,6 +42,7 @@ __all__ = [
     "LeaderboardSnapshotQuery",
     "LeaderboardSnapshotSort",
     "LeaderboardSort",
+    "License",
     "Model",
     "ModelPage",
     "ModelSearchQuery",
@@ -106,6 +107,7 @@ from bixarena_api_client.models.leaderboard_snapshot_sort import (
 from bixarena_api_client.models.leaderboard_sort import (
     LeaderboardSort as LeaderboardSort,
 )
+from bixarena_api_client.models.license import License as License
 from bixarena_api_client.models.model import Model as Model
 from bixarena_api_client.models.model_page import ModelPage as ModelPage
 from bixarena_api_client.models.model_search_query import (

@@ -16,16 +16,10 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import (
-    BaseModel,
-    ConfigDict,
-    Field,
-    StrictBool,
-    StrictStr,
-    field_validator,
-)
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
+from bixarena_api_client.models.license import License
 from bixarena_api_client.models.model_sort import ModelSort
 from bixarena_api_client.models.sort_direction import SortDirection
 from typing import Optional, Set
@@ -55,9 +49,7 @@ class ModelSearchQuery(BaseModel):
         default=None,
         description="Filter by active status (true returns only active models; false only inactive; omit for all).",
     )
-    license: Optional[StrictStr] = Field(
-        default=None, description="Filter by license type."
-    )
+    license: Optional[License] = None
     organization: Optional[StrictStr] = Field(
         default=None,
         description="Filter by organization name (case-insensitive partial match).",
@@ -72,16 +64,6 @@ class ModelSearchQuery(BaseModel):
         "license",
         "organization",
     ]
-
-    @field_validator("license")
-    def license_validate_enum(cls, value):
-        """Validates the enum"""
-        if value is None:
-            return value
-
-        if value not in set(["open-source", "commercial"]):
-            raise ValueError("must be one of enum values ('open-source', 'commercial')")
-        return value
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -129,11 +111,6 @@ class ModelSearchQuery(BaseModel):
         # and model_fields_set contains the field
         if self.active is None and "active" in self.model_fields_set:
             _dict["active"] = None
-
-        # set to None if license (nullable) is None
-        # and model_fields_set contains the field
-        if self.license is None and "license" in self.model_fields_set:
-            _dict["license"] = None
 
         # set to None if organization (nullable) is None
         # and model_fields_set contains the field

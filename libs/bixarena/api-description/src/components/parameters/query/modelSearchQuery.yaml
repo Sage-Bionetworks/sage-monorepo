@@ -1,5 +1,7 @@
 name: modelSearchQuery
 description: The search query used to find and filter models.
 in: query
+style: deepObject
+explode: true
 schema:
   $ref: ../../schemas/ModelSearchQuery.yaml

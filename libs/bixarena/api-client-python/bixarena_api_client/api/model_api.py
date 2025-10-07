@@ -266,8 +266,11 @@ class ModelApi:
         # process the path parameters
         # process the query parameters
         if model_search_query is not None:
-            _query_params.append(("modelSearchQuery", model_search_query))
-
+            # Extract individual query parameters from complex object
+            query_dict = model_search_query.to_dict()
+            for key, value in query_dict.items():
+                if value is not None:
+                    _query_params.append((key, value))
         # process the header parameters
         # process the form parameters
         # process the body parameter
