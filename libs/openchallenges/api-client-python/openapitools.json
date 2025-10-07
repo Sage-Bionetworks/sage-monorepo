@@ -8,7 +8,6 @@
         "generatorName": "python",
         "inputSpec": "#{cwd}/../api-description/openapi/openapi.yaml",
         "output": "#{cwd}/",
-        "templateDir": "templates",
         "additionalProperties": {
           "packageName": "openchallenges_api_client"
         }
