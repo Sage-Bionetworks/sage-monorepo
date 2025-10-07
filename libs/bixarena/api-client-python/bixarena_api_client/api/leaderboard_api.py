@@ -307,8 +307,11 @@ class LeaderboardApi:
             _path_params["leaderboardId"] = leaderboard_id
         # process the query parameters
         if leaderboard_search_query is not None:
-            _query_params.append(("leaderboardSearchQuery", leaderboard_search_query))
-
+            # Extract individual query parameters from complex object
+            query_dict = leaderboard_search_query.to_dict()
+            for key, value in query_dict.items():
+                if value is not None:
+                    _query_params.append((key, value))
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -594,10 +597,11 @@ class LeaderboardApi:
             _path_params["leaderboardId"] = leaderboard_id
         # process the query parameters
         if leaderboard_snapshot_query is not None:
-            _query_params.append(
-                ("leaderboardSnapshotQuery", leaderboard_snapshot_query)
-            )
-
+            # Extract individual query parameters from complex object
+            query_dict = leaderboard_snapshot_query.to_dict()
+            for key, value in query_dict.items():
+                if value is not None:
+                    _query_params.append((key, value))
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -904,10 +908,11 @@ class LeaderboardApi:
             _path_params["modelId"] = model_id
         # process the query parameters
         if leaderboard_model_history_query is not None:
-            _query_params.append(
-                ("leaderboardModelHistoryQuery", leaderboard_model_history_query)
-            )
-
+            # Extract individual query parameters from complex object
+            query_dict = leaderboard_model_history_query.to_dict()
+            for key, value in query_dict.items():
+                if value is not None:
+                    _query_params.append((key, value))
         # process the header parameters
         # process the form parameters
         # process the body parameter

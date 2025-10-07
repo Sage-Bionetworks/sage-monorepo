@@ -522,25 +522,20 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
 
 
 def build_battle_page(
-    register_api_endpoint_file=None,
     moderate=False,
     num_example_prompts=3,
 ):
     """Build the battle page with configurable number of example prompts
 
     Args:
-        register_api_endpoint_file: File for API endpoint registration
         moderate (bool): Enable content moderation
         num_example_prompts (int): Number of suggested prompts to display (default: 3)
     """
     # Set global variables
     set_global_vars_anony(moderate)
 
-    # Load models once and only for text-only models
-    models, _ = get_model_list(
-        register_api_endpoint_file,
-        False,
-    )
+    # Load models once (text-only models)
+    models, _ = get_model_list()
 
     # Initialize the demo (this sets up global variables in the original module)
     load_demo_side_by_side_anony(models, {})
