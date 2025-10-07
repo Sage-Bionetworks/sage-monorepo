@@ -1,14 +1,17 @@
-import logging
-import gradio as gr
 import json
-import requests
+import logging
+import os
 import time
 import uuid
 
-from bixarena_app.fastchat.model.model_adapter import get_conversation_template
-from bixarena_app.fastchat.serve.api_provider import get_api_provider_stream_iter
+import gradio as gr
+import requests
+from bixarena_api_client import ApiClient, Configuration, ModelApi, ModelSearchQuery
+from bixarena_api_client.exceptions import ApiException
 
-from bixarena_app.config.constants import ErrorCode, SERVER_ERROR_MSG
+from bixarena_app.config.constants import SERVER_ERROR_MSG, ErrorCode
+from bixarena_app.model.api_provider import get_api_provider_stream_iter
+from bixarena_app.model.model_adapter import get_conversation_template
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -50,35 +53,78 @@ def set_global_vars_anony(enable_moderation_):
     enable_moderation = enable_moderation_
 
 
-def get_model_list(register_api_endpoint_file, multimodal):
+def get_model_list():
+    """Fetch models from the BixArena API using the proper API client"""
     global api_endpoint_info
     models = []  # Initiate models list
-    # Load models from API providers only
-    if register_api_endpoint_file:
-        api_endpoint_info = json.load(open(register_api_endpoint_file))
-        for mdl, mdl_dict in api_endpoint_info.items():
-            mdl_multimodal = mdl_dict.get("multimodal", False)
-            if multimodal and mdl_multimodal:
-                models += [mdl]
-            elif not multimodal and not mdl_multimodal:
-                models += [mdl]
 
-    # Remove anonymous models
-    models = list(set(models))
-    visible_models = models.copy()
-    for mdl in visible_models:
-        if mdl not in api_endpoint_info:
-            continue
-        mdl_dict = api_endpoint_info[mdl]
-        if mdl_dict["anony_only"]:
-            visible_models.remove(mdl)
+    try:
+        # Configure the API client
+        configuration = Configuration(host="http://bixarena-api:8112/v1")
 
-    # Sort models and add descriptions
-    models.sort()  # Simple A-Z sorting
-    visible_models.sort()
-    logger.info(f"All models: {models}")
-    logger.info(f"Visible models: {visible_models}")
-    return visible_models, models
+        # Create API client and model API instance
+        with ApiClient(configuration) as api_client:
+            api_instance = ModelApi(api_client)
+
+            # Fetch only visible models (100 for now)
+            visible_models_search_query = ModelSearchQuery(
+                page_size=100,
+                active=True,
+            )
+            visible_models_response = api_instance.list_models(
+                model_search_query=visible_models_search_query
+            )
+
+            api_endpoint_info = {}
+
+            for model in visible_models_response.models:
+                model_name = model.name
+
+                # Check required fields for API configuration
+                api_model_name = model.api_model_name
+                api_base = model.api_base
+                api_type = "openai"
+                api_key = os.getenv("OPENAI_API_KEY", "")
+
+                if not api_key:
+                    logger.warning(
+                        f"Skipping model '{model_name}' - missing OPENAI_API_KEY"
+                    )
+                    continue
+
+                # Add model's display name to the model list
+                models.append(model_name)
+
+                # Convert to FastChat API-based format (text-only models)
+                api_endpoint_info[model_name] = {
+                    "api_type": api_type,
+                    "api_base": api_base,
+                    "api_key": api_key,
+                    "model_name": api_model_name,
+                    "anony_only": False,
+                    "multimodal": False,
+                }
+        logger.info(f"✅ Fetched {len(models)} visible models from BixArena API.")
+
+    except ApiException as e:
+        logger.error(f"❌ API Exception when calling ModelApi->list_models: {e}")
+        models = []
+        api_endpoint_info = {}
+    except Exception as e:
+        logger.error(f"❌ Unexpected error fetching models: {e}")
+        models = []
+        api_endpoint_info = {}
+
+    # Sort models alphabetically
+    models.sort()
+
+    if models:
+        logger.info(f"\n🚀 Available models: {models}")
+    else:
+        logger.warning("⚠️ No visible models found")
+
+    # Return models twice for compatibility with FastChat interface expectations
+    return models, models
 
 
 def bot_response(
@@ -86,8 +132,6 @@ def bot_response(
     temperature,
     top_p,
     max_new_tokens,
-    request: gr.Request,
-    apply_rate_limit=True,
 ):
     logger.info("bot_response. ")
     start_tstamp = time.time()
@@ -102,9 +146,7 @@ def bot_response(
         return
 
     conv, model_name = state.conv, state.model_name
-    model_api_dict = (
-        api_endpoint_info[model_name] if model_name in api_endpoint_info else None
-    )
+    model_api_dict = api_endpoint_info.get(model_name)
 
     # Only use API endpoints - no controller/worker logic
     if model_api_dict is None:
@@ -127,7 +169,7 @@ def bot_response(
     yield (state, state.to_gradio_chatbot()) + (disable_btn,) * 4
 
     try:
-        for i, data in enumerate(stream_iter):
+        for _i, data in enumerate(stream_iter):
             if data["error_code"] == 0:
                 output = data["text"].strip()
                 conv.update_last_message(output + "▌")
@@ -195,7 +237,6 @@ def bot_response(
 def bot_response_multi(
     state0,
     state1,
-    request: gr.Request,
     temperature=0.7,
     top_p=1.0,
     max_new_tokens=1024,
@@ -221,8 +262,6 @@ def bot_response_multi(
                 temperature,
                 top_p,
                 max_new_tokens,
-                request,
-                apply_rate_limit=False,
             )
         )
 

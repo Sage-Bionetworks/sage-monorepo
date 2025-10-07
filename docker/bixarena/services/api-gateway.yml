@@ -14,7 +14,10 @@ services:
         limits:
           memory: 1G
     depends_on:
+      bixarena-ai-service:
+        condition: service_started
       bixarena-api:
         condition: service_started
     extra_hosts:
+      - 'bixarena-ai-service:host-gateway'
       - 'bixarena-api:host-gateway'

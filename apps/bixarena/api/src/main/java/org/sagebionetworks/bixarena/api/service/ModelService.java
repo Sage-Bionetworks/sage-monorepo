@@ -8,6 +8,8 @@ import org.sagebionetworks.bixarena.api.model.dto.ModelSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.entity.ModelEntity;
 import org.sagebionetworks.bixarena.api.model.mapper.ModelMapper;
 import org.sagebionetworks.bixarena.api.model.repository.ModelRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,11 +23,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class ModelService {
 
+  private static final Logger logger = LoggerFactory.getLogger(ModelService.class);
+
   private final ModelRepository modelRepository;
   private final ModelMapper modelMapper = new ModelMapper();
 
   @Transactional(readOnly = true)
   public ModelPageDto listModels(ModelSearchQueryDto query) {
+    logger.info("List models with query {}", query);
+
     ModelSearchQueryDto effectiveQuery = query != null ? query : new ModelSearchQueryDto();
 
     Pageable pageable = createPageable(effectiveQuery);
@@ -33,15 +39,15 @@ public class ModelService {
 
     Page<ModelEntity> page = modelRepository.findAll(spec, pageable);
 
-    return new ModelPageDto(
-      page.getNumber(),
-      page.getSize(),
-      page.getTotalElements(),
-      page.getTotalPages(),
-      page.hasNext(),
-      page.hasPrevious(),
-      modelMapper.convertToDtoList(page.getContent())
-    );
+    return ModelPageDto.builder()
+      .number(page.getNumber())
+      .size(page.getSize())
+      .totalElements(page.getTotalElements())
+      .totalPages(page.getTotalPages())
+      .hasNext(page.hasNext())
+      .hasPrevious(page.hasPrevious())
+      .models(modelMapper.convertToDtoList(page.getContent()))
+      .build();
   }
 
   private Pageable createPageable(ModelSearchQueryDto query) {
@@ -76,9 +82,9 @@ public class ModelService {
 
   private Specification<ModelEntity> buildSpecification(ModelSearchQueryDto query) {
     return Specification.where(activeFilter(query))
-        .and(searchFilter(query))
-        .and(licenseFilter(query))
-        .and(organizationFilter(query));
+      .and(searchFilter(query))
+      .and(licenseFilter(query))
+      .and(organizationFilter(query));
   }
 
   private Specification<ModelEntity> activeFilter(ModelSearchQueryDto query) {

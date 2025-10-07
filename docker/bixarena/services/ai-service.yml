@@ -1,0 +1,17 @@
+services:
+  bixarena-ai-service:
+    image: ghcr.io/sage-bionetworks/bixarena-ai-service:${BIXARENA_VERSION:-local}
+    container_name: bixarena-ai-service
+    restart: always
+    env_file:
+      - ../../../apps/bixarena/ai-service/.env
+    networks:
+      - bixarena
+    ports:
+      - '8114:8114'
+    deploy:
+      resources:
+        limits:
+          memory: 1GB
+    depends_on:
+      - bixarena-postgres
