@@ -1,0 +1,1 @@
+../resource-label/dist/context.tf
