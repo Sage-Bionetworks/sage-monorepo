@@ -48,11 +48,6 @@ allow-direct-references = true
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[dependency-groups]
-dev = [
-    "unimport>=1.3.0",
-]
-
 [tool.ruff]
 exclude = [
   ".ruff_cache",
