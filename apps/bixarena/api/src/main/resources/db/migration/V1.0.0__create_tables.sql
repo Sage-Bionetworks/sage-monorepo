@@ -25,6 +25,10 @@ CREATE TABLE model (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- Indexes for performance
+CREATE INDEX idx_model_license ON model(license);
+CREATE INDEX idx_model_active ON model(active);
+
 -- Leaderboard snapshots table
 CREATE TABLE leaderboard_snapshot (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -57,13 +61,18 @@ CREATE INDEX idx_leaderboard_entry_rank ON leaderboard_entry(rank);
 CREATE INDEX idx_leaderboard_entry_bt_score ON leaderboard_entry(bt_score DESC);
 CREATE INDEX idx_leaderboard_snapshot_leaderboard_id ON leaderboard_snapshot(leaderboard_id);
 CREATE INDEX idx_leaderboard_snapshot_created_at ON leaderboard_snapshot(created_at DESC);
-CREATE INDEX idx_model_license ON model(license);
-CREATE INDEX idx_model_active ON model(active);
 
--- Sessions (existing table - keeping it)
-CREATE TABLE conversation (
-  id UUID PRIMARY KEY,
-  -- user_id INT NOT NULL REFERENCES "user"(id),
-  title TEXT,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+-- Example prompts table (self-contained biomedical example prompts)
+CREATE TABLE example_prompt (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  question VARCHAR(1000) NOT NULL,
+  source VARCHAR(100) NOT NULL,
+  active BOOLEAN NOT NULL DEFAULT FALSE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  -- Table constraints
+  CONSTRAINT chk_example_prompt_source CHECK (source IN ('pubmedqa', 'bixbench', 'bixarena'))
 );
+
+-- Indexes for performance
+CREATE INDEX idx_example_prompt_source ON example_prompt(source);
+CREATE INDEX idx_example_prompt_active ON example_prompt(active);

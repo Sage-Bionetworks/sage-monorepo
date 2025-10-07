@@ -16,6 +16,8 @@ tags:
     name: Leaderboard
   - description: Operations about models.
     name: Model
+  - description: Operations about example prompts for biomedical relevance detection.
+    name: ExamplePrompt
 paths:
   /leaderboards:
     get:
@@ -211,6 +213,38 @@ paths:
         - application/problem+json
       x-tags:
         - tag: Model
+  /example-prompts:
+    get:
+      description: Get a list of example prompts with comprehensive filtering options
+      operationId: listExamplePrompts
+      parameters:
+        - description: The search query used to find and filter example prompts.
+          explode: true
+          in: query
+          name: examplePromptSearchQuery
+          required: false
+          schema:
+            $ref: '#/components/schemas/ExamplePromptSearchQuery'
+          style: deepObject
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamplePromptPage'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      summary: List example prompts
+      tags:
+        - ExamplePrompt
+      x-accepts:
+        - application/json
+        - application/problem+json
+      x-tags:
+        - tag: ExamplePrompt
 components:
   parameters:
     leaderboardId:
@@ -269,6 +303,15 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/ModelSearchQuery'
+      style: deepObject
+    examplePromptSearchQuery:
+      description: The search query used to find and filter example prompts.
+      explode: true
+      in: query
+      name: examplePromptSearchQuery
+      required: false
+      schema:
+        $ref: '#/components/schemas/ExamplePromptSearchQuery'
       style: deepObject
   responses:
     BadRequest:
@@ -927,6 +970,130 @@ components:
         size: 99
         totalPages: 99
         hasPrevious: true
+        hasNext: true
+        totalElements: 99
+      type: object
+    ExamplePromptSort:
+      default: created_at
+      description: The field to sort example prompts by.
+      enum:
+        - question
+        - created_at
+        - source
+        - active
+      example: question
+      type: string
+    ExamplePromptSource:
+      description: The source dataset or origin of the example prompt.
+      enum:
+        - pubmedqa
+        - bixbench
+        - bixarena
+      example: pubmedqa
+      type: string
+    ExamplePromptSearchQuery:
+      description: An example prompt search query with pagination and filtering options.
+      properties:
+        pageNumber:
+          default: 0
+          description: The page number.
+          example: 0
+          format: int32
+          minimum: 0
+          type: integer
+        pageSize:
+          default: 25
+          description: The number of items in a single page.
+          example: 25
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+        sort:
+          $ref: '#/components/schemas/ExamplePromptSort'
+        direction:
+          $ref: '#/components/schemas/SortDirection'
+        source:
+          $ref: '#/components/schemas/ExamplePromptSource'
+        active:
+          description: Filter by active status (true returns only active prompts;
+            false only inactive; omit for all).
+          example: true
+          nullable: true
+          type: boolean
+        search:
+          description: Search by question content (case-insensitive partial match).
+          example: diabetes
+          nullable: true
+          type: string
+      type: object
+    ExamplePrompt:
+      description: A self-contained example prompt for biomedical question answering.
+      example:
+        createdAt: 2025-08-01T09:00:00Z
+        question: What are the main symptoms of Type 2 diabetes?
+        active: true
+        id: 123e4567-e89b-12d3-a456-426614174000
+        source: pubmedqa
+      properties:
+        id:
+          description: The unique identifier of the example prompt.
+          example: 123e4567-e89b-12d3-a456-426614174000
+          type: string
+        question:
+          description: The biomedical question text.
+          example: What are the main symptoms of Type 2 diabetes?
+          maxLength: 1000
+          minLength: 1
+          type: string
+        source:
+          $ref: '#/components/schemas/ExamplePromptSource'
+        active:
+          description: Whether this example prompt is currently active/visible for
+            use.
+          example: true
+          type: boolean
+        createdAt:
+          description: When the example prompt was created.
+          example: 2025-08-01T09:00:00Z
+          format: date-time
+          type: string
+      required:
+        - active
+        - createdAt
+        - id
+        - question
+        - source
+      type: object
+    ExamplePromptPage:
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - properties:
+            examplePrompts:
+              description: A list of example prompts.
+              items:
+                $ref: '#/components/schemas/ExamplePrompt'
+              type: array
+          required:
+            - examplePrompts
+          type: object
+      description: A page of example prompts.
+      example:
+        number: 99
+        size: 99
+        totalPages: 99
+        hasPrevious: true
+        examplePrompts:
+          - createdAt: 2025-08-01T09:00:00Z
+            question: What are the main symptoms of Type 2 diabetes?
+            active: true
+            id: 123e4567-e89b-12d3-a456-426614174000
+            source: pubmedqa
+          - createdAt: 2025-08-01T09:00:00Z
+            question: What are the main symptoms of Type 2 diabetes?
+            active: true
+            id: 123e4567-e89b-12d3-a456-426614174000
+            source: pubmedqa
         hasNext: true
         totalElements: 99
       type: object

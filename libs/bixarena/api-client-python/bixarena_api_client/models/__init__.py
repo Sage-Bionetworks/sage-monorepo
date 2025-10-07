@@ -14,6 +14,13 @@ Do not edit the class manually.
 
 # import models into model package
 from bixarena_api_client.models.basic_error import BasicError
+from bixarena_api_client.models.example_prompt import ExamplePrompt
+from bixarena_api_client.models.example_prompt_page import ExamplePromptPage
+from bixarena_api_client.models.example_prompt_search_query import (
+    ExamplePromptSearchQuery,
+)
+from bixarena_api_client.models.example_prompt_sort import ExamplePromptSort
+from bixarena_api_client.models.example_prompt_source import ExamplePromptSource
 from bixarena_api_client.models.historical_leaderboard_entry import (
     HistoricalLeaderboardEntry,
 )

@@ -196,6 +196,19 @@
       "cache": true,
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
+    },
+    "@nxlv/python:build": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["productionPython", "^productionPython"]
+    },
+    "@nxlv/python:run-commands": {
+      "cache": true,
+      "inputs": ["defaultPython", "^productionPython"]
+    },
+    "@nxlv/python:ruff-check": {
+      "cache": true,
+      "inputs": ["defaultPython"]
     }
   },
   "namedInputs": {
@@ -212,7 +225,13 @@
       "!{projectRoot}/.storybook/**/*",
       "!{projectRoot}/tsconfig.storybook.json",
       "!{projectRoot}/src/test/**/*"
-    ]
+    ],
+    "defaultPython": [
+      "{projectRoot}/**/*",
+      "{workspaceRoot}/pyproject.toml",
+      "{workspaceRoot}/uv.lock"
+    ],
+    "productionPython": ["defaultPython"]
   },
   "useInferencePlugins": false,
   "defaultBase": "main",

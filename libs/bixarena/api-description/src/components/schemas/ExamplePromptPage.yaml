@@ -1,0 +1,13 @@
+type: object
+description: A page of example prompts.
+allOf:
+  - $ref: PageMetadata.yaml
+  - type: object
+    properties:
+      examplePrompts:
+        type: array
+        description: A list of example prompts.
+        items:
+          $ref: ExamplePrompt.yaml
+    required:
+      - examplePrompts

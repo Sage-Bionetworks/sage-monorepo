@@ -1,0 +1,30 @@
+type: object
+description: A self-contained example prompt for biomedical question answering.
+properties:
+  id:
+    type: string
+    description: The unique identifier of the example prompt.
+    example: '123e4567-e89b-12d3-a456-426614174000'
+  question:
+    type: string
+    description: The biomedical question text.
+    minLength: 1
+    maxLength: 1000
+    example: 'What are the main symptoms of Type 2 diabetes?'
+  source:
+    $ref: ExamplePromptSource.yaml
+  active:
+    type: boolean
+    description: Whether this example prompt is currently active/visible for use.
+    example: true
+  createdAt:
+    type: string
+    format: date-time
+    description: When the example prompt was created.
+    example: '2025-08-01T09:00:00Z'
+required:
+  - id
+  - question
+  - source
+  - active
+  - createdAt

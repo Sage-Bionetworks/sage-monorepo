@@ -36,5 +36,3 @@ src/tests/state_of_the_union.txt
 build
 src/docs
 src/assets
-src/fastchat/serve/example_images/*
-src/fastchat/llm_judge/data/mt_bench/misc/radar.png

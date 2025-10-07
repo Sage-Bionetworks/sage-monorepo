@@ -10,8 +10,8 @@ from bixarena_api_client import ApiClient, Configuration, ModelApi, ModelSearchQ
 from bixarena_api_client.exceptions import ApiException
 
 from bixarena_app.config.constants import SERVER_ERROR_MSG, ErrorCode
-from bixarena_app.fastchat.model.model_adapter import get_conversation_template
-from bixarena_app.fastchat.serve.api_provider import get_api_provider_stream_iter
+from bixarena_app.model.api_provider import get_api_provider_stream_iter
+from bixarena_app.model.model_adapter import get_conversation_template
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -132,8 +132,6 @@ def bot_response(
     temperature,
     top_p,
     max_new_tokens,
-    request: gr.Request,
-    apply_rate_limit=True,
 ):
     logger.info("bot_response. ")
     start_tstamp = time.time()
@@ -239,7 +237,6 @@ def bot_response(
 def bot_response_multi(
     state0,
     state1,
-    request: gr.Request,
     temperature=0.7,
     top_p=1.0,
     max_new_tokens=1024,
@@ -265,8 +262,6 @@ def bot_response_multi(
                 temperature,
                 top_p,
                 max_new_tokens,
-                request,
-                apply_rate_limit=False,
             )
         )
 

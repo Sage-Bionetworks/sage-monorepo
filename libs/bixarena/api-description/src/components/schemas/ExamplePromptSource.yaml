@@ -1,0 +1,7 @@
+description: The source dataset or origin of the example prompt.
+type: string
+enum:
+  - pubmedqa
+  - bixbench
+  - bixarena
+example: pubmedqa

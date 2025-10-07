@@ -1,6 +1,7 @@
 README.md
 bixarena_api_client/__init__.py
 bixarena_api_client/api/__init__.py
+bixarena_api_client/api/example_prompt_api.py
 bixarena_api_client/api/leaderboard_api.py
 bixarena_api_client/api/model_api.py
 bixarena_api_client/api_client.py
@@ -9,6 +10,11 @@ bixarena_api_client/configuration.py
 bixarena_api_client/exceptions.py
 bixarena_api_client/models/__init__.py
 bixarena_api_client/models/basic_error.py
+bixarena_api_client/models/example_prompt.py
+bixarena_api_client/models/example_prompt_page.py
+bixarena_api_client/models/example_prompt_search_query.py
+bixarena_api_client/models/example_prompt_sort.py
+bixarena_api_client/models/example_prompt_source.py
 bixarena_api_client/models/historical_leaderboard_entry.py
 bixarena_api_client/models/leaderboard_entry.py
 bixarena_api_client/models/leaderboard_entry_page.py
@@ -32,6 +38,12 @@ bixarena_api_client/models/sort_direction.py
 bixarena_api_client/py.typed
 bixarena_api_client/rest.py
 docs/BasicError.md
+docs/ExamplePrompt.md
+docs/ExamplePromptApi.md
+docs/ExamplePromptPage.md
+docs/ExamplePromptSearchQuery.md
+docs/ExamplePromptSort.md
+docs/ExamplePromptSource.md
 docs/HistoricalLeaderboardEntry.md
 docs/LeaderboardApi.md
 docs/LeaderboardEntry.md
@@ -56,6 +68,12 @@ docs/PageMetadata.md
 docs/SortDirection.md
 test/__init__.py
 test/test_basic_error.py
+test/test_example_prompt.py
+test/test_example_prompt_api.py
+test/test_example_prompt_page.py
+test/test_example_prompt_search_query.py
+test/test_example_prompt_sort.py
+test/test_example_prompt_source.py
 test/test_historical_leaderboard_entry.py
 test/test_leaderboard_api.py
 test/test_leaderboard_entry.py

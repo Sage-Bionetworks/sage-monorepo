@@ -1,13 +1,26 @@
-[build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
+[tool.coverage.run]
+branch = true
+source = [ "bixarena_ai_service" ]
+
+[tool.coverage.report]
+exclude_lines = ['if TYPE_CHECKING:']
+show_missing = true
+
+[tool.pytest.ini_options]
+addopts = """
+ --cov
+ --cov-report html:'../../../coverage/apps/bixarena/ai-service/html'
+ --cov-report xml:'../../../coverage/apps/bixarena/ai-service/coverage.xml'
+ --html='../../../reports/apps/bixarena/ai-service/unittests/html/index.html'
+ --junitxml='../../../reports/apps/bixarena/ai-service/unittests/junit.xml'
+"""
 
 [project]
 name = "bixarena-ai-service"
-version = "0.1.0"
+version = "1.0.0"
 description = "BixArena AI API"
+requires-python = "==3.13.3"
 readme = "README.md"
-requires-python = ">=3.11,<3.13"
 license = { text = "Apache-2.0" }
 authors = [ { name = "Sage Bionetworks" } ]
 dependencies = [
@@ -31,7 +44,7 @@ dependencies = [
   "itsdangerous==1.1.0",
   "Jinja2==3.1.4",
   "MarkupSafe==2.0.1",
-  "orjson==3.9.15",
+  "orjson~=3.0",
   "promise==2.3",
   "pydantic>=2",
   "python-dotenv==0.17.1",
@@ -49,35 +62,45 @@ dependencies = [
   "websockets==10.0",
 ]
 
-[tool.black]
-line-length = 88
-exclude = '''
-(
-  /(
-      \.eggs         # exclude a few common directories in the
-    | \.git          # root of the project
-    | \.hg
-    | \.mypy_cache
-    | \.tox
-    | \.venv
-    | _build
-    | buck-out
-    | build
-    | dist
-  )/
-)
-'''
 
-[tool.isort]
-profile = "black"
-skip = [
-    '.eggs', '.git', '.hg', '.mypy_cache', '.nox', '.pants.d', '.tox',
-    '.venv', '_build', 'buck-out', 'build', 'dist', 'node_modules', 'venv',
+[tool.hatch.build.targets.wheel]
+packages = ["bixarena_ai_service"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+exclude = [
+  ".ruff_cache",
+  ".svn",
+  ".tox",
+  ".venv",
+  "dist",
 ]
-skip_gitignore = true
 
-[tool.setuptools]
-package-dir = {"" = "src"}
+line-length = 88
+indent-width = 4
 
-[tool.setuptools.packages.find]
-where = ["src"]
+[tool.ruff.lint]
+select = [
+  # pycodestyle
+  "E",
+  # Pyflakes
+  "F",
+  # pyupgrade
+  "UP",
+  # flake8-bugbear
+  "B",
+  # flake8-simplify
+  "SIM",
+  # isort
+  "I",
+]
+ignore = []
+
+fixable = ["ALL"]
+unfixable = []

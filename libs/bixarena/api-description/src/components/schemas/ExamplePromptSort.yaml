@@ -1,0 +1,9 @@
+type: string
+description: The field to sort example prompts by.
+enum:
+  - question
+  - created_at
+  - source
+  - active
+default: created_at
+example: question

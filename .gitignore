@@ -4,6 +4,7 @@
 .scannerwork/
 playwright-report/
 test-results/
+tmp/
 
 # Config files
 .act.secrets
