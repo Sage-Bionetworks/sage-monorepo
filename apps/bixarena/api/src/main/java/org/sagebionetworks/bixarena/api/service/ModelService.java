@@ -8,8 +8,6 @@ import org.sagebionetworks.bixarena.api.model.dto.ModelSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.entity.ModelEntity;
 import org.sagebionetworks.bixarena.api.model.mapper.ModelMapper;
 import org.sagebionetworks.bixarena.api.model.repository.ModelRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,14 +21,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class ModelService {
 
-  private static final Logger logger = LoggerFactory.getLogger(ModelService.class);
-
   private final ModelRepository modelRepository;
   private final ModelMapper modelMapper = new ModelMapper();
 
   @Transactional(readOnly = true)
   public ModelPageDto listModels(ModelSearchQueryDto query) {
-    logger.info("List models with query {}", query);
+    log.info("List models with query {}", query);
 
     ModelSearchQueryDto effectiveQuery = query != null ? query : new ModelSearchQueryDto();
 
