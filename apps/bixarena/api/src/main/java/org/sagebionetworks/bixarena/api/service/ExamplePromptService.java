@@ -5,12 +5,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptSearchQueryDto;
+import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptSortDto;
 import org.sagebionetworks.bixarena.api.model.entity.ExamplePromptEntity;
 import org.sagebionetworks.bixarena.api.model.mapper.ExamplePromptMapper;
 import org.sagebionetworks.bixarena.api.model.repository.ExamplePromptRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -36,10 +38,18 @@ public class ExamplePromptService {
       ? query
       : new ExamplePromptSearchQueryDto();
 
-    Pageable pageable = createPageable(effectiveQuery);
-    Specification<ExamplePromptEntity> spec = buildSpecification(effectiveQuery);
+    Page<ExamplePromptEntity> page;
 
-    Page<ExamplePromptEntity> page = examplePromptRepository.findAll(spec, pageable);
+    // Handle random sort specially since JPA Sort doesn't support SQL functions
+    if (effectiveQuery.getSort() == ExamplePromptSortDto.RANDOM) {
+      int pageSize = Optional.ofNullable(effectiveQuery.getPageSize()).orElse(25);
+      var randomList = examplePromptRepository.findRandom(pageSize, effectiveQuery.getActive());
+      page = new PageImpl<>(randomList, PageRequest.of(0, randomList.size()), randomList.size());
+    } else {
+      Pageable pageable = createPageable(effectiveQuery);
+      Specification<ExamplePromptEntity> spec = buildSpecification(effectiveQuery);
+      page = examplePromptRepository.findAll(spec, pageable);
+    }
 
     return ExamplePromptPageDto.builder()
       .number(page.getNumber())
@@ -82,9 +92,14 @@ public class ExamplePromptService {
   }
 
   private Specification<ExamplePromptEntity> buildSpecification(ExamplePromptSearchQueryDto query) {
-    return Specification.where(activeFilter(query))
-      .and(searchFilter(query))
-      .and(sourceFilter(query));
+    Specification<ExamplePromptEntity> spec = activeFilter(query);
+    if (searchFilter(query) != null) {
+      spec = spec == null ? searchFilter(query) : spec.and(searchFilter(query));
+    }
+    if (sourceFilter(query) != null) {
+      spec = spec == null ? sourceFilter(query) : spec.and(sourceFilter(query));
+    }
+    return spec;
   }
 
   private Specification<ExamplePromptEntity> activeFilter(ExamplePromptSearchQueryDto query) {

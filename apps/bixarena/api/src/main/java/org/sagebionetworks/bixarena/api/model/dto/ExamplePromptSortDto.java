@@ -28,7 +28,9 @@ public enum ExamplePromptSortDto {
   
   SOURCE("source"),
   
-  ACTIVE("active");
+  ACTIVE("active"),
+  
+  RANDOM("random");
 
   private final String value;
 

@@ -7,7 +7,6 @@ simplified to a single function for a single-page LLM comparison arena.
 
 import json
 import logging
-import random
 import time
 
 import gradio as gr
@@ -53,20 +52,19 @@ def example_prompt_cards(num_prompts=3):
         with ApiClient(configuration) as api_client:
             api_instance = ExamplePromptApi(api_client)
 
-            # Create search query to get active prompts only
-            search_query = ExamplePromptSearchQuery(active=True)
+            # Create search query to get random active prompts directly from backend
+            search_query = ExamplePromptSearchQuery(
+                active=True, page_size=num_prompts, sort="random"
+            )
 
-            # Fetch example prompts
+            # Fetch random example prompts - no client-side sampling needed!
             response = api_instance.list_example_prompts(
                 example_prompt_search_query=search_query
             )
 
-            # Extract questions and sample randomly
-            display_prompts = random.sample(
-                [prompt.question for prompt in response.example_prompts],
-                min(num_prompts, response.total_elements),
-            )
-        logger.info(f"✅ Fetched {response.total_elements} example prompts")
+            # Extract questions - already randomly selected by backend
+            display_prompts = [prompt.question for prompt in response.example_prompts]
+        logger.info(f"✅ Fetched {len(display_prompts)} random example prompts")
     except Exception as e:
         # Fallback to dummy prompts if API fails
         logger.error(f"Error fetching example prompts: {e}")

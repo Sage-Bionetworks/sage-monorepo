@@ -29,6 +29,7 @@ class ExamplePromptSort(str, Enum):
     CREATED_AT = "created_at"
     SOURCE = "source"
     ACTIVE = "active"
+    RANDOM = "random"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:

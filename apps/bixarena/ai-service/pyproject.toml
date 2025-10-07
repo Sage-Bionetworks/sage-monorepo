@@ -59,7 +59,7 @@ dependencies = [
   "uvicorn==0.30.6",
   "uvloop==0.21.0",
   "watchgod==0.7",
-  "websockets==10.0",
+  "websockets>=12.0",
 ]
 
 # Transitional console script now points to wrapper package

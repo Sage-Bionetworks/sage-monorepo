@@ -981,6 +981,7 @@ components:
         - created_at
         - source
         - active
+        - random
       example: question
       type: string
     ExamplePromptSource:

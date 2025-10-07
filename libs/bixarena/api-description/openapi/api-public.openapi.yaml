@@ -687,6 +687,7 @@ components:
         - created_at
         - source
         - active
+        - random
       default: created_at
       example: question
     ExamplePromptSource:
