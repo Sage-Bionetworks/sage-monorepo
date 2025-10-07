@@ -25,10 +25,7 @@ class ExamplePromptSort(str, Enum):
     """
     allowed enum values
     """
-    QUESTION = "question"
     CREATED_AT = "created_at"
-    SOURCE = "source"
-    ACTIVE = "active"
     RANDOM = "random"
 
     @classmethod

@@ -22,13 +22,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 public enum ExamplePromptSortDto {
   
-  QUESTION("question"),
-  
   CREATED_AT("created_at"),
-  
-  SOURCE("source"),
-  
-  ACTIVE("active"),
   
   RANDOM("random");
 

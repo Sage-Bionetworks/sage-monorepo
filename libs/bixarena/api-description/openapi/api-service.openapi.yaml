@@ -683,13 +683,10 @@ components:
       type: string
       description: The field to sort example prompts by.
       enum:
-        - question
         - created_at
-        - source
-        - active
         - random
       default: created_at
-      example: question
+      example: random
     ExamplePromptSource:
       description: The source dataset or origin of the example prompt.
       type: string
