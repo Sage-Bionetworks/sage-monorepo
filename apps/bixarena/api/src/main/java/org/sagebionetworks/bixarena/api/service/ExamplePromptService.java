@@ -8,6 +8,8 @@ import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.entity.ExamplePromptEntity;
 import org.sagebionetworks.bixarena.api.model.mapper.ExamplePromptMapper;
 import org.sagebionetworks.bixarena.api.model.repository.ExamplePromptRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,11 +23,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class ExamplePromptService {
 
+  private static final Logger logger = LoggerFactory.getLogger(ExamplePromptService.class);
+
   private final ExamplePromptRepository examplePromptRepository;
   private final ExamplePromptMapper examplePromptMapper = new ExamplePromptMapper();
 
   @Transactional(readOnly = true)
   public ExamplePromptPageDto listExamplePrompts(ExamplePromptSearchQueryDto query) {
+    logger.info("List example prompts with query {}", query);
+
     ExamplePromptSearchQueryDto effectiveQuery = query != null
       ? query
       : new ExamplePromptSearchQueryDto();
