@@ -54,7 +54,7 @@ def example_prompt_cards(num_prompts=3):
 
             # Create search query to get random active prompts directly from backend
             search_query = ExamplePromptSearchQuery(
-                active=True, page_size=num_prompts, sort="random"
+                page_size=num_prompts, sort="random"
             )
 
             # Fetch random example prompts - no client-side sampling needed!
