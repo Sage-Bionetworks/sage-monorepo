@@ -88,14 +88,9 @@ public class ExamplePromptService {
   }
 
   private Specification<ExamplePromptEntity> buildSpecification(ExamplePromptSearchQueryDto query) {
-    Specification<ExamplePromptEntity> spec = activeFilter(query);
-    if (searchFilter(query) != null) {
-      spec = spec == null ? searchFilter(query) : spec.and(searchFilter(query));
-    }
-    if (sourceFilter(query) != null) {
-      spec = spec == null ? sourceFilter(query) : spec.and(sourceFilter(query));
-    }
-    return spec;
+    return Specification.where(activeFilter(query))
+      .and(searchFilter(query))
+      .and(sourceFilter(query));
   }
 
   private Specification<ExamplePromptEntity> activeFilter(ExamplePromptSearchQueryDto query) {
