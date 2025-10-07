@@ -14,12 +14,9 @@ public interface ExamplePromptRepository
   extends JpaRepository<ExamplePromptEntity, UUID>, JpaSpecificationExecutor<ExamplePromptEntity> {
   @Query(
     value = "SELECT * FROM example_prompt ep " +
-    "WHERE (:active IS NULL OR ep.active = :active) " +
+    "WHERE ep.active = TRUE " +
     "ORDER BY random() LIMIT :page_size",
     nativeQuery = true
   )
-  List<ExamplePromptEntity> findRandom(
-    @Param("page_size") int pageSize,
-    @Param("active") Boolean active
-  );
+  List<ExamplePromptEntity> findRandom(@Param("page_size") int pageSize);
 }

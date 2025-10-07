@@ -39,7 +39,7 @@ public class ExamplePromptService {
     // Handle random sort specially since JPA Sort doesn't support SQL functions
     if (effectiveQuery.getSort() == ExamplePromptSortDto.RANDOM) {
       int pageSize = Optional.ofNullable(effectiveQuery.getPageSize()).orElse(25);
-      var randomList = examplePromptRepository.findRandom(pageSize, effectiveQuery.getActive());
+      var randomList = examplePromptRepository.findRandom(pageSize);
       page = new PageImpl<>(randomList, PageRequest.of(0, randomList.size()), randomList.size());
     } else {
       Pageable pageable = createPageable(effectiveQuery);
