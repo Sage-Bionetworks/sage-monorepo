@@ -41,15 +41,15 @@ public class ExamplePromptService {
 
     Page<ExamplePromptEntity> page = examplePromptRepository.findAll(spec, pageable);
 
-    return new ExamplePromptPageDto(
-      page.getNumber(),
-      page.getSize(),
-      page.getTotalElements(),
-      page.getTotalPages(),
-      page.hasNext(),
-      page.hasPrevious(),
-      examplePromptMapper.convertToDtoList(page.getContent())
-    );
+    return ExamplePromptPageDto.builder()
+      .number(page.getNumber())
+      .size(page.getSize())
+      .totalElements(page.getTotalElements())
+      .totalPages(page.getTotalPages())
+      .hasNext(page.hasNext())
+      .hasPrevious(page.hasPrevious())
+      .examplePrompts(examplePromptMapper.convertToDtoList(page.getContent()))
+      .build();
   }
 
   private Pageable createPageable(ExamplePromptSearchQueryDto query) {
