@@ -214,6 +214,7 @@ name = "bixarena-api-client"
 version = "1.0.0"
 source = { editable = "libs/bixarena/api-client-python" }
 dependencies = [
+    { name = "lazy-imports" },
     { name = "pydantic" },
     { name = "python-dateutil" },
     { name = "typing-extensions" },
@@ -222,6 +223,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "lazy-imports", specifier = ">=1.0.1" },
     { name = "pydantic", specifier = ">=2" },
     { name = "python-dateutil", specifier = ">=2.8.2" },
     { name = "typing-extensions", specifier = ">=4.7.1" },

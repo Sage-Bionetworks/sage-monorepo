@@ -104,6 +104,7 @@ def get_model_list():
                     "anony_only": False,
                     "multimodal": False,
                 }
+        logger.info(f"✅ Fetched {len(models)} visible models from BixArena API.")
 
     except ApiException as e:
         logger.error(f"❌ API Exception when calling ModelApi->list_models: {e}")
