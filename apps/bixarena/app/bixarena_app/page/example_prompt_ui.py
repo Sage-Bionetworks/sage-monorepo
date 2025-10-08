@@ -14,6 +14,7 @@ from bixarena_api_client import ApiClient, Configuration, ExamplePromptApi
 from bixarena_api_client.models.example_prompt_search_query import (
     ExamplePromptSearchQuery,
 )
+from bixarena_api_client.models.example_prompt_sort import ExamplePromptSort
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +40,7 @@ class ExamplePromptUI:
                 api_instance = ExamplePromptApi(api_client)
                 search_query = ExamplePromptSearchQuery(
                     page_size=num_prompts,  # use alias defined by generator
-                    sort="random",
+                    sort=ExamplePromptSort.RANDOM,
                 )
                 resp = api_instance.list_example_prompts(
                     example_prompt_search_query=search_query
