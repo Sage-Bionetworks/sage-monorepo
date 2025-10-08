@@ -11,16 +11,8 @@
   transform: translateX(-200px);
   transition: vars.$transition-duration;
   z-index: 500;
-
-  .p-popover {
-    background-color: #fff;
-    border-radius: 0;
-    box-shadow: 0 0 10px 3px rgb(0 0 0 / 15%);
-  }
-
-  .p-popover-content {
-    padding: 30px;
-  }
+  background: #fff;
+  box-shadow: 0 8px 24px 0 rgba(53 58 63 / 15%);
 
   .filter-panel-inner {
     height: 100%;
@@ -42,7 +34,7 @@
   z-index: 100;
 
   .filter-panel-main-inner {
-    padding: 30px 30px 30px 44px;
+    padding: 10px 30px 30px 44px;
   }
 
   ul {
@@ -84,7 +76,7 @@
   }
 
   .filter-panel-pane-inner {
-    padding: 30px;
+    padding: 10px 30px;
   }
 
   ul {

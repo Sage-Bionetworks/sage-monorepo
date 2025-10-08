@@ -1,31 +1,20 @@
-import { Component, input, model } from '@angular/core';
-import {
-  ComparisonToolConfigFilter,
-  ComparisonToolFilter,
-} from '@sagebionetworks/explorers/models';
-import { ComparisonToolFilterPanelComponent } from './comparison-tool-filter-panel/comparison-tool-filter-panel.component';
+import { Component, input, output } from '@angular/core';
 import { ComparisonToolFilterResultsButtonComponent } from './comparison-tool-filter-results-button/comparison-tool-filter-results-button.component';
 import { ComparisonToolShareURLButtonComponent } from './comparison-tool-share-url-button/comparison-tool-share-url-button.component';
 
 @Component({
   selector: 'explorers-comparison-tool-header',
-  imports: [
-    ComparisonToolFilterResultsButtonComponent,
-    ComparisonToolShareURLButtonComponent,
-    ComparisonToolFilterPanelComponent,
-  ],
+  imports: [ComparisonToolFilterResultsButtonComponent, ComparisonToolShareURLButtonComponent],
   templateUrl: './comparison-tool-header.component.html',
   styleUrls: ['./comparison-tool-header.component.scss'],
 })
 export class ComparisonToolHeaderComponent {
   filterResultsButtonTooltip = input.required<string>();
   headerTitle = input.required<string>();
-  filterConfigs = input.required<ComparisonToolConfigFilter[]>();
-  onFiltersChange = input.required<(filters: ComparisonToolFilter[]) => void>();
 
-  isFilterPanelOpen = model(false);
+  filterToggle = output<void>();
 
-  toggleFilterPanel() {
-    this.isFilterPanelOpen.update((isOpen) => !isOpen);
+  onFilterToggle() {
+    this.filterToggle.emit();
   }
 }

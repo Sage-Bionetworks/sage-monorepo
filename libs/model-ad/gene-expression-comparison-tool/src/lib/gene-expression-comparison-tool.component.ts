@@ -1,10 +1,7 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
-import {
-  BaseComparisonToolComponent,
-  ComparisonToolHeaderComponent,
-} from '@sagebionetworks/explorers/comparison-tools';
+import { BaseComparisonToolComponent } from '@sagebionetworks/explorers/comparison-tools';
 import { ComparisonToolFilter } from '@sagebionetworks/explorers/models';
 import { ComparisonToolService } from '@sagebionetworks/explorers/services';
 import {
@@ -17,11 +14,7 @@ import { GeneExpressionHelpLinksComponent } from './components/gene-expression-h
 
 @Component({
   selector: 'model-ad-gene-expression-comparison-tool',
-  imports: [
-    BaseComparisonToolComponent,
-    ComparisonToolHeaderComponent,
-    GeneExpressionHelpLinksComponent,
-  ],
+  imports: [BaseComparisonToolComponent, GeneExpressionHelpLinksComponent],
   templateUrl: './gene-expression-comparison-tool.component.html',
   styleUrls: ['./gene-expression-comparison-tool.component.scss'],
   providers: [ComparisonToolService],
