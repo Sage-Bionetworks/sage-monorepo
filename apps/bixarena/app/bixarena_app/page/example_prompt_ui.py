@@ -38,7 +38,7 @@ class ExamplePromptUI:
             with ApiClient(configuration) as api_client:
                 api_instance = ExamplePromptApi(api_client)
                 search_query = ExamplePromptSearchQuery(
-                    pageSize=num_prompts,  # use alias defined by generator
+                    page_size=num_prompts,  # use alias defined by generator
                     sort="random",
                 )
                 resp = api_instance.list_example_prompts(
