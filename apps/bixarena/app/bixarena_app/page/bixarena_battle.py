@@ -8,29 +8,32 @@ simplified to a single function for a single-page LLM comparison arena.
 import json
 import logging
 import time
+
 import gradio as gr
 
 from bixarena_app.config.constants import (
-    MODERATION_MSG,
     CONVERSATION_LIMIT_MSG,
-    SLOW_MODEL_MSG,
-    INPUT_CHAR_LEN_LIMIT,
     CONVERSATION_TURN_LIMIT,
+    INPUT_CHAR_LEN_LIMIT,
+    MODERATION_MSG,
+    SLOW_MODEL_MSG,
 )
-from bixarena_app.config.prompt_examples import get_prompt_manager
-
-from bixarena_app.model.model_selection import get_battle_pair, moderation_filter
-
 from bixarena_app.model.model_response import (
     State,
-    get_model_list,
-    set_global_vars_anony,
     bot_response_multi,
-    no_change_btn,
-    enable_btn,
     disable_btn,
+    enable_btn,
+    get_model_list,
     invisible_btn,
+    no_change_btn,
+    set_global_vars_anony,
 )
+from bixarena_app.model.model_selection import get_battle_pair, moderation_filter
+from bixarena_app.page.battle_page_css import (
+    EXAMPLE_PROMPTS_CSS,
+    INPUT_PROMPT_CSS,
+)
+from bixarena_app.page.example_prompt_ui import example_prompt_cards
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -38,24 +41,6 @@ logger = logging.getLogger(__name__)
 num_sides = 2
 anony_names = ["", ""]
 models = []
-
-# Global state for prompt examples
-prompt_manager = get_prompt_manager()
-
-
-def create_suggested_prompts(num_prompts=3, max_chars=240):
-    """Create suggested prompts cards"""
-    display_prompts = prompt_manager.get_display_prompts(num_prompts, max_chars)
-
-    prompt_cards = []
-    for display_text, full_prompt in display_prompts:
-        btn = gr.Button(
-            value=display_text,
-            elem_classes=["suggested-prompt-card"],
-        )
-        prompt_cards.append((btn, full_prompt))
-
-    return prompt_cards
 
 
 def load_demo_side_by_side_anony(models_, _):
@@ -255,67 +240,23 @@ def add_text(
         + [gr.Group(visible=True)]  # show battle_interface
         + [gr.Row(visible=True)]  # show voting_row
         + [gr.Row(visible=True)]  # show next_battle_row
-        + [gr.Column(visible=False)]  # hide suggested_prompts_group
+        + [gr.Column(visible=False)]  # hide example_prompts_group
     )
 
 
-def build_side_by_side_ui_anony(num_example_prompts=3):
+def build_side_by_side_ui_anony():
     # Page header with title and custom styles
-    page_header_html = """
+    page_header_html = f"""
     <div style="text-align: center; padding: 0px;">
         <h1 style="font-size: 3rem; margin-bottom: 0.5rem;">BixArena</h1>
-        <p style="font-size: 1.2rem; color: #666; margin: 0;">Benchmarking LLMs for Biomedical Breakthroughs</p>
+        <p style="font-size: 1.2rem; color: #666; margin: 0;">
+            Benchmarking LLMs for Biomedical Breakthroughs
+        </p>
     </div>
     <style>
-    .gradio-container .suggested-prompt-card {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 8px;
-        padding: 12px 16px;
-        text-align: left;
-        font-size: 14px;
-        transition: all 0.2s ease;
-        width: 30%;
-        margin: 0 1.5%;
-        flex: 1;
-        min-width: 200px;
-        line-height: 1.4;
-        word-wrap: break-word;
-        white-space: normal;
-    }
-
-    .gradio-container .suggested-prompt-card:hover {
-        background: rgba(255, 255, 255, 0.08);
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-
-    #suggested_prompts_section {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
-        gap: 12px;
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-    
-    #input_box.prompt_input {
-        background: var(--background-fill-primary);
-    }
-    
-    #input_box.prompt_input textarea {
-        border-radius: 12px;
-    }
-    
-    .form:has(.prompt_input) {
-        border: none;
-        box-shadow: none;
-    }
+    {EXAMPLE_PROMPTS_CSS}
+    {INPUT_PROMPT_CSS}
     </style>
-    
-
     """
 
     states = [gr.State() for _ in range(num_sides)]
@@ -324,12 +265,14 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
 
     # Page content
     with gr.Column(elem_classes=["content-wrapper"]):
-        gr.HTML(page_header_html, elem_id="title_section")
-        # Suggested prompts
-        with gr.Column(
-            elem_id="suggested_prompts_section", visible=True
-        ) as suggested_prompts_group:
-            prompt_buttons_data = create_suggested_prompts(num_example_prompts)
+        gr.HTML(page_header_html)
+        # Example prompts (cards + arrows) now provided by helper (textbox bound later)
+        (
+            example_prompts_group,
+            prompt_cards,
+            _prev_btn,
+            _next_btn,
+        ) = example_prompt_cards(textbox=None)
 
         # Battle interface - will appear once a prompt is submitted
         with gr.Group(elem_id="share-region-anony", visible=False) as battle_interface:
@@ -415,7 +358,7 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
         + [textbox]
         + btn_list
         + [slow_warning]
-        + [battle_interface, voting_row, next_battle_row, suggested_prompts_group],
+        + [battle_interface, voting_row, next_battle_row, example_prompts_group],
     )
 
     # Direct JavaScript functions for enter key control
@@ -427,7 +370,11 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
             
             if (!textbox._enterHandler) {
                 textbox._enterHandler = function(event) {
-                    if (event.key === 'Enter' && !event.shiftKey && textbox._enterDisabled) {
+                    if (
+                        event.key === 'Enter' &&
+                        !event.shiftKey &&
+                        textbox._enterDisabled
+                    ) {
                         event.preventDefault();
                         event.stopPropagation();
                         event.stopImmediatePropagation();
@@ -459,7 +406,7 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
         + [textbox]
         + btn_list
         + [slow_warning]
-        + [battle_interface, voting_row, next_battle_row, suggested_prompts_group],
+        + [battle_interface, voting_row, next_battle_row, example_prompts_group],
     ).then(
         lambda: None,  # Disable enter key
         [],
@@ -480,16 +427,11 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
         js=enable_enter_js,
     )
 
-    # Set up suggested prompt click handlers to automatically submit
-    for btn, prompt_text in prompt_buttons_data:
-
-        def create_handler(text):
-            def handler():
-                return text
-
-            return handler
-
-        btn.click(create_handler(prompt_text), outputs=[textbox]).then(
+    # Re-wire prompt buttons now that the real textbox exists (created above)
+    # Replace the temporary hidden textbox inside example prompt UI with actual textbox
+    # We simply add new handlers that append to existing click chain.
+    for card in prompt_cards:
+        card.click(lambda v: v, inputs=[card], outputs=[textbox]).then(
             add_text,
             states + model_selectors + [textbox],
             states
@@ -497,7 +439,7 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
             + [textbox]
             + btn_list
             + [slow_warning]
-            + [battle_interface, voting_row, next_battle_row, suggested_prompts_group],
+            + [battle_interface, voting_row, next_battle_row, example_prompts_group],
         ).then(
             lambda: None,
             [],
@@ -523,13 +465,11 @@ def build_side_by_side_ui_anony(num_example_prompts=3):
 
 def build_battle_page(
     moderate=False,
-    num_example_prompts=3,
 ):
-    """Build the battle page with configurable number of example prompts
+    """Build the battle page
 
     Args:
         moderate (bool): Enable content moderation
-        num_example_prompts (int): Number of suggested prompts to display (default: 3)
     """
     # Set global variables
     set_global_vars_anony(moderate)
@@ -541,6 +481,6 @@ def build_battle_page(
     load_demo_side_by_side_anony(models, {})
 
     with gr.Blocks(title="BixArena - Biomedical LLM Battle") as battle_page:
-        build_side_by_side_ui_anony(num_example_prompts)
+        build_side_by_side_ui_anony()
 
     return battle_page

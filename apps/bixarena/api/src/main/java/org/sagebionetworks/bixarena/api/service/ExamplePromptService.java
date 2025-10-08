@@ -5,10 +5,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptSearchQueryDto;
+import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptSortDto;
 import org.sagebionetworks.bixarena.api.model.entity.ExamplePromptEntity;
 import org.sagebionetworks.bixarena.api.model.mapper.ExamplePromptMapper;
 import org.sagebionetworks.bixarena.api.model.repository.ExamplePromptRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,24 +28,34 @@ public class ExamplePromptService {
 
   @Transactional(readOnly = true)
   public ExamplePromptPageDto listExamplePrompts(ExamplePromptSearchQueryDto query) {
+    log.info("List example prompts with query {}", query);
+
     ExamplePromptSearchQueryDto effectiveQuery = query != null
       ? query
       : new ExamplePromptSearchQueryDto();
 
-    Pageable pageable = createPageable(effectiveQuery);
-    Specification<ExamplePromptEntity> spec = buildSpecification(effectiveQuery);
+    Page<ExamplePromptEntity> page;
 
-    Page<ExamplePromptEntity> page = examplePromptRepository.findAll(spec, pageable);
+    // Handle random sort specially since JPA Sort doesn't support SQL functions
+    if (effectiveQuery.getSort() == ExamplePromptSortDto.RANDOM) {
+      int pageSize = Optional.ofNullable(effectiveQuery.getPageSize()).orElse(25);
+      var randomList = examplePromptRepository.findRandom(pageSize);
+      page = new PageImpl<>(randomList, PageRequest.of(0, randomList.size()), randomList.size());
+    } else {
+      Pageable pageable = createPageable(effectiveQuery);
+      Specification<ExamplePromptEntity> spec = buildSpecification(effectiveQuery);
+      page = examplePromptRepository.findAll(spec, pageable);
+    }
 
-    return new ExamplePromptPageDto(
-      page.getNumber(),
-      page.getSize(),
-      page.getTotalElements(),
-      page.getTotalPages(),
-      page.hasNext(),
-      page.hasPrevious(),
-      examplePromptMapper.convertToDtoList(page.getContent())
-    );
+    return ExamplePromptPageDto.builder()
+      .number(page.getNumber())
+      .size(page.getSize())
+      .totalElements(page.getTotalElements())
+      .totalPages(page.getTotalPages())
+      .hasNext(page.hasNext())
+      .hasPrevious(page.hasPrevious())
+      .examplePrompts(examplePromptMapper.convertToDtoList(page.getContent()))
+      .build();
   }
 
   private Pageable createPageable(ExamplePromptSearchQueryDto query) {

@@ -977,11 +977,9 @@ components:
       default: created_at
       description: The field to sort example prompts by.
       enum:
-        - question
         - created_at
-        - source
-        - active
-      example: question
+        - random
+      example: random
       type: string
     ExamplePromptSource:
       description: The source dataset or origin of the example prompt.
