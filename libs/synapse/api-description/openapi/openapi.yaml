@@ -7908,6 +7908,47 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.GridRecordSetExportResponse'
+  /repo/v1/grid/import/csv/async/start:
+    post:
+      tags:
+        - Grid Services
+      operationId: post-/repo/v1/grid/import/csv/async/start
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.GridCsvImportRequest'
+        required: true
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.asynch.AsyncJobId'
+  /repo/v1/grid/import/csv/async/get/{asyncToken}:
+    get:
+      tags:
+        - Grid Services
+      operationId: get-/repo/v1/grid/import/csv/async/get/{asyncToken}
+      parameters:
+        - name: asyncToken
+          in: path
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Auto-generated description
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.GridCsvImportResponse'
   /repo/v1/userProfile:
     get:
       tags:
@@ -15807,6 +15848,11 @@ components:
           type: string
           description: The name of the Team.
       description: JSON schema for TeamHeader POJO
+    org.sagebionetworks.repo.model.grid.query.ValidationOperator:
+      type: string
+      enum:
+        - LIKE
+        - NOT_LIKE
     org.sagebionetworks.repo.model.Versionable:
       type: object
       properties:
@@ -18357,18 +18403,6 @@ components:
         - MUST_AGREE_NOW
         - MUST_AGREE_SOON
         - UP_TO_DATE
-    org.sagebionetworks.repo.model.grid.sql.ColumnReference:
-      type: object
-      properties:
-        concreteType:
-          type: string
-          description: Required. Full name of the exact type used.
-          enum:
-            - org.sagebionetworks.repo.model.grid.sql.ColumnReference
-        column:
-          $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.Identifier'
-      required:
-        - concreteType
     org.sagebionetworks.repo.model.download.ActionRequiredCount:
       type: object
       properties:
@@ -18494,6 +18528,17 @@ components:
           description: Role or type of user who would benefit from this feature (e.g., data analyst, researcher, business user).
           maxLength: 100
       description: Request for a new function to enhance Agent capabilities for tabular data curation.
+    org.sagebionetworks.repo.model.grid.query.result.Row:
+      type: object
+      properties:
+        cellValues:
+          type: array
+          items: {}
+          description: An array of cell values for a single row.  Each cell's index will corresponds to the SelectColumn.columnIndex
+        validationResults:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.query.result.ValidationResults'
+          description: Results of a grid row against a JSON schema
+      description: A single row of a grid query result.
     org.sagebionetworks.repo.model.BatchAccessApprovalInfoResponse:
       type: object
       properties:
@@ -18595,6 +18640,22 @@ components:
       enum:
         - ASC
         - DESC
+    org.sagebionetworks.repo.model.grid.query.result.QueryResult:
+      type: object
+      properties:
+        selectColumns:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.query.result.SelectColumn'
+            description: Information about a single selected column.
+          description: Information about the selected columns.
+        rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.query.result.Row'
+            description: A single row of a grid query result.
+          description: A single page of rows.
+      description: Results of a query against a grid session.
     org.sagebionetworks.repo.model.Row:
       type: object
       properties:
@@ -18827,6 +18888,20 @@ components:
         - concreteType
       discriminator:
         propertyName: concreteType
+    org.sagebionetworks.repo.model.grid.query.SelectItem:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          description: Required. Full name of the exact type used.
+      description: A generic select item.
+      oneOf:
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.query.SelectAll'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.query.function.CountStar'
+      required:
+        - concreteType
+      discriminator:
+        propertyName: concreteType
     org.sagebionetworks.repo.model.table.TableEntity:
       type: object
       properties:
@@ -18886,11 +18961,6 @@ components:
       description: A TableEntity represents the metadata of a table.
       required:
         - concreteType
-    org.sagebionetworks.repo.model.grid.sql.OrderByDirection:
-      type: string
-      enum:
-        - ASC
-        - DESC
     org.sagebionetworks.repo.model.download.QueryRequestDetails:
       type: object
       properties:
@@ -19069,6 +19139,18 @@ components:
         From:
           type: string
       description: The headers from the email message.
+    org.sagebionetworks.repo.model.grid.query.OrderByItem:
+      type: object
+      properties:
+        columnName:
+          type: string
+          description: Name of a column.  Can also be the alias of an aggregate function in the select clause.
+        direction:
+          type: string
+          description: The ordering direction (default is ASC).
+          enum:
+            - ASC
+            - DESC
     org.sagebionetworks.repo.model.doi.v2.DataciteMetadata:
       type: object
       properties:
@@ -19291,10 +19373,6 @@ components:
           type: string
           description: A list of full DRS identifier URI paths that may be used to obtain the object. These URIs may be external to this DRS instance. e.g drs://<host-name>/syn123.1
       description: For blob there is no contents and for bundle its list of object inside the bundle.
-    org.sagebionetworks.repo.model.grid.sql.SetQuantifier:
-      type: string
-      enum:
-        - DISTINCT
     org.sagebionetworks.repo.model.table.UploadToTablePreviewResult:
       type: object
       properties:
@@ -19761,6 +19839,17 @@ components:
       description: A view of Entities within a defined scope.
       required:
         - concreteType
+    org.sagebionetworks.repo.model.grid.query.SelectAll:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          description: Required. Full name of the exact type used.
+          enum:
+            - org.sagebionetworks.repo.model.grid.query.SelectAll
+      description: A SelectItem that will result in the selection of all columns.
+      required:
+        - concreteType
     PaginatedResultsOfUserProfile:
       type: object
       properties:
@@ -20170,13 +20259,6 @@ components:
           type: string
           description: The IP address of the server that is sending this message to the CloudMailin servers
       description: Message Envelope
-    org.sagebionetworks.repo.model.grid.sql.GridQueryResponse:
-      type: object
-      properties:
-        results:
-          $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.QueryResult'
-          description: Tabular query results from a SQL query.
-      description: ''
     org.sagebionetworks.repo.model.report.DownloadStorageReportRequest:
       type: object
       properties:
@@ -20265,6 +20347,7 @@ components:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.UploadToTableRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.TableSchemaChangeRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.ViewColumnModelRequest'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.GridCsvImportRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.file.FileHandleArchivalRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.file.BulkFileDownloadRequest'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.migration.AsyncMigrationRequest'
@@ -20423,17 +20506,6 @@ components:
           description: The version number of this row. Each row version is immutable, so when a row is updated a new version is created.
           format: int32
       description: Reference for a single Row of a TableEntity
-    org.sagebionetworks.repo.model.grid.sql.Row:
-      type: object
-      properties:
-        cellValues:
-          type: array
-          items: {}
-          description: Cell values for a single row of a query result. The first column is at index zero, the second at 1 and so on.
-        validationResults:
-          $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.ValidationResults'
-          description: Results of a grid row against a JSON schema
-      description: A single row of a grid query result.
     org.sagebionetworks.repo.model.table.QueryResult:
       type: object
       properties:
@@ -21014,28 +21086,6 @@ components:
       description: Results for a lastSeenOn backfill request.
       required:
         - concreteType
-    org.sagebionetworks.repo.model.grid.sql.InExpression:
-      type: object
-      properties:
-        concreteType:
-          type: string
-          description: Required. Full name of the exact type used.
-          enum:
-            - org.sagebionetworks.repo.model.grid.sql.InExpression
-        left:
-          $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.ColumnReference'
-        values:
-          type: array
-          items:
-            $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.Literal'
-            description: Literal is a single value of a given type.
-          description: An array of literal values for the 'IN' operator.
-        not:
-          type: boolean
-          description: Optional (default to false). Indicates if it's a 'NOT IN' expression.
-      description: In expression is used for a where condition using the 'in' opperator.
-      required:
-        - concreteType
     PaginatedResultsOfSubmissionStatus:
       type: object
       properties:
@@ -21490,20 +21540,6 @@ components:
           type: string
           description: The ID of the original parent before deletion.
       description: JSON schema for the TrashEntity POJO. A trashed entity is an entity in the trash can.
-    org.sagebionetworks.repo.model.grid.sql.SelectClause:
-      type: object
-      properties:
-        setQuantifier:
-          type: string
-          description: Optional.
-          enum:
-            - DISTINCT
-        selectList:
-          type: array
-          items:
-            $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.SelectItem'
-          description: One ore more select items.
-      description: Object model describing the SELECT statment of a SQL query.
     org.sagebionetworks.repo.model.dataaccess.AccessRequirementStatus:
       type: object
       properties:
@@ -21963,15 +21999,6 @@ components:
           description: A hash of this object, used for optimistic concurrency.
           format: int32
       description: Describes the eligibility of a Challenge Team to submit to an Evalution queue, reflecting the queue's submission quotas and current submissions.
-    org.sagebionetworks.repo.model.grid.sql.SetValue:
-      type: object
-      properties:
-        columnName:
-          $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.ColumnReference'
-        value:
-          $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.Literal'
-          description: Literal is a single value of a given type.
-      description: Set the value of a column.
     org.sagebionetworks.repo.model.form.FormGroup:
       type: object
       properties:
@@ -22553,21 +22580,6 @@ components:
           type: string
           description: To recieve the next page, forward the nextPageToken returned with the pevious reponse.
       description: Request for a single page of DownloadOrderSummary objects.
-    org.sagebionetworks.repo.model.grid.sql.FunctionName:
-      type: string
-      enum:
-        - AVG
-        - COUNT
-        - COUNT_DISTINCT
-        - MAX
-        - MIN
-        - STD
-        - STDPOP
-        - STDDEV_SAMP
-        - SUM
-        - VAR_POP
-        - VAR_SAMP
-        - VARIANCE
     org.sagebionetworks.repo.model.doi.v2.Doi:
       type: object
       properties:
@@ -22699,21 +22711,6 @@ components:
           type: string
           description: The version of DRS specification.
       description: The DRS package information follows GA4GH specification.
-    org.sagebionetworks.repo.model.grid.sql.ValidationResults:
-      type: object
-      properties:
-        isValid:
-          type: boolean
-          description: True if the object is currently valid according to the schema.
-        validationErrorMessage:
-          type: string
-          description: If the object is not valid according to the schema, a simple one line error message will be provided.
-        allValidationMessages:
-          type: array
-          items:
-            type: string
-          description: If the object is not valid according to the schema, a the flat list of error messages will be provided with one error message per sub-schema.
-      description: Results of a grid row against a JSON schema
     org.sagebionetworks.repo.model.table.FacetColumnValuesRequest:
       type: object
       properties:
@@ -23079,6 +23076,26 @@ components:
             - EVALUATION
             - TEAM
       description: A submission to request access to controlled data.
+    org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          description: 'Required. Must be a properly quoted JSON string matching one of: "org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter", "org.sagebionetworks.repo.model.grid.query.RowSelectionFilter", "org.sagebionetworks.repo.model.grid.query.RowIsValidFilter", or "org.sagebionetworks.repo.model.grid.query.CellValueFilter"'
+          enum:
+            - org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter
+        operator:
+          type: string
+          description: The comparison operator.
+          enum:
+            - LIKE
+            - NOT_LIKE
+        validationResultValue:
+          type: string
+          description: "A validation result value.  For wildcards use '%' to represents zero or more characters, and '_' to represents a single character.  For example, LIKE '%expected type: String, found%' would match rows with a validation result that contains the message: 'expected type: String, found'. Use the 'NOT_LIKE' operator to find all rows that do not have a validation message matching the provided 'validationResultValue'."
+      description: Use this filter to find rows that have data quality issues or schema validation errors. This is ideal for requests about finding 'errors', 'invalid data', or 'rows that failed validation'. To find rows with a specific error message, set the 'operator' to 'LIKE' and provide the error text in 'validationResultValue'. For example, for a user request like 'show me all rows with a type error', a good value for 'validationResultValue' would be '%expected type:%'.
+      required:
+        - concreteType
     org.sagebionetworks.repo.model.doi.DoiStatus:
       type: string
       enum:
@@ -23099,41 +23116,6 @@ components:
           type: string
           description: The optional stacktrace to log.
       description: JSON schema for a log entry
-    org.sagebionetworks.repo.model.grid.sql.FunctionCall:
-      type: object
-      properties:
-        concreteType:
-          type: string
-          description: Required. Full name of the exact type used.
-          enum:
-            - org.sagebionetworks.repo.model.grid.sql.FunctionCall
-        name:
-          type: string
-          description: The name of the fuction.
-          enum:
-            - AVG
-            - COUNT
-            - COUNT_DISTINCT
-            - MAX
-            - MIN
-            - STD
-            - STDPOP
-            - STDDEV_SAMP
-            - SUM
-            - VAR_POP
-            - VAR_SAMP
-            - VARIANCE
-        arguments:
-          type: array
-          items:
-            $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.SqlExpression'
-            description: A generic SQL expression.
-          description: An array of arguments passed to the function.
-        distinct:
-          type: boolean
-          description: Indicates if the 'DISTINCT' keyword was used (for aggregate functions).
-      required:
-        - concreteType
     org.sagebionetworks.repo.model.file.UploadType:
       type: string
       enum:
@@ -23505,6 +23487,21 @@ components:
       description: A request to export a grid created from a record set back to the original record set. A CSV file will be generated and set as a new version of the recordset.
       required:
         - concreteType
+    org.sagebionetworks.repo.model.grid.query.result.ValidationResults:
+      type: object
+      properties:
+        isValid:
+          type: boolean
+          description: Will be 'true' if the row is valid according to the JSON schema. Will be 'false' when the row is invalid.
+        validationErrorMessage:
+          type: string
+          description: If the object is not valid according to the schema, a simple one line error message will be provided.
+        allValidationMessages:
+          type: array
+          items:
+            type: string
+          description: If the object is not valid according to the schema, a the flat list of error messages will be provided with one error message per sub-schema.
+      description: Results of a grid row against a JSON schema
     org.sagebionetworks.repo.model.auth.SecretKey:
       type: object
       properties:
@@ -23512,6 +23509,40 @@ components:
           type: string
           description: The user's secret key
       description: Data transfer object for a secret key
+    org.sagebionetworks.repo.model.grid.query.CellValueFilter:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          description: 'Required. Must be a properly quoted JSON string matching one of: "org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter", "org.sagebionetworks.repo.model.grid.query.RowSelectionFilter", "org.sagebionetworks.repo.model.grid.query.RowIsValidFilter", or "org.sagebionetworks.repo.model.grid.query.CellValueFilter"'
+          enum:
+            - org.sagebionetworks.repo.model.grid.query.CellValueFilter
+        columnName:
+          type: string
+          description: Required. The name of the column to filter by.
+        operator:
+          type: string
+          description: The comparison operator.
+          enum:
+            - EQUALS
+            - NOT_EQUALS
+            - GREATER_THAN
+            - LESS_THAN
+            - GREATER_THAN_OR_EQUALS
+            - LESS_THAN_OR_EQUALS
+            - IN
+            - NOT_IN
+            - LIKE
+            - NOT_LIKE
+            - IS_NULL
+            - IS_NOT_NULL
+        value:
+          type: array
+          items: {}
+          description: "A filter used to select rows based on a specific column's cell value. Use operators like 'EQUALS' or 'LIKE' with the 'value' array for standard comparisons. For user requests about finding 'empty', 'blank', or 'null' values, use the 'IS_NULL' operator and omit the 'value' property. To find rows that are not empty, use the 'IS_NOT_NULL' operator. When using either 'LIKE' or 'NOT_LIKE', the wildcard character: '%' is used to represents zero or more characters, and '_' is used to represents a single character."
+      description: A filter used to select rows based on cell values. For example, to handle a user request like 'find all rows where the Project column is Alpha', you would set 'columnName' to 'Project', 'operator' to 'EQUALS', and 'value' to ['Alpha']
+      required:
+        - concreteType
     org.sagebionetworks.repo.model.oauth.OAuthProvider:
       type: string
       enum:
@@ -23911,6 +23942,17 @@ components:
       description: A multiple choice question
       required:
         - concreteType
+    org.sagebionetworks.repo.model.grid.query.result.SelectColumn:
+      type: object
+      properties:
+        columnName:
+          type: string
+          description: The name of the column.  Will be the alias if one is provide in the select item.
+        columnIndex:
+          type: integer
+          description: The index of this column. The first column will have an index of zero.
+          format: int32
+      description: Information about a single selected column.
     org.sagebionetworks.repo.model.project.UploadDestinationListSetting:
       type: object
       properties:
@@ -23968,6 +24010,20 @@ components:
         nextPageToken:
           type: string
           description: Token that can be used to get the next page. Null if there are no more results.
+    org.sagebionetworks.repo.model.grid.query.RowSelectionFilter:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          description: 'Required. Must be a properly quoted JSON string matching one of: "org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter", "org.sagebionetworks.repo.model.grid.query.RowSelectionFilter", "org.sagebionetworks.repo.model.grid.query.RowIsValidFilter", or "org.sagebionetworks.repo.model.grid.query.CellValueFilter"'
+          enum:
+            - org.sagebionetworks.repo.model.grid.query.RowSelectionFilter
+        isSelected:
+          type: boolean
+          description: "When true, only rows that the user has selected will be returned.  When false, rows that the user has selected with be excluded.  This filter should be excluded to ignore the user's row selection. "
+      description: Use this filter to narrow down results based on rows the user has actively selected in the interface. For user requests like 'show me only my selected items' or 'run this analysis on the rows I've checked', set the 'isSelected' property to true. For requests to see the opposite, like 'show me the unselected rows', set 'isSelected' to false. If the user makes no mention of selected items, do not include this filter in the query.
+      required:
+        - concreteType
     org.sagebionetworks.repo.model.v2.wiki.V2WikiOrderHint:
       type: object
       properties:
@@ -24366,6 +24422,7 @@ components:
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.CreateGridResponse'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.RowReferenceSetResults'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.download.DownloadListQueryResponse'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.GridCsvImportResponse'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.DownloadFromTableResult'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.file.BulkFileDownloadResponse'
         - $ref: '#/components/schemas/org.sagebionetworks.repo.model.file.AddFileToDownloadListResponse'
@@ -24407,17 +24464,6 @@ components:
           description: The total number of results
           format: int32
       description: Paginated results of strings
-    org.sagebionetworks.repo.model.grid.sql.Star:
-      type: object
-      properties:
-        concreteType:
-          type: string
-          description: Required. Full name of the exact type used.
-          enum:
-            - org.sagebionetworks.repo.model.grid.sql.Star
-      description: Indicates an asterisk (*).
-      required:
-        - concreteType
     org.sagebionetworks.repo.model.download.SortField:
       type: string
       enum:
@@ -24430,17 +24476,6 @@ components:
         - createdOn
         - fileSize
         - isEligibleForPackaging
-    org.sagebionetworks.repo.model.grid.sql.BinaryOperator:
-      type: string
-      enum:
-        - EQUALS
-        - NOT_EQUALS
-        - GREATER_THAN
-        - LESS_THAN
-        - GREATER_THAN_OR_EQUALS
-        - LESS_THAN_OR_EQUALS
-        - AND
-        - OR
     org.sagebionetworks.repo.model.agent.AgentType:
       type: string
       enum:
@@ -24499,6 +24534,31 @@ components:
           type: boolean
           description: Optional. When trace is enabled, the agent will include information about its decision process and the functions/tools it will use to process this request. Default value is false.
       description: Send a chat message to the Synapse chat agent
+      required:
+        - concreteType
+    org.sagebionetworks.repo.model.grid.GridCsvImportRequest:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          enum:
+            - org.sagebionetworks.repo.model.grid.GridCsvImportRequest
+        sessionId:
+          type: string
+          description: The grid session ID.
+        fileHandleId:
+          type: string
+          description: The id of the file handle that contains the CSV data.
+        csvDescriptor:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.CsvTableDescriptor'
+          description: The description of a csv for upload or download.
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.ColumnModel'
+            description: A column model contains the metadata of a single column of a table or view.
+          description: The list of ColumnModel that describe the CSV file. Currently this is is required.
+      description: A request to import a CSV file into a grid. Currently supports only grid created from a record set.
       required:
         - concreteType
     org.sagebionetworks.repo.model.table.ColumnModel:
@@ -25122,13 +25182,6 @@ components:
       description: A materialized view is a type of table that is automatically built from a Synapse SQL query. Its content is persisted. The SQL of the materialized view may contain JOIN clauses on multiple tables.
       required:
         - concreteType
-    org.sagebionetworks.repo.model.grid.sql.LiteralType:
-      type: string
-      enum:
-        - string
-        - integner
-        - float
-        - boolean
     org.sagebionetworks.repo.model.file.ExternalUploadDestination:
       type: object
       properties:
@@ -25397,28 +25450,6 @@ components:
             description: JSON schema for a search document.
           description: The set of search documents.
       description: JSON schema for a batch of search documents.
-    org.sagebionetworks.repo.model.grid.sql.Literal:
-      type: object
-      properties:
-        concreteType:
-          type: string
-          description: Required. Full name of the exact type used.
-          enum:
-            - org.sagebionetworks.repo.model.grid.sql.Literal
-        value:
-          type: string
-          description: The literal value.
-        dataType:
-          type: string
-          description: The data type of the literal.
-          enum:
-            - string
-            - integner
-            - float
-            - boolean
-      description: Literal is a single value of a given type.
-      required:
-        - concreteType
     org.sagebionetworks.repo.model.RestResourceList:
       type: object
       properties:
@@ -25450,18 +25481,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/org.sagebionetworks.repo.model.v2.wiki.V2WikiHeader'
-    org.sagebionetworks.repo.model.grid.sql.OrderByItem:
-      type: object
-      properties:
-        expression:
-          $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.SqlExpression'
-          description: A generic SQL expression.
-        direction:
-          type: string
-          description: The ordering direction (default is ASC).
-          enum:
-            - ASC
-            - DESC
     org.sagebionetworks.repo.model.grid.DownloadFromGridRequest:
       type: object
       properties:
@@ -25810,21 +25829,6 @@ components:
           description: The unique identifiers of the intended recipients of a message
           uniqueItems: true
       description: Contains a set of IDs of the intended recipients of a message
-    org.sagebionetworks.repo.model.grid.sql.QueryResult:
-      type: object
-      properties:
-        columnNames:
-          type: array
-          items:
-            type: string
-          description: The column names from the select.
-        rows:
-          type: array
-          items:
-            $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.Row'
-            description: A single row of a grid query result.
-          description: A single page of rows.
-      description: Tabular query results from a SQL query.
     org.sagebionetworks.repo.model.file.StsUploadDestination:
       type: object
       properties:
@@ -26346,6 +26350,30 @@ components:
           type: string
           description: The reason that the Submission is rejected if newState is REJECTED.
       description: A request to change the state of a Submission.
+    org.sagebionetworks.repo.model.grid.query.Query:
+      type: object
+      properties:
+        columnSelection:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.query.SelectItem'
+            description: A generic select item.
+          description: 'One or more SelectItem is required to define the columns that will be returned by this query.  Each SelectItem must be a complete JSON object with the required ''concreteType'' property. IMPORTANT: Do not use SQL syntax - use the predefined SelectItem objects. Examples: To select all columns: {"concreteType":"org.sagebionetworks.repo.model.grid..query.SelectAll"}. To select the count of the number of rows use: {"concreteType":"org.sagebionetworks.repo.model.grid.query.function.CountStar"}'
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.query.Filter'
+            description: 'All filter objects must use valid JSON syntax with double quotes around all strings. There are four different types of filters that can be applied to a grid query. For example, a filter to find all rows where column named: ''someInt'' has a value greater than 12, the following filter would be used:[{"concreteType":"org.sagebionetworks.repo.model.grid.query.CellValueFilter","columnName":"someInt","operator":"GREATER_THAN","value":[12]}]. In order to find all rows with a JSON schema validation error use the following filter: [{"concreteType":"org.sagebionetworks.repo.model.grid.query.RowIsValidFilter","value":false}].  In order to find all rows with JSON schema validation error message that indicates the wrong type was provided, you could use the filter: [{"concreteType":"org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter","operator":"LIKE","validationResultValue":"%expected type%"}]. In order to find all rows that are currently selected by the user, you would use the following filter: [{"concreteType":"org.sagebionetworks.repo.model.grid.query.RowSelectionFilter","isSelected":true}].'
+          description: 'Optional. Each filter must be a complete JSON object with the required ''concreteType'' property. IMPORTANT: Do not use SQL syntax - use the predefined filter objects. Examples: To find invalid rows: [{"concreteType":"org.sagebionetworks.repo.model.grid.query.RowIsValidFilter","value":false}]. To find rows where ''age'' > 25: [{"concreteType":"org.sagebionetworks.repo.model.grid.query.CellValueFilter","columnName":"age","operator":"GREATER_THAN","value":[25]}]. Multiple filters are combined with AND logic.'
+        limit:
+          type: integer
+          description: Required. Limit of the number of rows returned to avoid loading more data than needed into your context window.
+          format: int32
+        offset:
+          type: integer
+          description: Optional. specifies the offset of the first row to return.
+          format: int32
+      description: Defines a structured query using JSON SelectItems and Filters objects - NOT SQL syntax. Use the predefined SelectItems and Filters with specific concreteType values.
     org.sagebionetworks.repo.model.schema.ObjectType:
       type: string
       enum:
@@ -27247,6 +27275,17 @@ components:
         - REPLICATED_EVENT
         - PORTAL
         - OAUTH_CLIENT
+    org.sagebionetworks.repo.model.grid.query.function.CountStar:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          description: Required. Full name of the exact type used.
+          enum:
+            - org.sagebionetworks.repo.model.grid.query.function.CountStar
+      description: Use this to count the total number of rows that match the query. For example, for a user request like 'how many rows are there in total?', select this item. The alias property can be used to name the resulting count column.
+      required:
+        - concreteType
     org.sagebionetworks.repo.model.InviteeVerificationSignedToken:
       type: object
       properties:
@@ -27819,6 +27858,20 @@ components:
           description: The total run time (MS) of the last processing job.
           format: int32
       description: Object used to track the status of a Table.
+    org.sagebionetworks.repo.model.grid.query.RowIsValidFilter:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          description: 'Required. Must be a properly quoted JSON string matching one of: "org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter", "org.sagebionetworks.repo.model.grid.query.RowSelectionFilter", "org.sagebionetworks.repo.model.grid.query.RowIsValidFilter", or "org.sagebionetworks.repo.model.grid.query.CellValueFilter"'
+          enum:
+            - org.sagebionetworks.repo.model.grid.query.RowIsValidFilter
+        value:
+          type: boolean
+          description: Set to 'true' to find rows that are valid according to the schema. Set to 'false' to find rows that are invalid and have validation errors.'
+      description: Use this filter for simple requests to find all 'valid' or 'invalid' rows based on their overall validation status.
+      required:
+        - concreteType
     org.sagebionetworks.repo.model.download.DownloadListManifestResponse:
       type: object
       properties:
@@ -28171,40 +28224,6 @@ components:
           type: boolean
           description: true if and only if the user can send an email to the team
       description: JSON schema for the possible status of a User with respect to Team membership.
-    org.sagebionetworks.repo.model.grid.sql.Update:
-      type: object
-      properties:
-        set:
-          type: array
-          items:
-            $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.SetValue'
-            description: Set the value of a column.
-          description: Values to set.
-        where:
-          type: array
-          items:
-            $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.SqlExpression'
-            description: A generic SQL expression.
-          description: Optional WHERE clause.
-        limit:
-          type: integer
-          description: The number of rows to limit.
-          format: int32
-      description: SQL used to update cells of a grid.
-    org.sagebionetworks.repo.model.grid.sql.GridQueryRequest:
-      type: object
-      properties:
-        gridSessionId:
-          type: string
-          description: The grid session ID.
-        replicaId:
-          type: integer
-          description: The identifier of the replica to query.
-          format: int32
-        query:
-          $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.Query'
-          description: Defines a SQL query to be run against the current grid.
-      description: Request to query the grid.
     org.sagebionetworks.repo.model.discussion.DiscussionThreadOrder:
       type: string
       enum:
@@ -28212,25 +28231,6 @@ components:
         - NUMBER_OF_VIEWS
         - PINNED_AND_LAST_ACTIVITY
         - THREAD_TITLE
-    org.sagebionetworks.repo.model.grid.sql.SqlExpression:
-      type: object
-      properties:
-        concreteType:
-          type: string
-          description: Required. Full name of the exact type used.
-      description: A generic SQL expression.
-      oneOf:
-        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.Star'
-        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.Literal'
-        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.BinaryExpression'
-        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.Identifier'
-        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.InExpression'
-        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.FunctionCall'
-        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.ColumnReference'
-      required:
-        - concreteType
-      discriminator:
-        propertyName: concreteType
     org.sagebionetworks.repo.model.form.ListResponse:
       type: object
       properties:
@@ -29266,34 +29266,6 @@ components:
       description: JSON schema for an error returned by Drs Services. Used to align error messages with <a href="https://ga4gh.github.io/data-repository-service-schemas/preview/release/drs-1.2.0/docs/#tag/ErrorModel">Error</a>
       required:
         - concreteType
-    org.sagebionetworks.repo.model.grid.sql.BinaryExpression:
-      type: object
-      properties:
-        concreteType:
-          type: string
-          description: Required. Full name of the exact type used.
-          enum:
-            - org.sagebionetworks.repo.model.grid.sql.BinaryExpression
-        left:
-          $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.SqlExpression'
-          description: A generic SQL expression.
-        operator:
-          type: string
-          description: The comparison operator.
-          enum:
-            - EQUALS
-            - NOT_EQUALS
-            - GREATER_THAN
-            - LESS_THAN
-            - GREATER_THAN_OR_EQUALS
-            - LESS_THAN_OR_EQUALS
-            - AND
-            - OR
-        right:
-          $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.SqlExpression'
-          description: A generic SQL expression.
-      required:
-        - concreteType
     org.sagebionetworks.repo.model.ACTAccessRequirementInterface:
       type: object
       properties:
@@ -29685,6 +29657,31 @@ components:
         - NO_ACTION
         - RESTORED
         - RESTORING
+    org.sagebionetworks.repo.model.grid.GridCsvImportResponse:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          enum:
+            - org.sagebionetworks.repo.model.grid.GridCsvImportResponse
+        sessionId:
+          type: string
+          description: The grid session ID.
+        totalCount:
+          type: integer
+          description: The total number of processed rows.
+          format: int32
+        createdCount:
+          type: integer
+          description: The number of newly created rows in the grid.
+          format: int32
+        updatedCount:
+          type: integer
+          description: The number of updated rows in the grid.
+          format: int32
+      description: The result of a CSV import into the grid.
+      required:
+        - concreteType
     org.sagebionetworks.repo.model.auth.Session:
       type: object
       properties:
@@ -29920,6 +29917,21 @@ components:
           type: string
           description: A note for this record
       description: JSON schema for Entity Group Record POJO
+    org.sagebionetworks.repo.model.grid.query.CellValueOperator:
+      type: string
+      enum:
+        - EQUALS
+        - NOT_EQUALS
+        - GREATER_THAN
+        - LESS_THAN
+        - GREATER_THAN_OR_EQUALS
+        - LESS_THAN_OR_EQUALS
+        - IN
+        - NOT_IN
+        - LIKE
+        - NOT_LIKE
+        - IS_NULL
+        - IS_NOT_NULL
     org.sagebionetworks.repo.model.oauth.OAuthRefreshTokenInformation:
       type: object
       properties:
@@ -31358,6 +31370,22 @@ components:
       description: Request checksum for given type.
       required:
         - concreteType
+    org.sagebionetworks.repo.model.grid.query.Filter:
+      type: object
+      properties:
+        concreteType:
+          type: string
+          description: 'Required. Must be a properly quoted JSON string matching one of: "org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter", "org.sagebionetworks.repo.model.grid.query.RowSelectionFilter", "org.sagebionetworks.repo.model.grid.query.RowIsValidFilter", or "org.sagebionetworks.repo.model.grid.query.CellValueFilter"'
+      description: 'All filter objects must use valid JSON syntax with double quotes around all strings. There are four different types of filters that can be applied to a grid query. For example, a filter to find all rows where column named: ''someInt'' has a value greater than 12, the following filter would be used:[{"concreteType":"org.sagebionetworks.repo.model.grid.query.CellValueFilter","columnName":"someInt","operator":"GREATER_THAN","value":[12]}]. In order to find all rows with a JSON schema validation error use the following filter: [{"concreteType":"org.sagebionetworks.repo.model.grid.query.RowIsValidFilter","value":false}].  In order to find all rows with JSON schema validation error message that indicates the wrong type was provided, you could use the filter: [{"concreteType":"org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter","operator":"LIKE","validationResultValue":"%expected type%"}]. In order to find all rows that are currently selected by the user, you would use the following filter: [{"concreteType":"org.sagebionetworks.repo.model.grid.query.RowSelectionFilter","isSelected":true}].'
+      oneOf:
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.query.RowValidationResultFilter'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.query.RowSelectionFilter'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.query.RowIsValidFilter'
+        - $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.query.CellValueFilter'
+      required:
+        - concreteType
+      discriminator:
+        propertyName: concreteType
     org.sagebionetworks.repo.model.discussion.EntityThreadCounts:
       type: object
       properties:
@@ -31367,12 +31395,6 @@ components:
             $ref: '#/components/schemas/org.sagebionetworks.repo.model.discussion.EntityThreadCount'
             description: The model object represents the number of threads that mentioned a particular entity.
       description: The model object represents a list of EntityThreadCounts
-    org.sagebionetworks.repo.model.grid.sql.SelectItem:
-      type: object
-      properties:
-        expression:
-          $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.SqlExpression'
-          description: A generic SQL expression.
     org.sagebionetworks.repo.model.Node:
       type: object
       properties:
@@ -31492,38 +31514,6 @@ components:
           type: string
           description: Forward this token to get the next page of results.
       description: A single page of the JSON schema validation results.
-    org.sagebionetworks.repo.model.grid.sql.Query:
-      type: object
-      properties:
-        select:
-          $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.SelectClause'
-          description: Object model describing the SELECT statment of a SQL query.
-        where:
-          type: array
-          items:
-            $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.SqlExpression'
-            description: A generic SQL expression.
-          description: Optional WHERE clause.
-        groupBy:
-          type: array
-          items:
-            $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.SqlExpression'
-            description: A generic SQL expression.
-          description: Optional GROUP BY clause.
-        orderBy:
-          type: array
-          items:
-            $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.OrderByItem'
-          description: Optional ORDER BY clause.
-        limit:
-          type: integer
-          description: Optional limit of the number of rows.
-          format: int32
-        offset:
-          type: integer
-          description: Optional specifies the offset of the first row to return.
-          format: int32
-      description: Defines a SQL query to be run against the current grid.
     org.sagebionetworks.repo.model.schema.BoundObjectType:
       type: string
       enum:
@@ -31608,6 +31598,13 @@ components:
           type: string
           description: A message describing the reason of the verification status
       description: An object that serves as registration for a Synapse user to receive events for the specified event.
+    org.sagebionetworks.repo.model.grid.query.QueryRequest:
+      type: object
+      properties:
+        query:
+          $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.query.Query'
+          description: Defines a structured query using JSON SelectItems and Filters objects - NOT SQL syntax. Use the predefined SelectItems and Filters with specific concreteType values.
+      description: Request to run a query.
     org.sagebionetworks.repo.model.dataaccess.SubmissionStatus:
       type: object
       properties:
@@ -31758,7 +31755,7 @@ components:
           $ref: '#/components/schemas/org.sagebionetworks.repo.model.table.Query'
         parentId:
           type: string
-          description: "The synID of a folder, project, or dataset to add all of the children files to the user's download list.  This parameter should be excluded when adding files from a query. Note: This is not recursive, unless the recursive property is set to true."
+          description: "The synID of a folder, project, dataset or dataset collection to add all of the children files to the user's download list.  This parameter should be excluded when adding files from a query. Note: This is not recursive, unless the recursive property is set to true."
         recursive:
           type: boolean
           description: "When the parentId is specified and this property is set to true all the files in a folder or project will be added to the user's download list, including files contained in sub-folders. When set to false (default) only the direct children of the provided parentId will be added to the download list. Note: the property cannot be true when a query is specified or when the parentId is a dataset."
@@ -33228,6 +33225,11 @@ components:
           type: string
           description: Additional notes that can be set by the ACT team and that is not exposed to the end user.
       description: The state of a verification submission
+    org.sagebionetworks.repo.model.grid.query.OrderByDirection:
+      type: string
+      enum:
+        - ASC
+        - DESC
     org.sagebionetworks.repo.model.agent.ListAgentSessionsRequest:
       type: object
       properties:
@@ -35107,19 +35109,6 @@ components:
         - concreteType
       discriminator:
         propertyName: concreteType
-    org.sagebionetworks.repo.model.grid.sql.Identifier:
-      type: object
-      properties:
-        concreteType:
-          type: string
-          description: Required. Full name of the exact type used.
-          enum:
-            - org.sagebionetworks.repo.model.grid.sql.Identifier
-        value:
-          type: string
-          description: The identifier value (e.g., table name, column name).
-      required:
-        - concreteType
     org.sagebionetworks.repo.model.OAuthErrorResponse:
       type: object
       properties:
@@ -35191,6 +35180,22 @@ components:
       description: This upload destination contains information to start an upload to an external external S3 bucket connected with Synapse. The destination is mapped from an <a href="${org.sagebionetworks.repo.model.project.ExternalS3StorageLocationSetting}">ExternalS3StorageLocationSetting</a>.
       required:
         - concreteType
+    org.sagebionetworks.repo.model.grid.query.SelectClause:
+      type: object
+      properties:
+        selectAll:
+          type: boolean
+          description: When true, all columns will be selected (*). The selectList will be ignored.
+        distinct:
+          type: boolean
+          description: Optional. When true, DISTINCT will be used.
+        selectList:
+          type: array
+          items:
+            $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.query.SelectItem'
+            description: A generic select item.
+          description: One or more select items. This list is ignored if 'selectAll' is true.
+      description: Defines the SELECT clause of the query. Use 'selectAll' for a 'SELECT *' query, otherwise provide a list of columns and functions in 'selectList'.
     org.sagebionetworks.evaluation.model.EvaluationRoundLimit:
       type: object
       properties:
@@ -35251,9 +35256,6 @@ components:
           type: integer
           description: Identifies the replica that will be establishing the websocket connection.
           format: int32
-        update:
-          $ref: '#/components/schemas/org.sagebionetworks.repo.model.grid.sql.Update'
-          description: SQL used to update cells of a grid.
       description: Request to update the grid by executing a SQL update command.
     org.sagebionetworks.repo.model.dataaccess.SubmissionSortField:
       type: string

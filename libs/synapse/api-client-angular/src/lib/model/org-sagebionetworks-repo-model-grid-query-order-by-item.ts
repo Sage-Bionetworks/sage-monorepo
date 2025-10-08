@@ -7,16 +7,18 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { OrgSagebionetworksRepoModelGridSqlSqlExpression } from './org-sagebionetworks-repo-model-grid-sql-sql-expression';
 
-export interface OrgSagebionetworksRepoModelGridSqlOrderByItem {
-  expression?: OrgSagebionetworksRepoModelGridSqlSqlExpression;
+export interface OrgSagebionetworksRepoModelGridQueryOrderByItem {
+  /**
+   * Name of a column.  Can also be the alias of an aggregate function in the select clause.
+   */
+  columnName?: string;
   /**
    * The ordering direction (default is ASC).
    */
-  direction?: OrgSagebionetworksRepoModelGridSqlOrderByItem.DirectionEnum;
+  direction?: OrgSagebionetworksRepoModelGridQueryOrderByItem.DirectionEnum;
 }
-export namespace OrgSagebionetworksRepoModelGridSqlOrderByItem {
+export namespace OrgSagebionetworksRepoModelGridQueryOrderByItem {
   export type DirectionEnum = 'ASC' | 'DESC';
   export const DirectionEnum = {
     Asc: 'ASC' as DirectionEnum,

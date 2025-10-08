@@ -19,6 +19,7 @@ import { OrgSagebionetworksRepoModelFileFileHandleAssociation } from './org-sage
 import { OrgSagebionetworksRepoModelReportDownloadStorageReportRequest } from './org-sagebionetworks-repo-model-report-download-storage-report-request';
 import { OrgSagebionetworksRepoModelTableQueryNextPageToken } from './org-sagebionetworks-repo-model-table-query-next-page-token';
 import { OrgSagebionetworksRepoModelDownloadDownloadListQueryRequest } from './org-sagebionetworks-repo-model-download-download-list-query-request';
+import { OrgSagebionetworksRepoModelGridGridCsvImportRequest } from './org-sagebionetworks-repo-model-grid-grid-csv-import-request';
 import { OrgSagebionetworksRepoModelMigrationAdminRequest } from './org-sagebionetworks-repo-model-migration-admin-request';
 import { OrgSagebionetworksRepoModelTableSortItem } from './org-sagebionetworks-repo-model-table-sort-item';
 import { OrgSagebionetworksRepoModelTableCsvTableDescriptor } from './org-sagebionetworks-repo-model-table-csv-table-descriptor';
@@ -71,6 +72,7 @@ export type OrgSagebionetworksRepoModelAsynchAsynchronousRequestBody =
   | OrgSagebionetworksRepoModelFileFileHandleRestoreRequest
   | OrgSagebionetworksRepoModelGridCreateGridRequest
   | OrgSagebionetworksRepoModelGridDownloadFromGridRequest
+  | OrgSagebionetworksRepoModelGridGridCsvImportRequest
   | OrgSagebionetworksRepoModelGridGridRecordSetExportRequest
   | OrgSagebionetworksRepoModelMigrationAsyncMigrationRequest
   | OrgSagebionetworksRepoModelReportDownloadStorageReportRequest
