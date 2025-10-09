@@ -1,0 +1,115 @@
+{
+  "config": {
+    "num_models": 6,
+    "num_votes": 200,
+    "num_bootstrap": 50,
+    "tie_probability": 0.1,
+    "random_seed": 123
+  },
+  "leaderboard": [
+    {
+      "rank": 1,
+      "model_name": "model_05",
+      "bt_score": 1077.6962947158304,
+      "vote_count": 56,
+      "bootstrap_q025": 969.9266652442474,
+      "bootstrap_q975": 1185.4659241874135,
+      "ci_95": "[969.9, 1185.5]"
+    },
+    {
+      "rank": 2,
+      "model_name": "model_06",
+      "bt_score": 1035.93791958523,
+      "vote_count": 63,
+      "bootstrap_q025": 932.344127626707,
+      "bootstrap_q975": 1139.531711543753,
+      "ci_95": "[932.3, 1139.5]"
+    },
+    {
+      "rank": 3,
+      "model_name": "model_04",
+      "bt_score": 1019.0330362826451,
+      "vote_count": 71,
+      "bootstrap_q025": 917.1297326543805,
+      "bootstrap_q975": 1120.9363399109095,
+      "ci_95": "[917.1, 1120.9]"
+    },
+    {
+      "rank": 4,
+      "model_name": "model_02",
+      "bt_score": 982.8914949845878,
+      "vote_count": 77,
+      "bootstrap_q025": 884.602345486129,
+      "bootstrap_q975": 1081.1806444830465,
+      "ci_95": "[884.6, 1081.2]"
+    },
+    {
+      "rank": 5,
+      "model_name": "model_01",
+      "bt_score": 974.6578251242051,
+      "vote_count": 67,
+      "bootstrap_q025": 877.1920426117846,
+      "bootstrap_q975": 1072.1236076366256,
+      "ci_95": "[877.2, 1072.1]"
+    },
+    {
+      "rank": 6,
+      "model_name": "model_03",
+      "bt_score": 909.7834293075015,
+      "vote_count": 66,
+      "bootstrap_q025": 818.8050863767513,
+      "bootstrap_q975": 1000.7617722382516,
+      "ci_95": "[818.8, 1000.8]"
+    }
+  ],
+  "bt_scores": [
+    {
+      "model": "model_05",
+      "bt_score": 1077.6962947158304,
+      "rank": 1,
+      "bootstrap_q025": 969.9266652442474,
+      "bootstrap_q975": 1185.4659241874135
+    },
+    {
+      "model": "model_06",
+      "bt_score": 1035.93791958523,
+      "rank": 2,
+      "bootstrap_q025": 932.344127626707,
+      "bootstrap_q975": 1139.531711543753
+    },
+    {
+      "model": "model_04",
+      "bt_score": 1019.0330362826451,
+      "rank": 3,
+      "bootstrap_q025": 917.1297326543805,
+      "bootstrap_q975": 1120.9363399109095
+    },
+    {
+      "model": "model_02",
+      "bt_score": 982.8914949845878,
+      "rank": 4,
+      "bootstrap_q025": 884.602345486129,
+      "bootstrap_q975": 1081.1806444830465
+    },
+    {
+      "model": "model_01",
+      "bt_score": 974.6578251242051,
+      "rank": 5,
+      "bootstrap_q025": 877.1920426117846,
+      "bootstrap_q975": 1072.1236076366256
+    },
+    {
+      "model": "model_03",
+      "bt_score": 909.7834293075015,
+      "rank": 6,
+      "bootstrap_q025": 818.8050863767513,
+      "bootstrap_q975": 1000.7617722382516
+    }
+  ],
+  "summary": {
+    "total_votes": 200,
+    "total_models": 6,
+    "top_model": "model_05",
+    "top_score": 1077.6962947158304
+  }
+}
