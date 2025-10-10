@@ -15,7 +15,6 @@ export const intersectFilterCallback = function (value: any, filters: any): bool
 };
 
 export const urlLinkCallback = function (value: any, filters: any): boolean {
-  console.log('urlLinkCallback', value, filters);
   if (filters === undefined || filters === null || filters.length < 1) {
     return true;
   } else if (value === undefined || value === null || filters.length < 1) {

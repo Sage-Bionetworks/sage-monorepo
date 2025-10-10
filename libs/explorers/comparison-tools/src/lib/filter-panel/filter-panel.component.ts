@@ -20,10 +20,7 @@ export class FilterPanelComponent {
   filterPanelService = inject(FilterPanelService);
 
   handleChange(option: ComparisonToolFilterOption) {
-    console.log('handling change', option);
-    console.log(this.filterPanelService.filters());
     this.filterPanelService.handleFilterChange(option);
-    console.log(this.filterPanelService.getSelectedFilters());
     this.changeEvent.emit();
   }
 

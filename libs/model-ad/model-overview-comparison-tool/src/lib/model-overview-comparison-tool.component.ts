@@ -96,9 +96,7 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
           const modelOverviewConfig = configs.find(
             (config) => config.page === ComparisonToolPage.ModelOverview,
           );
-          console.log('modelOverviewConfig', modelOverviewConfig);
           this.config.set(modelOverviewConfig);
-          console.log('this.config', this.config());
           if (modelOverviewConfig) {
             this.columns.set(this.getColumnsFromConfig(modelOverviewConfig));
             this.filterPanelService.setFilters(this.filters());
@@ -144,68 +142,8 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
       });
   }
 
-  // setFilters() {
-  //   console.log('setFilters called');
-  //   this.filter();
-  //   this.updateUrl();
-  // }
-
   filter() {
-    let filters: { [key: string]: any };
-    console.log('in filter() func of model overview comparison tool');
-
-    // if (this.searchTerm) {
-    //   if (this.searchTerm.indexOf(',') !== -1) {
-    //     const terms = this.searchTerm
-    //       .toLowerCase()
-    //       .split(',')
-    //       .map((t: string) => t.trim())
-    //       .filter((t: string) => t !== '');
-    //     filters['search_array'] = {
-    //       value: terms,
-    //       matchMode: 'intersect',
-    //     };
-    //   } else {
-    //     filters['search_string'] = {
-    //       value: this.searchTerm.toLowerCase(),
-    //       matchMode: 'contains',
-    //     };
-    //   }
-    // }
-
-    // this.filters.forEach((filter) => {
-    //   if (!filter.field) {
-    //     return;
-    //   }
-
-    //   const values = filter.options
-    //     .filter((option) => option.selected)
-    //     .map((selected) => selected.value);
-
-    //   if (values.length) {
-    //     filters[filter.field] = {
-    //       value: values,
-    //       matchMode: filter.matchMode || 'equals',
-    //     };
-    //   }
-    // });
-
-    // const filterChanged =
-    //   JSON.stringify({ ...filters, ...{ ensembl_gene_id: '' } }) !==
-    //   JSON.stringify({
-    //     ...this.genesTable.filters,
-    //     ...{ ensembl_gene_id: '' },
-    //   });
-
-    // const currentPage = this.genesTable._first;
-
-    // this.genesTable.filters = filters;
-    // this.genesTable._filter();
-
-    // // Restoring current pagination if filters didn't change
-    // if (!filterChanged) {
-    //   this.genesTable._first = currentPage;
-    // }
+    const filters: { [key: string]: any } = {};
   }
 
   updateUrl() {

@@ -59,9 +59,7 @@ export class FilterPanelService {
         o.label === option.label ? { ...o, selected: option.selected } : o,
       ),
     }));
-    console.log('updating filters');
     this.filtersSignal.set(updatedFilters);
-    console.log('updated filters', updatedFilters);
   }
 
   getSelectedFilters() {
@@ -71,7 +69,6 @@ export class FilterPanelService {
       const selectedOptions = filter.options
         .filter((option) => option.selected)
         .map((option) => option.label);
-      console.log('getselectedfilters:selectedOptions', selectedOptions);
       if (selectedOptions.length) {
         values[filter.name] = selectedOptions;
       }
