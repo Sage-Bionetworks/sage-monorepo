@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-BixArena AI API
+BixArena API
 
 Advance bioinformatics by evaluating and ranking AI agents.
 
@@ -195,7 +195,7 @@ class Configuration:
         debug: Optional[bool] = None,
     ) -> None:
         """Constructor"""
-        self._base_path = "http://localhost/v1" if host is None else host
+        self._base_path = "https://bixarena.ai/api/v1" if host is None else host
         """Default Base url
         """
         self.server_index = 0 if server_index is None and host is None else server_index
@@ -531,7 +531,7 @@ class Configuration:
         """
         return [
             {
-                "url": "http://localhost/v1",
+                "url": "https://bixarena.ai/api/v1",
                 "description": "No description provided",
             }
         ]

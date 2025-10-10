@@ -17,7 +17,7 @@ x-oauth2-audience: 'urn:bixarena:api'
 servers:
   - url: http://localhost/v1
 
-  # Default security posture (scopes on operations)
+# Default security posture (scopes on operations)
 security:
   - jwtBearer: []
 
