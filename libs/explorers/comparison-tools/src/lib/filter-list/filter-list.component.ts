@@ -12,6 +12,7 @@ import { SvgIconComponent } from '@sagebionetworks/explorers/util';
   encapsulation: ViewEncapsulation.None,
 })
 export class FilterListComponent {
+  // TODO convert to latest signals
   /* Filters ------------------------------------------------------------------ */
   @Input() filters: GCTFilter[] = [] as GCTFilter[];
   @Output() changeEvent: EventEmitter<object> = new EventEmitter<object>();

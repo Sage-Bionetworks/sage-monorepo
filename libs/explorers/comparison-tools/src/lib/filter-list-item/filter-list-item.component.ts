@@ -8,6 +8,8 @@ import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angu
   encapsulation: ViewEncapsulation.None,
 })
 export class FilterListItemComponent {
+  // TODO convert to latest signals
+
   @Input() item: any;
   @Input() isVisible = false;
   @Input() title = '';
