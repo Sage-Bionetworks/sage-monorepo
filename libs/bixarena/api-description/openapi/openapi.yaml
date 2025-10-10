@@ -30,6 +30,9 @@ paths:
       summary: List example prompts
       description: Get a list of example prompts with comprehensive filtering options
       operationId: listExamplePrompts
+      security:
+        - jwtBearer:
+            - read:example-prompts
       parameters:
         - $ref: '#/components/parameters/examplePromptSearchQuery'
       responses:
@@ -43,8 +46,6 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-      security:
-        - jwtBearer: []
   /leaderboards:
     get:
       x-anonymous-access: true
@@ -53,6 +54,9 @@ paths:
       summary: List all available leaderboards
       description: Get a list of all available leaderboards with their metadata
       operationId: listLeaderboards
+      security:
+        - jwtBearer:
+            - read:leaderboards
       responses:
         '200':
           description: Success
@@ -64,8 +68,6 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-      security:
-        - jwtBearer: []
   /leaderboards/{leaderboardId}:
     parameters:
       - $ref: '#/components/parameters/leaderboardId'
@@ -76,6 +78,9 @@ paths:
       summary: Get leaderboard entries
       description: Get paginated leaderboard entries for a specific leaderboard
       operationId: getLeaderboard
+      security:
+        - jwtBearer:
+            - read:challenges
       parameters:
         - $ref: '#/components/parameters/leaderboardSearchQuery'
       responses:
@@ -91,8 +96,6 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-      security:
-        - jwtBearer: []
   /leaderboards/{leaderboardId}/history/{modelId}:
     parameters:
       - $ref: '#/components/parameters/leaderboardId'
@@ -104,6 +107,9 @@ paths:
       summary: Get model performance history
       description: Get historical performance data for a specific model in a leaderboard
       operationId: getModelHistory
+      security:
+        - jwtBearer:
+            - read:leaderboards
       parameters:
         - $ref: '#/components/parameters/leaderboardModelHistoryQuery'
       responses:
@@ -119,8 +125,6 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-      security:
-        - jwtBearer: []
   /leaderboards/{leaderboardId}/snapshots:
     parameters:
       - $ref: '#/components/parameters/leaderboardId'
@@ -131,6 +135,9 @@ paths:
       summary: Get leaderboard snapshots
       description: Get a paginated list of available snapshots for a leaderboard
       operationId: getLeaderboardSnapshots
+      security:
+        - jwtBearer:
+            - read:leaderboards
       parameters:
         - $ref: '#/components/parameters/leaderboardSnapshotQuery'
       responses:
@@ -146,8 +153,6 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-      security:
-        - jwtBearer: []
   /models:
     get:
       x-anonymous-access: true
@@ -156,6 +161,9 @@ paths:
       summary: List models
       description: Get a paginated list of models with optional filters (e.g., active)
       operationId: listModels
+      security:
+        - jwtBearer:
+            - read:models
       parameters:
         - $ref: '#/components/parameters/modelSearchQuery'
       responses:
@@ -169,8 +177,6 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-      security:
-        - jwtBearer: []
 components:
   securitySchemes:
     jwtBearer:
