@@ -12,6 +12,8 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.sagebionetworks.bixarena.api.configuration.AppProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sagebionetworks.bixarena.api.model.dto.GetJwks200ResponseDto;
 import org.sagebionetworks.bixarena.api.model.dto.MintInternalToken200ResponseDto;
 import org.sagebionetworks.bixarena.api.model.dto.OidcCallback200ResponseDto;
@@ -32,6 +34,8 @@ import jakarta.servlet.http.HttpSession;
 
 @Service
 public class AuthApiDelegateImpl implements AuthApiDelegate {
+
+  private static final Logger log = LoggerFactory.getLogger(AuthApiDelegateImpl.class);
 
   private final JwkKeyStore keyStore;
   private final InternalJwtService jwtService;
@@ -95,6 +99,9 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
     HttpSession session = req.getSession(true);
     session.setAttribute("OIDC_STATE", state);
     session.setAttribute("OIDC_NONCE", nonce);
+    if (log.isInfoEnabled()) {
+      log.info("OIDC start: sessionId={} assigned state={} nonce={} host={}", session.getId(), state, nonce, req.getServerName());
+    }
 
     String redirect = authProps.authorizeUrl()
       + "?response_type=code"
@@ -112,26 +119,44 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
     HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
     HttpSession session = req.getSession(false);
     if (session == null) {
-      return ResponseEntity.status(400).build();
+      log.info("OIDC callback: no session (cookie missing). host={} code={} state={}", req.getServerName(), code, state);
+      return ResponseEntity.status(400).contentType(MediaType.APPLICATION_JSON).body(
+        OidcCallback200ResponseDto.builder().status("error:no-session").build()
+      );
+    }
+    if (log.isInfoEnabled()) {
+      log.info("OIDC callback: sessionId={} received state={} code={} expectedState={} host={}", session.getId(), state, code, session.getAttribute("OIDC_STATE"), req.getServerName());
     }
     String expectedState = (String) session.getAttribute("OIDC_STATE");
     if (expectedState == null || !expectedState.equals(state)) {
-      return ResponseEntity.status(400).build();
+      log.info("OIDC callback: state mismatch expected={} received={}", expectedState, state);
+      return ResponseEntity.status(400).contentType(MediaType.APPLICATION_JSON).body(
+        OidcCallback200ResponseDto.builder().status("error:state-mismatch").build()
+      );
     }
     try {
       // Exchange code for tokens at Synapse
       var tokenResponse = exchangeCodeForTokens(code);
       if (tokenResponse == null) {
-        return ResponseEntity.status(400).build();
+        log.info("OIDC callback: token exchange returned null");
+        return ResponseEntity.status(400).contentType(MediaType.APPLICATION_JSON).body(
+          OidcCallback200ResponseDto.builder().status("error:token-exchange").build()
+        );
       }
       String idToken = (String) tokenResponse.get("id_token");
       if (idToken == null) {
-        return ResponseEntity.status(400).build();
+        log.info("OIDC callback: missing id_token in response keys={}", tokenResponse.keySet());
+        return ResponseEntity.status(400).contentType(MediaType.APPLICATION_JSON).body(
+          OidcCallback200ResponseDto.builder().status("error:missing-id-token").build()
+        );
       }
       Map<String, Object> idClaims = decodeJwt(idToken);
       String sub = (String) idClaims.get("sub");
       if (sub == null) {
-        return ResponseEntity.status(400).build();
+        log.info("OIDC callback: missing sub claim in id token");
+        return ResponseEntity.status(400).contentType(MediaType.APPLICATION_JSON).body(
+          OidcCallback200ResponseDto.builder().status("error:missing-sub").build()
+        );
       }
       String email = (String) idClaims.get("email");
       String givenName = (String) idClaims.getOrDefault("given_name", null);
@@ -170,7 +195,10 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
       var body = OidcCallback200ResponseDto.builder().status("ok").build();
       return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(body);
     } catch (Exception e) {
-      return ResponseEntity.status(400).build();
+      log.info("OIDC callback: exception {}", e.getMessage());
+      return ResponseEntity.status(400).contentType(MediaType.APPLICATION_JSON).body(
+        OidcCallback200ResponseDto.builder().status("error:exception").build()
+      );
     }
   }
 
@@ -189,12 +217,14 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
         .build();
       java.net.http.HttpResponse<String> response = client.send(request, java.net.http.HttpResponse.BodyHandlers.ofString());
       if (response.statusCode() != 200) {
+        log.debug("OIDC token exchange non-200 status={} body={}", response.statusCode(), response.body());
         return null;
       }
   @SuppressWarnings("unchecked")
   Map<String, Object> parsed = objectMapper.readValue(response.body(), Map.class);
   return parsed;
     } catch (Exception e) {
+      log.debug("OIDC token exchange exception {}", e.getMessage());
       return null;
     }
   }

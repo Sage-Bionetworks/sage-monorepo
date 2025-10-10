@@ -45,7 +45,9 @@ def build_header():
 def update_login_button():
     """Update login button using backend OIDC start endpoint."""
     auth_service = get_auth_service()
-    backend_base = os.environ.get("BACKEND_BASE_URL", "http://localhost:8112/v1")
+    # Use 127.0.0.1 (not localhost) to match OAuth redirect-uri host so
+    # the session cookie (JSESSIONID) is reused across start and callback.
+    backend_base = os.environ.get("BACKEND_BASE_URL", "http://127.0.0.1:8112/v1")
     start_endpoint = f"{backend_base}/auth/oidc/start"
     if auth_service.is_authenticated():
         return gr.Button(auth_service.get_display_name(), variant="primary", link=None)

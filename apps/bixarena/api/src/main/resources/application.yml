@@ -73,6 +73,7 @@ app:
     jwks-url: https://repo-prod.prod.sagebase.org/auth/v1/openid/jwks
     client-id: changeme
     client-secret: changeme
+    # Use localhost (not 127.0.0.1) so the browser sends the same cookie across app and api if app uses localhost
     redirect-uri: http://127.0.0.1:8112/v1/auth/oidc/callback
     internal-issuer: http://bixarena-api:8112
     audience: myapi
