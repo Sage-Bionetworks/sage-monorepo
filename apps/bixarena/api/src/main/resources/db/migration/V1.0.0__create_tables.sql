@@ -81,6 +81,9 @@ CREATE INDEX idx_example_prompt_active ON example_prompt(active);
 CREATE TABLE app_user (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   username VARCHAR(255) UNIQUE NOT NULL,
+  email VARCHAR(255) UNIQUE,
+  first_name VARCHAR(255),
+  last_name VARCHAR(255),
   role VARCHAR(50) NOT NULL DEFAULT 'user',
   enabled BOOLEAN NOT NULL DEFAULT true,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL,
@@ -89,6 +92,9 @@ CREATE TABLE app_user (
 
 -- Create indexes for better performance
 CREATE INDEX idx_app_user_username ON app_user(username);
+CREATE INDEX idx_app_user_email ON app_user(email) WHERE email IS NOT NULL;
+CREATE INDEX idx_app_user_first_name ON app_user(first_name) WHERE first_name IS NOT NULL;
+CREATE INDEX idx_app_user_last_name ON app_user(last_name) WHERE last_name IS NOT NULL;
 
 -- Create external_account table for OAuth2 provider linking
 CREATE TABLE external_account (
