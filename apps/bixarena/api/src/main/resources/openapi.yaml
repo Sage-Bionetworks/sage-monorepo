@@ -69,6 +69,9 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer:
+            - read:leaderboards
       summary: List all available leaderboards
       tags:
         - Leaderboard
@@ -113,6 +116,9 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer:
+            - read:challenges
       summary: Get leaderboard entries
       tags:
         - Leaderboard
@@ -167,6 +173,9 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer:
+            - read:leaderboards
       summary: Get model performance history
       tags:
         - Leaderboard
@@ -211,6 +220,9 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer:
+            - read:leaderboards
       summary: Get leaderboard snapshots
       tags:
         - Leaderboard
@@ -244,6 +256,9 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer:
+            - read:models
       summary: List models
       tags:
         - Model
@@ -1136,8 +1151,13 @@ components:
   securitySchemes:
     jwtBearer:
       bearerFormat: JWT
+<<<<<<< HEAD
       description: |
         Short-lived internal JWT issued by the API gateway after authentication through Synapse or an API key exchange. The token is included in the Authorization header using the Bearer scheme.
+=======
+      description: JWT access token obtained from OAuth2 authorization flow or API
+        key exchange
+>>>>>>> 9f6f1cc16 (chore: generate server stubs and api clients)
       scheme: bearer
       type: http
 x-oauth2-audience: urn:bixarena:api

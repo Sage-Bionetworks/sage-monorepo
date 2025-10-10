@@ -5,6 +5,23 @@
  */
 package org.sagebionetworks.bixarena.api.api;
 
+import io.swagger.v3.oas.annotations.ExternalDocumentation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Generated;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import java.util.List;
+import java.util.Map;
 import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardEntryPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardListInnerDto;
@@ -13,238 +30,386 @@ import org.sagebionetworks.bixarena.api.model.dto.LeaderboardModelHistoryQueryDt
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSearchQueryDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSnapshotPageDto;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardSnapshotQueryDto;
-import io.swagger.v3.oas.annotations.ExternalDocumentation;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import org.springframework.lang.Nullable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
-import java.util.List;
-import java.util.Map;
-import jakarta.annotation.Generated;
-
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
+@Generated(
+  value = "org.openapitools.codegen.languages.SpringCodegen",
+  comments = "Generator version: 7.14.0"
+)
 @Validated
 @Tag(name = "Leaderboard", description = "Operations about leaderboards.")
 public interface LeaderboardApi {
+  default LeaderboardApiDelegate getDelegate() {
+    return new LeaderboardApiDelegate() {};
+  }
 
-    default LeaderboardApiDelegate getDelegate() {
-        return new LeaderboardApiDelegate() {};
-    }
-
-    /**
-     * GET /leaderboards/{leaderboardId} : Get leaderboard entries
-     * Get paginated leaderboard entries for a specific leaderboard
-     *
-     * @param leaderboardId The unique identifier of a leaderboard (required)
-     * @param leaderboardSearchQuery The search query used to find and filter leaderboard entries. (optional)
-     * @return Success (status code 200)
-     *         or Invalid request parameters (status code 400)
-     *         or The requested resource was not found (status code 404)
-     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     */
-    @Operation(
-        operationId = "getLeaderboard",
-        summary = "Get leaderboard entries",
-        description = "Get paginated leaderboard entries for a specific leaderboard",
-        tags = { "Leaderboard" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Success", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = LeaderboardEntryPageDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = LeaderboardEntryPageDto.class))
-            }),
-            @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "404", description = "The requested resource was not found", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            })
-        },
-        security = {
-            @SecurityRequirement(name = "jwtBearer")
+  /**
+   * GET /leaderboards/{leaderboardId} : Get leaderboard entries
+   * Get paginated leaderboard entries for a specific leaderboard
+   *
+   * @param leaderboardId The unique identifier of a leaderboard (required)
+   * @param leaderboardSearchQuery The search query used to find and filter leaderboard entries. (optional)
+   * @return Success (status code 200)
+   *         or Invalid request parameters (status code 400)
+   *         or The requested resource was not found (status code 404)
+   *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+   */
+  @Operation(
+    operationId = "getLeaderboard",
+    summary = "Get leaderboard entries",
+    description = "Get paginated leaderboard entries for a specific leaderboard",
+    tags = { "Leaderboard" },
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "Success",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = LeaderboardEntryPageDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = LeaderboardEntryPageDto.class)
+          ),
         }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/leaderboards/{leaderboardId}",
-        produces = { "application/json", "application/problem+json" }
-    )
-    
-    default ResponseEntity<LeaderboardEntryPageDto> getLeaderboard(
-        @Parameter(name = "leaderboardId", description = "The unique identifier of a leaderboard", required = true, in = ParameterIn.PATH) @PathVariable("leaderboardId") String leaderboardId,
-        @Parameter(name = "leaderboardSearchQuery", description = "The search query used to find and filter leaderboard entries.", in = ParameterIn.QUERY) @Valid @Nullable LeaderboardSearchQueryDto leaderboardSearchQuery
-    ) {
-        return getDelegate().getLeaderboard(leaderboardId, leaderboardSearchQuery);
-    }
-
-
-    /**
-     * GET /leaderboards/{leaderboardId}/snapshots : Get leaderboard snapshots
-     * Get a paginated list of available snapshots for a leaderboard
-     *
-     * @param leaderboardId The unique identifier of a leaderboard (required)
-     * @param leaderboardSnapshotQuery The query used to filter and paginate leaderboard snapshots. (optional)
-     * @return Success (status code 200)
-     *         or Invalid request parameters (status code 400)
-     *         or The requested resource was not found (status code 404)
-     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     */
-    @Operation(
-        operationId = "getLeaderboardSnapshots",
-        summary = "Get leaderboard snapshots",
-        description = "Get a paginated list of available snapshots for a leaderboard",
-        tags = { "Leaderboard" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Success", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = LeaderboardSnapshotPageDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = LeaderboardSnapshotPageDto.class))
-            }),
-            @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "404", description = "The requested resource was not found", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            })
-        },
-        security = {
-            @SecurityRequirement(name = "jwtBearer")
+      ),
+      @ApiResponse(
+        responseCode = "400",
+        description = "Invalid request parameters",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
         }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/leaderboards/{leaderboardId}/snapshots",
-        produces = { "application/json", "application/problem+json" }
-    )
-    
-    default ResponseEntity<LeaderboardSnapshotPageDto> getLeaderboardSnapshots(
-        @Parameter(name = "leaderboardId", description = "The unique identifier of a leaderboard", required = true, in = ParameterIn.PATH) @PathVariable("leaderboardId") String leaderboardId,
-        @Parameter(name = "leaderboardSnapshotQuery", description = "The query used to filter and paginate leaderboard snapshots.", in = ParameterIn.QUERY) @Valid @Nullable LeaderboardSnapshotQueryDto leaderboardSnapshotQuery
-    ) {
-        return getDelegate().getLeaderboardSnapshots(leaderboardId, leaderboardSnapshotQuery);
-    }
-
-
-    /**
-     * GET /leaderboards/{leaderboardId}/history/{modelId} : Get model performance history
-     * Get historical performance data for a specific model in a leaderboard
-     *
-     * @param leaderboardId The unique identifier of a leaderboard (required)
-     * @param modelId The unique identifier of a model (required)
-     * @param leaderboardModelHistoryQuery The query used to filter and paginate historical model performance data. (optional)
-     * @return Success (status code 200)
-     *         or Invalid request parameters (status code 400)
-     *         or The requested resource was not found (status code 404)
-     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     */
-    @Operation(
-        operationId = "getModelHistory",
-        summary = "Get model performance history",
-        description = "Get historical performance data for a specific model in a leaderboard",
-        tags = { "Leaderboard" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Success", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = LeaderboardModelHistoryPageDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = LeaderboardModelHistoryPageDto.class))
-            }),
-            @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "404", description = "The requested resource was not found", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            })
-        },
-        security = {
-            @SecurityRequirement(name = "jwtBearer")
+      ),
+      @ApiResponse(
+        responseCode = "404",
+        description = "The requested resource was not found",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
         }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/leaderboards/{leaderboardId}/history/{modelId}",
-        produces = { "application/json", "application/problem+json" }
-    )
-    
-    default ResponseEntity<LeaderboardModelHistoryPageDto> getModelHistory(
-        @Parameter(name = "leaderboardId", description = "The unique identifier of a leaderboard", required = true, in = ParameterIn.PATH) @PathVariable("leaderboardId") String leaderboardId,
-        @Parameter(name = "modelId", description = "The unique identifier of a model", required = true, in = ParameterIn.PATH) @PathVariable("modelId") String modelId,
-        @Parameter(name = "leaderboardModelHistoryQuery", description = "The query used to filter and paginate historical model performance data.", in = ParameterIn.QUERY) @Valid @Nullable LeaderboardModelHistoryQueryDto leaderboardModelHistoryQuery
-    ) {
-        return getDelegate().getModelHistory(leaderboardId, modelId, leaderboardModelHistoryQuery);
-    }
-
-
-    /**
-     * GET /leaderboards : List all available leaderboards
-     * Get a list of all available leaderboards with their metadata
-     *
-     * @return Success (status code 200)
-     *         or Invalid request parameters (status code 400)
-     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     */
-    @Operation(
-        operationId = "listLeaderboards",
-        summary = "List all available leaderboards",
-        description = "Get a list of all available leaderboards with their metadata",
-        tags = { "Leaderboard" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Success", content = {
-                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = LeaderboardListInnerDto.class))),
-                @Content(mediaType = "application/problem+json", array = @ArraySchema(schema = @Schema(implementation = LeaderboardListInnerDto.class)))
-            }),
-            @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            })
-        },
-        security = {
-            @SecurityRequirement(name = "jwtBearer")
+      ),
+      @ApiResponse(
+        responseCode = "500",
+        description = "The request cannot be fulfilled due to an unexpected server error",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
         }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/leaderboards",
-        produces = { "application/json", "application/problem+json" }
-    )
-    
-    default ResponseEntity<List<LeaderboardListInnerDto>> listLeaderboards(
-        
-    ) {
-        return getDelegate().listLeaderboards();
-    }
+      ),
+    },
+    security = { @SecurityRequirement(name = "jwtBearer") }
+  )
+  @RequestMapping(
+    method = RequestMethod.GET,
+    value = "/leaderboards/{leaderboardId}",
+    produces = { "application/json", "application/problem+json" }
+  )
+  default ResponseEntity<LeaderboardEntryPageDto> getLeaderboard(
+    @Parameter(
+      name = "leaderboardId",
+      description = "The unique identifier of a leaderboard",
+      required = true,
+      in = ParameterIn.PATH
+    ) @PathVariable("leaderboardId") String leaderboardId,
+    @Parameter(
+      name = "leaderboardSearchQuery",
+      description = "The search query used to find and filter leaderboard entries.",
+      in = ParameterIn.QUERY
+    ) @Valid @Nullable LeaderboardSearchQueryDto leaderboardSearchQuery
+  ) {
+    return getDelegate().getLeaderboard(leaderboardId, leaderboardSearchQuery);
+  }
 
+  /**
+   * GET /leaderboards/{leaderboardId}/snapshots : Get leaderboard snapshots
+   * Get a paginated list of available snapshots for a leaderboard
+   *
+   * @param leaderboardId The unique identifier of a leaderboard (required)
+   * @param leaderboardSnapshotQuery The query used to filter and paginate leaderboard snapshots. (optional)
+   * @return Success (status code 200)
+   *         or Invalid request parameters (status code 400)
+   *         or The requested resource was not found (status code 404)
+   *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+   */
+  @Operation(
+    operationId = "getLeaderboardSnapshots",
+    summary = "Get leaderboard snapshots",
+    description = "Get a paginated list of available snapshots for a leaderboard",
+    tags = { "Leaderboard" },
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "Success",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = LeaderboardSnapshotPageDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = LeaderboardSnapshotPageDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "400",
+        description = "Invalid request parameters",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "404",
+        description = "The requested resource was not found",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "500",
+        description = "The request cannot be fulfilled due to an unexpected server error",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+    },
+    security = { @SecurityRequirement(name = "jwtBearer") }
+  )
+  @RequestMapping(
+    method = RequestMethod.GET,
+    value = "/leaderboards/{leaderboardId}/snapshots",
+    produces = { "application/json", "application/problem+json" }
+  )
+  default ResponseEntity<LeaderboardSnapshotPageDto> getLeaderboardSnapshots(
+    @Parameter(
+      name = "leaderboardId",
+      description = "The unique identifier of a leaderboard",
+      required = true,
+      in = ParameterIn.PATH
+    ) @PathVariable("leaderboardId") String leaderboardId,
+    @Parameter(
+      name = "leaderboardSnapshotQuery",
+      description = "The query used to filter and paginate leaderboard snapshots.",
+      in = ParameterIn.QUERY
+    ) @Valid @Nullable LeaderboardSnapshotQueryDto leaderboardSnapshotQuery
+  ) {
+    return getDelegate().getLeaderboardSnapshots(leaderboardId, leaderboardSnapshotQuery);
+  }
+
+  /**
+   * GET /leaderboards/{leaderboardId}/history/{modelId} : Get model performance history
+   * Get historical performance data for a specific model in a leaderboard
+   *
+   * @param leaderboardId The unique identifier of a leaderboard (required)
+   * @param modelId The unique identifier of a model (required)
+   * @param leaderboardModelHistoryQuery The query used to filter and paginate historical model performance data. (optional)
+   * @return Success (status code 200)
+   *         or Invalid request parameters (status code 400)
+   *         or The requested resource was not found (status code 404)
+   *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+   */
+  @Operation(
+    operationId = "getModelHistory",
+    summary = "Get model performance history",
+    description = "Get historical performance data for a specific model in a leaderboard",
+    tags = { "Leaderboard" },
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "Success",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = LeaderboardModelHistoryPageDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = LeaderboardModelHistoryPageDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "400",
+        description = "Invalid request parameters",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "404",
+        description = "The requested resource was not found",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "500",
+        description = "The request cannot be fulfilled due to an unexpected server error",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+    },
+    security = { @SecurityRequirement(name = "jwtBearer") }
+  )
+  @RequestMapping(
+    method = RequestMethod.GET,
+    value = "/leaderboards/{leaderboardId}/history/{modelId}",
+    produces = { "application/json", "application/problem+json" }
+  )
+  default ResponseEntity<LeaderboardModelHistoryPageDto> getModelHistory(
+    @Parameter(
+      name = "leaderboardId",
+      description = "The unique identifier of a leaderboard",
+      required = true,
+      in = ParameterIn.PATH
+    ) @PathVariable("leaderboardId") String leaderboardId,
+    @Parameter(
+      name = "modelId",
+      description = "The unique identifier of a model",
+      required = true,
+      in = ParameterIn.PATH
+    ) @PathVariable("modelId") String modelId,
+    @Parameter(
+      name = "leaderboardModelHistoryQuery",
+      description = "The query used to filter and paginate historical model performance data.",
+      in = ParameterIn.QUERY
+    ) @Valid @Nullable LeaderboardModelHistoryQueryDto leaderboardModelHistoryQuery
+  ) {
+    return getDelegate().getModelHistory(leaderboardId, modelId, leaderboardModelHistoryQuery);
+  }
+
+  /**
+   * GET /leaderboards : List all available leaderboards
+   * Get a list of all available leaderboards with their metadata
+   *
+   * @return Success (status code 200)
+   *         or Invalid request parameters (status code 400)
+   *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+   */
+  @Operation(
+    operationId = "listLeaderboards",
+    summary = "List all available leaderboards",
+    description = "Get a list of all available leaderboards with their metadata",
+    tags = { "Leaderboard" },
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "Success",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            array = @ArraySchema(schema = @Schema(implementation = LeaderboardListInnerDto.class))
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            array = @ArraySchema(schema = @Schema(implementation = LeaderboardListInnerDto.class))
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "400",
+        description = "Invalid request parameters",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "500",
+        description = "The request cannot be fulfilled due to an unexpected server error",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+    },
+    security = { @SecurityRequirement(name = "jwtBearer") }
+  )
+  @RequestMapping(
+    method = RequestMethod.GET,
+    value = "/leaderboards",
+    produces = { "application/json", "application/problem+json" }
+  )
+  default ResponseEntity<List<LeaderboardListInnerDto>> listLeaderboards() {
+    return getDelegate().listLeaderboards();
+  }
 }

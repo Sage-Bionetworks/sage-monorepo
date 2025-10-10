@@ -5,84 +5,118 @@
  */
 package org.sagebionetworks.bixarena.api.api;
 
-import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
-import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptPageDto;
-import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptSearchQueryDto;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import org.springframework.lang.Nullable;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
+import jakarta.annotation.Generated;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import java.util.List;
 import java.util.Map;
-import jakarta.annotation.Generated;
+import org.sagebionetworks.bixarena.api.model.dto.BasicErrorDto;
+import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptPageDto;
+import org.sagebionetworks.bixarena.api.model.dto.ExamplePromptSearchQueryDto;
+import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
+@Generated(
+  value = "org.openapitools.codegen.languages.SpringCodegen",
+  comments = "Generator version: 7.14.0"
+)
 @Validated
-@Tag(name = "Example Prompt", description = "Operations about example prompts for biomedical relevance detection.")
+@Tag(
+  name = "Example Prompt",
+  description = "Operations about example prompts for biomedical relevance detection."
+)
 public interface ExamplePromptApi {
+  default ExamplePromptApiDelegate getDelegate() {
+    return new ExamplePromptApiDelegate() {};
+  }
 
-    default ExamplePromptApiDelegate getDelegate() {
-        return new ExamplePromptApiDelegate() {};
-    }
-
-    /**
-     * GET /example-prompts : List example prompts
-     * Get a list of example prompts with comprehensive filtering options
-     *
-     * @param examplePromptSearchQuery The search query used to find and filter example prompts. (optional)
-     * @return Success (status code 200)
-     *         or Invalid request parameters (status code 400)
-     *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
-     */
-    @Operation(
-        operationId = "listExamplePrompts",
-        summary = "List example prompts",
-        description = "Get a list of example prompts with comprehensive filtering options",
-        tags = { "Example Prompt" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Success", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ExamplePromptPageDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = ExamplePromptPageDto.class))
-            }),
-            @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-            @ApiResponse(responseCode = "500", description = "The request cannot be fulfilled due to an unexpected server error", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
-                @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
-            })
-        },
-        security = {
-            @SecurityRequirement(name = "jwtBearer")
+  /**
+   * GET /example-prompts : List example prompts
+   * Get a list of example prompts with comprehensive filtering options
+   *
+   * @param examplePromptSearchQuery The search query used to find and filter example prompts. (optional)
+   * @return Success (status code 200)
+   *         or Invalid request parameters (status code 400)
+   *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
+   */
+  @Operation(
+    operationId = "listExamplePrompts",
+    summary = "List example prompts",
+    description = "Get a list of example prompts with comprehensive filtering options",
+    tags = { "Example Prompt" },
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "Success",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = ExamplePromptPageDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = ExamplePromptPageDto.class)
+          ),
         }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = "/example-prompts",
-        produces = { "application/json", "application/problem+json" }
-    )
-    
-    default ResponseEntity<ExamplePromptPageDto> listExamplePrompts(
-        @Parameter(name = "examplePromptSearchQuery", description = "The search query used to find and filter example prompts.", in = ParameterIn.QUERY) @Valid @Nullable ExamplePromptSearchQueryDto examplePromptSearchQuery
-    ) {
-        return getDelegate().listExamplePrompts(examplePromptSearchQuery);
-    }
-
+      ),
+      @ApiResponse(
+        responseCode = "400",
+        description = "Invalid request parameters",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "500",
+        description = "The request cannot be fulfilled due to an unexpected server error",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+    },
+    security = { @SecurityRequirement(name = "jwtBearer") }
+  )
+  @RequestMapping(
+    method = RequestMethod.GET,
+    value = "/example-prompts",
+    produces = { "application/json", "application/problem+json" }
+  )
+  default ResponseEntity<ExamplePromptPageDto> listExamplePrompts(
+    @Parameter(
+      name = "examplePromptSearchQuery",
+      description = "The search query used to find and filter example prompts.",
+      in = ParameterIn.QUERY
+    ) @Valid @Nullable ExamplePromptSearchQueryDto examplePromptSearchQuery
+  ) {
+    return getDelegate().listExamplePrompts(examplePromptSearchQuery);
+  }
 }
