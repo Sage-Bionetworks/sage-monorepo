@@ -1,11 +1,17 @@
+parameters:
+  - $ref: ../../../components/parameters/path/leaderboardId.yaml
+
 get:
+  x-anonymous-access: true
   tags:
     - Leaderboard
   summary: Get leaderboard snapshots
   description: Get a paginated list of available snapshots for a leaderboard
   operationId: getLeaderboardSnapshots
+  security:
+    - jwtBearer:
+        - read:leaderboards
   parameters:
-    - $ref: ../../../components/parameters/path/leaderboardId.yaml
     - $ref: ../../../components/parameters/query/leaderboardSnapshotQuery.yaml
   responses:
     '200':

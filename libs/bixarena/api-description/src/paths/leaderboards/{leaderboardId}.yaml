@@ -1,11 +1,17 @@
+parameters:
+  - $ref: ../../components/parameters/path/leaderboardId.yaml
+
 get:
+  x-anonymous-access: true
   tags:
     - Leaderboard
   summary: Get leaderboard entries
   description: Get paginated leaderboard entries for a specific leaderboard
   operationId: getLeaderboard
+  security:
+    - jwtBearer:
+        - read:challenges
   parameters:
-    - $ref: ../../components/parameters/path/leaderboardId.yaml
     - $ref: ../../components/parameters/query/leaderboardSearchQuery.yaml
   responses:
     '200':
