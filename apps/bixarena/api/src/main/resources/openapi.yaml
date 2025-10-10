@@ -11,13 +11,15 @@ info:
   version: 1.0.0
 servers:
   - url: http://localhost/v1
+security:
+  - jwtBearer: []
 tags:
   - description: Operations about leaderboards.
     name: Leaderboard
   - description: Operations about models.
     name: Model
   - description: Operations about example prompts for biomedical relevance detection.
-    name: ExamplePrompt
+    name: Example Prompt
 paths:
   /leaderboards:
     get:
@@ -34,9 +36,13 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer:
+            - read:leaderboards
       summary: List all available leaderboards
       tags:
         - Leaderboard
+      x-anonymous-access: true
       x-accepts:
         - application/json
         - application/problem+json
@@ -77,9 +83,13 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer:
+            - read:challenges
       summary: Get leaderboard entries
       tags:
         - Leaderboard
+      x-anonymous-access: true
       x-accepts:
         - application/json
         - application/problem+json
@@ -130,9 +140,13 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer:
+            - read:leaderboards
       summary: Get model performance history
       tags:
         - Leaderboard
+      x-anonymous-access: true
       x-accepts:
         - application/json
         - application/problem+json
@@ -173,9 +187,13 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer:
+            - read:leaderboards
       summary: Get leaderboard snapshots
       tags:
         - Leaderboard
+      x-anonymous-access: true
       x-accepts:
         - application/json
         - application/problem+json
@@ -205,9 +223,13 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer:
+            - read:models
       summary: List models
       tags:
         - Model
+      x-anonymous-access: true
       x-accepts:
         - application/json
         - application/problem+json
@@ -237,14 +259,18 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
+      security:
+        - jwtBearer:
+            - read:example-prompts
       summary: List example prompts
       tags:
-        - ExamplePrompt
+        - Example Prompt
+      x-anonymous-access: true
       x-accepts:
         - application/json
         - application/problem+json
       x-tags:
-        - tag: ExamplePrompt
+        - tag: Example Prompt
 components:
   parameters:
     leaderboardId:
@@ -1125,3 +1151,11 @@ components:
         - name
         - updatedAt
       type: object
+  securitySchemes:
+    jwtBearer:
+      bearerFormat: JWT
+      description: JWT access token obtained from OAuth2 authorization flow or API
+        key exchange
+      scheme: bearer
+      type: http
+x-oauth2-audience: urn:bixarena:api

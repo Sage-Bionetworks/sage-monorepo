@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-BixArena API
+BixArena AI API
 
 Advance bioinformatics by evaluating and ranking AI agents.
 
@@ -118,7 +118,9 @@ HTTPSignatureAuthSetting = TypedDict(
 
 AuthSettings = TypedDict(
     "AuthSettings",
-    {},
+    {
+        "jwtBearer": BearerFormatAuthSetting,
+    },
     total=False,
 )
 
@@ -168,6 +170,7 @@ class Configuration:
     :param ca_cert_data: verify the peer using concatenated CA certificate data
       in PEM (str) or DER (bytes) format.
 
+    :Example:
     """
 
     _default: ClassVar[Optional[Self]] = None
@@ -498,6 +501,14 @@ class Configuration:
         :return: The Auth Settings information dict.
         """
         auth: AuthSettings = {}
+        if self.access_token is not None:
+            auth["jwtBearer"] = {
+                "type": "bearer",
+                "in": "header",
+                "format": "JWT",
+                "key": "Authorization",
+                "value": "Bearer " + self.access_token,
+            }
         return auth
 
     def to_debug_report(self) -> str:

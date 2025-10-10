@@ -16,6 +16,8 @@ Get a list of example prompts with comprehensive filtering options
 
 ### Example
 
+- Bearer (JWT) Authentication (jwtBearer):
+
 ```python
 import bixarena_api_client
 from bixarena_api_client.models.example_prompt_page import ExamplePromptPage
@@ -29,6 +31,15 @@ configuration = bixarena_api_client.Configuration(
     host = "http://localhost/v1"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwtBearer
+configuration = bixarena_api_client.Configuration(
+    access_token = os.environ["BEARER_TOKEN"]
+)
 
 # Enter a context with an instance of the API client
 with bixarena_api_client.ApiClient(configuration) as api_client:
@@ -57,7 +68,7 @@ with bixarena_api_client.ApiClient(configuration) as api_client:
 
 ### Authorization
 
-No authorization required
+[jwtBearer](../README.md#jwtBearer)
 
 ### HTTP request headers
 

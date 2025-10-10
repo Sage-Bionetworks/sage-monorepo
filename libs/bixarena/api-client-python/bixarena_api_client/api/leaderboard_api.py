@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-BixArena API
+BixArena AI API
 
 Advance bioinformatics by evaluating and ranking AI agents.
 
@@ -323,7 +323,7 @@ class LeaderboardApi:
             )
 
         # authentication setting
-        _auth_settings: List[str] = []
+        _auth_settings: List[str] = ["jwtBearer"]
 
         return self.api_client.param_serialize(
             method="GET",
@@ -613,7 +613,7 @@ class LeaderboardApi:
             )
 
         # authentication setting
-        _auth_settings: List[str] = []
+        _auth_settings: List[str] = ["jwtBearer"]
 
         return self.api_client.param_serialize(
             method="GET",
@@ -924,7 +924,7 @@ class LeaderboardApi:
             )
 
         # authentication setting
-        _auth_settings: List[str] = []
+        _auth_settings: List[str] = ["jwtBearer"]
 
         return self.api_client.param_serialize(
             method="GET",
@@ -1156,7 +1156,7 @@ class LeaderboardApi:
             )
 
         # authentication setting
-        _auth_settings: List[str] = []
+        _auth_settings: List[str] = ["jwtBearer"]
 
         return self.api_client.param_serialize(
             method="GET",

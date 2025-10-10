@@ -34,7 +34,7 @@ import jakarta.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
 @Validated
-@Tag(name = "ExamplePrompt", description = "Operations about example prompts for biomedical relevance detection.")
+@Tag(name = "Example Prompt", description = "Operations about example prompts for biomedical relevance detection.")
 public interface ExamplePromptApi {
 
     default ExamplePromptApiDelegate getDelegate() {
@@ -54,7 +54,7 @@ public interface ExamplePromptApi {
         operationId = "listExamplePrompts",
         summary = "List example prompts",
         description = "Get a list of example prompts with comprehensive filtering options",
-        tags = { "ExamplePrompt" },
+        tags = { "Example Prompt" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Success", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = ExamplePromptPageDto.class)),
@@ -68,6 +68,9 @@ public interface ExamplePromptApi {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = BasicErrorDto.class)),
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))
             })
+        },
+        security = {
+            @SecurityRequirement(name = "jwtBearer", scopes={ "read:example-prompts" })
         }
     )
     @RequestMapping(
