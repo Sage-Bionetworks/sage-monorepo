@@ -10,8 +10,8 @@ import { GeneExpressionHelpLinksComponent } from './components/gene-expression-h
   selector: 'model-ad-gene-expression-comparison-tool',
   imports: [
     BaseComparisonToolComponent,
-    ComparisonToolHeaderComponent,
     GeneExpressionHelpLinksComponent,
+    ComparisonToolHeaderComponent,
   ],
   templateUrl: './gene-expression-comparison-tool.component.html',
   styleUrls: ['./gene-expression-comparison-tool.component.scss'],

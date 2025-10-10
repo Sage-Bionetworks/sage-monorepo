@@ -1,0 +1,97 @@
+/* stylelint-disable no-descending-specificity */
+
+.main-table {
+  box-shadow: 0 2px 6px rgb(0 0 0 / 50%);
+
+  .p-datatable-header {
+    display: flex;
+    min-height: 58px;
+    background-color: var(--color-primary);
+    color: #fff;
+    align-items: center;
+    padding: 0 15px;
+
+    > div {
+      padding: 15px;
+
+      &:first-child {
+        flex-grow: 1;
+      }
+    }
+
+    a {
+      color: #fff;
+    }
+  }
+
+  .p-datatable-table-container {
+    height: 344px;
+  }
+
+  p-table.fullscreen-table {
+    .p-datatable-table-container {
+      height: calc(100vh - 58px);
+    }
+  }
+
+  .p-datatable-table {
+    background-color: #fff;
+
+    &,
+    thead,
+    tbody {
+      width: 100%;
+    }
+
+    thead tr th,
+    tbody tr td {
+      flex-grow: 1 !important;
+
+      &.hidden {
+        display: none;
+      }
+    }
+
+    th {
+      min-height: 58px;
+      padding: 15px;
+      justify-content: center;
+      text-align: center;
+      white-space: nowrap;
+      background-color: #dadce1;
+    }
+
+    td {
+      min-height: 58px;
+      padding: 15px;
+      justify-content: center;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    tr {
+      &:nth-child(odd) {
+        td {
+          background-color: #fff;
+        }
+      }
+
+      &:nth-child(even) {
+        td {
+          background-color: var(--color-gray-200);
+        }
+      }
+
+      &:hover {
+        td {
+          color: #fff;
+          background: var(--color-action-primary);
+        }
+      }
+    }
+  }
+}
+
+.similar-gene-table .p-datatable-table-container {
+  height: 638px;
+}

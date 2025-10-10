@@ -1,12 +1,14 @@
 <explorers-base-comparison-tool [isLoading]="isLoading()" [resultsCount]="resultsCount()">
   <div class="model-overview-comparison-tool">
+    <explorers-filter-panel />
     <explorers-comparison-tool-header
       headerTitle="Model Overview"
       filterResultsButtonTooltip="Filter the results based on the selected criteria"
+      shareUrlButtonTooltip="Copy the URL that captures the table's current filters, sorting, and pinned genes"
     />
-    <explorers-displayed-results />
+    <explorers-comparison-tool-controls />
     <explorers-comparison-tool-columns />
-    <model-ad-model-overview-main-table [data]="data" />
+    <model-ad-model-overview-main-table [data]="data()" />
     <model-ad-model-overview-help-links />
   </div>
 </explorers-base-comparison-tool>

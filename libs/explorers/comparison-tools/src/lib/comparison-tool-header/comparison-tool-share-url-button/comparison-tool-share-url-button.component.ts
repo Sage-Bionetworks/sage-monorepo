@@ -1,5 +1,5 @@
 import { Clipboard } from '@angular/cdk/clipboard';
-import { Component, inject } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { TooltipButtonComponent } from '@sagebionetworks/explorers/util';
 
 @Component({
@@ -9,6 +9,8 @@ import { TooltipButtonComponent } from '@sagebionetworks/explorers/util';
   styleUrls: ['./comparison-tool-share-url-button.component.scss'],
 })
 export class ComparisonToolShareURLButtonComponent {
+  tooltip = input('');
+
   private readonly clipboard = inject(Clipboard);
 
   private hasCopied = false;

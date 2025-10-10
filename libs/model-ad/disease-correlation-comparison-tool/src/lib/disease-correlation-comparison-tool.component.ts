@@ -10,8 +10,8 @@ import { DiseaseCorrelationHelpLinksComponent } from './components/disease-corre
   selector: 'model-ad-disease-correlation-comparison-tool',
   imports: [
     BaseComparisonToolComponent,
-    ComparisonToolHeaderComponent,
     DiseaseCorrelationHelpLinksComponent,
+    ComparisonToolHeaderComponent,
   ],
   templateUrl: './disease-correlation-comparison-tool.component.html',
   styleUrls: ['./disease-correlation-comparison-tool.component.scss'],
