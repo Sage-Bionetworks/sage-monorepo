@@ -5,6 +5,9 @@ get:
   summary: List example prompts
   description: Get a list of example prompts with comprehensive filtering options
   operationId: listExamplePrompts
+  security:
+    - jwtBearer:
+        - read:example-prompts
   parameters:
     - $ref: ../components/parameters/query/examplePromptSearchQuery.yaml
   responses:

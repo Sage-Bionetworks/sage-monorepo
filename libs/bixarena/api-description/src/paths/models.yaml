@@ -5,6 +5,9 @@ get:
   summary: List models
   description: Get a paginated list of models with optional filters (e.g., active)
   operationId: listModels
+  security:
+    - jwtBearer:
+        - read:models
   parameters:
     - $ref: ../components/parameters/query/modelSearchQuery.yaml
   responses:
