@@ -70,7 +70,7 @@ public interface ExamplePromptApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "jwtBearer", scopes={ "read:example-prompts" })
+            @SecurityRequirement(name = "jwtBearer")
         }
     )
     @RequestMapping(

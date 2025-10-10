@@ -22,14 +22,16 @@ security:
   - jwtBearer: []
 
 tags:
+  - name: Example Prompt
+    description: Operations about example prompts for biomedical relevance detection.
   - name: Leaderboard
     description: Operations about leaderboards.
   - name: Model
     description: Operations about models.
-  - name: Example Prompt
-    description: Operations about example prompts for biomedical relevance detection.
 
 paths:
+  /example-prompts:
+    $ref: paths/example-prompts.yaml
   /leaderboards:
     $ref: paths/leaderboards.yaml
   /leaderboards/{leaderboardId}:
@@ -40,8 +42,6 @@ paths:
     $ref: paths/leaderboards/{leaderboardId}/snapshots.yaml
   /models:
     $ref: paths/models.yaml
-  /example-prompts:
-    $ref: paths/example-prompts.yaml
 
 components:
   securitySchemes:

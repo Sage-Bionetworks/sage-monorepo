@@ -8,9 +8,6 @@ get:
   summary: Get leaderboard entries
   description: Get paginated leaderboard entries for a specific leaderboard
   operationId: getLeaderboard
-  security:
-    - jwtBearer:
-        - read:challenges
   parameters:
     - $ref: ../../components/parameters/query/leaderboardSearchQuery.yaml
   responses:

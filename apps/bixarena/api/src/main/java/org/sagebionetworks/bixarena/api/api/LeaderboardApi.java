@@ -81,7 +81,7 @@ public interface LeaderboardApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "jwtBearer", scopes={ "read:challenges" })
+            @SecurityRequirement(name = "jwtBearer")
         }
     )
     @RequestMapping(
@@ -133,7 +133,7 @@ public interface LeaderboardApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "jwtBearer", scopes={ "read:leaderboards" })
+            @SecurityRequirement(name = "jwtBearer")
         }
     )
     @RequestMapping(
@@ -186,7 +186,7 @@ public interface LeaderboardApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "jwtBearer", scopes={ "read:leaderboards" })
+            @SecurityRequirement(name = "jwtBearer")
         }
     )
     @RequestMapping(
@@ -232,7 +232,7 @@ public interface LeaderboardApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "jwtBearer", scopes={ "read:leaderboards" })
+            @SecurityRequirement(name = "jwtBearer")
         }
     )
     @RequestMapping(

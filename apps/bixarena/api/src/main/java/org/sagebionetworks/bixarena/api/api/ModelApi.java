@@ -70,7 +70,7 @@ public interface ModelApi {
             })
         },
         security = {
-            @SecurityRequirement(name = "jwtBearer", scopes={ "read:models" })
+            @SecurityRequirement(name = "jwtBearer")
         }
     )
     @RequestMapping(
