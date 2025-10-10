@@ -35,3 +35,5 @@
 /libs/results-visualization-framework/ @Sage-Bionetworks/sage-monorepo-agora
 
 /libs/explorers/ @Sage-Bionetworks/sage-monorepo-agora
+
+/libs/synapse/ @Sage-Bionetworks/sage-monorepo-agora
