@@ -11,6 +11,9 @@
 #   keeping unannotated nodes visible in all outputs.
 # - Best practice: Be intentional and always specify the `x-audience` annotation on path nodes.
 
+plugins:
+  - './plugins/plugin.mjs'
+
 apis:
   # BixArena API
   bixarena-public:

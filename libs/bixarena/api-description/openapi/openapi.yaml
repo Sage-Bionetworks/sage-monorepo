@@ -10,7 +10,7 @@ info:
     name: Support
     url: https://github.com/Sage-Bionetworks/sage-monorepo
 servers:
-  - url: http://localhost/v1
+  - url: https://bixarena.ai/api/v1
 tags:
   - name: Leaderboard
     description: Operations about leaderboards.
