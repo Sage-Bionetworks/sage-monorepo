@@ -11,9 +11,9 @@
 /**
  * Results of a grid row against a JSON schema
  */
-export interface OrgSagebionetworksRepoModelGridSqlValidationResults {
+export interface OrgSagebionetworksRepoModelGridQueryResultValidationResults {
   /**
-   * True if the object is currently valid according to the schema.
+   * Will be \'true\' if the row is valid according to the JSON schema. Will be \'false\' when the row is invalid.
    */
   isValid?: boolean;
   /**

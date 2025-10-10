@@ -41,6 +41,10 @@ import { OrgSagebionetworksRepoModelGridDownloadFromGridRequest } from '../model
 // @ts-ignore
 import { OrgSagebionetworksRepoModelGridDownloadFromGridResult } from '../model/org-sagebionetworks-repo-model-grid-download-from-grid-result';
 // @ts-ignore
+import { OrgSagebionetworksRepoModelGridGridCsvImportRequest } from '../model/org-sagebionetworks-repo-model-grid-grid-csv-import-request';
+// @ts-ignore
+import { OrgSagebionetworksRepoModelGridGridCsvImportResponse } from '../model/org-sagebionetworks-repo-model-grid-grid-csv-import-response';
+// @ts-ignore
 import { OrgSagebionetworksRepoModelGridGridRecordSetExportRequest } from '../model/org-sagebionetworks-repo-model-grid-grid-record-set-export-request';
 // @ts-ignore
 import { OrgSagebionetworksRepoModelGridGridRecordSetExportResponse } from '../model/org-sagebionetworks-repo-model-grid-grid-record-set-export-response';
@@ -419,6 +423,113 @@ export class GridServicesService {
 
     let localVarPath = `/repo/v1/grid/export/recordset/async/get/${this.configuration.encodeParam({ name: 'asyncToken', value: asyncToken, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
     return this.httpClient.request<OrgSagebionetworksRepoModelGridGridRecordSetExportResponse>(
+      'get',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * @param asyncToken
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public getRepoV1GridImportCsvAsyncGetAsyncToken(
+    asyncToken: string,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelGridGridCsvImportResponse>;
+  public getRepoV1GridImportCsvAsyncGetAsyncToken(
+    asyncToken: string,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelGridGridCsvImportResponse>>;
+  public getRepoV1GridImportCsvAsyncGetAsyncToken(
+    asyncToken: string,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelGridGridCsvImportResponse>>;
+  public getRepoV1GridImportCsvAsyncGetAsyncToken(
+    asyncToken: string,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (asyncToken === null || asyncToken === undefined) {
+      throw new Error(
+        'Required parameter asyncToken was null or undefined when calling getRepoV1GridImportCsvAsyncGetAsyncToken.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (bearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('bearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/repo/v1/grid/import/csv/async/get/${this.configuration.encodeParam({ name: 'asyncToken', value: asyncToken, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelGridGridCsvImportResponse>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {
@@ -992,6 +1103,125 @@ export class GridServicesService {
       {
         context: localVarHttpContext,
         body: orgSagebionetworksRepoModelGridGridRecordSetExportRequest,
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: localVarHeaders,
+        observe: observe,
+        transferCache: localVarTransferCache,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * @param orgSagebionetworksRepoModelGridGridCsvImportRequest
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public postRepoV1GridImportCsvAsyncStart(
+    orgSagebionetworksRepoModelGridGridCsvImportRequest: OrgSagebionetworksRepoModelGridGridCsvImportRequest,
+    observe?: 'body',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<OrgSagebionetworksRepoModelAsynchAsyncJobId>;
+  public postRepoV1GridImportCsvAsyncStart(
+    orgSagebionetworksRepoModelGridGridCsvImportRequest: OrgSagebionetworksRepoModelGridGridCsvImportRequest,
+    observe?: 'response',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpResponse<OrgSagebionetworksRepoModelAsynchAsyncJobId>>;
+  public postRepoV1GridImportCsvAsyncStart(
+    orgSagebionetworksRepoModelGridGridCsvImportRequest: OrgSagebionetworksRepoModelGridGridCsvImportRequest,
+    observe?: 'events',
+    reportProgress?: boolean,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<HttpEvent<OrgSagebionetworksRepoModelAsynchAsyncJobId>>;
+  public postRepoV1GridImportCsvAsyncStart(
+    orgSagebionetworksRepoModelGridGridCsvImportRequest: OrgSagebionetworksRepoModelGridGridCsvImportRequest,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: {
+      httpHeaderAccept?: 'application/json';
+      context?: HttpContext;
+      transferCache?: boolean;
+    },
+  ): Observable<any> {
+    if (
+      orgSagebionetworksRepoModelGridGridCsvImportRequest === null ||
+      orgSagebionetworksRepoModelGridGridCsvImportRequest === undefined
+    ) {
+      throw new Error(
+        'Required parameter orgSagebionetworksRepoModelGridGridCsvImportRequest was null or undefined when calling postRepoV1GridImportCsvAsyncStart.',
+      );
+    }
+
+    let localVarHeaders = this.defaultHeaders;
+
+    let localVarCredential: string | undefined;
+    // authentication (bearerAuth) required
+    localVarCredential = this.configuration.lookupCredential('bearerAuth');
+    if (localVarCredential) {
+      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+    }
+
+    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (localVarHttpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (localVarHttpHeaderAcceptSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+    }
+
+    let localVarHttpContext: HttpContext | undefined = options && options.context;
+    if (localVarHttpContext === undefined) {
+      localVarHttpContext = new HttpContext();
+    }
+
+    let localVarTransferCache: boolean | undefined = options && options.transferCache;
+    if (localVarTransferCache === undefined) {
+      localVarTransferCache = true;
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined =
+      this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/repo/v1/grid/import/csv/async/start`;
+    return this.httpClient.request<OrgSagebionetworksRepoModelAsynchAsyncJobId>(
+      'post',
+      `${this.configuration.basePath}${localVarPath}`,
+      {
+        context: localVarHttpContext,
+        body: orgSagebionetworksRepoModelGridGridCsvImportRequest,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,
