@@ -1,10 +1,10 @@
-<div class="filter-panel" [class.open]="isOpen()" [class.active]="activePane > -1">
+<div class="filter-panel" [class.open]="isOpen()" [class.active]="hasActivePane()">
   <div class="filter-panel-inner">
     <div class="filter-panel-main">
       <div class="filter-panel-main-inner">
         <explorers-filter-panel-header
           heading="Filter By"
-          [hideCloseButton]="activePane > -1"
+          [hideCloseButton]="hasActivePane()"
           (closeClick)="close()"
         />
         <div class="filter-panel-main-menu">
@@ -12,7 +12,7 @@
             @for (filter of filters(); track filter; let i = $index) {
               <li
                 class="filter-panel-main-menu-item-{{ filter.name }}"
-                [class.active]="activePane === i"
+                [class.active]="activePane() === i"
               >
                 <explorers-filter-panel-main-menu-item-button
                   [filter]="filter"
@@ -29,12 +29,12 @@
       @for (filter of filters(); track filter; let i = $index) {
         <div
           class="filter-panel-pane filter-panel-pane-{{ filter.name }}"
-          [class.open]="activePane === i"
+          [class.open]="activePane() === i"
         >
           <div class="filter-panel-pane-inner">
             <explorers-filter-panel-header
               [heading]="filter.name"
-              [hideCloseButton]="activePane !== i"
+              [hideCloseButton]="activePane() !== i"
               (closeClick)="close()"
             />
             <ul>

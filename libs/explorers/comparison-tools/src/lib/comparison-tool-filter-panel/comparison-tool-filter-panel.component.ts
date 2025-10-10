@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, input, model, output } from '@angular/core';
+import { Component, computed, input, model, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   ComparisonToolConfigFilter,
@@ -42,18 +42,19 @@ export class ComparisonToolFilterPanelComponent {
     });
   });
 
-  activePane = -1;
+  activePane = signal(-1);
+  hasActivePane = computed(() => this.activePane() !== -1);
 
   handleChange() {
     this.filtersChanged.emit(this.filters());
   }
 
   openPane(index: number) {
-    this.activePane = index;
+    this.activePane.set(index);
   }
 
   closePanes() {
-    this.activePane = -1;
+    this.activePane.set(-1);
   }
 
   open() {

@@ -81,7 +81,7 @@ describe('ComparisonToolFilterPanelComponent', () => {
     const { user, componentInstance } = await setup(true);
     const categoryButton = getCategoryButton(mockComparisonToolConfigFilters[0].name);
     await user.click(categoryButton);
-    expect(componentInstance.activePane).toBe(0);
+    expect(componentInstance.activePane()).toBe(0);
   });
 
   it('should display filter options when pane is opened', async () => {
