@@ -1,0 +1,37 @@
+<div class="filter-list">
+  @if (shouldShowList()) {
+    <div class="filter-list-inner">
+      <div>
+        <button class="filter-list-clear-all" (click)="clearList()">
+          <explorers-svg-icon
+            imagePath="/explorers-assets/icons/trash.svg"
+            [width]="10"
+            [height]="12"
+            [color]="'#aeb5bc'"
+            altText="trash"
+          ></explorers-svg-icon>
+          <span>Clear all</span>
+        </button>
+      </div>
+      <div>
+        <explorers-filter-list-item
+          [item]=""
+          [description]="'Significance &leq; ' + significanceThreshold"
+          [isVisible]="significanceThresholdActive"
+          (clearEvent)="removeSignificanceThresholdFilter()"
+        ></explorers-filter-list-item>
+        @for (filter of filters; track filter; let i = $index) {
+          @for (option of filter.options; track option; let j = $index) {
+            <explorers-filter-list-item
+              [item]="option"
+              [title]="filter.short || ''"
+              [description]="option.label"
+              [isVisible]="option.selected || false"
+              (clearEvent)="clearSelectedFilters(option)"
+            ></explorers-filter-list-item>
+          }
+        }
+      </div>
+    </div>
+  }
+</div>
