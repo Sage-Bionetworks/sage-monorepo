@@ -6,7 +6,6 @@ buildscript {
 
 plugins {
   id("sage.spring-boot-application")
-  id("sage.jacoco-coverage")
   id("sage.lombok")
   alias(libs.plugins.flyway)
 }
@@ -21,7 +20,8 @@ dependencies {
   implementation(libs.spring.boot.starter.data.jpa)
   implementation(libs.spring.boot.starter.jdbc)
   implementation(libs.spring.boot.starter.security)
-  implementation("com.nimbusds:nimbus-jose-jwt:9.40")
+  implementation(libs.nimbus.jose.jwt)
+  implementation(libs.spring.boot.starter.oauth2.client)
   implementation(libs.spring.boot.starter.validation)
   implementation(libs.spring.boot.starter.web)
   implementation(libs.springdoc.openapi.ui)
@@ -32,11 +32,6 @@ dependencies {
   runtimeOnly(libs.spring.boot.devtools)
   testImplementation(libs.spring.boot.starter.test)
   testRuntimeOnly(libs.h2database.h2)
-}
-
-jacocoCoverage {
-  classExcludes = listOf<String>()
-  forceClassIncludes = listOf<String>()
 }
 
 flyway {

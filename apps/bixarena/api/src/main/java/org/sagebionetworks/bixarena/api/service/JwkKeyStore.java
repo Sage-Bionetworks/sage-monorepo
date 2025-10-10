@@ -2,6 +2,7 @@ package org.sagebionetworks.bixarena.api.service;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
@@ -51,6 +52,8 @@ public class JwkKeyStore {
   }
 
   public JWKSet publicJwkSet() {
-    return new JWKSet(all().stream().map(RSAKey::toPublicJWK).toList());
+    // Convert public RSA keys to generic JWK list for JWKSet constructor
+    var jwks = all().stream().map(k -> (JWK) k.toPublicJWK()).toList();
+    return new JWKSet(jwks);
   }
 }
