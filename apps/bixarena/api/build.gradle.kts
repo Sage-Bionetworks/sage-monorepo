@@ -21,6 +21,7 @@ dependencies {
   implementation(libs.spring.boot.starter.data.jpa)
   implementation(libs.spring.boot.starter.jdbc)
   implementation(libs.spring.boot.starter.security)
+  implementation("com.nimbusds:nimbus-jose-jwt:9.40")
   implementation(libs.spring.boot.starter.validation)
   implementation(libs.spring.boot.starter.web)
   implementation(libs.springdoc.openapi.ui)

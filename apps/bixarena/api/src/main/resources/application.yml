@@ -60,3 +60,16 @@ management:
 info:
   application:
     name: ${spring.application.name}
+
+app:
+  welcome-message: 'Welcome to BixArena API'
+  auth:
+    authorize-url: https://signin.synapse.org/oauth2/authorize
+    token-url: https://signin.synapse.org/oauth2/token
+    jwks-url: https://signin.synapse.org/.well-known/jwks.json
+    client-id: changeme
+    client-secret: changeme
+    redirect-uri: http://bixarena-api:8112/v1/auth/callback
+    internal-issuer: http://bixarena-api:8112
+    audience: myapi
+    token-ttl-seconds: 600
