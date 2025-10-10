@@ -1,0 +1,96 @@
+<div
+  class="filter-panel"
+  [ngClass]="{ open: filterPanelService.isOpen(), active: filterPanelService.activePane() > -1 }"
+>
+  <div class="filter-panel-inner">
+    <div class="filter-panel-main">
+      <div class="filter-panel-main-inner">
+        <div class="filter-panel-main-top">
+          <button class="filter-panel-close" (click)="close()">
+            <explorers-svg-icon
+              imagePath="/explorers-assets/icons/close.svg"
+              [width]="21"
+              [height]="21"
+              altText="close"
+            />
+          </button>
+        </div>
+        <div class="filter-panel-main-heading">Filter By</div>
+        <div class="filter-panel-main-menu">
+          <ul>
+            @for (filter of filterPanelService.filters(); track filter; let i = $index) {
+              <li
+                class="filter-panel-main-menu-item-{{ filter.name }}"
+                [ngClass]="{ active: filterPanelService.activePane() === i }"
+              >
+                <button (click)="openPane(i)">
+                  <div>
+                    {{ filter.name }}
+                  </div>
+                  <div>
+                    <svg
+                      width="9"
+                      height="15"
+                      viewBox="0 0 9 15"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M0.999999 1.59998L7 7.59998L1 13.6"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      />
+                    </svg>
+                  </div>
+                </button>
+              </li>
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-panel-panes">
+      @for (filter of filterPanelService.filters(); track filter; let i = $index) {
+        <div
+          class="filter-panel-pane filter-panel-pane-{{ filter.name }}"
+          [ngClass]="{ open: filterPanelService.activePane() === i }"
+        >
+          <div class="filter-panel-pane-inner">
+            <div class="filter-panel-pane-top">
+              <button class="filter-panel-close" (click)="close()">
+                <explorers-svg-icon
+                  imagePath="/explorers-assets/icons/close.svg"
+                  [width]="21"
+                  [height]="21"
+                  altText="close"
+                />
+              </button>
+            </div>
+            <div class="filter-panel-pane-heading">
+              {{ filter.name }}
+            </div>
+            <ul>
+              @for (option of filter.options; track option; let j = $index) {
+                <li>
+                  <div class="checkbox">
+                    <p-checkbox
+                      [(ngModel)]="option.selected"
+                      [binary]="true"
+                      (ngModelChange)="handleChange(option)"
+                      [inputId]="option.label"
+                      size="small"
+                    />
+                    <label [for]="option.label">
+                      {{ option.label }}
+                    </label>
+                  </div>
+                </li>
+              }
+            </ul>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

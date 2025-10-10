@@ -1,6 +1,7 @@
-import { Component, input, output, signal } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
+import { FilterPanelService } from '../../filter-panel/filter-panel.service';
 
 @Component({
   selector: 'explorers-comparison-tool-filter-results-button',
@@ -10,11 +11,10 @@ import { TooltipModule } from 'primeng/tooltip';
 })
 export class ComparisonToolFilterResultsButtonComponent {
   tooltip = input('');
-  filterToggle = output<boolean>();
-  private filterState = signal(false);
+  category = input('');
+  filterPanelService = inject(FilterPanelService);
 
   toggle() {
-    this.filterState.update((state) => !state);
-    this.filterToggle.emit(this.filterState());
+    this.filterPanelService.toggle();
   }
 }

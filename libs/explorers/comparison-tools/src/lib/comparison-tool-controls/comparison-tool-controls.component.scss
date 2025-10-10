@@ -1,0 +1,17 @@
+.controls {
+  display: flex;
+  flex-direction: row;
+
+  .controls-left {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+  }
+
+  .controls-right {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    flex-grow: 1;
+  }
+}

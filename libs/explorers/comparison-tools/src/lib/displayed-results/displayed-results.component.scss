@@ -1,11 +1,13 @@
+@use 'explorers/styles/src/lib/variables';
+
 .displayed-results {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100px;
-  width: 200px;
-  border: 1px solid gray;
+  width: 300px;
+  border: 1px solid var(--color-gray-300);
 
   h5 {
     font-weight: 700;

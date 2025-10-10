@@ -105,14 +105,7 @@ paths:
         - Comparison Tool Config
       summary: Get Comparison Tool configuration
       description: Retrieve the Comparison Tool configuration schema for the Model-AD application
-      operationId: getComparisonToolConfig
-      parameters:
-        - name: page
-          in: query
-          description: Name of the page to retrieve the Comparison Tool configuration for
-          required: true
-          schema:
-            $ref: '#/components/schemas/ComparisonToolPage'
+      operationId: getComparisonToolConfigs
       responses:
         '200':
           description: Successfully retrieved Comparison Tool configuration
@@ -458,7 +451,10 @@ components:
           items:
             $ref: '#/components/schemas/ComparisonToolConfigColumn'
         filters:
-          $ref: '#/components/schemas/ComparisonToolConfigFilter'
+          type: array
+          description: List of ComparisonToolConfig filters
+          items:
+            $ref: '#/components/schemas/ComparisonToolConfigFilter'
       required:
         - page
         - dropdowns
