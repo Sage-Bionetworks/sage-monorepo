@@ -1,26 +1,25 @@
-import { Component, inject, signal, OnInit, DestroyRef } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute } from '@angular/router';
 import {
   BaseComparisonToolComponent,
   ComparisonToolColumnsComponent,
-  ComparisonToolHeaderComponent,
   DisplayedResultsComponent,
 } from '@sagebionetworks/explorers/comparison-tools';
-import { ModelOverviewHelpLinksComponent } from './components/model-overview-help-links/model-overview-help-links.component';
+import { ComparisonToolFilter } from '@sagebionetworks/explorers/models';
+import { ComparisonToolService, PlatformService } from '@sagebionetworks/explorers/services';
 import {
   ComparisonToolConfig,
   ModelOverview,
   ModelOverviewService,
 } from '@sagebionetworks/model-ad/api-client';
-import { ActivatedRoute } from '@angular/router';
-import { ComparisonToolService, PlatformService } from '@sagebionetworks/explorers/services';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ModelOverviewHelpLinksComponent } from './components/model-overview-help-links/model-overview-help-links.component';
 import { ModelOverviewMainTableComponent } from './components/model-overview-main-table/model-overview-main-table.component';
 
 @Component({
   selector: 'model-ad-model-overview-comparison-tool',
   imports: [
     BaseComparisonToolComponent,
-    ComparisonToolHeaderComponent,
     ModelOverviewMainTableComponent,
     ModelOverviewHelpLinksComponent,
     DisplayedResultsComponent,
@@ -92,4 +91,9 @@ export class ModelOverviewComparisonToolComponent implements OnInit {
         },
       });
   }
+
+  setFilters = (filters: ComparisonToolFilter[]) => {
+    // TODO: filter data based on selected filters
+    console.log('Filters changed:', filters);
+  };
 }

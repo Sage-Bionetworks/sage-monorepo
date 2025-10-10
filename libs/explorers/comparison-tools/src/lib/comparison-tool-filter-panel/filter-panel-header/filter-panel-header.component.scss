@@ -1,0 +1,30 @@
+.filter-panel-header-top {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 15px 0 40px;
+  border-bottom: 1px solid var(--color-border);
+
+  .filter-panel-close {
+    display: flex;
+    justify-content: flex-end;
+    background-color: transparent;
+    border: none;
+    color: var(--color-gray-600);
+    cursor: pointer;
+
+    &:hover {
+      color: var(--color-action-primary);
+    }
+
+    &.hidden {
+      visibility: hidden;
+      pointer-events: none;
+    }
+  }
+
+  .filter-panel-header-heading {
+    font-size: 24px;
+    font-weight: 700;
+  }
+}

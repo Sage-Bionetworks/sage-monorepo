@@ -1,0 +1,63 @@
+<div class="filter-panel" [class.open]="isOpen()" [class.active]="hasActivePane()">
+  <div class="filter-panel-inner">
+    <div class="filter-panel-main">
+      <div class="filter-panel-main-inner">
+        <explorers-filter-panel-header
+          heading="Filter By"
+          [hideCloseButton]="hasActivePane()"
+          (closeClick)="close()"
+        />
+        <div class="filter-panel-main-menu">
+          <ul>
+            @for (filter of filters(); track filter; let i = $index) {
+              <li
+                class="filter-panel-main-menu-item-{{ filter.name }}"
+                [class.active]="activePane() === i"
+              >
+                <explorers-filter-panel-main-menu-item-button
+                  [filter]="filter"
+                  (buttonClick)="openPane(i)"
+                />
+              </li>
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-panel-panes">
+      @for (filter of filters(); track filter; let i = $index) {
+        <div
+          class="filter-panel-pane filter-panel-pane-{{ filter.name }}"
+          [class.open]="activePane() === i"
+        >
+          <div class="filter-panel-pane-inner">
+            <explorers-filter-panel-header
+              [heading]="filter.name"
+              [hideCloseButton]="activePane() !== i"
+              (closeClick)="close()"
+            />
+            <ul>
+              @for (option of filter.options; track option; let j = $index) {
+                <li>
+                  <div class="checkbox">
+                    <p-checkbox
+                      [(ngModel)]="option.selected"
+                      [binary]="true"
+                      (ngModelChange)="handleChange()"
+                      [inputId]="option.label"
+                      size="small"
+                    />
+                    <label [for]="option.label">
+                      {{ option.label }}
+                    </label>
+                  </div>
+                </li>
+              }
+            </ul>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

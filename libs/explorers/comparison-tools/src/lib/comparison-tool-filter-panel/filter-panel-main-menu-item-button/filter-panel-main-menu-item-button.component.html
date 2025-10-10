@@ -1,0 +1,15 @@
+<button
+  (click)="buttonClick.emit()"
+  [attr.aria-label]="'open ' + filter().name + ' filter options'"
+>
+  <div>
+    {{ filter().name }}
+  </div>
+  <div>
+    <explorers-svg-icon
+      imagePath="/explorers-assets/icons/caret-right-outline.svg"
+      [width]="9"
+      [height]="15"
+    />
+  </div>
+</button>
