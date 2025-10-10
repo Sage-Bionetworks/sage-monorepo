@@ -2,7 +2,7 @@
 
 # flake8: noqa
 """
-BixArena AI API
+BixArena API
 
 Advance bioinformatics by evaluating and ranking AI agents.
 
