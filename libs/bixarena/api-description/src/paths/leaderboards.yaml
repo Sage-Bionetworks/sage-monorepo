@@ -5,9 +5,6 @@ get:
   summary: List all available leaderboards
   description: Get a list of all available leaderboards with their metadata
   operationId: listLeaderboards
-  security:
-    - jwtBearer:
-        - read:leaderboards
   responses:
     '200':
       description: Success
