@@ -11,21 +11,27 @@ info:
     url: https://github.com/Sage-Bionetworks/sage-monorepo
 servers:
   - url: http://localhost/v1
+security:
+  - jwtBearer: []
 tags:
   - name: Leaderboard
     description: Operations about leaderboards.
   - name: Model
     description: Operations about models.
-  - name: ExamplePrompt
+  - name: Example Prompt
     description: Operations about example prompts for biomedical relevance detection.
 paths:
   /leaderboards:
     get:
+      x-anonymous-access: true
       tags:
         - Leaderboard
       summary: List all available leaderboards
       description: Get a list of all available leaderboards with their metadata
       operationId: listLeaderboards
+      security:
+        - jwtBearer:
+            - read:leaderboards
       responses:
         '200':
           description: Success
@@ -38,14 +44,19 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
   /leaderboards/{leaderboardId}:
+    parameters:
+      - $ref: '#/components/parameters/leaderboardId'
     get:
+      x-anonymous-access: true
       tags:
         - Leaderboard
       summary: Get leaderboard entries
       description: Get paginated leaderboard entries for a specific leaderboard
       operationId: getLeaderboard
+      security:
+        - jwtBearer:
+            - read:challenges
       parameters:
-        - $ref: '#/components/parameters/leaderboardId'
         - $ref: '#/components/parameters/leaderboardSearchQuery'
       responses:
         '200':
@@ -61,15 +72,20 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
   /leaderboards/{leaderboardId}/history/{modelId}:
+    parameters:
+      - $ref: '#/components/parameters/leaderboardId'
+      - $ref: '#/components/parameters/modelId'
     get:
+      x-anonymous-access: true
       tags:
         - Leaderboard
       summary: Get model performance history
       description: Get historical performance data for a specific model in a leaderboard
       operationId: getModelHistory
+      security:
+        - jwtBearer:
+            - read:leaderboards
       parameters:
-        - $ref: '#/components/parameters/leaderboardId'
-        - $ref: '#/components/parameters/modelId'
         - $ref: '#/components/parameters/leaderboardModelHistoryQuery'
       responses:
         '200':
@@ -85,14 +101,19 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
   /leaderboards/{leaderboardId}/snapshots:
+    parameters:
+      - $ref: '#/components/parameters/leaderboardId'
     get:
+      x-anonymous-access: true
       tags:
         - Leaderboard
       summary: Get leaderboard snapshots
       description: Get a paginated list of available snapshots for a leaderboard
       operationId: getLeaderboardSnapshots
+      security:
+        - jwtBearer:
+            - read:leaderboards
       parameters:
-        - $ref: '#/components/parameters/leaderboardId'
         - $ref: '#/components/parameters/leaderboardSnapshotQuery'
       responses:
         '200':
@@ -109,11 +130,15 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /models:
     get:
+      x-anonymous-access: true
       tags:
         - Model
       summary: List models
       description: Get a paginated list of models with optional filters (e.g., active)
       operationId: listModels
+      security:
+        - jwtBearer:
+            - read:models
       parameters:
         - $ref: '#/components/parameters/modelSearchQuery'
       responses:
@@ -129,11 +154,15 @@ paths:
           $ref: '#/components/responses/InternalServerError'
   /example-prompts:
     get:
+      x-anonymous-access: true
       tags:
-        - ExamplePrompt
+        - Example Prompt
       summary: List example prompts
       description: Get a list of example prompts with comprehensive filtering options
       operationId: listExamplePrompts
+      security:
+        - jwtBearer:
+            - read:example-prompts
       parameters:
         - $ref: '#/components/parameters/examplePromptSearchQuery'
       responses:
@@ -148,6 +177,12 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
+  securitySchemes:
+    jwtBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT access token obtained from OAuth2 authorization flow or API key exchange
   schemas:
     LeaderboardList:
       type: array
@@ -853,3 +888,4 @@ components:
       explode: true
       schema:
         $ref: '#/components/schemas/ExamplePromptSearchQuery'
+x-oauth2-audience: urn:bixarena:api
