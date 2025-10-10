@@ -1,0 +1,12 @@
+post:
+  tags:
+    - Auth
+  summary: Start Synapse OIDC authorization code flow
+  description: Initiates the OIDC login by redirecting the user to Synapse with state and nonce.
+  operationId: startOidc
+  security: []
+  responses:
+    '302':
+      description: Redirect to Synapse login
+    '400':
+      $ref: ../components/responses/BadRequest.yaml

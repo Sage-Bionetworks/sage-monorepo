@@ -28,6 +28,12 @@ tags:
     description: Operations about leaderboards.
   - name: Model
     description: Operations about models.
+  - name: Auth
+    description: Authentication and token minting operations.
+  - name: Utility
+    description: Utility endpoints.
+  - name: Admin
+    description: Administrative endpoints requiring elevated roles.
 
 paths:
   /example-prompts:
@@ -42,6 +48,18 @@ paths:
     $ref: paths/leaderboards/{leaderboardId}/snapshots.yaml
   /models:
     $ref: paths/models.yaml
+  /auth/oidc/start:
+    $ref: paths/auth-oidc-start.yaml
+  /auth/oidc/callback:
+    $ref: paths/auth-oidc-callback.yaml
+  /token:
+    $ref: paths/token.yaml
+  /.well-known/jwks.json:
+    $ref: paths/jwks.yaml
+  /echo:
+    $ref: paths/echo.yaml
+  /admin/stats:
+    $ref: paths/admin-stats.yaml
 
 components:
   securitySchemes:
