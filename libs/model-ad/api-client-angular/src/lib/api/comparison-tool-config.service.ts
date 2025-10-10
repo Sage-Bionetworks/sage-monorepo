@@ -26,8 +26,6 @@ import { Observable } from 'rxjs';
 import { BasicError } from '../model/basic-error';
 // @ts-ignore
 import { ComparisonToolConfig } from '../model/comparison-tool-config';
-// @ts-ignore
-import { ComparisonToolPage } from '../model/comparison-tool-page';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -111,12 +109,10 @@ export class ComparisonToolConfigService {
   /**
    * Get Comparison Tool configuration
    * Retrieve the Comparison Tool configuration schema for the Model-AD application
-   * @param page Name of the page to retrieve the Comparison Tool configuration for
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getComparisonToolConfig(
-    page: ComparisonToolPage,
+  public getComparisonToolConfigs(
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
@@ -125,8 +121,7 @@ export class ComparisonToolConfigService {
       transferCache?: boolean;
     },
   ): Observable<Array<ComparisonToolConfig>>;
-  public getComparisonToolConfig(
-    page: ComparisonToolPage,
+  public getComparisonToolConfigs(
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
@@ -135,8 +130,7 @@ export class ComparisonToolConfigService {
       transferCache?: boolean;
     },
   ): Observable<HttpResponse<Array<ComparisonToolConfig>>>;
-  public getComparisonToolConfig(
-    page: ComparisonToolPage,
+  public getComparisonToolConfigs(
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
@@ -145,8 +139,7 @@ export class ComparisonToolConfigService {
       transferCache?: boolean;
     },
   ): Observable<HttpEvent<Array<ComparisonToolConfig>>>;
-  public getComparisonToolConfig(
-    page: ComparisonToolPage,
+  public getComparisonToolConfigs(
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
@@ -155,17 +148,6 @@ export class ComparisonToolConfigService {
       transferCache?: boolean;
     },
   ): Observable<any> {
-    if (page === null || page === undefined) {
-      throw new Error(
-        'Required parameter page was null or undefined when calling getComparisonToolConfig.',
-      );
-    }
-
-    let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
-    if (page !== undefined && page !== null) {
-      localVarQueryParameters = this.addToHttpParams(localVarQueryParameters, <any>page, 'page');
-    }
-
     let localVarHeaders = this.defaultHeaders;
 
     let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -205,7 +187,6 @@ export class ComparisonToolConfigService {
       `${this.configuration.basePath}${localVarPath}`,
       {
         context: localVarHttpContext,
-        params: localVarQueryParameters,
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
         headers: localVarHeaders,

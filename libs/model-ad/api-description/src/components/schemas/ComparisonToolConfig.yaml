@@ -14,7 +14,10 @@ properties:
     items:
       $ref: './ComparisonToolConfigColumn.yaml'
   filters:
-    $ref: './ComparisonToolConfigFilter.yaml'
+    type: array
+    description: List of ComparisonToolConfig filters
+    items:
+      $ref: './ComparisonToolConfigFilter.yaml'
 required:
   - page
   - dropdowns
