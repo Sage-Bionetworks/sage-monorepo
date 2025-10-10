@@ -165,7 +165,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
   /auth/oidc/start:
-    post:
+    get:
       tags:
         - Auth
       summary: Start Synapse OIDC authorization code flow
@@ -315,7 +315,7 @@ components:
       scheme: bearer
       bearerFormat: JWT
       description: |
-        Short-lived internal JWT issued by this service after authentication through Synapse or an API key exchange.
+        Short-lived internal JWT issued by this service after authentication through Synapse or (later) an API key exchange.
   schemas:
     ExamplePromptSort:
       type: string

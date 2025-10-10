@@ -64,12 +64,16 @@ info:
 app:
   welcome-message: 'Welcome to BixArena API'
   auth:
-    authorize-url: https://signin.synapse.org/oauth2/authorize
-    token-url: https://signin.synapse.org/oauth2/token
-    jwks-url: https://signin.synapse.org/.well-known/jwks.json
+    # Synapse OAuth endpoints (adjusted to known working endpoints)
+    # Authorize endpoint: root sign-in portal with query params
+    authorize-url: https://signin.synapse.org
+    # Token endpoint (Synapse repo service)
+    token-url: https://repo-prod.prod.sagebase.org/auth/v1/oauth2/token
+    # JWKS endpoint (Synapse repo service openid)
+    jwks-url: https://repo-prod.prod.sagebase.org/auth/v1/openid/jwks
     client-id: changeme
     client-secret: changeme
-    redirect-uri: http://bixarena-api:8112/v1/auth/callback
+    redirect-uri: http://127.0.0.1:8112/v1/auth/oidc/callback
     internal-issuer: http://bixarena-api:8112
     audience: myapi
     token-ttl-seconds: 600

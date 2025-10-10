@@ -7,7 +7,7 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 | [**get_jwks**](AuthApi.md#get_jwks)                       | **GET** /.well-known/jwks.json | JSON Web Key Set                           |
 | [**mint_internal_token**](AuthApi.md#mint_internal_token) | **POST** /token                | Mint short-lived internal JWT              |
 | [**oidc_callback**](AuthApi.md#oidc_callback)             | **GET** /auth/oidc/callback    | OIDC redirect callback                     |
-| [**start_oidc**](AuthApi.md#start_oidc)                   | **POST** /auth/oidc/start      | Start Synapse OIDC authorization code flow |
+| [**start_oidc**](AuthApi.md#start_oidc)                   | **GET** /auth/oidc/start       | Start Synapse OIDC authorization code flow |
 
 # **get_jwks**
 

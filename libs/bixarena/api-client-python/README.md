@@ -104,7 +104,7 @@ All URIs are relative to *https://bixarena.ai/api/v1*
 | _AuthApi_          | [**get_jwks**](docs/AuthApi.md#get_jwks)                                          | **GET** /.well-known/jwks.json                          | JSON Web Key Set                           |
 | _AuthApi_          | [**mint_internal_token**](docs/AuthApi.md#mint_internal_token)                    | **POST** /token                                         | Mint short-lived internal JWT              |
 | _AuthApi_          | [**oidc_callback**](docs/AuthApi.md#oidc_callback)                                | **GET** /auth/oidc/callback                             | OIDC redirect callback                     |
-| _AuthApi_          | [**start_oidc**](docs/AuthApi.md#start_oidc)                                      | **POST** /auth/oidc/start                               | Start Synapse OIDC authorization code flow |
+| _AuthApi_          | [**start_oidc**](docs/AuthApi.md#start_oidc)                                      | **GET** /auth/oidc/start                                | Start Synapse OIDC authorization code flow |
 | _ExamplePromptApi_ | [**list_example_prompts**](docs/ExamplePromptApi.md#list_example_prompts)         | **GET** /example-prompts                                | List example prompts                       |
 | _LeaderboardApi_   | [**get_leaderboard**](docs/LeaderboardApi.md#get_leaderboard)                     | **GET** /leaderboards/{leaderboardId}                   | Get leaderboard entries                    |
 | _LeaderboardApi_   | [**get_leaderboard_snapshots**](docs/LeaderboardApi.md#get_leaderboard_snapshots) | **GET** /leaderboards/{leaderboardId}/snapshots         | Get leaderboard snapshots                  |

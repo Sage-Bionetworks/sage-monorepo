@@ -1,4 +1,7 @@
+import os
+
 import gradio as gr
+
 from bixarena_app.auth.auth_service import get_auth_service
 
 
@@ -40,14 +43,14 @@ def build_header():
 
 
 def update_login_button():
-    """Update login button based on authentication state"""
+    """Update login button using backend OIDC start endpoint."""
     auth_service = get_auth_service()
-
+    backend_base = os.environ.get("BACKEND_BASE_URL", "http://localhost:8112/v1")
+    start_endpoint = f"{backend_base}/auth/oidc/start"
     if auth_service.is_authenticated():
         return gr.Button(auth_service.get_display_name(), variant="primary", link=None)
     else:
-        login_url = auth_service.generate_login_url()
-        return gr.Button("Login", variant="primary", link=login_url)
+        return gr.Button("Login", variant="primary", link=start_endpoint)
 
 
 def handle_login_click(navigator, update_login_button, update_user_page):

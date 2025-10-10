@@ -157,7 +157,7 @@ public interface AuthApi {
 
 
     /**
-     * POST /auth/oidc/start : Start Synapse OIDC authorization code flow
+     * GET /auth/oidc/start : Start Synapse OIDC authorization code flow
      * Initiates the OIDC login by redirecting the user to Synapse with state and nonce.
      *
      * @return Redirect to Synapse login (status code 302)
@@ -176,7 +176,7 @@ public interface AuthApi {
         }
     )
     @RequestMapping(
-        method = RequestMethod.POST,
+        method = RequestMethod.GET,
         value = "/auth/oidc/start",
         produces = { "application/problem+json" }
     )

@@ -1,4 +1,4 @@
-post:
+get:
   tags:
     - Auth
   summary: Start Synapse OIDC authorization code flow
