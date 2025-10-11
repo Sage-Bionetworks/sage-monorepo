@@ -38,11 +38,12 @@ public class SecurityConfiguration {
             "/swagger-ui/**",
             "/v1/auth/**",
             "/v1/auth/logout",
+            "/v1/example-prompts",
+            "/v1/example-prompts/**",
             "/v1/leaderboards",
             "/v1/leaderboards/**",
             "/v1/models",
             "/v1/models/**",
-            "/v1/example-prompts/**",
             "/v3/api-docs/**"
           )
           .permitAll()

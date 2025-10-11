@@ -25,7 +25,7 @@ import org.sagebionetworks.bixarena.api.model.entity.UserEntity;
 import org.sagebionetworks.bixarena.api.model.repository.ExternalAccountRepository;
 import org.sagebionetworks.bixarena.api.model.repository.UserRepository;
 import org.sagebionetworks.bixarena.api.service.InternalJwtService;
-import org.sagebionetworks.bixarena.api.service.JwkKeyStore;
+import org.sagebionetworks.bixarena.api.security.keys.JwkKeyStore;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package org.sagebionetworks.bixarena.api.service;
+package org.sagebionetworks.bixarena.api.security.keys;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -12,6 +12,11 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import org.springframework.stereotype.Component;
 
+/**
+ * In-memory key store that holds the current signing key plus (optionally) the previous key to
+ * support short overlap during rotation. For now this is ephemeral and will regenerate on restart.
+ * Later we can persist keys or load them from an external secret manager.
+ */
 @Component
 public class JwkKeyStore {
 
@@ -44,6 +49,7 @@ public class JwkKeyStore {
         .generate();
       List<RSAKey> newList = new ArrayList<>();
       newList.add(next);
+      // Keep only the most recent previous key for a brief overlap window
       all().stream().limit(1).forEach(newList::add);
       keys.set(List.copyOf(newList));
     } catch (JOSEException e) {
@@ -52,7 +58,6 @@ public class JwkKeyStore {
   }
 
   public JWKSet publicJwkSet() {
-    // Convert public RSA keys to generic JWK list for JWKSet constructor
     var jwks = all().stream().map(k -> (JWK) k.toPublicJWK()).toList();
     return new JWKSet(jwks);
   }

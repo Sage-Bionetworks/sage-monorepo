@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.bixarena.api.configuration.AppProperties;
+import org.sagebionetworks.bixarena.api.security.keys.JwkKeyStore;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
