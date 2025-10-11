@@ -83,10 +83,3 @@ development container, giving you a ready-to-use environment with all required t
 If you like the Sage Monorepo, its architecture, approach, or the projects it brings together (such
 as Agora, OpenChallenges, and MODEL-AD), please consider giving it a star ⭐ and check out the
 [contributing guide](CONTRIBUTING.md) to get involved.
-
-## BixArena Auth Implementation Note
-
-The BixArena app previously contained a Python-side Synapse OAuth client (`oauth_client.py`).
-OAuth/OIDC is now handled exclusively by the Java auth service and API Gateway; the Python
-Gradio UI only performs a one-time backend session sync. The deprecated client file has been
-removed—no Synapse client credentials are required in the Python environment anymore.

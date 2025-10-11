@@ -1,6 +1,6 @@
 import secrets
 import time
-from typing import Any, Dict, Optional
+from typing import Any
 
 from .session_store import create_session_store
 
@@ -12,7 +12,7 @@ class SessionManager:
 
     def __new__(cls):
         if cls._instance is None:
-            cls._instance = super(SessionManager, cls).__new__(cls)
+            cls._instance = super().__new__(cls)
             cls._instance._initialized = False
         return cls._instance
 
@@ -23,14 +23,13 @@ class SessionManager:
         self._store = create_session_store()
         self._current_user = None
         self._session_timestamp = None
-        self._oauth_state = None
-        self._processed_codes = set()
+        # Removed direct OAuth state/code tracking; backend handles OIDC.
         self._error_message = None
         self._access_token = None
         self._session_id = None
         self._initialized = True
 
-    def create_session(self, user_data: Dict[str, Any], access_token: str) -> str:
+    def create_session(self, user_data: dict[str, Any], access_token: str) -> str:
         """Create a new server-side session and return session ID"""
         session_id = secrets.token_urlsafe(32)
 
@@ -71,11 +70,11 @@ class SessionManager:
 
         return True
 
-    def get_current_user(self) -> Optional[Dict[str, Any]]:
+    def get_current_user(self) -> dict[str, Any] | None:
         """Get currently logged in user data"""
         return self._current_user
 
-    def set_current_user(self, user_data: Dict[str, Any]) -> None:
+    def set_current_user(self, user_data: dict[str, Any]) -> None:
         """Set current user data after successful login"""
         self._current_user = user_data
         self._session_timestamp = time.time()
@@ -93,11 +92,11 @@ class SessionManager:
         self._access_token = None
         self._session_id = None
 
-    def get_session_id(self) -> Optional[str]:
+    def get_session_id(self) -> str | None:
         """Get current session ID for cookie storage"""
         return self._session_id
 
-    def get_access_token(self) -> Optional[str]:
+    def get_access_token(self) -> str | None:
         """Get access token"""
         return self._access_token
 
@@ -112,33 +111,13 @@ class SessionManager:
             return "Guest"
         return user.get("firstName", user.get("userName", "User"))
 
-    def set_oauth_state(self, state: str) -> None:
-        """Set OAuth state for verification"""
-        self._oauth_state = state
-
-    def verify_oauth_state(self, received_state: str) -> bool:
-        """Verify OAuth state parameter"""
-        return (
-            self._oauth_state == received_state
-            if self._oauth_state and received_state
-            else False
-        )
-
-    def is_code_processed(self, code: str) -> bool:
-        """Check if OAuth code has been processed"""
-        return code in self._processed_codes
-
-    def mark_code_processed(self, code: str) -> None:
-        """Mark OAuth code as processed"""
-        self._processed_codes.add(code)
-        if len(self._processed_codes) > 50:  # Keep memory usage low
-            self._processed_codes = set(list(self._processed_codes)[-25:])
+    # Deprecated OAuth-specific helpers removed (state & processed codes).
 
     def set_error(self, message: str) -> None:
         """Set error message"""
         self._error_message = message
 
-    def get_error(self) -> Optional[str]:
+    def get_error(self) -> str | None:
         """Get current error message"""
         return self._error_message
 

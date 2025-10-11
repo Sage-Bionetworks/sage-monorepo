@@ -42,20 +42,6 @@ def _extract_session_cookie(request: gr.Request) -> str | None:
     return None
 
 
-def _validate_oauth_params(code: str, state: str | None) -> bool:
-    """Validate OAuth parameters"""
-    if not code or len(code) > 500:
-        print("❌ Invalid OAuth code parameter")
-        return False
-    if state and len(state) > 100:
-        print("❌ Invalid OAuth state parameter")
-        return False
-    return True
-
-
-## Direct OAuth callback processing removed: backend Java service owns OIDC flow.
-
-
 def check_oauth_callback(request: gr.Request):
     """Process OAuth callback and (if necessary) sync backend session once.
 
