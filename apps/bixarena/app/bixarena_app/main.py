@@ -1,21 +1,25 @@
 import argparse
+import os
 import urllib.parse
+from typing import Any
+
 import gradio as gr
-from typing import Optional, Tuple, Any
+import requests
+
+from bixarena_app.auth.auth_service import get_auth_service
+from bixarena_app.page.bixarena_battle import build_battle_page
 from bixarena_app.page.bixarena_header import (
     build_header,
-    update_login_button,
     handle_login_click,
+    update_login_button,
 )
-from bixarena_app.page.bixarena_battle import build_battle_page
-from bixarena_app.page.bixarena_leaderboard import build_leaderboard_page
 from bixarena_app.page.bixarena_home import build_home_page
+from bixarena_app.page.bixarena_leaderboard import build_leaderboard_page
 from bixarena_app.page.bixarena_user import (
     build_user_page,
-    update_user_page,
     handle_logout_click,
+    update_user_page,
 )
-from bixarena_app.auth.auth_service import get_auth_service
 
 
 class PageNavigator:
@@ -28,7 +32,7 @@ class PageNavigator:
         return [gr.Column(visible=(i == index)) for i in range(len(self.pages))]
 
 
-def _extract_session_cookie(request: gr.Request) -> Optional[str]:
+def _extract_session_cookie(request: gr.Request) -> str | None:
     """Extract session cookie from request"""
     if not request or not hasattr(request, "headers"):
         return None
@@ -40,7 +44,7 @@ def _extract_session_cookie(request: gr.Request) -> Optional[str]:
     return None
 
 
-def _validate_oauth_params(code: str, state: str) -> bool:
+def _validate_oauth_params(code: str, state: str | None) -> bool:
     """Validate OAuth parameters"""
     if not code or len(code) > 500:
         print("❌ Invalid OAuth code parameter")
@@ -53,7 +57,7 @@ def _validate_oauth_params(code: str, state: str) -> bool:
 
 def _process_oauth_callback(
     request: gr.Request, auth_service
-) -> Optional[Tuple[Any, ...]]:
+) -> tuple[Any, ...] | None:
     """Process OAuth callback parameters"""
     try:
         parsed_url = urllib.parse.urlparse(str(request.url))
@@ -72,11 +76,16 @@ def _process_oauth_callback(
         if success and session_id:
             # Set cookie with appropriate security for environment (2 hours)
             secure_flag = "secure" if str(request.url).startswith("https") else ""
-            cookie_script = f"""
+            cookie_script = (
+                """
             <script>
-            document.cookie = "bixarena_session={session_id}; path=/; max-age=7200; samesite=strict; {secure_flag}";
-            </script>
+            document.cookie = "bixarena_session="""
+                f"{session_id}"
+                + "; path=/; max-age=7200; samesite=strict; "
+                + secure_flag
+                + """";\n            </script>
             """
+            )
             return update_login_button(), *update_user_page(), gr.HTML(cookie_script)
 
     except Exception as e:
@@ -86,7 +95,7 @@ def _process_oauth_callback(
 
 
 def check_oauth_callback(request: gr.Request):
-    """Process OAuth callback with input validation and cookie management"""
+    """Process OAuth callback or sync via backend session (JSESSIONID)."""
     auth_service = get_auth_service()
 
     # Load session from cookie (for both callback and normal page loads)
@@ -98,7 +107,8 @@ def check_oauth_callback(request: gr.Request):
             # Clear cookie (no need for secure flag when clearing)
             clear_cookie_script = """
             <script>
-            document.cookie = "bixarena_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; samesite=strict;";
+            document.cookie = "bixarena_session=; path=/;" +\
+            " expires=Thu, 01 Jan 1970 00:00:00 GMT; samesite=strict;";
             </script>
             """
             return (
@@ -112,6 +122,57 @@ def check_oauth_callback(request: gr.Request):
         result = _process_oauth_callback(request, auth_service)
         if result:
             return result
+
+    # If not authenticated but backend JSESSIONID present, sync via /echo
+    if not auth_service.is_authenticated() and request and hasattr(request, "headers"):
+        cookie_header = request.headers.get("cookie", "")
+        jsessionid = None
+        for ck in cookie_header.split(";"):
+            ck = ck.strip()
+            if ck.startswith("JSESSIONID="):
+                jsessionid = ck.split("=", 1)[1]
+                break
+        if jsessionid:
+            backend_base = os.environ.get(
+                "BACKEND_BASE_URL", "http://127.0.0.1:8112/v1"
+            )
+            try:
+                print(
+                    "[auth-sync] Found JSESSIONID cookie; syncing via /echo base="
+                    + backend_base
+                )
+                resp = requests.get(
+                    f"{backend_base}/echo",
+                    cookies={"JSESSIONID": jsessionid},
+                    timeout=2,
+                )
+                if resp.status_code == 200:
+                    data = resp.json()
+                    sub = data.get("sub")
+                    if sub:
+                        auth_service.session.set_current_user(
+                            {
+                                "firstName": sub,
+                                "userName": sub,
+                                "source": "backend",
+                            }
+                        )
+                        print(f"✅ Synced backend session for user {sub}")
+                        return update_login_button(), *update_user_page(), gr.HTML("")
+                else:
+                    print(
+                        "[auth-sync] /echo status="
+                        + str(resp.status_code)
+                        + " body="
+                        + resp.text[:160]
+                    )
+            except Exception as e:
+                print(f"⚠️ Failed to sync backend session: {e}")
+        else:
+            if cookie_header:
+                print("[auth-sync] No JSESSIONID cookie in request")
+            else:
+                print("[auth-sync] No cookie header present on request")
 
     return update_login_button(), *update_user_page(), gr.HTML("")
 

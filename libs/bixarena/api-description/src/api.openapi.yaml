@@ -52,6 +52,8 @@ paths:
     $ref: paths/auth-oidc-start.yaml
   /auth/oidc/callback:
     $ref: paths/auth-oidc-callback.yaml
+  /auth/logout:
+    $ref: paths/auth-logout.yaml
   /token:
     $ref: paths/token.yaml
   /.well-known/jwks.json:

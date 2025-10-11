@@ -108,11 +108,12 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
     session.setAttribute("OIDC_NONCE", nonce);
     if (log.isInfoEnabled()) {
       log.info(
-        "OIDC start: sessionId={} assigned state={} nonce={} host={}",
+        "OIDC start: sessionId={} assigned state={} nonce={} host={} port={}",
         session.getId(),
         state,
         nonce,
-        req.getServerName()
+        req.getServerName(),
+        req.getServerPort()
       );
     }
 
@@ -140,8 +141,9 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
     HttpSession session = req.getSession(false);
     if (session == null) {
       log.info(
-        "OIDC callback: no session (cookie missing). host={} code={} state={}",
+        "OIDC callback: no session (cookie missing). host={} port={} code={} state={}",
         req.getServerName(),
+        req.getServerPort(),
         code,
         state
       );
@@ -151,12 +153,13 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
     }
     if (log.isInfoEnabled()) {
       log.info(
-        "OIDC callback: sessionId={} received state={} code={} expectedState={} host={}",
+        "OIDC callback: sessionId={} received state={} code={} expectedState={} host={} port={}",
         session.getId(),
         state,
         code,
         session.getAttribute("OIDC_STATE"),
-        req.getServerName()
+        req.getServerName(),
+        req.getServerPort()
       );
     }
     String expectedState = (String) session.getAttribute("OIDC_STATE");
@@ -298,5 +301,16 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
 
   private static String url(String v) {
     return URLEncoder.encode(v, StandardCharsets.UTF_8);
+  }
+
+  @Override
+  public ResponseEntity<Void> logout() {
+    HttpServletRequest req =
+      ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+    HttpSession session = req.getSession(false);
+    if (session != null) {
+      session.invalidate();
+    }
+    return ResponseEntity.noContent().build();
   }
 }

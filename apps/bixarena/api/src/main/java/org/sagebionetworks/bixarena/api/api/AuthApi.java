@@ -79,6 +79,33 @@ public interface AuthApi {
 
 
     /**
+     * POST /auth/logout : Logout current session
+     * Invalidate the current authenticated session.
+     *
+     * @return Logged out (idempotent) (status code 204)
+     */
+    @Operation(
+        operationId = "logout",
+        summary = "Logout current session",
+        description = "Invalidate the current authenticated session.",
+        tags = { "Auth" },
+        responses = {
+            @ApiResponse(responseCode = "204", description = "Logged out (idempotent)")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/auth/logout"
+    )
+    
+    default ResponseEntity<Void> logout(
+        
+    ) {
+        return getDelegate().logout();
+    }
+
+
+    /**
      * POST /token : Mint short-lived internal JWT
      * Exchanges an authenticated session (cookie) for an internal JWT.
      *
@@ -160,7 +187,8 @@ public interface AuthApi {
      * GET /auth/oidc/start : Start Synapse OIDC authorization code flow
      * Initiates the OIDC login by redirecting the user to Synapse with state and nonce.
      *
-     * @return Redirect to Synapse login (status code 302)
+     * @return Flow started (no content; clients should follow redirect) (status code 204)
+     *         or Redirect to Synapse login (status code 302)
      *         or Invalid request parameters (status code 400)
      */
     @Operation(
@@ -169,6 +197,7 @@ public interface AuthApi {
         description = "Initiates the OIDC login by redirecting the user to Synapse with state and nonce.",
         tags = { "Auth" },
         responses = {
+            @ApiResponse(responseCode = "204", description = "Flow started (no content; clients should follow redirect)"),
             @ApiResponse(responseCode = "302", description = "Redirect to Synapse login"),
             @ApiResponse(responseCode = "400", description = "Invalid request parameters", content = {
                 @Content(mediaType = "application/problem+json", schema = @Schema(implementation = BasicErrorDto.class))

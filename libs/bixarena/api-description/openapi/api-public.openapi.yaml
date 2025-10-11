@@ -173,6 +173,8 @@ paths:
       operationId: startOidc
       security: []
       responses:
+        '204':
+          description: Flow started (no content; clients should follow redirect)
         '302':
           description: Redirect to Synapse login
         '400':
@@ -211,6 +213,17 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+  /auth/logout:
+    post:
+      tags:
+        - Auth
+      summary: Logout current session
+      description: Invalidate the current authenticated session.
+      operationId: logout
+      security: []
+      responses:
+        '204':
+          description: Logged out (idempotent)
   /token:
     post:
       tags:

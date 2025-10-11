@@ -63,7 +63,7 @@ info:
 
 app:
   welcome-message: 'Welcome to BixArena API'
-  ui-base-url: http://localhost:8100
+  ui-base-url: http://127.0.0.1:8100
   auth:
     # Synapse OAuth endpoints (adjusted to known working endpoints)
     # Authorize endpoint: root sign-in portal with query params
