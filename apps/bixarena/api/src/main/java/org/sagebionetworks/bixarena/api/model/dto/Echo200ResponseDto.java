@@ -1,29 +1,24 @@
 package org.sagebionetworks.bixarena.api.model.dto;
 
-import java.net.URI;
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import org.springframework.lang.Nullable;
-import java.time.OffsetDateTime;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
-
-
-import java.util.*;
 import jakarta.annotation.Generated;
+import jakarta.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import org.springframework.lang.Nullable;
 
 /**
  * Echo200ResponseDto
  */
 
 @JsonTypeName("echo_200_response")
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.14.0")
+@Generated(
+  value = "org.openapitools.codegen.languages.SpringCodegen",
+  comments = "Generator version: 7.14.0"
+)
 public class Echo200ResponseDto {
 
   private @Nullable String sub;
@@ -40,7 +35,7 @@ public class Echo200ResponseDto {
    * Get sub
    * @return sub
    */
-  
+
   @Schema(name = "sub", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("sub")
   public @Nullable String getSub() {
@@ -68,7 +63,7 @@ public class Echo200ResponseDto {
    * Get roles
    * @return roles
    */
-  
+
   @Schema(name = "roles", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("roles")
   public List<String> getRoles() {
@@ -88,8 +83,10 @@ public class Echo200ResponseDto {
       return false;
     }
     Echo200ResponseDto echo200Response = (Echo200ResponseDto) o;
-    return Objects.equals(this.sub, echo200Response.sub) &&
-        Objects.equals(this.roles, echo200Response.roles);
+    return (
+      Objects.equals(this.sub, echo200Response.sub) &&
+      Objects.equals(this.roles, echo200Response.roles)
+    );
   }
 
   @Override
@@ -117,7 +114,7 @@ public class Echo200ResponseDto {
     }
     return o.toString().replace("\n", "\n    ");
   }
-  
+
   public static class Builder {
 
     private Echo200ResponseDto instance;
@@ -130,7 +127,7 @@ public class Echo200ResponseDto {
       this.instance = instance;
     }
 
-    protected Builder copyOf(Echo200ResponseDto value) { 
+    protected Builder copyOf(Echo200ResponseDto value) {
       this.instance.setSub(value.sub);
       this.instance.setRoles(value.roles);
       return this;
@@ -140,17 +137,17 @@ public class Echo200ResponseDto {
       this.instance.sub(sub);
       return this;
     }
-    
+
     public Echo200ResponseDto.Builder roles(List<String> roles) {
       this.instance.roles(roles);
       return this;
     }
-    
+
     /**
-    * returns a built Echo200ResponseDto instance.
-    *
-    * The builder is not reusable (NullPointerException)
-    */
+     * returns a built Echo200ResponseDto instance.
+     *
+     * The builder is not reusable (NullPointerException)
+     */
     public Echo200ResponseDto build() {
       try {
         return this.instance;
@@ -167,19 +164,17 @@ public class Echo200ResponseDto {
   }
 
   /**
-  * Create a builder with no initialized field (except for the default values).
-  */
+   * Create a builder with no initialized field (except for the default values).
+   */
   public static Echo200ResponseDto.Builder builder() {
     return new Echo200ResponseDto.Builder();
   }
 
   /**
-  * Create a builder with a shallow copy of this instance.
-  */
+   * Create a builder with a shallow copy of this instance.
+   */
   public Echo200ResponseDto.Builder toBuilder() {
     Echo200ResponseDto.Builder builder = new Echo200ResponseDto.Builder();
     return builder.copyOf(this);
   }
-
 }
-

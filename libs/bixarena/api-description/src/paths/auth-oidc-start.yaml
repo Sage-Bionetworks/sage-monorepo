@@ -6,6 +6,8 @@ get:
   operationId: startOidc
   security: []
   responses:
+    '204':
+      description: Flow started (no content; clients should follow redirect)
     '302':
       description: Redirect to Synapse login
     '400':
