@@ -1,0 +1,6 @@
+type: http
+scheme: bearer
+bearerFormat: JWT
+description: >
+  Short-lived internal JWT issued by the API gateway after authentication through Synapse or an API
+  key exchange. The token is included in the Authorization header using the Bearer scheme.

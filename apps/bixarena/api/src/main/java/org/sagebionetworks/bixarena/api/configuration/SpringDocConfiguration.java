@@ -32,6 +32,14 @@ public class SpringDocConfiguration {
                                 )
                                 .version("1.0.0")
                 )
+                .components(
+                        new Components()
+                                .addSecuritySchemes("jwtBearer", new SecurityScheme()
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT")
+                                )
+                )
         ;
     }
 }

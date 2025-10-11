@@ -1,6 +1,7 @@
 get:
+  x-anonymous-access: true
   tags:
-    - ExamplePrompt
+    - Example Prompt
   summary: List example prompts
   description: Get a list of example prompts with comprehensive filtering options
   operationId: listExamplePrompts
