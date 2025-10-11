@@ -1,4 +1,4 @@
-package org.sagebionetworks.bixarena.api.security.keys;
+package org.sagebionetworks.bixarena.api.security.key;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
