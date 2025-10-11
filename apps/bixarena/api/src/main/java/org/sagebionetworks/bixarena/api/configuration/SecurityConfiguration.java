@@ -33,12 +33,17 @@ public class SecurityConfiguration {
       .authorizeHttpRequests(authz ->
         authz
           .requestMatchers(
+            "/.well-known/jwks.json",
+            "/swagger-ui.html",
+            "/swagger-ui/**",
             "/v1/auth/**",
             "/v1/auth/logout",
-            "/.well-known/jwks.json",
-            "/v3/api-docs/**",
-            "/swagger-ui.html",
-            "/swagger-ui/**"
+            "/v1/leaderboards",
+            "/v1/leaderboards/**",
+            "/v1/models",
+            "/v1/models/**",
+            "/v1/example-prompts/**",
+            "/v3/api-docs/**"
           )
           .permitAll()
           .requestMatchers("/v1/admin/**")
