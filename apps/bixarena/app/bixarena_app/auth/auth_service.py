@@ -1,5 +1,3 @@
-from typing import Optional, Dict, Any
-from bixarena_app.auth.oauth_client import SynapseOAuthClient
 from bixarena_app.auth.session_manager import get_session
 
 
@@ -7,72 +5,10 @@ class AuthService:
     """Authentication service"""
 
     def __init__(self):
-        self.oauth_client = SynapseOAuthClient()
         self.session = get_session()
 
-    def generate_login_url(self) -> str:
-        """Generate OAuth login URL"""
-        # Development bypass - only allow in development environment
-        if self.oauth_client.skip_auth:
-            import os
-
-            # Add safety check for development environment
-            if os.environ.get("ENVIRONMENT", "production").lower() == "production":
-                raise ValueError(
-                    "SKIP_AUTH can only be used in development environment"
-                )
-
-            # Set mock user immediately
-            mock_user = {
-                "firstName": "Developer",
-                "userName": "developer",
-                "authenticated": True,
-            }
-            self.session.set_current_user(mock_user)
-            return ""
-
-        try:
-            login_url, state = self.oauth_client.generate_login_url()
-            self.session.set_oauth_state(state)
-            return login_url
-        except Exception as e:
-            self.session.set_error(f"Failed to generate login URL: {e}")
-            return ""
-
-    def handle_oauth_callback(
-        self, code: str, state: str = None
-    ) -> tuple[bool, Optional[str]]:
-        """Handle OAuth callback from Synapse"""
-        try:
-            if self.session.is_code_processed(code):
-                return self.session.is_authenticated(), self.session.get_session_id()
-
-            self.session.mark_code_processed(code)
-
-            if state and not self.session.verify_oauth_state(state):
-                self.session.set_error("Invalid OAuth state")
-                return False, None
-
-            access_token = self.oauth_client.exchange_code_for_token(code)
-            if not access_token:
-                self.session.set_error("Failed to obtain access token")
-                return False, None
-
-            user_profile = self.oauth_client.get_user_profile(access_token)
-            if not user_profile:
-                self.session.set_error("Failed to get user profile")
-                return False, None
-
-            # Create server-side session
-            session_id = self.session.create_session(user_profile, access_token)
-
-            print(f"✅ Login successful: {self.session.get_display_name()}")
-            return True, session_id
-
-        except Exception as e:
-            self.session.set_error(f"OAuth callback failed: {e}")
-            print(f"Error during OAuth callback: {e}")
-            return False, None
+    # Direct OAuth logic removed. The Java backend performs OIDC; this service
+    # only stores transient user state populated by backend sync.
 
     def logout(self) -> None:
         """Logout current user"""
@@ -91,7 +27,7 @@ class AuthService:
         """Check if user is authenticated"""
         return self.session.is_authenticated()
 
-    def get_current_user(self) -> Optional[Dict[str, Any]]:
+    def get_current_user(self) -> dict | None:
         """Get current user data"""
         return self.session.get_current_user()
 
@@ -99,7 +35,7 @@ class AuthService:
         """Get current user display name"""
         return self.session.get_display_name()
 
-    def get_session_id(self) -> Optional[str]:
+    def get_session_id(self) -> str | None:
         """Get session ID for cookie storage"""
         return self.session.get_session_id()
 

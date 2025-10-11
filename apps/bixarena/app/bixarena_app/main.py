@@ -1,7 +1,5 @@
 import argparse
 import os
-import urllib.parse
-from typing import Any
 
 import gradio as gr
 import requests
@@ -55,43 +53,7 @@ def _validate_oauth_params(code: str, state: str | None) -> bool:
     return True
 
 
-def _process_oauth_callback(
-    request: gr.Request, auth_service
-) -> tuple[Any, ...] | None:
-    """Process OAuth callback parameters"""
-    try:
-        parsed_url = urllib.parse.urlparse(str(request.url))
-        params = urllib.parse.parse_qs(parsed_url.query)
-
-        if "code" not in params:
-            return None
-
-        code = params["code"][0]
-        state = params.get("state", [None])[0]
-
-        if not _validate_oauth_params(code, state):
-            return update_login_button(), *update_user_page(), gr.HTML("")
-
-        success, session_id = auth_service.handle_oauth_callback(code, state)
-        if success and session_id:
-            # Set cookie with appropriate security for environment (2 hours)
-            secure_flag = "secure" if str(request.url).startswith("https") else ""
-            cookie_script = (
-                """
-            <script>
-            document.cookie = "bixarena_session="""
-                f"{session_id}"
-                + "; path=/; max-age=7200; samesite=strict; "
-                + secure_flag
-                + """";\n            </script>
-            """
-            )
-            return update_login_button(), *update_user_page(), gr.HTML(cookie_script)
-
-    except Exception as e:
-        print(f"❌ OAuth callback failed: {e}")
-
-    return None
+## Direct OAuth callback processing removed: backend Java service owns OIDC flow.
 
 
 def check_oauth_callback(request: gr.Request):
@@ -122,11 +84,7 @@ def check_oauth_callback(request: gr.Request):
                 gr.HTML(clear_cookie_script),
             )
 
-    # Process OAuth callback if present
-    if request and hasattr(request, "url"):
-        result = _process_oauth_callback(request, auth_service)
-        if result:
-            return result
+    # (Direct OAuth code handling removed; rely on backend sync below.)
 
     # One-time backend session sync if still unauthenticated and JSESSIONID present
     if not auth_service.is_authenticated() and request and hasattr(request, "headers"):
