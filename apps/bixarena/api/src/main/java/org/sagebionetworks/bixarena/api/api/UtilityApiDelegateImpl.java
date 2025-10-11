@@ -27,6 +27,10 @@ public class UtilityApiDelegateImpl implements UtilityApiDelegate {
       if (sessionRoles != null) roles = sessionRoles;
     }
     var body = Echo200ResponseDto.builder().sub(subject).roles(roles).build();
-    return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(body);
+    return ResponseEntity.ok()
+      .header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+      .header("Pragma", "no-cache")
+      .contentType(MediaType.APPLICATION_JSON)
+      .body(body);
   }
 }

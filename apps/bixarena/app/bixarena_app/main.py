@@ -95,7 +95,12 @@ def _process_oauth_callback(
 
 
 def check_oauth_callback(request: gr.Request):
-    """Process OAuth callback or sync via backend session (JSESSIONID)."""
+    """Process OAuth callback and (if necessary) sync backend session once.
+
+    We removed continuous polling, but we still need a one-time sync so that
+    when the backend (Java) completes the OIDC flow and sets JSESSIONID, the
+    Gradio app can reflect authenticated state (button -> Logout, user page).
+    """
     auth_service = get_auth_service()
 
     # Load session from cookie (for both callback and normal page loads)
@@ -123,7 +128,7 @@ def check_oauth_callback(request: gr.Request):
         if result:
             return result
 
-    # If not authenticated but backend JSESSIONID present, sync via /echo
+    # One-time backend session sync if still unauthenticated and JSESSIONID present
     if not auth_service.is_authenticated() and request and hasattr(request, "headers"):
         cookie_header = request.headers.get("cookie", "")
         jsessionid = None
@@ -138,8 +143,8 @@ def check_oauth_callback(request: gr.Request):
             )
             try:
                 print(
-                    "[auth-sync] Found JSESSIONID cookie; syncing via /echo base="
-                    + backend_base
+                    "[auth-sync] Attempting one-time backend session sync JSESSIONID "
+                    f"present len={len(jsessionid)}"
                 )
                 resp = requests.get(
                     f"{backend_base}/echo",
@@ -151,28 +156,28 @@ def check_oauth_callback(request: gr.Request):
                     sub = data.get("sub")
                     if sub:
                         auth_service.session.set_current_user(
-                            {
-                                "firstName": sub,
-                                "userName": sub,
-                                "source": "backend",
-                            }
+                            {"firstName": sub, "userName": sub, "source": "backend"}
                         )
-                        print(f"✅ Synced backend session for user {sub}")
+                        print(f"[auth-sync] Backend sync success sub={sub}")
                         return update_login_button(), *update_user_page(), gr.HTML("")
+                    else:
+                        print("[auth-sync] /echo returned 200 but no sub field")
                 else:
+                    snippet = resp.text[:160] if resp.text else ""
                     print(
-                        "[auth-sync] /echo status="
-                        + str(resp.status_code)
-                        + " body="
-                        + resp.text[:160]
+                        f"[auth-sync] /echo non-200 status={resp.status_code} "
+                        f"bodySnippet={snippet}"
                     )
             except Exception as e:
-                print(f"⚠️ Failed to sync backend session: {e}")
+                print(f"[auth-sync] backend sync failed: {e}")
         else:
             if cookie_header:
-                print("[auth-sync] No JSESSIONID cookie in request")
+                print(
+                    "[auth-sync] No JSESSIONID found in cookie header during "
+                    "callback sync"
+                )
             else:
-                print("[auth-sync] No cookie header present on request")
+                print("[auth-sync] Empty cookie header on callback load; cannot sync")
 
     return update_login_button(), *update_user_page(), gr.HTML("")
 
@@ -229,8 +234,21 @@ def build_app(moderate=False):
         with gr.Column(visible=False) as user_page:
             _, welcome_display, logout_btn = build_user_page()
 
-        # Hidden HTML component for cookie scripts
-        cookie_html = gr.HTML("", visible=False)
+        # Hidden HTML component(s) for cookie scripts / future use
+        cookie_html = gr.HTML("", visible=False, elem_id="cookie-html")
+
+        # Expose start endpoint to login button JS for immediate redirect
+        import os as _os
+
+        backend_base = _os.environ.get("BACKEND_BASE_URL", "http://127.0.0.1:8112/v1")
+        start_endpoint = f"{backend_base}/auth/oidc/start"
+        gr.HTML(
+            "<span id='login-start-endpoint' style='display:none'>"
+            + start_endpoint
+            + "</span><span id='backend-base' style='display:none'>"
+            + backend_base
+            + "</span>"
+        )
 
         pages = [home_page, battle_page, leaderboard_page, user_page]
         navigator = PageNavigator(pages)
@@ -245,7 +263,30 @@ def build_app(moderate=False):
             lambda: handle_login_click(
                 navigator, update_login_button, update_user_page
             ),
-            outputs=pages + [login_btn, welcome_display, logout_btn],
+            outputs=pages + [login_btn, welcome_display, logout_btn, cookie_html],
+            js="""
+() => {
+  const btn = document.querySelector('#login-btn button,#login-btn');
+  if(!btn) return;
+  const label = btn.innerText.trim();
+  if(label === 'Login') {
+      const el = document.getElementById('login-start-endpoint');
+      if(el){ window.location.href = el.textContent.trim(); }
+      return;
+  }
+  if(label === 'Logout') {
+      const baseEl = document.getElementById('backend-base');
+      const base = baseEl ? baseEl.textContent.trim() : '';
+      if(base){
+          fetch(base + '/auth/logout', {method:'POST', credentials:'include'})
+             .finally(()=> {
+                 try { sessionStorage.setItem('justLoggedOut','1'); } catch(e) {}
+                 window.location.href = '/';
+             });
+      }
+  }
+}
+                """,
         )
 
         # Logout
@@ -262,6 +303,8 @@ def build_app(moderate=False):
             outputs=[login_btn, welcome_display, logout_btn, cookie_html],
             js=cleanup_js,
         )
+
+        # (Removed MutationObserver; direct JS click handles login redirect.)
 
     return demo
 

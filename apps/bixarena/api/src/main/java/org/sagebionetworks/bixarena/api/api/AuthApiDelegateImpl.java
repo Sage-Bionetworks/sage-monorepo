@@ -308,9 +308,48 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
     HttpServletRequest req =
       ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
     HttpSession session = req.getSession(false);
+    if (log.isDebugEnabled()) {
+      log.debug(
+        "Logout request: raw Cookie header='{}' secure={} remoteAddr={} ua='{}'",
+        req.getHeader("Cookie"),
+        req.isSecure(),
+        req.getRemoteAddr(),
+        req.getHeader("User-Agent")
+      );
+    }
     if (session != null) {
+      if (log.isInfoEnabled()) {
+        log.info("Logout: invalidating sessionId={}", session.getId());
+      }
       session.invalidate();
     }
-    return ResponseEntity.noContent().build();
+    // Clear SecurityContext (defensive)
+    org.springframework.security.core.context.SecurityContextHolder.clearContext();
+    // Re-issue cookie deletion mirroring attributes (Secure only if original would have been secure)
+    boolean secure = req.isSecure();
+    StringBuilder cookie = new StringBuilder(
+      "JSESSIONID=; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Path=/; HttpOnly; SameSite=Lax"
+    );
+    if (secure) cookie.append("; Secure");
+    // Optional: add domain if explicitly configured (else rely on host-only cookie)
+    // String domain = req.getServerName(); // only if you earlier set Domain attribute
+    if (log.isDebugEnabled()) {
+      log.debug(
+        "Logout: issuing clearing cookie attrs secure={} path=/ sameSite=Lax host={}",
+        secure,
+        req.getServerName()
+      );
+      // Provide a short hash of clearing cookie for correlation
+      log.debug(
+        "Logout: clearing Set-Cookie hash={} value='{}'",
+        Integer.toHexString(cookie.toString().hashCode()),
+        cookie
+      );
+    }
+    return ResponseEntity.noContent()
+      .header("Set-Cookie", cookie.toString())
+      .header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+      .header("Pragma", "no-cache")
+      .build();
   }
 }

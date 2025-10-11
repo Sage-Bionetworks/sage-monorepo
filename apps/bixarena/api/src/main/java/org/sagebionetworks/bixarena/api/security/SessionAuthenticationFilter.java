@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,6 +29,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Component
 public class SessionAuthenticationFilter extends OncePerRequestFilter {
 
+  private static final Logger log = LoggerFactory.getLogger(SessionAuthenticationFilter.class);
+
   @Override
   protected void doFilterInternal(
     HttpServletRequest request,
@@ -42,6 +46,14 @@ public class SessionAuthenticationFilter extends OncePerRequestFilter {
         @SuppressWarnings("unchecked")
         List<String> roles = (List<String>) session.getAttribute("AUTH_ROLES");
         if (subject != null && roles != null) {
+          if (log.isDebugEnabled()) {
+            log.debug(
+              "SessionAuthenticationFilter: populating context sessionId={} subject={} roles={}",
+              session.getId(),
+              subject,
+              roles
+            );
+          }
           List<GrantedAuthority> authorities = roles
             .stream()
             .map(r -> r.startsWith("ROLE_") ? r : "ROLE_" + r)
@@ -60,6 +72,13 @@ public class SessionAuthenticationFilter extends OncePerRequestFilter {
           };
           auth.setAuthenticated(true);
           SecurityContextHolder.getContext().setAuthentication(auth);
+        } else if (log.isDebugEnabled()) {
+          log.debug(
+            "SessionAuthenticationFilter: sessionId={} present but missing auth attributes (subject={}, roles={})",
+            session.getId(),
+            subject,
+            roles
+          );
         }
       }
     }
