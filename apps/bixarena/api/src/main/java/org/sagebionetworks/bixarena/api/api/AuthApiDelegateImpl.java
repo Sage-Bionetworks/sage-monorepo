@@ -13,6 +13,8 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.configuration.AppProperties;
 import org.sagebionetworks.bixarena.api.model.dto.GetJwks200ResponseDto;
 import org.sagebionetworks.bixarena.api.model.dto.MintInternalToken200ResponseDto;
@@ -24,41 +26,23 @@ import org.sagebionetworks.bixarena.api.model.repository.ExternalAccountReposito
 import org.sagebionetworks.bixarena.api.model.repository.UserRepository;
 import org.sagebionetworks.bixarena.api.service.InternalJwtService;
 import org.sagebionetworks.bixarena.api.service.JwkKeyStore;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+@RequiredArgsConstructor
 @Service
+@Slf4j
 public class AuthApiDelegateImpl implements AuthApiDelegate {
-
-  private static final Logger log = LoggerFactory.getLogger(AuthApiDelegateImpl.class);
 
   private final JwkKeyStore keyStore;
   private final InternalJwtService jwtService;
-  private final AppProperties.Auth authProps;
   private final AppProperties appProperties;
   private final UserRepository userRepository;
   private final ExternalAccountRepository externalAccountRepository;
   private final ObjectMapper objectMapper = new ObjectMapper();
-
-  public AuthApiDelegateImpl(
-    JwkKeyStore keyStore,
-    InternalJwtService jwtService,
-    AppProperties appProperties,
-    UserRepository userRepository,
-    ExternalAccountRepository externalAccountRepository
-  ) {
-    this.keyStore = keyStore;
-    this.jwtService = jwtService;
-    this.authProps = appProperties.auth();
-    this.appProperties = appProperties;
-    this.userRepository = userRepository;
-    this.externalAccountRepository = externalAccountRepository;
-  }
 
   @Override
   public ResponseEntity<GetJwks200ResponseDto> getJwks() {
@@ -118,12 +102,12 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
     }
 
     String redirect =
-      authProps.authorizeUrl() +
+      appProperties.auth().authorizeUrl() +
       "?response_type=code" +
       "&client_id=" +
-      url(authProps.clientId()) +
+      url(appProperties.auth().clientId()) +
       "&redirect_uri=" +
-      url(authProps.redirectUri().toString()) +
+      url(appProperties.auth().redirectUri().toString()) +
       "&scope=" +
       url("openid profile email") +
       "&state=" +
@@ -250,17 +234,19 @@ public class AuthApiDelegateImpl implements AuthApiDelegate {
     try {
       String basic = Base64.getEncoder()
         .encodeToString(
-          (authProps.clientId() + ":" + authProps.clientSecret()).getBytes(StandardCharsets.UTF_8)
+          (appProperties.auth().clientId() + ":" + appProperties.auth().clientSecret()).getBytes(
+              StandardCharsets.UTF_8
+            )
         );
       java.net.http.HttpClient client = java.net.http.HttpClient.newHttpClient();
       String form =
         "grant_type=authorization_code" +
         "&redirect_uri=" +
-        url(authProps.redirectUri().toString()) +
+        url(appProperties.auth().redirectUri().toString()) +
         "&code=" +
         url(code);
       java.net.http.HttpRequest request = java.net.http.HttpRequest.newBuilder(
-        java.net.URI.create(authProps.tokenUrl())
+        java.net.URI.create(appProperties.auth().tokenUrl())
       )
         .header("Authorization", "Basic " + basic)
         .header("Content-Type", "application/x-www-form-urlencoded")

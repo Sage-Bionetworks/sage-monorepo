@@ -4,6 +4,8 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.bixarena.api.exception.LeaderboardNotFoundException;
 import org.sagebionetworks.bixarena.api.exception.LeaderboardSnapshotNotFoundException;
 import org.sagebionetworks.bixarena.api.model.dto.LeaderboardEntryPageDto;
@@ -16,8 +18,6 @@ import org.sagebionetworks.bixarena.api.model.mapper.LeaderboardEntryMapper;
 import org.sagebionetworks.bixarena.api.model.repository.LeaderboardEntryRepository;
 import org.sagebionetworks.bixarena.api.model.repository.LeaderboardRepository;
 import org.sagebionetworks.bixarena.api.model.repository.LeaderboardSnapshotRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,29 +25,19 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@RequiredArgsConstructor
 @Service
+@Slf4j
 public class LeaderboardService {
-
-  private static final Logger logger = LoggerFactory.getLogger(LeaderboardService.class);
 
   private final LeaderboardRepository leaderboardRepository;
   private final LeaderboardSnapshotRepository snapshotRepository;
   private final LeaderboardEntryRepository entryRepository;
   private final LeaderboardEntryMapper entryMapper = new LeaderboardEntryMapper();
 
-  public LeaderboardService(
-    LeaderboardRepository leaderboardRepository,
-    LeaderboardSnapshotRepository snapshotRepository,
-    LeaderboardEntryRepository entryRepository
-  ) {
-    this.leaderboardRepository = leaderboardRepository;
-    this.snapshotRepository = snapshotRepository;
-    this.entryRepository = entryRepository;
-  }
-
   @Transactional(readOnly = true)
   public List<LeaderboardListInnerDto> listLeaderboards() {
-    logger.info("Listing all leaderboards");
+    log.info("Listing all leaderboards");
 
     List<LeaderboardEntity> leaderboards = leaderboardRepository.findAll();
 
@@ -59,7 +49,7 @@ public class LeaderboardService {
     String leaderboardId,
     LeaderboardSearchQueryDto query
   ) {
-    logger.info("Getting leaderboard {} with query {}", leaderboardId, query);
+    log.info("Getting leaderboard {} with query {}", leaderboardId, query);
 
     // Use default query if not provided
     LeaderboardSearchQueryDto searchQuery = query != null ? query : new LeaderboardSearchQueryDto();

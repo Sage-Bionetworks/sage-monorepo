@@ -8,8 +8,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,9 +26,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
  * Authentication object for the lifetime of the request.</p>
  */
 @Component
+@Slf4j
 public class SessionAuthenticationFilter extends OncePerRequestFilter {
-
-  private static final Logger log = LoggerFactory.getLogger(SessionAuthenticationFilter.class);
 
   @Override
   protected void doFilterInternal(

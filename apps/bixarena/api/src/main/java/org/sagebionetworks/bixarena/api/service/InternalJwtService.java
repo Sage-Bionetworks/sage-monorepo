@@ -9,30 +9,27 @@ import com.nimbusds.jwt.SignedJWT;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.bixarena.api.configuration.AppProperties;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class InternalJwtService {
 
   private final JwkKeyStore keyStore;
-  private final AppProperties.Auth authProps;
+  private final AppProperties appProperties;
 
   public record Minted(String token, Instant expiresAt) {}
-
-  public InternalJwtService(JwkKeyStore keyStore, AppProperties appProperties) {
-    this.keyStore = keyStore;
-    this.authProps = appProperties.auth();
-  }
 
   public Minted mint(String sub, List<String> roles) {
     try {
       var key = keyStore.current();
       Instant now = Instant.now();
-      Instant exp = now.plusSeconds(authProps.tokenTtlSeconds());
+      Instant exp = now.plusSeconds(appProperties.auth().tokenTtlSeconds());
       JWTClaimsSet claims = new JWTClaimsSet.Builder()
-        .issuer(authProps.internalIssuer())
-        .audience(authProps.audience())
+        .issuer(appProperties.auth().internalIssuer())
+        .audience(appProperties.auth().audience())
         .subject(sub)
         .claim("roles", roles)
         .issueTime(Date.from(now))
