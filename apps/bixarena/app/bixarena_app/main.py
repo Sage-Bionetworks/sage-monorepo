@@ -30,22 +30,20 @@ class PageNavigator:
         return [gr.Column(visible=(i == index)) for i in range(len(self.pages))]
 
 
-## Removed legacy bixarena_session cookie extraction (server-side session store pruned)
+## Legacy session & OAuth artifacts removed; perform only a one-time backend user sync.
 
 
 def sync_backend_session_on_load(request: gr.Request):
     """One-time backend session sync on initial page load.
 
-    Direct OAuth callback handling was removed; the Java backend owns the OIDC
-    flow and sets JSESSIONID. We just attempt a lightweight sync so the UI can
-    reflect authenticated state (login button -> Logout, user info loaded)
-    without persisting or parsing OAuth params here.
+    Perform a lightweight backend sync (via JSESSIONID) so UI reflects
+    authenticated state without any local OAuth or session persistence.
     """
     auth_service = get_auth_service()
 
     # Legacy cookie-based session loading removed.
 
-    # (Direct OAuth code handling removed; rely on backend sync below.)
+    # Backend sync only (no direct OAuth handling here)
 
     # One-time backend session sync if still unauthenticated and JSESSIONID present
     if not auth_service.is_authenticated() and request and hasattr(request, "headers"):
@@ -74,7 +72,7 @@ def sync_backend_session_on_load(request: gr.Request):
                     data = resp.json()
                     sub = data.get("sub")
                     if sub:
-                        auth_service.session.set_current_user(
+                        auth_service.set_current_user(
                             {"firstName": sub, "userName": sub, "source": "backend"}
                         )
                         print(f"[auth-sync] Backend sync success sub={sub}")

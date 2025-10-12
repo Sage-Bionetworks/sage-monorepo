@@ -1,39 +1,38 @@
-from bixarena_app.auth.session_manager import get_session
+from bixarena_app.auth.user_state import get_user_state
 
 
 class AuthService:
-    """Authentication service (transient in-memory user only)"""
+    """Authentication service (transient in-memory user only).
+
+    Thin façade over the singleton UserState to keep existing call sites stable.
+    """
 
     def __init__(self):
-        self.session = get_session()
-
-    # The Java backend performs OIDC; this service only stores transient user state
-    # populated by backend sync.
+        self._state = get_user_state()
 
     def logout(self) -> None:
-        """Logout current user"""
-        username = self.session.get_display_name()
-        self.session.clear_session()
+        """Logout current user and clear state."""
+        username = self._state.get_display_name()
+        self._state.clear_session()
         print(f"👋 User logged out: {username}")
 
     def is_authenticated(self) -> bool:
-        """Check if user is authenticated"""
-        return self.session.is_authenticated()
+        return self._state.is_authenticated()
 
     def get_current_user(self) -> dict | None:
-        """Get current user data"""
-        return self.session.get_current_user()
+        return self._state.get_current_user()
 
     def get_display_name(self) -> str:
-        """Get current user display name"""
-        return self.session.get_display_name()
+        return self._state.get_display_name()
+
+    def set_current_user(self, user: dict) -> None:
+        self._state.set_current_user(user)
 
 
-_auth_service = None
+_auth_service: AuthService | None = None
 
 
 def get_auth_service() -> AuthService:
-    """Get the global authentication service instance"""
     global _auth_service
     if _auth_service is None:
         _auth_service = AuthService()

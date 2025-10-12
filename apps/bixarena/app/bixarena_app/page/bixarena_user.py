@@ -47,5 +47,5 @@ def handle_logout_click(navigator, update_login_button, update_user_page):
     user_info = update_user_page()
     home_pages = navigator.show_page(0)
 
-    # Legacy bixarena_session cookie clearing removed (no separate Python session)
+    # Legacy cookie clearing removed
     return *home_pages, updated_login_btn, *user_info, gr.HTML("")
