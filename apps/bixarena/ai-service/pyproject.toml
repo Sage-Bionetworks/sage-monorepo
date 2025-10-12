@@ -24,7 +24,6 @@ readme = "README.md"
 license = { text = "Apache-2.0" }
 authors = [ { name = "Sage Bionetworks" } ]
 dependencies = [
-  "fastapi==0.115.2",
   "pydantic>=2",
   "starlette==0.40.0",
   "uvicorn==0.30.6",
@@ -35,6 +34,7 @@ dependencies = [
   "watchgod==0.7",
   # Needed by models (Self) until Python stdlib covers all
   "typing-extensions==4.13.2",
+  "fastapi>=0.119.0",
 ]
 
 # Transitional console script now points to wrapper package
