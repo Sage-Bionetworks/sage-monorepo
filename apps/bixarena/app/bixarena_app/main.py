@@ -30,45 +30,20 @@ class PageNavigator:
         return [gr.Column(visible=(i == index)) for i in range(len(self.pages))]
 
 
-def _extract_session_cookie(request: gr.Request) -> str | None:
-    """Extract session cookie from request"""
-    if not request or not hasattr(request, "headers"):
-        return None
-
-    cookie_header = request.headers.get("cookie", "")
-    for cookie in cookie_header.split(";"):
-        if "bixarena_session=" in cookie:
-            return cookie.split("bixarena_session=")[1].strip()
-    return None
+## Removed legacy bixarena_session cookie extraction (server-side session store pruned)
 
 
-def check_oauth_callback(request: gr.Request):
-    """Process OAuth callback and (if necessary) sync backend session once.
+def sync_backend_session_on_load(request: gr.Request):
+    """One-time backend session sync on initial page load.
 
-    We removed continuous polling, but we still need a one-time sync so that
-    when the backend (Java) completes the OIDC flow and sets JSESSIONID, the
-    Gradio app can reflect authenticated state (button -> Logout, user page).
+    Direct OAuth callback handling was removed; the Java backend owns the OIDC
+    flow and sets JSESSIONID. We just attempt a lightweight sync so the UI can
+    reflect authenticated state (login button -> Logout, user info loaded)
+    without persisting or parsing OAuth params here.
     """
     auth_service = get_auth_service()
 
-    # Load session from cookie (for both callback and normal page loads)
-    session_cookie = _extract_session_cookie(request)
-    if session_cookie:
-        success = auth_service.load_session_from_cookie(session_cookie)
-        if not success:
-            # Invalid session, clear cookie
-            # Clear cookie (no need for secure flag when clearing)
-            clear_cookie_script = """
-            <script>
-            document.cookie = "bixarena_session=; path=/;" +\
-            " expires=Thu, 01 Jan 1970 00:00:00 GMT; samesite=strict;";
-            </script>
-            """
-            return (
-                update_login_button(),
-                *update_user_page(),
-                gr.HTML(clear_cookie_script),
-            )
+    # Legacy cookie-based session loading removed.
 
     # (Direct OAuth code handling removed; rely on backend sync below.)
 
@@ -243,7 +218,7 @@ def build_app(moderate=False):
 
         # OAuth callback
         demo.load(
-            check_oauth_callback,
+            sync_backend_session_on_load,
             outputs=[login_btn, welcome_display, logout_btn, cookie_html],
             js=cleanup_js,
         )
