@@ -1,6 +1,6 @@
 import gradio as gr
 
-from bixarena_app.auth.auth_service import get_auth_service
+from bixarena_app.auth.user_state import get_user_state
 
 
 def build_user_page():
@@ -21,10 +21,10 @@ def build_user_page():
 
 def update_user_page():
     """Update user page based on authentication state"""
-    auth_service = get_auth_service()
+    state = get_user_state()
 
-    if auth_service.is_authenticated():
-        username = auth_service.get_display_name()
+    if state.is_authenticated():
+        username = state.get_display_name()
         welcome_html = f"<h2 style='text-align: center;'>Welcome, {username}!</h2>"
         return gr.HTML(welcome_html), gr.Button(
             "Logout", visible=True, variant="primary"
@@ -38,14 +38,16 @@ def update_user_page():
 
 def handle_logout_click(navigator, update_login_button, update_user_page):
     """Handle logout and redirect to home - must return all expected outputs"""
-    auth_service = get_auth_service()
+    state = get_user_state()
 
-    if auth_service.is_authenticated():
-        auth_service.logout()
+    if state.is_authenticated():
+        username = state.get_display_name()
+        state.clear_session()
+        print(f"👋 User logged out: {username}")
 
     updated_login_btn = update_login_button()
     user_info = update_user_page()
     home_pages = navigator.show_page(0)
 
     # Legacy cookie clearing removed
-    return *home_pages, updated_login_btn, *user_info, gr.HTML("")
+    return (*home_pages, updated_login_btn, *user_info, gr.HTML(""))

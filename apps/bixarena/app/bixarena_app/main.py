@@ -4,7 +4,7 @@ import os
 import gradio as gr
 import requests
 
-from bixarena_app.auth.auth_service import get_auth_service
+from bixarena_app.auth.user_state import get_user_state
 from bixarena_app.page.bixarena_battle import build_battle_page
 from bixarena_app.page.bixarena_header import (
     build_header,
@@ -39,14 +39,14 @@ def sync_backend_session_on_load(request: gr.Request):
     Perform a lightweight backend sync (via JSESSIONID) so UI reflects
     authenticated state without any local OAuth or session persistence.
     """
-    auth_service = get_auth_service()
+    state = get_user_state()
 
     # Legacy cookie-based session loading removed.
 
     # Backend sync only (no direct OAuth handling here)
 
     # One-time backend session sync if still unauthenticated and JSESSIONID present
-    if not auth_service.is_authenticated() and request and hasattr(request, "headers"):
+    if not state.is_authenticated() and request and hasattr(request, "headers"):
         cookie_header = request.headers.get("cookie", "")
         jsessionid = None
         for ck in cookie_header.split(";"):
@@ -72,7 +72,7 @@ def sync_backend_session_on_load(request: gr.Request):
                     data = resp.json()
                     sub = data.get("sub")
                     if sub:
-                        auth_service.set_current_user(
+                        state.set_current_user(
                             {"firstName": sub, "userName": sub, "source": "backend"}
                         )
                         print(f"[auth-sync] Backend sync success sub={sub}")

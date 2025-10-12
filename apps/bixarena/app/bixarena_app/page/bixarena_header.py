@@ -1,6 +1,6 @@
 import gradio as gr
 
-from bixarena_app.auth.auth_service import get_auth_service
+from bixarena_app.auth.user_state import get_user_state
 
 
 def build_header():
@@ -44,8 +44,8 @@ def build_header():
 
 def update_login_button():
     """Return gr.update for login button based on Python-side auth state."""
-    auth_service = get_auth_service()
-    if auth_service.is_authenticated():
+    state = get_user_state()
+    if state.is_authenticated():
         return gr.update(value="Logout", variant="primary")
     return gr.update(value="Login", variant="primary")
 
@@ -56,13 +56,15 @@ def handle_login_click(navigator, update_login_button, update_user_page):
     Returns a fixed tuple shape matching outputs:
     (*pages, login_button_update, user_html, logout_button, cookie_html_script)
     """
-    auth_service = get_auth_service()
+    state = get_user_state()
     # backend_base retrieval not needed here (handled in main.py login JS)
 
     # If currently authenticated -> perform logout (server + python) and stay on home
-    if auth_service.is_authenticated():
+    if state.is_authenticated():
         # Clear python state immediately (browser JS will trigger backend logout)
-        auth_service.logout()
+        username = state.get_display_name()
+        state.clear_session()
+        print(f"👋 User logged out: {username}")
         logout_script = ""  # client JS handles real logout & reload
         pages = navigator.show_page(0)
         updated_login_btn = update_login_button()
