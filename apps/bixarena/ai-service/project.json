@@ -38,6 +38,12 @@
         "parallel": false
       }
     },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/bixarena/serve-detach.sh {projectName}"
+      }
+    },
     "lint": {
       "executor": "@nxlv/python:ruff-check",
       "outputs": [],
