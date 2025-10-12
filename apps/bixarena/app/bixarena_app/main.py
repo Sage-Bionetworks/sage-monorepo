@@ -30,22 +30,15 @@ class PageNavigator:
         return [gr.Column(visible=(i == index)) for i in range(len(self.pages))]
 
 
-## Legacy session & OAuth artifacts removed; perform only a one-time backend user sync.
-
-
 def sync_backend_session_on_load(request: gr.Request):
-    """One-time backend session sync on initial page load.
+    """Fetch user identity from backend once (if JSESSIONID cookie present).
 
-    Perform a lightweight backend sync (via JSESSIONID) so UI reflects
-    authenticated state without any local OAuth or session persistence.
+    No local token storage, refresh logic, or OAuth flow lives here—only a
+    best-effort identity pull so UI components can render the logged-in name.
     """
     state = get_user_state()
 
-    # Legacy cookie-based session loading removed.
-
-    # Backend sync only (no direct OAuth handling here)
-
-    # One-time backend session sync if still unauthenticated and JSESSIONID present
+    # Skip if already populated or request has no headers (e.g. internal load)
     if not state.is_authenticated() and request and hasattr(request, "headers"):
         cookie_header = request.headers.get("cookie", "")
         jsessionid = None
@@ -60,8 +53,8 @@ def sync_backend_session_on_load(request: gr.Request):
             )
             try:
                 print(
-                    "[auth-sync] Attempting one-time backend session sync JSESSIONID "
-                    f"present len={len(jsessionid)}"
+                    "[auth-sync] Starting backend identity fetch (JSESSIONID present) "
+                    f"len={len(jsessionid)}"
                 )
                 resp = requests.get(
                     f"{backend_base}/echo",
@@ -75,26 +68,23 @@ def sync_backend_session_on_load(request: gr.Request):
                         state.set_current_user(
                             {"firstName": sub, "userName": sub, "source": "backend"}
                         )
-                        print(f"[auth-sync] Backend sync success sub={sub}")
+                        print(f"[auth-sync] Identity sync success sub={sub}")
                         return update_login_button(), *update_user_page(), gr.HTML("")
                     else:
-                        print("[auth-sync] /echo returned 200 but no sub field")
+                        print(
+                            "[auth-sync] /echo 200 but no sub field; "
+                            "leaving guest state"
+                        )
                 else:
                     snippet = resp.text[:160] if resp.text else ""
-                    print(
-                        f"[auth-sync] /echo non-200 status={resp.status_code} "
-                        f"bodySnippet={snippet}"
-                    )
+                    print(f"[auth-sync] /echo {resp.status_code} bodySnippet={snippet}")
             except Exception as e:
-                print(f"[auth-sync] backend sync failed: {e}")
+                print(f"[auth-sync] identity fetch failed: {e}")
         else:
             if cookie_header:
-                print(
-                    "[auth-sync] No JSESSIONID found in cookie header during "
-                    "callback sync"
-                )
+                print("[auth-sync] Cookie header present but no JSESSIONID token")
             else:
-                print("[auth-sync] Empty cookie header on callback load; cannot sync")
+                print("[auth-sync] No cookie header; skipping identity fetch")
 
     return update_login_button(), *update_user_page(), gr.HTML("")
 
@@ -214,7 +204,7 @@ def build_app(moderate=False):
             outputs=pages + [login_btn, welcome_display, logout_btn, cookie_html],
         )
 
-        # OAuth callback
+        # Initial identity sync (not an OAuth callback—just a passive identity fetch)
         demo.load(
             sync_backend_session_on_load,
             outputs=[login_btn, welcome_display, logout_btn, cookie_html],
