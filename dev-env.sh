@@ -258,6 +258,8 @@ function workspace-initialize-env {
   # Prevent Corepack showing the URL when it needs to download software
   # https://github.com/nodejs/corepack/blob/main/README.md#environment-variables
   export COREPACK_ENABLE_DOWNLOAD_PROMPT="0"
+
+  export UV_CACHE_DIR=$WORKSPACE_DIR/.cache/uv
 }
 
 function workspace-nuke {
