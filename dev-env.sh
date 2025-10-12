@@ -259,6 +259,9 @@ function workspace-initialize-env {
   # https://github.com/nodejs/corepack/blob/main/README.md#environment-variables
   export COREPACK_ENABLE_DOWNLOAD_PROMPT="0"
 
+  # Store uv's package cache inside the workspace to keep it on the same filesystem
+  # as the virtual environment. This allows uv to use hardlinks instead of copies,
+  # improving installation speed and reducing disk usage.
   export UV_CACHE_DIR=$WORKSPACE_DIR/.cache/uv
 }
 
