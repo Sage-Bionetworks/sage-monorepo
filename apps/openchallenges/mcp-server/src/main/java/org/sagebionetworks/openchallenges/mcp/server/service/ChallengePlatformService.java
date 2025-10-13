@@ -18,19 +18,37 @@ public class ChallengePlatformService {
 
   private final ChallengePlatformApi challengePlatformApi;
 
-  @Tool(name = "list_challenge_platforms", description = "List challenge platforms")
+  @Tool(
+    name = "list_challenge_platforms",
+    description = """
+    Retrieve challenge platforms (hosting venues) with optional filtering and sorting.
+
+    Usage:
+    - Provide only filters user requests (slugs, searchTerms).
+    - Use this first to discover a platform slug before filtering challenges (then pass slug to list_challenges via platforms list).
+
+    Examples:
+    - "List platforms" -> no filters.
+    - "Find platform named synapse" -> searchTerms="synapse".
+    - "Show specific platforms" -> slugs=["synapse","openchallenges"].
+    """
+  )
   public ChallengePlatformsPage listChallengePlatforms(
-    @ToolParam(description = "The page number.") @Nullable Integer pageNumber,
-    @ToolParam(description = "The number of items in a single page.") @Nullable Integer pageSize,
-    @ToolParam(description = "What to sort results by.") @Nullable ChallengePlatformSort sort,
     @ToolParam(
-      description = "The direction to sort the results by."
+      description = "Page index (integer >=0). First page is 0."
+    ) @Nullable Integer pageNumber,
+    @ToolParam(
+      description = "Page size (integer 1–200). Default if null."
+    ) @Nullable Integer pageSize,
+    @ToolParam(
+      description = "Sort enum: created|name|relevance (see API)."
+    ) @Nullable ChallengePlatformSort sort,
+    @ToolParam(
+      description = "Sort direction enum: asc|desc."
     ) @Nullable ChallengePlatformDirection direction,
+    @ToolParam(description = "Platform slug list (exact matches).") @Nullable List<String> slugs,
     @ToolParam(
-      description = "An array of challenge platform slugs used to filter the results."
-    ) @Nullable List<String> slugs,
-    @ToolParam(
-      description = "A string of search terms used to filter the results."
+      description = "Free-text search (short distinctive keyword)."
     ) @Nullable String searchTerms
   ) {
     ChallengePlatformSearchQuery query = new ChallengePlatformSearchQuery();

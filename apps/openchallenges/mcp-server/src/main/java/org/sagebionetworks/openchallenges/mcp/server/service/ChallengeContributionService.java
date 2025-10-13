@@ -16,14 +16,18 @@ public class ChallengeContributionService {
   @Tool(
     name = "list_challenge_contributions",
     description = """
-    Lists contributions made by organizations to challenges.
+    Retrieve organization contributions for a specific challenge.
 
-    Guidelines for using this tool:
-    - You can specify a challenge ID (`challengeId`) to find all organizations that contributed to that challenge.
+    Usage:
+    - Always supply the target challengeId.
+    - Use this AFTER discovering a challenge via list_challenges to enumerate contributing organizations (for attribution, sponsorship, etc.).
+
+    Example:
+    - "Who contributed to challenge 42?" -> challengeId=42.
     """
   )
   public ChallengeContributionsPage listChallengeContributions(
-    @ToolParam(description = "The ID of the challenge to list contributions for.") Long challengeId
+    @ToolParam(description = "Challenge ID (long > 0). Required.") Long challengeId
   ) {
     return challengeContributionApi.listChallengeContributions(challengeId);
   }

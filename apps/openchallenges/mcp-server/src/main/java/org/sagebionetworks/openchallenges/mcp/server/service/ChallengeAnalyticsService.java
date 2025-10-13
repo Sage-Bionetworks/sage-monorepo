@@ -14,7 +14,16 @@ public class ChallengeAnalyticsService {
 
   @Tool(
     name = "get_challenges_per_year",
-    description = "Get the number of challenges tracked per year"
+    description = """
+    Retrieve historical counts of tracked challenges per calendar year.
+
+    Usage:
+    - Call to display longitudinal growth / trend analysis.
+    - Combine with user request for 'trend', 'history', or 'yearly numbers'.
+
+    Example:
+    - "Show how challenge numbers evolved over time" -> call directly.
+    """
   )
   public ChallengesPerYear getChallengesPerYear() {
     return challengeAnalyticsApi.getChallengesPerYear();
