@@ -1,3 +1,4 @@
+export * from './lib/http-error-interceptor/http-error.interceptor';
 export * from './lib/loading-container/loading-container.component';
 export * from './lib/loading-icon/loading-icon.component';
 export * from './lib/modal-link/modal-link.component';

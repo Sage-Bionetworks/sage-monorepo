@@ -1,0 +1,41 @@
+@use 'explorers/styles/src/lib/variables';
+
+.search-input {
+  border: 1px solid var(--color-gray-300);
+
+  explorers-svg-icon {
+    position: absolute;
+    top: 50%;
+    left: 13px;
+    margin-top: 13px;
+  }
+
+  input {
+    border: 1px solid var(--color-gray-300);
+    padding: 12px 40px 12px 34px;
+    width: 100%;
+    transition: variables.$transition-duration;
+    box-sizing: border-box;
+    font-size: var(--font-size-xs);
+    outline: none;
+
+    &:focus {
+      border-color: var(--color-action-primary);
+    }
+  }
+
+  button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 100%;
+    cursor: pointer;
+
+    &:hover explorers-svg-icon {
+      path {
+        fill: var(--color-action-primary);
+      }
+    }
+  }
+}

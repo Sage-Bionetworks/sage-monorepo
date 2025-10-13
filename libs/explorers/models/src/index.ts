@@ -1,4 +1,7 @@
 export * from './lib/app-error';
+export * from './lib/comparison-tool-config-filter';
+export * from './lib/comparison-tool-filter-option';
+export * from './lib/comparison-tool-filter';
 export * from './lib/loading-icon-colors';
 export * from './lib/navigation-link';
 export * from './lib/panel';

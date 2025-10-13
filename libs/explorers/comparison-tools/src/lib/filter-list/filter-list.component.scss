@@ -1,0 +1,42 @@
+@use 'sass:map';
+@use 'agora/styles/src/lib/variables';
+@use 'agora/styles/src/lib/mixins';
+
+.filter-list {
+  white-space: nowrap;
+
+  button {
+    @include mixins.reset-button;
+  }
+
+  .filter-list-inner {
+    display: flex;
+    padding: 28px 44px 20px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .filter-list-clear-all {
+    display: flex;
+    color: var(--color-gray-900);
+    gap: 8px;
+    margin-top: 7px;
+    margin-right: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: variables.$transition-duration;
+
+    &:hover {
+      color: var(--color-action-primary);
+
+      @include mixins.link-hover;
+    }
+
+    &:hover explorers-svg-icon {
+      path {
+        fill: var(--color-action-primary);
+      }
+    }
+  }
+}
