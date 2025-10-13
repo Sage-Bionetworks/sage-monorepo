@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import {
   BaseComparisonToolComponent,
   ComparisonToolColumnsComponent,
-  DisplayedResultsComponent,
+  ComparisonToolControlsComponent,
 } from '@sagebionetworks/explorers/comparison-tools';
 import { ComparisonToolFilter } from '@sagebionetworks/explorers/models';
 import { ComparisonToolService, PlatformService } from '@sagebionetworks/explorers/services';
@@ -20,9 +20,9 @@ import { ModelOverviewMainTableComponent } from './components/model-overview-mai
   selector: 'model-ad-model-overview-comparison-tool',
   imports: [
     BaseComparisonToolComponent,
+    ComparisonToolControlsComponent,
     ModelOverviewMainTableComponent,
     ModelOverviewHelpLinksComponent,
-    DisplayedResultsComponent,
     ComparisonToolColumnsComponent,
   ],
   providers: [ComparisonToolService],
