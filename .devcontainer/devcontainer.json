@@ -11,7 +11,8 @@
     "NX_CLOUD_ENCRYPTION_KEY": "${localEnv:NX_CLOUD_ENCRYPTION_KEY}",
     "NX_HEAD": "${localEnv:NX_HEAD}",
     "SONAR_PULL_REQUEST_NUMBER": "${localEnv:SONAR_PULL_REQUEST_NUMBER}",
-    "SONAR_TOKEN": "${localEnv:SONAR_TOKEN}"
+    "SONAR_TOKEN": "${localEnv:SONAR_TOKEN}",
+    "UV_CACHE_DIR": "${containerWorkspaceFolder}/.cache/uv"
   },
   "features": {},
   "forwardPorts": [
