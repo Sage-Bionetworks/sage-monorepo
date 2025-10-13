@@ -1,5 +1,5 @@
 app:
-  welcome-message: 'Welcome to the OpenChallenges MCP Server!'
+  welcome-message: 'Welcome to the OpenChallenges MCP Server'
   api-base-url: http://openchallenges-api-gateway:8082/api/v1
 
 server:
