@@ -8,7 +8,7 @@ import logging
 import pandas as pd
 
 # Import our standalone Bradley-Terry implementation (based on FastChat)
-from .bradley_terry import compute_bootstrap_bt, compute_bt
+from .bt_score import compute_bootstrap_bt, compute_bt
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
