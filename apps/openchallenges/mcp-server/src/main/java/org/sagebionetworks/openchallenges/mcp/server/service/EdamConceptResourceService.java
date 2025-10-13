@@ -23,6 +23,9 @@ public class EdamConceptResourceService {
   @Bean
   public List<McpServerFeatures.SyncResourceSpecification> edamConceptResources() {
     var edamConceptResource = McpSchema.Resource.builder()
+      // 'uri' is required by the MCP schema builder; using same value as name for simplicity.
+      // Consider a more structured scheme later, e.g. 'edam:concepts' or 'edam://concepts'.
+      .uri("list_edam_concepts")
       .name("list_edam_concepts")
       .description(
         "List EDAM ontology for bioinformatics data types, formats, operations, and topics"
@@ -51,16 +54,17 @@ public class EdamConceptResourceService {
 
     return List.of(resourceSpecification);
   }
-  // @Bean
-  // public List<McpSchema.ResourceTemplate> edamConceptResourceTemplates() {
-  //   return List.of(
-  //     new McpSchema.ResourceTemplate(
-  //       "list_edam_concepts?searchTerms={searchTerms}&sections={sections}&pageSize={pageSize}&ids={ids}",
-  //       "List EDAM Concepts with Parameters",
-  //       "List EDAM ontology concepts. Parameters: searchTerms (text search), sections (data/format/operation/topic), pageSize (limit results), ids (specific concept IDs)",
-  //       "application/json",
-  //       null
-  //     )
-  //   );
-  // }
+
+  @Bean
+  public List<McpSchema.ResourceTemplate> edamConceptResourceTemplates() {
+    // Builder API for ResourceTemplate not present in MCP SDK 0.14.0, using constructor.
+    var template = new McpSchema.ResourceTemplate(
+      "list_edam_concepts?searchTerms={searchTerms}&sections={sections}&pageSize={pageSize}&ids={ids}",
+      "list_edam_concepts_template",
+      "Parameterized EDAM concepts listing. Parameters: searchTerms (text query), sections (data|format|operation|topic), pageSize (limit results), ids (specific concept IDs).",
+      "application/json",
+      null
+    );
+    return List.of(template);
+  }
 }
