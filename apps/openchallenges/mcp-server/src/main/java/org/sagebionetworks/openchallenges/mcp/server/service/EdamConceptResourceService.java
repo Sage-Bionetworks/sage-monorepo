@@ -22,13 +22,13 @@ public class EdamConceptResourceService {
 
   @Bean
   public List<McpServerFeatures.SyncResourceSpecification> edamConceptResources() {
-    var edamConceptResource = new McpSchema.Resource(
-      "list_edam_concepts",
-      "List EDAM Concepts",
-      "List EDAM ontology for bioinformatics data types, formats, operations, and topics",
-      "application/json",
-      null
-    );
+    var edamConceptResource = McpSchema.Resource.builder()
+      .name("list_edam_concepts")
+      .description(
+        "List EDAM ontology for bioinformatics data types, formats, operations, and topics"
+      )
+      .mimeType("application/json")
+      .build();
 
     var resourceSpecification = new McpServerFeatures.SyncResourceSpecification(
       edamConceptResource,
