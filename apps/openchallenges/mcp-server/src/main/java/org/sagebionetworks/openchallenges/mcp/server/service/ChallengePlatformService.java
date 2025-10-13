@@ -1,6 +1,8 @@
 package org.sagebionetworks.openchallenges.mcp.server.service;
 
 import io.micrometer.common.lang.Nullable;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.openchallenges.api.client.api.ChallengePlatformApi;
@@ -11,8 +13,10 @@ import org.sagebionetworks.openchallenges.api.client.model.ChallengePlatformsPag
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 @Service
+@Validated
 @RequiredArgsConstructor
 public class ChallengePlatformService {
 
@@ -36,10 +40,10 @@ public class ChallengePlatformService {
   public ChallengePlatformsPage listChallengePlatforms(
     @ToolParam(
       description = "Page index (integer >=0). First page is 0."
-    ) @Nullable Integer pageNumber,
+    ) @Nullable @PositiveOrZero Integer pageNumber,
     @ToolParam(
-      description = "Page size (integer 1–200). Default if null."
-    ) @Nullable Integer pageSize,
+      description = "Page size (integer 1-200). Default if null."
+    ) @Nullable @Positive Integer pageSize,
     @ToolParam(
       description = "Sort enum: created|name|relevance (see API)."
     ) @Nullable ChallengePlatformSort sort,

@@ -1,6 +1,8 @@
 package org.sagebionetworks.openchallenges.mcp.server.service;
 
 import io.micrometer.common.lang.Nullable;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.openchallenges.api.client.api.OrganizationApi;
@@ -13,8 +15,10 @@ import org.sagebionetworks.openchallenges.api.client.model.OrganizationsPage;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 @Service
+@Validated
 @RequiredArgsConstructor
 public class OrganizationService {
 
@@ -39,10 +43,10 @@ public class OrganizationService {
   public OrganizationsPage listOrganizations(
     @ToolParam(
       description = "Page index (integer >=0). First page is 0."
-    ) @Nullable Integer pageNumber,
+    ) @Nullable @PositiveOrZero Integer pageNumber,
     @ToolParam(
-      description = "Page size (integer 1–200). Uses default if null."
-    ) @Nullable Integer pageSize,
+      description = "Page size (integer 1-200). Uses default if null."
+    ) @Nullable @Positive Integer pageSize,
     @ToolParam(description = "Category enums list: featured.") @Nullable List<
       OrganizationCategory
     > categories,
@@ -55,11 +59,23 @@ public class OrganizationService {
     @ToolParam(
       description = "Sort direction enum: asc|desc."
     ) @Nullable OrganizationDirection direction,
-    @ToolParam(description = "Organization ID list (long).") @Nullable List<Long> ids,
+    @ToolParam(description = "Organization ID list (long).") @Nullable List<
+      @PositiveOrZero Long
+    > ids,
     @ToolParam(
       description = "Free-text search (short distinctive name/acronym)."
     ) @Nullable String searchTerms
   ) {
+    if (pageNumber != null && pageNumber < 0) {
+      throw new IllegalArgumentException("pageNumber must be >= 0");
+    }
+    if (pageSize != null && pageSize <= 0) {
+      throw new IllegalArgumentException("pageSize must be > 0");
+    }
+    if (ids != null && ids.stream().anyMatch(id -> id == null || id < 0)) {
+      throw new IllegalArgumentException("organization ids must be >= 0");
+    }
+
     OrganizationSearchQuery query = new OrganizationSearchQuery();
     query.setPageNumber(pageNumber);
     query.setPageSize(pageSize);

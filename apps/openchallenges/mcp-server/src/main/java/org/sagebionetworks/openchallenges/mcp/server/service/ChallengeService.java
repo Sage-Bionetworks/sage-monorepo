@@ -1,6 +1,8 @@
 package org.sagebionetworks.openchallenges.mcp.server.service;
 
 import io.micrometer.common.lang.Nullable;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +18,10 @@ import org.sagebionetworks.openchallenges.api.client.model.ChallengesPage;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 @Service
+@Validated
 @RequiredArgsConstructor
 public class ChallengeService {
 
@@ -46,16 +50,16 @@ public class ChallengeService {
   public ChallengesPage listChallenges(
     @ToolParam(
       description = "Page index (integer >= 0). First page is 0."
-    ) @Nullable Integer pageNumber,
+    ) @Nullable @PositiveOrZero Integer pageNumber,
     @ToolParam(
-      description = "Page size (integer 1–200). Default server value if null."
-    ) @Nullable Integer pageSize,
+      description = "Page size (integer 1-200). Default server value if null."
+    ) @Nullable @Positive Integer pageSize,
     @ToolParam(
       description = "Sort field enum (created|random|relevance|starred|start_date|end_date). 'starred' = descending star count"
     ) @Nullable ChallengeSort sort,
     @ToolParam(
       description = "Seed (integer) required only when sort=random to make results reproducible."
-    ) @Nullable Integer sortSeed,
+    ) @Nullable @PositiveOrZero Integer sortSeed,
     @ToolParam(
       description = "Sort direction enum (asc|desc)."
     ) @Nullable ChallengeDirection direction,
@@ -73,7 +77,7 @@ public class ChallengeService {
     ) @Nullable List<String> platforms,
     @ToolParam(
       description = "Organization IDs list (long). Obtained via list_organizations."
-    ) @Nullable List<Long> organizations,
+    ) @Nullable List<@PositiveOrZero Long> organizations,
     @ToolParam(description = "Status enums: upcoming|active|completed.") @Nullable List<
       ChallengeStatus
     > status,
@@ -82,9 +86,9 @@ public class ChallengeService {
     ) @Nullable List<ChallengeSubmissionType> submissionTypes,
     @ToolParam(
       description = "EDAM data concept ID integers (from list_edam_concepts)."
-    ) @Nullable List<Integer> inputDataTypes,
+    ) @Nullable List<@PositiveOrZero Integer> inputDataTypes,
     @ToolParam(description = "EDAM operation concept ID integers.") @Nullable List<
-      Integer
+      @PositiveOrZero Integer
     > operations,
     @ToolParam(
       description = "Category enums: featured|benchmark|hackathon|starting_soon|ending_soon|recently_started|recently_ended."

@@ -1,6 +1,8 @@
 package org.sagebionetworks.openchallenges.mcp.server.service;
 
 import io.micrometer.common.lang.Nullable;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.openchallenges.api.client.api.EdamConceptApi;
@@ -12,8 +14,10 @@ import org.sagebionetworks.openchallenges.api.client.model.EdamSection;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 @Service
+@Validated
 @RequiredArgsConstructor
 public class EdamConceptService {
 
@@ -32,7 +36,7 @@ public class EdamConceptService {
     - Avoid generic words (data, dataset, information, file).
     - If first attempt empty: try controlled synonyms (MRI -> magnetic resonance, CT -> computed tomography, DNA -> nucleotide sequence).
     - To target data input concepts only set sections=["data"].
-    - After 2–3 unsuccessful variations, report no close EDAM match and optionally point user to BioPortal.
+    - After 2-3 unsuccessful variations, report no close EDAM match and optionally point user to BioPortal.
 
     Examples:
     - "Need MRI training data" -> searchTerms="MRI", sections=[data].
@@ -43,22 +47,34 @@ public class EdamConceptService {
   public EdamConceptsPage listEdamConcepts(
     @ToolParam(
       description = "Page index (integer >= 0). First page is 0."
-    ) @Nullable Integer pageNumber,
+    ) @Nullable @PositiveOrZero Integer pageNumber,
     @ToolParam(
-      description = "Page size (integer 1–200). Default 100 if null."
-    ) @Nullable Integer pageSize,
+      description = "Page size (integer 1-200). Default 100 if null."
+    ) @Nullable @Positive Integer pageSize,
     @ToolParam(
       description = "Sort enum: preferred_label|relevance."
     ) @Nullable EdamConceptSort sort,
     @ToolParam(
       description = "Sort direction enum: asc|desc."
     ) @Nullable EdamConceptDirection direction,
-    @ToolParam(description = "Concept ID integers list (exact match).") @Nullable List<Integer> ids,
+    @ToolParam(description = "Concept ID integers list (exact match).") @Nullable List<
+      @PositiveOrZero Integer
+    > ids,
     @ToolParam(description = "Free-text search (concise core term).") @Nullable String searchTerms,
     @ToolParam(
       description = "Section enums list: data|format|identifier|operation|topic."
     ) @Nullable List<EdamSection> sections
   ) {
+    if (pageNumber != null && pageNumber < 0) {
+      throw new IllegalArgumentException("pageNumber must be >= 0");
+    }
+    if (pageSize != null && pageSize <= 0) {
+      throw new IllegalArgumentException("pageSize must be > 0");
+    }
+    if (ids != null && ids.stream().anyMatch(id -> id == null || id < 0)) {
+      throw new IllegalArgumentException("ids must be >= 0");
+    }
+
     EdamConceptSearchQuery query = new EdamConceptSearchQuery();
     query.setPageNumber(pageNumber);
     query.setPageSize(pageSize);

@@ -1,13 +1,16 @@
 package org.sagebionetworks.openchallenges.mcp.server.service;
 
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.sagebionetworks.openchallenges.api.client.api.ChallengeContributionApi;
 import org.sagebionetworks.openchallenges.api.client.model.ChallengeContributionsPage;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 @Service
+@Validated
 @RequiredArgsConstructor
 public class ChallengeContributionService {
 
@@ -27,7 +30,7 @@ public class ChallengeContributionService {
     """
   )
   public ChallengeContributionsPage listChallengeContributions(
-    @ToolParam(description = "Challenge ID (long > 0). Required.") Long challengeId
+    @ToolParam(description = "Challenge ID (long > 0). Required.") @Positive Long challengeId
   ) {
     return challengeContributionApi.listChallengeContributions(challengeId);
   }
