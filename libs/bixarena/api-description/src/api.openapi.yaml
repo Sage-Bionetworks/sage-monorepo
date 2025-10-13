@@ -1,4 +1,5 @@
 openapi: 3.0.3
+
 info:
   version: 1.0.0
   title: BixArena API
@@ -9,16 +10,28 @@ info:
   contact:
     name: Support
     url: https://github.com/Sage-Bionetworks/sage-monorepo
+
+# Vendor extensions at the top level
+x-oauth2-audience: 'urn:bixarena:api'
+
 servers:
   - url: http://localhost/v1
+
+# Default security posture (scopes on operations)
+security:
+  - jwtBearer: []
+
 tags:
+  - name: Example Prompt
+    description: Operations about example prompts for biomedical relevance detection.
   - name: Leaderboard
     description: Operations about leaderboards.
   - name: Model
     description: Operations about models.
-  - name: ExamplePrompt
-    description: Operations about example prompts for biomedical relevance detection.
+
 paths:
+  /example-prompts:
+    $ref: paths/example-prompts.yaml
   /leaderboards:
     $ref: paths/leaderboards.yaml
   /leaderboards/{leaderboardId}:
@@ -29,5 +42,8 @@ paths:
     $ref: paths/leaderboards/{leaderboardId}/snapshots.yaml
   /models:
     $ref: paths/models.yaml
-  /example-prompts:
-    $ref: paths/example-prompts.yaml
+
+components:
+  securitySchemes:
+    jwtBearer:
+      $ref: components/securitySchemes/JwtBearer.yaml
