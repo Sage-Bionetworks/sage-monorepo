@@ -1,6 +1,6 @@
 """BixArena Infrastructure CDK package."""
 
-from .app_main import build_app
+from .app import build_app
 from .ecs_stack import EcsStack
 from .load_balancer_stack import LoadBalancerStack
 from .network_stack import NetworkStack

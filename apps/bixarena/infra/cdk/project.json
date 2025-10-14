@@ -4,6 +4,13 @@
   "projectType": "application",
   "sourceRoot": "apps/bixarena/infra/cdk/bixarena_infra_cdk",
   "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
     "build": {
       "executor": "@nxlv/python:build",
       "outputs": ["{projectRoot}/dist"],
@@ -34,6 +41,13 @@
         "cwd": "{projectRoot}"
       },
       "cache": true
+    },
+    "synth": {
+      "executor": "@nxlv/python:run-commands",
+      "options": {
+        "command": "uv run bixarena_infra_cdk/index_kaggle_challenges.py",
+        "cwd": "{projectRoot}"
+      }
     }
   },
   "tags": ["language:python", "package-manager:uv"],

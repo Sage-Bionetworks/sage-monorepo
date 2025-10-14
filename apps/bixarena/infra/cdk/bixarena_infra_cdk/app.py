@@ -1,4 +1,4 @@
-"""CDK application entrypoint for BixArena infrastructure."""
+"""CDK application assembly (no CLI side effects)."""
 
 from os import environ
 
@@ -14,10 +14,7 @@ VALID_ENVIRONMENTS = ["dev", "stage", "prod"]
 
 
 def build_app() -> cdk.App:
-    """Build and synthesize the CDK application.
-
-    Reads the ENV environment variable and deploys the appropriate stacks.
-    """
+    """Build and return the CDK application (does not synth)."""
 
     environment = environ.get("ENV")
     match environment:
@@ -111,12 +108,3 @@ def build_app() -> cdk.App:
     app_stack.add_dependency(app_stack)
 
     return cdk_app
-
-
-def main() -> None:  # pragma: no cover - thin wrapper
-    """CLI entry point."""
-    build_app().synth()
-
-
-if __name__ == "__main__":  # pragma: no cover
-    main()
